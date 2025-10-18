@@ -1,47 +1,33 @@
+mod common;
+
 use axum::serve;
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::json;
 use sqlx::Row;
 use std::time::Duration;
+use std::net::TcpListener as StdTcpListener;
 use tokio::net::TcpListener;
-
-/// Helper function to set environment variable with automatic restoration
-async fn with_env_var<F, Fut>(key: &str, value: &str, f: F)
-where
-    F: FnOnce() -> Fut,
-    Fut: std::future::Future<Output = ()>,
-{
-    let original_value = std::env::var(key).ok();
-    std::env::set_var(key, value);
-
-    f().await;
-
-    // Restore original value
-    match original_value {
-        Some(val) => std::env::set_var(key, val),
-        None => std::env::remove_var(key),
-    }
-}
 
 #[tokio::test]
 async fn test_get_evidence_endpoint() {
     // Create temp DB - using in-memory database for reliability in tests
     let db_url = "sqlite::memory:";
 
-    with_env_var("API_DB_URL", db_url, || async {
+    common::with_env_var("API_DB_URL", db_url, || async {
         // Build app
         let (app, pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
+        // Bind with std TcpListener first
+        let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
+        std_listener.set_nonblocking(true).unwrap();
+        let port = std_listener.local_addr().unwrap().port();
+        
+        // Convert to tokio listener
+        let listener = TcpListener::from_std(std_listener).unwrap();
 
-        // Start server
+        // Start server with the converted listener
         let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
             serve(listener, app.into_make_service()).await.unwrap();
         });
 
@@ -93,19 +79,20 @@ async fn test_get_evidence_not_found() {
     // Create temp DB - using in-memory database for reliability in tests
     let db_url = "sqlite::memory:";
 
-    with_env_var("API_DB_URL", db_url, || async {
+    common::with_env_var("API_DB_URL", db_url, || async {
         // Build app
         let (app, _pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
+        // Bind with std TcpListener first
+        let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
+        std_listener.set_nonblocking(true).unwrap();
+        let port = std_listener.local_addr().unwrap().port();
+        
+        // Convert to tokio listener
+        let listener = TcpListener::from_std(std_listener).unwrap();
 
-        // Start server
+        // Start server with the converted listener
         let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
             serve(listener, app.into_make_service()).await.unwrap();
         });
 
@@ -114,47 +101,43 @@ async fn test_get_evidence_not_found() {
 
         let client = Client::new();
 
+        // The ID we're requesting that doesn't exist
+        let requested_id = "non-existent";
+
         // Test getting non-existent evidence
         let response = client
-            .get(format!("http://127.0.0.1:{}/evidence/non-existent", port))
+            .get(format!("http://127.0.0.1:{}/evidence/{}", port, requested_id))
             .send()
             .await
             .unwrap();
 
-        // Get the response status 
-        let status = response.status();
+        // Assert that status is 404 Not Found
+            assert_eq!(
+            response.status(), 404,
+            "Expected status 404 Not Found, got {}",
+            response.status()
+            );
         
-        // Read response body fully before aborting server to avoid race condition
+        // Read response body and parse as JSON
         let response_text = response.text().await.unwrap();
+        let result: serde_json::Value = serde_json::from_str(&response_text)
+            .unwrap_or_else(|_| panic!("Failed to parse response as JSON: {}", response_text));
         
-        // Clean up server after response is fully read
+        // Verify JSON structure contains expected fields with correct values
+        assert_eq!(
+            result["id"].as_str().unwrap_or_default(), requested_id,
+            "Expected result[\"id\"] to be {}, got: {}",
+            requested_id, result["id"]
+            );
+        
+        assert_eq!(
+            result["status"].as_str().unwrap_or_default(), "not_found",
+            "Expected result[\"status\"] to be \"not_found\", got: {}",
+            result["status"]
+        );
+        
+        // Clean up server after response is fully processed
         server.abort();
-        
-        // Check the response based on status code
-        if status == 200 {
-            // For 200 OK, parse the JSON and verify the error message
-            let result: serde_json::Value = serde_json::from_str(&response_text)
-                .unwrap_or_else(|_| panic!("Failed to parse response: {}", response_text));
-                
-            assert!(
-                result["error"].is_string(),
-                "Expected error field in response: {}",
-                response_text
-            );
-            assert_eq!(
-                result["error"].as_str().unwrap_or_default(),
-                "Job not found",
-                "Unexpected error message in response: {}",
-                response_text
-            );
-        } else {
-            // For 404 Not Found, verify the status code
-            assert_eq!(
-                status, 404,
-                "Expected status 404 Not Found, got {}: {}",
-                status, response_text
-            );
-        }
     })
     .await;
 }

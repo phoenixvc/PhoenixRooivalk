@@ -1,30 +1,14 @@
+mod common;
+
 use phoenix_api::build_app;
 use sqlx::Row;
-
-/// Helper function to set environment variable with automatic restoration
-async fn with_env_var<F, Fut>(key: &str, value: &str, f: F)
-where
-    F: FnOnce() -> Fut,
-    Fut: std::future::Future<Output = ()>,
-{
-    let original_value = std::env::var(key).ok();
-    std::env::set_var(key, value);
-
-    f().await;
-
-    // Restore original value
-    match original_value {
-        Some(val) => std::env::set_var(key, val),
-        None => std::env::remove_var(key),
-    }
-}
 
 #[tokio::test]
 async fn test_build_app() {
     // Create temp DB - using in-memory database for reliability in tests
     let db_url = "sqlite::memory:";
 
-    with_env_var("API_DB_URL", db_url, || async {
+    common::with_env_var("API_DB_URL", db_url, || async {
         // Build app
         let (_app, pool) = build_app().await.unwrap();
 
@@ -48,7 +32,7 @@ async fn test_build_app_with_fallback_url() {
     let original_api_url = std::env::var("API_DB_URL").ok();
     std::env::remove_var("API_DB_URL");
 
-    with_env_var("KEEPER_DB_URL", db_url, || async {
+    common::with_env_var("KEEPER_DB_URL", db_url, || async {
         // Build app
         let (_app, pool) = build_app().await.unwrap();
 

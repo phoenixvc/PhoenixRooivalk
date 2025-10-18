@@ -1,52 +1,20 @@
-use axum::serve;
+mod common;
+
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::json;
 use sqlx::Row;
-use std::time::Duration;
-use tokio::net::TcpListener;
-
-/// Helper function to set environment variable with automatic restoration
-async fn with_env_var<F, Fut>(key: &str, value: &str, f: F)
-where
-    F: FnOnce() -> Fut,
-    Fut: std::future::Future<Output = ()>,
-{
-    let original_value = std::env::var(key).ok();
-    std::env::set_var(key, value);
-
-    f().await;
-
-    // Restore original value
-    match original_value {
-        Some(val) => std::env::set_var(key, val),
-        None => std::env::remove_var(key),
-    }
-}
 
 #[tokio::test]
 async fn test_health_endpoint() {
-    // Create temp DB - using in-memory database for reliability in tests
-    let db_url = "sqlite::memory:";
-
-    with_env_var("API_DB_URL", db_url, || async {
+    // Use specialized helper for API database environment setup
+    common::with_api_db_env(|| async {
         // Build app
         let (app, _pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
-
-        // Start server
-        let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-            serve(listener, app.into_make_service()).await.unwrap();
-        });
-
-        // Wait for server to start
-        tokio::time::sleep(Duration::from_millis(100)).await;
+        // Use helpers for test listener creation and server setup
+        let (listener, port) = common::create_test_listener();
+        let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
         let response = client
@@ -66,27 +34,14 @@ async fn test_health_endpoint() {
 
 #[tokio::test]
 async fn test_post_evidence_endpoint() {
-    // Create temp DB - using in-memory database for reliability in tests
-    let db_url = "sqlite::memory:";
-
-    with_env_var("API_DB_URL", db_url, || async {
+    // Use specialized helper for API database environment setup
+    common::with_api_db_env(|| async {
         // Build app
         let (app, pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
-
-        // Start server
-        let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-            serve(listener, app.into_make_service()).await.unwrap();
-        });
-
-        // Wait for server to start
-        tokio::time::sleep(Duration::from_millis(100)).await;
+        // Use helpers for test listener creation and server setup
+        let (listener, port) = common::create_test_listener();
+        let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
@@ -128,27 +83,14 @@ async fn test_post_evidence_endpoint() {
 
 #[tokio::test]
 async fn test_post_evidence_with_custom_id() {
-    // Create temp DB - using in-memory database for reliability in tests
-    let db_url = "sqlite::memory:";
-
-    with_env_var("API_DB_URL", db_url, || async {
+    // Use specialized helper for API database environment setup
+    common::with_api_db_env(|| async {
         // Build app
         let (app, _pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
-
-        // Start server
-        let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-            serve(listener, app.into_make_service()).await.unwrap();
-        });
-
-        // Wait for server to start
-        tokio::time::sleep(Duration::from_millis(100)).await;
+        // Use helpers for test listener creation and server setup
+        let (listener, port) = common::create_test_listener();
+        let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
@@ -166,8 +108,12 @@ async fn test_post_evidence_with_custom_id() {
 
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
-        assert_eq!(result["id"], "custom-evidence-123");
-        assert_eq!(result["status"], "queued");
+        
+        // Use helper for JSON response validation
+        common::assert_json_response(&result, &[
+            ("id", "custom-evidence-123"),
+            ("status", "queued")
+        ]);
         
         server.abort();
     })
@@ -176,27 +122,14 @@ async fn test_post_evidence_with_custom_id() {
 
 #[tokio::test]
 async fn test_post_evidence_with_metadata() {
-    // Create temp DB - using in-memory database for reliability in tests
-    let db_url = "sqlite::memory:";
-
-    with_env_var("API_DB_URL", db_url, || async {
+    // Use specialized helper for API database environment setup
+    common::with_api_db_env(|| async {
         // Build app
         let (app, _pool) = build_app().await.unwrap();
 
-        // Find available port
-        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let addr = listener.local_addr().unwrap();
-        let port = addr.port();
-        drop(listener);
-
-        // Start server
-        let server = tokio::spawn(async move {
-            let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-            serve(listener, app.into_make_service()).await.unwrap();
-        });
-
-        // Wait for server to start
-        tokio::time::sleep(Duration::from_millis(100)).await;
+        // Use helpers for test listener creation and server setup
+        let (listener, port) = common::create_test_listener();
+        let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
@@ -220,7 +153,11 @@ async fn test_post_evidence_with_metadata() {
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
         assert!(result["id"].is_string());
-        assert_eq!(result["status"], "queued");
+        
+        // Use helper for JSON response validation
+        common::assert_json_response(&result, &[
+            ("status", "queued")
+        ]);
 
         server.abort();
     })
