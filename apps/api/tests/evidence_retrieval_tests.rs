@@ -12,7 +12,7 @@ use tokio::net::TcpListener;
 #[tokio::test]
 async fn test_get_evidence_endpoint() {
     // Create temp DB - using in-memory database for reliability in tests
-    let db_url = "sqlite::memory:";
+    let db_url = "sqlite::memory:?cache=shared";
 
     common::with_env_var("API_DB_URL", db_url, || async {
         // Build app
