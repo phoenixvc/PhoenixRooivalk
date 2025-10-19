@@ -24,12 +24,14 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         .unwrap_or_else(|| "sqlite://blockchain_outbox.sqlite3".to_string());
     let pool = SqlitePoolOptions::new()
         .max_connections(5)
+        .after_connect(|conn| Box::pin(async move {
+            // Enforce foreign key constraints for SQLite reliability on every connection
+            sqlx::query("PRAGMA foreign_keys = ON")
+                .execute(&mut *conn)
+                .await?;
+            Ok(())
+        }))
         .connect(&db_url)
-        .await?;
-
-    // Enforce foreign key constraints for SQLite reliability
-    sqlx::query("PRAGMA foreign_keys = ON")
-        .execute(&pool)
         .await?;
 
     // Run full migrations (includes outbox + countermeasures + audits + jamming)

@@ -18,6 +18,20 @@ use axum::{
     Json,
 };
 
+fn internal_error(e: impl ToString) -> (StatusCode, Json<serde_json::Value>) {
+    (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        Json(serde_json::json!({ "error": e.to_string() })),
+    )
+}
+
+fn parse_pagination(pagination: Pagination) -> (i64, i64, i64) {
+    let page = pagination.page.unwrap_or(1).max(1);
+    let per_page = pagination.per_page.unwrap_or(10).clamp(1, 100);
+    let offset = (page - 1) * per_page;
+    (page, per_page, offset)
+}
+
 pub async fn health() -> &'static str {
     "OK"
 }
@@ -26,12 +40,7 @@ pub async fn list_evidence(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination
-        .per_page
-        .unwrap_or(10)
-        .clamp(1, 100);
-    let offset = (page - 1) * per_page;
+    let (page, per_page, offset) = parse_pagination(pagination);
 
     match list_evidence_jobs(&state.pool, per_page, offset).await {
         Ok((jobs, total_count)) => {
@@ -150,12 +159,7 @@ pub async fn list_countermeasures(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination
-        .per_page
-        .unwrap_or(10)
-        .clamp(1, 100);
-    let offset = (page - 1) * per_page;
+    let (page, per_page, offset) = parse_pagination(pagination);
 
     match list_countermeasure_deployments(&state.pool, per_page, offset).await {
         Ok((deployments, total_count)) => {
@@ -224,12 +228,7 @@ pub async fn list_signal_disruptions(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination
-        .per_page
-        .unwrap_or(10)
-        .clamp(1, 100);
-    let offset = (page - 1) * per_page;
+    let (page, per_page, offset) = parse_pagination(pagination);
 
     match list_signal_disruption_audits(&state.pool, per_page, offset).await {
         Ok((audits, total_count)) => {
@@ -298,12 +297,7 @@ pub async fn list_jamming_operations(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination
-        .per_page
-        .unwrap_or(10)
-        .clamp(1, 100);
-    let offset = (page - 1) * per_page;
+    let (page, per_page, offset) = parse_pagination(pagination);
 
     match crate::db::list_jamming_operations(&state.pool, per_page, offset).await {
         Ok((operations, total_count)) => {
