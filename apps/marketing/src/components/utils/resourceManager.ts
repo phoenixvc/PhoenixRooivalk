@@ -227,8 +227,8 @@ export const DRONE_UNLOCK_DATA: Record<string, DroneData> = {
     researchCost: 80,
     tokenCost: 100,
   },
-  coordinator: {
-    id: "coordinator",
+  "swarm-coordinator": {
+    id: "swarm-coordinator",
     name: "Coordinator Drone",
     role: "command_control",
     notes: "Swarm coordination and mission command.",

@@ -17,21 +17,16 @@ import { useFullscreen } from "./hooks/useFullscreen";
 import { useGameState } from "./hooks/useGameState";
 import { useThreatSimulatorEvents } from "./hooks/useThreatSimulatorEvents";
 import { useThreatSimulatorGame } from "./hooks/useThreatSimulatorGame";
+import type { PowerUp as GamePowerUp } from "../types/game";
+import { getThreatAppearance as mapThreatAppearance } from "./utils/threatUtils";
 
-interface ThreatSimulatorProps {
-  isTeaser?: boolean;
-  autoFullscreen?: boolean;
-  demoMode?: boolean; // Show component showcase instead of game
-}
+ interface ThreatSimulatorProps {
+   isTeaser?: boolean;
+   autoFullscreen?: boolean;
+   demoMode?: boolean; // Show component showcase instead of game
+ }
 
-// Define power-up types as a union type to avoid string errors
-type PowerUpType =
-  | "rapid-fire"
-  | "damage-boost"
-  | "area-effect"
-  | "range-boost";
-
-export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
+ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   isTeaser = false,
   autoFullscreen = false,
   demoMode = false,
@@ -43,8 +38,6 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   const [showSimulationWarning, setShowSimulationWarning] = useState(true);
   const [showResearch, setShowResearch] = useState(false);
   const [showTokenStore, setShowTokenStore] = useState(false);
-  const [showFullscreenPrompt, setShowFullscreenPrompt] =
-    useState(autoFullscreen);
 
   // Demo mode state
   const [demoViewMode, setDemoViewMode] = useState<
@@ -123,8 +116,16 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   });
 
   // Pass correct props structure to useFullscreen hook
-  const { isFullscreen, enterFullscreen, exitFullscreen } = useFullscreen({
+  const {
+    isFullscreen,
+    showFullscreenPrompt,
+    setShowFullscreenPrompt,
+    enterFullscreen,
+    exitFullscreen,
+  } = useFullscreen({
     gameRef,
+    autoFullscreen,
+    isTeaser,
   });
 
   const { addFeed } = useEventFeed();
@@ -275,26 +276,11 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
     }
   };
 
-  // Create getThreatAppearance function with proper return type
-  const getThreatAppearance = (type: string) => {
-    const appearances: Record<
-      string,
-      { emoji: string; color: string; cssClass: string }
-    > = {
-      drone: { emoji: "🚁", color: "bg-red-500", cssClass: "threat-drone" },
-      swarm: { emoji: "👾", color: "bg-yellow-500", cssClass: "threat-swarm" },
-      stealth: {
-        emoji: "🥷",
-        color: "bg-gray-700",
-        cssClass: "threat-stealth",
-      },
-      // Add more threat types as needed
-    };
-    return appearances[type] || appearances.drone;
-  };
+  // Use shared getThreatAppearance mapping for consistency
+  const getThreatAppearance = mapThreatAppearance;
 
   // These functions are marked as unused with underscore prefix
-  const _handlePowerUpClick = (powerUpType: PowerUpType) => {
+  const _handlePowerUpClick = (powerUpType: GamePowerUp["type"]) => {
     // Implementation for handling power-up clicks
     activatePowerUp(powerUpType);
   };

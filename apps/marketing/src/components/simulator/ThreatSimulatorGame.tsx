@@ -11,6 +11,7 @@ import { ParticleEffects } from "./ParticleEffects";
 import RadarCanvas from "./RadarCanvas";
 import { ThreatSimulatorComponents } from "./ThreatSimulatorComponents";
 import { ThreatSimulatorOverlays } from "./ThreatSimulatorOverlays";
+import { getThreatAppearance as mapThreatAppearance } from "../utils/threatUtils";
 
 interface ThreatSimulatorGameProps {
   className?: string;
@@ -114,32 +115,8 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
     setShowFullscreenPrompt(false);
   };
 
-  // Threat appearance mapping
-  const getThreatAppearance = (type: string) => {
-    const normalizedType = type.toLowerCase();
-
-    const threatAppearances: Record<
-      string,
-      { emoji: string; color: string; cssClass: string }
-    > = {
-      drone: { emoji: "🚁", color: "#ef4444", cssClass: "threat-drone" },
-      swarm: { emoji: "🐝", color: "#f59e0b", cssClass: "threat-swarm" },
-      missile: { emoji: "🚀", color: "#dc2626", cssClass: "threat-missile" },
-      stealth: { emoji: "👻", color: "#6b7280", cssClass: "threat-stealth" },
-      kamikaze: { emoji: "💥", color: "#dc2626", cssClass: "threat-kamikaze" },
-      decoy: { emoji: "🎭", color: "#8b5cf6", cssClass: "threat-decoy" },
-      shielded: { emoji: "🛡️", color: "#10b981", cssClass: "threat-shielded" },
-      boss: { emoji: "👹", color: "#dc2626", cssClass: "threat-boss" },
-    };
-
-    return (
-      threatAppearances[normalizedType] || {
-        emoji: "❓",
-        color: "#6b7280",
-        cssClass: "threat-unknown",
-      }
-    );
-  };
+  // Threat appearance mapping (shared util)
+  const getThreatAppearance = mapThreatAppearance;
 
   return (
     <section className={`threatsim card flex flex-col h-full ${className}`}>

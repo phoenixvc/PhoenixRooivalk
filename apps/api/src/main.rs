@@ -1,64 +1,7 @@
-use axum::{
-    routing::{get, post},
-    Router,
-};
-use sqlx::sqlite::SqlitePoolOptions;
-use sqlx::{Pool, Sqlite};
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
 use tokio::signal::ctrl_c;
 use tracing_subscriber::prelude::*;
-
-use phoenix_api::handlers::{
-    get_countermeasure, get_evidence, get_jamming_operation, get_signal_disruption, health,
-    list_countermeasures, list_evidence, list_jamming_operations, list_signal_disruptions,
-    post_countermeasure, post_evidence, post_jamming_operation, post_signal_disruption,
-};
-use phoenix_api::migrations::MigrationManager;
-use phoenix_api::AppState;
-
-pub async fn build_app() -> (Router, Pool<Sqlite>) {
-    // DB pool (use API_DB_URL, fallback to KEEPER_DB_URL, then sqlite file)
-    let db_url = std::env::var("API_DB_URL")
-        .ok()
-        .or_else(|| std::env::var("KEEPER_DB_URL").ok())
-        .unwrap_or_else(|| {
-            eprintln!("API_DB_URL or KEEPER_DB_URL must be set");
-            std::process::exit(1)
-        });
-    let pool = SqlitePoolOptions::new()
-        .max_connections(5)
-        .connect(&db_url)
-        .await
-        .expect("failed to connect db");
-
-    // Run migrations instead of manual schema initialization
-    let migration_manager = MigrationManager::new(pool.clone());
-    migration_manager.migrate().await.expect("migration failed");
-
-    let state = AppState { pool: pool.clone() };
-    let app = Router::new()
-        .route("/health", get(health)) // Using the imported health handler
-        .route(
-            "/countermeasures",
-            post(post_countermeasure).get(list_countermeasures),
-        )
-        .route("/countermeasures/{id}", get(get_countermeasure))
-        .route("/evidence", post(post_evidence).get(list_evidence))
-        .route("/evidence/{id}", get(get_evidence))
-        .route(
-            "/signal-disruptions",
-            post(post_signal_disruption).get(list_signal_disruptions),
-        )
-        .route("/signal-disruptions/{id}", get(get_signal_disruption))
-        .route(
-            "/jamming-operations",
-            post(post_jamming_operation).get(list_jamming_operations),
-        )
-        .route("/jamming-operations/{id}", get(get_jamming_operation))
-        .with_state(state);
-    (app, pool)
-}
 
 #[tokio::main]
 async fn main() {
@@ -69,7 +12,13 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let (app, _pool) = build_app().await;
+    let (app, _pool) = match phoenix_api::build_app().await {
+        Ok(pair) => pair,
+        Err(e) => {
+            tracing::error!(error=%e, "failed to build app");
+            std::process::exit(1);
+        }
+    };
 
     let port: u16 = std::env::var("PORT")
         .ok()

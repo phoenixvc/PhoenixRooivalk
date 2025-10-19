@@ -27,7 +27,10 @@ pub async fn list_evidence(
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
     let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination.per_page.unwrap_or(10).max(1);
+    let per_page = pagination
+        .per_page
+        .unwrap_or(10)
+        .clamp(1, 100);
     let offset = (page - 1) * per_page;
 
     match list_evidence_jobs(&state.pool, per_page, offset).await {
@@ -148,7 +151,10 @@ pub async fn list_countermeasures(
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
     let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination.per_page.unwrap_or(10).max(1);
+    let per_page = pagination
+        .per_page
+        .unwrap_or(10)
+        .clamp(1, 100);
     let offset = (page - 1) * per_page;
 
     match list_countermeasure_deployments(&state.pool, per_page, offset).await {
@@ -219,7 +225,10 @@ pub async fn list_signal_disruptions(
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
     let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination.per_page.unwrap_or(10).max(1);
+    let per_page = pagination
+        .per_page
+        .unwrap_or(10)
+        .clamp(1, 100);
     let offset = (page - 1) * per_page;
 
     match list_signal_disruption_audits(&state.pool, per_page, offset).await {
@@ -290,7 +299,10 @@ pub async fn list_jamming_operations(
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
     let page = pagination.page.unwrap_or(1).max(1);
-    let per_page = pagination.per_page.unwrap_or(10).max(1);
+    let per_page = pagination
+        .per_page
+        .unwrap_or(10)
+        .clamp(1, 100);
     let offset = (page - 1) * per_page;
 
     match crate::db::list_jamming_operations(&state.pool, per_page, offset).await {

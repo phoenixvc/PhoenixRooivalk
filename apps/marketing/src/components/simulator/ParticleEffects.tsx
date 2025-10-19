@@ -7,10 +7,10 @@ interface ParticleEffectsProps {
 }
 
 const POWER_UP_VISUALS = {
-  "multi-shot": { color: "bg-yellow-500", count: 5 },
   "rapid-fire": { color: "bg-blue-500", count: 7 },
+  "damage-boost": { color: "bg-red-500", count: 6 },
   "area-effect": { color: "bg-purple-500", count: 10 },
-  "shield-penetration": { color: "bg-green-500", count: 6 },
+  "range-boost": { color: "bg-green-500", count: 5 },
 };
 
 export const ParticleEffects: React.FC<ParticleEffectsProps> = ({
