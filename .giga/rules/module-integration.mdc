@@ -1,5 +1,5 @@
 ---
-description: Defines complex inter-module communication patterns and integration points for distributed threat simulation system
+description: Specification for analyzing integration patterns between modules and components in a defense simulation system
 ---
 
 # === USER INSTRUCTIONS ===
@@ -51,24 +51,21 @@ Each profile configures:
 - Formation patterns
 - Evidence anchoring requirements
 $END$
-# === END USER INSTRUCTIONS ===
 
+---
+description: Defines complex inter-module communication patterns and integration points for distributed threat simulation system
+---
 # module-integration
-
 ## Core Integration Components
-
 ### 1. Evidence Anchoring System (Score: 95)
 `crates/anchor-etherlink/src/lib.rs`, `crates/anchor-solana/src/lib.rs`
-
 Implements cross-chain evidence anchoring with:
 - Dual-network transaction submission (Etherlink/Solana)
 - Confirmation status synchronization
 - Fallback network selection
 - Cross-chain reference tracking
-
 ### 2. Threat Simulation Integration (Score: 90) 
 `apps/threat-simulator-desktop/src/game/engine.rs`
-
 Coordinates multiple simulation subsystems:
 - Formation management
 - Weapon systems 
@@ -76,44 +73,94 @@ Coordinates multiple simulation subsystems:
 - Particle effects
 - Auto-targeting
 - Energy management
-
 ### 3. Marketing Site WASM Bridge (Score: 85)
 `apps/marketing/src/components/WasmThreatSimulator.tsx`
-
 Provides seamless integration between web and WASM components:
 - Dynamic WASM module loading
 - Shared state management
 - Event propagation
 - Resource cleanup
 - Error boundary handling
-
 ### 4. Evidence Processing Pipeline (Score: 85)
 `apps/evidence-cli/src/main.rs`, `apps/keeper/src/lib.rs`
-
 Coordinates evidence workflow across modules:
 - Record creation
 - Hash generation
 - Chain selection
 - Transaction submission
 - Status tracking
-
 ### 5. Resource Management Bridge (Score: 80)
 `apps/marketing/src/components/utils/resourceManager.ts`
-
 Synchronizes resource state across modules:
 - Energy allocation
 - Weapon cooldowns
 - Research progression
 - Token economy
-
 ### 6. Formation Coordination System (Score: 75)
 `apps/threat-simulator-desktop/src/game/formations.rs`
-
 Manages formation data flow between modules:
 - Position calculations
 - Role assignments
 - Movement coordination
 - Formation integrity checks
+$END$
+# === END USER INSTRUCTIONS ===
+
+# module-integration
+
+## Core Integration Components
+
+### 1. Threat Simulator Integration Layer
+**Path**: `apps/marketing/src/components/WasmThreatSimulator.tsx`
+**Importance Score**: 95
+
+Manages bidirectional communication between the high-performance Rust simulation core and React frontend:
+- Dynamic WASM module loading and initialization
+- Shared memory buffer management for real-time threat data
+- Event delegation system for threat response coordination
+- Cross-module state synchronization
+
+### 2. Evidence Chain Integration 
+**Path**: `crates/anchor-solana/src/lib.rs`, `crates/anchor-etherlink/src/lib.rs`
+**Importance Score**: 90
+
+Implements dual-chain anchoring system:
+- Parallel transaction submission to Solana and EtherLink
+- Cross-chain confirmation verification
+- Synchronized evidence record management
+- Failure recovery and retry coordination
+
+### 3. Formation Management Bridge
+**Path**: `apps/threat-simulator-desktop/src/game/formations.rs`
+**Importance Score**: 85
+
+Coordinates formation calculations between modules:
+- Geometric calculation handoff between Rust and TypeScript
+- Real-time formation updates across simulation boundaries
+- Shared memory optimization for position data
+- Cross-module validation protocols
+
+### 4. Resource Management Integration
+**Path**: `apps/threat-simulator-desktop/src/components/energy_management.rs`
+**Importance Score**: 85
+
+Centralizes resource allocation across modules:
+- Energy budget distribution system
+- Cross-module power management protocols
+- Synchronized cooldown tracking
+- Resource constraint enforcement
+
+### 5. Threat Response Coordination
+**Path**: `apps/marketing/src/components/utils/responseProtocols.ts`
+**Importance Score**: 80
+
+Manages threat response workflow across modules:
+- Protocol activation synchronization
+- Cross-module threat assessment sharing
+- Response verification pipeline
+- Module-specific capability activation
+
+The integration architecture focuses heavily on military-grade simulation requirements, particularly around real-time coordination and secure evidence management. Key emphasis is placed on maintaining consistency across the WASM boundary and ensuring reliable dual-chain anchoring.
 
 $END$
 

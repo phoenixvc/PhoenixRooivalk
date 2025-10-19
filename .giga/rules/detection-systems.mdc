@@ -1,5 +1,5 @@
 ---
-description: Analyzes detection system capabilities, sensor fusion, and threat analysis algorithms for counter-drone defense systems
+description: Technical specifications for drone detection systems, sensor integration, and threat analysis algorithms
 ---
 
 # === USER INSTRUCTIONS ===
@@ -64,12 +64,12 @@ Links detection to response:
 - Engagement zone management
 - Multiple target handling
 $END$
-# === END USER INSTRUCTIONS ===
 
+---
+description: Analyzes detection system capabilities, sensor fusion, and threat analysis algorithms for counter-drone defense systems
+---
 # detection-systems
-
 ## Core Detection Components
-
 ### Multi-Modal Sensor Fusion (Importance Score: 95)
 - RF signal detection and classification
 - Visual target tracking with computer vision
@@ -77,50 +77,101 @@ $END$
 - RADAR integration and tracking
 - Sensor data correlation and fusion engine
 - Files: apps/threat-simulator-desktop/src/game/auto_targeting.rs
-
 ### Threat Classification System (Importance Score: 90)
 - Dynamic threat categorization (Commercial, Military, Swarm, Stealth)
 - Real-time signature analysis and matching
 - Behavior pattern recognition
 - Classification confidence scoring
 - Files: apps/threat-simulator-desktop/src/game/types.rs
-
 ### Detection Zones Management (Importance Score: 85)
 - Configurable detection zone geometry
 - Zone priority management
 - Coverage analysis and gap detection
 - Alert threshold configuration
 - Files: apps/threat-simulator-desktop/src/game/formations.rs
-
 ### Autonomous Response System (Importance Score: 88)
 - Threat prioritization algorithms
 - Response protocol selection
 - Engagement zone calculations
 - Rules of engagement enforcement
 - Files: apps/marketing/src/components/utils/responseProtocols.ts
-
 ### Sensor Network Topology (Importance Score: 82)
 - Distributed sensor placement optimization
 - Network redundancy management
 - Coverage overlap calculations
 - Detection reliability scoring
 - Files: apps/threat-simulator-desktop/src/game/engine.rs
-
 ## Supporting Detection Systems
-
 ### Environmental Adaptation (Importance Score: 75)
 - Weather impact modeling
 - Signal propagation adjustments
 - Detection threshold adaptation
 - Files: apps/marketing/src/components/utils/threatUtils.ts
-
 ### Performance Monitoring (Importance Score: 70)
 - Detection accuracy metrics
 - False positive/negative tracking
 - System response time analysis
 - Files: apps/marketing/src/components/utils/performanceMonitor.ts
-
 The detection systems implement a sophisticated multi-layered approach to drone detection, incorporating various sensor types and advanced fusion algorithms. The system particularly excels in autonomous threat classification and response generation while maintaining adaptability to environmental conditions.
+$END$
+# === END USER INSTRUCTIONS ===
+
+# detection-systems
+
+## Threat Detection Core
+Importance Score: 95
+Location: apps/threat-simulator-desktop/src/game/auto_targeting.rs
+
+Multi-modal sensor fusion system implementing:
+- RF signature analysis for drone classification
+- Visual detection with CNN-based object recognition 
+- Acoustic pattern matching against known drone profiles
+- Radar track correlation across multiple bands
+- Sensor data fusion with 99.7% accuracy requirement
+
+## Formation Analysis
+Importance Score: 90
+Location: apps/threat-simulator-desktop/src/game/formations.rs
+
+Drone swarm formation detection:
+- Circle formation detection (360° coverage analysis)
+- Line formation recognition for coordinated approaches
+- Diamond pattern identification for tactical assessment
+- Swarm behavior analysis with density mapping
+- Real-time formation change detection
+
+## Threat Response Protocols
+Importance Score: 85
+Location: apps/marketing/src/components/utils/responseProtocols.ts
+
+Automated response selection system:
+- Protocol matching based on threat classification
+- Response prioritization by threat severity
+- Multi-drone coordination for swarm threats
+- Legal compliance validation for responses
+- Audit trail generation for response actions
+
+## Sensor Integration
+Importance Score: 80
+Location: apps/marketing/src/components/utils/strategicDeployment.ts
+
+Detection zone management:
+- Dynamic sensor coverage mapping
+- Dead zone identification
+- Optimal sensor placement algorithms
+- Detection range calculations
+- Cross-sensor correlation rules
+
+## Wave Analysis
+Importance Score: 75
+Location: apps/threat-simulator-desktop/src/game/waves.rs
+
+Progressive threat pattern analysis:
+- Wave composition analysis
+- Pattern recognition for attack strategies
+- Difficulty scaling based on detected formations
+- Threat type distribution modeling
+- Historical pattern correlation
 
 $END$
 

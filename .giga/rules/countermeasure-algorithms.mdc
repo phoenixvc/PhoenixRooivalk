@@ -1,5 +1,5 @@
 ---
-description: Documents core algorithms and implementations for RF jamming, GPS spoofing, and signal disruption systems
+description: Documents core algorithms and implementations for RF jamming, GPS spoofing, and signal disruption countermeasures
 ---
 
 # === USER INSTRUCTIONS ===
@@ -125,10 +125,11 @@ Importance Score: 80
 - Control link severance patterns
 The countermeasure system employs a modular architecture with specialized algorithms for each disruption method. Core functionality includes automatic threat classification, optimal countermeasure selection, and coordinated deployment of multiple jamming techniques while maintaining regulatory compliance.
 $END$
-# === END USER INSTRUCTIONS ===
 
+---
+description: Documents core algorithms and implementations for RF jamming, GPS spoofing, and signal disruption systems
+---
 # countermeasure-algorithms
-
 ## Jamming Systems (Importance: 95)
 File: apps/threat-simulator-desktop/src/game/weapons.rs
 - RF jamming algorithms implementing:
@@ -139,7 +140,6 @@ File: apps/threat-simulator-desktop/src/game/weapons.rs
 - Dynamic power allocation based on target distance and signal strength
 - Automated frequency hopping detection and targeted disruption
 - Multi-target jamming prioritization logic
-
 ## GPS Spoofing (Importance: 90)
 File: apps/threat-simulator-desktop/src/game/auto_targeting.rs
 - GPS signal replication algorithms for:
@@ -149,7 +149,6 @@ File: apps/threat-simulator-desktop/src/game/auto_targeting.rs
 - Progressive position drift calculations
 - Signal power matching with legitimate GPS sources
 - Multiple simultaneous spoofing patterns
-
 ## Signal Disruption (Importance: 85)
 File: apps/threat-simulator-desktop/src/components/synergy_system.rs
 - Implementation of signal disruption techniques:
@@ -159,7 +158,6 @@ File: apps/threat-simulator-desktop/src/components/synergy_system.rs
   - Authentication bypass
 - Adaptive power management for optimal disruption
 - Target prioritization based on threat classification
-
 ## Counter-Drone Formation Control (Importance: 80)
 File: apps/threat-simulator-desktop/src/game/formations.rs
 - Defensive formation algorithms:
@@ -167,13 +165,76 @@ File: apps/threat-simulator-desktop/src/game/formations.rs
   - Multi-unit coordination for signal overlap
   - Dynamic repositioning based on threat movement
 - Formation effectiveness calculations against different drone types
-
 ## Energy Management System (Importance: 75)
 File: apps/threat-simulator-desktop/src/components/energy_management.rs
 - Power allocation algorithms for countermeasures
 - Resource distribution between multiple jamming systems
 - Cooldown management for high-power operations
 - Energy efficiency optimization based on threat distance
+$END$
+# === END USER INSTRUCTIONS ===
+
+# countermeasure-algorithms
+
+## Core Signal Disruption Systems
+
+### RF Jamming Engine
+File: apps/threat-simulator-desktop/src/game/weapons.rs
+Importance Score: 95
+
+- Frequency band targeting with dynamic power allocation
+- Multi-mode jamming patterns (sweep, spot, barrage)
+- Automatic frequency scanning and classification
+- Energy budget optimization for sustained jamming
+
+### GPS Spoofing Module
+File: apps/threat-simulator-desktop/src/game/countermeasures.rs
+Importance Score: 90
+
+- GNSS signal replication with configurable drift patterns
+- Position data manipulation algorithms
+- Time synchronization disruption calculations
+- Signal strength modulation based on target distance
+
+### Signal Analysis System
+File: apps/marketing/src/components/utils/threatUtils.ts
+Importance Score: 85
+
+- Signal characteristic identification
+- Transmission protocol detection
+- Bandwidth utilization monitoring
+- Interference pattern recognition
+
+## Countermeasure Coordination
+
+### Tactical Response Manager
+File: apps/threat-simulator-desktop/src/game/auto_targeting.rs
+Importance Score: 85
+
+- Multi-layer defense coordination
+- Priority-based countermeasure selection
+- Resource allocation between active systems
+- Response effectiveness tracking
+
+### Energy Management
+File: apps/threat-simulator-desktop/src/game/energy_management.rs
+Importance Score: 80
+
+- Power distribution algorithms
+- Thermal load balancing
+- Efficiency optimization
+- Resource depletion modeling
+
+## Response Protocols
+
+### Engagement Rules Engine
+File: apps/marketing/src/components/utils/responseProtocols.ts
+Importance Score: 75
+
+- Legal compliance validation
+- Minimum force calculations
+- Collateral impact assessment
+- Authorization level enforcement
 
 $END$
 

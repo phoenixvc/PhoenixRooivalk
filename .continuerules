@@ -44,8 +44,6 @@ Simulated compliance features include geofencing, fail-safe return-to-launch (RT
 - No real-world defense system capabilities are implied or represented
 
 ```
-# === END USER INSTRUCTIONS ===
-
 
 # main-overview
 
@@ -61,56 +59,48 @@ Simulated compliance features include geofencing, fail-safe return-to-launch (RT
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-Phoenix Rooivalk implements a sophisticated military defense simulation system with three core business domains:
+The PhoenixRooivalk simulator models a counter‑drone defense system with four core business domains:
 
-## Counter-Drone Defense System (Score: 95)
-- Advanced threat detection and neutralization
-- Formation-based tactical deployment patterns
-- Weapon effectiveness matrices against various drone types
-- Resource management for defensive operations
-- Mission-specific objective tracking
+## 1. Threat Response System (Importance: 95/100)
+- Multi-layered threat detection with AI-based classification
+- Autonomous response selection based on threat characteristics
+- Dynamic formation management for defensive deployments
+- Real-time tactical adjustments based on threat behavior
+- Integration with military-grade sensor fusion systems
 
-Key implementations:
-```
-apps/threat-simulator-desktop/src/game/formations.rs
-apps/threat-simulator-desktop/src/game/weapons.rs
-apps/threat-simulator-desktop/src/components/simulator/ThreatSimulatorGame.tsx
-```
+Key Files:
+- `apps/threat-simulator-desktop/src/game/engine.rs`
+- `apps/threat-simulator-desktop/src/game/formations.rs`
+- `apps/threat-simulator-desktop/src/game/weapons.rs`
 
-## Evidence Management System (Score: 90)
-- Dual-chain anchoring (Solana + EtherLink)
-- Evidence record creation and validation
-- Transaction confirmation tracking
-- Cryptographic digest generation
+## 2. Evidence Management System (Importance: 90/100)
+- Dual-chain anchoring for evidence records (Solana + EtherLink)
+- Tamper-proof audit trails for all countermeasure deployments
+- Complex job management with exponential backoff retry logic
+- Automated confirmation polling across multiple blockchains
 
-Key implementations:
-```
-apps/keeper/src/evidence_manager.rs
-crates/evidence/src/lib.rs
-crates/anchor-solana/src/lib.rs
-crates/anchor-etherlink/src/lib.rs
-```
+Key Files:
+- `apps/api/src/repository.rs`
+- `crates/anchor-etherlink/src/lib.rs`
+- `crates/anchor-solana/src/lib.rs`
 
-## Simulation Training Platform (Score: 85)
-- Dynamic threat scaling based on performance
-- Weapon synergy system
-- Research and development progression
-- Resource allocation mechanics
-- Mission-specific scenario generation
+## 3. Tactical Simulation Engine (Importance: 85/100)
+- Progressive difficulty scaling with 7 distinct threat types
+- Complex weapon synergy system with multiplicative effects
+- Resource management with thermal and energy constraints
+- Formation-based tactical advantage calculations
 
-Key implementations:
-```
-apps/marketing/src/components/ThreatSimulator.tsx
-apps/marketing/src/components/utils/autoTargeting.ts
-apps/marketing/src/components/utils/strategicDeployment.ts
-```
+Key Files:
+- `apps/marketing/src/components/utils/responseProtocols.ts`
+- `apps/marketing/src/components/utils/strategicDeployment.ts`
 
-The system architecture emphasizes military-grade simulation accuracy with particular focus on:
-- Real-world counter-drone tactics
-- Evidence-based accountability
-- Progressive difficulty scaling
-- Resource optimization
-- Mission-specific training scenarios
+## 4. Research & Development System (Importance: 80/100)
+- Technology tree with interdependent unlocks
+- Performance-based progression system
+- Compliance-aware weapon system deployment
+- Real-world inspired countermeasure development paths
+
+The system emphasizes military-grade defensive capabilities while maintaining strict compliance requirements and evidence tracking. Core business logic focuses on threat response automation, tactical deployment optimization, and comprehensive audit trails.
 
 $END$
 

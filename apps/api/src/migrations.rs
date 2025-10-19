@@ -322,7 +322,7 @@ mod tests {
 
     async fn create_test_pool() -> Pool<Sqlite> {
         // Use in-memory database with shared cache for the connection pool
-        let db_url = "sqlite::memory:";
+        let db_url = "sqlite::memory:?cache=shared";
 
         let pool = SqlitePoolOptions::new()
             .max_connections(1)
