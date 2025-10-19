@@ -20,13 +20,13 @@ import { useThreatSimulatorGame } from "./hooks/useThreatSimulatorGame";
 import type { PowerUp as GamePowerUp } from "../types/game";
 import { getThreatAppearance as mapThreatAppearance } from "./utils/threatUtils";
 
- interface ThreatSimulatorProps {
+interface ThreatSimulatorProps {
    isTeaser?: boolean;
    autoFullscreen?: boolean;
    demoMode?: boolean; // Show component showcase instead of game
  }
 
- export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
+export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   isTeaser = false,
   autoFullscreen = false,
   demoMode = false,
