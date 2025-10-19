@@ -59,7 +59,7 @@ Simulated compliance features include geofencing, fail-safe return-to-launch (RT
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-The Phoenix Rooivalk system implements a sophisticated counter-drone defense platform with three core business domains:
+The PhoenixRooivalk simulator models a counter‑drone defense system with four core business domains:
 
 ## 1. Threat Response System (Importance: 95/100)
 - Multi-layered threat detection with AI-based classification
