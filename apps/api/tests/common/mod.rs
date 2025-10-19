@@ -6,7 +6,7 @@
 //!
 //! Use the environment variable helpers to safely set and restore environment variables:
 //!
-//! ```
+//! ```ignore
 //! common::with_env_var("API_DB_URL", "sqlite::memory:?cache=shared", || async {
 //!     // Your test code here - API_DB_URL will be set to sqlite::memory:?cache=shared
 //!     // and automatically restored afterward
@@ -26,7 +26,7 @@
 //!
 //! For server tests, use these helpers to avoid race conditions and simplify setup:
 //!
-//! ```
+//! ```ignore
 //! // Create a listener on a free port
 //! let (listener, port) = common::create_test_listener();
 //!
@@ -52,7 +52,7 @@
 //!
 //! The module also provides utilities for common test operations:
 //!
-//! ```
+//! ```ignore
 //! // Create an in-memory database URL
 //! let db_url = common::create_test_db_url();
 //!
@@ -209,24 +209,49 @@ where
     let _guard = ENV_MUTEX.lock().await;
 
     // Save original values
+    println!("Saving original database environment variables");
     let original_api_url = std::env::var("API_DB_URL").ok();
     let original_keeper_url = std::env::var("KEEPER_DB_URL").ok();
 
     // Clear environment variables
+    println!("Removing API_DB_URL and KEEPER_DB_URL for default URL testing");
     std::env::remove_var("API_DB_URL");
     std::env::remove_var("KEEPER_DB_URL");
 
+    // Verify the variables were actually removed
+    if std::env::var("API_DB_URL").is_ok() {
+        panic!("Failed to remove API_DB_URL environment variable");
+    }
+    if std::env::var("KEEPER_DB_URL").is_ok() {
+        panic!("Failed to remove KEEPER_DB_URL environment variable");
+    }
+
     // Execute the function while holding the lock
+    // This ensures no other test can modify environment variables during execution
+    println!("Executing test with default database URLs");
     f().await;
 
-    // Restore original values
+    // Restore original values (still holding the lock)
+    println!("Restoring original database environment variables");
     match original_api_url {
-        Some(val) => std::env::set_var("API_DB_URL", val),
-        None => std::env::remove_var("API_DB_URL"),
+        Some(val) => {
+            println!("Restoring API_DB_URL={}", val);
+            std::env::set_var("API_DB_URL", val);
+        },
+        None => {
+            println!("Keeping API_DB_URL removed");
+            std::env::remove_var("API_DB_URL");
+        }
     }
     match original_keeper_url {
-        Some(val) => std::env::set_var("KEEPER_DB_URL", val),
-        None => std::env::remove_var("KEEPER_DB_URL"),
+        Some(val) => {
+            println!("Restoring KEEPER_DB_URL={}", val);
+            std::env::set_var("KEEPER_DB_URL", val);
+        },
+        None => {
+            println!("Keeping KEEPER_DB_URL removed");
+            std::env::remove_var("KEEPER_DB_URL");
+        }
     }
     // Lock is automatically released when _guard goes out of scope
 }
