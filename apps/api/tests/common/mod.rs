@@ -7,8 +7,8 @@
 //! Use the environment variable helpers to safely set and restore environment variables:
 //!
 //! ```
-//! common::with_env_var("API_DB_URL", "sqlite::memory:", || async {
-//!     // Your test code here - API_DB_URL will be set to sqlite::memory:
+//! common::with_env_var("API_DB_URL", "sqlite::memory:?cache=shared", || async {
+//!     // Your test code here - API_DB_URL will be set to sqlite::memory:?cache=shared
 //!     // and automatically restored afterward
 //! }).await;
 //!
@@ -131,7 +131,7 @@ pub async fn spawn_test_server(app: Router, listener: TcpListener) -> (tokio::ta
 
 /// Creates an in-memory SQLite database string for testing
 pub fn create_test_db_url() -> String {
-    "sqlite::memory:".to_string()
+    "sqlite::memory:?cache=shared".to_string()
 }
 
 /// Utility to assert JSON response properties
@@ -149,7 +149,7 @@ where
     F: FnOnce() -> Fut,
     Fut: std::future::Future<Output = ()>,
 {
-    with_env_var("API_DB_URL", "sqlite::memory:", f).await
+    with_env_var("API_DB_URL", "sqlite::memory:?cache=shared", f).await
 }
 
 /// Sets up environment for Keeper database fallback tests
@@ -161,7 +161,7 @@ where
     let original_api_url = std::env::var("API_DB_URL").ok();
     std::env::remove_var("API_DB_URL");
     
-    with_env_var("KEEPER_DB_URL", "sqlite::memory:", f).await;
+    with_env_var("KEEPER_DB_URL", "sqlite::memory:?cache=shared", f).await;
     
     // Restore original API_DB_URL if it existed
     match original_api_url {

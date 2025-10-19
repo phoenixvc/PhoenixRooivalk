@@ -374,10 +374,10 @@ mod tests {
 
     async fn create_test_repo() -> EvidenceRepository {
         // Use in-memory database with shared cache
-        let db_url = "sqlite::memory:";
+        let db_url = "sqlite::memory:?cache=shared";
 
         let pool = SqlitePoolOptions::new()
-            .max_connections(1)
+            .max_connections(5)
             .connect(db_url)
             .await
             .unwrap();
