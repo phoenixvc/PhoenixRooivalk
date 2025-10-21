@@ -26,6 +26,15 @@ type NavigationItem = LinkItem | DropdownItem;
 
 export const Navigation: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   const navigationItems: NavigationItem[] = [
     {
@@ -171,22 +180,89 @@ export const Navigation: React.FC = () => {
 
         {/* Mobile navigation */}
         <div className={styles.mobileNav}>
-          <button className={styles.mobileMenuButton}>
+          <button
+            className={styles.mobileMenuButton}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+          >
             <svg
               className={styles.mobileMenuIcon}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
             </svg>
           </button>
         </div>
+
+        {/* Mobile menu overlay */}
+        {isMobileMenuOpen && (
+          <div className={styles.mobileMenuOverlay}>
+            <div className={styles.mobileMenuContent}>
+              <nav className={styles.mobileMenuNav}>
+                {navigationItems.map((item) => (
+                  <div
+                    key={item.type === "link" ? item.href : item.label}
+                    className={styles.mobileMenuItem}
+                  >
+                    {item.type === "dropdown" ? (
+                      <>
+                        <div className={styles.mobileMenuLabel}>
+                          {item.label}
+                        </div>
+                        <div className={styles.mobileMenuSubItems}>
+                          {item.items?.map((subItem) => (
+                            <Link
+                              key={subItem.href}
+                              href={subItem.href}
+                              className={styles.mobileMenuLink}
+                              onClick={closeMobileMenu}
+                            >
+                              <span className={styles.mobileMenuLinkLabel}>
+                                {subItem.label}
+                              </span>
+                              <span
+                                className={styles.mobileMenuLinkDescription}
+                              >
+                                {subItem.description}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    ) : item.type === "link" ? (
+                      <Link
+                        href={item.href}
+                        className={styles.mobileMenuLink}
+                        onClick={closeMobileMenu}
+                      >
+                        <span className={styles.mobileMenuLinkLabel}>
+                          {item.label}
+                        </span>
+                      </Link>
+                    ) : null}
+                  </div>
+                ))}
+              </nav>
+            </div>
+          </div>
+        )}
 
         {/* Theme Toggle & Links */}
         <div className={styles.actions}>
