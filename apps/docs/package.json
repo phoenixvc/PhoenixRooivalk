@@ -13,7 +13,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@docusaurus/core": "^3.9.1",
+    "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-content-docs": "^3.9.2",
     "@docusaurus/plugin-content-pages": "^3.9.2",
     "@docusaurus/plugin-debug": "^3.9.2",
@@ -21,7 +21,7 @@
     "@docusaurus/plugin-google-gtag": "^3.9.1",
     "@docusaurus/plugin-ideal-image": "^3.9.2",
     "@docusaurus/plugin-pwa": "^3.9.1",
-    "@docusaurus/plugin-sitemap": "^3.9.1",
+    "@docusaurus/plugin-sitemap": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.1",
     "@docusaurus/theme-classic": "^3.9.1",
     "clsx": "^2.1.0",
@@ -31,10 +31,10 @@
   },
   "devDependencies": {
     "@docusaurus/types": "^3.4.0",
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^9.38.0",
     "@types/node": "^24.7.2",
     "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.1",
+    "@types/react-dom": "19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
     "@typescript-eslint/parser": "^8.45.0",
     "eslint": "^9.36.0",
