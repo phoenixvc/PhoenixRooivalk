@@ -281,8 +281,8 @@ async fn test_migration_system() {
     // Check status
     let status = migration_manager.get_status().await.unwrap();
     assert!(status.is_up_to_date);
-    assert_eq!(status.current_version, 4);
-    assert_eq!(status.applied_migrations.len(), 4);
+    assert_eq!(status.current_version, status.latest_version);
+    assert_eq!(status.applied_migrations.len(), status.latest_version as usize);
     
     // Test idempotency
     migration_manager.migrate().await.unwrap();

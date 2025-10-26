@@ -313,3 +313,22 @@ export function calculateThreatPriority(
 
   return "low";
 }
+
+/**
+ * Map threat type to appearance for consistent UI rendering
+ */
+export function getThreatAppearance(
+  type: string,
+): { emoji: string; color: string; cssClass: string } {
+  const map: Record<string, { emoji: string; color: string; cssClass: string }> = {
+    drone: { emoji: "🚁", color: "bg-red-500", cssClass: "threat-drone" },
+    swarm: { emoji: "👾", color: "bg-yellow-500", cssClass: "threat-swarm" },
+    stealth: { emoji: "🥷", color: "bg-gray-700", cssClass: "threat-stealth" },
+    missile: { emoji: "🚀", color: "bg-red-600", cssClass: "threat-missile" },
+    kamikaze: { emoji: "💥", color: "bg-red-600", cssClass: "threat-kamikaze" },
+    decoy: { emoji: "🎭", color: "bg-violet-600", cssClass: "threat-decoy" },
+    shielded: { emoji: "🛡️", color: "bg-green-600", cssClass: "threat-shielded" },
+    boss: { emoji: "👹", color: "bg-red-700", cssClass: "threat-boss" },
+  };
+  return map[type] || map.drone;
+}

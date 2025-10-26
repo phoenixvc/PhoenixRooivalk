@@ -144,12 +144,17 @@ export const useThreatSimulatorGame = ({
     [addThreat, gameState.level, gameRef],
   );
 
+  // Track which physics objects have been added to avoid per-frame churn
+  const addedPhysicsIdsRef = useRef<Set<string>>(new Set());
+
   // Fixed movement function - smooth movement without jumping
   const moveAllThreats = useCallback(() => {
     if (!gameRef.current) return;
 
-    const rect = gameRef.current.getBoundingClientRect();
-    const centerPoint = { x: rect.width / 2, y: rect.height / 2 };
+    const centerPoint = {
+      x: gameDimensions.width / 2,
+      y: gameDimensions.height / 2,
+    };
 
     const movedThreats = gameState.threats.map((threat) => {
       // Skip non-active threats
@@ -190,31 +195,27 @@ export const useThreatSimulatorGame = ({
       let finalX = movementResult.x;
       let finalY = movementResult.y;
 
-      // Add physics object to collision system
-      const physicsObj = createPhysicsObject(
-        threat.id,
-        finalX,
-        finalY,
-        "circle",
-        {
+      // Add/update physics object in collision system
+      if (!addedPhysicsIdsRef.current.has(threat.id)) {
+        const physicsObj = createPhysicsObject(threat.id, finalX, finalY, "circle", {
           radius: 8,
           mass: threat.type === "boss" ? 5 : 1,
           restitution: 0.3,
           velocity: movementResult.velocity,
-        },
-      );
-
-      collisionSystem.addObject(physicsObj);
+        });
+        collisionSystem.addObject(physicsObj);
+        addedPhysicsIdsRef.current.add(threat.id);
+      } else {
+        collisionSystem.updateObject(threat.id, finalX, finalY, movementResult.velocity);
+      }
 
       // Special movement patterns
       if (threat.type === "swarm") {
-        // Swarm zigzag pattern
         const time = Date.now() / 1000;
         const zigzag = Math.sin(time * 5 + threat.createdAt) * 5;
         finalX += zigzag * (-movementResult.velocity.y / 10);
         finalY += zigzag * (movementResult.velocity.x / 10);
       } else if (threat.type === "stealth") {
-        // Stealth opacity pulsing
         const time = Date.now() / 2000;
         threat.specialProperties = {
           ...threat.specialProperties,
@@ -243,7 +244,6 @@ export const useThreatSimulatorGame = ({
     const collisions = collisionSystem.checkCollisions();
     collisions.forEach(({ obj1, obj2, result }) => {
       if (result.hasCollision && result.collisionPoint) {
-        // Create debris at collision point
         collisionSystem.createDebris(
           result.collisionPoint.x,
           result.collisionPoint.y,
@@ -258,6 +258,8 @@ export const useThreatSimulatorGame = ({
         collisionSystem.removeObject(obj2.id);
         pathInterpolators.delete(obj1.id);
         pathInterpolators.delete(obj2.id);
+        addedPhysicsIdsRef.current.delete(obj1.id);
+        addedPhysicsIdsRef.current.delete(obj2.id);
 
         // Add explosion effect
         particleSystem.createExplosion(
@@ -274,6 +276,8 @@ export const useThreatSimulatorGame = ({
     // Update debris
     collisionSystem.updateDebris(16); // 16ms delta time approximation
   }, [
+    gameDimensions.width,
+    gameDimensions.height,
     gameState.threats,
     updateThreats,
     gameRef,
