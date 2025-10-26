@@ -15,7 +15,7 @@
   "dependencies": {
     "@docusaurus/core": "^3.9.1",
     "@docusaurus/plugin-content-docs": "^3.9.2",
-    "@docusaurus/plugin-content-pages": "^3.9.1",
+    "@docusaurus/plugin-content-pages": "^3.9.2",
     "@docusaurus/plugin-debug": "^3.9.2",
     "@docusaurus/plugin-google-analytics": "^3.9.1",
     "@docusaurus/plugin-google-gtag": "^3.9.1",
