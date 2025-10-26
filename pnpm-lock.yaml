@@ -89,8 +89,8 @@ importers:
         specifier: ^3.9.1
         version: 3.9.1(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       '@docusaurus/plugin-ideal-image':
-        specifier: ^3.9.1
-        version: 3.9.1(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+        specifier: ^3.9.2
+        version: 3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       '@docusaurus/plugin-pwa':
         specifier: ^3.9.1
         version: 3.9.1(@docusaurus/plugin-content-docs@3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(@types/babel__core@7.20.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
@@ -156,8 +156,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       next:
-        specifier: 16.0.0
-        version: 16.0.0(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 15.5.4
+        version: 15.5.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -1533,8 +1533,8 @@ packages:
     resolution: {integrity: sha512-/SVCc57ByARzGSU60c50rMyQlBuMIJCjcsJlkphxY6B0GV4UH3tcA1994N8fFfbJ9kX3jIBe/xg3XP5qBtGDbA==}
     engines: {node: '>=20.0'}
 
-  '@docusaurus/lqip-loader@3.9.1':
-    resolution: {integrity: sha512-bCYHDxZ9U0M9pUdbUyrqyOmTuDZQw4MhZOdib+MZPmcor8U2spHnPW9+fagzJfmyoZ321X/tvEDSo3g+UxSM1Q==}
+  '@docusaurus/lqip-loader@3.9.2':
+    resolution: {integrity: sha512-Q9QO0E+HLKhcpKVOIXRVBdJ1bbxxpfSwBll5NsmGxcx1fArH0fFi68cpEztqBg7WwbFRb976MTlqlBuGrMLpuw==}
     engines: {node: '>=20.0'}
 
   '@docusaurus/mdx-loader@3.9.1':
@@ -1638,8 +1638,8 @@ packages:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
 
-  '@docusaurus/plugin-ideal-image@3.9.1':
-    resolution: {integrity: sha512-9d4VKG/jSQj4sf9wKYpr+5q4wPOnEAqGAMcLLvuh+LXmCPmrKwMOrr9M0ycCaYdE0eL/uOrLhVa5E1H2MuTEvA==}
+  '@docusaurus/plugin-ideal-image@3.9.2':
+    resolution: {integrity: sha512-YYYbmC2wSYFd7o4//5rPXt9+DkZwfwjCUmyGi5OIVqEbwELK80o3COXs2Xd0BtVIpuRvG7pKCYrMQwVo32Y9qw==}
     engines: {node: '>=20.0'}
     peerDependencies:
       jimp: '*'
@@ -1733,6 +1733,10 @@ packages:
 
   '@docusaurus/theme-translations@3.9.1':
     resolution: {integrity: sha512-mUQd49BSGKTiM6vP9+JFgRJL28lMIN3PUvXjF3rzuOHMByUZUBNwCt26Z23GkKiSIOrRkjKoaBNTipR/MHdYSQ==}
+    engines: {node: '>=20.0'}
+
+  '@docusaurus/theme-translations@3.9.2':
+    resolution: {integrity: sha512-vIryvpP18ON9T9rjgMRFLr2xJVDpw1rtagEGf8Ccce4CkTrvM/fRB8N2nyWYOW5u3DdjkwKw5fBa+3tbn9P4PA==}
     engines: {node: '>=20.0'}
 
   '@docusaurus/types@3.9.1':
@@ -3328,11 +3332,16 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  bare-events@2.7.0:
-    resolution: {integrity: sha512-b3N5eTW1g7vXkw+0CXh/HazGTcO5KYuu/RCNaJbDMPI6LHDi+7qe8EmxKUVe1sUbY2KZOVZFyj62x0OEz9qyAA==}
+  bare-events@2.8.1:
+    resolution: {integrity: sha512-oxSAxTS1hRfnyit2CL5QpAOS5ixfBjj6ex3yTNvXyY/kE719jQ/IjuESJBK2w5v4wwQRAHGseVJXx9QBYOtFGQ==}
+    peerDependencies:
+      bare-abort-controller: '*'
+    peerDependenciesMeta:
+      bare-abort-controller:
+        optional: true
 
-  bare-fs@4.4.5:
-    resolution: {integrity: sha512-TCtu93KGLu6/aiGWzMr12TmSRS6nKdfhAnzTQRbXoSWxkbb9eRd53jQ51jG7g1gYjjtto3hbBrrhzg6djcgiKg==}
+  bare-fs@4.5.0:
+    resolution: {integrity: sha512-GljgCjeupKZJNetTqxKaQArLK10vpmK28or0+RwWjEl5Rk+/xG3wkpmkv+WrcBm3q1BwHKlnhXzR8O37kcvkXQ==}
     engines: {bare: '>=1.16.0'}
     peerDependencies:
       bare-buffer: '*'
@@ -3358,8 +3367,8 @@ packages:
       bare-events:
         optional: true
 
-  bare-url@2.2.2:
-    resolution: {integrity: sha512-g+ueNGKkrjMazDG3elZO1pNs3HY5+mMmOet1jtKyhOaCnkLzitxf26z7hoAEkDNgdNmnc1KIlt/dw6Po6xZMpA==}
+  bare-url@2.3.1:
+    resolution: {integrity: sha512-v2yl0TnaZTdEnelkKtXZGnotiV6qATBlnNuUMrHl6v9Lmmrh9mw9RYyImPU7/4RahumSwQS1k2oKXcRfXcbjJw==}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -9099,6 +9108,20 @@ snapshots:
       '@babel/core': 7.28.5
       '@babel/helper-module-imports': 7.27.1
       '@babel/helper-plugin-utils': 7.27.1
+      '@babel/helper-remap-async-to-generator': 7.27.1(@babel/core@7.28.5)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@babel/plugin-transform-block-scoped-functions@7.27.1(@babel/core@7.28.5)':
+    dependencies:
+      '@babel/core': 7.28.5
+      '@babel/helper-plugin-utils': 7.27.1
+
+  '@babel/plugin-transform-block-scoping@7.28.4(@babel/core@7.28.4)':
+    dependencies:
+      '@babel/core': 7.28.5
+      '@babel/helper-module-imports': 7.27.1
+      '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/plugin-transform-block-scoped-functions@7.27.1(@babel/core@7.28.5)':
     dependencies:
@@ -9108,6 +9131,11 @@ snapshots:
   '@babel/plugin-transform-block-scoping@7.28.4(@babel/core@7.28.4)':
     dependencies:
       '@babel/core': 7.28.4
+      '@babel/helper-plugin-utils': 7.27.1
+
+  '@babel/plugin-transform-block-scoping@7.28.5(@babel/core@7.28.5)':
+    dependencies:
+      '@babel/core': 7.28.5
       '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/plugin-transform-block-scoping@7.28.5(@babel/core@7.28.5)':
@@ -9745,6 +9773,11 @@ snapshots:
   '@babel/plugin-transform-sticky-regex@7.27.1(@babel/core@7.28.4)':
     dependencies:
       '@babel/core': 7.28.4
+      '@babel/helper-plugin-utils': 7.27.1
+
+  '@babel/plugin-transform-sticky-regex@7.27.1(@babel/core@7.28.5)':
+    dependencies:
+      '@babel/core': 7.28.5
       '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/plugin-transform-sticky-regex@7.27.1(@babel/core@7.28.5)':
@@ -10762,14 +10795,15 @@ snapshots:
       chalk: 4.1.2
       tslib: 2.8.1
 
-  '@docusaurus/lqip-loader@3.9.1(webpack@5.102.1)':
+  '@docusaurus/lqip-loader@3.9.2(webpack@5.102.1)':
     dependencies:
-      '@docusaurus/logger': 3.9.1
+      '@docusaurus/logger': 3.9.2
       file-loader: 6.2.0(webpack@5.102.1)
       lodash: 4.17.21
       sharp: 0.32.6
       tslib: 2.8.1
     transitivePeerDependencies:
+      - bare-abort-controller
       - bare-buffer
       - react-native-b4a
       - webpack
@@ -10847,24 +10881,6 @@ snapshots:
   '@docusaurus/module-type-aliases@3.9.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@docusaurus/types': 3.9.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@types/history': 4.7.11
-      '@types/react': 18.3.3
-      '@types/react-router-config': 5.0.11
-      '@types/react-router-dom': 5.3.3
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      react-helmet-async: '@slorber/react-helmet-async@1.3.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)'
-      react-loadable: '@docusaurus/react-loadable@6.0.0(react@19.2.0)'
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - supports-color
-      - uglify-js
-      - webpack-cli
-
-  '@docusaurus/module-type-aliases@3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      '@docusaurus/types': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@types/history': 4.7.11
       '@types/react': 18.3.3
       '@types/react-router-config': 5.0.11
@@ -10980,6 +10996,46 @@ snapshots:
       - webpack-cli
 
   '@docusaurus/plugin-content-docs@3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
+    dependencies:
+      '@docusaurus/core': 3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      '@docusaurus/logger': 3.9.2
+      '@docusaurus/mdx-loader': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/module-type-aliases': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/theme-common': 3.9.2(@docusaurus/plugin-content-docs@3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/types': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/utils': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/utils-common': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/utils-validation': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@types/react-router-config': 5.0.11
+      combine-promises: 1.2.0
+      fs-extra: 11.3.2
+      js-yaml: 4.1.0
+      lodash: 4.17.21
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+      schema-dts: 1.1.5
+      tslib: 2.8.1
+      utility-types: 3.11.0
+      webpack: 5.102.1
+    transitivePeerDependencies:
+      - '@docusaurus/faster'
+      - '@mdx-js/react'
+      - '@parcel/css'
+      - '@rspack/core'
+      - '@swc/core'
+      - '@swc/css'
+      - bufferutil
+      - csso
+      - debug
+      - esbuild
+      - lightningcss
+      - supports-color
+      - typescript
+      - uglify-js
+      - utf-8-validate
+      - webpack-cli
+
+  '@docusaurus/plugin-content-pages@3.9.1(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
     dependencies:
       '@docusaurus/core': 3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       '@docusaurus/logger': 3.9.2
@@ -11211,14 +11267,14 @@ snapshots:
       - utf-8-validate
       - webpack-cli
 
-  '@docusaurus/plugin-ideal-image@3.9.1(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
+  '@docusaurus/plugin-ideal-image@3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
     dependencies:
-      '@docusaurus/core': 3.9.1(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
-      '@docusaurus/lqip-loader': 3.9.1(webpack@5.102.1)
+      '@docusaurus/core': 3.9.2(@mdx-js/react@3.1.1(@types/react@18.3.3)(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      '@docusaurus/lqip-loader': 3.9.2(webpack@5.102.1)
       '@docusaurus/responsive-loader': 1.7.1(sharp@0.32.6)
-      '@docusaurus/theme-translations': 3.9.1
-      '@docusaurus/types': 3.9.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@docusaurus/utils-validation': 3.9.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/theme-translations': 3.9.2
+      '@docusaurus/types': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@docusaurus/utils-validation': 3.9.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
       sharp: 0.32.6
@@ -11231,6 +11287,7 @@ snapshots:
       - '@rspack/core'
       - '@swc/core'
       - '@swc/css'
+      - bare-abort-controller
       - bare-buffer
       - bufferutil
       - csso
@@ -11591,6 +11648,11 @@ snapshots:
       - webpack-cli
 
   '@docusaurus/theme-translations@3.9.1':
+    dependencies:
+      fs-extra: 11.3.2
+      tslib: 2.8.1
+
+  '@docusaurus/theme-translations@3.9.2':
     dependencies:
       fs-extra: 11.3.2
       tslib: 2.8.1
@@ -13588,16 +13650,17 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  bare-events@2.7.0: {}
+  bare-events@2.8.1: {}
 
-  bare-fs@4.4.5:
+  bare-fs@4.5.0:
     dependencies:
-      bare-events: 2.7.0
+      bare-events: 2.8.1
       bare-path: 3.0.0
-      bare-stream: 2.7.0(bare-events@2.7.0)
-      bare-url: 2.2.2
+      bare-stream: 2.7.0(bare-events@2.8.1)
+      bare-url: 2.3.1
       fast-fifo: 1.3.2
     transitivePeerDependencies:
+      - bare-abort-controller
       - react-native-b4a
     optional: true
 
@@ -13609,16 +13672,17 @@ snapshots:
       bare-os: 3.6.2
     optional: true
 
-  bare-stream@2.7.0(bare-events@2.7.0):
+  bare-stream@2.7.0(bare-events@2.8.1):
     dependencies:
       streamx: 2.23.0
     optionalDependencies:
-      bare-events: 2.7.0
+      bare-events: 2.8.1
     transitivePeerDependencies:
+      - bare-abort-controller
       - react-native-b4a
     optional: true
 
-  bare-url@2.2.2:
+  bare-url@2.3.1:
     dependencies:
       bare-path: 3.0.0
     optional: true
@@ -15060,7 +15124,9 @@ snapshots:
 
   events-universal@1.0.1:
     dependencies:
-      bare-events: 2.7.0
+      bare-events: 2.8.1
+    transitivePeerDependencies:
+      - bare-abort-controller
 
   events@3.3.0: {}
 
@@ -17380,7 +17446,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@16.0.0(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  next@15.5.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@next/env': 16.0.0
       '@swc/helpers': 0.5.15
@@ -18768,6 +18834,7 @@ snapshots:
       tar-fs: 3.1.1
       tunnel-agent: 0.6.0
     transitivePeerDependencies:
+      - bare-abort-controller
       - bare-buffer
       - react-native-b4a
 
@@ -18974,6 +19041,7 @@ snapshots:
       fast-fifo: 1.3.2
       text-decoder: 1.2.3
     transitivePeerDependencies:
+      - bare-abort-controller
       - react-native-b4a
 
   string-argv@0.3.2: {}
@@ -19172,9 +19240,10 @@ snapshots:
       pump: 3.0.3
       tar-stream: 3.1.7
     optionalDependencies:
-      bare-fs: 4.4.5
+      bare-fs: 4.5.0
       bare-path: 3.0.0
     transitivePeerDependencies:
+      - bare-abort-controller
       - bare-buffer
       - react-native-b4a
 
@@ -19192,6 +19261,7 @@ snapshots:
       fast-fifo: 1.3.2
       streamx: 2.23.0
     transitivePeerDependencies:
+      - bare-abort-controller
       - react-native-b4a
 
   tar@7.5.1:
