@@ -25,6 +25,27 @@ export const HeroSection: React.FC = () => {
           Autonomous counter-drone defense that operates without network
           connectivity. Sub-200ms response times in complete RF denial.
         </p>
+
+        {/* Mission Statement */}
+        <div className={styles.missionStatement}>
+          <div className={styles.missionIcon}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <p className={styles.missionText}>
+            <strong>Our Mission:</strong> Defense drone technology to protect civilians, corporates, and statesmen from emerging aerial threats.
+          </p>
+        </div>
         <div className={styles.metricsCard}>
           <div className={styles.metricsGrid}>
             <div className={styles.metric}>

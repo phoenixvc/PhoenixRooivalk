@@ -319,6 +319,76 @@
   font-weight: 600;
 }
 
+/* Mission Statement */
+.missionStatement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  max-width: 48rem;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.1),
+    rgba(251, 191, 36, 0.1)
+  );
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(249, 115, 22, 0.1) inset;
+  animation: fadeInUp 1s ease both;
+  animation-delay: 300ms;
+}
+
+.missionIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.missionText {
+  flex: 1;
+  font-size: 1.125rem;
+  color: rgb(var(--text-primary));
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+.missionText strong {
+  color: rgb(249, 115, 22);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .missionStatement {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .missionIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .missionText {
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -327,5 +397,16 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
