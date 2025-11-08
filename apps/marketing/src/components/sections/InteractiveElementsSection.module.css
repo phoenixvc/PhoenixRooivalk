@@ -472,7 +472,7 @@
 
 .adaptationWarningText {
   font-size: 0.875rem;
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
   text-align: center;
   font-weight: 600;
 }

@@ -578,7 +578,7 @@
 
 .statusInProgress {
   background: rgba(var(--accent), 0.2);
-  color: var(--accent);
+  color: rgb(var(--accent));
   border: 1px solid rgba(var(--accent), 0.3);
 }
 

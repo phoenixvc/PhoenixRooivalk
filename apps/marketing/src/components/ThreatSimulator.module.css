@@ -1127,18 +1127,18 @@
 }
 
 .filter-chip:hover {
-  border-color: var(--chip-color, var(--sim-accent));
-  background: var(--chip-color, var(--sim-accent)) 10;
+  border-color: rgb(var(--chip-color, var(--sim-accent)));
+  background: rgba(var(--chip-color, var(--sim-accent)), 0.1);
 }
 
 .filter-chip--selected {
-  border-color: var(--chip-color, var(--sim-accent));
-  background: var(--chip-color, var(--sim-accent)) 20;
-  color: var(--chip-color, var(--sim-accent));
+  border-color: rgb(var(--chip-color, var(--sim-accent)));
+  background: rgba(var(--chip-color, var(--sim-accent)), 0.2);
+  color: rgb(var(--chip-color, var(--sim-accent)));
 }
 
 .filter-chip-count {
-  background: var(--chip-color, var(--sim-accent));
+  background: rgb(var(--chip-color, var(--sim-accent)));
   color: white;
   font-size: 10px;
   padding: 1px 4px;
@@ -1543,9 +1543,9 @@
   border-radius: 8px;
   font-size: 10px;
   font-weight: 600;
-  border: 1px solid var(--risk-color, var(--sim-border));
-  background: var(--risk-color, var(--sim-border)) 10;
-  color: var(--risk-color, var(--sim-text));
+  border: 1px solid rgb(var(--risk-color, var(--sim-border)));
+  background: rgba(var(--risk-color, var(--sim-border)), 0.1);
+  color: rgb(var(--risk-color, var(--sim-text)));
 }
 
 .roe-risk-indicator--low {

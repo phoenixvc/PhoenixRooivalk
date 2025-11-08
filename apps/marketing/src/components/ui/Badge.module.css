@@ -10,7 +10,7 @@
 
 /* Variant styles */
 .variantDefault {
-  background: var(--primary, #00ff88);
+  background: rgb(var(--primary, #00ff88));
   color: #000;
 }
 
@@ -26,7 +26,7 @@
 .variantOutlined {
   background: transparent;
   border: 2px solid var(--primary, #00ff88);
-  color: var(--primary, #00ff88);
+  color: rgb(var(--primary, #00ff88));
 }
 
 .variantStatus {

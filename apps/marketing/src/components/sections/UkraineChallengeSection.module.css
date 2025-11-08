@@ -56,7 +56,7 @@
 }
 
 .description {
-  color: var(--gray);
+  color: rgb(var(--gray));
   max-width: 48rem;
   margin: 0 auto;
   font-size: 1.125rem;
@@ -128,13 +128,13 @@
 }
 
 .solutionIcon {
-  color: var(--primary);
+  color: rgb(var(--primary));
   font-size: 1.5rem;
 }
 
 .solutionTitle {
   font-weight: bold;
-  color: var(--primary);
+  color: rgb(var(--primary));
 }
 
 .solutionDescription {
@@ -164,7 +164,7 @@
 }
 
 .stakesText {
-  color: var(--gray);
+  color: rgb(var(--gray));
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
 }

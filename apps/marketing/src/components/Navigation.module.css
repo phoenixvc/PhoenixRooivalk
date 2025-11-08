@@ -140,7 +140,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
 }
 
 .navItem {
@@ -163,7 +163,7 @@
 
 .navButton:hover,
 .navButton:focus {
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .navLink {
@@ -174,7 +174,7 @@
 }
 
 .navLink:hover {
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .chevron {
@@ -219,7 +219,7 @@
   flex-direction: column;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
   text-decoration: none;
   transition: all 0.2s ease;
   border-radius: 0.5rem;
@@ -238,7 +238,7 @@
 
 .dropdownDescription {
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
 }
 
 .mobileNav {
@@ -293,7 +293,7 @@
 .githubButton {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
@@ -304,7 +304,7 @@
 }
 
 .githubButton:hover {
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .githubIcon {
@@ -357,7 +357,7 @@
   align-items: center;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
   text-decoration: none;
   transition: all 0.2s ease;
   border-radius: 0.5rem;
@@ -386,7 +386,7 @@
 
 .githubDropdownDesc {
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
 }
 
 .divider {
@@ -397,14 +397,14 @@
 .themeToggle {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: rgb(var(--text-secondary));
   cursor: pointer;
   padding: 0.5rem;
   transition: all 0.2s ease;
 }
 
 .themeToggle:hover {
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .themeIcon {
@@ -415,14 +415,14 @@
 .themeIconPhoenix {
   width: 100%;
   height: 100%;
-  background: var(--action-primary);
+  background: rgb(var(--action-primary));
   border-radius: 9999px;
 }
 
 .themeIconBlue {
   width: 100%;
   height: 100%;
-  background: var(--action-secondary);
+  background: rgb(var(--action-secondary));
   border-radius: 0.25rem;
 }
 
@@ -451,7 +451,7 @@
     rgb(var(--primary)),
     rgb(var(--accent))
   );
-  color: var(--bg-primary);
+  color: rgb(var(--bg-primary));
   font-weight: 600;
   padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
@@ -532,7 +532,7 @@
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1rem;
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
   text-decoration: none;
   background: rgba(249, 115, 22, 0.05);
   border-radius: 0.5rem;
@@ -554,7 +554,7 @@
 
 .mobileMenuLinkDescription {
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
 }
 
 @media (min-width: 1024px) {

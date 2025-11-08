@@ -633,7 +633,7 @@
 
 .disclaimerText {
   font-size: 0.875rem;
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
   text-align: center;
   font-weight: 600;
 }
@@ -691,7 +691,7 @@
 }
 
 .detailValueSuccess {
-  color: var(--action-success);
+  color: rgb(var(--action-success));
 }
 
 .detailValuePrimary {
@@ -699,7 +699,7 @@
 }
 
 .detailValueWarning {
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
 }
 
 .objectivesList {
@@ -717,7 +717,7 @@
 }
 
 .objectiveCheck {
-  color: var(--action-success);
+  color: rgb(var(--action-success));
   margin-right: 0.5rem;
 }
 
