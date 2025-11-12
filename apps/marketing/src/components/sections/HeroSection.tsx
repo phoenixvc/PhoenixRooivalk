@@ -43,7 +43,8 @@ export const HeroSection: React.FC = () => {
             </svg>
           </div>
           <p className={styles.missionText}>
-            <strong>Our Mission:</strong> Defense drone technology to protect civilians, corporates, and statesmen from emerging aerial threats.
+            <strong>Our Mission:</strong> Defense drone technology to protect
+            civilians, corporates, and statesmen from emerging aerial threats.
           </p>
         </div>
         <div className={styles.metricsCard}>

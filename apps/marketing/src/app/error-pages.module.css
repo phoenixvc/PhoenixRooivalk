@@ -2,8 +2,8 @@
 
 .container {
   min-height: 100vh;
-  background-color: var(--darker);
-  color: var(--phoenix-white);
+  background-color: rgb(var(--darker));
+  color: rgb(var(--phoenix-white));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,7 +30,7 @@
 .errorTitle {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--phoenix-white);
+  color: rgb(var(--phoenix-white));
   margin-bottom: 1rem;
 }
 

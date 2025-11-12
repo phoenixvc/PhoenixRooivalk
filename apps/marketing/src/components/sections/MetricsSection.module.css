@@ -41,7 +41,7 @@
 }
 
 .description {
-  color: var(--gray);
+  color: rgb(var(--gray));
   max-width: 42rem;
   margin: 0 auto;
 }

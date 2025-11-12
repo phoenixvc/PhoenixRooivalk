@@ -197,16 +197,27 @@ export const useThreatSimulatorGame = ({
 
       // Add/update physics object in collision system
       if (!addedPhysicsIdsRef.current.has(threat.id)) {
-        const physicsObj = createPhysicsObject(threat.id, finalX, finalY, "circle", {
-          radius: 8,
-          mass: threat.type === "boss" ? 5 : 1,
-          restitution: 0.3,
-          velocity: movementResult.velocity,
-        });
+        const physicsObj = createPhysicsObject(
+          threat.id,
+          finalX,
+          finalY,
+          "circle",
+          {
+            radius: 8,
+            mass: threat.type === "boss" ? 5 : 1,
+            restitution: 0.3,
+            velocity: movementResult.velocity,
+          },
+        );
         collisionSystem.addObject(physicsObj);
         addedPhysicsIdsRef.current.add(threat.id);
       } else {
-        collisionSystem.updateObject(threat.id, finalX, finalY, movementResult.velocity);
+        collisionSystem.updateObject(
+          threat.id,
+          finalX,
+          finalY,
+          movementResult.velocity,
+        );
       }
 
       // Special movement patterns

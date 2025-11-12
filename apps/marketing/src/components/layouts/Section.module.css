@@ -26,7 +26,7 @@
 }
 
 .backgroundPrimary {
-  background: var(--bg-primary, #0a0e1a);
+  background: rgb(var(--bg-primary, #0a0e1a));
 }
 
 .backgroundNone {

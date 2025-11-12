@@ -5,6 +5,8 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static exports
   },
+  // Empty turbopack config to acknowledge Turbopack usage
+  turbopack: {},
   webpack: (config, { isServer }) => {
     // This ensures that the @ alias works in both development and production
     config.resolve.alias = {

@@ -9,7 +9,7 @@
 .card:hover {
   transform: translateY(-4px);
   background: rgba(255, 255, 255, 0.08);
-  border-color: var(--primary);
+  border-color: rgb(var(--primary));
 }
 
 .cardIcon {
@@ -25,14 +25,14 @@
 }
 
 .cardDescription {
-  color: var(--gray);
+  color: rgb(var(--gray));
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 0.75rem;
 }
 
 .cardProof {
-  color: var(--primary);
+  color: rgb(var(--primary));
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;

@@ -107,13 +107,13 @@
 
 .timelineItem:hover {
   transform: translateY(-4px);
-  border-color: var(--primary);
+  border-color: rgb(var(--primary));
 }
 
 .phaseLabel {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--primary);
+  color: rgb(var(--primary));
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -185,5 +185,5 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: var(--primary);
+  color: rgb(var(--primary));
 }

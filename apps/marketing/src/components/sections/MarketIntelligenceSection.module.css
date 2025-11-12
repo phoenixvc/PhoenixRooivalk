@@ -45,7 +45,7 @@
 }
 
 .description {
-  color: var(--gray);
+  color: rgb(var(--gray));
   max-width: 48rem;
   margin: 0 auto;
 }
@@ -90,7 +90,7 @@
 .metricValue {
   font-size: 1.875rem;
   font-weight: bold;
-  color: var(--primary);
+  color: rgb(var(--primary));
   margin-bottom: 0.5rem;
 }
 
@@ -133,7 +133,7 @@
 
 .competitorStatus {
   font-size: 0.875rem;
-  color: var(--primary);
+  color: rgb(var(--primary));
   margin-bottom: 0.75rem;
 }
 
@@ -189,7 +189,7 @@
 .advantageItemTitle {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--primary);
+  color: rgb(var(--primary));
   margin-bottom: 0.5rem;
 }
 

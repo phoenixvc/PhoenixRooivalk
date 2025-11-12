@@ -86,13 +86,13 @@
 }
 
 .companyDescription {
-  color: var(--gray);
+  color: rgb(var(--gray));
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
 
 .companySubtext {
-  color: var(--gray);
+  color: rgb(var(--gray));
   font-size: 0.75rem;
 }
 
@@ -113,7 +113,7 @@
 }
 
 .icon {
-  color: var(--primary);
+  color: rgb(var(--primary));
   font-size: 0.875rem;
 }
 
@@ -146,14 +146,14 @@
 }
 
 .link {
-  color: var(--gray);
+  color: rgb(var(--gray));
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s ease;
 }
 
 .link:hover {
-  color: var(--primary);
+  color: rgb(var(--primary));
 }
 
 .bottom {
@@ -187,7 +187,7 @@
 }
 
 .copyrightText {
-  color: var(--gray);
+  color: rgb(var(--gray));
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -229,12 +229,12 @@
 
 .statusText {
   font-size: 0.75rem;
-  color: var(--gray);
+  color: rgb(var(--gray));
 }
 
 .version {
   font-size: 0.75rem;
-  color: var(--gray);
+  color: rgb(var(--gray));
 }
 
 .disclaimer {
@@ -247,12 +247,12 @@
 
 .disclaimerText {
   font-size: 0.75rem;
-  color: var(--gray);
+  color: rgb(var(--gray));
   text-align: center;
   line-height: 1.625;
 }
 
 .disclaimerStrong {
-  color: var(--primary);
+  color: rgb(var(--primary));
   font-weight: 600;
 }

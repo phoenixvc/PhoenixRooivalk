@@ -1,7 +1,7 @@
 /* CounterDroneMethodsSection.module.css */
 .section {
   padding: 3rem 1.5rem;
-  background: var(--bg-primary);
+  background: rgb(var(--bg-primary));
   position: relative;
   overflow: hidden;
 }
@@ -155,7 +155,7 @@
 .metricValue {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--action-success);
+  color: rgb(var(--action-success));
 }
 
 .metricValuePrimary {
@@ -163,7 +163,7 @@
 }
 
 .metricValueAccent {
-  color: var(--accent);
+  color: rgb(var(--accent));
 }
 
 .prosConsGrid {
@@ -186,14 +186,14 @@
 .prosTitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--action-success);
+  color: rgb(var(--action-success));
   margin-bottom: 0.5rem;
 }
 
 .consTitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
   margin-bottom: 0.5rem;
 }
 
@@ -216,11 +216,11 @@
 }
 
 .listBulletSuccess {
-  color: var(--action-success);
+  color: rgb(var(--action-success));
 }
 
 .listBulletWarning {
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
 }
 
 .useCaseBox {

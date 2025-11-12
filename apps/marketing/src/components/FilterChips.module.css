@@ -11,13 +11,13 @@
 
 .filterChipsTitle {
   font-weight: 600;
-  color: var(--sim-text);
+  color: rgb(var(--sim-text));
   font-size: 0.875rem;
 }
 
 .filterChipsClear {
   font-size: 0.75rem;
-  color: var(--sim-primary);
+  color: rgb(var(--sim-primary));
   cursor: pointer;
   background: transparent;
   border: none;
@@ -26,7 +26,7 @@
 }
 
 .filterChipsClear:hover {
-  color: var(--sim-secondary);
+  color: rgb(var(--sim-secondary));
 }
 
 .filterChipsContainer {

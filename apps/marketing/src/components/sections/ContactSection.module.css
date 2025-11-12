@@ -41,7 +41,7 @@
 }
 
 .subtitle {
-  color: var(--gray);
+  color: rgb(var(--gray));
   max-width: 48rem;
   margin: 0 auto;
   font-size: 1.125rem;

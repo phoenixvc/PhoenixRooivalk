@@ -267,12 +267,12 @@
 .conceptTitleText {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--action-primary);
+  color: rgb(var(--action-primary));
   margin-bottom: 1rem;
 }
 
 .conceptDescription {
-  color: var(--text-muted);
+  color: rgb(var(--text-muted));
   margin-bottom: 1.5rem;
 }
 
@@ -295,13 +295,13 @@
 .conceptMetricLabel {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
 }
 
 .conceptMetricValue {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--action-success);
+  color: rgb(var(--action-success));
 }
 
 .disclaimer {
@@ -314,7 +314,7 @@
 
 .disclaimerText {
   font-size: 0.75rem;
-  color: var(--action-warning);
+  color: rgb(var(--action-warning));
   text-align: center;
   font-weight: 600;
 }
