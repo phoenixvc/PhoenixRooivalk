@@ -220,6 +220,7 @@ For detailed specifications and planning baselines, see [`index.md`](./index.md)
 ## Documentation map
 
 - **Live Documentation**: [phoenixrooivalk-docs.netlify.app](https://phoenixrooivalk-docs.netlify.app) - Complete technical documentation
+- **Project Structure**: [docs/PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md) - Repository organization and file structure
 - **Environment Validation**: [docs/ENVIRONMENT_VALIDATION.md](./docs/ENVIRONMENT_VALIDATION.md) - Environment variable validation guide
 - **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment and configuration
 - **Legacy Documentation**: See `docs/` directory for historical reference
