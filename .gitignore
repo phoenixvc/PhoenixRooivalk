@@ -66,3 +66,17 @@ apps/marketing/next-env.d.ts
 # TypeScript build info
 *.tsbuildinfo
 package-lock.json
+
+# Database files
+*.db
+*.sqlite3
+*.sqlite
+
+# Binary executables and installers
+*.exe
+*.msi
+*.dmg
+*.pkg
+
+# Large documentation files (prefer markdown)
+*.pdf
