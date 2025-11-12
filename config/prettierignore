@@ -1,0 +1,17 @@
+README.md
+apps/docs/README.md
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated WASM files
+apps/marketing/public/wasm/*.js
+apps/marketing/public/wasm/*.wasm
+apps/marketing/public/wasm/manifest.json
+
+# Tauri generated files
+apps/threat-simulator-desktop/src-tauri/gen/
+apps/threat-simulator-desktop/src-tauri/target/
+

@@ -372,7 +372,7 @@ chore: Update dependencies to latest versions
 1. Check existing documentation in `/docs`
 2. Review similar implementations in codebase
 3. Check GitHub Issues for related problems
-4. Consult `GAME_IMPROVEMENTS_TODO.md` for known issues
+4. Consult `docs/GAME_IMPROVEMENTS_TODO.md` for known issues
 
 ## Code Review Checklist
 
@@ -392,10 +392,10 @@ Before submitting PR:
 
 ## Additional Resources
 
-- **Design System**: See `VISUAL_IMPROVEMENTS_GUIDE.md`
-- **Improvements Tracker**: See `GAME_IMPROVEMENTS_TODO.md`
-- **Architecture**: See `REFACTORING_SUMMARY.md`
-- **WASM Integration**: See `WASM_EMBEDDING_SUMMARY.md`
+- **Design System**: See `docs/VISUAL_IMPROVEMENTS_GUIDE.md`
+- **Improvements Tracker**: See `docs/GAME_IMPROVEMENTS_TODO.md`
+- **Architecture**: See `docs/REFACTORING_SUMMARY.md`
+- **WASM Integration**: See `docs/WASM_EMBEDDING_SUMMARY.md`
 - **Responsible Use**: See `RESPONSIBLE_USE.md`
 
 ---

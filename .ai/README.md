@@ -1,0 +1,29 @@
+# AI IDE Assistant Rules
+
+This directory contains configuration files for AI-powered IDE assistants.
+
+## Files
+
+- **continuerules** — Rules and context for Continue IDE extension
+- **cursorrules** — Rules and context for Cursor IDE
+- **windsurfrules** — Rules and context for Windsurf IDE
+
+## Purpose
+
+These files provide project-specific instructions and context to AI assistants, helping them:
+- Understand the project structure and architecture
+- Follow coding standards and best practices
+- Make appropriate suggestions for this specific codebase
+- Maintain consistency with existing patterns
+
+## Usage
+
+AI IDE assistants automatically detect and use these files when they exist in the repository. No manual configuration is required.
+
+## Editing
+
+When updating these files:
+1. Keep instructions clear and specific
+2. Include relevant project structure information
+3. Document coding standards and conventions
+4. Update when project architecture changes significantly

@@ -69,14 +69,19 @@ Structure:
   - `anchor-solana/` — Solana blockchain anchoring.
   - `anchor-etherlink/` — EtherLink blockchain anchoring.
   - `address-validation/` — Blockchain address validation.
-- `docs/` — Legacy documentation (migrated to `apps/docs/`).
+- `config/` — Tooling configuration files (ESLint, Prettier, Clippy, etc.).
+  - Configuration files are symlinked to root for tool compatibility.
+- `.ai/` — AI IDE assistant rules (Cursor, Continue, Windsurf).
+- `docs/` — Project documentation and development guides.
+  - Includes technical summaries, improvement guides, and environment validation.
+  - Legacy documentation (migrated to `apps/docs/`).
 - `scripts/` — Root-level deployment and utility scripts.
-- `blockchain_outbox.sqlite3` — SQLite database for blockchain evidence outbox.
-- `ACCESS.md` — Access request information for defense partners.
-- `CONTRIBUTING.md` — Contribution guidelines.
-- `DEPLOYMENT.md` — Deployment documentation.
-- `RESPONSIBLE_USE.md` — Responsible use guidelines.
-- `SECURITY.md` — Security policy and reporting.
+- Root configuration files:
+  - `ACCESS.md` — Access request information for defense partners.
+  - `CONTRIBUTING.md` — Contribution guidelines.
+  - `DEPLOYMENT.md` — Deployment documentation.
+  - `RESPONSIBLE_USE.md` — Responsible use guidelines.
+  - `SECURITY.md` — Security policy and reporting.
 
 Tooling:
 
