@@ -6,7 +6,7 @@ pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {
     let (selected_drone_type, set_selected_drone_type) = create_signal(DroneType::Interceptor);
     let (deployment_count, set_deployment_count) = create_signal(1_u32);
 
-    let drone_types = std::rc::Rc::new(vec![
+    let drone_types = store_value(vec![
         (
             DroneType::Interceptor,
             "Interceptor",
@@ -43,7 +43,6 @@ pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {
         ),
     ]);
 
-    let drone_types_clone = drone_types.clone();
     let deploy_drone = move |_| {
         let count = deployment_count.get();
         let drone_type = selected_drone_type.get();
@@ -80,16 +79,16 @@ pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {
                     class="drone-select"
                     on:change=move |ev| {
                         let value = event_target_value(&ev);
-                        let types = drone_types_clone.clone();
                         if let Ok(index) = value.parse::<usize>() {
-                            if let Some((drone_type, _, _, _)) = types.get(index) {
+                            if let Some((drone_type, _, _, _)) = drone_types.get_value().get(index) {
                                 set_selected_drone_type.set(*drone_type);
                             }
                         }
                     }
                 >
 
-                    {(*drone_types)
+                    {drone_types
+                        .get_value()
                         .iter()
                         .enumerate()
                         .map(|(i, (_, name, _desc, cost))| {
@@ -127,48 +126,42 @@ pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {
                 <div class="info-row">
                     <span class="info-label">"Selected:"</span>
                     <span class="info-value">
-                        {
-                            let types = drone_types.clone();
-                            move || {
-                                types
-                                    .iter()
-                                    .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
-                                    .map(|(_, name, _, _)| *name)
-                                    .unwrap_or("Unknown")
-                            }
-                        }
+                        {move || {
+                            drone_types
+                                .get_value()
+                                .iter()
+                                .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
+                                .map(|(_, name, _, _)| *name)
+                                .unwrap_or("Unknown")
+                        }}
 
                     </span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">"Description:"</span>
                     <span class="info-value">
-                        {
-                            let types = drone_types.clone();
-                            move || {
-                                types
-                                    .iter()
-                                    .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
-                                    .map(|(_, _, desc, _)| *desc)
-                                    .unwrap_or("N/A")
-                            }
-                        }
+                        {move || {
+                            drone_types
+                                .get_value()
+                                .iter()
+                                .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
+                                .map(|(_, _, desc, _)| *desc)
+                                .unwrap_or("N/A")
+                        }}
 
                     </span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">"Total Cost:"</span>
                     <span class="info-value">
-                        {
-                            let types = drone_types.clone();
-                            move || {
-                                types
-                                    .iter()
-                                    .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
-                                    .map(|(_, _, _, cost)| cost * deployment_count.get() as f32)
-                                    .unwrap_or(0.0)
-                            }
-                        }
+                        {move || {
+                            drone_types
+                                .get_value()
+                                .iter()
+                                .find(|(dt, _, _, _)| *dt == selected_drone_type.get())
+                                .map(|(_, _, _, cost)| cost * deployment_count.get() as f32)
+                                .unwrap_or(0.0)
+                        }}
                         " energy"
                     </span>
                 </div>

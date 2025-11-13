@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[component]
 pub fn SimulationWarning<F>(show: ReadSignal<bool>, on_close: F) -> impl IntoView
 where
-    F: Fn() + Copy + 'static,
+    F: Fn() + Copy + 'static + Send + Sync,
 {
     view! {
         <Show when=move || show.get() fallback=|| view! { <div></div> }>
@@ -51,7 +51,7 @@ pub fn AchievementNotification<F>(
     on_dismiss: F,
 ) -> impl IntoView
 where
-    F: Fn() + Copy + 'static,
+    F: Fn() + Copy + 'static + Send + Sync,
 {
     view! {
         <Show when=move || message.get().is_some() fallback=|| view! { <div></div> }>
@@ -80,7 +80,7 @@ pub fn GameOverOverlay<F>(
     on_restart: F,
 ) -> impl IntoView
 where
-    F: Fn() + Copy + 'static,
+    F: Fn() + Copy + 'static + Send + Sync,
 {
     view! {
         <Show when=move || show.get() fallback=|| view! { <div></div> }>
@@ -117,8 +117,8 @@ where
 #[component]
 pub fn FullscreenPrompt<F1, F2>(show: ReadSignal<bool>, on_enter: F1, on_skip: F2) -> impl IntoView
 where
-    F1: Fn() + Copy + 'static,
-    F2: Fn() + Copy + 'static,
+    F1: Fn() + Copy + 'static + Send + Sync,
+    F2: Fn() + Copy + 'static + Send + Sync,
 {
     view! {
         <Show when=move || show.get() fallback=|| view! { <div></div> }>

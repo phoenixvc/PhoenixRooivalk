@@ -55,12 +55,9 @@ pub fn App() -> impl IntoView {
     let (is_loading, set_is_loading) = create_signal(true);
     let (loading_progress, set_loading_progress) = create_signal(0u8);
 
-    // Wrap game state in Rc to allow multiple references
-    let game_state_rc = std::rc::Rc::new(game_state.clone());
-
     // Watch for critical events - low health
     {
-        let game_state_watcher = game_state_rc.clone();
+        let game_state_watcher = game_state.clone();
         let (last_warning_sent, set_last_warning_sent) = create_signal(false);
         create_effect(move |_| {
             let health = game_state_watcher.mothership_health.get();
@@ -80,7 +77,7 @@ pub fn App() -> impl IntoView {
 
     // Watch for wave changes
     {
-        let game_state_watcher = game_state_rc.clone();
+        let game_state_watcher = game_state.clone();
         let (last_level, set_last_level) = create_signal(1u8);
         create_effect(move |_| {
             let current_level = game_state_watcher.level.get();
@@ -103,7 +100,7 @@ pub fn App() -> impl IntoView {
 
     // Watch for high scores
     {
-        let game_state_watcher = game_state_rc.clone();
+        let game_state_watcher = game_state.clone();
         let (milestones_reached, set_milestones_reached) =
             create_signal(std::collections::HashSet::new());
         create_effect(move |_| {
@@ -133,7 +130,7 @@ pub fn App() -> impl IntoView {
     }
 
     // Keyboard event handler
-    let game_state_kb = game_state_rc.clone();
+    let game_state_kb = game_state.clone();
     {
         let window = web_sys::window().unwrap();
         let game_state_inner = game_state_kb.clone();
@@ -205,12 +202,12 @@ pub fn App() -> impl IntoView {
     }
 
     // Clone game state for components
-    let game_state_hud = game_state_rc.clone();
-    let game_state_canvas = game_state_rc.clone();
-    let game_state_energy = game_state_rc.clone();
-    let game_state_drones = game_state_rc.clone();
-    let game_state_tokens = game_state_rc.clone();
-    let game_state_weapons = game_state_rc.clone();
+    let game_state_hud = game_state.clone();
+    let game_state_canvas = game_state.clone();
+    let game_state_energy = game_state.clone();
+    let game_state_drones = game_state.clone();
+    let game_state_tokens = game_state.clone();
+    let game_state_weapons = game_state.clone();
 
     // Simulate loading progress with proper cleanup
     {
@@ -379,7 +376,7 @@ pub fn App() -> impl IntoView {
             // Synergy System (floating indicator)
             <SynergySystem
                 active_weapons={
-                    let game_state_synergy = game_state_rc.clone();
+                    let game_state_synergy = game_state.clone();
                     let active_weapons_signal = create_rw_signal(Vec::new());
 
                     // Update the signal when weapons change
