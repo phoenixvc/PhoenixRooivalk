@@ -31,7 +31,7 @@ where
     let (unlocked_items, set_unlocked_items) = signal(Vec::<String>::new());
     let (research_points, set_research_points) = signal(100_u32);
 
-    let research_catalog = store_value(get_research_catalog());
+    let research_catalog = StoredValue::new_local(get_research_catalog());
 
     let start_research = move |item_id: String, cost: u32| {
         if research_points.get() >= cost {

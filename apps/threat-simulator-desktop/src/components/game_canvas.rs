@@ -8,7 +8,7 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 #[component]
 pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) -> impl IntoView {
-    let canvas_ref = create_node_ref::<Canvas>();
+    let canvas_ref = NodeRef::<Canvas>();
 
     // Game engine - shared between animation loop and event handlers
     let engine = Rc::new(RefCell::new(GameEngine::new(1)));
@@ -26,13 +26,13 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
     let animation_scheduled_for_restart = animation_scheduled.clone();
 
     // Keep the shared state in sync with the Leptos signal
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let running = is_running.get();
         *is_running_shared_effect.borrow_mut() = running;
     });
 
     // Set up canvas immediately when component mounts (during loading)
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let Some(canvas_elem) = canvas_ref.get() else {
             return;
         };
@@ -239,7 +239,7 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
     {
         let animation_closure_restart = animation_closure_for_restart.clone();
         let animation_scheduled_restart = animation_scheduled_for_restart.clone();
-        create_effect(move |_| {
+        Effect::new(move |_| {
             let is_running_now = is_running.get();
             if is_running_now && !*animation_scheduled_restart.borrow() {
                 // Game just resumed and animation is not scheduled - restart it

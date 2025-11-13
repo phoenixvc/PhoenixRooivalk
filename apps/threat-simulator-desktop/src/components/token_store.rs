@@ -13,7 +13,7 @@ where
 {
     let (tokens, set_tokens) = signal(1000_u32);
 
-    let drone_catalog = store_value(vec![
+    let drone_catalog = StoredValue::new_local(vec![
         (
             DroneType::Interceptor,
             "Interceptor",

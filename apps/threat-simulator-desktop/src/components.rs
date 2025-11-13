@@ -59,7 +59,7 @@ pub fn App() -> impl IntoView {
     {
         let game_state_watcher = game_state.clone();
         let (last_warning_sent, set_last_warning_sent) = signal(false);
-        create_effect(move |_| {
+        Effect::new(move |_| {
             let health = game_state_watcher.mothership_health.get();
             if health < 25.0 && !last_warning_sent.get() {
                 set_event_feed.update(|feed| {
@@ -79,7 +79,7 @@ pub fn App() -> impl IntoView {
     {
         let game_state_watcher = game_state.clone();
         let (last_level, set_last_level) = signal(1u8);
-        create_effect(move |_| {
+        Effect::new(move |_| {
             let current_level = game_state_watcher.level.get();
             let previous_level = last_level.get();
 
@@ -103,7 +103,7 @@ pub fn App() -> impl IntoView {
         let game_state_watcher = game_state.clone();
         let (milestones_reached, set_milestones_reached) =
             signal(std::collections::HashSet::new());
-        create_effect(move |_| {
+        Effect::new(move |_| {
             let score = game_state_watcher.score.get();
             let milestones = [1000, 5000, 10000, 25000, 50000, 100000];
 
@@ -380,7 +380,7 @@ pub fn App() -> impl IntoView {
                     let active_weapons_signal = rw_signal(Vec::new());
 
                     // Update the signal when weapons change
-                    create_effect(move |_| {
+                    Effect::new(move |_| {
                         let weapons = game_state_synergy.weapons.get()
                             .into_iter()
                             .map(|w| w.weapon_type)

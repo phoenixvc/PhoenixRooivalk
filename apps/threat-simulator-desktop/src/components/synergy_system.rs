@@ -20,7 +20,7 @@ pub fn SynergySystem(
     show: ReadSignal<bool>,
 ) -> impl IntoView {
     // Use get_all_synergies() as single source of truth
-    let synergies = store_value(get_all_synergies());
+    let synergies = StoredValue::new_local(get_all_synergies());
 
     view! {
         <Show when=move || show.get() fallback=|| view! { <div></div> }>
