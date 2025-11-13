@@ -113,6 +113,7 @@ where
 }
 
 /// Creates a Tokio TcpListener bound to an available port on localhost
+#[allow(dead_code)]
 pub fn create_test_listener() -> (TcpListener, u16) {
     let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
     std_listener.set_nonblocking(true).unwrap();
@@ -123,6 +124,7 @@ pub fn create_test_listener() -> (TcpListener, u16) {
 }
 
 /// Spawns a test server using the Axum Router and returns the port it's listening on
+#[allow(dead_code)]
 pub async fn spawn_test_server(
     app: Router,
     listener: TcpListener,
@@ -141,11 +143,13 @@ pub async fn spawn_test_server(
 
 /// Creates an in-memory SQLite database string for testing
 /// Uses shared cache to ensure multiple connections share the same database
+#[allow(dead_code)]
 pub fn create_test_db_url() -> String {
     "sqlite::memory:?cache=shared".to_string()
 }
 
 /// Utility to assert JSON response properties
+#[allow(dead_code)]
 pub fn assert_json_response(json: &serde_json::Value, expected_values: &[(&str, &str)]) {
     for (key, expected) in expected_values {
         assert_eq!(
@@ -160,6 +164,7 @@ pub fn assert_json_response(json: &serde_json::Value, expected_values: &[(&str, 
 }
 
 /// Sets up environment for API database tests with in-memory SQLite
+#[allow(dead_code)]
 pub async fn with_api_db_env<F, Fut>(f: F)
 where
     F: FnOnce() -> Fut,
