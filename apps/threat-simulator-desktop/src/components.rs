@@ -353,13 +353,13 @@ pub fn App() -> impl IntoView {
 
             <Show when=move || show_energy.get() fallback=|| view! { <div></div> }>
                 <div class="side-panel right">
-                    <EnergyManagement game_state=(*game_state_energy).clone()/>
+                    <EnergyManagement game_state=game_state_energy.clone()/>
                 </div>
             </Show>
 
             <Show when=move || show_drones.get() fallback=|| view! { <div></div> }>
                 <div class="side-panel right-lower">
-                    <DroneDeploymentPanel game_state=(*game_state_drones).clone()/>
+                    <DroneDeploymentPanel game_state=game_state_drones.clone()/>
                 </div>
             </Show>
 
@@ -368,7 +368,7 @@ pub fn App() -> impl IntoView {
 
             // Token Store (full modal)
             <TokenStore
-                game_state=(*game_state_tokens).clone()
+                game_state=game_state_tokens.clone()
                 show=show_token_store
                 on_close=move || set_show_token_store.set(false)
             />
@@ -439,7 +439,7 @@ pub fn App() -> impl IntoView {
                     </button>
                 </div>
 
-                <WeaponPanel game_state=(*game_state_weapons).clone()/>
+                <WeaponPanel game_state=game_state_weapons.clone()/>
 
                 <div class="control-section">
                     <button
