@@ -340,9 +340,9 @@ pub fn App() -> impl IntoView {
                 on_dismiss=move || set_achievement_message.set(None)
             />
 
-            <Hud game_state=(*game_state_hud).clone() is_running=is_running/>
+            <Hud game_state=game_state_hud.clone() is_running=is_running/>
 
-            <GameCanvas game_state=(*game_state_canvas).clone() is_running=is_running/>
+            <GameCanvas game_state=game_state_canvas.clone() is_running=is_running/>
 
             // Side panels
             <Show when=move || show_events.get() fallback=|| view! { <div></div> }>
