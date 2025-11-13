@@ -8,7 +8,7 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 #[component]
 pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) -> impl IntoView {
-    let canvas_ref = NodeRef::<Canvas>();
+    let canvas_ref = NodeRef::<Canvas>::new();
 
     // Game engine - shared between animation loop and event handlers
     let engine = Rc::new(RefCell::new(GameEngine::new(1)));
