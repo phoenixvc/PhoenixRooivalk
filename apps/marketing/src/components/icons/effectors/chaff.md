@@ -1,0 +1,42 @@
+# Chaff/Obscurant Effector Icon
+
+## Description
+
+Smoke/obscurant generator for visual concealment and tracking disruption.
+
+## Visual Elements
+
+- Cloud or fog bank pattern
+- Visual concealment symbol
+- Obscurant generation representation
+
+## Technical Specifications
+
+- **Size**: 24x24px viewBox
+- **Style**: Military, outline-based
+- **Stroke Width**: 2px
+- **Color**: `#6b7280` (countermeasure gray)
+
+## AI Generation Prompt
+
+````text
+Create an obscurant icon: cloud or fog bank pattern. Military style, outline-based, 24x24px. Color #6b7280. Visual concealment, smoke generation aesthetic.
+```text
+
+## SVG Structure
+
+```svg
+<svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+  <!-- Cloud/fog pattern -->
+  <path d="M6 14C4 14 2 12 2 10C2 8 4 6 6 6C6 4 8 2 10 2C12 2 14 4 14 6C16 6 18 8 18 10C18 12 16 14 14 14L6 14Z" />
+  <path d="M8 16C6 16 4 14 4 12C4 10 6 8 8 8" />
+  <path d="M16 16C14 16 12 14 12 12C12 10 14 8 16 8" />
+</svg>
+```text
+
+## Usage Context
+
+- Chaff/obscurant systems
+- Visual concealment
+- Smoke generation
+````
