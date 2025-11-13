@@ -1,5 +1,5 @@
 use crate::game::GameStateManager;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn EnergyManagement(game_state: GameStateManager) -> impl IntoView {

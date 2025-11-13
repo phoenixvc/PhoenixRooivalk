@@ -1,28 +1,49 @@
-use sqlx::{Pool, Sqlite, Row};
-use crate::queries;
+use sqlx::{Pool, Sqlite};
 
 /// Shared database schema initialization logic
 /// Creates the core outbox tables and indexes used across multiple applications
 pub async fn ensure_schema(pool: &Pool<Sqlite>) -> Result<(), sqlx::Error> {
-    sqlx::query(queries::CREATE_OUTBOX_JOBS_TABLE)
-        .execute(pool)
-        .await?;
-    sqlx::query(queries::CREATE_OUTBOX_TX_REFS_TABLE)
-        .execute(pool)
-        .await?;
+    // Jobs table - core evidence job tracking
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS outbox_jobs (
+            id TEXT PRIMARY KEY,
+            payload_sha256 TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'queued',
+            attempts INTEGER NOT NULL DEFAULT 0,
+            last_error TEXT,
+            created_ms INTEGER NOT NULL,
+            updated_ms INTEGER NOT NULL,
+            next_attempt_ms INTEGER NOT NULL DEFAULT 0
+        );
+        "#,
+    )
+    .execute(pool)
+    .await?;
 
-    let rows = sqlx::query("PRAGMA table_info(outbox_jobs)")
-        .fetch_all(pool)
-        .await?;
-    let has_column = rows.iter().any(|row| {
-        row.get::<&str, _>("name") == "next_attempt_ms"
-    });
+    // Transaction references table - blockchain anchoring metadata
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS outbox_tx_refs (
+            job_id TEXT NOT NULL,
+            network TEXT NOT NULL,
+            chain TEXT NOT NULL,
+            tx_id TEXT NOT NULL,
+            confirmed INTEGER NOT NULL,
+            timestamp INTEGER,
+            PRIMARY KEY (job_id, network, chain)
+        );
+        "#,
+    )
+    .execute(pool)
+    .await?;
 
-    if !has_column {
-        sqlx::query(queries::ADD_NEXT_ATTEMPT_MS_COLUMN)
-            .execute(pool)
-            .await?;
-    }
+    // Best-effort migration for next_attempt_ms column (for backward compatibility)
+    let _ = sqlx::query(
+        "ALTER TABLE outbox_jobs ADD COLUMN next_attempt_ms INTEGER NOT NULL DEFAULT 0",
+    )
+    .execute(pool)
+    .await;
 
     Ok(())
 }

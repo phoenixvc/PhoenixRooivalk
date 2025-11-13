@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 mod cooldown_meter;
 mod drone_deployment;
@@ -37,32 +37,29 @@ pub fn App() -> impl IntoView {
     let game_state = GameStateManager::new();
 
     // Reactive signals for UI state
-    let (show_help, set_show_help) = create_signal(false);
-    let (show_stats, set_show_stats) = create_signal(false);
-    let (show_energy, set_show_energy) = create_signal(false);
-    let (show_drones, set_show_drones) = create_signal(false);
-    let (_show_warning, _set_show_warning) = create_signal(true);
-    let (show_events, set_show_events) = create_signal(false);
-    let (show_research, set_show_research) = create_signal(false);
-    let (show_token_store, set_show_token_store) = create_signal(false);
-    let (show_synergies, set_show_synergies) = create_signal(false); // Hide by default
-    let (is_running, set_is_running) = create_signal(false); // Don't start until user clicks Start
-    let (show_start_screen, set_show_start_screen) = create_signal(false); // Show after loading
-    let (achievement_message, set_achievement_message) = create_signal(None::<String>);
-    let (event_feed, set_event_feed) = create_signal(Vec::<FeedItem>::new());
+    let (show_help, set_show_help) = signal(false);
+    let (show_stats, set_show_stats) = signal(false);
+    let (show_energy, set_show_energy) = signal(false);
+    let (show_drones, set_show_drones) = signal(false);
+    let (_show_warning, _set_show_warning) = signal(true);
+    let (show_events, set_show_events) = signal(false);
+    let (show_research, set_show_research) = signal(false);
+    let (show_token_store, set_show_token_store) = signal(false);
+    let (show_synergies, set_show_synergies) = signal(false); // Hide by default
+    let (is_running, set_is_running) = signal(false); // Don't start until user clicks Start
+    let (show_start_screen, set_show_start_screen) = signal(false); // Show after loading
+    let (achievement_message, set_achievement_message) = signal(None::<String>);
+    let (event_feed, set_event_feed) = signal(Vec::<FeedItem>::new());
 
     // Loading state
-    let (is_loading, set_is_loading) = create_signal(true);
-    let (loading_progress, set_loading_progress) = create_signal(0u8);
-
-    // Wrap game state in Rc to allow multiple references
-    let game_state_rc = std::rc::Rc::new(game_state.clone());
+    let (is_loading, set_is_loading) = signal(true);
+    let (loading_progress, set_loading_progress) = signal(0u8);
 
     // Watch for critical events - low health
     {
-        let game_state_watcher = game_state_rc.clone();
-        let (last_warning_sent, set_last_warning_sent) = create_signal(false);
-        create_effect(move |_| {
+        let game_state_watcher = game_state.clone();
+        let (last_warning_sent, set_last_warning_sent) = signal(false);
+        Effect::new(move |_| {
             let health = game_state_watcher.mothership_health.get();
             if health < 25.0 && !last_warning_sent.get() {
                 set_event_feed.update(|feed| {
@@ -80,9 +77,9 @@ pub fn App() -> impl IntoView {
 
     // Watch for wave changes
     {
-        let game_state_watcher = game_state_rc.clone();
-        let (last_level, set_last_level) = create_signal(1u8);
-        create_effect(move |_| {
+        let game_state_watcher = game_state.clone();
+        let (last_level, set_last_level) = signal(1u8);
+        Effect::new(move |_| {
             let current_level = game_state_watcher.level.get();
             let previous_level = last_level.get();
 
@@ -103,10 +100,9 @@ pub fn App() -> impl IntoView {
 
     // Watch for high scores
     {
-        let game_state_watcher = game_state_rc.clone();
-        let (milestones_reached, set_milestones_reached) =
-            create_signal(std::collections::HashSet::new());
-        create_effect(move |_| {
+        let game_state_watcher = game_state.clone();
+        let (milestones_reached, set_milestones_reached) = signal(std::collections::HashSet::new());
+        Effect::new(move |_| {
             let score = game_state_watcher.score.get();
             let milestones = [1000, 5000, 10000, 25000, 50000, 100000];
 
@@ -133,7 +129,7 @@ pub fn App() -> impl IntoView {
     }
 
     // Keyboard event handler
-    let game_state_kb = game_state_rc.clone();
+    let game_state_kb = game_state.clone();
     {
         let window = web_sys::window().unwrap();
         let game_state_inner = game_state_kb.clone();
@@ -193,24 +189,26 @@ pub fn App() -> impl IntoView {
             .unwrap();
 
         // Clean up on component unmount
-        on_cleanup({
-            let window = window.clone();
-            let closure_ref = closure.as_ref().unchecked_ref::<js_sys::Function>().clone();
-            move || {
-                let _ = window.remove_event_listener_with_callback("keydown", &closure_ref);
-            }
+        // Use StoredValue with LocalStorage to handle non-Send/Sync types in WASM
+        let window_stored = StoredValue::new_local(window.clone());
+        let closure_ref_stored =
+            StoredValue::new_local(closure.as_ref().unchecked_ref::<js_sys::Function>().clone());
+        on_cleanup(move || {
+            let window = window_stored.get_value();
+            let closure_ref = closure_ref_stored.get_value();
+            let _ = window.remove_event_listener_with_callback("keydown", &closure_ref);
         });
         // Keep closure alive until cleanup
         std::mem::forget(closure);
     }
 
     // Clone game state for components
-    let game_state_hud = game_state_rc.clone();
-    let game_state_canvas = game_state_rc.clone();
-    let game_state_energy = game_state_rc.clone();
-    let game_state_drones = game_state_rc.clone();
-    let game_state_tokens = game_state_rc.clone();
-    let game_state_weapons = game_state_rc.clone();
+    let game_state_hud = game_state.clone();
+    let game_state_canvas = game_state.clone();
+    let game_state_energy = game_state.clone();
+    let game_state_drones = game_state.clone();
+    let game_state_tokens = game_state.clone();
+    let game_state_weapons = game_state.clone();
 
     // Simulate loading progress with proper cleanup
     {
@@ -284,7 +282,17 @@ pub fn App() -> impl IntoView {
         *animation_handle.borrow_mut() = Some(handle);
 
         // Clean up on unmount
+        // Use StoredValue with LocalStorage to handle non-Send/Sync types in WASM
+        let animation_handle_stored = StoredValue::new_local(animation_handle.clone());
+        let timeout_handle_stored = StoredValue::new_local(timeout_handle.clone());
+        let animate_fn_stored = StoredValue::new_local(animate_fn.clone());
+        let window_stored = StoredValue::new_local(window.clone());
         on_cleanup(move || {
+            let animation_handle = animation_handle_stored.get_value();
+            let timeout_handle = timeout_handle_stored.get_value();
+            let animate_fn = animate_fn_stored.get_value();
+            let window = window_stored.get_value();
+
             if let Some(h) = animation_handle.borrow_mut().take() {
                 window.cancel_animation_frame(h).ok();
             }
@@ -343,9 +351,9 @@ pub fn App() -> impl IntoView {
                 on_dismiss=move || set_achievement_message.set(None)
             />
 
-            <Hud game_state=(*game_state_hud).clone() is_running=is_running/>
+            <Hud game_state=game_state_hud.clone() is_running=is_running/>
 
-            <GameCanvas game_state=(*game_state_canvas).clone() is_running=is_running/>
+            <GameCanvas game_state=game_state_canvas.clone() is_running=is_running/>
 
             // Side panels
             <Show when=move || show_events.get() fallback=|| view! { <div></div> }>
@@ -356,13 +364,13 @@ pub fn App() -> impl IntoView {
 
             <Show when=move || show_energy.get() fallback=|| view! { <div></div> }>
                 <div class="side-panel right">
-                    <EnergyManagement game_state=(*game_state_energy).clone()/>
+                    <EnergyManagement game_state=game_state_energy.clone()/>
                 </div>
             </Show>
 
             <Show when=move || show_drones.get() fallback=|| view! { <div></div> }>
                 <div class="side-panel right-lower">
-                    <DroneDeploymentPanel game_state=(*game_state_drones).clone()/>
+                    <DroneDeploymentPanel game_state=game_state_drones.clone()/>
                 </div>
             </Show>
 
@@ -371,7 +379,7 @@ pub fn App() -> impl IntoView {
 
             // Token Store (full modal)
             <TokenStore
-                game_state=(*game_state_tokens).clone()
+                game_state=game_state_tokens.clone()
                 show=show_token_store
                 on_close=move || set_show_token_store.set(false)
             />
@@ -379,11 +387,11 @@ pub fn App() -> impl IntoView {
             // Synergy System (floating indicator)
             <SynergySystem
                 active_weapons={
-                    let game_state_synergy = game_state_rc.clone();
-                    let active_weapons_signal = create_rw_signal(Vec::new());
+                    let game_state_synergy = game_state.clone();
+                    let active_weapons_signal = RwSignal::new(Vec::new());
 
                     // Update the signal when weapons change
-                    create_effect(move |_| {
+                    Effect::new(move |_| {
                         let weapons = game_state_synergy.weapons.get()
                             .into_iter()
                             .map(|w| w.weapon_type)
@@ -442,7 +450,7 @@ pub fn App() -> impl IntoView {
                     </button>
                 </div>
 
-                <WeaponPanel game_state=(*game_state_weapons).clone()/>
+                <WeaponPanel game_state=game_state_weapons.clone()/>
 
                 <div class="control-section">
                     <button

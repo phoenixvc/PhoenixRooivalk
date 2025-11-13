@@ -1,5 +1,5 @@
 #[cfg(target_arch = "wasm32")]
-use leptos::*;
+use leptos::prelude::*;
 
 pub mod auto_targeting;
 pub mod engine;
@@ -45,24 +45,24 @@ pub struct GameStateManager {
 impl GameStateManager {
     pub fn new() -> Self {
         Self {
-            score: create_rw_signal(0),
-            level: create_rw_signal(1),
-            threats: create_rw_signal(Vec::new()),
-            drones: create_rw_signal(Vec::new()),
-            neutralized: create_rw_signal(0),
+            score: RwSignal::new(0),
+            level: RwSignal::new(1),
+            threats: RwSignal::new(Vec::new()),
+            drones: RwSignal::new(Vec::new()),
+            neutralized: RwSignal::new(0),
 
-            selected_weapon: create_rw_signal(WeaponType::Kinetic),
-            weapons: create_rw_signal(Self::init_weapons()),
-            energy: create_rw_signal(100.0),
-            cooling: create_rw_signal(100.0),
+            selected_weapon: RwSignal::new(WeaponType::Kinetic),
+            weapons: RwSignal::new(Self::init_weapons()),
+            energy: RwSignal::new(100.0),
+            cooling: RwSignal::new(100.0),
 
-            game_time: create_rw_signal(0.0),
-            frame_rate: create_rw_signal(60.0),
+            game_time: RwSignal::new(0.0),
+            frame_rate: RwSignal::new(60.0),
 
-            mothership_health: create_rw_signal(100.0),
-            power_ups: create_rw_signal(Vec::new()),
+            mothership_health: RwSignal::new(100.0),
+            power_ups: RwSignal::new(Vec::new()),
 
-            auto_targeting_enabled: create_rw_signal(false),
+            auto_targeting_enabled: RwSignal::new(false),
         }
     }
 

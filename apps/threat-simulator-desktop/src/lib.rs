@@ -11,7 +11,7 @@ mod tauri_api;
 pub use components::App;
 
 #[cfg(target_arch = "wasm32")]
-use leptos::*;
+use leptos::prelude::*;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;

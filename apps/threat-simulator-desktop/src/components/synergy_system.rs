@@ -1,5 +1,5 @@
 use crate::game::WeaponType;
-use leptos::*;
+use leptos::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct SynergyEffect {
@@ -20,7 +20,7 @@ pub fn SynergySystem(
     show: ReadSignal<bool>,
 ) -> impl IntoView {
     // Use get_all_synergies() as single source of truth
-    let synergies = std::rc::Rc::new(get_all_synergies());
+    let synergies = StoredValue::new_local(get_all_synergies());
 
     view! {
         <Show when=move || show.get() fallback=|| view! { <div></div> }>
@@ -28,30 +28,28 @@ pub fn SynergySystem(
                 <div class="synergy-header">
                     <span class="synergy-title">"⚡ ACTIVE SYNERGIES"</span>
                     <span class="synergy-count">
-                        {
-                            let syn = synergies.clone();
-                            move || {
-                                let active = active_weapons.get();
-                                syn.iter()
-                                    .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
-                                    .count()
-                            }
-                        }
+                        {move || {
+                            let active = active_weapons.get();
+                            synergies
+                                .get_value()
+                                .iter()
+                                .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
+                                .count()
+                        }}
 
                     </span>
                 </div>
 
                 <div class="synergy-list">
                     <For
-                        each={
-                            let syn = synergies.clone();
-                            move || {
-                                let active = active_weapons.get();
-                                syn.iter()
-                                    .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
-                                    .cloned()
-                                    .collect::<Vec<_>>()
-                            }
+                        each=move || {
+                            let active = active_weapons.get();
+                            synergies
+                                .get_value()
+                                .iter()
+                                .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
+                                .cloned()
+                                .collect::<Vec<_>>()
                         }
 
                         key=|synergy| synergy.id.clone()
@@ -86,11 +84,14 @@ pub fn SynergySystem(
                                                 }
                                             })}
                                         {(!synergy.visual_effect.is_empty())
-                                            .then(|| {
-                                                view! {
-                                                    <span class="visual-effect" title=&synergy.visual_effect>
-                                                        "✨"
-                                                    </span>
+                                            .then({
+                                                let visual_effect = synergy.visual_effect.clone();
+                                                move || {
+                                                    view! {
+                                                        <span class="visual-effect" title=visual_effect.clone()>
+                                                            "✨"
+                                                        </span>
+                                                    }
                                                 }
                                             })}
 
@@ -103,15 +104,14 @@ pub fn SynergySystem(
                 </div>
 
                 <Show
-                    when={
-                        let syn = synergies.clone();
-                        move || {
-                            let active = active_weapons.get();
-                            syn.iter()
-                                .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
-                                .count()
-                                == 0
-                        }
+                    when=move || {
+                        let active = active_weapons.get();
+                        synergies
+                            .get_value()
+                            .iter()
+                            .filter(|s| s.weapons.iter().all(|w| active.contains(w)))
+                            .count()
+                            == 0
                     }
 
                     fallback={

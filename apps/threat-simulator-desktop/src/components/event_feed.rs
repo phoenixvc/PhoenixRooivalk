@@ -1,5 +1,5 @@
 use js_sys::Date;
-use leptos::*;
+use leptos::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct FeedItem {

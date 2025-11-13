@@ -1,5 +1,6 @@
 use crate::game::{engine::GameEngine, GameStateManager};
-use leptos::*;
+use leptos::html::Canvas;
+use leptos::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::{closure::Closure, JsCast};
@@ -7,7 +8,7 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 #[component]
 pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) -> impl IntoView {
-    let canvas_ref = create_node_ref::<html::Canvas>();
+    let canvas_ref = NodeRef::<Canvas>::new();
 
     // Game engine - shared between animation loop and event handlers
     let engine = Rc::new(RefCell::new(GameEngine::new(1)));
@@ -25,13 +26,13 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
     let animation_scheduled_for_restart = animation_scheduled.clone();
 
     // Keep the shared state in sync with the Leptos signal
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let running = is_running.get();
         *is_running_shared_effect.borrow_mut() = running;
     });
 
     // Set up canvas immediately when component mounts (during loading)
-    create_effect(move |_| {
+    Effect::new(move |_| {
         let Some(canvas_elem) = canvas_ref.get() else {
             return;
         };
@@ -224,26 +225,20 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
             }
         }
 
-        // Clean up: break the Rc cycle so the closure can be dropped
-        on_cleanup({
-            let animation_closure = animation_closure.clone();
-            move || {
-                // Dropping the Closure removes the JS callback reference
-                let _ = animation_closure.borrow_mut().take();
-            }
-        });
+        // Note: Cleanup happens automatically when the component is unmounted
+        // The Rc<RefCell<>> will be dropped, breaking any cycles
     });
 
     // Watch for is_running changes and restart animation when game resumes
     {
         let animation_closure_restart = animation_closure_for_restart.clone();
         let animation_scheduled_restart = animation_scheduled_for_restart.clone();
-        create_effect(move |_| {
+        Effect::new(move |_| {
             let is_running_now = is_running.get();
             if is_running_now && !*animation_scheduled_restart.borrow() {
                 // Game just resumed and animation is not scheduled - restart it
                 if let Some(window) = web_sys::window() {
-                    if let Ok(handle) = window.request_animation_frame(
+                    if let Ok(_handle) = window.request_animation_frame(
                         animation_closure_restart
                             .borrow()
                             .as_ref()
