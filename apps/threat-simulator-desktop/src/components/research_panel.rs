@@ -1,5 +1,5 @@
 use crate::game::{DroneType, WeaponType};
-use leptos::*;
+use leptos::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct ResearchItem {

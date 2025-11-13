@@ -75,7 +75,7 @@ async fn test_post_evidence_endpoint() {
         assert_eq!(row.get::<String, _>("id"), job_id);
         assert_eq!(row.get::<String, _>("status"), "queued");
         assert_eq!(row.get::<i64, _>("attempts"), 0);
-        
+
         server.abort();
     })
     .await;
@@ -108,13 +108,13 @@ async fn test_post_evidence_with_custom_id() {
 
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
-        
+
         // Use helper for JSON response validation
-        common::assert_json_response(&result, &[
-            ("id", "custom-evidence-123"),
-            ("status", "queued")
-        ]);
-        
+        common::assert_json_response(
+            &result,
+            &[("id", "custom-evidence-123"), ("status", "queued")],
+        );
+
         server.abort();
     })
     .await;
@@ -153,11 +153,9 @@ async fn test_post_evidence_with_metadata() {
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
         assert!(result["id"].is_string());
-        
+
         // Use helper for JSON response validation
-        common::assert_json_response(&result, &[
-            ("status", "queued")
-        ]);
+        common::assert_json_response(&result, &[("status", "queued")]);
 
         server.abort();
     })

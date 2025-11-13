@@ -1,5 +1,5 @@
 use crate::game::{Drone, DroneType, GameStateManager, Vector2};
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {

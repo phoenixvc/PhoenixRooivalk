@@ -1,6 +1,6 @@
 use crate::game::{DroneType, GameStateManager};
 use js_sys::Date;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn TokenStore<F>(

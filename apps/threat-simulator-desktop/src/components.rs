@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 mod cooldown_meter;
 mod drone_deployment;

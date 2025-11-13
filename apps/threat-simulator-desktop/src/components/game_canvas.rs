@@ -1,5 +1,5 @@
 use crate::game::{engine::GameEngine, GameStateManager};
-use leptos::*;
+use leptos::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::{closure::Closure, JsCast};

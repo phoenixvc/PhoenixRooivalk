@@ -1,5 +1,5 @@
 use crate::game::WeaponType;
-use leptos::*;
+use leptos::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct SynergyEffect {

@@ -64,11 +64,11 @@
 //! ]);
 //! ```
 
-use std::net::TcpListener as StdTcpListener;
-use tokio::net::TcpListener;
 use axum::{serve, Router};
-use std::time::Duration;
 use once_cell::sync::Lazy;
+use std::net::TcpListener as StdTcpListener;
+use std::time::Duration;
+use tokio::net::TcpListener;
 use tokio::sync::Mutex;
 
 // Define a global mutex for environment variable operations
@@ -92,7 +92,7 @@ where
     match std::env::var(key) {
         Ok(current) => {
             println!("Verified {}={}", key, current);
-        },
+        }
         Err(e) => {
             panic!("Failed to set environment variable {}: {}", key, e);
         }
@@ -107,7 +107,7 @@ where
         Some(val) => {
             println!("Restoring {}={}", key, val);
             std::env::set_var(key, val);
-        },
+        }
         None => {
             println!("Removing {}", key);
             std::env::remove_var(key);
@@ -127,8 +127,10 @@ pub fn create_test_listener() -> (TcpListener, u16) {
 }
 
 /// Spawns a test server using the Axum Router and returns the port it's listening on
-pub async fn spawn_test_server(app: Router, listener: TcpListener) -> (tokio::task::JoinHandle<()>, u16)
-{
+pub async fn spawn_test_server(
+    app: Router,
+    listener: TcpListener,
+) -> (tokio::task::JoinHandle<()>, u16) {
     let port = listener.local_addr().unwrap().port();
 
     let server = tokio::spawn(async move {
@@ -150,9 +152,14 @@ pub fn create_test_db_url() -> String {
 /// Utility to assert JSON response properties
 pub fn assert_json_response(json: &serde_json::Value, expected_values: &[(&str, &str)]) {
     for (key, expected) in expected_values {
-        assert_eq!(json[key].as_str().unwrap_or_default(), *expected,
-                  "Expected json[{}] to be {}, but got {}",
-                  key, expected, json[key]);
+        assert_eq!(
+            json[key].as_str().unwrap_or_default(),
+            *expected,
+            "Expected json[{}] to be {}, but got {}",
+            key,
+            expected,
+            json[key]
+        );
     }
 }
 
@@ -237,7 +244,7 @@ where
         Some(val) => {
             println!("Restoring API_DB_URL={}", val);
             std::env::set_var("API_DB_URL", val);
-        },
+        }
         None => {
             println!("Keeping API_DB_URL removed");
             std::env::remove_var("API_DB_URL");
@@ -247,7 +254,7 @@ where
         Some(val) => {
             println!("Restoring KEEPER_DB_URL={}", val);
             std::env::set_var("KEEPER_DB_URL", val);
-        },
+        }
         None => {
             println!("Keeping KEEPER_DB_URL removed");
             std::env::remove_var("KEEPER_DB_URL");

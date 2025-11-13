@@ -5,8 +5,8 @@ use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::json;
 use sqlx::Row;
-use std::time::Duration;
 use std::net::TcpListener as StdTcpListener;
+use std::time::Duration;
 use tokio::net::TcpListener;
 
 #[tokio::test]
@@ -87,7 +87,7 @@ async fn test_get_evidence_not_found() {
         let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
         std_listener.set_nonblocking(true).unwrap();
         let port = std_listener.local_addr().unwrap().port();
-        
+
         // Convert to tokio listener
         let listener = TcpListener::from_std(std_listener).unwrap();
 
@@ -106,36 +106,43 @@ async fn test_get_evidence_not_found() {
 
         // Test getting non-existent evidence
         let response = client
-            .get(format!("http://127.0.0.1:{}/evidence/{}", port, requested_id))
+            .get(format!(
+                "http://127.0.0.1:{}/evidence/{}",
+                port, requested_id
+            ))
             .send()
             .await
             .unwrap();
 
         // Assert that status is 404 Not Found
-            assert_eq!(
-            response.status(), 404,
+        assert_eq!(
+            response.status(),
+            404,
             "Expected status 404 Not Found, got {}",
             response.status()
-            );
-        
+        );
+
         // Read response body and parse as JSON
         let response_text = response.text().await.unwrap();
         let result: serde_json::Value = serde_json::from_str(&response_text)
             .unwrap_or_else(|_| panic!("Failed to parse response as JSON: {}", response_text));
-        
+
         // Verify JSON structure contains expected fields with correct values
         assert_eq!(
-            result["id"].as_str().unwrap_or_default(), requested_id,
+            result["id"].as_str().unwrap_or_default(),
+            requested_id,
             "Expected result[\"id\"] to be {}, got: {}",
-            requested_id, result["id"]
-            );
-        
+            requested_id,
+            result["id"]
+        );
+
         assert_eq!(
-            result["status"].as_str().unwrap_or_default(), "not_found",
+            result["status"].as_str().unwrap_or_default(),
+            "not_found",
             "Expected result[\"status\"] to be \"not_found\", got: {}",
             result["status"]
         );
-        
+
         // Clean up server after response is fully processed
         server.abort();
     })

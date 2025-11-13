@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn SimulationWarning<F>(show: ReadSignal<bool>, on_close: F) -> impl IntoView

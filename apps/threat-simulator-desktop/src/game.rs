@@ -1,5 +1,5 @@
 #[cfg(target_arch = "wasm32")]
-use leptos::*;
+use leptos::prelude::*;
 
 pub mod auto_targeting;
 pub mod engine;
