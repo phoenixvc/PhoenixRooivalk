@@ -3,8 +3,6 @@ mod common;
 use axum::serve;
 use phoenix_api::build_app;
 use reqwest::Client;
-use serde_json::json;
-use sqlx::Row;
 use std::net::TcpListener as StdTcpListener;
 use std::time::Duration;
 use tokio::net::TcpListener;
@@ -22,7 +20,7 @@ async fn test_get_evidence_endpoint() {
         let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
         std_listener.set_nonblocking(true).unwrap();
         let port = std_listener.local_addr().unwrap().port();
-        
+
         // Convert to tokio listener
         let listener = TcpListener::from_std(std_listener).unwrap();
 
@@ -37,7 +35,7 @@ async fn test_get_evidence_endpoint() {
         // Insert a test job directly into the database
         let job_id = "test-job-123";
         let now = chrono::Utc::now().timestamp_millis();
-        
+
         sqlx::query(
             "INSERT INTO outbox_jobs (id, payload_sha256, status, attempts, last_error, created_ms, updated_ms)
             VALUES (?, ?, ?, ?, ?, ?, ?)",

@@ -2,7 +2,6 @@ use axum::serve;
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::Value;
-use sqlx::Row;
 use std::net::TcpListener as StdTcpListener;
 use tokio::net::TcpListener;
 

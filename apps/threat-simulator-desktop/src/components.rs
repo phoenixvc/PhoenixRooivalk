@@ -101,8 +101,7 @@ pub fn App() -> impl IntoView {
     // Watch for high scores
     {
         let game_state_watcher = game_state.clone();
-        let (milestones_reached, set_milestones_reached) =
-            signal(std::collections::HashSet::new());
+        let (milestones_reached, set_milestones_reached) = signal(std::collections::HashSet::new());
         Effect::new(move |_| {
             let score = game_state_watcher.score.get();
             let milestones = [1000, 5000, 10000, 25000, 50000, 100000];
@@ -190,12 +189,14 @@ pub fn App() -> impl IntoView {
             .unwrap();
 
         // Clean up on component unmount
-        on_cleanup({
-            let window = window.clone();
-            let closure_ref = closure.as_ref().unchecked_ref::<js_sys::Function>().clone();
-            move || {
-                let _ = window.remove_event_listener_with_callback("keydown", &closure_ref);
-            }
+        // Use StoredValue with LocalStorage to handle non-Send/Sync types in WASM
+        let window_stored = StoredValue::new_local(window.clone());
+        let closure_ref_stored =
+            StoredValue::new_local(closure.as_ref().unchecked_ref::<js_sys::Function>().clone());
+        on_cleanup(move || {
+            let window = window_stored.get_value();
+            let closure_ref = closure_ref_stored.get_value();
+            let _ = window.remove_event_listener_with_callback("keydown", &closure_ref);
         });
         // Keep closure alive until cleanup
         std::mem::forget(closure);
@@ -281,7 +282,17 @@ pub fn App() -> impl IntoView {
         *animation_handle.borrow_mut() = Some(handle);
 
         // Clean up on unmount
+        // Use StoredValue with LocalStorage to handle non-Send/Sync types in WASM
+        let animation_handle_stored = StoredValue::new_local(animation_handle.clone());
+        let timeout_handle_stored = StoredValue::new_local(timeout_handle.clone());
+        let animate_fn_stored = StoredValue::new_local(animate_fn.clone());
+        let window_stored = StoredValue::new_local(window.clone());
         on_cleanup(move || {
+            let animation_handle = animation_handle_stored.get_value();
+            let timeout_handle = timeout_handle_stored.get_value();
+            let animate_fn = animate_fn_stored.get_value();
+            let window = window_stored.get_value();
+
             if let Some(h) = animation_handle.borrow_mut().take() {
                 window.cancel_animation_frame(h).ok();
             }
@@ -377,7 +388,7 @@ pub fn App() -> impl IntoView {
             <SynergySystem
                 active_weapons={
                     let game_state_synergy = game_state.clone();
-                    let active_weapons_signal = rw_signal(Vec::new());
+                    let active_weapons_signal = RwSignal::new(Vec::new());
 
                     // Update the signal when weapons change
                     Effect::new(move |_| {
