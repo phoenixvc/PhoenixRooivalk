@@ -1,45 +1,47 @@
-use axum::serve;
+mod common;
+
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::json;
-use std::net::TcpListener as StdTcpListener;
-use tokio::net::TcpListener;
+use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
+
+async fn setup_pool(db_url: &str) -> Pool<Sqlite> {
+    let pool = SqlitePoolOptions::new()
+        .max_connections(1)
+        .connect(db_url)
+        .await
+        .unwrap();
+    // Run migrations
+    let migration_manager = phoenix_api::migrations::MigrationManager::new(pool.clone());
+    migration_manager.migrate().await.unwrap();
+    pool
+}
 
 #[tokio::test]
 async fn test_countermeasure_fk_enforced() {
-    // Use in-memory DB
-    let db_url = "sqlite::memory:?cache=shared";
-    std::env::set_var("API_DB_URL", db_url);
+    common::with_api_db_env(|| async {
+        let db_url = common::create_test_db_url();
+        let pool = setup_pool(&db_url).await;
+        let app = build_app(pool.clone()).await.unwrap();
+        let (listener, port) = common::create_test_listener();
+        let (server, _) = common::spawn_test_server(app, listener).await;
 
-    let (app, _pool) = build_app().await.unwrap();
+        let client = Client::new();
+        let url = format!("http://127.0.0.1:{}/countermeasures", port);
 
-    // Start server
-    let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
-    std_listener.set_nonblocking(true).unwrap();
-    let addr = std_listener.local_addr().unwrap();
-    let port = addr.port();
-    let listener = TcpListener::from_std(std_listener).unwrap();
+        let payload = json!({
+            "job_id": "missing-job",
+            "deployed_by": "tester",
+            "countermeasure_type": "rf_jam",
+            "effectiveness_score": 0.9,
+            "notes": "test insert with missing fk"
+        });
 
-    let server = tokio::spawn(async move {
-        serve(listener, app.into_make_service()).await.unwrap();
-    });
+        let resp = client.post(&url).json(&payload).send().await.unwrap();
 
-    let client = Client::new();
-    let url = format!("http://127.0.0.1:{}/countermeasures", port);
+        assert_eq!(resp.status(), 500);
 
-    // Post a countermeasure referencing a non-existent job_id
-    let payload = json!({
-        "job_id": "missing-job",
-        "deployed_by": "tester",
-        "countermeasure_type": "rf_jam",
-        "effectiveness_score": 0.9,
-        "notes": "test insert with missing fk"
-    });
-
-    let resp = client.post(&url).json(&payload).send().await.unwrap();
-
-    // Should fail with 500 due to FK enforcement
-    assert_eq!(resp.status(), 500);
-
-    server.abort();
+        server.abort();
+    })
+    .await;
 }
