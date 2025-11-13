@@ -80,19 +80,8 @@ where
     // Acquire the mutex to ensure exclusive access to environment variables
     let _guard = ENV_MUTEX.lock().await;
 
-    println!("Setting environment variable {}={}", key, value);
     let original_value = std::env::var(key).ok();
     std::env::set_var(key, value);
-
-    // Verify the variable was actually set
-    match std::env::var(key) {
-        Ok(current) => {
-            println!("Verified {}={}", key, current);
-        }
-        Err(e) => {
-            panic!("Failed to set environment variable {}: {}", key, e);
-        }
-    }
 
     // Execute the provided function while holding the lock
     // This ensures no other test can modify environment variables during execution
@@ -100,14 +89,8 @@ where
 
     // Restore original value (still holding the lock)
     match original_value {
-        Some(val) => {
-            println!("Restoring {}={}", key, val);
-            std::env::set_var(key, val);
-        }
-        None => {
-            println!("Removing {}", key);
-            std::env::remove_var(key);
-        }
+        Some(val) => std::env::set_var(key, val),
+        None => std::env::remove_var(key),
     }
     // Lock is automatically released when _guard goes out of scope
 }
