@@ -16,10 +16,6 @@
 //! common::with_api_db_env(|| async {
 //!     // Test with in-memory API database
 //! }).await;
-//!
-//! common::with_keeper_db_fallback(|| async {
-//!     // Test API fallback to keeper database
-//! }).await;
 //! ```
 //!
 //! ## Server Testing
@@ -172,38 +168,6 @@ where
     // Use the shared test DB URL for consistency
     let db_url = create_test_db_url();
     with_env_var("API_DB_URL", &db_url, f).await
-}
-
-/// Sets up environment for Keeper database fallback tests
-pub async fn with_keeper_db_fallback<F, Fut>(f: F)
-where
-    F: FnOnce() -> Fut,
-    Fut: std::future::Future<Output = ()>,
-{
-    // Acquire the mutex to ensure exclusive access to environment variables
-    let _guard = ENV_MUTEX.lock().await;
-
-    let original_api_url = std::env::var("API_DB_URL").ok();
-    let original_keeper_url = std::env::var("KEEPER_DB_URL").ok();
-
-    // Set up the test environment using the shared test DB URL
-    std::env::remove_var("API_DB_URL");
-    let db_url = create_test_db_url();
-    std::env::set_var("KEEPER_DB_URL", &db_url);
-
-    // Execute the function while holding the lock
-    f().await;
-
-    // Restore original values
-    match original_api_url {
-        Some(val) => std::env::set_var("API_DB_URL", val),
-        None => std::env::remove_var("API_DB_URL"),
-    }
-    match original_keeper_url {
-        Some(val) => std::env::set_var("KEEPER_DB_URL", val),
-        None => std::env::remove_var("KEEPER_DB_URL"),
-    }
-    // Lock is automatically released when _guard goes out of scope
 }
 
 /// Sets up environment with no database URLs (for default URL testing)
