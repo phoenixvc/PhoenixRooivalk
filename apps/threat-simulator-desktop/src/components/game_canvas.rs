@@ -238,7 +238,7 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
             if is_running_now && !*animation_scheduled_restart.borrow() {
                 // Game just resumed and animation is not scheduled - restart it
                 if let Some(window) = web_sys::window() {
-                    if let Ok(handle) = window.request_animation_frame(
+                    if let Ok(_handle) = window.request_animation_frame(
                         animation_closure_restart
                             .borrow()
                             .as_ref()

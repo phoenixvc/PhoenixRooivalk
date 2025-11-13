@@ -84,11 +84,14 @@ pub fn SynergySystem(
                                                 }
                                             })}
                                         {(!synergy.visual_effect.is_empty())
-                                            .then(|| {
-                                                view! {
-                                                    <span class="visual-effect" title=&synergy.visual_effect>
-                                                        "✨"
-                                                    </span>
+                                            .then({
+                                                let visual_effect = synergy.visual_effect.clone();
+                                                move || {
+                                                    view! {
+                                                        <span class="visual-effect" title=visual_effect.clone()>
+                                                            "✨"
+                                                        </span>
+                                                    }
                                                 }
                                             })}
 
