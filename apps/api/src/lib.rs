@@ -24,13 +24,15 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         .unwrap_or_else(|| "sqlite://blockchain_outbox.sqlite3".to_string());
     let pool = SqlitePoolOptions::new()
         .max_connections(5)
-        .after_connect(|conn| Box::pin(async move {
-            // Enforce foreign key constraints for SQLite reliability on every connection
-            sqlx::query("PRAGMA foreign_keys = ON")
-                .execute(&mut *conn)
-                .await?;
-            Ok(())
-        }))
+        .after_connect(|conn| {
+            Box::pin(async move {
+                // Enforce foreign key constraints for SQLite reliability on every connection
+                sqlx::query("PRAGMA foreign_keys = ON")
+                    .execute(&mut *conn)
+                    .await?;
+                Ok(())
+            })
+        })
         .connect(&db_url)
         .await?;
 
@@ -67,7 +69,10 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
             "/jamming-operations",
             post(handlers::post_jamming_operation).get(handlers::list_jamming_operations),
         )
-        .route("/jamming-operations/{id}", get(handlers::get_jamming_operation))
+        .route(
+            "/jamming-operations/{id}",
+            get(handlers::get_jamming_operation),
+        )
         .with_state(state);
     Ok((app, pool))
 }

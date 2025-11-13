@@ -1,5 +1,5 @@
 use crate::game::GameStateManager;
-use leptos::*;
+use leptos::prelude::*;
 
 // Small epsilon for floating-point comparisons (cooldown readiness check)
 const COOLDOWN_EPSILON: f32 = 1e-6;

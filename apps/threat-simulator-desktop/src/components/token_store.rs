@@ -1,6 +1,6 @@
 use crate::game::{DroneType, GameStateManager};
 use js_sys::Date;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn TokenStore<F>(
@@ -9,11 +9,11 @@ pub fn TokenStore<F>(
     on_close: F,
 ) -> impl IntoView
 where
-    F: Fn() + Copy + 'static,
+    F: Fn() + Copy + 'static + Send + Sync,
 {
-    let (tokens, set_tokens) = create_signal(1000_u32);
+    let (tokens, set_tokens) = signal(1000_u32);
 
-    let drone_catalog = std::rc::Rc::new(vec![
+    let drone_catalog = StoredValue::new_local(vec![
         (
             DroneType::Interceptor,
             "Interceptor",
@@ -127,7 +127,8 @@ where
                         </p>
 
                         <div class="drone-catalog">
-                            {(*drone_catalog)
+                            {drone_catalog
+                                .get_value()
                                 .iter()
                                 .map(|(drone_type, name, role, desc, cost)| {
                                     let drone_type = *drone_type;
