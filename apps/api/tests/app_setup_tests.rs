@@ -1,7 +1,6 @@
 mod common;
 
 use phoenix_api::build_app;
-use sqlx::Row;
 
 #[tokio::test]
 async fn test_build_app() {
