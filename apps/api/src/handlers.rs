@@ -18,13 +18,6 @@ use axum::{
     Json,
 };
 
-fn internal_error(e: impl ToString) -> (StatusCode, Json<serde_json::Value>) {
-    (
-        StatusCode::INTERNAL_SERVER_ERROR,
-        Json(serde_json::json!({ "error": e.to_string() })),
-    )
-}
-
 fn parse_pagination(pagination: Pagination) -> (i64, i64, i64) {
     let page = pagination.page.unwrap_or(1).max(1);
     let per_page = pagination.per_page.unwrap_or(10).clamp(1, 100);
