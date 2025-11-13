@@ -3,8 +3,6 @@ mod common;
 use axum::serve;
 use phoenix_api::build_app;
 use reqwest::Client;
-use serde_json::json;
-use sqlx::Row;
 use std::net::TcpListener as StdTcpListener;
 use std::time::Duration;
 use tokio::net::TcpListener;
