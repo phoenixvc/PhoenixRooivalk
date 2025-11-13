@@ -45,24 +45,24 @@ pub struct GameStateManager {
 impl GameStateManager {
     pub fn new() -> Self {
         Self {
-            score: create_rw_signal(0),
-            level: create_rw_signal(1),
-            threats: create_rw_signal(Vec::new()),
-            drones: create_rw_signal(Vec::new()),
-            neutralized: create_rw_signal(0),
+            score: rw_signal(0),
+            level: rw_signal(1),
+            threats: rw_signal(Vec::new()),
+            drones: rw_signal(Vec::new()),
+            neutralized: rw_signal(0),
 
-            selected_weapon: create_rw_signal(WeaponType::Kinetic),
-            weapons: create_rw_signal(Self::init_weapons()),
-            energy: create_rw_signal(100.0),
-            cooling: create_rw_signal(100.0),
+            selected_weapon: rw_signal(WeaponType::Kinetic),
+            weapons: rw_signal(Self::init_weapons()),
+            energy: rw_signal(100.0),
+            cooling: rw_signal(100.0),
 
-            game_time: create_rw_signal(0.0),
-            frame_rate: create_rw_signal(60.0),
+            game_time: rw_signal(0.0),
+            frame_rate: rw_signal(60.0),
 
-            mothership_health: create_rw_signal(100.0),
-            power_ups: create_rw_signal(Vec::new()),
+            mothership_health: rw_signal(100.0),
+            power_ups: rw_signal(Vec::new()),
 
-            auto_targeting_enabled: create_rw_signal(false),
+            auto_targeting_enabled: rw_signal(false),
         }
     }
 

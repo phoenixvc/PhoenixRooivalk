@@ -11,7 +11,7 @@ pub fn TokenStore<F>(
 where
     F: Fn() + Copy + 'static + Send + Sync,
 {
-    let (tokens, set_tokens) = create_signal(1000_u32);
+    let (tokens, set_tokens) = signal(1000_u32);
 
     let drone_catalog = store_value(vec![
         (

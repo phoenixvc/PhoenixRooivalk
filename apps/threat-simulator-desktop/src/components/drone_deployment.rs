@@ -3,8 +3,8 @@ use leptos::prelude::*;
 
 #[component]
 pub fn DroneDeploymentPanel(game_state: GameStateManager) -> impl IntoView {
-    let (selected_drone_type, set_selected_drone_type) = create_signal(DroneType::Interceptor);
-    let (deployment_count, set_deployment_count) = create_signal(1_u32);
+    let (selected_drone_type, set_selected_drone_type) = signal(DroneType::Interceptor);
+    let (deployment_count, set_deployment_count) = signal(1_u32);
 
     let drone_types = store_value(vec![
         (

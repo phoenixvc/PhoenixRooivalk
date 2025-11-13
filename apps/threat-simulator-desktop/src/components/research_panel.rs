@@ -27,9 +27,9 @@ pub fn ResearchPanel<F>(show: ReadSignal<bool>, on_close: F) -> impl IntoView
 where
     F: Fn() + Copy + 'static + Send + Sync,
 {
-    let (selected_category, set_selected_category) = create_signal(ResearchCategory::Weapon);
-    let (unlocked_items, set_unlocked_items) = create_signal(Vec::<String>::new());
-    let (research_points, set_research_points) = create_signal(100_u32);
+    let (selected_category, set_selected_category) = signal(ResearchCategory::Weapon);
+    let (unlocked_items, set_unlocked_items) = signal(Vec::<String>::new());
+    let (research_points, set_research_points) = signal(100_u32);
 
     let research_catalog = store_value(get_research_catalog());
 

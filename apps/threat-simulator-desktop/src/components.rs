@@ -37,28 +37,28 @@ pub fn App() -> impl IntoView {
     let game_state = GameStateManager::new();
 
     // Reactive signals for UI state
-    let (show_help, set_show_help) = create_signal(false);
-    let (show_stats, set_show_stats) = create_signal(false);
-    let (show_energy, set_show_energy) = create_signal(false);
-    let (show_drones, set_show_drones) = create_signal(false);
-    let (_show_warning, _set_show_warning) = create_signal(true);
-    let (show_events, set_show_events) = create_signal(false);
-    let (show_research, set_show_research) = create_signal(false);
-    let (show_token_store, set_show_token_store) = create_signal(false);
-    let (show_synergies, set_show_synergies) = create_signal(false); // Hide by default
-    let (is_running, set_is_running) = create_signal(false); // Don't start until user clicks Start
-    let (show_start_screen, set_show_start_screen) = create_signal(false); // Show after loading
-    let (achievement_message, set_achievement_message) = create_signal(None::<String>);
-    let (event_feed, set_event_feed) = create_signal(Vec::<FeedItem>::new());
+    let (show_help, set_show_help) = signal(false);
+    let (show_stats, set_show_stats) = signal(false);
+    let (show_energy, set_show_energy) = signal(false);
+    let (show_drones, set_show_drones) = signal(false);
+    let (_show_warning, _set_show_warning) = signal(true);
+    let (show_events, set_show_events) = signal(false);
+    let (show_research, set_show_research) = signal(false);
+    let (show_token_store, set_show_token_store) = signal(false);
+    let (show_synergies, set_show_synergies) = signal(false); // Hide by default
+    let (is_running, set_is_running) = signal(false); // Don't start until user clicks Start
+    let (show_start_screen, set_show_start_screen) = signal(false); // Show after loading
+    let (achievement_message, set_achievement_message) = signal(None::<String>);
+    let (event_feed, set_event_feed) = signal(Vec::<FeedItem>::new());
 
     // Loading state
-    let (is_loading, set_is_loading) = create_signal(true);
-    let (loading_progress, set_loading_progress) = create_signal(0u8);
+    let (is_loading, set_is_loading) = signal(true);
+    let (loading_progress, set_loading_progress) = signal(0u8);
 
     // Watch for critical events - low health
     {
         let game_state_watcher = game_state.clone();
-        let (last_warning_sent, set_last_warning_sent) = create_signal(false);
+        let (last_warning_sent, set_last_warning_sent) = signal(false);
         create_effect(move |_| {
             let health = game_state_watcher.mothership_health.get();
             if health < 25.0 && !last_warning_sent.get() {
@@ -78,7 +78,7 @@ pub fn App() -> impl IntoView {
     // Watch for wave changes
     {
         let game_state_watcher = game_state.clone();
-        let (last_level, set_last_level) = create_signal(1u8);
+        let (last_level, set_last_level) = signal(1u8);
         create_effect(move |_| {
             let current_level = game_state_watcher.level.get();
             let previous_level = last_level.get();
@@ -102,7 +102,7 @@ pub fn App() -> impl IntoView {
     {
         let game_state_watcher = game_state.clone();
         let (milestones_reached, set_milestones_reached) =
-            create_signal(std::collections::HashSet::new());
+            signal(std::collections::HashSet::new());
         create_effect(move |_| {
             let score = game_state_watcher.score.get();
             let milestones = [1000, 5000, 10000, 25000, 50000, 100000];
@@ -377,7 +377,7 @@ pub fn App() -> impl IntoView {
             <SynergySystem
                 active_weapons={
                     let game_state_synergy = game_state.clone();
-                    let active_weapons_signal = create_rw_signal(Vec::new());
+                    let active_weapons_signal = rw_signal(Vec::new());
 
                     // Update the signal when weapons change
                     create_effect(move |_| {
