@@ -3,26 +3,16 @@ mod common;
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::json;
-use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite, Row};
-
-async fn setup_pool(db_url: &str) -> Pool<Sqlite> {
-    let pool = SqlitePoolOptions::new()
-        .max_connections(1)
-        .connect(db_url)
-        .await
-        .unwrap();
-    // Run migrations
-    let migration_manager = phoenix_api::migrations::MigrationManager::new(pool.clone());
-    migration_manager.migrate().await.unwrap();
-    pool
-}
+use sqlx::Row;
 
 #[tokio::test]
 async fn test_health_endpoint() {
+    // Use specialized helper for API database environment setup
     common::with_api_db_env(|| async {
-        let db_url = common::create_test_db_url();
-        let pool = setup_pool(&db_url).await;
-        let app = build_app(pool).await.unwrap();
+        // Build app
+        let (app, _pool) = build_app().await.unwrap();
+
+        // Use helpers for test listener creation and server setup
         let (listener, port) = common::create_test_listener();
         let (server, _) = common::spawn_test_server(app, listener).await;
 
@@ -44,15 +34,18 @@ async fn test_health_endpoint() {
 
 #[tokio::test]
 async fn test_post_evidence_endpoint() {
+    // Use specialized helper for API database environment setup
     common::with_api_db_env(|| async {
-        let db_url = common::create_test_db_url();
-        let pool = setup_pool(&db_url).await;
-        let app = build_app(pool.clone()).await.unwrap();
+        // Build app
+        let (app, pool) = build_app().await.unwrap();
+
+        // Use helpers for test listener creation and server setup
         let (listener, port) = common::create_test_listener();
         let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
+        // Test evidence submission
         let evidence_payload = json!({
             "digest_hex": "deadbeefcafebabe1234567890abcdef1234567890abcdef1234567890abcdef"
         });
@@ -67,6 +60,7 @@ async fn test_post_evidence_endpoint() {
         let result: serde_json::Value = response.json().await.unwrap();
         assert!(result["id"].is_string());
 
+        // Verify job was created in database
         let job_id = result["id"].as_str().unwrap();
         let row = sqlx::query(
             "SELECT id, status, attempts, created_ms, updated_ms FROM outbox_jobs WHERE id = ?",
@@ -80,7 +74,8 @@ async fn test_post_evidence_endpoint() {
         let row = row.unwrap();
         assert_eq!(row.get::<String, _>("id"), job_id);
         assert_eq!(row.get::<String, _>("status"), "queued");
-        
+        assert_eq!(row.get::<i64, _>("attempts"), 0);
+
         server.abort();
     })
     .await;
@@ -88,15 +83,18 @@ async fn test_post_evidence_endpoint() {
 
 #[tokio::test]
 async fn test_post_evidence_with_custom_id() {
+    // Use specialized helper for API database environment setup
     common::with_api_db_env(|| async {
-        let db_url = common::create_test_db_url();
-        let pool = setup_pool(&db_url).await;
-        let app = build_app(pool).await.unwrap();
+        // Build app
+        let (app, _pool) = build_app().await.unwrap();
+
+        // Use helpers for test listener creation and server setup
         let (listener, port) = common::create_test_listener();
         let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
+        // Test evidence submission with custom ID
         let evidence_payload = json!({
             "id": "custom-evidence-123",
             "digest_hex": "deadbeefcafebabe1234567890abcdef1234567890abcdef1234567890abcdef"
@@ -110,8 +108,13 @@ async fn test_post_evidence_with_custom_id() {
 
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
-        common::assert_json_response(&result, &[("id", "custom-evidence-123")]);
-        
+
+        // Use helper for JSON response validation
+        common::assert_json_response(
+            &result,
+            &[("id", "custom-evidence-123"), ("status", "queued")],
+        );
+
         server.abort();
     })
     .await;
@@ -119,15 +122,18 @@ async fn test_post_evidence_with_custom_id() {
 
 #[tokio::test]
 async fn test_post_evidence_with_metadata() {
+    // Use specialized helper for API database environment setup
     common::with_api_db_env(|| async {
-        let db_url = common::create_test_db_url();
-        let pool = setup_pool(&db_url).await;
-        let app = build_app(pool).await.unwrap();
+        // Build app
+        let (app, _pool) = build_app().await.unwrap();
+
+        // Use helpers for test listener creation and server setup
         let (listener, port) = common::create_test_listener();
         let (server, _) = common::spawn_test_server(app, listener).await;
 
         let client = Client::new();
 
+        // Test evidence submission with metadata
         let evidence_payload = json!({
             "digest_hex": "deadbeefcafebabe1234567890abcdef1234567890abcdef1234567890abcdef",
             "payload_mime": "application/json",
@@ -147,7 +153,10 @@ async fn test_post_evidence_with_metadata() {
         assert_eq!(response.status(), 200);
         let result: serde_json::Value = response.json().await.unwrap();
         assert!(result["id"].is_string());
-        
+
+        // Use helper for JSON response validation
+        common::assert_json_response(&result, &[("status", "queued")]);
+
         server.abort();
     })
     .await;

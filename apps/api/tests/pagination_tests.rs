@@ -1,58 +1,59 @@
-mod common;
-
+use axum::serve;
 use phoenix_api::build_app;
 use reqwest::Client;
 use serde_json::Value;
-use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite, Row};
-
-async fn setup_pool(db_url: &str) -> Pool<Sqlite> {
-    let pool = SqlitePoolOptions::new()
-        .max_connections(1)
-        .connect(db_url)
-        .await
-        .unwrap();
-    // Run migrations
-    let migration_manager = phoenix_api::migrations::MigrationManager::new(pool.clone());
-    migration_manager.migrate().await.unwrap();
-    pool
-}
+use std::net::TcpListener as StdTcpListener;
+use tokio::net::TcpListener;
 
 #[tokio::test]
 async fn test_evidence_pagination_clamp() {
-    common::with_api_db_env(|| async {
-        let db_url = common::create_test_db_url();
-        let pool = setup_pool(&db_url).await;
-        let app = build_app(pool.clone()).await.unwrap();
-        let (listener, port) = common::create_test_listener();
-        let (server, _) = common::spawn_test_server(app, listener).await;
+    // In-memory DB for reliability
+    let db_url = "sqlite::memory:?cache=shared";
+    std::env::set_var("API_DB_URL", db_url);
 
-        let now = chrono::Utc::now().timestamp_millis();
-        for i in 0..150 {
-            let id = format!("job-{}", i);
-            sqlx::query(
-                "INSERT INTO outbox_jobs (id, payload_sha256, status, attempts, created_ms, updated_ms, next_attempt_ms)
-                 VALUES (?1, ?2, 'queued', 0, ?3, ?3, 0)"
-            )
-            .bind(id)
-            .bind("seedhash")
-            .bind(now)
-            .execute(&pool)
-            .await
-            .unwrap();
-        }
+    let (app, pool) = build_app().await.unwrap();
 
-        let client = Client::new();
-        let url = format!("http://127.0.0.1:{}/evidence?per_page=1000&page=1", port);
+    // Seed more than 100 jobs
+    let now = chrono::Utc::now().timestamp_millis();
+    for i in 0..150 {
+        let id = format!("job-{}", i);
+        sqlx::query(
+            "INSERT INTO outbox_jobs (id, payload_sha256, status, attempts, created_ms, updated_ms, next_attempt_ms)
+             VALUES (?1, ?2, 'queued', 0, ?3, ?3, 0)"
+        )
+        .bind(id)
+        .bind("seedhash")
+        .bind(now)
+        .execute(&pool)
+        .await
+        .unwrap();
+    }
 
-        let resp = client.get(&url).send().await.unwrap();
-        assert!(resp.status().is_success());
-        let body: Value = resp.json().await.unwrap();
+    // Bind server to a random free port
+    let std_listener = StdTcpListener::bind("127.0.0.1:0").unwrap();
+    std_listener.set_nonblocking(true).unwrap();
+    let addr = std_listener.local_addr().unwrap();
+    let port = addr.port();
+    let listener = TcpListener::from_std(std_listener).unwrap();
 
-        assert_eq!(body["per_page"].as_i64().unwrap_or(0), 100);
-        let data = body["data"].as_array().unwrap();
-        assert!(data.len() <= 100);
+    // Start server
+    let server = tokio::spawn(async move {
+        serve(listener, app.into_make_service()).await.unwrap();
+    });
 
-        server.abort();
-    })
-    .await;
+    let client = Client::new();
+    let url = format!("http://127.0.0.1:{}/evidence?per_page=1000&page=1", port);
+
+    let resp = client.get(&url).send().await.unwrap();
+    assert!(resp.status().is_success());
+    let body: Value = resp.json().await.unwrap();
+
+    // per_page should be clamped to 100
+    assert_eq!(body["per_page"].as_i64().unwrap_or(0), 100);
+
+    // data length should be <= 100
+    let data = body["data"].as_array().unwrap();
+    assert!(data.len() <= 100);
+
+    server.abort();
 }

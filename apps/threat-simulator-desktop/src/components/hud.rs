@@ -1,5 +1,5 @@
 use crate::game::GameStateManager;
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn Hud(game_state: GameStateManager, is_running: ReadSignal<bool>) -> impl IntoView {

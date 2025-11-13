@@ -1,5 +1,5 @@
 use crate::game::{GameStateManager, WeaponType};
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn WeaponPanel(game_state: GameStateManager) -> impl IntoView {

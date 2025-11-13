@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn LoadingIndicator(progress: ReadSignal<u8>) -> impl IntoView {
