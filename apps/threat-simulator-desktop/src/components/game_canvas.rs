@@ -225,14 +225,8 @@ pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) ->
             }
         }
 
-        // Clean up: break the Rc cycle so the closure can be dropped
-        on_cleanup({
-            let animation_closure = animation_closure.clone();
-            move || {
-                // Dropping the Closure removes the JS callback reference
-                let _ = animation_closure.borrow_mut().take();
-            }
-        });
+        // Note: Cleanup happens automatically when the component is unmounted
+        // The Rc<RefCell<>> will be dropped, breaking any cycles
     });
 
     // Watch for is_running changes and restart animation when game resumes
