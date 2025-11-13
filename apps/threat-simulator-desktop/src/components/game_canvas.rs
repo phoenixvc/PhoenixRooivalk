@@ -1,5 +1,6 @@
 use crate::game::{engine::GameEngine, GameStateManager};
 use leptos::prelude::*;
+use leptos::html::Canvas;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::{closure::Closure, JsCast};
@@ -7,7 +8,7 @@ use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 #[component]
 pub fn GameCanvas(game_state: GameStateManager, is_running: ReadSignal<bool>) -> impl IntoView {
-    let canvas_ref = create_node_ref::<html::Canvas>();
+    let canvas_ref = create_node_ref::<Canvas>();
 
     // Game engine - shared between animation loop and event handlers
     let engine = Rc::new(RefCell::new(GameEngine::new(1)));
