@@ -101,8 +101,7 @@ pub fn App() -> impl IntoView {
     // Watch for high scores
     {
         let game_state_watcher = game_state.clone();
-        let (milestones_reached, set_milestones_reached) =
-            signal(std::collections::HashSet::new());
+        let (milestones_reached, set_milestones_reached) = signal(std::collections::HashSet::new());
         Effect::new(move |_| {
             let score = game_state_watcher.score.get();
             let milestones = [1000, 5000, 10000, 25000, 50000, 100000];
@@ -192,7 +191,8 @@ pub fn App() -> impl IntoView {
         // Clean up on component unmount
         // Use StoredValue with LocalStorage to handle non-Send/Sync types in WASM
         let window_stored = StoredValue::new_local(window.clone());
-        let closure_ref_stored = StoredValue::new_local(closure.as_ref().unchecked_ref::<js_sys::Function>().clone());
+        let closure_ref_stored =
+            StoredValue::new_local(closure.as_ref().unchecked_ref::<js_sys::Function>().clone());
         on_cleanup(move || {
             let window = window_stored.get_value();
             let closure_ref = closure_ref_stored.get_value();
@@ -292,7 +292,7 @@ pub fn App() -> impl IntoView {
             let timeout_handle = timeout_handle_stored.get_value();
             let animate_fn = animate_fn_stored.get_value();
             let window = window_stored.get_value();
-            
+
             if let Some(h) = animation_handle.borrow_mut().take() {
                 window.cancel_animation_frame(h).ok();
             }

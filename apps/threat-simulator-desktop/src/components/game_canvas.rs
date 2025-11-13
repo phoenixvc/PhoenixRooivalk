@@ -1,6 +1,6 @@
 use crate::game::{engine::GameEngine, GameStateManager};
-use leptos::prelude::*;
 use leptos::html::Canvas;
+use leptos::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::{closure::Closure, JsCast};
