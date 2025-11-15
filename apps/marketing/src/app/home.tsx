@@ -43,42 +43,42 @@ export default function HomePage(): React.ReactElement {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "How does Phoenix Rooivalk work when all communications are jammed?",
+                name: "What is PhoenixRooivalk's dual-brand strategy?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Phoenix Rooivalk uses edge autonomy - like a flock of birds that coordinate without radios. Defense nodes communicate via light signals and sound pulses across 500m-1km ranges, making decisions in 120-195ms even under complete jamming.",
+                  text: "PhoenixRooivalk operates two brands: SkySnare™ for consumer sports/training markets ($1.68B TAM @ 8.2% CAGR) and AeroNet™ for enterprise infrastructure security ($4.2B TAM @ 47% CAGR). We prove reliability at consumer scale, then leverage that track record for enterprise markets.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How does Phoenix Rooivalk detect RF-silent autonomous drones?",
+                name: "What is the 5-year revenue trajectory?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Phoenix Rooivalk uses multi-sensor fusion combining radar, optical, acoustic, and infrared sensors to detect RF-silent threats that 64% of current market systems cannot handle. This addresses the fastest-growing threat vector in the $26B counter-drone market.",
+                  text: "PhoenixRooivalk targets growth from $1.825M (FY26) to $50M (FY30) revenue with 30% EBITDA margin. Year 1: prototype + 4,500 SkySnare™ units. Year 5: 75K consumer units + 35 AeroNet™ enterprise sites.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What is the market opportunity for Phoenix Rooivalk?",
+                name: "What is the combined market opportunity?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "The counter-drone market is $2.3-4.5B currently, growing to $9-26B by 2030. Phoenix Rooivalk's SAE Level 4 autonomous capabilities and multi-sensor fusion approach are designed to address key market gaps in this rapidly expanding sector.",
+                  text: "PhoenixRooivalk addresses a $5.9B combined TAM: $1.68B consumer sports/training market growing at 8.2% CAGR plus $4.2B counter-drone security market growing at 47% CAGR. Dual-brand strategy minimizes channel conflict.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How does Phoenix Rooivalk perform compared to typical market offerings?",
+                name: "How does certification build competitive advantage?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Designed for ultra-low latency edge operation and RF-silent detection via multi-sensor fusion. Performance claims are based on internal benchmarks under defined test conditions and may vary by deployment. The system targets sub-200ms response times and autonomous operation without network connectivity.",
+                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (May 2026) and FAA waiver for AeroNet™ enterprise operations (June 2026). This safety-first approach builds trust and market credibility.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What is Phoenix Rooivalk's SBIR strategy for market entry?",
+                name: "What is the capital strategy?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Phoenix Rooivalk is applying for Air Force SBIR Phase I ($350K) following Anduril's proven path to $14B valuation. We're targeting CMMC 2.0 Level 2 certification and partnerships with established defense contractors for market credibility.",
+                  text: "PhoenixRooivalk requires $41.5M across 4 funding rounds: Seed ($1.5M, 2025-26), Series A ($5M, 2027), Series B ($15M, 2028), Growth ($20M, 2029). Target exit: $250-400M valuation by 2030, delivering 8-30× returns to early investors.",
                 },
               },
             ],

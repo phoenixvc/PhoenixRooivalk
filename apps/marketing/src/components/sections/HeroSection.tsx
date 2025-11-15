@@ -8,22 +8,22 @@ export const HeroSection: React.FC = () => {
       <div className={styles.container}>
         {/* Development status indicators */}
         <div className={styles.statusBadges}>
-          <span className="pill pill--concept">Concept Phase</span>
-          <span className="pill pill--partners">Seeking Design Partners</span>
-          <span className="pill pill--sbir">Open to SBIR Collaboration</span>
+          <span className="pill pill--concept">Foundation Phase (FY26)</span>
+          <span className="pill pill--partners">SkySnare™ Consumer | AeroNet™ Enterprise</span>
+          <span className="pill pill--sbir">Seeking Early Partners</span>
         </div>
 
         {/* Vision-focused headline */}
         <h1 className={styles.headline}>
-          Edge Autonomy <span className={styles.headlineOrange}>in</span> RF-
-          Denied <span className={styles.headlineOrange}>Environments</span>
+          Safety-Proven <span className={styles.headlineOrange}>at</span> Consumer Scale.
+          Enterprise-Ready <span className={styles.headlineOrange}>with</span> AI Compliance.
           <span className={styles.headlineSubtext}>
-            SAE Level 4 Local Decisioning
+            Dual-Brand Strategy: SkySnare™ + AeroNet™
           </span>
         </h1>
         <p className={styles.description}>
-          Autonomous counter-drone defense that operates without network
-          connectivity. Sub-200ms response times in complete RF denial.
+          Transform proven pneumatic technology into world-leading brands.
+          Consumer sports safety meets enterprise infrastructure security.
         </p>
 
         {/* Mission Statement */}
@@ -43,27 +43,27 @@ export const HeroSection: React.FC = () => {
             </svg>
           </div>
           <p className={styles.missionText}>
-            <strong>Our Mission:</strong> Defense drone technology to protect
-            civilians, corporates, and statesmen from emerging aerial threats.
+            <strong>Our Strategy:</strong> Prove reliability and safety at consumer scale (SkySnare™), 
+            then leverage that track record for high-value enterprise markets (AeroNet™).
           </p>
         </div>
         <div className={styles.metricsCard}>
           <div className={styles.metricsGrid}>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>&lt;200ms</div>
-              <div className={styles.metricLabel}>Response Time</div>
+              <div className={styles.metricValue}>$5.9B</div>
+              <div className={styles.metricLabel}>Combined TAM</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>100%</div>
-              <div className={styles.metricLabel}>Offline Operation</div>
+              <div className={styles.metricValue}>$50M</div>
+              <div className={styles.metricLabel}>FY30 Target Revenue</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>64%</div>
-              <div className={styles.metricLabel}>Market Gap</div>
+              <div className={styles.metricValue}>30%</div>
+              <div className={styles.metricLabel}>EBITDA Margin (FY30)</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>$26B</div>
-              <div className={styles.metricLabel}>Market by 2030</div>
+              <div className={styles.metricValue}>2 Brands</div>
+              <div className={styles.metricLabel}>SkySnare™ + AeroNet™</div>
             </div>
           </div>
         </div>
@@ -126,15 +126,15 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* SAE Level 4 Autonomy Concept Card - moved below as a row */}
+        {/* 5-Year Strategic Path */}
         <div className={styles.conceptCard}>
           <div className="card card--elevated">
             <div className={styles.conceptTitle}>
               <h3 className={styles.conceptTitleText}>
-                SAE Level 4 Autonomy Concept
+                5-Year Strategic Roadmap (2025-2030)
               </h3>
               <p className={styles.conceptDescription}>
-                Edge-first decision making without network dependency
+                From consumer validation to enterprise leadership
               </p>
             </div>
 
@@ -142,28 +142,28 @@ export const HeroSection: React.FC = () => {
             <div className={styles.conceptMetrics}>
               <div className={styles.conceptMetric}>
                 <span className={styles.conceptMetricLabel}>
-                  Detection Latency
+                  FY26 Revenue
                 </span>
-                <span className={styles.conceptMetricValue}>&lt;200ms</span>
+                <span className={styles.conceptMetricValue}>$1.8M</span>
               </div>
               <div className={styles.conceptMetric}>
                 <span className={styles.conceptMetricLabel}>
-                  Network Independence
+                  FY30 Revenue Target
                 </span>
-                <span className={styles.conceptMetricValue}>100%</span>
+                <span className={styles.conceptMetricValue}>$50M</span>
               </div>
               <div className={styles.conceptMetric}>
                 <span className={styles.conceptMetricLabel}>
-                  Market Gap Addressed
+                  Capital Requirement
                 </span>
-                <span className={styles.conceptMetricValue}>64%</span>
+                <span className={styles.conceptMetricValue">$41.5M</span>
               </div>
             </div>
 
             <div className={styles.disclaimer}>
               <p className={styles.disclaimerText}>
-                💡 This represents a conceptual approach under development.
-                Performance metrics are targets for validation.
+                💡 Targets based on market research and strategic milestones.
+                Performance subject to execution and market conditions.
               </p>
             </div>
           </div>

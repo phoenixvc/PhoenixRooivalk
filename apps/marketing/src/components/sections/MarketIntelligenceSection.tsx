@@ -5,45 +5,45 @@ import styles from "./MarketIntelligenceSection.module.css";
 export const MarketIntelligenceSection: React.FC = () => {
   const marketData = [
     {
-      metric: "$26B",
-      label: "Market by 2030",
-      description: "Counter-drone market growing from $2.3-4.5B to $9-26B",
+      metric: "$5.9B",
+      label: "Combined TAM",
+      description: "SkySnare™ ($1.68B @ 8.2% CAGR) + AeroNet™ ($4.2B @ 47% CAGR)",
     },
     {
-      metric: "100x",
-      label: "Performance Improvement",
-      description: "<2ms vs 2-5 seconds for current systems",
+      metric: "$50M",
+      label: "FY30 Revenue Target",
+      description: "5-year growth from $1.825M (FY26) to $50M (FY30)",
     },
     {
-      metric: "64%",
-      label: "Market Vulnerability",
-      description: "RF-dependent systems cannot detect autonomous drones",
+      metric: "30%",
+      label: "Target EBITDA Margin",
+      description: "Profitable unit economics by Year 5 (FY30)",
     },
     {
-      metric: "2-5s",
-      label: "Current Latency",
-      description: "Detection-to-engagement time for existing systems",
+      metric: "$41.5M",
+      label: "Capital Strategy",
+      description: "Seed through Growth rounds to fund market leadership",
     },
   ];
 
   const competitors = [
     {
-      name: "Anduril",
-      status: "$14B valuation",
-      capability: "Lattice OS integration, DoD contracts",
-      limitation: "2-5 second latency, cloud dependency",
+      name: "Consumer Sports Equipment",
+      status: "$1.68B market @ 8.2% CAGR",
+      capability: "Established brands, retail distribution",
+      limitation: "No counter-drone crossover, limited tech integration",
     },
     {
-      name: "Fortem",
-      status: "4,500+ drone kills in Ukraine",
-      capability: "DroneHunter F700, battlefield-proven",
-      limitation: "Kinetic only, no RF-silent detection",
+      name: "Counter-Drone Security",
+      status: "$4.2B market @ 47% CAGR",
+      capability: "Anduril, Fortem, DroneShield",
+      limitation: "No consumer validation, compliance-heavy entry barriers",
     },
     {
-      name: "DroneShield",
-      status: "700+ global deployments",
-      capability: "Electronic warfare, cost-effective",
-      limitation: "RF-dependent, no kinetic capability",
+      name: "Dual-Market Players",
+      status: "Minimal competition",
+      capability: "Gap opportunity: consumer + enterprise",
+      limitation: "Most players focus on single market segment",
     },
   ];
 
@@ -52,11 +52,11 @@ export const MarketIntelligenceSection: React.FC = () => {
       <div className={styles.container}>
         <RevealSection className={styles.header}>
           <h2 className={styles.title}>
-            Market Opportunity & Competitive Position
+            Dual-Brand Market Strategy
           </h2>
           <p className={styles.description}>
-            Phoenix Rooivalk addresses critical gaps in the $26B counter-drone
-            market with SAE Level 4 autonomous architecture
+            PhoenixRooivalk targets $5.9B combined opportunity through parallel 
+            consumer validation (SkySnare™) and enterprise scaling (AeroNet™)
           </p>
         </RevealSection>
 
@@ -101,25 +101,31 @@ export const MarketIntelligenceSection: React.FC = () => {
         <RevealSection className={styles.advantageSection}>
           <div className={styles.advantageCard}>
             <h3 className={styles.advantageTitle}>
-              Phoenix Rooivalk Advantage
+              Key Competitive Advantages
             </h3>
             <div className={styles.advantageGrid}>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Speed</div>
+                <div className={styles.advantageItemTitle}>Safety & Compliance</div>
                 <div className={styles.advantageItemDescription}>
-                  &lt;2ms latency vs 2-5 seconds for competitors
+                  Dual certification (CPSC + FAA) builds regulatory moat
                 </div>
               </div>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Autonomy</div>
+                <div className={styles.advantageItemTitle}>AI Edge Processing</div>
                 <div className={styles.advantageItemDescription}>
-                  Complete edge operation without communications
+                  On-device intelligence ensures privacy and low latency
                 </div>
               </div>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Accountability</div>
+                <div className={styles.advantageItemTitle}>Brand Separation</div>
                 <div className={styles.advantageItemDescription}>
-                  Blockchain-verified engagement records
+                  Two brands—consumer & enterprise—avoid channel conflict
+                </div>
+              </div>
+              <div className={styles.advantageItem}>
+                <div className={styles.advantageItemTitle}>Data Asset Creation</div>
+                <div className={styles.advantageItemDescription}>
+                  Proprietary training data from AeroNet™ deployments
                 </div>
               </div>
             </div>

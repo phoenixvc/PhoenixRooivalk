@@ -23,9 +23,9 @@ export const SocialProofSection: React.FC = () => {
   ];
 
   const partnerships = [
-    { name: "Seeking Partnerships", logo: "🤝", type: "Development Partners" },
-    { name: "SBIR Application", logo: "🚀", type: "Funding Pursuit" },
-    { name: "Industry Collaboration", logo: "🔬", type: "Research Partners" },
+    { name: "SkySnare™ Consumer", logo: "🎯", type: "Sports & Training Market" },
+    { name: "AeroNet™ Enterprise", logo: "🛡️", type: "Infrastructure Security" },
+    { name: "Seeking Investment", logo: "💰", type: "Seed Round: $1.5M" },
   ];
 
   const certifications = [
@@ -40,26 +40,26 @@ export const SocialProofSection: React.FC = () => {
   const developmentStatus = [
     {
       icon: "🔬",
-      title: "Concept Phase",
-      description: "Core architecture design and planning underway",
-      status: "Planning",
+      title: "Year 1 (FY26): Foundation",
+      description: "Prototype completion, CPSC certification, SkySnare™ D2C launch",
+      status: "Active",
     },
     {
       icon: "🚀",
-      title: "SBIR Strategy",
-      description: "Air Force SBIR Phase I application preparation",
+      title: "Year 2 (FY27): AI Demo",
+      description: "FAA waiver, first AeroNet™ pilot with AI detection",
       status: "Planned",
     },
     {
       icon: "🛡️",
-      title: "DoD Compliance",
-      description: "CMMC 2.0 Level 2 certification pathway planning",
+      title: "Year 3-4: Scale",
+      description: "SkySnare™ Pro, 6-15 AeroNet™ sites, AI 2.0 deployment",
       status: "Planned",
     },
     {
       icon: "🔒",
-      title: "Security Standards",
-      description: "Military-grade security protocols under design",
+      title: "Year 5 (FY30): Exit Ready",
+      description: "75K consumer units, 35 enterprise sites, $50M revenue",
       status: "Planning",
     },
   ];
@@ -97,12 +97,11 @@ export const SocialProofSection: React.FC = () => {
           {/* Section Header */}
           <div className={styles.header}>
             <h2 className={styles.title}>
-              Innovation in Counter-Drone Defense
+              Dual-Brand Innovation: Consumer to Enterprise
             </h2>
             <p className={styles.subtitle}>
-              Phoenix Rooivalk represents the next generation of autonomous
-              counter-drone defense technology, designed to address critical
-              gaps in current market solutions.
+              PhoenixRooivalk builds market trust through consumer safety 
+              (SkySnare™), then scales to enterprise infrastructure security (AeroNet™).
             </p>
           </div>
 
@@ -165,7 +164,7 @@ export const SocialProofSection: React.FC = () => {
             {/* Development Status */}
             <div className={styles.testimonialSection}>
               <h4 className={styles.developmentSubtitle}>
-                Development Roadmap (Targets, Post-Funding)
+                5-Year Strategic Phases (2025-2030)
               </h4>
               <div className={styles.developmentGrid}>
                 {developmentStatus.map((status, index) => (
@@ -237,11 +236,11 @@ export const SocialProofSection: React.FC = () => {
           {/* CTA Section */}
           <div className={styles.ctaSection}>
             <h3 className={styles.ctaTitle}>
-              Ready to Experience 120ms Response Time?
+              Ready to Join the Dual-Brand Revolution?
             </h3>
             <p className={styles.ctaSubtitle}>
-              Join leading defense organizations in piloting the next generation
-              of autonomous counter-drone defense.
+              Invest in proven consumer safety scaling to enterprise infrastructure 
+              security. Target: $50M revenue by FY30.
             </p>
             <div className={styles.ctaButtons}>
               <Button

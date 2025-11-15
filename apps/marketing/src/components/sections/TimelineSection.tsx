@@ -5,55 +5,73 @@ import styles from "./TimelineSection.module.css";
 export const TimelineSection: React.FC = () => {
   const timelineItems = [
     {
-      phase: "Phase 1",
-      title: "Concept Development",
-      duration: "Q1-Q3 2025",
-      status: "Completed" as const,
-      description: "Core architecture design and planning",
-      milestones: [
-        "System architecture finalized ✓",
-        "Technical specifications completed ✓",
-        "Initial prototype development ✓",
-        "Interactive demo launched ✓",
-      ],
-    },
-    {
-      phase: "Phase 2",
-      title: "SBIR Application",
-      duration: "Q3-Q4 2025",
+      phase: "Year 1 (FY26)",
+      title: "Foundation & Validation",
+      duration: "Nov 2025 - Oct 2026",
       status: "Active" as const,
-      description: "Air Force SBIR Phase I application preparation",
+      description: "Complete mechanical prototype, achieve certification, launch SkySnare™ D2C",
       milestones: [
-        "SBIR proposal submission (In Progress)",
-        "Technical validation planning",
-        "Partnership development",
-        "DoD stakeholder engagement",
+        "Complete mechanical prototype (May 2026)",
+        "Achieve CPSC certification",
+        "Launch SkySnare™ D2C, target 4,500+ units",
+        "Integrate initial AI detection into AeroNet™ prototype",
+        "FY26 Revenue Target: $1.825M / R29M",
       ],
     },
     {
-      phase: "Phase 3",
-      title: "DoD Compliance",
-      duration: "Q4 2025 - Q1 2026",
+      phase: "Year 2 (FY27)",
+      title: "Market Proof & AI Demonstration",
+      duration: "Nov 2026 - Oct 2027",
       status: "Planned" as const,
-      description: "CMMC 2.0 Level 2 certification pathway",
+      description: "FAA waiver approved, first AeroNet™ pilot, AI detection deployment",
       milestones: [
-        "CMMC 2.0 Level 2 certification",
-        "Security protocols implementation",
-        "Audit preparation",
-        "ITAR compliance verification",
+        "FAA waiver approved (June 2026)",
+        "First AeroNet™ pilot live (Q2 2027)",
+        "Deploy AI-based detection and tracking",
+        "SkySnare™ expands to 15,000 units",
+        "FY27 Revenue Target: $5M / R83M",
       ],
     },
     {
-      phase: "Phase 4",
-      title: "Production Readiness",
-      duration: "Q2-Q3 2026",
-      status: "Future" as const,
-      description: "Manufacturing and deployment preparation",
+      phase: "Year 3 (FY28)",
+      title: "Scale & Diversify",
+      duration: "Nov 2027 - Oct 2028",
+      status: "Planned" as const,
+      description: "Introduce SkySnare™ Pro, expand AeroNet™ pilots with predictive AI",
       milestones: [
-        "Production line setup",
-        "Quality assurance protocols",
-        "Deployment planning",
-        "Field testing and validation",
+        "Launch SkySnare™ Pro (advanced training)",
+        "AeroNet™: 6-8 operational pilots",
+        "Implement AI compliance logging",
+        "Predictive AI tracking deployed",
+        "FY28 Revenue Target: $18M / R300M",
+      ],
+    },
+    {
+      phase: "Year 4 (FY29)",
+      title: "Expansion & Network Intelligence",
+      duration: "Nov 2028 - Oct 2029",
+      status: "Future" as const,
+      description: "60K SkySnare™ units, 15 AeroNet™ sites with cloud coordination",
+      milestones: [
+        "60,000 SkySnare™ units sold globally",
+        "15 AeroNet™ sites operating",
+        "Deploy AeroNet AI 2.0 (predictive risk models)",
+        "Edge self-calibration enabled",
+        "FY29 Revenue Target: $32M / R533M",
+      ],
+    },
+    {
+      phase: "Year 5 (FY30)",
+      title: "Leadership & Exit Preparation",
+      duration: "Nov 2029 - Oct 2030",
+      status: "Future" as const,
+      description: "75K SkySnare™ units, 35 AeroNet™ deployments, exit readiness",
+      milestones: [
+        "75,000 SkySnare™ units delivered",
+        "35 AeroNet™ deployments active",
+        "EBITDA margin: 30%",
+        "FY30 Revenue Target: $50M / R833M",
+        "Position for Series C or strategic acquisition",
       ],
     },
   ];
@@ -82,10 +100,10 @@ export const TimelineSection: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.container}>
           <RevealSection className={styles.header}>
-            <h2 className={styles.title}>Development Timeline</h2>
+            <h2 className={styles.title}>5-Year Strategic Roadmap (2025-2030)</h2>
             <p className={styles.description}>
-              A structured roadmap for bringing Phoenix Rooivalk from concept to
-              production, with clear milestones and compliance targets.
+              From foundation to market leadership: SkySnare™ consumer validation 
+              to AeroNet™ enterprise dominance, targeting $50M revenue by FY30.
             </p>
           </RevealSection>
 
