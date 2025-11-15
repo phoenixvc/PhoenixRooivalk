@@ -15,15 +15,14 @@ export const HeroSection: React.FC = () => {
 
         {/* Vision-focused headline */}
         <h1 className={styles.headline}>
-          Safety-Proven <span className={styles.headlineOrange}>at</span> Consumer Scale.
-          Enterprise-Ready <span className={styles.headlineOrange}>with</span> AI Compliance.
+          Dual-Brand <span className={styles.headlineOrange}>Counter-Drone</span> Platform
           <span className={styles.headlineSubtext}>
-            Dual-Brand Strategy: SkySnare™ + AeroNet™
+            SkySnare™ Consumer Sports | AeroNet™ Enterprise Security
           </span>
         </h1>
         <p className={styles.description}>
-          Transform proven pneumatic technology into world-leading brands.
-          Consumer sports safety meets enterprise infrastructure security.
+          Pneumatic interception technology designed for two markets: 
+          consumer sports training and enterprise infrastructure protection.
         </p>
 
         {/* Mission Statement */}
@@ -43,8 +42,8 @@ export const HeroSection: React.FC = () => {
             </svg>
           </div>
           <p className={styles.missionText}>
-            <strong>Our Strategy:</strong> Prove reliability and safety at consumer scale (SkySnare™), 
-            then leverage that track record for high-value enterprise markets (AeroNet™).
+            <strong>Our Strategy:</strong> Build consumer brand (SkySnare™) to demonstrate 
+            safety and reliability, then scale proven technology to enterprise markets (AeroNet™).
           </p>
         </div>
         <div className={styles.metricsCard}>
