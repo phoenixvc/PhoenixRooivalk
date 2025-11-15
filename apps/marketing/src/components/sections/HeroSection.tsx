@@ -156,7 +156,7 @@ export const HeroSection: React.FC = () => {
                 <span className={styles.conceptMetricLabel}>
                   Capital Requirement
                 </span>
-                <span className={styles.conceptMetricValue">$41.5M</span>
+                <span className={styles.conceptMetricValue}>$41.5M</span>
               </div>
             </div>
 
