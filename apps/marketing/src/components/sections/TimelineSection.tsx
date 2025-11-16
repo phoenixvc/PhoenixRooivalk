@@ -9,7 +9,8 @@ export const TimelineSection: React.FC = () => {
       title: "Foundation & Validation",
       duration: "Nov 2025 - Oct 2026",
       status: "Active" as const,
-      description: "Complete mechanical prototype, achieve certification, launch SkySnare™ D2C",
+      description:
+        "Complete mechanical prototype, achieve certification, launch SkySnare™ D2C",
       milestones: [
         "Complete mechanical prototype (May 2026)",
         "Achieve CPSC certification",
@@ -23,7 +24,8 @@ export const TimelineSection: React.FC = () => {
       title: "Market Proof & AI Demonstration",
       duration: "Nov 2026 - Oct 2027",
       status: "Planned" as const,
-      description: "FAA waiver approved, first AeroNet™ pilot, AI detection deployment",
+      description:
+        "FAA waiver approved, first AeroNet™ pilot, AI detection deployment",
       milestones: [
         "FAA waiver approved (June 2026)",
         "First AeroNet™ pilot live (Q2 2027)",
@@ -37,7 +39,8 @@ export const TimelineSection: React.FC = () => {
       title: "Scale & Diversify",
       duration: "Nov 2027 - Oct 2028",
       status: "Planned" as const,
-      description: "Introduce SkySnare™ Pro, expand AeroNet™ pilots with predictive AI",
+      description:
+        "Introduce SkySnare™ Pro, expand AeroNet™ pilots with predictive AI",
       milestones: [
         "Launch SkySnare™ Pro (advanced training)",
         "AeroNet™: 6-8 operational pilots",
@@ -51,7 +54,8 @@ export const TimelineSection: React.FC = () => {
       title: "Expansion & Network Intelligence",
       duration: "Nov 2028 - Oct 2029",
       status: "Future" as const,
-      description: "60K SkySnare™ units, 15 AeroNet™ sites with cloud coordination",
+      description:
+        "60K SkySnare™ units, 15 AeroNet™ sites with cloud coordination",
       milestones: [
         "60,000 SkySnare™ units sold globally",
         "15 AeroNet™ sites operating",
@@ -65,7 +69,8 @@ export const TimelineSection: React.FC = () => {
       title: "Leadership & Exit Preparation",
       duration: "Nov 2029 - Oct 2030",
       status: "Future" as const,
-      description: "75K SkySnare™ units, 35 AeroNet™ deployments, exit readiness",
+      description:
+        "75K SkySnare™ units, 35 AeroNet™ deployments, exit readiness",
       milestones: [
         "75,000 SkySnare™ units delivered",
         "35 AeroNet™ deployments active",
@@ -100,10 +105,13 @@ export const TimelineSection: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.container}>
           <RevealSection className={styles.header}>
-            <h2 className={styles.title}>5-Year Strategic Roadmap (2025-2030)</h2>
+            <h2 className={styles.title}>
+              5-Year Strategic Roadmap (2025-2030)
+            </h2>
             <p className={styles.description}>
-              From foundation to market leadership: SkySnare™ consumer validation 
-              to AeroNet™ enterprise dominance, targeting $50M revenue by FY30.
+              From foundation to market leadership: SkySnare™ consumer
+              validation to AeroNet™ enterprise dominance, targeting $50M
+              revenue by FY30.
             </p>
           </RevealSection>
 

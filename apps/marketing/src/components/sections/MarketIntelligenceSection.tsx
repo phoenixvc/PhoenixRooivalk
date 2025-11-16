@@ -7,7 +7,8 @@ export const MarketIntelligenceSection: React.FC = () => {
     {
       metric: "$5.9B",
       label: "Combined TAM",
-      description: "SkySnare™ ($1.68B @ 8.2% CAGR) + AeroNet™ ($4.2B @ 47% CAGR)",
+      description:
+        "SkySnare™ ($1.68B @ 8.2% CAGR) + AeroNet™ ($4.2B @ 47% CAGR)",
     },
     {
       metric: "$50M",
@@ -51,11 +52,9 @@ export const MarketIntelligenceSection: React.FC = () => {
     <section className={styles.section} id="market">
       <div className={styles.container}>
         <RevealSection className={styles.header}>
-          <h2 className={styles.title}>
-            Dual-Brand Market Strategy
-          </h2>
+          <h2 className={styles.title}>Dual-Brand Market Strategy</h2>
           <p className={styles.description}>
-            PhoenixRooivalk targets $5.9B combined opportunity through parallel 
+            PhoenixRooivalk targets $5.9B combined opportunity through parallel
             consumer validation (SkySnare™) and enterprise scaling (AeroNet™)
           </p>
         </RevealSection>
@@ -105,25 +104,33 @@ export const MarketIntelligenceSection: React.FC = () => {
             </h3>
             <div className={styles.advantageGrid}>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Safety & Compliance</div>
+                <div className={styles.advantageItemTitle}>
+                  Safety & Compliance
+                </div>
                 <div className={styles.advantageItemDescription}>
                   Dual certification (CPSC + FAA) builds regulatory moat
                 </div>
               </div>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>AI Edge Processing</div>
+                <div className={styles.advantageItemTitle}>
+                  AI Edge Processing
+                </div>
                 <div className={styles.advantageItemDescription}>
                   On-device intelligence ensures privacy and low latency
                 </div>
               </div>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Brand Separation</div>
+                <div className={styles.advantageItemTitle}>
+                  Brand Separation
+                </div>
                 <div className={styles.advantageItemDescription}>
                   Two brands—consumer & enterprise—avoid channel conflict
                 </div>
               </div>
               <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>Data Asset Creation</div>
+                <div className={styles.advantageItemTitle}>
+                  Data Asset Creation
+                </div>
                 <div className={styles.advantageItemDescription}>
                   Proprietary training data from AeroNet™ deployments
                 </div>

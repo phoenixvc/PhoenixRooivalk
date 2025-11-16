@@ -23,8 +23,16 @@ export const SocialProofSection: React.FC = () => {
   ];
 
   const partnerships = [
-    { name: "SkySnare™ Consumer", logo: "🎯", type: "Sports & Training Market" },
-    { name: "AeroNet™ Enterprise", logo: "🛡️", type: "Infrastructure Security" },
+    {
+      name: "SkySnare™ Consumer",
+      logo: "🎯",
+      type: "Sports & Training Market",
+    },
+    {
+      name: "AeroNet™ Enterprise",
+      logo: "🛡️",
+      type: "Infrastructure Security",
+    },
     { name: "Seeking Investment", logo: "💰", type: "Seed Round: $1.5M" },
   ];
 
@@ -41,7 +49,8 @@ export const SocialProofSection: React.FC = () => {
     {
       icon: "🔬",
       title: "Year 1 (FY26): Foundation",
-      description: "Prototype completion, CPSC certification, SkySnare™ D2C launch",
+      description:
+        "Prototype completion, CPSC certification, SkySnare™ D2C launch",
       status: "Active",
     },
     {
@@ -100,8 +109,9 @@ export const SocialProofSection: React.FC = () => {
               Dual-Brand Innovation: Consumer to Enterprise
             </h2>
             <p className={styles.subtitle}>
-              PhoenixRooivalk builds market trust through consumer safety 
-              (SkySnare™), then scales to enterprise infrastructure security (AeroNet™).
+              PhoenixRooivalk builds market trust through consumer safety
+              (SkySnare™), then scales to enterprise infrastructure security
+              (AeroNet™).
             </p>
           </div>
 
@@ -239,8 +249,8 @@ export const SocialProofSection: React.FC = () => {
               Ready to Join the Dual-Brand Revolution?
             </h3>
             <p className={styles.ctaSubtitle}>
-              Invest in proven consumer safety scaling to enterprise infrastructure 
-              security. Target: $50M revenue by FY30.
+              Invest in proven consumer safety scaling to enterprise
+              infrastructure security. Target: $50M revenue by FY30.
             </p>
             <div className={styles.ctaButtons}>
               <Button

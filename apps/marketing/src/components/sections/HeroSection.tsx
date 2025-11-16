@@ -9,20 +9,23 @@ export const HeroSection: React.FC = () => {
         {/* Development status indicators */}
         <div className={styles.statusBadges}>
           <span className="pill pill--concept">Foundation Phase (FY26)</span>
-          <span className="pill pill--partners">SkySnare™ Consumer | AeroNet™ Enterprise</span>
+          <span className="pill pill--partners">
+            SkySnare™ Consumer | AeroNet™ Enterprise
+          </span>
           <span className="pill pill--sbir">Seeking Early Partners</span>
         </div>
 
         {/* Vision-focused headline */}
         <h1 className={styles.headline}>
-          Dual-Brand <span className={styles.headlineOrange}>Counter-Drone</span> Platform
+          Dual-Brand{" "}
+          <span className={styles.headlineOrange}>Counter-Drone</span> Platform
           <span className={styles.headlineSubtext}>
             SkySnare™ Consumer Sports | AeroNet™ Enterprise Security
           </span>
         </h1>
         <p className={styles.description}>
-          Pneumatic interception technology designed for two markets: 
-          consumer sports training and enterprise infrastructure protection.
+          Pneumatic interception technology designed for two markets: consumer
+          sports training and enterprise infrastructure protection.
         </p>
 
         {/* Mission Statement */}
@@ -42,8 +45,9 @@ export const HeroSection: React.FC = () => {
             </svg>
           </div>
           <p className={styles.missionText}>
-            <strong>Our Strategy:</strong> Build consumer brand (SkySnare™) to demonstrate 
-            safety and reliability, then scale proven technology to enterprise markets (AeroNet™).
+            <strong>Our Strategy:</strong> Build consumer brand (SkySnare™) to
+            demonstrate safety and reliability, then scale proven technology to
+            enterprise markets (AeroNet™).
           </p>
         </div>
         <div className={styles.metricsCard}>
@@ -140,9 +144,7 @@ export const HeroSection: React.FC = () => {
             {/* Visual concept representation */}
             <div className={styles.conceptMetrics}>
               <div className={styles.conceptMetric}>
-                <span className={styles.conceptMetricLabel}>
-                  FY26 Revenue
-                </span>
+                <span className={styles.conceptMetricLabel}>FY26 Revenue</span>
                 <span className={styles.conceptMetricValue}>$1.8M</span>
               </div>
               <div className={styles.conceptMetric}>
