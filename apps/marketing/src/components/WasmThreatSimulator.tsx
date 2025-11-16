@@ -63,12 +63,9 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
         wasmInstanceInitialized = true;
 
         // Resolve asset URLs via manifest to avoid hardcoded hashes
-        const manifest = await fetch(
-          "http://localhost:8080/wasm/manifest.json",
-          {
-            cache: "no-store",
-          },
-        )
+        const manifest = await fetch("/wasm/manifest.json", {
+          cache: "no-store",
+        })
           .then((r) => (r.ok ? r.json() : null))
           .catch((err) => {
             console.warn("Failed to load WASM manifest:", err);
@@ -78,18 +75,18 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
         const pick = (ext: string, fallback?: string) => {
           if (manifest && Array.isArray(manifest.files)) {
             const match = manifest.files.find((f: string) => f.endsWith(ext));
-            if (match) return `http://localhost:8080/wasm/${match}`;
+            if (match) return `/wasm/${match}`;
           }
           return fallback || null;
         };
 
         const jsUrl = pick(
           ".js",
-          "http://localhost:8080/wasm/threat-simulator-desktop-43e4df905ff42f76.js",
+          "/wasm/threat-simulator-desktop-43e4df905ff42f76.js",
         );
         const wasmUrl = pick(
           ".wasm",
-          "http://localhost:8080/wasm/threat-simulator-desktop-43e4df905ff42f76_bg.wasm",
+          "/wasm/threat-simulator-desktop-43e4df905ff42f76_bg.wasm",
         );
         const resolvedCssUrl = pick(".css");
 
