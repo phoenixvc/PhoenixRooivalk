@@ -262,14 +262,20 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                   .map((selector: string) => {
                     const trimmed = selector.trim();
 
-                    // Skip problematic global selectors that shouldn't be scoped
-                    if (
-                      trimmed.startsWith(":root") ||
-                      trimmed === "body" ||
-                      trimmed === "html" ||
-                      trimmed === "*"
-                    ) {
+                    // Skip :root selectors - they define CSS variables that should remain global
+                    if (trimmed.startsWith(":root")) {
                       return "";
+                    }
+
+                    // Scope global selectors to the WASM container
+                    if (trimmed === "*") {
+                      // Apply universal styles within the container
+                      return `${scopeClass} *`;
+                    }
+
+                    if (trimmed === "body" || trimmed === "html") {
+                      // Map body/html to the container itself and the mount point
+                      return `${scopeClass}, ${scopeClass} #${uniqueMountId}`;
                     }
 
                     // Replace #app with the unique mount ID to ensure styles apply after ID restoration
