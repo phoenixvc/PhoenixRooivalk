@@ -13,25 +13,34 @@
 [![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)](https://eslint.org/)
 [![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=white)](https://prettier.io/)
 
-## 🚁 **PhoenixRooivalk Counter-Drone Defense Platform**
+## 🚁 **PhoenixRooivalk: Dual-Brand Counter-Drone Platform**
 
-PhoenixRooivalk is a next-generation modular counter-Unmanned Aircraft System (c-UAS) defense platform that operates autonomously even when communications are completely jammed. Our system delivers military-grade drone threat detection and neutralization in 120-195ms response times - 25-40x faster than traditional systems that fail when enemies jam communications.
+PhoenixRooivalk transforms proven pneumatic platform technology into two world-leading brands:
+
+### **SkySnare™ Consumer**
+Premium sports and training equipment for the consumer market. Safety-certified, reliability-proven devices that demonstrate our core technology at scale.
+
+### **AeroNet™ Enterprise**
+AI-enabled infrastructure security for regulated enterprise markets. Compliance-focused, automated counter-drone systems with measurable risk reduction.
+
+**Strategic Vision:**
+Prove reliability and safety at consumer scale (SkySnare™), then apply that track record to high-value enterprise markets (AeroNet™) that demand compliance, automation, and accountability.
 
 **Key Features:**
-• **Edge Autonomy**: SAE Level 4 autonomous operation without network dependency
-• **Modular Architecture**: VTOL motherships, interceptors, and ground support systems  
-• **Blockchain Evidence**: Tamper-proof dual-chain (Solana + EtherLink) audit trails
-• **Real-time Processing**: Multi-sensor fusion with 95%+ AI detection accuracy
-• **EW Resilience**: GPS-denied and jamming-resistant operation
+• **Dual Certification Path**: Consumer safety (CPSC) + Enterprise compliance (FAA)
+• **AI Edge Processing**: On-device intelligence for privacy and low latency
+• **Safety First**: Sub-200ms response times with human oversight
+• **Compliance Logging**: Automated regulatory and insurance audit trails
+• **Data Asset Creation**: Proprietary training data from deployments
 
 **Technology Stack:**
 • Rust-based blockchain evidence management
 • Solana and EtherLink dual-chain anchoring
-• NVIDIA Jetson AGX Orin (275 TOPS AI performance)
-• Real-time threat simulation and response systems
-• Military-grade sensor fusion algorithms
+• Edge AI processing (NVIDIA Jetson AGX Orin)
+• Real-time sensor fusion and tracking
+• Multi-site coordination and cloud learning
 
-Our platform addresses the critical gap in defense systems that fail when communications are compromised, providing reliable protection for critical infrastructure, military installations, and civilian areas against increasingly sophisticated drone threats.
+**Market Opportunity**: $5.9B combined TAM (Consumer: $1.68B @ 8.2% CAGR | Enterprise: $4.2B @ 47% CAGR)
 
 **Corporate Status**: Nexamesh Technologies (Delaware C-Corp in progress)
 
@@ -192,9 +201,11 @@ integration guides) are shared upon approval.
 
 ## Mission
 
-Provide a modular, layered defense against low‑cost UAS threats by cueing the
-cheapest effective effector first, preserving high‑value effectors, and
-maintaining C2 in heavy EW through resilient optical and RF links.
+Transform proven pneumatic platform technology into two world-leading brands:
+- **SkySnare™** for consumer sports and training markets
+- **AeroNet™** for regulated, AI-enabled infrastructure security
+
+We aim to prove reliability and safety at consumer scale, then apply that track record to high-value enterprise markets that demand compliance, automation, and measurable risk reduction.
 
 ## System overview (abstract)
 
