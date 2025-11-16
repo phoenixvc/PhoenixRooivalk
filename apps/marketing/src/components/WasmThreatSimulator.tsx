@@ -313,7 +313,10 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                       value = value.replace(regex, scopedName);
                     });
                     decl.value = value;
-                  } else if (decl.prop === "position" && decl.value === "fixed") {
+                  } else if (
+                    decl.prop === "position" &&
+                    decl.value === "fixed"
+                  ) {
                     // Convert fixed positioning to absolute to keep elements within container
                     decl.value = "absolute";
                   }
