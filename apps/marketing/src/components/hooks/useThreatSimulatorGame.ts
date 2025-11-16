@@ -78,6 +78,9 @@ export const useThreatSimulatorGame = ({
     () => new Map(),
   );
 
+  // Resource manager - must be declared before waveManager as it's used in callbacks
+  const [resourceManager] = useState(() => createResourceManager());
+
   // Wave manager
   const [waveManager] = useState(
     () =>
@@ -113,9 +116,6 @@ export const useThreatSimulatorGame = ({
         },
       ),
   );
-
-  // Resource manager
-  const [resourceManager] = useState(() => createResourceManager());
 
   // Game state
   const [gameDimensions, setGameDimensions] = useState({

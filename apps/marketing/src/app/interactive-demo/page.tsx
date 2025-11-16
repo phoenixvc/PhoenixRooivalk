@@ -1,4 +1,5 @@
 import { WasmThreatSimulator } from "../../components/WasmThreatSimulator";
+import { WasmErrorBoundary } from "../../components/WasmErrorBoundary";
 
 export default function InteractiveDemoPage() {
   return (
@@ -18,7 +19,9 @@ export default function InteractiveDemoPage() {
           </p>
         </div>
 
-        <WasmThreatSimulator />
+        <WasmErrorBoundary>
+          <WasmThreatSimulator />
+        </WasmErrorBoundary>
 
         <div className="mt-12 text-center">
           <div className="bg-gray-800/50 p-8 rounded-lg max-w-4xl mx-auto">

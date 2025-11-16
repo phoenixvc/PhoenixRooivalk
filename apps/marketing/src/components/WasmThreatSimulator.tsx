@@ -9,6 +9,11 @@ interface WasmThreatSimulatorProps {
   className?: string;
 }
 
+// Configuration constants
+const WASM_INIT_TIMEOUT_MS = 100; // Time to wait before restoring element ID
+const MOUNT_RETRY_INTERVAL_MS = 50; // Interval between mount element checks
+const MAX_MOUNT_RETRIES = 10; // Maximum attempts to find mount element
+
 // Singleton flag to prevent multiple WASM instances
 // Leptos targets a specific mount point and multiple instances would conflict
 let wasmInstanceInitialized = false;
@@ -105,17 +110,18 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
         // Wait for mount element to be available with retry logic
         let mountElement = document.getElementById(uniqueMountId);
         let retries = 0;
-        const maxRetries = 10;
 
-        while (!mountElement && retries < maxRetries) {
-          await new Promise((resolve) => setTimeout(resolve, 50));
+        while (!mountElement && retries < MAX_MOUNT_RETRIES) {
+          await new Promise((resolve) =>
+            setTimeout(resolve, MOUNT_RETRY_INTERVAL_MS),
+          );
           mountElement = document.getElementById(uniqueMountId);
           retries++;
         }
 
         if (!mountElement) {
           throw new Error(
-            `Mount element not found after ${maxRetries} retries`,
+            `Mount element not found after ${MAX_MOUNT_RETRIES} retries`,
           );
         }
         const originalId = mountElement.id;
@@ -133,7 +139,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
           if (mountElement && mounted) {
             mountElement.id = originalId;
           }
-        }, 100);
+        }, WASM_INIT_TIMEOUT_MS);
 
         if (!mounted) return;
 
@@ -250,22 +256,41 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                   return;
                 }
 
-                // Scope selectors (handles :root exclusions)
+                // Scope selectors (handles :root exclusions and global selectors)
                 rule.selector = rule.selector
                   .split(",")
                   .map((selector: string) => {
                     const trimmed = selector.trim();
-                    // Don't scope :root selectors - skip them
-                    if (trimmed.startsWith(":root")) {
+
+                    // Skip problematic global selectors that shouldn't be scoped
+                    if (
+                      trimmed.startsWith(":root") ||
+                      trimmed === "body" ||
+                      trimmed === "html" ||
+                      trimmed === "*"
+                    ) {
                       return "";
                     }
+
+                    // Replace #app with the unique mount ID to ensure styles apply after ID restoration
+                    let scopedSelector = trimmed.replace(
+                      /^#app\b/,
+                      `#${uniqueMountId}`,
+                    );
+
+                    // Replace #app when it appears as a descendant selector
+                    scopedSelector = scopedSelector.replace(
+                      /\s+#app\b/g,
+                      ` #${uniqueMountId}`,
+                    );
+
                     // Prefix with container class
-                    return `${scopeClass} ${trimmed}`;
+                    return `${scopeClass} ${scopedSelector}`;
                   })
                   .filter((s: string) => s) // Remove empty selectors
                   .join(", ");
 
-                // Update animation-name and animation shorthand properties
+                // Update animation-name, animation shorthand properties, and fix positioning
                 rule.walkDecls((decl: PostCSSDecl) => {
                   if (decl.prop === "animation-name") {
                     const names = decl.value.split(",").map((n: string) => {
@@ -288,6 +313,12 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                       value = value.replace(regex, scopedName);
                     });
                     decl.value = value;
+                  } else if (
+                    decl.prop === "position" &&
+                    decl.value === "fixed"
+                  ) {
+                    // Convert fixed positioning to absolute to keep elements within container
+                    decl.value = "absolute";
                   }
                 });
               });
@@ -332,7 +363,12 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
       {/* WASM styles are now dynamically loaded and scoped - no inline overrides needed */}
 
       {isLoading && (
-        <div className={styles.loadingOverlay}>
+        <div
+          className={styles.loadingOverlay}
+          role="status"
+          aria-live="polite"
+          aria-label="Loading threat simulator"
+        >
           <div className={styles.loadingText}>
             ⚡ Loading Threat Simulator...
           </div>
