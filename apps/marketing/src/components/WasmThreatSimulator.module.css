@@ -17,10 +17,10 @@
 }
 
 .containerFull {
-  height: 100vh;
+  height: 800px;
   min-height: 800px;
-  max-height: none;
-  border-radius: 0;
+  max-height: 800px;
+  border-radius: 8px;
 }
 
 .loadingOverlay {
