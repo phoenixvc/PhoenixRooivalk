@@ -255,7 +255,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                   .split(",")
                   .map((selector: string) => {
                     const trimmed = selector.trim();
-                    
+
                     // Skip problematic global selectors that shouldn't be scoped
                     if (
                       trimmed.startsWith(":root") ||
@@ -265,19 +265,19 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                     ) {
                       return "";
                     }
-                    
+
                     // Replace #app with the unique mount ID to ensure styles apply after ID restoration
                     let scopedSelector = trimmed.replace(
                       /^#app\b/,
                       `#${uniqueMountId}`,
                     );
-                    
+
                     // Replace #app when it appears as a descendant selector
                     scopedSelector = scopedSelector.replace(
                       /\s+#app\b/g,
                       ` #${uniqueMountId}`,
                     );
-                    
+
                     // Prefix with container class
                     return `${scopeClass} ${scopedSelector}`;
                   })
