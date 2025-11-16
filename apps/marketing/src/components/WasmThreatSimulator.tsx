@@ -290,7 +290,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                   .filter((s: string) => s) // Remove empty selectors
                   .join(", ");
 
-                // Update animation-name and animation shorthand properties
+                // Update animation-name, animation shorthand properties, and fix positioning
                 rule.walkDecls((decl: PostCSSDecl) => {
                   if (decl.prop === "animation-name") {
                     const names = decl.value.split(",").map((n: string) => {
@@ -313,6 +313,9 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
                       value = value.replace(regex, scopedName);
                     });
                     decl.value = value;
+                  } else if (decl.prop === "position" && decl.value === "fixed") {
+                    // Convert fixed positioning to absolute to keep elements within container
+                    decl.value = "absolute";
                   }
                 });
               });
