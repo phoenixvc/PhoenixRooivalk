@@ -379,7 +379,11 @@ export const Navigation: React.FC = () => {
             onClick={toggleTheme}
             className={styles.themeToggle}
             aria-label={`Switch to ${
-              theme === "phoenix" ? "blue" : theme === "blue" ? "green" : "phoenix"
+              theme === "phoenix"
+                ? "blue"
+                : theme === "blue"
+                  ? "green"
+                  : "phoenix"
             } theme`}
           >
             <div className={styles.themeIcon}>
