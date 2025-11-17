@@ -177,187 +177,80 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
     };
   }, [autoFullscreen, uniqueMountId]);
 
-  // Dynamically load and scope WASM CSS to prevent global interference
+  // Load WASM CSS directly without any transformation
   useEffect(() => {
     if (!cssUrl || wasmStylesLoaded) return;
 
-    const loadWasmStyles = async () => {
-      try {
-        const response = await fetch(cssUrl);
-        const cssText = await response.text();
-
-        // Import postcss dynamically for CSS transformation
-        const postcss = (await import("postcss")).default;
-
-        // Create a scoped style element
-        const styleElement = document.createElement("style");
-        styleElement.id = `wasm-styles-${uniqueMountId}`;
-
-        // Generate unique scope identifier
-        const scopeClass = `.wasm-threat-simulator-container`;
-        const keyframePrefix = `wasm-${uniqueMountId}`;
-
-        // PostCSS plugin to scope CSS selectors and handle @keyframes
-        const scopePlugin = () => {
-          interface PostCSSNode {
-            parent?: PostCSSNode;
-            type: string;
-            name?: string;
-            params?: string;
-            selector?: string;
-            walkDecls?: (callback: (decl: PostCSSDecl) => void) => void;
-          }
-
-          interface PostCSSAtRule extends PostCSSNode {
-            params: string;
-          }
-
-          interface PostCSSRule extends PostCSSNode {
-            selector: string;
-            parent?: PostCSSNode;
-            walkDecls: (callback: (decl: PostCSSDecl) => void) => void;
-          }
-
-          interface PostCSSDecl {
-            prop: string;
-            value: string;
-          }
-
-          interface PostCSSRoot {
-            walkAtRules: (
-              name: string,
-              callback: (atRule: PostCSSAtRule) => void,
-            ) => void;
-            walkRules: (callback: (rule: PostCSSRule) => void) => void;
-          }
-
-          return {
-            postcssPlugin: "scope-wasm-css",
-            Once(root: PostCSSRoot) {
-              // Track animation name mappings
-              const animationMap = new Map<string, string>();
-
-              // First pass: rename @keyframes and track mappings
-              root.walkAtRules("keyframes", (atRule: PostCSSAtRule) => {
-                const originalName = atRule.params.trim();
-                const scopedName = `${keyframePrefix}-${originalName}`;
-                animationMap.set(originalName, scopedName);
-                atRule.params = scopedName;
-              });
-
-              // Second pass: scope all selectors and update animation references
-              root.walkRules((rule: PostCSSRule) => {
-                // Skip rules inside @keyframes
-                if (
-                  rule.parent &&
-                  rule.parent.type === "atrule" &&
-                  rule.parent.name === "keyframes"
-                ) {
-                  return;
-                }
-
-                // Scope selectors (handles :root exclusions and global selectors)
-                rule.selector = rule.selector
-                  .split(",")
-                  .map((selector: string) => {
-                    const trimmed = selector.trim();
-
-                    // Skip :root selectors - they define CSS variables that should remain global
-                    if (trimmed.startsWith(":root")) {
-                      return "";
-                    }
-
-                    // Scope global selectors to the WASM container
-                    if (trimmed === "*") {
-                      // Apply universal styles within the container
-                      return `${scopeClass} *`;
-                    }
-
-                    if (trimmed === "body" || trimmed === "html") {
-                      // Map body/html to the container itself and the mount point
-                      return `${scopeClass}, ${scopeClass} #${uniqueMountId}`;
-                    }
-
-                    // Replace #app with the unique mount ID to ensure styles apply after ID restoration
-                    let scopedSelector = trimmed.replace(
-                      /^#app\b/,
-                      `#${uniqueMountId}`,
-                    );
-
-                    // Replace #app when it appears as a descendant selector
-                    scopedSelector = scopedSelector.replace(
-                      /\s+#app\b/g,
-                      ` #${uniqueMountId}`,
-                    );
-
-                    // Prefix with container class
-                    return `${scopeClass} ${scopedSelector}`;
-                  })
-                  .filter((s: string) => s) // Remove empty selectors
-                  .join(", ");
-
-                // Update animation-name, animation shorthand properties, and fix positioning
-                rule.walkDecls((decl: PostCSSDecl) => {
-                  if (decl.prop === "animation-name") {
-                    const names = decl.value.split(",").map((n: string) => {
-                      const name = n.trim();
-                      return animationMap.get(name) || name;
-                    });
-                    decl.value = names.join(", ");
-                  } else if (decl.prop === "animation") {
-                    // Handle animation shorthand: find and replace animation names
-                    let value = decl.value;
-                    animationMap.forEach((scopedName, originalName) => {
-                      // Escape special regex characters in animation name
-                      const escapedName = originalName.replace(
-                        /[.*+?^${}()|[\]\\]/g,
-                        "\\$&",
-                      );
-                      // Use word boundary regex to match animation names
-                      // eslint-disable-next-line security/detect-non-literal-regexp
-                      const regex = new RegExp(`\\b${escapedName}\\b`, "g");
-                      value = value.replace(regex, scopedName);
-                    });
-                    decl.value = value;
-                  } else if (
-                    decl.prop === "position" &&
-                    decl.value === "fixed"
-                  ) {
-                    // Convert fixed positioning to absolute to keep elements within container
-                    decl.value = "absolute";
-                  }
-                });
-              });
-            },
-          };
-        };
-
-        scopePlugin.postcss = true;
-
-        // Process CSS with PostCSS
-        const result = await postcss([scopePlugin()]).process(cssText, {
-          from: undefined,
-        });
-
-        styleElement.textContent = result.css;
-        document.head.appendChild(styleElement);
-        setWasmStylesLoaded(true);
-      } catch (err) {
-        console.warn("Failed to load WASM styles:", err);
-        setWasmStylesLoaded(true); // Continue without styles
-      }
+    // Create a <link> element to load the WASM CSS directly
+    const linkElement = document.createElement("link");
+    linkElement.id = `wasm-styles-${uniqueMountId}`;
+    linkElement.rel = "stylesheet";
+    linkElement.href = cssUrl;
+    
+    linkElement.onload = () => {
+      // After CSS loads, inject critical overrides to make it work in a container
+      const styleOverrides = document.createElement("style");
+      styleOverrides.id = `wasm-overrides-${uniqueMountId}`;
+      styleOverrides.textContent = `
+        /* Force WASM app to work within container instead of fullscreen */
+        #${uniqueMountId} {
+          width: 100% !important;
+          height: 100% !important;
+          max-width: 100% !important;
+          max-height: 100% !important;
+          overflow: hidden !important;
+          display: flex !important;
+          flex-direction: column !important;
+          position: relative !important;
+        }
+        
+        /* Fix app-container to fill the mount point */
+        #${uniqueMountId} .app-container {
+          width: 100% !important;
+          height: 100% !important;
+          position: relative !important;
+        }
+        
+        /* Fix game canvas to be positioned relative, not fixed */
+        #${uniqueMountId} .game-canvas {
+          position: relative !important;
+          width: 100% !important;
+          height: 100% !important;
+          flex: 1 !important;
+        }
+        
+        /* Fix loading screen positioning */
+        #${uniqueMountId} .loading-container {
+          position: absolute !important;
+        }
+        
+        /* Fix all panels that use fixed positioning */
+        #${uniqueMountId} .stats-panel,
+        #${uniqueMountId} .control-bar,
+        #${uniqueMountId} .hud-bar,
+        #${uniqueMountId} .event-feed,
+        #${uniqueMountId} .energy-panel,
+        #${uniqueMountId} .drone-panel {
+          position: absolute !important;
+        }
+      `;
+      document.head.appendChild(styleOverrides);
+      setWasmStylesLoaded(true);
+    };
+    
+    linkElement.onerror = () => {
+      console.warn("Failed to load WASM styles from:", cssUrl);
+      setWasmStylesLoaded(true); // Continue without styles
     };
 
-    loadWasmStyles();
+    document.head.appendChild(linkElement);
 
     return () => {
-      // Cleanup scoped styles on unmount
-      const styleElement = document.getElementById(
-        `wasm-styles-${uniqueMountId}`,
-      );
-      if (styleElement) {
-        styleElement.remove();
-      }
+      // Cleanup styles on unmount
+      const linkElem = document.getElementById(`wasm-styles-${uniqueMountId}`);
+      const overridesElem = document.getElementById(`wasm-overrides-${uniqueMountId}`);
+      if (linkElem) linkElem.remove();
+      if (overridesElem) overridesElem.remove();
     };
   }, [cssUrl, uniqueMountId, wasmStylesLoaded]);
 
