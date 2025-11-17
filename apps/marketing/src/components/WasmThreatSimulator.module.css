@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 100%;
   position: relative;
-  background-color: #000;
+  background-color: #0a0e1a;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -31,6 +31,7 @@
   text-align: center;
   color: #00ff00;
   font-family: monospace;
+  z-index: 100;
 }
 
 .loadingText {
@@ -53,6 +54,7 @@
   color: #ff0000;
   font-family: monospace;
   max-width: 80%;
+  z-index: 100;
 }
 
 .errorTitle {
@@ -84,6 +86,16 @@
 
 .wasmMountVisible {
   display: block;
+}
+
+.wasmIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @keyframes pulse {
