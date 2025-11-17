@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { WasmThreatSimulator } from "../WasmThreatSimulator";
 import { Button } from "../ui/button";
 import styles from "./InteractiveElementsSection.module.css";
 import { AdaptationCard } from "./components/AdaptationCard";
@@ -265,7 +264,7 @@ export const InteractiveElementsSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Demo Teaser */}
+          {/* Interactive Demo CTA */}
           <div className={styles.demoSection}>
             <div className={styles.demoHeader}>
               <h3 className={styles.demoTitle}>Experience the System</h3>
@@ -276,15 +275,30 @@ export const InteractiveElementsSection: React.FC = () => {
               </p>
             </div>
 
-            <div className={styles.demoContainer}>
-              <div className={styles.demoCard}>
-                <WasmThreatSimulator isTeaser={true} />
-              </div>
-
-              <div className={styles.demoButtonWrapper}>
-                <Button href="/interactive-demo" variant="primary" size="lg">
-                  🚀 Try Full Interactive Demo (Rust/WASM)
-                </Button>
+            <div className={styles.demoCtaContainer}>
+              <div className={styles.demoCta}>
+                <div className={styles.demoCtaContent}>
+                  <div className={styles.demoCtaIcon}>🎮</div>
+                  <h4 className={styles.demoCtaTitle}>
+                    Interactive Simulator Demo
+                  </h4>
+                  <p className={styles.demoCtaDescription}>
+                    Launch the full-featured threat simulator built with Rust
+                    and WebAssembly. Control weapons, deploy drones, and
+                    neutralize aerial threats in real-time.
+                  </p>
+                  <ul className={styles.demoFeatureList}>
+                    <li>✓ Real-time threat detection and tracking</li>
+                    <li>✓ Multiple weapon systems and deployments</li>
+                    <li>✓ Advanced radar visualization</li>
+                    <li>✓ Energy management and synergy systems</li>
+                  </ul>
+                </div>
+                <div className={styles.demoButtonWrapper}>
+                  <Button href="/interactive-demo" variant="primary" size="lg">
+                    🚀 Launch Interactive Demo
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
