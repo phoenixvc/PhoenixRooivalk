@@ -128,7 +128,7 @@
   --radius: 14px;
 
   /* Focus & Accessibility */
-  --focus: 0 0 0 2px rgba(249, 115, 22, 0.5);
+  --focus: 0 0 0 2px rgba(var(--primary), 0.5);
 
   /* Reduced Motion Support */
   --motion-reduce: 0;
@@ -263,29 +263,29 @@ h6 {
 }
 
 .btn:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 0 0 4px rgba(var(--primary), 0.3);
 }
 
 .btn--primary {
-  background: linear-gradient(135deg, #ff7518, #ea580c);
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   color: white;
-  border-color: #ff7518;
-  box-shadow: 0 4px 20px rgba(255, 117, 24, 0.35);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 4px 20px rgba(var(--primary), 0.35);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(234, 88, 12, 0.45);
-  border-color: #fb923c;
-  background: linear-gradient(135deg, #fb923c, #f97316);
+  box-shadow: 0 6px 24px rgba(var(--primary), 0.45);
+  border-color: rgb(var(--accent));
+  background: linear-gradient(135deg, rgb(var(--accent)), rgb(var(--primary)));
 }
 
 .btn--primary:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 0 0 4px rgba(var(--primary), 0.3);
   transform: translateY(-2px);
 }
 
@@ -306,9 +306,9 @@ h6 {
 }
 
 .btn--secondary:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 0 0 4px rgba(var(--primary), 0.3);
   transform: translateY(-2px);
 }
 
@@ -327,9 +327,9 @@ h6 {
 }
 
 .btn--ghost:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 4px;
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 0 0 4px rgba(var(--primary), 0.3);
 }
 
 /* Pill System - Enhanced */
@@ -371,31 +371,31 @@ h6 {
 .pill--concept {
   background: linear-gradient(
     135deg,
-    rgba(249, 115, 22, 0.2),
-    rgba(251, 146, 60, 0.2)
+    rgba(var(--primary), 0.2),
+    rgba(var(--accent), 0.2)
   );
-  border-color: rgba(249, 115, 22, 0.5);
-  color: #ffb380;
+  border-color: rgba(var(--primary), 0.5);
+  color: rgb(var(--accent));
 }
 
 .pill--partners {
   background: linear-gradient(
     135deg,
-    rgba(100, 116, 139, 0.2),
-    rgba(148, 163, 184, 0.2)
+    rgba(var(--secondary), 0.2),
+    rgba(var(--secondary), 0.2)
   );
-  border-color: rgba(148, 163, 184, 0.5);
-  color: #94a3b8;
+  border-color: rgba(var(--secondary), 0.5);
+  color: rgb(var(--secondary));
 }
 
 .pill--sbir {
   background: linear-gradient(
     135deg,
-    rgba(249, 191, 59, 0.2),
-    rgba(251, 207, 91, 0.2)
+    rgba(var(--phoenix-amber), 0.2),
+    rgba(var(--phoenix-gold), 0.2)
   );
-  border-color: rgba(249, 191, 59, 0.5);
-  color: #fbbf24;
+  border-color: rgba(var(--phoenix-amber), 0.5);
+  color: rgb(var(--phoenix-gold));
 }
 
 /* Card System - Enhanced */
@@ -410,7 +410,7 @@ h6 {
 }
 
 .card:hover {
-  border-color: rgba(249, 115, 22, 0.5);
+  border-color: rgba(var(--primary), 0.5);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transform: translateY(-3px);
 }
@@ -596,7 +596,7 @@ section:first-of-type {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  border-color: rgba(249, 115, 22, 0.5);
+  border-color: rgba(var(--primary), 0.5);
 }
 
 /* Utility Classes for Visual Hierarchy */
@@ -604,12 +604,12 @@ section:first-of-type {
   background:
     radial-gradient(
       ellipse at top left,
-      rgba(249, 115, 22, 0.1),
+      rgba(var(--primary), 0.1),
       transparent 50%
     ),
     radial-gradient(
       ellipse at bottom right,
-      rgba(59, 130, 246, 0.06),
+      rgba(var(--secondary), 0.06),
       transparent 50%
     ),
     linear-gradient(180deg, #0f172a, #1e293b);
@@ -679,7 +679,7 @@ section:first-of-type {
 
 /* Focus-visible for all interactive elements */
 *:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 3px;
   border-radius: 4px;
 }
