@@ -378,13 +378,21 @@ export const Navigation: React.FC = () => {
           <button
             onClick={toggleTheme}
             className={styles.themeToggle}
-            aria-label={`Switch to ${theme === "phoenix" ? "blue" : "phoenix"} theme`}
+            aria-label={`Switch to ${
+              theme === "phoenix"
+                ? "blue"
+                : theme === "blue"
+                  ? "green"
+                  : "phoenix"
+            } theme`}
           >
             <div className={styles.themeIcon}>
               {theme === "phoenix" ? (
                 <div className={styles.themeIconPhoenix}></div>
-              ) : (
+              ) : theme === "blue" ? (
                 <div className={styles.themeIconBlue}></div>
+              ) : (
+                <div className={styles.themeIconGreen}></div>
               )}
             </div>
           </button>

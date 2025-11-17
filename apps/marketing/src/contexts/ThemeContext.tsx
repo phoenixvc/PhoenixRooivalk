@@ -2,7 +2,7 @@
 import * as React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "phoenix" | "blue";
+type Theme = "phoenix" | "blue" | "green";
 
 interface ThemeContextType {
   theme: Theme;
@@ -27,7 +27,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("phoenix-theme") as Theme | null;
-      if (savedTheme && (savedTheme === "phoenix" || savedTheme === "blue")) {
+      if (
+        savedTheme &&
+        (savedTheme === "phoenix" ||
+          savedTheme === "blue" ||
+          savedTheme === "green")
+      ) {
         return savedTheme;
       }
     }
@@ -61,7 +66,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       root.style.setProperty("--red-glow", "rgba(249, 115, 22, 0.2)");
       root.style.setProperty("--orange-glow", "rgba(249, 115, 22, 0.15)");
       root.style.setProperty("--amber-glow", "rgba(251, 146, 60, 0.15)");
-    } else {
+    } else if (theme === "blue") {
       // Blue Tactical Theme
       root.style.setProperty("--primary", "59, 130, 246"); // Blue 500
       root.style.setProperty("--secondary", "51, 65, 85"); // Tactical Gray Dark
@@ -73,11 +78,27 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       root.style.setProperty("--red-glow", "rgba(59, 130, 246, 0.2)");
       root.style.setProperty("--orange-glow", "rgba(59, 130, 246, 0.15)");
       root.style.setProperty("--amber-glow", "rgba(96, 165, 250, 0.15)");
+    } else {
+      // Green Tactical Theme
+      root.style.setProperty("--primary", "34, 197, 94"); // Green 500
+      root.style.setProperty("--secondary", "51, 65, 85"); // Tactical Gray Dark
+      root.style.setProperty("--accent", "74, 222, 128"); // Green 400
+      root.style.setProperty("--orange", "34, 197, 94"); // Use green instead of orange
+      root.style.setProperty("--action-primary", "34, 197, 94"); // Green
+      root.style.setProperty("--brand-primary", "34, 197, 94");
+      root.style.setProperty("--brand-accent", "74, 222, 128");
+      root.style.setProperty("--red-glow", "rgba(34, 197, 94, 0.2)");
+      root.style.setProperty("--orange-glow", "rgba(34, 197, 94, 0.15)");
+      root.style.setProperty("--amber-glow", "rgba(74, 222, 128, 0.15)");
     }
   }, [theme, mounted]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "phoenix" ? "blue" : "phoenix"));
+    setTheme((prev) => {
+      if (prev === "phoenix") return "blue";
+      if (prev === "blue") return "green";
+      return "phoenix";
+    });
   };
 
   return (
