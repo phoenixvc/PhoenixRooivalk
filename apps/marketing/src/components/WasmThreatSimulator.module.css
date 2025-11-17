@@ -17,9 +17,16 @@
 }
 
 .containerFull {
-  min-height: 900px;
-  height: 900px;
+  min-height: 1080px;
+  height: calc(100vh - 200px);
+  max-height: 1080px;
   border-radius: 8px;
+}
+
+@media (min-height: 900px) {
+  .containerFull {
+    height: calc(100vh - 150px);
+  }
 }
 
 /* Fullscreen mode */

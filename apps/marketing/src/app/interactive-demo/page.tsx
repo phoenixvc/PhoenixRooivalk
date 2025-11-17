@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WasmThreatSimulator } from "../../components/WasmThreatSimulator";
 import { WasmErrorBoundary } from "../../components/WasmErrorBoundary";
 import Link from "next/link";
@@ -8,14 +8,40 @@ import Link from "next/link";
 export default function InteractiveDemoPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Listen for fullscreen changes (e.g., when user presses ESC)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange,
+      );
+    };
+  }, []);
+
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-        setIsFullscreen(false);
       }
     }
   };
@@ -35,6 +61,8 @@ export default function InteractiveDemoPage() {
             <button
               onClick={toggleFullscreen}
               className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg hover:shadow-xl"
+              aria-label="Enter fullscreen mode"
+              type="button"
             >
               🖥️ Enter Fullscreen Mode
             </button>
@@ -62,6 +90,14 @@ export default function InteractiveDemoPage() {
         <WasmErrorBoundary>
           <WasmThreatSimulator />
         </WasmErrorBoundary>
+
+        {/* Fullscreen hint */}
+        {isFullscreen && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 text-white px-6 py-3 rounded-lg text-sm backdrop-blur-sm">
+            Press <kbd className="px-2 py-1 bg-gray-700 rounded">ESC</kbd> to
+            exit fullscreen
+          </div>
+        )}
       </div>
 
       {/* System Capabilities - Hidden in fullscreen */}
