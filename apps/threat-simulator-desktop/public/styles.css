@@ -749,6 +749,131 @@ body {
   background: rgba(15, 25, 41, 0.95);
   border: 2px solid rgba(0, 255, 255, 0.4);
   border-radius: 6px;
+  padding: 10px 20px;
+  color: #00ffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.control-button:hover {
+  border-color: rgba(0, 255, 255, 0.8);
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.control-button.primary {
+  background: linear-gradient(135deg, #0088ff, #00ffff);
+  color: #0a0e1a;
+  border-color: #00ffff;
+}
+
+.control-button.primary:hover {
+  background: linear-gradient(135deg, #00aaff, #00ffff);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Tutorial Restart Button */
+.control-button.tutorial-restart {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(33, 150, 243, 0.2));
+  border: 2px solid rgba(76, 175, 80, 0.6);
+  color: #4caf50;
+  animation: tutorial-button-pulse 2s ease-in-out infinite;
+}
+
+.control-button.tutorial-restart:hover {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(33, 150, 243, 0.3));
+  border-color: #4caf50;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  animation: none;
+}
+
+@keyframes tutorial-button-pulse {
+  0%, 100% {
+    border-color: rgba(76, 175, 80, 0.6);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    border-color: rgba(76, 175, 80, 0.8);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+  }
+}
+
+/* AI Indicator Overlay */
+.ai-indicator-overlay {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  z-index: 150;
+  pointer-events: none;
+}
+
+.ai-indicator-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.95), rgba(33, 150, 243, 0.95));
+  border: 2px solid rgba(76, 175, 80, 0.8);
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+  animation: ai-indicator-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ai-indicator-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(76, 175, 80, 0.6);
+  }
+}
+
+.ai-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+  animation: ai-icon-rotate 3s ease-in-out infinite;
+}
+
+@keyframes ai-icon-rotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+.ai-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-title {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.ai-subtitle {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+  border-radius: 6px;
   padding: 12px 24px;
   color: #00ffff;
   cursor: pointer;

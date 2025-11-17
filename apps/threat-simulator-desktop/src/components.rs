@@ -406,6 +406,25 @@ pub fn App() -> impl IntoView {
                 on_dismiss=move || set_achievement_message.set(None)
             />
 
+            // AI Tutorial Indicator - shows when AI is active
+            {move || {
+                if game_state.tutorial_mode.get() && game_state.auto_targeting_enabled.get() && is_running.get() {
+                    view! {
+                        <div class="ai-indicator-overlay">
+                            <div class="ai-indicator-badge">
+                                <div class="ai-icon">"🤖"</div>
+                                <div class="ai-text">
+                                    <div class="ai-title">"AI ASSISTING"</div>
+                                    <div class="ai-subtitle">"Auto-targeting enabled"</div>
+                                </div>
+                            </div>
+                        </div>
+                    }.into_any()
+                } else {
+                    view! { <div></div> }.into_any()
+                }
+            }}
+
             <Hud game_state=game_state_hud.clone() is_running=is_running/>
 
             <GameCanvas game_state=game_state_canvas.clone() is_running=is_running/>
@@ -503,6 +522,42 @@ pub fn App() -> impl IntoView {
 
                         "↺ RESET"
                     </button>
+
+                    // Restart Tutorial Button - only show if tutorial is completed
+                    {move || {
+                        if game_state.tutorial_completed.get() {
+                            view! {
+                                <button
+                                    class="control-button tutorial-restart"
+                                    on:click={
+                                        let game_state_tutorial = game_state.clone();
+                                        move |_| {
+                                            // Clear tutorial completion from localStorage
+                                            if let Some(window) = web_sys::window() {
+                                                if let Ok(Some(storage)) = window.local_storage() {
+                                                    let _ = storage.remove_item("tutorial_completed");
+                                                }
+                                            }
+                                            // Reset game and re-enable tutorial
+                                            game_state_tutorial.tutorial_completed.set(false);
+                                            game_state_tutorial.tutorial_mode.set(true);
+                                            game_state_tutorial.auto_targeting_enabled.set(true);
+                                            game_state_tutorial.reset();
+                                            set_is_running.set(false);
+                                            set_event_feed.set(vec![
+                                                create_feed_item("Tutorial mode restarted".to_string(), FeedSeverity::Success),
+                                            ]);
+                                        }
+                                    }
+                                    title="Restart the tutorial with AI assistance"
+                                >
+                                    "🎓 RESTART TUTORIAL"
+                                </button>
+                            }.into_any()
+                        } else {
+                            view! { <div></div> }.into_any()
+                        }
+                    }}
                 </div>
 
                 <WeaponPanel game_state=game_state_weapons.clone()/>
