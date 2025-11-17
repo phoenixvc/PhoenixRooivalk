@@ -634,6 +634,30 @@ pub fn App() -> impl IntoView {
 
                         "❓ HELP"
                     </button>
+
+                    <button
+                        class="control-button"
+                        on:click=move |_| {
+                            // Toggle fullscreen on the app container
+                            if let Some(window) = web_sys::window() {
+                                if let Some(document) = window.document() {
+                                    if let Some(element) = document.query_selector(".app-container").ok().flatten() {
+                                        use wasm_bindgen::JsCast;
+                                        if let Some(html_element) = element.dyn_ref::<web_sys::HtmlElement>() {
+                                            if document.fullscreen_element().is_none() {
+                                                let _ = html_element.request_fullscreen();
+                                            } else {
+                                                let _ = document.exit_fullscreen();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    >
+
+                        "🖥️ FULLSCREEN"
+                    </button>
                 </div>
             </div>
 

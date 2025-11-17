@@ -17,16 +17,10 @@
 }
 
 .containerFull {
-  min-height: 1080px;
-  height: calc(100vh - 200px);
-  max-height: 1080px;
-  border-radius: 8px;
-}
-
-@media (min-height: 900px) {
-  .containerFull {
-    height: calc(100vh - 150px);
-  }
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
 }
 
 /* Fullscreen mode - apply to both container variants */
