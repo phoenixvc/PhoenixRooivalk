@@ -76,7 +76,6 @@ impl GameStateManager {
     #[cfg(target_arch = "wasm32")]
     fn should_enable_tutorial() -> bool {
         // Check if tutorial has been completed before
-        use wasm_bindgen::JsValue;
         if let Some(window) = web_sys::window() {
             if let Ok(Some(storage)) = window.local_storage() {
                 if let Ok(Some(completed)) = storage.get_item("tutorial_completed") {
@@ -89,7 +88,6 @@ impl GameStateManager {
 
     #[cfg(target_arch = "wasm32")]
     fn is_tutorial_completed() -> bool {
-        use wasm_bindgen::JsValue;
         if let Some(window) = web_sys::window() {
             if let Ok(Some(storage)) = window.local_storage() {
                 if let Ok(Some(completed)) = storage.get_item("tutorial_completed") {
