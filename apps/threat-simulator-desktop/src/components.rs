@@ -94,6 +94,44 @@ pub fn App() -> impl IntoView {
                         FeedSeverity::Warning,
                     ));
                 });
+
+                // Tutorial mode: gradually disable AI assistance
+                if game_state_watcher.tutorial_mode.get() {
+                    match current_level {
+                        3 => {
+                            // Reduce auto-targeting accuracy at wave 3
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "Tutorial: AI assistance reduced - take more control!"
+                                        .to_string(),
+                                    FeedSeverity::Info,
+                                ));
+                            });
+                        }
+                        5 => {
+                            // Disable auto-targeting at wave 5
+                            game_state_watcher.auto_targeting_enabled.set(false);
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "Tutorial: AI assistance disabled - you're in command!"
+                                        .to_string(),
+                                    FeedSeverity::Info,
+                                ));
+                            });
+                        }
+                        7 => {
+                            // Complete tutorial at wave 7
+                            game_state_watcher.complete_tutorial();
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "🎓 Tutorial completed! Future games will start in normal mode.".to_string(),
+                                    FeedSeverity::Success,
+                                ));
+                            });
+                        }
+                        _ => {}
+                    }
+                }
             }
         });
     }
@@ -319,6 +357,23 @@ pub fn App() -> impl IntoView {
 
                         // Integrated warning (no close button)
                         <IntegratedSimulationWarning/>
+
+                        // Tutorial mode indicator
+                        {move || {
+                            if game_state.tutorial_mode.get() && !game_state.tutorial_completed.get() {
+                                view! {
+                                    <div class="tutorial-indicator">
+                                        <div class="tutorial-icon">"🤖"</div>
+                                        <div class="tutorial-text">
+                                            <p class="tutorial-title">"AI-ASSISTED TUTORIAL MODE"</p>
+                                            <p class="tutorial-subtitle">"Auto-targeting enabled • AI assistance will reduce as you progress"</p>
+                                        </div>
+                                    </div>
+                                }.into_any()
+                            } else {
+                                view! { <div></div> }.into_any()
+                            }
+                        }}
 
                         <div class="start-description">
                             <p>"Defend your mothership against waves of hostile drones."</p>

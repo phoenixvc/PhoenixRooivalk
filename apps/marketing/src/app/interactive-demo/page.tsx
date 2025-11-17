@@ -102,36 +102,45 @@ export default function InteractiveDemoPage() {
 
       {/* System Capabilities - Hidden in fullscreen */}
       {!isFullscreen && (
-        <div className="container mx-auto px-4 py-12">
-          <div className="bg-gray-800/50 p-8 rounded-lg max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-green-400 mb-4">
+        <div className="container mx-auto px-4 py-16 mb-12">
+          <div className="bg-gradient-to-br from-gray-800/90 via-gray-900/80 to-black/70 backdrop-blur-sm border border-orange-500/20 p-10 rounded-2xl shadow-2xl shadow-orange-500/10 max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 mb-8 text-center">
               System Capabilities
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-cyan-400">
-                  🛡️ Radar Detection
-                </h3>
-                <p className="text-gray-300 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+              <div className="space-y-3 p-6 bg-cyan-500/5 border border-cyan-500/20 rounded-xl hover:bg-cyan-500/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="text-3xl">🛡️</div>
+                  <h3 className="text-xl font-bold text-cyan-400">
+                    Radar Detection
+                  </h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
                   Advanced radar systems detect and track multiple aerial
                   threats simultaneously with sub-meter precision and real-time
                   updates.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-yellow-400">
-                  📡 Electronic Warfare
-                </h3>
-                <p className="text-gray-300 text-sm">
+              <div className="space-y-3 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-xl hover:bg-yellow-500/10 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/20 hover:scale-105">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="text-3xl">📡</div>
+                  <h3 className="text-xl font-bold text-yellow-400">
+                    Electronic Warfare
+                  </h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
                   Sophisticated jamming technology disrupts enemy communications
                   and navigation systems, creating electronic safe zones.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-fuchsia-400">
-                  🚀 Kinetic Interceptors
-                </h3>
-                <p className="text-gray-300 text-sm">
+              <div className="space-y-3 p-6 bg-fuchsia-500/5 border border-fuchsia-500/20 rounded-xl hover:bg-fuchsia-500/10 transition-all duration-300 hover:shadow-lg hover:shadow-fuchsia-500/20 hover:scale-105">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="text-3xl">🚀</div>
+                  <h3 className="text-xl font-bold text-fuchsia-400">
+                    Kinetic Interceptors
+                  </h3>
+                </div>
+                <p className="text-gray-300 leading-relaxed">
                   Precision-guided effectors neutralize threats with minimal
                   collateral damage using advanced targeting algorithms.
                 </p>

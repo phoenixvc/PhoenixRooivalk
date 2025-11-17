@@ -39,6 +39,10 @@ pub struct GameStateManager {
 
     // Auto-targeting
     pub auto_targeting_enabled: RwSignal<bool>,
+
+    // Tutorial mode - AI assistance that gradually reduces
+    pub tutorial_mode: RwSignal<bool>,
+    pub tutorial_completed: RwSignal<bool>,
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -62,7 +66,50 @@ impl GameStateManager {
             mothership_health: RwSignal::new(100.0),
             power_ups: RwSignal::new(Vec::new()),
 
-            auto_targeting_enabled: RwSignal::new(false),
+            // Check localStorage for tutorial completion
+            auto_targeting_enabled: RwSignal::new(Self::should_enable_tutorial()),
+            tutorial_mode: RwSignal::new(Self::should_enable_tutorial()),
+            tutorial_completed: RwSignal::new(Self::is_tutorial_completed()),
+        }
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn should_enable_tutorial() -> bool {
+        // Check if tutorial has been completed before
+        use wasm_bindgen::JsValue;
+        if let Some(window) = web_sys::window() {
+            if let Ok(Some(storage)) = window.local_storage() {
+                if let Ok(Some(completed)) = storage.get_item("tutorial_completed") {
+                    return completed != "true";
+                }
+            }
+        }
+        true // Enable by default for first-time users
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn is_tutorial_completed() -> bool {
+        use wasm_bindgen::JsValue;
+        if let Some(window) = web_sys::window() {
+            if let Ok(Some(storage)) = window.local_storage() {
+                if let Ok(Some(completed)) = storage.get_item("tutorial_completed") {
+                    return completed == "true";
+                }
+            }
+        }
+        false
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    pub fn complete_tutorial(&self) {
+        self.tutorial_completed.set(true);
+        self.tutorial_mode.set(false);
+
+        // Save to localStorage
+        if let Some(window) = web_sys::window() {
+            if let Ok(Some(storage)) = window.local_storage() {
+                let _ = storage.set_item("tutorial_completed", "true");
+            }
         }
     }
 
@@ -111,7 +158,15 @@ impl GameStateManager {
         self.game_time.set(0.0);
         self.mothership_health.set(100.0);
         self.power_ups.set(Vec::new());
-        self.auto_targeting_enabled.set(false);
+
+        // Keep tutorial mode based on completion status
+        if self.tutorial_completed.get() {
+            self.auto_targeting_enabled.set(false);
+            self.tutorial_mode.set(false);
+        } else {
+            self.auto_targeting_enabled.set(true);
+            self.tutorial_mode.set(true);
+        }
     }
 
     pub fn add_threat(&self, threat: Threat) {

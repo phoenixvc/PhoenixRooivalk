@@ -304,6 +304,57 @@ body {
   color: #00ffff;
 }
 
+/* Tutorial Mode Indicator */
+.tutorial-indicator {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(33, 150, 243, 0.15));
+  border: 2px solid rgba(76, 175, 80, 0.4);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  gap: 16px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+  animation: tutorial-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tutorial-pulse {
+  0%, 100% {
+    border-color: rgba(76, 175, 80, 0.4);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+  }
+  50% {
+    border-color: rgba(76, 175, 80, 0.6);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+  }
+}
+
+.tutorial-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6));
+}
+
+.tutorial-text {
+  flex: 1;
+  text-align: left;
+}
+
+.tutorial-title {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.tutorial-subtitle {
+  font-size: 0.85rem;
+  color: #b3e5fc;
+  line-height: 1.4;
+}
+
 /* Integrated Warning (within start screen) */
 .integrated-warning {
   display: flex;
