@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./WasmThreatSimulator.module.css";
 
 interface WasmThreatSimulatorProps {
@@ -33,6 +33,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
   const handleIframeLoad = () => {
     // Hide the loading overlay immediately when iframe loads
     // The WASM app has its own loading indicator
+    console.log("Iframe onLoad fired - hiding React loading overlay");
     setIsLoading(false);
     // Check if iframe loaded successfully
     try {
@@ -50,6 +51,19 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
     setError("Failed to load the threat simulator");
     setIsLoading(false);
   };
+
+  // Ensure loading state is cleared after a maximum timeout
+  // This prevents the loading indicator from staying stuck
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        console.log("Loading timeout reached - forcing loading state to false");
+        setIsLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
 
   return (
     <div
