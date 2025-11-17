@@ -524,13 +524,15 @@ pub fn App() -> impl IntoView {
                     </button>
 
                     // Restart Tutorial Button - only show if tutorial is completed
-                    {move || {
-                        if game_state.tutorial_completed.get() {
+                    {
+                        let game_state_check = game_state.clone();
+                        move || {
+                        if game_state_check.tutorial_completed.get() {
+                            let game_state_tutorial = game_state_check.clone();
                             view! {
                                 <button
                                     class="control-button tutorial-restart"
                                     on:click={
-                                        let game_state_tutorial = game_state.clone();
                                         move |_| {
                                             // Clear tutorial completion from localStorage
                                             if let Some(window) = web_sys::window() {
