@@ -17,60 +17,98 @@
 }
 
 .containerFull {
-  height: 800px;
-  min-height: 800px;
-  max-height: 800px;
+  min-height: 1080px;
+  height: calc(100vh - 200px);
+  max-height: 1080px;
   border-radius: 8px;
+}
+
+@media (min-height: 900px) {
+  .containerFull {
+    height: calc(100vh - 150px);
+  }
+}
+
+/* Fullscreen mode */
+.containerFull:fullscreen,
+.containerFull:-webkit-full-screen,
+.containerFull:-moz-full-screen,
+.containerFull:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border-radius: 0;
 }
 
 .loadingOverlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 14, 26, 0.95);
   color: #00ff00;
   font-family: monospace;
   z-index: 100;
+  pointer-events: none;
 }
 
 .loadingText {
   font-size: 24px;
   margin-bottom: 20px;
   animation: pulse 1.5s ease-in-out infinite;
+  text-align: center;
 }
 
 .loadingSubtext {
   font-size: 14px;
   color: #0f0;
+  text-align: center;
 }
 
 .errorOverlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 14, 26, 0.95);
   color: #ff0000;
   font-family: monospace;
-  max-width: 80%;
+  max-width: 100%;
+  padding: 2rem;
   z-index: 100;
+}
+
+.errorContent {
+  text-align: center;
+  max-width: 80%;
 }
 
 .errorTitle {
   font-size: 24px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .errorMessage {
   font-size: 14px;
   color: #faa;
+  text-align: center;
 }
 
 .errorHint {
   font-size: 12px;
   color: #888;
   margin-top: 10px;
+  text-align: center;
 }
 
 .wasmMount {

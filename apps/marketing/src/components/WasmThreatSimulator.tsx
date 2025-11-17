@@ -22,7 +22,6 @@ interface WasmThreatSimulatorProps {
  * - No CSS conflicts with the parent page
  */
 export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
-  autoFullscreen = false,
   isTeaser = false,
   className = "",
 }) => {
@@ -38,7 +37,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
       if (iframeRef.current?.contentWindow) {
         console.log("WASM iframe loaded successfully");
       }
-    } catch (err) {
+    } catch {
       console.warn(
         "Cannot access iframe content (expected due to same-origin policy)",
       );
@@ -62,18 +61,26 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
           aria-live="polite"
           aria-label="Loading threat simulator"
         >
-          <div className={styles.loadingText}>
-            ⚡ Loading Threat Simulator...
+          <div>
+            <div className={styles.loadingText}>
+              ⚡ Loading Threat Simulator...
+            </div>
+            <div className={styles.loadingSubtext}>
+              Initializing WASM Runtime
+            </div>
           </div>
-          <div className={styles.loadingSubtext}>Initializing WASM Runtime</div>
         </div>
       )}
 
       {error && (
         <div className={styles.errorOverlay}>
-          <div className={styles.errorTitle}>⚠️ Error Loading Simulator</div>
-          <div className={styles.errorMessage}>{error}</div>
-          <div className={styles.errorHint}>Please try refreshing the page</div>
+          <div className={styles.errorContent}>
+            <div className={styles.errorTitle}>⚠️ Error Loading Simulator</div>
+            <div className={styles.errorMessage}>{error}</div>
+            <div className={styles.errorHint}>
+              Please try refreshing the page
+            </div>
+          </div>
         </div>
       )}
 
