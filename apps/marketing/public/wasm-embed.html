@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phoenix Rooivalk Threat Simulator</title>
+    <style>
+      /* Reset to ensure fullscreen rendering */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0a0e1a;
+      }
+
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <!-- WASM CSS will be loaded dynamically -->
+    <link id="wasm-styles" rel="stylesheet" href="" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      // Load WASM manifest to get correct file names
+      async function initWasm() {
+        try {
+          // Load manifest
+          const manifest = await fetch("/wasm/manifest.json", {
+            cache: "no-store",
+          })
+            .then((r) => (r.ok ? r.json() : null))
+            .catch(() => null);
+
+          const pick = (ext, fallback) => {
+            if (manifest && Array.isArray(manifest.files)) {
+              const match = manifest.files.find((f) => f.endsWith(ext));
+              if (match) return `/wasm/${match}`;
+            }
+            return fallback || null;
+          };
+
+          const jsUrl = pick(
+            ".js",
+            "/wasm/threat-simulator-desktop-43e4df905ff42f76.js",
+          );
+          const wasmUrl = pick(
+            ".wasm",
+            "/wasm/threat-simulator-desktop-43e4df905ff42f76_bg.wasm",
+          );
+          const cssUrl = pick(".css");
+
+          // Load CSS
+          if (cssUrl) {
+            document.getElementById("wasm-styles").href = cssUrl;
+          }
+
+          // Validate required assets
+          if (!jsUrl || !wasmUrl) {
+            throw new Error("Required WASM assets (JS or WASM) not found");
+          }
+
+          // Load and initialize WASM
+          const mod = await import(/* webpackIgnore: true */ jsUrl);
+          const init = mod.default || mod.__wbg_init;
+          if (typeof init !== "function") {
+            throw new Error("Invalid WASM module: missing default init");
+          }
+          await init({ module_or_path: wasmUrl });
+
+          console.log("WASM initialized successfully");
+        } catch (err) {
+          console.error("Failed to initialize WASM:", err);
+          document.body.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ff0000; font-family: monospace; text-align: center; padding: 2rem;">
+            <div>
+              <div style="font-size: 24px; margin-bottom: 20px;">⚠️ Error Loading Simulator</div>
+              <div style="font-size: 14px; color: #faa;">${err.message}</div>
+              <div style="font-size: 12px; color: #888; margin-top: 10px;">Please try refreshing the page</div>
+            </div>
+          </div>
+        `;
+        }
+      }
+
+      // Initialize on page load
+      initWasm();
+    </script>
+  </body>
+</html>
