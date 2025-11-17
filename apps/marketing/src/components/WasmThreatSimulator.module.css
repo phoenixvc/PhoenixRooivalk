@@ -29,16 +29,38 @@
   }
 }
 
-/* Fullscreen mode */
-.containerFull:fullscreen,
-.containerFull:-webkit-full-screen,
-.containerFull:-moz-full-screen,
-.containerFull:-ms-fullscreen {
+/* Fullscreen mode - apply to both container variants */
+.container:fullscreen,
+.container:-webkit-full-screen,
+.container:-moz-full-screen,
+.container:-ms-fullscreen {
   width: 100vw !important;
   height: 100vh !important;
   max-width: 100vw !important;
   max-height: 100vh !important;
+  min-height: 100vh !important;
   border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Also target the specific container classes */
+.containerFull:fullscreen,
+.containerFull:-webkit-full-screen,
+.containerFull:-moz-full-screen,
+.containerFull:-ms-fullscreen,
+.containerTeaser:fullscreen,
+.containerTeaser:-webkit-full-screen,
+.containerTeaser:-moz-full-screen,
+.containerTeaser:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  min-height: 100vh !important;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .loadingOverlay {

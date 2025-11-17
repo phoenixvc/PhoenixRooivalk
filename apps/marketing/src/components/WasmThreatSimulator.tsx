@@ -31,6 +31,8 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const handleIframeLoad = () => {
+    // Hide the loading overlay immediately when iframe loads
+    // The WASM app has its own loading indicator
     setIsLoading(false);
     // Check if iframe loaded successfully
     try {

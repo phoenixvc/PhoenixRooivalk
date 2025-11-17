@@ -38,14 +38,14 @@ pub fn App() -> impl IntoView {
 
     // Reactive signals for UI state
     let (show_help, set_show_help) = signal(false);
-    let (show_stats, set_show_stats) = signal(false);
-    let (show_energy, set_show_energy) = signal(false);
-    let (show_drones, set_show_drones) = signal(false);
+    let (show_stats, set_show_stats) = signal(true); // Visible by default
+    let (show_energy, set_show_energy) = signal(true); // Visible by default
+    let (show_drones, set_show_drones) = signal(true); // Visible by default
     let (_show_warning, _set_show_warning) = signal(true);
-    let (show_events, set_show_events) = signal(false);
+    let (show_events, set_show_events) = signal(true); // Visible by default
     let (show_research, set_show_research) = signal(false);
     let (show_token_store, set_show_token_store) = signal(false);
-    let (show_synergies, set_show_synergies) = signal(false); // Hide by default
+    let (show_synergies, set_show_synergies) = signal(true); // Visible by default
     let (is_running, set_is_running) = signal(false); // Don't start until user clicks Start
     let (show_start_screen, set_show_start_screen) = signal(false); // Show after loading
     let (achievement_message, set_achievement_message) = signal(None::<String>);
