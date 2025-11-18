@@ -82,6 +82,11 @@ jobs:
           rm -rf apps/marketing/.next
           rm -rf apps/marketing/out
 
+      - name: Build WASM (threat-simulator-desktop)
+        run: |
+          cd apps/threat-simulator-desktop
+          trunk build --release
+
       - name: Build (marketing)
         run: pnpm --filter marketing build
 
@@ -169,6 +174,11 @@ jobs:
         run: |
           rm -rf apps/marketing/.next
           rm -rf apps/marketing/out
+
+      - name: Build WASM (threat-simulator-desktop)
+        run: |
+          cd apps/threat-simulator-desktop
+          trunk build --release
 
       - name: Build (marketing)
         run: pnpm --filter marketing build

@@ -34,6 +34,16 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
+      - name: Setup Rust (for threat-simulator-desktop WASM dependencies)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install Trunk (for WASM builds)
+        uses: jetli/trunk-action@v0.5.1
+        with:
+          version: "latest"
+
       - name: Generate lockfile if missing
         run: |
           if [ ! -f pnpm-lock.yaml ]; then
@@ -63,6 +73,11 @@ jobs:
 
       - name: TypeScript check
         run: pnpm typecheck
+
+      - name: Build WASM (threat-simulator-desktop)
+        run: |
+          cd apps/threat-simulator-desktop
+          trunk build --release
 
       - name: Build
         run: pnpm build
