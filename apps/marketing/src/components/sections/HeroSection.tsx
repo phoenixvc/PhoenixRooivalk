@@ -8,7 +8,7 @@ export const HeroSection: React.FC = () => {
       <div className={styles.container}>
         {/* Development status indicators */}
         <div className={styles.statusBadges}>
-          <span className="pill pill--concept">Foundation Phase (FY26)</span>
+          <span className="pill pill--concept">Phase 1: Pneumatic Net Launcher</span>
           <span className="pill pill--partners">
             SkySnare™ Consumer | AeroNet™ Enterprise
           </span>
@@ -53,20 +53,20 @@ export const HeroSection: React.FC = () => {
         <div className={styles.metricsCard}>
           <div className={styles.metricsGrid}>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>$5.9B</div>
-              <div className={styles.metricLabel}>Combined TAM</div>
+              <div className={styles.metricValue}>Phase 1</div>
+              <div className={styles.metricLabel}>Pneumatic Net Launcher</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>$50M</div>
-              <div className={styles.metricLabel}>FY30 Target Revenue</div>
-            </div>
-            <div className={styles.metric}>
-              <div className={styles.metricValue}>30%</div>
-              <div className={styles.metricLabel}>EBITDA Margin (FY30)</div>
+              <div className={styles.metricValue}>2026-2027</div>
+              <div className={styles.metricLabel}>Launch + Testing</div>
             </div>
             <div className={styles.metric}>
               <div className={styles.metricValue}>2 Brands</div>
               <div className={styles.metricLabel}>SkySnare™ + AeroNet™</div>
+            </div>
+            <div className={styles.metric}>
+              <div className={styles.metricValue}>Future Phases</div>
+              <div className={styles.metricLabel}>Advanced Detection</div>
             </div>
           </div>
         </div>
@@ -134,37 +134,36 @@ export const HeroSection: React.FC = () => {
           <div className="card card--elevated">
             <div className={styles.conceptTitle}>
               <h3 className={styles.conceptTitleText}>
-                5-Year Strategic Roadmap (2025-2030)
+                Our Development Path (2025-2030)
               </h3>
               <p className={styles.conceptDescription}>
-                From consumer validation to enterprise leadership
+                Starting with proven pneumatic technology, expanding to advanced systems
               </p>
             </div>
 
             {/* Visual concept representation */}
             <div className={styles.conceptMetrics}>
               <div className={styles.conceptMetric}>
-                <span className={styles.conceptMetricLabel}>FY26 Revenue</span>
-                <span className={styles.conceptMetricValue}>$1.8M</span>
+                <span className={styles.conceptMetricLabel}>Phase 1 (2026)</span>
+                <span className={styles.conceptMetricValue}>Net Launcher</span>
               </div>
               <div className={styles.conceptMetric}>
                 <span className={styles.conceptMetricLabel}>
-                  FY30 Revenue Target
+                  Phase 2 (2027)
                 </span>
-                <span className={styles.conceptMetricValue}>$50M</span>
+                <span className={styles.conceptMetricValue}>AI Detection</span>
               </div>
               <div className={styles.conceptMetric}>
                 <span className={styles.conceptMetricLabel}>
-                  Capital Requirement
+                  Phase 3+ (2028-30)
                 </span>
-                <span className={styles.conceptMetricValue}>$41.5M</span>
+                <span className={styles.conceptMetricValue}>Full Platform</span>
               </div>
             </div>
 
             <div className={styles.disclaimer}>
               <p className={styles.disclaimerText}>
-                💡 Targets based on market research and strategic milestones.
-                Performance subject to execution and market conditions.
+                💡 Phased approach reduces risk and validates technology at each stage
               </p>
             </div>
           </div>
