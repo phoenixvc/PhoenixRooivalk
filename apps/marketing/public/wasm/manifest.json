@@ -1,10 +1,10 @@
 {
-  "syncedAt": "2025-10-09T00:43:41.504Z",
+  "syncedAt": "2025-11-18T12:23:38.792Z",
   "files": [
-    "styles-cbc35ef5ef53864a.css",
-    "threat-simulator-desktop-8ac2774e309dbb7f.js",
-    "threat-simulator-desktop-8ac2774e309dbb7f_bg.wasm"
+    "styles-daeb6e84e749a149.css",
+    "threat-simulator-desktop-9be239a1c34586f5.js",
+    "threat-simulator-desktop-9be239a1c34586f5_bg.wasm"
   ],
-  "sourceDir": "C:\\Users\\smitj\\repos\\PhoenixRooivalk\\apps\\threat-simulator-desktop\\dist",
-  "targetDir": "C:\\Users\\smitj\\repos\\PhoenixRooivalk\\apps\\marketing\\public\\wasm"
+  "sourceDir": "/home/runner/work/PhoenixRooivalk/PhoenixRooivalk/apps/threat-simulator-desktop/dist",
+  "targetDir": "/home/runner/work/PhoenixRooivalk/PhoenixRooivalk/apps/marketing/public/wasm"
 }
