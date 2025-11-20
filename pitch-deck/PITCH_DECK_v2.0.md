@@ -1,4 +1,5 @@
 # PhoenixRooivalk Investor Pitch Deck
+
 ## Dual-Brand Strategy: SkySnare™ Consumer + AeroNet™ Enterprise
 
 **Version:** 2.0  
@@ -10,19 +11,24 @@
 ## SLIDE 1: TITLE / INTRODUCTION
 
 # PhoenixRooivalk
+
 ## Transforming Pneumatic Platform Technology into World-Leading Brands
 
 ### Dual-Brand Strategy
+
 🎯 **SkySnare™** - Premium Sports & Training Equipment  
 🛡️ **AeroNet™** - AI-Enabled Infrastructure Security
 
-**Tagline:** *Proving Safety at Consumer Scale, Delivering Security at Enterprise Scale*
+**Tagline:** _Proving Safety at Consumer Scale, Delivering Security at
+Enterprise Scale_
 
 **Contact:**
+
 - **Jurie Smit**, Co-Founder & CTO | jurie@phoenixvc.tech | +27 (069) 140-6835
 - **Martyn Redelinghuys**, Co-Founder & CEO | martyn@phoenixvc.tech
 
 **Websites:**
+
 - Consumer: www.skysnare.com
 - Enterprise: www.aeronet-security.com
 - Corporate: phoenixrooivalk.netlify.app
@@ -34,12 +40,14 @@
 # The Convergence of Three Critical Problems
 
 ### Problem 1: Consumer Sports Safety Gap
+
 - **250,000+ sports injuries annually** require better training equipment
 - Premium sports market demands **safety-certified, reliable devices**
 - Existing pneumatic training equipment lacks **modern safety standards**
 - Market needs **trackable, data-driven training tools**
 
 ### Problem 2: Enterprise Drone Threat Acceleration
+
 - **Ukraine loses 10,000+ drones monthly** to jamming (proven operational need)
 - **$6B+ in recent defense contracts** including:
   - Raytheon's **$5.04B Coyote interceptor** (through 2033)
@@ -50,12 +58,14 @@
 - Cannot operate in **GPS-denied/RF-jammed** environments
 
 ### Problem 3: Compliance & Insurance Crisis
+
 - Critical infrastructure operators face **rising insurance costs**
 - **Regulatory requirements** demand automated audit trails
 - **Manual logging systems** are error-prone and inadmissible in court
 - **No AI-enabled compliance** solutions exist for drone defense
 
-**The Gap:** No company bridges consumer safety validation with enterprise defense technology.
+**The Gap:** No company bridges consumer safety validation with enterprise
+defense technology.
 
 ---
 
@@ -64,18 +74,25 @@
 # The PhoenixRooivalk Dual-Brand Strategy
 
 ### Strategic Vision
-**Prove reliability and safety at consumer scale (SkySnare™), then apply that track record to high-value enterprise markets (AeroNet™) that demand compliance, automation, and measurable risk reduction.**
+
+**Prove reliability and safety at consumer scale (SkySnare™), then apply that
+track record to high-value enterprise markets (AeroNet™) that demand
+compliance, automation, and measurable risk reduction.**
 
 ### SkySnare™ Consumer
+
 Safety-certified pneumatic sports training devices.
+
 - 🏅 CPSC Safety Certified
 - 📊 Performance Tracking
 - FY26: 4,500 units | FY30: 75,000 units
 
 ### AeroNet™ Enterprise
+
 AI-enabled, compliance-focused counter-drone systems.
 
 **Revolutionary Technology:**
+
 - 🤖 Sub-200ms response (25-40x faster)
 - ⛓️ Blockchain evidence (Solana: 65,000 TPS)
 - �� 99.5%+ accuracy, 5km+ range
@@ -88,20 +105,26 @@ AI-enabled, compliance-focused counter-drone systems.
 # Live Demonstrations
 
 ### 1. Marketing Website
+
 **phoenixrooivalk.netlify.app**
+
 - Interactive threat detection visualization
 - ROI calculator
 - Compliance checker
 
 ### 2. Threat Simulator Desktop
+
 **Tauri + Leptos (Rust/WASM)**
+
 - Real-time drone threat simulation
 - AI detection visualization (YOLOv9)
 - Blockchain evidence demonstration
 - 10-100x faster than JavaScript
 
 ### 3. Documentation Site
+
 **docs-phoenixrooivalk.netlify.app**
+
 - Technical architecture
 - Integration guides
 - Compliance frameworks
@@ -112,15 +135,16 @@ AI-enabled, compliance-focused counter-drone systems.
 
 # 5-Year Trajectory: $1.8M → $50M
 
-| Year | Revenue | EBITDA | Margin | Milestones |
-|------|---------|--------|--------|------------|
-| **FY26** | $1.8M | -$0.5M | -27% | Certification complete |
-| **FY27** | $5.0M | $1.2M | 24% | FAA waiver, 6 pilots |
-| **FY28** | $18M | $2.7M | 15% | Multi-market scaling |
-| **FY29** | $32M | $8M | 25% | AeroNet AI 2.0 |
-| **FY30** | $50M | $15M | 30% | Exit readiness |
+| Year     | Revenue | EBITDA | Margin | Milestones             |
+| -------- | ------- | ------ | ------ | ---------------------- |
+| **FY26** | $1.8M   | -$0.5M | -27%   | Certification complete |
+| **FY27** | $5.0M   | $1.2M  | 24%    | FAA waiver, 6 pilots   |
+| **FY28** | $18M    | $2.7M  | 15%    | Multi-market scaling   |
+| **FY29** | $32M    | $8M    | 25%    | AeroNet AI 2.0         |
+| **FY30** | $50M    | $15M   | 30%    | Exit readiness         |
 
 ### Revenue Mix
+
 - FY26: 80% Consumer / 20% Enterprise
 - FY30: 50% Consumer / 50% Enterprise
 
@@ -131,18 +155,23 @@ AI-enabled, compliance-focused counter-drone systems.
 # Combined TAM: $5.9B - Defense Upside $15-20B
 
 ### SkySnare™: $1.68B (8.2% CAGR)
+
 Premium sports & training equipment
 
 ### AeroNet™: $4.2B (47% CAGR)
+
 Commercial counter-drone & infrastructure
 
 ### Defense Market: $15-20B Additional
+
 **Recent Evidence:**
+
 - Raytheon Coyote: $5.04B (single contract)
 - Pentagon Replicator: $500M
 - Total recent awards: $6B+
 
 **Market Clarification:**
+
 - Conservative: $4.2B (commercial/infrastructure)
 - Defense: $15-20B (military contracts)
 - **Our Focus:** Commercial first, defense expansion FY28+
@@ -157,29 +186,35 @@ Commercial counter-drone & infrastructure
 
 **Jurie Smit** - CTO  
 🔗 [linkedin.com/in/juriesmit](https://linkedin.com/in/juriesmit/)
+
 - 15+ years systems engineering & AI
 - B.Eng (Stellenbosch), B.Com (UNISA)
 - Senior Developer at Sygnia
 
 **Martyn Redelinghuys** - CEO  
 🔗 [linkedin.com/in/martynrede](https://linkedin.com/in/martynrede/)
+
 - 20+ years defense project management
 - MBA (GIBS), B.Eng (Stellenbosch)
 - Executive PM at Sasol (R500M+ portfolio)
 
 **Pieter Lagrange** - Strategic Advisor  
 🔗 [linkedin.com/in/pieterlagrange](https://linkedin.com/in/pieterlagrange/)
+
 - Go-to-market strategy & BD
 
 **Eben Mare** - Technical Advisor  
 🔗 [linkedin.com/in/ebenmare](https://linkedin.com/in/ebenmare/)
+
 - Systems integration & hardware
 
 **Chanelle Fellinger** - Operations  
 🔗 [linkedin.com/in/chanelle-fellinger](https://linkedin.com/in/chanelle-fellinger/)
+
 - Regulatory compliance & QA
 
 ### Strategic Partnerships
+
 - CSIR, Paramount Group, Universities (Wits, UCT, Stellenbosch)
 
 ---
@@ -189,25 +224,33 @@ Commercial counter-drone & infrastructure
 # Risk Management (SWOT - WOT)
 
 ### Weaknesses
+
 **W1: Early-stage, limited track record**
+
 - Mitigation: Consumer validation first, team's 35+ years experience
 
 **W2: Capital constraints**
+
 - Mitigation: Phased funding, government grants, pre-sales
 
 ### Opportunities
+
 **O1: Regulatory tailwinds** (Counter-UAS Authority Act 2026)  
 **O2: Technology convergence** (Edge AI, blockchain adoption)  
 **O3: Market expansion** (BRICS, critical infrastructure)
 
 ### Threats
+
 **T1: Competitive response**
+
 - Mitigation: 2 patents pending, 18-24 month lead
 
 **T2: Certification delays**
+
 - Mitigation: 2-month buffer, parallel tracks
 
 **T3: Technology underperformance**
+
 - Mitigation: Combat-proven components, 95% lab validation
 
 ---
@@ -217,26 +260,31 @@ Commercial counter-drone & infrastructure
 # Capital Allocation
 
 ### Series A: $1.5M (Q1 2026)
-| Category | Amount | % |
-|----------|--------|---|
-| R&D & Prototype | $500K | 33% |
-| Manufacturing | $350K | 23% |
-| Marketing & Sales | $300K | 20% |
-| Team Expansion | $200K | 13% |
-| Working Capital | $150K | 10% |
+
+| Category          | Amount | %   |
+| ----------------- | ------ | --- |
+| R&D & Prototype   | $500K  | 33% |
+| Manufacturing     | $350K  | 23% |
+| Marketing & Sales | $300K  | 20% |
+| Team Expansion    | $200K  | 13% |
+| Working Capital   | $150K  | 10% |
 
 **Milestones:**
+
 - May 2026: CPSC certification
 - Oct 2026: 4,500 units sold
 - Q4 2026: AeroNet™ prototype 80% complete
 
 ### Series B: $5M (Q2 2027)
+
 Enterprise scale, FAA waiver, 6-8 pilots
 
 ### Series C: $15M (Q4 2028)
+
 International expansion, AI 2.0
 
 ### Growth: $20M (Q2 2030)
+
 Exit preparation, global dominance
 
 **Total Capital: $41.5M**
@@ -248,32 +296,38 @@ Exit preparation, global dominance
 # 18-Month Roadmap & 5-Year Vision
 
 ### Q1 2026: Foundation
+
 - Series A close: $1.5M
 - Team expansion (4 hires)
 - CPSC certification process
 
 ### Q2 2026: Consumer Launch
+
 - SkySnare™ D2C launch
 - 1,000 units shipped
 - Manufacturing at scale
 
 ### Q3 2026: Validation
+
 - 3,000 additional units
 - AeroNet™ prototype 80% complete
 - First enterprise LOI
 
 ### Q4 2026: Enterprise Prep
+
 - FAA waiver submission
 - Series B fundraising
 - FY26 target: $1.8M revenue
 
 ### 2027-2030: Scale & Exit
+
 - **2027:** $5M revenue, first pilots
 - **2028:** $18M revenue, multi-market
 - **2029:** $32M revenue, AI 2.0
 - **2030:** $50M revenue, exit prep
 
 ### Exit Options
+
 - Consumer: $150-200M
 - Enterprise: $250-300M
 - Combined: $350-400M
@@ -286,6 +340,7 @@ Exit preparation, global dominance
 # The Opportunity
 
 ### Why PhoenixRooivalk?
+
 ✅ Dual-brand strategy reduces risk  
 ✅ $5.9B TAM + $15-20B defense upside  
 ✅ Only blockchain-enabled C-UAS  
@@ -293,12 +348,14 @@ Exit preparation, global dominance
 ✅ World-class team, clear path to $50M
 
 ### Series A: $1.5M
+
 - **Min Investment:** $50K
 - **Valuation:** $7M pre-money
 - **Returns:** 8-10x by exit
 - **Timeline:** 8-10 weeks to close
 
 ### Next Steps
+
 1. Technical demo & team meeting
 2. Due diligence & data room
 3. Term sheet negotiation

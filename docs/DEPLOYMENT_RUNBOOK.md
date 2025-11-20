@@ -2,7 +2,8 @@
 
 ## Overview
 
-This runbook describes the step-by-step process for deploying Phoenix Rooivalk applications:
+This runbook describes the step-by-step process for deploying Phoenix Rooivalk
+applications:
 
 - Marketing (Next.js) → Netlify
 - Documentation (Docusaurus) → Netlify
@@ -49,11 +50,11 @@ apps/marketing/out
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_API_URL` | Public API endpoint |
+| Variable               | Description            |
+| ---------------------- | ---------------------- |
+| `NEXT_PUBLIC_API_URL`  | Public API endpoint    |
 | `NEXT_PUBLIC_DOCS_URL` | Documentation site URL |
-| `NEXT_PUBLIC_WASM_URL` | Path to WASM bundle |
+| `NEXT_PUBLIC_WASM_URL` | Path to WASM bundle    |
 
 ### Manual Deployment Steps
 
@@ -95,10 +96,10 @@ apps/docs/build
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
+| Variable        | Description                |
+| --------------- | -------------------------- |
 | `MARKETING_URL` | Backlink to marketing site |
-| `DOCS_BASE_URL` | Custom domain base URL |
+| `DOCS_BASE_URL` | Custom domain base URL     |
 
 ### Manual Deployment
 
@@ -152,13 +153,13 @@ CMD ["./phoenix-api"]
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | SQLite/Postgres connection string |
-| `RUST_LOG` | Logging level (info/debug) |
-| `SOLANA_RPC_URL` | RPC endpoint |
-| `ETHERLINK_RPC_URL` | RPC endpoint |
-| `PORT` | API port (default 8080) |
+| Variable            | Description                       |
+| ------------------- | --------------------------------- |
+| `DATABASE_URL`      | SQLite/Postgres connection string |
+| `RUST_LOG`          | Logging level (info/debug)        |
+| `SOLANA_RPC_URL`    | RPC endpoint                      |
+| `ETHERLINK_RPC_URL` | RPC endpoint                      |
+| `PORT`              | API port (default 8080)           |
 
 ### Kubernetes Deployment Example
 
@@ -197,10 +198,10 @@ spec:
 
 ### Post-Deployment Verification
 
-- [ ] `/health` returns 200  
-- [ ] `/metrics` accessible (Prometheus)  
-- [ ] Evidence creation endpoint functional  
-- [ ] Anchoring job enqueued  
+- [ ] `/health` returns 200
+- [ ] `/metrics` accessible (Prometheus)
+- [ ] Evidence creation endpoint functional
+- [ ] Anchoring job enqueued
 - [ ] Logs show no errors
 
 ---
@@ -255,13 +256,13 @@ WantedBy=multi-user.target
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | SQLite file path |
-| `SOLANA_RPC_URL` | RPC endpoint |
-| `ETHERLINK_RPC_URL` | RPC endpoint |
-| `ANCHOR_BATCH_SIZE` | Jobs per cycle |
-| `POLL_INTERVAL_MS` | Loop delay |
+| Variable            | Description      |
+| ------------------- | ---------------- |
+| `DATABASE_URL`      | SQLite file path |
+| `SOLANA_RPC_URL`    | RPC endpoint     |
+| `ETHERLINK_RPC_URL` | RPC endpoint     |
+| `ANCHOR_BATCH_SIZE` | Jobs per cycle   |
+| `POLL_INTERVAL_MS`  | Loop delay       |
 
 ### Post-Deployment Checklist
 
@@ -276,9 +277,9 @@ WantedBy=multi-user.target
 
 ### Marketing / Docs (Netlify)
 
-1. Open Netlify dashboard  
-2. Go to Deploys tab  
-3. Click "Rollback" on previous successful deploy  
+1. Open Netlify dashboard
+2. Go to Deploys tab
+3. Click "Rollback" on previous successful deploy
 4. Confirm and monitor logs
 
 ### API / Keeper (Kubernetes)
@@ -317,13 +318,13 @@ sudo systemctl start phoenix-api
 
 ## Monitoring & Alerts
 
-| Component | Metric | Threshold | Action |
-|-----------|--------|-----------|--------|
-| API | Error rate | >1% | Investigate logs, roll back if needed |
-| API | p95 latency | >250ms | Scale up pods, analyze slow queries |
-| Keeper | Pending jobs | >500 | Increase worker count, check blockchain RPC |
-| Keeper | Confirm pending | >100 | Investigate blockchain connectivity |
-| Marketing | Uptime | <99.9% | Check Netlify status, redeploy |
+| Component | Metric          | Threshold | Action                                      |
+| --------- | --------------- | --------- | ------------------------------------------- |
+| API       | Error rate      | >1%       | Investigate logs, roll back if needed       |
+| API       | p95 latency     | >250ms    | Scale up pods, analyze slow queries         |
+| Keeper    | Pending jobs    | >500      | Increase worker count, check blockchain RPC |
+| Keeper    | Confirm pending | >100      | Investigate blockchain connectivity         |
+| Marketing | Uptime          | <99.9%    | Check Netlify status, redeploy              |
 
 ---
 
@@ -396,13 +397,13 @@ curl -X POST https://api.phoenixrooivalk.com/api/anchor/<ID>
 
 ### Contacts
 
-| Role | Contact |
-|------|---------|
+| Role             | Contact                      |
+| ---------------- | ---------------------------- |
 | Engineering Lead | eng-lead@phoenixrooivalk.com |
-| DevOps | devops@phoenixrooivalk.com |
-| Security | security@phoenixrooivalk.com |
-| Product Owner | product@phoenixrooivalk.com |
+| DevOps           | devops@phoenixrooivalk.com   |
+| Security         | security@phoenixrooivalk.com |
+| Product Owner    | product@phoenixrooivalk.com  |
 
 ---
 
-*Last Updated: November 18, 2024*
+_Last Updated: November 18, 2024_

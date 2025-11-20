@@ -1,6 +1,7 @@
 # Troubleshooting Guide
 
-This guide provides solutions to common problems encountered when developing, deploying, or using Phoenix Rooivalk.
+This guide provides solutions to common problems encountered when developing,
+deploying, or using Phoenix Rooivalk.
 
 ## Table of Contents
 
@@ -21,6 +22,7 @@ This guide provides solutions to common problems encountered when developing, de
 ### pnpm install fails
 
 **Symptoms:**
+
 ```
 ERROR: Cannot find module '...'
 ```
@@ -28,6 +30,7 @@ ERROR: Cannot find module '...'
 **Solutions:**
 
 1. Clear cache and reinstall:
+
    ```bash
    pnpm store prune
    rm -rf node_modules
@@ -36,6 +39,7 @@ ERROR: Cannot find module '...'
    ```
 
 2. Check Node.js version:
+
    ```bash
    node --version  # Should be 18.x or 20.x
    corepack enable
@@ -49,6 +53,7 @@ ERROR: Cannot find module '...'
 ### Cargo build fails
 
 **Symptoms:**
+
 ```
 error: could not compile `phoenix-api`
 ```
@@ -56,18 +61,21 @@ error: could not compile `phoenix-api`
 **Solutions:**
 
 1. Update Rust toolchain:
+
    ```bash
    rustup update stable
    rustup default stable
    ```
 
 2. Clean build artifacts:
+
    ```bash
    cargo clean
    cargo build
    ```
 
 3. Check for missing system dependencies:
+
    ```bash
    # Ubuntu/Debian
    sudo apt-get install build-essential pkg-config libssl-dev
@@ -79,6 +87,7 @@ error: could not compile `phoenix-api`
 ### TypeScript errors after update
 
 **Symptoms:**
+
 ```
 error TS2304: Cannot find name 'X'
 ```
@@ -86,11 +95,13 @@ error TS2304: Cannot find name 'X'
 **Solutions:**
 
 1. Rebuild TypeScript declarations:
+
    ```bash
    pnpm turbo build --force
    ```
 
 2. Clear TypeScript cache:
+
    ```bash
    rm -rf apps/*/tsconfig.tsbuildinfo
    rm -rf packages/*/tsconfig.tsbuildinfo
@@ -106,6 +117,7 @@ error TS2304: Cannot find name 'X'
 ### Next.js build fails with memory error
 
 **Symptoms:**
+
 ```
 FATAL ERROR: Reached heap limit
 ```
@@ -113,6 +125,7 @@ FATAL ERROR: Reached heap limit
 **Solutions:**
 
 1. Increase Node.js memory:
+
    ```bash
    NODE_OPTIONS="--max-old-space-size=4096" pnpm build
    ```
@@ -127,12 +140,14 @@ FATAL ERROR: Reached heap limit
 ### Turborepo cache issues
 
 **Symptoms:**
+
 - Stale output
 - Build not reflecting changes
 
 **Solutions:**
 
 1. Clear Turbo cache:
+
    ```bash
    pnpm turbo build --force
    rm -rf .turbo
@@ -146,6 +161,7 @@ FATAL ERROR: Reached heap limit
 ### WASM build fails
 
 **Symptoms:**
+
 ```
 error: failed to execute `wasm-pack`
 ```
@@ -153,11 +169,13 @@ error: failed to execute `wasm-pack`
 **Solutions:**
 
 1. Install/update wasm-pack:
+
    ```bash
    cargo install wasm-pack
    ```
 
 2. Install Trunk:
+
    ```bash
    cargo install trunk
    ```
@@ -174,19 +192,22 @@ error: failed to execute `wasm-pack`
 ### API returns 500 Internal Server Error
 
 **Symptoms:**
+
 ```json
-{"error": "internal_error", "message": "..."}
+{ "error": "internal_error", "message": "..." }
 ```
 
 **Solutions:**
 
 1. Check API logs:
+
    ```bash
    # If running with cargo
    RUST_LOG=debug cargo run --manifest-path apps/api/Cargo.toml
    ```
 
 2. Verify database connection:
+
    ```bash
    ls -la *.db  # Check if database file exists
    ```
@@ -199,6 +220,7 @@ error: failed to execute `wasm-pack`
 ### React hydration mismatch
 
 **Symptoms:**
+
 ```
 Warning: Text content did not match
 ```
@@ -221,6 +243,7 @@ Warning: Text content did not match
 ### CORS errors in browser console
 
 **Symptoms:**
+
 ```
 Access to fetch at '...' has been blocked by CORS policy
 ```
@@ -228,6 +251,7 @@ Access to fetch at '...' has been blocked by CORS policy
 **Solutions:**
 
 1. Configure CORS in API:
+
    ```rust
    // apps/api/src/main.rs
    use tower_http::cors::CorsLayer;
@@ -235,7 +259,7 @@ Access to fetch at '...' has been blocked by CORS policy
    let cors = CorsLayer::new()
        .allow_origin("http://localhost:3000".parse().unwrap())
        .allow_methods(vec![Method::GET, Method::POST]);
-   
+
    let app = Router::new()
        .layer(cors);
    ```
@@ -247,8 +271,8 @@ Access to fetch at '...' has been blocked by CORS policy
      async rewrites() {
        return [
          {
-           source: '/api/:path*',
-           destination: 'http://localhost:8080/api/:path*',
+           source: "/api/:path*",
+           destination: "http://localhost:8080/api/:path*",
          },
        ];
      },
@@ -262,18 +286,21 @@ Access to fetch at '...' has been blocked by CORS policy
 ### Low FPS in threat simulator
 
 **Symptoms:**
+
 - Frame rate drops below 30 FPS
 - Stuttering animations
 
 **Solutions:**
 
 1. Reduce particle count:
+
    ```typescript
    // src/components/utils/particleSystem.ts
    MAX_PARTICLES = 500; // Reduce from 1000
    ```
 
 2. Enable requestAnimationFrame gating:
+
    ```typescript
    useEffect(() => {
      if (document.hidden) return;
@@ -289,12 +316,14 @@ Access to fetch at '...' has been blocked by CORS policy
 ### High memory usage
 
 **Symptoms:**
+
 - Browser tab crashes
 - "Out of memory" errors
 
 **Solutions:**
 
 1. Clear threat trails periodically:
+
    ```typescript
    if (threat.trail.length > 20) {
      threat.trail = threat.trail.slice(-10);
@@ -302,11 +331,11 @@ Access to fetch at '...' has been blocked by CORS policy
    ```
 
 2. Remove old threats:
+
    ```typescript
    const currentTime = Date.now();
-   threats = threats.filter(t => 
-     t.status === 'active' || 
-     currentTime - t.neutralizedAt < 10000
+   threats = threats.filter(
+     (t) => t.status === "active" || currentTime - t.neutralizedAt < 10000,
    );
    ```
 
@@ -316,18 +345,21 @@ Access to fetch at '...' has been blocked by CORS policy
 ### Slow database queries
 
 **Symptoms:**
+
 - API requests take >5s
 - Keeper service lag
 
 **Solutions:**
 
 1. Add indexes:
+
    ```sql
    CREATE INDEX idx_outbox_status ON outbox_jobs(status, next_attempt_ms);
    CREATE INDEX idx_tx_confirmed ON outbox_tx_refs(confirmed);
    ```
 
 2. Analyze query plans:
+
    ```bash
    sqlite3 keeper.db
    EXPLAIN QUERY PLAN SELECT * FROM outbox_jobs WHERE status='queued';
@@ -345,6 +377,7 @@ Access to fetch at '...' has been blocked by CORS policy
 ### SQLite database locked
 
 **Symptoms:**
+
 ```
 Error: database is locked
 ```
@@ -352,11 +385,13 @@ Error: database is locked
 **Solutions:**
 
 1. Close other connections:
+
    ```bash
    lsof keeper.db  # See what's accessing the file
    ```
 
 2. Increase busy timeout:
+
    ```rust
    // In SQLx connection code
    sqlx::sqlite::SqliteConnectOptions::new()
@@ -371,6 +406,7 @@ Error: database is locked
 ### Database corruption
 
 **Symptoms:**
+
 ```
 Error: database disk image is malformed
 ```
@@ -378,11 +414,13 @@ Error: database disk image is malformed
 **Solutions:**
 
 1. Try to recover:
+
    ```bash
    sqlite3 keeper.db ".recover" | sqlite3 keeper_recovered.db
    ```
 
 2. Restore from backup:
+
    ```bash
    cp backup/keeper_YYYYMMDD.db keeper.db
    ```
@@ -396,6 +434,7 @@ Error: database disk image is malformed
 ### Missing tables
 
 **Symptoms:**
+
 ```
 Error: no such table: outbox_jobs
 ```
@@ -403,6 +442,7 @@ Error: no such table: outbox_jobs
 **Solutions:**
 
 1. Run schema initialization:
+
    ```rust
    // In keeper service
    phoenix_keeper::ensure_schema(&pool).await?;
@@ -420,6 +460,7 @@ Error: no such table: outbox_jobs
 ### Solana RPC rate limiting
 
 **Symptoms:**
+
 ```
 Error: 429 Too Many Requests
 ```
@@ -427,11 +468,13 @@ Error: 429 Too Many Requests
 **Solutions:**
 
 1. Use paid RPC endpoint:
+
    ```bash
    export SOLANA_RPC_URL="https://your-paid-rpc.com"
    ```
 
 2. Implement exponential backoff:
+
    ```rust
    let mut retries = 0;
    while retries < 5 {
@@ -451,17 +494,20 @@ Error: 429 Too Many Requests
 ### Transaction not confirming
 
 **Symptoms:**
+
 - Transaction stuck in "pending"
 - No confirmation after 5 minutes
 
 **Solutions:**
 
 1. Check transaction status:
+
    ```bash
    solana confirm <TRANSACTION_SIGNATURE>
    ```
 
 2. Increase commitment level:
+
    ```rust
    let commitment = CommitmentConfig::finalized();
    ```
@@ -471,6 +517,7 @@ Error: 429 Too Many Requests
 ### Invalid address checksum
 
 **Symptoms:**
+
 ```
 Error: invalid checksum
 ```
@@ -478,6 +525,7 @@ Error: invalid checksum
 **Solutions:**
 
 1. Normalize address:
+
    ```rust
    use phoenix_address_validation::to_eip55_checksum;
    let normalized = to_eip55_checksum(address)?;
@@ -495,12 +543,14 @@ Error: invalid checksum
 ### WASM fails to load
 
 **Symptoms:**
+
 - Blank screen
 - Console: "failed to fetch wasm"
 
 **Solutions:**
 
 1. Check MIME type:
+
    ```nginx
    # nginx.conf
    types {
@@ -509,6 +559,7 @@ Error: invalid checksum
    ```
 
 2. Verify file exists:
+
    ```bash
    ls -la public/wasm/
    ```
@@ -518,12 +569,14 @@ Error: invalid checksum
 ### WASM renders outside container
 
 **Symptoms:**
+
 - Leptos app appears outside designated div
 - Z-index issues
 
 **Solutions:**
 
 1. Use iframe isolation (already implemented):
+
    ```tsx
    <iframe src="/wasm-embed.html" />
    ```
@@ -538,6 +591,7 @@ Error: invalid checksum
 ### WASM performance degradation
 
 **Symptoms:**
+
 - Starts fast, slows down over time
 - Memory usage increases
 
@@ -559,6 +613,7 @@ Error: invalid checksum
 ### Netlify build fails
 
 **Symptoms:**
+
 - Build error in GitHub Actions
 - Deployment never completes
 
@@ -566,6 +621,7 @@ Error: invalid checksum
 
 1. Check build logs in Actions tab
 2. Verify build command:
+
    ```toml
    # netlify.toml
    [build]
@@ -578,6 +634,7 @@ Error: invalid checksum
 ### Missing environment variables
 
 **Symptoms:**
+
 ```
 Error: NEXT_PUBLIC_API_URL is not defined
 ```
@@ -596,11 +653,13 @@ Error: NEXT_PUBLIC_API_URL is not defined
 ### 404 on deployed site
 
 **Symptoms:**
+
 - Routes work locally but 404 in production
 
 **Solutions:**
 
 1. Add `_redirects` file:
+
    ```
    /*    /index.html   200
    ```
@@ -609,7 +668,7 @@ Error: NEXT_PUBLIC_API_URL is not defined
    ```javascript
    // next.config.js
    module.exports = {
-     output: 'export',
+     output: "export",
      trailingSlash: true,
    };
    ```
@@ -621,17 +680,20 @@ Error: NEXT_PUBLIC_API_URL is not defined
 ### Tests fail intermittently
 
 **Symptoms:**
+
 - Tests pass locally but fail in CI
 - Flaky tests
 
 **Solutions:**
 
 1. Add explicit waits:
+
    ```typescript
    await waitFor(() => expect(element).toBeInTheDocument());
    ```
 
 2. Mock time-dependent code:
+
    ```typescript
    jest.useFakeTimers();
    ```
@@ -644,6 +706,7 @@ Error: NEXT_PUBLIC_API_URL is not defined
 ### Playwright tests timeout
 
 **Symptoms:**
+
 ```
 Error: Timeout 30000ms exceeded
 ```
@@ -651,6 +714,7 @@ Error: Timeout 30000ms exceeded
 **Solutions:**
 
 1. Increase timeout globally:
+
    ```typescript
    // playwright.config.ts
    export default defineConfig({
@@ -659,6 +723,7 @@ Error: Timeout 30000ms exceeded
    ```
 
 2. Wait for specific elements:
+
    ```typescript
    await page.waitForSelector('[data-testid="loaded"]');
    ```
@@ -680,6 +745,7 @@ If you can't resolve your issue:
 4. **Check documentation**: https://docs.phoenixrooivalk.com
 
 When asking for help, include:
+
 - Error message (full stack trace)
 - Steps to reproduce
 - Environment (OS, Node version, Rust version)
@@ -687,4 +753,4 @@ When asking for help, include:
 
 ---
 
-*Last Updated: November 18, 2024*
+_Last Updated: November 18, 2024_

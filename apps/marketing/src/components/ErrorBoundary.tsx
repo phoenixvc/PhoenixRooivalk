@@ -14,10 +14,10 @@ interface State {
 
 /**
  * ErrorBoundary - Catches JavaScript errors anywhere in the child component tree
- * 
+ *
  * This component implements React's error boundary pattern to gracefully handle
  * errors and display a fallback UI instead of crashing the entire application.
- * 
+ *
  * Usage:
  * ```tsx
  * <ErrorBoundary fallback={<ErrorFallback />}>
@@ -77,9 +77,10 @@ export class ErrorBoundary extends Component<Props, State> {
           <div className="error-boundary-content">
             <h2>⚠️ Something went wrong</h2>
             <p>
-              We encountered an unexpected error. Please try refreshing the page.
+              We encountered an unexpected error. Please try refreshing the
+              page.
             </p>
-            
+
             {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="error-boundary-details">
                 <summary>Error Details (Development Only)</summary>
@@ -221,9 +222,7 @@ export const WasmErrorFallback: React.FC = () => {
     <div className="wasm-error-fallback">
       <div className="wasm-error-content">
         <h2>⚠️ Simulator Initialization Failed</h2>
-        <p>
-          The threat simulator could not be loaded. This may be due to:
-        </p>
+        <p>The threat simulator could not be loaded. This may be due to:</p>
         <ul className="wasm-error-reasons">
           <li>Browser compatibility issues (WebAssembly not supported)</li>
           <li>Network connectivity problems</li>
