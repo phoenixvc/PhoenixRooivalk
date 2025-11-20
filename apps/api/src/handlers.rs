@@ -29,7 +29,7 @@ fn parse_pagination(pagination: Pagination) -> (i64, i64, i64) {
 }
 
 /// Create an error response with a given status code and error message
-fn error_response(status: StatusCode, error: impl std::fmt::Display) -> impl IntoResponse {
+fn error_response(status: StatusCode, error: impl std::fmt::Display) -> axum::response::Response {
     (
         status,
         Json(serde_json::json!({ "error": error.to_string() })),
@@ -41,7 +41,7 @@ fn error_response(status: StatusCode, error: impl std::fmt::Display) -> impl Int
 fn handle_get_by_id_response<T: Serialize>(
     result: Result<Option<T>, sqlx::Error>,
     id: String,
-) -> impl IntoResponse {
+) -> axum::response::Response {
     match result {
         Ok(Some(item)) => match serde_json::to_value(item) {
             Ok(json) => (StatusCode::OK, Json(json)).into_response(),
@@ -64,7 +64,7 @@ fn create_paginated_response<T: Serialize>(
     page: i64,
     items_per_page: i64,
     total_count: i64,
-) -> impl IntoResponse {
+) -> axum::response::Response {
     let response = serde_json::json!({
         "data": items,
         "page": page,
