@@ -15,6 +15,14 @@ This creates:
 ### Current Version
 **v2.0** - Dual-brand strategy (SkySnare™ + AeroNet™)
 
+**What's New in v2.0:**
+- ✅ Professional PPTX generation with locally installed Marp CLI
+- ✅ Visual charts for revenue growth, market size, and capital allocation
+- ✅ Specific traction dates and milestones (with exact dates)
+- ✅ Comprehensive exit strategy section with multiple scenarios
+- ✅ Enhanced financial projections with visual representations
+- ✅ 12-slide format optimized for investor presentations
+
 ### Files
 - `PITCH_DECK_v2.0.md` - Main presentation (10 slides)
 - `generate-ppt.sh` - Automation script
@@ -24,10 +32,10 @@ This creates:
 
 ### Prerequisites
 ```bash
-# Option 1: Marp (recommended for best output)
-npm install -g @marp-team/marp-cli
+# Marp CLI is now installed locally as a project dependency
+# No need for global installation
 
-# Option 2: Pandoc (alternative)
+# Optional: Pandoc for alternative generation
 brew install pandoc  # macOS
 apt-get install pandoc  # Linux
 ```
@@ -38,6 +46,8 @@ cd pitch-deck
 chmod +x generate-ppt.sh
 ./generate-ppt.sh v2.0
 ```
+
+**Note:** The script automatically uses the locally installed Marp CLI via npx. No global installation required!
 
 ## Usage
 
@@ -107,9 +117,11 @@ Edit these in markdown or post-process in PowerPoint:
 ## Troubleshooting
 
 ### "marp: command not found"
+**Solution:** The project now includes Marp CLI as a local dependency. Simply run:
 ```bash
-npm install -g @marp-team/marp-cli
+npm install
 ```
+The script will automatically use the local installation via npx.
 
 ### "pandoc: command not found"
 ```bash
