@@ -15,3 +15,8 @@ apps/marketing/public/wasm/manifest.json
 apps/threat-simulator-desktop/src-tauri/gen/
 apps/threat-simulator-desktop/src-tauri/target/
 
+# Generated pitch deck files
+pitch-deck/*.html
+pitch-deck/*.pptx
+pitch-deck/*.pdf
+
