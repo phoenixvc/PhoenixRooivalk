@@ -10,13 +10,13 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 /// Creates the appropriate Etherlink provider based on environment configuration
 fn create_etherlink_provider() -> Box<dyn AnchorProvider + Send + Sync> {
     let use_stub = match std::env::var("KEEPER_USE_STUB") {
-        Ok(val) => {
-            match val.trim().to_lowercase().as_str() {
+        Ok(value) => {
+            match value.trim().to_lowercase().as_str() {
                 "true" | "1" | "yes" | "on" => true,
                 "false" | "0" | "no" | "off" => false,
-                other => {
+                unrecognized_value => {
                     // Emit warning for unrecognized values
-                    tracing::warn!("Invalid KEEPER_USE_STUB value '{}'. Expected true/false/1/0/yes/no/on/off. Using real provider for safety.", other);
+                    tracing::warn!("Invalid KEEPER_USE_STUB value '{}'. Expected true/false/1/0/yes/no/on/off. Using real provider for safety.", unrecognized_value);
                     false // Default to false (real provider) for unrecognized values
                 }
             }
@@ -44,11 +44,11 @@ fn create_etherlink_provider() -> Box<dyn AnchorProvider + Send + Sync> {
                 );
                 Box::new(provider)
             }
-            Err(e) => {
+            Err(error) => {
                 tracing::error!(
                     endpoint = %endpoint,
                     network = %network,
-                    error = %e,
+                    error = %error,
                     "Failed to create EtherlinkProvider"
                 );
                 std::process::exit(1);
@@ -74,14 +74,14 @@ async fn main() {
 
         let listener = match tokio::net::TcpListener::bind(addr).await {
             Ok(listener) => listener,
-            Err(_e) => {
-                tracing::error!(address=%addr, error=%_e, "Failed to bind HTTP server");
+            Err(bind_error) => {
+                tracing::error!(address=%addr, error=%bind_error, "Failed to bind HTTP server");
                 std::process::exit(1);
             }
         };
 
-        if let Err(_e) = axum::serve(listener, app.into_make_service()).await {
-            tracing::error!(error=%_e, "HTTP server runtime error");
+        if let Err(serve_error) = axum::serve(listener, app.into_make_service()).await {
+            tracing::error!(error=%serve_error, "HTTP server runtime error");
             std::process::exit(1);
         }
     });
@@ -102,19 +102,19 @@ async fn main() {
             .await
         {
             Ok(pool) => {
-                if let Err(_e) = ensure_schema(&pool).await {
-                    tracing::error!(error=%_e, "schema init failed");
+                if let Err(schema_error) = ensure_schema(&pool).await {
+                    tracing::error!(error=%schema_error, "schema init failed");
                     tracing::error!("Exiting due to schema initialization failure");
                     std::process::exit(1);
                 }
 
-                let mut jp = SqliteJobProvider::new(pool.clone());
+                let mut job_provider = SqliteJobProvider::new(pool.clone());
                 let anchor = create_etherlink_provider();
 
                 // Start job processing loop
                 let job_anchor = anchor;
                 let job_handle = tokio::spawn(async move {
-                    run_job_loop(&mut jp, job_anchor.as_ref(), poll_interval).await;
+                    run_job_loop(&mut job_provider, job_anchor.as_ref(), poll_interval).await;
                 });
 
                 // Start confirmation polling loop
@@ -134,8 +134,8 @@ async fn main() {
                     }
                 }
             }
-            Err(e) => {
-                tracing::error!(error=%e, "db connect failed; keeper idle");
+            Err(connection_error) => {
+                tracing::error!(error=%connection_error, "db connect failed; keeper idle");
                 tokio::time::sleep(Duration::from_secs(10)).await;
             }
         }

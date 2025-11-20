@@ -11,13 +11,13 @@ pub async fn create_evidence_job(
         .id
         .clone()
         .unwrap_or_else(|| Uuid::new_v4().to_string());
-    let now = Utc::now().timestamp_millis();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
     let result = sqlx::query(
         "INSERT OR IGNORE INTO outbox_jobs (id, payload_sha256, status, attempts, created_ms, updated_ms) VALUES (?1, ?2, 'queued', 0, ?3, ?3)"
     )
     .bind(&id)
     .bind(&body.digest_hex)
-    .bind(now)
+    .bind(current_timestamp_ms)
     .execute(pool)
     .await?;
     Ok((id, result.rows_affected()))
@@ -64,7 +64,7 @@ pub async fn list_evidence_jobs(
     .fetch_all(pool)
     .await?;
 
-    let jobs = rows
+    let evidence_jobs = rows
         .into_iter()
         .map(|row| EvidenceOut {
             id: row.get::<String, _>(0),
@@ -76,7 +76,7 @@ pub async fn list_evidence_jobs(
         })
         .collect();
 
-    Ok((jobs, total_count))
+    Ok((evidence_jobs, total_count))
 }
 
 // Countermeasure Deployment functions
@@ -85,20 +85,20 @@ pub async fn create_countermeasure_deployment(
     deployment: &crate::models::CountermeasureDeploymentIn,
 ) -> Result<String, sqlx::Error> {
     let id = Uuid::new_v4().to_string();
-    let now = Utc::now().timestamp_millis();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
 
     sqlx::query(
         "INSERT INTO countermeasure_deployments (id, job_id, deployed_at, deployed_by, countermeasure_type, effectiveness_score, notes, created_ms, updated_ms) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)"
     )
     .bind(&id)
     .bind(&deployment.job_id)
-    .bind(now)
+    .bind(current_timestamp_ms)
     .bind(&deployment.deployed_by)
     .bind(&deployment.countermeasure_type)
     .bind(deployment.effectiveness_score)
     .bind(&deployment.notes)
-    .bind(now)
-    .bind(now)
+    .bind(current_timestamp_ms)
+    .bind(current_timestamp_ms)
     .execute(pool)
     .await?;
 
@@ -171,7 +171,7 @@ pub async fn create_signal_disruption_audit(
     audit: &crate::models::SignalDisruptionAuditIn,
 ) -> Result<String, sqlx::Error> {
     let id = Uuid::new_v4().to_string();
-    let now = Utc::now().timestamp_millis();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
 
     sqlx::query(
         "INSERT INTO signal_disruption_audit (id, target_id, event_type, event_timestamp, detected_by, severity, outcome, evidence_blob, created_ms, updated_ms) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)"
@@ -179,13 +179,13 @@ pub async fn create_signal_disruption_audit(
     .bind(&id)
     .bind(&audit.target_id)
     .bind(&audit.event_type)
-    .bind(now)
+    .bind(current_timestamp_ms)
     .bind(&audit.detected_by)
     .bind(&audit.severity)
     .bind(&audit.outcome)
     .bind(&audit.evidence_blob)
-    .bind(now)
-    .bind(now)
+    .bind(current_timestamp_ms)
+    .bind(current_timestamp_ms)
     .execute(pool)
     .await?;
 
@@ -260,7 +260,7 @@ pub async fn create_jamming_operation(
     operation: &crate::models::JammingOperationIn,
 ) -> Result<String, sqlx::Error> {
     let id = Uuid::new_v4().to_string();
-    let now = Utc::now().timestamp_millis();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
 
     sqlx::query(
         "INSERT INTO jamming_operations (id, operation_id, job_id, started_ms, target_frequency_range, power_level, success_metric, attempts, created_ms, updated_ms) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)"
@@ -268,13 +268,13 @@ pub async fn create_jamming_operation(
     .bind(&id)
     .bind(&operation.operation_id)
     .bind(&operation.job_id)
-    .bind(now)
+    .bind(current_timestamp_ms)
     .bind(&operation.target_frequency_range)
     .bind(operation.power_level)
     .bind(operation.success_metric)
     .bind(0) // attempts
-    .bind(now)
-    .bind(now)
+    .bind(current_timestamp_ms)
+    .bind(current_timestamp_ms)
     .execute(pool)
     .await?;
 
