@@ -26,12 +26,13 @@ const ThreatSimulatorDemo: React.FC = () => {
 
   // Client-only rendering flag for Next.js hydration
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Standard Next.js hydration pattern
     setIsClient(true);
   }, []);
 
-  // Demo data for component showcase - memoize to avoid Date.now() issues
+  // Demo data for component showcase - use fixed timestamp for demo
   const demoTargets: RadarTarget[] = useMemo(() => {
-    const now = Date.now();
+    const now = 1700000000000; // Fixed timestamp for demo consistency
     return [
       {
         id: "TGT-001",

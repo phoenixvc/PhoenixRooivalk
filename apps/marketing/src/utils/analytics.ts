@@ -3,6 +3,21 @@
  * Privacy-focused event tracking for conversion optimization
  */
 
+// Type declarations for analytics libraries
+declare global {
+  interface Window {
+    plausible?: (
+      eventName: string,
+      options?: { props?: Record<string, string | number | boolean> },
+    ) => void;
+    gtag?: (
+      command: string,
+      targetOrAction: string,
+      params?: Record<string, unknown>,
+    ) => void;
+  }
+}
+
 export interface AnalyticsEvent {
   name: string;
   category: "lead" | "engagement" | "download" | "navigation";
@@ -18,13 +33,13 @@ export const trackEvent = (
   props?: Record<string, string | number | boolean>,
 ): void => {
   // Plausible Analytics (privacy-focused)
-  if (typeof window !== "undefined" && (window as any).plausible) {
-    (window as any).plausible(eventName, { props });
+  if (typeof window !== "undefined" && window.plausible) {
+    window.plausible(eventName, { props });
   }
 
   // Google Analytics 4 (if implemented)
-  if (typeof window !== "undefined" && (window as any).gtag) {
-    (window as any).gtag("event", eventName, props);
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", eventName, props);
   }
 
   // Console log in development
@@ -86,14 +101,14 @@ export const trackConversion = (
  * Track page view (for SPAs)
  */
 export const trackPageView = (url: string, title?: string): void => {
-  if (typeof window !== "undefined" && (window as any).plausible) {
-    (window as any).plausible("pageview", {
+  if (typeof window !== "undefined" && window.plausible) {
+    window.plausible("pageview", {
       props: { url, title: title || document.title },
     });
   }
 
-  if (typeof window !== "undefined" && (window as any).gtag) {
-    (window as any).gtag("config", "GA_MEASUREMENT_ID", {
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("config", "GA_MEASUREMENT_ID", {
       page_path: url,
       page_title: title,
     });

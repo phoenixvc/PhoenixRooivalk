@@ -45,6 +45,7 @@ export const InfoPopover: React.FC<InfoPopoverProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Synchronizing position with DOM measurements
       updatePosition();
       const handleResize = () => updatePosition();
       const handleScroll = () => updatePosition();

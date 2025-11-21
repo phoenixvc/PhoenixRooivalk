@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import type { EvidenceRecord, BlockchainAnchor } from "@phoenix/types";
+import type { EvidenceRecord, BlockchainAnchor } from "@phoenix-rooivalk/types";
 import styles from "./EvidenceExplorer.module.css";
 
 /**
@@ -74,7 +74,9 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
         // Filter by chain client-side
         if (filters.chain && filters.chain !== "all") {
           records = records.filter((record: EvidenceRecord) =>
-            record.anchors.some((anchor) => anchor.chain === filters.chain),
+            record.anchors.some(
+              (anchor: BlockchainAnchor) => anchor.chain === filters.chain,
+            ),
           );
         }
 
@@ -102,7 +104,7 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
     record: EvidenceRecord,
   ): { label: string; color: string } => {
     const hasConfirmed = record.anchors.some(
-      (a) => a.chain === "solana" || a.chain === "etherlink",
+      (a: BlockchainAnchor) => a.chain === "solana" || a.chain === "etherlink",
     );
     const allConfirmed = record.anchors.length > 0;
 
@@ -125,7 +127,9 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
   const exportToCSV = () => {
     const csvHeader = "ID,Event Type,Timestamp,Digest,Chains\n";
     const csvRows = evidence.map((record) => {
-      const chains = record.anchors.map((a) => a.chain).join(";");
+      const chains = record.anchors
+        .map((a: BlockchainAnchor) => a.chain)
+        .join(";");
       return `"${record.id}","${record.eventType}","${record.timestamp}","${record.digest}","${chains}"`;
     });
     const csv = csvHeader + csvRows.join("\n");
@@ -152,7 +156,10 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
         <select
           value={filters.chain || "all"}
           onChange={(e) =>
-            setFilters({ ...filters, chain: e.target.value as any })
+            setFilters({
+              ...filters,
+              chain: e.target.value as "all" | "solana" | "etherlink",
+            })
           }
           className={styles.select}
           aria-label="Filter by blockchain"
@@ -165,7 +172,14 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
         <select
           value={filters.status || "all"}
           onChange={(e) =>
-            setFilters({ ...filters, status: e.target.value as any })
+            setFilters({
+              ...filters,
+              status: e.target.value as
+                | "all"
+                | "anchored"
+                | "pending"
+                | "failed",
+            })
           }
           className={styles.select}
           aria-label="Filter by status"
@@ -262,7 +276,7 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                         {new Date(record.timestamp).toLocaleString()}
                       </div>
                       <div className={styles.recordChains}>
-                        {record.anchors.map((anchor) => (
+                        {record.anchors.map((anchor: BlockchainAnchor) => (
                           <span
                             key={anchor.transactionId}
                             className={styles.chainBadge}
@@ -284,7 +298,7 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
               <div className={styles.detailsContent}>
                 <div className={styles.detailSection}>
                   <h3>Record Information</h3>
-                  <dl>
+                  <dl className={styles.dl}>
                     <dt>ID:</dt>
                     <dd className={styles.mono}>{selectedEvidence.id}</dd>
                     <dt>Event Type:</dt>
@@ -303,7 +317,7 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                   {selectedEvidence.anchors.length === 0 ? (
                     <p className={styles.noAnchors}>Not yet anchored</p>
                   ) : (
-                    selectedEvidence.anchors.map((anchor) => (
+                    selectedEvidence.anchors.map((anchor: BlockchainAnchor) => (
                       <div
                         key={anchor.transactionId}
                         className={styles.anchorCard}
