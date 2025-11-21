@@ -87,14 +87,14 @@ impl EvidenceRepository {
             .clone()
             .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
 
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "INSERT OR IGNORE INTO outbox_jobs (id, payload_sha256, status, attempts, created_ms, updated_ms, next_attempt_ms) VALUES (?1, ?2, 'queued', 0, ?3, ?3, 0)"
         )
         .bind(&id)
         .bind(&evidence.digest_hex)
-        .bind(now)
+        .bind(current_timestamp_ms)
         .execute(&self.pool)
         .await?;
 
@@ -148,7 +148,7 @@ impl EvidenceRepository {
         .fetch_all(&self.pool)
         .await?;
 
-        let jobs = rows
+        let evidence_jobs = rows
             .into_iter()
             .map(|row| EvidenceOut {
                 id: row.get::<String, _>(0),
@@ -160,7 +160,7 @@ impl EvidenceRepository {
             })
             .collect();
 
-        Ok((jobs, total_count))
+        Ok((evidence_jobs, total_count))
     }
 
     /// Update job status
@@ -170,14 +170,14 @@ impl EvidenceRepository {
         status: &str,
         error: Option<&str>,
     ) -> Result<()> {
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "UPDATE outbox_jobs SET status = ?1, last_error = ?2, updated_ms = ?3 WHERE id = ?4",
         )
         .bind(status)
         .bind(error)
-        .bind(now)
+        .bind(current_timestamp_ms)
         .bind(id)
         .execute(&self.pool)
         .await?;
@@ -194,12 +194,12 @@ impl EvidenceRepository {
 
     /// Increment job attempts
     pub async fn increment_attempts(&self, id: &str) -> Result<()> {
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "UPDATE outbox_jobs SET attempts = attempts + 1, updated_ms = ?1 WHERE id = ?2",
         )
-        .bind(now)
+        .bind(current_timestamp_ms)
         .bind(id)
         .execute(&self.pool)
         .await?;
@@ -216,13 +216,13 @@ impl EvidenceRepository {
 
     /// Set next attempt time (for retry logic)
     pub async fn set_next_attempt(&self, id: &str, next_attempt_ms: i64) -> Result<()> {
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "UPDATE outbox_jobs SET next_attempt_ms = ?1, updated_ms = ?2 WHERE id = ?3",
         )
         .bind(next_attempt_ms)
-        .bind(now)
+        .bind(current_timestamp_ms)
         .bind(id)
         .execute(&self.pool)
         .await?;
@@ -239,17 +239,17 @@ impl EvidenceRepository {
 
     /// Get jobs ready for processing
     pub async fn get_ready_jobs(&self, limit: i64) -> Result<Vec<EvidenceOut>> {
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let rows = sqlx::query(
             "SELECT id, status, attempts, last_error, created_ms, updated_ms FROM outbox_jobs WHERE status = 'queued' AND next_attempt_ms <= ?1 ORDER BY created_ms ASC LIMIT ?2"
         )
-        .bind(now)
+        .bind(current_timestamp_ms)
         .bind(limit)
         .fetch_all(&self.pool)
         .await?;
 
-        let jobs = rows
+        let ready_jobs = rows
             .into_iter()
             .map(|row| EvidenceOut {
                 id: row.get::<String, _>(0),
@@ -261,17 +261,17 @@ impl EvidenceRepository {
             })
             .collect();
 
-        Ok(jobs)
+        Ok(ready_jobs)
     }
 
     /// Mark job as in progress
     pub async fn mark_in_progress(&self, id: &str) -> Result<()> {
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "UPDATE outbox_jobs SET status = 'in_progress', updated_ms = ?1 WHERE id = ?2",
         )
-        .bind(now)
+        .bind(current_timestamp_ms)
         .bind(id)
         .execute(&self.pool)
         .await?;
@@ -344,14 +344,14 @@ impl EvidenceRepository {
             .clone()
             .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
 
-        let now = chrono::Utc::now().timestamp_millis();
+        let current_timestamp_ms = chrono::Utc::now().timestamp_millis();
 
         let result = sqlx::query(
             "INSERT OR IGNORE INTO outbox_jobs (id, payload_sha256, status, attempts, created_ms, updated_ms, next_attempt_ms) VALUES (?1, ?2, 'queued', 0, ?3, ?3, 0)"
         )
         .bind(&id)
         .bind(&evidence.digest_hex)
-        .bind(now)
+        .bind(current_timestamp_ms)
         .execute(&mut *tx)
         .await?;
 

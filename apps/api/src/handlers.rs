@@ -17,12 +17,61 @@ use axum::{
     response::IntoResponse,
     Json,
 };
+use serde::Serialize;
 
+/// Parse pagination parameters and calculate offset
+/// Returns (page, items_per_page, offset)
 fn parse_pagination(pagination: Pagination) -> (i64, i64, i64) {
     let page = pagination.page.unwrap_or(1).max(1);
     let per_page = pagination.per_page.unwrap_or(10).clamp(1, 100);
     let offset = (page - 1) * per_page;
     (page, per_page, offset)
+}
+
+/// Create an error response with a given status code and error message
+fn error_response(status: StatusCode, error: impl std::fmt::Display) -> axum::response::Response {
+    (
+        status,
+        Json(serde_json::json!({ "error": error.to_string() })),
+    )
+        .into_response()
+}
+
+/// Handle GET by ID responses with consistent error handling
+fn handle_get_by_id_response<T: Serialize>(
+    result: Result<Option<T>, sqlx::Error>,
+    id: String,
+) -> axum::response::Response {
+    match result {
+        Ok(Some(item)) => match serde_json::to_value(item) {
+            Ok(json) => (StatusCode::OK, Json(json)).into_response(),
+            Err(serialization_error) => {
+                error_response(StatusCode::INTERNAL_SERVER_ERROR, serialization_error)
+            }
+        },
+        Ok(None) => (
+            StatusCode::NOT_FOUND,
+            Json(serde_json::json!({ "id": id, "status": "not_found" })),
+        )
+            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
+    }
+}
+
+/// Create a paginated list response
+fn create_paginated_response<T: Serialize>(
+    items: Vec<T>,
+    page: i64,
+    items_per_page: i64,
+    total_count: i64,
+) -> axum::response::Response {
+    let response = serde_json::json!({
+        "data": items,
+        "page": page,
+        "per_page": items_per_page,
+        "total": total_count,
+    });
+    (StatusCode::OK, Json(response)).into_response()
 }
 
 pub async fn health() -> &'static str {
@@ -33,23 +82,13 @@ pub async fn list_evidence(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let (page, per_page, offset) = parse_pagination(pagination);
+    let (page, items_per_page, offset) = parse_pagination(pagination);
 
-    match list_evidence_jobs(&state.pool, per_page, offset).await {
-        Ok((jobs, total_count)) => {
-            let response = serde_json::json!({
-                "data": jobs,
-                "page": page,
-                "per_page": per_page,
-                "total": total_count,
-            });
-            (StatusCode::OK, Json(response)).into_response()
+    match list_evidence_jobs(&state.pool, items_per_page, offset).await {
+        Ok((evidence_jobs, total_count)) => {
+            create_paginated_response(evidence_jobs, page, items_per_page, total_count)
         }
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -69,11 +108,7 @@ pub async fn post_evidence(
                 (StatusCode::CONFLICT, Json(serde_json::json!({ "error": "evidence with this ID already exists", "id": id }))).into_response()
             }
         }
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -81,26 +116,8 @@ pub async fn get_evidence(
     State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> impl IntoResponse {
-    match get_evidence_by_id(&state.pool, &id).await {
-        Ok(Some(evidence)) => match serde_json::to_value(evidence) {
-            Ok(json) => (StatusCode::OK, Json(json)).into_response(),
-            Err(e) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": e.to_string() })),
-            )
-                .into_response(),
-        },
-        Ok(None) => (
-            StatusCode::NOT_FOUND,
-            Json(serde_json::json!({ "id": id, "status": "not_found" })),
-        )
-            .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
-    }
+    let result = get_evidence_by_id(&state.pool, &id).await;
+    handle_get_by_id_response(result, id)
 }
 
 // Countermeasure Deployment handlers
@@ -114,11 +131,7 @@ pub async fn post_countermeasure(
             Json(serde_json::json!({ "id": id, "status": "created" })),
         )
             .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -126,49 +139,21 @@ pub async fn get_countermeasure(
     State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> impl IntoResponse {
-    match get_countermeasure_deployment_by_id(&state.pool, &id).await {
-        Ok(Some(deployment)) => match serde_json::to_value(deployment) {
-            Ok(json) => (StatusCode::OK, Json(json)).into_response(),
-            Err(e) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": e.to_string() })),
-            )
-                .into_response(),
-        },
-        Ok(None) => (
-            StatusCode::NOT_FOUND,
-            Json(serde_json::json!({ "id": id, "status": "not_found" })),
-        )
-            .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
-    }
+    let result = get_countermeasure_deployment_by_id(&state.pool, &id).await;
+    handle_get_by_id_response(result, id)
 }
 
 pub async fn list_countermeasures(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let (page, per_page, offset) = parse_pagination(pagination);
+    let (page, items_per_page, offset) = parse_pagination(pagination);
 
-    match list_countermeasure_deployments(&state.pool, per_page, offset).await {
+    match list_countermeasure_deployments(&state.pool, items_per_page, offset).await {
         Ok((deployments, total_count)) => {
-            let response = serde_json::json!({
-                "data": deployments,
-                "page": page,
-                "per_page": per_page,
-                "total": total_count,
-            });
-            (StatusCode::OK, Json(response)).into_response()
+            create_paginated_response(deployments, page, items_per_page, total_count)
         }
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -183,11 +168,7 @@ pub async fn post_signal_disruption(
             Json(serde_json::json!({ "id": id, "status": "created" })),
         )
             .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -195,49 +176,21 @@ pub async fn get_signal_disruption(
     State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> impl IntoResponse {
-    match get_signal_disruption_audit_by_id(&state.pool, &id).await {
-        Ok(Some(audit)) => match serde_json::to_value(audit) {
-            Ok(json) => (StatusCode::OK, Json(json)).into_response(),
-            Err(e) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": e.to_string() })),
-            )
-                .into_response(),
-        },
-        Ok(None) => (
-            StatusCode::NOT_FOUND,
-            Json(serde_json::json!({ "id": id, "status": "not_found" })),
-        )
-            .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
-    }
+    let result = get_signal_disruption_audit_by_id(&state.pool, &id).await;
+    handle_get_by_id_response(result, id)
 }
 
 pub async fn list_signal_disruptions(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let (page, per_page, offset) = parse_pagination(pagination);
+    let (page, items_per_page, offset) = parse_pagination(pagination);
 
-    match list_signal_disruption_audits(&state.pool, per_page, offset).await {
+    match list_signal_disruption_audits(&state.pool, items_per_page, offset).await {
         Ok((audits, total_count)) => {
-            let response = serde_json::json!({
-                "data": audits,
-                "page": page,
-                "per_page": per_page,
-                "total": total_count,
-            });
-            (StatusCode::OK, Json(response)).into_response()
+            create_paginated_response(audits, page, items_per_page, total_count)
         }
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -252,11 +205,7 @@ pub async fn post_jamming_operation(
             Json(serde_json::json!({ "id": id, "status": "created" })),
         )
             .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
 
@@ -264,48 +213,20 @@ pub async fn get_jamming_operation(
     State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> impl IntoResponse {
-    match get_jamming_operation_by_id(&state.pool, &id).await {
-        Ok(Some(operation)) => match serde_json::to_value(operation) {
-            Ok(json) => (StatusCode::OK, Json(json)).into_response(),
-            Err(e) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                Json(serde_json::json!({ "error": e.to_string() })),
-            )
-                .into_response(),
-        },
-        Ok(None) => (
-            StatusCode::NOT_FOUND,
-            Json(serde_json::json!({ "id": id, "status": "not_found" })),
-        )
-            .into_response(),
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
-    }
+    let result = get_jamming_operation_by_id(&state.pool, &id).await;
+    handle_get_by_id_response(result, id)
 }
 
 pub async fn list_jamming_operations(
     State(state): State<AppState>,
     Query(pagination): Query<Pagination>,
 ) -> impl IntoResponse {
-    let (page, per_page, offset) = parse_pagination(pagination);
+    let (page, items_per_page, offset) = parse_pagination(pagination);
 
-    match crate::db::list_jamming_operations(&state.pool, per_page, offset).await {
+    match crate::db::list_jamming_operations(&state.pool, items_per_page, offset).await {
         Ok((operations, total_count)) => {
-            let response = serde_json::json!({
-                "data": operations,
-                "page": page,
-                "per_page": per_page,
-                "total": total_count,
-            });
-            (StatusCode::OK, Json(response)).into_response()
+            create_paginated_response(operations, page, items_per_page, total_count)
         }
-        Err(e) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": e.to_string() })),
-        )
-            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }

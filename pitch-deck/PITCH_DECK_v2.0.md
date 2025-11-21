@@ -201,6 +201,27 @@ $1.8M┼──╯                                  ● FY26: Launch
 
 # Combined TAM: $5.9B - Defense Upside $15-20B
 
+### SkySnare™: $1.68B (8.2% CAGR)
+
+Premium sports & training equipment
+
+### AeroNet™: $4.2B (47% CAGR)
+
+Commercial counter-drone & infrastructure
+
+### Defense Market: $15-20B Additional
+
+**Recent Evidence:**
+
+- Raytheon Coyote: $5.04B (single contract)
+- Pentagon Replicator: $500M
+- Total recent awards: $6B+
+
+**Market Clarification:**
+
+- Conservative: $4.2B (commercial/infrastructure)
+- Defense: $15-20B (military contracts)
+- **Our Focus:** Commercial first, defense expansion FY28+
 ### Market Size Visualization
 
 ```
