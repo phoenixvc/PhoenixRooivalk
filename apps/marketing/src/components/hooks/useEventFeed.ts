@@ -56,10 +56,7 @@ export const useEventFeed = () => {
   }, []);
 
   const filterFeed = useCallback(
-    (
-      severity?: FeedSeverity,
-      category?: FeedCategory,
-    ): FeedItem[] => {
+    (severity?: FeedSeverity, category?: FeedCategory): FeedItem[] => {
       return feedItems.filter((item) => {
         if (severity && item.severity !== severity) return false;
         if (category && item.category !== category) return false;

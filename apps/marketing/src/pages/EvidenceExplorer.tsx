@@ -4,10 +4,10 @@ import styles from "./EvidenceExplorer.module.css";
 
 /**
  * EvidenceExplorer - Blockchain Evidence Explorer & Audit Trail Viewer
- * 
+ *
  * High-value feature for viewing and verifying blockchain-anchored evidence records.
  * Provides complete audit trail visualization, transaction verification, and export capabilities.
- * 
+ *
  * Key Features:
  * - Interactive timeline of all evidence records
  * - Transaction verification with block explorer links
@@ -35,7 +35,8 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
   darkMode = true,
 }) => {
   const [evidence, setEvidence] = useState<EvidenceRecord[]>([]);
-  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceRecord | null>(null);
+  const [selectedEvidence, setSelectedEvidence] =
+    useState<EvidenceRecord | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({
     chain: "all",
     status: "all",
@@ -59,8 +60,10 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
           params.append("status", filters.status);
         }
 
-        const response = await fetch(`${apiBaseUrl}/evidence?${params.toString()}`);
-        
+        const response = await fetch(
+          `${apiBaseUrl}/evidence?${params.toString()}`,
+        );
+
         if (!response.ok) {
           throw new Error(`Failed to fetch evidence: ${response.statusText}`);
         }
@@ -95,10 +98,14 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
     return "#";
   };
 
-  const getStatusBadge = (record: EvidenceRecord): { label: string; color: string } => {
-    const hasConfirmed = record.anchors.some((a) => a.chain === "solana" || a.chain === "etherlink");
+  const getStatusBadge = (
+    record: EvidenceRecord,
+  ): { label: string; color: string } => {
+    const hasConfirmed = record.anchors.some(
+      (a) => a.chain === "solana" || a.chain === "etherlink",
+    );
     const allConfirmed = record.anchors.length > 0;
-    
+
     if (!hasConfirmed) return { label: "Pending", color: "#f59e0b" };
     if (allConfirmed) return { label: "Anchored", color: "#10b981" };
     return { label: "Partial", color: "#3b82f6" };
@@ -144,7 +151,9 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
       <div className={styles.filters}>
         <select
           value={filters.chain || "all"}
-          onChange={(e) => setFilters({ ...filters, chain: e.target.value as any })}
+          onChange={(e) =>
+            setFilters({ ...filters, chain: e.target.value as any })
+          }
           className={styles.select}
           aria-label="Filter by blockchain"
         >
@@ -155,7 +164,9 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
 
         <select
           value={filters.status || "all"}
-          onChange={(e) => setFilters({ ...filters, status: e.target.value as any })}
+          onChange={(e) =>
+            setFilters({ ...filters, status: e.target.value as any })
+          }
           className={styles.select}
           aria-label="Filter by status"
         >
@@ -182,10 +193,18 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
         />
 
         <div className={styles.exportButtons}>
-          <button onClick={exportToJSON} className={styles.exportBtn} aria-label="Export as JSON">
+          <button
+            onClick={exportToJSON}
+            className={styles.exportBtn}
+            aria-label="Export as JSON"
+          >
             📄 JSON
           </button>
-          <button onClick={exportToCSV} className={styles.exportBtn} aria-label="Export as CSV">
+          <button
+            onClick={exportToCSV}
+            className={styles.exportBtn}
+            aria-label="Export as CSV"
+          >
             📊 CSV
           </button>
         </div>
@@ -236,11 +255,18 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                           {status.label}
                         </span>
                       </div>
-                      <div className={styles.recordType}>{record.eventType}</div>
-                      <div className={styles.recordTime}>{new Date(record.timestamp).toLocaleString()}</div>
+                      <div className={styles.recordType}>
+                        {record.eventType}
+                      </div>
+                      <div className={styles.recordTime}>
+                        {new Date(record.timestamp).toLocaleString()}
+                      </div>
                       <div className={styles.recordChains}>
                         {record.anchors.map((anchor) => (
-                          <span key={anchor.transactionId} className={styles.chainBadge}>
+                          <span
+                            key={anchor.transactionId}
+                            className={styles.chainBadge}
+                          >
                             {anchor.chain}
                           </span>
                         ))}
@@ -264,7 +290,9 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                     <dt>Event Type:</dt>
                     <dd>{selectedEvidence.eventType}</dd>
                     <dt>Timestamp:</dt>
-                    <dd>{new Date(selectedEvidence.timestamp).toLocaleString()}</dd>
+                    <dd>
+                      {new Date(selectedEvidence.timestamp).toLocaleString()}
+                    </dd>
                     <dt>Digest:</dt>
                     <dd className={styles.mono}>{selectedEvidence.digest}</dd>
                   </dl>
@@ -276,9 +304,14 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                     <p className={styles.noAnchors}>Not yet anchored</p>
                   ) : (
                     selectedEvidence.anchors.map((anchor) => (
-                      <div key={anchor.transactionId} className={styles.anchorCard}>
+                      <div
+                        key={anchor.transactionId}
+                        className={styles.anchorCard}
+                      >
                         <div className={styles.anchorHeader}>
-                          <span className={styles.anchorChain}>{anchor.chain.toUpperCase()}</span>
+                          <span className={styles.anchorChain}>
+                            {anchor.chain.toUpperCase()}
+                          </span>
                           <a
                             href={getChainExplorerUrl(anchor)}
                             target="_blank"
@@ -290,14 +323,18 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
                         </div>
                         <dl className={styles.anchorDetails}>
                           <dt>Transaction ID:</dt>
-                          <dd className={styles.mono}>{anchor.transactionId}</dd>
+                          <dd className={styles.mono}>
+                            {anchor.transactionId}
+                          </dd>
                           <dt>Block Height:</dt>
                           <dd>{anchor.blockHeight}</dd>
                           <dt>Timestamp:</dt>
                           <dd>{new Date(anchor.timestamp).toLocaleString()}</dd>
                           <dt>Verified:</dt>
                           <dd>
-                            <span className={styles.verifiedBadge}>✓ Confirmed</span>
+                            <span className={styles.verifiedBadge}>
+                              ✓ Confirmed
+                            </span>
                           </dd>
                         </dl>
                       </div>

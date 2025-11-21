@@ -8,7 +8,9 @@ export const HeroSection: React.FC = () => {
       <div className={styles.container}>
         {/* Development status indicators */}
         <div className={styles.statusBadges}>
-          <span className="pill pill--concept">Phase 1: Pneumatic Net Launcher</span>
+          <span className="pill pill--concept">
+            Phase 1: Pneumatic Net Launcher
+          </span>
           <span className="pill pill--partners">
             SkySnare™ Consumer | AeroNet™ Enterprise
           </span>
@@ -137,14 +139,17 @@ export const HeroSection: React.FC = () => {
                 Our Development Path (2025-2030)
               </h3>
               <p className={styles.conceptDescription}>
-                Starting with proven pneumatic technology, expanding to advanced systems
+                Starting with proven pneumatic technology, expanding to advanced
+                systems
               </p>
             </div>
 
             {/* Visual concept representation */}
             <div className={styles.conceptMetrics}>
               <div className={styles.conceptMetric}>
-                <span className={styles.conceptMetricLabel}>Phase 1 (2026)</span>
+                <span className={styles.conceptMetricLabel}>
+                  Phase 1 (2026)
+                </span>
                 <span className={styles.conceptMetricValue}>Net Launcher</span>
               </div>
               <div className={styles.conceptMetric}>
@@ -163,7 +168,8 @@ export const HeroSection: React.FC = () => {
 
             <div className={styles.disclaimer}>
               <p className={styles.disclaimerText}>
-                💡 Phased approach reduces risk and validates technology at each stage
+                💡 Phased approach reduces risk and validates technology at each
+                stage
               </p>
             </div>
           </div>

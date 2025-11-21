@@ -1,6 +1,7 @@
 # Pitch Deck Version Control
 
 ## Versioning Scheme
+
 - **Major.Minor** format (e.g., 2.0, 2.1, 3.0)
 - **Major** changes: Strategic pivots, complete restructures
 - **Minor** changes: Content updates, metric refreshes, new data
@@ -8,7 +9,9 @@
 ## Version History
 
 ### v2.0 (November 18, 2025) - CURRENT
+
 **Major Changes:**
+
 - Complete strategic pivot to dual-brand model (SkySnare™ + AeroNet™)
 - Updated from counter-UAS only to consumer + enterprise
 - New financial projections: $1.8M → $50M (FY26-FY30)
@@ -17,6 +20,7 @@
 - 10-slide format optimized for investor presentations
 
 **Key Metrics:**
+
 - Series A: $1.5M (was $120M R)
 - FY26 Revenue: $1.8M (was $25M R)
 - FY30 Revenue: $50M (was $500M R)
@@ -24,6 +28,7 @@
 - EBITDA: 30% by FY30
 
 **Files:**
+
 - PITCH_DECK_v2.0.md (main deck)
 - PITCH_DECK_v2.0_SPEAKER_NOTES.md (presenter script)
 - PhoenixRooivalk_Pitch_Deck_v2.0.pptx (generated)
@@ -31,7 +36,9 @@
 ---
 
 ### v1.0 (November 18, 2025)
+
 **Initial Version:**
+
 - 18-slide comprehensive investor deck
 - Counter-UAS focus only (no dual-brand)
 - Original financial model: R25M → R500M
@@ -39,6 +46,7 @@
 - Team: Jurie + Martyn only
 
 **Files:**
+
 - ../PITCH_DECK.md
 - ../PITCH_DECK_ONE_PAGER.md
 - ../PITCH_DECK_README.md
@@ -50,6 +58,7 @@
 When creating a new version, update these sections:
 
 ### Financial Data (Quarterly Review)
+
 - [ ] Revenue projections (check against actuals)
 - [ ] Unit economics (CAC, LTV)
 - [ ] Market size estimates
@@ -57,6 +66,7 @@ When creating a new version, update these sections:
 - [ ] Valuation and funding amounts
 
 ### Market Data (Quarterly Review)
+
 - [ ] TAM/SAM/SOM figures
 - [ ] Competitor landscape
 - [ ] Recent contract awards
@@ -64,6 +74,7 @@ When creating a new version, update these sections:
 - [ ] Industry CAGR updates
 
 ### Company Milestones (Monthly Review)
+
 - [ ] Product development status
 - [ ] Customer deployments
 - [ ] Team additions
@@ -71,12 +82,14 @@ When creating a new version, update these sections:
 - [ ] Certification achievements
 
 ### Technology Updates (As Needed)
+
 - [ ] Performance metrics
 - [ ] New capabilities
 - [ ] Patent filings
 - [ ] R&D breakthroughs
 
 ### Design Elements (Annual Review)
+
 - [ ] Branding updates
 - [ ] Color schemes
 - [ ] Logo versions
@@ -98,6 +111,7 @@ PhoenixRooivalk_Pitch_Deck_v[MAJOR].[MINOR].pdf   # PDF export
 ## Generation Commands
 
 ### Create New Version
+
 ```bash
 # Copy current version
 cp PITCH_DECK_v2.0.md PITCH_DECK_v2.1.md
@@ -115,6 +129,7 @@ git commit -m "Pitch deck v2.1: [description of changes]"
 ```
 
 ### Generate All Formats
+
 ```bash
 ./generate-ppt.sh v2.0
 ```
@@ -124,21 +139,25 @@ git commit -m "Pitch deck v2.1: [description of changes]"
 ## Distribution Guidelines
 
 ### Internal Review
+
 - Version: Any (draft versions allowed)
 - Recipients: Team members only
 - Tracking: Not required
 
 ### Investor Presentations
+
 - Version: Latest stable (X.0 releases only)
 - Recipients: NDA-signed investors
 - Tracking: Log in CRM with version number
 
 ### Partner Discussions
+
 - Version: Customize per audience
 - Recipients: Strategic partners (technical vs business versions)
 - Tracking: Version + recipient in data room log
 
 ### Public Materials
+
 - Version: Approved marketing versions only
 - Recipients: General inquiries, conferences
 - Tracking: Public version (no confidential financials)
@@ -148,23 +167,27 @@ git commit -m "Pitch deck v2.1: [description of changes]"
 ## Maintenance Schedule
 
 ### Weekly
+
 - [ ] Update traction metrics if changed
 - [ ] Review for factual accuracy
 - [ ] Check broken links
 
 ### Monthly
+
 - [ ] Update customer count
 - [ ] Review team section
 - [ ] Check competitor landscape
 - [ ] Update testimonials
 
 ### Quarterly
+
 - [ ] Major financial update
 - [ ] Market data refresh
 - [ ] Milestone progress review
 - [ ] Bump minor version (e.g., 2.0 → 2.1)
 
 ### Annually
+
 - [ ] Strategic review
 - [ ] Complete redesign consideration
 - [ ] Bump major version (e.g., 2.1 → 3.0)

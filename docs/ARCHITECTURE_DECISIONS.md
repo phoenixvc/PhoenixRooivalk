@@ -1,6 +1,7 @@
 # Architecture Decision Records (ADRs)
 
-This document captures key architectural decisions made during the development of Phoenix Rooivalk.
+This document captures key architectural decisions made during the development
+of Phoenix Rooivalk.
 
 ## Table of Contents
 
@@ -21,28 +22,33 @@ This document captures key architectural decisions made during the development o
 
 **Status:** Accepted  
 **Date:** 2024-01-15  
-**Context:** Need to manage multiple applications (marketing, docs, API, keeper) and shared packages efficiently.
+**Context:** Need to manage multiple applications (marketing, docs, API, keeper)
+and shared packages efficiently.
 
 ### Decision
 
-Use a monorepo structure with Turborepo for build orchestration and pnpm for package management.
+Use a monorepo structure with Turborepo for build orchestration and pnpm for
+package management.
 
 ### Rationale
 
 - **Code Sharing**: Shared types, UI components, and utilities across apps
 - **Atomic Changes**: Single PR can update multiple apps simultaneously
-- **Build Performance**: Turborepo provides intelligent caching and parallel execution
+- **Build Performance**: Turborepo provides intelligent caching and parallel
+  execution
 - **Developer Experience**: Single `pnpm install`, unified tooling configuration
 
 ### Consequences
 
 **Positive:**
+
 - Simplified dependency management
 - Faster CI/CD with smart caching
 - Easier refactoring across packages
 - Consistent tooling and linting
 
 **Negative:**
+
 - Larger repository size
 - More complex CI/CD configuration
 - Learning curve for monorepo patterns
@@ -59,7 +65,8 @@ Use a monorepo structure with Turborepo for build orchestration and pnpm for pac
 
 **Status:** Accepted  
 **Date:** 2024-01-20  
-**Context:** Need tamper-proof evidence trail for military compliance and legal defensibility.
+**Context:** Need tamper-proof evidence trail for military compliance and legal
+defensibility.
 
 ### Decision
 
@@ -68,19 +75,23 @@ Implement dual-chain anchoring to both Solana and EtherLink blockchains.
 ### Rationale
 
 - **Redundancy**: Multiple chains provide backup if one fails
-- **Speed vs Cost**: Solana for fast confirmations, EtherLink for Ethereum ecosystem compatibility
+- **Speed vs Cost**: Solana for fast confirmations, EtherLink for Ethereum
+  ecosystem compatibility
 - **Legal Compliance**: Multiple independent witnesses strengthen legal validity
-- **Cross-Chain Verification**: Independent verification from different consensus mechanisms
+- **Cross-Chain Verification**: Independent verification from different
+  consensus mechanisms
 
 ### Consequences
 
 **Positive:**
+
 - Enhanced tamper-resistance
 - Geographic and technical diversity
 - Compliance with multiple regulatory frameworks
 - Future-proof against single-chain failures
 
 **Negative:**
+
 - Increased operational complexity
 - Higher anchoring costs
 - More complex verification logic
@@ -102,7 +113,8 @@ pub trait AnchorProvider {
 
 **Status:** Accepted  
 **Date:** 2024-01-22  
-**Context:** Need high-performance, secure backend services for API, keeper, and CLI tools.
+**Context:** Need high-performance, secure backend services for API, keeper, and
+CLI tools.
 
 ### Decision
 
@@ -119,12 +131,14 @@ Use Rust with Axum for all backend services and command-line tools.
 ### Consequences
 
 **Positive:**
+
 - Minimal memory footprint
 - No garbage collection pauses
 - Strong compile-time guarantees
 - Excellent WebAssembly support
 
 **Negative:**
+
 - Steeper learning curve
 - Slower initial development
 - Smaller talent pool
@@ -160,12 +174,14 @@ Use Next.js 14 with static export for the marketing website.
 ### Consequences
 
 **Positive:**
+
 - Excellent Lighthouse scores
 - Fast initial page loads
 - Easy integration with React component libraries
 - Strong TypeScript support
 
 **Negative:**
+
 - Next.js-specific patterns and conventions
 - Build complexity for static export
 - Client-side hydration overhead
@@ -175,7 +191,7 @@ Use Next.js 14 with static export for the marketing website.
 ```javascript
 // next.config.js
 module.exports = {
-  output: 'export',
+  output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
 };
@@ -204,12 +220,14 @@ Use SQLite with SQLx for the blockchain outbox pattern.
 ### Consequences
 
 **Positive:**
+
 - Zero configuration
 - Easy local development
 - Built-in backup (file copy)
 - No network latency
 
 **Negative:**
+
 - Single-writer limitation
 - No horizontal scaling
 - Limited concurrent connections
@@ -263,12 +281,14 @@ Build threat simulator in Rust with Leptos, compile to WebAssembly.
 ### Consequences
 
 **Positive:**
+
 - 60 FPS performance with complex simulations
 - Code sharing between platforms
 - Memory safety for complex game logic
 - Smaller download size
 
 **Negative:**
+
 - WASM bundle still ~2MB
 - Browser compatibility concerns
 - Debugging complexity
@@ -290,7 +310,8 @@ Build threat simulator in Rust with Leptos, compile to WebAssembly.
 
 ### Decision
 
-Design entire system around immutable evidence records with cryptographic proofs.
+Design entire system around immutable evidence records with cryptographic
+proofs.
 
 ### Rationale
 
@@ -303,12 +324,14 @@ Design entire system around immutable evidence records with cryptographic proofs
 ### Consequences
 
 **Positive:**
+
 - Legal defensibility
 - Regulatory compliance
 - Complete audit history
 - Tamper detection
 
 **Negative:**
+
 - Storage requirements grow continuously
 - No data deletion (append-only)
 - Complex GDPR compliance
@@ -344,7 +367,8 @@ pub struct ChainTxRef {
 
 ### Decision
 
-Create dedicated crate for cross-chain address validation with EIP-55 checksum support.
+Create dedicated crate for cross-chain address validation with EIP-55 checksum
+support.
 
 ### Rationale
 
@@ -356,12 +380,14 @@ Create dedicated crate for cross-chain address validation with EIP-55 checksum s
 ### Consequences
 
 **Positive:**
+
 - Prevents costly mistakes
 - Improves UX with instant validation
 - Supports multiple chains
 - Strong type safety
 
 **Negative:**
+
 - Maintenance burden for new chains
 - Checksum computation overhead
 - Complex validation rules
@@ -388,12 +414,14 @@ Create shared TypeScript packages for types, UI components, and utilities.
 ### Consequences
 
 **Positive:**
+
 - Type-safe API contracts
 - Consistent UI/UX
 - Faster feature development
 - Easier refactoring
 
 **Negative:**
+
 - Circular dependency risk
 - Breaking changes affect multiple apps
 - Package versioning complexity
@@ -429,12 +457,14 @@ Embed WASM simulator via iframe for true DOM isolation.
 ### Consequences
 
 **Positive:**
+
 - True isolation from parent DOM
 - No CSS conflicts
 - Proper fullscreen behavior
 - Enhanced security
 
 **Negative:**
+
 - IPC complexity for parent-child communication
 - Extra HTTP request for iframe content
 - Slight performance overhead
@@ -454,6 +484,7 @@ Embed WASM simulator via iframe for true DOM isolation.
 ## Review Process
 
 ADRs should be reviewed and approved by:
+
 - Technical Lead
 - Security Team (for security-sensitive decisions)
 - Legal Team (for compliance-related decisions)
@@ -461,9 +492,10 @@ ADRs should be reviewed and approved by:
 ## Revision History
 
 All ADRs are immutable once accepted. Changes require:
+
 1. Mark original ADR as "Superseded"
 2. Create new ADR with "Supersedes ADR-XXX"
 
 ---
 
-*Last Updated: November 18, 2024*
+_Last Updated: November 18, 2024_

@@ -2,14 +2,15 @@
 
 ## Overview
 
-Phoenix Rooivalk uses SQLite for the blockchain evidence outbox pattern. This document describes the schema, relationships, and usage patterns.
+Phoenix Rooivalk uses SQLite for the blockchain evidence outbox pattern. This
+document describes the schema, relationships, and usage patterns.
 
 ## Database Files
 
-| File | Purpose | Location |
-|------|---------|----------|
-| `keeper.db` | Outbox pattern for blockchain anchoring | `apps/keeper/` |
-| `evidence.db` | Evidence record storage (if used) | `apps/api/` |
+| File          | Purpose                                 | Location       |
+| ------------- | --------------------------------------- | -------------- |
+| `keeper.db`   | Outbox pattern for blockchain anchoring | `apps/keeper/` |
+| `evidence.db` | Evidence record storage (if used)       | `apps/api/`    |
 
 ## Schema Version
 
@@ -39,24 +40,24 @@ CREATE TABLE IF NOT EXISTS outbox_jobs (
 
 #### Columns
 
-| Column | Type | Nullable | Description |
-|--------|------|----------|-------------|
-| `id` | TEXT | NO | Unique evidence record ID |
-| `payload_sha256` | TEXT | NO | SHA-256 digest of evidence payload |
-| `status` | TEXT | NO | Job status: `queued`, `in_progress`, `done`, `failed` |
-| `attempts` | INTEGER | NO | Number of anchoring attempts |
-| `last_error` | TEXT | YES | Last error message if failed |
-| `created_ms` | INTEGER | NO | Unix timestamp (ms) when job created |
-| `updated_ms` | INTEGER | NO | Unix timestamp (ms) of last update |
-| `next_attempt_ms` | INTEGER | NO | Unix timestamp (ms) for next retry attempt |
+| Column            | Type    | Nullable | Description                                           |
+| ----------------- | ------- | -------- | ----------------------------------------------------- |
+| `id`              | TEXT    | NO       | Unique evidence record ID                             |
+| `payload_sha256`  | TEXT    | NO       | SHA-256 digest of evidence payload                    |
+| `status`          | TEXT    | NO       | Job status: `queued`, `in_progress`, `done`, `failed` |
+| `attempts`        | INTEGER | NO       | Number of anchoring attempts                          |
+| `last_error`      | TEXT    | YES      | Last error message if failed                          |
+| `created_ms`      | INTEGER | NO       | Unix timestamp (ms) when job created                  |
+| `updated_ms`      | INTEGER | NO       | Unix timestamp (ms) of last update                    |
+| `next_attempt_ms` | INTEGER | NO       | Unix timestamp (ms) for next retry attempt            |
 
 #### Indexes
 
 ```sql
-CREATE INDEX IF NOT EXISTS idx_outbox_status 
+CREATE INDEX IF NOT EXISTS idx_outbox_status
 ON outbox_jobs(status, next_attempt_ms);
 
-CREATE INDEX IF NOT EXISTS idx_outbox_created 
+CREATE INDEX IF NOT EXISTS idx_outbox_created
 ON outbox_jobs(created_ms);
 ```
 
@@ -84,32 +85,36 @@ queued → in_progress → done
 #### Example Queries
 
 **Fetch next job:**
+
 ```sql
-SELECT id, payload_sha256, created_ms 
-FROM outbox_jobs 
-WHERE status='queued' AND next_attempt_ms <= ?1 
-ORDER BY created_ms ASC 
+SELECT id, payload_sha256, created_ms
+FROM outbox_jobs
+WHERE status='queued' AND next_attempt_ms <= ?1
+ORDER BY created_ms ASC
 LIMIT 1;
 ```
 
 **Update job to in_progress:**
+
 ```sql
-UPDATE outbox_jobs 
-SET status='in_progress', updated_ms=?1, attempts=attempts+1 
+UPDATE outbox_jobs
+SET status='in_progress', updated_ms=?1, attempts=attempts+1
 WHERE id=?2;
 ```
 
 **Mark job as done:**
+
 ```sql
-UPDATE outbox_jobs 
-SET status='done', updated_ms=?1 
+UPDATE outbox_jobs
+SET status='done', updated_ms=?1
 WHERE id=?2;
 ```
 
 **Requeue with backoff:**
+
 ```sql
-UPDATE outbox_jobs 
-SET status='queued', last_error=?1, updated_ms=?2, next_attempt_ms=?3 
+UPDATE outbox_jobs
+SET status='queued', last_error=?1, updated_ms=?2, next_attempt_ms=?3
 WHERE id=?4;
 ```
 
@@ -134,22 +139,22 @@ CREATE TABLE IF NOT EXISTS outbox_tx_refs (
 
 #### Columns
 
-| Column | Type | Nullable | Description |
-|--------|------|----------|-------------|
-| `job_id` | TEXT | NO | References `outbox_jobs.id` |
-| `network` | TEXT | NO | Network name: `mainnet`, `devnet`, `testnet` |
-| `chain` | TEXT | NO | Chain name: `solana`, `etherlink` |
-| `tx_id` | TEXT | NO | Transaction ID/signature on blockchain |
-| `confirmed` | INTEGER | NO | 0 = pending, 1 = confirmed |
-| `timestamp` | INTEGER | YES | Unix timestamp (seconds) when transaction confirmed |
+| Column      | Type    | Nullable | Description                                         |
+| ----------- | ------- | -------- | --------------------------------------------------- |
+| `job_id`    | TEXT    | NO       | References `outbox_jobs.id`                         |
+| `network`   | TEXT    | NO       | Network name: `mainnet`, `devnet`, `testnet`        |
+| `chain`     | TEXT    | NO       | Chain name: `solana`, `etherlink`                   |
+| `tx_id`     | TEXT    | NO       | Transaction ID/signature on blockchain              |
+| `confirmed` | INTEGER | NO       | 0 = pending, 1 = confirmed                          |
+| `timestamp` | INTEGER | YES      | Unix timestamp (seconds) when transaction confirmed |
 
 #### Indexes
 
 ```sql
-CREATE INDEX IF NOT EXISTS idx_tx_refs_confirmed 
+CREATE INDEX IF NOT EXISTS idx_tx_refs_confirmed
 ON outbox_tx_refs(confirmed);
 
-CREATE INDEX IF NOT EXISTS idx_tx_refs_job 
+CREATE INDEX IF NOT EXISTS idx_tx_refs_job
 ON outbox_tx_refs(job_id);
 ```
 
@@ -161,30 +166,34 @@ ON outbox_tx_refs(job_id);
 #### Example Queries
 
 **Insert transaction reference:**
+
 ```sql
-INSERT OR REPLACE INTO outbox_tx_refs 
-(job_id, network, chain, tx_id, confirmed, timestamp) 
+INSERT OR REPLACE INTO outbox_tx_refs
+(job_id, network, chain, tx_id, confirmed, timestamp)
 VALUES (?1, ?2, ?3, ?4, ?5, ?6);
 ```
 
 **Fetch unconfirmed transactions:**
+
 ```sql
-SELECT job_id, network, chain, tx_id, confirmed, timestamp 
-FROM outbox_tx_refs 
+SELECT job_id, network, chain, tx_id, confirmed, timestamp
+FROM outbox_tx_refs
 WHERE confirmed = 0;
 ```
 
 **Update confirmation status:**
+
 ```sql
-UPDATE outbox_tx_refs 
-SET confirmed = ?1 
+UPDATE outbox_tx_refs
+SET confirmed = ?1
 WHERE tx_id = ?2 AND network = ?3 AND chain = ?4;
 ```
 
 **Get all anchors for a job:**
+
 ```sql
-SELECT network, chain, tx_id, confirmed, timestamp 
-FROM outbox_tx_refs 
+SELECT network, chain, tx_id, confirmed, timestamp
+FROM outbox_tx_refs
 WHERE job_id = ?1;
 ```
 
@@ -199,7 +208,8 @@ outbox_jobs (1) ──< (N) outbox_tx_refs
    job_id
 ```
 
-- One `outbox_jobs` record can have multiple `outbox_tx_refs` (dual-chain anchoring)
+- One `outbox_jobs` record can have multiple `outbox_tx_refs` (dual-chain
+  anchoring)
 - Each `outbox_tx_refs` record references exactly one `outbox_jobs` record
 
 ---
@@ -346,44 +356,44 @@ sqlite3 keeper.db "PRAGMA integrity_check;"
 ### Job Status Distribution
 
 ```sql
-SELECT status, COUNT(*) as count 
-FROM outbox_jobs 
+SELECT status, COUNT(*) as count
+FROM outbox_jobs
 GROUP BY status;
 ```
 
 ### Failed Jobs
 
 ```sql
-SELECT id, last_error, attempts, updated_ms 
-FROM outbox_jobs 
-WHERE status='failed' 
-ORDER BY updated_ms DESC 
+SELECT id, last_error, attempts, updated_ms
+FROM outbox_jobs
+WHERE status='failed'
+ORDER BY updated_ms DESC
 LIMIT 10;
 ```
 
 ### Oldest Pending Job
 
 ```sql
-SELECT id, created_ms, attempts 
-FROM outbox_jobs 
-WHERE status='queued' 
-ORDER BY created_ms ASC 
+SELECT id, created_ms, attempts
+FROM outbox_jobs
+WHERE status='queued'
+ORDER BY created_ms ASC
 LIMIT 1;
 ```
 
 ### Unconfirmed Transactions
 
 ```sql
-SELECT COUNT(*) as pending_confirmations 
-FROM outbox_tx_refs 
+SELECT COUNT(*) as pending_confirmations
+FROM outbox_tx_refs
 WHERE confirmed = 0;
 ```
 
 ### Average Confirmation Time
 
 ```sql
-SELECT 
-    AVG(tx.timestamp - jobs.created_ms / 1000) as avg_confirm_time_seconds 
+SELECT
+    AVG(tx.timestamp - jobs.created_ms / 1000) as avg_confirm_time_seconds
 FROM outbox_tx_refs tx
 JOIN outbox_jobs jobs ON tx.job_id = jobs.id
 WHERE tx.confirmed = 1;
@@ -434,16 +444,19 @@ async fn migrate_to_v2(pool: &Pool<Sqlite>) -> Result<()> {
 ## Security Considerations
 
 1. **File Permissions**: Restrict database file access
+
    ```bash
    chmod 600 keeper.db
    ```
 
 2. **Encryption at Rest**: Use SQLCipher for encrypted SQLite
+
    ```bash
    sqlcipher keeper.db
    ```
 
-3. **SQL Injection**: Always use parameterized queries (SQLx does this automatically)
+3. **SQL Injection**: Always use parameterized queries (SQLx does this
+   automatically)
 
 4. **Backup Encryption**: Encrypt backups before offsite storage
    ```bash
@@ -482,4 +495,4 @@ async fn migrate_to_v2(pool: &Pool<Sqlite>) -> Result<()> {
 
 ---
 
-*Last Updated: November 18, 2024*
+_Last Updated: November 18, 2024_

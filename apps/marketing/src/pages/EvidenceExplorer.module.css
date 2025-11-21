@@ -57,7 +57,9 @@
   background: rgba(148, 163, 184, 0.1);
   color: inherit;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .exportBtn:hover {
@@ -111,7 +113,9 @@
   border: 1px solid transparent;
   background: rgba(15, 23, 42, 0.8);
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .recordCard:hover {
