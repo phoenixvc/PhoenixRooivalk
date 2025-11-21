@@ -13,6 +13,7 @@
     "sync:wasm": "node scripts/sync-wasm.js"
   },
   "dependencies": {
+    "@phoenix-rooivalk/types": "workspace:*",
     "@phoenix-rooivalk/utils": "workspace:*",
     "next": "16.0.3",
     "react": "19.2.0",

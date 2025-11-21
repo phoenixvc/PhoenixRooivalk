@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "./EventFeed.module.css";
 
-type EventSeverity = "info" | "warning" | "success" | "critical";
+type EventSeverity = "info" | "warning" | "success" | "critical" | "error";
 
 interface FeedItem {
   timestamp: string;
   message: string;
   severity?: EventSeverity;
-  details?: string;
+  details?: Record<string, unknown>;
 }
 
 interface EventFeedProps {
@@ -19,6 +19,8 @@ const EventFeed: React.FC<EventFeedProps> = ({ feedItems }) => {
     switch (severity) {
       case "critical":
         return "🔴";
+      case "error":
+        return "❌";
       case "warning":
         return "⚠️";
       case "success":
@@ -66,7 +68,9 @@ const EventFeed: React.FC<EventFeedProps> = ({ feedItems }) => {
               </span>
               <span className={styles.message}>{item.message}</span>
               {item.details && (
-                <span className={styles.details}>{item.details}</span>
+                <span className={styles.details}>
+                  {JSON.stringify(item.details)}
+                </span>
               )}
             </div>
           </div>
