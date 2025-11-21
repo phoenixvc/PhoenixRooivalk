@@ -298,7 +298,7 @@ export const EvidenceExplorer: React.FC<EvidenceExplorerProps> = ({
               <div className={styles.detailsContent}>
                 <div className={styles.detailSection}>
                   <h3>Record Information</h3>
-                  <dl>
+                  <dl className={styles.dl}>
                     <dt>ID:</dt>
                     <dd className={styles.mono}>{selectedEvidence.id}</dd>
                     <dt>Event Type:</dt>
