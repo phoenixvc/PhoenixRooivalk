@@ -1,6 +1,6 @@
 #!/bin/bash
 # Pitch Deck PowerPoint Generation Script
-# Version: 1.0
+# Version: 1.1
 # Usage: ./generate-ppt.sh [version]
 
 set -e
@@ -31,12 +31,28 @@ check_tool() {
     return 0
 }
 
+# Check for npx marp (local installation via npm)
+check_npx_marp() {
+    if cd .. && npx @marp-team/marp-cli --version &> /dev/null; then
+        echo "✅ Marp CLI found (local npm installation)"
+        cd - > /dev/null
+        return 0
+    fi
+    cd - > /dev/null 2>&1 || true
+    return 1
+}
+
 echo "Checking for required tools..."
 MARP_AVAILABLE=false
 PANDOC_AVAILABLE=false
 
-if check_tool "marp" "npm install -g @marp-team/marp-cli"; then
+# First check for local marp via npx
+if check_npx_marp; then
     MARP_AVAILABLE=true
+    MARP_CMD="npx"
+elif check_tool "marp" "npm install -g @marp-team/marp-cli"; then
+    MARP_AVAILABLE=true
+    MARP_CMD="marp"
 fi
 
 if check_tool "pandoc" "brew install pandoc (macOS) or apt-get install pandoc (Linux)"; then
@@ -48,17 +64,33 @@ echo ""
 # Generate with Marp (best for presentations)
 if [ "$MARP_AVAILABLE" = true ]; then
     echo "📊 Generating PowerPoint with Marp..."
-    marp "${SOURCE_FILE}" \
-        --output "${OUTPUT_BASE}_marp.pptx" \
-        --theme default \
-        --allow-local-files
-    echo "✅ Created: ${OUTPUT_BASE}_marp.pptx"
+    if [ "$MARP_CMD" = "npx" ]; then
+        cd .. && npx @marp-team/marp-cli "pitch-deck/${SOURCE_FILE}" \
+            --output "pitch-deck/${OUTPUT_BASE}.pptx" \
+            --theme default \
+            --allow-local-files
+        cd pitch-deck
+    else
+        marp "${SOURCE_FILE}" \
+            --output "${OUTPUT_BASE}.pptx" \
+            --theme default \
+            --allow-local-files
+    fi
+    echo "✅ Created: ${OUTPUT_BASE}.pptx"
     
     echo "📄 Generating PDF with Marp..."
-    marp "${SOURCE_FILE}" \
-        --output "${OUTPUT_BASE}.pdf" \
-        --pdf \
-        --allow-local-files
+    if [ "$MARP_CMD" = "npx" ]; then
+        cd .. && npx @marp-team/marp-cli "pitch-deck/${SOURCE_FILE}" \
+            --output "pitch-deck/${OUTPUT_BASE}.pdf" \
+            --pdf \
+            --allow-local-files
+        cd pitch-deck
+    else
+        marp "${SOURCE_FILE}" \
+            --output "${OUTPUT_BASE}.pdf" \
+            --pdf \
+            --allow-local-files
+    fi
     echo "✅ Created: ${OUTPUT_BASE}.pdf"
 fi
 
@@ -130,7 +162,7 @@ ls -lh PhoenixRooivalk_Pitch_Deck_${VERSION}* 2>/dev/null || echo "Check above f
 
 echo ""
 echo "💡 Tips:"
-echo "  - For best results, use Marp: npm install -g @marp-team/marp-cli"
+echo "  - For best results, Marp CLI is installed locally (npm install -D @marp-team/marp-cli)"
 echo "  - Open HTML file in browser for quick preview"
-echo "  - Use PPTX files for presentations"
+echo "  - Use PPTX files for formal investor presentations"
 echo ""

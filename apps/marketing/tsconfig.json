@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@phoenix-rooivalk/types": ["../../packages/types/src/index.ts"],
       "@phoenix-rooivalk/utils": ["../../packages/utils/src/index.ts"],
       "@/*": ["./src/*"]
     },

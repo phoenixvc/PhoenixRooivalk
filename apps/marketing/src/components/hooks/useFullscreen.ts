@@ -58,6 +58,7 @@ export const useFullscreen = ({
       gameRef.current &&
       !document.fullscreenElement
     ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Controlled prompt display before fullscreen action
       setShowFullscreenPrompt(true);
       const timer = setTimeout(() => {
         enterFullscreen();

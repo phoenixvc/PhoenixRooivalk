@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document outlines the testing strategy for the Phoenix Rooivalk platform, covering unit tests, integration tests, end-to-end tests, and performance benchmarks.
+This document outlines the testing strategy for the Phoenix Rooivalk platform,
+covering unit tests, integration tests, end-to-end tests, and performance
+benchmarks.
 
 ## Testing Philosophy
 
@@ -171,7 +173,7 @@ use phoenix_evidence::model::EvidenceRecord;
 async fn test_solana_anchoring() {
     let provider = SolanaAnchorProvider::new_devnet();
     let evidence = EvidenceRecord { /* ... */ };
-    
+
     let tx_ref = provider.anchor(&evidence).await.unwrap();
     assert!(!tx_ref.tx_id.is_empty());
 }
@@ -211,26 +213,26 @@ async fn test_solana_anchoring() {
 
 ```typescript
 // tests/e2e/threat-simulator.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('threat simulator basic flow', async ({ page }) => {
-  await page.goto('/');
-  
+test("threat simulator basic flow", async ({ page }) => {
+  await page.goto("/");
+
   // Wait for simulator to load
   await expect(page.locator('[data-testid="simulator"]')).toBeVisible();
-  
+
   // Spawn a threat
   await page.click('[data-testid="spawn-threat-btn"]');
-  
+
   // Verify threat appears
-  await expect(page.locator('.threat')).toBeVisible();
-  
+  await expect(page.locator(".threat")).toBeVisible();
+
   // Neutralize threat
-  await page.click('.threat');
-  
+  await page.click(".threat");
+
   // Verify score increases
   const score = await page.textContent('[data-testid="score"]');
-  expect(parseInt(score || '0')).toBeGreaterThan(0);
+  expect(parseInt(score || "0")).toBeGreaterThan(0);
 });
 ```
 
@@ -287,6 +289,7 @@ cargo bench
 **Tool**: k6 or Artillery for API load testing
 
 **Target Metrics**:
+
 - API: 1000 req/s with <100ms p95
 - Keeper: Process 100 jobs/minute
 - Database: <10ms query time p99
@@ -295,25 +298,29 @@ cargo bench
 
 ```javascript
 // tests/load/api-load-test.js
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+import http from "k6/http";
+import { check, sleep } from "k6";
 
 export const options = {
   vus: 100,
-  duration: '30s',
+  duration: "30s",
 };
 
 export default function () {
-  const res = http.post('http://localhost:8080/api/evidence', JSON.stringify({
-    eventType: 'test',
-    payload: {},
-  }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const res = http.post(
+    "http://localhost:8080/api/evidence",
+    JSON.stringify({
+      eventType: "test",
+      payload: {},
+    }),
+    {
+      headers: { "Content-Type": "application/json" },
+    },
+  );
 
   check(res, {
-    'status is 201': (r) => r.status === 201,
-    'response time < 200ms': (r) => r.timings.duration < 200,
+    "status is 201": (r) => r.status === 201,
+    "response time < 200ms": (r) => r.timings.duration < 200,
   });
 
   sleep(1);
@@ -334,7 +341,7 @@ k6 run tests/load/api-load-test.js
 
 ```typescript
 // .storybook/test-runner.ts
-import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import { toMatchImageSnapshot } from "jest-image-snapshot";
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -350,14 +357,14 @@ export default {
 
 ### Current Coverage
 
-| Package | Unit | Integration | E2E | Total |
-|---------|------|-------------|-----|-------|
-| `evidence` | 95% | 80% | - | 90% |
-| `keeper` | 85% | 75% | - | 82% |
-| `api` | 80% | 70% | 90% | 78% |
-| `marketing` | 70% | - | 85% | 75% |
-| `types` | 100% | - | - | 100% |
-| `ui` | 75% | - | - | 75% |
+| Package     | Unit | Integration | E2E | Total |
+| ----------- | ---- | ----------- | --- | ----- |
+| `evidence`  | 95%  | 80%         | -   | 90%   |
+| `keeper`    | 85%  | 75%         | -   | 82%   |
+| `api`       | 80%  | 70%         | 90% | 78%   |
+| `marketing` | 70%  | -           | 85% | 75%   |
+| `types`     | 100% | -           | -   | 100%  |
+| `ui`        | 75%  | -           | -   | 75%   |
 
 ### Coverage Goals
 
@@ -443,7 +450,7 @@ Use factories for test data generation:
 export function createEvidenceRecord(overrides = {}) {
   return {
     id: `evidence-${Date.now()}`,
-    eventType: 'test',
+    eventType: "test",
     payload: {},
     timestamp: new Date().toISOString(),
     ...overrides,
@@ -456,6 +463,7 @@ export function createEvidenceRecord(overrides = {}) {
 ### External Services
 
 Mock external services (blockchains, APIs) to:
+
 - Speed up tests
 - Ensure deterministic behavior
 - Avoid rate limits/costs
@@ -464,7 +472,7 @@ Mock external services (blockchains, APIs) to:
 // __mocks__/solana.ts
 export const mockSolanaProvider = {
   anchor: jest.fn().mockResolvedValue({
-    tx_id: 'mock-tx-123',
+    tx_id: "mock-tx-123",
     confirmed: false,
   }),
 };
@@ -475,13 +483,13 @@ export const mockSolanaProvider = {
 Use `jest.useFakeTimers()` for time-dependent logic:
 
 ```typescript
-it('should clean up old items after timeout', () => {
+it("should clean up old items after timeout", () => {
   jest.useFakeTimers();
   const manager = new ResourceManager();
-  
-  manager.addItem('test');
+
+  manager.addItem("test");
   jest.advanceTimersByTime(60000);
-  
+
   expect(manager.getItems()).toHaveLength(0);
   jest.useRealTimers();
 });
@@ -498,6 +506,7 @@ it('should clean up old items after timeout', () => {
 ### Test Smells
 
 Watch for:
+
 - Tests that depend on execution order
 - Tests with hardcoded IDs/timestamps
 - Tests that require manual setup
@@ -513,6 +522,7 @@ Watch for:
 ## Documentation
 
 Each test suite should have:
+
 - Purpose comment at top
 - Clear test names (`it('should X when Y')`)
 - Setup/teardown documented
@@ -528,4 +538,4 @@ Each test suite should have:
 
 ---
 
-*Last Updated: November 18, 2024*
+_Last Updated: November 18, 2024_

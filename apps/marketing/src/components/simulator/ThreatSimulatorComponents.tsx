@@ -23,6 +23,15 @@ export const ThreatSimulatorComponents: React.FC<
   getThreatAppearance,
 }) => {
   const [hoveredThreat, setHoveredThreat] = React.useState<string | null>(null);
+  const [currentTime, setCurrentTime] = React.useState(() => Date.now());
+
+  // Update current time for fade animations
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 100); // Update every 100ms for smooth fade
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -97,7 +106,6 @@ export const ThreatSimulatorComponents: React.FC<
         // Calculate fade opacity for neutralized threats
         let fadeOpacity = 1;
         if (threat.status === "neutralized" && threat.fadeStartTime) {
-          const currentTime = Date.now();
           if (currentTime >= threat.fadeStartTime) {
             const fadeDuration = 3000; // 3 seconds to fade out
             const fadeProgress = Math.min(
