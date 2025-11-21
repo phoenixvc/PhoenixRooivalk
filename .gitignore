@@ -80,3 +80,8 @@ package-lock.json
 
 # Large documentation files (prefer markdown)
 *.pdf
+
+# Generated pitch deck files (generate from markdown)
+pitch-deck/*.pptx
+pitch-deck/*.pdf
+pitch-deck/*.html

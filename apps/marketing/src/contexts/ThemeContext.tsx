@@ -42,6 +42,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   // Mark as mounted
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Standard Next.js hydration pattern
     setMounted(true);
   }, []);
 

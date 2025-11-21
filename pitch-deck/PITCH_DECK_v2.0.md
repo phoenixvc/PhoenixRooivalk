@@ -1,3 +1,27 @@
+---
+marp: true
+theme: default
+paginate: true
+backgroundColor: #0F172A
+color: #CBD5E1
+style: |
+  section {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  h1 {
+    color: #F97316;
+  }
+  h2 {
+    color: #FBBF24;
+  }
+  strong {
+    color: #FBBF24;
+  }
+  table {
+    font-size: 0.9em;
+  }
+---
+
 # PhoenixRooivalk Investor Pitch Deck
 
 ## Dual-Brand Strategy: SkySnare™ Consumer + AeroNet™ Enterprise
@@ -135,18 +159,41 @@ AI-enabled, compliance-focused counter-drone systems.
 
 # 5-Year Trajectory: $1.8M → $50M
 
-| Year     | Revenue | EBITDA | Margin | Milestones             |
-| -------- | ------- | ------ | ------ | ---------------------- |
-| **FY26** | $1.8M   | -$0.5M | -27%   | Certification complete |
-| **FY27** | $5.0M   | $1.2M  | 24%    | FAA waiver, 6 pilots   |
-| **FY28** | $18M    | $2.7M  | 15%    | Multi-market scaling   |
-| **FY29** | $32M    | $8M    | 25%    | AeroNet AI 2.0         |
-| **FY30** | $50M    | $15M   | 30%    | Exit readiness         |
+| Year     | Revenue | EBITDA | Margin | Milestones                        |
+| -------- | ------- | ------ | ------ | --------------------------------- |
+| **FY26** | $1.8M   | -$0.5M | -27%   | Certification complete (Q2)       |
+| **FY27** | $5.0M   | $1.2M  | 24%    | FAA waiver (Q2), 6 pilots (Q3-Q4) |
+| **FY28** | $18M    | $2.7M  | 15%    | Multi-market scaling (Q1-Q4)      |
+| **FY29** | $32M    | $8M    | 25%    | AeroNet AI 2.0 (Q2)               |
+| **FY30** | $50M    | $15M   | 30%    | Exit readiness (Q4)               |
+
+### Revenue Growth Visualization
+
+```
+$50M ┤                                   ╭─●  FY30: Exit Ready
+$40M ┤                           ╭───────╯
+$32M ┤                    ╭──────╯         ● FY29: AI 2.0
+$20M ┤              ╭─────╯
+$18M ┤         ╭────╯                      ● FY28: Multi-market
+$10M ┤    ╭────╯
+$5M  ┤  ╭─╯                                ● FY27: First Pilots
+$1.8M┼──╯                                  ● FY26: Launch
+     └─────────────────────────────────────
+     FY26  FY27  FY28  FY29  FY30
+```
 
 ### Revenue Mix
 
-- FY26: 80% Consumer / 20% Enterprise
-- FY30: 50% Consumer / 50% Enterprise
+- **FY26:** 80% Consumer (SkySnare™) / 20% Enterprise (AeroNet™)
+- **FY28:** 65% Consumer / 35% Enterprise
+- **FY30:** 50% Consumer / 50% Enterprise
+
+### Key Metrics (FY30)
+
+- **Unit Sales:** 75,000 SkySnare™ + 50 AeroNet™ systems
+- **Customer LTV:** $150 (consumer) / $2M (enterprise)
+- **Gross Margin:** 60% blended
+- **CAC Payback:** 8 months (consumer) / 14 months (enterprise)
 
 ---
 
@@ -175,6 +222,55 @@ Commercial counter-drone & infrastructure
 - Conservative: $4.2B (commercial/infrastructure)
 - Defense: $15-20B (military contracts)
 - **Our Focus:** Commercial first, defense expansion FY28+
+### Market Size Visualization
+
+```
+$20B ┤                            ╔════════════════╗
+$15B ┤                            ║   Defense      ║
+$10B ┤                            ║   Market       ║
+$5B  ┤  ╔═══════════════════╗    ║   (Future)     ║
+$4B  ┤  ║   AeroNet™        ║    ╚════════════════╝
+$3B  ┤  ║   Commercial      ║
+$2B  ┤  ║   C-UAS: $4.2B    ║
+$1B  ┤  ║   47% CAGR        ║    ╔════════════╗
+     ┤  ╚═══════════════════╝    ║ SkySnare™  ║
+     └──────────────────────────────────────────
+        AeroNet™ (2030)  Defense   SkySnare™
+        Commercial               (2030) $1.68B
+                                8.2% CAGR
+```
+
+### SkySnare™ Consumer: $1.68B TAM (2030)
+
+- **Market:** Premium sports & training equipment
+- **CAGR:** 8.2% (2025-2030)
+- **Target:** Safety-conscious athletes, schools, training facilities
+- **Entry Point:** Direct-to-consumer + retail partnerships
+
+### AeroNet™ Enterprise: $4.2B TAM (2030)
+
+- **Market:** Commercial counter-drone & infrastructure security
+- **CAGR:** 47% (explosive growth driven by threats)
+- **Target:** Airports, stadiums, critical infrastructure, corporations
+- **Entry Point:** Pilots + government compliance drivers
+
+### Defense Market: $15-20B Additional Upside
+
+**Recent Contract Evidence (2024-2025):**
+
+- **Raytheon Coyote:** $5.04B contract (through 2033)
+- **Pentagon Replicator Program:** $500M (delivery by Aug 2026)
+- **Total recent awards:** $6B+ (validates market maturity)
+
+**Our Strategy:**
+
+- **Phase 1 (FY26-FY27):** Commercial validation (SkySnare™ + AeroNet™)
+- **Phase 2 (FY28-FY29):** Defense market entry via strategic partnerships
+- **Phase 3 (FY30+):** Full defense portfolio with proven commercial track
+  record
+
+**Conservative Approach:** Focus on $5.9B commercial TAM, defense as expansion
+opportunity
 
 ---
 
@@ -259,33 +355,59 @@ Commercial counter-drone & infrastructure
 
 # Capital Allocation
 
-### Series A: $1.5M (Q1 2026)
+### Series A: $1.5M (Q1 2026 - Jan 15, 2026 close)
 
-| Category          | Amount | %   |
-| ----------------- | ------ | --- |
-| R&D & Prototype   | $500K  | 33% |
-| Manufacturing     | $350K  | 23% |
-| Marketing & Sales | $300K  | 20% |
-| Team Expansion    | $200K  | 13% |
-| Working Capital   | $150K  | 10% |
+| Category          | Amount | %   | Purpose                                      |
+| ----------------- | ------ | --- | -------------------------------------------- |
+| R&D & Prototype   | $500K  | 33% | Product development, testing, certifications |
+| Manufacturing     | $350K  | 23% | Initial production setup, tooling, inventory |
+| Marketing & Sales | $300K  | 20% | Brand launch, D2C campaigns, sales team      |
+| Team Expansion    | $200K  | 13% | 2 engineers, 1 marketer, 1 ops manager       |
+| Working Capital   | $150K  | 10% | Operations, legal, contingency               |
 
-**Milestones:**
+### Visual Capital Allocation
 
-- May 2026: CPSC certification
-- Oct 2026: 4,500 units sold
-- Q4 2026: AeroNet™ prototype 80% complete
+```
+R&D & Prototype     [████████████████████████████████] 33% - $500K
+Manufacturing       [███████████████████████]          23% - $350K
+Marketing & Sales   [████████████████████]             20% - $300K
+Team Expansion      [█████████████]                    13% - $200K
+Working Capital     [██████████]                       10% - $150K
+```
 
-### Series B: $5M (Q2 2027)
+**Specific Milestones:**
 
-Enterprise scale, FAA waiver, 6-8 pilots
+- **Feb 15, 2026:** First 2 engineers hired (Rust + Hardware)
+- **Mar 15, 2026:** CPSC certification application submitted
+- **Apr 15, 2026:** SkySnare™ website + D2C launch
+- **May 20, 2026:** CPSC certification received
+- **Jun 30, 2026:** 1,000 units manufactured and shipped
+- **Oct 31, 2026:** FY26 revenue target: $1.8M achieved (4,500 units sold)
+- **Q4 2026:** AeroNet™ prototype 80% complete
 
-### Series C: $15M (Q4 2028)
+### Series B: $5M (Q2 2027 - Apr 2027 close)
 
-International expansion, AI 2.0
+**Focus:** Enterprise scale-up, FAA waiver, 6-8 pilot deployments **Key Dates:**
 
-### Growth: $20M (Q2 2030)
+- Apr 2027: Funding close
+- Jun 2027: FAA waiver obtained
+- Q3-Q4 2027: First 6 pilot installations
 
-Exit preparation, global dominance
+### Series C: $15M (Q4 2028 - Oct 2028 close)
+
+**Focus:** International expansion, AI 2.0 development **Key Dates:**
+
+- Oct 2028: Funding close
+- Q1 2029: AI 2.0 beta release
+- Q2 2029: Multi-country deployments
+
+### Growth Round: $20M (Q2 2030 - Apr 2030 close)
+
+**Focus:** Exit preparation, market dominance, IPO readiness **Key Dates:**
+
+- Apr 2030: Funding close
+- Q3 2030: $50M revenue run rate achieved
+- Q4 2030: Exit process initiated
 
 **Total Capital: $41.5M**
 
@@ -295,47 +417,120 @@ Exit preparation, global dominance
 
 # 18-Month Roadmap & 5-Year Vision
 
-### Q1 2026: Foundation
+### Q1 2026: Foundation (Jan-Mar 2026)
 
-- Series A close: $1.5M
-- Team expansion (4 hires)
-- CPSC certification process
+- **Jan 15, 2026:** Series A close: $1.5M
+- **Feb 2026:** Team expansion (4 hires: 2 engineers, 1 marketer, 1 ops)
+- **Mar 2026:** CPSC certification process initiated
+- **Milestone:** Foundation laid for dual-brand launch
 
-### Q2 2026: Consumer Launch
+### Q2 2026: Consumer Launch (Apr-Jun 2026)
 
-- SkySnare™ D2C launch
-- 1,000 units shipped
-- Manufacturing at scale
+- **Apr 15, 2026:** SkySnare™ D2C website launch
+- **May 20, 2026:** CPSC certification completed
+- **Jun 2026:** 1,000 units shipped
+- **Milestone:** Consumer validation begins
 
-### Q3 2026: Validation
+### Q3 2026: Validation (Jul-Sep 2026)
 
-- 3,000 additional units
-- AeroNet™ prototype 80% complete
-- First enterprise LOI
+- **Jul-Sep 2026:** 3,000 additional units sold
+- **Aug 2026:** AeroNet™ prototype 80% complete
+- **Sep 2026:** First enterprise LOI signed
+- **Milestone:** Product-market fit confirmed
 
-### Q4 2026: Enterprise Prep
+### Q4 2026: Enterprise Prep (Oct-Dec 2026)
 
-- FAA waiver submission
-- Series B fundraising
-- FY26 target: $1.8M revenue
+- **Oct 2026:** 4,500 total units sold (FY26 target)
+- **Nov 2026:** FAA waiver submission
+- **Dec 2026:** Series B fundraising launch
+- **Milestone:** FY26 target $1.8M revenue achieved
 
 ### 2027-2030: Scale & Exit
 
-- **2027:** $5M revenue, first pilots
-- **2028:** $18M revenue, multi-market
-- **2029:** $32M revenue, AI 2.0
-- **2030:** $50M revenue, exit prep
-
-### Exit Options
-
-- Consumer: $150-200M
-- Enterprise: $250-300M
-- Combined: $350-400M
-- **Returns:** 25-30x Seed, 8-10x Series A
+- **FY27:** $5M revenue, 6-8 pilots, Series B ($5M)
+- **FY28:** $18M revenue, multi-market, Series C ($15M)
+- **FY29:** $32M revenue, AeroNet AI 2.0, Growth ($20M)
+- **FY30:** $50M revenue, exit readiness
 
 ---
 
-## INVESTMENT SUMMARY
+## SLIDE 11: EXIT STRATEGY
+
+# Multiple Exit Paths, Strong Returns
+
+### Exit Timeline: 2029-2031 (4-6 Years)
+
+**Primary Exit Windows:**
+
+- **2029 (Early Exit):** Strategic acquisition at $200-250M
+- **2030 (Planned Exit):** Strategic/PE acquisition at $350-400M
+- **2031 (Extended Exit):** IPO or mega-acquisition at $500M+
+
+### Strategic Acquirers (Consumer - SkySnare™)
+
+**Sporting Goods Giants:**
+
+- **Nike, Adidas, Under Armour:** Portfolio expansion into smart training
+  equipment
+- **Dick's Sporting Goods, REI:** Vertical integration into premium products
+- **Valuation Range:** $150-200M (15-20x FY30 consumer revenue)
+
+**Consumer Tech Players:**
+
+- **Apple, Garmin:** Wearable/training tech synergies
+- **Peloton, Tonal:** Smart fitness ecosystem expansion
+
+### Strategic Acquirers (Enterprise - AeroNet™)
+
+**Defense Primes:**
+
+- **Raytheon, Northrop Grumman, Lockheed Martin:** C-UAS portfolio addition
+- **L3Harris, General Dynamics:** Infrastructure protection solutions
+- **Valuation Range:** $250-350M (12-15x FY30 enterprise revenue)
+
+**Enterprise Security:**
+
+- **Palantir:** AI-enabled security platforms
+- **Anduril:** Autonomous defense systems
+- **Dedicated Freight Corridor Corporation (DFCC), Airports Authority:** Direct
+  buyers
+
+### Private Equity Exit
+
+**Target PE Firms:**
+
+- **Vista Equity Partners:** Enterprise software + hardware
+- **Thoma Bravo:** B2B SaaS platforms
+- **KKR, Carlyle:** Defense + infrastructure focus
+- **Valuation Range:** $300-400M (10-12x EBITDA at 30% margin)
+
+### IPO Path (Extended Scenario)
+
+**Public Market Potential:**
+
+- **Timing:** 2031+ (after $100M+ revenue)
+- **Comparables:** DroneShield (ASX), Anduril (planned), Palantir (PLTR)
+- **Valuation Range:** $500M-1B (10-20x revenue multiple)
+- **Market:** NASDAQ or dual-listing (JSE + NASDAQ)
+
+### Return Scenarios
+
+| Exit Type           | Valuation | Seed (25-30x) | Series A (8-10x) | Series B (4-5x) |
+| ------------------- | --------- | ------------- | ---------------- | --------------- |
+| **Early (2029)**    | $200-250M | $5.0-6.25M    | $16-25M          | $40-50M         |
+| **Planned (2030)**  | $350-400M | $8.75-10M     | $28-40M          | $70-80M         |
+| **Extended (2031)** | $500M+    | $12.5M+       | $40M+            | $100M+          |
+
+**Investment Highlights:**
+
+- **Proven Model:** Dual-brand de-risks single-market exposure
+- **Multiple Buyers:** Consumer, defense, PE, public market options
+- **Strong Fundamentals:** 30% EBITDA margin by FY30
+- **Market Timing:** Defensive tech + consumer safety convergence
+
+---
+
+## SLIDE 12: INVESTMENT SUMMARY
 
 # The Opportunity
 

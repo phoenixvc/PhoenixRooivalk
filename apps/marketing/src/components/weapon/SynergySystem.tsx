@@ -140,6 +140,7 @@ export const SynergySystem: React.FC<SynergySystemProps> = ({
       );
     });
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Computing derived state from props
     setActiveSynergies(synergies);
     onSynergyUpdate(synergies);
   }, [selectedEffectors, onSynergyUpdate]);
