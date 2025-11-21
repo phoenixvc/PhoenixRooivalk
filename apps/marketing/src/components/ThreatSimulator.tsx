@@ -47,6 +47,7 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
 
   // Client-only rendering flag for Next.js hydration
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Standard Next.js hydration pattern
     setIsClient(true);
   }, []);
 

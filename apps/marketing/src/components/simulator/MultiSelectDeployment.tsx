@@ -31,33 +31,6 @@ export const MultiSelectDeployment: React.FC<MultiSelectDeploymentProps> = ({
   const [selectedDeployments, setSelectedDeployments] = useState<string[]>([]);
   const [usedEnergy, setUsedEnergy] = useState(0);
 
-  // Initialize deployment options from database
-  useEffect(() => {
-    const options = effectorDatabase.deployments.map((deployment) => ({
-      id: deployment.id,
-      name: deployment.name,
-      role: deployment.role,
-      energy: deployment.energy || 0,
-      speed: deployment.speed || "unknown",
-      endurance: deployment.endurance || "unknown",
-      selected: false,
-      disabled: false,
-      maxCount: getMaxCountForRole(deployment.role),
-      currentCount: 0,
-    }));
-    setDeploymentOptions(options);
-  }, []);
-
-  // Update disabled state based on energy constraints
-  useEffect(() => {
-    setDeploymentOptions((prev) =>
-      prev.map((option) => ({
-        ...option,
-        disabled: option.energy > availableEnergy,
-      })),
-    );
-  }, [availableEnergy]);
-
   const getMaxCountForRole = (role: string): number => {
     // Define max counts based on role and operational constraints
     const roleLimits = {
@@ -73,6 +46,35 @@ export const MultiSelectDeployment: React.FC<MultiSelectDeploymentProps> = ({
     };
     return roleLimits[role as keyof typeof roleLimits] || 2;
   };
+
+  // Initialize deployment options from database
+  useEffect(() => {
+    const options = effectorDatabase.deployments.map((deployment) => ({
+      id: deployment.id,
+      name: deployment.name,
+      role: deployment.role,
+      energy: deployment.energy || 0,
+      speed: deployment.speed || "unknown",
+      endurance: deployment.endurance || "unknown",
+      selected: false,
+      disabled: false,
+      maxCount: getMaxCountForRole(deployment.role),
+      currentCount: 0,
+    }));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Initial data loading from static database
+    setDeploymentOptions(options);
+  }, []);
+
+  // Update disabled state based on energy constraints
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Computing derived state from availableEnergy
+    setDeploymentOptions((prev) =>
+      prev.map((option) => ({
+        ...option,
+        disabled: option.energy > availableEnergy,
+      })),
+    );
+  }, [availableEnergy]);
 
   const handleSelectionChange = (optionId: string, selected: boolean) => {
     const option = deploymentOptions.find((opt) => opt.id === optionId);
@@ -119,6 +121,7 @@ export const MultiSelectDeployment: React.FC<MultiSelectDeploymentProps> = ({
 
   useEffect(() => {
     const total = calculateUsedEnergy();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Computing derived state from deploymentOptions
     setUsedEnergy(total);
   }, [calculateUsedEnergy]);
 

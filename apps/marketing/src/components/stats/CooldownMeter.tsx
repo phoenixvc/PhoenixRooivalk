@@ -17,7 +17,7 @@ export const CooldownMeter: React.FC<CooldownMeterProps> = ({
   showLabel = false,
   label = "",
 }) => {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   // Update every second while cooldown is active
   useEffect(() => {

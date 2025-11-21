@@ -72,7 +72,10 @@ export const Button: React.FC<ButtonProps> = ({
 
     // Call original onClick handler
     if (onClick) {
-      (onClick as any)(event);
+      onClick(
+        event as React.MouseEvent<HTMLButtonElement> &
+          React.MouseEvent<HTMLAnchorElement>,
+      );
     }
   };
 

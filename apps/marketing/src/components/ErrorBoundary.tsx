@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
+import Link from "next/link";
 
 interface Props {
   children: ReactNode;
@@ -235,9 +236,9 @@ export const WasmErrorFallback: React.FC = () => {
           >
             Reload Page
           </button>
-          <a href="/" className="wasm-error-home">
+          <Link href="/" className="wasm-error-home">
             Return to Home
-          </a>
+          </Link>
         </div>
       </div>
 
