@@ -134,8 +134,8 @@ async fn main() {
                     }
                 }
             }
-            Err(connection_error) => {
-                tracing::error!(error=%connection_error, "db connect failed; keeper idle");
+            Err(_) => {
+                tracing::error!("db connect failed; keeper idle");
                 tokio::time::sleep(Duration::from_secs(10)).await;
             }
         }
