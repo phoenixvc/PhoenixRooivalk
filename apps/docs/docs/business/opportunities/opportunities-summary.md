@@ -36,6 +36,8 @@ Each opportunity is scored on a 1-5 scale across multiple weighted factors:
 
 ### Priority Rankings
 
+#### Defense & Government Programs
+
 | Rank | Opportunity | Score | Status | Deadline |
 |------|-------------|-------|--------|----------|
 | **1** | Soonami Cohort 8 | 4.5/5 | **ACTIVE** | Ongoing |
@@ -47,6 +49,31 @@ Each opportunity is scored on a 1-5 scale across multiple weighted factors:
 | **7** | Australia LAND 156 | 3.7/5 | Monitor | 2026 |
 | **8** | AFWERX SBIR Open Topic | 3.5/5 | Paused | TBD |
 | **9** | Army SBIR/STTR | 3.4/5 | Paused | TBD |
+
+#### AI Hackathons & Competitions
+
+| Rank | Opportunity | Score | Status | Prize/Funding |
+|------|-------------|-------|--------|---------------|
+| **1** | DARPA AIxCC Challenge | 4.2/5 | Monitor | Up to $4M |
+| **2** | Afore Hacks AI Agent | 3.9/5 | Open | $500K-$2M potential |
+| **3** | SEED Hackathon (Perimeter ZERO) | 3.8/5 | Open | Scholarships + recognition |
+| **4** | GSA Federal AI Hackathon | 3.5/5 | Monitor | $10K prize pool |
+
+#### Tech Platform Programs (Non-Dilutive)
+
+| Rank | Opportunity | Score | Status | Credits/Benefits |
+|------|-------------|-------|--------|------------------|
+| **1** | NVIDIA Inception | 4.4/5 | **Apply Now** | $150K+ credits, hardware |
+| **2** | Google for Startups AI | 4.3/5 | Open | $350K cloud credits |
+| **3** | AWS Activate | 4.2/5 | **Apply Now** | Up to $300K credits |
+| **4** | Microsoft for Startups | 4.0/5 | Open | $150K Azure credits |
+
+#### Blockchain/Audit Trail Opportunities
+
+| Rank | Opportunity | Score | Status | Type |
+|------|-------------|-------|--------|------|
+| **1** | LF Decentralized Trust | 3.8/5 | Open | Membership/Community |
+| **2** | NIST NCCoE Traceability | 3.6/5 | Monitor | Research Partnership |
 
 ---
 
@@ -288,15 +315,372 @@ Australian partners (EOS Defence, Department 13, Acacia Systems).
 
 ---
 
+## AI Hackathons & Competitions
+
+### DARPA AI Cyber Challenge (AIxCC)
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | AI Cyber Challenge |
+| **Agency** | Defense Advanced Research Projects Agency |
+| **Prize Pool** | Up to $4M (1st: $4M, 2nd: $3M, 3rd: $1.5M) |
+| **Focus** | AI-powered vulnerability detection & patching |
+| **Event** | DEF CON annual conference |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Cyber defense aligns with edge security |
+| Funding Amount | 5 | $4M top prize |
+| Timeline Fit | 3 | Annual competition cycle |
+| Success Probability | 2 | Highly competitive (top AI teams) |
+| Market Access | 5 | DARPA/DoD visibility |
+| Effort Required | 2 | Significant R&D investment |
+| **Weighted Score** | **4.2** | |
+
+**Key Details:**
+- 2025 winners: Team Atlanta ($4M), Trail of Bits ($3M), Theori ($1.5M)
+- Cyber reasoning systems that identify/patch vulnerabilities across 54M lines of code
+- Seven teams competed in finals, each winning $2M in semifinals
+
+[DARPA Official Info](https://www.cybersecuritydive.com/news/darpa-ai-cyber-challenge-winners-def-con/757252/)
+
+---
+
+### Afore Hacks - AI Agent Hackathon
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Droids Strike Back AI Hackathon |
+| **Organizer** | Afore Capital |
+| **Location** | San Francisco |
+| **Date** | November 22, 2025 |
+| **Prize Pool** | $5,000+ cash prizes |
+| **Funding Access** | $500K-$2M pre-seed potential |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Autonomous agents align with edge AI |
+| Funding Amount | 5 | Pre-seed funding access |
+| Timeline Fit | 4 | November 2025 |
+| Success Probability | 3 | 200+ participants expected |
+| Market Access | 4 | VC network access |
+| Effort Required | 4 | 1-day intensive event |
+| **Weighted Score** | **3.9** | |
+
+**Key Details:**
+- Build autonomous AI systems
+- Software and simulation tracks
+- Expert mentorship from Afore Capital partners
+- Direct path to pre-seed funding
+
+[Afore Hacks](https://www.aforehacks.org/droids-strike-back)
+
+---
+
+### SEED Hackathon 2025 - Perimeter ZERO
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | SEED Global Education Hackathon |
+| **Theme** | Perimeter ZERO - Autonomous Defense |
+| **Prize** | GWU Engineering Scholarships (Fall 2026) |
+| **Focus** | Autonomous defense for legacy infrastructure |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Autonomous defense system theme |
+| Funding Amount | 3 | Scholarships, not cash |
+| Timeline Fit | 4 | 2025-2026 timeline |
+| Success Probability | 3 | Academic competition |
+| Market Access | 3 | Academic network |
+| Effort Required | 3 | Project development |
+| **Weighted Score** | **3.8** | |
+
+**Challenge Requirements:**
+- Build autonomous defense system for legacy infrastructure
+- Detect cyber-physical attacks
+- Respond without human intervention (millisecond timing)
+- Maintain safety requirements
+
+[SEED Hackathon](https://seedglobaleducation.com/seed-hackathon/2025/showcase-interest/)
+
+---
+
+### GSA Federal AI Hackathon
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Federal AI Hackathon |
+| **Agency** | General Services Administration |
+| **Locations** | Washington D.C., Atlanta, New York City |
+| **Prize Pool** | $10,000 total |
+| **Focus** | AI solutions for federal government |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 3 | Government AI focus |
+| Funding Amount | 2 | $10K modest |
+| Timeline Fit | 4 | Annual event |
+| Success Probability | 3 | Federal focus |
+| Market Access | 4 | GSA/Federal contacts |
+| Effort Required | 4 | Regional participation |
+| **Weighted Score** | **3.5** | |
+
+[GSA AI Hackathon](https://www.gsa.gov/technology/government-it-initiatives/federal-ai-hackathon)
+
+---
+
+## Tech Platform Programs (Non-Dilutive)
+
+### NVIDIA Inception Program
+
+:::tip Recommended: Apply Now
+
+Free to join, no equity, significant cloud credits and hardware discounts.
+
+:::
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | NVIDIA Inception |
+| **Cost** | Free (no equity) |
+| **Network** | 19,000+ AI startups globally |
+| **Cloud Credits** | Up to $150K via Nebius AI Lift |
+| **AWS Credits** | $25K-$100K via partnership |
+| **Other Benefits** | Hardware discounts, DLI training, VC intros |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Perfect for edge AI/ML development |
+| Funding Amount | 4 | Non-dilutive credits |
+| Timeline Fit | 5 | Apply anytime |
+| Success Probability | 4 | Accessible criteria |
+| Market Access | 4 | NVIDIA ecosystem access |
+| Effort Required | 5 | Simple application |
+| **Weighted Score** | **4.4** | |
+
+**Eligibility Requirements:**
+- At least one developer on team
+- Working website
+- Officially incorporated
+- Less than 10 years old
+- Note: Crypto-focused startups excluded
+
+**Partner Benefits:**
+- Nebius AI Lift: Up to $150K cloud credits
+- AWS Activate: $25K-$100K credits
+- Accenture Ventures: Enterprise scaling support
+
+[NVIDIA Inception](https://www.nvidia.com/en-us/startups/)
+
+---
+
+### Google for Startups Accelerator: AI
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Google for Startups Cloud AI Accelerator |
+| **Regions** | North America, UK, India, Africa |
+| **Duration** | 10-12 weeks |
+| **Credits** | Up to $350,000 Google Cloud |
+| **Equity** | None (equity-free) |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | AI/ML focus |
+| Funding Amount | 5 | $350K in credits |
+| Timeline Fit | 4 | Multiple cohorts |
+| Success Probability | 3 | Competitive selection |
+| Market Access | 4 | Google Cloud ecosystem |
+| Effort Required | 3 | Application + commitment |
+| **Weighted Score** | **4.3** | |
+
+**Program Benefits:**
+- Hands-on mentorship from Google experts
+- Technical project support
+- Featured at Google Cloud Next
+- Demo Day for investors
+- 30 days free Cloud TPU access
+
+**Regional Programs:**
+- **North America**: Cloud AI Accelerator - Next cohort Q1 2026
+- **UK**: AI First - Applications cycle yearly
+- **India**: AI First - September-December 2025
+- **Energy**: AI for Energy (utilities focus)
+
+[Google for Startups](https://startup.google.com/programs/accelerator/)
+
+---
+
+### AWS Activate
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | AWS Activate for Startups |
+| **Standard Credits** | Up to $100,000 |
+| **AI Startups** | Up to $300,000 |
+| **Validity** | 1-2 years |
+| **Equity** | None |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Infrastructure for ML training |
+| Funding Amount | 4 | Up to $300K for AI |
+| Timeline Fit | 5 | Apply anytime |
+| Success Probability | 4 | Accessible tiers |
+| Market Access | 3 | AWS partner network |
+| Effort Required | 5 | Simple application |
+| **Weighted Score** | **4.2** | |
+
+**Program Tiers:**
+- **Founders**: Up to $1,000 (bootstrapped)
+- **Portfolio**: Higher amounts (VC-backed)
+- **AI/ML Tier**: Up to $300,000 (foundation models)
+
+**New: Kiro Startup Credits (2025)**
+- Up to 1 year of Kiro Pro+ free
+- Available until December 31, 2025
+- For early-stage to Series B startups
+
+**Coverage:**
+- Compute (EC2, Lambda)
+- Storage (S3, EBS)
+- Databases (RDS, DynamoDB)
+- Data transfer (egress)
+- Most AWS services
+
+[AWS Activate](https://aws.amazon.com/startups/credits)
+
+---
+
+### Microsoft for Startups
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Microsoft for Startups Founders Hub |
+| **Credits** | Up to $150,000 Azure |
+| **AI Tools** | GitHub Copilot, OpenAI access |
+| **Equity** | None |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Azure ML capabilities |
+| Funding Amount | 4 | $150K credits |
+| Timeline Fit | 5 | Apply anytime |
+| Success Probability | 4 | Accessible |
+| Market Access | 3 | Microsoft ecosystem |
+| Effort Required | 5 | Simple application |
+| **Weighted Score** | **4.0** | |
+
+**Key Benefits:**
+- Azure credits for cloud compute
+- GitHub Enterprise access
+- OpenAI API access
+- LinkedIn Premium
+- Microsoft 365
+
+[Microsoft for Startups](https://www.microsoft.com/en-us/startups)
+
+---
+
+## Blockchain/Audit Trail Opportunities
+
+### LF Decentralized Trust (Hyperledger Foundation)
+
+| Attribute | Details |
+|-----------|---------|
+| **Organization** | Linux Foundation Decentralized Trust |
+| **Formerly** | Hyperledger Foundation |
+| **Focus** | Enterprise blockchain technologies |
+| **Members** | 250+ global institutions (IBM, Intel, Cisco) |
+| **Type** | Community membership, technical collaboration |
+
+**Relevance to Phoenix Rooivalk:**
+- Hyperledger Fabric is the blockchain platform for evidence anchoring
+- Access to technical resources and best practices
+- Network with enterprise blockchain implementers
+- Visibility among institutional members
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Using Fabric for audit trail |
+| Funding Amount | 2 | Community, not grants |
+| Timeline Fit | 5 | Ongoing |
+| Success Probability | 5 | Open community |
+| Market Access | 4 | Enterprise network |
+| Effort Required | 4 | Participation commitment |
+| **Weighted Score** | **3.8** | |
+
+**Key Projects:**
+- Hyperledger Fabric (enterprise blockchain)
+- Hyperledger Besu (Ethereum client)
+- Hyperledger Aries (identity)
+
+[LF Decentralized Trust](https://www.hyperledger.org/)
+
+---
+
+### NIST NCCoE Manufacturing Traceability
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Manufacturing Supply Chain Traceability |
+| **Agency** | NIST National Cybersecurity Center of Excellence |
+| **Focus** | Blockchain for product pedigree/provenance |
+| **Type** | Research partnership opportunity |
+
+**Relevance to Phoenix Rooivalk:**
+- Defense supply chain traceability requirements
+- Non-repudiable claims for product provenance
+- Government validation of blockchain approach
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Supply chain/evidence focus |
+| Funding Amount | 2 | Research collaboration |
+| Timeline Fit | 4 | Ongoing program |
+| Success Probability | 3 | Partnership required |
+| Market Access | 4 | Federal credibility |
+| Effort Required | 3 | Technical engagement |
+| **Weighted Score** | **3.6** | |
+
+[NIST NCCoE](https://www.nccoe.nist.gov/projects/manufacturing-supply-chain-traceability-using-blockchain-related-technologies)
+
+---
+
 ## Opportunity Calendar
 
 | Month | Opportunity | Action Required |
 |-------|-------------|-----------------|
 | **Nov 2025** | Soonami Cohort 8 | Active participation |
+| **Nov 22, 2025** | Afore Hacks AI Agent | Hackathon participation |
 | **Dec 15, 2025** | Canada CUAS Sandbox | **APPLICATION DEADLINE** |
-| **Oct 14, 2025** | UK DASA Cycle 4 | Submission deadline |
+| **Dec 31, 2025** | AWS Kiro Credits | Apply before deadline |
+| **Q1 2026** | NVIDIA Inception | Apply for membership |
+| **Q1 2026** | Google for Startups AI | Apply for cohort |
 | **Q1 2026** | DIU CSO | Monitor new solicitations |
 | **FY2026** | DHS C-UAS Grants | Partner identification |
+| **Aug 2026** | DARPA AIxCC | DEF CON competition |
 | **Sep 2026** | Canada CUAS Sandbox | Event participation |
 | **2026** | NATO NIF | Pitch preparation |
 
@@ -304,14 +688,31 @@ Australian partners (EOS Defence, Department 13, Acacia Systems).
 
 ## Application Status Tracker
 
+### Active Applications
+
 | Opportunity | Status | Next Action | Owner | Due Date |
 |-------------|--------|-------------|-------|----------|
 | Soonami Cohort 8 | Active | Demo Day prep | Team | TBD |
 | Canada CUAS 2026 | Draft | Finalize application | PM | Dec 15 |
+
+### To Apply (Non-Dilutive - High Priority)
+
+| Opportunity | Status | Next Action | Owner | Due Date |
+|-------------|--------|-------------|-------|----------|
+| NVIDIA Inception | Not Started | Submit application | Eng | ASAP |
+| AWS Activate | Not Started | Submit application | Eng | ASAP |
+| Microsoft for Startups | Not Started | Submit application | Eng | Q1 2026 |
+| Google for Startups | Not Started | Prepare for cohort | Exec | Q1 2026 |
+
+### Monitoring
+
+| Opportunity | Status | Next Action | Owner | Due Date |
+|-------------|--------|-------------|-------|----------|
 | DIU Counter NEXT | Monitoring | Watch for CSO | BD | Ongoing |
 | DHS C-UAS | Planning | Partner outreach | BD | Q1 2026 |
-| UK DASA | Evaluating | Prepare proposal | Eng | Oct 2025 |
+| UK DASA | Evaluating | Prepare proposal | Eng | 2026 cycle |
 | NATO NIF | Research | Pitch deck | Exec | Q1 2026 |
+| LF Decentralized Trust | Research | Membership inquiry | Eng | Q1 2026 |
 
 ---
 
@@ -324,7 +725,17 @@ Australian partners (EOS Defence, Department 13, Acacia Systems).
 | Soonami Cohort 8 | $125K | 80% | $100K |
 | Canada CUAS Prize | $500K | 30% | $150K |
 | UK DASA | £350K | 25% | £87.5K |
-| **Total** | | | **~$350K** |
+| **Total Cash** | | | **~$350K** |
+
+### Non-Dilutive Cloud Credits (Apply Now)
+
+| Source | Credits | Probability | Expected Value |
+|--------|---------|-------------|----------------|
+| NVIDIA Inception | $150K | 90% | $135K |
+| AWS Activate | $100K | 85% | $85K |
+| Google for Startups | $350K | 40% | $140K |
+| Microsoft for Startups | $150K | 80% | $120K |
+| **Total Credits** | | | **~$480K** |
 
 ### Medium-Term (6-18 months)
 
@@ -334,6 +745,7 @@ Australian partners (EOS Defence, Department 13, Acacia Systems).
 | NATO NIF | €5M | 10% | €500K |
 | DHS (via partner) | $500K | 20% | $100K |
 | SBIR Phase I | $75K | 40% | $30K |
+| Afore Pre-seed | $500K | 15% | $75K |
 | **Total** | | | **~$1M** |
 
 ---
@@ -343,20 +755,25 @@ Australian partners (EOS Defence, Department 13, Acacia Systems).
 ### Immediate Actions (Next 30 Days)
 
 1. **Finalize Canada CUAS Application** - Deadline Dec 15, 2025
-2. **Maximize Soonami Participation** - Demo Day preparation
-3. **Monitor SBIR Reauthorization** - Prepare applications
+2. **Apply to NVIDIA Inception** - Free, immediate access to credits
+3. **Apply to AWS Activate** - Non-dilutive cloud resources
+4. **Maximize Soonami Participation** - Demo Day preparation
+5. **Monitor SBIR Reauthorization** - Prepare applications
 
 ### Q1 2026 Actions
 
-1. **DIU CSO Monitoring** - Watch for new counter-UAS solicitations
-2. **NATO NIF Outreach** - Initial introductions
-3. **DHS Partner Development** - State/local agency relationships
+1. **Apply to Google for Startups AI** - $350K credits opportunity
+2. **Join LF Decentralized Trust** - Hyperledger community
+3. **DIU CSO Monitoring** - Watch for new counter-UAS solicitations
+4. **NATO NIF Outreach** - Initial introductions
+5. **DHS Partner Development** - State/local agency relationships
 
 ### Q2-Q3 2026 Actions
 
 1. **Canada CUAS Sandbox Participation** - September 2026
 2. **UK DASA Submission** - Cycle alignment
-3. **Australia Partner Exploration** - LAND 156 subcontracting
+3. **DARPA AIxCC Preparation** - DEF CON August 2026
+4. **Australia Partner Exploration** - LAND 156 subcontracting
 
 ---
 

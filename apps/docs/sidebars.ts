@@ -91,7 +91,10 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Hardware",
           collapsed: true,
-          items: ["technical/hardware/rkv-m-specifications"],
+          items: [
+            "technical/hardware/rkv-m-specifications",
+            "technical/hardware/net-specifications",
+          ],
         },
         {
           type: "category",
