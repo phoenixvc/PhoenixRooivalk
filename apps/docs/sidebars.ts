@@ -176,6 +176,12 @@ const sidebars: SidebarsConfig = {
         "research/sensor-technologies-comprehensive-analysis",
       ],
     },
+    {
+      type: "category",
+      label: "📚 Resources & References",
+      collapsed: false,
+      items: ["resources/suas-program-documentation"],
+    },
   ],
 };
 
