@@ -68,6 +68,24 @@ Each opportunity is scored on a 1-5 scale across multiple weighted factors:
 | **3** | AWS Activate | 4.2/5 | **Apply Now** | Up to $300K credits | Dec 2025 |
 | **4** | Microsoft for Startups | 4.5/5 | **ACTIVE - Phase 3** | $25K (Phase 4 @ 50%) | Jul 2026 |
 
+#### Web3/Blockchain Hackathons
+
+| Rank | Opportunity | Score | Status | Prize | Event Date |
+|------|-------------|-------|--------|-------|------------|
+| **1** | ETHGlobal (Various) | 4.0/5 | Open | $500K+ per event | Rolling 2025-26 |
+| **2** | Encode Club Scoop AI | 3.9/5 | Open | $100K global series | Dec 2025-Jan 2026 |
+| **3** | Encode Web3 AI Hackathon | 3.8/5 | Open | Various | Rolling |
+
+#### Accelerators & VC Programs
+
+| Rank | Opportunity | Score | Status | Funding | Deadline |
+|------|-------------|-------|--------|---------|----------|
+| **1** | Y Combinator | 4.5/5 | Open | $500K | W26: Nov 8, 2025 |
+| **2** | Techstars Air Force | 4.3/5 | Open | $120K + equity | Spring 2026 |
+| **3** | Techstars Space | 4.2/5 | Open | $120K + equity | Spring 2026 |
+| **4** | Shield Capital | 4.0/5 | Monitor | Series A/Seed | Rolling |
+| **5** | In-Q-Tel | 3.8/5 | Monitor | Strategic investment | Rolling |
+
 #### Blockchain/Audit Trail Opportunities
 
 | Rank | Opportunity | Score | Status | Type | Track Date |
@@ -688,21 +706,308 @@ Phoenix Rooivalk is currently enrolled in Microsoft for Startups.
 
 ---
 
+## Web3/Blockchain Hackathons
+
+### ETHGlobal Hackathons
+
+| Attribute | Details |
+|-----------|---------|
+| **Organizer** | ETHGlobal |
+| **Format** | In-person + Online (async) events |
+| **Prize Pools** | $500K+ per major event |
+| **Focus** | Ethereum/Web3 development |
+| **Network** | 10,000+ developers, $2M+ total prizes |
+
+**2025-2026 Events:**
+
+| Event | Location | Date | Format |
+|-------|----------|------|--------|
+| ETHGlobal New York | NYC, USA | 2025 | In-person |
+| ETHGlobal Buenos Aires | Argentina | Nov 21-23, 2025 | In-person |
+| ETHGlobal Delhi | India | Sep 26-28, 2025 | In-person |
+| ETHOnline 2025 | Virtual | Oct 10-31, 2025 | Async |
+| Agentic Ethereum | Virtual | Jan 31-Feb 14, 2025 | Async |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Blockchain/audit trail alignment |
+| Funding Amount | 4 | Large prize pools |
+| Timeline Fit | 5 | Multiple events throughout year |
+| Success Probability | 3 | Competitive but accessible |
+| Market Access | 4 | Web3 developer ecosystem |
+| Effort Required | 3 | 36-hour intensive events |
+| **Weighted Score** | **4.0** | |
+
+**Relevance to Phoenix Rooivalk:**
+- Blockchain-based evidence anchoring demos
+- Supply chain traceability use cases
+- AI agent tracks (autonomous systems)
+- Web3 investor network access
+
+[ETHGlobal](https://ethglobal.com/)
+
+---
+
+### Encode Club Hackathons
+
+| Attribute | Details |
+|-----------|---------|
+| **Organizer** | Encode Club |
+| **Focus** | Web3 & AI startup development |
+| **Network** | Global developer community |
+| **Programs** | Hackathons, bootcamps, accelerator |
+
+**Scoop AI Hackathon (Global Series):**
+
+| Attribute | Details |
+|-----------|---------|
+| **Partners** | Neo, SpoonOS |
+| **Total Prize Pool** | $100,000 across 8 cities |
+| **Per-City Prizes** | $10,000+ |
+| **Locations** | Moscow, Hanoi, Tokyo, Seoul, Silicon Valley, Hyderabad, Beijing, London |
+| **Timeline** | October 2025 - January 2026 |
+| **London Dates** | December 6-7, 2025 |
+
+**Competition Tracks:**
+- AI for Science
+- AI for DeFi and Payments
+- AI Agent with Web3 (autonomous blockchain agents)
+- Web3 Infrastructure
+- Open Innovation
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | AI agents + Web3 alignment |
+| Funding Amount | 3 | $10K per city |
+| Timeline Fit | 5 | Multiple events |
+| Success Probability | 3 | Battle Royale format |
+| Market Access | 4 | Web3 ecosystem access |
+| Effort Required | 4 | 2-day intensive |
+| **Weighted Score** | **3.9** | |
+
+**Web3 AI Hackathon:**
+- Build projects connecting AI & Web3 on Citrea Devnet
+- AI agents on-chain via Galadriel (LLM inference in Solidity)
+- Autonomous agent loops with web_search tools
+
+[Encode Club](https://www.encodeclub.com/programmes) |
+[Scoop AI Hackathon](https://www.encodeclub.com/ai-hackathon)
+
+---
+
+## Accelerators & VC Programs
+
+### Y Combinator
+
+:::info Defense Tech Friendly
+
+YC now accepts defense tech startups (policy changed in 2024).
+
+:::
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Y Combinator Startup Accelerator |
+| **Funding** | $500,000 standard deal |
+| **Duration** | 3 months (batch program) |
+| **Location** | San Francisco Bay Area |
+| **Equity** | ~7% (negotiable) |
+
+**Upcoming Deadlines:**
+
+| Batch | Deadline | Program Dates |
+|-------|----------|---------------|
+| **Winter 2026 (W26)** | **November 8, 2025** | Jan-Mar 2026 |
+| Spring 2026 (X26) | ~Feb 2026 | Apr-Jun 2026 |
+| Summer 2026 (S26) | ~May 2026 | Jun-Aug 2026 |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Defense tech now accepted |
+| Funding Amount | 5 | $500K + follow-on potential |
+| Timeline Fit | 4 | W26 deadline Nov 8 |
+| Success Probability | 2 | Highly competitive (<2% acceptance) |
+| Market Access | 5 | Top-tier VC network |
+| Effort Required | 3 | Application + interview |
+| **Weighted Score** | **4.5** | |
+
+**Key Points:**
+- Defense tech portfolio growing since 2024 policy change
+- Ukrainian defense startups can participate remotely
+- Early Decision option for future batches
+- Demo Day investor exposure
+
+[Y Combinator](https://www.ycombinator.com/apply)
+
+---
+
+### Techstars Air Force Accelerator
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Air Force Accelerator Powered by Techstars |
+| **Partners** | U.S. Air Force |
+| **Location** | Boston (in-residence) |
+| **Duration** | 3 months |
+| **Funding** | $120K (typically $20K + $100K note) |
+| **Focus** | Dual-use technologies (commercial + government) |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Perfect dual-use alignment |
+| Funding Amount | 3 | $120K modest |
+| Timeline Fit | 4 | Spring 2026 |
+| Success Probability | 3 | Targeted selection |
+| Market Access | 5 | Direct Air Force access |
+| Effort Required | 3 | Application + relocation |
+| **Weighted Score** | **4.3** | |
+
+**Application:** Spring 2026 programs - Apply by November 19, 2025
+
+[Techstars Air Force](https://www.techstars.com/accelerators) |
+[Air Force Accelerators](https://afaccelerators.com/)
+
+---
+
+### Techstars Space Accelerator
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Techstars Space Accelerator |
+| **Partners** | U.S. Space Force, NASA JPL |
+| **Location** | Los Angeles / Virtual options |
+| **Duration** | 3 months |
+| **Funding** | $120K |
+| **Focus** | Next-gen space technology |
+
+**Related Programs:**
+- **Techstars Allied Space** (Virtual) - Netherlands MoD, Norwegian Space Agency
+- **Techstars Starburst Space** - Lockheed Martin, Maxar, SAIC, Israel Aerospace
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Space/defense crossover |
+| Funding Amount | 3 | $120K |
+| Timeline Fit | 4 | Spring 2026 |
+| Success Probability | 3 | Aerospace focus |
+| Market Access | 5 | Space Force, NASA, primes |
+| Effort Required | 3 | Application process |
+| **Weighted Score** | **4.2** | |
+
+[Techstars Space](https://www.techstars.com/accelerators/space)
+
+---
+
+### Shield Capital (Defense VC)
+
+| Attribute | Details |
+|-----------|---------|
+| **Type** | Venture Capital |
+| **Fund Size** | $186M (Fund I) |
+| **Focus** | AI, Autonomy, Cybersecurity, Space |
+| **Stage** | Seed to Series A |
+| **Location** | San Francisco |
+
+**Leadership:**
+- Philip Bilden (HarbourVest co-founder)
+- Raj Shah (Former DIU Director)
+- Advisory: Ashton Carter (Former SecDef), Sean Stackley (Former Acting SecNav)
+
+**Portfolio Highlights:**
+- 32 companies invested
+- 3 unicorns (Snorkel AI, Apex, Rebellion Defense)
+- 8 new investments in last 12 months
+
+**Recent 2025 Investments:**
+- Code Metal ($36.5M) - AI code translation
+- mPower Technology ($21M Series B) - Solar tech
+- Seasats - Autonomous maritime solutions
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | AI + autonomy + defense |
+| Funding Amount | 5 | Series A capability |
+| Timeline Fit | 5 | Always investing |
+| Success Probability | 2 | Selective |
+| Market Access | 5 | DoD connections |
+| Effort Required | 3 | Pitch process |
+| **Weighted Score** | **4.0** | |
+
+[Shield Capital](https://shieldcap.com)
+
+---
+
+### In-Q-Tel
+
+| Attribute | Details |
+|-----------|---------|
+| **Type** | Strategic Venture Capital |
+| **Established** | 1999 |
+| **Location** | Tysons, Virginia |
+| **Focus** | Technologies for intelligence & defense communities |
+| **Structure** | Not-for-profit |
+
+**Investment Areas:**
+- Artificial Intelligence
+- Autonomous Systems
+- Sensors & Robotics
+- Cybersecurity
+- Space Technology
+- Quantum Computing
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Counter-UAS, autonomy focus |
+| Funding Amount | 4 | Strategic, not just financial |
+| Timeline Fit | 5 | Ongoing |
+| Success Probability | 2 | Highly selective |
+| Market Access | 5 | Direct IC/DoD pathway |
+| Effort Required | 2 | Requires introduction |
+| **Weighted Score** | **3.8** | |
+
+**Key Benefit:** In-Q-Tel investments provide validation for government customers and often lead to pilot programs.
+
+[In-Q-Tel](https://www.iqt.org/)
+
+---
+
 ## Opportunity Calendar
 
 | Month | Opportunity | Action Required |
 |-------|-------------|-----------------|
+| **Nov 8, 2025** | Y Combinator W26 | **APPLICATION DEADLINE** |
 | **Nov 2025** | Soonami Cohort 8 | Active participation |
-| **Nov 22, 2025** | Afore Hacks AI Agent | Hackathon participation |
+| **Nov 19, 2025** | Techstars Spring 2026 | Application deadline |
+| **Nov 21-23, 2025** | ETHGlobal Buenos Aires | Hackathon ($500K prizes) |
+| **Nov 22, 2025** | Afore Hacks AI Agent | Past |
+| **Dec 6-7, 2025** | Encode Scoop AI London | Hackathon ($10K prizes) |
 | **Dec 15, 2025** | Canada CUAS Sandbox | **APPLICATION DEADLINE** |
 | **Dec 31, 2025** | AWS Kiro Credits | Apply before deadline |
 | **Q1 2026** | NVIDIA Inception | Apply for membership |
 | **Q1 2026** | Google for Startups AI | Apply for cohort |
 | **Q1 2026** | DIU CSO | Monitor new solicitations |
+| **Q1 2026** | ETHGlobal Events | Multiple hackathons |
+| **Spring 2026** | Techstars Air Force | Program starts |
 | **FY2026** | DHS C-UAS Grants | Partner identification |
 | **Aug 2026** | DARPA AIxCC | DEF CON competition |
 | **Sep 2026** | Canada CUAS Sandbox | Event participation |
 | **2026** | NATO NIF | Pitch preparation |
+| **Rolling** | Shield Capital | Pitch when ready |
+| **Rolling** | In-Q-Tel | Requires introduction |
 
 ---
 
