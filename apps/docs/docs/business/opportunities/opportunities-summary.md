@@ -1033,6 +1033,10 @@ YC now accepts defense tech startups (policy changed in 2024).
 | NVIDIA Inception | Not Started | Submit application | Eng | ASAP |
 | AWS Activate | Not Started | Submit application | Eng | ASAP |
 | Google for Startups | Not Started | Prepare for cohort | Exec | Q1 2026 |
+| MongoDB for Startups | Not Started | Submit application | Eng | ASAP |
+| Notion for Startups | Not Started | Submit application | Ops | ASAP |
+| Figma for Startups | Not Started | Submit application | Design | ASAP |
+| DigitalOcean Hatch | Not Started | Submit application | Eng | ASAP |
 
 ### Monitoring
 
@@ -1072,6 +1076,19 @@ YC now accepts defense tech startups (policy changed in 2024).
 | Google for Startups | $350K | 40% | $140K | Q1 2026 |
 | **Total Potential** | | | **~$360K** | |
 
+### Additional Startup SaaS Credits
+
+| Source | Credits/Benefits | Status | Apply |
+|--------|------------------|--------|-------|
+| MongoDB Atlas | $500-$5,000 | Apply | [MongoDB for Startups](https://www.mongodb.com/startups) |
+| Notion for Startups | 6 months free (~$1K) | Apply | [Notion Startups](https://www.notion.so/startups) |
+| Figma for Startups | 2 years free | Apply | [Figma Startups](https://www.figma.com/startups/) |
+| Stripe Atlas Credits | $5K+ partner credits | Apply | [Stripe Atlas](https://stripe.com/atlas) |
+| HubSpot for Startups | 75-90% discount | Apply | [HubSpot Startups](https://www.hubspot.com/startups) |
+| Segment Startup Program | $25K credits | Apply | [Segment Startups](https://segment.com/industry/startups/) |
+| Airtable Startup Program | 1 year free Pro | Apply | [Airtable Startups](https://www.airtable.com/lp/startup-program) |
+| DigitalOcean Hatch | $10K credits | Apply | [DO Hatch](https://www.digitalocean.com/hatch) |
+
 ### Medium-Term (6-18 months)
 
 | Source | Amount | Probability | Expected Value |
@@ -1095,6 +1112,7 @@ YC now accepts defense tech startups (policy changed in 2024).
 4. **Maximize Soonami Participation** - Demo Day preparation
 5. **Microsoft Phase 4 Planning** - Track usage toward 50% threshold ($12,500)
 6. **Monitor SBIR Reauthorization** - Prepare applications
+7. **Apply to SaaS Credit Programs** - MongoDB, Notion, Figma, DigitalOcean (all free)
 
 ### Q1 2026 Actions
 
