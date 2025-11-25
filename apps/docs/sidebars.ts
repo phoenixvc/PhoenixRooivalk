@@ -8,6 +8,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         "executive/executive-summary",
+        "executive/investor-executive-summary",
         "executive/global-strategy",
         "executive/system-overview",
         "executive/system-overview-detailed",
@@ -82,6 +83,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "ML Training",
+          collapsed: true,
+          items: ["technical/ml-training/ml-training-plan"],
+        },
+        {
+          type: "category",
           label: "Performance",
           collapsed: true,
           items: ["technical/performance/performance-specifications"],
@@ -95,6 +102,7 @@ const sidebars: SidebarsConfig = {
       items: [
         "business/market-analysis",
         "business/business-model",
+        "business/12-month-business-plan",
         "business/competitive-analysis",
         "business/emerging-trends",
         "business/roi-analysis",
@@ -107,6 +115,18 @@ const sidebars: SidebarsConfig = {
         "business/presentation-video-script",
         "business/technical-requirements-checklist",
         "business/traction-metrics",
+        {
+          type: "category",
+          label: "Opportunities",
+          collapsed: true,
+          items: ["business/opportunities/cuas-sandbox-2026"],
+        },
+        {
+          type: "category",
+          label: "Applications",
+          collapsed: true,
+          items: ["business/applications/cuas-sandbox-2026-application"],
+        },
       ],
     },
     {
