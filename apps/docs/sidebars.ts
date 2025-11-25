@@ -19,6 +19,12 @@ const sidebars: SidebarsConfig = {
         "executive/phoenix-rooivalk-litepaper",
         "executive/phoenix-rooivalk-pitch-deck",
         "executive/phoenix-rooivalk-technical-whitepaper",
+        {
+          type: "category",
+          label: "Early Development",
+          collapsed: true,
+          items: ["executive/early-development/early-spec-qa"],
+        },
       ],
     },
     {
@@ -83,6 +89,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "Hardware",
+          collapsed: true,
+          items: ["technical/hardware/rkv-m-specifications"],
+        },
+        {
+          type: "category",
           label: "ML Training",
           collapsed: true,
           items: ["technical/ml-training/ml-training-plan"],
@@ -119,7 +131,11 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Opportunities",
           collapsed: true,
-          items: ["business/opportunities/cuas-sandbox-2026"],
+          items: [
+            "business/opportunities/opportunities-summary",
+            "business/opportunities/soonami-cohort-8",
+            "business/opportunities/cuas-sandbox-2026",
+          ],
         },
         {
           type: "category",
@@ -173,6 +189,12 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: ["operations/training/training-materials"],
         },
+        {
+          type: "category",
+          label: "Calendar",
+          collapsed: true,
+          items: ["operations/calendar/project-calendar"],
+        },
       ],
     },
     {
@@ -200,7 +222,10 @@ const sidebars: SidebarsConfig = {
       type: "category",
       label: "📚 Resources & References",
       collapsed: false,
-      items: ["resources/suas-program-documentation"],
+      items: [
+        "resources/downloads",
+        "resources/suas-program-documentation",
+      ],
     },
   ],
 };
