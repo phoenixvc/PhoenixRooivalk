@@ -68,6 +68,7 @@ contacts for high-performance drone engineering and testing partnerships.
 | **The War Zone** | Military tech, breaking news | 500K+ | Industry credibility |
 | **Task & Purpose** | Military news, veteran audience | 1.5M+ | Defense community reach |
 | **Combat Veteran Reacts** | Combat analysis, Ukraine | 300K+ | Veteran credibility, tactical analysis |
+| **Professor Gerdes** | Ukraine drone warfare, analysis | 100K+ | Academic credibility, NAFO community |
 | **ATP Geopolitics** | Ukraine war, drone warfare | 55K+ | OSINT, geopolitical analysis |
 | **Jake Broe** | Ukraine updates, USAF veteran | 316K+ | Nuclear ops background |
 | **Ward Carroll** | Military aviation, F-14 veteran | 660K+ | Naval aviation expertise |
@@ -84,6 +85,15 @@ community.
 
 :::
 
+:::info Professor Gerdes Explains
+
+Academic analyst with 1,000+ videos on Ukraine conflict. Deep expertise in drone
+warfare, precision strikes on Russian infrastructure, and battlefield analysis.
+Author of book on Zelenskyy. "Facts over noise. Context over headlines."
+Contact: @Dr_Gerdes on X, professorgerdesyt@gmail.com
+
+:::
+
 **Content Opportunities:**
 - Counter-UAS technology explainers
 - Ukraine drone warfare analysis
@@ -94,6 +104,7 @@ community.
 [The War Zone](https://www.twz.com/) |
 [Task & Purpose](https://taskandpurpose.com/) |
 [Combat Veteran Reacts](https://www.youtube.com/@CombatVeteranReacts) |
+[Professor Gerdes](https://www.youtube.com/@Professor-Gerdes) |
 [ATP Geopolitics](https://www.youtube.com/@ATPGeopolitics)
 
 ---
