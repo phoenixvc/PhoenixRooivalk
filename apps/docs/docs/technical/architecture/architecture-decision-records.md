@@ -437,6 +437,261 @@ performance requirements.
 
 ---
 
+## Development Architecture Decisions
+
+The following ADRs document technical implementation decisions for the development
+infrastructure and tooling.
+
+---
+
+### ADR-D001: Monorepo Structure with Turborepo
+
+**Date**: 2024-01-15
+**Status**: Accepted
+
+#### Context
+
+Need to manage multiple applications (marketing, docs, API, keeper) and shared
+packages efficiently.
+
+#### Decision
+
+Use a monorepo structure with Turborepo for build orchestration and pnpm for
+package management.
+
+#### Rationale
+
+- **Code Sharing**: Shared types, UI components, and utilities across apps
+- **Atomic Changes**: Single PR can update multiple apps simultaneously
+- **Build Performance**: Turborepo provides intelligent caching and parallel execution
+- **Developer Experience**: Single `pnpm install`, unified tooling configuration
+
+#### Consequences
+
+**Positive:**
+- Simplified dependency management
+- Faster CI/CD with smart caching
+- Easier refactoring across packages
+- Consistent tooling and linting
+
+**Negative:**
+- Larger repository size
+- More complex CI/CD configuration
+- Learning curve for monorepo patterns
+
+---
+
+### ADR-D002: Dual Blockchain Anchoring (Solana + EtherLink)
+
+**Date**: 2024-01-20
+**Status**: Accepted
+
+#### Context
+
+Need tamper-proof evidence trail for military compliance and legal defensibility.
+
+#### Decision
+
+Implement dual-chain anchoring to both Solana and EtherLink blockchains.
+
+#### Rationale
+
+- **Redundancy**: Multiple chains provide backup if one fails
+- **Speed vs Cost**: Solana for fast confirmations, EtherLink for Ethereum ecosystem
+- **Legal Compliance**: Multiple independent witnesses strengthen legal validity
+- **Cross-Chain Verification**: Independent verification from different consensus mechanisms
+
+#### Consequences
+
+**Positive:**
+- Enhanced tamper-resistance
+- Geographic and technical diversity
+- Compliance with multiple regulatory frameworks
+
+**Negative:**
+- Increased operational complexity
+- Higher anchoring costs
+- More complex verification logic
+
+---
+
+### ADR-D003: Rust for Backend Services
+
+**Date**: 2024-01-22
+**Status**: Accepted
+
+#### Context
+
+Need high-performance, secure backend services for API, keeper, and CLI tools.
+
+#### Decision
+
+Use Rust with Axum for all backend services and command-line tools.
+
+#### Rationale
+
+- **Memory Safety**: Eliminates entire classes of security vulnerabilities
+- **Performance**: Near C/C++ performance for blockchain operations
+- **Concurrency**: Tokio async runtime for high-throughput I/O
+- **Type Safety**: Compile-time guarantees reduce runtime errors
+- **Cryptography**: Strong ecosystem for cryptographic operations
+
+#### Technology Stack
+
+- **Web Framework**: Axum 0.8
+- **Async Runtime**: Tokio 1.48
+- **Database**: SQLx with SQLite
+- **Serialization**: serde with serde_json
+
+---
+
+### ADR-D004: Next.js for Marketing Site
+
+**Date**: 2024-01-25
+**Status**: Accepted
+
+#### Context
+
+Need modern, performant marketing website with SEO optimization.
+
+#### Decision
+
+Use Next.js 14 with static export for the marketing website.
+
+#### Rationale
+
+- **SEO**: Server-side rendering and static generation for search engines
+- **Performance**: Automatic code splitting and optimization
+- **Developer Experience**: Hot reload, TypeScript support, file-based routing
+- **Deployment**: Static export works with any hosting (Netlify, Vercel, S3)
+
+---
+
+### ADR-D005: SQLite for Outbox Pattern
+
+**Date**: 2024-02-01
+**Status**: Accepted
+
+#### Context
+
+Need reliable outbox pattern for queuing blockchain anchoring jobs.
+
+#### Decision
+
+Use SQLite with SQLx for the blockchain outbox pattern.
+
+#### Rationale
+
+- **Simplicity**: No separate database server required
+- **ACID Transactions**: Full transactional support
+- **Portability**: Single file, easy backup and migration
+- **Performance**: Sufficient for single-instance keeper service
+
+---
+
+### ADR-D006: WASM Threat Simulator with Leptos
+
+**Date**: 2024-02-10
+**Status**: Accepted
+
+#### Context
+
+Need high-performance threat simulation that runs in the browser.
+
+#### Decision
+
+Build threat simulator in Rust with Leptos, compile to WebAssembly.
+
+#### Rationale
+
+- **Performance**: Native-speed computation for physics and collision detection
+- **Code Reuse**: Share logic between desktop (Tauri) and web versions
+- **Type Safety**: Rust type system prevents runtime errors
+- **Size**: Smaller bundle than equivalent JavaScript
+
+---
+
+### ADR-D007: Evidence-Based Architecture
+
+**Date**: 2024-02-15
+**Status**: Accepted
+
+#### Context
+
+Core system architecture must support military-grade audit trails.
+
+#### Decision
+
+Design entire system around immutable evidence records with cryptographic proofs.
+
+#### Evidence Model
+
+```rust
+pub struct EvidenceRecord {
+    pub id: String,
+    pub created_at: DateTime<Utc>,
+    pub digest: EvidenceDigest,
+    pub payload_mime: Option<String>,
+    pub metadata: serde_json::Value,
+}
+
+pub struct ChainTxRef {
+    pub network: String,
+    pub chain: String,
+    pub tx_id: String,
+    pub confirmed: bool,
+    pub timestamp: Option<DateTime<Utc>>,
+}
+```
+
+---
+
+### ADR-D008: TypeScript Shared Packages
+
+**Date**: 2024-03-01
+**Status**: Accepted
+
+#### Context
+
+Need shared type definitions and utilities across frontend apps.
+
+#### Decision
+
+Create shared TypeScript packages for types, UI components, and utilities.
+
+#### Package Structure
+
+```
+packages/
+├── types/       # Core type definitions
+├── ui/          # React UI components
+└── utils/       # Shared utilities
+```
+
+---
+
+### ADR-D009: Iframe Isolation for WASM
+
+**Date**: 2024-03-05
+**Status**: Accepted
+
+#### Context
+
+Leptos WASM app was rendering outside designated container.
+
+#### Decision
+
+Embed WASM simulator via iframe for true DOM isolation.
+
+#### Rationale
+
+- **DOM Isolation**: Prevents WASM from affecting parent page
+- **CSS Isolation**: No style conflicts with parent
+- **Fullscreen Support**: Native fullscreen API support
+- **Security**: Additional sandboxing layer
+
+---
+
 _This document contains confidential architectural information. Distribution is
 restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
 reserved._

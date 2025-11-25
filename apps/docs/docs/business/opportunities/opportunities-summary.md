@@ -86,6 +86,19 @@ Each opportunity is scored on a 1-5 scale across multiple weighted factors:
 | **4** | Shield Capital | 4.0/5 | Monitor | Series A/Seed | Rolling |
 | **5** | In-Q-Tel | 3.8/5 | Monitor | Strategic investment | Rolling |
 
+#### Defense Experimentation & Competitions
+
+| Rank | Opportunity | Score | Status | Prize/Benefit | Event Date |
+|------|-------------|-------|--------|---------------|------------|
+| **1** | Silent Swarm 2026 | 4.4/5 | Monitor | CRADA + DoD exposure | Jul 2026 |
+| **2** | Army xTechCounter Strike | 4.3/5 | Monitor | Up to $2.5M total | Ongoing |
+| **3** | Operation Flytrap 5.0 | 4.2/5 | Monitor | $50K-$350K prizes | Mar-Apr 2026 |
+| **4** | DARPA Lift Challenge | 4.0/5 | Open | Up to $6.5M | 2026 |
+| **5** | MBDA Swarm Drone Challenge | 3.9/5 | Open | €50K prizes | 2026 |
+| **6** | Proven in Pendleton | 3.8/5 | Monitor | $100K+ prizes | 2026 |
+| **7** | NATO SAPIENCE Competition | 3.7/5 | Monitor | Research funding | 2026 |
+| **8** | IARC Mission 10 | 3.5/5 | Open | $20K prize | 2026 |
+
 #### Blockchain/Audit Trail Opportunities
 
 | Rank | Opportunity | Score | Status | Type | Track Date |
@@ -985,6 +998,262 @@ YC now accepts defense tech startups (policy changed in 2024).
 
 ---
 
+## Defense Experimentation & Competitions
+
+### Silent Swarm 2026
+
+:::tip High Value: Direct DoD Experimentation
+
+Navy-led experimentation event with CRADA partnership and direct operator feedback.
+
+:::
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Silent Swarm 2026 Experimentation Event |
+| **Agency** | NSWC Crane / OUSD(R&E) |
+| **Focus** | Electromagnetic Spectrum Operations (EMSO) on attritable UxS |
+| **Event** | Two weeks in July 2026 (maritime environment) |
+| **Notice ID** | N0016425SNC28 |
+| **Cost** | Free (CRADA required) |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | EMSO + swarm UAS directly relevant |
+| Funding Amount | 3 | No cash prizes (CRADA + exposure) |
+| Timeline Fit | 4 | July 2026 aligns with prototype |
+| Success Probability | 4 | Open to TRL 2-5 technologies |
+| Market Access | 5 | Direct DoD/Navy pathway |
+| Effort Required | 3 | CRADA + workshops + 2-week event |
+| **Weighted Score** | **4.4** | |
+
+**Focus Areas (Relevant to Phoenix Rooivalk):**
+- Distributed Electromagnetic Attack (EA)
+- Deception and Concealment (RF)
+- Alternative PNT (GPS-denied navigation)
+- Resilient Communications (anti-jam, LPx)
+- Electromagnetic Warfare Support with Geolocation
+
+**Key Requirements:**
+- Sign NDA and establish CRADA with NSWC Crane
+- Attend virtual Kick Off Workshop (Dec 2-4, 2025)
+- Participate in planning workshops (virtual + in-person)
+- Comply with spectrum authorizations and FAA waivers
+- Field conditions in maritime environment
+
+**Timeline:**
+- Submission Deadline: October 31, 2025 (passed for 2026)
+- Kick Off Workshop: December 2-4, 2025
+- Event: July 2026
+
+[sUAS News Article](https://www.suasnews.com/2025/09/silent-swarm-2026/) |
+[Navy Notice](https://govtribe.com/opportunity/federal-contract-opportunity/silent-swarm-2026-n0016425snc28)
+
+---
+
+### Army xTechCounter Strike / Operation Flytrap
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | xTechCounter Strike Competition |
+| **Agency** | U.S. Army / G-TEAD |
+| **Focus** | Counter-UAS detection and defeat solutions |
+| **Prize Pool** | Up to $2.5M total |
+| **Per-Event** | $50K (finalist) + $350K (winner) |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Direct C-UAS focus |
+| Funding Amount | 5 | $350K winner prizes |
+| Timeline Fit | 4 | Ongoing with Flytrap 5.0 in 2026 |
+| Success Probability | 3 | 15 finalists from 200+ applicants |
+| Market Access | 5 | G-TEAD Marketplace access |
+| Effort Required | 3 | Application + live demonstration |
+| **Weighted Score** | **4.3** | |
+
+**Competition Structure:**
+- **Part 1**: Application review → 15 finalists ($50K each)
+- **Part 2**: Live experimentation at Operation Flytrap
+- **Finals**: Up to 5 winners ($350K each)
+- **Outcome**: G-TEAD Marketplace placement for follow-on contracts
+
+**Recent Results (Flytrap 4.5 - Nov 2025):**
+- 15 finalists from 200+ companies
+- 4 winners selected (including MatrixSpace for active sensing)
+- Held at Truppenübungsplatz Putlos, Germany
+
+**Upcoming:**
+- Operation Flytrap 5.0: March-April 2026
+
+[xTechCounter Strike](https://xtech.army.mil/competition/xtechcounterstrike/) |
+[Army Article](https://www.army.mil/article/289184/)
+
+---
+
+### DARPA Lift Challenge
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | DARPA Lift Challenge |
+| **Agency** | Defense Advanced Research Projects Agency |
+| **Focus** | Heavy-lift drones (4x+ payload-to-weight ratio) |
+| **Prize Pool** | $6.5 million |
+| **Registration** | January 2026 (tentative) |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Heavy lift for logistics/deployment |
+| Funding Amount | 5 | $6.5M prize pool |
+| Timeline Fit | 4 | Registration Jan-May 2026 |
+| Success Probability | 2 | Highly competitive |
+| Market Access | 5 | DARPA/DoD visibility |
+| Effort Required | 2 | Significant R&D investment |
+| **Weighted Score** | **4.0** | |
+
+**Challenge Goal:**
+- Novel drone designs carrying payloads 4x+ their weight
+- Shatter the "heavy lift bottleneck"
+- Target university researchers, innovators, and industry
+
+[DARPA Official](https://www.darpa.mil/news/2025/lift-challenge)
+
+---
+
+### MBDA Swarm Drone Challenge 2026
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Swarm Drone Challenge 2026 (SDC26) |
+| **Organizer** | MBDA Deutschland + brigkAIR |
+| **Format** | Indoor drone swarm competition (Capture the Flag) |
+| **Prize Pool** | Up to €50,000 |
+| **Eligibility** | Students, professionals, startups |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Swarm autonomy alignment |
+| Funding Amount | 3 | €50K prizes |
+| Timeline Fit | 5 | 2026 event |
+| Success Probability | 3 | International competition |
+| Market Access | 4 | European defense network |
+| Effort Required | 3 | Team development + event |
+| **Weighted Score** | **3.9** | |
+
+**Competition Focus:**
+- Autonomous drone swarm cooperation
+- AI-powered collaboration
+- Tactical decision-making
+- Capture the Flag format
+
+[MBDA Swarm Drone Challenge](https://swarmdronechallenge.digital/)
+
+---
+
+### Proven in Pendleton
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | Proven in Pendleton Counter-UAS Challenge |
+| **Organizer** | Oregon UAS Accelerator |
+| **Location** | Pendleton UAS Test Range, Oregon |
+| **Prize Pool** | $120,000+ |
+| **Winner Prize** | $100,000 grand prize |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 5 | Direct C-UAS focus |
+| Funding Amount | 4 | $100K grand prize |
+| Timeline Fit | 4 | Annual event |
+| Success Probability | 3 | 30 competing systems |
+| Market Access | 4 | Industry exposure |
+| Effort Required | 3 | Technology demonstration |
+| **Weighted Score** | **3.8** | |
+
+**Recent Winner (2025):**
+- Zing Drone Solutions (Z-SCAN detection system)
+- 30 systems competed
+- Focus: Protecting secure facilities from rogue drones
+
+**Benefits:**
+- Free flight testing at Pendleton UAS Test Range
+- Industry visibility
+- Commercial pathway
+
+[DroneLife Article](https://dronelife.com/2025/04/29/zing-drone-solutions-wins-100k-at-counter-uas-challenge-for-airspace-security-innovation/)
+
+---
+
+### NATO SAPIENCE Competition
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | SAPIENCE Autonomous Drone Competition |
+| **Organizer** | NATO Science for Peace and Security Programme |
+| **Focus** | Autonomous drone navigation and task completion |
+| **Location** | 2026 Finals in Netherlands |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 4 | Autonomous systems focus |
+| Funding Amount | 3 | Research funding |
+| Timeline Fit | 4 | 2026 finals |
+| Success Probability | 3 | University competition |
+| Market Access | 4 | NATO alliance exposure |
+| Effort Required | 3 | Academic partnership |
+| **Weighted Score** | **3.7** | |
+
+**Competition History:**
+- 2025: Four university teams competed at Huntsville UAS range
+- Teams from Netherlands, UK, USA, Austria
+- 2026: Final competition combining indoor/outdoor scenarios
+
+[NATO Article](https://www.nato.int/cps/en/natohq/news_237011.htm)
+
+---
+
+### International Aerial Robotics Competition (IARC) Mission 10
+
+| Attribute | Details |
+|-----------|---------|
+| **Program** | IARC Mission 10 |
+| **Organizer** | AUVSI |
+| **Location** | UAS & Counter-UAS Center of Excellence, Huntsville, AL |
+| **Prize** | $20,000 Grand Prize (doubled for 2026) |
+| **Focus** | Collegiate aerial robotics |
+
+**Score Breakdown:**
+
+| Factor | Score | Notes |
+|--------|-------|-------|
+| Strategic Fit | 3 | Autonomous systems |
+| Funding Amount | 2 | $20K prize |
+| Timeline Fit | 5 | Annual event |
+| Success Probability | 3 | Academic competition |
+| Market Access | 3 | Industry connections |
+| Effort Required | 3 | Team development |
+| **Weighted Score** | **3.5** | |
+
+**History:**
+- Longest-running collegiate aerial robotics challenge (34+ years)
+- 2025 event: No winner (challenging mission)
+- 2026: Prize doubled to $20,000
+
+[IARC Official](http://www.aerialroboticscompetition.org/)
+
+---
+
 ## Opportunity Calendar
 
 | Month | Opportunity | Action Required |
@@ -1003,9 +1272,14 @@ YC now accepts defense tech startups (policy changed in 2024).
 | **Q1 2026** | ETHGlobal Events | Multiple hackathons |
 | **Spring 2026** | Techstars Air Force | Program starts |
 | **FY2026** | DHS C-UAS Grants | Partner identification |
+| **Mar-Apr 2026** | Operation Flytrap 5.0 | xTechCounter Strike event |
+| **Jul 2026** | Silent Swarm 2026 | Two-week experimentation |
 | **Aug 2026** | DARPA AIxCC | DEF CON competition |
 | **Sep 2026** | Canada CUAS Sandbox | Event participation |
 | **2026** | NATO NIF | Pitch preparation |
+| **2026** | MBDA Swarm Drone Challenge | Registration + competition |
+| **2026** | NATO SAPIENCE Finals | Netherlands event |
+| **2026** | Proven in Pendleton | Annual C-UAS challenge |
 | **Rolling** | Shield Capital | Pitch when ready |
 | **Rolling** | In-Q-Tel | Requires introduction |
 
@@ -1047,6 +1321,11 @@ YC now accepts defense tech startups (policy changed in 2024).
 | UK DASA | Evaluating | Prepare proposal | Eng | 2026 cycle |
 | NATO NIF | Research | Pitch deck | Exec | Q1 2026 |
 | LF Decentralized Trust | Research | Membership inquiry | Eng | Q1 2026 |
+| Silent Swarm 2027 | Future | Monitor next notice | BD | Sep 2026 |
+| xTechCounter Strike | Monitoring | Watch for next round | BD | Q1 2026 |
+| Operation Flytrap 5.0 | Monitoring | Track applications | BD | Q1 2026 |
+| MBDA Swarm Drone Challenge | Open | Review registration | Eng | Q1 2026 |
+| Proven in Pendleton 2026 | Future | Monitor announcement | BD | Q2 2026 |
 
 ---
 
