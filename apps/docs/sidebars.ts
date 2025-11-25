@@ -100,7 +100,10 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "ML Training",
           collapsed: true,
-          items: ["technical/ml-training/ml-training-plan"],
+          items: [
+            "technical/ml-training/ml-training-plan",
+            "technical/ml-training/drone-training-data-sources",
+          ],
         },
         {
           type: "category",
@@ -130,6 +133,7 @@ const sidebars: SidebarsConfig = {
         "business/presentation-video-script",
         "business/technical-requirements-checklist",
         "business/traction-metrics",
+        "business/influencers-and-contacts",
         {
           type: "category",
           label: "Opportunities",
