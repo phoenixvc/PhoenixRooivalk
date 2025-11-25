@@ -37,9 +37,18 @@ Building relationships with FPV content creators provides:
 | **Rotor Riot** | FPV entertainment, racing | 1M+ | Mass audience, pilot network |
 | **Mr Steele** | Freestyle, vlogs | 300K+ | Influential pilot, authentic voice |
 | **Oscar Liang** | Tutorials, reviews | 200K+ | Technical guides, trusted resource |
+| **The Bells (Luke Maximo Bell)** | Speed records, engineering | 100K+ | Guinness World Record holder, SA-based |
 | **UAV Futures** | Budget builds, beginner | 400K+ | Entry-level audience |
 | **Painless360** | Reviews, how-to | 250K+ | UK/EU audience |
 | **Drone Racing League** | Professional racing | 1.6M | Mainstream exposure |
+
+:::info The Bells - World Record Holders
+
+Luke Maximo Bell and his father Mike hold the Guinness World Record for fastest
+drone (360+ mph with Peregrine 3). Based in South Africa, they're excellent
+contacts for high-performance drone engineering and testing partnerships.
+
+:::
 
 **Engagement Approach:**
 - Offer early access to detection demos
@@ -54,34 +63,84 @@ Building relationships with FPV content creators provides:
 
 ### Defense & Military Technology
 
-| Channel | Focus | Value |
-|---------|-------|-------|
-| **The War Zone** | Military tech, breaking news | Industry credibility |
-| **Task & Purpose** | Military news, veteran audience | Defense community reach |
-| **Sandboxx** | Defense explainers | Educational content |
-| **Binkov's Battlegrounds** | Military analysis | Deep-dive audience |
-| **Military Aviation History** | Historical context | Serious enthusiasts |
+| Channel | Focus | Subscribers | Value |
+|---------|-------|-------------|-------|
+| **The War Zone** | Military tech, breaking news | 500K+ | Industry credibility |
+| **Task & Purpose** | Military news, veteran audience | 1.5M+ | Defense community reach |
+| **Combat Veteran Reacts** | Combat analysis, Ukraine | 300K+ | Veteran credibility, tactical analysis |
+| **ATP Geopolitics** | Ukraine war, drone warfare | 55K+ | OSINT, geopolitical analysis |
+| **Jake Broe** | Ukraine updates, USAF veteran | 316K+ | Nuclear ops background |
+| **Ward Carroll** | Military aviation, F-14 veteran | 660K+ | Naval aviation expertise |
+| **Civ Div** | Military life, combat veteran | 1.4M+ | SOF experience, Ukraine SSO |
+| **Sandboxx** | Defense explainers | 200K+ | Educational content |
+| **Binkov's Battlegrounds** | Military analysis | 800K+ | Deep-dive audience |
+
+:::tip Combat Veteran Reacts - Paul Lewandowski
+
+US Army veteran (Afghanistan), Bronze Star recipient, Johns Hopkins SAIS grad.
+Pivoted from movie reactions to Ukraine combat analysis. Runs combatvetnews.com
+and actively fundraises for Ukrainian forces. High credibility in veteran/defense
+community.
+
+:::
 
 **Content Opportunities:**
 - Counter-UAS technology explainers
 - Ukraine drone warfare analysis
 - Future of drone defense features
 - Technical white paper summaries
+- Reaction videos to Phoenix Rooivalk demos
 
 [The War Zone](https://www.twz.com/) |
 [Task & Purpose](https://taskandpurpose.com/) |
-[Sandboxx](https://www.sandboxx.us/)
+[Combat Veteran Reacts](https://www.youtube.com/@CombatVeteranReacts) |
+[ATP Geopolitics](https://www.youtube.com/@ATPGeopolitics)
+
+---
+
+### Drone Industry Media
+
+| Channel | Focus | Subscribers | Value |
+|---------|-------|-------------|-------|
+| **Drone & Sundry** | Industry news, interviews | 12.5K | sUAS News official channel |
+| **Commercial Drones FM** | Commercial applications | 10K+ | Industry podcast |
+| **51 Drones** | Drone news, reviews | 200K+ | Consumer/prosumer audience |
+
+:::info Drone & Sundry - sUAS News Channel
+
+Weekly live show covering drone industry news, events, and interviews with
+industry professionals. Official channel of sUAS News (suasnews.com). Great for
+industry visibility and staying current on commercial drone developments.
+
+- Weekly show: "Drone Stuff This Week"
+- Direct line to sUAS News editorial team
+- Subscribe to weekly email roundup: eepurl.com/dxkHcv
+
+:::
+
+[Drone & Sundry](https://www.youtube.com/@DroneandSundry) |
+[sUAS News](https://www.suasnews.com)
 
 ---
 
 ### Technology & Startup Channels
 
-| Channel | Focus | Value |
-|---------|-------|-------|
-| **Y Combinator** | Startup advice, founder stories | VC audience |
-| **a]6z (Andreessen Horowitz)** | Tech trends, deep dives | Investor network |
-| **All-In Podcast** | Tech/business/politics | Influential reach |
-| **Lex Fridman** | Deep tech interviews | Thought leadership |
+| Channel | Focus | Subscribers | Value |
+|---------|-------|-------------|-------|
+| **Prof G (Scott Galloway)** | Business, tech, defense | 500K+ | NYU professor, defense industry analysis |
+| **Y Combinator** | Startup advice, founder stories | 1M+ | VC audience |
+| **a16z (Andreessen Horowitz)** | Tech trends, deep dives | 400K+ | Investor network |
+| **All-In Podcast** | Tech/business/politics | 1M+ | Influential reach |
+| **Lex Fridman** | Deep tech interviews | 4M+ | Thought leadership |
+
+:::tip Prof G - Scott Galloway
+
+NYU Stern professor and bestselling author. Has specific episodes on the defense
+industry ("The Defense Industry" - July 2024). Co-hosts Pivot podcast with Kara
+Swisher. Excellent for mainstream tech/business audience crossover and investment
+community visibility.
+
+:::
 
 ---
 
