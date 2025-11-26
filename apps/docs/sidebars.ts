@@ -23,7 +23,10 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Early Development",
           collapsed: true,
-          items: ["executive/early-development/early-spec-qa"],
+          items: [
+            "executive/early-development/early-spec-qa",
+            "executive/early-development/investment-phases",
+          ],
         },
       ],
     },
@@ -274,6 +277,7 @@ const sidebars: SidebarsConfig = {
       label: "📚 Resources & References",
       collapsed: false,
       items: [
+        "resources/documentation-status",
         "resources/downloads",
         "resources/suas-program-documentation",
         "resources/cloud-sync-setup",

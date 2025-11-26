@@ -37,7 +37,8 @@ const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
 const config: Config = {
-  title: "PhoenixRooivalk Docs",
+  title: "Phoenix Rooivalk Documentation",
+  tagline: "Autonomous Counter-UAS Defense Platform",
   favicon: "img/favicon.ico",
   url: "https://docs-phoenixrooivalk.netlify.app",
   baseUrl: "/",
@@ -45,6 +46,45 @@ const config: Config = {
   projectName: "PhoenixRooivalk",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
+  headTags: [
+    {
+      tagName: "meta",
+      attributes: {
+        name: "keywords",
+        content:
+          "counter-drone, counter-UAS, autonomous defense, blockchain, security, drone interception, AI, machine learning",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:type",
+        content: "website",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:title",
+        content: "Phoenix Rooivalk - Autonomous Counter-UAS Defense Platform",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:description",
+        content:
+          "Comprehensive documentation for the world's most advanced autonomous counter-UAS defense platform.",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+    },
+  ],
   markdown: {
     format: "md",
     mermaid: true,
@@ -140,6 +180,14 @@ const config: Config = {
               label: "System Architecture",
               to: "/docs/technical/system-architecture",
             },
+            {
+              label: "API Documentation",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
+              label: "Blockchain Architecture",
+              to: "/docs/technical/blockchain/blockchain-architecture",
+            },
           ],
         },
         {
@@ -228,6 +276,10 @@ const config: Config = {
               to: "/docs/technical/technical-architecture",
             },
             {
+              label: "API Documentation",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
               label: "Market Analysis",
               to: "/docs/business/market-analysis",
             },
@@ -236,6 +288,10 @@ const config: Config = {
         {
           title: "Resources",
           items: [
+            {
+              label: "Documentation Status",
+              to: "/docs/resources/documentation-status",
+            },
             {
               label: "Your Progress",
               to: "/your-progress",
@@ -280,11 +336,22 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    // Enhanced prism theme
+    // Enhanced prism theme with additional languages
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ["rust", "bash", "json", "yaml"],
+      additionalLanguages: [
+        "rust",
+        "bash",
+        "json",
+        "yaml",
+        "solidity",
+        "hcl",
+        "toml",
+        "python",
+        "typescript",
+        "go",
+      ],
     },
     // Enhanced announcement bar
     announcementBar: {
