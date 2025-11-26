@@ -65,11 +65,7 @@ export default function YourProgress(): React.ReactElement {
           </div>
         </section>
 
-        <section
-          className="row margin-top--xl"
-          aria-label="Call to action"
-          role="region"
-        >
+        <section className="row margin-top--xl" aria-label="Call to action">
           <div className="col col--12">
             <div className={styles.ctaCard}>
               <h3 className={styles.ctaTitle}>Ready to continue learning?</h3>
