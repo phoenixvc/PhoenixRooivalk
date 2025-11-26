@@ -121,7 +121,9 @@ export const signOut = async (): Promise<void> => {
  * @param {(user: User | null) => void} callback - Function called when auth state changes
  * @returns {() => void} Unsubscribe function to stop listening to auth changes
  */
-export const onAuthChange = (callback: (user: User | null) => void): (() => void) => {
+export const onAuthChange = (
+  callback: (user: User | null) => void,
+): (() => void) => {
   if (!auth) {
     callback(null);
     return () => {};
@@ -178,7 +180,9 @@ const DEFAULT_PROGRESS: UserProgress = {
  * @param {string} userId - The user's unique identifier
  * @returns {Promise<UserProgress>} The user's progress data or default values if not found
  */
-export const getUserProgress = async (userId: string): Promise<UserProgress> => {
+export const getUserProgress = async (
+  userId: string,
+): Promise<UserProgress> => {
   if (!db) return DEFAULT_PROGRESS;
   try {
     const docRef = doc(db, "userProgress", userId);
@@ -204,7 +208,7 @@ export const getUserProgress = async (userId: string): Promise<UserProgress> => 
  */
 export const updateUserProgress = async (
   userId: string,
-  progress: Partial<UserProgress>
+  progress: Partial<UserProgress>,
 ): Promise<boolean> => {
   if (!db) return false;
   try {
@@ -229,7 +233,7 @@ export const updateUserProgress = async (
  */
 export const saveUserProgress = async (
   userId: string,
-  progress: UserProgress
+  progress: UserProgress,
 ): Promise<boolean> => {
   if (!db) return false;
   try {

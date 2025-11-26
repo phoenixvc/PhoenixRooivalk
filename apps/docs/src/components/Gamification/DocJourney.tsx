@@ -190,7 +190,7 @@ interface JourneyProgress {
 
 export function useDocJourney() {
   const [journeyProgress, setJourneyProgress] = React.useState<JourneyProgress>(
-    {}
+    {},
   );
 
   React.useEffect(() => {
@@ -284,11 +284,7 @@ function JourneyPathCard({
 
       <div className="journey-path-docs">
         {path.docs.map((doc, index) => (
-          <Link
-            key={doc.id}
-            to={doc.path}
-            className="journey-path-doc"
-          >
+          <Link key={doc.id} to={doc.path} className="journey-path-doc">
             <span className="journey-path-doc-number">{index + 1}</span>
             <span className="journey-path-doc-title">{doc.title}</span>
           </Link>
@@ -303,11 +299,11 @@ export default function DocJourney(): React.ReactElement {
   const { getPathProgress, isPathComplete } = useDocJourney();
 
   const completedPaths = LEARNING_PATHS.filter((p) =>
-    isPathComplete(p.id)
+    isPathComplete(p.id),
   ).length;
   const totalProgress = Math.round(
     LEARNING_PATHS.reduce((sum, p) => sum + getPathProgress(p.id), 0) /
-      LEARNING_PATHS.length
+      LEARNING_PATHS.length,
   );
 
   return (

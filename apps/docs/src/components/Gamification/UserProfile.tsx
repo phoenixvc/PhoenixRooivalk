@@ -8,16 +8,18 @@ interface UserProfileProps {
 
 /**
  * UserProfile Component
- * 
+ *
  * Displays user authentication status, profile information, and cloud sync controls.
  * Supports multiple display modes: compact (dropdown) and full (card).
  * Handles Firebase configuration states and loading/authenticated/guest states.
- * 
+ *
  * @param {UserProfileProps} props - Component props
  * @param {boolean} [props.compact=false] - Whether to render in compact dropdown mode
  * @returns {React.ReactElement} User profile UI
  */
-export function UserProfile({ compact = false }: UserProfileProps): React.ReactElement {
+export function UserProfile({
+  compact = false,
+}: UserProfileProps): React.ReactElement {
   const {
     user,
     loading,
@@ -41,7 +43,10 @@ export function UserProfile({ compact = false }: UserProfileProps): React.ReactE
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -170,7 +175,9 @@ export function UserProfile({ compact = false }: UserProfileProps): React.ReactE
     <div className="user-profile user-profile--guest">
       <div className="user-profile-guest-message">
         <h4>Sync Your Progress</h4>
-        <p>Sign in to save your achievements and reading progress across devices.</p>
+        <p>
+          Sign in to save your achievements and reading progress across devices.
+        </p>
       </div>
       <div className="user-profile-auth-buttons">
         <button

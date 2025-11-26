@@ -20,7 +20,7 @@ interface ProgressData {
  * Hook for tracking reading progress across documentation pages.
  * Persists progress to localStorage and provides utilities for marking docs as read,
  * updating scroll progress, and querying completion status.
- * 
+ *
  * @returns {object} Progress tracking utilities including mark as read, update scroll, and query methods
  */
 export function useReadingProgress() {
@@ -97,7 +97,7 @@ export function useReadingProgress() {
 /**
  * ReadingProgress component displays progress for a specific documentation category.
  * Shows completion stats and a progress bar for the specified category.
- * 
+ *
  * @param {ReadingProgressProps} props - Component props
  * @param {number} props.totalDocs - Total number of documents in the category
  * @param {string} props.categoryName - Name of the documentation category
@@ -138,13 +138,13 @@ export function ReadingProgress({
  */
 export function ReadingProgressCard(): React.ReactElement {
   const { progress, getCompletedCount } = useReadingProgress();
-  
+
   // Calculate overall statistics
   const totalCompleted = getCompletedCount();
   const allDocs = Object.keys(progress);
   const totalDocs = allDocs.length || 1; // Avoid division by zero
   const percentage = Math.round((totalCompleted / totalDocs) * 100);
-  
+
   // Calculate reading streak
   const completedDocs = allDocs
     .filter((docId) => progress[docId]?.completed)
@@ -153,14 +153,16 @@ export function ReadingProgressCard(): React.ReactElement {
       const dateB = progress[b]?.completedAt || "";
       return dateB.localeCompare(dateA);
     });
-  
+
   const recentlyCompleted = completedDocs.slice(0, 3);
 
   return (
     <div className="reading-progress-overview-card">
       <div className="reading-progress-overview-header">
         <div>
-          <h2 className="reading-progress-overview-title">📚 Reading Progress</h2>
+          <h2 className="reading-progress-overview-title">
+            📚 Reading Progress
+          </h2>
           <p className="reading-progress-overview-subtitle">
             Track your journey through Phoenix Rooivalk documentation
           </p>
@@ -187,7 +189,9 @@ export function ReadingProgressCard(): React.ReactElement {
         <div className="reading-progress-stat-card">
           <div className="reading-progress-stat-icon">🔥</div>
           <div className="reading-progress-stat-content">
-            <div className="reading-progress-stat-value">{completedDocs.length}</div>
+            <div className="reading-progress-stat-value">
+              {completedDocs.length}
+            </div>
             <div className="reading-progress-stat-label">Total Read</div>
           </div>
         </div>

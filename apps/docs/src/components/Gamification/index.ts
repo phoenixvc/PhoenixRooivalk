@@ -10,6 +10,10 @@ export {
   useAchievements,
   ACHIEVEMENTS,
 } from "./Achievements";
-export { default as DocJourney, useDocJourney, LEARNING_PATHS } from "./DocJourney";
+export {
+  default as DocJourney,
+  useDocJourney,
+  LEARNING_PATHS,
+} from "./DocJourney";
 export { default as FeedbackWidget, useFeedback } from "./FeedbackWidget";
 export { UserProfile } from "./UserProfile";

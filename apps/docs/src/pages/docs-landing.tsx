@@ -92,7 +92,8 @@ export default function DocsLanding(): React.ReactElement {
     {
       emoji: "⚖️",
       title: "Legal & Compliance",
-      description: "Regulatory framework, ITAR compliance, and legal requirements",
+      description:
+        "Regulatory framework, ITAR compliance, and legal requirements",
       links: [
         {
           label: "Compliance Framework",
