@@ -5,11 +5,11 @@ sidebar_label: 🏠 Home
 slug: /
 ---
 
-<div style={{textAlign: 'center', marginBottom: '3rem'}}>
-  <h1 style={{fontSize: '3rem', background: 'linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem'}}>
+<div className="docs-readme-hero">
+  <h1 className="docs-readme-title">
     Phoenix Rooivalk Documentation
   </h1>
-  <p style={{fontSize: '1.25rem', color: 'rgb(148, 163, 184)', maxWidth: '800px', margin: '0 auto 2rem'}}>
+  <p className="docs-readme-subtitle">
     Comprehensive documentation for the world's most advanced autonomous counter-UAS defense platform. Explore technical specifications, business insights, and operational guides.
   </p>
 </div>

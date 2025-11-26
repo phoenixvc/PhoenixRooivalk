@@ -1,0 +1,14 @@
+{
+  "label": "Legal Documentation",
+  "position": 4,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-legal",
+  "description": "Regulatory framework, ITAR compliance, and legal requirements.",
+  "link": {
+    "type": "generated-index",
+    "title": "Legal & Compliance Documentation",
+    "description": "Comprehensive legal framework including ITAR compliance, DoD regulations, and risk management.",
+    "slug": "/legal"
+  }
+}

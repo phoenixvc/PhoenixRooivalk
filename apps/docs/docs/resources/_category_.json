@@ -1,0 +1,14 @@
+{
+  "label": "Resources & References",
+  "position": 7,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-resources",
+  "description": "Downloadable resources, reference materials, and supporting documentation.",
+  "link": {
+    "type": "generated-index",
+    "title": "Resources & References",
+    "description": "Downloadable assets, sUAS program documentation, and reference materials.",
+    "slug": "/resources"
+  }
+}

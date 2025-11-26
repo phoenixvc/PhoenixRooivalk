@@ -1,0 +1,14 @@
+{
+  "label": "Operations Documentation",
+  "position": 5,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-operations",
+  "description": "Deployment procedures, operational guidelines, maintenance, and training materials.",
+  "link": {
+    "type": "generated-index",
+    "title": "Operations Documentation",
+    "description": "Operational documentation including deployment guides, maintenance procedures, training materials, and project calendars.",
+    "slug": "/operations"
+  }
+}

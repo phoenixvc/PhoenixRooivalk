@@ -1,3 +1,9 @@
+---
+id: inst-forward-looking
+title: "Research: Forward-Looking Tech"
+sidebar_label: "Research: Forward-Looking Tech"
+---
+
 # Complete Research Instruction: Forward-Looking Technology Assessment
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

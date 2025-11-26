@@ -1,0 +1,14 @@
+{
+  "label": "Executive Documentation",
+  "position": 1,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-executive",
+  "description": "High-level overviews, strategic direction, and business value propositions for leadership decision-making.",
+  "link": {
+    "type": "generated-index",
+    "title": "Executive Documentation",
+    "description": "Strategic documentation for executives, investors, and board members including system overviews, market opportunities, and key value propositions.",
+    "slug": "/executive"
+  }
+}

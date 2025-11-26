@@ -1,0 +1,14 @@
+{
+  "label": "Business Documentation",
+  "position": 3,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-business",
+  "description": "Market analysis, business model, competitive landscape, and growth strategy documentation.",
+  "link": {
+    "type": "generated-index",
+    "title": "Business Documentation",
+    "description": "Business intelligence including market analysis, ROI projections, competitive positioning, and partnership strategies.",
+    "slug": "/business"
+  }
+}

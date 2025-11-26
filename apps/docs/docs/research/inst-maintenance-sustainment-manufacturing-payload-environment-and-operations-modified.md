@@ -1,3 +1,9 @@
+---
+id: inst-maintenance-ops
+title: "Research: Maintenance & Operations"
+sidebar_label: "Research: Maintenance & Operations"
+---
+
 # Complete Research Instruction: Maintenance, Sustainment, Manufacturing, Payload Environment and Operations
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

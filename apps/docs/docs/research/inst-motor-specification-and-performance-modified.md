@@ -1,3 +1,9 @@
+---
+id: inst-motor-specs
+title: "Research: Motor Specifications"
+sidebar_label: "Research: Motor Specifications"
+---
+
 # Complete Research Instruction: Motor Specification and Performance Analysis
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

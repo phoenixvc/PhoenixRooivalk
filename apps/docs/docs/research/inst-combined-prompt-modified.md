@@ -1,3 +1,9 @@
+---
+id: inst-combined-systems
+title: "Research: Combined Systems"
+sidebar_label: "Research: Combined Systems"
+---
+
 # Complete Research Instruction: Combined Propulsion, Motor, Airframe and Power Systems
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)
