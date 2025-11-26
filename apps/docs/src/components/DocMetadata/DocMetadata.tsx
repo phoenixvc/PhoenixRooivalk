@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "@docusaurus/Link";
 import type { DocFrontmatter } from "../../types/frontmatter";
 import { DIFFICULTY_CONFIG } from "../../types/frontmatter";
 import styles from "./DocMetadata.module.css";
@@ -94,7 +95,7 @@ export const DocMetadata: React.FC<DocMetadataProps> = ({ frontmatter }) => {
           <ul>
             {prerequisites.map((prereq) => (
               <li key={prereq}>
-                <a href={`/docs/${prereq}`}>{prereq}</a>
+                <Link to={`/docs/${prereq}`}>{prereq}</Link>
               </li>
             ))}
           </ul>

@@ -1,6 +1,10 @@
 import type { Transformer } from "unified";
 import type { Root } from "mdast";
 
+interface VFileData {
+  frontMatter?: Record<string, unknown>;
+}
+
 /**
  * Remark plugin that validates document frontmatter metadata
  * and provides console warnings for invalid values
@@ -8,7 +12,7 @@ import type { Root } from "mdast";
 export function remarkDocMetadata(): Transformer<Root> {
   return (tree, file) => {
     // Access frontmatter through vfile
-    const frontmatter = (file.data as any).frontMatter;
+    const frontmatter = (file.data as VFileData).frontMatter;
 
     if (!frontmatter) {
       return;
@@ -67,15 +71,10 @@ export function remarkDocMetadata(): Transformer<Root> {
       );
     }
 
-    // Log successful validation
-    if (
-      frontmatter.difficulty ||
-      frontmatter.estimated_reading_time ||
-      frontmatter.points
-    ) {
-      console.log(
-        `[Doc Metadata] ✓ Validated metadata for ${file.path?.split("/").pop() || "document"}`,
-      );
-    }
+    // Optional: Log successful validation (disabled by default to reduce build verbosity)
+    // Uncomment for debugging:
+    // if (frontmatter.difficulty || frontmatter.estimated_reading_time || frontmatter.points) {
+    //   console.log(`[Doc Metadata] ✓ Validated metadata for ${file.path?.split("/").pop() || "document"}`);
+    // }
   };
 }
