@@ -87,11 +87,11 @@ access to restricted materials.
 
 Subscribe to project calendars for automatic sync:
 
-| Calendar                      | Format | Description                  | Download         |
-| ----------------------------- | ------ | ---------------------------- | ---------------- |
-| **Opportunities & Deadlines** | ICS    | Funding deadlines and events | [Coming Soon](#) |
-| **Development Milestones**    | ICS    | Sprint and release schedule  | [Coming Soon](#) |
-| **Team Meetings**             | ICS    | Recurring meeting schedule   | [Coming Soon](#) |
+| Calendar                      | Format | Description                  | Download    |
+| ----------------------------- | ------ | ---------------------------- | ----------- |
+| **Opportunities & Deadlines** | ICS    | Funding deadlines and events | Coming Soon |
+| **Development Milestones**    | ICS    | Sprint and release schedule  | Coming Soon |
+| **Team Meetings**             | ICS    | Recurring meeting schedule   | Coming Soon |
 
 See [Project Calendar](../operations/calendar/project-calendar.md) for
 subscription instructions.
