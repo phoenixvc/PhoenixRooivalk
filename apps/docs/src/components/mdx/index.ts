@@ -15,15 +15,42 @@ export { default as Whitepaper } from "./Whitepaper";
 
 // Standard Figures exports
 export {
+  // Core component
   StandardFigure,
   FIGURES,
-  MarketSize2030,
+
+  // Market components
   MarketSize2025,
-  TPS,
-  Availability,
-  DetectionAccuracy,
+  MarketSize2030,
+  CAGR,
+
+  // Performance components
   ResponseTime,
+  DetectionAccuracy,
+  Availability,
+  AIPerformance,
+
+  // Blockchain components
+  TPS,
+  TPSCompliance,
+  Finality,
+
+  // Investment & ROI components
   CapitalRequirements,
+  ROI5Year,
+  PaybackPeriod,
+  Investment5Year,
+  Revenue5Year,
+
+  // Government components
+  PentagonReplicator,
+  RecentContracts,
+
+  // Card components
   FiguresCard,
+  MarketOverviewCard,
+  PerformanceCard,
+  InvestmentCard,
 } from "./StandardFigures";
+
 export type { FigureKey } from "./StandardFigures";

@@ -7,17 +7,20 @@ keywords:
   - status
   - overview
   - changelog
+  - figures
+  - metrics
 difficulty: beginner
-estimated_reading_time: 3
-points: 5
+estimated_reading_time: 8
+points: 10
 tags:
   - resources
   - status
+  - reference
 ---
 
 # Documentation Status
 
-This page provides an overview of the Phoenix Rooivalk documentation completeness and recent updates.
+This page provides an overview of the Phoenix Rooivalk documentation completeness, standardized figures reference, and recent updates.
 
 ## Overview
 
@@ -41,7 +44,190 @@ This page provides an overview of the Phoenix Rooivalk documentation completenes
 | Legal Documentation | Complete | 2 | Nov 2025 |
 | Operations Documentation | Complete | 10 | Nov 2025 |
 | Research Documentation | Complete | 14 | Nov 2025 |
-| Resources | Complete | 5 | Nov 2025 |
+| Resources | Complete | 6 | Nov 2025 |
+
+---
+
+## Standard Figures Reference
+
+Use these standardized figures consistently across documentation. Different contexts may require different specific figures - refer to the appropriate section below.
+
+### Market Size Figures
+
+| Metric | Value | Use In |
+|--------|-------|--------|
+| **Counter-Drone Market (2025)** | $2.45-3.0B | Executive, Business docs |
+| **Counter-Drone Market (2030)** | $9-15B | Executive, Business docs |
+| **Enterprise Counter-Drone (2032)** | $12.24B | Investor docs |
+| **CAGR** | 23-27% | All market discussions |
+| **Asia-Pacific CAGR** | 25.7% | Regional analysis |
+| **Middle East CAGR** | 28% | Regional analysis |
+| **Europe CAGR** | 24% | Regional analysis |
+
+### Market Segments (2025)
+
+| Segment | Value | Percentage |
+|---------|-------|------------|
+| Military & Defense | $1.2B | 48% |
+| Critical Infrastructure | $600M | 24% |
+| Commercial & Events | $400M | 16% |
+| Border Security | $300M | 12% |
+
+### TAM Projections (Use in ROI Analysis)
+
+| Year | TAM |
+|------|-----|
+| 2025 | $8.2B |
+| 2026 | $9.8B |
+| 2027 | $11.7B |
+| 2028 | $13.9B |
+| 2029 | $16.5B |
+| **5-Year Total** | $60.1B |
+
+### Regional Markets (2030)
+
+| Region | Market Size |
+|--------|-------------|
+| Europe | €3.2B |
+| Middle East & Africa | $1.8B |
+| Asia-Pacific | $3.5B |
+
+---
+
+## Performance Metrics
+
+### Response Time
+
+| Metric | Value | Context |
+|--------|-------|---------|
+| **Phoenix Response Time** | 120-195ms | Standard performance |
+| **Target Response Time** | 50-195ms | Technical specs |
+| **Speed Advantage** | 10-40x faster | vs. competitors |
+| **Competitor Baseline** | 3-10 seconds | Industry average |
+
+### Detection Accuracy
+
+| Metric | Value | Context |
+|--------|-------|---------|
+| **Baseline Accuracy** | 85-90% | Pre-training |
+| **Target Accuracy** | 95%+ | Standard target |
+| **Final Accuracy** | 99.5% | Full system |
+| **False Positive Rate** | <1-2% | All contexts |
+
+### AI & System Performance
+
+| Metric | Value |
+|--------|-------|
+| **AI Performance (Jetson AGX Orin)** | 275 TOPS |
+| **AI Performance (Orin NX)** | 100 TOPS |
+| **Sensor-to-Decision Latency** | <50ms |
+| **System Availability** | 99.9% |
+| **Data Integrity** | 99.9% |
+| **Detection Range** | 500m-2km |
+| **Concurrent Targets** | 10+ |
+
+### Blockchain Performance
+
+| Metric | High-Perf Mode | Compliance Mode |
+|--------|---------------|-----------------|
+| **TPS** | 65,000+ TPS | 3,000-4,500 TPS |
+| **Sustained TPS** | 65,000-100,000 TPS | N/A |
+| **Block Finality** | <1 second | Sub-2-second |
+| **Auth Latency** | Sub-2ms | Sub-2ms |
+
+---
+
+## Investment Figures
+
+### Development Phases (TRL Path)
+
+| Phase | Investment | Duration | Milestone |
+|-------|-----------|----------|-----------|
+| Phase 1 (Concept) | $3.5M | 9 months | TRL 3-4 |
+| Phase 2 (Prototype) | $15M | 12 months | Hardware demo |
+| Phase 3 (Integration) | $25M | 15 months | Field trials |
+| **Total to TRL7** | $43.5M | ~3 years | System demo |
+
+### 5-Year Program (Commercialization)
+
+| Year | Investment | Revenue |
+|------|-----------|---------|
+| 2025 | $25M | $0M |
+| 2026 | $35M | $45M |
+| 2027 | $40M | $180M |
+| 2028 | $30M | $320M |
+| 2029 | $15M | $297M |
+| **Total** | $145M | $842M |
+
+### Funding Requirements
+
+| Type | Amount | Context |
+|------|--------|---------|
+| **Seed Funding** | $1.5M | Early stage |
+| **Series A Target** | $30-50M | Growth stage |
+| **Capital Requirements** | $30-50M | Total needs |
+
+---
+
+## ROI Metrics
+
+### Main Program ROI
+
+| Metric | Value |
+|--------|-------|
+| **5-Year ROI** | 580% |
+| **Annualized ROI** | 47% |
+| **IRR** | 89% |
+| **NPV (10% discount)** | $456M |
+| **Payback Period** | 18 months |
+| **Net Profit (5-Year)** | $697M |
+
+### Blockchain Implementation ROI
+
+| Implementation | ROI | Timeline |
+|----------------|-----|----------|
+| Full Implementation | 300% | 24 months |
+| Simplified Implementation | 45% | 18 months |
+| Break-even | N/A | 6 months |
+
+### Exit Potential
+
+| Type | Value Range |
+|------|-------------|
+| Acquisition | $2B-$5B |
+| IPO | $5B-$10B |
+
+---
+
+## Government & Contract Figures
+
+| Program/Contract | Value |
+|------------------|-------|
+| Pentagon Replicator Program | $500M |
+| Recent Government Contracts | $6B+ |
+| Raytheon Coyote (through 2033) | $5.04B |
+| NATO Investment | $1.2B |
+
+---
+
+## Competitor Figures
+
+| Company | Valuation | Notes |
+|---------|-----------|-------|
+| Anduril Industries | $28B | Series G (June 2025) |
+| Fortem Technologies | $1.2B | Series C (2025) |
+| Competitor Accuracy | 70-85% | Industry average |
+
+---
+
+## Product Figures (SkySnare/AeroNet)
+
+| Product | TAM |
+|---------|-----|
+| SkySnare (Consumer) | $1.68B |
+| AeroNet (Enterprise) | $4.2B |
+| Combined TAM | ~$5.88B |
+| Invested to Date | $150K |
 
 ---
 
@@ -98,20 +284,28 @@ Deployment and operational procedures.
 
 ---
 
-## Key Figures Reference
+## Using Standard Figures in MDX
 
-These standardized figures should be used consistently across all documentation:
+For MDX-enabled documents, you can import standard figure components:
 
-| Metric | Value | Category |
-|--------|-------|----------|
-| Market Size (2025) | $2.45-3.0B | Market |
-| Market Size (2030) | $9-15B | Market |
-| CAGR | 23-27% | Market |
-| Detection Accuracy | 99.7% | Performance |
-| Response Time | 120-195ms | Performance |
-| AI Performance | 275 TOPS | Performance |
-| System Availability | 99.9% | Performance |
-| Capital Requirements | $30-50M | Investment |
+```tsx
+import { MarketSize2030, ResponseTime, ROI5Year } from '@site/src/components/mdx';
+
+// Usage
+The market opportunity is <MarketSize2030 /> by 2030.
+Our response time of <ResponseTime /> is 10-40x faster than competitors.
+Expected <ROI5Year /> ROI within 5 years.
+```
+
+Available preset cards:
+
+```tsx
+import { MarketOverviewCard, PerformanceCard, InvestmentCard } from '@site/src/components/mdx';
+
+<MarketOverviewCard />
+<PerformanceCard />
+<InvestmentCard />
+```
 
 ---
 
@@ -120,8 +314,10 @@ These standardized figures should be used consistently across all documentation:
 ### November 2025
 - Documentation site launched on Netlify
 - All core documentation sections completed
+- Standard figures reference established
 - Reading progress tracking implemented
 - Search functionality added
+- MDX components for consistent figures created
 
 ### Previous Updates
 - Initial documentation structure created
@@ -137,8 +333,9 @@ To contribute to the documentation:
 
 1. Visit the [GitHub Repository](https://github.com/JustAGhosT/PhoenixRooivalk)
 2. Navigate to `apps/docs/docs/`
-3. Edit or create markdown files following the established patterns
-4. Submit a pull request for review
+3. Reference this page for standard figures
+4. Edit or create markdown files following the established patterns
+5. Submit a pull request for review
 
 For documentation guidelines, see the [Documentation Guide](./documentation-guide).
 
