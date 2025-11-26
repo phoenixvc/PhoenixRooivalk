@@ -36,6 +36,11 @@ import {
   Firestore,
   serverTimestamp,
 } from "firebase/firestore";
+import {
+  getAnalytics,
+  Analytics,
+  isSupported as isAnalyticsSupported,
+} from "firebase/analytics";
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
@@ -45,6 +50,7 @@ const firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
   appId: process.env.FIREBASE_APP_ID || "",
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "", // GA4 Measurement ID
 };
 
 // Check if Firebase is configured
@@ -52,10 +58,16 @@ export const isFirebaseConfigured = (): boolean => {
   return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 };
 
+// Check if GA4 is configured
+export const isGA4Configured = (): boolean => {
+  return Boolean(firebaseConfig.measurementId);
+};
+
 // Initialize Firebase only if configured
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
+let analytics: Analytics | null = null;
 
 if (isFirebaseConfigured() && typeof window !== "undefined") {
   if (getApps().length === 0) {
@@ -65,7 +77,23 @@ if (isFirebaseConfigured() && typeof window !== "undefined") {
   }
   auth = getAuth(app);
   db = getFirestore(app);
+
+  // Initialize GA4 Analytics if configured and supported
+  if (isGA4Configured()) {
+    isAnalyticsSupported().then((supported) => {
+      if (supported && app) {
+        analytics = getAnalytics(app);
+      }
+    });
+  }
 }
+
+/**
+ * Get the GA4 Analytics instance (may be null if not configured/supported)
+ */
+export const getGA4Analytics = (): Analytics | null => {
+  return analytics;
+};
 
 // Auth providers
 const googleProvider = new GoogleAuthProvider();
@@ -261,4 +289,7 @@ export const saveUserProgress = async (
 };
 
 // Export instances for direct access if needed
-export { auth, db, app };
+export { auth, db, app, analytics };
+
+// Re-export GA4 logging function for convenience
+export { logEvent } from "firebase/analytics";

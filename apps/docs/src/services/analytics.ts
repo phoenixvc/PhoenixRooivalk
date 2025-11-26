@@ -22,7 +22,8 @@ import {
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
-import { isFirebaseConfigured } from "./firebase";
+import { logEvent, Analytics } from "firebase/analytics";
+import { isFirebaseConfigured, isGA4Configured, getGA4Analytics } from "./firebase";
 import { isAnalyticsAllowed } from "../components/CookieConsent";
 import { checkRateLimit, debounce } from "../utils/rateLimiter";
 
@@ -119,6 +120,7 @@ const RATE_LIMITS = {
 
 class AnalyticsService {
   private db: ReturnType<typeof getFirestore> | null = null;
+  private ga4: Analytics | null = null;
   private sessionId: string = "";
   private currentPageStartTime: number = 0;
   private currentPageUrl: string = "";
@@ -162,8 +164,29 @@ class AnalyticsService {
         this.db = getFirestore();
         this.isInitialized = true;
         await this.initSession();
+
+        // Initialize GA4 if configured
+        if (isGA4Configured()) {
+          this.ga4 = getGA4Analytics();
+        }
       } catch (error) {
         console.warn("Analytics initialization failed:", error);
+      }
+    }
+  }
+
+  /**
+   * Track event to GA4 (Google Analytics 4)
+   */
+  private trackGA4Event(
+    eventName: string,
+    params?: Record<string, unknown>
+  ): void {
+    if (this.ga4 && this.hasConsent()) {
+      try {
+        logEvent(this.ga4, eventName, params);
+      } catch (error) {
+        // Silently fail - GA4 is supplementary
       }
     }
   }
@@ -260,6 +283,14 @@ class AnalyticsService {
 
       // Track daily stats (debounced)
       this.debouncedDailyStats(pageUrl, isAuthenticated);
+
+      // Track to GA4
+      this.trackGA4Event("page_view", {
+        page_path: pageUrl,
+        page_title: pageTitle,
+        page_location: typeof window !== "undefined" ? window.location.href : "",
+        is_authenticated: isAuthenticated,
+      });
     } catch (error) {
       console.warn("Page view tracking failed:", error);
     }
@@ -305,6 +336,13 @@ class AnalyticsService {
       await updateDoc(sessionRef, {
         totalTimeMs: increment(timeSpent),
         lastActivity: serverTimestamp(),
+      });
+
+      // Track engagement to GA4
+      this.trackGA4Event("user_engagement", {
+        engagement_time_msec: timeSpent,
+        page_path: this.currentPageUrl,
+        scroll_depth: this.maxScrollDepth,
       });
     } catch (error) {
       console.warn("Time tracking failed:", error);
@@ -356,9 +394,33 @@ class AnalyticsService {
           userId,
         });
       }
+
+      // Track to GA4 with mapped event names
+      const ga4EventName = this.mapConversionToGA4Event(eventType);
+      this.trackGA4Event(ga4EventName, {
+        event_category: "conversion",
+        event_label: eventType,
+        ...eventData,
+      });
     } catch (error) {
       console.warn("Conversion tracking failed:", error);
     }
+  }
+
+  /**
+   * Map internal conversion events to GA4 standard events
+   */
+  private mapConversionToGA4Event(eventType: ConversionEvent["eventType"]): string {
+    const mapping: Record<ConversionEvent["eventType"], string> = {
+      teaser_view: "view_item",
+      signup_prompt_shown: "view_promotion",
+      signup_started: "begin_checkout",
+      signup_completed: "sign_up",
+      first_doc_read: "tutorial_complete",
+      achievement_unlocked: "unlock_achievement",
+      path_completed: "level_end",
+    };
+    return mapping[eventType] || eventType;
   }
 
   /**
