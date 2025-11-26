@@ -139,7 +139,7 @@ Phoenix Rooivalk is currently participating in Soonami Cohort 8.
 | Effort Required     | 5       | Minimal additional effort                 |
 | **Weighted Score**  | **4.5** |                                           |
 
-[View Full Details](./soonami-cohort-8.md)
+[View Full Details](./soonami-cohort-8)
 
 ---
 
@@ -166,8 +166,8 @@ Phoenix Rooivalk is currently participating in Soonami Cohort 8.
 | Effort Required     | 3       | Detailed application required |
 | **Weighted Score**  | **4.3** |                               |
 
-[View Full Details](./cuas-sandbox-2026.md) |
-[Draft Application](../applications/cuas-sandbox-2026-application.md)
+[View Full Details](./cuas-sandbox-2026) |
+[Draft Application](../applications/cuas-sandbox-2026-application)
 
 ---
 
@@ -1457,7 +1457,7 @@ feedback.
 
 ### Application Templates
 
-- [Canada CUAS 2026 Application Draft](../applications/cuas-sandbox-2026-application.md)
+- [Canada CUAS 2026 Application Draft](../applications/cuas-sandbox-2026-application)
 - [SBIR Phase I Template](../applications/) _(coming soon)_
 
 ### External Links
