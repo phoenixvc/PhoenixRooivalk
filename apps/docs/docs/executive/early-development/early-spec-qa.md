@@ -504,7 +504,7 @@ areas for business partner:
 
 ## Related Documents
 
-- [Investment Phases Mapping](./investment-phases.md) _(coming soon)_
+- [Investment Phases Mapping](./investment-phases) _(coming soon)_
 - [Technical Whitepaper](../phoenix-rooivalk-technical-whitepaper)
 - [Investor Executive Summary](../investor-executive-summary)
 - [12-Month Business Plan](../../business/12-month-business-plan)

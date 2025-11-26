@@ -405,7 +405,7 @@ evidence admissibility, and operational resilience in contested environments.
 
 :::tip sUAS Program Documentation
 
-See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
+See [sUAS Program Documentation](../resources/suas-program-documentation) for
 comprehensive DHS framework details and integration guidance with Phoenix
 Rooivalk operations.
 

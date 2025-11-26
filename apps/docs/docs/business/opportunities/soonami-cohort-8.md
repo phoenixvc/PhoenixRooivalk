@@ -170,9 +170,9 @@ on-chain venture, leveraging Web3 and AI solutions.
 
 ### Internal Resources
 
-- [Phoenix Rooivalk Pitch Deck](../../executive/phoenix-rooivalk-pitch-deck.md)
-- [Investor Executive Summary](../../executive/investor-executive-summary.md)
-- [12-Month Business Plan](../12-month-business-plan.md)
+- [Phoenix Rooivalk Pitch Deck](../../executive/phoenix-rooivalk-pitch-deck)
+- [Investor Executive Summary](../../executive/investor-executive-summary)
+- [12-Month Business Plan](../12-month-business-plan)
 
 ---
 

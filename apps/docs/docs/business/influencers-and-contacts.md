@@ -440,9 +440,9 @@ investment community visibility.
 
 ## Related Documents
 
-- [Opportunities Summary](./opportunities/opportunities-summary.md)
-- [Market Analysis](./market-analysis.md)
-- [Competitive Analysis](./competitive-analysis.md)
+- [Opportunities Summary](./opportunities/opportunities-summary)
+- [Market Analysis](./market-analysis)
+- [Competitive Analysis](./competitive-analysis)
 
 ---
 

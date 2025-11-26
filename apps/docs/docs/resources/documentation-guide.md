@@ -48,7 +48,7 @@ security or safety. :::
 
 ## Mermaid Diagrams
 
-Create diagrams directly in markdown using Mermaid syntax:
+Create diagrams directly in Markdown using Mermaid syntax:
 
 ### Flowchart Example
 

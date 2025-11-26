@@ -606,9 +606,9 @@ guidance that complements Phoenix Rooivalk operator certification:
 
 :::tip Recommended Reading
 
-See [sUAS Program Documentation](../../resources/suas-program-documentation.md)
-for comprehensive framework details and integration guidance with Phoenix
-Rooivalk training programs.
+See [sUAS Program Documentation](../../resources/suas-program-documentation) for
+comprehensive framework details and integration guidance with Phoenix Rooivalk
+training programs.
 
 :::
 
