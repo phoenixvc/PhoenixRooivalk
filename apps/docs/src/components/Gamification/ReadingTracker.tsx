@@ -1,16 +1,48 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useLocation } from "@docusaurus/router";
-import { useReadingProgress } from "./ReadingProgress";
+import { useAuth } from "../../contexts/AuthContext";
 
 /**
  * ReadingTracker component automatically tracks user progress through documentation pages.
  * It monitors scroll position and marks pages as read when users scroll past 90%.
- * 
+ * Progress is synced to Firebase when user is authenticated, otherwise saved locally.
+ *
  * This component should be added to the theme to track all doc pages automatically.
  */
 export function ReadingTracker(): null {
   const location = useLocation();
-  const { updateScrollProgress } = useReadingProgress();
+  const { progress, updateProgress } = useAuth();
+
+  // Update scroll progress for a document
+  const updateScrollProgress = useCallback(
+    async (docId: string, scrollPercent: number) => {
+      if (!progress) return;
+
+      const currentDoc = progress.docs[docId] || {
+        scrollProgress: 0,
+        completed: false,
+      };
+
+      // Only update if scroll progress increased
+      if (scrollPercent > currentDoc.scrollProgress) {
+        const isCompleted = scrollPercent >= 90;
+        await updateProgress({
+          docs: {
+            [docId]: {
+              ...currentDoc,
+              scrollProgress: scrollPercent,
+              completed: isCompleted || currentDoc.completed,
+              completedAt:
+                isCompleted && !currentDoc.completed
+                  ? new Date().toISOString()
+                  : currentDoc.completedAt,
+            },
+          },
+        });
+      }
+    },
+    [progress, updateProgress],
+  );
 
   useEffect(() => {
     // Only track docs pages
@@ -25,7 +57,7 @@ export function ReadingTracker(): null {
 
     let ticking = false;
 
-    const updateProgress = () => {
+    const trackScrollPosition = () => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY;
@@ -48,13 +80,13 @@ export function ReadingTracker(): null {
 
     const handleScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateProgress);
+        window.requestAnimationFrame(trackScrollPosition);
         ticking = true;
       }
     };
 
     // Initial progress update
-    updateProgress();
+    trackScrollPosition();
 
     // Listen for scroll events
     window.addEventListener("scroll", handleScroll, { passive: true });

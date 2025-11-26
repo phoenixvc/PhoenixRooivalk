@@ -1,96 +1,39 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ReadingProgressProps {
   totalDocs: number;
   categoryName: string;
 }
 
-const STORAGE_KEY = "phoenix-docs-progress";
-
-interface ProgressData {
-  [docId: string]: {
-    completed: boolean;
-    completedAt?: string;
-    scrollProgress: number;
-  };
-}
-
 /**
- * Hook for tracking reading progress across documentation pages.
- * Persists progress to localStorage and provides utilities for marking docs as read,
- * updating scroll progress, and querying completion status.
+ * Hook for accessing reading progress from the AuthContext.
+ * Progress is synced to Firebase when user is authenticated.
  *
- * @returns {object} Progress tracking utilities including mark as read, update scroll, and query methods
+ * @returns {object} Progress tracking utilities including query methods
  */
 export function useReadingProgress() {
-  const [progress, setProgress] = useState<ProgressData>({});
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      setProgress(JSON.parse(stored));
-    }
-  }, []);
-
-  const markAsRead = (docId: string) => {
-    const newProgress = {
-      ...progress,
-      [docId]: {
-        completed: true,
-        completedAt: new Date().toISOString(),
-        scrollProgress: 100,
-      },
-    };
-    setProgress(newProgress);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newProgress));
-  };
-
-  const updateScrollProgress = (docId: string, scrollPercent: number) => {
-    const existing = progress[docId] || { completed: false, scrollProgress: 0 };
-    if (scrollPercent > existing.scrollProgress) {
-      const newProgress = {
-        ...progress,
-        [docId]: {
-          ...existing,
-          scrollProgress: scrollPercent,
-          completed: scrollPercent >= 90 ? true : existing.completed,
-          completedAt:
-            scrollPercent >= 90 && !existing.completed
-              ? new Date().toISOString()
-              : existing.completedAt,
-        },
-      };
-      setProgress(newProgress);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newProgress));
-    }
-  };
+  const { progress, markDocAsRead } = useAuth();
 
   const getCompletedCount = () => {
-    return Object.values(progress).filter((p) => p.completed).length;
+    if (!progress?.docs) return 0;
+    return Object.values(progress.docs).filter((p) => p.completed).length;
   };
 
   const isCompleted = (docId: string) => {
-    return progress[docId]?.completed || false;
+    return progress?.docs[docId]?.completed || false;
   };
 
   const getScrollProgress = (docId: string) => {
-    return progress[docId]?.scrollProgress || 0;
-  };
-
-  const resetProgress = () => {
-    setProgress({});
-    localStorage.removeItem(STORAGE_KEY);
+    return progress?.docs[docId]?.scrollProgress || 0;
   };
 
   return {
-    progress,
-    markAsRead,
-    updateScrollProgress,
+    progress: progress?.docs || {},
+    markAsRead: markDocAsRead,
     getCompletedCount,
     isCompleted,
     getScrollProgress,
-    resetProgress,
   };
 }
 

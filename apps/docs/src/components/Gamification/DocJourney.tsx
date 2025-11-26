@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "@docusaurus/Link";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface JourneyPath {
   id: string;
@@ -178,69 +179,71 @@ export const LEARNING_PATHS: JourneyPath[] = [
   },
 ];
 
-const JOURNEY_STORAGE_KEY = "phoenix-docs-journey";
-
-interface JourneyProgress {
-  [pathId: string]: {
-    completedDocs: string[];
-    startedAt?: string;
-    completedAt?: string;
-  };
-}
-
+/**
+ * Hook for tracking learning path progress using AuthContext.
+ * Progress is automatically derived from document reading progress,
+ * which syncs to Firebase when user is authenticated.
+ */
 export function useDocJourney() {
-  const [journeyProgress, setJourneyProgress] = React.useState<JourneyProgress>(
-    {},
+  const { progress } = useAuth();
+
+  // Helper to convert doc path to doc ID used in progress tracking
+  const pathToDocId = (docPath: string): string => {
+    return docPath.replace(/^\/docs\//, "").replace(/\/$/, "");
+  };
+
+  // Check if a specific doc in a path is completed
+  const isDocComplete = React.useCallback(
+    (_pathId: string, docId: string) => {
+      // Find the path and doc to get the actual doc path
+      for (const path of LEARNING_PATHS) {
+        const doc = path.docs.find((d) => d.id === docId);
+        if (doc) {
+          const progressDocId = pathToDocId(doc.path);
+          return progress?.docs[progressDocId]?.completed || false;
+        }
+      }
+      return false;
+    },
+    [progress],
   );
 
-  React.useEffect(() => {
-    const stored = localStorage.getItem(JOURNEY_STORAGE_KEY);
-    if (stored) {
-      setJourneyProgress(JSON.parse(stored));
-    }
-  }, []);
+  // Get progress percentage for a learning path
+  const getPathProgress = React.useCallback(
+    (pathId: string) => {
+      const path = LEARNING_PATHS.find((p) => p.id === pathId);
+      if (!path || !progress?.docs) return 0;
 
-  const markDocComplete = (pathId: string, docId: string) => {
-    const path = LEARNING_PATHS.find((p) => p.id === pathId);
-    if (!path) return;
+      const completedCount = path.docs.filter((doc) => {
+        const progressDocId = pathToDocId(doc.path);
+        return progress.docs[progressDocId]?.completed || false;
+      }).length;
 
-    const currentProgress = journeyProgress[pathId] || { completedDocs: [] };
-    if (currentProgress.completedDocs.includes(docId)) return;
+      return Math.round((completedCount / path.docs.length) * 100);
+    },
+    [progress],
+  );
 
-    const newCompletedDocs = [...currentProgress.completedDocs, docId];
-    const isPathComplete = newCompletedDocs.length === path.docs.length;
+  // Check if entire path is complete
+  const isPathComplete = React.useCallback(
+    (pathId: string) => {
+      return getPathProgress(pathId) === 100;
+    },
+    [getPathProgress],
+  );
 
-    const newProgress = {
-      ...journeyProgress,
-      [pathId]: {
-        ...currentProgress,
-        completedDocs: newCompletedDocs,
-        startedAt: currentProgress.startedAt || new Date().toISOString(),
-        completedAt: isPathComplete ? new Date().toISOString() : undefined,
-      },
-    };
-
-    setJourneyProgress(newProgress);
-    localStorage.setItem(JOURNEY_STORAGE_KEY, JSON.stringify(newProgress));
-  };
-
-  const getPathProgress = (pathId: string) => {
-    const path = LEARNING_PATHS.find((p) => p.id === pathId);
-    const progress = journeyProgress[pathId];
-    if (!path || !progress) return 0;
-    return Math.round((progress.completedDocs.length / path.docs.length) * 100);
-  };
-
-  const isDocComplete = (pathId: string, docId: string) => {
-    return journeyProgress[pathId]?.completedDocs.includes(docId) || false;
-  };
-
-  const isPathComplete = (pathId: string) => {
-    return getPathProgress(pathId) === 100;
-  };
+  // markDocComplete is no longer needed as progress is tracked automatically
+  // by the ReadingTracker when users scroll through documents
+  const markDocComplete = React.useCallback(
+    (_pathId: string, _docId: string) => {
+      // This is now handled automatically by ReadingTracker
+      console.log("Doc completion is now tracked automatically via ReadingTracker");
+    },
+    [],
+  );
 
   return {
-    journeyProgress,
+    journeyProgress: progress,
     markDocComplete,
     getPathProgress,
     isDocComplete,

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export interface Achievement {
   id: string;
@@ -208,127 +209,101 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
-const ACHIEVEMENTS_STORAGE_KEY = "phoenix-docs-achievements";
-
-interface AchievementProgress {
-  unlockedAchievements: string[];
-  totalPoints: number;
-  currentStreak: number;
-  lastReadDate?: string;
-}
-
 /**
  * Hook for managing achievement progress and unlocking.
- * Persists achievement state to localStorage and provides utilities for
- * unlocking achievements, checking unlock status, and calculating user level.
+ * Uses AuthContext for state management with Firebase cloud sync.
  *
  * @returns {object} Achievement management utilities
- * @returns {AchievementProgress} returns.achievementProgress - Current achievement progress state
- * @returns {Achievement | null} returns.newAchievement - Recently unlocked achievement for notification
- * @returns {(achievementId: string) => void} returns.unlockAchievement - Function to unlock an achievement
- * @returns {(docsReadCount: number) => void} returns.checkAndUnlockAchievements - Check and unlock achievements based on criteria
- * @returns {(achievementId: string) => boolean} returns.isUnlocked - Check if an achievement is unlocked
- * @returns {() => object} returns.getLevel - Calculate current user level based on points
- * @returns {() => void} returns.dismissNotification - Dismiss the achievement notification
  */
 export function useAchievements() {
-  const [achievementProgress, setAchievementProgress] =
-    useState<AchievementProgress>({
-      unlockedAchievements: [],
-      totalPoints: 0,
-      currentStreak: 0,
-    });
+  const { progress, unlockAchievement: authUnlockAchievement } = useAuth();
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(
     null,
   );
 
-  useEffect(() => {
-    const stored = localStorage.getItem(ACHIEVEMENTS_STORAGE_KEY);
-    if (stored) {
-      setAchievementProgress(JSON.parse(stored));
-    }
-  }, []);
+  // Get unlocked achievements from auth context
+  const unlockedAchievements = progress?.achievements
+    ? Object.keys(progress.achievements)
+    : [];
+  const totalPoints = progress?.stats?.totalPoints || 0;
 
-  const unlockAchievement = (achievementId: string) => {
-    const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
-    if (
-      !achievement ||
-      achievementProgress.unlockedAchievements.includes(achievementId)
-    ) {
-      return;
-    }
-
-    const newProgress = {
-      ...achievementProgress,
-      unlockedAchievements: [
-        ...achievementProgress.unlockedAchievements,
-        achievementId,
-      ],
-      totalPoints: achievementProgress.totalPoints + achievement.points,
-    };
-
-    setAchievementProgress(newProgress);
-    localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(newProgress));
-    setNewAchievement(achievement);
-
-    // Auto-dismiss after 5 seconds
-    setTimeout(() => setNewAchievement(null), 5000);
-  };
-
-  const checkAndUnlockAchievements = (docsReadCount: number) => {
-    ACHIEVEMENTS.forEach((achievement) => {
-      if (achievementProgress.unlockedAchievements.includes(achievement.id)) {
+  const unlockAchievement = useCallback(
+    async (achievementId: string) => {
+      const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
+      if (!achievement || unlockedAchievements.includes(achievementId)) {
         return;
       }
 
-      if (
-        achievement.requirement.type === "docs_read" &&
-        docsReadCount >= achievement.requirement.value
-      ) {
-        unlockAchievement(achievement.id);
+      // Use AuthContext to unlock achievement (handles Firebase sync)
+      await authUnlockAchievement(achievementId, achievement.points);
+
+      // Show notification
+      setNewAchievement(achievement);
+
+      // Auto-dismiss after 5 seconds
+      setTimeout(() => setNewAchievement(null), 5000);
+    },
+    [unlockedAchievements, authUnlockAchievement],
+  );
+
+  const checkAndUnlockAchievements = useCallback(
+    (docsReadCount: number) => {
+      ACHIEVEMENTS.forEach((achievement) => {
+        if (unlockedAchievements.includes(achievement.id)) {
+          return;
+        }
+
+        if (
+          achievement.requirement.type === "docs_read" &&
+          docsReadCount >= achievement.requirement.value
+        ) {
+          unlockAchievement(achievement.id);
+        }
+      });
+
+      // Check time-based achievements
+      const hour = new Date().getHours();
+      const day = new Date().getDay();
+
+      if (hour < 7 && !unlockedAchievements.includes("early-bird")) {
+        unlockAchievement("early-bird");
       }
-    });
+      if (hour >= 23 && !unlockedAchievements.includes("night-owl")) {
+        unlockAchievement("night-owl");
+      }
+      if (
+        (day === 0 || day === 6) &&
+        !unlockedAchievements.includes("weekend-warrior")
+      ) {
+        unlockAchievement("weekend-warrior");
+      }
+    },
+    [unlockedAchievements, unlockAchievement],
+  );
 
-    // Check time-based achievements
-    const hour = new Date().getHours();
-    const day = new Date().getDay();
+  const isUnlocked = useCallback(
+    (achievementId: string) => {
+      return unlockedAchievements.includes(achievementId);
+    },
+    [unlockedAchievements],
+  );
 
-    if (
-      hour < 7 &&
-      !achievementProgress.unlockedAchievements.includes("early-bird")
-    ) {
-      unlockAchievement("early-bird");
-    }
-    if (
-      hour >= 23 &&
-      !achievementProgress.unlockedAchievements.includes("night-owl")
-    ) {
-      unlockAchievement("night-owl");
-    }
-    if (
-      (day === 0 || day === 6) &&
-      !achievementProgress.unlockedAchievements.includes("weekend-warrior")
-    ) {
-      unlockAchievement("weekend-warrior");
-    }
-  };
-
-  const isUnlocked = (achievementId: string) => {
-    return achievementProgress.unlockedAchievements.includes(achievementId);
-  };
-
-  const getLevel = () => {
-    const points = achievementProgress.totalPoints;
+  const getLevel = useCallback(() => {
+    const points = totalPoints;
     if (points >= 1000)
       return { level: 5, title: "Phoenix Master", icon: "🏆" };
     if (points >= 500) return { level: 4, title: "Expert", icon: "⭐" };
     if (points >= 200) return { level: 3, title: "Advanced", icon: "🎯" };
     if (points >= 50) return { level: 2, title: "Intermediate", icon: "📈" };
     return { level: 1, title: "Beginner", icon: "🌱" };
-  };
+  }, [totalPoints]);
 
   return {
-    achievementProgress,
+    achievementProgress: {
+      unlockedAchievements,
+      totalPoints,
+      currentStreak: progress?.stats?.streak || 0,
+    },
     newAchievement,
     unlockAchievement,
     checkAndUnlockAchievements,
