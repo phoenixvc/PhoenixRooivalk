@@ -2,6 +2,15 @@
 id: blockchain-protocols-analysis
 title: Blockchain Protocols Analysis
 sidebar_label: Blockchain Protocols Analysis
+difficulty: expert
+estimated_reading_time: 6
+points: 50
+tags:
+  - technical
+  - blockchain
+  - counter-uas
+prerequisites:
+  - blockchain-architecture
 ---
 
 ## Executive Summary

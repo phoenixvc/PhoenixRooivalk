@@ -1,3 +1,14 @@
+---
+id: operational-resilience
+title: Phoenix Rooivalk Operational Resilience
+sidebar_label: Phoenix Rooivalk Operational
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - operations
+---
+
 # Phoenix Rooivalk Operational Resilience
 
 ## Executive Summary

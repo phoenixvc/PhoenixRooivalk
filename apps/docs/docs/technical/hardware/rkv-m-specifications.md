@@ -2,6 +2,12 @@
 id: rkv-m-specifications
 title: RKV-M Tilt Quad Rotor Specifications
 sidebar_label: RKV-M Specifications
+difficulty: advanced
+estimated_reading_time: 4
+points: 25
+tags:
+  - technical
+  - counter-uas
 ---
 
 ## Overview

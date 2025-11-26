@@ -2,6 +2,12 @@
 id: early-spec-qa
 title: Early Development Spec & Q&A
 sidebar_label: Early Spec & Q&A
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## What Phoenix Rooivalk Does (Plain English)
@@ -498,7 +504,7 @@ areas for business partner:
 
 ## Related Documents
 
-- [Investment Phases Mapping](./investment-phases.md) _(coming soon)_
+- [Investment Phases Mapping](./investment-phases) _(coming soon)_
 - [Technical Whitepaper](../phoenix-rooivalk-technical-whitepaper)
 - [Investor Executive Summary](../investor-executive-summary)
 - [12-Month Business Plan](../../business/12-month-business-plan)

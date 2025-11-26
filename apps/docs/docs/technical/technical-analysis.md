@@ -2,6 +2,12 @@
 id: technical-analysis
 title: Technical Analysis
 sidebar_label: Technical Analysis
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - counter-uas
 ---
 
 ## Executive Summary

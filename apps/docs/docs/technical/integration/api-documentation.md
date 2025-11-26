@@ -1,3 +1,15 @@
+---
+id: api-documentation
+title: Phoenix Rooivalk API Documentation
+sidebar_label: Phoenix Rooivalk API
+difficulty: advanced
+estimated_reading_time: 3
+points: 25
+tags:
+  - technical
+  - integration
+---
+
 # Phoenix Rooivalk API Documentation
 
 ## Executive Summary

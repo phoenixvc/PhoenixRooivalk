@@ -2,6 +2,14 @@
 id: cuas-sandbox-2026
 title: Canada CUAS Sandbox 2026 Opportunity
 sidebar_label: CUAS Sandbox 2026
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Program Overview
@@ -331,7 +339,7 @@ Phoenix Rooivalk's counter-UAS capabilities align strongly with CUAS Sandbox
 :::tip Recommended Action
 
 See
-[CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application.md)
+[CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application)
 for the draft Phoenix Rooivalk application.
 
 :::

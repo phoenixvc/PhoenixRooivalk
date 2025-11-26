@@ -2,6 +2,13 @@
 id: compliance-framework
 title: Compliance Framework
 sidebar_label: Compliance Framework
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - legal
+  - compliance
+  - counter-uas
 ---
 
 ## Executive Summary
@@ -398,7 +405,7 @@ evidence admissibility, and operational resilience in contested environments.
 
 :::tip sUAS Program Documentation
 
-See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
+See [sUAS Program Documentation](../resources/suas-program-documentation) for
 comprehensive DHS framework details and integration guidance with Phoenix
 Rooivalk operations.
 

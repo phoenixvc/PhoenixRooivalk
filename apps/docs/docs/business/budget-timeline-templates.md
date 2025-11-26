@@ -2,6 +2,14 @@
 id: budget-timeline-templates
 title: Budget and Timeline Templates
 sidebar_label: Budget and Timeline Templates
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

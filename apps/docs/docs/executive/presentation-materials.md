@@ -2,6 +2,12 @@
 id: presentation-materials
 title: Presentation Materials
 sidebar_label: Presentation Materials
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Executive Presentation Script

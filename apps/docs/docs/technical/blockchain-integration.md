@@ -2,6 +2,14 @@
 id: blockchain-integration
 title: Blockchain Integration
 sidebar_label: Blockchain Integration
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - blockchain
+  - integration
+  - counter-uas
 ---
 
 ## Solana for Immutable Evidence Anchoring

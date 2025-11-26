@@ -1,3 +1,15 @@
+---
+id: inst-forward-looking
+title: "Research: Forward-Looking Tech"
+sidebar_label: "Research: Forward-Looking Tech"
+difficulty: advanced
+estimated_reading_time: 12
+points: 25
+tags:
+  - research
+  - counter-uas
+---
+
 # Complete Research Instruction: Forward-Looking Technology Assessment
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

@@ -1,3 +1,15 @@
+---
+id: resp-airframe-analysis
+title: "Analysis: Airframe Design"
+sidebar_label: "Analysis: Airframe Design"
+difficulty: advanced
+estimated_reading_time: 35
+points: 25
+tags:
+  - research
+  - counter-uas
+---
+
 # Drone Airframe Design Revolution: Multi-Domain Analysis Across Military, Industrial, and Racing Applications
 
 Military tilt-rotor hybrids achieve 8-14 L/D ratios—triple the efficiency of

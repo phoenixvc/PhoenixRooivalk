@@ -2,6 +2,12 @@
 id: global-strategy
 title: Global Strategy
 sidebar_label: Global Strategy
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Executive Summary: Dual Entity Strategy for Global Defense Markets

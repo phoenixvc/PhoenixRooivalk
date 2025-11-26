@@ -2,6 +2,12 @@
 id: implementation-plan
 title: Implementation Plan
 sidebar_label: Implementation Plan
+difficulty: expert
+estimated_reading_time: 7
+points: 50
+tags:
+  - operations
+  - counter-uas
 ---
 
 ## Executive Summary

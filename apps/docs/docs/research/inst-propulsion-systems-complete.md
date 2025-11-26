@@ -1,3 +1,15 @@
+---
+id: inst-propulsion
+title: "Research: Propulsion Systems"
+sidebar_label: "Research: Propulsion Systems"
+difficulty: advanced
+estimated_reading_time: 11
+points: 25
+tags:
+  - research
+  - counter-uas
+---
+
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)
 engineering, propulsion systems, aerodynamics, and power management. Your task
 is to conduct comprehensive deep research into drone hardware components,

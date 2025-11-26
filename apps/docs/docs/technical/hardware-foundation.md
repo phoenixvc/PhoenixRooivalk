@@ -2,6 +2,13 @@
 id: hardware-foundation
 title: Hardware Foundation
 sidebar_label: Hardware Foundation
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - hardware
+  - counter-uas
 ---
 
 ## NVIDIA Jetson for Edge AI

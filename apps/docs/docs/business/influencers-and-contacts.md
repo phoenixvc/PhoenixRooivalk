@@ -2,6 +2,14 @@
 id: influencers-and-contacts
 title: Influencers, Media & Key Contacts
 sidebar_label: Influencers & Contacts
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Overview
@@ -432,9 +440,9 @@ investment community visibility.
 
 ## Related Documents
 
-- [Opportunities Summary](./opportunities/opportunities-summary.md)
-- [Market Analysis](./market-analysis.md)
-- [Competitive Analysis](./competitive-analysis.md)
+- [Opportunities Summary](./opportunities/opportunities-summary)
+- [Market Analysis](./market-analysis)
+- [Competitive Analysis](./competitive-analysis)
 
 ---
 

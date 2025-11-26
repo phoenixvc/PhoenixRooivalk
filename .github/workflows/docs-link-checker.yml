@@ -1,0 +1,68 @@
+name: Documentation Link Checker
+
+on:
+  pull_request:
+    paths:
+      - "apps/docs/**"
+      - ".github/workflows/docs-link-checker.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/docs/**"
+  schedule:
+    # Run weekly on Sundays at midnight UTC
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    name: Check Documentation Links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: apps/docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for broken links (internal)
+        run: |
+          # Capture and check build output for broken link warnings
+          BUILD_OUTPUT=$(pnpm run build 2>&1)
+          if echo "$BUILD_OUTPUT" | grep -i "broken link\|error.*link"; then
+            echo "❌ Broken links detected in build output"
+            exit 1
+          else
+            echo "✅ No broken links detected"
+          fi
+        env:
+          NODE_ENV: production
+
+      - name: Markdown lint check
+        run: pnpm run lint
+        continue-on-error: true
+
+      - name: Report summary
+        if: always()
+        run: |
+          echo "## Documentation Link Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Build completed: ${{ job.status == 'success' && '✅' || '❌' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Check the build logs for any broken link warnings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tips" >> $GITHUB_STEP_SUMMARY
+          echo "- Internal links should use relative paths without .md extension" >> $GITHUB_STEP_SUMMARY
+          echo "- Use kebab-case for all document IDs and filenames" >> $GITHUB_STEP_SUMMARY

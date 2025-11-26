@@ -1,3 +1,15 @@
+---
+id: defense-integration
+title: Phoenix Rooivalk Defense Integration
+sidebar_label: Phoenix Rooivalk Defense
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - integration
+---
+
 # Phoenix Rooivalk Defense Integration
 
 ## Lockheed Martin Partnerships and Azure Cloud

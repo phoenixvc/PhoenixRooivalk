@@ -2,6 +2,12 @@
 id: key-questions-cheatsheet
 title: Key Questions Cheatsheet
 sidebar_label: Key Questions Cheatsheet
+difficulty: beginner
+estimated_reading_time: 13
+points: 10
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Technology & Product

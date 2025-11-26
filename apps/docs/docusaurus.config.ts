@@ -4,6 +4,7 @@ import { resolve } from "path";
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
+import { remarkDocMetadata } from "./src/plugins/remark-doc-metadata";
 
 // Node.js environment declarations
 declare const process: {
@@ -42,10 +43,27 @@ const config: Config = {
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",
-  onBrokenLinks: "ignore",
+  onBrokenLinks: "warn",
+  onBrokenMarkdownLinks: "warn",
   markdown: {
     format: "md",
+    mermaid: true,
   },
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        docsRouteBasePath: "/docs",
+        indexBlog: false,
+        searchBarShortcutHint: true,
+      },
+    ],
+  ],
   i18n: { defaultLocale: "en", locales: ["en"] },
   presets: [
     [
@@ -54,8 +72,15 @@ const config: Config = {
         docs: {
           routeBasePath: "docs",
           sidebarPath: resolve(__dirname, "./sidebars.ts"),
-          editUrl: undefined,
-          remarkPlugins: [],
+          // Enable "Edit this page" links to GitHub
+          editUrl:
+            "https://github.com/JustAGhosT/PhoenixRooivalk/edit/main/apps/docs/",
+          // Show last updated timestamps from git
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
+          // Enable breadcrumbs for navigation
+          breadcrumbs: true,
+          remarkPlugins: [remarkDocMetadata],
           rehypePlugins: [],
         },
         blog: false,
@@ -80,6 +105,12 @@ const config: Config = {
           docId: "phoenix-rooivalk-documentation",
           position: "left",
           label: "Documentation",
+        },
+        {
+          to: "/your-progress",
+          label: "Your Progress",
+          position: "left",
+          className: "navbar__link--progress",
         },
         {
           type: "dropdown",
@@ -206,16 +237,20 @@ const config: Config = {
           title: "Resources",
           items: [
             {
+              label: "Your Progress",
+              to: "/your-progress",
+            },
+            {
+              label: "Downloads",
+              to: "/docs/resources/downloads",
+            },
+            {
               label: "GitHub Repository",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
             },
             {
               label: "Request Access",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-            },
-            {
-              label: "Getting Started",
-              to: "/docs",
             },
           ],
         },

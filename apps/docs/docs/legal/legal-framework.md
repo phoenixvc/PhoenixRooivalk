@@ -2,6 +2,13 @@
 id: legal-framework
 title: Legal Framework
 sidebar_label: Legal Framework
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - legal
+  - compliance
+  - counter-uas
 ---
 
 ## Executive Summary

@@ -1,3 +1,15 @@
+---
+id: training-materials
+title: Phoenix Rooivalk Training Materials
+sidebar_label: Phoenix Rooivalk Training
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - operations
+  - ai
+---
+
 # Phoenix Rooivalk Training Materials
 
 ## Executive Summary
@@ -594,9 +606,9 @@ guidance that complements Phoenix Rooivalk operator certification:
 
 :::tip Recommended Reading
 
-See [sUAS Program Documentation](../../resources/suas-program-documentation.md)
-for comprehensive framework details and integration guidance with Phoenix
-Rooivalk training programs.
+See [sUAS Program Documentation](../../resources/suas-program-documentation) for
+comprehensive framework details and integration guidance with Phoenix Rooivalk
+training programs.
 
 :::
 

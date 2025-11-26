@@ -2,6 +2,14 @@
 id: soonami-cohort-8
 title: Soonami Cohort 8
 sidebar_label: Soonami Cohort 8
+difficulty: intermediate
+estimated_reading_time: 2
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Program Overview
@@ -162,9 +170,9 @@ on-chain venture, leveraging Web3 and AI solutions.
 
 ### Internal Resources
 
-- [Phoenix Rooivalk Pitch Deck](../../executive/phoenix-rooivalk-pitch-deck.md)
-- [Investor Executive Summary](../../executive/investor-executive-summary.md)
-- [12-Month Business Plan](../12-month-business-plan.md)
+- [Phoenix Rooivalk Pitch Deck](../../executive/phoenix-rooivalk-pitch-deck)
+- [Investor Executive Summary](../../executive/investor-executive-summary)
+- [12-Month Business Plan](../12-month-business-plan)
 
 ---
 

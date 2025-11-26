@@ -2,6 +2,12 @@
 id: strategic-recommendations
 title: Strategic Recommendations
 sidebar_label: Strategic Recommendations
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Path to Global Leadership

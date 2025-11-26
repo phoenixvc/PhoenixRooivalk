@@ -1,3 +1,15 @@
+---
+id: inst-business-economics
+title: "Research: Business & Economics"
+sidebar_label: "Research: Business & Economics"
+difficulty: advanced
+estimated_reading_time: 15
+points: 25
+tags:
+  - research
+  - counter-uas
+---
+
 # Complete Research Instruction: Business and Economics Analysis
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

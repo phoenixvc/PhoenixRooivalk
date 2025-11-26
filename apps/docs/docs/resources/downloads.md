@@ -2,6 +2,11 @@
 id: downloads
 title: Resources & Downloads
 sidebar_label: Downloads
+difficulty: beginner
+estimated_reading_time: 4
+points: 10
+tags:
+  - counter-uas
 ---
 
 ## Overview
@@ -13,6 +18,38 @@ materials for Phoenix Rooivalk stakeholders.
 
 Some resources may require authorization. Contact the project administrator for
 access to restricted materials.
+
+:::
+
+---
+
+## Export Documentation to PDF
+
+You can save any documentation page as a PDF for offline reading or printing.
+
+### Browser Print Method (Recommended)
+
+1. Navigate to the page you want to save
+2. Press `Ctrl+P` (Windows/Linux) or `Cmd+P` (Mac)
+3. Select "Save as PDF" as the printer destination
+4. Click "Save" to download the PDF
+
+### Print-Optimized Styling
+
+Our documentation includes print-optimized CSS that:
+
+- Removes navigation elements (sidebar, navbar)
+- Optimizes text for printing
+- Preserves code block formatting
+- Maintains table structure
+
+:::tip Quick Export
+
+For best results when printing multiple pages:
+
+1. Use Chrome or Firefox
+2. Set margins to "Default" or "Minimum"
+3. Enable "Background graphics" for diagrams and icons
 
 :::
 

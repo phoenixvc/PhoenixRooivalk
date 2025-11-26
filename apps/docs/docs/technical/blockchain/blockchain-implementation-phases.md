@@ -2,6 +2,16 @@
 id: blockchain-implementation-phases
 title: Blockchain Implementation Phases
 sidebar_label: Blockchain Implementation Phases
+difficulty: expert
+estimated_reading_time: 7
+points: 50
+tags:
+  - technical
+  - blockchain
+  - counter-uas
+prerequisites:
+  - blockchain-architecture
+  - blockchain-phases
 ---
 
 ## Executive Summary

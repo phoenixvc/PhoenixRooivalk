@@ -2,6 +2,13 @@
 id: market-intelligence-notes
 title: Market Intelligence Notes
 sidebar_label: Market Intelligence Notes
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - research
+  - business
+  - counter-uas
 ---
 
 ## Overview
@@ -326,10 +333,10 @@ regulators, and drone enthusiasts interested in industry news and analysis.
 
 ## Related Documents
 
-- [Competitive Analysis](../business/competitive-analysis.md)
-- [Influencers & Contacts](../business/influencers-and-contacts.md)
-- [Opportunities Summary](../business/opportunities/opportunities-summary.md)
-- [CUAS Sandbox 2026](../business/opportunities/cuas-sandbox-2026.md)
+- [Competitive Analysis](../business/competitive-analysis)
+- [Influencers & Contacts](../business/influencers-and-contacts)
+- [Opportunities Summary](../business/opportunities/opportunities-summary)
+- [CUAS Sandbox 2026](../business/opportunities/cuas-sandbox-2026)
 
 ---
 

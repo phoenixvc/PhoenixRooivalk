@@ -2,6 +2,14 @@
 id: business-model
 title: Business Model
 sidebar_label: Business Model
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Executive Summary

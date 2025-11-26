@@ -1,3 +1,16 @@
+---
+id: maintenance-procedures
+title: Phoenix Rooivalk Maintenance Procedures
+sidebar_label: Phoenix Rooivalk Maintenance
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - operations
+  - maintenance
+  - ai
+---
+
 # Phoenix Rooivalk Maintenance Procedures
 
 ## Executive Summary
