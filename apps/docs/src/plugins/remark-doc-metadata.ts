@@ -1,5 +1,5 @@
-import type { Transformer } from "unified";
 import type { Root } from "mdast";
+import type { Transformer } from "unified";
 import type { VFile } from "vfile";
 
 interface VFileData {
@@ -27,10 +27,11 @@ export function remarkDocMetadata(): Transformer<Root> {
         "advanced",
         "expert",
       ];
-      if (
-        typeof frontmatter.difficulty === "string" &&
-        !validDifficulties.includes(frontmatter.difficulty)
-      ) {
+      if (typeof frontmatter.difficulty !== "string") {
+        console.warn(
+          `[Doc Metadata] Invalid difficulty type in ${file.path}. Must be a string.`,
+        );
+      } else if (!validDifficulties.includes(frontmatter.difficulty)) {
         console.warn(
           `[Doc Metadata] Invalid difficulty level "${frontmatter.difficulty}" in ${file.path}. Must be one of: ${validDifficulties.join(", ")}`,
         );

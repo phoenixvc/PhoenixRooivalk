@@ -15,6 +15,14 @@ export default [
           jsx: true,
         },
       },
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        module: "readonly",
+        require: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": typescript,
