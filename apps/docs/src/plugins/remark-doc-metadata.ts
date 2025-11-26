@@ -1,5 +1,6 @@
 import type { Transformer } from "unified";
 import type { Root } from "mdast";
+import type { VFile } from "vfile";
 
 interface VFileData {
   frontMatter?: Record<string, unknown>;
@@ -10,7 +11,7 @@ interface VFileData {
  * and provides console warnings for invalid values
  */
 export function remarkDocMetadata(): Transformer<Root> {
-  return (tree, file) => {
+  return (tree: Root, file: VFile) => {
     // Access frontmatter through vfile
     const frontmatter = (file.data as VFileData).frontMatter;
 
@@ -26,7 +27,10 @@ export function remarkDocMetadata(): Transformer<Root> {
         "advanced",
         "expert",
       ];
-      if (!validDifficulties.includes(frontmatter.difficulty)) {
+      if (
+        typeof frontmatter.difficulty === "string" &&
+        !validDifficulties.includes(frontmatter.difficulty)
+      ) {
         console.warn(
           `[Doc Metadata] Invalid difficulty level "${frontmatter.difficulty}" in ${file.path}. Must be one of: ${validDifficulties.join(", ")}`,
         );

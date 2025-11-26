@@ -1466,7 +1466,7 @@ feedback.
 ### Application Templates
 
 - [Canada CUAS 2026 Application Draft](../applications/cuas-sandbox-2026-application)
-- [SBIR Phase I Template](../applications/) _(coming soon)_
+- SBIR Phase I Template _(coming soon)_
 
 ### External Links
 
