@@ -18,6 +18,7 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 #### Documentation Site Improvements
 
 **Added:**
+
 - Mermaid diagram support for architecture visualizations
 - "Edit this page" links to GitHub for community contributions
 - "Last updated" timestamps showing document freshness
@@ -28,6 +29,7 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 - Broken link checker CI workflow
 
 **Improved:**
+
 - Sidebar organization with Software/AI vs Mechanical/Hardware separation
 - Category landing pages with auto-generated indexes
 - Mobile navigation and ToC responsiveness
@@ -35,6 +37,7 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 - Pagination navigation between documents
 
 **Fixed:**
+
 - 60+ broken internal links
 - Navbar and footer link corrections
 - Missing research documentation in sidebar
@@ -47,6 +50,7 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 ### v0.1.0 - Initial Documentation Release
 
 **Documentation:**
+
 - Executive documentation suite
 - Technical architecture specifications
 - Business analysis and market research
@@ -55,6 +59,7 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 - Research documentation
 
 **Technical Specifications:**
+
 - AI/ML capabilities documented (275 TOPS, YOLOv9)
 - Blockchain integration architecture
 - Hardware specifications (RKV-M platform)

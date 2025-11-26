@@ -126,7 +126,11 @@ export const ACHIEVEMENTS: Achievement[] = [
     description: "Complete all Operations documentation",
     icon: "🚀",
     category: "expertise",
-    requirement: { type: "category_complete", value: 1, category: "operations" },
+    requirement: {
+      type: "category_complete",
+      value: 1,
+      category: "operations",
+    },
     points: 100,
     rarity: "rare",
   },
@@ -221,7 +225,7 @@ export function useAchievements() {
       currentStreak: 0,
     });
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -275,10 +279,16 @@ export function useAchievements() {
     const hour = new Date().getHours();
     const day = new Date().getDay();
 
-    if (hour < 7 && !achievementProgress.unlockedAchievements.includes("early-bird")) {
+    if (
+      hour < 7 &&
+      !achievementProgress.unlockedAchievements.includes("early-bird")
+    ) {
       unlockAchievement("early-bird");
     }
-    if (hour >= 23 && !achievementProgress.unlockedAchievements.includes("night-owl")) {
+    if (
+      hour >= 23 &&
+      !achievementProgress.unlockedAchievements.includes("night-owl")
+    ) {
       unlockAchievement("night-owl");
     }
     if (
@@ -295,7 +305,8 @@ export function useAchievements() {
 
   const getLevel = () => {
     const points = achievementProgress.totalPoints;
-    if (points >= 1000) return { level: 5, title: "Phoenix Master", icon: "🏆" };
+    if (points >= 1000)
+      return { level: 5, title: "Phoenix Master", icon: "🏆" };
     if (points >= 500) return { level: 4, title: "Expert", icon: "⭐" };
     if (points >= 200) return { level: 3, title: "Advanced", icon: "🎯" };
     if (points >= 50) return { level: 2, title: "Intermediate", icon: "📈" };
@@ -329,7 +340,9 @@ export function AchievementNotification({
           <div className="achievement-notification-title">
             Achievement Unlocked!
           </div>
-          <div className="achievement-notification-name">{achievement.name}</div>
+          <div className="achievement-notification-name">
+            {achievement.name}
+          </div>
           <div className="achievement-notification-desc">
             {achievement.description}
           </div>
@@ -395,7 +408,9 @@ export default function AchievementsPanel(): React.ReactElement {
         <div className="achievements-level">
           <span className="achievements-level-icon">{levelInfo.icon}</span>
           <span className="achievements-level-title">{levelInfo.title}</span>
-          <span className="achievements-level-number">Lvl {levelInfo.level}</span>
+          <span className="achievements-level-number">
+            Lvl {levelInfo.level}
+          </span>
         </div>
         <div className="achievements-points">
           <span className="achievements-points-value">
@@ -413,22 +428,24 @@ export default function AchievementsPanel(): React.ReactElement {
         </div>
       </div>
 
-      {Object.entries(categorizedAchievements).map(([category, achievements]) => (
-        <div key={category} className="achievements-category">
-          <h3 className="achievements-category-title">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </h3>
-          <div className="achievements-grid">
-            {achievements.map((achievement) => (
-              <AchievementBadge
-                key={achievement.id}
-                achievement={achievement}
-                unlocked={isUnlocked(achievement.id)}
-              />
-            ))}
+      {Object.entries(categorizedAchievements).map(
+        ([category, achievements]) => (
+          <div key={category} className="achievements-category">
+            <h3 className="achievements-category-title">
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </h3>
+            <div className="achievements-grid">
+              {achievements.map((achievement) => (
+                <AchievementBadge
+                  key={achievement.id}
+                  achievement={achievement}
+                  unlocked={isUnlocked(achievement.id)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ),
+      )}
     </div>
   );
 }

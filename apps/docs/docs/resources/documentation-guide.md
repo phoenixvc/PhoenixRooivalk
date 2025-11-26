@@ -142,6 +142,7 @@ Add classification badges to sensitive documents:
 ```
 
 Available classifications:
+
 - `doc-badge--public` - Public information
 - `doc-badge--internal` - Internal use only
 - `doc-badge--confidential` - Confidential

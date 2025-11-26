@@ -1,5 +1,6 @@
-import React from "react";
 import Layout from "@theme/Layout";
+import React from "react";
+
 import {
   ReadingProgressCard,
   AchievementsPanel,
@@ -106,7 +107,9 @@ export default function YourProgress(): React.ReactElement {
               >
                 Ready to continue learning?
               </h3>
-              <p style={{ color: "rgb(148, 163, 184)", marginBottom: "1.5rem" }}>
+              <p
+                style={{ color: "rgb(148, 163, 184)", marginBottom: "1.5rem" }}
+              >
                 Dive into the documentation to unlock more achievements and
                 complete your learning paths.
               </p>

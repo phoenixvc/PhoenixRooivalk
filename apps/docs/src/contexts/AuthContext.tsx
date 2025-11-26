@@ -47,17 +47,32 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Helper to get local progress
 const getLocalProgress = (): UserProgress => {
   if (typeof window === "undefined") {
-    return { docs: {}, achievements: {}, stats: { totalPoints: 0, level: 1, streak: 0 } };
+    return {
+      docs: {},
+      achievements: {},
+      stats: { totalPoints: 0, level: 1, streak: 0 },
+    };
   }
 
-  const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || "{}");
-  const achievements = JSON.parse(localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || "{}");
-  const stats = JSON.parse(
-    localStorage.getItem(LOCAL_STATS_KEY) ||
-      '{"totalPoints":0,"level":1,"streak":0}'
-  );
+  try {
+    const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || "{}");
+    const achievements = JSON.parse(
+      localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || "{}",
+    );
+    const stats = JSON.parse(
+      localStorage.getItem(LOCAL_STATS_KEY) ||
+        '{"totalPoints":0,"level":1,"streak":0}',
+    );
 
-  return { docs, achievements, stats };
+    return { docs, achievements, stats };
+  } catch (error) {
+    console.error("Error parsing local progress:", error);
+    return {
+      docs: {},
+      achievements: {},
+      stats: { totalPoints: 0, level: 1, streak: 0 },
+    };
+  }
 };
 
 // Helper to save local progress
@@ -65,14 +80,17 @@ const saveLocalProgress = (progress: UserProgress): void => {
   if (typeof window === "undefined") return;
 
   localStorage.setItem(LOCAL_PROGRESS_KEY, JSON.stringify(progress.docs));
-  localStorage.setItem(LOCAL_ACHIEVEMENTS_KEY, JSON.stringify(progress.achievements));
+  localStorage.setItem(
+    LOCAL_ACHIEVEMENTS_KEY,
+    JSON.stringify(progress.achievements),
+  );
   localStorage.setItem(LOCAL_STATS_KEY, JSON.stringify(progress.stats));
 };
 
 // Merge cloud and local progress (cloud wins for conflicts, but keeps local-only data)
 const mergeProgress = (
   cloud: UserProgress,
-  local: UserProgress
+  local: UserProgress,
 ): UserProgress => {
   const mergedDocs = { ...local.docs };
   const mergedAchievements = { ...local.achievements };
@@ -115,7 +133,9 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
+export function AuthProvider({
+  children,
+}: AuthProviderProps): React.ReactElement {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<UserProgress | null>(null);
@@ -158,12 +178,22 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
   const signInGoogle = useCallback(async () => {
     setLoading(true);
-    await signInWithGoogle();
+    const result = await signInWithGoogle();
+    if (!result) {
+      // Sign-in failed, reset loading state
+      // Note: On success, the auth state listener will handle setLoading(false)
+      setLoading(false);
+    }
   }, []);
 
   const signInGithub = useCallback(async () => {
     setLoading(true);
-    await signInWithGithub();
+    const result = await signInWithGithub();
+    if (!result) {
+      // Sign-in failed, reset loading state
+      // Note: On success, the auth state listener will handle setLoading(false)
+      setLoading(false);
+    }
   }, []);
 
   const logout = useCallback(async () => {
@@ -195,13 +225,16 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
         await saveUserProgress(user.uid, newProgress);
       }
     },
-    [progress, user]
+    [progress, user],
   );
 
   const markDocAsRead = useCallback(
     async (docId: string) => {
       const now = new Date().toISOString();
-      const currentDoc = progress?.docs[docId] || { scrollProgress: 0, completed: false };
+      const currentDoc = progress?.docs[docId] || {
+        scrollProgress: 0,
+        completed: false,
+      };
 
       await updateProgress({
         docs: {
@@ -214,7 +247,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
         },
       });
     },
-    [progress, updateProgress]
+    [progress, updateProgress],
   );
 
   const unlockAchievement = useCallback(
@@ -232,10 +265,11 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
         stats: {
           totalPoints: newTotalPoints,
           level: newLevel,
+          streak: progress?.stats.streak || 0,
         },
       });
     },
-    [progress, updateProgress]
+    [progress, updateProgress],
   );
 
   const value: AuthContextType = {
