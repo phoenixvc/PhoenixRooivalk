@@ -2,6 +2,14 @@
 id: 12-month-business-plan
 title: 12-Month Business Plan
 sidebar_label: 12-Month Business Plan
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Phoenix Rooivalk: Dual-Brand Launch Strategy

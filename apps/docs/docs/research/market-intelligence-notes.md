@@ -2,6 +2,13 @@
 id: market-intelligence-notes
 title: Market Intelligence Notes
 sidebar_label: Market Intelligence Notes
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - research
+  - business
+  - counter-uas
 ---
 
 ## Overview

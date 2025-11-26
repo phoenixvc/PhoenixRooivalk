@@ -1,3 +1,16 @@
+---
+id: defense-technology-deep-dive
+title:
+  "Defense Technology Deep Dive: Counter-Drone Systems, Tethered Platforms, and
+  South African Defense Capabilities"
+sidebar_label: Defense Technology Deep
+difficulty: expert
+estimated_reading_time: 11
+points: 50
+tags:
+  - technical
+---
+
 # Defense Technology Deep Dive: Counter-Drone Systems, Tethered Platforms, and South African Defense Capabilities
 
 import TechnicalHighlight from "@site/src/components/mdx/TechnicalHighlight";

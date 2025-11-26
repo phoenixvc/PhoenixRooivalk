@@ -1,3 +1,17 @@
+---
+id: blockchain-architecture
+title: Phoenix Rooivalk Blockchain Architecture
+sidebar_label: Phoenix Rooivalk Blockchain
+difficulty: expert
+estimated_reading_time: 7
+points: 50
+tags:
+  - technical
+  - blockchain
+  - architecture
+  - ai
+---
+
 # Phoenix Rooivalk Blockchain Architecture
 
 ## Executive Summary

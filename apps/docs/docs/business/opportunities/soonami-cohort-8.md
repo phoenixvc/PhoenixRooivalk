@@ -2,6 +2,14 @@
 id: soonami-cohort-8
 title: Soonami Cohort 8
 sidebar_label: Soonami Cohort 8
+difficulty: intermediate
+estimated_reading_time: 2
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Program Overview

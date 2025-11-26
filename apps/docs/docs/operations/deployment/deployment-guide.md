@@ -1,3 +1,15 @@
+---
+id: deployment-guide
+title: Phoenix Rooivalk Deployment Guide
+sidebar_label: Phoenix Rooivalk Deployment
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - operations
+  - deployment
+---
+
 # Phoenix Rooivalk Deployment Guide
 
 ## Executive Summary

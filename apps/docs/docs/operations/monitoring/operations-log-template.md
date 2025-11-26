@@ -1,3 +1,15 @@
+---
+id: operations-log-template
+title: Phoenix Rooivalk Operations Log Template
+sidebar_label: Phoenix Rooivalk Operations
+difficulty: beginner
+estimated_reading_time: 3
+points: 10
+tags:
+  - operations
+  - deployment
+---
+
 # Phoenix Rooivalk Operations Log Template
 
 ## Executive Summary

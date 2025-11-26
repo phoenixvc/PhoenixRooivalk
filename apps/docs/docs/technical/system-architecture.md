@@ -2,6 +2,13 @@
 id: system-architecture
 title: System Architecture
 sidebar_label: System Architecture
+difficulty: expert
+estimated_reading_time: 6
+points: 50
+tags:
+  - technical
+  - architecture
+  - counter-uas
 ---
 
 ## Revolutionary Multi-Part Design

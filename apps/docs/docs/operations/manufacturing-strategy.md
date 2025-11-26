@@ -1,3 +1,14 @@
+---
+id: manufacturing-strategy
+title: Phoenix Rooivalk Manufacturing Strategy
+sidebar_label: Phoenix Rooivalk Manufacturing
+difficulty: intermediate
+estimated_reading_time: 6
+points: 15
+tags:
+  - operations
+---
+
 # Phoenix Rooivalk Manufacturing Strategy
 
 ## Executive Summary

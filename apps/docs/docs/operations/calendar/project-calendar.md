@@ -2,6 +2,12 @@
 id: project-calendar
 title: Project Calendar & Sync
 sidebar_label: Project Calendar
+difficulty: intermediate
+estimated_reading_time: 5
+points: 15
+tags:
+  - operations
+  - counter-uas
 ---
 
 ## Overview

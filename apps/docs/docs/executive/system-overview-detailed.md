@@ -2,6 +2,14 @@
 id: system-overview-detailed
 title: System Overview Detailed
 sidebar_label: System Overview Detailed
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - executive
+  - counter-uas
+prerequisites:
+  - system-overview
 ---
 
 > Public-safe documentation. For restricted partner materials, request access

@@ -2,6 +2,12 @@
 id: inst-avionics-autonomy
 title: "Research: Avionics & Autonomy"
 sidebar_label: "Research: Avionics & Autonomy"
+difficulty: advanced
+estimated_reading_time: 14
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Avionics, Autonomy and Navigation Systems

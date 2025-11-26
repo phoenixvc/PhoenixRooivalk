@@ -2,6 +2,12 @@
 id: inst-power-electronics
 title: "Research: Power Electronics & ESC"
 sidebar_label: "Research: Power Electronics & ESC"
+difficulty: advanced
+estimated_reading_time: 14
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

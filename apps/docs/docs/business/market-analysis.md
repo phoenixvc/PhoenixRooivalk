@@ -2,6 +2,14 @@
 id: market-analysis
 title: Market Analysis
 sidebar_label: Market Analysis
+difficulty: intermediate
+estimated_reading_time: 6
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Market Opportunity: Explosive Growth in Counter-Drone Systems

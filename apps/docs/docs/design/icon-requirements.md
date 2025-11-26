@@ -5,6 +5,11 @@ sidebar_label: Icon Requirements
 description:
   Comprehensive icon requirements for the Phoenix Rooivalk Threat Simulator UI
   components
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - counter-uas
 ---
 
 # Icon Requirements & Design System

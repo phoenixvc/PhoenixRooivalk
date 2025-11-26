@@ -3,6 +3,9 @@ id: cloud-sync-setup
 title: Cloud Sync Setup Guide
 sidebar_label: Cloud Sync Setup
 description: Configure Firebase to enable cross-device progress synchronization
+difficulty: beginner
+estimated_reading_time: 3
+points: 10
 ---
 
 # Cloud Sync Setup Guide

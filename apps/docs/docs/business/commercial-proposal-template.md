@@ -2,6 +2,14 @@
 id: commercial-proposal-template
 title: Commercial Proposal Template
 sidebar_label: Commercial Proposal Template
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose
