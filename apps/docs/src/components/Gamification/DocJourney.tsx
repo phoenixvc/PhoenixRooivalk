@@ -236,8 +236,7 @@ export function useDocJourney() {
   // by the ReadingTracker when users scroll through documents
   const markDocComplete = React.useCallback(
     (_pathId: string, _docId: string) => {
-      // This is now handled automatically by ReadingTracker
-      console.log("Doc completion is now tracked automatically via ReadingTracker");
+      // No-op: Progress is now tracked automatically by ReadingTracker
     },
     [],
   );

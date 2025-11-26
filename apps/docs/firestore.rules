@@ -1,0 +1,72 @@
+rules_version = '2';
+
+/**
+ * Firestore Security Rules for Phoenix Rooivalk Documentation
+ *
+ * Collections:
+ * - userProgress: User's reading progress and achievements (user-owned)
+ * - analytics_pageviews: Page view events (write-only, admin-read)
+ * - analytics_timeonpage: Time on page events (write-only, admin-read)
+ * - analytics_conversions: Conversion funnel events (write-only, admin-read)
+ * - analytics_sessions: Session data (write-only, admin-read)
+ * - analytics_daily: Daily aggregated stats (write-only, admin-read)
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if user is admin
+    // Configure admin UIDs in your Firebase project settings or use custom claims
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.admin == true ||
+        request.auth.token.email.matches('.*@phoenixrooivalk\\.com$') ||
+        request.auth.token.email.matches('.*@justaghost\\.dev$')
+      );
+    }
+
+    // User progress - users can only read/write their own data
+    match /userProgress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isAdmin(); // Admins can read all progress for support
+    }
+
+    // Analytics collections - anyone can write (for tracking), only admins can read
+    match /analytics_pageviews/{document=**} {
+      allow create: if true; // Allow anonymous tracking
+      allow read: if isAdmin();
+      allow update, delete: if false; // Immutable
+    }
+
+    match /analytics_timeonpage/{document=**} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /analytics_conversions/{document=**} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /analytics_sessions/{sessionId} {
+      allow create: if true;
+      allow update: if true; // Sessions need to be updated with page counts
+      allow read: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /analytics_daily/{date} {
+      allow create: if true;
+      allow update: if true; // Daily stats are incremented
+      allow read: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

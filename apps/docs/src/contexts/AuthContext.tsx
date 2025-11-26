@@ -177,13 +177,16 @@ export function AuthProvider({
         // Save merged progress back to cloud
         await saveUserProgress(authUser.uid, merged);
 
-        // Track signup completion for new users or returning sign-ins
+        // Track signup/signin events
         if (wasSignedOut) {
           const method = authUser.providerData[0]?.providerId || "unknown";
-          await analytics.trackSignupCompleted(
-            authUser.uid,
-            method.includes("google") ? "google" : method.includes("github") ? "github" : method
-          );
+          const authMethod = method.includes("google") ? "google" : method.includes("github") ? "github" : method;
+
+          if (isNewUser) {
+            // First time signup - track as new conversion
+            await analytics.trackSignupCompleted(authUser.uid, authMethod);
+          }
+          // Could also track returning user sign-ins separately if needed
         }
       }
 

@@ -24,10 +24,14 @@ import {
 import { isFirebaseConfigured } from "../../services/firebase";
 import styles from "./analytics.module.css";
 
-// Admin user IDs (you would configure this in Firebase)
-const ADMIN_USERS = [
-  // Add admin user UIDs here
-];
+// Admin user IDs - configure via environment variable ADMIN_USER_IDS (comma-separated)
+// If not set, falls back to checking user email domain
+const ADMIN_USERS: string[] = process.env.ADMIN_USER_IDS
+  ? process.env.ADMIN_USER_IDS.split(",").map((id) => id.trim())
+  : [];
+
+// Admin email domains that are allowed (fallback if no specific UIDs configured)
+const ADMIN_EMAIL_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 interface DailyStats {
   date: string;
@@ -60,7 +64,11 @@ export default function AnalyticsDashboard(): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState(7); // Last 7 days
 
-  const isAdmin = user && (ADMIN_USERS.includes(user.uid) || ADMIN_USERS.length === 0);
+  // Check if user is admin by UID or email domain
+  const isAdmin = user && (
+    ADMIN_USERS.includes(user.uid) ||
+    (user.email && ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)))
+  );
 
   useEffect(() => {
     if (!loading && isAdmin && isFirebaseConfigured()) {

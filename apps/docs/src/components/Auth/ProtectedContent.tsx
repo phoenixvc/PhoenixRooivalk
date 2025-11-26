@@ -5,15 +5,13 @@
  * Shows teaser content for non-authenticated users with CTA to sign in.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics";
 import "./ProtectedContent.css";
 
 interface ProtectedContentProps {
   children: React.ReactNode;
-  /** Number of paragraphs/sections to show as teaser (default: 2) */
-  teaserSections?: number;
   /** Page URL for analytics tracking */
   pageUrl?: string;
   /** Whether this specific page is free (no auth required) */
@@ -30,12 +28,10 @@ const FREE_PAGES = [
 
 export function ProtectedContent({
   children,
-  teaserSections = 2,
   pageUrl,
   isFreeContent = false,
 }: ProtectedContentProps): React.ReactElement {
   const { user, loading, isConfigured, signInGoogle, signInGithub } = useAuth();
-  const [showSignupModal, setShowSignupModal] = useState(false);
 
   const currentUrl = pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
   const isFreePage = isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
@@ -68,11 +64,12 @@ export function ProtectedContent({
   }
 
   // Non-authenticated - show teaser with sign-in CTA
+  // CSS handles the height limiting and fade effect
   return (
     <div className="protected-content protected-content--teaser">
-      {/* Teaser content */}
+      {/* Teaser content - CSS limits visible height */}
       <div className="protected-content-teaser">
-        <TeaserContent teaserSections={teaserSections}>{children}</TeaserContent>
+        {children}
       </div>
 
       {/* Fade overlay */}
@@ -139,45 +136,6 @@ export function ProtectedContent({
       </div>
     </div>
   );
-}
-
-/**
- * Extracts teaser content from children
- */
-function TeaserContent({
-  children,
-  teaserSections,
-}: {
-  children: React.ReactNode;
-  teaserSections: number;
-}): React.ReactElement {
-  // For simple cases, we'll show first N children
-  const childArray = React.Children.toArray(children);
-
-  // Count content sections (paragraphs, headings, lists, etc.)
-  let sectionCount = 0;
-  const teaserElements: React.ReactNode[] = [];
-
-  for (const child of childArray) {
-    if (sectionCount >= teaserSections) break;
-
-    teaserElements.push(child);
-
-    // Count block-level elements as sections
-    if (React.isValidElement(child)) {
-      const type = child.type;
-      if (
-        typeof type === "string" &&
-        ["p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "blockquote", "pre", "table"].includes(
-          type
-        )
-      ) {
-        sectionCount++;
-      }
-    }
-  }
-
-  return <>{teaserElements}</>;
 }
 
 // Icon components
