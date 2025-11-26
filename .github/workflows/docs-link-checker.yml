@@ -46,9 +46,14 @@ jobs:
 
       - name: Check for broken links (internal)
         run: |
-          echo "Checking for broken internal links..."
-          # The build process with onBrokenLinks: "warn" will report issues
-          # This step captures the build output for review
+          # Capture and check build output for broken link warnings
+          BUILD_OUTPUT=$(pnpm run build 2>&1)
+          if echo "$BUILD_OUTPUT" | grep -i "broken link\|error.*link"; then
+            echo "❌ Broken links detected in build output"
+            exit 1
+          else
+            echo "✅ No broken links detected"
+          fi
 
       - name: Markdown lint check
         run: pnpm run lint
