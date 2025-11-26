@@ -418,7 +418,6 @@ scarcity, supporting both binary classification and multi-class identification.
 ## Related Documents
 
 - [ML Training Plan](./ml-training-plan.md)
-- [Sensor Fusion Pipeline](../sensors/sensor-fusion.md)
 - [Technical Architecture](../architecture/technical-architecture.md)
 
 ---
