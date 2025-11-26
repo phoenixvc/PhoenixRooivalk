@@ -32,6 +32,7 @@ You can save any documentation page as a PDF for offline reading or printing.
 ### Print-Optimized Styling
 
 Our documentation includes print-optimized CSS that:
+
 - Removes navigation elements (sidebar, navbar)
 - Optimizes text for printing
 - Preserves code block formatting
@@ -40,6 +41,7 @@ Our documentation includes print-optimized CSS that:
 :::tip Quick Export
 
 For best results when printing multiple pages:
+
 1. Use Chrome or Firefox
 2. Set margins to "Default" or "Minimum"
 3. Enable "Background graphics" for diagrams and icons
