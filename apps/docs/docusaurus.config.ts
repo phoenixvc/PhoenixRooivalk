@@ -92,7 +92,7 @@ const config: Config = {
             },
             {
               label: "Global Strategy",
-              to: "/docs/executive/Global_Strategy",
+              to: "/docs/executive/global-strategy",
             },
           ],
         },
@@ -103,11 +103,11 @@ const config: Config = {
           items: [
             {
               label: "Technical Architecture",
-              to: "/docs/technical/Technical_Architecture",
+              to: "/docs/technical/technical-architecture",
             },
             {
               label: "System Architecture",
-              to: "/docs/technical/System_Architecture",
+              to: "/docs/technical/system-architecture",
             },
           ],
         },
@@ -118,7 +118,7 @@ const config: Config = {
           items: [
             {
               label: "Market Analysis",
-              to: "/docs/business/Market_Analysis",
+              to: "/docs/business/market-analysis",
             },
             {
               label: "Business Model",
@@ -133,7 +133,7 @@ const config: Config = {
           items: [
             {
               label: "Manufacturing Strategy",
-              to: "/docs/operations/Manufacturing_Strategy",
+              to: "/docs/operations/manufacturing-strategy",
             },
           ],
         },
@@ -194,11 +194,11 @@ const config: Config = {
             },
             {
               label: "Technical Architecture",
-              to: "/docs/technical/Technical_Architecture",
+              to: "/docs/technical/technical-architecture",
             },
             {
               label: "Market Analysis",
-              to: "/docs/business/Market_Analysis",
+              to: "/docs/business/market-analysis",
             },
           ],
         },
@@ -224,11 +224,11 @@ const config: Config = {
           items: [
             {
               label: "Manufacturing Strategy",
-              to: "/docs/operations/Manufacturing_Strategy",
+              to: "/docs/operations/manufacturing-strategy",
             },
             {
               label: "System Architecture",
-              to: "/docs/technical/System_Architecture",
+              to: "/docs/technical/system-architecture",
             },
             {
               label: "Business Model",

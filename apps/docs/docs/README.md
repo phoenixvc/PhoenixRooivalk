@@ -1,138 +1,119 @@
 ---
 id: phoenix-rooivalk-documentation
-title: Phoenix Rooivalk Documentation
-sidebar_label: Documentation Overview
+title: Welcome to Phoenix Rooivalk Documentation
+sidebar_label: 🏠 Home
+slug: /
 ---
 
-## Overview
+<div style={{textAlign: 'center', marginBottom: '3rem'}}>
+  <h1 style={{fontSize: '3rem', background: 'linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem'}}>
+    Phoenix Rooivalk Documentation
+  </h1>
+  <p style={{fontSize: '1.25rem', color: 'rgb(148, 163, 184)', maxWidth: '800px', margin: '0 auto 2rem'}}>
+    Comprehensive documentation for the world's most advanced autonomous counter-UAS defense platform. Explore technical specifications, business insights, and operational guides.
+  </p>
+</div>
 
-This directory contains the comprehensive documentation for the Phoenix Rooivalk Counter-Drone Defense System, organized by functional area and audience.
+## 📚 Documentation Categories
 
----
+Explore our comprehensive documentation organized by audience and purpose:
 
-## Directory Structure
-
-### 📊 Executive Documentation
+### 📊 **Executive Documentation**
 
 **Audience**: Executives, Investors, Board Members
 
-- **[Executive Summary](executive/Executive_Summary.md)** - System overview, market opportunity, and key value propositions
-- **[System Overview](executive/System_Overview.md)** - High-level system overview and mission statement
-- **[System Overview Detailed](executive/System_Overview_Detailed.md)** - Comprehensive system architecture and capabilities
-- **[Key Questions Cheatsheet](executive/Key_Questions_Cheatsheet.md)** - Comprehensive Q&A for stakeholder meetings
-- **[Presentation Materials](executive/Presentation_Materials.md)** - Executive presentation scripts and demo flows
+High-level overviews, strategic direction, and business value propositions for leadership decision-making.
 
-### 🔧 Technical Documentation
+- **[Executive Summary](executive/executive-summary.md)** - System overview, market opportunity, and key value propositions
+- **[Global Strategy](executive/global-strategy.md)** - Strategic direction and global expansion plans
+- **[System Overview](executive/system-overview.md)** - High-level system overview and mission statement
+- **[Investor Executive Summary](executive/investor-executive-summary.md)** - Investment opportunity and ROI analysis
 
-**Audience**: Technical Evaluators, Engineers, System Integrators
+### 💻 **Software & AI Technical Documentation**
 
-#### Architecture
+**Audience**: Software Engineers, AI/ML Engineers, System Integrators
 
-- **[Technical Architecture](technical/architecture/Technical_Architecture.md)** - System design, hardware specifications, and technology stack
-- **[Architecture Decision Records](technical/architecture/Architecture_Decision_Records.md)** - Key architectural decisions and rationale
+Software architecture, AI/ML systems, algorithms, blockchain integration, and API documentation.
 
-#### Blockchain
+- **[Technical Architecture](technical/technical-architecture.md)** - Complete software and AI system design
+- **[System Architecture](technical/system-architecture.md)** - Overall system architecture and integration
+- **[AI Benefits](technical/ai-benefits.md)** - AI/ML capabilities and competitive advantages
+- **[Blockchain Integration](technical/blockchain-integration.md)** - Blockchain security and evidence anchoring
+- **[API Documentation](technical/integration/api-documentation.md)** - API specifications and integration guides
 
-- **[Blockchain Architecture](technical/blockchain/Blockchain_Architecture.md)** - Solana integration, evidence anchoring, and legal compliance
-- **[Blockchain Implementation Guide](technical/blockchain/Blockchain_Implementation_Guide.md)** - Comprehensive blockchain implementation documentation
-- **[Blockchain Architecture Detailed](technical/blockchain/Blockchain_Architecture_Detailed.md)** - Detailed technical blockchain specifications
-- **[Blockchain Implementation Phases](technical/blockchain/Blockchain_Implementation_Phases.md)** - 5-phase implementation roadmap
-- **[Blockchain Implementation Roadmap](technical/blockchain/Implementation_Roadmap.md)** - Strategic implementation roadmap with pivot frameworks
-- **[Blockchain Protocols Analysis](technical/blockchain/Blockchain_Protocols_Analysis.md)** - Comprehensive blockchain protocol comparison and analysis
-- **[Blockchain Security Compliance](technical/blockchain/Blockchain_Security_Compliance.md)** - Quantum resistance, security, and compliance framework
-- **[Blockchain Benefits](technical/blockchain/Blockchain_Benefits.md)** - Blockchain technology benefits, security advantages, and operational benefits
+### 🔧 **Mechanical & Hardware Technical Documentation**
 
-#### Mechanical Design
+**Audience**: Mechanical Engineers, Hardware Engineers, Manufacturing Teams
 
-- **[Mechanical Design Records](technical/mechanical/Mechanical_Design_Records.md)** - RKV-M tilt-quad mechanical design and ADRs
-- **[Mechanical Design ADRs](technical/mechanical/Mechanical_Design_ADRs.md)** - Architecture Decision Records for mechanical design
+Physical design, mechanical engineering, hardware specifications, and manufacturing processes.
 
-#### Performance
+- **[Mechanical Design Records](technical/mechanical/mechanical-design-records.md)** - RKV-M tilt-quad mechanical design
+- **[Mechanical Design ADRs](technical/mechanical/mechanical-design-adrs.md)** - Architecture Decision Records for mechanical design
+- **[Hardware Foundation](technical/hardware-foundation.md)** - Hardware platform and component specifications
+- **[RKV-M Specifications](technical/hardware/rkv-m-specifications.md)** - Detailed drone platform specifications
+- **[Manufacturing Strategy](operations/manufacturing-strategy.md)** - Manufacturing processes and supply chain
 
-- **[Performance Specifications](technical/performance/Performance_Specifications.md)** - Detailed technical metrics and benchmarks
+### 💼 **Business Documentation**
 
-#### Integration
+**Audience**: Business Development, Sales, Marketing, Investors
 
-- **[Integration Guide](technical/integration/Integration_Guide.md)** - Third-party system integration procedures
-- **[API Documentation](technical/integration/API_Documentation.md)** - API specifications and integration examples
+Market analysis, business model, competitive landscape, and growth strategy.
 
-#### General
+- **[Market Analysis](business/market-analysis.md)** - Market size, growth drivers, and opportunities
+- **[Business Model](business/business-model.md)** - Revenue model, pricing strategy, financial projections
+- **[Competitive Analysis](business/competitive-analysis.md)** - Detailed competitor comparisons and positioning
+- **[ROI Analysis](business/roi-analysis.md)** - Return on investment analysis
+- **[Use Cases](business/use-cases.md)** - Military, civilian, and commercial applications
 
-- **[Glossary](technical/Glossary.md)** - Comprehensive technical terminology and definitions
-- **[Technical Analysis](technical/Technical_Analysis.md)** - Technical feasibility, performance benchmarks, and competitive analysis
-- **[AI Benefits](technical/AI_Benefits.md)** - AI technology benefits, performance advantages, and competitive positioning
-- **[Reusable Systems Architecture](technical/REUSABLE_SYSTEMS_ARCHITECTURE.md)** - Enhanced reusable system architecture for ThreatSimulator
-- **[ThreatSimulator Enhancements](technical/ThreatSimulator_Enhancements.md)** - Planned improvements to the ThreatSimulator drone game
-
-### 💼 Business Documentation
-
-**Audience**: Business Development, Sales, Marketing
-
-- **[Market Analysis](business/Market_Analysis.md)** - Market size, growth drivers, competitive landscape
-- **[Business Model](business/Business_Model.md)** - Revenue model, pricing strategy, financial projections
-- **[ROI Analysis](business/ROI_Analysis.md)** - Return on investment analysis and financial projections
-- **[Competitive Analysis](business/Competitive_Analysis.md)** - Detailed competitor comparisons and positioning
-- **[Use Cases](business/Use_Cases.md)** - Military, civilian, and commercial use cases
-- **[Emerging Trends](business/Emerging_Trends.md)** - Market trends, opportunities, and strategic recommendations
-
-### ⚖️ Legal Documentation
+### ⚖️ **Legal Documentation**
 
 **Audience**: Legal, Compliance, Regulatory
 
-- **[Compliance Framework](legal/Compliance_Framework.md)** - ITAR, DoD, blockchain evidence, operational resilience
-- **[Legal Framework](legal/Legal_Framework.md)** - Comprehensive legal framework, regulatory compliance, and risk management
+Regulatory framework, ITAR compliance, and legal requirements.
 
-### 🚀 Operations Documentation
+- **[Compliance Framework](legal/compliance-framework.md)** - ITAR, DoD, and operational compliance
+- **[Legal Framework](legal/legal-framework.md)** - Comprehensive legal framework and risk management
 
-**Audience**: Operations, Deployment, Maintenance
+### 🚀 **Operations Documentation**
 
-#### Deployment
+**Audience**: Operations Teams, Deployment Engineers, Maintenance
 
-- **[Deployment Guide](operations/deployment/Deployment_Guide.md)** - Installation, configuration, and deployment procedures
+Deployment procedures, operational guidelines, maintenance, and training materials.
 
-#### Maintenance
-
-- **[Maintenance Procedures](operations/maintenance/Maintenance_Procedures.md)** - Detailed maintenance procedures and schedules
-
-#### Training
-
-- **[Training Materials](operations/training/Training_Materials.md)** - Comprehensive training programs and certification requirements
-
-#### Monitoring
-
-- **[Troubleshooting Guide](operations/monitoring/Troubleshooting_Guide.md)** - Common issues, diagnostic procedures, and solutions
-- **[Operations Log Template](operations/monitoring/Operations_Log_Template.md)** - Standardized operational logging template
-
-#### General
-
-- **[Operational Resilience](operations/Operational_Resilience.md)** - GPS-denied environments, EW resilience, graceful degradation
-- **[Operations Manual](operations/Operations_Manual.md)** - Day-to-day operations, maintenance, and optimization
-- **[Implementation Plan](operations/Implementation_Plan.md)** - 18-month implementation roadmap and project management
-- **[Operations Modes](operations/Operations_Modes.md)** - Operational modes, deployment configurations, and mission-specific procedures
+- **[Operations Manual](operations/operations-manual.md)** - Day-to-day operations and procedures
+- **[Deployment Guide](operations/deployment/deployment-guide.md)** - Installation and deployment procedures
+- **[Maintenance Procedures](operations/maintenance/maintenance-procedures.md)** - Maintenance schedules and procedures
+- **[Training Materials](operations/training/training-materials.md)** - Training programs and certification
 
 ---
 
-## Quick Access by Use Case
+## 🚀 Quick Start Guides
+
+Get started quickly based on your role:
 
 ### **For Executive Presentations**
 
-Start with: [Executive Summary](executive/Executive_Summary.md) → [Market Analysis](business/Market_Analysis.md) → [Business Model](business/Business_Model.md)
+Start with: [Executive Summary](executive/executive-summary.md) → [Market Analysis](business/market-analysis.md) → [Business Model](business/business-model.md)
 
-### **For Technical Evaluations**
+### **For Technical Evaluations (Software/AI)**
 
-Start with: [Technical Architecture](technical/Technical_Architecture.md) → [Operational Resilience](operations/Operational_Resilience.md) → [Compliance Framework](legal/Compliance_Framework.md)
+Start with: [Technical Architecture](technical/technical-architecture.md) → [AI Benefits](technical/ai-benefits.md) → [Blockchain Integration](technical/blockchain-integration.md)
+
+### **For Technical Evaluations (Mechanical/Hardware)**
+
+Start with: [Mechanical Design Records](technical/mechanical/mechanical-design-records.md) → [Hardware Foundation](technical/hardware-foundation.md) → [Manufacturing Strategy](operations/manufacturing-strategy.md)
 
 ### **For Business Development**
 
-Start with: [Market Analysis](business/Market_Analysis.md) → [Business Model](business/Business_Model.md) → [Executive Summary](executive/Executive_Summary.md)
+Start with: [Market Analysis](business/market-analysis.md) → [Business Model](business/business-model.md) → [Executive Summary](executive/executive-summary.md)
 
 ### **For Legal/Compliance Review**
 
-Start with: [Compliance Framework](legal/Compliance_Framework.md) → [Technical Architecture](technical/Technical_Architecture.md) → [Operational Resilience](operations/Operational_Resilience.md)
+Start with: [Compliance Framework](legal/compliance-framework.md) → [Technical Architecture](technical/technical-architecture.md) → [Operational Resilience](operations/operational-resilience.md)
 
 ---
 
-## Key Features
+## 🌟 Key Features & Capabilities
 
 ### **Market Opportunity**
 
@@ -167,34 +148,7 @@ Start with: [Compliance Framework](legal/Compliance_Framework.md) → [Technical
 
 ---
 
-## Document Status
-
-### ✅ **Completed Documents**
-
-- **Executive Summary** - Comprehensive system overview with market data
-- **Technical Architecture** - Detailed hardware and software specifications
-- **Market Analysis** - Market size, growth drivers, competitive positioning
-- **Business Model** - Revenue model, pricing strategy, financial projections
-- **Compliance Framework** - ITAR, DoD, blockchain evidence, operational resilience
-- **Operational Resilience** - GPS-denied environments, EW resistance, graceful degradation
-
-### 🔄 **In Progress Documents**
-
-- **Performance Specifications** - Detailed technical metrics and benchmarks
-- **Deployment Guide** - Installation and configuration procedures
-- **Operations Manual** - Day-to-day operations and maintenance
-- **Integration Guide** - Third-party system integration
-
-### ⏳ **Planned Documents**
-
-- **Troubleshooting Guide** - Common issues and solutions
-- **Training Materials** - User education and certification
-- **API Documentation** - Technical integration specifications
-- **Security Assessment** - Penetration testing and vulnerability analysis
-
----
-
-## Contact Information
+## 📞 Contact Information
 
 **Phoenix Rooivalk**
 
@@ -202,22 +156,13 @@ Start with: [Compliance Framework](legal/Compliance_Framework.md) → [Technical
 
 ---
 
-## Document Maintenance
+## 🔍 Navigation Tips
 
-### **Update Schedule**
-
-- **Monthly**: Market analysis and competitive intelligence
-- **Quarterly**: Technical specifications and performance metrics
-- **Annually**: Business model and financial projections
-- **As Needed**: Compliance updates and regulatory changes
-
-### **Version Control**
-
-- **Document Versioning**: Semantic versioning (v1.0.0)
-- **Change Log**: Track all document updates and modifications
-- **Approval Process**: Technical and business review before publication
-- **Distribution Control**: Restricted access based on clearance level
+- **Use the sidebar** on the left to browse documentation by category
+- **Press Ctrl+K** (or Cmd+K on Mac) to search across all documentation
+- **Click the arrows** in each section to expand/collapse subcategories
+- **Use breadcrumbs** at the top to navigate back to parent sections
 
 ---
 
-*This documentation index provides comprehensive access to all Phoenix Rooivalk documentation. Last updated: October 3, 2025*
+*This documentation provides comprehensive access to all Phoenix Rooivalk information. Last updated: November 2025*
