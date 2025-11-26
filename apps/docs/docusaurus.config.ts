@@ -140,21 +140,17 @@ const config: Config = {
         height: 40,
       },
       items: [
+        // Primary navigation - Documentation home
         {
           type: "doc",
           docId: "phoenix-rooivalk-documentation",
           position: "left",
-          label: "Docs",
+          label: "Documentation",
         },
-        {
-          to: "/your-progress",
-          label: "Your Progress",
-          position: "left",
-          className: "navbar__link--progress",
-        },
+        // Key audience-focused dropdowns (consolidated)
         {
           type: "dropdown",
-          label: "Executive",
+          label: "For Investors",
           position: "left",
           items: [
             {
@@ -170,31 +166,23 @@ const config: Config = {
               to: "/docs/executive/phoenix-rooivalk-pitch-deck",
             },
             {
-              label: "Global Strategy",
-              to: "/docs/executive/global-strategy",
+              label: "Market Analysis",
+              to: "/docs/business/market-analysis",
             },
             {
-              label: "Technical Whitepaper",
-              to: "/docs/executive/phoenix-rooivalk-technical-whitepaper",
+              label: "ROI Analysis",
+              to: "/docs/business/roi-analysis",
             },
           ],
         },
         {
           type: "dropdown",
-          label: "Technical",
+          label: "For Engineers",
           position: "left",
           items: [
             {
               label: "Technical Architecture",
               to: "/docs/technical/technical-architecture",
-            },
-            {
-              label: "System Architecture",
-              to: "/docs/technical/system-architecture",
-            },
-            {
-              label: "AI Benefits",
-              to: "/docs/technical/ai-benefits",
             },
             {
               label: "API Documentation",
@@ -205,6 +193,10 @@ const config: Config = {
               to: "/docs/technical/blockchain/blockchain-architecture",
             },
             {
+              label: "System Architecture",
+              to: "/docs/technical/system-architecture",
+            },
+            {
               label: "Glossary",
               to: "/docs/technical/glossary",
             },
@@ -212,34 +204,7 @@ const config: Config = {
         },
         {
           type: "dropdown",
-          label: "Business",
-          position: "left",
-          items: [
-            {
-              label: "Market Analysis",
-              to: "/docs/business/market-analysis",
-            },
-            {
-              label: "Business Model",
-              to: "/docs/business/business-model",
-            },
-            {
-              label: "Competitive Analysis",
-              to: "/docs/business/competitive-analysis",
-            },
-            {
-              label: "ROI Analysis",
-              to: "/docs/business/roi-analysis",
-            },
-            {
-              label: "Use Cases",
-              to: "/docs/business/use-cases",
-            },
-          ],
-        },
-        {
-          type: "dropdown",
-          label: "Operations",
+          label: "For Operations",
           position: "left",
           items: [
             {
@@ -251,48 +216,24 @@ const config: Config = {
               to: "/docs/operations/operations-manual",
             },
             {
-              label: "Manufacturing Strategy",
-              to: "/docs/operations/manufacturing-strategy",
-            },
-            {
               label: "Training Materials",
               to: "/docs/operations/training/training-materials",
             },
+            {
+              label: "Compliance Framework",
+              to: "/docs/legal/compliance-framework",
+            },
           ],
         },
-        // Cross-link to marketing site
-        ...(marketingUrl && marketingUrl !== "https://"
-          ? [
-              {
-                href: marketingUrl,
-                label: "Website",
-                position: "right",
-              } as const,
-            ]
-          : []),
-        // GitHub repository links
+        // GitHub repository link
         {
-          type: "dropdown",
+          href: "https://github.com/JustAGhosT/PhoenixRooivalk",
           label: "GitHub",
           position: "right",
-          items: [
-            {
-              href: "https://github.com/JustAGhosT/PhoenixRooivalk",
-              label: "PhoenixRooivalk",
-            },
-            {
-              href: "https://github.com/justaghost/cognitive-mesh",
-              label: "Cognitive Mesh",
-            },
-          ],
+          "aria-label": "GitHub repository",
         },
-        // Environment badge (build-time)
-        {
-          href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-          label: "Request Access",
-          position: "right",
-        },
-        ...(envBadge
+        // Environment badge (only show in non-production)
+        ...(envBadge && envName !== "production"
           ? [
               {
                 to: "#",
@@ -374,6 +315,10 @@ const config: Config = {
         {
           title: "Resources",
           items: [
+            {
+              label: "Main Website",
+              href: "https://phoenixrooivalk.netlify.app",
+            },
             {
               label: "Documentation Status",
               to: "/docs/resources/documentation-status",
