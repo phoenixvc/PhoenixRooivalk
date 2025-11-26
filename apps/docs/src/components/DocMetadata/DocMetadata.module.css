@@ -1,0 +1,122 @@
+.docMetadata {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+}
+
+.metadataGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.metadataItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.difficultyBadge,
+.readingTime,
+.points {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+}
+
+.difficultyBadge {
+  /* Background set inline based on difficulty */
+}
+
+.readingTime {
+  background: var(--ifm-color-primary);
+}
+
+.points {
+  background: var(--ifm-color-warning, #f59e0b);
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-800);
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.prerequisites {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.9375rem;
+}
+
+.prerequisites strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.prerequisites ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.prerequisites li {
+  margin-bottom: 0.25rem;
+}
+
+.prerequisites a {
+  color: var(--ifm-link-color);
+  text-decoration: none;
+}
+
+.prerequisites a:hover {
+  text-decoration: underline;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .docMetadata {
+  background: var(--ifm-background-surface-color);
+}
+
+[data-theme="dark"] .tag {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-900);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .metadataGrid {
+    flex-direction: column;
+  }
+
+  .metadataItem {
+    width: 100%;
+  }
+
+  .difficultyBadge,
+  .readingTime,
+  .points {
+    width: 100%;
+    justify-content: center;
+  }
+}

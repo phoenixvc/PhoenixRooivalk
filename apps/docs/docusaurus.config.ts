@@ -4,6 +4,7 @@ import { resolve } from "path";
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
+import { remarkDocMetadata } from "./src/plugins/remark-doc-metadata";
 
 // Node.js environment declarations
 declare const process: {
@@ -79,7 +80,7 @@ const config: Config = {
           showLastUpdateAuthor: true,
           // Enable breadcrumbs for navigation
           breadcrumbs: true,
-          remarkPlugins: [],
+          remarkPlugins: [remarkDocMetadata],
           rehypePlugins: [],
         },
         blog: false,
