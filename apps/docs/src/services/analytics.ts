@@ -7,6 +7,8 @@
  * - Scroll depth
  * - Conversion funnel events
  * - User sessions
+ *
+ * Features rate limiting to prevent excessive API calls.
  */
 
 import {
@@ -22,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "./firebase";
 import { isAnalyticsAllowed } from "../components/CookieConsent";
+import { checkRateLimit, debounce } from "../utils/rateLimiter";
 
 // Types for analytics events
 export interface PageViewEvent {
@@ -106,6 +109,14 @@ const getAnonymousId = (): string => {
   return anonId;
 };
 
+// Rate limit constants
+const RATE_LIMITS = {
+  pageViews: { max: 30, windowMs: 60000 }, // 30 per minute
+  conversions: { max: 20, windowMs: 60000 }, // 20 per minute
+  timeOnPage: { max: 60, windowMs: 60000 }, // 60 per minute
+  dailyStats: { max: 30, windowMs: 60000 }, // 30 per minute
+};
+
 class AnalyticsService {
   private db: ReturnType<typeof getFirestore> | null = null;
   private sessionId: string = "";
@@ -113,6 +124,14 @@ class AnalyticsService {
   private currentPageUrl: string = "";
   private maxScrollDepth: number = 0;
   private isInitialized: boolean = false;
+
+  // Debounced daily stats update
+  private debouncedDailyStats = debounce(
+    (pageUrl: string, isAuthenticated: boolean) => {
+      this._updateDailyStats(pageUrl, isAuthenticated);
+    },
+    2000
+  );
 
   constructor() {
     if (typeof window !== "undefined") {
@@ -193,6 +212,11 @@ class AnalyticsService {
       return;
     }
 
+    // Check rate limit
+    if (!checkRateLimit("pageViews", RATE_LIMITS.pageViews.max, RATE_LIMITS.pageViews.windowMs)) {
+      return; // Rate limited, skip this tracking
+    }
+
     if (!this.db) {
       await this.init();
     }
@@ -234,8 +258,8 @@ class AnalyticsService {
         isAuthenticated,
       });
 
-      // Track daily stats
-      await this.updateDailyStats(pageUrl, isAuthenticated);
+      // Track daily stats (debounced)
+      this.debouncedDailyStats(pageUrl, isAuthenticated);
     } catch (error) {
       console.warn("Page view tracking failed:", error);
     }
@@ -255,6 +279,11 @@ class AnalyticsService {
    */
   async trackTimeOnPage(): Promise<void> {
     if (!this.db || !this.currentPageUrl) return;
+
+    // Check rate limit
+    if (!checkRateLimit("timeOnPage", RATE_LIMITS.timeOnPage.max, RATE_LIMITS.timeOnPage.windowMs)) {
+      return; // Rate limited, skip this tracking
+    }
 
     const timeSpent = Date.now() - this.currentPageStartTime;
 
@@ -295,6 +324,12 @@ class AnalyticsService {
       return;
     }
 
+    // Check rate limit (but always allow signup_completed for accuracy)
+    if (eventType !== "signup_completed" &&
+        !checkRateLimit("conversions", RATE_LIMITS.conversions.max, RATE_LIMITS.conversions.windowMs)) {
+      return; // Rate limited, skip this tracking
+    }
+
     if (!this.db) {
       await this.init();
     }
@@ -327,13 +362,18 @@ class AnalyticsService {
   }
 
   /**
-   * Update daily aggregated stats
+   * Update daily aggregated stats (internal, called via debounce)
    */
-  private async updateDailyStats(
+  private async _updateDailyStats(
     pageUrl: string,
     isAuthenticated: boolean
   ): Promise<void> {
     if (!this.db) return;
+
+    // Check rate limit
+    if (!checkRateLimit("dailyStats", RATE_LIMITS.dailyStats.max, RATE_LIMITS.dailyStats.windowMs)) {
+      return;
+    }
 
     const today = new Date().toISOString().split("T")[0];
     const statsRef = doc(this.db, "analytics_daily", today);
