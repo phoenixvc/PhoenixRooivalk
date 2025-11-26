@@ -180,6 +180,7 @@ substantial market share by addressing critical gaps in current solutions.
 
 Industry reports indicate DroneShield executives selling significant share
 positions. This may signal internal concerns about:
+
 - Technology limitations against autonomous drone threats
 - Competitive pressure from next-generation solutions
 - Market saturation in their current product category
@@ -278,21 +279,22 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 **5. Non-Kinetic Safety Advantage**
 
 - **Phoenix Rooivalk**: Net-based capture with no projectile risks
-- **Competitors**: Kinetic interceptors (Fortem, Anduril) create collateral damage
-  concerns
+- **Competitors**: Kinetic interceptors (Fortem, Anduril) create collateral
+  damage concerns
 - **Advantage**: Suitable for urban, civilian, and sensitive environments
 
 :::tip Urban & Civilian Market Advantage
 
 Industry discussions increasingly highlight safety concerns with kinetic C-UAS
 solutions in populated areas. Phoenix Rooivalk's net-capture approach offers:
+
 - No projectile or debris risks
 - Lower liability exposure for operators
 - Better regulatory pathway for civilian airspace
 - Suitability for airports, stadiums, and critical infrastructure
 
-This positions Phoenix Rooivalk favorably against kinetic solutions like Fortem's
-DroneHunter in the growing urban security market.
+This positions Phoenix Rooivalk favorably against kinetic solutions like
+Fortem's DroneHunter in the growing urban security market.
 
 :::
 

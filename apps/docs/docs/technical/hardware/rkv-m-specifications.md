@@ -258,7 +258,6 @@ All pods capable of 0-90° tilt for transition flight
 
 ## Related Documents
 
-- [Sensor Fusion Pipeline](../sensors/sensor-fusion.md)
 - [ML Training Plan](../ml-training/ml-training-plan.md)
 - [Operations Manual](../../operations/operations-manual.md)
 - [Safety & Compliance](../../legal/compliance-framework.md)
