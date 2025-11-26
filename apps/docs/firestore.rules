@@ -10,6 +10,13 @@ rules_version = '2';
  * - analytics_conversions: Conversion funnel events (write-only, admin-read)
  * - analytics_sessions: Session data (write-only, admin-read)
  * - analytics_daily: Daily aggregated stats (write-only, admin-read)
+ *
+ * AI Collections (managed by Cloud Functions):
+ * - ai_rate_limits: Rate limiting for AI features (function-managed)
+ * - ai_usage: AI feature usage tracking (function-managed)
+ * - document_improvements: User-submitted improvement suggestions
+ * - documentation_meta: Document metadata for recommendations
+ * - notifications: User notifications
  */
 
 service cloud.firestore {
@@ -62,6 +69,45 @@ service cloud.firestore {
       allow update: if true; // Daily stats are incremented
       allow read: if isAdmin();
       allow delete: if false;
+    }
+
+    // AI Collections - managed primarily by Cloud Functions
+    // Rate limits - only Cloud Functions can read/write (via admin SDK)
+    match /ai_rate_limits/{document=**} {
+      allow read, write: if false; // Function-only via admin SDK
+    }
+
+    // AI usage tracking - only Cloud Functions can write
+    match /ai_usage/{document=**} {
+      allow read: if isAdmin();
+      allow write: if false; // Function-only via admin SDK
+    }
+
+    // Document improvements - users submit, admins review
+    match /document_improvements/{improvementId} {
+      // Users can read their own submissions
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      // Only functions can create (via admin SDK)
+      allow create, update, delete: if false;
+    }
+
+    // Documentation metadata - for AI recommendations
+    match /documentation_meta/{docId} {
+      allow read: if request.auth != null; // Any authenticated user can read
+      allow write: if isAdmin(); // Only admins can update metadata
+    }
+
+    // User notifications
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Users can mark their own notifications as read
+      allow update: if request.auth != null &&
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+      allow create, delete: if false; // Function-only via admin SDK
     }
 
     // Default deny all other collections

@@ -12,8 +12,9 @@ This guide covers configuration for the documentation site's interactive feature
 6. [Rate Limiting](#rate-limiting)
 7. [Error Boundaries](#error-boundaries)
 8. [Cloud Functions](#cloud-functions)
-9. [Testing](#testing)
-10. [Environment Variables](#environment-variables)
+9. [AI Features](#ai-features)
+10. [Testing](#testing)
+11. [Environment Variables](#environment-variables)
 
 ---
 
@@ -421,6 +422,184 @@ await manualCleanup({
 
 ---
 
+## AI Features
+
+The documentation site includes AI-powered features for research, recommendations, and document improvement.
+
+### Overview
+
+| Feature | Description | Endpoint |
+|---------|-------------|----------|
+| Competitor Analysis | Analyze defense market competitors | `analyzeCompetitors` |
+| SWOT Analysis | Generate strategic SWOT analyses | `generateSWOT` |
+| Market Insights | Get market intelligence and trends | `getMarketInsights` |
+| Reading Recommendations | AI-powered reading suggestions | `getReadingRecommendations` |
+| Document Improvements | Suggest doc improvements for review | `suggestDocumentImprovements` |
+| Content Summary | Summarize page content | `summarizeContent` |
+
+### Setup
+
+1. **Configure OpenAI API Key**
+
+```bash
+firebase functions:config:set openai.key="sk-your-openai-api-key"
+```
+
+2. **Deploy Functions**
+
+```bash
+cd apps/docs/functions
+npm install
+npm run build
+firebase deploy --only functions
+```
+
+### Using the AI Panel
+
+The AI Panel appears as a floating button (🤖) for authenticated users. It provides:
+
+1. **Competitor Analysis**
+   - Select from known competitors or add custom ones
+   - Quick presets: Kinetic, Electronic, Laser, Major Players
+   - Generates detailed competitive analysis
+
+2. **SWOT Analysis**
+   - Enter any topic for strategic analysis
+   - Pre-defined topics for Phoenix Rooivalk
+   - Includes strengths, weaknesses, opportunities, threats
+
+3. **Market Insights**
+   - Counter-UAS market intelligence
+   - Regulatory landscape analysis
+   - Investment and M&A trends
+
+4. **Reading Recommendations**
+   - Based on user's reading history
+   - Suggests logical next articles
+   - Shows relevance scores
+
+5. **Document Improvements**
+   - AI analyzes current page
+   - Suggests clarity, structure, content improvements
+   - Submissions go to admin review queue
+
+6. **Content Summary**
+   - Summarize current page or custom content
+   - Useful for quick overview
+
+### Rate Limiting
+
+AI features are rate-limited per user:
+
+| Feature | Limit |
+|---------|-------|
+| Competitor Analysis | 20/hour |
+| SWOT Analysis | 20/hour |
+| Market Insights | 20/hour |
+| Document Improvements | 20/hour |
+| Content Summary | 20/hour |
+
+### Reading Recommendations Component
+
+Embed recommendations in your pages:
+
+```tsx
+import { ReadingRecommendations } from '../components/AIPanel';
+
+// Compact widget for sidebar
+<ReadingRecommendations variant="compact" maxItems={3} />
+
+// Full panel with stats
+<ReadingRecommendations variant="full" showHeading={true} />
+```
+
+Props:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `maxItems` | number | 3 | Max recommendations to show |
+| `variant` | "compact" \| "full" | "compact" | Display style |
+| `currentDocId` | string | - | Current document for context |
+| `showHeading` | boolean | true | Show section heading |
+| `autoRefresh` | number | 0 | Auto-refresh interval (ms) |
+
+### Admin Review Panel
+
+Admins can review document improvement suggestions:
+
+```tsx
+import { AdminImprovementReview } from '../components/AIPanel';
+
+// On an admin page
+<AdminImprovementReview pageSize={10} />
+```
+
+Actions available:
+- **Approve** - Mark suggestion as approved
+- **Implemented** - Suggestion was implemented
+- **Reject** - Decline the suggestion
+
+Users receive notifications when their suggestions are reviewed.
+
+### AI Service API
+
+Use the AI service directly:
+
+```typescript
+import { aiService } from '../services/aiService';
+
+// Competitor analysis
+const result = await aiService.analyzeCompetitors(
+  ['Anduril', 'DroneShield'],
+  ['technology', 'market-position']
+);
+
+// SWOT analysis
+const swot = await aiService.generateSWOT(
+  'Phoenix Rooivalk Market Entry',
+  'Focus on European defense market'
+);
+
+// Reading recommendations
+const recs = await aiService.getReadingRecommendations('/docs/overview');
+
+// Document improvements
+const improvements = await aiService.suggestDocumentImprovements(
+  '/docs/technical/architecture',
+  'Technical Architecture',
+  documentContent
+);
+```
+
+### Firestore Collections
+
+AI features use these collections:
+
+| Collection | Purpose |
+|------------|---------|
+| `ai_rate_limits` | Rate limiting per user/feature |
+| `ai_usage` | Usage tracking and analytics |
+| `document_improvements` | Improvement suggestions queue |
+| `documentation_meta` | Document metadata for recommendations |
+| `notifications` | User notifications |
+
+### Cost Considerations
+
+AI features use OpenAI API with different models:
+
+| Feature | Model | Approx Cost |
+|---------|-------|-------------|
+| Competitor Analysis | gpt-4o | ~$0.02/request |
+| SWOT Analysis | gpt-4o-mini | ~$0.005/request |
+| Market Insights | gpt-4o | ~$0.02/request |
+| Document Improvements | gpt-4o | ~$0.02/request |
+| Recommendations | gpt-4o-mini | ~$0.003/request |
+| Summary | gpt-4o-mini | ~$0.003/request |
+
+With rate limits (20/hour/user), maximum cost per user is approximately $0.40/hour for heavy usage.
+
+---
+
 ## Testing
 
 ### Setup
@@ -502,6 +681,21 @@ For CI/CD deployment:
 2. Click "Generate new private key"
 3. Copy the JSON content
 4. Add as `FIREBASE_SERVICE_ACCOUNT` secret in GitHub
+
+### Firebase Functions Configuration
+
+For AI features, configure the OpenAI API key:
+
+```bash
+# Set OpenAI API key for Cloud Functions
+firebase functions:config:set openai.key="sk-your-openai-api-key"
+
+# Verify configuration
+firebase functions:config:get
+
+# Deploy with new config
+firebase deploy --only functions
+```
 
 ---
 

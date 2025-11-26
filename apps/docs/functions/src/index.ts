@@ -5,7 +5,29 @@
  * - cleanupOldAnalytics: Removes analytics data older than retention period
  * - cleanupInactiveSessions: Removes sessions with no activity
  * - aggregateDailyStats: Aggregates and archives old daily stats
+ *
+ * AI Functions (from ./ai.ts):
+ * - analyzeCompetitors: Competitor research and analysis
+ * - generateSWOT: SWOT analysis generation
+ * - getReadingRecommendations: AI-powered reading suggestions
+ * - suggestDocumentImprovements: Document improvement suggestions
+ * - getMarketInsights: Market analysis and insights
+ * - summarizeContent: Content summarization
+ * - reviewDocumentImprovement: Admin review of suggestions
+ * - getPendingImprovements: Get pending suggestions (admin)
  */
+
+// Export AI functions
+export {
+  analyzeCompetitors,
+  generateSWOT,
+  getReadingRecommendations,
+  suggestDocumentImprovements,
+  getMarketInsights,
+  summarizeContent,
+  reviewDocumentImprovement,
+  getPendingImprovements,
+} from "./ai";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
