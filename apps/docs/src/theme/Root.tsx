@@ -1,7 +1,7 @@
 /**
  * Root Component Wrapper
- * Provides AuthContext, ReadingTracker, AnalyticsTracker, and CookieConsent
- * to the entire Docusaurus application.
+ * Provides AuthContext, ReadingTracker, AnalyticsTracker, CookieConsent,
+ * and OfflineIndicator to the entire Docusaurus application.
  *
  * Non-critical features are wrapped in SilentErrorBoundary to prevent
  * analytics/tracking errors from crashing the documentation site.
@@ -13,6 +13,7 @@ import { ReadingTracker } from "../components/Gamification";
 import { AnalyticsTracker } from "../components/Analytics";
 import { CookieConsentBanner } from "../components/CookieConsent";
 import { SilentErrorBoundary } from "../components/ErrorBoundary";
+import { OfflineIndicator } from "../components/Offline";
 
 interface RootProps {
   children: ReactNode;
@@ -30,6 +31,9 @@ export default function Root({ children }: RootProps): React.ReactElement {
       {children}
       <SilentErrorBoundary>
         <CookieConsentBanner />
+      </SilentErrorBoundary>
+      <SilentErrorBoundary>
+        <OfflineIndicator />
       </SilentErrorBoundary>
     </AuthProvider>
   );
