@@ -154,6 +154,8 @@ export interface UserProgress {
       completed: boolean;
       completedAt?: string;
       scrollProgress: number;
+      timeSpentMs?: number; // Time spent reading this doc in milliseconds
+      lastReadAt?: string; // Last time this doc was read
     };
   };
   achievements: {
@@ -166,6 +168,7 @@ export interface UserProgress {
     level: number;
     streak: number;
     lastVisit?: string;
+    totalTimeSpentMs?: number; // Total time spent across all docs
   };
   updatedAt?: unknown;
 }
