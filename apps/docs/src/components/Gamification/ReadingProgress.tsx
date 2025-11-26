@@ -139,11 +139,13 @@ export function ReadingProgress({
 export function ReadingProgressCard(): React.ReactElement {
   const { progress, getCompletedCount } = useReadingProgress();
 
+  // Total documentation pages in the site
+  const TOTAL_DOCS = 106;
+
   // Calculate overall statistics
   const totalCompleted = getCompletedCount();
   const allDocs = Object.keys(progress);
-  const totalDocs = allDocs.length || 1; // Avoid division by zero
-  const percentage = Math.round((totalCompleted / totalDocs) * 100);
+  const percentage = Math.round((totalCompleted / TOTAL_DOCS) * 100);
 
   // Calculate reading streak
   const completedDocs = allDocs

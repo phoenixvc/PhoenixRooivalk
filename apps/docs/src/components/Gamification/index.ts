@@ -17,3 +17,4 @@ export {
 } from "./DocJourney";
 export { default as FeedbackWidget, useFeedback } from "./FeedbackWidget";
 export { UserProfile } from "./UserProfile";
+export { ReadingTracker } from "./ReadingTracker";
