@@ -210,12 +210,17 @@ export function AuthProvider({
 
   const updateProgress = useCallback(
     async (updates: Partial<UserProgress>) => {
+      if (!progress) {
+        console.warn("Cannot update progress: progress not initialized");
+        return;
+      }
+
       const newProgress = {
         ...progress,
         ...updates,
-        docs: { ...progress?.docs, ...updates.docs },
-        achievements: { ...progress?.achievements, ...updates.achievements },
-        stats: { ...progress?.stats, ...updates.stats },
+        docs: { ...progress.docs, ...updates.docs },
+        achievements: { ...progress.achievements, ...updates.achievements },
+        stats: { ...progress.stats, ...updates.stats },
       } as UserProgress;
 
       setProgress(newProgress);

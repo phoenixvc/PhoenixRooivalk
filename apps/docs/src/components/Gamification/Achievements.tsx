@@ -217,6 +217,20 @@ interface AchievementProgress {
   lastReadDate?: string;
 }
 
+/**
+ * Hook for managing achievement progress and unlocking.
+ * Persists achievement state to localStorage and provides utilities for
+ * unlocking achievements, checking unlock status, and calculating user level.
+ *
+ * @returns {object} Achievement management utilities
+ * @returns {AchievementProgress} returns.achievementProgress - Current achievement progress state
+ * @returns {Achievement | null} returns.newAchievement - Recently unlocked achievement for notification
+ * @returns {(achievementId: string) => void} returns.unlockAchievement - Function to unlock an achievement
+ * @returns {(docsReadCount: number) => void} returns.checkAndUnlockAchievements - Check and unlock achievements based on criteria
+ * @returns {(achievementId: string) => boolean} returns.isUnlocked - Check if an achievement is unlocked
+ * @returns {() => object} returns.getLevel - Calculate current user level based on points
+ * @returns {() => void} returns.dismissNotification - Dismiss the achievement notification
+ */
 export function useAchievements() {
   const [achievementProgress, setAchievementProgress] =
     useState<AchievementProgress>({
@@ -324,7 +338,15 @@ export function useAchievements() {
   };
 }
 
-// Achievement notification popup
+/**
+ * Displays a popup notification when an achievement is unlocked.
+ *
+ * @component
+ * @param {object} props - Component props
+ * @param {Achievement} props.achievement - The unlocked achievement to display
+ * @param {() => void} props.onDismiss - Callback to dismiss the notification
+ * @returns {React.ReactElement} Achievement notification popup
+ */
 export function AchievementNotification({
   achievement,
   onDismiss,
@@ -332,8 +354,22 @@ export function AchievementNotification({
   achievement: Achievement;
   onDismiss: () => void;
 }): React.ReactElement {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onDismiss();
+    }
+  };
+
   return (
-    <div className="achievement-notification" onClick={onDismiss}>
+    <div
+      className="achievement-notification"
+      onClick={onDismiss}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`Dismiss ${achievement.name} achievement notification`}
+    >
       <div className="achievement-notification-content">
         <div className="achievement-notification-icon">{achievement.icon}</div>
         <div className="achievement-notification-text">
@@ -360,7 +396,15 @@ export function AchievementNotification({
   );
 }
 
-// Achievement badge display
+/**
+ * Displays a badge for an achievement with locked/unlocked states.
+ *
+ * @component
+ * @param {object} props - Component props
+ * @param {Achievement} props.achievement - The achievement to display (includes name, description, icon, rarity, points)
+ * @param {boolean} props.unlocked - Whether the achievement is unlocked/revealed
+ * @returns {React.ReactElement} Achievement badge display
+ */
 export function AchievementBadge({
   achievement,
   unlocked,
