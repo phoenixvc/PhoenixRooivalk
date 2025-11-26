@@ -144,7 +144,7 @@ const config: Config = {
           type: "doc",
           docId: "phoenix-rooivalk-documentation",
           position: "left",
-          label: "Documentation",
+          label: "Docs",
         },
         {
           to: "/your-progress",
@@ -162,8 +162,20 @@ const config: Config = {
               to: "/docs/executive/executive-summary",
             },
             {
+              label: "Investor Summary",
+              to: "/docs/executive/investor-executive-summary",
+            },
+            {
+              label: "Pitch Deck",
+              to: "/docs/executive/phoenix-rooivalk-pitch-deck",
+            },
+            {
               label: "Global Strategy",
               to: "/docs/executive/global-strategy",
+            },
+            {
+              label: "Technical Whitepaper",
+              to: "/docs/executive/phoenix-rooivalk-technical-whitepaper",
             },
           ],
         },
@@ -181,12 +193,20 @@ const config: Config = {
               to: "/docs/technical/system-architecture",
             },
             {
+              label: "AI Benefits",
+              to: "/docs/technical/ai-benefits",
+            },
+            {
               label: "API Documentation",
               to: "/docs/technical/integration/api-documentation",
             },
             {
               label: "Blockchain Architecture",
               to: "/docs/technical/blockchain/blockchain-architecture",
+            },
+            {
+              label: "Glossary",
+              to: "/docs/technical/glossary",
             },
           ],
         },
@@ -203,6 +223,18 @@ const config: Config = {
               label: "Business Model",
               to: "/docs/business/business-model",
             },
+            {
+              label: "Competitive Analysis",
+              to: "/docs/business/competitive-analysis",
+            },
+            {
+              label: "ROI Analysis",
+              to: "/docs/business/roi-analysis",
+            },
+            {
+              label: "Use Cases",
+              to: "/docs/business/use-cases",
+            },
           ],
         },
         {
@@ -211,8 +243,20 @@ const config: Config = {
           position: "left",
           items: [
             {
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
+            },
+            {
+              label: "Operations Manual",
+              to: "/docs/operations/operations-manual",
+            },
+            {
               label: "Manufacturing Strategy",
               to: "/docs/operations/manufacturing-strategy",
+            },
+            {
+              label: "Training Materials",
+              to: "/docs/operations/training/training-materials",
             },
           ],
         },
@@ -260,17 +304,34 @@ const config: Config = {
           : []),
       ],
     },
-    // Enhanced footer
+    // Enhanced footer with role-based navigation
     footer: {
       style: "dark",
       links: [
         {
-          title: "Documentation",
+          title: "For Executives",
           items: [
             {
               label: "Executive Summary",
               to: "/docs/executive/executive-summary",
             },
+            {
+              label: "Investor Summary",
+              to: "/docs/executive/investor-executive-summary",
+            },
+            {
+              label: "Market Analysis",
+              to: "/docs/business/market-analysis",
+            },
+            {
+              label: "ROI Analysis",
+              to: "/docs/business/roi-analysis",
+            },
+          ],
+        },
+        {
+          title: "For Engineers",
+          items: [
             {
               label: "Technical Architecture",
               to: "/docs/technical/technical-architecture",
@@ -280,8 +341,33 @@ const config: Config = {
               to: "/docs/technical/integration/api-documentation",
             },
             {
-              label: "Market Analysis",
-              to: "/docs/business/market-analysis",
+              label: "Blockchain Architecture",
+              to: "/docs/technical/blockchain/blockchain-architecture",
+            },
+            {
+              label: "Glossary",
+              to: "/docs/technical/glossary",
+            },
+          ],
+        },
+        {
+          title: "For Operations",
+          items: [
+            {
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
+            },
+            {
+              label: "Operations Manual",
+              to: "/docs/operations/operations-manual",
+            },
+            {
+              label: "Training Materials",
+              to: "/docs/operations/training/training-materials",
+            },
+            {
+              label: "Compliance Framework",
+              to: "/docs/legal/compliance-framework",
             },
           ],
         },
@@ -291,10 +377,6 @@ const config: Config = {
             {
               label: "Documentation Status",
               to: "/docs/resources/documentation-status",
-            },
-            {
-              label: "Your Progress",
-              to: "/your-progress",
             },
             {
               label: "Downloads",
@@ -307,23 +389,6 @@ const config: Config = {
             {
               label: "Request Access",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-            },
-          ],
-        },
-        {
-          title: "Operations",
-          items: [
-            {
-              label: "Manufacturing Strategy",
-              to: "/docs/operations/manufacturing-strategy",
-            },
-            {
-              label: "System Architecture",
-              to: "/docs/technical/system-architecture",
-            },
-            {
-              label: "Business Model",
-              to: "/docs/business/business-model",
             },
           ],
         },
