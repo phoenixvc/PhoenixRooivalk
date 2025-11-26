@@ -231,11 +231,11 @@ function addOpportunityDeadline() {
 
 Download calendar events as ICS files for import:
 
-| Calendar                  | Download               |
-| ------------------------- | ---------------------- |
-| Opportunities & Deadlines | [opportunities.ics](#) |
-| Development Milestones    | [development.ics](#)   |
-| Team Meetings             | [meetings.ics](#)      |
+| Calendar                  | Download          |
+| ------------------------- | ----------------- |
+| Opportunities & Deadlines | opportunities.ics |
+| Development Milestones    | development.ics   |
+| Team Meetings             | meetings.ics      |
 
 :::note ICS Files
 

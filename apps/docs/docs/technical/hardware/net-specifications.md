@@ -434,7 +434,6 @@ For reliable deployment:
 ## Related Documents
 
 - [RKV-M Specifications](./rkv-m-specifications.md)
-- [Sensor Fusion Pipeline](../sensors/sensor-fusion.md)
 - [Operations Manual](../../operations/operations-manual.md)
 
 ---
