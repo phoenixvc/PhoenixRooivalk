@@ -29,6 +29,12 @@ const sidebars: SidebarsConfig = {
           id: "phoenix-rooivalk-documentation",
           label: "Documentation Home",
         },
+        {
+          type: "link",
+          label: "📊 Your Progress",
+          href: "/your-progress",
+          description: "Track your learning journey",
+        },
         "resources/documentation-status",
         "executive/executive-summary",
         "technical/glossary",

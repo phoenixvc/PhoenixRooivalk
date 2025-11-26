@@ -225,6 +225,14 @@ const config: Config = {
             },
           ],
         },
+        // Your Progress - compact styled link on right
+        {
+          to: "/your-progress",
+          label: "Progress",
+          position: "right",
+          className: "navbar__link--progress",
+          "aria-label": "Track your learning progress",
+        },
         // GitHub repository link
         {
           href: "https://github.com/JustAGhosT/PhoenixRooivalk",
@@ -315,6 +323,10 @@ const config: Config = {
         {
           title: "Resources",
           items: [
+            {
+              label: "Your Progress",
+              to: "/your-progress",
+            },
             {
               label: "Main Website",
               href: "https://phoenixrooivalk.netlify.app",
