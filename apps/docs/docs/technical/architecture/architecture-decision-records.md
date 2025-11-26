@@ -439,15 +439,14 @@ performance requirements.
 
 ## Development Architecture Decisions
 
-The following ADRs document technical implementation decisions for the development
-infrastructure and tooling.
+The following ADRs document technical implementation decisions for the
+development infrastructure and tooling.
 
 ---
 
 ### ADR-D001: Monorepo Structure with Turborepo
 
-**Date**: 2024-01-15
-**Status**: Accepted
+**Date**: 2024-01-15 **Status**: Accepted
 
 #### Context
 
@@ -463,18 +462,21 @@ package management.
 
 - **Code Sharing**: Shared types, UI components, and utilities across apps
 - **Atomic Changes**: Single PR can update multiple apps simultaneously
-- **Build Performance**: Turborepo provides intelligent caching and parallel execution
+- **Build Performance**: Turborepo provides intelligent caching and parallel
+  execution
 - **Developer Experience**: Single `pnpm install`, unified tooling configuration
 
 #### Consequences
 
 **Positive:**
+
 - Simplified dependency management
 - Faster CI/CD with smart caching
 - Easier refactoring across packages
 - Consistent tooling and linting
 
 **Negative:**
+
 - Larger repository size
 - More complex CI/CD configuration
 - Learning curve for monorepo patterns
@@ -483,12 +485,12 @@ package management.
 
 ### ADR-D002: Dual Blockchain Anchoring (Solana + EtherLink)
 
-**Date**: 2024-01-20
-**Status**: Accepted
+**Date**: 2024-01-20 **Status**: Accepted
 
 #### Context
 
-Need tamper-proof evidence trail for military compliance and legal defensibility.
+Need tamper-proof evidence trail for military compliance and legal
+defensibility.
 
 #### Decision
 
@@ -497,18 +499,22 @@ Implement dual-chain anchoring to both Solana and EtherLink blockchains.
 #### Rationale
 
 - **Redundancy**: Multiple chains provide backup if one fails
-- **Speed vs Cost**: Solana for fast confirmations, EtherLink for Ethereum ecosystem
+- **Speed vs Cost**: Solana for fast confirmations, EtherLink for Ethereum
+  ecosystem
 - **Legal Compliance**: Multiple independent witnesses strengthen legal validity
-- **Cross-Chain Verification**: Independent verification from different consensus mechanisms
+- **Cross-Chain Verification**: Independent verification from different
+  consensus mechanisms
 
 #### Consequences
 
 **Positive:**
+
 - Enhanced tamper-resistance
 - Geographic and technical diversity
 - Compliance with multiple regulatory frameworks
 
 **Negative:**
+
 - Increased operational complexity
 - Higher anchoring costs
 - More complex verification logic
@@ -517,8 +523,7 @@ Implement dual-chain anchoring to both Solana and EtherLink blockchains.
 
 ### ADR-D003: Rust for Backend Services
 
-**Date**: 2024-01-22
-**Status**: Accepted
+**Date**: 2024-01-22 **Status**: Accepted
 
 #### Context
 
@@ -547,8 +552,7 @@ Use Rust with Axum for all backend services and command-line tools.
 
 ### ADR-D004: Next.js for Marketing Site
 
-**Date**: 2024-01-25
-**Status**: Accepted
+**Date**: 2024-01-25 **Status**: Accepted
 
 #### Context
 
@@ -569,8 +573,7 @@ Use Next.js 14 with static export for the marketing website.
 
 ### ADR-D005: SQLite for Outbox Pattern
 
-**Date**: 2024-02-01
-**Status**: Accepted
+**Date**: 2024-02-01 **Status**: Accepted
 
 #### Context
 
@@ -591,8 +594,7 @@ Use SQLite with SQLx for the blockchain outbox pattern.
 
 ### ADR-D006: WASM Threat Simulator with Leptos
 
-**Date**: 2024-02-10
-**Status**: Accepted
+**Date**: 2024-02-10 **Status**: Accepted
 
 #### Context
 
@@ -613,8 +615,7 @@ Build threat simulator in Rust with Leptos, compile to WebAssembly.
 
 ### ADR-D007: Evidence-Based Architecture
 
-**Date**: 2024-02-15
-**Status**: Accepted
+**Date**: 2024-02-15 **Status**: Accepted
 
 #### Context
 
@@ -622,7 +623,8 @@ Core system architecture must support military-grade audit trails.
 
 #### Decision
 
-Design entire system around immutable evidence records with cryptographic proofs.
+Design entire system around immutable evidence records with cryptographic
+proofs.
 
 #### Evidence Model
 
@@ -648,8 +650,7 @@ pub struct ChainTxRef {
 
 ### ADR-D008: TypeScript Shared Packages
 
-**Date**: 2024-03-01
-**Status**: Accepted
+**Date**: 2024-03-01 **Status**: Accepted
 
 #### Context
 
@@ -672,8 +673,7 @@ packages/
 
 ### ADR-D009: Iframe Isolation for WASM
 
-**Date**: 2024-03-05
-**Status**: Accepted
+**Date**: 2024-03-05 **Status**: Accepted
 
 #### Context
 

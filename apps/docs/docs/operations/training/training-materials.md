@@ -567,17 +567,17 @@ technicians, and administrators.
 
 ### DHS sUAS Program Documentation
 
-The **DHS Small Unmanned Aircraft System Program Documentation for Public Safety**
-(BCF-T-G-2, November 2025) provides essential supplementary training guidance that
-complements Phoenix Rooivalk operator certification:
+The **DHS Small Unmanned Aircraft System Program Documentation for Public
+Safety** (BCF-T-G-2, November 2025) provides essential supplementary training
+guidance that complements Phoenix Rooivalk operator certification:
 
 **Key Training Elements**:
 
 - **FAA Part 107 Certification**: Remote Pilot in Command requirements and
   recurrent training
 - **Safety Checklists**: PAVE and IMSAFE frameworks for pre-flight readiness
-- **Aeronautical Decision Making (ADM)**: Priority framework (Aviate → Navigate →
-  Communicate)
+- **Aeronautical Decision Making (ADM)**: Priority framework (Aviate → Navigate
+  → Communicate)
 - **Emergency Procedures**: Lost link, GPS loss, traffic incursion, and flyaway
   protocols
 - **Role-Based Training**: RPIC, Visual Observer, and Air Coordinator
@@ -585,18 +585,18 @@ complements Phoenix Rooivalk operator certification:
 
 **Integration with Phoenix Rooivalk Training**:
 
-| DHS Training Element | Phoenix Rooivalk Level |
-|----------------------|------------------------|
-| Part 107 Certification | Level 1 prerequisite |
-| Safety Checklists | Modules 3 (L1), 1-2 (L2) |
-| Emergency Procedures | Modules 2-3 (L1), 2 (L2) |
-| ADM Framework | All levels |
+| DHS Training Element   | Phoenix Rooivalk Level   |
+| ---------------------- | ------------------------ |
+| Part 107 Certification | Level 1 prerequisite     |
+| Safety Checklists      | Modules 3 (L1), 1-2 (L2) |
+| Emergency Procedures   | Modules 2-3 (L1), 2 (L2) |
+| ADM Framework          | All levels               |
 
 :::tip Recommended Reading
 
-See [sUAS Program Documentation](../../resources/suas-program-documentation.md) for
-comprehensive framework details and integration guidance with Phoenix Rooivalk
-training programs.
+See [sUAS Program Documentation](../../resources/suas-program-documentation.md)
+for comprehensive framework details and integration guidance with Phoenix
+Rooivalk training programs.
 
 :::
 

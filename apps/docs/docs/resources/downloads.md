@@ -11,8 +11,8 @@ materials for Phoenix Rooivalk stakeholders.
 
 :::info Access Levels
 
-Some resources may require authorization. Contact the project administrator
-for access to restricted materials.
+Some resources may require authorization. Contact the project administrator for
+access to restricted materials.
 
 :::
 
@@ -22,20 +22,20 @@ for access to restricted materials.
 
 ### Presentations
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **Investor Pitch Deck** | PDF/PPTX | Full investor presentation | Restricted |
-| **Technical Overview** | PDF | System architecture summary | Public |
-| **Demo Day Slides** | PPTX | Soonami Cohort 8 presentation | Restricted |
-| **One-Pager** | PDF | Executive summary single page | Public |
+| Resource                | Format   | Description                   | Access     |
+| ----------------------- | -------- | ----------------------------- | ---------- |
+| **Investor Pitch Deck** | PDF/PPTX | Full investor presentation    | Restricted |
+| **Technical Overview**  | PDF      | System architecture summary   | Public     |
+| **Demo Day Slides**     | PPTX     | Soonami Cohort 8 presentation | Restricted |
+| **One-Pager**           | PDF      | Executive summary single page | Public     |
 
 ### Documents
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **Executive Summary** | PDF | Investor-ready overview | [View Online](../executive/investor-executive-summary.md) |
-| **12-Month Business Plan** | PDF | Operational roadmap | [View Online](../business/12-month-business-plan.md) |
-| **Early Spec & Q&A** | PDF | Plain-English technical overview | [View Online](../executive/early-development/early-spec-qa.md) |
+| Resource                   | Format | Description                      | Access                                                         |
+| -------------------------- | ------ | -------------------------------- | -------------------------------------------------------------- |
+| **Executive Summary**      | PDF    | Investor-ready overview          | [View Online](../executive/investor-executive-summary.md)      |
+| **12-Month Business Plan** | PDF    | Operational roadmap              | [View Online](../business/12-month-business-plan.md)           |
+| **Early Spec & Q&A**       | PDF    | Plain-English technical overview | [View Online](../executive/early-development/early-spec-qa.md) |
 
 ---
 
@@ -43,21 +43,21 @@ for access to restricted materials.
 
 ### Specifications
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **RKV-M Specifications** | PDF | Interceptor platform specs | [View Online](../technical/hardware/rkv-m-specifications.md) |
-| **Sensor Fusion Architecture** | PDF | Multi-modal sensor integration | [View Online](../technical/sensors/sensor-fusion.md) |
-| **ML Training Plan** | PDF | Model training methodology | [View Online](../technical/ml-training/ml-training-plan.md) |
-| **System Block Diagram** | PNG/SVG | High-level architecture | Restricted |
+| Resource                       | Format  | Description                    | Access                                                       |
+| ------------------------------ | ------- | ------------------------------ | ------------------------------------------------------------ |
+| **RKV-M Specifications**       | PDF     | Interceptor platform specs     | [View Online](../technical/hardware/rkv-m-specifications.md) |
+| **Sensor Fusion Architecture** | PDF     | Multi-modal sensor integration | [View Online](../technical/sensors/sensor-fusion.md)         |
+| **ML Training Plan**           | PDF     | Model training methodology     | [View Online](../technical/ml-training/ml-training-plan.md)  |
+| **System Block Diagram**       | PNG/SVG | High-level architecture        | Restricted                                                   |
 
 ### Datasheets
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **SkySnare Consumer** | PDF | Consumer product datasheet | Coming Soon |
-| **AeroNet Enterprise** | PDF | Enterprise solution datasheet | Coming Soon |
-| **Edge Node Specs** | PDF | NVIDIA Jetson Orin configuration | Coming Soon |
-| **Sensor Suite** | PDF | Detection system specifications | Coming Soon |
+| Resource               | Format | Description                      | Access      |
+| ---------------------- | ------ | -------------------------------- | ----------- |
+| **SkySnare Consumer**  | PDF    | Consumer product datasheet       | Coming Soon |
+| **AeroNet Enterprise** | PDF    | Enterprise solution datasheet    | Coming Soon |
+| **Edge Node Specs**    | PDF    | NVIDIA Jetson Orin configuration | Coming Soon |
+| **Sensor Suite**       | PDF    | Detection system specifications  | Coming Soon |
 
 ---
 
@@ -65,19 +65,19 @@ for access to restricted materials.
 
 ### Application Templates
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **CUAS Sandbox Application** | DOCX | Canada DND application template | [View Draft](../business/applications/cuas-sandbox-2026-application.md) |
-| **SBIR Phase I Template** | DOCX | Standard SBIR proposal format | Coming Soon |
-| **DASA Submission Template** | DOCX | UK DASA proposal format | Coming Soon |
+| Resource                     | Format | Description                     | Access                                                                  |
+| ---------------------------- | ------ | ------------------------------- | ----------------------------------------------------------------------- |
+| **CUAS Sandbox Application** | DOCX   | Canada DND application template | [View Draft](../business/applications/cuas-sandbox-2026-application.md) |
+| **SBIR Phase I Template**    | DOCX   | Standard SBIR proposal format   | Coming Soon                                                             |
+| **DASA Submission Template** | DOCX   | UK DASA proposal format         | Coming Soon                                                             |
 
 ### Operational Templates
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **Mission Planning Checklist** | PDF | Pre-flight checklist | Coming Soon |
-| **Incident Report Form** | DOCX | Post-engagement documentation | Coming Soon |
-| **Maintenance Log** | XLSX | Equipment tracking template | Coming Soon |
+| Resource                       | Format | Description                   | Access      |
+| ------------------------------ | ------ | ----------------------------- | ----------- |
+| **Mission Planning Checklist** | PDF    | Pre-flight checklist          | Coming Soon |
+| **Incident Report Form**       | DOCX   | Post-engagement documentation | Coming Soon |
+| **Maintenance Log**            | XLSX   | Equipment tracking template   | Coming Soon |
 
 ---
 
@@ -87,13 +87,14 @@ for access to restricted materials.
 
 Subscribe to project calendars for automatic sync:
 
-| Calendar | Format | Description | Download |
-|----------|--------|-------------|----------|
-| **Opportunities & Deadlines** | ICS | Funding deadlines and events | [Coming Soon](#) |
-| **Development Milestones** | ICS | Sprint and release schedule | [Coming Soon](#) |
-| **Team Meetings** | ICS | Recurring meeting schedule | [Coming Soon](#) |
+| Calendar                      | Format | Description                  | Download         |
+| ----------------------------- | ------ | ---------------------------- | ---------------- |
+| **Opportunities & Deadlines** | ICS    | Funding deadlines and events | [Coming Soon](#) |
+| **Development Milestones**    | ICS    | Sprint and release schedule  | [Coming Soon](#) |
+| **Team Meetings**             | ICS    | Recurring meeting schedule   | [Coming Soon](#) |
 
-See [Project Calendar](../operations/calendar/project-calendar.md) for subscription instructions.
+See [Project Calendar](../operations/calendar/project-calendar.md) for
+subscription instructions.
 
 ---
 
@@ -101,20 +102,20 @@ See [Project Calendar](../operations/calendar/project-calendar.md) for subscript
 
 ### Standards & Compliance
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **sUAS Program Documentation** | PDF | DHS BCF-T-G-2 guide | [View Online](./suas-program-documentation.md) |
-| **Compliance Framework** | PDF | Regulatory requirements | [View Online](../legal/compliance-framework.md) |
-| **FAA Part 107 Summary** | PDF | Drone operation regulations | External |
-| **ASTM F963 Overview** | PDF | Consumer safety standards | External |
+| Resource                       | Format | Description                 | Access                                          |
+| ------------------------------ | ------ | --------------------------- | ----------------------------------------------- |
+| **sUAS Program Documentation** | PDF    | DHS BCF-T-G-2 guide         | [View Online](./suas-program-documentation.md)  |
+| **Compliance Framework**       | PDF    | Regulatory requirements     | [View Online](../legal/compliance-framework.md) |
+| **FAA Part 107 Summary**       | PDF    | Drone operation regulations | External                                        |
+| **ASTM F963 Overview**         | PDF    | Consumer safety standards   | External                                        |
 
 ### Industry Reports
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **C-UAS Market Analysis** | PDF | Industry landscape | Restricted |
-| **Competitor Matrix** | XLSX | Competitive analysis | Restricted |
-| **Technology Roadmap** | PDF | Industry trends | Restricted |
+| Resource                  | Format | Description          | Access     |
+| ------------------------- | ------ | -------------------- | ---------- |
+| **C-UAS Market Analysis** | PDF    | Industry landscape   | Restricted |
+| **Competitor Matrix**     | XLSX   | Competitive analysis | Restricted |
+| **Technology Roadmap**    | PDF    | Industry trends      | Restricted |
 
 ---
 
@@ -122,20 +123,20 @@ See [Project Calendar](../operations/calendar/project-calendar.md) for subscript
 
 ### Logos & Branding
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **Phoenix Rooivalk Logo** | SVG/PNG | Primary logo files | Coming Soon |
-| **SkySnare Logo** | SVG/PNG | Consumer brand logo | Coming Soon |
-| **AeroNet Logo** | SVG/PNG | Enterprise brand logo | Coming Soon |
-| **Brand Guidelines** | PDF | Usage and style guide | Coming Soon |
+| Resource                  | Format  | Description           | Access      |
+| ------------------------- | ------- | --------------------- | ----------- |
+| **Phoenix Rooivalk Logo** | SVG/PNG | Primary logo files    | Coming Soon |
+| **SkySnare Logo**         | SVG/PNG | Consumer brand logo   | Coming Soon |
+| **AeroNet Logo**          | SVG/PNG | Enterprise brand logo | Coming Soon |
+| **Brand Guidelines**      | PDF     | Usage and style guide | Coming Soon |
 
 ### Images & Diagrams
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
+| Resource                        | Format  | Description               | Access      |
+| ------------------------------- | ------- | ------------------------- | ----------- |
 | **System Architecture Diagram** | PNG/SVG | Technical overview visual | Coming Soon |
-| **Product Renders** | PNG | 3D product visualizations | Coming Soon |
-| **Deployment Scenarios** | PNG | Use case illustrations | Coming Soon |
+| **Product Renders**             | PNG     | 3D product visualizations | Coming Soon |
+| **Deployment Scenarios**        | PNG     | Use case illustrations    | Coming Soon |
 
 ---
 
@@ -143,12 +144,12 @@ See [Project Calendar](../operations/calendar/project-calendar.md) for subscript
 
 ### Demonstrations
 
-| Resource | Duration | Description | Access |
-|----------|----------|-------------|--------|
-| **System Overview** | 3 min | Introduction video | Coming Soon |
-| **Technical Deep Dive** | 15 min | Architecture walkthrough | Restricted |
-| **Demo Day Recording** | 10 min | Soonami presentation | Restricted |
-| **Field Test Footage** | 5 min | Prototype testing | Restricted |
+| Resource                | Duration | Description              | Access      |
+| ----------------------- | -------- | ------------------------ | ----------- |
+| **System Overview**     | 3 min    | Introduction video       | Coming Soon |
+| **Technical Deep Dive** | 15 min   | Architecture walkthrough | Restricted  |
+| **Demo Day Recording**  | 10 min   | Soonami presentation     | Restricted  |
+| **Field Test Footage**  | 5 min    | Prototype testing        | Restricted  |
 
 ---
 
@@ -156,11 +157,11 @@ See [Project Calendar](../operations/calendar/project-calendar.md) for subscript
 
 ### Development Resources
 
-| Resource | Format | Description | Access |
-|----------|--------|-------------|--------|
-| **API Documentation** | HTML | Integration reference | Coming Soon |
-| **SDK Package** | ZIP | Developer toolkit | Restricted |
-| **Simulation Environment** | Docker | Testing sandbox | Restricted |
+| Resource                   | Format | Description           | Access      |
+| -------------------------- | ------ | --------------------- | ----------- |
+| **API Documentation**      | HTML   | Integration reference | Coming Soon |
+| **SDK Package**            | ZIP    | Developer toolkit     | Restricted  |
+| **Simulation Environment** | Docker | Testing sandbox       | Restricted  |
 
 ---
 
@@ -206,17 +207,18 @@ Some materials require a signed Non-Disclosure Agreement:
 
 ### Large Files
 
-Files over 100MB are hosted separately. Contact administrator for access credentials.
+Files over 100MB are hosted separately. Contact administrator for access
+credentials.
 
 ---
 
 ## Version History
 
-| Date | Update | Affected Resources |
-|------|--------|-------------------|
-| Nov 2025 | Initial release | All documents |
-| Dec 2025 | CUAS application draft | Applications |
-| Q1 2026 | Datasheets added | Technical docs |
+| Date     | Update                 | Affected Resources |
+| -------- | ---------------------- | ------------------ |
+| Nov 2025 | Initial release        | All documents      |
+| Dec 2025 | CUAS application draft | Applications       |
+| Q1 2026  | Datasheets added       | Technical docs     |
 
 ---
 
@@ -224,13 +226,13 @@ Files over 100MB are hosted separately. Contact administrator for access credent
 
 For questions about resources or access:
 
-| Type | Contact |
-|------|---------|
-| **General Inquiries** | info@phoenixrooivalk.com |
+| Type                    | Contact                         |
+| ----------------------- | ------------------------------- |
+| **General Inquiries**   | info@phoenixrooivalk.com        |
 | **Technical Documents** | engineering@phoenixrooivalk.com |
-| **Investor Materials** | investors@phoenixrooivalk.com |
+| **Investor Materials**  | investors@phoenixrooivalk.com   |
 
 ---
 
-_Resources are updated regularly. Check back for new materials.
-© 2025 Phoenix Rooivalk. All rights reserved._
+_Resources are updated regularly. Check back for new materials. © 2025 Phoenix
+Rooivalk. All rights reserved._
