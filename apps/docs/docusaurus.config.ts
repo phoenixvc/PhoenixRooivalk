@@ -46,7 +46,9 @@ const config: Config = {
   onBrokenMarkdownLinks: "warn",
   markdown: {
     format: "md",
+    mermaid: true,
   },
+  themes: ["@docusaurus/theme-mermaid"],
   i18n: { defaultLocale: "en", locales: ["en"] },
   presets: [
     [
@@ -55,7 +57,14 @@ const config: Config = {
         docs: {
           routeBasePath: "docs",
           sidebarPath: resolve(__dirname, "./sidebars.ts"),
-          editUrl: undefined,
+          // Enable "Edit this page" links to GitHub
+          editUrl:
+            "https://github.com/JustAGhosT/PhoenixRooivalk/edit/main/apps/docs/",
+          // Show last updated timestamps from git
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
+          // Enable breadcrumbs for navigation
+          breadcrumbs: true,
           remarkPlugins: [],
           rehypePlugins: [],
         },

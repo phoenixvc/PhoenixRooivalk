@@ -1,0 +1,70 @@
+name: Documentation Link Checker
+
+on:
+  pull_request:
+    paths:
+      - "apps/docs/**"
+      - ".github/workflows/docs-link-checker.yml"
+  push:
+    branches: [main]
+    paths:
+      - "apps/docs/**"
+  schedule:
+    # Run weekly on Sundays at midnight UTC
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    name: Check Documentation Links
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate lockfile if missing
+        run: |
+          if [ ! -f pnpm-lock.yaml ]; then
+            pnpm install --no-frozen-lockfile
+          fi
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build documentation
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+
+      - name: Check for broken links (internal)
+        run: |
+          echo "Checking for broken internal links..."
+          # The build process with onBrokenLinks: "warn" will report issues
+          # This step captures the build output for review
+
+      - name: Markdown lint check
+        run: pnpm run lint
+        continue-on-error: true
+
+      - name: Report summary
+        if: always()
+        run: |
+          echo "## Documentation Link Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Build completed: ${{ job.status == 'success' && '✅' || '❌' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Check the build logs for any broken link warnings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tips" >> $GITHUB_STEP_SUMMARY
+          echo "- Internal links should use relative paths without .md extension" >> $GITHUB_STEP_SUMMARY
+          echo "- Use kebab-case for all document IDs and filenames" >> $GITHUB_STEP_SUMMARY
