@@ -13,6 +13,9 @@ import { RAG_CONFIG } from "./indexer";
 
 const db = admin.firestore();
 
+// Configuration constants
+const SEARCH_CONTENT_PREVIEW_LENGTH = 300;
+
 /**
  * Search result interface
  */
@@ -273,7 +276,7 @@ export const searchDocs = functions.https.onCall(async (data, context) => {
         docId: r.docId,
         title: r.title,
         section: r.section,
-        content: r.content.substring(0, 300) + "...",
+        content: r.content.substring(0, SEARCH_CONTENT_PREVIEW_LENGTH) + "...",
         score: Math.round(r.score * 100) / 100,
       })),
     };

@@ -13,6 +13,46 @@ import { searchDocuments, SearchResult } from "./search";
 
 const db = admin.firestore();
 
+// Configuration constants
+const RAG_QUERY_CONFIG = {
+  model: "gpt-4o-mini",
+  maxTokens: 1500,
+  temperature: 0.3,
+  rateLimit: {
+    windowMs: 60 * 60 * 1000, // 1 hour
+    maxRequests: 50, // 50 queries per hour
+  },
+};
+
+const PHOENIX_ROOIVALK_CONTEXT = `Context about Phoenix Rooivalk:
+- Autonomous reusable kinetic interceptor for counter-UAS defense
+- Uses blockchain-verified chain of custody
+- AI-powered targeting with human-in-the-loop options
+- Designed for military and critical infrastructure protection`;
+
+/**
+ * Build system prompt for RAG queries
+ */
+function buildSystemPrompt(responseFormat: "detailed" | "concise"): string {
+  const formatInstruction =
+    responseFormat === "detailed"
+      ? "Provide comprehensive answers with technical details and multiple source citations."
+      : "Provide concise, focused answers. Be brief but accurate.";
+
+  return `You are Phoenix Rooivalk's documentation assistant, an expert on autonomous counter-drone defense systems.
+
+IMPORTANT RULES:
+1. Answer ONLY using information from the provided documentation context
+2. If the context doesn't contain relevant information, say "I don't have specific documentation on that topic"
+3. Always cite your sources using [Source X] notation
+4. Be accurate and technical, but explain complex concepts clearly
+5. If asked about competitors or sensitive topics, refer to the appropriate documentation sections
+
+${PHOENIX_ROOIVALK_CONTEXT}
+
+Response format: ${formatInstruction}`;
+}
+
 /**
  * RAG Response interface
  */
@@ -97,8 +137,7 @@ async function checkRateLimit(
   const doc = await ref.get();
 
   const now = Date.now();
-  const windowMs = 60 * 60 * 1000; // 1 hour
-  const maxRequests = 50; // 50 RAG queries per hour
+  const { windowMs, maxRequests } = RAG_QUERY_CONFIG.rateLimit;
 
   if (doc.exists) {
     const data = doc.data();
@@ -165,27 +204,8 @@ export async function queryWithRAG(
     )
     .join("\n\n---\n\n");
 
-  // Build system prompt
-  const systemPrompt = `You are Phoenix Rooivalk's documentation assistant, an expert on autonomous counter-drone defense systems.
-
-IMPORTANT RULES:
-1. Answer ONLY using information from the provided documentation context
-2. If the context doesn't contain relevant information, say "I don't have specific documentation on that topic"
-3. Always cite your sources using [Source X] notation
-4. Be accurate and technical, but explain complex concepts clearly
-5. If asked about competitors or sensitive topics, refer to the appropriate documentation sections
-
-Context about Phoenix Rooivalk:
-- Autonomous reusable kinetic interceptor for counter-UAS defense
-- Uses blockchain-verified chain of custody
-- AI-powered targeting with human-in-the-loop options
-- Designed for military and critical infrastructure protection
-
-Response format: ${
-    responseFormat === "detailed"
-      ? "Provide comprehensive answers with technical details and multiple source citations."
-      : "Provide concise, focused answers. Be brief but accurate."
-  }`;
+  // Build system prompt using extracted function
+  const systemPrompt = buildSystemPrompt(responseFormat);
 
   // Build messages
   const messages: Array<{
@@ -213,8 +233,8 @@ Please answer based on the documentation above. Cite sources using [Source X] no
 
   // Generate response
   const { content: answer, tokensUsed } = await callOpenAIChat(messages, {
-    temperature: 0.3,
-    maxTokens: 1500,
+    temperature: RAG_QUERY_CONFIG.temperature,
+    maxTokens: RAG_QUERY_CONFIG.maxTokens,
   });
 
   return {
