@@ -1,0 +1,693 @@
+/* ================================================
+   GAMIFICATION STYLES
+   Phoenix Rooivalk Documentation
+   ================================================ */
+
+/* ================================================
+   READING PROGRESS CARD
+   ================================================ */
+
+.reading-progress-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.reading-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.reading-progress-icon {
+  font-size: 1.5rem;
+}
+
+.reading-progress-title {
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+}
+
+.reading-progress-bar-container {
+  height: 8px;
+  background: rgb(51, 65, 85);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.reading-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.reading-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.reading-progress-percentage {
+  font-weight: 600;
+  color: rgb(249, 115, 22);
+}
+
+/* ================================================
+   ACHIEVEMENTS
+   ================================================ */
+
+.achievements-panel {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.achievements-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(51, 65, 85);
+}
+
+.achievements-level {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.achievements-level-icon {
+  font-size: 2rem;
+}
+
+.achievements-level-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+}
+
+.achievements-level-number {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  background: rgb(51, 65, 85);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.achievements-points,
+.achievements-count {
+  display: flex;
+  flex-direction: column;
+}
+
+.achievements-points-value,
+.achievements-count-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(249, 115, 22);
+}
+
+.achievements-points-label,
+.achievements-count-label {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+}
+
+.achievements-category {
+  margin-bottom: 1.5rem;
+}
+
+.achievements-category-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(203, 213, 225);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+/* Achievement Badge */
+.achievement-badge {
+  background: rgb(15, 23, 42);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.achievement-badge--unlocked {
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+.achievement-badge--locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.achievement-badge:hover {
+  transform: translateY(-4px);
+}
+
+.achievement-badge-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-badge-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-badge-rarity {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Rarity colors */
+.achievement-rarity--common {
+  color: rgb(148, 163, 184);
+}
+
+.achievement-rarity--uncommon {
+  color: rgb(34, 197, 94);
+}
+
+.achievement-rarity--rare {
+  color: rgb(59, 130, 246);
+}
+
+.achievement-rarity--epic {
+  color: rgb(168, 85, 247);
+}
+
+.achievement-rarity--legendary {
+  color: rgb(251, 191, 36);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+/* Achievement Notification */
+.achievement-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42));
+  border: 2px solid rgb(249, 115, 22);
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-width: 320px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: achievement-slide-in 0.5s ease-out;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+@keyframes achievement-slide-in {
+  from {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.achievement-notification-content {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.achievement-notification-icon {
+  font-size: 3rem;
+  animation: achievement-bounce 0.5s ease-out 0.3s;
+}
+
+@keyframes achievement-bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.achievement-notification-text {
+  flex: 1;
+}
+
+.achievement-notification-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(249, 115, 22);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-notification-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+}
+
+.achievement-notification-desc {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-notification-points {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(251, 191, 36);
+}
+
+.achievement-notification-rarity {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ================================================
+   DOCUMENTATION JOURNEY
+   ================================================ */
+
+.doc-journey {
+  margin: 2rem 0;
+}
+
+.doc-journey-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.doc-journey-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.5rem;
+}
+
+.doc-journey-subtitle {
+  color: rgb(148, 163, 184);
+  margin-bottom: 1.5rem;
+}
+
+.doc-journey-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.doc-journey-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doc-journey-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(249, 115, 22);
+}
+
+.doc-journey-stat-label {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.doc-journey-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Journey Path Card */
+.journey-path-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.journey-path-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--path-color);
+  opacity: 0.5;
+}
+
+.journey-path-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--path-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.journey-path-card--complete {
+  border-color: rgb(34, 197, 94);
+}
+
+.journey-path-card--complete::before {
+  background: rgb(34, 197, 94);
+  opacity: 1;
+}
+
+.journey-path-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.journey-path-icon {
+  font-size: 2rem;
+}
+
+.journey-path-info {
+  flex: 1;
+}
+
+.journey-path-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin: 0 0 0.25rem 0;
+}
+
+.journey-path-desc {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.journey-path-complete-badge {
+  width: 28px;
+  height: 28px;
+  background: rgb(34, 197, 94);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+
+.journey-path-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.journey-path-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgb(51, 65, 85);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.journey-path-progress-fill {
+  height: 100%;
+  background: var(--path-color);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.journey-path-progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--path-color);
+  min-width: 3rem;
+  text-align: right;
+}
+
+.journey-path-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.journey-path-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  color: rgb(203, 213, 225) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.journey-path-doc:hover {
+  background: rgba(249, 115, 22, 0.1);
+  color: rgb(249, 115, 22) !important;
+}
+
+.journey-path-doc-number {
+  width: 24px;
+  height: 24px;
+  background: rgb(51, 65, 85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.journey-path-doc-title {
+  font-size: 0.875rem;
+}
+
+/* ================================================
+   FEEDBACK WIDGET
+   ================================================ */
+
+.feedback-widget {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 3rem;
+}
+
+.feedback-widget--submitted {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgb(34, 197, 94);
+}
+
+.feedback-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.feedback-question-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgb(51, 65, 85);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 8px;
+  color: rgb(203, 213, 225);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-btn:hover {
+  background: rgb(71, 85, 105);
+}
+
+.feedback-btn--selected {
+  background: rgb(249, 115, 22);
+  border-color: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+}
+
+.feedback-btn--yes:hover:not(.feedback-btn--selected) {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgb(34, 197, 94);
+}
+
+.feedback-btn--no:hover:not(.feedback-btn--selected) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgb(239, 68, 68);
+}
+
+.feedback-btn-icon {
+  font-size: 1.25rem;
+}
+
+.feedback-comment {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(51, 65, 85);
+}
+
+.feedback-comment-label {
+  display: block;
+  font-size: 0.875rem;
+  color: rgb(203, 213, 225);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-comment-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgb(15, 23, 42);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 8px;
+  color: rgb(242, 244, 246);
+  font-size: 0.875rem;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.feedback-comment-input:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+}
+
+.feedback-submit-btn {
+  margin-top: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  background: rgb(249, 115, 22);
+  border: none;
+  border-radius: 8px;
+  color: rgb(15, 23, 42);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-submit-btn:hover {
+  background: rgb(234, 88, 12);
+  transform: translateY(-1px);
+}
+
+.feedback-thanks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.feedback-thanks-icon {
+  width: 24px;
+  height: 24px;
+  background: rgb(34, 197, 94);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.feedback-thanks-text {
+  color: rgb(34, 197, 94);
+  font-weight: 600;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+@media (max-width: 768px) {
+  .achievements-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doc-journey-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-journey-stats {
+    gap: 1.5rem;
+  }
+
+  .achievement-notification {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    min-width: auto;
+  }
+
+  .feedback-question {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-notification {
+    animation: none;
+  }
+
+  .achievement-notification-icon {
+    animation: none;
+  }
+
+  .journey-path-card:hover,
+  .achievement-badge:hover {
+    transform: none;
+  }
+}

@@ -106,6 +106,12 @@ const config: Config = {
           label: "Documentation",
         },
         {
+          to: "/your-progress",
+          label: "Your Progress",
+          position: "left",
+          className: "navbar__link--progress",
+        },
+        {
           type: "dropdown",
           label: "Executive",
           position: "left",
@@ -230,16 +236,20 @@ const config: Config = {
           title: "Resources",
           items: [
             {
+              label: "Your Progress",
+              to: "/your-progress",
+            },
+            {
+              label: "Downloads",
+              to: "/docs/resources/downloads",
+            },
+            {
               label: "GitHub Repository",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
             },
             {
               label: "Request Access",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-            },
-            {
-              label: "Getting Started",
-              to: "/docs",
             },
           ],
         },
