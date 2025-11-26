@@ -27,17 +27,18 @@ comprehensive detection capabilities.
 
 The benchmark dataset for drone-based computer vision from Tianjin University.
 
-| Attribute | Details |
-|-----------|---------|
-| **Source** | AISKYEYE Lab, Tianjin University, China |
-| **Size** | 288 video clips (261,908 frames) + 10,209 static images |
-| **Coverage** | 14 cities, urban/rural, various densities |
-| **Objects** | Pedestrians, vehicles, bicycles, drones |
-| **Tasks** | Detection, tracking, counting |
-| **Format** | Images/videos with bounding box annotations |
-| **License** | Academic use |
+| Attribute    | Details                                                 |
+| ------------ | ------------------------------------------------------- |
+| **Source**   | AISKYEYE Lab, Tianjin University, China                 |
+| **Size**     | 288 video clips (261,908 frames) + 10,209 static images |
+| **Coverage** | 14 cities, urban/rural, various densities               |
+| **Objects**  | Pedestrians, vehicles, bicycles, drones                 |
+| **Tasks**    | Detection, tracking, counting                           |
+| **Format**   | Images/videos with bounding box annotations             |
+| **License**  | Academic use                                            |
 
 **Use Cases:**
+
 - Object detection in images/videos
 - Single and multi-object tracking
 - Crowd counting and density estimation
@@ -49,17 +50,19 @@ The benchmark dataset for drone-based computer vision from Tianjin University.
 
 ### SynDroneVision (Synthetic Dataset)
 
-High-quality synthetic dataset for drone detection, useful for data augmentation.
+High-quality synthetic dataset for drone detection, useful for data
+augmentation.
 
-| Attribute | Details |
-|-----------|---------|
-| **Source** | Academic research (WACV 2025) |
-| **Type** | Synthetic (computer-generated) |
-| **Purpose** | Enhance deep learning model performance |
+| Attribute     | Details                                         |
+| ------------- | ----------------------------------------------- |
+| **Source**    | Academic research (WACV 2025)                   |
+| **Type**      | Synthetic (computer-generated)                  |
+| **Purpose**   | Enhance deep learning model performance         |
 | **Advantage** | Unlimited variations, no collection constraints |
-| **Best Use** | Combined with real-world data for robustness |
+| **Best Use**  | Combined with real-world data for robustness    |
 
 **Key Benefits:**
+
 - Control over environmental conditions
 - Consistent labeling quality
 - Rare scenario generation (e.g., swarm attacks)
@@ -73,15 +76,16 @@ High-quality synthetic dataset for drone detection, useful for data augmentation
 
 Benchmark dataset for deep learning-based drone detection.
 
-| Attribute | Details |
-|-----------|---------|
-| **Source** | IEEE DataPort |
-| **Content** | Aerial and ground-based drone images |
-| **Conditions** | Varying backgrounds, altitudes, distances, lighting |
-| **Format** | YOLO-compatible bounding boxes |
-| **Compatibility** | YOLO, Faster R-CNN, SSD, other architectures |
+| Attribute         | Details                                             |
+| ----------------- | --------------------------------------------------- |
+| **Source**        | IEEE DataPort                                       |
+| **Content**       | Aerial and ground-based drone images                |
+| **Conditions**    | Varying backgrounds, altitudes, distances, lighting |
+| **Format**        | YOLO-compatible bounding boxes                      |
+| **Compatibility** | YOLO, Faster R-CNN, SSD, other architectures        |
 
 **Applications:**
+
 - Airspace monitoring
 - Critical infrastructure protection
 - Airport safety
@@ -95,15 +99,15 @@ Benchmark dataset for deep learning-based drone detection.
 
 Large-scale dataset for Haar Cascade and deep learning training.
 
-| Attribute | Details |
-|-----------|---------|
-| **Size** | 51,446 train + 5,375 test images |
-| **Resolution** | 640x480 RGB |
-| **Annotations** | XML labels (Haar Cascade), COCO format |
-| **Variety** | Different drone types, sizes, scales, environments |
+| Attribute       | Details                                            |
+| --------------- | -------------------------------------------------- |
+| **Size**        | 51,446 train + 5,375 test images                   |
+| **Resolution**  | 640x480 RGB                                        |
+| **Annotations** | XML labels (Haar Cascade), COCO format             |
+| **Variety**     | Different drone types, sizes, scales, environments |
 
-[Hugging Face Dataset](https://huggingface.co/datasets/pathikg/drone-detection-dataset) |
-[GitHub Repository](https://github.com/Maciullo/DroneDetectionDataset)
+[Hugging Face Dataset](https://huggingface.co/datasets/pathikg/drone-detection-dataset)
+| [GitHub Repository](https://github.com/Maciullo/DroneDetectionDataset)
 
 ---
 
@@ -111,14 +115,15 @@ Large-scale dataset for Haar Cascade and deep learning training.
 
 Curated collection of drone detection datasets with various specializations.
 
-| Dataset Type | Use Case |
-|--------------|----------|
-| Fixed-wing UAV | Larger drone detection |
-| Bird vs Drone | Reducing false positives |
-| Mini/Micro drones | Small target detection |
-| Swarm scenarios | Multiple drone tracking |
+| Dataset Type      | Use Case                 |
+| ----------------- | ------------------------ |
+| Fixed-wing UAV    | Larger drone detection   |
+| Bird vs Drone     | Reducing false positives |
+| Mini/Micro drones | Small target detection   |
+| Swarm scenarios   | Multiple drone tracking  |
 
 **Features:**
+
 - Pre-processed and augmented datasets
 - Multiple export formats (YOLO, COCO, TensorFlow)
 - Version control and collaboration
@@ -134,12 +139,12 @@ Curated collection of drone detection datasets with various specializations.
 
 Combined IR, visible, and audio data for comprehensive detection.
 
-| Attribute | Details |
-|-----------|---------|
-| **Modalities** | Infrared, visible spectrum, audio |
+| Attribute        | Details                           |
+| ---------------- | --------------------------------- |
+| **Modalities**   | Infrared, visible spectrum, audio |
 | **Video Labels** | Airplane, Bird, Drone, Helicopter |
-| **Audio Labels** | Drone, Helicopter, Background |
-| **Purpose** | Multi-sensor fusion training |
+| **Audio Labels** | Drone, Helicopter, Background     |
+| **Purpose**      | Multi-sensor fusion training      |
 
 **Key Advantage:** Enables training of fusion models that combine multiple
 detection modalities for improved accuracy.
@@ -150,13 +155,13 @@ detection modalities for improved accuracy.
 
 ### Thermal Drone Detection Considerations
 
-| Factor | Recommendation |
-|--------|----------------|
-| **Temperature Delta** | Collect at various ambient temps |
-| **Motor Heat** | Include both cold start and sustained flight |
-| **Battery Signatures** | Capture LiPo thermal patterns |
-| **Time of Day** | Dawn, day, dusk, night variations |
-| **Weather** | Clear, cloudy, rain, fog conditions |
+| Factor                 | Recommendation                               |
+| ---------------------- | -------------------------------------------- |
+| **Temperature Delta**  | Collect at various ambient temps             |
+| **Motor Heat**         | Include both cold start and sustained flight |
+| **Battery Signatures** | Capture LiPo thermal patterns                |
+| **Time of Day**        | Dawn, day, dusk, night variations            |
+| **Weather**            | Clear, cloudy, rain, fog conditions          |
 
 ---
 
@@ -166,15 +171,16 @@ detection modalities for improved accuracy.
 
 Standard dataset for RF-based drone detection and identification.
 
-| Attribute | Details |
-|-----------|---------|
-| **Source** | Mendeley Data |
-| **Drones** | Parrot Bebop, Parrot AR Drone, DJI Phantom |
-| **Content** | RF signal recordings |
-| **Tools** | LabVIEW, MATLAB, Python scripts |
+| Attribute   | Details                                        |
+| ----------- | ---------------------------------------------- |
+| **Source**  | Mendeley Data                                  |
+| **Drones**  | Parrot Bebop, Parrot AR Drone, DJI Phantom     |
+| **Content** | RF signal recordings                           |
+| **Tools**   | LabVIEW, MATLAB, Python scripts                |
 | **Purpose** | Detection and identification via RF signatures |
 
 **Research Applications:**
+
 - RF fingerprinting
 - Protocol identification
 - Controller-drone link detection
@@ -188,26 +194,27 @@ Standard dataset for RF-based drone detection and identification.
 
 Additional RF dataset for model evaluation.
 
-| Metric | Purpose |
-|--------|---------|
-| Accuracy | Overall correct classifications |
-| Precision | True positive rate |
-| Sensitivity | Detection rate |
-| F1-Score | Balanced performance metric |
+| Metric      | Purpose                         |
+| ----------- | ------------------------------- |
+| Accuracy    | Overall correct classifications |
+| Precision   | True positive rate              |
+| Sensitivity | Detection rate                  |
+| F1-Score    | Balanced performance metric     |
 
 ---
 
 ### RF Data Collection Strategy
 
-| Frequency Band | Drone Types |
-|----------------|-------------|
-| **2.4 GHz** | Consumer drones (DJI, Parrot, etc.) |
-| **5.8 GHz** | FPV video links |
-| **900 MHz** | Long-range control links |
-| **433 MHz** | Some industrial drones |
-| **868/915 MHz** | LoRa-based systems |
+| Frequency Band  | Drone Types                         |
+| --------------- | ----------------------------------- |
+| **2.4 GHz**     | Consumer drones (DJI, Parrot, etc.) |
+| **5.8 GHz**     | FPV video links                     |
+| **900 MHz**     | Long-range control links            |
+| **433 MHz**     | Some industrial drones              |
+| **868/915 MHz** | LoRa-based systems                  |
 
 **Collection Requirements:**
+
 - Software Defined Radio (SDR) hardware
 - Wideband spectrum analyzer
 - Directional antennas for source localization
@@ -221,13 +228,13 @@ Additional RF dataset for model evaluation.
 
 One of the largest open-access UAV audio datasets.
 
-| Attribute | Details |
-|-----------|---------|
-| **Drones** | 15 different models |
-| **Range** | Small toys to Class I UAVs |
-| **Duration** | 8,120 seconds annotated audio |
-| **Model** | CNN trained for 15-class classification |
-| **Accuracy** | 98.7% test accuracy |
+| Attribute    | Details                                 |
+| ------------ | --------------------------------------- |
+| **Drones**   | 15 different models                     |
+| **Range**    | Small toys to Class I UAVs              |
+| **Duration** | 8,120 seconds annotated audio           |
+| **Model**    | CNN trained for 15-class classification |
+| **Accuracy** | 98.7% test accuracy                     |
 
 ---
 
@@ -235,10 +242,10 @@ One of the largest open-access UAV audio datasets.
 
 Acoustic signatures for open-set drone detection.
 
-| Feature | Description |
-|---------|-------------|
-| **Approach** | Acoustic fingerprinting |
-| **Detection** | Known and unknown drone types |
+| Feature         | Description                    |
+| --------------- | ------------------------------ |
+| **Approach**    | Acoustic fingerprinting        |
+| **Detection**   | Known and unknown drone types  |
 | **Online Data** | Continuous learning capability |
 
 [DronePrint Paper](https://dl.acm.org/doi/10.1145/3448115)
@@ -247,16 +254,17 @@ Acoustic signatures for open-set drone detection.
 
 ### Acoustic Data Collection Guidelines
 
-| Factor | Recommendation |
-|--------|----------------|
-| **Microphones** | MEMS arrays for direction finding |
-| **Sample Rate** | 44.1 kHz minimum, 96 kHz preferred |
-| **Distance** | 10m to 500m+ range |
-| **Background** | Urban, rural, industrial environments |
-| **Weather** | Wind affects SNR significantly |
-| **Interference** | Aircraft, vehicles, HVAC systems |
+| Factor           | Recommendation                        |
+| ---------------- | ------------------------------------- |
+| **Microphones**  | MEMS arrays for direction finding     |
+| **Sample Rate**  | 44.1 kHz minimum, 96 kHz preferred    |
+| **Distance**     | 10m to 500m+ range                    |
+| **Background**   | Urban, rural, industrial environments |
+| **Weather**      | Wind affects SNR significantly        |
+| **Interference** | Aircraft, vehicles, HVAC systems      |
 
 **Key Acoustic Features:**
+
 - Rotor blade passing frequency
 - Motor harmonics
 - Propeller tip noise
@@ -268,13 +276,13 @@ Acoustic signatures for open-set drone detection.
 
 ### Multi-Modal Dataset Requirements
 
-| Modality | Primary Use | Limitation |
-|----------|-------------|------------|
-| **Visual** | Classification, tracking | Weather, occlusion |
-| **Thermal** | Night detection | Cost, resolution |
-| **RF** | Early warning, protocol ID | Passive drones, jamming |
-| **Acoustic** | Backup detection | Wind, urban noise |
-| **Radar** | All-weather tracking | Cost, size |
+| Modality     | Primary Use                | Limitation              |
+| ------------ | -------------------------- | ----------------------- |
+| **Visual**   | Classification, tracking   | Weather, occlusion      |
+| **Thermal**  | Night detection            | Cost, resolution        |
+| **RF**       | Early warning, protocol ID | Passive drones, jamming |
+| **Acoustic** | Backup detection           | Wind, urban noise       |
+| **Radar**    | All-weather tracking       | Cost, size              |
 
 ### Fusion Training Strategies
 
@@ -292,23 +300,23 @@ Research shows RF + acoustic fusion provides noise immunity advantages.
 
 ### Benefits of Synthetic Data
 
-| Advantage | Description |
-|-----------|-------------|
-| **Scale** | Unlimited data generation |
-| **Diversity** | Any scenario imaginable |
-| **Labels** | Perfect ground truth |
-| **Safety** | No real-world flight risks |
-| **Cost** | Lower than real collection |
+| Advantage     | Description                |
+| ------------- | -------------------------- |
+| **Scale**     | Unlimited data generation  |
+| **Diversity** | Any scenario imaginable    |
+| **Labels**    | Perfect ground truth       |
+| **Safety**    | No real-world flight risks |
+| **Cost**      | Lower than real collection |
 
 ### Tools for Synthetic Generation
 
-| Tool | Use Case |
-|------|----------|
-| **Unreal Engine** | Photorealistic rendering |
-| **AirSim** | Drone simulation |
-| **Blender** | 3D drone models |
-| **CARLA** | Autonomous systems testing |
-| **GANs** | Augmentation and generation |
+| Tool              | Use Case                    |
+| ----------------- | --------------------------- |
+| **Unreal Engine** | Photorealistic rendering    |
+| **AirSim**        | Drone simulation            |
+| **Blender**       | 3D drone models             |
+| **CARLA**         | Autonomous systems testing  |
+| **GANs**          | Augmentation and generation |
 
 ### GAN-Based Augmentation
 
@@ -323,43 +331,43 @@ scarcity, supporting both binary classification and multi-class identification.
 
 ### Phase 1: Foundational (Months 1-3)
 
-| Task | Priority | Source |
-|------|----------|--------|
-| Download VisDrone | High | Public |
-| Obtain DroneRF | High | Academic |
-| Collect local acoustic | Medium | Internal |
-| Set up synthetic pipeline | Medium | Internal |
+| Task                      | Priority | Source   |
+| ------------------------- | -------- | -------- |
+| Download VisDrone         | High     | Public   |
+| Obtain DroneRF            | High     | Academic |
+| Collect local acoustic    | Medium   | Internal |
+| Set up synthetic pipeline | Medium   | Internal |
 
 ### Phase 2: Expansion (Months 4-6)
 
-| Task | Priority | Source |
-|------|----------|--------|
-| Field thermal collection | High | Internal |
-| RF signature library | High | Internal |
-| Multi-sensor alignment | Medium | Internal |
-| Edge case generation | Medium | Synthetic |
+| Task                     | Priority | Source    |
+| ------------------------ | -------- | --------- |
+| Field thermal collection | High     | Internal  |
+| RF signature library     | High     | Internal  |
+| Multi-sensor alignment   | Medium   | Internal  |
+| Edge case generation     | Medium   | Synthetic |
 
 ### Phase 3: Refinement (Months 7-12)
 
-| Task | Priority | Source |
-|------|----------|--------|
-| Real-world validation | High | Field tests |
-| Adversarial scenarios | High | Red team |
-| Continuous learning | Medium | Deployment |
-| Dataset versioning | Medium | Internal |
+| Task                  | Priority | Source      |
+| --------------------- | -------- | ----------- |
+| Real-world validation | High     | Field tests |
+| Adversarial scenarios | High     | Red team    |
+| Continuous learning   | Medium   | Deployment  |
+| Dataset versioning    | Medium   | Internal    |
 
 ---
 
 ## Challenges and Mitigations
 
-| Challenge | Mitigation |
-|-----------|------------|
-| **Limited drone types** | Synthetic augmentation |
-| **Environmental variety** | Domain randomization |
-| **Annotation quality** | Multi-annotator consensus |
-| **Class imbalance** | Oversampling, weighted loss |
-| **Privacy concerns** | Synthetic data, consent protocols |
-| **Data freshness** | Continuous collection pipeline |
+| Challenge                 | Mitigation                        |
+| ------------------------- | --------------------------------- |
+| **Limited drone types**   | Synthetic augmentation            |
+| **Environmental variety** | Domain randomization              |
+| **Annotation quality**    | Multi-annotator consensus         |
+| **Class imbalance**       | Oversampling, weighted loss       |
+| **Privacy concerns**      | Synthetic data, consent protocols |
+| **Data freshness**        | Continuous collection pipeline    |
 
 ---
 
@@ -367,12 +375,12 @@ scarcity, supporting both binary classification and multi-class identification.
 
 ### Data Collection Compliance
 
-| Jurisdiction | Consideration |
-|--------------|---------------|
-| **USA** | FAA Part 107, privacy laws |
-| **EU** | GDPR for personal data |
-| **Canada** | RPAS regulations |
-| **General** | Property rights, consent |
+| Jurisdiction | Consideration              |
+| ------------ | -------------------------- |
+| **USA**      | FAA Part 107, privacy laws |
+| **EU**       | GDPR for personal data     |
+| **Canada**   | RPAS regulations           |
+| **General**  | Property rights, consent   |
 
 ### Responsible AI Practices
 
@@ -388,29 +396,28 @@ scarcity, supporting both binary classification and multi-class identification.
 
 ### Dataset Repositories
 
-| Repository | Focus |
-|------------|-------|
-| [Roboflow Universe](https://universe.roboflow.com) | Vision datasets |
-| [Hugging Face](https://huggingface.co/datasets) | ML datasets |
-| [IEEE DataPort](https://ieee-dataport.org) | Research datasets |
-| [Kaggle](https://www.kaggle.com/datasets) | Community datasets |
-| [Papers With Code](https://paperswithcode.com) | Benchmark datasets |
+| Repository                                         | Focus              |
+| -------------------------------------------------- | ------------------ |
+| [Roboflow Universe](https://universe.roboflow.com) | Vision datasets    |
+| [Hugging Face](https://huggingface.co/datasets)    | ML datasets        |
+| [IEEE DataPort](https://ieee-dataport.org)         | Research datasets  |
+| [Kaggle](https://www.kaggle.com/datasets)          | Community datasets |
+| [Papers With Code](https://paperswithcode.com)     | Benchmark datasets |
 
 ### Annotation Tools
 
-| Tool | Use Case |
-|------|----------|
-| **CVAT** | Video/image annotation |
-| **Label Studio** | Multi-modal labeling |
-| **Roboflow** | Automated annotation |
-| **VGG Image Annotator** | Simple bounding boxes |
+| Tool                    | Use Case               |
+| ----------------------- | ---------------------- |
+| **CVAT**                | Video/image annotation |
+| **Label Studio**        | Multi-modal labeling   |
+| **Roboflow**            | Automated annotation   |
+| **VGG Image Annotator** | Simple bounding boxes  |
 
 ---
 
 ## Related Documents
 
 - [ML Training Plan](./ml-training-plan.md)
-- [Sensor Fusion Pipeline](../sensors/sensor-fusion.md)
 - [Technical Architecture](../architecture/technical-architecture.md)
 
 ---
