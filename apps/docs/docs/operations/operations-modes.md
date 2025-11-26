@@ -1,3 +1,15 @@
+---
+id: operations-modes
+title: Phoenix Rooivalk Operations Modes
+sidebar_label: Phoenix Rooivalk Operations
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - operations
+  - deployment
+---
+
 # Phoenix Rooivalk Operations Modes
 
 ## Executive Summary

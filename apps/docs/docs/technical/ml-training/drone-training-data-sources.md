@@ -2,6 +2,12 @@
 id: drone-training-data-sources
 title: Drone Training Data Acquisition Guide
 sidebar_label: Training Data Sources
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - counter-uas
 ---
 
 ## Overview

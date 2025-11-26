@@ -2,6 +2,12 @@
 id: phoenix-rooivalk-pitch-deck
 title: Phoenix Rooivalk Pitch Deck
 sidebar_label: Phoenix Rooivalk Pitch Deck
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 import PitchDeckSlide from "@site/src/components/mdx/PitchDeck"; import

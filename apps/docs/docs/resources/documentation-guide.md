@@ -3,11 +3,17 @@ id: documentation-guide
 title: Documentation Guide
 sidebar_label: Documentation Guide
 description: How to write and format documentation for Phoenix Rooivalk
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - counter-uas
 ---
 
 # Documentation Guide
 
-This guide covers how to write effective documentation for Phoenix Rooivalk, including formatting, diagrams, and best practices.
+This guide covers how to write effective documentation for Phoenix Rooivalk,
+including formatting, diagrams, and best practices.
 
 ---
 
@@ -15,36 +21,27 @@ This guide covers how to write effective documentation for Phoenix Rooivalk, inc
 
 Use admonitions to highlight important information:
 
-:::note
-This is a **note** admonition. Use it for general information that readers should be aware of.
+:::note This is a **note** admonition. Use it for general information that
+readers should be aware of. :::
+
+:::tip This is a **tip** admonition. Use it for helpful suggestions and best
+practices. :::
+
+:::info This is an **info** admonition. Use it for supplementary information.
 :::
 
-:::tip
-This is a **tip** admonition. Use it for helpful suggestions and best practices.
-:::
+:::caution This is a **caution** admonition. Use it for warnings about potential
+issues. :::
 
-:::info
-This is an **info** admonition. Use it for supplementary information.
-:::
-
-:::caution
-This is a **caution** admonition. Use it for warnings about potential issues.
-:::
-
-:::danger
-This is a **danger** admonition. Use it for critical warnings about security or safety.
-:::
+:::danger This is a **danger** admonition. Use it for critical warnings about
+security or safety. :::
 
 ### Syntax
 
 ```markdown
-:::note
-Your note content here.
-:::
+:::note Your note content here. :::
 
-:::tip Custom Title
-You can add custom titles to admonitions.
-:::
+:::tip Custom Title You can add custom titles to admonitions. :::
 ```
 
 ---
@@ -165,22 +162,63 @@ description: Brief description for SEO
 
 ### Required Fields
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| `id` | Unique identifier (kebab-case) | `technical-architecture` |
-| `title` | Full document title | `Technical Architecture` |
-| `sidebar_label` | Short label for sidebar | `Architecture` |
+| Field           | Description                    | Example                  |
+| --------------- | ------------------------------ | ------------------------ |
+| `id`            | Unique identifier (kebab-case) | `technical-architecture` |
+| `title`         | Full document title            | `Technical Architecture` |
+| `sidebar_label` | Short label for sidebar        | `Architecture`           |
 
 ### Optional Fields
 
-| Field | Description |
-|-------|-------------|
-| `description` | SEO meta description |
-| `keywords` | SEO keywords array |
-| `image` | Social sharing image |
-| `hide_title` | Hide the H1 title |
-| `hide_table_of_contents` | Hide ToC |
-| `draft` | Mark as draft (won't build) |
+| Field                    | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| `description`            | SEO meta description                                                 |
+| `keywords`               | SEO keywords array                                                   |
+| `image`                  | Social sharing image                                                 |
+| `hide_title`             | Hide the H1 title                                                    |
+| `hide_table_of_contents` | Hide ToC                                                             |
+| `draft`                  | Mark as draft (won't build)                                          |
+| `difficulty`             | Content difficulty: `beginner`, `intermediate`, `advanced`, `expert` |
+| `estimated_reading_time` | Estimated reading time in minutes (number)                           |
+| `points`                 | Base points awarded for completion (default: 10)                     |
+| `tags`                   | Array of topic tags for categorization                               |
+| `prerequisites`          | Array of doc IDs that should be read first                           |
+
+### Gamification Fields
+
+The documentation system includes a gamification feature that tracks reading
+progress and awards achievements. Use these fields to enhance the learning
+experience:
+
+**Difficulty Levels:**
+
+- `beginner` - Introductory content, no prior knowledge required (10 points)
+- `intermediate` - Requires basic understanding (15 points)
+- `advanced` - Assumes strong technical background (25 points)
+- `expert` - Deep technical or specialized knowledge (50 points)
+
+**Example with Gamification:**
+
+```yaml
+---
+id: technical-architecture
+title: Technical Architecture
+sidebar_label: Architecture
+description: Deep dive into Phoenix Rooivalk's system architecture
+difficulty: advanced
+estimated_reading_time: 15
+points: 25
+tags: [architecture, technical, edge-computing, blockchain]
+prerequisites: [system-overview, executive-summary]
+---
+```
+
+**Benefits:**
+
+- Users see recommended reading order via prerequisites
+- Progress tracking awards appropriate points based on difficulty
+- Tags enable topic-based learning paths
+- Reading time helps users plan their learning sessions
 
 ---
 
@@ -229,11 +267,11 @@ npm run serve
 
 ## Tables
 
-| Feature | Specification | Status |
-|---------|--------------|--------|
-| AI Processing | 275 TOPS | Active |
-| Response Time | 120-195ms | Verified |
-| Detection Accuracy | 99.7% | Validated |
+| Feature            | Specification | Status    |
+| ------------------ | ------------- | --------- |
+| AI Processing      | 275 TOPS      | Active    |
+| Response Time      | 120-195ms     | Verified  |
+| Detection Accuracy | 99.7%         | Validated |
 
 ---
 
@@ -248,4 +286,4 @@ npm run serve
 
 ---
 
-*Need help? Contact the documentation team or submit a PR.*
+_Need help? Contact the documentation team or submit a PR._

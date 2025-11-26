@@ -2,6 +2,14 @@
 id: implementation-roadmap
 title: Implementation Roadmap
 sidebar_label: Implementation Roadmap
+difficulty: expert
+estimated_reading_time: 6
+points: 50
+tags:
+  - technical
+  - counter-uas
+prerequisites:
+  - blockchain-architecture
 ---
 
 ## Executive Summary

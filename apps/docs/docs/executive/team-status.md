@@ -2,6 +2,12 @@
 id: team-status
 title: Team Status
 sidebar_label: Team Status
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Project Status Overview

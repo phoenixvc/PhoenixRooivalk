@@ -2,6 +2,11 @@
 id: downloads
 title: Resources & Downloads
 sidebar_label: Downloads
+difficulty: beginner
+estimated_reading_time: 4
+points: 10
+tags:
+  - counter-uas
 ---
 
 ## Overview

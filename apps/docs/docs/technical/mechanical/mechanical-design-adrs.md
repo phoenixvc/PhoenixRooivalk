@@ -1,3 +1,15 @@
+---
+id: mechanical-design-adrs
+title: Phoenix Rooivalk Mechanical Design - Architecture Decision Records
+sidebar_label: Phoenix Rooivalk Mechanical
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - hardware
+---
+
 # Phoenix Rooivalk Mechanical Design - Architecture Decision Records
 
 ## Executive Summary

@@ -2,6 +2,12 @@
 id: inst-cross-cutting
 title: "Research: Cross-Cutting Concerns"
 sidebar_label: "Research: Cross-Cutting Concerns"
+difficulty: advanced
+estimated_reading_time: 11
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Cross-Cutting Technical Concerns

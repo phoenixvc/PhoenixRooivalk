@@ -2,6 +2,13 @@
 id: reusable-systems-architecture
 title: REUSABLE SYSTEMS ARCHITECTURE
 sidebar_label: REUSABLE SYSTEMS ARCHITECTURE
+difficulty: expert
+estimated_reading_time: 5
+points: 50
+tags:
+  - technical
+  - architecture
+  - counter-uas
 ---
 
 ## Overview

@@ -2,6 +2,13 @@
 id: technical-architecture
 title: Technical Architecture
 sidebar_label: Technical Architecture
+difficulty: expert
+estimated_reading_time: 9
+points: 50
+tags:
+  - technical
+  - architecture
+  - counter-uas
 ---
 
 ## System Architecture Overview

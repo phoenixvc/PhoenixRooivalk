@@ -2,6 +2,12 @@
 id: system-overview
 title: System Overview
 sidebar_label: System Overview
+difficulty: intermediate
+estimated_reading_time: 5
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Executive Summary

@@ -2,6 +2,13 @@
 id: ml-training-plan
 title: ML Model Training & Fine-Tuning Plan
 sidebar_label: ML Training Plan
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - technical
+  - ai
+  - counter-uas
 ---
 
 ## Executive Summary

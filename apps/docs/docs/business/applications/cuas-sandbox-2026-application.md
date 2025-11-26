@@ -2,6 +2,14 @@
 id: cuas-sandbox-2026-application
 title: CUAS Sandbox 2026 Application Draft
 sidebar_label: CUAS 2026 Application
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Application Status

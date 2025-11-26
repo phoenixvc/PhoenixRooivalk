@@ -2,6 +2,14 @@
 id: influencers-and-contacts
 title: Influencers, Media & Key Contacts
 sidebar_label: Influencers & Contacts
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Overview

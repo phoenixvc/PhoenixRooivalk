@@ -2,6 +2,14 @@
 id: dod-proposal-template
 title: DoD Proposal Template
 sidebar_label: DoD Proposal Template
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

@@ -2,6 +2,12 @@
 id: inst-safety-certification
 title: "Research: Safety & Certification"
 sidebar_label: "Research: Safety & Certification"
+difficulty: advanced
+estimated_reading_time: 11
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Safety, Reliability, Certification and Regulatory Standards

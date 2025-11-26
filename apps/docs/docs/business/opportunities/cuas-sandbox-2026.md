@@ -2,6 +2,14 @@
 id: cuas-sandbox-2026
 title: Canada CUAS Sandbox 2026 Opportunity
 sidebar_label: CUAS Sandbox 2026
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Program Overview

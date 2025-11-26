@@ -2,6 +2,12 @@
 id: operations-manual
 title: Operations Manual
 sidebar_label: Operations Manual
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - operations
+  - counter-uas
 ---
 
 ## Executive Summary

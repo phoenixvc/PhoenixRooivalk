@@ -2,6 +2,12 @@
 id: inst-airframe-design
 title: "Research: Airframe Design & Aerodynamics"
 sidebar_label: "Research: Airframe Design & Aerodynamics"
+difficulty: advanced
+estimated_reading_time: 16
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Airframe Design and Aerodynamics

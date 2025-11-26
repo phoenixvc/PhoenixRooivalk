@@ -2,6 +2,12 @@
 id: investor-executive-summary
 title: Investor Executive Summary
 sidebar_label: Investor Executive Summary
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Phoenix Rooivalk: Dual-Brand Platform Strategy

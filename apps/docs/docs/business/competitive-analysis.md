@@ -2,6 +2,14 @@
 id: competitive-analysis
 title: Competitive Analysis
 sidebar_label: Competitive Analysis
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Executive Summary

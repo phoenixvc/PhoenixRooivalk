@@ -3,11 +3,15 @@ id: changelog
 title: Changelog & Release Notes
 sidebar_label: Changelog
 description: Track all updates, improvements, and changes to Phoenix Rooivalk
+difficulty: beginner
+estimated_reading_time: 1
+points: 10
 ---
 
 # Changelog & Release Notes
 
-Stay up to date with the latest changes, improvements, and releases for Phoenix Rooivalk.
+Stay up to date with the latest changes, improvements, and releases for Phoenix
+Rooivalk.
 
 ---
 
@@ -84,9 +88,12 @@ Stay up to date with the latest changes, improvements, and releases for Phoenix 
 Found an issue or want to suggest an improvement?
 
 1. Use the **"Edit this page"** link at the bottom of any document
-2. Submit a pull request on [GitHub](https://github.com/JustAGhosT/PhoenixRooivalk)
-3. Report issues in the [issue tracker](https://github.com/JustAGhosT/PhoenixRooivalk/issues)
+2. Submit a pull request on
+   [GitHub](https://github.com/JustAGhosT/PhoenixRooivalk)
+3. Report issues in the
+   [issue tracker](https://github.com/JustAGhosT/PhoenixRooivalk/issues)
 
 ---
 
-*For the latest updates, watch the [GitHub repository](https://github.com/JustAGhosT/PhoenixRooivalk).*
+_For the latest updates, watch the
+[GitHub repository](https://github.com/JustAGhosT/PhoenixRooivalk)._

@@ -1,3 +1,15 @@
+---
+id: training-materials
+title: Phoenix Rooivalk Training Materials
+sidebar_label: Phoenix Rooivalk Training
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - operations
+  - ai
+---
+
 # Phoenix Rooivalk Training Materials
 
 ## Executive Summary

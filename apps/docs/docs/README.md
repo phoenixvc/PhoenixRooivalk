@@ -1,9 +1,15 @@
 ---
 id: phoenix-rooivalk-documentation
 title: Welcome to Phoenix Rooivalk Documentation
-sidebar_label: 🏠 Home
+sidebar_label: "\U0001F3E0 Home"
 slug: /
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+- counter-uas
 ---
+
 
 <div className="docs-readme-hero">
   <h1 className="docs-readme-title">

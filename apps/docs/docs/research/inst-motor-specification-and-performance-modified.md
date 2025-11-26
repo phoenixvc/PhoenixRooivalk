@@ -2,6 +2,12 @@
 id: inst-motor-specs
 title: "Research: Motor Specifications"
 sidebar_label: "Research: Motor Specifications"
+difficulty: advanced
+estimated_reading_time: 16
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Motor Specification and Performance Analysis

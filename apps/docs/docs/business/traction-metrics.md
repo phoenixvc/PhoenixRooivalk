@@ -2,6 +2,14 @@
 id: traction-metrics
 title: Traction Metrics
 sidebar_label: Traction Metrics
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose
