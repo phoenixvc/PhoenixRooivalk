@@ -439,16 +439,16 @@ export default function DocsLanding(): React.ReactElement {
           </div>
 
           <div className="categories-grid">
-            {categories.map((category, idx) => (
-              <div key={idx} className="category-card">
+            {categories.map((category) => (
+              <div key={category.title} className="category-card">
                 <div className="category-header">
                   <div className="category-emoji">{category.emoji}</div>
                   <h2 className="category-title">{category.title}</h2>
                 </div>
                 <p className="category-description">{category.description}</p>
                 <ul className="category-links">
-                  {category.links.map((link, linkIdx) => (
-                    <li key={linkIdx}>
+                  {category.links.map((link) => (
+                    <li key={link.to}>
                       <Link to={link.to} className="category-link">
                         {link.label}
                       </Link>
