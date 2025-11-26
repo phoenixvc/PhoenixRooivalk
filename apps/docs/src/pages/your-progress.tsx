@@ -4,6 +4,7 @@ import {
   ReadingProgressCard,
   AchievementsPanel,
   DocJourney,
+  UserProfile,
 } from "../components/Gamification";
 
 import "../css/gamification.css";
@@ -45,6 +46,13 @@ export default function YourProgress(): React.ReactElement {
                 Rooivalk documentation
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Cloud Sync Section */}
+        <div className="row margin-bottom--lg">
+          <div className="col col--8 col--offset-2">
+            <UserProfile />
           </div>
         </div>
 

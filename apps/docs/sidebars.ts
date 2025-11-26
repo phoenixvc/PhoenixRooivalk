@@ -276,6 +276,7 @@ const sidebars: SidebarsConfig = {
       items: [
         "resources/downloads",
         "resources/suas-program-documentation",
+        "resources/cloud-sync-setup",
         "resources/changelog",
         "resources/documentation-guide",
       ],
