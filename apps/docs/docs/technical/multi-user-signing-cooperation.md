@@ -2,6 +2,11 @@
 id: multi-user-signing-cooperation
 title: Multi-User Signing and Cooperation System
 sidebar_label: Multi-User Signing & Cooperation
+difficulty: advanced
+estimated_reading_time: 10
+points: 25
+tags:
+  - technical
 ---
 
 ## Overview

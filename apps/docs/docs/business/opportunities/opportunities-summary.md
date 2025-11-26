@@ -2,6 +2,14 @@
 id: opportunities-summary
 title: Funding Opportunities Summary
 sidebar_label: Opportunities Summary
+difficulty: intermediate
+estimated_reading_time: 28
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Overview

@@ -2,6 +2,16 @@
 id: blockchain-implementation-guide
 title: Blockchain Implementation Guide
 sidebar_label: Blockchain Implementation Guide
+difficulty: expert
+estimated_reading_time: 7
+points: 50
+tags:
+  - technical
+  - blockchain
+  - counter-uas
+prerequisites:
+  - blockchain-architecture
+  - blockchain-guide
 ---
 
 ## Executive Summary

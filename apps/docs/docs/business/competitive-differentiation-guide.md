@@ -2,6 +2,14 @@
 id: competitive-differentiation-guide
 title: Competitive Differentiation Guide
 sidebar_label: Competitive Differentiation Guide
+difficulty: intermediate
+estimated_reading_time: 6
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

@@ -5,6 +5,13 @@ sidebar_label: Investment Phases
 description:
   Detailed breakdown of Phoenix Rooivalk investment phases, milestones, and
   deliverables
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - executive
+  - investment
+  - counter-uas
 ---
 
 # Investment Phases Mapping

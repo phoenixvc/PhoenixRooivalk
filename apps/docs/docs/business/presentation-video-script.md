@@ -2,6 +2,14 @@
 id: presentation-video-script
 title: Presentation Video Script
 sidebar_label: Presentation Video Script
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

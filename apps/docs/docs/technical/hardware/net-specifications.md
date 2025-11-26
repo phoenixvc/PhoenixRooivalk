@@ -2,6 +2,12 @@
 id: net-specifications
 title: Capture Net Specifications
 sidebar_label: Net Specifications
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - counter-uas
 ---
 
 ## Overview

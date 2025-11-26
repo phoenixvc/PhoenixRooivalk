@@ -1,3 +1,15 @@
+---
+id: system-architecture-diagrams
+title: PhoenixRooivalk System Architecture Diagrams
+sidebar_label: PhoenixRooivalk System Architecture
+difficulty: expert
+estimated_reading_time: 3
+points: 50
+tags:
+  - visual-elements
+  - architecture
+---
+
 # PhoenixRooivalk System Architecture Diagrams
 
 ## Overview

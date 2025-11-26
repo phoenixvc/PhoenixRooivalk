@@ -2,6 +2,12 @@
 id: phoenix-rooivalk-technical-whitepaper
 title: Phoenix Rooivalk Technical Whitepaper
 sidebar_label: Phoenix Rooivalk Technical Whitepaper
+difficulty: expert
+estimated_reading_time: 13
+points: 50
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Revolutionary SAE Level 4 Autonomous Counter-UAS Defense Platform

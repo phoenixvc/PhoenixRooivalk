@@ -2,6 +2,15 @@
 id: integration-guide
 title: Integration Guide
 sidebar_label: Integration Guide
+difficulty: advanced
+estimated_reading_time: 9
+points: 25
+tags:
+  - technical
+  - integration
+  - counter-uas
+prerequisites:
+  - technical-architecture
 ---
 
 ## Executive Summary

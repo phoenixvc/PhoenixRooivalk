@@ -1,3 +1,14 @@
+---
+id: threatsimulator-enhancements
+title: ThreatSimulator Drone Game Enhancements Documentation
+sidebar_label: ThreatSimulator Drone Game
+difficulty: advanced
+estimated_reading_time: 3
+points: 25
+tags:
+  - technical
+---
+
 # ThreatSimulator Drone Game Enhancements Documentation
 
 ## Overview

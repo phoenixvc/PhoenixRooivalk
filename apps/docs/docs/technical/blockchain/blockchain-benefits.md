@@ -2,6 +2,15 @@
 id: blockchain-benefits
 title: Blockchain Benefits
 sidebar_label: Blockchain Benefits
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - blockchain
+  - counter-uas
+prerequisites:
+  - blockchain-architecture
 ---
 
 # Phoenix Rooivalk Blockchain Benefits

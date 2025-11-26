@@ -2,6 +2,14 @@
 id: technical-requirements-checklist
 title: Technical Requirements Checklist
 sidebar_label: Technical Requirements Checklist
+difficulty: advanced
+estimated_reading_time: 5
+points: 25
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

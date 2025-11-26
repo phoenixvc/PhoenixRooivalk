@@ -2,6 +2,15 @@
 id: architecture-decision-records
 title: Architecture Decision Records
 sidebar_label: Architecture Decision Records
+difficulty: expert
+estimated_reading_time: 11
+points: 50
+tags:
+  - technical
+  - architecture
+  - counter-uas
+prerequisites:
+  - system-overview
 ---
 
 ## Executive Summary

@@ -2,6 +2,12 @@
 id: inst-combined-systems
 title: "Research: Combined Systems"
 sidebar_label: "Research: Combined Systems"
+difficulty: advanced
+estimated_reading_time: 11
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Combined Propulsion, Motor, Airframe and Power Systems

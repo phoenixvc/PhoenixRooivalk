@@ -2,6 +2,14 @@
 id: discovery-questionnaire
 title: Customer Discovery Questionnaire
 sidebar_label: Customer Discovery Questionnaire
+difficulty: intermediate
+estimated_reading_time: 5
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Purpose

@@ -2,6 +2,12 @@
 id: inst-maintenance-ops
 title: "Research: Maintenance & Operations"
 sidebar_label: "Research: Maintenance & Operations"
+difficulty: advanced
+estimated_reading_time: 10
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Complete Research Instruction: Maintenance, Sustainment, Manufacturing, Payload Environment and Operations

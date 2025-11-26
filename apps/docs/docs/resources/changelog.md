@@ -3,6 +3,9 @@ id: changelog
 title: Changelog & Release Notes
 sidebar_label: Changelog
 description: Track all updates, improvements, and changes to Phoenix Rooivalk
+difficulty: beginner
+estimated_reading_time: 1
+points: 10
 ---
 
 # Changelog & Release Notes

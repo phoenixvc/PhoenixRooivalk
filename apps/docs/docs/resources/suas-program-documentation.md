@@ -2,6 +2,11 @@
 id: suas-program-documentation
 title: sUAS Program Documentation for Public Safety
 sidebar_label: sUAS Program Documentation
+difficulty: beginner
+estimated_reading_time: 5
+points: 10
+tags:
+  - counter-uas
 ---
 
 ## Document Overview

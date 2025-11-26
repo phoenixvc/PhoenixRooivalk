@@ -2,6 +2,14 @@
 id: roi-analysis
 title: ROI Analysis
 sidebar_label: ROI Analysis
+difficulty: intermediate
+estimated_reading_time: 6
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Executive Summary

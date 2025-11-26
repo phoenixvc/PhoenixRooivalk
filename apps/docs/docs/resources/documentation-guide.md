@@ -3,6 +3,11 @@ id: documentation-guide
 title: Documentation Guide
 sidebar_label: Documentation Guide
 description: How to write and format documentation for Phoenix Rooivalk
+difficulty: intermediate
+estimated_reading_time: 4
+points: 15
+tags:
+  - counter-uas
 ---
 
 # Documentation Guide
@@ -165,14 +170,55 @@ description: Brief description for SEO
 
 ### Optional Fields
 
-| Field                    | Description                 |
-| ------------------------ | --------------------------- |
-| `description`            | SEO meta description        |
-| `keywords`               | SEO keywords array          |
-| `image`                  | Social sharing image        |
-| `hide_title`             | Hide the H1 title           |
-| `hide_table_of_contents` | Hide ToC                    |
-| `draft`                  | Mark as draft (won't build) |
+| Field                    | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| `description`            | SEO meta description                                                 |
+| `keywords`               | SEO keywords array                                                   |
+| `image`                  | Social sharing image                                                 |
+| `hide_title`             | Hide the H1 title                                                    |
+| `hide_table_of_contents` | Hide ToC                                                             |
+| `draft`                  | Mark as draft (won't build)                                          |
+| `difficulty`             | Content difficulty: `beginner`, `intermediate`, `advanced`, `expert` |
+| `estimated_reading_time` | Estimated reading time in minutes (number)                           |
+| `points`                 | Base points awarded for completion (default: 10)                     |
+| `tags`                   | Array of topic tags for categorization                               |
+| `prerequisites`          | Array of doc IDs that should be read first                           |
+
+### Gamification Fields
+
+The documentation system includes a gamification feature that tracks reading
+progress and awards achievements. Use these fields to enhance the learning
+experience:
+
+**Difficulty Levels:**
+
+- `beginner` - Introductory content, no prior knowledge required (10 points)
+- `intermediate` - Requires basic understanding (15 points)
+- `advanced` - Assumes strong technical background (25 points)
+- `expert` - Deep technical or specialized knowledge (50 points)
+
+**Example with Gamification:**
+
+```yaml
+---
+id: technical-architecture
+title: Technical Architecture
+sidebar_label: Architecture
+description: Deep dive into Phoenix Rooivalk's system architecture
+difficulty: advanced
+estimated_reading_time: 15
+points: 25
+tags: [architecture, technical, edge-computing, blockchain]
+prerequisites: [system-overview, executive-summary]
+---
+```
+
+**Benefits:**
+
+- Users see recommended reading order via prerequisites
+- Progress tracking awards appropriate points based on difficulty
+- Tags enable topic-based learning paths
+- Reading time helps users plan their learning sessions
 
 ---
 

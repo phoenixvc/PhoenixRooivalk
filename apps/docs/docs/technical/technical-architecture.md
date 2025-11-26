@@ -1,3 +1,15 @@
+---
+id: technical-architecture
+title: Phoenix Rooivalk Technical Architecture
+sidebar_label: Phoenix Rooivalk Technical
+difficulty: expert
+estimated_reading_time: 2
+points: 50
+tags:
+  - technical
+  - architecture
+---
+
 # Phoenix Rooivalk Technical Architecture
 
 ## System Architecture Overview

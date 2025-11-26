@@ -2,6 +2,12 @@
 id: glossary
 title: Glossary
 sidebar_label: Glossary
+difficulty: beginner
+estimated_reading_time: 10
+points: 10
+tags:
+  - technical
+  - counter-uas
 ---
 
 ## Executive Summary

@@ -1,3 +1,16 @@
+---
+id: sensor-technologies-comprehensive-analysis
+title:
+  "Military Drone Sensor Technologies: Comprehensive Analysis of Current and
+  Emerging Systems"
+sidebar_label: Military Drone Sensor
+difficulty: advanced
+estimated_reading_time: 41
+points: 25
+tags:
+  - research
+---
+
 # Military Drone Sensor Technologies: Comprehensive Analysis of Current and Emerging Systems
 
 **Military drones now deploy sensors spanning the electromagnetic spectrum—from

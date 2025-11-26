@@ -2,6 +2,13 @@
 id: compliance-framework
 title: Compliance Framework
 sidebar_label: Compliance Framework
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - legal
+  - compliance
+  - counter-uas
 ---
 
 ## Executive Summary

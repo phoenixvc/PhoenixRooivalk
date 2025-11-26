@@ -2,6 +2,12 @@
 id: phoenix-rooivalk-litepaper
 title: Phoenix Rooivalk Litepaper
 sidebar_label: Phoenix Rooivalk Litepaper
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Revolutionary Counter-Drone Defense Platform

@@ -2,6 +2,12 @@
 id: early-spec-qa
 title: Early Development Spec & Q&A
 sidebar_label: Early Spec & Q&A
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## What Phoenix Rooivalk Does (Plain English)

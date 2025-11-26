@@ -1,7 +1,13 @@
 ---
-title: "Experimental Counter-Drone Effectors Transform Warfare"
-id: "experimental-counter-drone-effectors-transform-warfare"
-sidebar_label: "Counter-Drone Effectors Research"
+title: Experimental Counter-Drone Effectors Transform Warfare
+id: experimental-counter-drone-effectors-transform-warfare
+sidebar_label: Counter-Drone Effectors Research
+difficulty: advanced
+estimated_reading_time: 37
+points: 25
+tags:
+  - research
+  - counter-uas
 ---
 
 # Experimental Counter-Drone Effectors Transform Warfare Economics
