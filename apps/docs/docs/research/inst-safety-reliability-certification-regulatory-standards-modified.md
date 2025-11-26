@@ -1,3 +1,9 @@
+---
+id: inst-safety-certification
+title: "Research: Safety & Certification"
+sidebar_label: "Research: Safety & Certification"
+---
+
 # Complete Research Instruction: Safety, Reliability, Certification and Regulatory Standards
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

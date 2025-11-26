@@ -1,3 +1,9 @@
+---
+id: inst-cross-cutting
+title: "Research: Cross-Cutting Concerns"
+sidebar_label: "Research: Cross-Cutting Concerns"
+---
+
 # Complete Research Instruction: Cross-Cutting Technical Concerns
 
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)

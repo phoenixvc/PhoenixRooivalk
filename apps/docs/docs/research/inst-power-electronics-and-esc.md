@@ -1,3 +1,9 @@
+---
+id: inst-power-electronics
+title: "Research: Power Electronics & ESC"
+sidebar_label: "Research: Power Electronics & ESC"
+---
+
 You are an AI assistant with deep expertise in unmanned aerial vehicle (UAV)
 engineering, propulsion systems, aerodynamics, power management, and defense
 technology. Your task is to conduct comprehensive deep research into drone power

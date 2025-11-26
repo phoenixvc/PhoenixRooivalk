@@ -528,6 +528,33 @@ a:focus {
   outline-offset: 2px !important;
 }
 
+/* Documentation Landing Hero Styles (for README.md) */
+.docs-readme-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.docs-readme-title {
+  font-size: 3rem !important;
+  background: linear-gradient(
+    135deg,
+    rgb(249, 115, 22),
+    rgb(251, 191, 36)
+  ) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  margin-bottom: 1rem !important;
+  border-bottom: none !important;
+}
+
+.docs-readme-subtitle {
+  font-size: 1.25rem !important;
+  color: rgb(148, 163, 184) !important;
+  max-width: 800px;
+  margin: 0 auto 2rem !important;
+}
+
 /* Custom Utility Classes */
 .text-phoenix-orange {
   color: rgb(249, 115, 22) !important;
