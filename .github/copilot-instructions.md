@@ -369,7 +369,9 @@ chore: Update dependencies to latest versions
 
 ### Getting Help
 
-1. Check documentation at [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app) or in `apps/docs/`
+1. Check documentation at
+   [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+   or in `apps/docs/`
 2. Review similar implementations in codebase
 3. Check GitHub Issues for related problems
 
@@ -391,8 +393,10 @@ Before submitting PR:
 
 ## Additional Resources
 
-- **Documentation Portal**: [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
-- **Documentation Source**: `apps/docs/docs/` - Technical, business, and operations documentation
+- **Documentation Portal**:
+  [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+- **Documentation Source**: `apps/docs/docs/` - Technical, business, and
+  operations documentation
 - **Responsible Use**: See `RESPONSIBLE_USE.md`
 
 ---

@@ -462,6 +462,38 @@ troubleshooting, and maintenance procedures.
 
 ### DHS sUAS Program Documentation
 
+The **DHS Small Unmanned Aircraft System Program Documentation for Public
+Safety** (BCF-T-G-2, November 2025) provides essential supplementary operational
+guidance that complements Phoenix Rooivalk procedures:
+
+**Key Operational Elements**:
+
+- **Preflight Checklists**: Equipment, operations, and pre-launch procedures
+- **In-Flight Procedures**: Active flight monitoring and landing protocols
+- **Postflight Procedures**: Mission completion and debriefing standards
+- **Emergency Procedures**: Lost link, GPS loss, flyaway, and collision
+  protocols
+- **Documentation Standards**: Flight log and maintenance log templates
+
+**Safety Framework Integration**:
+
+| DHS Safety Element                    | Phoenix Rooivalk Integration    |
+| ------------------------------------- | ------------------------------- |
+| ADM (Aviate → Navigate → Communicate) | Alert Management priorities     |
+| PAVE Checklist                        | Daily Operations Startup        |
+| IMSAFE Checklist                      | Operator Training certification |
+| Emergency Checklists                  | Incident Response procedures    |
+
+**Documentation Alignment**:
+
+The DHS framework's reporting requirements align with Phoenix Rooivalk's
+documentation standards:
+
+- **FAA Reporting** (10 days): Integrate with Incident Documentation
+- **NTSB Reporting** (Immediate): Integrate with Critical Alert Response
+- **NASA ASRS** (Voluntary): Support continuous improvement program
+- **Flight Logs**: Integrate with Blockchain Evidence Anchoring
+
 :::tip Recommended Reading
 
 See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
