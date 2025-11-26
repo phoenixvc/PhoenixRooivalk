@@ -433,8 +433,8 @@ For reliable deployment:
 
 ## Related Documents
 
-- [RKV-M Specifications](./rkv-m-specifications.md)
-- [Operations Manual](../../operations/operations-manual.md)
+- [RKV-M Specifications](./rkv-m-specifications)
+- [Operations Manual](../../operations/operations-manual)
 
 ---
 

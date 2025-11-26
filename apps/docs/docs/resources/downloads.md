@@ -31,11 +31,11 @@ access to restricted materials.
 
 ### Documents
 
-| Resource                   | Format | Description                      | Access                                                         |
-| -------------------------- | ------ | -------------------------------- | -------------------------------------------------------------- |
-| **Executive Summary**      | PDF    | Investor-ready overview          | [View Online](../executive/investor-executive-summary.md)      |
-| **12-Month Business Plan** | PDF    | Operational roadmap              | [View Online](../business/12-month-business-plan.md)           |
-| **Early Spec & Q&A**       | PDF    | Plain-English technical overview | [View Online](../executive/early-development/early-spec-qa.md) |
+| Resource                   | Format | Description                      | Access                                                      |
+| -------------------------- | ------ | -------------------------------- | ----------------------------------------------------------- |
+| **Executive Summary**      | PDF    | Investor-ready overview          | [View Online](../executive/investor-executive-summary)      |
+| **12-Month Business Plan** | PDF    | Operational roadmap              | [View Online](../business/12-month-business-plan)           |
+| **Early Spec & Q&A**       | PDF    | Plain-English technical overview | [View Online](../executive/early-development/early-spec-qa) |
 
 ---
 
@@ -43,12 +43,11 @@ access to restricted materials.
 
 ### Specifications
 
-| Resource                       | Format  | Description                    | Access                                                       |
-| ------------------------------ | ------- | ------------------------------ | ------------------------------------------------------------ |
-| **RKV-M Specifications**       | PDF     | Interceptor platform specs     | [View Online](../technical/hardware/rkv-m-specifications.md) |
-| **Sensor Fusion Architecture** | PDF     | Multi-modal sensor integration | [View Online](../technical/sensors/sensor-fusion.md)         |
-| **ML Training Plan**           | PDF     | Model training methodology     | [View Online](../technical/ml-training/ml-training-plan.md)  |
-| **System Block Diagram**       | PNG/SVG | High-level architecture        | Restricted                                                   |
+| Resource                 | Format  | Description                | Access                                                    |
+| ------------------------ | ------- | -------------------------- | --------------------------------------------------------- |
+| **RKV-M Specifications** | PDF     | Interceptor platform specs | [View Online](../technical/hardware/rkv-m-specifications) |
+| **ML Training Plan**     | PDF     | Model training methodology | [View Online](../technical/ml-training/ml-training-plan)  |
+| **System Block Diagram** | PNG/SVG | High-level architecture    | Restricted                                                |
 
 ### Datasheets
 
@@ -65,11 +64,11 @@ access to restricted materials.
 
 ### Application Templates
 
-| Resource                     | Format | Description                     | Access                                                                  |
-| ---------------------------- | ------ | ------------------------------- | ----------------------------------------------------------------------- |
-| **CUAS Sandbox Application** | DOCX   | Canada DND application template | [View Draft](../business/applications/cuas-sandbox-2026-application.md) |
-| **SBIR Phase I Template**    | DOCX   | Standard SBIR proposal format   | Coming Soon                                                             |
-| **DASA Submission Template** | DOCX   | UK DASA proposal format         | Coming Soon                                                             |
+| Resource                     | Format | Description                     | Access                                                               |
+| ---------------------------- | ------ | ------------------------------- | -------------------------------------------------------------------- |
+| **CUAS Sandbox Application** | DOCX   | Canada DND application template | [View Draft](../business/applications/cuas-sandbox-2026-application) |
+| **SBIR Phase I Template**    | DOCX   | Standard SBIR proposal format   | Coming Soon                                                          |
+| **DASA Submission Template** | DOCX   | UK DASA proposal format         | Coming Soon                                                          |
 
 ### Operational Templates
 
@@ -87,14 +86,14 @@ access to restricted materials.
 
 Subscribe to project calendars for automatic sync:
 
-| Calendar                      | Format | Description                  | Download         |
-| ----------------------------- | ------ | ---------------------------- | ---------------- |
-| **Opportunities & Deadlines** | ICS    | Funding deadlines and events | [Coming Soon](#) |
-| **Development Milestones**    | ICS    | Sprint and release schedule  | [Coming Soon](#) |
-| **Team Meetings**             | ICS    | Recurring meeting schedule   | [Coming Soon](#) |
+| Calendar                      | Format | Description                  | Download    |
+| ----------------------------- | ------ | ---------------------------- | ----------- |
+| **Opportunities & Deadlines** | ICS    | Funding deadlines and events | Coming Soon |
+| **Development Milestones**    | ICS    | Sprint and release schedule  | Coming Soon |
+| **Team Meetings**             | ICS    | Recurring meeting schedule   | Coming Soon |
 
-See [Project Calendar](../operations/calendar/project-calendar.md) for
-subscription instructions.
+See [Project Calendar](../operations/calendar/project-calendar) for subscription
+instructions.
 
 ---
 
@@ -102,12 +101,12 @@ subscription instructions.
 
 ### Standards & Compliance
 
-| Resource                       | Format | Description                 | Access                                          |
-| ------------------------------ | ------ | --------------------------- | ----------------------------------------------- |
-| **sUAS Program Documentation** | PDF    | DHS BCF-T-G-2 guide         | [View Online](./suas-program-documentation.md)  |
-| **Compliance Framework**       | PDF    | Regulatory requirements     | [View Online](../legal/compliance-framework.md) |
-| **FAA Part 107 Summary**       | PDF    | Drone operation regulations | External                                        |
-| **ASTM F963 Overview**         | PDF    | Consumer safety standards   | External                                        |
+| Resource                       | Format | Description                 | Access                                       |
+| ------------------------------ | ------ | --------------------------- | -------------------------------------------- |
+| **sUAS Program Documentation** | PDF    | DHS BCF-T-G-2 guide         | [View Online](./suas-program-documentation)  |
+| **Compliance Framework**       | PDF    | Regulatory requirements     | [View Online](../legal/compliance-framework) |
+| **FAA Part 107 Summary**       | PDF    | Drone operation regulations | External                                     |
+| **ASTM F963 Overview**         | PDF    | Consumer safety standards   | External                                     |
 
 ### Industry Reports
 
