@@ -50,14 +50,19 @@ const getLocalProgress = (): UserProgress => {
     return { docs: {}, achievements: {}, stats: { totalPoints: 0, level: 1, streak: 0 } };
   }
 
-  const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || "{}");
-  const achievements = JSON.parse(localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || "{}");
-  const stats = JSON.parse(
-    localStorage.getItem(LOCAL_STATS_KEY) ||
-      '{"totalPoints":0,"level":1,"streak":0}'
-  );
+  try {
+    const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || "{}");
+    const achievements = JSON.parse(localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || "{}");
+    const stats = JSON.parse(
+      localStorage.getItem(LOCAL_STATS_KEY) ||
+        '{"totalPoints":0,"level":1,"streak":0}'
+    );
 
-  return { docs, achievements, stats };
+    return { docs, achievements, stats };
+  } catch (error) {
+    console.error("Error parsing local progress:", error);
+    return { docs: {}, achievements: {}, stats: { totalPoints: 0, level: 1, streak: 0 } };
+  }
 };
 
 // Helper to save local progress
@@ -158,12 +163,18 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
   const signInGoogle = useCallback(async () => {
     setLoading(true);
-    await signInWithGoogle();
+    const result = await signInWithGoogle();
+    if (!result) {
+      setLoading(false);
+    }
   }, []);
 
   const signInGithub = useCallback(async () => {
     setLoading(true);
-    await signInWithGithub();
+    const result = await signInWithGithub();
+    if (!result) {
+      setLoading(false);
+    }
   }, []);
 
   const logout = useCallback(async () => {

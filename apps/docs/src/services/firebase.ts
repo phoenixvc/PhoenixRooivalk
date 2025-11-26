@@ -72,6 +72,11 @@ const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 
 // Authentication functions
+
+/**
+ * Authenticates user with Google OAuth provider.
+ * @returns {Promise<User | null>} The authenticated user or null if sign-in fails
+ */
 export const signInWithGoogle = async (): Promise<User | null> => {
   if (!auth) return null;
   try {
@@ -83,6 +88,10 @@ export const signInWithGoogle = async (): Promise<User | null> => {
   }
 };
 
+/**
+ * Authenticates user with GitHub OAuth provider.
+ * @returns {Promise<User | null>} The authenticated user or null if sign-in fails
+ */
 export const signInWithGithub = async (): Promise<User | null> => {
   if (!auth) return null;
   try {
@@ -94,6 +103,10 @@ export const signInWithGithub = async (): Promise<User | null> => {
   }
 };
 
+/**
+ * Signs out the current user.
+ * @returns {Promise<void>}
+ */
 export const signOut = async (): Promise<void> => {
   if (!auth) return;
   try {
@@ -103,6 +116,11 @@ export const signOut = async (): Promise<void> => {
   }
 };
 
+/**
+ * Registers a callback for authentication state changes.
+ * @param {(user: User | null) => void} callback - Function called when auth state changes
+ * @returns {() => void} Unsubscribe function to stop listening to auth changes
+ */
 export const onAuthChange = (callback: (user: User | null) => void): (() => void) => {
   if (!auth) {
     callback(null);
@@ -111,6 +129,10 @@ export const onAuthChange = (callback: (user: User | null) => void): (() => void
   return onAuthStateChanged(auth, callback);
 };
 
+/**
+ * Gets the currently authenticated user.
+ * @returns {User | null} The current user or null if not authenticated
+ */
 export const getCurrentUser = (): User | null => {
   return auth?.currentUser || null;
 };
@@ -149,6 +171,13 @@ const DEFAULT_PROGRESS: UserProgress = {
 };
 
 // Firestore operations
+
+/**
+ * Retrieves user's progress document from Firestore.
+ * Creates a default progress document if none exists for the user.
+ * @param {string} userId - The user's unique identifier
+ * @returns {Promise<UserProgress>} The user's progress data or default values if not found
+ */
 export const getUserProgress = async (userId: string): Promise<UserProgress> => {
   if (!db) return DEFAULT_PROGRESS;
   try {
@@ -166,6 +195,13 @@ export const getUserProgress = async (userId: string): Promise<UserProgress> => 
   }
 };
 
+/**
+ * Updates specific fields in user's progress document.
+ * Uses Firestore merge semantics to update only provided fields.
+ * @param {string} userId - The user's unique identifier
+ * @param {Partial<UserProgress>} progress - Partial progress data to update
+ * @returns {Promise<boolean>} True if update succeeded, false otherwise
+ */
 export const updateUserProgress = async (
   userId: string,
   progress: Partial<UserProgress>
@@ -184,6 +220,13 @@ export const updateUserProgress = async (
   }
 };
 
+/**
+ * Saves complete user progress document to Firestore.
+ * Overwrites the entire document with provided data.
+ * @param {string} userId - The user's unique identifier
+ * @param {UserProgress} progress - Complete progress data to save
+ * @returns {Promise<boolean>} True if save succeeded, false otherwise
+ */
 export const saveUserProgress = async (
   userId: string,
   progress: UserProgress
