@@ -25,9 +25,9 @@ program.
 
 ## The Challenge
 
-> "How might we detect and/or defeat Micro and Mini Uncrewed Aerial Systems (UAS)
-> with systems that can be integrated into the broader military command and
-> control system?"
+> "How might we detect and/or defeat Micro and Mini Uncrewed Aerial Systems
+> (UAS) with systems that can be integrated into the broader military command
+> and control system?"
 
 Building on the results of the 2024 CUAS Sandbox, DND and the Canadian Armed
 Forces (CAF) seek CUAS solutions capable of detecting and/or defeating Micro and
@@ -37,14 +37,14 @@ Mini UAS that can integrate into broader military command and control systems.
 
 ## What IDEaS Provides
 
-| Benefit | Description |
-|---------|-------------|
-| **Test Range Access** | Up to 5 days of free, personal full-time use of fully equipped CUAS test range |
-| **Target Drones** | DND provides Micro and Mini UAS targets for testing |
+| Benefit                | Description                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| **Test Range Access**  | Up to 5 days of free, personal full-time use of fully equipped CUAS test range         |
+| **Target Drones**      | DND provides Micro and Mini UAS targets for testing                                    |
 | **Expert Interaction** | On-site one-on-one interaction with CAF, US IWTSD, RCMP end-users, and science experts |
-| **Iterative Testing** | Opportunity to improve technology through iterative testing and demonstration |
-| **Real-Time Feedback** | CAF feedback to customize and adjust test plans on the fly |
-| **Prize Money** | $1.75 million CAD in monetary prizes for promising technologies |
+| **Iterative Testing**  | Opportunity to improve technology through iterative testing and demonstration          |
+| **Real-Time Feedback** | CAF feedback to customize and adjust test plans on the fly                             |
+| **Prize Money**        | $1.75 million CAD in monetary prizes for promising technologies                        |
 
 ---
 
@@ -118,12 +118,12 @@ Monitoring and defending linear borders:
 
 ## CUAS Methodologies
 
-| Method | Description | Considerations |
-|--------|-------------|----------------|
-| **Active Detection** | Transmitting signals to detect UAS (e.g., radar) | May reveal transmitter location |
-| **Passive Detection** | Detecting UAS from effects it generates (visual, RF, acoustic) | Conceals own position |
-| **Soft-Kill** | RF effects, cyber, or other methods to deter/disable/takeover | Non-kinetic neutralization |
-| **Hard-Kill** | Ammunition, nets, missiles, lasers, microwaves | Physical neutralization |
+| Method                | Description                                                    | Considerations                  |
+| --------------------- | -------------------------------------------------------------- | ------------------------------- |
+| **Active Detection**  | Transmitting signals to detect UAS (e.g., radar)               | May reveal transmitter location |
+| **Passive Detection** | Detecting UAS from effects it generates (visual, RF, acoustic) | Conceals own position           |
+| **Soft-Kill**         | RF effects, cyber, or other methods to deter/disable/takeover  | Non-kinetic neutralization      |
+| **Hard-Kill**         | Ammunition, nets, missiles, lasers, microwaves                 | Physical neutralization         |
 
 ---
 
@@ -139,12 +139,14 @@ Monitoring and defending linear borders:
 ### Known Methods (Less Likely Unless Improved)
 
 Detection:
+
 - Radar
 - Acoustic
 - Radio Frequency (RF) Signal
 - Optical
 
 Defeat:
+
 - RF Jamming and Cyber
 - Nets
 - Small arms ballistic projectiles
@@ -193,11 +195,11 @@ Sandboxes are not exclusively restricted to made-in-Canada products; however,
 
 Applications are evaluated within one of three categories:
 
-| Category | Description |
-|----------|-------------|
-| **Detect Only** | Solutions that detect UAS threats but do not include defeat capability |
-| **Defeat Only** | Solutions that cannot do initial detection but can target and defeat threats once cued |
-| **Detect & Defeat** | Combined detection and defeat capability |
+| Category            | Description                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| **Detect Only**     | Solutions that detect UAS threats but do not include defeat capability                 |
+| **Defeat Only**     | Solutions that cannot do initial detection but can target and defeat threats once cued |
+| **Detect & Defeat** | Combined detection and defeat capability                                               |
 
 :::note Fair Competition
 
@@ -246,14 +248,14 @@ selected technologies.
 
 ## Timeline
 
-| Date | Milestone |
-|------|-----------|
-| October 2025 | Call for Applications opens |
-| **December 15, 2025, 2:00 PM ET** | **Application deadline** |
-| February 2026 (approx.) | Selection notifications (6-8 weeks after close) |
-| February 2026 | 5 business days to accept invitation |
-| September 14, 2026 | Sandbox begins |
-| October 9, 2026 | Sandbox concludes |
+| Date                              | Milestone                                       |
+| --------------------------------- | ----------------------------------------------- |
+| October 2025                      | Call for Applications opens                     |
+| **December 15, 2025, 2:00 PM ET** | **Application deadline**                        |
+| February 2026 (approx.)           | Selection notifications (6-8 weeks after close) |
+| February 2026                     | 5 business days to accept invitation            |
+| September 14, 2026                | Sandbox begins                                  |
+| October 9, 2026                   | Sandbox concludes                               |
 
 ---
 
@@ -285,7 +287,8 @@ The following CAF projects have direct interest in CUAS systems:
 
 ### Counter Uncrewed Aerial Systems (CUAS) Initiative
 
-- Investigating CUAS systems for critical infrastructure, vehicles, and personnel
+- Investigating CUAS systems for critical infrastructure, vehicles, and
+  personnel
 - Not currently funded
 - No procurement date established
 
@@ -316,18 +319,19 @@ coordination across:
 Phoenix Rooivalk's counter-UAS capabilities align strongly with CUAS Sandbox
 2026 requirements:
 
-| Sandbox Requirement | Phoenix Rooivalk Capability |
-|---------------------|----------------------------|
+| Sandbox Requirement   | Phoenix Rooivalk Capability                        |
+| --------------------- | -------------------------------------------------- |
 | Detect Micro/Mini UAS | Multi-sensor fusion (radar, RF, optical, acoustic) |
-| Defeat capability | Kinetic interceptor drones |
-| C2 integration | Open architecture, STANAG-compatible |
-| Mobile deployment | Vehicle-mounted and portable configurations |
-| GPS-denied operation | Multi-modal navigation (SLAM, VIO, INS) |
-| EW resilience | Frequency hopping, mesh networking |
+| Defeat capability     | Kinetic interceptor drones                         |
+| C2 integration        | Open architecture, STANAG-compatible               |
+| Mobile deployment     | Vehicle-mounted and portable configurations        |
+| GPS-denied operation  | Multi-modal navigation (SLAM, VIO, INS)            |
+| EW resilience         | Frequency hopping, mesh networking                 |
 
 :::tip Recommended Action
 
-See [CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application.md)
+See
+[CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application.md)
 for the draft Phoenix Rooivalk application.
 
 :::

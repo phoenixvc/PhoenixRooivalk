@@ -6,9 +6,9 @@ sidebar_label: Project Calendar
 
 ## Overview
 
-The Phoenix Rooivalk Project Calendar provides centralized tracking of deadlines,
-milestones, opportunities, and team activities. Team members can subscribe to
-the calendar for automatic sync with their personal calendars.
+The Phoenix Rooivalk Project Calendar provides centralized tracking of
+deadlines, milestones, opportunities, and team activities. Team members can
+subscribe to the calendar for automatic sync with their personal calendars.
 
 ---
 
@@ -55,9 +55,8 @@ Add the Phoenix Rooivalk calendar to your personal calendar application:
 
 Contact the project administrator to obtain calendar subscription URLs.
 
-**Primary Calendar**: Opportunities & Deadlines
-**Development Calendar**: Sprint milestones & releases
-**Team Calendar**: Meetings & reviews
+**Primary Calendar**: Opportunities & Deadlines **Development Calendar**: Sprint
+milestones & releases **Team Calendar**: Meetings & reviews
 
 :::
 
@@ -67,35 +66,35 @@ Contact the project administrator to obtain calendar subscription URLs.
 
 ### Q4 2025
 
-| Date | Event | Category | Priority |
-|------|-------|----------|----------|
+| Date             | Event                                    | Category    | Priority    |
+| ---------------- | ---------------------------------------- | ----------- | ----------- |
 | **Dec 15, 2025** | Canada CUAS Sandbox Application Deadline | Opportunity | 🔴 Critical |
-| Dec 31, 2025 | Q4 Milestone Review | Internal | 🟡 High |
-| Ongoing | Soonami Cohort 8 Activities | Program | 🟢 Active |
+| Dec 31, 2025     | Q4 Milestone Review                      | Internal    | 🟡 High     |
+| Ongoing          | Soonami Cohort 8 Activities              | Program     | 🟢 Active   |
 
 ### Q1 2026
 
-| Date | Event | Category | Priority |
-|------|-------|----------|----------|
-| Jan 15, 2026 | Prototype Validation Target | Development | 🔴 Critical |
-| Feb 2026 | Canada CUAS Selection Notification | Opportunity | 🟡 High |
-| Mar 2026 | CPSC/ASTM/EN-71 Certification | Compliance | 🔴 Critical |
-| Mar 31, 2026 | Q1 Milestone Review | Internal | 🟡 High |
+| Date         | Event                              | Category    | Priority    |
+| ------------ | ---------------------------------- | ----------- | ----------- |
+| Jan 15, 2026 | Prototype Validation Target        | Development | 🔴 Critical |
+| Feb 2026     | Canada CUAS Selection Notification | Opportunity | 🟡 High     |
+| Mar 2026     | CPSC/ASTM/EN-71 Certification      | Compliance  | 🔴 Critical |
+| Mar 31, 2026 | Q1 Milestone Review                | Internal    | 🟡 High     |
 
 ### Q2 2026
 
-| Date | Event | Category | Priority |
-|------|-------|----------|----------|
-| Apr 30, 2026 | Phase 1a Prototype Complete | Development | 🔴 Critical |
-| May 2026 | UK DASA Cycle Submission | Opportunity | 🟡 High |
-| Jun 2026 | FAA Part 107 Waiver Submission | Compliance | 🟡 High |
+| Date         | Event                          | Category    | Priority    |
+| ------------ | ------------------------------ | ----------- | ----------- |
+| Apr 30, 2026 | Phase 1a Prototype Complete    | Development | 🔴 Critical |
+| May 2026     | UK DASA Cycle Submission       | Opportunity | 🟡 High     |
+| Jun 2026     | FAA Part 107 Waiver Submission | Compliance  | 🟡 High     |
 
 ### Q3 2026
 
-| Date | Event | Category | Priority |
-|------|-------|----------|----------|
-| **Sep 14-Oct 9, 2026** | Canada CUAS Sandbox Event | Opportunity | 🔴 Critical |
-| Sep 2026 | Enterprise Pilot MOU Target | Business | 🔴 Critical |
+| Date                   | Event                       | Category    | Priority    |
+| ---------------------- | --------------------------- | ----------- | ----------- |
+| **Sep 14-Oct 9, 2026** | Canada CUAS Sandbox Event   | Opportunity | 🔴 Critical |
+| Sep 2026               | Enterprise Pilot MOU Target | Business    | 🔴 Critical |
 
 ---
 
@@ -125,11 +124,11 @@ Contact the project administrator to obtain calendar subscription URLs.
 
 ### Rolling Opportunities
 
-| Opportunity | Submission Window | Review Cycle |
-|-------------|-------------------|--------------|
-| DIU CSO | Ongoing | As posted |
-| NATO NIF | Ongoing | Quarterly |
-| DHS C-UAS Grants | FY2026 | Annual |
+| Opportunity      | Submission Window | Review Cycle |
+| ---------------- | ----------------- | ------------ |
+| DIU CSO          | Ongoing           | As posted    |
+| NATO NIF         | Ongoing           | Quarterly    |
+| DHS C-UAS Grants | FY2026            | Annual       |
 
 ---
 
@@ -137,28 +136,28 @@ Contact the project administrator to obtain calendar subscription URLs.
 
 ### Phase 1a: Core Platform
 
-| Milestone | Target Date | Status |
-|-----------|-------------|--------|
-| Subsystem Integration | Dec 2025 | 🟡 In Progress |
-| Prototype Assembly | Jan 2026 | ⬜ Planned |
-| Field Evaluation | Apr 2026 | ⬜ Planned |
+| Milestone             | Target Date | Status         |
+| --------------------- | ----------- | -------------- |
+| Subsystem Integration | Dec 2025    | 🟡 In Progress |
+| Prototype Assembly    | Jan 2026    | ⬜ Planned     |
+| Field Evaluation      | Apr 2026    | ⬜ Planned     |
 
 ### Phase 1b: SkySnare™ Consumer
 
-| Milestone | Target Date | Status |
-|-----------|-------------|--------|
-| CPSC/ASTM Certification | Mar 2026 | ⬜ Planned |
-| D2C Website Launch | Apr 2026 | ⬜ Planned |
-| First Units Shipped | May 2026 | ⬜ Planned |
-| 5,000 Units Sold | Dec 2026 | ⬜ Target |
+| Milestone               | Target Date | Status     |
+| ----------------------- | ----------- | ---------- |
+| CPSC/ASTM Certification | Mar 2026    | ⬜ Planned |
+| D2C Website Launch      | Apr 2026    | ⬜ Planned |
+| First Units Shipped     | May 2026    | ⬜ Planned |
+| 5,000 Units Sold        | Dec 2026    | ⬜ Target  |
 
 ### Phase 1c: AeroNet™ Enterprise
 
-| Milestone | Target Date | Status |
-|-----------|-------------|--------|
-| FAA Waiver Submission | Jun 2026 | ⬜ Planned |
-| Pilot MOU Signed | Sep 2026 | ⬜ Target |
-| First Pilot Deployment | Q1 2027 | ⬜ Target |
+| Milestone              | Target Date | Status     |
+| ---------------------- | ----------- | ---------- |
+| FAA Waiver Submission  | Jun 2026    | ⬜ Planned |
+| Pilot MOU Signed       | Sep 2026    | ⬜ Target  |
+| First Pilot Deployment | Q1 2027     | ⬜ Target  |
 
 ---
 
@@ -166,22 +165,22 @@ Contact the project administrator to obtain calendar subscription URLs.
 
 ### Recurring Meetings
 
-| Meeting | Frequency | Day/Time | Duration |
-|---------|-----------|----------|----------|
-| Daily Standup | Daily | Mon-Fri 9:00 AM | 15 min |
-| Sprint Planning | Bi-weekly | Monday 10:00 AM | 2 hours |
-| Sprint Review | Bi-weekly | Friday 3:00 PM | 1 hour |
-| Investor Update | Monthly | 1st Thursday | 1 hour |
-| Board Meeting | Quarterly | TBD | 2 hours |
+| Meeting         | Frequency | Day/Time        | Duration |
+| --------------- | --------- | --------------- | -------- |
+| Daily Standup   | Daily     | Mon-Fri 9:00 AM | 15 min   |
+| Sprint Planning | Bi-weekly | Monday 10:00 AM | 2 hours  |
+| Sprint Review   | Bi-weekly | Friday 3:00 PM  | 1 hour   |
+| Investor Update | Monthly   | 1st Thursday    | 1 hour   |
+| Board Meeting   | Quarterly | TBD             | 2 hours  |
 
 ### Soonami Cohort 8 Schedule
 
-| Meeting | Frequency | Notes |
-|---------|-----------|-------|
-| Mentor Sessions | Weekly | Individual |
-| Cohort Meetings | Bi-weekly | Group |
-| Workshops | As scheduled | Various topics |
-| Demo Day Prep | Final 4 weeks | Intensive |
+| Meeting         | Frequency     | Notes          |
+| --------------- | ------------- | -------------- |
+| Mentor Sessions | Weekly        | Individual     |
+| Cohort Meetings | Bi-weekly     | Group          |
+| Workshops       | As scheduled  | Various topics |
+| Demo Day Prep   | Final 4 weeks | Intensive      |
 
 ---
 
@@ -203,15 +202,15 @@ Contact the project administrator to obtain calendar subscription URLs.
 ```javascript
 // Google Apps Script example
 function addOpportunityDeadline() {
-  var calendar = CalendarApp.getCalendarById('CALENDAR_ID');
+  var calendar = CalendarApp.getCalendarById("CALENDAR_ID");
   calendar.createEvent(
-    'CUAS Sandbox 2026 Application Deadline',
-    new Date('2025-12-15T14:00:00-05:00'),
-    new Date('2025-12-15T15:00:00-05:00'),
+    "CUAS Sandbox 2026 Application Deadline",
+    new Date("2025-12-15T14:00:00-05:00"),
+    new Date("2025-12-15T15:00:00-05:00"),
     {
-      description: 'Submit application via PriviDox',
-      location: 'Online'
-    }
+      description: "Submit application via PriviDox",
+      location: "Online",
+    },
   );
 }
 ```
@@ -232,16 +231,16 @@ function addOpportunityDeadline() {
 
 Download calendar events as ICS files for import:
 
-| Calendar | Download |
-|----------|----------|
+| Calendar                  | Download               |
+| ------------------------- | ---------------------- |
 | Opportunities & Deadlines | [opportunities.ics](#) |
-| Development Milestones | [development.ics](#) |
-| Team Meetings | [meetings.ics](#) |
+| Development Milestones    | [development.ics](#)   |
+| Team Meetings             | [meetings.ics](#)      |
 
 :::note ICS Files
 
-ICS files will be generated and made available in the Resources section.
-Contact the project administrator for access.
+ICS files will be generated and made available in the Resources section. Contact
+the project administrator for access.
 
 :::
 
@@ -251,21 +250,23 @@ Contact the project administrator for access.
 
 ### Recommended Alert Settings
 
-| Event Type | Alert 1 | Alert 2 | Alert 3 |
-|------------|---------|---------|---------|
-| Critical Deadline | 1 week | 3 days | 1 day |
-| High Priority | 5 days | 1 day | 2 hours |
-| Meetings | 1 day | 1 hour | 15 min |
-| Milestones | 2 weeks | 1 week | 1 day |
+| Event Type        | Alert 1 | Alert 2 | Alert 3 |
+| ----------------- | ------- | ------- | ------- |
+| Critical Deadline | 1 week  | 3 days  | 1 day   |
+| High Priority     | 5 days  | 1 day   | 2 hours |
+| Meetings          | 1 day   | 1 hour  | 15 min  |
+| Milestones        | 2 weeks | 1 week  | 1 day   |
 
 ### Setting Up Notifications
 
 **Google Calendar:**
+
 1. Click on event
 2. Edit event → Add notification
 3. Set time before event
 
 **Outlook:**
+
 1. Open event
 2. Click Reminder dropdown
 3. Select reminder time
@@ -289,13 +290,13 @@ When adding new opportunities or deadlines:
 
 ### Event Categories (Color Coding)
 
-| Category | Color | Examples |
-|----------|-------|----------|
-| **Opportunities** | 🔴 Red | Application deadlines |
-| **Development** | 🔵 Blue | Milestones, releases |
-| **Compliance** | 🟡 Yellow | Certifications, audits |
-| **Meetings** | 🟢 Green | Team meetings, reviews |
-| **Events** | 🟣 Purple | Conferences, sandbox |
+| Category          | Color     | Examples               |
+| ----------------- | --------- | ---------------------- |
+| **Opportunities** | 🔴 Red    | Application deadlines  |
+| **Development**   | 🔵 Blue   | Milestones, releases   |
+| **Compliance**    | 🟡 Yellow | Certifications, audits |
+| **Meetings**      | 🟢 Green  | Team meetings, reviews |
+| **Events**        | 🟣 Purple | Conferences, sandbox   |
 
 ---
 
@@ -303,19 +304,19 @@ When adding new opportunities or deadlines:
 
 ### Immediate Actions Required
 
-| Item | Due | Owner | Status |
-|------|-----|-------|--------|
-| Canada CUAS Application | Dec 15, 2025 | PM | Draft |
-| Soonami Demo Day Prep | TBD | Team | Active |
-| Prototype Integration | Jan 2026 | Eng | In Progress |
+| Item                    | Due          | Owner | Status      |
+| ----------------------- | ------------ | ----- | ----------- |
+| Canada CUAS Application | Dec 15, 2025 | PM    | Draft       |
+| Soonami Demo Day Prep   | TBD          | Team  | Active      |
+| Prototype Integration   | Jan 2026     | Eng   | In Progress |
 
 ### Upcoming Reviews
 
-| Review | Date | Participants |
-|--------|------|--------------|
-| Q4 2025 Review | Dec 31, 2025 | All |
-| Investor Update | Jan 2026 | Exec + Investors |
-| Sprint Review | Bi-weekly | Development Team |
+| Review          | Date         | Participants     |
+| --------------- | ------------ | ---------------- |
+| Q4 2025 Review  | Dec 31, 2025 | All              |
+| Investor Update | Jan 2026     | Exec + Investors |
+| Sprint Review   | Bi-weekly    | Development Team |
 
 ---
 

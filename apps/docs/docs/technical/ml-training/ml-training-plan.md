@@ -7,30 +7,30 @@ sidebar_label: ML Training Plan
 ## Executive Summary
 
 This document provides a comprehensive training and fine-tuning strategy for all
-ML models in the Phoenix Rooivalk counter-drone system. The strategy is optimized
-for achieving **99.7% threat detection accuracy** with **sub-200ms inference
-latency**.
+ML models in the Phoenix Rooivalk counter-drone system. The strategy is
+optimized for achieving **99.7% threat detection accuracy** with **sub-200ms
+inference latency**.
 
 ### Key Decisions Summary
 
-| Model | Approach | Rationale |
-|-------|----------|-----------|
-| Optical | Fine-tune | ImageNet features transfer well |
-| RF | Train from scratch | No suitable pretrained models |
-| Radar | Train from scratch | Domain-specific sequences |
-| Acoustic | Fine-tune | AudioSet contains motor sounds |
-| Fusion | Train from scratch | Custom architecture |
-| Behavioral | Train from scratch | Graph structure is unique |
-| Attribution | Train from scratch | Tabular data, fast training |
+| Model       | Approach           | Rationale                       |
+| ----------- | ------------------ | ------------------------------- |
+| Optical     | Fine-tune          | ImageNet features transfer well |
+| RF          | Train from scratch | No suitable pretrained models   |
+| Radar       | Train from scratch | Domain-specific sequences       |
+| Acoustic    | Fine-tune          | AudioSet contains motor sounds  |
+| Fusion      | Train from scratch | Custom architecture             |
+| Behavioral  | Train from scratch | Graph structure is unique       |
+| Attribution | Train from scratch | Tabular data, fast training     |
 
 ### Resource Summary
 
-| Resource | Specification |
-|----------|---------------|
-| **Timeline** | 16 weeks |
-| **Compute** | 4× NVIDIA A100 GPUs |
-| **Budget** | ~$45,000 (cloud) or 8 weeks (dedicated hardware) |
-| **Data** | 380,000+ labeled samples across all modalities |
+| Resource     | Specification                                    |
+| ------------ | ------------------------------------------------ |
+| **Timeline** | 16 weeks                                         |
+| **Compute**  | 4× NVIDIA A100 GPUs                              |
+| **Budget**   | ~$45,000 (cloud) or 8 weeks (dedicated hardware) |
+| **Data**     | 380,000+ labeled samples across all modalities   |
 
 ---
 
@@ -72,14 +72,14 @@ latency**.
 
 ### Decision Criteria
 
-| Criterion | Train from Scratch | Fine-Tune |
-|-----------|-------------------|-----------|
-| Pretrained model exists? | No | Yes |
-| Domain similarity | Very different | Similar |
-| Labeled data available | 100k+ | 5k-50k |
-| Compute budget | High | Limited |
-| Time constraint | Flexible | Tight |
-| Custom architecture needed | Yes | No |
+| Criterion                  | Train from Scratch | Fine-Tune |
+| -------------------------- | ------------------ | --------- |
+| Pretrained model exists?   | No                 | Yes       |
+| Domain similarity          | Very different     | Similar   |
+| Labeled data available     | 100k+              | 5k-50k    |
+| Compute budget             | High               | Limited   |
+| Time constraint            | Flexible           | Tight     |
+| Custom architecture needed | Yes                | No        |
 
 ---
 
@@ -166,12 +166,12 @@ STAGE 3: Unfreeze All with Differential LR (Epochs 26-50+)
 
 ### Stage-by-Stage Expected Results
 
-| Stage | Epochs | Trainable Params | Val Accuracy | Training Time |
-|-------|--------|------------------|--------------|---------------|
-| 1 | 5 | 1.2M (1%) | 85-88% | ~2 hours |
-| 2 | 20 | 35M (39%) | 94-96% | ~12 hours |
-| 3 | 25-50 | 89M (100%) | 97-99% | ~20 hours |
-| **TOTAL** | 50-75 | - | 97-99% | ~34 hours |
+| Stage     | Epochs | Trainable Params | Val Accuracy | Training Time |
+| --------- | ------ | ---------------- | ------------ | ------------- |
+| 1         | 5      | 1.2M (1%)        | 85-88%       | ~2 hours      |
+| 2         | 20     | 35M (39%)        | 94-96%       | ~12 hours     |
+| 3         | 25-50  | 89M (100%)       | 97-99%       | ~20 hours     |
+| **TOTAL** | 50-75  | -                | 97-99%       | ~34 hours     |
 
 ---
 
@@ -183,22 +183,22 @@ STAGE 3: Unfreeze All with Differential LR (Epochs 26-50+)
 
 #### Data Requirements
 
-| Dataset Component | Quantity | Source |
-|-------------------|----------|--------|
-| Commercial drones | 25,000 | Field trials, synthetic |
-| Military drones | 15,000 | Partner data |
-| Birds | 20,000 | Public datasets, field |
-| Aircraft | 12,000 | Public datasets |
-| Unknown objects | 10,000 | Field trials |
-| **Total** | **100,000+** | |
+| Dataset Component | Quantity     | Source                  |
+| ----------------- | ------------ | ----------------------- |
+| Commercial drones | 25,000       | Field trials, synthetic |
+| Military drones   | 15,000       | Partner data            |
+| Birds             | 20,000       | Public datasets, field  |
+| Aircraft          | 12,000       | Public datasets         |
+| Unknown objects   | 10,000       | Field trials            |
+| **Total**         | **100,000+** |                         |
 
 #### Progressive Unfreezing Schedule
 
-| Stage | Epochs | Frozen | Learning Rate | Expected Accuracy |
-|-------|--------|--------|---------------|-------------------|
-| 1 | 5 | Stages 0-3 | Head: 1e-3 | 85-88% |
-| 2 | 20 | Stages 0-1 | Stage 2: 1e-5, Stage 3: 1e-4, Head: 1e-3 | 94-96% |
-| 3 | 25-50 | None | Differential 1e-7 to 1e-3 | 97-99% |
+| Stage | Epochs | Frozen     | Learning Rate                            | Expected Accuracy |
+| ----- | ------ | ---------- | ---------------------------------------- | ----------------- |
+| 1     | 5      | Stages 0-3 | Head: 1e-3                               | 85-88%            |
+| 2     | 20     | Stages 0-1 | Stage 2: 1e-5, Stage 3: 1e-4, Head: 1e-3 | 94-96%            |
+| 3     | 25-50  | None       | Differential 1e-7 to 1e-3                | 97-99%            |
 
 #### Training Configuration
 
@@ -231,22 +231,22 @@ optical_config = {
 
 #### Data Requirements
 
-| Signal Type | Quantity | Collection Method |
-|-------------|----------|-------------------|
-| WiFi control (2.4/5.8 GHz) | 12,000 | Field SDR capture |
-| Proprietary RF (DJI, etc.) | 10,000 | Field trials |
-| FPV protocols | 8,000 | Partner data |
-| Military datalink | 5,000 | Classified sources |
-| Background/interference | 10,000 | Various environments |
-| **Total** | **50,000+** | |
+| Signal Type                | Quantity    | Collection Method    |
+| -------------------------- | ----------- | -------------------- |
+| WiFi control (2.4/5.8 GHz) | 12,000      | Field SDR capture    |
+| Proprietary RF (DJI, etc.) | 10,000      | Field trials         |
+| FPV protocols              | 8,000       | Partner data         |
+| Military datalink          | 5,000       | Classified sources   |
+| Background/interference    | 10,000      | Various environments |
+| **Total**                  | **50,000+** |                      |
 
 #### Training Schedule
 
-| Phase | Epochs | Learning Rate | Notes |
-|-------|--------|---------------|-------|
-| Warmup | 5 | 0 → 3e-4 | Linear warmup |
-| Main | 100 | 3e-4 → 1e-6 | Cosine decay |
-| Fine-tune | 50 | 1e-5 | If needed |
+| Phase     | Epochs | Learning Rate | Notes         |
+| --------- | ------ | ------------- | ------------- |
+| Warmup    | 5      | 0 → 3e-4      | Linear warmup |
+| Main      | 100    | 3e-4 → 1e-6   | Cosine decay  |
+| Fine-tune | 50     | 1e-5          | If needed     |
 
 ### Radar Track Analysis (Mamba-2)
 
@@ -254,15 +254,15 @@ optical_config = {
 
 #### Data Requirements
 
-| Track Type | Quantity | Notes |
-|------------|----------|-------|
-| Drone hover | 30,000 | Stationary patterns |
-| Drone transit | 40,000 | Linear movement |
-| Drone evasive | 25,000 | Unpredictable paths |
-| Bird single | 35,000 | Natural flight |
-| Bird flock | 15,000 | Group behavior |
-| Aircraft | 20,000 | Fixed patterns |
-| **Total** | **200,000+** | |
+| Track Type    | Quantity     | Notes               |
+| ------------- | ------------ | ------------------- |
+| Drone hover   | 30,000       | Stationary patterns |
+| Drone transit | 40,000       | Linear movement     |
+| Drone evasive | 25,000       | Unpredictable paths |
+| Bird single   | 35,000       | Natural flight      |
+| Bird flock    | 15,000       | Group behavior      |
+| Aircraft      | 20,000       | Fixed patterns      |
+| **Total**     | **200,000+** |                     |
 
 ### Acoustic Detection (BEATs)
 
@@ -270,22 +270,22 @@ optical_config = {
 
 #### Data Requirements
 
-| Audio Class | Quantity | Duration |
-|-------------|----------|----------|
-| Quadcopter small | 6,000 | 5-15s each |
-| Quadcopter large | 5,000 | 5-15s |
-| Fixed-wing electric | 3,000 | 5-15s |
-| Birds | 6,000 | 5-15s |
-| Background | 5,000 | 5-15s |
-| **Total** | **30,000+** | |
+| Audio Class         | Quantity    | Duration   |
+| ------------------- | ----------- | ---------- |
+| Quadcopter small    | 6,000       | 5-15s each |
+| Quadcopter large    | 5,000       | 5-15s      |
+| Fixed-wing electric | 3,000       | 5-15s      |
+| Birds               | 6,000       | 5-15s      |
+| Background          | 5,000       | 5-15s      |
+| **Total**           | **30,000+** |            |
 
 #### Progressive Unfreezing Schedule
 
-| Stage | Epochs | Frozen Layers | Learning Rate |
-|-------|--------|---------------|---------------|
-| 1 | 5 | All encoder (12 layers) | Head: 1e-4 |
-| 2 | 15 | First 8 layers | Last 4: 1e-5, Head: 1e-4 |
-| 3 | 30 | None | Differential 1e-6 to 1e-4 |
+| Stage | Epochs | Frozen Layers           | Learning Rate             |
+| ----- | ------ | ----------------------- | ------------------------- |
+| 1     | 5      | All encoder (12 layers) | Head: 1e-4                |
+| 2     | 15     | First 8 layers          | Last 4: 1e-5, Head: 1e-4  |
+| 3     | 30     | None                    | Differential 1e-6 to 1e-4 |
 
 ### Sensor Fusion (Cross-Modal Transformer)
 
@@ -294,6 +294,7 @@ optical_config = {
 #### Prerequisites
 
 All modality-specific models must be trained first:
+
 - Optical model checkpoint
 - RF model checkpoint
 - Radar model checkpoint
@@ -313,6 +314,7 @@ All modality-specific models must be trained first:
 #### Data Requirements
 
 Multi-drone trajectory graphs from swarm scenarios:
+
 - Single drone tracks: 50,000
 - Multi-drone scenes: 30,000
 - Swarm formations: 10,000
@@ -380,24 +382,24 @@ PyTorch Model
 
 ### Quantization Strategy
 
-| Model | FP32 Size | FP16 Size | INT8 Size | Accuracy Drop |
-|-------|-----------|-----------|-----------|---------------|
-| Optical | 350 MB | 175 MB | 90 MB | < 0.5% |
-| RF | 100 MB | 50 MB | 25 MB | < 0.3% |
-| Radar | 60 MB | 30 MB | 15 MB | < 0.2% |
-| Acoustic | 350 MB | 175 MB | 90 MB | < 0.5% |
-| Fusion | 80 MB | 40 MB | 20 MB | < 0.3% |
+| Model    | FP32 Size | FP16 Size | INT8 Size | Accuracy Drop |
+| -------- | --------- | --------- | --------- | ------------- |
+| Optical  | 350 MB    | 175 MB    | 90 MB     | < 0.5%        |
+| RF       | 100 MB    | 50 MB     | 25 MB     | < 0.3%        |
+| Radar    | 60 MB     | 30 MB     | 15 MB     | < 0.2%        |
+| Acoustic | 350 MB    | 175 MB    | 90 MB     | < 0.5%        |
+| Fusion   | 80 MB     | 40 MB     | 20 MB     | < 0.3%        |
 
 ### Target Latencies
 
-| Component | GPU (A100) | Edge (Jetson) | Target |
-|-----------|------------|---------------|--------|
-| Optical | 35ms | 80ms | < 120ms |
-| RF | 25ms | 50ms | < 80ms |
-| Radar | 18ms | 35ms | < 60ms |
-| Acoustic | 40ms | 70ms | < 100ms |
-| Fusion | 30ms | 50ms | < 80ms |
-| **Total** | ~100ms | ~150ms | **< 200ms** |
+| Component | GPU (A100) | Edge (Jetson) | Target      |
+| --------- | ---------- | ------------- | ----------- |
+| Optical   | 35ms       | 80ms          | < 120ms     |
+| RF        | 25ms       | 50ms          | < 80ms      |
+| Radar     | 18ms       | 35ms          | < 60ms      |
+| Acoustic  | 40ms       | 70ms          | < 100ms     |
+| Fusion    | 30ms       | 50ms          | < 80ms      |
+| **Total** | ~100ms     | ~150ms        | **< 200ms** |
 
 ---
 
@@ -437,21 +439,21 @@ Week 16│ Final validation, documentation, deployment package
 
 ### Resource Requirements
 
-| Resource | Specification | Cost Estimate |
-|----------|---------------|---------------|
-| GPU Compute | 4× NVIDIA A100 (80GB) | $35,000 cloud |
-| Storage | 10 TB NVMe | $2,000 |
-| Data Labeling | 380,000 samples | $5,000 |
-| Edge Devices | 2× Jetson AGX Orin | $3,000 |
-| **Total** | | **~$45,000** |
+| Resource      | Specification         | Cost Estimate |
+| ------------- | --------------------- | ------------- |
+| GPU Compute   | 4× NVIDIA A100 (80GB) | $35,000 cloud |
+| Storage       | 10 TB NVMe            | $2,000        |
+| Data Labeling | 380,000 samples       | $5,000        |
+| Edge Devices  | 2× Jetson AGX Orin    | $3,000        |
+| **Total**     |                       | **~$45,000**  |
 
 ### Team Requirements
 
-| Role | Count | Responsibility |
-|------|-------|----------------|
-| ML Engineer | 2 | Model training, optimization |
-| Data Engineer | 1 | Pipeline, data quality |
-| MLOps Engineer | 1 | Infrastructure, deployment |
+| Role           | Count | Responsibility               |
+| -------------- | ----- | ---------------------------- |
+| ML Engineer    | 2     | Model training, optimization |
+| Data Engineer  | 1     | Pipeline, data quality       |
+| MLOps Engineer | 1     | Infrastructure, deployment   |
 
 ---
 
@@ -459,23 +461,23 @@ Week 16│ Final validation, documentation, deployment package
 
 ### Model-Level Validation
 
-| Model | Accuracy Target | Latency Target | Validation Dataset |
-|-------|-----------------|----------------|-------------------|
-| Optical | > 98% | < 35ms GPU | 15,000 held-out images |
-| RF | > 96% | < 25ms GPU | 7,500 held-out samples |
-| Radar | > 97% | < 18ms GPU | 30,000 held-out tracks |
-| Acoustic | > 95% | < 40ms GPU | 4,500 held-out clips |
-| Fusion | > 99% | < 30ms GPU | Multi-modal test set |
+| Model    | Accuracy Target | Latency Target | Validation Dataset     |
+| -------- | --------------- | -------------- | ---------------------- |
+| Optical  | > 98%           | < 35ms GPU     | 15,000 held-out images |
+| RF       | > 96%           | < 25ms GPU     | 7,500 held-out samples |
+| Radar    | > 97%           | < 18ms GPU     | 30,000 held-out tracks |
+| Acoustic | > 95%           | < 40ms GPU     | 4,500 held-out clips   |
+| Fusion   | > 99%           | < 30ms GPU     | Multi-modal test set   |
 
 ### System-Level Validation
 
-| Metric | Target | Validation Method |
-|--------|--------|-------------------|
-| End-to-end accuracy | > 99% | Field trial data |
-| Total latency | < 200ms | Timing benchmarks |
-| False positive rate | < 1% | Extended testing |
-| Edge deployment | < 150ms | Jetson benchmarks |
-| Degraded mode (missing sensor) | > 95% | Ablation testing |
+| Metric                         | Target  | Validation Method |
+| ------------------------------ | ------- | ----------------- |
+| End-to-end accuracy            | > 99%   | Field trial data  |
+| Total latency                  | < 200ms | Timing benchmarks |
+| False positive rate            | < 1%    | Extended testing  |
+| Edge deployment                | < 150ms | Jetson benchmarks |
+| Degraded mode (missing sensor) | > 95%   | Ablation testing  |
 
 ### Validation Checkpoints
 
@@ -528,12 +530,12 @@ Central Server                    Deployment Sites
 
 ### Continuous Learning Schedule
 
-| Frequency | Activity |
-|-----------|----------|
-| Daily | Local model inference, data collection |
-| Weekly | Federated learning round (if enough new data) |
-| Monthly | Full model evaluation, performance audit |
-| Quarterly | Major model update consideration |
+| Frequency | Activity                                      |
+| --------- | --------------------------------------------- |
+| Daily     | Local model inference, data collection        |
+| Weekly    | Federated learning round (if enough new data) |
+| Monthly   | Full model evaluation, performance audit      |
+| Quarterly | Major model update consideration              |
 
 ---
 
@@ -583,10 +585,10 @@ Target        │ < 150ms total, < 4GB GPU memory
 
 ## Document Control
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025 | AI Team | Initial draft |
-| 2.0 | 2025 | AI Team | Added progressive unfreezing detail, finalized |
+| Version | Date | Author  | Changes                                        |
+| ------- | ---- | ------- | ---------------------------------------------- |
+| 1.0     | 2025 | AI Team | Initial draft                                  |
+| 2.0     | 2025 | AI Team | Added progressive unfreezing detail, finalized |
 
 ---
 

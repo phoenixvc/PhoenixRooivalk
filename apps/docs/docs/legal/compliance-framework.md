@@ -406,13 +406,15 @@ guidance on:
 - **FAA Part 107 Compliance**: Standard sUAS operations requirements
 - **Safety Frameworks**: PAVE and IMSAFE checklists for operator readiness
 - **Reporting Requirements**: FAA, NTSB, and NASA ASRS reporting obligations
-- **Role Definitions**: RPIC, Visual Observer, and Air Coordinator responsibilities
+- **Role Definitions**: RPIC, Visual Observer, and Air Coordinator
+  responsibilities
 - **Documentation Standards**: Flight logs and maintenance record templates
 
 :::tip Recommended Reading
 
-See [sUAS Program Documentation](../resources/suas-program-documentation.md) for a
-comprehensive summary and integration guidance with Phoenix Rooivalk operations.
+See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
+a comprehensive summary and integration guidance with Phoenix Rooivalk
+operations.
 
 :::
 
@@ -420,12 +422,12 @@ comprehensive summary and integration guidance with Phoenix Rooivalk operations.
 
 The DHS framework complements Phoenix Rooivalk's compliance requirements:
 
-| DHS Framework Element | Phoenix Rooivalk Integration |
-|-----------------------|------------------------------|
-| FAA Part 107 | Operator certification baseline |
-| Flight Logging | Blockchain evidence anchoring |
-| Safety Checklists | Counter-UAS operational procedures |
-| Training Requirements | Level 1-4 certification alignment |
+| DHS Framework Element | Phoenix Rooivalk Integration       |
+| --------------------- | ---------------------------------- |
+| FAA Part 107          | Operator certification baseline    |
+| Flight Logging        | Blockchain evidence anchoring      |
+| Safety Checklists     | Counter-UAS operational procedures |
+| Training Requirements | Level 1-4 certification alignment  |
 
 ---
 
