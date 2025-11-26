@@ -16,6 +16,13 @@ interface ProgressData {
   };
 }
 
+/**
+ * Hook for tracking reading progress across documentation pages.
+ * Persists progress to localStorage and provides utilities for marking docs as read,
+ * updating scroll progress, and querying completion status.
+ * 
+ * @returns {object} Progress tracking utilities including mark as read, update scroll, and query methods
+ */
 export function useReadingProgress() {
   const [progress, setProgress] = useState<ProgressData>({});
 
@@ -87,7 +94,16 @@ export function useReadingProgress() {
   };
 }
 
-export default function ReadingProgress({
+/**
+ * ReadingProgress component displays progress for a specific documentation category.
+ * Shows completion stats and a progress bar for the specified category.
+ * 
+ * @param {ReadingProgressProps} props - Component props
+ * @param {number} props.totalDocs - Total number of documents in the category
+ * @param {string} props.categoryName - Name of the documentation category
+ * @returns {React.ReactElement} Reading progress display for a category
+ */
+export function ReadingProgress({
   totalDocs,
   categoryName,
 }: ReadingProgressProps): React.ReactElement {

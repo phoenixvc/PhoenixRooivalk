@@ -36,14 +36,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build documentation
-        run: pnpm run build
-        env:
-          NODE_ENV: production
-
       - name: Check for broken links (internal)
         run: |
           # Capture and check build output for broken link warnings
@@ -54,6 +46,8 @@ jobs:
           else
             echo "✅ No broken links detected"
           fi
+        env:
+          NODE_ENV: production
 
       - name: Markdown lint check
         run: pnpm run lint

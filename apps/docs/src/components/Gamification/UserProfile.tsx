@@ -1,16 +1,22 @@
-/**
- * UserProfile Component
- * Shows user authentication status and cloud sync controls
- */
+import React, { useState, useEffect, useRef } from "react";
 
-import * as React from "react";
-import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface UserProfileProps {
   compact?: boolean;
 }
 
+/**
+ * UserProfile Component
+ * 
+ * Displays user authentication status, profile information, and cloud sync controls.
+ * Supports multiple display modes: compact (dropdown) and full (card).
+ * Handles Firebase configuration states and loading/authenticated/guest states.
+ * 
+ * @param {UserProfileProps} props - Component props
+ * @param {boolean} [props.compact=false] - Whether to render in compact dropdown mode
+ * @returns {React.ReactElement} User profile UI
+ */
 export function UserProfile({ compact = false }: UserProfileProps): React.ReactElement {
   const {
     user,
@@ -22,6 +28,31 @@ export function UserProfile({ compact = false }: UserProfileProps): React.ReactE
     logout,
   } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Handle keyboard navigation for dropdown
+  useEffect(() => {
+    if (!showDropdown) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowDropdown(false);
+      }
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   // If Firebase isn't configured, show local-only mode
   if (!isConfigured) {
@@ -56,7 +87,7 @@ export function UserProfile({ compact = false }: UserProfileProps): React.ReactE
 
     if (compact) {
       return (
-        <div className="user-profile user-profile--compact">
+        <div className="user-profile user-profile--compact" ref={dropdownRef}>
           <button
             className="user-profile-avatar-btn"
             onClick={() => setShowDropdown(!showDropdown)}
@@ -185,5 +216,3 @@ export function UserProfile({ compact = false }: UserProfileProps): React.ReactE
     </div>
   );
 }
-
-export default UserProfile;

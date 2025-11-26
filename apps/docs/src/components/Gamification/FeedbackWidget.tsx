@@ -115,10 +115,11 @@ export default function FeedbackWidget({
 
       {showComment && (
         <div className="feedback-comment">
-          <label className="feedback-comment-label">
+          <label htmlFor="feedback-comment-input" className="feedback-comment-label">
             How can we improve this page?
           </label>
           <textarea
+            id="feedback-comment-input"
             className="feedback-comment-input"
             placeholder="Your feedback helps us improve..."
             value={comment}

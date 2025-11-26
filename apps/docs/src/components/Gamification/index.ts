@@ -1,5 +1,5 @@
 export {
-  default as ReadingProgress,
+  ReadingProgress,
   ReadingProgressCard,
   useReadingProgress,
 } from "./ReadingProgress";
@@ -12,4 +12,4 @@ export {
 } from "./Achievements";
 export { default as DocJourney, useDocJourney, LEARNING_PATHS } from "./DocJourney";
 export { default as FeedbackWidget, useFeedback } from "./FeedbackWidget";
-export { default as UserProfile } from "./UserProfile";
+export { UserProfile } from "./UserProfile";
