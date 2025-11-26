@@ -21,6 +21,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "./firebase";
+import { isAnalyticsAllowed } from "../components/CookieConsent";
 
 // Types for analytics events
 export interface PageViewEvent {
@@ -120,10 +121,22 @@ class AnalyticsService {
   }
 
   /**
+   * Check if analytics tracking is allowed (GDPR consent)
+   */
+  private hasConsent(): boolean {
+    return isAnalyticsAllowed();
+  }
+
+  /**
    * Initialize the analytics service
    */
   async init(): Promise<void> {
     if (this.isInitialized) return;
+
+    // Don't initialize if user hasn't consented
+    if (!this.hasConsent()) {
+      return;
+    }
 
     if (isFirebaseConfigured() && typeof window !== "undefined") {
       try {
@@ -175,6 +188,11 @@ class AnalyticsService {
     userId: string | null,
     isAuthenticated: boolean
   ): Promise<void> {
+    // Check GDPR consent before tracking
+    if (!this.hasConsent()) {
+      return;
+    }
+
     if (!this.db) {
       await this.init();
     }
@@ -272,6 +290,11 @@ class AnalyticsService {
     userId: string | null,
     eventData?: Record<string, unknown>
   ): Promise<void> {
+    // Check GDPR consent before tracking
+    if (!this.hasConsent()) {
+      return;
+    }
+
     if (!this.db) {
       await this.init();
     }
