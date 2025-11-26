@@ -458,6 +458,18 @@ troubleshooting, and maintenance procedures.
 
 ---
 
+## Recommended External Resources
+
+:::tip sUAS Program Documentation
+
+See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
+comprehensive DHS framework details and integration guidance with Phoenix
+Rooivalk operations.
+
+:::
+
+---
+
 ## Conclusion
 
 The Phoenix Rooivalk Operations Manual provides comprehensive procedures for

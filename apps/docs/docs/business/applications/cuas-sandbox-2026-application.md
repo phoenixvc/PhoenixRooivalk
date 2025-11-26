@@ -1,0 +1,491 @@
+---
+id: cuas-sandbox-2026-application
+title: CUAS Sandbox 2026 Application Draft
+sidebar_label: CUAS 2026 Application
+---
+
+## Application Status
+
+:::caution Draft Document
+
+This is a **DRAFT APPLICATION** for the Canada DND CUAS Sandbox 2026. Final
+submission must be made through the official PriviDox platform by **December 15,
+2025, 2:00 PM ET**.
+
+:::
+
+| Field                    | Value                                                             |
+| ------------------------ | ----------------------------------------------------------------- |
+| **Program**              | Counter Uncrewed Aerial Systems Sandbox 2026                      |
+| **Applicant**            | Phoenix Rooivalk Inc.                                             |
+| **Solution Category**    | Detect & Defeat                                                   |
+| **TRL Level**            | TRL 6 (System prototype demonstration in operational environment) |
+| **Application Deadline** | December 15, 2025, 2:00 PM ET                                     |
+
+---
+
+## Section 1: Organization Information
+
+### 1.1 Applicant Details
+
+| Field                 | Information                                                  |
+| --------------------- | ------------------------------------------------------------ |
+| **Legal Name**        | Phoenix Rooivalk Inc.                                        |
+| **Business Type**     | Delaware C-Corporation                                       |
+| **Year Founded**      | 2024                                                         |
+| **Headquarters**      | United States                                                |
+| **Canadian Presence** | Planned Q2 2026 (South African Entity for non-ITAR products) |
+| **Website**           | www.phoenixrooivalk.com                                      |
+| **Primary Contact**   | [To be completed]                                            |
+| **Email**             | contact@phoenixrooivalk.com                                  |
+
+### 1.2 Company Overview
+
+Phoenix Rooivalk develops autonomous counter-drone defense systems utilizing SAE
+Level 4 autonomy, multi-sensor fusion, and blockchain-based evidence anchoring.
+Our platform addresses the rapidly evolving UAS threat landscape through
+innovative detection and kinetic defeat capabilities.
+
+**Core Competencies**:
+
+- Multi-sensor fusion (radar, RF, optical, acoustic, LiDAR)
+- AI-powered threat classification and tracking
+- Autonomous interceptor drone deployment
+- GPS-denied navigation and EW-resilient communications
+- Blockchain evidence anchoring for legal admissibility
+
+---
+
+## Section 2: Solution Description
+
+### 2.1 Solution Name
+
+**Phoenix Rooivalk Counter-UAS Defense System**
+
+### 2.2 Solution Category
+
+**Detect & Defeat** - Our system provides integrated detection, classification,
+tracking, and kinetic neutralization of Micro and Mini UAS threats.
+
+### 2.3 Solution Overview
+
+The Phoenix Rooivalk system is a comprehensive counter-drone solution that
+combines multi-modal sensing with autonomous kinetic interceptors. The system
+addresses all six operational scenarios outlined in the CUAS Sandbox 2026
+requirements.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PHOENIX ROOIVALK SYSTEM ARCHITECTURE                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
+│  │   Radar     │  │  RF Sensor  │  │  EO/IR      │  │  Acoustic   │        │
+│  │  Detection  │  │  Detection  │  │  Camera     │  │  Sensor     │        │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘        │
+│         │                │                │                │               │
+│         └────────────────┴────────────────┴────────────────┘               │
+│                                   │                                        │
+│                                   ▼                                        │
+│                    ┌──────────────────────────────┐                        │
+│                    │   COGNITIVE MESH PROCESSOR   │                        │
+│                    │   (Multi-Sensor Fusion AI)   │                        │
+│                    └──────────────┬───────────────┘                        │
+│                                   │                                        │
+│              ┌────────────────────┼────────────────────┐                   │
+│              ▼                    ▼                    ▼                   │
+│    ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐          │
+│    │  Track & ID     │  │  Threat Level   │  │  Engagement     │          │
+│    │  Management     │  │  Assessment     │  │  Coordination   │          │
+│    └─────────────────┘  └─────────────────┘  └────────┬────────┘          │
+│                                                       │                    │
+│                                                       ▼                    │
+│                              ┌─────────────────────────────────┐           │
+│                              │   INTERCEPTOR DRONE SWARM       │           │
+│                              │   (Kinetic Defeat System)       │           │
+│                              └─────────────────────────────────┘           │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                     COMMAND & CONTROL INTERFACE                     │   │
+│  │              (STANAG-Compatible, C2 Integration Ready)              │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 2.4 Technology Readiness Level
+
+**TRL 6** - System/subsystem model or prototype demonstration in a relevant
+environment.
+
+| Component                    | TRL   | Evidence                        |
+| ---------------------------- | ----- | ------------------------------- |
+| Multi-Sensor Fusion          | TRL 6 | Field trials completed          |
+| Optical Detection (ConvNeXt) | TRL 6 | 98%+ accuracy validated         |
+| RF Detection                 | TRL 5 | Integration testing complete    |
+| Radar Track Analysis         | TRL 5 | Algorithm validation complete   |
+| Acoustic Detection           | TRL 5 | Field testing in progress       |
+| Interceptor Drone            | TRL 5 | Prototype flight tests complete |
+| C2 Integration               | TRL 5 | API specification finalized     |
+
+---
+
+## Section 3: Detection Capabilities
+
+### 3.1 Detection Methods
+
+| Method                  | Type    | Range  | Description                                    |
+| ----------------------- | ------- | ------ | ---------------------------------------------- |
+| **Micro-Doppler Radar** | Active  | 5+ km  | 360° coverage, rotor signature discrimination  |
+| **RF Sensing**          | Passive | 10+ km | 300MHz-6GHz, protocol analysis                 |
+| **EO/IR Camera**        | Passive | 3+ km  | Visual + thermal imaging                       |
+| **Acoustic Sensors**    | Passive | 500m   | Autonomous drone detection in GPS-denied areas |
+| **LiDAR**               | Active  | 1 km   | 42,000 measurements/sec, sub-meter accuracy    |
+
+### 3.2 Detection Performance
+
+| Metric                      | Specification                            |
+| --------------------------- | ---------------------------------------- |
+| **Detection Accuracy**      | > 99.5%                                  |
+| **False Positive Rate**     | < 1%                                     |
+| **Classification Accuracy** | > 98% (drone vs bird vs aircraft)        |
+| **Response Time**           | < 200ms from detection to classification |
+| **Track Capacity**          | 50+ simultaneous targets                 |
+
+### 3.3 Target Types Detected
+
+| UAS Category           | Detection Capability                     |
+| ---------------------- | ---------------------------------------- |
+| **Micro UAS** (< 2 kg) | Full detection and classification        |
+| **Mini UAS** (2-25 kg) | Full detection and classification        |
+| **Commercial Drones**  | DJI, Autel, Parrot, custom builds        |
+| **FPV Racing Drones**  | High-speed targets up to 150 km/h        |
+| **Fixed-Wing UAS**     | Including autonomous loitering munitions |
+| **Swarms**             | Multi-target coordination detection      |
+
+---
+
+## Section 4: Defeat Capabilities
+
+### 4.1 Defeat Method
+
+**Kinetic Interceptor Drone Swarm** - Autonomous interceptor drones that
+physically disable threat UAS through direct collision or net deployment.
+
+### 4.2 Defeat System Specifications
+
+| Specification                | Value                                 |
+| ---------------------------- | ------------------------------------- |
+| **Interceptor Type**         | Custom quadcopter with net payload    |
+| **Max Speed**                | 120 km/h                              |
+| **Intercept Range**          | 2.5 km from launch point              |
+| **Time to Launch**           | < 10 seconds from engagement decision |
+| **Time to Intercept**        | < 60 seconds at 1 km range            |
+| **Reusability**              | Yes (net recovery and reload)         |
+| **Simultaneous Engagements** | Up to 4 interceptors per target       |
+
+### 4.3 Engagement Process
+
+```
+Detection → Classification → Threat Assessment → Human-in-Loop Confirmation
+     │                                                      │
+     └──────────────────────────────────────────────────────┘
+                              │
+                              ▼
+                    Interceptor Launch
+                              │
+                              ▼
+                    Autonomous Pursuit
+                              │
+                              ▼
+                    Net Deployment / Collision
+                              │
+                              ▼
+                    Target Neutralization
+                              │
+                              ▼
+                    Evidence Anchoring (Blockchain)
+```
+
+### 4.4 Defeat Performance
+
+| Metric                       | Specification                          |
+| ---------------------------- | -------------------------------------- |
+| **Probability of Kill (Pk)** | > 85% per engagement                   |
+| **Engagement Envelope**      | 360° azimuth, 0-500m altitude          |
+| **Multi-Target Capability**  | Up to 8 simultaneous engagements       |
+| **Collateral Damage Risk**   | Minimal (falling net + disabled drone) |
+
+---
+
+## Section 5: Operational Scenario Coverage
+
+### 5.1 Operating Base Defense
+
+| Requirement               | Phoenix Rooivalk Solution                         |
+| ------------------------- | ------------------------------------------------- |
+| Static deployment         | Trailer-mounted sensor suite + interceptor hangar |
+| 2.5 km perimeter          | Full coverage with overlapping sensor fields      |
+| 24/7 operation            | Automated monitoring, human-supervised engagement |
+| Friend/Foe identification | Transponder integration, flight plan correlation  |
+
+### 5.2 Mobile Vehicle Defense
+
+| Requirement           | Phoenix Rooivalk Solution                            |
+| --------------------- | ---------------------------------------------------- |
+| Vehicle-mounted       | Compact sensor pod + 4-drone launcher                |
+| Power requirements    | 12V/24V vehicle power compatible                     |
+| On-the-move operation | Stabilized sensors, mesh networking between vehicles |
+| Patrol coverage       | Coordinated defense bubble across 5-vehicle patrol   |
+
+### 5.3 Dismounted Personnel Defense
+
+| Requirement       | Phoenix Rooivalk Solution                 |
+| ----------------- | ----------------------------------------- |
+| Person portable   | Backpack sensor unit (< 15 kg)            |
+| Handheld launcher | Single-drone portable launcher (< 8 kg)   |
+| Moving operation  | GPS-denied navigation, local mesh network |
+| 12-person element | 360° coverage, single operator control    |
+
+### 5.4 Urban Environment
+
+| Requirement           | Phoenix Rooivalk Solution                         |
+| --------------------- | ------------------------------------------------- |
+| Cluttered environment | Multi-path resistant radar processing             |
+| RF-dense              | Passive RF detection with protocol fingerprinting |
+| Building obstacles    | Distributed sensor placement, mesh networking     |
+| 4x4 block coverage    | Networked sensors on building rooftops            |
+
+### 5.5 Naval Environment
+
+| Requirement          | Phoenix Rooivalk Solution                   |
+| -------------------- | ------------------------------------------- |
+| Ship superstructure  | Mast-mounted sensors, stabilized gimbal     |
+| Maritime environment | IP67 rated, salt spray resistant            |
+| Underway operation   | Motion-compensated tracking                 |
+| Harbor defense       | Extended range detection, port coordination |
+
+### 5.6 Linear Border Defense
+
+| Requirement           | Phoenix Rooivalk Solution                      |
+| --------------------- | ---------------------------------------------- |
+| 10 km coverage        | 4-5 sensor nodes at 2 km spacing               |
+| Continuous monitoring | Overlapping detection zones, automated handoff |
+| Rapid response        | Pre-positioned interceptors at each node       |
+| Cost efficiency       | Low-cost sensor network option available       |
+
+---
+
+## Section 6: Command & Control Integration
+
+### 6.1 C2 Architecture
+
+The Phoenix Rooivalk system is designed for seamless integration with military
+command and control systems:
+
+| Integration Point | Standard/Protocol                      |
+| ----------------- | -------------------------------------- |
+| Track Data        | STANAG 4586, STANAG 4676               |
+| Imagery           | STANAG 4609 (MISB)                     |
+| Messaging         | MIL-STD-6016 (Link 16 compatible)      |
+| API               | RESTful JSON, gRPC                     |
+| Security          | AES-256 encryption, PKI authentication |
+
+### 6.2 External System Integration
+
+- **Air Traffic Management**: ASTERIX CAT-048/062 format support
+- **Sensor Networks**: MQTT/DDS for sensor fusion
+- **GIS Systems**: OGC-compliant spatial data
+- **Logging**: Blockchain evidence anchoring for legal admissibility
+
+---
+
+## Section 7: GPS-Denied & EW-Contested Operation
+
+### 7.1 Navigation Resilience
+
+| Capability                   | Implementation                        |
+| ---------------------------- | ------------------------------------- |
+| **Multi-Constellation GNSS** | GPS + GLONASS + Galileo + BeiDou      |
+| **Visual-Inertial Odometry** | VINS-Fusion for GPS-denied navigation |
+| **Terrain-Aided Navigation** | High-altitude terrain matching        |
+| **SLAM**                     | Simultaneous localization and mapping |
+
+### 7.2 Communications Resilience
+
+| Capability            | Implementation                            |
+| --------------------- | ----------------------------------------- |
+| **Frequency Hopping** | 2.4GHz, 5.2GHz, 5.8GHz, 900MHz bands      |
+| **Mesh Networking**   | Doodle Labs Mesh Rider (80+ Mbps)         |
+| **Anti-Jamming**      | Adaptive notch filtering, spread spectrum |
+| **Range**             | 50+ km with automatic failover            |
+
+---
+
+## Section 8: Test Plan Summary
+
+### 8.1 Proposed Test Objectives
+
+| Objective                   | Description                                              |
+| --------------------------- | -------------------------------------------------------- |
+| **Detection Range**         | Validate detection of Micro/Mini UAS at specified ranges |
+| **Classification Accuracy** | Confirm >98% accuracy across target types                |
+| **Engagement Success**      | Demonstrate interceptor Pk against maneuvering targets   |
+| **C2 Integration**          | Verify track data exchange with CAF systems              |
+| **Scenario Coverage**       | Test in at least 3 of 6 operational scenarios            |
+
+### 8.2 Test Scenarios
+
+**Day 1-2: Detection Validation**
+
+- Multi-sensor detection at various ranges
+- Classification accuracy testing
+- False positive rate measurement
+
+**Day 3-4: Defeat Demonstrations**
+
+- Interceptor launch and engagement tests
+- Multi-target engagement scenarios
+- Defeat effectiveness measurement
+
+**Day 5: Integration & Scenarios**
+
+- C2 integration demonstration
+- Operational scenario simulation
+- Red Team challenge
+
+### 8.3 Success Criteria
+
+| Metric                  | Target | Minimum |
+| ----------------------- | ------ | ------- |
+| Detection Rate          | > 99%  | > 95%   |
+| Classification Accuracy | > 98%  | > 90%   |
+| False Positive Rate     | < 1%   | < 5%    |
+| Intercept Probability   | > 85%  | > 70%   |
+| Response Time           | < 60s  | < 120s  |
+
+---
+
+## Section 9: Team & Experience
+
+### 9.1 Key Personnel
+
+| Role                  | Expertise                               |
+| --------------------- | --------------------------------------- |
+| **Program Manager**   | 15+ years defense systems experience    |
+| **Chief Engineer**    | Counter-UAS systems development         |
+| **AI/ML Lead**        | Computer vision and sensor fusion       |
+| **Flight Operations** | Certified drone operators, FAA Part 107 |
+
+### 9.2 Relevant Experience
+
+- Counter-UAS research and development since 2024
+- Multi-sensor fusion system integration
+- Autonomous drone navigation development
+- Defense industry partnerships
+
+---
+
+## Section 10: Canadian Content
+
+### 10.1 Canadian Involvement
+
+| Element              | Canadian Content                             |
+| -------------------- | -------------------------------------------- |
+| **Testing Location** | CFB Suffield, Alberta                        |
+| **Planned Entity**   | Canadian subsidiary planned 2026             |
+| **Partnerships**     | Exploring Canadian defense industry partners |
+| **Manufacturing**    | Open to Canadian manufacturing partnerships  |
+| **Research**         | Interest in DRDC collaboration               |
+
+### 10.2 Economic Benefits
+
+- Potential job creation in Canada
+- Technology transfer opportunities
+- Canadian defense industrial base contribution
+- Export potential from Canadian operations
+
+---
+
+## Section 11: Compliance & Safety
+
+### 11.1 Regulatory Compliance
+
+| Regulation           | Status                                    |
+| -------------------- | ----------------------------------------- |
+| **Transport Canada** | RPAS registration and certification       |
+| **ITAR**             | US entity fully compliant                 |
+| **Export Controls**  | Canadian export permit process understood |
+| **Safety Standards** | ISO 9001, MIL-STD-810G                    |
+
+### 11.2 Safety Measures
+
+- Human-in-the-loop for engagement decisions
+- Geo-fencing and airspace deconfliction
+- Fail-safe return-to-base protocols
+- Comprehensive risk assessment procedures
+
+---
+
+## Section 12: Submission Checklist
+
+- [ ] Organization information complete
+- [ ] Solution description finalized
+- [ ] TRL evidence documentation prepared
+- [ ] Test Plan template completed
+- [ ] Team bios and CVs ready
+- [ ] Canadian content statement prepared
+- [ ] Safety documentation complete
+- [ ] PriviDox account activated
+- [ ] Final review by legal/compliance
+- [ ] Submit before December 15, 2025, 2:00 PM ET
+
+---
+
+## Appendix A: Technical Specifications
+
+### A.1 Sensor Specifications
+
+| Sensor       | Specification                                 |
+| ------------ | --------------------------------------------- |
+| **Radar**    | X-band, 360° scan, 5+ km range, micro-Doppler |
+| **RF**       | 300 MHz - 6 GHz, protocol identification      |
+| **EO/IR**    | 4K visible + LWIR thermal, 30x optical zoom   |
+| **Acoustic** | 8-channel array, 300-500m range               |
+| **LiDAR**    | 905nm, 42,000 pts/sec, 1 km range             |
+
+### A.2 Interceptor Specifications
+
+| Specification     | Value                 |
+| ----------------- | --------------------- |
+| **Configuration** | Quadcopter            |
+| **Size**          | 450mm diagonal        |
+| **Weight**        | 2.5 kg (with payload) |
+| **Payload**       | Deployable net system |
+| **Endurance**     | 15 minutes            |
+| **Max Speed**     | 120 km/h              |
+
+### A.3 System Power Requirements
+
+| Configuration     | Power                      |
+| ----------------- | -------------------------- |
+| **Fixed Site**    | 2.5 kW (full sensor suite) |
+| **Vehicle Mount** | 800W (compact suite)       |
+| **Portable**      | 150W (backpack sensor)     |
+
+---
+
+## Appendix B: Contact Information
+
+| Role                | Contact                          |
+| ------------------- | -------------------------------- |
+| **Primary Contact** | [Name]                           |
+| **Email**           | applications@phoenixrooivalk.com |
+| **Phone**           | [To be added]                    |
+| **Address**         | [To be added]                    |
+
+---
+
+_This document is a draft application for internal review. Final submission must
+be made through the official PriviDox platform. © 2025 Phoenix Rooivalk. All
+rights reserved._

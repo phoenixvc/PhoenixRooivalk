@@ -1,0 +1,306 @@
+---
+id: 12-month-business-plan
+title: 12-Month Business Plan
+sidebar_label: 12-Month Business Plan
+---
+
+## Phoenix Rooivalk: Dual-Brand Launch Strategy
+
+**SkySnare™ & AeroNet™**
+
+| Investment         | Timeline                     |
+| ------------------ | ---------------------------- |
+| $1.5M Seed Funding | November 2025 - October 2026 |
+
+---
+
+## Executive Summary
+
+Phoenix Rooivalk operates two distinct brands sharing core technology:
+**SkySnare™** for consumer sports training and **AeroNet™** for enterprise
+security. The company is currently in mechanical prototype development,
+targeting a first integrated test in Q1 2026.
+
+Year 1 focuses on completing prototype development, launching SkySnare™ D2C,
+and preparing AeroNet™ for enterprise pilots.
+
+### Year 1 Objectives
+
+- Complete mechanical prototype development (Phase 1a)
+- Launch SkySnare™ D2C channel (Phase 1b)
+- Achieve 5,000 consumer sales by Dec 2026
+- Prepare AeroNet™ for pilot deployment (Phase 1c)
+- Generate $2.15M total revenue
+
+---
+
+## Market Opportunity
+
+### Consumer Market (SkySnare™)
+
+The outdoor active toy market is growing at **8.2% CAGR**¹. Parents seek
+screen-free, safe outdoor activities, with 42% of households spending $300+
+annually on sports toys².
+
+**Target Customer:**
+
+| Attribute        | Detail                       |
+| ---------------- | ---------------------------- |
+| Household income | $75K+                        |
+| Children aged    | 10–16                        |
+| Location         | Suburban or rural households |
+| Interest         | Sports/outdoor activities    |
+
+**Positioning**: "The safe way to practice your aim." Marketed as a sports
+training tool, not a drone interference device.
+
+### Enterprise Market (AeroNet™)
+
+The counter-drone market is expanding at **47% CAGR**³, driven by security and
+insurance requirements.
+
+**Target Customer:**
+
+| Segment                          | Count/Size                 |
+| -------------------------------- | -------------------------- |
+| Regional airports                | 542 in the US              |
+| Seaports and logistics terminals | Major ports                |
+| Critical infrastructure          | Power, water, comms        |
+| Insurance-led programs           | Risk reduction initiatives |
+
+---
+
+## Product Development Timeline
+
+### Phase 1a: Core Platform – Mechanical Prototype (Nov 2025 → Apr 2026)
+
+- Mechanical prototype under development
+- Subsystem integration in progress
+- Reliability and endurance testing (Q1 2026)
+- **Target**: Full prototype validation by Apr 2026
+
+### Phase 1b: SkySnare™ Consumer (Mar 2026 → Sep 2026)
+
+| Attribute     | Specification                                      |
+| ------------- | -------------------------------------------------- |
+| Product       | Lightweight pneumatic launcher for sports training |
+| Certification | CPSC/ASTM/EN-71 by Mar 2026                        |
+| Price         | $349 MSRP / $125 COGS (Batch 2)                    |
+| Focus         | D2C launch, brand building, influencer engagement  |
+
+### Phase 1c: AeroNet™ Enterprise (Aug 2026 → Apr 2027)
+
+| Attribute   | Specification                                             |
+| ----------- | --------------------------------------------------------- |
+| Product     | Enterprise capture system for authorized security use     |
+| Compliance  | FAA coordination (US) & SORA compliance (EU)              |
+| Preparation | Safety case preparation, insurance partnership validation |
+| Target      | First pilot deployment Q1 2027                            |
+
+---
+
+## Quarterly Execution Plan
+
+### Q1 (Nov 2025 – Jan 2026): Foundation
+
+| Activity                                  | Status      |
+| ----------------------------------------- | ----------- |
+| Assemble mechanical prototype components  | In progress |
+| Begin subsystem integration & range tests | In progress |
+| Initiate CPSC/ASTM testing                | Planned     |
+| Secure $5M product liability policy       | Planned     |
+| Launch D2C website preorders              | Planned     |
+
+| Metric    | Target |
+| --------- | ------ |
+| Burn      | $375K  |
+| Revenue   | $175K  |
+| Headcount | 6      |
+
+### Q2 (Feb – Apr 2026): Prototype Validation & Certification
+
+| Activity                                                  | Status   |
+| --------------------------------------------------------- | -------- |
+| Complete full mechanical prototype validation (50m)       | Planned  |
+| CPSC/ASTM/EN-71 certifications completed                  | Mar 2026 |
+| Begin Kickstarter fulfillment and first small batch sales | Planned  |
+| Establish influencer partnerships (5 major, 20 micro)     | Planned  |
+
+| Metric    | Target |
+| --------- | ------ |
+| Burn      | $400K  |
+| Revenue   | $525K  |
+| Headcount | 9      |
+
+### Q3 (May – Jul 2026): Scale & Enterprise Prep
+
+| Activity                                          | Status  |
+| ------------------------------------------------- | ------- |
+| 3,500 cumulative SkySnare™ units shipped         | Target  |
+| Return rate <3%, warranty claims <1%              | Target  |
+| Submit enterprise safety case and insurance model | Planned |
+| FAA meetings and SORA documentation               | Planned |
+
+| Metric    | Target |
+| --------- | ------ |
+| Burn      | $425K  |
+| Revenue   | $875K  |
+| Headcount | 11     |
+
+### Q4 (Aug – Oct 2026): Dual Progress
+
+| Activity                                            | Status   |
+| --------------------------------------------------- | -------- |
+| Integrated prototype tested in field conditions     | Target   |
+| 4,500 total consumer units sold (5,000 by Dec 2026) | Target   |
+| Enterprise pilot MOU signed                         | Sep 2026 |
+| Series A preparation                                | Ongoing  |
+
+| Metric    | Target |
+| --------- | ------ |
+| Burn      | $300K  |
+| Revenue   | $575K  |
+| Headcount | 13     |
+
+---
+
+## Financial Plan
+
+### Revenue Streams
+
+| Stream             | Units/Contracts | Revenue | Margin | Notes               |
+| ------------------ | --------------- | ------- | ------ | ------------------- |
+| SkySnare D2C       | 4,500           | $1.57M  | 60%    | Primary channel     |
+| SkySnare Amazon    | 500             | $140K   | 45%    | FBA fees included   |
+| Accessories        | -               | $105K   | 70%    | 30% attach rate     |
+| Enterprise Setup   | 1               | $75K    | 40%    | Readiness fee       |
+| Warranty & Support | -               | $35K    | 90%    | Extended warranties |
+
+**Total Year 1 Revenue**: $2.15M (Consumer-led)
+
+### Working Capital
+
+| Source            | Amount     | Notes             |
+| ----------------- | ---------- | ----------------- |
+| Initial inventory | $150–200K  | 750–1,000 units   |
+| PO financing      | $350K line | 35-day conversion |
+| Kickstarter funds | $300K net  | Q1 2026 inflow    |
+
+### True Unit Economics (D2C)
+
+| Metric                  | Value          |
+| ----------------------- | -------------- |
+| Gross Revenue           | $349           |
+| Returns (3.5%)          | -$12           |
+| Warranty Reserve (2%)   | -$7            |
+| **Net Revenue**         | **$330**       |
+| COGS (blended)          | $135           |
+| **Contribution Margin** | **$195 (59%)** |
+| CAC                     | $60            |
+| **Unit Profit**         | **$135**       |
+
+---
+
+## Marketing Strategy
+
+### SkySnare™ ($350K Budget)
+
+| Channel    | Allocation | Tactics                                                 |
+| ---------- | ---------- | ------------------------------------------------------- |
+| Digital    | 50%        | Facebook, Instagram, YouTube, TikTok (#TargetChallenge) |
+| Influencer | 30%        | 5 major + 20 micro partners (CPA model $25/conv)        |
+| PR         | 20%        | Outdoor & parenting magazines, local media demos        |
+
+:::warning Message Control
+
+No "drone" or "wildlife" phrasing; sports training positioning only.
+
+:::
+
+### AeroNet™ ($75K Budget)
+
+| Channel                      | Investment               |
+| ---------------------------- | ------------------------ |
+| Airport security conferences | 2 events                 |
+| Insurance co-marketing       | Partnership development  |
+| Trade publications           | Industry visibility      |
+| Government liaison           | Regulatory relationships |
+
+---
+
+## Operations & Team
+
+### Manufacturing
+
+| Partner      | Details        |
+| ------------ | -------------- |
+| Manufacturer | Flex (Vietnam) |
+| MOQ          | 500 units      |
+| Lead time    | 45 days        |
+| Quality      | Six Sigma QC   |
+
+### Fulfillment
+
+| Channel        | Method          |
+| -------------- | --------------- |
+| D2C            | 3PL fulfillment |
+| Amazon         | FBA             |
+| Returns target | <3%             |
+| Warranty       | 1-year standard |
+
+### Team Growth
+
+| Quarter | Headcount |
+| ------- | --------- |
+| Q1      | 6         |
+| Q2      | 9         |
+| Q3      | 11        |
+| Q4      | 13        |
+
+---
+
+## Risk Management
+
+### Key Risks
+
+| Category      | Risk              | Mitigation                         |
+| ------------- | ----------------- | ---------------------------------- |
+| **Technical** | Prototype delays  | Staged subsystem validation        |
+| **Legal**     | Compliance issues | Certification partners & insurance |
+| **Financial** | Cash flow gaps    | PO financing and staged production |
+| **Brand**     | B2C/B2B confusion | Full brand separation              |
+
+---
+
+## Success Metrics
+
+### Consumer KPIs
+
+| Metric      | Target            |
+| ----------- | ----------------- |
+| Units sold  | 5,000 by Dec 2026 |
+| Return rate | <3%               |
+| CAC         | <$60              |
+| NPS         | >50               |
+
+### Enterprise KPIs
+
+| Metric          | Target   |
+| --------------- | -------- |
+| Safety case     | Approved |
+| Insurance study | Complete |
+| Pilot MOU       | Signed   |
+
+---
+
+## Sources
+
+1. IBISWorld Outdoor Recreation 2024
+2. National Sporting Goods Association 2024
+3. MarketsandMarkets Counter-UAS 2024
+
+---
+
+_This document contains confidential business planning information. Distribution
+is restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+reserved._

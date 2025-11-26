@@ -8,6 +8,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         "executive/executive-summary",
+        "executive/investor-executive-summary",
         "executive/global-strategy",
         "executive/system-overview",
         "executive/system-overview-detailed",
@@ -18,6 +19,12 @@ const sidebars: SidebarsConfig = {
         "executive/phoenix-rooivalk-litepaper",
         "executive/phoenix-rooivalk-pitch-deck",
         "executive/phoenix-rooivalk-technical-whitepaper",
+        {
+          type: "category",
+          label: "Early Development",
+          collapsed: true,
+          items: ["executive/early-development/early-spec-qa"],
+        },
       ],
     },
     {
@@ -82,6 +89,24 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "Hardware",
+          collapsed: true,
+          items: [
+            "technical/hardware/rkv-m-specifications",
+            "technical/hardware/net-specifications",
+          ],
+        },
+        {
+          type: "category",
+          label: "ML Training",
+          collapsed: true,
+          items: [
+            "technical/ml-training/ml-training-plan",
+            "technical/ml-training/drone-training-data-sources",
+          ],
+        },
+        {
+          type: "category",
           label: "Performance",
           collapsed: true,
           items: ["technical/performance/performance-specifications"],
@@ -95,6 +120,7 @@ const sidebars: SidebarsConfig = {
       items: [
         "business/market-analysis",
         "business/business-model",
+        "business/12-month-business-plan",
         "business/competitive-analysis",
         "business/emerging-trends",
         "business/roi-analysis",
@@ -107,6 +133,23 @@ const sidebars: SidebarsConfig = {
         "business/presentation-video-script",
         "business/technical-requirements-checklist",
         "business/traction-metrics",
+        "business/influencers-and-contacts",
+        {
+          type: "category",
+          label: "Opportunities",
+          collapsed: true,
+          items: [
+            "business/opportunities/opportunities-summary",
+            "business/opportunities/soonami-cohort-8",
+            "business/opportunities/cuas-sandbox-2026",
+          ],
+        },
+        {
+          type: "category",
+          label: "Applications",
+          collapsed: true,
+          items: ["business/applications/cuas-sandbox-2026-application"],
+        },
       ],
     },
     {
@@ -153,6 +196,12 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: ["operations/training/training-materials"],
         },
+        {
+          type: "category",
+          label: "Calendar",
+          collapsed: true,
+          items: ["operations/calendar/project-calendar"],
+        },
       ],
     },
     {
@@ -174,7 +223,14 @@ const sidebars: SidebarsConfig = {
       items: [
         "research/experimental-counter-drone-effectors-transform-warfare",
         "research/sensor-technologies-comprehensive-analysis",
+        "research/market-intelligence-notes",
       ],
+    },
+    {
+      type: "category",
+      label: "📚 Resources & References",
+      collapsed: false,
+      items: ["resources/downloads", "resources/suas-program-documentation"],
     },
   ],
 };

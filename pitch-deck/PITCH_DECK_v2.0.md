@@ -222,6 +222,7 @@ Commercial counter-drone & infrastructure
 - Conservative: $4.2B (commercial/infrastructure)
 - Defense: $15-20B (military contracts)
 - **Our Focus:** Commercial first, defense expansion FY28+
+
 ### Market Size Visualization
 
 ```

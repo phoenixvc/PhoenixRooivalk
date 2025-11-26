@@ -394,6 +394,18 @@ evidence admissibility, and operational resilience in contested environments.
 
 ---
 
+## Recommended External Resources
+
+:::tip sUAS Program Documentation
+
+See [sUAS Program Documentation](../resources/suas-program-documentation.md) for
+comprehensive DHS framework details and integration guidance with Phoenix
+Rooivalk operations.
+
+:::
+
+---
+
 ## Conclusion
 
 Phoenix Rooivalk's comprehensive security and compliance framework addresses the

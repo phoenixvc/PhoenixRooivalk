@@ -369,10 +369,11 @@ chore: Update dependencies to latest versions
 
 ### Getting Help
 
-1. Check existing documentation in `/docs`
+1. Check documentation at
+   [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+   or in `apps/docs/`
 2. Review similar implementations in codebase
 3. Check GitHub Issues for related problems
-4. Consult `docs/GAME_IMPROVEMENTS_TODO.md` for known issues
 
 ## Code Review Checklist
 
@@ -392,10 +393,10 @@ Before submitting PR:
 
 ## Additional Resources
 
-- **Design System**: See `docs/VISUAL_IMPROVEMENTS_GUIDE.md`
-- **Improvements Tracker**: See `docs/GAME_IMPROVEMENTS_TODO.md`
-- **Architecture**: See `docs/REFACTORING_SUMMARY.md`
-- **WASM Integration**: See `docs/WASM_EMBEDDING_SUMMARY.md`
+- **Documentation Portal**:
+  [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+- **Documentation Source**: `apps/docs/docs/` - Technical, business, and
+  operations documentation
 - **Responsible Use**: See `RESPONSIBLE_USE.md`
 
 ---
