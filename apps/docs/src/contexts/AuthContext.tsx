@@ -22,6 +22,7 @@ import {
   saveUserProgress,
   UserProgress,
 } from "../services/firebase";
+import { analytics } from "../services/analytics";
 
 // Local storage keys
 const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
@@ -154,7 +155,11 @@ export function AuthProvider({
       return;
     }
 
+    let previousUser: User | null = null;
+
     const unsubscribe = onAuthChange(async (authUser) => {
+      const wasSignedOut = !previousUser && authUser;
+      previousUser = authUser;
       setUser(authUser);
 
       if (authUser) {
@@ -163,11 +168,23 @@ export function AuthProvider({
         const localProgress = getLocalProgress();
         const merged = mergeProgress(cloudProgress, localProgress);
 
+        // Check if this is a new user (no cloud progress = first sign in)
+        const isNewUser = Object.keys(cloudProgress.docs).length === 0;
+
         setProgress(merged);
         saveLocalProgress(merged);
 
         // Save merged progress back to cloud
         await saveUserProgress(authUser.uid, merged);
+
+        // Track signup completion for new users or returning sign-ins
+        if (wasSignedOut) {
+          const method = authUser.providerData[0]?.providerId || "unknown";
+          await analytics.trackSignupCompleted(
+            authUser.uid,
+            method.includes("google") ? "google" : method.includes("github") ? "github" : method
+          );
+        }
       }
 
       setLoading(false);
