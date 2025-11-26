@@ -1,0 +1,190 @@
+/**
+ * AI Floating Widget Styles
+ */
+
+/* Widget Container */
+.ai-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Toggle Button */
+.ai-widget__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  border: none;
+  border-radius: 28px;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-widget__toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 28px rgba(249, 115, 22, 0.5);
+}
+
+.ai-widget__toggle--active {
+  background: rgb(51, 65, 85);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ai-widget__toggle-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.ai-widget__toggle-label {
+  font-weight: 600;
+}
+
+.ai-widget__toggle-shortcut {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Quick Actions Menu */
+.ai-widget__quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: rgb(30, 41, 59);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-widget__quick-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgb(226, 230, 234);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: inherit;
+  text-align: left;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ai-widget__quick-action:hover {
+  background: rgb(51, 65, 85);
+  color: rgb(249, 115, 22);
+}
+
+.ai-widget__quick-action span:first-child {
+  font-size: 1.1rem;
+}
+
+/* Pulse Animation for Attention */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+.ai-widget__toggle::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(249, 115, 22, 0.4);
+  animation: pulse-ring 2s ease-in-out infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Show pulse on first visit (can be controlled via class) */
+.ai-widget__toggle--new::before {
+  opacity: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .ai-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .ai-widget__toggle {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .ai-widget__toggle-shortcut {
+    display: none;
+  }
+
+  .ai-widget__quick-actions {
+    right: 0;
+    width: auto;
+    min-width: 140px;
+  }
+
+  .ai-widget__quick-action {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .ai-widget__toggle,
+  .ai-widget__quick-actions,
+  .ai-widget__quick-action {
+    transition: none;
+    animation: none;
+  }
+
+  .ai-widget__toggle::before {
+    animation: none;
+    opacity: 0;
+  }
+}
