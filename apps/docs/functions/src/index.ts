@@ -15,6 +15,15 @@
  * - summarizeContent: Content summarization
  * - reviewDocumentImprovement: Admin review of suggestions
  * - getPendingImprovements: Get pending suggestions (admin)
+ *
+ * RAG Functions (from ./rag/):
+ * - indexAllDocumentation: Index all documentation for RAG
+ * - reindexDocument: Reindex a single document
+ * - deleteFromIndex: Remove document from index
+ * - getIndexStats: Get indexing statistics
+ * - searchDocs: Semantic search over documentation
+ * - askDocumentation: RAG-powered Q&A with source citations
+ * - getSuggestedQuestions: Get contextual question suggestions
  */
 
 // Export AI functions
@@ -28,6 +37,17 @@ export {
   reviewDocumentImprovement,
   getPendingImprovements,
 } from "./ai";
+
+// Export RAG functions
+export {
+  indexAllDocumentation,
+  reindexDocument,
+  deleteFromIndex,
+  getIndexStats,
+  searchDocs,
+  askDocumentation,
+  getSuggestedQuestions,
+} from "./rag";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";

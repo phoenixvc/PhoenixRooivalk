@@ -290,6 +290,34 @@ html[data-theme="dark"] .ai-textarea {
   border-color: var(--ifm-color-emphasis-300, #404040);
 }
 
+/* Category Select */
+.ai-category-select {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-category-select label {
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary, #6b7280);
+}
+
+.ai-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--ifm-color-emphasis-300, #d1d5db);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: var(--ifm-background-surface-color, #ffffff);
+  color: var(--ifm-color-content, #1f2937);
+  cursor: pointer;
+}
+
+html[data-theme="dark"] .ai-select {
+  background: var(--ifm-color-emphasis-100, #2d2d2d);
+  border-color: var(--ifm-color-emphasis-300, #404040);
+}
+
 /* Submit Button */
 .ai-submit-btn {
   width: 100%;

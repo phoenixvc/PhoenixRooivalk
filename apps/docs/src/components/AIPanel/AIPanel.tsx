@@ -22,6 +22,7 @@ import {
 import "./AIPanel.css";
 
 type AITab =
+  | "ask"
   | "competitor"
   | "swot"
   | "market"
@@ -37,6 +38,12 @@ interface AITabConfig {
 }
 
 const AI_TABS: AITabConfig[] = [
+  {
+    id: "ask",
+    label: "Ask Docs",
+    icon: "📖",
+    description: "Ask questions about the documentation with AI-powered answers",
+  },
   {
     id: "competitor",
     label: "Competitor Analysis",
@@ -78,7 +85,7 @@ const AI_TABS: AITabConfig[] = [
 export function AIPanel(): React.ReactElement | null {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<AITab>("recommendations");
+  const [activeTab, setActiveTab] = useState<AITab>("ask");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
@@ -91,6 +98,10 @@ export function AIPanel(): React.ReactElement | null {
   const [marketTopic, setMarketTopic] = useState("");
   const [summaryContent, setSummaryContent] = useState("");
 
+  // Ask Docs states
+  const [docQuestion, setDocQuestion] = useState("");
+  const [docCategory, setDocCategory] = useState("");
+
   const handleError = useCallback((err: unknown) => {
     if (err instanceof AIError) {
       setError(err.message);
@@ -100,6 +111,48 @@ export function AIPanel(): React.ReactElement | null {
       setError("An unexpected error occurred");
     }
   }, []);
+
+  const handleAskDocs = async () => {
+    if (!docQuestion.trim()) {
+      setError("Please enter a question");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      const response = await aiService.askDocumentation(docQuestion, {
+        category: docCategory || undefined,
+        format: "detailed",
+      });
+
+      // Format confidence emoji
+      const confidenceEmoji =
+        response.confidence === "high"
+          ? "🟢"
+          : response.confidence === "medium"
+            ? "🟡"
+            : "🟠";
+
+      // Format sources
+      const sourcesFormatted = response.sources
+        .map(
+          (s, i) =>
+            `${i + 1}. **${s.title}** - ${s.section} _(${Math.round(s.relevance * 100)}% relevant)_`
+        )
+        .join("\n");
+
+      setResult(
+        `## Answer\n\n${response.answer}\n\n---\n\n### Sources ${confidenceEmoji} ${response.confidence} confidence\n\n${sourcesFormatted}`
+      );
+    } catch (err) {
+      handleError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCompetitorAnalysis = async () => {
     if (competitors.length === 0) {
@@ -332,6 +385,51 @@ export function AIPanel(): React.ReactElement | null {
 
           {/* Content */}
           <div className="ai-panel-content">
+            {/* Ask Docs Tab */}
+            {activeTab === "ask" && (
+              <div className="ai-tab-content">
+                <p className="ai-tab-description">
+                  Ask questions about Phoenix Rooivalk documentation. AI will
+                  search relevant sources and provide answers with citations.
+                </p>
+
+                <div className="ai-category-select">
+                  <label htmlFor="doc-category">Filter by category:</label>
+                  <select
+                    id="doc-category"
+                    className="ai-select"
+                    value={docCategory}
+                    onChange={(e) => setDocCategory(e.target.value)}
+                  >
+                    <option value="">All Documentation</option>
+                    <option value="technical">Technical</option>
+                    <option value="business">Business</option>
+                    <option value="operations">Operations</option>
+                    <option value="executive">Executive</option>
+                    <option value="legal">Legal</option>
+                    <option value="research">Research</option>
+                  </select>
+                </div>
+
+                <textarea
+                  className="ai-textarea"
+                  placeholder="e.g., How does the RKV targeting system work?"
+                  value={docQuestion}
+                  onChange={(e) => setDocQuestion(e.target.value)}
+                  rows={3}
+                  aria-label="Question about documentation"
+                />
+
+                <button
+                  className="ai-submit-btn"
+                  onClick={handleAskDocs}
+                  disabled={isLoading || !docQuestion.trim()}
+                >
+                  {isLoading ? "Searching..." : "Ask Documentation"}
+                </button>
+              </div>
+            )}
+
             {/* Competitor Analysis Tab */}
             {activeTab === "competitor" && (
               <div className="ai-tab-content">

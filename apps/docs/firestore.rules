@@ -17,6 +17,10 @@ rules_version = '2';
  * - document_improvements: User-submitted improvement suggestions
  * - documentation_meta: Document metadata for recommendations
  * - notifications: User notifications
+ *
+ * RAG Collections (managed by Cloud Functions):
+ * - doc_embeddings: Document chunks with vector embeddings for semantic search
+ * - doc_metadata: Document-level metadata for RAG indexing
  */
 
 service cloud.firestore {
@@ -97,6 +101,19 @@ service cloud.firestore {
     match /documentation_meta/{docId} {
       allow read: if request.auth != null; // Any authenticated user can read
       allow write: if isAdmin(); // Only admins can update metadata
+    }
+
+    // RAG Collections - Document embeddings and metadata
+    // doc_embeddings: Stores document chunks with vector embeddings
+    match /doc_embeddings/{chunkId} {
+      allow read: if request.auth != null; // Authenticated users can search
+      allow write: if false; // Function-only via admin SDK (indexing)
+    }
+
+    // doc_metadata: Stores document-level metadata for RAG
+    match /doc_metadata/{docId} {
+      allow read: if request.auth != null; // Authenticated users can read metadata
+      allow write: if false; // Function-only via admin SDK (indexing)
     }
 
     // User notifications
