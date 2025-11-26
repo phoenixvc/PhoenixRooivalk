@@ -339,7 +339,7 @@ Phoenix Rooivalk's counter-UAS capabilities align strongly with CUAS Sandbox
 :::tip Recommended Action
 
 See
-[CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application.md)
+[CUAS Sandbox 2026 Application](../applications/cuas-sandbox-2026-application)
 for the draft Phoenix Rooivalk application.
 
 :::
