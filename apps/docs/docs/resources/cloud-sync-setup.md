@@ -7,8 +7,8 @@ description: Configure Firebase to enable cross-device progress synchronization
 
 # Cloud Sync Setup Guide
 
-Enable cross-device synchronization for your reading progress and achievements by
-configuring Firebase.
+Enable cross-device synchronization for your reading progress and achievements
+by configuring Firebase.
 
 ---
 
@@ -16,10 +16,10 @@ configuring Firebase.
 
 The gamification system supports two modes:
 
-| Mode | Storage | Cross-Device | Setup Required |
-|------|---------|--------------|----------------|
-| **Local** | Browser localStorage | No | None |
-| **Cloud** | Firebase Firestore | Yes | Firebase project |
+| Mode      | Storage              | Cross-Device | Setup Required   |
+| --------- | -------------------- | ------------ | ---------------- |
+| **Local** | Browser localStorage | No           | None             |
+| **Cloud** | Firebase Firestore   | Yes          | Firebase project |
 
 Without Firebase configured, the system automatically falls back to local-only
 storage.
@@ -181,12 +181,12 @@ User progress is stored in Firestore with this structure:
 
 Firebase free tier includes:
 
-| Resource | Free Limit |
-|----------|------------|
-| Authentication | Unlimited users |
-| Firestore reads | 50,000/day |
-| Firestore writes | 20,000/day |
-| Firestore storage | 1 GB |
+| Resource          | Free Limit      |
+| ----------------- | --------------- |
+| Authentication    | Unlimited users |
+| Firestore reads   | 50,000/day      |
+| Firestore writes  | 20,000/day      |
+| Firestore storage | 1 GB            |
 
 For a documentation site, this is typically more than sufficient.
 
@@ -199,5 +199,5 @@ The system will automatically use localStorage.
 
 ---
 
-*For questions about cloud sync setup, please open an issue on
-[GitHub](https://github.com/JustAGhosT/PhoenixRooivalk/issues).*
+_For questions about cloud sync setup, please open an issue on
+[GitHub](https://github.com/JustAGhosT/PhoenixRooivalk/issues)._
