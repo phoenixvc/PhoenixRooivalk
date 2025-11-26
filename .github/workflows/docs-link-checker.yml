@@ -33,11 +33,8 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generate lockfile if missing
-        run: |
-          if [ ! -f pnpm-lock.yaml ]; then
-            pnpm install --no-frozen-lockfile
-          fi
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Install dependencies
         run: pnpm install
