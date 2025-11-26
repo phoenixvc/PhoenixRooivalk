@@ -97,6 +97,7 @@ export function UserProfile({
             className="user-profile-avatar-btn"
             onClick={() => setShowDropdown(!showDropdown)}
             aria-label="User menu"
+            aria-expanded={showDropdown}
           >
             {photoURL ? (
               <img

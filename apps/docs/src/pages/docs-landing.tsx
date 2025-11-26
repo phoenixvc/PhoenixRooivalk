@@ -142,7 +142,7 @@ export default function DocsLanding(): React.ReactElement {
             </p>
             <div
               className="search-prompt"
-              role="note"
+              role="status"
               aria-label="Search shortcut: Press Control K or Command K to search documentation"
             >
               <span aria-hidden="true">🔍</span>

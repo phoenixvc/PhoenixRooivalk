@@ -83,7 +83,11 @@ export const signInWithGoogle = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   } catch (error) {
-    console.error("Google sign-in error:", error);
+    console.error("Google sign-in error:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      code: (error as any)?.code,
+      error,
+    });
     return null;
   }
 };
@@ -98,7 +102,11 @@ export const signInWithGithub = async (): Promise<User | null> => {
     const result = await signInWithPopup(auth, githubProvider);
     return result.user;
   } catch (error) {
-    console.error("GitHub sign-in error:", error);
+    console.error("GitHub sign-in error:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      code: (error as any)?.code,
+      error,
+    });
     return null;
   }
 };

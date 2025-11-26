@@ -180,6 +180,8 @@ export function AuthProvider({
     setLoading(true);
     const result = await signInWithGoogle();
     if (!result) {
+      // Sign-in failed, reset loading state
+      // Note: On success, the auth state listener will handle setLoading(false)
       setLoading(false);
     }
   }, []);
@@ -188,6 +190,8 @@ export function AuthProvider({
     setLoading(true);
     const result = await signInWithGithub();
     if (!result) {
+      // Sign-in failed, reset loading state
+      // Note: On success, the auth state listener will handle setLoading(false)
       setLoading(false);
     }
   }, []);
