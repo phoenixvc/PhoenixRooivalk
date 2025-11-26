@@ -48,7 +48,21 @@ const config: Config = {
     format: "md",
     mermaid: true,
   },
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        docsRouteBasePath: "/docs",
+        indexBlog: false,
+        searchBarShortcutHint: true,
+      },
+    ],
+  ],
   i18n: { defaultLocale: "en", locales: ["en"] },
   presets: [
     [

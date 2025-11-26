@@ -273,7 +273,12 @@ const sidebars: SidebarsConfig = {
       type: "category",
       label: "📚 Resources & References",
       collapsed: false,
-      items: ["resources/downloads", "resources/suas-program-documentation"],
+      items: [
+        "resources/downloads",
+        "resources/suas-program-documentation",
+        "resources/changelog",
+        "resources/documentation-guide",
+      ],
     },
   ],
 };
