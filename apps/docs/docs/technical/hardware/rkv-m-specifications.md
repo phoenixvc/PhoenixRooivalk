@@ -258,9 +258,9 @@ All pods capable of 0-90° tilt for transition flight
 
 ## Related Documents
 
-- [ML Training Plan](../ml-training/ml-training-plan.md)
-- [Operations Manual](../../operations/operations-manual.md)
-- [Safety & Compliance](../../legal/compliance-framework.md)
+- [ML Training Plan](../ml-training/ml-training-plan)
+- [Operations Manual](../../operations/operations-manual)
+- [Safety & Compliance](../../legal/compliance-framework)
 
 ---
 

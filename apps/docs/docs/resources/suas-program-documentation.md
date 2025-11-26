@@ -247,11 +247,11 @@ complement Phoenix Rooivalk operations:
 
 ### Related Phoenix Rooivalk Documentation
 
-- [Compliance Framework](../legal/compliance-framework.md) - ITAR, DoD, and
+- [Compliance Framework](../legal/compliance-framework) - ITAR, DoD, and
   regulatory compliance
-- [Training Materials](../operations/training/training-materials.md) - Operator
+- [Training Materials](../operations/training/training-materials) - Operator
   certification programs
-- [Operations Manual](../operations/operations-manual.md) - Standard operating
+- [Operations Manual](../operations/operations-manual) - Standard operating
   procedures
 
 ### External Resources

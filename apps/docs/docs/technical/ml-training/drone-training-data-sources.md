@@ -417,8 +417,8 @@ scarcity, supporting both binary classification and multi-class identification.
 
 ## Related Documents
 
-- [ML Training Plan](./ml-training-plan.md)
-- [Technical Architecture](../architecture/technical-architecture.md)
+- [ML Training Plan](./ml-training-plan)
+- [Technical Architecture](../architecture/technical-architecture)
 
 ---
 
