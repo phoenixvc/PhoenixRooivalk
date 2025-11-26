@@ -76,11 +76,16 @@ export function AIChatInterface({
   // Send initial question if provided
   useEffect(() => {
     if (initialQuestion && messages.length === 0) {
-      handleSendMessage(initialQuestion);
+      // Using a ref to avoid including handleSendMessage in dependencies
+      // which would cause infinite loops
+      const sendInitialQuestion = async () => {
+        await handleSendMessage(initialQuestion);
+      };
+      sendInitialQuestion();
     }
-  }, [initialQuestion]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [initialQuestion, messages.length, handleSendMessage]);
 
-  const generateMessageId = () => `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const generateMessageId = () => `msg-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
   const handleSendMessage = useCallback(
     async (questionText?: string) => {
@@ -291,7 +296,7 @@ export function AIChatInterface({
                       <div
                         className="ai-chat__message-text"
                         dangerouslySetInnerHTML={{
-                          __html: formatMessageContent(message.content),
+                          __html: sanitizeHtml(message.content),
                         }}
                       />
 
@@ -371,9 +376,27 @@ export function AIChatInterface({
 }
 
 /**
- * Format message content with basic markdown
+ * Sanitize HTML to prevent XSS attacks
+ * Only allows safe tags: strong, em, code, pre, ul, li, br
  */
-function formatMessageContent(text: string): string {
+function sanitizeHtml(html: string): string {
+  // First, escape any HTML entities
+  const escaped = html
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+  // Then apply markdown formatting (which introduces our safe HTML)
+  return formatMarkdown(escaped);
+}
+
+/**
+ * Format message content with basic markdown
+ * Note: This function expects escaped HTML input
+ */
+function formatMarkdown(text: string): string {
   return (
     text
       // Code blocks

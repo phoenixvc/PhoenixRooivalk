@@ -55,11 +55,15 @@ export function AIFloatingWidget({
     setShowQuickActions(false);
   }, []);
 
-  // Expose the openWithQuestion method globally for other components
+  // Expose the openWithQuestion method via custom event for loose coupling
   useEffect(() => {
-    (window as Window & { openAIAssistant?: (q: string) => void }).openAIAssistant = openWithQuestion;
+    const handleOpenAI = (e: CustomEvent<{ question: string }>) => {
+      openWithQuestion(e.detail.question);
+    };
+
+    window.addEventListener("openAIAssistant", handleOpenAI as EventListener);
     return () => {
-      delete (window as Window & { openAIAssistant?: (q: string) => void }).openAIAssistant;
+      window.removeEventListener("openAIAssistant", handleOpenAI as EventListener);
     };
   }, [openWithQuestion]);
 

@@ -11,12 +11,22 @@ import "./AIContextButton.css";
 interface AIContextButtonProps {
   /** The section/heading text to ask about */
   sectionTitle: string;
-  /** Click handler */
-  onClick: (question: string) => void;
+  /** Click handler - defaults to using the global AI assistant event */
+  onClick?: (question: string) => void;
   /** Size variant */
   size?: "small" | "medium";
   /** Position relative to content */
   position?: "inline" | "floating";
+}
+
+/**
+ * Helper function to open the AI assistant with a question
+ * Uses custom events for loose coupling
+ */
+export function openAIAssistant(question: string): void {
+  window.dispatchEvent(
+    new CustomEvent("openAIAssistant", { detail: { question } })
+  );
 }
 
 export function AIContextButton({
@@ -27,7 +37,11 @@ export function AIContextButton({
 }: AIContextButtonProps): React.ReactElement {
   const handleClick = () => {
     const question = `Explain the "${sectionTitle}" section in detail`;
-    onClick(question);
+    if (onClick) {
+      onClick(question);
+    } else {
+      openAIAssistant(question);
+    }
   };
 
   return (

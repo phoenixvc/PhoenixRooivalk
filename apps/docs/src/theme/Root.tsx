@@ -40,15 +40,18 @@ function usePageContext() {
 
       updateContext();
 
-      // Update on navigation
-      const observer = new MutationObserver(updateContext);
-      observer.observe(document.querySelector("title") || document.head, {
-        subtree: true,
-        characterData: true,
-        childList: true,
-      });
+      // Update on navigation - observe the title element specifically
+      const titleElement = document.querySelector("title");
+      if (titleElement) {
+        const observer = new MutationObserver(updateContext);
+        observer.observe(titleElement, {
+          subtree: true,
+          characterData: true,
+          childList: true,
+        });
 
-      return () => observer.disconnect();
+        return () => observer.disconnect();
+      }
     }
   }, []);
 

@@ -6,7 +6,7 @@
 
 export { AIChatInterface } from "./AIChatInterface";
 export { AISearchBar } from "./AISearchBar";
-export { AIContextButton } from "./AIContextButton";
+export { AIContextButton, openAIAssistant } from "./AIContextButton";
 export { AIFloatingWidget } from "./AIFloatingWidget";
 
 export default {

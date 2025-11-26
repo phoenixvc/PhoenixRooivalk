@@ -52,8 +52,11 @@
   transition: opacity 0.2s, transform 0.2s;
 }
 
-/* Show floating button on parent hover */
-*:hover > .ai-context-btn--floating {
+/* Show floating button on parent hover - use more specific selector */
+.heading-wrapper:hover > .ai-context-btn--floating,
+.section-header:hover > .ai-context-btn--floating,
+h2:hover > .ai-context-btn--floating,
+h3:hover > .ai-context-btn--floating {
   opacity: 1;
 }
 
