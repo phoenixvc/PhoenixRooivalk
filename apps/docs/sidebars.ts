@@ -223,6 +223,7 @@ const sidebars: SidebarsConfig = {
       items: [
         "research/experimental-counter-drone-effectors-transform-warfare",
         "research/sensor-technologies-comprehensive-analysis",
+        "research/market-intelligence-notes",
       ],
     },
     {
