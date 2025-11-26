@@ -55,7 +55,7 @@ interface FeedbackWidgetProps {
 export default function FeedbackWidget({
   docId,
 }: FeedbackWidgetProps): React.ReactElement {
-  const { feedback, submitted, submitFeedback } = useFeedback(docId);
+  const { submitted, submitFeedback } = useFeedback(docId);
   const [showComment, setShowComment] = useState(false);
   const [comment, setComment] = useState("");
   const [selectedRating, setSelectedRating] = useState<boolean | null>(null);
