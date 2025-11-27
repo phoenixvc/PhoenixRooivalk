@@ -14,7 +14,6 @@ import { PROMPTS } from "./prompts";
 const db = admin.firestore();
 
 interface RecommendationRequest {
-  userId: string;
   currentDocId?: string;
 }
 
@@ -185,8 +184,9 @@ export const getReadingRecommendations = functions.https.onCall(
       ...semanticRecommendations,
       ...unreadDocs
         .slice(0, 3 - semanticRecommendations.length)
-        .map((doc: { id: string }) => ({
+        .map((doc: { id: string; title?: string }) => ({
           docId: doc.id,
+          title: doc.title || "",
           reason: "Suggested based on your reading history",
           relevanceScore: 0.7,
         })),

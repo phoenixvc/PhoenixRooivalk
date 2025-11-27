@@ -50,9 +50,18 @@ export const researchPerson = functions.https.onCall(
       );
     }
 
-    const { firstName, lastName, linkedInUrl } = data;
+    // Safe destructuring with fallback to prevent null/undefined errors
+    const { firstName, lastName, linkedInUrl } = (data ?? {}) as ResearchPersonRequest;
 
-    if (!firstName || !lastName || !linkedInUrl) {
+    // Validate that all required fields are strings
+    if (
+      typeof firstName !== "string" ||
+      typeof lastName !== "string" ||
+      typeof linkedInUrl !== "string" ||
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !linkedInUrl.trim()
+    ) {
       throw new functions.https.HttpsError(
         "invalid-argument",
         "First name, last name, and LinkedIn URL are required",
@@ -105,11 +114,16 @@ export const researchPerson = functions.https.onCall(
                 : "other",
             })) as FunFact[];
 
-          await logUsage(context.auth.uid, "research_person", {
-            provider: metrics.provider,
-            model: metrics.model,
-            tokens: metrics.totalTokens,
-          });
+          // Isolate logUsage in its own try/catch so logging errors don't fail the function
+          try {
+            await logUsage(context.auth.uid, "research_person", {
+              provider: metrics.provider,
+              model: metrics.model,
+              tokens: metrics.totalTokens,
+            });
+          } catch (logError) {
+            functions.logger.warn("Failed to log usage for research_person:", logError);
+          }
 
           return {
             facts: parsed.facts,

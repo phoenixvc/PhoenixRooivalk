@@ -6,8 +6,10 @@
  */
 
 import * as functions from "firebase-functions";
+
 import { chatCompletion } from "../ai-provider";
 import { searchDocuments, SearchResult } from "../rag/search";
+
 import { checkRateLimit, logUsage } from "./rate-limit";
 import { PROMPTS, PHOENIX_CONTEXT } from "./prompts";
 
@@ -108,7 +110,7 @@ Base your Strengths and Weaknesses on the documented capabilities. Reference spe
       { model: "chat", maxTokens: 2500, temperature: 0.5 },
     );
 
-    await logUsage(context.auth.uid, "swot_analysis", {
+    await logUsage(context.auth.uid, "swot", {
       topic,
       provider: metrics.provider,
       model: metrics.model,

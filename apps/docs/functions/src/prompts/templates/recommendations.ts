@@ -18,7 +18,8 @@ export const RECOMMENDATIONS_PROMPT: PromptTemplate = {
       "Suggests next articles based on reading history with semantic search",
     createdAt: "2025-11-27",
     author: "Phoenix AI Team",
-    changelog: "Added semantic search for contextually relevant recommendations",
+    changelog:
+      "Added semantic search for contextually relevant recommendations",
     recommendedModel: "chat",
     maxTokens: 1000,
     temperature: 0.5,
@@ -27,13 +28,17 @@ export const RECOMMENDATIONS_PROMPT: PromptTemplate = {
   },
 
   system: {
-    base: `You are a documentation assistant for Phoenix Rooivalk, helping users navigate technical documentation about autonomous counter-drone systems. You understand learning paths and can recommend the most relevant next articles based on what the user has already read.`,
+    base: `You are a documentation assistant for Phoenix Rooivalk, \
+helping users navigate technical documentation about autonomous \
+counter-drone systems. You understand learning paths and can recommend \
+the most relevant next articles based on what the user has already read.`,
 
     contextMarker: "{{RAG_CONTEXT}}",
   },
 
   user: {
-    template: `Based on the user's reading history, recommend the 3 most relevant articles to read next.
+    template: `Based on the user's reading history, recommend the 3 most \
+relevant articles to read next.
 
 **Already read:**
 {{readDocs}}
@@ -75,6 +80,7 @@ Consider:
     properties: {
       recommendations: {
         type: "array",
+        maxItems: 3,
         items: {
           type: "object",
           properties: {

@@ -6,7 +6,7 @@
 
 import * as functions from "firebase-functions";
 import { chatCompletion } from "../ai-provider";
-import { checkRateLimit } from "./rate-limit";
+import { checkRateLimit, logUsage } from "./rate-limit";
 import { PROMPTS } from "./prompts";
 
 interface ContentSummaryRequest {
@@ -34,9 +34,11 @@ export const summarizeContent = functions.https.onCall(
       );
     }
 
-    const { content, maxLength = 500 } = data;
+    // Safe destructuring with fallback to prevent null/undefined errors
+    const { content, maxLength = 500 } = (data ?? {}) as ContentSummaryRequest;
 
-    if (!content || content.length < 200) {
+    // Validate content is a non-empty string
+    if (typeof content !== "string" || content.length < 200) {
       throw new functions.https.HttpsError(
         "invalid-argument",
         "Content is too short to summarize",
@@ -46,7 +48,7 @@ export const summarizeContent = functions.https.onCall(
     const truncatedContent =
       content.length > 15000 ? content.substring(0, 15000) + "..." : content;
 
-    const { content: summary } = await chatCompletion(
+    const { content: summary, metrics } = await chatCompletion(
       [
         { role: "system", content: PROMPTS.summary.system },
         {
@@ -56,6 +58,15 @@ export const summarizeContent = functions.https.onCall(
       ],
       { model: "chatFast", maxTokens: 1000, temperature: 0.3 },
     );
+
+    // Log usage after successful completion
+    await logUsage(context.auth.uid, "summary", {
+      provider: metrics.provider,
+      model: metrics.model,
+      tokens: metrics.totalTokens,
+      contentLength: content.length,
+      maxLength,
+    });
 
     return { summary };
   },

@@ -201,25 +201,41 @@ export async function ensureAzureIndex(): Promise<{
         success: true,
         message: "Index updated successfully",
       };
+    } else if (checkResponse.status === 404) {
+      // Index doesn't exist, create it
+      const createUrl = `${config.endpoint}/indexes?api-version=${config.apiVersion}`;
+      const createResponse = await fetch(createUrl, {
+        method: "POST",
+        headers: buildAzureHeaders(config),
+        body: JSON.stringify(AZURE_SEARCH_INDEX_SCHEMA),
+      });
+
+      if (!createResponse.ok) {
+        const error = await createResponse.json();
+        throw new Error(error.error?.message || "Failed to create index");
+      }
+
+      return {
+        success: true,
+        message: "Index created successfully",
+      };
+    } else {
+      // Handle other non-OK statuses (403, 500, etc.)
+      let errorDetails = `HTTP ${checkResponse.status}`;
+      try {
+        const errorBody = await checkResponse.json();
+        errorDetails = errorBody.error?.message || errorDetails;
+      } catch {
+        try {
+          errorDetails = await checkResponse.text();
+        } catch {
+          // Keep the status code as the error details
+        }
+      }
+      throw new Error(
+        `Failed to check index status: ${errorDetails}`,
+      );
     }
-
-    // Index doesn't exist, create it
-    const createUrl = `${config.endpoint}/indexes?api-version=${config.apiVersion}`;
-    const createResponse = await fetch(createUrl, {
-      method: "POST",
-      headers: buildAzureHeaders(config),
-      body: JSON.stringify(AZURE_SEARCH_INDEX_SCHEMA),
-    });
-
-    if (!createResponse.ok) {
-      const error = await createResponse.json();
-      throw new Error(error.error?.message || "Failed to create index");
-    }
-
-    return {
-      success: true,
-      message: "Index created successfully",
-    };
   } catch (error) {
     functions.logger.error("Azure index setup failed:", error);
     const message = error instanceof Error ? error.message : "Unknown error";

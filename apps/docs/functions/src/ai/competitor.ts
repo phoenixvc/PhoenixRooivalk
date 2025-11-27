@@ -53,9 +53,11 @@ export const analyzeCompetitors = functions.https.onCall(
       );
     }
 
-    const { competitors, focusAreas } = data;
+    // Safe destructuring with fallback to prevent null/undefined errors
+    const { competitors, focusAreas } = (data ?? {}) as CompetitorAnalysisRequest;
 
-    if (!competitors || competitors.length === 0) {
+    // Validate payload
+    if (!Array.isArray(competitors) || competitors.length === 0) {
       throw new functions.https.HttpsError(
         "invalid-argument",
         "At least one competitor name required",
@@ -114,13 +116,18 @@ When comparing competitors, highlight how Phoenix Rooivalk's documented capabili
       { model: "chatAdvanced", maxTokens: 3000 },
     );
 
-    await logUsage(context.auth.uid, "competitor_analysis", {
-      competitors,
-      provider: metrics.provider,
-      model: metrics.model,
-      tokens: metrics.totalTokens,
-      ragSourcesUsed: sourcesUsed.length,
-    });
+    // Log usage in isolated try/catch so telemetry failures don't affect response
+    try {
+      await logUsage(context.auth.uid, "competitor_analysis", {
+        competitors,
+        provider: metrics.provider,
+        model: metrics.model,
+        tokens: metrics.totalTokens,
+        ragSourcesUsed: sourcesUsed.length,
+      });
+    } catch (logError) {
+      functions.logger.warn("Failed to log usage for competitor analysis:", logError);
+    }
 
     return {
       analysis: content,
