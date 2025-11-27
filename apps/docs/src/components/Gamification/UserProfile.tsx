@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Link from "@docusaurus/Link";
 
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -123,6 +124,13 @@ export function UserProfile({
                 <span className="user-profile-sync-icon">☁️</span>
                 <span>Cloud sync enabled</span>
               </div>
+              <Link
+                to="/profile-settings"
+                className="user-profile-dropdown-btn user-profile-dropdown-link"
+                onClick={() => setShowDropdown(false)}
+              >
+                Profile Settings
+              </Link>
               <button
                 className="user-profile-dropdown-btn"
                 onClick={() => {
@@ -164,9 +172,14 @@ export function UserProfile({
           <span className="user-profile-sync-icon">☁️</span>
           <span>Progress synced to cloud</span>
         </div>
-        <button className="user-profile-logout-btn" onClick={logout}>
-          Sign Out
-        </button>
+        <div className="user-profile-actions">
+          <Link to="/profile-settings" className="user-profile-settings-btn">
+            Profile Settings
+          </Link>
+          <button className="user-profile-logout-btn" onClick={logout}>
+            Sign Out
+          </button>
+        </div>
       </div>
     );
   }

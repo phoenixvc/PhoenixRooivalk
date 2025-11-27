@@ -1055,6 +1055,42 @@
   background: rgb(71, 85, 105);
 }
 
+/* Profile actions container */
+.user-profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.user-profile-settings-btn {
+  padding: 0.625rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 8px;
+  color: rgb(203, 213, 225) !important;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none !important;
+}
+
+.user-profile-settings-btn:hover {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgb(249, 115, 22);
+  color: rgb(249, 115, 22) !important;
+}
+
+/* Dropdown link styling */
+.user-profile-dropdown-link {
+  text-decoration: none !important;
+  color: rgb(226, 230, 234) !important;
+  text-align: center;
+}
+
+.user-profile-dropdown-link:hover {
+  color: rgb(249, 115, 22) !important;
+}
+
 /* Guest state (not logged in) */
 .user-profile--guest {
   text-align: center;

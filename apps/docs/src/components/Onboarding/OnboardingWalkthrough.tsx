@@ -152,6 +152,16 @@ export function resetOnboarding(): void {
 }
 
 /**
+ * Clear all onboarding highlight classes from DOM
+ */
+function clearAllHighlights(): void {
+  if (typeof document === "undefined") return;
+  document.querySelectorAll(".onboarding-highlight").forEach((el) => {
+    el.classList.remove("onboarding-highlight");
+  });
+}
+
+/**
  * Check if onboarding is available (user has completed it)
  */
 export function canRevisitOnboarding(userId: string): boolean {
@@ -267,6 +277,7 @@ export function OnboardingWalkthrough({
   const handleSkip = useCallback(() => {
     if (!user) return;
     markOnboardingCompleted(user.uid);
+    clearAllHighlights();
     setIsVisible(false);
     onClose?.();
   }, [user, onClose]);
@@ -275,6 +286,7 @@ export function OnboardingWalkthrough({
     if (!user) return;
     markOnboardingCompleted(user.uid);
     localStorage.removeItem(ONBOARDING_STEP_KEY);
+    clearAllHighlights();
     setIsVisible(false);
     onClose?.();
   }, [user, onClose]);

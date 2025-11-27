@@ -12,7 +12,11 @@ import * as React from "react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { aiService, ReadingRecommendation } from "../../services/aiService";
-import { profileToRecommendations } from "../../config/userProfiles";
+import {
+  profileToRecommendations,
+  PROFILE_TEMPLATES,
+  UserProfile,
+} from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
 
@@ -90,7 +94,13 @@ export function SidebarRecommendations({
   const previousUserIdRef = useRef<string | null>(null);
 
   // Use centralized profile from AuthContext
-  const { knownProfile, isProfileLoaded } = userProfile;
+  const { knownProfile, isProfileLoaded, profileKey } = userProfile;
+
+  // Get selected template for unknown users
+  const selectedTemplate =
+    !knownProfile && profileKey && profileKey in PROFILE_TEMPLATES
+      ? PROFILE_TEMPLATES[profileKey]
+      : null;
 
   // Reset state when user changes (fixes loadedRef persistence bug)
   useEffect(() => {
@@ -110,6 +120,11 @@ export function SidebarRecommendations({
     // If known user, use their profile description
     if (knownProfile) {
       return knownProfile.profileDescription;
+    }
+
+    // If unknown user selected a template, use template description
+    if (selectedTemplate?.profileDescription) {
+      return selectedTemplate.profileDescription;
     }
 
     if (!progress?.docs) return "new user";
@@ -147,7 +162,7 @@ export function SidebarRecommendations({
     } else {
       return `experienced user with focus on ${topCategory || "general"} content`;
     }
-  }, [progress, knownProfile]);
+  }, [progress, knownProfile, selectedTemplate]);
 
   const fetchRecommendations = useCallback(async () => {
     if (!user || hasLoaded) return;
@@ -170,7 +185,27 @@ export function SidebarRecommendations({
         return;
       }
 
-      // For unknown users, use AI-generated recommendations
+      // For unknown users who selected a template, use template recommendations
+      if (selectedTemplate?.recommendedPaths) {
+        const templateAsProfile = {
+          ...selectedTemplate,
+          name: "Your",
+          recommendedPaths: selectedTemplate.recommendedPaths,
+        } as UserProfile;
+        const templateRecs = profileToRecommendations(templateAsProfile, maxItems);
+        const recs: ReadingRecommendation[] = templateRecs.map((r) => ({
+          docId: r.docId,
+          relevanceScore: r.relevanceScore,
+          reason: r.reason,
+        }));
+        setRecommendations(recs);
+        highlightSidebarItems(recs.map((r) => r.docId));
+        setHasLoaded(true);
+        setIsLoading(false);
+        return;
+      }
+
+      // For unknown users without template, use AI-generated recommendations
       const currentPath =
         typeof window !== "undefined" ? window.location.pathname : "";
       const result = await aiService.getReadingRecommendations(currentPath);
@@ -187,7 +222,7 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems, knownProfile, hasLoaded]);
+  }, [user, maxItems, knownProfile, selectedTemplate, hasLoaded]);
 
   // Load recommendations when user and profile are available
   // Wait for isProfileLoaded to avoid stale closure with knownProfile
@@ -247,12 +282,17 @@ export function SidebarRecommendations({
 
               {recommendations.length > 0 ? (
                 <>
-                  {/* Show completion progress for recommendations */}
-                  {knownProfile && (
+                  {/* Show completion progress for recommendations (known profiles and templates) */}
+                  {(knownProfile || selectedTemplate) && (
                     <div className="sidebar-rec-progress-summary">
                       {recommendations.filter((rec) => {
+                        // Normalize doc key - handle both /docs/path and path formats
                         const docKey = rec.docId.replace(/^\/docs\//, "");
-                        return progress?.docs?.[docKey]?.completed;
+                        // Check both normalized and original formats
+                        return (
+                          progress?.docs?.[docKey]?.completed ||
+                          progress?.docs?.[rec.docId]?.completed
+                        );
                       }).length}
                       /{recommendations.length} completed
                     </div>
@@ -260,8 +300,11 @@ export function SidebarRecommendations({
                   <ul className="sidebar-rec-list">
                     {recommendations.map((rec) => {
                       const category = getCategoryFromPath(rec.docId);
+                      // Normalize doc key - handle both /docs/path and path formats
                       const docKey = rec.docId.replace(/^\/docs\//, "");
-                      const isCompleted = progress?.docs?.[docKey]?.completed;
+                      const isCompleted =
+                        progress?.docs?.[docKey]?.completed ||
+                        progress?.docs?.[rec.docId]?.completed;
                       return (
                         <li key={rec.docId} className="sidebar-rec-item">
                           <Link

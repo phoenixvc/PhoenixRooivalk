@@ -112,6 +112,53 @@
   font-style: italic;
 }
 
+/* Recommendation stats */
+.recommendationStats {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border-radius: 8px;
+}
+
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.statsLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+}
+
+.statsValue {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+}
+
+.progressBar {
+  height: 8px;
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.statsPercentage {
+  font-size: 0.75rem;
+  color: rgb(249, 115, 22);
+  font-weight: 600;
+}
+
 .sectionTitle {
   font-size: 1.25rem;
   font-weight: 700;
@@ -234,6 +281,46 @@
   font-size: 1.5rem;
 }
 
+/* Account section */
+.accountActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.accountAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border-radius: 8px;
+}
+
+.accountActionTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+  margin: 0 0 0.25rem 0;
+  border-bottom: none;
+}
+
+.accountActionDesc {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.signOutBtn {
+  border-color: rgb(239, 68, 68) !important;
+  color: rgb(239, 68, 68) !important;
+}
+
+.signOutBtn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2rem;
@@ -250,5 +337,10 @@
 
   .quickLink {
     width: 100%;
+  }
+
+  .accountAction {
+    flex-direction: column;
+    text-align: center;
   }
 }

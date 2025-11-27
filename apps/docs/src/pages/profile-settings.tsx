@@ -8,19 +8,29 @@
 import Layout from "@theme/Layout";
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { AVAILABLE_ROLES } from "../config/userProfiles";
+import {
+  AVAILABLE_ROLES,
+  PROFILE_TEMPLATES,
+  profileToRecommendations,
+} from "../config/userProfiles";
 import { resetOnboarding } from "../components/Onboarding/OnboardingWalkthrough";
 import Link from "@docusaurus/Link";
 import styles from "./profile-settings.module.css";
 
+// localStorage key for profile confirmation
+const PROFILE_CONFIRMED_KEY = "phoenix-docs-profile-confirmed";
+const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
+
 export default function ProfileSettings(): React.ReactElement {
-  const { user, loading, userProfile, updateUserRoles } = useAuth();
+  const { user, loading, userProfile, updateUserRoles, logout, progress } =
+    useAuth();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(
     userProfile.confirmedRoles,
   );
   const [isSaving, setIsSaving] = useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const [showOnboardingReset, setShowOnboardingReset] = useState(false);
+  const [showProfileReset, setShowProfileReset] = useState(false);
 
   // Sync selected roles with userProfile when it loads
   React.useEffect(() => {
@@ -54,6 +64,23 @@ export default function ProfileSettings(): React.ReactElement {
     setTimeout(() => {
       window.location.reload();
     }, 1000);
+  };
+
+  const handleResetProfile = () => {
+    // Clear profile confirmation data from localStorage
+    localStorage.removeItem(PROFILE_CONFIRMED_KEY);
+    localStorage.removeItem(PROFILE_DATA_KEY);
+    setShowProfileReset(true);
+    // Reload to trigger profile confirmation modal
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
+  const handleSignOut = async () => {
+    await logout();
+    // Redirect to home after logout
+    window.location.href = "/";
   };
 
   if (loading) {
@@ -94,10 +121,47 @@ export default function ProfileSettings(): React.ReactElement {
     );
   }
 
-  const { knownProfile } = userProfile;
+  const { knownProfile, profileKey } = userProfile;
   const hasChanges =
     JSON.stringify(selectedRoles.sort()) !==
     JSON.stringify(userProfile.confirmedRoles.sort());
+
+  // Calculate recommendation completion stats
+  const getRecommendationStats = () => {
+    // Get recommended docs based on profile or template
+    let recommendedDocs: string[] = [];
+
+    if (knownProfile) {
+      const recs = profileToRecommendations(knownProfile, 10);
+      recommendedDocs = recs.map((r) => r.docId);
+    } else if (profileKey && profileKey in PROFILE_TEMPLATES) {
+      const template = PROFILE_TEMPLATES[profileKey];
+      if (template.recommendedPaths) {
+        recommendedDocs = template.recommendedPaths;
+      }
+    }
+
+    if (recommendedDocs.length === 0) {
+      return null;
+    }
+
+    // Count completed docs
+    const completedCount = recommendedDocs.filter((docId) => {
+      const docKey = docId.replace(/^\/docs\//, "");
+      return (
+        progress?.docs?.[docKey]?.completed ||
+        progress?.docs?.[docId]?.completed
+      );
+    }).length;
+
+    return {
+      completed: completedCount,
+      total: recommendedDocs.length,
+      percentage: Math.round((completedCount / recommendedDocs.length) * 100),
+    };
+  };
+
+  const recommendationStats = getRecommendationStats();
 
   return (
     <Layout title="Profile Settings" description="Manage your profile settings">
@@ -143,6 +207,30 @@ export default function ProfileSettings(): React.ReactElement {
               {knownProfile && (
                 <div className={styles.profileDescription}>
                   <strong>Profile:</strong> {knownProfile.profileDescription}
+                </div>
+              )}
+
+              {/* Recommendation completion stats */}
+              {recommendationStats && (
+                <div className={styles.recommendationStats}>
+                  <div className={styles.statsHeader}>
+                    <span className={styles.statsLabel}>
+                      Recommended Reading Progress
+                    </span>
+                    <span className={styles.statsValue}>
+                      {recommendationStats.completed}/{recommendationStats.total}{" "}
+                      docs
+                    </span>
+                  </div>
+                  <div className={styles.progressBar}>
+                    <div
+                      className={styles.progressFill}
+                      style={{ width: `${recommendationStats.percentage}%` }}
+                    />
+                  </div>
+                  <span className={styles.statsPercentage}>
+                    {recommendationStats.percentage}% complete
+                  </span>
                 </div>
               )}
             </div>
@@ -220,6 +308,59 @@ export default function ProfileSettings(): React.ReactElement {
                   Restart Walkthrough
                 </button>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Account Section */}
+        <section className="row margin-bottom--lg">
+          <div className="col col--8 col--offset-2">
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>Account</h3>
+
+              <div className={styles.accountActions}>
+                <div className={styles.accountAction}>
+                  <div>
+                    <h4 className={styles.accountActionTitle}>
+                      Reset Profile Selection
+                    </h4>
+                    <p className={styles.accountActionDesc}>
+                      Clear your profile data and select a new profile template
+                      on next visit.
+                    </p>
+                  </div>
+                  {showProfileReset ? (
+                    <div className={styles.onboardingReset}>
+                      <span className={styles.resetIcon}>✓</span>
+                      Resetting...
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="button button--secondary"
+                      onClick={handleResetProfile}
+                    >
+                      Reset Profile
+                    </button>
+                  )}
+                </div>
+
+                <div className={styles.accountAction}>
+                  <div>
+                    <h4 className={styles.accountActionTitle}>Sign Out</h4>
+                    <p className={styles.accountActionDesc}>
+                      Sign out of your account. Your progress will be saved.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className={`button button--secondary ${styles.signOutBtn}`}
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
