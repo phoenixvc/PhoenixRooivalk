@@ -22,6 +22,9 @@ rules_version = '2';
  * - doc_embeddings: Document chunks with vector embeddings for semantic search
  * - doc_metadata: Document-level metadata for RAG indexing
  *
+ * Build-Time Indexing Collections (managed by Cloud Functions):
+ * - build_index_status: Build indexing status and progress
+ *
  * Cache Collections (managed by Cloud Functions):
  * - cache_embeddings: Cached embedding vectors
  * - cache_queries: Cached query results
@@ -125,6 +128,13 @@ service cloud.firestore {
     match /doc_metadata/{docId} {
       allow read: if request.auth != null; // Authenticated users can read metadata
       allow write: if false; // Function-only via admin SDK (indexing)
+    }
+
+    // Build-Time Indexing Collections
+    // build_index_status: Tracks build indexing progress and status
+    match /build_index_status/{buildId} {
+      allow read: if isAdmin(); // Only admins can view build status
+      allow write: if false; // Function-only via admin SDK
     }
 
     // Cache Collections - managed by Cloud Functions

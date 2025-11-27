@@ -25,6 +25,15 @@
  * - askDocumentation: RAG-powered Q&A with source citations
  * - getSuggestedQuestions: Get contextual question suggestions
  *
+ * Vector Search Functions (from ./vector-search.ts):
+ * - vectorSearchDocs: Optimized vector similarity search
+ * - getVectorStats: Get vector search statistics
+ *
+ * Build-Time Indexing Functions (from ./build-index.ts):
+ * - buildTimeIndex: Index documentation during build
+ * - getBuildIndexStatus: Get build indexing status
+ * - checkIndexStaleness: Check which docs need re-indexing
+ *
  * Cache Functions (from ./cache.ts):
  * - cleanupExpiredCache: Scheduled cleanup of expired cache entries
  * - getAICacheStats: Get cache statistics (admin)
@@ -58,6 +67,16 @@ export {
   askDocumentation,
   getSuggestedQuestions,
 } from "./rag";
+
+// Export Vector Search functions
+export { vectorSearchDocs, getVectorStats } from "./vector-search";
+
+// Export Build-Time Indexing functions
+export {
+  buildTimeIndex,
+  getBuildIndexStatus,
+  checkIndexStaleness,
+} from "./build-index";
 
 // Export Cache functions
 export { cleanupExpiredCache, getAICacheStats, clearAICache } from "./cache";

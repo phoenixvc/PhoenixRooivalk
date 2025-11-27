@@ -33,10 +33,11 @@ export const MONITORING_CONFIG = {
 
 /**
  * Log AI request metrics
+ * Accepts either AIRequestMetrics or a partial metrics object
  */
 export async function logMetrics(
   feature: string,
-  metrics: AIRequestMetrics,
+  metrics: Partial<AIRequestMetrics> | Record<string, unknown>,
   userId?: string,
   additionalData?: Record<string, unknown>
 ): Promise<void> {
@@ -49,20 +50,28 @@ export async function logMetrics(
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    // Update daily stats
+    // Update daily stats (only if relevant fields are present)
     const today = new Date().toISOString().split("T")[0];
     const dailyRef = db
       .collection(MONITORING_CONFIG.collections.dailyStats)
       .doc(`${today}_${feature}`);
+
+    const totalTokens = (metrics as Record<string, unknown>).totalTokens;
+    const latencyMs = (metrics as Record<string, unknown>).latencyMs;
+    const cached = (metrics as Record<string, unknown>).cached;
 
     await dailyRef.set(
       {
         date: today,
         feature,
         totalRequests: admin.firestore.FieldValue.increment(1),
-        totalTokens: admin.firestore.FieldValue.increment(metrics.totalTokens),
-        totalLatencyMs: admin.firestore.FieldValue.increment(metrics.latencyMs),
-        cacheHits: admin.firestore.FieldValue.increment(metrics.cached ? 1 : 0),
+        totalTokens: admin.firestore.FieldValue.increment(
+          typeof totalTokens === "number" ? totalTokens : 0
+        ),
+        totalLatencyMs: admin.firestore.FieldValue.increment(
+          typeof latencyMs === "number" ? latencyMs : 0
+        ),
+        cacheHits: admin.firestore.FieldValue.increment(cached ? 1 : 0),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true }

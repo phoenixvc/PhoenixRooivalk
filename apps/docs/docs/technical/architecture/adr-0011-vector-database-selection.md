@@ -3,7 +3,7 @@ id: adr-0011-vector-database-selection
 title: "ADR 0011: Vector Database Selection for RAG"
 sidebar_label: "ADR 0011: Vector Database"
 difficulty: expert
-estimated_reading_time: 8
+estimated_reading_time: 15
 points: 40
 tags:
   - technical
@@ -18,7 +18,7 @@ prerequisites:
 # ADR 0011: Vector Database Selection for RAG
 
 **Date**: 2025-11-27  
-**Status**: Accepted (Firebase Vector Search)
+**Status**: Accepted (Azure AI Search)
 
 ## Context
 
@@ -27,10 +27,12 @@ The Phoenix Rooivalk documentation site implements RAG (Retrieval-Augmented Gene
 We need to select a vector database solution that provides:
 
 - Efficient similarity search (sub-100ms for &lt;10K documents)
-- Integration with our existing Firebase/GCP infrastructure
+- Integration with our existing infrastructure
 - Cost-effective operation for ~200 documentation files
 - Build-time indexing support
 - Category/metadata filtering
+
+**Key Consideration**: We have **free Azure Foundry credits** and already host AI models there (gpt-4o, gpt-5, gpt-5.1, text-embedding-3-small, claude-sonnet-4-5). This significantly impacts the cost analysis.
 
 ### Scale Assessment
 
@@ -39,232 +41,338 @@ We need to select a vector database solution that provides:
 - **Expected queries**: ~100-500/day initially
 - **Growth projection**: Up to 1,000 docs over 2 years
 
-## Options Considered
+---
 
-### Option 1: Pinecone
+## Options Evaluated
 
-**Overview**: Managed vector database purpose-built for ML embeddings.
+### Option 1: Azure AI Search
 
-**Pros**:
+**Overview**: Enterprise-grade cognitive search service with native vector search, part of Azure AI Foundry.
 
-- Industry-leading performance (sub-10ms latency)
-- Serverless option with pay-per-query pricing
-- Native metadata filtering
-- Excellent documentation and SDKs
-- Hybrid search (sparse + dense vectors)
+**Capabilities**:
+- Vector similarity search with KNN and HNSW algorithms
+- Hybrid search (keyword + semantic in same query)
+- Multimodal & multilingual support
+- Filtered vector search with metadata
+- Advanced compression (up to 92.5% storage reduction)
+- Enterprise-grade security (HSM, customer-managed keys)
+- Semantic ranking and reranking
 
-**Cons**:
-
-- External service (data leaves GCP)
-- Additional vendor dependency
-- Minimum $70/month for dedicated pods
-- Serverless has cold-start latency
-
-**Cost**: ~$0.25/million vectors + $0.10/million queries (serverless)
+**Pricing** (November 2025):
+- Free tier: 50MB storage, 3 indexes
+- Basic: ~$73.73/month - 15GB storage, 15 indexes
+- Standard S1: ~$245.28/month - 160GB storage, 50 indexes
+- **With Azure Foundry credits**: Effectively $0 for our usage
 
 ### Option 2: Firebase Vector Search Extension
 
-**Overview**: Firebase extension using Vertex AI for embeddings and Firestore for storage with vector search capabilities.
+**Overview**: Firebase extension using Firestore for vector storage with native KNN search.
 
-**Pros**:
+**Capabilities**:
+- Native Firestore integration with automatic indexing
+- Cosine similarity and Euclidean distance metrics
+- Maximum vector dimension: 2048
+- Flat index type only (no HNSW/ANN algorithms)
+- Trigger-based embedding generation via Vertex AI/Gemini
 
-- Native GCP/Firebase integration
-- Data stays within Firebase ecosystem
-- Leverages existing Firestore infrastructure
-- No additional service to manage
-- Uses Vertex AI Matching Engine under the hood
-- Free tier includes 2GB vector storage
+**Pricing**:
+- Requires Blaze (pay-as-you-go) plan
+- ~$0.01/month base extension cost
+- $0.03/100K document reads (after free tier)
+- Free tier: 1 GiB storage, 50K reads/day, 20K writes/day
 
-**Cons**:
+**Limitations**:
+- Preview/Beta status (Pre-GA in November 2025)
+- Only flat index type (less efficient at scale)
+- 1 MiB max document size
 
-- Relatively new (GA in 2024)
-- Limited to OpenAI or Vertex AI embeddings
-- Less mature than dedicated vector DBs
-- Firestore query limitations apply
+### Option 3: Pinecone
 
-**Cost**: Included in Firestore pricing + Vertex AI embedding costs
+**Overview**: Managed vector database purpose-built for ML embeddings.
 
-### Option 3: Supabase pgvector
+**Capabilities**:
+- Industry-leading performance (sub-10ms latency)
+- Serverless and dedicated pod options
+- Native metadata filtering
+- Hybrid search (sparse + dense vectors)
+- Excellent SDKs and documentation
 
-**Overview**: PostgreSQL extension for vector similarity search.
+**Pricing** (November 2025):
+- Serverless: ~$0.25/million vectors + $0.10/million queries
+- Starter pods: ~$70/month minimum
+- Enterprise: Custom pricing
 
-**Pros**:
+### Option 4: Qdrant
 
-- Open source, self-hostable
-- Full SQL capabilities
-- Excellent metadata filtering
-- Generous free tier (500MB)
-- ACID compliance
+**Overview**: High-performance open-source vector database written in Rust.
 
-**Cons**:
+**Capabilities**:
+- Excellent performance benchmarks
+- HNSW algorithm with quantization
+- Cloud and self-hosted options
+- Good filtering capabilities
+- Rust-based (aligns with our backend stack)
 
-- Requires PostgreSQL instance
-- Additional infrastructure to manage
-- Not as optimized as purpose-built solutions
-- Separate from Firebase ecosystem
+**Pricing** (November 2025):
+- Self-hosted: Free (infrastructure costs only)
+- Cloud: Starts at ~$25/month
+- Enterprise: Custom pricing
 
-**Cost**: Free tier available, $25/month for Pro
-
-### Option 4: Weaviate
+### Option 5: Weaviate
 
 **Overview**: Open-source vector database with hybrid search.
 
-**Pros**:
-
-- Open source with cloud option
+**Capabilities**:
 - GraphQL API
 - Hybrid search (BM25 + vector)
-- Good multi-tenancy support
+- Multi-tenancy support
+- Generative search capabilities
+- Module ecosystem
 
-**Cons**:
+**Pricing** (November 2025):
+- Self-hosted: Free
+- Cloud: ~$25/month minimum
+- Enterprise: Custom pricing
 
-- Heavier infrastructure requirements
-- More complex setup
-- Cloud pricing higher than alternatives
+### Option 6: Supabase pgvector
 
-**Cost**: $25/month minimum for cloud
+**Overview**: PostgreSQL extension for vector similarity search.
 
-### Option 5: Qdrant
+**Capabilities**:
+- Full SQL capabilities
+- ACID compliance
+- Excellent metadata filtering
+- Open source, self-hostable
+- Integrated with Supabase platform
 
-**Overview**: High-performance open-source vector database.
+**Pricing** (November 2025):
+- Free tier: 500MB database
+- Pro: $25/month
+- Team: $599/month
 
-**Pros**:
-
-- Excellent performance benchmarks
-- Rust-based (aligns with backend stack)
-- Cloud and self-hosted options
-- Good filtering capabilities
-
-**Cons**:
-
-- Smaller community than Pinecone
-- Cloud option relatively new
-- Separate infrastructure
-
-**Cost**: Free self-hosted, cloud starts at $25/month
-
-### Option 6: Keep Current Firestore + In-Memory Search
+### Option 7: Keep Current (Firestore + In-Memory)
 
 **Overview**: Enhance current approach with caching and optimization.
 
-**Pros**:
-
+**Capabilities**:
 - No additional services
-- Minimal changes required
 - Already implemented
+- Full control over search logic
 
-**Cons**:
-
+**Limitations**:
 - O(n) complexity doesn't scale
-- High memory usage
-- Slow for large corpora
+- High memory usage at scale
+- No advanced search features
 
-**Cost**: Current Firestore costs
+---
+
+## Weighted Decision Matrix
+
+We evaluated all options against 10 key criteria, weighted by importance for our use case.
+
+**Scoring**: 1 = Poor, 2 = Below Average, 3 = Average, 4 = Good, 5 = Excellent
+
+### Criteria Weights
+
+| Criterion | Weight | Rationale |
+|-----------|--------|-----------|
+| Cost Efficiency | 20% | Budget constraints, Azure credits available |
+| Performance at Scale | 15% | Sub-100ms queries required for UX |
+| Ecosystem Integration | 15% | Firebase + Azure existing stack |
+| Production Readiness | 12% | Must be stable for documentation site |
+| Search Features | 10% | Hybrid search, filtering needs |
+| Operational Simplicity | 10% | Limited DevOps bandwidth |
+| Data Residency Control | 6% | Defense sector compliance |
+| Compression/Storage | 5% | Cost optimization |
+| Security Features | 4% | Enterprise requirements |
+| Documentation/Support | 3% | Developer productivity |
+
+### Weighted Scores by Option
+
+| Criterion | Weight | Azure AI Search | Firebase Vector | Pinecone | Qdrant | Weaviate | Supabase pgvector | Current (In-Memory) |
+|-----------|--------|-----------------|-----------------|----------|--------|----------|-------------------|---------------------|
+| **Cost Efficiency** | 20% | 5 (1.00) | 3 (0.60) | 2 (0.40) | 3 (0.60) | 3 (0.60) | 4 (0.80) | 5 (1.00) |
+| **Performance at Scale** | 15% | 5 (0.75) | 2 (0.30) | 5 (0.75) | 5 (0.75) | 4 (0.60) | 3 (0.45) | 1 (0.15) |
+| **Ecosystem Integration** | 15% | 4 (0.60) | 5 (0.75) | 2 (0.30) | 2 (0.30) | 2 (0.30) | 2 (0.30) | 5 (0.75) |
+| **Production Readiness** | 12% | 5 (0.60) | 2 (0.24) | 5 (0.60) | 4 (0.48) | 4 (0.48) | 4 (0.48) | 3 (0.36) |
+| **Search Features** | 10% | 5 (0.50) | 2 (0.20) | 4 (0.40) | 4 (0.40) | 5 (0.50) | 3 (0.30) | 1 (0.10) |
+| **Operational Simplicity** | 10% | 3 (0.30) | 4 (0.40) | 4 (0.40) | 2 (0.20) | 2 (0.20) | 3 (0.30) | 5 (0.50) |
+| **Data Residency Control** | 6% | 5 (0.30) | 4 (0.24) | 3 (0.18) | 4 (0.24) | 3 (0.18) | 4 (0.24) | 5 (0.30) |
+| **Compression/Storage** | 5% | 5 (0.25) | 2 (0.10) | 4 (0.20) | 4 (0.20) | 3 (0.15) | 3 (0.15) | 1 (0.05) |
+| **Security Features** | 4% | 5 (0.20) | 3 (0.12) | 4 (0.16) | 3 (0.12) | 3 (0.12) | 4 (0.16) | 3 (0.12) |
+| **Documentation/Support** | 3% | 5 (0.15) | 3 (0.09) | 5 (0.15) | 4 (0.12) | 4 (0.12) | 4 (0.12) | 2 (0.06) |
+
+### Final Weighted Scores
+
+| Rank | Solution | Total Weighted Score | Percentage |
+|------|----------|---------------------|------------|
+| 🥇 **1** | **Azure AI Search** | **4.65** | **93%** |
+| 🥈 2 | Pinecone | 3.54 | 71% |
+| 🥉 3 | Current (In-Memory) | 3.39 | 68% |
+| 4 | Qdrant | 3.41 | 68% |
+| 5 | Supabase pgvector | 3.30 | 66% |
+| 6 | Weaviate | 3.25 | 65% |
+| 7 | Firebase Vector Search | 3.04 | 61% |
+
+---
 
 ## Decision
 
-**Adopt Firebase Vector Search Extension** as the primary vector database solution.
+**Adopt Azure AI Search** as the vector database solution for RAG.
 
 ## Rationale
 
-### 1. Ecosystem Alignment
+### 1. Cost Advantage with Azure Credits (Score: 5/5)
 
-Firebase Vector Search integrates natively with our existing infrastructure:
+Given our free Azure Foundry credits, Azure AI Search is effectively **$0** for our usage:
+- Basic tier ($73.73/month) is fully covered by credits
+- 15GB storage is 15x what we need for ~1K documents
+- Same billing as our existing AI models (gpt-4o, gpt-5, gpt-5.1)
 
-- Firestore for document storage
-- Firebase Functions for serverless compute
-- Firebase Auth for access control
-- GCP for hosting and security
+### 2. Superior Performance (Score: 5/5)
 
-### 2. Operational Simplicity
+Azure AI Search uses **HNSW (Hierarchical Navigable Small World)** algorithm:
+- Sub-10ms query latency vs Firebase's flat index O(n)
+- Efficient at scale (tested to millions of vectors)
+- 92.5% storage compression available
 
-- No new service accounts or API keys
-- Unified billing through GCP
-- Same deployment model as existing functions
-- Familiar Firestore query patterns
+### 3. Unified Azure Ecosystem (Score: 4/5)
 
-### 3. Data Residency
+We already use Azure for AI models:
+- `gpt-4o` (965K quota) for chat
+- `gpt-5` (5M quota) for advanced reasoning
+- `text-embedding-3-small` (492K quota) for embeddings
+- `claude-sonnet-4-5` (2M quota) for alternatives
+- Single API surface, single billing, single credential management
 
-- All data remains within Firebase/GCP
-- Compliant with existing security policies
-- No data transfer to third-party services
-- Leverages existing GCP security controls
+### 4. Production Maturity (Score: 5/5)
 
-### 4. Cost Efficiency
+Azure AI Search is GA with enterprise SLAs:
+- Firebase Vector Search is still in Preview/Pre-GA (November 2025)
+- Risk of breaking changes or feature limitations with Firebase
+- Enterprise support available for production issues
 
-For our scale (~1K documents):
+### 5. Advanced Features (Score: 5/5)
 
-- Pinecone serverless: ~$5-10/month
-- Firebase Vector Search: ~$2-5/month (included in Firestore)
-- Supabase: $0 (free tier) to $25/month
+Azure provides capabilities others lack:
+- **Hybrid search**: Combine keyword and semantic search in one query
+- **Semantic ranking**: AI-powered reranking for better relevance
+- **Filtered search**: Complex metadata filtering with facets
+- **Multimodal**: Support for image and document embeddings
 
-Firebase Vector Search provides the best balance of cost and integration.
+### Why Not Others?
 
-### 5. Future-Proofing
+| Option | Why Not Selected |
+|--------|------------------|
+| **Firebase Vector Search** | Pre-GA status, flat index only, limited features |
+| **Pinecone** | Additional vendor, no cost advantage, separate billing |
+| **Qdrant** | Self-hosting complexity, no existing relationship |
+| **Weaviate** | Higher operational overhead, no cost advantage |
+| **Supabase pgvector** | Separate infrastructure, not aligned with stack |
+| **Current In-Memory** | O(n) doesn't scale, no advanced features |
 
-- Backed by Google/Vertex AI infrastructure
-- Continuous improvements expected
-- Natural upgrade path to Vertex AI Matching Engine for larger scale
+---
 
 ## Implementation Plan
 
-### Phase 3A: Firebase Vector Search Setup
+### Phase 3A: Azure AI Search Setup
 
-1. Install Firebase Vector Search extension
-2. Configure embeddings with `text-embedding-3-small`
-3. Migrate existing `doc_embeddings` collection
-4. Update search functions to use extension
+1. Create Azure AI Search service (Basic tier, covered by credits)
+2. Configure index schema for documentation chunks
+3. Set up data source connection from build pipeline
+4. Create skillset for embedding generation via Azure OpenAI
 
 ### Phase 3B: Build-Time Indexing
 
-1. Create Docusaurus plugin for indexing
-2. Generate embeddings during `npm run build`
-3. Upload vectors to Firebase on deploy
-4. Add staleness detection via content hashing
+1. Modify Docusaurus build plugin to push to Azure
+2. Use Azure Search indexer for batch updates
+3. Implement content hashing for incremental updates
+4. Set up CI/CD to trigger reindex on doc changes
 
-### Phase 3C: Enhanced Search
+### Phase 3C: Query Integration
 
-1. Implement hybrid search (keyword + semantic)
-2. Add category-weighted scoring
-3. Enable related document discovery
-4. Implement query expansion
+1. Update Cloud Functions to call Azure AI Search
+2. Implement hybrid search (keyword + semantic)
+3. Add faceted filtering by category
+4. Enable semantic ranking for improved results
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Build Pipeline (GitHub Actions)             │
+│  ┌─────────────┐    ┌──────────────┐    ┌───────────────────┐  │
+│  │ Docusaurus  │───▶│ RAG Indexer  │───▶│ Azure AI Search   │  │
+│  │   Build     │    │   Plugin     │    │ (Vector Index)    │  │
+│  └─────────────┘    └──────────────┘    └───────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+                                                    │
+                    ┌───────────────────────────────┘
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        Runtime (User Query)                      │
+│  ┌─────────────┐    ┌──────────────┐    ┌───────────────────┐  │
+│  │  AI Panel   │───▶│ Firebase     │───▶│ Azure AI Search   │  │
+│  │  (React)    │    │ Functions    │    │ (Hybrid Query)    │  │
+│  └─────────────┘    └──────────────┘    └───────────────────┘  │
+│                              │                    │              │
+│                              ▼                    │              │
+│                     ┌──────────────┐              │              │
+│                     │ Azure OpenAI │◀─────────────┘              │
+│                     │ (gpt-4o/5)   │   (context injection)      │
+│                     └──────────────┘                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## Consequences
 
 ### Positive
 
-- **Performance**: Sub-100ms vector search for 10K+ vectors
-- **Scalability**: Can grow to 100K+ documents without architecture change
-- **Maintainability**: Single ecosystem reduces operational complexity
-- **Cost**: Predictable, included in existing Firebase billing
+- **Zero Cost**: Covered entirely by Azure credits
+- **Performance**: Sub-10ms vector search at scale
+- **Features**: Hybrid search, semantic ranking, filtering
+- **Maturity**: Production-ready enterprise service
+- **Integration**: Unified Azure billing and management
 
 ### Negative
 
-- **Vendor Lock-in**: Deeper commitment to Firebase/GCP ecosystem
-- **Maturity**: Less battle-tested than Pinecone for edge cases
-- **Flexibility**: Tied to Firestore query patterns and limitations
+- **Vendor Consolidation**: Deeper Azure commitment
+- **Added Complexity**: Azure Search API alongside Firebase
+- **Network Latency**: Cross-cloud calls (Firebase → Azure)
+- **Learning Curve**: New service to configure and maintain
 
 ### Risks and Mitigations
 
-| Risk                     | Probability | Impact | Mitigation                                                   |
-| ------------------------ | ----------- | ------ | ------------------------------------------------------------ |
-| Extension deprecation    | Low         | High   | Abstract vector ops behind interface for easy swap           |
-| Performance degradation  | Low         | Medium | Monitor latency, fallback to Pinecone if needed              |
-| Cost increase at scale   | Medium      | Low    | Re-evaluate at 10K documents, consider Vertex AI direct      |
-| Feature limitations      | Medium      | Medium | Supplement with application-level filtering                  |
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Azure credits expire | Low | High | Monitor usage, set alerts, budget fallback |
+| Cross-cloud latency | Medium | Low | Cache frequent queries, use connection pooling |
+| Service unavailability | Low | Medium | Fallback to Firestore in-memory search |
+| Configuration errors | Medium | Medium | Infrastructure as Code, thorough testing |
 
-## Alternatives Considered for Future
+---
 
-If Firebase Vector Search proves insufficient:
+## Feature Comparison Summary
 
-1. **Pinecone Serverless**: Best performance, minimal cold-start impact
-2. **Qdrant Cloud**: Good Rust ecosystem alignment
-3. **Vertex AI Matching Engine Direct**: For massive scale (100K+ vectors)
+| Feature | Azure AI Search | Firebase Vector | Pinecone | Qdrant | Weaviate | pgvector |
+|---------|-----------------|-----------------|----------|--------|----------|----------|
+| **Monthly Cost (our usage)** | $0 (credits) | $5-20 | $70+ | $25+ | $25+ | $25+ |
+| **Index Algorithm** | HNSW | Flat | HNSW | HNSW | HNSW | IVFFlat/HNSW |
+| **Max Vectors** | Millions | ~100K | Billions | Millions | Millions | Millions |
+| **Hybrid Search** | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
+| **Semantic Ranking** | ✅ Yes | ❌ No | ❌ No | ❌ No | ✅ Yes | ❌ No |
+| **Compression** | ✅ 92.5% | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
+| **Production Status** | GA | Preview | GA | GA | GA | GA |
+| **Our AI Models** | ✅ Same platform | ❌ Separate | ❌ Separate | ❌ Separate | ❌ Separate | ❌ Separate |
+
+---
 
 ## Related ADRs
 
-- [ADR 0001: Chain Selection for On-Chain Anchoring](/docs/technical/architecture/architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others)
 - [ADR 0006: AI/ML Architecture](/docs/technical/architecture/architecture-decision-records#adr-0006-aiml-architecture)
+- [ADR D003: Rust for Backend Services](/docs/technical/architecture/architecture-decision-records#adr-d003-rust-for-backend-services)
 
 ---
 
