@@ -555,10 +555,22 @@ export function OnboardingWalkthrough({
     if (isAnimating) return;
 
     const step = ONBOARDING_STEPS[currentStep];
-    // Don't allow going back before the tour starts
-    // (can't go back from tour to ai-fun-facts, profile-selection, or profile-completion)
+    
+    // Don't allow going back from non-tour steps
+    // (can't go back from profile-completion, profile-selection, ai-fun-facts, or first tour step)
+    if (step.stepType !== "tour") return;
+    
+    // Don't allow going back to non-tour steps from tour
     const tourStartIndex = findStepIndex("tour");
     if (currentStep <= tourStartIndex) return;
+
+    // Clear any highlight from the current step before navigating
+    if (step.highlight) {
+      const element = document.querySelector(step.highlight);
+      if (element) {
+        element.classList.remove("onboarding-highlight");
+      }
+    }
 
     setIsAnimating(true);
     setTimeout(() => {
