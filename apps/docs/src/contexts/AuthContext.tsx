@@ -22,6 +22,13 @@ import {
   saveUserProgress,
   UserProgress,
 } from "../services/firebase";
+import { analytics } from "../services/analytics";
+import {
+  isOnline,
+  queueUpdate,
+  getQueuedUpdates,
+  removeFromQueue,
+} from "../components/Offline";
 
 // Local storage keys
 const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
@@ -154,7 +161,11 @@ export function AuthProvider({
       return;
     }
 
+    let previousUser: User | null = null;
+
     const unsubscribe = onAuthChange(async (authUser) => {
+      const wasSignedOut = !previousUser && authUser;
+      previousUser = authUser;
       setUser(authUser);
 
       if (authUser) {
@@ -163,11 +174,26 @@ export function AuthProvider({
         const localProgress = getLocalProgress();
         const merged = mergeProgress(cloudProgress, localProgress);
 
+        // Check if this is a new user (no cloud progress = first sign in)
+        const isNewUser = Object.keys(cloudProgress.docs).length === 0;
+
         setProgress(merged);
         saveLocalProgress(merged);
 
         // Save merged progress back to cloud
         await saveUserProgress(authUser.uid, merged);
+
+        // Track signup/signin events
+        if (wasSignedOut) {
+          const method = authUser.providerData[0]?.providerId || "unknown";
+          const authMethod = method.includes("google") ? "google" : method.includes("github") ? "github" : method;
+
+          if (isNewUser) {
+            // First time signup - track as new conversion
+            await analytics.trackSignupCompleted(authUser.uid, authMethod);
+          }
+          // Could also track returning user sign-ins separately if needed
+        }
       }
 
       setLoading(false);
@@ -227,11 +253,51 @@ export function AuthProvider({
       saveLocalProgress(newProgress);
 
       if (user) {
+        // If offline, queue the update for later
+        if (!isOnline()) {
+          queueUpdate({
+            type: "progress",
+            data: { userId: user.uid, progress: newProgress },
+          });
+          return;
+        }
+
+        // Online - save directly
         await saveUserProgress(user.uid, newProgress);
       }
     },
     [progress, user],
   );
+
+  // Sync queued updates when coming back online
+  const syncQueuedUpdates = useCallback(async () => {
+    if (!user || !isOnline()) return;
+
+    const queue = getQueuedUpdates();
+    const progressUpdates = queue.filter((item) => item.type === "progress");
+
+    for (const update of progressUpdates) {
+      try {
+        const data = update.data as { userId: string; progress: UserProgress };
+        if (data.userId === user.uid) {
+          await saveUserProgress(user.uid, data.progress);
+          removeFromQueue(update.id);
+        }
+      } catch (error) {
+        console.error("Failed to sync queued update:", error);
+      }
+    }
+  }, [user]);
+
+  // Listen for online events to sync queued updates
+  useEffect(() => {
+    const handleOnline = () => {
+      syncQueuedUpdates();
+    };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [syncQueuedUpdates]);
 
   const markDocAsRead = useCallback(
     async (docId: string) => {

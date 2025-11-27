@@ -1,0 +1,118 @@
+/**
+ * Offline Indicator Styles
+ */
+
+.offline-indicator {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: offline-slide-up 0.3s ease-out;
+}
+
+@keyframes offline-slide-up {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.offline-indicator--offline {
+  background: rgb(239, 68, 68);
+  color: white;
+}
+
+.offline-indicator--syncing {
+  background: rgb(59, 130, 246);
+  color: white;
+}
+
+.offline-indicator-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.offline-indicator-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.offline-indicator-text {
+  flex: 1;
+}
+
+.offline-indicator-pending {
+  opacity: 0.8;
+}
+
+.offline-indicator-dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  color: inherit;
+  margin-left: 0.25rem;
+}
+
+.offline-indicator-dismiss:hover {
+  opacity: 1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .offline-indicator {
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    bottom: 4.5rem; /* Above mobile nav if present */
+  }
+
+  @keyframes offline-slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .offline-indicator {
+    animation: none;
+  }
+
+  .offline-indicator-spinner {
+    animation: none;
+  }
+}

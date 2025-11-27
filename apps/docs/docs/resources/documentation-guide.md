@@ -271,7 +271,7 @@ npm run serve
 | ------------------ | ------------- | --------- |
 | AI Processing      | 275 TOPS      | Active    |
 | Response Time      | 120-195ms     | Verified  |
-| Detection Accuracy | 99.7%         | Validated |
+| Detection Accuracy | 95%+ (99.5% full system) | Validated |
 
 ---
 
