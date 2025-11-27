@@ -202,10 +202,10 @@ export async function tracedRAGQuery(
 
 ### Agent Tracing
 
-```typescript
 // langchain/observability/traced-agents.ts
 import { AgentExecutor } from "langchain/agents";
 import { getTracedConfig } from "./traced-chains";
+import { logger } from "firebase-functions";
 
 export async function tracedAgentExecution(
   agent: AgentExecutor,
@@ -244,7 +244,6 @@ export async function tracedAgentExecution(
     throw error;
   }
 }
-```
 
 ---
 
