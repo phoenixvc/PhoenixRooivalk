@@ -285,22 +285,22 @@ export function AuthProvider({
       return;
     }
 
+    // Capture current user in a local const to ensure non-null in async closure
+    const currentUser = user;
+
     // Async function to load and merge profile data
     async function loadUserProfile() {
-      // Guard against user being null (for TypeScript closure)
-      if (!user) return;
-
       // Detect known profile from internal profiles
       const { profile, profileKey: detectedProfileKey } = detectUserProfile(
-        user.email,
-        user.displayName,
+        currentUser.email,
+        currentUser.displayName,
       );
 
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();
 
       // Fetch profile data from Firestore
-      const cloudProfile = await getUserProfileData(user.uid);
+      const cloudProfile = await getUserProfileData(currentUser.uid);
 
       // Merge strategy: Cloud wins for conflicts, but keep local-only data
       let mergedProfileKey: string | null = detectedProfileKey;

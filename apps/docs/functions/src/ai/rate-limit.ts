@@ -25,6 +25,7 @@ export const RATE_LIMITS: Record<
 
 /**
  * Check if user has exceeded rate limit for a feature
+ * Uses Firestore transaction to prevent race conditions.
  * @returns true if request can proceed, false if rate limited
  */
 export async function checkRateLimit(
@@ -40,29 +41,32 @@ export async function checkRateLimit(
   const rateLimitRef = db
     .collection("ai_rate_limits")
     .doc(`${userId}_${feature}`);
-  const doc = await rateLimitRef.get();
 
-  const now = Date.now();
+  return db.runTransaction(async (transaction) => {
+    const doc = await transaction.get(rateLimitRef);
+    const now = Date.now();
 
-  if (doc.exists) {
-    const data = doc.data();
-    const windowStart = data?.windowStart || 0;
-    const count = data?.count || 0;
+    if (doc.exists) {
+      const data = doc.data();
+      const windowStart = data?.windowStart || 0;
+      const count = data?.count || 0;
 
-    if (now - windowStart < windowMs) {
-      if (count >= maxRequests) {
-        return false; // Rate limited
+      if (now - windowStart < windowMs) {
+        if (count >= maxRequests) {
+          return false; // Rate limited
+        }
+        transaction.update(rateLimitRef, { count: count + 1 });
+      } else {
+        // New window - reset windowStart and count
+        transaction.set(rateLimitRef, { windowStart: now, count: 1 });
       }
-      await rateLimitRef.update({ count: count + 1 });
     } else {
-      // New window
-      await rateLimitRef.set({ windowStart: now, count: 1 });
+      // Document doesn't exist - create it
+      transaction.set(rateLimitRef, { windowStart: now, count: 1 });
     }
-  } else {
-    await rateLimitRef.set({ windowStart: now, count: 1 });
-  }
 
-  return true;
+    return true;
+  });
 }
 
 /**

@@ -39,6 +39,12 @@ describe("OfflineSync", () => {
   beforeEach(() => {
     localStorageMock.clear();
     jest.clearAllMocks();
+    // Reset navigator.onLine to default state between tests
+    Object.defineProperty(navigator, "onLine", {
+      value: true,
+      writable: true,
+      configurable: true,
+    });
   });
 
   describe("isOnline", () => {
@@ -46,6 +52,7 @@ describe("OfflineSync", () => {
       Object.defineProperty(navigator, "onLine", {
         value: true,
         writable: true,
+        configurable: true,
       });
       expect(isOnline()).toBe(true);
     });
@@ -54,6 +61,7 @@ describe("OfflineSync", () => {
       Object.defineProperty(navigator, "onLine", {
         value: false,
         writable: true,
+        configurable: true,
       });
       expect(isOnline()).toBe(false);
     });
