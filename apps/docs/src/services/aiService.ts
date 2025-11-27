@@ -482,6 +482,32 @@ class AIService {
       this.handleError(error);
     }
   }
+
+  /**
+   * Research a person and generate fun facts
+   * Uses LinkedIn profile and name to generate interesting facts
+   */
+  async researchPerson(
+    firstName: string,
+    lastName: string,
+    linkedInUrl: string,
+  ): Promise<FunFactsResult> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const researchFn = httpsCallable<
+        { firstName: string; lastName: string; linkedInUrl: string },
+        FunFactsResult
+      >(this.functions!, "researchPerson");
+
+      const result = await researchFn({ firstName, lastName, linkedInUrl });
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
 }
 
 // Singleton instance
@@ -490,6 +516,16 @@ export const aiService = new AIService();
 // React hook for AI service
 export function useAI() {
   return aiService;
+}
+
+// Fun facts research result
+export interface FunFactsResult {
+  facts: Array<{
+    id: string;
+    fact: string;
+    category: "professional" | "education" | "achievement" | "interest" | "other";
+  }>;
+  summary: string;
 }
 
 // Predefined competitor lists for quick analysis

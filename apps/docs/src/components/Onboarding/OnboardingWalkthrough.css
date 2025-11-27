@@ -393,6 +393,32 @@
   text-decoration: underline;
 }
 
+/* ================================================
+   PROFILE COMPLETION STEP
+   Form for collecting user details
+   ================================================ */
+
+.onboarding-modal--profile-completion {
+  max-width: 560px;
+}
+
+.onboarding-modal--profile-completion .onboarding-content {
+  padding-bottom: 0;
+}
+
+/* ================================================
+   AI FUN FACTS STEP
+   Display of AI-researched facts
+   ================================================ */
+
+.onboarding-modal--fun-facts {
+  max-width: 640px;
+}
+
+.onboarding-modal--fun-facts .onboarding-content {
+  padding-bottom: 0;
+}
+
 /* Mobile adjustments for profile selection */
 @media (max-width: 640px) {
   .onboarding-modal--profile {
@@ -418,6 +444,11 @@
 
   .onboarding-profile-desc {
     font-size: 0.6875rem;
+  }
+
+  .onboarding-modal--profile-completion,
+  .onboarding-modal--fun-facts {
+    max-width: 100%;
   }
 }
 

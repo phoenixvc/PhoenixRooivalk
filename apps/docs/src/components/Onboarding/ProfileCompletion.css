@@ -1,0 +1,163 @@
+/* ================================================
+   PROFILE COMPLETION FORM
+   Collects user details after signup
+   ================================================ */
+
+.profile-completion {
+  padding: 2rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.profile-completion-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-completion-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.profile-completion-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+}
+
+.profile-completion-subtitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgb(148, 163, 184);
+}
+
+.profile-completion-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.profile-completion-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.profile-completion-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.profile-completion-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+}
+
+.profile-completion-label .required {
+  color: rgb(239, 68, 68);
+}
+
+.profile-completion-label .optional {
+  font-weight: 400;
+  color: rgb(100, 116, 139);
+  font-size: 0.75rem;
+}
+
+.profile-completion-input {
+  padding: 0.75rem 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 8px;
+  color: rgb(242, 244, 246);
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+}
+
+.profile-completion-input::placeholder {
+  color: rgb(100, 116, 139);
+}
+
+.profile-completion-input:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+.profile-completion-input.error {
+  border-color: rgb(239, 68, 68);
+}
+
+.profile-completion-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.profile-completion-error {
+  font-size: 0.75rem;
+  color: rgb(239, 68, 68);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.profile-completion-hint {
+  font-size: 0.75rem;
+  color: rgb(100, 116, 139);
+}
+
+.profile-completion-submit {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.profile-completion-submit:hover {
+  background: linear-gradient(135deg, rgb(251, 146, 60), rgb(249, 115, 22));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.profile-completion-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 560px) {
+  .profile-completion {
+    padding: 1.5rem;
+  }
+
+  .profile-completion-row {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-completion-icon {
+    font-size: 2.5rem;
+  }
+
+  .profile-completion-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .profile-completion-input,
+  .profile-completion-submit {
+    transition: none;
+  }
+}
