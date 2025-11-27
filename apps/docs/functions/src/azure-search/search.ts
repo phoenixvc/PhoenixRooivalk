@@ -26,7 +26,7 @@ export async function azureVectorSearch(
     category?: string;
     minScore?: number;
     hybridSearch?: boolean;
-  } = {}
+  } = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: {
@@ -42,7 +42,7 @@ export async function azureVectorSearch(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured. Set azure_search.endpoint and azure_search.key"
+      "Azure Search not configured. Set azure_search.endpoint and azure_search.key",
     );
   }
 

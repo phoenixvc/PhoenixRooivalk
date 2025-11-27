@@ -29,7 +29,7 @@ export async function uploadToAzureIndex(
     totalChunks: number;
     contentHash: string;
     embedding: number[];
-  }>
+  }>,
 ): Promise<{
   success: boolean;
   indexed: number;
@@ -41,7 +41,7 @@ export async function uploadToAzureIndex(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -74,16 +74,16 @@ export async function uploadToAzureIndex(
     // Process results
     const results = data.value || [];
     const indexed = results.filter(
-      (r: { status: boolean }) => r.status === true
+      (r: { status: boolean }) => r.status === true,
     ).length;
     const failed = results.filter(
-      (r: { status: boolean }) => r.status === false
+      (r: { status: boolean }) => r.status === false,
     ).length;
     const errors = results
       .filter((r: { status: boolean; errorMessage?: string }) => !r.status)
       .map(
         (r: { key: string; errorMessage?: string }) =>
-          `${r.key}: ${r.errorMessage || "Unknown error"}`
+          `${r.key}: ${r.errorMessage || "Unknown error"}`,
       );
 
     // Log metrics
@@ -109,9 +109,7 @@ export async function uploadToAzureIndex(
 /**
  * Delete documents from Azure Search index
  */
-export async function deleteFromAzureIndex(
-  documentIds: string[]
-): Promise<{
+export async function deleteFromAzureIndex(documentIds: string[]): Promise<{
   success: boolean;
   deleted: number;
 }> {
@@ -120,7 +118,7 @@ export async function deleteFromAzureIndex(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -164,7 +162,7 @@ export async function ensureAzureIndex(): Promise<{
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -218,7 +216,7 @@ export async function ensureAzureIndex(): Promise<{
     const message = error instanceof Error ? error.message : "Unknown error";
     throw new functions.https.HttpsError(
       "internal",
-      `Index setup failed: ${message}`
+      `Index setup failed: ${message}`,
     );
   }
 }

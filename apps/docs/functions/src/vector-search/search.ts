@@ -7,10 +7,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { logMetrics } from "../monitoring";
-import {
-  isAzureSearchAvailable,
-  azureVectorSearch,
-} from "../azure-search";
+import { isAzureSearchAvailable, azureVectorSearch } from "../azure-search";
 import {
   VECTOR_SEARCH_CONFIG,
   VectorSearchResult,
@@ -32,13 +29,13 @@ const db = admin.firestore();
  */
 async function searchInMemory(
   queryEmbedding: number[],
-  options: VectorSearchOptions
+  options: VectorSearchOptions,
 ): Promise<VectorSearchResult[]> {
   const { topK = 5, category, minScore = 0.65 } = options;
 
   // Build Firestore query
   let firestoreQuery: admin.firestore.Query = db.collection(
-    VECTOR_SEARCH_CONFIG.embeddingsCollection
+    VECTOR_SEARCH_CONFIG.embeddingsCollection,
   );
 
   if (category) {
@@ -51,7 +48,7 @@ async function searchInMemory(
   // Check if we're exceeding in-memory limits
   if (snapshot.size > VECTOR_SEARCH_CONFIG.maxVectorsForInMemory) {
     functions.logger.warn(
-      `In-memory search with ${snapshot.size} vectors. Consider enabling Firebase Vector Search.`
+      `In-memory search with ${snapshot.size} vectors. Consider enabling Firebase Vector Search.`,
     );
   }
 
@@ -89,7 +86,7 @@ async function searchInMemory(
  */
 export async function vectorSearch(
   query: string,
-  options: VectorSearchOptions = {}
+  options: VectorSearchOptions = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: SearchMetrics;
@@ -121,7 +118,7 @@ export async function vectorSearch(
     } catch (error) {
       functions.logger.warn(
         "Azure AI Search failed, falling back to in-memory:",
-        error
+        error,
       );
       // Fall through to in-memory search
     }
@@ -168,7 +165,7 @@ export async function vectorSearch(
  */
 export async function vectorSearchUnique(
   query: string,
-  options: VectorSearchOptions = {}
+  options: VectorSearchOptions = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: SearchMetrics;
@@ -208,7 +205,7 @@ export async function vectorSearchUnique(
  */
 export async function findRelatedDocuments(
   docId: string,
-  options: { topK?: number; excludeSelf?: boolean } = {}
+  options: { topK?: number; excludeSelf?: boolean } = {},
 ): Promise<VectorSearchResult[]> {
   const { topK = 5, excludeSelf = true } = options;
 

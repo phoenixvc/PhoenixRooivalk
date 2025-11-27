@@ -38,7 +38,7 @@ export const researchPerson = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -46,7 +46,7 @@ export const researchPerson = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -55,7 +55,7 @@ export const researchPerson = functions.https.onCall(
     if (!firstName || !lastName || !linkedInUrl) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "First name, last name, and LinkedIn URL are required"
+        "First name, last name, and LinkedIn URL are required",
       );
     }
 
@@ -63,7 +63,7 @@ export const researchPerson = functions.https.onCall(
     if (!LINKEDIN_REGEX.test(linkedInUrl)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Invalid LinkedIn URL format"
+        "Invalid LinkedIn URL format",
       );
     }
 
@@ -76,7 +76,7 @@ export const researchPerson = functions.https.onCall(
             content: PROMPTS.research.user(firstName, lastName, linkedInUrl),
           },
         ],
-        { model: "chat", maxTokens: 1500, temperature: 0.7 }
+        { model: "chat", maxTokens: 1500, temperature: 0.7 },
       );
 
       // Parse the JSON response
@@ -121,14 +121,14 @@ export const researchPerson = functions.https.onCall(
 
       // Fallback response if parsing fails
       functions.logger.warn(
-        "Failed to parse fun facts response, using fallback"
+        "Failed to parse fun facts response, using fallback",
       );
       return createFallbackResponse(firstName, lastName);
     } catch (error) {
       functions.logger.error("Research person error:", error);
       return createFallbackResponse(firstName, lastName);
     }
-  }
+  },
 );
 
 /**
@@ -136,7 +136,7 @@ export const researchPerson = functions.https.onCall(
  */
 function createFallbackResponse(
   firstName: string,
-  lastName: string
+  lastName: string,
 ): FunFactsResult {
   return {
     facts: [

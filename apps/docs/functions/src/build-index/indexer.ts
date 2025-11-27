@@ -28,7 +28,7 @@ const db = admin.firestore();
  */
 export async function hasContentChanged(
   docId: string,
-  contentHash: string
+  contentHash: string,
 ): Promise<boolean> {
   const metaDoc = await db
     .collection(BUILD_INDEX_CONFIG.metadataCollection)
@@ -47,7 +47,7 @@ export async function hasContentChanged(
  * Index a single document
  */
 export async function indexDocument(
-  doc: DocumentInput
+  doc: DocumentInput,
 ): Promise<DocumentIndexResult> {
   const contentHash = generateContentHash(doc.content);
 
@@ -86,7 +86,7 @@ export async function indexDocument(
     for (let i = 0; i < chunks.length; i += BUILD_INDEX_CONFIG.batchSize) {
       const batch = chunks.slice(i, i + BUILD_INDEX_CONFIG.batchSize);
       const { embeddings, metrics } = await generateEmbedding(
-        batch.map((c) => c.text)
+        batch.map((c) => c.text),
       );
       allEmbeddings.push(...embeddings);
       totalTokens += metrics.totalTokens || 0;

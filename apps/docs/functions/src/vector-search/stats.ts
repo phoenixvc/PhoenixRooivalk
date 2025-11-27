@@ -5,10 +5,7 @@
  */
 
 import * as admin from "firebase-admin";
-import {
-  isAzureSearchAvailable,
-  getAzureIndexStats,
-} from "../azure-search";
+import { isAzureSearchAvailable, getAzureIndexStats } from "../azure-search";
 import { VECTOR_SEARCH_CONFIG, VectorStats } from "./config";
 
 const db = admin.firestore();

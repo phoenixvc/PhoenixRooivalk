@@ -22,7 +22,7 @@ export const summarizeContent = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -30,7 +30,7 @@ export const summarizeContent = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -39,7 +39,7 @@ export const summarizeContent = functions.https.onCall(
     if (!content || content.length < 200) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Content is too short to summarize"
+        "Content is too short to summarize",
       );
     }
 
@@ -49,11 +49,14 @@ export const summarizeContent = functions.https.onCall(
     const { content: summary } = await chatCompletion(
       [
         { role: "system", content: PROMPTS.summary.system },
-        { role: "user", content: PROMPTS.summary.user(truncatedContent, maxLength) },
+        {
+          role: "user",
+          content: PROMPTS.summary.user(truncatedContent, maxLength),
+        },
       ],
-      { model: "chatFast", maxTokens: 1000, temperature: 0.3 }
+      { model: "chatFast", maxTokens: 1000, temperature: 0.3 },
     );
 
     return { summary };
-  }
+  },
 );
