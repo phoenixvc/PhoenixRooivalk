@@ -33,8 +33,11 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  runTransaction,
   Firestore,
   serverTimestamp,
+  Timestamp,
+  FieldValue,
 } from "firebase/firestore";
 import {
   getAnalytics,
@@ -192,9 +195,9 @@ export interface UserProfileData {
     fact: string;
     category: string;
   }>;
-  // Timestamps
-  createdAt?: unknown;
-  updatedAt?: unknown;
+  // Timestamps - use Firestore Timestamp or FieldValue for serverTimestamp()
+  createdAt?: Timestamp | FieldValue;
+  updatedAt?: Timestamp | FieldValue;
   profileCompletedAt?: string;
   funFactsGeneratedAt?: string;
 }
@@ -231,7 +234,8 @@ export interface UserProgress {
     lastVisit?: string;
     totalTimeSpentMs?: number; // Total time spent across all docs
   };
-  updatedAt?: unknown;
+  // Use Firestore Timestamp or FieldValue for serverTimestamp()
+  updatedAt?: Timestamp | FieldValue;
 }
 
 const DEFAULT_PROGRESS: UserProgress = {
@@ -347,7 +351,8 @@ export const getUserProfileData = async (
 
 /**
  * Saves user profile document to Firestore.
- * Creates a new document or overwrites existing one.
+ * Creates a new document or updates existing one using a transaction
+ * to avoid race conditions.
  * @param {string} userId - The user's unique identifier
  * @param {UserProfileData} profile - Complete profile data to save
  * @returns {Promise<boolean>} True if save succeeded, false otherwise
@@ -359,22 +364,25 @@ export const saveUserProfileData = async (
   if (!db) return false;
   try {
     const docRef = doc(db, "userProfiles", userId);
-    const existingDoc = await getDoc(docRef);
 
-    if (existingDoc.exists()) {
-      // Update existing document
-      await updateDoc(docRef, {
-        ...profile,
-        updatedAt: serverTimestamp(),
-      });
-    } else {
-      // Create new document
-      await setDoc(docRef, {
-        ...profile,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-    }
+    await runTransaction(db, async (transaction) => {
+      const existingDoc = await transaction.get(docRef);
+
+      if (existingDoc.exists()) {
+        // Update existing document
+        transaction.update(docRef, {
+          ...profile,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // Create new document
+        transaction.set(docRef, {
+          ...profile,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+      }
+    });
     return true;
   } catch (error) {
     console.error("Error saving user profile:", error);
@@ -384,7 +392,7 @@ export const saveUserProfileData = async (
 
 /**
  * Updates specific fields in user's profile document.
- * Uses Firestore merge semantics to update only provided fields.
+ * Uses Firestore transaction to avoid race conditions and lost writes.
  * @param {string} userId - The user's unique identifier
  * @param {Partial<UserProfileData>} updates - Partial profile data to update
  * @returns {Promise<boolean>} True if update succeeded, false otherwise
@@ -396,22 +404,25 @@ export const updateUserProfileData = async (
   if (!db) return false;
   try {
     const docRef = doc(db, "userProfiles", userId);
-    const existingDoc = await getDoc(docRef);
 
-    if (existingDoc.exists()) {
-      await updateDoc(docRef, {
-        ...updates,
-        updatedAt: serverTimestamp(),
-      });
-    } else {
-      // Create document if it doesn't exist
-      await setDoc(docRef, {
-        ...DEFAULT_USER_PROFILE,
-        ...updates,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-    }
+    await runTransaction(db, async (transaction) => {
+      const existingDoc = await transaction.get(docRef);
+
+      if (existingDoc.exists()) {
+        transaction.update(docRef, {
+          ...updates,
+          updatedAt: serverTimestamp(),
+        });
+      } else {
+        // Create document if it doesn't exist
+        transaction.set(docRef, {
+          ...DEFAULT_USER_PROFILE,
+          ...updates,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+      }
+    });
     return true;
   } catch (error) {
     console.error("Error updating user profile:", error);
