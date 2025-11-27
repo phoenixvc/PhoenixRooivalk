@@ -15,6 +15,7 @@
  * - summarizeContent: Content summarization
  * - reviewDocumentImprovement: Admin review of suggestions
  * - getPendingImprovements: Get pending suggestions (admin)
+ * - researchPerson: Generate fun facts about a user from LinkedIn
  *
  * RAG Functions (from ./rag/):
  * - indexAllDocumentation: Index all documentation for RAG
@@ -60,6 +61,7 @@ export {
   summarizeContent,
   reviewDocumentImprovement,
   getPendingImprovements,
+  researchPerson,
 } from "./ai";
 
 // Export RAG functions

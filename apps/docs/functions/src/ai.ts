@@ -745,3 +745,180 @@ export const getPendingImprovements = functions.https.onCall(
     return { suggestions };
   }
 );
+
+/**
+ * Research Person - Generate fun facts about a user from their LinkedIn profile
+ */
+interface ResearchPersonRequest {
+  firstName: string;
+  lastName: string;
+  linkedInUrl: string;
+}
+
+interface FunFact {
+  id: string;
+  fact: string;
+  category: "professional" | "education" | "achievement" | "interest" | "other";
+}
+
+interface FunFactsResult {
+  facts: FunFact[];
+  summary: string;
+}
+
+export const researchPerson = functions.https.onCall(
+  async (data: ResearchPersonRequest, context): Promise<FunFactsResult> => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be authenticated to use AI features"
+      );
+    }
+
+    const canProceed = await checkAIRateLimit(context.auth.uid, "research");
+    if (!canProceed) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "Rate limit exceeded. Try again later."
+      );
+    }
+
+    const { firstName, lastName, linkedInUrl } = data;
+
+    if (!firstName || !lastName || !linkedInUrl) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "First name, last name, and LinkedIn URL are required"
+      );
+    }
+
+    // Validate LinkedIn URL format
+    const linkedInRegex =
+      /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|pub|profile)\/[\w-]+\/?$/i;
+    if (!linkedInRegex.test(linkedInUrl)) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Invalid LinkedIn URL format"
+      );
+    }
+
+    const systemPrompt = `You are a professional researcher helping to create engaging user profiles for the Phoenix Rooivalk documentation platform. Your task is to generate interesting, professional fun facts about a person based on their name and LinkedIn profile.
+
+IMPORTANT GUIDELINES:
+- Generate 4-6 fun facts that are professional and appropriate
+- Focus on career achievements, education, skills, interests, and professional journey
+- Be positive and highlight accomplishments
+- If you cannot find specific information, make reasonable inferences based on typical career paths
+- Each fact should be 1-2 sentences
+- Facts should be interesting conversation starters for a professional setting
+- Do NOT include personal information like age, family details, or private matters
+- Do NOT make up specific companies, dates, or achievements you're not confident about
+
+Categories:
+- professional: Career-related achievements, roles, or expertise
+- education: Academic background, certifications, courses
+- achievement: Awards, recognitions, notable accomplishments
+- interest: Professional interests, passions, side projects
+- other: Other interesting professional tidbits`;
+
+    const userPrompt = `Research and generate fun facts about this person:
+
+Name: ${firstName} ${lastName}
+LinkedIn: ${linkedInUrl}
+
+Generate a JSON response with exactly this structure:
+{
+  "facts": [
+    {
+      "id": "fact-1",
+      "fact": "The actual fun fact text here",
+      "category": "professional"
+    }
+  ],
+  "summary": "A brief 1-sentence summary of this person's professional profile"
+}
+
+Generate 4-6 facts with varied categories. Make them engaging and professional.`;
+
+    try {
+      const response = await callOpenAI(
+        [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        { model: OPENAI_MODEL, maxTokens: 1500, temperature: 0.7 }
+      );
+
+      // Parse the JSON response
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]) as FunFactsResult;
+
+        // Validate and sanitize the response
+        if (parsed.facts && Array.isArray(parsed.facts)) {
+          // Ensure each fact has required fields
+          parsed.facts = parsed.facts
+            .filter((f) => f.fact && f.category)
+            .map((f, index) => ({
+              id: f.id || `fact-${index + 1}`,
+              fact: f.fact,
+              category: ["professional", "education", "achievement", "interest", "other"].includes(
+                f.category
+              )
+                ? f.category
+                : "other",
+            })) as FunFact[];
+
+          // Log usage
+          await db.collection("ai_usage").add({
+            userId: context.auth.uid,
+            feature: "research_person",
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          });
+
+          return {
+            facts: parsed.facts,
+            summary: parsed.summary || `Welcome ${firstName} to Phoenix Rooivalk!`,
+          };
+        }
+      }
+
+      // Fallback response if parsing fails
+      functions.logger.warn("Failed to parse fun facts response, using fallback");
+      return {
+        facts: [
+          {
+            id: "fact-1",
+            fact: `${firstName} is joining the Phoenix Rooivalk documentation team.`,
+            category: "professional",
+          },
+          {
+            id: "fact-2",
+            fact: "Ready to explore cutting-edge counter-drone technology.",
+            category: "interest",
+          },
+        ],
+        summary: `Welcome ${firstName} ${lastName} to Phoenix Rooivalk!`,
+      };
+    } catch (error) {
+      functions.logger.error("Research person error:", error);
+
+      // Return graceful fallback on error
+      return {
+        facts: [
+          {
+            id: "fact-1",
+            fact: `${firstName} is joining the Phoenix Rooivalk documentation team.`,
+            category: "professional",
+          },
+          {
+            id: "fact-2",
+            fact: "Exploring autonomous defense technology documentation.",
+            category: "interest",
+          },
+        ],
+        summary: `Welcome ${firstName} ${lastName} to Phoenix Rooivalk!`,
+      };
+    }
+  }
+);
