@@ -1,5 +1,29 @@
 import * as React from "react";
 import Link from "@docusaurus/Link";
+import { useAuth } from "../../contexts/AuthContext";
+
+/**
+ * Formats milliseconds into a human-readable time string.
+ */
+function formatTime(ms: number): string {
+  if (ms < 60000) {
+    return "< 1 min";
+  }
+
+  const minutes = Math.floor(ms / 60000);
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  if (hours === 0) {
+    return `${minutes} min`;
+  }
+
+  if (remainingMinutes === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${remainingMinutes}m`;
+}
 
 interface JourneyPath {
   id: string;
@@ -178,73 +202,105 @@ export const LEARNING_PATHS: JourneyPath[] = [
   },
 ];
 
-const JOURNEY_STORAGE_KEY = "phoenix-docs-journey";
-
-interface JourneyProgress {
-  [pathId: string]: {
-    completedDocs: string[];
-    startedAt?: string;
-    completedAt?: string;
-  };
-}
-
+/**
+ * Hook for tracking learning path progress using AuthContext.
+ * Progress is automatically derived from document reading progress,
+ * which syncs to Firebase when user is authenticated.
+ */
 export function useDocJourney() {
-  const [journeyProgress, setJourneyProgress] = React.useState<JourneyProgress>(
-    {},
+  const { progress } = useAuth();
+
+  // Helper to convert doc path to doc ID used in progress tracking
+  const pathToDocId = (docPath: string): string => {
+    return docPath.replace(/^\/docs\//, "").replace(/\/$/, "");
+  };
+
+  // Check if a specific doc in a path is completed
+  const isDocComplete = React.useCallback(
+    (_pathId: string, docId: string) => {
+      // Find the path and doc to get the actual doc path
+      for (const path of LEARNING_PATHS) {
+        const doc = path.docs.find((d) => d.id === docId);
+        if (doc) {
+          const progressDocId = pathToDocId(doc.path);
+          return progress?.docs[progressDocId]?.completed || false;
+        }
+      }
+      return false;
+    },
+    [progress],
   );
 
-  React.useEffect(() => {
-    const stored = localStorage.getItem(JOURNEY_STORAGE_KEY);
-    if (stored) {
-      setJourneyProgress(JSON.parse(stored));
-    }
-  }, []);
+  // Get progress percentage for a learning path
+  const getPathProgress = React.useCallback(
+    (pathId: string) => {
+      const path = LEARNING_PATHS.find((p) => p.id === pathId);
+      if (!path || !progress?.docs) return 0;
 
-  const markDocComplete = (pathId: string, docId: string) => {
-    const path = LEARNING_PATHS.find((p) => p.id === pathId);
-    if (!path) return;
+      const completedCount = path.docs.filter((doc) => {
+        const progressDocId = pathToDocId(doc.path);
+        return progress.docs[progressDocId]?.completed || false;
+      }).length;
 
-    const currentProgress = journeyProgress[pathId] || { completedDocs: [] };
-    if (currentProgress.completedDocs.includes(docId)) return;
+      return Math.round((completedCount / path.docs.length) * 100);
+    },
+    [progress],
+  );
 
-    const newCompletedDocs = [...currentProgress.completedDocs, docId];
-    const isPathComplete = newCompletedDocs.length === path.docs.length;
+  // Check if entire path is complete
+  const isPathComplete = React.useCallback(
+    (pathId: string) => {
+      return getPathProgress(pathId) === 100;
+    },
+    [getPathProgress],
+  );
 
-    const newProgress = {
-      ...journeyProgress,
-      [pathId]: {
-        ...currentProgress,
-        completedDocs: newCompletedDocs,
-        startedAt: currentProgress.startedAt || new Date().toISOString(),
-        completedAt: isPathComplete ? new Date().toISOString() : undefined,
-      },
-    };
+  // markDocComplete is no longer needed as progress is tracked automatically
+  // by the ReadingTracker when users scroll through documents
+  const markDocComplete = React.useCallback(
+    (_pathId: string, _docId: string) => {
+      // No-op: Progress is now tracked automatically by ReadingTracker
+    },
+    [],
+  );
 
-    setJourneyProgress(newProgress);
-    localStorage.setItem(JOURNEY_STORAGE_KEY, JSON.stringify(newProgress));
-  };
+  // Get time spent on a specific doc
+  const getDocTimeSpent = React.useCallback(
+    (docPath: string): number => {
+      const progressDocId = pathToDocId(docPath);
+      return progress?.docs[progressDocId]?.timeSpentMs || 0;
+    },
+    [progress],
+  );
 
-  const getPathProgress = (pathId: string) => {
-    const path = LEARNING_PATHS.find((p) => p.id === pathId);
-    const progress = journeyProgress[pathId];
-    if (!path || !progress) return 0;
-    return Math.round((progress.completedDocs.length / path.docs.length) * 100);
-  };
+  // Get total time spent on a learning path
+  const getPathTimeSpent = React.useCallback(
+    (pathId: string): number => {
+      const path = LEARNING_PATHS.find((p) => p.id === pathId);
+      if (!path || !progress?.docs) return 0;
 
-  const isDocComplete = (pathId: string, docId: string) => {
-    return journeyProgress[pathId]?.completedDocs.includes(docId) || false;
-  };
+      return path.docs.reduce((total, doc) => {
+        const progressDocId = pathToDocId(doc.path);
+        return total + (progress.docs[progressDocId]?.timeSpentMs || 0);
+      }, 0);
+    },
+    [progress],
+  );
 
-  const isPathComplete = (pathId: string) => {
-    return getPathProgress(pathId) === 100;
-  };
+  // Get total time spent across all docs
+  const getTotalTimeSpent = React.useCallback((): number => {
+    return progress?.stats.totalTimeSpentMs || 0;
+  }, [progress]);
 
   return {
-    journeyProgress,
+    journeyProgress: progress,
     markDocComplete,
     getPathProgress,
     isDocComplete,
     isPathComplete,
+    getDocTimeSpent,
+    getPathTimeSpent,
+    getTotalTimeSpent,
   };
 }
 
@@ -253,10 +309,14 @@ function JourneyPathCard({
   path,
   progress,
   isComplete,
+  timeSpent,
+  getDocTimeSpent,
 }: {
   path: JourneyPath;
   progress: number;
   isComplete: boolean;
+  timeSpent: number;
+  getDocTimeSpent: (docPath: string) => number;
 }): React.ReactElement {
   return (
     <div
@@ -280,15 +340,26 @@ function JourneyPathCard({
           />
         </div>
         <span className="journey-path-progress-text">{progress}%</span>
+        {timeSpent > 0 && (
+          <span className="journey-path-time" title="Time spent reading">
+            {formatTime(timeSpent)}
+          </span>
+        )}
       </div>
 
       <div className="journey-path-docs">
-        {path.docs.map((doc, index) => (
-          <Link key={doc.id} to={doc.path} className="journey-path-doc">
-            <span className="journey-path-doc-number">{index + 1}</span>
-            <span className="journey-path-doc-title">{doc.title}</span>
-          </Link>
-        ))}
+        {path.docs.map((doc, index) => {
+          const docTime = getDocTimeSpent(doc.path);
+          return (
+            <Link key={doc.id} to={doc.path} className="journey-path-doc">
+              <span className="journey-path-doc-number">{index + 1}</span>
+              <span className="journey-path-doc-title">{doc.title}</span>
+              {docTime > 0 && (
+                <span className="journey-path-doc-time">{formatTime(docTime)}</span>
+              )}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
@@ -296,7 +367,13 @@ function JourneyPathCard({
 
 // Main journey dashboard
 export default function DocJourney(): React.ReactElement {
-  const { getPathProgress, isPathComplete } = useDocJourney();
+  const {
+    getPathProgress,
+    isPathComplete,
+    getPathTimeSpent,
+    getTotalTimeSpent,
+    getDocTimeSpent,
+  } = useDocJourney();
 
   const completedPaths = LEARNING_PATHS.filter((p) =>
     isPathComplete(p.id),
@@ -305,6 +382,7 @@ export default function DocJourney(): React.ReactElement {
     LEARNING_PATHS.reduce((sum, p) => sum + getPathProgress(p.id), 0) /
       LEARNING_PATHS.length,
   );
+  const totalTime = getTotalTimeSpent();
 
   return (
     <div className="doc-journey">
@@ -324,6 +402,12 @@ export default function DocJourney(): React.ReactElement {
               / {LEARNING_PATHS.length} Paths Complete
             </span>
           </div>
+          {totalTime > 0 && (
+            <div className="doc-journey-stat">
+              <span className="doc-journey-stat-value">{formatTime(totalTime)}</span>
+              <span className="doc-journey-stat-label">Time Invested</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -334,6 +418,8 @@ export default function DocJourney(): React.ReactElement {
             path={path}
             progress={getPathProgress(path.id)}
             isComplete={isPathComplete(path.id)}
+            timeSpent={getPathTimeSpent(path.id)}
+            getDocTimeSpent={getDocTimeSpent}
           />
         ))}
       </div>
