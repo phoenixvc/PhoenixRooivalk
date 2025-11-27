@@ -5,8 +5,9 @@
  * Can be revisited from user profile settings.
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { isProfileConfirmationPending } from "../Auth";
 import Link from "@docusaurus/Link";
 import "./OnboardingWalkthrough.css";
 
@@ -172,6 +173,7 @@ export function OnboardingWalkthrough({
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const checkIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if we should show onboarding
   useEffect(() => {
@@ -189,13 +191,35 @@ export function OnboardingWalkthrough({
       return;
     }
 
-    // Show onboarding after a short delay (after profile confirmation)
+    // Wait for profile confirmation to complete before showing onboarding
+    // This prevents both modals from appearing at the same time
+    const checkAndShow = () => {
+      if (!isProfileConfirmationPending()) {
+        setCurrentStep(getSavedStep());
+        setIsVisible(true);
+        if (checkIntervalRef.current) {
+          clearInterval(checkIntervalRef.current);
+          checkIntervalRef.current = null;
+        }
+      }
+    };
+
+    // Initial delay, then check periodically if profile confirmation is still pending
     const timer = setTimeout(() => {
-      setCurrentStep(getSavedStep());
-      setIsVisible(true);
+      if (isProfileConfirmationPending()) {
+        // Profile confirmation is showing, poll until it's done
+        checkIntervalRef.current = setInterval(checkAndShow, 500);
+      } else {
+        checkAndShow();
+      }
     }, 1500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (checkIntervalRef.current) {
+        clearInterval(checkIntervalRef.current);
+      }
+    };
   }, [user, loading, forceShow]);
 
   // Highlight target element

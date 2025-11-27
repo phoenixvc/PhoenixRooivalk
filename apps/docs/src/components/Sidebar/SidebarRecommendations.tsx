@@ -17,6 +17,7 @@ import {
   profileToRecommendations,
   UserProfile,
 } from "../../config/userProfiles";
+import { getSavedProfile } from "../Auth";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
 
@@ -92,14 +93,46 @@ export function SidebarRecommendations({
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [knownProfile, setKnownProfile] = useState<UserProfile | null>(null);
-  const loadedRef = useRef(false);
+  const [confirmedRoles, setConfirmedRoles] = useState<string[]>([]);
+  const [profileChecked, setProfileChecked] = useState(false);
+  const previousUserIdRef = useRef<string | null>(null);
 
-  // Check for known internal user profile
+  // Reset state when user changes (fixes loadedRef persistence bug)
   useEffect(() => {
-    if (user) {
-      const profile = getKnownUserProfile(user.email, user.displayName);
-      setKnownProfile(profile);
+    const currentUserId = user?.uid || null;
+    if (previousUserIdRef.current !== currentUserId) {
+      // User changed - reset all state
+      previousUserIdRef.current = currentUserId;
+      setHasLoaded(false);
+      setRecommendations([]);
+      setKnownProfile(null);
+      setConfirmedRoles([]);
+      setProfileChecked(false);
+      // Clear sidebar highlights
+      highlightSidebarItems([]);
     }
+  }, [user?.uid]);
+
+  // Check for known internal user profile and saved confirmation
+  useEffect(() => {
+    if (!user) {
+      setProfileChecked(true);
+      return;
+    }
+
+    const profile = getKnownUserProfile(user.email, user.displayName);
+    setKnownProfile(profile);
+
+    // Get user's confirmed roles from localStorage (if they modified them)
+    const savedProfile = getSavedProfile();
+    if (savedProfile?.roles && savedProfile.roles.length > 0) {
+      setConfirmedRoles(savedProfile.roles);
+    } else if (profile) {
+      // Use default profile roles if no saved confirmation
+      setConfirmedRoles(profile.roles);
+    }
+
+    setProfileChecked(true);
   }, [user]);
 
   // Derive user profile description from reading history (for unknown users)
@@ -147,10 +180,9 @@ export function SidebarRecommendations({
   }, [progress, knownProfile]);
 
   const fetchRecommendations = useCallback(async () => {
-    if (!user || loadedRef.current) return;
+    if (!user || hasLoaded) return;
 
     setIsLoading(true);
-    loadedRef.current = true;
 
     try {
       // For known internal users, use pre-defined recommendations
@@ -185,16 +217,17 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems, knownProfile]);
+  }, [user, maxItems, knownProfile, hasLoaded]);
 
-  // Load recommendations when user is available
+  // Load recommendations when user and profile are available
+  // Wait for profileChecked to avoid stale closure with knownProfile
   useEffect(() => {
-    if (user && !hasLoaded) {
+    if (user && profileChecked && !hasLoaded) {
       // Small delay to not block initial render
-      const timer = setTimeout(fetchRecommendations, 1000);
+      const timer = setTimeout(fetchRecommendations, 500);
       return () => clearTimeout(timer);
     }
-  }, [user, hasLoaded, fetchRecommendations]);
+  }, [user, profileChecked, hasLoaded, fetchRecommendations]);
 
   // Don't render for unauthenticated users
   if (!user) {
@@ -243,26 +276,43 @@ export function SidebarRecommendations({
               </div>
 
               {recommendations.length > 0 ? (
-                <ul className="sidebar-rec-list">
-                  {recommendations.map((rec) => {
-                    const category = getCategoryFromPath(rec.docId);
-                    return (
-                      <li key={rec.docId} className="sidebar-rec-item">
-                        <Link to={rec.docId} className="sidebar-rec-link">
-                          <span className="sidebar-rec-emoji">
-                            {getCategoryEmoji(category)}
-                          </span>
-                          <span className="sidebar-rec-doc">
-                            {formatDocTitle(rec.docId)}
-                          </span>
-                          <span className="sidebar-rec-score">
-                            {Math.round(rec.relevanceScore * 100)}%
-                          </span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <>
+                  {/* Show completion progress for recommendations */}
+                  {knownProfile && (
+                    <div className="sidebar-rec-progress-summary">
+                      {recommendations.filter((rec) => {
+                        const docKey = rec.docId.replace(/^\/docs\//, "");
+                        return progress?.docs?.[docKey]?.completed;
+                      }).length}
+                      /{recommendations.length} completed
+                    </div>
+                  )}
+                  <ul className="sidebar-rec-list">
+                    {recommendations.map((rec) => {
+                      const category = getCategoryFromPath(rec.docId);
+                      const docKey = rec.docId.replace(/^\/docs\//, "");
+                      const isCompleted = progress?.docs?.[docKey]?.completed;
+                      return (
+                        <li key={rec.docId} className="sidebar-rec-item">
+                          <Link
+                            to={rec.docId}
+                            className={`sidebar-rec-link ${isCompleted ? "sidebar-rec-link--completed" : ""}`}
+                          >
+                            <span className="sidebar-rec-emoji">
+                              {isCompleted ? "✓" : getCategoryEmoji(category)}
+                            </span>
+                            <span className="sidebar-rec-doc">
+                              {formatDocTitle(rec.docId)}
+                            </span>
+                            <span className="sidebar-rec-score">
+                              {Math.round(rec.relevanceScore * 100)}%
+                            </span>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
               ) : (
                 <div className="sidebar-rec-empty">
                   {completedCount === 0

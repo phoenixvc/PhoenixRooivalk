@@ -16,6 +16,7 @@ import "./ProfileConfirmation.css";
 
 const PROFILE_CONFIRMED_KEY = "phoenix-docs-profile-confirmed";
 const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
+const PROFILE_CONFIRMATION_PENDING_KEY = "phoenix-docs-profile-pending";
 
 interface ProfileConfirmationProps {
   children: React.ReactNode;
@@ -79,6 +80,27 @@ export function getSavedProfile(): {
   }
 }
 
+/**
+ * Check if profile confirmation modal is currently pending
+ * Used by OnboardingWalkthrough to avoid showing both modals at once
+ */
+export function isProfileConfirmationPending(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(PROFILE_CONFIRMATION_PENDING_KEY) === "true";
+}
+
+/**
+ * Set profile confirmation pending state
+ */
+function setProfileConfirmationPending(pending: boolean): void {
+  if (typeof window === "undefined") return;
+  if (pending) {
+    localStorage.setItem(PROFILE_CONFIRMATION_PENDING_KEY, "true");
+  } else {
+    localStorage.removeItem(PROFILE_CONFIRMATION_PENDING_KEY);
+  }
+}
+
 export function ProfileConfirmation({
   children,
 }: ProfileConfirmationProps): React.ReactElement {
@@ -117,8 +139,14 @@ export function ProfileConfirmation({
     } else {
       // Unknown user - no confirmation needed
       setShowConfirmation(false);
+      setProfileConfirmationPending(false);
     }
   }, [user, loading]);
+
+  // Update pending state when showConfirmation changes
+  useEffect(() => {
+    setProfileConfirmationPending(showConfirmation);
+  }, [showConfirmation]);
 
   const handleRoleToggle = (role: string) => {
     setSelectedRoles((prev) =>
@@ -168,6 +196,9 @@ export function ProfileConfirmation({
   if (showConfirmation && detectedProfile && user) {
     return (
       <>
+        {/* Always render children underneath the modal */}
+        {children}
+
         {/* Backdrop */}
         <div className="profile-confirm-backdrop" />
 
