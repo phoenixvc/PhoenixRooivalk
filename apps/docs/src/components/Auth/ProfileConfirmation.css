@@ -247,6 +247,69 @@
   }
 }
 
+/* Template selection for unknown users */
+.profile-confirm-templates {
+  margin-bottom: 1.5rem;
+}
+
+.profile-confirm-template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.profile-confirm-template {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-confirm-template:hover {
+  background: rgba(51, 65, 85, 0.5);
+  border-color: rgba(100, 116, 139, 0.5);
+}
+
+.profile-confirm-template.selected {
+  background: rgba(249, 115, 22, 0.15);
+  border-color: rgb(249, 115, 22);
+}
+
+.profile-confirm-template-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+}
+
+.profile-confirm-template.selected .profile-confirm-template-name {
+  color: rgb(249, 115, 22);
+}
+
+.profile-confirm-template-desc {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  line-height: 1.4;
+}
+
+/* Increased max-width for template selection */
+.profile-confirm-modal:has(.profile-confirm-templates) {
+  max-width: 560px;
+}
+
+/* Mobile adjustments for templates */
+@media (max-width: 520px) {
+  .profile-confirm-template-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .profile-confirm-btn {
@@ -254,6 +317,10 @@
   }
 
   .profile-confirm-role {
+    transition: none;
+  }
+
+  .profile-confirm-template {
     transition: none;
   }
 }
