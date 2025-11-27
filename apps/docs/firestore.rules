@@ -69,7 +69,13 @@ service cloud.firestore {
         request.auth.uid == userId &&
         request.resource.data.keys().hasAll(['firstName', 'lastName', 'profileKey', 'roles']) &&
         request.resource.data.firstName is string &&
-        request.resource.data.lastName is string;
+        request.resource.data.lastName is string &&
+        request.resource.data.profileKey is string &&
+        request.resource.data.roles is list &&
+        // Ensure timestamp fields are set by server, not user
+        (!request.resource.data.keys().hasAny(['createdAt', 'updatedAt']) ||
+         (request.resource.data.createdAt == request.time && 
+          request.resource.data.updatedAt == request.time));
       
       allow update: if request.auth != null && 
         request.auth.uid == userId &&
