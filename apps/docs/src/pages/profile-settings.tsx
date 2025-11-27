@@ -137,7 +137,7 @@ export default function ProfileSettings(): React.ReactElement {
     } else if (profileKey && profileKey in PROFILE_TEMPLATES) {
       const template = PROFILE_TEMPLATES[profileKey];
       if (template.recommendedPaths) {
-        recommendedDocs = template.recommendedPaths;
+        recommendedDocs = template.recommendedPaths.map((p) => p.docId);
       }
     }
 

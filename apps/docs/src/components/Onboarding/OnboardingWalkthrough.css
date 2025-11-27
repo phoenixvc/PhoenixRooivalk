@@ -293,6 +293,134 @@
   }
 }
 
+/* ================================================
+   PROFILE SELECTION STEP
+   Grid of profile template cards
+   ================================================ */
+
+.onboarding-modal--profile {
+  max-width: 720px;
+}
+
+.onboarding-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.onboarding-profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border: 2px solid rgba(71, 85, 105, 0.5);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.onboarding-profile-card:hover {
+  background: rgba(51, 65, 85, 0.5);
+  border-color: rgba(100, 116, 139, 0.8);
+  transform: translateY(-2px);
+}
+
+.onboarding-profile-card.selected {
+  background: rgba(249, 115, 22, 0.15);
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.2);
+}
+
+.onboarding-profile-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.onboarding-profile-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+}
+
+.onboarding-profile-card.selected .onboarding-profile-name {
+  color: rgb(249, 115, 22);
+}
+
+.onboarding-profile-desc {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  line-height: 1.4;
+}
+
+/* Template explanation note */
+.onboarding-template-note {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.onboarding-template-note-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.onboarding-template-note-text {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  line-height: 1.5;
+}
+
+.onboarding-template-note-text strong {
+  color: rgb(226, 230, 234);
+}
+
+.onboarding-template-note-text a {
+  color: rgb(249, 115, 22);
+  text-decoration: none;
+}
+
+.onboarding-template-note-text a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile adjustments for profile selection */
+@media (max-width: 640px) {
+  .onboarding-modal--profile {
+    max-width: 100%;
+  }
+
+  .onboarding-profile-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .onboarding-profile-card {
+    padding: 0.875rem;
+  }
+
+  .onboarding-profile-icon {
+    font-size: 1.25rem;
+  }
+
+  .onboarding-profile-name {
+    font-size: 0.875rem;
+  }
+
+  .onboarding-profile-desc {
+    font-size: 0.6875rem;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .onboarding-content.animating .onboarding-step {
@@ -314,5 +442,9 @@
 
   .onboarding-highlight {
     animation: none;
+  }
+
+  .onboarding-profile-card {
+    transition: none;
   }
 }

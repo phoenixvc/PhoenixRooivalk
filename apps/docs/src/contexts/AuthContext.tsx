@@ -63,6 +63,7 @@ interface AuthContextType {
   syncProgress: () => Promise<void>;
   updateProgress: (updates: Partial<UserProgress>) => Promise<void>;
   updateUserRoles: (roles: string[]) => void;
+  refreshUserProfile: () => void;
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
 }
@@ -309,6 +310,35 @@ export function AuthProvider({
     saveProfileData(userProfile.profileKey, roles);
   }, [userProfile.profileKey]);
 
+  // Refresh user profile from localStorage (called after onboarding profile selection)
+  const refreshUserProfile = useCallback(() => {
+    if (!user) return;
+
+    // Re-detect known profile
+    const { profile, profileKey } = detectUserProfile(user.email, user.displayName);
+
+    // Get saved profile data (may have been updated by onboarding)
+    const savedProfile = getSavedProfileData();
+
+    // Determine the profile key to use - prefer saved if available
+    const effectiveProfileKey = savedProfile?.profileKey || profileKey;
+
+    // Determine roles: use saved roles if available, otherwise defaults from profile
+    let confirmedRoles: string[] = [];
+    if (savedProfile?.roles && savedProfile.roles.length > 0) {
+      confirmedRoles = savedProfile.roles;
+    } else if (profile) {
+      confirmedRoles = profile.roles;
+    }
+
+    setUserProfile({
+      knownProfile: profile,
+      confirmedRoles,
+      profileKey: effectiveProfileKey,
+      isProfileLoaded: true,
+    });
+  }, [user]);
+
   const signInGoogle = useCallback(async () => {
     setLoading(true);
     const result = await signInWithGoogle();
@@ -462,6 +492,7 @@ export function AuthProvider({
     syncProgress,
     updateProgress,
     updateUserRoles,
+    refreshUserProfile,
     markDocAsRead,
     unlockAchievement,
   };
