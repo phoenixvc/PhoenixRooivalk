@@ -55,7 +55,7 @@ This appendix provides the detailed technical analysis supporting [ADR 0012: Run
 
 | Option | Weighted Score | Rank |
 |--------|---------------|------|
-| **Firebase Functions** | **8.35** | 🥇 1st |
+| **Firebase Functions** | **8.42** | 🥇 1st |
 | Azure Functions | 6.57 | 🥈 2nd |
 | Cloudflare Workers | 5.93 | 🥉 3rd |
 | Hybrid (Firebase + Azure) | 5.23 | 4th |

@@ -54,7 +54,7 @@ This appendix provides the detailed technical analysis supporting [ADR 0014: Ser
 
 | Option | Weighted Score | Rank |
 |--------|---------------|------|
-| **Firebase Config** | **7.48** | 🥇 1st |
+| **Firebase Config** | **7.86** | 🥇 1st |
 | Google Secret Manager | 7.46 | 🥈 2nd |
 | Azure Key Vault | 6.94 | 🥉 3rd |
 | HashiCorp Vault | 6.44 | 4th |

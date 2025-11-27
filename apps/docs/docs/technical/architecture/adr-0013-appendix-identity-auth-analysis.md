@@ -55,7 +55,7 @@ This appendix provides the detailed technical analysis supporting [ADR 0013: Ide
 
 | Option | Weighted Score | Rank |
 |--------|---------------|------|
-| **Firebase Auth** | **7.93** | 🥇 1st |
+| **Firebase Auth** | **7.91** | 🥇 1st |
 | Entra ID (Azure AD B2C) | 7.19 | 🥈 2nd |
 | Auth0 | 7.08 | 🥉 3rd |
 | Keycloak (Self-Hosted) | 6.07 | 4th |
