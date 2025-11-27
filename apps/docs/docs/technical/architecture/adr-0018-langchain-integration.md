@@ -686,6 +686,30 @@ Note: Tree-shaking reduces actual impact based on imports used.
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Defer / Minimal** ⚠️
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Proposed (not implemented) |
+| **CM Equivalent** | Agency Layer uses custom orchestration |
+| **Bundle Impact** | ~330KB gzipped |
+| **Resource Trade-off** | Dev time better spent on CM |
+
+**Rationale**: LangChain integration adds significant bundle size and complexity for features that would be better implemented in Cognitive Mesh. The simple AI features (competitor analysis, SWOT, recommendations) work fine with direct Azure OpenAI calls.
+
+**Action**: 
+- **Skip** full LangChain integration
+- Keep simple direct API calls for existing features
+- **Invest development time in CM Agency Layer instead** (~40% complete)
+
+**If minimal integration needed**: Only implement a thin RAG chain wrapper, not the full agent/workflow stack.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

@@ -840,6 +840,31 @@ const resilientWorkflow = RunnableSequence.from([
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Implement in Cognitive Mesh** 🔶
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Proposed (not implemented) |
+| **CM Equivalent** | BusinessApplications Layer (~30% complete) |
+| **CM Advantage** | Workflow governance, checkpoints, human-in-the-loop |
+| **Resource Trade-off** | Workflow engine is complex, CM has it designed |
+
+**Rationale**: Cognitive Mesh's Business Applications Layer includes Workflow Orchestrators with step-level compliance tracking, checkpoint/rollback capabilities, and human-in-the-loop integration. These are enterprise-grade features that would require significant effort to implement here.
+
+**Action**: 
+- **Do NOT implement** workflow engine in docs site
+- **Complete CM Business Layer PRD**
+- Docs site works with simple single-step analyses
+- No need for multi-step market analysis or competitive workflows
+
+**For docs site**: Keep simple single-step features (competitor analysis, SWOT). No workflow orchestration needed.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

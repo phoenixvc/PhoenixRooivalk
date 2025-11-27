@@ -828,6 +828,35 @@ async function sendAlert(title: string, message: string) {
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Split Implementation** ⚠️
+
+| Factor | Docs Site | Cognitive Mesh |
+|--------|-----------|----------------|
+| **Basic Metrics** | ✅ Implement | — |
+| **Compliance Audits** | — | ✅ Implement |
+| **LangSmith** | Skip (cost) | — |
+| **NIST AI RMF** | — | ✅ Built-in |
+
+**Rationale**: Basic observability (latency, errors, token usage) is needed for the docs site to monitor AI health. However, compliance audit logging and NIST AI RMF reporting should be implemented in Cognitive Mesh where it's integrated across all layers.
+
+**Action for Docs Site**:
+- **Implement** lightweight custom metrics in Firestore
+- Track: latency, error rates, token usage, feature adoption
+- **Skip** LangSmith integration ($$$ cost, unnecessary for docs)
+- Simple Firebase logging is sufficient
+
+**Action for CM**:
+- Compliance audit trails integrated per layer
+- NIST AI RMF compliance reporting
+- Ethical reasoning transparency logs
+- Zero-trust security event logging
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

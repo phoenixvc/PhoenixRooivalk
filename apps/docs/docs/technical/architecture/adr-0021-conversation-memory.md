@@ -730,6 +730,31 @@ service cloud.firestore {
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Implement in Cognitive Mesh** 🔶
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Proposed (not implemented) |
+| **CM Equivalent** | MetacognitiveLayer (~25% complete) |
+| **CM Advantage** | GDPR built-in, multi-tier memory, privacy controls |
+| **Resource Trade-off** | Privacy/GDPR is complex, CM has it designed |
+
+**Rationale**: Conversation memory has significant privacy implications (GDPR right-to-erasure, data retention, etc.). Cognitive Mesh's Metacognitive Layer has multi-tier memory (working, episodic, semantic) with built-in privacy controls and compliance tracking.
+
+**Action**: 
+- **Do NOT implement** conversation memory in docs site
+- **Prioritize CM Metacognitive Layer development**
+- Docs site works fine with single-turn interactions
+- Users don't need conversation history for documentation Q&A
+
+**For docs site**: Single-turn Q&A is acceptable. No conversation continuity needed.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
