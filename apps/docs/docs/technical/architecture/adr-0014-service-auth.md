@@ -376,6 +376,13 @@ az monitor activity-log list \
 
 ---
 
+## Appendix
+
+For detailed weighted analysis, threat models, and high-security roadmap, see:
+- [ADR 0014 Appendix: Service-to-Service Auth Weighted Analysis](./adr-0014-appendix-service-auth-analysis.md)
+
+---
+
 ## Related ADRs
 
 - [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture)

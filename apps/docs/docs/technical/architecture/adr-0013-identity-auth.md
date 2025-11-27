@@ -374,6 +374,13 @@ Protected Resources
 
 ---
 
+## Appendix
+
+For detailed weighted analysis, RBAC matrices, and federation flows, see:
+- [ADR 0013 Appendix: Identity & Auth Weighted Analysis](./adr-0013-appendix-identity-auth-analysis.md)
+
+---
+
 ## Related ADRs
 
 - [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture)

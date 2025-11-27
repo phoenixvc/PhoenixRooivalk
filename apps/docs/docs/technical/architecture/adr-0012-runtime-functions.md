@@ -382,6 +382,13 @@ logger.info('RAG query', {
 
 ---
 
+## Appendix
+
+For detailed weighted analysis, benchmarks, and cost projections, see:
+- [ADR 0012 Appendix: Runtime Functions Weighted Analysis](./adr-0012-appendix-runtime-functions-analysis.md)
+
+---
+
 ## Related ADRs
 
 - [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture)
