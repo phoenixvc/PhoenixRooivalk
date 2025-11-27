@@ -369,6 +369,198 @@ Azure provides capabilities others lack:
 
 ---
 
+## Azure Deployment Alternatives
+
+Beyond the standard Azure AI Search option, Azure provides several alternative deployment paths that may suit different requirements:
+
+### 1. Azure AI Search (Managed Service) — **Recommended**
+
+The standard managed offering evaluated above.
+
+| Tier | Storage | Indexes | Cost/Month | With Credits |
+|------|---------|---------|------------|--------------|
+| Free | 50 MB | 3 | $0 | $0 |
+| Basic | 15 GB | 15 | ~$74 | $0 |
+| Standard S1 | 160 GB | 50 | ~$245 | $0 |
+| Standard S2 | 512 GB | 200 | ~$980 | $0 |
+| Standard S3 | 2 TB | 200 | ~$1,960 | $0 |
+
+**Best for**: Most use cases, managed infrastructure, built-in scaling.
+
+### 2. Azure Container Apps + Qdrant/Milvus (Self-Managed Vector DB)
+
+Deploy open-source vector databases (Qdrant, Milvus, or Weaviate) on Azure Container Apps for full control.
+
+```
+┌───────────────────────────────────────────────────┐
+│               Azure Container Apps                 │
+│  ┌─────────────────┐    ┌─────────────────┐       │
+│  │    Qdrant       │    │   Azure Files   │       │
+│  │   Container     │◀──▶│   (Persistent)  │       │
+│  └─────────────────┘    └─────────────────┘       │
+└───────────────────────────────────────────────────┘
+```
+
+| Component | Estimated Cost | With Credits |
+|-----------|----------------|--------------|
+| Container Apps (1 vCPU, 2 GB) | ~$50/month | $0 |
+| Azure Files (10 GB) | ~$2/month | $0 |
+| Total | ~$52/month | $0 |
+
+**Pros**:
+- Full control over vector DB configuration
+- Use latest Qdrant/Milvus features immediately
+- Rust-native (Qdrant aligns with our backend)
+- No vendor lock-in to Azure Search schema
+
+**Cons**:
+- Operational overhead (updates, backups, scaling)
+- No hybrid search unless manually implemented
+- Must manage embeddings separately
+
+**Best for**: Teams needing full control, specific features, or Rust ecosystem alignment.
+
+### 3. Azure Kubernetes Service (AKS) + Helm Charts
+
+Enterprise-grade deployment of vector databases on Kubernetes.
+
+| Component | Estimated Cost | With Credits |
+|-----------|----------------|--------------|
+| AKS Cluster (3 nodes, B2s) | ~$150/month | $0 |
+| Managed Disks | ~$20/month | $0 |
+| Load Balancer | ~$20/month | $0 |
+| Total | ~$190/month | $0 |
+
+**Pros**:
+- Kubernetes ecosystem integration
+- Auto-scaling, self-healing
+- Helm charts available for Qdrant, Milvus, Weaviate
+
+**Cons**:
+- Significant operational complexity
+- Overkill for <10K documents
+- Requires Kubernetes expertise
+
+**Best for**: Enterprise deployments with existing Kubernetes infrastructure.
+
+### 4. Azure Cosmos DB with MongoDB vCore (Vector Search Preview)
+
+Vector search capabilities in Cosmos DB's MongoDB vCore offering.
+
+| Tier | Storage | RU/s | Cost/Month | With Credits |
+|------|---------|------|------------|--------------|
+| M25 (burstable) | 32 GB | - | ~$87 | $0 |
+| M40 | 128 GB | - | ~$438 | $0 |
+| M80 | 256 GB | - | ~$875 | $0 |
+
+**Pros**:
+- MongoDB API compatibility
+- HNSW index support (Cosmos DB DiskANN)
+- Global distribution
+- Integrated with existing Cosmos DB data
+
+**Cons**:
+- Preview status (not GA as of November 2025)
+- Higher cost than AI Search for pure vector workloads
+- MongoDB-specific implementation
+
+**Best for**: Teams already using Cosmos DB who want to add vector search.
+
+### 5. Azure PostgreSQL Flexible Server + pgvector
+
+PostgreSQL with the pgvector extension for SQL-native vector search.
+
+| Tier | vCores | RAM | Storage | Cost/Month | With Credits |
+|------|--------|-----|---------|------------|--------------|
+| Burstable B1ms | 1 | 2 GB | 32 GB | ~$25 | $0 |
+| General Purpose D2s_v3 | 2 | 8 GB | 64 GB | ~$90 | $0 |
+| Memory Optimized E4s_v3 | 4 | 32 GB | 128 GB | ~$250 | $0 |
+
+**Pros**:
+- Full SQL capabilities
+- Open-source pgvector extension
+- ACID compliance
+- Existing PostgreSQL tooling works
+
+**Cons**:
+- IVFFlat index less efficient than HNSW
+- No hybrid search built-in
+- Requires PostgreSQL expertise
+
+**Best for**: Teams preferring SQL, existing PostgreSQL workflows.
+
+### 6. Azure OpenAI + Assistants API with File Search
+
+Use Azure OpenAI's built-in Retrieval capabilities via Assistants API.
+
+| Component | Estimated Cost | With Credits |
+|-----------|----------------|--------------|
+| Azure OpenAI (existing) | Included | $0 |
+| File storage (per GB/day) | ~$0.10 | ~$0 |
+| Vector storage (per GB/day) | ~$0.10 | ~$0 |
+
+**Pros**:
+- No separate vector DB needed
+- Built-in chunking and embedding
+- Managed by Azure OpenAI team
+- Simple API
+
+**Cons**:
+- Less control over retrieval algorithm
+- Limited to Azure OpenAI models only
+- File size limits
+- Can't reuse embeddings across models
+
+**Best for**: Quick POC, simple RAG use cases, minimal infrastructure.
+
+### 7. Azure AI Foundry Hub with Custom Model Deployments
+
+Deploy custom embedding models alongside chat models in a unified hub.
+
+**Available in our Azure Foundry**:
+- `text-embedding-3-small` (1536 dimensions) — Already deployed
+- `text-embedding-ada-002` (1536 dimensions) — Available
+- Custom fine-tuned models — Possible
+
+**Deployment options**:
+| Deployment Type | Scaling | Latency | Cost |
+|-----------------|---------|---------|------|
+| Global Standard | Auto | Variable | Pay-per-token |
+| Provisioned Throughput | Reserved | Consistent | Fixed monthly |
+| Global Batch | Queue-based | High | 50% discount |
+
+**For embedding + search**:
+- Combine with any Azure vector store option
+- Use same credentials/billing as chat models
+- Unified monitoring in AI Foundry portal
+
+---
+
+## Azure Deployment Comparison Matrix
+
+| Deployment Option | Setup Complexity | Monthly Cost (Credits) | Hybrid Search | HNSW | Our Use Case Fit |
+|-------------------|------------------|------------------------|---------------|------|------------------|
+| **Azure AI Search (Managed)** | Low | $0 | ✅ | ✅ | ⭐⭐⭐⭐⭐ |
+| Container Apps + Qdrant | Medium | $0 | ❌ | ✅ | ⭐⭐⭐⭐ |
+| AKS + Helm Charts | High | $0 | ❌ | ✅ | ⭐⭐ |
+| Cosmos DB vCore | Low | $0 | ❌ | ✅ | ⭐⭐⭐ |
+| PostgreSQL + pgvector | Medium | $0 | ❌ | ❌ | ⭐⭐⭐ |
+| Azure OpenAI Assistants | Very Low | $0 | ❌ | ❌ | ⭐⭐⭐ |
+| AI Foundry Custom | Medium | $0 | ❌ | ❌ | ⭐⭐⭐ |
+
+### Decision Rationale for Azure AI Search
+
+Given our requirements:
+1. **Zero cost** — All Azure options are $0 with credits
+2. **Hybrid search needed** — Only Azure AI Search provides this natively
+3. **Production maturity** — Azure AI Search is GA; Cosmos DB vector is preview
+4. **Minimal ops** — Managed service beats Container Apps/AKS complexity
+5. **Unified platform** — Same portal as our AI models
+
+**Conclusion**: Azure AI Search remains the optimal choice for our documentation RAG use case.
+
+---
+
 ## Related ADRs
 
 - [ADR 0006: AI/ML Architecture](/docs/technical/architecture/architecture-decision-records#adr-0006-aiml-architecture)
