@@ -287,6 +287,9 @@ export function AuthProvider({
 
     // Async function to load and merge profile data
     async function loadUserProfile() {
+      // Guard against user being null (for TypeScript closure)
+      if (!user) return;
+
       // Detect known profile from internal profiles
       const { profile, profileKey: detectedProfileKey } = detectUserProfile(
         user.email,

@@ -96,7 +96,7 @@ export async function searchDocuments(
     topK?: number;
     category?: string;
     minScore?: number;
-  }
+  },
 ): Promise<SearchResult[]> {
   const { topK = 5, category, minScore = 0.65 } = options || {};
 
@@ -146,7 +146,7 @@ export async function searchDocumentsUnique(
     topK?: number;
     category?: string;
     minScore?: number;
-  }
+  },
 ): Promise<SearchResult[]> {
   const { topK = 5 } = options || {};
 
@@ -180,7 +180,7 @@ export async function getRelatedDocuments(
   options?: {
     topK?: number;
     excludeSelf?: boolean;
-  }
+  },
 ): Promise<SearchResult[]> {
   const { topK = 5, excludeSelf = true } = options || {};
 
@@ -238,7 +238,7 @@ export const searchDocs = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Authentication required"
+      "Authentication required",
     );
   }
 
@@ -247,7 +247,7 @@ export const searchDocs = functions.https.onCall(async (data, context) => {
   if (!query || typeof query !== "string") {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Query is required"
+      "Query is required",
     );
   }
 
@@ -269,6 +269,9 @@ export const searchDocs = functions.https.onCall(async (data, context) => {
     };
   } catch (error) {
     functions.logger.error("Search error:", error);
-    throw new functions.https.HttpsError("internal", "Failed to search documents");
+    throw new functions.https.HttpsError(
+      "internal",
+      "Failed to search documents",
+    );
   }
 });

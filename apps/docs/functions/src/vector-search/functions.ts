@@ -16,7 +16,7 @@ export const vectorSearchDocs = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Authentication required"
+        "Authentication required",
       );
     }
 
@@ -25,7 +25,7 @@ export const vectorSearchDocs = functions.https.onCall(
     if (!query || typeof query !== "string") {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Query is required"
+        "Query is required",
       );
     }
 
@@ -52,24 +52,22 @@ export const vectorSearchDocs = functions.https.onCall(
       functions.logger.error("Vector search error:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to search documents"
+        "Failed to search documents",
       );
     }
-  }
+  },
 );
 
 /**
  * Cloud Function: Get Vector Search Stats
  */
-export const getVectorStats = functions.https.onCall(
-  async (_data, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError(
-        "unauthenticated",
-        "Authentication required"
-      );
-    }
-
-    return getVectorSearchStats();
+export const getVectorStats = functions.https.onCall(async (_data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "Authentication required",
+    );
   }
-);
+
+  return getVectorSearchStats();
+});

@@ -29,12 +29,17 @@ export const RATE_LIMITS: Record<
  */
 export async function checkRateLimit(
   userId: string,
-  feature: string
+  feature: string,
 ): Promise<boolean> {
-  const config = RATE_LIMITS[feature] || { maxRequests: 20, windowMs: 60 * 60 * 1000 };
+  const config = RATE_LIMITS[feature] || {
+    maxRequests: 20,
+    windowMs: 60 * 60 * 1000,
+  };
   const { maxRequests, windowMs } = config;
 
-  const rateLimitRef = db.collection("ai_rate_limits").doc(`${userId}_${feature}`);
+  const rateLimitRef = db
+    .collection("ai_rate_limits")
+    .doc(`${userId}_${feature}`);
   const doc = await rateLimitRef.get();
 
   const now = Date.now();
@@ -66,7 +71,7 @@ export async function checkRateLimit(
 export async function logUsage(
   userId: string,
   feature: string,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): Promise<void> {
   await db.collection("ai_usage").add({
     userId,

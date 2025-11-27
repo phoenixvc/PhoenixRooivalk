@@ -12,11 +12,19 @@ import { ensureAzureIndex, getAzureIndexStats } from "./index-ops";
  * Cloud Function: Azure Vector Search
  */
 export const azureSearchDocs = functions.https.onCall(
-  async (data: { query: string; category?: string; topK?: number; hybridSearch?: boolean }, context) => {
+  async (
+    data: {
+      query: string;
+      category?: string;
+      topK?: number;
+      hybridSearch?: boolean;
+    },
+    context,
+  ) => {
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Authentication required"
+        "Authentication required",
       );
     }
 
@@ -25,7 +33,7 @@ export const azureSearchDocs = functions.https.onCall(
     if (!query || typeof query !== "string") {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Query is required"
+        "Query is required",
       );
     }
 
@@ -46,7 +54,7 @@ export const azureSearchDocs = functions.https.onCall(
       })),
       metrics,
     };
-  }
+  },
 );
 
 /**
@@ -57,12 +65,12 @@ export const setupAzureIndex = functions.https.onCall(
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Admin access required"
+        "Admin access required",
       );
     }
 
     return ensureAzureIndex();
-  }
+  },
 );
 
 /**
@@ -73,10 +81,10 @@ export const getAzureStats = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Authentication required"
+        "Authentication required",
       );
     }
 
     return getAzureIndexStats();
-  }
+  },
 );

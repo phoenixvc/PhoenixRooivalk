@@ -153,7 +153,7 @@ export function isAzureSearchAvailable(): boolean {
 export function buildAzureUrl(
   config: AzureSearchConfig,
   path: string,
-  queryParams?: Record<string, string>
+  queryParams?: Record<string, string>,
 ): string {
   const params = new URLSearchParams({
     "api-version": config.apiVersion,
@@ -166,7 +166,7 @@ export function buildAzureUrl(
  * Azure Search request headers
  */
 export function buildAzureHeaders(
-  config: AzureSearchConfig
+  config: AzureSearchConfig,
 ): Record<string, string> {
   return {
     "Content-Type": "application/json",

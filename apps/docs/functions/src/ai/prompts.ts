@@ -21,7 +21,10 @@ ${PHOENIX_CONTEXT}
 
 Provide factual, objective analysis based on publicly available information. Focus on technical capabilities, market positioning, and strategic implications.`,
 
-    user: (competitors: string[], focusAreas?: string[]) => `Analyze the following competitors in the counter-drone/defense market:
+    user: (
+      competitors: string[],
+      focusAreas?: string[],
+    ) => `Analyze the following competitors in the counter-drone/defense market:
 
 Competitors: ${competitors.join(", ")}
 
@@ -45,7 +48,10 @@ Format the response in clear markdown with headers and bullet points.`,
 
 ${PHOENIX_CONTEXT}`,
 
-    user: (topic: string, context?: string) => `Generate a comprehensive SWOT analysis for: "${topic}"
+    user: (
+      topic: string,
+      context?: string,
+    ) => `Generate a comprehensive SWOT analysis for: "${topic}"
 
 ${context ? `Additional context: ${context}` : ""}
 
@@ -81,7 +87,10 @@ For each point, provide specific, actionable insights. Format in clear markdown.
 
 ${PHOENIX_CONTEXT}`,
 
-    user: (topic: string, industry?: string) => `Provide market insights on: "${topic}"
+    user: (
+      topic: string,
+      industry?: string,
+    ) => `Provide market insights on: "${topic}"
 
 ${industry ? `Industry focus: ${industry}` : "Industry: Defense / Counter-UAS"}
 
@@ -188,7 +197,7 @@ Categories:
     user: (
       firstName: string,
       lastName: string,
-      linkedInUrl: string
+      linkedInUrl: string,
     ) => `Research and generate fun facts about this person:
 
 Name: ${firstName} ${lastName}
@@ -215,7 +224,7 @@ Generate 4-6 facts with varied categories. Make them engaging and professional.`
     user: (
       readDocs: string[],
       currentDocId: string | undefined,
-      unreadDocs: Array<{ id: string; title?: string; category?: string }>
+      unreadDocs: Array<{ id: string; title?: string; category?: string }>,
     ) => `Based on the user's reading history, recommend the 3 most relevant articles to read next.
 
 **Already read:**

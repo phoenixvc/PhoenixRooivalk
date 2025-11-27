@@ -57,7 +57,7 @@ export function parseFrontmatter(content: string): {
  */
 export function chunkDocument(
   content: string,
-  overlap: number
+  overlap: number,
 ): Array<{ text: string; section: string }> {
   const chunks: Array<{ text: string; section: string }> = [];
 
