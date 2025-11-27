@@ -21,6 +21,9 @@ import {
   getUserProgress,
   saveUserProgress,
   UserProgress,
+  getUserProfileData,
+  updateUserProfileData,
+  UserProfileData,
 } from "../services/firebase";
 import { analytics } from "../services/analytics";
 import {
@@ -66,6 +69,7 @@ interface AuthContextType {
   refreshUserProfile: () => void;
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
+  saveProfileToFirebase: (data: Partial<UserProfileData>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -79,7 +83,10 @@ const DEFAULT_PROFILE_STATE: UserProfileState = {
 };
 
 // Helper to get saved profile data from localStorage
-const getSavedProfileData = (): { profileKey: string; roles: string[] } | null => {
+const getSavedProfileData = (): {
+  profileKey: string;
+  roles: string[];
+} | null => {
   if (typeof window === "undefined") return null;
   try {
     const data = localStorage.getItem(PROFILE_DATA_KEY);
@@ -92,10 +99,7 @@ const getSavedProfileData = (): { profileKey: string; roles: string[] } | null =
 // Helper to save profile data to localStorage
 const saveProfileData = (profileKey: string | null, roles: string[]): void => {
   if (typeof window === "undefined") return;
-  localStorage.setItem(
-    PROFILE_DATA_KEY,
-    JSON.stringify({ profileKey, roles }),
-  );
+  localStorage.setItem(PROFILE_DATA_KEY, JSON.stringify({ profileKey, roles }));
 };
 
 // Helper to detect profile for a user
@@ -210,7 +214,9 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<UserProgress | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfileState>(DEFAULT_PROFILE_STATE);
+  const [userProfile, setUserProfile] = useState<UserProfileState>(
+    DEFAULT_PROFILE_STATE,
+  );
   const isConfigured = isFirebaseConfigured();
 
   // Initialize with local progress
@@ -280,7 +286,10 @@ export function AuthProvider({
     }
 
     // Detect known profile
-    const { profile, profileKey } = detectUserProfile(user.email, user.displayName);
+    const { profile, profileKey } = detectUserProfile(
+      user.email,
+      user.displayName,
+    );
 
     // Check for saved profile data (confirmed roles from ProfileConfirmation)
     const savedProfile = getSavedProfileData();
@@ -302,20 +311,26 @@ export function AuthProvider({
   }, [user]);
 
   // Update user roles (called from ProfileConfirmation or Profile Settings)
-  const updateUserRoles = useCallback((roles: string[]) => {
-    setUserProfile((prev) => ({
-      ...prev,
-      confirmedRoles: roles,
-    }));
-    saveProfileData(userProfile.profileKey, roles);
-  }, [userProfile.profileKey]);
+  const updateUserRoles = useCallback(
+    (roles: string[]) => {
+      setUserProfile((prev) => ({
+        ...prev,
+        confirmedRoles: roles,
+      }));
+      saveProfileData(userProfile.profileKey, roles);
+    },
+    [userProfile.profileKey],
+  );
 
   // Refresh user profile from localStorage (called after onboarding profile selection)
   const refreshUserProfile = useCallback(() => {
     if (!user) return;
 
     // Re-detect known profile
-    const { profile, profileKey } = detectUserProfile(user.email, user.displayName);
+    const { profile, profileKey } = detectUserProfile(
+      user.email,
+      user.displayName,
+    );
 
     // Get saved profile data (may have been updated by onboarding)
     const savedProfile = getSavedProfileData();
@@ -411,8 +426,9 @@ export function AuthProvider({
     if (!user || !isOnline()) return;
 
     const queue = getQueuedUpdates();
-    const progressUpdates = queue.filter((item) => item.type === "progress");
 
+    // Sync progress updates
+    const progressUpdates = queue.filter((item) => item.type === "progress");
     for (const update of progressUpdates) {
       try {
         const data = update.data as { userId: string; progress: UserProgress };
@@ -421,7 +437,24 @@ export function AuthProvider({
           removeFromQueue(update.id);
         }
       } catch (error) {
-        console.error("Failed to sync queued update:", error);
+        console.error("Failed to sync queued progress update:", error);
+      }
+    }
+
+    // Sync profile updates
+    const profileUpdates = queue.filter((item) => item.type === "profile");
+    for (const update of profileUpdates) {
+      try {
+        const data = update.data as {
+          userId: string;
+          profile: Partial<UserProfileData>;
+        };
+        if (data.userId === user.uid) {
+          await updateUserProfileData(user.uid, data.profile);
+          removeFromQueue(update.id);
+        }
+      } catch (error) {
+        console.error("Failed to sync queued profile update:", error);
       }
     }
   }, [user]);
@@ -480,6 +513,42 @@ export function AuthProvider({
     [progress, updateProgress],
   );
 
+  // Save user profile data to Firebase
+  const saveProfileToFirebase = useCallback(
+    async (data: Partial<UserProfileData>): Promise<boolean> => {
+      if (!user) {
+        console.warn("Cannot save profile: user not authenticated");
+        return false;
+      }
+
+      // If offline, queue the update for later
+      if (!isOnline()) {
+        queueUpdate({
+          type: "profile",
+          data: { userId: user.uid, profile: data },
+        });
+        return true; // Queued successfully
+      }
+
+      // Online - save directly to Firebase
+      const success = await updateUserProfileData(user.uid, data);
+
+      if (success) {
+        // Also update local storage for faster access
+        const savedProfile = getSavedProfileData();
+        if (data.profileKey !== undefined || data.roles !== undefined) {
+          saveProfileData(
+            data.profileKey ?? savedProfile?.profileKey ?? null,
+            data.roles ?? savedProfile?.roles ?? [],
+          );
+        }
+      }
+
+      return success;
+    },
+    [user],
+  );
+
   const value: AuthContextType = {
     user,
     loading,
@@ -495,6 +564,7 @@ export function AuthProvider({
     refreshUserProfile,
     markDocAsRead,
     unlockAchievement,
+    saveProfileToFirebase,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

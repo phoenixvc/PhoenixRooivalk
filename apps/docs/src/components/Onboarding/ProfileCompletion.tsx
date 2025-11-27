@@ -179,7 +179,9 @@ export function ProfileCompletion({
               autoComplete="given-name"
             />
             {touched.firstName && errors.firstName && (
-              <span className="profile-completion-error">{errors.firstName}</span>
+              <span className="profile-completion-error">
+                {errors.firstName}
+              </span>
             )}
           </div>
 
@@ -200,7 +202,9 @@ export function ProfileCompletion({
               autoComplete="family-name"
             />
             {touched.lastName && errors.lastName && (
-              <span className="profile-completion-error">{errors.lastName}</span>
+              <span className="profile-completion-error">
+                {errors.lastName}
+              </span>
             )}
           </div>
         </div>
@@ -252,8 +256,7 @@ export function ProfileCompletion({
 
         <div className="profile-completion-field">
           <label htmlFor="whatsApp" className="profile-completion-label">
-            WhatsApp Number{" "}
-            <span className="optional">(optional)</span>
+            WhatsApp Number <span className="optional">(optional)</span>
           </label>
           <input
             type="tel"

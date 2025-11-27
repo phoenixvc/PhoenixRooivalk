@@ -64,20 +64,22 @@ export const PROFILE_TEMPLATES_MAP: Record<string, ProfileTemplate> = {
  * Use PROFILE_TEMPLATES_MAP for full ProfileTemplate access.
  * Use PROFILE_TEMPLATES_ARRAY for iteration with display metadata.
  */
-export const PROFILE_TEMPLATES: Record<string, Partial<UserProfile>> =
-  Object.fromEntries(
-    PROFILE_TEMPLATES_ARRAY.map((template) => [
-      template.templateKey,
-      {
-        roles: template.roles,
-        focusAreas: template.focusAreas,
-        interests: template.interests,
-        experienceLevel: template.experienceLevel,
-        profileDescription: template.profileDescription,
-        recommendedPaths: template.recommendedPaths,
-      },
-    ]),
-  );
+export const PROFILE_TEMPLATES: Record<
+  string,
+  Partial<UserProfile>
+> = Object.fromEntries(
+  PROFILE_TEMPLATES_ARRAY.map((template) => [
+    template.templateKey,
+    {
+      roles: template.roles,
+      focusAreas: template.focusAreas,
+      interests: template.interests,
+      experienceLevel: template.experienceLevel,
+      profileDescription: template.profileDescription,
+      recommendedPaths: template.recommendedPaths,
+    },
+  ]),
+);
 
 /**
  * Get recommended paths for a user, sorted by priority.

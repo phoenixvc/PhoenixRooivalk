@@ -141,17 +141,20 @@ export function AIFunFacts({
     setEditText(fact.fact);
   }, []);
 
-  const handleSaveEdit = useCallback((id: string) => {
-    if (!editText.trim()) return;
+  const handleSaveEdit = useCallback(
+    (id: string) => {
+      if (!editText.trim()) return;
 
-    setFacts((prev) =>
-      prev.map((f) =>
-        f.id === id ? { ...f, fact: editText.trim(), isEditing: false } : f,
-      ),
-    );
-    setEditingId(null);
-    setEditText("");
-  }, [editText]);
+      setFacts((prev) =>
+        prev.map((f) =>
+          f.id === id ? { ...f, fact: editText.trim(), isEditing: false } : f,
+        ),
+      );
+      setEditingId(null);
+      setEditText("");
+    },
+    [editText],
+  );
 
   const handleCancelEdit = useCallback(() => {
     setEditingId(null);
@@ -204,11 +207,7 @@ export function AIFunFacts({
           </div>
         </div>
 
-        <button
-          type="button"
-          className="fun-facts-skip"
-          onClick={onSkip}
-        >
+        <button type="button" className="fun-facts-skip" onClick={onSkip}>
           Skip this step
         </button>
       </div>
@@ -317,11 +316,7 @@ export function AIFunFacts({
       </div>
 
       <div className="fun-facts-footer">
-        <button
-          type="button"
-          className="fun-facts-skip"
-          onClick={onSkip}
-        >
+        <button type="button" className="fun-facts-skip" onClick={onSkip}>
           Skip
         </button>
         <button

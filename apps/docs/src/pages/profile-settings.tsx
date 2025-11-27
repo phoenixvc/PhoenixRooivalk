@@ -218,8 +218,8 @@ export default function ProfileSettings(): React.ReactElement {
                       Recommended Reading Progress
                     </span>
                     <span className={styles.statsValue}>
-                      {recommendationStats.completed}/{recommendationStats.total}{" "}
-                      docs
+                      {recommendationStats.completed}/
+                      {recommendationStats.total} docs
                     </span>
                   </div>
                   <div className={styles.progressBar}>
@@ -253,7 +253,9 @@ export default function ProfileSettings(): React.ReactElement {
                     key={role}
                     type="button"
                     className={`${styles.roleChip} ${
-                      selectedRoles.includes(role) ? styles.roleChipSelected : ""
+                      selectedRoles.includes(role)
+                        ? styles.roleChipSelected
+                        : ""
                     }`}
                     onClick={() => handleRoleToggle(role)}
                   >

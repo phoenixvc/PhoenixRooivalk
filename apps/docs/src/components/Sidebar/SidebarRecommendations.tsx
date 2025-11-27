@@ -192,7 +192,10 @@ export function SidebarRecommendations({
           name: "Your",
           recommendedPaths: selectedTemplate.recommendedPaths,
         } as UserProfile;
-        const templateRecs = profileToRecommendations(templateAsProfile, maxItems);
+        const templateRecs = profileToRecommendations(
+          templateAsProfile,
+          maxItems,
+        );
         const recs: ReadingRecommendation[] = templateRecs.map((r) => ({
           docId: r.docId,
           relevanceScore: r.relevanceScore,
@@ -285,15 +288,17 @@ export function SidebarRecommendations({
                   {/* Show completion progress for recommendations (known profiles and templates) */}
                   {(knownProfile || selectedTemplate) && (
                     <div className="sidebar-rec-progress-summary">
-                      {recommendations.filter((rec) => {
-                        // Normalize doc key - handle both /docs/path and path formats
-                        const docKey = rec.docId.replace(/^\/docs\//, "");
-                        // Check both normalized and original formats
-                        return (
-                          progress?.docs?.[docKey]?.completed ||
-                          progress?.docs?.[rec.docId]?.completed
-                        );
-                      }).length}
+                      {
+                        recommendations.filter((rec) => {
+                          // Normalize doc key - handle both /docs/path and path formats
+                          const docKey = rec.docId.replace(/^\/docs\//, "");
+                          // Check both normalized and original formats
+                          return (
+                            progress?.docs?.[docKey]?.completed ||
+                            progress?.docs?.[rec.docId]?.completed
+                          );
+                        }).length
+                      }
                       /{recommendations.length} completed
                     </div>
                   )}

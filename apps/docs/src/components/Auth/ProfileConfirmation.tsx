@@ -211,10 +211,7 @@ export function ProfileConfirmation({
             <div className="profile-confirm-header">
               <div className="profile-confirm-avatar">
                 {user.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt={user.displayName || "User"}
-                  />
+                  <img src={user.photoURL} alt={user.displayName || "User"} />
                 ) : (
                   <span className="profile-confirm-avatar-fallback">
                     {(user.displayName || user.email || "U")[0].toUpperCase()}

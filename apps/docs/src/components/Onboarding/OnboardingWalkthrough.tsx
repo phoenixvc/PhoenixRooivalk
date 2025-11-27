@@ -25,7 +25,11 @@ const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
 const USER_DETAILS_KEY = "phoenix-docs-user-details";
 const USER_FUN_FACTS_KEY = "phoenix-docs-user-fun-facts";
 
-type StepType = "profile-completion" | "profile-selection" | "ai-fun-facts" | "tour";
+type StepType =
+  | "profile-completion"
+  | "profile-selection"
+  | "ai-fun-facts"
+  | "tour";
 
 interface OnboardingStep {
   id: string;
@@ -332,7 +336,13 @@ export function OnboardingWalkthrough({
   forceShow = false,
   onClose,
 }: OnboardingWalkthroughProps): React.ReactElement | null {
-  const { user, loading, userProfile, refreshUserProfile } = useAuth();
+  const {
+    user,
+    loading,
+    userProfile,
+    refreshUserProfile,
+    saveProfileToFirebase,
+  } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -446,29 +456,49 @@ export function OnboardingWalkthrough({
 
   // Handle profile completion form submission
   const handleProfileComplete = useCallback(
-    (details: UserProfileDetails) => {
+    async (details: UserProfileDetails) => {
       if (!user) return;
+      // Save to localStorage for quick access
       saveUserDetails(user.uid, details);
       setUserDetails(details);
+
+      // Save to Firebase for persistence
+      await saveProfileToFirebase({
+        firstName: details.firstName,
+        lastName: details.lastName,
+        linkedIn: details.linkedIn,
+        discord: details.discord,
+        whatsApp: details.whatsApp || undefined,
+        profileCompletedAt: new Date().toISOString(),
+      });
+
       // Move to next step
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep],
+    [user, currentStep, saveProfileToFirebase],
   );
 
   // Handle AI fun facts completion
   const handleFunFactsComplete = useCallback(
-    (facts: Array<{ id: string; fact: string; category: string }>) => {
+    async (facts: Array<{ id: string; fact: string; category: string }>) => {
       if (!user) return;
+      // Save to localStorage for quick access
       saveUserFunFacts(user.uid, facts);
+
+      // Save to Firebase for persistence
+      await saveProfileToFirebase({
+        funFacts: facts,
+        funFactsGeneratedAt: new Date().toISOString(),
+      });
+
       // Move to next step (tour)
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep],
+    [user, currentStep, saveProfileToFirebase],
   );
 
   // Handle skipping fun facts
@@ -479,18 +509,26 @@ export function OnboardingWalkthrough({
     saveStep(nextStep);
   }, [currentStep]);
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     if (isAnimating) return;
 
     const step = ONBOARDING_STEPS[currentStep];
 
     // If on profile selection step, save the selection before proceeding
     if (step.stepType === "profile-selection" && selectedTemplate && user) {
+      // Save to localStorage for quick access
       saveProfileSelection(
         user.uid,
         selectedTemplate.templateKey,
         selectedTemplate.roles,
       );
+
+      // Save to Firebase for persistence
+      await saveProfileToFirebase({
+        profileKey: selectedTemplate.templateKey,
+        roles: selectedTemplate.roles,
+      });
+
       // Refresh the user profile in context
       refreshUserProfile?.();
     }
@@ -504,7 +542,14 @@ export function OnboardingWalkthrough({
       }
       setIsAnimating(false);
     }, 200);
-  }, [currentStep, isAnimating, selectedTemplate, user, refreshUserProfile]);
+  }, [
+    currentStep,
+    isAnimating,
+    selectedTemplate,
+    user,
+    refreshUserProfile,
+    saveProfileToFirebase,
+  ]);
 
   const handlePrevious = useCallback(() => {
     if (isAnimating) return;
@@ -609,7 +654,8 @@ export function OnboardingWalkthrough({
                 user
                   ? {
                       firstName: user.displayName?.split(" ")[0] || "",
-                      lastName: user.displayName?.split(" ").slice(1).join(" ") || "",
+                      lastName:
+                        user.displayName?.split(" ").slice(1).join(" ") || "",
                     }
                   : undefined
               }

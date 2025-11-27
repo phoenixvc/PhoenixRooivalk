@@ -523,7 +523,12 @@ export interface FunFactsResult {
   facts: Array<{
     id: string;
     fact: string;
-    category: "professional" | "education" | "achievement" | "interest" | "other";
+    category:
+      | "professional"
+      | "education"
+      | "achievement"
+      | "interest"
+      | "other";
   }>;
   summary: string;
 }

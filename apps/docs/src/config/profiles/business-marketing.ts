@@ -16,7 +16,13 @@ export const businessMarketingTemplate: ProfileTemplate = {
   name: "Business Professional",
   roles: ["Business", "Marketing", "Sales"],
   focusAreas: ["business", "executive"],
-  interests: ["market-analysis", "commercial", "strategy", "counter-uas", "roi"],
+  interests: [
+    "market-analysis",
+    "commercial",
+    "strategy",
+    "counter-uas",
+    "roi",
+  ],
   experienceLevel: "intermediate",
   profileDescription:
     "Business and marketing professional focused on market positioning and growth",

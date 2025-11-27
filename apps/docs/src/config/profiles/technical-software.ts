@@ -16,7 +16,14 @@ export const technicalSoftwareTemplate: ProfileTemplate = {
   name: "Software Engineer",
   roles: ["Technical - Software/AI"],
   focusAreas: ["technical", "research"],
-  interests: ["software", "ai", "machine-learning", "counter-uas", "rag", "llm"],
+  interests: [
+    "software",
+    "ai",
+    "machine-learning",
+    "counter-uas",
+    "rag",
+    "llm",
+  ],
   experienceLevel: "intermediate",
   profileDescription:
     "Software engineer focused on AI/ML systems and autonomous capabilities",
