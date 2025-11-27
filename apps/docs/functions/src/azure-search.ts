@@ -45,7 +45,7 @@ export interface AzureSearchResult {
   contentHash?: string;
 }
 
-// Unified search result
+// Unified search result (matches vector-search.ts VectorSearchResult)
 export interface VectorSearchResult {
   docId: string;
   chunkId: string;
@@ -57,6 +57,8 @@ export interface VectorSearchResult {
     category: string;
     chunkIndex: number;
     totalChunks: number;
+    wordCount?: number;
+    charCount?: number;
   };
 }
 

@@ -21,6 +21,7 @@ import { logMetrics } from "./monitoring";
 import {
   isAzureSearchAvailable,
   azureVectorSearch,
+  getAzureIndexStats,
 } from "./azure-search";
 
 const db = admin.firestore();
@@ -434,10 +435,16 @@ export async function getVectorSearchStats(): Promise<{
   // Determine search method and optimization status
   let searchMethod = "in_memory";
   let isOptimized = totalVectors <= VECTOR_SEARCH_CONFIG.maxVectorsForInMemory;
+  let azureStats: {
+    documentCount: number;
+    storageSize: number;
+    isAvailable: boolean;
+  } | undefined;
 
   if (azureAvailable && VECTOR_SEARCH_CONFIG.useAzureSearch) {
     searchMethod = "azure_ai_search";
     isOptimized = true; // Azure AI Search is always optimized (HNSW)
+    azureStats = await getAzureIndexStats();
   }
 
   return {
@@ -446,6 +453,7 @@ export async function getVectorSearchStats(): Promise<{
     categories,
     searchMethod,
     isOptimized,
+    azureStats,
   };
 }
 
