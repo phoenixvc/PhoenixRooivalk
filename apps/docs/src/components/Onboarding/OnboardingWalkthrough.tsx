@@ -612,7 +612,6 @@ export function OnboardingWalkthrough({
   const isProfileSelectionStep = step.stepType === "profile-selection";
   const isAIFunFactsStep = step.stepType === "ai-fun-facts";
   const isTourStep = step.stepType === "tour";
-  const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === ONBOARDING_STEPS.length - 1;
   const tourStartIndex = findStepIndex("tour");
   const progress = ((currentStep + 1) / ONBOARDING_STEPS.length) * 100;
