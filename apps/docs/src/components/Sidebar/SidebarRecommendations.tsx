@@ -12,12 +12,7 @@ import * as React from "react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { aiService, ReadingRecommendation } from "../../services/aiService";
-import {
-  getUserProfile as getKnownUserProfile,
-  profileToRecommendations,
-  UserProfile,
-} from "../../config/userProfiles";
-import { getSavedProfile } from "../Auth";
+import { profileToRecommendations } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
 
@@ -85,55 +80,30 @@ function highlightSidebarItems(recommendedPaths: string[]): void {
 export function SidebarRecommendations({
   maxItems = 5,
 }: SidebarRecommendationsProps): React.ReactElement | null {
-  const { user, progress } = useAuth();
+  const { user, progress, userProfile } = useAuth();
   const [recommendations, setRecommendations] = useState<
     ReadingRecommendation[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [knownProfile, setKnownProfile] = useState<UserProfile | null>(null);
-  const [confirmedRoles, setConfirmedRoles] = useState<string[]>([]);
-  const [profileChecked, setProfileChecked] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
+
+  // Use centralized profile from AuthContext
+  const { knownProfile, isProfileLoaded } = userProfile;
 
   // Reset state when user changes (fixes loadedRef persistence bug)
   useEffect(() => {
     const currentUserId = user?.uid || null;
     if (previousUserIdRef.current !== currentUserId) {
-      // User changed - reset all state
+      // User changed - reset recommendations state
       previousUserIdRef.current = currentUserId;
       setHasLoaded(false);
       setRecommendations([]);
-      setKnownProfile(null);
-      setConfirmedRoles([]);
-      setProfileChecked(false);
       // Clear sidebar highlights
       highlightSidebarItems([]);
     }
   }, [user?.uid]);
-
-  // Check for known internal user profile and saved confirmation
-  useEffect(() => {
-    if (!user) {
-      setProfileChecked(true);
-      return;
-    }
-
-    const profile = getKnownUserProfile(user.email, user.displayName);
-    setKnownProfile(profile);
-
-    // Get user's confirmed roles from localStorage (if they modified them)
-    const savedProfile = getSavedProfile();
-    if (savedProfile?.roles && savedProfile.roles.length > 0) {
-      setConfirmedRoles(savedProfile.roles);
-    } else if (profile) {
-      // Use default profile roles if no saved confirmation
-      setConfirmedRoles(profile.roles);
-    }
-
-    setProfileChecked(true);
-  }, [user]);
 
   // Derive user profile description from reading history (for unknown users)
   const deriveProfileDescription = useCallback((): string => {
@@ -220,14 +190,14 @@ export function SidebarRecommendations({
   }, [user, maxItems, knownProfile, hasLoaded]);
 
   // Load recommendations when user and profile are available
-  // Wait for profileChecked to avoid stale closure with knownProfile
+  // Wait for isProfileLoaded to avoid stale closure with knownProfile
   useEffect(() => {
-    if (user && profileChecked && !hasLoaded) {
+    if (user && isProfileLoaded && !hasLoaded) {
       // Small delay to not block initial render
       const timer = setTimeout(fetchRecommendations, 500);
       return () => clearTimeout(timer);
     }
-  }, [user, profileChecked, hasLoaded, fetchRecommendations]);
+  }, [user, isProfileLoaded, hasLoaded, fetchRecommendations]);
 
   // Don't render for unauthenticated users
   if (!user) {

@@ -29,27 +29,90 @@ import {
   getQueuedUpdates,
   removeFromQueue,
 } from "../components/Offline";
+import {
+  getUserProfile as getKnownUserProfile,
+  UserProfile,
+  INTERNAL_USER_PROFILES,
+} from "../config/userProfiles";
 
 // Local storage keys
 const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
 const LOCAL_ACHIEVEMENTS_KEY = "phoenix-docs-achievements";
 const LOCAL_STATS_KEY = "phoenix-docs-stats";
+const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
+
+/**
+ * User profile state for centralized profile management
+ */
+export interface UserProfileState {
+  knownProfile: UserProfile | null; // Detected profile from INTERNAL_USER_PROFILES
+  confirmedRoles: string[]; // User's confirmed/selected roles
+  profileKey: string | null; // Key in INTERNAL_USER_PROFILES (e.g., "martyn")
+  isProfileLoaded: boolean; // True once profile detection is complete
+}
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isConfigured: boolean;
   progress: UserProgress | null;
+  userProfile: UserProfileState;
   signInGoogle: () => Promise<void>;
   signInGithub: () => Promise<void>;
   logout: () => Promise<void>;
   syncProgress: () => Promise<void>;
   updateProgress: (updates: Partial<UserProgress>) => Promise<void>;
+  updateUserRoles: (roles: string[]) => void;
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Default profile state
+const DEFAULT_PROFILE_STATE: UserProfileState = {
+  knownProfile: null,
+  confirmedRoles: [],
+  profileKey: null,
+  isProfileLoaded: false,
+};
+
+// Helper to get saved profile data from localStorage
+const getSavedProfileData = (): { profileKey: string; roles: string[] } | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const data = localStorage.getItem(PROFILE_DATA_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
+
+// Helper to save profile data to localStorage
+const saveProfileData = (profileKey: string | null, roles: string[]): void => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(
+    PROFILE_DATA_KEY,
+    JSON.stringify({ profileKey, roles }),
+  );
+};
+
+// Helper to detect profile for a user
+const detectUserProfile = (
+  email?: string | null,
+  displayName?: string | null,
+): { profile: UserProfile | null; profileKey: string | null } => {
+  const profile = getKnownUserProfile(email, displayName);
+  if (!profile) return { profile: null, profileKey: null };
+
+  // Find the profile key
+  for (const [key, p] of Object.entries(INTERNAL_USER_PROFILES)) {
+    if (p.name === profile.name) {
+      return { profile, profileKey: key };
+    }
+  }
+  return { profile, profileKey: null };
+};
 
 // Helper to get local progress
 const getLocalProgress = (): UserProgress => {
@@ -146,6 +209,7 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<UserProgress | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileState>(DEFAULT_PROFILE_STATE);
   const isConfigured = isFirebaseConfigured();
 
   // Initialize with local progress
@@ -205,6 +269,45 @@ export function AuthProvider({
 
     return () => unsubscribe();
   }, [isConfigured]);
+
+  // Detect and load user profile when user changes
+  useEffect(() => {
+    if (!user) {
+      // Reset profile when logged out
+      setUserProfile(DEFAULT_PROFILE_STATE);
+      return;
+    }
+
+    // Detect known profile
+    const { profile, profileKey } = detectUserProfile(user.email, user.displayName);
+
+    // Check for saved profile data (confirmed roles from ProfileConfirmation)
+    const savedProfile = getSavedProfileData();
+
+    // Determine roles: use saved roles if available, otherwise defaults from profile
+    let confirmedRoles: string[] = [];
+    if (savedProfile?.roles && savedProfile.roles.length > 0) {
+      confirmedRoles = savedProfile.roles;
+    } else if (profile) {
+      confirmedRoles = profile.roles;
+    }
+
+    setUserProfile({
+      knownProfile: profile,
+      confirmedRoles,
+      profileKey,
+      isProfileLoaded: true,
+    });
+  }, [user]);
+
+  // Update user roles (called from ProfileConfirmation or Profile Settings)
+  const updateUserRoles = useCallback((roles: string[]) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      confirmedRoles: roles,
+    }));
+    saveProfileData(userProfile.profileKey, roles);
+  }, [userProfile.profileKey]);
 
   const signInGoogle = useCallback(async () => {
     setLoading(true);
@@ -352,11 +455,13 @@ export function AuthProvider({
     loading,
     isConfigured,
     progress,
+    userProfile,
     signInGoogle,
     signInGithub,
     logout,
     syncProgress,
     updateProgress,
+    updateUserRoles,
     markDocAsRead,
     unlockAchievement,
   };
