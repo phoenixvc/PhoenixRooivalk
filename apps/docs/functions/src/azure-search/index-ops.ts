@@ -63,9 +63,18 @@ export async function uploadToAzureIndex(
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      functions.logger.error("Azure index upload error:", error);
-      throw new Error(error.error?.message || "Azure index upload failed");
+      let errorMessage = "Azure index upload failed";
+      try {
+        const error = await response.json();
+        errorMessage = error.error?.message || errorMessage;
+        functions.logger.error("Azure index upload error:", error);
+      } catch {
+        functions.logger.error("Azure index upload error (non-JSON response):", {
+          status: response.status,
+          statusText: response.statusText
+        });
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
