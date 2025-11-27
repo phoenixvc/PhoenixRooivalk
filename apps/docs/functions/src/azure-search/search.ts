@@ -104,9 +104,16 @@ export async function azureVectorSearch(
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      functions.logger.error("Azure Search error:", error);
-      throw new Error(error.error?.message || "Azure Search API error");
+      let errorMessage = "Azure Search API error";
+      try {
+        const error = await response.json();
+        functions.logger.error("Azure Search error:", error);
+        errorMessage = error.error?.message || errorMessage;
+      } catch {
+        const text = await response.text();
+        functions.logger.error("Azure Search error (non-JSON):", text);
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
