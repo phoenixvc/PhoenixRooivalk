@@ -285,29 +285,51 @@ export function AuthProvider({
       return;
     }
 
-    // Detect known profile
-    const { profile, profileKey } = detectUserProfile(
-      user.email,
-      user.displayName,
-    );
+    // Async function to load and merge profile data
+    async function loadUserProfile() {
+      // Detect known profile from internal profiles
+      const { profile, profileKey: detectedProfileKey } = detectUserProfile(
+        user.email,
+        user.displayName,
+      );
 
-    // Check for saved profile data (confirmed roles from ProfileConfirmation)
-    const savedProfile = getSavedProfileData();
+      // Get local profile data from localStorage
+      const localProfile = getSavedProfileData();
 
-    // Determine roles: use saved roles if available, otherwise defaults from profile
-    let confirmedRoles: string[] = [];
-    if (savedProfile?.roles && savedProfile.roles.length > 0) {
-      confirmedRoles = savedProfile.roles;
-    } else if (profile) {
-      confirmedRoles = profile.roles;
+      // Fetch profile data from Firestore
+      const cloudProfile = await getUserProfileData(user.uid);
+
+      // Merge strategy: Cloud wins for conflicts, but keep local-only data
+      let mergedProfileKey: string | null = detectedProfileKey;
+      let mergedRoles: string[] = [];
+
+      if (cloudProfile) {
+        // Cloud data exists - use cloud values as source of truth
+        mergedProfileKey = cloudProfile.profileKey ?? detectedProfileKey;
+        mergedRoles = cloudProfile.roles || [];
+      }
+
+      // If no cloud roles, fallback to local, then to detected profile defaults
+      if (mergedRoles.length === 0) {
+        if (localProfile?.roles && localProfile.roles.length > 0) {
+          mergedRoles = localProfile.roles;
+        } else if (profile) {
+          mergedRoles = profile.roles;
+        }
+      }
+
+      // Update localStorage with merged data for fast access
+      saveProfileData(mergedProfileKey, mergedRoles);
+
+      setUserProfile({
+        knownProfile: profile,
+        confirmedRoles: mergedRoles,
+        profileKey: mergedProfileKey,
+        isProfileLoaded: true,
+      });
     }
 
-    setUserProfile({
-      knownProfile: profile,
-      confirmedRoles,
-      profileKey,
-      isProfileLoaded: true,
-    });
+    loadUserProfile();
   }, [user]);
 
   // Update user roles (called from ProfileConfirmation or Profile Settings)
