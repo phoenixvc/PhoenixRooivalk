@@ -134,8 +134,7 @@ export function useConsent() {
  * Cookie Consent Banner Component
  */
 export function CookieConsentBanner(): React.ReactElement | null {
-  const { consent, isLoaded, isPending, acceptAll, acceptFunctionalOnly } =
-    useConsent();
+  const { isLoaded, isPending, acceptAll, acceptFunctionalOnly } = useConsent();
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Don't render until we've checked localStorage

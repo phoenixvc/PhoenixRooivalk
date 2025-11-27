@@ -3,6 +3,53 @@
 /* Import Gamification Styles */
 @import "./gamification.css";
 
+/* ================================================
+   PREVENT BLACK FLICKER ON NAVIGATION
+   Apply background immediately to prevent flash
+   ================================================ */
+
+/* Apply background color immediately on HTML element */
+html {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Ensure body also has background to prevent any flash */
+body {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Prevent flash during page transitions */
+html,
+body,
+#__docusaurus {
+  background-color: rgb(15, 23, 42) !important;
+  min-height: 100vh;
+}
+
+/* Ensure all wrapper elements have consistent background */
+[data-theme="dark"] html,
+[data-theme="dark"] body,
+[data-theme="dark"] #__docusaurus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Even light theme uses dark background for this project */
+[data-theme="light"] html,
+[data-theme="light"] body,
+[data-theme="light"] #__docusaurus {
+  background-color: rgb(15, 23, 42) !important;
+}
+
+/* Instant background application - no transition delay */
+html,
+body,
+#__docusaurus,
+.main-wrapper,
+.docMainContainer,
+.container {
+  transition: none !important;
+}
+
 /* Import Phoenix Rooivalk Brand Colors */
 :root {
   /* Phoenix Rooivalk Brand Colors */

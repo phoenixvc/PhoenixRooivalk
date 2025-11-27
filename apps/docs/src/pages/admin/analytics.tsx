@@ -18,8 +18,6 @@ import {
   orderBy,
   limit,
   getDocs,
-  where,
-  Timestamp,
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "../../services/firebase";
 import styles from "./analytics.module.css";
@@ -58,17 +56,22 @@ export default function AnalyticsDashboard(): React.ReactElement {
   const { user, loading } = useAuth();
   const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
   const [topPages, setTopPages] = useState<TopPage[]>([]);
-  const [conversions, setConversions] = useState<ConversionMetrics | null>(null);
+  const [conversions, setConversions] = useState<ConversionMetrics | null>(
+    null,
+  );
   const [recentSessions, setRecentSessions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState(7); // Last 7 days
 
   // Check if user is admin by UID or email domain
-  const isAdmin = user && (
-    ADMIN_USERS.includes(user.uid) ||
-    (user.email && ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)))
-  );
+  const isAdmin =
+    user &&
+    (ADMIN_USERS.includes(user.uid) ||
+      (user.email &&
+        ADMIN_EMAIL_DOMAINS.some((domain) =>
+          user.email?.endsWith(`@${domain}`),
+        )));
 
   useEffect(() => {
     if (!loading && isAdmin && isFirebaseConfigured()) {
@@ -89,7 +92,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
       const dailyQuery = query(
         collection(db, "analytics_daily"),
         orderBy("date", "desc"),
-        limit(dateRange)
+        limit(dateRange),
       );
       const dailySnapshot = await getDocs(dailyQuery);
       const daily = dailySnapshot.docs.map((doc) => doc.data() as DailyStats);
@@ -99,7 +102,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
       const pageViewsQuery = query(
         collection(db, "analytics_pageviews"),
         orderBy("timestamp", "desc"),
-        limit(1000)
+        limit(1000),
       );
       const pageViewsSnapshot = await getDocs(pageViewsQuery);
 
@@ -122,7 +125,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
       const conversionsQuery = query(
         collection(db, "analytics_conversions"),
         orderBy("timestamp", "desc"),
-        limit(500)
+        limit(500),
       );
       const conversionsSnapshot = await getDocs(conversionsQuery);
 
@@ -148,7 +151,9 @@ export default function AnalyticsDashboard(): React.ReactElement {
         conversionRate:
           conversionCounts.teaser_view > 0
             ? Math.round(
-                (conversionCounts.signup_completed / conversionCounts.teaser_view) * 100
+                (conversionCounts.signup_completed /
+                  conversionCounts.teaser_view) *
+                  100,
               )
             : 0,
       });
@@ -157,7 +162,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
       const sessionsQuery = query(
         collection(db, "analytics_sessions"),
         orderBy("lastActivity", "desc"),
-        limit(20)
+        limit(20),
       );
       const sessionsSnapshot = await getDocs(sessionsQuery);
       setRecentSessions(sessionsSnapshot.docs.map((doc) => doc.data()));
@@ -218,12 +223,24 @@ export default function AnalyticsDashboard(): React.ReactElement {
     );
   }
 
-  const totalViews = dailyStats.reduce((sum, d) => sum + (d.totalPageViews || 0), 0);
-  const totalAuth = dailyStats.reduce((sum, d) => sum + (d.authenticatedViews || 0), 0);
-  const totalAnon = dailyStats.reduce((sum, d) => sum + (d.anonymousViews || 0), 0);
+  const totalViews = dailyStats.reduce(
+    (sum, d) => sum + (d.totalPageViews || 0),
+    0,
+  );
+  const totalAuth = dailyStats.reduce(
+    (sum, d) => sum + (d.authenticatedViews || 0),
+    0,
+  );
+  const totalAnon = dailyStats.reduce(
+    (sum, d) => sum + (d.anonymousViews || 0),
+    0,
+  );
 
   return (
-    <Layout title="Analytics Dashboard" description="View documentation analytics">
+    <Layout
+      title="Analytics Dashboard"
+      description="View documentation analytics"
+    >
       <main className="container margin-vert--xl">
         <header className={styles.header}>
           <h1>Analytics Dashboard</h1>
@@ -252,15 +269,21 @@ export default function AnalyticsDashboard(): React.ReactElement {
             {/* Overview Cards */}
             <section className={styles.overviewSection}>
               <div className={styles.statCard}>
-                <div className={styles.statValue}>{totalViews.toLocaleString()}</div>
+                <div className={styles.statValue}>
+                  {totalViews.toLocaleString()}
+                </div>
                 <div className={styles.statLabel}>Total Page Views</div>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statValue}>{totalAuth.toLocaleString()}</div>
+                <div className={styles.statValue}>
+                  {totalAuth.toLocaleString()}
+                </div>
                 <div className={styles.statLabel}>Authenticated Views</div>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statValue}>{totalAnon.toLocaleString()}</div>
+                <div className={styles.statValue}>
+                  {totalAnon.toLocaleString()}
+                </div>
                 <div className={styles.statLabel}>Anonymous Views</div>
               </div>
               <div className={styles.statCard}>
@@ -277,17 +300,23 @@ export default function AnalyticsDashboard(): React.ReactElement {
                 <h2>Conversion Funnel</h2>
                 <div className={styles.funnel}>
                   <div className={styles.funnelStep}>
-                    <div className={styles.funnelValue}>{conversions.teaserViews}</div>
+                    <div className={styles.funnelValue}>
+                      {conversions.teaserViews}
+                    </div>
                     <div className={styles.funnelLabel}>Teaser Views</div>
                   </div>
                   <div className={styles.funnelArrow}>→</div>
                   <div className={styles.funnelStep}>
-                    <div className={styles.funnelValue}>{conversions.signupPrompts}</div>
+                    <div className={styles.funnelValue}>
+                      {conversions.signupPrompts}
+                    </div>
                     <div className={styles.funnelLabel}>Signup Prompts</div>
                   </div>
                   <div className={styles.funnelArrow}>→</div>
                   <div className={styles.funnelStep}>
-                    <div className={styles.funnelValue}>{conversions.signupsStarted}</div>
+                    <div className={styles.funnelValue}>
+                      {conversions.signupsStarted}
+                    </div>
                     <div className={styles.funnelLabel}>Started Signup</div>
                   </div>
                   <div className={styles.funnelArrow}>→</div>
@@ -342,7 +371,9 @@ export default function AnalyticsDashboard(): React.ReactElement {
                         {session.sessionId?.substring(0, 12)}...
                       </td>
                       <td>
-                        {session.isAuthenticated ? "Authenticated" : "Anonymous"}
+                        {session.isAuthenticated
+                          ? "Authenticated"
+                          : "Anonymous"}
                       </td>
                       <td>{session.pageViews || 0}</td>
                       <td>{Math.round((session.totalTimeMs || 0) / 60000)}</td>
