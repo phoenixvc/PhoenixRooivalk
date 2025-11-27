@@ -16,6 +16,8 @@ import { SilentErrorBoundary } from "../components/ErrorBoundary";
 import { OfflineIndicator } from "../components/Offline";
 import { AIFloatingWidget } from "../components/AIChat";
 import { SidebarRecommendations } from "../components/Sidebar";
+import { ProfileConfirmation } from "../components/Auth";
+import { OnboardingWalkthrough } from "../components/Onboarding";
 
 interface RootProps {
   children: ReactNode;
@@ -68,26 +70,33 @@ export default function Root({ children }: RootProps): React.ReactElement {
   return (
     <AuthProvider>
       <SilentErrorBoundary>
-        <ReadingTracker />
-      </SilentErrorBoundary>
-      <SilentErrorBoundary>
-        <AnalyticsTracker />
-      </SilentErrorBoundary>
-      {children}
-      <SilentErrorBoundary>
-        <CookieConsentBanner />
-      </SilentErrorBoundary>
-      <SilentErrorBoundary>
-        <OfflineIndicator />
-      </SilentErrorBoundary>
-      <SilentErrorBoundary>
-        <CompletionToast />
-      </SilentErrorBoundary>
-      <SilentErrorBoundary>
-        <SidebarRecommendations />
-      </SilentErrorBoundary>
-      <SilentErrorBoundary>
-        <AIFloatingWidget pageContext={pageContext} />
+        <ProfileConfirmation>
+          <SilentErrorBoundary>
+            <ReadingTracker />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <AnalyticsTracker />
+          </SilentErrorBoundary>
+          {children}
+          <SilentErrorBoundary>
+            <CookieConsentBanner />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <OfflineIndicator />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <CompletionToast />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <SidebarRecommendations />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <AIFloatingWidget pageContext={pageContext} />
+          </SilentErrorBoundary>
+          <SilentErrorBoundary>
+            <OnboardingWalkthrough />
+          </SilentErrorBoundary>
+        </ProfileConfirmation>
       </SilentErrorBoundary>
     </AuthProvider>
   );

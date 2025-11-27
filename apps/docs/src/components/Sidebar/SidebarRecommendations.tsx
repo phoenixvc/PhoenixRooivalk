@@ -4,15 +4,19 @@
  * AI-powered personalized recommendations shown in the sidebar.
  * Analyzes logged-in user's reading history and suggests relevant docs.
  * Highlights recommended categories dynamically.
+ *
+ * For known internal users, uses pre-defined recommendations from userProfiles.
  */
 
 import * as React from "react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { aiService, ReadingRecommendation } from "../../services/aiService";
 import {
-  aiService,
-  ReadingRecommendation,
-} from "../../services/aiService";
+  getUserProfile as getKnownUserProfile,
+  profileToRecommendations,
+  UserProfile,
+} from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
 
@@ -35,9 +39,7 @@ function getCategoryFromPath(path: string): string {
  */
 function formatDocTitle(docPath: string): string {
   const name = docPath.split("/").pop() || docPath;
-  return name
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return name.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /**
@@ -70,7 +72,9 @@ function highlightSidebarItems(recommendedPaths: string[]): void {
   // Add highlights to recommended items
   recommendedPaths.forEach((path) => {
     const normalizedPath = path.replace(/^\/docs/, "").replace(/\/$/, "");
-    const links = document.querySelectorAll(`.menu__link[href*="${normalizedPath}"]`);
+    const links = document.querySelectorAll(
+      `.menu__link[href*="${normalizedPath}"]`,
+    );
     links.forEach((link) => {
       link.classList.add("menu__link--recommended");
     });
@@ -78,17 +82,33 @@ function highlightSidebarItems(recommendedPaths: string[]): void {
 }
 
 export function SidebarRecommendations({
-  maxItems = 3,
+  maxItems = 5,
 }: SidebarRecommendationsProps): React.ReactElement | null {
   const { user, progress } = useAuth();
-  const [recommendations, setRecommendations] = useState<ReadingRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<
+    ReadingRecommendation[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [knownProfile, setKnownProfile] = useState<UserProfile | null>(null);
   const loadedRef = useRef(false);
 
-  // Derive user profile from reading history
-  const getUserProfile = useCallback((): string => {
+  // Check for known internal user profile
+  useEffect(() => {
+    if (user) {
+      const profile = getKnownUserProfile(user.email, user.displayName);
+      setKnownProfile(profile);
+    }
+  }, [user]);
+
+  // Derive user profile description from reading history (for unknown users)
+  const deriveProfileDescription = useCallback((): string => {
+    // If known user, use their profile description
+    if (knownProfile) {
+      return knownProfile.profileDescription;
+    }
+
     if (!progress?.docs) return "new user";
 
     const completedDocs = Object.entries(progress.docs)
@@ -105,8 +125,9 @@ export function SidebarRecommendations({
     });
 
     // Find most read category
-    const topCategory = Object.entries(categoryCounts)
-      .sort(([, a], [, b]) => b - a)[0]?.[0];
+    const topCategory = Object.entries(categoryCounts).sort(
+      ([, a], [, b]) => b - a,
+    )[0]?.[0];
 
     if (completedDocs.length === 0) {
       return "new user starting their journey";
@@ -123,7 +144,7 @@ export function SidebarRecommendations({
     } else {
       return `experienced user with focus on ${topCategory || "general"} content`;
     }
-  }, [progress]);
+  }, [progress, knownProfile]);
 
   const fetchRecommendations = useCallback(async () => {
     if (!user || loadedRef.current) return;
@@ -132,7 +153,24 @@ export function SidebarRecommendations({
     loadedRef.current = true;
 
     try {
-      const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
+      // For known internal users, use pre-defined recommendations
+      if (knownProfile) {
+        const profileRecs = profileToRecommendations(knownProfile, maxItems);
+        const recs: ReadingRecommendation[] = profileRecs.map((r) => ({
+          docId: r.docId,
+          relevanceScore: r.relevanceScore,
+          reason: r.reason,
+        }));
+        setRecommendations(recs);
+        highlightSidebarItems(recs.map((r) => r.docId));
+        setHasLoaded(true);
+        setIsLoading(false);
+        return;
+      }
+
+      // For unknown users, use AI-generated recommendations
+      const currentPath =
+        typeof window !== "undefined" ? window.location.pathname : "";
       const result = await aiService.getReadingRecommendations(currentPath);
 
       if (result.recommendations && result.recommendations.length > 0) {
@@ -147,7 +185,7 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems]);
+  }, [user, maxItems, knownProfile]);
 
   // Load recommendations when user is available
   useEffect(() => {
@@ -168,7 +206,7 @@ export function SidebarRecommendations({
     return null;
   }
 
-  const userProfile = getUserProfile();
+  const userProfileDescription = deriveProfileDescription();
   const completedCount = progress?.docs
     ? Object.values(progress.docs).filter((d) => d.completed).length
     : 0;
@@ -196,8 +234,12 @@ export function SidebarRecommendations({
           ) : (
             <>
               <div className="sidebar-rec-profile">
-                <span className="sidebar-rec-profile-label">Profile:</span>
-                <span className="sidebar-rec-profile-text">{userProfile}</span>
+                <span className="sidebar-rec-profile-label">
+                  {knownProfile ? `${knownProfile.name}'s Focus:` : "Profile:"}
+                </span>
+                <span className="sidebar-rec-profile-text">
+                  {userProfileDescription}
+                </span>
               </div>
 
               {recommendations.length > 0 ? (

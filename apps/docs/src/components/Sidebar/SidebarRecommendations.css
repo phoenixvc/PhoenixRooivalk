@@ -10,7 +10,11 @@
   bottom: 80px;
   width: 280px;
   margin: 0.5rem;
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.98),
+    rgba(15, 23, 42, 0.98)
+  );
   border: 1px solid rgba(249, 115, 22, 0.3);
   border-radius: 12px;
   overflow: hidden;

@@ -1,0 +1,259 @@
+/* ================================================
+   PROFILE CONFIRMATION MODAL
+   Shows after login for known internal users
+   ================================================ */
+
+.profile-confirm-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}
+
+.profile-confirm-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: 100%;
+  max-width: 480px;
+  padding: 1rem;
+}
+
+.profile-confirm-content {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 59, 0.98),
+    rgba(15, 23, 42, 0.98)
+  );
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.profile-confirm-header {
+  padding: 2rem 2rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.profile-confirm-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgb(249, 115, 22);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+}
+
+.profile-confirm-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-confirm-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.profile-confirm-header h2 {
+  margin: 0 0 0.5rem;
+  color: rgb(242, 244, 246);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.profile-confirm-subtitle {
+  margin: 0;
+  color: rgb(148, 163, 184);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.profile-confirm-body {
+  padding: 1.5rem 2rem;
+}
+
+.profile-confirm-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.4);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.profile-confirm-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(249, 115, 22);
+}
+
+.profile-confirm-description {
+  font-size: 0.9375rem;
+  color: rgb(226, 230, 234);
+  font-style: italic;
+}
+
+.profile-confirm-roles {
+  margin-bottom: 1.5rem;
+}
+
+.profile-confirm-role-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.profile-confirm-role {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 9999px;
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-confirm-role:hover {
+  background: rgba(71, 85, 105, 0.5);
+  border-color: rgba(100, 116, 139, 0.5);
+  color: rgb(226, 230, 234);
+}
+
+.profile-confirm-role.selected {
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgb(249, 115, 22);
+  color: rgb(249, 115, 22);
+}
+
+.profile-confirm-role-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(51, 65, 85, 0.5);
+  font-size: 0.75rem;
+}
+
+.profile-confirm-role.selected .profile-confirm-role-check {
+  background: rgb(249, 115, 22);
+  color: white;
+}
+
+.profile-confirm-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(30, 58, 138, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  color: rgb(147, 197, 253);
+}
+
+.profile-confirm-note-icon {
+  flex-shrink: 0;
+}
+
+.profile-confirm-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.profile-confirm-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-confirm-btn--secondary {
+  background: transparent;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  color: rgb(148, 163, 184);
+}
+
+.profile-confirm-btn--secondary:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.5);
+  border-color: rgba(100, 116, 139, 0.5);
+  color: rgb(226, 230, 234);
+}
+
+.profile-confirm-btn--primary {
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.profile-confirm-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgb(251, 146, 60), rgb(249, 115, 22));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+/* Mobile adjustments */
+@media (max-width: 520px) {
+  .profile-confirm-modal {
+    padding: 0.5rem;
+  }
+
+  .profile-confirm-header,
+  .profile-confirm-body,
+  .profile-confirm-footer {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .profile-confirm-footer {
+    flex-direction: column-reverse;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .profile-confirm-btn {
+    transition: none;
+  }
+
+  .profile-confirm-role {
+    transition: none;
+  }
+}
