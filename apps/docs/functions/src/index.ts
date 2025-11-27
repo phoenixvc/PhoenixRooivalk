@@ -24,6 +24,16 @@
  * - searchDocs: Semantic search over documentation
  * - askDocumentation: RAG-powered Q&A with source citations
  * - getSuggestedQuestions: Get contextual question suggestions
+ *
+ * Cache Functions (from ./cache.ts):
+ * - cleanupExpiredCache: Scheduled cleanup of expired cache entries
+ * - getAICacheStats: Get cache statistics (admin)
+ * - clearAICache: Clear cache collection (admin)
+ *
+ * Monitoring Functions (from ./monitoring.ts):
+ * - getAIMonitoringStats: Get AI usage statistics (admin)
+ * - getAIErrors: Get recent AI errors (admin)
+ * - checkAIAlerts: Scheduled alert checking
  */
 
 // Export AI functions
@@ -48,6 +58,16 @@ export {
   askDocumentation,
   getSuggestedQuestions,
 } from "./rag";
+
+// Export Cache functions
+export { cleanupExpiredCache, getAICacheStats, clearAICache } from "./cache";
+
+// Export Monitoring functions
+export {
+  getAIMonitoringStats,
+  getAIErrors,
+  checkAIAlerts,
+} from "./monitoring";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";

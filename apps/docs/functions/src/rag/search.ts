@@ -2,14 +2,17 @@
  * RAG Search for Phoenix Rooivalk Documentation
  *
  * Provides semantic search functionality:
- * - Generates query embeddings
+ * - Generates query embeddings with caching
  * - Performs cosine similarity search
  * - Returns relevant document chunks
+ * - Tracks metrics for monitoring
  */
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { RAG_CONFIG } from "./indexer";
+import { generateEmbedding } from "../ai-provider";
+import { getCachedEmbedding, cacheEmbedding } from "../cache";
+import { logMetrics } from "../monitoring";
 
 const db = admin.firestore();
 
@@ -34,45 +37,29 @@ export interface SearchResult {
 }
 
 /**
- * Call OpenAI Embeddings API for query
+ * Get query embedding with caching
  */
-async function getQueryEmbedding(text: string): Promise<number[]> {
-  const apiKey = functions.config().openai?.key;
-
-  if (!apiKey) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "OpenAI API key not configured"
-    );
+async function getQueryEmbedding(text: string): Promise<{
+  embedding: number[];
+  cached: boolean;
+}> {
+  // Check cache first
+  const cached = await getCachedEmbedding(text);
+  if (cached) {
+    return { embedding: cached, cached: true };
   }
 
-  try {
-    const response = await fetch("https://api.openai.com/v1/embeddings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: RAG_CONFIG.embeddingModel,
-        input: text,
-      }),
-    });
+  // Generate new embedding
+  const { embeddings, metrics } = await generateEmbedding(text);
+  const embedding = embeddings[0];
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || "OpenAI Embeddings API error");
-    }
+  // Cache for future use
+  await cacheEmbedding(text, embedding);
 
-    const data = await response.json();
-    return data.data[0].embedding;
-  } catch (error) {
-    functions.logger.error("OpenAI Embeddings error:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Failed to generate query embedding"
-    );
-  }
+  // Log metrics (non-blocking)
+  logMetrics("embedding_query", metrics).catch(() => {});
+
+  return { embedding, cached: false };
 }
 
 /**
@@ -113,8 +100,8 @@ export async function searchDocuments(
 ): Promise<SearchResult[]> {
   const { topK = 5, category, minScore = 0.65 } = options || {};
 
-  // Generate query embedding
-  const queryVector = await getQueryEmbedding(query);
+  // Generate query embedding (with caching)
+  const { embedding: queryVector } = await getQueryEmbedding(query);
 
   // Build Firestore query
   let firestoreQuery: admin.firestore.Query = db.collection("doc_embeddings");

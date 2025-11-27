@@ -5,17 +5,21 @@
  * - Searches relevant documentation chunks
  * - Generates answers with context
  * - Provides source citations
+ * - Caches frequent queries
+ * - Tracks metrics for monitoring
  */
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { searchDocuments, SearchResult } from "./search";
+import { chatCompletion, type AIRequestMetrics } from "../ai-provider";
+import { getCachedQuery, cacheQueryResult } from "../cache";
+import { logMetrics, logError } from "../monitoring";
 
 const db = admin.firestore();
 
 // Configuration constants
 const RAG_QUERY_CONFIG = {
-  model: "gpt-4o-mini",
   maxTokens: 1500,
   temperature: 0.3,
   rateLimit: {
@@ -66,64 +70,8 @@ export interface RAGResponse {
   }>;
   confidence: "high" | "medium" | "low";
   tokensUsed: number;
-}
-
-/**
- * Call OpenAI Chat API
- */
-async function callOpenAIChat(
-  messages: Array<{ role: "system" | "user" | "assistant"; content: string }>,
-  options: {
-    model?: string;
-    maxTokens?: number;
-    temperature?: number;
-  } = {}
-): Promise<{ content: string; tokensUsed: number }> {
-  const apiKey = functions.config().openai?.key;
-
-  if (!apiKey) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "OpenAI API key not configured"
-    );
-  }
-
-  const model = options.model || "gpt-4o-mini";
-  const maxTokens = options.maxTokens || 1500;
-  const temperature = options.temperature ?? 0.3;
-
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        max_tokens: maxTokens,
-        temperature,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || "OpenAI Chat API error");
-    }
-
-    const data = await response.json();
-    return {
-      content: data.choices[0]?.message?.content || "Unable to generate response.",
-      tokensUsed: data.usage?.total_tokens || 0,
-    };
-  } catch (error) {
-    functions.logger.error("OpenAI Chat error:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Failed to generate response"
-    );
-  }
+  cached: boolean;
+  metrics?: AIRequestMetrics;
 }
 
 /**
@@ -170,6 +118,7 @@ export async function queryWithRAG(
       content: string;
     }>;
     responseFormat?: "detailed" | "concise";
+    skipCache?: boolean;
   }
 ): Promise<RAGResponse> {
   const {
@@ -177,7 +126,22 @@ export async function queryWithRAG(
     category,
     conversationHistory = [],
     responseFormat = "detailed",
+    skipCache = false,
   } = options || {};
+
+  // Check cache first (only for queries without conversation history)
+  if (!skipCache && conversationHistory.length === 0) {
+    const cached = await getCachedQuery(question, category);
+    if (cached) {
+      return {
+        answer: cached.answer,
+        sources: cached.sources,
+        confidence: cached.confidence,
+        tokensUsed: 0,
+        cached: true,
+      };
+    }
+  }
 
   // Search for relevant chunks
   const relevantChunks: SearchResult[] = await searchDocuments(question, {
@@ -231,22 +195,36 @@ Question: ${question}
 Please answer based on the documentation above. Cite sources using [Source X] notation.`,
   });
 
-  // Generate response
-  const { content: answer, tokensUsed } = await callOpenAIChat(messages, {
+  // Generate response using provider abstraction
+  const { content: answer, metrics } = await chatCompletion(messages, {
+    model: "chat",
     temperature: RAG_QUERY_CONFIG.temperature,
     maxTokens: RAG_QUERY_CONFIG.maxTokens,
   });
 
+  const sources = relevantChunks.map((chunk) => ({
+    docId: chunk.docId,
+    title: chunk.title,
+    section: chunk.section,
+    relevance: Math.round(chunk.score * 100) / 100,
+  }));
+
+  // Cache the result (only for queries without conversation history)
+  if (conversationHistory.length === 0) {
+    await cacheQueryResult(question, category, {
+      answer,
+      sources,
+      confidence,
+    });
+  }
+
   return {
     answer,
-    sources: relevantChunks.map((chunk) => ({
-      docId: chunk.docId,
-      title: chunk.title,
-      section: chunk.section,
-      relevance: Math.round(chunk.score * 100) / 100,
-    })),
+    sources,
     confidence,
-    tokensUsed,
+    tokensUsed: metrics.totalTokens,
+    cached: false,
+    metrics,
   };
 }
 
@@ -288,7 +266,16 @@ export const askDocumentation = functions.https.onCall(
         conversationHistory: history || [],
       });
 
-      // Log usage
+      // Log metrics if not cached
+      if (response.metrics) {
+        await logMetrics("rag_query", response.metrics, context.auth.uid, {
+          question: question.substring(0, 200),
+          sourcesUsed: response.sources.length,
+          confidence: response.confidence,
+        });
+      }
+
+      // Log usage (legacy - keep for backwards compatibility)
       await db.collection("ai_usage").add({
         userId: context.auth.uid,
         feature: "rag_query",
@@ -296,11 +283,18 @@ export const askDocumentation = functions.https.onCall(
         sourcesUsed: response.sources.length,
         confidence: response.confidence,
         tokensUsed: response.tokensUsed,
+        cached: response.cached,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       });
 
       return response;
     } catch (error) {
+      // Log error for monitoring
+      await logError("rag_query", error, {
+        question: question.substring(0, 200),
+        category,
+      });
+
       functions.logger.error("RAG query error:", error);
       throw new functions.https.HttpsError(
         "internal",

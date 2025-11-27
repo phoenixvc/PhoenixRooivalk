@@ -21,6 +21,17 @@ rules_version = '2';
  * RAG Collections (managed by Cloud Functions):
  * - doc_embeddings: Document chunks with vector embeddings for semantic search
  * - doc_metadata: Document-level metadata for RAG indexing
+ *
+ * Cache Collections (managed by Cloud Functions):
+ * - cache_embeddings: Cached embedding vectors
+ * - cache_queries: Cached query results
+ * - cache_suggestions: Cached suggested questions
+ *
+ * Monitoring Collections (managed by Cloud Functions):
+ * - ai_metrics: Individual request metrics
+ * - ai_daily_stats: Daily aggregated AI stats
+ * - ai_errors: Error logs
+ * - ai_alerts: Alert notifications
  */
 
 service cloud.firestore {
@@ -114,6 +125,40 @@ service cloud.firestore {
     match /doc_metadata/{docId} {
       allow read: if request.auth != null; // Authenticated users can read metadata
       allow write: if false; // Function-only via admin SDK (indexing)
+    }
+
+    // Cache Collections - managed by Cloud Functions
+    match /cache_embeddings/{document=**} {
+      allow read, write: if false; // Function-only via admin SDK
+    }
+
+    match /cache_queries/{document=**} {
+      allow read, write: if false; // Function-only via admin SDK
+    }
+
+    match /cache_suggestions/{document=**} {
+      allow read, write: if false; // Function-only via admin SDK
+    }
+
+    // Monitoring Collections - managed by Cloud Functions
+    match /ai_metrics/{document=**} {
+      allow read: if isAdmin(); // Admins can view metrics
+      allow write: if false; // Function-only via admin SDK
+    }
+
+    match /ai_daily_stats/{document=**} {
+      allow read: if isAdmin(); // Admins can view daily stats
+      allow write: if false; // Function-only via admin SDK
+    }
+
+    match /ai_errors/{document=**} {
+      allow read: if isAdmin(); // Admins can view errors
+      allow write: if false; // Function-only via admin SDK
+    }
+
+    match /ai_alerts/{document=**} {
+      allow read: if isAdmin(); // Admins can view alerts
+      allow write: if false; // Function-only via admin SDK
     }
 
     // User notifications
