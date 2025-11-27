@@ -2,11 +2,15 @@
  * Vector Search Abstraction Layer
  *
  * Provides a unified interface for vector search operations that can work with:
- * - Firebase Vector Search Extension (primary, as per ADR-0011)
+ * - Azure AI Search (primary, as per ADR-0011) - HNSW + hybrid search
  * - Firestore + in-memory search (fallback)
  *
  * This abstraction allows easy migration between vector databases without
  * changing the application code.
+ *
+ * Priority order:
+ * 1. Azure AI Search (if configured) - sub-10ms, hybrid search
+ * 2. In-memory Firestore search (fallback) - O(n), no hybrid
  */
 
 import * as functions from "firebase-functions";
@@ -14,6 +18,10 @@ import * as admin from "firebase-admin";
 import { generateEmbedding } from "./ai-provider";
 import { getCachedEmbedding, cacheEmbedding } from "./cache";
 import { logMetrics } from "./monitoring";
+import {
+  isAzureSearchAvailable,
+  azureVectorSearch,
+} from "./azure-search";
 
 const db = admin.firestore();
 
@@ -30,8 +38,8 @@ export const VECTOR_SEARCH_CONFIG = {
   // Vector dimensions (text-embedding-3-small)
   dimensions: 1536,
 
-  // Feature flags
-  useFirebaseVectorSearch: process.env.USE_FIREBASE_VECTOR_SEARCH === "true",
+  // Feature flags - Azure AI Search is now the default
+  useAzureSearch: true, // Use Azure AI Search when available
 
   // Performance thresholds
   maxVectorsForInMemory: 10000,
@@ -132,6 +140,11 @@ async function getQueryEmbedding(text: string): Promise<{
 /**
  * In-memory vector search (fallback method)
  * Loads all embeddings and computes cosine similarity
+ *
+ * Note: This is O(n) and should only be used for:
+ * - Development/testing
+ * - Fallback when Azure AI Search is unavailable
+ * - Small document sets (<10,000 vectors)
  */
 async function searchInMemory(
   queryEmbedding: number[],
@@ -183,49 +196,12 @@ async function searchInMemory(
 }
 
 /**
- * Firebase Vector Search (primary method when enabled)
- * Uses Firestore's native vector search capabilities
- */
-async function searchWithFirebaseVectorSearch(
-  queryEmbedding: number[],
-  options: VectorSearchOptions
-): Promise<VectorSearchResult[]> {
-  const { topK = 5, category, minScore = 0.65 } = options;
-
-  try {
-    // Build vector search query
-    // Note: This uses Firestore's findNearest() when available
-    let collectionRef = db.collection(VECTOR_SEARCH_CONFIG.embeddingsCollection);
-
-    // Firebase Vector Search query
-    // The actual API depends on the Firebase SDK version
-    // For now, we use the in-memory fallback with a warning
-    functions.logger.info(
-      "Firebase Vector Search not yet configured. Using in-memory search."
-    );
-
-    // TODO: When Firebase Vector Search extension is installed:
-    // const results = await collectionRef
-    //   .findNearest({
-    //     vectorField: 'embedding',
-    //     queryVector: queryEmbedding,
-    //     limit: topK,
-    //     distanceType: 'COSINE',
-    //   })
-    //   .get();
-
-    // Fallback to in-memory search
-    return searchInMemory(queryEmbedding, options);
-  } catch (error) {
-    functions.logger.error("Firebase Vector Search error:", error);
-    // Fallback to in-memory
-    return searchInMemory(queryEmbedding, options);
-  }
-}
-
-/**
  * Main vector search function
  * Automatically selects the best search method based on configuration
+ *
+ * Priority:
+ * 1. Azure AI Search (if configured) - HNSW + hybrid search, sub-10ms
+ * 2. In-memory Firestore search (fallback) - O(n), for development/testing
  */
 export async function vectorSearch(
   query: string,
@@ -239,10 +215,43 @@ export async function vectorSearch(
     totalLatencyMs: number;
     embeddingCached: boolean;
     resultCount: number;
+    hybridSearch?: boolean;
   };
 }> {
   const startTime = Date.now();
 
+  // Try Azure AI Search first (recommended per ADR-0011)
+  if (VECTOR_SEARCH_CONFIG.useAzureSearch && isAzureSearchAvailable()) {
+    try {
+      const { results, metrics } = await azureVectorSearch(query, {
+        topK: options.topK || VECTOR_SEARCH_CONFIG.defaultTopK,
+        category: options.category,
+        minScore: options.minScore || VECTOR_SEARCH_CONFIG.defaultMinScore,
+        hybridSearch: true, // Use hybrid search for better results
+      });
+
+      return {
+        results,
+        metrics: {
+          searchMethod: "azure_ai_search",
+          embeddingLatencyMs: 0, // Azure handles embedding internally
+          searchLatencyMs: metrics.latencyMs,
+          totalLatencyMs: Date.now() - startTime,
+          embeddingCached: metrics.embeddingCached,
+          resultCount: results.length,
+          hybridSearch: true,
+        },
+      };
+    } catch (error) {
+      functions.logger.warn(
+        "Azure AI Search failed, falling back to in-memory:",
+        error
+      );
+      // Fall through to in-memory search
+    }
+  }
+
+  // Fallback to in-memory search
   // Generate query embedding
   const {
     embedding: queryEmbedding,
@@ -251,25 +260,13 @@ export async function vectorSearch(
   } = await getQueryEmbedding(query);
 
   const searchStartTime = Date.now();
-
-  // Select search method
-  let results: VectorSearchResult[];
-  let searchMethod: string;
-
-  if (VECTOR_SEARCH_CONFIG.useFirebaseVectorSearch) {
-    searchMethod = "firebase_vector_search";
-    results = await searchWithFirebaseVectorSearch(queryEmbedding, options);
-  } else {
-    searchMethod = "in_memory";
-    results = await searchInMemory(queryEmbedding, options);
-  }
-
+  const results = await searchInMemory(queryEmbedding, options);
   const searchLatencyMs = Date.now() - searchStartTime;
   const totalLatencyMs = Date.now() - startTime;
 
   // Log search metrics
   await logMetrics("vector_search", {
-    provider: searchMethod,
+    provider: "in_memory",
     latencyMs: totalLatencyMs,
     embeddingCached,
     resultCount: results.length,
@@ -278,12 +275,13 @@ export async function vectorSearch(
   return {
     results,
     metrics: {
-      searchMethod,
+      searchMethod: "in_memory",
       embeddingLatencyMs,
       searchLatencyMs,
       totalLatencyMs,
       embeddingCached,
       resultCount: results.length,
+      hybridSearch: false,
     },
   };
 }
@@ -401,7 +399,16 @@ export async function getVectorSearchStats(): Promise<{
   categories: Record<string, number>;
   searchMethod: string;
   isOptimized: boolean;
+  azureStats?: {
+    documentCount: number;
+    storageSize: number;
+    isAvailable: boolean;
+  };
 }> {
+  // Check Azure Search availability first
+  const azureAvailable = isAzureSearchAvailable();
+
+  // Get Firestore stats (for fallback/metadata)
   const chunksSnapshot = await db
     .collection(VECTOR_SEARCH_CONFIG.embeddingsCollection)
     .count()
@@ -424,16 +431,21 @@ export async function getVectorSearchStats(): Promise<{
 
   const totalVectors = chunksSnapshot.data().count;
 
+  // Determine search method and optimization status
+  let searchMethod = "in_memory";
+  let isOptimized = totalVectors <= VECTOR_SEARCH_CONFIG.maxVectorsForInMemory;
+
+  if (azureAvailable && VECTOR_SEARCH_CONFIG.useAzureSearch) {
+    searchMethod = "azure_ai_search";
+    isOptimized = true; // Azure AI Search is always optimized (HNSW)
+  }
+
   return {
     totalVectors,
     totalDocuments: docsSnapshot.data().count,
     categories,
-    searchMethod: VECTOR_SEARCH_CONFIG.useFirebaseVectorSearch
-      ? "firebase_vector_search"
-      : "in_memory",
-    isOptimized:
-      VECTOR_SEARCH_CONFIG.useFirebaseVectorSearch ||
-      totalVectors <= VECTOR_SEARCH_CONFIG.maxVectorsForInMemory,
+    searchMethod,
+    isOptimized,
   };
 }
 

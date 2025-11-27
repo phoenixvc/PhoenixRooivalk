@@ -29,6 +29,11 @@
  * - vectorSearchDocs: Optimized vector similarity search
  * - getVectorStats: Get vector search statistics
  *
+ * Azure AI Search Functions (from ./azure-search.ts):
+ * - azureSearchDocs: Azure AI Search with hybrid search
+ * - setupAzureIndex: Create/update Azure Search index (admin)
+ * - getAzureStats: Get Azure Search index statistics
+ *
  * Build-Time Indexing Functions (from ./build-index.ts):
  * - buildTimeIndex: Index documentation during build
  * - getBuildIndexStatus: Get build indexing status
@@ -70,6 +75,13 @@ export {
 
 // Export Vector Search functions
 export { vectorSearchDocs, getVectorStats } from "./vector-search";
+
+// Export Azure AI Search functions
+export {
+  azureSearchDocs,
+  setupAzureIndex,
+  getAzureStats,
+} from "./azure-search";
 
 // Export Build-Time Indexing functions
 export {
