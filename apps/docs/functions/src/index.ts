@@ -15,6 +15,39 @@
  * - summarizeContent: Content summarization
  * - reviewDocumentImprovement: Admin review of suggestions
  * - getPendingImprovements: Get pending suggestions (admin)
+ *
+ * RAG Functions (from ./rag/):
+ * - indexAllDocumentation: Index all documentation for RAG
+ * - reindexDocument: Reindex a single document
+ * - deleteFromIndex: Remove document from index
+ * - getIndexStats: Get indexing statistics
+ * - searchDocs: Semantic search over documentation
+ * - askDocumentation: RAG-powered Q&A with source citations
+ * - getSuggestedQuestions: Get contextual question suggestions
+ *
+ * Vector Search Functions (from ./vector-search.ts):
+ * - vectorSearchDocs: Optimized vector similarity search
+ * - getVectorStats: Get vector search statistics
+ *
+ * Azure AI Search Functions (from ./azure-search.ts):
+ * - azureSearchDocs: Azure AI Search with hybrid search
+ * - setupAzureIndex: Create/update Azure Search index (admin)
+ * - getAzureStats: Get Azure Search index statistics
+ *
+ * Build-Time Indexing Functions (from ./build-index.ts):
+ * - buildTimeIndex: Index documentation during build
+ * - getBuildIndexStatus: Get build indexing status
+ * - checkIndexStaleness: Check which docs need re-indexing
+ *
+ * Cache Functions (from ./cache.ts):
+ * - cleanupExpiredCache: Scheduled cleanup of expired cache entries
+ * - getAICacheStats: Get cache statistics (admin)
+ * - clearAICache: Clear cache collection (admin)
+ *
+ * Monitoring Functions (from ./monitoring.ts):
+ * - getAIMonitoringStats: Get AI usage statistics (admin)
+ * - getAIErrors: Get recent AI errors (admin)
+ * - checkAIAlerts: Scheduled alert checking
  */
 
 // Export AI functions
@@ -28,6 +61,44 @@ export {
   reviewDocumentImprovement,
   getPendingImprovements,
 } from "./ai";
+
+// Export RAG functions
+export {
+  indexAllDocumentation,
+  reindexDocument,
+  deleteFromIndex,
+  getIndexStats,
+  searchDocs,
+  askDocumentation,
+  getSuggestedQuestions,
+} from "./rag";
+
+// Export Vector Search functions
+export { vectorSearchDocs, getVectorStats } from "./vector-search";
+
+// Export Azure AI Search functions
+export {
+  azureSearchDocs,
+  setupAzureIndex,
+  getAzureStats,
+} from "./azure-search";
+
+// Export Build-Time Indexing functions
+export {
+  buildTimeIndex,
+  getBuildIndexStatus,
+  checkIndexStaleness,
+} from "./build-index";
+
+// Export Cache functions
+export { cleanupExpiredCache, getAICacheStats, clearAICache } from "./cache";
+
+// Export Monitoring functions
+export {
+  getAIMonitoringStats,
+  getAIErrors,
+  checkAIAlerts,
+} from "./monitoring";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";

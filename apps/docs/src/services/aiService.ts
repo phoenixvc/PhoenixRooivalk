@@ -56,10 +56,39 @@ export interface PendingImprovement {
   userEmail?: string;
   suggestions: string;
   status: "pending" | "approved" | "rejected" | "implemented";
-  createdAt: any;
-  reviewedAt?: any;
+  createdAt: unknown;
+  reviewedAt?: unknown;
   reviewedBy?: string;
   reviewNotes?: string;
+}
+
+// RAG Response types
+export interface RAGSource {
+  docId: string;
+  title: string;
+  section: string;
+  relevance: number;
+}
+
+export interface RAGResponse {
+  answer: string;
+  sources: RAGSource[];
+  confidence: "high" | "medium" | "low";
+  tokensUsed?: number;
+}
+
+export interface SearchResultItem {
+  docId: string;
+  title: string;
+  section: string;
+  content: string;
+  score: number;
+}
+
+export interface IndexStats {
+  totalChunks: number;
+  totalDocuments: number;
+  categories: Record<string, number>;
 }
 
 // AI Feature types
@@ -69,7 +98,8 @@ export type AIFeature =
   | "recommendations"
   | "improvements"
   | "market"
-  | "summary";
+  | "summary"
+  | "ask";
 
 // Error types
 export class AIError extends Error {
@@ -325,6 +355,119 @@ class AIService {
       >(this.functions!, "getPendingImprovements");
 
       const result = await getPendingFn({ limit });
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Ask questions about documentation using RAG
+   */
+  async askDocumentation(
+    question: string,
+    options?: {
+      category?: string;
+      format?: "detailed" | "concise";
+      history?: Array<{ role: "user" | "assistant"; content: string }>;
+    }
+  ): Promise<RAGResponse> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const askDocsFn = httpsCallable<
+        {
+          question: string;
+          category?: string;
+          format?: string;
+          history?: Array<{ role: string; content: string }>;
+        },
+        RAGResponse
+      >(this.functions!, "askDocumentation");
+
+      const result = await askDocsFn({
+        question,
+        category: options?.category,
+        format: options?.format,
+        history: options?.history,
+      });
+
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Search documentation using semantic search
+   */
+  async searchDocumentation(
+    query: string,
+    options?: { category?: string; topK?: number }
+  ): Promise<SearchResultItem[]> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const searchFn = httpsCallable<
+        { query: string; category?: string; topK?: number },
+        { results: SearchResultItem[] }
+      >(this.functions!, "searchDocs");
+
+      const result = await searchFn({
+        query,
+        category: options?.category,
+        topK: options?.topK,
+      });
+
+      return result.data.results;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get suggested questions based on current context
+   */
+  async getSuggestedQuestions(
+    docId?: string,
+    category?: string
+  ): Promise<{ suggestions: string[]; docInfo: { title: string; category: string } | null }> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const getSuggestionsFn = httpsCallable<
+        { docId?: string; category?: string },
+        { suggestions: string[]; docInfo: { title: string; category: string } | null }
+      >(this.functions!, "getSuggestedQuestions");
+
+      const result = await getSuggestionsFn({ docId, category });
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get RAG index statistics (admin only)
+   */
+  async getIndexStats(): Promise<IndexStats> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const getStatsFn = httpsCallable<Record<string, never>, IndexStats>(
+        this.functions!,
+        "getIndexStats"
+      );
+
+      const result = await getStatsFn({});
       return result.data;
     } catch (error) {
       this.handleError(error);
