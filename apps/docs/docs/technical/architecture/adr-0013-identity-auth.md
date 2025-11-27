@@ -372,6 +372,30 @@ Protected Resources
 4. Migrate remaining users (optional)
 5. For classified: Deploy Keycloak on-prem
 
+### Future Consideration: Cognitive Mesh
+
+Cognitive Mesh provides **built-in zero-trust RBAC** as part of its architecture, eliminating the need for custom claims management.
+
+| Aspect | Firebase Auth | Cognitive Mesh |
+|--------|--------------|----------------|
+| **RBAC** | Custom claims (manual) | Built-in per-layer RBAC |
+| **Audit** | Firebase logs (manual export) | Comprehensive audit trails |
+| **MFA** | TOTP only | Full zero-trust stack |
+| **Compliance** | Manual | NIST AI RMF, GDPR, EU AI Act |
+| **Stack** | Firebase (TypeScript) | .NET 9.0+ |
+
+**Repository**: [github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+**When to Consider**:
+- Defense contracts mandate NIST AI RMF compliance
+- FIDO2 hardware keys required (CM supports full zero-trust)
+- Enterprise RBAC complexity exceeds Firebase custom claims
+- AI features need per-operation audit logging
+
+**Current CM Status**: ~40% complete. Security & Zero-Trust Framework complete; identity features in Adaptive Agency Framework (~25% complete).
+
+**Resource Trade-off Note**: Firebase Auth remains appropriate until compliance requirements escalate. Development time spent on advanced auth here delays CM maturation.
+
 ---
 
 ## Appendix
@@ -383,6 +407,7 @@ For detailed weighted analysis, RBAC matrices, and federation flows, see:
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0014: Service-to-Service Auth](./adr-0014-service-auth.md)

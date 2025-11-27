@@ -355,6 +355,30 @@ logger.info('RAG query', {
 
 ## Migration Path (If Needed)
 
+### To Cognitive Mesh (Full Platform Shift)
+
+Cognitive Mesh represents a **complete platform migration**, not just a runtime change. It would replace Firebase Functions with a .NET-based 5-layer hexagonal architecture.
+
+| Aspect | Firebase Functions | Cognitive Mesh |
+|--------|-------------------|----------------|
+| **Stack** | TypeScript/Node.js | C#/.NET 9.0+ |
+| **Architecture** | Serverless functions | 5-layer hexagonal |
+| **Compliance** | Manual | Built-in (NIST AI RMF, GDPR) |
+| **Auth** | Firebase Auth | Zero-trust RBAC |
+
+**Repository**: [github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+**When to Consider**:
+- Defense contracts require built-in compliance
+- Multi-agent orchestration exceeds current capabilities
+- Enterprise RBAC and audit logging mandated
+- .NET backend integration planned
+
+**Effort**: 8-12 weeks (full platform migration)  
+**Risk**: High (different stack, significant rewrite)
+
+**Resource Trade-off Note**: Time spent here planning CM migration is time not spent maturing CM itself (~40% complete). Current Firebase Functions approach remains valid until compliance requirements escalate.
+
 ### To Azure Functions
 
 1. Create Azure Functions project
@@ -391,6 +415,7 @@ For detailed weighted analysis, benchmarks, and cost projections, see:
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture)
 - [ADR 0011: Vector Database Selection](./adr-0011-vector-database-selection.md)
 - [ADR 0013: Identity & Auth Strategy](./adr-0013-identity-auth.md)

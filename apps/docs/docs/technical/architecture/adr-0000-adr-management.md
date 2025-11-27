@@ -290,7 +290,9 @@ For AI-related ADRs, always evaluate **Cognitive Mesh** (our in-house enterprise
 - Community ecosystem and plugins needed
 - When cognitive-mesh features are still in development
 
-**Current Cognitive Mesh Status**: In development, not yet deployed. Code exists but requires finalization before production use.
+**Current Cognitive Mesh Status**: In development (~40% complete), not yet deployed. Core Security & Zero-Trust Framework complete, agentic and value layers in progress. See [ADR 0000 Appendix](./adr-0000-appendix-platform-decision-matrix.md#cognitive-mesh-completion-status) for detailed PRD completion status.
+
+**Resource Trade-off Note**: Development resources for Phoenix Rooivalk and Cognitive Mesh are shared. Time invested in advanced docs site features delays CM maturation. Prioritize CM development unless docs site work is blocking demos or core functionality.
 
 ---
 
