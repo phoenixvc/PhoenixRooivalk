@@ -53,6 +53,8 @@ export const AVAILABLE_INTERESTS = [
   "software",
   "ai",
   "machine-learning",
+  "rag",
+  "llm",
   "compliance",
   "itar",
   "defense",
@@ -340,15 +342,15 @@ export const INTERNAL_USER_PROFILES: Record<string, UserProfile> = {
     ],
   },
 
-  // Eben - Financial, Business, Executive
+  // Eben - Financial, Business, Executive, Technical - Software/AI
   eben: {
     name: "Eben",
-    roles: ["Financial", "Business", "Executive"],
-    focusAreas: ["executive", "business"],
-    interests: ["roi", "investment", "strategy", "compliance"],
+    roles: ["Financial", "Business", "Executive", "Technical - Software/AI"],
+    focusAreas: ["executive", "business", "technical", "research"],
+    interests: ["roi", "investment", "strategy", "compliance", "ai", "rag", "llm", "software"],
     experienceLevel: "advanced",
     profileDescription:
-      "Financial and business executive focused on funding, investment, and strategic planning",
+      "Financial and business executive with technical expertise in AI/RAG systems, focused on funding, investment, and AI-driven solutions",
     recommendedPaths: [
       {
         docId: "/docs/executive/investor-executive-summary",
@@ -369,6 +371,12 @@ export const INTERNAL_USER_PROFILES: Record<string, UserProfile> = {
         reason: "Return on investment metrics",
       },
       {
+        docId: "/docs/technical/ai-ml-integration",
+        title: "AI/ML Integration",
+        priority: 5,
+        reason: "Machine learning and RAG system architecture",
+      },
+      {
         docId: "/docs/business/business-model",
         title: "Business Model",
         priority: 5,
@@ -379,6 +387,12 @@ export const INTERNAL_USER_PROFILES: Record<string, UserProfile> = {
         title: "Executive Summary",
         priority: 5,
         reason: "High-level project overview",
+      },
+      {
+        docId: "/docs/technical/software-architecture",
+        title: "Software Architecture",
+        priority: 4,
+        reason: "Software design and AI system structure",
       },
       {
         docId: "/docs/business/12-month-business-plan",
@@ -399,10 +413,10 @@ export const INTERNAL_USER_PROFILES: Record<string, UserProfile> = {
         reason: "Capital needs and use of funds",
       },
       {
-        docId: "/docs/business/traction-metrics",
-        title: "Traction Metrics",
+        docId: "/docs/research/autonomous-systems",
+        title: "Autonomous Systems Research",
         priority: 4,
-        reason: "Key performance indicators",
+        reason: "R&D on AI and autonomous capabilities",
       },
       {
         docId: "/docs/legal/compliance-framework",
