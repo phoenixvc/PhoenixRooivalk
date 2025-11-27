@@ -6,7 +6,7 @@
  * - cleanupInactiveSessions: Removes sessions with no activity
  * - aggregateDailyStats: Aggregates and archives old daily stats
  *
- * AI Functions (from ./ai.ts):
+ * AI Functions (from ./ai/ module - uses AI Foundry with OpenAI fallback):
  * - analyzeCompetitors: Competitor research and analysis
  * - generateSWOT: SWOT analysis generation
  * - getReadingRecommendations: AI-powered reading suggestions
@@ -30,7 +30,7 @@
  * - vectorSearchDocs: Optimized vector similarity search
  * - getVectorStats: Get vector search statistics
  *
- * Azure AI Search Functions (from ./azure-search.ts):
+ * Azure AI Search Functions (from ./azure-search/ module):
  * - azureSearchDocs: Azure AI Search with hybrid search
  * - setupAzureIndex: Create/update Azure Search index (admin)
  * - getAzureStats: Get Azure Search index statistics
