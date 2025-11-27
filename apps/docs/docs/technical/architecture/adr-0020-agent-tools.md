@@ -648,6 +648,41 @@ export {
 
 ---
 
+## Option: Cognitive Mesh Tools (Future)
+
+### Alternative Framework
+
+| Aspect | Details |
+|--------|---------|
+| **Framework** | Cognitive Mesh Agency Layer |
+| **Validation** | Built-in governance and RBAC |
+| **Platform** | C#/.NET 9.0+ |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Enterprise-grade tool governance
+- RBAC per tool with audit logging
+- Built-in rate limiting and quota management
+- Tool usage compliance tracking
+- Ethical guardrails for tool invocation
+- Multi-tenant tool isolation
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development
+- Migration effort from LangChain tools
+
+**When to Consider**:
+- When tool governance becomes critical
+- When audit trails for tool usage are required
+- When multi-tenant tool isolation is needed
+- When compliance mandates tool-level RBAC
+
+**Current Status**: In development. Evaluate when tool governance requirements increase.
+
+---
+
 ## Consequences
 
 ### Positive
@@ -677,9 +712,11 @@ export {
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

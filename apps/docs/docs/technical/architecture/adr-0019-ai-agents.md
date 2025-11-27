@@ -535,17 +535,56 @@ export const agentQuery = functions
 
 ---
 
+### Option 4: Cognitive Mesh (Future)
+
+| Aspect | Details |
+|--------|---------|
+| **Framework** | In-house enterprise platform |
+| **Reasoning** | 5-layer cognitive architecture |
+| **Tool calling** | Agency Layer with governance |
+| **Platform** | C#/.NET 9.0+ |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Agency Layer designed for multi-agent orchestration
+- Metacognitive Layer for self-reflection and learning
+- Built-in ethical reasoning and governance
+- Enterprise compliance (NIST AI RMF, GDPR, EU AI Act)
+- Zero-trust security with RBAC per agent
+- Comprehensive audit logging of agent actions
+- Cognitive Engines for specialized reasoning
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development, not yet deployed
+- Migration effort from LangChain agents
+- Higher operational complexity
+
+**When to Consider**:
+- When enterprise compliance becomes mandatory
+- When ethical AI governance is required for agents
+- When multi-agent coordination becomes complex
+- When audit trails for agent decisions are mandated
+- When agents need self-reflection capabilities
+
+**Current Status**: In development. Agency and Metacognitive layers are core features. Evaluate when compliance requirements increase.
+
+---
+
 ## Rationale
 
-| Factor | LangChain | Custom | Assistants |
-|--------|-----------|--------|------------|
-| **Development speed** | ✅ Fast | ❌ Slow | ✅ Fast |
-| **Control** | ⚠️ Medium | ✅ Full | ❌ Limited |
-| **Azure compatibility** | ✅ Yes | ✅ Yes | ❌ No |
-| **Observability** | ✅ LangSmith | ⚠️ Manual | ⚠️ Limited |
-| **Community** | ✅ Large | ❌ None | ⚠️ Growing |
+| Factor | LangChain | Custom | Assistants | Cognitive Mesh |
+|--------|-----------|--------|------------|----------------|
+| **Development speed** | ✅ Fast | ❌ Slow | ✅ Fast | ⚠️ Medium |
+| **Control** | ⚠️ Medium | ✅ Full | ❌ Limited | ✅ Full |
+| **Azure compatibility** | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
+| **Observability** | ✅ LangSmith | ⚠️ Manual | ⚠️ Limited | ✅ Built-in |
+| **Community** | ✅ Large | ❌ None | ⚠️ Growing | ❌ Internal |
+| **Compliance** | ⚠️ Manual | ❌ None | ⚠️ Limited | ✅ Built-in |
+| **Ethical governance** | ❌ None | ❌ None | ❌ None | ✅ Native |
 
-**Decision**: LangChain provides the best balance of capability and development speed while maintaining Azure compatibility.
+**Decision**: LangChain provides the best balance of capability and development speed while maintaining Azure compatibility. Cognitive Mesh becomes the preferred option when enterprise compliance or ethical AI governance is required.
 
 ---
 
@@ -599,10 +638,12 @@ export const agentQuery = functions
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0020: Agent Tools Framework](./adr-0020-agent-tools.md)
 - [ADR 0022: AI Workflows](./adr-0022-ai-workflows.md)
 - [ADR 0023: AI Observability](./adr-0023-ai-observability.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

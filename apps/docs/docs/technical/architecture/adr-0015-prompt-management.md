@@ -245,17 +245,53 @@ Focus areas: {{focusAreas}}`,
 
 ---
 
+### Option 5: Cognitive Mesh (Future)
+
+| Aspect | Details |
+|--------|---------|
+| **Structure** | Reasoning Layer with cognitive engines |
+| **Versioning** | Built-in version management |
+| **Discovery** | Centralized registry with governance |
+| **Platform** | C#/.NET 9.0+ (different tech stack) |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Enterprise-grade prompt governance
+- Built-in compliance (NIST AI RMF, GDPR, EU AI Act)
+- Zero-trust security with RBAC
+- Comprehensive audit logging
+- Ethical reasoning layer built-in
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development, not yet deployed
+- Requires migration from Firebase Functions
+- Higher operational complexity
+
+**When to Consider**:
+- When enterprise compliance becomes mandatory
+- When audit requirements increase
+- When ethical AI governance is required
+- When scaling to multi-tenant enterprise deployments
+
+**Current Status**: In development. Evaluate when deploying to regulated environments.
+
+---
+
 ## Rationale
 
 ### Why Centralized Templates?
 
-| Factor | Templates | Config File | Database | Inline |
-|--------|-----------|-------------|----------|--------|
-| **Type safety** | ✅ Full | ❌ None | ❌ Runtime | ⚠️ Partial |
-| **Version tracking** | ✅ Built-in | ⚠️ Git only | ✅ Built-in | ⚠️ Git only |
-| **RAG integration** | ✅ Native | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
-| **IDE support** | ✅ Full | ❌ Limited | ❌ None | ✅ Partial |
-| **Optimization** | ✅ Easy | ⚠️ Medium | ✅ Easy | ❌ Hard |
+| Factor | Templates | Config File | Database | Inline | Cognitive Mesh |
+|--------|-----------|-------------|----------|--------|----------------|
+| **Type safety** | ✅ Full | ❌ None | ❌ Runtime | ⚠️ Partial | ✅ Full |
+| **Version tracking** | ✅ Built-in | ⚠️ Git only | ✅ Built-in | ⚠️ Git only | ✅ Built-in |
+| **RAG integration** | ✅ Native | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ✅ Native |
+| **IDE support** | ✅ Full | ❌ Limited | ❌ None | ✅ Partial | ✅ Full |
+| **Optimization** | ✅ Easy | ⚠️ Medium | ✅ Easy | ❌ Hard | ✅ Easy |
+| **Compliance** | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ❌ None | ✅ Built-in |
+| **Stack fit** | ✅ TypeScript | ✅ Any | ✅ Firebase | ✅ Current | ⚠️ C#/.NET |
 
 **Decision**: Centralized templates provide the best balance of type safety, developer experience, and optimization capability.
 
@@ -480,9 +516,11 @@ describe("Prompt Templates", () => {
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
 - [ADR 0017: Context Management](./adr-0017-context-management.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

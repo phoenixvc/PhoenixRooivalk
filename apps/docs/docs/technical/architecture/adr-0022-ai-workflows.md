@@ -772,6 +772,46 @@ const resilientWorkflow = RunnableSequence.from([
 
 ---
 
+## Option: Cognitive Mesh Workflows (Future)
+
+### Alternative Framework
+
+| Aspect | Details |
+|--------|---------|
+| **Framework** | Cognitive Mesh Business Layer |
+| **Orchestration** | Workflow Orchestrators with governance |
+| **State** | Built-in workflow state with compliance |
+| **Platform** | C#/.NET 9.0+ |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Enterprise-grade workflow orchestration
+- Built-in workflow versioning and governance
+- Compliance tracking per workflow step
+- Audit trails for all workflow transitions
+- Checkpoint and rollback capabilities
+- Multi-tenant workflow isolation
+- Timeout and budget management built-in
+- Human-in-the-loop integration for critical decisions
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development, not yet deployed
+- Migration effort from LangChain workflows
+- Higher operational complexity
+
+**When to Consider**:
+- When workflow governance becomes critical
+- When audit trails for workflow steps are mandated
+- When human-in-the-loop approval is required
+- When compliance tracking per step is needed
+- When workflow rollback capabilities are essential
+
+**Current Status**: In development. Business Layer with Workflow Orchestrators is a core feature. Evaluate when compliance requirements increase.
+
+---
+
 ## Consequences
 
 ### Positive
@@ -802,10 +842,12 @@ const resilientWorkflow = RunnableSequence.from([
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0020: Agent Tools Framework](./adr-0020-agent-tools.md)
 - [ADR 0023: AI Observability](./adr-0023-ai-observability.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

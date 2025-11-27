@@ -617,17 +617,55 @@ export const cleanupExpiredSessions = functions.pubsub
 
 ---
 
+### Option 4: Cognitive Mesh (Future)
+
+| Aspect | Details |
+|--------|---------|
+| **Storage** | Cognitive Memory Layer |
+| **Persistence** | Multi-tier with governance |
+| **Scalability** | Enterprise-grade |
+| **Platform** | C#/.NET 9.0+ |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Built-in memory governance and retention policies
+- User-scoped memory with RBAC
+- Audit trails for memory access
+- Multi-tier memory (working, episodic, semantic)
+- Memory summarization with compliance tracking
+- GDPR-compliant data handling built-in
+- Privacy controls and right-to-be-forgotten support
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development, not yet deployed
+- Migration effort from Firestore memory
+- Higher operational complexity
+
+**When to Consider**:
+- When GDPR compliance for memory is mandated
+- When audit trails for conversation access are required
+- When multi-tier memory architecture is needed
+- When user privacy controls are critical
+
+**Current Status**: In development. Evaluate when privacy and compliance requirements increase.
+
+---
+
 ## Rationale
 
-| Factor | Firestore | Redis | In-Memory |
-|--------|-----------|-------|-----------|
-| **Persistence** | ✅ Native | ⚠️ Config needed | ❌ None |
-| **Stack fit** | ✅ Firebase native | ⚠️ New service | ✅ No deps |
-| **Multi-turn** | ✅ Yes | ✅ Yes | ❌ No |
-| **Cost** | ⚠️ Per read/write | ⚠️ Instance cost | ✅ Free |
-| **Complexity** | ⚠️ Medium | ⚠️ Medium | ✅ Low |
+| Factor | Firestore | Redis | In-Memory | Cognitive Mesh |
+|--------|-----------|-------|-----------|----------------|
+| **Persistence** | ✅ Native | ⚠️ Config needed | ❌ None | ✅ Multi-tier |
+| **Stack fit** | ✅ Firebase native | ⚠️ New service | ✅ No deps | ⚠️ C#/.NET |
+| **Multi-turn** | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
+| **Cost** | ⚠️ Per read/write | ⚠️ Instance cost | ✅ Free | ⚠️ Infrastructure |
+| **Complexity** | ⚠️ Medium | ⚠️ Medium | ✅ Low | ⚠️ High |
+| **Privacy/GDPR** | ⚠️ Manual | ⚠️ Manual | ❌ None | ✅ Built-in |
+| **Audit trails** | ⚠️ Manual | ❌ None | ❌ None | ✅ Built-in |
 
-**Decision**: Firestore provides the best balance of persistence, Firebase integration, and feature richness for conversation memory.
+**Decision**: Firestore provides the best balance of persistence, Firebase integration, and feature richness for conversation memory. Cognitive Mesh becomes the preferred option when privacy compliance requirements increase.
 
 ---
 
@@ -694,9 +732,11 @@ service cloud.firestore {
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0013: Identity & Auth Strategy](./adr-0013-identity-auth.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

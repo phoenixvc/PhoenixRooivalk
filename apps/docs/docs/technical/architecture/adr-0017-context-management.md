@@ -384,18 +384,54 @@ function injectContext(
 
 ---
 
+### Option 4: Cognitive Mesh (Future)
+
+| Aspect | Details |
+|--------|---------|
+| **Structure** | Knowledge Layer with contextual reasoning |
+| **Flexibility** | Dynamic context assembly with governance |
+| **Token efficiency** | Optimized via knowledge graphs |
+| **Platform** | C#/.NET 9.0+ (different tech stack) |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Enterprise-grade context governance
+- Knowledge graph-based context relationships
+- Built-in token budget optimization
+- Audit trail for context usage
+- Multi-tenant context isolation
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript)
+- Currently in development, not yet deployed
+- Higher operational complexity
+- Migration effort from current TypeScript implementation
+
+**When to Consider**:
+- When context governance becomes critical
+- When multi-tenant isolation is required
+- When audit trails for context usage are mandated
+- When knowledge graph relationships would improve context quality
+
+**Current Status**: In development. Evaluate when compliance requirements increase.
+
+---
+
 ## Rationale
 
 ### Why Layered Context?
 
-| Factor | Layered | Monolithic | Dynamic-Only |
-|--------|---------|------------|--------------|
-| **Token efficiency** | ✅ Optimal | ❌ Wasteful | ⚠️ Variable |
-| **Consistency** | ✅ Base + dynamic | ✅ Always same | ❌ Query-dependent |
-| **Flexibility** | ✅ Per-feature | ❌ None | ⚠️ Limited |
-| **Reliability** | ✅ Fallback layers | ✅ Always available | ❌ Retrieval-dependent |
+| Factor | Layered | Monolithic | Dynamic-Only | Cognitive Mesh |
+|--------|---------|------------|--------------|----------------|
+| **Token efficiency** | ✅ Optimal | ❌ Wasteful | ⚠️ Variable | ✅ Optimized |
+| **Consistency** | ✅ Base + dynamic | ✅ Always same | ❌ Query-dependent | ✅ Governed |
+| **Flexibility** | ✅ Per-feature | ❌ None | ⚠️ Limited | ✅ Full |
+| **Reliability** | ✅ Fallback layers | ✅ Always available | ❌ Retrieval-dependent | ✅ Resilient |
+| **Governance** | ⚠️ Manual | ⚠️ Manual | ❌ None | ✅ Built-in |
+| **Stack fit** | ✅ TypeScript | ✅ TypeScript | ✅ TypeScript | ⚠️ C#/.NET |
 
-**Decision**: Layered context provides the best balance of efficiency, consistency, and flexibility for our diverse AI features.
+**Decision**: Layered context provides the best balance of efficiency, consistency, and flexibility for our diverse AI features. Cognitive Mesh remains an option when enterprise governance requirements increase.
 
 ---
 
@@ -595,9 +631,11 @@ logger.info("Context assembled", {
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0015: Prompt Management](./adr-0015-prompt-management.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 

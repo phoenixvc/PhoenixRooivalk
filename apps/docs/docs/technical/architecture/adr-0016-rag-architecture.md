@@ -414,17 +414,53 @@ async function getReadingRecommendations(
 
 ---
 
+### Option 5: Cognitive Mesh (Future)
+
+| Aspect | Details |
+|--------|---------|
+| **Vector Search** | Integrated RAG in Foundation Layer |
+| **Infrastructure** | C#/.NET enterprise platform |
+| **Hybrid** | Multi-source retrieval with governance |
+
+**Repository**: https://github.com/justaghost/cognitive-mesh
+
+**Pros**:
+- Enterprise-grade RAG with compliance built-in
+- Zero-trust security for document access
+- RBAC for retrieval permissions
+- Audit logging for all queries
+- Multi-tenant isolation
+- Integrated with reasoning engines
+
+**Cons**:
+- Different tech stack (C#/.NET vs TypeScript/Firebase)
+- Currently in development
+- Requires infrastructure migration
+- Higher operational complexity
+
+**When to Consider**:
+- When document access requires RBAC controls
+- When query audit trails are mandated
+- When deploying to regulated industries (defense, finance)
+- When multi-tenant isolation is required
+
+**Current Status**: In development. RAG capabilities exist but not production-ready.
+
+---
+
 ## Rationale
 
 ### Why Azure AI Search?
 
-| Factor | Azure Search | Firestore | Pinecone | pgvector |
-|--------|--------------|-----------|----------|----------|
-| **Performance** | ✅ Fast | ❌ Slow | ✅ Fastest | ⚠️ Medium |
-| **Stack fit** | ✅ Azure AI | ✅ Firebase | ⚠️ New vendor | ⚠️ New infra |
-| **Hybrid search** | ✅ Native | ❌ None | ⚠️ Limited | ⚠️ Extension |
-| **Cost** | ⚠️ Medium | ✅ Low | ⚠️ Medium | ✅ Low |
-| **Maintenance** | ✅ Managed | ✅ Managed | ✅ Managed | ⚠️ Self |
+| Factor | Azure Search | Firestore | Pinecone | pgvector | Cognitive Mesh |
+|--------|--------------|-----------|----------|----------|----------------|
+| **Performance** | ✅ Fast | ❌ Slow | ✅ Fastest | ⚠️ Medium | ✅ Fast |
+| **Stack fit** | ✅ Azure AI | ✅ Firebase | ⚠️ New vendor | ⚠️ New infra | ⚠️ C#/.NET |
+| **Hybrid search** | ✅ Native | ❌ None | ⚠️ Limited | ⚠️ Extension | ✅ Native |
+| **Cost** | ⚠️ Medium | ✅ Low | ⚠️ Medium | ✅ Low | ⚠️ Self-hosted |
+| **Maintenance** | ✅ Managed | ✅ Managed | ✅ Managed | ⚠️ Self | ⚠️ Self |
+| **Compliance** | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ✅ Built-in |
+| **RBAC** | ⚠️ External | ⚠️ External | ❌ Limited | ⚠️ External | ✅ Native |
 
 **Decision**: Azure AI Search provides the best balance of performance, features, and integration with our existing Azure AI services.
 
@@ -634,10 +670,12 @@ logger.info("RAG search completed", {
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0011: Vector Database Selection](./adr-0011-vector-database-selection.md)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0015: Prompt Management](./adr-0015-prompt-management.md)
 - [ADR 0017: Context Management](./adr-0017-context-management.md)
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
 
 ---
 
