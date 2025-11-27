@@ -183,8 +183,8 @@ Phoenix Rooivalk has three main paths for implementing AI functionality:
 | Rank | Platform | Weighted Score | Percentage | Best For |
 |------|----------|----------------|------------|----------|
 | 🥇 **1** | **LangChain** | **3.76** | **75%** | Current development |
-| 🥈 2 | Custom TypeScript | 3.22 | 64% | Simple, performance-critical |
-| 🥉 3 | Cognitive Mesh | 3.43 | 69% | Future compliance needs |
+| 🥈 2 | Cognitive Mesh | 3.43 | 69% | Future compliance needs |
+| 🥉 3 | Custom TypeScript | 3.22 | 64% | Simple, performance-critical |
 
 ### Score Analysis
 
