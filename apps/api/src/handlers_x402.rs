@@ -235,7 +235,7 @@ async fn handle_paid_verification(
                 sqlx::Error::Database(db_err) => {
                     // SQLite error code 2067 = SQLITE_CONSTRAINT_UNIQUE
                     // Also check for constraint violation message patterns
-                    db_err.code().map_or(false, |c| c == "2067" || c == "1555")
+                    db_err.code().is_some_and(|c| c == "2067" || c == "1555")
                         || db_err.message().to_lowercase().contains("unique")
                         || db_err.message().to_lowercase().contains("constraint")
                 }
