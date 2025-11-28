@@ -2,7 +2,7 @@
  * NavbarProgressVisibility Component
  *
  * This component hides/shows the Progress navbar link based on user authentication state.
- * It uses CSS to toggle visibility of the navbar__link--progress element.
+ * It uses a data attribute on the document body to control visibility via CSS.
  */
 
 import React, { useEffect } from "react";
@@ -12,30 +12,27 @@ export function NavbarProgressVisibility(): React.ReactElement | null {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    // Find the Progress link in the navbar and toggle its visibility
-    const progressLinks = document.querySelectorAll(".navbar__link--progress");
-    progressLinks.forEach((progressLink) => {
-      // Find the parent navbar item (could be li or div)
-      const parentItem =
-        progressLink.closest(".navbar__item") || progressLink.closest("li");
-      if (parentItem) {
-        // Show if user is authenticated and not loading
-        if (!loading && user) {
-          (parentItem as HTMLElement).style.display = "";
-        } else {
-          (parentItem as HTMLElement).style.display = "none";
-        }
-      }
-    });
+    // Set a data attribute on the body to indicate authentication state
+    // This allows CSS to control visibility without direct DOM manipulation
+    if (!loading && user) {
+      document.body.setAttribute("data-user-authenticated", "true");
+    } else {
+      document.body.removeAttribute("data-user-authenticated");
+    }
   }, [user, loading]);
 
-  // Also add CSS to hide by default (before JavaScript runs)
+  // CSS to hide the Progress navbar item by default
+  // Only show when user is authenticated (data-user-authenticated attribute is present)
   return (
     <style>{`
-      /* Hide Progress navbar item by default until auth state is determined */
-      .navbar__item:has(.navbar__link--progress),
-      li:has(.navbar__link--progress) {
+      /* Hide Progress navbar item by default */
+      .navbar__link--progress {
         display: none !important;
+      }
+      
+      /* Show Progress navbar item only when user is authenticated */
+      body[data-user-authenticated="true"] .navbar__link--progress {
+        display: flex !important;
       }
     `}</style>
   );

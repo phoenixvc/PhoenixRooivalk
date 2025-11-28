@@ -167,7 +167,7 @@ export default function Home(): React.ReactElement {
 
         /* Comparison */
         .marketing .comparison-section { max-width: 1400px; margin: 0 auto; }
-        .marketing .comparison-table { overflow-x: auto; margin-top: 2rem; max-width: 1000px; margin-left: auto; margin-right: auto; }
+        .marketing .comparison-table { overflow-x: auto; margin: 2rem auto 0; max-width: 1000px; }
         .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
         .marketing th { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 1rem; text-align: left; font-weight: 800; }
         .marketing td { padding: 1rem; border-bottom: 1px solid rgba(249,115,22,0.1); }
