@@ -4,7 +4,7 @@
     echo "=== Firebase Config Check ===" && \
     echo "FIREBASE_API_KEY: ${FIREBASE_API_KEY:+SET}" && \
     echo "FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:+SET}" && \
-    npm ci && npm run build
+    pnpm install && pnpm run build
   """
   publish = "build"
 
