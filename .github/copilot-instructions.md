@@ -306,13 +306,15 @@ chore: Update dependencies to latest versions
 
 ### Architecture Decision Records (ADRs)
 
-When creating or restructuring ADRs, **ALWAYS** reference the canonical template:
+When creating or restructuring ADRs, **ALWAYS** reference the canonical
+template:
 
 ```
 apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
 ```
 
 **ADR Requirements:**
+
 1. Follow the exact structure defined in ADR-0000
 2. Include Executive Summary (Problem, Decision, Trade-off)
 3. Consider at least 3 options with comparison tables
@@ -325,8 +327,11 @@ apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
    - `D001-D999`: Development Decisions
 
 **Key Files:**
-- Template: `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
-- Index: `apps/docs/docs/technical/architecture/architecture-decision-records.md`
+
+- Template:
+  `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
+- Index:
+  `apps/docs/docs/technical/architecture/architecture-decision-records.md`
 - Location: `apps/docs/docs/technical/architecture/adr-XXXX-short-title.md`
 
 ### Code Comments

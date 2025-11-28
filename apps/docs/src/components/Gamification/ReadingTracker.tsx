@@ -41,7 +41,8 @@ export function ReadingTracker(): null {
       };
 
       const newTimeSpent = (currentDoc.timeSpentMs || 0) + additionalMs;
-      const totalTimeSpent = (progress.stats.totalTimeSpentMs || 0) + additionalMs;
+      const totalTimeSpent =
+        (progress.stats.totalTimeSpentMs || 0) + additionalMs;
 
       await updateProgress({
         docs: {
@@ -95,9 +96,9 @@ export function ReadingTracker(): null {
           const now = Date.now();
           if (now - lastAchievementCheckRef.current > 1000) {
             lastAchievementCheckRef.current = now;
-            const completedCount = Object.values(progress.docs).filter(
-              (d) => d.completed
-            ).length + 1; // +1 for the doc we just completed
+            const completedCount =
+              Object.values(progress.docs).filter((d) => d.completed).length +
+              1; // +1 for the doc we just completed
             checkAndUnlockAchievements(completedCount);
           }
         }
@@ -113,9 +114,7 @@ export function ReadingTracker(): null {
       return;
     }
 
-    const docId = location.pathname
-      .replace(/^\/docs\//, "")
-      .replace(/\/$/, "");
+    const docId = location.pathname.replace(/^\/docs\//, "").replace(/\/$/, "");
 
     // Reset time tracking for new doc
     currentDocIdRef.current = docId;
@@ -205,9 +204,7 @@ export function ReadingTracker(): null {
     }
 
     // Extract doc ID from pathname
-    const docId = location.pathname
-      .replace(/^\/docs\//, "")
-      .replace(/\/$/, "");
+    const docId = location.pathname.replace(/^\/docs\//, "").replace(/\/$/, "");
 
     let ticking = false;
 

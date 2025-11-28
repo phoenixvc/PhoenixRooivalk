@@ -7,7 +7,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { aiService, ReadingRecommendation, AIError } from "../../services/aiService";
+import {
+  aiService,
+  ReadingRecommendation,
+  AIError,
+} from "../../services/aiService";
 import "./ReadingRecommendations.css";
 
 interface ReadingRecommendationsProps {
@@ -31,7 +35,9 @@ export function ReadingRecommendations({
   autoRefresh = 0,
 }: ReadingRecommendationsProps): React.ReactElement | null {
   const { user, userProgress } = useAuth();
-  const [recommendations, setRecommendations] = useState<ReadingRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<
+    ReadingRecommendation[]
+  >([]);
   const [learningPath, setLearningPath] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +51,9 @@ export function ReadingRecommendations({
     setError(null);
 
     try {
-      const docId = currentDocId || (typeof window !== "undefined" ? window.location.pathname : "");
+      const docId =
+        currentDocId ||
+        (typeof window !== "undefined" ? window.location.pathname : "");
       const result = await aiService.getReadingRecommendations(docId);
 
       if (result.message) {
@@ -91,7 +99,7 @@ export function ReadingRecommendations({
   // Calculate reading progress stats
   const totalDocs = Object.keys(userProgress?.docs || {}).length;
   const completedDocs = Object.values(userProgress?.docs || {}).filter(
-    (doc: any) => doc.completed
+    (doc: any) => doc.completed,
   ).length;
 
   if (variant === "compact") {
@@ -126,7 +134,9 @@ export function ReadingRecommendations({
               <li key={rec.docId} className="reading-rec-item">
                 <a href={rec.docId} className="reading-rec-link">
                   <span className="reading-rec-number">{index + 1}</span>
-                  <span className="reading-rec-doc">{formatDocId(rec.docId)}</span>
+                  <span className="reading-rec-doc">
+                    {formatDocId(rec.docId)}
+                  </span>
                   <span className="reading-rec-score">
                     {Math.round(rec.relevanceScore * 100)}%
                   </span>
@@ -142,7 +152,9 @@ export function ReadingRecommendations({
             <div className="reading-rec-progress-bar">
               <div
                 className="reading-rec-progress-fill"
-                style={{ width: `${(completedDocs / Math.max(totalDocs, 1)) * 100}%` }}
+                style={{
+                  width: `${(completedDocs / Math.max(totalDocs, 1)) * 100}%`,
+                }}
               />
             </div>
             <span className="reading-rec-progress-text">
@@ -185,11 +197,7 @@ export function ReadingRecommendations({
         <>
           <div className="reading-rec-cards">
             {recommendations.map((rec, index) => (
-              <a
-                key={rec.docId}
-                href={rec.docId}
-                className="reading-rec-card"
-              >
+              <a key={rec.docId} href={rec.docId} className="reading-rec-card">
                 <div className="reading-rec-card-header">
                   <span className="reading-rec-card-number">#{index + 1}</span>
                   <span className="reading-rec-card-score">
@@ -224,7 +232,9 @@ export function ReadingRecommendations({
           <span className="reading-rec-stat-label">Progress</span>
         </div>
         <div className="reading-rec-stat">
-          <span className="reading-rec-stat-value">{recommendations.length}</span>
+          <span className="reading-rec-stat-value">
+            {recommendations.length}
+          </span>
           <span className="reading-rec-stat-label">Suggested</span>
         </div>
       </div>
@@ -246,9 +256,7 @@ function formatDocId(docId: string): string {
   formatted = formatted.replace(/[-_]/g, " ");
 
   // Capitalize words
-  formatted = formatted
-    .split("/")
-    .pop() || formatted;
+  formatted = formatted.split("/").pop() || formatted;
 
   formatted = formatted
     .split(" ")

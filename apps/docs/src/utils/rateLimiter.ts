@@ -20,7 +20,7 @@ const limiters: Map<string, RateLimitState> = new Map();
 export function checkRateLimit(
   key: string,
   maxCalls: number,
-  windowMs: number
+  windowMs: number,
 ): boolean {
   const now = Date.now();
   const state = limiters.get(key);
@@ -57,7 +57,7 @@ export function checkRateLimit(
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   fn: T,
-  intervalMs: number
+  intervalMs: number,
 ): (...args: Parameters<T>) => ReturnType<T> | undefined {
   let lastCall = 0;
 
@@ -76,7 +76,7 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   fn: T,
-  delayMs: number
+  delayMs: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -102,7 +102,7 @@ export class RateLimitedExecutor<T> {
 
   constructor(
     private readonly minIntervalMs: number,
-    private readonly maxQueueSize: number = 100
+    private readonly maxQueueSize: number = 100,
   ) {}
 
   async execute(fn: () => Promise<T>): Promise<T | null> {

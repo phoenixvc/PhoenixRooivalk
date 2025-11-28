@@ -32,7 +32,10 @@ export function AnalyticsTracker(): null {
     if (trackableHeight <= 0) {
       scrollDepthRef.current = 100;
     } else {
-      const depth = Math.min(100, Math.round((scrollTop / trackableHeight) * 100));
+      const depth = Math.min(
+        100,
+        Math.round((scrollTop / trackableHeight) * 100),
+      );
       if (depth > scrollDepthRef.current) {
         scrollDepthRef.current = depth;
         analytics.updateScrollDepth(depth);
@@ -54,12 +57,7 @@ export function AnalyticsTracker(): null {
     const pageTitle = document.title || currentPath;
 
     // Track page view
-    analytics.trackPageView(
-      currentPath,
-      pageTitle,
-      user?.uid || null,
-      !!user
-    );
+    analytics.trackPageView(currentPath, pageTitle, user?.uid || null, !!user);
   }, [location.pathname, user]);
 
   // Set up scroll tracking

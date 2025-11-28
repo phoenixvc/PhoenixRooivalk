@@ -79,7 +79,7 @@ export interface RAGResponse {
  */
 async function checkRateLimit(
   userId: string,
-  feature: string
+  feature: string,
 ): Promise<boolean> {
   const ref = db.collection("ai_rate_limits").doc(`${userId}_${feature}`);
   const doc = await ref.get();
@@ -119,7 +119,7 @@ export async function queryWithRAG(
     }>;
     responseFormat?: "detailed" | "concise";
     skipCache?: boolean;
-  }
+  },
 ): Promise<RAGResponse> {
   const {
     topK = 5,
@@ -164,7 +164,7 @@ export async function queryWithRAG(
   const context = relevantChunks
     .map(
       (chunk, i) =>
-        `[Source ${i + 1}: ${chunk.title} - ${chunk.section}]\n${chunk.content}`
+        `[Source ${i + 1}: ${chunk.title} - ${chunk.section}]\n${chunk.content}`,
     )
     .join("\n\n---\n\n");
 
@@ -237,7 +237,7 @@ export const askDocumentation = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to query documentation"
+        "Must be authenticated to query documentation",
       );
     }
 
@@ -246,7 +246,7 @@ export const askDocumentation = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Please try again later."
+        "Rate limit exceeded. Please try again later.",
       );
     }
 
@@ -255,7 +255,7 @@ export const askDocumentation = functions.https.onCall(
     if (!question || typeof question !== "string") {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Question is required"
+        "Question is required",
       );
     }
 
@@ -298,10 +298,10 @@ export const askDocumentation = functions.https.onCall(
       functions.logger.error("RAG query error:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to process question"
+        "Failed to process question",
       );
     }
-  }
+  },
 );
 
 /**
@@ -312,7 +312,7 @@ export const getSuggestedQuestions = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Authentication required"
+        "Authentication required",
       );
     }
 
@@ -361,5 +361,5 @@ export const getSuggestedQuestions = functions.https.onCall(
         ? { title: docInfo.title, category: docInfo.category }
         : null,
     };
-  }
+  },
 );

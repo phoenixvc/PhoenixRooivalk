@@ -149,13 +149,13 @@ async function getQueryEmbedding(text: string): Promise<{
  */
 async function searchInMemory(
   queryEmbedding: number[],
-  options: VectorSearchOptions
+  options: VectorSearchOptions,
 ): Promise<VectorSearchResult[]> {
   const { topK = 5, category, minScore = 0.65 } = options;
 
   // Build Firestore query
   let firestoreQuery: admin.firestore.Query = db.collection(
-    VECTOR_SEARCH_CONFIG.embeddingsCollection
+    VECTOR_SEARCH_CONFIG.embeddingsCollection,
   );
 
   if (category) {
@@ -168,7 +168,7 @@ async function searchInMemory(
   // Check if we're exceeding in-memory limits
   if (snapshot.size > VECTOR_SEARCH_CONFIG.maxVectorsForInMemory) {
     functions.logger.warn(
-      `In-memory search with ${snapshot.size} vectors. Consider enabling Firebase Vector Search.`
+      `In-memory search with ${snapshot.size} vectors. Consider enabling Firebase Vector Search.`,
     );
   }
 
@@ -206,7 +206,7 @@ async function searchInMemory(
  */
 export async function vectorSearch(
   query: string,
-  options: VectorSearchOptions = {}
+  options: VectorSearchOptions = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: {
@@ -246,7 +246,7 @@ export async function vectorSearch(
     } catch (error) {
       functions.logger.warn(
         "Azure AI Search failed, falling back to in-memory:",
-        error
+        error,
       );
       // Fall through to in-memory search
     }
@@ -293,7 +293,7 @@ export async function vectorSearch(
  */
 export async function vectorSearchUnique(
   query: string,
-  options: VectorSearchOptions = {}
+  options: VectorSearchOptions = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: {
@@ -340,7 +340,7 @@ export async function vectorSearchUnique(
  */
 export async function findRelatedDocuments(
   docId: string,
-  options: { topK?: number; excludeSelf?: boolean } = {}
+  options: { topK?: number; excludeSelf?: boolean } = {},
 ): Promise<VectorSearchResult[]> {
   const { topK = 5, excludeSelf = true } = options;
 
@@ -435,11 +435,13 @@ export async function getVectorSearchStats(): Promise<{
   // Determine search method and optimization status
   let searchMethod = "in_memory";
   let isOptimized = totalVectors <= VECTOR_SEARCH_CONFIG.maxVectorsForInMemory;
-  let azureStats: {
-    documentCount: number;
-    storageSize: number;
-    isAvailable: boolean;
-  } | undefined;
+  let azureStats:
+    | {
+        documentCount: number;
+        storageSize: number;
+        isAvailable: boolean;
+      }
+    | undefined;
 
   if (azureAvailable && VECTOR_SEARCH_CONFIG.useAzureSearch) {
     searchMethod = "azure_ai_search";
@@ -460,47 +462,52 @@ export async function getVectorSearchStats(): Promise<{
 /**
  * Cloud Function: Vector Search
  */
-export const vectorSearchDocs = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      "Authentication required"
-    );
-  }
+export const vectorSearchDocs = functions.https.onCall(
+  async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Authentication required",
+      );
+    }
 
-  const { query, category, topK, minScore, unique } = data;
+    const { query, category, topK, minScore, unique } = data;
 
-  if (!query || typeof query !== "string") {
-    throw new functions.https.HttpsError("invalid-argument", "Query is required");
-  }
+    if (!query || typeof query !== "string") {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Query is required",
+      );
+    }
 
-  try {
-    const searchFn = unique ? vectorSearchUnique : vectorSearch;
-    const { results, metrics } = await searchFn(query, {
-      category,
-      topK: topK || 5,
-      minScore: minScore || 0.65,
-    });
+    try {
+      const searchFn = unique ? vectorSearchUnique : vectorSearch;
+      const { results, metrics } = await searchFn(query, {
+        category,
+        topK: topK || 5,
+        minScore: minScore || 0.65,
+      });
 
-    return {
-      results: results.map((r) => ({
-        docId: r.docId,
-        title: r.title,
-        section: r.section,
-        content: r.content.substring(0, 300) + "...",
-        score: Math.round(r.score * 100) / 100,
-        category: r.metadata.category,
-      })),
-      metrics,
-    };
-  } catch (error) {
-    functions.logger.error("Vector search error:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Failed to search documents"
-    );
-  }
-});
+      return {
+        results: results.map((r) => ({
+          docId: r.docId,
+          title: r.title,
+          section: r.section,
+          content: r.content.substring(0, 300) + "...",
+          score: Math.round(r.score * 100) / 100,
+          category: r.metadata.category,
+        })),
+        metrics,
+      };
+    } catch (error) {
+      functions.logger.error("Vector search error:", error);
+      throw new functions.https.HttpsError(
+        "internal",
+        "Failed to search documents",
+      );
+    }
+  },
+);
 
 /**
  * Cloud Function: Get Vector Search Stats
@@ -509,7 +516,7 @@ export const getVectorStats = functions.https.onCall(async (_data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Authentication required"
+      "Authentication required",
     );
   }
 

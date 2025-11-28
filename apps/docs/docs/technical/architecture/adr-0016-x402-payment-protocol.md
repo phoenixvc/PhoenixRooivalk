@@ -20,17 +20,19 @@ prerequisites:
 
 # ADR 0016: x402 Payment Protocol Integration
 
-**Date**: 2025-11-28
-**Status**: Accepted (Implementation Started)
-**Updated**: 2025-11-28
+**Date**: 2025-11-28 **Status**: Accepted (Implementation Started) **Updated**:
+2025-11-28
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: How can we monetize evidence verification APIs and enable autonomous agent-to-agent payments?
-2. **Decision**: Integrate x402 protocol for HTTP-native micropayments on our evidence verification API
-3. **Trade-off**: Protocol maturity vs. strategic positioning in emerging AI-agent economy
+1. **Problem**: How can we monetize evidence verification APIs and enable
+   autonomous agent-to-agent payments?
+2. **Decision**: Integrate x402 protocol for HTTP-native micropayments on our
+   evidence verification API
+3. **Trade-off**: Protocol maturity vs. strategic positioning in emerging
+   AI-agent economy
 
 ---
 
@@ -38,19 +40,22 @@ prerequisites:
 
 ### What is x402?
 
-**x402** is a payment protocol built on the HTTP 402 "Payment Required" status code. Initially developed by Coinbase, it enables instant micropayments for API access without requiring:
+**x402** is a payment protocol built on the HTTP 402 "Payment Required" status
+code. Initially developed by Coinbase, it enables instant micropayments for API
+access without requiring:
+
 - Account creation
 - OAuth flows
 - Complex authentication signatures
 - Subscription management
 
-| Feature | Description |
-|---------|-------------|
-| **Protocol** | HTTP 402 status code activation |
-| **Settlement** | Solana (400ms finality, $0.00025/tx) |
-| **Currencies** | USDC (stable), all SPL tokens |
-| **Fees** | 0% protocol fees |
-| **Use Case** | AI agents, API monetization, content paywalls |
+| Feature        | Description                                   |
+| -------------- | --------------------------------------------- |
+| **Protocol**   | HTTP 402 status code activation               |
+| **Settlement** | Solana (400ms finality, $0.00025/tx)          |
+| **Currencies** | USDC (stable), all SPL tokens                 |
+| **Fees**       | 0% protocol fees                              |
+| **Use Case**   | AI agents, API monetization, content paywalls |
 
 ### Why x402 Matters for Phoenix Rooivalk
 
@@ -92,17 +97,18 @@ Our evidence verification system has natural monetization potential:
 
 ### Strategic Alignment
 
-| Phoenix Rooivalk Capability | x402 Opportunity |
-|----------------------------|------------------|
-| **Evidence Verification API** | Pay-per-verification monetization |
-| **Solana Integration** | Native settlement layer (already integrated) |
-| **Autonomous Operations** | AI agents can pay for evidence checks |
-| **Court-Admissible Records** | Premium verification with legal attestation |
-| **Multi-Chain Evidence** | Cross-chain verification as premium service |
+| Phoenix Rooivalk Capability   | x402 Opportunity                             |
+| ----------------------------- | -------------------------------------------- |
+| **Evidence Verification API** | Pay-per-verification monetization            |
+| **Solana Integration**        | Native settlement layer (already integrated) |
+| **Autonomous Operations**     | AI agents can pay for evidence checks        |
+| **Court-Admissible Records**  | Premium verification with legal attestation  |
+| **Multi-Chain Evidence**      | Cross-chain verification as premium service  |
 
 ### Hackathon Opportunity
 
 **Encode Club Solana Winter Build Challenge 2025**:
+
 - **Timeline**: December 2025 (4 weeks)
 - **Focus**: Building on Solana, bounties, workshops
 - **Prizes**: Historical $10K+ main prizes with partner bounties
@@ -117,10 +123,12 @@ Our evidence verification system has natural monetization potential:
 Continue with free evidence verification API.
 
 **Pros**:
+
 - No additional complexity
 - Maximum accessibility
 
 **Cons**:
+
 - No monetization path
 - Costs borne entirely by us
 - No alignment with AI-agent economy
@@ -133,10 +141,12 @@ Continue with free evidence verification API.
 Implement Stripe/PayPal for API access.
 
 **Pros**:
+
 - Mature payment infrastructure
 - Familiar developer experience
 
 **Cons**:
+
 - Requires account creation
 - High fees (2.9% + $0.30)
 - Not suitable for micropayments
@@ -150,6 +160,7 @@ Implement Stripe/PayPal for API access.
 Implement HTTP 402 payment-required endpoints for premium API features.
 
 **Pros**:
+
 - 0% protocol fees
 - Micropayment-friendly ($0.001 viable)
 - AI agent-native (autonomous payments)
@@ -158,6 +169,7 @@ Implement HTTP 402 payment-required endpoints for premium API features.
 - Growing ecosystem (500K+ weekly transactions)
 
 **Cons**:
+
 - Newer protocol (less mature)
 - Requires Solana wallet for clients
 - Learning curve for traditional developers
@@ -168,7 +180,8 @@ Implement HTTP 402 payment-required endpoints for premium API features.
 
 **Pursue Option 3: x402 Protocol Integration**
 
-Implement x402 for premium evidence API features, targeting the Encode Club Solana Winter Build Challenge for initial development and validation.
+Implement x402 for premium evidence API features, targeting the Encode Club
+Solana Winter Build Challenge for initial development and validation.
 
 ---
 
@@ -176,24 +189,28 @@ Implement x402 for premium evidence API features, targeting the Encode Club Sola
 
 ### Why x402 Over Traditional Payments?
 
-| Factor | x402 | Stripe/PayPal | Winner |
-|--------|------|---------------|--------|
-| **Minimum Viable Payment** | $0.001 | $0.50+ (fees make smaller unviable) | x402 |
-| **Protocol Fees** | 0% | 2.9% + $0.30 | x402 |
-| **AI Agent Support** | Native | Manual/workarounds | x402 |
-| **Settlement Time** | 400ms | 2-3 business days | x402 |
-| **Account Required** | No | Yes | x402 |
-| **Decentralization** | Yes | No | x402 |
-| **Ecosystem Maturity** | Emerging | Mature | Stripe |
-| **Developer Familiarity** | Low | High | Stripe |
+| Factor                     | x402     | Stripe/PayPal                       | Winner |
+| -------------------------- | -------- | ----------------------------------- | ------ |
+| **Minimum Viable Payment** | $0.001   | $0.50+ (fees make smaller unviable) | x402   |
+| **Protocol Fees**          | 0%       | 2.9% + $0.30                        | x402   |
+| **AI Agent Support**       | Native   | Manual/workarounds                  | x402   |
+| **Settlement Time**        | 400ms    | 2-3 business days                   | x402   |
+| **Account Required**       | No       | Yes                                 | x402   |
+| **Decentralization**       | Yes      | No                                  | x402   |
+| **Ecosystem Maturity**     | Emerging | Mature                              | Stripe |
+| **Developer Familiarity**  | Low      | High                                | Stripe |
 
-**Decision**: For micropayments and AI agent use cases, x402 is clearly superior. Traditional payments remain viable for high-value transactions.
+**Decision**: For micropayments and AI agent use cases, x402 is clearly
+superior. Traditional payments remain viable for high-value transactions.
 
 ### Strategic Value of Early Adoption
 
-1. **AI Agent Economy**: x402 transactions grew 10,000% in one month (500K+ weekly)
-2. **Market Position**: First defense tech platform with x402 payment integration
-3. **Revenue Stream**: Evidence verification becomes profit center, not cost center
+1. **AI Agent Economy**: x402 transactions grew 10,000% in one month (500K+
+   weekly)
+2. **Market Position**: First defense tech platform with x402 payment
+   integration
+3. **Revenue Stream**: Evidence verification becomes profit center, not cost
+   center
 4. **Ecosystem Alignment**: Coinbase, Anthropic, AWS, Cloudflare supporting x402
 
 ---
@@ -204,12 +221,12 @@ Implement x402 for premium evidence API features, targeting the Encode Club Sola
 
 **Scope**: 4-week sprint for Encode Club Solana Winter Build Challenge
 
-| Week | Deliverable |
-|------|-------------|
-| **Week 1** | x402 facilitator integration, SDK setup |
+| Week       | Deliverable                                              |
+| ---------- | -------------------------------------------------------- |
+| **Week 1** | x402 facilitator integration, SDK setup                  |
 | **Week 2** | Premium evidence verification endpoint with 402 response |
-| **Week 3** | Payment verification and evidence return flow |
-| **Week 4** | Demo, documentation, hackathon submission |
+| **Week 3** | Payment verification and evidence return flow            |
+| **Week 4** | Demo, documentation, hackathon submission                |
 
 **Technical Architecture**:
 
@@ -275,16 +292,17 @@ fn payment_details(evidence_id: &str) -> PaymentRequired {
 
 ### Phase 2: Production Deployment (Q1 2026)
 
-| Feature | Price (USDC) | Description |
-|---------|--------------|-------------|
-| **Basic Verification** | $0.01 | Single-chain evidence verification |
-| **Multi-Chain Verification** | $0.05 | Cross-chain (Solana + EtherLink) |
-| **Legal Attestation** | $1.00 | Court-admissible certification |
-| **Bulk Verification** | $0.005/ea | 100+ verifications |
+| Feature                      | Price (USDC) | Description                        |
+| ---------------------------- | ------------ | ---------------------------------- |
+| **Basic Verification**       | $0.01        | Single-chain evidence verification |
+| **Multi-Chain Verification** | $0.05        | Cross-chain (Solana + EtherLink)   |
+| **Legal Attestation**        | $1.00        | Court-admissible certification     |
+| **Bulk Verification**        | $0.005/ea    | 100+ verifications                 |
 
 ### Phase 3: AI Agent Marketplace (Q2 2026)
 
 Enable autonomous systems to:
+
 - Pay for evidence verification during operations
 - Purchase audit trail access
 - Subscribe to threat intelligence feeds
@@ -301,6 +319,7 @@ POST /api/v1/evidence/verify-premium
 ```
 
 **Request (without payment)**:
+
 ```json
 {
   "evidence_id": "evt-2025-001-drone-intercept",
@@ -309,6 +328,7 @@ POST /api/v1/evidence/verify-premium
 ```
 
 **Response (402 Payment Required)**:
+
 ```json
 {
   "price": "0.01",
@@ -321,6 +341,7 @@ POST /api/v1/evidence/verify-premium
 ```
 
 **Request (with payment)**:
+
 ```
 POST /api/v1/evidence/verify-premium
 X-PAYMENT: <base64-encoded-payment-proof>
@@ -332,6 +353,7 @@ X-PAYMENT: <base64-encoded-payment-proof>
 ```
 
 **Response (200 OK)**:
+
 ```json
 {
   "verified": true,
@@ -362,26 +384,28 @@ X-PAYMENT: <base64-encoded-payment-proof>
 
 ### Conservative Estimates (Year 1)
 
-| Metric | Assumption | Value |
-|--------|------------|-------|
-| **Daily Verifications** | 100 | - |
-| **Price per Verification** | $0.01 | - |
-| **Daily Revenue** | - | $1.00 |
-| **Monthly Revenue** | - | $30 |
-| **Annual Revenue** | - | $365 |
+| Metric                     | Assumption | Value |
+| -------------------------- | ---------- | ----- |
+| **Daily Verifications**    | 100        | -     |
+| **Price per Verification** | $0.01      | -     |
+| **Daily Revenue**          | -          | $1.00 |
+| **Monthly Revenue**        | -          | $30   |
+| **Annual Revenue**         | -          | $365  |
 
 ### Growth Scenario (Year 2-3)
 
-| Metric | Year 2 | Year 3 |
-|--------|--------|--------|
-| **Daily Verifications** | 1,000 | 10,000 |
-| **Avg Price** | $0.02 | $0.03 |
-| **Monthly Revenue** | $600 | $9,000 |
-| **Annual Revenue** | $7,200 | $108,000 |
+| Metric                  | Year 2 | Year 3   |
+| ----------------------- | ------ | -------- |
+| **Daily Verifications** | 1,000  | 10,000   |
+| **Avg Price**           | $0.02  | $0.03    |
+| **Monthly Revenue**     | $600   | $9,000   |
+| **Annual Revenue**      | $7,200 | $108,000 |
 
 ### AI Agent Economy Upside
 
-If x402 becomes the standard for AI agent payments (current trajectory suggests this):
+If x402 becomes the standard for AI agent payments (current trajectory suggests
+this):
+
 - 500K+ weekly transactions already
 - 10,000% monthly growth in adoption
 - Phoenix Rooivalk positioned as evidence infrastructure provider
@@ -390,13 +414,13 @@ If x402 becomes the standard for AI agent payments (current trajectory suggests 
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| **Protocol Immaturity** | Medium | Medium | Pilot first, maintain fallback |
-| **Low Adoption** | Medium | Low | Free tier always available |
-| **Solana Dependency** | Low | Medium | x402 is chain-agnostic |
-| **Regulatory Uncertainty** | Low | High | USDC stablecoin compliance |
-| **Facilitator Availability** | Low | Medium | Multiple facilitators supported |
+| Risk                         | Likelihood | Impact | Mitigation                      |
+| ---------------------------- | ---------- | ------ | ------------------------------- |
+| **Protocol Immaturity**      | Medium     | Medium | Pilot first, maintain fallback  |
+| **Low Adoption**             | Medium     | Low    | Free tier always available      |
+| **Solana Dependency**        | Low        | Medium | x402 is chain-agnostic          |
+| **Regulatory Uncertainty**   | Low        | High   | USDC stablecoin compliance      |
+| **Facilitator Availability** | Low        | Medium | Multiple facilitators supported |
 
 ---
 

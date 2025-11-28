@@ -39,7 +39,9 @@ export function getQueuedUpdates(): QueuedUpdate[] {
 /**
  * Add an update to the offline queue
  */
-export function queueUpdate(update: Omit<QueuedUpdate, "id" | "timestamp">): void {
+export function queueUpdate(
+  update: Omit<QueuedUpdate, "id" | "timestamp">,
+): void {
   if (typeof window === "undefined") return;
 
   const queue = getQueuedUpdates();

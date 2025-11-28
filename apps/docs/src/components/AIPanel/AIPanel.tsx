@@ -42,7 +42,8 @@ const AI_TABS: AITabConfig[] = [
     id: "ask",
     label: "Ask Docs",
     icon: "📖",
-    description: "Ask questions about the documentation with AI-powered answers",
+    description:
+      "Ask questions about the documentation with AI-powered answers",
   },
   {
     id: "competitor",
@@ -140,12 +141,12 @@ export function AIPanel(): React.ReactElement | null {
       const sourcesFormatted = response.sources
         .map(
           (s, i) =>
-            `${i + 1}. **${s.title}** - ${s.section} _(${Math.round(s.relevance * 100)}% relevant)_`
+            `${i + 1}. **${s.title}** - ${s.section} _(${Math.round(s.relevance * 100)}% relevant)_`,
         )
         .join("\n");
 
       setResult(
-        `## Answer\n\n${response.answer}\n\n---\n\n### Sources ${confidenceEmoji} ${response.confidence} confidence\n\n${sourcesFormatted}`
+        `## Answer\n\n${response.answer}\n\n---\n\n### Sources ${confidenceEmoji} ${response.confidence} confidence\n\n${sourcesFormatted}`,
       );
     } catch (err) {
       handleError(err);
@@ -220,7 +221,8 @@ export function AIPanel(): React.ReactElement | null {
     setResult(null);
 
     try {
-      const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
+      const currentPath =
+        typeof window !== "undefined" ? window.location.pathname : "";
       const response = await aiService.getReadingRecommendations(currentPath);
 
       if (response.message) {
@@ -229,14 +231,16 @@ export function AIPanel(): React.ReactElement | null {
         const formatted = response.recommendations
           .map(
             (rec, i) =>
-              `### ${i + 1}. ${rec.docId}\n**Why:** ${rec.reason}\n**Relevance:** ${Math.round(rec.relevanceScore * 100)}%`
+              `### ${i + 1}. ${rec.docId}\n**Why:** ${rec.reason}\n**Relevance:** ${Math.round(rec.relevanceScore * 100)}%`,
           )
           .join("\n\n");
         setResult(
-          `## Recommended Reading\n\n${formatted}\n\n---\n\n**Learning Path:** ${response.learningPath || "Continue exploring"}`
+          `## Recommended Reading\n\n${formatted}\n\n---\n\n**Learning Path:** ${response.learningPath || "Continue exploring"}`,
         );
       } else {
-        setResult("No recommendations available yet. Keep reading to get personalized suggestions!");
+        setResult(
+          "No recommendations available yet. Keep reading to get personalized suggestions!",
+        );
       }
     } catch (err) {
       handleError(err);
@@ -270,11 +274,11 @@ export function AIPanel(): React.ReactElement | null {
       const response = await aiService.suggestDocumentImprovements(
         docId,
         docTitle,
-        docContent
+        docContent,
       );
 
       setResult(
-        `## Improvement Suggestions\n\n${response.suggestions}\n\n---\n\n✅ ${response.message}\n\n*Suggestion ID: ${response.suggestionId}*`
+        `## Improvement Suggestions\n\n${response.suggestions}\n\n---\n\n✅ ${response.message}\n\n*Suggestion ID: ${response.suggestionId}*`,
       );
     } catch (err) {
       handleError(err);
@@ -318,12 +322,15 @@ export function AIPanel(): React.ReactElement | null {
     setCompetitors((prev) =>
       prev.includes(competitor)
         ? prev.filter((c) => c !== competitor)
-        : [...prev, competitor]
+        : [...prev, competitor],
     );
   };
 
   const addCustomCompetitor = () => {
-    if (customCompetitor.trim() && !competitors.includes(customCompetitor.trim())) {
+    if (
+      customCompetitor.trim() &&
+      !competitors.includes(customCompetitor.trim())
+    ) {
       setCompetitors((prev) => [...prev, customCompetitor.trim()]);
       setCustomCompetitor("");
     }
@@ -448,24 +455,26 @@ export function AIPanel(): React.ReactElement | null {
                   <button onClick={() => selectCompetitorPreset("laser")}>
                     Laser
                   </button>
-                  <button onClick={() => selectCompetitorPreset("comprehensive")}>
+                  <button
+                    onClick={() => selectCompetitorPreset("comprehensive")}
+                  >
                     Major Players
                   </button>
                 </div>
 
                 <div className="ai-competitor-list">
-                  {[...new Set([...Object.values(KNOWN_COMPETITORS).flat()])].map(
-                    (comp) => (
-                      <label key={comp} className="ai-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={competitors.includes(comp)}
-                          onChange={() => toggleCompetitor(comp)}
-                        />
-                        {comp}
-                      </label>
-                    )
-                  )}
+                  {[
+                    ...new Set([...Object.values(KNOWN_COMPETITORS).flat()]),
+                  ].map((comp) => (
+                    <label key={comp} className="ai-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={competitors.includes(comp)}
+                        onChange={() => toggleCompetitor(comp)}
+                      />
+                      {comp}
+                    </label>
+                  ))}
                 </div>
 
                 <div className="ai-custom-input">
@@ -474,7 +483,9 @@ export function AIPanel(): React.ReactElement | null {
                     placeholder="Add custom competitor..."
                     value={customCompetitor}
                     onChange={(e) => setCustomCompetitor(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && addCustomCompetitor()}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && addCustomCompetitor()
+                    }
                   />
                   <button onClick={addCustomCompetitor}>Add</button>
                 </div>
@@ -585,7 +596,8 @@ export function AIPanel(): React.ReactElement | null {
             {activeTab === "recommendations" && (
               <div className="ai-tab-content">
                 <p className="ai-tab-description">
-                  Get personalized reading recommendations based on your progress.
+                  Get personalized reading recommendations based on your
+                  progress.
                 </p>
 
                 <button
@@ -678,36 +690,38 @@ export function AIPanel(): React.ReactElement | null {
  * Simple markdown formatter
  */
 function formatMarkdown(text: string): string {
-  return text
-    // Headers
-    .replace(/^### (.*$)/gm, "<h4>$1</h4>")
-    .replace(/^## (.*$)/gm, "<h3>$1</h3>")
-    .replace(/^# (.*$)/gm, "<h2>$1</h2>")
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    // Italic
-    .replace(/\*(.*?)\*/g, "<em>$1</em>")
-    // Code blocks
-    .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-    // Inline code
-    .replace(/`(.*?)`/g, "<code>$1</code>")
-    // Lists
-    .replace(/^- (.*$)/gm, "<li>$1</li>")
-    .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-    // Horizontal rule
-    .replace(/^---$/gm, "<hr />")
-    // Paragraphs
-    .replace(/\n\n/g, "</p><p>")
-    .replace(/^(.+)$/gm, (match) => {
-      if (
-        match.startsWith("<") ||
-        match.startsWith("</") ||
-        match.trim() === ""
-      ) {
+  return (
+    text
+      // Headers
+      .replace(/^### (.*$)/gm, "<h4>$1</h4>")
+      .replace(/^## (.*$)/gm, "<h3>$1</h3>")
+      .replace(/^# (.*$)/gm, "<h2>$1</h2>")
+      // Bold
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      // Italic
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      // Code blocks
+      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+      // Inline code
+      .replace(/`(.*?)`/g, "<code>$1</code>")
+      // Lists
+      .replace(/^- (.*$)/gm, "<li>$1</li>")
+      .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
+      // Horizontal rule
+      .replace(/^---$/gm, "<hr />")
+      // Paragraphs
+      .replace(/\n\n/g, "</p><p>")
+      .replace(/^(.+)$/gm, (match) => {
+        if (
+          match.startsWith("<") ||
+          match.startsWith("</") ||
+          match.trim() === ""
+        ) {
+          return match;
+        }
         return match;
-      }
-      return match;
-    });
+      })
+  );
 }
 
 export default AIPanel;

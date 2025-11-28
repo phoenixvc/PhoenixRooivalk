@@ -39,7 +39,7 @@ export async function logMetrics(
   feature: string,
   metrics: Partial<AIRequestMetrics> | Record<string, unknown>,
   userId?: string,
-  additionalData?: Record<string, unknown>
+  additionalData?: Record<string, unknown>,
 ): Promise<void> {
   try {
     await db.collection(MONITORING_CONFIG.collections.metrics).add({
@@ -66,15 +66,15 @@ export async function logMetrics(
         feature,
         totalRequests: admin.firestore.FieldValue.increment(1),
         totalTokens: admin.firestore.FieldValue.increment(
-          typeof totalTokens === "number" ? totalTokens : 0
+          typeof totalTokens === "number" ? totalTokens : 0,
         ),
         totalLatencyMs: admin.firestore.FieldValue.increment(
-          typeof latencyMs === "number" ? latencyMs : 0
+          typeof latencyMs === "number" ? latencyMs : 0,
         ),
         cacheHits: admin.firestore.FieldValue.increment(cached ? 1 : 0),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
-      { merge: true }
+      { merge: true },
     );
   } catch (error) {
     functions.logger.warn("Failed to log metrics:", error);
@@ -88,13 +88,11 @@ export async function logMetrics(
 export async function logError(
   feature: string,
   error: unknown,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ): Promise<void> {
   try {
-    const errorMessage =
-      error instanceof Error ? error.message : String(error);
-    const errorStack =
-      error instanceof Error ? error.stack : undefined;
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
 
     await db.collection(MONITORING_CONFIG.collections.errors).add({
       feature,
@@ -117,7 +115,7 @@ export async function logError(
         totalErrors: admin.firestore.FieldValue.increment(1),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
-      { merge: true }
+      { merge: true },
     );
   } catch (logError) {
     functions.logger.error("Failed to log error:", logError);
@@ -140,7 +138,7 @@ export interface DailyStatsSummary {
 
 export async function getDailyStats(
   date: string,
-  feature?: string
+  feature?: string,
 ): Promise<DailyStatsSummary[]> {
   let query = db
     .collection(MONITORING_CONFIG.collections.dailyStats)
@@ -184,9 +182,7 @@ export async function getDailyStats(
 /**
  * Get weekly stats summary
  */
-export async function getWeeklyStats(
-  feature?: string
-): Promise<{
+export async function getWeeklyStats(feature?: string): Promise<{
   totalRequests: number;
   totalTokens: number;
   avgLatencyMs: number;
@@ -237,9 +233,7 @@ export async function getWeeklyStats(
       totalTokens: data.totalTokens || 0,
       totalErrors: data.totalErrors || 0,
       avgLatencyMs:
-        requests > 0
-          ? Math.round((data.totalLatencyMs || 0) / requests)
-          : 0,
+        requests > 0 ? Math.round((data.totalLatencyMs || 0) / requests) : 0,
       cacheHitRate:
         requests > 0
           ? Math.round(((data.cacheHits || 0) / requests) * 100) / 100
@@ -264,9 +258,7 @@ export async function getWeeklyStats(
       totalRequests > 0
         ? Math.round((totalErrors / totalRequests) * 100) / 100
         : 0,
-    dailyBreakdown: dailyBreakdown.sort((a, b) =>
-      a.date.localeCompare(b.date)
-    ),
+    dailyBreakdown: dailyBreakdown.sort((a, b) => a.date.localeCompare(b.date)),
   };
 }
 
@@ -300,8 +292,7 @@ export async function checkAlerts(date: string): Promise<AlertStatus> {
     totalTokens += s.totalTokens;
   });
 
-  const avgLatency =
-    totalRequests > 0 ? totalLatencyMs / totalRequests : 0;
+  const avgLatency = totalRequests > 0 ? totalLatencyMs / totalRequests : 0;
   const errorRate = totalRequests > 0 ? totalErrors / totalRequests : 0;
 
   // Check latency
@@ -348,7 +339,7 @@ export const getAIMonitoringStats = functions.https.onCall(
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Admin access required"
+        "Admin access required",
       );
     }
 
@@ -367,7 +358,7 @@ export const getAIMonitoringStats = functions.https.onCall(
     const alerts = await checkAlerts(today);
 
     return { stats, alerts };
-  }
+  },
 );
 
 /**
@@ -377,7 +368,7 @@ export const getAIErrors = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Admin access required"
+      "Admin access required",
     );
   }
 

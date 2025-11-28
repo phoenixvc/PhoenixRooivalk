@@ -267,10 +267,10 @@ npm run serve
 
 ## Tables
 
-| Feature            | Specification | Status    |
-| ------------------ | ------------- | --------- |
-| AI Processing      | 275 TOPS      | Active    |
-| Response Time      | 120-195ms     | Verified  |
+| Feature            | Specification            | Status    |
+| ------------------ | ------------------------ | --------- |
+| AI Processing      | 275 TOPS                 | Active    |
+| Response Time      | 120-195ms                | Verified  |
 | Detection Accuracy | 95%+ (99.5% full system) | Validated |
 
 ---

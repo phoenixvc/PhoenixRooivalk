@@ -63,7 +63,10 @@ export function AIFloatingWidget({
 
     window.addEventListener("openAIAssistant", handleOpenAI as EventListener);
     return () => {
-      window.removeEventListener("openAIAssistant", handleOpenAI as EventListener);
+      window.removeEventListener(
+        "openAIAssistant",
+        handleOpenAI as EventListener,
+      );
     };
   }, [openWithQuestion]);
 
@@ -138,15 +141,11 @@ export function AIFloatingWidget({
           aria-label={isOpen ? "Close AI Assistant" : "Open AI Assistant"}
           aria-expanded={isOpen}
         >
-          <span className="ai-widget__toggle-icon">
-            {isOpen ? "✕" : "🤖"}
-          </span>
+          <span className="ai-widget__toggle-icon">{isOpen ? "✕" : "🤖"}</span>
           <span className="ai-widget__toggle-label">
             {isOpen ? "Close" : "AI"}
           </span>
-          {!isOpen && (
-            <span className="ai-widget__toggle-shortcut">⌘K</span>
-          )}
+          {!isOpen && <span className="ai-widget__toggle-shortcut">⌘K</span>}
         </button>
       </div>
 
