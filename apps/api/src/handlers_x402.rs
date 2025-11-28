@@ -229,9 +229,20 @@ async fn handle_paid_verification(
             // Receipt stored successfully, payment is unique
         }
         Err(e) => {
-            let error_str = e.to_string();
             // Check if this is a UNIQUE constraint violation (payment replay)
-            if error_str.contains("UNIQUE") || error_str.contains("duplicate") || error_str.contains("unique") {
+            // SQLx wraps database errors, check for Database variant with constraint info
+            let is_unique_violation = match &e {
+                sqlx::Error::Database(db_err) => {
+                    // SQLite error code 2067 = SQLITE_CONSTRAINT_UNIQUE
+                    // Also check for constraint violation message patterns
+                    db_err.code().map_or(false, |c| c == "2067" || c == "1555")
+                        || db_err.message().to_lowercase().contains("unique")
+                        || db_err.message().to_lowercase().contains("constraint")
+                }
+                _ => false,
+            };
+
+            if is_unique_violation {
                 return (
                     StatusCode::CONFLICT,
                     Json(json!({

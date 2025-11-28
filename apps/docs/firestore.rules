@@ -53,10 +53,14 @@ service cloud.firestore {
 
     // Valid role values that users can have
     function isValidRole(role) {
-      return role in ['reader', 'contributor', 'reviewer', 'admin'];
+      return role == 'reader' || 
+             role == 'contributor' || 
+             role == 'reviewer' || 
+             role == 'admin';
     }
 
     // Validate all roles in a list are valid strings and allowed values
+    // Note: Firestore rules don't support loops, so we check each index
     function hasValidRoles(roles) {
       return roles is list &&
         roles.size() <= 4 &&
