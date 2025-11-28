@@ -150,6 +150,41 @@ security, compliance, and operational resilience.
 - **Best Practices**: Industry best practices for secret management
 - **Audit**: Complete audit trail of secret access
 
+### API and Proxy Security
+
+**Header Normalization**
+
+The Phoenix Rooivalk API uses `X-Forwarded-For` and `X-Real-IP` headers for
+client IP identification (used in rate limiting). These headers can be spoofed
+by untrusted clients, so proper infrastructure configuration is **required**:
+
+- **Load Balancer Configuration**: Configure load balancers (ALB, NLB, NGINX,
+  etc.) to strip incoming `X-Forwarded-For` and `X-Real-IP` headers from client
+  requests
+- **Header Injection**: Configure infrastructure to set these headers based on
+  the actual TCP connection source IP
+- **Trust Chain**: Only trust headers set by your own infrastructure, never
+  headers passed through from clients
+
+**NGINX Example Configuration**:
+
+```nginx
+# Strip client-supplied headers and set from real connection
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $remote_addr;
+```
+
+**AWS ALB Configuration**:
+
+- ALB automatically sets `X-Forwarded-For` based on client connection
+- Ensure no upstream proxies pass through untrusted headers
+
+**Rate Limiting Considerations**:
+
+- Without proper header normalization, malicious clients can bypass rate limits
+- The API trusts the first IP in `X-Forwarded-For` as the client IP
+- Ensure your infrastructure adds only one hop to the forwarding chain
+
 ---
 
 ## Hardware Deployment
