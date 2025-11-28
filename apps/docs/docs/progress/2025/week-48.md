@@ -16,6 +16,7 @@ xpReward: 75
 
 - **Net Launcher Design COMPLETE**: Both launcher mechanism and net design finalized - ready for prototyping
 - **In-House Kevlar Manufacturing**: Strategic decision to weave our own nets - reduces costs, eliminates international lead times, protects IP
+- **Kevlar Sourced**: Pieter has domestic Kevlar stock available - no import delays, can begin immediately
 - **Ground-Based Launcher**: Larger multi-shot canister in development - serves as backup system and future Grover UGV integration
 
 ### 2. Revenue: x402 Payment Protocol Implemented
@@ -28,7 +29,7 @@ xpReward: 75
 
 - **3 SA Airports Contacted**: Zero drone incidents reported - operators are compliant and responsible
 - **Boeing Pilot Interview**: Confirms lasers/kites are current threats (cheaper, accessible) - drones will follow as prices drop
-- **Strategic Pivot**: Validates international-first go-to-market (US/EU/ME where problem exists)
+- **Strategic Pivot**: Validates international-first go-to-market (EU and Canada where problem exists and regulations support entry)
 
 ### 4. Platform: 370+ Commits - Major Technical Velocity
 
@@ -49,12 +50,12 @@ xpReward: 75
 │  NET LAUNCHER          │  KEVLAR NET               │
 │  ✅ Design complete    │  ✅ Design complete       │
 │  ✅ Ready for proto    │  ✅ In-house manufacturing│
-│  → Ground-based first  │  → Cost savings: ~60%     │
-│  → Grover integration  │  → Lead time: weeks → days│
+│  → Ground-based first  │  ✅ Kevlar sourced (Pieter)│
+│  → Grover integration  │  → Ready to start weaving │
 └─────────────────────────────────────────────────────┘
 ```
 
-**Key Message**: First hardware milestone achieved. In-house net manufacturing = competitive advantage.
+**Key Message**: First hardware milestone achieved. Kevlar in hand - prototype can begin immediately.
 
 ---
 
@@ -112,7 +113,7 @@ xpReward: 75
 
 ### Slide 6: Next Week Priorities 📅
 
-1. **Hardware**: Source Kevlar, begin net prototype
+1. **Hardware**: Begin net prototype with Pieter's Kevlar stock
 2. **Software**: x402 testing, RAG optimization
 3. **Marketing**: International outreach campaign
 4. **Launcher**: Continue ground-based development
@@ -122,9 +123,122 @@ xpReward: 75
 ### Discussion Points for Meeting
 
 1. **Funding allocation**: Hardware prototype vs continued software development?
-2. **International targets**: Which markets to prioritize first? (US defense, EU airports, ME security)
-3. **Kevlar sourcing**: Domestic vs import suppliers - cost/quality tradeoff
-4. **Timeline**: When do we demo the net launcher prototype?
+2. **International targets**: EU airports vs Canada CUAS Sandbox - which first?
+3. **Timeline**: When do we demo the net launcher prototype?
+4. **Net specs**: Confirm weave pattern and size variants with Pieter
+
+---
+
+## Presentation Walkthrough Script
+
+> **Duration**: ~10 minutes + discussion
+> **Audience**: Weekly feedback meeting (investors/advisors)
+
+---
+
+### Opening (30 seconds)
+
+> "Good [morning/afternoon]. This week was significant - we hit our first hardware milestone and validated our international market strategy. Let me walk you through the highlights."
+
+---
+
+### Slide 1: Hardware Progress (2 minutes)
+
+> "Starting with hardware - the most tangible progress this week.
+>
+> We've completed the design for both the net launcher mechanism and the net itself. These are ready for prototyping.
+>
+> The big news: we've decided to manufacture our own Kevlar nets in-house rather than import. This gives us three advantages:
+> - **Cost**: approximately 60% reduction
+> - **Speed**: Pieter already has Kevlar stock domestically, so we can start weaving immediately - no international lead times
+> - **IP protection**: the manufacturing know-how stays with us
+>
+> The ground-based launcher is a larger multi-shot design. While it won't fit on our interceptor drones due to weight, it serves as a backup system and will eventually mount on the Grover ground vehicle.
+>
+> **Bottom line**: First hardware milestone complete. We can start the prototype this week."
+
+---
+
+### Slide 2: Revenue Model (1.5 minutes)
+
+> "On the software side, we've implemented the x402 payment protocol.
+>
+> This is blockchain-based micropayments for our premium API - specifically evidence verification.
+>
+> Why this matters: we now have a revenue stream that can start generating income *before* our hardware ships. Software revenue can help fund hardware development.
+>
+> The system is production-ready with rate limiting and security hardening. We've also published the architecture decision for technical due diligence."
+
+---
+
+### Slide 3: Market Validation (2 minutes)
+
+> "This week we did direct market research - spoke to three small South African airports and a Boeing pilot.
+>
+> The results were... informative. Not what we hoped, but valuable.
+>
+> **The finding**: South Africa currently has zero drone incidents at these airports. Operators are responsible - proper credentials, radio contact when approaching airspace.
+>
+> The pilot told us the bigger problems in SA right now are lasers and kites - they're cheaper and accessible to low-income demographics. Drones will become a problem as prices drop, but we're not there yet.
+>
+> **What this means**: Our international-first strategy is correct. The problem exists in Europe and Canada today - and Canada has the CUAS Sandbox program specifically for testing. South Africa is a Phase 2 market.
+>
+> This is actually good validation - we're not wasting resources on a market that isn't ready."
+
+---
+
+### Slide 4: Engineering Velocity (1 minute)
+
+> "Quick update on development velocity - 370+ commits this week, 40+ pull requests merged.
+>
+> Key deliverables:
+> - Full RAG integration across all AI endpoints
+> - User authentication and analytics
+> - 10+ architecture decisions documented
+>
+> The technical foundation is production-ready. This is the kind of velocity that shows investors we can execute."
+
+---
+
+### Slide 5: Key Decisions (1 minute)
+
+> "Four major decisions this week:
+>
+> 1. **In-house Kevlar nets** - cost, speed, IP protection
+> 2. **International first** - market research confirmed this
+> 3. **x402 protocol** - pre-hardware revenue
+> 4. **Firebase Vector Search** - right tool for our stack
+>
+> All documented in ADRs for transparency."
+
+---
+
+### Slide 6: Next Week (30 seconds)
+
+> "Next week priorities:
+> - Start weaving the first net prototype with Pieter's Kevlar
+> - Continue x402 testing
+> - Begin international outreach
+> - Keep pushing on the launcher
+>
+> That's the update. Questions?"
+
+---
+
+### Discussion Prompts
+
+If conversation stalls, use these:
+
+1. "Given the SA market timing, should we accelerate EU and Canada outreach?"
+2. "Canada CUAS Sandbox 2026 - are we on track for the application?"
+3. "Do we have the runway to run hardware and software development in parallel?"
+4. "What's a realistic timeline for a net launcher demo?"
+
+---
+
+### Closing
+
+> "Thanks everyone. We'll have the first net prototype progress to show next week."
 
 ---
 
