@@ -5,9 +5,11 @@
  */
 
 import * as functions from "firebase-functions";
-import { logMetrics } from "../monitoring";
+
 import { generateEmbedding } from "../ai-provider";
 import { getCachedEmbedding, cacheEmbedding } from "../cache";
+import { logMetrics } from "../monitoring";
+
 import {
   AzureSearchResult,
   VectorSearchResult,
