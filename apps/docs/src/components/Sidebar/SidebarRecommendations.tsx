@@ -92,6 +92,7 @@ export function SidebarRecommendations({
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
 
   // Use centralized profile from AuthContext
@@ -273,6 +274,28 @@ export function SidebarRecommendations({
     ? Object.values(progress.docs).filter((d) => d.completed).length
     : 0;
 
+  // Helper to check if a doc is completed
+  const isDocCompleted = useCallback(
+    (docId: string): boolean => {
+      const docKey = docId.replace(/^\/docs\//, "");
+      return !!(
+        progress?.docs?.[docKey]?.completed ||
+        progress?.docs?.[docId]?.completed
+      );
+    },
+    [progress],
+  );
+
+  // Filter recommendations based on hideCompleted state
+  const filteredRecommendations = hideCompleted
+    ? recommendations.filter((rec) => !isDocCompleted(rec.docId))
+    : recommendations;
+
+  // Count completed recommendations
+  const completedRecsCount = recommendations.filter((rec) =>
+    isDocCompleted(rec.docId),
+  ).length;
+
   return (
     <div className="sidebar-rec">
       <button
@@ -309,28 +332,29 @@ export function SidebarRecommendations({
                   {/* Show completion progress for recommendations (known profiles, templates, or roles) */}
                   {(knownProfile || selectedTemplate || (confirmedRoles && confirmedRoles.length > 0)) && (
                     <div className="sidebar-rec-progress-summary">
-                      {
-                        recommendations.filter((rec) => {
-                          // Normalize doc key - handle both /docs/path and path formats
-                          const docKey = rec.docId.replace(/^\/docs\//, "");
-                          // Check both normalized and original formats
-                          return (
-                            progress?.docs?.[docKey]?.completed ||
-                            progress?.docs?.[rec.docId]?.completed
-                          );
-                        }).length
-                      }
-                      /{recommendations.length} completed
+                      <span>
+                        {completedRecsCount}/{recommendations.length} completed
+                      </span>
+                      {completedRecsCount > 0 && (
+                        <button
+                          type="button"
+                          className={`sidebar-rec-filter-toggle ${hideCompleted ? "sidebar-rec-filter-toggle--active" : ""}`}
+                          onClick={() => setHideCompleted(!hideCompleted)}
+                          title={hideCompleted ? "Show all" : "Hide completed"}
+                        >
+                          <span className="sidebar-rec-filter-icon">
+                            {hideCompleted ? "○" : "●"}
+                          </span>
+                          {hideCompleted ? "Show all" : "Hide done"}
+                        </button>
+                      )}
                     </div>
                   )}
-                  <ul className="sidebar-rec-list">
-                    {recommendations.map((rec) => {
-                      const category = getCategoryFromPath(rec.docId);
-                      // Normalize doc key - handle both /docs/path and path formats
-                      const docKey = rec.docId.replace(/^\/docs\//, "");
-                      const isCompleted =
-                        progress?.docs?.[docKey]?.completed ||
-                        progress?.docs?.[rec.docId]?.completed;
+                  {filteredRecommendations.length > 0 ? (
+                    <ul className="sidebar-rec-list">
+                      {filteredRecommendations.map((rec) => {
+                        const category = getCategoryFromPath(rec.docId);
+                        const isCompleted = isDocCompleted(rec.docId);
                       return (
                         <li key={rec.docId} className="sidebar-rec-item">
                           <Link
@@ -349,8 +373,13 @@ export function SidebarRecommendations({
                           </Link>
                         </li>
                       );
-                    })}
-                  </ul>
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="sidebar-rec-empty">
+                      All recommendations completed! 🎉
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="sidebar-rec-empty">
