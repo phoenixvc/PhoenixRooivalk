@@ -9,13 +9,14 @@
  */
 
 import * as React from "react";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { aiService, ReadingRecommendation } from "../../services/aiService";
 import {
   profileToRecommendations,
   PROFILE_TEMPLATES,
   UserProfile,
+  getRecommendationsForRoles,
 } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
@@ -91,10 +92,11 @@ export function SidebarRecommendations({
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(false);
   const previousUserIdRef = useRef<string | null>(null);
 
   // Use centralized profile from AuthContext
-  const { knownProfile, isProfileLoaded, profileKey } = userProfile;
+  const { knownProfile, isProfileLoaded, profileKey, confirmedRoles } = userProfile;
 
   // Get selected template for unknown users
   const selectedTemplate =
@@ -208,7 +210,19 @@ export function SidebarRecommendations({
         return;
       }
 
-      // For unknown users without template, use AI-generated recommendations
+      // For users with confirmed roles but no template, use role-based recommendations
+      if (confirmedRoles && confirmedRoles.length > 0) {
+        const roleRecs = getRecommendationsForRoles(confirmedRoles, maxItems);
+        if (roleRecs.length > 0) {
+          setRecommendations(roleRecs);
+          highlightSidebarItems(roleRecs.map((r) => r.docId));
+          setHasLoaded(true);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // For unknown users without template or roles, use AI-generated recommendations
       const currentPath =
         typeof window !== "undefined" ? window.location.pathname : "";
       const result = await aiService.getReadingRecommendations(currentPath);
@@ -225,7 +239,7 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems, knownProfile, selectedTemplate, hasLoaded]);
+  }, [user, maxItems, knownProfile, selectedTemplate, confirmedRoles, hasLoaded]);
 
   // Load recommendations when user and profile are available
   // Wait for isProfileLoaded to avoid stale closure with knownProfile
@@ -237,14 +251,49 @@ export function SidebarRecommendations({
     }
   }, [user, isProfileLoaded, hasLoaded, fetchRecommendations]);
 
+  // Helper to check if a doc is completed (must be before early returns per hooks rules)
+  const isDocCompleted = useCallback(
+    (docId: string): boolean => {
+      const docKey = docId.replace(/^\/docs\//, "");
+      return !!(
+        progress?.docs?.[docKey]?.completed ||
+        progress?.docs?.[docId]?.completed
+      );
+    },
+    [progress],
+  );
+
+  // Memoize filtered recommendations to avoid recalculation on every render
+  const filteredRecommendations = useMemo(
+    () =>
+      hideCompleted
+        ? recommendations.filter((rec) => !isDocCompleted(rec.docId))
+        : recommendations,
+    [recommendations, hideCompleted, isDocCompleted],
+  );
+
+  // Memoize completed count
+  const completedRecsCount = useMemo(
+    () => recommendations.filter((rec) => isDocCompleted(rec.docId)).length,
+    [recommendations, isDocCompleted],
+  );
+
   // Don't render for unauthenticated users
   if (!user) {
     return null;
   }
 
-  // Don't show if no recommendations yet
-  if (!hasLoaded && !isLoading) {
-    return null;
+  // Show loading skeleton while waiting for profile to load
+  if (!isProfileLoaded || (!hasLoaded && !isLoading)) {
+    return (
+      <div className="sidebar-rec">
+        <div className="sidebar-rec-skeleton">
+          <span className="sidebar-rec-skeleton-icon" />
+          <span className="sidebar-rec-skeleton-text" />
+          <span className="sidebar-rec-skeleton-toggle" />
+        </div>
+      </div>
+    );
   }
 
   const userProfileDescription = deriveProfileDescription();
@@ -285,31 +334,39 @@ export function SidebarRecommendations({
 
               {recommendations.length > 0 ? (
                 <>
-                  {/* Show completion progress for recommendations (known profiles and templates) */}
-                  {(knownProfile || selectedTemplate) && (
-                    <div className="sidebar-rec-progress-summary">
-                      {
-                        recommendations.filter((rec) => {
-                          // Normalize doc key - handle both /docs/path and path formats
-                          const docKey = rec.docId.replace(/^\/docs\//, "");
-                          // Check both normalized and original formats
-                          return (
-                            progress?.docs?.[docKey]?.completed ||
-                            progress?.docs?.[rec.docId]?.completed
-                          );
-                        }).length
-                      }
-                      /{recommendations.length} completed
+                  {/* Show completion progress for recommendations (known profiles, templates, or roles) */}
+                  {(knownProfile || selectedTemplate || (confirmedRoles && confirmedRoles.length > 0)) && (
+                    <div
+                      className={`sidebar-rec-progress-summary ${completedRecsCount === 0 ? "sidebar-rec-progress-summary--centered" : ""}`}
+                    >
+                      <span>
+                        {completedRecsCount}/{recommendations.length} completed
+                      </span>
+                      {completedRecsCount > 0 && (
+                        <button
+                          type="button"
+                          className={`sidebar-rec-filter-toggle ${hideCompleted ? "sidebar-rec-filter-toggle--active" : ""}`}
+                          onClick={() => setHideCompleted(!hideCompleted)}
+                          title={hideCompleted ? "Show all" : "Hide completed"}
+                          aria-label={
+                            hideCompleted
+                              ? "Show all recommendations"
+                              : "Hide completed recommendations"
+                          }
+                        >
+                          <span className="sidebar-rec-filter-icon">
+                            {hideCompleted ? "○" : "●"}
+                          </span>
+                          {hideCompleted ? "Show all" : "Hide done"}
+                        </button>
+                      )}
                     </div>
                   )}
-                  <ul className="sidebar-rec-list">
-                    {recommendations.map((rec) => {
-                      const category = getCategoryFromPath(rec.docId);
-                      // Normalize doc key - handle both /docs/path and path formats
-                      const docKey = rec.docId.replace(/^\/docs\//, "");
-                      const isCompleted =
-                        progress?.docs?.[docKey]?.completed ||
-                        progress?.docs?.[rec.docId]?.completed;
+                  {filteredRecommendations.length > 0 ? (
+                    <ul className="sidebar-rec-list">
+                      {filteredRecommendations.map((rec) => {
+                        const category = getCategoryFromPath(rec.docId);
+                        const isCompleted = isDocCompleted(rec.docId);
                       return (
                         <li key={rec.docId} className="sidebar-rec-item">
                           <Link
@@ -328,8 +385,13 @@ export function SidebarRecommendations({
                           </Link>
                         </li>
                       );
-                    })}
-                  </ul>
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="sidebar-rec-empty">
+                      All recommendations completed! 🎉
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="sidebar-rec-empty">

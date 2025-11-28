@@ -30,4 +30,5 @@ export {
   getTemplateByKey,
   getAllTemplates,
   templateToUserProfile,
+  getRecommendationsForRoles,
 } from "./profiles";
