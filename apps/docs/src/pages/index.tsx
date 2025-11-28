@@ -132,21 +132,21 @@ export default function Home(): React.ReactElement {
         .marketing .secondary-button:hover { background: var(--primary); color: var(--dark); }
 
         .marketing .hero-visual { position: relative; }
-        .marketing .drone-graphic { width: 100%; height: 380px; background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,191,36,0.05)); border: 1px solid rgba(249,115,22,0.2); border-radius: 24px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .marketing .radar-sweep { position: absolute; width: 280px; height: 280px; border: 2px solid rgba(249,115,22,0.4); border-radius: 50%; }
-        .marketing .radar-sweep::before { content: ''; position: absolute; width: 200px; height: 200px; border: 1px solid rgba(249,115,22,0.2); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .marketing .drone-graphic { width: 100%; height: 380px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(249,115,22,0.3); border-radius: 24px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; backdrop-filter: blur(10px); box-shadow: 0 0 60px rgba(249,115,22,0.15), inset 0 0 60px rgba(249,115,22,0.05); }
+        .marketing .radar-sweep { position: absolute; width: 280px; height: 280px; border: 2px solid rgba(249,115,22,0.5); border-radius: 50%; box-shadow: 0 0 20px rgba(249,115,22,0.2); }
+        .marketing .radar-sweep::before { content: ''; position: absolute; width: 200px; height: 200px; border: 1px solid rgba(249,115,22,0.3); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         .marketing .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); transform-origin: left center; animation: marketing-radar 4s linear infinite; }
         @keyframes marketing-radar { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
-        .marketing .shield-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); animation: marketing-pulse 2s ease-in-out infinite; }
-        @keyframes marketing-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .marketing .drone-emoji { font-size: 8rem; animation: marketing-float 3s ease-in-out infinite; }
+        .marketing .shield-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 40px rgba(249,115,22,0.6)); animation: marketing-pulse 2s ease-in-out infinite; }
+        @keyframes marketing-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        .marketing .drone-emoji { font-size: 8rem; animation: marketing-float 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(249,115,22,0.4)); }
         @keyframes marketing-float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
         .marketing .radar-dots { position: absolute; width: 100%; height: 100%; }
-        .marketing .radar-dot { position: absolute; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: marketing-blink 2s ease-in-out infinite; }
+        .marketing .radar-dot { position: absolute; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; animation: marketing-blink 2s ease-in-out infinite; box-shadow: 0 0 10px var(--primary); }
         .marketing .radar-dot:nth-child(1) { top: 25%; left: 30%; animation-delay: 0s; }
         .marketing .radar-dot:nth-child(2) { top: 60%; left: 70%; animation-delay: 0.5s; }
         .marketing .radar-dot:nth-child(3) { top: 40%; left: 55%; animation-delay: 1s; }
-        @keyframes marketing-blink { 0%,100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+        @keyframes marketing-blink { 0%,100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.6); } }
 
         /* Sections */
         .marketing .section { padding: 3rem 5%; position: relative; z-index: 1; }
