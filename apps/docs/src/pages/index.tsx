@@ -166,7 +166,8 @@ export default function Home(): React.ReactElement {
         .marketing .tech-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; flex-shrink: 0; }
 
         /* Comparison */
-        .marketing .comparison-table { overflow-x: auto; margin-top: 2rem; }
+        .marketing .comparison-section { max-width: 1400px; margin: 0 auto; }
+        .marketing .comparison-table { overflow-x: auto; margin-top: 2rem; max-width: 1000px; margin-left: auto; margin-right: auto; }
         .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
         .marketing th { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 1rem; text-align: left; font-weight: 800; }
         .marketing td { padding: 1rem; border-bottom: 1px solid rgba(249,115,22,0.1); }
@@ -176,8 +177,10 @@ export default function Home(): React.ReactElement {
 
         /* CTA */
         .marketing .cta-section { background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); text-align: center; }
+        .marketing .cta-content { max-width: 800px; margin: 0 auto; }
         .marketing .cta-content h2 { font-size: 2.6rem; margin-bottom: .8rem; background: linear-gradient(135deg, var(--light), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .marketing .cta-content p { font-size: 1.1rem; color: var(--gray); margin-bottom: 1.4rem; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .marketing .cta-content .hero-buttons { justify-content: center; flex-wrap: wrap; }
 
         /* Footer-like bottom */
         .marketing .footer { padding: 2rem 5%; border-top: 1px solid rgba(249,115,22,0.2); color: var(--gray); text-align: center; }

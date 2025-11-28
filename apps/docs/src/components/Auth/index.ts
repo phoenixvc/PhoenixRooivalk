@@ -10,3 +10,5 @@ export {
   isProfileConfirmationPending,
 } from "./ProfileConfirmation";
 export { default as ProfileConfirmationDefault } from "./ProfileConfirmation";
+export { NavbarProgressVisibility } from "./NavbarProgressVisibility";
+export { default as NavbarProgressVisibilityDefault } from "./NavbarProgressVisibility";
