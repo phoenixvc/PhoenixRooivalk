@@ -43,7 +43,7 @@ Phoenix Rooivalk currently uses dual-chain anchoring for evidence management:
 | **Solana** | Primary anchoring | 65,000 TPS, ~400ms finality, $0.00025/tx | Production |
 | **EtherLink** | Secondary/redundancy | Ethereum L2 compatibility | Production |
 
-Per [ADR 0001](./architecture-decision-records#adr-0001-chain-selection) and [ADR-D002](./architecture-decision-records#adr-d002-dual-blockchain-anchoring), our strategy emphasizes:
+Per [ADR 0001](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others) and [ADR-D002](./architecture-decision-records#adr-d002-dual-blockchain-anchoring-solana--etherlink), our strategy emphasizes:
 
 - Low-latency finality for real-time operations
 - Cost-efficient frequent anchoring
@@ -418,10 +418,10 @@ After hackathon, Movement integration proceeds to production if:
 
 ## Related ADRs
 
-- [ADR 0001: Chain Selection for On-Chain Anchoring](./architecture-decision-records#adr-0001-chain-selection)
-- [ADR 0002: Solana Memo vs Smart Contract Approach](./architecture-decision-records#adr-0002-solana-memo-vs-smart-contract)
-- [ADR 0004: Layered Strategy (L1/L2/L3)](./architecture-decision-records#adr-0004-layered-strategy)
-- [ADR-D002: Dual Blockchain Anchoring (Solana + EtherLink)](./architecture-decision-records#adr-d002-dual-blockchain-anchoring)
+- [ADR 0001: Chain Selection for On-Chain Anchoring](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others)
+- [ADR 0002: Solana Memo vs Smart Contract Approach](./architecture-decision-records#adr-0002-solana-memo-vs-smart-contract-approach)
+- [ADR 0004: Layered Strategy (L1/L2/L3)](./architecture-decision-records#adr-0004-layered-strategy-l1l2l3)
+- [ADR-D002: Dual Blockchain Anchoring (Solana + EtherLink)](./architecture-decision-records#adr-d002-dual-blockchain-anchoring-solana--etherlink)
 - [ADR-D007: Evidence-Based Architecture](./architecture-decision-records#adr-d007-evidence-based-architecture)
 
 ---

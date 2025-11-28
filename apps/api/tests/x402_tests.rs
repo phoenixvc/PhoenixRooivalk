@@ -105,10 +105,7 @@ async fn test_verify_premium_not_configured() {
     assert_eq!(response.status(), StatusCode::SERVICE_UNAVAILABLE);
 
     let body: Value = response.json().await.expect("Failed to parse JSON");
-    assert!(body["error"]
-        .as_str()
-        .unwrap()
-        .contains("not configured"));
+    assert!(body["error"].as_str().unwrap().contains("not configured"));
 }
 
 /// Test x402 payment flow simulation (with environment configured)
@@ -218,9 +215,9 @@ async fn test_x402_price_tiers() {
 /// Test rate limiting module unit tests
 #[tokio::test]
 async fn test_rate_limiter_unit() {
+    use governor::Quota;
     use phoenix_api::rate_limit::X402RateLimiter;
     use std::num::NonZeroU32;
-    use governor::Quota;
 
     // Create a very restrictive limiter: 2 requests per minute
     let limiter = X402RateLimiter::with_quotas(

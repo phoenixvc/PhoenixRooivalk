@@ -26,9 +26,11 @@ use std::{
 #[derive(Clone)]
 pub struct X402RateLimiter {
     /// Per-IP rate limiters for premium verification
-    verify_limiters: Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
+    verify_limiters:
+        Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
     /// Per-IP rate limiters for status checks
-    status_limiters: Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
+    status_limiters:
+        Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
     /// Quota for premium verification (more restrictive)
     verify_quota: Quota,
     /// Quota for status checks (less restrictive)
@@ -67,7 +69,10 @@ impl X402RateLimiter {
     }
 
     /// Get or create a rate limiter for an IP address (verify endpoint)
-    fn get_verify_limiter(&self, ip: &str) -> Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>> {
+    fn get_verify_limiter(
+        &self,
+        ip: &str,
+    ) -> Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>> {
         // Try read lock first
         {
             let limiters = self.verify_limiters.read().unwrap();
@@ -89,7 +94,10 @@ impl X402RateLimiter {
     }
 
     /// Get or create a rate limiter for an IP address (status endpoint)
-    fn get_status_limiter(&self, ip: &str) -> Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>> {
+    fn get_status_limiter(
+        &self,
+        ip: &str,
+    ) -> Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>> {
         // Try read lock first
         {
             let limiters = self.status_limiters.read().unwrap();
@@ -117,7 +125,8 @@ impl X402RateLimiter {
         match limiter.check() {
             Ok(_) => Ok(()),
             Err(not_until) => {
-                let wait_time = not_until.wait_time_from(governor::clock::Clock::now(&DefaultClock::default()));
+                let wait_time =
+                    not_until.wait_time_from(governor::clock::Clock::now(&DefaultClock::default()));
                 Err(rate_limit_response(wait_time))
             }
         }
@@ -130,7 +139,8 @@ impl X402RateLimiter {
         match limiter.check() {
             Ok(_) => Ok(()),
             Err(not_until) => {
-                let wait_time = not_until.wait_time_from(governor::clock::Clock::now(&DefaultClock::default()));
+                let wait_time =
+                    not_until.wait_time_from(governor::clock::Clock::now(&DefaultClock::default()));
                 Err(rate_limit_response(wait_time))
             }
         }
@@ -185,7 +195,10 @@ fn rate_limit_response(retry_after: Duration) -> Response {
 
 /// Extract client IP from request
 /// Checks X-Forwarded-For header first (for proxied requests), then falls back to socket address
-pub fn extract_client_ip<B>(req: &Request<B>, connect_info: Option<&ConnectInfo<SocketAddr>>) -> String {
+pub fn extract_client_ip<B>(
+    req: &Request<B>,
+    connect_info: Option<&ConnectInfo<SocketAddr>>,
+) -> String {
     // Check X-Forwarded-For header first
     if let Some(forwarded) = req.headers().get("x-forwarded-for") {
         if let Ok(forwarded_str) = forwarded.to_str() {
@@ -261,8 +274,8 @@ mod tests {
     #[test]
     fn test_separate_endpoint_quotas() {
         let limiter = X402RateLimiter::with_quotas(
-            Quota::per_minute(NonZeroU32::new(1).unwrap()),  // verify: 1/min
-            Quota::per_minute(NonZeroU32::new(5).unwrap()),  // status: 5/min
+            Quota::per_minute(NonZeroU32::new(1).unwrap()), // verify: 1/min
+            Quota::per_minute(NonZeroU32::new(5).unwrap()), // status: 5/min
         );
 
         let ip = "172.16.0.1";
@@ -295,10 +308,7 @@ mod tests {
 
     #[test]
     fn test_extract_client_ip_no_headers() {
-        let req = Request::builder()
-            .uri("/test")
-            .body(())
-            .unwrap();
+        let req = Request::builder().uri("/test").body(()).unwrap();
 
         let addr: SocketAddr = "192.168.1.100:8080".parse().unwrap();
         let connect_info = ConnectInfo(addr);

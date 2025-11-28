@@ -28,7 +28,10 @@ pub fn payment_required_response(
     facilitator_url: &str,
 ) -> (axum::http::StatusCode, axum::Json<PaymentDetails>) {
     let details = PaymentDetails::for_evidence(evidence_id, tier, wallet_address, facilitator_url);
-    (axum::http::StatusCode::PAYMENT_REQUIRED, axum::Json(details))
+    (
+        axum::http::StatusCode::PAYMENT_REQUIRED,
+        axum::Json(details),
+    )
 }
 
 #[cfg(test)]

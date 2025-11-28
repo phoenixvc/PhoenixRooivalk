@@ -5,12 +5,14 @@
   "scripts": {
     "start": "docusaurus start",
     "build": "docusaurus build",
+    "build:strict": "DOCUSAURUS_BROKEN_LINKS=throw docusaurus build",
     "serve": "docusaurus serve",
     "lint": "prettier --check . && markdownlint \"**/*.md\" --ignore node_modules --disable MD025 MD051",
     "lint:fix": "markdownlint --fix '**/*.md' --ignore node_modules",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "check-links": "../../scripts/check-docs-links.sh",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
