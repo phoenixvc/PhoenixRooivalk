@@ -54,12 +54,12 @@ export default function SlideDeck({
   const slideInfo = React.useMemo(() => {
     const slides = React.Children.toArray(children).filter(
       (child): child is React.ReactElement =>
-        React.isValidElement(child) && typeof child.props.number === "number"
+        React.isValidElement(child) && typeof child.props.number === "number",
     );
     const count = slides.length;
     const totalSeconds = slides.reduce(
       (sum, slide) => sum + (slide.props.duration || 0),
-      0
+      0,
     );
     return { count, totalSeconds };
   }, [children]);
