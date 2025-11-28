@@ -277,12 +277,10 @@ const config: Config = {
           className: "navbar__link--login",
           "aria-label": "Sign in to your account",
         },
-        // GitHub repository link
+        // Theme toggle
         {
-          href: "https://github.com/JustAGhosT/PhoenixRooivalk",
-          label: "GitHub",
+          type: "colorMode",
           position: "right",
-          "aria-label": "GitHub repository",
         },
         // Environment badge (only show in non-production)
         ...(envBadge && envName !== "production"
@@ -383,9 +381,26 @@ const config: Config = {
               label: "Downloads",
               to: "/docs/resources/downloads",
             },
+          ],
+        },
+        {
+          title: "Connect",
+          items: [
             {
-              label: "GitHub Repository",
+              label: "GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
+            },
+            {
+              label: "LinkedIn",
+              href: "https://linkedin.com/company/phoenix-rooivalk",
+            },
+            {
+              label: "X (Twitter)",
+              href: "https://x.com/PhoenixRooivalk",
+            },
+            {
+              label: "Contact Us",
+              to: "/contact",
             },
             {
               label: "Request Access",
