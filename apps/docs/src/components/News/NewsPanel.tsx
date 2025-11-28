@@ -30,7 +30,7 @@ export function NewsPanel({
   defaultTab = "feed",
   maxItems = 20,
 }: NewsPanelProps): React.ReactElement {
-  const { user, profile } = useAuth();
+  const { user, userProfile: authUserProfile } = useAuth();
 
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [generalNews, setGeneralNews] = useState<NewsArticle[]>([]);
@@ -42,18 +42,20 @@ export function NewsPanel({
     [],
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>();
 
   // Get user profile for personalization
-  const userProfile = profile
+  // Use knownProfile from AuthContext which contains roles, interests, focusAreas
+  const knownProfile = authUserProfile?.knownProfile;
+  const userProfile = knownProfile
     ? {
-        roles: profile.roles || [],
-        interests: profile.interests || [],
-        focusAreas: profile.focusAreas || [],
-        experienceLevel: profile.experienceLevel || "intermediate",
+        roles: authUserProfile.confirmedRoles || knownProfile.roles || [],
+        interests: knownProfile.interests || [],
+        focusAreas: knownProfile.focusAreas || [],
+        experienceLevel: knownProfile.experienceLevel || "intermediate",
       }
     : undefined;
 
@@ -278,9 +280,22 @@ export function NewsPanel({
       {error && <div className="news-panel-error">{error}</div>}
 
       {isLoading && generalNews.length === 0 && specializedNews.length === 0 && (
-        <div className="news-panel-loading">
-          <div className="news-loading-spinner" />
-          <p>Loading news...</p>
+        <div className="news-skeleton-grid" aria-label="Loading news..." role="status">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="news-skeleton-card">
+              <div className="news-skeleton-image" />
+              <div className="news-skeleton-title" />
+              <div className="news-skeleton-summary">
+                <div className="news-skeleton-line" />
+                <div className="news-skeleton-line" />
+                <div className="news-skeleton-line" />
+              </div>
+              <div className="news-skeleton-meta">
+                <div className="news-skeleton-badge" />
+                <div className="news-skeleton-date" />
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

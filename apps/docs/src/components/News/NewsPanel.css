@@ -191,6 +191,111 @@
   }
 }
 
+/* Skeleton Loading */
+.news-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.news-skeleton-card {
+  background: var(--ifm-color-emphasis-100, #f3f4f6);
+  border-radius: 12px;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.news-skeleton-image {
+  height: 160px;
+  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.news-skeleton-title {
+  height: 1.25rem;
+  width: 80%;
+  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.news-skeleton-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.news-skeleton-line {
+  height: 0.875rem;
+  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.news-skeleton-line:nth-child(1) {
+  width: 100%;
+  animation-delay: 0.2s;
+}
+
+.news-skeleton-line:nth-child(2) {
+  width: 90%;
+  animation-delay: 0.3s;
+}
+
+.news-skeleton-line:nth-child(3) {
+  width: 60%;
+  animation-delay: 0.4s;
+}
+
+.news-skeleton-meta {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.news-skeleton-badge {
+  height: 1.5rem;
+  width: 80px;
+  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.news-skeleton-date {
+  height: 1rem;
+  width: 100px;
+  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+[data-theme="dark"] .news-skeleton-card {
+  background: var(--ifm-color-emphasis-200, #374151);
+}
+
+[data-theme="dark"] .news-skeleton-image,
+[data-theme="dark"] .news-skeleton-title,
+[data-theme="dark"] .news-skeleton-line,
+[data-theme="dark"] .news-skeleton-badge,
+[data-theme="dark"] .news-skeleton-date {
+  background: var(--ifm-color-emphasis-300, #4b5563);
+}
+
 /* Content */
 .news-panel-content {
   display: flex;

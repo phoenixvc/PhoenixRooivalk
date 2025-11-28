@@ -116,6 +116,12 @@ export {
   saveArticle,
   getSavedArticles,
   searchNews,
+  // Ingestion functions
+  fetchNewsFromWeb,
+  triggerNewsIngestion,
+  generateAINewsDigest,
+  importNewsArticles,
+  getNewsIngestionStats,
 } from "./news";
 
 import * as functions from "firebase-functions";

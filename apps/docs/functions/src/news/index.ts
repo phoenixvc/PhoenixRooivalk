@@ -281,7 +281,28 @@ export const getPersonalizedNews = functions.https.onCall(
       );
     }
 
-    const { userProfile, limit = 10 } = data;
+    const { limit = 10 } = data;
+
+    // Normalize user profile with defaults for empty/undefined values
+    const userProfile: UserProfile = {
+      roles: data.userProfile?.roles?.filter(Boolean) || [],
+      interests: data.userProfile?.interests?.filter(Boolean) || [],
+      focusAreas: data.userProfile?.focusAreas?.filter(Boolean) || [],
+      experienceLevel: data.userProfile?.experienceLevel || "intermediate",
+    };
+
+    // If user has no profile data, return empty (they'll see general news instead)
+    if (
+      userProfile.roles.length === 0 &&
+      userProfile.interests.length === 0 &&
+      userProfile.focusAreas.length === 0
+    ) {
+      return {
+        articles: [],
+        totalMatched: 0,
+        message: "Complete your profile to see personalized news recommendations.",
+      };
+    }
 
     try {
       // Get recent articles
@@ -733,3 +754,15 @@ function cosineSimilarity(a: number[], b: number[]): number {
   const magnitude = Math.sqrt(normA) * Math.sqrt(normB);
   return magnitude === 0 ? 0 : dotProduct / magnitude;
 }
+
+// Export ingestion functions
+export {
+  fetchNewsFromWeb,
+  triggerNewsIngestion,
+  generateAINewsDigest,
+  importNewsArticles,
+  getNewsIngestionStats,
+} from "./ingestion";
+
+// Export config
+export { NEWS_TOPICS, NEWS_SOURCES, ROLE_INTERESTS_MAP } from "./config";
