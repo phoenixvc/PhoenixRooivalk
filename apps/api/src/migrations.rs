@@ -163,8 +163,8 @@ impl MigrationManager {
                     PRIMARY KEY (job_id, network, chain, tx_id)
                 );
                 -- Copy existing data, deduplicating on the new primary key
-                INSERT OR IGNORE INTO outbox_tx_refs_new 
-                SELECT job_id, network, chain, tx_id, confirmed, timestamp 
+                INSERT OR IGNORE INTO outbox_tx_refs_new
+                SELECT job_id, network, chain, tx_id, confirmed, timestamp
                 FROM outbox_tx_refs;
                 -- Replace old table
                 DROP TABLE outbox_tx_refs;
@@ -172,6 +172,31 @@ impl MigrationManager {
                 -- Recreate indexes
                 CREATE INDEX IF NOT EXISTS idx_outbox_tx_refs_job_id ON outbox_tx_refs(job_id);
                 CREATE INDEX IF NOT EXISTS idx_outbox_tx_refs_confirmed ON outbox_tx_refs(confirmed);
+                "#,
+            },
+            Migration {
+                version: 9,
+                name: "add_payment_receipts_table",
+                sql: r#"
+                -- x402 payment receipts for audit trail and replay protection
+                CREATE TABLE IF NOT EXISTS payment_receipts (
+                    id TEXT PRIMARY KEY,
+                    evidence_id TEXT NOT NULL,
+                    tx_signature TEXT NOT NULL UNIQUE,
+                    amount_usdc TEXT NOT NULL,
+                    tier TEXT NOT NULL,
+                    sender_wallet TEXT,
+                    verified_at INTEGER NOT NULL,
+                    created_ms INTEGER NOT NULL
+                );
+                -- Index for checking if a signature was already used (replay protection)
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_payment_receipts_tx_signature ON payment_receipts(tx_signature);
+                -- Index for querying payments by evidence
+                CREATE INDEX IF NOT EXISTS idx_payment_receipts_evidence_id ON payment_receipts(evidence_id);
+                -- Index for analytics by time
+                CREATE INDEX IF NOT EXISTS idx_payment_receipts_verified_at ON payment_receipts(verified_at);
+                -- Index for analytics by tier
+                CREATE INDEX IF NOT EXISTS idx_payment_receipts_tier ON payment_receipts(tier);
                 "#,
             },
         ]
@@ -350,8 +375,8 @@ mod tests {
         // Check status
         let status = migration_manager.get_status().await.unwrap();
         assert!(status.is_up_to_date);
-        assert_eq!(status.current_version, 8);
-        assert_eq!(status.applied_migrations.len(), 8);
+        assert_eq!(status.current_version, 9);
+        assert_eq!(status.applied_migrations.len(), 9);
 
         // Verify tables exist
         let tables = sqlx::query("SELECT name FROM sqlite_master WHERE type='table'")

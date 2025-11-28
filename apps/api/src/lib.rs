@@ -12,9 +12,13 @@ pub mod migrations;
 pub mod models;
 pub mod repository;
 
+/// Application state shared across all handlers
 #[derive(Clone)]
 pub struct AppState {
+    /// Database connection pool
     pub pool: Pool<Sqlite>,
+    /// x402 payment protocol state (None if not configured)
+    pub x402: Option<handlers_x402::X402State>,
 }
 
 pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
@@ -41,7 +45,18 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
     let migration_manager = crate::migrations::MigrationManager::new(pool.clone());
     migration_manager.migrate().await?;
 
-    let state = AppState { pool: pool.clone() };
+    // Initialize x402 payment protocol (once at startup, not per-request)
+    let x402 = handlers_x402::X402State::from_env();
+    if x402.is_some() {
+        tracing::info!("x402 payment protocol enabled");
+    } else {
+        tracing::debug!("x402 payment protocol disabled (not configured)");
+    }
+
+    let state = AppState {
+        pool: pool.clone(),
+        x402,
+    };
     let app = Router::new()
         .route("/health", get(handlers::health))
         // Evidence

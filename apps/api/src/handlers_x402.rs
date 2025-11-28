@@ -3,7 +3,10 @@
 //! This module implements HTTP 402 "Payment Required" endpoints for
 //! monetizing evidence verification API access.
 
-use crate::{db::get_evidence_by_id, AppState};
+use crate::{
+    db::{create_payment_receipt, get_evidence_by_id, is_payment_signature_used},
+    AppState,
+};
 use axum::{
     extract::State,
     http::{HeaderMap, StatusCode},
@@ -61,9 +64,9 @@ pub async fn verify_evidence_premium(
     headers: HeaderMap,
     Json(req): Json<VerifyEvidenceRequest>,
 ) -> Response {
-    // Get x402 configuration from environment
-    let x402_state = match X402State::from_env() {
-        Some(s) => s,
+    // Get x402 configuration from AppState (initialized once at startup)
+    let x402_state = match &state.x402 {
+        Some(s) => s.clone(),
         None => {
             // x402 not configured - return 503 Service Unavailable
             return (
@@ -128,6 +131,33 @@ async fn handle_paid_verification(
     req: VerifyEvidenceRequest,
     proof: PaymentProof,
 ) -> Response {
+    // Check for payment replay attack
+    match is_payment_signature_used(&state.pool, &proof.signature).await {
+        Ok(true) => {
+            return (
+                StatusCode::CONFLICT,
+                Json(json!({
+                    "error": "Payment already used",
+                    "tx_signature": proof.signature,
+                    "hint": "This payment signature has already been redeemed"
+                })),
+            )
+                .into_response();
+        }
+        Ok(false) => {} // Payment not used yet, continue
+        Err(e) => {
+            tracing::error!("Failed to check payment signature: {}", e);
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({
+                    "error": "Failed to verify payment uniqueness",
+                    "details": e.to_string()
+                })),
+            )
+                .into_response();
+        }
+    }
+
     let expected_memo = format!("evidence:{}", req.evidence_id);
     let min_amount = req.tier.price_usdc();
 
@@ -165,6 +195,22 @@ async fn handle_paid_verification(
         .into_response();
         *response.status_mut() = StatusCode::PAYMENT_REQUIRED;
         return response;
+    }
+
+    // Store payment receipt for audit trail and replay protection
+    let tier_str = format!("{:?}", req.tier).to_lowercase();
+    if let Err(e) = create_payment_receipt(
+        &state.pool,
+        &req.evidence_id,
+        &proof.signature,
+        &verification.amount_usdc,
+        &tier_str,
+        Some(&proof.sender),
+    )
+    .await
+    {
+        tracing::error!("Failed to store payment receipt: {}", e);
+        // Continue anyway - verification was successful
     }
 
     // Payment verified - perform premium evidence verification
@@ -286,15 +332,15 @@ fn build_chain_confirmations(
 /// Get x402 payment status and configuration
 ///
 /// GET /api/v1/x402/status
-pub async fn x402_status() -> Response {
-    match X402State::from_env() {
-        Some(state) => (
+pub async fn x402_status(State(state): State<AppState>) -> Response {
+    match &state.x402 {
+        Some(x402) => (
             StatusCode::OK,
             Json(json!({
                 "enabled": true,
-                "network": state.config.network,
-                "wallet_address": state.config.wallet_address,
-                "facilitator_url": state.config.facilitator_url,
+                "network": x402.config.network,
+                "wallet_address": x402.config.wallet_address,
+                "facilitator_url": x402.config.facilitator_url,
                 "supported_tokens": ["USDC", "USDT", "SOL"],
                 "price_tiers": {
                     "basic": {

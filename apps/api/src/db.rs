@@ -346,3 +346,70 @@ pub async fn list_jamming_operations(
 
     Ok((operations, total_count))
 }
+
+// Payment Receipt functions for x402 audit trail and replay protection
+
+/// Check if a payment signature has already been used (replay protection)
+pub async fn is_payment_signature_used(
+    pool: &Pool<Sqlite>,
+    tx_signature: &str,
+) -> Result<bool, sqlx::Error> {
+    let row = sqlx::query("SELECT 1 FROM payment_receipts WHERE tx_signature = ?1")
+        .bind(tx_signature)
+        .fetch_optional(pool)
+        .await?;
+    Ok(row.is_some())
+}
+
+/// Store a payment receipt for audit trail
+pub async fn create_payment_receipt(
+    pool: &Pool<Sqlite>,
+    evidence_id: &str,
+    tx_signature: &str,
+    amount_usdc: &str,
+    tier: &str,
+    sender_wallet: Option<&str>,
+) -> Result<String, sqlx::Error> {
+    let id = Uuid::new_v4().to_string();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
+
+    sqlx::query(
+        "INSERT INTO payment_receipts (id, evidence_id, tx_signature, amount_usdc, tier, sender_wallet, verified_at, created_ms) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)"
+    )
+    .bind(&id)
+    .bind(evidence_id)
+    .bind(tx_signature)
+    .bind(amount_usdc)
+    .bind(tier)
+    .bind(sender_wallet)
+    .bind(current_timestamp_ms)
+    .bind(current_timestamp_ms)
+    .execute(pool)
+    .await?;
+
+    Ok(id)
+}
+
+/// Get payment receipt by transaction signature
+pub async fn get_payment_receipt_by_signature(
+    pool: &Pool<Sqlite>,
+    tx_signature: &str,
+) -> Result<Option<crate::models::PaymentReceiptOut>, sqlx::Error> {
+    let row = sqlx::query(
+        "SELECT id, evidence_id, tx_signature, amount_usdc, tier, sender_wallet, verified_at, created_ms FROM payment_receipts WHERE tx_signature = ?1"
+    )
+    .bind(tx_signature)
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(row.map(|row| crate::models::PaymentReceiptOut {
+        id: row.get::<String, _>(0),
+        evidence_id: row.get::<String, _>(1),
+        tx_signature: row.get::<String, _>(2),
+        amount_usdc: row.get::<String, _>(3),
+        tier: row.get::<String, _>(4),
+        sender_wallet: row.get::<Option<String>, _>(5),
+        verified_at: row.get::<i64, _>(6),
+        created_ms: row.get::<i64, _>(7),
+    }))
+}
