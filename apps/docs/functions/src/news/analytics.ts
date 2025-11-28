@@ -17,6 +17,23 @@ const COLLECTIONS = {
 
 /**
  * Get news engagement analytics (admin only)
+ *
+ * Retrieves comprehensive analytics data about news article engagement
+ * including views, saves, top articles, and category performance.
+ *
+ * @param data - Request data
+ * @param data.dateRange - Time period for analytics: "7d" (default), "30d", or "90d"
+ * @param context - Firebase callable context
+ * @returns Promise containing:
+ *   - totalViews: Total number of article views
+ *   - totalSaves: Total number of saved articles
+ *   - uniqueReaders: Number of unique users who viewed articles
+ *   - avgReadTime: Average reading time in seconds
+ *   - topArticles: Array of top 10 articles by views
+ *   - engagementByCategory: Views and saves grouped by category
+ *   - dailyViews: Array of daily view counts
+ * @throws {HttpsError} permission-denied - If user is not an admin
+ * @throws {HttpsError} internal - If analytics retrieval fails
  */
 export const getNewsAnalytics = functions.https.onCall(
   async (
@@ -69,7 +86,7 @@ export const getNewsAnalytics = functions.https.onCall(
         }
       }
 
-      // Get article details for top articles
+      // Get article details for top articles using batched fetch
       const topArticleIds = Object.entries(articleViews)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10)
@@ -82,28 +99,34 @@ export const getNewsAnalytics = functions.https.onCall(
         saves: number;
       }> = [];
 
-      for (const articleId of topArticleIds) {
-        const articleDoc = await db
-          .collection(COLLECTIONS.NEWS)
-          .doc(articleId)
-          .get();
+      // Batch fetch all article documents at once
+      if (topArticleIds.length > 0) {
+        const articleRefs = topArticleIds.map((id) =>
+          db.collection(COLLECTIONS.NEWS).doc(id),
+        );
+        const articleDocs = await db.getAll(...articleRefs);
 
-        if (articleDoc.exists) {
-          const articleData = articleDoc.data()!;
-          topArticles.push({
-            id: articleId,
-            title: articleData.title,
-            views: articleViews[articleId] || 0,
-            saves: articleSaves[articleId] || 0,
-          });
+        for (let i = 0; i < articleDocs.length; i++) {
+          const articleDoc = articleDocs[i];
+          const articleId = topArticleIds[i];
 
-          // Aggregate by category
-          const category = articleData.category || "uncategorized";
-          if (!categoryViews[category]) {
-            categoryViews[category] = { views: 0, saves: 0 };
+          if (articleDoc.exists) {
+            const articleData = articleDoc.data()!;
+            topArticles.push({
+              id: articleId,
+              title: articleData.title,
+              views: articleViews[articleId] || 0,
+              saves: articleSaves[articleId] || 0,
+            });
+
+            // Aggregate by category
+            const category = articleData.category || "uncategorized";
+            if (!categoryViews[category]) {
+              categoryViews[category] = { views: 0, saves: 0 };
+            }
+            categoryViews[category].views += articleViews[articleId] || 0;
+            categoryViews[category].saves += articleSaves[articleId] || 0;
           }
-          categoryViews[category].views += articleViews[articleId] || 0;
-          categoryViews[category].saves += articleSaves[articleId] || 0;
         }
       }
 
@@ -152,6 +175,20 @@ export const getNewsAnalytics = functions.https.onCall(
 
 /**
  * Get news ingestion statistics (admin only)
+ *
+ * Retrieves statistics about news article ingestion including counts,
+ * category distribution, and time-based metrics.
+ *
+ * @param _data - No parameters expected from client
+ * @param context - Firebase callable context (requires admin token)
+ * @returns Promise containing:
+ *   - totalArticles: Total number of articles in the system
+ *   - lastIngestionTime: ISO timestamp of the most recently ingested article
+ *   - articlesByCategory: Object mapping category names to article counts
+ *   - articlesLast24h: Number of articles ingested in the last 24 hours
+ *   - articlesLast7d: Number of articles ingested in the last 7 days
+ * @throws {HttpsError} permission-denied - If user is not an admin
+ * @throws {HttpsError} internal - If statistics retrieval fails
  */
 export const getNewsIngestionStats = functions.https.onCall(
   async (_data: Record<string, never>, context) => {

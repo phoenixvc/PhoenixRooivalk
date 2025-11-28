@@ -176,6 +176,14 @@ export const getNewsFeed = functions.https.onCall(
     const userId = context.auth?.uid;
     const limit = data.limit || 20;
 
+    // Validate categories - Firestore "in" operator supports max 10 values
+    if (data.categories && data.categories.length > 10) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Cannot filter by more than 10 categories at once",
+      );
+    }
+
     try {
       // Build base query
       let query = db
@@ -334,7 +342,7 @@ export const getPersonalizedNews = functions.https.onCall(
         } else if (ruleBasedRelevance.score >= 0.2) {
           // Use AI for borderline cases
           try {
-            const prompt = NEWS_PERSONALIZATION_PROMPT.user
+            const prompt = NEWS_PERSONALIZATION_PROMPT.user.template
               .replace("{{articleTitle}}", article.title)
               .replace("{{articleSummary}}", article.summary)
               .replace("{{articleCategory}}", article.category)
@@ -351,7 +359,7 @@ export const getPersonalizedNews = functions.https.onCall(
 
             const { content } = await chatCompletion(
               [
-                { role: "system", content: NEWS_PERSONALIZATION_PROMPT.system },
+                { role: "system", content: NEWS_PERSONALIZATION_PROMPT.system.base },
                 { role: "user", content: prompt },
               ],
               { model: "chatFast", maxTokens: 300, temperature: 0.2 },
@@ -427,13 +435,13 @@ export const addNewsArticle = functions.https.onCall(
 
     try {
       // Use AI to categorize and extract metadata
-      const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user
+      const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user.template
         .replace("{{title}}", title)
         .replace("{{content}}", content.substring(0, 2000));
 
       const { content: categorizationResult } = await chatCompletion(
         [
-          { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system },
+          { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system.base },
           { role: "user", content: categorizationPrompt },
         ],
         { model: "chatFast", maxTokens: 500, temperature: 0.1 },

@@ -87,13 +87,13 @@ async function processArticleWithAI(
 ): Promise<ProcessedArticle | null> {
   try {
     // Categorize the article
-    const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user
+    const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user.template
       .replace("{{title}}", title)
       .replace("{{content}}", content.substring(0, 3000));
 
     const { content: categorizationResult } = await chatCompletion(
       [
-        { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system },
+        { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system.base },
         { role: "user", content: categorizationPrompt },
       ],
       { model: "chatFast", maxTokens: 500, temperature: 0.1 },
