@@ -351,6 +351,187 @@
   color: rgb(249, 115, 22);
 }
 
+/* News Personalization Styles */
+.preferencesSection {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.preferencesSection:last-of-type {
+  border-bottom: none;
+  margin-bottom: 1rem;
+}
+
+.preferencesSubtitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+  margin: 0 0 0.25rem 0;
+  border-bottom: none;
+}
+
+.preferencesHint {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin: 0 0 1rem 0;
+}
+
+/* Category Grid */
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.5rem;
+}
+
+.categoryChip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 8px;
+  color: rgb(226, 230, 234);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.categoryChip:hover {
+  background: rgba(71, 85, 105, 0.8);
+  border-color: rgb(100, 116, 139);
+}
+
+.categoryPreferred {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgb(34, 197, 94);
+}
+
+.categoryPreferred:hover {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+.categoryHidden {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: rgb(148, 163, 184);
+  text-decoration: line-through;
+}
+
+.categoryHidden:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.categoryIcon {
+  font-size: 1rem;
+}
+
+.categoryLabel {
+  flex: 1;
+  text-align: left;
+}
+
+.categoryStatus {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Keyword Input */
+.keywordInput {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.keywordField {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 6px;
+  color: rgb(226, 230, 234);
+  font-size: 0.875rem;
+}
+
+.keywordField:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+}
+
+.keywordField::placeholder {
+  color: rgb(100, 116, 139);
+}
+
+.keywordList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.keywordTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  border-radius: 9999px;
+  color: rgb(249, 115, 22);
+  font-size: 0.8125rem;
+}
+
+.keywordRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: rgba(249, 115, 22, 0.2);
+  border-radius: 50%;
+  color: rgb(249, 115, 22);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.keywordRemove:hover {
+  background: rgba(249, 115, 22, 0.4);
+}
+
+/* Digest Options */
+.digestOptions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.digestOption {
+  padding: 0.5rem 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 6px;
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.digestOption:hover {
+  background: rgba(71, 85, 105, 0.8);
+  color: rgb(226, 230, 234);
+}
+
+.digestActive {
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgb(249, 115, 22);
+  color: rgb(249, 115, 22);
+}
+
+.digestActive:hover {
+  background: rgba(249, 115, 22, 0.3);
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2rem;

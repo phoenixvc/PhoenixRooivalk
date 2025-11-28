@@ -17,6 +17,7 @@ import type {
   NewsFeedResponse,
   NewsCategory,
   NewsSearchParams,
+  UserNewsPreferences,
 } from "../types/news";
 
 // Cache TTLs (in milliseconds)
@@ -490,6 +491,64 @@ class NewsService {
       >(this.functions!, "unsubscribeFromBreakingNews");
 
       const result = await unsubscribeFn({});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get user news preferences
+   */
+  async getUserPreferences(): Promise<UserNewsPreferences | null> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    // Check cache
+    const cached = memoryCache.get<UserNewsPreferences>("user_news_preferences");
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const getPreferencesFn = httpsCallable<
+        Record<string, never>,
+        { preferences: UserNewsPreferences | null }
+      >(this.functions!, "getUserNewsPreferences");
+
+      const result = await getPreferencesFn({});
+
+      // Cache the result
+      if (result.data.preferences) {
+        memoryCache.set("user_news_preferences", result.data.preferences, NEWS_FEED_CACHE_TTL);
+      }
+
+      return result.data.preferences;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Save user news preferences
+   */
+  async saveUserPreferences(preferences: Partial<Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">>): Promise<{ success: boolean }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const savePreferencesFn = httpsCallable<
+        { preferences: Partial<Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">> },
+        { success: boolean }
+      >(this.functions!, "saveUserNewsPreferences");
+
+      const result = await savePreferencesFn({ preferences });
+
+      // Invalidate cache
+      memoryCache.delete("user_news_preferences");
+
       return result.data;
     } catch (error) {
       this.handleError(error);

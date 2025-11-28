@@ -7,7 +7,7 @@
 
 import Layout from "@theme/Layout";
 import { useColorMode } from "@docusaurus/theme-common";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
   AVAILABLE_ROLES,
@@ -16,16 +16,28 @@ import {
 } from "../config/userProfiles";
 import { resetOnboarding } from "../components/Onboarding/OnboardingWalkthrough";
 import Link from "@docusaurus/Link";
+import { newsService } from "../services/newsService";
+import {
+  NEWS_CATEGORY_CONFIG,
+  DEFAULT_NEWS_PREFERENCES,
+  type NewsCategory,
+  type UserNewsPreferences,
+} from "../types/news";
+import { useToast } from "../contexts/ToastContext";
 import styles from "./profile-settings.module.css";
 
 // localStorage key for profile confirmation
 const PROFILE_CONFIRMED_KEY = "phoenix-docs-profile-confirmed";
 const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
 
+// All available news categories
+const ALL_CATEGORIES = Object.keys(NEWS_CATEGORY_CONFIG) as NewsCategory[];
+
 export default function ProfileSettings(): React.ReactElement {
   const { user, loading, userProfile, updateUserRoles, logout, progress } =
     useAuth();
   const { colorMode, setColorMode } = useColorMode();
+  const toast = useToast();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(
     userProfile.confirmedRoles,
   );
@@ -34,12 +46,49 @@ export default function ProfileSettings(): React.ReactElement {
   const [showOnboardingReset, setShowOnboardingReset] = useState(false);
   const [showProfileReset, setShowProfileReset] = useState(false);
 
+  // News preferences state
+  const [newsPreferences, setNewsPreferences] = useState<
+    Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+  >(DEFAULT_NEWS_PREFERENCES);
+  const [isLoadingPreferences, setIsLoadingPreferences] = useState(false);
+  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+  const [newKeyword, setNewKeyword] = useState("");
+
   // Sync selected roles with userProfile when it loads
   React.useEffect(() => {
     if (userProfile.isProfileLoaded) {
       setSelectedRoles(userProfile.confirmedRoles);
     }
   }, [userProfile.isProfileLoaded, userProfile.confirmedRoles]);
+
+  // Load news preferences when user is authenticated
+  useEffect(() => {
+    if (user) {
+      setIsLoadingPreferences(true);
+      newsService
+        .getUserPreferences()
+        .then((prefs) => {
+          if (prefs) {
+            setNewsPreferences({
+              preferredCategories: prefs.preferredCategories || [],
+              hiddenCategories: prefs.hiddenCategories || [],
+              followedKeywords: prefs.followedKeywords || [],
+              excludedKeywords: prefs.excludedKeywords || [],
+              emailDigest: prefs.emailDigest || "none",
+              pushNotifications: prefs.pushNotifications || false,
+              readArticleIds: prefs.readArticleIds || [],
+              savedArticleIds: prefs.savedArticleIds || [],
+            });
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load news preferences:", err);
+        })
+        .finally(() => {
+          setIsLoadingPreferences(false);
+        });
+    }
+  }, [user]);
 
   const handleRoleToggle = (role: string) => {
     setSelectedRoles((prev) =>
@@ -83,6 +132,87 @@ export default function ProfileSettings(): React.ReactElement {
     await logout();
     // Redirect to home after logout
     window.location.href = "/";
+  };
+
+  // News preferences handlers
+  const handleCategoryToggle = (category: NewsCategory) => {
+    setNewsPreferences((prev) => {
+      const isPreferred = prev.preferredCategories.includes(category);
+      const isHidden = prev.hiddenCategories.includes(category);
+
+      if (isPreferred) {
+        // Move from preferred to hidden
+        return {
+          ...prev,
+          preferredCategories: prev.preferredCategories.filter((c) => c !== category),
+          hiddenCategories: [...prev.hiddenCategories, category],
+        };
+      } else if (isHidden) {
+        // Remove from hidden (neutral)
+        return {
+          ...prev,
+          hiddenCategories: prev.hiddenCategories.filter((c) => c !== category),
+        };
+      } else {
+        // Add to preferred
+        return {
+          ...prev,
+          preferredCategories: [...prev.preferredCategories, category],
+        };
+      }
+    });
+  };
+
+  const handleAddKeyword = () => {
+    const keyword = newKeyword.trim().toLowerCase();
+    if (keyword && !newsPreferences.followedKeywords.includes(keyword)) {
+      setNewsPreferences((prev) => ({
+        ...prev,
+        followedKeywords: [...prev.followedKeywords, keyword],
+      }));
+      setNewKeyword("");
+    }
+  };
+
+  const handleRemoveKeyword = (keyword: string) => {
+    setNewsPreferences((prev) => ({
+      ...prev,
+      followedKeywords: prev.followedKeywords.filter((k) => k !== keyword),
+    }));
+  };
+
+  const handleEmailDigestChange = (value: "none" | "daily" | "weekly") => {
+    setNewsPreferences((prev) => ({
+      ...prev,
+      emailDigest: value,
+    }));
+  };
+
+  const handlePushNotificationsToggle = () => {
+    setNewsPreferences((prev) => ({
+      ...prev,
+      pushNotifications: !prev.pushNotifications,
+    }));
+  };
+
+  const handleSaveNewsPreferences = async () => {
+    setIsSavingPreferences(true);
+    try {
+      await newsService.saveUserPreferences({
+        preferredCategories: newsPreferences.preferredCategories,
+        hiddenCategories: newsPreferences.hiddenCategories,
+        followedKeywords: newsPreferences.followedKeywords,
+        excludedKeywords: newsPreferences.excludedKeywords,
+        emailDigest: newsPreferences.emailDigest,
+        pushNotifications: newsPreferences.pushNotifications,
+      });
+      toast.success("News preferences saved!");
+    } catch (err) {
+      console.error("Failed to save news preferences:", err);
+      toast.error("Failed to save preferences. Please try again.");
+    } finally {
+      setIsSavingPreferences(false);
+    }
   };
 
   if (loading) {
@@ -355,6 +485,160 @@ export default function ProfileSettings(): React.ReactElement {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* News Personalization Section */}
+        <section className="row margin-bottom--lg">
+          <div className="col col--8 col--offset-2">
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>News Personalization</h3>
+              <p className={styles.sectionDescription}>
+                Customize your news feed by selecting preferred categories and keywords.
+              </p>
+
+              {isLoadingPreferences ? (
+                <div className={styles.loading}>Loading preferences...</div>
+              ) : (
+                <>
+                  {/* Category Selection */}
+                  <div className={styles.preferencesSection}>
+                    <h4 className={styles.preferencesSubtitle}>News Categories</h4>
+                    <p className={styles.preferencesHint}>
+                      Click to cycle: Preferred → Hidden → Neutral
+                    </p>
+                    <div className={styles.categoryGrid}>
+                      {ALL_CATEGORIES.map((category) => {
+                        const config = NEWS_CATEGORY_CONFIG[category];
+                        const isPreferred = newsPreferences.preferredCategories.includes(category);
+                        const isHidden = newsPreferences.hiddenCategories.includes(category);
+                        return (
+                          <button
+                            key={category}
+                            type="button"
+                            className={`${styles.categoryChip} ${
+                              isPreferred ? styles.categoryPreferred : ""
+                            } ${isHidden ? styles.categoryHidden : ""}`}
+                            onClick={() => handleCategoryToggle(category)}
+                            title={
+                              isPreferred
+                                ? "Preferred - Click to hide"
+                                : isHidden
+                                ? "Hidden - Click to reset"
+                                : "Neutral - Click to prefer"
+                            }
+                          >
+                            <span className={styles.categoryIcon}>{config.icon}</span>
+                            <span className={styles.categoryLabel}>{config.label}</span>
+                            {isPreferred && <span className={styles.categoryStatus}>★</span>}
+                            {isHidden && <span className={styles.categoryStatus}>✕</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Keywords */}
+                  <div className={styles.preferencesSection}>
+                    <h4 className={styles.preferencesSubtitle}>Followed Keywords</h4>
+                    <p className={styles.preferencesHint}>
+                      Add keywords to prioritize related news articles.
+                    </p>
+                    <div className={styles.keywordInput}>
+                      <input
+                        type="text"
+                        value={newKeyword}
+                        onChange={(e) => setNewKeyword(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleAddKeyword()}
+                        placeholder="Add keyword..."
+                        className={styles.keywordField}
+                      />
+                      <button
+                        type="button"
+                        className="button button--sm button--secondary"
+                        onClick={handleAddKeyword}
+                        disabled={!newKeyword.trim()}
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {newsPreferences.followedKeywords.length > 0 && (
+                      <div className={styles.keywordList}>
+                        {newsPreferences.followedKeywords.map((keyword) => (
+                          <span key={keyword} className={styles.keywordTag}>
+                            {keyword}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveKeyword(keyword)}
+                              className={styles.keywordRemove}
+                              aria-label={`Remove ${keyword}`}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Email Digest */}
+                  <div className={styles.preferencesSection}>
+                    <h4 className={styles.preferencesSubtitle}>Email Digest</h4>
+                    <p className={styles.preferencesHint}>
+                      Receive a summary of news relevant to your interests.
+                    </p>
+                    <div className={styles.digestOptions}>
+                      {(["none", "daily", "weekly"] as const).map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          className={`${styles.digestOption} ${
+                            newsPreferences.emailDigest === option ? styles.digestActive : ""
+                          }`}
+                          onClick={() => handleEmailDigestChange(option)}
+                        >
+                          {option === "none" ? "Off" : option.charAt(0).toUpperCase() + option.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Push Notifications */}
+                  <div className={styles.preferencesSection}>
+                    <div className={styles.accountAction}>
+                      <div>
+                        <h4 className={styles.preferencesSubtitle}>Push Notifications</h4>
+                        <p className={styles.preferencesHint}>
+                          Get notified about breaking news and important updates.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className={`${styles.toggleButton} ${
+                          newsPreferences.pushNotifications ? styles.toggleActive : ""
+                        }`}
+                        onClick={handlePushNotificationsToggle}
+                        aria-pressed={newsPreferences.pushNotifications}
+                      >
+                        {newsPreferences.pushNotifications ? "On" : "Off"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Save Button */}
+                  <div className={styles.saveSection}>
+                    <button
+                      type="button"
+                      className={`button button--primary ${styles.saveButton}`}
+                      onClick={handleSaveNewsPreferences}
+                      disabled={isSavingPreferences}
+                    >
+                      {isSavingPreferences ? "Saving..." : "Save News Preferences"}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </section>
