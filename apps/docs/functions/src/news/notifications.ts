@@ -408,6 +408,163 @@ export const processEmailQueue = functions.pubsub
   });
 
 /**
+ * Send daily email digest
+ *
+ * Scheduled function that runs every day at 8 AM UTC to send
+ * personalized news digests to users who have opted in.
+ */
+export const sendDailyDigest = functions.pubsub
+  .schedule("0 8 * * *") // 8 AM UTC daily
+  .timeZone("UTC")
+  .onRun(async () => {
+    await sendEmailDigest("daily");
+    return null;
+  });
+
+/**
+ * Send weekly email digest
+ *
+ * Scheduled function that runs every Monday at 8 AM UTC to send
+ * personalized news digests to users who have opted in.
+ */
+export const sendWeeklyDigest = functions.pubsub
+  .schedule("0 8 * * 1") // 8 AM UTC every Monday
+  .timeZone("UTC")
+  .onRun(async () => {
+    await sendEmailDigest("weekly");
+    return null;
+  });
+
+/**
+ * Helper function to send email digests
+ */
+async function sendEmailDigest(frequency: "daily" | "weekly"): Promise<void> {
+  const USER_PREFS_COLLECTION = "user_news_preferences";
+
+  functions.logger.info(`Sending ${frequency} email digest`);
+
+  try {
+    // Get users subscribed to this frequency
+    const subscribersSnapshot = await db
+      .collection(USER_PREFS_COLLECTION)
+      .where("emailDigest", "==", frequency)
+      .get();
+
+    if (subscribersSnapshot.empty) {
+      functions.logger.info(`No subscribers for ${frequency} digest`);
+      return;
+    }
+
+    // Get recent news articles
+    const daysBack = frequency === "daily" ? 1 : 7;
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysBack);
+
+    const articlesSnapshot = await db
+      .collection(COLLECTIONS.NEWS)
+      .where("publishedAt", ">=", cutoffDate.toISOString())
+      .orderBy("publishedAt", "desc")
+      .limit(10)
+      .get();
+
+    if (articlesSnapshot.empty) {
+      functions.logger.info(`No recent articles for ${frequency} digest`);
+      return;
+    }
+
+    const articles = articlesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Queue digest emails for each subscriber
+    const emailPromises = subscribersSnapshot.docs.map(async (doc) => {
+      const userData = doc.data();
+      const userEmail = userData.email;
+
+      if (!userEmail) {
+        return;
+      }
+
+      // Filter articles based on user preferences
+      const preferredCategories = userData.preferredCategories || [];
+      const hiddenCategories = userData.hiddenCategories || [];
+      const followedKeywords = userData.followedKeywords || [];
+
+      interface ArticleData {
+        id: string;
+        category?: string;
+        keywords?: string[];
+        title?: string;
+        summary?: string;
+        content?: string;
+        source?: string;
+        publishedAt?: string;
+      }
+
+      const relevantArticles = articles.filter((article: ArticleData) => {
+        // Exclude hidden categories
+        if (hiddenCategories.includes(article.category)) {
+          return false;
+        }
+
+        // Include if matches preferred category or followed keyword
+        const matchesCategory =
+          preferredCategories.length === 0 ||
+          preferredCategories.includes(article.category);
+
+        const matchesKeyword =
+          followedKeywords.length === 0 ||
+          followedKeywords.some(
+            (kw: string) =>
+              article.keywords?.includes(kw) ||
+              article.title?.toLowerCase().includes(kw.toLowerCase()) ||
+              article.content?.toLowerCase().includes(kw.toLowerCase()),
+          );
+
+        return matchesCategory || matchesKeyword;
+      });
+
+      if (relevantArticles.length === 0) {
+        return;
+      }
+
+      // Queue the email
+      await db.collection(COLLECTIONS.NOTIFICATION_QUEUE).add({
+        type: "email",
+        to: userEmail,
+        subject: `[Phoenix Rooivalk] Your ${frequency === "daily" ? "Daily" : "Weekly"} News Digest`,
+        template: "news_digest",
+        data: {
+          frequency,
+          articleCount: relevantArticles.length,
+          articles: relevantArticles.slice(0, 5).map((a: ArticleData) => ({
+            id: a.id,
+            title: a.title,
+            summary: a.summary,
+            category: a.category,
+            source: a.source,
+            url: `${BASE_URL}/news?article=${a.id}`,
+            publishedAt: a.publishedAt,
+          })),
+          managePreferencesUrl: `${BASE_URL}/profile-settings`,
+        },
+        status: "pending",
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+
+    await Promise.allSettled(emailPromises);
+
+    functions.logger.info(
+      `Queued ${subscribersSnapshot.size} ${frequency} digest emails`,
+    );
+  } catch (error) {
+    functions.logger.error(`Error sending ${frequency} digest:`, error);
+  }
+}
+
+/**
  * Mark article as breaking news (admin only)
  *
  * Toggles the breaking news status of an article.

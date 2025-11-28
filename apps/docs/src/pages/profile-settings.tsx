@@ -24,6 +24,11 @@ import {
   type UserNewsPreferences,
 } from "../types/news";
 import { useToast } from "../contexts/ToastContext";
+import {
+  enablePushNotifications,
+  isPushSupported,
+  getNotificationPermission,
+} from "../utils/pushNotifications";
 import styles from "./profile-settings.module.css";
 
 // localStorage key for profile confirmation
@@ -188,11 +193,61 @@ export default function ProfileSettings(): React.ReactElement {
     }));
   };
 
-  const handlePushNotificationsToggle = () => {
-    setNewsPreferences((prev) => ({
-      ...prev,
-      pushNotifications: !prev.pushNotifications,
-    }));
+  const handlePushNotificationsToggle = async () => {
+    // If trying to enable, request permission and get token
+    if (!newsPreferences.pushNotifications) {
+      if (!isPushSupported()) {
+        toast.error("Push notifications are not supported in this browser.");
+        return;
+      }
+
+      const currentPermission = getNotificationPermission();
+      if (currentPermission === "denied") {
+        toast.error("Notifications are blocked. Please enable them in your browser settings.");
+        return;
+      }
+
+      toast.info("Requesting notification permission...");
+
+      const result = await enablePushNotifications();
+
+      if (!result.success) {
+        toast.error(result.error || "Failed to enable push notifications.");
+        return;
+      }
+
+      // Subscribe to breaking news with the FCM token
+      try {
+        await newsService.subscribeToBreakingNews({
+          categories: newsPreferences.preferredCategories,
+          pushEnabled: true,
+          emailEnabled: newsPreferences.emailDigest !== "none",
+        });
+
+        setNewsPreferences((prev) => ({
+          ...prev,
+          pushNotifications: true,
+        }));
+
+        toast.success("Push notifications enabled!");
+      } catch (err) {
+        console.error("Failed to subscribe:", err);
+        toast.error("Failed to enable push notifications. Please try again.");
+      }
+    } else {
+      // Disable push notifications
+      try {
+        await newsService.unsubscribeFromBreakingNews();
+        setNewsPreferences((prev) => ({
+          ...prev,
+          pushNotifications: false,
+        }));
+        toast.success("Push notifications disabled.");
+      } catch (err) {
+        console.error("Failed to unsubscribe:", err);
+        toast.error("Failed to disable push notifications.");
+      }
+    }
   };
 
   const handleSaveNewsPreferences = async () => {
