@@ -45,6 +45,17 @@ const onBrokenLinksConfig =
 const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
+// Firebase configuration from environment variables (exposed to client via customFields)
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY || "",
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.FIREBASE_APP_ID || "",
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
+};
+
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
@@ -53,6 +64,10 @@ const config: Config = {
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",
+  // Custom fields exposed to client-side code via useDocusaurusContext()
+  customFields: {
+    firebaseConfig,
+  },
   onBrokenLinks: onBrokenLinksConfig,
   // Note: onBrokenMarkdownLinks is deprecated in Docusaurus v4
   // It should be migrated to markdown.preprocessor in the future
@@ -254,6 +269,14 @@ const config: Config = {
           className: "navbar__link--progress",
           "aria-label": "Track your learning progress",
         },
+        // Login link
+        {
+          to: "/login",
+          label: "Login",
+          position: "right",
+          className: "navbar__link--login",
+          "aria-label": "Sign in to your account",
+        },
         // GitHub repository link
         {
           href: "https://github.com/JustAGhosT/PhoenixRooivalk",
@@ -371,7 +394,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security.`,
+      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security. | v0.2.0`,
     },
     // Enhanced color mode
     colorMode: {

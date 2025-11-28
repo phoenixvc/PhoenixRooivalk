@@ -1260,3 +1260,34 @@ html {
     rgba(251, 191, 36, 0.25)
   ) !important;
 }
+
+/* ================================================
+   LOGIN NAVBAR LINK
+   ================================================ */
+
+.navbar__link--login {
+  position: relative;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
+  color: rgb(15, 23, 42) !important;
+  border-radius: 20px;
+  padding: 0.375rem 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease;
+}
+
+.navbar__link--login::before {
+  content: "🔐";
+  margin-right: 0.375rem;
+}
+
+.navbar__link--login:hover {
+  background: linear-gradient(
+    135deg,
+    rgb(234, 88, 12),
+    rgb(249, 115, 22)
+  ) !important;
+  color: rgb(15, 23, 42) !important;
+  text-decoration: none !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);
+}
