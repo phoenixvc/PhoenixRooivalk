@@ -9,6 +9,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
 import { NewsCard } from "./NewsCard";
+import { useDebounce } from "../../hooks/useDebounce";
 import type {
   NewsArticle,
   PersonalizedNewsItem,
@@ -42,6 +43,7 @@ export function NewsPanel({
     [],
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -120,7 +122,7 @@ export function NewsPanel({
 
   // Search news
   const handleSearch = useCallback(async () => {
-    if (!searchQuery.trim()) {
+    if (!debouncedSearchQuery.trim()) {
       fetchNewsFeed();
       return;
     }
@@ -130,7 +132,7 @@ export function NewsPanel({
 
     try {
       const result = await newsService.searchNews({
-        query: searchQuery,
+        query: debouncedSearchQuery,
         categories:
           selectedCategories.length > 0 ? selectedCategories : undefined,
         limit: maxItems,
@@ -148,7 +150,7 @@ export function NewsPanel({
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, selectedCategories, maxItems, fetchNewsFeed]);
+  }, [debouncedSearchQuery, selectedCategories, maxItems, fetchNewsFeed]);
 
   // Initial load
   useEffect(() => {
@@ -158,6 +160,13 @@ export function NewsPanel({
       fetchNewsFeed();
     }
   }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-search when debounced query changes
+  useEffect(() => {
+    if (activeTab !== "saved") {
+      handleSearch();
+    }
+  }, [debouncedSearchQuery, selectedCategories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle category filter change
   const toggleCategory = (category: NewsCategory) => {

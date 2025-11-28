@@ -9,6 +9,8 @@ import type { NewsArticle, PersonalizedNewsItem } from "../../types/news";
 import { NEWS_CATEGORY_CONFIG } from "../../types/news";
 import { newsService } from "../../services/newsService";
 import { useToast } from "../../contexts/ToastContext";
+import { formatReadingTime } from "../../utils/readingTime";
+import { shareContent, shareOnPlatform, isShareSupported } from "../../utils/share";
 import "./NewsCard.css";
 
 interface NewsCardProps {
@@ -33,10 +35,12 @@ export function NewsCard({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const toast = useToast();
 
   const categoryConfig = NEWS_CATEGORY_CONFIG[article.category];
   const personalized = isPersonalized(article);
+  const readingTime = formatReadingTime(article.content);
 
   const handleClick = async () => {
     if (!isExpanded) {
@@ -67,6 +71,37 @@ export function NewsCard({
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const getArticleUrl = () => {
+    return article.sourceUrl || `${window.location.origin}/news/${article.id}`;
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (isShareSupported()) {
+      const success = await shareContent({
+        title: article.title,
+        text: article.summary || article.content.substring(0, 100),
+        url: getArticleUrl(),
+      });
+      if (success) {
+        toast.success("Article shared!");
+      }
+    } else {
+      setShowShareMenu((prev) => !prev);
+    }
+  };
+
+  const handleSharePlatform = (platform: "twitter" | "linkedin" | "email") => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    shareOnPlatform(platform, {
+      title: article.title,
+      text: article.summary || article.content.substring(0, 100),
+      url: getArticleUrl(),
+    });
+    setShowShareMenu(false);
   };
 
   const formatDate = (dateStr: string) => {
@@ -117,15 +152,33 @@ export function NewsCard({
 
         <div className="news-card-footer">
           <span className="news-card-source">{article.source}</span>
+          <span className="news-card-reading-time">{readingTime}</span>
           <span className="news-card-date">{formatDate(article.publishedAt)}</span>
-          <button
-            className={`news-card-save-btn ${isSaved ? "saved" : ""}`}
-            onClick={handleSave}
-            disabled={isSaving}
-            title={isSaved ? "Remove from saved" : "Save for later"}
-          >
-            {isSaved ? "★" : "☆"}
-          </button>
+          <div className="news-card-actions">
+            <button
+              className="news-card-share-btn"
+              onClick={handleShare}
+              title="Share article"
+              aria-label="Share article"
+            >
+              ↗
+            </button>
+            {showShareMenu && (
+              <div className="news-card-share-menu">
+                <button onClick={handleSharePlatform("twitter")}>Twitter</button>
+                <button onClick={handleSharePlatform("linkedin")}>LinkedIn</button>
+                <button onClick={handleSharePlatform("email")}>Email</button>
+              </div>
+            )}
+            <button
+              className={`news-card-save-btn ${isSaved ? "saved" : ""}`}
+              onClick={handleSave}
+              disabled={isSaving}
+              title={isSaved ? "Remove from saved" : "Save for later"}
+            >
+              {isSaved ? "★" : "☆"}
+            </button>
+          </div>
         </div>
 
         {isExpanded && (
@@ -179,13 +232,30 @@ export function NewsCard({
             </span>
           )}
         </div>
-        <button
-          className={`news-card-save-btn-full ${isSaved ? "saved" : ""}`}
-          onClick={handleSave}
-          disabled={isSaving}
-        >
-          {isSaved ? "★ Saved" : "☆ Save"}
-        </button>
+        <div className="news-card-full-actions">
+          <button
+            className="news-card-share-btn-full"
+            onClick={handleShare}
+            title="Share article"
+            aria-label="Share article"
+          >
+            ↗ Share
+          </button>
+          {showShareMenu && (
+            <div className="news-card-share-menu news-card-share-menu-full">
+              <button onClick={handleSharePlatform("twitter")}>Twitter</button>
+              <button onClick={handleSharePlatform("linkedin")}>LinkedIn</button>
+              <button onClick={handleSharePlatform("email")}>Email</button>
+            </div>
+          )}
+          <button
+            className={`news-card-save-btn-full ${isSaved ? "saved" : ""}`}
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaved ? "★ Saved" : "☆ Save"}
+          </button>
+        </div>
       </header>
 
       <h2 className="news-card-full-title">{article.title}</h2>
@@ -194,6 +264,8 @@ export function NewsCard({
         <span className="news-card-source">{article.source}</span>
         <span className="news-card-separator">•</span>
         <span className="news-card-date">{formatDate(article.publishedAt)}</span>
+        <span className="news-card-separator">•</span>
+        <span className="news-card-reading-time">{readingTime}</span>
         <span className="news-card-separator">•</span>
         <span className="news-card-views">{article.viewCount} views</span>
       </div>
