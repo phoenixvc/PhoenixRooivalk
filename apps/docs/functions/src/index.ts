@@ -49,6 +49,15 @@
  * - getAIMonitoringStats: Get AI usage statistics (admin)
  * - getAIErrors: Get recent AI errors (admin)
  * - checkAIAlerts: Scheduled alert checking
+ *
+ * News Functions (from ./news/):
+ * - getNewsFeed: Get combined general and personalized news feed
+ * - getPersonalizedNews: Get AI-personalized news based on user profile
+ * - addNewsArticle: Add a new news article (admin only)
+ * - markArticleRead: Mark an article as read
+ * - saveArticle: Save/unsave an article for later
+ * - getSavedArticles: Get user's saved articles
+ * - searchNews: Semantic search over news articles
  */
 
 // Export AI functions
@@ -97,6 +106,32 @@ export { cleanupExpiredCache, getAICacheStats, clearAICache } from "./cache";
 
 // Export Monitoring functions
 export { getAIMonitoringStats, getAIErrors, checkAIAlerts } from "./monitoring";
+
+// Export News functions
+export {
+  getNewsFeed,
+  getPersonalizedNews,
+  addNewsArticle,
+  markArticleRead,
+  saveArticle,
+  getSavedArticles,
+  searchNews,
+  // Ingestion functions
+  fetchNewsFromWeb,
+  triggerNewsIngestion,
+  generateAINewsDigest,
+  importNewsArticles,
+  // Analytics functions
+  getNewsAnalytics,
+  getNewsIngestionStats,
+  // Notification functions
+  subscribeToBreakingNews,
+  unsubscribeFromBreakingNews,
+  getNotificationSubscription,
+  onBreakingNewsCreated,
+  processEmailQueue,
+  markAsBreakingNews,
+} from "./news";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
