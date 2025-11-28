@@ -99,7 +99,7 @@ async function processArticleWithAI(
       { model: "chatFast", maxTokens: 500, temperature: 0.1 },
     );
 
-    const categorization = JSON.parse(categorizationResult) as {
+    let categorization: {
       category: string;
       targetRoles: string[];
       targetInterests: string[];
@@ -107,6 +107,20 @@ async function processArticleWithAI(
       isGeneral: boolean;
       sentiment: "positive" | "neutral" | "negative";
     };
+    
+    try {
+      categorization = JSON.parse(categorizationResult);
+    } catch (parseError) {
+      functions.logger.warn("Failed to parse categorization JSON, using defaults", { parseError, categorizationResult });
+      categorization = {
+        category: "company-news",
+        targetRoles: [],
+        targetInterests: [],
+        keywords: [],
+        isGeneral: true,
+        sentiment: "neutral",
+      };
+    }
 
     // Generate summary
     const { content: summary } = await chatCompletion(
