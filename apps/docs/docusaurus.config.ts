@@ -277,7 +277,6 @@ const config: Config = {
           className: "navbar__link--login",
           "aria-label": "Sign in to your account",
         },
-        // Note: Color mode toggle is automatic when colorMode.disableSwitch is false
         // Environment badge (only show in non-production)
         ...(envBadge && envName !== "production"
           ? [

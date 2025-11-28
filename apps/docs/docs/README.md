@@ -1,8 +1,9 @@
 ---
 id: phoenix-rooivalk-documentation
-title: Welcome to Phoenix Rooivalk Documentation
+title: Phoenix Rooivalk Documentation
 sidebar_label: "\U0001F3E0 Home"
 slug: /
+hide_title: true
 difficulty: intermediate
 estimated_reading_time: 4
 points: 15
