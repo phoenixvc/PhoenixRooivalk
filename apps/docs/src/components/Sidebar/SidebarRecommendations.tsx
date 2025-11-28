@@ -96,7 +96,8 @@ export function SidebarRecommendations({
   const previousUserIdRef = useRef<string | null>(null);
 
   // Use centralized profile from AuthContext
-  const { knownProfile, isProfileLoaded, profileKey, confirmedRoles } = userProfile;
+  const { knownProfile, isProfileLoaded, profileKey, confirmedRoles } =
+    userProfile;
 
   // Get selected template for unknown users
   const selectedTemplate =
@@ -239,7 +240,14 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems, knownProfile, selectedTemplate, confirmedRoles, hasLoaded]);
+  }, [
+    user,
+    maxItems,
+    knownProfile,
+    selectedTemplate,
+    confirmedRoles,
+    hasLoaded,
+  ]);
 
   // Load recommendations when user and profile are available
   // Wait for isProfileLoaded to avoid stale closure with knownProfile
@@ -335,7 +343,9 @@ export function SidebarRecommendations({
               {recommendations.length > 0 ? (
                 <>
                   {/* Show completion progress for recommendations (known profiles, templates, or roles) */}
-                  {(knownProfile || selectedTemplate || (confirmedRoles && confirmedRoles.length > 0)) && (
+                  {(knownProfile ||
+                    selectedTemplate ||
+                    (confirmedRoles && confirmedRoles.length > 0)) && (
                     <div
                       className={`sidebar-rec-progress-summary ${completedRecsCount === 0 ? "sidebar-rec-progress-summary--centered" : ""}`}
                     >
@@ -367,24 +377,24 @@ export function SidebarRecommendations({
                       {filteredRecommendations.map((rec) => {
                         const category = getCategoryFromPath(rec.docId);
                         const isCompleted = isDocCompleted(rec.docId);
-                      return (
-                        <li key={rec.docId} className="sidebar-rec-item">
-                          <Link
-                            to={rec.docId}
-                            className={`sidebar-rec-link ${isCompleted ? "sidebar-rec-link--completed" : ""}`}
-                          >
-                            <span className="sidebar-rec-emoji">
-                              {isCompleted ? "✓" : getCategoryEmoji(category)}
-                            </span>
-                            <span className="sidebar-rec-doc">
-                              {formatDocTitle(rec.docId)}
-                            </span>
-                            <span className="sidebar-rec-score">
-                              {Math.round(rec.relevanceScore * 100)}%
-                            </span>
-                          </Link>
-                        </li>
-                      );
+                        return (
+                          <li key={rec.docId} className="sidebar-rec-item">
+                            <Link
+                              to={rec.docId}
+                              className={`sidebar-rec-link ${isCompleted ? "sidebar-rec-link--completed" : ""}`}
+                            >
+                              <span className="sidebar-rec-emoji">
+                                {isCompleted ? "✓" : getCategoryEmoji(category)}
+                              </span>
+                              <span className="sidebar-rec-doc">
+                                {formatDocTitle(rec.docId)}
+                              </span>
+                              <span className="sidebar-rec-score">
+                                {Math.round(rec.relevanceScore * 100)}%
+                              </span>
+                            </Link>
+                          </li>
+                        );
                       })}
                     </ul>
                   ) : (

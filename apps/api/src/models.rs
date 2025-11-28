@@ -17,6 +17,7 @@ pub struct EvidenceIn {
 #[derive(Debug, Serialize)]
 pub struct EvidenceOut {
     pub id: String,
+    pub digest_hex: String,
     pub status: String,
     pub attempts: i64,
     pub last_error: Option<String>,
@@ -96,4 +97,17 @@ pub struct JammingOperationOut {
     pub last_error: Option<String>,
     pub created_ms: i64,
     pub updated_ms: i64,
+}
+
+// x402 Payment Receipt models
+#[derive(Debug, Serialize)]
+pub struct PaymentReceiptOut {
+    pub id: String,
+    pub evidence_id: String,
+    pub tx_signature: String,
+    pub amount_usdc: String,
+    pub tier: String,
+    pub sender_wallet: Option<String>,
+    pub verified_at: i64,
+    pub created_ms: i64,
 }

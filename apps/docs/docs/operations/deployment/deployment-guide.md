@@ -150,6 +150,87 @@ security, compliance, and operational resilience.
 - **Best Practices**: Industry best practices for secret management
 - **Audit**: Complete audit trail of secret access
 
+### API and Proxy Security
+
+**Header Normalization**
+
+The Phoenix Rooivalk API uses `X-Forwarded-For` and `X-Real-IP` headers for
+client IP identification (used in rate limiting). These headers can be spoofed
+by untrusted clients, so proper infrastructure configuration is **required**:
+
+- **Load Balancer Configuration**: Configure load balancers (ALB, NLB, NGINX,
+  etc.) to strip incoming `X-Forwarded-For` and `X-Real-IP` headers from client
+  requests
+- **Header Injection**: Configure infrastructure to set these headers based on
+  the actual TCP connection source IP
+- **Trust Chain**: Only trust headers set by your own infrastructure, never
+  headers passed through from clients
+
+**NGINX Example Configuration**:
+
+```nginx
+# Strip client-supplied headers and set from real connection
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $remote_addr;
+```
+
+**AWS ALB Configuration**:
+
+- ALB automatically sets `X-Forwarded-For` based on client connection
+- Ensure no upstream proxies pass through untrusted headers
+
+**Rate Limiting Considerations**:
+
+- Without proper header normalization, malicious clients can bypass rate limits
+- The API trusts the first IP in `X-Forwarded-For` as the client IP
+- Ensure your infrastructure adds only one hop to the forwarding chain
+
+### Database Backend Support
+
+The Phoenix Rooivalk API supports multiple database backends for flexibility
+across different deployment environments.
+
+**Supported Database Error Codes for Duplicate Key Detection**:
+
+| Backend    | Error Codes            | Description                    |
+|------------|------------------------|--------------------------------|
+| SQLite     | 2067, 1555, 19         | CONSTRAINT_UNIQUE, CONSTRAINT_PRIMARYKEY, CONSTRAINT_BASE |
+| PostgreSQL | 23505                  | unique_violation (SQLSTATE)    |
+| MySQL      | 1062                   | ER_DUP_ENTRY                   |
+
+**Database Error Handling**:
+
+- Unique constraint violations are detected across all supported backends
+- The system uses driver-specific error codes when available
+- Message-based fallback detection is available for edge cases
+
+**SQLite (Default)**:
+
+```bash
+# Development and testing
+export API_DB_URL="sqlite://blockchain_outbox.sqlite3"
+```
+
+**PostgreSQL**:
+
+```bash
+# Production deployment
+export API_DB_URL="postgres://user:password@host:5432/phoenix_db"
+```
+
+**MySQL**:
+
+```bash
+# Alternative production deployment
+export API_DB_URL="mysql://user:password@host:3306/phoenix_db"
+```
+
+**Migration Notes**:
+
+- The migration system automatically adapts to the configured backend
+- Schema differences are handled at the SQL dialect level
+- Test thoroughly when switching between backends in production
+
 ---
 
 ## Hardware Deployment

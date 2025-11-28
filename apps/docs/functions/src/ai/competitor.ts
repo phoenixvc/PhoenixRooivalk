@@ -78,8 +78,7 @@ export const analyzeCompetitors = functions.https.onCall(
     // Normalize focusAreas: filter to valid strings only
     const normalizedFocusAreas = Array.isArray(focusAreas)
       ? focusAreas.filter(
-          (a): a is string =>
-            typeof a === "string" && a.trim().length > 0,
+          (a): a is string => typeof a === "string" && a.trim().length > 0,
         )
       : [];
 
@@ -129,7 +128,7 @@ When comparing competitors, highlight how Phoenix Rooivalk's documented capabili
         { role: "system", content: systemPrompt },
         {
           role: "user",
-          content: PROMPTS.competitor.user(competitors, focusAreas),
+          content: PROMPTS.competitor.user(competitors, normalizedFocusAreas),
         },
       ],
       { model: "chatAdvanced", maxTokens: 3000 },

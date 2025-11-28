@@ -140,13 +140,13 @@ export function createTracer(metadata?: Record<string, any>) {
 // Wrapper for traced execution
 export async function withTracing<T>(
   name: string,
-  fn: () => Promise<T>,
+  fn: (tracer: LangChainTracer) => Promise<T>,
   metadata?: Record<string, any>,
 ): Promise<T> {
-  const tracer = createTracer(metadata);
+  const tracer = createTracer({ ...metadata, runName: name });
 
   try {
-    const result = await fn();
+    const result = await fn(tracer);
     return result;
   } catch (error) {
     throw error;
@@ -210,7 +210,7 @@ export async function tracedAgentExecution(
   agent: AgentExecutor,
   userId: string,
   input: string,
-  agentType: string
+  agentType: string,
 ) {
   const config = getTracedConfig(userId, `agent-${agentType}`, {
     inputLength: input.length,

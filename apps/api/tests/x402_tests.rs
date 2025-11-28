@@ -1,0 +1,319 @@
+//! Integration tests for x402 premium evidence verification endpoints
+
+mod common;
+
+use once_cell::sync::Lazy;
+use reqwest::StatusCode;
+use serde_json::{json, Value};
+use tokio::sync::Mutex;
+use tokio::task::JoinHandle;
+
+// Global mutex to serialize all x402 tests that modify environment variables
+// This prevents race conditions when tests run in parallel
+static TEST_MUTEX: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+
+/// Test API token for M2M endpoint authentication
+/// The x402 premium verification endpoint requires Bearer token auth
+const TEST_BEARER_TOKEN: &str = "Bearer test-api-token";
+
+/// Test context that properly cleans up resources when dropped
+struct TestContext {
+    base_url: String,
+    server: JoinHandle<()>,
+    env_vars: Vec<(String, Option<String>)>, // Track original values for restoration
+}
+
+impl TestContext {
+    /// Create a new test context with a running server
+    async fn new() -> Self {
+        Self::with_x402(false, None).await
+    }
+
+    /// Create a test context with x402 enabled
+    async fn with_x402(enabled: bool, wallet: Option<&str>) -> Self {
+        let mut env_vars: Vec<(String, Option<String>)> = Vec::new();
+
+        // Helper to save and set env var
+        let mut set_env = |key: &str, value: &str| {
+            let original = std::env::var(key).ok();
+            std::env::set_var(key, value);
+            env_vars.push((key.to_string(), original));
+        };
+
+        // Set database URL for tests
+        set_env("API_DB_URL", &common::create_test_db_url());
+
+        if enabled {
+            set_env("X402_ENABLED", "true");
+
+            if let Some(addr) = wallet {
+                set_env("X402_WALLET_ADDRESS", addr);
+            }
+
+            set_env("SOLANA_NETWORK", "devnet");
+        } else {
+            // Explicitly disable x402 and clear wallet to ensure clean state
+            let original_enabled = std::env::var("X402_ENABLED").ok();
+            std::env::remove_var("X402_ENABLED");
+            env_vars.push(("X402_ENABLED".to_string(), original_enabled));
+
+            let original_wallet = std::env::var("X402_WALLET_ADDRESS").ok();
+            std::env::remove_var("X402_WALLET_ADDRESS");
+            env_vars.push(("X402_WALLET_ADDRESS".to_string(), original_wallet));
+        }
+
+        let (listener, port) = common::create_test_listener();
+        let (app, _pool) = phoenix_api::build_app().await.expect("Failed to build app");
+        let (server, _) = common::spawn_test_server(app, listener).await;
+
+        Self {
+            base_url: format!("http://127.0.0.1:{}", port),
+            server,
+            env_vars,
+        }
+    }
+
+    fn url(&self, path: &str) -> String {
+        format!("{}{}", self.base_url, path)
+    }
+}
+
+impl Drop for TestContext {
+    fn drop(&mut self) {
+        // Abort the server to free resources
+        self.server.abort();
+
+        // Restore original environment variables
+        for (var, original) in &self.env_vars {
+            match original {
+                Some(val) => std::env::set_var(var, val),
+                None => std::env::remove_var(var),
+            }
+        }
+    }
+}
+
+/// Test that x402 status endpoint returns disabled when not configured
+#[tokio::test]
+async fn test_x402_status_not_configured() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::new().await;
+
+    let client = reqwest::Client::new();
+    let response = client
+        .get(ctx.url("/api/v1/x402/status"))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body: Value = response.json().await.expect("Failed to parse JSON");
+    assert_eq!(body["enabled"], false);
+}
+
+/// Test that premium verification returns 503 when x402 is not configured
+#[tokio::test]
+async fn test_verify_premium_not_configured() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::new().await;
+
+    let client = reqwest::Client::new();
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "test-evidence-001",
+            "tier": "basic"
+        }))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert_eq!(response.status(), StatusCode::SERVICE_UNAVAILABLE);
+
+    let body: Value = response.json().await.expect("Failed to parse JSON");
+    assert!(body["error"].as_str().unwrap().contains("not configured"));
+}
+
+/// Test x402 payment flow simulation (with environment configured)
+#[tokio::test]
+async fn test_x402_payment_flow_simulation() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet123")).await;
+
+    let client = reqwest::Client::new();
+
+    // Step 1: Request without payment should return 402
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "test-evidence-002",
+            "tier": "basic"
+        }))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+
+    let body: Value = response.json().await.expect("Failed to parse JSON");
+    assert_eq!(body["price"], "0.01");
+    assert_eq!(body["currency"], "USDC");
+    assert_eq!(body["recipient"], "PhxRvkTestWallet123");
+    assert!(body["memo"]
+        .as_str()
+        .unwrap()
+        .contains("evidence:test-evidence-002"));
+}
+
+/// Test x402 status endpoint shows correct configuration when enabled
+#[tokio::test]
+async fn test_x402_status_configured() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet456")).await;
+
+    let client = reqwest::Client::new();
+    let response = client
+        .get(ctx.url("/api/v1/x402/status"))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body: Value = response.json().await.expect("Failed to parse JSON");
+    assert_eq!(body["enabled"], true);
+    assert_eq!(body["network"], "devnet");
+    assert_eq!(body["wallet_address"], "PhxRvkTestWallet456");
+
+    // Check price tiers are present
+    assert!(body["price_tiers"]["basic"]["price"].is_string());
+    assert!(body["price_tiers"]["multi_chain"]["price"].is_string());
+    assert!(body["price_tiers"]["legal_attestation"]["price"].is_string());
+}
+
+/// Test different price tiers in 402 response
+#[tokio::test]
+async fn test_x402_price_tiers() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet789")).await;
+    let client = reqwest::Client::new();
+
+    // Test basic tier
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "test-001",
+            "tier": "basic"
+        }))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+    let body: Value = response.json().await.unwrap();
+    assert_eq!(body["price"], "0.01");
+
+    // Test multi_chain tier
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "test-002",
+            "tier": "multi_chain"
+        }))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+    let body: Value = response.json().await.unwrap();
+    assert_eq!(body["price"], "0.05");
+
+    // Test legal_attestation tier
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "test-003",
+            "tier": "legal_attestation"
+        }))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+    let body: Value = response.json().await.unwrap();
+    assert_eq!(body["price"], "1.00");
+}
+
+/// Test rate limiting module unit tests
+#[tokio::test]
+async fn test_rate_limiter_unit() {
+    use governor::Quota;
+    use phoenix_api::rate_limit::X402RateLimiter;
+    use std::num::NonZeroU32;
+
+    // Create a very restrictive limiter: 2 requests per minute
+    let limiter = X402RateLimiter::with_quotas(
+        Quota::per_minute(NonZeroU32::new(2).unwrap()),
+        Quota::per_minute(NonZeroU32::new(5).unwrap()),
+    );
+
+    // First two requests should pass
+    assert!(limiter.check_verify("192.168.1.1").is_ok());
+    assert!(limiter.check_verify("192.168.1.1").is_ok());
+
+    // Third request should be rate limited
+    let result = limiter.check_verify("192.168.1.1");
+    assert!(result.is_err());
+
+    // Different IP should still work (per-IP isolation)
+    assert!(limiter.check_verify("192.168.1.2").is_ok());
+
+    // Status endpoint has different quota
+    assert!(limiter.check_status("192.168.1.1").is_ok());
+    assert!(limiter.check_status("192.168.1.1").is_ok());
+}
+
+/// Test that rate limiting is applied to endpoints (integration test)
+/// Note: Default rate limits are high (10/min verify, 60/min status) so this test
+/// verifies the rate limiter is integrated, not that it triggers in normal use
+#[tokio::test]
+async fn test_x402_rate_limiting_headers() {
+    let _guard = TEST_MUTEX.lock().await;
+    let ctx = TestContext::with_x402(true, Some("PhxRvkTestWalletRL")).await;
+    let client = reqwest::Client::new();
+
+    // Make request with X-Forwarded-For header to test IP extraction
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        .header("x-forwarded-for", "10.0.0.1")
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", TEST_BEARER_TOKEN)
+        .json(&json!({
+            "evidence_id": "rate-test-001",
+            "tier": "basic"
+        }))
+        .send()
+        .await
+        .unwrap();
+
+    // Should succeed (not rate limited with default high quotas)
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+
+    // Make request with X-Real-IP header
+    let response = client
+        .get(ctx.url("/api/v1/x402/status"))
+        .header("x-real-ip", "10.0.0.2")
+        .send()
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+}
