@@ -117,6 +117,8 @@ async fn test_verify_premium_not_configured() {
     let client = reqwest::Client::new();
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "test-evidence-001",
             "tier": "basic"
@@ -142,6 +144,8 @@ async fn test_x402_payment_flow_simulation() {
     // Step 1: Request without payment should return 402
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "test-evidence-002",
             "tier": "basic"
@@ -198,6 +202,8 @@ async fn test_x402_price_tiers() {
     // Test basic tier
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "test-001",
             "tier": "basic"
@@ -212,6 +218,8 @@ async fn test_x402_price_tiers() {
     // Test multi_chain tier
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "test-002",
             "tier": "multi_chain"
@@ -226,6 +234,8 @@ async fn test_x402_price_tiers() {
     // Test legal_attestation tier
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "test-003",
             "tier": "legal_attestation"
@@ -280,6 +290,8 @@ async fn test_x402_rate_limiting_headers() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         .header("x-forwarded-for", "10.0.0.1")
+        // M2M endpoint requires Bearer token authentication
+        .header("authorization", "Bearer test-api-token")
         .json(&json!({
             "evidence_id": "rate-test-001",
             "tier": "basic"
