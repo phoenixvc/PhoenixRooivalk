@@ -14,24 +14,28 @@ tags:
 
 # ADR 0000: ADR Management & Organization
 
-**Date**: 2025-11-27
-**Status**: Accepted (Living Document)
+**Date**: 2025-11-27 **Status**: Accepted (Living Document)
 
 ---
 
 ## Executive Summary
 
-This document establishes the governance, organization, and lifecycle management for Architecture Decision Records (ADRs) within Phoenix Rooivalk. It serves as the meta-ADR that guides how all other ADRs are created, maintained, and retired.
+This document establishes the governance, organization, and lifecycle management
+for Architecture Decision Records (ADRs) within Phoenix Rooivalk. It serves as
+the meta-ADR that guides how all other ADRs are created, maintained, and
+retired.
 
 ---
 
 ## Purpose of ADRs
 
-Architecture Decision Records capture significant architectural decisions along with their context, rationale, and consequences. They serve to:
+Architecture Decision Records capture significant architectural decisions along
+with their context, rationale, and consequences. They serve to:
 
 1. **Document decisions**: Preserve the "why" behind architectural choices
 2. **Enable onboarding**: Help new team members understand system evolution
-3. **Prevent re-litigation**: Avoid revisiting decided topics without new information
+3. **Prevent re-litigation**: Avoid revisiting decided topics without new
+   information
 4. **Track evolution**: Show how the architecture has changed over time
 5. **Support audits**: Provide evidence of thoughtful decision-making
 
@@ -41,18 +45,19 @@ Architecture Decision Records capture significant architectural decisions along 
 
 ### Numbering Scheme
 
-| Range | Category | Description |
-|-------|----------|-------------|
-| 0000-0009 | Meta | ADR management, templates, governance |
-| 0010-0019 | Infrastructure | Databases, hosting, deployment |
-| 0020-0029 | Security | Auth, encryption, compliance |
-| 0030-0039 | AI/ML | LLM integration, RAG, agents |
-| 0040-0049 | Frontend | UI frameworks, state management |
-| 0050-0059 | API | Endpoints, protocols, contracts |
-| 0060-0069 | Integration | External services, partners |
-| 0070-0099 | Reserved | Future categories |
+| Range     | Category       | Description                           |
+| --------- | -------------- | ------------------------------------- |
+| 0000-0009 | Meta           | ADR management, templates, governance |
+| 0010-0019 | Infrastructure | Databases, hosting, deployment        |
+| 0020-0029 | Security       | Auth, encryption, compliance          |
+| 0030-0039 | AI/ML          | LLM integration, RAG, agents          |
+| 0040-0049 | Frontend       | UI frameworks, state management       |
+| 0050-0059 | API            | Endpoints, protocols, contracts       |
+| 0060-0069 | Integration    | External services, partners           |
+| 0070-0099 | Reserved       | Future categories                     |
 
-**Note**: Current ADRs (0011-0023) predate this numbering scheme and remain in their original sequence for stability.
+**Note**: Current ADRs (0011-0023) predate this numbering scheme and remain in
+their original sequence for stability.
 
 ### Directory Structure
 
@@ -82,15 +87,15 @@ adr-{NNNN}-appendix-{topic}.md       # For detailed analysis
 
 ### Statuses
 
-| Status | Description |
-|--------|-------------|
-| **Draft** | Under discussion, not yet decided |
-| **Proposed** | Ready for review, seeking approval |
-| **Accepted** | Decision made, implementation planned or in progress |
-| **Implemented** | Decision fully implemented in production |
-| **Deprecated** | No longer recommended, superseded by newer ADR |
-| **Superseded** | Replaced by another ADR (link to successor) |
-| **Rejected** | Proposal not accepted (preserved for history) |
+| Status          | Description                                          |
+| --------------- | ---------------------------------------------------- |
+| **Draft**       | Under discussion, not yet decided                    |
+| **Proposed**    | Ready for review, seeking approval                   |
+| **Accepted**    | Decision made, implementation planned or in progress |
+| **Implemented** | Decision fully implemented in production             |
+| **Deprecated**  | No longer recommended, superseded by newer ADR       |
+| **Superseded**  | Replaced by another ADR (link to successor)          |
+| **Rejected**    | Proposal not accepted (preserved for history)        |
 
 ### State Transitions
 
@@ -116,20 +121,19 @@ id: adr-{NNNN}-{short-description}
 title: "ADR {NNNN}: {Title}"
 sidebar_label: "ADR {NNNN}: {Short Title}"
 difficulty: beginner|intermediate|advanced|expert
-estimated_reading_time: {minutes}
-points: {gamification points}
+estimated_reading_time: { minutes }
+points: { gamification points }
 tags:
   - technical
   - architecture
-  - {category}
+  - { category }
 prerequisites:
-  - {related-adr-id}
+  - { related-adr-id }
 ---
 
 # ADR {NNNN}: {Title}
 
-**Date**: {YYYY-MM-DD}
-**Status**: {Status}
+**Date**: {YYYY-MM-DD} **Status**: {Status}
 
 ---
 
@@ -178,10 +182,12 @@ prerequisites:
 ## Consequences
 
 ### Positive
+
 - {Benefit 1}
 - {Benefit 2}
 
 ### Negative
+
 - {Drawback 1}
 - {Drawback 2}
 
@@ -202,25 +208,26 @@ _© 2025 Phoenix Rooivalk. Confidential._
 
 ### Current ADRs
 
-| ADR | Title | Status | Category | Appendix |
-|-----|-------|--------|----------|----------|
-| 0000 | ADR Management | Accepted | Meta | ✅ |
-| 0001-0010 | *Reserved / Unused* | — | — | — |
-| 0011 | Vector Database Selection | Accepted | Infrastructure | ✅ |
-| 0012 | Runtime Functions Architecture | Accepted | Infrastructure | ✅ |
-| 0013 | Identity & Auth Strategy | Accepted | Security | ✅ |
-| 0014 | Service-to-Service Auth | Accepted | Security | ✅ |
-| 0015 | Prompt Management | Accepted | AI/ML | — |
-| 0016 | RAG Architecture | Accepted | AI/ML | — |
-| 0017 | Context Management | Accepted | AI/ML | — |
-| 0018 | LangChain Integration | Proposed | AI/ML | — |
-| 0019 | AI Agents Architecture | Proposed | AI/ML | — |
-| 0020 | Agent Tools Framework | Proposed | AI/ML | — |
-| 0021 | Conversation Memory | Proposed | AI/ML | — |
-| 0022 | AI Workflows | Proposed | AI/ML | — |
-| 0023 | AI Observability | Proposed | AI/ML | — |
+| ADR       | Title                          | Status   | Category       | Appendix |
+| --------- | ------------------------------ | -------- | -------------- | -------- |
+| 0000      | ADR Management                 | Accepted | Meta           | ✅       |
+| 0001-0010 | _Reserved / Unused_            | —        | —              | —        |
+| 0011      | Vector Database Selection      | Accepted | Infrastructure | ✅       |
+| 0012      | Runtime Functions Architecture | Accepted | Infrastructure | ✅       |
+| 0013      | Identity & Auth Strategy       | Accepted | Security       | ✅       |
+| 0014      | Service-to-Service Auth        | Accepted | Security       | ✅       |
+| 0015      | Prompt Management              | Accepted | AI/ML          | —        |
+| 0016      | RAG Architecture               | Accepted | AI/ML          | —        |
+| 0017      | Context Management             | Accepted | AI/ML          | —        |
+| 0018      | LangChain Integration          | Proposed | AI/ML          | —        |
+| 0019      | AI Agents Architecture         | Proposed | AI/ML          | —        |
+| 0020      | Agent Tools Framework          | Proposed | AI/ML          | —        |
+| 0021      | Conversation Memory            | Proposed | AI/ML          | —        |
+| 0022      | AI Workflows                   | Proposed | AI/ML          | —        |
+| 0023      | AI Observability               | Proposed | AI/ML          | —        |
 
-**Note**: ADRs 0001-0010 were reserved for early infrastructure decisions but were never formally documented. They remain reserved for historical consistency.
+**Note**: ADRs 0001-0010 were reserved for early infrastructure decisions but
+were never formally documented. They remain reserved for historical consistency.
 
 ### Dependency Graph
 
@@ -260,22 +267,24 @@ ADR-0013 (Identity)
 
 When evaluating implementation options, consider:
 
-| Factor | Build Custom | Buy/Use Framework | Cognitive Mesh |
-|--------|--------------|-------------------|----------------|
-| **Time to value** | Slow | Fast | Medium |
-| **Control** | Full | Limited | Full |
-| **Maintenance** | High | Low | Medium |
-| **Cost** | Dev time | Licensing | Dev time |
-| **Compliance** | Custom | Varies | Built-in |
-| **Enterprise ready** | Varies | Varies | Yes |
+| Factor               | Build Custom | Buy/Use Framework | Cognitive Mesh |
+| -------------------- | ------------ | ----------------- | -------------- |
+| **Time to value**    | Slow         | Fast              | Medium         |
+| **Control**          | Full         | Limited           | Full           |
+| **Maintenance**      | High         | Low               | Medium         |
+| **Cost**             | Dev time     | Licensing         | Dev time       |
+| **Compliance**       | Custom       | Varies            | Built-in       |
+| **Enterprise ready** | Varies       | Varies            | Yes            |
 
 ### Cognitive Mesh Consideration
 
-For AI-related ADRs, always evaluate **Cognitive Mesh** (our in-house enterprise AI platform) as an option:
+For AI-related ADRs, always evaluate **Cognitive Mesh** (our in-house enterprise
+AI platform) as an option:
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **When to prefer Cognitive Mesh**:
+
 - Enterprise compliance requirements (NIST AI RMF, GDPR, EU AI Act)
 - Zero-trust security requirements
 - Need for comprehensive audit logging
@@ -284,15 +293,23 @@ For AI-related ADRs, always evaluate **Cognitive Mesh** (our in-house enterprise
 - When governance and RBAC are critical
 
 **When to prefer alternatives (e.g., LangChain)**:
+
 - Rapid prototyping and iteration
 - TypeScript/JavaScript stack preference
 - Simpler use cases without compliance needs
 - Community ecosystem and plugins needed
 - When cognitive-mesh features are still in development
 
-**Current Cognitive Mesh Status**: In development (~40% complete), not yet deployed. Core Security & Zero-Trust Framework complete, agentic and value layers in progress. See [ADR 0000 Appendix](./adr-0000-appendix-platform-decision-matrix.md#cognitive-mesh-completion-status) for detailed PRD completion status.
+**Current Cognitive Mesh Status**: In development (~40% complete), not yet
+deployed. Core Security & Zero-Trust Framework complete, agentic and value
+layers in progress. See
+[ADR 0000 Appendix](./adr-0000-appendix-platform-decision-matrix.md#cognitive-mesh-completion-status)
+for detailed PRD completion status.
 
-**Resource Trade-off Note**: Development resources for Phoenix Rooivalk and Cognitive Mesh are shared. Time invested in advanced docs site features delays CM maturation. Prioritize CM development unless docs site work is blocking demos or core functionality.
+**Resource Trade-off Note**: Development resources for Phoenix Rooivalk and
+Cognitive Mesh are shared. Time invested in advanced docs site features delays
+CM maturation. Prioritize CM development unless docs site work is blocking demos
+or core functionality.
 
 ---
 
@@ -301,6 +318,7 @@ For AI-related ADRs, always evaluate **Cognitive Mesh** (our in-house enterprise
 ### When to Create an ADR
 
 Create an ADR when:
+
 - Introducing new technology or framework
 - Making significant architectural changes
 - Choosing between multiple valid approaches
@@ -309,11 +327,11 @@ Create an ADR when:
 
 ### Review Cadence
 
-| Review Type | Frequency | Purpose |
-|-------------|-----------|---------|
-| New ADR review | Per ADR | Ensure quality and completeness |
+| Review Type      | Frequency      | Purpose                             |
+| ---------------- | -------------- | ----------------------------------- |
+| New ADR review   | Per ADR        | Ensure quality and completeness     |
 | Quarterly review | Every 3 months | Check if ADRs still reflect reality |
-| Annual audit | Yearly | Deprecate outdated ADRs |
+| Annual audit     | Yearly         | Deprecate outdated ADRs             |
 
 ### Approval Process
 
@@ -346,7 +364,8 @@ Before finalizing an ADR, verify:
 
 - [ ] Executive summary is clear and concise
 - [ ] Context explains the problem fully
-- [ ] All viable options are considered (including Cognitive Mesh where applicable)
+- [ ] All viable options are considered (including Cognitive Mesh where
+      applicable)
 - [ ] Rationale clearly explains the choice
 - [ ] Consequences (both positive and negative) are documented
 - [ ] Related ADRs are linked
@@ -360,7 +379,9 @@ Before finalizing an ADR, verify:
 ### When to Create an Appendix
 
 Create an appendix (ADR-{NNNN}-appendix-{topic}.md) when:
-- The decision requires extensive analysis (weighted decision matrices, cost models)
+
+- The decision requires extensive analysis (weighted decision matrices, cost
+  models)
 - Detailed technical comparisons exceed 2-3 pages
 - Supporting data would clutter the main ADR
 - Multiple options require in-depth evaluation
@@ -388,8 +409,9 @@ Create an appendix (ADR-{NNNN}-appendix-{topic}.md) when:
 ## Scale Assessment
 
 ### Current State
-| Metric | Value |
-|--------|-------|
+
+| Metric   | Value   |
+| -------- | ------- |
 | {metric} | {value} |
 
 ---
@@ -397,82 +419,93 @@ Create an appendix (ADR-{NNNN}-appendix-{topic}.md) when:
 ## Options Evaluated
 
 ### Option 1: {Name}
-**Overview**: {description}
-**Capabilities**: {list}
-**Pricing**: {table}
+
+**Overview**: {description} **Capabilities**: {list} **Pricing**: {table}
 
 ---
 
 ## Weighted Decision Matrix
 
 ### Criteria Weights
-| Criterion | Weight | Rationale |
-|-----------|--------|-----------|
-| {criterion} | {%} | {why} |
+
+| Criterion   | Weight | Rationale |
+| ----------- | ------ | --------- |
+| {criterion} | {%}    | {why}     |
 
 ### Scoring Legend
+
 - 1 = Poor, 2 = Below Average, 3 = Average, 4 = Good, 5 = Excellent
 
 ### Detailed Scoring Matrix
-| Criterion | Weight | Option A | Option B | Option C |
-|-----------|--------|----------|----------|----------|
-| {criterion} | {%} | {score} | {score} | {score} |
+
+| Criterion   | Weight | Option A | Option B | Option C |
+| ----------- | ------ | -------- | -------- | -------- |
+| {criterion} | {%}    | {score}  | {score}  | {score}  |
 
 ### Final Weighted Scores
+
 | Rank | Solution | Weighted Score |
-|------|----------|----------------|
-| 🥇 1 | {winner} | {score} |
+| ---- | -------- | -------------- |
+| 🥇 1 | {winner} | {score}        |
 
 ---
 
 ## Cost Model
+
 {2-year projections, break-even analysis}
 
 ---
 
 ## Risk Assessment
+
 | Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
+| ---- | ----------- | ------ | ---------- |
 
 ---
 
 ## Conclusion
+
 {Summary of why selected option is best}
 ```
 
 ### Existing Appendices
 
-| ADR | Appendix | Focus |
-|-----|----------|-------|
-| 0000 | ✅ Platform Decision Matrix | Cognitive Mesh vs alternatives |
-| 0011 | ✅ Vector DB Analysis | Detailed scoring, cost models |
-| 0012 | ✅ Runtime Functions Analysis | Architecture comparison |
-| 0013 | ✅ Identity Auth Analysis | Security framework comparison |
-| 0014 | ✅ Service Auth Analysis | Protocol evaluation |
+| ADR  | Appendix                      | Focus                          |
+| ---- | ----------------------------- | ------------------------------ |
+| 0000 | ✅ Platform Decision Matrix   | Cognitive Mesh vs alternatives |
+| 0011 | ✅ Vector DB Analysis         | Detailed scoring, cost models  |
+| 0012 | ✅ Runtime Functions Analysis | Architecture comparison        |
+| 0013 | ✅ Identity Auth Analysis     | Security framework comparison  |
+| 0014 | ✅ Service Auth Analysis      | Protocol evaluation            |
 
 ---
 
 ## Appendix: ADR Maturity Model
 
 ### Level 1: Ad-hoc
+
 - Decisions made but not documented
 - Knowledge in people's heads
 
 ### Level 2: Documented
+
 - ADRs exist for major decisions
 - Inconsistent format and depth
 
 ### Level 3: Structured ← Current Target
+
 - Consistent ADR format
 - Regular review process
 - Clear lifecycle management
 
 ### Level 4: Governed
+
 - ADRs integrated with planning
 - Automated compliance checks
 - Metrics on decision quality
 
 ### Level 5: Optimized
+
 - AI-assisted ADR creation
 - Predictive decision analysis
 - Continuous improvement feedback

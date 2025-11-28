@@ -54,7 +54,8 @@ export const analyzeCompetitors = functions.https.onCall(
     }
 
     // Safe destructuring with fallback to prevent null/undefined errors
-    const { competitors, focusAreas } = (data ?? {}) as CompetitorAnalysisRequest;
+    const { competitors, focusAreas } = (data ??
+      {}) as CompetitorAnalysisRequest;
 
     // Validate payload
     if (!Array.isArray(competitors) || competitors.length === 0) {
@@ -126,7 +127,10 @@ When comparing competitors, highlight how Phoenix Rooivalk's documented capabili
         ragSourcesUsed: sourcesUsed.length,
       });
     } catch (logError) {
-      functions.logger.warn("Failed to log usage for competitor analysis:", logError);
+      functions.logger.warn(
+        "Failed to log usage for competitor analysis:",
+        logError,
+      );
     }
 
     return {

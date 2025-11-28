@@ -555,11 +555,11 @@ export function OnboardingWalkthrough({
     if (isAnimating) return;
 
     const step = ONBOARDING_STEPS[currentStep];
-    
+
     // Don't allow going back from non-tour steps
     // (can't go back from profile-completion, profile-selection, or ai-fun-facts)
     if (step.stepType !== "tour") return;
-    
+
     // Don't allow going back to non-tour steps from the first tour step
     const tourStartIndex = findStepIndex("tour");
     if (currentStep <= tourStartIndex) return;
@@ -567,7 +567,9 @@ export function OnboardingWalkthrough({
     // Clear the highlight from current step before navigating back
     // (the useEffect will apply the new step's highlight)
     if (step.highlight) {
-      document.querySelector(step.highlight)?.classList.remove("onboarding-highlight");
+      document
+        .querySelector(step.highlight)
+        ?.classList.remove("onboarding-highlight");
     }
 
     setIsAnimating(true);

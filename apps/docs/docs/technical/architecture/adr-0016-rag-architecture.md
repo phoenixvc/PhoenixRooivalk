@@ -18,34 +18,41 @@ prerequisites:
 
 # ADR 0016: RAG (Retrieval-Augmented Generation) Architecture
 
-**Date**: 2025-11-27
-**Status**: Accepted (Hybrid RAG with Azure AI Search + Firestore)
+**Date**: 2025-11-27 **Status**: Accepted (Hybrid RAG with Azure AI Search +
+Firestore)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: LLM responses lack grounding in Phoenix Rooivalk's specific documentation and context
-2. **Decision**: Hybrid RAG architecture using Azure AI Search for vector retrieval with Firestore fallback
-3. **Trade-off**: Increased latency (~500ms) for significantly improved accuracy and relevance
+1. **Problem**: LLM responses lack grounding in Phoenix Rooivalk's specific
+   documentation and context
+2. **Decision**: Hybrid RAG architecture using Azure AI Search for vector
+   retrieval with Firestore fallback
+3. **Trade-off**: Increased latency (~500ms) for significantly improved accuracy
+   and relevance
 
 ---
 
 ## Context
 
-Phoenix Rooivalk's AI features need to provide accurate, contextual responses about:
+Phoenix Rooivalk's AI features need to provide accurate, contextual responses
+about:
+
 - Company products and capabilities
 - Technical specifications
 - Competitive landscape
 - Market positioning
 
 **Without RAG**:
+
 - LLM generates generic responses based on training data
 - May hallucinate or provide outdated information
 - Cannot reference specific documentation
 - No source citations possible
 
 **With RAG**:
+
 - Responses grounded in actual documentation
 - Up-to-date information from indexed content
 - Source citations for verification
@@ -56,6 +63,7 @@ Phoenix Rooivalk's AI features need to provide accurate, contextual responses ab
 ## Decision
 
 **Hybrid RAG architecture** with:
+
 1. **Primary**: Azure AI Search for vector similarity search
 2. **Fallback**: Firestore embeddings for offline/backup retrieval
 3. **Integration**: RAG context injection into all AI functions
@@ -136,13 +144,15 @@ async function indexDocument(doc: DocumentToIndex): Promise<void> {
   });
 
   // 3. Index in Azure AI Search (primary)
-  await indexClient.uploadDocuments([{
-    id: doc.id,
-    title: doc.title,
-    content: doc.content,
-    category: doc.category,
-    contentVector: embedding,
-  }]);
+  await indexClient.uploadDocuments([
+    {
+      id: doc.id,
+      title: doc.title,
+      content: doc.content,
+      category: doc.category,
+      contentVector: embedding,
+    },
+  ]);
 }
 ```
 
@@ -152,7 +162,7 @@ async function indexDocument(doc: DocumentToIndex): Promise<void> {
 // Primary: Azure AI Search
 async function searchDocuments(
   query: string,
-  options: SearchOptions = {}
+  options: SearchOptions = {},
 ): Promise<SearchResult[]> {
   const { topK = 5, minScore = 0.7 } = options;
 
@@ -162,12 +172,14 @@ async function searchDocuments(
   // Vector search
   const results = await searchClient.search("*", {
     vectorSearchOptions: {
-      queries: [{
-        kind: "vector",
-        vector: queryEmbedding,
-        kNearestNeighborsCount: topK,
-        fields: ["contentVector"],
-      }],
+      queries: [
+        {
+          kind: "vector",
+          vector: queryEmbedding,
+          kNearestNeighborsCount: topK,
+          fields: ["contentVector"],
+        },
+      ],
     },
   });
 
@@ -185,7 +197,7 @@ async function searchDocuments(
 // Fallback: Firestore with cosine similarity
 async function searchDocumentsFallback(
   query: string,
-  options: SearchOptions = {}
+  options: SearchOptions = {},
 ): Promise<SearchResult[]> {
   const queryEmbedding = await generateEmbedding(query);
   const snapshot = await db.collection("doc_embeddings").get();
@@ -209,7 +221,7 @@ async function searchDocumentsFallback(
 // Build RAG context for LLM
 function buildRAGContext(
   results: SearchResult[],
-  maxTokens: number = 2000
+  maxTokens: number = 2000,
 ): RAGContext {
   let context = "";
   const sources: Source[] = [];
@@ -273,7 +285,7 @@ Used by: `analyzeCompetitors`, `generateSWOT`, `getMarketInsights`
 ```typescript
 async function analyzeCompetitors(
   competitors: string[],
-  focusAreas?: string[]
+  focusAreas?: string[],
 ): Promise<Analysis> {
   // 1. Search for Phoenix context (not competitor data)
   const searchQuery = `Phoenix Rooivalk capabilities ${focusAreas?.join(" ")}`;
@@ -291,7 +303,7 @@ async function analyzeCompetitors(
 
   return {
     analysis,
-    sources: results.map(r => r.id),
+    sources: results.map((r) => r.id),
     ragEnabled: results.length > 0,
   };
 }
@@ -304,7 +316,7 @@ Used by: `getReadingRecommendations`
 ```typescript
 async function getReadingRecommendations(
   readDocs: string[],
-  currentDocId?: string
+  currentDocId?: string,
 ): Promise<Recommendations> {
   // 1. Find related documents to current reading
   const relatedDocs = currentDocId
@@ -334,20 +346,22 @@ async function getReadingRecommendations(
 
 ### Option 1: Azure AI Search (Hybrid) ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Vector Search** | Native HNSW index |
+| Aspect            | Details                      |
+| ----------------- | ---------------------------- |
+| **Vector Search** | Native HNSW index            |
 | **Hybrid Search** | Vector + keyword combination |
-| **Scalability** | Managed, auto-scaling |
-| **Latency** | ~100-200ms per query |
+| **Scalability**   | Managed, auto-scaling        |
+| **Latency**       | ~100-200ms per query         |
 
 **Pros**:
+
 - Production-grade vector search
 - Hybrid search (vector + BM25)
 - Semantic ranking
 - Managed infrastructure
 
 **Cons**:
+
 - Cost (~$70/month for basic)
 - Azure lock-in
 - Requires embedding sync
@@ -356,18 +370,20 @@ async function getReadingRecommendations(
 
 ### Option 2: Firestore Only
 
-| Aspect | Details |
-|--------|---------|
-| **Storage** | Firestore documents with embedding arrays |
-| **Search** | Client-side cosine similarity |
-| **Scalability** | Limited by document reads |
+| Aspect          | Details                                   |
+| --------------- | ----------------------------------------- |
+| **Storage**     | Firestore documents with embedding arrays |
+| **Search**      | Client-side cosine similarity             |
+| **Scalability** | Limited by document reads                 |
 
 **Pros**:
+
 - No additional service
 - Simple implementation
 - Firestore already in stack
 
 **Cons**:
+
 - Poor performance at scale (full scan)
 - No native vector index
 - High read costs with large corpus
@@ -376,18 +392,20 @@ async function getReadingRecommendations(
 
 ### Option 3: Pinecone
 
-| Aspect | Details |
-|--------|---------|
-| **Vector Search** | Purpose-built vector DB |
-| **Scalability** | Serverless, auto-scaling |
-| **Latency** | ~50ms per query |
+| Aspect            | Details                  |
+| ----------------- | ------------------------ |
+| **Vector Search** | Purpose-built vector DB  |
+| **Scalability**   | Serverless, auto-scaling |
+| **Latency**       | ~50ms per query          |
 
 **Pros**:
+
 - Best-in-class vector search
 - Simple API
 - Excellent performance
 
 **Cons**:
+
 - Additional vendor
 - Cost at scale
 - Another service to manage
@@ -396,18 +414,20 @@ async function getReadingRecommendations(
 
 ### Option 4: pgvector (PostgreSQL)
 
-| Aspect | Details |
-|--------|---------|
-| **Vector Search** | PostgreSQL extension |
+| Aspect             | Details                |
+| ------------------ | ---------------------- |
+| **Vector Search**  | PostgreSQL extension   |
 | **Infrastructure** | Self-hosted or managed |
-| **Hybrid** | SQL + vector in one DB |
+| **Hybrid**         | SQL + vector in one DB |
 
 **Pros**:
+
 - Single database for all data
 - SQL joins with vector search
 - Open source
 
 **Cons**:
+
 - Requires PostgreSQL setup
 - Performance tuning needed
 - Not in current stack
@@ -416,15 +436,16 @@ async function getReadingRecommendations(
 
 ### Option 5: Cognitive Mesh (Future)
 
-| Aspect | Details |
-|--------|---------|
-| **Vector Search** | Integrated RAG in Foundation Layer |
-| **Infrastructure** | C#/.NET enterprise platform |
-| **Hybrid** | Multi-source retrieval with governance |
+| Aspect             | Details                                |
+| ------------------ | -------------------------------------- |
+| **Vector Search**  | Integrated RAG in Foundation Layer     |
+| **Infrastructure** | C#/.NET enterprise platform            |
+| **Hybrid**         | Multi-source retrieval with governance |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Enterprise-grade RAG with compliance built-in
 - Zero-trust security for document access
 - RBAC for retrieval permissions
@@ -433,18 +454,21 @@ async function getReadingRecommendations(
 - Integrated with reasoning engines
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript/Firebase)
 - Currently in development
 - Requires infrastructure migration
 - Higher operational complexity
 
 **When to Consider**:
+
 - When document access requires RBAC controls
 - When query audit trails are mandated
 - When deploying to regulated industries (defense, finance)
 - When multi-tenant isolation is required
 
-**Current Status**: In development. RAG capabilities exist but not production-ready.
+**Current Status**: In development. RAG capabilities exist but not
+production-ready.
 
 ---
 
@@ -452,17 +476,18 @@ async function getReadingRecommendations(
 
 ### Why Azure AI Search?
 
-| Factor | Azure Search | Firestore | Pinecone | pgvector | Cognitive Mesh |
-|--------|--------------|-----------|----------|----------|----------------|
-| **Performance** | ✅ Fast | ❌ Slow | ✅ Fastest | ⚠️ Medium | ✅ Fast |
-| **Stack fit** | ✅ Azure AI | ✅ Firebase | ⚠️ New vendor | ⚠️ New infra | ⚠️ C#/.NET |
-| **Hybrid search** | ✅ Native | ❌ None | ⚠️ Limited | ⚠️ Extension | ✅ Native |
-| **Cost** | ⚠️ Medium | ✅ Low | ⚠️ Medium | ✅ Low | ⚠️ Self-hosted |
-| **Maintenance** | ✅ Managed | ✅ Managed | ✅ Managed | ⚠️ Self | ⚠️ Self |
-| **Compliance** | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ✅ Built-in |
-| **RBAC** | ⚠️ External | ⚠️ External | ❌ Limited | ⚠️ External | ✅ Native |
+| Factor            | Azure Search | Firestore   | Pinecone      | pgvector     | Cognitive Mesh |
+| ----------------- | ------------ | ----------- | ------------- | ------------ | -------------- |
+| **Performance**   | ✅ Fast      | ❌ Slow     | ✅ Fastest    | ⚠️ Medium    | ✅ Fast        |
+| **Stack fit**     | ✅ Azure AI  | ✅ Firebase | ⚠️ New vendor | ⚠️ New infra | ⚠️ C#/.NET     |
+| **Hybrid search** | ✅ Native    | ❌ None     | ⚠️ Limited    | ⚠️ Extension | ✅ Native      |
+| **Cost**          | ⚠️ Medium    | ✅ Low      | ⚠️ Medium     | ✅ Low       | ⚠️ Self-hosted |
+| **Maintenance**   | ✅ Managed   | ✅ Managed  | ✅ Managed    | ⚠️ Self      | ⚠️ Self        |
+| **Compliance**    | ⚠️ Manual    | ⚠️ Manual   | ⚠️ Manual     | ⚠️ Manual    | ✅ Built-in    |
+| **RBAC**          | ⚠️ External  | ⚠️ External | ❌ Limited    | ⚠️ External  | ✅ Native      |
 
-**Decision**: Azure AI Search provides the best balance of performance, features, and integration with our existing Azure AI services.
+**Decision**: Azure AI Search provides the best balance of performance,
+features, and integration with our existing Azure AI services.
 
 ---
 
@@ -470,11 +495,11 @@ async function getReadingRecommendations(
 
 ### Model Selection
 
-| Model | Dimensions | Performance | Cost |
-|-------|------------|-------------|------|
-| text-embedding-3-small | 1536 | Good | $0.02/1M tokens |
-| text-embedding-3-large | 3072 | Better | $0.13/1M tokens |
-| text-embedding-ada-002 | 1536 | Good | $0.10/1M tokens |
+| Model                  | Dimensions | Performance | Cost            |
+| ---------------------- | ---------- | ----------- | --------------- |
+| text-embedding-3-small | 1536       | Good        | $0.02/1M tokens |
+| text-embedding-3-large | 3072       | Better      | $0.13/1M tokens |
+| text-embedding-ada-002 | 1536       | Good        | $0.10/1M tokens |
 
 **Selected**: `text-embedding-3-small` - best cost/performance ratio
 
@@ -482,9 +507,9 @@ async function getReadingRecommendations(
 
 ```typescript
 const CHUNK_CONFIG = {
-  maxChunkSize: 1000,      // tokens
-  chunkOverlap: 100,       // tokens for context
-  minChunkSize: 100,       // don't create tiny chunks
+  maxChunkSize: 1000, // tokens
+  chunkOverlap: 100, // tokens for context
+  minChunkSize: 100, // don't create tiny chunks
   splitOn: ["##", "\n\n"], // headers and paragraphs
 };
 
@@ -512,13 +537,13 @@ function chunkDocument(content: string): Chunk[] {
 
 ### Latency Breakdown
 
-| Stage | Latency | Notes |
-|-------|---------|-------|
-| Query embedding | ~100ms | Azure OpenAI |
-| Vector search | ~100-200ms | Azure AI Search |
-| Context assembly | ~10ms | Local processing |
-| LLM generation | ~1-3s | Depends on output length |
-| **Total** | ~1.5-3.5s | End-to-end |
+| Stage            | Latency    | Notes                    |
+| ---------------- | ---------- | ------------------------ |
+| Query embedding  | ~100ms     | Azure OpenAI             |
+| Vector search    | ~100-200ms | Azure AI Search          |
+| Context assembly | ~10ms      | Local processing         |
+| LLM generation   | ~1-3s      | Depends on output length |
+| **Total**        | ~1.5-3.5s  | End-to-end               |
 
 ### Caching Strategy
 
@@ -579,13 +604,13 @@ async function generateResponse(prompt: string): Promise<Response> {
   const ragEnabled = ragResults.length > 0;
 
   const response = await callLLM(
-    buildPrompt(prompt, ragEnabled ? ragResults : undefined)
+    buildPrompt(prompt, ragEnabled ? ragResults : undefined),
   );
 
   return {
     answer: response,
     ragEnabled,
-    sources: ragEnabled ? ragResults.map(r => r.id) : [],
+    sources: ragEnabled ? ragResults.map((r) => r.id) : [],
     // Include disclaimer if no RAG
     disclaimer: !ragEnabled
       ? "Response generated without documentation context"
@@ -600,13 +625,13 @@ async function generateResponse(prompt: string): Promise<Response> {
 
 ### Metrics to Track
 
-| Metric | Purpose | Alert Threshold |
-|--------|---------|-----------------|
-| Search latency | Performance | > 500ms p95 |
-| Search result count | Relevance | 0 results > 10% |
-| Relevance scores | Quality | Avg < 0.6 |
-| Fallback rate | Reliability | > 5% |
-| Embedding API errors | Availability | > 1% |
+| Metric               | Purpose      | Alert Threshold |
+| -------------------- | ------------ | --------------- |
+| Search latency       | Performance  | > 500ms p95     |
+| Search result count  | Relevance    | 0 results > 10% |
+| Relevance scores     | Quality      | Avg < 0.6       |
+| Fallback rate        | Reliability  | > 5%            |
+| Embedding API errors | Availability | > 1%            |
 
 ### Logging
 
@@ -615,7 +640,7 @@ logger.info("RAG search completed", {
   query: truncate(query, 100),
   resultCount: results.length,
   topScore: results[0]?.score,
-  avgScore: average(results.map(r => r.score)),
+  avgScore: average(results.map((r) => r.score)),
   latencyMs: Date.now() - startTime,
   usedFallback: false,
 });
@@ -642,12 +667,12 @@ logger.info("RAG search completed", {
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
-| Stale index | Automated indexing on doc publish |
-| Search service down | Firestore fallback |
-| Poor relevance | Tune min score, hybrid search |
-| Cost overrun | Monitor usage, set quotas |
+| Risk                | Mitigation                        |
+| ------------------- | --------------------------------- |
+| Stale index         | Automated indexing on doc publish |
+| Search service down | Firestore fallback                |
+| Poor relevance      | Tune min score, hybrid search     |
+| Cost overrun        | Monitor usage, set quotas         |
 
 ---
 
@@ -672,29 +697,36 @@ logger.info("RAG search completed", {
 
 ### Decision: **Keep Here** ✅
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Implemented with Azure AI Search |
-| **CM Equivalent** | FoundationLayer (~30% complete) |
-| **Migration Value** | Low - Azure AI Search works well |
+| Factor                 | Assessment                           |
+| ---------------------- | ------------------------------------ |
+| **Current Status**     | Implemented with Azure AI Search     |
+| **CM Equivalent**      | FoundationLayer (~30% complete)      |
+| **Migration Value**    | Low - Azure AI Search works well     |
 | **Resource Trade-off** | Current solution is production-ready |
 
-**Rationale**: The Azure AI Search + Firestore fallback architecture is working well for the documentation site. Cognitive Mesh's RAG is designed for multi-tenant deployments with document-level RBAC, which is unnecessary here since all documentation is public.
+**Rationale**: The Azure AI Search + Firestore fallback architecture is working
+well for the documentation site. Cognitive Mesh's RAG is designed for
+multi-tenant deployments with document-level RBAC, which is unnecessary here
+since all documentation is public.
 
 **Action**: No changes needed. Continue using current implementation.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0011: Vector Database Selection](./adr-0011-vector-database-selection.md)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0015: Prompt Management](./adr-0015-prompt-management.md)
 - [ADR 0017: Context Management](./adr-0017-context-management.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

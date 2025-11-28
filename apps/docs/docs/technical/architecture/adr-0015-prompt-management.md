@@ -17,16 +17,19 @@ prerequisites:
 
 # ADR 0015: Prompt Management System
 
-**Date**: 2025-11-27
-**Status**: Accepted (Centralized Template System with Versioning)
+**Date**: 2025-11-27 **Status**: Accepted (Centralized Template System with
+Versioning)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: AI prompts scattered across multiple files, difficult to optimize, version, and audit
-2. **Decision**: Centralized prompt management system with versioned templates, metadata, and type safety
-3. **Trade-off**: Additional structure vs. flexibility; chosen for maintainability at scale
+1. **Problem**: AI prompts scattered across multiple files, difficult to
+   optimize, version, and audit
+2. **Decision**: Centralized prompt management system with versioned templates,
+   metadata, and type safety
+3. **Trade-off**: Additional structure vs. flexibility; chosen for
+   maintainability at scale
 
 ---
 
@@ -45,6 +48,7 @@ AI Features
 ```
 
 **Problems with scattered prompts**:
+
 - Prompts embedded directly in function code
 - No version tracking for prompt changes
 - No standardized format for prompt templates
@@ -57,6 +61,7 @@ AI Features
 ## Decision
 
 **Centralized prompt management system** at `/functions/src/prompts/` with:
+
 - Type-safe template definitions
 - Version tracking and metadata
 - Reusable context modules
@@ -88,19 +93,19 @@ functions/src/prompts/
 ```typescript
 // Prompt metadata for tracking and optimization
 interface PromptMetadata {
-  id: string;              // Unique identifier
-  name: string;            // Human-readable name
+  id: string; // Unique identifier
+  name: string; // Human-readable name
   category: PromptCategory; // analysis | retrieval | recommendation
-  version: string;         // Semantic version (e.g., "1.2.0")
-  description: string;     // What this prompt does
-  createdAt: string;       // Creation date
-  author: string;          // Author/team
-  changelog: string;       // Latest changes
+  version: string; // Semantic version (e.g., "1.2.0")
+  description: string; // What this prompt does
+  createdAt: string; // Creation date
+  author: string; // Author/team
+  changelog: string; // Latest changes
   recommendedModel: AIModel; // chat | chatAdvanced
-  maxTokens: number;       // Token limit
-  temperature: number;     // Creativity setting
-  usesRAG: boolean;        // Whether prompt uses RAG
-  tags: string[];          // Searchable tags
+  maxTokens: number; // Token limit
+  temperature: number; // Creativity setting
+  usesRAG: boolean; // Whether prompt uses RAG
+  tags: string[]; // Searchable tags
 }
 
 // Complete prompt template
@@ -109,7 +114,7 @@ interface PromptTemplate {
   system: SystemPromptTemplate;
   user: UserPromptTemplate;
   outputFormat?: "text" | "json" | "markdown";
-  outputSchema?: object;   // JSON schema for structured output
+  outputSchema?: object; // JSON schema for structured output
 }
 ```
 
@@ -162,14 +167,15 @@ Focus areas: {{focusAreas}}`,
 
 ### Option 1: Centralized Template System ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Structure** | Dedicated `/prompts/` directory with types |
-| **Versioning** | Semantic versions in metadata |
-| **Discovery** | Registry pattern with lookup functions |
-| **Type Safety** | Full TypeScript interfaces |
+| Aspect          | Details                                    |
+| --------------- | ------------------------------------------ |
+| **Structure**   | Dedicated `/prompts/` directory with types |
+| **Versioning**  | Semantic versions in metadata              |
+| **Discovery**   | Registry pattern with lookup functions     |
+| **Type Safety** | Full TypeScript interfaces                 |
 
 **Pros**:
+
 - Single source of truth for all prompts
 - Version tracking and audit trail
 - Type-safe template interpolation
@@ -177,6 +183,7 @@ Focus areas: {{focusAreas}}`,
 - Supports RAG context injection
 
 **Cons**:
+
 - More initial setup
 - Requires migration from inline prompts
 - Additional abstraction layer
@@ -185,18 +192,20 @@ Focus areas: {{focusAreas}}`,
 
 ### Option 2: Configuration File (JSON/YAML)
 
-| Aspect | Details |
-|--------|---------|
-| **Structure** | Single `prompts.json` or `prompts.yaml` |
-| **Versioning** | Git-based |
-| **Discovery** | Parse and cache at runtime |
+| Aspect         | Details                                 |
+| -------------- | --------------------------------------- |
+| **Structure**  | Single `prompts.json` or `prompts.yaml` |
+| **Versioning** | Git-based                               |
+| **Discovery**  | Parse and cache at runtime              |
 
 **Pros**:
+
 - Easy to edit without code changes
 - Can be loaded dynamically
 - Simple to version in Git
 
 **Cons**:
+
 - No type safety
 - Limited interpolation options
 - Can't include complex logic
@@ -206,18 +215,20 @@ Focus areas: {{focusAreas}}`,
 
 ### Option 3: Database-Stored Prompts
 
-| Aspect | Details |
-|--------|---------|
-| **Structure** | Firestore collection |
-| **Versioning** | Document versions |
-| **Discovery** | Query by ID/category |
+| Aspect         | Details              |
+| -------------- | -------------------- |
+| **Structure**  | Firestore collection |
+| **Versioning** | Document versions    |
+| **Discovery**  | Query by ID/category |
 
 **Pros**:
+
 - Dynamic updates without deploy
 - A/B testing infrastructure
 - Usage analytics
 
 **Cons**:
+
 - Additional latency (fetch on each call)
 - Requires admin UI for editing
 - Overkill for current scale
@@ -227,17 +238,19 @@ Focus areas: {{focusAreas}}`,
 
 ### Option 4: Inline Prompts (Current)
 
-| Aspect | Details |
-|--------|---------|
-| **Structure** | Prompts in each function file |
-| **Versioning** | Git history |
-| **Discovery** | Manual search |
+| Aspect         | Details                       |
+| -------------- | ----------------------------- |
+| **Structure**  | Prompts in each function file |
+| **Versioning** | Git history                   |
+| **Discovery**  | Manual search                 |
 
 **Pros**:
+
 - Simple to start
 - No additional abstraction
 
 **Cons**:
+
 - Scattered across codebase
 - Hard to audit and optimize
 - Duplicate context definitions
@@ -247,16 +260,17 @@ Focus areas: {{focusAreas}}`,
 
 ### Option 5: Cognitive Mesh (Future)
 
-| Aspect | Details |
-|--------|---------|
-| **Structure** | Reasoning Layer with cognitive engines |
-| **Versioning** | Built-in version management |
-| **Discovery** | Centralized registry with governance |
-| **Platform** | C#/.NET 9.0+ (different tech stack) |
+| Aspect         | Details                                |
+| -------------- | -------------------------------------- |
+| **Structure**  | Reasoning Layer with cognitive engines |
+| **Versioning** | Built-in version management            |
+| **Discovery**  | Centralized registry with governance   |
+| **Platform**   | C#/.NET 9.0+ (different tech stack)    |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Enterprise-grade prompt governance
 - Built-in compliance (NIST AI RMF, GDPR, EU AI Act)
 - Zero-trust security with RBAC
@@ -264,18 +278,21 @@ Focus areas: {{focusAreas}}`,
 - Ethical reasoning layer built-in
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development, not yet deployed
 - Requires migration from Firebase Functions
 - Higher operational complexity
 
 **When to Consider**:
+
 - When enterprise compliance becomes mandatory
 - When audit requirements increase
 - When ethical AI governance is required
 - When scaling to multi-tenant enterprise deployments
 
-**Current Status**: In development. Evaluate when deploying to regulated environments.
+**Current Status**: In development. Evaluate when deploying to regulated
+environments.
 
 ---
 
@@ -283,17 +300,18 @@ Focus areas: {{focusAreas}}`,
 
 ### Why Centralized Templates?
 
-| Factor | Templates | Config File | Database | Inline | Cognitive Mesh |
-|--------|-----------|-------------|----------|--------|----------------|
-| **Type safety** | ✅ Full | ❌ None | ❌ Runtime | ⚠️ Partial | ✅ Full |
-| **Version tracking** | ✅ Built-in | ⚠️ Git only | ✅ Built-in | ⚠️ Git only | ✅ Built-in |
-| **RAG integration** | ✅ Native | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ✅ Native |
-| **IDE support** | ✅ Full | ❌ Limited | ❌ None | ✅ Partial | ✅ Full |
-| **Optimization** | ✅ Easy | ⚠️ Medium | ✅ Easy | ❌ Hard | ✅ Easy |
-| **Compliance** | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ❌ None | ✅ Built-in |
-| **Stack fit** | ✅ TypeScript | ✅ Any | ✅ Firebase | ✅ Current | ⚠️ C#/.NET |
+| Factor               | Templates     | Config File | Database    | Inline      | Cognitive Mesh |
+| -------------------- | ------------- | ----------- | ----------- | ----------- | -------------- |
+| **Type safety**      | ✅ Full       | ❌ None     | ❌ Runtime  | ⚠️ Partial  | ✅ Full        |
+| **Version tracking** | ✅ Built-in   | ⚠️ Git only | ✅ Built-in | ⚠️ Git only | ✅ Built-in    |
+| **RAG integration**  | ✅ Native     | ⚠️ Manual   | ⚠️ Manual   | ⚠️ Manual   | ✅ Native      |
+| **IDE support**      | ✅ Full       | ❌ Limited  | ❌ None     | ✅ Partial  | ✅ Full        |
+| **Optimization**     | ✅ Easy       | ⚠️ Medium   | ✅ Easy     | ❌ Hard     | ✅ Easy        |
+| **Compliance**       | ⚠️ Manual     | ⚠️ Manual   | ⚠️ Manual   | ❌ None     | ✅ Built-in    |
+| **Stack fit**        | ✅ TypeScript | ✅ Any      | ✅ Firebase | ✅ Current  | ⚠️ C#/.NET     |
 
-**Decision**: Centralized templates provide the best balance of type safety, developer experience, and optimization capability.
+**Decision**: Centralized templates provide the best balance of type safety,
+developer experience, and optimization capability.
 
 ---
 
@@ -339,14 +357,15 @@ Market Position:
 ```typescript
 function buildSystemPrompt(
   template: PromptTemplate,
-  ragContext?: string
+  ragContext?: string,
 ): string {
   let systemPrompt = template.system.base;
 
   // Inject RAG context if available
   if (ragContext && template.system.ragTemplate) {
-    systemPrompt += "\n\n" + template.system.ragTemplate
-      .replace("{{RAG_CONTEXT}}", ragContext);
+    systemPrompt +=
+      "\n\n" +
+      template.system.ragTemplate.replace("{{RAG_CONTEXT}}", ragContext);
   }
 
   return systemPrompt;
@@ -425,11 +444,11 @@ Both systems work simultaneously via legacy compatibility layer.
 
 ### Semantic Versioning for Prompts
 
-| Change Type | Version Bump | Example |
-|-------------|--------------|---------|
-| **Major** | X.0.0 | Complete prompt rewrite, output format change |
-| **Minor** | x.Y.0 | New optional variables, RAG integration |
-| **Patch** | x.y.Z | Typo fixes, minor wording improvements |
+| Change Type | Version Bump | Example                                       |
+| ----------- | ------------ | --------------------------------------------- |
+| **Major**   | X.0.0        | Complete prompt rewrite, output format change |
+| **Minor**   | x.Y.0        | New optional variables, RAG integration       |
+| **Patch**   | x.y.Z        | Typo fixes, minor wording improvements        |
 
 ### Changelog Tracking
 
@@ -518,28 +537,35 @@ describe("Prompt Templates", () => {
 
 ### Decision: **Keep Here** ✅
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Implemented and working |
-| **CM Equivalent** | ReasoningLayer/LLMReasoning (~40% complete) |
-| **Migration Value** | Low - current implementation meets docs site needs |
-| **Resource Trade-off** | Not worth migration effort |
+| Factor                 | Assessment                                         |
+| ---------------------- | -------------------------------------------------- |
+| **Current Status**     | Implemented and working                            |
+| **CM Equivalent**      | ReasoningLayer/LLMReasoning (~40% complete)        |
+| **Migration Value**    | Low - current implementation meets docs site needs |
+| **Resource Trade-off** | Not worth migration effort                         |
 
-**Rationale**: The current TypeScript prompt template system adequately serves the documentation site's needs. Cognitive Mesh's prompt management is designed for enterprise-grade governance with NIST AI RMF compliance tracking, which is unnecessary for this use case.
+**Rationale**: The current TypeScript prompt template system adequately serves
+the documentation site's needs. Cognitive Mesh's prompt management is designed
+for enterprise-grade governance with NIST AI RMF compliance tracking, which is
+unnecessary for this use case.
 
 **Action**: No changes needed. Continue using current implementation.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
 - [ADR 0017: Context Management](./adr-0017-context-management.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 
