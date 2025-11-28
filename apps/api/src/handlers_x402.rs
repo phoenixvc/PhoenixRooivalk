@@ -64,6 +64,14 @@ pub async fn verify_evidence_premium(
     headers: HeaderMap,
     Json(req): Json<VerifyEvidenceRequest>,
 ) -> Response {
+    // Extract client IP for rate limiting
+    let client_ip = extract_client_ip_from_headers(&headers);
+
+    // Check rate limit for premium verification endpoint
+    if let Err(response) = state.rate_limiter.check_verify(&client_ip) {
+        return response;
+    }
+
     // Get x402 configuration from AppState (initialized once at startup)
     let x402_state = match &state.x402 {
         Some(s) => s.clone(),
@@ -329,10 +337,46 @@ fn build_chain_confirmations(
     }
 }
 
+/// Helper to extract client IP from headers
+///
+/// Checks X-Forwarded-For and X-Real-IP headers for proxied requests.
+/// Falls back to "unknown" if no IP can be determined.
+fn extract_client_ip_from_headers(headers: &HeaderMap) -> String {
+    // Check X-Forwarded-For header first (standard for proxies)
+    if let Some(forwarded) = headers.get("x-forwarded-for") {
+        if let Ok(forwarded_str) = forwarded.to_str() {
+            // Take the first IP in the chain (original client)
+            if let Some(first_ip) = forwarded_str.split(',').next() {
+                return first_ip.trim().to_string();
+            }
+        }
+    }
+
+    // Check X-Real-IP header (nginx default)
+    if let Some(real_ip) = headers.get("x-real-ip") {
+        if let Ok(ip_str) = real_ip.to_str() {
+            return ip_str.trim().to_string();
+        }
+    }
+
+    // Fallback for direct connections or unknown proxies
+    "unknown".to_string()
+}
+
 /// Get x402 payment status and configuration
 ///
 /// GET /api/v1/x402/status
-pub async fn x402_status(State(state): State<AppState>) -> Response {
+pub async fn x402_status(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+) -> Response {
+    // Extract client IP for rate limiting
+    let client_ip = extract_client_ip_from_headers(&headers);
+
+    // Check rate limit for status endpoint
+    if let Err(response) = state.rate_limiter.check_status(&client_ip) {
+        return response;
+    }
     match &state.x402 {
         Some(x402) => (
             StatusCode::OK,

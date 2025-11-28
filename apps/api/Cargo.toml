@@ -17,6 +17,10 @@ phoenix-common = { path = "../../crates/phoenix-common" }
 phoenix-x402 = { path = "../../crates/x402" }
 anyhow = "1.0"
 thiserror = "2.0"
+# Rate limiting
+tower = "0.5"
+tower_governor = "0.4"
+governor = "0.8"
 
 [dev-dependencies]
 reqwest = { version = "0.12", features = ["json"] }
@@ -24,3 +28,4 @@ tempfile = "3"
 phoenix-keeper = { path = "../keeper" }
 anchor-etherlink = { path = "../../crates/anchor-etherlink" }
 once_cell = "1.19"  # Added for mutex synchronization in tests
+governor = "0.8"    # For rate limiter tests

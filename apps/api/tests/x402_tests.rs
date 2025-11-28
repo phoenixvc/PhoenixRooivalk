@@ -214,3 +214,66 @@ async fn test_x402_price_tiers() {
     let body: Value = response.json().await.unwrap();
     assert_eq!(body["price"], "1.00");
 }
+
+/// Test rate limiting module unit tests
+#[tokio::test]
+async fn test_rate_limiter_unit() {
+    use phoenix_api::rate_limit::X402RateLimiter;
+    use std::num::NonZeroU32;
+    use governor::Quota;
+
+    // Create a very restrictive limiter: 2 requests per minute
+    let limiter = X402RateLimiter::with_quotas(
+        Quota::per_minute(NonZeroU32::new(2).unwrap()),
+        Quota::per_minute(NonZeroU32::new(5).unwrap()),
+    );
+
+    // First two requests should pass
+    assert!(limiter.check_verify("192.168.1.1").is_ok());
+    assert!(limiter.check_verify("192.168.1.1").is_ok());
+
+    // Third request should be rate limited
+    let result = limiter.check_verify("192.168.1.1");
+    assert!(result.is_err());
+
+    // Different IP should still work (per-IP isolation)
+    assert!(limiter.check_verify("192.168.1.2").is_ok());
+
+    // Status endpoint has different quota
+    assert!(limiter.check_status("192.168.1.1").is_ok());
+    assert!(limiter.check_status("192.168.1.1").is_ok());
+}
+
+/// Test that rate limiting is applied to endpoints (integration test)
+/// Note: Default rate limits are high (10/min verify, 60/min status) so this test
+/// verifies the rate limiter is integrated, not that it triggers in normal use
+#[tokio::test]
+async fn test_x402_rate_limiting_headers() {
+    let ctx = TestContext::with_x402(true, Some("PhxRvkTestWalletRL")).await;
+    let client = reqwest::Client::new();
+
+    // Make request with X-Forwarded-For header to test IP extraction
+    let response = client
+        .post(ctx.url("/api/v1/evidence/verify-premium"))
+        .header("x-forwarded-for", "10.0.0.1")
+        .json(&json!({
+            "evidence_id": "rate-test-001",
+            "tier": "basic"
+        }))
+        .send()
+        .await
+        .unwrap();
+
+    // Should succeed (not rate limited with default high quotas)
+    assert_eq!(response.status(), StatusCode::PAYMENT_REQUIRED);
+
+    // Make request with X-Real-IP header
+    let response = client
+        .get(ctx.url("/api/v1/x402/status"))
+        .header("x-real-ip", "10.0.0.2")
+        .send()
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+}

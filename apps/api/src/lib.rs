@@ -10,6 +10,7 @@ pub mod handlers;
 pub mod handlers_x402;
 pub mod migrations;
 pub mod models;
+pub mod rate_limit;
 pub mod repository;
 
 /// Application state shared across all handlers
@@ -19,6 +20,8 @@ pub struct AppState {
     pub pool: Pool<Sqlite>,
     /// x402 payment protocol state (None if not configured)
     pub x402: Option<handlers_x402::X402State>,
+    /// Rate limiter for x402 endpoints
+    pub rate_limiter: rate_limit::X402RateLimiter,
 }
 
 pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
@@ -53,9 +56,14 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         tracing::debug!("x402 payment protocol disabled (not configured)");
     }
 
+    // Initialize rate limiter for x402 endpoints
+    let rate_limiter = rate_limit::X402RateLimiter::new();
+    tracing::debug!("x402 rate limiter initialized");
+
     let state = AppState {
         pool: pool.clone(),
         x402,
+        rate_limiter,
     };
     let app = Router::new()
         .route("/health", get(handlers::health))
