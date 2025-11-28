@@ -39,6 +39,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
                 sqlx::query("PRAGMA foreign_keys = ON")
                     .execute(&mut *conn)
                     .await?;
+                // Enable extended result codes so we get specific constraint violation codes
+                // (e.g., 2067 for UNIQUE, 1555 for PRIMARY KEY) instead of generic code 19.
+                // This improves the accuracy of is_unique_constraint_violation() detection.
+                sqlx::query("PRAGMA extended_result_codes = ON")
+                    .execute(&mut *conn)
+                    .await?;
                 Ok(())
             })
         })
