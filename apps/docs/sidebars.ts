@@ -5,13 +5,14 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
  *
  * Navigation Structure:
  * 1. Getting Started - Entry point for all users
- * 2. Executive - Leadership & investor materials
- * 3. Technical - Software, AI, Hardware, Architecture
- * 4. Business - Market, Strategy, Templates
- * 5. Operations - Deployment, Maintenance, Training
- * 6. Legal - Compliance & Framework
- * 7. Research - Deep-dive technical research
- * 8. Resources - Downloads, Guides, References
+ * 2. Progress Reports - Weekly development updates
+ * 3. Executive - Leadership & investor materials
+ * 4. Technical - Software, AI, Hardware, Architecture
+ * 5. Business - Market, Strategy, Templates
+ * 6. Operations - Deployment, Maintenance, Training
+ * 7. Legal - Compliance & Framework
+ * 8. Research - Deep-dive technical research
+ * 9. Resources - Downloads, Guides, References
  */
 
 const sidebars: SidebarsConfig = {
@@ -38,6 +39,24 @@ const sidebars: SidebarsConfig = {
         "resources/documentation-status",
         "executive/executive-summary",
         "technical/glossary",
+      ],
+    },
+
+    // ========================================
+    // PROGRESS REPORTS
+    // ========================================
+    {
+      type: "category",
+      label: "📈 Progress Reports",
+      collapsed: false,
+      items: [
+        "progress/progress-overview",
+        {
+          type: "category",
+          label: "2025",
+          collapsed: false,
+          items: ["progress/2025/week-48"],
+        },
       ],
     },
 
