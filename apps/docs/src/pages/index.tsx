@@ -115,38 +115,47 @@ export default function Home(): React.ReactElement {
         @keyframes marketing-gridMove { 0% { transform: translate(0,0);} 100% { transform: translate(50px,50px);} }
 
         /* Hero */
-        .marketing .hero { min-height: 85vh; display: flex; align-items: center; padding: 2rem 5%; position: relative; z-index: 1; }
-        .marketing .hero-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; }
-        .marketing .hero-text h1 { font-size: 3.5rem; line-height: 1.15; margin-bottom: 1.2rem; background: linear-gradient(135deg, var(--light) 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: marketing-fadeInUp 1s ease; }
+        .marketing .hero { min-height: 70vh; display: flex; align-items: center; padding: 2rem 5%; position: relative; z-index: 1; }
+        .marketing .hero-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; width: 100%; }
+        .marketing .hero-text h1 { font-size: 3rem; line-height: 1.15; margin-bottom: 1rem; background: linear-gradient(135deg, var(--light) 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: marketing-fadeInUp 1s ease; }
         .marketing .hero-text h1 span { display: block; }
         .marketing .hero-text h1 .highlight { color: var(--primary); -webkit-text-fill-color: var(--primary); }
-        .marketing .hero-text p { font-size: 1.2rem; color: var(--gray); margin-bottom: 1.8rem; animation: marketing-fadeInUp 1s ease 0.2s both; line-height: 1.7; }
-        .marketing .hero-buttons { display: flex; gap: 1rem; animation: marketing-fadeInUp 1s ease 0.4s both; }
-        .marketing .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3); border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; color: var(--primary); margin-bottom: 1.2rem; animation: marketing-fadeInUp 1s ease; }
+        .marketing .hero-text p { font-size: 1.1rem; color: var(--gray); margin-bottom: 1.5rem; animation: marketing-fadeInUp 1s ease 0.2s both; line-height: 1.6; }
+        .marketing .hero-buttons { display: flex; gap: 0.75rem; animation: marketing-fadeInUp 1s ease 0.4s both; flex-wrap: wrap; }
+        .marketing .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.25); border-radius: 20px; padding: 0.35rem 0.9rem; font-size: 0.8rem; color: var(--primary); margin-bottom: 1rem; animation: marketing-fadeInUp 1s ease; }
         .marketing .hero-badge::before { content: '🛡️'; }
         @keyframes marketing-fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
 
-        .marketing .cta-button { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; transition: all .3s; display: inline-block; font-size: 1rem; }
-        .marketing .cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4); color: var(--dark); }
-        .marketing .secondary-button { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; transition: all .3s; }
-        .marketing .secondary-button:hover { background: var(--primary); color: var(--dark); }
+        .marketing .cta-button { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all .3s; display: inline-block; font-size: 0.9rem; }
+        .marketing .cta-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35); color: var(--dark); }
+        .marketing .secondary-button { background: transparent; border: 1.5px solid rgba(249,115,22,0.6); color: var(--primary); padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all .3s; font-size: 0.9rem; }
+        .marketing .secondary-button:hover { background: rgba(249,115,22,0.1); border-color: var(--primary); color: var(--primary); }
 
-        .marketing .hero-visual { position: relative; }
-        .marketing .drone-graphic { width: 100%; height: 380px; background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,191,36,0.05)); border: 1px solid rgba(249,115,22,0.2); border-radius: 24px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .marketing .radar-sweep { position: absolute; width: 280px; height: 280px; border: 2px solid rgba(249,115,22,0.4); border-radius: 50%; }
-        .marketing .radar-sweep::before { content: ''; position: absolute; width: 200px; height: 200px; border: 1px solid rgba(249,115,22,0.2); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .marketing .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); transform-origin: left center; animation: marketing-radar 4s linear infinite; }
+        .marketing .hero-visual { position: relative; display: flex; justify-content: center; }
+        .marketing .drone-graphic { width: 100%; max-width: 420px; height: 320px; background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(249,115,22,0.25); border-radius: 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 0 80px rgba(249,115,22,0.12), inset 0 1px 0 rgba(255,255,255,0.05); }
+        .marketing .drone-graphic::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(249,115,22,0.08) 0%, transparent 70%); }
+        .marketing .radar-sweep { position: absolute; width: 220px; height: 220px; border: 2px solid rgba(249,115,22,0.4); border-radius: 50%; box-shadow: 0 0 30px rgba(249,115,22,0.15); }
+        .marketing .radar-sweep::before { content: ''; position: absolute; width: 160px; height: 160px; border: 1px solid rgba(249,115,22,0.25); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .marketing .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; background: linear-gradient(90deg, var(--primary), transparent); transform-origin: left center; animation: marketing-radar 3s linear infinite; }
         @keyframes marketing-radar { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
-        .marketing .shield-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); animation: marketing-pulse 2s ease-in-out infinite; }
+        .marketing .shield-emoji { font-size: 4rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); animation: marketing-pulse 2.5s ease-in-out infinite; }
         @keyframes marketing-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .marketing .drone-emoji { font-size: 8rem; animation: marketing-float 3s ease-in-out infinite; }
-        @keyframes marketing-float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
+        .marketing .drone-emoji { font-size: 6rem; animation: marketing-float 3s ease-in-out infinite; filter: drop-shadow(0 0 25px rgba(249,115,22,0.35)); }
+        @keyframes marketing-float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-12px);} }
         .marketing .radar-dots { position: absolute; width: 100%; height: 100%; }
-        .marketing .radar-dot { position: absolute; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: marketing-blink 2s ease-in-out infinite; }
-        .marketing .radar-dot:nth-child(1) { top: 25%; left: 30%; animation-delay: 0s; }
-        .marketing .radar-dot:nth-child(2) { top: 60%; left: 70%; animation-delay: 0.5s; }
-        .marketing .radar-dot:nth-child(3) { top: 40%; left: 55%; animation-delay: 1s; }
-        @keyframes marketing-blink { 0%,100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+        .marketing .radar-dot { position: absolute; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: marketing-blink 2s ease-in-out infinite; box-shadow: 0 0 8px var(--primary); }
+        .marketing .radar-dot:nth-child(1) { top: 28%; left: 32%; animation-delay: 0s; }
+        .marketing .radar-dot:nth-child(2) { top: 58%; left: 68%; animation-delay: 0.6s; }
+        .marketing .radar-dot:nth-child(3) { top: 42%; left: 52%; animation-delay: 1.2s; }
+        .marketing .radar-dot:nth-child(4) { top: 70%; left: 35%; animation-delay: 0.3s; }
+        .marketing .radar-dot:nth-child(5) { top: 35%; left: 72%; animation-delay: 0.9s; }
+        @keyframes marketing-blink { 0%,100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.4); } }
+
+        /* Hero stats strip */
+        .marketing .hero-stats { display: flex; gap: 2rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(249,115,22,0.15); animation: marketing-fadeInUp 1s ease 0.5s both; }
+        .marketing .hero-stat { text-align: left; }
+        .marketing .hero-stat-value { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .marketing .hero-stat-label { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* Sections */
         .marketing .section { padding: 3rem 5%; position: relative; z-index: 1; }
@@ -206,10 +215,13 @@ export default function Home(): React.ReactElement {
         /* Responsive */
         @media (max-width: 768px) {
           .marketing .hero-content { grid-template-columns: 1fr; text-align: center; }
-          .marketing .hero-text h1 { font-size: 2.4rem; }
-          .marketing .hero-buttons { flex-direction: column; }
+          .marketing .hero-text h1 { font-size: 2.2rem; }
+          .marketing .hero-buttons { flex-direction: column; align-items: center; }
+          .marketing .hero-stats { justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+          .marketing .hero-stat { text-align: center; }
           .marketing .tech-showcase { grid-template-columns: 1fr; }
           .marketing .stats-grid { grid-template-columns: 1fr; }
+          .marketing .drone-graphic { max-width: 300px; height: 260px; }
         }
 
         /* Reveal */
@@ -235,22 +247,41 @@ export default function Home(): React.ReactElement {
               <p>
                 Revolutionary defense technology combining military-grade AI
                 with blockchain integrity. Protect your airspace with 95%+
-                accuracy, sub-6 second response times, and tamper-proof
-                evidence logging.
+                accuracy and sub-6 second response times.
               </p>
               <div className="hero-buttons">
                 <a href="/contact" className="cta-button">
-                  Get Started
+                  Request Demo
                 </a>
                 <a href="#features" className="secondary-button">
-                  Learn More
+                  Explore Features
                 </a>
+              </div>
+              <div className="hero-stats">
+                <div className="hero-stat">
+                  <div className="hero-stat-value">95%+</div>
+                  <div className="hero-stat-label">Accuracy</div>
+                </div>
+                <div className="hero-stat">
+                  <div className="hero-stat-value">&lt;6s</div>
+                  <div className="hero-stat-label">Response</div>
+                </div>
+                <div className="hero-stat">
+                  <div className="hero-stat-value">5km</div>
+                  <div className="hero-stat-label">Range</div>
+                </div>
+                <div className="hero-stat">
+                  <div className="hero-stat-value">24/7</div>
+                  <div className="hero-stat-label">Protection</div>
+                </div>
               </div>
             </div>
             <div className="hero-visual" aria-hidden="true">
               <div className="drone-graphic">
                 <div className="radar-sweep" />
                 <div className="radar-dots">
+                  <div className="radar-dot" />
+                  <div className="radar-dot" />
                   <div className="radar-dot" />
                   <div className="radar-dot" />
                   <div className="radar-dot" />
