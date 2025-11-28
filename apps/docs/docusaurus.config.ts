@@ -277,11 +277,6 @@ const config: Config = {
           className: "navbar__link--login",
           "aria-label": "Sign in to your account",
         },
-        // Theme toggle
-        {
-          type: "colorMode",
-          position: "right",
-        },
         // Environment badge (only show in non-production)
         ...(envBadge && envName !== "production"
           ? [
