@@ -41,6 +41,7 @@ jobs:
 
       - name: Check for broken links
         id: link-check
+        shell: bash
         run: |
           # Run build and capture output to a file for analysis
           BUILD_LOG_FILE=$(mktemp)

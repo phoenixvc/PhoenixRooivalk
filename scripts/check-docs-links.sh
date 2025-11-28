@@ -7,6 +7,12 @@
 
 set -e
 
+# Ensure we're running in Bash (required for PIPESTATUS)
+if [ -z "$BASH_VERSION" ]; then
+    echo "Error: This script requires Bash. Please run with: bash $0"
+    exit 1
+fi
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
