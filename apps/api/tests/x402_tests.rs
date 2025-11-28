@@ -2,15 +2,21 @@
 
 mod common;
 
+use once_cell::sync::Lazy;
 use reqwest::StatusCode;
 use serde_json::{json, Value};
+use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
+
+// Global mutex to serialize all x402 tests that modify environment variables
+// This prevents race conditions when tests run in parallel
+static TEST_MUTEX: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
 
 /// Test context that properly cleans up resources when dropped
 struct TestContext {
     base_url: String,
     server: JoinHandle<()>,
-    env_vars: Vec<String>,
+    env_vars: Vec<(String, Option<String>)>, // Track original values for restoration
 }
 
 impl TestContext {
@@ -21,23 +27,35 @@ impl TestContext {
 
     /// Create a test context with x402 enabled
     async fn with_x402(enabled: bool, wallet: Option<&str>) -> Self {
-        let mut env_vars = Vec::new();
+        let mut env_vars: Vec<(String, Option<String>)> = Vec::new();
+
+        // Helper to save and set env var
+        let mut set_env = |key: &str, value: &str| {
+            let original = std::env::var(key).ok();
+            std::env::set_var(key, value);
+            env_vars.push((key.to_string(), original));
+        };
 
         // Set database URL for tests
-        std::env::set_var("API_DB_URL", common::create_test_db_url());
-        env_vars.push("API_DB_URL".to_string());
+        set_env("API_DB_URL", &common::create_test_db_url());
 
         if enabled {
-            std::env::set_var("X402_ENABLED", "true");
-            env_vars.push("X402_ENABLED".to_string());
+            set_env("X402_ENABLED", "true");
 
             if let Some(addr) = wallet {
-                std::env::set_var("X402_WALLET_ADDRESS", addr);
-                env_vars.push("X402_WALLET_ADDRESS".to_string());
+                set_env("X402_WALLET_ADDRESS", addr);
             }
 
-            std::env::set_var("SOLANA_NETWORK", "devnet");
-            env_vars.push("SOLANA_NETWORK".to_string());
+            set_env("SOLANA_NETWORK", "devnet");
+        } else {
+            // Explicitly disable x402 and clear wallet to ensure clean state
+            let original_enabled = std::env::var("X402_ENABLED").ok();
+            std::env::remove_var("X402_ENABLED");
+            env_vars.push(("X402_ENABLED".to_string(), original_enabled));
+
+            let original_wallet = std::env::var("X402_WALLET_ADDRESS").ok();
+            std::env::remove_var("X402_WALLET_ADDRESS");
+            env_vars.push(("X402_WALLET_ADDRESS".to_string(), original_wallet));
         }
 
         let (listener, port) = common::create_test_listener();
@@ -61,9 +79,12 @@ impl Drop for TestContext {
         // Abort the server to free resources
         self.server.abort();
 
-        // Clean up environment variables
-        for var in &self.env_vars {
-            std::env::remove_var(var);
+        // Restore original environment variables
+        for (var, original) in &self.env_vars {
+            match original {
+                Some(val) => std::env::set_var(var, val),
+                None => std::env::remove_var(var),
+            }
         }
     }
 }
@@ -71,6 +92,7 @@ impl Drop for TestContext {
 /// Test that x402 status endpoint returns disabled when not configured
 #[tokio::test]
 async fn test_x402_status_not_configured() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::new().await;
 
     let client = reqwest::Client::new();
@@ -89,6 +111,7 @@ async fn test_x402_status_not_configured() {
 /// Test that premium verification returns 503 when x402 is not configured
 #[tokio::test]
 async fn test_verify_premium_not_configured() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::new().await;
 
     let client = reqwest::Client::new();
@@ -111,6 +134,7 @@ async fn test_verify_premium_not_configured() {
 /// Test x402 payment flow simulation (with environment configured)
 #[tokio::test]
 async fn test_x402_payment_flow_simulation() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet123")).await;
 
     let client = reqwest::Client::new();
@@ -141,6 +165,7 @@ async fn test_x402_payment_flow_simulation() {
 /// Test x402 status endpoint shows correct configuration when enabled
 #[tokio::test]
 async fn test_x402_status_configured() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet456")).await;
 
     let client = reqwest::Client::new();
@@ -166,6 +191,7 @@ async fn test_x402_status_configured() {
 /// Test different price tiers in 402 response
 #[tokio::test]
 async fn test_x402_price_tiers() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::with_x402(true, Some("PhxRvkTestWallet789")).await;
     let client = reqwest::Client::new();
 
@@ -246,6 +272,7 @@ async fn test_rate_limiter_unit() {
 /// verifies the rate limiter is integrated, not that it triggers in normal use
 #[tokio::test]
 async fn test_x402_rate_limiting_headers() {
+    let _guard = TEST_MUTEX.lock().await;
     let ctx = TestContext::with_x402(true, Some("PhxRvkTestWalletRL")).await;
     let client = reqwest::Client::new();
 
