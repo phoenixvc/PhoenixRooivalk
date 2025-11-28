@@ -8,17 +8,19 @@
  * - Login prompt for unauthenticated users
  * - Optimistic updates for better UX
  * - Edit functionality
+ * - Threaded replies
  */
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   subscribeToPageComments,
   deleteComment,
   updateComment,
+  organizeIntoThreads,
 } from "../../services/commentService";
 import { isFirebaseConfigured } from "../../services/firebase";
-import type { Comment, UpdateCommentInput } from "../../types/comments";
+import type { Comment, CommentThread, UpdateCommentInput } from "../../types/comments";
 import { CommentForm } from "./CommentForm";
 import { CommentItem } from "./CommentItem";
 import { EditCommentModal } from "./EditCommentModal";
@@ -44,6 +46,7 @@ export function CommentSection({
   const [showForm, setShowForm] = useState(false);
   const [editingComment, setEditingComment] = useState<Comment | null>(null);
   const [optimisticComment, setOptimisticComment] = useState<Comment | null>(null);
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const unsubscribeRef = useRef<(() => void) | null>(null);
 
   // Check if current user is admin
@@ -94,11 +97,36 @@ export function CommentSection({
     };
   }, [pageId, user?.uid, authLoading, optimisticComment]);
 
+  // Organize comments into threaded structure
+  const threads = useMemo(() => {
+    const allComments = optimisticComment
+      ? [optimisticComment, ...comments.filter((c) => c.id !== optimisticComment.id)]
+      : comments;
+    return organizeIntoThreads(allComments);
+  }, [comments, optimisticComment]);
+
+  // Count only top-level comments for display
+  const topLevelCount = useMemo(() => {
+    return comments.filter((c) => !c.parentId).length;
+  }, [comments]);
+
   // Handle new comment added (optimistic update)
   const handleCommentAdded = useCallback((comment: Comment) => {
     // Add optimistic comment immediately
     setOptimisticComment(comment);
     setShowForm(false);
+    setReplyingTo(null);
+  }, []);
+
+  // Handle reply button click
+  const handleReply = useCallback((parentId: string) => {
+    setReplyingTo(parentId);
+    setShowForm(false);
+  }, []);
+
+  // Cancel reply
+  const handleCancelReply = useCallback(() => {
+    setReplyingTo(null);
   }, []);
 
   // Handle comment deletion with optimistic update
@@ -175,18 +203,19 @@ export function CommentSection({
     return null;
   }
 
-  // Combine real comments with optimistic comment
-  const displayComments = optimisticComment
-    ? [optimisticComment, ...comments.filter((c) => c.id !== optimisticComment.id)]
-    : comments;
+  // Find the parent comment for reply context
+  const replyParent = replyingTo
+    ? comments.find((c) => c.id === replyingTo)
+    : null;
 
   return (
     <section className={styles.commentSection}>
       <div className={styles.sectionHeader}>
         <h3>Comments & Feedback</h3>
-        {displayComments.length > 0 && (
+        {comments.length > 0 && (
           <span className={styles.commentCount}>
-            {displayComments.length} comment{displayComments.length !== 1 ? "s" : ""}
+            {topLevelCount} comment{topLevelCount !== 1 ? "s" : ""}
+            {comments.length > topLevelCount && ` (${comments.length - topLevelCount} replies)`}
           </span>
         )}
       </div>
@@ -223,6 +252,28 @@ export function CommentSection({
               onCommentAdded={handleCommentAdded}
               onCancel={() => setShowForm(false)}
             />
+          ) : replyingTo ? (
+            <div className={styles.replyFormContainer}>
+              <div className={styles.replyContext}>
+                Replying to{" "}
+                <strong>{replyParent?.author.displayName || "Anonymous"}</strong>
+                <button
+                  className={styles.cancelReplyBtn}
+                  onClick={handleCancelReply}
+                  type="button"
+                >
+                  Cancel
+                </button>
+              </div>
+              <CommentForm
+                pageId={pageId}
+                pageTitle={pageTitle}
+                pageUrl={currentUrl}
+                parentId={replyingTo}
+                onCommentAdded={handleCommentAdded}
+                onCancel={handleCancelReply}
+              />
+            </div>
           ) : (
             <button
               className={`${styles.btn} ${styles.btnPrimary}`}
@@ -240,22 +291,24 @@ export function CommentSection({
         <div className={styles.emptyState}>
           <div>Loading comments...</div>
         </div>
-      ) : displayComments.length > 0 ? (
+      ) : threads.length > 0 ? (
         <div className={styles.commentList}>
-          {displayComments.map((comment) => (
+          {threads.map((thread) => (
             <CommentItem
-              key={comment.id}
-              comment={comment}
+              key={thread.id}
+              comment={thread}
               isAdmin={isAdmin}
-              isOptimistic={comment.id === optimisticComment?.id}
+              isOptimistic={thread.id === optimisticComment?.id}
+              currentUserId={user?.uid}
               onEdit={
-                comment.author.uid === user?.uid ? () => handleEdit(comment) : undefined
+                thread.author.uid === user?.uid ? () => handleEdit(thread) : undefined
               }
               onDelete={
-                comment.author.uid === user?.uid || isAdmin
+                thread.author.uid === user?.uid || isAdmin
                   ? handleDelete
                   : undefined
               }
+              onReply={user ? handleReply : undefined}
             />
           ))}
         </div>

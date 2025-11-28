@@ -6,20 +6,27 @@
  * - Category and status badges
  * - Content (with AI-enhanced version toggle)
  * - Admin review information
+ * - Reply button and nested replies (threading support)
  */
 
 import React from "react";
-import type { Comment } from "../../types/comments";
+import type { Comment, CommentThread } from "../../types/comments";
 import { COMMENT_CATEGORIES, COMMENT_STATUSES } from "../../types/comments";
 import styles from "./Comments.module.css";
 
+// Maximum nesting depth for replies
+const MAX_REPLY_DEPTH = 3;
+
 interface CommentItemProps {
-  comment: Comment;
+  comment: Comment | CommentThread;
   isAdmin?: boolean;
   isOptimistic?: boolean;
+  depth?: number;
   onEdit?: (comment: Comment) => void;
   onDelete?: (commentId: string) => void;
   onReview?: (comment: Comment) => void;
+  onReply?: (parentId: string) => void;
+  currentUserId?: string;
 }
 
 // Format relative time
@@ -66,22 +73,37 @@ function getInitials(name: string | null): string {
     .substring(0, 2);
 }
 
+// Type guard to check if a comment is a CommentThread (has replies)
+function isCommentThread(comment: Comment | CommentThread): comment is CommentThread {
+  return "replies" in comment && Array.isArray((comment as CommentThread).replies);
+}
+
 export function CommentItem({
   comment,
   isAdmin = false,
   isOptimistic = false,
+  depth = 0,
   onEdit,
   onDelete,
   onReview,
+  onReply,
+  currentUserId,
 }: CommentItemProps): React.ReactElement {
   const displayContent = comment.useAIVersion && comment.enhancedContent
     ? comment.enhancedContent
     : comment.content;
 
+  const canReply = depth < MAX_REPLY_DEPTH && onReply && !isOptimistic;
+  const replies = isCommentThread(comment) ? comment.replies : [];
+  const isReply = depth > 0;
+
   return (
     <div
-      className={styles.commentItem}
-      style={isOptimistic ? { opacity: 0.7, pointerEvents: "none" } : undefined}
+      className={`${styles.commentItem} ${isReply ? styles.replyItem : ""}`}
+      style={{
+        ...(isOptimistic ? { opacity: 0.7, pointerEvents: "none" } : {}),
+        marginLeft: isReply ? `${Math.min(depth, MAX_REPLY_DEPTH) * 1.5}rem` : 0,
+      }}
     >
       {/* Header */}
       <div className={styles.commentHeader}>
@@ -165,6 +187,14 @@ export function CommentItem({
       {/* Footer with actions */}
       <div className={styles.commentFooter}>
         <div className={styles.commentActions}>
+          {canReply && (
+            <button
+              className={styles.actionBtn}
+              onClick={() => onReply(comment.id)}
+            >
+              Reply
+            </button>
+          )}
           {onEdit && (
             <button
               className={styles.actionBtn}
@@ -193,6 +223,29 @@ export function CommentItem({
           </button>
         )}
       </div>
+
+      {/* Nested replies */}
+      {replies.length > 0 && (
+        <div className={styles.repliesContainer}>
+          {replies.map((reply) => (
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              isAdmin={isAdmin}
+              depth={depth + 1}
+              onEdit={reply.author.uid === currentUserId ? onEdit : undefined}
+              onDelete={
+                reply.author.uid === currentUserId || isAdmin
+                  ? onDelete
+                  : undefined
+              }
+              onReview={onReview}
+              onReply={onReply}
+              currentUserId={currentUserId}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

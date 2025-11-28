@@ -87,11 +87,19 @@ export interface Comment {
   updatedAt: string;
   // Optional fields
   parentId?: string; // For threaded replies
+  replyCount?: number; // Number of direct replies
   isEdited: boolean;
   editHistory?: Array<{
     content: string;
     editedAt: string;
   }>;
+}
+
+/**
+ * Comment with nested replies for threaded display
+ */
+export interface CommentThread extends Comment {
+  replies: CommentThread[];
 }
 
 /**

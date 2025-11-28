@@ -35,6 +35,7 @@ import {
 import { isFirebaseConfigured } from "./firebase";
 import type {
   Comment,
+  CommentThread,
   CreateCommentInput,
   UpdateCommentInput,
   ReviewCommentInput,
@@ -1033,4 +1034,143 @@ export const getAllComments = async (
     console.error("Error getting all comments:", error);
     return { comments: [], lastDoc: null, total: 0 };
   }
+};
+
+// ============================================================================
+// Threading Support
+// ============================================================================
+
+/**
+ * Organize a flat list of comments into a threaded structure
+ * Top-level comments (no parentId) are at the root, with nested replies
+ */
+export function organizeIntoThreads(comments: Comment[]): CommentThread[] {
+  const commentMap = new Map<string, CommentThread>();
+  const threads: CommentThread[] = [];
+
+  // First pass: create CommentThread objects for all comments
+  comments.forEach((comment) => {
+    commentMap.set(comment.id, { ...comment, replies: [] });
+  });
+
+  // Second pass: organize into threads
+  comments.forEach((comment) => {
+    const thread = commentMap.get(comment.id);
+    if (!thread) return;
+
+    if (comment.parentId) {
+      // This is a reply - add to parent's replies
+      const parent = commentMap.get(comment.parentId);
+      if (parent) {
+        parent.replies.push(thread);
+      } else {
+        // Parent not found (maybe deleted), treat as top-level
+        threads.push(thread);
+      }
+    } else {
+      // This is a top-level comment
+      threads.push(thread);
+    }
+  });
+
+  // Sort replies by createdAt (oldest first for conversation flow)
+  const sortReplies = (thread: CommentThread): void => {
+    thread.replies.sort((a, b) =>
+      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+    thread.replies.forEach(sortReplies);
+  };
+
+  threads.forEach(sortReplies);
+
+  return threads;
+}
+
+/**
+ * Get replies for a specific comment
+ */
+export const getReplies = async (parentId: string): Promise<Comment[]> => {
+  const db = getDb();
+  const commentsRef = collection(db, COMMENTS_COLLECTION);
+
+  const q = query(
+    commentsRef,
+    where("parentId", "==", parentId),
+    orderBy("createdAt", "asc")
+  );
+
+  try {
+    const snapshot = await getDocs(q);
+    const replies: Comment[] = [];
+
+    snapshot.docs.forEach((doc) => {
+      const comment = parseCommentDoc(doc);
+      if (comment) {
+        replies.push(comment);
+      }
+    });
+
+    return replies;
+  } catch (error) {
+    console.error("Error getting replies:", error);
+    return [];
+  }
+};
+
+/**
+ * Get the count of replies for a comment
+ */
+export const getReplyCount = async (parentId: string): Promise<number> => {
+  const db = getDb();
+  const commentsRef = collection(db, COMMENTS_COLLECTION);
+
+  const q = query(commentsRef, where("parentId", "==", parentId));
+
+  try {
+    const countSnapshot = await getCountFromServer(q);
+    return countSnapshot.data().count;
+  } catch (error) {
+    console.error("Error getting reply count:", error);
+    return 0;
+  }
+};
+
+/**
+ * Subscribe to replies for a specific comment
+ */
+export const subscribeToReplies = (
+  parentId: string,
+  currentUserId: string | null,
+  onUpdate: (replies: Comment[]) => void,
+  onError?: (error: Error) => void
+): Unsubscribe => {
+  const db = getDb();
+  const commentsRef = collection(db, COMMENTS_COLLECTION);
+
+  const q = query(
+    commentsRef,
+    where("parentId", "==", parentId),
+    orderBy("createdAt", "asc")
+  );
+
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const replies: Comment[] = [];
+      snapshot.docs.forEach((doc) => {
+        const comment = parseCommentDoc(doc);
+        if (comment) {
+          // Filter out drafts from other users
+          if (comment.status !== "draft" || comment.author.uid === currentUserId) {
+            replies.push(comment);
+          }
+        }
+      });
+      onUpdate(replies);
+    },
+    (error) => {
+      console.error("Error in replies subscription:", error);
+      onError?.(error);
+    }
+  );
 };
