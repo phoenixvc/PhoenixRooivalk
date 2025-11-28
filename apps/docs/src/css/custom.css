@@ -3,6 +3,9 @@
 /* Import Gamification Styles */
 @import "./gamification.css";
 
+/* Import Print Styles */
+@import "./print.css";
+
 /* ================================================
    PREVENT BLACK FLICKER ON NAVIGATION
    Apply background immediately to prevent flash
