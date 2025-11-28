@@ -4,17 +4,24 @@
  * Main component for displaying comments on a documentation page.
  * Includes:
  * - Comment form for adding new comments
- * - List of existing comments
+ * - List of existing comments with real-time updates
  * - Login prompt for unauthenticated users
+ * - Optimistic updates for better UX
+ * - Edit functionality
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { getPageComments, deleteComment } from "../../services/commentService";
+import {
+  subscribeToPageComments,
+  deleteComment,
+  updateComment,
+} from "../../services/commentService";
 import { isFirebaseConfigured } from "../../services/firebase";
-import type { Comment } from "../../types/comments";
+import type { Comment, UpdateCommentInput } from "../../types/comments";
 import { CommentForm } from "./CommentForm";
 import { CommentItem } from "./CommentItem";
+import { EditCommentModal } from "./EditCommentModal";
 import styles from "./Comments.module.css";
 
 interface CommentSectionProps {
@@ -35,6 +42,9 @@ export function CommentSection({
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingComment, setEditingComment] = useState<Comment | null>(null);
+  const [optimisticComment, setOptimisticComment] = useState<Comment | null>(null);
+  const unsubscribeRef = useRef<(() => void) | null>(null);
 
   // Check if current user is admin
   const isAdmin =
@@ -42,68 +52,141 @@ export function CommentSection({
     ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`));
 
   // Get the current page URL
-  const currentUrl = pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
+  const currentUrl =
+    pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
 
-  // Load comments
-  const loadComments = useCallback(async () => {
-    if (!isFirebaseConfigured()) {
+  // Subscribe to real-time updates
+  useEffect(() => {
+    if (!isFirebaseConfigured() || authLoading) {
       setIsLoading(false);
       return;
     }
 
-    try {
-      const pageComments = await getPageComments(pageId);
-      // Filter out drafts from other users
-      const visibleComments = pageComments.filter(
-        (c) => c.status !== "draft" || c.author.uid === user?.uid
-      );
-      setComments(visibleComments);
-    } catch (error) {
-      console.error("Failed to load comments:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [pageId, user?.uid]);
+    setIsLoading(true);
 
-  useEffect(() => {
-    if (!authLoading) {
-      loadComments();
-    }
-  }, [authLoading, loadComments]);
+    // Subscribe to real-time updates
+    unsubscribeRef.current = subscribeToPageComments(
+      pageId,
+      user?.uid || null,
+      (updatedComments) => {
+        setComments(updatedComments);
+        setIsLoading(false);
+        // Clear optimistic comment if it's now in the real data
+        if (optimisticComment) {
+          const found = updatedComments.find((c) => c.id === optimisticComment.id);
+          if (found) {
+            setOptimisticComment(null);
+          }
+        }
+      },
+      (error) => {
+        console.error("Failed to subscribe to comments:", error);
+        setIsLoading(false);
+      }
+    );
 
-  // Handle new comment added
+    // Cleanup subscription on unmount or when dependencies change
+    return () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+        unsubscribeRef.current = null;
+      }
+    };
+  }, [pageId, user?.uid, authLoading, optimisticComment]);
+
+  // Handle new comment added (optimistic update)
   const handleCommentAdded = useCallback((comment: Comment) => {
-    setComments((prev) => [comment, ...prev]);
+    // Add optimistic comment immediately
+    setOptimisticComment(comment);
     setShowForm(false);
   }, []);
 
-  // Handle comment deletion
+  // Handle comment deletion with optimistic update
   const handleDelete = useCallback(
     async (commentId: string) => {
       if (!window.confirm("Are you sure you want to delete this comment?")) {
         return;
       }
 
+      // Optimistic update - remove immediately
+      const deletedComment = comments.find((c) => c.id === commentId);
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+
       const success = await deleteComment(commentId);
-      if (success) {
-        setComments((prev) => prev.filter((c) => c.id !== commentId));
+      if (!success && deletedComment) {
+        // Revert on failure
+        setComments((prev) => [...prev, deletedComment]);
       }
     },
-    []
+    [comments]
   );
+
+  // Handle edit click
+  const handleEdit = useCallback((comment: Comment) => {
+    setEditingComment(comment);
+  }, []);
+
+  // Handle edit save
+  const handleEditSave = useCallback(
+    async (commentId: string, updates: UpdateCommentInput) => {
+      const originalComment = comments.find((c) => c.id === commentId);
+      if (!originalComment) return;
+
+      // Optimistic update
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === commentId
+            ? {
+                ...c,
+                ...updates,
+                content: updates.content || c.content,
+                isEdited: true,
+                updatedAt: new Date().toISOString(),
+              }
+            : c
+        )
+      );
+
+      setEditingComment(null);
+
+      const success = await updateComment(
+        commentId,
+        updates,
+        originalComment.content
+      );
+
+      if (!success) {
+        // Revert on failure
+        setComments((prev) =>
+          prev.map((c) => (c.id === commentId ? originalComment : c))
+        );
+      }
+    },
+    [comments]
+  );
+
+  // Handle edit cancel
+  const handleEditCancel = useCallback(() => {
+    setEditingComment(null);
+  }, []);
 
   // Don't render if Firebase isn't configured
   if (!isFirebaseConfigured()) {
     return null;
   }
 
+  // Combine real comments with optimistic comment
+  const displayComments = optimisticComment
+    ? [optimisticComment, ...comments.filter((c) => c.id !== optimisticComment.id)]
+    : comments;
+
   return (
     <section className={styles.commentSection}>
       <div className={styles.sectionHeader}>
         <h3>Comments & Feedback</h3>
-        {comments.length > 0 && (
+        {displayComments.length > 0 && (
           <span className={styles.commentCount}>
-            {comments.length} comment{comments.length !== 1 ? "s" : ""}
+            {displayComments.length} comment{displayComments.length !== 1 ? "s" : ""}
           </span>
         )}
       </div>
@@ -157,20 +240,16 @@ export function CommentSection({
         <div className={styles.emptyState}>
           <div>Loading comments...</div>
         </div>
-      ) : comments.length > 0 ? (
+      ) : displayComments.length > 0 ? (
         <div className={styles.commentList}>
-          {comments.map((comment) => (
+          {displayComments.map((comment) => (
             <CommentItem
               key={comment.id}
               comment={comment}
               isAdmin={isAdmin}
+              isOptimistic={comment.id === optimisticComment?.id}
               onEdit={
-                comment.author.uid === user?.uid
-                  ? () => {
-                      // TODO: Implement edit functionality
-                      console.log("Edit comment:", comment.id);
-                    }
-                  : undefined
+                comment.author.uid === user?.uid ? () => handleEdit(comment) : undefined
               }
               onDelete={
                 comment.author.uid === user?.uid || isAdmin
@@ -187,6 +266,15 @@ export function CommentSection({
             No comments yet. Be the first to share your thoughts!
           </div>
         </div>
+      )}
+
+      {/* Edit Modal */}
+      {editingComment && (
+        <EditCommentModal
+          comment={editingComment}
+          onSave={handleEditSave}
+          onCancel={handleEditCancel}
+        />
       )}
     </section>
   );

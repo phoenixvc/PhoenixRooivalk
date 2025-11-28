@@ -57,6 +57,71 @@ export function CommentForm({
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Parse AI response with structured format
+  const parseAIResponse = useCallback((response: string): { content: string; suggestions: string[] } => {
+    // Try to find JSON block first (most reliable)
+    const jsonMatch = response.match(/```json\s*([\s\S]*?)```/);
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[1]);
+        return {
+          content: parsed.improved || parsed.content || response,
+          suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+        };
+      } catch {
+        // Fall through to other parsing methods
+      }
+    }
+
+    // Try to parse structured sections with clear markers
+    const sections = {
+      content: "",
+      suggestions: [] as string[],
+    };
+
+    // Look for "IMPROVED:" or "ENHANCED:" section
+    const improvedMatch = response.match(
+      /(?:IMPROVED|ENHANCED|REVISED)[:\s]*\n?([\s\S]*?)(?=(?:SUGGESTIONS?|TIPS|$))/i
+    );
+    if (improvedMatch) {
+      sections.content = improvedMatch[1].trim();
+    }
+
+    // Look for "SUGGESTIONS:" section
+    const suggestionsMatch = response.match(
+      /(?:SUGGESTIONS?|TIPS)[:\s]*\n?([\s\S]*?)$/i
+    );
+    if (suggestionsMatch) {
+      const suggestionsText = suggestionsMatch[1];
+      // Parse bullet points or numbered items
+      sections.suggestions = suggestionsText
+        .split(/\n/)
+        .map((line) => line.replace(/^[\s\-\*\d+\.]+/, "").trim())
+        .filter((s) => s.length >= 10 && s.length <= 200)
+        .slice(0, 3);
+    }
+
+    // Fallback: if no structured sections found, use the whole response as content
+    if (!sections.content) {
+      // Try to split on common patterns
+      const parts = response.split(/\n\n+/);
+      if (parts.length > 1) {
+        // Use first part as content, try to extract suggestions from the rest
+        sections.content = parts[0].trim();
+        const restText = parts.slice(1).join("\n");
+        sections.suggestions = restText
+          .split(/\n/)
+          .map((line) => line.replace(/^[\s\-\*\d+\.]+/, "").trim())
+          .filter((s) => s.length >= 10 && s.length <= 200)
+          .slice(0, 3);
+      } else {
+        sections.content = response.trim();
+      }
+    }
+
+    return sections;
+  }, []);
+
   // Handle AI enhancement
   const handleAIEnhance = useCallback(async () => {
     if (!content.trim() || isEnhancing) return;
@@ -65,42 +130,42 @@ export function CommentForm({
     setError(null);
 
     try {
-      // Use the RAG service to enhance the comment
-      const response = await aiService.askDocumentation(
-        `Please improve the following ${COMMENT_CATEGORIES[category].label.toLowerCase()} for a technical documentation page titled "${pageTitle}".
-        Make it clearer, more professional, and more actionable. Also provide 2-3 brief suggestions for what else the author might consider adding.
+      // Use a structured prompt for more reliable parsing
+      const structuredPrompt = `You are helping improve a ${COMMENT_CATEGORIES[category].label.toLowerCase()} on technical documentation.
 
-        Original comment:
-        "${content}"
+Page: "${pageTitle}"
 
-        Please respond with:
-        1. An improved version of the comment
-        2. A list of suggestions for improvement`,
-        { format: "detailed" }
-      );
+Original comment:
+"${content}"
 
-      // Parse the AI response
-      const enhancedContent = response.answer;
+Please provide:
+1. An improved, clearer, and more professional version of this comment
+2. 2-3 brief suggestions for additional points the author might consider
 
-      // Extract suggestions (simple parsing)
-      const suggestionMatch = enhancedContent.match(/suggestions?:?\s*([\s\S]*)/i);
-      const suggestions = suggestionMatch
-        ? suggestionMatch[1]
-            .split(/\n|•|-|\d+\./)
-            .map((s) => s.trim())
-            .filter((s) => s.length > 10 && s.length < 200)
-            .slice(0, 3)
-        : [];
+Format your response EXACTLY like this:
+IMPROVED:
+[Your improved version here - keep it concise and actionable]
 
-      // Get the improved content (before suggestions)
-      const improvedContent = enhancedContent
-        .split(/suggestions?:?/i)[0]
-        .replace(/improved version:?/i, "")
-        .trim();
+SUGGESTIONS:
+- [First suggestion]
+- [Second suggestion]
+- [Third suggestion if applicable]`;
+
+      const response = await aiService.askDocumentation(structuredPrompt, {
+        format: "detailed",
+      });
+
+      // Parse the structured response
+      const parsed = parseAIResponse(response.answer);
+
+      // Validate we got meaningful content
+      if (!parsed.content || parsed.content.length < 10) {
+        throw new Error("Could not parse AI response");
+      }
 
       setAiEnhancement({
-        content: improvedContent || enhancedContent,
-        suggestions,
+        content: parsed.content,
+        suggestions: parsed.suggestions,
       });
     } catch (err) {
       console.error("AI enhancement failed:", err);
@@ -108,7 +173,7 @@ export function CommentForm({
     } finally {
       setIsEnhancing(false);
     }
-  }, [content, category, pageTitle, isEnhancing]);
+  }, [content, category, pageTitle, isEnhancing, parseAIResponse]);
 
   // Use AI enhanced version
   const useAIVersion = useCallback(() => {

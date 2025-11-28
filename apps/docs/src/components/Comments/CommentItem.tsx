@@ -16,6 +16,7 @@ import styles from "./Comments.module.css";
 interface CommentItemProps {
   comment: Comment;
   isAdmin?: boolean;
+  isOptimistic?: boolean;
   onEdit?: (comment: Comment) => void;
   onDelete?: (commentId: string) => void;
   onReview?: (comment: Comment) => void;
@@ -68,6 +69,7 @@ function getInitials(name: string | null): string {
 export function CommentItem({
   comment,
   isAdmin = false,
+  isOptimistic = false,
   onEdit,
   onDelete,
   onReview,
@@ -77,7 +79,10 @@ export function CommentItem({
     : comment.content;
 
   return (
-    <div className={styles.commentItem}>
+    <div
+      className={styles.commentItem}
+      style={isOptimistic ? { opacity: 0.7, pointerEvents: "none" } : undefined}
+    >
       {/* Header */}
       <div className={styles.commentHeader}>
         <div className={styles.authorInfo}>
