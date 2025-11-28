@@ -39,7 +39,7 @@ Each weekly report follows a consistent format:
 
 | Week | Dates | Highlights |
 |------|-------|------------|
-| [Week 48](./2025/week-48) | Nov 25 - Dec 1 | SA airport outreach, net launcher design complete, Kevlar manufacturing decision |
+| [Week 48](./2025/week-48) | Nov 25 - Dec 1 | **370+ commits**: x402 payment protocol, RAG/AI integration, gamification, user profiles, SA airport outreach, net launcher design, Kevlar manufacturing |
 
 ---
 
