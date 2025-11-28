@@ -1,7 +1,7 @@
 import * as React from "react";
 import styles from "./Downloads.module.css";
 
-interface SlideDeckProps {
+export interface SlideDeckProps {
   /** Presentation title */
   title: string;
   /** Total duration in minutes */
@@ -50,10 +50,21 @@ export default function SlideDeck({
     }
   }, [title, duration]);
 
-  // Count slides from children (check for 'number' prop which SlideSection uses)
-  const slideCount = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && typeof child.props.number === "number"
-  ).length;
+  // Extract slide info from children
+  const slideInfo = React.useMemo(() => {
+    const slides = React.Children.toArray(children).filter(
+      (child): child is React.ReactElement =>
+        React.isValidElement(child) && typeof child.props.number === "number"
+    );
+    const count = slides.length;
+    const totalSeconds = slides.reduce(
+      (sum, slide) => sum + (slide.props.duration || 0),
+      0
+    );
+    return { count, totalSeconds };
+  }, [children]);
+
+  const slideCount = slideInfo.count;
 
   return (
     <div className={styles.slideDeckContainer} ref={deckRef}>
@@ -86,6 +97,16 @@ export default function SlideDeck({
         </button>
       </div>
 
+      {/* Print-only title page */}
+      <div className={styles.printTitlePage}>
+        <h1 className={styles.printTitle}>{title}</h1>
+        <p className={styles.printMeta}>
+          {duration}-Minute Presentation | {slideCount} Slides
+        </p>
+        <p className={styles.printAudience}>{audience}</p>
+        {date && <p className={styles.printDate}>{date}</p>}
+      </div>
+
       {/* Slides */}
       <div className={styles.slidesContainer}>{children}</div>
 
@@ -93,7 +114,7 @@ export default function SlideDeck({
       <div className={styles.slideDeckFooter}>
         <span>
           Total: {slideCount || React.Children.count(children)} slides |{" "}
-          {duration} minutes
+          {slideInfo.totalSeconds}s ({duration} min)
         </span>
       </div>
     </div>

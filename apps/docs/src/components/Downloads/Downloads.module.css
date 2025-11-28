@@ -398,8 +398,21 @@
   color: var(--ifm-color-emphasis-600);
 }
 
-/* Print-specific hiding */
+/* Print title page - hidden on screen */
+.printTitlePage {
+  display: none;
+}
+
+/* Focus styles for accessibility */
+.downloadDeckButton:focus-visible,
+.downloadButton:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Print-specific styles */
 @media print {
+  /* Hide screen-only elements */
   .modalHeader,
   .printButton,
   .closeButton,
@@ -407,6 +420,43 @@
   .slideDeckHeader,
   .slideDeckFooter {
     display: none !important;
+  }
+
+  /* Show print title page */
+  .printTitlePage {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .printTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: black;
+  }
+
+  .printMeta {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .printAudience {
+    font-size: 1.125rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  .printDate {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 1rem;
   }
 
   .slideDeckContainer {
@@ -422,5 +472,10 @@
     page-break-after: always;
     break-after: page;
     padding: 0.5in;
+  }
+
+  .slidePage:last-child {
+    page-break-after: auto;
+    break-after: auto;
   }
 }
