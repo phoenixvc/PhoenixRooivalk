@@ -6,10 +6,12 @@
  */
 
 import * as functions from "firebase-functions";
+
 import { chatCompletion } from "../ai-provider";
 import { searchDocuments, SearchResult } from "../rag/search";
-import { checkRateLimit, logUsage } from "./rate-limit";
+
 import { PROMPTS, PHOENIX_CONTEXT } from "./prompts";
+import { checkRateLimit, logUsage } from "./rate-limit";
 
 interface CompetitorAnalysisRequest {
   competitors: string[];
