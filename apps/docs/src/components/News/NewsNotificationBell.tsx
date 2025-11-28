@@ -26,7 +26,7 @@ export function NewsNotificationBell({
   const [emailEnabled, setEmailEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadCount] = useState(0);
 
   const categories = [
     { id: "counter-uas", label: "Counter-UAS" },
