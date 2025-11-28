@@ -45,6 +45,7 @@ pnpm run check-links
 ```
 
 This will:
+
 1. Build the documentation site
 2. Check for broken internal links
 3. Report any broken links with details on how to fix them
@@ -69,6 +70,7 @@ pnpm run build:strict
 ### CI Integration
 
 The `docs-link-checker.yml` workflow runs automatically on:
+
 - Pull requests that modify `apps/docs/**`
 - Pushes to `main` branch
 - Weekly scheduled runs
