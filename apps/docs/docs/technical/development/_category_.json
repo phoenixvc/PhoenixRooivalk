@@ -1,0 +1,14 @@
+{
+  "label": "Development",
+  "position": 10,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-development",
+  "description": "Development guides, programming languages, and software engineering best practices.",
+  "link": {
+    "type": "generated-index",
+    "title": "Development",
+    "description": "Comprehensive development documentation covering Rust, programming best practices, and software engineering guidelines.",
+    "slug": "/technical/development"
+  }
+}
