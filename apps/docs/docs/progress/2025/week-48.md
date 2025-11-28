@@ -131,114 +131,66 @@ xpReward: 75
 
 ## Presentation Walkthrough Script
 
-> **Duration**: ~10 minutes + discussion
+> **Duration**: ~3 minutes + discussion
 > **Audience**: Weekly feedback meeting (investors/advisors)
 
 ---
 
-### Opening (30 seconds)
+### Opening (15 seconds)
 
-> "Good [morning/afternoon]. This week was significant - we hit our first hardware milestone and validated our international market strategy. Let me walk you through the highlights."
-
----
-
-### Slide 1: Hardware Progress (2 minutes)
-
-> "Starting with hardware - the most tangible progress this week.
->
-> We've completed the design for both the net launcher mechanism and the net itself. These are ready for prototyping.
->
-> The big news: we've decided to manufacture our own Kevlar nets in-house rather than import. This gives us three advantages:
-> - **Cost**: approximately 60% reduction
-> - **Speed**: Pieter already has Kevlar stock domestically, so we can start weaving immediately - no international lead times
-> - **IP protection**: the manufacturing know-how stays with us
->
-> The ground-based launcher is a larger multi-shot design. While it won't fit on our interceptor drones due to weight, it serves as a backup system and will eventually mount on the Grover ground vehicle.
->
-> **Bottom line**: First hardware milestone complete. We can start the prototype this week."
+> "This week: first hardware milestone complete, revenue model activated, and market strategy validated. Quick overview."
 
 ---
 
-### Slide 2: Revenue Model (1.5 minutes)
+### Slide 1: Hardware (30 seconds)
 
-> "On the software side, we've implemented the x402 payment protocol.
->
-> This is blockchain-based micropayments for our premium API - specifically evidence verification.
->
-> Why this matters: we now have a revenue stream that can start generating income *before* our hardware ships. Software revenue can help fund hardware development.
->
-> The system is production-ready with rate limiting and security hardening. We've also published the architecture decision for technical due diligence."
+> "Net launcher and net designs are done - ready for prototyping. We're manufacturing Kevlar nets in-house using Pieter's domestic stock. 60% cost reduction, no import delays, IP stays with us. Prototype can start immediately."
 
 ---
 
-### Slide 3: Market Validation (2 minutes)
+### Slide 2: Revenue (25 seconds)
 
-> "This week we did direct market research - spoke to three small South African airports and a Boeing pilot.
->
-> The results were... informative. Not what we hoped, but valuable.
->
-> **The finding**: South Africa currently has zero drone incidents at these airports. Operators are responsible - proper credentials, radio contact when approaching airspace.
->
-> The pilot told us the bigger problems in SA right now are lasers and kites - they're cheaper and accessible to low-income demographics. Drones will become a problem as prices drop, but we're not there yet.
->
-> **What this means**: Our international-first strategy is correct. The problem exists in Europe and Canada today - and Canada has the CUAS Sandbox program specifically for testing. South Africa is a Phase 2 market.
->
-> This is actually good validation - we're not wasting resources on a market that isn't ready."
+> "x402 payment protocol is live - blockchain micropayments for premium API access. Revenue stream before hardware ships. Production-ready with full security."
 
 ---
 
-### Slide 4: Engineering Velocity (1 minute)
+### Slide 3: Market (40 seconds)
 
-> "Quick update on development velocity - 370+ commits this week, 40+ pull requests merged.
->
-> Key deliverables:
-> - Full RAG integration across all AI endpoints
-> - User authentication and analytics
-> - 10+ architecture decisions documented
->
-> The technical foundation is production-ready. This is the kind of velocity that shows investors we can execute."
+> "Spoke to three SA airports and a Boeing pilot. Finding: SA has zero drone incidents - operators are responsible. Current threats are lasers and kites - cheaper, accessible. This validates our international-first strategy. EU and Canada have the problem today. SA is Phase 2."
 
 ---
 
-### Slide 5: Key Decisions (1 minute)
+### Slide 4: Engineering (20 seconds)
 
-> "Four major decisions this week:
->
-> 1. **In-house Kevlar nets** - cost, speed, IP protection
-> 2. **International first** - market research confirmed this
-> 3. **x402 protocol** - pre-hardware revenue
-> 4. **Firebase Vector Search** - right tool for our stack
->
-> All documented in ADRs for transparency."
+> "370+ commits, 40+ PRs, 10+ ADRs. Full RAG integration, auth, gamification. Technical foundation is production-ready."
 
 ---
 
-### Slide 6: Next Week (30 seconds)
+### Slide 5: Decisions (20 seconds)
 
-> "Next week priorities:
-> - Start weaving the first net prototype with Pieter's Kevlar
-> - Continue x402 testing
-> - Begin international outreach
-> - Keep pushing on the launcher
->
-> That's the update. Questions?"
+> "Four key decisions: in-house Kevlar nets, international focus, x402 for pre-hardware revenue, Firebase Vector Search. All documented."
+
+---
+
+### Slide 6: Next Week (15 seconds)
+
+> "Next week: start net prototype, x402 testing, international outreach, continue launcher development. Questions?"
 
 ---
 
 ### Discussion Prompts
 
-If conversation stalls, use these:
+If needed:
 
-1. "Given the SA market timing, should we accelerate EU and Canada outreach?"
-2. "Canada CUAS Sandbox 2026 - are we on track for the application?"
-3. "Do we have the runway to run hardware and software development in parallel?"
-4. "What's a realistic timeline for a net launcher demo?"
+1. "Should we accelerate EU and Canada outreach?"
+2. "Canada CUAS Sandbox 2026 - on track?"
+3. "Timeline for net launcher demo?"
 
 ---
 
 ### Closing
 
-> "Thanks everyone. We'll have the first net prototype progress to show next week."
+> "We'll have net prototype progress next week."
 
 ---
 

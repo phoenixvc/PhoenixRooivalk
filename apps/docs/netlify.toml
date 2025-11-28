@@ -1,9 +1,18 @@
 [build]
-  command = "npm ci && npm run build"
+  # Echo Firebase config status during build for debugging
+  command = """
+    echo "=== Firebase Config Check ===" && \
+    echo "FIREBASE_API_KEY: ${FIREBASE_API_KEY:+SET}" && \
+    echo "FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:+SET}" && \
+    npm ci && npm run build
+  """
   publish = "build"
 
 [build.environment]
   NODE_VERSION = "20"
+  # Firebase environment variables should be set in Netlify UI:
+  # Site settings → Build & deploy → Environment
+  # Make sure "All scopes" or "Builds" is selected (not just "Runtime")
 
 [[headers]]
   for = "/**"
