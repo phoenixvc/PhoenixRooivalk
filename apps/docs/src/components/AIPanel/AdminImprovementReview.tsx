@@ -7,7 +7,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { aiService, PendingImprovement, AIError } from "../../services/aiService";
+import {
+  aiService,
+  PendingImprovement,
+  AIError,
+} from "../../services/aiService";
 import "./AdminImprovementReview.css";
 
 interface AdminImprovementReviewProps {
@@ -56,7 +60,7 @@ export function AdminImprovementReview({
 
   const handleReview = async (
     suggestionId: string,
-    status: "approved" | "rejected" | "implemented"
+    status: "approved" | "rejected" | "implemented",
   ) => {
     setActionLoading(suggestionId);
     setError(null);
@@ -65,9 +69,7 @@ export function AdminImprovementReview({
       await aiService.reviewImprovement(suggestionId, status, reviewNotes);
 
       // Remove from list
-      setImprovements((prev) =>
-        prev.filter((imp) => imp.id !== suggestionId)
-      );
+      setImprovements((prev) => prev.filter((imp) => imp.id !== suggestionId));
       setSelectedId(null);
       setReviewNotes("");
     } catch (err) {
@@ -123,7 +125,9 @@ export function AdminImprovementReview({
             <div
               className="admin-review-item-header"
               onClick={() =>
-                setSelectedId(selectedId === improvement.id ? null : improvement.id)
+                setSelectedId(
+                  selectedId === improvement.id ? null : improvement.id,
+                )
               }
             >
               <div className="admin-review-item-info">
@@ -142,7 +146,11 @@ export function AdminImprovementReview({
               <div className="admin-review-item-content">
                 <div className="admin-review-item-doc">
                   <strong>Document:</strong>{" "}
-                  <a href={improvement.docId} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={improvement.docId}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {improvement.docId}
                   </a>
                 </div>

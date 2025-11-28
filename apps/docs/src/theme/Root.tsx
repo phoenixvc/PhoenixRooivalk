@@ -24,11 +24,14 @@ interface RootProps {
  * Get current page context for AI assistant
  */
 function usePageContext() {
-  const [pageContext, setPageContext] = useState<{
-    title: string;
-    path: string;
-    section?: string;
-  } | undefined>(undefined);
+  const [pageContext, setPageContext] = useState<
+    | {
+        title: string;
+        path: string;
+        section?: string;
+      }
+    | undefined
+  >(undefined);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

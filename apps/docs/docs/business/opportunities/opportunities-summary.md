@@ -78,13 +78,13 @@ Each opportunity is scored on a 1-5 scale across multiple weighted factors:
 
 #### Web3/Blockchain Hackathons
 
-| Rank  | Opportunity                     | Score | Status     | Prize               | Event Date        |
-| ----- | ------------------------------- | ----- | ---------- | ------------------- | ----------------- |
-| **1** | Movement M1 Hackathon           | 4.3/5 | **OPEN**   | $30K                | Dec 1, 2025       |
-| **2** | Solana Winter Build (x402)      | 4.2/5 | **OPEN**   | $10K+ bounties      | Dec 2025          |
-| **3** | ETHGlobal (Various)             | 4.0/5 | Open       | $500K+ per event    | Rolling 2025-26   |
-| **4** | Encode Club Scoop AI            | 3.9/5 | Open       | $100K global series | Dec 2025-Jan 2026 |
-| **5** | Encode Web3 AI Hackathon        | 3.8/5 | Open       | Various             | Rolling           |
+| Rank  | Opportunity                | Score | Status   | Prize               | Event Date        |
+| ----- | -------------------------- | ----- | -------- | ------------------- | ----------------- |
+| **1** | Movement M1 Hackathon      | 4.3/5 | **OPEN** | $30K                | Dec 1, 2025       |
+| **2** | Solana Winter Build (x402) | 4.2/5 | **OPEN** | $10K+ bounties      | Dec 2025          |
+| **3** | ETHGlobal (Various)        | 4.0/5 | Open     | $500K+ per event    | Rolling 2025-26   |
+| **4** | Encode Club Scoop AI       | 3.9/5 | Open     | $100K global series | Dec 2025-Jan 2026 |
+| **5** | Encode Web3 AI Hackathon   | 3.8/5 | Open     | Various             | Rolling           |
 
 #### Accelerators & VC Programs
 
@@ -759,16 +759,16 @@ blockchain evidence anchoring strategy and Move language security model.
 
 :::
 
-| Attribute       | Details                                          |
-| --------------- | ------------------------------------------------ |
-| **Program**     | Movement M1 Hackathon                            |
-| **Organizer**   | Encode Club + Move Industries                    |
-| **Start Date**  | **December 1, 2025**                             |
-| **Duration**    | 4 weeks                                          |
-| **Prize Pool**  | $30,000                                          |
-| **Focus**       | Building on Movement's new L1 blockchain (M1)    |
-| **Language**    | Move programming language                        |
-| **Target**      | Intermediate developers, speed-to-ship emphasis  |
+| Attribute      | Details                                         |
+| -------------- | ----------------------------------------------- |
+| **Program**    | Movement M1 Hackathon                           |
+| **Organizer**  | Encode Club + Move Industries                   |
+| **Start Date** | **December 1, 2025**                            |
+| **Duration**   | 4 weeks                                         |
+| **Prize Pool** | $30,000                                         |
+| **Focus**      | Building on Movement's new L1 blockchain (M1)   |
+| **Language**   | Move programming language                       |
+| **Target**     | Intermediate developers, speed-to-ship emphasis |
 
 **Score Breakdown:**
 
@@ -785,9 +785,11 @@ blockchain evidence anchoring strategy and Move language security model.
 **Strategic Value:**
 
 - **Move Language**: Resource-oriented programming prevents evidence duplication
-- **Fast Finality**: Near-instant transaction confirmation for evidence anchoring
+- **Fast Finality**: Near-instant transaction confirmation for evidence
+  anchoring
 - **EVM Compatibility**: Bridge potential with existing EtherLink integration
-- **Third Chain Option**: Diversify blockchain redundancy beyond Solana + EtherLink
+- **Third Chain Option**: Diversify blockchain redundancy beyond Solana +
+  EtherLink
 
 **Technical Approach:**
 
@@ -795,7 +797,8 @@ blockchain evidence anchoring strategy and Move language security model.
 - Create `anchor-movement` Rust crate implementing `AnchorProvider` trait
 - Linear types ensure evidence cannot be copied or forged
 
-**Related ADR:** [ADR 0015: Movement Network Integration](../../technical/architecture/adr-0015-movement-network-integration.md)
+**Related ADR:**
+[ADR 0015: Movement Network Integration](../../technical/architecture/adr-0015-movement-network-integration.md)
 
 [Encode Club Movement M1](https://www.encodeclub.com/programmes)
 
@@ -810,37 +813,37 @@ monetization strategy and existing Solana integration.
 
 :::
 
-| Attribute       | Details                                          |
-| --------------- | ------------------------------------------------ |
-| **Program**     | Solana Winter Build Challenge 2025               |
-| **Organizer**   | Encode Club + Solana Foundation                  |
-| **Timeline**    | December 2025 (4 weeks)                          |
-| **Prize Pool**  | $10K+ main prize + partner bounties              |
-| **Focus**       | Building on Solana, bounties, workshops          |
-| **x402 Focus**  | HTTP 402 payment protocol integration            |
+| Attribute      | Details                                 |
+| -------------- | --------------------------------------- |
+| **Program**    | Solana Winter Build Challenge 2025      |
+| **Organizer**  | Encode Club + Solana Foundation         |
+| **Timeline**   | December 2025 (4 weeks)                 |
+| **Prize Pool** | $10K+ main prize + partner bounties     |
+| **Focus**      | Building on Solana, bounties, workshops |
+| **x402 Focus** | HTTP 402 payment protocol integration   |
 
 **Score Breakdown:**
 
-| Factor              | Score   | Notes                                         |
-| ------------------- | ------- | --------------------------------------------- |
-| Strategic Fit       | 5       | Leverages existing Solana integration         |
-| Funding Amount      | 3       | $10K+ prizes                                  |
-| Timeline Fit        | 5       | December 2025 - perfect timing                |
-| Success Probability | 4       | Strong alignment with evidence API            |
-| Market Access       | 5       | Solana ecosystem, x402 protocol community     |
-| Effort Required     | 3       | 4-week sprint                                 |
-| **Weighted Score**  | **4.2** |                                               |
+| Factor              | Score   | Notes                                     |
+| ------------------- | ------- | ----------------------------------------- |
+| Strategic Fit       | 5       | Leverages existing Solana integration     |
+| Funding Amount      | 3       | $10K+ prizes                              |
+| Timeline Fit        | 5       | December 2025 - perfect timing            |
+| Success Probability | 4       | Strong alignment with evidence API        |
+| Market Access       | 5       | Solana ecosystem, x402 protocol community |
+| Effort Required     | 3       | 4-week sprint                             |
+| **Weighted Score**  | **4.2** |                                           |
 
 **x402 Protocol Opportunity:**
 
 x402 is a payment protocol built on HTTP 402 "Payment Required":
 
-| Feature              | Value                                    |
-| -------------------- | ---------------------------------------- |
-| **Protocol Fees**    | 0% (free for merchants and customers)    |
-| **Settlement**       | Solana (400ms finality, $0.00025/tx)     |
-| **Minimum Payment**  | $0.001 viable (true micropayments)       |
-| **AI Agent Support** | Native - agents can pay autonomously     |
+| Feature              | Value                                       |
+| -------------------- | ------------------------------------------- |
+| **Protocol Fees**    | 0% (free for merchants and customers)       |
+| **Settlement**       | Solana (400ms finality, $0.00025/tx)        |
+| **Minimum Payment**  | $0.001 viable (true micropayments)          |
+| **AI Agent Support** | Native - agents can pay autonomously        |
 | **Weekly Volume**    | 500K+ transactions (10,000% monthly growth) |
 
 **Strategic Value:**
@@ -856,7 +859,8 @@ x402 is a payment protocol built on HTTP 402 "Payment Required":
 - Integrate x402 facilitator for payment verification
 - Pricing: $0.01/verification, $0.05 multi-chain, $1.00 legal attestation
 
-**Related ADR:** [ADR 0016: x402 Payment Protocol Integration](../../technical/architecture/adr-0016-x402-payment-protocol.md)
+**Related ADR:**
+[ADR 0016: x402 Payment Protocol Integration](../../technical/architecture/adr-0016-x402-payment-protocol.md)
 
 [x402 Protocol](https://www.x402.org/) |
 [Solana x402 Docs](https://solana.com/x402/what-is-x402) |
@@ -1457,12 +1461,12 @@ feedback.
 
 ### Active Applications
 
-| Opportunity               | Status     | Next Action            | Owner | Due Date |
-| ------------------------- | ---------- | ---------------------- | ----- | -------- |
-| Soonami Cohort 8          | Active     | Demo Day prep          | Team  | TBD      |
-| Canada CUAS 2026          | Draft      | Finalize application   | PM    | Dec 15   |
-| Movement M1 Hackathon     | **REGISTER** | Register + start build | Eng   | Dec 1    |
-| Solana Winter Build (x402)| **REGISTER** | Register + start build | Eng   | Dec 2025 |
+| Opportunity                | Status       | Next Action            | Owner | Due Date |
+| -------------------------- | ------------ | ---------------------- | ----- | -------- |
+| Soonami Cohort 8           | Active       | Demo Day prep          | Team  | TBD      |
+| Canada CUAS 2026           | Draft        | Finalize application   | PM    | Dec 15   |
+| Movement M1 Hackathon      | **REGISTER** | Register + start build | Eng   | Dec 1    |
+| Solana Winter Build (x402) | **REGISTER** | Register + start build | Eng   | Dec 2025 |
 
 ### Active Platform Programs
 
@@ -1557,10 +1561,12 @@ feedback.
 
 1. **Register for Movement M1 Hackathon** - Starts Dec 1, 2025 ($30K prizes)
    - Build `anchor-movement` crate for Move-based evidence anchoring
-   - See [ADR 0015](../../technical/architecture/adr-0015-movement-network-integration.md)
+   - See
+     [ADR 0015](../../technical/architecture/adr-0015-movement-network-integration.md)
 2. **Register for Solana Winter Build (x402)** - Dec 2025 ($10K+ prizes)
    - Implement x402 payment protocol for evidence API monetization
-   - See [ADR 0016](../../technical/architecture/adr-0016-x402-payment-protocol.md)
+   - See
+     [ADR 0016](../../technical/architecture/adr-0016-x402-payment-protocol.md)
 3. **Finalize Canada CUAS Application** - Deadline Dec 15, 2025
 4. **Apply to NVIDIA Inception** - Free, immediate access to credits
 5. **Apply to AWS Activate** - Non-dilutive cloud resources

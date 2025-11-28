@@ -60,14 +60,14 @@ async function callOpenAI(
     model?: string;
     maxTokens?: number;
     temperature?: number;
-  } = {}
+  } = {},
 ): Promise<string> {
   const apiKey = functions.config().openai?.key;
 
   if (!apiKey) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "OpenAI API key not configured. Set it using: firebase functions:config:set openai.key=YOUR_KEY"
+      "OpenAI API key not configured. Set it using: firebase functions:config:set openai.key=YOUR_KEY",
     );
   }
 
@@ -101,7 +101,7 @@ async function callOpenAI(
     functions.logger.error("OpenAI API error:", error);
     throw new functions.https.HttpsError(
       "internal",
-      "Failed to process AI request"
+      "Failed to process AI request",
     );
   }
 }
@@ -111,7 +111,7 @@ async function callOpenAI(
  */
 async function checkAIRateLimit(
   userId: string,
-  feature: string
+  feature: string,
 ): Promise<boolean> {
   const rateLimitRef = db
     .collection("ai_rate_limits")
@@ -151,7 +151,7 @@ export const analyzeCompetitors = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -159,7 +159,7 @@ export const analyzeCompetitors = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -168,7 +168,7 @@ export const analyzeCompetitors = functions.https.onCall(
     if (!competitors || competitors.length === 0) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "At least one competitor name required"
+        "At least one competitor name required",
       );
     }
 
@@ -206,7 +206,7 @@ Format the response in clear markdown with headers and bullet points.`;
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      { model: OPENAI_MODEL_ADVANCED, maxTokens: 3000 }
+      { model: OPENAI_MODEL_ADVANCED, maxTokens: 3000 },
     );
 
     // Log usage for analytics
@@ -218,7 +218,7 @@ Format the response in clear markdown with headers and bullet points.`;
     });
 
     return { analysis: response };
-  }
+  },
 );
 
 /**
@@ -229,7 +229,7 @@ export const generateSWOT = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -237,7 +237,7 @@ export const generateSWOT = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -246,7 +246,7 @@ export const generateSWOT = functions.https.onCall(
     if (!topic) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Topic is required for SWOT analysis"
+        "Topic is required for SWOT analysis",
       );
     }
 
@@ -289,7 +289,7 @@ For each point, provide specific, actionable insights. Format in clear markdown.
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      { maxTokens: 2500 }
+      { maxTokens: 2500 },
     );
 
     await db.collection("ai_usage").add({
@@ -300,7 +300,7 @@ For each point, provide specific, actionable insights. Format in clear markdown.
     });
 
     return { swot: response };
-  }
+  },
 );
 
 /**
@@ -311,7 +311,7 @@ export const getReadingRecommendations = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to get recommendations"
+        "Must be authenticated to get recommendations",
       );
     }
 
@@ -386,7 +386,7 @@ Consider:
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      { temperature: 0.5, maxTokens: 1000 }
+      { temperature: 0.5, maxTokens: 1000 },
     );
 
     try {
@@ -408,7 +408,7 @@ Consider:
       })),
       learningPath: "Continue exploring the documentation",
     };
-  }
+  },
 );
 
 /**
@@ -419,7 +419,7 @@ export const suggestDocumentImprovements = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to suggest improvements"
+        "Must be authenticated to suggest improvements",
       );
     }
 
@@ -427,7 +427,7 @@ export const suggestDocumentImprovements = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -436,13 +436,15 @@ export const suggestDocumentImprovements = functions.https.onCall(
     if (!docContent || docContent.length < 100) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Document content is too short for analysis"
+        "Document content is too short for analysis",
       );
     }
 
     // Truncate content if too long
     const truncatedContent =
-      docContent.length > 10000 ? docContent.substring(0, 10000) + "..." : docContent;
+      docContent.length > 10000
+        ? docContent.substring(0, 10000) + "..."
+        : docContent;
 
     const systemPrompt = `You are a technical documentation expert specializing in defense technology, autonomous systems, and technical writing best practices. You review documentation for clarity, accuracy, completeness, and user experience.`;
 
@@ -486,7 +488,7 @@ Be constructive and specific. Focus on high-impact improvements.`;
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      { model: OPENAI_MODEL_ADVANCED, maxTokens: 2500 }
+      { model: OPENAI_MODEL_ADVANCED, maxTokens: 2500 },
     );
 
     // Store the suggestion for admin review
@@ -515,7 +517,7 @@ Be constructive and specific. Focus on high-impact improvements.`;
       suggestions: response,
       message: "Your suggestions have been submitted for admin review.",
     };
-  }
+  },
 );
 
 /**
@@ -526,7 +528,7 @@ export const getMarketInsights = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -534,7 +536,7 @@ export const getMarketInsights = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -543,7 +545,7 @@ export const getMarketInsights = functions.https.onCall(
     if (!topic) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Topic is required for market insights"
+        "Topic is required for market insights",
       );
     }
 
@@ -592,7 +594,7 @@ Provide specific data points where available. Note any limitations in available 
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      { model: OPENAI_MODEL_ADVANCED, maxTokens: 3000 }
+      { model: OPENAI_MODEL_ADVANCED, maxTokens: 3000 },
     );
 
     await db.collection("ai_usage").add({
@@ -603,7 +605,7 @@ Provide specific data points where available. Note any limitations in available 
     });
 
     return { insights: response };
-  }
+  },
 );
 
 /**
@@ -614,7 +616,7 @@ export const summarizeContent = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Must be authenticated to use AI features"
+        "Must be authenticated to use AI features",
       );
     }
 
@@ -622,7 +624,7 @@ export const summarizeContent = functions.https.onCall(
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Rate limit exceeded. Try again later."
+        "Rate limit exceeded. Try again later.",
       );
     }
 
@@ -631,7 +633,7 @@ export const summarizeContent = functions.https.onCall(
     if (!content || content.length < 200) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Content is too short to summarize"
+        "Content is too short to summarize",
       );
     }
 
@@ -650,11 +652,11 @@ export const summarizeContent = functions.https.onCall(
           content: `Summarize this content in approximately ${maxLength} words:\n\n${truncatedContent}`,
         },
       ],
-      { temperature: 0.3, maxTokens: 1000 }
+      { temperature: 0.3, maxTokens: 1000 },
     );
 
     return { summary: response };
-  }
+  },
 );
 
 /**
@@ -667,12 +669,12 @@ export const reviewDocumentImprovement = functions.https.onCall(
       status: "approved" | "rejected" | "implemented";
       notes?: string;
     },
-    context
+    context,
   ) => {
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Only admins can review suggestions"
+        "Only admins can review suggestions",
       );
     }
 
@@ -681,11 +683,13 @@ export const reviewDocumentImprovement = functions.https.onCall(
     if (!suggestionId || !status) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Suggestion ID and status required"
+        "Suggestion ID and status required",
       );
     }
 
-    const suggestionRef = db.collection("document_improvements").doc(suggestionId);
+    const suggestionRef = db
+      .collection("document_improvements")
+      .doc(suggestionId);
     const suggestion = await suggestionRef.get();
 
     if (!suggestion.exists) {
@@ -706,14 +710,15 @@ export const reviewDocumentImprovement = functions.https.onCall(
         userId: suggestionData.userId,
         type: "improvement_reviewed",
         title: `Your suggestion for "${suggestionData.docTitle}" was ${status}`,
-        message: notes || `Your document improvement suggestion has been ${status}.`,
+        message:
+          notes || `Your document improvement suggestion has been ${status}.`,
         read: false,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
     }
 
     return { success: true, status };
-  }
+  },
 );
 
 /**
@@ -724,7 +729,7 @@ export const getPendingImprovements = functions.https.onCall(
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Only admins can view pending suggestions"
+        "Only admins can view pending suggestions",
       );
     }
 
@@ -743,5 +748,5 @@ export const getPendingImprovements = functions.https.onCall(
     }));
 
     return { suggestions };
-  }
+  },
 );

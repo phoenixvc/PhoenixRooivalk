@@ -110,19 +110,25 @@ jobs:
         if: |
           steps.check_secrets.outputs.secrets_available == 'true' &&
           (github.event.inputs.deploy_firestore != 'false')
-        run: firebase deploy --only firestore:rules --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        run:
+          firebase deploy --only firestore:rules --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
 
       - name: Deploy Firestore indexes
         if: |
           steps.check_secrets.outputs.secrets_available == 'true' &&
           (github.event.inputs.deploy_firestore != 'false')
-        run: firebase deploy --only firestore:indexes --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        run:
+          firebase deploy --only firestore:indexes --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
 
       - name: Deploy Cloud Functions
         if: |
           steps.check_secrets.outputs.secrets_available == 'true' &&
           (github.event.inputs.deploy_functions != 'false')
-        run: firebase deploy --only functions --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        run:
+          firebase deploy --only functions --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
 
       - name: Deployment Summary
         if: steps.check_secrets.outputs.secrets_available == 'true'

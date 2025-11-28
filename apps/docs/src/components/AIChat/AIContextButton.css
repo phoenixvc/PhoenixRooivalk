@@ -49,7 +49,9 @@
   top: 50%;
   transform: translateY(-50%);
   opacity: 0;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 }
 
 /* Show floating button on parent hover - use more specific selector */

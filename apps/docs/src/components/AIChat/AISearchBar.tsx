@@ -39,7 +39,7 @@ export function AISearchBar({
         setQuery("");
       }
     },
-    [query, onAsk]
+    [query, onAsk],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

@@ -16,33 +16,37 @@ prerequisites: []
 
 # ADR 0000: Architecture Decision Record Template & Guide
 
-**Date**: 2025-11-28
-**Status**: Accepted (Living Document)
+**Date**: 2025-11-28 **Status**: Accepted (Living Document)
 
 ---
 
 ## Purpose
 
-This document serves as the canonical template and guide for all Architecture Decision Records (ADRs) in the Phoenix Rooivalk project. All AI assistants (Claude, Copilot, Cursor, Continue, Windsurf) and human contributors MUST reference this document when creating or restructuring ADRs.
+This document serves as the canonical template and guide for all Architecture
+Decision Records (ADRs) in the Phoenix Rooivalk project. All AI assistants
+(Claude, Copilot, Cursor, Continue, Windsurf) and human contributors MUST
+reference this document when creating or restructuring ADRs.
 
 ---
 
 ## ADR Numbering Convention
 
-| Range | Category | Examples |
-|-------|----------|----------|
-| **0000** | Template & Meta | This document |
+| Range         | Category                 | Examples                                            |
+| ------------- | ------------------------ | --------------------------------------------------- |
+| **0000**      | Template & Meta          | This document                                       |
 | **0001-0099** | Core System Architecture | Chain selection, autonomy level, sensor integration |
-| **0100-0199** | Security & Compliance | Zero-trust, ITAR, authentication |
-| **0200-0299** | Blockchain & Evidence | Chain anchoring, evidence model, multi-chain |
-| **0300-0399** | AI/ML Architecture | Edge AI, model selection, inference |
-| **0400-0499** | Infrastructure & DevOps | Monorepo, CI/CD, deployment |
-| **D001-D999** | Development Decisions | Tooling, frameworks, patterns |
+| **0100-0199** | Security & Compliance    | Zero-trust, ITAR, authentication                    |
+| **0200-0299** | Blockchain & Evidence    | Chain anchoring, evidence model, multi-chain        |
+| **0300-0399** | AI/ML Architecture       | Edge AI, model selection, inference                 |
+| **0400-0499** | Infrastructure & DevOps  | Monorepo, CI/CD, deployment                         |
+| **D001-D999** | Development Decisions    | Tooling, frameworks, patterns                       |
 
 ### Current ADR Inventory
 
-- **ADR 0001-0010**: Core architecture (chains, autonomy, sensors, AI/ML, security)
-- **ADR 0011-0014**: Runtime architecture (vector DB, functions, identity, service auth)
+- **ADR 0001-0010**: Core architecture (chains, autonomy, sensors, AI/ML,
+  security)
+- **ADR 0011-0014**: Runtime architecture (vector DB, functions, identity,
+  service auth)
 - **ADR 0015+**: Ongoing decisions
 - **ADR-D001-D009**: Development tooling decisions
 
@@ -68,8 +72,8 @@ prerequisites:
 
 # ADR XXXX: Descriptive Title
 
-**Date**: YYYY-MM-DD
-**Status**: Proposed | Accepted | Deprecated | Superseded by ADR-YYYY
+**Date**: YYYY-MM-DD **Status**: Proposed | Accepted | Deprecated | Superseded
+by ADR-YYYY
 
 ---
 
@@ -84,6 +88,7 @@ prerequisites:
 ## Context
 
 [2-4 paragraphs explaining:]
+
 - Current situation and constraints
 - Why a decision is needed now
 - Key stakeholders and their concerns
@@ -95,11 +100,11 @@ prerequisites:
 
 ### Option 1: [Name] [✅ Selected | ❌ Rejected]
 
-| Aspect | Details |
-|--------|---------|
+| Aspect          | Details           |
+| --------------- | ----------------- |
 | **Description** | Brief description |
-| **Pros** | Key advantages |
-| **Cons** | Key disadvantages |
+| **Pros**        | Key advantages    |
+| **Cons**        | Key disadvantages |
 
 ### Option 2: [Name] [❌ Rejected]
 
@@ -121,11 +126,11 @@ prerequisites:
 
 ### Why [Selected Option] Over [Alternatives]?
 
-| Factor | [Option 1] | [Option 2] | Winner |
-|--------|------------|------------|--------|
-| **Factor 1** | Value | Value | Option |
-| **Factor 2** | Value | Value | Option |
-| **Factor 3** | Value | Value | Option |
+| Factor       | [Option 1] | [Option 2] | Winner |
+| ------------ | ---------- | ---------- | ------ |
+| **Factor 1** | Value      | Value      | Option |
+| **Factor 2** | Value      | Value      | Option |
+| **Factor 3** | Value      | Value      | Option |
 
 [Additional reasoning paragraphs if needed]
 
@@ -134,6 +139,7 @@ prerequisites:
 ## Implementation
 
 [Describe implementation approach:]
+
 - Architecture diagrams (ASCII or Mermaid)
 - Code snippets showing key interfaces
 - Migration plan if applicable
@@ -163,8 +169,8 @@ prerequisites:
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
+| Risk     | Likelihood      | Impact          | Mitigation            |
+| -------- | --------------- | --------------- | --------------------- |
 | [Risk 1] | Low/Medium/High | Low/Medium/High | [Mitigation strategy] |
 | [Risk 2] | Low/Medium/High | Low/Medium/High | [Mitigation strategy] |
 
@@ -205,11 +211,11 @@ Every ADR MUST have an executive summary with exactly three points:
 
 ### 2. Status Values
 
-| Status | Meaning |
-|--------|---------|
-| **Proposed** | Under discussion, not yet approved |
-| **Accepted** | Approved and in effect |
-| **Deprecated** | No longer recommended, but still in use |
+| Status         | Meaning                                     |
+| -------------- | ------------------------------------------- |
+| **Proposed**   | Under discussion, not yet approved          |
+| **Accepted**   | Approved and in effect                      |
+| **Deprecated** | No longer recommended, but still in use     |
 | **Superseded** | Replaced by another ADR (link to successor) |
 
 ### 3. Options Analysis
@@ -222,6 +228,7 @@ Every ADR MUST have an executive summary with exactly three points:
 ### 4. Code Examples
 
 Include code examples when the decision affects:
+
 - API contracts
 - Data structures
 - Integration patterns
@@ -258,7 +265,8 @@ graph LR
 
 ### 6. Consequences Section
 
-Always include both **positive** and **negative** consequences. This demonstrates honest assessment and helps future readers understand trade-offs.
+Always include both **positive** and **negative** consequences. This
+demonstrates honest assessment and helps future readers understand trade-offs.
 
 ### 7. Cross-References
 
@@ -272,16 +280,17 @@ Always include both **positive** and **negative** consequences. This demonstrate
 
 Write an ADR when:
 
-| Trigger | Example |
-|---------|---------|
-| **New technology adoption** | Adding a new blockchain, database, framework |
-| **Architecture change** | Changing from monolith to microservices |
-| **Major pattern shift** | Switching authentication approaches |
-| **Significant trade-off** | Choosing speed over cost, or vice versa |
-| **Reversing a prior decision** | Superseding an earlier ADR |
-| **Cross-team impact** | Changes affecting multiple components |
+| Trigger                        | Example                                      |
+| ------------------------------ | -------------------------------------------- |
+| **New technology adoption**    | Adding a new blockchain, database, framework |
+| **Architecture change**        | Changing from monolith to microservices      |
+| **Major pattern shift**        | Switching authentication approaches          |
+| **Significant trade-off**      | Choosing speed over cost, or vice versa      |
+| **Reversing a prior decision** | Superseding an earlier ADR                   |
+| **Cross-team impact**          | Changes affecting multiple components        |
 
 Do NOT write an ADR for:
+
 - Bug fixes
 - Minor refactoring
 - Routine dependency updates
@@ -308,11 +317,13 @@ Before submitting an ADR:
 
 ## AI Assistant Instructions
 
-When an AI assistant (Claude, Copilot, Cursor, Continue, Windsurf) is asked to create or restructure an ADR:
+When an AI assistant (Claude, Copilot, Cursor, Continue, Windsurf) is asked to
+create or restructure an ADR:
 
 1. **ALWAYS** reference this template (`adr-0000-template-and-guide.md`)
 2. **FOLLOW** the exact structure defined in the template section
-3. **INCLUDE** all required sections (Executive Summary, Context, Options, Decision, Rationale, Consequences)
+3. **INCLUDE** all required sections (Executive Summary, Context, Options,
+   Decision, Rationale, Consequences)
 4. **USE** the correct numbering convention based on category
 5. **LINK** to related ADRs when applicable
 6. **CHECK** the existing ADR inventory to avoid duplicate numbers

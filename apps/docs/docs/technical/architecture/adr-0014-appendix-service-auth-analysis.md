@@ -16,7 +16,8 @@ tags:
 
 # ADR 0014 Appendix: Service-to-Service Auth Weighted Analysis
 
-This appendix provides the detailed technical analysis supporting [ADR 0014: Service-to-Service Auth & Secrets](./adr-0014-service-auth.md).
+This appendix provides the detailed technical analysis supporting
+[ADR 0014: Service-to-Service Auth & Secrets](./adr-0014-service-auth.md).
 
 ---
 
@@ -24,49 +25,51 @@ This appendix provides the detailed technical analysis supporting [ADR 0014: Ser
 
 ### Evaluation Criteria
 
-| Criterion | Weight | Rationale |
-|-----------|--------|-----------|
-| **Operational Simplicity** | 22% | Minimize secret management overhead |
-| **Firebase Integration** | 18% | Native support with Cloud Functions |
-| **Security Level** | 16% | Protection against compromise |
-| **Cost Efficiency** | 14% | Budget for documentation site |
-| **Rotation Capability** | 12% | Reduce exposure from compromised keys |
-| **Audit & Compliance** | 10% | Logging and regulatory requirements |
-| **Defence-Grade Path** | 8% | Future high-security deployments |
+| Criterion                  | Weight | Rationale                             |
+| -------------------------- | ------ | ------------------------------------- |
+| **Operational Simplicity** | 22%    | Minimize secret management overhead   |
+| **Firebase Integration**   | 18%    | Native support with Cloud Functions   |
+| **Security Level**         | 16%    | Protection against compromise         |
+| **Cost Efficiency**        | 14%    | Budget for documentation site         |
+| **Rotation Capability**    | 12%    | Reduce exposure from compromised keys |
+| **Audit & Compliance**     | 10%    | Logging and regulatory requirements   |
+| **Defence-Grade Path**     | 8%     | Future high-security deployments      |
 
 ---
 
 ### Option Scoring (1-10 Scale)
 
-| Criterion | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
-|-----------|----------------|----------------------|-----------------|-----------------|
-| Operational Simplicity | 10 | 7 | 5 | 3 |
-| Firebase Integration | 10 | 8 | 4 | 5 |
-| Security Level | 6 | 8 | 9 | 10 |
-| Cost Efficiency | 10 | 8 | 6 | 4 |
-| Rotation Capability | 4 | 8 | 9 | 10 |
-| Audit & Compliance | 7 | 9 | 9 | 10 |
-| Defence-Grade Path | 4 | 6 | 9 | 10 |
+| Criterion              | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
+| ---------------------- | --------------- | --------------------- | --------------- | --------------- |
+| Operational Simplicity | 10              | 7                     | 5               | 3               |
+| Firebase Integration   | 10              | 8                     | 4               | 5               |
+| Security Level         | 6               | 8                     | 9               | 10              |
+| Cost Efficiency        | 10              | 8                     | 6               | 4               |
+| Rotation Capability    | 4               | 8                     | 9               | 10              |
+| Audit & Compliance     | 7               | 9                     | 9               | 10              |
+| Defence-Grade Path     | 4               | 6                     | 9               | 10              |
 
 ---
 
 ### Weighted Scores Calculation
 
-| Option | Weighted Score | Rank |
-|--------|---------------|------|
-| **Firebase Config** | **7.86** | 🥇 1st |
-| Google Secret Manager | 7.46 | 🥈 2nd |
-| Azure Key Vault | 6.94 | 🥉 3rd |
-| HashiCorp Vault | 6.44 | 4th |
+| Option                | Weighted Score | Rank   |
+| --------------------- | -------------- | ------ |
+| **Firebase Config**   | **7.86**       | 🥇 1st |
+| Google Secret Manager | 7.46           | 🥈 2nd |
+| Azure Key Vault       | 6.94           | 🥉 3rd |
+| HashiCorp Vault       | 6.44           | 4th    |
 
 **Calculation for Firebase Config**:
+
 ```
 (10×0.22) + (10×0.18) + (6×0.16) + (10×0.14) + (4×0.12) + (7×0.10) + (4×0.08)
 = 2.2 + 1.8 + 0.96 + 1.4 + 0.48 + 0.7 + 0.32
 = 7.86
 ```
 
-**Note**: Firebase Config and Google Secret Manager are very close. Firebase Config wins due to zero-setup requirement.
+**Note**: Firebase Config and Google Secret Manager are very close. Firebase
+Config wins due to zero-setup requirement.
 
 ---
 
@@ -74,37 +77,37 @@ This appendix provides the detailed technical analysis supporting [ADR 0014: Ser
 
 ### Secret Storage Capabilities
 
-| Feature | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
-|---------|----------------|----------------------|-----------------|-----------------|
-| Encryption at Rest | ✅ AES-256 | ✅ AES-256 | ✅ AES-256/HSM | ✅ AES-256 |
-| Encryption in Transit | ✅ TLS 1.3 | ✅ TLS 1.3 | ✅ TLS 1.3 | ✅ TLS 1.3 |
-| Version History | ❌ | ✅ | ✅ | ✅ |
-| Automatic Rotation | ❌ | ✅ | ✅ | ✅ |
-| Dynamic Secrets | ❌ | ❌ | ❌ | ✅ |
-| HSM Support | ❌ | ⚠️ Cloud HSM | ✅ Premium | ✅ Enterprise |
-| Multi-Region | ✅ Global | ✅ | ✅ | ✅ |
-| Cross-Cloud Access | ⚠️ Limited | ⚠️ GCP native | ⚠️ Azure native | ✅ Native |
+| Feature               | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
+| --------------------- | --------------- | --------------------- | --------------- | --------------- |
+| Encryption at Rest    | ✅ AES-256      | ✅ AES-256            | ✅ AES-256/HSM  | ✅ AES-256      |
+| Encryption in Transit | ✅ TLS 1.3      | ✅ TLS 1.3            | ✅ TLS 1.3      | ✅ TLS 1.3      |
+| Version History       | ❌              | ✅                    | ✅              | ✅              |
+| Automatic Rotation    | ❌              | ✅                    | ✅              | ✅              |
+| Dynamic Secrets       | ❌              | ❌                    | ❌              | ✅              |
+| HSM Support           | ❌              | ⚠️ Cloud HSM          | ✅ Premium      | ✅ Enterprise   |
+| Multi-Region          | ✅ Global       | ✅                    | ✅              | ✅              |
+| Cross-Cloud Access    | ⚠️ Limited      | ⚠️ GCP native         | ⚠️ Azure native | ✅ Native       |
 
 ### Access Control
 
-| Feature | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
-|---------|----------------|----------------------|-----------------|-----------------|
-| IAM Integration | ✅ Firebase | ✅ GCP IAM | ✅ Azure RBAC | ✅ Native |
-| Fine-Grained Policies | ❌ | ✅ | ✅ | ✅ |
-| Managed Identity | ❌ | ✅ (Workload Identity) | ✅ | ✅ |
-| Service Account Auth | ✅ | ✅ | ✅ | ✅ |
-| API Key Auth | ❌ | ❌ | ✅ | ✅ |
-| Certificate Auth | ❌ | ❌ | ✅ | ✅ |
+| Feature               | Firebase Config | Google Secret Manager  | Azure Key Vault | HashiCorp Vault |
+| --------------------- | --------------- | ---------------------- | --------------- | --------------- |
+| IAM Integration       | ✅ Firebase     | ✅ GCP IAM             | ✅ Azure RBAC   | ✅ Native       |
+| Fine-Grained Policies | ❌              | ✅                     | ✅              | ✅              |
+| Managed Identity      | ❌              | ✅ (Workload Identity) | ✅              | ✅              |
+| Service Account Auth  | ✅              | ✅                     | ✅              | ✅              |
+| API Key Auth          | ❌              | ❌                     | ✅              | ✅              |
+| Certificate Auth      | ❌              | ❌                     | ✅              | ✅              |
 
 ### Audit & Compliance
 
-| Feature | Firebase Config | Google Secret Manager | Azure Key Vault | HashiCorp Vault |
-|---------|----------------|----------------------|-----------------|-----------------|
-| Access Logging | ✅ Cloud Audit | ✅ Cloud Audit | ✅ Diagnostic Logs | ✅ Audit Device |
-| SIEM Export | ⚠️ Manual | ✅ | ✅ | ✅ |
-| SOC 2 | ✅ | ✅ | ✅ | ✅ |
-| FedRAMP | ⚠️ GovCloud | ✅ | ✅ | ✅ Enterprise |
-| HIPAA | ✅ | ✅ | ✅ | ✅ |
+| Feature        | Firebase Config | Google Secret Manager | Azure Key Vault    | HashiCorp Vault |
+| -------------- | --------------- | --------------------- | ------------------ | --------------- |
+| Access Logging | ✅ Cloud Audit  | ✅ Cloud Audit        | ✅ Diagnostic Logs | ✅ Audit Device |
+| SIEM Export    | ⚠️ Manual       | ✅                    | ✅                 | ✅              |
+| SOC 2          | ✅              | ✅                    | ✅                 | ✅              |
+| FedRAMP        | ⚠️ GovCloud     | ✅                    | ✅                 | ✅ Enterprise   |
+| HIPAA          | ✅              | ✅                    | ✅                 | ✅              |
 
 ---
 
@@ -112,55 +115,55 @@ This appendix provides the detailed technical analysis supporting [ADR 0014: Ser
 
 ### Firebase Config (Current)
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| Storage | $0 | $0 |
-| Access | $0 | $0 |
-| Operations | $0 | $0 |
-| **Total** | **$0** | **$0** |
+| Component  | Monthly | 24-Month |
+| ---------- | ------- | -------- |
+| Storage    | $0      | $0       |
+| Access     | $0      | $0       |
+| Operations | $0      | $0       |
+| **Total**  | **$0**  | **$0**   |
 
 ### Google Secret Manager
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| Active secret versions | ~$0.06/version | ~$30 |
-| Access operations | $0.03/10K ops | ~$2 |
-| **Total** | **~$1.50** | **~$36** |
+| Component              | Monthly        | 24-Month |
+| ---------------------- | -------------- | -------- |
+| Active secret versions | ~$0.06/version | ~$30     |
+| Access operations      | $0.03/10K ops  | ~$2      |
+| **Total**              | **~$1.50**     | **~$36** |
 
 ### Azure Key Vault (Standard)
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| Secrets operations | $0.03/10K ops | ~$15 |
-| Advanced operations | $0.03/10K ops | ~$5 |
-| **Total** | **~$1** | **~$20** |
+| Component           | Monthly       | 24-Month |
+| ------------------- | ------------- | -------- |
+| Secrets operations  | $0.03/10K ops | ~$15     |
+| Advanced operations | $0.03/10K ops | ~$5      |
+| **Total**           | **~$1**       | **~$20** |
 
 **Note**: Covered by Azure Foundry credits.
 
 ### Azure Key Vault (Premium + HSM)
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| HSM-protected keys | $1/key/month | ~$48 |
-| Operations | $0.03/10K ops | ~$15 |
-| **Total** | **~$3** | **~$63** |
+| Component          | Monthly       | 24-Month |
+| ------------------ | ------------- | -------- |
+| HSM-protected keys | $1/key/month  | ~$48     |
+| Operations         | $0.03/10K ops | ~$15     |
+| **Total**          | **~$3**       | **~$63** |
 
 ### HashiCorp Vault (HCP)
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| Development tier | $60/month | $1,440 |
-| Starter tier | $400/month | $9,600 |
-| **Total (Dev)** | **$60** | **$1,440** |
+| Component        | Monthly    | 24-Month   |
+| ---------------- | ---------- | ---------- |
+| Development tier | $60/month  | $1,440     |
+| Starter tier     | $400/month | $9,600     |
+| **Total (Dev)**  | **$60**    | **$1,440** |
 
 ### HashiCorp Vault (Self-Hosted)
 
-| Component | Monthly | 24-Month |
-|-----------|---------|----------|
-| Cluster (3 nodes) | ~$120 | ~$2,880 |
-| Storage backend | ~$20 | ~$480 |
-| Operations effort | ~$300 | ~$7,200 |
-| **Total** | **~$440** | **~$10,560** |
+| Component         | Monthly   | 24-Month     |
+| ----------------- | --------- | ------------ |
+| Cluster (3 nodes) | ~$120     | ~$2,880      |
+| Storage backend   | ~$20      | ~$480        |
+| Operations effort | ~$300     | ~$7,200      |
+| **Total**         | **~$440** | **~$10,560** |
 
 ---
 
@@ -200,7 +203,7 @@ This appendix provides the detailed technical analysis supporting [ADR 0014: Ser
 
 ```typescript
 // Automatic rotation with caching
-import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 interface SecretCache {
   value: string;
@@ -223,8 +226,8 @@ async function getSecret(secretName: string): Promise<string> {
     name: `projects/phoenix-rooivalk/secrets/${secretName}/versions/latest`,
   });
 
-  const value = version.payload?.data?.toString() || '';
-  
+  const value = version.payload?.data?.toString() || "";
+
   // Update cache
   secretCache.set(secretName, {
     value,
@@ -236,20 +239,20 @@ async function getSecret(secretName: string): Promise<string> {
 
 // Usage in function
 export const ragQuery = functions.https.onCall(async (data, context) => {
-  const azureKey = await getSecret('azure-openai-key');
+  const azureKey = await getSecret("azure-openai-key");
   // Use key for Azure API call
 });
 ```
 
 ### Rotation Frequency Recommendations
 
-| Secret Type | Rotation Period | Rationale |
-|-------------|-----------------|-----------|
-| Azure OpenAI API Key | 90 days | Balance security/operations |
-| Azure AI Search Key | 90 days | Match OpenAI rotation |
-| Service Account Keys | 365 days | Google manages rotation |
-| Admin Credentials | 30 days | Higher privilege |
-| MFA Backup Codes | 180 days | On-demand regeneration |
+| Secret Type          | Rotation Period | Rationale                   |
+| -------------------- | --------------- | --------------------------- |
+| Azure OpenAI API Key | 90 days         | Balance security/operations |
+| Azure AI Search Key  | 90 days         | Match OpenAI rotation       |
+| Service Account Keys | 365 days        | Google manages rotation     |
+| Admin Credentials    | 30 days         | Higher privilege            |
+| MFA Backup Codes     | 180 days        | On-demand regeneration      |
 
 ---
 
@@ -261,32 +264,35 @@ export const ragQuery = functions.https.onCall(async (data, context) => {
 // Every external call validates credentials
 async function callAzureService(
   endpoint: string,
-  method: 'GET' | 'POST',
-  body?: unknown
+  method: "GET" | "POST",
+  body?: unknown,
 ): Promise<Response> {
   const startTime = Date.now();
-  
+
   // 1. Get current secret (with caching)
-  const apiKey = await getSecret('azure-api-key');
-  
+  const apiKey = await getSecret("azure-api-key");
+
   if (!apiKey) {
-    logger.error('Azure API key not available');
-    throw new functions.https.HttpsError('internal', 'Service configuration error');
+    logger.error("Azure API key not available");
+    throw new functions.https.HttpsError(
+      "internal",
+      "Service configuration error",
+    );
   }
 
   // 2. Make authenticated request
   const response = await fetch(endpoint, {
     method,
     headers: {
-      'api-key': apiKey,
-      'Content-Type': 'application/json',
+      "api-key": apiKey,
+      "Content-Type": "application/json",
     },
     body: body ? JSON.stringify(body) : undefined,
   });
 
   // 3. Log access (without sensitive data)
-  logger.info('Azure API call', {
-    endpoint: endpoint.replace(/\/[a-f0-9-]{36}/g, '/<id>'), // Redact IDs
+  logger.info("Azure API call", {
+    endpoint: endpoint.replace(/\/[a-f0-9-]{36}/g, "/<id>"), // Redact IDs
     method,
     status: response.status,
     latencyMs: Date.now() - startTime,
@@ -298,12 +304,12 @@ async function callAzureService(
 
 ### Principle 2: Least Privilege
 
-| Service | Required Permission | Granted Permission | Justification |
-|---------|--------------------|--------------------|---------------|
-| Azure AI Search | Query documents | Query only | No index management needed |
-| Azure OpenAI | Chat completions | Completions only | No fine-tuning access |
-| Firestore | Read/write collections | Specific collections | No admin access |
-| Firebase Auth | Read user claims | Read only | No user management |
+| Service         | Required Permission    | Granted Permission   | Justification              |
+| --------------- | ---------------------- | -------------------- | -------------------------- |
+| Azure AI Search | Query documents        | Query only           | No index management needed |
+| Azure OpenAI    | Chat completions       | Completions only     | No fine-tuning access      |
+| Firestore       | Read/write collections | Specific collections | No admin access            |
+| Firebase Auth   | Read user claims       | Read only            | No user management         |
 
 ### Principle 3: Assume Breach
 
@@ -312,27 +318,30 @@ async function callAzureService(
 const SECURITY_CONFIG = {
   // Rate limiting even for valid keys
   maxRequestsPerMinute: 100,
-  
+
   // Automatic key rotation trigger
   suspiciousActivityThreshold: 10, // 10x normal usage
-  
+
   // IP allowlisting for admin functions
-  adminAllowedIPs: ['10.0.0.0/8', '172.16.0.0/12'],
-  
+  adminAllowedIPs: ["10.0.0.0/8", "172.16.0.0/12"],
+
   // Automatic alerting
   alertOnUnusualPatterns: true,
 };
 
 async function detectAnomalousActivity(
   userId: string,
-  action: string
+  action: string,
 ): Promise<boolean> {
   const recentActions = await getRecentActions(userId, 60); // Last 60 minutes
   const normalRate = await getNormalRate(userId, action);
-  
-  if (recentActions.length > normalRate * SECURITY_CONFIG.suspiciousActivityThreshold) {
+
+  if (
+    recentActions.length >
+    normalRate * SECURITY_CONFIG.suspiciousActivityThreshold
+  ) {
     await triggerSecurityAlert({
-      type: 'anomalous_activity',
+      type: "anomalous_activity",
       userId,
       action,
       rate: recentActions.length,
@@ -340,7 +349,7 @@ async function detectAnomalousActivity(
     });
     return true;
   }
-  
+
   return false;
 }
 ```
@@ -423,13 +432,13 @@ async function detectAnomalousActivity(
 
 ### Secret Exposure Scenarios
 
-| Scenario | Likelihood | Impact | Detection | Response |
-|----------|-----------|--------|-----------|----------|
-| Key in logs | Low | High | Log scanning | Immediate rotation |
-| Key in git | Very Low | High | Pre-commit hooks | Immediate rotation |
-| Key exfiltration | Very Low | High | Usage anomaly | Immediate rotation + investigation |
-| Key brute force | Very Low | Low | Rate limiting | Automatic block |
-| Insider threat | Low | High | Audit logging | Investigation + rotation |
+| Scenario         | Likelihood | Impact | Detection        | Response                           |
+| ---------------- | ---------- | ------ | ---------------- | ---------------------------------- |
+| Key in logs      | Low        | High   | Log scanning     | Immediate rotation                 |
+| Key in git       | Very Low   | High   | Pre-commit hooks | Immediate rotation                 |
+| Key exfiltration | Very Low   | High   | Usage anomaly    | Immediate rotation + investigation |
+| Key brute force  | Very Low   | Low    | Rate limiting    | Automatic block                    |
+| Insider threat   | Low        | High   | Audit logging    | Investigation + rotation           |
 
 ### Mitigation Controls
 
@@ -489,12 +498,12 @@ fi
 
 ### Key Metrics
 
-| Metric | Normal | Warning | Critical | Action |
-|--------|--------|---------|----------|--------|
-| API call failures | < 1% | 1-5% | > 5% | Investigate key validity |
-| Response latency | < 200ms | 200-500ms | > 500ms | Check network/quota |
-| Daily API calls | Baseline | 2x baseline | 5x baseline | Usage anomaly alert |
-| Auth failures | 0 | 1-5/hour | > 5/hour | Possible key compromise |
+| Metric            | Normal   | Warning     | Critical    | Action                   |
+| ----------------- | -------- | ----------- | ----------- | ------------------------ |
+| API call failures | < 1%     | 1-5%        | > 5%        | Investigate key validity |
+| Response latency  | < 200ms  | 200-500ms   | > 500ms     | Check network/quota      |
+| Daily API calls   | Baseline | 2x baseline | 5x baseline | Usage anomaly alert      |
+| Auth failures     | 0        | 1-5/hour    | > 5/hour    | Possible key compromise  |
 
 ### Alert Configuration
 
@@ -502,25 +511,25 @@ fi
 // Monitoring alert definitions
 const ALERT_RULES = [
   {
-    name: 'azure_auth_failures',
-    condition: 'count(status=401) > 5 in 1h',
-    severity: 'critical',
-    action: 'page_oncall',
-    runbook: 'https://docs.phoenix/runbooks/azure-auth-failure',
+    name: "azure_auth_failures",
+    condition: "count(status=401) > 5 in 1h",
+    severity: "critical",
+    action: "page_oncall",
+    runbook: "https://docs.phoenix/runbooks/azure-auth-failure",
   },
   {
-    name: 'unusual_api_usage',
-    condition: 'rate > baseline * 3',
-    severity: 'warning',
-    action: 'slack_security',
-    runbook: 'https://docs.phoenix/runbooks/usage-anomaly',
+    name: "unusual_api_usage",
+    condition: "rate > baseline * 3",
+    severity: "warning",
+    action: "slack_security",
+    runbook: "https://docs.phoenix/runbooks/usage-anomaly",
   },
   {
-    name: 'secret_access_spike',
-    condition: 'secret_access_count > 100 in 5m',
-    severity: 'warning',
-    action: 'slack_security',
-    runbook: 'https://docs.phoenix/runbooks/secret-access-spike',
+    name: "secret_access_spike",
+    condition: "secret_access_count > 100 in 5m",
+    severity: "warning",
+    action: "slack_security",
+    runbook: "https://docs.phoenix/runbooks/secret-access-spike",
   },
 ];
 ```
@@ -529,15 +538,15 @@ const ALERT_RULES = [
 
 ## Decision Summary
 
-| Criterion | Firebase Config | Notes |
-|-----------|----------------|-------|
-| **Recommended** | ✅ Yes | Best fit for current phase |
-| **Primary benefit** | Zero setup | Already integrated |
-| **Main trade-off** | Manual rotation | No auto-refresh |
-| **Migration effort** | N/A | Already deployed |
-| **24-month cost** | $0 | Free |
-| **Risk level** | Low-Medium | Acceptable for docs site |
-| **Defence-grade path** | Key Vault + mTLS | Planned for Phase 2-3 |
+| Criterion              | Firebase Config  | Notes                      |
+| ---------------------- | ---------------- | -------------------------- |
+| **Recommended**        | ✅ Yes           | Best fit for current phase |
+| **Primary benefit**    | Zero setup       | Already integrated         |
+| **Main trade-off**     | Manual rotation  | No auto-refresh            |
+| **Migration effort**   | N/A              | Already deployed           |
+| **24-month cost**      | $0               | Free                       |
+| **Risk level**         | Low-Medium       | Acceptable for docs site   |
+| **Defence-grade path** | Key Vault + mTLS | Planned for Phase 2-3      |
 
 ---
 

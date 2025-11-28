@@ -186,7 +186,11 @@ export function AuthProvider({
         // Track signup/signin events
         if (wasSignedOut) {
           const method = authUser.providerData[0]?.providerId || "unknown";
-          const authMethod = method.includes("google") ? "google" : method.includes("github") ? "github" : method;
+          const authMethod = method.includes("google")
+            ? "google"
+            : method.includes("github")
+              ? "github"
+              : method;
 
           if (isNewUser) {
             // First time signup - track as new conversion

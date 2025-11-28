@@ -50,8 +50,12 @@ html[data-theme="dark"] .reading-rec-compact {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .reading-rec-loading {
@@ -292,7 +296,11 @@ html[data-theme="dark"] .reading-rec-card {
 
 .reading-rec-path {
   padding: 12px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1),
+    rgba(139, 92, 246, 0.1)
+  );
   border-radius: 8px;
   font-size: 0.85rem;
   margin-bottom: 16px;

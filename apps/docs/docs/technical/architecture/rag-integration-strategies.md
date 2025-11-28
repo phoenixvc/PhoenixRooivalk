@@ -1,16 +1,21 @@
 ---
 title: RAG Integration Strategies
 sidebar_label: RAG Strategies
-description: Strategies for integrating documentation with AI features using Retrieval-Augmented Generation
+description:
+  Strategies for integrating documentation with AI features using
+  Retrieval-Augmented Generation
 ---
 
 # RAG Integration Strategies
 
-This document outlines different approaches for integrating our documentation (~107 files, ~208K words) with the AI assistant using Retrieval-Augmented Generation (RAG).
+This document outlines different approaches for integrating our documentation
+(~107 files, ~208K words) with the AI assistant using Retrieval-Augmented
+Generation (RAG).
 
 ## What is RAG?
 
 RAG enhances AI responses by:
+
 1. Converting documents into vector embeddings
 2. Storing embeddings in a searchable database
 3. When a user asks a question, finding relevant document chunks
@@ -32,14 +37,14 @@ RAG enhances AI responses by:
 
 ## Strategy Comparison
 
-| Strategy | Complexity | Cost | Latency | Scalability | Best For |
-|----------|------------|------|---------|-------------|----------|
-| OpenAI Assistants | Low | Medium | Low | High | Quick implementation |
-| Firebase + Functions | Medium | Low | Medium | Medium | Staying in ecosystem |
-| Pinecone | Medium | Medium | Low | High | Production at scale |
-| Supabase pgvector | Medium | Low | Low | High | SQL + vectors |
-| Vertex AI | Medium | Medium | Low | High | Google Cloud users |
-| Build-time Static | Low | None | Very Low | Low | Small docs, client-side |
+| Strategy             | Complexity | Cost   | Latency  | Scalability | Best For                |
+| -------------------- | ---------- | ------ | -------- | ----------- | ----------------------- |
+| OpenAI Assistants    | Low        | Medium | Low      | High        | Quick implementation    |
+| Firebase + Functions | Medium     | Low    | Medium   | Medium      | Staying in ecosystem    |
+| Pinecone             | Medium     | Medium | Low      | High        | Production at scale     |
+| Supabase pgvector    | Medium     | Low    | Low      | High        | SQL + vectors           |
+| Vertex AI            | Medium     | Medium | Low      | High        | Google Cloud users      |
+| Build-time Static    | Low        | None   | Very Low | Low         | Small docs, client-side |
 
 ---
 
@@ -47,7 +52,8 @@ RAG enhances AI responses by:
 
 ### Overview
 
-OpenAI's Assistants API includes built-in file search (vector store) capabilities.
+OpenAI's Assistants API includes built-in file search (vector store)
+capabilities.
 
 ### Architecture
 
@@ -76,7 +82,7 @@ OpenAI's Assistants API includes built-in file search (vector store) capabilitie
 
 ```typescript
 // functions/src/rag/openai-assistants.ts
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -88,7 +94,7 @@ export async function createAssistant() {
   // Create vector store
   const vectorStore = await openai.beta.vectorStores.create({
     name: "Phoenix Rooivalk Docs",
-    file_ids: files.map(f => f.id),
+    file_ids: files.map((f) => f.id),
   });
 
   // Create assistant with file search tool
@@ -102,9 +108,9 @@ export async function createAssistant() {
     tools: [{ type: "file_search" }],
     tool_resources: {
       file_search: {
-        vector_store_ids: [vectorStore.id]
-      }
-    }
+        vector_store_ids: [vectorStore.id],
+      },
+    },
   });
 
   return assistant;
@@ -114,7 +120,7 @@ export async function createAssistant() {
 export async function queryDocumentation(
   assistantId: string,
   question: string,
-  threadId?: string
+  threadId?: string,
 ) {
   // Create or continue thread
   const thread = threadId
@@ -124,12 +130,12 @@ export async function queryDocumentation(
   // Add message
   await openai.beta.threads.messages.create(thread.id, {
     role: "user",
-    content: question
+    content: question,
   });
 
   // Run assistant
   const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
-    assistant_id: assistantId
+    assistant_id: assistantId,
   });
 
   // Get response
@@ -139,23 +145,26 @@ export async function queryDocumentation(
   return {
     answer: response.content[0].text.value,
     citations: response.content[0].text.annotations,
-    threadId: thread.id
+    threadId: thread.id,
   };
 }
 ```
 
 ### Pros
+
 - Built-in chunking and embedding
 - Automatic citation support
 - Conversation memory via threads
 - No vector DB to manage
 
 ### Cons
+
 - Data stored on OpenAI servers
 - Less control over retrieval
 - Cost per token + storage
 
 ### Cost Estimate
+
 - Storage: $0.10/GB/day (~1MB docs = ~$0.003/day)
 - Retrieval: ~$0.03 per query (embedding + search)
 - Generation: ~$0.01-0.03 per response
@@ -192,15 +201,15 @@ Store embeddings in Firestore, search with Cloud Functions.
 ```typescript
 // Firestore collection: doc_embeddings
 interface DocChunk {
-  id: string;                    // chunk_id
-  docId: string;                 // Original doc path
-  docTitle: string;              // Document title
-  chunkIndex: number;            // Position in document
-  content: string;               // Chunk text (500-1000 tokens)
-  embedding: number[];           // 1536-dim vector (text-embedding-3-small)
+  id: string; // chunk_id
+  docId: string; // Original doc path
+  docTitle: string; // Document title
+  chunkIndex: number; // Position in document
+  content: string; // Chunk text (500-1000 tokens)
+  embedding: number[]; // 1536-dim vector (text-embedding-3-small)
   metadata: {
-    section: string;             // Section heading
-    category: string;            // Doc category
+    section: string; // Section heading
+    category: string; // Doc category
     wordCount: number;
     lastUpdated: Timestamp;
   };
@@ -211,16 +220,16 @@ interface DocChunk {
 
 ```typescript
 // functions/src/rag/firebase-rag.ts
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import OpenAI from 'openai';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import OpenAI from "openai";
 
 const db = admin.firestore();
 const openai = new OpenAI();
 
 // Chunk size configuration
-const CHUNK_SIZE = 500;  // tokens
-const CHUNK_OVERLAP = 100;  // tokens
+const CHUNK_SIZE = 500; // tokens
+const CHUNK_OVERLAP = 100; // tokens
 
 /**
  * Index a document into the vector store
@@ -228,22 +237,22 @@ const CHUNK_OVERLAP = 100;  // tokens
 export async function indexDocument(
   docPath: string,
   content: string,
-  metadata: { title: string; category: string }
+  metadata: { title: string; category: string },
 ) {
   // Split into chunks
   const chunks = chunkDocument(content, CHUNK_SIZE, CHUNK_OVERLAP);
 
   // Generate embeddings for all chunks
   const embeddings = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
-    input: chunks.map(c => c.text),
+    model: "text-embedding-3-small",
+    input: chunks.map((c) => c.text),
   });
 
   // Store in Firestore
   const batch = db.batch();
 
   chunks.forEach((chunk, i) => {
-    const ref = db.collection('doc_embeddings').doc();
+    const ref = db.collection("doc_embeddings").doc();
     batch.set(ref, {
       docId: docPath,
       docTitle: metadata.title,
@@ -269,36 +278,34 @@ export async function indexDocument(
 export async function searchDocuments(
   query: string,
   topK: number = 5,
-  filters?: { category?: string }
+  filters?: { category?: string },
 ): Promise<Array<{ chunk: DocChunk; score: number }>> {
   // Generate query embedding
   const queryEmbedding = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: query,
   });
   const queryVector = queryEmbedding.data[0].embedding;
 
   // Get all embeddings (for small-medium collections)
   // For larger collections, use batch processing or external vector DB
-  let query = db.collection('doc_embeddings');
+  let query = db.collection("doc_embeddings");
 
   if (filters?.category) {
-    query = query.where('metadata.category', '==', filters.category);
+    query = query.where("metadata.category", "==", filters.category);
   }
 
   const snapshot = await query.get();
 
   // Calculate cosine similarity
-  const results = snapshot.docs.map(doc => {
+  const results = snapshot.docs.map((doc) => {
     const data = doc.data() as DocChunk;
     const score = cosineSimilarity(queryVector, data.embedding);
     return { chunk: data, score };
   });
 
   // Sort by similarity and return top K
-  return results
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK);
+  return results.sort((a, b) => b.score - a.score).slice(0, topK);
 }
 
 /**
@@ -310,7 +317,7 @@ export async function queryWithRAG(
     category?: string;
     topK?: number;
     includeSource?: boolean;
-  }
+  },
 ) {
   const { category, topK = 5, includeSource = true } = options || {};
 
@@ -319,24 +326,24 @@ export async function queryWithRAG(
 
   // Build context from chunks
   const context = relevantChunks
-    .map(r => `[Source: ${r.chunk.docTitle}]\n${r.chunk.content}`)
-    .join('\n\n---\n\n');
+    .map((r) => `[Source: ${r.chunk.docTitle}]\n${r.chunk.content}`)
+    .join("\n\n---\n\n");
 
   // Query LLM with context
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: "gpt-4o-mini",
     messages: [
       {
-        role: 'system',
+        role: "system",
         content: `You are Phoenix Rooivalk's documentation assistant.
 Answer questions using ONLY the provided context.
 If the context doesn't contain the answer, say "I don't have information about that in the documentation."
-Always cite which document you're referencing.`
+Always cite which document you're referencing.`,
       },
       {
-        role: 'user',
-        content: `Context:\n${context}\n\nQuestion: ${question}`
-      }
+        role: "user",
+        content: `Context:\n${context}\n\nQuestion: ${question}`,
+      },
     ],
     temperature: 0.3,
   });
@@ -344,12 +351,12 @@ Always cite which document you're referencing.`
   return {
     answer: response.choices[0].message.content,
     sources: includeSource
-      ? relevantChunks.map(r => ({
+      ? relevantChunks.map((r) => ({
           title: r.chunk.docTitle,
           docId: r.chunk.docId,
-          relevance: r.score
+          relevance: r.score,
         }))
-      : undefined
+      : undefined,
   };
 }
 
@@ -370,25 +377,26 @@ function cosineSimilarity(a: number[], b: number[]): number {
 function chunkDocument(
   content: string,
   chunkSize: number,
-  overlap: number
+  overlap: number,
 ): Array<{ text: string; section: string }> {
   // Simple implementation - split by sections/paragraphs
   const sections = content.split(/\n#{1,3}\s/);
   const chunks: Array<{ text: string; section: string }> = [];
 
   for (const section of sections) {
-    const lines = section.split('\n');
-    const sectionTitle = lines[0] || 'Content';
-    let currentChunk = '';
+    const lines = section.split("\n");
+    const sectionTitle = lines[0] || "Content";
+    let currentChunk = "";
 
     for (const line of lines) {
-      if ((currentChunk + line).length > chunkSize * 4) { // ~4 chars per token
+      if ((currentChunk + line).length > chunkSize * 4) {
+        // ~4 chars per token
         if (currentChunk) {
           chunks.push({ text: currentChunk.trim(), section: sectionTitle });
         }
         currentChunk = line;
       } else {
-        currentChunk += '\n' + line;
+        currentChunk += "\n" + line;
       }
     }
 
@@ -402,17 +410,20 @@ function chunkDocument(
 ```
 
 ### Pros
+
 - Stays within Firebase ecosystem
 - Full control over chunking/retrieval
 - No external vector DB cost
 - Works well for <10K documents
 
 ### Cons
+
 - Manual implementation of vector search
 - Slower than purpose-built vector DBs
 - All embeddings loaded for search (unless paginated)
 
 ### Cost Estimate
+
 - Firestore: ~$0.06 per 100K reads
 - OpenAI Embeddings: $0.02 per 1M tokens (~$0.004 for all docs)
 - OpenAI Generation: ~$0.01-0.02 per query
@@ -443,15 +454,15 @@ Purpose-built vector database for production scale.
 
 ```typescript
 // functions/src/rag/pinecone-rag.ts
-import { Pinecone } from '@pinecone-database/pinecone';
-import OpenAI from 'openai';
+import { Pinecone } from "@pinecone-database/pinecone";
+import OpenAI from "openai";
 
 const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY!
+  apiKey: process.env.PINECONE_API_KEY!,
 });
 
 const openai = new OpenAI();
-const index = pinecone.index('phoenix-docs');
+const index = pinecone.index("phoenix-docs");
 
 /**
  * Upsert document chunks to Pinecone
@@ -461,12 +472,12 @@ export async function indexToPinecone(
     id: string;
     text: string;
     metadata: Record<string, any>;
-  }>
+  }>,
 ) {
   // Generate embeddings
   const embeddings = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
-    input: chunks.map(c => c.text),
+    model: "text-embedding-3-small",
+    input: chunks.map((c) => c.text),
   });
 
   // Prepare vectors for Pinecone
@@ -497,13 +508,13 @@ export async function queryPinecone(
     topK?: number;
     filter?: Record<string, any>;
     namespace?: string;
-  }
+  },
 ) {
   const { topK = 5, filter, namespace } = options || {};
 
   // Generate query embedding
   const queryEmbedding = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: question,
   });
 
@@ -518,27 +529,27 @@ export async function queryPinecone(
 
   // Extract context from results
   const context = results.matches
-    .map(m => `[${m.metadata?.docTitle}]\n${m.metadata?.text}`)
-    .join('\n\n---\n\n');
+    .map((m) => `[${m.metadata?.docTitle}]\n${m.metadata?.text}`)
+    .join("\n\n---\n\n");
 
   // Generate response with context
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: "gpt-4o-mini",
     messages: [
       {
-        role: 'system',
-        content: `Answer using only the provided documentation context.`
+        role: "system",
+        content: `Answer using only the provided documentation context.`,
       },
       {
-        role: 'user',
-        content: `Context:\n${context}\n\nQuestion: ${question}`
-      }
+        role: "user",
+        content: `Context:\n${context}\n\nQuestion: ${question}`,
+      },
     ],
   });
 
   return {
     answer: response.choices[0].message.content,
-    sources: results.matches.map(m => ({
+    sources: results.matches.map((m) => ({
       docId: m.metadata?.docId,
       title: m.metadata?.docTitle,
       score: m.score,
@@ -548,17 +559,20 @@ export async function queryPinecone(
 ```
 
 ### Pros
+
 - Purpose-built for vector search
 - Fast queries (~50ms)
 - Scales to millions of vectors
 - Metadata filtering
 
 ### Cons
+
 - Additional service to manage
 - Cost at scale
 - Network latency to external service
 
 ### Cost Estimate
+
 - Pinecone Starter: Free (100K vectors)
 - Pinecone Standard: $70/month (1M vectors)
 - Plus OpenAI costs
@@ -597,15 +611,15 @@ Generate embeddings at build time, store in static JSON, search client-side.
 
 ```typescript
 // scripts/generate-embeddings.ts (run at build time)
-import fs from 'fs';
-import path from 'path';
-import glob from 'glob';
-import OpenAI from 'openai';
+import fs from "fs";
+import path from "path";
+import glob from "glob";
+import OpenAI from "openai";
 
 const openai = new OpenAI();
 
 async function generateEmbeddings() {
-  const docsPath = 'docs/**/*.md';
+  const docsPath = "docs/**/*.md";
   const files = glob.sync(docsPath);
 
   const chunks: Array<{
@@ -617,13 +631,13 @@ async function generateEmbeddings() {
   }> = [];
 
   for (const file of files) {
-    const content = fs.readFileSync(file, 'utf-8');
+    const content = fs.readFileSync(file, "utf-8");
     const title = extractTitle(content);
     const textChunks = chunkText(content, 500);
 
     for (let i = 0; i < textChunks.length; i++) {
       const embedding = await openai.embeddings.create({
-        model: 'text-embedding-3-small',
+        model: "text-embedding-3-small",
         input: textChunks[i],
       });
 
@@ -638,10 +652,7 @@ async function generateEmbeddings() {
   }
 
   // Write to static file
-  fs.writeFileSync(
-    'static/embeddings.json',
-    JSON.stringify(chunks)
-  );
+  fs.writeFileSync("static/embeddings.json", JSON.stringify(chunks));
 
   console.log(`Generated ${chunks.length} chunks`);
 }
@@ -658,19 +669,17 @@ export class LocalRAG {
   }> = [];
 
   async load() {
-    const response = await fetch('/embeddings.json');
+    const response = await fetch("/embeddings.json");
     this.chunks = await response.json();
   }
 
   async search(queryEmbedding: number[], topK: number = 5) {
-    const scored = this.chunks.map(chunk => ({
+    const scored = this.chunks.map((chunk) => ({
       ...chunk,
       score: this.cosineSimilarity(queryEmbedding, chunk.embedding),
     }));
 
-    return scored
-      .sort((a, b) => b.score - a.score)
-      .slice(0, topK);
+    return scored.sort((a, b) => b.score - a.score).slice(0, topK);
   }
 
   private cosineSimilarity(a: number[], b: number[]): number {
@@ -680,12 +689,14 @@ export class LocalRAG {
 ```
 
 ### Pros
+
 - No runtime infrastructure
 - Fast client-side search
 - Works offline
 - No per-query costs
 
 ### Cons
+
 - Embeddings in client bundle (~3MB for 200K words)
 - Query embedding still needs API
 - Updates require rebuild
@@ -698,6 +709,7 @@ export class LocalRAG {
 ### Overview
 
 Combine strategies for optimal cost/performance:
+
 - **Frequently asked**: Pre-computed answers in Firestore
 - **Documentation queries**: Firebase + OpenAI RAG
 - **Complex analysis**: Direct to GPT-4 with context
@@ -732,7 +744,7 @@ export async function answerQuestion(question: string, userId: string) {
   // 1. Check FAQ cache first
   const cachedAnswer = await checkFAQCache(question);
   if (cachedAnswer) {
-    return { answer: cachedAnswer, source: 'cache', cost: 0 };
+    return { answer: cachedAnswer, source: "cache", cost: 0 };
   }
 
   // 2. Classify query complexity
@@ -740,15 +752,15 @@ export async function answerQuestion(question: string, userId: string) {
 
   // 3. Route to appropriate handler
   switch (queryType) {
-    case 'simple':
+    case "simple":
       // Use lightweight RAG with gpt-4o-mini
       return await simpleRAG(question);
 
-    case 'documentation':
+    case "documentation":
       // Full RAG with context retrieval
       return await documentationRAG(question);
 
-    case 'analysis':
+    case "analysis":
       // Complex analysis with gpt-4o
       return await complexAnalysis(question);
 
@@ -757,21 +769,23 @@ export async function answerQuestion(question: string, userId: string) {
   }
 }
 
-function classifyQuery(question: string): 'simple' | 'documentation' | 'analysis' {
+function classifyQuery(
+  question: string,
+): "simple" | "documentation" | "analysis" {
   const lowerQ = question.toLowerCase();
 
   // Simple factual queries
   if (lowerQ.match(/what is|define|meaning of|how does.*work/)) {
-    return 'simple';
+    return "simple";
   }
 
   // Analysis queries
   if (lowerQ.match(/compare|analyze|recommend|strategy|should we/)) {
-    return 'analysis';
+    return "analysis";
   }
 
   // Default to documentation search
-  return 'documentation';
+  return "documentation";
 }
 ```
 
@@ -779,9 +793,11 @@ function classifyQuery(question: string): 'simple' | 'documentation' | 'analysis
 
 ## Recommendation for Phoenix Rooivalk
 
-Given our documentation size (~208K words, 107 files) and existing Firebase infrastructure:
+Given our documentation size (~208K words, 107 files) and existing Firebase
+infrastructure:
 
 ### Phase 1: Quick Implementation (1-2 days)
+
 **Strategy: Firebase + Cloud Functions RAG**
 
 1. Index all docs at deploy time
@@ -790,6 +806,7 @@ Given our documentation size (~208K words, 107 files) and existing Firebase infr
 4. Integrate with existing AI functions
 
 ### Phase 2: Enhancement (Future)
+
 **Strategy: Add OpenAI Assistants for conversations**
 
 1. Create persistent assistant
@@ -797,6 +814,7 @@ Given our documentation size (~208K words, 107 files) and existing Firebase infr
 3. Add citation support
 
 ### Phase 3: Scale (If needed)
+
 **Strategy: Migrate to Pinecone**
 
 1. Move embeddings to Pinecone
@@ -824,4 +842,5 @@ Given our documentation size (~208K words, 107 files) and existing Firebase infr
    - Track which chunks are used
    - Improve retrieval over time
 
-See [RAG Implementation Guide](./rag-implementation.md) for detailed implementation steps.
+See [RAG Implementation Guide](./rag-implementation.md) for detailed
+implementation steps.

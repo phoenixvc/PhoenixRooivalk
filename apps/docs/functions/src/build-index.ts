@@ -136,7 +136,7 @@ function parseFrontmatter(content: string): {
  */
 function chunkDocument(
   content: string,
-  overlap: number
+  overlap: number,
 ): Array<{ text: string; section: string }> {
   const chunks: Array<{ text: string; section: string }> = [];
 
@@ -197,7 +197,7 @@ function chunkDocument(
  */
 async function hasContentChanged(
   docId: string,
-  contentHash: string
+  contentHash: string,
 ): Promise<boolean> {
   const metaDoc = await db
     .collection(BUILD_INDEX_CONFIG.metadataCollection)
@@ -215,9 +215,7 @@ async function hasContentChanged(
 /**
  * Index a single document
  */
-async function indexDocument(
-  doc: DocumentInput
-): Promise<DocumentIndexResult> {
+async function indexDocument(doc: DocumentInput): Promise<DocumentIndexResult> {
   const contentHash = generateContentHash(doc.content);
 
   try {
@@ -255,7 +253,7 @@ async function indexDocument(
     for (let i = 0; i < chunks.length; i += BUILD_INDEX_CONFIG.batchSize) {
       const batch = chunks.slice(i, i + BUILD_INDEX_CONFIG.batchSize);
       const { embeddings, metrics } = await generateEmbedding(
-        batch.map((c) => c.text)
+        batch.map((c) => c.text),
       );
       allEmbeddings.push(...embeddings);
       totalTokens += metrics.totalTokens || 0;
@@ -376,7 +374,7 @@ export const buildTimeIndex = functions
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Admin access required"
+        "Admin access required",
       );
     }
 
@@ -385,13 +383,14 @@ export const buildTimeIndex = functions
     if (!Array.isArray(docs)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "docs must be an array of { path, content, title }"
+        "docs must be an array of { path, content, title }",
       );
     }
 
     // Generate build ID
     const buildId =
-      providedBuildId || `build-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      providedBuildId ||
+      `build-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
     // Initialize build status
     const buildStatus: BuildIndexStatus = {
@@ -421,13 +420,15 @@ export const buildTimeIndex = functions
       for (let i = 0; i < docs.length; i += BUILD_INDEX_CONFIG.maxConcurrent) {
         const batch = docs.slice(i, i + BUILD_INDEX_CONFIG.maxConcurrent);
         const batchResults = await Promise.all(
-          batch.map((doc: DocumentInput) => indexDocument(doc))
+          batch.map((doc: DocumentInput) => indexDocument(doc)),
         );
         results.push(...batchResults);
 
         // Update progress
         const indexed = results.filter((r) => r.status === "indexed").length;
-        const unchanged = results.filter((r) => r.status === "unchanged").length;
+        const unchanged = results.filter(
+          (r) => r.status === "unchanged",
+        ).length;
         const failed = results.filter((r) => r.status === "failed").length;
 
         await db
@@ -451,7 +452,10 @@ export const buildTimeIndex = functions
         indexed: indexed.length,
         unchanged: unchanged.length,
         failed: failed.length,
-        totalChunks: indexed.reduce((sum, r) => sum + (r.chunksCreated || 0), 0),
+        totalChunks: indexed.reduce(
+          (sum, r) => sum + (r.chunksCreated || 0),
+          0,
+        ),
         totalTokens: indexed.reduce((sum, r) => sum + (r.tokensUsed || 0), 0),
         errors: failed.map((r) => `${r.path}: ${r.error}`),
       };
@@ -495,7 +499,10 @@ export const buildTimeIndex = functions
           errors: [errorMsg],
         });
 
-      throw new functions.https.HttpsError("internal", `Build indexing failed: ${errorMsg}`);
+      throw new functions.https.HttpsError(
+        "internal",
+        `Build indexing failed: ${errorMsg}`,
+      );
     }
   });
 
@@ -507,7 +514,7 @@ export const getBuildIndexStatus = functions.https.onCall(
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
-        "Authentication required"
+        "Authentication required",
       );
     }
 
@@ -537,7 +544,7 @@ export const getBuildIndexStatus = functions.https.onCall(
       id: doc.id,
       ...doc.data(),
     }));
-  }
+  },
 );
 
 /**
@@ -548,7 +555,7 @@ export const checkIndexStaleness = functions.https.onCall(
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Admin access required"
+        "Admin access required",
       );
     }
 
@@ -557,7 +564,7 @@ export const checkIndexStaleness = functions.https.onCall(
     if (!Array.isArray(docs)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "docs must be an array of { path, content }"
+        "docs must be an array of { path, content }",
       );
     }
 
@@ -606,5 +613,5 @@ export const checkIndexStaleness = functions.https.onCall(
       },
       documents: results,
     };
-  }
+  },
 );

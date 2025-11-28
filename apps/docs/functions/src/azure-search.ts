@@ -76,7 +76,12 @@ export const AZURE_SEARCH_INDEX_SCHEMA = {
     { name: "chunkIndex", type: "Edm.Int32", filterable: true, sortable: true },
     { name: "totalChunks", type: "Edm.Int32" },
     { name: "contentHash", type: "Edm.String", filterable: true },
-    { name: "indexedAt", type: "Edm.DateTimeOffset", filterable: true, sortable: true },
+    {
+      name: "indexedAt",
+      type: "Edm.DateTimeOffset",
+      filterable: true,
+      sortable: true,
+    },
     {
       name: "embedding",
       type: "Collection(Edm.Single)",
@@ -154,7 +159,7 @@ export function isAzureSearchAvailable(): boolean {
 function buildAzureUrl(
   config: AzureSearchConfig,
   path: string,
-  queryParams?: Record<string, string>
+  queryParams?: Record<string, string>,
 ): string {
   const params = new URLSearchParams({
     "api-version": config.apiVersion,
@@ -183,7 +188,7 @@ export async function azureVectorSearch(
     category?: string;
     minScore?: number;
     hybridSearch?: boolean;
-  } = {}
+  } = {},
 ): Promise<{
   results: VectorSearchResult[];
   metrics: {
@@ -199,7 +204,7 @@ export async function azureVectorSearch(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured. Set azure_search.endpoint and azure_search.key"
+      "Azure Search not configured. Set azure_search.endpoint and azure_search.key",
     );
   }
 
@@ -224,7 +229,8 @@ export async function azureVectorSearch(
   const searchRequest: Record<string, unknown> = {
     count: true,
     top: topK,
-    select: "docId,chunkId,title,section,content,category,chunkIndex,totalChunks",
+    select:
+      "docId,chunkId,title,section,content,category,chunkIndex,totalChunks",
   };
 
   // Add vector search
@@ -330,7 +336,7 @@ export async function uploadToAzureIndex(
     totalChunks: number;
     contentHash: string;
     embedding: number[];
-  }>
+  }>,
 ): Promise<{
   success: boolean;
   indexed: number;
@@ -342,7 +348,7 @@ export async function uploadToAzureIndex(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -375,16 +381,16 @@ export async function uploadToAzureIndex(
     // Process results
     const results = data.value || [];
     const indexed = results.filter(
-      (r: { status: boolean }) => r.status === true
+      (r: { status: boolean }) => r.status === true,
     ).length;
     const failed = results.filter(
-      (r: { status: boolean }) => r.status === false
+      (r: { status: boolean }) => r.status === false,
     ).length;
     const errors = results
       .filter((r: { status: boolean; errorMessage?: string }) => !r.status)
       .map(
         (r: { key: string; errorMessage?: string }) =>
-          `${r.key}: ${r.errorMessage || "Unknown error"}`
+          `${r.key}: ${r.errorMessage || "Unknown error"}`,
       );
 
     // Log metrics
@@ -410,9 +416,7 @@ export async function uploadToAzureIndex(
 /**
  * Delete documents from Azure Search index
  */
-export async function deleteFromAzureIndex(
-  documentIds: string[]
-): Promise<{
+export async function deleteFromAzureIndex(documentIds: string[]): Promise<{
   success: boolean;
   deleted: number;
 }> {
@@ -421,7 +425,7 @@ export async function deleteFromAzureIndex(
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -465,7 +469,7 @@ export async function ensureAzureIndex(): Promise<{
   if (!config) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "Azure Search not configured"
+      "Azure Search not configured",
     );
   }
 
@@ -519,7 +523,7 @@ export async function ensureAzureIndex(): Promise<{
     const message = error instanceof Error ? error.message : "Unknown error";
     throw new functions.https.HttpsError(
       "internal",
-      `Index setup failed: ${message}`
+      `Index setup failed: ${message}`,
     );
   }
 }
@@ -580,14 +584,17 @@ export const azureSearchDocs = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Authentication required"
+      "Authentication required",
     );
   }
 
   const { query, category, topK, hybridSearch } = data;
 
   if (!query || typeof query !== "string") {
-    throw new functions.https.HttpsError("invalid-argument", "Query is required");
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "Query is required",
+    );
   }
 
   const { results, metrics } = await azureVectorSearch(query, {
@@ -612,16 +619,18 @@ export const azureSearchDocs = functions.https.onCall(async (data, context) => {
 /**
  * Cloud Function: Setup Azure Index (Admin only)
  */
-export const setupAzureIndex = functions.https.onCall(async (_data, context) => {
-  if (!context.auth?.token.admin) {
-    throw new functions.https.HttpsError(
-      "permission-denied",
-      "Admin access required"
-    );
-  }
+export const setupAzureIndex = functions.https.onCall(
+  async (_data, context) => {
+    if (!context.auth?.token.admin) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Admin access required",
+      );
+    }
 
-  return ensureAzureIndex();
-});
+    return ensureAzureIndex();
+  },
+);
 
 /**
  * Cloud Function: Get Azure Index Stats
@@ -630,7 +639,7 @@ export const getAzureStats = functions.https.onCall(async (_data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Authentication required"
+      "Authentication required",
     );
   }
 

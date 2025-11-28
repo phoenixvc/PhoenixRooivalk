@@ -234,7 +234,9 @@ describe("RateLimitedExecutor", () => {
     await jest.runAllTimersAsync();
 
     // First was executed before queue limit hit, so 3 total should be called
-    expect(fns.filter((fn) => fn.mock.calls.length > 0).length).toBeLessThanOrEqual(3);
+    expect(
+      fns.filter((fn) => fn.mock.calls.length > 0).length,
+    ).toBeLessThanOrEqual(3);
   });
 
   it("should clear the queue when requested", () => {

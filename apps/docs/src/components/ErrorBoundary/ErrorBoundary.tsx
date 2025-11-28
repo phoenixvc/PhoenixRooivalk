@@ -24,7 +24,10 @@ interface ErrorBoundaryState {
   errorInfo: ErrorInfo | null;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -87,10 +90,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </details>
             )}
 
-            <button
-              className="error-boundary-retry"
-              onClick={this.handleRetry}
-            >
+            <button className="error-boundary-retry" onClick={this.handleRetry}>
               Try again
             </button>
           </div>
@@ -107,10 +107,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
  */
 export function withErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
-  componentName?: string
+  componentName?: string,
 ): React.FC<P> {
   const WithErrorBoundary: React.FC<P> = (props) => (
-    <ErrorBoundary componentName={componentName || WrappedComponent.displayName}>
+    <ErrorBoundary
+      componentName={componentName || WrappedComponent.displayName}
+    >
       <WrappedComponent {...props} />
     </ErrorBoundary>
   );
