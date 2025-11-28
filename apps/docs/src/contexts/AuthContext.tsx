@@ -14,6 +14,7 @@ import React, {
 import { User } from "firebase/auth";
 import {
   isFirebaseConfigured,
+  getMissingFirebaseConfig,
   onAuthChange,
   signInWithGoogle,
   signInWithGithub,
@@ -58,6 +59,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   isConfigured: boolean;
+  missingConfig: string[];
   progress: UserProgress | null;
   userProfile: UserProfileState;
   signInGoogle: () => Promise<void>;
@@ -218,6 +220,7 @@ export function AuthProvider({
     DEFAULT_PROFILE_STATE,
   );
   const isConfigured = isFirebaseConfigured();
+  const missingConfig = getMissingFirebaseConfig();
 
   // Initialize with local progress
   useEffect(() => {
@@ -578,6 +581,7 @@ export function AuthProvider({
     user,
     loading,
     isConfigured,
+    missingConfig,
     progress,
     userProfile,
     signInGoogle,

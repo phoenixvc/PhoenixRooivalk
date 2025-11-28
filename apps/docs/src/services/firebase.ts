@@ -103,6 +103,21 @@ export const isFirebaseConfigured = (): boolean => {
   return Boolean(config.apiKey && config.projectId);
 };
 
+// Get details about missing Firebase configuration
+export const getMissingFirebaseConfig = (): string[] => {
+  const config = getConfig();
+  const missing: string[] = [];
+
+  if (!config.apiKey) missing.push("FIREBASE_API_KEY");
+  if (!config.authDomain) missing.push("FIREBASE_AUTH_DOMAIN");
+  if (!config.projectId) missing.push("FIREBASE_PROJECT_ID");
+  if (!config.storageBucket) missing.push("FIREBASE_STORAGE_BUCKET");
+  if (!config.messagingSenderId) missing.push("FIREBASE_MESSAGING_SENDER_ID");
+  if (!config.appId) missing.push("FIREBASE_APP_ID");
+
+  return missing;
+};
+
 // Check if GA4 is configured
 export const isGA4Configured = (): boolean => {
   const config = getConfig();
