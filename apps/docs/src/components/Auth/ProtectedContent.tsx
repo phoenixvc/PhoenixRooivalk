@@ -79,7 +79,9 @@ export function ProtectedContent({
   // If Firebase not configured, show everything (local mode)
   if (!isConfigured) {
     if (DEBUG_AUTH) {
-      console.log("[ProtectedContent] Firebase not configured - showing all content");
+      console.log(
+        "[ProtectedContent] Firebase not configured - showing all content",
+      );
     }
     return <>{children}</>;
   }
@@ -100,7 +102,10 @@ export function ProtectedContent({
   // Authenticated or free content - show everything
   if (user || isFreePage) {
     if (DEBUG_AUTH) {
-      console.log("[ProtectedContent] Access granted", { hasUser: !!user, isFreePage });
+      console.log("[ProtectedContent] Access granted", {
+        hasUser: !!user,
+        isFreePage,
+      });
     }
     return <>{children}</>;
   }

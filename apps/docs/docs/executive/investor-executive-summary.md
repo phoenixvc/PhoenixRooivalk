@@ -14,8 +14,8 @@ tags:
 
 **Sports Training to Airport Security**
 
-| Brand          | Market     |
-| -------------- | ---------- |
+| Brand         | Market     |
+| ------------- | ---------- |
 | **SkySnare™** | Consumer   |
 | **AeroNet™**  | Enterprise |
 
@@ -38,8 +38,8 @@ separate, focused brands sharing core technology.
 
 ### Market Segmentation
 
-| Brand                      | Market                                     | TAM     |
-| -------------------------- | ------------------------------------------ | ------- |
+| Brand                     | Market                                     | TAM     |
+| ------------------------- | ------------------------------------------ | ------- |
 | **SkySnare™** (Consumer)  | Sports training & target practice          | $1.68B³ |
 | **AeroNet™** (Enterprise) | Airport & critical infrastructure security | $4.2B⁴  |
 
@@ -129,9 +129,9 @@ fallback option
 
 ## Business Model
 
-| Phase | Brand      | Product       | Revenue Model        | Gross Margin | FY26 Target           |
-| ----- | ---------- | ------------- | -------------------- | ------------ | --------------------- |
-| 1a    | R&D        | Core Platform | -                    | -            | Prototype development |
+| Phase | Brand     | Product       | Revenue Model        | Gross Margin | FY26 Target           |
+| ----- | --------- | ------------- | -------------------- | ------------ | --------------------- |
+| 1a    | R&D       | Core Platform | -                    | -            | Prototype development |
 | 1b    | SkySnare™ | D2C Consumer  | $349 MSRP            | 58–64%       | $1.75M (5,000 units)  |
 | 1c    | AeroNet™  | Enterprise    | $45K/mo + $75K setup | 44%          | $75K (setup only)     |
 

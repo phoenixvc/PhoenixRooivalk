@@ -625,21 +625,21 @@ match value {
 
 These keywords are reserved for potential future use:
 
-| Keyword | Potential Use |
-|---------|--------------|
+| Keyword    | Potential Use          |
+| ---------- | ---------------------- |
 | `abstract` | Abstract types/methods |
-| `become` | Tail call optimization |
-| `box` | Box patterns/placement |
-| `do` | Do notation |
-| `final` | Sealed types/methods |
-| `macro` | Macro definitions |
-| `override` | Method overriding |
-| `priv` | Private visibility |
-| `try` | Try blocks |
-| `typeof` | Type introspection |
-| `unsized` | Unsized types |
-| `virtual` | Virtual methods |
-| `yield` | Generator yield |
+| `become`   | Tail call optimization |
+| `box`      | Box patterns/placement |
+| `do`       | Do notation            |
+| `final`    | Sealed types/methods   |
+| `macro`    | Macro definitions      |
+| `override` | Method overriding      |
+| `priv`     | Private visibility     |
+| `try`      | Try blocks             |
+| `typeof`   | Type introspection     |
+| `unsized`  | Unsized types          |
+| `virtual`  | Virtual methods        |
+| `yield`    | Generator yield        |
 
 ---
 
@@ -694,15 +694,15 @@ static GLOBAL: &'static str = "hello";
 
 ## Keyword Categories Summary
 
-| Category | Keywords |
-|----------|----------|
+| Category     | Keywords                                                                     |
+| ------------ | ---------------------------------------------------------------------------- |
 | Control Flow | `if`, `else`, `match`, `loop`, `while`, `for`, `break`, `continue`, `return` |
-| Declaration | `let`, `const`, `static`, `fn`, `struct`, `enum`, `type`, `trait`, `impl` |
-| Module | `mod`, `use`, `pub`, `crate`, `super`, `self`, `extern`, `as` |
-| Reference | `ref`, `mut`, `move`, `unsafe` |
-| Type | `where`, `dyn`, `Self` |
-| Async | `async`, `await` |
-| Boolean | `true`, `false` |
+| Declaration  | `let`, `const`, `static`, `fn`, `struct`, `enum`, `type`, `trait`, `impl`    |
+| Module       | `mod`, `use`, `pub`, `crate`, `super`, `self`, `extern`, `as`                |
+| Reference    | `ref`, `mut`, `move`, `unsafe`                                               |
+| Type         | `where`, `dyn`, `Self`                                                       |
+| Async        | `async`, `await`                                                             |
+| Boolean      | `true`, `false`                                                              |
 
 ---
 
@@ -718,5 +718,5 @@ points to remember:
 
 ---
 
-_This document is part of the Phoenix Rooivalk development documentation.
-© 2025 Phoenix Rooivalk. All rights reserved._
+_This document is part of the Phoenix Rooivalk development documentation. © 2025
+Phoenix Rooivalk. All rights reserved._

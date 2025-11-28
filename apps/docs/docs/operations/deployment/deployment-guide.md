@@ -192,11 +192,11 @@ across different deployment environments.
 
 **Supported Database Error Codes for Duplicate Key Detection**:
 
-| Backend    | Error Codes            | Description                    |
-|------------|------------------------|--------------------------------|
-| SQLite     | 2067, 1555, 19         | CONSTRAINT_UNIQUE, CONSTRAINT_PRIMARYKEY, CONSTRAINT_BASE |
-| PostgreSQL | 23505                  | unique_violation (SQLSTATE)    |
-| MySQL      | 1062                   | ER_DUP_ENTRY                   |
+| Backend    | Error Codes    | Description                                               |
+| ---------- | -------------- | --------------------------------------------------------- |
+| SQLite     | 2067, 1555, 19 | CONSTRAINT_UNIQUE, CONSTRAINT_PRIMARYKEY, CONSTRAINT_BASE |
+| PostgreSQL | 23505          | unique_violation (SQLSTATE)                               |
+| MySQL      | 1062           | ER_DUP_ENTRY                                              |
 
 **Database Error Handling**:
 
