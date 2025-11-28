@@ -19,12 +19,9 @@ interface ProtectedContentProps {
 }
 
 // Pages that are always free (no auth required)
-const FREE_PAGES = [
-  "/docs/phoenix-rooivalk-documentation",
-  "/docs/executive/executive-summary",
-  "/docs/resources/documentation-status",
-  "/docs/technical/glossary",
-];
+// Note: The landing page (/) is not a docs page and is always accessible
+// All documentation pages under /docs/* require authentication
+const FREE_PAGES: string[] = [];
 
 export function ProtectedContent({
   children,
