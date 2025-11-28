@@ -213,8 +213,9 @@ async fn handle_paid_verification(
     }
 
     // Store payment receipt for audit trail and replay protection
+    // Uses UNIQUE constraint on tx_signature to prevent race conditions
     let tier_str = format!("{:?}", req.tier).to_lowercase();
-    if let Err(e) = create_payment_receipt(
+    match create_payment_receipt(
         &state.pool,
         &req.evidence_id,
         &proof.signature,
@@ -224,11 +225,48 @@ async fn handle_paid_verification(
     )
     .await
     {
-        tracing::error!("Failed to store payment receipt: {}", e);
-        // Continue anyway - verification was successful
+        Ok(_) => {
+            // Receipt stored successfully, payment is unique
+        }
+        Err(e) => {
+            // Check if this is a UNIQUE constraint violation (payment replay)
+            // SQLx wraps database errors, check for Database variant with constraint info
+            let is_unique_violation = match &e {
+                sqlx::Error::Database(db_err) => {
+                    // SQLite error code 2067 = SQLITE_CONSTRAINT_UNIQUE
+                    // Also check for constraint violation message patterns
+                    db_err.code().is_some_and(|c| c == "2067" || c == "1555")
+                        || db_err.message().to_lowercase().contains("unique")
+                        || db_err.message().to_lowercase().contains("constraint")
+                }
+                _ => false,
+            };
+
+            if is_unique_violation {
+                return (
+                    StatusCode::CONFLICT,
+                    Json(json!({
+                        "error": "Payment already used",
+                        "tx_signature": proof.signature,
+                        "hint": "This payment signature has already been redeemed"
+                    })),
+                )
+                    .into_response();
+            }
+            // Any other DB error is fatal - do not proceed without audit trail
+            tracing::error!("Failed to store payment receipt: {}", e);
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({
+                    "error": "Failed to record payment receipt",
+                    "details": "Database error during payment processing"
+                })),
+            )
+                .into_response();
+        }
     }
 
-    // Payment verified - perform premium evidence verification
+    // Payment verified and receipt stored - perform premium evidence verification
     perform_premium_verification(state, req, verification).await
 }
 

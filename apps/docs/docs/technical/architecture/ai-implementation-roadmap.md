@@ -412,7 +412,7 @@ export const marketAnalysisWorkflow = RunnableSequence.from([
 ```typescript
 // functions/src/langchain/observability.ts
 import { Client } from "langsmith";
-import { LangChainTracer } from "langchain/callbacks";
+import { LangChainTracer } from "@langchain/core/tracers/tracer_langchain";
 
 const langsmithClient = new Client({
   apiUrl: "https://api.smith.langchain.com",
