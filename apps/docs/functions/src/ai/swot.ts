@@ -115,13 +115,19 @@ Base your Strengths and Weaknesses on the documented capabilities. Reference spe
       { model: "chat", maxTokens: 2500, temperature: 0.5 },
     );
 
-    await logUsage(context.auth.uid, "swot", {
-      topic,
-      provider: metrics.provider,
-      model: metrics.model,
-      tokens: metrics.totalTokens,
-      ragSourcesUsed: sourcesUsed.length,
-    });
+    // Log usage in fire-and-forget manner to prevent logging failures from
+    // failing the callable
+    try {
+      await logUsage(context.auth.uid, "swot", {
+        topic,
+        provider: metrics.provider,
+        model: metrics.model,
+        tokens: metrics.totalTokens,
+        ragSourcesUsed: sourcesUsed.length,
+      });
+    } catch (logError) {
+      functions.logger.warn("Failed to log SWOT usage:", logError);
+    }
 
     return {
       swot: content,

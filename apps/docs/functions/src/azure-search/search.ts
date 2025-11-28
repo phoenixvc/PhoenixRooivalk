@@ -19,6 +19,14 @@ import {
 } from "./config";
 
 /**
+ * Extract the best available score from an Azure search result.
+ * Uses reranker score if available, otherwise falls back to search score.
+ */
+function getHitScore(hit: AzureSearchResult): number {
+  return hit["@search.rerankerScore"] ?? hit["@search.score"] ?? 0;
+}
+
+/**
  * Vector search using Azure AI Search
  */
 export async function azureVectorSearch(
@@ -143,8 +151,7 @@ export async function azureVectorSearch(
     // Transform results
     const results: VectorSearchResult[] = (data.value || [])
       .filter((hit: AzureSearchResult) => {
-        const score = hit["@search.rerankerScore"] || hit["@search.score"];
-        return score >= minScore;
+        return getHitScore(hit) >= minScore;
       })
       .map((hit: AzureSearchResult) => ({
         docId: hit.docId,
@@ -152,7 +159,7 @@ export async function azureVectorSearch(
         title: hit.title,
         section: hit.section,
         content: hit.content,
-        score: hit["@search.rerankerScore"] || hit["@search.score"],
+        score: getHitScore(hit),
         metadata: {
           category: hit.category,
           chunkIndex: hit.chunkIndex,

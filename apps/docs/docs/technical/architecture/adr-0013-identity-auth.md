@@ -404,7 +404,7 @@ architecture, eliminating the need for custom claims management.
 | **Stack**      | Firebase (TypeScript)         | .NET 9.0+                    |
 
 **Repository**:
-[github.com/phoenixvc/cognitive-mesh](https://github.com/phoenixvc/cognitive-mesh)
+[github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
 
 **When to Consider**:
 
