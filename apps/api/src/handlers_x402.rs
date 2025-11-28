@@ -384,6 +384,22 @@ fn build_chain_confirmations(
 ///
 /// Checks X-Forwarded-For and X-Real-IP headers for proxied requests.
 /// Falls back to "unknown" if no IP can be determined.
+///
+/// # Security Warning
+///
+/// **This function trusts the X-Forwarded-For and X-Real-IP headers, which can be
+/// spoofed by untrusted clients.** For secure rate limiting and IP-based controls:
+///
+/// - **Required deployment configuration**: Upstream proxies (load balancers, CDN,
+///   API gateways) MUST strip or normalize client-supplied X-Forwarded-For and
+///   X-Real-IP headers at the edge before forwarding requests.
+/// - The first hop in X-Forwarded-For is trusted as the client IP; all subsequent
+///   hops are expected to be added by trusted infrastructure.
+/// - If no trusted proxy is configured, malicious clients can bypass rate limiting
+///   by forging these headers.
+///
+/// See `apps/docs/docs/operations/deployment/deployment-guide.md` for infrastructure
+/// configuration requirements and header normalization guidance.
 fn extract_client_ip_from_headers(headers: &HeaderMap) -> String {
     // Check X-Forwarded-For header first (standard for proxies)
     if let Some(forwarded) = headers.get("x-forwarded-for") {
