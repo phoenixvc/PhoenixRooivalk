@@ -107,11 +107,14 @@ async function processArticleWithAI(
       isGeneral: boolean;
       sentiment: "positive" | "neutral" | "negative";
     };
-    
+
     try {
       categorization = JSON.parse(categorizationResult);
     } catch (parseError) {
-      functions.logger.warn("Failed to parse categorization JSON, using defaults", { parseError, categorizationResult });
+      functions.logger.warn(
+        "Failed to parse categorization JSON, using defaults",
+        { parseError, categorizationResult },
+      );
       categorization = {
         category: "company-news",
         targetRoles: [],
@@ -325,10 +328,7 @@ export const triggerNewsIngestion = functions.https.onCall(
  * Uses AI to identify trending topics and generate news summaries
  */
 export const generateAINewsDigest = functions.https.onCall(
-  async (
-    data: { topics?: string[]; userRoles?: string[] },
-    context,
-  ) => {
+  async (data: { topics?: string[]; userRoles?: string[] }, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",

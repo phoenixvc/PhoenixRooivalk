@@ -75,7 +75,8 @@ export const getNewsAnalytics = functions.https.onCall(
       // Group views by article
       const articleViews: Record<string, number> = {};
       const articleSaves: Record<string, number> = {};
-      const categoryViews: Record<string, { views: number; saves: number }> = {};
+      const categoryViews: Record<string, { views: number; saves: number }> =
+        {};
 
       for (const event of events) {
         const articleId = event.articleId;

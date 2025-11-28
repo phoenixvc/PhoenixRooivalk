@@ -90,7 +90,8 @@ export const subscribeToBreakingNews = functions.https.onCall(
         categories,
         pushEnabled,
         emailEnabled,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp() as admin.firestore.Timestamp,
+        updatedAt:
+          admin.firestore.FieldValue.serverTimestamp() as admin.firestore.Timestamp,
       };
 
       if (fcmToken) {
@@ -113,10 +114,7 @@ export const subscribeToBreakingNews = functions.https.onCall(
       };
     } catch (error) {
       functions.logger.error("Error subscribing to breaking news:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Failed to subscribe",
-      );
+      throw new functions.https.HttpsError("internal", "Failed to subscribe");
     }
   },
 );
@@ -151,10 +149,7 @@ export const unsubscribeFromBreakingNews = functions.https.onCall(
       return { success: true };
     } catch (error) {
       functions.logger.error("Error unsubscribing:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Failed to unsubscribe",
-      );
+      throw new functions.https.HttpsError("internal", "Failed to unsubscribe");
     }
   },
 );
@@ -397,7 +392,10 @@ export const processEmailQueue = functions.pubsub
           sentAt: admin.firestore.FieldValue.serverTimestamp(),
         });
       } catch (error) {
-        functions.logger.error(`Failed to send email to ${emailData.to}:`, error);
+        functions.logger.error(
+          `Failed to send email to ${emailData.to}:`,
+          error,
+        );
         await doc.ref.update({
           status: "failed",
           error: (error as Error).message,

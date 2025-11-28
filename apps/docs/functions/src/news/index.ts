@@ -150,7 +150,10 @@ async function getUserNewsPreferences(
   userId: string,
 ): Promise<{ readArticleIds: string[] }> {
   try {
-    const doc = await db.collection(COLLECTIONS.USER_NEWS_PREFS).doc(userId).get();
+    const doc = await db
+      .collection(COLLECTIONS.USER_NEWS_PREFS)
+      .doc(userId)
+      .get();
     if (doc.exists) {
       return doc.data() as { readArticleIds: string[] };
     }
@@ -248,10 +251,7 @@ export const getNewsFeed = functions.https.onCall(
 
       // Limit results
       const finalGeneral = generalNews.slice(0, Math.ceil(limit / 2));
-      const finalSpecialized = specializedNews.slice(
-        0,
-        Math.floor(limit / 2),
-      );
+      const finalSpecialized = specializedNews.slice(0, Math.floor(limit / 2));
 
       return {
         generalNews: finalGeneral,
@@ -308,7 +308,8 @@ export const getPersonalizedNews = functions.https.onCall(
       return {
         articles: [],
         totalMatched: 0,
-        message: "Complete your profile to see personalized news recommendations.",
+        message:
+          "Complete your profile to see personalized news recommendations.",
       };
     }
 
@@ -331,7 +332,10 @@ export const getPersonalizedNews = functions.https.onCall(
 
       for (const article of articles) {
         // First try rule-based matching for efficiency
-        const ruleBasedRelevance = calculateRelevanceScore(article, userProfile);
+        const ruleBasedRelevance = calculateRelevanceScore(
+          article,
+          userProfile,
+        );
 
         if (ruleBasedRelevance.score >= 0.5) {
           personalizedArticles.push({
@@ -359,7 +363,10 @@ export const getPersonalizedNews = functions.https.onCall(
 
             const { content } = await chatCompletion(
               [
-                { role: "system", content: NEWS_PERSONALIZATION_PROMPT.system.base },
+                {
+                  role: "system",
+                  content: NEWS_PERSONALIZATION_PROMPT.system.base,
+                },
                 { role: "user", content: prompt },
               ],
               { model: "chatFast", maxTokens: 300, temperature: 0.2 },
@@ -393,7 +400,9 @@ export const getPersonalizedNews = functions.https.onCall(
       }
 
       // Sort by relevance score
-      personalizedArticles.sort((a, b) => b.relevance.score - a.relevance.score);
+      personalizedArticles.sort(
+        (a, b) => b.relevance.score - a.relevance.score,
+      );
 
       return {
         articles: personalizedArticles.slice(0, limit),
@@ -666,10 +675,15 @@ export const getSavedArticles = functions.https.onCall(
         return { articles: [] };
       }
 
-      // Fetch saved articles
+      // Fetch saved articles using batched fetch for efficiency
+      const idsToFetch = savedIds.slice(0, 50);
+      const articleRefs = idsToFetch.map((id: string) =>
+        db.collection(COLLECTIONS.NEWS).doc(id),
+      );
+      const articleDocs = await db.getAll(...articleRefs);
+
       const articles: NewsArticle[] = [];
-      for (const id of savedIds.slice(0, 50)) {
-        const doc = await db.collection(COLLECTIONS.NEWS).doc(id).get();
+      for (const doc of articleDocs) {
         if (doc.exists) {
           articles.push({ id: doc.id, ...doc.data() } as NewsArticle);
         }
@@ -725,7 +739,10 @@ export const searchNews = functions.https.onCall(
       const scoredArticles = articles
         .filter((a) => a.embedding)
         .map((article) => {
-          const similarity = cosineSimilarity(queryEmbedding, article.embedding!);
+          const similarity = cosineSimilarity(
+            queryEmbedding,
+            article.embedding!,
+          );
           return { ...article, similarity };
         })
         .filter((a) => a.similarity > 0.5)
@@ -733,7 +750,9 @@ export const searchNews = functions.https.onCall(
         .slice(0, limit);
 
       return {
-        results: scoredArticles.map(({ embedding, ...rest }) => rest),
+        results: scoredArticles.map(
+          ({ embedding: _embedding, ...rest }) => rest,
+        ),
         totalFound: scoredArticles.length,
       };
     } catch (error) {

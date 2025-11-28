@@ -200,7 +200,12 @@ export const ROLE_INTERESTS_MAP: Record<string, string[]> = {
     "strategy",
   ],
   Financial: ["market-analysis", "defense-contracts", "roi", "investment"],
-  Business: ["market-analysis", "defense-contracts", "drone-industry", "strategy"],
+  Business: [
+    "market-analysis",
+    "defense-contracts",
+    "drone-industry",
+    "strategy",
+  ],
   Marketing: ["drone-industry", "market-analysis", "counter-uas"],
   Sales: ["defense-contracts", "market-analysis", "counter-uas"],
   Legal: ["drone-regulations", "compliance", "itar"],
@@ -230,8 +235,9 @@ export function getQueriesForRole(role: string): string[] {
  * Get all high-priority queries for general news fetch
  */
 export function getHighPriorityQueries(): string[] {
-  return NEWS_TOPICS.filter((t) => t.priority === 1)
-    .flatMap((t) => t.queries.slice(0, 2));
+  return NEWS_TOPICS.filter((t) => t.priority === 1).flatMap((t) =>
+    t.queries.slice(0, 2),
+  );
 }
 
 /**
