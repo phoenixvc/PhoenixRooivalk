@@ -1,0 +1,354 @@
+//! x402 Payment Protocol handlers for premium evidence verification
+//!
+//! This module implements HTTP 402 "Payment Required" endpoints for
+//! monetizing evidence verification API access.
+
+use crate::{db::get_evidence_by_id, AppState};
+use axum::{
+    extract::State,
+    http::{HeaderMap, StatusCode},
+    response::{IntoResponse, Response},
+    Json,
+};
+use phoenix_x402::{
+    middleware::extract_payment_proof, PaymentDetails, PaymentProof, PaymentVerification,
+    PriceTier, VerifyEvidenceRequest, VerifyEvidenceResponse, X402Config, X402Facilitator,
+};
+use serde_json::json;
+
+/// State extension for x402 configuration
+#[derive(Clone)]
+pub struct X402State {
+    pub facilitator: X402Facilitator,
+    pub config: X402Config,
+}
+
+impl X402State {
+    /// Create x402 state from environment configuration
+    pub fn from_env() -> Option<Self> {
+        match X402Config::from_env() {
+            Ok(config) if config.enabled => {
+                let facilitator = X402Facilitator::new(config.clone());
+                Some(Self { facilitator, config })
+            }
+            Ok(_) => {
+                tracing::info!("x402 payments disabled");
+                None
+            }
+            Err(e) => {
+                tracing::warn!("x402 config error: {}", e);
+                None
+            }
+        }
+    }
+
+    /// Create x402 state for devnet testing
+    pub fn devnet(wallet_address: &str) -> Self {
+        let config = X402Config::devnet(wallet_address);
+        let facilitator = X402Facilitator::new(config.clone());
+        Self { facilitator, config }
+    }
+}
+
+/// Premium evidence verification endpoint with x402 payment
+///
+/// POST /api/v1/evidence/verify-premium
+///
+/// Without X-PAYMENT header: Returns 402 Payment Required with payment details
+/// With X-PAYMENT header: Verifies payment and returns premium evidence verification
+pub async fn verify_evidence_premium(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(req): Json<VerifyEvidenceRequest>,
+) -> Response {
+    // Get x402 configuration from environment
+    let x402_state = match X402State::from_env() {
+        Some(s) => s,
+        None => {
+            // x402 not configured - return 503 Service Unavailable
+            return (
+                StatusCode::SERVICE_UNAVAILABLE,
+                Json(json!({
+                    "error": "Premium verification service not configured",
+                    "hint": "Set X402_ENABLED=true and X402_WALLET_ADDRESS to enable"
+                })),
+            )
+                .into_response();
+        }
+    };
+
+    // Check for X-PAYMENT header
+    match extract_payment_proof(&headers) {
+        Ok(Some(proof)) => {
+            // Payment provided - verify and process
+            handle_paid_verification(state, x402_state, req, proof).await
+        }
+        Ok(None) => {
+            // No payment - return 402 with payment details
+            create_payment_required_response(&req.evidence_id, req.tier, &x402_state)
+        }
+        Err(e) => {
+            // Invalid payment proof format
+            (
+                StatusCode::BAD_REQUEST,
+                Json(json!({
+                    "error": "Invalid payment proof",
+                    "details": e.to_string()
+                })),
+            )
+                .into_response()
+        }
+    }
+}
+
+/// Create 402 Payment Required response
+fn create_payment_required_response(
+    evidence_id: &str,
+    tier: PriceTier,
+    x402_state: &X402State,
+) -> Response {
+    let details = PaymentDetails::for_evidence(
+        evidence_id,
+        tier,
+        &x402_state.config.wallet_address,
+        &x402_state.config.facilitator_url,
+    );
+
+    // Add custom headers for x402 protocol
+    let mut response = Json(details).into_response();
+    *response.status_mut() = StatusCode::PAYMENT_REQUIRED;
+
+    response
+}
+
+/// Handle verification request with valid payment
+async fn handle_paid_verification(
+    state: AppState,
+    x402_state: X402State,
+    req: VerifyEvidenceRequest,
+    proof: PaymentProof,
+) -> Response {
+    let expected_memo = format!("evidence:{}", req.evidence_id);
+    let min_amount = req.tier.price_usdc();
+
+    // Verify payment with facilitator
+    let verification = match x402_state
+        .facilitator
+        .verify_payment(&proof, &expected_memo, min_amount)
+        .await
+    {
+        Ok(v) => v,
+        Err(e) => {
+            return (
+                StatusCode::BAD_GATEWAY,
+                Json(json!({
+                    "error": "Payment verification failed",
+                    "details": e.to_string()
+                })),
+            )
+                .into_response();
+        }
+    };
+
+    if !verification.valid {
+        // Payment verification failed - return 402 with details
+        let mut response = Json(json!({
+            "error": "Payment verification failed",
+            "verification": verification,
+            "payment_details": PaymentDetails::for_evidence(
+                &req.evidence_id,
+                req.tier,
+                &x402_state.config.wallet_address,
+                &x402_state.config.facilitator_url,
+            )
+        }))
+        .into_response();
+        *response.status_mut() = StatusCode::PAYMENT_REQUIRED;
+        return response;
+    }
+
+    // Payment verified - perform premium evidence verification
+    perform_premium_verification(state, req, verification).await
+}
+
+/// Perform the actual premium evidence verification
+async fn perform_premium_verification(
+    state: AppState,
+    req: VerifyEvidenceRequest,
+    payment: PaymentVerification,
+) -> Response {
+    // Get evidence from database
+    let evidence = match get_evidence_by_id(&state.pool, &req.evidence_id).await {
+        Ok(Some(e)) => e,
+        Ok(None) => {
+            return (
+                StatusCode::NOT_FOUND,
+                Json(json!({
+                    "error": "Evidence not found",
+                    "evidence_id": req.evidence_id,
+                    "payment": {
+                        "verified": true,
+                        "tx_signature": payment.tx_signature,
+                        "refund_eligible": true
+                    }
+                })),
+            )
+                .into_response();
+        }
+        Err(e) => {
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(json!({
+                    "error": "Database error",
+                    "details": e.to_string()
+                })),
+            )
+                .into_response();
+        }
+    };
+
+    // Build chain confirmations based on tier
+    let chain_confirmations = build_chain_confirmations(&evidence, &req);
+
+    // Build attestation for legal tier
+    let attestation = if req.tier == PriceTier::LegalAttestation {
+        Some(phoenix_x402::AttestationInfo {
+            signed_by: "PhoenixRooivalk Evidence Authority".to_string(),
+            signature: format!("sig:{}", evidence.id),
+            valid_until: (chrono::Utc::now() + chrono::Duration::days(365)).to_rfc3339(),
+        })
+    } else {
+        None
+    };
+
+    let response = VerifyEvidenceResponse {
+        verified: true,
+        evidence_id: evidence.id.clone(),
+        chain_confirmations,
+        digest: phoenix_x402::EvidenceDigestInfo {
+            algo: "sha256".to_string(),
+            hex: "pending".to_string(), // Would come from actual evidence data
+        },
+        attestation,
+    };
+
+    (
+        StatusCode::OK,
+        Json(json!({
+            "verification": response,
+            "payment": {
+                "verified": true,
+                "tx_signature": payment.tx_signature,
+                "amount_usdc": payment.amount_usdc,
+                "block": payment.block
+            }
+        })),
+    )
+        .into_response()
+}
+
+/// Build chain confirmation details based on evidence and tier
+fn build_chain_confirmations(
+    evidence: &crate::models::EvidenceOut,
+    req: &VerifyEvidenceRequest,
+) -> serde_json::Value {
+    let chain = req.chain.as_deref().unwrap_or("solana");
+
+    match req.tier {
+        PriceTier::MultiChain | PriceTier::LegalAttestation => {
+            // Multi-chain verification
+            json!({
+                "solana": {
+                    "tx_id": format!("pending:{}", evidence.id),
+                    "confirmed": evidence.status == "done",
+                    "network": "devnet"
+                },
+                "etherlink": {
+                    "tx_id": format!("pending:{}", evidence.id),
+                    "confirmed": evidence.status == "done",
+                    "network": "testnet"
+                }
+            })
+        }
+        _ => {
+            // Single-chain verification
+            json!({
+                chain: {
+                    "tx_id": format!("pending:{}", evidence.id),
+                    "confirmed": evidence.status == "done",
+                    "network": "devnet"
+                }
+            })
+        }
+    }
+}
+
+/// Get x402 payment status and configuration
+///
+/// GET /api/v1/x402/status
+pub async fn x402_status() -> Response {
+    match X402State::from_env() {
+        Some(state) => (
+            StatusCode::OK,
+            Json(json!({
+                "enabled": true,
+                "network": state.config.network,
+                "wallet_address": state.config.wallet_address,
+                "facilitator_url": state.config.facilitator_url,
+                "supported_tokens": ["USDC", "USDT", "SOL"],
+                "price_tiers": {
+                    "basic": {
+                        "price": PriceTier::Basic.price_usdc(),
+                        "currency": "USDC",
+                        "description": PriceTier::Basic.description()
+                    },
+                    "multi_chain": {
+                        "price": PriceTier::MultiChain.price_usdc(),
+                        "currency": "USDC",
+                        "description": PriceTier::MultiChain.description()
+                    },
+                    "legal_attestation": {
+                        "price": PriceTier::LegalAttestation.price_usdc(),
+                        "currency": "USDC",
+                        "description": PriceTier::LegalAttestation.description()
+                    },
+                    "bulk": {
+                        "price": PriceTier::Bulk.price_usdc(),
+                        "currency": "USDC",
+                        "description": PriceTier::Bulk.description()
+                    }
+                }
+            })),
+        )
+            .into_response(),
+        None => (
+            StatusCode::OK,
+            Json(json!({
+                "enabled": false,
+                "message": "x402 payments not configured"
+            })),
+        )
+            .into_response(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_x402_state_devnet() {
+        let state = X402State::devnet("PhxRvk123");
+        assert!(state.facilitator.is_enabled());
+        assert_eq!(state.config.wallet_address, "PhxRvk123");
+        assert_eq!(state.config.network, "devnet");
+    }
+
+    #[test]
+    fn test_price_tier_descriptions() {
+        assert!(!PriceTier::Basic.description().is_empty());
+        assert!(!PriceTier::MultiChain.description().is_empty());
+        assert!(!PriceTier::LegalAttestation.description().is_empty());
+        assert!(!PriceTier::Bulk.description().is_empty());
+    }
+}

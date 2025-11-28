@@ -7,6 +7,7 @@ use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 pub mod connection;
 pub mod db;
 pub mod handlers;
+pub mod handlers_x402;
 pub mod migrations;
 pub mod models;
 pub mod repository;
@@ -73,6 +74,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
             "/jamming-operations/{id}",
             get(handlers::get_jamming_operation),
         )
+        // x402 Premium Evidence Verification
+        .route(
+            "/api/v1/evidence/verify-premium",
+            post(handlers_x402::verify_evidence_premium),
+        )
+        .route("/api/v1/x402/status", get(handlers_x402::x402_status))
         .with_state(state);
     Ok((app, pool))
 }

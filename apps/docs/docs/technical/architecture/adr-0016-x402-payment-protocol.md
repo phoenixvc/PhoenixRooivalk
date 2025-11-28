@@ -21,7 +21,8 @@ prerequisites:
 # ADR 0016: x402 Payment Protocol Integration
 
 **Date**: 2025-11-28
-**Status**: Proposed (Hackathon Pilot Recommended)
+**Status**: Accepted (Implementation Started)
+**Updated**: 2025-11-28
 
 ---
 
