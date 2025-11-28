@@ -1299,12 +1299,13 @@ html {
    LAYOUT: Centered content, compact TOC
    ================================================ */
 
-/* Main doc container - wider content area */
+/* Main doc container - full width */
 .docMainContainer {
   max-width: 100%;
+  flex: 1;
 }
 
-/* Center the main content and reduce margins */
+/* Center the main content */
 .container {
   max-width: 1400px !important;
   margin: 0 auto;
@@ -1317,36 +1318,41 @@ article {
   margin: 0 auto;
 }
 
-/* Right TOC sidebar - more compact and pushed right */
+/* Right TOC sidebar - fixed width, no gap */
 .theme-doc-toc-desktop {
   position: sticky;
   top: 80px;
   max-height: calc(100vh - 100px);
   overflow-y: auto;
   padding-left: 1rem;
-  margin-left: auto;
+  padding-right: 0;
   width: 200px;
   min-width: 180px;
   flex-shrink: 0;
 }
 
-/* TOC container - slimmer */
+/* TOC container - fixed width */
 .col--3 {
-  --ifm-col-width: 180px;
+  --ifm-col-width: 200px;
+  width: 200px !important;
   max-width: 200px !important;
+  min-width: 180px !important;
   padding-left: 0.5rem !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
 }
 
-/* Main content column - take more space */
+/* Main content column - fill remaining space */
 .col:not(.col--3) {
   flex: 1;
-  max-width: calc(100% - 220px);
+  max-width: none;
 }
 
-/* Row layout for doc page */
+/* Row layout for doc page - no gaps */
 .row {
   margin: 0;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
 }
 
 /* Doc item wrapper - center content */
@@ -1362,29 +1368,42 @@ article {
   min-width: 280px;
 }
 
-/* Adjust for screens without TOC */
+/* Main wrapper - prevent extra space on right */
+.main-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+/* Doc page layout - no gap on right */
 @media (min-width: 997px) {
   .docMainContainer {
     padding-left: 1rem;
-    padding-right: 1rem;
+    padding-right: 0;
+  }
+
+  /* Container within doc main - stretch to edge */
+  .docMainContainer > .container {
+    max-width: 100%;
+    padding-right: 0;
   }
 
   /* When TOC is present, adjust content */
   .docMainContainerEnhanced {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 
-/* Hide TOC on smaller screens but keep layout */
+/* Smaller screens - narrower TOC */
 @media (max-width: 1200px) {
   .theme-doc-toc-desktop {
-    width: 160px;
+    width: 180px;
     min-width: 160px;
   }
 
   .col--3 {
-    max-width: 170px !important;
+    width: 180px !important;
+    max-width: 180px !important;
   }
 }
 
@@ -1396,5 +1415,9 @@ article {
 
   article {
     max-width: 100%;
+  }
+
+  .row {
+    flex-wrap: wrap;
   }
 }
