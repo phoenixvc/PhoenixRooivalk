@@ -10,6 +10,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics";
 import "./ProtectedContent.css";
 
+// Debug flag - defaults to true, can be disabled via environment variable
+const DEBUG_AUTH =
+  typeof process === "undefined" ||
+  process.env.NEXT_PUBLIC_DEBUG_AUTH !== "false";
+
 interface ProtectedContentProps {
   children: React.ReactNode;
   /** Page URL for analytics tracking */
@@ -37,44 +42,53 @@ export function ProtectedContent({
 
   // Debug logging on component load
   useEffect(() => {
-    console.log("[ProtectedContent] Component loaded", {
-      currentUrl,
-      isConfigured,
-      loading,
-      user: user ? { uid: user.uid, email: user.email } : null,
-      isFreePage,
-      isFreeContent,
-      FREE_PAGES,
-    });
+    if (DEBUG_AUTH) {
+      console.log("[ProtectedContent] Component loaded", {
+        hasUser: !!user,
+        isConfigured,
+        loading,
+        isFreePage,
+        isFreeContent,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Debug logging on state changes
   useEffect(() => {
-    console.log("[ProtectedContent] Auth state changed", {
-      loading,
-      isConfigured,
-      user: user ? { uid: user.uid, email: user.email } : null,
-      isFreePage,
-    });
+    if (DEBUG_AUTH) {
+      console.log("[ProtectedContent] Auth state changed", {
+        loading,
+        isConfigured,
+        hasUser: !!user,
+        isFreePage,
+      });
+    }
   }, [loading, isConfigured, user, isFreePage]);
 
   // Track teaser view for non-authenticated users
   useEffect(() => {
     if (!loading && !user && !isFreePage) {
-      console.log("[ProtectedContent] Showing teaser view for:", currentUrl);
+      if (DEBUG_AUTH) {
+        console.log("[ProtectedContent] Showing teaser view");
+      }
       analytics.trackTeaserView(currentUrl);
     }
   }, [loading, user, isFreePage, currentUrl]);
 
   // If Firebase not configured, show everything (local mode)
   if (!isConfigured) {
-    console.log("[ProtectedContent] Firebase not configured - showing all content");
+    if (DEBUG_AUTH) {
+      console.log("[ProtectedContent] Firebase not configured - showing all content");
+    }
     return <>{children}</>;
   }
 
   // Loading state
   if (loading) {
-    console.log("[ProtectedContent] Loading state - showing spinner");
+    if (DEBUG_AUTH) {
+      console.log("[ProtectedContent] Loading state - showing spinner");
+    }
     return (
       <div className="protected-content protected-content--loading">
         <div className="protected-content-spinner" />
@@ -85,11 +99,15 @@ export function ProtectedContent({
 
   // Authenticated or free content - show everything
   if (user || isFreePage) {
-    console.log("[ProtectedContent] Access granted", { hasUser: !!user, isFreePage });
+    if (DEBUG_AUTH) {
+      console.log("[ProtectedContent] Access granted", { hasUser: !!user, isFreePage });
+    }
     return <>{children}</>;
   }
 
-  console.log("[ProtectedContent] Access denied - showing teaser");
+  if (DEBUG_AUTH) {
+    console.log("[ProtectedContent] Access denied - showing teaser");
+  }
 
   // Non-authenticated - show teaser with sign-in CTA
   // CSS handles the height limiting and fade effect

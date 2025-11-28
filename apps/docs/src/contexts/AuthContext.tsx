@@ -39,6 +39,11 @@ import {
   INTERNAL_USER_PROFILES,
 } from "../config/userProfiles";
 
+// Debug flag - defaults to true, can be disabled via environment variable
+const DEBUG_AUTH =
+  typeof process === "undefined" ||
+  process.env.NEXT_PUBLIC_DEBUG_AUTH !== "false";
+
 // Local storage keys
 const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
 const LOCAL_ACHIEVEMENTS_KEY = "phoenix-docs-achievements";
@@ -224,25 +229,34 @@ export function AuthProvider({
 
   // Debug logging on mount
   useEffect(() => {
-    console.log("[AuthContext] Provider mounted", {
-      isConfigured,
-      missingConfig,
-      loading,
-    });
+    if (DEBUG_AUTH) {
+      console.log("[AuthContext] Provider mounted", {
+        isConfigured,
+        hasMissingConfig: missingConfig.length > 0,
+        loading,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Initialize with local progress
   useEffect(() => {
-    console.log("[AuthContext] Initializing local progress");
+    if (DEBUG_AUTH) {
+      console.log("[AuthContext] Initializing local progress");
+    }
     const localProgress = getLocalProgress();
     setProgress(localProgress);
   }, []);
 
   // Listen to auth state changes
   useEffect(() => {
-    console.log("[AuthContext] Setting up auth listener", { isConfigured });
+    if (DEBUG_AUTH) {
+      console.log("[AuthContext] Setting up auth listener", { isConfigured });
+    }
     if (!isConfigured) {
-      console.log("[AuthContext] Firebase not configured, setting loading=false");
+      if (DEBUG_AUTH) {
+        console.log("[AuthContext] Firebase not configured, setting loading=false");
+      }
       setLoading(false);
       return;
     }
@@ -250,16 +264,20 @@ export function AuthProvider({
     let previousUser: User | null = null;
 
     const unsubscribe = onAuthChange(async (authUser) => {
-      console.log("[AuthContext] Auth state changed", {
-        authUser: authUser ? { uid: authUser.uid, email: authUser.email } : null,
-        previousUser: previousUser ? { uid: previousUser.uid } : null,
-      });
+      if (DEBUG_AUTH) {
+        console.log("[AuthContext] Auth state changed", {
+          hasUser: !!authUser,
+          hadPreviousUser: !!previousUser,
+        });
+      }
       const wasSignedOut = !previousUser && authUser;
       previousUser = authUser;
       setUser(authUser);
 
       if (authUser) {
-        console.log("[AuthContext] User signed in, syncing progress...");
+        if (DEBUG_AUTH) {
+          console.log("[AuthContext] User signed in, syncing progress...");
+        }
         // User signed in - sync progress
         const cloudProgress = await getUserProgress(authUser.uid);
         const localProgress = getLocalProgress();
@@ -289,9 +307,13 @@ export function AuthProvider({
           }
           // Could also track returning user sign-ins separately if needed
         }
-        console.log("[AuthContext] User sync complete, setting loading=false");
+        if (DEBUG_AUTH) {
+          console.log("[AuthContext] User sync complete, setting loading=false");
+        }
       } else {
-        console.log("[AuthContext] No user, setting loading=false");
+        if (DEBUG_AUTH) {
+          console.log("[AuthContext] No user, setting loading=false");
+        }
       }
 
       setLoading(false);
