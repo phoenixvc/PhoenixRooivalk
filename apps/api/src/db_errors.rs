@@ -169,7 +169,9 @@ mod tests {
         }
 
         fn code(&self) -> Option<std::borrow::Cow<'_, str>> {
-            self.code.as_ref().map(|c| std::borrow::Cow::Borrowed(c.as_str()))
+            self.code
+                .as_ref()
+                .map(|c| std::borrow::Cow::Borrowed(c.as_str()))
         }
 
         fn as_error(&self) -> &(dyn std::error::Error + Send + Sync + 'static) {

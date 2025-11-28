@@ -259,9 +259,7 @@ async fn handle_paid_verification(
             // Check if this is a UNIQUE constraint violation (payment replay)
             // Uses database-agnostic helper for portable detection across backends
             let is_replay = match &e {
-                sqlx::Error::Database(db_err) => {
-                    is_unique_constraint_violation(db_err.as_ref())
-                }
+                sqlx::Error::Database(db_err) => is_unique_constraint_violation(db_err.as_ref()),
                 _ => false,
             };
 
