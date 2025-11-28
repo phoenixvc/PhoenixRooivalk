@@ -9,19 +9,21 @@
     rgba(2, 6, 23, 0.95) 0%,
     rgba(15, 23, 42, 0.95) 100%
   );
+  box-sizing: border-box;
 }
 
 .loginCard {
   width: 100%;
   max-width: 450px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(249, 115, 22, 0.3);
   border-radius: 1rem;
   padding: 3rem 2rem;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   box-shadow:
     0 20px 25px -5px rgba(0, 0, 0, 0.3),
-    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    0 10px 10px -5px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(249, 115, 22, 0.1);
 }
 
 .header {
@@ -129,19 +131,20 @@
 
 .input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  border: 1px solid rgba(249, 115, 22, 0.25);
   border-radius: 0.5rem;
   font-size: 1rem;
   color: white;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .input:focus {
   outline: none;
-  border-color: rgb(0, 255, 136);
-  box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
 .input::placeholder {
@@ -196,16 +199,98 @@
   text-decoration: underline;
 }
 
+/* Focus styles for accessibility */
+.googleButton:focus-visible,
+.submitButton:focus-visible {
+  outline: 3px solid rgb(249, 115, 22);
+  outline-offset: 2px;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid rgb(249, 115, 22);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .googleButton,
+  .submitButton,
+  .input,
+  .link {
+    transition: none;
+  }
+
+  .googleButton:hover,
+  .submitButton:hover {
+    transform: none;
+  }
+}
+
+/* Responsive styles */
 @media (max-width: 640px) {
   .container {
     padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
   }
 
   .loginCard {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.25rem;
+    border-radius: 0.75rem;
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: 1.625rem;
+  }
+
+  .subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .formContainer {
+    gap: 1.25rem;
+  }
+
+  .googleButton,
+  .submitButton {
+    padding: 0.875rem 1.25rem;
+    min-height: 48px;
+  }
+
+  .input {
+    padding: 0.875rem 1rem;
+    min-height: 48px;
+  }
+
+  .footer {
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .loginCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .googleButton span,
+  .submitButton {
+    font-size: 0.9375rem;
   }
 }
