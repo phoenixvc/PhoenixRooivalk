@@ -17,6 +17,7 @@ import { OfflineIndicator } from "../components/Offline";
 import { AIFloatingWidget } from "../components/AIChat";
 import { SidebarRecommendations } from "../components/Sidebar";
 import { ProfileConfirmation } from "../components/Auth";
+import { NavbarProgressVisibility } from "../components/Auth";
 import { OnboardingWalkthrough } from "../components/Onboarding";
 
 interface RootProps {
@@ -70,6 +71,7 @@ export default function Root({ children }: RootProps): React.ReactElement {
   return (
     <AuthProvider>
       <SilentErrorBoundary>
+        <NavbarProgressVisibility />
         <ProfileConfirmation>
           <SilentErrorBoundary>
             <ReadingTracker />

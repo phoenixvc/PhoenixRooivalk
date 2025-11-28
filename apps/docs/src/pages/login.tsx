@@ -5,8 +5,15 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "./login.module.css";
 
 export default function LoginPage(): React.ReactElement {
-  const { user, loading, signInGoogle, signInGithub, logout, isConfigured } =
-    useAuth();
+  const {
+    user,
+    loading,
+    signInGoogle,
+    signInGithub,
+    logout,
+    isConfigured,
+    missingConfig,
+  } = useAuth();
 
   const handleGoogleLogin = async () => {
     await signInGoogle();
@@ -83,8 +90,33 @@ export default function LoginPage(): React.ReactElement {
               {!isConfigured ? (
                 <div className={styles.loginWarning}>
                   <p>
-                    ⚠️ Authentication is not configured. Please set up Firebase
-                    credentials to enable sign-in functionality.
+                    <strong>⚠️ Firebase Authentication Not Configured</strong>
+                  </p>
+                  <p>
+                    The following environment variables are missing or not
+                    properly exposed to the client:
+                  </p>
+                  {missingConfig.length > 0 ? (
+                    <ul className={styles.missingConfigList}>
+                      {missingConfig.map((key) => (
+                        <li key={key}>
+                          <code>{key}</code>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>
+                      <em>
+                        Variables appear to be set but may not be exposed via{" "}
+                        <code>docusaurus.config.ts</code> customFields.
+                      </em>
+                    </p>
+                  )}
+                  <p className={styles.configHelp}>
+                    <strong>To fix:</strong> Ensure these are set in your
+                    hosting platform (Netlify, Vercel, etc.) and exposed in{" "}
+                    <code>docusaurus.config.ts</code> under{" "}
+                    <code>customFields.firebaseConfig</code>.
                   </p>
                 </div>
               ) : (

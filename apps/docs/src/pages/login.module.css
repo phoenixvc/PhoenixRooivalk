@@ -110,11 +110,47 @@
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 8px;
   color: rgb(245, 158, 11);
+  text-align: left;
 }
 
 .loginWarning p {
-  margin: 0;
+  margin: 0 0 0.75rem 0;
   font-size: 0.875rem;
+}
+
+.loginWarning p:last-child {
+  margin-bottom: 0;
+}
+
+.loginWarning strong {
+  color: rgb(251, 191, 36);
+}
+
+.loginWarning code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.missingConfigList {
+  margin: 0.5rem 0 1rem 0;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.missingConfigList li {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.configHelp {
+  font-size: 0.8125rem;
+  color: rgb(203, 213, 225);
+  border-top: 1px solid rgba(245, 158, 11, 0.2);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem !important;
 }
 
 /* Logged in state */
