@@ -188,13 +188,15 @@ proxy_set_header X-Forwarded-For $remote_addr;
 ### Database Backend Support
 
 The Phoenix Rooivalk API supports multiple database backends for flexibility
-across different deployment environments:
+across different deployment environments.
 
-| Backend    | Unique Constraint Codes | Status      |
-|------------|------------------------|-------------|
-| SQLite     | 2067, 1555, 19         | Supported   |
-| PostgreSQL | 23505                  | Supported   |
-| MySQL      | 1062                   | Supported   |
+**Supported Database Error Codes for Duplicate Key Detection**:
+
+| Backend    | Error Codes            | Description                    |
+|------------|------------------------|--------------------------------|
+| SQLite     | 2067, 1555, 19         | CONSTRAINT_UNIQUE, CONSTRAINT_PRIMARYKEY, CONSTRAINT_BASE |
+| PostgreSQL | 23505                  | unique_violation (SQLSTATE)    |
+| MySQL      | 1062                   | ER_DUP_ENTRY                   |
 
 **Database Error Handling**:
 

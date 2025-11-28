@@ -7,7 +7,7 @@
 //!
 //! | Backend    | Unique Constraint Codes | Detection Method |
 //! |------------|------------------------|------------------|
-//! | SQLite     | 2067, 1555, 19         | code() + message heuristic |
+//! | SQLite     | 2067, 1555, 19         | code() + message fallback |
 //! | PostgreSQL | 23505                  | code() |
 //! | MySQL      | 1062                   | code() |
 //!
@@ -119,7 +119,10 @@ pub fn is_unique_constraint_violation(db_err: &dyn DatabaseError) -> bool {
     }
 
     // Fallback: Check error message for unique constraint patterns
-    // This is less reliable but handles edge cases and unknown drivers
+    // This is less reliable but handles edge cases and unknown drivers.
+    // NOTE: Message-based detection assumes English error messages.
+    // Internationalized database drivers may not be detected via fallback,
+    // but code-based detection should still work for known backends.
     let message = db_err.message().to_lowercase();
     if message.contains("unique") && message.contains("constraint") {
         return true;
