@@ -1,0 +1,220 @@
+/**
+ * Print styles for PDF download and slide deck generation
+ */
+
+@media print {
+  /* Hide non-essential elements when printing */
+  .navbar,
+  .footer,
+  .pagination-nav,
+  .theme-doc-sidebar-container,
+  .theme-doc-toc-desktop,
+  .theme-doc-toc-mobile,
+  .document-download,
+  .table-of-contents,
+  .breadcrumbs,
+  .docSidebarContainer,
+  [class*="announcementBar"],
+  [class*="tableOfContents"],
+  [class*="tocCollapsible"],
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Reset body and main styles */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Main content takes full width */
+  main,
+  .main-wrapper,
+  .docMainContainer,
+  [class*="docMainContainer"],
+  article {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Article content styling */
+  article {
+    padding: 0.5in !important;
+  }
+
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    color: black !important;
+  }
+
+  h1 {
+    font-size: 24pt !important;
+    margin-bottom: 16pt !important;
+  }
+
+  h2 {
+    font-size: 18pt !important;
+    margin-top: 20pt !important;
+    margin-bottom: 12pt !important;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+    margin-top: 16pt !important;
+    margin-bottom: 8pt !important;
+  }
+
+  /* Paragraphs */
+  p {
+    orphans: 3 !important;
+    widows: 3 !important;
+    color: black !important;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+
+  th,
+  td {
+    border: 1px solid #333 !important;
+    padding: 8pt !important;
+    text-align: left !important;
+  }
+
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
+
+  /* Code blocks */
+  pre,
+  code {
+    font-size: 10pt !important;
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid !important;
+  }
+
+  pre {
+    padding: 12pt !important;
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+
+  /* Links - show URL */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+  }
+
+  a[href^="#"]:after {
+    content: none;
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    page-break-inside: avoid !important;
+  }
+
+  li {
+    page-break-inside: avoid !important;
+  }
+
+  /* Blockquotes - for scripts */
+  blockquote {
+    border-left: 3pt solid #333 !important;
+    padding-left: 12pt !important;
+    margin: 12pt 0 !important;
+    font-style: italic !important;
+    background: #f9f9f9 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Page breaks */
+  .page-break,
+  .print\\:break-before-page {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .print\\:break-after-page {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  /* Slide deck specific styles */
+  .slidedeck-print-content {
+    padding: 0 !important;
+  }
+
+  .slide-page {
+    page-break-after: always !important;
+    break-after: page !important;
+    padding: 0.5in !important;
+    min-height: calc(11in - 1in) !important;
+  }
+
+  .slide-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* Modal styling for print */
+  body.printing-slidedeck .fixed {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  body.printing-slidedeck .slidedeck-print-content {
+    box-shadow: none !important;
+  }
+
+  /* Dark mode reset for print */
+  .dark {
+    background: white !important;
+    color: black !important;
+  }
+
+  [class*="dark:"] {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Screen styles for print preview */
+@media screen {
+  .slide-page {
+    background: white;
+    min-height: auto;
+    border-radius: 8px;
+  }
+
+  .slidedeck-print-content {
+    background: white;
+  }
+}
