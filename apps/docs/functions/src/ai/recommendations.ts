@@ -30,9 +30,8 @@ export const getReadingRecommendations = functions.https.onCall(
       );
     }
 
-    const { currentDocId } = data;
+    const { currentDocId } = (data ?? {}) as RecommendationRequest;
     const userId = context.auth.uid;
-
     // Get user's reading history
     const progressDoc = await db.collection("userProgress").doc(userId).get();
     const progress = progressDoc.data();
