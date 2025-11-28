@@ -3,10 +3,11 @@
 use serde::{Deserialize, Serialize};
 
 /// Supported price tiers for evidence verification
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PriceTier {
     /// Basic single-chain verification ($0.01 USDC)
+    #[default]
     Basic,
     /// Multi-chain verification across Solana + EtherLink ($0.05 USDC)
     MultiChain,
@@ -38,11 +39,7 @@ impl PriceTier {
     }
 }
 
-impl Default for PriceTier {
-    fn default() -> Self {
-        PriceTier::Basic
-    }
-}
+
 
 /// Payment details returned in a 402 response
 #[derive(Debug, Clone, Serialize, Deserialize)]
