@@ -200,18 +200,27 @@ export async function tracedRAGQuery(userId: string, question: string) {
 
 ### Agent Tracing
 
-// langchain/observability/traced-agents.ts import { AgentExecutor } from
-"langchain/agents"; import { getTracedConfig } from "./traced-chains"; import {
-logger } from "firebase-functions";
+```typescript
+// langchain/observability/traced-agents.ts
+import { AgentExecutor } from "langchain/agents";
+import { getTracedConfig } from "./traced-chains";
+import { logger } from "firebase-functions";
 
-export async function tracedAgentExecution( agent: AgentExecutor, userId:
-string, input: string, agentType: string ) { const config =
-getTracedConfig(userId, `agent-${agentType}`, { inputLength: input.length,
-agentType, });
+export async function tracedAgentExecution(
+  agent: AgentExecutor,
+  userId: string,
+  input: string,
+  agentType: string
+) {
+  const config = getTracedConfig(userId, `agent-${agentType}`, {
+    inputLength: input.length,
+    agentType,
+  });
 
-const startTime = Date.now();
+  const startTime = Date.now();
 
-try { const result = await agent.invoke({ input }, config);
+  try {
+    const result = await agent.invoke({ input }, config);
 
     // Log summary
     logger.info("Agent execution completed", {
@@ -223,13 +232,18 @@ try { const result = await agent.invoke({ input }, config);
     });
 
     return result;
-
-} catch (error) { logger.error("Agent execution failed", { userId, agentType,
-durationMs: Date.now() - startTime, error: (error as Error).message, });
+  } catch (error) {
+    logger.error("Agent execution failed", {
+      userId,
+      agentType,
+      durationMs: Date.now() - startTime,
+      error: (error as Error).message,
+    });
 
     throw error;
-
-} }
+  }
+}
+```
 
 ---
 

@@ -55,12 +55,17 @@ export const generateSWOT = functions.https.onCall(
       );
     }
 
-    const { topic, context: additionalContext } = data;
+    // Safe destructuring with fallback to prevent null/undefined errors
+    const { topic, context: additionalContext } = (data ?? {}) as {
+      topic?: unknown;
+      context?: string;
+    };
 
-    if (!topic) {
+    // Validate topic is a non-empty string
+    if (typeof topic !== "string" || topic.trim().length === 0) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Topic is required for SWOT analysis",
+        "Topic must be a non-empty string for SWOT analysis",
       );
     }
 

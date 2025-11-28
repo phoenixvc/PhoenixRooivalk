@@ -463,7 +463,7 @@ recommendations, and document improvement.
 firebase functions:config:set openai.key="sk-your-openai-api-key"
 ```
 
-2. **Deploy Functions**
+1. **Deploy Functions**
 
 ```bash
 cd apps/docs/functions
@@ -733,7 +733,7 @@ Firestore analytics.
    - Set up a Web data stream
    - Copy Measurement ID (G-XXXXXXXXXX)
 
-2. **Add Environment Variable**
+1. **Add Environment Variable**
 
 Add to your environment:
 
@@ -741,7 +741,7 @@ Add to your environment:
 FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
-3. **Automatic Integration**
+1. **Automatic Integration**
 
 GA4 tracking is automatically enabled when the measurement ID is configured. The
 analytics service (`src/services/analytics.ts`) automatically tracks:

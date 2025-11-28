@@ -18,8 +18,7 @@ prerequisites:
 
 # ADR 0022: AI Workflows
 
-**Date**: 2025-11-27 **Status**: Proposed (LangChain Runnables with State
-Management)
+**Date**: 2025-11-27 **Status**: Proposed — Rejected (Defer to Cognitive Mesh)
 
 ---
 
@@ -27,10 +26,15 @@ Management)
 
 1. **Problem**: Complex analysis tasks require multi-step orchestration with
    intermediate results, branching logic, and error recovery
-2. **Decision**: Implement LangChain RunnableSequence workflows with Firestore
-   state persistence
-3. **Trade-off**: Orchestration complexity vs. powerful multi-step analysis
-   capabilities
+2. **Decision**: After evaluation, LangChain RunnableSequence with Firestore
+   state was **not chosen**. Cognitive Mesh's Business Applications Layer
+   provides superior workflow orchestration with governance and compliance.
+3. **Trade-off**: Workflow engine complexity exceeds docs site needs; Cognitive
+   Mesh already has this designed
+
+**Rejected Option**: LangChain/Firestore workflow approach was evaluated but
+rejected in favor of Cognitive Mesh. See Implementation Recommendation section
+for rationale.
 
 ---
 
