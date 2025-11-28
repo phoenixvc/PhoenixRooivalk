@@ -659,13 +659,13 @@ export const getSavedArticles = functions.https.onCall(
       }
 
       // Fetch saved articles
-      const articles: NewsArticle[] = [];
-      for (const id of savedIds.slice(0, 50)) {
-        const doc = await db.collection(COLLECTIONS.NEWS).doc(id).get();
-        if (doc.exists) {
-          articles.push({ id: doc.id, ...doc.data() } as NewsArticle);
-        }
-      }
+      const docRefs = savedIds
+        .slice(0, 50)
+        .map((id) => db.collection(COLLECTIONS.NEWS).doc(id));
+      const docs = await db.getAll(...docRefs);
+      const articles: NewsArticle[] = docs
+        .filter((doc) => doc.exists)
+        .map((doc) => ({ id: doc.id, ...doc.data() } as NewsArticle));
 
       return { articles };
     } catch (error) {
