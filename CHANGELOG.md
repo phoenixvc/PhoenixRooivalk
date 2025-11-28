@@ -6,7 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Unreleased] - November 14-28, 2025
+## [Unreleased] - Week 48 (Nov 25 - Dec 1, 2025)
+
+### Documentation Platform
+
+#### PDF Download & Slide Deck Components
+- **feat(docs)**: Add PDF download and slide deck generation for progress reports ([#214](https://github.com/JustAGhosT/PhoenixRooivalk/pull/214))
+- **feat(docs)**: Add inline SlideDeck and SlideSection components with integrated download button
+- **feat(docs)**: Add print-to-PDF functionality with title page and print styles
+- **fix(docs)**: Register SlideDeck components in MDXComponents for MDX support ([#216](https://github.com/JustAGhosT/PhoenixRooivalk/pull/216))
+- **fix(docs)**: Fix download components to use CSS modules instead of Tailwind
+
+#### Week 48 Progress Report
+- **docs**: Add x402 Revenue Model as slide 6 in investor presentation ([#217](https://github.com/JustAGhosT/PhoenixRooivalk/pull/217))
+- **docs**: Expand x402 slide with concrete market examples (insurance, legal, regulatory)
+- **docs**: Add x402/Solana discussion point for investor meeting
+
+#### Layout & UI Improvements
+- **style(docs)**: Compact TOC sidebar and center content ([#218](https://github.com/JustAGhosT/PhoenixRooivalk/pull/218))
+- **feat(docs)**: Improve homepage design and add auth debugging ([#219](https://github.com/JustAGhosT/PhoenixRooivalk/pull/219))
+- **fix(docs)**: Remove duplicate header on documentation home page
+- **fix(docs)**: Remove invalid colorMode navbar item and move GitHub to footer
+- **refactor(docs)**: Move GitHub to footer and add social links
+
+#### Build & Infrastructure
+- **fix(docs)**: Use pnpm instead of npm in netlify.toml
+- **chore**: Clean up root directory docs (delete obsolete pitch deck files, move DEPLOYMENT.md)
+
+---
+
+## [Previous] - November 14-24, 2025
 
 This release includes major feature additions across AI/RAG integration, x402 payment protocol, documentation platform improvements, and infrastructure enhancements.
 
