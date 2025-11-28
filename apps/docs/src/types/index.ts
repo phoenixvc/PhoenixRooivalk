@@ -15,9 +15,7 @@ export type {
   NewsRelevance,
   UserNewsPreferences,
   NewsCategory,
-  NewsFeedResult,
-  SearchNewsParams,
-  SearchNewsResult,
-  SavedArticlesResult,
+  NewsFeedResponse,
+  NewsSearchParams,
 } from "./news";
 export { NEWS_CATEGORY_CONFIG } from "./news";

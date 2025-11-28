@@ -627,5 +627,5 @@ Immediate next steps include:
 ---
 
 _This technical whitepaper contains confidential technical specifications and
-business information. Distribution is restricted to authorized personnel only. ©
-2025 Nexamesh Technologies. All rights reserved._
+business information. Distribution is restricted to authorized personnel only.
+© 2025 Nexamesh Technologies. All rights reserved._

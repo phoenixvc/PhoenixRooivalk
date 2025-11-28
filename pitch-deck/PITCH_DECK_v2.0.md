@@ -100,8 +100,8 @@ defense technology.
 ### Strategic Vision
 
 **Prove reliability and safety at consumer scale (SkySnare™), then apply that
-track record to high-value enterprise markets (AeroNet™) that demand compliance,
-automation, and measurable risk reduction.**
+track record to high-value enterprise markets (AeroNet™) that demand
+compliance, automation, and measurable risk reduction.**
 
 ### SkySnare™ Consumer
 

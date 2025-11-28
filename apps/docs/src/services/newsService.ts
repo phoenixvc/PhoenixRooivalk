@@ -334,7 +334,12 @@ class NewsService {
     totalSaves: number;
     uniqueReaders: number;
     avgReadTime: number;
-    topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
+    topArticles: Array<{
+      id: string;
+      title: string;
+      views: number;
+      saves: number;
+    }>;
     engagementByCategory: Record<string, { views: number; saves: number }>;
     dailyViews: Array<{ date: string; views: number }>;
   }> {
@@ -350,8 +355,16 @@ class NewsService {
           totalSaves: number;
           uniqueReaders: number;
           avgReadTime: number;
-          topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
-          engagementByCategory: Record<string, { views: number; saves: number }>;
+          topArticles: Array<{
+            id: string;
+            title: string;
+            views: number;
+            saves: number;
+          }>;
+          engagementByCategory: Record<
+            string,
+            { views: number; saves: number }
+          >;
           dailyViews: Array<{ date: string; views: number }>;
         }
       >(this.functions!, "getNewsAnalytics");

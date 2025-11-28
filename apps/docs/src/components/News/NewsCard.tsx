@@ -112,7 +112,9 @@ export function NewsCard({
 
         <div className="news-card-footer">
           <span className="news-card-source">{article.source}</span>
-          <span className="news-card-date">{formatDate(article.publishedAt)}</span>
+          <span className="news-card-date">
+            {formatDate(article.publishedAt)}
+          </span>
           <button
             className={`news-card-save-btn ${isSaved ? "saved" : ""}`}
             onClick={handleSave}
@@ -188,7 +190,9 @@ export function NewsCard({
       <div className="news-card-full-meta">
         <span className="news-card-source">{article.source}</span>
         <span className="news-card-separator">•</span>
-        <span className="news-card-date">{formatDate(article.publishedAt)}</span>
+        <span className="news-card-date">
+          {formatDate(article.publishedAt)}
+        </span>
         <span className="news-card-separator">•</span>
         <span className="news-card-views">{article.viewCount} views</span>
       </div>
@@ -201,7 +205,9 @@ export function NewsCard({
             </span>
             <span className="score-label">relevance</span>
           </div>
-          <p className="news-card-relevance-reason">{article.relevance.reason}</p>
+          <p className="news-card-relevance-reason">
+            {article.relevance.reason}
+          </p>
           {article.relevance.matchedInterests.length > 0 && (
             <div className="news-card-matched">
               <strong>Matched interests:</strong>{" "}

@@ -34,9 +34,9 @@ export function NewsPanel({
 
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [generalNews, setGeneralNews] = useState<NewsArticle[]>([]);
-  const [specializedNews, setSpecializedNews] = useState<PersonalizedNewsItem[]>(
-    [],
-  );
+  const [specializedNews, setSpecializedNews] = useState<
+    PersonalizedNewsItem[]
+  >([]);
   const [savedArticles, setSavedArticles] = useState<NewsArticle[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<NewsCategory[]>(
     [],
@@ -279,25 +279,31 @@ export function NewsPanel({
 
       {error && <div className="news-panel-error">{error}</div>}
 
-      {isLoading && generalNews.length === 0 && specializedNews.length === 0 && (
-        <div className="news-skeleton-grid" aria-label="Loading news..." role="status">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="news-skeleton-card">
-              <div className="news-skeleton-image" />
-              <div className="news-skeleton-title" />
-              <div className="news-skeleton-summary">
-                <div className="news-skeleton-line" />
-                <div className="news-skeleton-line" />
-                <div className="news-skeleton-line" />
+      {isLoading &&
+        generalNews.length === 0 &&
+        specializedNews.length === 0 && (
+          <div
+            className="news-skeleton-grid"
+            aria-label="Loading news..."
+            role="status"
+          >
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="news-skeleton-card">
+                <div className="news-skeleton-image" />
+                <div className="news-skeleton-title" />
+                <div className="news-skeleton-summary">
+                  <div className="news-skeleton-line" />
+                  <div className="news-skeleton-line" />
+                  <div className="news-skeleton-line" />
+                </div>
+                <div className="news-skeleton-meta">
+                  <div className="news-skeleton-badge" />
+                  <div className="news-skeleton-date" />
+                </div>
               </div>
-              <div className="news-skeleton-meta">
-                <div className="news-skeleton-badge" />
-                <div className="news-skeleton-date" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
       <div className="news-panel-content">
         {activeTab === "feed" && (
@@ -414,7 +420,10 @@ export function NewsPanel({
               </div>
             ) : (
               <div className="news-empty">
-                <p>No saved articles yet. Click the star on any article to save it.</p>
+                <p>
+                  No saved articles yet. Click the star on any article to save
+                  it.
+                </p>
               </div>
             )}
           </section>

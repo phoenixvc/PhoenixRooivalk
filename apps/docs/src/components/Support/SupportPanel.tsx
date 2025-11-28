@@ -99,9 +99,9 @@ export function SupportPanel({
     category: "general",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">(
-    "idle",
-  );
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const categories = [
     "all",
@@ -184,7 +184,9 @@ export function SupportPanel({
               className={`faq-filter-btn ${selectedCategory === category ? "active" : ""}`}
               onClick={() => setSelectedCategory(category)}
             >
-              {category === "all" ? "All" : category.charAt(0).toUpperCase() + category.slice(1)}
+              {category === "all"
+                ? "All"
+                : category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
           ))}
         </div>

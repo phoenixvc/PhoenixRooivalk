@@ -18,7 +18,11 @@ import {
   reviewComment,
 } from "../../services/commentService";
 import { isFirebaseConfigured } from "../../services/firebase";
-import type { Comment, CommentStats, CommentStatus } from "../../types/comments";
+import type {
+  Comment,
+  CommentStats,
+  CommentStatus,
+} from "../../types/comments";
 import { COMMENT_CATEGORIES, COMMENT_STATUSES } from "../../types/comments";
 import styles from "./comments.module.css";
 
@@ -89,13 +93,13 @@ export default function CommentsAdminDashboard(): React.ReactElement {
           selectedComment.id,
           user.uid,
           user.email || "",
-          { status, notes: reviewNotes }
+          { status, notes: reviewNotes },
         );
 
         if (success) {
           // Remove from pending list
           setPendingComments((prev) =>
-            prev.filter((c) => c.id !== selectedComment.id)
+            prev.filter((c) => c.id !== selectedComment.id),
           );
           setSelectedComment(null);
           setReviewNotes("");
@@ -106,7 +110,7 @@ export default function CommentsAdminDashboard(): React.ReactElement {
         setIsReviewing(false);
       }
     },
-    [selectedComment, user, reviewNotes]
+    [selectedComment, user, reviewNotes],
   );
 
   // Format date
@@ -252,7 +256,9 @@ export default function CommentsAdminDashboard(): React.ReactElement {
 
                         {comment.aiEnhancement && (
                           <div className={styles.aiEnhancementPreview}>
-                            <span className={styles.aiLabel}>{"\u2728"} AI-Enhanced:</span>
+                            <span className={styles.aiLabel}>
+                              {"\u2728"} AI-Enhanced:
+                            </span>
                             <p>{comment.aiEnhancement.enhancedContent}</p>
                           </div>
                         )}
@@ -298,7 +304,9 @@ export default function CommentsAdminDashboard(): React.ReactElement {
                             <a href={comment.pageUrl}>{comment.pageTitle}</a>
                           </td>
                           <td>
-                            <span className={`${styles.badge} ${styles.badgeCategory}`}>
+                            <span
+                              className={`${styles.badge} ${styles.badgeCategory}`}
+                            >
                               {COMMENT_CATEGORIES[comment.category].label}
                             </span>
                           </td>
@@ -328,7 +336,9 @@ export default function CommentsAdminDashboard(): React.ReactElement {
                     <div className={styles.statLabel}>Total Comments</div>
                   </div>
                   <div className={styles.statCard}>
-                    <div className={styles.statValue}>{stats.pendingReview}</div>
+                    <div className={styles.statValue}>
+                      {stats.pendingReview}
+                    </div>
                     <div className={styles.statLabel}>Pending Review</div>
                   </div>
                   <div className={styles.statCard}>
@@ -343,7 +353,11 @@ export default function CommentsAdminDashboard(): React.ReactElement {
                   <div className={styles.statsBreakdown}>
                     {Object.entries(stats.byCategory).map(([cat, count]) => (
                       <div key={cat} className={styles.breakdownItem}>
-                        <span>{COMMENT_CATEGORIES[cat as keyof typeof COMMENT_CATEGORIES]?.label || cat}</span>
+                        <span>
+                          {COMMENT_CATEGORIES[
+                            cat as keyof typeof COMMENT_CATEGORIES
+                          ]?.label || cat}
+                        </span>
                         <span className={styles.breakdownValue}>{count}</span>
                       </div>
                     ))}
@@ -356,7 +370,11 @@ export default function CommentsAdminDashboard(): React.ReactElement {
                   <div className={styles.statsBreakdown}>
                     {Object.entries(stats.byStatus).map(([status, count]) => (
                       <div key={status} className={styles.breakdownItem}>
-                        <span>{COMMENT_STATUSES[status as keyof typeof COMMENT_STATUSES]?.label || status}</span>
+                        <span>
+                          {COMMENT_STATUSES[
+                            status as keyof typeof COMMENT_STATUSES
+                          ]?.label || status}
+                        </span>
                         <span className={styles.breakdownValue}>{count}</span>
                       </div>
                     ))}
@@ -369,7 +387,10 @@ export default function CommentsAdminDashboard(): React.ReactElement {
 
         {/* Review Modal */}
         {selectedComment && (
-          <div className={styles.modalOverlay} onClick={() => setSelectedComment(null)}>
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setSelectedComment(null)}
+          >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
               <h2>Review Comment</h2>
 
