@@ -603,8 +603,8 @@ export default function Home(): React.ReactElement {
         {/* Info footer (keeps Docusaurus site footer separate) */}
         <div className="footer">
           <p>
-            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant | ISO
-            27001 Certified
+            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant |
+            ISO 27001 Certified
           </p>
         </div>
       </main>

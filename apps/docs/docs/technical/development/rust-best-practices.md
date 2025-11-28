@@ -814,5 +814,5 @@ Key principles:
 
 ---
 
-_This document is part of the Phoenix Rooivalk development documentation. © 2025
-Phoenix Rooivalk. All rights reserved._
+_This document is part of the Phoenix Rooivalk development documentation. ©
+2025 Phoenix Rooivalk. All rights reserved._

@@ -4,18 +4,26 @@
  * Wraps document content with ProtectedContent component to enforce
  * authentication and show teaser mode for non-authenticated users.
  * ErrorBoundary ensures auth issues don't crash the documentation.
+ * Also adds a CommentSection at the bottom of each doc page.
  */
 
 import React from "react";
 import Content from "@theme-original/DocItem/Content";
 import type ContentType from "@theme/DocItem/Content";
 import type { WrapperProps } from "@docusaurus/types";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { ProtectedContent } from "../../../components/Auth";
 import { ErrorBoundary } from "../../../components/ErrorBoundary";
+import { CommentSection } from "../../../components/Comments";
 
 type Props = WrapperProps<typeof ContentType>;
 
 export default function ContentWrapper(props: Props): React.ReactElement {
+  // Get document metadata for comments
+  const { metadata } = useDoc();
+  const pageId = metadata.id || metadata.slug || "";
+  const pageTitle = metadata.title || "";
+
   return (
     <ErrorBoundary
       fallback={
@@ -27,6 +35,18 @@ export default function ContentWrapper(props: Props): React.ReactElement {
     >
       <ProtectedContent>
         <Content {...props} />
+        {/* Comments Section */}
+        <ErrorBoundary
+          fallback={
+            <div
+              style={{ padding: "1rem", textAlign: "center", color: "#666" }}
+            >
+              <p>Comments are temporarily unavailable.</p>
+            </div>
+          }
+        >
+          <CommentSection pageId={pageId} pageTitle={pageTitle} />
+        </ErrorBoundary>
       </ProtectedContent>
     </ErrorBoundary>
   );
