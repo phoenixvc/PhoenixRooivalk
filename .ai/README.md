@@ -27,3 +27,13 @@ When updating these files:
 2. Include relevant project structure information
 3. Document coding standards and conventions
 4. Update when project architecture changes significantly
+
+## Architecture Decision Records (ADRs)
+
+All AI assistants are instructed to reference the ADR template when creating or restructuring ADRs:
+
+```
+apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
+```
+
+This ensures consistent ADR structure across all contributors (human and AI).
