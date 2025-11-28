@@ -18,6 +18,7 @@ use phoenix_x402::{
     PriceTier, VerifyEvidenceRequest, VerifyEvidenceResponse, X402Config, X402Facilitator,
 };
 use serde_json::json;
+use sha2::{Digest, Sha256};
 
 /// State extension for x402 configuration
 #[derive(Clone)]
@@ -237,6 +238,30 @@ async fn perform_premium_verification(
     req: VerifyEvidenceRequest,
     payment: PaymentVerification,
 ) -> Response {
+    // Check if legal attestation is enabled (gated behind feature flag)
+    // Until proper HSM/cryptographic signing is implemented, legal attestation
+    // is only available in preview mode with explicit warning
+    let legal_attestation_enabled =
+        std::env::var("X402_LEGAL_ATTESTATION_ENABLED").unwrap_or_default() == "true";
+
+    if req.tier == PriceTier::LegalAttestation && !legal_attestation_enabled {
+        return (
+            StatusCode::SERVICE_UNAVAILABLE,
+            Json(json!({
+                "error": "Legal attestation tier is not yet available",
+                "message": "Court-admissible legal attestation requires HSM-backed cryptographic signing infrastructure which is currently in development.",
+                "available_tiers": ["basic", "multi_chain", "bulk"],
+                "payment": {
+                    "verified": true,
+                    "tx_signature": payment.tx_signature,
+                    "refund_eligible": true,
+                    "hint": "Payment will be refunded. Please retry with a different tier."
+                }
+            })),
+        )
+            .into_response();
+    }
+
     // Get evidence from database
     let evidence = match get_evidence_by_id(&state.pool, &req.evidence_id).await {
         Ok(Some(e)) => e,
@@ -270,11 +295,23 @@ async fn perform_premium_verification(
     // Build chain confirmations based on tier
     let chain_confirmations = build_chain_confirmations(&evidence, &req);
 
-    // Build attestation for legal tier
-    let attestation = if req.tier == PriceTier::LegalAttestation {
+    // Build attestation for legal tier (only when explicitly enabled in preview mode)
+    let attestation = if req.tier == PriceTier::LegalAttestation && legal_attestation_enabled {
+        // In preview mode, generate a placeholder attestation with clear warning
+        // TODO: Replace with HSM-backed Ed25519 or ECDSA signature when available
+        let attestation_data = format!(
+            "{}:{}:{}",
+            evidence.id,
+            evidence.digest_hex,
+            chrono::Utc::now().timestamp()
+        );
+        let mut hasher = Sha256::new();
+        hasher.update(attestation_data.as_bytes());
+        let preview_signature = format!("PREVIEW:sha256:{}", hex::encode(hasher.finalize()));
+
         Some(phoenix_x402::AttestationInfo {
-            signed_by: "PhoenixRooivalk Evidence Authority".to_string(),
-            signature: format!("sig:{}", evidence.id),
+            signed_by: "PhoenixRooivalk Evidence Authority (PREVIEW MODE)".to_string(),
+            signature: preview_signature,
             valid_until: (chrono::Utc::now() + chrono::Duration::days(365)).to_rfc3339(),
         })
     } else {
@@ -287,7 +324,7 @@ async fn perform_premium_verification(
         chain_confirmations,
         digest: phoenix_x402::EvidenceDigestInfo {
             algo: "sha256".to_string(),
-            hex: "pending".to_string(), // Would come from actual evidence data
+            hex: evidence.digest_hex.clone(),
         },
         attestation,
     };

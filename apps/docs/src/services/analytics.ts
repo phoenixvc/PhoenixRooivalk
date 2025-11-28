@@ -20,7 +20,6 @@ import {
   setDoc,
   increment,
   serverTimestamp,
-  Timestamp,
 } from "firebase/firestore";
 import { logEvent, Analytics } from "firebase/analytics";
 import {
@@ -189,7 +188,7 @@ class AnalyticsService {
     if (this.ga4 && this.hasConsent()) {
       try {
         logEvent(this.ga4, eventName, params);
-      } catch (error) {
+      } catch {
         // Silently fail - GA4 is supplementary
       }
     }

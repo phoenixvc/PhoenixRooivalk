@@ -55,7 +55,8 @@ export function checkRateLimit(
 /**
  * Throttle function - ensures function is called at most once per interval.
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle<T extends (...args: any[]) => any>(
   fn: T,
   intervalMs: number,
 ): (...args: Parameters<T>) => ReturnType<T> | undefined {
@@ -74,7 +75,8 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 /**
  * Debounce function - delays execution until after a pause in calls.
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delayMs: number,
 ): (...args: Parameters<T>) => void {

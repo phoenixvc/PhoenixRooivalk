@@ -28,7 +28,7 @@ pub async fn get_evidence_by_id(
     id: &str,
 ) -> Result<Option<EvidenceOut>, sqlx::Error> {
     let row = sqlx::query(
-        "SELECT id, status, attempts, last_error, created_ms, updated_ms FROM outbox_jobs WHERE id=?1"
+        "SELECT id, payload_sha256, status, attempts, last_error, created_ms, updated_ms FROM outbox_jobs WHERE id=?1"
     )
     .bind(id)
     .fetch_optional(pool)
@@ -36,11 +36,12 @@ pub async fn get_evidence_by_id(
 
     Ok(row.map(|row| EvidenceOut {
         id: row.get::<String, _>(0),
-        status: row.get::<String, _>(1),
-        attempts: row.get::<i64, _>(2),
-        last_error: row.get::<Option<String>, _>(3),
-        created_ms: row.get::<i64, _>(4),
-        updated_ms: row.get::<i64, _>(5),
+        digest_hex: row.get::<String, _>(1),
+        status: row.get::<String, _>(2),
+        attempts: row.get::<i64, _>(3),
+        last_error: row.get::<Option<String>, _>(4),
+        created_ms: row.get::<i64, _>(5),
+        updated_ms: row.get::<i64, _>(6),
     }))
 }
 
@@ -57,7 +58,7 @@ pub async fn list_evidence_jobs(
 
     // Then, get the paginated list of jobs
     let rows = sqlx::query(
-        "SELECT id, status, attempts, last_error, created_ms, updated_ms FROM outbox_jobs ORDER BY created_ms DESC LIMIT ?1 OFFSET ?2"
+        "SELECT id, payload_sha256, status, attempts, last_error, created_ms, updated_ms FROM outbox_jobs ORDER BY created_ms DESC LIMIT ?1 OFFSET ?2"
     )
     .bind(limit)
     .bind(offset)
@@ -68,11 +69,12 @@ pub async fn list_evidence_jobs(
         .into_iter()
         .map(|row| EvidenceOut {
             id: row.get::<String, _>(0),
-            status: row.get::<String, _>(1),
-            attempts: row.get::<i64, _>(2),
-            last_error: row.get::<Option<String>, _>(3),
-            created_ms: row.get::<i64, _>(4),
-            updated_ms: row.get::<i64, _>(5),
+            digest_hex: row.get::<String, _>(1),
+            status: row.get::<String, _>(2),
+            attempts: row.get::<i64, _>(3),
+            last_error: row.get::<Option<String>, _>(4),
+            created_ms: row.get::<i64, _>(5),
+            updated_ms: row.get::<i64, _>(6),
         })
         .collect();
 

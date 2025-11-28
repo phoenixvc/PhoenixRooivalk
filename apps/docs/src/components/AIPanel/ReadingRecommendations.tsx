@@ -34,7 +34,7 @@ export function ReadingRecommendations({
   showHeading = true,
   autoRefresh = 0,
 }: ReadingRecommendationsProps): React.ReactElement | null {
-  const { user, userProgress } = useAuth();
+  const { user, progress: userProgress } = useAuth();
   const [recommendations, setRecommendations] = useState<
     ReadingRecommendation[]
   >([]);

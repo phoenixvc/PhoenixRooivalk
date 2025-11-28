@@ -6,7 +6,7 @@
  * - cleanupInactiveSessions: Removes sessions with no activity
  * - aggregateDailyStats: Aggregates and archives old daily stats
  *
- * AI Functions (from ./ai.ts):
+ * AI Functions (from ./ai/ module - uses AI Foundry with OpenAI fallback):
  * - analyzeCompetitors: Competitor research and analysis
  * - generateSWOT: SWOT analysis generation
  * - getReadingRecommendations: AI-powered reading suggestions
@@ -15,6 +15,7 @@
  * - summarizeContent: Content summarization
  * - reviewDocumentImprovement: Admin review of suggestions
  * - getPendingImprovements: Get pending suggestions (admin)
+ * - researchPerson: Generate fun facts about a user from LinkedIn
  *
  * RAG Functions (from ./rag/):
  * - indexAllDocumentation: Index all documentation for RAG
@@ -29,7 +30,7 @@
  * - vectorSearchDocs: Optimized vector similarity search
  * - getVectorStats: Get vector search statistics
  *
- * Azure AI Search Functions (from ./azure-search.ts):
+ * Azure AI Search Functions (from ./azure-search/ module):
  * - azureSearchDocs: Azure AI Search with hybrid search
  * - setupAzureIndex: Create/update Azure Search index (admin)
  * - getAzureStats: Get Azure Search index statistics
@@ -60,6 +61,7 @@ export {
   summarizeContent,
   reviewDocumentImprovement,
   getPendingImprovements,
+  researchPerson,
 } from "./ai";
 
 // Export RAG functions

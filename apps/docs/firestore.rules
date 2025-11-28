@@ -5,6 +5,7 @@ rules_version = '2';
  *
  * Collections:
  * - userProgress: User's reading progress and achievements (user-owned)
+ * - userProfiles: User profile data with roles and settings (user-owned)
  * - analytics_pageviews: Page view events (write-only, admin-read)
  * - analytics_timeonpage: Time on page events (write-only, admin-read)
  * - analytics_conversions: Conversion funnel events (write-only, admin-read)
@@ -54,6 +55,34 @@ service cloud.firestore {
     match /userProgress/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
       allow read: if isAdmin(); // Admins can read all progress for support
+    }
+
+    // User profiles - users can only read/write their own profile
+    // Validates required fields and restricts access to own profile only
+    match /userProfiles/{userId} {
+      // Only allow authenticated users to read/write their own profile
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow read: if isAdmin(); // Admins can read profiles for support
+      
+      // Write rules with field validation for minimal PII exposure
+      allow create: if request.auth != null && 
+        request.auth.uid == userId &&
+        request.resource.data.keys().hasAll(['firstName', 'lastName', 'profileKey', 'roles']) &&
+        request.resource.data.firstName is string &&
+        request.resource.data.lastName is string &&
+        request.resource.data.profileKey is string &&
+        request.resource.data.roles is list &&
+        // Ensure timestamp fields are set by server, not user
+        (!request.resource.data.keys().hasAny(['createdAt', 'updatedAt']) ||
+         (request.resource.data.createdAt == request.time && 
+          request.resource.data.updatedAt == request.time));
+      
+      allow update: if request.auth != null && 
+        request.auth.uid == userId &&
+        request.resource.data.firstName is string &&
+        request.resource.data.lastName is string;
+      
+      allow delete: if false; // Profiles should not be deleted, only deactivated
     }
 
     // Analytics collections - anyone can write (for tracking), only admins can read

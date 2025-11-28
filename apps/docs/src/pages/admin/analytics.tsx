@@ -18,8 +18,6 @@ import {
   orderBy,
   limit,
   getDocs,
-  where,
-  Timestamp,
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "../../services/firebase";
 import styles from "./analytics.module.css";

@@ -17,6 +17,7 @@ pub struct EvidenceIn {
 #[derive(Debug, Serialize)]
 pub struct EvidenceOut {
     pub id: String,
+    pub digest_hex: String,
     pub status: String,
     pub attempts: i64,
     pub last_error: Option<String>,

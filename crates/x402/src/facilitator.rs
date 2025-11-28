@@ -63,7 +63,7 @@ impl X402Facilitator {
 
         let response = self
             .client
-            .post(&format!("{}/verify", self.config.facilitator_url))
+            .post(format!("{}/verify", self.config.facilitator_url))
             .json(&request)
             .send()
             .await
