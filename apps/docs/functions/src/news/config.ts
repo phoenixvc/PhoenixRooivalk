@@ -218,6 +218,11 @@ export const ROLE_INTERESTS_MAP: Record<string, string[]> = {
 /**
  * Get search queries for a specific role
  */
+/**
+ * Get search queries for a specific role
+ * @param role - User role to get queries for
+ * @returns Array of deduplicated search queries relevant to the role
+ */
 export function getQueriesForRole(role: string): string[] {
   const interests = ROLE_INTERESTS_MAP[role] || [];
   const queries: string[] = [];

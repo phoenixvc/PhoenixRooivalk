@@ -726,6 +726,12 @@ export const searchNews = functions.https.onCall(
         .limit(100);
 
       if (categories && categories.length > 0) {
+        if (categories.length > 10) {
+          throw new functions.https.HttpsError(
+            "invalid-argument",
+            "Cannot filter by more than 10 categories at once",
+          );
+        }
         articlesQuery = articlesQuery.where("category", "in", categories);
       }
 
