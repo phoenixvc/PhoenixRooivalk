@@ -6,6 +6,7 @@ use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 
 pub mod connection;
 pub mod db;
+pub mod db_errors;
 pub mod handlers;
 pub mod handlers_x402;
 pub mod migrations;
