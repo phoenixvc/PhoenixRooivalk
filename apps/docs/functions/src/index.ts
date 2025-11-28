@@ -121,7 +121,16 @@ export {
   triggerNewsIngestion,
   generateAINewsDigest,
   importNewsArticles,
+  // Analytics functions
+  getNewsAnalytics,
   getNewsIngestionStats,
+  // Notification functions
+  subscribeToBreakingNews,
+  unsubscribeFromBreakingNews,
+  getNotificationSubscription,
+  onBreakingNewsCreated,
+  processEmailQueue,
+  markAsBreakingNews,
 } from "./news";
 
 import * as functions from "firebase-functions";

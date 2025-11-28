@@ -232,6 +232,182 @@ class NewsService {
       this.handleError(error);
     }
   }
+
+  // ========== Admin Functions ==========
+
+  /**
+   * Get news ingestion statistics (admin only)
+   */
+  async getIngestionStats(): Promise<{
+    totalArticles: number;
+    lastIngestionTime: Date | null;
+    articlesByCategory: Record<string, number>;
+    articlesLast24h: number;
+    articlesLast7d: number;
+  }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const getStatsFn = httpsCallable<
+        Record<string, never>,
+        {
+          totalArticles: number;
+          lastIngestionTime: string | null;
+          articlesByCategory: Record<string, number>;
+          articlesLast24h: number;
+          articlesLast7d: number;
+        }
+      >(this.functions!, "getNewsIngestionStats");
+
+      const result = await getStatsFn({});
+      return {
+        ...result.data,
+        lastIngestionTime: result.data.lastIngestionTime
+          ? new Date(result.data.lastIngestionTime)
+          : null,
+      };
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Trigger news ingestion manually (admin only)
+   */
+  async triggerIngestion(options?: {
+    topics?: string[];
+    force?: boolean;
+  }): Promise<{
+    success: boolean;
+    articlesAdded: number;
+    errors: string[];
+  }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const triggerFn = httpsCallable<
+        { topics?: string[]; force?: boolean },
+        { success: boolean; articlesAdded: number; errors: string[] }
+      >(this.functions!, "triggerNewsIngestion");
+
+      const result = await triggerFn(options || {});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Generate AI news digest (admin only)
+   */
+  async generateDigest(): Promise<{
+    success: boolean;
+    articleCount: number;
+    digest: string;
+  }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const digestFn = httpsCallable<
+        Record<string, never>,
+        { success: boolean; articleCount: number; digest: string }
+      >(this.functions!, "generateAINewsDigest");
+
+      const result = await digestFn({});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get news engagement analytics (admin only)
+   */
+  async getAnalytics(options?: { dateRange?: "7d" | "30d" | "90d" }): Promise<{
+    totalViews: number;
+    totalSaves: number;
+    uniqueReaders: number;
+    avgReadTime: number;
+    topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
+    engagementByCategory: Record<string, { views: number; saves: number }>;
+    dailyViews: Array<{ date: string; views: number }>;
+  }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const analyticsFn = httpsCallable<
+        { dateRange?: string },
+        {
+          totalViews: number;
+          totalSaves: number;
+          uniqueReaders: number;
+          avgReadTime: number;
+          topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
+          engagementByCategory: Record<string, { views: number; saves: number }>;
+          dailyViews: Array<{ date: string; views: number }>;
+        }
+      >(this.functions!, "getNewsAnalytics");
+
+      const result = await analyticsFn(options || {});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Subscribe to breaking news notifications
+   */
+  async subscribeToBreakingNews(options: {
+    categories?: NewsCategory[];
+    pushEnabled?: boolean;
+    emailEnabled?: boolean;
+  }): Promise<{ success: boolean; subscriptionId: string }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const subscribeFn = httpsCallable<
+        typeof options,
+        { success: boolean; subscriptionId: string }
+      >(this.functions!, "subscribeToBreakingNews");
+
+      const result = await subscribeFn(options);
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Unsubscribe from breaking news notifications
+   */
+  async unsubscribeFromBreakingNews(): Promise<{ success: boolean }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const unsubscribeFn = httpsCallable<
+        Record<string, never>,
+        { success: boolean }
+      >(this.functions!, "unsubscribeFromBreakingNews");
+
+      const result = await unsubscribeFn({});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
 }
 
 // Singleton instance

@@ -761,8 +761,20 @@ export {
   triggerNewsIngestion,
   generateAINewsDigest,
   importNewsArticles,
-  getNewsIngestionStats,
 } from "./ingestion";
+
+// Export analytics functions
+export { getNewsAnalytics, getNewsIngestionStats } from "./analytics";
+
+// Export notification functions
+export {
+  subscribeToBreakingNews,
+  unsubscribeFromBreakingNews,
+  getNotificationSubscription,
+  onBreakingNewsCreated,
+  processEmailQueue,
+  markAsBreakingNews,
+} from "./notifications";
 
 // Export config
 export { NEWS_TOPICS, NEWS_SOURCES, ROLE_INTERESTS_MAP } from "./config";
