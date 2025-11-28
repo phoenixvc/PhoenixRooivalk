@@ -77,7 +77,10 @@ export const analyzeCompetitors = functions.https.onCall(
 
     // Normalize focusAreas: filter to valid strings only
     const normalizedFocusAreas = Array.isArray(focusAreas)
-      ? focusAreas.filter((a): a is string => typeof a === "string" && a.trim().length > 0)
+      ? focusAreas.filter(
+          (a): a is string =>
+            typeof a === "string" && a.trim().length > 0,
+        )
       : [];
 
     // RAG: Search for relevant Phoenix Rooivalk documentation
