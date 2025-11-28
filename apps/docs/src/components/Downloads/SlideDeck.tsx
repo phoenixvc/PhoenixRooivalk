@@ -50,9 +50,9 @@ export default function SlideDeck({
     }
   }, [title, duration]);
 
-  // Count slides from children
+  // Count slides from children (check for 'number' prop which SlideSection uses)
   const slideCount = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && child.props["data-slide-number"]
+    (child) => React.isValidElement(child) && typeof child.props.number === "number"
   ).length;
 
   return (
