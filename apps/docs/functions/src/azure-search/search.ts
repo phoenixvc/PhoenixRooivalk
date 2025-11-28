@@ -143,7 +143,8 @@ export async function azureVectorSearch(
     // Transform results
     const results: VectorSearchResult[] = (data.value || [])
       .filter((hit: AzureSearchResult) => {
-        const score = hit["@search.rerankerScore"] || hit["@search.score"];
+        const score =
+          hit["@search.rerankerScore"] ?? hit["@search.score"] ?? 0;
         return score >= minScore;
       })
       .map((hit: AzureSearchResult) => ({
@@ -152,7 +153,7 @@ export async function azureVectorSearch(
         title: hit.title,
         section: hit.section,
         content: hit.content,
-        score: hit["@search.rerankerScore"] || hit["@search.score"],
+        score: hit["@search.rerankerScore"] ?? hit["@search.score"] ?? 0,
         metadata: {
           category: hit.category,
           chunkIndex: hit.chunkIndex,

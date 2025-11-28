@@ -204,6 +204,10 @@ async function searchDocumentsFallback(
   query: string,
   options: SearchOptions = {},
 ): Promise<SearchResult[]> {
+  // Use nullish coalescing (??) for proper defaults matching primary search path
+  const { topK = 5, minScore } = options;
+  const effectiveMinScore = minScore ?? 0.65;
+
   const queryEmbedding = await generateEmbedding(query);
   const snapshot = await db.collection("doc_embeddings").get();
 
@@ -214,9 +218,9 @@ async function searchDocumentsFallback(
   });
 
   return results
-    .filter((r) => r.score >= options.minScore)
+    .filter((r) => r.score >= effectiveMinScore)
     .sort((a, b) => b.score - a.score)
-    .slice(0, options.topK);
+    .slice(0, topK);
 }
 ```
 
