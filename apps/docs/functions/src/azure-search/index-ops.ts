@@ -69,10 +69,13 @@ export async function uploadToAzureIndex(
         errorMessage = error.error?.message || errorMessage;
         functions.logger.error("Azure index upload error:", error);
       } catch {
-        functions.logger.error("Azure index upload error (non-JSON response):", {
-          status: response.status,
-          statusText: response.statusText
-        });
+        functions.logger.error(
+          "Azure index upload error (non-JSON response):",
+          {
+            status: response.status,
+            statusText: response.statusText,
+          },
+        );
       }
       throw new Error(errorMessage);
     }
@@ -232,9 +235,7 @@ export async function ensureAzureIndex(): Promise<{
           // Keep the status code as the error details
         }
       }
-      throw new Error(
-        `Failed to check index status: ${errorDetails}`,
-      );
+      throw new Error(`Failed to check index status: ${errorDetails}`);
     }
   } catch (error) {
     functions.logger.error("Azure index setup failed:", error);

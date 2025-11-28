@@ -18,22 +18,26 @@ prerequisites:
 
 # ADR 0020: Agent Tools Framework
 
-**Date**: 2025-11-27
-**Status**: Proposed (LangChain Dynamic Tools with Zod Schemas)
+**Date**: 2025-11-27 **Status**: Proposed (LangChain Dynamic Tools with Zod
+Schemas)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: AI agents need to interact with external systems (search, APIs, calculations) in a structured, type-safe manner
-2. **Decision**: Implement LangChain DynamicStructuredTools with Zod schemas for type validation
-3. **Trade-off**: Tool complexity vs. agent capability; each tool adds potential failure modes
+1. **Problem**: AI agents need to interact with external systems (search, APIs,
+   calculations) in a structured, type-safe manner
+2. **Decision**: Implement LangChain DynamicStructuredTools with Zod schemas for
+   type validation
+3. **Trade-off**: Tool complexity vs. agent capability; each tool adds potential
+   failure modes
 
 ---
 
 ## Context
 
 Agents require tools to:
+
 - Search Phoenix documentation (internal knowledge)
 - Search the web (external knowledge)
 - Perform calculations (market sizing, ROI)
@@ -41,6 +45,7 @@ Agents require tools to:
 - Take notes (for synthesis)
 
 **Requirements**:
+
 - Type-safe inputs with validation
 - Consistent error handling
 - Timeout and retry logic
@@ -52,6 +57,7 @@ Agents require tools to:
 ## Decision
 
 **LangChain DynamicStructuredTool** with:
+
 1. Zod schemas for input validation
 2. Centralized tool registry
 3. Consistent error handling wrapper
@@ -133,8 +139,16 @@ import { wrapTool } from "../wrapper";
 
 const docSearchSchema = z.object({
   query: z.string().describe("The search query for Phoenix documentation"),
-  maxResults: z.number().min(1).max(10).default(5).describe("Maximum results to return"),
-  category: z.enum(["technical", "business", "all"]).default("all").describe("Document category filter"),
+  maxResults: z
+    .number()
+    .min(1)
+    .max(10)
+    .default(5)
+    .describe("Maximum results to return"),
+  category: z
+    .enum(["technical", "business", "all"])
+    .default("all")
+    .describe("Document category filter"),
 });
 
 export const docSearchTool = wrapTool(
@@ -155,11 +169,14 @@ for any Phoenix-related questions.`,
       }
 
       return results
-        .map((r, i) => `[Doc ${i + 1}: ${r.title}]\n${r.content}\nRelevance: ${(r.score * 100).toFixed(0)}%`)
+        .map(
+          (r, i) =>
+            `[Doc ${i + 1}: ${r.title}]\n${r.content}\nRelevance: ${(r.score * 100).toFixed(0)}%`,
+        )
         .join("\n\n---\n\n");
     },
   }),
-  { timeout: 10000, retries: 2 }
+  { timeout: 10000, retries: 2 },
 );
 ```
 
@@ -178,7 +195,10 @@ const noteStore = new Map<string, string[]>();
 
 const noteTakingSchema = z.object({
   note: z.string().describe("The note content to save"),
-  category: z.string().default("general").describe("Category for organizing notes"),
+  category: z
+    .string()
+    .default("general")
+    .describe("Category for organizing notes"),
 });
 
 export const noteTakingTool = wrapTool(
@@ -197,7 +217,7 @@ Use this to keep track of key information discovered during research.`,
       return `Note saved under "${category}". Total notes in category: ${noteStore.get(key)!.length}`;
     },
   }),
-  { timeout: 1000 }
+  { timeout: 1000 },
 );
 
 // Retrieve notes (called at end of agent execution)
@@ -233,7 +253,10 @@ const config = functions.config();
 const webSearchSchema = z.object({
   query: z.string().describe("The web search query"),
   maxResults: z.number().min(1).max(10).default(5).describe("Maximum results"),
-  freshness: z.enum(["day", "week", "month", "all"]).default("all").describe("Time filter for results"),
+  freshness: z
+    .enum(["day", "week", "month", "all"])
+    .default("all")
+    .describe("Time filter for results"),
   market: z.string().default("en-US").describe("Market/region for results"),
 });
 
@@ -244,7 +267,8 @@ export const webSearchTool = wrapTool(
 news, and external data. Use for information NOT in Phoenix documentation.`,
     schema: webSearchSchema,
     func: async ({ query, maxResults, freshness, market }) => {
-      const freshnessParam = freshness === "all" ? "" : `&freshness=${freshness}`;
+      const freshnessParam =
+        freshness === "all" ? "" : `&freshness=${freshness}`;
 
       const response = await fetch(
         `https://api.bing.microsoft.com/v7.0/search?q=${encodeURIComponent(query)}&count=${maxResults}${freshnessParam}&mkt=${market}`,
@@ -252,7 +276,7 @@ news, and external data. Use for information NOT in Phoenix documentation.`,
           headers: {
             "Ocp-Apim-Subscription-Key": config.bing.api_key,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -266,11 +290,14 @@ news, and external data. Use for information NOT in Phoenix documentation.`,
       }
 
       return data.webPages.value
-        .map((r: any, i: number) => `[Result ${i + 1}]\nTitle: ${r.name}\nURL: ${r.url}\nSnippet: ${r.snippet}`)
+        .map(
+          (r: any, i: number) =>
+            `[Result ${i + 1}]\nTitle: ${r.name}\nURL: ${r.url}\nSnippet: ${r.snippet}`,
+        )
         .join("\n\n---\n\n");
     },
   }),
-  { timeout: 15000, retries: 2, rateLimit: { maxPerMinute: 30 } }
+  { timeout: 15000, retries: 2, rateLimit: { maxPerMinute: 30 } },
 );
 ```
 
@@ -308,7 +335,7 @@ Good for competitor announcements, market news, and industry developments.`,
           headers: {
             "Ocp-Apim-Subscription-Key": config.bing.api_key,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -322,12 +349,14 @@ Good for competitor announcements, market news, and industry developments.`,
       }
 
       return data.value
-        .map((article: any, i: number) =>
-          `[News ${i + 1}]\nHeadline: ${article.name}\nSource: ${article.provider?.[0]?.name || "Unknown"}\nDate: ${article.datePublished}\nSummary: ${article.description}`)
+        .map(
+          (article: any, i: number) =>
+            `[News ${i + 1}]\nHeadline: ${article.name}\nSource: ${article.provider?.[0]?.name || "Unknown"}\nDate: ${article.datePublished}\nSummary: ${article.description}`,
+        )
         .join("\n\n---\n\n");
     },
   }),
-  { timeout: 15000, retries: 2, rateLimit: { maxPerMinute: 30 } }
+  { timeout: 15000, retries: 2, rateLimit: { maxPerMinute: 30 } },
 );
 ```
 
@@ -346,8 +375,13 @@ import { z } from "zod";
 import { wrapTool } from "../wrapper";
 
 const calculatorSchema = z.object({
-  expression: z.string().describe("Mathematical expression to evaluate (e.g., '1000000 * 0.15')"),
-  description: z.string().optional().describe("Description of what this calculation represents"),
+  expression: z
+    .string()
+    .describe("Mathematical expression to evaluate (e.g., '1000000 * 0.15')"),
+  description: z
+    .string()
+    .optional()
+    .describe("Description of what this calculation represents"),
 });
 
 export const calculatorTool = wrapTool(
@@ -361,7 +395,9 @@ growth projections, and other quantitative analysis. Supports basic arithmetic, 
       const sanitized = expression.replace(/[^0-9+\-*/().%\s]/g, "");
 
       if (sanitized !== expression.replace(/\s/g, "").replace(/\s/g, "")) {
-        throw new Error("Invalid characters in expression. Only numbers and basic operators allowed.");
+        throw new Error(
+          "Invalid characters in expression. Only numbers and basic operators allowed.",
+        );
       }
 
       try {
@@ -384,7 +420,7 @@ growth projections, and other quantitative analysis. Supports basic arithmetic, 
       }
     },
   }),
-  { timeout: 1000 }
+  { timeout: 1000 },
 );
 ```
 
@@ -401,14 +437,19 @@ import { wrapTool } from "../wrapper";
 
 const competitorDbSchema = z.object({
   competitor: z.string().describe("Competitor name to look up"),
-  fields: z.array(z.enum([
-    "overview",
-    "products",
-    "funding",
-    "customers",
-    "technology",
-    "all"
-  ])).default(["all"]).describe("Specific fields to retrieve"),
+  fields: z
+    .array(
+      z.enum([
+        "overview",
+        "products",
+        "funding",
+        "customers",
+        "technology",
+        "all",
+      ]),
+    )
+    .default(["all"])
+    .describe("Specific fields to retrieve"),
 });
 
 export const competitorDbTool = wrapTool(
@@ -432,25 +473,33 @@ known competitors. Contains verified data about products, funding, customers, an
       const sections: string[] = [];
 
       if (wantAll || fields.includes("overview")) {
-        sections.push(`## Overview\n${data.overview || "No overview available"}`);
+        sections.push(
+          `## Overview\n${data.overview || "No overview available"}`,
+        );
       }
       if (wantAll || fields.includes("products")) {
-        sections.push(`## Products\n${data.products?.join("\n- ") || "No product data"}`);
+        sections.push(
+          `## Products\n${data.products?.join("\n- ") || "No product data"}`,
+        );
       }
       if (wantAll || fields.includes("funding")) {
         sections.push(`## Funding\n${data.funding || "No funding data"}`);
       }
       if (wantAll || fields.includes("customers")) {
-        sections.push(`## Key Customers\n${data.customers?.join("\n- ") || "No customer data"}`);
+        sections.push(
+          `## Key Customers\n${data.customers?.join("\n- ") || "No customer data"}`,
+        );
       }
       if (wantAll || fields.includes("technology")) {
-        sections.push(`## Technology\n${data.technology || "No technology data"}`);
+        sections.push(
+          `## Technology\n${data.technology || "No technology data"}`,
+        );
       }
 
       return `# ${data.name || competitor}\n\n${sections.join("\n\n")}\n\nLast updated: ${data.updatedAt?.toDate?.()?.toISOString() || "Unknown"}`;
     },
   }),
-  { timeout: 5000 }
+  { timeout: 5000 },
 );
 ```
 
@@ -475,7 +524,7 @@ const rateLimitCounters = new Map<string, { count: number; resetAt: number }>();
 
 export function wrapTool(
   tool: DynamicStructuredTool,
-  options: WrapperOptions = {}
+  options: WrapperOptions = {},
 ): DynamicStructuredTool {
   const { timeout = 30000, retries = 1, rateLimit } = options;
   const originalFunc = tool.func;
@@ -487,7 +536,10 @@ export function wrapTool(
     // Rate limiting
     if (rateLimit) {
       const now = Date.now();
-      const counter = rateLimitCounters.get(toolName) || { count: 0, resetAt: now + 60000 };
+      const counter = rateLimitCounters.get(toolName) || {
+        count: 0,
+        resetAt: now + 60000,
+      };
 
       if (now > counter.resetAt) {
         counter.count = 0;
@@ -495,7 +547,9 @@ export function wrapTool(
       }
 
       if (counter.count >= rateLimit.maxPerMinute) {
-        throw new Error(`Rate limit exceeded for ${toolName}. Try again in ${Math.ceil((counter.resetAt - now) / 1000)}s`);
+        throw new Error(
+          `Rate limit exceeded for ${toolName}. Try again in ${Math.ceil((counter.resetAt - now) / 1000)}s`,
+        );
       }
 
       counter.count++;
@@ -510,7 +564,10 @@ export function wrapTool(
         const result = await Promise.race([
           originalFunc(input),
           new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error(`Tool timeout after ${timeout}ms`)), timeout)
+            setTimeout(
+              () => reject(new Error(`Tool timeout after ${timeout}ms`)),
+              timeout,
+            ),
           ),
         ]);
 
@@ -629,14 +686,14 @@ export {
 
 ### For Agents
 
-| Tool | When to Use | When NOT to Use |
-|------|-------------|-----------------|
+| Tool                  | When to Use                                | When NOT to Use                   |
+| --------------------- | ------------------------------------------ | --------------------------------- |
 | `search_phoenix_docs` | Phoenix product info, specs, internal data | External competitors, market data |
-| `web_search` | Competitors, market trends, current events | Phoenix-specific information |
-| `news_search` | Recent announcements, industry news | Historical data, technical specs |
-| `calculator` | Market sizing, ROI, projections | Complex formulas, statistics |
-| `competitor_database` | Known competitors (structured data) | New/unknown competitors |
-| `take_note` | Key findings during research | Final output |
+| `web_search`          | Competitors, market trends, current events | Phoenix-specific information      |
+| `news_search`         | Recent announcements, industry news        | Historical data, technical specs  |
+| `calculator`          | Market sizing, ROI, projections            | Complex formulas, statistics      |
+| `competitor_database` | Known competitors (structured data)        | New/unknown competitors           |
+| `take_note`           | Key findings during research               | Final output                      |
 
 ### Best Practices
 
@@ -652,15 +709,16 @@ export {
 
 ### Alternative Framework
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | Cognitive Mesh Agency Layer |
+| Aspect         | Details                      |
+| -------------- | ---------------------------- |
+| **Framework**  | Cognitive Mesh Agency Layer  |
 | **Validation** | Built-in governance and RBAC |
-| **Platform** | C#/.NET 9.0+ |
+| **Platform**   | C#/.NET 9.0+                 |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Enterprise-grade tool governance
 - RBAC per tool with audit logging
 - Built-in rate limiting and quota management
@@ -669,17 +727,20 @@ export {
 - Multi-tenant tool isolation
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development
 - Migration effort from LangChain tools
 
 **When to Consider**:
+
 - When tool governance becomes critical
 - When audit trails for tool usage are required
 - When multi-tenant tool isolation is needed
 - When compliance mandates tool-level RBAC
 
-**Current Status**: In development. Evaluate when tool governance requirements increase.
+**Current Status**: In development. Evaluate when tool governance requirements
+increase.
 
 ---
 
@@ -701,12 +762,12 @@ export {
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
-| API rate limits | Built-in rate limiting |
-| API changes | Version pinning, monitoring |
-| Tool misuse | Clear descriptions, routing |
-| Data staleness | Timestamp tracking, refresh |
+| Risk            | Mitigation                  |
+| --------------- | --------------------------- |
+| API rate limits | Built-in rate limiting      |
+| API changes     | Version pinning, monitoring |
+| Tool misuse     | Clear descriptions, routing |
+| Data staleness  | Timestamp tracking, refresh |
 
 ---
 
@@ -714,34 +775,43 @@ export {
 
 ### Decision: **Implement in Cognitive Mesh** 🔶
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Proposed (not implemented) |
-| **CM Equivalent** | Agency Layer tools (~35% complete) |
-| **CM Advantage** | RBAC per tool, usage governance, compliance |
+| Factor                 | Assessment                                     |
+| ---------------------- | ---------------------------------------------- |
+| **Current Status**     | Proposed (not implemented)                     |
+| **CM Equivalent**      | Agency Layer tools (~35% complete)             |
+| **CM Advantage**       | RBAC per tool, usage governance, compliance    |
 | **Resource Trade-off** | Tool governance is complex, CM has it designed |
 
-**Rationale**: Cognitive Mesh's Agency Layer includes tool-level RBAC, usage quotas, and compliance tracking. Implementing a full tools framework here requires significant effort for governance features that CM already has in its architecture.
+**Rationale**: Cognitive Mesh's Agency Layer includes tool-level RBAC, usage
+quotas, and compliance tracking. Implementing a full tools framework here
+requires significant effort for governance features that CM already has in its
+architecture.
 
-**Action**: 
+**Action**:
+
 - **Do NOT implement** full tools framework in docs site
 - **Complete CM Agency Layer tools system**
 - Keep existing simple tools (doc search via Azure AI Search)
 - No need for LangChain DynamicTools wrapper
 
-**For docs site**: Simple doc search tool is sufficient. No web search or calculator tools needed.
+**For docs site**: Simple doc search tool is sufficient. No web search or
+calculator tools needed.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

@@ -19,16 +19,20 @@ prerequisites:
 
 # ADR 0018: LangChain Integration Strategy
 
-**Date**: 2025-11-27
-**Status**: Proposed (Selective Integration for Complex Workflows)
+**Date**: 2025-11-27 **Status**: Proposed (Selective Integration for Complex
+Workflows)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: Current custom AI implementation works well for simple use cases, but complex multi-step workflows and agent-based features would require significant custom development
-2. **Decision**: Selective LangChain integration for complex orchestration while maintaining custom implementations for simple, performance-critical paths
-3. **Trade-off**: Framework overhead vs. development velocity for advanced AI features
+1. **Problem**: Current custom AI implementation works well for simple use
+   cases, but complex multi-step workflows and agent-based features would
+   require significant custom development
+2. **Decision**: Selective LangChain integration for complex orchestration while
+   maintaining custom implementations for simple, performance-critical paths
+3. **Trade-off**: Framework overhead vs. development velocity for advanced AI
+   features
 
 ---
 
@@ -45,17 +49,21 @@ Current Architecture
 ```
 
 **This works well for**:
+
 - Simple single-turn completions
 - Straightforward RAG queries
 - Predictable prompt patterns
 
 **Challenges emerging**:
+
 - Multi-step analysis workflows require manual orchestration
-- Agent-based features (research, multi-source synthesis) need complex state management
+- Agent-based features (research, multi-source synthesis) need complex state
+  management
 - Tool integration (web search, API calls) requires custom plumbing
 - Conversation memory management is manual
 
 **LangChain offers**:
+
 - Battle-tested abstractions for LLM orchestration
 - Built-in RAG chains and retrievers
 - Agent framework with tool integration
@@ -68,14 +76,14 @@ Current Architecture
 
 **Selective LangChain integration**:
 
-| Use Case | Approach |
-|----------|----------|
-| Simple completions | Keep custom (lower latency) |
-| Single-turn RAG | Keep custom (optimized for our stack) |
-| Multi-step analysis | Use LangChain chains |
-| Agent workflows | Use LangChain agents |
-| Tool integration | Use LangChain tools |
-| Conversation memory | Use LangChain memory |
+| Use Case            | Approach                              |
+| ------------------- | ------------------------------------- |
+| Simple completions  | Keep custom (lower latency)           |
+| Single-turn RAG     | Keep custom (optimized for our stack) |
+| Multi-step analysis | Use LangChain chains                  |
+| Agent workflows     | Use LangChain agents                  |
+| Tool integration    | Use LangChain tools                   |
+| Conversation memory | Use LangChain memory                  |
 
 ---
 
@@ -309,7 +317,10 @@ export async function deepAnalysis(topic: string) {
 ```typescript
 // langchain/agents/research-agent.ts
 import { AgentExecutor, createOpenAIToolsAgent } from "langchain/agents";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { z } from "zod";
 import { azureLLM } from "../llm";
@@ -318,20 +329,24 @@ import { docRetriever } from "../retrievers/azure-search";
 // Tool: Search Phoenix documentation
 const docSearchTool = new DynamicStructuredTool({
   name: "search_phoenix_docs",
-  description: "Search Phoenix Rooivalk documentation for technical information",
+  description:
+    "Search Phoenix Rooivalk documentation for technical information",
   schema: z.object({
     query: z.string().describe("The search query"),
   }),
   func: async ({ query }) => {
     const docs = await docRetriever.invoke(query);
-    return docs.map((d) => `[${d.metadata.title}]: ${d.pageContent}`).join("\n\n");
+    return docs
+      .map((d) => `[${d.metadata.title}]: ${d.pageContent}`)
+      .join("\n\n");
   },
 });
 
 // Tool: Web search (for competitor info)
 const webSearchTool = new DynamicStructuredTool({
   name: "web_search",
-  description: "Search the web for current information about competitors or market trends",
+  description:
+    "Search the web for current information about competitors or market trends",
   schema: z.object({
     query: z.string().describe("The search query"),
   }),
@@ -339,7 +354,7 @@ const webSearchTool = new DynamicStructuredTool({
     // Integrate with Bing Search API or similar
     const response = await fetch(
       `https://api.bing.microsoft.com/v7.0/search?q=${encodeURIComponent(query)}`,
-      { headers: { "Ocp-Apim-Subscription-Key": process.env.BING_API_KEY! } }
+      { headers: { "Ocp-Apim-Subscription-Key": process.env.BING_API_KEY! } },
     );
     const data = await response.json();
     return data.webPages.value
@@ -350,10 +365,13 @@ const webSearchTool = new DynamicStructuredTool({
 });
 
 const agentPrompt = ChatPromptTemplate.fromMessages([
-  ["system", `You are a competitive intelligence researcher for Phoenix Rooivalk.
+  [
+    "system",
+    `You are a competitive intelligence researcher for Phoenix Rooivalk.
 Your goal is to gather comprehensive information about defense industry competitors.
 Use the available tools to search documentation and the web.
-Always cite your sources.`],
+Always cite your sources.`,
+  ],
   ["human", "{input}"],
   new MessagesPlaceholder("agent_scratchpad"),
 ]);
@@ -422,18 +440,20 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Option 1: Full LangChain Migration
 
-| Aspect | Details |
-|--------|---------|
-| **Scope** | Replace all custom AI code with LangChain |
-| **Effort** | High (rewrite everything) |
-| **Benefit** | Full feature access |
+| Aspect      | Details                                   |
+| ----------- | ----------------------------------------- |
+| **Scope**   | Replace all custom AI code with LangChain |
+| **Effort**  | High (rewrite everything)                 |
+| **Benefit** | Full feature access                       |
 
 **Pros**:
+
 - Consistent patterns throughout
 - Access to all LangChain features
 - Community support and updates
 
 **Cons**:
+
 - Unnecessary for simple use cases
 - Performance overhead for simple calls
 - Large bundle size increase
@@ -443,19 +463,21 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Option 2: Selective Integration ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Scope** | LangChain for complex workflows only |
-| **Effort** | Medium (additive) |
-| **Benefit** | Best of both worlds |
+| Aspect      | Details                              |
+| ----------- | ------------------------------------ |
+| **Scope**   | LangChain for complex workflows only |
+| **Effort**  | Medium (additive)                    |
+| **Benefit** | Best of both worlds                  |
 
 **Pros**:
+
 - Keep optimized simple paths
 - Add power features where needed
 - Gradual adoption
 - Lower risk
 
 **Cons**:
+
 - Two patterns to maintain
 - Need clear decision criteria
 - Some code duplication
@@ -464,18 +486,20 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Option 3: No LangChain (Custom Everything)
 
-| Aspect | Details |
-|--------|---------|
-| **Scope** | Build all orchestration custom |
-| **Effort** | Very high |
-| **Benefit** | Full control |
+| Aspect      | Details                        |
+| ----------- | ------------------------------ |
+| **Scope**   | Build all orchestration custom |
+| **Effort**  | Very high                      |
+| **Benefit** | Full control                   |
 
 **Pros**:
+
 - No dependencies
 - Optimized for our needs
 - No framework learning curve
 
 **Cons**:
+
 - Reinventing the wheel
 - Slow development for complex features
 - Missing battle-tested patterns
@@ -485,16 +509,17 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Option 4: Cognitive Mesh (Future)
 
-| Aspect | Details |
-|--------|---------|
-| **Scope** | Enterprise AI orchestration platform |
-| **Effort** | Medium (migration required) |
-| **Benefit** | Enterprise-grade capabilities |
-| **Platform** | C#/.NET 9.0+ |
+| Aspect       | Details                              |
+| ------------ | ------------------------------------ |
+| **Scope**    | Enterprise AI orchestration platform |
+| **Effort**   | Medium (migration required)          |
+| **Benefit**  | Enterprise-grade capabilities        |
+| **Platform** | C#/.NET 9.0+                         |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - 5-layer hexagonal architecture for complex orchestration
 - Built-in multi-agent coordination
 - Enterprise compliance (NIST AI RMF, GDPR, EU AI Act)
@@ -503,19 +528,22 @@ export async function getConversationalChain(sessionId: string) {
 - Metacognitive reasoning layer
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development, not yet deployed
 - Migration effort from Firebase Functions
 - Higher operational complexity
 
 **When to Consider**:
+
 - When enterprise compliance becomes mandatory
 - When multi-agent orchestration becomes complex
 - When ethical AI governance is required
 - When scaling beyond current Firebase limits
 - When integrating with .NET backend systems
 
-**Current Status**: In development. Consider when compliance requirements increase or orchestration complexity exceeds LangChain capabilities.
+**Current Status**: In development. Consider when compliance requirements
+increase or orchestration complexity exceeds LangChain capabilities.
 
 ---
 
@@ -523,17 +551,19 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Decision Matrix
 
-| Criteria | Weight | Full Migration | Selective | Custom Only | Cognitive Mesh |
-|----------|--------|---------------|-----------|-------------|----------------|
-| **Development speed** | 30% | 8 | 9 | 4 | 6 |
-| **Performance** | 25% | 6 | 9 | 10 | 8 |
-| **Maintainability** | 20% | 7 | 8 | 5 | 8 |
-| **Feature richness** | 15% | 10 | 8 | 4 | 10 |
-| **Risk** | 10% | 5 | 8 | 7 | 5 |
-| **Compliance** | N/A | ⚠️ Manual | ⚠️ Manual | ❌ None | ✅ Built-in |
-| **Weighted Score** | | 7.15 | **8.55** | 5.75 | 7.45 |
+| Criteria              | Weight | Full Migration | Selective | Custom Only | Cognitive Mesh |
+| --------------------- | ------ | -------------- | --------- | ----------- | -------------- |
+| **Development speed** | 30%    | 8              | 9         | 4           | 6              |
+| **Performance**       | 25%    | 6              | 9         | 10          | 8              |
+| **Maintainability**   | 20%    | 7              | 8         | 5           | 8              |
+| **Feature richness**  | 15%    | 10             | 8         | 4           | 10             |
+| **Risk**              | 10%    | 5              | 8         | 7           | 5              |
+| **Compliance**        | N/A    | ⚠️ Manual      | ⚠️ Manual | ❌ None     | ✅ Built-in    |
+| **Weighted Score**    |        | 7.15           | **8.55**  | 5.75        | 7.45           |
 
-**Decision**: Selective integration provides the best balance of capability and pragmatism for current needs. Cognitive Mesh becomes the preferred option when compliance requirements increase.
+**Decision**: Selective integration provides the best balance of capability and
+pragmatism for current needs. Cognitive Mesh becomes the preferred option when
+compliance requirements increase.
 
 ---
 
@@ -609,13 +639,13 @@ export async function getConversationalChain(sessionId: string) {
 
 ### Estimated Bundle Impact
 
-| Package | Size (gzipped) |
-|---------|----------------|
-| langchain | ~150KB |
-| @langchain/openai | ~30KB |
-| @langchain/community | ~100KB |
-| @langchain/core | ~50KB |
-| **Total** | ~330KB |
+| Package              | Size (gzipped) |
+| -------------------- | -------------- |
+| langchain            | ~150KB         |
+| @langchain/openai    | ~30KB          |
+| @langchain/community | ~100KB         |
+| @langchain/core      | ~50KB          |
+| **Total**            | ~330KB         |
 
 Note: Tree-shaking reduces actual impact based on imports used.
 
@@ -625,12 +655,12 @@ Note: Tree-shaking reduces actual impact based on imports used.
 
 ### Latency Comparison
 
-| Operation | Custom | LangChain | Delta |
-|-----------|--------|-----------|-------|
-| Simple completion | 800ms | 850ms | +50ms |
-| RAG query | 1.2s | 1.3s | +100ms |
-| Multi-step chain | N/A | 3-5s | New capability |
-| Agent (3 tools) | N/A | 5-10s | New capability |
+| Operation         | Custom | LangChain | Delta          |
+| ----------------- | ------ | --------- | -------------- |
+| Simple completion | 800ms  | 850ms     | +50ms          |
+| RAG query         | 1.2s   | 1.3s      | +100ms         |
+| Multi-step chain  | N/A    | 3-5s      | New capability |
+| Agent (3 tools)   | N/A    | 5-10s     | New capability |
 
 ### Optimization Strategies
 
@@ -661,12 +691,12 @@ Note: Tree-shaking reduces actual impact based on imports used.
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
-| LangChain breaking changes | Pin versions, test upgrades |
-| Performance regression | Keep simple paths custom |
-| Complexity creep | Clear guidelines on when to use |
-| Vendor lock-in | Use abstractions, keep custom fallbacks |
+| Risk                       | Mitigation                              |
+| -------------------------- | --------------------------------------- |
+| LangChain breaking changes | Pin versions, test upgrades             |
+| Performance regression     | Keep simple paths custom                |
+| Complexity creep           | Clear guidelines on when to use         |
+| Vendor lock-in             | Use abstractions, keep custom fallbacks |
 
 ---
 
@@ -690,34 +720,43 @@ Note: Tree-shaking reduces actual impact based on imports used.
 
 ### Decision: **Defer / Minimal** ⚠️
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Proposed (not implemented) |
-| **CM Equivalent** | Agency Layer uses custom orchestration |
-| **Bundle Impact** | ~330KB gzipped |
-| **Resource Trade-off** | Dev time better spent on CM |
+| Factor                 | Assessment                             |
+| ---------------------- | -------------------------------------- |
+| **Current Status**     | Proposed (not implemented)             |
+| **CM Equivalent**      | Agency Layer uses custom orchestration |
+| **Bundle Impact**      | ~330KB gzipped                         |
+| **Resource Trade-off** | Dev time better spent on CM            |
 
-**Rationale**: LangChain integration adds significant bundle size and complexity for features that would be better implemented in Cognitive Mesh. The simple AI features (competitor analysis, SWOT, recommendations) work fine with direct Azure OpenAI calls.
+**Rationale**: LangChain integration adds significant bundle size and complexity
+for features that would be better implemented in Cognitive Mesh. The simple AI
+features (competitor analysis, SWOT, recommendations) work fine with direct
+Azure OpenAI calls.
 
-**Action**: 
+**Action**:
+
 - **Skip** full LangChain integration
 - Keep simple direct API calls for existing features
 - **Invest development time in CM Agency Layer instead** (~40% complete)
 
-**If minimal integration needed**: Only implement a thin RAG chain wrapper, not the full agent/workflow stack.
+**If minimal integration needed**: Only implement a thin RAG chain wrapper, not
+the full agent/workflow stack.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0015: Prompt Management](./adr-0015-prompt-management.md)
 - [ADR 0016: RAG Architecture](./adr-0016-rag-architecture.md)
 - [ADR 0017: Context Management](./adr-0017-context-management.md)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

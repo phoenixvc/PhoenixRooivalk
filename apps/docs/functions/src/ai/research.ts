@@ -51,7 +51,8 @@ export const researchPerson = functions.https.onCall(
     }
 
     // Safe destructuring with fallback to prevent null/undefined errors
-    const { firstName, lastName, linkedInUrl } = (data ?? {}) as ResearchPersonRequest;
+    const { firstName, lastName, linkedInUrl } = (data ??
+      {}) as ResearchPersonRequest;
 
     // Validate that all required fields are strings
     if (
@@ -122,7 +123,10 @@ export const researchPerson = functions.https.onCall(
               tokens: metrics.totalTokens,
             });
           } catch (logError) {
-            functions.logger.warn("Failed to log usage for research_person:", logError);
+            functions.logger.warn(
+              "Failed to log usage for research_person:",
+              logError,
+            );
           }
 
           return {

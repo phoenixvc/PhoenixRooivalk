@@ -18,16 +18,18 @@ prerequisites:
 
 # ADR 0023: AI Observability
 
-**Date**: 2025-11-27
-**Status**: Proposed (LangSmith + Custom Metrics Dashboard)
+**Date**: 2025-11-27 **Status**: Proposed (LangSmith + Custom Metrics Dashboard)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: AI systems are black boxes; need visibility into performance, costs, quality, and errors
-2. **Decision**: Implement LangSmith for LLM tracing combined with custom Firebase metrics dashboard
-3. **Trade-off**: Observability overhead vs. ability to debug, optimize, and ensure quality
+1. **Problem**: AI systems are black boxes; need visibility into performance,
+   costs, quality, and errors
+2. **Decision**: Implement LangSmith for LLM tracing combined with custom
+   Firebase metrics dashboard
+3. **Trade-off**: Observability overhead vs. ability to debug, optimize, and
+   ensure quality
 
 ---
 
@@ -35,17 +37,18 @@ prerequisites:
 
 AI features need monitoring for:
 
-| Aspect | Why It Matters |
-|--------|----------------|
-| **Performance** | Response times affect UX |
-| **Cost** | Token usage impacts budget |
-| **Quality** | Relevance and accuracy matter |
-| **Errors** | Need to detect and fix issues |
-| **Usage** | Understand feature adoption |
+| Aspect          | Why It Matters                |
+| --------------- | ----------------------------- |
+| **Performance** | Response times affect UX      |
+| **Cost**        | Token usage impacts budget    |
+| **Quality**     | Relevance and accuracy matter |
+| **Errors**      | Need to detect and fix issues |
+| **Usage**       | Understand feature adoption   |
 
 **Current state**: Limited visibility into AI operations
 
 **Challenges**:
+
 - LLM calls are stateless and hard to trace
 - Agent reasoning is multi-step and complex
 - RAG quality is hard to measure
@@ -56,6 +59,7 @@ AI features need monitoring for:
 ## Decision
 
 **Multi-layer observability stack**:
+
 1. **LangSmith**: LLM tracing, agent debugging, prompt versioning
 2. **Firebase/Cloud Monitoring**: Custom metrics, alerts, dashboards
 3. **Firestore**: Usage analytics, quality feedback storage
@@ -137,7 +141,7 @@ export function createTracer(metadata?: Record<string, any>) {
 export async function withTracing<T>(
   name: string,
   fn: () => Promise<T>,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): Promise<T> {
   const tracer = createTracer(metadata);
 
@@ -161,7 +165,7 @@ import { logger } from "firebase-functions";
 export function getTracedConfig(
   userId: string,
   feature: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): RunnableConfig {
   const runId = `${feature}-${userId}-${Date.now()}`;
 
@@ -183,18 +187,12 @@ export function getTracedConfig(
 }
 
 // Usage example
-export async function tracedRAGQuery(
-  userId: string,
-  question: string
-) {
+export async function tracedRAGQuery(userId: string, question: string) {
   const config = getTracedConfig(userId, "rag-query", {
     queryLength: question.length,
   });
 
-  const result = await ragChain.invoke(
-    { input: question },
-    config
-  );
+  const result = await ragChain.invoke({ input: question }, config);
 
   return result;
 }
@@ -202,26 +200,18 @@ export async function tracedRAGQuery(
 
 ### Agent Tracing
 
-// langchain/observability/traced-agents.ts
-import { AgentExecutor } from "langchain/agents";
-import { getTracedConfig } from "./traced-chains";
-import { logger } from "firebase-functions";
+// langchain/observability/traced-agents.ts import { AgentExecutor } from
+"langchain/agents"; import { getTracedConfig } from "./traced-chains"; import {
+logger } from "firebase-functions";
 
-export async function tracedAgentExecution(
-  agent: AgentExecutor,
-  userId: string,
-  input: string,
-  agentType: string
-) {
-  const config = getTracedConfig(userId, `agent-${agentType}`, {
-    inputLength: input.length,
-    agentType,
-  });
+export async function tracedAgentExecution( agent: AgentExecutor, userId:
+string, input: string, agentType: string ) { const config =
+getTracedConfig(userId, `agent-${agentType}`, { inputLength: input.length,
+agentType, });
 
-  const startTime = Date.now();
+const startTime = Date.now();
 
-  try {
-    const result = await agent.invoke({ input }, config);
+try { const result = await agent.invoke({ input }, config);
 
     // Log summary
     logger.info("Agent execution completed", {
@@ -233,17 +223,13 @@ export async function tracedAgentExecution(
     });
 
     return result;
-  } catch (error) {
-    logger.error("Agent execution failed", {
-      userId,
-      agentType,
-      durationMs: Date.now() - startTime,
-      error: (error as Error).message,
-    });
+
+} catch (error) { logger.error("Agent execution failed", { userId, agentType,
+durationMs: Date.now() - startTime, error: (error as Error).message, });
 
     throw error;
-  }
-}
+
+} }
 
 ---
 
@@ -273,7 +259,9 @@ export interface AIMetric {
 
 export class MetricsCollector {
   private readonly collection = db.collection("ai_metrics");
-  private readonly aggregatesCollection = db.collection("ai_metrics_aggregates");
+  private readonly aggregatesCollection = db.collection(
+    "ai_metrics_aggregates",
+  );
 
   async record(metric: Omit<AIMetric, "timestamp">): Promise<void> {
     // Record individual metric
@@ -297,14 +285,11 @@ export class MetricsCollector {
         totalTokens: FieldValue.increment(metric.tokensUsed.total),
         updatedAt: Timestamp.now(),
       },
-      { merge: true }
+      { merge: true },
     );
   }
 
-  async getFeatureMetrics(
-    feature: string,
-    days: number = 7
-  ): Promise<any[]> {
+  async getFeatureMetrics(feature: string, days: number = 7): Promise<any[]> {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
@@ -347,7 +332,7 @@ export interface InstrumentationOptions {
 
 export function instrumentAICall<TInput, TOutput>(
   fn: (input: TInput) => Promise<TOutput>,
-  options: InstrumentationOptions
+  options: InstrumentationOptions,
 ): (input: TInput) => Promise<TOutput> {
   const { feature, userId, enableLangSmith = true, metadata = {} } = options;
 
@@ -414,7 +399,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { langsmithClient } from "./langsmith";
 
 export interface UserFeedback {
-  responseId: string;        // ID of the AI response
+  responseId: string; // ID of the AI response
   userId: string;
   feature: string;
   rating: "positive" | "negative";
@@ -430,7 +415,9 @@ export interface UserFeedback {
 export class FeedbackCollector {
   private readonly collection = db.collection("ai_feedback");
 
-  async recordFeedback(feedback: Omit<UserFeedback, "timestamp">): Promise<void> {
+  async recordFeedback(
+    feedback: Omit<UserFeedback, "timestamp">,
+  ): Promise<void> {
     // Store in Firestore
     await this.collection.add({
       ...feedback,
@@ -440,10 +427,14 @@ export class FeedbackCollector {
     // Send to LangSmith (if run ID available)
     if (feedback.responseId && langsmithClient) {
       try {
-        await langsmithClient.createFeedback(feedback.responseId, "user-rating", {
-          score: feedback.rating === "positive" ? 1 : 0,
-          comment: feedback.comment,
-        });
+        await langsmithClient.createFeedback(
+          feedback.responseId,
+          "user-rating",
+          {
+            score: feedback.rating === "positive" ? 1 : 0,
+            comment: feedback.comment,
+          },
+        );
       } catch (error) {
         // Non-critical, just log
         console.warn("Failed to send feedback to LangSmith", error);
@@ -453,7 +444,7 @@ export class FeedbackCollector {
 
   async getFeedbackStats(
     feature: string,
-    days: number = 30
+    days: number = 30,
   ): Promise<{
     total: number;
     positive: number;
@@ -461,7 +452,7 @@ export class FeedbackCollector {
     positiveRate: number;
   }> {
     const startDate = Timestamp.fromDate(
-      new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+      new Date(Date.now() - days * 24 * 60 * 60 * 1000),
     );
 
     const snapshot = await this.collection
@@ -494,7 +485,10 @@ import { feedbackCollector } from "../langchain/observability/feedback";
 
 export const submitFeedback = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "Must be logged in",
+    );
   }
 
   const { responseId, feature, rating, comment } = data;
@@ -502,14 +496,14 @@ export const submitFeedback = functions.https.onCall(async (data, context) => {
   if (!responseId || !feature || !rating) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "responseId, feature, and rating required"
+      "responseId, feature, and rating required",
     );
   }
 
   if (!["positive", "negative"].includes(rating)) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "rating must be 'positive' or 'negative'"
+      "rating must be 'positive' or 'negative'",
     );
   }
 
@@ -538,108 +532,119 @@ import { metricsCollector } from "../langchain/observability/metrics";
 import { feedbackCollector } from "../langchain/observability/feedback";
 import { db } from "../config/firebase";
 
-export const getDashboardData = functions.https.onCall(async (data, context) => {
-  // Admin only
-  if (!context.auth?.token?.admin) {
-    throw new functions.https.HttpsError("permission-denied", "Admin access required");
-  }
+export const getDashboardData = functions.https.onCall(
+  async (data, context) => {
+    // Admin only
+    if (!context.auth?.token?.admin) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Admin access required",
+      );
+    }
 
-  const { days = 7 } = data;
+    const { days = 7 } = data;
 
-  // Get metrics for all features
-  const features = [
-    "rag-query",
-    "competitor-analysis",
-    "swot-analysis",
-    "market-insights",
-    "recommendations",
-    "agent-research",
-    "agent-competitive",
-  ];
+    // Get metrics for all features
+    const features = [
+      "rag-query",
+      "competitor-analysis",
+      "swot-analysis",
+      "market-insights",
+      "recommendations",
+      "agent-research",
+      "agent-competitive",
+    ];
 
-  const metricsPromises = features.map((feature) =>
-    metricsCollector.getFeatureMetrics(feature, days)
-  );
+    const metricsPromises = features.map((feature) =>
+      metricsCollector.getFeatureMetrics(feature, days),
+    );
 
-  const feedbackPromises = features.map((feature) =>
-    feedbackCollector.getFeedbackStats(feature, days)
-  );
+    const feedbackPromises = features.map((feature) =>
+      feedbackCollector.getFeedbackStats(feature, days),
+    );
 
-  const [metricsResults, feedbackResults] = await Promise.all([
-    Promise.all(metricsPromises),
-    Promise.all(feedbackPromises),
-  ]);
+    const [metricsResults, feedbackResults] = await Promise.all([
+      Promise.all(metricsPromises),
+      Promise.all(feedbackPromises),
+    ]);
 
-  // Calculate totals
-  const totals = {
-    totalCalls: 0,
-    totalTokens: 0,
-    avgLatencyMs: 0,
-    errorRate: 0,
-    positiveRate: 0,
-  };
+    // Calculate totals
+    const totals = {
+      totalCalls: 0,
+      totalTokens: 0,
+      avgLatencyMs: 0,
+      errorRate: 0,
+      positiveRate: 0,
+    };
 
-  const featureData = features.map((feature, i) => {
-    const metrics = metricsResults[i];
-    const feedback = feedbackResults[i];
+    const featureData = features.map((feature, i) => {
+      const metrics = metricsResults[i];
+      const feedback = feedbackResults[i];
 
-    const calls = metrics.reduce((sum, m) => sum + m.calls, 0);
-    const tokens = metrics.reduce((sum, m) => sum + m.avgTokens * m.calls, 0);
-    const latency = metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + m.avgLatencyMs, 0) / metrics.length
-      : 0;
-    const successRate = metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + m.successRate, 0) / metrics.length
-      : 1;
+      const calls = metrics.reduce((sum, m) => sum + m.calls, 0);
+      const tokens = metrics.reduce((sum, m) => sum + m.avgTokens * m.calls, 0);
+      const latency =
+        metrics.length > 0
+          ? metrics.reduce((sum, m) => sum + m.avgLatencyMs, 0) / metrics.length
+          : 0;
+      const successRate =
+        metrics.length > 0
+          ? metrics.reduce((sum, m) => sum + m.successRate, 0) / metrics.length
+          : 1;
 
-    totals.totalCalls += calls;
-    totals.totalTokens += tokens;
+      totals.totalCalls += calls;
+      totals.totalTokens += tokens;
+
+      return {
+        feature,
+        calls,
+        tokens,
+        avgLatencyMs: latency,
+        successRate,
+        positiveRate: feedback.positiveRate,
+        dailyMetrics: metrics,
+      };
+    });
+
+    totals.avgLatencyMs =
+      featureData.reduce((sum, f) => sum + f.avgLatencyMs, 0) / features.length;
+    totals.errorRate =
+      1 -
+      featureData.reduce((sum, f) => sum + f.successRate, 0) / features.length;
+    totals.positiveRate =
+      featureData.reduce((sum, f) => sum + f.positiveRate, 0) / features.length;
+
+    // Estimate costs (approximate)
+    const estimatedCost = (totals.totalTokens / 1000000) * 2.5; // ~$2.50/M tokens average
 
     return {
-      feature,
-      calls,
-      tokens,
-      avgLatencyMs: latency,
-      successRate,
-      positiveRate: feedback.positiveRate,
-      dailyMetrics: metrics,
+      period: `${days} days`,
+      totals: {
+        ...totals,
+        estimatedCost: `$${estimatedCost.toFixed(2)}`,
+      },
+      features: featureData,
+      generatedAt: new Date().toISOString(),
     };
-  });
-
-  totals.avgLatencyMs = featureData.reduce((sum, f) => sum + f.avgLatencyMs, 0) / features.length;
-  totals.errorRate = 1 - featureData.reduce((sum, f) => sum + f.successRate, 0) / features.length;
-  totals.positiveRate = featureData.reduce((sum, f) => sum + f.positiveRate, 0) / features.length;
-
-  // Estimate costs (approximate)
-  const estimatedCost = (totals.totalTokens / 1000000) * 2.5; // ~$2.50/M tokens average
-
-  return {
-    period: `${days} days`,
-    totals: {
-      ...totals,
-      estimatedCost: `$${estimatedCost.toFixed(2)}`,
-    },
-    features: featureData,
-    generatedAt: new Date().toISOString(),
-  };
-});
+  },
+);
 ```
 
 ### Key Metrics to Display
 
-| Category | Metric | Alert Threshold |
-|----------|--------|-----------------|
-| **Performance** | P50 latency | > 2s |
-| **Performance** | P95 latency | > 5s |
-| **Performance** | P99 latency | > 10s |
-| **Reliability** | Error rate | > 5% |
-| **Reliability** | Timeout rate | > 2% |
-| **Cost** | Daily token usage | > 1M |
-| **Cost** | Daily estimated cost | > $50 |
-| **Quality** | Positive feedback rate | < 80% |
-| **Quality** | RAG relevance score | < 0.7 avg |
-| **Usage** | Daily active users | Tracking |
-| **Usage** | Queries per user | Tracking |
+| Category        | Metric                 | Alert Threshold |
+| --------------- | ---------------------- | --------------- |
+| **Performance** | P50 latency            | > 2s            |
+| **Performance** | P95 latency            | > 5s            |
+| **Performance** | P99 latency            | > 10s           |
+| **Reliability** | Error rate             | > 5%            |
+| **Reliability** | Timeout rate           | > 2%            |
+| **Cost**        | Daily token usage      | > 1M            |
+| **Cost**        | Daily estimated cost   | > $50           |
+| **Quality**     | Positive feedback rate | < 80%           |
+| **Quality**     | RAG relevance score    | < 0.7 avg       |
+| **Usage**       | Daily active users     | Tracking        |
+| **Usage**       | Queries per user       | Tracking        |
 
 ---
 
@@ -670,20 +675,30 @@ export const checkMetricsAlerts = functions.pubsub
     // Calculate error rate
     const errorRate = metrics.filter((m) => !m.success).length / metrics.length;
     if (errorRate > 0.05) {
-      await sendAlert("High error rate", `Error rate: ${(errorRate * 100).toFixed(1)}%`);
+      await sendAlert(
+        "High error rate",
+        `Error rate: ${(errorRate * 100).toFixed(1)}%`,
+      );
     }
 
     // Calculate average latency
-    const avgLatency = metrics.reduce((sum, m) => sum + m.latencyMs, 0) / metrics.length;
+    const avgLatency =
+      metrics.reduce((sum, m) => sum + m.latencyMs, 0) / metrics.length;
     if (avgLatency > 5000) {
-      await sendAlert("High latency", `Avg latency: ${avgLatency.toFixed(0)}ms`);
+      await sendAlert(
+        "High latency",
+        `Avg latency: ${avgLatency.toFixed(0)}ms`,
+      );
     }
 
     // Check token usage
     const totalTokens = metrics.reduce((sum, m) => sum + m.tokensUsed.total, 0);
     const projectedDaily = totalTokens * (24 * 4); // Project to daily
     if (projectedDaily > 1000000) {
-      await sendAlert("High token usage", `Projected daily: ${projectedDaily.toLocaleString()} tokens`);
+      await sendAlert(
+        "High token usage",
+        `Projected daily: ${projectedDaily.toLocaleString()} tokens`,
+      );
     }
   });
 
@@ -707,18 +722,20 @@ async function sendAlert(title: string, message: string) {
 
 ### Option 1: LangSmith + Custom ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **LLM Tracing** | LangSmith |
+| Aspect             | Details            |
+| ------------------ | ------------------ |
+| **LLM Tracing**    | LangSmith          |
 | **Custom Metrics** | Firebase/Firestore |
-| **Dashboards** | Custom + LangSmith |
+| **Dashboards**     | Custom + LangSmith |
 
 **Pros**:
+
 - Best-in-class LLM tracing
 - Custom metrics for our needs
 - Integrated with Firebase stack
 
 **Cons**:
+
 - Two systems to manage
 - LangSmith cost
 - Learning curve
@@ -727,16 +744,18 @@ async function sendAlert(title: string, message: string) {
 
 ### Option 2: LangSmith Only
 
-| Aspect | Details |
-|--------|---------|
+| Aspect                | Details   |
+| --------------------- | --------- |
 | **All Observability** | LangSmith |
 
 **Pros**:
+
 - Single platform
 - Rich LLM features
 - Prompt playground
 
 **Cons**:
+
 - Limited custom metrics
 - Vendor lock-in
 - Cost at scale
@@ -745,16 +764,18 @@ async function sendAlert(title: string, message: string) {
 
 ### Option 3: Custom Only
 
-| Aspect | Details |
-|--------|---------|
+| Aspect                | Details                        |
+| --------------------- | ------------------------------ |
 | **All Observability** | Custom Firebase implementation |
 
 **Pros**:
+
 - Full control
 - No additional cost
 - Stack consistency
 
 **Cons**:
+
 - No LLM-specific tracing
 - Significant dev effort
 - Missing advanced features
@@ -763,16 +784,17 @@ async function sendAlert(title: string, message: string) {
 
 ### Option 4: Cognitive Mesh (Future)
 
-| Aspect | Details |
-|--------|---------|
+| Aspect            | Details                          |
+| ----------------- | -------------------------------- |
 | **Observability** | Built-in comprehensive telemetry |
-| **Tracing** | Full cognitive operation tracing |
-| **Compliance** | Audit logs with governance |
-| **Platform** | C#/.NET 9.0+ |
+| **Tracing**       | Full cognitive operation tracing |
+| **Compliance**    | Audit logs with governance       |
+| **Platform**      | C#/.NET 9.0+                     |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Built-in observability across all 5 layers
 - Comprehensive audit logging with compliance tracking
 - Cognitive operation tracing (not just LLM calls)
@@ -783,19 +805,22 @@ async function sendAlert(title: string, message: string) {
 - Zero-trust security event logging
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development, not yet deployed
 - Migration effort from LangSmith + Firebase
 - Higher operational complexity
 
 **When to Consider**:
+
 - When AI compliance audits are required
 - When ethical AI transparency is mandated
 - When metacognitive metrics are valuable
 - When zero-trust security logging is needed
 - When NIST AI RMF reporting is required
 
-**Current Status**: In development. Observability is built into each layer. Evaluate when compliance audit requirements increase.
+**Current Status**: In development. Observability is built into each layer.
+Evaluate when compliance audit requirements increase.
 
 ---
 
@@ -818,12 +843,12 @@ async function sendAlert(title: string, message: string) {
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
+| Risk             | Mitigation              |
+| ---------------- | ----------------------- |
 | LangSmith outage | Custom fallback logging |
-| Cost overrun | Usage alerts, sampling |
-| Data privacy | Anonymize traces |
-| Alert fatigue | Tune thresholds |
+| Cost overrun     | Usage alerts, sampling  |
+| Data privacy     | Anonymize traces        |
+| Alert fatigue    | Tune thresholds         |
 
 ---
 
@@ -831,38 +856,47 @@ async function sendAlert(title: string, message: string) {
 
 ### Decision: **Split Implementation** ⚠️
 
-| Factor | Docs Site | Cognitive Mesh |
-|--------|-----------|----------------|
-| **Basic Metrics** | ✅ Implement | — |
-| **Compliance Audits** | — | ✅ Implement |
-| **LangSmith** | Skip (cost) | — |
-| **NIST AI RMF** | — | ✅ Built-in |
+| Factor                | Docs Site    | Cognitive Mesh |
+| --------------------- | ------------ | -------------- |
+| **Basic Metrics**     | ✅ Implement | —              |
+| **Compliance Audits** | —            | ✅ Implement   |
+| **LangSmith**         | Skip (cost)  | —              |
+| **NIST AI RMF**       | —            | ✅ Built-in    |
 
-**Rationale**: Basic observability (latency, errors, token usage) is needed for the docs site to monitor AI health. However, compliance audit logging and NIST AI RMF reporting should be implemented in Cognitive Mesh where it's integrated across all layers.
+**Rationale**: Basic observability (latency, errors, token usage) is needed for
+the docs site to monitor AI health. However, compliance audit logging and NIST
+AI RMF reporting should be implemented in Cognitive Mesh where it's integrated
+across all layers.
 
 **Action for Docs Site**:
+
 - **Implement** lightweight custom metrics in Firestore
 - Track: latency, error rates, token usage, feature adoption
 - **Skip** LangSmith integration ($$$ cost, unnecessary for docs)
 - Simple Firebase logging is sufficient
 
 **Action for CM**:
+
 - Compliance audit trails integrated per layer
 - NIST AI RMF compliance reporting
 - Ethical reasoning transparency logs
 - Zero-trust security event logging
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0022: AI Workflows](./adr-0022-ai-workflows.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

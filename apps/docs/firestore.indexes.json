@@ -3,37 +3,27 @@
     {
       "collectionGroup": "analytics_pageviews",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
     },
     {
       "collectionGroup": "analytics_timeonpage",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
     },
     {
       "collectionGroup": "analytics_conversions",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
     },
     {
       "collectionGroup": "analytics_sessions",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "lastActivity", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "lastActivity", "order": "DESCENDING" }]
     },
     {
       "collectionGroup": "analytics_daily",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "date", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "date", "order": "DESCENDING" }]
     }
   ],
   "fieldOverrides": []

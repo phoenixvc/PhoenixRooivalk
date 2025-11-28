@@ -18,16 +18,19 @@ prerequisites:
 
 # ADR 0022: AI Workflows
 
-**Date**: 2025-11-27
-**Status**: Proposed (LangChain Runnables with State Management)
+**Date**: 2025-11-27 **Status**: Proposed (LangChain Runnables with State
+Management)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: Complex analysis tasks require multi-step orchestration with intermediate results, branching logic, and error recovery
-2. **Decision**: Implement LangChain RunnableSequence workflows with Firestore state persistence
-3. **Trade-off**: Orchestration complexity vs. powerful multi-step analysis capabilities
+1. **Problem**: Complex analysis tasks require multi-step orchestration with
+   intermediate results, branching logic, and error recovery
+2. **Decision**: Implement LangChain RunnableSequence workflows with Firestore
+   state persistence
+3. **Trade-off**: Orchestration complexity vs. powerful multi-step analysis
+   capabilities
 
 ---
 
@@ -36,6 +39,7 @@ prerequisites:
 Some analysis tasks require multiple coordinated steps:
 
 **Example: Comprehensive Market Analysis**
+
 1. Identify market segments
 2. Research each segment (parallel)
 3. Analyze competitive landscape
@@ -43,6 +47,7 @@ Some analysis tasks require multiple coordinated steps:
 5. Generate recommendations
 
 **Challenges**:
+
 - Steps have dependencies
 - Some steps can run in parallel
 - Long-running tasks may timeout
@@ -54,6 +59,7 @@ Some analysis tasks require multiple coordinated steps:
 ## Decision
 
 **LangChain RunnableSequence workflows** with:
+
 1. Declarative step definitions
 2. Parallel execution where possible
 3. Firestore-based state persistence
@@ -128,7 +134,10 @@ Some analysis tasks require multiple coordinated steps:
 // langchain/workflows/market-analysis.ts
 import { RunnableSequence, RunnableParallel } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { StringOutputParser, JsonOutputParser } from "@langchain/core/output_parsers";
+import {
+  StringOutputParser,
+  JsonOutputParser,
+} from "@langchain/core/output_parsers";
 import { azureLLM, azureLLMFast } from "../llm";
 import { docRetriever } from "../retrievers/azure-search";
 
@@ -215,7 +224,8 @@ export const marketAnalysisWorkflow = RunnableSequence.from([
     segments: identifySegmentsPrompt
       .pipe(azureLLM)
       .pipe(new JsonOutputParser()),
-    focusArea: (input: { focusArea: string; region: string }) => input.focusArea,
+    focusArea: (input: { focusArea: string; region: string }) =>
+      input.focusArea,
     region: (input: { focusArea: string; region: string }) => input.region,
   },
 
@@ -230,8 +240,8 @@ export const marketAnalysisWorkflow = RunnableSequence.from([
         segmentChain.invoke({
           segmentName: segment.name,
           segmentDescription: segment.description,
-        })
-      )
+        }),
+      ),
     );
 
     return {
@@ -316,7 +326,7 @@ export const competitiveLandscapeWorkflow = RunnableSequence.from([
           webResearch: webResults,
           recentNews: newsResults,
         };
-      })
+      }),
     );
 
     return {
@@ -345,7 +355,9 @@ Create a detailed comparison matrix covering:
 Format as a structured comparison.
 `);
 
-    const chain = comparisonPrompt.pipe(azureLLM).pipe(new StringOutputParser());
+    const chain = comparisonPrompt
+      .pipe(azureLLM)
+      .pipe(new StringOutputParser());
 
     const comparison = await chain.invoke({
       phoenixCapabilities: input.phoenixCapabilities,
@@ -446,7 +458,7 @@ export class WorkflowStateManager {
     workflowType: string,
     userId: string,
     input: Record<string, any>,
-    totalSteps: number
+    totalSteps: number,
   ): Promise<string> {
     const state: Omit<WorkflowState, "id"> = {
       workflowType,
@@ -470,11 +482,7 @@ export class WorkflowStateManager {
     return { id: doc.id, ...doc.data() } as WorkflowState;
   }
 
-  async updateStep(
-    runId: string,
-    step: string,
-    result: any
-  ): Promise<void> {
+  async updateStep(runId: string, step: string, result: any): Promise<void> {
     await this.collection.doc(runId).update({
       currentStep: step,
       [`stepResults.${step}`]: result,
@@ -518,7 +526,7 @@ export class WorkflowStateManager {
 
   async getUserWorkflows(
     userId: string,
-    options: { limit?: number; status?: string } = {}
+    options: { limit?: number; status?: string } = {},
   ): Promise<WorkflowState[]> {
     const { limit = 20, status } = options;
 
@@ -532,7 +540,9 @@ export class WorkflowStateManager {
     }
 
     const snapshot = await query.get();
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as WorkflowState));
+    return snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as WorkflowState,
+    );
   }
 }
 
@@ -555,7 +565,7 @@ export interface WorkflowStep {
 export class WorkflowExecutor {
   constructor(
     private workflowType: string,
-    private steps: WorkflowStep[]
+    private steps: WorkflowStep[],
   ) {}
 
   async start(userId: string, input: Record<string, any>): Promise<string> {
@@ -563,7 +573,7 @@ export class WorkflowExecutor {
       this.workflowType,
       userId,
       input,
-      this.steps.length
+      this.steps.length,
     );
 
     // Start execution asynchronously
@@ -577,7 +587,8 @@ export class WorkflowExecutor {
   async resume(runId: string): Promise<void> {
     const state = await workflowStateManager.get(runId);
     if (!state) throw new Error("Workflow not found");
-    if (state.status !== "failed") throw new Error("Can only resume failed workflows");
+    if (state.status !== "failed")
+      throw new Error("Can only resume failed workflows");
 
     await this.execute(runId, state.input, state.stepResults);
   }
@@ -585,7 +596,7 @@ export class WorkflowExecutor {
   private async execute(
     runId: string,
     input: Record<string, any>,
-    previousResults: Record<string, any> = {}
+    previousResults: Record<string, any> = {},
   ): Promise<void> {
     const results = { ...previousResults };
 
@@ -599,7 +610,9 @@ export class WorkflowExecutor {
       if (step.dependsOn) {
         const missingDeps = step.dependsOn.filter((dep) => !results[dep]);
         if (missingDeps.length > 0) {
-          throw new Error(`Missing dependencies for ${step.name}: ${missingDeps.join(", ")}`);
+          throw new Error(
+            `Missing dependencies for ${step.name}: ${missingDeps.join(", ")}`,
+          );
         }
       }
 
@@ -609,7 +622,7 @@ export class WorkflowExecutor {
         const stepInput = {
           ...input,
           ...Object.fromEntries(
-            (step.dependsOn || []).map((dep) => [dep, results[dep]])
+            (step.dependsOn || []).map((dep) => [dep, results[dep]]),
           ),
         };
 
@@ -643,28 +656,43 @@ export class WorkflowExecutor {
 ```typescript
 // functions/src/ai/workflows.ts
 import * as functions from "firebase-functions";
-import { marketAnalysisWorkflow, competitiveLandscapeWorkflow } from "../langchain/workflows";
-import { WorkflowExecutor, workflowStateManager } from "../langchain/workflows/executor";
+import {
+  marketAnalysisWorkflow,
+  competitiveLandscapeWorkflow,
+} from "../langchain/workflows";
+import {
+  WorkflowExecutor,
+  workflowStateManager,
+} from "../langchain/workflows/executor";
 
 // Start market analysis workflow
 export const startMarketAnalysis = functions
   .runWith({ timeoutSeconds: 540, memory: "1GB" })
   .https.onCall(async (data, context) => {
     if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be logged in",
+      );
     }
 
     const { focusArea, region } = data;
 
     if (!focusArea || !region) {
-      throw new functions.https.HttpsError("invalid-argument", "focusArea and region required");
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "focusArea and region required",
+      );
     }
 
     try {
       const result = await marketAnalysisWorkflow.invoke({ focusArea, region });
       return { success: true, result };
     } catch (error) {
-      throw new functions.https.HttpsError("internal", (error as Error).message);
+      throw new functions.https.HttpsError(
+        "internal",
+        (error as Error).message,
+      );
     }
   });
 
@@ -673,51 +701,74 @@ export const startCompetitiveLandscape = functions
   .runWith({ timeoutSeconds: 540, memory: "1GB" })
   .https.onCall(async (data, context) => {
     if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be logged in",
+      );
     }
 
     const { competitors } = data;
 
     if (!competitors || !Array.isArray(competitors)) {
-      throw new functions.https.HttpsError("invalid-argument", "competitors array required");
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "competitors array required",
+      );
     }
 
     try {
       const result = await competitiveLandscapeWorkflow.invoke({ competitors });
       return { success: true, result };
     } catch (error) {
-      throw new functions.https.HttpsError("internal", (error as Error).message);
+      throw new functions.https.HttpsError(
+        "internal",
+        (error as Error).message,
+      );
     }
   });
 
 // Get workflow status
-export const getWorkflowStatus = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
-  }
+export const getWorkflowStatus = functions.https.onCall(
+  async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be logged in",
+      );
+    }
 
-  const { runId } = data;
-  const state = await workflowStateManager.get(runId);
+    const { runId } = data;
+    const state = await workflowStateManager.get(runId);
 
-  if (!state) {
-    throw new functions.https.HttpsError("not-found", "Workflow not found");
-  }
+    if (!state) {
+      throw new functions.https.HttpsError("not-found", "Workflow not found");
+    }
 
-  if (state.userId !== context.auth.uid) {
-    throw new functions.https.HttpsError("permission-denied", "Access denied");
-  }
+    if (state.userId !== context.auth.uid) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Access denied",
+      );
+    }
 
-  return state;
-});
+    return state;
+  },
+);
 
 // List user workflows
 export const listWorkflows = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "Must be logged in",
+    );
   }
 
   const { limit, status } = data;
-  return workflowStateManager.getUserWorkflows(context.auth.uid, { limit, status });
+  return workflowStateManager.getUserWorkflows(context.auth.uid, {
+    limit,
+    status,
+  });
 });
 ```
 
@@ -730,8 +781,8 @@ export const listWorkflows = functions.https.onCall(async (data, context) => {
 ```typescript
 const sequentialWorkflow = RunnableSequence.from([
   step1,
-  step2,  // Receives output from step1
-  step3,  // Receives output from step2
+  step2, // Receives output from step1
+  step3, // Receives output from step2
 ]);
 ```
 
@@ -776,16 +827,17 @@ const resilientWorkflow = RunnableSequence.from([
 
 ### Alternative Framework
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | Cognitive Mesh Business Layer |
-| **Orchestration** | Workflow Orchestrators with governance |
-| **State** | Built-in workflow state with compliance |
-| **Platform** | C#/.NET 9.0+ |
+| Aspect            | Details                                 |
+| ----------------- | --------------------------------------- |
+| **Framework**     | Cognitive Mesh Business Layer           |
+| **Orchestration** | Workflow Orchestrators with governance  |
+| **State**         | Built-in workflow state with compliance |
+| **Platform**      | C#/.NET 9.0+                            |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Enterprise-grade workflow orchestration
 - Built-in workflow versioning and governance
 - Compliance tracking per workflow step
@@ -796,19 +848,22 @@ const resilientWorkflow = RunnableSequence.from([
 - Human-in-the-loop integration for critical decisions
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development, not yet deployed
 - Migration effort from LangChain workflows
 - Higher operational complexity
 
 **When to Consider**:
+
 - When workflow governance becomes critical
 - When audit trails for workflow steps are mandated
 - When human-in-the-loop approval is required
 - When compliance tracking per step is needed
 - When workflow rollback capabilities are essential
 
-**Current Status**: In development. Business Layer with Workflow Orchestrators is a core feature. Evaluate when compliance requirements increase.
+**Current Status**: In development. Business Layer with Workflow Orchestrators
+is a core feature. Evaluate when compliance requirements increase.
 
 ---
 
@@ -831,12 +886,12 @@ const resilientWorkflow = RunnableSequence.from([
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
-| Timeout | Break into smaller workflows |
-| State corruption | Atomic updates, validation |
-| Runaway costs | Step limits, budgets |
-| Deadlocks | Dependency validation |
+| Risk             | Mitigation                   |
+| ---------------- | ---------------------------- |
+| Timeout          | Break into smaller workflows |
+| State corruption | Atomic updates, validation   |
+| Runaway costs    | Step limits, budgets         |
+| Deadlocks        | Dependency validation        |
 
 ---
 
@@ -844,35 +899,44 @@ const resilientWorkflow = RunnableSequence.from([
 
 ### Decision: **Implement in Cognitive Mesh** 🔶
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Proposed (not implemented) |
-| **CM Equivalent** | BusinessApplications Layer (~30% complete) |
-| **CM Advantage** | Workflow governance, checkpoints, human-in-the-loop |
-| **Resource Trade-off** | Workflow engine is complex, CM has it designed |
+| Factor                 | Assessment                                          |
+| ---------------------- | --------------------------------------------------- |
+| **Current Status**     | Proposed (not implemented)                          |
+| **CM Equivalent**      | BusinessApplications Layer (~30% complete)          |
+| **CM Advantage**       | Workflow governance, checkpoints, human-in-the-loop |
+| **Resource Trade-off** | Workflow engine is complex, CM has it designed      |
 
-**Rationale**: Cognitive Mesh's Business Applications Layer includes Workflow Orchestrators with step-level compliance tracking, checkpoint/rollback capabilities, and human-in-the-loop integration. These are enterprise-grade features that would require significant effort to implement here.
+**Rationale**: Cognitive Mesh's Business Applications Layer includes Workflow
+Orchestrators with step-level compliance tracking, checkpoint/rollback
+capabilities, and human-in-the-loop integration. These are enterprise-grade
+features that would require significant effort to implement here.
 
-**Action**: 
+**Action**:
+
 - **Do NOT implement** workflow engine in docs site
 - **Complete CM Business Layer PRD**
 - Docs site works with simple single-step analyses
 - No need for multi-step market analysis or competitive workflows
 
-**For docs site**: Keep simple single-step features (competitor analysis, SWOT). No workflow orchestration needed.
+**For docs site**: Keep simple single-step features (competitor analysis, SWOT).
+No workflow orchestration needed.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0019: AI Agents Architecture](./adr-0019-ai-agents.md)
 - [ADR 0020: Agent Tools Framework](./adr-0020-agent-tools.md)
 - [ADR 0023: AI Observability](./adr-0023-ai-observability.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

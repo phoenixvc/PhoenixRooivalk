@@ -51,7 +51,12 @@ module.exports = {
   overrides: [
     {
       // Test files
-      files: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**/*.ts", "**/__tests__/**/*.tsx"],
+      files: [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**/*.ts",
+        "**/__tests__/**/*.tsx",
+      ],
       env: {
         jest: true,
       },

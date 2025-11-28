@@ -18,33 +18,38 @@ prerequisites:
 
 # ADR 0019: AI Agents Architecture
 
-**Date**: 2025-11-27
-**Status**: Proposed (LangChain Agents with Tool Selection)
+**Date**: 2025-11-27 **Status**: Proposed (LangChain Agents with Tool Selection)
 
 ---
 
 ## Executive Summary
 
-1. **Problem**: Complex research and analysis tasks require dynamic decision-making about what information to gather and how to process it
-2. **Decision**: Implement LangChain-based agents with tool selection capabilities for research and competitive intelligence
-3. **Trade-off**: Increased latency and unpredictability vs. powerful autonomous task completion
+1. **Problem**: Complex research and analysis tasks require dynamic
+   decision-making about what information to gather and how to process it
+2. **Decision**: Implement LangChain-based agents with tool selection
+   capabilities for research and competitive intelligence
+3. **Trade-off**: Increased latency and unpredictability vs. powerful autonomous
+   task completion
 
 ---
 
 ## Context
 
 Current AI features follow a fixed pipeline:
+
 ```
 User Query → RAG Search → LLM Generation → Response
 ```
 
 **Limitations**:
+
 - Cannot decide to search multiple sources
 - Cannot perform follow-up queries based on initial findings
 - Cannot combine information from different tools
 - Cannot adapt strategy based on intermediate results
 
 **Agent capabilities needed**:
+
 - Dynamic tool selection based on task requirements
 - Multi-step reasoning with intermediate results
 - Self-correction when initial approach fails
@@ -55,6 +60,7 @@ User Query → RAG Search → LLM Generation → Response
 ## Decision
 
 **LangChain ReAct agents** with:
+
 1. **Research Agent**: Deep-dive research on specific topics
 2. **Competitive Intelligence Agent**: Competitor analysis with market context
 3. **Analyst Agent**: Strategic recommendations based on data synthesis
@@ -114,12 +120,14 @@ User Query → RAG Search → LLM Generation → Response
 **Purpose**: Deep research on specific topics with multi-source synthesis.
 
 **Capabilities**:
+
 - Search Phoenix documentation
 - Search the web for external information
 - Synthesize findings into comprehensive reports
 - Follow up on interesting findings
 
 **Use Cases**:
+
 - "Research the current state of counter-drone technology"
 - "Find information about regulatory requirements for drone defense systems"
 - "Investigate market trends in autonomous defense systems"
@@ -127,12 +135,17 @@ User Query → RAG Search → LLM Generation → Response
 ```typescript
 // langchain/agents/research-agent.ts
 import { AgentExecutor, createOpenAIToolsAgent } from "langchain/agents";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
 import { azureLLM } from "../llm";
 import { docSearchTool, webSearchTool, noteTool } from "../tools";
 
 const RESEARCH_AGENT_PROMPT = ChatPromptTemplate.fromMessages([
-  ["system", `You are a research analyst for Phoenix Rooivalk, a counter-drone defense company.
+  [
+    "system",
+    `You are a research analyst for Phoenix Rooivalk, a counter-drone defense company.
 
 Your role is to conduct thorough research on topics related to:
 - Counter-drone and counter-UAS technology
@@ -148,7 +161,8 @@ Research Guidelines:
 5. Cite all sources in your final response
 6. Flag any conflicting information you find
 
-Be thorough but focused. Aim for actionable insights.`],
+Be thorough but focused. Aim for actionable insights.`,
+  ],
   ["human", "{input}"],
   new MessagesPlaceholder("agent_scratchpad"),
 ]);
@@ -178,12 +192,14 @@ export async function createResearchAgent() {
 **Purpose**: Analyze competitors with context from Phoenix capabilities.
 
 **Capabilities**:
+
 - Research competitor products and capabilities
 - Compare against Phoenix Rooivalk offerings
 - Identify strengths, weaknesses, opportunities, threats
 - Track market movements and announcements
 
 **Use Cases**:
+
 - "Analyze Anduril's counter-drone offerings vs Phoenix"
 - "What are DroneShield's recent product announcements?"
 - "Compare pricing strategies across counter-UAS market"
@@ -191,7 +207,9 @@ export async function createResearchAgent() {
 ```typescript
 // langchain/agents/competitive-intel-agent.ts
 const COMPETITIVE_INTEL_PROMPT = ChatPromptTemplate.fromMessages([
-  ["system", `You are a competitive intelligence analyst for Phoenix Rooivalk.
+  [
+    "system",
+    `You are a competitive intelligence analyst for Phoenix Rooivalk.
 
 Your role is to analyze competitors and market dynamics in the counter-drone defense industry.
 
@@ -211,7 +229,8 @@ Analysis Framework:
 4. Identify opportunities and threats for Phoenix
 5. Provide actionable recommendations
 
-Always ground your analysis in facts. Cite sources for all claims.`],
+Always ground your analysis in facts. Cite sources for all claims.`,
+  ],
   ["human", "{input}"],
   new MessagesPlaceholder("agent_scratchpad"),
 ]);
@@ -240,12 +259,14 @@ export async function createCompetitiveIntelAgent() {
 **Purpose**: Strategic analysis and recommendations based on data.
 
 **Capabilities**:
+
 - Process quantitative data (market size, growth rates)
 - Perform calculations and projections
 - Generate strategic recommendations
 - Create executive summaries
 
 **Use Cases**:
+
 - "Estimate the total addressable market for counter-UAS in Africa"
 - "What's our projected market share if we capture 10% of announced contracts?"
 - "Analyze the ROI of entering the European market"
@@ -253,7 +274,9 @@ export async function createCompetitiveIntelAgent() {
 ```typescript
 // langchain/agents/analyst-agent.ts
 const ANALYST_PROMPT = ChatPromptTemplate.fromMessages([
-  ["system", `You are a strategic analyst for Phoenix Rooivalk.
+  [
+    "system",
+    `You are a strategic analyst for Phoenix Rooivalk.
 
 Your role is to provide data-driven analysis and recommendations for business decisions.
 
@@ -275,7 +298,8 @@ Output Format:
 - Key Findings (bullet points)
 - Analysis Details (with calculations)
 - Recommendations (prioritized)
-- Risks and Mitigations`],
+- Risks and Mitigations`,
+  ],
   ["human", "{input}"],
   new MessagesPlaceholder("agent_scratchpad"),
 ]);
@@ -368,11 +392,11 @@ export async function executeAgentTask(task: string) {
 
 ### Execution Limits
 
-| Agent | Max Iterations | Timeout | Max Tools/Step |
-|-------|----------------|---------|----------------|
-| Research | 8 | 60s | 2 |
-| Competitive Intel | 10 | 90s | 2 |
-| Analyst | 12 | 120s | 3 |
+| Agent             | Max Iterations | Timeout | Max Tools/Step |
+| ----------------- | -------------- | ------- | -------------- |
+| Research          | 8              | 60s     | 2              |
+| Competitive Intel | 10             | 90s     | 2              |
+| Analyst           | 12             | 120s    | 3              |
 
 ### Error Handling
 
@@ -422,18 +446,24 @@ export const agentQuery = functions
   .https.onCall(async (data, context) => {
     // Auth check
     if (!context.auth) {
-      throw new functions.https.HttpsError("unauthenticated", "Must be logged in");
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be logged in",
+      );
     }
 
     const { task, agentType: requestedAgent } = data;
 
     if (!task || typeof task !== "string") {
-      throw new functions.https.HttpsError("invalid-argument", "Task is required");
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Task is required",
+      );
     }
 
     try {
       // Route to appropriate agent (or use requested)
-      const agentType = requestedAgent || await routeToAgent(task);
+      const agentType = requestedAgent || (await routeToAgent(task));
 
       logger.info("Executing agent task", {
         userId: context.auth.uid,
@@ -476,19 +506,21 @@ export const agentQuery = functions
 
 ### Option 1: LangChain ReAct Agents ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | LangChain AgentExecutor |
-| **Reasoning** | ReAct (Reason + Act) |
+| Aspect           | Details                 |
+| ---------------- | ----------------------- |
+| **Framework**    | LangChain AgentExecutor |
+| **Reasoning**    | ReAct (Reason + Act)    |
 | **Tool calling** | OpenAI function calling |
 
 **Pros**:
+
 - Well-tested agent framework
 - Built-in tool calling
 - Intermediate step tracking
 - Error recovery
 
 **Cons**:
+
 - Framework dependency
 - Can be unpredictable
 - Potential for loops
@@ -497,18 +529,20 @@ export const agentQuery = functions
 
 ### Option 2: Custom Agent Loop
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | Custom implementation |
-| **Reasoning** | Manual prompt chaining |
-| **Tool calling** | Custom dispatcher |
+| Aspect           | Details                |
+| ---------------- | ---------------------- |
+| **Framework**    | Custom implementation  |
+| **Reasoning**    | Manual prompt chaining |
+| **Tool calling** | Custom dispatcher      |
 
 **Pros**:
+
 - Full control
 - No dependencies
 - Predictable behavior
 
 **Cons**:
+
 - Significant development effort
 - Need to handle edge cases
 - Reinventing the wheel
@@ -517,18 +551,20 @@ export const agentQuery = functions
 
 ### Option 3: OpenAI Assistants API
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | OpenAI managed |
-| **Reasoning** | OpenAI internal |
+| Aspect           | Details                 |
+| ---------------- | ----------------------- |
+| **Framework**    | OpenAI managed          |
+| **Reasoning**    | OpenAI internal         |
 | **Tool calling** | Native function calling |
 
 **Pros**:
+
 - Managed infrastructure
 - Built-in file handling
 - Code interpreter
 
 **Cons**:
+
 - Not available in Azure OpenAI (yet)
 - Less control over behavior
 - Different API surface
@@ -537,16 +573,17 @@ export const agentQuery = functions
 
 ### Option 4: Cognitive Mesh (Future)
 
-| Aspect | Details |
-|--------|---------|
-| **Framework** | In-house enterprise platform |
-| **Reasoning** | 5-layer cognitive architecture |
-| **Tool calling** | Agency Layer with governance |
-| **Platform** | C#/.NET 9.0+ |
+| Aspect           | Details                        |
+| ---------------- | ------------------------------ |
+| **Framework**    | In-house enterprise platform   |
+| **Reasoning**    | 5-layer cognitive architecture |
+| **Tool calling** | Agency Layer with governance   |
+| **Platform**     | C#/.NET 9.0+                   |
 
 **Repository**: https://github.com/justaghost/cognitive-mesh
 
 **Pros**:
+
 - Agency Layer designed for multi-agent orchestration
 - Metacognitive Layer for self-reflection and learning
 - Built-in ethical reasoning and governance
@@ -556,35 +593,41 @@ export const agentQuery = functions
 - Cognitive Engines for specialized reasoning
 
 **Cons**:
+
 - Different tech stack (C#/.NET vs TypeScript)
 - Currently in development, not yet deployed
 - Migration effort from LangChain agents
 - Higher operational complexity
 
 **When to Consider**:
+
 - When enterprise compliance becomes mandatory
 - When ethical AI governance is required for agents
 - When multi-agent coordination becomes complex
 - When audit trails for agent decisions are mandated
 - When agents need self-reflection capabilities
 
-**Current Status**: In development. Agency and Metacognitive layers are core features. Evaluate when compliance requirements increase.
+**Current Status**: In development. Agency and Metacognitive layers are core
+features. Evaluate when compliance requirements increase.
 
 ---
 
 ## Rationale
 
-| Factor | LangChain | Custom | Assistants | Cognitive Mesh |
-|--------|-----------|--------|------------|----------------|
-| **Development speed** | ✅ Fast | ❌ Slow | ✅ Fast | ⚠️ Medium |
-| **Control** | ⚠️ Medium | ✅ Full | ❌ Limited | ✅ Full |
-| **Azure compatibility** | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
-| **Observability** | ✅ LangSmith | ⚠️ Manual | ⚠️ Limited | ✅ Built-in |
-| **Community** | ✅ Large | ❌ None | ⚠️ Growing | ❌ Internal |
-| **Compliance** | ⚠️ Manual | ❌ None | ⚠️ Limited | ✅ Built-in |
-| **Ethical governance** | ❌ None | ❌ None | ❌ None | ✅ Native |
+| Factor                  | LangChain    | Custom    | Assistants | Cognitive Mesh |
+| ----------------------- | ------------ | --------- | ---------- | -------------- |
+| **Development speed**   | ✅ Fast      | ❌ Slow   | ✅ Fast    | ⚠️ Medium      |
+| **Control**             | ⚠️ Medium    | ✅ Full   | ❌ Limited | ✅ Full        |
+| **Azure compatibility** | ✅ Yes       | ✅ Yes    | ❌ No      | ✅ Yes         |
+| **Observability**       | ✅ LangSmith | ⚠️ Manual | ⚠️ Limited | ✅ Built-in    |
+| **Community**           | ✅ Large     | ❌ None   | ⚠️ Growing | ❌ Internal    |
+| **Compliance**          | ⚠️ Manual    | ❌ None   | ⚠️ Limited | ✅ Built-in    |
+| **Ethical governance**  | ❌ None      | ❌ None   | ❌ None    | ✅ Native      |
 
-**Decision**: LangChain provides the best balance of capability and development speed while maintaining Azure compatibility. Cognitive Mesh becomes the preferred option when enterprise compliance or ethical AI governance is required.
+**Decision**: LangChain provides the best balance of capability and development
+speed while maintaining Azure compatibility. Cognitive Mesh becomes the
+preferred option when enterprise compliance or ethical AI governance is
+required.
 
 ---
 
@@ -592,20 +635,20 @@ export const agentQuery = functions
 
 ### Latency
 
-| Agent | Typical Latency | Worst Case |
-|-------|-----------------|------------|
-| Research | 10-30s | 60s |
-| Competitive Intel | 15-45s | 90s |
-| Analyst | 20-60s | 120s |
-| Router | 500ms | 2s |
+| Agent             | Typical Latency | Worst Case |
+| ----------------- | --------------- | ---------- |
+| Research          | 10-30s          | 60s        |
+| Competitive Intel | 15-45s          | 90s        |
+| Analyst           | 20-60s          | 120s       |
+| Router            | 500ms           | 2s         |
 
 ### Cost Estimation
 
-| Agent | Avg Tokens/Task | Est. Cost/Task |
-|-------|-----------------|----------------|
-| Research | 8,000 | $0.08 |
-| Competitive Intel | 12,000 | $0.12 |
-| Analyst | 15,000 | $0.15 |
+| Agent             | Avg Tokens/Task | Est. Cost/Task |
+| ----------------- | --------------- | -------------- |
+| Research          | 8,000           | $0.08          |
+| Competitive Intel | 12,000          | $0.12          |
+| Analyst           | 15,000          | $0.15          |
 
 ---
 
@@ -627,12 +670,12 @@ export const agentQuery = functions
 
 ### Risks
 
-| Risk | Mitigation |
-|------|------------|
-| Infinite loops | Max iterations limit |
-| Hallucination | Tool-grounded responses |
-| Cost overrun | Token budgets, rate limits |
-| Poor tool selection | Better prompts, routing |
+| Risk                | Mitigation                 |
+| ------------------- | -------------------------- |
+| Infinite loops      | Max iterations limit       |
+| Hallucination       | Tool-grounded responses    |
+| Cost overrun        | Token budgets, rate limits |
+| Poor tool selection | Better prompts, routing    |
 
 ---
 
@@ -640,35 +683,44 @@ export const agentQuery = functions
 
 ### Decision: **Implement in Cognitive Mesh** 🔶
 
-| Factor | Assessment |
-|--------|------------|
-| **Current Status** | Proposed (not implemented) |
-| **CM Equivalent** | Agency Layer (~40% complete) |
-| **CM Advantage** | Built-in ethical reasoning, audit trails, RBAC |
-| **Resource Trade-off** | CM has agent infrastructure in progress |
+| Factor                 | Assessment                                     |
+| ---------------------- | ---------------------------------------------- |
+| **Current Status**     | Proposed (not implemented)                     |
+| **CM Equivalent**      | Agency Layer (~40% complete)                   |
+| **CM Advantage**       | Built-in ethical reasoning, audit trails, RBAC |
+| **Resource Trade-off** | CM has agent infrastructure in progress        |
 
-**Rationale**: Cognitive Mesh's Agency Layer is already 40% complete with multi-agent orchestration, tool governance, and ethical reasoning built in. Implementing LangChain agents here duplicates effort and lacks the compliance features that CM provides.
+**Rationale**: Cognitive Mesh's Agency Layer is already 40% complete with
+multi-agent orchestration, tool governance, and ethical reasoning built in.
+Implementing LangChain agents here duplicates effort and lacks the compliance
+features that CM provides.
 
-**Action**: 
+**Action**:
+
 - **Do NOT implement** agent architecture in docs site
 - **Prioritize completing CM Agency Layer PRD**
 - Docs site can function with simple RAG Q&A (no agents)
 - Migrate to CM agents when platform is production-ready
 
-**For docs site**: Simple single-turn interactions are acceptable until CM is ready.
+**For docs site**: Simple single-turn interactions are acceptable until CM is
+ready.
 
-See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+See
+[ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md)
+for full analysis.
 
 ---
 
 ## Related ADRs
 
-- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0018: LangChain Integration](./adr-0018-langchain-integration.md)
 - [ADR 0020: Agent Tools Framework](./adr-0020-agent-tools.md)
 - [ADR 0022: AI Workflows](./adr-0022-ai-workflows.md)
 - [ADR 0023: AI Observability](./adr-0023-ai-observability.md)
-- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future enterprise platform
+- [Cognitive Mesh](https://github.com/justaghost/cognitive-mesh) - Future
+  enterprise platform
 
 ---
 

@@ -57,7 +57,10 @@ export {
 
 // Legacy compatibility - re-export from ai/prompts for backward compatibility
 // TODO: Migrate all usages to new template system
-import { PROMPTS as LegacyPROMPTS, PHOENIX_CONTEXT as LegacyContext } from "../ai/prompts";
+import {
+  PROMPTS as LegacyPROMPTS,
+  PHOENIX_CONTEXT as LegacyContext,
+} from "../ai/prompts";
 
 /**
  * @deprecated Use getPromptTemplate() instead
