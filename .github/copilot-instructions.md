@@ -309,7 +309,7 @@ chore: Update dependencies to latest versions
 When creating or restructuring ADRs, **ALWAYS** reference the canonical
 template:
 
-```
+```md
 apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
 ```
 

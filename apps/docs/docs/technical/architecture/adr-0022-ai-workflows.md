@@ -60,7 +60,29 @@ Some analysis tasks require multiple coordinated steps:
 
 ---
 
+## Options Considered
+
+| Option                     | Pros                                    | Cons                                         |
+| -------------------------- | --------------------------------------- | -------------------------------------------- |
+| 1. No workflow engine      | Simple, lower complexity                | Manual step coordination, error-prone        |
+| 2. LangChain + Firestore   | Standard patterns, local control        | Exceeds docs site needs, governance concerns |
+| 3. Defer to Cognitive Mesh | Built-in governance, compliance, mature | Requires Cognitive Mesh integration          |
+
+---
+
 ## Decision
+
+**Defer workflows to Cognitive Mesh**. Keep the Phoenix Rooivalk docs site
+focused on simple single-step AI features. Complex multi-step workflows should
+be implemented in Cognitive Mesh's Business Applications Layer, which provides
+superior workflow orchestration with governance and compliance built-in.
+
+---
+
+## Rejected Option: LangChain RunnableSequence Workflows
+
+The following approach was evaluated but **rejected** in favor of Cognitive
+Mesh:
 
 **LangChain RunnableSequence workflows** with:
 

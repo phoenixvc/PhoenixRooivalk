@@ -51,42 +51,45 @@ jobs:
           set -e
 
           # Check for Docusaurus broken link warnings
-          BROKEN_LINKS=""
           if grep -q "Docusaurus found broken links" "$BUILD_LOG_FILE"; then
-            echo "has_broken_links=true" >> $GITHUB_OUTPUT
+            echo "has_broken_links=true" >> "$GITHUB_OUTPUT"
             
             # Extract and format broken links
             BROKEN_LINKS=$(grep -A 100 "Exhaustive list of all broken links found" "$BUILD_LOG_FILE" | \
               grep -E "^- |source page path" | head -50)
             
-            echo "## ❌ Broken Links Detected" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "The following broken links were found during the documentation build:" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            grep -A 100 "Exhaustive list of all broken links found" "$BUILD_LOG_FILE" | head -60 >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
+            {
+              echo "## ❌ Broken Links Detected"
+              echo ""
+              echo "The following broken links were found during the documentation build:"
+              echo ""
+              echo "\`\`\`"
+              grep -A 100 "Exhaustive list of all broken links found" "$BUILD_LOG_FILE" | head -60
+              echo "\`\`\`"
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
             
             # Save broken links to output for PR comment
             {
               echo "broken_links<<EOF"
               grep -A 100 "Exhaustive list of all broken links found" "$BUILD_LOG_FILE" | head -60
               echo "EOF"
-            } >> $GITHUB_OUTPUT
+            } >> "$GITHUB_OUTPUT"
             
             rm "$BUILD_LOG_FILE"
             exit 1
           else
-            echo "has_broken_links=false" >> $GITHUB_OUTPUT
-            echo "## ✅ No Broken Links Found" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "All documentation links are valid." >> $GITHUB_STEP_SUMMARY
+            echo "has_broken_links=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## ✅ No Broken Links Found"
+              echo ""
+              echo "All documentation links are valid."
+            } >> "$GITHUB_STEP_SUMMARY"
             rm "$BUILD_LOG_FILE"
             
-            if [ $BUILD_EXIT_CODE -ne 0 ]; then
+            if [ "$BUILD_EXIT_CODE" -ne 0 ]; then
               echo "Build failed for other reasons"
-              exit $BUILD_EXIT_CODE
+              exit "$BUILD_EXIT_CODE"
             fi
           fi
         env:
@@ -134,10 +137,12 @@ jobs:
       - name: Report summary tips
         if: always()
         run: |
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 💡 Tips for Documentation Links" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Local check**: Run \`pnpm -C apps/docs run check-links\` before committing" >> $GITHUB_STEP_SUMMARY
-          echo "- **Relative paths**: Use \`./filename\` or \`../folder/filename\` (no \`.md\` extension)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Document IDs**: Use kebab-case for all document IDs and filenames" >> $GITHUB_STEP_SUMMARY
-          echo "- **Frontmatter**: Ensure \`id\` field matches the filename (without extension)" >> $GITHUB_STEP_SUMMARY
+          {
+            echo ""
+            echo "### 💡 Tips for Documentation Links"
+            echo ""
+            echo "- **Local check**: Run \`pnpm -C apps/docs run check-links\` before committing"
+            echo "- **Relative paths**: Use \`./filename\` or \`../folder/filename\` (no \`.md\` extension)"
+            echo "- **Document IDs**: Use kebab-case for all document IDs and filenames"
+            echo "- **Frontmatter**: Ensure \`id\` field matches the filename (without extension)"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -34,17 +34,31 @@ Mesh
 
 ## Executive Summary
 
-| ADR  | Feature               | Implement Here | Implement in CM     | Recommendation                               |
-| ---- | --------------------- | -------------- | ------------------- | -------------------------------------------- |
-| 0015 | Prompt Management     | ✅ (Done)      | Future              | **Keep here** - Basic needs met              |
-| 0016 | RAG Architecture      | ✅ (Done)      | Future              | **Keep here** - Azure AI Search works        |
-| 0017 | Context Management    | ✅ (Done)      | Future              | **Keep here** - Adequate for docs site       |
-| 0018 | LangChain Integration | ✅ (Proposed)  | —                   | **Defer/Minimal** - Focus on CM instead      |
-| 0019 | AI Agents             | ⚠️ (Proposed)  | ✅ (In Progress)    | **Implement in CM** - Agency Layer exists    |
-| 0020 | Agent Tools           | ⚠️ (Proposed)  | ✅ (Agency Layer)   | **Implement in CM** - Better governance      |
-| 0021 | Conversation Memory   | ⚠️ (Proposed)  | ✅ (Foundation)     | **Implement in CM** - Privacy/GDPR built-in  |
-| 0022 | AI Workflows          | ⚠️ (Proposed)  | ✅ (Business Layer) | **Implement in CM** - Workflow Orchestrators |
-| 0023 | AI Observability      | ✅ (Proposed)  | ✅ (All Layers)     | **Split** - Basic here, compliance in CM     |
+| ADR  | Feature               | Implement Here | Implement in CM     | Option 3: Hybrid/Minimal | Recommendation                               |
+| ---- | --------------------- | -------------- | ------------------- | ------------------------ | -------------------------------------------- |
+| 0015 | Prompt Management     | ✅ (Done)      | Future              | Keep minimal local       | **Keep here** - Basic needs met              |
+| 0016 | RAG Architecture      | ✅ (Done)      | Future              | Keep minimal local       | **Keep here** - Azure AI Search works        |
+| 0017 | Context Management    | ✅ (Done)      | Future              | Keep minimal local       | **Keep here** - Adequate for docs site       |
+| 0018 | LangChain Integration | ✅ (Proposed)  | —                   | Minimal local chains     | **Defer/Minimal** - Focus on CM instead      |
+| 0019 | AI Agents             | ⚠️ (Proposed)  | ✅ (In Progress)    | Stub for CM integration  | **Implement in CM** - Agency Layer exists    |
+| 0020 | Agent Tools           | ⚠️ (Proposed)  | ✅ (Agency Layer)   | Stub for CM integration  | **Implement in CM** - Better governance      |
+| 0021 | Conversation Memory   | ⚠️ (Proposed)  | ✅ (Foundation)     | Session-only memory      | **Implement in CM** - Privacy/GDPR built-in  |
+| 0022 | AI Workflows          | ⚠️ (Proposed)  | ✅ (Business Layer) | Single-step only         | **Implement in CM** - Workflow Orchestrators |
+| 0023 | AI Observability      | ✅ (Proposed)  | ✅ (All Layers)     | Basic logging only       | **Split** - Basic here, compliance in CM     |
+
+### Trade-offs Summary
+
+| ADR  | Schedule Impact  | Maintenance Burden     | Privacy/Compliance          |
+| ---- | ---------------- | ---------------------- | --------------------------- |
+| 0015 | None (done)      | Low - stable templates | Low - no PII in prompts     |
+| 0016 | None (done)      | Low - Azure managed    | Low - doc content only      |
+| 0017 | None (done)      | Low - simple windowing | Low - ephemeral context     |
+| 0018 | -2 weeks if done | Medium - chain updates | Low - no external data      |
+| 0019 | -4 weeks if done | High - agent lifecycle | Medium - action audit trail |
+| 0020 | -3 weeks if done | High - tool APIs       | High - external access      |
+| 0021 | -2 weeks if done | High - storage/GDPR    | High - GDPR compliance      |
+| 0022 | -4 weeks if done | High - state mgmt      | Medium - workflow logging   |
+| 0023 | -1 week if done  | Medium - dashboards    | Medium - trace data         |
 
 **Summary**: Keep already-implemented features (0015-0017) here. For proposed
 complex features (0019-0022), prioritize CM development over docs site
