@@ -150,7 +150,10 @@ async function getUserNewsPreferences(
   userId: string,
 ): Promise<{ readArticleIds: string[] }> {
   try {
-    const doc = await db.collection(COLLECTIONS.USER_NEWS_PREFS).doc(userId).get();
+    const doc = await db
+      .collection(COLLECTIONS.USER_NEWS_PREFS)
+      .doc(userId)
+      .get();
     if (doc.exists) {
       return doc.data() as { readArticleIds: string[] };
     }
@@ -175,6 +178,14 @@ export const getNewsFeed = functions.https.onCall(
   ) => {
     const userId = context.auth?.uid;
     const limit = data.limit || 20;
+
+    // Validate categories - Firestore "in" operator supports max 10 values
+    if (data.categories && data.categories.length > 10) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Cannot filter by more than 10 categories at once",
+      );
+    }
 
     try {
       // Build base query
@@ -240,10 +251,7 @@ export const getNewsFeed = functions.https.onCall(
 
       // Limit results
       const finalGeneral = generalNews.slice(0, Math.ceil(limit / 2));
-      const finalSpecialized = specializedNews.slice(
-        0,
-        Math.floor(limit / 2),
-      );
+      const finalSpecialized = specializedNews.slice(0, Math.floor(limit / 2));
 
       return {
         generalNews: finalGeneral,
@@ -300,7 +308,8 @@ export const getPersonalizedNews = functions.https.onCall(
       return {
         articles: [],
         totalMatched: 0,
-        message: "Complete your profile to see personalized news recommendations.",
+        message:
+          "Complete your profile to see personalized news recommendations.",
       };
     }
 
@@ -323,7 +332,10 @@ export const getPersonalizedNews = functions.https.onCall(
 
       for (const article of articles) {
         // First try rule-based matching for efficiency
-        const ruleBasedRelevance = calculateRelevanceScore(article, userProfile);
+        const ruleBasedRelevance = calculateRelevanceScore(
+          article,
+          userProfile,
+        );
 
         if (ruleBasedRelevance.score >= 0.5) {
           personalizedArticles.push({
@@ -334,7 +346,7 @@ export const getPersonalizedNews = functions.https.onCall(
         } else if (ruleBasedRelevance.score >= 0.2) {
           // Use AI for borderline cases
           try {
-            const prompt = NEWS_PERSONALIZATION_PROMPT.user
+            const prompt = NEWS_PERSONALIZATION_PROMPT.user.template
               .replace("{{articleTitle}}", article.title)
               .replace("{{articleSummary}}", article.summary)
               .replace("{{articleCategory}}", article.category)
@@ -351,7 +363,10 @@ export const getPersonalizedNews = functions.https.onCall(
 
             const { content } = await chatCompletion(
               [
-                { role: "system", content: NEWS_PERSONALIZATION_PROMPT.system },
+                {
+                  role: "system",
+                  content: NEWS_PERSONALIZATION_PROMPT.system.base,
+                },
                 { role: "user", content: prompt },
               ],
               { model: "chatFast", maxTokens: 300, temperature: 0.2 },
@@ -385,7 +400,9 @@ export const getPersonalizedNews = functions.https.onCall(
       }
 
       // Sort by relevance score
-      personalizedArticles.sort((a, b) => b.relevance.score - a.relevance.score);
+      personalizedArticles.sort(
+        (a, b) => b.relevance.score - a.relevance.score,
+      );
 
       return {
         articles: personalizedArticles.slice(0, limit),
@@ -427,13 +444,13 @@ export const addNewsArticle = functions.https.onCall(
 
     try {
       // Use AI to categorize and extract metadata
-      const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user
+      const categorizationPrompt = NEWS_CATEGORIZATION_PROMPT.user.template
         .replace("{{title}}", title)
         .replace("{{content}}", content.substring(0, 2000));
 
       const { content: categorizationResult } = await chatCompletion(
         [
-          { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system },
+          { role: "system", content: NEWS_CATEGORIZATION_PROMPT.system.base },
           { role: "user", content: categorizationPrompt },
         ],
         { model: "chatFast", maxTokens: 500, temperature: 0.1 },
@@ -658,14 +675,19 @@ export const getSavedArticles = functions.https.onCall(
         return { articles: [] };
       }
 
-      // Fetch saved articles
-      const docRefs = savedIds
-        .slice(0, 50)
-        .map((id) => db.collection(COLLECTIONS.NEWS).doc(id));
-      const docs = await db.getAll(...docRefs);
-      const articles: NewsArticle[] = docs
-        .filter((doc) => doc.exists)
-        .map((doc) => ({ id: doc.id, ...doc.data() } as NewsArticle));
+      // Fetch saved articles using batched fetch for efficiency
+      const idsToFetch = savedIds.slice(0, 50);
+      const articleRefs = idsToFetch.map((id: string) =>
+        db.collection(COLLECTIONS.NEWS).doc(id),
+      );
+      const articleDocs = await db.getAll(...articleRefs);
+
+      const articles: NewsArticle[] = [];
+      for (const doc of articleDocs) {
+        if (doc.exists) {
+          articles.push({ id: doc.id, ...doc.data() } as NewsArticle);
+        }
+      }
 
       return { articles };
     } catch (error) {
@@ -723,7 +745,10 @@ export const searchNews = functions.https.onCall(
       const scoredArticles = articles
         .filter((a) => a.embedding)
         .map((article) => {
-          const similarity = cosineSimilarity(queryEmbedding, article.embedding!);
+          const similarity = cosineSimilarity(
+            queryEmbedding,
+            article.embedding!,
+          );
           return { ...article, similarity };
         })
         .filter((a) => a.similarity > 0.5)
@@ -731,7 +756,9 @@ export const searchNews = functions.https.onCall(
         .slice(0, limit);
 
       return {
-        results: scoredArticles.map(({ embedding, ...rest }) => rest),
+        results: scoredArticles.map(
+          ({ embedding: _embedding, ...rest }) => rest,
+        ),
         totalFound: scoredArticles.length,
       };
     } catch (error) {

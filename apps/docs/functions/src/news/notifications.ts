@@ -9,6 +9,17 @@ import * as admin from "firebase-admin";
 
 const db = admin.firestore();
 
+/**
+ * Base URL for article links in notifications.
+ * Configurable via Firebase Functions config or environment variable.
+ * Falls back to production URL if not configured.
+ */
+const BASE_URL = (
+  functions.config().app?.base_url ||
+  process.env.BASE_URL ||
+  "https://docs-phoenixrooivalk.netlify.app"
+).trim();
+
 const COLLECTIONS = {
   NEWS: "news_articles",
   NEWS_SUBSCRIPTIONS: "news_subscriptions",
@@ -28,6 +39,18 @@ interface NewsSubscription {
 
 /**
  * Subscribe to breaking news notifications
+ *
+ * Registers a user for breaking news alerts via push notifications and/or email.
+ *
+ * @param data - Subscription configuration
+ * @param data.categories - Optional array of news categories to subscribe to
+ * @param data.pushEnabled - Enable push notifications (default: true)
+ * @param data.emailEnabled - Enable email notifications (default: false)
+ * @param data.fcmToken - Firebase Cloud Messaging token for push notifications
+ * @param context - Firebase callable context
+ * @returns Promise resolving to { success: boolean, subscriptionId: string }
+ * @throws {HttpsError} unauthenticated - If user is not signed in
+ * @throws {HttpsError} internal - If subscription fails
  */
 export const subscribeToBreakingNews = functions.https.onCall(
   async (
@@ -67,7 +90,8 @@ export const subscribeToBreakingNews = functions.https.onCall(
         categories,
         pushEnabled,
         emailEnabled,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp() as admin.firestore.Timestamp,
+        updatedAt:
+          admin.firestore.FieldValue.serverTimestamp() as admin.firestore.Timestamp,
       };
 
       if (fcmToken) {
@@ -90,16 +114,21 @@ export const subscribeToBreakingNews = functions.https.onCall(
       };
     } catch (error) {
       functions.logger.error("Error subscribing to breaking news:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Failed to subscribe",
-      );
+      throw new functions.https.HttpsError("internal", "Failed to subscribe");
     }
   },
 );
 
 /**
  * Unsubscribe from breaking news notifications
+ *
+ * Removes a user's subscription to breaking news alerts.
+ *
+ * @param _data - No parameters expected
+ * @param context - Firebase callable context
+ * @returns Promise resolving to { success: boolean }
+ * @throws {HttpsError} unauthenticated - If user is not signed in
+ * @throws {HttpsError} internal - If unsubscription fails
  */
 export const unsubscribeFromBreakingNews = functions.https.onCall(
   async (_data: Record<string, never>, context) => {
@@ -120,16 +149,21 @@ export const unsubscribeFromBreakingNews = functions.https.onCall(
       return { success: true };
     } catch (error) {
       functions.logger.error("Error unsubscribing:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Failed to unsubscribe",
-      );
+      throw new functions.https.HttpsError("internal", "Failed to unsubscribe");
     }
   },
 );
 
 /**
  * Get user's notification subscription status
+ *
+ * Retrieves the current notification subscription settings for the authenticated user.
+ *
+ * @param _data - No parameters expected
+ * @param context - Firebase callable context
+ * @returns Promise resolving to { isSubscribed: boolean, subscription: object | null }
+ * @throws {HttpsError} unauthenticated - If user is not signed in
+ * @throws {HttpsError} internal - If retrieval fails
  */
 export const getNotificationSubscription = functions.https.onCall(
   async (_data: Record<string, never>, context) => {
@@ -176,7 +210,13 @@ export const getNotificationSubscription = functions.https.onCall(
 
 /**
  * Trigger when a breaking news article is added
- * Sends notifications to all subscribed users
+ *
+ * Firestore trigger that sends notifications to all subscribed users
+ * when a new article is marked as breaking news.
+ *
+ * @param snap - Firestore document snapshot
+ * @param context - Event context containing article ID
+ * @returns null after processing notifications
  */
 export const onBreakingNewsCreated = functions.firestore
   .document(`${COLLECTIONS.NEWS}/{articleId}`)
@@ -266,11 +306,11 @@ async function sendPushNotification(
       data: {
         type: "breaking_news",
         articleId,
-        clickAction: `/news?article=${articleId}`,
+        clickAction: `${BASE_URL}/news?article=${articleId}`,
       },
       webpush: {
         fcmOptions: {
-          link: `/news?article=${articleId}`,
+          link: `${BASE_URL}/news?article=${articleId}`,
         },
         notification: {
           icon: "/img/logo.svg",
@@ -304,7 +344,7 @@ async function queueEmailNotification(
         title,
         summary,
         articleId,
-        articleUrl: `https://docs-phoenixrooivalk.netlify.app/news?article=${articleId}`,
+        articleUrl: `${BASE_URL}/news?article=${articleId}`,
       },
       status: "pending",
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -315,8 +355,12 @@ async function queueEmailNotification(
 }
 
 /**
- * Process email notification queue (scheduled function)
- * Runs every 5 minutes to batch process email notifications
+ * Process email notification queue
+ *
+ * Scheduled function that runs every 5 minutes to batch process
+ * pending email notifications from the queue.
+ *
+ * @returns null after processing pending emails
  */
 export const processEmailQueue = functions.pubsub
   .schedule("*/5 * * * *")
@@ -348,7 +392,10 @@ export const processEmailQueue = functions.pubsub
           sentAt: admin.firestore.FieldValue.serverTimestamp(),
         });
       } catch (error) {
-        functions.logger.error(`Failed to send email to ${emailData.to}:`, error);
+        functions.logger.error(
+          `Failed to send email to ${emailData.to}:`,
+          error,
+        );
         await doc.ref.update({
           status: "failed",
           error: (error as Error).message,
@@ -362,6 +409,16 @@ export const processEmailQueue = functions.pubsub
 
 /**
  * Mark article as breaking news (admin only)
+ *
+ * Toggles the breaking news status of an article.
+ *
+ * @param data - Request data
+ * @param data.articleId - ID of the article to update
+ * @param data.isBreaking - Whether to mark as breaking news
+ * @param context - Firebase callable context (requires admin token)
+ * @returns Promise resolving to { success: boolean }
+ * @throws {HttpsError} permission-denied - If user is not an admin
+ * @throws {HttpsError} internal - If update fails
  */
 export const markAsBreakingNews = functions.https.onCall(
   async (
