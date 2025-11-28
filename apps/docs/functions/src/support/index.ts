@@ -6,6 +6,7 @@
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import { checkRateLimit } from "../ai/rate-limit";
 
 const db = admin.firestore();
 
@@ -64,6 +65,16 @@ function determinePriority(
  */
 export const submitContactForm = functions.https.onCall(
   async (data: ContactFormData, context) => {
+    // Rate limiting - use userId if authenticated, otherwise use IP-based identifier
+    const rateLimitId = context.auth?.uid || context.rawRequest.ip || "anonymous";
+    const canProceed = await checkRateLimit(rateLimitId, "contactForm");
+    if (!canProceed) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "Too many requests. Please wait before submitting another message."
+      );
+    }
+
     // Validate input
     if (!data.name || !data.email || !data.subject || !data.message) {
       throw new functions.https.HttpsError(

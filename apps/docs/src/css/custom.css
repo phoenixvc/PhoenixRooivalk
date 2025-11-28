@@ -1317,7 +1317,8 @@ html {
 }
 
 /* News notification badge - shows when there's new news */
-.navbar__link--news[data-has-new="true"]::after {
+/* Uses CSS custom property set by NavbarNotifications component */
+.navbar__link--news::after {
   content: "";
   position: absolute;
   top: 2px;
@@ -1328,6 +1329,7 @@ html {
   border-radius: 50%;
   border: 2px solid rgb(15, 23, 42);
   animation: navbar-badge-pulse 2s ease-in-out infinite;
+  display: var(--navbar-news-badge-display, none);
 }
 
 /* ================================================
@@ -1352,7 +1354,8 @@ html {
 }
 
 /* Support notification badge - shows when there's new messages */
-.navbar__link--support[data-has-new="true"]::after {
+/* Uses CSS custom property set by NavbarNotifications component */
+.navbar__link--support::after {
   content: "";
   position: absolute;
   top: 2px;
@@ -1363,6 +1366,7 @@ html {
   border-radius: 50%;
   border: 2px solid rgb(15, 23, 42);
   animation: navbar-badge-pulse 2s ease-in-out infinite;
+  display: var(--navbar-support-badge-display, none);
 }
 
 /* Pulse animation for notification badges */

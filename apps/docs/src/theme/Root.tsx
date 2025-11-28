@@ -9,6 +9,8 @@
 
 import React, { ReactNode, useEffect, useState } from "react";
 import { AuthProvider } from "../contexts/AuthContext";
+import { ToastProvider } from "../contexts/ToastContext";
+import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
 import { ReadingTracker, CompletionToast } from "../components/Gamification";
 import { AnalyticsTracker } from "../components/Analytics";
 import { CookieConsentBanner } from "../components/CookieConsent";
@@ -71,37 +73,41 @@ export default function Root({ children }: RootProps): React.ReactElement {
 
   return (
     <AuthProvider>
-      <SilentErrorBoundary>
-        <NavbarProgressVisibility />
-        <NavbarNotifications />
-        <ProfileConfirmation>
+      <ToastProvider>
+        <NotificationBadgeProvider>
           <SilentErrorBoundary>
-            <ReadingTracker />
+            <NavbarProgressVisibility />
+            <NavbarNotifications />
+            <ProfileConfirmation>
+            <SilentErrorBoundary>
+              <ReadingTracker />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <AnalyticsTracker />
+            </SilentErrorBoundary>
+            {children}
+            <SilentErrorBoundary>
+              <CookieConsentBanner />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <OfflineIndicator />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <CompletionToast />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <SidebarRecommendations />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <AIFloatingWidget pageContext={pageContext} />
+            </SilentErrorBoundary>
+            <SilentErrorBoundary>
+              <OnboardingWalkthrough />
+            </SilentErrorBoundary>
+            </ProfileConfirmation>
           </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <AnalyticsTracker />
-          </SilentErrorBoundary>
-          {children}
-          <SilentErrorBoundary>
-            <CookieConsentBanner />
-          </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <OfflineIndicator />
-          </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <CompletionToast />
-          </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <SidebarRecommendations />
-          </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <AIFloatingWidget pageContext={pageContext} />
-          </SilentErrorBoundary>
-          <SilentErrorBoundary>
-            <OnboardingWalkthrough />
-          </SilentErrorBoundary>
-        </ProfileConfirmation>
-      </SilentErrorBoundary>
+        </NotificationBadgeProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }

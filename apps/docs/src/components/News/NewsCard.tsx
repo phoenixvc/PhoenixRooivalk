@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import type { NewsArticle, PersonalizedNewsItem } from "../../types/news";
 import { NEWS_CATEGORY_CONFIG } from "../../types/news";
 import { newsService } from "../../services/newsService";
+import { useToast } from "../../contexts/ToastContext";
 import "./NewsCard.css";
 
 interface NewsCardProps {
@@ -32,6 +33,7 @@ export function NewsCard({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const toast = useToast();
 
   const categoryConfig = NEWS_CATEGORY_CONFIG[article.category];
   const personalized = isPersonalized(article);
@@ -44,6 +46,7 @@ export function NewsCard({
         onRead?.(article.id);
       } catch (err) {
         console.error("Failed to mark article as read:", err);
+        // Silent fail for read tracking - not critical
       }
     } else {
       setIsExpanded(false);
@@ -57,8 +60,10 @@ export function NewsCard({
       const result = await newsService.saveArticle(article.id, !isSaved);
       setIsSaved(result.saved);
       onSave?.(article.id, result.saved);
+      toast.success(result.saved ? "Article saved!" : "Article removed from saved");
     } catch (err) {
       console.error("Failed to save article:", err);
+      toast.error("Failed to save article. Please try again.");
     } finally {
       setIsSaving(false);
     }

@@ -6,6 +6,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 import { supportService } from "../../services/supportService";
 import "./SupportPanel.css";
 
@@ -90,6 +91,7 @@ export function SupportPanel({
   showContactForm = true,
 }: SupportPanelProps): React.ReactElement {
   const { user } = useAuth();
+  const toast = useToast();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [contactForm, setContactForm] = useState({
@@ -133,6 +135,7 @@ export function SupportPanel({
 
       setTicketNumber(response.ticketNumber);
       setSubmitStatus("success");
+      toast.success(`Message sent! Ticket #${response.ticketNumber}`);
       setContactForm({
         name: user?.displayName || "",
         email: user?.email || "",
@@ -142,12 +145,12 @@ export function SupportPanel({
       });
     } catch (error) {
       console.error("Failed to submit contact form:", error);
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit. Please try again or email us directly."
-      );
+      const message = error instanceof Error
+        ? error.message
+        : "Failed to submit. Please try again or email us directly.";
+      setErrorMessage(message);
       setSubmitStatus("error");
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

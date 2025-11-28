@@ -973,18 +973,33 @@ export const getCommentStats = async (): Promise<CommentStats> => {
     const recentCount = await getCountFromServer(recentQuery);
     stats.recentCount = recentCount.data().count;
 
-    // For category and status breakdowns, we need to query each
-    // This is still more efficient than fetching all documents
-    for (const category of VALID_CATEGORIES) {
-      const categoryQuery = query(commentsRef, where("category", "==", category));
-      const categoryCount = await getCountFromServer(categoryQuery);
-      stats.byCategory[category] = categoryCount.data().count;
-    }
+    // Run category and status queries in parallel for better performance
+    // This reduces N+1 queries (11 sequential) to 2 parallel batches
+    const [categoryResults, statusResults] = await Promise.all([
+      // All category counts in parallel
+      Promise.all(
+        VALID_CATEGORIES.map(async (category) => {
+          const categoryQuery = query(commentsRef, where("category", "==", category));
+          const count = await getCountFromServer(categoryQuery);
+          return { category, count: count.data().count };
+        })
+      ),
+      // All status counts in parallel
+      Promise.all(
+        VALID_STATUSES.map(async (status) => {
+          const statusQuery = query(commentsRef, where("status", "==", status));
+          const count = await getCountFromServer(statusQuery);
+          return { status, count: count.data().count };
+        })
+      ),
+    ]);
 
-    for (const status of VALID_STATUSES) {
-      const statusQuery = query(commentsRef, where("status", "==", status));
-      const statusCount = await getCountFromServer(statusQuery);
-      stats.byStatus[status] = statusCount.data().count;
+    // Populate stats from parallel results
+    for (const { category, count } of categoryResults) {
+      stats.byCategory[category] = count;
+    }
+    for (const { status, count } of statusResults) {
+      stats.byStatus[status] = count;
     }
 
     return stats;
