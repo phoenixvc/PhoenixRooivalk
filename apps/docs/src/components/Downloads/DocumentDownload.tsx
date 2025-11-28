@@ -1,5 +1,6 @@
 import * as React from "react";
 import DownloadButton from "./DownloadButton";
+import styles from "./Downloads.module.css";
 
 interface DocumentDownloadProps {
   /** Document title for the PDF filename */
@@ -71,8 +72,8 @@ export default function DocumentDownload({
   }, [title, contentSelector]);
 
   return (
-    <div className="document-download flex flex-wrap gap-3 my-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mr-4">
+    <div className={styles.documentDownload}>
+      <div className={styles.downloadLabel}>
         <span aria-hidden="true">{"\u{2B07}"}</span>
         <span>Download:</span>
       </div>
