@@ -426,9 +426,9 @@ If x402 becomes the standard for AI agent payments (current trajectory suggests 
 
 ## Related ADRs
 
-- [ADR 0001: Chain Selection for On-Chain Anchoring](./architecture-decision-records#adr-0001-chain-selection)
+- [ADR 0001: Chain Selection for On-Chain Anchoring](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others)
 - [ADR 0015: Movement Network Integration](./adr-0015-movement-network-integration.md)
-- [ADR-D002: Dual Blockchain Anchoring](./architecture-decision-records#adr-d002-dual-blockchain-anchoring)
+- [ADR-D002: Dual Blockchain Anchoring](./architecture-decision-records#adr-d002-dual-blockchain-anchoring-solana--etherlink)
 
 ---
 

@@ -33,6 +33,15 @@ const envClass =
     ? "navbar-env-badge"
     : "navbar-env-badge navbar-env-badge--preview";
 
+// Allow override of broken links behavior via environment variable
+// DOCUSAURUS_BROKEN_LINKS: 'warn' (default), 'throw' (fail build), 'ignore' (skip)
+const onBrokenLinksConfig =
+  (process.env.DOCUSAURUS_BROKEN_LINKS as
+    | "ignore"
+    | "log"
+    | "warn"
+    | "throw") || "warn";
+
 const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
@@ -44,8 +53,11 @@ const config: Config = {
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",
-  onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
+  onBrokenLinks: onBrokenLinksConfig,
+  // Note: onBrokenMarkdownLinks is deprecated in Docusaurus v4
+  // It should be migrated to markdown.preprocessor in the future
+  onBrokenMarkdownLinks: onBrokenLinksConfig,
+  onBrokenAnchors: onBrokenLinksConfig,
   headTags: [
     {
       tagName: "meta",
