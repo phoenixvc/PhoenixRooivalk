@@ -110,9 +110,14 @@ export function CommentItem({
         <div className={styles.authorInfo}>
           <div className={styles.authorAvatar}>
             {comment.author.photoURL ? (
-              <img src={comment.author.photoURL} alt="" />
+              <img
+                src={comment.author.photoURL}
+                alt={`${comment.author.displayName || "User"}'s avatar`}
+              />
             ) : (
-              getInitials(comment.author.displayName)
+              <span aria-label={`${comment.author.displayName || "Anonymous"}'s avatar`}>
+                {getInitials(comment.author.displayName)}
+              </span>
             )}
           </div>
           <div className={styles.authorDetails}>

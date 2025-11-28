@@ -7,7 +7,7 @@
  * - Option to send for admin review
  */
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { createComment, saveAIEnhancement } from "../../services/commentService";
 import { aiService } from "../../services/aiService";
@@ -56,6 +56,16 @@ export function CommentForm({
     suggestions: string[];
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Auto-clear error after 8 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   // Parse AI response with structured format
   const parseAIResponse = useCallback((response: string): { content: string; suggestions: string[] } => {

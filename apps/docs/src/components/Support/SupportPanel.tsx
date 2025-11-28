@@ -209,29 +209,27 @@ export function SupportPanel({
           ))}
         </div>
 
-        <div className="faq-list">
+        <div className="faq-list" role="list">
           {filteredFAQs.map((item, index) => (
-            <div
+            <details
               key={index}
-              className={`faq-item ${expandedFAQ === index ? "expanded" : ""}`}
+              className="faq-item"
+              open={expandedFAQ === index}
+              onToggle={(e) => {
+                const isOpen = (e.target as HTMLDetailsElement).open;
+                setExpandedFAQ(isOpen ? index : null);
+              }}
             >
-              <button
-                className="faq-question"
-                onClick={() =>
-                  setExpandedFAQ(expandedFAQ === index ? null : index)
-                }
-              >
+              <summary className="faq-question">
                 <span className="faq-question-text">{item.question}</span>
-                <span className="faq-toggle">
+                <span className="faq-toggle" aria-hidden="true">
                   {expandedFAQ === index ? "−" : "+"}
                 </span>
-              </button>
-              {expandedFAQ === index && (
-                <div className="faq-answer">
-                  <p>{item.answer}</p>
-                </div>
-              )}
-            </div>
+              </summary>
+              <div className="faq-answer">
+                <p>{item.answer}</p>
+              </div>
+            </details>
           ))}
         </div>
       </section>

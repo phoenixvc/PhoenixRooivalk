@@ -9,6 +9,7 @@
 
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { app, isFirebaseConfigured } from "./firebase";
+import { withRetry, defaultIsRetryable } from "../utils/retry";
 import type {
   NewsArticle,
   PersonalizedNewsItem,
@@ -113,7 +114,17 @@ class NewsService {
         NewsFeedResponse
       >(this.functions!, "getNewsFeed");
 
-      const result = await getNewsFeedFn(options || {});
+      // Use retry with exponential backoff for network resilience
+      const result = await withRetry(
+        () => getNewsFeedFn(options || {}),
+        {
+          maxRetries: 3,
+          isRetryable: defaultIsRetryable,
+          onRetry: (attempt, error) => {
+            console.warn(`News feed fetch retry ${attempt}:`, error);
+          },
+        }
+      );
       return result.data;
     } catch (error) {
       this.handleError(error);
