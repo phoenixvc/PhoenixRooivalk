@@ -20,9 +20,17 @@ export const vectorSearchDocs = functions.https.onCall(
       );
     }
 
-    const { query, category, topK, minScore, unique } = data;
+    // Guard against null/undefined data before destructuring
+    const { query, category, topK, minScore, unique } = (data ?? {}) as {
+      query?: unknown;
+      category?: string;
+      topK?: number;
+      minScore?: number;
+      unique?: boolean;
+    };
 
-    if (!query || typeof query !== "string") {
+    // Validate query is a non-empty trimmed string
+    if (typeof query !== "string" || query.trim().length === 0) {
       throw new functions.https.HttpsError(
         "invalid-argument",
         "Query is required",
@@ -31,10 +39,10 @@ export const vectorSearchDocs = functions.https.onCall(
 
     try {
       const searchFn = unique ? vectorSearchUnique : vectorSearch;
-      const { results, metrics } = await searchFn(query, {
+      const { results, metrics } = await searchFn(query.trim(), {
         category,
-        topK: topK || 5,
-        minScore: minScore || 0.65,
+        topK: topK ?? 5,
+        minScore: minScore ?? 0.65,
       });
 
       return {

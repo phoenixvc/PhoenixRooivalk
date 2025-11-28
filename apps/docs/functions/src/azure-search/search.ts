@@ -90,9 +90,20 @@ export async function azureVectorSearch(
     searchRequest.answers = "extractive";
   }
 
-  // Add category filter
+  // Add category filter with sanitization to prevent OData injection
   if (category) {
-    searchRequest.filter = `category eq '${category}'`;
+    // Sanitize category by escaping single quotes and validating characters
+    // OData injection prevention: escape single quotes and reject invalid characters
+    const invalidChars = /[()\\;]/;
+    if (invalidChars.test(category)) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Invalid category format",
+      );
+    }
+    // Escape single quotes by replacing each ' with ''
+    const sanitizedCategory = category.replace(/'/g, "''");
+    searchRequest.filter = `category eq '${sanitizedCategory}'`;
   }
 
   try {
