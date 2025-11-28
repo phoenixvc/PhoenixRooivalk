@@ -8,15 +8,11 @@ timeEstimate: 5
 xpReward: 75
 ---
 
-import { ProgressReportDownloads, week48Slides, week48Meta } from "@site/src/components/Downloads";
+import { SlideDeck, SlideSection, DocumentDownload } from "@site/src/components/Downloads";
 
 # Week 48: November 25 - December 1, 2025
 
-<ProgressReportDownloads
-  title="Week 48 Progress Report - Phoenix Rooivalk"
-  slides={week48Slides}
-  slideDeckMeta={week48Meta}
-/>
+<DocumentDownload title="Week 48 Progress Report - Phoenix Rooivalk" />
 
 ## TL;DR (2-Minute Summary)
 
@@ -47,86 +43,102 @@ import { ProgressReportDownloads, week48Slides, week48Meta } from "@site/src/com
 
 ---
 
-## Presentation Brief (Weekly Feedback Meeting)
+## 3-Minute Presentation (Weekly Feedback Meeting)
 
-### Slide 1: Hardware Progress ✅
+<SlideDeck
+  title="Week 48 Progress Update"
+  duration={3}
+  audience="Investors/Advisors"
+  date="November 28, 2025"
+>
 
-**Net Interception System - Design Complete**
+<SlideSection
+  number={1}
+  title="Hardware Progress"
+  duration={30}
+  icon="✅"
+  keyPoints={[
+    "Net launcher and net designs complete - ready for prototyping",
+    "In-house Kevlar manufacturing using Pieter's domestic stock",
+    "60% cost reduction, no import delays, IP stays with us",
+    "Prototype can start immediately"
+  ]}
+  script="Net launcher and net designs are done - ready for prototyping. We're manufacturing Kevlar nets in-house using Pieter's domestic stock. 60% cost reduction, no import delays, IP stays with us. Prototype can start immediately."
+/>
 
-```
-┌─────────────────────────────────────────────────────┐
-│  NET LAUNCHER          │  KEVLAR NET               │
-│  ✅ Design complete    │  ✅ Design complete       │
-│  ✅ Ready for proto    │  ✅ In-house manufacturing│
-│  → Ground-based first  │  ✅ Kevlar sourced (Pieter)│
-│  → Grover integration  │  → Ready to start weaving │
-└─────────────────────────────────────────────────────┘
-```
+<SlideSection
+  number={2}
+  title="Revenue Model"
+  duration={25}
+  icon="💰"
+  keyPoints={[
+    "x402 payment protocol is live",
+    "Blockchain micropayments for premium API access",
+    "Revenue stream before hardware ships",
+    "Production-ready with full security"
+  ]}
+  script="x402 payment protocol is live - blockchain micropayments for premium API access. Revenue stream before hardware ships. Production-ready with full security."
+/>
 
-**Key Message**: First hardware milestone achieved. Kevlar in hand - prototype can begin immediately.
+<SlideSection
+  number={3}
+  title="Market Validation"
+  duration={40}
+  icon="🎯"
+  keyPoints={[
+    "Spoke to three SA airports and a Boeing pilot",
+    "Finding: SA has zero drone incidents - operators are responsible",
+    "Current threats are lasers and kites - cheaper, accessible",
+    "Validates international-first strategy (EU and Canada)",
+    "SA is Phase 2 market"
+  ]}
+  script="Spoke to three SA airports and a Boeing pilot. Finding: SA has zero drone incidents - operators are responsible. Current threats are lasers and kites - cheaper, accessible. This validates our international-first strategy. EU and Canada have the problem today. SA is Phase 2."
+/>
 
----
+<SlideSection
+  number={4}
+  title="Engineering Velocity"
+  duration={20}
+  icon="🚀"
+  keyPoints={[
+    "370+ commits merged this week",
+    "40+ PRs, 10+ ADRs published",
+    "Full RAG integration, auth, gamification",
+    "Technical foundation is production-ready"
+  ]}
+  script="370+ commits, 40+ PRs, 10+ ADRs. Full RAG integration, auth, gamification. Technical foundation is production-ready."
+/>
 
-### Slide 2: Revenue Model Activated 💰
+<SlideSection
+  number={5}
+  title="Key Decisions"
+  duration={20}
+  icon="📋"
+  keyPoints={[
+    "In-house Kevlar nets - cost, speed, IP protection",
+    "International focus - market research confirmed",
+    "x402 for pre-hardware revenue",
+    "Firebase Vector Search - right tool for stack",
+    "All decisions documented in ADRs"
+  ]}
+  script="Four key decisions: in-house Kevlar nets, international focus, x402 for pre-hardware revenue, Firebase Vector Search. All documented."
+/>
 
-**x402 Payment Protocol - Live**
+<SlideSection
+  number={6}
+  title="Next Week"
+  duration={15}
+  icon="📅"
+  keyPoints={[
+    "Start net prototype with Pieter's Kevlar",
+    "Continue x402 testing",
+    "Begin international outreach (EU/Canada)",
+    "Continue launcher development"
+  ]}
+  script="Next week: start net prototype, x402 testing, international outreach, continue launcher development. Questions?"
+/>
 
-- Premium API access via blockchain micropayments
-- Evidence verification = paid service tier
-- Revenue stream ready before hardware ships
-
-**Key Message**: Software revenue can fund hardware development.
-
----
-
-### Slide 3: Market Validation 🎯
-
-**SA Market Research Results**
-
-| Source | Finding | Implication |
-|--------|---------|-------------|
-| 3 Airports | No drone incidents | SA = future market |
-| Boeing Pilot | Lasers/kites > drones | Economic barrier (for now) |
-| Analysis | SA operators compliant | International focus correct |
-
-**Key Message**: Validates international-first strategy. SA is Phase 2.
-
----
-
-### Slide 4: Engineering Velocity 🚀
-
-**This Week: 370+ Commits, 40+ PRs, 10+ ADRs**
-
-| Category | Deliverables |
-|----------|-------------|
-| AI/RAG | Full integration across all endpoints |
-| Platform | Auth, analytics, offline, gamification |
-| Documentation | Architecture decisions for due diligence |
-| Security | CSRF, rate limiting, Firestore rules |
-
-**Key Message**: Technical foundation is production-ready.
-
----
-
-### Slide 5: Key Decisions Made 📋
-
-| Decision | Why | Impact |
-|----------|-----|--------|
-| In-house Kevlar nets | Cost + speed + IP | 60% cost reduction |
-| International first | SA not ready | Faster revenue |
-| x402 protocol | Monetize API | Pre-hardware revenue |
-| Firebase Vector Search | Best fit for stack | Reduced complexity |
-
----
-
-### Slide 6: Next Week Priorities 📅
-
-1. **Hardware**: Begin net prototype with Pieter's Kevlar stock
-2. **Software**: x402 testing, RAG optimization
-3. **Marketing**: International outreach campaign
-4. **Launcher**: Continue ground-based development
-
----
+</SlideDeck>
 
 ### Discussion Points for Meeting
 

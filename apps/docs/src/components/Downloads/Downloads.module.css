@@ -1,0 +1,426 @@
+/* Download Components Styles */
+
+/* Download Button */
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.downloadButton:hover {
+  transform: translateY(-1px);
+}
+
+.downloadButtonPrimary {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.downloadButtonPrimary:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+.downloadButtonSecondary {
+  background: var(--ifm-color-secondary);
+  color: var(--ifm-font-color-base);
+}
+
+.downloadButtonSecondary:hover {
+  background: var(--ifm-color-secondary-dark);
+}
+
+.downloadButtonOutline {
+  background: transparent;
+  border: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.downloadButtonOutline:hover {
+  background: var(--ifm-color-primary-lightest);
+}
+
+.downloadButtonIcon {
+  font-size: 1.1em;
+}
+
+/* Document Download Container */
+.documentDownload {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  border-radius: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.downloadLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-right: 0.5rem;
+}
+
+/* Slide Deck Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: var(--ifm-background-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 56rem;
+  width: 100%;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.printButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.printButton:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+.closeButton {
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ifm-color-emphasis-600);
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--ifm-font-color-base);
+  background: var(--ifm-color-emphasis-200);
+}
+
+.closeIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Slide Content */
+.slideContent {
+  padding: 2rem;
+}
+
+/* Title Slide */
+.titleSlide {
+  text-align: center;
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--ifm-color-emphasis-300);
+}
+
+.titleSlideTitle {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.titleSlideDuration {
+  font-size: 1.25rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.5rem;
+}
+
+.titleSlideAudience {
+  font-size: 1.125rem;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.titleSlideDate {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-400);
+  margin-top: 1rem;
+}
+
+/* Individual Slides */
+.slidePage {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.slidePage:last-child {
+  border-bottom: none;
+}
+
+.slideHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.slideHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.slideIcon {
+  font-size: 1.5rem;
+}
+
+.slideTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.slideHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.slideDuration {
+  padding: 0.25rem 0.5rem;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 0.25rem;
+}
+
+/* Key Points */
+.keyPointsSection {
+  margin-bottom: 1.5rem;
+}
+
+.keyPointsLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.75rem;
+}
+
+.keyPointsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyPoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.keyPointBullet {
+  color: var(--ifm-color-primary);
+  margin-top: 0.25rem;
+}
+
+/* Script Section */
+.scriptSection {
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.scriptLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.5rem;
+}
+
+.scriptText {
+  font-style: italic;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+}
+
+/* Summary Footer */
+.summaryFooter {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--ifm-color-emphasis-300);
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* ============================================
+   Inline SlideDeck Container
+   ============================================ */
+
+.slideDeckContainer {
+  margin: 2rem 0;
+  border: 2px solid var(--ifm-color-primary-light);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--ifm-background-surface-color);
+}
+
+.slideDeckHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-lightest) 0%,
+    var(--ifm-background-surface-color) 100%
+  );
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.slideDeckInfo {
+  flex: 1;
+  min-width: 200px;
+}
+
+.slideDeckTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--ifm-font-color-base);
+}
+
+.slideDeckMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.metaSeparator {
+  color: var(--ifm-color-emphasis-400);
+}
+
+.downloadDeckButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.downloadDeckButton:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.downloadDeckButton:active {
+  transform: translateY(0);
+}
+
+.slidesContainer {
+  padding: 1.5rem;
+}
+
+.slideChildren {
+  margin-bottom: 1rem;
+}
+
+.slideDeckFooter {
+  padding: 1rem 1.5rem;
+  background: var(--ifm-color-emphasis-100);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* Print-specific hiding */
+@media print {
+  .modalHeader,
+  .printButton,
+  .closeButton,
+  .downloadDeckButton,
+  .slideDeckHeader,
+  .slideDeckFooter {
+    display: none !important;
+  }
+
+  .slideDeckContainer {
+    border: none;
+    margin: 0;
+  }
+
+  .slidesContainer {
+    padding: 0;
+  }
+
+  .slidePage {
+    page-break-after: always;
+    break-after: page;
+    padding: 0.5in;
+  }
+}
