@@ -404,7 +404,7 @@ architecture, eliminating the need for custom claims management.
 | **Stack**      | Firebase (TypeScript)         | .NET 9.0+                    |
 
 **Repository**:
-[github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+[github.com/phoenixvc/cognitive-mesh](https://github.com/phoenixvc/cognitive-mesh)
 
 **When to Consider**:
 
@@ -413,8 +413,8 @@ architecture, eliminating the need for custom claims management.
 - Enterprise RBAC complexity exceeds Firebase custom claims
 - AI features need per-operation audit logging
 
-**Current CM Status**: ~40% complete. Security & Zero-Trust Framework complete;
-identity features in Adaptive Agency Framework (~25% complete).
+**Current CM Status**: Adaptive Agency & Cognitive Sovereignty Framework: In Progress.
+Security & Zero-Trust Framework complete; identity features in active development.
 
 **Resource Trade-off Note**: Firebase Auth remains appropriate until compliance
 requirements escalate. Development time spent on advanced auth here delays CM

@@ -65,8 +65,21 @@ export const analyzeCompetitors = functions.https.onCall(
       );
     }
 
+    // Validate focusAreas if provided
+    if (focusAreas !== undefined && !Array.isArray(focusAreas)) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "focusAreas must be an array of strings",
+      );
+    }
+
+    // Normalize focusAreas: filter to valid strings only
+    const normalizedFocusAreas = Array.isArray(focusAreas)
+      ? focusAreas.filter((a): a is string => typeof a === "string" && a.trim().length > 0)
+      : [];
+
     // RAG: Search for relevant Phoenix Rooivalk documentation
-    const searchQuery = `Phoenix Rooivalk technical capabilities specifications ${focusAreas?.join(" ") || "counter-UAS defense drone interceptor"}`;
+    const searchQuery = `Phoenix Rooivalk technical capabilities specifications ${normalizedFocusAreas.length > 0 ? normalizedFocusAreas.join(" ") : "counter-UAS defense drone interceptor"}`;
 
     let documentContext = "";
     let sourcesUsed: Array<{ title: string; section: string }> = [];

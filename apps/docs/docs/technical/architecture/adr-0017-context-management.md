@@ -469,7 +469,10 @@ async function buildCompetitorPrompt(
     `Phoenix Rooivalk vs ${competitors.join(" ")} ${focusAreas?.join(" ")}`,
     { topK: 5 },
   );
-  const ragContext = buildRAGContextSection(ragResults);
+  const ragContext = buildRAGContextSection(
+    ragResults.map((r) => r.content).join("\n\n---\n\n"),
+    ragResults.map(({ title, section }) => ({ title, section })),
+  );
 
   // 3. Assemble system prompt
   const systemPrompt = `${COMPETITOR_PROMPT.system.base}
@@ -497,7 +500,10 @@ async function buildQAPrompt(question: string): Promise<PromptParts> {
 
   // 2. Heavy RAG context (primary source)
   const ragResults = await searchDocuments(question, { topK: 8 });
-  const ragContext = buildRAGContextSection(ragResults);
+  const ragContext = buildRAGContextSection(
+    ragResults.map((r) => r.content).join("\n\n---\n\n"),
+    ragResults.map(({ title, section }) => ({ title, section })),
+  );
 
   // 3. Assemble with RAG priority
   const systemPrompt = `${RAG_QUERY_PROMPT.system.base}

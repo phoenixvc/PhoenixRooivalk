@@ -53,14 +53,22 @@ export async function azureVectorSearch(
   let embedding: number[];
   let embeddingCached = false;
 
-  const cachedEmbedding = await getCachedEmbedding(query);
-  if (cachedEmbedding) {
-    embedding = cachedEmbedding;
-    embeddingCached = true;
-  } else {
-    const { embeddings } = await generateEmbedding(query);
-    embedding = embeddings[0];
-    await cacheEmbedding(query, embedding);
+  try {
+    const cachedEmbedding = await getCachedEmbedding(query);
+    if (cachedEmbedding) {
+      embedding = cachedEmbedding;
+      embeddingCached = true;
+    } else {
+      const { embeddings } = await generateEmbedding(query);
+      embedding = embeddings[0];
+      await cacheEmbedding(query, embedding);
+    }
+  } catch (error) {
+    functions.logger.error("Embedding retrieval failed:", error);
+    throw new functions.https.HttpsError(
+      "internal",
+      "Failed to generate query embedding",
+    );
   }
 
   // Build search request

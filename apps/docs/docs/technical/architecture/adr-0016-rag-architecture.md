@@ -160,11 +160,16 @@ async function indexDocument(doc: DocumentToIndex): Promise<void> {
 
 ```typescript
 // Primary: Azure AI Search
+// Note: Default minScore is 0.65. Azure AI Search scoring ranges vary by algorithm:
+// - Cosine similarity: ~0.333–1.0
+// - Euclidean/dot-product: ~0–1
 async function searchDocuments(
   query: string,
   options: SearchOptions = {},
 ): Promise<SearchResult[]> {
-  const { topK = 5, minScore = 0.7 } = options;
+  // Use nullish coalescing (??) to preserve explicit falsy values like 0
+  const { topK = 5, minScore } = options;
+  const effectiveMinScore = minScore ?? 0.65;
 
   // Generate query embedding
   const queryEmbedding = await generateEmbedding(query);
@@ -185,7 +190,7 @@ async function searchDocuments(
 
   // Filter by score and format
   return results
-    .filter((r) => r.score >= minScore)
+    .filter((r) => r.score >= effectiveMinScore)
     .map((r) => ({
       id: r.document.id,
       title: r.document.title,
