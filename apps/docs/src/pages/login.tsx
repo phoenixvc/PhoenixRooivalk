@@ -2,7 +2,7 @@ import Layout from "@theme/Layout";
 import * as React from "react";
 import { useAuth } from "../contexts/AuthContext";
 
-import "./login.module.css";
+import styles from "./login.module.css";
 
 export default function LoginPage(): React.ReactElement {
   const { user, loading, signInGoogle, signInGithub, logout, isConfigured } =
@@ -25,30 +25,32 @@ export default function LoginPage(): React.ReactElement {
       title="Login"
       description="Sign in to access Phoenix Rooivalk documentation"
     >
-      <main className="loginMain">
-        <section className="loginSection">
+      <main className={styles.loginMain}>
+        <section className={styles.loginSection}>
           {loading ? (
-            <div className="loginLoading">
-              <div className="loadingSpinner" aria-label="Loading..." />
+            <div className={styles.loginLoading}>
+              <div className={styles.loadingSpinner} aria-label="Loading..." />
               <p>Loading...</p>
             </div>
           ) : user ? (
-            <div className="loginWelcome">
+            <div className={styles.loginWelcome}>
               <h1>Welcome back!</h1>
-              <div className="userInfo">
+              <div className={styles.userInfo}>
                 {user.photoURL && (
                   <img
                     src={user.photoURL}
                     alt={`${user.displayName || "User"} profile`}
-                    className="userAvatar"
+                    className={styles.userAvatar}
                   />
                 )}
-                <div className="userDetails">
-                  <p className="userName">{user.displayName || "User"}</p>
-                  <p className="userEmail">{user.email}</p>
+                <div className={styles.userDetails}>
+                  <p className={styles.userName}>
+                    {user.displayName || "User"}
+                  </p>
+                  <p className={styles.userEmail}>{user.email}</p>
                 </div>
               </div>
-              <div className="loginActions">
+              <div className={styles.loginActions}>
                 <a href="/docs" className="button button--primary">
                   📚 View Documentation
                 </a>
@@ -71,30 +73,30 @@ export default function LoginPage(): React.ReactElement {
               </div>
             </div>
           ) : (
-            <div className="loginContent">
+            <div className={styles.loginContent}>
               <h1>Sign In</h1>
-              <p className="loginSubtitle">
+              <p className={styles.loginSubtitle}>
                 Sign in to track your progress, save achievements, and access
                 personalized documentation.
               </p>
 
               {!isConfigured ? (
-                <div className="loginWarning">
+                <div className={styles.loginWarning}>
                   <p>
                     ⚠️ Authentication is not configured. Please set up Firebase
                     credentials to enable sign-in functionality.
                   </p>
                 </div>
               ) : (
-                <div className="loginButtons">
+                <div className={styles.loginButtons}>
                   <button
                     type="button"
                     onClick={handleGoogleLogin}
-                    className="loginButton loginButton--google"
+                    className={`${styles.loginButton} ${styles["loginButton--google"]}`}
                     aria-label="Sign in with Google"
                   >
                     <svg
-                      className="loginButtonIcon"
+                      className={styles.loginButtonIcon}
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
@@ -122,11 +124,11 @@ export default function LoginPage(): React.ReactElement {
                   <button
                     type="button"
                     onClick={handleGithubLogin}
-                    className="loginButton loginButton--github"
+                    className={`${styles.loginButton} ${styles["loginButton--github"]}`}
                     aria-label="Sign in with GitHub"
                   >
                     <svg
-                      className="loginButtonIcon"
+                      className={styles.loginButtonIcon}
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                       aria-hidden="true"
@@ -141,7 +143,7 @@ export default function LoginPage(): React.ReactElement {
                 </div>
               )}
 
-              <p className="loginNote">
+              <p className={styles.loginNote}>
                 By signing in, you agree to our terms of service and privacy
                 policy. Your progress will be synced across devices.
               </p>

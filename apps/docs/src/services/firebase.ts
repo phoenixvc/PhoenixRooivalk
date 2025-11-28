@@ -7,13 +7,15 @@
  * 3. Create a Firestore database
  * 4. Copy your config values to environment variables or .env file
  *
- * Environment variables needed:
+ * Environment variables needed (set in Netlify/hosting platform):
  * - FIREBASE_API_KEY
  * - FIREBASE_AUTH_DOMAIN
  * - FIREBASE_PROJECT_ID
  * - FIREBASE_STORAGE_BUCKET
  * - FIREBASE_MESSAGING_SENDER_ID
  * - FIREBASE_APP_ID
+ *
+ * These are exposed to the client via customFields in docusaurus.config.ts
  */
 
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
@@ -45,25 +47,66 @@ import {
   isSupported as isAnalyticsSupported,
 } from "firebase/analytics";
 
-// Firebase configuration from environment variables
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY || "",
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.FIREBASE_APP_ID || "",
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "", // GA4 Measurement ID
+// Firebase configuration interface
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId: string;
+}
+
+// Get Firebase config from Docusaurus customFields (set at build time)
+// This is populated from environment variables in docusaurus.config.ts
+const getFirebaseConfig = (): FirebaseConfig => {
+  // Check if we're in browser environment and Docusaurus context is available
+  if (typeof window !== "undefined") {
+    try {
+      // Access the config that was injected by Docusaurus at build time
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const docusaurusData = (window as any).__DOCUSAURUS__;
+      if (docusaurusData?.siteConfig?.customFields?.firebaseConfig) {
+        return docusaurusData.siteConfig.customFields
+          .firebaseConfig as FirebaseConfig;
+      }
+    } catch {
+      // Ignore errors accessing window data
+    }
+  }
+
+  // Fallback to empty config (Firebase won't be configured)
+  return {
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: "",
+  };
+};
+
+// Get config lazily to ensure window is available
+let _firebaseConfig: FirebaseConfig | null = null;
+const getConfig = (): FirebaseConfig => {
+  if (!_firebaseConfig) {
+    _firebaseConfig = getFirebaseConfig();
+  }
+  return _firebaseConfig;
 };
 
 // Check if Firebase is configured
 export const isFirebaseConfigured = (): boolean => {
-  return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
+  const config = getConfig();
+  return Boolean(config.apiKey && config.projectId);
 };
 
 // Check if GA4 is configured
 export const isGA4Configured = (): boolean => {
-  return Boolean(firebaseConfig.measurementId);
+  const config = getConfig();
+  return Boolean(config.measurementId);
 };
 
 // Initialize Firebase only if configured
@@ -71,30 +114,53 @@ let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
 let analytics: Analytics | null = null;
+let initialized = false;
 
-if (isFirebaseConfigured() && typeof window !== "undefined") {
-  if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
-  }
-  auth = getAuth(app);
-  db = getFirestore(app);
+// Lazy initialization function to ensure config is available
+const initializeFirebase = (): void => {
+  if (initialized) return;
+  if (typeof window === "undefined") return;
 
-  // Initialize GA4 Analytics if configured and supported
-  if (isGA4Configured()) {
-    isAnalyticsSupported().then((supported) => {
-      if (supported && app) {
-        analytics = getAnalytics(app);
-      }
-    });
+  const config = getConfig();
+  if (!config.apiKey || !config.projectId) return;
+
+  try {
+    if (getApps().length === 0) {
+      app = initializeApp(config);
+    } else {
+      app = getApps()[0];
+    }
+    auth = getAuth(app);
+    db = getFirestore(app);
+
+    // Initialize GA4 Analytics if configured and supported
+    if (config.measurementId) {
+      isAnalyticsSupported().then((supported) => {
+        if (supported && app) {
+          analytics = getAnalytics(app);
+        }
+      });
+    }
+
+    initialized = true;
+  } catch (error) {
+    console.error("Failed to initialize Firebase:", error);
   }
+};
+
+// Initialize on first import in browser
+if (typeof window !== "undefined") {
+  // Use setTimeout to ensure Docusaurus data is available
+  setTimeout(() => {
+    initializeFirebase();
+  }, 0);
 }
 
 /**
  * Get the GA4 Analytics instance (may be null if not configured/supported)
  */
 export const getGA4Analytics = (): Analytics | null => {
+  initializeFirebase(); // Ensure initialized
   return analytics;
 };
 
@@ -109,6 +175,7 @@ const githubProvider = new GithubAuthProvider();
  * @returns {Promise<User | null>} The authenticated user or null if sign-in fails
  */
 export const signInWithGoogle = async (): Promise<User | null> => {
+  initializeFirebase(); // Ensure initialized
   if (!auth) return null;
   try {
     const result = await signInWithPopup(auth, googleProvider);
@@ -116,7 +183,7 @@ export const signInWithGoogle = async (): Promise<User | null> => {
   } catch (error) {
     console.error("Google sign-in error:", {
       message: error instanceof Error ? error.message : "Unknown error",
-      code: (error as any)?.code,
+      code: (error as unknown as { code?: string })?.code,
       error,
     });
     return null;
@@ -128,6 +195,7 @@ export const signInWithGoogle = async (): Promise<User | null> => {
  * @returns {Promise<User | null>} The authenticated user or null if sign-in fails
  */
 export const signInWithGithub = async (): Promise<User | null> => {
+  initializeFirebase(); // Ensure initialized
   if (!auth) return null;
   try {
     const result = await signInWithPopup(auth, githubProvider);
@@ -135,7 +203,7 @@ export const signInWithGithub = async (): Promise<User | null> => {
   } catch (error) {
     console.error("GitHub sign-in error:", {
       message: error instanceof Error ? error.message : "Unknown error",
-      code: (error as any)?.code,
+      code: (error as unknown as { code?: string })?.code,
       error,
     });
     return null;
@@ -147,6 +215,7 @@ export const signInWithGithub = async (): Promise<User | null> => {
  * @returns {Promise<void>}
  */
 export const signOut = async (): Promise<void> => {
+  initializeFirebase(); // Ensure initialized
   if (!auth) return;
   try {
     await firebaseSignOut(auth);
@@ -163,6 +232,7 @@ export const signOut = async (): Promise<void> => {
 export const onAuthChange = (
   callback: (user: User | null) => void,
 ): (() => void) => {
+  initializeFirebase(); // Ensure initialized
   if (!auth) {
     callback(null);
     return () => {};
@@ -175,6 +245,7 @@ export const onAuthChange = (
  * @returns {User | null} The current user or null if not authenticated
  */
 export const getCurrentUser = (): User | null => {
+  initializeFirebase(); // Ensure initialized
   return auth?.currentUser || null;
 };
 
@@ -259,6 +330,7 @@ const DEFAULT_PROGRESS: UserProgress = {
 export const getUserProgress = async (
   userId: string,
 ): Promise<UserProgress> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return DEFAULT_PROGRESS;
   try {
     const docRef = doc(db, "userProgress", userId);
@@ -286,6 +358,7 @@ export const updateUserProgress = async (
   userId: string,
   progress: Partial<UserProgress>,
 ): Promise<boolean> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return false;
   try {
     const docRef = doc(db, "userProgress", userId);
@@ -311,6 +384,7 @@ export const saveUserProgress = async (
   userId: string,
   progress: UserProgress,
 ): Promise<boolean> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return false;
   try {
     const docRef = doc(db, "userProgress", userId);
@@ -335,6 +409,7 @@ export const saveUserProgress = async (
 export const getUserProfileData = async (
   userId: string,
 ): Promise<UserProfileData | null> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return null;
   try {
     const docRef = doc(db, "userProfiles", userId);
@@ -361,6 +436,7 @@ export const saveUserProfileData = async (
   userId: string,
   profile: UserProfileData,
 ): Promise<boolean> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return false;
   try {
     const docRef = doc(db, "userProfiles", userId);
@@ -401,6 +477,7 @@ export const updateUserProfileData = async (
   userId: string,
   updates: Partial<UserProfileData>,
 ): Promise<boolean> => {
+  initializeFirebase(); // Ensure initialized
   if (!db) return false;
   try {
     const docRef = doc(db, "userProfiles", userId);
