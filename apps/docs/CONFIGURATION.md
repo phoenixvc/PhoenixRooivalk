@@ -449,7 +449,7 @@ recommendations, and document improvement.
 | Feature                 | Description                         | Endpoint                      |
 | ----------------------- | ----------------------------------- | ----------------------------- |
 | Competitor Analysis     | Analyze defense market competitors  | `analyzeCompetitors`          |
-| SWOT Analysis           | Generate strategic SWOT analyzes    | `generateSWOT`                |
+| SWOT Analysis           | Generate strategic SWOT analyses    | `generateSWOT`                |
 | Market Insights         | Get market intelligence and trends  | `getMarketInsights`           |
 | Reading Recommendations | AI-powered reading suggestions      | `getReadingRecommendations`   |
 | Document Improvements   | Suggest doc improvements for review | `suggestDocumentImprovements` |

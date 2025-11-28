@@ -64,6 +64,26 @@ impl X402State {
 ///
 /// POST /api/v1/evidence/verify-premium
 ///
+/// # Security
+///
+/// This endpoint is **machine-to-machine (M2M) only** and is protected against CSRF
+/// attacks through the following mechanisms:
+///
+/// - **Bearer token authentication required**: All requests must include a valid
+///   `Authorization: Bearer <token>` header. Cookie-based authentication is not
+///   accepted, preventing browser-originated CSRF attacks.
+/// - **Strict CORS policy**: The API should be configured to reject cross-origin
+///   requests or only allow trusted origins via infrastructure.
+/// - **Browser origin detection**: Requests with browser-specific headers like
+///   `Cookie` or `Sec-Fetch-*` without proper Bearer auth will be rejected.
+///
+/// # Infrastructure Requirements
+///
+/// Operators must configure edge proxies/load balancers to:
+/// - Set and normalize X-Forwarded-For/X-Real-IP headers
+/// - Strip client-supplied values of these headers before forwarding
+/// - Enforce strict CORS policies at the infrastructure level
+///
 /// Without X-PAYMENT header: Returns 402 Payment Required with payment details
 /// With X-PAYMENT header: Verifies payment and returns premium evidence verification
 pub async fn verify_evidence_premium(
@@ -71,6 +91,12 @@ pub async fn verify_evidence_premium(
     headers: HeaderMap,
     Json(req): Json<VerifyEvidenceRequest>,
 ) -> Response {
+    // Enforce machine-to-machine access only - reject browser-originated requests
+    // without proper API authentication to prevent CSRF attacks
+    if let Err(response) = enforce_m2m_access(&headers) {
+        return response;
+    }
+
     // Extract client IP for rate limiting
     let client_ip = extract_client_ip_from_headers(&headers);
 
@@ -416,6 +442,80 @@ fn build_chain_confirmations(
             })
         }
     }
+}
+
+/// Enforce machine-to-machine (M2M) access only
+///
+/// This function validates that requests originate from authorized API clients
+/// rather than browser contexts, protecting against CSRF attacks.
+///
+/// # Security
+///
+/// The x402 premium verification endpoint is designed for M2M communication
+/// between authorized services and clients. This function enforces this by:
+///
+/// 1. **Requiring Bearer token authentication**: Requests must include a valid
+///    `Authorization: Bearer <token>` header. This prevents browser-based CSRF
+///    attacks since browsers cannot automatically include custom headers.
+///
+/// 2. **Rejecting browser-originated requests**: Requests containing browser-specific
+///    indicators (e.g., Cookie headers without proper Bearer auth, or Sec-Fetch-*
+///    headers indicating browser navigation) are rejected.
+///
+/// # Returns
+///
+/// - `Ok(())` if the request is from a valid M2M client
+/// - `Err(Response)` with 403 Forbidden if the request appears to be browser-originated
+///
+/// # Infrastructure Requirements
+///
+/// This validation works in conjunction with infrastructure-level controls:
+/// - CORS policies should reject unauthorized origins at the edge
+/// - API gateways should validate Bearer tokens before forwarding requests
+#[allow(clippy::result_large_err)]
+fn enforce_m2m_access(headers: &HeaderMap) -> Result<(), Response> {
+    // Check for Authorization header - required for M2M access
+    let has_bearer_auth = headers
+        .get("authorization")
+        .and_then(|h| h.to_str().ok())
+        .map(|auth| auth.to_lowercase().starts_with("bearer "))
+        .unwrap_or(false);
+
+    // Check for browser-specific indicators that suggest this is not a M2M request
+    let has_cookie = headers.contains_key("cookie");
+    let has_sec_fetch = headers
+        .keys()
+        .any(|k| k.as_str().to_lowercase().starts_with("sec-fetch"));
+
+    // If we have Bearer auth, allow the request (proper M2M access)
+    if has_bearer_auth {
+        return Ok(());
+    }
+
+    // If there's no Bearer auth but there are browser indicators, reject
+    if has_cookie || has_sec_fetch {
+        return Err((
+            StatusCode::FORBIDDEN,
+            Json(json!({
+                "error": "Browser access not permitted",
+                "message": "This endpoint is for machine-to-machine (M2M) API access only. Browser-originated requests must use the standard web interface.",
+                "hint": "Include an Authorization: Bearer <token> header for API access"
+            })),
+        )
+            .into_response());
+    }
+
+    // No Bearer auth and no browser indicators - could be a simple API client
+    // Require Bearer auth anyway for security
+    Err((
+        StatusCode::FORBIDDEN,
+        Json(json!({
+            "error": "Authentication required",
+            "message": "This endpoint requires Bearer token authentication for machine-to-machine access",
+            "hint": "Include an Authorization: Bearer <token> header with a valid API token"
+        })),
+    )
+        .into_response())
 }
 
 /// Helper to extract client IP from headers

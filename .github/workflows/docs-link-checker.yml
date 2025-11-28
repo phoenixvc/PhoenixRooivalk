@@ -54,10 +54,6 @@ jobs:
           if grep -q "Docusaurus found broken links" "$BUILD_LOG_FILE"; then
             echo "has_broken_links=true" >> "$GITHUB_OUTPUT"
             
-            # Extract and format broken links
-            BROKEN_LINKS=$(grep -A 100 "Exhaustive list of all broken links found" "$BUILD_LOG_FILE" | \
-              grep -E "^- |source page path" | head -50)
-            
             {
               echo "## ❌ Broken Links Detected"
               echo ""
