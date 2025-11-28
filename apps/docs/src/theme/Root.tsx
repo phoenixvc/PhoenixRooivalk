@@ -19,6 +19,7 @@ import { SidebarRecommendations } from "../components/Sidebar";
 import { ProfileConfirmation } from "../components/Auth";
 import { NavbarProgressVisibility } from "../components/Auth";
 import { OnboardingWalkthrough } from "../components/Onboarding";
+import { NavbarNotifications } from "../components/NavbarNotifications";
 
 interface RootProps {
   children: ReactNode;
@@ -72,6 +73,7 @@ export default function Root({ children }: RootProps): React.ReactElement {
     <AuthProvider>
       <SilentErrorBoundary>
         <NavbarProgressVisibility />
+        <NavbarNotifications />
         <ProfileConfirmation>
           <SilentErrorBoundary>
             <ReadingTracker />

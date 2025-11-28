@@ -17,7 +17,20 @@
   [class*="announcementBar"],
   [class*="tableOfContents"],
   [class*="tocCollapsible"],
-  .print\\:hidden {
+  .print\\:hidden,
+  /* Hide floating widgets */
+  .sidebar-rec,
+  .ai-floating-widget,
+  .cookie-consent,
+  .offline-indicator,
+  .completion-toast,
+  .onboarding-walkthrough,
+  [class*="AIFloating"],
+  [class*="SidebarRec"],
+  [class*="CookieConsent"],
+  [class*="floating"],
+  [class*="toast"],
+  [class*="widget"] {
     display: none !important;
   }
 
