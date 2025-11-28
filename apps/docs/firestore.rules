@@ -6,6 +6,8 @@ rules_version = '2';
  * Collections:
  * - userProgress: User's reading progress and achievements (user-owned)
  * - userProfiles: User profile data with roles and settings (user-owned)
+ * - comments: User-submitted comments on documentation pages (user-owned, admin-reviewable)
+ * - comment_notifications: Notifications for comment reviews (user-owned)
  * - analytics_pageviews: Page view events (write-only, admin-read)
  * - analytics_timeonpage: Time on page events (write-only, admin-read)
  * - analytics_conversions: Conversion funnel events (write-only, admin-read)
@@ -236,6 +238,90 @@ service cloud.firestore {
         resource.data.userId == request.auth.uid &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
       allow create, delete: if false; // Function-only via admin SDK
+    }
+
+    // Comments collection - user-submitted comments on documentation pages
+    // Users can create and manage their own comments, admins can review all
+    match /comments/{commentId} {
+      // Helper to validate comment category
+      function isValidCategory(category) {
+        return category in ['comment', 'change_request', 'question', 'suggestion', 'bug_report'];
+      }
+
+      // Helper to validate comment status
+      function isValidStatus(status) {
+        return status in ['draft', 'pending', 'approved', 'rejected', 'implemented', 'resolved'];
+      }
+
+      // Helper to validate comment content length
+      function isValidContent(content) {
+        return content is string && content.size() >= 1 && content.size() <= 5000;
+      }
+
+      // Read: Users can read non-draft comments, or their own drafts
+      // Admins can read all comments
+      allow read: if request.auth != null && (
+        isAdmin() ||
+        resource.data.status != 'draft' ||
+        resource.data.author.uid == request.auth.uid
+      );
+
+      // Create: Authenticated users can create comments
+      // Must be the author, have valid content/category, and correct initial status
+      allow create: if request.auth != null &&
+        request.resource.data.author.uid == request.auth.uid &&
+        isValidContent(request.resource.data.content) &&
+        isValidCategory(request.resource.data.category) &&
+        isValidStatus(request.resource.data.status) &&
+        // Initial status must be draft or pending (not approved/rejected/etc)
+        request.resource.data.status in ['draft', 'pending'] &&
+        // Required fields must be present
+        request.resource.data.keys().hasAll(['content', 'pageId', 'pageTitle', 'pageUrl', 'category', 'status', 'author', 'sendForReview', 'createdAt', 'updatedAt']);
+
+      // Update: Authors can update their own comments (content, category, sendForReview)
+      // Admins can update status and add reviews
+      allow update: if request.auth != null && (
+        // Author updating their own comment
+        (resource.data.author.uid == request.auth.uid &&
+         // Can only change allowed fields
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+           'content', 'enhancedContent', 'category', 'sendForReview', 'useAIVersion',
+           'aiEnhancement', 'updatedAt', 'isEdited', 'editHistory', 'status'
+         ]) &&
+         // Validate content if changed
+         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['content']) ||
+          isValidContent(request.resource.data.content)) &&
+         // Authors can only set status to draft or pending
+         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) ||
+          request.resource.data.status in ['draft', 'pending'])
+        ) ||
+        // Admin updating comment (for reviews)
+        (isAdmin() &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+           'status', 'review', 'updatedAt'
+         ]) &&
+         isValidStatus(request.resource.data.status)
+        )
+      );
+
+      // Delete: Only authors can delete their own comments, or admins can delete any
+      allow delete: if request.auth != null && (
+        resource.data.author.uid == request.auth.uid ||
+        isAdmin()
+      );
+    }
+
+    // Comment notifications - created when admin reviews a comment
+    match /comment_notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if request.auth != null && resource.data.authorId == request.auth.uid;
+      // Users can mark as read
+      allow update: if request.auth != null &&
+        resource.data.authorId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      // Only system/functions can create (via client SDK with auth)
+      allow create: if isAdmin();
+      allow delete: if false;
     }
 
     // Default deny all other collections
