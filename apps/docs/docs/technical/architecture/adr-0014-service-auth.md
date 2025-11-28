@@ -374,6 +374,30 @@ az monitor activity-log list \
 **Effort**: 1-2 weeks  
 **Prerequisites**: Azure VPN/interconnect for private access
 
+### Alternative: Cognitive Mesh (Full Platform Shift)
+
+Cognitive Mesh provides **built-in zero-trust service authentication** without manual secret management.
+
+| Aspect | Firebase Config | Cognitive Mesh |
+|--------|-----------------|----------------|
+| **Secret storage** | Firebase Config (manual) | Built-in secure vault |
+| **Rotation** | Manual redeploy | Automatic with governance |
+| **Service auth** | API keys | Zero-trust service mesh |
+| **Audit** | Cloud Audit Logs | Comprehensive per-call logging |
+| **mTLS** | Roadmap (Phase 3) | Built-in capability |
+
+**Repository**: [github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+**When to Consider**:
+- mTLS becomes mandatory for defense deployments
+- Automatic secret rotation required
+- Zero-trust service mesh needed
+- Cross-service audit logging mandated
+
+**Current CM Status**: ~40% complete. Security & Zero-Trust Framework (P0) complete; this provides the foundation for service auth capabilities.
+
+**Resource Trade-off Note**: CM migration is a platform shift, not incremental improvement. Time spent here planning is time not spent maturing CM. Firebase Config approach remains valid for documentation site.
+
 ---
 
 ## Appendix
@@ -385,6 +409,7 @@ For detailed weighted analysis, threat models, and high-security roadmap, see:
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0013: Identity & Auth Strategy](./adr-0013-identity-auth.md)

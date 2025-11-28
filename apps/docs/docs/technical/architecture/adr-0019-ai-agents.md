@@ -636,6 +636,31 @@ export const agentQuery = functions
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Implement in Cognitive Mesh** 🔶
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Proposed (not implemented) |
+| **CM Equivalent** | Agency Layer (~40% complete) |
+| **CM Advantage** | Built-in ethical reasoning, audit trails, RBAC |
+| **Resource Trade-off** | CM has agent infrastructure in progress |
+
+**Rationale**: Cognitive Mesh's Agency Layer is already 40% complete with multi-agent orchestration, tool governance, and ethical reasoning built in. Implementing LangChain agents here duplicates effort and lacks the compliance features that CM provides.
+
+**Action**: 
+- **Do NOT implement** agent architecture in docs site
+- **Prioritize completing CM Agency Layer PRD**
+- Docs site can function with simple RAG Q&A (no agents)
+- Migrate to CM agents when platform is production-ready
+
+**For docs site**: Simple single-turn interactions are acceptable until CM is ready.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

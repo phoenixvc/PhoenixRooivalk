@@ -514,6 +514,25 @@ describe("Prompt Templates", () => {
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Keep Here** ✅
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Implemented and working |
+| **CM Equivalent** | ReasoningLayer/LLMReasoning (~40% complete) |
+| **Migration Value** | Low - current implementation meets docs site needs |
+| **Resource Trade-off** | Not worth migration effort |
+
+**Rationale**: The current TypeScript prompt template system adequately serves the documentation site's needs. Cognitive Mesh's prompt management is designed for enterprise-grade governance with NIST AI RMF compliance tracking, which is unnecessary for this use case.
+
+**Action**: No changes needed. Continue using current implementation.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

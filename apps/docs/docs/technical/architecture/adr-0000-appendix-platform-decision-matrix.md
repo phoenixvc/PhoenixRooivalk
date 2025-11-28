@@ -342,6 +342,88 @@ Phoenix Rooivalk has three main paths for implementing AI functionality:
 
 ---
 
+## Cognitive Mesh Completion Status
+
+**Repository**: [github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+### PRD Implementation Status (as of 2025-11-27)
+
+| Priority | Category | PRD | Status | Completion |
+|----------|----------|-----|--------|------------|
+| **P0** | Foundational | Security & Zero-Trust Framework | 🟢 Complete | 100% |
+| **P0** | Foundational | Ethical & Legal Compliance | 🟠 Ready | 90% |
+| **P0** | Foundational | NIST AI RMF Backend | ⚪ Not Started | 0% |
+| **P0** | Foundational | NIST AI RMF Widget | ⚪ Not Started | 0% |
+| **P0** | Foundational | Adaptive Balance Backend | ⚪ Not Started | 0% |
+| **P0** | Foundational | Adaptive Balance Widget | ⚪ Not Started | 0% |
+| **P1** | Agentic | Agentic AI System Backend | 🟡 In Progress | ~40% |
+| **P1** | Agentic | Agentic AI System Widget | ⚪ Not Started | 0% |
+| **P1** | Cognitive | Cognitive Sandwich Backend | ⚪ Not Started | 0% |
+| **P1** | Cognitive | Cognitive Sovereignty Widget | ⚪ Not Started | 0% |
+| **P2** | Value | Value Generation Backend | 🟡 In Progress | ~30% |
+| **P2** | Value | Value Generation Widget | ⚪ Not Started | 0% |
+| **P3** | Identity | Adaptive Agency Framework | 🟡 In Progress | ~25% |
+| **P4** | Specialized | Convener Backend | 🟢 Complete | 100% |
+| **P4** | Specialized | Convener Widget | 🟢 Complete | 100% |
+
+### Overall Platform Completion
+
+| Layer | Implementation | Tests | Documentation |
+|-------|---------------|-------|---------------|
+| FoundationLayer | ~70% | ~50% | ~60% |
+| ReasoningLayer | ~40% | ~30% | ~40% |
+| MetacognitiveLayer | ~25% | ~15% | ~30% |
+| AgencyLayer | ~35% | ~25% | ~40% |
+| BusinessApplications | ~30% | ~20% | ~35% |
+
+**Estimated Overall Completion**: ~40%  
+**Estimated Time to Production-Ready**: 6-9 months
+
+---
+
+## Resource Trade-off Analysis
+
+### Same Developer Pool Reality
+
+⚠️ **Critical Context**: Development resources for Phoenix Rooivalk docs and Cognitive Mesh are the **same pool** (single developer). Every hour spent here is an hour not spent maturing CM.
+
+### Development Time Allocation Analysis
+
+| Activity | PR Time | CM Opportunity Cost |
+|----------|---------|---------------------|
+| ADR documentation | ~4-8 hrs | Could advance 1 PRD |
+| New AI feature (LangChain) | ~16-24 hrs | Could complete 2 PRDs |
+| UI polish/accessibility | ~8-16 hrs | Could advance 1-2 PRDs |
+| Testing/CI improvements | ~8-12 hrs | Could add CM test coverage |
+
+### Strategic Recommendation
+
+**Given resource constraints**:
+
+1. **Documentation site features** should remain minimal until CM reaches production-ready status
+2. **LangChain features** provide good value for current needs without blocking CM development
+3. **Avoid feature creep** in Phoenix Rooivalk that duplicates CM capabilities
+4. **Track CM trigger points** rather than documenting detailed migration plans
+
+### When to Invest in Docs Site
+
+| Invest Here When... | Don't Invest When... |
+|---------------------|---------------------|
+| Blocking customer demos | CM has equivalent feature in-progress |
+| Compliance requirement | Nice-to-have polish |
+| Core functionality gap | Marginal UX improvement |
+| No CM overlap | Duplicates CM capability |
+
+### CM Maturation Priority
+
+To maximize overall value:
+
+1. Complete P0 foundational PRDs first (NIST, Adaptive Balance)
+2. Finish P1 agentic system backends
+3. Only then invest in advanced docs site features
+
+---
+
 ## Conclusion
 
 **Current recommendation**: Use LangChain for complex AI features while monitoring Cognitive Mesh development.
@@ -349,6 +431,8 @@ Phoenix Rooivalk has three main paths for implementing AI functionality:
 **Future pivot point**: When compliance requirements increase (defense contracts, EU AI Act), Cognitive Mesh becomes the preferred platform due to its built-in governance, audit logging, and ethical reasoning capabilities.
 
 The weighted decision matrix shows LangChain currently winning (3.76 vs 3.43), but this will invert when compliance criteria weight increases from 18% to 30%+.
+
+**Resource Reality**: With a shared developer pool, prioritize CM maturation over docs site polish. The crossover point for Cognitive Mesh adoption is closer to 6-9 months if development focus shifts to CM PRDs.
 
 ---
 

@@ -668,6 +668,25 @@ logger.info("RAG search completed", {
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Keep Here** ✅
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Implemented with Azure AI Search |
+| **CM Equivalent** | FoundationLayer (~30% complete) |
+| **Migration Value** | Low - Azure AI Search works well |
+| **Resource Trade-off** | Current solution is production-ready |
+
+**Rationale**: The Azure AI Search + Firestore fallback architecture is working well for the documentation site. Cognitive Mesh's RAG is designed for multi-tenant deployments with document-level RBAC, which is unnecessary here since all documentation is public.
+
+**Action**: No changes needed. Continue using current implementation.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

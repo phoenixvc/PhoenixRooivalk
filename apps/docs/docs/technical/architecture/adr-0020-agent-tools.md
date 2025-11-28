@@ -710,6 +710,31 @@ export {
 
 ---
 
+## Implementation Recommendation
+
+### Decision: **Implement in Cognitive Mesh** 🔶
+
+| Factor | Assessment |
+|--------|------------|
+| **Current Status** | Proposed (not implemented) |
+| **CM Equivalent** | Agency Layer tools (~35% complete) |
+| **CM Advantage** | RBAC per tool, usage governance, compliance |
+| **Resource Trade-off** | Tool governance is complex, CM has it designed |
+
+**Rationale**: Cognitive Mesh's Agency Layer includes tool-level RBAC, usage quotas, and compliance tracking. Implementing a full tools framework here requires significant effort for governance features that CM already has in its architecture.
+
+**Action**: 
+- **Do NOT implement** full tools framework in docs site
+- **Complete CM Agency Layer tools system**
+- Keep existing simple tools (doc search via Azure AI Search)
+- No need for LangChain DynamicTools wrapper
+
+**For docs site**: Simple doc search tool is sufficient. No web search or calculator tools needed.
+
+See [ADR 0000 Appendix: CM Feature Recommendations](./adr-0000-appendix-cogmesh-feature-recommendations.md) for full analysis.
+
+---
+
 ## Related ADRs
 
 - [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework

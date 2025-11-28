@@ -150,8 +150,19 @@ Cold-starts on Firebase Functions may compound this on initial requests.
 
 ---
 
+## Cognitive Mesh Consideration
+
+Cognitive Mesh uses vector stores internally within its Reasoning Layer, but this is an infrastructure-level decision that remains valid regardless of platform.
+
+**CM Compatibility**: Azure AI Search works with CM via its ReasoningLayer adapters. No migration needed at this level if platform shift occurs.
+
+**Resource Trade-off Note**: Vector database selection is infrastructure-agnostic. This ADR's decision carries forward to CM without rework.
+
+---
+
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision framework
 - [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0013: Identity & Auth Strategy](./adr-0013-identity-auth.md)
