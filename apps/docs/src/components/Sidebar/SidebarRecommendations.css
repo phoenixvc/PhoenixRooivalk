@@ -267,6 +267,53 @@
   }
 }
 
+/* ================================================
+   LOADING SKELETON
+   Shown while recommendations are being fetched
+   ================================================ */
+
+.sidebar-rec-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.sidebar-rec-skeleton-icon {
+  width: 16px;
+  height: 16px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+  animation: sidebar-rec-pulse 1.5s ease-in-out infinite;
+}
+
+.sidebar-rec-skeleton-text {
+  flex: 1;
+  height: 14px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+  animation: sidebar-rec-pulse 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.sidebar-rec-skeleton-toggle {
+  width: 10px;
+  height: 10px;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 2px;
+  animation: sidebar-rec-pulse 1.5s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+@keyframes sidebar-rec-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .sidebar-rec-content {
@@ -279,5 +326,12 @@
 
   .sidebar-rec-toggle {
     transition: none;
+  }
+
+  .sidebar-rec-skeleton-icon,
+  .sidebar-rec-skeleton-text,
+  .sidebar-rec-skeleton-toggle {
+    animation: none;
+    opacity: 0.6;
   }
 }

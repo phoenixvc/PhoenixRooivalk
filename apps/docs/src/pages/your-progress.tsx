@@ -87,6 +87,13 @@ export default function YourProgress(): React.ReactElement {
               >
                 Download PDFs
               </a>
+              <a
+                href="/profile-settings"
+                className="button button--outline button--lg"
+                aria-label="Manage profile settings"
+              >
+                Profile Settings
+              </a>
             </div>
           </div>
         </section>

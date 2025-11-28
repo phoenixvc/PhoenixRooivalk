@@ -137,3 +137,71 @@ export function templateToUserProfile(
     recommendedPaths: [...template.recommendedPaths],
   };
 }
+
+/**
+ * Get recommendations based on confirmed roles.
+ * Aggregates and deduplicates recommendations from all templates
+ * that match any of the provided roles.
+ *
+ * @param roles - Array of role strings to match against templates
+ * @param maxItems - Maximum number of recommendations to return
+ * @returns Deduplicated recommendations sorted by priority
+ */
+export function getRecommendationsForRoles(
+  roles: string[],
+  maxItems: number = 5,
+): Array<{ docId: string; relevanceScore: number; reason: string }> {
+  if (!roles || roles.length === 0) {
+    return [];
+  }
+
+  // Find all templates that have overlapping roles
+  const matchingTemplates = PROFILE_TEMPLATES_ARRAY.filter((template) =>
+    template.roles.some((r) => roles.includes(r)),
+  );
+
+  if (matchingTemplates.length === 0) {
+    return [];
+  }
+
+  // Aggregate all recommendations with scoring based on role matches
+  const recommendationMap = new Map<
+    string,
+    { docId: string; score: number; reason: string; matchCount: number }
+  >();
+
+  for (const template of matchingTemplates) {
+    // Count how many roles match for weighting
+    const roleMatchCount = template.roles.filter((r) =>
+      roles.includes(r),
+    ).length;
+
+    for (const path of template.recommendedPaths) {
+      const existing = recommendationMap.get(path.docId);
+      const weightedScore = (path.priority / 5) * (1 + roleMatchCount * 0.1);
+
+      if (existing) {
+        // Boost score if recommended by multiple templates
+        existing.score = Math.max(existing.score, weightedScore);
+        existing.matchCount += 1;
+      } else {
+        recommendationMap.set(path.docId, {
+          docId: path.docId,
+          score: weightedScore,
+          reason: path.reason,
+          matchCount: 1,
+        });
+      }
+    }
+  }
+
+  // Convert to array, boost multi-match items, sort by score, and take top N
+  return Array.from(recommendationMap.values())
+    .map((rec) => ({
+      docId: rec.docId,
+      relevanceScore: Math.min(rec.score * (1 + rec.matchCount * 0.05), 1),
+      reason: rec.reason,
+    }))
+    .sort((a, b) => b.relevanceScore - a.relevanceScore)
+    .slice(0, maxItems);
+}

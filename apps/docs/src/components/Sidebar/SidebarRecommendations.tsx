@@ -16,6 +16,7 @@ import {
   profileToRecommendations,
   PROFILE_TEMPLATES,
   UserProfile,
+  getRecommendationsForRoles,
 } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import "./SidebarRecommendations.css";
@@ -94,7 +95,7 @@ export function SidebarRecommendations({
   const previousUserIdRef = useRef<string | null>(null);
 
   // Use centralized profile from AuthContext
-  const { knownProfile, isProfileLoaded, profileKey } = userProfile;
+  const { knownProfile, isProfileLoaded, profileKey, confirmedRoles } = userProfile;
 
   // Get selected template for unknown users
   const selectedTemplate =
@@ -208,7 +209,19 @@ export function SidebarRecommendations({
         return;
       }
 
-      // For unknown users without template, use AI-generated recommendations
+      // For users with confirmed roles but no template, use role-based recommendations
+      if (confirmedRoles && confirmedRoles.length > 0) {
+        const roleRecs = getRecommendationsForRoles(confirmedRoles, maxItems);
+        if (roleRecs.length > 0) {
+          setRecommendations(roleRecs);
+          highlightSidebarItems(roleRecs.map((r) => r.docId));
+          setHasLoaded(true);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // For unknown users without template or roles, use AI-generated recommendations
       const currentPath =
         typeof window !== "undefined" ? window.location.pathname : "";
       const result = await aiService.getReadingRecommendations(currentPath);
@@ -225,7 +238,7 @@ export function SidebarRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [user, maxItems, knownProfile, selectedTemplate, hasLoaded]);
+  }, [user, maxItems, knownProfile, selectedTemplate, confirmedRoles, hasLoaded]);
 
   // Load recommendations when user and profile are available
   // Wait for isProfileLoaded to avoid stale closure with knownProfile
@@ -242,9 +255,17 @@ export function SidebarRecommendations({
     return null;
   }
 
-  // Don't show if no recommendations yet
-  if (!hasLoaded && !isLoading) {
-    return null;
+  // Show loading skeleton while waiting for profile to load
+  if (!isProfileLoaded || (!hasLoaded && !isLoading)) {
+    return (
+      <div className="sidebar-rec">
+        <div className="sidebar-rec-skeleton">
+          <span className="sidebar-rec-skeleton-icon" />
+          <span className="sidebar-rec-skeleton-text" />
+          <span className="sidebar-rec-skeleton-toggle" />
+        </div>
+      </div>
+    );
   }
 
   const userProfileDescription = deriveProfileDescription();
@@ -285,8 +306,8 @@ export function SidebarRecommendations({
 
               {recommendations.length > 0 ? (
                 <>
-                  {/* Show completion progress for recommendations (known profiles and templates) */}
-                  {(knownProfile || selectedTemplate) && (
+                  {/* Show completion progress for recommendations (known profiles, templates, or roles) */}
+                  {(knownProfile || selectedTemplate || (confirmedRoles && confirmedRoles.length > 0)) && (
                     <div className="sidebar-rec-progress-summary">
                       {
                         recommendations.filter((rec) => {
