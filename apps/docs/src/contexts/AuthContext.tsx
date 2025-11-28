@@ -222,15 +222,27 @@ export function AuthProvider({
   const isConfigured = isFirebaseConfigured();
   const missingConfig = getMissingFirebaseConfig();
 
+  // Debug logging on mount
+  useEffect(() => {
+    console.log("[AuthContext] Provider mounted", {
+      isConfigured,
+      missingConfig,
+      loading,
+    });
+  }, []);
+
   // Initialize with local progress
   useEffect(() => {
+    console.log("[AuthContext] Initializing local progress");
     const localProgress = getLocalProgress();
     setProgress(localProgress);
   }, []);
 
   // Listen to auth state changes
   useEffect(() => {
+    console.log("[AuthContext] Setting up auth listener", { isConfigured });
     if (!isConfigured) {
+      console.log("[AuthContext] Firebase not configured, setting loading=false");
       setLoading(false);
       return;
     }
@@ -238,11 +250,16 @@ export function AuthProvider({
     let previousUser: User | null = null;
 
     const unsubscribe = onAuthChange(async (authUser) => {
+      console.log("[AuthContext] Auth state changed", {
+        authUser: authUser ? { uid: authUser.uid, email: authUser.email } : null,
+        previousUser: previousUser ? { uid: previousUser.uid } : null,
+      });
       const wasSignedOut = !previousUser && authUser;
       previousUser = authUser;
       setUser(authUser);
 
       if (authUser) {
+        console.log("[AuthContext] User signed in, syncing progress...");
         // User signed in - sync progress
         const cloudProgress = await getUserProgress(authUser.uid);
         const localProgress = getLocalProgress();
@@ -272,6 +289,9 @@ export function AuthProvider({
           }
           // Could also track returning user sign-ins separately if needed
         }
+        console.log("[AuthContext] User sync complete, setting loading=false");
+      } else {
+        console.log("[AuthContext] No user, setting loading=false");
       }
 
       setLoading(false);

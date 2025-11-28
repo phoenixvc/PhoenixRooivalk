@@ -115,26 +115,38 @@ export default function Home(): React.ReactElement {
         @keyframes marketing-gridMove { 0% { transform: translate(0,0);} 100% { transform: translate(50px,50px);} }
 
         /* Hero */
-        .marketing .hero { min-height: 80vh; display: flex; align-items: center; padding: 2rem 5%; position: relative; z-index: 1; }
-        .marketing .hero-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .marketing .hero-text h1 { font-size: 3.2rem; line-height: 1.2; margin-bottom: 1.2rem; background: linear-gradient(135deg, var(--light) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: marketing-fadeInUp 1s ease; }
-        .marketing .hero-text p { font-size: 1.15rem; color: var(--gray); margin-bottom: 1.6rem; animation: marketing-fadeInUp 1s ease 0.2s both; }
+        .marketing .hero { min-height: 85vh; display: flex; align-items: center; padding: 2rem 5%; position: relative; z-index: 1; }
+        .marketing .hero-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; }
+        .marketing .hero-text h1 { font-size: 3.5rem; line-height: 1.15; margin-bottom: 1.2rem; background: linear-gradient(135deg, var(--light) 0%, var(--primary) 50%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: marketing-fadeInUp 1s ease; }
+        .marketing .hero-text h1 span { display: block; }
+        .marketing .hero-text h1 .highlight { color: var(--primary); -webkit-text-fill-color: var(--primary); }
+        .marketing .hero-text p { font-size: 1.2rem; color: var(--gray); margin-bottom: 1.8rem; animation: marketing-fadeInUp 1s ease 0.2s both; line-height: 1.7; }
         .marketing .hero-buttons { display: flex; gap: 1rem; animation: marketing-fadeInUp 1s ease 0.4s both; }
+        .marketing .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3); border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.85rem; color: var(--primary); margin-bottom: 1.2rem; animation: marketing-fadeInUp 1s ease; }
+        .marketing .hero-badge::before { content: '🛡️'; }
         @keyframes marketing-fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
 
-        .marketing .cta-button { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 0.75rem 1.5rem; border-radius: 5px; font-weight: 700; transition: all .3s; display: inline-block; }
-        .marketing .cta-button:hover { transform: translateY(-2px); box-shadow: var(--glow); color: var(--dark); }
-        .marketing .secondary-button { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 0.75rem 1.5rem; border-radius: 5px; font-weight: 700; transition: all .3s; }
+        .marketing .cta-button { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; transition: all .3s; display: inline-block; font-size: 1rem; }
+        .marketing .cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4); color: var(--dark); }
+        .marketing .secondary-button { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; transition: all .3s; }
         .marketing .secondary-button:hover { background: var(--primary); color: var(--dark); }
 
-        .marketing .hero-visual { position: relative; animation: marketing-float 3s ease-in-out infinite; }
-        @keyframes marketing-float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-20px);} }
-        .marketing .drone-graphic { width: 100%; height: 350px; background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); border-radius: 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .marketing .radar-sweep { position: absolute; width: 250px; height: 250px; border: 2px solid var(--primary); border-radius: 50%; opacity: .3; }
-        .marketing .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary)); transform-origin: left center; animation: marketing-radar 3s linear infinite; }
+        .marketing .hero-visual { position: relative; }
+        .marketing .drone-graphic { width: 100%; height: 380px; background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(251,191,36,0.05)); border: 1px solid rgba(249,115,22,0.2); border-radius: 24px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .marketing .radar-sweep { position: absolute; width: 280px; height: 280px; border: 2px solid rgba(249,115,22,0.4); border-radius: 50%; }
+        .marketing .radar-sweep::before { content: ''; position: absolute; width: 200px; height: 200px; border: 1px solid rgba(249,115,22,0.2); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .marketing .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); transform-origin: left center; animation: marketing-radar 4s linear infinite; }
         @keyframes marketing-radar { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
-        .marketing .shield-emoji { font-size: 4rem; z-index: 1; }
+        .marketing .shield-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); animation: marketing-pulse 2s ease-in-out infinite; }
+        @keyframes marketing-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .marketing .drone-emoji { font-size: 8rem; animation: marketing-float 3s ease-in-out infinite; }
+        @keyframes marketing-float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-15px);} }
+        .marketing .radar-dots { position: absolute; width: 100%; height: 100%; }
+        .marketing .radar-dot { position: absolute; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: marketing-blink 2s ease-in-out infinite; }
+        .marketing .radar-dot:nth-child(1) { top: 25%; left: 30%; animation-delay: 0s; }
+        .marketing .radar-dot:nth-child(2) { top: 60%; left: 70%; animation-delay: 0.5s; }
+        .marketing .radar-dot:nth-child(3) { top: 40%; left: 55%; animation-delay: 1s; }
+        @keyframes marketing-blink { 0%,100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
 
         /* Sections */
         .marketing .section { padding: 3rem 5%; position: relative; z-index: 1; }
@@ -151,7 +163,9 @@ export default function Home(): React.ReactElement {
         .marketing .stat-label { color: var(--gray); margin-top: .4rem; }
 
         /* Features */
-        .marketing .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .marketing .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        @media (max-width: 1024px) { .marketing .features-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .marketing .features-grid { grid-template-columns: 1fr; } }
         .marketing .feature-card { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid rgba(249,115,22,0.2); border-radius: 15px; padding: 1.6rem; position: relative; overflow: hidden; transition: all .3s; }
         .marketing .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
         .marketing .feature-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: .8rem; }
@@ -167,10 +181,14 @@ export default function Home(): React.ReactElement {
 
         /* Comparison */
         .marketing .comparison-section { max-width: 1400px; margin: 0 auto; }
-        .marketing .comparison-table { overflow-x: auto; margin: 2rem auto 0; max-width: 1000px; }
-        .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
-        .marketing th { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 1rem; text-align: left; font-weight: 800; }
-        .marketing td { padding: 1rem; border-bottom: 1px solid rgba(249,115,22,0.1); }
+        .marketing .comparison-table { overflow-x: auto; margin: 2rem auto 0; max-width: 1200px; }
+        .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; table-layout: fixed; }
+        .marketing th { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 1rem 0.75rem; text-align: left; font-weight: 800; font-size: 0.9rem; }
+        .marketing th:first-child { width: 22%; }
+        .marketing th:nth-child(2) { width: 18%; background: linear-gradient(135deg, var(--primary), #d97706); }
+        .marketing td { padding: 0.85rem 0.75rem; border-bottom: 1px solid rgba(249,115,22,0.1); font-size: 0.95rem; }
+        .marketing td:first-child { color: var(--gray); font-weight: 500; }
+        .marketing td:nth-child(2) { background: rgba(249,115,22,0.05); }
         .marketing tr:hover { background: rgba(249,115,22,0.05); }
         .marketing .check { color: rgb(34, 197, 94); font-size: 1.1rem; }
         .marketing .cross { color: #ff4444; font-size: 1.1rem; }
@@ -192,7 +210,6 @@ export default function Home(): React.ReactElement {
           .marketing .hero-buttons { flex-direction: column; }
           .marketing .tech-showcase { grid-template-columns: 1fr; }
           .marketing .stats-grid { grid-template-columns: 1fr; }
-          .marketing .features-grid { grid-template-columns: 1fr; }
         }
 
         /* Reveal */
@@ -210,11 +227,16 @@ export default function Home(): React.ReactElement {
         <section className="hero" id="hero">
           <div className="hero-content">
             <div className="hero-text">
-              <h1>Blockchain-Powered Counter-Drone Defense</h1>
+              <div className="hero-badge">SAE Level 4 Autonomous Defense</div>
+              <h1>
+                <span>Blockchain-Powered</span>
+                <span>Counter-Drone Defense</span>
+              </h1>
               <p>
-                Revolutionary defense technology combining military-grade
-                security with blockchain integrity. Protect your airspace with
-                95% accuracy and sub-6 second response times.
+                Revolutionary defense technology combining military-grade AI
+                with blockchain integrity. Protect your airspace with 95%+
+                accuracy, sub-6 second response times, and tamper-proof
+                evidence logging.
               </p>
               <div className="hero-buttons">
                 <a href="/contact" className="cta-button">
@@ -228,6 +250,11 @@ export default function Home(): React.ReactElement {
             <div className="hero-visual" aria-hidden="true">
               <div className="drone-graphic">
                 <div className="radar-sweep" />
+                <div className="radar-dots">
+                  <div className="radar-dot" />
+                  <div className="radar-dot" />
+                  <div className="radar-dot" />
+                </div>
                 <div className="shield-emoji">🛡️</div>
               </div>
             </div>
@@ -399,89 +426,73 @@ export default function Home(): React.ReactElement {
                   <th>DroneGuard Pro</th>
                   <th>AeroDefender</th>
                   <th>FortiDrone</th>
+                  <th>SkyShield X1</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Price</td>
-                  <td>
-                    <strong>R850,000</strong>
-                  </td>
+                  <td><strong>R850,000</strong></td>
                   <td>R1,200,000</td>
                   <td>R1,500,000</td>
                   <td>R1,000,000</td>
+                  <td>R1,350,000</td>
                 </tr>
                 <tr>
                   <td>Detection Range</td>
-                  <td>
-                    <strong>5 km</strong>
-                  </td>
+                  <td><strong>5 km</strong></td>
                   <td>2 km</td>
                   <td>5 km</td>
                   <td>5 km</td>
+                  <td>4 km</td>
                 </tr>
                 <tr>
                   <td>Response Time</td>
-                  <td>
-                    <strong>3-6 seconds</strong>
-                  </td>
+                  <td><strong>3-6 seconds</strong></td>
                   <td>5 seconds</td>
                   <td>3 seconds</td>
                   <td>4 seconds</td>
+                  <td>6 seconds</td>
                 </tr>
                 <tr>
                   <td>Accuracy</td>
-                  <td>
-                    <strong>95%+</strong>
-                  </td>
+                  <td><strong>95%+</strong></td>
                   <td>90%</td>
                   <td>95%</td>
                   <td>94%</td>
+                  <td>92%</td>
                 </tr>
                 <tr>
                   <td>Blockchain Security</td>
-                  <td>
-                    <span className="check">✔</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="cross">✗</span></td>
                 </tr>
                 <tr>
                   <td>Modular Design</td>
-                  <td>
-                    <span className="check">✔</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="check">✔</span></td>
                 </tr>
                 <tr>
                   <td>Physical Countermeasures</td>
-                  <td>
-                    <span className="check">✔</span>
-                  </td>
-                  <td>
-                    <span className="cross">✗</span>
-                  </td>
-                  <td>
-                    <span className="check">✔</span>
-                  </td>
-                  <td>
-                    <span className="check">✔</span>
-                  </td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="cross">✗</span></td>
+                </tr>
+                <tr>
+                  <td>AI Classification</td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="cross">✗</span></td>
+                  <td><span className="check">✔</span></td>
+                  <td><span className="check">✔</span></td>
                 </tr>
               </tbody>
             </table>

@@ -35,20 +35,46 @@ export function ProtectedContent({
   const isFreePage =
     isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
 
+  // Debug logging on component load
+  useEffect(() => {
+    console.log("[ProtectedContent] Component loaded", {
+      currentUrl,
+      isConfigured,
+      loading,
+      user: user ? { uid: user.uid, email: user.email } : null,
+      isFreePage,
+      isFreeContent,
+      FREE_PAGES,
+    });
+  }, []);
+
+  // Debug logging on state changes
+  useEffect(() => {
+    console.log("[ProtectedContent] Auth state changed", {
+      loading,
+      isConfigured,
+      user: user ? { uid: user.uid, email: user.email } : null,
+      isFreePage,
+    });
+  }, [loading, isConfigured, user, isFreePage]);
+
   // Track teaser view for non-authenticated users
   useEffect(() => {
     if (!loading && !user && !isFreePage) {
+      console.log("[ProtectedContent] Showing teaser view for:", currentUrl);
       analytics.trackTeaserView(currentUrl);
     }
   }, [loading, user, isFreePage, currentUrl]);
 
   // If Firebase not configured, show everything (local mode)
   if (!isConfigured) {
+    console.log("[ProtectedContent] Firebase not configured - showing all content");
     return <>{children}</>;
   }
 
   // Loading state
   if (loading) {
+    console.log("[ProtectedContent] Loading state - showing spinner");
     return (
       <div className="protected-content protected-content--loading">
         <div className="protected-content-spinner" />
@@ -59,8 +85,11 @@ export function ProtectedContent({
 
   // Authenticated or free content - show everything
   if (user || isFreePage) {
+    console.log("[ProtectedContent] Access granted", { hasUser: !!user, isFreePage });
     return <>{children}</>;
   }
+
+  console.log("[ProtectedContent] Access denied - showing teaser");
 
   // Non-authenticated - show teaser with sign-in CTA
   // CSS handles the height limiting and fade effect
