@@ -6,6 +6,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { supportService } from "../../services/supportService";
 import "./SupportPanel.css";
 
 interface FAQItem {
@@ -102,6 +103,8 @@ export function SupportPanel({
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">(
     "idle",
   );
+  const [ticketNumber, setTicketNumber] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const categories = [
     "all",
@@ -117,10 +120,18 @@ export function SupportPanel({
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    setErrorMessage(null);
 
     try {
-      // In production, this would call a Cloud Function
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await supportService.submitContactForm({
+        name: contactForm.name,
+        email: contactForm.email,
+        subject: contactForm.subject,
+        message: contactForm.message,
+        category: contactForm.category as "general" | "technical" | "sales" | "partnership" | "feedback",
+      });
+
+      setTicketNumber(response.ticketNumber);
       setSubmitStatus("success");
       setContactForm({
         name: user?.displayName || "",
@@ -129,7 +140,13 @@ export function SupportPanel({
         message: "",
         category: "general",
       });
-    } catch {
+    } catch (error) {
+      console.error("Failed to submit contact form:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit. Please try again or email us directly."
+      );
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -225,13 +242,21 @@ export function SupportPanel({
             <div className="contact-success">
               <span className="contact-success-icon">✓</span>
               <h3>Message Sent!</h3>
+              {ticketNumber && (
+                <p className="contact-ticket-number">
+                  Your ticket number: <strong>{ticketNumber}</strong>
+                </p>
+              )}
               <p>
                 Thank you for reaching out. Our team will respond within 1-2
                 business days.
               </p>
               <button
                 className="contact-reset-btn"
-                onClick={() => setSubmitStatus("idle")}
+                onClick={() => {
+                  setSubmitStatus("idle");
+                  setTicketNumber(null);
+                }}
               >
                 Send another message
               </button>
@@ -321,7 +346,7 @@ export function SupportPanel({
 
               {submitStatus === "error" && (
                 <div className="contact-error">
-                  Something went wrong. Please try again or email us directly.
+                  {errorMessage || "Something went wrong. Please try again or email us directly."}
                 </div>
               )}
 

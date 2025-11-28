@@ -5,21 +5,62 @@
  * when there's new content the user hasn't seen.
  */
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { supportService, ContentTimestamps } from "../../services/supportService";
 
 const NEWS_LAST_SEEN_KEY = "phoenix-news-last-seen";
 const SUPPORT_LAST_SEEN_KEY = "phoenix-support-last-seen";
-
-// Simulated timestamps for new content - in a real app, these would come from the backend
-const LATEST_NEWS_TIMESTAMP = new Date("2025-11-28").getTime();
-const LATEST_SUPPORT_TIMESTAMP = new Date("2025-11-25").getTime();
+const TIMESTAMPS_CACHE_KEY = "phoenix-content-timestamps";
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 export function NavbarNotifications(): null {
   const { user } = useAuth();
+  const [timestamps, setTimestamps] = useState<ContentTimestamps | null>(null);
+  const fetchedRef = useRef(false);
+
+  // Fetch latest timestamps from backend
+  useEffect(() => {
+    if (typeof window === "undefined" || fetchedRef.current) return;
+
+    const fetchTimestamps = async () => {
+      try {
+        // Check cache first
+        const cached = localStorage.getItem(TIMESTAMPS_CACHE_KEY);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_TTL) {
+            setTimestamps(data);
+            return;
+          }
+        }
+
+        // Fetch from backend
+        const data = await supportService.getLatestContentTimestamps();
+        setTimestamps(data);
+
+        // Cache the result
+        localStorage.setItem(
+          TIMESTAMPS_CACHE_KEY,
+          JSON.stringify({ data, timestamp: Date.now() })
+        );
+      } catch (error) {
+        console.error("Failed to fetch content timestamps:", error);
+        // Use cached data as fallback even if stale
+        const cached = localStorage.getItem(TIMESTAMPS_CACHE_KEY);
+        if (cached) {
+          const { data } = JSON.parse(cached);
+          setTimestamps(data);
+        }
+      }
+    };
+
+    fetchedRef.current = true;
+    fetchTimestamps();
+  }, []);
 
   const updateNotificationBadges = useCallback(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !timestamps) return;
 
     // Get last seen timestamps from localStorage
     const newsLastSeen = parseInt(
@@ -37,7 +78,7 @@ export function NavbarNotifications(): null {
 
     // Update news badge
     if (newsLink) {
-      const hasNewNews = LATEST_NEWS_TIMESTAMP > newsLastSeen;
+      const hasNewNews = timestamps.newsUpdatedAt > newsLastSeen;
       if (hasNewNews) {
         newsLink.setAttribute("data-has-new", "true");
       } else {
@@ -47,14 +88,14 @@ export function NavbarNotifications(): null {
 
     // Update support badge (only for logged-in users)
     if (supportLink) {
-      const hasNewSupport = user && LATEST_SUPPORT_TIMESTAMP > supportLastSeen;
+      const hasNewSupport = user && timestamps.supportUpdatedAt > supportLastSeen;
       if (hasNewSupport) {
         supportLink.setAttribute("data-has-new", "true");
       } else {
         supportLink.removeAttribute("data-has-new");
       }
     }
-  }, [user]);
+  }, [user, timestamps]);
 
   // Mark news as seen when visiting the news page
   const handleNewsSeen = useCallback(() => {
