@@ -9,7 +9,7 @@
  */
 
 import * as React from "react";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { aiService, ReadingRecommendation } from "../../services/aiService";
 import {
@@ -251,6 +251,33 @@ export function SidebarRecommendations({
     }
   }, [user, isProfileLoaded, hasLoaded, fetchRecommendations]);
 
+  // Helper to check if a doc is completed (must be before early returns per hooks rules)
+  const isDocCompleted = useCallback(
+    (docId: string): boolean => {
+      const docKey = docId.replace(/^\/docs\//, "");
+      return !!(
+        progress?.docs?.[docKey]?.completed ||
+        progress?.docs?.[docId]?.completed
+      );
+    },
+    [progress],
+  );
+
+  // Memoize filtered recommendations to avoid recalculation on every render
+  const filteredRecommendations = useMemo(
+    () =>
+      hideCompleted
+        ? recommendations.filter((rec) => !isDocCompleted(rec.docId))
+        : recommendations,
+    [recommendations, hideCompleted, isDocCompleted],
+  );
+
+  // Memoize completed count
+  const completedRecsCount = useMemo(
+    () => recommendations.filter((rec) => isDocCompleted(rec.docId)).length,
+    [recommendations, isDocCompleted],
+  );
+
   // Don't render for unauthenticated users
   if (!user) {
     return null;
@@ -273,28 +300,6 @@ export function SidebarRecommendations({
   const completedCount = progress?.docs
     ? Object.values(progress.docs).filter((d) => d.completed).length
     : 0;
-
-  // Helper to check if a doc is completed
-  const isDocCompleted = useCallback(
-    (docId: string): boolean => {
-      const docKey = docId.replace(/^\/docs\//, "");
-      return !!(
-        progress?.docs?.[docKey]?.completed ||
-        progress?.docs?.[docId]?.completed
-      );
-    },
-    [progress],
-  );
-
-  // Filter recommendations based on hideCompleted state
-  const filteredRecommendations = hideCompleted
-    ? recommendations.filter((rec) => !isDocCompleted(rec.docId))
-    : recommendations;
-
-  // Count completed recommendations
-  const completedRecsCount = recommendations.filter((rec) =>
-    isDocCompleted(rec.docId),
-  ).length;
 
   return (
     <div className="sidebar-rec">
@@ -331,7 +336,9 @@ export function SidebarRecommendations({
                 <>
                   {/* Show completion progress for recommendations (known profiles, templates, or roles) */}
                   {(knownProfile || selectedTemplate || (confirmedRoles && confirmedRoles.length > 0)) && (
-                    <div className="sidebar-rec-progress-summary">
+                    <div
+                      className={`sidebar-rec-progress-summary ${completedRecsCount === 0 ? "sidebar-rec-progress-summary--centered" : ""}`}
+                    >
                       <span>
                         {completedRecsCount}/{recommendations.length} completed
                       </span>
@@ -341,6 +348,11 @@ export function SidebarRecommendations({
                           className={`sidebar-rec-filter-toggle ${hideCompleted ? "sidebar-rec-filter-toggle--active" : ""}`}
                           onClick={() => setHideCompleted(!hideCompleted)}
                           title={hideCompleted ? "Show all" : "Hide completed"}
+                          aria-label={
+                            hideCompleted
+                              ? "Show all recommendations"
+                              : "Hide completed recommendations"
+                          }
                         >
                           <span className="sidebar-rec-filter-icon">
                             {hideCompleted ? "○" : "●"}

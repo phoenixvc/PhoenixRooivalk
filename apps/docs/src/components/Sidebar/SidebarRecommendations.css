@@ -199,6 +199,10 @@
   color: rgb(34, 197, 94);
 }
 
+.sidebar-rec-progress-summary--centered {
+  justify-content: center;
+}
+
 .sidebar-rec-filter-toggle {
   display: flex;
   align-items: center;
