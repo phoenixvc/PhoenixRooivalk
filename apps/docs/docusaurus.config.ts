@@ -261,6 +261,22 @@ const config: Config = {
             },
           ],
         },
+        // News - RAG-powered personalized news
+        {
+          to: "/news",
+          label: "News",
+          position: "right",
+          className: "navbar__link--news",
+          "aria-label": "Industry news personalized for you",
+        },
+        // Support - Help and FAQ
+        {
+          to: "/support",
+          label: "Support",
+          position: "right",
+          className: "navbar__link--support",
+          "aria-label": "Get help and support",
+        },
         // Your Progress - compact styled link on right
         {
           to: "/your-progress",
@@ -367,6 +383,14 @@ const config: Config = {
         {
           title: "Resources",
           items: [
+            {
+              label: "Industry News",
+              to: "/news",
+            },
+            {
+              label: "Support Center",
+              to: "/support",
+            },
             {
               label: "Your Progress",
               to: "/your-progress",
