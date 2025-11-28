@@ -32,7 +32,10 @@ impl X402State {
         match X402Config::from_env() {
             Ok(config) if config.enabled => {
                 let facilitator = X402Facilitator::new(config.clone());
-                Some(Self { facilitator, config })
+                Some(Self {
+                    facilitator,
+                    config,
+                })
             }
             Ok(_) => {
                 tracing::info!("x402 payments disabled");
@@ -49,7 +52,10 @@ impl X402State {
     pub fn devnet(wallet_address: &str) -> Self {
         let config = X402Config::devnet(wallet_address);
         let facilitator = X402Facilitator::new(config.clone());
-        Self { facilitator, config }
+        Self {
+            facilitator,
+            config,
+        }
     }
 }
 
@@ -366,10 +372,7 @@ fn extract_client_ip_from_headers(headers: &HeaderMap) -> String {
 /// Get x402 payment status and configuration
 ///
 /// GET /api/v1/x402/status
-pub async fn x402_status(
-    State(state): State<AppState>,
-    headers: HeaderMap,
-) -> Response {
+pub async fn x402_status(State(state): State<AppState>, headers: HeaderMap) -> Response {
     // Extract client IP for rate limiting
     let client_ip = extract_client_ip_from_headers(&headers);
 

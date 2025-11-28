@@ -87,11 +87,7 @@ impl PaymentDetails {
             recipient: recipient.to_string(),
             memo: format!("evidence:{}", evidence_id),
             facilitator: facilitator.to_string(),
-            supported_tokens: vec![
-                "USDC".to_string(),
-                "USDT".to_string(),
-                "SOL".to_string(),
-            ],
+            supported_tokens: vec!["USDC".to_string(), "USDT".to_string(), "SOL".to_string()],
             expires_at: None,
             tier,
         }
@@ -123,11 +119,11 @@ pub struct PaymentProof {
 impl PaymentProof {
     /// Decode a payment proof from base64-encoded X-PAYMENT header
     pub fn from_header(header_value: &str) -> Result<Self, crate::X402Error> {
-        let decoded = base64::Engine::decode(
-            &base64::engine::general_purpose::STANDARD,
-            header_value,
-        )
-        .map_err(|e| crate::X402Error::InvalidProof(format!("base64 decode error: {}", e)))?;
+        let decoded =
+            base64::Engine::decode(&base64::engine::general_purpose::STANDARD, header_value)
+                .map_err(|e| {
+                    crate::X402Error::InvalidProof(format!("base64 decode error: {}", e))
+                })?;
 
         let json_str = String::from_utf8(decoded)
             .map_err(|e| crate::X402Error::InvalidProof(format!("UTF-8 decode error: {}", e)))?;

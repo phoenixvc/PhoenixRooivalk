@@ -92,7 +92,10 @@ impl X402Facilitator {
     }
 
     /// Verify payment directly on Solana (without facilitator)
-    pub async fn verify_on_chain(&self, proof: &PaymentProof) -> Result<PaymentVerification, X402Error> {
+    pub async fn verify_on_chain(
+        &self,
+        proof: &PaymentProof,
+    ) -> Result<PaymentVerification, X402Error> {
         let request = serde_json::json!({
             "jsonrpc": "2.0",
             "id": 1,
