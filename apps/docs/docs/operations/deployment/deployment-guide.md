@@ -185,6 +185,50 @@ proxy_set_header X-Forwarded-For $remote_addr;
 - The API trusts the first IP in `X-Forwarded-For` as the client IP
 - Ensure your infrastructure adds only one hop to the forwarding chain
 
+### Database Backend Support
+
+The Phoenix Rooivalk API supports multiple database backends for flexibility
+across different deployment environments:
+
+| Backend    | Unique Constraint Codes | Status      |
+|------------|------------------------|-------------|
+| SQLite     | 2067, 1555, 19         | Supported   |
+| PostgreSQL | 23505                  | Supported   |
+| MySQL      | 1062                   | Supported   |
+
+**Database Error Handling**:
+
+- Unique constraint violations are detected across all supported backends
+- The system uses driver-specific error codes when available
+- Message-based fallback detection is available for edge cases
+
+**SQLite (Default)**:
+
+```bash
+# Development and testing
+export API_DB_URL="sqlite://blockchain_outbox.sqlite3"
+```
+
+**PostgreSQL**:
+
+```bash
+# Production deployment
+export API_DB_URL="postgres://user:password@host:5432/phoenix_db"
+```
+
+**MySQL**:
+
+```bash
+# Alternative production deployment
+export API_DB_URL="mysql://user:password@host:3306/phoenix_db"
+```
+
+**Migration Notes**:
+
+- The migration system automatically adapts to the configured backend
+- Schema differences are handled at the SQL dialect level
+- Test thoroughly when switching between backends in production
+
 ---
 
 ## Hardware Deployment

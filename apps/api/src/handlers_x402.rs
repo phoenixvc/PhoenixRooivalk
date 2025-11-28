@@ -5,6 +5,7 @@
 
 use crate::{
     db::{create_payment_receipt, get_evidence_by_id, is_payment_signature_used},
+    db_errors::is_unique_constraint_violation,
     AppState,
 };
 use axum::{
@@ -256,19 +257,15 @@ async fn handle_paid_verification(
         }
         Err(e) => {
             // Check if this is a UNIQUE constraint violation (payment replay)
-            // SQLx wraps database errors, check for Database variant with constraint info
-            let is_unique_violation = match &e {
+            // Uses database-agnostic helper for portable detection across backends
+            let is_replay = match &e {
                 sqlx::Error::Database(db_err) => {
-                    // SQLite error code 2067 = SQLITE_CONSTRAINT_UNIQUE
-                    // Also check for constraint violation message patterns
-                    db_err.code().is_some_and(|c| c == "2067" || c == "1555")
-                        || db_err.message().to_lowercase().contains("unique")
-                        || db_err.message().to_lowercase().contains("constraint")
+                    is_unique_constraint_violation(db_err.as_ref())
                 }
                 _ => false,
             };
 
-            if is_unique_violation {
+            if is_replay {
                 return (
                     StatusCode::CONFLICT,
                     Json(json!({
