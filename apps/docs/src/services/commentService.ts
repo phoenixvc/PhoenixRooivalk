@@ -178,9 +178,13 @@ export function isComment(data: unknown): data is Comment {
  * Removes all HTML tags and escapes special characters
  */
 export function sanitizeContent(content: string): string {
+  // Remove HTML tags (apply repeatedly to handle nested & tricky cases)
+  let previous;
+  do {
+    previous = content;
+    content = content.replace(/<[^>]*>/g, "");
+  } while (content !== previous);
   return content
-    // Remove HTML tags
-    .replace(/<[^>]*>/g, "")
     // Escape HTML entities
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
