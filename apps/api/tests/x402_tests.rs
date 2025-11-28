@@ -12,6 +12,10 @@ use tokio::task::JoinHandle;
 // This prevents race conditions when tests run in parallel
 static TEST_MUTEX: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
 
+/// Test API token for M2M endpoint authentication
+/// The x402 premium verification endpoint requires Bearer token auth
+const TEST_BEARER_TOKEN: &str = "Bearer test-api-token";
+
 /// Test context that properly cleans up resources when dropped
 struct TestContext {
     base_url: String,
@@ -118,7 +122,7 @@ async fn test_verify_premium_not_configured() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "test-evidence-001",
             "tier": "basic"
@@ -145,7 +149,7 @@ async fn test_x402_payment_flow_simulation() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "test-evidence-002",
             "tier": "basic"
@@ -203,7 +207,7 @@ async fn test_x402_price_tiers() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "test-001",
             "tier": "basic"
@@ -219,7 +223,7 @@ async fn test_x402_price_tiers() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "test-002",
             "tier": "multi_chain"
@@ -235,7 +239,7 @@ async fn test_x402_price_tiers() {
     let response = client
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "test-003",
             "tier": "legal_attestation"
@@ -291,7 +295,7 @@ async fn test_x402_rate_limiting_headers() {
         .post(ctx.url("/api/v1/evidence/verify-premium"))
         .header("x-forwarded-for", "10.0.0.1")
         // M2M endpoint requires Bearer token authentication
-        .header("authorization", "Bearer test-api-token")
+        .header("authorization", TEST_BEARER_TOKEN)
         .json(&json!({
             "evidence_id": "rate-test-001",
             "tier": "basic"
