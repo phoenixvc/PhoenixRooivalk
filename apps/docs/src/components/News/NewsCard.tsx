@@ -16,6 +16,8 @@ import "./NewsCard.css";
 interface NewsCardProps {
   article: NewsArticle | PersonalizedNewsItem;
   variant?: "compact" | "full";
+  /** Whether this article is saved (for initial state) */
+  initialSaved?: boolean;
   onRead?: (articleId: string) => void;
   onSave?: (articleId: string, saved: boolean) => void;
 }
@@ -29,11 +31,12 @@ function isPersonalized(
 export function NewsCard({
   article,
   variant = "compact",
+  initialSaved = false,
   onRead,
   onSave,
 }: NewsCardProps): React.ReactElement {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const [isSaved, setIsSaved] = useState(initialSaved);
   const [isSaving, setIsSaving] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const toast = useToast();

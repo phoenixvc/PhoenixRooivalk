@@ -6,6 +6,7 @@
  */
 
 import Layout from "@theme/Layout";
+import { useColorMode } from "@docusaurus/theme-common";
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -24,6 +25,7 @@ const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
 export default function ProfileSettings(): React.ReactElement {
   const { user, loading, userProfile, updateUserRoles, logout, progress } =
     useAuth();
+  const { colorMode, setColorMode } = useColorMode();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(
     userProfile.confirmedRoles,
   );
@@ -310,6 +312,49 @@ export default function ProfileSettings(): React.ReactElement {
                   Restart Walkthrough
                 </button>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Preferences Section */}
+        <section className="row margin-bottom--lg">
+          <div className="col col--8 col--offset-2">
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>Preferences</h3>
+              <p className={styles.sectionDescription}>
+                Customize your viewing experience.
+              </p>
+
+              <div className={styles.accountActions}>
+                <div className={styles.accountAction}>
+                  <div>
+                    <h4 className={styles.accountActionTitle}>
+                      Dark Mode
+                    </h4>
+                    <p className={styles.accountActionDesc}>
+                      Switch between light and dark themes for better readability.
+                    </p>
+                  </div>
+                  <div className={styles.toggleContainer}>
+                    <button
+                      type="button"
+                      className={`${styles.toggleButton} ${colorMode === "light" ? styles.toggleActive : ""}`}
+                      onClick={() => setColorMode("light")}
+                      aria-pressed={colorMode === "light"}
+                    >
+                      Light
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.toggleButton} ${colorMode === "dark" ? styles.toggleActive : ""}`}
+                      onClick={() => setColorMode("dark")}
+                      aria-pressed={colorMode === "dark"}
+                    >
+                      Dark
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

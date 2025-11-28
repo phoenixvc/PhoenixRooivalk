@@ -5,7 +5,7 @@
  * Supports filtering, search, and saved articles.
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
 import { NewsCard } from "./NewsCard";
@@ -202,6 +202,22 @@ export function NewsPanel({
 
   const categories = Object.keys(NEWS_CATEGORY_CONFIG) as NewsCategory[];
 
+  // Create a Set of saved article IDs for efficient lookup
+  const savedArticleIds = useMemo(
+    () => new Set(savedArticles.map((a) => a.id)),
+    [savedArticles]
+  );
+
+  // Load saved articles on mount for logged-in users (for bookmark state)
+  useEffect(() => {
+    if (user && activeTab !== "saved") {
+      // Silently fetch saved articles in background for bookmark state
+      newsService.getSavedArticles()
+        .then((result) => setSavedArticles(result.articles))
+        .catch(() => {/* Silent fail - not critical */});
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="news-panel">
       <div className="news-panel-header">
@@ -324,6 +340,7 @@ export function NewsPanel({
                       key={article.id}
                       article={article}
                       variant="compact"
+                      initialSaved={savedArticleIds.has(article.id)}
                       onRead={handleArticleRead}
                       onSave={handleArticleSave}
                     />
@@ -345,6 +362,7 @@ export function NewsPanel({
                       key={article.id}
                       article={article}
                       variant="compact"
+                      initialSaved={savedArticleIds.has(article.id)}
                       onSave={handleArticleSave}
                     />
                   ))}
@@ -387,6 +405,7 @@ export function NewsPanel({
                     key={article.id}
                     article={article}
                     variant="full"
+                    initialSaved={savedArticleIds.has(article.id)}
                     onRead={handleArticleRead}
                     onSave={handleArticleSave}
                   />
@@ -417,6 +436,7 @@ export function NewsPanel({
                     key={article.id}
                     article={article}
                     variant="full"
+                    initialSaved={true}
                     onSave={handleArticleSave}
                   />
                 ))}

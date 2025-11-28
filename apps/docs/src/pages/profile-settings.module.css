@@ -321,6 +321,36 @@
   background: rgba(239, 68, 68, 0.1) !important;
 }
 
+/* Toggle Button for Dark Mode */
+.toggleContainer {
+  display: flex;
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggleButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  color: rgb(226, 230, 234);
+}
+
+.toggleActive {
+  background: rgba(249, 115, 22, 0.2);
+  color: rgb(249, 115, 22);
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2rem;
