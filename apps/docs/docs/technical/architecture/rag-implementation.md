@@ -935,6 +935,7 @@ async askDocumentation(
    ```
 
 4. **Test Query**
+
    ```bash
    firebase functions:call askDocumentation \
      --data '{"question": "How does the RKV work?"}'

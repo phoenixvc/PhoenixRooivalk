@@ -22,15 +22,17 @@ use std::{
     time::Duration,
 };
 
+/// Type alias for rate limiter map to reduce complexity
+type RateLimiterMap =
+    Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>;
+
 /// Rate limiter configuration for x402 endpoints
 #[derive(Clone)]
 pub struct X402RateLimiter {
     /// Per-IP rate limiters for premium verification
-    verify_limiters:
-        Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
+    verify_limiters: RateLimiterMap,
     /// Per-IP rate limiters for status checks
-    status_limiters:
-        Arc<RwLock<HashMap<String, Arc<RateLimiter<NotKeyed, InMemoryState, DefaultClock>>>>>,
+    status_limiters: RateLimiterMap,
     /// Quota for premium verification (more restrictive)
     verify_quota: Quota,
     /// Quota for status checks (less restrictive)
@@ -120,6 +122,7 @@ impl X402RateLimiter {
 
     /// Check rate limit for premium verification endpoint
     /// Returns Ok(()) if allowed, Err(Response) if rate limited
+    #[allow(clippy::result_large_err)]
     pub fn check_verify(&self, ip: &str) -> Result<(), Response> {
         let limiter = self.get_verify_limiter(ip);
         match limiter.check() {
@@ -134,6 +137,7 @@ impl X402RateLimiter {
 
     /// Check rate limit for status endpoint
     /// Returns Ok(()) if allowed, Err(Response) if rate limited
+    #[allow(clippy::result_large_err)]
     pub fn check_status(&self, ip: &str) -> Result<(), Response> {
         let limiter = self.get_status_limiter(ip);
         match limiter.check() {

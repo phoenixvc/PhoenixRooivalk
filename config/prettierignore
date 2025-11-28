@@ -6,6 +6,16 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
+# Build outputs
+**/dist/
+**/build/
+**/.docusaurus/
+**/node_modules/
+
+# Compiled function outputs
+apps/docs/functions/lib/
+apps/docs/functions/.eslintrc.js
+
 # Generated WASM files
 apps/marketing/public/wasm/*.js
 apps/marketing/public/wasm/*.wasm
@@ -19,4 +29,10 @@ apps/threat-simulator-desktop/src-tauri/target/
 pitch-deck/*.html
 pitch-deck/*.pptx
 pitch-deck/*.pdf
+
+# Config files that shouldn't be reformatted
+firebase.json
+firestore.indexes.json
+.eslintrc.js
+**/tsconfig.json
 

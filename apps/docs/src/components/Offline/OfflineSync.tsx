@@ -11,7 +11,7 @@ export interface QueuedUpdate {
   id: string;
   timestamp: number;
   data: Record<string, unknown>;
-  type: "progress" | "analytics";
+  type: "progress" | "analytics" | "profile";
 }
 
 /**

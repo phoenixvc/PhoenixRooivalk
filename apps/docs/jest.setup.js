@@ -43,10 +43,11 @@ Object.defineProperty(window, "sessionStorage", {
   value: sessionStorageMock,
 });
 
-// Mock navigator.onLine
+// Mock navigator.onLine - make configurable so tests can modify it
 Object.defineProperty(navigator, "onLine", {
   value: true,
   writable: true,
+  configurable: true,
 });
 
 // Reset mocks before each test

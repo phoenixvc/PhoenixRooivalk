@@ -18,3 +18,8 @@ export {
 export { default as FeedbackWidget, useFeedback } from "./FeedbackWidget";
 export { UserProfile } from "./UserProfile";
 export { ReadingTracker } from "./ReadingTracker";
+export {
+  CompletionToast,
+  emitDocumentCompletion,
+  useCompletionToast,
+} from "./CompletionToast";

@@ -73,18 +73,6 @@ export function AIChatInterface({
     inputRef.current?.focus();
   }, []);
 
-  // Send initial question if provided
-  useEffect(() => {
-    if (initialQuestion && messages.length === 0) {
-      // Using a ref to avoid including handleSendMessage in dependencies
-      // which would cause infinite loops
-      const sendInitialQuestion = async () => {
-        await handleSendMessage(initialQuestion);
-      };
-      sendInitialQuestion();
-    }
-  }, [initialQuestion, messages.length, handleSendMessage]);
-
   const generateMessageId = () =>
     `msg-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
@@ -172,6 +160,15 @@ export function AIChatInterface({
     },
     [inputValue, isLoading, messages, category],
   );
+
+  // Send initial question if provided
+  useEffect(() => {
+    if (initialQuestion && messages.length === 0) {
+      handleSendMessage(initialQuestion);
+    }
+    // Only run on mount with initial question
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

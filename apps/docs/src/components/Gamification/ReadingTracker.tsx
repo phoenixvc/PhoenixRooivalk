@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAchievements } from "./Achievements";
+import { emitDocumentCompletion } from "./CompletionToast";
 
 /**
  * ReadingTracker component automatically tracks user progress through documentation pages.
@@ -90,7 +91,7 @@ export function ReadingTracker(): null {
           },
         });
 
-        // Check achievements when a doc is newly completed
+        // Check achievements and show completion toast when a doc is newly completed
         // Throttle to once per second to avoid excessive calls
         if (isCompleted && !wasAlreadyCompleted) {
           const now = Date.now();
@@ -100,6 +101,13 @@ export function ReadingTracker(): null {
               Object.values(progress.docs).filter((d) => d.completed).length +
               1; // +1 for the doc we just completed
             checkAndUnlockAchievements(completedCount);
+
+            // Emit completion event for toast notification
+            emitDocumentCompletion({
+              docId,
+              title: docId,
+              completedAt: new Date().toISOString(),
+            });
           }
         }
       }

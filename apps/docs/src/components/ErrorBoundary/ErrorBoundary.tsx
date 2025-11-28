@@ -141,7 +141,7 @@ export class SilentErrorBoundary extends Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(error: Error, _errorInfo: ErrorInfo): void {
     // Log silently, don't disrupt user
     console.warn("SilentErrorBoundary caught error:", error.message);
   }
