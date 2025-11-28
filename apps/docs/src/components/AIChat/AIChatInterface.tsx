@@ -73,19 +73,8 @@ export function AIChatInterface({
     inputRef.current?.focus();
   }, []);
 
-  // Send initial question if provided
-  useEffect(() => {
-    if (initialQuestion && messages.length === 0) {
-      // Using a ref to avoid including handleSendMessage in dependencies
-      // which would cause infinite loops
-      const sendInitialQuestion = async () => {
-        await handleSendMessage(initialQuestion);
-      };
-      sendInitialQuestion();
-    }
-  }, [initialQuestion, messages.length, handleSendMessage]);
-
-  const generateMessageId = () => `msg-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  const generateMessageId = () =>
+    `msg-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
   const handleSendMessage = useCallback(
     async (questionText?: string) => {
@@ -112,7 +101,11 @@ export function AIChatInterface({
         isLoading: true,
       };
 
-      setMessages((prev: ChatMessage[]) => [...prev, userMessage, assistantPlaceholder]);
+      setMessages((prev: ChatMessage[]) => [
+        ...prev,
+        userMessage,
+        assistantPlaceholder,
+      ]);
 
       try {
         // Build conversation history for context
@@ -138,8 +131,8 @@ export function AIChatInterface({
                   confidence: response.confidence,
                   isLoading: false,
                 }
-              : msg
-          )
+              : msg,
+          ),
         );
       } catch (err) {
         const errorMessage =
@@ -157,16 +150,25 @@ export function AIChatInterface({
                   content: `⚠️ ${errorMessage}`,
                   isLoading: false,
                 }
-              : msg
-          )
+              : msg,
+          ),
         );
       } finally {
         setIsLoading(false);
         inputRef.current?.focus();
       }
     },
-    [inputValue, isLoading, messages, category]
+    [inputValue, isLoading, messages, category],
   );
+
+  // Send initial question if provided
+  useEffect(() => {
+    if (initialQuestion && messages.length === 0) {
+      handleSendMessage(initialQuestion);
+    }
+    // Only run on mount with initial question
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

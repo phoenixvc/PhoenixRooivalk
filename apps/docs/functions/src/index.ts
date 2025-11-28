@@ -6,7 +6,7 @@
  * - cleanupInactiveSessions: Removes sessions with no activity
  * - aggregateDailyStats: Aggregates and archives old daily stats
  *
- * AI Functions (from ./ai.ts):
+ * AI Functions (from ./ai/ module - uses AI Foundry with OpenAI fallback):
  * - analyzeCompetitors: Competitor research and analysis
  * - generateSWOT: SWOT analysis generation
  * - getReadingRecommendations: AI-powered reading suggestions
@@ -15,6 +15,7 @@
  * - summarizeContent: Content summarization
  * - reviewDocumentImprovement: Admin review of suggestions
  * - getPendingImprovements: Get pending suggestions (admin)
+ * - researchPerson: Generate fun facts about a user from LinkedIn
  *
  * RAG Functions (from ./rag/):
  * - indexAllDocumentation: Index all documentation for RAG
@@ -29,7 +30,7 @@
  * - vectorSearchDocs: Optimized vector similarity search
  * - getVectorStats: Get vector search statistics
  *
- * Azure AI Search Functions (from ./azure-search.ts):
+ * Azure AI Search Functions (from ./azure-search/ module):
  * - azureSearchDocs: Azure AI Search with hybrid search
  * - setupAzureIndex: Create/update Azure Search index (admin)
  * - getAzureStats: Get Azure Search index statistics
@@ -60,6 +61,7 @@ export {
   summarizeContent,
   reviewDocumentImprovement,
   getPendingImprovements,
+  researchPerson,
 } from "./ai";
 
 // Export RAG functions
@@ -94,11 +96,7 @@ export {
 export { cleanupExpiredCache, getAICacheStats, clearAICache } from "./cache";
 
 // Export Monitoring functions
-export {
-  getAIMonitoringStats,
-  getAIErrors,
-  checkAIAlerts,
-} from "./monitoring";
+export { getAIMonitoringStats, getAIErrors, checkAIAlerts } from "./monitoring";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
@@ -134,7 +132,7 @@ function getDateDaysAgo(days: number): Date {
 async function deleteOldDocuments(
   collectionName: string,
   timestampField: string,
-  cutoffDate: Date
+  cutoffDate: Date,
 ): Promise<number> {
   let deletedCount = 0;
 
@@ -155,7 +153,7 @@ async function deleteOldDocuments(
 
     await batch.commit();
     functions.logger.info(
-      `Deleted ${snapshot.size} documents from ${collectionName}`
+      `Deleted ${snapshot.size} documents from ${collectionName}`,
     );
 
     // Get next batch
@@ -182,7 +180,7 @@ export const cleanupOldAnalytics = functions.pubsub
     results.pageViews = await deleteOldDocuments(
       "analytics_pageviews",
       "timestamp",
-      pageViewsCutoff
+      pageViewsCutoff,
     );
 
     // Clean up time on page
@@ -190,7 +188,7 @@ export const cleanupOldAnalytics = functions.pubsub
     results.timeOnPage = await deleteOldDocuments(
       "analytics_timeonpage",
       "timestamp",
-      timeOnPageCutoff
+      timeOnPageCutoff,
     );
 
     // Clean up conversions (longer retention)
@@ -198,7 +196,7 @@ export const cleanupOldAnalytics = functions.pubsub
     results.conversions = await deleteOldDocuments(
       "analytics_conversions",
       "timestamp",
-      conversionsCutoff
+      conversionsCutoff,
     );
 
     functions.logger.info("Analytics cleanup complete", results);
@@ -219,7 +217,7 @@ export const cleanupInactiveSessions = functions.pubsub
     const deletedCount = await deleteOldDocuments(
       "analytics_sessions",
       "lastActivity",
-      cutoffDate
+      cutoffDate,
     );
 
     functions.logger.info(`Cleaned up ${deletedCount} inactive sessions`);
@@ -284,7 +282,7 @@ export const manualCleanup = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Only admins can trigger manual cleanup"
+      "Only admins can trigger manual cleanup",
     );
   }
 
@@ -294,7 +292,7 @@ export const manualCleanup = functions.https.onCall(async (data, context) => {
   if (!collection || !days || days < 1) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Collection name and days (> 0) required"
+      "Collection name and days (> 0) required",
     );
   }
 
@@ -308,7 +306,7 @@ export const manualCleanup = functions.https.onCall(async (data, context) => {
   if (!validCollections.includes(collection)) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      `Invalid collection. Must be one of: ${validCollections.join(", ")}`
+      `Invalid collection. Must be one of: ${validCollections.join(", ")}`,
     );
   }
 
@@ -319,11 +317,11 @@ export const manualCleanup = functions.https.onCall(async (data, context) => {
   const deletedCount = await deleteOldDocuments(
     collection,
     timestampField,
-    cutoffDate
+    cutoffDate,
   );
 
   functions.logger.info(
-    `Manual cleanup: deleted ${deletedCount} from ${collection}`
+    `Manual cleanup: deleted ${deletedCount} from ${collection}`,
   );
 
   return { deleted: deletedCount, collection, cutoffDays: days };

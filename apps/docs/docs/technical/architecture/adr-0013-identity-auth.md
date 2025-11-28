@@ -24,9 +24,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Need unified identity and authorization for documentation, AI features, and future defence deployments
-2. **Decision**: Firebase Auth as primary IdP with custom claims for RBAC, Entra ID federation for enterprise
-3. **Trade-off**: Firebase lock-in is acceptable for current phase; migration path preserved for high-security deployments
+1. **Problem**: Need unified identity and authorization for documentation, AI
+   features, and future defence deployments
+2. **Decision**: Firebase Auth as primary IdP with custom claims for RBAC, Entra
+   ID federation for enterprise
+3. **Trade-off**: Firebase lock-in is acceptable for current phase; migration
+   path preserved for high-security deployments
 
 ---
 
@@ -52,6 +55,7 @@ The Phoenix Rooivalk documentation site requires:
 ## Decision
 
 **Firebase Auth** as primary Identity Provider with:
+
 - **Custom claims** for role-based access control
 - **Entra ID federation** for enterprise SSO (future)
 - **Token-based authorization** in Cloud Functions
@@ -62,30 +66,30 @@ The Phoenix Rooivalk documentation site requires:
 
 ### User Types
 
-| Type | Description | Auth Method |
-|------|-------------|-------------|
-| **Public** | Anonymous documentation viewers | None |
+| Type           | Description                        | Auth Method                    |
+| -------------- | ---------------------------------- | ------------------------------ |
+| **Public**     | Anonymous documentation viewers    | None                           |
 | **Registered** | Authenticated users with AI access | Email/Password, Google, GitHub |
-| **Enterprise** | SSO users from partner orgs | Entra ID federation |
-| **Admin** | System administrators | Email/Password + MFA |
+| **Enterprise** | SSO users from partner orgs        | Entra ID federation            |
+| **Admin**      | System administrators              | Email/Password + MFA           |
 
 ### Role Model
 
-| Role | Scope | Permissions |
-|------|-------|-------------|
-| `viewer` | Default | Read public docs, use AI chat, 50 queries/hr |
-| `editor` | Contributors | + Edit suggestions, 200 queries/hr |
-| `admin` | Operators | + Admin panels, unlimited queries, config access |
-| `auditor` | Compliance | + Read-only access to all logs and metrics |
+| Role      | Scope        | Permissions                                      |
+| --------- | ------------ | ------------------------------------------------ |
+| `viewer`  | Default      | Read public docs, use AI chat, 50 queries/hr     |
+| `editor`  | Contributors | + Edit suggestions, 200 queries/hr               |
+| `admin`   | Operators    | + Admin panels, unlimited queries, config access |
+| `auditor` | Compliance   | + Read-only access to all logs and metrics       |
 
 ### Claims Structure
 
 ```typescript
 interface CustomClaims {
-  role: 'viewer' | 'editor' | 'admin' | 'auditor';
-  org?: string;           // Organization ID for enterprise users
-  tier?: 'free' | 'pro';  // Subscription tier (future)
-  features?: string[];    // Feature flags
+  role: "viewer" | "editor" | "admin" | "auditor";
+  org?: string; // Organization ID for enterprise users
+  tier?: "free" | "pro"; // Subscription tier (future)
+  features?: string[]; // Feature flags
 }
 ```
 
@@ -95,21 +99,23 @@ interface CustomClaims {
 
 ### Option 1: Firebase Auth (Current) ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Providers** | Email, Google, GitHub, Microsoft, Phone |
-| **Federation** | SAML, OIDC (Entra ID, Okta) |
-| **Custom claims** | Up to 1000 bytes per user |
-| **MFA** | SMS, TOTP via Firebase extensions |
-| **Cost** | Free up to 10K MAU, then $0.0025-0.006/MAU |
+| Aspect            | Details                                    |
+| ----------------- | ------------------------------------------ |
+| **Providers**     | Email, Google, GitHub, Microsoft, Phone    |
+| **Federation**    | SAML, OIDC (Entra ID, Okta)                |
+| **Custom claims** | Up to 1000 bytes per user                  |
+| **MFA**           | SMS, TOTP via Firebase extensions          |
+| **Cost**          | Free up to 10K MAU, then $0.0025-0.006/MAU |
 
 **Pros**:
+
 - Already deployed and integrated
 - Native Firebase Functions integration
 - Custom claims for RBAC
 - Federation-ready for enterprise
 
 **Cons**:
+
 - Limited MFA options (no hardware keys natively)
 - 1000-byte claim limit
 - Firebase-specific token format
@@ -118,21 +124,23 @@ interface CustomClaims {
 
 ### Option 2: Entra ID (Azure AD B2C)
 
-| Aspect | Details |
-|--------|---------|
-| **Providers** | Microsoft, Social, Custom |
-| **Federation** | SAML, OIDC, WS-Fed |
-| **Custom claims** | Unlimited via extension attributes |
-| **MFA** | Full suite including FIDO2 |
-| **Cost** | First 50K MAU free, then $0.003-0.01/MAU |
+| Aspect            | Details                                  |
+| ----------------- | ---------------------------------------- |
+| **Providers**     | Microsoft, Social, Custom                |
+| **Federation**    | SAML, OIDC, WS-Fed                       |
+| **Custom claims** | Unlimited via extension attributes       |
+| **MFA**           | Full suite including FIDO2               |
+| **Cost**          | First 50K MAU free, then $0.003-0.01/MAU |
 
 **Pros**:
+
 - Enterprise-grade for defence sector
 - Same platform as Azure AI (unified identity)
 - FIDO2 hardware key support
 - Conditional access policies
 
 **Cons**:
+
 - Requires migration from Firebase Auth
 - More complex configuration
 - Separate from Firebase ecosystem
@@ -141,20 +149,22 @@ interface CustomClaims {
 
 ### Option 3: Auth0
 
-| Aspect | Details |
-|--------|---------|
-| **Providers** | 60+ social, enterprise, passwordless |
-| **Federation** | SAML, OIDC, WS-Fed, LDAP |
-| **Custom claims** | Rules/Actions for dynamic claims |
-| **MFA** | Full suite |
-| **Cost** | 7K MAU free, then $0.015+/MAU |
+| Aspect            | Details                              |
+| ----------------- | ------------------------------------ |
+| **Providers**     | 60+ social, enterprise, passwordless |
+| **Federation**    | SAML, OIDC, WS-Fed, LDAP             |
+| **Custom claims** | Rules/Actions for dynamic claims     |
+| **MFA**           | Full suite                           |
+| **Cost**          | 7K MAU free, then $0.015+/MAU        |
 
 **Pros**:
+
 - Most flexible and feature-rich
 - Excellent developer experience
 - Strong compliance certifications
 
 **Cons**:
+
 - Additional vendor and cost
 - No native Firebase integration
 - Overkill for current scale
@@ -163,18 +173,20 @@ interface CustomClaims {
 
 ### Option 4: Self-Hosted (Keycloak/ORY)
 
-| Aspect | Details |
-|--------|---------|
-| **Providers** | Fully customizable |
+| Aspect         | Details                |
+| -------------- | ---------------------- |
+| **Providers**  | Fully customizable     |
 | **Federation** | Full SAML/OIDC support |
-| **Cost** | Infrastructure only |
+| **Cost**       | Infrastructure only    |
 
 **Pros**:
+
 - Full control and customization
 - No vendor lock-in
 - Required for classified deployments
 
 **Cons**:
+
 - Significant operational overhead
 - Security responsibility on us
 - Not needed for documentation site
@@ -185,16 +197,17 @@ interface CustomClaims {
 
 ### Why Firebase Auth (Not Entra ID)?
 
-| Factor | Firebase | Entra ID | Winner |
-|--------|----------|----------|--------|
-| **Current deployment** | ✅ Deployed | New setup | Firebase |
-| **Firestore integration** | Native | SDK needed | Firebase |
-| **Functions integration** | Native | Manual verify | Firebase |
-| **Enterprise federation** | ✅ OIDC | Native | Tie |
-| **Defence-grade MFA** | ❌ Limited | ✅ FIDO2 | Entra ID |
-| **Complexity** | Low | Medium | Firebase |
+| Factor                    | Firebase    | Entra ID      | Winner   |
+| ------------------------- | ----------- | ------------- | -------- |
+| **Current deployment**    | ✅ Deployed | New setup     | Firebase |
+| **Firestore integration** | Native      | SDK needed    | Firebase |
+| **Functions integration** | Native      | Manual verify | Firebase |
+| **Enterprise federation** | ✅ OIDC     | Native        | Tie      |
+| **Defence-grade MFA**     | ❌ Limited  | ✅ FIDO2      | Entra ID |
+| **Complexity**            | Low         | Medium        | Firebase |
 
-**Decision**: Firebase Auth meets current requirements. Entra ID is the migration target for high-security deployments (airports, prisons) in Phase 2.
+**Decision**: Firebase Auth meets current requirements. Entra ID is the
+migration target for high-security deployments (airports, prisons) in Phase 2.
 
 ---
 
@@ -224,25 +237,30 @@ Protected Resources
 ```typescript
 // Set claims (Admin SDK only)
 await admin.auth().setCustomUserClaims(uid, {
-  role: 'editor',
-  org: 'phoenix-team',
-  features: ['ai-panel', 'admin-suggestions']
+  role: "editor",
+  org: "phoenix-team",
+  features: ["ai-panel", "admin-suggestions"],
 });
 
 // Verify in Cloud Function
-export const protectedFunction = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Login required');
-  }
-  
-  const role = context.auth.token.role || 'viewer';
-  
-  if (role !== 'admin') {
-    throw new functions.https.HttpsError('permission-denied', 'Admin required');
-  }
-  
-  // Proceed with admin action
-});
+export const protectedFunction = functions.https.onCall(
+  async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError("unauthenticated", "Login required");
+    }
+
+    const role = context.auth.token.role || "viewer";
+
+    if (role !== "admin") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Admin required",
+      );
+    }
+
+    // Proceed with admin action
+  },
+);
 ```
 
 ---
@@ -261,36 +279,36 @@ interface RAGAuthzPolicy {
 
 const POLICIES: Record<string, RAGAuthzPolicy> = {
   viewer: {
-    allowedCategories: ['public', 'tutorial', 'api'],
+    allowedCategories: ["public", "tutorial", "api"],
     maxChunksPerQuery: 5,
-    rateLimitPerHour: 50
+    rateLimitPerHour: 50,
   },
   editor: {
-    allowedCategories: ['public', 'tutorial', 'api', 'internal'],
+    allowedCategories: ["public", "tutorial", "api", "internal"],
     maxChunksPerQuery: 10,
-    rateLimitPerHour: 200
+    rateLimitPerHour: 200,
   },
   admin: {
-    allowedCategories: ['*'],
+    allowedCategories: ["*"],
     maxChunksPerQuery: 20,
-    rateLimitPerHour: Infinity
-  }
+    rateLimitPerHour: Infinity,
+  },
 };
 ```
 
 ### AI Tool Access Gating
 
-| Tool | viewer | editor | admin |
-|------|--------|--------|-------|
-| Ask Docs (RAG) | ✅ | ✅ | ✅ |
-| Summarize | ✅ | ✅ | ✅ |
-| Explain | ✅ | ✅ | ✅ |
-| Related Docs | ✅ | ✅ | ✅ |
-| Suggest Improvements | ❌ | ✅ | ✅ |
-| Competitor Analysis | ❌ | ❌ | ✅ |
-| SWOT Generator | ❌ | ❌ | ✅ |
-| Reindex Docs | ❌ | ❌ | ✅ |
-| Clear Cache | ❌ | ❌ | ✅ |
+| Tool                 | viewer | editor | admin |
+| -------------------- | ------ | ------ | ----- |
+| Ask Docs (RAG)       | ✅     | ✅     | ✅    |
+| Summarize            | ✅     | ✅     | ✅    |
+| Explain              | ✅     | ✅     | ✅    |
+| Related Docs         | ✅     | ✅     | ✅    |
+| Suggest Improvements | ❌     | ✅     | ✅    |
+| Competitor Analysis  | ❌     | ❌     | ✅    |
+| SWOT Generator       | ❌     | ❌     | ✅    |
+| Reindex Docs         | ❌     | ❌     | ✅    |
+| Clear Cache          | ❌     | ❌     | ✅    |
 
 ---
 
@@ -316,12 +334,12 @@ Protected Resources
 
 ### Claim Mapping
 
-| Entra ID Claim | Firebase Custom Claim |
-|----------------|----------------------|
-| `preferred_username` | `email` |
-| `groups` | `role` (mapped) |
-| `tenant_id` | `org` |
-| `roles` | `features` (filtered) |
+| Entra ID Claim       | Firebase Custom Claim |
+| -------------------- | --------------------- |
+| `preferred_username` | `email`               |
+| `groups`             | `role` (mapped)       |
+| `tenant_id`          | `org`                 |
+| `roles`              | `features` (filtered) |
 
 ---
 
@@ -343,12 +361,12 @@ Protected Resources
 
 ### Security Gaps to Address
 
-| Gap | Risk | Mitigation |
-|-----|------|------------|
-| No hardware MFA | Medium | Use TOTP via Firebase extensions |
-| Token in localStorage | Low | Use sessionStorage, short expiry |
-| Claim tampering | Very Low | Claims verified server-side |
-| Rate limit bypass | Low | Per-IP rate limiting as backup |
+| Gap                   | Risk     | Mitigation                       |
+| --------------------- | -------- | -------------------------------- |
+| No hardware MFA       | Medium   | Use TOTP via Firebase extensions |
+| Token in localStorage | Low      | Use sessionStorage, short expiry |
+| Claim tampering       | Very Low | Claims verified server-side      |
+| Rate limit bypass     | Low      | Per-IP rate limiting as backup   |
 
 ---
 
@@ -356,13 +374,13 @@ Protected Resources
 
 ### Defence Sector Requirements
 
-| Requirement | Firebase Auth Status | Mitigation |
-|-------------|---------------------|------------|
-| MFA required | ✅ TOTP available | Enforce in security rules |
-| Session timeout | ✅ Configurable | Set to 1 hour |
-| Audit logging | ✅ Firebase logs | Export to SIEM |
-| FIDO2/PIV | ❌ Not supported | Migrate to Entra ID |
-| On-prem option | ❌ Cloud only | Use Keycloak for classified |
+| Requirement     | Firebase Auth Status | Mitigation                  |
+| --------------- | -------------------- | --------------------------- |
+| MFA required    | ✅ TOTP available    | Enforce in security rules   |
+| Session timeout | ✅ Configurable      | Set to 1 hour               |
+| Audit logging   | ✅ Firebase logs     | Export to SIEM              |
+| FIDO2/PIV       | ❌ Not supported     | Migrate to Entra ID         |
+| On-prem option  | ❌ Cloud only        | Use Keycloak for classified |
 
 ### Migration Path to Entra ID
 
@@ -372,17 +390,50 @@ Protected Resources
 4. Migrate remaining users (optional)
 5. For classified: Deploy Keycloak on-prem
 
+### Future Consideration: Cognitive Mesh
+
+Cognitive Mesh provides **built-in zero-trust RBAC** as part of its
+architecture, eliminating the need for custom claims management.
+
+| Aspect         | Firebase Auth                 | Cognitive Mesh               |
+| -------------- | ----------------------------- | ---------------------------- |
+| **RBAC**       | Custom claims (manual)        | Built-in per-layer RBAC      |
+| **Audit**      | Firebase logs (manual export) | Comprehensive audit trails   |
+| **MFA**        | TOTP only                     | Full zero-trust stack        |
+| **Compliance** | Manual                        | NIST AI RMF, GDPR, EU AI Act |
+| **Stack**      | Firebase (TypeScript)         | .NET 9.0+                    |
+
+**Repository**:
+[github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+**When to Consider**:
+
+- Defense contracts mandate NIST AI RMF compliance
+- FIDO2 hardware keys required (CM supports full zero-trust)
+- Enterprise RBAC complexity exceeds Firebase custom claims
+- AI features need per-operation audit logging
+
+**Current CM Status**: Adaptive Agency & Cognitive Sovereignty Framework: In Progress.
+Security & Zero-Trust Framework complete; identity features in active development.
+
+**Resource Trade-off Note**: Firebase Auth remains appropriate until compliance
+requirements escalate. Development time spent on advanced auth here delays CM
+maturation.
+
 ---
 
 ## Appendix
 
 For detailed weighted analysis, RBAC matrices, and federation flows, see:
+
 - [ADR 0013 Appendix: Identity & Auth Weighted Analysis](./adr-0013-appendix-identity-auth-analysis.md)
 
 ---
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture)
 - [ADR 0012: Runtime Functions Architecture](./adr-0012-runtime-functions.md)
 - [ADR 0014: Service-to-Service Auth](./adr-0014-service-auth.md)

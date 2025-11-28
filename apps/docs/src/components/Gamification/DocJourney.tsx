@@ -355,7 +355,9 @@ function JourneyPathCard({
               <span className="journey-path-doc-number">{index + 1}</span>
               <span className="journey-path-doc-title">{doc.title}</span>
               {docTime > 0 && (
-                <span className="journey-path-doc-time">{formatTime(docTime)}</span>
+                <span className="journey-path-doc-time">
+                  {formatTime(docTime)}
+                </span>
               )}
             </Link>
           );
@@ -404,7 +406,9 @@ export default function DocJourney(): React.ReactElement {
           </div>
           {totalTime > 0 && (
             <div className="doc-journey-stat">
-              <span className="doc-journey-stat-value">{formatTime(totalTime)}</span>
+              <span className="doc-journey-stat-value">
+                {formatTime(totalTime)}
+              </span>
               <span className="doc-journey-stat-label">Time Invested</span>
             </div>
           )}

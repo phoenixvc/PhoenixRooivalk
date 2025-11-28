@@ -47,6 +47,15 @@ const config: Config = {
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   headTags: [
+    // Prevent flash of unstyled content - set background immediately
+    {
+      tagName: "style",
+      attributes: {
+        type: "text/css",
+      },
+      innerHTML:
+        "html,body,#__docusaurus{background-color:rgb(15,23,42)!important;min-height:100vh}",
+    },
     {
       tagName: "meta",
       attributes: {

@@ -33,8 +33,10 @@ export function ProtectedContent({
 }: ProtectedContentProps): React.ReactElement {
   const { user, loading, isConfigured, signInGoogle, signInGithub } = useAuth();
 
-  const currentUrl = pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
-  const isFreePage = isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
+  const currentUrl =
+    pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
+  const isFreePage =
+    isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
 
   // Track teaser view for non-authenticated users
   useEffect(() => {
@@ -68,9 +70,7 @@ export function ProtectedContent({
   return (
     <div className="protected-content protected-content--teaser">
       {/* Teaser content - CSS limits visible height */}
-      <div className="protected-content-teaser">
-        {children}
-      </div>
+      <div className="protected-content-teaser">{children}</div>
 
       {/* Fade overlay */}
       <div className="protected-content-fade" />
@@ -83,8 +83,8 @@ export function ProtectedContent({
             Sign in to continue reading
           </h3>
           <p className="protected-content-cta-description">
-            Get full access to Phoenix Rooivalk documentation, track your progress,
-            and earn achievements as you learn.
+            Get full access to Phoenix Rooivalk documentation, track your
+            progress, and earn achievements as you learn.
           </p>
 
           <div className="protected-content-cta-benefits">

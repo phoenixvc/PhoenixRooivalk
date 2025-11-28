@@ -11,7 +11,7 @@ export interface QueuedUpdate {
   id: string;
   timestamp: number;
   data: Record<string, unknown>;
-  type: "progress" | "analytics";
+  type: "progress" | "analytics" | "profile";
 }
 
 /**
@@ -39,7 +39,9 @@ export function getQueuedUpdates(): QueuedUpdate[] {
 /**
  * Add an update to the offline queue
  */
-export function queueUpdate(update: Omit<QueuedUpdate, "id" | "timestamp">): void {
+export function queueUpdate(
+  update: Omit<QueuedUpdate, "id" | "timestamp">,
+): void {
   if (typeof window === "undefined") return;
 
   const queue = getQueuedUpdates();

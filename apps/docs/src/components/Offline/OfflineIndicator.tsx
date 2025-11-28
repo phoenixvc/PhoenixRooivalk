@@ -75,7 +75,8 @@ export function OfflineIndicator(): React.ReactElement | null {
           </svg>
         </span>
         <span className="offline-indicator-text">
-          Syncing {pendingCount} pending update{pendingCount !== 1 ? "s" : ""}...
+          Syncing {pendingCount} pending update{pendingCount !== 1 ? "s" : ""}
+          ...
         </span>
       </div>
     );

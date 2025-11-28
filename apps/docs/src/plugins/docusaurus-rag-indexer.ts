@@ -149,7 +149,7 @@ function pathToTitle(filePath: string): string {
 function collectMarkdownFiles(
   dir: string,
   basePath: string,
-  excludePatterns: string[]
+  excludePatterns: string[],
 ): DocInfo[] {
   const docs: DocInfo[] = [];
 
@@ -166,7 +166,7 @@ function collectMarkdownFiles(
     // Check exclude patterns
     const shouldExclude = excludePatterns.some((pattern) => {
       const regex = new RegExp(
-        pattern.replace(/\*\*/g, ".*").replace(/\*/g, "[^/]*")
+        pattern.replace(/\*\*/g, ".*").replace(/\*/g, "[^/]*"),
       );
       return regex.test(relativePath);
     });
@@ -176,9 +176,7 @@ function collectMarkdownFiles(
     }
 
     if (entry.isDirectory()) {
-      docs.push(
-        ...collectMarkdownFiles(fullPath, basePath, excludePatterns)
-      );
+      docs.push(...collectMarkdownFiles(fullPath, basePath, excludePatterns));
     } else if (
       entry.isFile() &&
       (entry.name.endsWith(".md") || entry.name.endsWith(".mdx"))
@@ -209,7 +207,7 @@ function collectMarkdownFiles(
  */
 export default function docusaurusRagIndexerPlugin(
   context: LoadContext,
-  options: PluginOptions
+  options: PluginOptions,
 ): Plugin {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const { siteDir } = context;
@@ -229,11 +227,7 @@ export default function docusaurusRagIndexerPlugin(
       const outputDir = path.join(outDir, opts.outputPath);
 
       // Collect all markdown files
-      const docs = collectMarkdownFiles(
-        docsDir,
-        docsDir,
-        opts.excludePatterns
-      );
+      const docs = collectMarkdownFiles(docsDir, docsDir, opts.excludePatterns);
 
       console.log(`[RAG Indexer] Found ${docs.length} documentation files`);
 
@@ -286,7 +280,7 @@ export default function docusaurusRagIndexerPlugin(
 
       console.log("[RAG Indexer] Indexing preparation complete!");
       console.log(
-        "[RAG Indexer] To complete indexing, run the Firebase admin function:"
+        "[RAG Indexer] To complete indexing, run the Firebase admin function:",
       );
       console.log("  1. Deploy the build");
       console.log("  2. Call `buildTimeIndex` with the documents.json data");

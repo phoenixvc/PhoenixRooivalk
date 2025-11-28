@@ -80,7 +80,7 @@ export function getProviderConfig(): AIProviderConfig {
 
   throw new functions.https.HttpsError(
     "failed-precondition",
-    "No AI provider configured. Set azure.key/azure.endpoint or openai.key"
+    "No AI provider configured. Set azure.key/azure.endpoint or openai.key",
   );
 }
 
@@ -90,7 +90,7 @@ export function getProviderConfig(): AIProviderConfig {
 function buildApiUrl(
   config: AIProviderConfig,
   endpoint: "chat" | "embeddings",
-  model?: string
+  model?: string,
 ): string {
   if (config.provider === "azure") {
     const deployment =
@@ -130,7 +130,7 @@ export async function chatCompletion(
     model?: "chat" | "chatFast" | "chatAdvanced";
     maxTokens?: number;
     temperature?: number;
-  } = {}
+  } = {},
 ): Promise<{
   content: string;
   metrics: AIRequestMetrics;
@@ -165,7 +165,7 @@ export async function chatCompletion(
     if (!response.ok) {
       const error = await response.json();
       throw new Error(
-        error.error?.message || `${config.provider} Chat API error`
+        error.error?.message || `${config.provider} Chat API error`,
       );
     }
 
@@ -190,7 +190,7 @@ export async function chatCompletion(
     functions.logger.error(`${config.provider} Chat error:`, error);
     throw new functions.https.HttpsError(
       "internal",
-      "Failed to generate response"
+      "Failed to generate response",
     );
   }
 }
@@ -198,9 +198,7 @@ export async function chatCompletion(
 /**
  * Generate embeddings with provider abstraction
  */
-export async function generateEmbedding(
-  text: string | string[]
-): Promise<{
+export async function generateEmbedding(text: string | string[]): Promise<{
   embeddings: number[][];
   metrics: AIRequestMetrics;
 }> {
@@ -233,7 +231,7 @@ export async function generateEmbedding(
     if (!response.ok) {
       const error = await response.json();
       throw new Error(
-        error.error?.message || `${config.provider} Embeddings API error`
+        error.error?.message || `${config.provider} Embeddings API error`,
       );
     }
 
@@ -242,7 +240,7 @@ export async function generateEmbedding(
 
     return {
       embeddings: data.data.map(
-        (item: { embedding: number[] }) => item.embedding
+        (item: { embedding: number[] }) => item.embedding,
       ),
       metrics: {
         provider: config.provider,
@@ -259,7 +257,7 @@ export async function generateEmbedding(
     functions.logger.error(`${config.provider} Embeddings error:`, error);
     throw new functions.https.HttpsError(
       "internal",
-      "Failed to generate embeddings"
+      "Failed to generate embeddings",
     );
   }
 }
@@ -269,7 +267,7 @@ export async function generateEmbedding(
  */
 export async function quickSummary(
   content: string,
-  maxLength: number = 200
+  maxLength: number = 200,
 ): Promise<{
   summary: string;
   metrics: AIRequestMetrics;
@@ -289,7 +287,7 @@ export async function quickSummary(
       model: "chatFast",
       maxTokens: 300,
       temperature: 0.3,
-    }
+    },
   );
 
   return { summary, metrics };
@@ -300,7 +298,7 @@ export async function quickSummary(
  */
 export async function advancedAnalysis(
   prompt: string,
-  context: string
+  context: string,
 ): Promise<{
   analysis: string;
   metrics: AIRequestMetrics;
@@ -321,7 +319,7 @@ export async function advancedAnalysis(
       model: "chatAdvanced",
       maxTokens: 3000,
       temperature: 0.5,
-    }
+    },
   );
 
   return { analysis, metrics };

@@ -20,10 +20,13 @@ import {
   setDoc,
   increment,
   serverTimestamp,
-  Timestamp,
 } from "firebase/firestore";
 import { logEvent, Analytics } from "firebase/analytics";
-import { isFirebaseConfigured, isGA4Configured, getGA4Analytics } from "./firebase";
+import {
+  isFirebaseConfigured,
+  isGA4Configured,
+  getGA4Analytics,
+} from "./firebase";
 import { isAnalyticsAllowed } from "../components/CookieConsent";
 import { checkRateLimit, debounce } from "../utils/rateLimiter";
 
@@ -132,7 +135,7 @@ class AnalyticsService {
     (pageUrl: string, isAuthenticated: boolean) => {
       this._updateDailyStats(pageUrl, isAuthenticated);
     },
-    2000
+    2000,
   );
 
   constructor() {
@@ -180,12 +183,12 @@ class AnalyticsService {
    */
   private trackGA4Event(
     eventName: string,
-    params?: Record<string, unknown>
+    params?: Record<string, unknown>,
   ): void {
     if (this.ga4 && this.hasConsent()) {
       try {
         logEvent(this.ga4, eventName, params);
-      } catch (error) {
+      } catch {
         // Silently fail - GA4 is supplementary
       }
     }
@@ -214,7 +217,7 @@ class AnalyticsService {
           userAgent: navigator.userAgent,
           referrer: document.referrer || "direct",
         },
-        { merge: true }
+        { merge: true },
       );
     } catch (error) {
       console.warn("Session init failed:", error);
@@ -228,7 +231,7 @@ class AnalyticsService {
     pageUrl: string,
     pageTitle: string,
     userId: string | null,
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
   ): Promise<void> {
     // Check GDPR consent before tracking
     if (!this.hasConsent()) {
@@ -236,7 +239,13 @@ class AnalyticsService {
     }
 
     // Check rate limit
-    if (!checkRateLimit("pageViews", RATE_LIMITS.pageViews.max, RATE_LIMITS.pageViews.windowMs)) {
+    if (
+      !checkRateLimit(
+        "pageViews",
+        RATE_LIMITS.pageViews.max,
+        RATE_LIMITS.pageViews.windowMs,
+      )
+    ) {
       return; // Rate limited, skip this tracking
     }
 
@@ -288,7 +297,8 @@ class AnalyticsService {
       this.trackGA4Event("page_view", {
         page_path: pageUrl,
         page_title: pageTitle,
-        page_location: typeof window !== "undefined" ? window.location.href : "",
+        page_location:
+          typeof window !== "undefined" ? window.location.href : "",
         is_authenticated: isAuthenticated,
       });
     } catch (error) {
@@ -312,7 +322,13 @@ class AnalyticsService {
     if (!this.db || !this.currentPageUrl) return;
 
     // Check rate limit
-    if (!checkRateLimit("timeOnPage", RATE_LIMITS.timeOnPage.max, RATE_LIMITS.timeOnPage.windowMs)) {
+    if (
+      !checkRateLimit(
+        "timeOnPage",
+        RATE_LIMITS.timeOnPage.max,
+        RATE_LIMITS.timeOnPage.windowMs,
+      )
+    ) {
       return; // Rate limited, skip this tracking
     }
 
@@ -355,7 +371,7 @@ class AnalyticsService {
   async trackConversion(
     eventType: ConversionEvent["eventType"],
     userId: string | null,
-    eventData?: Record<string, unknown>
+    eventData?: Record<string, unknown>,
   ): Promise<void> {
     // Check GDPR consent before tracking
     if (!this.hasConsent()) {
@@ -363,8 +379,14 @@ class AnalyticsService {
     }
 
     // Check rate limit (but always allow signup_completed for accuracy)
-    if (eventType !== "signup_completed" &&
-        !checkRateLimit("conversions", RATE_LIMITS.conversions.max, RATE_LIMITS.conversions.windowMs)) {
+    if (
+      eventType !== "signup_completed" &&
+      !checkRateLimit(
+        "conversions",
+        RATE_LIMITS.conversions.max,
+        RATE_LIMITS.conversions.windowMs,
+      )
+    ) {
       return; // Rate limited, skip this tracking
     }
 
@@ -410,7 +432,9 @@ class AnalyticsService {
   /**
    * Map internal conversion events to GA4 standard events
    */
-  private mapConversionToGA4Event(eventType: ConversionEvent["eventType"]): string {
+  private mapConversionToGA4Event(
+    eventType: ConversionEvent["eventType"],
+  ): string {
     const mapping: Record<ConversionEvent["eventType"], string> = {
       teaser_view: "view_item",
       signup_prompt_shown: "view_promotion",
@@ -428,12 +452,18 @@ class AnalyticsService {
    */
   private async _updateDailyStats(
     pageUrl: string,
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
   ): Promise<void> {
     if (!this.db) return;
 
     // Check rate limit
-    if (!checkRateLimit("dailyStats", RATE_LIMITS.dailyStats.max, RATE_LIMITS.dailyStats.windowMs)) {
+    if (
+      !checkRateLimit(
+        "dailyStats",
+        RATE_LIMITS.dailyStats.max,
+        RATE_LIMITS.dailyStats.windowMs,
+      )
+    ) {
       return;
     }
 
@@ -452,7 +482,7 @@ class AnalyticsService {
           [`pages.${pageUrl.replace(/\//g, "_")}`]: increment(1),
           lastUpdated: serverTimestamp(),
         },
-        { merge: true }
+        { merge: true },
       );
     } catch (error) {
       console.warn("Daily stats update failed:", error);
@@ -469,8 +499,14 @@ class AnalyticsService {
   /**
    * Track signup prompt shown
    */
-  async trackSignupPromptShown(pageUrl: string, trigger: string): Promise<void> {
-    await this.trackConversion("signup_prompt_shown", null, { pageUrl, trigger });
+  async trackSignupPromptShown(
+    pageUrl: string,
+    trigger: string,
+  ): Promise<void> {
+    await this.trackConversion("signup_prompt_shown", null, {
+      pageUrl,
+      trigger,
+    });
   }
 
   /**

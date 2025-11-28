@@ -42,7 +42,7 @@ async function getEmbeddings(texts: string[]): Promise<number[][]> {
   if (!apiKey) {
     throw new functions.https.HttpsError(
       "failed-precondition",
-      "OpenAI API key not configured"
+      "OpenAI API key not configured",
     );
   }
 
@@ -70,7 +70,7 @@ async function getEmbeddings(texts: string[]): Promise<number[][]> {
     functions.logger.error("OpenAI Embeddings error:", error);
     throw new functions.https.HttpsError(
       "internal",
-      "Failed to generate embeddings"
+      "Failed to generate embeddings",
     );
   }
 }
@@ -119,7 +119,7 @@ function parseFrontmatter(content: string): {
 function chunkDocument(
   content: string,
   _targetSize: number,
-  overlap: number
+  overlap: number,
 ): Array<{ text: string; section: string }> {
   const chunks: Array<{ text: string; section: string }> = [];
 
@@ -185,7 +185,7 @@ export async function indexDocumentInternal(
     category: string;
     description?: string;
     tags?: string[];
-  }
+  },
 ): Promise<{ chunksCreated: number; tokensUsed: number }> {
   // Parse frontmatter if present
   const { frontmatter, body } = parseFrontmatter(content);
@@ -194,7 +194,7 @@ export async function indexDocumentInternal(
   const chunks = chunkDocument(
     body,
     RAG_CONFIG.chunkSize,
-    RAG_CONFIG.chunkOverlap
+    RAG_CONFIG.chunkOverlap,
   );
 
   if (chunks.length === 0) {
@@ -239,7 +239,9 @@ export async function indexDocumentInternal(
       docId,
       chunkId,
       title:
-        metadata.title || (frontmatter.title as string | undefined) || "Untitled",
+        metadata.title ||
+        (frontmatter.title as string | undefined) ||
+        "Untitled",
       section: chunk.section,
       content: chunk.text,
       embedding: allEmbeddings[index],
@@ -267,7 +269,9 @@ export async function indexDocumentInternal(
     .set({
       docId,
       title:
-        metadata.title || (frontmatter.title as string | undefined) || "Untitled",
+        metadata.title ||
+        (frontmatter.title as string | undefined) ||
+        "Untitled",
       description:
         metadata.description ||
         (frontmatter.description as string | undefined) ||
@@ -276,8 +280,7 @@ export async function indexDocumentInternal(
         metadata.category ||
         (frontmatter.category as string | undefined) ||
         "general",
-      tags:
-        metadata.tags || (frontmatter.tags as string[] | undefined) || [],
+      tags: metadata.tags || (frontmatter.tags as string[] | undefined) || [],
       wordCount: body.split(/\s+/).length,
       chunkCount: chunks.length,
       lastIndexed: now,
@@ -285,7 +288,7 @@ export async function indexDocumentInternal(
     });
 
   functions.logger.info(
-    `Indexed ${docId}: ${chunks.length} chunks, ~${estimatedTokens} tokens`
+    `Indexed ${docId}: ${chunks.length} chunks, ~${estimatedTokens} tokens`,
   );
 
   return { chunksCreated: chunks.length, tokensUsed: estimatedTokens };
@@ -312,7 +315,7 @@ export const indexAllDocumentation = functions
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Admin access required"
+        "Admin access required",
       );
     }
 
@@ -321,7 +324,7 @@ export const indexAllDocumentation = functions
     if (!Array.isArray(docs)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "docs must be an array of { path, content, title }"
+        "docs must be an array of { path, content, title }",
       );
     }
 
@@ -337,7 +340,8 @@ export const indexAllDocumentation = functions
       try {
         // Determine category from path
         const pathParts = doc.path.split("/");
-        const categoryKey = pathParts.find((p: string) => CATEGORY_MAP[p]) || "general";
+        const categoryKey =
+          pathParts.find((p: string) => CATEGORY_MAP[p]) || "general";
         const category = CATEGORY_MAP[categoryKey] || "general";
 
         const { chunksCreated, tokensUsed } = await indexDocumentInternal(
@@ -346,7 +350,7 @@ export const indexAllDocumentation = functions
           {
             title: doc.title || pathFromId(doc.path),
             category,
-          }
+          },
         );
 
         results.indexed++;
@@ -370,7 +374,7 @@ export const reindexDocument = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Admin access required"
+      "Admin access required",
     );
   }
 
@@ -379,11 +383,14 @@ export const reindexDocument = functions.https.onCall(async (data, context) => {
   if (!path || !content) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "path and content are required"
+      "path and content are required",
     );
   }
 
-  const result = await indexDocumentInternal(path, content, { title, category });
+  const result = await indexDocumentInternal(path, content, {
+    title,
+    category,
+  });
 
   return result;
 });
@@ -395,7 +402,7 @@ export const deleteFromIndex = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Admin access required"
+      "Admin access required",
     );
   }
 
@@ -404,7 +411,7 @@ export const deleteFromIndex = functions.https.onCall(async (data, context) => {
   if (!docId) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "docId is required"
+      "docId is required",
     );
   }
 
@@ -433,7 +440,7 @@ export const getIndexStats = functions.https.onCall(async (_data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Authentication required"
+      "Authentication required",
     );
   }
 

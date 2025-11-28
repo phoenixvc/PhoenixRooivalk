@@ -6,7 +6,8 @@ description: Step-by-step guide to implementing RAG for documentation
 
 # RAG Implementation Guide
 
-This guide walks through implementing Retrieval-Augmented Generation (RAG) for the Phoenix Rooivalk documentation site using Firebase and OpenAI.
+This guide walks through implementing Retrieval-Augmented Generation (RAG) for
+the Phoenix Rooivalk documentation site using Firebase and OpenAI.
 
 ## Prerequisites
 
@@ -56,24 +57,24 @@ This guide walks through implementing Retrieval-Augmented Generation (RAG) for t
 ```typescript
 interface DocChunk {
   // Identifiers
-  docId: string;           // e.g., "/docs/technical/architecture"
-  chunkId: string;         // e.g., "technical-architecture-chunk-3"
+  docId: string; // e.g., "/docs/technical/architecture"
+  chunkId: string; // e.g., "technical-architecture-chunk-3"
 
   // Content
-  title: string;           // Document title
-  section: string;         // Section heading
-  content: string;         // Chunk text (500-1000 tokens)
+  title: string; // Document title
+  section: string; // Section heading
+  content: string; // Chunk text (500-1000 tokens)
 
   // Vector
-  embedding: number[];     // 1536 dimensions (text-embedding-3-small)
+  embedding: number[]; // 1536 dimensions (text-embedding-3-small)
 
   // Metadata
   metadata: {
-    category: string;      // e.g., "technical", "business", "operations"
+    category: string; // e.g., "technical", "business", "operations"
     wordCount: number;
     charCount: number;
-    chunkIndex: number;    // Position in original doc
-    totalChunks: number;   // Total chunks in this doc
+    chunkIndex: number; // Position in original doc
+    totalChunks: number; // Total chunks in this doc
   };
 
   // Timestamps
@@ -104,21 +105,21 @@ Create the document indexing Cloud Function:
 
 ```typescript
 // functions/src/rag/indexer.ts
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import OpenAI from 'openai';
-import * as crypto from 'crypto';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import OpenAI from "openai";
+import * as crypto from "crypto";
 
 const db = admin.firestore();
 const openai = new OpenAI({ apiKey: functions.config().openai.key });
 
 // Configuration
 const CONFIG = {
-  embeddingModel: 'text-embedding-3-small',
-  chunkSize: 500,        // Target tokens per chunk
-  chunkOverlap: 50,      // Overlap between chunks
-  maxChunkChars: 2000,   // Max characters per chunk
-  batchSize: 20,         // Embeddings per batch (OpenAI limit)
+  embeddingModel: "text-embedding-3-small",
+  chunkSize: 500, // Target tokens per chunk
+  chunkOverlap: 50, // Overlap between chunks
+  maxChunkChars: 2000, // Max characters per chunk
+  batchSize: 20, // Embeddings per batch (OpenAI limit)
 };
 
 /**
@@ -132,7 +133,7 @@ export async function indexDocument(
     category: string;
     description?: string;
     tags?: string[];
-  }
+  },
 ): Promise<{ chunksCreated: number; tokensUsed: number }> {
   // Parse frontmatter if present
   const { frontmatter, body } = parseFrontmatter(content);
@@ -154,20 +155,21 @@ export async function indexDocument(
 
     const response = await openai.embeddings.create({
       model: CONFIG.embeddingModel,
-      input: batch.map(c => c.text),
+      input: batch.map((c) => c.text),
     });
 
-    allEmbeddings.push(...response.data.map(d => d.embedding));
+    allEmbeddings.push(...response.data.map((d) => d.embedding));
     totalTokens += response.usage?.total_tokens || 0;
   }
 
   // Delete existing chunks for this document
-  const existingChunks = await db.collection('doc_embeddings')
-    .where('docId', '==', docId)
+  const existingChunks = await db
+    .collection("doc_embeddings")
+    .where("docId", "==", docId)
     .get();
 
   const deleteBatch = db.batch();
-  existingChunks.docs.forEach(doc => deleteBatch.delete(doc.ref));
+  existingChunks.docs.forEach((doc) => deleteBatch.delete(doc.ref));
   await deleteBatch.commit();
 
   // Store new chunks
@@ -176,17 +178,17 @@ export async function indexDocument(
 
   chunks.forEach((chunk, index) => {
     const chunkId = `${hashString(docId)}-${index}`;
-    const ref = db.collection('doc_embeddings').doc(chunkId);
+    const ref = db.collection("doc_embeddings").doc(chunkId);
 
     writeBatch.set(ref, {
       docId,
       chunkId,
-      title: metadata.title || frontmatter.title || 'Untitled',
+      title: metadata.title || frontmatter.title || "Untitled",
       section: chunk.section,
       content: chunk.text,
       embedding: allEmbeddings[index],
       metadata: {
-        category: metadata.category || frontmatter.category || 'general',
+        category: metadata.category || frontmatter.category || "general",
         wordCount: chunk.text.split(/\s+/).length,
         charCount: chunk.text.length,
         chunkIndex: index,
@@ -200,19 +202,24 @@ export async function indexDocument(
   await writeBatch.commit();
 
   // Update document metadata
-  await db.collection('doc_metadata').doc(hashString(docId)).set({
-    docId,
-    title: metadata.title || frontmatter.title || 'Untitled',
-    description: metadata.description || frontmatter.description || '',
-    category: metadata.category || frontmatter.category || 'general',
-    tags: metadata.tags || frontmatter.tags || [],
-    wordCount: body.split(/\s+/).length,
-    chunkCount: chunks.length,
-    lastIndexed: now,
-    frontmatter,
-  });
+  await db
+    .collection("doc_metadata")
+    .doc(hashString(docId))
+    .set({
+      docId,
+      title: metadata.title || frontmatter.title || "Untitled",
+      description: metadata.description || frontmatter.description || "",
+      category: metadata.category || frontmatter.category || "general",
+      tags: metadata.tags || frontmatter.tags || [],
+      wordCount: body.split(/\s+/).length,
+      chunkCount: chunks.length,
+      lastIndexed: now,
+      frontmatter,
+    });
 
-  functions.logger.info(`Indexed ${docId}: ${chunks.length} chunks, ${totalTokens} tokens`);
+  functions.logger.info(
+    `Indexed ${docId}: ${chunks.length} chunks, ${totalTokens} tokens`,
+  );
 
   return { chunksCreated: chunks.length, tokensUsed: totalTokens };
 }
@@ -223,7 +230,7 @@ export async function indexDocument(
 function chunkDocument(
   content: string,
   targetSize: number,
-  overlap: number
+  overlap: number,
 ): Array<{ text: string; section: string }> {
   const chunks: Array<{ text: string; section: string }> = [];
 
@@ -235,18 +242,21 @@ function chunkDocument(
 
     // Extract section heading
     const headingMatch = section.match(/^#{1,3}\s+(.+)/);
-    const sectionName = headingMatch ? headingMatch[1].trim() : 'Content';
+    const sectionName = headingMatch ? headingMatch[1].trim() : "Content";
 
     // Split large sections by paragraphs
     const paragraphs = section.split(/\n\n+/);
-    let currentChunk = '';
+    let currentChunk = "";
 
     for (const para of paragraphs) {
       const cleanPara = para.trim();
       if (!cleanPara) continue;
 
       // If adding this paragraph exceeds max size, save current chunk
-      if (currentChunk && (currentChunk + '\n\n' + cleanPara).length > CONFIG.maxChunkChars) {
+      if (
+        currentChunk &&
+        (currentChunk + "\n\n" + cleanPara).length > CONFIG.maxChunkChars
+      ) {
         chunks.push({
           text: currentChunk.trim(),
           section: sectionName,
@@ -255,10 +265,10 @@ function chunkDocument(
         // Start new chunk with overlap
         const words = currentChunk.split(/\s+/);
         const overlapWords = words.slice(-overlap);
-        currentChunk = overlapWords.join(' ') + '\n\n' + cleanPara;
+        currentChunk = overlapWords.join(" ") + "\n\n" + cleanPara;
       } else {
         currentChunk = currentChunk
-          ? currentChunk + '\n\n' + cleanPara
+          ? currentChunk + "\n\n" + cleanPara
           : cleanPara;
       }
     }
@@ -291,13 +301,13 @@ function parseFrontmatter(content: string): {
   try {
     // Simple YAML-like parsing
     const fm: Record<string, any> = {};
-    const lines = fmMatch[1].split('\n');
+    const lines = fmMatch[1].split("\n");
 
     for (const line of lines) {
-      const [key, ...valueParts] = line.split(':');
+      const [key, ...valueParts] = line.split(":");
       if (key && valueParts.length) {
-        const value = valueParts.join(':').trim();
-        fm[key.trim()] = value.replace(/^["']|["']$/g, '');
+        const value = valueParts.join(":").trim();
+        fm[key.trim()] = value.replace(/^["']|["']$/g, "");
       }
     }
 
@@ -311,7 +321,7 @@ function parseFrontmatter(content: string): {
  * Generate consistent hash for document ID
  */
 function hashString(str: string): string {
-  return crypto.createHash('md5').update(str).digest('hex').slice(0, 12);
+  return crypto.createHash("md5").update(str).digest("hex").slice(0, 12);
 }
 ```
 
@@ -321,9 +331,9 @@ Create the semantic search function:
 
 ```typescript
 // functions/src/rag/search.ts
-import * as admin from 'firebase-admin';
-import OpenAI from 'openai';
-import * as functions from 'firebase-functions';
+import * as admin from "firebase-admin";
+import OpenAI from "openai";
+import * as functions from "firebase-functions";
 
 const db = admin.firestore();
 const openai = new OpenAI({ apiKey: functions.config().openai.key });
@@ -351,22 +361,22 @@ export async function searchDocuments(
     topK?: number;
     category?: string;
     minScore?: number;
-  }
+  },
 ): Promise<SearchResult[]> {
   const { topK = 5, category, minScore = 0.7 } = options || {};
 
   // Generate query embedding
   const queryEmbedding = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: query,
   });
   const queryVector = queryEmbedding.data[0].embedding;
 
   // Build Firestore query
-  let firestoreQuery: admin.firestore.Query = db.collection('doc_embeddings');
+  let firestoreQuery: admin.firestore.Query = db.collection("doc_embeddings");
 
   if (category) {
-    firestoreQuery = firestoreQuery.where('metadata.category', '==', category);
+    firestoreQuery = firestoreQuery.where("metadata.category", "==", category);
   }
 
   // Get all embeddings (for collections < 10K docs)
@@ -393,9 +403,7 @@ export async function searchDocuments(
   }
 
   // Sort by score and return top K
-  return results
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK);
+  return results.sort((a, b) => b.score - a.score).slice(0, topK);
 }
 
 /**
@@ -403,7 +411,7 @@ export async function searchDocuments(
  */
 function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length) {
-    throw new Error('Vectors must have same length');
+    throw new Error("Vectors must have same length");
   }
 
   let dotProduct = 0;
@@ -430,10 +438,10 @@ Create the main RAG query function:
 
 ```typescript
 // functions/src/rag/query.ts
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import OpenAI from 'openai';
-import { searchDocuments, SearchResult } from './search';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import OpenAI from "openai";
+import { searchDocuments, SearchResult } from "./search";
 
 const db = admin.firestore();
 const openai = new OpenAI({ apiKey: functions.config().openai.key });
@@ -446,7 +454,7 @@ interface RAGResponse {
     section: string;
     relevance: number;
   }>;
-  confidence: 'high' | 'medium' | 'low';
+  confidence: "high" | "medium" | "low";
   tokensUsed: number;
 }
 
@@ -458,15 +466,18 @@ export async function queryWithRAG(
   options?: {
     topK?: number;
     category?: string;
-    conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
-    responseFormat?: 'detailed' | 'concise';
-  }
+    conversationHistory?: Array<{
+      role: "user" | "assistant";
+      content: string;
+    }>;
+    responseFormat?: "detailed" | "concise";
+  },
 ): Promise<RAGResponse> {
   const {
     topK = 5,
     category,
     conversationHistory = [],
-    responseFormat = 'detailed'
+    responseFormat = "detailed",
   } = options || {};
 
   // Search for relevant chunks
@@ -477,20 +488,22 @@ export async function queryWithRAG(
   });
 
   // Determine confidence based on top scores
-  const avgScore = relevantChunks.length > 0
-    ? relevantChunks.reduce((sum, c) => sum + c.score, 0) / relevantChunks.length
-    : 0;
+  const avgScore =
+    relevantChunks.length > 0
+      ? relevantChunks.reduce((sum, c) => sum + c.score, 0) /
+        relevantChunks.length
+      : 0;
 
-  const confidence: 'high' | 'medium' | 'low' =
-    avgScore > 0.85 ? 'high' :
-    avgScore > 0.75 ? 'medium' : 'low';
+  const confidence: "high" | "medium" | "low" =
+    avgScore > 0.85 ? "high" : avgScore > 0.75 ? "medium" : "low";
 
   // Build context from chunks
   const context = relevantChunks
-    .map((chunk, i) =>
-      `[Source ${i + 1}: ${chunk.title} - ${chunk.section}]\n${chunk.content}`
+    .map(
+      (chunk, i) =>
+        `[Source ${i + 1}: ${chunk.title} - ${chunk.section}]\n${chunk.content}`,
     )
-    .join('\n\n---\n\n');
+    .join("\n\n---\n\n");
 
   // Build system prompt
   const systemPrompt = `You are Phoenix Rooivalk's documentation assistant, an expert on autonomous counter-drone defense systems.
@@ -508,23 +521,27 @@ Context about Phoenix Rooivalk:
 - AI-powered targeting with human-in-the-loop options
 - Designed for military and critical infrastructure protection
 
-Response format: ${responseFormat === 'detailed'
-  ? 'Provide comprehensive answers with technical details and multiple source citations.'
-  : 'Provide concise, focused answers. Be brief but accurate.'}`;
+Response format: ${
+    responseFormat === "detailed"
+      ? "Provide comprehensive answers with technical details and multiple source citations."
+      : "Provide concise, focused answers. Be brief but accurate."
+  }`;
 
   // Build messages
-  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-    { role: 'system', content: systemPrompt },
-  ];
+  const messages: Array<{
+    role: "system" | "user" | "assistant";
+    content: string;
+  }> = [{ role: "system", content: systemPrompt }];
 
   // Add conversation history
-  for (const msg of conversationHistory.slice(-4)) { // Last 4 messages
+  for (const msg of conversationHistory.slice(-4)) {
+    // Last 4 messages
     messages.push({ role: msg.role, content: msg.content });
   }
 
   // Add context and question
   messages.push({
-    role: 'user',
+    role: "user",
     content: `Documentation Context:
 ${context}
 
@@ -532,22 +549,23 @@ ${context}
 
 Question: ${question}
 
-Please answer based on the documentation above. Cite sources using [Source X] notation.`
+Please answer based on the documentation above. Cite sources using [Source X] notation.`,
   });
 
   // Generate response
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+    model: "gpt-4o-mini",
     messages,
     temperature: 0.3,
     max_tokens: 1500,
   });
 
-  const answer = completion.choices[0].message.content || 'Unable to generate response.';
+  const answer =
+    completion.choices[0].message.content || "Unable to generate response.";
 
   return {
     answer,
-    sources: relevantChunks.map(chunk => ({
+    sources: relevantChunks.map((chunk) => ({
       docId: chunk.docId,
       title: chunk.title,
       section: chunk.section,
@@ -561,63 +579,68 @@ Please answer based on the documentation above. Cite sources using [Source X] no
 /**
  * Exposed Cloud Function
  */
-export const askDocumentation = functions.https.onCall(async (data, context) => {
-  // Require authentication
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      'unauthenticated',
-      'Must be authenticated to query documentation'
-    );
-  }
+export const askDocumentation = functions.https.onCall(
+  async (data, context) => {
+    // Require authentication
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Must be authenticated to query documentation",
+      );
+    }
 
-  // Rate limiting
-  const canProceed = await checkRateLimit(context.auth.uid, 'rag_query');
-  if (!canProceed) {
-    throw new functions.https.HttpsError(
-      'resource-exhausted',
-      'Rate limit exceeded. Please try again later.'
-    );
-  }
+    // Rate limiting
+    const canProceed = await checkRateLimit(context.auth.uid, "rag_query");
+    if (!canProceed) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "Rate limit exceeded. Please try again later.",
+      );
+    }
 
-  const { question, category, format } = data;
+    const { question, category, format } = data;
 
-  if (!question || typeof question !== 'string') {
-    throw new functions.https.HttpsError(
-      'invalid-argument',
-      'Question is required'
-    );
-  }
+    if (!question || typeof question !== "string") {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Question is required",
+      );
+    }
 
-  try {
-    const response = await queryWithRAG(question, {
-      category,
-      responseFormat: format || 'detailed',
-    });
+    try {
+      const response = await queryWithRAG(question, {
+        category,
+        responseFormat: format || "detailed",
+      });
 
-    // Log usage
-    await db.collection('ai_usage').add({
-      userId: context.auth.uid,
-      feature: 'rag_query',
-      question: question.substring(0, 200),
-      sourcesUsed: response.sources.length,
-      confidence: response.confidence,
-      tokensUsed: response.tokensUsed,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-    });
+      // Log usage
+      await db.collection("ai_usage").add({
+        userId: context.auth.uid,
+        feature: "rag_query",
+        question: question.substring(0, 200),
+        sourcesUsed: response.sources.length,
+        confidence: response.confidence,
+        tokensUsed: response.tokensUsed,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      });
 
-    return response;
-  } catch (error) {
-    functions.logger.error('RAG query error:', error);
-    throw new functions.https.HttpsError(
-      'internal',
-      'Failed to process question'
-    );
-  }
-});
+      return response;
+    } catch (error) {
+      functions.logger.error("RAG query error:", error);
+      throw new functions.https.HttpsError(
+        "internal",
+        "Failed to process question",
+      );
+    }
+  },
+);
 
 // Rate limiting helper
-async function checkRateLimit(userId: string, feature: string): Promise<boolean> {
-  const ref = db.collection('ai_rate_limits').doc(`${userId}_${feature}`);
+async function checkRateLimit(
+  userId: string,
+  feature: string,
+): Promise<boolean> {
+  const ref = db.collection("ai_rate_limits").doc(`${userId}_${feature}`);
   const doc = await ref.get();
 
   const now = Date.now();
@@ -649,20 +672,20 @@ Create a script to index all documentation:
 
 ```typescript
 // functions/src/rag/index-all.ts
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { indexDocument } from './indexer';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import { indexDocument } from "./indexer";
 
 const db = admin.firestore();
 
 // Category mapping based on path
 const CATEGORY_MAP: Record<string, string> = {
-  'technical': 'technical',
-  'business': 'business',
-  'operations': 'operations',
-  'executive': 'executive',
-  'legal': 'legal',
-  'research': 'research',
+  technical: "technical",
+  business: "business",
+  operations: "operations",
+  executive: "executive",
+  legal: "legal",
+  research: "research",
 };
 
 /**
@@ -670,13 +693,13 @@ const CATEGORY_MAP: Record<string, string> = {
  * Run via: firebase functions:call indexAllDocumentation
  */
 export const indexAllDocumentation = functions
-  .runWith({ timeoutSeconds: 540, memory: '1GB' })
+  .runWith({ timeoutSeconds: 540, memory: "1GB" })
   .https.onCall(async (data, context) => {
     // Admin only
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
-        'permission-denied',
-        'Admin access required'
+        "permission-denied",
+        "Admin access required",
       );
     }
 
@@ -684,8 +707,8 @@ export const indexAllDocumentation = functions
 
     if (!Array.isArray(docs)) {
       throw new functions.https.HttpsError(
-        'invalid-argument',
-        'docs must be an array of { path, content, title }'
+        "invalid-argument",
+        "docs must be an array of { path, content, title }",
       );
     }
 
@@ -700,9 +723,9 @@ export const indexAllDocumentation = functions
     for (const doc of docs) {
       try {
         // Determine category from path
-        const pathParts = doc.path.split('/');
-        const categoryKey = pathParts.find(p => CATEGORY_MAP[p]) || 'general';
-        const category = CATEGORY_MAP[categoryKey] || 'general';
+        const pathParts = doc.path.split("/");
+        const categoryKey = pathParts.find((p) => CATEGORY_MAP[p]) || "general";
+        const category = CATEGORY_MAP[categoryKey] || "general";
 
         const { chunksCreated, tokensUsed } = await indexDocument(
           doc.path,
@@ -710,7 +733,7 @@ export const indexAllDocumentation = functions
           {
             title: doc.title || pathFromId(doc.path),
             category,
-          }
+          },
         );
 
         results.indexed++;
@@ -722,7 +745,7 @@ export const indexAllDocumentation = functions
       }
     }
 
-    functions.logger.info('Indexing complete:', results);
+    functions.logger.info("Indexing complete:", results);
 
     return results;
   });
@@ -733,8 +756,8 @@ export const indexAllDocumentation = functions
 export const reindexDocument = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
-      'permission-denied',
-      'Admin access required'
+      "permission-denied",
+      "Admin access required",
     );
   }
 
@@ -742,8 +765,8 @@ export const reindexDocument = functions.https.onCall(async (data, context) => {
 
   if (!path || !content) {
     throw new functions.https.HttpsError(
-      'invalid-argument',
-      'path and content are required'
+      "invalid-argument",
+      "path and content are required",
     );
   }
 
@@ -754,10 +777,10 @@ export const reindexDocument = functions.https.onCall(async (data, context) => {
 
 function pathFromId(docId: string): string {
   return docId
-    .replace(/^\/docs\//, '')
-    .replace(/\//g, ' > ')
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
+    .replace(/^\/docs\//, "")
+    .replace(/\//g, " > ")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (l) => l.toUpperCase());
 }
 ```
 
@@ -890,6 +913,7 @@ async askDocumentation(
 ## Deployment Checklist
 
 1. **Deploy Functions**
+
    ```bash
    cd apps/docs/functions
    npm install openai
@@ -898,17 +922,20 @@ async askDocumentation(
    ```
 
 2. **Index Documentation**
+
    ```bash
    # Create a script to read all .md files and call indexAllDocumentation
    node scripts/prepare-docs-for-indexing.js
    ```
 
 3. **Verify Indexing**
+
    ```bash
    firebase firestore:get doc_embeddings --limit 5
    ```
 
 4. **Test Query**
+
    ```bash
    firebase functions:call askDocumentation \
      --data '{"question": "How does the RKV work?"}'
@@ -916,13 +943,13 @@ async askDocumentation(
 
 ## Cost Estimation
 
-| Component | Cost |
-|-----------|------|
+| Component           | Cost                                  |
+| ------------------- | ------------------------------------- |
 | Indexing (one-time) | ~$0.42 (208K words × $0.02/1M tokens) |
-| Query embedding | ~$0.00002 per query |
-| Search (Firestore) | ~$0.06 per 100K reads |
-| Generation | ~$0.01-0.02 per query |
-| **Total per query** | **~$0.02-0.03** |
+| Query embedding     | ~$0.00002 per query                   |
+| Search (Firestore)  | ~$0.06 per 100K reads                 |
+| Generation          | ~$0.01-0.02 per query                 |
+| **Total per query** | **~$0.02-0.03**                       |
 
 With 50 queries/hour limit: Max $1.50/hour per active user.
 

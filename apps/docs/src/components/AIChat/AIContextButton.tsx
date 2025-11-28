@@ -25,7 +25,7 @@ interface AIContextButtonProps {
  */
 export function openAIAssistant(question: string): void {
   window.dispatchEvent(
-    new CustomEvent("openAIAssistant", { detail: { question } })
+    new CustomEvent("openAIAssistant", { detail: { question } }),
   );
 }
 

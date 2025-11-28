@@ -20,7 +20,7 @@ const limiters: Map<string, RateLimitState> = new Map();
 export function checkRateLimit(
   key: string,
   maxCalls: number,
-  windowMs: number
+  windowMs: number,
 ): boolean {
   const now = Date.now();
   const state = limiters.get(key);
@@ -55,9 +55,10 @@ export function checkRateLimit(
 /**
  * Throttle function - ensures function is called at most once per interval.
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle<T extends (...args: any[]) => any>(
   fn: T,
-  intervalMs: number
+  intervalMs: number,
 ): (...args: Parameters<T>) => ReturnType<T> | undefined {
   let lastCall = 0;
 
@@ -74,9 +75,10 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 /**
  * Debounce function - delays execution until after a pause in calls.
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: any[]) => any>(
   fn: T,
-  delayMs: number
+  delayMs: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -102,7 +104,7 @@ export class RateLimitedExecutor<T> {
 
   constructor(
     private readonly minIntervalMs: number,
-    private readonly maxQueueSize: number = 100
+    private readonly maxQueueSize: number = 100,
   ) {}
 
   async execute(fn: () => Promise<T>): Promise<T | null> {

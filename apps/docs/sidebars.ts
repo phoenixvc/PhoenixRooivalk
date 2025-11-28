@@ -22,7 +22,7 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "🚀 Getting Started",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "doc",
@@ -47,12 +47,12 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "📊 Executive",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "category",
           label: "Investor Materials",
-          collapsed: false,
+          collapsed: true,
           items: [
             "executive/investor-executive-summary",
             "executive/phoenix-rooivalk-pitch-deck",
@@ -99,12 +99,12 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "🔧 Technical",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "category",
           label: "💻 Software & AI",
-          collapsed: false,
+          collapsed: true,
           items: [
             "technical/technical-architecture",
             "technical/system-architecture",
@@ -206,12 +206,12 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "💼 Business",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "category",
           label: "Market & Strategy",
-          collapsed: false,
+          collapsed: true,
           items: [
             "business/market-analysis",
             "business/business-model",
@@ -270,7 +270,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Implementation",
-          collapsed: false,
+          collapsed: true,
           items: [
             "operations/implementation-plan",
             "operations/manufacturing-strategy",
@@ -331,7 +331,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Key Research",
-          collapsed: false,
+          collapsed: true,
           items: [
             "research/experimental-counter-drone-effectors-transform-warfare",
             "research/sensor-technologies-comprehensive-analysis",

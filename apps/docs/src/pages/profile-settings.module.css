@@ -1,0 +1,346 @@
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  border-bottom: none;
+}
+
+.heroDescription {
+  font-size: 1.25rem;
+  color: rgb(148, 163, 184);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: rgb(148, 163, 184);
+  font-size: 1.25rem;
+}
+
+.signInPrompt {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgb(249, 115, 22);
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin: 0 0 0.25rem 0;
+  border-bottom: none;
+}
+
+.userEmail {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin: 0 0 0.5rem 0;
+}
+
+.profileBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(249, 115, 22, 0.2);
+  color: rgb(249, 115, 22);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.profileDescription {
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 8px;
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Recommendation stats */
+.recommendationStats {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border-radius: 8px;
+}
+
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.statsLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+}
+
+.statsValue {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+}
+
+.progressBar {
+  height: 8px;
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.statsPercentage {
+  font-size: 0.75rem;
+  color: rgb(249, 115, 22);
+  font-weight: 600;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.5rem;
+  border-bottom: none;
+}
+
+.sectionDescription {
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.roleGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.roleChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 9999px;
+  color: rgb(226, 230, 234);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.roleChip:hover {
+  background: rgba(71, 85, 105, 0.8);
+  border-color: rgb(100, 116, 139);
+}
+
+.roleChipSelected {
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgb(249, 115, 22);
+  color: rgb(249, 115, 22);
+}
+
+.roleChipSelected:hover {
+  background: rgba(249, 115, 22, 0.3);
+  border-color: rgb(249, 115, 22);
+}
+
+.roleCheck {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.saveSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.saveSuccess {
+  color: rgb(34, 197, 94);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.onboardingReset {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgb(34, 197, 94);
+  font-size: 0.875rem;
+}
+
+.resetIcon {
+  font-size: 1rem;
+}
+
+.quickLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.quickLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  color: rgb(226, 230, 234) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.quickLink:hover {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.4);
+  color: rgb(249, 115, 22) !important;
+  transform: translateY(-2px);
+}
+
+.quickLinkIcon {
+  font-size: 1.5rem;
+}
+
+/* Account section */
+.accountActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.accountAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(51, 65, 85, 0.3);
+  border-radius: 8px;
+}
+
+.accountActionTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(226, 230, 234);
+  margin: 0 0 0.25rem 0;
+  border-bottom: none;
+}
+
+.accountActionDesc {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.signOutBtn {
+  border-color: rgb(239, 68, 68) !important;
+  color: rgb(239, 68, 68) !important;
+}
+
+.signOutBtn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .quickLinks {
+    flex-direction: column;
+  }
+
+  .quickLink {
+    width: 100%;
+  }
+
+  .accountAction {
+    flex-direction: column;
+    text-align: center;
+  }
+}

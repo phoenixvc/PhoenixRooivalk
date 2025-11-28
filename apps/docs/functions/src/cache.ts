@@ -55,7 +55,7 @@ interface CacheEntry<T> {
  */
 export async function getFromCache<T>(
   collection: keyof typeof CACHE_CONFIG.collections,
-  key: string
+  key: string,
 ): Promise<T | null> {
   try {
     const collectionName = CACHE_CONFIG.collections[collection];
@@ -99,14 +99,14 @@ export async function setInCache<T>(
   collection: keyof typeof CACHE_CONFIG.collections,
   key: string,
   value: T,
-  ttlOverride?: number
+  ttlOverride?: number,
 ): Promise<void> {
   try {
     const collectionName = CACHE_CONFIG.collections[collection];
     const ttl = ttlOverride || CACHE_CONFIG.ttl[collection];
     const now = admin.firestore.Timestamp.now();
     const expiresAt = admin.firestore.Timestamp.fromMillis(
-      now.toMillis() + ttl
+      now.toMillis() + ttl,
     );
 
     const entry: CacheEntry<T> = {
@@ -130,7 +130,7 @@ export async function setInCache<T>(
  */
 export async function deleteFromCache(
   collection: keyof typeof CACHE_CONFIG.collections,
-  key: string
+  key: string,
 ): Promise<void> {
   try {
     const collectionName = CACHE_CONFIG.collections[collection];
@@ -144,7 +144,7 @@ export async function deleteFromCache(
  * Clear all cache for a collection
  */
 export async function clearCache(
-  collection: keyof typeof CACHE_CONFIG.collections
+  collection: keyof typeof CACHE_CONFIG.collections,
 ): Promise<number> {
   const collectionName = CACHE_CONFIG.collections[collection];
   const snapshot = await db.collection(collectionName).get();
@@ -168,7 +168,7 @@ export async function clearCache(
  * Cached embedding lookup
  */
 export async function getCachedEmbedding(
-  text: string
+  text: string,
 ): Promise<number[] | null> {
   const key = generateCacheKey(text, "emb");
   return getFromCache<number[]>("embeddings", key);
@@ -179,7 +179,7 @@ export async function getCachedEmbedding(
  */
 export async function cacheEmbedding(
   text: string,
-  embedding: number[]
+  embedding: number[],
 ): Promise<void> {
   const key = generateCacheKey(text, "emb");
   await setInCache("embeddings", key, embedding);
@@ -201,12 +201,9 @@ export interface CachedQueryResult {
 
 export async function getCachedQuery(
   question: string,
-  category?: string
+  category?: string,
 ): Promise<CachedQueryResult | null> {
-  const key = generateCacheKey(
-    `${question}_${category || "all"}`,
-    "query"
-  );
+  const key = generateCacheKey(`${question}_${category || "all"}`, "query");
   return getFromCache<CachedQueryResult>("queries", key);
 }
 
@@ -216,12 +213,9 @@ export async function getCachedQuery(
 export async function cacheQueryResult(
   question: string,
   category: string | undefined,
-  result: CachedQueryResult
+  result: CachedQueryResult,
 ): Promise<void> {
-  const key = generateCacheKey(
-    `${question}_${category || "all"}`,
-    "query"
-  );
+  const key = generateCacheKey(`${question}_${category || "all"}`, "query");
   await setInCache("queries", key, result);
 }
 
@@ -233,12 +227,11 @@ export async function getCacheStats(): Promise<{
   queries: { count: number; avgHits: number };
   suggestions: { count: number; avgHits: number };
 }> {
-  const stats: Record<
-    string,
-    { count: number; avgHits: number }
-  > = {};
+  const stats: Record<string, { count: number; avgHits: number }> = {};
 
-  for (const [key, collectionName] of Object.entries(CACHE_CONFIG.collections)) {
+  for (const [key, collectionName] of Object.entries(
+    CACHE_CONFIG.collections,
+  )) {
     const snapshot = await db.collection(collectionName).get();
     let totalHits = 0;
 
@@ -287,23 +280,27 @@ export const cleanupExpiredCache = functions.pubsub
       }
     }
 
-    functions.logger.info(`Cache cleanup complete: ${totalDeleted} entries removed`);
+    functions.logger.info(
+      `Cache cleanup complete: ${totalDeleted} entries removed`,
+    );
     return null;
   });
 
 /**
  * Cloud function to get cache stats (admin only)
  */
-export const getAICacheStats = functions.https.onCall(async (_data, context) => {
-  if (!context.auth?.token.admin) {
-    throw new functions.https.HttpsError(
-      "permission-denied",
-      "Admin access required"
-    );
-  }
+export const getAICacheStats = functions.https.onCall(
+  async (_data, context) => {
+    if (!context.auth?.token.admin) {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Admin access required",
+      );
+    }
 
-  return getCacheStats();
-});
+    return getCacheStats();
+  },
+);
 
 /**
  * Cloud function to clear cache (admin only)
@@ -312,7 +309,7 @@ export const clearAICache = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
     throw new functions.https.HttpsError(
       "permission-denied",
-      "Admin access required"
+      "Admin access required",
     );
   }
 
@@ -321,7 +318,7 @@ export const clearAICache = functions.https.onCall(async (data, context) => {
   if (!collection || !CACHE_CONFIG.collections[collection]) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "Valid collection required: embeddings, queries, or suggestions"
+      "Valid collection required: embeddings, queries, or suggestions",
     );
   }
 

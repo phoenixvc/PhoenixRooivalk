@@ -25,9 +25,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Need a runtime layer to orchestrate RAG search + AI inference across Firebase and Azure
-2. **Decision**: Firebase Cloud Functions as the runtime orchestrator with Azure as inference backend
-3. **Trade-off**: Cross-cloud latency (+50-150ms) is acceptable for RAG UX; Firebase provides tighter Firestore integration
+1. **Problem**: Need a runtime layer to orchestrate RAG search + AI inference
+   across Firebase and Azure
+2. **Decision**: Firebase Cloud Functions as the runtime orchestrator with Azure
+   as inference backend
+3. **Trade-off**: Cross-cloud latency (+50-150ms) is acceptable for RAG UX;
+   Firebase provides tighter Firestore integration
 
 ---
 
@@ -60,7 +63,8 @@ Firebase Firestore (cache, logs, usage)
 ### Key Constraints
 
 - **Existing stack**: Firebase for auth, hosting, and Firestore
-- **Azure investment**: AI models already deployed (gpt-4o, gpt-5, text-embedding-3-small)
+- **Azure investment**: AI models already deployed (gpt-4o, gpt-5,
+  text-embedding-3-small)
 - **Latency budget**: 500-2000ms for thoughtful RAG responses
 - **Cold starts**: Acceptable for documentation use case (not real-time gaming)
 
@@ -68,7 +72,8 @@ Firebase Firestore (cache, logs, usage)
 
 ## Decision
 
-**Retain Firebase Cloud Functions** as the runtime orchestrator for RAG and AI services.
+**Retain Firebase Cloud Functions** as the runtime orchestrator for RAG and AI
+services.
 
 ---
 
@@ -76,22 +81,24 @@ Firebase Firestore (cache, logs, usage)
 
 ### Option 1: Firebase Cloud Functions (Current) ✅ Selected
 
-| Aspect | Details |
-|--------|---------|
-| **Runtime** | Node.js 20 |
-| **Cold start** | ~500-1500ms |
-| **Warm latency** | ~20-50ms per invocation |
-| **Integration** | Native Firestore, Auth, Hosting |
-| **Scaling** | Automatic (0 to 1000 instances) |
-| **Cost** | 2M free invocations/month |
+| Aspect           | Details                         |
+| ---------------- | ------------------------------- |
+| **Runtime**      | Node.js 20                      |
+| **Cold start**   | ~500-1500ms                     |
+| **Warm latency** | ~20-50ms per invocation         |
+| **Integration**  | Native Firestore, Auth, Hosting |
+| **Scaling**      | Automatic (0 to 1000 instances) |
+| **Cost**         | 2M free invocations/month       |
 
 **Pros**:
+
 - Already deployed and functional
 - Native Firestore integration for caching/logging
 - Native Firebase Auth for user context
 - Same deployment as existing functions
 
 **Cons**:
+
 - Cross-cloud calls to Azure (latency)
 - Cold starts can be slow
 - Node.js (not Rust) for compute-heavy tasks
@@ -100,19 +107,21 @@ Firebase Firestore (cache, logs, usage)
 
 ### Option 2: Azure Functions
 
-| Aspect | Details |
-|--------|---------|
-| **Runtime** | Node.js, Python, C#, etc. |
-| **Cold start** | ~500-2000ms (consumption tier) |
-| **Integration** | Native with Azure AI services |
-| **Scaling** | Automatic or Premium (pre-warmed) |
+| Aspect          | Details                           |
+| --------------- | --------------------------------- |
+| **Runtime**     | Node.js, Python, C#, etc.         |
+| **Cold start**  | ~500-2000ms (consumption tier)    |
+| **Integration** | Native with Azure AI services     |
+| **Scaling**     | Automatic or Premium (pre-warmed) |
 
 **Pros**:
+
 - Same cloud as AI models (eliminates cross-cloud hop)
 - Premium tier eliminates cold starts
 - Tighter Azure AI Search/OpenAI integration
 
 **Cons**:
+
 - Lose Firebase Firestore native integration
 - Split runtime between Firebase and Azure
 - Additional complexity in deployment
@@ -122,19 +131,21 @@ Firebase Firestore (cache, logs, usage)
 
 ### Option 3: Cloudflare Workers
 
-| Aspect | Details |
-|--------|---------|
-| **Runtime** | V8 isolates (JavaScript/WASM) |
-| **Cold start** | ~0ms (always-warm) |
-| **Latency** | Edge-deployed, lowest latency |
+| Aspect          | Details                          |
+| --------------- | -------------------------------- |
+| **Runtime**     | V8 isolates (JavaScript/WASM)    |
+| **Cold start**  | ~0ms (always-warm)               |
+| **Latency**     | Edge-deployed, lowest latency    |
 | **Integration** | D1 (SQLite), KV, Durable Objects |
 
 **Pros**:
+
 - Zero cold starts
 - Edge deployment for global low latency
 - Workers AI for inference (if models available)
 
 **Cons**:
+
 - No native Firestore integration
 - Must implement all caching manually
 - Limited to V8 runtime (no native modules)
@@ -145,13 +156,16 @@ Firebase Firestore (cache, logs, usage)
 ### Option 4: Hybrid (Firebase + Azure Functions)
 
 Split workloads:
+
 - Firebase: Auth, Firestore ops, simple queries
 - Azure: AI-heavy operations, vector search
 
 **Pros**:
+
 - Each function runs on optimal platform
 
 **Cons**:
+
 - Complex deployment and debugging
 - Inter-function calls add latency
 - Split logging and monitoring
@@ -162,16 +176,18 @@ Split workloads:
 
 ### Why Firebase Functions (Not Azure Functions)?
 
-| Factor | Firebase | Azure | Winner |
-|--------|----------|-------|--------|
-| **Firestore integration** | Native | SDK needed | Firebase |
-| **Firebase Auth** | Native | Verify manually | Firebase |
-| **Cross-cloud latency** | +50-150ms to Azure | 0ms | Azure |
-| **Existing deployment** | ✅ Deployed | New setup | Firebase |
-| **Cold starts** | Acceptable | Similar | Tie |
-| **Monitoring** | Firebase Console | Azure Monitor | Tie |
+| Factor                    | Firebase           | Azure           | Winner   |
+| ------------------------- | ------------------ | --------------- | -------- |
+| **Firestore integration** | Native             | SDK needed      | Firebase |
+| **Firebase Auth**         | Native             | Verify manually | Firebase |
+| **Cross-cloud latency**   | +50-150ms to Azure | 0ms             | Azure    |
+| **Existing deployment**   | ✅ Deployed        | New setup       | Firebase |
+| **Cold starts**           | Acceptable         | Similar         | Tie      |
+| **Monitoring**            | Firebase Console   | Azure Monitor   | Tie      |
 
-**Decision**: The +50-150ms latency to Azure is acceptable within our 500-2000ms RAG budget. Migrating to Azure Functions would require:
+**Decision**: The +50-150ms latency to Azure is acceptable within our 500-2000ms
+RAG budget. Migrating to Azure Functions would require:
+
 - Re-implementing Firebase Auth verification
 - Setting up Firestore SDK connections
 - New deployment pipeline
@@ -203,9 +219,10 @@ React
 ```
 
 **Total P50**: ~350ms  
-**Total P99**: ~2500ms  
+**Total P99**: ~2500ms
 
-**Acceptable**: RAG users expect "thinking" time. Sub-3s is good UX for documentation queries.
+**Acceptable**: RAG users expect "thinking" time. Sub-3s is good UX for
+documentation queries.
 
 ---
 
@@ -229,18 +246,21 @@ React
 ### Failure Isolation
 
 If Firebase Functions fail:
+
 - **Impact**: Entire AI/RAG system unavailable
-- **Mitigation**: 
+- **Mitigation**:
   - Firebase has 99.95% SLA
   - Static documentation still available (Docusaurus)
   - Error page with "AI temporarily unavailable" message
 
 If Azure AI Search fails:
+
 - **Impact**: Vector search unavailable
 - **Fallback**: Keyword-only search via Firestore
 - **Mitigation**: Cached query results in Firestore
 
 If Azure OpenAI fails:
+
 - **Impact**: No AI responses
 - **Fallback**: Return search results without AI summary
 - **Mitigation**: Model fallback (gpt-4o → gpt-5-nano)
@@ -254,11 +274,11 @@ If Azure OpenAI fails:
 ```typescript
 // Scheduled function to keep instances warm
 export const keepWarm = functions.pubsub
-  .schedule('every 5 minutes')
+  .schedule("every 5 minutes")
   .onRun(async () => {
     // Minimal invocation to prevent cold start
-    await admin.firestore().collection('_warmup').doc('ping').set({
-      timestamp: Date.now()
+    await admin.firestore().collection("_warmup").doc("ping").set({
+      timestamp: Date.now(),
     });
   });
 ```
@@ -271,10 +291,10 @@ const circuitBreaker = {
   lastFailure: 0,
   threshold: 5,
   resetTimeout: 60000, // 1 minute
-  
+
   async call<T>(fn: () => Promise<T>): Promise<T> {
     if (this.isOpen()) {
-      throw new Error('Circuit breaker open');
+      throw new Error("Circuit breaker open");
     }
     try {
       const result = await fn();
@@ -284,7 +304,7 @@ const circuitBreaker = {
       this.recordFailure();
       throw error;
     }
-  }
+  },
 };
 ```
 
@@ -316,11 +336,11 @@ Azure (API key in Cloud Functions config)
 
 ### Secret Management
 
-| Secret | Storage | Access |
-|--------|---------|--------|
+| Secret              | Storage         | Access                                |
+| ------------------- | --------------- | ------------------------------------- |
 | Azure AI Search key | Firebase Config | `functions.config().azure.search_key` |
-| Azure OpenAI key | Firebase Config | `functions.config().azure.openai_key` |
-| Firebase Admin | Auto-injected | `admin.initializeApp()` |
+| Azure OpenAI key    | Firebase Config | `functions.config().azure.openai_key` |
+| Firebase Admin      | Auto-injected   | `admin.initializeApp()`               |
 
 **Rotation**: Secrets rotated via `firebase functions:config:set`
 
@@ -330,30 +350,60 @@ Azure (API key in Cloud Functions config)
 
 ### Metrics Tracked
 
-| Metric | Source | Alert Threshold |
-|--------|--------|-----------------|
-| Function latency | Firebase Console | P99 > 5s |
-| Error rate | Firebase Console | > 5% |
-| Cold starts | Firebase Console | > 20% |
-| Azure Search latency | Custom logging | P99 > 500ms |
-| Token usage | Custom Firestore | > 100K/day |
+| Metric               | Source           | Alert Threshold |
+| -------------------- | ---------------- | --------------- |
+| Function latency     | Firebase Console | P99 > 5s        |
+| Error rate           | Firebase Console | > 5%            |
+| Cold starts          | Firebase Console | > 20%           |
+| Azure Search latency | Custom logging   | P99 > 500ms     |
+| Token usage          | Custom Firestore | > 100K/day      |
 
 ### Logging Strategy
 
 ```typescript
 // Structured logging for distributed tracing
-logger.info('RAG query', {
+logger.info("RAG query", {
   userId: context.auth?.uid,
   queryId: uuidv4(),
-  step: 'azure_search',
+  step: "azure_search",
   latencyMs: 45,
-  resultCount: 5
+  resultCount: 5,
 });
 ```
 
 ---
 
 ## Migration Path (If Needed)
+
+### To Cognitive Mesh (Full Platform Shift)
+
+Cognitive Mesh represents a **complete platform migration**, not just a runtime
+change. It would replace Firebase Functions with a .NET-based 5-layer hexagonal
+architecture.
+
+| Aspect           | Firebase Functions   | Cognitive Mesh               |
+| ---------------- | -------------------- | ---------------------------- |
+| **Stack**        | TypeScript/Node.js   | C#/.NET 9.0+                 |
+| **Architecture** | Serverless functions | 5-layer hexagonal            |
+| **Compliance**   | Manual               | Built-in (NIST AI RMF, GDPR) |
+| **Auth**         | Firebase Auth        | Zero-trust RBAC              |
+
+**Repository**:
+[github.com/justaghost/cognitive-mesh](https://github.com/justaghost/cognitive-mesh)
+
+**When to Consider**:
+
+- Defense contracts require built-in compliance
+- Multi-agent orchestration exceeds current capabilities
+- Enterprise RBAC and audit logging mandated
+- .NET backend integration planned
+
+**Effort**: 8-12 weeks (full platform migration)  
+**Risk**: High (different stack, significant rewrite)
+
+**Resource Trade-off Note**: Time spent here planning CM migration is time not
+spent maturing CM itself (~40% complete). Current Firebase Functions approach
+remains valid until compliance requirements escalate.
 
 ### To Azure Functions
 
@@ -385,12 +435,15 @@ logger.info('RAG query', {
 ## Appendix
 
 For detailed weighted analysis, benchmarks, and cost projections, see:
+
 - [ADR 0012 Appendix: Runtime Functions Weighted Analysis](./adr-0012-appendix-runtime-functions-analysis.md)
 
 ---
 
 ## Related ADRs
 
+- [ADR 0000: ADR Management](./adr-0000-adr-management.md) - Platform decision
+  framework
 - [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture)
 - [ADR 0011: Vector Database Selection](./adr-0011-vector-database-selection.md)
 - [ADR 0013: Identity & Auth Strategy](./adr-0013-identity-auth.md)

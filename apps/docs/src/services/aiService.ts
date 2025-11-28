@@ -10,7 +10,7 @@
  * - Content summarization
  */
 
-import { getFunctions, httpsCallable, HttpsCallableResult } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { app, isFirebaseConfigured } from "./firebase";
 
 // Types for AI responses
@@ -161,7 +161,10 @@ class AIService {
       throw new AIError("Rate limit exceeded. Please try again later.", code);
     }
     if (code === "failed-precondition") {
-      throw new AIError("AI service not configured. Contact administrator.", code);
+      throw new AIError(
+        "AI service not configured. Contact administrator.",
+        code,
+      );
     }
 
     throw new AIError(message, code);
@@ -172,7 +175,7 @@ class AIService {
    */
   async analyzeCompetitors(
     competitors: string[],
-    focusAreas?: string[]
+    focusAreas?: string[],
   ): Promise<CompetitorAnalysisResult> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -216,7 +219,7 @@ class AIService {
    * Get personalized reading recommendations
    */
   async getReadingRecommendations(
-    currentDocId?: string
+    currentDocId?: string,
   ): Promise<RecommendationsResult> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -241,7 +244,7 @@ class AIService {
   async suggestDocumentImprovements(
     docId: string,
     docTitle: string,
-    docContent: string
+    docContent: string,
   ): Promise<DocumentImprovementResult> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -270,7 +273,7 @@ class AIService {
    */
   async getMarketInsights(
     topic: string,
-    industry?: string
+    industry?: string,
   ): Promise<MarketInsightsResult> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -294,7 +297,7 @@ class AIService {
    */
   async summarizeContent(
     content: string,
-    maxLength?: number
+    maxLength?: number,
   ): Promise<SummaryResult> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -319,7 +322,7 @@ class AIService {
   async reviewImprovement(
     suggestionId: string,
     status: "approved" | "rejected" | "implemented",
-    notes?: string
+    notes?: string,
   ): Promise<{ success: boolean; status: string }> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -342,7 +345,7 @@ class AIService {
    * Get pending improvement suggestions (admin only)
    */
   async getPendingImprovements(
-    limit?: number
+    limit?: number,
   ): Promise<{ suggestions: PendingImprovement[] }> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -370,7 +373,7 @@ class AIService {
       category?: string;
       format?: "detailed" | "concise";
       history?: Array<{ role: "user" | "assistant"; content: string }>;
-    }
+    },
   ): Promise<RAGResponse> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -405,7 +408,7 @@ class AIService {
    */
   async searchDocumentation(
     query: string,
-    options?: { category?: string; topK?: number }
+    options?: { category?: string; topK?: number },
   ): Promise<SearchResultItem[]> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
@@ -434,8 +437,11 @@ class AIService {
    */
   async getSuggestedQuestions(
     docId?: string,
-    category?: string
-  ): Promise<{ suggestions: string[]; docInfo: { title: string; category: string } | null }> {
+    category?: string,
+  ): Promise<{
+    suggestions: string[];
+    docInfo: { title: string; category: string } | null;
+  }> {
     if (!this.init()) {
       throw new AIError("AI service not available", "unavailable");
     }
@@ -443,7 +449,10 @@ class AIService {
     try {
       const getSuggestionsFn = httpsCallable<
         { docId?: string; category?: string },
-        { suggestions: string[]; docInfo: { title: string; category: string } | null }
+        {
+          suggestions: string[];
+          docInfo: { title: string; category: string } | null;
+        }
       >(this.functions!, "getSuggestedQuestions");
 
       const result = await getSuggestionsFn({ docId, category });
@@ -464,10 +473,36 @@ class AIService {
     try {
       const getStatsFn = httpsCallable<Record<string, never>, IndexStats>(
         this.functions!,
-        "getIndexStats"
+        "getIndexStats",
       );
 
       const result = await getStatsFn({});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Research a person and generate fun facts
+   * Uses LinkedIn profile and name to generate interesting facts
+   */
+  async researchPerson(
+    firstName: string,
+    lastName: string,
+    linkedInUrl: string,
+  ): Promise<FunFactsResult> {
+    if (!this.init()) {
+      throw new AIError("AI service not available", "unavailable");
+    }
+
+    try {
+      const researchFn = httpsCallable<
+        { firstName: string; lastName: string; linkedInUrl: string },
+        FunFactsResult
+      >(this.functions!, "researchPerson");
+
+      const result = await researchFn({ firstName, lastName, linkedInUrl });
       return result.data;
     } catch (error) {
       this.handleError(error);
@@ -481,6 +516,21 @@ export const aiService = new AIService();
 // React hook for AI service
 export function useAI() {
   return aiService;
+}
+
+// Fun facts research result
+export interface FunFactsResult {
+  facts: Array<{
+    id: string;
+    fact: string;
+    category:
+      | "professional"
+      | "education"
+      | "achievement"
+      | "interest"
+      | "other";
+  }>;
+  summary: string;
 }
 
 // Predefined competitor lists for quick analysis

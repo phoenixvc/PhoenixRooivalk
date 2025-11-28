@@ -21,6 +21,9 @@ import {
   getUserProgress,
   saveUserProgress,
   UserProgress,
+  getUserProfileData,
+  updateUserProfileData,
+  UserProfileData,
 } from "../services/firebase";
 import { analytics } from "../services/analytics";
 import {
@@ -29,27 +32,92 @@ import {
   getQueuedUpdates,
   removeFromQueue,
 } from "../components/Offline";
+import {
+  getUserProfile as getKnownUserProfile,
+  UserProfile,
+  INTERNAL_USER_PROFILES,
+} from "../config/userProfiles";
 
 // Local storage keys
 const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
 const LOCAL_ACHIEVEMENTS_KEY = "phoenix-docs-achievements";
 const LOCAL_STATS_KEY = "phoenix-docs-stats";
+const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
+
+/**
+ * User profile state for centralized profile management
+ */
+export interface UserProfileState {
+  knownProfile: UserProfile | null; // Detected profile from INTERNAL_USER_PROFILES
+  confirmedRoles: string[]; // User's confirmed/selected roles
+  profileKey: string | null; // Key in INTERNAL_USER_PROFILES (e.g., "martyn")
+  isProfileLoaded: boolean; // True once profile detection is complete
+}
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isConfigured: boolean;
   progress: UserProgress | null;
+  userProfile: UserProfileState;
   signInGoogle: () => Promise<void>;
   signInGithub: () => Promise<void>;
   logout: () => Promise<void>;
   syncProgress: () => Promise<void>;
   updateProgress: (updates: Partial<UserProgress>) => Promise<void>;
+  updateUserRoles: (roles: string[]) => void;
+  refreshUserProfile: () => void;
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
+  saveProfileToFirebase: (data: Partial<UserProfileData>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Default profile state
+const DEFAULT_PROFILE_STATE: UserProfileState = {
+  knownProfile: null,
+  confirmedRoles: [],
+  profileKey: null,
+  isProfileLoaded: false,
+};
+
+// Helper to get saved profile data from localStorage
+const getSavedProfileData = (): {
+  profileKey: string;
+  roles: string[];
+} | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const data = localStorage.getItem(PROFILE_DATA_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch {
+    return null;
+  }
+};
+
+// Helper to save profile data to localStorage
+const saveProfileData = (profileKey: string | null, roles: string[]): void => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(PROFILE_DATA_KEY, JSON.stringify({ profileKey, roles }));
+};
+
+// Helper to detect profile for a user
+const detectUserProfile = (
+  email?: string | null,
+  displayName?: string | null,
+): { profile: UserProfile | null; profileKey: string | null } => {
+  const profile = getKnownUserProfile(email, displayName);
+  if (!profile) return { profile: null, profileKey: null };
+
+  // Find the profile key
+  for (const [key, p] of Object.entries(INTERNAL_USER_PROFILES)) {
+    if (p.name === profile.name) {
+      return { profile, profileKey: key };
+    }
+  }
+  return { profile, profileKey: null };
+};
 
 // Helper to get local progress
 const getLocalProgress = (): UserProgress => {
@@ -146,6 +214,9 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<UserProgress | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileState>(
+    DEFAULT_PROFILE_STATE,
+  );
   const isConfigured = isFirebaseConfigured();
 
   // Initialize with local progress
@@ -186,7 +257,11 @@ export function AuthProvider({
         // Track signup/signin events
         if (wasSignedOut) {
           const method = authUser.providerData[0]?.providerId || "unknown";
-          const authMethod = method.includes("google") ? "google" : method.includes("github") ? "github" : method;
+          const authMethod = method.includes("google")
+            ? "google"
+            : method.includes("github")
+              ? "github"
+              : method;
 
           if (isNewUser) {
             // First time signup - track as new conversion
@@ -201,6 +276,108 @@ export function AuthProvider({
 
     return () => unsubscribe();
   }, [isConfigured]);
+
+  // Detect and load user profile when user changes
+  useEffect(() => {
+    if (!user) {
+      // Reset profile when logged out
+      setUserProfile(DEFAULT_PROFILE_STATE);
+      return;
+    }
+
+    // Capture current user in a local const to ensure non-null in async closure
+    const currentUser = user;
+
+    // Async function to load and merge profile data
+    async function loadUserProfile() {
+      // Detect known profile from internal profiles
+      const { profile, profileKey: detectedProfileKey } = detectUserProfile(
+        currentUser.email,
+        currentUser.displayName,
+      );
+
+      // Get local profile data from localStorage
+      const localProfile = getSavedProfileData();
+
+      // Fetch profile data from Firestore
+      const cloudProfile = await getUserProfileData(currentUser.uid);
+
+      // Merge strategy: Cloud wins for conflicts, but keep local-only data
+      let mergedProfileKey: string | null = detectedProfileKey;
+      let mergedRoles: string[] = [];
+
+      if (cloudProfile) {
+        // Cloud data exists - use cloud values as source of truth
+        mergedProfileKey = cloudProfile.profileKey ?? detectedProfileKey;
+        mergedRoles = cloudProfile.roles || [];
+      }
+
+      // If no cloud roles, fallback to local, then to detected profile defaults
+      if (mergedRoles.length === 0) {
+        if (localProfile?.roles && localProfile.roles.length > 0) {
+          mergedRoles = localProfile.roles;
+        } else if (profile) {
+          mergedRoles = profile.roles;
+        }
+      }
+
+      // Update localStorage with merged data for fast access
+      saveProfileData(mergedProfileKey, mergedRoles);
+
+      setUserProfile({
+        knownProfile: profile,
+        confirmedRoles: mergedRoles,
+        profileKey: mergedProfileKey,
+        isProfileLoaded: true,
+      });
+    }
+
+    loadUserProfile();
+  }, [user]);
+
+  // Update user roles (called from ProfileConfirmation or Profile Settings)
+  const updateUserRoles = useCallback(
+    (roles: string[]) => {
+      setUserProfile((prev) => ({
+        ...prev,
+        confirmedRoles: roles,
+      }));
+      saveProfileData(userProfile.profileKey, roles);
+    },
+    [userProfile.profileKey],
+  );
+
+  // Refresh user profile from localStorage (called after onboarding profile selection)
+  const refreshUserProfile = useCallback(() => {
+    if (!user) return;
+
+    // Re-detect known profile
+    const { profile, profileKey } = detectUserProfile(
+      user.email,
+      user.displayName,
+    );
+
+    // Get saved profile data (may have been updated by onboarding)
+    const savedProfile = getSavedProfileData();
+
+    // Determine the profile key to use - prefer saved if available
+    const effectiveProfileKey = savedProfile?.profileKey || profileKey;
+
+    // Determine roles: use saved roles if available, otherwise defaults from profile
+    let confirmedRoles: string[] = [];
+    if (savedProfile?.roles && savedProfile.roles.length > 0) {
+      confirmedRoles = savedProfile.roles;
+    } else if (profile) {
+      confirmedRoles = profile.roles;
+    }
+
+    setUserProfile({
+      knownProfile: profile,
+      confirmedRoles,
+      profileKey: effectiveProfileKey,
+      isProfileLoaded: true,
+    });
+  }, [user]);
 
   const signInGoogle = useCallback(async () => {
     setLoading(true);
@@ -274,8 +451,9 @@ export function AuthProvider({
     if (!user || !isOnline()) return;
 
     const queue = getQueuedUpdates();
-    const progressUpdates = queue.filter((item) => item.type === "progress");
 
+    // Sync progress updates
+    const progressUpdates = queue.filter((item) => item.type === "progress");
     for (const update of progressUpdates) {
       try {
         const data = update.data as { userId: string; progress: UserProgress };
@@ -284,7 +462,24 @@ export function AuthProvider({
           removeFromQueue(update.id);
         }
       } catch (error) {
-        console.error("Failed to sync queued update:", error);
+        console.error("Failed to sync queued progress update:", error);
+      }
+    }
+
+    // Sync profile updates
+    const profileUpdates = queue.filter((item) => item.type === "profile");
+    for (const update of profileUpdates) {
+      try {
+        const data = update.data as {
+          userId: string;
+          profile: Partial<UserProfileData>;
+        };
+        if (data.userId === user.uid) {
+          await updateUserProfileData(user.uid, data.profile);
+          removeFromQueue(update.id);
+        }
+      } catch (error) {
+        console.error("Failed to sync queued profile update:", error);
       }
     }
   }, [user]);
@@ -343,18 +538,58 @@ export function AuthProvider({
     [progress, updateProgress],
   );
 
+  // Save user profile data to Firebase
+  const saveProfileToFirebase = useCallback(
+    async (data: Partial<UserProfileData>): Promise<boolean> => {
+      if (!user) {
+        console.warn("Cannot save profile: user not authenticated");
+        return false;
+      }
+
+      // If offline, queue the update for later
+      if (!isOnline()) {
+        queueUpdate({
+          type: "profile",
+          data: { userId: user.uid, profile: data },
+        });
+        return true; // Queued successfully
+      }
+
+      // Online - save directly to Firebase
+      const success = await updateUserProfileData(user.uid, data);
+
+      if (success) {
+        // Also update local storage for faster access
+        const savedProfile = getSavedProfileData();
+        if (data.profileKey !== undefined || data.roles !== undefined) {
+          saveProfileData(
+            data.profileKey ?? savedProfile?.profileKey ?? null,
+            data.roles ?? savedProfile?.roles ?? [],
+          );
+        }
+      }
+
+      return success;
+    },
+    [user],
+  );
+
   const value: AuthContextType = {
     user,
     loading,
     isConfigured,
     progress,
+    userProfile,
     signInGoogle,
     signInGithub,
     logout,
     syncProgress,
     updateProgress,
+    updateUserRoles,
+    refreshUserProfile,
     markDocAsRead,
     unlockAchievement,
+    saveProfileToFirebase,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
