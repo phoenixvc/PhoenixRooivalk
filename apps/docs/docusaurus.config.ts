@@ -254,6 +254,14 @@ const config: Config = {
           className: "navbar__link--progress",
           "aria-label": "Track your learning progress",
         },
+        // Login link
+        {
+          to: "/login",
+          label: "Login",
+          position: "right",
+          className: "navbar__link--login",
+          "aria-label": "Sign in to your account",
+        },
         // GitHub repository link
         {
           href: "https://github.com/JustAGhosT/PhoenixRooivalk",
@@ -371,7 +379,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security.`,
+      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security. | v0.2.0`,
     },
     // Enhanced color mode
     colorMode: {
