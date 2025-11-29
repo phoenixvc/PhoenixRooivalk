@@ -111,7 +111,7 @@ function saveCollections(collections: ArticleCollection[]): void {
  * Article Collections Hook
  */
 export function useArticleCollections(): UseArticleCollectionsReturn {
-  const { user } = useAuth();
+  useAuth();
   const [collections, setCollections] = useState<ArticleCollection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
