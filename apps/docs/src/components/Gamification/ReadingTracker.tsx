@@ -137,10 +137,6 @@ export function ReadingTracker(): null {
       const newTimeSpent = (currentDoc.timeSpentMs || 0) + additionalMs;
       const totalTimeSpent =
         (progress.stats.totalTimeSpentMs || 0) + additionalMs;
-
-      // Also track session time
-      totalSessionTimeRef.current += additionalMs;
-
       await updateProgress({
         docs: {
           [docId]: {
