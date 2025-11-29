@@ -6,8 +6,10 @@
  */
 
 import React, { useEffect } from "react";
+
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics";
+
 import "./ProtectedContent.css";
 
 // Debug flag - defaults to true, can be disabled via environment variable
@@ -76,8 +78,8 @@ export function ProtectedContent({
     }
   }, [loading, user, isFreePage, currentUrl]);
 
-  // If Firebase not configured, BLOCK access - require proper setup
-  if (!isConfigured) {
+  // If Firebase not configured, block access for protected content but allow free pages
+  if (!isConfigured && !isFreePage) {
     if (DEBUG_AUTH) {
       console.log(
         "[ProtectedContent] Firebase not configured - blocking access",
@@ -92,14 +94,14 @@ export function ProtectedContent({
           </h3>
           <p className="protected-content-blocked-description">
             This documentation site requires authentication, but the
-            authentication service is not configured. Please contact the
-            site administrator.
+            authentication service is not configured. Please contact the site
+            administrator.
           </p>
           <div className="protected-content-blocked-details">
             <p>
               <strong>For administrators:</strong> Firebase environment
-              variables need to be set in your hosting platform
-              (Netlify/Vercel) and a new deployment triggered.
+              variables need to be set in your hosting platform (Netlify/Vercel)
+              and a new deployment triggered.
             </p>
             <p>
               Required variables: <code>FIREBASE_API_KEY</code>,{" "}

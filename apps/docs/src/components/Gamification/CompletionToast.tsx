@@ -1,7 +1,8 @@
-import * as React from "react";
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import Link from "@docusaurus/Link";
+import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useAuth } from "../../contexts/AuthContext";
 
 /**
  * CompletionToast and ChallengeToast components for engagement feedback.
@@ -26,11 +27,11 @@ interface ReadingChallenge {
 }
 
 // Event system for document completion
-type CompletionListener = (doc: CompletedDoc) => void;
+type CompletionListener = (_doc: CompletedDoc) => void;
 const completionListeners: Set<CompletionListener> = new Set();
 
 // Event system for reading challenges
-type ChallengeListener = (challenge: ReadingChallenge) => void;
+type ChallengeListener = (_challenge: ReadingChallenge) => void;
 const challengeListeners: Set<ChallengeListener> = new Set();
 
 /**
@@ -197,22 +198,8 @@ export function CompletionToast(): React.ReactElement | null {
     ? Object.values(progress.docs).filter((d) => d.completed).length
     : 0;
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
-      e.preventDefault();
-      dismissToast();
-    }
-  };
-
   return (
-    <div
-      className="completion-toast"
-      role="alert"
-      aria-live="polite"
-      onClick={dismissToast}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-    >
+    <div className="completion-toast" role="alert" aria-live="polite">
       <div className="completion-toast-content">
         <div className="completion-toast-icon completion-toast-icon--success">
           <span role="img" aria-label="Checkmark">
@@ -225,7 +212,9 @@ export function CompletionToast(): React.ReactElement | null {
             {formatDocTitle(completedDoc.docId)}
           </div>
           {completedDoc.message && (
-            <div className="completion-toast-message">{completedDoc.message}</div>
+            <div className="completion-toast-message">
+              {completedDoc.message}
+            </div>
           )}
           <div className="completion-toast-stats">
             {totalCompleted} document{totalCompleted !== 1 ? "s" : ""} read
@@ -265,13 +254,6 @@ export function ChallengeToast(): React.ReactElement | null {
     return null;
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
-      e.preventDefault();
-      dismissToast();
-    }
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     dismissToast();
@@ -285,8 +267,6 @@ export function ChallengeToast(): React.ReactElement | null {
       className="completion-toast completion-toast--challenge"
       role="alert"
       aria-live="assertive"
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
     >
       <div className="completion-toast-content">
         <div className="completion-toast-icon completion-toast-icon--challenge">
@@ -302,8 +282,8 @@ export function ChallengeToast(): React.ReactElement | null {
             {formatDocTitle(challenge.docId)}
           </div>
           <div className="completion-toast-message completion-toast-message--challenge">
-            You spent {timeSpentSec}s on a ~{Math.round(expectedSec / 60)} min read.
-            No completion credit for speed-scrolling!
+            You spent {timeSpentSec}s on a ~{Math.round(expectedSec / 60)} min
+            read. No completion credit for speed-scrolling!
           </div>
           <div className="completion-toast-actions">
             <button
@@ -311,7 +291,7 @@ export function ChallengeToast(): React.ReactElement | null {
               className="completion-toast-action completion-toast-action--primary"
               onClick={scrollToTop}
             >
-              Fine, I'll read it properly
+              Fine, I&apos;ll read it properly
             </button>
             <button
               type="button"
