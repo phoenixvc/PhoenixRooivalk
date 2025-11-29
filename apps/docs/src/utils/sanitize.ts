@@ -210,8 +210,13 @@ export function escapeHtml(text: string): string {
  */
 export function stripHtml(html: string): string {
   if (typeof window === "undefined") {
-    // Server-side: use regex
-    return html.replace(/<[^>]*>/g, "");
+    // Server-side: repeatedly remove tags until none remain
+    let prev;
+    do {
+      prev = html;
+      html = html.replace(/<[^>]*>/g, "");
+    } while (html !== prev);
+    return html;
   }
 
   const div = document.createElement("div");
