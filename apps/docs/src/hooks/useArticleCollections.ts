@@ -18,7 +18,7 @@ import {
   COLLECTION_COLORS,
   COLLECTION_ICONS,
 } from "../types/news";
-import { aiService, ReadingRecommendation } from "../services/aiService";
+import { aiService } from "../services/aiService";
 
 const STORAGE_KEY = "phoenix-article-collections";
 
