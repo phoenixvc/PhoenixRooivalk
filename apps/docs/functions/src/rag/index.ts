@@ -30,3 +30,16 @@ export { askDocumentation, getSuggestedQuestions, queryWithRAG } from "./query";
 
 // Export query types
 export type { RAGResponse } from "./query";
+
+// Export hybrid search functions (Phase 2.3)
+export {
+  hybridSearch,
+  smartSearch,
+  getSearchStats,
+} from "./hybrid-search";
+
+// Export hybrid search types
+export type {
+  HybridSearchOptions,
+  HybridSearchResult,
+} from "./hybrid-search";

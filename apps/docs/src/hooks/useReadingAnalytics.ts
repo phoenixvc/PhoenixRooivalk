@@ -6,11 +6,13 @@
  * - Most-read topics
  * - Reading streak tracking
  * - Weekly/monthly summaries
+ * - AI-powered insights (Wave 3)
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { NewsCategory, NEWS_CATEGORY_CONFIG } from "../types/news";
+import { aiService } from "../services/aiService";
 
 interface ReadingSession {
   articleId: string;
@@ -49,6 +51,17 @@ interface TopicStats {
   topic: string;
   count: number;
   lastRead: string;
+}
+
+/**
+ * AI-generated reading insights
+ */
+export interface AIReadingInsights {
+  summary: string;
+  recommendations: string[];
+  learningPath: string;
+  motivation: string;
+  confidence: number;
 }
 
 interface ReadingAnalytics {
@@ -179,11 +192,15 @@ export function useReadingAnalytics(): {
     topics?: string[],
   ) => void;
   setDailyGoal: (minutes: number) => void;
+  // AI-powered insights (Wave 3)
+  generateAIInsights: () => Promise<AIReadingInsights>;
+  isGeneratingInsights: boolean;
 } {
   const { user } = useAuth();
   const [data, setData] = useState(() => getStoredAnalytics());
   const [dailyGoal, setDailyGoalState] = useState(DEFAULT_DAILY_GOAL);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGeneratingInsights, setIsGeneratingInsights] = useState(false);
 
   // Load daily goal
   useEffect(() => {
@@ -410,11 +427,128 @@ export function useReadingAnalytics(): {
     };
   }, [data, dailyGoal]);
 
+  /**
+   * AI-powered: Generate personalized insights based on reading analytics
+   */
+  const generateAIInsights = useCallback(async (): Promise<AIReadingInsights> => {
+    setIsGeneratingInsights(true);
+
+    try {
+      // Build context from analytics
+      const topCategories = analytics.categoryStats
+        .slice(0, 3)
+        .map((c) => c.label)
+        .join(", ");
+
+      const topTopicsStr = analytics.topTopics
+        .slice(0, 5)
+        .map((t) => t.topic)
+        .join(", ");
+
+      const analyticsContext = `
+User Reading Profile:
+- Total reading time: ${formatReadingTime(analytics.totalReadingTimeMs)}
+- Articles read: ${analytics.totalArticlesRead}
+- Articles completed: ${analytics.totalArticlesCompleted}
+- Current streak: ${analytics.streak.currentStreak} days
+- Longest streak: ${analytics.streak.longestStreak} days
+- Top categories: ${topCategories || "None yet"}
+- Top topics: ${topTopicsStr || "None yet"}
+- Weekly progress: ${analytics.weekOverWeekChange > 0 ? "+" : ""}${analytics.weekOverWeekChange.toFixed(0)}% vs last week
+- Daily goal: ${analytics.dailyGoalMinutes} minutes
+- Today's progress: ${formatReadingTime(analytics.todayProgressMs)}
+      `.trim();
+
+      const prompt = `
+Based on this reading analytics data, provide personalized insights:
+
+${analyticsContext}
+
+Generate:
+1. A brief summary (1-2 sentences) of their reading patterns
+2. 2-3 specific recommendations for what to read next
+3. A suggested learning path based on their interests
+4. A motivational message about their progress
+
+Keep responses concise and actionable.
+      `;
+
+      const result = await aiService.askDocumentation(prompt, {
+        format: "detailed",
+      });
+
+      // Parse the AI response
+      const lines = result.answer.split("\n").filter((l) => l.trim());
+
+      // Extract summary (first substantial paragraph)
+      const summary =
+        lines.find((l) => l.length > 30 && !l.startsWith("-") && !l.startsWith("•")) ||
+        "You're making great progress with your reading!";
+
+      // Extract recommendations (bullet points)
+      const recommendations: string[] = [];
+      lines
+        .filter((l) => l.trim().startsWith("-") || l.trim().startsWith("•"))
+        .slice(0, 3)
+        .forEach((l) => {
+          recommendations.push(l.replace(/^[-•]\s*/, "").trim());
+        });
+
+      // Extract learning path
+      const learningPath =
+        lines.find(
+          (l) => l.toLowerCase().includes("path") || l.toLowerCase().includes("learn"),
+        ) || "Continue exploring topics that interest you!";
+
+      // Extract motivation
+      const motivation =
+        lines.find(
+          (l) =>
+            l.toLowerCase().includes("great") ||
+            l.toLowerCase().includes("keep") ||
+            l.toLowerCase().includes("progress"),
+        ) || "Keep up the great work!";
+
+      return {
+        summary: summary.substring(0, 300),
+        recommendations:
+          recommendations.length > 0
+            ? recommendations
+            : ["Explore technical documentation", "Review API guides"],
+        learningPath: learningPath.substring(0, 200),
+        motivation: motivation.substring(0, 150),
+        confidence:
+          result.confidence === "high"
+            ? 0.9
+            : result.confidence === "medium"
+              ? 0.7
+              : 0.5,
+      };
+    } catch (error) {
+      console.warn("Failed to generate AI insights:", error);
+      return {
+        summary: `You've read ${analytics.totalArticlesRead} articles with a ${analytics.streak.currentStreak}-day streak!`,
+        recommendations: [
+          "Continue with your top categories",
+          "Explore related topics",
+        ],
+        learningPath: "Keep building your knowledge base!",
+        motivation: "Great progress! Keep reading to earn more XP.",
+        confidence: 0,
+      };
+    } finally {
+      setIsGeneratingInsights(false);
+    }
+  }, [analytics]);
+
   return {
     analytics,
     isLoading,
     recordReading,
     setDailyGoal,
+    // AI-powered insights
+    generateAIInsights,
+    isGeneratingInsights,
   };
 }
 
