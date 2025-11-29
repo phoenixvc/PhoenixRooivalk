@@ -29,8 +29,8 @@ Phoenix Rooivalk operates two distinct brands sharing core technology:
 security. The company is currently in mechanical prototype development,
 targeting a first integrated test in Q1 2026.
 
-Year 1 focuses on completing prototype development, launching SkySnare™ D2C,
-and preparing AeroNet™ for enterprise pilots.
+Year 1 focuses on completing prototype development, launching SkySnare™ D2C, and
+preparing AeroNet™ for enterprise pilots.
 
 ### Year 1 Objectives
 
@@ -144,7 +144,7 @@ insurance requirements.
 
 | Activity                                          | Status  |
 | ------------------------------------------------- | ------- |
-| 3,500 cumulative SkySnare™ units shipped         | Target  |
+| 3,500 cumulative SkySnare™ units shipped          | Target  |
 | Return rate <3%, warranty claims <1%              | Target  |
 | Submit enterprise safety case and insurance model | Planned |
 | FAA meetings and SORA documentation               | Planned |

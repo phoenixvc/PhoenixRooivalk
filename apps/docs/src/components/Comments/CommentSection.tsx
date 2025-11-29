@@ -26,15 +26,12 @@ import {
   organizeIntoThreads,
 } from "../../services/commentService";
 import { isFirebaseConfigured } from "../../services/firebase";
-import type {
-  Comment,
-  CommentThread,
-  UpdateCommentInput,
-} from "../../types/comments";
 import { CommentForm } from "./CommentForm";
 import { CommentItem } from "./CommentItem";
 import { EditCommentModal } from "./EditCommentModal";
 import styles from "./Comments.module.css";
+
+import type { Comment, UpdateCommentInput } from "../../types/comments";
 
 interface CommentSectionProps {
   pageId: string;
@@ -64,7 +61,7 @@ export function CommentSection({
   // Check if current user is admin
   const isAdmin = Boolean(
     user?.email &&
-      ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
+    ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
   );
 
   // Get the current page URL
@@ -321,11 +318,7 @@ export function CommentSection({
               isAdmin={isAdmin}
               isOptimistic={thread.id === optimisticComment?.id}
               currentUserId={user?.uid}
-              onEdit={
-                thread.author.uid === user?.uid
-                  ? () => handleEdit(thread)
-                  : undefined
-              }
+              onEdit={thread.author.uid === user?.uid ? handleEdit : undefined}
               onDelete={
                 thread.author.uid === user?.uid || isAdmin
                   ? handleDelete

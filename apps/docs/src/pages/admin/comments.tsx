@@ -391,7 +391,7 @@ export default function CommentsAdminDashboard(): React.ReactElement {
             className={styles.modalOverlay}
             onClick={() => setSelectedComment(null)}
             onKeyDown={(e) => {
-              if (e.key === 'Escape') {
+              if (e.key === "Escape") {
                 setSelectedComment(null);
               }
             }}
