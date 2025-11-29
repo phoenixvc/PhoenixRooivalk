@@ -195,14 +195,31 @@
           // Build list items safely using DOM manipulation
           // Allowed URL path patterns for offline articles
           const allowedPathPatterns = ['/news', '/articles', '/docs', '/offline'];
+          
+          // Validate and normalize URL to prevent path traversal attacks
+          function isValidPath(url) {
+            try {
+              // Create a URL object to properly parse the path
+              const parsed = new URL(url, window.location.origin);
+              // Only allow same-origin URLs
+              if (parsed.origin !== window.location.origin) {
+                return false;
+              }
+              // Normalize the pathname to resolve any ../ sequences
+              const normalizedPath = parsed.pathname;
+              // Check if the normalized path starts with an allowed pattern
+              return allowedPathPatterns.some(pattern => normalizedPath.startsWith(pattern));
+            } catch {
+              return false;
+            }
+          }
+          
           articles.forEach(article => {
             const li = document.createElement('li');
             const a = document.createElement('a');
             // Validate URL - only allow expected path patterns to prevent open redirects
             const url = article.url || '/news?article=' + encodeURIComponent(article.id || '');
-            const isAllowedPath = url.startsWith('/') && 
-              allowedPathPatterns.some(pattern => url.startsWith(pattern));
-            if (isAllowedPath) {
+            if (isValidPath(url)) {
               a.href = url;
             } else {
               // Default to news page if URL doesn't match expected patterns

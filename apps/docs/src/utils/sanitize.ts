@@ -225,7 +225,12 @@ export function stripHtml(html: string): string {
     ALLOWED_ATTR: [],
     KEEP_CONTENT: true,
   });
-  return sanitized;
+  // Convert HTML entities back to plain text by using a temporary element
+  const div = document.createElement("div");
+  div.textContent = sanitized;
+  // Since we set textContent, no HTML parsing happens, but we need to decode entities
+  div.innerHTML = sanitized;
+  return div.textContent || div.innerText || "";
 }
 
 /**
