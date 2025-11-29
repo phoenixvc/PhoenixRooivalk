@@ -15,8 +15,14 @@ const WORDS_PER_MINUTE = 200;
 export function calculateReadingTime(content: string): number {
   if (!content) return 1;
 
-  // Strip HTML tags for accurate word count
-  const text = content.replace(/<[^>]*>/g, "").trim();
+  // Strip HTML tags for accurate word count, replacing recursively
+  let prev;
+  let text = content;
+  do {
+    prev = text;
+    text = text.replace(/<[^>]*>/g, "");
+  } while (text !== prev);
+  text = text.trim();
 
   // Count words (split by whitespace)
   const wordCount = text.split(/\s+/).filter(Boolean).length;
