@@ -27,7 +27,8 @@ specifications, or technical details.`,
       },
       category: {
         type: "string",
-        description: "Optional category filter (e.g., 'technical', 'specifications')",
+        description:
+          "Optional category filter (e.g., 'technical', 'specifications')",
       },
       limit: {
         type: "number",
@@ -37,7 +38,11 @@ specifications, or technical details.`,
     required: ["query"],
   },
   func: async (input: unknown) => {
-    const { query, category, limit = 5 } = input as {
+    const {
+      query,
+      category,
+      limit = 5,
+    } = input as {
       query: string;
       category?: string;
       limit?: number;
@@ -155,7 +160,8 @@ Use this for any numerical computations, unit conversions, or mathematical opera
     properties: {
       expression: {
         type: "string",
-        description: "Mathematical expression to evaluate (e.g., '2 + 2', '100 * 0.15')",
+        description:
+          "Mathematical expression to evaluate (e.g., '2 + 2', '100 * 0.15')",
       },
     },
     required: ["expression"],

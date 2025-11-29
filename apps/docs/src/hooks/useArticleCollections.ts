@@ -13,10 +13,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import {
-  ArticleCollection,
-  COLLECTION_COLORS,
-} from "../types/news";
+import { ArticleCollection, COLLECTION_COLORS } from "../types/news";
 import { aiService } from "../services/aiService";
 
 const STORAGE_KEY = "phoenix-article-collections";
@@ -159,7 +156,9 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
         id: generateId(),
         name: name.trim(),
         description: options?.description,
-        color: options?.color || COLLECTION_COLORS[collections.length % COLLECTION_COLORS.length],
+        color:
+          options?.color ||
+          COLLECTION_COLORS[collections.length % COLLECTION_COLORS.length],
         icon: options?.icon || "folder",
         articleIds: options?.articleIds || [],
         isDefault: false,
@@ -175,21 +174,18 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
   );
 
   // Rename a collection
-  const renameCollection = useCallback(
-    (id: string, name: string): boolean => {
-      if (!name.trim()) return false;
+  const renameCollection = useCallback((id: string, name: string): boolean => {
+    if (!name.trim()) return false;
 
-      setCollections((prev) =>
-        prev.map((col) =>
-          col.id === id
-            ? { ...col, name: name.trim(), updatedAt: new Date().toISOString() }
-            : col,
-        ),
-      );
-      return true;
-    },
-    [],
-  );
+    setCollections((prev) =>
+      prev.map((col) =>
+        col.id === id
+          ? { ...col, name: name.trim(), updatedAt: new Date().toISOString() }
+          : col,
+      ),
+    );
+    return true;
+  }, []);
 
   // Delete a collection
   const deleteCollection = useCallback((id: string): boolean => {
@@ -372,7 +368,8 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
       try {
         // Get recommendations based on the first article in the collection
         const primaryArticle = collection.articleIds[0];
-        const result = await aiService.getReadingRecommendations(primaryArticle);
+        const result =
+          await aiService.getReadingRecommendations(primaryArticle);
 
         if (!result.recommendations) {
           return [];
@@ -428,7 +425,12 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
 
         return {
           name: suggestedName || "My Collection",
-          confidence: result.confidence === "high" ? 0.9 : result.confidence === "medium" ? 0.7 : 0.5,
+          confidence:
+            result.confidence === "high"
+              ? 0.9
+              : result.confidence === "medium"
+                ? 0.7
+                : 0.5,
           alternatives: [],
         };
       } catch (error) {

@@ -36,6 +36,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Fallback Page | `static/offline.html` | Display when user is offline |
 
 **Technical Implementation**:
+
 - Service worker caches articles using Cache API
 - IndexedDB stores article metadata for quick access
 - Background sync queues downloads when connectivity is restored
@@ -52,6 +53,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Cloud Function | `news/notifications.ts` | Server-side notification dispatch |
 
 **Features**:
+
 - Real-time push notifications for comment replies
 - Weekly email digest summarizing activity
 - Configurable notification preferences
@@ -67,6 +69,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Type | `types/news.ts` | ArticleCollection interface |
 
 **Features**:
+
 - Create, rename, and delete collections
 - Move articles between collections
 - Default "Read Later" and "Favorites" collections
@@ -82,6 +85,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Service | `firebase.ts` | Firestore persistence layer |
 
 **Features**:
+
 - Per-document completion tracking
 - Time spent reading analytics
 - Cross-device sync via Firebase
@@ -97,6 +101,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Utility | `utils/share.ts` | Enhanced share functionality |
 
 **Features**:
+
 - Open Graph meta tags for Facebook/LinkedIn
 - Twitter Card support
 - Custom preview images per document
@@ -112,6 +117,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Utility | `utils/export.ts` | Export logic for Markdown/JSON |
 
 **Supported Exports**:
+
 - Articles: Markdown with frontmatter
 - Reading history: JSON with timestamps
 - Comments: Threaded JSON structure
@@ -127,6 +133,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Component | `KeyboardShortcutsModal.tsx` | Help modal showing all shortcuts |
 
 **Available Shortcuts**:
+
 - `?` - Show shortcuts help
 - `/` - Focus search
 - `j/k` - Navigate articles
@@ -143,6 +150,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Hook | `useDarkModeSchedule.ts` | Schedule-based theme management |
 
 **Features**:
+
 - Time-based scheduling (e.g., dark mode 6 PM - 6 AM)
 - System preference following
 - Manual override option
@@ -158,6 +166,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Component | `DraftIndicator.tsx` | Visual indicator for saved drafts |
 
 **Features**:
+
 - LocalStorage persistence
 - Debounced auto-save (500ms)
 - Visual draft indicator
@@ -173,6 +182,7 @@ The following 10 features were implemented to enhance user experience and engage
 | Hook | `useReadingAnalytics.ts` | Analytics aggregation and computation |
 
 **Metrics Tracked**:
+
 - Articles read per category
 - Reading time statistics
 - Reading streaks (consecutive days)
@@ -195,6 +205,7 @@ analyzeCompetitors({ competitor: string, aspects?: string[] })
 ```
 
 **Features**:
+
 - Multi-aspect competitor analysis
 - Market positioning insights
 - Technology stack comparison
@@ -209,6 +220,7 @@ generateSWOT({ topic: string, context?: string })
 ```
 
 **Output**:
+
 - Strengths analysis
 - Weaknesses identification
 - Opportunities assessment
@@ -227,6 +239,7 @@ getReadingRecommendations({
 ```
 
 **Features**:
+
 - User history-based recommendations
 - Content similarity matching
 - Learning path generation
@@ -245,6 +258,7 @@ suggestDocumentImprovements({
 ```
 
 **Features**:
+
 - Content quality analysis
 - Clarity improvements
 - Technical accuracy checks
@@ -259,6 +273,7 @@ getMarketInsights({ market: string, region?: string })
 ```
 
 **Coverage**:
+
 - Market size and growth
 - Key players analysis
 - Trend identification
@@ -273,6 +288,7 @@ summarizeContent({ content: string, maxLength?: number })
 ```
 
 **Features**:
+
 - Extractive and abstractive summarization
 - Configurable summary length
 - Key point extraction
@@ -354,6 +370,7 @@ ingestNews({ sources: NewsSource[], categories: string[] })
 ```
 
 **Features**:
+
 - Multi-source aggregation
 - Category classification (AI-powered)
 - Duplicate detection
@@ -366,6 +383,7 @@ getPersonalizedNews({ userId: string, limit?: number })
 ```
 
 **Algorithm**:
+
 1. User reading history analysis
 2. Category preference weighting
 3. Content freshness scoring
@@ -378,6 +396,7 @@ trackNewsEngagement({ articleId: string, action: string })
 ```
 
 **Tracked Events**:
+
 - View, read, share, bookmark
 - Time spent reading
 - Scroll depth
@@ -415,6 +434,7 @@ interface PromptTemplate {
 ### Context Injection
 
 All prompts include Phoenix Rooivalk context:
+
 - Company description
 - Product capabilities
 - Target markets

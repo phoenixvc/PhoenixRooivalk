@@ -32,10 +32,7 @@ function getStoredPreference(): DarkModePreference {
   if (typeof window === "undefined") return "system";
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (
-      stored &&
-      ["system", "light", "dark", "schedule"].includes(stored)
-    ) {
+    if (stored && ["system", "light", "dark", "schedule"].includes(stored)) {
       return stored as DarkModePreference;
     }
   } catch {

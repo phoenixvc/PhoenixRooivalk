@@ -160,7 +160,10 @@ export const getReadingRecommendations = functions.https.onCall(
     const unreadDocsStr = (
       unreadDocs as Array<{ id: string; title?: string; category?: string }>
     )
-      .map((d) => `${d.id} (${d.title || "Untitled"} - ${d.category || "General"})`)
+      .map(
+        (d) =>
+          `${d.id} (${d.title || "Untitled"} - ${d.category || "General"})`,
+      )
       .join("\n");
 
     const userPrompt = buildUserPrompt(RECOMMENDATIONS_PROMPT, {

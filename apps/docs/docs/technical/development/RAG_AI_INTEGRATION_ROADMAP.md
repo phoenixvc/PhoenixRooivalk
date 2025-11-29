@@ -63,6 +63,7 @@ With the core AI infrastructure in place (AIPanel, RAG system, vector search, Az
 **Purpose**: Suggest related articles for each bookmark collection based on semantic similarity.
 
 **Implementation**:
+
 ```typescript
 /**
  * Suggest articles for a collection based on its current contents
@@ -87,6 +88,7 @@ export async function suggestArticlesForCollection(
 ```
 
 **Value**:
+
 - Auto-populate "You might also like" suggestions
 - Increases content discovery
 - Higher engagement with documentation
@@ -102,6 +104,7 @@ export async function suggestArticlesForCollection(
 **Purpose**: AI-powered grammar, clarity, and tone suggestions for comment drafts.
 
 **Implementation**:
+
 ```typescript
 /**
  * Enhance a comment draft with AI suggestions
@@ -131,6 +134,7 @@ export async function enhanceCommentDraft(
 **UI Component**: Add "Enhance with AI" button next to DraftIndicator
 
 **Value**:
+
 - Better quality comments
 - Faster comment writing
 - Improved community discussions
@@ -148,6 +152,7 @@ export async function enhanceCommentDraft(
 **Purpose**: Personalized AI-written summaries for weekly email digests.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI summary for weekly digest
@@ -174,6 +179,7 @@ export async function generateDigestSummary(
 ```
 
 **Value**:
+
 - Personalized digest experience
 - Higher email open rates
 - Better user engagement
@@ -189,6 +195,7 @@ export async function generateDigestSummary(
 **Purpose**: Smart "Download related articles" feature using vector search.
 
 **Implementation**:
+
 ```typescript
 /**
  * Download semantically related articles for offline reading
@@ -223,6 +230,7 @@ export async function downloadRelatedArticles(
 **UI**: Add "Download bundle" button that caches article + related content
 
 **Value**:
+
 - Smarter offline experience
 - Complete topic bundles
 - Better offline reading
@@ -238,6 +246,7 @@ export async function downloadRelatedArticles(
 **Purpose**: Implement token budget management for optimal context usage.
 
 **Implementation**:
+
 ```typescript
 /**
  * Build context within token budget
@@ -294,6 +303,7 @@ export function buildContextWithBudget(
 ```
 
 **Value**:
+
 - 20%+ token efficiency improvement
 - Lower API costs
 - Faster responses
@@ -311,6 +321,7 @@ export function buildContextWithBudget(
 **Purpose**: Generate personalized insights from reading patterns.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI insights from reading analytics
@@ -343,6 +354,7 @@ export async function generateReadingInsights(
 **UI**: Add "Insights" tab to reading analytics dashboard
 
 **Value**:
+
 - Personalized learning guidance
 - Better content discovery
 - Increased engagement
@@ -358,6 +370,7 @@ export async function generateReadingInsights(
 **Purpose**: Add AI executive summaries to exported documents.
 
 **Implementation**:
+
 ```typescript
 /**
  * Export with AI-generated summary
@@ -392,6 +405,7 @@ export async function exportWithAISummary(
 ```
 
 **Value**:
+
 - Executive summaries in exports
 - Quick reference for exported content
 - Professional export quality
@@ -407,6 +421,7 @@ export async function exportWithAISummary(
 **Purpose**: Combine vector and keyword search for better relevance.
 
 **Implementation**:
+
 ```typescript
 /**
  * Hybrid search combining vector and keyword matching
@@ -478,6 +493,7 @@ function combineResults(
 ```
 
 **Value**:
+
 - 15%+ relevance improvement
 - Better handling of exact matches
 - More accurate search results
@@ -495,6 +511,7 @@ function combineResults(
 **Purpose**: Auto-generate compelling share text.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate optimized share text for social platforms
@@ -527,6 +544,7 @@ export async function generateShareText(
 **Purpose**: Suggest collection names based on article contents.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI-suggested collection name
@@ -565,6 +583,7 @@ export async function suggestCollectionName(
 **Purpose**: Set up LangChain infrastructure for advanced AI features.
 
 **Directory Structure**:
+
 ```
 functions/src/langchain/
 ├── index.ts           # Exports
@@ -580,6 +599,7 @@ functions/src/langchain/
 ```
 
 **Implementation** (llm.ts):
+
 ```typescript
 import { AzureChatOpenAI } from "@langchain/openai";
 import * as functions from "firebase-functions";
@@ -660,6 +680,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 ## Success Metrics
 
 ### Wave 1
+
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | Collection click-through | +15% | Analytics |
@@ -667,6 +688,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 | Feature adoption | >30% users | Usage tracking |
 
 ### Wave 2
+
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | Email open rate | +10% | Email analytics |
@@ -674,6 +696,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 | Token efficiency | -20% | API metrics |
 
 ### Wave 3
+
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | Insights engagement | >40% | Click tracking |
@@ -681,6 +704,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 | Search relevance | +15% | User feedback |
 
 ### Wave 4
+
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | Social shares | +20% | Share tracking |
@@ -717,6 +741,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 ## Implementation Status
 
 ### ✅ Wave 1 - Completed
+
 - **Smart Collection Recommendations** (`src/hooks/useArticleCollections.ts`)
   - Added `suggestArticlesForCollection()` function
   - Added `suggestCollectionName()` for AI-curated names
@@ -725,6 +750,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
   - Added `isEnhancing` state for UI feedback
 
 ### ✅ Wave 2 - Completed
+
 - **Digest AI Summaries** (`src/services/digestService.ts`)
   - Added `generateAIDigestSummary()` function
   - Integrated AI summary section in email formatting
@@ -736,6 +762,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
   - `estimateTokens()`, `truncateToTokens()`, `buildContextWithBudget()`
 
 ### ✅ Wave 3 - Completed
+
 - **Reading Analytics Insights** (`src/hooks/useReadingAnalytics.ts`)
   - Added `generateAIInsights()` for personalized recommendations
   - Returns summary, recommendations, learning path, motivation
@@ -747,6 +774,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
   - `hybridSearch()`, `smartSearch()`, `getSearchStats()`
 
 ### ✅ Wave 4 - Completed
+
 - **AI Share Text Generation** (`src/utils/share.ts`)
   - Platform-specific share text with character limits
   - `generateAIShareText()`, `generateMultiPlatformShareText()`

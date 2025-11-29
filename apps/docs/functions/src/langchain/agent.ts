@@ -37,7 +37,9 @@ export class Agent {
     totalTokens: 0,
   };
 
-  constructor(config: Partial<AgentConfig> & { name: string; systemPrompt: string }) {
+  constructor(
+    config: Partial<AgentConfig> & { name: string; systemPrompt: string },
+  ) {
     this.config = {
       ...DEFAULT_AGENT_CONFIG,
       tools: AVAILABLE_TOOLS,
@@ -107,7 +109,8 @@ export class Agent {
 
       // Max iterations reached
       return {
-        output: "I was unable to complete the task within the allowed iterations.",
+        output:
+          "I was unable to complete the task within the allowed iterations.",
         toolsUsed,
         iterations,
         thoughts: this.config.verbose ? thoughts : undefined,

@@ -191,9 +191,7 @@ export function commentsToMarkdown(comments: ExportComment[]): string {
     lines.push(`### Comment ${index + 1}`);
     lines.push("");
     lines.push(`**Page:** ${comment.pageTitle || comment.pageUrl}`);
-    lines.push(
-      `**Date:** ${new Date(comment.createdAt).toLocaleDateString()}`,
-    );
+    lines.push(`**Date:** ${new Date(comment.createdAt).toLocaleDateString()}`);
     lines.push(`**Status:** ${comment.status}`);
     lines.push("");
     lines.push(comment.content);
@@ -357,17 +355,18 @@ export async function generateAIExportSummary(
     const collectionCount = data.collections?.length || 0;
 
     // Get sample article titles for context
-    const sampleTitles = data.articles
-      ?.slice(0, 5)
-      .map((a) => a.title)
-      .join(", ") || "None";
+    const sampleTitles =
+      data.articles
+        ?.slice(0, 5)
+        .map((a) => a.title)
+        .join(", ") || "None";
 
     // Calculate reading stats
-    const completedCount = data.readingHistory?.filter((h) => h.completed).length || 0;
-    const totalTimeMs = data.readingHistory?.reduce(
-      (sum, h) => sum + (h.timeSpentMs || 0),
-      0,
-    ) || 0;
+    const completedCount =
+      data.readingHistory?.filter((h) => h.completed).length || 0;
+    const totalTimeMs =
+      data.readingHistory?.reduce((sum, h) => sum + (h.timeSpentMs || 0), 0) ||
+      0;
 
     const exportContext = `
 Export Data Summary:
@@ -402,7 +401,9 @@ Keep it professional and concise.
 
     // Extract overview
     const overview =
-      lines.find((l) => l.length > 40 && !l.startsWith("-") && !l.startsWith("•")) ||
+      lines.find(
+        (l) => l.length > 40 && !l.startsWith("-") && !l.startsWith("•"),
+      ) ||
       `This export contains ${articleCount} articles and ${historyCount} reading history entries.`;
 
     // Extract key points

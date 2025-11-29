@@ -193,15 +193,20 @@
             list.removeChild(list.firstChild);
           }
           // Build list items safely using DOM manipulation
+          // Allowed URL path patterns for offline articles
+          const allowedPathPatterns = ['/news', '/articles', '/docs', '/offline'];
           articles.forEach(article => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            // Validate URL - only allow same-origin or expected paths
+            // Validate URL - only allow expected path patterns to prevent open redirects
             const url = article.url || '/news?article=' + encodeURIComponent(article.id || '');
-            if (url.startsWith('/') || url.startsWith(window.location.origin)) {
+            const isAllowedPath = url.startsWith('/') && 
+              allowedPathPatterns.some(pattern => url.startsWith(pattern));
+            if (isAllowedPath) {
               a.href = url;
             } else {
-              a.href = '#';
+              // Default to news page if URL doesn't match expected patterns
+              a.href = '/news?article=' + encodeURIComponent(article.id || '');
             }
             a.textContent = article.title || 'Untitled Article';
             li.appendChild(a);

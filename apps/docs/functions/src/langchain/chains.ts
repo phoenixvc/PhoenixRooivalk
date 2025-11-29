@@ -55,7 +55,9 @@ abstract class BaseChain {
     try {
       const response = await provider.chat({
         messages: [
-          ...(systemPrompt ? [{ role: "system" as const, content: systemPrompt }] : []),
+          ...(systemPrompt
+            ? [{ role: "system" as const, content: systemPrompt }]
+            : []),
           { role: "user" as const, content: prompt },
         ],
         temperature: this.config.temperature,
@@ -102,9 +104,7 @@ abstract class BaseChain {
       return "";
     }
 
-    return this.messages
-      .map((m) => `${m.role}: ${m.content}`)
-      .join("\n");
+    return this.messages.map((m) => `${m.role}: ${m.content}`).join("\n");
   }
 
   /**

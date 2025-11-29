@@ -113,9 +113,7 @@ export async function updateDigestPreferences(
       userId,
       email,
       frequency,
-      lastDigestSent: existing.exists()
-        ? existing.data().lastDigestSent
-        : null,
+      lastDigestSent: existing.exists() ? existing.data().lastDigestSent : null,
       enabled: frequency !== "none",
       createdAt: existing.exists() ? existing.data().createdAt : now,
       updatedAt: now,
@@ -326,7 +324,8 @@ Keep it concise and actionable.
 
     return {
       overview: overview.substring(0, 200),
-      highlights: highlights.length > 0 ? highlights : ["Great activity this period!"],
+      highlights:
+        highlights.length > 0 ? highlights : ["Great activity this period!"],
       recommendation: recommendation.substring(0, 200),
     };
   } catch (error) {
@@ -378,8 +377,7 @@ export async function recordDigestSent(
  * Format digest as HTML email
  */
 export function formatDigestEmail(digest: DigestData): string {
-  const periodLabel =
-    digest.frequency === "daily" ? "Daily" : "Weekly";
+  const periodLabel = digest.frequency === "daily" ? "Daily" : "Weekly";
 
   return `
 <!DOCTYPE html>
@@ -469,8 +467,7 @@ export function formatDigestEmail(digest: DigestData): string {
  * Format digest as plain text
  */
 export function formatDigestText(digest: DigestData): string {
-  const periodLabel =
-    digest.frequency === "daily" ? "Daily" : "Weekly";
+  const periodLabel = digest.frequency === "daily" ? "Daily" : "Weekly";
 
   let text = `Your ${periodLabel} Comment Digest\n`;
   text += `${"=".repeat(40)}\n\n`;

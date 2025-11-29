@@ -290,7 +290,8 @@ Provide:
           enhancedText = textMatch[1].trim();
         } else if (lines.length > 0) {
           // Use the first substantial line as the enhanced text
-          enhancedText = lines.find((l) => l.trim().length > 20)?.trim() || draft;
+          enhancedText =
+            lines.find((l) => l.trim().length > 20)?.trim() || draft;
         }
 
         // Extract suggestions/changes from the response
@@ -300,7 +301,9 @@ Provide:
         if (changesMatch) {
           const changeLines = changesMatch[1]
             .split("\n")
-            .filter((l) => l.trim().startsWith("-") || l.trim().startsWith("•"));
+            .filter(
+              (l) => l.trim().startsWith("-") || l.trim().startsWith("•"),
+            );
           suggestions.push(
             ...changeLines.map((l) => l.replace(/^[-•]\s*/, "").trim()),
           );

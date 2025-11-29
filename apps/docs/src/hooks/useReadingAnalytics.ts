@@ -258,7 +258,8 @@ export function useReadingAnalytics(): {
             ...todayData,
             totalTimeMs: todayData.totalTimeMs + durationMs,
             articlesRead: todayData.articlesRead + 1,
-            articlesCompleted: todayData.articlesCompleted + (completed ? 1 : 0),
+            articlesCompleted:
+              todayData.articlesCompleted + (completed ? 1 : 0),
             categories: {
               ...todayData.categories,
               [category]: (todayData.categories[category] || 0) + durationMs,
@@ -375,7 +376,8 @@ export function useReadingAnalytics(): {
           color: config?.color || "#6B7280",
           totalTimeMs: time,
           articleCount: categoryCounts[category] || 0,
-          percentage: totalCategoryTime > 0 ? (time / totalCategoryTime) * 100 : 0,
+          percentage:
+            totalCategoryTime > 0 ? (time / totalCategoryTime) * 100 : 0,
         };
       })
       .sort((a, b) => b.totalTimeMs - a.totalTimeMs);
@@ -423,29 +425,31 @@ export function useReadingAnalytics(): {
       weekOverWeekChange,
       dailyGoalMinutes: dailyGoal,
       todayProgressMs: todayData?.totalTimeMs || 0,
-      goalCompletedToday: (todayData?.totalTimeMs || 0) >= dailyGoal * 60 * 1000,
+      goalCompletedToday:
+        (todayData?.totalTimeMs || 0) >= dailyGoal * 60 * 1000,
     };
   }, [data, dailyGoal]);
 
   /**
    * AI-powered: Generate personalized insights based on reading analytics
    */
-  const generateAIInsights = useCallback(async (): Promise<AIReadingInsights> => {
-    setIsGeneratingInsights(true);
+  const generateAIInsights =
+    useCallback(async (): Promise<AIReadingInsights> => {
+      setIsGeneratingInsights(true);
 
-    try {
-      // Build context from analytics
-      const topCategories = analytics.categoryStats
-        .slice(0, 3)
-        .map((c) => c.label)
-        .join(", ");
+      try {
+        // Build context from analytics
+        const topCategories = analytics.categoryStats
+          .slice(0, 3)
+          .map((c) => c.label)
+          .join(", ");
 
-      const topTopicsStr = analytics.topTopics
-        .slice(0, 5)
-        .map((t) => t.topic)
-        .join(", ");
+        const topTopicsStr = analytics.topTopics
+          .slice(0, 5)
+          .map((t) => t.topic)
+          .join(", ");
 
-      const analyticsContext = `
+        const analyticsContext = `
 User Reading Profile:
 - Total reading time: ${formatReadingTime(analytics.totalReadingTimeMs)}
 - Articles read: ${analytics.totalArticlesRead}
@@ -459,7 +463,7 @@ User Reading Profile:
 - Today's progress: ${formatReadingTime(analytics.todayProgressMs)}
       `.trim();
 
-      const prompt = `
+        const prompt = `
 Based on this reading analytics data, provide personalized insights:
 
 ${analyticsContext}
@@ -473,73 +477,76 @@ Generate:
 Keep responses concise and actionable.
       `;
 
-      const result = await aiService.askDocumentation(prompt, {
-        format: "detailed",
-      });
-
-      // Parse the AI response
-      const lines = result.answer.split("\n").filter((l) => l.trim());
-
-      // Extract summary (first substantial paragraph)
-      const summary =
-        lines.find((l) => l.length > 30 && !l.startsWith("-") && !l.startsWith("•")) ||
-        "You're making great progress with your reading!";
-
-      // Extract recommendations (bullet points)
-      const recommendations: string[] = [];
-      lines
-        .filter((l) => l.trim().startsWith("-") || l.trim().startsWith("•"))
-        .slice(0, 3)
-        .forEach((l) => {
-          recommendations.push(l.replace(/^[-•]\s*/, "").trim());
+        const result = await aiService.askDocumentation(prompt, {
+          format: "detailed",
         });
 
-      // Extract learning path
-      const learningPath =
-        lines.find(
-          (l) => l.toLowerCase().includes("path") || l.toLowerCase().includes("learn"),
-        ) || "Continue exploring topics that interest you!";
+        // Parse the AI response
+        const lines = result.answer.split("\n").filter((l) => l.trim());
 
-      // Extract motivation
-      const motivation =
-        lines.find(
-          (l) =>
-            l.toLowerCase().includes("great") ||
-            l.toLowerCase().includes("keep") ||
-            l.toLowerCase().includes("progress"),
-        ) || "Keep up the great work!";
+        // Extract summary (first substantial paragraph)
+        const summary =
+          lines.find(
+            (l) => l.length > 30 && !l.startsWith("-") && !l.startsWith("•"),
+          ) || "You're making great progress with your reading!";
 
-      return {
-        summary: summary.substring(0, 300),
-        recommendations:
-          recommendations.length > 0
-            ? recommendations
-            : ["Explore technical documentation", "Review API guides"],
-        learningPath: learningPath.substring(0, 200),
-        motivation: motivation.substring(0, 150),
-        confidence:
-          result.confidence === "high"
-            ? 0.9
-            : result.confidence === "medium"
-              ? 0.7
-              : 0.5,
-      };
-    } catch (error) {
-      console.warn("Failed to generate AI insights:", error);
-      return {
-        summary: `You've read ${analytics.totalArticlesRead} articles with a ${analytics.streak.currentStreak}-day streak!`,
-        recommendations: [
-          "Continue with your top categories",
-          "Explore related topics",
-        ],
-        learningPath: "Keep building your knowledge base!",
-        motivation: "Great progress! Keep reading to earn more XP.",
-        confidence: 0,
-      };
-    } finally {
-      setIsGeneratingInsights(false);
-    }
-  }, [analytics]);
+        // Extract recommendations (bullet points)
+        const recommendations: string[] = [];
+        lines
+          .filter((l) => l.trim().startsWith("-") || l.trim().startsWith("•"))
+          .slice(0, 3)
+          .forEach((l) => {
+            recommendations.push(l.replace(/^[-•]\s*/, "").trim());
+          });
+
+        // Extract learning path
+        const learningPath =
+          lines.find(
+            (l) =>
+              l.toLowerCase().includes("path") ||
+              l.toLowerCase().includes("learn"),
+          ) || "Continue exploring topics that interest you!";
+
+        // Extract motivation
+        const motivation =
+          lines.find(
+            (l) =>
+              l.toLowerCase().includes("great") ||
+              l.toLowerCase().includes("keep") ||
+              l.toLowerCase().includes("progress"),
+          ) || "Keep up the great work!";
+
+        return {
+          summary: summary.substring(0, 300),
+          recommendations:
+            recommendations.length > 0
+              ? recommendations
+              : ["Explore technical documentation", "Review API guides"],
+          learningPath: learningPath.substring(0, 200),
+          motivation: motivation.substring(0, 150),
+          confidence:
+            result.confidence === "high"
+              ? 0.9
+              : result.confidence === "medium"
+                ? 0.7
+                : 0.5,
+        };
+      } catch (error) {
+        console.warn("Failed to generate AI insights:", error);
+        return {
+          summary: `You've read ${analytics.totalArticlesRead} articles with a ${analytics.streak.currentStreak}-day streak!`,
+          recommendations: [
+            "Continue with your top categories",
+            "Explore related topics",
+          ],
+          learningPath: "Keep building your knowledge base!",
+          motivation: "Great progress! Keep reading to earn more XP.",
+          confidence: 0,
+        };
+      } finally {
+        setIsGeneratingInsights(false);
+      }
+    }, [analytics]);
 
   return {
     analytics,

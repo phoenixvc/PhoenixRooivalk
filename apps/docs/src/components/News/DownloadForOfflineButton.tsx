@@ -27,8 +27,13 @@ export function DownloadForOfflineButton({
   variant = "icon",
   className,
 }: DownloadForOfflineButtonProps): React.ReactElement | null {
-  const { isSupported, isCaching, isArticleCached, cacheArticle, uncacheArticle } =
-    useOfflineArticles();
+  const {
+    isSupported,
+    isCaching,
+    isArticleCached,
+    cacheArticle,
+    uncacheArticle,
+  } = useOfflineArticles();
   const [showTooltip, setShowTooltip] = useState(false);
 
   if (!isSupported) return null;
@@ -85,7 +90,12 @@ export function DownloadForOfflineButton({
             fill="currentColor"
             stroke="none"
           >
-            <path d="M20 6L9 17l-5-5" stroke="currentColor" fill="none" strokeWidth="2" />
+            <path
+              d="M20 6L9 17l-5-5"
+              stroke="currentColor"
+              fill="none"
+              strokeWidth="2"
+            />
           </svg>
         ) : (
           <svg
