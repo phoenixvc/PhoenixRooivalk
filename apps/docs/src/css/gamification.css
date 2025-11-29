@@ -1359,3 +1359,76 @@
     animation: none;
   }
 }
+
+/* ================================================
+   CHALLENGE TOAST (Reading verification failure)
+   ================================================ */
+
+.completion-toast--challenge {
+  border-color: rgb(239, 68, 68);
+  cursor: default;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(239, 68, 68, 0.15);
+}
+
+.completion-toast-icon--success {
+  background: linear-gradient(135deg, rgb(34, 197, 94), rgb(22, 163, 74));
+}
+
+.completion-toast-icon--challenge {
+  background: linear-gradient(135deg, rgb(239, 68, 68), rgb(185, 28, 28));
+}
+
+.completion-toast-title--challenge {
+  color: rgb(239, 68, 68);
+}
+
+.completion-toast-message {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.completion-toast-message--challenge {
+  color: rgb(252, 165, 165);
+}
+
+.completion-toast-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.completion-toast-action {
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-align: center;
+}
+
+.completion-toast-action--primary {
+  background: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+}
+
+.completion-toast-action--primary:hover {
+  background: rgb(234, 88, 12);
+  transform: translateY(-1px);
+}
+
+.completion-toast-action--secondary {
+  background: rgba(71, 85, 105, 0.5);
+  color: rgb(148, 163, 184);
+}
+
+.completion-toast-action--secondary:hover {
+  background: rgb(71, 85, 105);
+  color: rgb(203, 213, 225);
+}

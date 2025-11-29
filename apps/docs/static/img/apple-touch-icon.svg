@@ -1,0 +1,27 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="phoenix-gradient-touch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="36" fill="#0f172a"/>
+
+  <!-- Phoenix flame/bird -->
+  <path d="M90 24 L108 54 L132 36 L120 72 L156 60 L132 96 L144 132 L108 114 L90 156 L72 114 L36 132 L48 96 L24 60 L60 72 L48 36 L72 54 L90 24 Z"
+        fill="url(#phoenix-gradient-touch)"
+        stroke="#f97316"
+        stroke-width="2"/>
+
+  <!-- Inner shield detail -->
+  <path d="M90 42 L108 60 L108 90 L90 108 L72 90 L72 60 L90 42 Z"
+        fill="none"
+        stroke="#0f172a"
+        stroke-width="4"/>
+
+  <!-- Central dot -->
+  <circle cx="90" cy="78" r="12" fill="#0f172a"/>
+  <circle cx="90" cy="78" r="6" fill="#f97316"/>
+</svg>

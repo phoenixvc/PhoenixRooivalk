@@ -59,7 +59,7 @@ const firebaseConfig = {
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.svg",
   url: "https://docs-phoenixrooivalk.netlify.app",
   baseUrl: "/",
   organizationName: "JustAGhosT",
@@ -82,6 +82,23 @@ const config: Config = {
       },
       innerHTML:
         "html,body,#__docusaurus{background-color:rgb(15,23,42)!important;min-height:100vh}",
+    },
+    // Apple touch icon for iOS
+    {
+      tagName: "link",
+      attributes: {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/img/apple-touch-icon.svg",
+      },
+    },
+    // Theme color for browser chrome
+    {
+      tagName: "meta",
+      attributes: {
+        name: "theme-color",
+        content: "#0f172a",
+      },
     },
     {
       tagName: "meta",
@@ -261,13 +278,13 @@ const config: Config = {
             },
           ],
         },
-        // News - RAG-powered personalized news
+        // News - Industry updates
         {
           to: "/news",
           label: "News",
           position: "right",
           className: "navbar__link--news",
-          "aria-label": "Industry news personalized for you",
+          "aria-label": "Industry news",
         },
         // Support - Help and FAQ
         {
@@ -276,14 +293,6 @@ const config: Config = {
           position: "right",
           className: "navbar__link--support",
           "aria-label": "Get help and support",
-        },
-        // Your Progress - compact styled link on right
-        {
-          to: "/your-progress",
-          label: "Progress",
-          position: "right",
-          className: "navbar__link--progress",
-          "aria-label": "Track your learning progress",
         },
         // Login link
         {

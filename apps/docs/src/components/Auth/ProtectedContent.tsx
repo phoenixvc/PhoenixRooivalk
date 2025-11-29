@@ -76,14 +76,43 @@ export function ProtectedContent({
     }
   }, [loading, user, isFreePage, currentUrl]);
 
-  // If Firebase not configured, show everything (local mode)
+  // If Firebase not configured, BLOCK access - require proper setup
   if (!isConfigured) {
     if (DEBUG_AUTH) {
       console.log(
-        "[ProtectedContent] Firebase not configured - showing all content",
+        "[ProtectedContent] Firebase not configured - blocking access",
       );
     }
-    return <>{children}</>;
+    return (
+      <div className="protected-content protected-content--blocked">
+        <div className="protected-content-blocked-card">
+          <div className="protected-content-blocked-icon">🔧</div>
+          <h3 className="protected-content-blocked-title">
+            Documentation Unavailable
+          </h3>
+          <p className="protected-content-blocked-description">
+            This documentation site requires authentication, but the
+            authentication service is not configured. Please contact the
+            site administrator.
+          </p>
+          <div className="protected-content-blocked-details">
+            <p>
+              <strong>For administrators:</strong> Firebase environment
+              variables need to be set in your hosting platform
+              (Netlify/Vercel) and a new deployment triggered.
+            </p>
+            <p>
+              Required variables: <code>FIREBASE_API_KEY</code>,{" "}
+              <code>FIREBASE_AUTH_DOMAIN</code>,{" "}
+              <code>FIREBASE_PROJECT_ID</code>, etc.
+            </p>
+          </div>
+          <a href="/" className="protected-content-blocked-link">
+            Return to Home
+          </a>
+        </div>
+      </div>
+    );
   }
 
   // Loading state

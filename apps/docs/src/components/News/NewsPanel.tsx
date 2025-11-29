@@ -8,6 +8,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
+import { isFirebaseConfigured } from "../../services/firebase";
 import { NewsCard } from "./NewsCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import type {
@@ -49,6 +50,9 @@ export function NewsPanel({
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>();
+
+  // Check if Firebase is configured for news service
+  const firebaseConfigured = isFirebaseConfigured();
 
   // Get user profile for personalization
   // Use knownProfile from AuthContext which contains roles, interests, focusAreas
@@ -315,7 +319,23 @@ export function NewsPanel({
         </div>
       </div>
 
-      {error && <div className="news-panel-error">{error}</div>}
+      {/* Show message if Firebase is not configured */}
+      {!firebaseConfigured && (
+        <div className="news-panel-notice">
+          <p>
+            <strong>News service requires configuration</strong>
+          </p>
+          <p>
+            The news feed is powered by Firebase Cloud Functions which are not
+            currently configured. Contact your administrator to enable this
+            feature.
+          </p>
+        </div>
+      )}
+
+      {error && firebaseConfigured && (
+        <div className="news-panel-error">{error}</div>
+      )}
 
       {isLoading &&
         generalNews.length === 0 &&

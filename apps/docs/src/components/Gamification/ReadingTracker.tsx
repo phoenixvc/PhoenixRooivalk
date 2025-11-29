@@ -2,21 +2,61 @@ import { useEffect, useCallback, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAchievements } from "./Achievements";
-import { emitDocumentCompletion } from "./CompletionToast";
+import { emitDocumentCompletion, emitReadingChallenge } from "./CompletionToast";
 
 /**
  * ReadingTracker component automatically tracks user progress through documentation pages.
- * It monitors scroll position and marks pages as read when users scroll past 90%.
- * It also tracks time spent reading each document (only when page is visible/focused).
- * Progress is synced to Firebase when user is authenticated, otherwise saved locally.
- * Also checks and unlocks achievements when docs are completed.
+ * It monitors:
+ * - Scroll position (basic tracking)
+ * - Time spent actively reading (page visible and focused)
+ * - Estimated reading time vs actual time (engagement verification)
  *
- * This component should be added to the theme to track all doc pages automatically.
+ * If a user scrolls to 90%+ but hasn't spent enough time, they get a challenge
+ * instead of automatic completion credit.
+ *
+ * Progress is synced to Firebase when user is authenticated, otherwise saved locally.
  */
 
-// Time tracking interval in milliseconds
+// Time tracking constants
 const TIME_UPDATE_INTERVAL = 5000; // Update every 5 seconds
 const MIN_TIME_UPDATE = 1000; // Minimum 1 second before recording
+
+// Reading speed assumptions (words per minute)
+const SLOW_READER_WPM = 150; // Minimum expected reading speed
+const AVG_READER_WPM = 200; // Average reading speed
+const FAST_READER_WPM = 300; // Fast reader (skimming acceptable)
+
+// Engagement thresholds
+const MIN_ENGAGEMENT_RATIO = 0.25; // Must spend at least 25% of expected reading time
+const GOOD_ENGAGEMENT_RATIO = 0.5; // 50%+ is considered good engagement
+const EXCELLENT_ENGAGEMENT_RATIO = 0.75; // 75%+ is excellent engagement
+
+// Calculate expected reading time for a document (in milliseconds)
+function calculateExpectedReadingTime(wordCount: number): {
+  minimum: number;
+  average: number;
+  fast: number;
+} {
+  return {
+    minimum: (wordCount / SLOW_READER_WPM) * 60 * 1000,
+    average: (wordCount / AVG_READER_WPM) * 60 * 1000,
+    fast: (wordCount / FAST_READER_WPM) * 60 * 1000,
+  };
+}
+
+// Estimate word count from document content
+function estimateWordCount(): number {
+  if (typeof document === "undefined") return 1000; // Default estimate
+
+  const articleContent = document.querySelector("article");
+  if (!articleContent) return 1000;
+
+  // Get text content, excluding code blocks and metadata
+  const textContent = articleContent.innerText || articleContent.textContent || "";
+  const words = textContent.trim().split(/\s+/).filter(Boolean);
+
+  return Math.max(words.length, 100); // At least 100 words
+}
 
 export function ReadingTracker(): null {
   const location = useLocation();
@@ -28,7 +68,60 @@ export function ReadingTracker(): null {
   const isActiveRef = useRef(true);
   const lastActiveTimeRef = useRef(Date.now());
   const accumulatedTimeRef = useRef(0);
+  const totalSessionTimeRef = useRef(0); // Total time for this doc session
   const currentDocIdRef = useRef<string | null>(null);
+  const wordCountRef = useRef<number>(0);
+  const hasShownChallengeRef = useRef<Set<string>>(new Set());
+  const scrollCompletedRef = useRef(false);
+
+  // Check if user has engaged enough to earn completion credit
+  const checkEngagement = useCallback((docId: string, timeSpentMs: number): {
+    isEngaged: boolean;
+    engagementRatio: number;
+    expectedTime: number;
+    message: string;
+  } => {
+    const wordCount = wordCountRef.current || estimateWordCount();
+    const expectedTimes = calculateExpectedReadingTime(wordCount);
+
+    // Use the "fast reader" time as minimum baseline
+    const minimumTime = expectedTimes.fast * MIN_ENGAGEMENT_RATIO;
+    const engagementRatio = timeSpentMs / expectedTimes.average;
+
+    if (timeSpentMs >= minimumTime) {
+      if (engagementRatio >= EXCELLENT_ENGAGEMENT_RATIO) {
+        return {
+          isEngaged: true,
+          engagementRatio,
+          expectedTime: expectedTimes.average,
+          message: "Excellent reading! You thoroughly engaged with this content.",
+        };
+      } else if (engagementRatio >= GOOD_ENGAGEMENT_RATIO) {
+        return {
+          isEngaged: true,
+          engagementRatio,
+          expectedTime: expectedTimes.average,
+          message: "Good reading pace. Content completed!",
+        };
+      } else {
+        return {
+          isEngaged: true,
+          engagementRatio,
+          expectedTime: expectedTimes.average,
+          message: "Quick read! Document marked as complete.",
+        };
+      }
+    }
+
+    // Not enough engagement
+    const timeNeeded = Math.ceil((minimumTime - timeSpentMs) / 1000);
+    return {
+      isEngaged: false,
+      engagementRatio,
+      expectedTime: expectedTimes.average,
+      message: `You scrolled through in ${Math.round(timeSpentMs / 1000)}s, but this document needs at least ${Math.ceil(minimumTime / 1000)}s to read. Spend ${timeNeeded} more seconds to earn credit.`,
+    };
+  }, []);
 
   // Update time spent on a document
   const updateTimeSpent = useCallback(
@@ -44,7 +137,6 @@ export function ReadingTracker(): null {
       const newTimeSpent = (currentDoc.timeSpentMs || 0) + additionalMs;
       const totalTimeSpent =
         (progress.stats.totalTimeSpentMs || 0) + additionalMs;
-
       await updateProgress({
         docs: {
           [docId]: {
@@ -62,7 +154,7 @@ export function ReadingTracker(): null {
     [progress, updateProgress],
   );
 
-  // Update scroll progress for a document
+  // Update scroll progress for a document with engagement verification
   const updateScrollProgress = useCallback(
     async (docId: string, scrollPercent: number) => {
       if (!progress) return;
@@ -70,49 +162,90 @@ export function ReadingTracker(): null {
       const currentDoc = progress.docs[docId] || {
         scrollProgress: 0,
         completed: false,
+        timeSpentMs: 0,
       };
 
       // Only update if scroll progress increased
       if (scrollPercent > currentDoc.scrollProgress) {
-        const isCompleted = scrollPercent >= 90;
+        const reachedEnd = scrollPercent >= 90;
         const wasAlreadyCompleted = currentDoc.completed;
 
-        await updateProgress({
-          docs: {
-            [docId]: {
-              ...currentDoc,
-              scrollProgress: scrollPercent,
-              completed: isCompleted || currentDoc.completed,
-              completedAt:
-                isCompleted && !currentDoc.completed
-                  ? new Date().toISOString()
-                  : currentDoc.completedAt,
-            },
-          },
-        });
+        // If reaching end for first time, check engagement
+        if (reachedEnd && !wasAlreadyCompleted && !scrollCompletedRef.current) {
+          scrollCompletedRef.current = true;
 
-        // Check achievements and show completion toast when a doc is newly completed
-        // Throttle to once per second to avoid excessive calls
-        if (isCompleted && !wasAlreadyCompleted) {
-          const now = Date.now();
-          if (now - lastAchievementCheckRef.current > 1000) {
-            lastAchievementCheckRef.current = now;
-            const completedCount =
-              Object.values(progress.docs).filter((d) => d.completed).length +
-              1; // +1 for the doc we just completed
-            checkAndUnlockAchievements(completedCount);
+          const totalTime = totalSessionTimeRef.current + (currentDoc.timeSpentMs || 0);
+          const engagement = checkEngagement(docId, totalTime);
 
-            // Emit completion event for toast notification
-            emitDocumentCompletion({
-              docId,
-              title: docId,
-              completedAt: new Date().toISOString(),
+          if (engagement.isEngaged) {
+            // User has engaged enough - grant completion
+            await updateProgress({
+              docs: {
+                [docId]: {
+                  ...currentDoc,
+                  scrollProgress: scrollPercent,
+                  completed: true,
+                  completedAt: new Date().toISOString(),
+                  engagementScore: engagement.engagementRatio,
+                },
+              },
+            });
+
+            // Show success toast and check achievements
+            const now = Date.now();
+            if (now - lastAchievementCheckRef.current > 1000) {
+              lastAchievementCheckRef.current = now;
+              const completedCount =
+                Object.values(progress.docs).filter((d) => d.completed).length + 1;
+              checkAndUnlockAchievements(completedCount);
+
+              emitDocumentCompletion({
+                docId,
+                title: docId,
+                completedAt: new Date().toISOString(),
+                message: engagement.message,
+              });
+            }
+          } else {
+            // Not enough engagement - show challenge
+            if (!hasShownChallengeRef.current.has(docId)) {
+              hasShownChallengeRef.current.add(docId);
+
+              emitReadingChallenge({
+                docId,
+                title: docId,
+                timeSpent: totalTime,
+                expectedTime: engagement.expectedTime,
+                message: engagement.message,
+              });
+            }
+
+            // Still update scroll progress but don't mark complete
+            await updateProgress({
+              docs: {
+                [docId]: {
+                  ...currentDoc,
+                  scrollProgress: scrollPercent,
+                  completed: false,
+                  engagementScore: engagement.engagementRatio,
+                },
+              },
             });
           }
+        } else if (!reachedEnd) {
+          // Normal scroll progress update
+          await updateProgress({
+            docs: {
+              [docId]: {
+                ...currentDoc,
+                scrollProgress: scrollPercent,
+              },
+            },
+          });
         }
       }
     },
-    [progress, updateProgress, checkAndUnlockAchievements],
+    [progress, updateProgress, checkAndUnlockAchievements, checkEngagement],
   );
 
   // Effect for time tracking
@@ -129,6 +262,13 @@ export function ReadingTracker(): null {
     isActiveRef.current = !document.hidden;
     lastActiveTimeRef.current = Date.now();
     accumulatedTimeRef.current = 0;
+    totalSessionTimeRef.current = 0;
+    scrollCompletedRef.current = false;
+
+    // Estimate word count after DOM is ready
+    requestAnimationFrame(() => {
+      wordCountRef.current = estimateWordCount();
+    });
 
     // Handle visibility change
     const handleVisibilityChange = () => {
@@ -137,7 +277,9 @@ export function ReadingTracker(): null {
       if (document.hidden) {
         // Page became hidden - accumulate time if was active
         if (isActiveRef.current) {
-          accumulatedTimeRef.current += now - lastActiveTimeRef.current;
+          const elapsed = now - lastActiveTimeRef.current;
+          accumulatedTimeRef.current += elapsed;
+          totalSessionTimeRef.current += elapsed;
         }
         isActiveRef.current = false;
       } else {
@@ -156,7 +298,9 @@ export function ReadingTracker(): null {
     const handleBlur = () => {
       const now = Date.now();
       if (isActiveRef.current) {
-        accumulatedTimeRef.current += now - lastActiveTimeRef.current;
+        const elapsed = now - lastActiveTimeRef.current;
+        accumulatedTimeRef.current += elapsed;
+        totalSessionTimeRef.current += elapsed;
       }
       isActiveRef.current = false;
     };
@@ -169,7 +313,9 @@ export function ReadingTracker(): null {
       let timeToRecord = accumulatedTimeRef.current;
 
       if (isActiveRef.current) {
-        timeToRecord += now - lastActiveTimeRef.current;
+        const elapsed = now - lastActiveTimeRef.current;
+        timeToRecord += elapsed;
+        totalSessionTimeRef.current += elapsed;
         lastActiveTimeRef.current = now;
       }
 

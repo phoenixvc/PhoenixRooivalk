@@ -1236,212 +1236,182 @@ html {
 }
 
 /* ================================================
-   YOUR PROGRESS NAVBAR LINK
+   NAVBAR ACTION LINKS - Clean, unified styling
    ================================================ */
 
-.navbar__link--progress {
-  position: relative;
-  background: linear-gradient(
-    135deg,
-    rgba(249, 115, 22, 0.15),
-    rgba(251, 191, 36, 0.15)
-  );
-  border-radius: 20px;
-  padding: 0.375rem 1rem !important;
-  font-weight: 600 !important;
-}
-
-.navbar__link--progress::before {
-  content: "🏆";
-  margin-right: 0.375rem;
-}
-
-.navbar__link--progress:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(249, 115, 22, 0.25),
-    rgba(251, 191, 36, 0.25)
-  ) !important;
-}
-
-/* ================================================
-   LOGIN NAVBAR LINK
-   ================================================ */
-
+/* Base styling for navbar action links */
+.navbar__link--news,
+.navbar__link--support,
+.navbar__link--progress,
 .navbar__link--login {
   position: relative;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
-  color: rgb(15, 23, 42) !important;
-  border-radius: 20px;
-  padding: 0.375rem 1rem !important;
-  font-weight: 600 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
-.navbar__link--login::before {
-  content: "🔐";
-  margin-right: 0.375rem;
-}
-
-.navbar__link--login:hover {
-  background: linear-gradient(
-    135deg,
-    rgb(234, 88, 12),
-    rgb(249, 115, 22)
-  ) !important;
-  color: rgb(15, 23, 42) !important;
-  text-decoration: none !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.3);
-}
-
-/* ================================================
-   NEWS NAVBAR LINK
-   ================================================ */
-
+/* News link */
 .navbar__link--news {
-  position: relative;
-  background: rgba(59, 130, 246, 0.15);
-  border-radius: 20px;
-  padding: 0.375rem 1rem !important;
-  font-weight: 600 !important;
+  color: rgb(226, 230, 234) !important;
 }
 
 .navbar__link--news::before {
   content: "📰";
-  margin-right: 0.375rem;
+  font-size: 0.875rem;
 }
 
 .navbar__link--news:hover {
-  background: rgba(59, 130, 246, 0.25) !important;
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
 }
 
-/* News notification badge - shows when there's new news */
-/* Uses CSS custom property set by NavbarNotifications component */
+/* News notification badge */
 .navbar__link--news::after {
   content: "";
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 8px;
-  height: 8px;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
   background: rgb(239, 68, 68);
   border-radius: 50%;
-  border: 2px solid rgb(15, 23, 42);
-  animation: navbar-badge-pulse 2s ease-in-out infinite;
   display: var(--navbar-news-badge-display, none);
 }
 
-/* ================================================
-   SUPPORT NAVBAR LINK
-   ================================================ */
-
+/* Support link */
 .navbar__link--support {
-  position: relative;
-  background: rgba(34, 197, 94, 0.15);
-  border-radius: 20px;
-  padding: 0.375rem 1rem !important;
-  font-weight: 600 !important;
+  color: rgb(226, 230, 234) !important;
 }
 
 .navbar__link--support::before {
-  content: "🛟";
-  margin-right: 0.375rem;
+  content: "💬";
+  font-size: 0.875rem;
 }
 
 .navbar__link--support:hover {
-  background: rgba(34, 197, 94, 0.25) !important;
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
 }
 
-/* Support notification badge - shows when there's new messages */
-/* Uses CSS custom property set by NavbarNotifications component */
+/* Support notification badge */
 .navbar__link--support::after {
   content: "";
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 8px;
-  height: 8px;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
   background: rgb(239, 68, 68);
   border-radius: 50%;
-  border: 2px solid rgb(15, 23, 42);
-  animation: navbar-badge-pulse 2s ease-in-out infinite;
   display: var(--navbar-support-badge-display, none);
 }
 
-/* Pulse animation for notification badges */
-@keyframes navbar-badge-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
+/* Progress link - hidden by default, show only for logged in users via JS */
+.navbar__link--progress {
+  color: rgb(226, 230, 234) !important;
+}
+
+.navbar__link--progress::before {
+  content: "📊";
+  font-size: 0.875rem;
+}
+
+.navbar__link--progress:hover {
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
+}
+
+/* Login button - primary action style */
+.navbar__link--login {
+  background: rgb(249, 115, 22) !important;
+  color: rgb(15, 23, 42) !important;
+  font-weight: 600 !important;
+  border: none;
+}
+
+.navbar__link--login::before {
+  content: "→";
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.navbar__link--login:hover {
+  background: rgb(234, 88, 12) !important;
+  color: rgb(15, 23, 42) !important;
+  text-decoration: none !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
 }
 
 /* ================================================
-   LAYOUT: Wide content, no right TOC
+   LAYOUT: Full-width content without right TOC
    ================================================ */
 
 /* Hide the right TOC sidebar completely */
 .theme-doc-toc-desktop,
-.col--3:has(.table-of-contents),
-.tableOfContents_node_modules-\@docusaurus-theme-classic-lib-theme-TOC-styles-module {
+.theme-doc-toc-mobile {
   display: none !important;
 }
 
-/* Also hide TOC wrapper column */
-.col.col--3 {
-  display: none !important;
-}
-
-/* Main doc container - full width */
+/* Main doc container */
 .docMainContainer {
   max-width: 100%;
   flex: 1;
 }
 
-/* Center the main content with wider max-width */
+/* Container - full width */
 .container {
-  max-width: 1600px !important;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  max-width: 100% !important;
+  margin: 0;
+  padding: 0 2rem;
 }
 
-/* Make the article content much wider */
+/* Article content - use full available width */
 article {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-/* Main content column - fill all available space */
-.col:not(.col--3) {
-  flex: 1;
   max-width: 100%;
-  width: 100%;
+  margin: 0;
 }
 
-/* Row layout for doc page */
+/* Markdown content wrapper */
+.markdown {
+  max-width: 100%;
+}
+
+/* Row layout */
 .row {
   margin: 0;
-  justify-content: center;
   flex-wrap: nowrap;
 }
 
-/* Doc item wrapper - wider content, less padding */
-.docItemContainer {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
+/* Main content column */
+.col {
+  flex: 1;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
 }
 
-/* Sidebar left - keep reasonable width */
+/* Remove the col--3 spacing that was for TOC */
+.col.col--3 {
+  display: none !important;
+}
+
+/* Doc item wrapper */
+.docItemContainer {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sidebar left */
 .theme-doc-sidebar-container {
   width: 280px;
   min-width: 280px;
+  flex-shrink: 0;
 }
 
 /* Main wrapper */
@@ -1450,40 +1420,29 @@ article {
   width: 100%;
 }
 
-/* Doc page layout */
+/* Doc page layout for larger screens */
 @media (min-width: 997px) {
   .docMainContainer {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding: 0 2rem;
   }
 
-  /* Container within doc main */
   .docMainContainer > .container {
     max-width: 100%;
-    padding: 0 1rem;
-  }
-
-  /* Markdown content - wider */
-  .markdown {
-    max-width: 100%;
+    padding: 0;
   }
 }
 
 /* Mobile adjustments */
 @media (max-width: 996px) {
-  .docItemContainer {
+  .container {
     padding: 0 1rem;
   }
 
-  article {
-    max-width: 100%;
+  .docMainContainer {
+    padding: 0 1rem;
   }
 
   .row {
     flex-wrap: wrap;
-  }
-
-  .container {
-    padding: 0 1rem;
   }
 }
