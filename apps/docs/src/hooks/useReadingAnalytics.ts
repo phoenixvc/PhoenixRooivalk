@@ -196,7 +196,7 @@ export function useReadingAnalytics(): {
   generateAIInsights: () => Promise<AIReadingInsights>;
   isGeneratingInsights: boolean;
 } {
-  const { user } = useAuth();
+  useAuth();
   const [data, setData] = useState(() => getStoredAnalytics());
   const [dailyGoal, setDailyGoalState] = useState(DEFAULT_DAILY_GOAL);
   const [isLoading, setIsLoading] = useState(true);
