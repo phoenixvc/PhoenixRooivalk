@@ -75,7 +75,7 @@ const ALLOWED_ATTR = [
 /**
  * Configure DOMPurify with secure defaults
  */
-function getConfig(): DOMPurify.Config {
+function getConfig() {
   return {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
@@ -104,7 +104,7 @@ export function sanitizeHtml(html: string): string {
     return escapeHtml(html);
   }
 
-  const clean = DOMPurify.sanitize(html, getConfig());
+  const clean = DOMPurify.sanitize(html, getConfig()) as string;
 
   // Add security attributes to all links
   const div = document.createElement("div");
@@ -224,7 +224,7 @@ export function stripHtml(html: string): string {
     ALLOWED_TAGS: [],
     ALLOWED_ATTR: [],
     KEEP_CONTENT: true,
-  });
+  }) as string;
   // Convert HTML entities back to plain text by using a temporary element
   const div = document.createElement("div");
   div.textContent = sanitized;
