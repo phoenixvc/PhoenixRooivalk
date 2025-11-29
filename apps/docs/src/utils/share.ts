@@ -4,7 +4,10 @@
  * Provides cross-platform sharing functionality using Web Share API
  * with fallbacks for unsupported browsers.
  * Includes support for rich share previews via OG meta tags.
+ * AI-enhanced share text generation (Wave 4)
  */
+
+import { aiService } from "../services/aiService";
 
 export interface ShareData {
   title: string;
@@ -169,4 +172,206 @@ export function trackShare(
       item_id: url,
     });
   }
+}
+
+// ============================================================
+// AI-Enhanced Share Text Generation (Wave 4)
+// ============================================================
+
+/**
+ * Platform-specific character limits
+ */
+const PLATFORM_LIMITS: Record<SharePlatform, number> = {
+  twitter: 280,
+  linkedin: 700,
+  facebook: 500,
+  reddit: 300,
+  hackernews: 200,
+  whatsapp: 1000,
+  telegram: 1000,
+  email: 2000,
+};
+
+/**
+ * Platform-specific tone/style
+ */
+const PLATFORM_STYLES: Record<SharePlatform, string> = {
+  twitter: "concise, engaging, use relevant hashtags",
+  linkedin: "professional, insightful, thought-leadership style",
+  facebook: "friendly, conversational, engaging",
+  reddit: "informative, direct, community-focused",
+  hackernews: "technical, factual, understated",
+  whatsapp: "casual, friendly, personal recommendation style",
+  telegram: "direct, informative, with key highlights",
+  email: "formal, detailed, professional summary",
+};
+
+/**
+ * AI-generated share text result
+ */
+export interface AIShareText {
+  /** Generated share text */
+  text: string;
+  /** Suggested hashtags */
+  hashtags: string[];
+  /** Platform this was optimized for */
+  platform: SharePlatform;
+  /** Confidence in the generation */
+  confidence: number;
+}
+
+/**
+ * Article content for share text generation
+ */
+export interface ArticleContent {
+  title: string;
+  summary?: string;
+  content?: string;
+  category?: string;
+  author?: string;
+  source?: string;
+}
+
+/**
+ * Generate AI-enhanced share text optimized for a specific platform
+ */
+export async function generateAIShareText(
+  article: ArticleContent,
+  platform: SharePlatform,
+): Promise<AIShareText> {
+  const charLimit = PLATFORM_LIMITS[platform];
+  const style = PLATFORM_STYLES[platform];
+
+  try {
+    const context = `
+Article to share:
+Title: ${article.title}
+${article.summary ? `Summary: ${article.summary}` : ""}
+${article.category ? `Category: ${article.category}` : ""}
+${article.source ? `Source: ${article.source}` : ""}
+${article.content ? `Content excerpt: ${article.content.substring(0, 500)}...` : ""}
+    `.trim();
+
+    const prompt = `
+Generate share text for ${SHARE_PLATFORMS[platform].name}:
+
+${context}
+
+Requirements:
+- Maximum ${charLimit} characters (this is critical)
+- Style: ${style}
+- Make it compelling and shareable
+- Include 2-3 relevant hashtags at the end for Twitter
+- Focus on the key insight or value proposition
+- Do NOT include the URL (it will be added automatically)
+
+Respond with ONLY the share text, nothing else.
+    `;
+
+    const result = await aiService.askDocumentation(prompt, {
+      format: "concise",
+    });
+
+    // Extract text and hashtags
+    let text = result.answer.trim();
+    const hashtagMatches = text.match(/#\w+/g) || [];
+    const hashtags = hashtagMatches.map((h) => h.substring(1));
+
+    // Remove hashtags from main text for non-Twitter platforms
+    if (platform !== "twitter" && hashtags.length > 0) {
+      text = text.replace(/#\w+\s*/g, "").trim();
+    }
+
+    // Ensure we're within character limit
+    if (text.length > charLimit) {
+      text = text.substring(0, charLimit - 3) + "...";
+    }
+
+    return {
+      text,
+      hashtags,
+      platform,
+      confidence:
+        result.confidence === "high"
+          ? 0.9
+          : result.confidence === "medium"
+            ? 0.7
+            : 0.5,
+    };
+  } catch (error) {
+    console.warn("Failed to generate AI share text:", error);
+    // Fallback to simple share text
+    return {
+      text: article.summary || article.title,
+      hashtags: [],
+      platform,
+      confidence: 0,
+    };
+  }
+}
+
+/**
+ * Generate share text for multiple platforms at once
+ */
+export async function generateMultiPlatformShareText(
+  article: ArticleContent,
+  platforms: SharePlatform[] = ["twitter", "linkedin", "facebook"],
+): Promise<Map<SharePlatform, AIShareText>> {
+  const results = new Map<SharePlatform, AIShareText>();
+
+  // Generate for all platforms in parallel
+  const promises = platforms.map(async (platform) => {
+    const shareText = await generateAIShareText(article, platform);
+    results.set(platform, shareText);
+  });
+
+  await Promise.all(promises);
+  return results;
+}
+
+/**
+ * Generate AI-enhanced share data with optimized text
+ */
+export async function createAIEnhancedShareData(
+  article: ArticleContent,
+  url: string,
+  platform?: SharePlatform,
+): Promise<ShareData> {
+  // If platform specified, generate optimized text
+  if (platform) {
+    const aiText = await generateAIShareText(article, platform);
+    return {
+      title: article.title,
+      text: aiText.text,
+      url,
+      hashtags: aiText.hashtags,
+    };
+  }
+
+  // Default: generate generic share text
+  const aiText = await generateAIShareText(article, "twitter");
+  return {
+    title: article.title,
+    text: aiText.text,
+    url,
+    hashtags: aiText.hashtags,
+  };
+}
+
+/**
+ * Share with AI-enhanced text
+ */
+export async function shareWithAI(
+  article: ArticleContent,
+  url: string,
+  platform?: SharePlatform,
+): Promise<boolean> {
+  const shareData = await createAIEnhancedShareData(article, url, platform);
+
+  if (platform) {
+    shareOnPlatform(platform, shareData);
+    return true;
+  }
+
+  return shareContent(shareData);
 }
