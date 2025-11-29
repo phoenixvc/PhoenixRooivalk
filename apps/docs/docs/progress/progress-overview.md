@@ -2,7 +2,9 @@
 title: Weekly Progress Reports
 sidebar_label: Progress Overview
 sidebar_position: 1
-description: Weekly progress reports tracking Phoenix Rooivalk development, marketing, and business activities
+description:
+  Weekly progress reports tracking Phoenix Rooivalk development, marketing, and
+  business activities
 keywords: [progress, weekly reports, updates, development]
 difficulty: 1
 timeEstimate: 2
@@ -11,16 +13,21 @@ xpReward: 25
 
 # Weekly Progress Reports
 
-Welcome to the Phoenix Rooivalk weekly progress tracking. These reports document our ongoing development, marketing efforts, and business activities.
+Welcome to the Phoenix Rooivalk weekly progress tracking. These reports document
+our ongoing development, marketing efforts, and business activities.
 
 ## Purpose
 
 These weekly reports serve to:
 
-- **Track Development Progress**: Document product design, manufacturing, and engineering milestones
-- **Record Market Intelligence**: Capture customer feedback, market research, and competitive insights
-- **Maintain Accountability**: Provide transparent updates on commitments and deliverables
-- **Enable Learning**: Build institutional knowledge through documented decisions and outcomes
+- **Track Development Progress**: Document product design, manufacturing, and
+  engineering milestones
+- **Record Market Intelligence**: Capture customer feedback, market research,
+  and competitive insights
+- **Maintain Accountability**: Provide transparent updates on commitments and
+  deliverables
+- **Enable Learning**: Build institutional knowledge through documented
+  decisions and outcomes
 
 ## Report Structure
 
@@ -37,8 +44,8 @@ Each weekly report follows a consistent format:
 
 ### November 2025
 
-| Week | Dates | Highlights |
-|------|-------|------------|
+| Week                      | Dates          | Highlights                                                                                                                                               |
+| ------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Week 48](./2025/week-48) | Nov 25 - Dec 1 | **370+ commits**: x402 payment protocol, RAG/AI integration, gamification, user profiles, SA airport outreach, net launcher design, Kevlar manufacturing |
 
 ---
@@ -65,4 +72,4 @@ Each weekly report follows a consistent format:
 
 ---
 
-*Reports are published every Friday and cover the Monday-Sunday period.*
+_Reports are published every Friday and cover the Monday-Sunday period._

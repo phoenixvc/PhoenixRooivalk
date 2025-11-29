@@ -12,7 +12,10 @@ import { NewsPanel } from "../components/News";
 
 function NewsFallback(): React.ReactElement {
   return (
-    <div className="news-error-fallback" style={{ textAlign: "center", padding: "2rem" }}>
+    <div
+      className="news-error-fallback"
+      style={{ textAlign: "center", padding: "2rem" }}
+    >
       <h2>Unable to load news</h2>
       <p>We're having trouble loading the news feed. Please try again later.</p>
       <button

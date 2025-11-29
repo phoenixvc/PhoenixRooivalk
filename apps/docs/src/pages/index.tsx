@@ -182,7 +182,7 @@ export default function Home(): React.ReactElement {
         .marketing .feature-card p { color: var(--gray); }
 
         /* Tech */
-        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem; }
+        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
         .marketing .tech-list { list-style: none; padding: 0; }
         .marketing .tech-item { display: flex; align-items: flex-start; margin-bottom: 1.2rem; padding: 1.2rem; background: var(--card-bg); border-radius: 10px; transition: all .3s; }
         .marketing .tech-item:hover { transform: translateX(10px); background: rgba(249,115,22,0.1); }
@@ -463,7 +463,9 @@ export default function Home(): React.ReactElement {
               <tbody>
                 <tr>
                   <td>Price</td>
-                  <td><strong>R850,000</strong></td>
+                  <td>
+                    <strong>R850,000</strong>
+                  </td>
                   <td>R1,200,000</td>
                   <td>R1,500,000</td>
                   <td>R1,000,000</td>
@@ -471,7 +473,9 @@ export default function Home(): React.ReactElement {
                 </tr>
                 <tr>
                   <td>Detection Range</td>
-                  <td><strong>5 km</strong></td>
+                  <td>
+                    <strong>5 km</strong>
+                  </td>
                   <td>2 km</td>
                   <td>5 km</td>
                   <td>5 km</td>
@@ -479,7 +483,9 @@ export default function Home(): React.ReactElement {
                 </tr>
                 <tr>
                   <td>Response Time</td>
-                  <td><strong>3-6 seconds</strong></td>
+                  <td>
+                    <strong>3-6 seconds</strong>
+                  </td>
                   <td>5 seconds</td>
                   <td>3 seconds</td>
                   <td>4 seconds</td>
@@ -487,7 +493,9 @@ export default function Home(): React.ReactElement {
                 </tr>
                 <tr>
                   <td>Accuracy</td>
-                  <td><strong>95%+</strong></td>
+                  <td>
+                    <strong>95%+</strong>
+                  </td>
                   <td>90%</td>
                   <td>95%</td>
                   <td>94%</td>
@@ -495,35 +503,75 @@ export default function Home(): React.ReactElement {
                 </tr>
                 <tr>
                   <td>Blockchain Security</td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="cross">✗</span></td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
                 </tr>
                 <tr>
                   <td>Modular Design</td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="check">✔</span></td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
                 </tr>
                 <tr>
                   <td>Physical Countermeasures</td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="cross">✗</span></td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
                 </tr>
                 <tr>
                   <td>AI Classification</td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="cross">✗</span></td>
-                  <td><span className="check">✔</span></td>
-                  <td><span className="check">✔</span></td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="cross">✗</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
+                  <td>
+                    <span className="check">✔</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -555,8 +603,8 @@ export default function Home(): React.ReactElement {
         {/* Info footer (keeps Docusaurus site footer separate) */}
         <div className="footer">
           <p>
-            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant |
-            ISO 27001 Certified
+            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant | ISO
+            27001 Certified
           </p>
         </div>
       </main>

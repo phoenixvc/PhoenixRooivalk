@@ -11,7 +11,13 @@
  * - Threaded replies
  */
 
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   subscribeToPageComments,
@@ -20,11 +26,12 @@ import {
   organizeIntoThreads,
 } from "../../services/commentService";
 import { isFirebaseConfigured } from "../../services/firebase";
-import type { Comment, CommentThread, UpdateCommentInput } from "../../types/comments";
 import { CommentForm } from "./CommentForm";
 import { CommentItem } from "./CommentItem";
 import { EditCommentModal } from "./EditCommentModal";
 import styles from "./Comments.module.css";
+
+import type { Comment, UpdateCommentInput } from "../../types/comments";
 
 interface CommentSectionProps {
   pageId: string;
@@ -45,14 +52,17 @@ export function CommentSection({
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingComment, setEditingComment] = useState<Comment | null>(null);
-  const [optimisticComment, setOptimisticComment] = useState<Comment | null>(null);
+  const [optimisticComment, setOptimisticComment] = useState<Comment | null>(
+    null,
+  );
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const unsubscribeRef = useRef<(() => void) | null>(null);
 
   // Check if current user is admin
-  const isAdmin =
+  const isAdmin = Boolean(
     user?.email &&
-    ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`));
+    ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
+  );
 
   // Get the current page URL
   const currentUrl =
@@ -76,7 +86,9 @@ export function CommentSection({
         setIsLoading(false);
         // Clear optimistic comment if it's now in the real data
         if (optimisticComment) {
-          const found = updatedComments.find((c) => c.id === optimisticComment.id);
+          const found = updatedComments.find(
+            (c) => c.id === optimisticComment.id,
+          );
           if (found) {
             setOptimisticComment(null);
           }
@@ -85,7 +97,7 @@ export function CommentSection({
       (error) => {
         console.error("Failed to subscribe to comments:", error);
         setIsLoading(false);
-      }
+      },
     );
 
     // Cleanup subscription on unmount or when dependencies change
@@ -100,7 +112,10 @@ export function CommentSection({
   // Organize comments into threaded structure
   const threads = useMemo(() => {
     const allComments = optimisticComment
-      ? [optimisticComment, ...comments.filter((c) => c.id !== optimisticComment.id)]
+      ? [
+          optimisticComment,
+          ...comments.filter((c) => c.id !== optimisticComment.id),
+        ]
       : comments;
     return organizeIntoThreads(allComments);
   }, [comments, optimisticComment]);
@@ -146,7 +161,7 @@ export function CommentSection({
         setComments((prev) => [...prev, deletedComment]);
       }
     },
-    [comments]
+    [comments],
   );
 
   // Handle edit click
@@ -171,8 +186,8 @@ export function CommentSection({
                 isEdited: true,
                 updatedAt: new Date().toISOString(),
               }
-            : c
-        )
+            : c,
+        ),
       );
 
       setEditingComment(null);
@@ -180,17 +195,17 @@ export function CommentSection({
       const success = await updateComment(
         commentId,
         updates,
-        originalComment.content
+        originalComment.content,
       );
 
       if (!success) {
         // Revert on failure
         setComments((prev) =>
-          prev.map((c) => (c.id === commentId ? originalComment : c))
+          prev.map((c) => (c.id === commentId ? originalComment : c)),
         );
       }
     },
-    [comments]
+    [comments],
   );
 
   // Handle edit cancel
@@ -215,7 +230,8 @@ export function CommentSection({
         {comments.length > 0 && (
           <span className={styles.commentCount}>
             {topLevelCount} comment{topLevelCount !== 1 ? "s" : ""}
-            {comments.length > topLevelCount && ` (${comments.length - topLevelCount} replies)`}
+            {comments.length > topLevelCount &&
+              ` (${comments.length - topLevelCount} replies)`}
           </span>
         )}
       </div>
@@ -256,7 +272,9 @@ export function CommentSection({
             <div className={styles.replyFormContainer}>
               <div className={styles.replyContext}>
                 Replying to{" "}
-                <strong>{replyParent?.author.displayName || "Anonymous"}</strong>
+                <strong>
+                  {replyParent?.author.displayName || "Anonymous"}
+                </strong>
                 <button
                   className={styles.cancelReplyBtn}
                   onClick={handleCancelReply}
@@ -300,9 +318,7 @@ export function CommentSection({
               isAdmin={isAdmin}
               isOptimistic={thread.id === optimisticComment?.id}
               currentUserId={user?.uid}
-              onEdit={
-                thread.author.uid === user?.uid ? () => handleEdit(thread) : undefined
-              }
+              onEdit={thread.author.uid === user?.uid ? handleEdit : undefined}
               onDelete={
                 thread.author.uid === user?.uid || isAdmin
                   ? handleDelete

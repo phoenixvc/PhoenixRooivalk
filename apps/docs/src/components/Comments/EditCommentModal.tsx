@@ -6,10 +6,18 @@
  */
 
 import React, { useState, useCallback } from "react";
-import type { Comment, CommentCategory, UpdateCommentInput } from "../../types/comments";
 import { COMMENT_CATEGORIES } from "../../types/comments";
-import { validateContent, sanitizeContent } from "../../services/commentService";
+import {
+  validateContent,
+  sanitizeContent,
+} from "../../services/commentService";
 import styles from "./Comments.module.css";
+
+import type {
+  Comment,
+  CommentCategory,
+  UpdateCommentInput,
+} from "../../types/comments";
 
 interface EditCommentModalProps {
   comment: Comment;
@@ -80,33 +88,39 @@ export function EditCommentModal({
         <div className={styles.formGroup}>
           <label>Type of feedback</label>
           <div className={styles.categoryGrid}>
-            {(Object.keys(COMMENT_CATEGORIES) as CommentCategory[]).map((cat) => (
-              <label
-                key={cat}
-                className={`${styles.categoryOption} ${
-                  category === cat ? styles.selected : ""
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="category"
-                  value={cat}
-                  checked={category === cat}
-                  onChange={() => setCategory(cat)}
-                  disabled={isSaving}
-                />
-                <span className={styles.categoryIcon}>{CATEGORY_ICONS[cat]}</span>
-                <span className={styles.categoryLabel}>
-                  {COMMENT_CATEGORIES[cat].label}
-                </span>
-              </label>
-            ))}
+            {(Object.keys(COMMENT_CATEGORIES) as CommentCategory[]).map(
+              (cat) => (
+                <label
+                  key={cat}
+                  className={`${styles.categoryOption} ${
+                    category === cat ? styles.selected : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="category"
+                    value={cat}
+                    checked={category === cat}
+                    onChange={() => setCategory(cat)}
+                    disabled={isSaving}
+                  />
+                  <span className={styles.categoryIcon}>
+                    {CATEGORY_ICONS[cat]}
+                  </span>
+                  <span className={styles.categoryLabel}>
+                    {COMMENT_CATEGORIES[cat].label}
+                  </span>
+                </label>
+              ),
+            )}
           </div>
         </div>
 
         {/* Content */}
         <div className={styles.formGroup}>
-          <label htmlFor="edit-content">Your {COMMENT_CATEGORIES[category].label}</label>
+          <label htmlFor="edit-content">
+            Your {COMMENT_CATEGORIES[category].label}
+          </label>
           <textarea
             id="edit-content"
             className={styles.textarea}
@@ -119,7 +133,13 @@ export function EditCommentModal({
 
         {/* Error Message */}
         {error && (
-          <div style={{ color: "#ef4444", fontSize: "0.875rem", marginBottom: "1rem" }}>
+          <div
+            style={{
+              color: "#ef4444",
+              fontSize: "0.875rem",
+              marginBottom: "1rem",
+            }}
+          >
             {error}
           </div>
         )}

@@ -9,7 +9,10 @@
 
 import React, { useState, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { createComment, saveAIEnhancement } from "../../services/commentService";
+import {
+  createComment,
+  saveAIEnhancement,
+} from "../../services/commentService";
 import { aiService } from "../../services/aiService";
 import type {
   CommentCategory,
@@ -58,69 +61,74 @@ export function CommentForm({
   const [error, setError] = useState<string | null>(null);
 
   // Parse AI response with structured format
-  const parseAIResponse = useCallback((response: string): { content: string; suggestions: string[] } => {
-    // Try to find JSON block first (most reliable)
-    const jsonMatch = response.match(/```json\s*([\s\S]*?)```/);
-    if (jsonMatch) {
-      try {
-        const parsed = JSON.parse(jsonMatch[1]);
-        return {
-          content: parsed.improved || parsed.content || response,
-          suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
-        };
-      } catch {
-        // Fall through to other parsing methods
+  const parseAIResponse = useCallback(
+    (response: string): { content: string; suggestions: string[] } => {
+      // Try to find JSON block first (most reliable)
+      const jsonMatch = response.match(/```json\s*([\s\S]*?)```/);
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[1]);
+          return {
+            content: parsed.improved || parsed.content || response,
+            suggestions: Array.isArray(parsed.suggestions)
+              ? parsed.suggestions
+              : [],
+          };
+        } catch {
+          // Fall through to other parsing methods
+        }
       }
-    }
 
-    // Try to parse structured sections with clear markers
-    const sections = {
-      content: "",
-      suggestions: [] as string[],
-    };
+      // Try to parse structured sections with clear markers
+      const sections = {
+        content: "",
+        suggestions: [] as string[],
+      };
 
-    // Look for "IMPROVED:" or "ENHANCED:" section
-    const improvedMatch = response.match(
-      /(?:IMPROVED|ENHANCED|REVISED)[:\s]*\n?([\s\S]*?)(?=(?:SUGGESTIONS?|TIPS|$))/i
-    );
-    if (improvedMatch) {
-      sections.content = improvedMatch[1].trim();
-    }
+      // Look for "IMPROVED:" or "ENHANCED:" section
+      const improvedMatch = response.match(
+        /(?:IMPROVED|ENHANCED|REVISED)[:\s]*\n?([\s\S]*?)(?=(?:SUGGESTIONS?|TIPS|$))/i,
+      );
+      if (improvedMatch) {
+        sections.content = improvedMatch[1].trim();
+      }
 
-    // Look for "SUGGESTIONS:" section
-    const suggestionsMatch = response.match(
-      /(?:SUGGESTIONS?|TIPS)[:\s]*\n?([\s\S]*?)$/i
-    );
-    if (suggestionsMatch) {
-      const suggestionsText = suggestionsMatch[1];
-      // Parse bullet points or numbered items
-      sections.suggestions = suggestionsText
-        .split(/\n/)
-        .map((line) => line.replace(/^[\s\-\*\d+\.]+/, "").trim())
-        .filter((s) => s.length >= 10 && s.length <= 200)
-        .slice(0, 3);
-    }
-
-    // Fallback: if no structured sections found, use the whole response as content
-    if (!sections.content) {
-      // Try to split on common patterns
-      const parts = response.split(/\n\n+/);
-      if (parts.length > 1) {
-        // Use first part as content, try to extract suggestions from the rest
-        sections.content = parts[0].trim();
-        const restText = parts.slice(1).join("\n");
-        sections.suggestions = restText
+      // Look for "SUGGESTIONS:" section
+      const suggestionsMatch = response.match(
+        /(?:SUGGESTIONS?|TIPS)[:\s]*\n?([\s\S]*?)$/i,
+      );
+      if (suggestionsMatch) {
+        const suggestionsText = suggestionsMatch[1];
+        // Parse bullet points or numbered items
+        sections.suggestions = suggestionsText
           .split(/\n/)
           .map((line) => line.replace(/^[\s\-\*\d+\.]+/, "").trim())
           .filter((s) => s.length >= 10 && s.length <= 200)
           .slice(0, 3);
-      } else {
-        sections.content = response.trim();
       }
-    }
 
-    return sections;
-  }, []);
+      // Fallback: if no structured sections found, use the whole response as content
+      if (!sections.content) {
+        // Try to split on common patterns
+        const parts = response.split(/\n\n+/);
+        if (parts.length > 1) {
+          // Use first part as content, try to extract suggestions from the rest
+          sections.content = parts[0].trim();
+          const restText = parts.slice(1).join("\n");
+          sections.suggestions = restText
+            .split(/\n/)
+            .map((line) => line.replace(/^[\s\-\*\d+\.]+/, "").trim())
+            .filter((s) => s.length >= 10 && s.length <= 200)
+            .slice(0, 3);
+        } else {
+          sections.content = response.trim();
+        }
+      }
+
+      return sections;
+    },
+    [],
+  );
 
   // Handle AI enhancement
   const handleAIEnhance = useCallback(async () => {
@@ -222,7 +230,7 @@ SUGGESTIONS:
             comment.id,
             aiEnhancement.content,
             aiEnhancement.suggestions,
-            "medium"
+            "medium",
           );
         }
 
@@ -252,7 +260,7 @@ SUGGESTIONS:
       parentId,
       aiEnhancement,
       onCommentAdded,
-    ]
+    ],
   );
 
   if (!user) {
@@ -290,7 +298,9 @@ SUGGESTIONS:
 
       {/* Content */}
       <div className={styles.formGroup}>
-        <label htmlFor="comment-content">Your {COMMENT_CATEGORIES[category].label}</label>
+        <label htmlFor="comment-content">
+          Your {COMMENT_CATEGORIES[category].label}
+        </label>
         <textarea
           id="comment-content"
           className={styles.textarea}
@@ -318,7 +328,9 @@ SUGGESTIONS:
       {aiEnhancement && (
         <div className={styles.aiPreview}>
           <div className={styles.aiPreviewHeader}>
-            <span className={styles.aiPreviewTitle}>{"\u2728"} AI-Enhanced Version</span>
+            <span className={styles.aiPreviewTitle}>
+              {"\u2728"} AI-Enhanced Version
+            </span>
             <div className={styles.aiPreviewActions}>
               <button
                 type="button"
@@ -354,7 +366,13 @@ SUGGESTIONS:
 
       {/* Error Message */}
       {error && (
-        <div style={{ color: "#ef4444", fontSize: "0.875rem", marginTop: "0.5rem" }}>
+        <div
+          style={{
+            color: "#ef4444",
+            fontSize: "0.875rem",
+            marginTop: "0.5rem",
+          }}
+        >
           {error}
         </div>
       )}
