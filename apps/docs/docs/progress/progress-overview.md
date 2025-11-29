@@ -6,7 +6,7 @@ description:
   Weekly progress reports tracking Phoenix Rooivalk development, marketing, and
   business activities
 keywords: [progress, weekly reports, updates, development]
-difficulty: 1
+difficulty: beginner
 timeEstimate: 2
 xpReward: 25
 ---

@@ -138,7 +138,10 @@ export function calculateTokenBudget(
 
   // Reserve 60% for core, 15% for category, 25% for RAG
   const coreReserve = Math.min(coreTokens, Math.floor(maxTokens * 0.6));
-  const categoryReserve = Math.min(categoryTokens, Math.floor(maxTokens * 0.15));
+  const categoryReserve = Math.min(
+    categoryTokens,
+    Math.floor(maxTokens * 0.15),
+  );
   const ragBudget = maxTokens - coreReserve - categoryReserve;
 
   return {

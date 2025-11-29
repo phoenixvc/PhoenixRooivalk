@@ -6,13 +6,7 @@
  */
 
 import { getAIProvider } from "../ai-provider";
-import {
-  AgentConfig,
-  AgentResult,
-  ToolDefinition,
-  ChatMessage,
-  TokenUsage,
-} from "./types";
+import { AgentConfig, AgentResult, ChatMessage, TokenUsage } from "./types";
 import { AVAILABLE_TOOLS, formatToolsForPrompt, getTool } from "./tools";
 
 /**
@@ -37,7 +31,9 @@ export class Agent {
     totalTokens: 0,
   };
 
-  constructor(config: Partial<AgentConfig> & { name: string; systemPrompt: string }) {
+  constructor(
+    config: Partial<AgentConfig> & { name: string; systemPrompt: string },
+  ) {
     this.config = {
       ...DEFAULT_AGENT_CONFIG,
       tools: AVAILABLE_TOOLS,
@@ -107,7 +103,8 @@ export class Agent {
 
       // Max iterations reached
       return {
-        output: "I was unable to complete the task within the allowed iterations.",
+        output:
+          "I was unable to complete the task within the allowed iterations.",
         toolsUsed,
         iterations,
         thoughts: this.config.verbose ? thoughts : undefined,
@@ -193,9 +190,9 @@ Always think step by step. When you have enough information to answer, use Actio
     actionInput?: unknown;
     answer?: string;
   } {
-    const thoughtMatch = response.match(/Thought:\s*(.+?)(?=Action:|$)/s);
+    const thoughtMatch = response.match(/Thought:\s*([\s\S]+?)(?=Action:|$)/);
     const actionMatch = response.match(/Action:\s*(\w+)/);
-    const inputMatch = response.match(/Action Input:\s*(.+?)$/s);
+    const inputMatch = response.match(/Action Input:\s*([\s\S]+?)$/);
 
     const thought = thoughtMatch?.[1]?.trim() || response;
     const action = actionMatch?.[1]?.trim() || "final_answer";

@@ -128,7 +128,10 @@ export function getShareUrl(platform: SharePlatform, data: ShareData): string {
 /**
  * Open platform-specific share dialog in new window
  */
-export function shareOnPlatform(platform: SharePlatform, data: ShareData): void {
+export function shareOnPlatform(
+  platform: SharePlatform,
+  data: ShareData,
+): void {
   const url = getShareUrl(platform, data);
 
   if (platform === "email") {

@@ -314,7 +314,10 @@ describe("createResourceManager", () => {
   });
 
   it("should accept custom initial state", () => {
-    const manager = createResourceManager({ ...DEFAULT_RESOURCE_STATE, tokens: 500 });
+    const manager = createResourceManager({
+      ...DEFAULT_RESOURCE_STATE,
+      tokens: 500,
+    });
 
     expect(manager.getState().tokens).toBe(500);
   });

@@ -50,12 +50,13 @@ abstract class BaseChain {
     systemPrompt?: string,
   ): Promise<{ response: string; usage?: TokenUsage }> {
     const provider = getAIProvider();
-    const startTime = Date.now();
 
     try {
       const response = await provider.chat({
         messages: [
-          ...(systemPrompt ? [{ role: "system" as const, content: systemPrompt }] : []),
+          ...(systemPrompt
+            ? [{ role: "system" as const, content: systemPrompt }]
+            : []),
           { role: "user" as const, content: prompt },
         ],
         temperature: this.config.temperature,
@@ -102,9 +103,7 @@ abstract class BaseChain {
       return "";
     }
 
-    return this.messages
-      .map((m) => `${m.role}: ${m.content}`)
-      .join("\n");
+    return this.messages.map((m) => `${m.role}: ${m.content}`).join("\n");
   }
 
   /**
@@ -218,7 +217,7 @@ export class RAGQAChain extends BaseChain {
         documents = results.map((r) => ({
           id: r.docId,
           pageContent: r.content,
-          metadata: { title: r.title, source: r.source },
+          metadata: { title: r.title },
         }));
       } else {
         const results = await searchDocuments(input, {
@@ -229,7 +228,7 @@ export class RAGQAChain extends BaseChain {
         documents = results.map((r) => ({
           id: r.docId,
           pageContent: r.content,
-          metadata: { title: r.title, source: r.source },
+          metadata: { title: r.title },
         }));
       }
 

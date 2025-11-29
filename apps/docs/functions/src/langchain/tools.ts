@@ -8,7 +8,7 @@
 import { ToolDefinition } from "./types";
 import { searchDocuments } from "../rag/search";
 import { hybridSearch } from "../rag/hybrid-search";
-import { askDocumentation } from "../rag/query";
+import { queryWithRAG } from "../rag/query";
 
 /**
  * Document search tool
@@ -27,7 +27,8 @@ specifications, or technical details.`,
       },
       category: {
         type: "string",
-        description: "Optional category filter (e.g., 'technical', 'specifications')",
+        description:
+          "Optional category filter (e.g., 'technical', 'specifications')",
       },
       limit: {
         type: "number",
@@ -37,7 +38,11 @@ specifications, or technical details.`,
     required: ["query"],
   },
   func: async (input: unknown) => {
-    const { query, category, limit = 5 } = input as {
+    const {
+      query,
+      category,
+      limit = 5,
+    } = input as {
       query: string;
       category?: string;
       limit?: number;
@@ -52,7 +57,7 @@ specifications, or technical details.`,
     return results.map((r) => ({
       title: r.title,
       content: r.content.substring(0, 500),
-      source: r.source,
+      docId: r.docId,
       score: r.score,
     }));
   },
@@ -133,7 +138,7 @@ Use this when you need a direct answer rather than searching for documents.`,
       format?: "concise" | "detailed";
     };
 
-    const result = await askDocumentation(question, { format });
+    const result = await queryWithRAG(question, { responseFormat: format });
 
     return {
       answer: result.answer,
@@ -155,7 +160,8 @@ Use this for any numerical computations, unit conversions, or mathematical opera
     properties: {
       expression: {
         type: "string",
-        description: "Mathematical expression to evaluate (e.g., '2 + 2', '100 * 0.15')",
+        description:
+          "Mathematical expression to evaluate (e.g., '2 + 2', '100 * 0.15')",
       },
     },
     required: ["expression"],
@@ -254,9 +260,9 @@ Use this when you need to condense long content into key points.`,
     };
 
     // Use the Q&A system for summarization
-    const result = await askDocumentation(
+    const result = await queryWithRAG(
       `Please summarize the following in ${maxLength} words or less:\n\n${text}`,
-      { format: "concise" },
+      { responseFormat: "concise" },
     );
 
     return {

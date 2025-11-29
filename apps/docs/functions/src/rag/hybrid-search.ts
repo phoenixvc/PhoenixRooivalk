@@ -31,6 +31,8 @@ export interface HybridSearchOptions {
   boostExactMatches?: boolean;
   /** K constant for RRF (Reciprocal Rank Fusion) */
   rrfK?: number;
+  /** The search query string for exact match checking */
+  query?: string;
 }
 
 /**
@@ -92,8 +94,9 @@ async function keywordSearch(
         matchCount++;
       }
       // Content matches
-      const contentMatches = (contentLower.match(new RegExp(keyword, "g")) || [])
-        .length;
+      const contentMatches = (
+        contentLower.match(new RegExp(keyword, "g")) || []
+      ).length;
       if (contentMatches > 0) {
         keywordScore += Math.min(0.1 * contentMatches, 0.3);
         matchCount++;
@@ -315,9 +318,11 @@ export function getSearchStats(results: HybridSearchResult[]): {
   }
 
   const avgVectorScore =
-    results.reduce((sum, r) => sum + r.scoreBreakdown.vector, 0) / results.length;
+    results.reduce((sum, r) => sum + r.scoreBreakdown.vector, 0) /
+    results.length;
   const avgKeywordScore =
-    results.reduce((sum, r) => sum + r.scoreBreakdown.keyword, 0) / results.length;
+    results.reduce((sum, r) => sum + r.scoreBreakdown.keyword, 0) /
+    results.length;
   const exactMatchCount = results.filter(
     (r) => r.scoreBreakdown.exactMatchBoost > 0,
   ).length;
@@ -330,7 +335,9 @@ export function getSearchStats(results: HybridSearchResult[]): {
       topResult.scoreBreakdown.keyword > 0
     ) {
       topResultSource = "both";
-    } else if (topResult.scoreBreakdown.keyword > topResult.scoreBreakdown.vector) {
+    } else if (
+      topResult.scoreBreakdown.keyword > topResult.scoreBreakdown.vector
+    ) {
       topResultSource = "keyword";
     }
   }

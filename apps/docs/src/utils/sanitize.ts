@@ -75,7 +75,7 @@ const ALLOWED_ATTR = [
 /**
  * Configure DOMPurify with secure defaults
  */
-function getConfig(): DOMPurify.Config {
+function getConfig() {
   return {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
@@ -104,7 +104,7 @@ export function sanitizeHtml(html: string): string {
     return escapeHtml(html);
   }
 
-  const clean = DOMPurify.sanitize(html, getConfig());
+  const clean = DOMPurify.sanitize(html, getConfig()) as string;
 
   // Add security attributes to all links
   const div = document.createElement("div");
@@ -219,8 +219,17 @@ export function stripHtml(html: string): string {
     return html;
   }
 
+  // First sanitize the HTML using DOMPurify to remove any malicious content
+  const sanitized = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [],
+    ALLOWED_ATTR: [],
+    KEEP_CONTENT: true,
+  }) as string;
+  // Convert HTML entities back to plain text by using a temporary element
   const div = document.createElement("div");
-  div.innerHTML = html;
+  div.textContent = sanitized;
+  // Since we set textContent, no HTML parsing happens, but we need to decode entities
+  div.innerHTML = sanitized;
   return div.textContent || div.innerText || "";
 }
 

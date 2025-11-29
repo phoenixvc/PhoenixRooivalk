@@ -70,7 +70,7 @@ describe("spawnThreat", () => {
       Math.abs(threat.x - 400) < 1 ||
       Math.abs(threat.y - 300) < 1;
 
-    expect(isAtEdge || threat.x <= 400 && threat.y <= 300).toBe(true);
+    expect(isAtEdge || (threat.x <= 400 && threat.y <= 300)).toBe(true);
   });
 
   it("should increase speed with level", () => {
@@ -210,11 +210,20 @@ describe("moveThreats", () => {
     });
 
     const level1Result = moveThreats([threat1], { x: 200, y: 200 }, 1, 1 / 60);
-    const level10Result = moveThreats([threat2], { x: 200, y: 200 }, 10, 1 / 60);
+    const level10Result = moveThreats(
+      [threat2],
+      { x: 200, y: 200 },
+      10,
+      1 / 60,
+    );
 
     // Higher level should have more acceleration
-    const level1Distance = Math.sqrt(level1Result[0].vx ** 2 + level1Result[0].vy ** 2);
-    const level10Distance = Math.sqrt(level10Result[0].vx ** 2 + level10Result[0].vy ** 2);
+    const level1Distance = Math.sqrt(
+      level1Result[0].vx ** 2 + level1Result[0].vy ** 2,
+    );
+    const level10Distance = Math.sqrt(
+      level10Result[0].vx ** 2 + level10Result[0].vy ** 2,
+    );
 
     expect(level10Distance).toBeGreaterThan(level1Distance);
   });
@@ -278,9 +287,7 @@ describe("findThreatsInBox", () => {
   });
 
   it("should exclude neutralized threats", () => {
-    const threats = [
-      createMockThreat({ x: 50, y: 50, status: "neutralized" }),
-    ];
+    const threats = [createMockThreat({ x: 50, y: 50, status: "neutralized" })];
 
     const box = { startX: 0, startY: 0, endX: 100, endY: 100 };
     const result = findThreatsInBox(threats, box);

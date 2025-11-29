@@ -52,9 +52,7 @@ export function ArticleMeta({
       : description;
 
   // Generate a default OG image URL if none provided
-  const ogImage =
-    image ||
-    `/img/og-default.png`;
+  const ogImage = image || `/img/og-default.png`;
 
   return (
     <Head>
@@ -160,9 +158,7 @@ export function ArticleStructuredData({
 /**
  * Combined component for full SEO optimization
  */
-export function ArticleSEO(
-  props: ArticleMetaProps,
-): React.ReactElement {
+export function ArticleSEO(props: ArticleMetaProps): React.ReactElement {
   return (
     <>
       <ArticleMeta {...props} />

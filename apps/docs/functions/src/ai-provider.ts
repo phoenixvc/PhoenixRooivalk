@@ -324,3 +324,45 @@ export async function advancedAnalysis(
 
   return { analysis, metrics };
 }
+
+/**
+ * AI Provider interface for LangChain integration
+ */
+export interface AIProvider {
+  chat: (options: {
+    messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
+    temperature?: number;
+    maxTokens?: number;
+  }) => Promise<{
+    content: string;
+    usage?: {
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+    };
+  }>;
+}
+
+/**
+ * Get AI provider with chat interface for LangChain integration
+ */
+export function getAIProvider(): AIProvider {
+  return {
+    async chat(options) {
+      const { content, metrics } = await chatCompletion(options.messages, {
+        model: "chat",
+        maxTokens: options.maxTokens,
+        temperature: options.temperature,
+      });
+
+      return {
+        content,
+        usage: {
+          promptTokens: metrics.promptTokens,
+          completionTokens: metrics.completionTokens,
+          totalTokens: metrics.totalTokens,
+        },
+      };
+    },
+  };
+}

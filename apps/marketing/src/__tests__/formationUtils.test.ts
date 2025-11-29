@@ -257,8 +257,14 @@ describe("calculateFormationPositions", () => {
         semicircleDirection: "south",
       });
 
-      const northPositions = calculateFormationPositions(northFormation, drones);
-      const southPositions = calculateFormationPositions(southFormation, drones);
+      const northPositions = calculateFormationPositions(
+        northFormation,
+        drones,
+      );
+      const southPositions = calculateFormationPositions(
+        southFormation,
+        drones,
+      );
 
       // At least some positions should be different for different directions
       const hasDifferentPositions = northPositions.some((np, i) => {

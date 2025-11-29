@@ -2,27 +2,33 @@
 id: rag-ai-integration-roadmap
 title: RAG AI Integration Roadmap
 sidebar_label: RAG AI Roadmap
-description: Roadmap for integrating RAG-augmented AI across all platform features
+description:
+  Roadmap for integrating RAG-augmented AI across all platform features
 keywords:
   - rag
   - ai
   - integration
   - roadmap
   - features
-difficulty: 3
+difficulty: advanced
 timeEstimate: 15
 xpReward: 150
 ---
 
 # RAG AI Integration Roadmap
 
-This document outlines the implementation plan for integrating RAG (Retrieval-Augmented Generation) AI capabilities across all 10 platform features.
+This document outlines the implementation plan for integrating RAG
+(Retrieval-Augmented Generation) AI capabilities across all 10 platform
+features.
 
 ---
 
 ## Executive Summary
 
-With the core AI infrastructure in place (AIPanel, RAG system, vector search, Azure AI), we can enhance all 10 platform features with intelligent AI capabilities. This roadmap prioritizes high-value, low-effort integrations first.
+With the core AI infrastructure in place (AIPanel, RAG system, vector search,
+Azure AI), we can enhance all 10 platform features with intelligent AI
+capabilities. This roadmap prioritizes high-value, low-effort integrations
+first.
 
 ---
 
@@ -60,16 +66,18 @@ With the core AI infrastructure in place (AIPanel, RAG system, vector search, Az
 
 **File**: `src/hooks/useArticleCollections.ts`
 
-**Purpose**: Suggest related articles for each bookmark collection based on semantic similarity.
+**Purpose**: Suggest related articles for each bookmark collection based on
+semantic similarity.
 
 **Implementation**:
+
 ```typescript
 /**
  * Suggest articles for a collection based on its current contents
  */
 export async function suggestArticlesForCollection(
   collectionId: string,
-  limit: number = 5
+  limit: number = 5,
 ): Promise<ArticleSuggestion[]> {
   const collection = await getCollection(collectionId);
   if (!collection?.articles?.length) return [];
@@ -77,16 +85,17 @@ export async function suggestArticlesForCollection(
   // Get semantic recommendations based on collection articles
   const recommendations = await getReadingRecommendations({
     currentDocId: collection.articles[0],
-    context: collection.articles.slice(0, 3).join(', ')
+    context: collection.articles.slice(0, 3).join(", "),
   });
 
   return recommendations.filter(
-    rec => !collection.articles.includes(rec.docId)
+    (rec) => !collection.articles.includes(rec.docId),
   );
 }
 ```
 
 **Value**:
+
 - Auto-populate "You might also like" suggestions
 - Increases content discovery
 - Higher engagement with documentation
@@ -99,9 +108,11 @@ export async function suggestArticlesForCollection(
 
 **File**: `src/hooks/useCommentDraft.ts`
 
-**Purpose**: AI-powered grammar, clarity, and tone suggestions for comment drafts.
+**Purpose**: AI-powered grammar, clarity, and tone suggestions for comment
+drafts.
 
 **Implementation**:
+
 ```typescript
 /**
  * Enhance a comment draft with AI suggestions
@@ -131,6 +142,7 @@ export async function enhanceCommentDraft(
 **UI Component**: Add "Enhance with AI" button next to DraftIndicator
 
 **Value**:
+
 - Better quality comments
 - Faster comment writing
 - Improved community discussions
@@ -148,25 +160,26 @@ export async function enhanceCommentDraft(
 **Purpose**: Personalized AI-written summaries for weekly email digests.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI summary for weekly digest
  */
 export async function generateDigestSummary(
   activities: ActivityItem[],
-  userProfile: UserProfile
+  userProfile: UserProfile,
 ): Promise<string> {
   const activitySummary = activities
-    .map(a => `${a.type}: ${a.title}`)
-    .join('\n');
+    .map((a) => `${a.type}: ${a.title}`)
+    .join("\n");
 
   const summary = await summarizeContent(activitySummary, {
-    style: 'newsletter',
+    style: "newsletter",
     personalization: {
       name: userProfile.displayName,
-      interests: userProfile.interests
+      interests: userProfile.interests,
     },
-    maxLength: 200
+    maxLength: 200,
   });
 
   return summary;
@@ -174,6 +187,7 @@ export async function generateDigestSummary(
 ```
 
 **Value**:
+
 - Personalized digest experience
 - Higher email open rates
 - Better user engagement
@@ -189,19 +203,20 @@ export async function generateDigestSummary(
 **Purpose**: Smart "Download related articles" feature using vector search.
 
 **Implementation**:
+
 ```typescript
 /**
  * Download semantically related articles for offline reading
  */
 export async function downloadRelatedArticles(
   articleId: string,
-  limit: number = 5
+  limit: number = 5,
 ): Promise<DownloadResult[]> {
   // Find semantically similar articles
   const related = await findRelatedDocuments(articleId, {
     topK: limit,
     minScore: 0.7,
-    excludeSelf: true
+    excludeSelf: true,
   });
 
   // Download each related article
@@ -213,7 +228,7 @@ export async function downloadRelatedArticles(
       } catch (error) {
         return { docId: doc.docId, success: false, error };
       }
-    })
+    }),
   );
 
   return results;
@@ -223,6 +238,7 @@ export async function downloadRelatedArticles(
 **UI**: Add "Download bundle" button that caches article + related content
 
 **Value**:
+
 - Smarter offline experience
 - Complete topic bundles
 - Better offline reading
@@ -238,6 +254,7 @@ export async function downloadRelatedArticles(
 **Purpose**: Implement token budget management for optimal context usage.
 
 **Implementation**:
+
 ```typescript
 /**
  * Build context within token budget
@@ -245,7 +262,7 @@ export async function downloadRelatedArticles(
 export function buildContextWithBudget(
   category: PromptCategory,
   ragContext: string | undefined,
-  maxTokens: number = 3000
+  maxTokens: number = 3000,
 ): { context: string; tokenCount: number; truncated: boolean } {
   const staticContexts = getContextForCategory(category);
   let totalTokens = 0;
@@ -279,21 +296,22 @@ export function buildContextWithBudget(
     } else {
       // Truncate RAG context to fit
       const truncatedRag = truncateToTokens(ragContext, remainingBudget);
-      contextParts.push(truncatedRag + '\n\n[...context truncated]');
+      contextParts.push(truncatedRag + "\n\n[...context truncated]");
       totalTokens = maxTokens;
       truncated = true;
     }
   }
 
   return {
-    context: contextParts.join('\n\n'),
+    context: contextParts.join("\n\n"),
     tokenCount: totalTokens,
-    truncated
+    truncated,
   };
 }
 ```
 
 **Value**:
+
 - 20%+ token efficiency improvement
 - Lower API costs
 - Faster responses
@@ -311,31 +329,32 @@ export function buildContextWithBudget(
 **Purpose**: Generate personalized insights from reading patterns.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI insights from reading analytics
  */
 export async function generateReadingInsights(
-  analytics: ReadingAnalytics
+  analytics: ReadingAnalytics,
 ): Promise<InsightResult> {
   const context = `
     User Reading Profile:
-    - Top categories: ${analytics.topCategories.join(', ')}
+    - Top categories: ${analytics.topCategories.join(", ")}
     - Total articles read: ${analytics.totalArticlesRead}
     - Reading streak: ${analytics.currentStreak} days
-    - Peak reading hours: ${analytics.peakHours.join(', ')}
+    - Peak reading hours: ${analytics.peakHours.join(", ")}
     - Completion rate: ${analytics.completionRate}%
   `;
 
   const insights = await getMarketInsights({
-    topic: 'personalized learning recommendations',
-    context
+    topic: "personalized learning recommendations",
+    context,
   });
 
   return {
     summary: insights.summary,
     recommendations: insights.recommendations,
-    nextSteps: insights.nextSteps
+    nextSteps: insights.nextSteps,
   };
 }
 ```
@@ -343,6 +362,7 @@ export async function generateReadingInsights(
 **UI**: Add "Insights" tab to reading analytics dashboard
 
 **Value**:
+
 - Personalized learning guidance
 - Better content discovery
 - Increased engagement
@@ -358,26 +378,27 @@ export async function generateReadingInsights(
 **Purpose**: Add AI executive summaries to exported documents.
 
 **Implementation**:
+
 ```typescript
 /**
  * Export with AI-generated summary
  */
 export async function exportWithAISummary(
   articles: Article[],
-  format: 'markdown' | 'json'
+  format: "markdown" | "json",
 ): Promise<ExportData> {
   // Get base export data
   const baseData = await exportArticles(articles, format);
 
   // Generate AI summary
   const contentSummary = articles
-    .map(a => `${a.title}: ${a.summary || a.excerpt}`)
-    .join('\n\n');
+    .map((a) => `${a.title}: ${a.summary || a.excerpt}`)
+    .join("\n\n");
 
   const aiSummary = await summarizeContent(contentSummary, {
-    style: 'executive_summary',
+    style: "executive_summary",
     maxLength: 300,
-    includeKeyPoints: true
+    includeKeyPoints: true,
   });
 
   return {
@@ -385,13 +406,14 @@ export async function exportWithAISummary(
     aiSummary: {
       overview: aiSummary.text,
       keyPoints: aiSummary.keyPoints,
-      generatedAt: new Date().toISOString()
-    }
+      generatedAt: new Date().toISOString(),
+    },
   };
 }
 ```
 
 **Value**:
+
 - Executive summaries in exports
 - Quick reference for exported content
 - Professional export quality
@@ -407,37 +429,36 @@ export async function exportWithAISummary(
 **Purpose**: Combine vector and keyword search for better relevance.
 
 **Implementation**:
+
 ```typescript
 /**
  * Hybrid search combining vector and keyword matching
  */
 export async function hybridSearch(
   query: string,
-  options: HybridSearchOptions = {}
+  options: HybridSearchOptions = {},
 ): Promise<SearchResult[]> {
   const {
     vectorWeight = 0.7,
     keywordWeight = 0.3,
     topK = 5,
-    minScore = 0.6
+    minScore = 0.6,
   } = options;
 
   // Run searches in parallel
   const [vectorResults, keywordResults] = await Promise.all([
     vectorSearch(query, { topK: topK * 2 }),
-    keywordSearch(query, { topK: topK * 2 })
+    keywordSearch(query, { topK: topK * 2 }),
   ]);
 
   // Combine and re-rank
   const combined = combineResults(vectorResults, keywordResults, {
     vectorWeight,
-    keywordWeight
+    keywordWeight,
   });
 
   // Filter by score and limit
-  return combined
-    .filter(r => r.score >= minScore)
-    .slice(0, topK);
+  return combined.filter((r) => r.score >= minScore).slice(0, topK);
 }
 
 /**
@@ -446,7 +467,7 @@ export async function hybridSearch(
 function combineResults(
   vector: SearchResult[],
   keyword: SearchResult[],
-  weights: { vectorWeight: number; keywordWeight: number }
+  weights: { vectorWeight: number; keywordWeight: number },
 ): SearchResult[] {
   const resultMap = new Map<string, SearchResult>();
 
@@ -454,7 +475,7 @@ function combineResults(
   for (const result of vector) {
     resultMap.set(result.docId, {
       ...result,
-      score: result.score * weights.vectorWeight
+      score: result.score * weights.vectorWeight,
     });
   }
 
@@ -466,18 +487,18 @@ function combineResults(
     } else {
       resultMap.set(result.docId, {
         ...result,
-        score: result.score * weights.keywordWeight
+        score: result.score * weights.keywordWeight,
       });
     }
   }
 
   // Sort by combined score
-  return Array.from(resultMap.values())
-    .sort((a, b) => b.score - a.score);
+  return Array.from(resultMap.values()).sort((a, b) => b.score - a.score);
 }
 ```
 
 **Value**:
+
 - 15%+ relevance improvement
 - Better handling of exact matches
 - More accurate search results
@@ -495,21 +516,22 @@ function combineResults(
 **Purpose**: Auto-generate compelling share text.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate optimized share text for social platforms
  */
 export async function generateShareText(
   article: Article,
-  platform: 'twitter' | 'linkedin' | 'facebook'
+  platform: "twitter" | "linkedin" | "facebook",
 ): Promise<string> {
-  const maxLength = platform === 'twitter' ? 240 : 500;
+  const maxLength = platform === "twitter" ? 240 : 500;
 
   const generated = await summarizeContent(article.content, {
-    style: 'social_share',
+    style: "social_share",
     platform,
     maxLength,
-    includeCallToAction: true
+    includeCallToAction: true,
   });
 
   return generated.text;
@@ -527,29 +549,30 @@ export async function generateShareText(
 **Purpose**: Suggest collection names based on article contents.
 
 **Implementation**:
+
 ```typescript
 /**
  * Generate AI-suggested collection name
  */
 export async function suggestCollectionName(
-  articleIds: string[]
+  articleIds: string[],
 ): Promise<CollectionNameSuggestion> {
   if (articleIds.length === 0) {
-    return { name: 'New Collection', confidence: 0 };
+    return { name: "New Collection", confidence: 0 };
   }
 
   const articles = await getArticlesByIds(articleIds);
-  const titles = articles.map(a => a.title).join(', ');
+  const titles = articles.map((a) => a.title).join(", ");
 
   const suggestion = await askDocumentation(
     `Suggest a short, descriptive collection name (2-4 words) for articles about: ${titles}`,
-    { format: 'short_answer' }
+    { format: "short_answer" },
   );
 
   return {
     name: suggestion.answer,
     confidence: suggestion.confidence,
-    alternatives: suggestion.alternatives || []
+    alternatives: suggestion.alternatives || [],
   };
 }
 ```
@@ -565,6 +588,7 @@ export async function suggestCollectionName(
 **Purpose**: Set up LangChain infrastructure for advanced AI features.
 
 **Directory Structure**:
+
 ```
 functions/src/langchain/
 ├── index.ts           # Exports
@@ -580,6 +604,7 @@ functions/src/langchain/
 ```
 
 **Implementation** (llm.ts):
+
 ```typescript
 import { AzureChatOpenAI } from "@langchain/openai";
 import * as functions from "firebase-functions";
@@ -593,8 +618,8 @@ export function createAzureLLM(options: LLMOptions = {}) {
   return new AzureChatOpenAI({
     azureOpenAIApiKey: config.azure?.openai_key,
     azureOpenAIApiInstanceName: config.azure?.instance_name,
-    azureOpenAIApiDeploymentName: options.deployment || 'gpt-4',
-    azureOpenAIApiVersion: '2024-02-15-preview',
+    azureOpenAIApiDeploymentName: options.deployment || "gpt-4",
+    azureOpenAIApiVersion: "2024-02-15-preview",
     temperature: options.temperature || 0.5,
     maxTokens: options.maxTokens || 2000,
   });
@@ -606,7 +631,7 @@ export function createAzureLLM(options: LLMOptions = {}) {
 export function createOpenAIFallback(options: LLMOptions = {}) {
   return new ChatOpenAI({
     openAIApiKey: functions.config().openai?.api_key,
-    modelName: options.model || 'gpt-4-turbo-preview',
+    modelName: options.model || "gpt-4-turbo-preview",
     temperature: options.temperature || 0.5,
     maxTokens: options.maxTokens || 2000,
   });
@@ -660,63 +685,68 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
 ## Success Metrics
 
 ### Wave 1
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Collection click-through | +15% | Analytics |
-| Comment quality score | +20% | AI evaluation |
-| Feature adoption | >30% users | Usage tracking |
+
+| Metric                   | Target     | Measurement    |
+| ------------------------ | ---------- | -------------- |
+| Collection click-through | +15%       | Analytics      |
+| Comment quality score    | +20%       | AI evaluation  |
+| Feature adoption         | >30% users | Usage tracking |
 
 ### Wave 2
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Email open rate | +10% | Email analytics |
-| Offline bundle usage | >20% | Service worker logs |
-| Token efficiency | -20% | API metrics |
+
+| Metric               | Target | Measurement         |
+| -------------------- | ------ | ------------------- |
+| Email open rate      | +10%   | Email analytics     |
+| Offline bundle usage | >20%   | Service worker logs |
+| Token efficiency     | -20%   | API metrics         |
 
 ### Wave 3
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Insights engagement | >40% | Click tracking |
-| Export usage | +25% | Download counts |
-| Search relevance | +15% | User feedback |
+
+| Metric              | Target | Measurement     |
+| ------------------- | ------ | --------------- |
+| Insights engagement | >40%   | Click tracking  |
+| Export usage        | +25%   | Download counts |
+| Search relevance    | +15%   | User feedback   |
 
 ### Wave 4
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Social shares | +20% | Share tracking |
-| Collection organization | Qualitative | User surveys |
-| LangChain adoption | All new AI | Code coverage |
+
+| Metric                  | Target      | Measurement    |
+| ----------------------- | ----------- | -------------- |
+| Social shares           | +20%        | Share tracking |
+| Collection organization | Qualitative | User surveys   |
+| LangChain adoption      | All new AI  | Code coverage  |
 
 ---
 
 ## Risk Mitigation
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| API rate limits | Medium | Medium | Implement caching, queue requests |
-| Response latency | Medium | High | Add loading states, async patterns |
-| AI accuracy issues | Low | Medium | Add confidence scores, human review |
-| Cost overrun | Medium | Medium | Token budgets, usage monitoring |
+| Risk               | Likelihood | Impact | Mitigation                          |
+| ------------------ | ---------- | ------ | ----------------------------------- |
+| API rate limits    | Medium     | Medium | Implement caching, queue requests   |
+| Response latency   | Medium     | High   | Add loading states, async patterns  |
+| AI accuracy issues | Low        | Medium | Add confidence scores, human review |
+| Cost overrun       | Medium     | Medium | Token budgets, usage monitoring     |
 
 ---
 
 ## Timeline Summary
 
-| Wave | Features | Duration | Status |
-|------|----------|----------|--------|
-| Wave 1 | Collection AI, Draft Enhancement | 1 day | ✅ Complete |
-| Wave 2 | Digest AI, Offline Bundles, Context Opt | 2 days | ✅ Complete |
-| Wave 3 | Analytics AI, Export AI, Hybrid RAG | 2 days | ✅ Complete |
-| Wave 4 | Share AI, Names AI, LangChain | 2 days | ✅ Complete |
+| Wave   | Features                                | Duration | Status      |
+| ------ | --------------------------------------- | -------- | ----------- |
+| Wave 1 | Collection AI, Draft Enhancement        | 1 day    | ✅ Complete |
+| Wave 2 | Digest AI, Offline Bundles, Context Opt | 2 days   | ✅ Complete |
+| Wave 3 | Analytics AI, Export AI, Hybrid RAG     | 2 days   | ✅ Complete |
+| Wave 4 | Share AI, Names AI, LangChain           | 2 days   | ✅ Complete |
 
-**Total Estimated Duration**: 7 days
-**Actual Completion**: All waves implemented
+**Total Estimated Duration**: 7 days **Actual Completion**: All waves
+implemented
 
 ---
 
 ## Implementation Status
 
 ### ✅ Wave 1 - Completed
+
 - **Smart Collection Recommendations** (`src/hooks/useArticleCollections.ts`)
   - Added `suggestArticlesForCollection()` function
   - Added `suggestCollectionName()` for AI-curated names
@@ -725,17 +755,20 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
   - Added `isEnhancing` state for UI feedback
 
 ### ✅ Wave 2 - Completed
+
 - **Digest AI Summaries** (`src/services/digestService.ts`)
   - Added `generateAIDigestSummary()` function
   - Integrated AI summary section in email formatting
 - **Semantic Offline Bundles** (`src/hooks/useOfflineArticles.ts`)
   - Added `downloadRelatedBundle()` for smart offline caching
   - Uses vector search to find related articles
-- **Phase 2.2 Context Optimization** (`functions/src/prompts/context-builder.ts`)
+- **Phase 2.2 Context Optimization**
+  (`functions/src/prompts/context-builder.ts`)
   - Token budget management with priority-based context inclusion
   - `estimateTokens()`, `truncateToTokens()`, `buildContextWithBudget()`
 
 ### ✅ Wave 3 - Completed
+
 - **Reading Analytics Insights** (`src/hooks/useReadingAnalytics.ts`)
   - Added `generateAIInsights()` for personalized recommendations
   - Returns summary, recommendations, learning path, motivation
@@ -747,6 +780,7 @@ export function createOpenAIFallback(options: LLMOptions = {}) {
   - `hybridSearch()`, `smartSearch()`, `getSearchStats()`
 
 ### ✅ Wave 4 - Completed
+
 - **AI Share Text Generation** (`src/utils/share.ts`)
   - Platform-specific share text with character limits
   - `generateAIShareText()`, `generateMultiPlatformShareText()`

@@ -6,7 +6,7 @@
  */
 
 import Layout from "@theme/Layout";
-import { useColorMode } from "@docusaurus/theme-common";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -78,7 +78,8 @@ function setCachedPreferences(
 export default function ProfileSettings(): React.ReactElement {
   const { user, loading, userProfile, updateUserRoles, logout, progress } =
     useAuth();
-  const { colorMode, setColorMode } = useColorMode();
+  // Use state for colorMode to avoid SSG issues - will be updated client-side
+  const [colorMode, setColorModeState] = useState<"light" | "dark">("dark");
   const toast = useToast();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(
     userProfile.confirmedRoles,
@@ -112,6 +113,23 @@ export default function ProfileSettings(): React.ReactElement {
   const [isSavingPreferences, setIsSavingPreferences] = useState(false);
   const [newKeyword, setNewKeyword] = useState("");
 
+  // Sync color mode with document after hydration (SSG-safe)
+  useEffect(() => {
+    // Check document data attribute for current color mode
+    const currentMode = document.documentElement.getAttribute("data-theme");
+    if (currentMode === "light" || currentMode === "dark") {
+      setColorModeState(currentMode);
+    }
+  }, []);
+
+  // Function to set color mode (updates document and state)
+  const setColorMode = (mode: "light" | "dark") => {
+    document.documentElement.setAttribute("data-theme", mode);
+    setColorModeState(mode);
+    // Persist the preference
+    localStorage.setItem("theme", mode);
+  };
+
   // Sync selected roles with userProfile when it loads
   React.useEffect(() => {
     if (userProfile.isProfileLoaded) {
@@ -143,6 +161,7 @@ export default function ProfileSettings(): React.ReactElement {
               pushNotifications: prefs.pushNotifications || false,
               readArticleIds: prefs.readArticleIds || [],
               savedArticleIds: prefs.savedArticleIds || [],
+              collections: prefs.collections || [],
             };
             setNewsPreferences(prefsData);
             // Update cache with fresh data
