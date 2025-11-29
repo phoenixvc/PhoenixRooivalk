@@ -2,14 +2,21 @@
  * Market Insights AI Function
  *
  * Generates market analysis and insights using AI Foundry.
- * Now includes RAG to ground analysis in Phoenix Rooivalk documentation.
+ * Uses the new prompt template system with RAG integration.
+ *
+ * Migration: Updated to use MARKET_PROMPT template (Phase 2.1)
  */
 
 import * as functions from "firebase-functions";
 import { chatCompletion } from "../ai-provider";
 import { searchDocuments, SearchResult } from "../rag/search";
+import {
+  MARKET_PROMPT,
+  buildSystemPrompt,
+  buildUserPrompt,
+  getModelConfig,
+} from "../prompts";
 import { checkRateLimit, logUsage } from "./rate-limit";
-import { PROMPTS, PHOENIX_CONTEXT } from "./prompts";
 
 interface MarketInsightRequest {
   topic: string;
@@ -100,40 +107,47 @@ export const getMarketInsights = functions.https.onCall(
       functions.logger.warn("RAG search failed for market insights:", error);
     }
 
-    // Build enhanced system prompt with RAG context
-    const systemPrompt = documentContext
-      ? `${PROMPTS.market.system}
+    // Build prompts using the new template system
+    const systemPrompt = buildSystemPrompt(MARKET_PROMPT, {
+      ragContext: documentContext,
+      ragSources: sourcesUsed,
+    });
 
-IMPORTANT: Use the following Phoenix Rooivalk documentation to provide market insights grounded in the company's actual positioning and capabilities:
+    const userPrompt = buildUserPrompt(MARKET_PROMPT, {
+      topic,
+      industry,
+    });
 
-${PHOENIX_CONTEXT}
-
-PHOENIX ROOIVALK DOCUMENTATION:
-${documentContext}
-
-Reference Phoenix Rooivalk's documented market position and competitive advantages when discussing market opportunities and trends.`
-      : PROMPTS.market.system;
+    // Get model configuration from template
+    const modelConfig = getModelConfig(MARKET_PROMPT);
 
     const { content, metrics } = await chatCompletion(
       [
         { role: "system", content: systemPrompt },
-        { role: "user", content: PROMPTS.market.user(topic, industry) },
+        { role: "user", content: userPrompt },
       ],
-      { model: "chatAdvanced", maxTokens: 3000 },
+      { model: modelConfig.model, maxTokens: modelConfig.maxTokens },
     );
 
-    await logUsage(context.auth.uid, "market_insights", {
-      topic,
-      provider: metrics.provider,
-      model: metrics.model,
-      tokens: metrics.totalTokens,
-      ragSourcesUsed: sourcesUsed.length,
-    });
+    try {
+      await logUsage(context.auth.uid, "market_insights", {
+        topic,
+        promptId: MARKET_PROMPT.metadata.id,
+        promptVersion: MARKET_PROMPT.metadata.version,
+        provider: metrics.provider,
+        model: metrics.model,
+        tokens: metrics.totalTokens,
+        ragSourcesUsed: sourcesUsed.length,
+      });
+    } catch (logError) {
+      functions.logger.warn("Failed to log market insights usage:", logError);
+    }
 
     return {
       insights: content,
       sources: sourcesUsed,
       ragEnabled: documentContext.length > 0,
+      promptVersion: MARKET_PROMPT.metadata.version,
     };
   },
 );
