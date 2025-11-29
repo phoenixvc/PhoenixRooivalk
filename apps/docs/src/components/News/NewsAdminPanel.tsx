@@ -313,7 +313,7 @@ export function NewsAdminPanel(): React.ReactElement | null {
                           <div
                             className="news-admin-category-bar-fill"
                             style={{
-                              width: `${(count / stats.totalArticles) * 100}%`,
+                              width: `${Math.min(100, (count / Math.max(1, stats.totalArticles)) * 100)}%`,
                             }}
                           />
                         </div>
