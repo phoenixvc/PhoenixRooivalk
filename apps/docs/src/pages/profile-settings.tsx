@@ -34,9 +34,46 @@ import styles from "./profile-settings.module.css";
 // localStorage key for profile confirmation
 const PROFILE_CONFIRMED_KEY = "phoenix-docs-profile-confirmed";
 const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
+const NEWS_PREFERENCES_CACHE_KEY = "phoenix-docs-news-preferences";
+const NEWS_PREFERENCES_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // All available news categories
 const ALL_CATEGORIES = Object.keys(NEWS_CATEGORY_CONFIG) as NewsCategory[];
+
+// Helper functions for caching
+interface CachedPreferences {
+  data: Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">;
+  timestamp: number;
+}
+
+function getCachedPreferences(): CachedPreferences | null {
+  try {
+    const cached = localStorage.getItem(NEWS_PREFERENCES_CACHE_KEY);
+    if (cached) {
+      const parsed: CachedPreferences = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp < NEWS_PREFERENCES_CACHE_TTL) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Ignore cache errors
+  }
+  return null;
+}
+
+function setCachedPreferences(
+  data: Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+): void {
+  try {
+    const cached: CachedPreferences = {
+      data,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(NEWS_PREFERENCES_CACHE_KEY, JSON.stringify(cached));
+  } catch {
+    // Ignore cache errors
+  }
+}
 
 export default function ProfileSettings(): React.ReactElement {
   const { user, loading, userProfile, updateUserRoles, logout, progress } =
@@ -50,6 +87,22 @@ export default function ProfileSettings(): React.ReactElement {
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const [showOnboardingReset, setShowOnboardingReset] = useState(false);
   const [showProfileReset, setShowProfileReset] = useState(false);
+
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    confirmLabel: string;
+    onConfirm: () => void;
+    variant?: "danger" | "warning";
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    confirmLabel: "",
+    onConfirm: () => {},
+  });
 
   // News preferences state
   const [newsPreferences, setNewsPreferences] = useState<
@@ -66,15 +119,22 @@ export default function ProfileSettings(): React.ReactElement {
     }
   }, [userProfile.isProfileLoaded, userProfile.confirmedRoles]);
 
-  // Load news preferences when user is authenticated
+  // Load news preferences when user is authenticated (with caching)
   useEffect(() => {
     if (user) {
+      // Try to load from cache first for instant UI
+      const cached = getCachedPreferences();
+      if (cached) {
+        setNewsPreferences(cached.data);
+      }
+
+      // Then fetch fresh data from server
       setIsLoadingPreferences(true);
       newsService
         .getUserPreferences()
         .then((prefs) => {
           if (prefs) {
-            setNewsPreferences({
+            const prefsData = {
               preferredCategories: prefs.preferredCategories || [],
               hiddenCategories: prefs.hiddenCategories || [],
               followedKeywords: prefs.followedKeywords || [],
@@ -83,11 +143,15 @@ export default function ProfileSettings(): React.ReactElement {
               pushNotifications: prefs.pushNotifications || false,
               readArticleIds: prefs.readArticleIds || [],
               savedArticleIds: prefs.savedArticleIds || [],
-            });
+            };
+            setNewsPreferences(prefsData);
+            // Update cache with fresh data
+            setCachedPreferences(prefsData);
           }
         })
         .catch((err) => {
           console.error("Failed to load news preferences:", err);
+          // If server fails but we have cached data, keep using it
         })
         .finally(() => {
           setIsLoadingPreferences(false);
@@ -122,21 +186,51 @@ export default function ProfileSettings(): React.ReactElement {
     }, 1000);
   };
 
-  const handleResetProfile = () => {
+  const executeProfileReset = () => {
     // Clear profile confirmation data from localStorage
     localStorage.removeItem(PROFILE_CONFIRMED_KEY);
     localStorage.removeItem(PROFILE_DATA_KEY);
     setShowProfileReset(true);
+    setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
     // Reload to trigger profile confirmation modal
     setTimeout(() => {
       window.location.reload();
     }, 1000);
   };
 
-  const handleSignOut = async () => {
+  const handleResetProfile = () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: "Reset Profile?",
+      message:
+        "This will clear your profile selection and preferences. You'll need to select a new profile template on your next visit. This action cannot be undone.",
+      confirmLabel: "Reset Profile",
+      onConfirm: executeProfileReset,
+      variant: "warning",
+    });
+  };
+
+  const executeSignOut = async () => {
+    setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
     await logout();
     // Redirect to home after logout
     window.location.href = "/";
+  };
+
+  const handleSignOut = () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: "Sign Out?",
+      message:
+        "Are you sure you want to sign out? Your progress will be saved and you can sign back in anytime.",
+      confirmLabel: "Sign Out",
+      onConfirm: executeSignOut,
+      variant: "danger",
+    });
+  };
+
+  const closeConfirmDialog = () => {
+    setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
   };
 
   // News preferences handlers
@@ -261,6 +355,8 @@ export default function ProfileSettings(): React.ReactElement {
         emailDigest: newsPreferences.emailDigest,
         pushNotifications: newsPreferences.pushNotifications,
       });
+      // Update cache with saved preferences
+      setCachedPreferences(newsPreferences);
       toast.success("News preferences saved!");
     } catch (err) {
       console.error("Failed to save news preferences:", err);
@@ -766,6 +862,44 @@ export default function ProfileSettings(): React.ReactElement {
             </div>
           </div>
         </section>
+
+        {/* Confirmation Dialog */}
+        {confirmDialog.isOpen && (
+          <div className={styles.dialogOverlay} onClick={closeConfirmDialog}>
+            <div
+              className={styles.dialogContent}
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="confirm-dialog-title"
+            >
+              <h3 id="confirm-dialog-title" className={styles.dialogTitle}>
+                {confirmDialog.title}
+              </h3>
+              <p className={styles.dialogMessage}>{confirmDialog.message}</p>
+              <div className={styles.dialogActions}>
+                <button
+                  type="button"
+                  className="button button--secondary"
+                  onClick={closeConfirmDialog}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className={`button ${
+                    confirmDialog.variant === "danger"
+                      ? "button--danger"
+                      : "button--warning"
+                  }`}
+                  onClick={confirmDialog.onConfirm}
+                >
+                  {confirmDialog.confirmLabel}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </Layout>
   );

@@ -42,6 +42,7 @@ export function NewsPanel({
   const [selectedCategories, setSelectedCategories] = useState<NewsCategory[]>(
     [],
   );
+  const debouncedSelectedCategories = useDebounce(selectedCategories, 300);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,7 +74,7 @@ export function NewsPanel({
           limit: maxItems,
           cursor: loadMore ? cursor : undefined,
           categories:
-            selectedCategories.length > 0 ? selectedCategories : undefined,
+            debouncedSelectedCategories.length > 0 ? debouncedSelectedCategories : undefined,
         });
 
         if (loadMore) {
@@ -96,7 +97,7 @@ export function NewsPanel({
         setIsLoading(false);
       }
     },
-    [userProfile, maxItems, cursor, selectedCategories],
+    [userProfile, maxItems, cursor, debouncedSelectedCategories],
   );
 
   // Fetch saved articles
@@ -134,7 +135,7 @@ export function NewsPanel({
       const result = await newsService.searchNews({
         query: debouncedSearchQuery,
         categories:
-          selectedCategories.length > 0 ? selectedCategories : undefined,
+          debouncedSelectedCategories.length > 0 ? debouncedSelectedCategories : undefined,
         limit: maxItems,
       });
 
@@ -150,7 +151,7 @@ export function NewsPanel({
     } finally {
       setIsLoading(false);
     }
-  }, [debouncedSearchQuery, selectedCategories, maxItems, fetchNewsFeed]);
+  }, [debouncedSearchQuery, debouncedSelectedCategories, maxItems, fetchNewsFeed]);
 
   // Initial load
   useEffect(() => {
@@ -161,12 +162,12 @@ export function NewsPanel({
     }
   }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-search when debounced query changes
+  // Auto-search when debounced query or categories change
   useEffect(() => {
     if (activeTab !== "saved") {
       handleSearch();
     }
-  }, [debouncedSearchQuery, selectedCategories]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debouncedSearchQuery, debouncedSelectedCategories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle category filter change
   const toggleCategory = (category: NewsCategory) => {

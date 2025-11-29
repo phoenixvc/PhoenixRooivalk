@@ -38,6 +38,7 @@ export function NewsCard({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSaved, setIsSaved] = useState(initialSaved);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const shareMenuRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
@@ -82,13 +83,24 @@ export function NewsCard({
 
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // Optimistic UI update - immediately toggle the saved state
+    const previousSaved = isSaved;
+    const newSaved = !isSaved;
+    setIsSaved(newSaved);
     setIsSaving(true);
+
     try {
-      const result = await newsService.saveArticle(article.id, !isSaved);
-      setIsSaved(result.saved);
+      const result = await newsService.saveArticle(article.id, newSaved);
+      // Verify server state matches our optimistic update
+      if (result.saved !== newSaved) {
+        setIsSaved(result.saved);
+      }
       onSave?.(article.id, result.saved);
       toast.success(result.saved ? "Article saved!" : "Article removed from saved");
     } catch (err) {
+      // Revert optimistic update on error
+      setIsSaved(previousSaved);
       console.error("Failed to save article:", err);
       toast.error("Failed to save article. Please try again.");
     } finally {
@@ -104,13 +116,18 @@ export function NewsCard({
     e.stopPropagation();
 
     if (isShareSupported()) {
-      const success = await shareContent({
-        title: article.title,
-        text: article.summary || article.content.substring(0, 100),
-        url: getArticleUrl(),
-      });
-      if (success) {
-        toast.success("Article shared!");
+      setIsSharing(true);
+      try {
+        const success = await shareContent({
+          title: article.title,
+          text: article.summary || article.content.substring(0, 100),
+          url: getArticleUrl(),
+        });
+        if (success) {
+          toast.success("Article shared!");
+        }
+      } finally {
+        setIsSharing(false);
       }
     } else {
       setShowShareMenu((prev) => !prev);
@@ -179,12 +196,13 @@ export function NewsCard({
           <span className="news-card-date">{formatDate(article.publishedAt)}</span>
           <div className="news-card-actions" ref={shareMenuRef}>
             <button
-              className="news-card-share-btn"
+              className={`news-card-share-btn ${isSharing ? "sharing" : ""}`}
               onClick={handleShare}
+              disabled={isSharing}
               title="Share article"
               aria-label="Share article"
             >
-              ↗
+              {isSharing ? "..." : "↗"}
             </button>
             {showShareMenu && (
               <div className="news-card-share-menu">
@@ -257,12 +275,13 @@ export function NewsCard({
         </div>
         <div className="news-card-full-actions" ref={shareMenuRef}>
           <button
-            className="news-card-share-btn-full"
+            className={`news-card-share-btn-full ${isSharing ? "sharing" : ""}`}
             onClick={handleShare}
+            disabled={isSharing}
             title="Share article"
             aria-label="Share article"
           >
-            ↗ Share
+            {isSharing ? "Sharing..." : "↗ Share"}
           </button>
           {showShareMenu && (
             <div className="news-card-share-menu news-card-share-menu-full">

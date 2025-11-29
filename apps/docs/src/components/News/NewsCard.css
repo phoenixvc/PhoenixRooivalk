@@ -284,6 +284,17 @@
   color: white;
 }
 
+.news-card-share-btn-full.sharing,
+.news-card-share-btn.sharing {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.news-card-share-btn-full:disabled,
+.news-card-share-btn:disabled {
+  cursor: not-allowed;
+}
+
 .news-card-share-menu-full {
   top: 100%;
   bottom: auto;

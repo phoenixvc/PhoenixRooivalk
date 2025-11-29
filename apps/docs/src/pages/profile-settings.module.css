@@ -532,6 +532,74 @@
   background: rgba(249, 115, 22, 0.3);
 }
 
+/* Confirmation Dialog */
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.dialogContent {
+  background: rgb(30, 41, 59);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.dialogTitle {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(241, 245, 249);
+}
+
+.dialogMessage {
+  margin: 0 0 1.5rem 0;
+  color: rgb(148, 163, 184);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.dialogActions .button--warning {
+  background: rgb(245, 158, 11);
+  border-color: rgb(245, 158, 11);
+  color: white;
+}
+
+.dialogActions .button--warning:hover {
+  background: rgb(217, 119, 6);
+  border-color: rgb(217, 119, 6);
+}
+
+.dialogActions .button--danger {
+  background: rgb(239, 68, 68);
+  border-color: rgb(239, 68, 68);
+  color: white;
+}
+
+.dialogActions .button--danger:hover {
+  background: rgb(220, 38, 38);
+  border-color: rgb(220, 38, 38);
+}
+
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2rem;
@@ -553,5 +621,13 @@
   .accountAction {
     flex-direction: column;
     text-align: center;
+  }
+
+  .dialogActions {
+    flex-direction: column-reverse;
+  }
+
+  .dialogActions button {
+    width: 100%;
   }
 }
