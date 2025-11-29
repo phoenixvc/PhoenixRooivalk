@@ -53,11 +53,19 @@ export default function SlideDeck({
   // Extract slide info from children
   const slideInfo = React.useMemo(() => {
     const slides = React.Children.toArray(children).filter(
-      (
-        child,
-      ): child is React.ReactElement<{ number: number; duration?: number }> =>
-        React.isValidElement(child) &&
-        typeof (child.props as { number?: number }).number === "number",
+      (child): child is React.ReactElement<{
+        number: number;
+        duration?: number;
+      }> => {
+        if (!React.isValidElement(child)) return false;
+        const props = child.props as unknown;
+        return (
+          typeof props === "object" &&
+          props !== null &&
+          "number" in props &&
+          typeof (props as { number: unknown }).number === "number"
+        );
+      },
     );
     const count = slides.length;
     const totalSeconds = slides.reduce(
