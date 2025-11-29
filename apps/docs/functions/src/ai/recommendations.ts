@@ -2,14 +2,21 @@
  * Reading Recommendations AI Function
  *
  * Suggests next articles based on user reading history.
- * Now includes RAG semantic search for better relevance matching.
+ * Uses the new prompt template system with RAG semantic search.
+ *
+ * Migration: Updated to use RECOMMENDATIONS_PROMPT template (Phase 2.1)
  */
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { chatCompletion } from "../ai-provider";
 import { searchDocumentsUnique, getRelatedDocuments } from "../rag/search";
-import { PROMPTS } from "./prompts";
+import {
+  RECOMMENDATIONS_PROMPT,
+  buildSystemPrompt,
+  buildUserPrompt,
+  getModelConfig,
+} from "../prompts";
 
 const db = admin.firestore();
 
@@ -141,27 +148,42 @@ export const getReadingRecommendations = functions.https.onCall(
         learningPath:
           "Continue exploring documentation related to your interests",
         ragEnabled: true,
+        promptVersion: RECOMMENDATIONS_PROMPT.metadata.version,
       };
     }
 
-    // Fall back to LLM-based recommendations
+    // Fall back to LLM-based recommendations using the new template system
+    const systemPrompt = buildSystemPrompt(RECOMMENDATIONS_PROMPT);
+
+    // Format data for template
+    const readDocsStr = readDocs.join(", ") || "None";
+    const unreadDocsStr = (
+      unreadDocs as Array<{ id: string; title?: string; category?: string }>
+    )
+      .map(
+        (d) =>
+          `${d.id} (${d.title || "Untitled"} - ${d.category || "General"})`,
+      )
+      .join("\n");
+
+    const userPrompt = buildUserPrompt(RECOMMENDATIONS_PROMPT, {
+      readDocs: readDocsStr,
+      currentDocId: currentDocId || "Not specified",
+      unreadDocs: unreadDocsStr,
+    });
+
+    const modelConfig = getModelConfig(RECOMMENDATIONS_PROMPT);
+
     const { content } = await chatCompletion(
       [
-        { role: "system", content: PROMPTS.recommendations.system },
-        {
-          role: "user",
-          content: PROMPTS.recommendations.user(
-            readDocs,
-            currentDocId,
-            unreadDocs as Array<{
-              id: string;
-              title?: string;
-              category?: string;
-            }>,
-          ),
-        },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
       ],
-      { model: "chat", maxTokens: 1000, temperature: 0.5 },
+      {
+        model: modelConfig.model,
+        maxTokens: modelConfig.maxTokens,
+        temperature: modelConfig.temperature,
+      },
     );
 
     try {
@@ -172,6 +194,7 @@ export const getReadingRecommendations = functions.https.onCall(
         return {
           ...parsed,
           ragEnabled: false,
+          promptVersion: RECOMMENDATIONS_PROMPT.metadata.version,
         };
       }
     } catch (e) {
@@ -195,6 +218,7 @@ export const getReadingRecommendations = functions.https.onCall(
       recommendations: fallbackRecs.slice(0, 5),
       learningPath: "Continue exploring the documentation",
       ragEnabled: semanticRecommendations.length > 0,
+      promptVersion: RECOMMENDATIONS_PROMPT.metadata.version,
     };
   },
 );

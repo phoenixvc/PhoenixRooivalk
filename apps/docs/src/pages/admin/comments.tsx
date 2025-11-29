@@ -393,6 +393,9 @@ export default function CommentsAdminDashboard(): React.ReactElement {
             onKeyDown={(e) => {
               if (e.key === "Escape") {
                 setSelectedComment(null);
+              } else if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedComment(null);
               }
             }}
             role="button"

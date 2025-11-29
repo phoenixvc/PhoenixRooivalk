@@ -13,6 +13,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { aiService, AIError, RAGResponse } from "../../services/aiService";
+import { sanitizeMarkdown } from "../../utils/sanitize";
 import "./AIChatInterface.css";
 
 interface ChatMessage {
@@ -298,7 +299,7 @@ export function AIChatInterface({
                       <div
                         className="ai-chat__message-text"
                         dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(message.content),
+                          __html: sanitizeMarkdown(message.content),
                         }}
                       />
 
@@ -374,46 +375,6 @@ export function AIChatInterface({
         </p>
       </div>
     </div>
-  );
-}
-
-/**
- * Sanitize HTML to prevent XSS attacks
- * Only allows safe tags: strong, em, code, pre, ul, li, br
- */
-function sanitizeHtml(html: string): string {
-  // First, escape any HTML entities
-  const escaped = html
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-  // Then apply markdown formatting (which introduces our safe HTML)
-  return formatMarkdown(escaped);
-}
-
-/**
- * Format message content with basic markdown
- * Note: This function expects escaped HTML input
- */
-function formatMarkdown(text: string): string {
-  return (
-    text
-      // Code blocks
-      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-      // Inline code
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      // Bold
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      // Italic
-      .replace(/\*([^*]+)\*/g, "<em>$1</em>")
-      // Lists
-      .replace(/^- (.+)$/gm, "<li>$1</li>")
-      .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-      // Line breaks
-      .replace(/\n/g, "<br>")
   );
 }
 

@@ -141,7 +141,8 @@
   overflow: hidden;
 }
 
-.faq-item.expanded {
+/* Use [open] attribute for expanded state with details element */
+.faq-item[open] {
   border-color: var(--ifm-color-primary, #3b82f6);
 }
 
@@ -159,6 +160,17 @@
   font-weight: 500;
   color: var(--ifm-font-color-base, #1f2937);
   transition: background 0.2s;
+  list-style: none; /* Remove default marker for summary element */
+}
+
+/* Hide the default disclosure triangle */
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::marker {
+  display: none;
+  content: "";
 }
 
 .faq-question:hover {

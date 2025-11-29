@@ -133,6 +133,15 @@ export {
   markAsBreakingNews,
 } from "./news";
 
+// Export Support functions
+export {
+  submitContactForm,
+  getLatestContentTimestamps,
+  getUserTickets,
+  getAdminTickets,
+  updateTicketStatus,
+} from "./support";
+
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 

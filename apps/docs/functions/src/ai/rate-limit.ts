@@ -13,6 +13,7 @@ export const RATE_LIMITS: Record<
   string,
   { maxRequests: number; windowMs: number }
 > = {
+  // AI features
   competitor: { maxRequests: 10, windowMs: 60 * 60 * 1000 }, // 10/hour
   swot: { maxRequests: 15, windowMs: 60 * 60 * 1000 }, // 15/hour
   recommendations: { maxRequests: 30, windowMs: 60 * 60 * 1000 }, // 30/hour
@@ -21,6 +22,11 @@ export const RATE_LIMITS: Record<
   summary: { maxRequests: 20, windowMs: 60 * 60 * 1000 }, // 20/hour
   research: { maxRequests: 20, windowMs: 60 * 60 * 1000 }, // 20/hour
   ask: { maxRequests: 50, windowMs: 60 * 60 * 1000 }, // 50/hour for RAG
+  // Support features
+  contactForm: { maxRequests: 5, windowMs: 60 * 60 * 1000 }, // 5/hour
+  // Comment features
+  createComment: { maxRequests: 30, windowMs: 60 * 60 * 1000 }, // 30/hour
+  updateComment: { maxRequests: 60, windowMs: 60 * 60 * 1000 }, // 60/hour
 };
 
 /**

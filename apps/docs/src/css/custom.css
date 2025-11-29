@@ -1316,6 +1316,22 @@ html {
   background: rgba(59, 130, 246, 0.25) !important;
 }
 
+/* News notification badge - shows when there's new news */
+/* Uses CSS custom property set by NavbarNotifications component */
+.navbar__link--news::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: rgb(239, 68, 68);
+  border-radius: 50%;
+  border: 2px solid rgb(15, 23, 42);
+  animation: navbar-badge-pulse 2s ease-in-out infinite;
+  display: var(--navbar-news-badge-display, none);
+}
+
 /* ================================================
    SUPPORT NAVBAR LINK
    ================================================ */
@@ -1337,9 +1353,50 @@ html {
   background: rgba(34, 197, 94, 0.25) !important;
 }
 
+/* Support notification badge - shows when there's new messages */
+/* Uses CSS custom property set by NavbarNotifications component */
+.navbar__link--support::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: rgb(239, 68, 68);
+  border-radius: 50%;
+  border: 2px solid rgb(15, 23, 42);
+  animation: navbar-badge-pulse 2s ease-in-out infinite;
+  display: var(--navbar-support-badge-display, none);
+}
+
+/* Pulse animation for notification badges */
+@keyframes navbar-badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
 /* ================================================
-   LAYOUT: Centered content, compact TOC
+   LAYOUT: Wide content, no right TOC
    ================================================ */
+
+/* Hide the right TOC sidebar completely */
+.theme-doc-toc-desktop,
+.col--3:has(.table-of-contents),
+.tableOfContents_node_modules-\@docusaurus-theme-classic-lib-theme-TOC-styles-module {
+  display: none !important;
+}
+
+/* Also hide TOC wrapper column */
+.col.col--3 {
+  display: none !important;
+}
 
 /* Main doc container - full width */
 .docMainContainer {
@@ -1347,61 +1404,38 @@ html {
   flex: 1;
 }
 
-/* Center the main content */
+/* Center the main content with wider max-width */
 .container {
-  max-width: 1400px !important;
+  max-width: 1600px !important;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
-/* Make the article content wider */
+/* Make the article content much wider */
 article {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-/* Right TOC sidebar - fixed width, no gap */
-.theme-doc-toc-desktop {
-  position: sticky;
-  top: 80px;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  padding-left: 1rem;
-  padding-right: 0;
-  width: 200px;
-  min-width: 180px;
-  flex-shrink: 0;
-}
-
-/* TOC container - fixed width */
-.col--3 {
-  --ifm-col-width: 200px;
-  width: 200px !important;
-  max-width: 200px !important;
-  min-width: 180px !important;
-  padding-left: 0.5rem !important;
-  padding-right: 0 !important;
-  margin-right: 0 !important;
-}
-
-/* Main content column - fill remaining space */
+/* Main content column - fill all available space */
 .col:not(.col--3) {
   flex: 1;
-  max-width: none;
+  max-width: 100%;
+  width: 100%;
 }
 
-/* Row layout for doc page - no gaps */
+/* Row layout for doc page */
 .row {
   margin: 0;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: nowrap;
 }
 
-/* Doc item wrapper - center content */
+/* Doc item wrapper - wider content, less padding */
 .docItemContainer {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 /* Sidebar left - keep reasonable width */
@@ -1410,42 +1444,28 @@ article {
   min-width: 280px;
 }
 
-/* Main wrapper - prevent extra space on right */
+/* Main wrapper */
 .main-wrapper {
   display: flex;
   width: 100%;
 }
 
-/* Doc page layout - no gap on right */
+/* Doc page layout */
 @media (min-width: 997px) {
   .docMainContainer {
-    padding-left: 1rem;
-    padding-right: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
-  /* Container within doc main - stretch to edge */
+  /* Container within doc main */
   .docMainContainer > .container {
     max-width: 100%;
-    padding-right: 0;
+    padding: 0 1rem;
   }
 
-  /* When TOC is present, adjust content */
-  .docMainContainerEnhanced {
-    display: flex;
-    justify-content: flex-start;
-  }
-}
-
-/* Smaller screens - narrower TOC */
-@media (max-width: 1200px) {
-  .theme-doc-toc-desktop {
-    width: 180px;
-    min-width: 160px;
-  }
-
-  .col--3 {
-    width: 180px !important;
-    max-width: 180px !important;
+  /* Markdown content - wider */
+  .markdown {
+    max-width: 100%;
   }
 }
 
@@ -1461,5 +1481,9 @@ article {
 
   .row {
     flex-wrap: wrap;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 }

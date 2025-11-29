@@ -72,6 +72,23 @@ export interface PersonalizedNewsItem extends NewsArticle {
 }
 
 /**
+ * Article collection/folder for organizing saved articles
+ */
+export interface ArticleCollection {
+  id: string;
+  name: string;
+  description?: string;
+  color?: string;
+  icon?: string;
+  articleIds: string[];
+  isDefault?: boolean;
+  isShared?: boolean;
+  sharedWith?: string[]; // User IDs
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
  * User news preferences stored in Firestore
  */
 export interface UserNewsPreferences {
@@ -90,6 +107,8 @@ export interface UserNewsPreferences {
   // Reading history
   readArticleIds: string[];
   savedArticleIds: string[];
+  // Article collections
+  collections: ArticleCollection[];
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -176,7 +195,36 @@ export const DEFAULT_NEWS_PREFERENCES: Omit<
   pushNotifications: false,
   readArticleIds: [],
   savedArticleIds: [],
+  collections: [],
 };
+
+/**
+ * Default collection colors
+ */
+export const COLLECTION_COLORS = [
+  "#4A90D9", // Blue
+  "#10B981", // Green
+  "#F59E0B", // Amber
+  "#EC4899", // Pink
+  "#8B5CF6", // Purple
+  "#14B8A6", // Teal
+  "#F97316", // Orange
+  "#6366F1", // Indigo
+] as const;
+
+/**
+ * Default collection icons
+ */
+export const COLLECTION_ICONS = [
+  "folder",
+  "star",
+  "bookmark",
+  "heart",
+  "flag",
+  "tag",
+  "archive",
+  "lightning",
+] as const;
 
 /**
  * News category display configuration

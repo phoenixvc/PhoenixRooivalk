@@ -19,6 +19,7 @@ import {
   SWOT_TOPICS,
   MARKET_TOPICS,
 } from "../../services/aiService";
+import { sanitizeMarkdown } from "../../utils/sanitize";
 import "./AIPanel.css";
 
 type AITab =
@@ -674,7 +675,7 @@ export function AIPanel(): React.ReactElement | null {
                 <div
                   className="ai-result-content"
                   dangerouslySetInnerHTML={{
-                    __html: formatMarkdown(result),
+                    __html: sanitizeMarkdown(result),
                   }}
                 />
               </div>
@@ -683,44 +684,6 @@ export function AIPanel(): React.ReactElement | null {
         </div>
       )}
     </>
-  );
-}
-
-/**
- * Simple markdown formatter
- */
-function formatMarkdown(text: string): string {
-  return (
-    text
-      // Headers
-      .replace(/^### (.*$)/gm, "<h4>$1</h4>")
-      .replace(/^## (.*$)/gm, "<h3>$1</h3>")
-      .replace(/^# (.*$)/gm, "<h2>$1</h2>")
-      // Bold
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      // Italic
-      .replace(/\*(.*?)\*/g, "<em>$1</em>")
-      // Code blocks
-      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-      // Inline code
-      .replace(/`(.*?)`/g, "<code>$1</code>")
-      // Lists
-      .replace(/^- (.*$)/gm, "<li>$1</li>")
-      .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-      // Horizontal rule
-      .replace(/^---$/gm, "<hr />")
-      // Paragraphs
-      .replace(/\n\n/g, "</p><p>")
-      .replace(/^(.+)$/gm, (match) => {
-        if (
-          match.startsWith("<") ||
-          match.startsWith("</") ||
-          match.trim() === ""
-        ) {
-          return match;
-        }
-        return match;
-      })
   );
 }
 

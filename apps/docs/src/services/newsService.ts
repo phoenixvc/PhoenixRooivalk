@@ -9,13 +9,21 @@
 
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { app, isFirebaseConfigured } from "./firebase";
+import { withRetry, defaultIsRetryable } from "../utils/retry";
+import { memoryCache } from "../utils/cache";
 import type {
   NewsArticle,
   PersonalizedNewsItem,
   NewsFeedResponse,
   NewsCategory,
   NewsSearchParams,
+  UserNewsPreferences,
 } from "../types/news";
+
+// Cache TTLs (in milliseconds)
+const NEWS_FEED_CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+const SEARCH_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const SAVED_ARTICLES_CACHE_TTL = 60 * 1000; // 1 minute
 
 // User profile for personalization
 interface UserProfile {
@@ -90,6 +98,24 @@ class NewsService {
   }
 
   /**
+   * Generate cache key for news feed
+   */
+  private getNewsFeedCacheKey(options?: {
+    userProfile?: UserProfile;
+    limit?: number;
+    cursor?: string;
+    categories?: NewsCategory[];
+  }): string {
+    const parts = ["news_feed"];
+    if (options?.cursor) parts.push(`cursor:${options.cursor}`);
+    if (options?.limit) parts.push(`limit:${options.limit}`);
+    if (options?.categories?.length)
+      parts.push(`cats:${options.categories.sort().join(",")}`);
+    // Don't include userProfile in cache key - it's user-specific
+    return parts.join("_");
+  }
+
+  /**
    * Get news feed with general and personalized articles
    */
   async getNewsFeed(options?: {
@@ -100,6 +126,15 @@ class NewsService {
   }): Promise<NewsFeedResponse> {
     if (!this.init()) {
       throw new NewsError("News service not available", "unavailable");
+    }
+
+    // Check cache for general news (skip if user profile is provided for personalization)
+    const cacheKey = this.getNewsFeedCacheKey(options);
+    if (!options?.userProfile) {
+      const cached = memoryCache.get<NewsFeedResponse>(cacheKey);
+      if (cached) {
+        return cached;
+      }
     }
 
     try {
@@ -113,7 +148,20 @@ class NewsService {
         NewsFeedResponse
       >(this.functions!, "getNewsFeed");
 
-      const result = await getNewsFeedFn(options || {});
+      // Use retry with exponential backoff for network resilience
+      const result = await withRetry(() => getNewsFeedFn(options || {}), {
+        maxRetries: 3,
+        isRetryable: defaultIsRetryable,
+        onRetry: (attempt, error) => {
+          console.warn(`News feed fetch retry ${attempt}:`, error);
+        },
+      });
+
+      // Cache the result (only for non-personalized requests)
+      if (!options?.userProfile) {
+        memoryCache.set(cacheKey, result.data, NEWS_FEED_CACHE_TTL);
+      }
+
       return result.data;
     } catch (error) {
       this.handleError(error);
@@ -183,6 +231,10 @@ class NewsService {
       >(this.functions!, "saveArticle");
 
       const result = await saveFn({ articleId, save });
+
+      // Invalidate saved articles cache
+      memoryCache.delete("saved_articles");
+
       return result.data;
     } catch (error) {
       this.handleError(error);
@@ -197,6 +249,14 @@ class NewsService {
       throw new NewsError("News service not available", "unavailable");
     }
 
+    // Check cache
+    const cached = memoryCache.get<{ articles: NewsArticle[] }>(
+      "saved_articles",
+    );
+    if (cached) {
+      return cached;
+    }
+
     try {
       const getSavedFn = httpsCallable<
         Record<string, never>,
@@ -204,10 +264,28 @@ class NewsService {
       >(this.functions!, "getSavedArticles");
 
       const result = await getSavedFn({});
+
+      // Cache the result
+      memoryCache.set("saved_articles", result.data, SAVED_ARTICLES_CACHE_TTL);
+
       return result.data;
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  /**
+   * Generate cache key for search
+   */
+  private getSearchCacheKey(params: NewsSearchParams): string {
+    const parts = ["news_search"];
+    if (params.query) parts.push(`q:${params.query}`);
+    if (params.categories?.length)
+      parts.push(`cats:${params.categories.sort().join(",")}`);
+    if (params.type) parts.push(`type:${params.type}`);
+    if (params.limit) parts.push(`limit:${params.limit}`);
+    if (params.cursor) parts.push(`cursor:${params.cursor}`);
+    return parts.join("_");
   }
 
   /**
@@ -220,6 +298,16 @@ class NewsService {
       throw new NewsError("News service not available", "unavailable");
     }
 
+    // Check cache
+    const cacheKey = this.getSearchCacheKey(params);
+    const cached = memoryCache.get<{
+      results: NewsArticle[];
+      totalFound: number;
+    }>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     try {
       const searchFn = httpsCallable<
         NewsSearchParams,
@@ -227,6 +315,10 @@ class NewsService {
       >(this.functions!, "searchNews");
 
       const result = await searchFn(params);
+
+      // Cache the search results
+      memoryCache.set(cacheKey, result.data, SEARCH_CACHE_TTL);
+
       return result.data;
     } catch (error) {
       this.handleError(error);
@@ -416,6 +508,78 @@ class NewsService {
       >(this.functions!, "unsubscribeFromBreakingNews");
 
       const result = await unsubscribeFn({});
+      return result.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Get user news preferences
+   */
+  async getUserPreferences(): Promise<UserNewsPreferences | null> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    // Check cache
+    const cached = memoryCache.get<UserNewsPreferences>(
+      "user_news_preferences",
+    );
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const getPreferencesFn = httpsCallable<
+        Record<string, never>,
+        { preferences: UserNewsPreferences | null }
+      >(this.functions!, "getUserNewsPreferences");
+
+      const result = await getPreferencesFn({});
+
+      // Cache the result
+      if (result.data.preferences) {
+        memoryCache.set(
+          "user_news_preferences",
+          result.data.preferences,
+          NEWS_FEED_CACHE_TTL,
+        );
+      }
+
+      return result.data.preferences;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Save user news preferences
+   */
+  async saveUserPreferences(
+    preferences: Partial<
+      Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+    >,
+  ): Promise<{ success: boolean }> {
+    if (!this.init()) {
+      throw new NewsError("News service not available", "unavailable");
+    }
+
+    try {
+      const savePreferencesFn = httpsCallable<
+        {
+          preferences: Partial<
+            Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+          >;
+        },
+        { success: boolean }
+      >(this.functions!, "saveUserNewsPreferences");
+
+      const result = await savePreferencesFn({ preferences });
+
+      // Invalidate cache
+      memoryCache.delete("user_news_preferences");
+
       return result.data;
     } catch (error) {
       this.handleError(error);

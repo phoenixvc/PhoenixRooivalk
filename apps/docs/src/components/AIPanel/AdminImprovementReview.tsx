@@ -12,6 +12,7 @@ import {
   PendingImprovement,
   AIError,
 } from "../../services/aiService";
+import { sanitizeMarkdown } from "../../utils/sanitize";
 import "./AdminImprovementReview.css";
 
 interface AdminImprovementReviewProps {
@@ -160,7 +161,7 @@ export function AdminImprovementReview({
                   <div
                     className="admin-review-suggestions-content"
                     dangerouslySetInnerHTML={{
-                      __html: formatMarkdown(improvement.suggestions),
+                      __html: sanitizeMarkdown(improvement.suggestions),
                     }}
                   />
                 </div>
@@ -232,24 +233,6 @@ function formatDate(timestamp: any): string {
   } catch {
     return "Unknown";
   }
-}
-
-/**
- * Simple markdown formatter
- */
-function formatMarkdown(text: string): string {
-  return text
-    .replace(/^### (.*$)/gm, "<h4>$1</h4>")
-    .replace(/^## (.*$)/gm, "<h3>$1</h3>")
-    .replace(/^# (.*$)/gm, "<h2>$1</h2>")
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.*?)\*/g, "<em>$1</em>")
-    .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-    .replace(/`(.*?)`/g, "<code>$1</code>")
-    .replace(/^- (.*$)/gm, "<li>$1</li>")
-    .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-    .replace(/^---$/gm, "<hr />")
-    .replace(/\n\n/g, "</p><p>");
 }
 
 export default AdminImprovementReview;

@@ -2,15 +2,22 @@
  * Competitor Analysis AI Function
  *
  * Analyzes competitors in the defense/drone market using AI Foundry.
- * Now includes RAG to ground analysis in Phoenix Rooivalk documentation.
+ * Uses the new prompt template system with RAG integration.
+ *
+ * Migration: Updated to use COMPETITOR_PROMPT template (Phase 2.1)
  */
 
 import * as functions from "firebase-functions";
 
 import { chatCompletion } from "../ai-provider";
 import { searchDocuments, SearchResult } from "../rag/search";
+import {
+  COMPETITOR_PROMPT,
+  buildSystemPrompt,
+  buildUserPrompt,
+  getModelConfig,
+} from "../prompts";
 
-import { PROMPTS, PHOENIX_CONTEXT } from "./prompts";
 import { checkRateLimit, logUsage } from "./rate-limit";
 
 interface CompetitorAnalysisRequest {
@@ -109,35 +116,37 @@ export const analyzeCompetitors = functions.https.onCall(
       );
     }
 
-    // Build enhanced system prompt with RAG context
-    const systemPrompt = documentContext
-      ? `${PROMPTS.competitor.system}
+    // Build prompts using the new template system
+    const systemPrompt = buildSystemPrompt(COMPETITOR_PROMPT, {
+      ragContext: documentContext,
+      ragSources: sourcesUsed,
+    });
 
-IMPORTANT: Use the following Phoenix Rooivalk documentation to provide accurate comparisons. Reference specific capabilities from this context:
+    const userPrompt = buildUserPrompt(COMPETITOR_PROMPT, {
+      competitors,
+      focusAreas:
+        normalizedFocusAreas.length > 0
+          ? normalizedFocusAreas.join(", ")
+          : undefined,
+    });
 
-${PHOENIX_CONTEXT}
-
-PHOENIX ROOIVALK DOCUMENTATION:
-${documentContext}
-
-When comparing competitors, highlight how Phoenix Rooivalk's documented capabilities compare to each competitor's offerings.`
-      : PROMPTS.competitor.system;
+    // Get model configuration from template
+    const modelConfig = getModelConfig(COMPETITOR_PROMPT);
 
     const { content, metrics } = await chatCompletion(
       [
         { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: PROMPTS.competitor.user(competitors, normalizedFocusAreas),
-        },
+        { role: "user", content: userPrompt },
       ],
-      { model: "chatAdvanced", maxTokens: 3000 },
+      { model: modelConfig.model, maxTokens: modelConfig.maxTokens },
     );
 
     // Log usage in isolated try/catch so telemetry failures don't affect response
     try {
       await logUsage(context.auth.uid, "competitor_analysis", {
         competitors,
+        promptId: COMPETITOR_PROMPT.metadata.id,
+        promptVersion: COMPETITOR_PROMPT.metadata.version,
         provider: metrics.provider,
         model: metrics.model,
         tokens: metrics.totalTokens,
@@ -154,6 +163,7 @@ When comparing competitors, highlight how Phoenix Rooivalk's documented capabili
       analysis: content,
       sources: sourcesUsed,
       ragEnabled: documentContext.length > 0,
+      promptVersion: COMPETITOR_PROMPT.metadata.version,
     };
   },
 );

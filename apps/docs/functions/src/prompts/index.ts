@@ -55,15 +55,35 @@ export {
   RECOMMENDATIONS_PROMPT,
 } from "./templates";
 
+// Builder utilities for prompt construction
+export {
+  buildSystemPrompt,
+  buildUserPrompt,
+  buildPrompts,
+  getModelConfig,
+} from "./builder";
+
+// Context optimization utilities (Phase 2.2)
+export {
+  estimateTokens,
+  truncateToTokens,
+  calculateTokenBudget,
+  buildContextWithBudget,
+  buildOptimizedContext,
+  getTokenUsageReport,
+} from "./context-builder";
+
+export type { TokenBudget, ContextBuildResult } from "./context-builder";
+
 // Legacy compatibility - re-export from ai/prompts for backward compatibility
-// TODO: Migrate all usages to new template system
+// NOTE: Legacy exports maintained for gradual migration. Use new template system for new code.
 import {
   PROMPTS as LegacyPROMPTS,
   PHOENIX_CONTEXT as LegacyContext,
 } from "../ai/prompts";
 
 /**
- * @deprecated Use getPromptTemplate() instead
+ * @deprecated Use getPromptTemplate() and buildPrompts() instead
  * Legacy PROMPTS object for backwards compatibility
  */
 export const PROMPTS = LegacyPROMPTS;

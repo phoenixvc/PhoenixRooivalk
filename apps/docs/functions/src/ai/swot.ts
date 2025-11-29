@@ -2,16 +2,23 @@
  * SWOT Analysis AI Function
  *
  * Generates SWOT analysis for any topic using AI Foundry.
- * Now includes RAG to ground analysis in Phoenix Rooivalk documentation.
+ * Uses the new prompt template system with RAG integration.
+ *
+ * Migration: Updated to use SWOT_PROMPT template (Phase 2.1)
  */
 
 import * as functions from "firebase-functions";
 
 import { chatCompletion } from "../ai-provider";
 import { searchDocuments, SearchResult } from "../rag/search";
+import {
+  SWOT_PROMPT,
+  buildSystemPrompt,
+  buildUserPrompt,
+  getModelConfig,
+} from "../prompts";
 
 import { checkRateLimit, logUsage } from "./rate-limit";
-import { PROMPTS, PHOENIX_CONTEXT } from "./prompts";
 
 interface SWOTRequest {
   topic: string;
@@ -93,26 +100,30 @@ export const generateSWOT = functions.https.onCall(
       functions.logger.warn("RAG search failed for SWOT analysis:", error);
     }
 
-    // Build enhanced system prompt with RAG context
-    const systemPrompt = documentContext
-      ? `${PROMPTS.swot.system}
+    // Build prompts using the new template system
+    const systemPrompt = buildSystemPrompt(SWOT_PROMPT, {
+      ragContext: documentContext,
+      ragSources: sourcesUsed,
+    });
 
-IMPORTANT: Use the following Phoenix Rooivalk documentation to provide an accurate SWOT analysis grounded in real company data:
+    const userPrompt = buildUserPrompt(SWOT_PROMPT, {
+      topic,
+      additionalContext,
+    });
 
-${PHOENIX_CONTEXT}
-
-PHOENIX ROOIVALK DOCUMENTATION:
-${documentContext}
-
-Base your Strengths and Weaknesses on the documented capabilities. Reference specific features and specifications from the documentation.`
-      : PROMPTS.swot.system;
+    // Get model configuration from template
+    const modelConfig = getModelConfig(SWOT_PROMPT);
 
     const { content, metrics } = await chatCompletion(
       [
         { role: "system", content: systemPrompt },
-        { role: "user", content: PROMPTS.swot.user(topic, additionalContext) },
+        { role: "user", content: userPrompt },
       ],
-      { model: "chat", maxTokens: 2500, temperature: 0.5 },
+      {
+        model: modelConfig.model,
+        maxTokens: modelConfig.maxTokens,
+        temperature: modelConfig.temperature,
+      },
     );
 
     // Log usage in fire-and-forget manner to prevent logging failures from
@@ -120,6 +131,8 @@ Base your Strengths and Weaknesses on the documented capabilities. Reference spe
     try {
       await logUsage(context.auth.uid, "swot", {
         topic,
+        promptId: SWOT_PROMPT.metadata.id,
+        promptVersion: SWOT_PROMPT.metadata.version,
         provider: metrics.provider,
         model: metrics.model,
         tokens: metrics.totalTokens,
@@ -133,6 +146,7 @@ Base your Strengths and Weaknesses on the documented capabilities. Reference spe
       swot: content,
       sources: sourcesUsed,
       ragEnabled: documentContext.length > 0,
+      promptVersion: SWOT_PROMPT.metadata.version,
     };
   },
 );

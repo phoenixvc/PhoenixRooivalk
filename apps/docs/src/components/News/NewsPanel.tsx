@@ -5,10 +5,11 @@
  * Supports filtering, search, and saved articles.
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
 import { NewsCard } from "./NewsCard";
+import { useDebounce } from "../../hooks/useDebounce";
 import type {
   NewsArticle,
   PersonalizedNewsItem,
@@ -41,7 +42,9 @@ export function NewsPanel({
   const [selectedCategories, setSelectedCategories] = useState<NewsCategory[]>(
     [],
   );
+  const debouncedSelectedCategories = useDebounce(selectedCategories, 300);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -71,7 +74,9 @@ export function NewsPanel({
           limit: maxItems,
           cursor: loadMore ? cursor : undefined,
           categories:
-            selectedCategories.length > 0 ? selectedCategories : undefined,
+            debouncedSelectedCategories.length > 0
+              ? debouncedSelectedCategories
+              : undefined,
         });
 
         if (loadMore) {
@@ -94,7 +99,7 @@ export function NewsPanel({
         setIsLoading(false);
       }
     },
-    [userProfile, maxItems, cursor, selectedCategories],
+    [userProfile, maxItems, cursor, debouncedSelectedCategories],
   );
 
   // Fetch saved articles
@@ -120,7 +125,7 @@ export function NewsPanel({
 
   // Search news
   const handleSearch = useCallback(async () => {
-    if (!searchQuery.trim()) {
+    if (!debouncedSearchQuery.trim()) {
       fetchNewsFeed();
       return;
     }
@@ -130,9 +135,11 @@ export function NewsPanel({
 
     try {
       const result = await newsService.searchNews({
-        query: searchQuery,
+        query: debouncedSearchQuery,
         categories:
-          selectedCategories.length > 0 ? selectedCategories : undefined,
+          debouncedSelectedCategories.length > 0
+            ? debouncedSelectedCategories
+            : undefined,
         limit: maxItems,
       });
 
@@ -148,7 +155,12 @@ export function NewsPanel({
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, selectedCategories, maxItems, fetchNewsFeed]);
+  }, [
+    debouncedSearchQuery,
+    debouncedSelectedCategories,
+    maxItems,
+    fetchNewsFeed,
+  ]);
 
   // Initial load
   useEffect(() => {
@@ -158,6 +170,13 @@ export function NewsPanel({
       fetchNewsFeed();
     }
   }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-search when debounced query or categories change
+  useEffect(() => {
+    if (activeTab !== "saved") {
+      handleSearch();
+    }
+  }, [debouncedSearchQuery, debouncedSelectedCategories]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle category filter change
   const toggleCategory = (category: NewsCategory) => {
@@ -192,6 +211,25 @@ export function NewsPanel({
   };
 
   const categories = Object.keys(NEWS_CATEGORY_CONFIG) as NewsCategory[];
+
+  // Create a Set of saved article IDs for efficient lookup
+  const savedArticleIds = useMemo(
+    () => new Set(savedArticles.map((a) => a.id)),
+    [savedArticles],
+  );
+
+  // Load saved articles on mount for logged-in users (for bookmark state)
+  useEffect(() => {
+    if (user && activeTab !== "saved") {
+      // Silently fetch saved articles in background for bookmark state
+      newsService
+        .getSavedArticles()
+        .then((result) => setSavedArticles(result.articles))
+        .catch(() => {
+          /* Silent fail - not critical */
+        });
+    }
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="news-panel">
@@ -321,6 +359,7 @@ export function NewsPanel({
                       key={article.id}
                       article={article}
                       variant="compact"
+                      initialSaved={savedArticleIds.has(article.id)}
                       onRead={handleArticleRead}
                       onSave={handleArticleSave}
                     />
@@ -342,6 +381,7 @@ export function NewsPanel({
                       key={article.id}
                       article={article}
                       variant="compact"
+                      initialSaved={savedArticleIds.has(article.id)}
                       onSave={handleArticleSave}
                     />
                   ))}
@@ -384,6 +424,7 @@ export function NewsPanel({
                     key={article.id}
                     article={article}
                     variant="full"
+                    initialSaved={savedArticleIds.has(article.id)}
                     onRead={handleArticleRead}
                     onSave={handleArticleSave}
                   />
@@ -414,6 +455,7 @@ export function NewsPanel({
                     key={article.id}
                     article={article}
                     variant="full"
+                    initialSaved={true}
                     onSave={handleArticleSave}
                   />
                 ))}
