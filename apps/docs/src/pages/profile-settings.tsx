@@ -62,7 +62,7 @@ function getCachedPreferences(): CachedPreferences | null {
 }
 
 function setCachedPreferences(
-  data: Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+  data: Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">,
 ): void {
   try {
     const cached: CachedPreferences = {
@@ -243,7 +243,9 @@ export default function ProfileSettings(): React.ReactElement {
         // Move from preferred to hidden
         return {
           ...prev,
-          preferredCategories: prev.preferredCategories.filter((c) => c !== category),
+          preferredCategories: prev.preferredCategories.filter(
+            (c) => c !== category,
+          ),
           hiddenCategories: [...prev.hiddenCategories, category],
         };
       } else if (isHidden) {
@@ -297,7 +299,9 @@ export default function ProfileSettings(): React.ReactElement {
 
       const currentPermission = getNotificationPermission();
       if (currentPermission === "denied") {
-        toast.error("Notifications are blocked. Please enable them in your browser settings.");
+        toast.error(
+          "Notifications are blocked. Please enable them in your browser settings.",
+        );
         return;
       }
 
@@ -609,11 +613,10 @@ export default function ProfileSettings(): React.ReactElement {
               <div className={styles.accountActions}>
                 <div className={styles.accountAction}>
                   <div>
-                    <h4 className={styles.accountActionTitle}>
-                      Dark Mode
-                    </h4>
+                    <h4 className={styles.accountActionTitle}>Dark Mode</h4>
                     <p className={styles.accountActionDesc}>
-                      Switch between light and dark themes for better readability.
+                      Switch between light and dark themes for better
+                      readability.
                     </p>
                   </div>
                   <div className={styles.toggleContainer}>
@@ -646,7 +649,8 @@ export default function ProfileSettings(): React.ReactElement {
             <div className={styles.card}>
               <h3 className={styles.sectionTitle}>News Personalization</h3>
               <p className={styles.sectionDescription}>
-                Customize your news feed by selecting preferred categories and keywords.
+                Customize your news feed by selecting preferred categories and
+                keywords.
               </p>
 
               {isLoadingPreferences ? (
@@ -655,15 +659,21 @@ export default function ProfileSettings(): React.ReactElement {
                 <>
                   {/* Category Selection */}
                   <div className={styles.preferencesSection}>
-                    <h4 className={styles.preferencesSubtitle}>News Categories</h4>
+                    <h4 className={styles.preferencesSubtitle}>
+                      News Categories
+                    </h4>
                     <p className={styles.preferencesHint}>
                       Click to cycle: Preferred → Hidden → Neutral
                     </p>
                     <div className={styles.categoryGrid}>
                       {ALL_CATEGORIES.map((category) => {
                         const config = NEWS_CATEGORY_CONFIG[category];
-                        const isPreferred = newsPreferences.preferredCategories.includes(category);
-                        const isHidden = newsPreferences.hiddenCategories.includes(category);
+                        const isPreferred =
+                          newsPreferences.preferredCategories.includes(
+                            category,
+                          );
+                        const isHidden =
+                          newsPreferences.hiddenCategories.includes(category);
                         return (
                           <button
                             key={category}
@@ -676,14 +686,22 @@ export default function ProfileSettings(): React.ReactElement {
                               isPreferred
                                 ? "Preferred - Click to hide"
                                 : isHidden
-                                ? "Hidden - Click to reset"
-                                : "Neutral - Click to prefer"
+                                  ? "Hidden - Click to reset"
+                                  : "Neutral - Click to prefer"
                             }
                           >
-                            <span className={styles.categoryIcon}>{config.icon}</span>
-                            <span className={styles.categoryLabel}>{config.label}</span>
-                            {isPreferred && <span className={styles.categoryStatus}>★</span>}
-                            {isHidden && <span className={styles.categoryStatus}>✕</span>}
+                            <span className={styles.categoryIcon}>
+                              {config.icon}
+                            </span>
+                            <span className={styles.categoryLabel}>
+                              {config.label}
+                            </span>
+                            {isPreferred && (
+                              <span className={styles.categoryStatus}>★</span>
+                            )}
+                            {isHidden && (
+                              <span className={styles.categoryStatus}>✕</span>
+                            )}
                           </button>
                         );
                       })}
@@ -692,7 +710,9 @@ export default function ProfileSettings(): React.ReactElement {
 
                   {/* Keywords */}
                   <div className={styles.preferencesSection}>
-                    <h4 className={styles.preferencesSubtitle}>Followed Keywords</h4>
+                    <h4 className={styles.preferencesSubtitle}>
+                      Followed Keywords
+                    </h4>
                     <p className={styles.preferencesHint}>
                       Add keywords to prioritize related news articles.
                     </p>
@@ -701,7 +721,9 @@ export default function ProfileSettings(): React.ReactElement {
                         type="text"
                         value={newKeyword}
                         onChange={(e) => setNewKeyword(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleAddKeyword()}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && handleAddKeyword()
+                        }
                         placeholder="Add keyword..."
                         className={styles.keywordField}
                       />
@@ -745,11 +767,15 @@ export default function ProfileSettings(): React.ReactElement {
                           key={option}
                           type="button"
                           className={`${styles.digestOption} ${
-                            newsPreferences.emailDigest === option ? styles.digestActive : ""
+                            newsPreferences.emailDigest === option
+                              ? styles.digestActive
+                              : ""
                           }`}
                           onClick={() => handleEmailDigestChange(option)}
                         >
-                          {option === "none" ? "Off" : option.charAt(0).toUpperCase() + option.slice(1)}
+                          {option === "none"
+                            ? "Off"
+                            : option.charAt(0).toUpperCase() + option.slice(1)}
                         </button>
                       ))}
                     </div>
@@ -759,15 +785,20 @@ export default function ProfileSettings(): React.ReactElement {
                   <div className={styles.preferencesSection}>
                     <div className={styles.accountAction}>
                       <div>
-                        <h4 className={styles.preferencesSubtitle}>Push Notifications</h4>
+                        <h4 className={styles.preferencesSubtitle}>
+                          Push Notifications
+                        </h4>
                         <p className={styles.preferencesHint}>
-                          Get notified about breaking news and important updates.
+                          Get notified about breaking news and important
+                          updates.
                         </p>
                       </div>
                       <button
                         type="button"
                         className={`${styles.toggleButton} ${
-                          newsPreferences.pushNotifications ? styles.toggleActive : ""
+                          newsPreferences.pushNotifications
+                            ? styles.toggleActive
+                            : ""
                         }`}
                         onClick={handlePushNotificationsToggle}
                         aria-pressed={newsPreferences.pushNotifications}
@@ -785,7 +816,9 @@ export default function ProfileSettings(): React.ReactElement {
                       onClick={handleSaveNewsPreferences}
                       disabled={isSavingPreferences}
                     >
-                      {isSavingPreferences ? "Saving..." : "Save News Preferences"}
+                      {isSavingPreferences
+                        ? "Saving..."
+                        : "Save News Preferences"}
                     </button>
                   </div>
                 </>

@@ -173,7 +173,7 @@ export const storageCache = new StorageCache("phoenix_");
 export function withCache<TArgs extends unknown[], TResult>(
   fn: (...args: TArgs) => Promise<TResult>,
   keyFn: (...args: TArgs) => string,
-  ttl = 5 * 60 * 1000
+  ttl = 5 * 60 * 1000,
 ): (...args: TArgs) => Promise<TResult> {
   return async (...args: TArgs): Promise<TResult> => {
     const key = keyFn(...args);

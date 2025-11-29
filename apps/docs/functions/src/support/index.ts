@@ -46,7 +46,7 @@ function generateTicketNumber(): string {
  * Determine priority based on category
  */
 function determinePriority(
-  category: ContactFormData["category"]
+  category: ContactFormData["category"],
 ): ContactTicket["priority"] {
   switch (category) {
     case "technical":
@@ -66,12 +66,13 @@ function determinePriority(
 export const submitContactForm = functions.https.onCall(
   async (data: ContactFormData, context) => {
     // Rate limiting - use userId if authenticated, otherwise use IP-based identifier
-    const rateLimitId = context.auth?.uid || context.rawRequest.ip || "anonymous";
+    const rateLimitId =
+      context.auth?.uid || context.rawRequest.ip || "anonymous";
     const canProceed = await checkRateLimit(rateLimitId, "contactForm");
     if (!canProceed) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
-        "Too many requests. Please wait before submitting another message."
+        "Too many requests. Please wait before submitting another message.",
       );
     }
 
@@ -79,7 +80,7 @@ export const submitContactForm = functions.https.onCall(
     if (!data.name || !data.email || !data.subject || !data.message) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Name, email, subject, and message are required"
+        "Name, email, subject, and message are required",
       );
     }
 
@@ -88,7 +89,7 @@ export const submitContactForm = functions.https.onCall(
     if (!emailRegex.test(data.email)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Invalid email format"
+        "Invalid email format",
       );
     }
 
@@ -132,32 +133,33 @@ export const submitContactForm = functions.https.onCall(
       // Save to Firestore
       const docRef = await db.collection("support_tickets").add(ticket);
 
-      functions.logger.info(
-        `Contact form submitted: ${ticketNumber}`,
-        { ticketId: docRef.id, category: data.category }
-      );
+      functions.logger.info(`Contact form submitted: ${ticketNumber}`, {
+        ticketId: docRef.id,
+        category: data.category,
+      });
 
       // Update latest support timestamp for notifications
       await db.collection("metadata").doc("latest_updates").set(
         {
           supportUpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
         },
-        { merge: true }
+        { merge: true },
       );
 
       return {
         success: true,
         ticketNumber,
-        message: "Your message has been received. We'll respond within 1-2 business days.",
+        message:
+          "Your message has been received. We'll respond within 1-2 business days.",
       };
     } catch (error) {
       functions.logger.error("Failed to submit contact form:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to submit contact form. Please try again."
+        "Failed to submit contact form. Please try again.",
       );
     }
-  }
+  },
 );
 
 /**
@@ -192,7 +194,9 @@ export const getLatestContentTimestamps = functions.https.onCall(
       const data = metadataDoc.data();
 
       // Convert Firestore timestamps to milliseconds
-      const toMillis = (timestamp: admin.firestore.Timestamp | undefined): number => {
+      const toMillis = (
+        timestamp: admin.firestore.Timestamp | undefined,
+      ): number => {
         if (timestamp && typeof timestamp.toMillis === "function") {
           return timestamp.toMillis();
         }
@@ -208,10 +212,10 @@ export const getLatestContentTimestamps = functions.https.onCall(
       functions.logger.error("Failed to get content timestamps:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to get content timestamps"
+        "Failed to get content timestamps",
       );
     }
-  }
+  },
 );
 
 /**
@@ -221,7 +225,7 @@ export const getUserTickets = functions.https.onCall(async (_data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "unauthenticated",
-      "Must be logged in to view tickets"
+      "Must be logged in to view tickets",
     );
   }
 
@@ -243,10 +247,7 @@ export const getUserTickets = functions.https.onCall(async (_data, context) => {
     return { tickets };
   } catch (error) {
     functions.logger.error("Failed to get user tickets:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Failed to get tickets"
-    );
+    throw new functions.https.HttpsError("internal", "Failed to get tickets");
   }
 });
 
@@ -254,12 +255,15 @@ export const getUserTickets = functions.https.onCall(async (_data, context) => {
  * Admin: Get all tickets with filters
  */
 export const getAdminTickets = functions.https.onCall(
-  async (data: { status?: string; category?: string; limit?: number }, context) => {
+  async (
+    data: { status?: string; category?: string; limit?: number },
+    context,
+  ) => {
     // Check if caller is admin
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Only admins can view all tickets"
+        "Only admins can view all tickets",
       );
     }
 
@@ -288,12 +292,9 @@ export const getAdminTickets = functions.https.onCall(
       return { tickets };
     } catch (error) {
       functions.logger.error("Failed to get admin tickets:", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        "Failed to get tickets"
-      );
+      throw new functions.https.HttpsError("internal", "Failed to get tickets");
     }
-  }
+  },
 );
 
 /**
@@ -302,13 +303,13 @@ export const getAdminTickets = functions.https.onCall(
 export const updateTicketStatus = functions.https.onCall(
   async (
     data: { ticketId: string; status: string; response?: string },
-    context
+    context,
   ) => {
     // Check if caller is admin
     if (!context.auth?.token.admin) {
       throw new functions.https.HttpsError(
         "permission-denied",
-        "Only admins can update tickets"
+        "Only admins can update tickets",
       );
     }
 
@@ -316,7 +317,7 @@ export const updateTicketStatus = functions.https.onCall(
     if (!validStatuses.includes(data.status)) {
       throw new functions.https.HttpsError(
         "invalid-argument",
-        "Invalid status"
+        "Invalid status",
       );
     }
 
@@ -332,17 +333,22 @@ export const updateTicketStatus = functions.https.onCall(
         updateData.respondedBy = context.auth.uid;
       }
 
-      await db.collection("support_tickets").doc(data.ticketId).update(updateData);
+      await db
+        .collection("support_tickets")
+        .doc(data.ticketId)
+        .update(updateData);
 
-      functions.logger.info(`Ticket ${data.ticketId} updated to ${data.status}`);
+      functions.logger.info(
+        `Ticket ${data.ticketId} updated to ${data.status}`,
+      );
 
       return { success: true };
     } catch (error) {
       functions.logger.error("Failed to update ticket:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to update ticket"
+        "Failed to update ticket",
       );
     }
-  }
+  },
 );

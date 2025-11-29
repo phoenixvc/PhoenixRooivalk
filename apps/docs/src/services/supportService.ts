@@ -85,7 +85,7 @@ class SupportService {
 
     const submitContact = httpsCallable<ContactFormData, ContactFormResponse>(
       this.functions!,
-      "submitContactForm"
+      "submitContactForm",
     );
 
     const result = await submitContact(data);
@@ -108,7 +108,7 @@ class SupportService {
     try {
       const getTimestamps = httpsCallable<void, ContentTimestamps>(
         this.functions!,
-        "getLatestContentTimestamps"
+        "getLatestContentTimestamps",
       );
 
       const result = await getTimestamps();
@@ -134,7 +134,7 @@ class SupportService {
 
     const getTickets = httpsCallable<void, { tickets: SupportTicket[] }>(
       this.functions!,
-      "getUserTickets"
+      "getUserTickets",
     );
 
     const result = await getTickets();
@@ -168,7 +168,7 @@ class SupportService {
   async updateTicketStatus(
     ticketId: string,
     status: string,
-    response?: string
+    response?: string,
   ): Promise<{ success: boolean }> {
     if (!this.init()) {
       throw new Error("Support service not initialized");

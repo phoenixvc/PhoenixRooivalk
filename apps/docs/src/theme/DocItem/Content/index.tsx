@@ -38,7 +38,9 @@ export default function ContentWrapper(props: Props): React.ReactElement {
         {/* Comments Section */}
         <ErrorBoundary
           fallback={
-            <div style={{ padding: "1rem", textAlign: "center", color: "#666" }}>
+            <div
+              style={{ padding: "1rem", textAlign: "center", color: "#666" }}
+            >
               <p>Comments are temporarily unavailable.</p>
             </div>
           }

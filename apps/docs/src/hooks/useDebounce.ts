@@ -37,7 +37,7 @@ export function useDebounce<T>(value: T, delay = 300): T {
  */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   callback: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 

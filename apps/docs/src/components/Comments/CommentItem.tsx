@@ -74,8 +74,12 @@ function getInitials(name: string | null): string {
 }
 
 // Type guard to check if a comment is a CommentThread (has replies)
-function isCommentThread(comment: Comment | CommentThread): comment is CommentThread {
-  return "replies" in comment && Array.isArray((comment as CommentThread).replies);
+function isCommentThread(
+  comment: Comment | CommentThread,
+): comment is CommentThread {
+  return (
+    "replies" in comment && Array.isArray((comment as CommentThread).replies)
+  );
 }
 
 export function CommentItem({
@@ -89,9 +93,10 @@ export function CommentItem({
   onReply,
   currentUserId,
 }: CommentItemProps): React.ReactElement {
-  const displayContent = comment.useAIVersion && comment.enhancedContent
-    ? comment.enhancedContent
-    : comment.content;
+  const displayContent =
+    comment.useAIVersion && comment.enhancedContent
+      ? comment.enhancedContent
+      : comment.content;
 
   const canReply = depth < MAX_REPLY_DEPTH && onReply && !isOptimistic;
   const replies = isCommentThread(comment) ? comment.replies : [];
@@ -102,7 +107,9 @@ export function CommentItem({
       className={`${styles.commentItem} ${isReply ? styles.replyItem : ""}`}
       style={{
         ...(isOptimistic ? { opacity: 0.7, pointerEvents: "none" } : {}),
-        marginLeft: isReply ? `${Math.min(depth, MAX_REPLY_DEPTH) * 1.5}rem` : 0,
+        marginLeft: isReply
+          ? `${Math.min(depth, MAX_REPLY_DEPTH) * 1.5}rem`
+          : 0,
       }}
     >
       {/* Header */}
@@ -115,7 +122,9 @@ export function CommentItem({
                 alt={`${comment.author.displayName || "User"}'s avatar`}
               />
             ) : (
-              <span aria-label={`${comment.author.displayName || "Anonymous"}'s avatar`}>
+              <span
+                aria-label={`${comment.author.displayName || "Anonymous"}'s avatar`}
+              >
                 {getInitials(comment.author.displayName)}
               </span>
             )}
@@ -163,16 +172,20 @@ export function CommentItem({
       </div>
 
       {/* AI Suggestions (if applicable) */}
-      {comment.aiEnhancement?.suggestions && comment.aiEnhancement.suggestions.length > 0 && (
-        <div className={styles.aiSuggestions} style={{ marginTop: "0.75rem" }}>
-          <div className={styles.aiSuggestionsTitle}>AI Suggestions:</div>
-          <ul className={styles.aiSuggestionsList}>
-            {comment.aiEnhancement.suggestions.map((suggestion, i) => (
-              <li key={i}>{suggestion}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {comment.aiEnhancement?.suggestions &&
+        comment.aiEnhancement.suggestions.length > 0 && (
+          <div
+            className={styles.aiSuggestions}
+            style={{ marginTop: "0.75rem" }}
+          >
+            <div className={styles.aiSuggestionsTitle}>AI Suggestions:</div>
+            <ul className={styles.aiSuggestionsList}>
+              {comment.aiEnhancement.suggestions.map((suggestion, i) => (
+                <li key={i}>{suggestion}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
       {/* Review Info (if reviewed) */}
       {comment.review && (
@@ -218,15 +231,18 @@ export function CommentItem({
           )}
         </div>
 
-        {isAdmin && comment.sendForReview && comment.status === "pending" && onReview && (
-          <button
-            className={`${styles.btn} ${styles.btnPrimary}`}
-            onClick={() => onReview(comment)}
-            style={{ padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}
-          >
-            Review
-          </button>
-        )}
+        {isAdmin &&
+          comment.sendForReview &&
+          comment.status === "pending" &&
+          onReview && (
+            <button
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              onClick={() => onReview(comment)}
+              style={{ padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}
+            >
+              Review
+            </button>
+          )}
       </div>
 
       {/* Nested replies */}

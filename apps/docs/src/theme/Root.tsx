@@ -79,31 +79,31 @@ export default function Root({ children }: RootProps): React.ReactElement {
             <NavbarProgressVisibility />
             <NavbarNotifications />
             <ProfileConfirmation>
-            <SilentErrorBoundary>
-              <ReadingTracker />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <AnalyticsTracker />
-            </SilentErrorBoundary>
-            {children}
-            <SilentErrorBoundary>
-              <CookieConsentBanner />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <OfflineIndicator />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <CompletionToast />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <SidebarRecommendations />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <AIFloatingWidget pageContext={pageContext} />
-            </SilentErrorBoundary>
-            <SilentErrorBoundary>
-              <OnboardingWalkthrough />
-            </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <ReadingTracker />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <AnalyticsTracker />
+              </SilentErrorBoundary>
+              {children}
+              <SilentErrorBoundary>
+                <CookieConsentBanner />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <OfflineIndicator />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <CompletionToast />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <SidebarRecommendations />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <AIFloatingWidget pageContext={pageContext} />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
+                <OnboardingWalkthrough />
+              </SilentErrorBoundary>
             </ProfileConfirmation>
           </SilentErrorBoundary>
         </NotificationBadgeProvider>

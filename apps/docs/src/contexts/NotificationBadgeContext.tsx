@@ -36,9 +36,9 @@ interface NotificationBadgeState {
   isLoading: boolean;
 }
 
-const NotificationBadgeContext = createContext<NotificationBadgeState | undefined>(
-  undefined
-);
+const NotificationBadgeContext = createContext<
+  NotificationBadgeState | undefined
+>(undefined);
 
 interface NotificationBadgeProviderProps {
   children: React.ReactNode;
@@ -61,11 +61,11 @@ export function NotificationBadgeProvider({
 
     const newsLastSeen = parseInt(
       localStorage.getItem(NEWS_LAST_SEEN_KEY) || "0",
-      10
+      10,
     );
     const supportLastSeen = parseInt(
       localStorage.getItem(SUPPORT_LAST_SEEN_KEY) || "0",
-      10
+      10,
     );
     setLastSeen({ news: newsLastSeen, support: supportLastSeen });
   }, []);
@@ -94,7 +94,7 @@ export function NotificationBadgeProvider({
       // Cache the result
       localStorage.setItem(
         TIMESTAMPS_CACHE_KEY,
-        JSON.stringify({ data, timestamp: Date.now() })
+        JSON.stringify({ data, timestamp: Date.now() }),
       );
     } catch (error) {
       console.error("Failed to fetch content timestamps:", error);
@@ -146,7 +146,14 @@ export function NotificationBadgeProvider({
       refresh: fetchTimestamps,
       isLoading,
     }),
-    [hasNewNews, hasNewSupport, markNewsSeen, markSupportSeen, fetchTimestamps, isLoading]
+    [
+      hasNewNews,
+      hasNewSupport,
+      markNewsSeen,
+      markSupportSeen,
+      fetchTimestamps,
+      isLoading,
+    ],
   );
 
   return (
@@ -164,7 +171,7 @@ export function useNotificationBadges(): NotificationBadgeState {
 
   if (context === undefined) {
     throw new Error(
-      "useNotificationBadges must be used within a NotificationBadgeProvider"
+      "useNotificationBadges must be used within a NotificationBadgeProvider",
     );
   }
 

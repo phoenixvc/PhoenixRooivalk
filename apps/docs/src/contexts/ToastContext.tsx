@@ -79,27 +79,31 @@ export function ToastProvider({
 
       return id;
     },
-    [maxToasts]
+    [maxToasts],
   );
 
   const success = useCallback(
-    (message: string, duration?: number) => showToast(message, "success", duration),
-    [showToast]
+    (message: string, duration?: number) =>
+      showToast(message, "success", duration),
+    [showToast],
   );
 
   const error = useCallback(
-    (message: string, duration?: number) => showToast(message, "error", duration ?? 7000),
-    [showToast]
+    (message: string, duration?: number) =>
+      showToast(message, "error", duration ?? 7000),
+    [showToast],
   );
 
   const warning = useCallback(
-    (message: string, duration?: number) => showToast(message, "warning", duration ?? 6000),
-    [showToast]
+    (message: string, duration?: number) =>
+      showToast(message, "warning", duration ?? 6000),
+    [showToast],
   );
 
   const info = useCallback(
-    (message: string, duration?: number) => showToast(message, "info", duration),
-    [showToast]
+    (message: string, duration?: number) =>
+      showToast(message, "info", duration),
+    [showToast],
   );
 
   const clearAll = useCallback(() => {
@@ -116,7 +120,7 @@ export function ToastProvider({
       removeToast,
       clearAll,
     }),
-    [showToast, success, error, warning, info, removeToast, clearAll]
+    [showToast, success, error, warning, info, removeToast, clearAll],
   );
 
   return (

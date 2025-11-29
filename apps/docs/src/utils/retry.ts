@@ -61,7 +61,11 @@ export function isRateLimitError(error: unknown): boolean {
   // Check for HTTP 429 status
   if (typeof error === "object" && error !== null) {
     const err = error as { code?: string | number; status?: number };
-    return err.code === 429 || err.status === 429 || err.code === "resource-exhausted";
+    return (
+      err.code === 429 ||
+      err.status === 429 ||
+      err.code === "resource-exhausted"
+    );
   }
   return false;
 }
@@ -118,7 +122,7 @@ function sleep(ms: number): Promise<void> {
  */
 export async function withRetry<T>(
   fn: () => Promise<T>,
-  options: RetryOptions = {}
+  options: RetryOptions = {},
 ): Promise<T> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   let lastError: unknown;
@@ -171,7 +175,7 @@ export async function withRetry<T>(
  */
 export function createRetryable<TArgs extends unknown[], TResult>(
   fn: (...args: TArgs) => Promise<TResult>,
-  options: RetryOptions = {}
+  options: RetryOptions = {},
 ): (...args: TArgs) => Promise<TResult> {
   return (...args: TArgs) => withRetry(() => fn(...args), options);
 }

@@ -103,7 +103,8 @@ export function NewsNotificationBell({
         }
 
         await newsService.subscribeToBreakingNews({
-          categories: selectedCategories.length > 0 ? selectedCategories : undefined,
+          categories:
+            selectedCategories.length > 0 ? selectedCategories : undefined,
           pushEnabled,
           emailEnabled,
         });
@@ -179,7 +180,9 @@ export function NewsNotificationBell({
           )}
         </span>
         {unreadCount > 0 && (
-          <span className="news-notification-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>
+          <span className="news-notification-badge">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
         )}
       </button>
 
@@ -200,7 +203,8 @@ export function NewsNotificationBell({
 
           <div className="news-notification-content">
             <p className="news-notification-desc">
-              Get notified when breaking news is published in your areas of interest.
+              Get notified when breaking news is published in your areas of
+              interest.
             </p>
 
             <div className="news-notification-options">

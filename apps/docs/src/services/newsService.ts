@@ -109,7 +109,8 @@ class NewsService {
     const parts = ["news_feed"];
     if (options?.cursor) parts.push(`cursor:${options.cursor}`);
     if (options?.limit) parts.push(`limit:${options.limit}`);
-    if (options?.categories?.length) parts.push(`cats:${options.categories.sort().join(",")}`);
+    if (options?.categories?.length)
+      parts.push(`cats:${options.categories.sort().join(",")}`);
     // Don't include userProfile in cache key - it's user-specific
     return parts.join("_");
   }
@@ -148,16 +149,13 @@ class NewsService {
       >(this.functions!, "getNewsFeed");
 
       // Use retry with exponential backoff for network resilience
-      const result = await withRetry(
-        () => getNewsFeedFn(options || {}),
-        {
-          maxRetries: 3,
-          isRetryable: defaultIsRetryable,
-          onRetry: (attempt, error) => {
-            console.warn(`News feed fetch retry ${attempt}:`, error);
-          },
-        }
-      );
+      const result = await withRetry(() => getNewsFeedFn(options || {}), {
+        maxRetries: 3,
+        isRetryable: defaultIsRetryable,
+        onRetry: (attempt, error) => {
+          console.warn(`News feed fetch retry ${attempt}:`, error);
+        },
+      });
 
       // Cache the result (only for non-personalized requests)
       if (!options?.userProfile) {
@@ -252,7 +250,9 @@ class NewsService {
     }
 
     // Check cache
-    const cached = memoryCache.get<{ articles: NewsArticle[] }>("saved_articles");
+    const cached = memoryCache.get<{ articles: NewsArticle[] }>(
+      "saved_articles",
+    );
     if (cached) {
       return cached;
     }
@@ -280,7 +280,8 @@ class NewsService {
   private getSearchCacheKey(params: NewsSearchParams): string {
     const parts = ["news_search"];
     if (params.query) parts.push(`q:${params.query}`);
-    if (params.categories?.length) parts.push(`cats:${params.categories.sort().join(",")}`);
+    if (params.categories?.length)
+      parts.push(`cats:${params.categories.sort().join(",")}`);
     if (params.type) parts.push(`type:${params.type}`);
     if (params.limit) parts.push(`limit:${params.limit}`);
     if (params.cursor) parts.push(`cursor:${params.cursor}`);
@@ -299,7 +300,10 @@ class NewsService {
 
     // Check cache
     const cacheKey = this.getSearchCacheKey(params);
-    const cached = memoryCache.get<{ results: NewsArticle[]; totalFound: number }>(cacheKey);
+    const cached = memoryCache.get<{
+      results: NewsArticle[];
+      totalFound: number;
+    }>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -422,7 +426,12 @@ class NewsService {
     totalSaves: number;
     uniqueReaders: number;
     avgReadTime: number;
-    topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
+    topArticles: Array<{
+      id: string;
+      title: string;
+      views: number;
+      saves: number;
+    }>;
     engagementByCategory: Record<string, { views: number; saves: number }>;
     dailyViews: Array<{ date: string; views: number }>;
   }> {
@@ -438,8 +447,16 @@ class NewsService {
           totalSaves: number;
           uniqueReaders: number;
           avgReadTime: number;
-          topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
-          engagementByCategory: Record<string, { views: number; saves: number }>;
+          topArticles: Array<{
+            id: string;
+            title: string;
+            views: number;
+            saves: number;
+          }>;
+          engagementByCategory: Record<
+            string,
+            { views: number; saves: number }
+          >;
           dailyViews: Array<{ date: string; views: number }>;
         }
       >(this.functions!, "getNewsAnalytics");
@@ -506,7 +523,9 @@ class NewsService {
     }
 
     // Check cache
-    const cached = memoryCache.get<UserNewsPreferences>("user_news_preferences");
+    const cached = memoryCache.get<UserNewsPreferences>(
+      "user_news_preferences",
+    );
     if (cached) {
       return cached;
     }
@@ -521,7 +540,11 @@ class NewsService {
 
       // Cache the result
       if (result.data.preferences) {
-        memoryCache.set("user_news_preferences", result.data.preferences, NEWS_FEED_CACHE_TTL);
+        memoryCache.set(
+          "user_news_preferences",
+          result.data.preferences,
+          NEWS_FEED_CACHE_TTL,
+        );
       }
 
       return result.data.preferences;
@@ -533,14 +556,22 @@ class NewsService {
   /**
    * Save user news preferences
    */
-  async saveUserPreferences(preferences: Partial<Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">>): Promise<{ success: boolean }> {
+  async saveUserPreferences(
+    preferences: Partial<
+      Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+    >,
+  ): Promise<{ success: boolean }> {
     if (!this.init()) {
       throw new NewsError("News service not available", "unavailable");
     }
 
     try {
       const savePreferencesFn = httpsCallable<
-        { preferences: Partial<Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">> },
+        {
+          preferences: Partial<
+            Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
+          >;
+        },
         { success: boolean }
       >(this.functions!, "saveUserNewsPreferences");
 

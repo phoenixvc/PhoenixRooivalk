@@ -35,9 +35,9 @@ export function NewsPanel({
 
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [generalNews, setGeneralNews] = useState<NewsArticle[]>([]);
-  const [specializedNews, setSpecializedNews] = useState<PersonalizedNewsItem[]>(
-    [],
-  );
+  const [specializedNews, setSpecializedNews] = useState<
+    PersonalizedNewsItem[]
+  >([]);
   const [savedArticles, setSavedArticles] = useState<NewsArticle[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<NewsCategory[]>(
     [],
@@ -74,7 +74,9 @@ export function NewsPanel({
           limit: maxItems,
           cursor: loadMore ? cursor : undefined,
           categories:
-            debouncedSelectedCategories.length > 0 ? debouncedSelectedCategories : undefined,
+            debouncedSelectedCategories.length > 0
+              ? debouncedSelectedCategories
+              : undefined,
         });
 
         if (loadMore) {
@@ -135,7 +137,9 @@ export function NewsPanel({
       const result = await newsService.searchNews({
         query: debouncedSearchQuery,
         categories:
-          debouncedSelectedCategories.length > 0 ? debouncedSelectedCategories : undefined,
+          debouncedSelectedCategories.length > 0
+            ? debouncedSelectedCategories
+            : undefined,
         limit: maxItems,
       });
 
@@ -151,7 +155,12 @@ export function NewsPanel({
     } finally {
       setIsLoading(false);
     }
-  }, [debouncedSearchQuery, debouncedSelectedCategories, maxItems, fetchNewsFeed]);
+  }, [
+    debouncedSearchQuery,
+    debouncedSelectedCategories,
+    maxItems,
+    fetchNewsFeed,
+  ]);
 
   // Initial load
   useEffect(() => {
@@ -206,16 +215,19 @@ export function NewsPanel({
   // Create a Set of saved article IDs for efficient lookup
   const savedArticleIds = useMemo(
     () => new Set(savedArticles.map((a) => a.id)),
-    [savedArticles]
+    [savedArticles],
   );
 
   // Load saved articles on mount for logged-in users (for bookmark state)
   useEffect(() => {
     if (user && activeTab !== "saved") {
       // Silently fetch saved articles in background for bookmark state
-      newsService.getSavedArticles()
+      newsService
+        .getSavedArticles()
         .then((result) => setSavedArticles(result.articles))
-        .catch(() => {/* Silent fail - not critical */});
+        .catch(() => {
+          /* Silent fail - not critical */
+        });
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -305,25 +317,31 @@ export function NewsPanel({
 
       {error && <div className="news-panel-error">{error}</div>}
 
-      {isLoading && generalNews.length === 0 && specializedNews.length === 0 && (
-        <div className="news-skeleton-grid" aria-label="Loading news..." role="status">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="news-skeleton-card">
-              <div className="news-skeleton-image" />
-              <div className="news-skeleton-title" />
-              <div className="news-skeleton-summary">
-                <div className="news-skeleton-line" />
-                <div className="news-skeleton-line" />
-                <div className="news-skeleton-line" />
+      {isLoading &&
+        generalNews.length === 0 &&
+        specializedNews.length === 0 && (
+          <div
+            className="news-skeleton-grid"
+            aria-label="Loading news..."
+            role="status"
+          >
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="news-skeleton-card">
+                <div className="news-skeleton-image" />
+                <div className="news-skeleton-title" />
+                <div className="news-skeleton-summary">
+                  <div className="news-skeleton-line" />
+                  <div className="news-skeleton-line" />
+                  <div className="news-skeleton-line" />
+                </div>
+                <div className="news-skeleton-meta">
+                  <div className="news-skeleton-badge" />
+                  <div className="news-skeleton-date" />
+                </div>
               </div>
-              <div className="news-skeleton-meta">
-                <div className="news-skeleton-badge" />
-                <div className="news-skeleton-date" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
       <div className="news-panel-content">
         {activeTab === "feed" && (
@@ -444,7 +462,10 @@ export function NewsPanel({
               </div>
             ) : (
               <div className="news-empty">
-                <p>No saved articles yet. Click the star on any article to save it.</p>
+                <p>
+                  No saved articles yet. Click the star on any article to save
+                  it.
+                </p>
               </div>
             )}
           </section>

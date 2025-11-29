@@ -23,11 +23,11 @@ export function NavbarNotifications(): null {
     const root = document.documentElement;
     root.style.setProperty(
       "--navbar-news-badge-display",
-      hasNewNews ? "block" : "none"
+      hasNewNews ? "block" : "none",
     );
     root.style.setProperty(
       "--navbar-support-badge-display",
-      hasNewSupport ? "block" : "none"
+      hasNewSupport ? "block" : "none",
     );
   }, [hasNewNews, hasNewSupport]);
 

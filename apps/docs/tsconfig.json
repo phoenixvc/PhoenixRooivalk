@@ -12,9 +12,9 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node", "jest"]
   },
-  "types": ["node"],
   "include": ["src/**/*", "docusaurus.config.ts", "sidebars.ts"],
   "exclude": ["node_modules", "build", ".docusaurus"]
 }

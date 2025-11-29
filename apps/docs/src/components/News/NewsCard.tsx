@@ -10,7 +10,11 @@ import { NEWS_CATEGORY_CONFIG } from "../../types/news";
 import { newsService } from "../../services/newsService";
 import { useToast } from "../../contexts/ToastContext";
 import { formatReadingTime } from "../../utils/readingTime";
-import { shareContent, shareOnPlatform, isShareSupported } from "../../utils/share";
+import {
+  shareContent,
+  shareOnPlatform,
+  isShareSupported,
+} from "../../utils/share";
 import "./NewsCard.css";
 
 interface NewsCardProps {
@@ -97,7 +101,9 @@ export function NewsCard({
         setIsSaved(result.saved);
       }
       onSave?.(article.id, result.saved);
-      toast.success(result.saved ? "Article saved!" : "Article removed from saved");
+      toast.success(
+        result.saved ? "Article saved!" : "Article removed from saved",
+      );
     } catch (err) {
       // Revert optimistic update on error
       setIsSaved(previousSaved);
@@ -134,15 +140,16 @@ export function NewsCard({
     }
   };
 
-  const handleSharePlatform = (platform: "twitter" | "linkedin" | "email") => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    shareOnPlatform(platform, {
-      title: article.title,
-      text: article.summary || article.content.substring(0, 100),
-      url: getArticleUrl(),
-    });
-    setShowShareMenu(false);
-  };
+  const handleSharePlatform =
+    (platform: "twitter" | "linkedin" | "email") => (e: React.MouseEvent) => {
+      e.stopPropagation();
+      shareOnPlatform(platform, {
+        title: article.title,
+        text: article.summary || article.content.substring(0, 100),
+        url: getArticleUrl(),
+      });
+      setShowShareMenu(false);
+    };
 
   const formatDate = (dateStr: string) => {
     try {
@@ -193,7 +200,9 @@ export function NewsCard({
         <div className="news-card-footer">
           <span className="news-card-source">{article.source}</span>
           <span className="news-card-reading-time">{readingTime}</span>
-          <span className="news-card-date">{formatDate(article.publishedAt)}</span>
+          <span className="news-card-date">
+            {formatDate(article.publishedAt)}
+          </span>
           <div className="news-card-actions" ref={shareMenuRef}>
             <button
               className={`news-card-share-btn ${isSharing ? "sharing" : ""}`}
@@ -206,8 +215,12 @@ export function NewsCard({
             </button>
             {showShareMenu && (
               <div className="news-card-share-menu">
-                <button onClick={handleSharePlatform("twitter")}>Twitter</button>
-                <button onClick={handleSharePlatform("linkedin")}>LinkedIn</button>
+                <button onClick={handleSharePlatform("twitter")}>
+                  Twitter
+                </button>
+                <button onClick={handleSharePlatform("linkedin")}>
+                  LinkedIn
+                </button>
                 <button onClick={handleSharePlatform("email")}>Email</button>
               </div>
             )}
@@ -286,7 +299,9 @@ export function NewsCard({
           {showShareMenu && (
             <div className="news-card-share-menu news-card-share-menu-full">
               <button onClick={handleSharePlatform("twitter")}>Twitter</button>
-              <button onClick={handleSharePlatform("linkedin")}>LinkedIn</button>
+              <button onClick={handleSharePlatform("linkedin")}>
+                LinkedIn
+              </button>
               <button onClick={handleSharePlatform("email")}>Email</button>
             </div>
           )}
@@ -305,7 +320,9 @@ export function NewsCard({
       <div className="news-card-full-meta">
         <span className="news-card-source">{article.source}</span>
         <span className="news-card-separator">•</span>
-        <span className="news-card-date">{formatDate(article.publishedAt)}</span>
+        <span className="news-card-date">
+          {formatDate(article.publishedAt)}
+        </span>
         <span className="news-card-separator">•</span>
         <span className="news-card-reading-time">{readingTime}</span>
         <span className="news-card-separator">•</span>
@@ -320,7 +337,9 @@ export function NewsCard({
             </span>
             <span className="score-label">relevance</span>
           </div>
-          <p className="news-card-relevance-reason">{article.relevance.reason}</p>
+          <p className="news-card-relevance-reason">
+            {article.relevance.reason}
+          </p>
           {article.relevance.matchedInterests.length > 0 && (
             <div className="news-card-matched">
               <strong>Matched interests:</strong>{" "}

@@ -122,14 +122,19 @@ function isRateLimited(userId: string): boolean {
  * Type guard for CommentCategory
  */
 export function isValidCategory(value: unknown): value is CommentCategory {
-  return typeof value === "string" && VALID_CATEGORIES.includes(value as CommentCategory);
+  return (
+    typeof value === "string" &&
+    VALID_CATEGORIES.includes(value as CommentCategory)
+  );
 }
 
 /**
  * Type guard for CommentStatus
  */
 export function isValidStatus(value: unknown): value is CommentStatus {
-  return typeof value === "string" && VALID_STATUSES.includes(value as CommentStatus);
+  return (
+    typeof value === "string" && VALID_STATUSES.includes(value as CommentStatus)
+  );
 }
 
 /**
@@ -184,25 +189,30 @@ export function sanitizeContent(content: string): string {
     previous = content;
     content = content.replace(/<[^>]*>/g, "");
   } while (content !== previous);
-  return content
-    // Escape HTML entities
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    // Normalize whitespace (but preserve line breaks)
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    // Remove null bytes and other control characters (except newlines and tabs)
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
-    .trim();
+  return (
+    content
+      // Escape HTML entities
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      // Normalize whitespace (but preserve line breaks)
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      // Remove null bytes and other control characters (except newlines and tabs)
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+      .trim()
+  );
 }
 
 /**
  * Validate comment content
  */
-export function validateContent(content: string): { valid: boolean; error?: string } {
+export function validateContent(content: string): {
+  valid: boolean;
+  error?: string;
+} {
   if (!content || typeof content !== "string") {
     return { valid: false, error: "Content is required" };
   }
@@ -214,7 +224,10 @@ export function validateContent(content: string): { valid: boolean; error?: stri
   }
 
   if (sanitized.length > MAX_CONTENT_LENGTH) {
-    return { valid: false, error: `Comment exceeds ${MAX_CONTENT_LENGTH} characters` };
+    return {
+      valid: false,
+      error: `Comment exceeds ${MAX_CONTENT_LENGTH} characters`,
+    };
   }
 
   return { valid: true };
@@ -223,9 +236,10 @@ export function validateContent(content: string): { valid: boolean; error?: stri
 /**
  * Validate CreateCommentInput
  */
-export function validateCreateInput(
-  input: CreateCommentInput
-): { valid: boolean; error?: string } {
+export function validateCreateInput(input: CreateCommentInput): {
+  valid: boolean;
+  error?: string;
+} {
   const contentValidation = validateContent(input.content);
   if (!contentValidation.valid) {
     return contentValidation;
@@ -276,7 +290,9 @@ const timestampToString = (timestamp: unknown): string => {
 /**
  * Parse Firestore document to Comment with type safety
  */
-function parseCommentDoc(doc: DocumentSnapshot | QueryDocumentSnapshot): Comment | null {
+function parseCommentDoc(
+  doc: DocumentSnapshot | QueryDocumentSnapshot,
+): Comment | null {
   if (!doc.exists()) return null;
 
   const data = doc.data();
@@ -317,7 +333,7 @@ const getDb = () => {
  */
 export const createComment = async (
   input: CreateCommentInput,
-  author: CommentAuthor
+  author: CommentAuthor,
 ): Promise<Comment> => {
   // Validate author
   if (!isValidAuthor(author)) {
@@ -372,7 +388,9 @@ export const createComment = async (
 /**
  * Get a comment by ID with type-safe parsing
  */
-export const getComment = async (commentId: string): Promise<Comment | null> => {
+export const getComment = async (
+  commentId: string,
+): Promise<Comment | null> => {
   if (!commentId || typeof commentId !== "string") {
     return null;
   }
@@ -390,7 +408,7 @@ export const getComment = async (commentId: string): Promise<Comment | null> => 
 export const updateComment = async (
   commentId: string,
   input: UpdateCommentInput,
-  currentContent?: string
+  currentContent?: string,
 ): Promise<boolean> => {
   if (!commentId || typeof commentId !== "string") {
     throw new Error("Invalid comment ID");
@@ -493,7 +511,7 @@ export interface CommentCursor {
  */
 export const getComments = async (
   filters: CommentFilters = {},
-  cursor?: DocumentSnapshot | null
+  cursor?: DocumentSnapshot | null,
 ): Promise<{ comments: Comment[]; lastDoc: DocumentSnapshot | null }> => {
   const db = getDb();
   const commentsRef = collection(db, COMMENTS_COLLECTION);
@@ -519,7 +537,7 @@ export const getComments = async (
 
   // Add ordering
   constraints.push(
-    orderBy(filters.orderBy || "createdAt", filters.orderDirection || "desc")
+    orderBy(filters.orderBy || "createdAt", filters.orderDirection || "desc"),
   );
 
   // Add cursor for pagination
@@ -569,7 +587,7 @@ export const getPageComments = async (pageId: string): Promise<Comment[]> => {
  * Get comments pending admin review
  */
 export const getPendingComments = async (
-  limitCount?: number
+  limitCount?: number,
 ): Promise<Comment[]> => {
   const { comments } = await getComments({
     sendForReview: true,
@@ -604,7 +622,7 @@ export const subscribeToPageComments = (
   pageId: string,
   currentUserId: string | null,
   onUpdate: (comments: Comment[]) => void,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
   const commentsRef = collection(db, COMMENTS_COLLECTION);
@@ -612,7 +630,7 @@ export const subscribeToPageComments = (
   const q = query(
     commentsRef,
     where("pageId", "==", pageId),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "desc"),
   );
 
   return onSnapshot(
@@ -623,7 +641,10 @@ export const subscribeToPageComments = (
         const comment = parseCommentDoc(doc);
         if (comment) {
           // Filter out drafts from other users
-          if (comment.status !== "draft" || comment.author.uid === currentUserId) {
+          if (
+            comment.status !== "draft" ||
+            comment.author.uid === currentUserId
+          ) {
             comments.push(comment);
           }
         }
@@ -633,7 +654,7 @@ export const subscribeToPageComments = (
     (error) => {
       console.error("Error in comments subscription:", error);
       onError?.(error);
-    }
+    },
   );
 };
 
@@ -642,7 +663,7 @@ export const subscribeToPageComments = (
  */
 export const subscribeToPendingComments = (
   onUpdate: (comments: Comment[]) => void,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
   const commentsRef = collection(db, COMMENTS_COLLECTION);
@@ -651,7 +672,7 @@ export const subscribeToPendingComments = (
     commentsRef,
     where("sendForReview", "==", true),
     where("status", "==", "pending"),
-    orderBy("createdAt", "asc")
+    orderBy("createdAt", "asc"),
   );
 
   return onSnapshot(
@@ -669,7 +690,7 @@ export const subscribeToPendingComments = (
     (error) => {
       console.error("Error in pending comments subscription:", error);
       onError?.(error);
-    }
+    },
   );
 };
 
@@ -700,7 +721,7 @@ export const reviewComment = async (
   commentId: string,
   reviewerId: string,
   reviewerEmail: string,
-  input: ReviewCommentInput
+  input: ReviewCommentInput,
 ): Promise<boolean> => {
   if (!commentId || !reviewerId || !reviewerEmail) {
     throw new Error("Missing required parameters");
@@ -761,7 +782,7 @@ export const reviewComment = async (
  * Get notifications for a user
  */
 export const getUserNotifications = async (
-  userId: string
+  userId: string,
 ): Promise<CommentNotification[]> => {
   const db = getDb();
   const notificationsRef = collection(db, NOTIFICATIONS_COLLECTION);
@@ -770,7 +791,7 @@ export const getUserNotifications = async (
     notificationsRef,
     where("authorId", "==", userId),
     orderBy("createdAt", "desc"),
-    limit(50)
+    limit(50),
   );
 
   try {
@@ -793,7 +814,7 @@ export const getUserNotifications = async (
  * Mark a notification as read
  */
 export const markNotificationRead = async (
-  notificationId: string
+  notificationId: string,
 ): Promise<boolean> => {
   const db = getDb();
   const docRef = doc(db, NOTIFICATIONS_COLLECTION, notificationId);
@@ -816,7 +837,7 @@ export const markNotificationRead = async (
 export const subscribeToNotifications = (
   userId: string,
   onUpdate: (notifications: CommentNotification[]) => void,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
   const notificationsRef = collection(db, NOTIFICATIONS_COLLECTION);
@@ -825,7 +846,7 @@ export const subscribeToNotifications = (
     notificationsRef,
     where("authorId", "==", userId),
     where("read", "==", false),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "desc"),
   );
 
   return onSnapshot(
@@ -844,7 +865,7 @@ export const subscribeToNotifications = (
     (error) => {
       console.error("Error in notifications subscription:", error);
       onError?.(error);
-    }
+    },
   );
 };
 
@@ -859,7 +880,7 @@ export const saveAIEnhancement = async (
   commentId: string,
   enhancedContent: string,
   suggestions: string[],
-  confidence: "high" | "medium" | "low"
+  confidence: "high" | "medium" | "low",
 ): Promise<boolean> => {
   if (!commentId) {
     throw new Error("Comment ID is required");
@@ -867,7 +888,9 @@ export const saveAIEnhancement = async (
 
   // Validate and sanitize
   const sanitizedContent = sanitizeContent(enhancedContent);
-  const sanitizedSuggestions = suggestions.map(sanitizeContent).filter((s) => s.length > 0);
+  const sanitizedSuggestions = suggestions
+    .map(sanitizeContent)
+    .filter((s) => s.length > 0);
 
   const db = getDb();
   const docRef = doc(db, COMMENTS_COLLECTION, commentId);
@@ -895,7 +918,7 @@ export const saveAIEnhancement = async (
  */
 export const toggleAIVersion = async (
   commentId: string,
-  useAIVersion: boolean
+  useAIVersion: boolean,
 ): Promise<boolean> => {
   if (!commentId) {
     return false;
@@ -958,7 +981,7 @@ export const getCommentStats = async (): Promise<CommentStats> => {
     const pendingQuery = query(
       commentsRef,
       where("sendForReview", "==", true),
-      where("status", "==", "pending")
+      where("status", "==", "pending"),
     );
     const pendingCount = await getCountFromServer(pendingQuery);
     stats.pendingReview = pendingCount.data().count;
@@ -968,7 +991,7 @@ export const getCommentStats = async (): Promise<CommentStats> => {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const recentQuery = query(
       commentsRef,
-      where("createdAt", ">=", Timestamp.fromDate(sevenDaysAgo))
+      where("createdAt", ">=", Timestamp.fromDate(sevenDaysAgo)),
     );
     const recentCount = await getCountFromServer(recentQuery);
     stats.recentCount = recentCount.data().count;
@@ -979,10 +1002,13 @@ export const getCommentStats = async (): Promise<CommentStats> => {
       // All category counts in parallel
       Promise.all(
         VALID_CATEGORIES.map(async (category) => {
-          const categoryQuery = query(commentsRef, where("category", "==", category));
+          const categoryQuery = query(
+            commentsRef,
+            where("category", "==", category),
+          );
           const count = await getCountFromServer(categoryQuery);
           return { category, count: count.data().count };
-        })
+        }),
       ),
       // All status counts in parallel
       Promise.all(
@@ -990,7 +1016,7 @@ export const getCommentStats = async (): Promise<CommentStats> => {
           const statusQuery = query(commentsRef, where("status", "==", status));
           const count = await getCountFromServer(statusQuery);
           return { status, count: count.data().count };
-        })
+        }),
       ),
     ]);
 
@@ -1014,8 +1040,12 @@ export const getCommentStats = async (): Promise<CommentStats> => {
  */
 export const getAllComments = async (
   pageSize: number = 20,
-  cursor?: DocumentSnapshot | null
-): Promise<{ comments: Comment[]; lastDoc: DocumentSnapshot | null; total: number }> => {
+  cursor?: DocumentSnapshot | null,
+): Promise<{
+  comments: Comment[];
+  lastDoc: DocumentSnapshot | null;
+  total: number;
+}> => {
   const db = getDb();
   const commentsRef = collection(db, COMMENTS_COLLECTION);
 
@@ -1094,8 +1124,9 @@ export function organizeIntoThreads(comments: Comment[]): CommentThread[] {
 
   // Sort replies by createdAt (oldest first for conversation flow)
   const sortReplies = (thread: CommentThread): void => {
-    thread.replies.sort((a, b) =>
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    thread.replies.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
     thread.replies.forEach(sortReplies);
   };
@@ -1115,7 +1146,7 @@ export const getReplies = async (parentId: string): Promise<Comment[]> => {
   const q = query(
     commentsRef,
     where("parentId", "==", parentId),
-    orderBy("createdAt", "asc")
+    orderBy("createdAt", "asc"),
   );
 
   try {
@@ -1161,7 +1192,7 @@ export const subscribeToReplies = (
   parentId: string,
   currentUserId: string | null,
   onUpdate: (replies: Comment[]) => void,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
   const commentsRef = collection(db, COMMENTS_COLLECTION);
@@ -1169,7 +1200,7 @@ export const subscribeToReplies = (
   const q = query(
     commentsRef,
     where("parentId", "==", parentId),
-    orderBy("createdAt", "asc")
+    orderBy("createdAt", "asc"),
   );
 
   return onSnapshot(
@@ -1180,7 +1211,10 @@ export const subscribeToReplies = (
         const comment = parseCommentDoc(doc);
         if (comment) {
           // Filter out drafts from other users
-          if (comment.status !== "draft" || comment.author.uid === currentUserId) {
+          if (
+            comment.status !== "draft" ||
+            comment.author.uid === currentUserId
+          ) {
             replies.push(comment);
           }
         }
@@ -1190,6 +1224,6 @@ export const subscribeToReplies = (
     (error) => {
       console.error("Error in replies subscription:", error);
       onError?.(error);
-    }
+    },
   );
 };

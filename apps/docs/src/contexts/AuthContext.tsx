@@ -255,7 +255,9 @@ export function AuthProvider({
     }
     if (!isConfigured) {
       if (DEBUG_AUTH) {
-        console.log("[AuthContext] Firebase not configured, setting loading=false");
+        console.log(
+          "[AuthContext] Firebase not configured, setting loading=false",
+        );
       }
       setLoading(false);
       return;
@@ -308,7 +310,9 @@ export function AuthProvider({
           // Could also track returning user sign-ins separately if needed
         }
         if (DEBUG_AUTH) {
-          console.log("[AuthContext] User sync complete, setting loading=false");
+          console.log(
+            "[AuthContext] User sync complete, setting loading=false",
+          );
         }
       } else {
         if (DEBUG_AUTH) {

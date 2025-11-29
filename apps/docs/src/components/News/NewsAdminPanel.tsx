@@ -26,7 +26,9 @@ interface IngestionResult {
 
 export function NewsAdminPanel(): React.ReactElement | null {
   const { user, userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState<"ingestion" | "analytics" | "settings">("ingestion");
+  const [activeTab, setActiveTab] = useState<
+    "ingestion" | "analytics" | "settings"
+  >("ingestion");
   const [stats, setStats] = useState<IngestionStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isIngesting, setIsIngesting] = useState(false);
@@ -77,10 +79,14 @@ export function NewsAdminPanel(): React.ReactElement | null {
       });
 
       if (result.success) {
-        setSuccessMessage(`Successfully ingested ${result.articlesAdded} articles!`);
+        setSuccessMessage(
+          `Successfully ingested ${result.articlesAdded} articles!`,
+        );
         fetchStats(); // Refresh stats
       } else {
-        setError(`Ingestion completed with errors: ${result.errors.join(", ")}`);
+        setError(
+          `Ingestion completed with errors: ${result.errors.join(", ")}`,
+        );
       }
     } catch (err) {
       if (err instanceof NewsError) {
@@ -100,7 +106,9 @@ export function NewsAdminPanel(): React.ReactElement | null {
 
     try {
       const result = await newsService.generateDigest();
-      setSuccessMessage(`Generated AI digest with ${result.articleCount} articles!`);
+      setSuccessMessage(
+        `Generated AI digest with ${result.articleCount} articles!`,
+      );
     } catch (err) {
       if (err instanceof NewsError) {
         setError(err.message);
@@ -161,7 +169,10 @@ export function NewsAdminPanel(): React.ReactElement | null {
         <div className="news-admin-error">
           <span className="news-admin-error-icon">!</span>
           {error}
-          <button onClick={() => setError(null)} className="news-admin-error-close">
+          <button
+            onClick={() => setError(null)}
+            className="news-admin-error-close"
+          >
             x
           </button>
         </div>
@@ -171,7 +182,10 @@ export function NewsAdminPanel(): React.ReactElement | null {
         <div className="news-admin-success">
           <span className="news-admin-success-icon">OK</span>
           {successMessage}
-          <button onClick={() => setSuccessMessage(null)} className="news-admin-success-close">
+          <button
+            onClick={() => setSuccessMessage(null)}
+            className="news-admin-success-close"
+          >
             x
           </button>
         </div>
@@ -182,7 +196,8 @@ export function NewsAdminPanel(): React.ReactElement | null {
           <div className="news-admin-section">
             <h3>Manual Ingestion</h3>
             <p className="news-admin-section-desc">
-              Trigger news ingestion manually. The system also runs automatically every 6 hours.
+              Trigger news ingestion manually. The system also runs
+              automatically every 6 hours.
             </p>
 
             <div className="news-admin-topics">
@@ -197,7 +212,9 @@ export function NewsAdminPanel(): React.ReactElement | null {
                         if (e.target.checked) {
                           setSelectedTopics([...selectedTopics, topic]);
                         } else {
-                          setSelectedTopics(selectedTopics.filter((t) => t !== topic));
+                          setSelectedTopics(
+                            selectedTopics.filter((t) => t !== topic),
+                          );
                         }
                       }}
                     />
@@ -245,15 +262,21 @@ export function NewsAdminPanel(): React.ReactElement | null {
             ) : stats ? (
               <div className="news-admin-stats">
                 <div className="news-admin-stat-card">
-                  <span className="news-admin-stat-value">{stats.totalArticles}</span>
+                  <span className="news-admin-stat-value">
+                    {stats.totalArticles}
+                  </span>
                   <span className="news-admin-stat-label">Total Articles</span>
                 </div>
                 <div className="news-admin-stat-card">
-                  <span className="news-admin-stat-value">{stats.articlesLast24h}</span>
+                  <span className="news-admin-stat-value">
+                    {stats.articlesLast24h}
+                  </span>
                   <span className="news-admin-stat-label">Last 24 Hours</span>
                 </div>
                 <div className="news-admin-stat-card">
-                  <span className="news-admin-stat-value">{stats.articlesLast7d}</span>
+                  <span className="news-admin-stat-value">
+                    {stats.articlesLast7d}
+                  </span>
                   <span className="news-admin-stat-label">Last 7 Days</span>
                 </div>
                 <div className="news-admin-stat-card">
@@ -288,7 +311,9 @@ export function NewsAdminPanel(): React.ReactElement | null {
                             }}
                           />
                         </div>
-                        <span className="news-admin-category-count">{count}</span>
+                        <span className="news-admin-category-count">
+                          {count}
+                        </span>
                       </div>
                     ))}
                 </div>
@@ -298,9 +323,7 @@ export function NewsAdminPanel(): React.ReactElement | null {
         </div>
       )}
 
-      {activeTab === "analytics" && (
-        <NewsAnalyticsDashboard />
-      )}
+      {activeTab === "analytics" && <NewsAnalyticsDashboard />}
 
       {activeTab === "settings" && (
         <div className="news-admin-settings">
@@ -359,7 +382,12 @@ function NewsAnalyticsDashboard(): React.ReactElement {
     totalSaves: number;
     uniqueReaders: number;
     avgReadTime: number;
-    topArticles: Array<{ id: string; title: string; views: number; saves: number }>;
+    topArticles: Array<{
+      id: string;
+      title: string;
+      views: number;
+      saves: number;
+    }>;
     engagementByCategory: Record<string, { views: number; saves: number }>;
     dailyViews: Array<{ date: string; views: number }>;
   } | null>(null);
@@ -398,7 +426,9 @@ function NewsAnalyticsDashboard(): React.ReactElement {
   }
 
   if (!analytics) {
-    return <div className="news-admin-no-stats">No analytics data available</div>;
+    return (
+      <div className="news-admin-no-stats">No analytics data available</div>
+    );
   }
 
   return (
@@ -429,19 +459,27 @@ function NewsAnalyticsDashboard(): React.ReactElement {
 
       <div className="news-analytics-overview">
         <div className="news-analytics-card">
-          <span className="news-analytics-value">{analytics.totalViews.toLocaleString()}</span>
+          <span className="news-analytics-value">
+            {analytics.totalViews.toLocaleString()}
+          </span>
           <span className="news-analytics-label">Total Views</span>
         </div>
         <div className="news-analytics-card">
-          <span className="news-analytics-value">{analytics.totalSaves.toLocaleString()}</span>
+          <span className="news-analytics-value">
+            {analytics.totalSaves.toLocaleString()}
+          </span>
           <span className="news-analytics-label">Saved Articles</span>
         </div>
         <div className="news-analytics-card">
-          <span className="news-analytics-value">{analytics.uniqueReaders.toLocaleString()}</span>
+          <span className="news-analytics-value">
+            {analytics.uniqueReaders.toLocaleString()}
+          </span>
           <span className="news-analytics-label">Unique Readers</span>
         </div>
         <div className="news-analytics-card">
-          <span className="news-analytics-value">{Math.round(analytics.avgReadTime)}s</span>
+          <span className="news-analytics-value">
+            {Math.round(analytics.avgReadTime)}s
+          </span>
           <span className="news-analytics-label">Avg Read Time</span>
         </div>
       </div>
@@ -450,7 +488,9 @@ function NewsAnalyticsDashboard(): React.ReactElement {
         <h4>Daily Views Trend</h4>
         <div className="news-analytics-chart">
           {analytics.dailyViews.map((day, index) => {
-            const maxViews = Math.max(...analytics.dailyViews.map((d) => d.views));
+            const maxViews = Math.max(
+              ...analytics.dailyViews.map((d) => d.views),
+            );
             const height = maxViews > 0 ? (day.views / maxViews) * 100 : 0;
             return (
               <div key={day.date} className="news-analytics-bar-wrapper">
@@ -461,7 +501,10 @@ function NewsAnalyticsDashboard(): React.ReactElement {
                 />
                 {index % 3 === 0 && (
                   <span className="news-analytics-bar-label">
-                    {new Date(day.date).toLocaleDateString("en", { month: "short", day: "numeric" })}
+                    {new Date(day.date).toLocaleDateString("en", {
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </span>
                 )}
               </div>
@@ -476,7 +519,9 @@ function NewsAnalyticsDashboard(): React.ReactElement {
           {analytics.topArticles.slice(0, 5).map((article, index) => (
             <div key={article.id} className="news-analytics-article-row">
               <span className="news-analytics-article-rank">#{index + 1}</span>
-              <span className="news-analytics-article-title">{article.title}</span>
+              <span className="news-analytics-article-title">
+                {article.title}
+              </span>
               <span className="news-analytics-article-stats">
                 {article.views} views | {article.saves} saves
               </span>

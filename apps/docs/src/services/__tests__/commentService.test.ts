@@ -32,7 +32,7 @@ describe("Comment Service - Sanitization", () => {
     });
 
     it("should escape HTML entities", () => {
-      const input = "Hello <World> & \"Friends\"";
+      const input = 'Hello <World> & "Friends"';
       const result = sanitizeContent(input);
       expect(result).toContain("&lt;");
       expect(result).toContain("&gt;");

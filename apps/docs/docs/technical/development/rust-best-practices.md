@@ -94,19 +94,19 @@ use my_crate::PublicStruct;
 
 ### Standard Conventions
 
-| Item | Convention | Example |
-|------|-----------|---------|
-| Crates | snake_case | `my_crate` |
-| Modules | snake_case | `my_module` |
-| Types | PascalCase | `MyStruct`, `MyEnum` |
-| Traits | PascalCase | `Iterator`, `Display` |
-| Functions | snake_case | `do_something` |
-| Methods | snake_case | `get_value` |
-| Variables | snake_case | `my_variable` |
-| Constants | SCREAMING_SNAKE_CASE | `MAX_SIZE` |
-| Statics | SCREAMING_SNAKE_CASE | `GLOBAL_CONFIG` |
-| Type parameters | PascalCase (short) | `T`, `E`, `K`, `V` |
-| Lifetimes | lowercase (short) | `'a`, `'b`, `'static` |
+| Item            | Convention           | Example               |
+| --------------- | -------------------- | --------------------- |
+| Crates          | snake_case           | `my_crate`            |
+| Modules         | snake_case           | `my_module`           |
+| Types           | PascalCase           | `MyStruct`, `MyEnum`  |
+| Traits          | PascalCase           | `Iterator`, `Display` |
+| Functions       | snake_case           | `do_something`        |
+| Methods         | snake_case           | `get_value`           |
+| Variables       | snake_case           | `my_variable`         |
+| Constants       | SCREAMING_SNAKE_CASE | `MAX_SIZE`            |
+| Statics         | SCREAMING_SNAKE_CASE | `GLOBAL_CONFIG`       |
+| Type parameters | PascalCase (short)   | `T`, `E`, `K`, `V`    |
+| Lifetimes       | lowercase (short)    | `'a`, `'b`, `'static` |
 
 ### Meaningful Names
 
@@ -590,7 +590,7 @@ fn test_client_server_communication() {
 
 ### Document Public APIs
 
-```rust
+````rust
 /// A user account in the system.
 ///
 /// # Examples
@@ -628,11 +628,11 @@ impl User {
         Self { name }
     }
 }
-```
+````
 
 ### Use Doc Tests
 
-```rust
+````rust
 /// Adds two numbers together.
 ///
 /// # Examples
@@ -651,11 +651,11 @@ impl User {
 pub fn add(a: i32, b: i32) -> i32 {
     a + b
 }
-```
+````
 
 ### Document Modules
 
-```rust
+````rust
 //! # My Module
 //!
 //! This module provides utilities for working with user data.
@@ -676,7 +676,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 //!     .email("alice@example.com")
 //!     .build();
 //! ```
-```
+````
 
 ---
 
@@ -814,5 +814,5 @@ Key principles:
 
 ---
 
-_This document is part of the Phoenix Rooivalk development documentation.
-© 2025 Phoenix Rooivalk. All rights reserved._
+_This document is part of the Phoenix Rooivalk development documentation. ©
+2025 Phoenix Rooivalk. All rights reserved._

@@ -152,7 +152,7 @@ function generateId(): string {
  */
 export async function queueOperation<T>(
   type: string,
-  data: T
+  data: T,
 ): Promise<string> {
   const id = generateId();
   const operation: QueuedOperation<T> = {
@@ -211,7 +211,7 @@ export async function getPendingOperations<T = unknown>(): Promise<
  * Get pending operations by type
  */
 export async function getPendingByType<T = unknown>(
-  type: string
+  type: string,
 ): Promise<QueuedOperation<T>[]> {
   const operations = await getPendingOperations<T>();
   return operations.filter((op) => op.type === type);
@@ -269,7 +269,7 @@ export async function incrementRetryCount(id: string): Promise<void> {
     // Fallback to localStorage
     const operations = getFallbackStorage();
     const updated = operations.map((op) =>
-      op.id === id ? { ...op, retryCount: op.retryCount + 1 } : op
+      op.id === id ? { ...op, retryCount: op.retryCount + 1 } : op,
     );
     setFallbackStorage(updated);
   }
@@ -309,7 +309,7 @@ export function isOnline(): boolean {
 export async function processQueue<T>(
   type: string,
   handler: (data: T) => Promise<void>,
-  maxRetries = 3
+  maxRetries = 3,
 ): Promise<{ processed: number; failed: number }> {
   if (!isOnline()) {
     return { processed: 0, failed: 0 };
@@ -345,7 +345,7 @@ export async function processQueue<T>(
  */
 export function registerNetworkListeners(
   onOnline: () => void,
-  onOffline?: () => void
+  onOffline?: () => void,
 ): () => void {
   if (typeof window === "undefined") {
     return () => {};

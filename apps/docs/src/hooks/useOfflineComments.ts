@@ -40,7 +40,7 @@ interface UseOfflineCommentsReturn extends OfflineCommentsState {
   queueComment: (comment: PendingComment) => Promise<string>;
   /** Manually trigger sync */
   syncComments: (
-    submitHandler: (comment: PendingComment) => Promise<void>
+    submitHandler: (comment: PendingComment) => Promise<void>,
   ) => Promise<{ processed: number; failed: number }>;
   /** Remove a pending comment */
   removePendingComment: (id: string) => Promise<void>;
@@ -69,14 +69,14 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
         setState(updater);
       }
     },
-    []
+    [],
   );
 
   // Load pending comments on mount
   const refreshPending = useCallback(async () => {
     try {
       const operations = await getPendingByType<PendingComment>(
-        COMMENT_OPERATION_TYPE
+        COMMENT_OPERATION_TYPE,
       );
       safeSetState((prev) => ({
         ...prev,
@@ -122,14 +122,17 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
   }, [safeSetState]);
 
   // Queue a comment
-  const queueComment = useCallback(async (comment: PendingComment) => {
-    const id = await queueOperation(COMMENT_OPERATION_TYPE, comment);
-    safeSetState((prev) => ({
-      ...prev,
-      pendingComments: [...prev.pendingComments, { id, comment }],
-    }));
-    return id;
-  }, [safeSetState]);
+  const queueComment = useCallback(
+    async (comment: PendingComment) => {
+      const id = await queueOperation(COMMENT_OPERATION_TYPE, comment);
+      safeSetState((prev) => ({
+        ...prev,
+        pendingComments: [...prev.pendingComments, { id, comment }],
+      }));
+      return id;
+    },
+    [safeSetState],
+  );
 
   // Sync comments
   const syncComments = useCallback(
@@ -144,7 +147,7 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
         const result = await processQueue<PendingComment>(
           COMMENT_OPERATION_TYPE,
           submitHandler,
-          3
+          3,
         );
 
         safeSetState((prev) => ({
@@ -163,7 +166,7 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
         return { processed: 0, failed: 0 };
       }
     },
-    [refreshPending, safeSetState]
+    [refreshPending, safeSetState],
   );
 
   // Remove a pending comment
@@ -172,7 +175,7 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
       await removeOperation(id);
       await refreshPending();
     },
-    [refreshPending]
+    [refreshPending],
   );
 
   return {

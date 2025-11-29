@@ -4,7 +4,12 @@
  * Handles browser push notification permissions and FCM token management.
  */
 
-import { getMessaging, getToken, onMessage, Messaging } from "firebase/messaging";
+import {
+  getMessaging,
+  getToken,
+  onMessage,
+  Messaging,
+} from "firebase/messaging";
 import { app, isFirebaseConfigured } from "../services/firebase";
 
 // VAPID key for web push (should be set in Firebase Console)
@@ -50,7 +55,9 @@ export function isPushSupported(): boolean {
 /**
  * Get the current notification permission status
  */
-export function getNotificationPermission(): NotificationPermission | "unsupported" {
+export function getNotificationPermission():
+  | NotificationPermission
+  | "unsupported" {
   if (!isPushSupported()) {
     return "unsupported";
   }
@@ -60,7 +67,9 @@ export function getNotificationPermission(): NotificationPermission | "unsupport
 /**
  * Request notification permission from the user
  */
-export async function requestNotificationPermission(): Promise<NotificationPermission | "unsupported"> {
+export async function requestNotificationPermission(): Promise<
+  NotificationPermission | "unsupported"
+> {
   if (!isPushSupported()) {
     return "unsupported";
   }
@@ -112,7 +121,9 @@ export async function getFCMToken(): Promise<string | null> {
 
   const vapidKey = getVapidKey();
   if (!vapidKey) {
-    console.error("VAPID key not configured. Push notifications require a valid VAPID key.");
+    console.error(
+      "VAPID key not configured. Push notifications require a valid VAPID key.",
+    );
     return null;
   }
 
@@ -165,7 +176,7 @@ function getFirebaseConfig(): Record<string, string> | null {
  * Send Firebase config to service worker
  */
 async function sendConfigToServiceWorker(
-  registration: ServiceWorkerRegistration
+  registration: ServiceWorkerRegistration,
 ): Promise<void> {
   const config = getFirebaseConfig();
   if (!config) {
@@ -174,7 +185,8 @@ async function sendConfigToServiceWorker(
   }
 
   // Wait for the service worker to be ready
-  const sw = registration.active || registration.waiting || registration.installing;
+  const sw =
+    registration.active || registration.waiting || registration.installing;
   if (!sw) return;
 
   // Send config via postMessage
@@ -190,7 +202,7 @@ async function sendConfigToServiceWorker(
       "config",
       new Response(JSON.stringify(config), {
         headers: { "Content-Type": "application/json" },
-      })
+      }),
     );
   } catch {
     // Caching is optional, continue without it
@@ -207,22 +219,29 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
 
   try {
     // Check for existing registration
-    let registration = await navigator.serviceWorker.getRegistration("/firebase-messaging-sw.js");
+    let registration = await navigator.serviceWorker.getRegistration(
+      "/firebase-messaging-sw.js",
+    );
 
     if (!registration) {
       // Register new service worker
-      registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      registration = await navigator.serviceWorker.register(
+        "/firebase-messaging-sw.js",
+      );
     }
 
     // Wait for the service worker to be active
     if (registration.installing) {
       await new Promise<void>((resolve) => {
-        registration!.installing!.addEventListener("statechange", function handler() {
-          if (this.state === "activated") {
-            this.removeEventListener("statechange", handler);
-            resolve();
-          }
-        });
+        registration!.installing!.addEventListener(
+          "statechange",
+          function handler() {
+            if (this.state === "activated") {
+              this.removeEventListener("statechange", handler);
+              resolve();
+            }
+          },
+        );
       });
     }
 
@@ -239,13 +258,15 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
 /**
  * Listen for foreground messages
  */
-export function onForegroundMessage(callback: (payload: {
-  notification?: {
-    title?: string;
-    body?: string;
-  };
-  data?: Record<string, string>;
-}) => void): (() => void) | null {
+export function onForegroundMessage(
+  callback: (payload: {
+    notification?: {
+      title?: string;
+      body?: string;
+    };
+    data?: Record<string, string>;
+  }) => void,
+): (() => void) | null {
   const messaging = initializeMessaging();
   if (!messaging) {
     return null;
@@ -266,7 +287,7 @@ export function onForegroundMessage(callback: (payload: {
  */
 export function showLocalNotification(
   title: string,
-  options?: NotificationOptions
+  options?: NotificationOptions,
 ): void {
   if (!isPushSupported() || Notification.permission !== "granted") {
     return;
@@ -329,9 +350,10 @@ export async function enablePushNotifications(): Promise<{
       success: false,
       token: null,
       permission,
-      error: permission === "denied"
-        ? "Notification permission was denied. Please enable it in browser settings."
-        : "Notification permission request was dismissed",
+      error:
+        permission === "denied"
+          ? "Notification permission was denied. Please enable it in browser settings."
+          : "Notification permission request was dismissed",
     };
   }
 

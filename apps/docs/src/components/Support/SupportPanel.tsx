@@ -102,9 +102,9 @@ export function SupportPanel({
     category: "general",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">(
-    "idle",
-  );
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
   const [ticketNumber, setTicketNumber] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -130,7 +130,12 @@ export function SupportPanel({
         email: contactForm.email,
         subject: contactForm.subject,
         message: contactForm.message,
-        category: contactForm.category as "general" | "technical" | "sales" | "partnership" | "feedback",
+        category: contactForm.category as
+          | "general"
+          | "technical"
+          | "sales"
+          | "partnership"
+          | "feedback",
       });
 
       setTicketNumber(response.ticketNumber);
@@ -145,9 +150,10 @@ export function SupportPanel({
       });
     } catch (error) {
       console.error("Failed to submit contact form:", error);
-      const message = error instanceof Error
-        ? error.message
-        : "Failed to submit. Please try again or email us directly.";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to submit. Please try again or email us directly.";
       setErrorMessage(message);
       setSubmitStatus("error");
       toast.error(message);
@@ -204,7 +210,9 @@ export function SupportPanel({
               className={`faq-filter-btn ${selectedCategory === category ? "active" : ""}`}
               onClick={() => setSelectedCategory(category)}
             >
-              {category === "all" ? "All" : category.charAt(0).toUpperCase() + category.slice(1)}
+              {category === "all"
+                ? "All"
+                : category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
           ))}
         </div>
@@ -347,7 +355,8 @@ export function SupportPanel({
 
               {submitStatus === "error" && (
                 <div className="contact-error">
-                  {errorMessage || "Something went wrong. Please try again or email us directly."}
+                  {errorMessage ||
+                    "Something went wrong. Please try again or email us directly."}
                 </div>
               )}
 

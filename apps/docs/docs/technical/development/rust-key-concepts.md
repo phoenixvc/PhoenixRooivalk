@@ -185,19 +185,19 @@ where
 
 ### Common Standard Library Traits
 
-| Trait | Purpose |
-|-------|---------|
-| `Clone` | Explicit copy via `.clone()` |
-| `Copy` | Implicit bitwise copy |
-| `Debug` | Debug formatting `{:?}` |
-| `Display` | User-facing formatting `{}` |
-| `Default` | Default value creation |
-| `PartialEq`, `Eq` | Equality comparison |
-| `PartialOrd`, `Ord` | Ordering comparison |
-| `Hash` | Hashing for collections |
-| `Iterator` | Sequential iteration |
-| `From`, `Into` | Type conversion |
-| `Send`, `Sync` | Thread safety markers |
+| Trait               | Purpose                      |
+| ------------------- | ---------------------------- |
+| `Clone`             | Explicit copy via `.clone()` |
+| `Copy`              | Implicit bitwise copy        |
+| `Debug`             | Debug formatting `{:?}`      |
+| `Display`           | User-facing formatting `{}`  |
+| `Default`           | Default value creation       |
+| `PartialEq`, `Eq`   | Equality comparison          |
+| `PartialOrd`, `Ord` | Ordering comparison          |
+| `Hash`              | Hashing for collections      |
+| `Iterator`          | Sequential iteration         |
+| `From`, `Into`      | Type conversion              |
+| `Send`, `Sync`      | Thread safety markers        |
 
 ---
 
@@ -398,11 +398,11 @@ fn main() {
 
 ### Closure Traits
 
-| Trait | Capture Method | Use Case |
-|-------|---------------|----------|
-| `Fn` | Borrows immutably | Multiple calls, no mutation |
-| `FnMut` | Borrows mutably | Multiple calls with mutation |
-| `FnOnce` | Takes ownership | Single call, consumes values |
+| Trait    | Capture Method    | Use Case                     |
+| -------- | ----------------- | ---------------------------- |
+| `Fn`     | Borrows immutably | Multiple calls, no mutation  |
+| `FnMut`  | Borrows mutably   | Multiple calls with mutation |
+| `FnOnce` | Takes ownership   | Single call, consumes values |
 
 ---
 
@@ -706,5 +706,5 @@ systems code.
 
 ---
 
-_This document is part of the Phoenix Rooivalk development documentation.
-© 2025 Phoenix Rooivalk. All rights reserved._
+_This document is part of the Phoenix Rooivalk development documentation. ©
+2025 Phoenix Rooivalk. All rights reserved._
