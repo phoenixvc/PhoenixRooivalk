@@ -50,7 +50,6 @@ abstract class BaseChain {
     systemPrompt?: string,
   ): Promise<{ response: string; usage?: TokenUsage }> {
     const provider = getAIProvider();
-    const startTime = Date.now();
 
     try {
       const response = await provider.chat({
@@ -218,7 +217,7 @@ export class RAGQAChain extends BaseChain {
         documents = results.map((r) => ({
           id: r.docId,
           pageContent: r.content,
-          metadata: { title: r.title, source: r.source },
+          metadata: { title: r.title },
         }));
       } else {
         const results = await searchDocuments(input, {
@@ -229,7 +228,7 @@ export class RAGQAChain extends BaseChain {
         documents = results.map((r) => ({
           id: r.docId,
           pageContent: r.content,
-          metadata: { title: r.title, source: r.source },
+          metadata: { title: r.title },
         }));
       }
 

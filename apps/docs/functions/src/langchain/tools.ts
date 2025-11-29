@@ -8,7 +8,7 @@
 import { ToolDefinition } from "./types";
 import { searchDocuments } from "../rag/search";
 import { hybridSearch } from "../rag/hybrid-search";
-import { askDocumentation } from "../rag/query";
+import { queryWithRAG } from "../rag/query";
 
 /**
  * Document search tool
@@ -57,7 +57,7 @@ specifications, or technical details.`,
     return results.map((r) => ({
       title: r.title,
       content: r.content.substring(0, 500),
-      source: r.source,
+      docId: r.docId,
       score: r.score,
     }));
   },
@@ -138,7 +138,7 @@ Use this when you need a direct answer rather than searching for documents.`,
       format?: "concise" | "detailed";
     };
 
-    const result = await askDocumentation(question, { format });
+    const result = await queryWithRAG(question, { responseFormat: format });
 
     return {
       answer: result.answer,
@@ -260,9 +260,9 @@ Use this when you need to condense long content into key points.`,
     };
 
     // Use the Q&A system for summarization
-    const result = await askDocumentation(
+    const result = await queryWithRAG(
       `Please summarize the following in ${maxLength} words or less:\n\n${text}`,
-      { format: "concise" },
+      { responseFormat: "concise" },
     );
 
     return {
