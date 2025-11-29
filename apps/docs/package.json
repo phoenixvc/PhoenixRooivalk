@@ -29,6 +29,7 @@
     "@docusaurus/plugin-sitemap": "^3.9.2",
     "@docusaurus/preset-classic": "^3.9.1",
     "@docusaurus/theme-classic": "^3.9.1",
+    "@docusaurus/theme-common": "^3.9.1",
     "@docusaurus/theme-mermaid": "^3.9.1",
     "@easyops-cn/docusaurus-search-local": "^0.45.0",
     "ajv": "^8.17.1",

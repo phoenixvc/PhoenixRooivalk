@@ -9,7 +9,7 @@ keywords:
   - implementation
   - hooks
   - services
-difficulty: 2
+difficulty: intermediate
 timeEstimate: 10
 xpReward: 100
 ---

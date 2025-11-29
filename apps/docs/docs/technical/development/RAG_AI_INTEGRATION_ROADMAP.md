@@ -9,7 +9,7 @@ keywords:
   - integration
   - roadmap
   - features
-difficulty: 3
+difficulty: advanced
 timeEstimate: 15
 xpReward: 150
 ---
