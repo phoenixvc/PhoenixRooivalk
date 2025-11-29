@@ -7,6 +7,8 @@
  * - Add/remove articles from collections
  * - Move articles between collections
  * - Share collections with other users
+ * - AI-powered article suggestions for collections (Wave 1)
+ * - AI-curated collection name suggestions (Wave 4)
  */
 
 import { useState, useCallback, useEffect } from "react";
@@ -16,8 +18,27 @@ import {
   COLLECTION_COLORS,
   COLLECTION_ICONS,
 } from "../types/news";
+import { aiService, ReadingRecommendation } from "../services/aiService";
 
 const STORAGE_KEY = "phoenix-article-collections";
+
+/**
+ * AI-powered article suggestion for collections
+ */
+export interface ArticleSuggestion {
+  docId: string;
+  reason: string;
+  relevanceScore: number;
+}
+
+/**
+ * AI-generated collection name suggestion
+ */
+export interface CollectionNameSuggestion {
+  name: string;
+  confidence: number;
+  alternatives?: string[];
+}
 
 interface UseArticleCollectionsReturn {
   collections: ArticleCollection[];
@@ -44,6 +65,14 @@ interface UseArticleCollectionsReturn {
   updateCollectionIcon: (id: string, icon: string) => boolean;
   shareCollection: (id: string, userIds: string[]) => boolean;
   unshareCollection: (id: string) => boolean;
+  // AI-powered features (Wave 1 & 4)
+  suggestArticlesForCollection: (
+    collectionId: string,
+    limit?: number,
+  ) => Promise<ArticleSuggestion[]>;
+  suggestCollectionName: (
+    articleIds: string[],
+  ) => Promise<CollectionNameSuggestion>;
 }
 
 /**
@@ -327,6 +356,90 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
     return true;
   }, []);
 
+  /**
+   * AI-powered: Suggest articles for a collection based on its contents
+   * Uses semantic search to find related articles
+   */
+  const suggestArticlesForCollection = useCallback(
+    async (
+      collectionId: string,
+      limit: number = 5,
+    ): Promise<ArticleSuggestion[]> => {
+      const collection = collections.find((c) => c.id === collectionId);
+      if (!collection || collection.articleIds.length === 0) {
+        return [];
+      }
+
+      try {
+        // Get recommendations based on the first article in the collection
+        const primaryArticle = collection.articleIds[0];
+        const result = await aiService.getReadingRecommendations(primaryArticle);
+
+        if (!result.recommendations) {
+          return [];
+        }
+
+        // Filter out articles already in any collection and transform to suggestions
+        const allCollectionArticles = new Set(
+          collections.flatMap((c) => c.articleIds),
+        );
+
+        const suggestions: ArticleSuggestion[] = result.recommendations
+          .filter((rec) => !allCollectionArticles.has(rec.docId))
+          .slice(0, limit)
+          .map((rec) => ({
+            docId: rec.docId,
+            reason: rec.reason || `Related to "${collection.name}"`,
+            relevanceScore: rec.relevanceScore,
+          }));
+
+        return suggestions;
+      } catch (error) {
+        console.warn("Failed to get AI suggestions for collection:", error);
+        return [];
+      }
+    },
+    [collections],
+  );
+
+  /**
+   * AI-powered: Suggest a collection name based on its articles
+   * Uses AI to analyze article topics and generate a descriptive name
+   */
+  const suggestCollectionName = useCallback(
+    async (articleIds: string[]): Promise<CollectionNameSuggestion> => {
+      if (articleIds.length === 0) {
+        return { name: "New Collection", confidence: 0 };
+      }
+
+      try {
+        // Use AI to analyze the articles and suggest a name
+        const context = `Articles: ${articleIds.slice(0, 5).join(", ")}`;
+        const result = await aiService.askDocumentation(
+          `Based on these article IDs, suggest a short (2-4 words) descriptive collection name: ${context}`,
+          { format: "concise" },
+        );
+
+        // Extract the suggested name from the AI response
+        const suggestedName = result.answer
+          .replace(/["']/g, "")
+          .trim()
+          .split("\n")[0]
+          .substring(0, 50);
+
+        return {
+          name: suggestedName || "My Collection",
+          confidence: result.confidence === "high" ? 0.9 : result.confidence === "medium" ? 0.7 : 0.5,
+          alternatives: [],
+        };
+      } catch (error) {
+        console.warn("Failed to get AI collection name suggestion:", error);
+        return { name: "New Collection", confidence: 0 };
+      }
+    },
+    [],
+  );
+
   return {
     collections,
     isLoading,
@@ -342,6 +455,9 @@ export function useArticleCollections(): UseArticleCollectionsReturn {
     updateCollectionIcon,
     shareCollection,
     unshareCollection,
+    // AI-powered features
+    suggestArticlesForCollection,
+    suggestCollectionName,
   };
 }
 

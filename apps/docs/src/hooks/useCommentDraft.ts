@@ -8,9 +8,11 @@
  * - Draft indicator UI state
  * - Clear draft on successful submit
  * - Per-page draft storage
+ * - AI-powered draft enhancement (Wave 1)
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { aiService } from "../services/aiService";
 
 const DRAFTS_STORAGE_KEY = "phoenix-comment-drafts";
 const DEBOUNCE_DELAY = 500;
@@ -74,6 +76,30 @@ interface UseCommentDraftOptions {
   onRecover?: (content: string) => void;
 }
 
+/**
+ * AI Enhancement result
+ */
+export interface DraftEnhancement {
+  enhanced: string;
+  suggestions: string[];
+  confidence: number;
+  improvements: {
+    grammar: boolean;
+    clarity: boolean;
+    tone: boolean;
+  };
+}
+
+/**
+ * Enhancement options
+ */
+export interface EnhanceOptions {
+  tone?: "professional" | "casual" | "technical";
+  improveGrammar?: boolean;
+  improveClarity?: boolean;
+  maxLength?: number;
+}
+
 interface UseCommentDraftReturn {
   draft: string;
   setDraft: (content: string) => void;
@@ -82,6 +108,9 @@ interface UseCommentDraftReturn {
   lastSaved: Date | null;
   clearDraft: () => void;
   recoverDraft: () => string | null;
+  // AI-powered enhancement (Wave 1)
+  enhanceDraft: (options?: EnhanceOptions) => Promise<DraftEnhancement>;
+  isEnhancing: boolean;
 }
 
 /**
@@ -96,6 +125,7 @@ export function useCommentDraft({
   const [hasDraft, setHasDraft] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [isEnhancing, setIsEnhancing] = useState(false);
 
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -200,6 +230,112 @@ export function useCommentDraft({
     };
   }, []);
 
+  /**
+   * AI-powered: Enhance the current draft with grammar, clarity, and tone improvements
+   */
+  const enhanceDraft = useCallback(
+    async (options: EnhanceOptions = {}): Promise<DraftEnhancement> => {
+      const {
+        tone = "professional",
+        improveGrammar = true,
+        improveClarity = true,
+        maxLength,
+      } = options;
+
+      // Don't enhance if draft is too short
+      if (!draft || draft.trim().length < 10) {
+        return {
+          enhanced: draft,
+          suggestions: [],
+          confidence: 0,
+          improvements: { grammar: false, clarity: false, tone: false },
+        };
+      }
+
+      setIsEnhancing(true);
+
+      try {
+        // Build enhancement prompt
+        const enhancementPrompt = `
+Improve this comment for a technical documentation platform.
+Target tone: ${tone}
+${improveGrammar ? "- Fix any grammar issues" : ""}
+${improveClarity ? "- Improve clarity and readability" : ""}
+${maxLength ? `- Keep response under ${maxLength} characters` : ""}
+
+Original comment:
+"""
+${draft}
+"""
+
+Provide:
+1. The improved comment text
+2. A brief note on what was changed
+`;
+
+        const result = await aiService.askDocumentation(enhancementPrompt, {
+          format: "detailed",
+        });
+
+        // Parse the AI response to extract enhanced text
+        const lines = result.answer.split("\n");
+        let enhancedText = draft;
+        const suggestions: string[] = [];
+
+        // Try to extract the enhanced text (usually the first paragraph)
+        const textMatch = result.answer.match(
+          /(?:improved|enhanced|revised).*?:?\s*\n*["']?([\s\S]+?)["']?(?:\n\n|$)/i,
+        );
+        if (textMatch) {
+          enhancedText = textMatch[1].trim();
+        } else if (lines.length > 0) {
+          // Use the first substantial line as the enhanced text
+          enhancedText = lines.find((l) => l.trim().length > 20)?.trim() || draft;
+        }
+
+        // Extract suggestions/changes from the response
+        const changesMatch = result.answer.match(
+          /(?:changes?|improvements?|notes?):?\s*\n*([\s\S]*)/i,
+        );
+        if (changesMatch) {
+          const changeLines = changesMatch[1]
+            .split("\n")
+            .filter((l) => l.trim().startsWith("-") || l.trim().startsWith("•"));
+          suggestions.push(
+            ...changeLines.map((l) => l.replace(/^[-•]\s*/, "").trim()),
+          );
+        }
+
+        return {
+          enhanced: enhancedText,
+          suggestions: suggestions.slice(0, 5),
+          confidence:
+            result.confidence === "high"
+              ? 0.9
+              : result.confidence === "medium"
+                ? 0.7
+                : 0.5,
+          improvements: {
+            grammar: improveGrammar,
+            clarity: improveClarity,
+            tone: true,
+          },
+        };
+      } catch (error) {
+        console.warn("Failed to enhance draft:", error);
+        return {
+          enhanced: draft,
+          suggestions: ["Enhancement failed. Please try again."],
+          confidence: 0,
+          improvements: { grammar: false, clarity: false, tone: false },
+        };
+      } finally {
+        setIsEnhancing(false);
+      }
+    },
+    [draft],
+  );
+
   return {
     draft,
     setDraft,
@@ -208,6 +344,9 @@ export function useCommentDraft({
     lastSaved,
     clearDraft,
     recoverDraft,
+    // AI-powered enhancement
+    enhanceDraft,
+    isEnhancing,
   };
 }
 

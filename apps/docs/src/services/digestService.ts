@@ -3,6 +3,7 @@
  *
  * Handles weekly/daily digest generation for comment notifications.
  * Aggregates comment activity and prepares digest data.
+ * Features AI-generated personalized summaries (Wave 2).
  */
 
 import {
@@ -19,6 +20,7 @@ import {
   limit,
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "./firebase";
+import { aiService } from "./aiService";
 
 export type DigestFrequency = "none" | "daily" | "weekly";
 
@@ -48,6 +50,12 @@ export interface DigestData {
     topPages: { url: string; title: string; count: number }[];
   };
   generatedAt: string;
+  // AI-generated personalized summary (Wave 2)
+  aiSummary?: {
+    overview: string;
+    highlights: string[];
+    recommendation: string;
+  };
 }
 
 export interface UserDigestPreferences {
@@ -256,6 +264,87 @@ function calculateTopPages(
 }
 
 /**
+ * AI-powered: Generate a personalized summary for the digest
+ * Uses AI to create engaging, personalized content
+ */
+export async function generateAIDigestSummary(
+  digest: DigestData,
+  userName?: string,
+): Promise<DigestData["aiSummary"]> {
+  try {
+    // Build context for AI
+    const activitySummary = digest.activities
+      .slice(0, 10)
+      .map((a) => `${a.type}: ${a.pageTitle} - ${a.content}`)
+      .join("\n");
+
+    const statsContext = `
+Stats for this ${digest.frequency} period:
+- ${digest.stats.totalReplies} replies to your comments
+- ${digest.stats.totalApprovals} comments approved
+- ${digest.stats.totalEnhancements} AI enhancements
+- Most active pages: ${digest.stats.topPages.map((p) => p.title).join(", ")}
+    `.trim();
+
+    const prompt = `
+Generate a brief, personalized digest summary for ${userName || "a user"} about their documentation activity.
+
+${statsContext}
+
+Recent activities:
+${activitySummary}
+
+Provide:
+1. A 1-2 sentence personalized overview (friendly, encouraging tone)
+2. 2-3 key highlights from their activity
+3. A recommendation for what to read or engage with next
+
+Keep it concise and actionable.
+    `;
+
+    const result = await aiService.askDocumentation(prompt, {
+      format: "detailed",
+    });
+
+    // Parse the AI response
+    const lines = result.answer.split("\n").filter((l) => l.trim());
+    const overview = lines[0] || "You've been active in the community!";
+
+    const highlights: string[] = [];
+    const highlightLines = lines.filter(
+      (l) => l.trim().startsWith("-") || l.trim().startsWith("•"),
+    );
+    highlights.push(
+      ...highlightLines
+        .slice(0, 3)
+        .map((l) => l.replace(/^[-•]\s*/, "").trim()),
+    );
+
+    // Find recommendation (usually the last substantial line)
+    const recommendation =
+      lines.find((l) => l.toLowerCase().includes("recommend")) ||
+      "Keep engaging with the documentation to earn more XP!";
+
+    return {
+      overview: overview.substring(0, 200),
+      highlights: highlights.length > 0 ? highlights : ["Great activity this period!"],
+      recommendation: recommendation.substring(0, 200),
+    };
+  } catch (error) {
+    console.warn("Failed to generate AI digest summary:", error);
+    // Return a default summary if AI fails
+    return {
+      overview: `You've had ${digest.activities.length} activities this ${digest.frequency === "daily" ? "day" : "week"}!`,
+      highlights: [
+        `${digest.stats.totalReplies} people replied to your comments`,
+        `${digest.stats.totalApprovals} of your comments were approved`,
+      ],
+      recommendation: "Keep contributing to earn more XP and badges!",
+    };
+  }
+}
+
+/**
  * Record that a digest was sent
  */
 export async function recordDigestSent(
@@ -322,6 +411,20 @@ export function formatDigestEmail(digest: DigestData): string {
       <p>Here's what happened with your comments</p>
     </div>
     <div class="content">
+      ${
+        digest.aiSummary
+          ? `
+      <div style="background: linear-gradient(135deg, #4fd1c5 0%, #38b2ac 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="margin: 0 0 10px 0; font-size: 16px;">${digest.aiSummary.overview}</p>
+        <ul style="margin: 0; padding-left: 20px;">
+          ${digest.aiSummary.highlights.map((h) => `<li>${h}</li>`).join("")}
+        </ul>
+        <p style="margin: 15px 0 0 0; font-style: italic; font-size: 14px;">${digest.aiSummary.recommendation}</p>
+      </div>
+      `
+          : ""
+      }
+
       <div class="stats">
         <div class="stat">
           <div class="stat-value">${digest.stats.totalReplies}</div>
@@ -398,6 +501,7 @@ export default {
   updateDigestPreferences,
   getCommentActivities,
   generateDigest,
+  generateAIDigestSummary,
   recordDigestSent,
   formatDigestEmail,
   formatDigestText,

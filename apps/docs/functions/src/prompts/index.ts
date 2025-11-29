@@ -63,6 +63,21 @@ export {
   getModelConfig,
 } from "./builder";
 
+// Context optimization utilities (Phase 2.2)
+export {
+  estimateTokens,
+  truncateToTokens,
+  calculateTokenBudget,
+  buildContextWithBudget,
+  buildOptimizedContext,
+  getTokenUsageReport,
+} from "./context-builder";
+
+export type {
+  TokenBudget,
+  ContextBuildResult,
+} from "./context-builder";
+
 // Legacy compatibility - re-export from ai/prompts for backward compatibility
 // NOTE: Legacy exports maintained for gradual migration. Use new template system for new code.
 import {

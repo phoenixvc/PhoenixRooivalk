@@ -7,9 +7,11 @@
  * - Track cached articles
  * - Sync when back online
  * - Storage usage info
+ * - AI-powered semantic bundles (Wave 2)
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { aiService } from "../services/aiService";
 
 export interface CachedArticle {
   id: string;
@@ -18,6 +20,16 @@ export interface CachedArticle {
   imageUrl?: string;
   cachedAt: number;
   size?: number;
+}
+
+/**
+ * Result of downloading a semantic bundle
+ */
+export interface BundleDownloadResult {
+  primaryArticle: CachedArticle;
+  relatedArticles: CachedArticle[];
+  totalCached: number;
+  failedCount: number;
 }
 
 interface UseOfflineArticlesReturn {
@@ -29,6 +41,12 @@ interface UseOfflineArticlesReturn {
   isArticleCached: (articleId: string) => boolean;
   getCacheSize: () => Promise<{ used: number; quota: number } | null>;
   clearAllCached: () => Promise<void>;
+  // AI-powered semantic bundles (Wave 2)
+  downloadRelatedBundle: (
+    article: CachedArticle,
+    limit?: number,
+  ) => Promise<BundleDownloadResult>;
+  isDownloadingBundle: boolean;
 }
 
 /**
@@ -62,6 +80,7 @@ async function getServiceWorker(): Promise<ServiceWorker | null> {
 export function useOfflineArticles(): UseOfflineArticlesReturn {
   const [cachedArticles, setCachedArticles] = useState<CachedArticle[]>([]);
   const [isCaching, setIsCaching] = useState(false);
+  const [isDownloadingBundle, setIsDownloadingBundle] = useState(false);
   const isSupported = isServiceWorkerSupported();
 
   // Load cached articles on mount
@@ -222,6 +241,72 @@ export function useOfflineArticles(): UseOfflineArticlesReturn {
     }
   }, [isSupported]);
 
+  /**
+   * AI-powered: Download article with semantically related articles
+   * Uses vector search to find related content for a complete offline bundle
+   */
+  const downloadRelatedBundle = useCallback(
+    async (
+      article: CachedArticle,
+      limit: number = 5,
+    ): Promise<BundleDownloadResult> => {
+      setIsDownloadingBundle(true);
+
+      const result: BundleDownloadResult = {
+        primaryArticle: article,
+        relatedArticles: [],
+        totalCached: 0,
+        failedCount: 0,
+      };
+
+      try {
+        // First, cache the primary article
+        const primaryCached = await cacheArticle(article);
+        if (primaryCached) {
+          result.totalCached++;
+        } else {
+          result.failedCount++;
+        }
+
+        // Use AI to find semantically related articles
+        const recommendations = await aiService.getReadingRecommendations(
+          article.id,
+        );
+
+        if (recommendations.recommendations?.length > 0) {
+          // Cache related articles
+          const relatedPromises = recommendations.recommendations
+            .slice(0, limit)
+            .map(async (rec) => {
+              const relatedArticle: CachedArticle = {
+                id: rec.docId,
+                title: rec.reason || rec.docId,
+                cachedAt: Date.now(),
+              };
+
+              const cached = await cacheArticle(relatedArticle);
+              if (cached) {
+                result.relatedArticles.push(relatedArticle);
+                result.totalCached++;
+              } else {
+                result.failedCount++;
+              }
+              return cached;
+            });
+
+          await Promise.all(relatedPromises);
+        }
+      } catch (error) {
+        console.error("Failed to download related bundle:", error);
+      } finally {
+        setIsDownloadingBundle(false);
+      }
+
+      return result;
+    },
+    [cacheArticle],
+  );
+
   return {
     cachedArticles,
     isCaching,
@@ -231,6 +316,9 @@ export function useOfflineArticles(): UseOfflineArticlesReturn {
     isArticleCached,
     getCacheSize,
     clearAllCached,
+    // AI-powered semantic bundles
+    downloadRelatedBundle,
+    isDownloadingBundle,
   };
 }
 
