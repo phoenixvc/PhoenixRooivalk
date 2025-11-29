@@ -3,11 +3,13 @@
  *
  * Provides IndexedDB-based queue for offline operations.
  * Automatically syncs when connection is restored.
+ * Includes fallback to localStorage when IndexedDB is unavailable.
  */
 
 const DB_NAME = "phoenix-offline-queue";
 const DB_VERSION = 1;
 const STORE_NAME = "pending-operations";
+const FALLBACK_KEY = "phoenix-offline-queue-fallback";
 
 interface QueuedOperation<T = unknown> {
   id: string;
@@ -17,20 +19,104 @@ interface QueuedOperation<T = unknown> {
   retryCount: number;
 }
 
+// Track whether we should use fallback mode
+let useFallbackMode = false;
+
 /**
- * Open IndexedDB connection
+ * Check if IndexedDB is available and working
  */
-function openDB(): Promise<IDBDatabase> {
+function isIndexedDBAvailable(): boolean {
+  if (typeof window === "undefined") return false;
+  if (!window.indexedDB) return false;
+
+  // Some browsers have indexedDB but it's blocked (e.g., private mode)
+  try {
+    const testKey = "__idb_test__";
+    const request = indexedDB.open(testKey);
+    request.onerror = () => {
+      useFallbackMode = true;
+    };
+    // Clean up test database
+    request.onsuccess = () => {
+      request.result.close();
+      indexedDB.deleteDatabase(testKey);
+    };
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get fallback storage (localStorage)
+ */
+function getFallbackStorage(): QueuedOperation[] {
+  try {
+    const data = localStorage.getItem(FALLBACK_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Save to fallback storage
+ */
+function setFallbackStorage(operations: QueuedOperation[]): void {
+  try {
+    localStorage.setItem(FALLBACK_KEY, JSON.stringify(operations));
+  } catch (error) {
+    console.warn("Failed to save to localStorage fallback:", error);
+  }
+}
+
+/**
+ * Open IndexedDB connection with error recovery
+ */
+async function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    if (typeof window === "undefined" || !window.indexedDB) {
-      reject(new Error("IndexedDB not available"));
+    if (typeof window === "undefined" || !window.indexedDB || useFallbackMode) {
+      reject(new Error("IndexedDB not available, using fallback"));
       return;
     }
 
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
+    // Set a timeout for the open request
+    const timeout = setTimeout(() => {
+      useFallbackMode = true;
+      reject(new Error("IndexedDB open timed out"));
+    }, 5000);
+
+    request.onerror = () => {
+      clearTimeout(timeout);
+      // If there's a version error, try to delete and recreate
+      if (request.error?.name === "VersionError") {
+        console.warn("IndexedDB version error, attempting recovery...");
+        indexedDB.deleteDatabase(DB_NAME);
+        // Retry once after deletion
+        const retryRequest = indexedDB.open(DB_NAME, DB_VERSION);
+        retryRequest.onsuccess = () => resolve(retryRequest.result);
+        retryRequest.onerror = () => {
+          useFallbackMode = true;
+          reject(retryRequest.error);
+        };
+        retryRequest.onupgradeneeded = (event) => {
+          const db = (event.target as IDBOpenDBRequest).result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: "id" });
+          }
+        };
+      } else {
+        useFallbackMode = true;
+        reject(request.error);
+      }
+    };
+
+    request.onsuccess = () => {
+      clearTimeout(timeout);
+      resolve(request.result);
+    };
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -38,7 +124,20 @@ function openDB(): Promise<IDBDatabase> {
         db.createObjectStore(STORE_NAME, { keyPath: "id" });
       }
     };
+
+    // Handle blocked (another tab has the database open with older version)
+    request.onblocked = () => {
+      console.warn("IndexedDB blocked by another tab");
+      clearTimeout(timeout);
+      useFallbackMode = true;
+      reject(new Error("IndexedDB blocked"));
+    };
   });
+}
+
+// Initialize on module load
+if (typeof window !== "undefined") {
+  isIndexedDBAvailable();
 }
 
 /**
@@ -55,26 +154,34 @@ export async function queueOperation<T>(
   type: string,
   data: T
 ): Promise<string> {
-  const db = await openDB();
   const id = generateId();
+  const operation: QueuedOperation<T> = {
+    id,
+    type,
+    data,
+    timestamp: Date.now(),
+    retryCount: 0,
+  };
 
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], "readwrite");
-    const store = transaction.objectStore(STORE_NAME);
+  // Try IndexedDB first
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
 
-    const operation: QueuedOperation<T> = {
-      id,
-      type,
-      data,
-      timestamp: Date.now(),
-      retryCount: 0,
-    };
+      const request = store.add(operation);
 
-    const request = store.add(operation);
-
-    request.onsuccess = () => resolve(id);
-    request.onerror = () => reject(request.error);
-  });
+      request.onsuccess = () => resolve(id);
+      request.onerror = () => reject(request.error);
+    });
+  } catch {
+    // Fallback to localStorage
+    const operations = getFallbackStorage();
+    operations.push(operation as QueuedOperation);
+    setFallbackStorage(operations);
+    return id;
+  }
 }
 
 /**
@@ -83,16 +190,21 @@ export async function queueOperation<T>(
 export async function getPendingOperations<T = unknown>(): Promise<
   QueuedOperation<T>[]
 > {
-  const db = await openDB();
+  // Try IndexedDB first
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], "readonly");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.getAll();
 
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], "readonly");
-    const store = transaction.objectStore(STORE_NAME);
-    const request = store.getAll();
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  } catch {
+    // Fallback to localStorage
+    return getFallbackStorage() as QueuedOperation<T>[];
+  }
 }
 
 /**
@@ -109,58 +221,79 @@ export async function getPendingByType<T = unknown>(
  * Remove operation from queue
  */
 export async function removeOperation(id: string): Promise<void> {
-  const db = await openDB();
+  // Try IndexedDB first
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.delete(id);
 
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], "readwrite");
-    const store = transaction.objectStore(STORE_NAME);
-    const request = store.delete(id);
-
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  } catch {
+    // Fallback to localStorage
+    const operations = getFallbackStorage();
+    const filtered = operations.filter((op) => op.id !== id);
+    setFallbackStorage(filtered);
+  }
 }
 
 /**
  * Update operation retry count
  */
 export async function incrementRetryCount(id: string): Promise<void> {
-  const db = await openDB();
+  // Try IndexedDB first
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+      const getRequest = store.get(id);
 
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], "readwrite");
-    const store = transaction.objectStore(STORE_NAME);
-    const getRequest = store.get(id);
-
-    getRequest.onsuccess = () => {
-      const operation = getRequest.result;
-      if (operation) {
-        operation.retryCount += 1;
-        const putRequest = store.put(operation);
-        putRequest.onsuccess = () => resolve();
-        putRequest.onerror = () => reject(putRequest.error);
-      } else {
-        resolve();
-      }
-    };
-    getRequest.onerror = () => reject(getRequest.error);
-  });
+      getRequest.onsuccess = () => {
+        const operation = getRequest.result;
+        if (operation) {
+          operation.retryCount += 1;
+          const putRequest = store.put(operation);
+          putRequest.onsuccess = () => resolve();
+          putRequest.onerror = () => reject(putRequest.error);
+        } else {
+          resolve();
+        }
+      };
+      getRequest.onerror = () => reject(getRequest.error);
+    });
+  } catch {
+    // Fallback to localStorage
+    const operations = getFallbackStorage();
+    const updated = operations.map((op) =>
+      op.id === id ? { ...op, retryCount: op.retryCount + 1 } : op
+    );
+    setFallbackStorage(updated);
+  }
 }
 
 /**
  * Clear all pending operations
  */
 export async function clearQueue(): Promise<void> {
-  const db = await openDB();
+  // Try IndexedDB first
+  try {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.clear();
 
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORE_NAME], "readwrite");
-    const store = transaction.objectStore(STORE_NAME);
-    const request = store.clear();
-
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  } catch {
+    // Fallback to localStorage
+    setFallbackStorage([]);
+  }
 }
 
 /**
