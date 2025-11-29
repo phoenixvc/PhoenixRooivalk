@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef, useState } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAchievements } from "./Achievements";
