@@ -42,7 +42,7 @@ export function NewsAdminPanel(): React.ReactElement | null {
   // Check admin status by email domain
   const isAdmin = Boolean(
     user?.email &&
-      ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
+    ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
   );
 
   const fetchStats = useCallback(async () => {
