@@ -2,6 +2,9 @@
  * Firebase Cloud Messaging Service Worker
  *
  * Handles background push notifications for the Phoenix Rooivalk documentation.
+ *
+ * Configuration is received from the main thread via postMessage to avoid
+ * hardcoding sensitive values in the service worker file.
  */
 
 /* eslint-disable no-undef */
@@ -10,45 +13,92 @@
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-// Initialize Firebase with config
-// Note: These values should match your firebase config
-firebase.initializeApp({
-  apiKey: "AIzaSyExample", // Will be replaced during build
-  authDomain: "phoenix-rooivalk.firebaseapp.com",
-  projectId: "phoenix-rooivalk",
-  storageBucket: "phoenix-rooivalk.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abc123"
+// Firebase instance - initialized when config is received
+let messaging = null;
+let isInitialized = false;
+
+/**
+ * Initialize Firebase with provided config
+ * @param {Object} config - Firebase configuration object
+ */
+function initializeFirebase(config) {
+  if (isInitialized) return;
+
+  // Validate required config fields
+  if (!config || !config.apiKey || !config.projectId) {
+    console.warn('[firebase-messaging-sw.js] Invalid Firebase config received');
+    return;
+  }
+
+  try {
+    firebase.initializeApp(config);
+    messaging = firebase.messaging();
+    isInitialized = true;
+    console.log('[firebase-messaging-sw.js] Firebase initialized successfully');
+
+    // Set up background message handler after initialization
+    setupBackgroundMessageHandler();
+  } catch (error) {
+    console.error('[firebase-messaging-sw.js] Failed to initialize Firebase:', error);
+  }
+}
+
+// Listen for config from main thread
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'FIREBASE_CONFIG') {
+    initializeFirebase(event.data.config);
+  }
 });
 
-const messaging = firebase.messaging();
-
-// Handle background messages
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Background message:', payload);
-
-  const notificationTitle = payload.notification?.title || 'Phoenix Rooivalk News';
-  const notificationOptions = {
-    body: payload.notification?.body || 'You have a new notification',
-    icon: '/img/logo.svg',
-    badge: '/img/badge.png',
-    tag: payload.data?.articleId ? `news-${payload.data.articleId}` : 'news-general',
-    data: payload.data,
-    requireInteraction: true,
-    actions: [
-      {
-        action: 'view',
-        title: 'View Article'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss'
+// Try to get config from cache on SW activation (for refresh scenarios)
+self.addEventListener('activate', async (event) => {
+  event.waitUntil(
+    caches.open('firebase-config').then(async (cache) => {
+      try {
+        const response = await cache.match('config');
+        if (response) {
+          const config = await response.json();
+          initializeFirebase(config);
+        }
+      } catch (error) {
+        // Config not in cache yet, will be sent via postMessage
       }
-    ]
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
+    })
+  );
 });
+
+/**
+ * Set up background message handler
+ */
+function setupBackgroundMessageHandler() {
+  if (!messaging) return;
+
+  messaging.onBackgroundMessage((payload) => {
+    console.log('[firebase-messaging-sw.js] Background message:', payload);
+
+    const notificationTitle = payload.notification?.title || 'Phoenix Rooivalk News';
+    const notificationOptions = {
+      body: payload.notification?.body || 'You have a new notification',
+      icon: '/img/logo.svg',
+      badge: '/img/badge.png',
+      tag: payload.data?.articleId ? `news-${payload.data.articleId}` : 'news-general',
+      data: payload.data,
+      requireInteraction: true,
+      actions: [
+        {
+          action: 'view',
+          title: 'View Article'
+        },
+        {
+          action: 'dismiss',
+          title: 'Dismiss'
+        }
+      ]
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
+  });
+}
 
 // Handle notification click
 self.addEventListener('notificationclick', (event) => {

@@ -4,7 +4,7 @@
  * Displays a single news article with personalization indicators.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import type { NewsArticle, PersonalizedNewsItem } from "../../types/news";
 import { NEWS_CATEGORY_CONFIG } from "../../types/news";
 import { newsService } from "../../services/newsService";
@@ -39,11 +39,31 @@ export function NewsCard({
   const [isSaved, setIsSaved] = useState(initialSaved);
   const [isSaving, setIsSaving] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
 
   const categoryConfig = NEWS_CATEGORY_CONFIG[article.category];
   const personalized = isPersonalized(article);
   const readingTime = formatReadingTime(article.content);
+
+  // Close share menu when clicking outside
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      shareMenuRef.current &&
+      !shareMenuRef.current.contains(event.target as Node)
+    ) {
+      setShowShareMenu(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (showShareMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showShareMenu, handleClickOutside]);
 
   const handleClick = async () => {
     if (!isExpanded) {
@@ -157,7 +177,7 @@ export function NewsCard({
           <span className="news-card-source">{article.source}</span>
           <span className="news-card-reading-time">{readingTime}</span>
           <span className="news-card-date">{formatDate(article.publishedAt)}</span>
-          <div className="news-card-actions">
+          <div className="news-card-actions" ref={shareMenuRef}>
             <button
               className="news-card-share-btn"
               onClick={handleShare}
@@ -235,7 +255,7 @@ export function NewsCard({
             </span>
           )}
         </div>
-        <div className="news-card-full-actions">
+        <div className="news-card-full-actions" ref={shareMenuRef}>
           <button
             className="news-card-share-btn-full"
             onClick={handleShare}

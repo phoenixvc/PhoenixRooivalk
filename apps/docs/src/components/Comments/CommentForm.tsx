@@ -55,6 +55,7 @@ export function CommentForm({
   const [sendForReview, setSendForReview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false); // Guard for sync race condition
   const [aiEnhancement, setAiEnhancement] = useState<{
     content: string;
     suggestions: string[];
@@ -98,17 +99,29 @@ export function CommentForm({
 
   // Auto-sync when coming back online
   useEffect(() => {
-    if (isNetworkOnline && pendingComments.length > 0 && user) {
-      syncComments(submitPendingComment).then((result) => {
+    // Guard against race conditions - don't start sync if already syncing
+    if (!isNetworkOnline || pendingComments.length === 0 || !user || isSyncing) {
+      return;
+    }
+
+    setIsSyncing(true);
+    syncComments(submitPendingComment)
+      .then((result) => {
         if (result.processed > 0) {
           toast.success(`Synced ${result.processed} offline comment(s)`);
         }
         if (result.failed > 0) {
           toast.warning(`${result.failed} comment(s) failed to sync`);
         }
+      })
+      .catch((err) => {
+        console.error("Failed to sync offline comments:", err);
+        toast.error("Failed to sync some offline comments. Will retry later.");
+      })
+      .finally(() => {
+        setIsSyncing(false);
       });
-    }
-  }, [isNetworkOnline, pendingComments.length, user, syncComments, submitPendingComment, toast]);
+  }, [isNetworkOnline, pendingComments.length, user, syncComments, submitPendingComment, toast, isSyncing]);
 
   // Parse AI response with structured format
   const parseAIResponse = useCallback((response: string): { content: string; suggestions: string[] } => {

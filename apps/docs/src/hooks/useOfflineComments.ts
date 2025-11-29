@@ -4,7 +4,7 @@
  * Manages comment queuing when offline and syncs when online.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   queueOperation,
   getPendingByType,
@@ -59,13 +59,26 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
     lastSyncResult: null,
   });
 
+  // Track mounted state to prevent updates after unmount
+  const isMountedRef = useRef(true);
+
+  // Safe setState that checks if component is still mounted
+  const safeSetState = useCallback(
+    (updater: (prev: OfflineCommentsState) => OfflineCommentsState) => {
+      if (isMountedRef.current) {
+        setState(updater);
+      }
+    },
+    []
+  );
+
   // Load pending comments on mount
   const refreshPending = useCallback(async () => {
     try {
       const operations = await getPendingByType<PendingComment>(
         COMMENT_OPERATION_TYPE
       );
-      setState((prev) => ({
+      safeSetState((prev) => ({
         ...prev,
         pendingComments: operations.map((op) => ({
           id: op.id,
@@ -75,37 +88,48 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
     } catch (error) {
       console.error("Failed to load pending comments:", error);
     }
-  }, []);
+  }, [safeSetState]);
 
-  // Check online status on mount
+  // Check online status on mount and cleanup on unmount
   useEffect(() => {
-    setState((prev) => ({ ...prev, isNetworkOnline: isOnline() }));
+    isMountedRef.current = true;
+    safeSetState((prev) => ({ ...prev, isNetworkOnline: isOnline() }));
     refreshPending();
-  }, [refreshPending]);
 
-  // Register network listeners
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [refreshPending, safeSetState]);
+
+  // Register network listeners with proper cleanup
   useEffect(() => {
-    const cleanup = registerNetworkListeners(
-      () => {
-        setState((prev) => ({ ...prev, isNetworkOnline: true }));
-      },
-      () => {
-        setState((prev) => ({ ...prev, isNetworkOnline: false }));
-      }
-    );
+    const handleOnline = () => {
+      safeSetState((prev) => ({ ...prev, isNetworkOnline: true }));
+    };
 
-    return cleanup;
-  }, []);
+    const handleOffline = () => {
+      safeSetState((prev) => ({ ...prev, isNetworkOnline: false }));
+    };
+
+    const cleanup = registerNetworkListeners(handleOnline, handleOffline);
+
+    return () => {
+      // Ensure cleanup is called
+      if (typeof cleanup === "function") {
+        cleanup();
+      }
+    };
+  }, [safeSetState]);
 
   // Queue a comment
   const queueComment = useCallback(async (comment: PendingComment) => {
     const id = await queueOperation(COMMENT_OPERATION_TYPE, comment);
-    setState((prev) => ({
+    safeSetState((prev) => ({
       ...prev,
       pendingComments: [...prev.pendingComments, { id, comment }],
     }));
     return id;
-  }, []);
+  }, [safeSetState]);
 
   // Sync comments
   const syncComments = useCallback(
@@ -114,7 +138,7 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
         return { processed: 0, failed: 0 };
       }
 
-      setState((prev) => ({ ...prev, isSyncing: true }));
+      safeSetState((prev) => ({ ...prev, isSyncing: true }));
 
       try {
         const result = await processQueue<PendingComment>(
@@ -123,7 +147,7 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
           3
         );
 
-        setState((prev) => ({
+        safeSetState((prev) => ({
           ...prev,
           isSyncing: false,
           lastSyncResult: result,
@@ -135,11 +159,11 @@ export function useOfflineComments(): UseOfflineCommentsReturn {
         return result;
       } catch (error) {
         console.error("Sync failed:", error);
-        setState((prev) => ({ ...prev, isSyncing: false }));
+        safeSetState((prev) => ({ ...prev, isSyncing: false }));
         return { processed: 0, failed: 0 };
       }
     },
-    [refreshPending]
+    [refreshPending, safeSetState]
   );
 
   // Remove a pending comment

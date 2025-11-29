@@ -8,7 +8,30 @@ import { getMessaging, getToken, onMessage, Messaging } from "firebase/messaging
 import { app, isFirebaseConfigured } from "../services/firebase";
 
 // VAPID key for web push (should be set in Firebase Console)
-const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY || "";
+// Accessed via Docusaurus customFields at runtime
+const getVapidKey = (): string | null => {
+  if (typeof window === "undefined") return null;
+
+  try {
+    // Try to get from Docusaurus context
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const docusaurusData = (window as any).__DOCUSAURUS__;
+    const vapidKey = docusaurusData?.siteConfig?.customFields?.vapidKey;
+    if (vapidKey && typeof vapidKey === "string" && vapidKey.length > 0) {
+      return vapidKey;
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  // Fallback to environment variable (for non-Docusaurus builds)
+  const envKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+  if (envKey && envKey.length > 0) {
+    return envKey;
+  }
+
+  return null;
+};
 
 let messagingInstance: Messaging | null = null;
 
@@ -87,6 +110,12 @@ export async function getFCMToken(): Promise<string | null> {
     return null;
   }
 
+  const vapidKey = getVapidKey();
+  if (!vapidKey) {
+    console.error("VAPID key not configured. Push notifications require a valid VAPID key.");
+    return null;
+  }
+
   const messaging = initializeMessaging();
   if (!messaging) {
     return null;
@@ -101,7 +130,7 @@ export async function getFCMToken(): Promise<string | null> {
     }
 
     const token = await getToken(messaging, {
-      vapidKey: VAPID_KEY,
+      vapidKey,
       serviceWorkerRegistration: registration,
     });
 
@@ -109,6 +138,62 @@ export async function getFCMToken(): Promise<string | null> {
   } catch (error) {
     console.error("Error getting FCM token:", error);
     return null;
+  }
+}
+
+/**
+ * Get Firebase config from Docusaurus context
+ */
+function getFirebaseConfig(): Record<string, string> | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const docusaurusData = (window as any).__DOCUSAURUS__;
+    const config = docusaurusData?.siteConfig?.customFields?.firebaseConfig;
+    if (config && config.apiKey && config.projectId) {
+      return config;
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  return null;
+}
+
+/**
+ * Send Firebase config to service worker
+ */
+async function sendConfigToServiceWorker(
+  registration: ServiceWorkerRegistration
+): Promise<void> {
+  const config = getFirebaseConfig();
+  if (!config) {
+    console.warn("Firebase config not available for service worker");
+    return;
+  }
+
+  // Wait for the service worker to be ready
+  const sw = registration.active || registration.waiting || registration.installing;
+  if (!sw) return;
+
+  // Send config via postMessage
+  sw.postMessage({
+    type: "FIREBASE_CONFIG",
+    config,
+  });
+
+  // Also cache the config for SW restart scenarios
+  try {
+    const cache = await caches.open("firebase-config");
+    await cache.put(
+      "config",
+      new Response(JSON.stringify(config), {
+        headers: { "Content-Type": "application/json" },
+      })
+    );
+  } catch {
+    // Caching is optional, continue without it
   }
 }
 
@@ -122,13 +207,28 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null
 
   try {
     // Check for existing registration
-    const existingRegistration = await navigator.serviceWorker.getRegistration("/firebase-messaging-sw.js");
-    if (existingRegistration) {
-      return existingRegistration;
+    let registration = await navigator.serviceWorker.getRegistration("/firebase-messaging-sw.js");
+
+    if (!registration) {
+      // Register new service worker
+      registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
     }
 
-    // Register new service worker
-    const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+    // Wait for the service worker to be active
+    if (registration.installing) {
+      await new Promise<void>((resolve) => {
+        registration!.installing!.addEventListener("statechange", function handler() {
+          if (this.state === "activated") {
+            this.removeEventListener("statechange", handler);
+            resolve();
+          }
+        });
+      });
+    }
+
+    // Send Firebase config to service worker
+    await sendConfigToServiceWorker(registration);
+
     return registration;
   } catch (error) {
     console.error("Service worker registration failed:", error);
@@ -184,6 +284,13 @@ export function showLocalNotification(
 }
 
 /**
+ * Check if VAPID key is configured
+ */
+export function isVapidConfigured(): boolean {
+  return getVapidKey() !== null;
+}
+
+/**
  * Enable push notifications with full flow:
  * 1. Request permission
  * 2. Get FCM token
@@ -202,6 +309,16 @@ export async function enablePushNotifications(): Promise<{
       token: null,
       permission: "unsupported",
       error: "Push notifications are not supported in this browser",
+    };
+  }
+
+  // Check VAPID key configuration
+  if (!isVapidConfigured()) {
+    return {
+      success: false,
+      token: null,
+      permission: Notification.permission,
+      error: "Push notifications are not configured. Please contact support.",
     };
   }
 
