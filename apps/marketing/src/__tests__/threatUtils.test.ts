@@ -13,7 +13,7 @@ import {
   calculateThreatPriority,
   getThreatAppearance,
 } from "../components/utils/threatUtils";
-import { createMockThreat, createMockThreats } from "./__mocks__/gameMocks";
+import { createMockThreat } from "./__mocks__/gameMocks";
 
 describe("spawnThreat", () => {
   it("should spawn a threat with default values", () => {
