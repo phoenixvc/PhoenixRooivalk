@@ -219,9 +219,13 @@ export function stripHtml(html: string): string {
     return html;
   }
 
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.textContent || div.innerText || "";
+  // First sanitize the HTML using DOMPurify to remove any malicious content
+  const sanitized = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [],
+    ALLOWED_ATTR: [],
+    KEEP_CONTENT: true,
+  });
+  return sanitized;
 }
 
 /**

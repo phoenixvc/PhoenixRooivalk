@@ -31,6 +31,8 @@ export interface HybridSearchOptions {
   boostExactMatches?: boolean;
   /** K constant for RRF (Reciprocal Rank Fusion) */
   rrfK?: number;
+  /** The search query string for exact match checking */
+  query?: string;
 }
 
 /**

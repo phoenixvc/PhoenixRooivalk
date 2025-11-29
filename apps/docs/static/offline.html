@@ -188,9 +188,25 @@
         if (articles.length > 0) {
           document.getElementById('cachedSection').style.display = 'block';
           const list = document.getElementById('cachedList');
-          list.innerHTML = articles.map(article =>
-            `<li><a href="${article.url || '/news?article=' + article.id}">${article.title || 'Untitled Article'}</a></li>`
-          ).join('');
+          // Clear existing items
+          while (list.firstChild) {
+            list.removeChild(list.firstChild);
+          }
+          // Build list items safely using DOM manipulation
+          articles.forEach(article => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            // Validate URL - only allow same-origin or expected paths
+            const url = article.url || '/news?article=' + encodeURIComponent(article.id || '');
+            if (url.startsWith('/') || url.startsWith(window.location.origin)) {
+              a.href = url;
+            } else {
+              a.href = '#';
+            }
+            a.textContent = article.title || 'Untitled Article';
+            li.appendChild(a);
+            list.appendChild(li);
+          });
         }
       } catch (error) {
         console.log('Could not load cached articles:', error);

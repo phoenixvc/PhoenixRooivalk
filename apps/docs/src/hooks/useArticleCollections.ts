@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 import {
   ArticleCollection,
   COLLECTION_COLORS,
-  COLLECTION_ICONS,
 } from "../types/news";
 import { aiService } from "../services/aiService";
 
