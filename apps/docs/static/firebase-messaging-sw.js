@@ -197,7 +197,10 @@ async function getCachedArticles() {
 
     const articles = [];
     for (const request of keys) {
-      if (request.url.includes("/offline/articles/") && request.url.includes("/metadata")) {
+      if (
+        request.url.includes("/offline/articles/") &&
+        request.url.includes("/metadata")
+      ) {
         const response = await cache.match(request);
         if (response) {
           const article = await response.json();
@@ -393,13 +396,11 @@ async function syncOfflineOperations() {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll([
-        "/offline.html",
-        "/img/logo.svg",
-        "/img/badge.png",
-      ]).catch((error) => {
-        console.warn("[SW] Some static assets failed to cache:", error);
-      });
+      return cache
+        .addAll(["/offline.html", "/img/logo.svg", "/img/badge.png"])
+        .catch((error) => {
+          console.warn("[SW] Some static assets failed to cache:", error);
+        });
     }),
   );
   // Skip waiting to activate immediately
@@ -415,7 +416,8 @@ self.addEventListener("activate", (event) => {
           .filter((name) => {
             // Remove old versioned caches
             return (
-              (name.startsWith("phoenix-articles-") && name !== ARTICLE_CACHE) ||
+              (name.startsWith("phoenix-articles-") &&
+                name !== ARTICLE_CACHE) ||
               (name.startsWith("phoenix-static-") && name !== STATIC_CACHE)
             );
           })

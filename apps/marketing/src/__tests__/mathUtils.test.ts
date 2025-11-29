@@ -212,7 +212,14 @@ describe("conversion round-trips", () => {
   });
 
   it("should convert radians to degrees and back", () => {
-    const testValues = [0, Math.PI / 6, Math.PI / 4, Math.PI / 2, Math.PI, 2 * Math.PI];
+    const testValues = [
+      0,
+      Math.PI / 6,
+      Math.PI / 4,
+      Math.PI / 2,
+      Math.PI,
+      2 * Math.PI,
+    ];
 
     testValues.forEach((rad) => {
       const deg = radToDeg(rad);

@@ -4,7 +4,10 @@
 
 import { describe, it, expect } from "vitest";
 import { calculateROI } from "../components/sections/utils/roiCalculator";
-import type { ROIInputs, SensitivityLevel } from "../components/sections/utils/roiCalculator";
+import type {
+  ROIInputs,
+  SensitivityLevel,
+} from "../components/sections/utils/roiCalculator";
 
 describe("calculateROI", () => {
   const defaultInputs: ROIInputs = {
@@ -80,7 +83,9 @@ describe("calculateROI", () => {
       const result = calculateROI(defaultInputs, "unknown" as SensitivityLevel);
 
       const conservativeResult = calculateROI(defaultInputs, "conservative");
-      expect(result.phoenix.successRate).toBe(conservativeResult.phoenix.successRate);
+      expect(result.phoenix.successRate).toBe(
+        conservativeResult.phoenix.successRate,
+      );
     });
 
     it("should increase phoenix ROI with aggressive settings", () => {
@@ -150,7 +155,8 @@ describe("calculateROI", () => {
       const result = calculateROI(defaultInputs, "median");
 
       // ROI = (savings - costs) / costs * 100
-      const phoenixCosts = defaultInputs.deploymentCost + defaultInputs.personnelCost;
+      const phoenixCosts =
+        defaultInputs.deploymentCost + defaultInputs.personnelCost;
       const expectedROI =
         ((result.phoenix.savings - phoenixCosts) / phoenixCosts) * 100;
 
@@ -164,7 +170,8 @@ describe("calculateROI", () => {
       const traditionalCosts =
         defaultInputs.deploymentCost * 2 + defaultInputs.personnelCost;
       const expectedROI =
-        ((result.traditional.savings - traditionalCosts) / traditionalCosts) * 100;
+        ((result.traditional.savings - traditionalCosts) / traditionalCosts) *
+        100;
 
       expect(result.traditional.roi).toBeCloseTo(expectedROI, 0);
     });

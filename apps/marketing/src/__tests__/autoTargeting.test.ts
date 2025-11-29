@@ -40,11 +40,7 @@ describe("AutoTargetingSystem", () => {
         t.status = "neutralized";
       });
 
-      const target = system.findBestTarget(
-        threats,
-        { x: 100, y: 100 },
-        200,
-      );
+      const target = system.findBestTarget(threats, { x: 100, y: 100 }, 200);
 
       expect(target).toBeNull();
     });
@@ -55,26 +51,30 @@ describe("AutoTargetingSystem", () => {
         t.isMoving = false;
       });
 
-      const target = system.findBestTarget(
-        threats,
-        { x: 100, y: 100 },
-        200,
-      );
+      const target = system.findBestTarget(threats, { x: 100, y: 100 }, 200);
 
       expect(target).toBeNull();
     });
 
     it("should find threat within range", () => {
       const threats = [
-        createMockThreat({ id: "close", x: 50, y: 50, status: "active", isMoving: true }),
-        createMockThreat({ id: "far", x: 500, y: 500, status: "active", isMoving: true }),
+        createMockThreat({
+          id: "close",
+          x: 50,
+          y: 50,
+          status: "active",
+          isMoving: true,
+        }),
+        createMockThreat({
+          id: "far",
+          x: 500,
+          y: 500,
+          status: "active",
+          isMoving: true,
+        }),
       ];
 
-      const target = system.findBestTarget(
-        threats,
-        { x: 0, y: 0 },
-        100,
-      );
+      const target = system.findBestTarget(threats, { x: 0, y: 0 }, 100);
 
       expect(target).not.toBeNull();
       expect(target?.id).toBe("close");
@@ -101,11 +101,7 @@ describe("AutoTargetingSystem", () => {
         }),
       ];
 
-      const target = system.findBestTarget(
-        threats,
-        { x: 0, y: 0 },
-        200,
-      );
+      const target = system.findBestTarget(threats, { x: 0, y: 0 }, 200);
 
       // Kamikaze should be higher priority (both close, kamikaze type wins)
       expect(target?.id).toBe("kamikaze");
@@ -131,11 +127,7 @@ describe("AutoTargetingSystem", () => {
         }),
       ];
 
-      const target = system.findBestTarget(
-        threats,
-        { x: 0, y: 0 },
-        200,
-      );
+      const target = system.findBestTarget(threats, { x: 0, y: 0 }, 200);
 
       expect(target?.id).toBe("close");
     });
@@ -202,7 +194,14 @@ describe("AutoTargetingSystem", () => {
             isMoving: true,
           }),
         ],
-        mothership: { x: 400, y: 300, health: 100, maxHealth: 100, shield: 50, maxShield: 50 },
+        mothership: {
+          x: 400,
+          y: 300,
+          health: 100,
+          maxHealth: 100,
+          shield: 50,
+          maxShield: 50,
+        },
         energy: 100,
       });
 
@@ -224,7 +223,14 @@ describe("AutoTargetingSystem", () => {
             isMoving: true,
           }),
         ],
-        mothership: { x: 400, y: 300, health: 100, maxHealth: 100, shield: 50, maxShield: 50 },
+        mothership: {
+          x: 400,
+          y: 300,
+          health: 100,
+          maxHealth: 100,
+          shield: 50,
+          maxShield: 50,
+        },
         energy: 100,
       });
 
@@ -306,7 +312,12 @@ describe("AutoTargetingSystem", () => {
       const onNeutralize = vi.fn();
       const threats = [
         createMockThreat({ id: "in-range", x: 50, y: 50, status: "active" }),
-        createMockThreat({ id: "out-of-range", x: 500, y: 500, status: "active" }),
+        createMockThreat({
+          id: "out-of-range",
+          x: 500,
+          y: 500,
+          status: "active",
+        }),
       ];
 
       const hits = system.processAreaEngagement(
@@ -323,7 +334,12 @@ describe("AutoTargetingSystem", () => {
     it("should not hit neutralized threats", () => {
       const onNeutralize = vi.fn();
       const threats = [
-        createMockThreat({ id: "neutralized", x: 50, y: 50, status: "neutralized" }),
+        createMockThreat({
+          id: "neutralized",
+          x: 50,
+          y: 50,
+          status: "neutralized",
+        }),
       ];
 
       const hits = system.processAreaEngagement(

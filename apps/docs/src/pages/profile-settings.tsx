@@ -161,6 +161,7 @@ export default function ProfileSettings(): React.ReactElement {
               pushNotifications: prefs.pushNotifications || false,
               readArticleIds: prefs.readArticleIds || [],
               savedArticleIds: prefs.savedArticleIds || [],
+              collections: prefs.collections || [],
             };
             setNewsPreferences(prefsData);
             // Update cache with fresh data

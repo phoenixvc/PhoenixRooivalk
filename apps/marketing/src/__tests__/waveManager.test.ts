@@ -107,7 +107,10 @@ describe("generateWaveConfig", () => {
   });
 
   it("should apply environment settings", () => {
-    const config = generateWaveConfig(1, 1, { weather: "rain", terrain: "military-base" });
+    const config = generateWaveConfig(1, 1, {
+      weather: "rain",
+      terrain: "military-base",
+    });
 
     expect(config.environment.weather).toBe("rain");
     expect(config.environment.terrain).toBe("military-base");
@@ -218,7 +221,9 @@ describe("WaveManager", () => {
       manager.defeatThreat();
 
       const newProgress = manager.getWaveProgress();
-      expect(newProgress.threatsRemaining).toBeLessThan(initialProgress.threatsRemaining);
+      expect(newProgress.threatsRemaining).toBeLessThan(
+        initialProgress.threatsRemaining,
+      );
     });
   });
 

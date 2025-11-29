@@ -2,7 +2,8 @@
 id: features-and-ai-implementations
 title: Features and AI Implementations
 sidebar_label: Features & AI
-description: Comprehensive documentation of platform features and AI implementations
+description:
+  Comprehensive documentation of platform features and AI implementations
 keywords:
   - features
   - ai
@@ -16,24 +17,26 @@ xpReward: 100
 
 # Features and AI Implementations
 
-This document provides a comprehensive overview of all platform features and their AI implementations in the Phoenix Rooivalk Documentation Platform.
+This document provides a comprehensive overview of all platform features and
+their AI implementations in the Phoenix Rooivalk Documentation Platform.
 
 ---
 
 ## Platform Features (10 Core Features)
 
-The following 10 features were implemented to enhance user experience and engagement:
+The following 10 features were implemented to enhance user experience and
+engagement:
 
 ### 1. Offline Articles Reading
 
 **Purpose**: Allow users to download articles for offline reading.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useOfflineArticles.ts` | Manages offline article storage and sync |
-| Component | `DownloadForOfflineButton.tsx` | UI button for downloading articles |
-| Service Worker | `firebase-messaging-sw.js` | Caches articles for offline access |
-| Fallback Page | `static/offline.html` | Display when user is offline |
+| Component      | File                           | Description                              |
+| -------------- | ------------------------------ | ---------------------------------------- |
+| Hook           | `useOfflineArticles.ts`        | Manages offline article storage and sync |
+| Component      | `DownloadForOfflineButton.tsx` | UI button for downloading articles       |
+| Service Worker | `firebase-messaging-sw.js`     | Caches articles for offline access       |
+| Fallback Page  | `static/offline.html`          | Display when user is offline             |
 
 **Technical Implementation**:
 
@@ -46,11 +49,11 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Keep users engaged with push notifications and weekly digests.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Service | `digestService.ts` | Weekly email digest compilation |
-| Push | `pushNotifications.ts` | Real-time push notification delivery |
-| Cloud Function | `news/notifications.ts` | Server-side notification dispatch |
+| Component      | File                    | Description                          |
+| -------------- | ----------------------- | ------------------------------------ |
+| Service        | `digestService.ts`      | Weekly email digest compilation      |
+| Push           | `pushNotifications.ts`  | Real-time push notification delivery |
+| Cloud Function | `news/notifications.ts` | Server-side notification dispatch    |
 
 **Features**:
 
@@ -63,10 +66,10 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Organize saved articles into custom collections.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useArticleCollections.ts` | Collection CRUD operations |
-| Type | `types/news.ts` | ArticleCollection interface |
+| Component | File                       | Description                 |
+| --------- | -------------------------- | --------------------------- |
+| Hook      | `useArticleCollections.ts` | Collection CRUD operations  |
+| Type      | `types/news.ts`            | ArticleCollection interface |
 
 **Features**:
 
@@ -79,10 +82,10 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Track and sync reading progress across devices.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Context | `AuthContext.tsx` | User profile and progress state |
-| Service | `firebase.ts` | Firestore persistence layer |
+| Component | File              | Description                     |
+| --------- | ----------------- | ------------------------------- |
+| Context   | `AuthContext.tsx` | User profile and progress state |
+| Service   | `firebase.ts`     | Firestore persistence layer     |
 
 **Features**:
 
@@ -95,10 +98,10 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Beautiful social media preview cards when sharing articles.
 
-| Component | File | Description |
-|-----------|------|-------------|
+| Component | File                  | Description                          |
+| --------- | --------------------- | ------------------------------------ |
 | Component | `SEO/ArticleMeta.tsx` | Open Graph and Twitter card metadata |
-| Utility | `utils/share.ts` | Enhanced share functionality |
+| Utility   | `utils/share.ts`      | Enhanced share functionality         |
 
 **Features**:
 
@@ -106,15 +109,17 @@ The following 10 features were implemented to enhance user experience and engage
 - Twitter Card support
 - Custom preview images per document
 - Analytics tracking for share events
-- Multiple share platforms (Twitter, LinkedIn, Facebook, Email, WhatsApp, Telegram)
+- Multiple share platforms (Twitter, LinkedIn, Facebook, Email, WhatsApp,
+  Telegram)
 
 ### 6. Export Functionality
 
-**Purpose**: Export reading history, bookmarks, and comments in multiple formats.
+**Purpose**: Export reading history, bookmarks, and comments in multiple
+formats.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Utility | `utils/export.ts` | Export logic for Markdown/JSON |
+| Component | File              | Description                    |
+| --------- | ----------------- | ------------------------------ |
+| Utility   | `utils/export.ts` | Export logic for Markdown/JSON |
 
 **Supported Exports**:
 
@@ -127,10 +132,10 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Power user navigation with keyboard shortcuts.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useKeyboardShortcuts.ts` | Shortcut registration and handling |
-| Component | `KeyboardShortcutsModal.tsx` | Help modal showing all shortcuts |
+| Component | File                         | Description                        |
+| --------- | ---------------------------- | ---------------------------------- |
+| Hook      | `useKeyboardShortcuts.ts`    | Shortcut registration and handling |
+| Component | `KeyboardShortcutsModal.tsx` | Help modal showing all shortcuts   |
 
 **Available Shortcuts**:
 
@@ -145,9 +150,9 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Automatic theme switching based on time or system preference.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useDarkModeSchedule.ts` | Schedule-based theme management |
+| Component | File                     | Description                     |
+| --------- | ------------------------ | ------------------------------- |
+| Hook      | `useDarkModeSchedule.ts` | Schedule-based theme management |
 
 **Features**:
 
@@ -160,9 +165,9 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Auto-save comment drafts to prevent data loss.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useCommentDraft.ts` | Draft persistence logic |
+| Component | File                 | Description                       |
+| --------- | -------------------- | --------------------------------- |
+| Hook      | `useCommentDraft.ts` | Draft persistence logic           |
 | Component | `DraftIndicator.tsx` | Visual indicator for saved drafts |
 
 **Features**:
@@ -177,9 +182,9 @@ The following 10 features were implemented to enhance user experience and engage
 
 **Purpose**: Personal reading analytics and insights.
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Hook | `useReadingAnalytics.ts` | Analytics aggregation and computation |
+| Component | File                     | Description                           |
+| --------- | ------------------------ | ------------------------------------- |
+| Hook      | `useReadingAnalytics.ts` | Analytics aggregation and computation |
 
 **Metrics Tracked**:
 
@@ -194,7 +199,8 @@ The following 10 features were implemented to enhance user experience and engage
 
 ## AI Cloud Functions
 
-All AI functions use Azure AI Foundry with OpenAI fallback. Located in `apps/docs/functions/src/ai/`.
+All AI functions use Azure AI Foundry with OpenAI fallback. Located in
+`apps/docs/functions/src/ai/`.
 
 ### analyzeCompetitors
 
@@ -253,8 +259,8 @@ getReadingRecommendations({
 suggestDocumentImprovements({
   docId: string,
   docTitle: string,
-  content: string
-})
+  content: string,
+});
 ```
 
 **Features**:
@@ -299,7 +305,7 @@ summarizeContent({ content: string, maxLength?: number })
 **Purpose**: Generate fun facts about users for personalization.
 
 ```typescript
-researchPerson({ linkedInUrl: string })
+researchPerson({ linkedInUrl: string });
 ```
 
 **Used In**: Onboarding flow personalization
@@ -341,13 +347,13 @@ researchPerson({ linkedInUrl: string })
 
 ### Components
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `rag/indexer.ts` | Build-time indexing | Document chunking and embedding |
-| `rag/search.ts` | Query-time search | Semantic similarity search |
-| `rag/query.ts` | Answer generation | LLM prompting with context |
-| `vector-search/` | Firebase Vector Search | Alternative vector store |
-| `azure-search/` | Azure AI Search | Enterprise vector store |
+| Component        | Location               | Purpose                         |
+| ---------------- | ---------------------- | ------------------------------- |
+| `rag/indexer.ts` | Build-time indexing    | Document chunking and embedding |
+| `rag/search.ts`  | Query-time search      | Semantic similarity search      |
+| `rag/query.ts`   | Answer generation      | LLM prompting with context      |
+| `vector-search/` | Firebase Vector Search | Alternative vector store        |
+| `azure-search/`  | Azure AI Search        | Enterprise vector store         |
 
 ### RAG Features
 
@@ -392,7 +398,7 @@ getPersonalizedNews({ userId: string, limit?: number })
 ### News Analytics
 
 ```typescript
-trackNewsEngagement({ articleId: string, action: string })
+trackNewsEngagement({ articleId: string, action: string });
 ```
 
 **Tracked Events**:
@@ -422,14 +428,14 @@ interface PromptTemplate {
 
 ### Available Templates
 
-| Template | Purpose |
-|----------|---------|
-| `competitor.ts` | Competitor analysis prompts |
-| `market.ts` | Market insights prompts |
-| `news.ts` | News categorization prompts |
-| `rag-query.ts` | RAG answer generation prompts |
+| Template             | Purpose                        |
+| -------------------- | ------------------------------ |
+| `competitor.ts`      | Competitor analysis prompts    |
+| `market.ts`          | Market insights prompts        |
+| `news.ts`            | News categorization prompts    |
+| `rag-query.ts`       | RAG answer generation prompts  |
 | `recommendations.ts` | Reading recommendation prompts |
-| `swot.ts` | SWOT analysis prompts |
+| `swot.ts`            | SWOT analysis prompts          |
 
 ### Context Injection
 
@@ -449,8 +455,8 @@ All prompts include Phoenix Rooivalk context:
 ```typescript
 // ai-provider.ts
 const providers = {
-  azure: AzureOpenAIProvider,    // Primary
-  openai: OpenAIProvider,        // Fallback
+  azure: AzureOpenAIProvider, // Primary
+  openai: OpenAIProvider, // Fallback
 };
 ```
 
@@ -463,11 +469,11 @@ const providers = {
 
 ### Rate Limits
 
-| Tier | Requests/Hour | Tokens/Day |
-|------|---------------|------------|
-| Free | 10 | 10,000 |
-| Authenticated | 50 | 50,000 |
-| Premium | 200 | 200,000 |
+| Tier          | Requests/Hour | Tokens/Day |
+| ------------- | ------------- | ---------- |
+| Free          | 10            | 10,000     |
+| Authenticated | 50            | 50,000     |
+| Premium       | 200           | 200,000    |
 
 ---
 
@@ -509,32 +515,32 @@ searchDocs(query: string): Promise<SearchResultItem[]>
 
 ### Completed Features
 
-| Feature | Status | Files |
-|---------|--------|-------|
-| Offline Articles | ✅ Complete | 4 files |
+| Feature               | Status      | Files   |
+| --------------------- | ----------- | ------- |
+| Offline Articles      | ✅ Complete | 4 files |
 | Comment Notifications | ✅ Complete | 3 files |
-| Bookmark Collections | ✅ Complete | 2 files |
+| Bookmark Collections  | ✅ Complete | 2 files |
 | Reading Progress Sync | ✅ Complete | 2 files |
-| Rich Share Previews | ✅ Complete | 2 files |
-| Export Functionality | ✅ Complete | 1 file |
-| Keyboard Shortcuts | ✅ Complete | 2 files |
-| Dark Mode Schedule | ✅ Complete | 1 file |
-| Comment Drafts | ✅ Complete | 2 files |
-| News Analytics | ✅ Complete | 1 file |
+| Rich Share Previews   | ✅ Complete | 2 files |
+| Export Functionality  | ✅ Complete | 1 file  |
+| Keyboard Shortcuts    | ✅ Complete | 2 files |
+| Dark Mode Schedule    | ✅ Complete | 1 file  |
+| Comment Drafts        | ✅ Complete | 2 files |
+| News Analytics        | ✅ Complete | 1 file  |
 
 ### AI Functions Status
 
-| Function | Status | RAG Enabled |
-|----------|--------|-------------|
-| analyzeCompetitors | ✅ Complete | Yes |
-| generateSWOT | ✅ Complete | Yes |
-| getReadingRecommendations | ✅ Complete | Yes |
-| suggestDocumentImprovements | ✅ Complete | Yes |
-| getMarketInsights | ✅ Complete | Yes |
-| summarizeContent | ✅ Complete | Yes |
-| researchPerson | ✅ Complete | No |
-| askDocs (RAG) | ✅ Complete | Yes |
-| searchDocs | ✅ Complete | N/A |
+| Function                    | Status      | RAG Enabled |
+| --------------------------- | ----------- | ----------- |
+| analyzeCompetitors          | ✅ Complete | Yes         |
+| generateSWOT                | ✅ Complete | Yes         |
+| getReadingRecommendations   | ✅ Complete | Yes         |
+| suggestDocumentImprovements | ✅ Complete | Yes         |
+| getMarketInsights           | ✅ Complete | Yes         |
+| summarizeContent            | ✅ Complete | Yes         |
+| researchPerson              | ✅ Complete | No          |
+| askDocs (RAG)               | ✅ Complete | Yes         |
+| searchDocs                  | ✅ Complete | N/A         |
 
 ---
 
