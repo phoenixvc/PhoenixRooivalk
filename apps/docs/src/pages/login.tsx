@@ -93,30 +93,37 @@ export default function LoginPage(): React.ReactElement {
                     <strong>⚠️ Firebase Authentication Not Configured</strong>
                   </p>
                   <p>
-                    The following environment variables are missing or not
-                    properly exposed to the client:
+                    Authentication is not available because Firebase
+                    environment variables were not set at build time.
                   </p>
-                  {missingConfig.length > 0 ? (
-                    <ul className={styles.missingConfigList}>
-                      {missingConfig.map((key) => (
-                        <li key={key}>
-                          <code>{key}</code>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>
-                      <em>
-                        Variables appear to be set but may not be exposed via{" "}
-                        <code>docusaurus.config.ts</code> customFields.
-                      </em>
+                  <details className={styles.configDetails}>
+                    <summary>Technical Details</summary>
+                    <p>Missing variables:</p>
+                    {missingConfig.length > 0 ? (
+                      <ul className={styles.missingConfigList}>
+                        {missingConfig.map((key) => (
+                          <li key={key}>
+                            <code>{key}</code>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>
+                        <em>
+                          Variables may be set but not exposed via{" "}
+                          <code>customFields</code>.
+                        </em>
+                      </p>
+                    )}
+                    <p className={styles.configHelp}>
+                      <strong>For admins:</strong> Set these in your hosting
+                      platform's environment variables (Netlify: Site
+                      Configuration → Environment Variables). A new deploy is
+                      required after adding them.
                     </p>
-                  )}
-                  <p className={styles.configHelp}>
-                    <strong>To fix:</strong> Ensure these are set in your
-                    hosting platform (Netlify, Vercel, etc.) and exposed in{" "}
-                    <code>docusaurus.config.ts</code> under{" "}
-                    <code>customFields.firebaseConfig</code>.
+                  </details>
+                  <p className={styles.loginNote} style={{ marginTop: "1rem" }}>
+                    You can still browse documentation without signing in.
                   </p>
                 </div>
               ) : (

@@ -261,13 +261,13 @@ const config: Config = {
             },
           ],
         },
-        // News - RAG-powered personalized news
+        // News - Industry updates
         {
           to: "/news",
           label: "News",
           position: "right",
           className: "navbar__link--news",
-          "aria-label": "Industry news personalized for you",
+          "aria-label": "Industry news",
         },
         // Support - Help and FAQ
         {
@@ -276,14 +276,6 @@ const config: Config = {
           position: "right",
           className: "navbar__link--support",
           "aria-label": "Get help and support",
-        },
-        // Your Progress - compact styled link on right
-        {
-          to: "/your-progress",
-          label: "Progress",
-          position: "right",
-          className: "navbar__link--progress",
-          "aria-label": "Track your learning progress",
         },
         // Login link
         {
