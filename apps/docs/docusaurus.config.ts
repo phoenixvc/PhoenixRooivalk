@@ -59,7 +59,7 @@ const firebaseConfig = {
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.svg",
   url: "https://docs-phoenixrooivalk.netlify.app",
   baseUrl: "/",
   organizationName: "JustAGhosT",
@@ -82,6 +82,23 @@ const config: Config = {
       },
       innerHTML:
         "html,body,#__docusaurus{background-color:rgb(15,23,42)!important;min-height:100vh}",
+    },
+    // Apple touch icon for iOS
+    {
+      tagName: "link",
+      attributes: {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/img/apple-touch-icon.svg",
+      },
+    },
+    // Theme color for browser chrome
+    {
+      tagName: "meta",
+      attributes: {
+        name: "theme-color",
+        content: "#0f172a",
+      },
     },
     {
       tagName: "meta",
