@@ -7,7 +7,6 @@
 import React, { useState } from "react";
 import {
   useOfflineArticles,
-  formatBytes,
   CachedArticle,
 } from "../../hooks/useOfflineArticles";
 import styles from "./DownloadForOfflineButton.module.css";
