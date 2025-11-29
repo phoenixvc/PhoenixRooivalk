@@ -8,6 +8,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
+import type { NewsCategory } from "../../types/news";
 import "./NewsNotificationBell.css";
 
 interface NewsNotificationBellProps {
@@ -21,14 +22,16 @@ export function NewsNotificationBell({
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<NewsCategory[]>(
+    [],
+  );
   const [pushEnabled, setPushEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unreadCount] = useState(0);
 
-  const categories = [
+  const categories: { id: NewsCategory; label: string }[] = [
     { id: "counter-uas", label: "Counter-UAS" },
     { id: "defense-tech", label: "Defense Tech" },
     { id: "drone-industry", label: "Drone Industry" },
@@ -134,7 +137,7 @@ export function NewsNotificationBell({
   };
 
   // Toggle category selection
-  const toggleCategory = (categoryId: string) => {
+  const toggleCategory = (categoryId: NewsCategory) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? prev.filter((c) => c !== categoryId)

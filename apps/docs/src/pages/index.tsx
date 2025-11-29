@@ -182,7 +182,7 @@ export default function Home(): React.ReactElement {
         .marketing .feature-card p { color: var(--gray); }
 
         /* Tech */
-        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem; }
+        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
         .marketing .tech-list { list-style: none; padding: 0; }
         .marketing .tech-item { display: flex; align-items: flex-start; margin-bottom: 1.2rem; padding: 1.2rem; background: var(--card-bg); border-radius: 10px; transition: all .3s; }
         .marketing .tech-item:hover { transform: translateX(10px); background: rgba(249,115,22,0.1); }
@@ -603,8 +603,8 @@ export default function Home(): React.ReactElement {
         {/* Info footer (keeps Docusaurus site footer separate) */}
         <div className="footer">
           <p>
-            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant |
-            ISO 27001 Certified
+            © 2025 Phoenix Rooivalk. All rights reserved. | ITAR Compliant | ISO
+            27001 Certified
           </p>
         </div>
       </main>

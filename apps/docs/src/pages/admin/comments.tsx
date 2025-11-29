@@ -390,6 +390,14 @@ export default function CommentsAdminDashboard(): React.ReactElement {
           <div
             className={styles.modalOverlay}
             onClick={() => setSelectedComment(null)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setSelectedComment(null);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Close modal"
           >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
               <h2>Review Comment</h2>

@@ -4,24 +4,15 @@
  * Displays a single news article with personalization indicators.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import type { NewsArticle, PersonalizedNewsItem } from "../../types/news";
 import { NEWS_CATEGORY_CONFIG } from "../../types/news";
 import { newsService } from "../../services/newsService";
-import { useToast } from "../../contexts/ToastContext";
-import { formatReadingTime } from "../../utils/readingTime";
-import {
-  shareContent,
-  shareOnPlatform,
-  isShareSupported,
-} from "../../utils/share";
 import "./NewsCard.css";
 
 interface NewsCardProps {
   article: NewsArticle | PersonalizedNewsItem;
   variant?: "compact" | "full";
-  /** Whether this article is saved (for initial state) */
-  initialSaved?: boolean;
   onRead?: (articleId: string) => void;
   onSave?: (articleId: string, saved: boolean) => void;
 }
@@ -35,40 +26,15 @@ function isPersonalized(
 export function NewsCard({
   article,
   variant = "compact",
-  initialSaved = false,
   onRead,
   onSave,
 }: NewsCardProps): React.ReactElement {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSaved, setIsSaved] = useState(initialSaved);
+  const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isSharing, setIsSharing] = useState(false);
-  const [showShareMenu, setShowShareMenu] = useState(false);
-  const shareMenuRef = useRef<HTMLDivElement>(null);
-  const toast = useToast();
 
   const categoryConfig = NEWS_CATEGORY_CONFIG[article.category];
   const personalized = isPersonalized(article);
-  const readingTime = formatReadingTime(article.content);
-
-  // Close share menu when clicking outside
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (
-      shareMenuRef.current &&
-      !shareMenuRef.current.contains(event.target as Node)
-    ) {
-      setShowShareMenu(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (showShareMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }
-  }, [showShareMenu, handleClickOutside]);
 
   const handleClick = async () => {
     if (!isExpanded) {
@@ -78,7 +44,6 @@ export function NewsCard({
         onRead?.(article.id);
       } catch (err) {
         console.error("Failed to mark article as read:", err);
-        // Silent fail for read tracking - not critical
       }
     } else {
       setIsExpanded(false);
@@ -87,69 +52,17 @@ export function NewsCard({
 
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation();
-
-    // Optimistic UI update - immediately toggle the saved state
-    const previousSaved = isSaved;
-    const newSaved = !isSaved;
-    setIsSaved(newSaved);
     setIsSaving(true);
-
     try {
-      const result = await newsService.saveArticle(article.id, newSaved);
-      // Verify server state matches our optimistic update
-      if (result.saved !== newSaved) {
-        setIsSaved(result.saved);
-      }
+      const result = await newsService.saveArticle(article.id, !isSaved);
+      setIsSaved(result.saved);
       onSave?.(article.id, result.saved);
-      toast.success(
-        result.saved ? "Article saved!" : "Article removed from saved",
-      );
     } catch (err) {
-      // Revert optimistic update on error
-      setIsSaved(previousSaved);
       console.error("Failed to save article:", err);
-      toast.error("Failed to save article. Please try again.");
     } finally {
       setIsSaving(false);
     }
   };
-
-  const getArticleUrl = () => {
-    return article.sourceUrl || `${window.location.origin}/news/${article.id}`;
-  };
-
-  const handleShare = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (isShareSupported()) {
-      setIsSharing(true);
-      try {
-        const success = await shareContent({
-          title: article.title,
-          text: article.summary || article.content.substring(0, 100),
-          url: getArticleUrl(),
-        });
-        if (success) {
-          toast.success("Article shared!");
-        }
-      } finally {
-        setIsSharing(false);
-      }
-    } else {
-      setShowShareMenu((prev) => !prev);
-    }
-  };
-
-  const handleSharePlatform =
-    (platform: "twitter" | "linkedin" | "email") => (e: React.MouseEvent) => {
-      e.stopPropagation();
-      shareOnPlatform(platform, {
-        title: article.title,
-        text: article.summary || article.content.substring(0, 100),
-        url: getArticleUrl(),
-      });
-      setShowShareMenu(false);
-    };
 
   const formatDate = (dateStr: string) => {
     try {
@@ -199,40 +112,17 @@ export function NewsCard({
 
         <div className="news-card-footer">
           <span className="news-card-source">{article.source}</span>
-          <span className="news-card-reading-time">{readingTime}</span>
           <span className="news-card-date">
             {formatDate(article.publishedAt)}
           </span>
-          <div className="news-card-actions" ref={shareMenuRef}>
-            <button
-              className={`news-card-share-btn ${isSharing ? "sharing" : ""}`}
-              onClick={handleShare}
-              disabled={isSharing}
-              title="Share article"
-              aria-label="Share article"
-            >
-              {isSharing ? "..." : "↗"}
-            </button>
-            {showShareMenu && (
-              <div className="news-card-share-menu">
-                <button onClick={handleSharePlatform("twitter")}>
-                  Twitter
-                </button>
-                <button onClick={handleSharePlatform("linkedin")}>
-                  LinkedIn
-                </button>
-                <button onClick={handleSharePlatform("email")}>Email</button>
-              </div>
-            )}
-            <button
-              className={`news-card-save-btn ${isSaved ? "saved" : ""}`}
-              onClick={handleSave}
-              disabled={isSaving}
-              title={isSaved ? "Remove from saved" : "Save for later"}
-            >
-              {isSaved ? "★" : "☆"}
-            </button>
-          </div>
+          <button
+            className={`news-card-save-btn ${isSaved ? "saved" : ""}`}
+            onClick={handleSave}
+            disabled={isSaving}
+            title={isSaved ? "Remove from saved" : "Save for later"}
+          >
+            {isSaved ? "★" : "☆"}
+          </button>
         </div>
 
         {isExpanded && (
@@ -286,33 +176,13 @@ export function NewsCard({
             </span>
           )}
         </div>
-        <div className="news-card-full-actions" ref={shareMenuRef}>
-          <button
-            className={`news-card-share-btn-full ${isSharing ? "sharing" : ""}`}
-            onClick={handleShare}
-            disabled={isSharing}
-            title="Share article"
-            aria-label="Share article"
-          >
-            {isSharing ? "Sharing..." : "↗ Share"}
-          </button>
-          {showShareMenu && (
-            <div className="news-card-share-menu news-card-share-menu-full">
-              <button onClick={handleSharePlatform("twitter")}>Twitter</button>
-              <button onClick={handleSharePlatform("linkedin")}>
-                LinkedIn
-              </button>
-              <button onClick={handleSharePlatform("email")}>Email</button>
-            </div>
-          )}
-          <button
-            className={`news-card-save-btn-full ${isSaved ? "saved" : ""}`}
-            onClick={handleSave}
-            disabled={isSaving}
-          >
-            {isSaved ? "★ Saved" : "☆ Save"}
-          </button>
-        </div>
+        <button
+          className={`news-card-save-btn-full ${isSaved ? "saved" : ""}`}
+          onClick={handleSave}
+          disabled={isSaving}
+        >
+          {isSaved ? "★ Saved" : "☆ Save"}
+        </button>
       </header>
 
       <h2 className="news-card-full-title">{article.title}</h2>
@@ -323,8 +193,6 @@ export function NewsCard({
         <span className="news-card-date">
           {formatDate(article.publishedAt)}
         </span>
-        <span className="news-card-separator">•</span>
-        <span className="news-card-reading-time">{readingTime}</span>
         <span className="news-card-separator">•</span>
         <span className="news-card-views">{article.viewCount} views</span>
       </div>

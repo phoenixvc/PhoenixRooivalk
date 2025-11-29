@@ -10,6 +10,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
 import "./NewsAdminPanel.css";
 
+// Admin email domains (same as in analytics.tsx and CommentSection.tsx)
+const ADMIN_EMAIL_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
+
 interface IngestionStats {
   totalArticles: number;
   lastIngestionTime: Date | null;
@@ -25,7 +28,7 @@ interface IngestionResult {
 }
 
 export function NewsAdminPanel(): React.ReactElement | null {
-  const { user, userProfile } = useAuth();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<
     "ingestion" | "analytics" | "settings"
   >("ingestion");
@@ -36,8 +39,11 @@ export function NewsAdminPanel(): React.ReactElement | null {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
-  // Check admin status
-  const isAdmin = userProfile?.isAdmin || false;
+  // Check admin status by email domain
+  const isAdmin = Boolean(
+    user?.email &&
+    ADMIN_EMAIL_DOMAINS.some((domain) => user.email?.endsWith(`@${domain}`)),
+  );
 
   const fetchStats = useCallback(async () => {
     setIsLoading(true);

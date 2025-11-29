@@ -7,18 +7,13 @@
  * - Option to send for admin review
  */
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useToast } from "../../contexts/ToastContext";
 import {
   createComment,
   saveAIEnhancement,
 } from "../../services/commentService";
 import { aiService } from "../../services/aiService";
-import {
-  useOfflineComments,
-  type PendingComment,
-} from "../../hooks/useOfflineComments";
 import type {
   CommentCategory,
   CreateCommentInput,
@@ -54,94 +49,16 @@ export function CommentForm({
   parentId,
 }: CommentFormProps): React.ReactElement | null {
   const { user } = useAuth();
-  const toast = useToast();
-  const { queueComment, pendingComments, isNetworkOnline, syncComments } =
-    useOfflineComments();
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<CommentCategory>("comment");
   const [sendForReview, setSendForReview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false); // Guard for sync race condition
   const [aiEnhancement, setAiEnhancement] = useState<{
     content: string;
     suggestions: string[];
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Auto-clear error after 8 seconds
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => {
-        setError(null);
-      }, 8000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
-
-  // Submit handler for syncing offline comments
-  const submitPendingComment = useCallback(
-    async (pending: PendingComment) => {
-      if (!user) return;
-
-      const input: CreateCommentInput = {
-        content: pending.content,
-        pageId: pending.docPath,
-        pageTitle,
-        pageUrl,
-        category: (pending.category as CommentCategory) || "comment",
-        sendForReview: false,
-        parentId: pending.parentId,
-      };
-
-      await createComment(input, {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      });
-    },
-    [user, pageTitle, pageUrl],
-  );
-
-  // Auto-sync when coming back online
-  useEffect(() => {
-    // Guard against race conditions - don't start sync if already syncing
-    if (
-      !isNetworkOnline ||
-      pendingComments.length === 0 ||
-      !user ||
-      isSyncing
-    ) {
-      return;
-    }
-
-    setIsSyncing(true);
-    syncComments(submitPendingComment)
-      .then((result) => {
-        if (result.processed > 0) {
-          toast.success(`Synced ${result.processed} offline comment(s)`);
-        }
-        if (result.failed > 0) {
-          toast.warning(`${result.failed} comment(s) failed to sync`);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to sync offline comments:", err);
-        toast.error("Failed to sync some offline comments. Will retry later.");
-      })
-      .finally(() => {
-        setIsSyncing(false);
-      });
-  }, [
-    isNetworkOnline,
-    pendingComments.length,
-    user,
-    syncComments,
-    submitPendingComment,
-    toast,
-    isSyncing,
-  ]);
 
   // Parse AI response with structured format
   const parseAIResponse = useCallback(
@@ -289,35 +206,6 @@ SUGGESTIONS:
       setIsSubmitting(true);
       setError(null);
 
-      // If offline, queue the comment for later
-      if (!isNetworkOnline) {
-        try {
-          await queueComment({
-            docPath: pageId,
-            content: content.trim(),
-            category,
-            parentId,
-            timestamp: Date.now(),
-          });
-
-          toast.info(
-            "You're offline. Comment saved and will be submitted when you're back online.",
-          );
-
-          // Reset form
-          setContent("");
-          setCategory("comment");
-          setSendForReview(false);
-          setAiEnhancement(null);
-        } catch (err) {
-          console.error("Failed to queue comment:", err);
-          setError("Failed to save comment for offline submission.");
-        } finally {
-          setIsSubmitting(false);
-        }
-        return;
-      }
-
       try {
         const input: CreateCommentInput = {
           content: content.trim(),
@@ -354,7 +242,6 @@ SUGGESTIONS:
 
         // Notify parent
         onCommentAdded?.(comment);
-        toast.success("Comment submitted successfully!");
       } catch (err) {
         console.error("Failed to submit comment:", err);
         setError("Failed to submit comment. Please try again.");
@@ -373,9 +260,6 @@ SUGGESTIONS:
       parentId,
       aiEnhancement,
       onCommentAdded,
-      isNetworkOnline,
-      queueComment,
-      toast,
     ],
   );
 
@@ -385,20 +269,6 @@ SUGGESTIONS:
 
   return (
     <form className={styles.commentForm} onSubmit={handleSubmit}>
-      {/* Offline indicator */}
-      {!isNetworkOnline && (
-        <div className={styles.offlineNotice}>
-          <span className={styles.offlineIcon}>📡</span>
-          You're offline. Comments will be saved and submitted when you're back
-          online.
-          {pendingComments.length > 0 && (
-            <span className={styles.pendingBadge}>
-              {pendingComments.length} pending
-            </span>
-          )}
-        </div>
-      )}
-
       {/* Category Selection */}
       <div className={styles.formGroup}>
         <label>Type of feedback</label>

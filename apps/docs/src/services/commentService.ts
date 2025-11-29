@@ -31,6 +31,7 @@ import {
   QueryDocumentSnapshot,
   Unsubscribe,
   getCountFromServer,
+  QueryConstraint,
 } from "firebase/firestore";
 import { isFirebaseConfigured } from "./firebase";
 import type {
@@ -200,8 +201,9 @@ export function sanitizeContent(content: string): string {
       // Normalize whitespace (but preserve line breaks)
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
-      // Remove null bytes and other control characters (except newlines and tabs)
-      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+      // Remove null bytes and other non-printable control characters (except newlines and tabs)
+      // This sanitizes control chars for XSS prevention: U+0000-U+0008, U+000B, U+000C, U+000E-U+001F, U+007F
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
       .trim()
   );
 }
@@ -517,7 +519,7 @@ export const getComments = async (
   const commentsRef = collection(db, COMMENTS_COLLECTION);
 
   // Build query constraints
-  const constraints: ReturnType<typeof where | typeof orderBy>[] = [];
+  const constraints: QueryConstraint[] = [];
 
   if (filters.pageId) {
     constraints.push(where("pageId", "==", filters.pageId));
@@ -996,36 +998,21 @@ export const getCommentStats = async (): Promise<CommentStats> => {
     const recentCount = await getCountFromServer(recentQuery);
     stats.recentCount = recentCount.data().count;
 
-    // Run category and status queries in parallel for better performance
-    // This reduces N+1 queries (11 sequential) to 2 parallel batches
-    const [categoryResults, statusResults] = await Promise.all([
-      // All category counts in parallel
-      Promise.all(
-        VALID_CATEGORIES.map(async (category) => {
-          const categoryQuery = query(
-            commentsRef,
-            where("category", "==", category),
-          );
-          const count = await getCountFromServer(categoryQuery);
-          return { category, count: count.data().count };
-        }),
-      ),
-      // All status counts in parallel
-      Promise.all(
-        VALID_STATUSES.map(async (status) => {
-          const statusQuery = query(commentsRef, where("status", "==", status));
-          const count = await getCountFromServer(statusQuery);
-          return { status, count: count.data().count };
-        }),
-      ),
-    ]);
-
-    // Populate stats from parallel results
-    for (const { category, count } of categoryResults) {
-      stats.byCategory[category] = count;
+    // For category and status breakdowns, we need to query each
+    // This is still more efficient than fetching all documents
+    for (const category of VALID_CATEGORIES) {
+      const categoryQuery = query(
+        commentsRef,
+        where("category", "==", category),
+      );
+      const categoryCount = await getCountFromServer(categoryQuery);
+      stats.byCategory[category] = categoryCount.data().count;
     }
-    for (const { status, count } of statusResults) {
-      stats.byStatus[status] = count;
+
+    for (const status of VALID_STATUSES) {
+      const statusQuery = query(commentsRef, where("status", "==", status));
+      const statusCount = await getCountFromServer(statusQuery);
+      stats.byStatus[status] = statusCount.data().count;
     }
 
     return stats;
@@ -1055,7 +1042,7 @@ export const getAllComments = async (
     const total = countSnapshot.data().count;
 
     // Build query with cursor
-    const constraints: Parameters<typeof query>[1][] = [
+    const constraints: QueryConstraint[] = [
       orderBy("createdAt", "desc"),
       limit(Math.min(pageSize, 100)),
     ];

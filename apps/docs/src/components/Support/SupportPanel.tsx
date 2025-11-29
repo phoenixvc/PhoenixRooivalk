@@ -6,8 +6,6 @@
 
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useToast } from "../../contexts/ToastContext";
-import { supportService } from "../../services/supportService";
 import "./SupportPanel.css";
 
 interface FAQItem {
@@ -91,7 +89,6 @@ export function SupportPanel({
   showContactForm = true,
 }: SupportPanelProps): React.ReactElement {
   const { user } = useAuth();
-  const toast = useToast();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [contactForm, setContactForm] = useState({
@@ -105,8 +102,6 @@ export function SupportPanel({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-  const [ticketNumber, setTicketNumber] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const categories = [
     "all",
@@ -122,25 +117,11 @@ export function SupportPanel({
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("idle");
-    setErrorMessage(null);
 
     try {
-      const response = await supportService.submitContactForm({
-        name: contactForm.name,
-        email: contactForm.email,
-        subject: contactForm.subject,
-        message: contactForm.message,
-        category: contactForm.category as
-          | "general"
-          | "technical"
-          | "sales"
-          | "partnership"
-          | "feedback",
-      });
-
-      setTicketNumber(response.ticketNumber);
+      // In production, this would call a Cloud Function
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setSubmitStatus("success");
-      toast.success(`Message sent! Ticket #${response.ticketNumber}`);
       setContactForm({
         name: user?.displayName || "",
         email: user?.email || "",
@@ -148,15 +129,8 @@ export function SupportPanel({
         message: "",
         category: "general",
       });
-    } catch (error) {
-      console.error("Failed to submit contact form:", error);
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to submit. Please try again or email us directly.";
-      setErrorMessage(message);
+    } catch {
       setSubmitStatus("error");
-      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -217,27 +191,29 @@ export function SupportPanel({
           ))}
         </div>
 
-        <div className="faq-list" role="list">
+        <div className="faq-list">
           {filteredFAQs.map((item, index) => (
-            <details
+            <div
               key={index}
-              className="faq-item"
-              open={expandedFAQ === index}
-              onToggle={(e) => {
-                const isOpen = (e.target as HTMLDetailsElement).open;
-                setExpandedFAQ(isOpen ? index : null);
-              }}
+              className={`faq-item ${expandedFAQ === index ? "expanded" : ""}`}
             >
-              <summary className="faq-question">
+              <button
+                className="faq-question"
+                onClick={() =>
+                  setExpandedFAQ(expandedFAQ === index ? null : index)
+                }
+              >
                 <span className="faq-question-text">{item.question}</span>
-                <span className="faq-toggle" aria-hidden="true">
+                <span className="faq-toggle">
                   {expandedFAQ === index ? "−" : "+"}
                 </span>
-              </summary>
-              <div className="faq-answer">
-                <p>{item.answer}</p>
-              </div>
-            </details>
+              </button>
+              {expandedFAQ === index && (
+                <div className="faq-answer">
+                  <p>{item.answer}</p>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </section>
@@ -251,21 +227,13 @@ export function SupportPanel({
             <div className="contact-success">
               <span className="contact-success-icon">✓</span>
               <h3>Message Sent!</h3>
-              {ticketNumber && (
-                <p className="contact-ticket-number">
-                  Your ticket number: <strong>{ticketNumber}</strong>
-                </p>
-              )}
               <p>
                 Thank you for reaching out. Our team will respond within 1-2
                 business days.
               </p>
               <button
                 className="contact-reset-btn"
-                onClick={() => {
-                  setSubmitStatus("idle");
-                  setTicketNumber(null);
-                }}
+                onClick={() => setSubmitStatus("idle")}
               >
                 Send another message
               </button>
@@ -355,8 +323,7 @@ export function SupportPanel({
 
               {submitStatus === "error" && (
                 <div className="contact-error">
-                  {errorMessage ||
-                    "Something went wrong. Please try again or email us directly."}
+                  Something went wrong. Please try again or email us directly.
                 </div>
               )}
 
