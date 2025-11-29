@@ -32,7 +32,7 @@ export function NewsPanel({
   defaultTab = "feed",
   maxItems = 20,
 }: NewsPanelProps): React.ReactElement {
-  const { user, userProfile: authUserProfile, isConfigured } = useAuth();
+  const { user, userProfile: authUserProfile } = useAuth();
 
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [generalNews, setGeneralNews] = useState<NewsArticle[]>([]);
