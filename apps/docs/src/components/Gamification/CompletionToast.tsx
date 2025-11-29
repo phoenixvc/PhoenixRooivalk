@@ -4,28 +4,49 @@ import { useAuth } from "../../contexts/AuthContext";
 import Link from "@docusaurus/Link";
 
 /**
- * CompletionToast component displays a toast notification when a document is completed.
- * Shows document title, completion message, and a link to the progress page.
+ * CompletionToast and ChallengeToast components for engagement feedback.
  *
- * @component
+ * CompletionToast: Shows success when document is properly read
+ * ChallengeToast: Shows challenge when user scrolled too fast without reading
  */
 
 interface CompletedDoc {
   docId: string;
   title: string;
   completedAt: string;
+  message?: string;
 }
 
-// Simple event system for document completion
+interface ReadingChallenge {
+  docId: string;
+  title: string;
+  timeSpent: number;
+  expectedTime: number;
+  message: string;
+}
+
+// Event system for document completion
 type CompletionListener = (doc: CompletedDoc) => void;
 const completionListeners: Set<CompletionListener> = new Set();
 
+// Event system for reading challenges
+type ChallengeListener = (challenge: ReadingChallenge) => void;
+const challengeListeners: Set<ChallengeListener> = new Set();
+
 /**
  * Emit a document completion event.
- * Called by ReadingTracker when a document is newly completed.
+ * Called by ReadingTracker when a document is properly completed.
  */
 export function emitDocumentCompletion(doc: CompletedDoc): void {
   completionListeners.forEach((listener) => listener(doc));
+}
+
+/**
+ * Emit a reading challenge event.
+ * Called by ReadingTracker when user scrolls too fast.
+ */
+export function emitReadingChallenge(challenge: ReadingChallenge): void {
+  challengeListeners.forEach((listener) => listener(challenge));
 }
 
 /**
@@ -38,6 +59,18 @@ function useDocumentCompletion(onComplete: CompletionListener): void {
       completionListeners.delete(onComplete);
     };
   }, [onComplete]);
+}
+
+/**
+ * Subscribe to reading challenge events.
+ */
+function useReadingChallenge(onChallenge: ChallengeListener): void {
+  useEffect(() => {
+    challengeListeners.add(onChallenge);
+    return () => {
+      challengeListeners.delete(onChallenge);
+    };
+  }, [onChallenge]);
 }
 
 /**
@@ -90,6 +123,55 @@ export function useCompletionToast() {
 }
 
 /**
+ * Hook to manage challenge toast state
+ */
+export function useChallengeToast() {
+  const [challenge, setChallenge] = useState<ReadingChallenge | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = useCallback((newChallenge: ReadingChallenge) => {
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    setChallenge(newChallenge);
+    setIsVisible(true);
+
+    // Auto-dismiss after 10 seconds (longer for challenge to read)
+    timeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 10000);
+  }, []);
+
+  const dismissToast = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsVisible(false);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Subscribe to challenge events
+  useReadingChallenge(showToast);
+
+  return {
+    challenge,
+    isVisible,
+    dismissToast,
+  };
+}
+
+/**
  * Format document ID to a readable title
  */
 function formatDocTitle(docId: string): string {
@@ -132,7 +214,7 @@ export function CompletionToast(): React.ReactElement | null {
       tabIndex={0}
     >
       <div className="completion-toast-content">
-        <div className="completion-toast-icon">
+        <div className="completion-toast-icon completion-toast-icon--success">
           <span role="img" aria-label="Checkmark">
             &#10003;
           </span>
@@ -142,6 +224,9 @@ export function CompletionToast(): React.ReactElement | null {
           <div className="completion-toast-doc">
             {formatDocTitle(completedDoc.docId)}
           </div>
+          {completedDoc.message && (
+            <div className="completion-toast-message">{completedDoc.message}</div>
+          )}
           <div className="completion-toast-stats">
             {totalCompleted} document{totalCompleted !== 1 ? "s" : ""} read
           </div>
@@ -166,6 +251,99 @@ export function CompletionToast(): React.ReactElement | null {
         &#10005;
       </button>
     </div>
+  );
+}
+
+/**
+ * ChallengeToast displays a challenge when user scrolls too fast.
+ * Encourages them to actually read the content.
+ */
+export function ChallengeToast(): React.ReactElement | null {
+  const { challenge, isVisible, dismissToast } = useChallengeToast();
+
+  if (!isVisible || !challenge) {
+    return null;
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
+      e.preventDefault();
+      dismissToast();
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    dismissToast();
+  };
+
+  const timeSpentSec = Math.round(challenge.timeSpent / 1000);
+  const expectedSec = Math.round(challenge.expectedTime / 1000);
+
+  return (
+    <div
+      className="completion-toast completion-toast--challenge"
+      role="alert"
+      aria-live="assertive"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
+      <div className="completion-toast-content">
+        <div className="completion-toast-icon completion-toast-icon--challenge">
+          <span role="img" aria-label="Warning">
+            &#9888;
+          </span>
+        </div>
+        <div className="completion-toast-text">
+          <div className="completion-toast-title completion-toast-title--challenge">
+            Hold up - Did you actually read this?
+          </div>
+          <div className="completion-toast-doc">
+            {formatDocTitle(challenge.docId)}
+          </div>
+          <div className="completion-toast-message completion-toast-message--challenge">
+            You spent {timeSpentSec}s on a ~{Math.round(expectedSec / 60)} min read.
+            No completion credit for speed-scrolling!
+          </div>
+          <div className="completion-toast-actions">
+            <button
+              type="button"
+              className="completion-toast-action completion-toast-action--primary"
+              onClick={scrollToTop}
+            >
+              Fine, I'll read it properly
+            </button>
+            <button
+              type="button"
+              className="completion-toast-action completion-toast-action--secondary"
+              onClick={dismissToast}
+            >
+              Whatever, skip it
+            </button>
+          </div>
+        </div>
+      </div>
+      <button
+        className="completion-toast-dismiss"
+        onClick={dismissToast}
+        aria-label="Dismiss notification"
+        type="button"
+      >
+        &#10005;
+      </button>
+    </div>
+  );
+}
+
+/**
+ * Combined toast component that renders both completion and challenge toasts
+ */
+export function EngagementToasts(): React.ReactElement {
+  return (
+    <>
+      <CompletionToast />
+      <ChallengeToast />
+    </>
   );
 }
 

@@ -11,7 +11,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { AuthProvider } from "../contexts/AuthContext";
 import { ToastProvider } from "../contexts/ToastContext";
 import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
-import { ReadingTracker, CompletionToast } from "../components/Gamification";
+import { ReadingTracker, EngagementToasts } from "../components/Gamification";
 import { AnalyticsTracker } from "../components/Analytics";
 import { CookieConsentBanner } from "../components/CookieConsent";
 import { SilentErrorBoundary } from "../components/ErrorBoundary";
@@ -93,7 +93,7 @@ export default function Root({ children }: RootProps): React.ReactElement {
                 <OfflineIndicator />
               </SilentErrorBoundary>
               <SilentErrorBoundary>
-                <CompletionToast />
+                <EngagementToasts />
               </SilentErrorBoundary>
               <SilentErrorBoundary>
                 <SidebarRecommendations />

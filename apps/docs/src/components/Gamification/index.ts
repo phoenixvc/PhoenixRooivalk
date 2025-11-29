@@ -20,6 +20,10 @@ export { UserProfile } from "./UserProfile";
 export { ReadingTracker } from "./ReadingTracker";
 export {
   CompletionToast,
+  ChallengeToast,
+  EngagementToasts,
   emitDocumentCompletion,
+  emitReadingChallenge,
   useCompletionToast,
+  useChallengeToast,
 } from "./CompletionToast";
