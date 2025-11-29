@@ -201,8 +201,9 @@ export function sanitizeContent(content: string): string {
       // Normalize whitespace (but preserve line breaks)
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
-      // Remove null bytes and other control characters (except newlines and tabs)
-      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
+      // Remove null bytes and other non-printable control characters (except newlines and tabs)
+      // This sanitizes control chars for XSS prevention: U+0000-U+0008, U+000B, U+000C, U+000E-U+001F, U+007F
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
       .trim()
   );
 }
@@ -1041,7 +1042,7 @@ export const getAllComments = async (
     const total = countSnapshot.data().count;
 
     // Build query with cursor
-    const constraints: Parameters<typeof query>[1][] = [
+    const constraints: QueryConstraint[] = [
       orderBy("createdAt", "desc"),
       limit(Math.min(pageSize, 100)),
     ];

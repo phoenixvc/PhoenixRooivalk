@@ -17,7 +17,9 @@ function SupportFallback(): React.ReactElement {
     >
       <h2>Unable to load support</h2>
       <p>
-        We're having trouble loading the support center. Please try again later.
+        {
+          "We're having trouble loading the support center. Please try again later."
+        }
       </p>
       <p>
         For urgent inquiries, email us at{" "}

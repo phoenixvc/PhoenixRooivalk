@@ -6,17 +6,18 @@
  */
 
 import React, { useState, useCallback } from "react";
-import type {
-  Comment,
-  CommentCategory,
-  UpdateCommentInput,
-} from "../../types/comments";
 import { COMMENT_CATEGORIES } from "../../types/comments";
 import {
   validateContent,
   sanitizeContent,
 } from "../../services/commentService";
 import styles from "./Comments.module.css";
+
+import type {
+  Comment,
+  CommentCategory,
+  UpdateCommentInput,
+} from "../../types/comments";
 
 interface EditCommentModalProps {
   comment: Comment;
