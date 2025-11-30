@@ -3,6 +3,7 @@
  *
  * Factory for creating and managing cloud service instances.
  * Supports switching between Firebase and Azure implementations.
+ * Falls back gracefully: Primary -> Secondary -> Offline
  */
 
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
@@ -27,10 +28,19 @@ import { AzureAnalyticsService, AzureAnalyticsConfig } from './azure/analytics';
 import { AzureMessagingService, AzureMessagingConfig } from './azure/messaging';
 import { AzureFunctionsService, AzureFunctionsConfig } from './azure/functions';
 
+// Offline fallback implementations
+import {
+  OfflineAuthService,
+  OfflineDatabaseService,
+  OfflineAnalyticsService,
+  OfflineMessagingService,
+  OfflineAIFunctionsService,
+} from './offline';
+
 /**
  * Cloud provider type
  */
-export type CloudProvider = 'firebase' | 'azure';
+export type CloudProvider = 'firebase' | 'azure' | 'offline';
 
 /**
  * Cloud services collection
@@ -226,23 +236,86 @@ function createAzureServices(): CloudServices {
 }
 
 /**
- * Get or create cloud services instance
+ * Create offline fallback services
+ */
+function createOfflineServices(): CloudServices {
+  console.warn('Using offline mode - data will be stored locally');
+
+  return {
+    auth: new OfflineAuthService(),
+    database: new OfflineDatabaseService(),
+    analytics: new OfflineAnalyticsService(),
+    messaging: new OfflineMessagingService(),
+    functions: new OfflineAIFunctionsService(),
+    provider: 'offline',
+    isConfigured: true,
+  };
+}
+
+/**
+ * Get or create cloud services instance with fallback
+ *
+ * Fallback order:
+ * 1. Requested provider (if configured)
+ * 2. Alternative cloud provider (if configured)
+ * 3. Offline mode (always available)
  */
 export function getCloudServices(forceProvider?: CloudProvider): CloudServices {
-  const provider = forceProvider || detectProvider();
+  const requestedProvider = forceProvider || detectProvider();
 
   // Return cached instance if provider matches
-  if (cloudServicesInstance && cloudServicesInstance.provider === provider) {
+  if (cloudServicesInstance && cloudServicesInstance.provider === requestedProvider) {
     return cloudServicesInstance;
   }
 
-  // Create new instance
-  if (provider === 'azure') {
-    cloudServicesInstance = createAzureServices();
-  } else {
-    cloudServicesInstance = createFirebaseServices();
+  // If forcing offline, return offline services
+  if (requestedProvider === 'offline') {
+    cloudServicesInstance = createOfflineServices();
+    return cloudServicesInstance;
   }
 
+  // Try requested provider first
+  if (requestedProvider === 'azure') {
+    const azureServices = createAzureServices();
+    if (azureServices.isConfigured) {
+      cloudServicesInstance = azureServices;
+      return cloudServicesInstance;
+    }
+    console.warn('Azure not configured, trying Firebase...');
+  }
+
+  if (requestedProvider === 'firebase') {
+    const firebaseServices = createFirebaseServices();
+    if (firebaseServices.isConfigured) {
+      cloudServicesInstance = firebaseServices;
+      return cloudServicesInstance;
+    }
+    console.warn('Firebase not configured, trying Azure...');
+  }
+
+  // Fallback to alternative provider
+  const azureConfig = getAzureConfig();
+  const firebaseConfig = getFirebaseConfig();
+
+  if (azureConfig) {
+    const azureServices = createAzureServices();
+    if (azureServices.isConfigured) {
+      cloudServicesInstance = azureServices;
+      return cloudServicesInstance;
+    }
+  }
+
+  if (firebaseConfig) {
+    const firebaseServices = createFirebaseServices();
+    if (firebaseServices.isConfigured) {
+      cloudServicesInstance = firebaseServices;
+      return cloudServicesInstance;
+    }
+  }
+
+  // Final fallback: offline mode
+  console.warn('No cloud provider configured, falling back to offline mode');
+  cloudServicesInstance = createOfflineServices();
   return cloudServicesInstance;
 }
 
@@ -255,6 +328,29 @@ export function switchProvider(provider: CloudProvider): void {
     localStorage.setItem('phoenix-cloud-provider', provider);
   }
   cloudServicesInstance = null;
+}
+
+/**
+ * Get fallback chain status
+ * Useful for debugging provider configuration
+ */
+export function getProviderStatus(): {
+  active: CloudProvider;
+  available: CloudProvider[];
+  configured: { firebase: boolean; azure: boolean };
+} {
+  const firebaseConfigured = getFirebaseConfig() !== null;
+  const azureConfigured = getAzureConfig() !== null;
+  const available: CloudProvider[] = ['offline'];
+
+  if (firebaseConfigured) available.unshift('firebase');
+  if (azureConfigured) available.unshift('azure');
+
+  return {
+    active: cloudServicesInstance?.provider || detectProvider(),
+    available,
+    configured: { firebase: firebaseConfigured, azure: azureConfigured },
+  };
 }
 
 /**

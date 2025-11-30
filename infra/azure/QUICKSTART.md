@@ -154,11 +154,50 @@ az deployment group show --resource-group phoenix-rooivalk-dev --name phoenix-ro
 az functionapp log tail --name func-phoenix-rooivalk-dev --resource-group phoenix-rooivalk-dev
 ```
 
+## Index Documentation for Search (Optional)
+
+To enable semantic search over your documentation:
+
+```bash
+# Index all markdown files (requires OpenAI API key in Key Vault)
+node scripts/index-docs.js \
+  --functions-url https://func-phoenix-rooivalk-dev.azurewebsites.net \
+  --token "your-admin-key"
+
+# Check indexing status
+curl https://func-phoenix-rooivalk-dev.azurewebsites.net/api/index/stats
+```
+
+## Fallback Behavior
+
+The app automatically falls back if a provider isn't configured:
+
+1. **Azure** (if `CLOUD_PROVIDER=azure` and configured)
+2. **Firebase** (if Azure unavailable but Firebase configured)
+3. **Offline** (localStorage, always works)
+
+This means you can develop locally without any cloud setup - just run `pnpm dev`!
+
+## B2C Redirect URIs (Important!)
+
+When setting up Azure AD B2C, add these redirect URIs:
+
+**Local Development:**
+- `http://localhost:3000`
+- `http://localhost:3000/login`
+- `http://localhost:3000/callback`
+
+**Production (replace with your URLs):**
+- `https://<your-app>.azurestaticapps.net`
+- `https://<your-app>.azurestaticapps.net/login`
+- `https://docs.phoenixrooivalk.com` (custom domain)
+
 ## Next Steps
 
 1. Set up custom domain
 2. Configure CI/CD for staging environment
 3. Set up monitoring alerts
-4. Enable WAF (if needed)
+4. Index documentation for semantic search
+5. Enable WAF (if needed)
 
 For detailed documentation, see [README.md](./README.md).
