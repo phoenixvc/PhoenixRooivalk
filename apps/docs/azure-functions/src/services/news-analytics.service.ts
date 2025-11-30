@@ -438,6 +438,70 @@ Format as a brief digest with 3-5 key items.`;
         "This digest is AI-generated and may not reflect the most recent news. Verify information from primary sources.",
     };
   }
+
+  /**
+   * Generate AI digest from recent articles in database
+   * Used by scheduled job to create summaries of recent news
+   */
+  async generateAIDigest(): Promise<{
+    digest: string;
+    articleCount: number;
+    generatedAt: string;
+  }> {
+    // Get articles from last 24 hours
+    const cutoff = new Date();
+    cutoff.setHours(cutoff.getHours() - 24);
+
+    const recentArticles = await queryDocuments<{
+      id: string;
+      title: string;
+      summary: string;
+      category: string;
+      source: string;
+      publishedAt: string;
+    }>(
+      "news_articles",
+      "SELECT c.id, c.title, c.summary, c.category, c.source, c.publishedAt FROM c WHERE c.publishedAt >= @cutoff ORDER BY c.publishedAt DESC OFFSET 0 LIMIT 50",
+      [{ name: "@cutoff", value: cutoff.toISOString() }],
+    );
+
+    if (recentArticles.length === 0) {
+      return {
+        digest: "No new articles in the last 24 hours.",
+        articleCount: 0,
+        generatedAt: new Date().toISOString(),
+      };
+    }
+
+    // Build context from articles
+    const articleSummaries = recentArticles
+      .slice(0, 20) // Limit to top 20 for context
+      .map((a, i) => `${i + 1}. [${a.category}] ${a.title}: ${a.summary}`)
+      .join("\n");
+
+    const systemPrompt = `You are a defense industry news analyst specializing in counter-drone and c-UAS technology.
+Summarize the key developments from the provided articles into a concise executive digest.`;
+
+    const userPrompt = `Based on these recent articles, create an executive news digest highlighting the most important developments:
+
+${articleSummaries}
+
+Provide:
+1. A brief overview (2-3 sentences)
+2. Top 3-5 key developments with brief analysis
+3. Any emerging trends or patterns`;
+
+    const digest = await generateCompletion(systemPrompt, userPrompt, {
+      temperature: 0.3,
+      maxTokens: 800,
+    });
+
+    return {
+      digest,
+      articleCount: recentArticles.length,
+      generatedAt: new Date().toISOString(),
+    };
+  }
 }
 
 /**
