@@ -21,6 +21,10 @@ import {
   getModelConfig,
 } from "../prompts";
 import { newsRepository, NewsArticle } from "../repositories";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "news-ingestion-service" });
 
 /**
  * Raw news article from external API
@@ -62,7 +66,7 @@ export class NewsIngestionService {
     const config = getNewsApiConfig();
 
     if (!config.apiKey) {
-      console.warn("NewsAPI key not configured");
+      logger.warn("NewsAPI key not configured", { operation: "fetchFromNewsAPI" });
       return [];
     }
 
@@ -85,7 +89,7 @@ export class NewsIngestionService {
 
       if (!response.ok) {
         const error = await response.json();
-        console.error("NewsAPI error:", error);
+        logger.error("NewsAPI error", error, { operation: "fetchFromNewsAPI" });
         return [];
       }
 
@@ -109,7 +113,7 @@ export class NewsIngestionService {
         urlToImage: article.urlToImage,
       }));
     } catch (error) {
-      console.error("Failed to fetch from NewsAPI:", error);
+      logger.error("Failed to fetch from NewsAPI", error, { operation: "fetchFromNewsAPI" });
       return [];
     }
   }
@@ -138,7 +142,7 @@ export class NewsIngestionService {
       });
 
       if (!response.ok) {
-        console.error("Bing News API error:", response.status);
+        logger.error("Bing News API error", undefined, { operation: "fetchFromBingNews", status: response.status });
         return [];
       }
 
@@ -161,7 +165,7 @@ export class NewsIngestionService {
         urlToImage: article.image?.thumbnail?.contentUrl,
       }));
     } catch (error) {
-      console.error("Failed to fetch from Bing News:", error);
+      logger.error("Failed to fetch from Bing News", error, { operation: "fetchFromBingNews" });
       return [];
     }
   }
@@ -209,7 +213,7 @@ export class NewsIngestionService {
       try {
         categorization = JSON.parse(categorizationResult);
       } catch (error) {
-        console.warn("Failed to parse categorization result:", error);
+        logger.warn("Failed to parse categorization result", { operation: "processArticle" });
         categorization = {
           category: "defense-tech",
           targetRoles: [],
@@ -260,7 +264,7 @@ export class NewsIngestionService {
         embedding,
       };
     } catch (error) {
-      console.error("Failed to process article:", error);
+      logger.error("Failed to process article", error, { operation: "processArticle" });
       return null;
     }
   }

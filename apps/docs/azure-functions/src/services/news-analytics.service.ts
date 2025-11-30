@@ -13,6 +13,10 @@ import {
   getModelConfig,
 } from "../prompts";
 import { newsRepository, NewsArticle } from "../repositories";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "news-analytics-service" });
 
 /**
  * Analytics event
@@ -329,7 +333,7 @@ export class NewsAnalyticsService {
       try {
         categorization = JSON.parse(categorizationResult);
       } catch (error) {
-        console.warn("Failed to parse categorization result:", error);
+        logger.warn("Failed to parse categorization result", { operation: "processArticleWithAI" });
         categorization = {
           category: "company-news",
           targetRoles: [],
@@ -380,7 +384,7 @@ export class NewsAnalyticsService {
         embedding,
       };
     } catch (error) {
-      console.error("Error processing article with AI:", error);
+      logger.error("Error processing article with AI", error, { operation: "processArticleWithAI", title: title?.substring(0, 50) });
       return null;
     }
   }
