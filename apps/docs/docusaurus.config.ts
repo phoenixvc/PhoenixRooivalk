@@ -315,132 +315,132 @@ const config: Config = {
           : []),
       ],
     },
-    // Enhanced footer with role-based navigation
+    // Enhanced footer with role-based navigation and icons
     footer: {
       style: "dark",
       links: [
         {
-          title: "For Executives",
+          title: "📊 Executives",
           items: [
             {
-              label: "Executive Summary",
+              label: "📋 Executive Summary",
               to: "/docs/executive/executive-summary",
             },
             {
-              label: "Investor Summary",
+              label: "💼 Investor Summary",
               to: "/docs/executive/investor-executive-summary",
             },
             {
-              label: "Market Analysis",
+              label: "📈 Market Analysis",
               to: "/docs/business/market-analysis",
             },
             {
-              label: "ROI Analysis",
+              label: "💰 ROI Analysis",
               to: "/docs/business/roi-analysis",
             },
           ],
         },
         {
-          title: "For Engineers",
+          title: "⚙️ Engineers",
           items: [
             {
-              label: "Technical Architecture",
+              label: "🏗️ Technical Architecture",
               to: "/docs/technical/technical-architecture",
             },
             {
-              label: "API Documentation",
+              label: "📡 API Documentation",
               to: "/docs/technical/integration/api-documentation",
             },
             {
-              label: "Blockchain Architecture",
+              label: "🔗 Blockchain Architecture",
               to: "/docs/technical/blockchain/blockchain-architecture",
             },
             {
-              label: "Glossary",
+              label: "📖 Glossary",
               to: "/docs/technical/glossary",
             },
           ],
         },
         {
-          title: "For Operations",
+          title: "🎯 Operations",
           items: [
             {
-              label: "Deployment Guide",
+              label: "🚀 Deployment Guide",
               to: "/docs/operations/deployment/deployment-guide",
             },
             {
-              label: "Operations Manual",
+              label: "📚 Operations Manual",
               to: "/docs/operations/operations-manual",
             },
             {
-              label: "Training Materials",
+              label: "🎓 Training Materials",
               to: "/docs/operations/training/training-materials",
             },
             {
-              label: "Compliance Framework",
+              label: "✅ Compliance Framework",
               to: "/docs/legal/compliance-framework",
             },
           ],
         },
         {
-          title: "Resources",
+          title: "📦 Resources",
           items: [
             {
-              label: "Industry News",
+              label: "📰 Industry News",
               to: "/news",
             },
             {
-              label: "Downloads",
+              label: "⬇️ Downloads",
               to: "/docs/resources/downloads",
             },
             {
-              label: "Documentation Status",
+              label: "📊 Documentation Status",
               to: "/docs/resources/documentation-status",
             },
             {
-              label: "Main Website",
+              label: "🌐 Main Website",
               href: "https://phoenixrooivalk.netlify.app",
             },
           ],
         },
         {
-          title: "Support",
+          title: "💬 Support",
           items: [
             {
-              label: "Support Center",
+              label: "🛟 Support Center",
               to: "/support",
             },
             {
-              label: "Your Progress",
+              label: "📈 Your Progress",
               to: "/your-progress",
             },
             {
-              label: "Contact Us",
+              label: "✉️ Contact Us",
               to: "/contact",
             },
             {
-              label: "Request Access",
+              label: "🔑 Request Access",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
             },
           ],
         },
         {
-          title: "Connect",
+          title: "🔗 Connect",
           items: [
             {
-              label: "GitHub",
+              label: "🐙 GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
             },
             {
-              label: "LinkedIn",
+              label: "💼 LinkedIn",
               href: "https://linkedin.com/company/phoenix-rooivalk",
             },
             {
-              label: "X (Twitter)",
+              label: "🐦 X (Twitter)",
               href: "https://x.com/PhoenixRooivalk",
             },
             {
-              label: "Email Us",
+              label: "📧 Email Us",
               href: "mailto:contact@phoenixrooivalk.com",
             },
           ],

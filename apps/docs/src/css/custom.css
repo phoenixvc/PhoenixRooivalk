@@ -447,6 +447,23 @@ h3 {
   ) !important;
   border-top: 2px solid rgb(249, 115, 22);
   padding: 3rem 0 1.5rem !important;
+  position: relative;
+}
+
+/* Subtle decorative accent */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(249, 115, 22, 0.08) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
 }
 
 .footer__links {
@@ -456,6 +473,7 @@ h3 {
   max-width: 1400px !important;
   margin: 0 auto !important;
   padding: 0 3rem !important;
+  position: relative;
 }
 
 .footer__col {
@@ -465,13 +483,16 @@ h3 {
 .footer__title {
   color: rgb(249, 115, 22) !important;
   font-weight: 700 !important;
-  font-size: 0.75rem !important;
+  font-size: 0.8rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.08em !important;
   margin-bottom: 1rem !important;
   padding-bottom: 0.5rem !important;
   border-bottom: 1px solid rgb(51, 65, 85) !important;
   white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
 }
 
 .footer__items {
@@ -480,7 +501,7 @@ h3 {
 }
 
 .footer__item {
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.625rem !important;
 }
 
 .footer__link-item {
@@ -489,7 +510,8 @@ h3 {
   transition: all 0.2s ease !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.25rem !important;
+  gap: 0.5rem !important;
+  padding: 0.25rem 0 !important;
 }
 
 .footer__link-item:hover {
