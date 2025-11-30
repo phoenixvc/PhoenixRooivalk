@@ -127,6 +127,24 @@ jobs:
           BRANCH: ${{ github.ref_name }}
         run: pnpm run build
 
+      - name: Verify build output
+        working-directory: ${{ env.APP_LOCATION }}
+        run: |
+          echo "=== Checking build output ==="
+          if [ -f "build/index.html" ]; then
+            echo "✅ Found index.html in build/"
+            ls -la build/
+          else
+            echo "❌ ERROR: index.html not found in build/"
+            echo "Contents of current directory:"
+            ls -la
+            if [ -d "build" ]; then
+              echo "Contents of build/:"
+              ls -la build/
+            fi
+            exit 1
+          fi
+
       - name: Deploy to Azure Static Web Apps
         id: deploy
         uses: Azure/static-web-apps-deploy@v1
@@ -134,10 +152,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: ${{ env.APP_LOCATION }}
-          output_location: ${{ env.OUTPUT_LOCATION }}
-          skip_app_build: true  # We already built it above
-          skip_api_build: true  # API is deployed separately
+          # With skip_app_build=true, app_location must point directly to pre-built output
+          app_location: "apps/docs/build"
+          skip_app_build: true
+          skip_api_build: true
           production_branch: "main"
 
       - name: Comment on PR with preview URL
