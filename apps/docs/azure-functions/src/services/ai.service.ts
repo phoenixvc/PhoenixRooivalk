@@ -6,6 +6,7 @@
 
 import { generateCompletion, generateEmbeddings } from "../lib/openai";
 import { queryDocuments } from "../lib/cosmos";
+import { createLogger, Logger } from "../lib/logger";
 import {
   COMPETITOR_PROMPT,
   SWOT_PROMPT,
@@ -18,6 +19,9 @@ import {
   buildUserPrompt,
   getModelConfig,
 } from "../prompts";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "ai-service" });
 
 /**
  * Document chunk for RAG search
@@ -151,7 +155,10 @@ export class AIService {
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
     } catch (error) {
-      console.warn("RAG search failed for competitor analysis, continuing without context:", error);
+      logger.warn("RAG search failed for competitor analysis, continuing without context", {
+        operation: "analyzeCompetitors",
+        competitors: competitors.slice(0, 3).join(", "),
+      });
     }
 
     const systemPrompt = documentContext
@@ -196,7 +203,10 @@ export class AIService {
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
     } catch (error) {
-      console.warn("RAG search failed for SWOT analysis, continuing without context:", error);
+      logger.warn("RAG search failed for SWOT analysis, continuing without context", {
+        operation: "generateSWOT",
+        focusArea: options.focusArea,
+      });
     }
 
     const systemPrompt = documentContext
@@ -242,7 +252,11 @@ export class AIService {
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
     } catch (error) {
-      console.warn("RAG search failed for market insights, continuing without context:", error);
+      logger.warn("RAG search failed for market insights, continuing without context", {
+        operation: "getMarketInsights",
+        region: options.region,
+        segment: options.segment,
+      });
     }
 
     const systemPrompt = documentContext

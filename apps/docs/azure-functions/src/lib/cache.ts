@@ -11,6 +11,10 @@
 
 import * as crypto from "crypto";
 import { getContainer, queryDocuments, upsertDocument } from "./cosmos";
+import { createLogger, Logger } from "./logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "cache" });
 
 // Cache configuration
 export const CACHE_CONFIG = {
@@ -86,7 +90,7 @@ export async function getFromCache<T>(
     return resource.value;
   } catch (error: unknown) {
     if ((error as { code?: number })?.code === 404) return null;
-    console.warn("Cache get error:", error);
+    logger.warn("Cache get error", { operation: "getFromCache", collection, key });
     return null;
   }
 }
@@ -118,7 +122,7 @@ export async function setInCache<T>(
 
     await upsertDocument(containerName, entry);
   } catch (error) {
-    console.warn("Cache set error:", error);
+    logger.warn("Cache set error", { operation: "setInCache", collection, key });
     // Don't throw - cache failures shouldn't break the application
   }
 }
@@ -135,7 +139,7 @@ export async function deleteFromCache(
     const container = getContainer(containerName);
     await container.item(key, key).delete();
   } catch (error) {
-    console.warn("Cache delete error:", error);
+    logger.warn("Cache delete error", { operation: "deleteFromCache", collection, key });
   }
 }
 
@@ -159,7 +163,7 @@ export async function clearCache(
       await container.item(item.id, item.id).delete();
       deletedCount++;
     } catch (error) {
-      console.warn(`Failed to delete cache item ${item.id}:`, error);
+      logger.warn("Failed to delete cache item", { operation: "clearCache", itemId: item.id });
     }
   }
 
@@ -248,7 +252,7 @@ export async function getCacheStats(): Promise<{
         avgHits: items.length > 0 ? totalHits / items.length : 0,
       };
     } catch (error) {
-      console.warn(`Failed to get cache stats for ${key}:`, error);
+      logger.warn("Failed to get cache stats", { operation: "getCacheStats", collection: key });
       stats[key] = { count: 0, avgHits: 0 };
     }
   }
@@ -282,14 +286,14 @@ export async function cleanupExpiredCache(): Promise<number> {
           await container.item(item.id, item.id).delete();
           totalDeleted++;
         } catch (error) {
-          console.warn(`Failed to delete expired cache item ${item.id}:`, error);
+          logger.warn("Failed to delete expired cache item", { operation: "cleanupExpiredCache", itemId: item.id });
         }
       }
     } catch (error) {
-      console.warn(`Failed to cleanup cache for ${containerName}:`, error);
+      logger.warn("Failed to cleanup cache", { operation: "cleanupExpiredCache", containerName });
     }
   }
 
-  console.log(`Cache cleanup complete: ${totalDeleted} entries removed`);
+  logger.info("Cache cleanup complete", { operation: "cleanupExpiredCache", totalDeleted });
   return totalDeleted;
 }

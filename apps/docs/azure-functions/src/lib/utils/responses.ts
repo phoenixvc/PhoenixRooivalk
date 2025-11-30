@@ -5,6 +5,10 @@
  */
 
 import { HttpResponseInit } from "@azure/functions";
+import { createLogger, Logger } from "../logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "responses" });
 
 /**
  * Standard error codes used across the API
@@ -80,7 +84,7 @@ export function withErrorHandling<T>(
   return fn()
     .then((result) => successResponse(result))
     .catch((error) => {
-      console.error(`Error in ${operation}:`, error);
+      logger.error(`Error in ${operation}`, error, { operation });
       return Errors.internal(`Failed to ${operation.toLowerCase()}`);
     });
 }

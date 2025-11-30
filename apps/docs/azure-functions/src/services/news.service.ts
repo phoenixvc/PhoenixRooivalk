@@ -20,6 +20,10 @@ import {
 } from "../prompts";
 import { isValidCategory, getCategoryIds } from "../config";
 import { generateId } from "../lib/utils/ids";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "news-service" });
 
 /**
  * User profile for personalization
@@ -239,7 +243,10 @@ export class NewsService {
 
       categorization = JSON.parse(result);
     } catch (error) {
-      console.warn("AI categorization failed, using defaults:", error);
+      logger.warn("AI categorization failed, using defaults", {
+        operation: "addArticle",
+        title: title.substring(0, 50),
+      });
       categorization = {
         category: category && isValidCategory(category) ? category : "company-news",
         targetRoles: [],
@@ -268,7 +275,10 @@ export class NewsService {
         { temperature: 0.3, maxTokens: 200 },
       );
     } catch (error) {
-      console.warn("AI summary generation failed, using truncated content:", error);
+      logger.warn("AI summary generation failed, using truncated content", {
+        operation: "addArticle",
+        title: title.substring(0, 50),
+      });
       summary = content.substring(0, 200) + "...";
     }
 

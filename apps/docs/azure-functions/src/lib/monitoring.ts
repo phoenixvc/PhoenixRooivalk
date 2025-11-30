@@ -12,6 +12,10 @@
  */
 
 import { getContainer, queryDocuments, upsertDocument } from "./cosmos";
+import { createLogger, Logger } from "./logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "monitoring" });
 
 // Monitoring configuration
 export const MONITORING_CONFIG = {
@@ -81,7 +85,7 @@ export async function logMetrics(
     } catch (error) {
       // Expected for first request of the day - no existing stats
       if ((error as { code?: number })?.code !== 404) {
-        console.warn("Failed to read existing daily stats:", error);
+        logger.warn("Failed to read existing daily stats", { operation: "logMetrics", dailyId });
       }
     }
 
@@ -102,7 +106,7 @@ export async function logMetrics(
       updatedAt: now.toISOString(),
     });
   } catch (error) {
-    console.warn("Failed to log metrics:", error);
+    logger.warn("Failed to log metrics", { operation: "logMetrics", feature });
     // Don't throw - monitoring failures shouldn't break the application
   }
 }
@@ -146,7 +150,7 @@ export async function logError(
     } catch (error) {
       // Expected for first error of the day - no existing stats
       if ((error as { code?: number })?.code !== 404) {
-        console.warn("Failed to read existing daily stats for error logging:", error);
+        logger.warn("Failed to read existing daily stats for error logging", { operation: "logError", dailyId });
       }
     }
 
@@ -162,7 +166,7 @@ export async function logError(
       updatedAt: now.toISOString(),
     });
   } catch (logError) {
-    console.error("Failed to log error:", logError);
+    logger.error("Failed to log error", logError, { operation: "logError", feature });
   }
 }
 
@@ -401,7 +405,11 @@ export async function checkAndStoreAlerts(): Promise<AlertStatus> {
   const alertStatus = await checkAlerts(today);
 
   if (alertStatus.hasAlerts) {
-    console.warn("AI Monitoring Alerts:", alertStatus.alerts);
+    logger.warn("AI Monitoring Alerts detected", {
+      operation: "checkAndStoreAlerts",
+      alertCount: alertStatus.alerts.length,
+      alertTypes: alertStatus.alerts.map((a) => a.type),
+    });
 
     const id = `alert_${today}_${Date.now()}`;
     await upsertDocument(MONITORING_CONFIG.containers.alerts, {

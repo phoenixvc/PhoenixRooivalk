@@ -7,6 +7,10 @@
 import * as crypto from "crypto";
 import { generateEmbeddings } from "../lib/openai";
 import { getContainer, queryDocuments, upsertDocument } from "../lib/cosmos";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "indexing-service" });
 
 /**
  * Document chunk for embedding storage
@@ -185,7 +189,7 @@ export class IndexingService {
           // Rate limit: wait between embeddings
           await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
-          console.error(`Failed to index chunk ${chunkId}:`, error);
+          logger.error("Failed to index chunk", error, { operation: "indexDocument", chunkId, docId: doc.id });
         }
       }
     }
@@ -264,7 +268,7 @@ export class IndexingService {
         await container.item(chunk.id, chunk.id).delete();
         deleted++;
       } catch (error) {
-        console.warn(`Failed to delete chunk ${chunk.id}:`, error);
+        logger.warn("Failed to delete chunk", { operation: "deleteDocumentEmbeddings", chunkId: chunk.id, docId });
       }
     }
 
@@ -273,7 +277,7 @@ export class IndexingService {
       const metadataContainer = getContainer("doc_metadata");
       await metadataContainer.item(docId, docId).delete();
     } catch (error) {
-      console.warn(`Failed to delete metadata for ${docId}:`, error);
+      logger.warn("Failed to delete metadata", { operation: "deleteDocumentEmbeddings", docId });
     }
 
     return deleted;

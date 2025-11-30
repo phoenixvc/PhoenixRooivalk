@@ -7,6 +7,10 @@
 import { queryDocuments, upsertDocument, getContainer } from "../lib/cosmos";
 import { newsRepository, NewsArticle } from "../repositories";
 import { generateId } from "../lib/utils/ids";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "notifications-service" });
 
 /**
  * News subscription
@@ -99,7 +103,10 @@ export class NotificationsService {
       await container.item(userId, userId).delete();
     } catch (error) {
       // Log but don't throw - subscription may not exist
-      console.warn(`Unsubscribe for ${userId} failed (may not exist):`, error);
+      logger.warn("Unsubscribe failed (may not exist)", {
+        operation: "unsubscribe",
+        userId,
+      });
     }
   }
 
@@ -114,7 +121,10 @@ export class NotificationsService {
     } catch (error) {
       // Expected for non-existent subscriptions
       if ((error as { code?: number })?.code !== 404) {
-        console.warn(`Failed to get subscription for ${userId}:`, error);
+        logger.warn("Failed to get subscription", {
+          operation: "getSubscription",
+          userId,
+        });
       }
       return null;
     }
@@ -242,7 +252,11 @@ export class NotificationsService {
         // TODO: Implement push notification sending via Azure Notification Hubs
         // await sendPushNotification(subscriber.pushToken, title, summary, articleId);
         // Note: Not incrementing notificationsSent here since push is not actually sent yet
-        console.warn(`Push notification queued for subscriber ${subscriber.id} but not sent - Azure Notification Hubs integration pending`);
+        logger.warn("Push notification queued but not sent - Azure Notification Hubs integration pending", {
+          operation: "notifyBreakingNews",
+          subscriberId: subscriber.id,
+          articleId,
+        });
       }
     }
 

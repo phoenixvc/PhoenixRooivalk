@@ -7,6 +7,10 @@
 
 import { HttpRequest } from "@azure/functions";
 import * as jose from "jose";
+import { createLogger, Logger } from "./logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "auth" });
 
 export interface TokenClaims {
   sub: string;
@@ -63,7 +67,7 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
     }
 
     if (!audience || !tenant) {
-      console.warn("Azure AD B2C not configured, using unvalidated decode");
+      logger.warn("Azure AD B2C not configured, using unvalidated decode", { operation: "validateToken" });
       const [, payload] = token.split(".");
       return JSON.parse(Buffer.from(payload, "base64url").toString());
     }
@@ -76,7 +80,7 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
 
     return payload as unknown as TokenClaims;
   } catch (error) {
-    console.error("Token validation failed:", error);
+    logger.error("Token validation failed", error, { operation: "validateToken" });
     return null;
   }
 }
@@ -162,7 +166,7 @@ export function requireAuth(request: HttpRequest): {
 
     return { authenticated: true, userId };
   } catch (error) {
-    console.warn("Token parsing failed:", error);
+    logger.warn("Token parsing failed", { operation: "requireAuth" });
     return {
       authenticated: false,
       userId: null,

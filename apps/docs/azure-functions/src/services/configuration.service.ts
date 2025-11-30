@@ -17,6 +17,10 @@ import {
   DomainConfig,
 } from "../repositories/configuration.repository";
 import { generateCompletion } from "../lib/openai";
+import { createLogger, Logger } from "../lib/logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "configuration-service" });
 
 /**
  * Cache entry with TTL
@@ -351,7 +355,7 @@ export class ConfigurationService {
       const categoryAnalysis = await this.analyzeCategories(categories);
       optimizations.push(...categoryAnalysis);
     } catch (error) {
-      console.warn("AI category analysis failed, skipping:", error);
+      logger.warn("AI category analysis failed, skipping", { operation: "analyzeOptimizations" });
     }
 
     return optimizations;
@@ -394,7 +398,7 @@ Respond with JSON array:
         basedOn: { usageData: false, contentAnalysis: true, userFeedback: false },
       }));
     } catch (error) {
-      console.warn("Failed to parse AI category suggestions:", error);
+      logger.warn("Failed to parse AI category suggestions", { operation: "analyzeCategories" });
       return [];
     }
   }
