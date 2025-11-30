@@ -12,7 +12,6 @@ import { IDatabaseService } from './interfaces/database';
 import { IAnalyticsService } from './interfaces/analytics';
 import { IMessagingService } from './interfaces/messaging';
 import { IAIFunctionsService } from './interfaces/functions';
-import { CloudServiceConfig } from './interfaces/types';
 
 // Firebase implementations
 import { FirebaseAuthService } from './firebase/auth';
