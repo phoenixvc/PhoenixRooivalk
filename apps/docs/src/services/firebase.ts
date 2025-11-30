@@ -1,22 +1,18 @@
 /**
- * Firebase Compatibility Layer
+ * Authentication and Database Services
  *
- * This file provides backward compatibility for components that were using
- * Firebase directly. It re-exports functionality from the cloud provider
- * which now uses Azure (or offline fallback).
- *
- * @deprecated Import from './cloud' instead
+ * Azure-based implementation for user authentication and data storage.
+ * Uses Azure Entra ID (MSAL) for auth and Azure Functions/Cosmos DB for data.
  */
 
 import {
   getCloudServices,
   getAuthService,
   getDatabaseService,
-  getCurrentProvider,
   isCloudConfigured,
 } from "./cloud";
 
-// Re-export User type - create a compatible type since we're not using Firebase
+// User type
 export interface User {
   uid: string;
   email: string | null;
@@ -32,7 +28,7 @@ export interface User {
   }>;
 }
 
-// Re-export UserProgress type
+// User progress tracking
 export interface UserProgress {
   docs: Record<
     string,
@@ -43,12 +39,7 @@ export interface UserProgress {
       lastVisited?: string;
     }
   >;
-  achievements: Record<
-    string,
-    {
-      unlockedAt: string;
-    }
-  >;
+  achievements: Record<string, { unlockedAt: string }>;
   stats: {
     totalPoints: number;
     level: number;
@@ -57,7 +48,7 @@ export interface UserProgress {
   };
 }
 
-// Re-export UserProfileData type
+// User profile data
 export interface UserProfileData {
   profileKey?: string | null;
   roles: string[];
@@ -68,42 +59,35 @@ export interface UserProfileData {
 }
 
 /**
- * Check if cloud services are configured
+ * Check if Azure services are configured
  */
 export function isFirebaseConfigured(): boolean {
   return isCloudConfigured();
 }
 
 /**
- * Get missing configuration items
+ * Get missing Azure configuration
  */
 export function getMissingFirebaseConfig(): string[] {
-  const provider = getCurrentProvider();
-  if (provider === "offline") {
-    return ["AZURE_ENTRA_CLIENT_ID", "AZURE_ENTRA_TENANT_ID"];
-  }
-  return [];
+  if (isCloudConfigured()) return [];
+  return ["AZURE_ENTRA_CLIENT_ID", "AZURE_ENTRA_TENANT_ID"];
 }
 
 /**
- * Listen to auth state changes
+ * Auth state change listener
  */
-export function onAuthChange(
-  callback: (user: User | null) => void,
-): () => void {
+export function onAuthChange(callback: (user: User | null) => void): () => void {
   const auth = getAuthService();
   return auth.onAuthStateChanged((cloudUser) => {
     if (cloudUser) {
-      // Convert cloud user to compatible User type
-      const user: User = {
+      callback({
         uid: cloudUser.uid,
         email: cloudUser.email,
         displayName: cloudUser.displayName,
         photoURL: cloudUser.photoURL,
         emailVerified: cloudUser.emailVerified || false,
         providerData: cloudUser.providerData || [],
-      };
-      callback(user);
+      });
     } else {
       callback(null);
     }
@@ -111,7 +95,7 @@ export function onAuthChange(
 }
 
 /**
- * Sign in with Google
+ * Sign in with Google (via Azure AD B2C or direct)
  */
 export async function signInWithGoogle(): Promise<User | null> {
   const auth = getAuthService();
@@ -130,7 +114,7 @@ export async function signInWithGoogle(): Promise<User | null> {
 }
 
 /**
- * Sign in with GitHub
+ * Sign in with GitHub (via Azure AD B2C or direct)
  */
 export async function signInWithGithub(): Promise<User | null> {
   const auth = getAuthService();
@@ -157,43 +141,36 @@ export async function signOut(): Promise<void> {
 }
 
 /**
- * Get user progress from database
+ * Get user progress from Cosmos DB
  */
 export async function getUserProgress(userId: string): Promise<UserProgress> {
   const db = getDatabaseService();
   const data = await db.getDocument<UserProgress>(`users/${userId}/progress`, "current");
-  return (
-    data || {
-      docs: {},
-      achievements: {},
-      stats: { totalPoints: 0, level: 1, streak: 0 },
-    }
-  );
+  return data || {
+    docs: {},
+    achievements: {},
+    stats: { totalPoints: 0, level: 1, streak: 0 },
+  };
 }
 
 /**
- * Save user progress to database
+ * Save user progress to Cosmos DB
  */
-export async function saveUserProgress(
-  userId: string,
-  progress: UserProgress,
-): Promise<void> {
+export async function saveUserProgress(userId: string, progress: UserProgress): Promise<void> {
   const db = getDatabaseService();
   await db.setDocument(`users/${userId}/progress`, "current", progress);
 }
 
 /**
- * Get user profile data from database
+ * Get user profile from Cosmos DB
  */
-export async function getUserProfileData(
-  userId: string,
-): Promise<UserProfileData | null> {
+export async function getUserProfileData(userId: string): Promise<UserProfileData | null> {
   const db = getDatabaseService();
   return db.getDocument<UserProfileData>("users", userId);
 }
 
 /**
- * Update user profile data in database
+ * Update user profile in Cosmos DB
  */
 export async function updateUserProfileData(
   userId: string,

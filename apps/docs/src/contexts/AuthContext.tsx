@@ -11,8 +11,8 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import { User } from "firebase/auth";
 import {
+  User,
   isFirebaseConfigured,
   getMissingFirebaseConfig,
   onAuthChange,
