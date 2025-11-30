@@ -6,6 +6,7 @@
  */
 
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { SqlParameter, JSONValue } from '@azure/cosmos';
 import { requireAuth } from '../lib/auth';
 import { getDocument, upsertDocument, deleteDocument, queryDocuments } from '../lib/cosmos';
 
@@ -165,7 +166,7 @@ async function queryDocumentsHandler(
     const body = await request.json() as {
       collection: string;
       options?: {
-        conditions?: Array<{ field: string; operator: string; value: unknown }>;
+        conditions?: Array<{ field: string; operator: string; value: JSONValue }>;
         orderBy?: Array<{ field: string; direction: 'asc' | 'desc' }>;
         limit?: number;
       };
@@ -182,7 +183,7 @@ async function queryDocumentsHandler(
 
     // Build SQL query
     let query = 'SELECT * FROM c';
-    const params: { name: string; value: unknown }[] = [];
+    const params: SqlParameter[] = [];
 
     if (options?.conditions?.length) {
       const whereClauses = options.conditions.map((cond, i) => {

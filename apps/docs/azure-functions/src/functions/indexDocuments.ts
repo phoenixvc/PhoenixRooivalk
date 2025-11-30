@@ -173,6 +173,13 @@ async function httpHandler(
     };
   }
 
+  if (!authResult.isAdmin) {
+    return {
+      status: 403,
+      jsonBody: { error: 'Admin access required', code: 'permission-denied' },
+    };
+  }
+
   try {
     const body = (await request.json()) as IndexRequest;
     const { documents, chunkSize = 1000, overlap = 200 } = body;
@@ -228,6 +235,10 @@ async function deleteDocumentEmbeddings(
     return { status: 401, jsonBody: { error: 'Unauthorized' } };
   }
 
+  if (!authResult.isAdmin) {
+    return { status: 403, jsonBody: { error: 'Admin access required' } };
+  }
+
   try {
     const { docId } = (await request.json()) as { docId: string };
 
@@ -235,7 +246,7 @@ async function deleteDocumentEmbeddings(
       return { status: 400, jsonBody: { error: 'docId is required' } };
     }
 
-    const container = await getContainer('doc_embeddings');
+    const container = getContainer('doc_embeddings');
 
     // Query and delete all chunks for this doc
     const { resources } = await container.items

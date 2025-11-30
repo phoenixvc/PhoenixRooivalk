@@ -4,7 +4,7 @@
  * Provides database operations for Azure Functions.
  */
 
-import { CosmosClient, Database, Container } from '@azure/cosmos';
+import { CosmosClient, Database, Container, SqlParameter, ItemDefinition } from '@azure/cosmos';
 
 let client: CosmosClient | null = null;
 let database: Database | null = null;
@@ -44,7 +44,7 @@ export function getContainer(containerName: string): Container {
 /**
  * Helper to get document by ID
  */
-export async function getDocument<T>(
+export async function getDocument<T extends ItemDefinition>(
   containerName: string,
   id: string,
   partitionKey?: string
@@ -53,8 +53,8 @@ export async function getDocument<T>(
     const container = getContainer(containerName);
     const { resource } = await container.item(id, partitionKey || id).read<T>();
     return resource || null;
-  } catch (error: any) {
-    if (error.code === 404) return null;
+  } catch (error: unknown) {
+    if ((error as { code?: number })?.code === 404) return null;
     throw error;
   }
 }
@@ -89,7 +89,7 @@ export async function deleteDocument(
 export async function queryDocuments<T>(
   containerName: string,
   query: string,
-  parameters?: { name: string; value: unknown }[]
+  parameters?: SqlParameter[]
 ): Promise<T[]> {
   const container = getContainer(containerName);
   const { resources } = await container.items

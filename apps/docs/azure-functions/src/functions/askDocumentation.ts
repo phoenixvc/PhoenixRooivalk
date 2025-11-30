@@ -6,6 +6,7 @@
  */
 
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { SqlParameter } from '@azure/cosmos';
 import { requireAuth } from '../lib/auth';
 import { queryDocuments } from '../lib/cosmos';
 import { generateCompletion, generateEmbeddings, checkRateLimit } from '../lib/openai';
@@ -60,7 +61,7 @@ async function findRelevantChunks(
 ): Promise<DocChunk[]> {
   // Query all embeddings (in production, use vector search index)
   let query = 'SELECT * FROM c';
-  const params: { name: string; value: unknown }[] = [];
+  const params: SqlParameter[] = [];
 
   if (category) {
     query += ' WHERE c.category = @category';

@@ -124,3 +124,47 @@ export function requireAdmin(request: HttpRequest): {
 
   return { authorized: true, userId: authResult.userId };
 }
+
+/**
+ * Validate authorization header directly
+ * For use with API keys or tokens passed as header string
+ */
+export async function validateAuthHeader(
+  authHeader: string | null
+): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean }> {
+  if (!authHeader) {
+    return { valid: false };
+  }
+
+  // Check for API key (admin key for Functions)
+  const adminKey = process.env.FUNCTIONS_ADMIN_KEY;
+  if (adminKey && authHeader === `Bearer ${adminKey}`) {
+    return { valid: true, userId: 'admin', isAdmin: true };
+  }
+
+  // Check for Bearer token (JWT)
+  if (authHeader.startsWith('Bearer ')) {
+    const token = authHeader.substring(7);
+
+    try {
+      const [, payload] = token.split('.');
+      const claims = JSON.parse(Buffer.from(payload, 'base64').toString());
+      const userId = claims.sub || claims.oid;
+
+      if (!userId) {
+        return { valid: false };
+      }
+
+      // Check if admin by email domain
+      const email = claims.email || '';
+      const domain = email.split('@')[1]?.toLowerCase();
+      const isAdminUser = ADMIN_DOMAINS.includes(domain);
+
+      return { valid: true, userId, isAdmin: isAdminUser };
+    } catch {
+      return { valid: false };
+    }
+  }
+
+  return { valid: false };
+}

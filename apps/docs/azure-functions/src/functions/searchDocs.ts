@@ -1,13 +1,24 @@
 /**
  * Search Documentation Function
  *
- * Semantic search over documentation.
- * Replaces Firebase searchDocs function.
+ * Semantic search over documentation using embeddings.
+ *
+ * SCALABILITY NOTE:
+ * Current implementation loads embeddings into memory for cosine similarity.
+ * This works well for <5000 documents. For larger scale:
+ * - Use Azure AI Search with vector search
+ * - Or enable Cosmos DB vector indexing (preview)
+ *
+ * To use Azure AI Search instead, set AZURE_SEARCH_ENDPOINT and AZURE_SEARCH_KEY
  */
 
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { SqlParameter } from '@azure/cosmos';
 import { queryDocuments } from '../lib/cosmos';
 import { generateEmbeddings, checkRateLimit } from '../lib/openai';
+
+// Maximum chunks to load for in-memory search (memory protection)
+const MAX_CHUNKS_IN_MEMORY = 5000;
 
 interface SearchResult {
   docId: string;
@@ -78,16 +89,21 @@ async function handler(
     // Generate embedding for the query
     const queryEmbedding = await generateEmbeddings(query);
 
-    // Query all embeddings
-    let dbQuery = 'SELECT * FROM c';
-    const params: { name: string; value: unknown }[] = [];
+    // Query embeddings (with limit to prevent memory issues)
+    // For production scale, use Azure AI Search instead
+    let dbQuery = `SELECT TOP ${MAX_CHUNKS_IN_MEMORY} * FROM c`;
+    const params: SqlParameter[] = [];
 
     if (category) {
-      dbQuery += ' WHERE c.category = @category';
+      dbQuery = `SELECT TOP ${MAX_CHUNKS_IN_MEMORY} * FROM c WHERE c.category = @category`;
       params.push({ name: '@category', value: category });
     }
 
     const chunks = await queryDocuments<DocChunk>('doc_embeddings', dbQuery, params);
+
+    if (chunks.length >= MAX_CHUNKS_IN_MEMORY) {
+      context.warn(`Search limited to ${MAX_CHUNKS_IN_MEMORY} chunks. Consider using Azure AI Search for larger datasets.`);
+    }
 
     // Calculate similarity and sort
     const scored = chunks.map((chunk) => ({
