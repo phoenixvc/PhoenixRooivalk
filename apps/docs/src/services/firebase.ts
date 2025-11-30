@@ -306,6 +306,7 @@ export interface UserProgress {
       scrollProgress: number;
       timeSpentMs?: number; // Time spent reading this doc in milliseconds
       lastReadAt?: string; // Last time this doc was read
+      engagementScore?: number; // Engagement ratio based on reading time vs expected time
     };
   };
   achievements: {
