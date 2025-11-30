@@ -18,3 +18,13 @@ export {
   supportService,
   type ContactFormData,
 } from "./support.service";
+
+export { AIService, aiService } from "./ai.service";
+
+export {
+  IndexingService,
+  indexingService,
+  type DocumentChunk,
+  type DocumentMetadata,
+  type IndexingResult,
+} from "./indexing.service";
