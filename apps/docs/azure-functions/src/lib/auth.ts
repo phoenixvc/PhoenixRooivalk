@@ -124,10 +124,23 @@ export async function getTokenClaims(
 }
 
 /**
- * Get token claims from request (synchronous, for legacy compatibility)
- * NOTE: Does not validate signature - prefer requireAuthAsync for secure validation
+ * Decode JWT payload without signature verification (for sync legacy use)
+ * WARNING: Only use when you cannot use async validation
  */
-export function getTokenClaims(request: HttpRequest): TokenClaims | null {
+function decodeJwtPayload(token: string): TokenClaims | null {
+  try {
+    const [, payload] = token.split(".");
+    return JSON.parse(Buffer.from(payload, "base64url").toString());
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Get token claims from request (synchronous, for legacy compatibility)
+ * NOTE: Does not validate signature - prefer getTokenClaimsAsync for secure validation
+ */
+export function getTokenClaimsSync(request: HttpRequest): TokenClaims | null {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return null;
@@ -139,10 +152,10 @@ export function getTokenClaims(request: HttpRequest): TokenClaims | null {
 
 /**
  * Extract user ID from request (synchronous)
- * NOTE: Does not validate signature - prefer requireAuthAsync for secure validation
+ * NOTE: Does not validate signature - prefer getUserIdFromRequestAsync for secure validation
  */
-export function getUserIdFromRequest(request: HttpRequest): string | null {
-  const claims = getTokenClaims(request);
+export function getUserIdFromRequestSync(request: HttpRequest): string | null {
+  const claims = getTokenClaimsSync(request);
   return claims?.sub || claims?.oid || null;
 }
 
@@ -189,7 +202,7 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
   }
 
   const token = authHeader.substring(7);
-  const claims = await validateJwtToken(token);
+  const claims = await validateToken(token);
 
   if (!claims) {
     return {
@@ -270,32 +283,6 @@ export function requireAuth(request: HttpRequest): {
       },
     };
   }
-}
-
-/**
- * Require authentication with proper validation (async)
- */
-export async function requireAuthAsync(request: HttpRequest): Promise<{
-  authenticated: boolean;
-  userId: string | null;
-  claims: TokenClaims | null;
-  error?: { status: number; body: object };
-}> {
-  const claims = await getTokenClaims(request);
-
-  if (!claims) {
-    return {
-      authenticated: false,
-      userId: null,
-      claims: null,
-      error: {
-        status: 401,
-        body: { error: "Authentication required", code: "unauthenticated" },
-      },
-    };
-  }
-
-  return { authenticated: true, userId: claims.sub, claims };
 }
 
 /**

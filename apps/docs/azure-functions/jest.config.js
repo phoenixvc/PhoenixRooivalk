@@ -7,6 +7,9 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
+  moduleNameMapper: {
+    "^uuid$": "<rootDir>/src/__tests__/__mocks__/uuid.ts",
+  },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverageFrom: [
     "src/**/*.ts",

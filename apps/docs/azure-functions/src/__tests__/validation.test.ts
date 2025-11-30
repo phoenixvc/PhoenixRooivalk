@@ -49,7 +49,7 @@ describe("Validation Schemas", () => {
     it("should accept optional fields", () => {
       const article = {
         title: "Test Article",
-        content: "Content",
+        content: "This is the content of the test article with more than 10 characters.",
         category: "technology",
         source: "test-source",
         summary: "A summary",
