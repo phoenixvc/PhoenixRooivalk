@@ -293,7 +293,15 @@ source_env_file() {
             [[ -z "$line" ]] && continue
             # Only process lines with = that look like variable assignments
             if [[ "$line" =~ ^[A-Za-z_][A-Za-z0-9_]*= ]]; then
-                export "$line" 2>/dev/null || true
+                # Split line into key and value, then export properly
+                local key="${line%%=*}"
+                local value="${line#*=}"
+                # Remove surrounding quotes from value if present
+                value="${value#\"}"
+                value="${value%\"}"
+                value="${value#\'}"
+                value="${value%\'}"
+                export "$key=$value" 2>/dev/null || true
             fi
         done < "$file"
     fi
