@@ -459,7 +459,6 @@ h3 {
 }
 
 .footer__col {
-  flex: 1 !important;
   min-width: 0 !important;
 }
 
