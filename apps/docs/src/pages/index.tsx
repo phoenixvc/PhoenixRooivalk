@@ -182,25 +182,28 @@ export default function Home(): React.ReactElement {
         .marketing .feature-card p { color: var(--gray); }
 
         /* Tech */
-        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
-        .marketing .tech-list { list-style: none; padding: 0; }
-        .marketing .tech-item { display: flex; align-items: flex-start; margin-bottom: 1.2rem; padding: 1.2rem; background: var(--card-bg); border-radius: 10px; transition: all .3s; }
-        .marketing .tech-item:hover { transform: translateX(10px); background: rgba(249,115,22,0.1); }
-        .marketing .tech-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1.2rem; flex-shrink: 0; }
+        .marketing .tech-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; }
+        .marketing .tech-list { list-style: none; padding: 0; margin: 0; }
+        .marketing .tech-item { display: flex; align-items: flex-start; margin-bottom: 1rem; padding: 1.25rem; background: var(--card-bg); border-radius: 12px; transition: all .2s ease; }
+        .marketing .tech-item:last-child { margin-bottom: 0; }
+        .marketing .tech-item:hover { background: rgba(249,115,22,0.08); }
+        .marketing .tech-icon { width: 44px; height: 44px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem; flex-shrink: 0; font-size: 1.1rem; }
+        .marketing .tech-item h4 { margin: 0 0 0.25rem 0; font-size: 1rem; color: var(--light); }
+        .marketing .tech-item p { margin: 0; font-size: 0.9rem; color: var(--gray); line-height: 1.5; }
 
         /* Comparison */
-        .marketing .comparison-section { max-width: 1400px; margin: 0 auto; }
-        .marketing .comparison-table { overflow-x: auto; margin: 2rem auto 0; max-width: 1200px; }
-        .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; table-layout: fixed; }
-        .marketing th { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 1rem 0.75rem; text-align: left; font-weight: 800; font-size: 0.9rem; }
-        .marketing th:first-child { width: 22%; }
-        .marketing th:nth-child(2) { width: 18%; background: linear-gradient(135deg, var(--primary), #d97706); }
-        .marketing td { padding: 0.85rem 0.75rem; border-bottom: 1px solid rgba(249,115,22,0.1); font-size: 0.95rem; }
-        .marketing td:first-child { color: var(--gray); font-weight: 500; }
-        .marketing td:nth-child(2) { background: rgba(249,115,22,0.05); }
-        .marketing tr:hover { background: rgba(249,115,22,0.05); }
+        .marketing .comparison-section { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+        .marketing .comparison-table { overflow-x: auto; margin: 2rem auto 0; }
+        .marketing table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 12px; overflow: hidden; }
+        .marketing th { background: var(--primary); color: var(--dark); padding: 1rem 1.25rem; text-align: center; font-weight: 700; font-size: 0.85rem; }
+        .marketing th:first-child { text-align: left; width: 180px; }
+        .marketing th:nth-child(2) { background: #d97706; }
+        .marketing td { padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; text-align: center; }
+        .marketing td:first-child { color: var(--gray); font-weight: 500; text-align: left; }
+        .marketing td:nth-child(2) { background: rgba(249,115,22,0.05); font-weight: 600; }
+        .marketing tr:hover { background: rgba(255,255,255,0.02); }
         .marketing .check { color: rgb(34, 197, 94); font-size: 1.1rem; }
-        .marketing .cross { color: #ff4444; font-size: 1.1rem; }
+        .marketing .cross { color: rgb(239, 68, 68); font-size: 1.1rem; opacity: 0.7; }
 
         /* CTA */
         .marketing .cta-section { background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); text-align: center; }
