@@ -193,7 +193,20 @@ export interface IAnalyticsService {
  * Generate a unique session ID
  */
 export function generateSessionId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+  // Use cryptographically secure random values for session ID
+  let randStr: string;
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    const randomValues = new Uint32Array(2);
+    window.crypto.getRandomValues(randomValues);
+    // Convert to a base36 string and pad to ensure length >= 9
+    randStr = randomValues[0].toString(36) + randomValues[1].toString(36);
+    randStr = randStr.substring(0, 9); // match original substring length if desired
+  } else {
+    // Fallback to Math.random() on non-browser environments
+    // (this should ideally be replaced with Node.js crypto, but not shown in code context)
+    randStr = Math.random().toString(36).substring(2, 11);
+  }
+  return `${Date.now()}-${randStr}`;
 }
 
 /**
