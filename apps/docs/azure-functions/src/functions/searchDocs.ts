@@ -12,10 +12,15 @@
  * To use Azure AI Search instead, set AZURE_SEARCH_ENDPOINT and AZURE_SEARCH_KEY
  */
 
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
-import { SqlParameter } from '@azure/cosmos';
-import { queryDocuments } from '../lib/cosmos';
-import { generateEmbeddings, checkRateLimit } from '../lib/openai';
+import {
+  app,
+  HttpRequest,
+  HttpResponseInit,
+  InvocationContext,
+} from "@azure/functions";
+import { SqlParameter } from "@azure/cosmos";
+import { queryDocuments } from "../lib/cosmos";
+import { generateEmbeddings, checkRateLimit } from "../lib/openai";
 
 // Maximum chunks to load for in-memory search (memory protection)
 const MAX_CHUNKS_IN_MEMORY = 5000;
@@ -56,20 +61,20 @@ function cosineSimilarity(a: number[], b: number[]): number {
 
 async function handler(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   // Get client IP for rate limiting (anonymous users)
-  const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
+  const clientIp = request.headers.get("x-forwarded-for") || "unknown";
 
   if (!checkRateLimit(`search:${clientIp}`, 30, 60000)) {
     return {
       status: 429,
-      jsonBody: { error: 'Rate limit exceeded', code: 'resource-exhausted' },
+      jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },
     };
   }
 
   try {
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       query: string;
       category?: string;
       topK?: number;
@@ -77,10 +82,10 @@ async function handler(
 
     const { query, category, topK = 10 } = body;
 
-    if (!query || typeof query !== 'string') {
+    if (!query || typeof query !== "string") {
       return {
         status: 400,
-        jsonBody: { error: 'Query is required', code: 'invalid-argument' },
+        jsonBody: { error: "Query is required", code: "invalid-argument" },
       };
     }
 
@@ -96,13 +101,19 @@ async function handler(
 
     if (category) {
       dbQuery = `SELECT TOP ${MAX_CHUNKS_IN_MEMORY} * FROM c WHERE c.category = @category`;
-      params.push({ name: '@category', value: category });
+      params.push({ name: "@category", value: category });
     }
 
-    const chunks = await queryDocuments<DocChunk>('doc_embeddings', dbQuery, params);
+    const chunks = await queryDocuments<DocChunk>(
+      "doc_embeddings",
+      dbQuery,
+      params,
+    );
 
     if (chunks.length >= MAX_CHUNKS_IN_MEMORY) {
-      context.warn(`Search limited to ${MAX_CHUNKS_IN_MEMORY} chunks. Consider using Azure AI Search for larger datasets.`);
+      context.warn(
+        `Search limited to ${MAX_CHUNKS_IN_MEMORY} chunks. Consider using Azure AI Search for larger datasets.`,
+      );
     }
 
     // Calculate similarity and sort
@@ -110,7 +121,7 @@ async function handler(
       docId: chunk.docId,
       title: chunk.title,
       section: chunk.section,
-      content: chunk.content.substring(0, 200) + '...',
+      content: chunk.content.substring(0, 200) + "...",
       score: cosineSimilarity(queryEmbedding, chunk.embedding),
     }));
 
@@ -124,16 +135,16 @@ async function handler(
 
     return { status: 200, jsonBody: { results } };
   } catch (error) {
-    context.error('Error searching:', error);
+    context.error("Error searching:", error);
     return {
       status: 500,
-      jsonBody: { error: 'Search failed', code: 'internal' },
+      jsonBody: { error: "Search failed", code: "internal" },
     };
   }
 }
 
-app.http('searchDocs', {
-  methods: ['POST'],
-  authLevel: 'anonymous',
+app.http("searchDocs", {
+  methods: ["POST"],
+  authLevel: "anonymous",
   handler,
 });

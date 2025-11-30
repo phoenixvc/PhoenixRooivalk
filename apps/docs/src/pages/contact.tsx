@@ -187,27 +187,31 @@ export default function Contact(): React.ReactElement {
           <section className={styles.inquirySection}>
             <h2>Select Inquiry Type</h2>
             <div className={styles.inquiryGrid}>
-              {(Object.entries(INQUIRY_TYPES) as [InquiryType, typeof INQUIRY_TYPES[InquiryType]][]).map(
-                ([key, inquiry]) => (
-                  <button
-                    key={key}
-                    className={`${styles.inquiryCard} ${selectedType === key ? styles.inquiryCardSelected : ""}`}
-                    onClick={() => setSelectedType(key)}
-                    type="button"
-                  >
-                    <span className={styles.inquiryIcon}>{inquiry.icon}</span>
-                    <h3>{inquiry.label}</h3>
-                    <p>{inquiry.description}</p>
-                  </button>
-                )
-              )}
+              {(
+                Object.entries(INQUIRY_TYPES) as [
+                  InquiryType,
+                  (typeof INQUIRY_TYPES)[InquiryType],
+                ][]
+              ).map(([key, inquiry]) => (
+                <button
+                  key={key}
+                  className={`${styles.inquiryCard} ${selectedType === key ? styles.inquiryCardSelected : ""}`}
+                  onClick={() => setSelectedType(key)}
+                  type="button"
+                >
+                  <span className={styles.inquiryIcon}>{inquiry.icon}</span>
+                  <h3>{inquiry.label}</h3>
+                  <p>{inquiry.description}</p>
+                </button>
+              ))}
             </div>
 
             {selectedType && (
               <div className={styles.inquiryAction}>
                 <p>
                   Click below to open your email client with a pre-filled
-                  template for <strong>{INQUIRY_TYPES[selectedType].label}</strong>.
+                  template for{" "}
+                  <strong>{INQUIRY_TYPES[selectedType].label}</strong>.
                 </p>
                 <a
                   href={generateMailtoLink(selectedType)}

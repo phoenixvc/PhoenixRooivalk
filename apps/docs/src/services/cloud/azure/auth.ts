@@ -11,13 +11,8 @@ import {
   IAuthService,
   checkIsAdmin,
   DEFAULT_ADMIN_DOMAINS,
-} from '../interfaces/auth';
-import {
-  CloudUser,
-  OAuthProvider,
-  UnsubscribeFn,
-  CloudServiceConfig,
-} from '../interfaces/types';
+} from "../interfaces/auth";
+import { CloudUser, OAuthProvider, UnsubscribeFn } from "../interfaces/types";
 
 /**
  * Azure AD B2C Configuration
@@ -70,18 +65,19 @@ export class AzureAuthService implements IAuthService {
 
     try {
       // Dynamically import MSAL to avoid bundling when not used
-      const msal = await import('@azure/msal-browser');
+      const msal = await import("@azure/msal-browser");
 
       const msalConfig = {
         auth: {
           clientId: this.config.clientId,
-          authority: this.config.authority ||
+          authority:
+            this.config.authority ||
             `https://${this.config.tenantId}.b2clogin.com/${this.config.tenantId}.onmicrosoft.com/B2C_1_SignUpSignIn`,
           redirectUri: this.config.redirectUri || window.location.origin,
           knownAuthorities: [`${this.config.tenantId}.b2clogin.com`],
         },
         cache: {
-          cacheLocation: 'localStorage',
+          cacheLocation: "localStorage",
           storeAuthStateInCookie: false,
         },
       };
@@ -104,22 +100,25 @@ export class AzureAuthService implements IAuthService {
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Azure Auth initialization failed:', error);
+      console.error("Azure Auth initialization failed:", error);
       return false;
     }
   }
 
   isConfigured(): boolean {
-    return this.config !== null && Boolean(this.config.clientId && this.config.tenantId);
+    return (
+      this.config !== null &&
+      Boolean(this.config.clientId && this.config.tenantId)
+    );
   }
 
   getMissingConfig(): string[] {
     const missing: string[] = [];
     if (!this.config) {
-      missing.push('Azure AD configuration');
+      missing.push("Azure AD configuration");
     } else {
-      if (!this.config.clientId) missing.push('AZURE_CLIENT_ID');
-      if (!this.config.tenantId) missing.push('AZURE_TENANT_ID');
+      if (!this.config.clientId) missing.push("AZURE_CLIENT_ID");
+      if (!this.config.tenantId) missing.push("AZURE_TENANT_ID");
     }
     return missing;
   }
@@ -145,15 +144,15 @@ export class AzureAuthService implements IAuthService {
   }
 
   async signInWithGoogle(): Promise<CloudUser | null> {
-    return this.signInWithProvider('google');
+    return this.signInWithProvider("google");
   }
 
   async signInWithGithub(): Promise<CloudUser | null> {
-    return this.signInWithProvider('github');
+    return this.signInWithProvider("github");
   }
 
   async signInWithMicrosoft(): Promise<CloudUser | null> {
-    return this.signInWithProvider('microsoft');
+    return this.signInWithProvider("microsoft");
   }
 
   async signOut(): Promise<void> {
@@ -166,7 +165,7 @@ export class AzureAuthService implements IAuthService {
       this.currentUser = null;
       this.notifyAuthStateChange(null);
     } catch (error) {
-      console.error('Sign-out error:', error);
+      console.error("Sign-out error:", error);
     }
   }
 
@@ -174,7 +173,9 @@ export class AzureAuthService implements IAuthService {
     return this.currentUser;
   }
 
-  onAuthStateChanged(callback: (user: CloudUser | null) => void): UnsubscribeFn {
+  onAuthStateChanged(
+    callback: (user: CloudUser | null) => void,
+  ): UnsubscribeFn {
     this.authStateCallbacks.add(callback);
 
     // Immediately call with current state
@@ -193,18 +194,18 @@ export class AzureAuthService implements IAuthService {
 
     try {
       const response = await this.msalInstance.acquireTokenSilent({
-        scopes: this.config?.scopes || ['openid', 'profile', 'email'],
+        scopes: this.config?.scopes || ["openid", "profile", "email"],
         account: accounts[0],
         forceRefresh,
       });
       return response.idToken;
     } catch (error) {
-      console.error('Error getting ID token:', error);
+      console.error("Error getting ID token:", error);
 
       // Try interactive if silent fails
       try {
         const response = await this.msalInstance.acquireTokenPopup({
-          scopes: this.config?.scopes || ['openid', 'profile', 'email'],
+          scopes: this.config?.scopes || ["openid", "profile", "email"],
         });
         return response.idToken;
       } catch {
@@ -213,7 +214,10 @@ export class AzureAuthService implements IAuthService {
     }
   }
 
-  isAdmin(user: CloudUser | null, adminDomains = DEFAULT_ADMIN_DOMAINS): boolean {
+  isAdmin(
+    user: CloudUser | null,
+    adminDomains = DEFAULT_ADMIN_DOMAINS,
+  ): boolean {
     return checkIsAdmin(user, adminDomains);
   }
 
@@ -223,23 +227,23 @@ export class AzureAuthService implements IAuthService {
 
   private getLoginRequest(provider: OAuthProvider) {
     const baseRequest = {
-      scopes: this.config?.scopes || ['openid', 'profile', 'email'],
+      scopes: this.config?.scopes || ["openid", "profile", "email"],
     };
 
     // For Azure AD B2C, identity providers are configured in user flows
     // The provider hint is passed via domain_hint or idp parameter
     switch (provider) {
-      case 'google':
+      case "google":
         return {
           ...baseRequest,
-          extraQueryParameters: { domain_hint: 'google.com' },
+          extraQueryParameters: { domain_hint: "google.com" },
         };
-      case 'github':
+      case "github":
         return {
           ...baseRequest,
-          extraQueryParameters: { domain_hint: 'github.com' },
+          extraQueryParameters: { domain_hint: "github.com" },
         };
-      case 'microsoft':
+      case "microsoft":
         return {
           ...baseRequest,
           // Microsoft is the default for Azure AD
@@ -266,7 +270,7 @@ export class AzureAuthService implements IAuthService {
       emailVerified: claims.email_verified || false,
       providerData: [
         {
-          providerId: claims.idp || 'azure',
+          providerId: claims.idp || "azure",
           uid: claims.sub || account.localAccountId,
           displayName: claims.name || null,
           email: claims.email || null,
@@ -283,7 +287,7 @@ export class AzureAuthService implements IAuthService {
       try {
         callback(user);
       } catch (error) {
-        console.error('Auth state callback error:', error);
+        console.error("Auth state callback error:", error);
       }
     });
   }

@@ -11,7 +11,7 @@ import {
   isSupported as isAnalyticsSupported,
   setUserId,
   setUserProperties as setGA4UserProperties,
-} from 'firebase/analytics';
+} from "firebase/analytics";
 import {
   getFirestore,
   collection,
@@ -22,8 +22,8 @@ import {
   increment,
   serverTimestamp,
   Firestore,
-} from 'firebase/firestore';
-import { FirebaseApp } from 'firebase/app';
+} from "firebase/firestore";
+import { FirebaseApp } from "firebase/app";
 import {
   IAnalyticsService,
   PageViewEvent,
@@ -33,7 +33,7 @@ import {
   UserProperties,
   getOrCreateSessionId,
   getOrCreateAnonymousId,
-} from '../interfaces/analytics';
+} from "../interfaces/analytics";
 
 /**
  * Rate limit configuration
@@ -75,16 +75,16 @@ class RateLimiter {
 export class FirebaseAnalyticsService implements IAnalyticsService {
   private db: Firestore | null = null;
   private ga4: Analytics | null = null;
-  private sessionId = '';
+  private sessionId = "";
   private currentPageStartTime = 0;
-  private currentPageUrl = '';
+  private currentPageUrl = "";
   private maxScrollDepth = 0;
   private initialized = false;
   private consentGranted = false;
   private rateLimiter = new RateLimiter();
 
   constructor(private app: FirebaseApp | null) {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       this.sessionId = getOrCreateSessionId();
     }
   }
@@ -95,10 +95,10 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
 
   hasConsent(): boolean {
     // Check for cookie consent
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
     try {
-      const consent = localStorage.getItem('phoenix-cookie-consent');
-      return consent === 'accepted' || consent === 'analytics';
+      const consent = localStorage.getItem("phoenix-cookie-consent");
+      return consent === "accepted" || consent === "analytics";
     } catch {
       return false;
     }
@@ -106,8 +106,11 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
 
   setConsent(granted: boolean): void {
     this.consentGranted = granted;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('phoenix-cookie-consent', granted ? 'accepted' : 'declined');
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "phoenix-cookie-consent",
+        granted ? "accepted" : "declined",
+      );
     }
   }
 
@@ -126,7 +129,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       this.initialized = true;
       await this.startSession();
     } catch (error) {
-      console.warn('Analytics initialization failed:', error);
+      console.warn("Analytics initialization failed:", error);
     }
   }
 
@@ -140,7 +143,13 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
 
   async trackPageView(event: PageViewEvent): Promise<void> {
     if (!this.hasConsent()) return;
-    if (!this.rateLimiter.check('pageViews', RATE_LIMITS.pageViews.max, RATE_LIMITS.pageViews.windowMs)) {
+    if (
+      !this.rateLimiter.check(
+        "pageViews",
+        RATE_LIMITS.pageViews.max,
+        RATE_LIMITS.pageViews.windowMs,
+      )
+    ) {
       return;
     }
 
@@ -165,7 +174,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     this.maxScrollDepth = 0;
 
     try {
-      await addDoc(collection(this.db, 'analytics_pageviews'), {
+      await addDoc(collection(this.db, "analytics_pageviews"), {
         ...event,
         userId: event.userId || getOrCreateAnonymousId(),
         sessionId: this.sessionId,
@@ -173,7 +182,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       });
 
       // Update session
-      const sessionRef = doc(this.db, 'analytics_sessions', this.sessionId);
+      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
       await updateDoc(sessionRef, {
         lastActivity: serverTimestamp(),
         pageViews: increment(1),
@@ -182,43 +191,49 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       });
 
       // Track to GA4
-      this.trackGA4Event('page_view', {
+      this.trackGA4Event("page_view", {
         page_path: event.pageUrl,
         page_title: event.pageTitle,
         is_authenticated: event.isAuthenticated,
       });
     } catch (error) {
-      console.warn('Page view tracking failed:', error);
+      console.warn("Page view tracking failed:", error);
     }
   }
 
   async trackTimeOnPage(event: TimeOnPageEvent): Promise<void> {
     if (!this.db || !this.hasConsent()) return;
-    if (!this.rateLimiter.check('timeOnPage', RATE_LIMITS.timeOnPage.max, RATE_LIMITS.timeOnPage.windowMs)) {
+    if (
+      !this.rateLimiter.check(
+        "timeOnPage",
+        RATE_LIMITS.timeOnPage.max,
+        RATE_LIMITS.timeOnPage.windowMs,
+      )
+    ) {
       return;
     }
 
     try {
-      await addDoc(collection(this.db, 'analytics_timeonpage'), {
+      await addDoc(collection(this.db, "analytics_timeonpage"), {
         ...event,
         timestamp: serverTimestamp(),
       });
 
       // Update session total time
-      const sessionRef = doc(this.db, 'analytics_sessions', this.sessionId);
+      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
       await updateDoc(sessionRef, {
         totalTimeMs: increment(event.timeSpentMs),
         lastActivity: serverTimestamp(),
       });
 
       // Track to GA4
-      this.trackGA4Event('user_engagement', {
+      this.trackGA4Event("user_engagement", {
         engagement_time_msec: event.timeSpentMs,
         page_path: event.pageUrl,
         scroll_depth: event.maxScrollDepth,
       });
     } catch (error) {
-      console.warn('Time tracking failed:', error);
+      console.warn("Time tracking failed:", error);
     }
   }
 
@@ -236,8 +251,14 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     if (!this.hasConsent()) return;
 
     // Always allow signup_completed for accuracy
-    if (event.eventType !== 'signup_completed') {
-      if (!this.rateLimiter.check('conversions', RATE_LIMITS.conversions.max, RATE_LIMITS.conversions.windowMs)) {
+    if (event.eventType !== "signup_completed") {
+      if (
+        !this.rateLimiter.check(
+          "conversions",
+          RATE_LIMITS.conversions.max,
+          RATE_LIMITS.conversions.windowMs,
+        )
+      ) {
         return;
       }
     }
@@ -246,7 +267,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     if (!this.db) return;
 
     try {
-      await addDoc(collection(this.db, 'analytics_conversions'), {
+      await addDoc(collection(this.db, "analytics_conversions"), {
         ...event,
         userId: event.userId || getOrCreateAnonymousId(),
         sessionId: this.sessionId,
@@ -254,8 +275,8 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       });
 
       // Update session if signup conversion
-      if (event.eventType === 'signup_completed') {
-        const sessionRef = doc(this.db, 'analytics_sessions', this.sessionId);
+      if (event.eventType === "signup_completed") {
+        const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
         await updateDoc(sessionRef, {
           convertedToSignup: true,
           userId: event.userId,
@@ -265,36 +286,41 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       // Track to GA4
       const ga4EventName = this.mapConversionToGA4(event.eventType);
       this.trackGA4Event(ga4EventName, {
-        event_category: 'conversion',
+        event_category: "conversion",
         event_label: event.eventType,
         ...event.eventData,
       });
     } catch (error) {
-      console.warn('Conversion tracking failed:', error);
+      console.warn("Conversion tracking failed:", error);
     }
   }
 
   async trackTeaserView(pageUrl: string): Promise<void> {
     await this.trackConversion({
-      eventType: 'teaser_view',
+      eventType: "teaser_view",
       sessionId: this.sessionId,
       pageUrl,
       eventData: { pageUrl },
     });
   }
 
-  async trackSignupPromptShown(pageUrl: string, trigger: string): Promise<void> {
+  async trackSignupPromptShown(
+    pageUrl: string,
+    trigger: string,
+  ): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_prompt_shown',
+      eventType: "signup_prompt_shown",
       sessionId: this.sessionId,
       pageUrl,
       eventData: { pageUrl, trigger },
     });
   }
 
-  async trackSignupStarted(method: 'google' | 'github' | 'microsoft'): Promise<void> {
+  async trackSignupStarted(
+    method: "google" | "github" | "microsoft",
+  ): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_started',
+      eventType: "signup_started",
       sessionId: this.sessionId,
       pageUrl: this.currentPageUrl || window.location.pathname,
       eventData: { method },
@@ -303,7 +329,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
 
   async trackSignupCompleted(userId: string, method: string): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_completed',
+      eventType: "signup_completed",
       userId,
       sessionId: this.sessionId,
       pageUrl: this.currentPageUrl || window.location.pathname,
@@ -322,13 +348,13 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
 
     if (this.db) {
       try {
-        await addDoc(collection(this.db, 'analytics_events'), {
+        await addDoc(collection(this.db, "analytics_events"), {
           ...event,
           sessionId: this.sessionId,
           timestamp: serverTimestamp(),
         });
       } catch (error) {
-        console.warn('Custom event tracking failed:', error);
+        console.warn("Custom event tracking failed:", error);
       }
     }
   }
@@ -342,7 +368,7 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
       }
       setGA4UserProperties(this.ga4, properties);
     } catch (error) {
-      console.warn('Setting user properties failed:', error);
+      console.warn("Setting user properties failed:", error);
     }
   }
 
@@ -354,22 +380,30 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     if (!this.db) return;
 
     try {
-      const sessionRef = doc(this.db, 'analytics_sessions', this.sessionId);
-      await setDoc(sessionRef, {
-        sessionId: this.sessionId,
-        userId: null,
-        startTime: serverTimestamp(),
-        lastActivity: serverTimestamp(),
-        pageViews: 0,
-        totalTimeMs: 0,
-        pagesVisited: [],
-        isAuthenticated: false,
-        convertedToSignup: false,
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
-        referrer: typeof document !== 'undefined' ? document.referrer || 'direct' : 'direct',
-      }, { merge: true });
+      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
+      await setDoc(
+        sessionRef,
+        {
+          sessionId: this.sessionId,
+          userId: null,
+          startTime: serverTimestamp(),
+          lastActivity: serverTimestamp(),
+          pageViews: 0,
+          totalTimeMs: 0,
+          pagesVisited: [],
+          isAuthenticated: false,
+          convertedToSignup: false,
+          userAgent:
+            typeof navigator !== "undefined" ? navigator.userAgent : "",
+          referrer:
+            typeof document !== "undefined"
+              ? document.referrer || "direct"
+              : "direct",
+        },
+        { merge: true },
+      );
     } catch (error) {
-      console.warn('Session init failed:', error);
+      console.warn("Session init failed:", error);
     }
   }
 
@@ -386,18 +420,21 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     }
   }
 
-  async updateSessionAuth(userId: string, isAuthenticated: boolean): Promise<void> {
+  async updateSessionAuth(
+    userId: string,
+    isAuthenticated: boolean,
+  ): Promise<void> {
     if (!this.db) return;
 
     try {
-      const sessionRef = doc(this.db, 'analytics_sessions', this.sessionId);
+      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
       await updateDoc(sessionRef, {
         userId,
         isAuthenticated,
         lastActivity: serverTimestamp(),
       });
     } catch (error) {
-      console.warn('Session auth update failed:', error);
+      console.warn("Session auth update failed:", error);
     }
   }
 
@@ -415,15 +452,15 @@ export class FirebaseAnalyticsService implements IAnalyticsService {
     }
   }
 
-  private mapConversionToGA4(eventType: ConversionEvent['eventType']): string {
-    const mapping: Record<ConversionEvent['eventType'], string> = {
-      teaser_view: 'view_item',
-      signup_prompt_shown: 'view_promotion',
-      signup_started: 'begin_checkout',
-      signup_completed: 'sign_up',
-      first_doc_read: 'tutorial_complete',
-      achievement_unlocked: 'unlock_achievement',
-      path_completed: 'level_end',
+  private mapConversionToGA4(eventType: ConversionEvent["eventType"]): string {
+    const mapping: Record<ConversionEvent["eventType"], string> = {
+      teaser_view: "view_item",
+      signup_prompt_shown: "view_promotion",
+      signup_started: "begin_checkout",
+      signup_completed: "sign_up",
+      first_doc_read: "tutorial_complete",
+      achievement_unlocked: "unlock_achievement",
+      path_completed: "level_end",
     };
     return mapping[eventType] || eventType;
   }

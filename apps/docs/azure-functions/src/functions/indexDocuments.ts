@@ -10,10 +10,15 @@
  * 3. Via webhook when docs are updated
  */
 
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
-import { getContainer, upsertDocument } from '../lib/cosmos';
-import { generateEmbeddings } from '../lib/openai';
-import { validateAuthHeader } from '../lib/auth';
+import {
+  app,
+  HttpRequest,
+  HttpResponseInit,
+  InvocationContext,
+} from "@azure/functions";
+import { getContainer, upsertDocument } from "../lib/cosmos";
+import { generateEmbeddings } from "../lib/openai";
+import { validateAuthHeader } from "../lib/auth";
 
 interface DocumentChunk {
   id: string;
@@ -45,7 +50,7 @@ interface IndexRequest {
 function chunkText(
   text: string,
   chunkSize: number = 1000,
-  overlap: number = 200
+  overlap: number = 200,
 ): string[] {
   const chunks: string[] = [];
   let start = 0;
@@ -65,11 +70,13 @@ function chunkText(
 /**
  * Extract sections from markdown content
  */
-function extractSections(content: string): Array<{ heading: string; content: string }> {
+function extractSections(
+  content: string,
+): Array<{ heading: string; content: string }> {
   const sections: Array<{ heading: string; content: string }> = [];
-  const lines = content.split('\n');
+  const lines = content.split("\n");
 
-  let currentHeading = 'Introduction';
+  let currentHeading = "Introduction";
   let currentContent: string[] = [];
 
   for (const line of lines) {
@@ -80,7 +87,7 @@ function extractSections(content: string): Array<{ heading: string; content: str
       if (currentContent.length > 0) {
         sections.push({
           heading: currentHeading,
-          content: currentContent.join('\n').trim(),
+          content: currentContent.join("\n").trim(),
         });
       }
 
@@ -95,7 +102,7 @@ function extractSections(content: string): Array<{ heading: string; content: str
   if (currentContent.length > 0) {
     sections.push({
       heading: currentHeading,
-      content: currentContent.join('\n').trim(),
+      content: currentContent.join("\n").trim(),
     });
   }
 
@@ -106,10 +113,10 @@ function extractSections(content: string): Array<{ heading: string; content: str
  * Index a single document
  */
 async function indexDocument(
-  doc: IndexRequest['documents'][0],
+  doc: IndexRequest["documents"][0],
   chunkSize: number,
   overlap: number,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<number> {
   const sections = extractSections(doc.content);
   let chunksIndexed = 0;
@@ -120,13 +127,13 @@ async function indexDocument(
     const chunks = chunkText(section.content, chunkSize, overlap);
 
     for (let i = 0; i < chunks.length; i++) {
-      const chunkId = `${doc.id}_${section.heading.toLowerCase().replace(/\s+/g, '-')}_${i}`;
+      const chunkId = `${doc.id}_${section.heading.toLowerCase().replace(/\s+/g, "-")}_${i}`;
       const chunkContent = chunks[i];
 
       try {
         // Generate embedding
         const embedding = await generateEmbeddings(
-          `${doc.title} - ${section.heading}\n\n${chunkContent}`
+          `${doc.title} - ${section.heading}\n\n${chunkContent}`,
         );
 
         const chunk: DocumentChunk = {
@@ -135,13 +142,13 @@ async function indexDocument(
           title: doc.title,
           section: section.heading,
           content: chunkContent,
-          category: doc.category || 'general',
-          url: doc.url || '',
+          category: doc.category || "general",
+          url: doc.url || "",
           embedding,
           indexedAt: new Date().toISOString(),
         };
 
-        await upsertDocument('doc_embeddings', chunk);
+        await upsertDocument("doc_embeddings", chunk);
         chunksIndexed++;
 
         context.log(`Indexed chunk: ${chunkId}`);
@@ -162,21 +169,23 @@ async function indexDocument(
  */
 async function httpHandler(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   // Require admin authentication for indexing
-  const authResult = await validateAuthHeader(request.headers.get('authorization'));
+  const authResult = await validateAuthHeader(
+    request.headers.get("authorization"),
+  );
   if (!authResult.valid) {
     return {
       status: 401,
-      jsonBody: { error: 'Unauthorized', code: 'unauthenticated' },
+      jsonBody: { error: "Unauthorized", code: "unauthenticated" },
     };
   }
 
   if (!authResult.isAdmin) {
     return {
       status: 403,
-      jsonBody: { error: 'Admin access required', code: 'permission-denied' },
+      jsonBody: { error: "Admin access required", code: "permission-denied" },
     };
   }
 
@@ -187,23 +196,27 @@ async function httpHandler(
     if (!documents || !Array.isArray(documents)) {
       return {
         status: 400,
-        jsonBody: { error: 'documents array is required', code: 'invalid-argument' },
+        jsonBody: {
+          error: "documents array is required",
+          code: "invalid-argument",
+        },
       };
     }
 
     context.log(`Indexing ${documents.length} documents...`);
 
     let totalChunks = 0;
-    const results: Array<{ docId: string; chunks: number; status: string }> = [];
+    const results: Array<{ docId: string; chunks: number; status: string }> =
+      [];
 
     for (const doc of documents) {
       try {
         const chunks = await indexDocument(doc, chunkSize, overlap, context);
         totalChunks += chunks;
-        results.push({ docId: doc.id, chunks, status: 'success' });
+        results.push({ docId: doc.id, chunks, status: "success" });
       } catch (error) {
         context.error(`Failed to index doc ${doc.id}:`, error);
-        results.push({ docId: doc.id, chunks: 0, status: 'failed' });
+        results.push({ docId: doc.id, chunks: 0, status: "failed" });
       }
     }
 
@@ -215,10 +228,10 @@ async function httpHandler(
       },
     };
   } catch (error) {
-    context.error('Indexing error:', error);
+    context.error("Indexing error:", error);
     return {
       status: 500,
-      jsonBody: { error: 'Indexing failed', code: 'internal' },
+      jsonBody: { error: "Indexing failed", code: "internal" },
     };
   }
 }
@@ -228,31 +241,33 @@ async function httpHandler(
  */
 async function deleteDocumentEmbeddings(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const authResult = await validateAuthHeader(request.headers.get('authorization'));
+  const authResult = await validateAuthHeader(
+    request.headers.get("authorization"),
+  );
   if (!authResult.valid) {
-    return { status: 401, jsonBody: { error: 'Unauthorized' } };
+    return { status: 401, jsonBody: { error: "Unauthorized" } };
   }
 
   if (!authResult.isAdmin) {
-    return { status: 403, jsonBody: { error: 'Admin access required' } };
+    return { status: 403, jsonBody: { error: "Admin access required" } };
   }
 
   try {
     const { docId } = (await request.json()) as { docId: string };
 
     if (!docId) {
-      return { status: 400, jsonBody: { error: 'docId is required' } };
+      return { status: 400, jsonBody: { error: "docId is required" } };
     }
 
-    const container = getContainer('doc_embeddings');
+    const container = getContainer("doc_embeddings");
 
     // Query and delete all chunks for this doc
     const { resources } = await container.items
       .query({
-        query: 'SELECT c.id FROM c WHERE c.docId = @docId',
-        parameters: [{ name: '@docId', value: docId }],
+        query: "SELECT c.id FROM c WHERE c.docId = @docId",
+        parameters: [{ name: "@docId", value: docId }],
       })
       .fetchAll();
 
@@ -267,8 +282,8 @@ async function deleteDocumentEmbeddings(
       jsonBody: { message: `Deleted ${deleted} chunks for document ${docId}` },
     };
   } catch (error) {
-    context.error('Delete error:', error);
-    return { status: 500, jsonBody: { error: 'Delete failed' } };
+    context.error("Delete error:", error);
+    return { status: 500, jsonBody: { error: "Delete failed" } };
   }
 }
 
@@ -277,24 +292,24 @@ async function deleteDocumentEmbeddings(
  */
 async function getStats(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
-    const container = await getContainer('doc_embeddings');
+    const container = await getContainer("doc_embeddings");
 
     // Get total count
     const { resources: countResult } = await container.items
-      .query({ query: 'SELECT VALUE COUNT(1) FROM c' })
+      .query({ query: "SELECT VALUE COUNT(1) FROM c" })
       .fetchAll();
 
     // Get docs count
     const { resources: docsResult } = await container.items
-      .query({ query: 'SELECT DISTINCT VALUE c.docId FROM c' })
+      .query({ query: "SELECT DISTINCT VALUE c.docId FROM c" })
       .fetchAll();
 
     // Get categories
     const { resources: categoriesResult } = await container.items
-      .query({ query: 'SELECT DISTINCT VALUE c.category FROM c' })
+      .query({ query: "SELECT DISTINCT VALUE c.category FROM c" })
       .fetchAll();
 
     return {
@@ -306,29 +321,29 @@ async function getStats(
       },
     };
   } catch (error) {
-    context.error('Stats error:', error);
-    return { status: 500, jsonBody: { error: 'Failed to get stats' } };
+    context.error("Stats error:", error);
+    return { status: 500, jsonBody: { error: "Failed to get stats" } };
   }
 }
 
 // Register endpoints
-app.http('indexDocuments', {
-  methods: ['POST'],
-  authLevel: 'anonymous',
-  route: 'index/documents',
+app.http("indexDocuments", {
+  methods: ["POST"],
+  authLevel: "anonymous",
+  route: "index/documents",
   handler: httpHandler,
 });
 
-app.http('deleteDocumentIndex', {
-  methods: ['DELETE'],
-  authLevel: 'anonymous',
-  route: 'index/documents',
+app.http("deleteDocumentIndex", {
+  methods: ["DELETE"],
+  authLevel: "anonymous",
+  route: "index/documents",
   handler: deleteDocumentEmbeddings,
 });
 
-app.http('indexStats', {
-  methods: ['GET'],
-  authLevel: 'anonymous',
-  route: 'index/stats',
+app.http("indexStats", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "index/stats",
   handler: getStats,
 });

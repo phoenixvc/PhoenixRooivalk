@@ -16,7 +16,7 @@ import {
   UserProperties,
   getOrCreateSessionId,
   getOrCreateAnonymousId,
-} from '../interfaces/analytics';
+} from "../interfaces/analytics";
 
 /**
  * Azure Application Insights Configuration
@@ -31,9 +31,9 @@ export interface AzureAnalyticsConfig {
  */
 export class AzureAnalyticsService implements IAnalyticsService {
   private appInsights: any = null; // ApplicationInsights
-  private sessionId = '';
+  private sessionId = "";
   private currentPageStartTime = 0;
-  private currentPageUrl = '';
+  private currentPageUrl = "";
   private maxScrollDepth = 0;
   private initialized = false;
   private consentGranted = false;
@@ -41,8 +41,8 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
   constructor(config?: AzureAnalyticsConfig) {
     this.config = config || null;
-    if (typeof window !== 'undefined') {
-      this.sessionId = getOrCreateSessionId('azure-analytics-session');
+    if (typeof window !== "undefined") {
+      this.sessionId = getOrCreateSessionId("azure-analytics-session");
     }
   }
 
@@ -51,10 +51,10 @@ export class AzureAnalyticsService implements IAnalyticsService {
   }
 
   hasConsent(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
     try {
-      const consent = localStorage.getItem('phoenix-cookie-consent');
-      return consent === 'accepted' || consent === 'analytics';
+      const consent = localStorage.getItem("phoenix-cookie-consent");
+      return consent === "accepted" || consent === "analytics";
     } catch {
       return false;
     }
@@ -62,8 +62,11 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
   setConsent(granted: boolean): void {
     this.consentGranted = granted;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('phoenix-cookie-consent', granted ? 'accepted' : 'declined');
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "phoenix-cookie-consent",
+        granted ? "accepted" : "declined",
+      );
     }
   }
 
@@ -72,7 +75,8 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
     try {
       // Dynamically import Application Insights
-      const { ApplicationInsights } = await import('@microsoft/applicationinsights-web');
+      const { ApplicationInsights } =
+        await import("@microsoft/applicationinsights-web");
 
       this.appInsights = new ApplicationInsights({
         config: {
@@ -92,7 +96,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
       await this.startSession();
     } catch (error) {
-      console.warn('Azure Analytics initialization failed:', error);
+      console.warn("Azure Analytics initialization failed:", error);
     }
   }
 
@@ -133,7 +137,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         uri: event.pageUrl,
         refUri: event.referrer,
         properties: {
-          userId: event.userId || getOrCreateAnonymousId('azure-anonymous-id'),
+          userId: event.userId || getOrCreateAnonymousId("azure-anonymous-id"),
           sessionId: this.sessionId,
           isAuthenticated: event.isAuthenticated,
           screenWidth: event.screenWidth,
@@ -141,7 +145,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         },
       });
     } catch (error) {
-      console.warn('Page view tracking failed:', error);
+      console.warn("Page view tracking failed:", error);
     }
   }
 
@@ -150,13 +154,13 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
     try {
       this.appInsights.trackEvent({
-        name: 'TimeOnPage',
+        name: "TimeOnPage",
         properties: {
           pageUrl: event.pageUrl,
           timeSpentMs: event.timeSpentMs,
           maxScrollDepth: event.maxScrollDepth,
           completed: event.completed,
-          userId: event.userId || getOrCreateAnonymousId('azure-anonymous-id'),
+          userId: event.userId || getOrCreateAnonymousId("azure-anonymous-id"),
           sessionId: event.sessionId,
         },
         measurements: {
@@ -165,7 +169,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         },
       });
     } catch (error) {
-      console.warn('Time tracking failed:', error);
+      console.warn("Time tracking failed:", error);
     }
   }
 
@@ -189,50 +193,59 @@ export class AzureAnalyticsService implements IAnalyticsService {
         name: `Conversion_${event.eventType}`,
         properties: {
           eventType: event.eventType,
-          userId: event.userId || getOrCreateAnonymousId('azure-anonymous-id'),
+          userId: event.userId || getOrCreateAnonymousId("azure-anonymous-id"),
           sessionId: event.sessionId,
           pageUrl: event.pageUrl,
           ...event.eventData,
         },
       });
     } catch (error) {
-      console.warn('Conversion tracking failed:', error);
+      console.warn("Conversion tracking failed:", error);
     }
   }
 
   async trackTeaserView(pageUrl: string): Promise<void> {
     await this.trackConversion({
-      eventType: 'teaser_view',
+      eventType: "teaser_view",
       sessionId: this.sessionId,
       pageUrl,
       eventData: { pageUrl },
     });
   }
 
-  async trackSignupPromptShown(pageUrl: string, trigger: string): Promise<void> {
+  async trackSignupPromptShown(
+    pageUrl: string,
+    trigger: string,
+  ): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_prompt_shown',
+      eventType: "signup_prompt_shown",
       sessionId: this.sessionId,
       pageUrl,
       eventData: { pageUrl, trigger },
     });
   }
 
-  async trackSignupStarted(method: 'google' | 'github' | 'microsoft'): Promise<void> {
+  async trackSignupStarted(
+    method: "google" | "github" | "microsoft",
+  ): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_started',
+      eventType: "signup_started",
       sessionId: this.sessionId,
-      pageUrl: this.currentPageUrl || (typeof window !== 'undefined' ? window.location.pathname : ''),
+      pageUrl:
+        this.currentPageUrl ||
+        (typeof window !== "undefined" ? window.location.pathname : ""),
       eventData: { method },
     });
   }
 
   async trackSignupCompleted(userId: string, method: string): Promise<void> {
     await this.trackConversion({
-      eventType: 'signup_completed',
+      eventType: "signup_completed",
       userId,
       sessionId: this.sessionId,
-      pageUrl: this.currentPageUrl || (typeof window !== 'undefined' ? window.location.pathname : ''),
+      pageUrl:
+        this.currentPageUrl ||
+        (typeof window !== "undefined" ? window.location.pathname : ""),
       eventData: { method },
     });
   }
@@ -253,7 +266,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         },
       });
     } catch (error) {
-      console.warn('Custom event tracking failed:', error);
+      console.warn("Custom event tracking failed:", error);
     }
   }
 
@@ -271,7 +284,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         Object.assign(envelope.data, properties);
       });
     } catch (error) {
-      console.warn('Setting user properties failed:', error);
+      console.warn("Setting user properties failed:", error);
     }
   }
 
@@ -284,15 +297,19 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
     try {
       this.appInsights.trackEvent({
-        name: 'SessionStart',
+        name: "SessionStart",
         properties: {
           sessionId: this.sessionId,
-          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
-          referrer: typeof document !== 'undefined' ? document.referrer || 'direct' : 'direct',
+          userAgent:
+            typeof navigator !== "undefined" ? navigator.userAgent : "",
+          referrer:
+            typeof document !== "undefined"
+              ? document.referrer || "direct"
+              : "direct",
         },
       });
     } catch (error) {
-      console.warn('Session start tracking failed:', error);
+      console.warn("Session start tracking failed:", error);
     }
   }
 
@@ -312,18 +329,21 @@ export class AzureAnalyticsService implements IAnalyticsService {
 
     try {
       this.appInsights.trackEvent({
-        name: 'SessionEnd',
+        name: "SessionEnd",
         properties: {
           sessionId: this.sessionId,
         },
       });
       this.appInsights.flush();
     } catch (error) {
-      console.warn('Session end tracking failed:', error);
+      console.warn("Session end tracking failed:", error);
     }
   }
 
-  async updateSessionAuth(userId: string, isAuthenticated: boolean): Promise<void> {
+  async updateSessionAuth(
+    userId: string,
+    isAuthenticated: boolean,
+  ): Promise<void> {
     if (!this.appInsights) return;
 
     try {
@@ -334,7 +354,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
       }
 
       this.appInsights.trackEvent({
-        name: 'SessionAuthUpdate',
+        name: "SessionAuthUpdate",
         properties: {
           sessionId: this.sessionId,
           userId,
@@ -342,7 +362,7 @@ export class AzureAnalyticsService implements IAnalyticsService {
         },
       });
     } catch (error) {
-      console.warn('Session auth update failed:', error);
+      console.warn("Session auth update failed:", error);
     }
   }
 }

@@ -5,7 +5,16 @@
  * Implementations: Firebase Analytics (GA4), Azure Application Insights
  */
 
-import { UnsubscribeFn } from './types';
+// Import Node.js crypto in non-browser environments for secure random generation
+let nodeCrypto: typeof import("crypto") | null = null;
+if (typeof window === "undefined") {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    nodeCrypto = require("crypto");
+  } catch {
+    nodeCrypto = null;
+  }
+}
 
 /**
  * Page view event data
@@ -38,13 +47,13 @@ export interface TimeOnPageEvent {
  * Conversion event types
  */
 export type ConversionEventType =
-  | 'teaser_view'
-  | 'signup_prompt_shown'
-  | 'signup_started'
-  | 'signup_completed'
-  | 'first_doc_read'
-  | 'achievement_unlocked'
-  | 'path_completed';
+  | "teaser_view"
+  | "signup_prompt_shown"
+  | "signup_started"
+  | "signup_completed"
+  | "first_doc_read"
+  | "achievement_unlocked"
+  | "path_completed";
 
 /**
  * Conversion event data
@@ -70,7 +79,7 @@ export interface CustomEvent {
  */
 export interface UserProperties {
   userId?: string;
-  userType?: 'anonymous' | 'authenticated';
+  userType?: "anonymous" | "authenticated";
   roles?: string[];
   level?: number;
   [key: string]: unknown;
@@ -148,7 +157,7 @@ export interface IAnalyticsService {
   /**
    * Track signup started
    */
-  trackSignupStarted(method: 'google' | 'github' | 'microsoft'): Promise<void>;
+  trackSignupStarted(method: "google" | "github" | "microsoft"): Promise<void>;
 
   /**
    * Track signup completed
@@ -195,16 +204,32 @@ export interface IAnalyticsService {
 export function generateSessionId(): string {
   // Use cryptographically secure random values for session ID
   let randStr: string;
-  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+  if (
+    typeof window !== "undefined" &&
+    window.crypto &&
+    window.crypto.getRandomValues
+  ) {
     const randomValues = new Uint32Array(2);
     window.crypto.getRandomValues(randomValues);
     // Convert to a base36 string and pad to ensure length >= 9
     randStr = randomValues[0].toString(36) + randomValues[1].toString(36);
     randStr = randStr.substring(0, 9); // match original substring length if desired
+  } else if (nodeCrypto && nodeCrypto.randomBytes) {
+    // Use Node.js crypto for secure random in server (non-browser) environments
+    const buffer = nodeCrypto.randomBytes(8);
+    randStr = Array.from(buffer)
+      .map((b) => b.toString(36).padStart(2, "0"))
+      .join("")
+      .substring(0, 9);
   } else {
-    // Fallback to Math.random() on non-browser environments
-    // (this should ideally be replaced with Node.js crypto, but not shown in code context)
-    randStr = Math.random().toString(36).substring(2, 11);
+    // Last resort fallback - should rarely happen in practice
+    // Use Date.now() which is deterministic but at least not predictable
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn(
+        "Warning: No secure random generator available for session ID generation.",
+      );
+    }
+    randStr = Date.now().toString(36);
   }
   return `${Date.now()}-${randStr}`;
 }
@@ -219,8 +244,10 @@ export function generateAnonymousId(): string {
 /**
  * Get or create a session ID from sessionStorage
  */
-export function getOrCreateSessionId(storageKey: string = 'phoenix-analytics-session'): string {
-  if (typeof window === 'undefined') return 'ssr-session';
+export function getOrCreateSessionId(
+  storageKey: string = "phoenix-analytics-session",
+): string {
+  if (typeof window === "undefined") return "ssr-session";
 
   let sessionId = sessionStorage.getItem(storageKey);
   if (!sessionId) {
@@ -233,8 +260,10 @@ export function getOrCreateSessionId(storageKey: string = 'phoenix-analytics-ses
 /**
  * Get or create an anonymous ID from localStorage
  */
-export function getOrCreateAnonymousId(storageKey: string = 'phoenix-anonymous-id'): string {
-  if (typeof window === 'undefined') return 'ssr-anonymous';
+export function getOrCreateAnonymousId(
+  storageKey: string = "phoenix-anonymous-id",
+): string {
+  if (typeof window === "undefined") return "ssr-anonymous";
 
   let anonId = localStorage.getItem(storageKey);
   if (!anonId) {

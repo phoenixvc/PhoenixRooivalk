@@ -5,7 +5,6 @@
  */
 
 import {
-  IFunctionsService,
   IAIFunctionsService,
   CloudFunctionError,
   CompetitorAnalysisResult,
@@ -19,8 +18,8 @@ import {
   IndexStats,
   FunFactsResult,
   PendingImprovement,
-} from '../interfaces/functions';
-import { FunctionCallOptions } from '../interfaces/types';
+} from "../interfaces/functions";
+import { FunctionCallOptions } from "../interfaces/types";
 
 /**
  * Azure Functions Configuration
@@ -64,35 +63,38 @@ export class AzureFunctionsService implements IAIFunctionsService {
   async call<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput> {
     if (!this.initialized) {
       await this.init();
     }
 
     if (!this.config) {
-      throw new CloudFunctionError('Functions service not configured', 'unavailable');
+      throw new CloudFunctionError(
+        "Functions service not configured",
+        "unavailable",
+      );
     }
 
     const url = `${this.config.baseUrl}/api/${name}`;
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
 
     // Add API key if configured
     if (this.config.apiKey) {
-      headers['x-functions-key'] = this.config.apiKey;
+      headers["x-functions-key"] = this.config.apiKey;
     }
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(
         () => controller.abort(),
-        options?.timeout || 30000
+        options?.timeout || 30000,
       );
 
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify(data),
         signal: controller.signal,
@@ -104,58 +106,61 @@ export class AzureFunctionsService implements IAIFunctionsService {
         const error = await response.json().catch(() => ({}));
         throw new CloudFunctionError(
           error.message || `Function call failed: ${response.statusText}`,
-          error.code || `http_${response.status}`
+          error.code || `http_${response.status}`,
         );
       }
 
       return response.json();
     } catch (error: any) {
-      if (error.name === 'AbortError') {
-        throw new CloudFunctionError('Request timed out', 'timeout');
+      if (error.name === "AbortError") {
+        throw new CloudFunctionError("Request timed out", "timeout");
       }
       if (error instanceof CloudFunctionError) {
         throw error;
       }
-      throw new CloudFunctionError(error.message || 'Unknown error', 'unknown');
+      throw new CloudFunctionError(error.message || "Unknown error", "unknown");
     }
   }
 
   async callAuthenticated<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput> {
     if (!this.initialized) {
       await this.init();
     }
 
     if (!this.config) {
-      throw new CloudFunctionError('Functions service not configured', 'unavailable');
+      throw new CloudFunctionError(
+        "Functions service not configured",
+        "unavailable",
+      );
     }
 
     if (!this.authToken) {
-      throw new CloudFunctionError('Not authenticated', 'unauthenticated');
+      throw new CloudFunctionError("Not authenticated", "unauthenticated");
     }
 
     const url = `${this.config.baseUrl}/api/${name}`;
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${this.authToken}`,
     };
 
     if (this.config.apiKey) {
-      headers['x-functions-key'] = this.config.apiKey;
+      headers["x-functions-key"] = this.config.apiKey;
     }
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(
         () => controller.abort(),
-        options?.timeout || 30000
+        options?.timeout || 30000,
       );
 
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify(data),
         signal: controller.signal,
@@ -170,13 +175,13 @@ export class AzureFunctionsService implements IAIFunctionsService {
 
       return response.json();
     } catch (error: any) {
-      if (error.name === 'AbortError') {
-        throw new CloudFunctionError('Request timed out', 'timeout');
+      if (error.name === "AbortError") {
+        throw new CloudFunctionError("Request timed out", "timeout");
       }
       if (error instanceof CloudFunctionError) {
         throw error;
       }
-      throw new CloudFunctionError(error.message || 'Unknown error', 'unknown');
+      throw new CloudFunctionError(error.message || "Unknown error", "unknown");
     }
   }
 
@@ -186,68 +191,68 @@ export class AzureFunctionsService implements IAIFunctionsService {
 
   async analyzeCompetitors(
     competitors: string[],
-    focusAreas?: string[]
+    focusAreas?: string[],
   ): Promise<CompetitorAnalysisResult> {
     return this.callAuthenticated<
       { competitors: string[]; focusAreas?: string[] },
       CompetitorAnalysisResult
-    >('analyzeCompetitors', { competitors, focusAreas });
+    >("analyzeCompetitors", { competitors, focusAreas });
   }
 
   async generateSWOT(topic: string, context?: string): Promise<SWOTResult> {
-    return this.callAuthenticated<{ topic: string; context?: string }, SWOTResult>(
-      'generateSWOT',
-      { topic, context }
-    );
+    return this.callAuthenticated<
+      { topic: string; context?: string },
+      SWOTResult
+    >("generateSWOT", { topic, context });
   }
 
   async getReadingRecommendations(
-    currentDocId?: string
+    currentDocId?: string,
   ): Promise<RecommendationsResult> {
-    return this.callAuthenticated<{ currentDocId?: string }, RecommendationsResult>(
-      'getReadingRecommendations',
-      { currentDocId }
-    );
+    return this.callAuthenticated<
+      { currentDocId?: string },
+      RecommendationsResult
+    >("getReadingRecommendations", { currentDocId });
   }
 
   async suggestDocumentImprovements(
     docId: string,
     docTitle: string,
-    docContent: string
+    docContent: string,
   ): Promise<DocumentImprovementResult> {
     return this.callAuthenticated<
       { docId: string; docTitle: string; docContent: string },
       DocumentImprovementResult
-    >('suggestDocumentImprovements', { docId, docTitle, docContent });
+    >("suggestDocumentImprovements", { docId, docTitle, docContent });
   }
 
   async getMarketInsights(
     topic: string,
-    industry?: string
+    industry?: string,
   ): Promise<MarketInsightsResult> {
     return this.callAuthenticated<
       { topic: string; industry?: string },
       MarketInsightsResult
-    >('getMarketInsights', { topic, industry });
+    >("getMarketInsights", { topic, industry });
   }
 
   async summarizeContent(
     content: string,
-    maxLength?: number
+    maxLength?: number,
   ): Promise<SummaryResult> {
-    return this.callAuthenticated<{ content: string; maxLength?: number }, SummaryResult>(
-      'summarizeContent',
-      { content, maxLength }
-    );
+    return this.callAuthenticated<
+      { content: string; maxLength?: number },
+      SummaryResult
+    >("summarizeContent", { content, maxLength });
   }
 
   async askDocumentation(
     question: string,
     options?: {
       category?: string;
-      format?: 'detailed' | 'concise';
-      history?: Array<{ role: 'user' | 'assistant'; content: string }>;
-    }
+      format?: "detailed" | "concise";
+      history?: Array<{ role: "user" | "assistant"; content: string }>;
+    },
   ): Promise<RAGResponse> {
     return this.callAuthenticated<
       {
@@ -257,7 +262,7 @@ export class AzureFunctionsService implements IAIFunctionsService {
         history?: Array<{ role: string; content: string }>;
       },
       RAGResponse
-    >('askDocumentation', {
+    >("askDocumentation", {
       question,
       category: options?.category,
       format: options?.format,
@@ -267,12 +272,12 @@ export class AzureFunctionsService implements IAIFunctionsService {
 
   async searchDocumentation(
     query: string,
-    options?: { category?: string; topK?: number }
+    options?: { category?: string; topK?: number },
   ): Promise<SearchResultItem[]> {
     const result = await this.call<
       { query: string; category?: string; topK?: number },
       { results: SearchResultItem[] }
-    >('searchDocs', {
+    >("searchDocs", {
       query,
       category: options?.category,
       topK: options?.topK,
@@ -282,7 +287,7 @@ export class AzureFunctionsService implements IAIFunctionsService {
 
   async getSuggestedQuestions(
     docId?: string,
-    category?: string
+    category?: string,
   ): Promise<{
     suggestions: string[];
     docInfo: { title: string; category: string } | null;
@@ -293,45 +298,45 @@ export class AzureFunctionsService implements IAIFunctionsService {
         suggestions: string[];
         docInfo: { title: string; category: string } | null;
       }
-    >('getSuggestedQuestions', { docId, category });
+    >("getSuggestedQuestions", { docId, category });
   }
 
   async researchPerson(
     firstName: string,
     lastName: string,
-    linkedInUrl: string
+    linkedInUrl: string,
   ): Promise<FunFactsResult> {
     return this.callAuthenticated<
       { firstName: string; lastName: string; linkedInUrl: string },
       FunFactsResult
-    >('researchPerson', { firstName, lastName, linkedInUrl });
+    >("researchPerson", { firstName, lastName, linkedInUrl });
   }
 
   async getIndexStats(): Promise<IndexStats> {
     return this.callAuthenticated<Record<string, never>, IndexStats>(
-      'getIndexStats',
-      {}
+      "getIndexStats",
+      {},
     );
   }
 
   async reviewImprovement(
     suggestionId: string,
-    status: 'approved' | 'rejected' | 'implemented',
-    notes?: string
+    status: "approved" | "rejected" | "implemented",
+    notes?: string,
   ): Promise<{ success: boolean; status: string }> {
     return this.callAuthenticated<
       { suggestionId: string; status: string; notes?: string },
       { success: boolean; status: string }
-    >('reviewDocumentImprovement', { suggestionId, status, notes });
+    >("reviewDocumentImprovement", { suggestionId, status, notes });
   }
 
   async getPendingImprovements(
-    limit?: number
+    limit?: number,
   ): Promise<{ suggestions: PendingImprovement[] }> {
     return this.callAuthenticated<
       { limit?: number },
       { suggestions: PendingImprovement[] }
-    >('getPendingImprovements', { limit });
+    >("getPendingImprovements", { limit });
   }
 
   // ============================================================================
@@ -339,19 +344,31 @@ export class AzureFunctionsService implements IAIFunctionsService {
   // ============================================================================
 
   private handleHttpError(status: number, error: any): never {
-    const message = error.message || 'An error occurred';
+    const message = error.message || "An error occurred";
 
     switch (status) {
       case 401:
-        throw new CloudFunctionError('Please sign in to use this feature', 'unauthenticated');
+        throw new CloudFunctionError(
+          "Please sign in to use this feature",
+          "unauthenticated",
+        );
       case 403:
-        throw new CloudFunctionError('Access denied', 'permission-denied');
+        throw new CloudFunctionError("Access denied", "permission-denied");
       case 429:
-        throw new CloudFunctionError('Rate limit exceeded. Please try again later.', 'resource-exhausted');
+        throw new CloudFunctionError(
+          "Rate limit exceeded. Please try again later.",
+          "resource-exhausted",
+        );
       case 500:
-        throw new CloudFunctionError('Server error. Please try again.', 'internal');
+        throw new CloudFunctionError(
+          "Server error. Please try again.",
+          "internal",
+        );
       case 503:
-        throw new CloudFunctionError('Service unavailable. Please try again later.', 'unavailable');
+        throw new CloudFunctionError(
+          "Service unavailable. Please try again later.",
+          "unavailable",
+        );
       default:
         throw new CloudFunctionError(message, error.code || `http_${status}`);
     }

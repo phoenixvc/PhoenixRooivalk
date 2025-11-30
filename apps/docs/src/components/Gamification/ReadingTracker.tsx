@@ -2,7 +2,10 @@ import { useEffect, useCallback, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAchievements } from "./Achievements";
-import { emitDocumentCompletion, emitReadingChallenge } from "./CompletionToast";
+import {
+  emitDocumentCompletion,
+  emitReadingChallenge,
+} from "./CompletionToast";
 
 /**
  * ReadingTracker component automatically tracks user progress through documentation pages.
@@ -52,7 +55,8 @@ function estimateWordCount(): number {
   if (!articleContent) return 1000;
 
   // Get text content, excluding code blocks and metadata
-  const textContent = articleContent.innerText || articleContent.textContent || "";
+  const textContent =
+    articleContent.innerText || articleContent.textContent || "";
   const words = textContent.trim().split(/\s+/).filter(Boolean);
 
   return Math.max(words.length, 100); // At least 100 words
@@ -75,53 +79,60 @@ export function ReadingTracker(): null {
   const scrollCompletedRef = useRef(false);
 
   // Check if user has engaged enough to earn completion credit
-  const checkEngagement = useCallback((docId: string, timeSpentMs: number): {
-    isEngaged: boolean;
-    engagementRatio: number;
-    expectedTime: number;
-    message: string;
-  } => {
-    const wordCount = wordCountRef.current || estimateWordCount();
-    const expectedTimes = calculateExpectedReadingTime(wordCount);
+  const checkEngagement = useCallback(
+    (
+      docId: string,
+      timeSpentMs: number,
+    ): {
+      isEngaged: boolean;
+      engagementRatio: number;
+      expectedTime: number;
+      message: string;
+    } => {
+      const wordCount = wordCountRef.current || estimateWordCount();
+      const expectedTimes = calculateExpectedReadingTime(wordCount);
 
-    // Use the "fast reader" time as minimum baseline
-    const minimumTime = expectedTimes.fast * MIN_ENGAGEMENT_RATIO;
-    const engagementRatio = timeSpentMs / expectedTimes.average;
+      // Use the "fast reader" time as minimum baseline
+      const minimumTime = expectedTimes.fast * MIN_ENGAGEMENT_RATIO;
+      const engagementRatio = timeSpentMs / expectedTimes.average;
 
-    if (timeSpentMs >= minimumTime) {
-      if (engagementRatio >= EXCELLENT_ENGAGEMENT_RATIO) {
-        return {
-          isEngaged: true,
-          engagementRatio,
-          expectedTime: expectedTimes.average,
-          message: "Excellent reading! You thoroughly engaged with this content.",
-        };
-      } else if (engagementRatio >= GOOD_ENGAGEMENT_RATIO) {
-        return {
-          isEngaged: true,
-          engagementRatio,
-          expectedTime: expectedTimes.average,
-          message: "Good reading pace. Content completed!",
-        };
-      } else {
-        return {
-          isEngaged: true,
-          engagementRatio,
-          expectedTime: expectedTimes.average,
-          message: "Quick read! Document marked as complete.",
-        };
+      if (timeSpentMs >= minimumTime) {
+        if (engagementRatio >= EXCELLENT_ENGAGEMENT_RATIO) {
+          return {
+            isEngaged: true,
+            engagementRatio,
+            expectedTime: expectedTimes.average,
+            message:
+              "Excellent reading! You thoroughly engaged with this content.",
+          };
+        } else if (engagementRatio >= GOOD_ENGAGEMENT_RATIO) {
+          return {
+            isEngaged: true,
+            engagementRatio,
+            expectedTime: expectedTimes.average,
+            message: "Good reading pace. Content completed!",
+          };
+        } else {
+          return {
+            isEngaged: true,
+            engagementRatio,
+            expectedTime: expectedTimes.average,
+            message: "Quick read! Document marked as complete.",
+          };
+        }
       }
-    }
 
-    // Not enough engagement
-    const timeNeeded = Math.ceil((minimumTime - timeSpentMs) / 1000);
-    return {
-      isEngaged: false,
-      engagementRatio,
-      expectedTime: expectedTimes.average,
-      message: `You scrolled through in ${Math.round(timeSpentMs / 1000)}s, but this document needs at least ${Math.ceil(minimumTime / 1000)}s to read. Spend ${timeNeeded} more seconds to earn credit.`,
-    };
-  }, []);
+      // Not enough engagement
+      const timeNeeded = Math.ceil((minimumTime - timeSpentMs) / 1000);
+      return {
+        isEngaged: false,
+        engagementRatio,
+        expectedTime: expectedTimes.average,
+        message: `You scrolled through in ${Math.round(timeSpentMs / 1000)}s, but this document needs at least ${Math.ceil(minimumTime / 1000)}s to read. Spend ${timeNeeded} more seconds to earn credit.`,
+      };
+    },
+    [],
+  );
 
   // Update time spent on a document
   const updateTimeSpent = useCallback(
@@ -174,7 +185,8 @@ export function ReadingTracker(): null {
         if (reachedEnd && !wasAlreadyCompleted && !scrollCompletedRef.current) {
           scrollCompletedRef.current = true;
 
-          const totalTime = totalSessionTimeRef.current + (currentDoc.timeSpentMs || 0);
+          const totalTime =
+            totalSessionTimeRef.current + (currentDoc.timeSpentMs || 0);
           const engagement = checkEngagement(docId, totalTime);
 
           if (engagement.isEngaged) {
@@ -196,7 +208,8 @@ export function ReadingTracker(): null {
             if (now - lastAchievementCheckRef.current > 1000) {
               lastAchievementCheckRef.current = now;
               const completedCount =
-                Object.values(progress.docs).filter((d) => d.completed).length + 1;
+                Object.values(progress.docs).filter((d) => d.completed).length +
+                1;
               checkAndUnlockAchievements(completedCount);
 
               emitDocumentCompletion({

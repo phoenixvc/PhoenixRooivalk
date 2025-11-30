@@ -6,11 +6,15 @@
  * for features that require a backend.
  */
 
-import { IAuthService } from '../interfaces/auth';
-import { IDatabaseService, ITransaction, IBatchWriter } from '../interfaces/database';
-import { IAnalyticsService } from '../interfaces/analytics';
-import { IMessagingService } from '../interfaces/messaging';
-import { IAIFunctionsService } from '../interfaces/functions';
+import { IAuthService } from "../interfaces/auth";
+import {
+  IDatabaseService,
+  ITransaction,
+  IBatchWriter,
+} from "../interfaces/database";
+import { IAnalyticsService } from "../interfaces/analytics";
+import { IMessagingService } from "../interfaces/messaging";
+import { IAIFunctionsService } from "../interfaces/functions";
 import {
   CloudUser,
   OAuthProvider,
@@ -18,9 +22,9 @@ import {
   QueryOptions,
   PaginatedResult,
   FieldOperations,
-} from '../interfaces/types';
+} from "../interfaces/types";
 
-const STORAGE_PREFIX = 'phoenix_offline_';
+const STORAGE_PREFIX = "phoenix_offline_";
 
 // ============================================================================
 // Offline Auth Service
@@ -32,7 +36,7 @@ export class OfflineAuthService implements IAuthService {
 
   constructor() {
     // Restore user from localStorage
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedUser = localStorage.getItem(`${STORAGE_PREFIX}user`);
       if (savedUser) {
         try {
@@ -49,15 +53,17 @@ export class OfflineAuthService implements IAuthService {
   }
 
   getMissingConfig(): string[] {
-    return ['Cloud provider not configured - using offline mode'];
+    return ["Cloud provider not configured - using offline mode"];
   }
 
-  async signInWithProvider(_provider: OAuthProvider): Promise<CloudUser | null> {
+  async signInWithProvider(
+    _provider: OAuthProvider,
+  ): Promise<CloudUser | null> {
     // Create a mock user for offline mode
     const mockUser: CloudUser = {
       uid: `offline_${Date.now()}`,
-      email: 'offline@local.dev',
-      displayName: 'Offline User',
+      email: "offline@local.dev",
+      displayName: "Offline User",
       photoURL: null,
       emailVerified: false,
       providerData: [],
@@ -67,25 +73,27 @@ export class OfflineAuthService implements IAuthService {
     this.saveUser();
     this.notifyListeners();
 
-    console.warn('Using offline authentication - data will only be stored locally');
+    console.warn(
+      "Using offline authentication - data will only be stored locally",
+    );
     return mockUser;
   }
 
   async signInWithGoogle(): Promise<CloudUser | null> {
-    return this.signInWithProvider('google');
+    return this.signInWithProvider("google");
   }
 
   async signInWithGithub(): Promise<CloudUser | null> {
-    return this.signInWithProvider('github');
+    return this.signInWithProvider("github");
   }
 
   async signInWithMicrosoft(): Promise<CloudUser | null> {
-    return this.signInWithProvider('microsoft');
+    return this.signInWithProvider("microsoft");
   }
 
   async signOut(): Promise<void> {
     this.currentUser = null;
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.removeItem(`${STORAGE_PREFIX}user`);
     }
     this.notifyListeners();
@@ -95,7 +103,9 @@ export class OfflineAuthService implements IAuthService {
     return this.currentUser;
   }
 
-  onAuthStateChanged(callback: (user: CloudUser | null) => void): UnsubscribeFn {
+  onAuthStateChanged(
+    callback: (user: CloudUser | null) => void,
+  ): UnsubscribeFn {
     this.callbacks.add(callback);
     callback(this.currentUser);
     return () => this.callbacks.delete(callback);
@@ -110,8 +120,11 @@ export class OfflineAuthService implements IAuthService {
   }
 
   private saveUser(): void {
-    if (typeof window !== 'undefined' && this.currentUser) {
-      localStorage.setItem(`${STORAGE_PREFIX}user`, JSON.stringify(this.currentUser));
+    if (typeof window !== "undefined" && this.currentUser) {
+      localStorage.setItem(
+        `${STORAGE_PREFIX}user`,
+        JSON.stringify(this.currentUser),
+      );
     }
   }
 
@@ -135,12 +148,16 @@ class OfflineTransaction implements ITransaction {
     collection: string,
     docId: string,
     data: T,
-    merge = false
+    merge = false,
   ): void {
     this.service.setDocument(collection, docId, data, merge);
   }
 
-  update(collection: string, docId: string, updates: Record<string, unknown>): void {
+  update(
+    collection: string,
+    docId: string,
+    updates: Record<string, unknown>,
+  ): void {
     this.service.updateDocument(collection, docId, updates);
   }
 
@@ -158,7 +175,7 @@ class OfflineBatchWriter implements IBatchWriter {
     collection: string,
     docId: string,
     data: T,
-    merge = false
+    merge = false,
   ): IBatchWriter {
     this.ops.push(async () => {
       await this.service.setDocument(collection, docId, data, merge);
@@ -166,7 +183,11 @@ class OfflineBatchWriter implements IBatchWriter {
     return this;
   }
 
-  update(collection: string, docId: string, updates: Record<string, unknown>): IBatchWriter {
+  update(
+    collection: string,
+    docId: string,
+    updates: Record<string, unknown>,
+  ): IBatchWriter {
     this.ops.push(async () => {
       await this.service.updateDocument(collection, docId, updates);
     });
@@ -209,7 +230,7 @@ export class OfflineDatabaseService implements IDatabaseService {
   }
 
   async getDocument<T>(collection: string, docId: string): Promise<T | null> {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === "undefined") return null;
 
     const key = this.getStorageKey(collection, docId);
     const data = localStorage.getItem(key);
@@ -226,12 +247,16 @@ export class OfflineDatabaseService implements IDatabaseService {
     collection: string,
     docId: string,
     data: T,
-    merge = false
+    merge = false,
   ): Promise<boolean> {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     const key = this.getStorageKey(collection, docId);
-    let finalData = { ...data, id: docId, _updatedAt: new Date().toISOString() };
+    let finalData = {
+      ...data,
+      id: docId,
+      _updatedAt: new Date().toISOString(),
+    };
 
     if (merge) {
       const existing = await this.getDocument<T>(collection, docId);
@@ -248,16 +273,24 @@ export class OfflineDatabaseService implements IDatabaseService {
   async updateDocument(
     collection: string,
     docId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): Promise<boolean> {
-    const existing = await this.getDocument<Record<string, unknown>>(collection, docId);
+    const existing = await this.getDocument<Record<string, unknown>>(
+      collection,
+      docId,
+    );
     if (!existing) return false;
 
-    return this.setDocument(collection, docId, { ...existing, ...updates }, false);
+    return this.setDocument(
+      collection,
+      docId,
+      { ...existing, ...updates },
+      false,
+    );
   }
 
   async deleteDocument(collection: string, docId: string): Promise<boolean> {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     const key = this.getStorageKey(collection, docId);
     localStorage.removeItem(key);
@@ -267,7 +300,7 @@ export class OfflineDatabaseService implements IDatabaseService {
 
   async addDocument<T extends Record<string, unknown>>(
     collection: string,
-    data: T
+    data: T,
   ): Promise<string | null> {
     const docId = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     const success = await this.setDocument(collection, docId, data);
@@ -276,7 +309,7 @@ export class OfflineDatabaseService implements IDatabaseService {
 
   async queryDocuments<T>(
     collection: string,
-    options: QueryOptions = {}
+    options: QueryOptions = {},
   ): Promise<PaginatedResult<T>> {
     const allDocs = await this.getAllDocuments<T>(collection);
     let filtered = [...allDocs];
@@ -287,21 +320,21 @@ export class OfflineDatabaseService implements IDatabaseService {
         filtered = filtered.filter((doc) => {
           const value = this.getNestedValue(doc, cond.field);
           switch (cond.operator) {
-            case '==':
+            case "==":
               return value === cond.value;
-            case '!=':
+            case "!=":
               return value !== cond.value;
-            case '<':
+            case "<":
               return value < cond.value;
-            case '<=':
+            case "<=":
               return value <= cond.value;
-            case '>':
+            case ">":
               return value > cond.value;
-            case '>=':
+            case ">=":
               return value >= cond.value;
-            case 'array-contains':
+            case "array-contains":
               return Array.isArray(value) && value.includes(cond.value);
-            case 'in':
+            case "in":
               return Array.isArray(cond.value) && cond.value.includes(value);
             default:
               return true;
@@ -318,7 +351,7 @@ export class OfflineDatabaseService implements IDatabaseService {
           const bVal = this.getNestedValue(b, order.field);
           const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
           if (cmp !== 0) {
-            return order.direction === 'desc' ? -cmp : cmp;
+            return order.direction === "desc" ? -cmp : cmp;
           }
         }
         return 0;
@@ -337,7 +370,7 @@ export class OfflineDatabaseService implements IDatabaseService {
   }
 
   async getAllDocuments<T>(collection: string): Promise<T[]> {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === "undefined") return [];
 
     const index = this.getIndex(collection);
     const docs: T[] = [];
@@ -350,7 +383,10 @@ export class OfflineDatabaseService implements IDatabaseService {
     return docs;
   }
 
-  async countDocuments(collection: string, options: QueryOptions = {}): Promise<number> {
+  async countDocuments(
+    collection: string,
+    options: QueryOptions = {},
+  ): Promise<number> {
     const result = await this.queryDocuments(collection, options);
     return result.items.length;
   }
@@ -358,7 +394,7 @@ export class OfflineDatabaseService implements IDatabaseService {
   subscribeToDocument<T>(
     collection: string,
     docId: string,
-    onUpdate: (data: T | null) => void
+    onUpdate: (data: T | null) => void,
   ): UnsubscribeFn {
     // Initial fetch
     this.getDocument<T>(collection, docId).then(onUpdate);
@@ -370,7 +406,7 @@ export class OfflineDatabaseService implements IDatabaseService {
   subscribeToQuery<T>(
     collection: string,
     options: QueryOptions,
-    onUpdate: (items: T[]) => void
+    onUpdate: (items: T[]) => void,
   ): UnsubscribeFn {
     // Initial fetch
     this.queryDocuments<T>(collection, options).then((r) => onUpdate(r.items));
@@ -379,7 +415,9 @@ export class OfflineDatabaseService implements IDatabaseService {
     return () => {};
   }
 
-  async runTransaction<T>(updateFn: (transaction: ITransaction) => Promise<T>): Promise<T> {
+  async runTransaction<T>(
+    updateFn: (transaction: ITransaction) => Promise<T>,
+  ): Promise<T> {
     const transaction = new OfflineTransaction(this);
     return updateFn(transaction);
   }
@@ -390,29 +428,35 @@ export class OfflineDatabaseService implements IDatabaseService {
 
   // Index management for listing documents
   private getIndex(collection: string): string[] {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === "undefined") return [];
     const key = `${STORAGE_PREFIX}index_${collection}`;
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : [];
   }
 
   private updateIndex(collection: string, docId: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const index = this.getIndex(collection);
     if (!index.includes(docId)) {
       index.push(docId);
-      localStorage.setItem(`${STORAGE_PREFIX}index_${collection}`, JSON.stringify(index));
+      localStorage.setItem(
+        `${STORAGE_PREFIX}index_${collection}`,
+        JSON.stringify(index),
+      );
     }
   }
 
   private removeFromIndex(collection: string, docId: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const index = this.getIndex(collection).filter((id) => id !== docId);
-    localStorage.setItem(`${STORAGE_PREFIX}index_${collection}`, JSON.stringify(index));
+    localStorage.setItem(
+      `${STORAGE_PREFIX}index_${collection}`,
+      JSON.stringify(index),
+    );
   }
 
   private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((o, p) => o?.[p], obj);
+    return path.split(".").reduce((o, p) => o?.[p], obj);
   }
 }
 
@@ -460,7 +504,7 @@ export class OfflineMessagingService implements IMessagingService {
   }
 
   async requestPermission(): Promise<boolean> {
-    console.warn('Push notifications not available in offline mode');
+    console.warn("Push notifications not available in offline mode");
     return false;
   }
 
@@ -492,7 +536,8 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     confidence: number;
   }> {
     return {
-      answer: 'AI features are not available in offline mode. Please configure a cloud provider.',
+      answer:
+        "AI features are not available in offline mode. Please configure a cloud provider.",
       sources: [],
       confidence: 0,
     };
@@ -517,9 +562,9 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     threats: string[];
   }> {
     return {
-      strengths: ['Offline mode available'],
-      weaknesses: ['AI features require cloud connection'],
-      opportunities: ['Configure Azure or Firebase for full features'],
+      strengths: ["Offline mode available"],
+      weaknesses: ["AI features require cloud connection"],
+      opportunities: ["Configure Azure or Firebase for full features"],
       threats: [],
     };
   }
