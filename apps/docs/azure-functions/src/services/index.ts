@@ -46,3 +46,9 @@ export {
   notificationsService,
   type NewsSubscription,
 } from "./notifications.service";
+
+export {
+  ConfigurationService,
+  configurationService,
+  type ConfigOptimization,
+} from "./configuration.service";

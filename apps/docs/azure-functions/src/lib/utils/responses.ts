@@ -34,9 +34,9 @@ export function errorResponse(
 /**
  * Success response with data
  */
-export function successResponse<T>(data: T): HttpResponseInit {
+export function successResponse<T>(data: T, status = 200): HttpResponseInit {
   return {
-    status: 200,
+    status,
     jsonBody: data,
   };
 }

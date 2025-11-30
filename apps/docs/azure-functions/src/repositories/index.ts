@@ -30,3 +30,17 @@ export {
   type SupportTicket,
   type SupportTicketFilters,
 } from "./support.repository";
+
+export {
+  ConfigurationRepository,
+  configurationRepository,
+  type ConfigItem,
+  type ConfigType,
+  type CategoryConfig,
+  type RoleConfig,
+  type InterestConfig,
+  type PromptConfig,
+  type TopicConfig,
+  type DomainConfig,
+  type ConfigVersion,
+} from "./configuration.repository";
