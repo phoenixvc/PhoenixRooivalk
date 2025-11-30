@@ -19,13 +19,11 @@ export const ThreatSimulatorSection: React.FC = () => {
         <div className={styles.demoCta}>
           <div className={styles.demoCtaContent}>
             <div className={styles.demoCtaIcon}>🎮</div>
-            <h4 className={styles.demoCtaTitle}>
-              Interactive Simulator Demo
-            </h4>
+            <h4 className={styles.demoCtaTitle}>Interactive Simulator Demo</h4>
             <p className={styles.demoCtaDescription}>
               Launch the full-featured threat simulator built with Rust and
-              WebAssembly. Control weapons, deploy drones, and neutralize
-              aerial threats in real-time.
+              WebAssembly. Control weapons, deploy drones, and neutralize aerial
+              threats in real-time.
             </p>
             <ul className={styles.demoFeatureList}>
               <li>✓ Real-time threat detection and tracking</li>
