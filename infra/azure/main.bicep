@@ -79,14 +79,14 @@ var tags = {
 // Modules
 // ============================================================================
 
-// Naming: {env}-{type}-{region}-{project}
+// Naming: {env}-{region}-{type}-{project} e.g., dev-eus2-kv-rooivalk
 var locationShort = location == 'eastus2' ? 'eus2' : location == 'westeurope' ? 'weu' : location == 'eastasia' ? 'eas' : take(location, 4)
 
 // Key Vault for secrets management
 module keyVault 'modules/keyvault.bicep' = {
   name: 'keyVault'
   params: {
-    name: '${environment}-kv-${locationShort}-phoenix'
+    name: '${environment}-${locationShort}-kv-rooivalk'
     location: location
     tags: tags
   }
@@ -96,7 +96,7 @@ module keyVault 'modules/keyvault.bicep' = {
 module storage 'modules/storage.bicep' = {
   name: 'storage'
   params: {
-    name: '${environment}st${locationShort}phoenix'  // Storage accounts can't have hyphens, max 24 chars
+    name: '${environment}${locationShort}strooivalk'  // Storage accounts can't have hyphens, max 24 chars
     location: location
     tags: tags
   }
@@ -106,7 +106,7 @@ module storage 'modules/storage.bicep' = {
 module appInsights 'modules/appinsights.bicep' = {
   name: 'appInsights'
   params: {
-    name: '${environment}-appi-${locationShort}-phoenix'
+    name: '${environment}-${locationShort}-appi-rooivalk'
     location: location
     tags: tags
   }
@@ -116,7 +116,7 @@ module appInsights 'modules/appinsights.bicep' = {
 module cosmosDb 'modules/cosmosdb.bicep' = {
   name: 'cosmosDb'
   params: {
-    name: '${environment}-cosmos-${locationShort}-phoenix'
+    name: '${environment}-${locationShort}-cosmos-rooivalk'
     location: location
     tags: tags
     throughput: cosmosDbThroughput
@@ -128,8 +128,8 @@ module cosmosDb 'modules/cosmosdb.bicep' = {
 module notificationHub 'modules/notificationhub.bicep' = {
   name: 'notificationHub'
   params: {
-    namespaceName: '${environment}-nhns-${locationShort}-phoenix'
-    hubName: '${environment}-nh-${locationShort}-phoenix'
+    namespaceName: '${environment}-${locationShort}-nhns-rooivalk'
+    hubName: '${environment}-${locationShort}-nh-rooivalk'
     location: location
     tags: tags
   }
@@ -139,7 +139,7 @@ module notificationHub 'modules/notificationhub.bicep' = {
 module functions 'modules/functions.bicep' = {
   name: 'functions'
   params: {
-    name: '${environment}-func-${locationShort}-phoenix'
+    name: '${environment}-${locationShort}-func-rooivalk'
     location: location
     tags: tags
     storageAccountName: storage.outputs.name
@@ -157,7 +157,7 @@ module functions 'modules/functions.bicep' = {
 module staticWebApp 'modules/staticwebapp.bicep' = {
   name: 'staticWebApp'
   params: {
-    name: '${environment}-swa-${locationShort}-phoenix'
+    name: '${environment}-${locationShort}-swa-rooivalk'
     location: location
     tags: tags
     sku: staticWebAppSku
