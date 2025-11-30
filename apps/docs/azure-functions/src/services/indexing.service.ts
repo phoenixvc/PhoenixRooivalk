@@ -76,7 +76,11 @@ export class IndexingService {
   /**
    * Split text into chunks with overlap
    */
-  chunkText(text: string, chunkSize: number = 1000, overlap: number = 200): string[] {
+  chunkText(
+    text: string,
+    chunkSize: number = 1000,
+    overlap: number = 200,
+  ): string[] {
     const chunks: string[] = [];
     let start = 0;
 
@@ -93,7 +97,9 @@ export class IndexingService {
   /**
    * Extract sections from markdown content
    */
-  extractSections(content: string): Array<{ heading: string; content: string }> {
+  extractSections(
+    content: string,
+  ): Array<{ heading: string; content: string }> {
     const sections: Array<{ heading: string; content: string }> = [];
     const lines = content.split("\n");
 
@@ -189,7 +195,11 @@ export class IndexingService {
           // Rate limit: wait between embeddings
           await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
-          logger.error("Failed to index chunk", error, { operation: "indexDocument", chunkId, docId: doc.id });
+          logger.error("Failed to index chunk", error, {
+            operation: "indexDocument",
+            chunkId,
+            docId: doc.id,
+          });
         }
       }
     }
@@ -268,7 +278,11 @@ export class IndexingService {
         await container.item(chunk.id, chunk.id).delete();
         deleted++;
       } catch (error) {
-        logger.warn("Failed to delete chunk", { operation: "deleteDocumentEmbeddings", chunkId: chunk.id, docId });
+        logger.warn("Failed to delete chunk", {
+          operation: "deleteDocumentEmbeddings",
+          chunkId: chunk.id,
+          docId,
+        });
       }
     }
 
@@ -277,7 +291,10 @@ export class IndexingService {
       const metadataContainer = getContainer("doc_metadata");
       await metadataContainer.item(docId, docId).delete();
     } catch (error) {
-      logger.warn("Failed to delete metadata", { operation: "deleteDocumentEmbeddings", docId });
+      logger.warn("Failed to delete metadata", {
+        operation: "deleteDocumentEmbeddings",
+        docId,
+      });
     }
 
     return deleted;

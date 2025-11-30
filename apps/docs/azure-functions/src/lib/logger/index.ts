@@ -15,8 +15,9 @@ import { ConsoleLogger } from "./console";
 import { AppInsightsLogger } from "./appinsights";
 import { generateCorrelationId } from "./utils";
 
-// Module-level state
-let appInsightsClient: unknown = null;
+// Module-level state - use any to accommodate different versions of App Insights
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let appInsightsClient: any = null;
 let initialized = false;
 
 /**
@@ -60,7 +61,8 @@ export async function initializeLogging(): Promise<void> {
         JSON.stringify({
           timestamp: new Date().toISOString(),
           level: "warn",
-          message: "Failed to initialize Application Insights, using console logger",
+          message:
+            "Failed to initialize Application Insights, using console logger",
           error: error instanceof Error ? error.message : String(error),
         }),
       );
@@ -86,7 +88,7 @@ export async function initializeLogging(): Promise<void> {
  */
 export function createLogger(context: LogContext = {}): Logger {
   if (appInsightsClient) {
-    return new AppInsightsLogger(appInsightsClient as Parameters<typeof AppInsightsLogger>[0], context);
+    return new AppInsightsLogger(appInsightsClient, context);
   }
   return new ConsoleLogger(context);
 }
@@ -100,7 +102,10 @@ export function createLogger(context: LogContext = {}): Logger {
  * @param feature - Feature/module name for grouping logs
  * @returns Logger instance with request context
  */
-export function createRequestLogger(request: HttpRequest, feature: string): Logger {
+export function createRequestLogger(
+  request: HttpRequest,
+  feature: string,
+): Logger {
   const correlationId =
     request.headers.get("x-correlation-id") ||
     request.headers.get("x-request-id") ||
@@ -114,7 +119,9 @@ export function createRequestLogger(request: HttpRequest, feature: string): Logg
       const token = authHeader.substring(7);
       const [, payload] = token.split(".");
       if (payload) {
-        const decoded = JSON.parse(Buffer.from(payload, "base64url").toString());
+        const decoded = JSON.parse(
+          Buffer.from(payload, "base64url").toString(),
+        );
         userId = decoded.sub || decoded.oid;
       }
     } catch {
@@ -149,4 +156,8 @@ export function createOperationLogger(
 
 // Re-export types and utilities
 export { Logger, LogContext, LogLevel } from "./types";
-export { generateCorrelationId, sanitizeLogData, truncateForLog } from "./utils";
+export {
+  generateCorrelationId,
+  sanitizeLogData,
+  truncateForLog,
+} from "./utils";

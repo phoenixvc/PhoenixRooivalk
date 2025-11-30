@@ -50,8 +50,7 @@ function getHubConfig(): {
   connectionString: string;
   hubName: string;
 } | null {
-  const connectionString =
-    process.env.AZURE_NOTIFICATION_HUB_CONNECTION_STRING;
+  const connectionString = process.env.AZURE_NOTIFICATION_HUB_CONNECTION_STRING;
   const hubName = process.env.AZURE_NOTIFICATION_HUB_NAME;
 
   if (!connectionString || !hubName) {
@@ -70,9 +69,7 @@ function parseConnectionString(connectionString: string): {
   sharedAccessKey: string;
 } | null {
   const endpointMatch = connectionString.match(/Endpoint=sb:\/\/([^/]+)\//i);
-  const keyNameMatch = connectionString.match(
-    /SharedAccessKeyName=([^;]+)/i,
-  );
+  const keyNameMatch = connectionString.match(/SharedAccessKeyName=([^;]+)/i);
   const keyMatch = connectionString.match(/SharedAccessKey=([^;]+)/i);
 
   if (!endpointMatch || !keyNameMatch || !keyMatch) {
@@ -386,7 +383,9 @@ export async function registerDevice(
     if (response.ok || response.status === 201) {
       // Parse registration ID from response
       const responseText = await response.text();
-      const regIdMatch = responseText.match(/<RegistrationId>([^<]+)<\/RegistrationId>/);
+      const regIdMatch = responseText.match(
+        /<RegistrationId>([^<]+)<\/RegistrationId>/,
+      );
       const registrationId = regIdMatch ? regIdMatch[1] : "unknown";
 
       logger.info("Device registered", {

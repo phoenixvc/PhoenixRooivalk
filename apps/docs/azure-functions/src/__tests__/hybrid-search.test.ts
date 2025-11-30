@@ -66,7 +66,9 @@ describe("Hybrid Search", () => {
     it("should throw for different length vectors", () => {
       const a = [1, 2, 3];
       const b = [1, 2];
-      expect(() => cosineSimilarity(a, b)).toThrow("Vectors must have same length");
+      expect(() => cosineSimilarity(a, b)).toThrow(
+        "Vectors must have same length",
+      );
     });
 
     it("should handle zero vectors", () => {
@@ -145,7 +147,9 @@ describe("Hybrid Search", () => {
       const fusedScores = new Map<string, number>();
 
       for (const ranking of rankings) {
-        const sortedEntries = [...ranking.entries()].sort((a, b) => b[1] - a[1]);
+        const sortedEntries = [...ranking.entries()].sort(
+          (a, b) => b[1] - a[1],
+        );
         sortedEntries.forEach(([id], rank) => {
           const rrfScore = 1 / (k + rank + 1);
           fusedScores.set(id, (fusedScores.get(id) || 0) + rrfScore);

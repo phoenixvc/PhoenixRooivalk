@@ -203,7 +203,12 @@ export class ConfigurationService {
     const existing = await configurationRepository.findById(id);
     if (!existing) return null;
 
-    const result = await configurationRepository.update(id, updates, userId, reason);
+    const result = await configurationRepository.update(
+      id,
+      updates,
+      userId,
+      reason,
+    );
     if (result) {
       this.invalidateCache(existing.type);
     }
@@ -239,7 +244,11 @@ export class ConfigurationService {
     const existing = await configurationRepository.findById(configId);
     if (!existing) return null;
 
-    const result = await configurationRepository.revert(configId, version, userId);
+    const result = await configurationRepository.revert(
+      configId,
+      version,
+      userId,
+    );
     if (result) {
       this.invalidateCache(existing.type);
     }
@@ -250,7 +259,9 @@ export class ConfigurationService {
    * Import configuration
    */
   async importConfig(
-    items: Array<Omit<ConfigItem, "id" | "version" | "createdAt" | "updatedAt">>,
+    items: Array<
+      Omit<ConfigItem, "id" | "version" | "createdAt" | "updatedAt">
+    >,
     userId?: string,
   ) {
     const result = await configurationRepository.importConfig(items, userId);
@@ -290,9 +301,11 @@ export class ConfigurationService {
     const metadata = prompt.metadata as PromptConfig["metadata"];
     const usageCount = (metadata.usageCount || 0) + 1;
     const avgLatencyMs =
-      ((metadata.avgLatencyMs || 0) * (usageCount - 1) + latencyMs) / usageCount;
+      ((metadata.avgLatencyMs || 0) * (usageCount - 1) + latencyMs) /
+      usageCount;
     const successRate =
-      ((metadata.successRate || 1) * (usageCount - 1) + (success ? 1 : 0)) / usageCount;
+      ((metadata.successRate || 1) * (usageCount - 1) + (success ? 1 : 0)) /
+      usageCount;
 
     await configurationRepository.update(
       promptId,
@@ -324,7 +337,12 @@ export class ConfigurationService {
     // Analyze prompts for low success rates
     for (const prompt of prompts) {
       const meta = prompt.metadata;
-      if (meta.usageCount && meta.usageCount > 10 && meta.successRate && meta.successRate < 0.8) {
+      if (
+        meta.usageCount &&
+        meta.usageCount > 10 &&
+        meta.successRate &&
+        meta.successRate < 0.8
+      ) {
         optimizations.push({
           type: "prompt",
           configId: prompt.id,
@@ -332,7 +350,11 @@ export class ConfigurationService {
           suggestion: `Prompt "${prompt.name}" has ${Math.round((1 - meta.successRate) * 100)}% failure rate`,
           reason: `Based on ${meta.usageCount} uses, this prompt may need refinement`,
           confidence: 0.8,
-          basedOn: { usageData: true, contentAnalysis: false, userFeedback: false },
+          basedOn: {
+            usageData: true,
+            contentAnalysis: false,
+            userFeedback: false,
+          },
         });
       }
 
@@ -345,7 +367,11 @@ export class ConfigurationService {
           suggestion: `Prompt "${prompt.name}" has high latency (${Math.round(meta.avgLatencyMs / 1000)}s avg)`,
           reason: "Consider reducing maxTokens or simplifying the prompt",
           confidence: 0.7,
-          basedOn: { usageData: true, contentAnalysis: false, userFeedback: false },
+          basedOn: {
+            usageData: true,
+            contentAnalysis: false,
+            userFeedback: false,
+          },
         });
       }
     }
@@ -355,7 +381,9 @@ export class ConfigurationService {
       const categoryAnalysis = await this.analyzeCategories(categories);
       optimizations.push(...categoryAnalysis);
     } catch (error) {
-      logger.warn("AI category analysis failed, skipping", { operation: "analyzeOptimizations" });
+      logger.warn("AI category analysis failed, skipping", {
+        operation: "analyzeOptimizations",
+      });
     }
 
     return optimizations;
@@ -389,16 +417,29 @@ Respond with JSON array:
 
     try {
       const suggestions = JSON.parse(result);
-      return suggestions.map((s: { action: string; category: string; suggestion: string; confidence: number }) => ({
-        type: "category" as ConfigType,
-        action: s.action,
-        suggestion: s.suggestion,
-        reason: `AI analysis of category "${s.category}"`,
-        confidence: s.confidence,
-        basedOn: { usageData: false, contentAnalysis: true, userFeedback: false },
-      }));
+      return suggestions.map(
+        (s: {
+          action: string;
+          category: string;
+          suggestion: string;
+          confidence: number;
+        }) => ({
+          type: "category" as ConfigType,
+          action: s.action,
+          suggestion: s.suggestion,
+          reason: `AI analysis of category "${s.category}"`,
+          confidence: s.confidence,
+          basedOn: {
+            usageData: false,
+            contentAnalysis: true,
+            userFeedback: false,
+          },
+        }),
+      );
     } catch (error) {
-      logger.warn("Failed to parse AI category suggestions", { operation: "analyzeCategories" });
+      logger.warn("Failed to parse AI category suggestions", {
+        operation: "analyzeCategories",
+      });
       return [];
     }
   }
@@ -406,7 +447,9 @@ Respond with JSON array:
   /**
    * Seed initial configuration from static defaults
    */
-  async seedDefaults(userId?: string): Promise<{ seeded: number; skipped: number }> {
+  async seedDefaults(
+    userId?: string,
+  ): Promise<{ seeded: number; skipped: number }> {
     const defaults = this.getDefaultConfiguration();
     const result = await this.importConfig(defaults, userId);
     return { seeded: result.imported, skipped: result.skipped };
@@ -420,23 +463,114 @@ Respond with JSON array:
   > {
     return [
       // Categories
-      { type: "category", name: "counter-uas", description: "Counter-drone technology", metadata: { icon: "shield", color: "#dc2626" }, isActive: true, order: 1 },
-      { type: "category", name: "defense-tech", description: "Defense technology news", metadata: { icon: "chip", color: "#2563eb" }, isActive: true, order: 2 },
-      { type: "category", name: "drone-industry", description: "Drone manufacturing and operations", metadata: { icon: "plane", color: "#7c3aed" }, isActive: true, order: 3 },
-      { type: "category", name: "regulatory", description: "Laws and regulations", metadata: { icon: "document", color: "#059669" }, isActive: true, order: 4 },
-      { type: "category", name: "market-analysis", description: "Market research", metadata: { icon: "chart", color: "#d97706" }, isActive: true, order: 5 },
+      {
+        type: "category",
+        name: "counter-uas",
+        description: "Counter-drone technology",
+        metadata: { icon: "shield", color: "#dc2626" },
+        isActive: true,
+        order: 1,
+      },
+      {
+        type: "category",
+        name: "defense-tech",
+        description: "Defense technology news",
+        metadata: { icon: "chip", color: "#2563eb" },
+        isActive: true,
+        order: 2,
+      },
+      {
+        type: "category",
+        name: "drone-industry",
+        description: "Drone manufacturing and operations",
+        metadata: { icon: "plane", color: "#7c3aed" },
+        isActive: true,
+        order: 3,
+      },
+      {
+        type: "category",
+        name: "regulatory",
+        description: "Laws and regulations",
+        metadata: { icon: "document", color: "#059669" },
+        isActive: true,
+        order: 4,
+      },
+      {
+        type: "category",
+        name: "market-analysis",
+        description: "Market research",
+        metadata: { icon: "chart", color: "#d97706" },
+        isActive: true,
+        order: 5,
+      },
 
       // Roles
-      { type: "role", name: "Technical - Software/AI", description: "Software and AI engineers", metadata: { department: "engineering" }, isActive: true, order: 1 },
-      { type: "role", name: "Technical - Mechanical", description: "Mechanical engineers", metadata: { department: "engineering" }, isActive: true, order: 2 },
-      { type: "role", name: "Business", description: "Business development", metadata: { department: "business" }, isActive: true, order: 3 },
-      { type: "role", name: "Executive", description: "C-suite executives", metadata: { level: "executive" }, isActive: true, order: 4 },
+      {
+        type: "role",
+        name: "Technical - Software/AI",
+        description: "Software and AI engineers",
+        metadata: { department: "engineering" },
+        isActive: true,
+        order: 1,
+      },
+      {
+        type: "role",
+        name: "Technical - Mechanical",
+        description: "Mechanical engineers",
+        metadata: { department: "engineering" },
+        isActive: true,
+        order: 2,
+      },
+      {
+        type: "role",
+        name: "Business",
+        description: "Business development",
+        metadata: { department: "business" },
+        isActive: true,
+        order: 3,
+      },
+      {
+        type: "role",
+        name: "Executive",
+        description: "C-suite executives",
+        metadata: { level: "executive" },
+        isActive: true,
+        order: 4,
+      },
 
       // Interests
-      { type: "interest", name: "counter-uas", description: "Counter-UAS technology", metadata: { category: "technology" }, isActive: true, order: 1 },
-      { type: "interest", name: "ai", description: "Artificial intelligence", metadata: { category: "technology" }, isActive: true, order: 2 },
-      { type: "interest", name: "hardware", description: "Hardware systems", metadata: { category: "technology" }, isActive: true, order: 3 },
-      { type: "interest", name: "compliance", description: "Regulatory compliance", metadata: { category: "legal" }, isActive: true, order: 4 },
+      {
+        type: "interest",
+        name: "counter-uas",
+        description: "Counter-UAS technology",
+        metadata: { category: "technology" },
+        isActive: true,
+        order: 1,
+      },
+      {
+        type: "interest",
+        name: "ai",
+        description: "Artificial intelligence",
+        metadata: { category: "technology" },
+        isActive: true,
+        order: 2,
+      },
+      {
+        type: "interest",
+        name: "hardware",
+        description: "Hardware systems",
+        metadata: { category: "technology" },
+        isActive: true,
+        order: 3,
+      },
+      {
+        type: "interest",
+        name: "compliance",
+        description: "Regulatory compliance",
+        metadata: { category: "legal" },
+        isActive: true,
+        order: 4,
+      },
     ];
   }
 }

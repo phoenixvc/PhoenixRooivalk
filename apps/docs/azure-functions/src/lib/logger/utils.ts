@@ -14,7 +14,9 @@ export function generateCorrelationId(): string {
 /**
  * Sanitize log data to remove sensitive information
  */
-export function sanitizeLogData(data: Record<string, unknown>): Record<string, unknown> {
+export function sanitizeLogData(
+  data: Record<string, unknown>,
+): Record<string, unknown> {
   const sensitiveKeys = [
     "password",
     "token",
@@ -50,5 +52,8 @@ export function truncateForLog(value: string, maxLength: number = 500): string {
   if (value.length <= maxLength) {
     return value;
   }
-  return value.substring(0, maxLength) + `... [truncated, ${value.length - maxLength} more chars]`;
+  return (
+    value.substring(0, maxLength) +
+    `... [truncated, ${value.length - maxLength} more chars]`
+  );
 }

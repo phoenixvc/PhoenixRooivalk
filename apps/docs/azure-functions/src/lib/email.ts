@@ -317,7 +317,9 @@ export const EmailTemplates = {
   /**
    * Daily digest
    */
-  dailyDigest: (articles: Array<{ title: string; summary: string; url: string }>): EmailMessage => ({
+  dailyDigest: (
+    articles: Array<{ title: string; summary: string; url: string }>,
+  ): EmailMessage => ({
     to: [],
     subject: "📰 Your Daily News Digest",
     html: `

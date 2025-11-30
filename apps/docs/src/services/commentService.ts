@@ -816,9 +816,12 @@ export const getCommentStats = async (): Promise<CommentStats> => {
 
     // Get category counts
     for (const category of VALID_CATEGORIES) {
-      stats.byCategory[category] = await db.countDocuments(COMMENTS_COLLECTION, {
-        conditions: [{ field: "category", operator: "==", value: category }],
-      });
+      stats.byCategory[category] = await db.countDocuments(
+        COMMENTS_COLLECTION,
+        {
+          conditions: [{ field: "category", operator: "==", value: category }],
+        },
+      );
     }
 
     // Get status counts

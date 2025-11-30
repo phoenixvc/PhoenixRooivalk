@@ -12,14 +12,28 @@ import {
 } from "@azure/functions";
 import { validateAuthHeader } from "../lib/auth";
 import { Errors, successResponse } from "../lib/utils";
-import { configurationService, ConfigOptimization } from "../services/configuration.service";
-import { ConfigItem, ConfigType } from "../repositories/configuration.repository";
+import {
+  configurationService,
+  ConfigOptimization,
+} from "../services/configuration.service";
+import {
+  ConfigItem,
+  ConfigType,
+} from "../repositories/configuration.repository";
 
 /**
  * Validate config type
  */
 function isValidConfigType(type: string): type is ConfigType {
-  return ["category", "role", "interest", "prompt", "topic", "domain", "setting"].includes(type);
+  return [
+    "category",
+    "role",
+    "interest",
+    "prompt",
+    "topic",
+    "domain",
+    "setting",
+  ].includes(type);
 }
 
 /**
@@ -41,7 +55,9 @@ async function listConfigHandler(
     const type = request.query.get("type") as ConfigType | null;
 
     if (type && !isValidConfigType(type)) {
-      return Errors.badRequest(`Invalid type. Must be one of: category, role, interest, prompt, topic, domain, setting`);
+      return Errors.badRequest(
+        `Invalid type. Must be one of: category, role, interest, prompt, topic, domain, setting`,
+      );
     }
 
     const config = await configurationService.exportConfig(type || undefined);
@@ -243,7 +259,10 @@ async function deleteConfigHandler(
 
     context.log(`Deactivated config: ${id}`);
 
-    return successResponse({ success: true, message: "Configuration deactivated" });
+    return successResponse({
+      success: true,
+      message: "Configuration deactivated",
+    });
   } catch (error) {
     context.error("Error deleting config:", error);
     return Errors.internal("Failed to delete configuration");
@@ -304,7 +323,11 @@ async function revertConfigHandler(
       return Errors.badRequest("Invalid version number");
     }
 
-    const item = await configurationService.revertConfig(id, version, authResult.userId);
+    const item = await configurationService.revertConfig(
+      id,
+      version,
+      authResult.userId,
+    );
 
     if (!item) {
       return Errors.notFound("Configuration or version not found");
@@ -358,7 +381,9 @@ async function importConfigHandler(
       authResult.userId,
     );
 
-    context.log(`Imported ${result.imported} configs, skipped ${result.skipped}`);
+    context.log(
+      `Imported ${result.imported} configs, skipped ${result.skipped}`,
+    );
 
     return successResponse(result);
   } catch (error) {
@@ -392,7 +417,11 @@ async function exportConfigHandler(
         "Content-Type": "application/json",
         "Content-Disposition": `attachment; filename="config-export-${Date.now()}.json"`,
       },
-      body: JSON.stringify({ items: config, exportedAt: new Date().toISOString() }, null, 2),
+      body: JSON.stringify(
+        { items: config, exportedAt: new Date().toISOString() },
+        null,
+        2,
+      ),
     };
   } catch (error) {
     context.error("Error exporting config:", error);
@@ -482,7 +511,10 @@ async function searchConfigHandler(
       return Errors.badRequest("Query parameter 'q' is required");
     }
 
-    const results = await configurationService.searchConfig(query, type || undefined);
+    const results = await configurationService.searchConfig(
+      query,
+      type || undefined,
+    );
 
     return successResponse({
       query,

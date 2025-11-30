@@ -8,7 +8,7 @@
 import { createLogger, Logger } from "../lib/logger";
 import { generateCompletion } from "../lib/openai";
 import { hybridSearch, SearchResult } from "./hybrid-search.service";
-import { newsRepository } from "../repositories";
+import { newsRepository, NewsArticle } from "../repositories";
 
 const logger: Logger = createLogger({ feature: "ai-agent" });
 
@@ -104,7 +104,8 @@ function createNewsTool(): AgentTool {
       properties: {
         category: {
           type: "string",
-          description: "News category to filter by (e.g., technology, security)",
+          description:
+            "News category to filter by (e.g., technology, security)",
         },
         limit: {
           type: "number",
@@ -118,7 +119,7 @@ function createNewsTool(): AgentTool {
         category: params.category as string | undefined,
         limit: (params.limit as number) || 5,
       });
-      return articles.map((a) => ({
+      return articles.map((a: NewsArticle) => ({
         title: a.title,
         summary: a.summary,
         category: a.category,
@@ -141,20 +142,22 @@ function createCalculatorTool(): AgentTool {
       properties: {
         expression: {
           type: "string",
-          description: "Mathematical expression to evaluate (e.g., '2 + 2 * 3')",
+          description:
+            "Mathematical expression to evaluate (e.g., '2 + 2 * 3')",
         },
       },
       required: ["expression"],
     },
     execute: async (params) => {
       const expression = params.expression as string;
-      
+
       try {
         // Safe evaluation using a simple parser (no eval/Function)
         const result = safeEvaluate(expression);
         return { result, expression };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Invalid expression";
+        const errorMessage =
+          error instanceof Error ? error.message : "Invalid expression";
         return { error: errorMessage, expression };
       }
     },
@@ -174,55 +177,60 @@ function safeEvaluate(expression: string): number {
 
   // Tokenize
   const tokens = tokenize(expression);
-  
+
   // Parse and evaluate using recursive descent parser
   let pos = 0;
 
   function parseExpression(): number {
     let left = parseTerm();
-    
-    while (pos < tokens.length && (tokens[pos] === '+' || tokens[pos] === '-')) {
+
+    while (
+      pos < tokens.length &&
+      (tokens[pos] === "+" || tokens[pos] === "-")
+    ) {
       const op = tokens[pos++];
       const right = parseTerm();
-      left = op === '+' ? left + right : left - right;
+      left = op === "+" ? left + right : left - right;
     }
-    
+
     return left;
   }
 
   function parseTerm(): number {
     let left = parseFactor();
-    
-    while (pos < tokens.length && (tokens[pos] === '*' || tokens[pos] === '/' || tokens[pos] === '%')) {
+
+    while (
+      pos < tokens.length &&
+      (tokens[pos] === "*" || tokens[pos] === "/" || tokens[pos] === "%")
+    ) {
       const op = tokens[pos++];
       const right = parseFactor();
-      if (op === '*') left *= right;
-      else if (op === '/') {
+      if (op === "*") left *= right;
+      else if (op === "/") {
         if (right === 0) throw new Error("Division by zero");
         left /= right;
-      }
-      else left %= right;
+      } else left %= right;
     }
-    
+
     return left;
   }
 
   function parseFactor(): number {
     // Handle negative numbers
-    if (tokens[pos] === '-') {
+    if (tokens[pos] === "-") {
       pos++;
       return -parseFactor();
     }
-    
+
     // Handle parentheses
-    if (tokens[pos] === '(') {
+    if (tokens[pos] === "(") {
       pos++; // skip (
       const result = parseExpression();
-      if (tokens[pos] !== ')') throw new Error("Missing closing parenthesis");
+      if (tokens[pos] !== ")") throw new Error("Missing closing parenthesis");
       pos++; // skip )
       return result;
     }
-    
+
     // Parse number
     const num = parseFloat(tokens[pos]);
     if (isNaN(num)) throw new Error(`Invalid number: ${tokens[pos]}`);
@@ -231,11 +239,11 @@ function safeEvaluate(expression: string): number {
   }
 
   const result = parseExpression();
-  
+
   if (pos < tokens.length) {
     throw new Error("Unexpected characters at end of expression");
   }
-  
+
   return result;
 }
 
@@ -244,29 +252,29 @@ function safeEvaluate(expression: string): number {
  */
 function tokenize(expression: string): string[] {
   const tokens: string[] = [];
-  let current = '';
-  
+  let current = "";
+
   for (const char of expression) {
-    if (char === ' ') {
+    if (char === " ") {
       if (current) {
         tokens.push(current);
-        current = '';
+        current = "";
       }
-    } else if ('+-*/%()'.includes(char)) {
+    } else if ("+-*/%()".includes(char)) {
       if (current) {
         tokens.push(current);
-        current = '';
+        current = "";
       }
       tokens.push(char);
     } else {
       current += char;
     }
   }
-  
+
   if (current) {
     tokens.push(current);
   }
-  
+
   return tokens;
 }
 
@@ -276,7 +284,8 @@ function tokenize(expression: string): string[] {
 function createTimeTool(): AgentTool {
   return {
     name: "get_current_time",
-    description: "Get the current date and time. Use this when asked about today's date or current time.",
+    description:
+      "Get the current date and time. Use this when asked about today's date or current time.",
     parameters: {
       type: "object",
       properties: {
@@ -359,7 +368,9 @@ function parseAgentResponse(response: string): AgentStep {
   const step: AgentStep = { thought: "" };
 
   // Extract thought
-  const thoughtMatch = response.match(/Thought:\s*(.+?)(?=\n(?:Action|Final Answer)|$)/s);
+  const thoughtMatch = response.match(
+    /Thought:\s*(.+?)(?=\n(?:Action|Final Answer)|$)/s,
+  );
   if (thoughtMatch) {
     step.thought = thoughtMatch[1].trim();
   }
@@ -415,10 +426,14 @@ export async function runAgent(
     }
 
     // Get LLM response
-    const response = await generateCompletion(systemPrompt, conversationHistory, {
-      temperature,
-      maxTokens: 1024,
-    });
+    const response = await generateCompletion(
+      systemPrompt,
+      conversationHistory,
+      {
+        temperature,
+        maxTokens: 1024,
+      },
+    );
 
     const step = parseAgentResponse(response);
     steps.push(step);
@@ -504,10 +519,14 @@ export async function* runAgentStreaming(
   let conversationHistory = `User: ${query}\n\n`;
 
   for (let i = 0; i < maxIterations; i++) {
-    const response = await generateCompletion(systemPrompt, conversationHistory, {
-      temperature,
-      maxTokens: 1024,
-    });
+    const response = await generateCompletion(
+      systemPrompt,
+      conversationHistory,
+      {
+        temperature,
+        maxTokens: 1024,
+      },
+    );
 
     const step = parseAgentResponse(response);
     steps.push(step);
@@ -567,11 +586,14 @@ export function createAgent(
   options: AgentOptions = {},
 ): {
   run: (query: string) => Promise<AgentResult>;
-  runStreaming: (query: string) => AsyncGenerator<AgentStep, AgentResult, undefined>;
+  runStreaming: (
+    query: string,
+  ) => AsyncGenerator<AgentStep, AgentResult, undefined>;
 } {
   return {
     run: (query: string) => runAgent(query, options, customTools),
-    runStreaming: (query: string) => runAgentStreaming(query, options, customTools),
+    runStreaming: (query: string) =>
+      runAgentStreaming(query, options, customTools),
   };
 }
 

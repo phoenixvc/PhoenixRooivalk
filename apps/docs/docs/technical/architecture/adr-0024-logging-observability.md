@@ -24,9 +24,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Current Azure Functions use `console.log/warn/error` which lacks structured logging, correlation IDs, and centralized monitoring.
-2. **Decision**: Implement Azure Application Insights with structured logging via a custom logger wrapper.
-3. **Trade-off**: Slight increase in complexity and Azure costs, but gain comprehensive observability.
+1. **Problem**: Current Azure Functions use `console.log/warn/error` which lacks
+   structured logging, correlation IDs, and centralized monitoring.
+2. **Decision**: Implement Azure Application Insights with structured logging
+   via a custom logger wrapper.
+3. **Trade-off**: Slight increase in complexity and Azure costs, but gain
+   comprehensive observability.
 
 ---
 
@@ -41,20 +44,25 @@ console.error("Token validation failed:", error);
 
 This approach has several limitations:
 
-1. **No structured logging** - Messages are plain text, making parsing and analysis difficult
+1. **No structured logging** - Messages are plain text, making parsing and
+   analysis difficult
 2. **No correlation IDs** - Cannot trace requests across function invocations
 3. **No centralized monitoring** - Logs are scattered across function instances
 4. **No alerting** - Cannot set up automated alerts on error patterns
 5. **Limited debugging** - Cannot query or aggregate log data
 
 Key stakeholders:
+
 - **DevOps**: Need centralized monitoring and alerting
 - **Developers**: Need debugging capabilities and error tracing
 - **Security**: Need audit trails and incident investigation support
 
 Related decisions:
-- [ADR 0012: Runtime Functions](./adr-0012-runtime-functions.md) - Azure Functions as runtime
-- [ADR 0023: AI Observability](./adr-0023-ai-observability.md) - AI-specific monitoring
+
+- [ADR 0012: Runtime Functions](./adr-0012-runtime-functions.md) - Azure
+  Functions as runtime
+- [ADR 0023: AI Observability](./adr-0023-ai-observability.md) - AI-specific
+  monitoring
 
 ---
 
@@ -62,41 +70,42 @@ Related decisions:
 
 ### Option 1: Azure Application Insights [✅ Selected]
 
-| Aspect          | Details |
-| --------------- | ------- |
-| **Description** | Microsoft's APM solution, native to Azure Functions with auto-instrumentation |
+| Aspect          | Details                                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Description** | Microsoft's APM solution, native to Azure Functions with auto-instrumentation                                                   |
 | **Pros**        | Native Azure integration, distributed tracing, rich querying with KQL, alerting, dashboards, cost-effective for Azure workloads |
-| **Cons**        | Azure lock-in, learning curve for KQL, data retention costs |
+| **Cons**        | Azure lock-in, learning curve for KQL, data retention costs                                                                     |
 
 ### Option 2: OpenTelemetry + Grafana/Loki [❌ Rejected]
 
-| Aspect          | Details |
-| --------------- | ------- |
-| **Description** | Vendor-neutral observability with OpenTelemetry SDK exporting to Grafana stack |
-| **Pros**        | Vendor-neutral, portable, rich ecosystem, open source |
+| Aspect          | Details                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| **Description** | Vendor-neutral observability with OpenTelemetry SDK exporting to Grafana stack               |
+| **Pros**        | Vendor-neutral, portable, rich ecosystem, open source                                        |
 | **Cons**        | Higher operational overhead, need to host Grafana/Loki, more complex setup, additional costs |
 
 ### Option 3: Winston/Pino + External Service [❌ Rejected]
 
-| Aspect          | Details |
-| --------------- | ------- |
+| Aspect          | Details                                                                                 |
+| --------------- | --------------------------------------------------------------------------------------- |
 | **Description** | Popular Node.js logging libraries with external log aggregation (Datadog, Splunk, etc.) |
-| **Pros**        | Flexible, feature-rich libraries, works anywhere |
-| **Cons**        | External service costs, integration complexity, not native to Azure |
+| **Pros**        | Flexible, feature-rich libraries, works anywhere                                        |
+| **Cons**        | External service costs, integration complexity, not native to Azure                     |
 
 ### Option 4: Enhanced Console Logging [❌ Rejected]
 
-| Aspect          | Details |
-| --------------- | ------- |
-| **Description** | Wrap console methods with structured JSON output |
-| **Pros**        | Simple, no dependencies, works immediately |
+| Aspect          | Details                                                         |
+| --------------- | --------------------------------------------------------------- |
+| **Description** | Wrap console methods with structured JSON output                |
+| **Pros**        | Simple, no dependencies, works immediately                      |
 | **Cons**        | No centralized aggregation, no alerting, no distributed tracing |
 
 ---
 
 ## Decision
 
-**We will use Azure Application Insights with a custom structured logger wrapper that provides:**
+**We will use Azure Application Insights with a custom structured logger wrapper
+that provides:**
 
 1. Structured logging with consistent fields
 2. Automatic correlation ID propagation
@@ -111,16 +120,17 @@ Related decisions:
 
 ### Why Application Insights Over Alternatives?
 
-| Factor | App Insights | OpenTelemetry+Grafana | Winston+External | Enhanced Console |
-| ------ | ------------ | --------------------- | ---------------- | ---------------- |
-| **Azure Integration** | Native | Requires setup | Manual | None |
-| **Setup Complexity** | Low | High | Medium | Very Low |
-| **Operational Overhead** | Low (managed) | High (self-hosted) | Medium | None |
-| **Distributed Tracing** | Built-in | Built-in | Manual | None |
-| **Cost** | Pay-per-use | Infrastructure + labor | External service | Free |
-| **Alerting** | Built-in | Requires config | External | None |
+| Factor                   | App Insights  | OpenTelemetry+Grafana  | Winston+External | Enhanced Console |
+| ------------------------ | ------------- | ---------------------- | ---------------- | ---------------- |
+| **Azure Integration**    | Native        | Requires setup         | Manual           | None             |
+| **Setup Complexity**     | Low           | High                   | Medium           | Very Low         |
+| **Operational Overhead** | Low (managed) | High (self-hosted)     | Medium           | None             |
+| **Distributed Tracing**  | Built-in      | Built-in               | Manual           | None             |
+| **Cost**                 | Pay-per-use   | Infrastructure + labor | External service | Free             |
+| **Alerting**             | Built-in      | Requires config        | External         | None             |
 
-Given that we're already committed to Azure (ADR-0012), Application Insights provides the best balance of features, integration, and operational simplicity.
+Given that we're already committed to Azure (ADR-0012), Application Insights
+provides the best balance of features, integration, and operational simplicity.
 
 ---
 
@@ -132,10 +142,10 @@ Given that we're already committed to Azure (ADR-0012), Application Insights pro
 // src/lib/logger.ts
 
 export enum LogLevel {
-  DEBUG = 'debug',
-  INFO = 'info',
-  WARN = 'warn',
-  ERROR = 'error',
+  DEBUG = "debug",
+  INFO = "info",
+  WARN = "warn",
+  ERROR = "error",
 }
 
 export interface LogContext {
@@ -162,8 +172,8 @@ export interface Logger {
 ```typescript
 // src/lib/logger/appinsights.ts
 
-import * as appInsights from 'applicationinsights';
-import { Logger, LogContext, LogLevel } from './types';
+import * as appInsights from "applicationinsights";
+import { Logger, LogContext, LogLevel } from "./types";
 
 export class AppInsightsLogger implements Logger {
   private client: appInsights.TelemetryClient;
@@ -176,7 +186,11 @@ export class AppInsightsLogger implements Logger {
     this.correlationId = context.correlationId || generateCorrelationId();
   }
 
-  private formatMessage(level: LogLevel, message: string, context?: LogContext): void {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    context?: LogContext,
+  ): void {
     const enrichedContext = {
       ...this.baseContext,
       ...context,
@@ -219,7 +233,10 @@ export class AppInsightsLogger implements Logger {
     this.formatMessage(LogLevel.ERROR, message, context);
   }
 
-  async trackOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {
+  async trackOperation<T>(
+    name: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
     const startTime = Date.now();
     try {
       const result = await operation();
@@ -227,7 +244,7 @@ export class AppInsightsLogger implements Logger {
         name,
         duration: Date.now() - startTime,
         success: true,
-        dependencyTypeName: 'InProc',
+        dependencyTypeName: "InProc",
         properties: { correlationId: this.correlationId },
       });
       return result;
@@ -236,7 +253,7 @@ export class AppInsightsLogger implements Logger {
         name,
         duration: Date.now() - startTime,
         success: false,
-        dependencyTypeName: 'InProc',
+        dependencyTypeName: "InProc",
         properties: { correlationId: this.correlationId },
       });
       throw error;
@@ -257,10 +274,14 @@ export class AppInsightsLogger implements Logger {
 
   private mapSeverity(level: LogLevel): appInsights.Contracts.SeverityLevel {
     switch (level) {
-      case LogLevel.DEBUG: return appInsights.Contracts.SeverityLevel.Verbose;
-      case LogLevel.INFO: return appInsights.Contracts.SeverityLevel.Information;
-      case LogLevel.WARN: return appInsights.Contracts.SeverityLevel.Warning;
-      case LogLevel.ERROR: return appInsights.Contracts.SeverityLevel.Error;
+      case LogLevel.DEBUG:
+        return appInsights.Contracts.SeverityLevel.Verbose;
+      case LogLevel.INFO:
+        return appInsights.Contracts.SeverityLevel.Information;
+      case LogLevel.WARN:
+        return appInsights.Contracts.SeverityLevel.Warning;
+      case LogLevel.ERROR:
+        return appInsights.Contracts.SeverityLevel.Error;
     }
   }
 }
@@ -280,7 +301,11 @@ export class ConsoleLogger implements Logger {
     this.correlationId = context.correlationId || generateCorrelationId();
   }
 
-  private format(level: LogLevel, message: string, context?: LogContext): string {
+  private format(
+    level: LogLevel,
+    message: string,
+    context?: LogContext,
+  ): string {
     const enriched = {
       timestamp: new Date().toISOString(),
       level,
@@ -305,18 +330,29 @@ export class ConsoleLogger implements Logger {
   }
 
   error(message: string, error?: Error, context?: LogContext): void {
-    const errorContext = error ? { errorMessage: error.message, stack: error.stack } : {};
-    console.error(this.format(LogLevel.ERROR, message, { ...context, ...errorContext }));
+    const errorContext = error
+      ? { errorMessage: error.message, stack: error.stack }
+      : {};
+    console.error(
+      this.format(LogLevel.ERROR, message, { ...context, ...errorContext }),
+    );
   }
 
-  async trackOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {
+  async trackOperation<T>(
+    name: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
     const start = Date.now();
     try {
       const result = await operation();
-      this.info(`Operation ${name} completed`, { durationMs: Date.now() - start });
+      this.info(`Operation ${name} completed`, {
+        durationMs: Date.now() - start,
+      });
       return result;
     } catch (error) {
-      this.error(`Operation ${name} failed`, error as Error, { durationMs: Date.now() - start });
+      this.error(`Operation ${name} failed`, error as Error, {
+        durationMs: Date.now() - start,
+      });
       throw error;
     }
   }
@@ -326,7 +362,11 @@ export class ConsoleLogger implements Logger {
   }
 
   child(context: LogContext): Logger {
-    return new ConsoleLogger({ ...this.baseContext, ...context, correlationId: this.correlationId });
+    return new ConsoleLogger({
+      ...this.baseContext,
+      ...context,
+      correlationId: this.correlationId,
+    });
   }
 }
 ```
@@ -336,44 +376,52 @@ export class ConsoleLogger implements Logger {
 ```typescript
 // src/lib/logger/index.ts
 
-import * as appInsights from 'applicationinsights';
-import { Logger, LogContext } from './types';
-import { AppInsightsLogger } from './appinsights';
-import { ConsoleLogger } from './console';
+import * as appInsights from "applicationinsights";
+import { Logger, LogContext } from "./types";
+import { AppInsightsLogger } from "./appinsights";
+import { ConsoleLogger } from "./console";
 
 let initialized = false;
 
 export function initializeLogging(): void {
   if (initialized) return;
-  
+
   const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
-  
+
   if (connectionString) {
-    appInsights.setup(connectionString)
+    appInsights
+      .setup(connectionString)
       .setAutoCollectRequests(true)
       .setAutoCollectPerformance(true)
       .setAutoCollectExceptions(true)
       .setAutoCollectDependencies(true)
       .setAutoDependencyCorrelation(true)
       .start();
-    
-    console.log('Application Insights initialized');
+
+    console.log("Application Insights initialized");
   } else {
-    console.log('Application Insights not configured, using console logger');
+    console.log("Application Insights not configured, using console logger");
   }
-  
+
   initialized = true;
 }
 
 export function createLogger(context: LogContext = {}): Logger {
-  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING && appInsights.defaultClient) {
+  if (
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING &&
+    appInsights.defaultClient
+  ) {
     return new AppInsightsLogger(context);
   }
   return new ConsoleLogger(context);
 }
 
-export function createRequestLogger(request: HttpRequest, feature: string): Logger {
-  const correlationId = request.headers.get('x-correlation-id') || generateCorrelationId();
+export function createRequestLogger(
+  request: HttpRequest,
+  feature: string,
+): Logger {
+  const correlationId =
+    request.headers.get("x-correlation-id") || generateCorrelationId();
   return createLogger({ feature, correlationId });
 }
 
@@ -381,7 +429,7 @@ function generateCorrelationId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export { Logger, LogContext, LogLevel } from './types';
+export { Logger, LogContext, LogLevel } from "./types";
 ```
 
 ### 5. Usage in Functions
@@ -391,22 +439,22 @@ export { Logger, LogContext, LogLevel } from './types';
 console.warn("RAG search failed:", error);
 
 // After (with structured logging)
-import { createRequestLogger } from '../lib/logger';
+import { createRequestLogger } from "../lib/logger";
 
-const logger = createRequestLogger(request, 'ai-service');
+const logger = createRequestLogger(request, "ai-service");
 
-logger.warn("RAG search failed", { 
-  operation: 'searchDocuments',
+logger.warn("RAG search failed", {
+  operation: "searchDocuments",
   query: searchQuery.substring(0, 100),
 });
 
 // For errors with stack traces
 logger.error("Token validation failed", error, {
-  operation: 'validateToken',
+  operation: "validateToken",
 });
 
 // For performance tracking
-const result = await logger.trackOperation('generateEmbeddings', async () => {
+const result = await logger.trackOperation("generateEmbeddings", async () => {
   return generateEmbeddings(text);
 });
 ```
@@ -459,33 +507,37 @@ az functionapp config appsettings set \
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-| ---- | ---------- | ------ | ---------- |
-| Cost overruns from excessive logging | Medium | Medium | Set up cost alerts, use sampling for high-volume traces |
-| Performance impact | Low | Low | Use async logging, batch operations |
-| Data exposure in logs | Medium | High | Never log PII or secrets, use log scrubbing |
-| Lock-in to Azure | Medium | Medium | Abstract behind Logger interface for future portability |
+| Risk                                 | Likelihood | Impact | Mitigation                                              |
+| ------------------------------------ | ---------- | ------ | ------------------------------------------------------- |
+| Cost overruns from excessive logging | Medium     | Medium | Set up cost alerts, use sampling for high-volume traces |
+| Performance impact                   | Low        | Low    | Use async logging, batch operations                     |
+| Data exposure in logs                | Medium     | High   | Never log PII or secrets, use log scrubbing             |
+| Lock-in to Azure                     | Medium     | Medium | Abstract behind Logger interface for future portability |
 
 ---
 
 ## Migration Plan
 
 ### Phase 1: Setup (Week 1)
+
 1. Add `applicationinsights` package
 2. Create logger module with interface
 3. Initialize in function startup
 
 ### Phase 2: Core Services (Week 2)
+
 1. Replace console statements in services
 2. Add correlation ID propagation
 3. Track key operations
 
 ### Phase 3: All Functions (Week 3)
+
 1. Replace remaining console statements
 2. Add request logging middleware
 3. Set up dashboards and alerts
 
 ### Phase 4: Optimization (Week 4)
+
 1. Configure sampling for high-volume traces
 2. Set up cost monitoring
 3. Create runbooks for common queries

@@ -106,7 +106,8 @@ export class NewsService {
       (matchedInterests.length / Math.max(article.targetInterests.length, 1)) *
       0.4;
     const focusScore =
-      (matchedFocusAreas.length / Math.max(article.targetFocusAreas.length, 1)) *
+      (matchedFocusAreas.length /
+        Math.max(article.targetFocusAreas.length, 1)) *
       0.2;
 
     const score = Math.min(roleScore + interestScore + focusScore, 1);
@@ -117,7 +118,9 @@ export class NewsService {
       reasons.push(`matches your ${matchedRoles.join(", ")} role`);
     }
     if (matchedInterests.length > 0) {
-      reasons.push(`aligns with your interest in ${matchedInterests.join(", ")}`);
+      reasons.push(
+        `aligns with your interest in ${matchedInterests.join(", ")}`,
+      );
     }
     if (matchedFocusAreas.length > 0) {
       reasons.push(`relevant to your ${matchedFocusAreas.join(", ")} focus`);
@@ -172,9 +175,8 @@ export class NewsService {
     // Get user read status
     let readArticleIds: string[] = [];
     if (userId) {
-      readArticleIds = await userPreferencesRepository.getReadArticleIds(
-        userId,
-      );
+      readArticleIds =
+        await userPreferencesRepository.getReadArticleIds(userId);
     }
 
     // Separate general and specialized news
@@ -248,7 +250,8 @@ export class NewsService {
         title: title.substring(0, 50),
       });
       categorization = {
-        category: category && isValidCategory(category) ? category : "company-news",
+        category:
+          category && isValidCategory(category) ? category : "company-news",
         targetRoles: [],
         targetInterests: [],
         keywords: [],
@@ -290,7 +293,10 @@ export class NewsService {
       title,
       summary,
       content,
-      category: category && isValidCategory(category) ? category : categorization.category,
+      category:
+        category && isValidCategory(category)
+          ? category
+          : categorization.category,
       type: categorization.isGeneral ? "general" : "specialized",
       source,
       sourceUrl,

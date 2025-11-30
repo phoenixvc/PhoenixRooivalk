@@ -1,6 +1,7 @@
 # Azure Functions Infrastructure Setup
 
-This document describes the required Azure infrastructure for deploying the Phoenix Rooivalk Azure Functions.
+This document describes the required Azure infrastructure for deploying the
+Phoenix Rooivalk Azure Functions.
 
 ## Prerequisites
 
@@ -130,28 +131,28 @@ Add these secrets to your GitHub repository:
 
 ### Required Secrets
 
-| Secret Name | Description | How to Get |
-|-------------|-------------|------------|
+| Secret Name                         | Description                  | How to Get                                        |
+| ----------------------------------- | ---------------------------- | ------------------------------------------------- |
 | `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` | Function App publish profile | Azure Portal → Function App → Get publish profile |
-| `COSMOS_DB_CONNECTION_STRING` | Cosmos DB connection string | Azure Portal → Cosmos DB → Keys |
-| `AZURE_AI_ENDPOINT` | Azure OpenAI endpoint URL | Azure Portal → Azure OpenAI → Keys and Endpoint |
-| `AZURE_AI_API_KEY` | Azure OpenAI API key | Azure Portal → Azure OpenAI → Keys and Endpoint |
+| `COSMOS_DB_CONNECTION_STRING`       | Cosmos DB connection string  | Azure Portal → Cosmos DB → Keys                   |
+| `AZURE_AI_ENDPOINT`                 | Azure OpenAI endpoint URL    | Azure Portal → Azure OpenAI → Keys and Endpoint   |
+| `AZURE_AI_API_KEY`                  | Azure OpenAI API key         | Azure Portal → Azure OpenAI → Keys and Endpoint   |
 
 ### Optional Secrets
 
-| Secret Name | Description | How to Get |
-|-------------|-------------|------------|
-| `AZURE_CREDENTIALS` | Service principal credentials | `az ad sp create-for-rbac --sdk-auth` |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING` | App Insights connection string | Azure Portal → App Insights → Connection String |
-| `SENDGRID_API_KEY` | SendGrid API key for emails | SendGrid Dashboard |
-| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | Notification Hub connection | Azure Portal → Notification Hub → Access Policies |
+| Secret Name                                | Description                    | How to Get                                        |
+| ------------------------------------------ | ------------------------------ | ------------------------------------------------- |
+| `AZURE_CREDENTIALS`                        | Service principal credentials  | `az ad sp create-for-rbac --sdk-auth`             |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING`    | App Insights connection string | Azure Portal → App Insights → Connection String   |
+| `SENDGRID_API_KEY`                         | SendGrid API key for emails    | SendGrid Dashboard                                |
+| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | Notification Hub connection    | Azure Portal → Notification Hub → Access Policies |
 
 ### GitHub Variables
 
-| Variable Name | Description | Example |
-|---------------|-------------|---------|
-| `AZURE_FUNCTIONAPP_NAME` | Function App name | `func-phoenix-rooivalk` |
-| `AZURE_AI_DEPLOYMENT_NAME` | OpenAI chat deployment | `gpt-4` |
+| Variable Name              | Description            | Example                 |
+| -------------------------- | ---------------------- | ----------------------- |
+| `AZURE_FUNCTIONAPP_NAME`   | Function App name      | `func-phoenix-rooivalk` |
+| `AZURE_AI_DEPLOYMENT_NAME` | OpenAI chat deployment | `gpt-4`                 |
 
 ## Get Connection Strings
 
@@ -199,40 +200,41 @@ az functionapp deployment list-publishing-profiles \
 
 ## Environment Variables Reference
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `COSMOS_DB_CONNECTION_STRING` | ✅ | Cosmos DB connection |
-| `COSMOS_DB_DATABASE` | ❌ | Database name (default: `phoenix-docs`) |
-| `AZURE_AI_ENDPOINT` | ✅ | Azure OpenAI endpoint |
-| `AZURE_AI_API_KEY` | ✅* | Azure OpenAI API key |
-| `AZURE_ENTRA_AUTHORITY` | ✅* | For managed identity auth |
-| `AZURE_AI_DEPLOYMENT_NAME` | ❌ | Chat model deployment (default: `gpt-4`) |
-| `AZURE_AI_EMBEDDING_DEPLOYMENT` | ❌ | Embedding model (default: `text-embedding-3-small`) |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING` | ❌ | For monitoring |
-| `SENDGRID_API_KEY` | ❌ | For email sending |
-| `SENDGRID_FROM_EMAIL` | ❌ | Sender email address |
-| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | ❌ | For push notifications |
-| `AZURE_NOTIFICATION_HUB_NAME` | ❌ | Notification hub name |
-| `NEWS_API_KEY` | ❌ | NewsAPI.org API key |
-| `BING_SEARCH_API_KEY` | ❌ | Bing News Search API key |
-| `BASE_URL` | ❌ | Base URL for links (default: `https://docs-phoenixrooivalk.netlify.app`) |
+| Variable                                   | Required | Description                                                              |
+| ------------------------------------------ | -------- | ------------------------------------------------------------------------ |
+| `COSMOS_DB_CONNECTION_STRING`              | ✅       | Cosmos DB connection                                                     |
+| `COSMOS_DB_DATABASE`                       | ❌       | Database name (default: `phoenix-docs`)                                  |
+| `AZURE_AI_ENDPOINT`                        | ✅       | Azure OpenAI endpoint                                                    |
+| `AZURE_AI_API_KEY`                         | ✅\*     | Azure OpenAI API key                                                     |
+| `AZURE_ENTRA_AUTHORITY`                    | ✅\*     | For managed identity auth                                                |
+| `AZURE_AI_DEPLOYMENT_NAME`                 | ❌       | Chat model deployment (default: `gpt-4`)                                 |
+| `AZURE_AI_EMBEDDING_DEPLOYMENT`            | ❌       | Embedding model (default: `text-embedding-3-small`)                      |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING`    | ❌       | For monitoring                                                           |
+| `SENDGRID_API_KEY`                         | ❌       | For email sending                                                        |
+| `SENDGRID_FROM_EMAIL`                      | ❌       | Sender email address                                                     |
+| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | ❌       | For push notifications                                                   |
+| `AZURE_NOTIFICATION_HUB_NAME`              | ❌       | Notification hub name                                                    |
+| `NEWS_API_KEY`                             | ❌       | NewsAPI.org API key                                                      |
+| `BING_SEARCH_API_KEY`                      | ❌       | Bing News Search API key                                                 |
+| `BASE_URL`                                 | ❌       | Base URL for links (default: `https://docs-phoenixrooivalk.netlify.app`) |
 
-*Either `AZURE_AI_API_KEY` or `AZURE_ENTRA_AUTHORITY` is required for authentication.
+\*Either `AZURE_AI_API_KEY` or `AZURE_ENTRA_AUTHORITY` is required for
+authentication.
 
 ## Cosmos DB Containers
 
-| Container | Partition Key | Purpose |
-|-----------|---------------|---------|
-| `news_articles` | `/id` | News articles storage |
-| `user_news_preferences` | `/userId` | User preferences |
-| `documents` | `/id` | Document embeddings for RAG |
-| `support_tickets` | `/id` | Support tickets |
-| `news_subscriptions` | `/id` | Push/email subscriptions |
-| `notification_queue` | `/id` | Email/notification queue |
-| `embeddings` | `/id` | Vector embeddings cache |
-| `configuration` | `/type` | Dynamic configuration |
-| `monitoring_logs` | `/id` | Monitoring and metrics |
-| `cache` | `/id` | General caching |
+| Container               | Partition Key | Purpose                     |
+| ----------------------- | ------------- | --------------------------- |
+| `news_articles`         | `/id`         | News articles storage       |
+| `user_news_preferences` | `/userId`     | User preferences            |
+| `documents`             | `/id`         | Document embeddings for RAG |
+| `support_tickets`       | `/id`         | Support tickets             |
+| `news_subscriptions`    | `/id`         | Push/email subscriptions    |
+| `notification_queue`    | `/id`         | Email/notification queue    |
+| `embeddings`            | `/id`         | Vector embeddings cache     |
+| `configuration`         | `/type`       | Dynamic configuration       |
+| `monitoring_logs`       | `/id`         | Monitoring and metrics      |
+| `cache`                 | `/id`         | General caching             |
 
 ## Troubleshooting
 
@@ -248,7 +250,8 @@ The CI/CD pipeline validates infrastructure before deployment. If it fails:
 
 1. Check Application Insights for errors
 2. Verify environment variables are set correctly
-3. Check the Function App logs: `az functionapp log tail --name func-phoenix-rooivalk --resource-group rg-phoenix-rooivalk`
+3. Check the Function App logs:
+   `az functionapp log tail --name func-phoenix-rooivalk --resource-group rg-phoenix-rooivalk`
 
 ### Cosmos DB Connection Issues
 

@@ -43,7 +43,10 @@ async function handler(
     if (!documentContent || documentContent.length < 100) {
       return {
         status: 400,
-        jsonBody: { error: "Document content too short", code: "invalid-argument" },
+        jsonBody: {
+          error: "Document content too short",
+          code: "invalid-argument",
+        },
       };
     }
 

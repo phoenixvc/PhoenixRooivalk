@@ -111,11 +111,11 @@ GDPR-compliant cookie consent banner with granular consent options.
 
 Consent categories in `src/components/CookieConsent/CookieConsent.tsx`:
 
-| Category     | Purpose                                    | Default   |
-| ------------ | ------------------------------------------ | --------- |
-| `necessary`  | Essential site functionality               | Always on |
-| `analytics`  | Usage tracking (Application Insights)      | Off       |
-| `functional` | Progress tracking, preferences             | Off       |
+| Category     | Purpose                               | Default   |
+| ------------ | ------------------------------------- | --------- |
+| `necessary`  | Essential site functionality          | Always on |
+| `analytics`  | Usage tracking (Application Insights) | Off       |
+| `functional` | Progress tracking, preferences        | Off       |
 
 ### Customization
 
@@ -152,12 +152,12 @@ const consent = getConsent();
 
 Analytics are tracked via Azure Application Insights:
 
-| Event Type     | Data                          | Purpose           |
-| -------------- | ----------------------------- | ----------------- |
-| Page Views     | Page visits, paths, referrers | Usage tracking    |
-| Time on Page   | Time spent on pages           | Engagement        |
-| Conversions    | CTA clicks, sign-ups          | Funnel analysis   |
-| Custom Events  | Feature usage                 | Product insights  |
+| Event Type    | Data                          | Purpose          |
+| ------------- | ----------------------------- | ---------------- |
+| Page Views    | Page visits, paths, referrers | Usage tracking   |
+| Time on Page  | Time spent on pages           | Engagement       |
+| Conversions   | CTA clicks, sign-ups          | Funnel analysis  |
+| Custom Events | Feature usage                 | Product insights |
 
 ### Rate Limits
 
@@ -312,13 +312,13 @@ Azure Functions handle AI features, data operations, and scheduled tasks.
 
 ### Functions
 
-| Function                     | Trigger    | Purpose                         |
-| ---------------------------- | ---------- | ------------------------------- |
-| `analyzeCompetitors`         | HTTP POST  | AI competitor analysis          |
-| `getMarketInsights`          | HTTP POST  | AI market intelligence          |
-| `summarizeContent`           | HTTP POST  | AI content summarization        |
-| `getReadingRecommendations`  | HTTP POST  | AI reading suggestions          |
-| `suggestImprovements`        | HTTP POST  | AI document improvements        |
+| Function                    | Trigger   | Purpose                  |
+| --------------------------- | --------- | ------------------------ |
+| `analyzeCompetitors`        | HTTP POST | AI competitor analysis   |
+| `getMarketInsights`         | HTTP POST | AI market intelligence   |
+| `summarizeContent`          | HTTP POST | AI content summarization |
+| `getReadingRecommendations` | HTTP POST | AI reading suggestions   |
+| `suggestImprovements`       | HTTP POST | AI document improvements |
 
 ### Deployment
 
@@ -334,11 +334,11 @@ az functionapp deployment source config-zip -g <resource-group> -n <app-name> --
 
 Functions require these environment variables in Azure:
 
-| Variable              | Description                |
-| --------------------- | -------------------------- |
-| `OPENAI_API_KEY`      | OpenAI API key for AI      |
-| `COSMOS_CONNECTION`   | Cosmos DB connection string|
-| `JWT_SECRET`          | JWT verification secret    |
+| Variable            | Description                 |
+| ------------------- | --------------------------- |
+| `OPENAI_API_KEY`    | OpenAI API key for AI       |
+| `COSMOS_CONNECTION` | Cosmos DB connection string |
+| `JWT_SECRET`        | JWT verification secret     |
 
 ---
 
@@ -358,11 +358,11 @@ Functions require these environment variables in Azure:
 
 AI features are rate-limited per user:
 
-| Feature               | Limit   |
-| --------------------- | ------- |
-| Competitor Analysis   | 20/hour |
-| Market Insights       | 20/hour |
-| Document Improvements | 5/minute |
+| Feature               | Limit     |
+| --------------------- | --------- |
+| Competitor Analysis   | 20/hour   |
+| Market Insights       | 20/hour   |
+| Document Improvements | 5/minute  |
 | Content Summary       | 10/minute |
 
 ### Using the AI Panel
@@ -417,28 +417,28 @@ src/
 
 ### Required for Production
 
-| Variable                        | Description                          |
-| ------------------------------- | ------------------------------------ |
-| `AZURE_ENTRA_CLIENT_ID`         | Azure AD Application (client) ID     |
-| `AZURE_ENTRA_TENANT_ID`         | Azure AD Directory (tenant) ID       |
-| `AZURE_FUNCTIONS_BASE_URL`      | Base URL for Azure Functions app     |
-| `APPINSIGHTS_CONNECTION_STRING` | Application Insights connection      |
+| Variable                        | Description                      |
+| ------------------------------- | -------------------------------- |
+| `AZURE_ENTRA_CLIENT_ID`         | Azure AD Application (client) ID |
+| `AZURE_ENTRA_TENANT_ID`         | Azure AD Directory (tenant) ID   |
+| `AZURE_FUNCTIONS_BASE_URL`      | Base URL for Azure Functions app |
+| `APPINSIGHTS_CONNECTION_STRING` | Application Insights connection  |
 
 ### Optional
 
-| Variable                   | Description                          |
-| -------------------------- | ------------------------------------ |
-| `COSMOS_ENDPOINT`          | Cosmos DB endpoint (for direct access)|
-| `COSMOS_KEY`               | Cosmos DB primary key                |
+| Variable          | Description                            |
+| ----------------- | -------------------------------------- |
+| `COSMOS_ENDPOINT` | Cosmos DB endpoint (for direct access) |
+| `COSMOS_KEY`      | Cosmos DB primary key                  |
 
 ### Azure Functions Environment
 
 Set in Azure Portal > Function App > Configuration:
 
-| Variable              | Description                |
-| --------------------- | -------------------------- |
-| `OPENAI_API_KEY`      | OpenAI API key for AI      |
-| `CosmosDbConnection`  | Cosmos DB connection string|
+| Variable             | Description                 |
+| -------------------- | --------------------------- |
+| `OPENAI_API_KEY`     | OpenAI API key for AI       |
+| `CosmosDbConnection` | Cosmos DB connection string |
 
 ### Setting Up Azure Entra ID
 

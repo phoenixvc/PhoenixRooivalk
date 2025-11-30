@@ -9,7 +9,7 @@ import { Logger, LogContext, LogLevel } from "./types";
 import { generateCorrelationId } from "./utils";
 
 // Application Insights types (we'll use dynamic import to avoid hard dependency)
-interface TelemetryClient {
+export interface TelemetryClient {
   trackTrace(telemetry: {
     message: string;
     severity: number;
@@ -127,7 +127,10 @@ export class AppInsightsLogger implements Logger {
     }
   }
 
-  async trackOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {
+  async trackOperation<T>(
+    name: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
     const startTime = Date.now();
 
     try {

@@ -90,7 +90,11 @@ export async function getFromCache<T>(
     return resource.value;
   } catch (error: unknown) {
     if ((error as { code?: number })?.code === 404) return null;
-    logger.warn("Cache get error", { operation: "getFromCache", collection, key });
+    logger.warn("Cache get error", {
+      operation: "getFromCache",
+      collection,
+      key,
+    });
     return null;
   }
 }
@@ -122,7 +126,11 @@ export async function setInCache<T>(
 
     await upsertDocument(containerName, entry);
   } catch (error) {
-    logger.warn("Cache set error", { operation: "setInCache", collection, key });
+    logger.warn("Cache set error", {
+      operation: "setInCache",
+      collection,
+      key,
+    });
     // Don't throw - cache failures shouldn't break the application
   }
 }
@@ -139,7 +147,11 @@ export async function deleteFromCache(
     const container = getContainer(containerName);
     await container.item(key, key).delete();
   } catch (error) {
-    logger.warn("Cache delete error", { operation: "deleteFromCache", collection, key });
+    logger.warn("Cache delete error", {
+      operation: "deleteFromCache",
+      collection,
+      key,
+    });
   }
 }
 
@@ -163,7 +175,10 @@ export async function clearCache(
       await container.item(item.id, item.id).delete();
       deletedCount++;
     } catch (error) {
-      logger.warn("Failed to delete cache item", { operation: "clearCache", itemId: item.id });
+      logger.warn("Failed to delete cache item", {
+        operation: "clearCache",
+        itemId: item.id,
+      });
     }
   }
 
@@ -252,7 +267,10 @@ export async function getCacheStats(): Promise<{
         avgHits: items.length > 0 ? totalHits / items.length : 0,
       };
     } catch (error) {
-      logger.warn("Failed to get cache stats", { operation: "getCacheStats", collection: key });
+      logger.warn("Failed to get cache stats", {
+        operation: "getCacheStats",
+        collection: key,
+      });
       stats[key] = { count: 0, avgHits: 0 };
     }
   }
@@ -286,14 +304,23 @@ export async function cleanupExpiredCache(): Promise<number> {
           await container.item(item.id, item.id).delete();
           totalDeleted++;
         } catch (error) {
-          logger.warn("Failed to delete expired cache item", { operation: "cleanupExpiredCache", itemId: item.id });
+          logger.warn("Failed to delete expired cache item", {
+            operation: "cleanupExpiredCache",
+            itemId: item.id,
+          });
         }
       }
     } catch (error) {
-      logger.warn("Failed to cleanup cache", { operation: "cleanupExpiredCache", containerName });
+      logger.warn("Failed to cleanup cache", {
+        operation: "cleanupExpiredCache",
+        containerName,
+      });
     }
   }
 
-  logger.info("Cache cleanup complete", { operation: "cleanupExpiredCache", totalDeleted });
+  logger.info("Cache cleanup complete", {
+    operation: "cleanupExpiredCache",
+    totalDeleted,
+  });
   return totalDeleted;
 }

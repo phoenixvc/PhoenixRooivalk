@@ -336,13 +336,8 @@ export function OnboardingWalkthrough({
   forceShow = false,
   onClose,
 }: OnboardingWalkthroughProps): React.ReactElement | null {
-  const {
-    user,
-    loading,
-    userProfile,
-    refreshUserProfile,
-    saveProfileToCloud,
-  } = useAuth();
+  const { user, loading, userProfile, refreshUserProfile, saveProfileToCloud } =
+    useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);

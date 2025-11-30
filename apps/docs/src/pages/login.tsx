@@ -118,7 +118,8 @@ export default function LoginPage(): React.ReactElement {
                     <p className={styles.configHelp}>
                       <strong>For admins:</strong> Set these in your hosting
                       platform's environment variables (Azure Static Web Apps,
-                      Netlify, etc.). A new deploy is required after adding them.
+                      Netlify, etc.). A new deploy is required after adding
+                      them.
                     </p>
                   </details>
                   <p className={styles.loginNote} style={{ marginTop: "1rem" }}>

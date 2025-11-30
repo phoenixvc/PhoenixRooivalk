@@ -148,6 +148,27 @@ export class NewsRepository extends BaseRepository<NewsArticle> {
 
     return this.query(query, parameters);
   }
+
+  /**
+   * Find recent articles (optionally filtered by category)
+   */
+  async findRecent(options: {
+    category?: string;
+    limit?: number;
+  }): Promise<NewsArticle[]> {
+    const { category, limit = 10 } = options;
+    let query = "SELECT * FROM c";
+    const parameters: Array<{ name: string; value: string }> = [];
+
+    if (category) {
+      query += " WHERE c.category = @category";
+      parameters.push({ name: "@category", value: category });
+    }
+
+    query += ` ORDER BY c.publishedAt DESC OFFSET 0 LIMIT ${limit}`;
+
+    return this.query(query, parameters);
+  }
 }
 
 /**

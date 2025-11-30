@@ -39,9 +39,11 @@ async function getAIMonitoringStatsHandler(
   }
 
   try {
-    const { period = "weekly", feature, date } = Object.fromEntries(
-      request.query.entries(),
-    );
+    const {
+      period = "weekly",
+      feature,
+      date,
+    } = Object.fromEntries(request.query.entries());
 
     if (period === "daily") {
       const targetDate = date || new Date().toISOString().split("T")[0];
@@ -152,11 +154,15 @@ async function clearCacheHandler(
       collection: "embeddings" | "queries" | "suggestions";
     };
 
-    if (!collection || !["embeddings", "queries", "suggestions"].includes(collection)) {
+    if (
+      !collection ||
+      !["embeddings", "queries", "suggestions"].includes(collection)
+    ) {
       return {
         status: 400,
         jsonBody: {
-          error: "Valid collection required: embeddings, queries, or suggestions",
+          error:
+            "Valid collection required: embeddings, queries, or suggestions",
           code: "invalid-argument",
         },
       };
@@ -194,7 +200,13 @@ async function cleanupCacheHandler(
 
   try {
     const deleted = await cleanupExpiredCache();
-    return { status: 200, jsonBody: { deleted, message: `Cleaned up ${deleted} expired cache entries` } };
+    return {
+      status: 200,
+      jsonBody: {
+        deleted,
+        message: `Cleaned up ${deleted} expired cache entries`,
+      },
+    };
   } catch (error) {
     context.error("Error cleaning up cache:", error);
     return {

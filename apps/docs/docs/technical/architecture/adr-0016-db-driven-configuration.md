@@ -25,15 +25,19 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Static configuration (categories, roles, prompts) limits flexibility and requires code deployments for changes
-2. **Decision**: Store configuration in Cosmos DB with admin management and optional AI-assisted optimization
-3. **Trade-off**: Added complexity for CRUD operations vs. flexibility and dynamic updates
+1. **Problem**: Static configuration (categories, roles, prompts) limits
+   flexibility and requires code deployments for changes
+2. **Decision**: Store configuration in Cosmos DB with admin management and
+   optional AI-assisted optimization
+3. **Trade-off**: Added complexity for CRUD operations vs. flexibility and
+   dynamic updates
 
 ---
 
 ## Context
 
-The Phoenix Rooivalk documentation platform currently uses hardcoded configuration for:
+The Phoenix Rooivalk documentation platform currently uses hardcoded
+configuration for:
 
 - **News categories** (counter-uas, defense-tech, etc.)
 - **Target roles** (Technical, Business, Executive, etc.)
@@ -51,6 +55,7 @@ This approach has limitations:
 5. **Content Mismatch**: Categories may not reflect actual content distribution
 
 Key stakeholders:
+
 - **Admins**: Need to manage configuration without developer involvement
 - **AI Team**: Want to optimize prompts based on performance
 - **Content Team**: Need to add/modify categories as content evolves
@@ -62,33 +67,34 @@ Key stakeholders:
 
 ### Option 1: Cosmos DB with Admin API [✅ Selected]
 
-| Aspect          | Details |
-| --------------- | ------- |
+| Aspect          | Details                                                                       |
+| --------------- | ----------------------------------------------------------------------------- |
 | **Description** | Store all configuration in Cosmos DB collections with REST API for management |
-| **Pros**        | Full flexibility, admin dashboard integration, versioning, audit trail |
-| **Cons**        | More complex, requires careful caching, potential cold start issues |
+| **Pros**        | Full flexibility, admin dashboard integration, versioning, audit trail        |
+| **Cons**        | More complex, requires careful caching, potential cold start issues           |
 
 ### Option 2: Environment Variables + Config Files [❌ Rejected]
 
-| Aspect          | Details |
-| --------------- | ------- |
+| Aspect          | Details                                                             |
+| --------------- | ------------------------------------------------------------------- |
 | **Description** | Use environment variables for simple config, JSON files for complex |
-| **Pros**        | Simple, no DB dependency, fast cold starts |
-| **Cons**        | Requires deployment for changes, no admin UI, no versioning |
+| **Pros**        | Simple, no DB dependency, fast cold starts                          |
+| **Cons**        | Requires deployment for changes, no admin UI, no versioning         |
 
 ### Option 3: External Configuration Service (Azure App Configuration) [❌ Rejected]
 
-| Aspect          | Details |
-| --------------- | ------- |
-| **Description** | Use Azure App Configuration service for centralized config |
-| **Pros**        | Enterprise-grade, feature flags, A/B testing built-in |
+| Aspect          | Details                                                            |
+| --------------- | ------------------------------------------------------------------ |
+| **Description** | Use Azure App Configuration service for centralized config         |
+| **Pros**        | Enterprise-grade, feature flags, A/B testing built-in              |
 | **Cons**        | Additional cost, another service to manage, limited prompt storage |
 
 ---
 
 ## Decision
 
-**Store all dynamic configuration in Cosmos DB with a ConfigurationRepository pattern, admin management APIs, and optional AI-assisted optimization.**
+**Store all dynamic configuration in Cosmos DB with a ConfigurationRepository
+pattern, admin management APIs, and optional AI-assisted optimization.**
 
 ---
 
@@ -96,16 +102,17 @@ Key stakeholders:
 
 ### Why Cosmos DB Over Alternatives?
 
-| Factor | Cosmos DB | Env Vars | Azure App Config | Winner |
-| ------ | --------- | -------- | ---------------- | ------ |
-| **Flexibility** | High | Low | Medium | Cosmos DB |
-| **Admin Access** | Full API | None | Portal only | Cosmos DB |
-| **Prompt Storage** | Unlimited | N/A | Limited | Cosmos DB |
-| **Versioning** | Custom | None | Built-in | Tie |
-| **Cost** | Existing | Free | Additional | Cosmos DB |
-| **Integration** | Already used | Simple | New service | Cosmos DB |
+| Factor             | Cosmos DB    | Env Vars | Azure App Config | Winner    |
+| ------------------ | ------------ | -------- | ---------------- | --------- |
+| **Flexibility**    | High         | Low      | Medium           | Cosmos DB |
+| **Admin Access**   | Full API     | None     | Portal only      | Cosmos DB |
+| **Prompt Storage** | Unlimited    | N/A      | Limited          | Cosmos DB |
+| **Versioning**     | Custom       | None     | Built-in         | Tie       |
+| **Cost**           | Existing     | Free     | Additional       | Cosmos DB |
+| **Integration**    | Already used | Simple   | New service      | Cosmos DB |
 
-Cosmos DB is already used for other data storage, making it the natural choice for configuration without adding new dependencies.
+Cosmos DB is already used for other data storage, making it the natural choice
+for configuration without adding new dependencies.
 
 ---
 
@@ -116,8 +123,8 @@ Cosmos DB is already used for other data storage, making it the natural choice f
 ```typescript
 // Configuration collection schema
 interface ConfigItem {
-  id: string;              // e.g., "category:counter-uas"
-  type: ConfigType;        // "category" | "role" | "interest" | "prompt" | "topic"
+  id: string; // e.g., "category:counter-uas"
+  type: ConfigType; // "category" | "role" | "interest" | "prompt" | "topic"
   name: string;
   description: string;
   metadata: Record<string, unknown>;
@@ -129,14 +136,14 @@ interface ConfigItem {
   updatedBy: string;
 }
 
-type ConfigType = 
-  | "category"      // News categories
-  | "role"          // Target roles
-  | "interest"      // Target interests
-  | "prompt"        // AI prompts
-  | "topic"         // News topics
-  | "domain"        // Trusted domains
-  | "setting";      // General settings
+type ConfigType =
+  | "category" // News categories
+  | "role" // Target roles
+  | "interest" // Target interests
+  | "prompt" // AI prompts
+  | "topic" // News topics
+  | "domain" // Trusted domains
+  | "setting"; // General settings
 
 // Prompt-specific schema
 interface PromptConfig extends ConfigItem {
@@ -170,12 +177,12 @@ class ConfigurationRepository {
   async create(item: Omit<ConfigItem, "id" | "version">): Promise<ConfigItem>;
   async update(id: string, updates: Partial<ConfigItem>): Promise<ConfigItem>;
   async deactivate(id: string): Promise<void>;
-  
+
   // Versioning
   async getVersion(id: string, version: number): Promise<ConfigItem | null>;
   async getHistory(id: string): Promise<ConfigItem[]>;
   async revert(id: string, version: number): Promise<ConfigItem>;
-  
+
   // Bulk operations
   async importConfig(items: ConfigItem[]): Promise<ImportResult>;
   async exportConfig(type?: ConfigType): Promise<ConfigItem[]>;
@@ -192,17 +199,17 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 async function getCachedConfig(type: ConfigType): Promise<ConfigItem[]> {
   const cacheKey = `config:${type}`;
   const cached = configCache.get(cacheKey);
-  
+
   if (cached && cached.expiresAt > Date.now()) {
     return cached.item;
   }
-  
+
   const items = await configRepository.getActive(type);
   configCache.set(cacheKey, {
     item: items,
     expiresAt: Date.now() + CACHE_TTL_MS,
   });
-  
+
   return items;
 }
 
@@ -280,12 +287,12 @@ GET    /api/admin/config/optimize           # AI suggestions
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-| ---- | ---------- | ------ | ---------- |
-| Invalid config breaks system | Medium | High | Strict validation, rollback capability |
-| Cache inconsistency | Low | Medium | TTL-based expiration, invalidation on update |
-| Performance degradation | Low | Medium | Aggressive caching, lazy loading |
-| Unauthorized access | Low | High | Admin-only endpoints, audit logging |
+| Risk                         | Likelihood | Impact | Mitigation                                   |
+| ---------------------------- | ---------- | ------ | -------------------------------------------- |
+| Invalid config breaks system | Medium     | High   | Strict validation, rollback capability       |
+| Cache inconsistency          | Low        | Medium | TTL-based expiration, invalidation on update |
+| Performance degradation      | Low        | Medium | Aggressive caching, lazy loading             |
+| Unauthorized access          | Low        | High   | Admin-only endpoints, audit logging          |
 
 ---
 

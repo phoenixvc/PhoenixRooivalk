@@ -218,7 +218,11 @@ Target audience: {{audience}}
 Output format: {{format}}
 {{/format}}`,
     requiredVariables: ["content"],
-    optionalVariables: { length: "2-3 paragraphs", audience: "general", format: "paragraph" },
+    optionalVariables: {
+      length: "2-3 paragraphs",
+      audience: "general",
+      format: "paragraph",
+    },
   },
   outputFormat: "text",
 };
@@ -258,7 +262,12 @@ Available Documentation Sections:
 {{availableDocs}}
 
 Provide 5-7 recommendations with brief explanations of why each is relevant.`,
-    requiredVariables: ["role", "interests", "experienceLevel", "availableDocs"],
+    requiredVariables: [
+      "role",
+      "interests",
+      "experienceLevel",
+      "availableDocs",
+    ],
     optionalVariables: { readHistory: "" },
   },
   outputFormat: "json",

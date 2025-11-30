@@ -21,10 +21,15 @@ const logger: Logger = createLogger({ feature: "scheduled-jobs" });
  * Runs every 6 hours
  * Cron: 0 0 *\/6 * * *
  */
-async function fetchNewsJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function fetchNewsJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "fetchNewsJob" });
 
-  jobLogger.info("Starting scheduled news fetch", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Starting scheduled news fetch", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     // Fetch from NewsAPI
@@ -59,10 +64,15 @@ app.timer("fetchNewsScheduled", {
  * Runs every 5 minutes
  * Cron: 0 *\/5 * * * *
  */
-async function processEmailQueueJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function processEmailQueueJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "processEmailQueueJob" });
 
-  jobLogger.info("Processing email queue", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Processing email queue", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     // TODO: Pass actual email sending function when SendGrid is configured
@@ -88,10 +98,15 @@ app.timer("processEmailQueueScheduled", {
  * Runs daily at 8 AM UTC
  * Cron: 0 0 8 * * *
  */
-async function sendDailyDigestJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function sendDailyDigestJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "sendDailyDigestJob" });
 
-  jobLogger.info("Sending daily digest", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Sending daily digest", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     const result = await notificationsService.sendDigest("daily");
@@ -115,10 +130,15 @@ app.timer("sendDailyDigestScheduled", {
  * Runs every Monday at 8 AM UTC
  * Cron: 0 0 8 * * 1
  */
-async function sendWeeklyDigestJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function sendWeeklyDigestJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "sendWeeklyDigestJob" });
 
-  jobLogger.info("Sending weekly digest", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Sending weekly digest", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     const result = await notificationsService.sendDigest("weekly");
@@ -142,10 +162,15 @@ app.timer("sendWeeklyDigestScheduled", {
  * Runs every hour
  * Cron: 0 0 * * * *
  */
-async function cacheCleanupJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function cacheCleanupJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "cacheCleanupJob" });
 
-  jobLogger.info("Starting cache cleanup", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Starting cache cleanup", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     const deleted = await cleanupExpiredCache();
@@ -169,10 +194,15 @@ app.timer("cacheCleanupScheduled", {
  * Runs every 15 minutes
  * Cron: 0 *\/15 * * * *
  */
-async function monitoringAlertsJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function monitoringAlertsJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "monitoringAlertsJob" });
 
-  jobLogger.info("Checking monitoring alerts", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Checking monitoring alerts", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     const alertStatus = await checkAndStoreAlerts();
@@ -201,10 +231,15 @@ app.timer("monitoringAlertsScheduled", {
  * Runs twice daily at 6 AM and 6 PM UTC
  * Cron: 0 0 6,18 * * *
  */
-async function aiNewsDigestJob(timer: Timer, context: InvocationContext): Promise<void> {
+async function aiNewsDigestJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
   const jobLogger = logger.child({ operation: "aiNewsDigestJob" });
 
-  jobLogger.info("Generating AI news digest", { scheduledTime: timer.scheduledTime?.toISOString() });
+  jobLogger.info("Generating AI news digest", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
 
   try {
     const result = await newsAnalyticsService.generateAIDigest();

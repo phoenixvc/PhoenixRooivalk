@@ -335,9 +335,18 @@ const config: Config = {
         {
           title: "DOCUMENTATION",
           items: [
-            { label: "Getting Started", to: "/docs/phoenix-rooivalk-documentation" },
-            { label: "API Reference", to: "/docs/technical/integration/api-documentation" },
-            { label: "Deployment Guide", to: "/docs/operations/deployment/deployment-guide" },
+            {
+              label: "Getting Started",
+              to: "/docs/phoenix-rooivalk-documentation",
+            },
+            {
+              label: "API Reference",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
+            },
           ],
         },
         {
@@ -345,7 +354,10 @@ const config: Config = {
           items: [
             { label: "News", to: "/news" },
             { label: "Changelog", to: "/docs/resources/documentation-status" },
-            { label: "Security and Compliance", to: "/docs/legal/compliance-framework" },
+            {
+              label: "Security and Compliance",
+              to: "/docs/legal/compliance-framework",
+            },
           ],
         },
         {

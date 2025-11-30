@@ -165,9 +165,9 @@ export function isValidCategory(categoryId: string): boolean {
  * Get category list formatted for prompts
  */
 export function getCategoriesForPrompt(): string {
-  return DEFAULT_NEWS_CATEGORIES.map(
-    (c) => `- ${c.id}: ${c.description}`,
-  ).join("\n");
+  return DEFAULT_NEWS_CATEGORIES.map((c) => `- ${c.id}: ${c.description}`).join(
+    "\n",
+  );
 }
 
 /**

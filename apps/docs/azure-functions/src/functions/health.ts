@@ -65,7 +65,9 @@ async function readinessHandler(
     await container.items.query("SELECT TOP 1 * FROM c").fetchAll();
   } catch (error) {
     checks.cosmos = "error";
-    errors.push(`Cosmos DB: ${error instanceof Error ? error.message : "Unknown error"}`);
+    errors.push(
+      `Cosmos DB: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
   }
 
   // Check OpenAI configuration
@@ -74,7 +76,12 @@ async function readinessHandler(
   }
 
   const status: HealthStatus = {
-    status: errors.length === 0 ? "healthy" : checks.cosmos === "error" ? "unhealthy" : "degraded",
+    status:
+      errors.length === 0
+        ? "healthy"
+        : checks.cosmos === "error"
+          ? "unhealthy"
+          : "degraded",
     timestamp: new Date().toISOString(),
     version: process.env.npm_package_version || "1.0.0",
     uptime: Math.floor((Date.now() - startTime) / 1000),
@@ -83,7 +90,12 @@ async function readinessHandler(
   };
 
   return {
-    status: status.status === "healthy" ? 200 : status.status === "degraded" ? 200 : 503,
+    status:
+      status.status === "healthy"
+        ? 200
+        : status.status === "degraded"
+          ? 200
+          : 503,
     jsonBody: status,
   };
 }

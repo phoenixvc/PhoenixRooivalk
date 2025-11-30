@@ -2,7 +2,11 @@
  * Unit tests for utility functions
  */
 
-import { generateId, generateShortId, generateNumericId } from "../lib/utils/ids";
+import {
+  generateId,
+  generateShortId,
+  generateNumericId,
+} from "../lib/utils/ids";
 
 describe("ID Generation", () => {
   describe("generateId", () => {

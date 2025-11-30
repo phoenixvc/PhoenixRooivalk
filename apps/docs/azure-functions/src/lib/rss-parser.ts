@@ -222,22 +222,24 @@ function parseAtom(xml: string): RSSFeed {
  */
 function parseFeed(xml: string): RSSFeed {
   // Check for Atom namespace in feed element
-  const atomFeedMatch = xml.match(/<feed[^>]*xmlns\s*=\s*["']http:\/\/www\.w3\.org\/2005\/Atom["'][^>]*>/i);
+  const atomFeedMatch = xml.match(
+    /<feed[^>]*xmlns\s*=\s*["']http:\/\/www\.w3\.org\/2005\/Atom["'][^>]*>/i,
+  );
   if (atomFeedMatch) {
     return parseAtom(xml);
   }
-  
+
   // Check for RSS root element
   const rssMatch = xml.match(/<rss[^>]*version\s*=\s*["'][\d.]+["'][^>]*>/i);
   if (rssMatch) {
     return parseRSS2(xml);
   }
-  
+
   // Check for channel element (RSS 1.0/2.0)
   if (xml.includes("<channel>") || xml.includes("<channel ")) {
     return parseRSS2(xml);
   }
-  
+
   // Default to RSS parsing
   return parseRSS2(xml);
 }
@@ -259,7 +261,8 @@ export async function fetchRSSFeed(
 
     const response = await fetch(url, {
       headers: {
-        Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml",
+        Accept:
+          "application/rss+xml, application/atom+xml, application/xml, text/xml",
         "User-Agent": "Phoenix-Rooivalk-Bot/1.0",
       },
       signal: controller.signal,
@@ -282,7 +285,8 @@ export async function fetchRSSFeed(
 
     return feed;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     logger.error("Failed to fetch RSS feed", { url, error: errorMessage });
     throw new Error(`Failed to fetch RSS feed: ${errorMessage}`);
   }

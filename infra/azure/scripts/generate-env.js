@@ -12,23 +12,23 @@
  *   node generate-env.js --resource-group phoenix-rooivalk-prod --env prod
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 // Parse arguments
 const args = process.argv.slice(2);
-let resourceGroup = '';
-let environment = 'dev';
+let resourceGroup = "";
+let environment = "dev";
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--resource-group' || args[i] === '-g') {
+  if (args[i] === "--resource-group" || args[i] === "-g") {
     resourceGroup = args[i + 1];
     i++;
-  } else if (args[i] === '--env' || args[i] === '-e') {
+  } else if (args[i] === "--env" || args[i] === "-e") {
     environment = args[i + 1];
     i++;
-  } else if (args[i] === '--help' || args[i] === '-h') {
+  } else if (args[i] === "--help" || args[i] === "-h") {
     console.log(`
 Usage: node generate-env.js --resource-group <rg-name> --env <environment>
 
@@ -45,23 +45,23 @@ Example:
 }
 
 if (!resourceGroup) {
-  console.error('Error: --resource-group is required');
+  console.error("Error: --resource-group is required");
   process.exit(1);
 }
 
-console.log('');
-console.log('═══════════════════════════════════════════════════════════════');
-console.log('       Phoenix Rooivalk - Environment Generator');
-console.log('═══════════════════════════════════════════════════════════════');
-console.log('');
+console.log("");
+console.log("═══════════════════════════════════════════════════════════════");
+console.log("       Phoenix Rooivalk - Environment Generator");
+console.log("═══════════════════════════════════════════════════════════════");
+console.log("");
 console.log(`Resource Group: ${resourceGroup}`);
 console.log(`Environment:    ${environment}`);
-console.log('');
+console.log("");
 
 // Helper to run Azure CLI commands
 function az(command) {
   try {
-    return execSync(`az ${command}`, { encoding: 'utf8' }).trim();
+    return execSync(`az ${command}`, { encoding: "utf8" }).trim();
   } catch (error) {
     return null;
   }
@@ -70,18 +70,18 @@ function az(command) {
 // Helper to run Azure CLI and parse JSON
 function azJson(command) {
   try {
-    const result = execSync(`az ${command} -o json`, { encoding: 'utf8' });
+    const result = execSync(`az ${command} -o json`, { encoding: "utf8" });
     return JSON.parse(result);
   } catch (error) {
     return null;
   }
 }
 
-console.log('Fetching Azure resources...');
-console.log('');
+console.log("Fetching Azure resources...");
+console.log("");
 
 // Project naming convention
-const projectName = 'phoenix-rooivalk';
+const projectName = "phoenix-rooivalk";
 const shortEnv = environment.substring(0, 4);
 
 // Resource names (matching Bicep naming)
@@ -93,35 +93,39 @@ const keyVaultName = `kv-phoenixrooivalk-${shortEnv}`;
 
 // Collect configuration
 const config = {
-  CLOUD_PROVIDER: 'azure',
+  CLOUD_PROVIDER: "azure",
   AZURE_STATIC_WEB_APP_NAME: staticWebAppName,
   AZURE_FUNCTIONS_APP_NAME: functionsAppName,
-  AZURE_FUNCTIONS_BASE_URL: '',
-  AZURE_APP_INSIGHTS_CONNECTION_STRING: '',
-  AZURE_COSMOS_ENDPOINT: '',
+  AZURE_FUNCTIONS_BASE_URL: "",
+  AZURE_APP_INSIGHTS_CONNECTION_STRING: "",
+  AZURE_COSMOS_ENDPOINT: "",
   AZURE_ENTRA_TENANT_ID: "",
   AZURE_ENTRA_CLIENT_ID: "",
   AZURE_ENTRA_AUTHORITY: "",
   AZURE_ENTRA_REDIRECT_URI: "",
   AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI: "",
   AZURE_ENTRA_SCOPES: "openid profile email User.Read",
-  AZURE_STATIC_WEB_APPS_API_TOKEN: '',
-  AZURE_FUNCTIONS_PUBLISH_PROFILE: '',
+  AZURE_STATIC_WEB_APPS_API_TOKEN: "",
+  AZURE_FUNCTIONS_PUBLISH_PROFILE: "",
 };
 
 // Get Static Web App token
-console.log('Getting Static Web App deployment token...');
-const swaToken = az(`staticwebapp secrets list --name "${staticWebAppName}" --query "properties.apiKey" -o tsv`);
+console.log("Getting Static Web App deployment token...");
+const swaToken = az(
+  `staticwebapp secrets list --name "${staticWebAppName}" --query "properties.apiKey" -o tsv`,
+);
 if (swaToken) {
   config.AZURE_STATIC_WEB_APPS_API_TOKEN = swaToken;
-  console.log('  ✓ Static Web App token retrieved');
+  console.log("  ✓ Static Web App token retrieved");
 } else {
-  console.log('  ⚠ Could not retrieve Static Web App token');
+  console.log("  ⚠ Could not retrieve Static Web App token");
 }
 
 // Get Functions URL
-console.log('Getting Azure Functions URL...');
-const functionsHostname = az(`functionapp show --name "${functionsAppName}" --resource-group "${resourceGroup}" --query "defaultHostName" -o tsv`);
+console.log("Getting Azure Functions URL...");
+const functionsHostname = az(
+  `functionapp show --name "${functionsAppName}" --resource-group "${resourceGroup}" --query "defaultHostName" -o tsv`,
+);
 if (functionsHostname) {
   config.AZURE_FUNCTIONS_BASE_URL = `https://${functionsHostname}`;
   console.log(`  ✓ Functions URL: ${config.AZURE_FUNCTIONS_BASE_URL}`);
@@ -131,39 +135,45 @@ if (functionsHostname) {
 }
 
 // Get Functions publish profile
-console.log('Getting Azure Functions publish profile...');
-const publishProfile = az(`functionapp deployment list-publishing-profiles --name "${functionsAppName}" --resource-group "${resourceGroup}" --xml`);
+console.log("Getting Azure Functions publish profile...");
+const publishProfile = az(
+  `functionapp deployment list-publishing-profiles --name "${functionsAppName}" --resource-group "${resourceGroup}" --xml`,
+);
 if (publishProfile) {
   config.AZURE_FUNCTIONS_PUBLISH_PROFILE = publishProfile;
-  console.log('  ✓ Functions publish profile retrieved');
+  console.log("  ✓ Functions publish profile retrieved");
 } else {
-  console.log('  ⚠ Could not retrieve Functions publish profile');
+  console.log("  ⚠ Could not retrieve Functions publish profile");
 }
 
 // Get Application Insights connection string
-console.log('Getting Application Insights connection string...');
-const appInsightsConnection = az(`monitor app-insights component show --app "${appInsightsName}" --resource-group "${resourceGroup}" --query "connectionString" -o tsv`);
+console.log("Getting Application Insights connection string...");
+const appInsightsConnection = az(
+  `monitor app-insights component show --app "${appInsightsName}" --resource-group "${resourceGroup}" --query "connectionString" -o tsv`,
+);
 if (appInsightsConnection) {
   config.AZURE_APP_INSIGHTS_CONNECTION_STRING = appInsightsConnection;
-  console.log('  ✓ App Insights connection string retrieved');
+  console.log("  ✓ App Insights connection string retrieved");
 } else {
-  console.log('  ⚠ Could not retrieve App Insights connection string');
+  console.log("  ⚠ Could not retrieve App Insights connection string");
 }
 
 // Get Cosmos DB endpoint
-console.log('Getting Cosmos DB endpoint...');
-const cosmosEndpoint = az(`cosmosdb show --name "${cosmosAccountName}" --resource-group "${resourceGroup}" --query "documentEndpoint" -o tsv`);
+console.log("Getting Cosmos DB endpoint...");
+const cosmosEndpoint = az(
+  `cosmosdb show --name "${cosmosAccountName}" --resource-group "${resourceGroup}" --query "documentEndpoint" -o tsv`,
+);
 if (cosmosEndpoint) {
   config.AZURE_COSMOS_ENDPOINT = cosmosEndpoint;
   console.log(`  ✓ Cosmos DB endpoint: ${cosmosEndpoint}`);
 } else {
-  console.log('  ⚠ Could not retrieve Cosmos DB endpoint');
+  console.log("  ⚠ Could not retrieve Cosmos DB endpoint");
 }
 
-console.log('');
+console.log("");
 
 // Create output directory
-const outputDir = path.join(__dirname, '..', 'output');
+const outputDir = path.join(__dirname, "..", "output");
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }
@@ -255,7 +265,7 @@ echo "════════════════════════�
 `;
 
 fs.writeFileSync(secretsFile, secretsContent);
-fs.chmodSync(secretsFile, '755');
+fs.chmodSync(secretsFile, "755");
 console.log(`✓ GitHub secrets script created: ${secretsFile}`);
 
 // Generate JSON config
@@ -285,21 +295,21 @@ const jsonContent = {
 fs.writeFileSync(jsonFile, JSON.stringify(jsonContent, null, 2));
 console.log(`✓ JSON config created: ${jsonFile}`);
 
-console.log('');
-console.log('═══════════════════════════════════════════════════════════════');
-console.log('                     Configuration Complete!');
-console.log('═══════════════════════════════════════════════════════════════');
-console.log('');
-console.log('Next steps:');
-console.log('');
-console.log('  1. Copy environment variables to your local .env.local:');
+console.log("");
+console.log("═══════════════════════════════════════════════════════════════");
+console.log("                     Configuration Complete!");
+console.log("═══════════════════════════════════════════════════════════════");
+console.log("");
+console.log("Next steps:");
+console.log("");
+console.log("  1. Copy environment variables to your local .env.local:");
 console.log(`     cat ${envFile}`);
-console.log('');
-console.log('  2. Configure GitHub secrets:');
+console.log("");
+console.log("  2. Configure GitHub secrets:");
 console.log(`     bash ${secretsFile}`);
-console.log('');
+console.log("");
 console.log("  3. Set up Azure Entra ID for authentication:");
 console.log("     ./scripts/setup-entra.sh --create");
-console.log('');
-console.log('  4. Push to main branch to trigger deployment');
-console.log('');
+console.log("");
+console.log("  4. Push to main branch to trigger deployment");
+console.log("");

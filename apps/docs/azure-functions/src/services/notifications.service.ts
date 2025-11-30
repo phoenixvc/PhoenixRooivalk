@@ -124,7 +124,9 @@ export class NotificationsService {
   async getSubscription(userId: string): Promise<NewsSubscription | null> {
     try {
       const container = getContainer(this.subscriptionsContainer);
-      const { resource } = await container.item(userId, userId).read<NewsSubscription>();
+      const { resource } = await container
+        .item(userId, userId)
+        .read<NewsSubscription>();
       return resource || null;
     } catch (error) {
       // Expected for non-existent subscriptions
@@ -179,7 +181,10 @@ export class NotificationsService {
         const emailMessage: EmailMessage = {
           to: notification.to,
           subject: notification.subject,
-          html: this.renderEmailTemplate(notification.template, notification.data),
+          html: this.renderEmailTemplate(
+            notification.template,
+            notification.data,
+          ),
         };
 
         const result = await sendEmail(emailMessage);
@@ -203,7 +208,8 @@ export class NotificationsService {
           failed++;
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
         logger.error("Failed to process email notification", {
           operation: "processEmailQueue",
           notificationId: notification.id,
@@ -295,7 +301,11 @@ export class NotificationsService {
     title: string,
     summary: string,
     category: string,
-  ): Promise<{ notificationsSent: number; pushSent: number; emailQueued: number }> {
+  ): Promise<{
+    notificationsSent: number;
+    pushSent: number;
+    emailQueued: number;
+  }> {
     // Get subscribers for this category
     const subscribers = await queryDocuments<NewsSubscription>(
       this.subscriptionsContainer,
@@ -344,7 +354,7 @@ export class NotificationsService {
 
         // Detect platform from token format (simplified heuristic)
         const platform = this.detectPlatform(subscriber.pushToken);
-        
+
         const result = await sendPushNotification(
           subscriber.pushToken,
           platform,

@@ -16,10 +16,22 @@ export function generateId(prefix?: string): string {
 }
 
 /**
- * Generate a short ID (8 characters)
+ * Generate a short ID (configurable length, default 8 characters)
  */
-export function generateShortId(): string {
-  return crypto.randomBytes(4).toString("hex");
+export function generateShortId(length: number = 8): string {
+  const bytes = Math.ceil(length / 2);
+  return crypto.randomBytes(bytes).toString("hex").slice(0, length);
+}
+
+/**
+ * Generate a numeric ID of specified length
+ */
+export function generateNumericId(length: number = 6): string {
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += Math.floor(Math.random() * 10).toString();
+  }
+  return result;
 }
 
 /**

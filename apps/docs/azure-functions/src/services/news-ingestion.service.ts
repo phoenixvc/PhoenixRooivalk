@@ -62,11 +62,21 @@ export class NewsIngestionService {
   /**
    * Fetch news from NewsAPI.org
    */
-  async fetchFromNewsAPI(query: string): Promise<ExternalNewsArticle[]> {
+  async fetchFromNewsAPI(
+    queryOrOptions: string | { query: string; pageSize?: number },
+  ): Promise<ExternalNewsArticle[]> {
+    const query =
+      typeof queryOrOptions === "string"
+        ? queryOrOptions
+        : queryOrOptions.query;
+    const pageSize =
+      typeof queryOrOptions === "object" ? queryOrOptions.pageSize || 10 : 10;
     const config = getNewsApiConfig();
 
     if (!config.apiKey) {
-      logger.warn("NewsAPI key not configured", { operation: "fetchFromNewsAPI" });
+      logger.warn("NewsAPI key not configured", {
+        operation: "fetchFromNewsAPI",
+      });
       return [];
     }
 
@@ -75,7 +85,7 @@ export class NewsIngestionService {
       url.searchParams.set("q", query);
       url.searchParams.set("language", "en");
       url.searchParams.set("sortBy", "publishedAt");
-      url.searchParams.set("pageSize", "10");
+      url.searchParams.set("pageSize", pageSize.toString());
 
       // Filter by trusted domains
       const domains = TRUSTED_DOMAINS.slice(0, 20).join(",");
@@ -95,25 +105,29 @@ export class NewsIngestionService {
 
       const data = await response.json();
 
-      return (data.articles || []).map((article: {
-        title: string;
-        description: string;
-        content?: string;
-        url: string;
-        source: { name: string };
-        publishedAt: string;
-        urlToImage?: string;
-      }) => ({
-        title: article.title,
-        description: article.description,
-        content: article.content,
-        url: article.url,
-        source: article.source?.name || "Unknown",
-        publishedAt: article.publishedAt,
-        urlToImage: article.urlToImage,
-      }));
+      return (data.articles || []).map(
+        (article: {
+          title: string;
+          description: string;
+          content?: string;
+          url: string;
+          source: { name: string };
+          publishedAt: string;
+          urlToImage?: string;
+        }) => ({
+          title: article.title,
+          description: article.description,
+          content: article.content,
+          url: article.url,
+          source: article.source?.name || "Unknown",
+          publishedAt: article.publishedAt,
+          urlToImage: article.urlToImage,
+        }),
+      );
     } catch (error) {
-      logger.error("Failed to fetch from NewsAPI", error, { operation: "fetchFromNewsAPI" });
+      logger.error("Failed to fetch from NewsAPI", error, {
+        operation: "fetchFromNewsAPI",
+      });
       return [];
     }
   }
@@ -121,7 +135,15 @@ export class NewsIngestionService {
   /**
    * Fetch news from Bing News API
    */
-  async fetchFromBingNews(query: string): Promise<ExternalNewsArticle[]> {
+  async fetchFromBingNews(
+    queryOrOptions: string | { query: string; count?: number },
+  ): Promise<ExternalNewsArticle[]> {
+    const query =
+      typeof queryOrOptions === "string"
+        ? queryOrOptions
+        : queryOrOptions.query;
+    const count =
+      typeof queryOrOptions === "object" ? queryOrOptions.count || 10 : 10;
     const config = getNewsApiConfig();
 
     if (config.provider !== "bing" || !config.apiKey) {
@@ -131,7 +153,7 @@ export class NewsIngestionService {
     try {
       const url = new URL(`${config.baseUrl}/search`);
       url.searchParams.set("q", query);
-      url.searchParams.set("count", "10");
+      url.searchParams.set("count", count.toString());
       url.searchParams.set("freshness", "Week");
       url.searchParams.set("mkt", "en-US");
 
@@ -142,30 +164,37 @@ export class NewsIngestionService {
       });
 
       if (!response.ok) {
-        logger.error("Bing News API error", undefined, { operation: "fetchFromBingNews", status: response.status });
+        logger.error("Bing News API error", undefined, {
+          operation: "fetchFromBingNews",
+          status: response.status,
+        });
         return [];
       }
 
       const data = await response.json();
 
-      return (data.value || []).map((article: {
-        name: string;
-        description: string;
-        url: string;
-        provider: Array<{ name: string }>;
-        datePublished: string;
-        image?: { thumbnail?: { contentUrl: string } };
-      }) => ({
-        title: article.name,
-        description: article.description,
-        content: article.description,
-        url: article.url,
-        source: article.provider?.[0]?.name || "Unknown",
-        publishedAt: article.datePublished,
-        urlToImage: article.image?.thumbnail?.contentUrl,
-      }));
+      return (data.value || []).map(
+        (article: {
+          name: string;
+          description: string;
+          url: string;
+          provider: Array<{ name: string }>;
+          datePublished: string;
+          image?: { thumbnail?: { contentUrl: string } };
+        }) => ({
+          title: article.name,
+          description: article.description,
+          content: article.description,
+          url: article.url,
+          source: article.provider?.[0]?.name || "Unknown",
+          publishedAt: article.datePublished,
+          urlToImage: article.image?.thumbnail?.contentUrl,
+        }),
+      );
     } catch (error) {
-      logger.error("Failed to fetch from Bing News", error, { operation: "fetchFromBingNews" });
+      logger.error("Failed to fetch from Bing News", error, {
+        operation: "fetchFromBingNews",
+      });
       return [];
     }
   }
@@ -192,7 +221,9 @@ export class NewsIngestionService {
   /**
    * Process article with AI categorization
    */
-  async processArticle(article: ExternalNewsArticle): Promise<NewsArticle | null> {
+  async processArticle(
+    article: ExternalNewsArticle,
+  ): Promise<NewsArticle | null> {
     try {
       const content = article.content || article.description;
 
@@ -213,7 +244,9 @@ export class NewsIngestionService {
       try {
         categorization = JSON.parse(categorizationResult);
       } catch (error) {
-        logger.warn("Failed to parse categorization result", { operation: "processArticle" });
+        logger.warn("Failed to parse categorization result", {
+          operation: "processArticle",
+        });
         categorization = {
           category: "defense-tech",
           targetRoles: [],
@@ -264,7 +297,9 @@ export class NewsIngestionService {
         embedding,
       };
     } catch (error) {
-      logger.error("Failed to process article", error, { operation: "processArticle" });
+      logger.error("Failed to process article", error, {
+        operation: "processArticle",
+      });
       return null;
     }
   }
@@ -272,11 +307,13 @@ export class NewsIngestionService {
   /**
    * Run news ingestion from external APIs
    */
-  async runIngestion(options: {
-    queries?: string[];
-    maxArticles?: number;
-    provider?: "newsapi" | "bing";
-  } = {}): Promise<IngestionResult> {
+  async runIngestion(
+    options: {
+      queries?: string[];
+      maxArticles?: number;
+      provider?: "newsapi" | "bing";
+    } = {},
+  ): Promise<IngestionResult> {
     const queries = options.queries || NEWS_SEARCH_QUERIES.slice(0, 5);
     const maxArticles = Math.min(
       options.maxArticles || this.maxArticlesPerRun,

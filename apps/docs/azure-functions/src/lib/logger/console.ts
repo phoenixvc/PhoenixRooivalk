@@ -70,7 +70,10 @@ export class ConsoleLogger implements Logger {
   }
 
   debug(message: string, context?: LogContext): void {
-    this.log(LogLevel.DEBUG, this.createEntry(LogLevel.DEBUG, message, context));
+    this.log(
+      LogLevel.DEBUG,
+      this.createEntry(LogLevel.DEBUG, message, context),
+    );
   }
 
   info(message: string, context?: LogContext): void {
@@ -88,7 +91,10 @@ export class ConsoleLogger implements Logger {
     );
   }
 
-  async trackOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {
+  async trackOperation<T>(
+    name: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
     const startTime = Date.now();
 
     try {

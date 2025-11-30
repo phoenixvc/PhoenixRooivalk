@@ -85,7 +85,10 @@ export async function logMetrics(
     } catch (error) {
       // Expected for first request of the day - no existing stats
       if ((error as { code?: number })?.code !== 404) {
-        logger.warn("Failed to read existing daily stats", { operation: "logMetrics", dailyId });
+        logger.warn("Failed to read existing daily stats", {
+          operation: "logMetrics",
+          dailyId,
+        });
       }
     }
 
@@ -100,8 +103,7 @@ export async function logMetrics(
       totalLatencyMs:
         ((existingStats.totalLatencyMs as number) || 0) +
         (typeof latencyMs === "number" ? latencyMs : 0),
-      cacheHits:
-        ((existingStats.cacheHits as number) || 0) + (cached ? 1 : 0),
+      cacheHits: ((existingStats.cacheHits as number) || 0) + (cached ? 1 : 0),
       totalErrors: (existingStats.totalErrors as number) || 0,
       updatedAt: now.toISOString(),
     });
@@ -150,7 +152,10 @@ export async function logError(
     } catch (error) {
       // Expected for first error of the day - no existing stats
       if ((error as { code?: number })?.code !== 404) {
-        logger.warn("Failed to read existing daily stats for error logging", { operation: "logError", dailyId });
+        logger.warn("Failed to read existing daily stats for error logging", {
+          operation: "logError",
+          dailyId,
+        });
       }
     }
 
@@ -166,7 +171,10 @@ export async function logError(
       updatedAt: now.toISOString(),
     });
   } catch (logError) {
-    logger.error("Failed to log error", logError, { operation: "logError", feature });
+    logger.error("Failed to log error", logError, {
+      operation: "logError",
+      feature,
+    });
   }
 }
 
@@ -215,14 +223,13 @@ export async function getDailyStats(
       totalErrors: (data.totalErrors as number) || 0,
       avgLatencyMs:
         totalRequests > 0
-          ? Math.round(
-              ((data.totalLatencyMs as number) || 0) / totalRequests,
-            )
+          ? Math.round(((data.totalLatencyMs as number) || 0) / totalRequests)
           : 0,
       cacheHitRate:
         totalRequests > 0
-          ? Math.round((((data.cacheHits as number) || 0) / totalRequests) * 100) /
-            100
+          ? Math.round(
+              (((data.cacheHits as number) || 0) / totalRequests) * 100,
+            ) / 100
           : 0,
       errorRate:
         totalRequests > 0
@@ -434,7 +441,8 @@ export async function getRecentErrors(
   const parameters: Array<{ name: string; value: string | number }> = [];
 
   if (feature) {
-    query = "SELECT * FROM c WHERE c.feature = @feature ORDER BY c.timestamp DESC";
+    query =
+      "SELECT * FROM c WHERE c.feature = @feature ORDER BY c.timestamp DESC";
     parameters.push({ name: "@feature", value: feature });
   }
 

@@ -5,20 +5,24 @@
  * Supports categories, roles, interests, prompts, topics, and settings.
  */
 
-import { BaseRepository, BaseEntity, PaginationOptions } from "./base.repository";
+import {
+  BaseRepository,
+  BaseEntity,
+  PaginationOptions,
+} from "./base.repository";
 import { queryDocuments, upsertDocument } from "../lib/cosmos";
 
 /**
  * Configuration types
  */
 export type ConfigType =
-  | "category"   // News categories
-  | "role"       // Target roles
-  | "interest"   // Target interests
-  | "prompt"     // AI prompts
-  | "topic"      // News topics
-  | "domain"     // Trusted domains
-  | "setting";   // General settings
+  | "category" // News categories
+  | "role" // Target roles
+  | "interest" // Target interests
+  | "prompt" // AI prompts
+  | "topic" // News topics
+  | "domain" // Trusted domains
+  | "setting"; // General settings
 
 /**
  * Base configuration item
@@ -75,7 +79,12 @@ export interface InterestConfig extends ConfigItem {
 export interface PromptConfig extends ConfigItem {
   type: "prompt";
   metadata: {
-    category: "analysis" | "generation" | "retrieval" | "research" | "recommendation";
+    category:
+      | "analysis"
+      | "generation"
+      | "retrieval"
+      | "research"
+      | "recommendation";
     systemPrompt: string;
     userTemplate: string;
     requiredVariables: string[];
@@ -275,7 +284,10 @@ export class ConfigurationRepository extends BaseRepository<ConfigItem> {
   /**
    * Get specific version
    */
-  async getVersion(configId: string, version: number): Promise<ConfigVersion | null> {
+  async getVersion(
+    configId: string,
+    version: number,
+  ): Promise<ConfigVersion | null> {
     const results = await queryDocuments<ConfigVersion>(
       this.historyContainer,
       "SELECT * FROM c WHERE c.configId = @configId AND c.version = @version",
@@ -316,7 +328,9 @@ export class ConfigurationRepository extends BaseRepository<ConfigItem> {
    * Bulk import configuration
    */
   async importConfig(
-    items: Array<Omit<ConfigItem, "id" | "version" | "createdAt" | "updatedAt">>,
+    items: Array<
+      Omit<ConfigItem, "id" | "version" | "createdAt" | "updatedAt">
+    >,
     userId?: string,
   ): Promise<{ imported: number; skipped: number; errors: string[] }> {
     const result = { imported: 0, skipped: 0, errors: [] as string[] };
@@ -352,12 +366,10 @@ export class ConfigurationRepository extends BaseRepository<ConfigItem> {
   /**
    * Search configuration
    */
-  async search(
-    query: string,
-    type?: ConfigType,
-  ): Promise<ConfigItem[]> {
+  async search(query: string, type?: ConfigType): Promise<ConfigItem[]> {
     const searchQuery = `%${query.toLowerCase()}%`;
-    let sql = "SELECT * FROM c WHERE (LOWER(c.name) LIKE @query OR LOWER(c.description) LIKE @query)";
+    let sql =
+      "SELECT * FROM c WHERE (LOWER(c.name) LIKE @query OR LOWER(c.description) LIKE @query)";
     const params: Array<{ name: string; value: string }> = [
       { name: "@query", value: searchQuery },
     ];

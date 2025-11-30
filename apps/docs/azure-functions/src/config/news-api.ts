@@ -24,7 +24,8 @@ export interface NewsApiConfig {
  * Get news API configuration from environment
  */
 export function getNewsApiConfig(): NewsApiConfig {
-  const provider = (process.env.NEWS_API_PROVIDER || "newsapi") as NewsApiProvider;
+  const provider = (process.env.NEWS_API_PROVIDER ||
+    "newsapi") as NewsApiProvider;
 
   switch (provider) {
     case "newsapi":

@@ -25,6 +25,10 @@ export const schemas = {
     source: z.string().min(1).max(200),
     sourceUrl: z.string().url().optional(),
     category: z.string().min(1).max(50).optional(),
+    summary: z.string().max(1000).optional(),
+    imageUrl: z.string().url().optional(),
+    author: z.string().max(200).optional(),
+    tags: z.array(z.string()).max(20).optional(),
   }),
 
   // User preferences
@@ -32,7 +36,12 @@ export const schemas = {
     roles: z.array(z.string()).max(10).optional(),
     interests: z.array(z.string()).max(20).optional(),
     focusAreas: z.array(z.string()).max(10).optional(),
-    experienceLevel: z.enum(["beginner", "intermediate", "advanced"]).optional(),
+    experienceLevel: z
+      .enum(["beginner", "intermediate", "advanced"])
+      .optional(),
+    preferredCategories: z.array(z.string()).max(20).default([]),
+    emailDigest: z.enum(["daily", "weekly", "none"]).optional(),
+    pushEnabled: z.boolean().default(false),
   }),
 
   // Subscription
@@ -76,11 +85,12 @@ export const schemas = {
 
   // Support ticket
   supportTicket: z.object({
-    name: z.string().min(1).max(100),
+    name: z.string().min(1).max(100).optional(),
     email: z.string().email(),
     subject: z.string().min(1).max(200),
     message: z.string().min(10).max(5000),
     category: z.string().max(50).optional(),
+    priority: z.enum(["low", "medium", "high"]).optional(),
   }),
 
   // Configuration
@@ -131,6 +141,15 @@ export const schemas = {
     context: z.string().max(500).optional(),
   }),
 };
+
+// Export individual schemas for backward compatibility
+export const NewsArticleSchema = schemas.newsArticle;
+export const SupportTicketSchema = schemas.supportTicket;
+export const UserPreferencesSchema = schemas.userPreferences;
+export const PaginationSchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+  offset: z.coerce.number().int().min(0).default(0),
+});
 
 /**
  * Validation result
@@ -231,7 +250,8 @@ export function validateParams<T>(
   schema: z.ZodSchema<T>,
 ): ValidationResult<T> {
   try {
-    const params = Object.fromEntries(request.params.entries());
+    // request.params is a Record<string, string> in Azure Functions
+    const params = request.params;
     const result = schema.safeParse(params);
 
     if (!result.success) {
@@ -262,7 +282,9 @@ export function validateParams<T>(
 /**
  * Create validation error response
  */
-export function validationErrorResponse(error: ValidationResult<unknown>["error"]) {
+export function validationErrorResponse(
+  error: ValidationResult<unknown>["error"],
+) {
   return {
     status: 400,
     jsonBody: {

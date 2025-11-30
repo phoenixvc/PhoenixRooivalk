@@ -65,9 +65,8 @@ export const Errors = {
   notFound: (message: string) => errorResponse(404, message, "not-found"),
 
   /** 429 - Rate limit exceeded */
-  rateLimited: (
-    message = "Too many requests. Please try again later.",
-  ) => errorResponse(429, message, "resource-exhausted"),
+  rateLimited: (message = "Too many requests. Please try again later.") =>
+    errorResponse(429, message, "resource-exhausted"),
 
   /** 500 - Internal server error */
   internal: (message = "An error occurred") =>

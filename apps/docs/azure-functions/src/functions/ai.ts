@@ -32,7 +32,12 @@ async function analyzeCompetitorsHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-competitor", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-competitor",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -66,7 +71,12 @@ async function generateSWOTHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-swot", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-swot",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -96,7 +106,12 @@ async function getMarketInsightsHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-market", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-market",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -106,7 +121,11 @@ async function getMarketInsightsHandler(
       timeframe?: string;
     };
 
-    const result = await aiService.getMarketInsights({ region, segment, timeframe });
+    const result = await aiService.getMarketInsights({
+      region,
+      segment,
+      timeframe,
+    });
 
     return successResponse(result);
   } catch (error) {
@@ -127,7 +146,12 @@ async function summarizeContentHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-summary", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-summary",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -142,7 +166,11 @@ async function summarizeContentHandler(
       return Errors.badRequest("Content is required");
     }
 
-    const summary = await aiService.summarizeContent(content, { length, audience, format });
+    const summary = await aiService.summarizeContent(content, {
+      length,
+      audience,
+      format,
+    });
 
     return successResponse({ summary });
   } catch (error) {
@@ -163,19 +191,27 @@ async function getReadingRecommendationsHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-recommendations", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-recommendations",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
-    const { role, interests, experienceLevel, readHistory } = (await request.json()) as {
-      role: string;
-      interests: string[];
-      experienceLevel: string;
-      readHistory?: string[];
-    };
+    const { role, interests, experienceLevel, readHistory } =
+      (await request.json()) as {
+        role: string;
+        interests: string[];
+        experienceLevel: string;
+        readHistory?: string[];
+      };
 
     if (!role || !interests || !experienceLevel) {
-      return Errors.badRequest("role, interests, and experienceLevel are required");
+      return Errors.badRequest(
+        "role, interests, and experienceLevel are required",
+      );
     }
 
     const result = await aiService.getReadingRecommendations({
@@ -204,7 +240,12 @@ async function suggestImprovementsHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-improvements", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-improvements",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -218,7 +259,11 @@ async function suggestImprovementsHandler(
       return Errors.badRequest("title and content are required");
     }
 
-    const suggestions = await aiService.suggestImprovements(title, content, focusArea);
+    const suggestions = await aiService.suggestImprovements(
+      title,
+      content,
+      focusArea,
+    );
 
     return successResponse({ suggestions });
   } catch (error) {
@@ -239,7 +284,12 @@ async function askDocumentationHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-ask", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-ask",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
@@ -253,7 +303,10 @@ async function askDocumentationHandler(
       return Errors.badRequest("question is required");
     }
 
-    const result = await aiService.askDocumentation(question, { category, topK });
+    const result = await aiService.askDocumentation(question, {
+      category,
+      topK,
+    });
 
     return successResponse(result);
   } catch (error) {
@@ -274,11 +327,21 @@ async function researchPersonHandler(
     return Errors.unauthenticated();
   }
 
-  const rateLimit = applyRateLimit(request, "ai-research", RateLimits.ai, auth.userId!);
+  const rateLimit = applyRateLimit(
+    request,
+    "ai-research",
+    RateLimits.ai,
+    auth.userId!,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
-    const { name, company, role, context: ctx } = (await request.json()) as {
+    const {
+      name,
+      company,
+      role,
+      context: ctx,
+    } = (await request.json()) as {
       name: string;
       company?: string;
       role?: string;
@@ -289,7 +352,11 @@ async function researchPersonHandler(
       return Errors.badRequest("name is required");
     }
 
-    const research = await aiService.researchPerson(name, { company, role, context: ctx });
+    const research = await aiService.researchPerson(name, {
+      company,
+      role,
+      context: ctx,
+    });
 
     return successResponse({ research });
   } catch (error) {

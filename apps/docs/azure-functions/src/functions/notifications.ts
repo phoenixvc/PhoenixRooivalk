@@ -171,7 +171,9 @@ async function processEmailQueueHandler(
     // that integrates with SendGrid, Mailgun, etc.
     const result = await notificationsService.processEmailQueue();
 
-    context.log(`Processed ${result.processed} emails, ${result.failed} failed`);
+    context.log(
+      `Processed ${result.processed} emails, ${result.failed} failed`,
+    );
 
     return successResponse(result);
   } catch (error) {

@@ -77,10 +77,7 @@ export abstract class BaseRepository<T extends BaseEntity> {
   /**
    * Query entities
    */
-  async query(
-    query: string,
-    parameters?: SqlParameter[],
-  ): Promise<T[]> {
+  async query(query: string, parameters?: SqlParameter[]): Promise<T[]> {
     return queryDocuments<T>(this.containerName, query, parameters);
   }
 

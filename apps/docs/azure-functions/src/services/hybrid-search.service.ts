@@ -5,6 +5,7 @@
  * using Reciprocal Rank Fusion (RRF) for result merging.
  */
 
+import { SqlParameter } from "@azure/cosmos";
 import { createLogger, Logger } from "../lib/logger";
 import { generateEmbeddings } from "../lib/openai";
 import { queryDocuments } from "../lib/cosmos";
@@ -140,7 +141,7 @@ async function vectorSearch(
   // Query documents with embeddings
   let queryStr =
     "SELECT c.id, c.title, c.content, c.embedding, c.category, c.metadata FROM c WHERE IS_ARRAY(c.embedding)";
-  const params: Array<{ name: string; value: unknown }> = [];
+  const params: SqlParameter[] = [];
 
   if (category) {
     queryStr += " AND c.category = @category";
@@ -188,8 +189,9 @@ async function keywordSearch(
   category?: string,
 ): Promise<Map<string, { score: number; doc: Record<string, unknown> }>> {
   // Query documents
-  let queryStr = "SELECT c.id, c.title, c.content, c.category, c.metadata FROM c";
-  const params: Array<{ name: string; value: unknown }> = [];
+  let queryStr =
+    "SELECT c.id, c.title, c.content, c.category, c.metadata FROM c";
+  const params: SqlParameter[] = [];
 
   if (category) {
     queryStr += " WHERE c.category = @category";
@@ -214,7 +216,8 @@ async function keywordSearch(
     (sum, doc) => sum + ((doc.content?.length || 0) + (doc.title?.length || 0)),
     0,
   );
-  const avgDocLength = documents.length > 0 ? totalLength / documents.length : 500;
+  const avgDocLength =
+    documents.length > 0 ? totalLength / documents.length : 500;
 
   for (const doc of documents) {
     const text = `${doc.title || ""} ${doc.content || ""}`;
@@ -279,7 +282,10 @@ export async function hybridSearch(
     }
 
     // Apply RRF to merge results
-    const fusedScores = reciprocalRankFusion([vectorScores, keywordScores], rrfK);
+    const fusedScores = reciprocalRankFusion(
+      [vectorScores, keywordScores],
+      rrfK,
+    );
 
     // Combine all documents
     const allDocs = new Map<string, Record<string, unknown>>();
@@ -324,7 +330,8 @@ export async function hybridSearch(
 
     return finalResults;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     logger.error("Hybrid search failed", { error: errorMessage });
     throw error;
   }
@@ -381,7 +388,10 @@ export async function weightedHybridSearch(
     const normalizedKeyword = normalizeScores(keywordResults);
 
     // Combine all document IDs
-    const allIds = new Set([...normalizedVector.keys(), ...normalizedKeyword.keys()]);
+    const allIds = new Set([
+      ...normalizedVector.keys(),
+      ...normalizedKeyword.keys(),
+    ]);
 
     // Combine all documents
     const allDocs = new Map<string, Record<string, unknown>>();
@@ -431,7 +441,8 @@ export async function weightedHybridSearch(
 
     return finalResults;
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     logger.error("Weighted hybrid search failed", { error: errorMessage });
     throw error;
   }
@@ -459,7 +470,9 @@ export async function searchWithRerank(
     const titleMatch = result.title?.toLowerCase().includes(query.toLowerCase())
       ? 0.2
       : 0;
-    const exactMatch = result.content?.toLowerCase().includes(query.toLowerCase())
+    const exactMatch = result.content
+      ?.toLowerCase()
+      .includes(query.toLowerCase())
       ? 0.1
       : 0;
 

@@ -92,7 +92,11 @@ export class AIService {
       params.push({ name: "@category", value: category });
     }
 
-    const chunks = await queryDocuments<DocChunk>("doc_embeddings", dbQuery, params);
+    const chunks = await queryDocuments<DocChunk>(
+      "doc_embeddings",
+      dbQuery,
+      params,
+    );
 
     // Calculate similarity and filter
     const results: SearchResult[] = [];
@@ -142,7 +146,9 @@ export class AIService {
   }> {
     // Search for relevant Phoenix Rooivalk documentation
     const searchQuery = `Phoenix Rooivalk technical capabilities specifications ${
-      focusAreas?.length ? focusAreas.join(" ") : "counter-UAS defense drone interceptor"
+      focusAreas?.length
+        ? focusAreas.join(" ")
+        : "counter-UAS defense drone interceptor"
     }`;
 
     let documentContext = "";
@@ -152,13 +158,19 @@ export class AIService {
       const ragResults = await this.searchDocuments(searchQuery, { topK: 5 });
       if (ragResults.length > 0) {
         documentContext = this.buildDocumentContext(ragResults);
-        sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
+        sources = ragResults.map((r) => ({
+          title: r.title,
+          section: r.section,
+        }));
       }
     } catch (error) {
-      logger.warn("RAG search failed for competitor analysis, continuing without context", {
-        operation: "analyzeCompetitors",
-        competitors: competitors.slice(0, 3).join(", "),
-      });
+      logger.warn(
+        "RAG search failed for competitor analysis, continuing without context",
+        {
+          operation: "analyzeCompetitors",
+          competitors: competitors.slice(0, 3).join(", "),
+        },
+      );
     }
 
     const systemPrompt = documentContext
@@ -200,13 +212,19 @@ export class AIService {
       );
       if (ragResults.length > 0) {
         documentContext = this.buildDocumentContext(ragResults);
-        sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
+        sources = ragResults.map((r) => ({
+          title: r.title,
+          section: r.section,
+        }));
       }
     } catch (error) {
-      logger.warn("RAG search failed for SWOT analysis, continuing without context", {
-        operation: "generateSWOT",
-        focusArea: options.focusArea,
-      });
+      logger.warn(
+        "RAG search failed for SWOT analysis, continuing without context",
+        {
+          operation: "generateSWOT",
+          focusArea: options.focusArea,
+        },
+      );
     }
 
     const systemPrompt = documentContext
@@ -249,14 +267,20 @@ export class AIService {
       );
       if (ragResults.length > 0) {
         documentContext = this.buildDocumentContext(ragResults);
-        sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
+        sources = ragResults.map((r) => ({
+          title: r.title,
+          section: r.section,
+        }));
       }
     } catch (error) {
-      logger.warn("RAG search failed for market insights, continuing without context", {
-        operation: "getMarketInsights",
-        region: options.region,
-        segment: options.segment,
-      });
+      logger.warn(
+        "RAG search failed for market insights, continuing without context",
+        {
+          operation: "getMarketInsights",
+          region: options.region,
+          segment: options.segment,
+        },
+      );
     }
 
     const systemPrompt = documentContext
@@ -309,10 +333,11 @@ export class AIService {
     readHistory?: string[];
   }): Promise<{ recommendations: string }> {
     // Get available documentation sections
-    const docs = await queryDocuments<{ docId: string; title: string; category: string }>(
-      "doc_metadata",
-      "SELECT c.docId, c.title, c.category FROM c",
-    );
+    const docs = await queryDocuments<{
+      docId: string;
+      title: string;
+      category: string;
+    }>("doc_metadata", "SELECT c.docId, c.title, c.category FROM c");
 
     const availableDocs = docs
       .map((d) => `- ${d.title} (${d.category})`)
@@ -386,10 +411,14 @@ export class AIService {
     const userPrompt = buildUserPrompt(RAG_QUERY_PROMPT, { context, question });
 
     const config = getModelConfig(RAG_QUERY_PROMPT);
-    const answer = await generateCompletion(RAG_QUERY_PROMPT.system.base, userPrompt, {
-      temperature: config.temperature,
-      maxTokens: config.maxTokens,
-    });
+    const answer = await generateCompletion(
+      RAG_QUERY_PROMPT.system.base,
+      userPrompt,
+      {
+        temperature: config.temperature,
+        maxTokens: config.maxTokens,
+      },
+    );
 
     // Determine confidence based on scores
     const avgScore =

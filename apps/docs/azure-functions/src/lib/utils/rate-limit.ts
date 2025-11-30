@@ -38,10 +38,7 @@ export const RateLimits = {
 /**
  * In-memory rate limit storage
  */
-const rateLimitStore = new Map<
-  string,
-  { count: number; resetAt: number }
->();
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 /**
  * Clean up expired entries periodically

@@ -97,9 +97,11 @@ export class NewsAnalyticsService {
 
     for (const event of events) {
       if (event.action === "view") {
-        articleViews[event.articleId] = (articleViews[event.articleId] || 0) + 1;
+        articleViews[event.articleId] =
+          (articleViews[event.articleId] || 0) + 1;
       } else if (event.action === "save") {
-        articleSaves[event.articleId] = (articleSaves[event.articleId] || 0) + 1;
+        articleSaves[event.articleId] =
+          (articleSaves[event.articleId] || 0) + 1;
       }
     }
 
@@ -116,7 +118,10 @@ export class NewsAnalyticsService {
       saves: number;
     }> = [];
 
-    const engagementByCategory: Record<string, { views: number; saves: number }> = {};
+    const engagementByCategory: Record<
+      string,
+      { views: number; saves: number }
+    > = {};
 
     if (topArticleIds.length > 0) {
       const articles = await newsRepository.findByIds(topArticleIds);
@@ -193,7 +198,10 @@ export class NewsAnalyticsService {
       const category = article.category || "uncategorized";
       articlesByCategory[category] = (articlesByCategory[category] || 0) + 1;
 
-      if (!lastIngestionTime || (article.createdAt && article.createdAt > lastIngestionTime)) {
+      if (
+        !lastIngestionTime ||
+        (article.createdAt && article.createdAt > lastIngestionTime)
+      ) {
         lastIngestionTime = article.createdAt || null;
       }
     }
@@ -333,7 +341,9 @@ export class NewsAnalyticsService {
       try {
         categorization = JSON.parse(categorizationResult);
       } catch (error) {
-        logger.warn("Failed to parse categorization result", { operation: "processArticleWithAI" });
+        logger.warn("Failed to parse categorization result", {
+          operation: "processArticleWithAI",
+        });
         categorization = {
           category: "company-news",
           targetRoles: [],
@@ -384,7 +394,10 @@ export class NewsAnalyticsService {
         embedding,
       };
     } catch (error) {
-      logger.error("Error processing article with AI", error, { operation: "processArticleWithAI", title: title?.substring(0, 50) });
+      logger.error("Error processing article with AI", error, {
+        operation: "processArticleWithAI",
+        title: title?.substring(0, 50),
+      });
       return null;
     }
   }

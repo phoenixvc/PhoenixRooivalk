@@ -67,7 +67,9 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
     }
 
     if (!audience || !tenant) {
-      logger.warn("Azure AD B2C not configured, using unvalidated decode", { operation: "validateToken" });
+      logger.warn("Azure AD B2C not configured, using unvalidated decode", {
+        operation: "validateToken",
+      });
       const [, payload] = token.split(".");
       return JSON.parse(Buffer.from(payload, "base64url").toString());
     }
@@ -80,7 +82,9 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
 
     return payload as unknown as TokenClaims;
   } catch (error) {
-    logger.error("Token validation failed", error, { operation: "validateToken" });
+    logger.error("Token validation failed", error, {
+      operation: "validateToken",
+    });
     return null;
   }
 }
@@ -88,7 +92,9 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
 /**
  * Extract user ID from request (from validated token)
  */
-export async function getUserIdFromRequest(request: HttpRequest): Promise<string | null> {
+export async function getUserIdFromRequest(
+  request: HttpRequest,
+): Promise<string | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return null;
@@ -103,7 +109,9 @@ export async function getUserIdFromRequest(request: HttpRequest): Promise<string
 /**
  * Get token claims from request (validated)
  */
-export async function getTokenClaims(request: HttpRequest): Promise<TokenClaims | null> {
+export async function getTokenClaims(
+  request: HttpRequest,
+): Promise<TokenClaims | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return null;
