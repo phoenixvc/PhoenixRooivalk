@@ -2,11 +2,16 @@
  * Jest test setup
  */
 
-// Set up environment variables for tests
+// Test-only environment variables
+// Note: These only apply to the test environment and are NOT used in production
+// The test environment is completely isolated from production
 process.env.NODE_ENV = 'test';
+
+// Disable auth validation in tests to allow testing without real tokens
+// This is safe because tests run in an isolated environment
 process.env.SKIP_TOKEN_VALIDATION = 'true';
 
-// Mock crypto.randomUUID if not available
+// Mock crypto.randomUUID if not available in test environment
 if (typeof crypto === 'undefined' || !crypto.randomUUID) {
   (global as any).crypto = {
     randomUUID: () => {
@@ -27,3 +32,9 @@ if (typeof crypto === 'undefined' || !crypto.randomUUID) {
 
 // Global test timeout
 jest.setTimeout(10000);
+
+// Cleanup after all tests
+afterAll(() => {
+  // Reset environment
+  delete process.env.SKIP_TOKEN_VALIDATION;
+});

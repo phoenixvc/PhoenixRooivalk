@@ -221,9 +221,24 @@ function parseAtom(xml: string): RSSFeed {
  * Detect feed type and parse accordingly
  */
 function parseFeed(xml: string): RSSFeed {
-  if (xml.includes("<feed") && xml.includes("xmlns=\"http://www.w3.org/2005/Atom\"")) {
+  // Check for Atom namespace in feed element
+  const atomFeedMatch = xml.match(/<feed[^>]*xmlns\s*=\s*["']http:\/\/www\.w3\.org\/2005\/Atom["'][^>]*>/i);
+  if (atomFeedMatch) {
     return parseAtom(xml);
   }
+  
+  // Check for RSS root element
+  const rssMatch = xml.match(/<rss[^>]*version\s*=\s*["'][\d.]+["'][^>]*>/i);
+  if (rssMatch) {
+    return parseRSS2(xml);
+  }
+  
+  // Check for channel element (RSS 1.0/2.0)
+  if (xml.includes("<channel>") || xml.includes("<channel ")) {
+    return parseRSS2(xml);
+  }
+  
+  // Default to RSS parsing
   return parseRSS2(xml);
 }
 

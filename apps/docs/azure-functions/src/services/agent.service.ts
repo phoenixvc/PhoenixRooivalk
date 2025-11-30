@@ -148,17 +148,126 @@ function createCalculatorTool(): AgentTool {
     },
     execute: async (params) => {
       const expression = params.expression as string;
-      // Simple and safe math evaluation
-      const sanitized = expression.replace(/[^0-9+\-*/().%\s]/g, "");
+      
       try {
-        // Use Function constructor for sandboxed evaluation
-        const result = new Function(`return ${sanitized}`)();
-        return { result, expression: sanitized };
-      } catch {
-        return { error: "Invalid expression", expression: sanitized };
+        // Safe evaluation using a simple parser (no eval/Function)
+        const result = safeEvaluate(expression);
+        return { result, expression };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Invalid expression";
+        return { error: errorMessage, expression };
       }
     },
   };
+}
+
+/**
+ * Safe mathematical expression evaluator
+ * Only supports: numbers, +, -, *, /, %, parentheses, and spaces
+ */
+function safeEvaluate(expression: string): number {
+  // Validate that expression only contains allowed characters
+  const allowedPattern = /^[\d+\-*/%().\s]+$/;
+  if (!allowedPattern.test(expression)) {
+    throw new Error("Expression contains invalid characters");
+  }
+
+  // Tokenize
+  const tokens = tokenize(expression);
+  
+  // Parse and evaluate using recursive descent parser
+  let pos = 0;
+
+  function parseExpression(): number {
+    let left = parseTerm();
+    
+    while (pos < tokens.length && (tokens[pos] === '+' || tokens[pos] === '-')) {
+      const op = tokens[pos++];
+      const right = parseTerm();
+      left = op === '+' ? left + right : left - right;
+    }
+    
+    return left;
+  }
+
+  function parseTerm(): number {
+    let left = parseFactor();
+    
+    while (pos < tokens.length && (tokens[pos] === '*' || tokens[pos] === '/' || tokens[pos] === '%')) {
+      const op = tokens[pos++];
+      const right = parseFactor();
+      if (op === '*') left *= right;
+      else if (op === '/') {
+        if (right === 0) throw new Error("Division by zero");
+        left /= right;
+      }
+      else left %= right;
+    }
+    
+    return left;
+  }
+
+  function parseFactor(): number {
+    // Handle negative numbers
+    if (tokens[pos] === '-') {
+      pos++;
+      return -parseFactor();
+    }
+    
+    // Handle parentheses
+    if (tokens[pos] === '(') {
+      pos++; // skip (
+      const result = parseExpression();
+      if (tokens[pos] !== ')') throw new Error("Missing closing parenthesis");
+      pos++; // skip )
+      return result;
+    }
+    
+    // Parse number
+    const num = parseFloat(tokens[pos]);
+    if (isNaN(num)) throw new Error(`Invalid number: ${tokens[pos]}`);
+    pos++;
+    return num;
+  }
+
+  const result = parseExpression();
+  
+  if (pos < tokens.length) {
+    throw new Error("Unexpected characters at end of expression");
+  }
+  
+  return result;
+}
+
+/**
+ * Tokenize mathematical expression
+ */
+function tokenize(expression: string): string[] {
+  const tokens: string[] = [];
+  let current = '';
+  
+  for (const char of expression) {
+    if (char === ' ') {
+      if (current) {
+        tokens.push(current);
+        current = '';
+      }
+    } else if ('+-*/%()'.includes(char)) {
+      if (current) {
+        tokens.push(current);
+        current = '';
+      }
+      tokens.push(char);
+    } else {
+      current += char;
+    }
+  }
+  
+  if (current) {
+    tokens.push(current);
+  }
+  
+  return tokens;
 }
 
 /**
