@@ -6,7 +6,6 @@
  */
 
 import {
-  getCloudServices,
   getAuthService,
   getDatabaseService,
   isCloudConfigured,
