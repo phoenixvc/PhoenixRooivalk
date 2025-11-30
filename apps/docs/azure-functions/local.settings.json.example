@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "COSMOS_DB_CONNECTION_STRING": "your-cosmos-connection-string",
+    "COSMOS_DB_DATABASE": "phoenix-docs",
+    "OPENAI_API_KEY": "your-openai-api-key",
+    "KEY_VAULT_NAME": "your-keyvault-name"
+  },
+  "Host": {
+    "CORS": "*",
+    "CORSCredentials": true
+  }
+}
