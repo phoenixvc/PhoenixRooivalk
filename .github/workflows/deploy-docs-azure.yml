@@ -137,6 +137,7 @@ jobs:
           app_location: "apps/docs/build"
           skip_app_build: true  # We already built it above
           skip_api_build: true  # API is deployed separately
+          production_branch: "main"
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
