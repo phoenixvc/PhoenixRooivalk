@@ -52,3 +52,11 @@ export {
   configurationService,
   type ConfigOptimization,
 } from "./configuration.service";
+
+export {
+  hybridSearch,
+  weightedHybridSearch,
+  searchWithRerank,
+  type SearchResult,
+  type HybridSearchOptions,
+} from "./hybrid-search.service";

@@ -8,6 +8,14 @@ import { queryDocuments, upsertDocument, getContainer } from "../lib/cosmos";
 import { newsRepository, NewsArticle } from "../repositories";
 import { generateId } from "../lib/utils/ids";
 import { createLogger, Logger } from "../lib/logger";
+import { sendEmail, EmailTemplates, EmailMessage } from "../lib/email";
+import {
+  sendPushNotification,
+  sendTaggedNotification,
+  registerDevice,
+  DeviceRegistration,
+  PushNotification,
+} from "../lib/push-notifications";
 
 // Module-level logger
 const logger: Logger = createLogger({ feature: "notifications-service" });
@@ -154,16 +162,9 @@ export class NotificationsService {
   }
 
   /**
-   * Process pending email queue
+   * Process pending email queue - sends emails using configured provider
    */
-  async processEmailQueue(
-    sendEmailFn?: (
-      to: string,
-      subject: string,
-      template: string,
-      data: Record<string, unknown>,
-    ) => Promise<void>,
-  ): Promise<{ processed: number; failed: number }> {
+  async processEmailQueue(): Promise<{ processed: number; failed: number }> {
     const pending = await queryDocuments<EmailNotification>(
       this.notificationQueueContainer,
       "SELECT * FROM c WHERE c.type = 'email' AND c.status = 'pending' OFFSET 0 LIMIT 50",
@@ -174,34 +175,116 @@ export class NotificationsService {
 
     for (const notification of pending) {
       try {
-        if (sendEmailFn) {
-          await sendEmailFn(
-            notification.to,
-            notification.subject,
-            notification.template,
-            notification.data,
-          );
+        // Build email message from template data
+        const emailMessage: EmailMessage = {
+          to: notification.to,
+          subject: notification.subject,
+          html: this.renderEmailTemplate(notification.template, notification.data),
+        };
+
+        const result = await sendEmail(emailMessage);
+
+        if (result.success) {
+          // Mark as sent
+          await upsertDocument(this.notificationQueueContainer, {
+            ...notification,
+            status: "sent",
+            sentAt: new Date().toISOString(),
+            messageId: result.messageId,
+          });
+          processed++;
+        } else {
+          // Mark as failed
+          await upsertDocument(this.notificationQueueContainer, {
+            ...notification,
+            status: "failed",
+            error: result.error,
+          });
+          failed++;
         }
-
-        // Mark as sent
-        await upsertDocument(this.notificationQueueContainer, {
-          ...notification,
-          status: "sent",
-          sentAt: new Date().toISOString(),
-        });
-
-        processed++;
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        logger.error("Failed to process email notification", {
+          operation: "processEmailQueue",
+          notificationId: notification.id,
+          error: errorMessage,
+        });
         await upsertDocument(this.notificationQueueContainer, {
           ...notification,
           status: "failed",
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: errorMessage,
         });
         failed++;
       }
     }
 
+    logger.info("Email queue processed", { processed, failed });
     return { processed, failed };
+  }
+
+  /**
+   * Render email template with data
+   */
+  private renderEmailTemplate(
+    template: string,
+    data: Record<string, unknown>,
+  ): string {
+    switch (template) {
+      case "breaking_news":
+        return `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #f97316;">🚨 Breaking News</h1>
+            <h2>${data.title}</h2>
+            <p>${data.summary}</p>
+            <a href="${data.articleUrl}" style="display: inline-block; background: #f97316; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
+              Read Full Article
+            </a>
+            <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
+            <p style="color: #666; font-size: 12px;">
+              You received this email because you subscribed to breaking news alerts.
+              <a href="${BASE_URL}/unsubscribe">Unsubscribe</a>
+            </p>
+          </div>
+        `;
+
+      case "news_digest":
+        const articles = (data.articles || []) as Array<{
+          title: string;
+          summary: string;
+          url: string;
+        }>;
+        return `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #f97316;">📰 ${data.frequency === "daily" ? "Daily" : "Weekly"} Digest</h1>
+            <p>Here are ${data.articleCount} recent stories:</p>
+            ${articles
+              .map(
+                (article) => `
+              <div style="margin: 16px 0; padding: 16px; border: 1px solid #eee; border-radius: 8px;">
+                <h3 style="margin: 0 0 8px 0;">${article.title}</h3>
+                <p style="margin: 0 0 12px 0; color: #666;">${article.summary}</p>
+                <a href="${article.url}" style="color: #f97316;">Read more →</a>
+              </div>
+            `,
+              )
+              .join("")}
+            <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
+            <p style="color: #666; font-size: 12px;">
+              <a href="${data.managePreferencesUrl}">Manage Preferences</a> | 
+              <a href="${BASE_URL}/unsubscribe">Unsubscribe</a>
+            </p>
+          </div>
+        `;
+
+      default:
+        // Generic template
+        return `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #f97316;">Phoenix Rooivalk</h1>
+            <p>${JSON.stringify(data)}</p>
+          </div>
+        `;
+    }
   }
 
   /**
@@ -212,14 +295,15 @@ export class NotificationsService {
     title: string,
     summary: string,
     category: string,
-  ): Promise<{ notificationsSent: number }> {
+  ): Promise<{ notificationsSent: number; pushSent: number; emailQueued: number }> {
     // Get subscribers for this category
     const subscribers = await queryDocuments<NewsSubscription>(
       this.subscriptionsContainer,
       "SELECT * FROM c WHERE c.pushEnabled = true OR c.emailEnabled = true",
     );
 
-    let notificationsSent = 0;
+    let pushSent = 0;
+    let emailQueued = 0;
 
     for (const subscriber of subscribers) {
       // Check category match
@@ -243,24 +327,103 @@ export class NotificationsService {
             articleUrl: `${BASE_URL}/news?article=${articleId}`,
           },
         );
-        notificationsSent++;
+        emailQueued++;
       }
 
-      // Push notification would be sent here
-      // In production, integrate with Azure Notification Hubs or similar
+      // Send push notification via Azure Notification Hubs
       if (subscriber.pushEnabled && subscriber.pushToken) {
-        // TODO: Implement push notification sending via Azure Notification Hubs
-        // await sendPushNotification(subscriber.pushToken, title, summary, articleId);
-        // Note: Not incrementing notificationsSent here since push is not actually sent yet
-        logger.warn("Push notification queued but not sent - Azure Notification Hubs integration pending", {
-          operation: "notifyBreakingNews",
-          subscriberId: subscriber.id,
-          articleId,
+        const pushNotification: PushNotification = {
+          title: "🚨 Breaking News",
+          body: title,
+          data: {
+            articleId,
+            category,
+            type: "breaking_news",
+          },
+        };
+
+        // Detect platform from token format (simplified heuristic)
+        const platform = this.detectPlatform(subscriber.pushToken);
+        
+        const result = await sendPushNotification(
+          subscriber.pushToken,
+          platform,
+          pushNotification,
+        );
+
+        if (result.success) {
+          pushSent++;
+        } else {
+          logger.warn("Failed to send push notification", {
+            operation: "notifyBreakingNews",
+            subscriberId: subscriber.id,
+            error: result.error,
+          });
+        }
+      }
+    }
+
+    const notificationsSent = pushSent + emailQueued;
+    logger.info("Breaking news notifications sent", {
+      articleId,
+      category,
+      pushSent,
+      emailQueued,
+      total: notificationsSent,
+    });
+
+    return { notificationsSent, pushSent, emailQueued };
+  }
+
+  /**
+   * Detect push notification platform from token format
+   */
+  private detectPlatform(pushToken: string): "fcm" | "apns" | "wns" {
+    // FCM tokens are typically longer and contain alphanumeric characters
+    // APNS tokens are 64 hex characters
+    // WNS tokens are URLs
+    if (pushToken.startsWith("https://")) {
+      return "wns";
+    }
+    if (/^[a-f0-9]{64}$/i.test(pushToken)) {
+      return "apns";
+    }
+    return "fcm"; // Default to FCM
+  }
+
+  /**
+   * Register device for push notifications
+   */
+  async registerPushDevice(
+    userId: string,
+    pushToken: string,
+    platform: "fcm" | "apns" | "wns",
+    tags?: string[],
+  ): Promise<{ registrationId: string } | null> {
+    const registration: DeviceRegistration = {
+      platform,
+      pushToken,
+      userId,
+      tags: tags || [],
+    };
+
+    const result = await registerDevice(registration);
+
+    if (result) {
+      // Update subscription with registration ID
+      const subscription = await this.getSubscription(userId);
+      if (subscription) {
+        await upsertDocument(this.subscriptionsContainer, {
+          ...subscription,
+          pushToken,
+          pushRegistrationId: result.registrationId,
+          pushPlatform: platform,
+          updatedAt: new Date().toISOString(),
         });
       }
     }
 
-    return { notificationsSent };
+    return result;
   }
 
   /**
