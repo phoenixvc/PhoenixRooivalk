@@ -6,6 +6,7 @@
 
 import { queryDocuments, upsertDocument, getContainer } from "../lib/cosmos";
 import { newsRepository, NewsArticle } from "../repositories";
+import { generateId } from "../lib/utils/ids";
 
 /**
  * News subscription
@@ -96,8 +97,9 @@ export class NotificationsService {
     try {
       const container = getContainer(this.subscriptionsContainer);
       await container.item(userId, userId).delete();
-    } catch {
-      // Ignore if not found
+    } catch (error) {
+      // Log but don't throw - subscription may not exist
+      console.warn(`Unsubscribe for ${userId} failed (may not exist):`, error);
     }
   }
 
@@ -109,7 +111,11 @@ export class NotificationsService {
       const container = getContainer(this.subscriptionsContainer);
       const { resource } = await container.item(userId, userId).read<NewsSubscription>();
       return resource || null;
-    } catch {
+    } catch (error) {
+      // Expected for non-existent subscriptions
+      if ((error as { code?: number })?.code !== 404) {
+        console.warn(`Failed to get subscription for ${userId}:`, error);
+      }
       return null;
     }
   }
@@ -124,7 +130,7 @@ export class NotificationsService {
     data: Record<string, unknown>,
   ): Promise<void> {
     const notification: EmailNotification = {
-      id: `email_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: generateId("email"),
       type: "email",
       to,
       subject,
@@ -233,8 +239,10 @@ export class NotificationsService {
       // Push notification would be sent here
       // In production, integrate with Azure Notification Hubs or similar
       if (subscriber.pushEnabled && subscriber.pushToken) {
+        // TODO: Implement push notification sending via Azure Notification Hubs
         // await sendPushNotification(subscriber.pushToken, title, summary, articleId);
-        notificationsSent++;
+        // Note: Not incrementing notificationsSent here since push is not actually sent yet
+        console.warn(`Push notification queued for subscriber ${subscriber.id} but not sent - Azure Notification Hubs integration pending`);
       }
     }
 

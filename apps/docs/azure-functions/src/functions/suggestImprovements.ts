@@ -86,7 +86,8 @@ Format your response as JSON:
       } else {
         suggestions = { suggestions: [], raw: response };
       }
-    } catch {
+    } catch (parseError) {
+      context.warn("Failed to parse suggestions JSON:", parseError);
       suggestions = { suggestions: [], raw: response };
     }
 

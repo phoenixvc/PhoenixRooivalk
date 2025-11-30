@@ -350,8 +350,8 @@ export class ConfigurationService {
     try {
       const categoryAnalysis = await this.analyzeCategories(categories);
       optimizations.push(...categoryAnalysis);
-    } catch {
-      // AI analysis failed, continue without
+    } catch (error) {
+      console.warn("AI category analysis failed, skipping:", error);
     }
 
     return optimizations;
@@ -393,7 +393,8 @@ Respond with JSON array:
         confidence: s.confidence,
         basedOn: { usageData: false, contentAnalysis: true, userFeedback: false },
       }));
-    } catch {
+    } catch (error) {
+      console.warn("Failed to parse AI category suggestions:", error);
       return [];
     }
   }

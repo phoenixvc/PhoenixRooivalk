@@ -84,7 +84,8 @@ Recommend the next documents to read.`;
       } else {
         recommendations = { recommendations: [], raw: response };
       }
-    } catch {
+    } catch (parseError) {
+      context.warn("Failed to parse recommendations JSON:", parseError);
       recommendations = { recommendations: [], raw: response };
     }
 

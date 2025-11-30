@@ -161,7 +161,8 @@ export function requireAuth(request: HttpRequest): {
     }
 
     return { authenticated: true, userId };
-  } catch {
+  } catch (error) {
+    console.warn("Token parsing failed:", error);
     return {
       authenticated: false,
       userId: null,

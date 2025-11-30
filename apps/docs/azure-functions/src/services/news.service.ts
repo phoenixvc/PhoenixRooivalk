@@ -19,6 +19,7 @@ import {
   getModelConfig,
 } from "../prompts";
 import { isValidCategory, getCategoryIds } from "../config";
+import { generateId } from "../lib/utils/ids";
 
 /**
  * User profile for personalization
@@ -237,7 +238,8 @@ export class NewsService {
       );
 
       categorization = JSON.parse(result);
-    } catch {
+    } catch (error) {
+      console.warn("AI categorization failed, using defaults:", error);
       categorization = {
         category: category && isValidCategory(category) ? category : "company-news",
         targetRoles: [],
@@ -265,12 +267,13 @@ export class NewsService {
         summaryPrompt,
         { temperature: 0.3, maxTokens: 200 },
       );
-    } catch {
+    } catch (error) {
+      console.warn("AI summary generation failed, using truncated content:", error);
       summary = content.substring(0, 200) + "...";
     }
 
     const now = new Date().toISOString();
-    const articleId = `news_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const articleId = generateId("news");
 
     const article: NewsArticle = {
       id: articleId,

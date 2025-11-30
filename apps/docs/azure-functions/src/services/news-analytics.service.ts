@@ -328,7 +328,8 @@ export class NewsAnalyticsService {
       let categorization;
       try {
         categorization = JSON.parse(categorizationResult);
-      } catch {
+      } catch (error) {
+        console.warn("Failed to parse categorization result:", error);
         categorization = {
           category: "company-news",
           targetRoles: [],

@@ -63,9 +63,10 @@ export class IndexingService {
 
   /**
    * Generate document ID from path
+   * Uses SHA-256 for better collision resistance
    */
   hashPath(path: string): string {
-    return crypto.createHash("md5").update(path).digest("hex").slice(0, 12);
+    return crypto.createHash("sha256").update(path).digest("hex").slice(0, 16);
   }
 
   /**
@@ -262,8 +263,8 @@ export class IndexingService {
       try {
         await container.item(chunk.id, chunk.id).delete();
         deleted++;
-      } catch {
-        // Ignore delete errors
+      } catch (error) {
+        console.warn(`Failed to delete chunk ${chunk.id}:`, error);
       }
     }
 
@@ -271,8 +272,8 @@ export class IndexingService {
     try {
       const metadataContainer = getContainer("doc_metadata");
       await metadataContainer.item(docId, docId).delete();
-    } catch {
-      // Ignore
+    } catch (error) {
+      console.warn(`Failed to delete metadata for ${docId}:`, error);
     }
 
     return deleted;

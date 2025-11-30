@@ -78,8 +78,11 @@ export async function logMetrics(
       if (resource) {
         existingStats = resource;
       }
-    } catch {
-      // No existing stats
+    } catch (error) {
+      // Expected for first request of the day - no existing stats
+      if ((error as { code?: number })?.code !== 404) {
+        console.warn("Failed to read existing daily stats:", error);
+      }
     }
 
     await upsertDocument(MONITORING_CONFIG.containers.dailyStats, {
@@ -140,8 +143,11 @@ export async function logError(
       if (resource) {
         existingStats = resource;
       }
-    } catch {
-      // No existing stats
+    } catch (error) {
+      // Expected for first error of the day - no existing stats
+      if ((error as { code?: number })?.code !== 404) {
+        console.warn("Failed to read existing daily stats for error logging:", error);
+      }
     }
 
     await upsertDocument(MONITORING_CONFIG.containers.dailyStats, {

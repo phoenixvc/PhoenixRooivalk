@@ -158,8 +158,8 @@ export async function clearCache(
     try {
       await container.item(item.id, item.id).delete();
       deletedCount++;
-    } catch {
-      // Ignore delete errors
+    } catch (error) {
+      console.warn(`Failed to delete cache item ${item.id}:`, error);
     }
   }
 
@@ -247,7 +247,8 @@ export async function getCacheStats(): Promise<{
         count: items.length,
         avgHits: items.length > 0 ? totalHits / items.length : 0,
       };
-    } catch {
+    } catch (error) {
+      console.warn(`Failed to get cache stats for ${key}:`, error);
       stats[key] = { count: 0, avgHits: 0 };
     }
   }
@@ -280,12 +281,12 @@ export async function cleanupExpiredCache(): Promise<number> {
         try {
           await container.item(item.id, item.id).delete();
           totalDeleted++;
-        } catch {
-          // Ignore delete errors
+        } catch (error) {
+          console.warn(`Failed to delete expired cache item ${item.id}:`, error);
         }
       }
-    } catch {
-      // Ignore query errors
+    } catch (error) {
+      console.warn(`Failed to cleanup cache for ${containerName}:`, error);
     }
   }
 

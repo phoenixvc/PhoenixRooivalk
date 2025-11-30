@@ -150,8 +150,8 @@ export class AIService {
         documentContext = this.buildDocumentContext(ragResults);
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
-    } catch {
-      // Continue without RAG
+    } catch (error) {
+      console.warn("RAG search failed for competitor analysis, continuing without context:", error);
     }
 
     const systemPrompt = documentContext
@@ -195,8 +195,8 @@ export class AIService {
         documentContext = this.buildDocumentContext(ragResults);
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
-    } catch {
-      // Continue without RAG
+    } catch (error) {
+      console.warn("RAG search failed for SWOT analysis, continuing without context:", error);
     }
 
     const systemPrompt = documentContext
@@ -241,8 +241,8 @@ export class AIService {
         documentContext = this.buildDocumentContext(ragResults);
         sources = ragResults.map((r) => ({ title: r.title, section: r.section }));
       }
-    } catch {
-      // Continue without RAG
+    } catch (error) {
+      console.warn("RAG search failed for market insights, continuing without context:", error);
     }
 
     const systemPrompt = documentContext
