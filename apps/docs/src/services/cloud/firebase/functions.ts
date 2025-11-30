@@ -5,7 +5,7 @@
  */
 
 import { getFunctions, httpsCallable, Functions } from 'firebase/functions';
-import { getAuth } from 'firebase/auth';
+
 import { FirebaseApp } from 'firebase/app';
 import {
   IFunctionsService,
