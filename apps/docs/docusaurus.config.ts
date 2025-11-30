@@ -327,32 +327,65 @@ const config: Config = {
         {
           title: "PLATFORM",
           items: [
-            { label: "Overview", to: "/docs/overview" },
-            { label: "Features", to: "/docs/technical/technical-architecture" },
-            { label: "Pricing", to: "/docs/business/roi-analysis" },
+            {
+              label: "Overview",
+              to: "/docs/overview",
+            },
+            {
+              label: "Features",
+              to: "/docs/technical/technical-architecture",
+            },
+            {
+              label: "Pricing",
+              to: "/docs/business/roi-analysis",
+            },
           ],
         },
         {
           title: "DOCUMENTATION",
           items: [
-            { label: "Getting Started", to: "/docs/phoenix-rooivalk-documentation" },
-            { label: "API Reference", to: "/docs/technical/integration/api-documentation" },
-            { label: "Deployment Guide", to: "/docs/operations/deployment/deployment-guide" },
+            {
+              label: "Getting Started",
+              to: "/docs/phoenix-rooivalk-documentation",
+            },
+            {
+              label: "API Reference",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
+            },
           ],
         },
         {
           title: "RESOURCES",
           items: [
-            { label: "News", to: "/news" },
-            { label: "Changelog", to: "/docs/resources/documentation-status" },
-            { label: "Security and Compliance", to: "/docs/legal/compliance-framework" },
+            {
+              label: "News",
+              to: "/news",
+            },
+            {
+              label: "Changelog",
+              to: "/docs/resources/documentation-status",
+            },
+            {
+              label: "Security and Compliance",
+              to: "/docs/legal/compliance-framework",
+            },
           ],
         },
         {
           title: "COMPANY",
           items: [
-            { label: "About", href: "https://phoenixrooivalk.netlify.app" },
-            { label: "Contact and Support", to: "/contact" },
+            {
+              label: "About",
+              href: "https://phoenixrooivalk.netlify.app",
+            },
+            {
+              label: "Contact and Support",
+              to: "/contact",
+            },
             {
               label: "GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",

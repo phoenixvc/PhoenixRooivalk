@@ -146,7 +146,7 @@ jobs:
           fi
 
       - name: Install SWA CLI
-        run: npm install -g @azure/static-web-apps-cli
+        run: npm install -g @azure/static-web-apps-cli@2.0.7
 
       - name: Deploy with SWA CLI
         id: deploy
@@ -163,11 +163,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const prNumber = context.issue.number;
+            const appName = process.env.SWA_APP_NAME || 'phoenixrooivalk-docs';
+            const previewUrl = `https://${appName}-${prNumber}.azurestaticapps.net`;
+            const portalUrl = 'https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Web%2FStaticSites';
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **Azure Static Web Apps Preview**\n\nDeployment complete! Check your Static Web App URL.\n\n*This preview will be automatically deleted when the PR is closed.*`
+              body: `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n**Preview URL:** ${previewUrl}\n\n> **Note:** If the preview URL doesn't work, the deployment may use a different hostname. Check the [Azure Portal](${portalUrl}) or the workflow logs above for the actual URL.\n\n*This preview will be automatically deleted when the PR is closed.*`
             });
 
   close-pull-request:
