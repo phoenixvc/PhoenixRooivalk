@@ -67,7 +67,8 @@ param b2cTenantName string = ''
 // Variables
 // ============================================================================
 
-var resourcePrefix = '${projectName}-${environment}'
+// Naming: {env}-{type}-{project} e.g., dev-kv-phoenixrooivalk
+var resourcePrefix = '${environment}-phoenixrooivalk'
 var tags = {
   project: projectName
   environment: environment
@@ -78,11 +79,14 @@ var tags = {
 // Modules
 // ============================================================================
 
+// Naming: {env}-{type}-{region}-{project}
+var locationShort = location == 'eastus2' ? 'eus2' : location == 'westeurope' ? 'weu' : location == 'eastasia' ? 'eas' : take(location, 4)
+
 // Key Vault for secrets management
 module keyVault 'modules/keyvault.bicep' = {
   name: 'keyVault'
   params: {
-    name: '${resourcePrefix}-kv'
+    name: '${environment}-kv-${locationShort}-phoenix'
     location: location
     tags: tags
   }
@@ -92,7 +96,7 @@ module keyVault 'modules/keyvault.bicep' = {
 module storage 'modules/storage.bicep' = {
   name: 'storage'
   params: {
-    name: replace('${resourcePrefix}stor', '-', '')
+    name: '${environment}st${locationShort}phoenix'  // Storage accounts can't have hyphens, max 24 chars
     location: location
     tags: tags
   }
@@ -102,7 +106,7 @@ module storage 'modules/storage.bicep' = {
 module appInsights 'modules/appinsights.bicep' = {
   name: 'appInsights'
   params: {
-    name: '${resourcePrefix}-insights'
+    name: '${environment}-appi-${locationShort}-phoenix'
     location: location
     tags: tags
   }
@@ -112,7 +116,7 @@ module appInsights 'modules/appinsights.bicep' = {
 module cosmosDb 'modules/cosmosdb.bicep' = {
   name: 'cosmosDb'
   params: {
-    name: '${resourcePrefix}-cosmos'
+    name: '${environment}-cosmos-${locationShort}-phoenix'
     location: location
     tags: tags
     throughput: cosmosDbThroughput
@@ -124,8 +128,8 @@ module cosmosDb 'modules/cosmosdb.bicep' = {
 module notificationHub 'modules/notificationhub.bicep' = {
   name: 'notificationHub'
   params: {
-    namespaceName: '${resourcePrefix}-nhns'
-    hubName: '${resourcePrefix}-nh'
+    namespaceName: '${environment}-nhns-${locationShort}-phoenix'
+    hubName: '${environment}-nh-${locationShort}-phoenix'
     location: location
     tags: tags
   }
@@ -135,7 +139,7 @@ module notificationHub 'modules/notificationhub.bicep' = {
 module functions 'modules/functions.bicep' = {
   name: 'functions'
   params: {
-    name: '${resourcePrefix}-func'
+    name: '${environment}-func-${locationShort}-phoenix'
     location: location
     tags: tags
     storageAccountName: storage.outputs.name
@@ -153,7 +157,7 @@ module functions 'modules/functions.bicep' = {
 module staticWebApp 'modules/staticwebapp.bicep' = {
   name: 'staticWebApp'
   params: {
-    name: '${resourcePrefix}-swa'
+    name: '${environment}-swa-${locationShort}-phoenix'
     location: location
     tags: tags
     sku: staticWebAppSku
