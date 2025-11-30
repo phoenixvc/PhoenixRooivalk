@@ -599,7 +599,6 @@ export default function Home(): React.ReactElement {
             </div>
           </div>
         </section>
-
       </main>
     </Layout>
   );

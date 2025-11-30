@@ -81,9 +81,7 @@ export function ProtectedContent({
   // If Azure not configured, block access for protected content but allow free pages
   if (!isConfigured && !isFreePage) {
     if (DEBUG_AUTH) {
-      console.log(
-        "[ProtectedContent] Azure not configured - blocking access",
-      );
+      console.log("[ProtectedContent] Azure not configured - blocking access");
     }
     return (
       <div className="protected-content protected-content--blocked">

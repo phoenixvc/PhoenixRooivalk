@@ -161,7 +161,10 @@ class AIService {
       throw new AIError("Please sign in to use AI features", "unauthenticated");
     }
     if (code === "resource-exhausted" || code === "429") {
-      throw new AIError("Rate limit exceeded. Please try again later.", "resource-exhausted");
+      throw new AIError(
+        "Rate limit exceeded. Please try again later.",
+        "resource-exhausted",
+      );
     }
     if (code === "failed-precondition" || code === "503") {
       throw new AIError(
@@ -270,10 +273,13 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<MarketInsightsResult>("getMarketInsights", {
-        topic,
-        industry,
-      });
+      return await this.callFunction<MarketInsightsResult>(
+        "getMarketInsights",
+        {
+          topic,
+          industry,
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }

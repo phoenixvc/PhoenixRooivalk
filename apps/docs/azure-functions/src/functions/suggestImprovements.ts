@@ -43,7 +43,10 @@ async function handler(
     if (!documentContent || documentContent.length < 100) {
       return {
         status: 400,
-        jsonBody: { error: "Document content too short", code: "invalid-argument" },
+        jsonBody: {
+          error: "Document content too short",
+          code: "invalid-argument",
+        },
       };
     }
 
@@ -86,7 +89,8 @@ Format your response as JSON:
       } else {
         suggestions = { suggestions: [], raw: response };
       }
-    } catch {
+    } catch (parseError) {
+      context.warn("Failed to parse suggestions JSON:", parseError);
       suggestions = { suggestions: [], raw: response };
     }
 
