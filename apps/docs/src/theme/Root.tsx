@@ -8,20 +8,23 @@
  */
 
 import React, { ReactNode, useEffect, useState } from "react";
-import { AuthProvider } from "../contexts/AuthContext";
-import { ToastProvider } from "../contexts/ToastContext";
-import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
-import { ReadingTracker, EngagementToasts } from "../components/Gamification";
+
+import { AIFloatingWidget } from "../components/AIChat";
 import { AnalyticsTracker } from "../components/Analytics";
+import {
+  NavbarProgressVisibility,
+  ProfileConfirmation,
+} from "../components/Auth";
 import { CookieConsentBanner } from "../components/CookieConsent";
 import { SilentErrorBoundary } from "../components/ErrorBoundary";
-import { OfflineIndicator } from "../components/Offline";
-import { AIFloatingWidget } from "../components/AIChat";
-import { SidebarRecommendations } from "../components/Sidebar";
-import { ProfileConfirmation } from "../components/Auth";
-import { NavbarProgressVisibility } from "../components/Auth";
-import { OnboardingWalkthrough } from "../components/Onboarding";
+import { EngagementToasts, ReadingTracker } from "../components/Gamification";
 import { NavbarNotifications } from "../components/NavbarNotifications";
+import { OfflineIndicator } from "../components/Offline";
+import { OnboardingWalkthrough } from "../components/Onboarding";
+import { SidebarRecommendations } from "../components/Sidebar";
+import { AuthProvider } from "../contexts/AuthContext";
+import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
+import { ToastProvider } from "../contexts/ToastContext";
 
 interface RootProps {
   children: ReactNode;
