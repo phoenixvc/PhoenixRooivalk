@@ -5,7 +5,7 @@
  * Implementations: Firebase Cloud Functions, Azure Functions
  */
 
-import { FunctionCallOptions } from './types';
+import { FunctionCallOptions } from "./types";
 
 /**
  * Function call result
@@ -23,7 +23,7 @@ export class CloudFunctionError extends Error {
 
   constructor(message: string, code: string, details?: unknown) {
     super(message);
-    this.name = 'CloudFunctionError';
+    this.name = "CloudFunctionError";
     this.code = code;
     this.details = details;
   }
@@ -52,7 +52,7 @@ export interface IFunctionsService {
   call<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput>;
 
   /**
@@ -62,7 +62,7 @@ export interface IFunctionsService {
   callAuthenticated<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput>;
 }
 
@@ -141,7 +141,7 @@ export interface RAGSource {
 export interface RAGResponse {
   answer: string;
   sources: RAGSource[];
-  confidence: 'high' | 'medium' | 'low';
+  confidence: "high" | "medium" | "low";
   tokensUsed?: number;
 }
 
@@ -172,7 +172,12 @@ export interface FunFactsResult {
   facts: Array<{
     id: string;
     fact: string;
-    category: 'professional' | 'education' | 'achievement' | 'interest' | 'other';
+    category:
+      | "professional"
+      | "education"
+      | "achievement"
+      | "interest"
+      | "other";
   }>;
   summary: string;
 }
@@ -187,7 +192,7 @@ export interface PendingImprovement {
   userId: string;
   userEmail?: string;
   suggestions: string;
-  status: 'pending' | 'approved' | 'rejected' | 'implemented';
+  status: "pending" | "approved" | "rejected" | "implemented";
   createdAt: unknown;
   reviewedAt?: unknown;
   reviewedBy?: string;
@@ -207,7 +212,7 @@ export interface IAIFunctionsService extends IFunctionsService {
    */
   analyzeCompetitors(
     competitors: string[],
-    focusAreas?: string[]
+    focusAreas?: string[],
   ): Promise<CompetitorAnalysisResult>;
 
   /**
@@ -218,7 +223,9 @@ export interface IAIFunctionsService extends IFunctionsService {
   /**
    * Get reading recommendations
    */
-  getReadingRecommendations(currentDocId?: string): Promise<RecommendationsResult>;
+  getReadingRecommendations(
+    currentDocId?: string,
+  ): Promise<RecommendationsResult>;
 
   /**
    * Suggest document improvements
@@ -226,13 +233,16 @@ export interface IAIFunctionsService extends IFunctionsService {
   suggestDocumentImprovements(
     docId: string,
     docTitle: string,
-    docContent: string
+    docContent: string,
   ): Promise<DocumentImprovementResult>;
 
   /**
    * Get market insights
    */
-  getMarketInsights(topic: string, industry?: string): Promise<MarketInsightsResult>;
+  getMarketInsights(
+    topic: string,
+    industry?: string,
+  ): Promise<MarketInsightsResult>;
 
   /**
    * Summarize content
@@ -246,9 +256,9 @@ export interface IAIFunctionsService extends IFunctionsService {
     question: string,
     options?: {
       category?: string;
-      format?: 'detailed' | 'concise';
-      history?: Array<{ role: 'user' | 'assistant'; content: string }>;
-    }
+      format?: "detailed" | "concise";
+      history?: Array<{ role: "user" | "assistant"; content: string }>;
+    },
   ): Promise<RAGResponse>;
 
   /**
@@ -256,7 +266,7 @@ export interface IAIFunctionsService extends IFunctionsService {
    */
   searchDocumentation(
     query: string,
-    options?: { category?: string; topK?: number }
+    options?: { category?: string; topK?: number },
   ): Promise<SearchResultItem[]>;
 
   /**
@@ -264,7 +274,7 @@ export interface IAIFunctionsService extends IFunctionsService {
    */
   getSuggestedQuestions(
     docId?: string,
-    category?: string
+    category?: string,
   ): Promise<{
     suggestions: string[];
     docInfo: { title: string; category: string } | null;
@@ -276,7 +286,7 @@ export interface IAIFunctionsService extends IFunctionsService {
   researchPerson(
     firstName: string,
     lastName: string,
-    linkedInUrl: string
+    linkedInUrl: string,
   ): Promise<FunFactsResult>;
 
   /**
@@ -289,12 +299,14 @@ export interface IAIFunctionsService extends IFunctionsService {
    */
   reviewImprovement(
     suggestionId: string,
-    status: 'approved' | 'rejected' | 'implemented',
-    notes?: string
+    status: "approved" | "rejected" | "implemented",
+    notes?: string,
   ): Promise<{ success: boolean; status: string }>;
 
   /**
    * Get pending improvements (admin)
    */
-  getPendingImprovements(limit?: number): Promise<{ suggestions: PendingImprovement[] }>;
+  getPendingImprovements(
+    limit?: number,
+  ): Promise<{ suggestions: PendingImprovement[] }>;
 }

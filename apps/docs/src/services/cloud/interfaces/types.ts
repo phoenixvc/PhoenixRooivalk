@@ -23,13 +23,13 @@ export interface CloudUser {
 /**
  * OAuth provider types
  */
-export type OAuthProvider = 'google' | 'github' | 'microsoft';
+export type OAuthProvider = "google" | "github" | "microsoft";
 
 /**
  * Cloud service configuration
  */
 export interface CloudServiceConfig {
-  provider: 'firebase' | 'azure';
+  provider: "firebase" | "azure";
   // Firebase-specific config
   firebase?: {
     apiKey: string;
@@ -57,16 +57,16 @@ export interface CloudServiceConfig {
  * Query operators for database queries
  */
 export type QueryOperator =
-  | '=='
-  | '!='
-  | '<'
-  | '<='
-  | '>'
-  | '>='
-  | 'array-contains'
-  | 'array-contains-any'
-  | 'in'
-  | 'not-in';
+  | "=="
+  | "!="
+  | "<"
+  | "<="
+  | ">"
+  | ">="
+  | "array-contains"
+  | "array-contains-any"
+  | "in"
+  | "not-in";
 
 /**
  * Query condition for database queries
@@ -82,7 +82,7 @@ export interface QueryCondition {
  */
 export interface OrderByClause {
   field: string;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 /**
@@ -145,7 +145,7 @@ export interface FunctionCallOptions {
 /**
  * Server timestamp placeholder
  */
-export const SERVER_TIMESTAMP = Symbol('SERVER_TIMESTAMP');
+export const SERVER_TIMESTAMP = Symbol("SERVER_TIMESTAMP");
 export type ServerTimestamp = typeof SERVER_TIMESTAMP;
 
 /**

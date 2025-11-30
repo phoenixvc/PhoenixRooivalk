@@ -4,13 +4,13 @@
  * Provides AI capabilities for Azure Functions using Azure OpenAI Service.
  */
 
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI } from "openai";
 
 let azureClient: AzureOpenAI | null = null;
 
 // Default deployment names (configurable via env vars)
-const DEFAULT_CHAT_DEPLOYMENT = 'gpt-4';
-const DEFAULT_EMBEDDING_DEPLOYMENT = 'text-embedding-3-small';
+const DEFAULT_CHAT_DEPLOYMENT = "gpt-4";
+const DEFAULT_EMBEDDING_DEPLOYMENT = "text-embedding-3-small";
 
 /**
  * Get Azure OpenAI client (singleton)
@@ -19,13 +19,13 @@ export function getAzureOpenAIClient(): AzureOpenAI {
   if (!azureClient) {
     const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
     const apiKey = process.env.AZURE_OPENAI_API_KEY;
-    const apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-10-21';
+    const apiVersion = process.env.AZURE_OPENAI_API_VERSION || "2024-10-21";
 
     if (!endpoint) {
-      throw new Error('AZURE_OPENAI_ENDPOINT not configured');
+      throw new Error("AZURE_OPENAI_ENDPOINT not configured");
     }
     if (!apiKey) {
-      throw new Error('AZURE_OPENAI_API_KEY not configured');
+      throw new Error("AZURE_OPENAI_API_KEY not configured");
     }
 
     azureClient = new AzureOpenAI({
@@ -47,22 +47,25 @@ export async function generateCompletion(
     deployment?: string;
     maxTokens?: number;
     temperature?: number;
-  }
+  },
 ): Promise<string> {
   const client = getAzureOpenAIClient();
-  const deployment = options?.deployment || process.env.AZURE_OPENAI_CHAT_DEPLOYMENT || DEFAULT_CHAT_DEPLOYMENT;
+  const deployment =
+    options?.deployment ||
+    process.env.AZURE_OPENAI_CHAT_DEPLOYMENT ||
+    DEFAULT_CHAT_DEPLOYMENT;
 
   const completion = await client.chat.completions.create({
     model: deployment,
     max_tokens: options?.maxTokens || 2048,
     temperature: options?.temperature || 0.7,
     messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
     ],
   });
 
-  return completion.choices[0]?.message?.content || '';
+  return completion.choices[0]?.message?.content || "";
 }
 
 /**
@@ -70,10 +73,13 @@ export async function generateCompletion(
  */
 export async function generateEmbeddings(
   text: string,
-  deployment?: string
+  deployment?: string,
 ): Promise<number[]> {
   const client = getAzureOpenAIClient();
-  const embeddingDeployment = deployment || process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT || DEFAULT_EMBEDDING_DEPLOYMENT;
+  const embeddingDeployment =
+    deployment ||
+    process.env.AZURE_OPENAI_EMBEDDING_DEPLOYMENT ||
+    DEFAULT_EMBEDDING_DEPLOYMENT;
 
   const response = await client.embeddings.create({
     model: embeddingDeployment,
@@ -91,7 +97,7 @@ const rateLimits = new Map<string, { count: number; resetAt: number }>();
 export function checkRateLimit(
   key: string,
   maxRequests: number,
-  windowMs: number
+  windowMs: number,
 ): boolean {
   const now = Date.now();
   const limit = rateLimits.get(key);

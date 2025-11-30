@@ -5,13 +5,18 @@
  * Replaces Firebase generateSWOT function.
  */
 
-import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
-import { requireAuth } from '../lib/auth';
-import { generateCompletion, checkRateLimit } from '../lib/openai';
+import {
+  app,
+  HttpRequest,
+  HttpResponseInit,
+  InvocationContext,
+} from "@azure/functions";
+import { requireAuth } from "../lib/auth";
+import { generateCompletion, checkRateLimit } from "../lib/openai";
 
 async function handler(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   const auth = requireAuth(request);
   if (!auth.authenticated) {
@@ -21,22 +26,22 @@ async function handler(
   if (!checkRateLimit(`swot:${auth.userId}`, 10, 60000)) {
     return {
       status: 429,
-      jsonBody: { error: 'Rate limit exceeded', code: 'resource-exhausted' },
+      jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },
     };
   }
 
   try {
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       topic: string;
       context?: string;
     };
 
     const { topic, context: additionalContext } = body;
 
-    if (!topic || typeof topic !== 'string') {
+    if (!topic || typeof topic !== "string") {
       return {
         status: 400,
-        jsonBody: { error: 'Topic is required', code: 'invalid-argument' },
+        jsonBody: { error: "Topic is required", code: "invalid-argument" },
       };
     }
 
@@ -74,16 +79,16 @@ Brief strategic summary and recommendations.`;
 
     return { status: 200, jsonBody: { swot } };
   } catch (error) {
-    context.error('Error generating SWOT:', error);
+    context.error("Error generating SWOT:", error);
     return {
       status: 500,
-      jsonBody: { error: 'Failed to generate SWOT analysis', code: 'internal' },
+      jsonBody: { error: "Failed to generate SWOT analysis", code: "internal" },
     };
   }
 }
 
-app.http('generateSWOT', {
-  methods: ['POST'],
-  authLevel: 'anonymous',
+app.http("generateSWOT", {
+  methods: ["POST"],
+  authLevel: "anonymous",
   handler,
 });

@@ -14,14 +14,14 @@ import {
   IDatabaseService,
   ITransaction,
   IBatchWriter,
-} from '../interfaces/database';
+} from "../interfaces/database";
 import {
   QueryOptions,
   PaginatedResult,
   UnsubscribeFn,
   FieldOperations,
   QueryCondition,
-} from '../interfaces/types';
+} from "../interfaces/types";
 
 /**
  * Azure Cosmos DB Configuration
@@ -49,41 +49,43 @@ const azureFieldOperations: FieldOperations = {
  * Convert QueryCondition to Cosmos SQL WHERE clause
  */
 function buildWhereClause(conditions: QueryCondition[]): string {
-  if (conditions.length === 0) return '';
+  if (conditions.length === 0) return "";
 
   const clauses = conditions.map((cond, index) => {
     const paramName = `@param${index}`;
     const fieldPath = `c.${cond.field.replace(/\./g, '["').replace(/\./g, '"]')}`;
 
     switch (cond.operator) {
-      case '==':
+      case "==":
         return `${fieldPath} = ${paramName}`;
-      case '!=':
+      case "!=":
         return `${fieldPath} != ${paramName}`;
-      case '<':
+      case "<":
         return `${fieldPath} < ${paramName}`;
-      case '<=':
+      case "<=":
         return `${fieldPath} <= ${paramName}`;
-      case '>':
+      case ">":
         return `${fieldPath} > ${paramName}`;
-      case '>=':
+      case ">=":
         return `${fieldPath} >= ${paramName}`;
-      case 'array-contains':
+      case "array-contains":
         return `ARRAY_CONTAINS(${fieldPath}, ${paramName})`;
-      case 'in':
+      case "in":
         return `${fieldPath} IN (${paramName})`;
       default:
         return `${fieldPath} = ${paramName}`;
     }
   });
 
-  return `WHERE ${clauses.join(' AND ')}`;
+  return `WHERE ${clauses.join(" AND ")}`;
 }
 
 /**
  * Build query parameters for Cosmos SQL
  */
-function buildParameters(conditions: QueryCondition[]): { name: string; value: unknown }[] {
+function buildParameters(
+  conditions: QueryCondition[],
+): { name: string; value: unknown }[] {
   return conditions.map((cond, index) => ({
     name: `@param${index}`,
     value: cond.value,
@@ -96,7 +98,7 @@ function buildParameters(conditions: QueryCondition[]): { name: string; value: u
  */
 class AzureTransaction implements ITransaction {
   private operations: Array<{
-    type: 'get' | 'set' | 'update' | 'delete';
+    type: "get" | "set" | "update" | "delete";
     collection: string;
     documentId: string;
     data?: any;
@@ -114,10 +116,10 @@ class AzureTransaction implements ITransaction {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): void {
     this.operations.push({
-      type: 'set',
+      type: "set",
       collection: collectionName,
       documentId,
       data,
@@ -128,10 +130,10 @@ class AzureTransaction implements ITransaction {
   update(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): void {
     this.operations.push({
-      type: 'update',
+      type: "update",
       collection: collectionName,
       documentId,
       data: updates,
@@ -140,7 +142,7 @@ class AzureTransaction implements ITransaction {
 
   delete(collectionName: string, documentId: string): void {
     this.operations.push({
-      type: 'delete',
+      type: "delete",
       collection: collectionName,
       documentId,
     });
@@ -156,7 +158,7 @@ class AzureTransaction implements ITransaction {
  */
 class AzureBatchWriter implements IBatchWriter {
   private operations: Array<{
-    type: 'set' | 'update' | 'delete';
+    type: "set" | "update" | "delete";
     collection: string;
     documentId: string;
     data?: any;
@@ -169,10 +171,10 @@ class AzureBatchWriter implements IBatchWriter {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): IBatchWriter {
     this.operations.push({
-      type: 'set',
+      type: "set",
       collection: collectionName,
       documentId,
       data,
@@ -184,10 +186,10 @@ class AzureBatchWriter implements IBatchWriter {
   update(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): IBatchWriter {
     this.operations.push({
-      type: 'update',
+      type: "update",
       collection: collectionName,
       documentId,
       data: updates,
@@ -197,7 +199,7 @@ class AzureBatchWriter implements IBatchWriter {
 
   delete(collectionName: string, documentId: string): IBatchWriter {
     this.operations.push({
-      type: 'delete',
+      type: "delete",
       collection: collectionName,
       documentId,
     });
@@ -209,13 +211,22 @@ class AzureBatchWriter implements IBatchWriter {
     // In production, use bulk operations API or stored procedures
     for (const op of this.operations) {
       switch (op.type) {
-        case 'set':
-          await this.service.setDocument(op.collection, op.documentId, op.data, op.merge);
+        case "set":
+          await this.service.setDocument(
+            op.collection,
+            op.documentId,
+            op.data,
+            op.merge,
+          );
           break;
-        case 'update':
-          await this.service.updateDocument(op.collection, op.documentId, op.data);
+        case "update":
+          await this.service.updateDocument(
+            op.collection,
+            op.documentId,
+            op.data,
+          );
           break;
-        case 'delete':
+        case "delete":
           await this.service.deleteDocument(op.collection, op.documentId);
           break;
       }
@@ -249,13 +260,13 @@ export class AzureDatabaseService implements IDatabaseService {
 
     try {
       // For browser, we use Azure Functions as proxy
-      if (typeof window !== 'undefined' && this.config.functionsBaseUrl) {
+      if (typeof window !== "undefined" && this.config.functionsBaseUrl) {
         this.initialized = true;
         return true;
       }
 
       // For server-side, use Cosmos SDK directly
-      const cosmos = await import('@azure/cosmos');
+      const cosmos = await import("@azure/cosmos");
       this.cosmosClient = new cosmos.CosmosClient({
         endpoint: this.config.endpoint,
         key: this.config.key,
@@ -264,7 +275,7 @@ export class AzureDatabaseService implements IDatabaseService {
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Azure Cosmos DB initialization failed:', error);
+      console.error("Azure Cosmos DB initialization failed:", error);
       return false;
     }
   }
@@ -281,12 +292,15 @@ export class AzureDatabaseService implements IDatabaseService {
   // Document Operations (using Functions proxy for browser)
   // ============================================================================
 
-  async getDocument<T>(collectionName: string, documentId: string): Promise<T | null> {
+  async getDocument<T>(
+    collectionName: string,
+    documentId: string,
+  ): Promise<T | null> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
       // Use Functions proxy
-      return this.callFunctionsProxy<T>('getDocument', {
+      return this.callFunctionsProxy<T>("getDocument", {
         collection: collectionName,
         documentId,
       });
@@ -300,7 +314,7 @@ export class AzureDatabaseService implements IDatabaseService {
       return { id: resource.id, ...resource } as T;
     } catch (error: any) {
       if (error.code === 404) return null;
-      console.error('Error getting document:', error);
+      console.error("Error getting document:", error);
       return null;
     }
   }
@@ -309,12 +323,12 @@ export class AzureDatabaseService implements IDatabaseService {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): Promise<boolean> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      return this.callFunctionsProxy<boolean>('setDocument', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      return this.callFunctionsProxy<boolean>("setDocument", {
         collection: collectionName,
         documentId,
         data,
@@ -324,13 +338,19 @@ export class AzureDatabaseService implements IDatabaseService {
 
     try {
       const container = this.database.container(collectionName);
-      const doc = { id: documentId, ...data, _updatedAt: new Date().toISOString() };
+      const doc = {
+        id: documentId,
+        ...data,
+        _updatedAt: new Date().toISOString(),
+      };
 
       if (merge) {
         // Get existing and merge
         const existing = await this.getDocument<T>(collectionName, documentId);
         if (existing) {
-          await container.item(documentId, documentId).replace({ ...existing, ...doc });
+          await container
+            .item(documentId, documentId)
+            .replace({ ...existing, ...doc });
         } else {
           await container.items.create(doc);
         }
@@ -339,7 +359,7 @@ export class AzureDatabaseService implements IDatabaseService {
       }
       return true;
     } catch (error) {
-      console.error('Error setting document:', error);
+      console.error("Error setting document:", error);
       return false;
     }
   }
@@ -347,12 +367,12 @@ export class AzureDatabaseService implements IDatabaseService {
   async updateDocument(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): Promise<boolean> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      return this.callFunctionsProxy<boolean>('updateDocument', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      return this.callFunctionsProxy<boolean>("updateDocument", {
         collection: collectionName,
         documentId,
         updates,
@@ -371,16 +391,19 @@ export class AzureDatabaseService implements IDatabaseService {
       });
       return true;
     } catch (error) {
-      console.error('Error updating document:', error);
+      console.error("Error updating document:", error);
       return false;
     }
   }
 
-  async deleteDocument(collectionName: string, documentId: string): Promise<boolean> {
+  async deleteDocument(
+    collectionName: string,
+    documentId: string,
+  ): Promise<boolean> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      return this.callFunctionsProxy<boolean>('deleteDocument', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      return this.callFunctionsProxy<boolean>("deleteDocument", {
         collection: collectionName,
         documentId,
       });
@@ -391,21 +414,21 @@ export class AzureDatabaseService implements IDatabaseService {
       await container.item(documentId, documentId).delete();
       return true;
     } catch (error) {
-      console.error('Error deleting document:', error);
+      console.error("Error deleting document:", error);
       return false;
     }
   }
 
   async addDocument<T extends Record<string, unknown>>(
     collectionName: string,
-    data: T
+    data: T,
   ): Promise<string | null> {
     if (!this.initialized) await this.initialize();
 
     const documentId = this.generateId();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      const success = await this.callFunctionsProxy<boolean>('addDocument', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      const success = await this.callFunctionsProxy<boolean>("addDocument", {
         collection: collectionName,
         documentId,
         data,
@@ -423,7 +446,7 @@ export class AzureDatabaseService implements IDatabaseService {
       });
       return documentId;
     } catch (error) {
-      console.error('Error adding document:', error);
+      console.error("Error adding document:", error);
       return null;
     }
   }
@@ -434,12 +457,12 @@ export class AzureDatabaseService implements IDatabaseService {
 
   async queryDocuments<T>(
     collectionName: string,
-    options: QueryOptions = {}
+    options: QueryOptions = {},
   ): Promise<PaginatedResult<T>> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      return this.callFunctionsProxy<PaginatedResult<T>>('queryDocuments', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      return this.callFunctionsProxy<PaginatedResult<T>>("queryDocuments", {
         collection: collectionName,
         options,
       });
@@ -449,19 +472,19 @@ export class AzureDatabaseService implements IDatabaseService {
       const container = this.database.container(collectionName);
 
       // Build SQL query
-      let query = 'SELECT * FROM c';
+      let query = "SELECT * FROM c";
       const parameters: { name: string; value: unknown }[] = [];
 
       if (options.conditions && options.conditions.length > 0) {
-        query += ' ' + buildWhereClause(options.conditions);
+        query += " " + buildWhereClause(options.conditions);
         parameters.push(...buildParameters(options.conditions));
       }
 
       if (options.orderBy && options.orderBy.length > 0) {
         const orderClauses = options.orderBy.map(
-          (o) => `c.${o.field} ${o.direction.toUpperCase()}`
+          (o) => `c.${o.field} ${o.direction.toUpperCase()}`,
         );
-        query += ` ORDER BY ${orderClauses.join(', ')}`;
+        query += ` ORDER BY ${orderClauses.join(", ")}`;
       }
 
       const querySpec = { query, parameters };
@@ -478,7 +501,7 @@ export class AzureDatabaseService implements IDatabaseService {
         .query(querySpec, queryOptions)
         .fetchNext();
 
-      const items = resources.map((r: any) => ({ id: r.id, ...r } as T));
+      const items = resources.map((r: any) => ({ id: r.id, ...r }) as T);
 
       return {
         items,
@@ -486,7 +509,7 @@ export class AzureDatabaseService implements IDatabaseService {
         hasMore: Boolean(continuationToken),
       };
     } catch (error) {
-      console.error('Error querying documents:', error);
+      console.error("Error querying documents:", error);
       return { items: [], cursor: null, hasMore: false };
     }
   }
@@ -496,11 +519,14 @@ export class AzureDatabaseService implements IDatabaseService {
     return result.items;
   }
 
-  async countDocuments(collectionName: string, options: QueryOptions = {}): Promise<number> {
+  async countDocuments(
+    collectionName: string,
+    options: QueryOptions = {},
+  ): Promise<number> {
     if (!this.initialized) await this.initialize();
 
-    if (typeof window !== 'undefined' && this.config?.functionsBaseUrl) {
-      return this.callFunctionsProxy<number>('countDocuments', {
+    if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
+      return this.callFunctionsProxy<number>("countDocuments", {
         collection: collectionName,
         options,
       });
@@ -509,11 +535,11 @@ export class AzureDatabaseService implements IDatabaseService {
     try {
       const container = this.database.container(collectionName);
 
-      let query = 'SELECT VALUE COUNT(1) FROM c';
+      let query = "SELECT VALUE COUNT(1) FROM c";
       const parameters: { name: string; value: unknown }[] = [];
 
       if (options.conditions && options.conditions.length > 0) {
-        query += ' ' + buildWhereClause(options.conditions);
+        query += " " + buildWhereClause(options.conditions);
         parameters.push(...buildParameters(options.conditions));
       }
 
@@ -523,7 +549,7 @@ export class AzureDatabaseService implements IDatabaseService {
 
       return resources[0] || 0;
     } catch (error) {
-      console.error('Error counting documents:', error);
+      console.error("Error counting documents:", error);
       return 0;
     }
   }
@@ -538,7 +564,7 @@ export class AzureDatabaseService implements IDatabaseService {
     collectionName: string,
     documentId: string,
     onUpdate: (data: T | null) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn {
     // Polling-based implementation
     // In production, use Azure SignalR or Change Feed
@@ -572,7 +598,7 @@ export class AzureDatabaseService implements IDatabaseService {
     collectionName: string,
     options: QueryOptions,
     onUpdate: (items: T[]) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn {
     // Polling-based implementation
     let active = true;
@@ -606,7 +632,7 @@ export class AzureDatabaseService implements IDatabaseService {
   // ============================================================================
 
   async runTransaction<T>(
-    updateFn: (transaction: ITransaction) => Promise<T>
+    updateFn: (transaction: ITransaction) => Promise<T>,
   ): Promise<T> {
     // Cosmos DB transactions use stored procedures
     // This is a simplified implementation
@@ -628,19 +654,22 @@ export class AzureDatabaseService implements IDatabaseService {
 
   private async callFunctionsProxy<T>(
     operation: string,
-    params: Record<string, unknown>
+    params: Record<string, unknown>,
   ): Promise<T> {
     if (!this.config?.functionsBaseUrl) {
-      throw new Error('Functions base URL not configured');
+      throw new Error("Functions base URL not configured");
     }
 
-    const response = await fetch(`${this.config.functionsBaseUrl}/api/cosmos/${operation}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${this.config.functionsBaseUrl}/api/cosmos/${operation}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params),
       },
-      body: JSON.stringify(params),
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`Functions proxy error: ${response.statusText}`);

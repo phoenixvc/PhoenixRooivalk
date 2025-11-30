@@ -30,6 +30,17 @@ import {
 import { isAnalyticsAllowed } from "../components/CookieConsent";
 import { checkRateLimit, debounce } from "../utils/rateLimiter";
 
+// Import Node.js crypto in non-browser environments for secure random generation
+let nodeCrypto: typeof import("crypto") | null = null;
+if (typeof window === "undefined") {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    nodeCrypto = require("crypto");
+  } catch {
+    nodeCrypto = null;
+  }
+}
+
 // Types for analytics events
 export interface PageViewEvent {
   userId: string | null;
@@ -84,9 +95,31 @@ export interface UserSession {
   referrer: string;
 }
 
-// Generate unique session ID
+// Generate unique session ID (cryptographically secure)
 const generateSessionId = (): string => {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  let randStr: string;
+  if (
+    typeof window !== "undefined" &&
+    window.crypto &&
+    window.crypto.getRandomValues
+  ) {
+    // Browser environment: use window.crypto
+    const randomValues = new Uint32Array(2);
+    window.crypto.getRandomValues(randomValues);
+    randStr = randomValues[0].toString(36) + randomValues[1].toString(36);
+    randStr = randStr.substring(0, 9);
+  } else if (nodeCrypto && nodeCrypto.randomBytes) {
+    // Node.js environment: use crypto.randomBytes
+    const buffer = nodeCrypto.randomBytes(8);
+    randStr = Array.from(buffer)
+      .map((b) => b.toString(36).padStart(2, "0"))
+      .join("")
+      .substring(0, 9);
+  } else {
+    // Last resort fallback - should rarely happen in practice
+    randStr = Date.now().toString(36);
+  }
+  return `${Date.now()}-${randStr}`;
 };
 
 // Get or create session ID from sessionStorage

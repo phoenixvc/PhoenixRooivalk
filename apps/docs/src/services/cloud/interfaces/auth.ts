@@ -5,7 +5,7 @@
  * Implementations: Firebase Auth, Azure AD B2C / Entra External ID
  */
 
-import { CloudUser, OAuthProvider, UnsubscribeFn } from './types';
+import { CloudUser, OAuthProvider, UnsubscribeFn } from "./types";
 
 /**
  * Authentication service interface
@@ -77,16 +77,16 @@ export interface IAuthService {
 /**
  * Default admin domains for Phoenix Rooivalk
  */
-export const DEFAULT_ADMIN_DOMAINS = ['phoenixrooivalk.com', 'justaghost.dev'];
+export const DEFAULT_ADMIN_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 /**
  * Helper to check if a user is an admin
  */
 export function checkIsAdmin(
   user: CloudUser | null,
-  adminDomains: string[] = DEFAULT_ADMIN_DOMAINS
+  adminDomains: string[] = DEFAULT_ADMIN_DOMAINS,
 ): boolean {
   if (!user?.email) return false;
-  const emailDomain = user.email.split('@')[1]?.toLowerCase();
-  return adminDomains.some(domain => domain.toLowerCase() === emailDomain);
+  const emailDomain = user.email.split("@")[1]?.toLowerCase();
+  return adminDomains.some((domain) => domain.toLowerCase() === emailDomain);
 }

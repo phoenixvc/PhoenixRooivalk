@@ -15,8 +15,8 @@ import {
   IncomingNotification,
   isNotificationApiSupported,
   getCurrentPermission,
-} from '../interfaces/messaging';
-import { NotificationPayload, UnsubscribeFn } from '../interfaces/types';
+} from "../interfaces/messaging";
+import { NotificationPayload, UnsubscribeFn } from "../interfaces/types";
 
 /**
  * Azure Notification Hub Configuration
@@ -52,15 +52,15 @@ export class AzureMessagingService implements IMessagingService {
 
   async requestPermission(): Promise<NotificationPermissionStatus> {
     if (!this.isSupported()) {
-      return 'unsupported';
+      return "unsupported";
     }
 
     try {
       const permission = await Notification.requestPermission();
       return permission as NotificationPermissionStatus;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
-      return 'denied';
+      console.error("Error requesting notification permission:", error);
+      return "denied";
     }
   }
 
@@ -69,8 +69,8 @@ export class AzureMessagingService implements IMessagingService {
       return null;
     }
 
-    if (Notification.permission !== 'granted') {
-      console.warn('Notification permission not granted');
+    if (Notification.permission !== "granted") {
+      console.warn("Notification permission not granted");
       return null;
     }
 
@@ -78,15 +78,16 @@ export class AzureMessagingService implements IMessagingService {
       // Register service worker if not already registered
       this.serviceWorkerRegistration = await this.registerServiceWorker();
       if (!this.serviceWorkerRegistration) {
-        console.error('Service worker registration failed');
+        console.error("Service worker registration failed");
         return null;
       }
 
       // Get push subscription from service worker
-      const subscription = await this.serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: await this.getVapidPublicKey(),
-      });
+      const subscription =
+        await this.serviceWorkerRegistration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: await this.getVapidPublicKey(),
+        });
 
       // Convert subscription to token string
       this.currentToken = JSON.stringify(subscription.toJSON());
@@ -96,7 +97,7 @@ export class AzureMessagingService implements IMessagingService {
 
       return this.currentToken;
     } catch (error) {
-      console.error('Error getting push token:', error);
+      console.error("Error getting push token:", error);
       return null;
     }
   }
@@ -107,8 +108,8 @@ export class AzureMessagingService implements IMessagingService {
       return {
         success: false,
         token: null,
-        permission: 'unsupported',
-        error: 'Push notifications are not supported in this browser',
+        permission: "unsupported",
+        error: "Push notifications are not supported in this browser",
       };
     }
 
@@ -118,21 +119,21 @@ export class AzureMessagingService implements IMessagingService {
         success: false,
         token: null,
         permission: this.getPermissionStatus(),
-        error: 'Push notifications are not configured. Please contact support.',
+        error: "Push notifications are not configured. Please contact support.",
       };
     }
 
     // Request permission
     const permission = await this.requestPermission();
-    if (permission !== 'granted') {
+    if (permission !== "granted") {
       return {
         success: false,
         token: null,
         permission,
         error:
-          permission === 'denied'
-            ? 'Notification permission was denied. Please enable it in browser settings.'
-            : 'Notification permission request was dismissed',
+          permission === "denied"
+            ? "Notification permission was denied. Please enable it in browser settings."
+            : "Notification permission request was dismissed",
       };
     }
 
@@ -143,7 +144,7 @@ export class AzureMessagingService implements IMessagingService {
         success: false,
         token: null,
         permission,
-        error: 'Failed to get notification token. Please try again.',
+        error: "Failed to get notification token. Please try again.",
       };
     }
 
@@ -161,17 +162,17 @@ export class AzureMessagingService implements IMessagingService {
       const response = await fetch(
         `${this.config.functionsBaseUrl}/api/notifications/subscribe`,
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token: token || this.currentToken,
             topic,
           }),
-        }
+        },
       );
       return response.ok;
     } catch (error) {
-      console.error('Error subscribing to topic:', error);
+      console.error("Error subscribing to topic:", error);
       return false;
     }
   }
@@ -183,30 +184,30 @@ export class AzureMessagingService implements IMessagingService {
       const response = await fetch(
         `${this.config.functionsBaseUrl}/api/notifications/unsubscribe`,
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token: token || this.currentToken,
             topic,
           }),
-        }
+        },
       );
       return response.ok;
     } catch (error) {
-      console.error('Error unsubscribing from topic:', error);
+      console.error("Error unsubscribing from topic:", error);
       return false;
     }
   }
 
   onForegroundMessage(
-    callback: (notification: IncomingNotification) => void
+    callback: (notification: IncomingNotification) => void,
   ): UnsubscribeFn | null {
     if (!this.serviceWorkerRegistration) {
       return null;
     }
 
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'PUSH_NOTIFICATION') {
+      if (event.data && event.data.type === "PUSH_NOTIFICATION") {
         callback({
           notification: event.data.notification,
           data: event.data.data,
@@ -215,27 +216,27 @@ export class AzureMessagingService implements IMessagingService {
       }
     };
 
-    navigator.serviceWorker.addEventListener('message', handleMessage);
+    navigator.serviceWorker.addEventListener("message", handleMessage);
 
     return () => {
-      navigator.serviceWorker.removeEventListener('message', handleMessage);
+      navigator.serviceWorker.removeEventListener("message", handleMessage);
     };
   }
 
   showLocalNotification(payload: NotificationPayload): void {
-    if (!this.isSupported() || Notification.permission !== 'granted') {
+    if (!this.isSupported() || Notification.permission !== "granted") {
       return;
     }
 
     try {
       new Notification(payload.title, {
         body: payload.body,
-        icon: payload.icon || '/img/logo.svg',
-        badge: payload.badge || '/img/badge.png',
+        icon: payload.icon || "/img/logo.svg",
+        badge: payload.badge || "/img/badge.png",
         data: payload.data,
       });
     } catch (error) {
-      console.error('Error showing notification:', error);
+      console.error("Error showing notification:", error);
     }
   }
 
@@ -243,7 +244,8 @@ export class AzureMessagingService implements IMessagingService {
     if (!this.serviceWorkerRegistration) return false;
 
     try {
-      const subscription = await this.serviceWorkerRegistration.pushManager.getSubscription();
+      const subscription =
+        await this.serviceWorkerRegistration.pushManager.getSubscription();
       if (subscription) {
         await subscription.unsubscribe();
 
@@ -255,7 +257,7 @@ export class AzureMessagingService implements IMessagingService {
       this.currentToken = null;
       return true;
     } catch (error) {
-      console.error('Error deleting token:', error);
+      console.error("Error deleting token:", error);
       return false;
     }
   }
@@ -270,7 +272,7 @@ export class AzureMessagingService implements IMessagingService {
       token: this.currentToken!,
       topics: [], // Would need to track separately or query from backend
       createdAt: new Date(),
-      platform: 'web',
+      platform: "web",
     };
   }
 
@@ -279,47 +281,51 @@ export class AzureMessagingService implements IMessagingService {
   // ============================================================================
 
   private async registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-    if (!('serviceWorker' in navigator)) {
+    if (!("serviceWorker" in navigator)) {
       return null;
     }
 
     try {
-      let registration = await navigator.serviceWorker.getRegistration('/sw.js');
+      let registration =
+        await navigator.serviceWorker.getRegistration("/sw.js");
 
       if (!registration) {
-        registration = await navigator.serviceWorker.register('/sw.js');
+        registration = await navigator.serviceWorker.register("/sw.js");
       }
 
       // Wait for activation
       if (registration.installing) {
         await new Promise<void>((resolve) => {
-          registration!.installing!.addEventListener('statechange', function handler() {
-            if (this.state === 'activated') {
-              this.removeEventListener('statechange', handler);
-              resolve();
-            }
-          });
+          registration!.installing!.addEventListener(
+            "statechange",
+            function handler() {
+              if (this.state === "activated") {
+                this.removeEventListener("statechange", handler);
+                resolve();
+              }
+            },
+          );
         });
       }
 
       return registration;
     } catch (error) {
-      console.error('Service worker registration failed:', error);
+      console.error("Service worker registration failed:", error);
       return null;
     }
   }
 
   private async getVapidPublicKey(): Promise<Uint8Array> {
     if (!this.config?.functionsBaseUrl) {
-      throw new Error('Functions base URL not configured');
+      throw new Error("Functions base URL not configured");
     }
 
     const response = await fetch(
-      `${this.config.functionsBaseUrl}/api/notifications/vapid-key`
+      `${this.config.functionsBaseUrl}/api/notifications/vapid-key`,
     );
 
     if (!response.ok) {
-      throw new Error('Failed to get VAPID public key');
+      throw new Error("Failed to get VAPID public key");
     }
 
     const { publicKey } = await response.json();
@@ -332,33 +338,38 @@ export class AzureMessagingService implements IMessagingService {
     const response = await fetch(
       `${this.config.functionsBaseUrl}/api/notifications/register`,
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           token,
-          platform: 'web',
+          platform: "web",
         }),
-      }
+      },
     );
 
     if (!response.ok) {
-      throw new Error('Failed to register with Notification Hub');
+      throw new Error("Failed to register with Notification Hub");
     }
   }
 
   private async unregisterFromHub(token: string): Promise<void> {
     if (!this.config?.functionsBaseUrl) return;
 
-    await fetch(`${this.config.functionsBaseUrl}/api/notifications/unregister`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token }),
-    });
+    await fetch(
+      `${this.config.functionsBaseUrl}/api/notifications/unregister`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      },
+    );
   }
 
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
     for (let i = 0; i < rawData.length; ++i) {

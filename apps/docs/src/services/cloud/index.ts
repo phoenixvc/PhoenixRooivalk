@@ -19,7 +19,7 @@
  */
 
 // Export interfaces
-export * from './interfaces';
+export * from "./interfaces";
 
 // Export provider and service accessors
 export {
@@ -35,7 +35,7 @@ export {
   getFunctionsService,
   type CloudProvider,
   type CloudServices,
-} from './provider';
+} from "./provider";
 
 // Export Firebase implementations (for direct use if needed)
 export {
@@ -44,7 +44,7 @@ export {
   FirebaseAnalyticsService,
   FirebaseMessagingService,
   FirebaseFunctionsService,
-} from './firebase';
+} from "./firebase";
 
 // Export Azure implementations (for direct use if needed)
 export {
@@ -58,7 +58,7 @@ export {
   type AzureAnalyticsConfig,
   type AzureMessagingConfig,
   type AzureFunctionsConfig,
-} from './azure';
+} from "./azure";
 
 // Export React hooks
 export {
@@ -67,4 +67,4 @@ export {
   useCloudAuth,
   useUserProgress,
   useCloudAnalytics,
-} from './hooks';
+} from "./hooks";

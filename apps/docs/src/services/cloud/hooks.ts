@@ -4,16 +4,16 @@
  * Provides React hooks for accessing cloud services and managing state.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   getCloudServices,
   getCurrentProvider,
   switchProvider,
   CloudProvider,
   CloudServices,
-} from './provider';
-import { CloudUser } from './interfaces/types';
-import { UserProgress, DEFAULT_USER_PROGRESS } from './interfaces/database';
+} from "./provider";
+import { CloudUser } from "./interfaces/types";
+import { UserProgress, DEFAULT_USER_PROGRESS } from "./interfaces/database";
 
 /**
  * Hook to get cloud services
@@ -100,7 +100,7 @@ export function useCloudAuth(): {
 
   const isAdmin = useMemo(
     () => services.auth.isAdmin(user),
-    [services.auth, user]
+    [services.auth, user],
   );
 
   return {
@@ -139,8 +139,8 @@ export function useUserProgress(userId: string | null): {
 
     const loadProgress = async () => {
       const dbProgress = await services.database.getDocument<UserProgress>(
-        'userProgress',
-        userId
+        "userProgress",
+        userId,
       );
 
       if (dbProgress) {
@@ -150,7 +150,7 @@ export function useUserProgress(userId: string | null): {
         const local = getLocalProgress();
         setProgress(local);
         // Create initial progress in database
-        await services.database.setDocument('userProgress', userId, {
+        await services.database.setDocument("userProgress", userId, {
           ...local,
           updatedAt: services.database.getFieldOperations().serverTimestamp(),
         });
@@ -177,19 +177,27 @@ export function useUserProgress(userId: string | null): {
       saveLocalProgress(newProgress);
 
       if (userId && services.database.isConfigured()) {
-        await services.database.setDocument('userProgress', userId, {
-          ...newProgress,
-          updatedAt: services.database.getFieldOperations().serverTimestamp(),
-        }, true);
+        await services.database.setDocument(
+          "userProgress",
+          userId,
+          {
+            ...newProgress,
+            updatedAt: services.database.getFieldOperations().serverTimestamp(),
+          },
+          true,
+        );
       }
     },
-    [progress, userId, services.database]
+    [progress, userId, services.database],
   );
 
   const markDocAsRead = useCallback(
     async (docId: string) => {
       const now = new Date().toISOString();
-      const currentDoc = progress?.docs[docId] || { scrollProgress: 0, completed: false };
+      const currentDoc = progress?.docs[docId] || {
+        scrollProgress: 0,
+        completed: false,
+      };
 
       await updateProgress({
         docs: {
@@ -202,7 +210,7 @@ export function useUserProgress(userId: string | null): {
         },
       });
     },
-    [progress, updateProgress]
+    [progress, updateProgress],
   );
 
   const unlockAchievement = useCallback(
@@ -224,7 +232,7 @@ export function useUserProgress(userId: string | null): {
         },
       });
     },
-    [progress, updateProgress]
+    [progress, updateProgress],
   );
 
   return {
@@ -240,7 +248,11 @@ export function useUserProgress(userId: string | null): {
  * Hook for analytics
  */
 export function useCloudAnalytics(): {
-  trackPageView: (pageUrl: string, pageTitle: string, userId?: string | null) => Promise<void>;
+  trackPageView: (
+    pageUrl: string,
+    pageTitle: string,
+    userId?: string | null,
+  ) => Promise<void>;
   trackEvent: (name: string, params?: Record<string, unknown>) => Promise<void>;
   updateScrollDepth: (depth: number) => void;
 } {
@@ -254,26 +266,29 @@ export function useCloudAnalytics(): {
         userId,
         sessionId: services.analytics.getSessionId(),
         isAuthenticated: Boolean(userId),
-        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
-        screenWidth: typeof window !== 'undefined' ? window.innerWidth : undefined,
-        screenHeight: typeof window !== 'undefined' ? window.innerHeight : undefined,
+        referrer:
+          typeof document !== "undefined" ? document.referrer : undefined,
+        screenWidth:
+          typeof window !== "undefined" ? window.innerWidth : undefined,
+        screenHeight:
+          typeof window !== "undefined" ? window.innerHeight : undefined,
       });
     },
-    [services.analytics]
+    [services.analytics],
   );
 
   const trackEvent = useCallback(
     async (name: string, params?: Record<string, unknown>) => {
       await services.analytics.trackEvent({ name, params });
     },
-    [services.analytics]
+    [services.analytics],
   );
 
   const updateScrollDepth = useCallback(
     (depth: number) => {
       services.analytics.updateScrollDepth(depth);
     },
-    [services.analytics]
+    [services.analytics],
   );
 
   return { trackPageView, trackEvent, updateScrollDepth };
@@ -283,20 +298,23 @@ export function useCloudAnalytics(): {
 // Local Storage Helpers
 // ============================================================================
 
-const LOCAL_PROGRESS_KEY = 'phoenix-docs-progress';
-const LOCAL_ACHIEVEMENTS_KEY = 'phoenix-docs-achievements';
-const LOCAL_STATS_KEY = 'phoenix-docs-stats';
+const LOCAL_PROGRESS_KEY = "phoenix-docs-progress";
+const LOCAL_ACHIEVEMENTS_KEY = "phoenix-docs-achievements";
+const LOCAL_STATS_KEY = "phoenix-docs-stats";
 
 function getLocalProgress(): UserProgress {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return DEFAULT_USER_PROGRESS;
   }
 
   try {
-    const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || '{}');
-    const achievements = JSON.parse(localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || '{}');
+    const docs = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || "{}");
+    const achievements = JSON.parse(
+      localStorage.getItem(LOCAL_ACHIEVEMENTS_KEY) || "{}",
+    );
     const stats = JSON.parse(
-      localStorage.getItem(LOCAL_STATS_KEY) || '{"totalPoints":0,"level":1,"streak":0}'
+      localStorage.getItem(LOCAL_STATS_KEY) ||
+        '{"totalPoints":0,"level":1,"streak":0}',
     );
 
     return { docs, achievements, stats };
@@ -306,9 +324,12 @@ function getLocalProgress(): UserProgress {
 }
 
 function saveLocalProgress(progress: UserProgress): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   localStorage.setItem(LOCAL_PROGRESS_KEY, JSON.stringify(progress.docs));
-  localStorage.setItem(LOCAL_ACHIEVEMENTS_KEY, JSON.stringify(progress.achievements));
+  localStorage.setItem(
+    LOCAL_ACHIEVEMENTS_KEY,
+    JSON.stringify(progress.achievements),
+  );
   localStorage.setItem(LOCAL_STATS_KEY, JSON.stringify(progress.stats));
 }

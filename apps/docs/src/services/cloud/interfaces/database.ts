@@ -10,7 +10,7 @@ import {
   PaginatedResult,
   UnsubscribeFn,
   FieldOperations,
-} from './types';
+} from "./types";
 
 /**
  * Document reference for updates
@@ -56,7 +56,7 @@ export interface IDatabaseService {
     collection: string,
     documentId: string,
     data: T,
-    merge?: boolean
+    merge?: boolean,
   ): Promise<boolean>;
 
   /**
@@ -68,7 +68,7 @@ export interface IDatabaseService {
   updateDocument(
     collection: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): Promise<boolean>;
 
   /**
@@ -86,7 +86,7 @@ export interface IDatabaseService {
    */
   addDocument<T extends Record<string, unknown>>(
     collection: string,
-    data: T
+    data: T,
   ): Promise<string | null>;
 
   // ============================================================================
@@ -100,7 +100,7 @@ export interface IDatabaseService {
    */
   queryDocuments<T>(
     collection: string,
-    options?: QueryOptions
+    options?: QueryOptions,
   ): Promise<PaginatedResult<T>>;
 
   /**
@@ -132,7 +132,7 @@ export interface IDatabaseService {
     collection: string,
     documentId: string,
     onUpdate: (data: T | null) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn;
 
   /**
@@ -146,7 +146,7 @@ export interface IDatabaseService {
     collection: string,
     options: QueryOptions,
     onUpdate: (items: T[]) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn;
 
   // ============================================================================
@@ -158,7 +158,7 @@ export interface IDatabaseService {
    * @param updateFn - Function that performs the transaction operations
    */
   runTransaction<T>(
-    updateFn: (transaction: ITransaction) => Promise<T>
+    updateFn: (transaction: ITransaction) => Promise<T>,
   ): Promise<T>;
 
   /**
@@ -183,7 +183,7 @@ export interface ITransaction {
     collection: string,
     documentId: string,
     data: T,
-    merge?: boolean
+    merge?: boolean,
   ): void;
 
   /**
@@ -192,7 +192,7 @@ export interface ITransaction {
   update(
     collection: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): void;
 
   /**
@@ -212,7 +212,7 @@ export interface IBatchWriter {
     collection: string,
     documentId: string,
     data: T,
-    merge?: boolean
+    merge?: boolean,
   ): IBatchWriter;
 
   /**
@@ -221,7 +221,7 @@ export interface IBatchWriter {
   update(
     collection: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): IBatchWriter;
 
   /**
@@ -306,10 +306,10 @@ export const DEFAULT_USER_PROGRESS: UserProgress = {
  * Default user profile
  */
 export const DEFAULT_USER_PROFILE: UserProfileData = {
-  firstName: '',
-  lastName: '',
-  linkedIn: '',
-  discord: '',
+  firstName: "",
+  lastName: "",
+  linkedIn: "",
+  discord: "",
   profileKey: null,
   roles: [],
 };

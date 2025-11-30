@@ -33,19 +33,19 @@ import {
   QueryConstraint,
   Transaction,
   WriteBatch,
-} from 'firebase/firestore';
-import { FirebaseApp } from 'firebase/app';
+} from "firebase/firestore";
+import { FirebaseApp } from "firebase/app";
 import {
   IDatabaseService,
   ITransaction,
   IBatchWriter,
-} from '../interfaces/database';
+} from "../interfaces/database";
 import {
   QueryOptions,
   PaginatedResult,
   UnsubscribeFn,
   FieldOperations,
-} from '../interfaces/types';
+} from "../interfaces/types";
 
 /**
  * Firebase field operations
@@ -67,7 +67,9 @@ function buildConstraints(options: QueryOptions): QueryConstraint[] {
   // Add conditions
   if (options.conditions) {
     for (const condition of options.conditions) {
-      constraints.push(where(condition.field, condition.operator, condition.value));
+      constraints.push(
+        where(condition.field, condition.operator, condition.value),
+      );
     }
   }
 
@@ -95,7 +97,10 @@ function buildConstraints(options: QueryOptions): QueryConstraint[] {
  * Firebase Transaction wrapper
  */
 class FirebaseTransaction implements ITransaction {
-  constructor(private db: Firestore, private transaction: Transaction) {}
+  constructor(
+    private db: Firestore,
+    private transaction: Transaction,
+  ) {}
 
   async get<T>(collectionName: string, documentId: string): Promise<T | null> {
     const docRef = doc(this.db, collectionName, documentId);
@@ -108,7 +113,7 @@ class FirebaseTransaction implements ITransaction {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): void {
     const docRef = doc(this.db, collectionName, documentId);
     this.transaction.set(docRef, data, { merge });
@@ -117,7 +122,7 @@ class FirebaseTransaction implements ITransaction {
   update(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): void {
     const docRef = doc(this.db, collectionName, documentId);
     this.transaction.update(docRef, updates);
@@ -143,7 +148,7 @@ class FirebaseBatchWriter implements IBatchWriter {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): IBatchWriter {
     const docRef = doc(this.db, collectionName, documentId);
     this.batch.set(docRef, data, { merge });
@@ -153,7 +158,7 @@ class FirebaseBatchWriter implements IBatchWriter {
   update(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): IBatchWriter {
     const docRef = doc(this.db, collectionName, documentId);
     this.batch.update(docRef, updates);
@@ -197,7 +202,10 @@ export class FirebaseDatabaseService implements IDatabaseService {
   // Document Operations
   // ============================================================================
 
-  async getDocument<T>(collectionName: string, documentId: string): Promise<T | null> {
+  async getDocument<T>(
+    collectionName: string,
+    documentId: string,
+  ): Promise<T | null> {
     if (!this.db) return null;
 
     try {
@@ -206,7 +214,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
       if (!docSnap.exists()) return null;
       return { id: docSnap.id, ...docSnap.data() } as T;
     } catch (error) {
-      console.error('Error getting document:', error);
+      console.error("Error getting document:", error);
       return null;
     }
   }
@@ -215,7 +223,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
     collectionName: string,
     documentId: string,
     data: T,
-    merge = false
+    merge = false,
   ): Promise<boolean> {
     if (!this.db) return false;
 
@@ -224,7 +232,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
       await setDoc(docRef, data, { merge });
       return true;
     } catch (error) {
-      console.error('Error setting document:', error);
+      console.error("Error setting document:", error);
       return false;
     }
   }
@@ -232,7 +240,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
   async updateDocument(
     collectionName: string,
     documentId: string,
-    updates: Record<string, unknown>
+    updates: Record<string, unknown>,
   ): Promise<boolean> {
     if (!this.db) return false;
 
@@ -241,12 +249,15 @@ export class FirebaseDatabaseService implements IDatabaseService {
       await updateDoc(docRef, updates);
       return true;
     } catch (error) {
-      console.error('Error updating document:', error);
+      console.error("Error updating document:", error);
       return false;
     }
   }
 
-  async deleteDocument(collectionName: string, documentId: string): Promise<boolean> {
+  async deleteDocument(
+    collectionName: string,
+    documentId: string,
+  ): Promise<boolean> {
     if (!this.db) return false;
 
     try {
@@ -254,14 +265,14 @@ export class FirebaseDatabaseService implements IDatabaseService {
       await deleteDoc(docRef);
       return true;
     } catch (error) {
-      console.error('Error deleting document:', error);
+      console.error("Error deleting document:", error);
       return false;
     }
   }
 
   async addDocument<T extends Record<string, unknown>>(
     collectionName: string,
-    data: T
+    data: T,
   ): Promise<string | null> {
     if (!this.db) return null;
 
@@ -270,7 +281,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
       const docRef = await addDoc(collectionRef, data);
       return docRef.id;
     } catch (error) {
-      console.error('Error adding document:', error);
+      console.error("Error adding document:", error);
       return null;
     }
   }
@@ -281,7 +292,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
 
   async queryDocuments<T>(
     collectionName: string,
-    options: QueryOptions = {}
+    options: QueryOptions = {},
   ): Promise<PaginatedResult<T>> {
     if (!this.db) {
       return { items: [], cursor: null, hasMore: false };
@@ -305,17 +316,25 @@ export class FirebaseDatabaseService implements IDatabaseService {
 
       return { items, cursor: lastDoc, hasMore };
     } catch (error) {
-      console.error('Error querying documents:', error);
+      console.error("Error querying documents:", error);
       return { items: [], cursor: null, hasMore: false };
     }
   }
 
-  async getAllDocuments<T>(collectionName: string, maxLimit = 1000): Promise<T[]> {
-    const result = await this.queryDocuments<T>(collectionName, { limit: maxLimit });
+  async getAllDocuments<T>(
+    collectionName: string,
+    maxLimit = 1000,
+  ): Promise<T[]> {
+    const result = await this.queryDocuments<T>(collectionName, {
+      limit: maxLimit,
+    });
     return result.items;
   }
 
-  async countDocuments(collectionName: string, options: QueryOptions = {}): Promise<number> {
+  async countDocuments(
+    collectionName: string,
+    options: QueryOptions = {},
+  ): Promise<number> {
     if (!this.db) return 0;
 
     try {
@@ -325,18 +344,21 @@ export class FirebaseDatabaseService implements IDatabaseService {
       // Only add conditions for count query
       if (options.conditions) {
         for (const condition of options.conditions) {
-          constraints.push(where(condition.field, condition.operator, condition.value));
+          constraints.push(
+            where(condition.field, condition.operator, condition.value),
+          );
         }
       }
 
-      const q = constraints.length > 0
-        ? query(collectionRef, ...constraints)
-        : collectionRef;
+      const q =
+        constraints.length > 0
+          ? query(collectionRef, ...constraints)
+          : collectionRef;
 
       const countSnapshot = await getCountFromServer(q);
       return countSnapshot.data().count;
     } catch (error) {
-      console.error('Error counting documents:', error);
+      console.error("Error counting documents:", error);
       return 0;
     }
   }
@@ -349,7 +371,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
     collectionName: string,
     documentId: string,
     onUpdate: (data: T | null) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn {
     if (!this.db) {
       onUpdate(null);
@@ -368,9 +390,9 @@ export class FirebaseDatabaseService implements IDatabaseService {
         }
       },
       (error) => {
-        console.error('Document subscription error:', error);
+        console.error("Document subscription error:", error);
         onError?.(error);
-      }
+      },
     );
   }
 
@@ -378,7 +400,7 @@ export class FirebaseDatabaseService implements IDatabaseService {
     collectionName: string,
     options: QueryOptions,
     onUpdate: (items: T[]) => void,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): UnsubscribeFn {
     if (!this.db) {
       onUpdate([]);
@@ -399,9 +421,9 @@ export class FirebaseDatabaseService implements IDatabaseService {
         onUpdate(items);
       },
       (error) => {
-        console.error('Query subscription error:', error);
+        console.error("Query subscription error:", error);
         onError?.(error);
-      }
+      },
     );
   }
 
@@ -410,21 +432,24 @@ export class FirebaseDatabaseService implements IDatabaseService {
   // ============================================================================
 
   async runTransaction<T>(
-    updateFn: (transaction: ITransaction) => Promise<T>
+    updateFn: (transaction: ITransaction) => Promise<T>,
   ): Promise<T> {
     if (!this.db) {
-      throw new Error('Database not configured');
+      throw new Error("Database not configured");
     }
 
     return firestoreRunTransaction(this.db, async (firestoreTransaction) => {
-      const transaction = new FirebaseTransaction(this.db!, firestoreTransaction);
+      const transaction = new FirebaseTransaction(
+        this.db!,
+        firestoreTransaction,
+      );
       return updateFn(transaction);
     });
   }
 
   createBatch(): IBatchWriter {
     if (!this.db) {
-      throw new Error('Database not configured');
+      throw new Error("Database not configured");
     }
     return new FirebaseBatchWriter(this.db);
   }

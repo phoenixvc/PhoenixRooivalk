@@ -4,11 +4,10 @@
  * Implements IFunctionsService and IAIFunctionsService using Firebase Cloud Functions.
  */
 
-import { getFunctions, httpsCallable, Functions } from 'firebase/functions';
+import { getFunctions, httpsCallable, Functions } from "firebase/functions";
 
-import { FirebaseApp } from 'firebase/app';
+import { FirebaseApp } from "firebase/app";
 import {
-  IFunctionsService,
   IAIFunctionsService,
   CloudFunctionError,
   CompetitorAnalysisResult,
@@ -22,8 +21,8 @@ import {
   IndexStats,
   FunFactsResult,
   PendingImprovement,
-} from '../interfaces/functions';
-import { FunctionCallOptions } from '../interfaces/types';
+} from "../interfaces/functions";
+import { FunctionCallOptions } from "../interfaces/types";
 
 /**
  * Firebase Functions Service
@@ -42,7 +41,7 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
     if (this.initialized) return true;
 
     if (!this.app) {
-      console.warn('Firebase Functions: Firebase not configured');
+      console.warn("Firebase Functions: Firebase not configured");
       return false;
     }
 
@@ -51,7 +50,7 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Firebase Functions initialization failed:', error);
+      console.error("Firebase Functions initialization failed:", error);
       return false;
     }
   }
@@ -59,14 +58,17 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
   async call<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput> {
     if (!this.initialized) {
       await this.init();
     }
 
     if (!this.functions) {
-      throw new CloudFunctionError('Functions service not available', 'unavailable');
+      throw new CloudFunctionError(
+        "Functions service not available",
+        "unavailable",
+      );
     }
 
     try {
@@ -81,7 +83,7 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
   async callAuthenticated<TInput, TOutput>(
     name: string,
     data: TInput,
-    options?: FunctionCallOptions
+    options?: FunctionCallOptions,
   ): Promise<TOutput> {
     // Firebase callable functions automatically include auth context
     return this.call<TInput, TOutput>(name, data, options);
@@ -93,63 +95,63 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
 
   async analyzeCompetitors(
     competitors: string[],
-    focusAreas?: string[]
+    focusAreas?: string[],
   ): Promise<CompetitorAnalysisResult> {
     return this.call<
       { competitors: string[]; focusAreas?: string[] },
       CompetitorAnalysisResult
-    >('analyzeCompetitors', { competitors, focusAreas });
+    >("analyzeCompetitors", { competitors, focusAreas });
   }
 
   async generateSWOT(topic: string, context?: string): Promise<SWOTResult> {
     return this.call<{ topic: string; context?: string }, SWOTResult>(
-      'generateSWOT',
-      { topic, context }
+      "generateSWOT",
+      { topic, context },
     );
   }
 
   async getReadingRecommendations(
-    currentDocId?: string
+    currentDocId?: string,
   ): Promise<RecommendationsResult> {
     return this.call<{ currentDocId?: string }, RecommendationsResult>(
-      'getReadingRecommendations',
-      { currentDocId }
+      "getReadingRecommendations",
+      { currentDocId },
     );
   }
 
   async suggestDocumentImprovements(
     docId: string,
     docTitle: string,
-    docContent: string
+    docContent: string,
   ): Promise<DocumentImprovementResult> {
     return this.call<
       { docId: string; docTitle: string; docContent: string; userId: string },
       DocumentImprovementResult
-    >('suggestDocumentImprovements', {
+    >("suggestDocumentImprovements", {
       docId,
       docTitle,
       docContent,
-      userId: '', // Will be set by the function from context
+      userId: "", // Will be set by the function from context
     });
   }
 
   async getMarketInsights(
     topic: string,
-    industry?: string
+    industry?: string,
   ): Promise<MarketInsightsResult> {
-    return this.call<{ topic: string; industry?: string }, MarketInsightsResult>(
-      'getMarketInsights',
-      { topic, industry }
-    );
+    return this.call<
+      { topic: string; industry?: string },
+      MarketInsightsResult
+    >("getMarketInsights", { topic, industry });
   }
 
   async summarizeContent(
     content: string,
-    maxLength?: number
+    maxLength?: number,
   ): Promise<SummaryResult> {
     return this.call<{ content: string; maxLength?: number }, SummaryResult>(
-      'summarizeContent',
-      { content, maxLength }
+      "summarizeContent",
+      { content, maxLength },
     );
   }
 
@@ -157,9 +159,9 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
     question: string,
     options?: {
       category?: string;
-      format?: 'detailed' | 'concise';
-      history?: Array<{ role: 'user' | 'assistant'; content: string }>;
-    }
+      format?: "detailed" | "concise";
+      history?: Array<{ role: "user" | "assistant"; content: string }>;
+    },
   ): Promise<RAGResponse> {
     return this.call<
       {
@@ -169,7 +171,7 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
         history?: Array<{ role: string; content: string }>;
       },
       RAGResponse
-    >('askDocumentation', {
+    >("askDocumentation", {
       question,
       category: options?.category,
       format: options?.format,
@@ -179,12 +181,12 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
 
   async searchDocumentation(
     query: string,
-    options?: { category?: string; topK?: number }
+    options?: { category?: string; topK?: number },
   ): Promise<SearchResultItem[]> {
     const result = await this.call<
       { query: string; category?: string; topK?: number },
       { results: SearchResultItem[] }
-    >('searchDocs', {
+    >("searchDocs", {
       query,
       category: options?.category,
       topK: options?.topK,
@@ -194,7 +196,7 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
 
   async getSuggestedQuestions(
     docId?: string,
-    category?: string
+    category?: string,
   ): Promise<{
     suggestions: string[];
     docInfo: { title: string; category: string } | null;
@@ -205,41 +207,41 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
         suggestions: string[];
         docInfo: { title: string; category: string } | null;
       }
-    >('getSuggestedQuestions', { docId, category });
+    >("getSuggestedQuestions", { docId, category });
   }
 
   async researchPerson(
     firstName: string,
     lastName: string,
-    linkedInUrl: string
+    linkedInUrl: string,
   ): Promise<FunFactsResult> {
     return this.call<
       { firstName: string; lastName: string; linkedInUrl: string },
       FunFactsResult
-    >('researchPerson', { firstName, lastName, linkedInUrl });
+    >("researchPerson", { firstName, lastName, linkedInUrl });
   }
 
   async getIndexStats(): Promise<IndexStats> {
-    return this.call<Record<string, never>, IndexStats>('getIndexStats', {});
+    return this.call<Record<string, never>, IndexStats>("getIndexStats", {});
   }
 
   async reviewImprovement(
     suggestionId: string,
-    status: 'approved' | 'rejected' | 'implemented',
-    notes?: string
+    status: "approved" | "rejected" | "implemented",
+    notes?: string,
   ): Promise<{ success: boolean; status: string }> {
     return this.call<
       { suggestionId: string; status: string; notes?: string },
       { success: boolean; status: string }
-    >('reviewDocumentImprovement', { suggestionId, status, notes });
+    >("reviewDocumentImprovement", { suggestionId, status, notes });
   }
 
   async getPendingImprovements(
-    limit?: number
+    limit?: number,
   ): Promise<{ suggestions: PendingImprovement[] }> {
     return this.call<{ limit?: number }, { suggestions: PendingImprovement[] }>(
-      'getPendingImprovements',
-      { limit }
+      "getPendingImprovements",
+      { limit },
     );
   }
 
@@ -248,17 +250,23 @@ export class FirebaseFunctionsService implements IAIFunctionsService {
   // ============================================================================
 
   private handleError(error: any): never {
-    const code = error.code || 'unknown';
-    const message = error.message || 'An error occurred';
+    const code = error.code || "unknown";
+    const message = error.message || "An error occurred";
 
-    if (code === 'unauthenticated') {
-      throw new CloudFunctionError('Please sign in to use this feature', code);
+    if (code === "unauthenticated") {
+      throw new CloudFunctionError("Please sign in to use this feature", code);
     }
-    if (code === 'resource-exhausted') {
-      throw new CloudFunctionError('Rate limit exceeded. Please try again later.', code);
+    if (code === "resource-exhausted") {
+      throw new CloudFunctionError(
+        "Rate limit exceeded. Please try again later.",
+        code,
+      );
     }
-    if (code === 'failed-precondition') {
-      throw new CloudFunctionError('Service not configured. Contact administrator.', code);
+    if (code === "failed-precondition") {
+      throw new CloudFunctionError(
+        "Service not configured. Contact administrator.",
+        code,
+      );
     }
 
     throw new CloudFunctionError(message, code);

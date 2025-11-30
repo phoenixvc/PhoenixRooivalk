@@ -14,14 +14,18 @@ import {
   onAuthStateChanged,
   User,
   Auth,
-} from 'firebase/auth';
-import { FirebaseApp } from 'firebase/app';
+} from "firebase/auth";
+import { FirebaseApp } from "firebase/app";
 import {
   IAuthService,
   checkIsAdmin,
   DEFAULT_ADMIN_DOMAINS,
-} from '../interfaces/auth';
-import { CloudUser, OAuthProvider as OAuthProviderType, UnsubscribeFn } from '../interfaces/types';
+} from "../interfaces/auth";
+import {
+  CloudUser,
+  OAuthProvider as OAuthProviderType,
+  UnsubscribeFn,
+} from "../interfaces/types";
 
 /**
  * Convert Firebase User to CloudUser
@@ -54,7 +58,7 @@ export class FirebaseAuthService implements IAuthService {
   // OAuth providers
   private googleProvider = new GoogleAuthProvider();
   private githubProvider = new GithubAuthProvider();
-  private microsoftProvider = new OAuthProvider('microsoft.com');
+  private microsoftProvider = new OAuthProvider("microsoft.com");
 
   constructor(app: FirebaseApp | null) {
     this.app = app;
@@ -70,10 +74,12 @@ export class FirebaseAuthService implements IAuthService {
 
   getMissingConfig(): string[] {
     if (this.isConfigured()) return [];
-    return ['Firebase app not initialized'];
+    return ["Firebase app not initialized"];
   }
 
-  async signInWithProvider(provider: OAuthProviderType): Promise<CloudUser | null> {
+  async signInWithProvider(
+    provider: OAuthProviderType,
+  ): Promise<CloudUser | null> {
     if (!this.auth) return null;
 
     const authProvider = this.getProvider(provider);
@@ -89,15 +95,15 @@ export class FirebaseAuthService implements IAuthService {
   }
 
   async signInWithGoogle(): Promise<CloudUser | null> {
-    return this.signInWithProvider('google');
+    return this.signInWithProvider("google");
   }
 
   async signInWithGithub(): Promise<CloudUser | null> {
-    return this.signInWithProvider('github');
+    return this.signInWithProvider("github");
   }
 
   async signInWithMicrosoft(): Promise<CloudUser | null> {
-    return this.signInWithProvider('microsoft');
+    return this.signInWithProvider("microsoft");
   }
 
   async signOut(): Promise<void> {
@@ -105,7 +111,7 @@ export class FirebaseAuthService implements IAuthService {
     try {
       await firebaseSignOut(this.auth);
     } catch (error) {
-      console.error('Sign-out error:', error);
+      console.error("Sign-out error:", error);
     }
   }
 
@@ -114,7 +120,9 @@ export class FirebaseAuthService implements IAuthService {
     return toCloudUser(this.auth.currentUser);
   }
 
-  onAuthStateChanged(callback: (user: CloudUser | null) => void): UnsubscribeFn {
+  onAuthStateChanged(
+    callback: (user: CloudUser | null) => void,
+  ): UnsubscribeFn {
     if (!this.auth) {
       callback(null);
       return () => {};
@@ -130,22 +138,25 @@ export class FirebaseAuthService implements IAuthService {
     try {
       return await this.auth.currentUser.getIdToken(forceRefresh);
     } catch (error) {
-      console.error('Error getting ID token:', error);
+      console.error("Error getting ID token:", error);
       return null;
     }
   }
 
-  isAdmin(user: CloudUser | null, adminDomains = DEFAULT_ADMIN_DOMAINS): boolean {
+  isAdmin(
+    user: CloudUser | null,
+    adminDomains = DEFAULT_ADMIN_DOMAINS,
+  ): boolean {
     return checkIsAdmin(user, adminDomains);
   }
 
   private getProvider(provider: OAuthProviderType) {
     switch (provider) {
-      case 'google':
+      case "google":
         return this.googleProvider;
-      case 'github':
+      case "github":
         return this.githubProvider;
-      case 'microsoft':
+      case "microsoft":
         return this.microsoftProvider;
       default:
         return null;

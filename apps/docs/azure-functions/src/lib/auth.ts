@@ -4,7 +4,7 @@
  * Validates Azure AD B2C tokens for authenticated functions.
  */
 
-import { HttpRequest } from '@azure/functions';
+import { HttpRequest } from "@azure/functions";
 
 export interface TokenClaims {
   sub: string;
@@ -20,15 +20,15 @@ export interface TokenClaims {
 /**
  * Admin email domains
  */
-const ADMIN_DOMAINS = ['phoenixrooivalk.com', 'justaghost.dev'];
+const ADMIN_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 /**
  * Extract user ID from request (from validated token)
  * In production, validate the JWT token properly
  */
 export function getUserIdFromRequest(request: HttpRequest): string | null {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
     return null;
   }
 
@@ -36,8 +36,8 @@ export function getUserIdFromRequest(request: HttpRequest): string | null {
 
   try {
     // Decode JWT payload (without validation - in prod, use proper JWT validation)
-    const [, payload] = token.split('.');
-    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString());
+    const [, payload] = token.split(".");
+    const decoded = JSON.parse(Buffer.from(payload, "base64").toString());
     return decoded.sub || decoded.oid || null;
   } catch {
     return null;
@@ -48,16 +48,16 @@ export function getUserIdFromRequest(request: HttpRequest): string | null {
  * Get token claims from request
  */
 export function getTokenClaims(request: HttpRequest): TokenClaims | null {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
     return null;
   }
 
   const token = authHeader.substring(7);
 
   try {
-    const [, payload] = token.split('.');
-    return JSON.parse(Buffer.from(payload, 'base64').toString());
+    const [, payload] = token.split(".");
+    return JSON.parse(Buffer.from(payload, "base64").toString());
   } catch {
     return null;
   }
@@ -70,7 +70,7 @@ export function isAdmin(request: HttpRequest): boolean {
   const claims = getTokenClaims(request);
   if (!claims?.email) return false;
 
-  const domain = claims.email.split('@')[1]?.toLowerCase();
+  const domain = claims.email.split("@")[1]?.toLowerCase();
   return ADMIN_DOMAINS.includes(domain);
 }
 
@@ -90,7 +90,7 @@ export function requireAuth(request: HttpRequest): {
       userId: null,
       error: {
         status: 401,
-        body: { error: 'Authentication required', code: 'unauthenticated' },
+        body: { error: "Authentication required", code: "unauthenticated" },
       },
     };
   }
@@ -117,7 +117,7 @@ export function requireAdmin(request: HttpRequest): {
       userId: authResult.userId,
       error: {
         status: 403,
-        body: { error: 'Admin access required', code: 'permission-denied' },
+        body: { error: "Admin access required", code: "permission-denied" },
       },
     };
   }
@@ -130,7 +130,7 @@ export function requireAdmin(request: HttpRequest): {
  * For use with API keys or tokens passed as header string
  */
 export async function validateAuthHeader(
-  authHeader: string | null
+  authHeader: string | null,
 ): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean }> {
   if (!authHeader) {
     return { valid: false };
@@ -139,16 +139,16 @@ export async function validateAuthHeader(
   // Check for API key (admin key for Functions)
   const adminKey = process.env.FUNCTIONS_ADMIN_KEY;
   if (adminKey && authHeader === `Bearer ${adminKey}`) {
-    return { valid: true, userId: 'admin', isAdmin: true };
+    return { valid: true, userId: "admin", isAdmin: true };
   }
 
   // Check for Bearer token (JWT)
-  if (authHeader.startsWith('Bearer ')) {
+  if (authHeader.startsWith("Bearer ")) {
     const token = authHeader.substring(7);
 
     try {
-      const [, payload] = token.split('.');
-      const claims = JSON.parse(Buffer.from(payload, 'base64').toString());
+      const [, payload] = token.split(".");
+      const claims = JSON.parse(Buffer.from(payload, "base64").toString());
       const userId = claims.sub || claims.oid;
 
       if (!userId) {
@@ -156,8 +156,8 @@ export async function validateAuthHeader(
       }
 
       // Check if admin by email domain
-      const email = claims.email || '';
-      const domain = email.split('@')[1]?.toLowerCase();
+      const email = claims.email || "";
+      const domain = email.split("@")[1]?.toLowerCase();
       const isAdminUser = ADMIN_DOMAINS.includes(domain);
 
       return { valid: true, userId, isAdmin: isAdminUser };

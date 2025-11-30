@@ -5,16 +5,16 @@
  * Implementations: Firebase Cloud Messaging (FCM), Azure Notification Hubs
  */
 
-import { NotificationPayload, UnsubscribeFn } from './types';
+import { NotificationPayload, UnsubscribeFn } from "./types";
 
 /**
  * Notification permission status
  */
 export type NotificationPermissionStatus =
-  | 'granted'
-  | 'denied'
-  | 'default'
-  | 'unsupported';
+  | "granted"
+  | "denied"
+  | "default"
+  | "unsupported";
 
 /**
  * Push token registration result
@@ -33,7 +33,7 @@ export interface NotificationSubscription {
   token: string;
   topics: string[];
   createdAt: Date;
-  platform: 'web' | 'ios' | 'android';
+  platform: "web" | "ios" | "android";
 }
 
 /**
@@ -107,7 +107,7 @@ export interface IMessagingService {
    * @returns Unsubscribe function
    */
   onForegroundMessage(
-    callback: (notification: IncomingNotification) => void
+    callback: (notification: IncomingNotification) => void,
   ): UnsubscribeFn | null;
 
   /**
@@ -132,10 +132,10 @@ export interface IMessagingService {
  */
 export function isNotificationApiSupported(): boolean {
   return (
-    typeof window !== 'undefined' &&
-    'Notification' in window &&
-    'serviceWorker' in navigator &&
-    'PushManager' in window
+    typeof window !== "undefined" &&
+    "Notification" in window &&
+    "serviceWorker" in navigator &&
+    "PushManager" in window
   );
 }
 
@@ -144,7 +144,7 @@ export function isNotificationApiSupported(): boolean {
  */
 export function getCurrentPermission(): NotificationPermissionStatus {
   if (!isNotificationApiSupported()) {
-    return 'unsupported';
+    return "unsupported";
   }
   return Notification.permission as NotificationPermissionStatus;
 }

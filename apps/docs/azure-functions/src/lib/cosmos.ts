@@ -4,7 +4,13 @@
  * Provides database operations for Azure Functions.
  */
 
-import { CosmosClient, Database, Container, SqlParameter, ItemDefinition } from '@azure/cosmos';
+import {
+  CosmosClient,
+  Database,
+  Container,
+  SqlParameter,
+  ItemDefinition,
+} from "@azure/cosmos";
 
 let client: CosmosClient | null = null;
 let database: Database | null = null;
@@ -16,7 +22,7 @@ export function getCosmosClient(): CosmosClient {
   if (!client) {
     const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
     if (!connectionString) {
-      throw new Error('COSMOS_DB_CONNECTION_STRING not configured');
+      throw new Error("COSMOS_DB_CONNECTION_STRING not configured");
     }
     client = new CosmosClient(connectionString);
   }
@@ -28,7 +34,7 @@ export function getCosmosClient(): CosmosClient {
  */
 export function getDatabase(): Database {
   if (!database) {
-    const dbName = process.env.COSMOS_DB_DATABASE || 'phoenix-docs';
+    const dbName = process.env.COSMOS_DB_DATABASE || "phoenix-docs";
     database = getCosmosClient().database(dbName);
   }
   return database;
@@ -47,7 +53,7 @@ export function getContainer(containerName: string): Container {
 export async function getDocument<T extends ItemDefinition>(
   containerName: string,
   id: string,
-  partitionKey?: string
+  partitionKey?: string,
 ): Promise<T | null> {
   try {
     const container = getContainer(containerName);
@@ -64,7 +70,7 @@ export async function getDocument<T extends ItemDefinition>(
  */
 export async function upsertDocument<T extends { id: string }>(
   containerName: string,
-  document: T
+  document: T,
 ): Promise<T> {
   const container = getContainer(containerName);
   const { resource } = await container.items.upsert<T>(document);
@@ -77,7 +83,7 @@ export async function upsertDocument<T extends { id: string }>(
 export async function deleteDocument(
   containerName: string,
   id: string,
-  partitionKey?: string
+  partitionKey?: string,
 ): Promise<void> {
   const container = getContainer(containerName);
   await container.item(id, partitionKey || id).delete();
@@ -89,7 +95,7 @@ export async function deleteDocument(
 export async function queryDocuments<T>(
   containerName: string,
   query: string,
-  parameters?: SqlParameter[]
+  parameters?: SqlParameter[],
 ): Promise<T[]> {
   const container = getContainer(containerName);
   const { resources } = await container.items

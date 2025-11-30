@@ -93,8 +93,8 @@ export default function LoginPage(): React.ReactElement {
                     <strong>⚠️ Firebase Authentication Not Configured</strong>
                   </p>
                   <p>
-                    Authentication is not available because Firebase
-                    environment variables were not set at build time.
+                    Authentication is not available because Firebase environment
+                    variables were not set at build time.
                   </p>
                   <details className={styles.configDetails}>
                     <summary>Technical Details</summary>
