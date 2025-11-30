@@ -159,7 +159,7 @@ az functionapp log tail --name func-phoenix-rooivalk-dev --resource-group phoeni
 To enable semantic search over your documentation:
 
 ```bash
-# Index all markdown files (requires OpenAI API key in Key Vault)
+# Index all markdown files (requires Azure OpenAI configured)
 node scripts/index-docs.js \
   --functions-url https://func-phoenix-rooivalk-dev.azurewebsites.net \
   --token "your-admin-key"

@@ -34,6 +34,15 @@ param keyVaultName string
 @allowed(['Y1', 'EP1', 'EP2', 'EP3'])
 param sku string = 'Y1'  // Consumption plan (serverless)
 
+@description('Azure OpenAI endpoint URL')
+param azureOpenAIEndpoint string = ''
+
+@description('Azure OpenAI chat deployment name')
+param azureOpenAIChatDeployment string = 'gpt-4'
+
+@description('Azure OpenAI embedding deployment name')
+param azureOpenAIEmbeddingDeployment string = 'text-embedding-3-small'
+
 // Reference existing storage account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -113,10 +122,26 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
           name: 'KEY_VAULT_NAME'
           value: keyVaultName
         }
-        // OpenAI key will be fetched from Key Vault
+        // Azure OpenAI (AI Foundry) configuration
         {
-          name: 'OPENAI_API_KEY'
-          value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=OpenAiApiKey)'
+          name: 'AZURE_OPENAI_ENDPOINT'
+          value: azureOpenAIEndpoint
+        }
+        {
+          name: 'AZURE_OPENAI_API_KEY'
+          value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=AzureOpenAiApiKey)'
+        }
+        {
+          name: 'AZURE_OPENAI_API_VERSION'
+          value: '2024-08-01-preview'
+        }
+        {
+          name: 'AZURE_OPENAI_CHAT_DEPLOYMENT'
+          value: azureOpenAIChatDeployment
+        }
+        {
+          name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT'
+          value: azureOpenAIEmbeddingDeployment
         }
       ]
       cors: {

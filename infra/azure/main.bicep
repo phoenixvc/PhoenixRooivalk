@@ -47,9 +47,18 @@ param cosmosDbThroughput int = 400
 @description('Enable serverless Cosmos DB (recommended for variable workloads)')
 param useServerlessCosmosDb bool = true
 
-@description('OpenAI API Key for AI features')
+@description('Azure OpenAI API Key for AI features')
 @secure()
-param openAiApiKey string = ''
+param azureOpenAiApiKey string = ''
+
+@description('Azure OpenAI endpoint URL (e.g., https://your-resource.openai.azure.com/)')
+param azureOpenAiEndpoint string = ''
+
+@description('Azure OpenAI chat deployment name')
+param azureOpenAiChatDeployment string = 'gpt-4'
+
+@description('Azure OpenAI embedding deployment name')
+param azureOpenAiEmbeddingDeployment string = 'text-embedding-3-small'
 
 @description('Azure AD B2C Tenant Name (e.g., phoenixrooivalkb2c)')
 param b2cTenantName string = ''
@@ -134,6 +143,9 @@ module functions 'modules/functions.bicep' = {
     appInsightsConnectionString: appInsights.outputs.connectionString
     cosmosDbConnectionString: cosmosDb.outputs.connectionString
     keyVaultName: keyVault.outputs.name
+    azureOpenAIEndpoint: azureOpenAiEndpoint
+    azureOpenAIChatDeployment: azureOpenAiChatDeployment
+    azureOpenAIEmbeddingDeployment: azureOpenAiEmbeddingDeployment
   }
 }
 
@@ -167,13 +179,13 @@ module cosmosSecret 'modules/keyvault-secret.bicep' = {
   }
 }
 
-// Store OpenAI API key if provided
-module openAiSecret 'modules/keyvault-secret.bicep' = if (!empty(openAiApiKey)) {
-  name: 'openAiSecret'
+// Store Azure OpenAI API key if provided
+module azureOpenAiSecret 'modules/keyvault-secret.bicep' = if (!empty(azureOpenAiApiKey)) {
+  name: 'azureOpenAiSecret'
   params: {
     keyVaultName: keyVault.outputs.name
-    secretName: 'OpenAiApiKey'
-    secretValue: openAiApiKey
+    secretName: 'AzureOpenAiApiKey'
+    secretValue: azureOpenAiApiKey
   }
 }
 

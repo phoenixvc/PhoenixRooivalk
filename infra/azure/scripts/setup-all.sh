@@ -5,11 +5,11 @@
 # This script sets up everything needed for Azure deployment from scratch.
 # Run this once to get your Azure infrastructure ready.
 #
-# Usage: ./setup-all.sh <environment> <location> [openai-api-key]
+# Usage: ./setup-all.sh <environment> <location> [azure-openai-endpoint] [azure-openai-api-key]
 #
 # Examples:
 #   ./setup-all.sh dev eastus
-#   ./setup-all.sh prod westeurope sk-xxx
+#   ./setup-all.sh prod westeurope https://myopenai.openai.azure.com your-api-key
 #
 
 set -e
@@ -38,7 +38,8 @@ print_banner() {
 # Parse arguments
 ENVIRONMENT="${1:-dev}"
 LOCATION="${2:-eastus}"
-OPENAI_API_KEY="${3:-}"
+AZURE_OPENAI_ENDPOINT="${3:-}"
+AZURE_OPENAI_API_KEY="${4:-}"
 
 # Derived names
 RESOURCE_GROUP="phoenix-rooivalk-${ENVIRONMENT}"
@@ -117,16 +118,21 @@ log_success "Retrieved deployment outputs"
 # Step 4: Configure Key Vault secrets
 log_info "Step 4/6: Configuring Key Vault secrets..."
 
-if [ -n "$OPENAI_API_KEY" ]; then
+if [ -n "$AZURE_OPENAI_API_KEY" ]; then
     az keyvault secret set \
         --vault-name "$KEY_VAULT_NAME" \
-        --name "OpenAIApiKey" \
-        --value "$OPENAI_API_KEY" \
+        --name "AzureOpenAiApiKey" \
+        --value "$AZURE_OPENAI_API_KEY" \
         --output none
-    log_success "OpenAI API key stored in Key Vault"
+    log_success "Azure OpenAI API key stored in Key Vault"
 else
-    log_warning "No OpenAI API key provided. Add it later with:"
-    echo "  az keyvault secret set --vault-name $KEY_VAULT_NAME --name OpenAIApiKey --value 'your-key'"
+    log_warning "No Azure OpenAI API key provided. Add it later with:"
+    echo "  az keyvault secret set --vault-name $KEY_VAULT_NAME --name AzureOpenAiApiKey --value 'your-key'"
+fi
+
+if [ -n "$AZURE_OPENAI_ENDPOINT" ]; then
+    log_info "Azure OpenAI endpoint: $AZURE_OPENAI_ENDPOINT"
+    log_info "Configure this in your Function App settings or parameters file"
 fi
 
 # Step 5: Get Static Web Apps deployment token

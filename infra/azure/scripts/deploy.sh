@@ -94,10 +94,15 @@ deploy_infrastructure() {
         PARAMS_FILE="$INFRA_DIR/parameters.dev.json"
     fi
 
-    # Prompt for OpenAI API key if not set
-    if [ -z "$OPENAI_API_KEY" ]; then
-        echo -e "${YELLOW}OpenAI API key not set.${NC}"
-        read -sp "Enter OpenAI API key (or press Enter to skip): " OPENAI_API_KEY
+    # Prompt for Azure OpenAI configuration if not set
+    if [ -z "$AZURE_OPENAI_ENDPOINT" ]; then
+        echo -e "${YELLOW}Azure OpenAI endpoint not set.${NC}"
+        read -p "Enter Azure OpenAI endpoint (or press Enter to skip): " AZURE_OPENAI_ENDPOINT
+    fi
+
+    if [ -z "$AZURE_OPENAI_API_KEY" ]; then
+        echo -e "${YELLOW}Azure OpenAI API key not set.${NC}"
+        read -sp "Enter Azure OpenAI API key (or press Enter to skip): " AZURE_OPENAI_API_KEY
         echo ""
     fi
 
@@ -109,7 +114,8 @@ deploy_infrastructure() {
         --resource-group "$RESOURCE_GROUP" \
         --template-file "$INFRA_DIR/main.bicep" \
         --parameters "@$PARAMS_FILE" \
-        --parameters openAiApiKey="$OPENAI_API_KEY" \
+        --parameters azureOpenAiApiKey="$AZURE_OPENAI_API_KEY" \
+        --parameters azureOpenAiEndpoint="$AZURE_OPENAI_ENDPOINT" \
         --output json)
 
     if [ $? -eq 0 ]; then
