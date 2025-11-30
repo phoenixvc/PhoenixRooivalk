@@ -67,20 +67,13 @@ param b2cTenantName string = ''
 // Variables
 // ============================================================================
 
-// Naming: {env}-{type}-{project} e.g., dev-kv-phoenixrooivalk
-var resourcePrefix = '${environment}-phoenixrooivalk'
+// Naming: {env}-{region}-{type}-{project} e.g., dev-eus2-kv-rooivalk
+var locationShort = location == 'eastus2' ? 'eus2' : location == 'westeurope' ? 'weu' : location == 'eastasia' ? 'eas' : take(location, 4)
 var tags = {
   project: projectName
   environment: environment
   managedBy: 'bicep'
 }
-
-// ============================================================================
-// Modules
-// ============================================================================
-
-// Naming: {env}-{region}-{type}-{project} e.g., dev-eus2-kv-rooivalk
-var locationShort = location == 'eastus2' ? 'eus2' : location == 'westeurope' ? 'weu' : location == 'eastasia' ? 'eas' : take(location, 4)
 
 // Key Vault for secrets management
 module keyVault 'modules/keyvault.bicep' = {
