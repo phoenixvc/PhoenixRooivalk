@@ -175,39 +175,44 @@ function createFirebaseServices(): CloudServices {
 function createAzureServices(): CloudServices {
   const config = getAzureConfig();
 
-  const authConfig: AzureAuthConfig | undefined = config
+  // Auth config - uses Azure AD B2C via MSAL
+  const authConfig: AzureAuthConfig | undefined = config?.clientId
     ? {
         tenantId: config.tenantId,
         clientId: config.clientId,
-        authority: config.authority,
-        redirectUri: config.redirectUri,
-        scopes: config.scopes,
+        authority: config.authority || undefined,
+        // redirectUri defaults to window.location.origin in the auth service
       }
     : undefined;
 
-  const cosmosConfig: AzureCosmosConfig | undefined = config
+  // Database config - uses Azure Functions as proxy (browser-safe)
+  const cosmosConfig: AzureCosmosConfig | undefined = config?.functionsBaseUrl
     ? {
-        endpoint: config.cosmosEndpoint,
-        key: config.cosmosKey,
-        databaseId: config.cosmosDatabase || 'phoenix-docs',
+        endpoint: '', // Not used in browser - proxy handles this
+        key: '', // Not used in browser - proxy handles this
+        databaseId: 'phoenix-docs',
         functionsBaseUrl: config.functionsBaseUrl,
       }
     : undefined;
 
+  // Analytics config - uses Application Insights
   const analyticsConfig: AzureAnalyticsConfig | undefined = config?.appInsightsConnectionString
     ? { connectionString: config.appInsightsConnectionString }
     : undefined;
 
+  // Messaging config - uses Azure Functions for push registration
   const messagingConfig: AzureMessagingConfig | undefined = config?.functionsBaseUrl
     ? { functionsBaseUrl: config.functionsBaseUrl }
     : undefined;
 
+  // AI Functions config
   const functionsConfig: AzureFunctionsConfig | undefined = config?.functionsBaseUrl
     ? {
         baseUrl: config.functionsBaseUrl,
-        apiKey: config.functionsApiKey,
       }
     : undefined;
+
+  const isConfigured = Boolean(config?.clientId || config?.functionsBaseUrl);
 
   return {
     auth: new AzureAuthService(authConfig),
@@ -216,7 +221,7 @@ function createAzureServices(): CloudServices {
     messaging: new AzureMessagingService(messagingConfig),
     functions: new AzureFunctionsService(functionsConfig),
     provider: 'azure',
-    isConfigured: config !== null,
+    isConfigured,
   };
 }
 
