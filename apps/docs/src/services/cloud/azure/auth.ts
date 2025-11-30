@@ -1,7 +1,7 @@
 /**
  * Azure Authentication Service Implementation
  *
- * Implements IAuthService using Azure AD B2C / Entra External ID via MSAL.
+ * Implements IAuthService using Azure Entra ID (formerly Azure AD) via MSAL.
  *
  * Note: This requires the @azure/msal-browser package to be installed.
  * npm install @azure/msal-browser
@@ -15,34 +15,39 @@ import {
 import { CloudUser, OAuthProvider, UnsubscribeFn } from "../interfaces/types";
 
 /**
- * Azure AD B2C Configuration
+ * Azure Entra ID Configuration
  */
 export interface AzureAuthConfig {
   tenantId: string;
   clientId: string;
   authority?: string;
   redirectUri?: string;
-  scopes?: string[];
+  postLogoutRedirectUri?: string;
+  scopes?: string[] | string;
 }
 
 /**
- * Token claims from Azure AD
+ * Token claims from Azure Entra ID
  */
 interface AzureTokenClaims {
   sub: string;
+  oid?: string;
   email?: string;
   name?: string;
   preferred_username?: string;
   picture?: string;
   email_verified?: boolean;
   idp?: string;
+  given_name?: string;
+  family_name?: string;
+  upn?: string;
 }
 
 /**
  * Azure Auth Service
  *
- * Uses MSAL.js for authentication with Azure AD B2C or Entra External ID.
- * Supports Google, GitHub, and Microsoft identity providers.
+ * Uses MSAL.js for authentication with Azure Entra ID.
+ * Supports Microsoft identity provider with single-tenant or multi-tenant configuration.
  */
 export class AzureAuthService implements IAuthService {
   private msalInstance: any = null; // PublicClientApplication
@@ -53,6 +58,19 @@ export class AzureAuthService implements IAuthService {
 
   constructor(config?: AzureAuthConfig) {
     this.config = config || null;
+  }
+
+  /**
+   * Parse scopes from config (can be string or array)
+   */
+  private parseScopes(): string[] {
+    if (!this.config?.scopes) {
+      return ["openid", "profile", "email", "User.Read"];
+    }
+    if (typeof this.config.scopes === "string") {
+      return this.config.scopes.split(" ").filter(Boolean);
+    }
+    return this.config.scopes;
   }
 
   /**
@@ -67,18 +85,29 @@ export class AzureAuthService implements IAuthService {
       // Dynamically import MSAL to avoid bundling when not used
       const msal = await import("@azure/msal-browser");
 
+      // Azure Entra ID uses login.microsoftonline.com
+      const authority =
+        this.config.authority ||
+        `https://login.microsoftonline.com/${this.config.tenantId}`;
+
       const msalConfig = {
         auth: {
           clientId: this.config.clientId,
-          authority:
-            this.config.authority ||
-            `https://${this.config.tenantId}.b2clogin.com/${this.config.tenantId}.onmicrosoft.com/B2C_1_SignUpSignIn`,
+          authority,
           redirectUri: this.config.redirectUri || window.location.origin,
-          knownAuthorities: [`${this.config.tenantId}.b2clogin.com`],
+          postLogoutRedirectUri:
+            this.config.postLogoutRedirectUri || window.location.origin,
+          knownAuthorities: ["login.microsoftonline.com"],
+          navigateToLoginRequestUrl: true,
         },
         cache: {
           cacheLocation: "localStorage",
           storeAuthStateInCookie: false,
+        },
+        system: {
+          loggerOptions: {
+            logLevel: msal.LogLevel.Warning,
+          },
         },
       };
 
@@ -100,7 +129,7 @@ export class AzureAuthService implements IAuthService {
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error("Azure Auth initialization failed:", error);
+      console.error("Azure Entra ID Auth initialization failed:", error);
       return false;
     }
   }
@@ -115,10 +144,10 @@ export class AzureAuthService implements IAuthService {
   getMissingConfig(): string[] {
     const missing: string[] = [];
     if (!this.config) {
-      missing.push("Azure AD configuration");
+      missing.push("Azure Entra ID configuration");
     } else {
-      if (!this.config.clientId) missing.push("AZURE_CLIENT_ID");
-      if (!this.config.tenantId) missing.push("AZURE_TENANT_ID");
+      if (!this.config.clientId) missing.push("AZURE_ENTRA_CLIENT_ID");
+      if (!this.config.tenantId) missing.push("AZURE_ENTRA_TENANT_ID");
     }
     return missing;
   }
@@ -160,7 +189,8 @@ export class AzureAuthService implements IAuthService {
 
     try {
       await this.msalInstance.logoutPopup({
-        postLogoutRedirectUri: window.location.origin,
+        postLogoutRedirectUri:
+          this.config?.postLogoutRedirectUri || window.location.origin,
       });
       this.currentUser = null;
       this.notifyAuthStateChange(null);
@@ -192,9 +222,11 @@ export class AzureAuthService implements IAuthService {
     const accounts = this.msalInstance.getAllAccounts();
     if (accounts.length === 0) return null;
 
+    const scopes = this.parseScopes();
+
     try {
       const response = await this.msalInstance.acquireTokenSilent({
-        scopes: this.config?.scopes || ["openid", "profile", "email"],
+        scopes,
         account: accounts[0],
         forceRefresh,
       });
@@ -205,7 +237,7 @@ export class AzureAuthService implements IAuthService {
       // Try interactive if silent fails
       try {
         const response = await this.msalInstance.acquireTokenPopup({
-          scopes: this.config?.scopes || ["openid", "profile", "email"],
+          scopes,
         });
         return response.idToken;
       } catch {
@@ -226,27 +258,28 @@ export class AzureAuthService implements IAuthService {
   // ============================================================================
 
   private getLoginRequest(provider: OAuthProvider) {
-    const baseRequest = {
-      scopes: this.config?.scopes || ["openid", "profile", "email"],
-    };
+    const scopes = this.parseScopes();
+    const baseRequest = { scopes };
 
-    // For Azure AD B2C, identity providers are configured in user flows
-    // The provider hint is passed via domain_hint or idp parameter
+    // For Azure Entra ID, we use the Microsoft identity platform directly
+    // Note: Google/GitHub providers require external identity federation setup in Entra ID
     switch (provider) {
       case "google":
         return {
           ...baseRequest,
+          // Requires Google federation configured in Entra ID
           extraQueryParameters: { domain_hint: "google.com" },
         };
       case "github":
         return {
           ...baseRequest,
+          // Requires GitHub federation configured in Entra ID
           extraQueryParameters: { domain_hint: "github.com" },
         };
       case "microsoft":
         return {
           ...baseRequest,
-          // Microsoft is the default for Azure AD
+          // Microsoft is native to Entra ID
         };
       default:
         return baseRequest;
@@ -262,18 +295,31 @@ export class AzureAuthService implements IAuthService {
   private setUserFromAccount(account: any): void {
     const claims = account.idTokenClaims as AzureTokenClaims;
 
+    // Build display name from available claims
+    const displayName =
+      claims.name ||
+      (claims.given_name && claims.family_name
+        ? `${claims.given_name} ${claims.family_name}`
+        : null) ||
+      claims.preferred_username ||
+      null;
+
+    // Get email from various possible claims
+    const email =
+      claims.email || claims.preferred_username || claims.upn || null;
+
     this.currentUser = {
-      uid: claims.sub || account.localAccountId,
-      email: claims.email || claims.preferred_username || null,
-      displayName: claims.name || null,
+      uid: claims.oid || claims.sub || account.localAccountId,
+      email,
+      displayName,
       photoURL: claims.picture || null,
-      emailVerified: claims.email_verified || false,
+      emailVerified: claims.email_verified ?? (email ? true : false),
       providerData: [
         {
-          providerId: claims.idp || "azure",
-          uid: claims.sub || account.localAccountId,
-          displayName: claims.name || null,
-          email: claims.email || null,
+          providerId: claims.idp || "microsoft",
+          uid: claims.oid || claims.sub || account.localAccountId,
+          displayName,
+          email,
           photoURL: claims.picture || null,
         },
       ],

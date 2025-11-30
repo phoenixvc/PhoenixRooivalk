@@ -175,10 +175,13 @@ AZURE_APP_INSIGHTS_CONNECTION_STRING=$APP_INSIGHTS_CONN
 # Azure Cosmos DB (for server-side use only - don't expose key to client)
 AZURE_COSMOS_ENDPOINT=$COSMOS_ENDPOINT
 
-# Azure AD B2C (fill in after B2C tenant setup)
-AZURE_AD_B2C_TENANT_ID=
-AZURE_AD_B2C_CLIENT_ID=
-AZURE_AD_B2C_AUTHORITY=
+# Azure Entra ID (fill in after running setup-entra.sh)
+AZURE_ENTRA_TENANT_ID=
+AZURE_ENTRA_CLIENT_ID=
+AZURE_ENTRA_AUTHORITY=
+AZURE_ENTRA_REDIRECT_URI=
+AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI=
+AZURE_ENTRA_SCOPES=openid profile email User.Read
 
 # Key Vault (for Functions to fetch secrets)
 AZURE_KEY_VAULT_URI=$KEY_VAULT_URI
@@ -224,7 +227,8 @@ main() {
     echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
     echo ""
     echo -e "${BLUE}Next steps:${NC}"
-    echo "1. Set up Azure AD B2C tenant for authentication"
+    echo "1. Set up Azure Entra ID for authentication:"
+    echo "   ./scripts/setup-entra.sh --create"
     echo "2. Deploy Azure Functions code"
     echo "3. Update GitHub Actions with deployment token"
     echo "4. Configure custom domain (optional)"

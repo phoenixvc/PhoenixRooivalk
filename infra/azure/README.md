@@ -27,7 +27,7 @@ This directory contains the Azure infrastructure as code (Bicep) and deployment 
          ┌────────────────────────────────────────┘
          ▼
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│ App Insights    │  │ Notification    │  │ Azure AD B2C    │
+│ App Insights    │  │ Notification    │  │ Azure Entra ID  │
 │ (Analytics)     │  │ Hubs (Push)     │  │ (Auth)          │
 └─────────────────┘  └─────────────────┘  └─────────────────┘
 ```
@@ -39,7 +39,7 @@ This directory contains the Azure infrastructure as code (Bicep) and deployment 
 | Azure Static Web Apps | Documentation hosting | Netlify |
 | Azure Cosmos DB | NoSQL database | Firebase Firestore |
 | Azure Functions | Serverless compute | Firebase Cloud Functions |
-| Azure AD B2C | Authentication | Firebase Auth |
+| Azure Entra ID | Authentication | Firebase Auth |
 | Azure Notification Hubs | Push notifications | Firebase Cloud Messaging |
 | Application Insights | Analytics & monitoring | Firebase Analytics |
 | Key Vault | Secrets management | Firebase config |
@@ -70,13 +70,13 @@ az account set --subscription "Your Subscription Name"
 ./scripts/deploy.sh prod phoenix-rooivalk-prod westeurope
 ```
 
-### 3. Set up Azure AD B2C (Authentication)
+### 3. Set up Azure Entra ID (Authentication)
 
-```bash
-./scripts/setup-b2c.sh phoenixrooivalkb2c
-```
-
-Follow the printed instructions to complete B2C setup in the Azure Portal.
+See [QUICKSTART.md](./QUICKSTART.md) for detailed Entra ID setup instructions, including:
+- Creating app registration
+- Configuring redirect URIs
+- Setting API permissions
+- Creating client secrets
 
 ### 4. Deploy Azure Functions
 
@@ -103,7 +103,7 @@ infra/azure/
 ├── scripts/
 │   ├── deploy.sh              # Main deployment script
 │   ├── deploy-functions.sh    # Functions deployment
-│   └── setup-b2c.sh           # B2C setup guide
+│   └── setup-entra.sh         # Entra ID setup guide
 └── README.md                  # This file
 ```
 
@@ -118,10 +118,16 @@ CLOUD_PROVIDER=azure
 # Azure Functions
 AZURE_FUNCTIONS_BASE_URL=https://your-func.azurewebsites.net
 
-# Azure AD B2C
-AZURE_AD_B2C_TENANT_ID=yourtenant.onmicrosoft.com
-AZURE_AD_B2C_CLIENT_ID=your-client-id
-AZURE_AD_B2C_AUTHORITY=https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1_SignUpSignIn
+
+# Azure Entra ID
+AZURE_ENTRA_CLIENT_ID=your-client-id
+# Azure Entra ID
+AZURE_ENTRA_CLIENT_ID=your-client-id
+AZURE_ENTRA_TENANT_ID=your-tenant-id
+AZURE_ENTRA_TENANT_ID=your-tenant-id
+AZURE_ENTRA_AUTHORITY=https://login.microsoftonline.com/your-tenant-id
+AZURE_ENTRA_REDIRECT_URI=https://your-app.azurestaticapps.net/callback
+AZURE_ENTRA_SCOPES=openid profile email User.Read
 
 # Azure Application Insights
 AZURE_APP_INSIGHTS_CONNECTION_STRING=InstrumentationKey=...
@@ -139,7 +145,7 @@ Using free tier and serverless options:
 | Static Web Apps | Free | $0/month |
 | Cosmos DB | Serverless | ~$0-5/month (based on usage) |
 | Functions | Consumption | ~$0-2/month (first 1M free) |
-| AD B2C | First 50K MAU free | $0/month |
+| Entra ID | Free tier | $0/month |
 | Notification Hubs | Free | $0/month |
 | Application Insights | First 5GB free | ~$0/month |
 | Key Vault | Standard | ~$0.03/10K operations |

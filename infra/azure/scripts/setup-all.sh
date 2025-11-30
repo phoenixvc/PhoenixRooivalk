@@ -272,10 +272,12 @@ AZURE_APP_INSIGHTS_CONNECTION_STRING=$APP_INSIGHTS_CONNECTION
 # Azure Key Vault
 AZURE_KEY_VAULT_NAME=$KEY_VAULT_NAME
 
-# Azure AD B2C (configure after running setup-b2c.sh)
-AZURE_AD_B2C_TENANT_ID=
-AZURE_AD_B2C_CLIENT_ID=
-AZURE_AD_B2C_AUTHORITY=
+# Azure Entra ID (configure after running setup-entra.sh)
+AZURE_ENTRA_TENANT_ID=
+AZURE_ENTRA_CLIENT_ID=
+AZURE_ENTRA_AUTHORITY=
+AZURE_ENTRA_REDIRECT_URI=
+AZURE_ENTRA_SCOPES=openid profile email User.Read
 
 # Azure Cosmos DB (server-side only, used by Functions)
 AZURE_COSMOS_ENDPOINT=$COSMOS_ENDPOINT
@@ -304,10 +306,12 @@ gh secret set AZURE_FUNCTIONS_APP_NAME --body "$FUNCTIONS_APP_NAME"
 # Azure Application Insights
 gh secret set AZURE_APP_INSIGHTS_CONNECTION_STRING --body "$APP_INSIGHTS_CONNECTION"
 
-# Azure AD B2C (update these after B2C setup)
-# gh secret set AZURE_AD_B2C_TENANT_ID --body "your-tenant.onmicrosoft.com"
-# gh secret set AZURE_AD_B2C_CLIENT_ID --body "your-client-id"
-# gh secret set AZURE_AD_B2C_AUTHORITY --body "https://your-tenant.b2clogin.com/..."
+# Azure Entra ID (update these after running setup-entra.sh)
+# gh secret set AZURE_ENTRA_TENANT_ID --body "your-tenant-id"
+# gh secret set AZURE_ENTRA_CLIENT_ID --body "your-client-id"
+# gh secret set AZURE_ENTRA_CLIENT_SECRET --body "your-client-secret"
+# gh secret set AZURE_ENTRA_AUTHORITY --body "https://login.microsoftonline.com/your-tenant-id"
+# gh secret set AZURE_ENTRA_SCOPES --body "openid profile email User.Read"
 
 echo "GitHub secrets configured!"
 EOF
@@ -332,8 +336,8 @@ echo "  - Storage:            $STORAGE_NAME"
 echo ""
 echo "Next steps:"
 echo ""
-echo "  1. Configure Azure AD B2C for authentication:"
-echo "     ./scripts/setup-b2c.sh phoenixrooivalkb2c"
+echo "  1. Configure Azure Entra ID for authentication:"
+echo "     ./scripts/setup-entra.sh --create"
 echo ""
 echo "  2. Add GitHub secrets (requires gh CLI):"
 echo "     $SECRETS_FILE"

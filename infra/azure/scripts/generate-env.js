@@ -99,9 +99,12 @@ const config = {
   AZURE_FUNCTIONS_BASE_URL: '',
   AZURE_APP_INSIGHTS_CONNECTION_STRING: '',
   AZURE_COSMOS_ENDPOINT: '',
-  AZURE_AD_B2C_TENANT_ID: '',
-  AZURE_AD_B2C_CLIENT_ID: '',
-  AZURE_AD_B2C_AUTHORITY: '',
+  AZURE_ENTRA_TENANT_ID: "",
+  AZURE_ENTRA_CLIENT_ID: "",
+  AZURE_ENTRA_AUTHORITY: "",
+  AZURE_ENTRA_REDIRECT_URI: "",
+  AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI: "",
+  AZURE_ENTRA_SCOPES: "openid profile email User.Read",
   AZURE_STATIC_WEB_APPS_API_TOKEN: '',
   AZURE_FUNCTIONS_PUBLISH_PROFILE: '',
 };
@@ -183,11 +186,14 @@ AZURE_APP_INSIGHTS_CONNECTION_STRING=${config.AZURE_APP_INSIGHTS_CONNECTION_STRI
 # Azure Cosmos DB (server-side only)
 AZURE_COSMOS_ENDPOINT=${config.AZURE_COSMOS_ENDPOINT}
 
-# Azure AD B2C (configure manually after B2C setup)
-# Run: ./scripts/setup-b2c.sh <tenant-name>
-AZURE_AD_B2C_TENANT_ID=
-AZURE_AD_B2C_CLIENT_ID=
-AZURE_AD_B2C_AUTHORITY=
+# Azure Entra ID (configure after running setup-entra.sh)
+# Run: ./scripts/setup-entra.sh --create
+AZURE_ENTRA_TENANT_ID=
+AZURE_ENTRA_CLIENT_ID=
+AZURE_ENTRA_AUTHORITY=
+AZURE_ENTRA_REDIRECT_URI=
+AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI=
+AZURE_ENTRA_SCOPES=openid profile email User.Read
 `;
 
 fs.writeFileSync(envFile, envContent);
@@ -238,11 +244,13 @@ echo "════════════════════════�
 echo "GitHub secrets configured successfully!"
 echo ""
 echo "Remaining manual steps:"
-echo "  1. Configure Azure AD B2C (run: ./scripts/setup-b2c.sh)"
-echo "  2. Add B2C secrets:"
-echo "     gh secret set AZURE_AD_B2C_TENANT_ID --body 'your-tenant.onmicrosoft.com'"
-echo "     gh secret set AZURE_AD_B2C_CLIENT_ID --body 'your-client-id'"
-echo "     gh secret set AZURE_AD_B2C_AUTHORITY --body 'https://...'"
+echo "  1. Configure Azure Entra ID (run: ./scripts/setup-entra.sh --create)"
+echo "  2. Add Entra ID secrets:"
+echo "     gh secret set AZURE_ENTRA_TENANT_ID --body 'your-tenant-id'"
+echo "     gh secret set AZURE_ENTRA_CLIENT_ID --body 'your-client-id'"
+echo "     gh secret set AZURE_ENTRA_CLIENT_SECRET --body 'your-client-secret'"
+echo "     gh secret set AZURE_ENTRA_AUTHORITY --body 'https://login.microsoftonline.com/your-tenant-id'"
+echo "     gh secret set AZURE_ENTRA_SCOPES --body 'openid profile email User.Read'"
 echo "═══════════════════════════════════════════════════════════════"
 `;
 
@@ -290,8 +298,8 @@ console.log('');
 console.log('  2. Configure GitHub secrets:');
 console.log(`     bash ${secretsFile}`);
 console.log('');
-console.log('  3. Set up Azure AD B2C for authentication:');
-console.log('     ./scripts/setup-b2c.sh phoenixrooivalkb2c');
+console.log("  3. Set up Azure Entra ID for authentication:");
+console.log("     ./scripts/setup-entra.sh --create");
 console.log('');
 console.log('  4. Push to main branch to trigger deployment');
 console.log('');

@@ -56,11 +56,14 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
 };
 
-// Azure configuration from environment variables (exposed to client via customFields)
+// Azure Entra ID configuration from environment variables (exposed to client via customFields)
 const azureConfig = {
-  tenantId: process.env.AZURE_AD_B2C_TENANT_ID || "",
-  clientId: process.env.AZURE_AD_B2C_CLIENT_ID || "",
-  authority: process.env.AZURE_AD_B2C_AUTHORITY || "",
+  tenantId: process.env.AZURE_ENTRA_TENANT_ID || "",
+  clientId: process.env.AZURE_ENTRA_CLIENT_ID || "",
+  authority: process.env.AZURE_ENTRA_AUTHORITY || "",
+  redirectUri: process.env.AZURE_ENTRA_REDIRECT_URI || "",
+  postLogoutRedirectUri: process.env.AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI || "",
+  scopes: process.env.AZURE_ENTRA_SCOPES || "openid profile email User.Read",
   functionsBaseUrl: process.env.AZURE_FUNCTIONS_BASE_URL || "",
   appInsightsConnectionString:
     process.env.AZURE_APP_INSIGHTS_CONNECTION_STRING || "",
