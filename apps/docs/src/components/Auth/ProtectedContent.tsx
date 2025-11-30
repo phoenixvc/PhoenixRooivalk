@@ -78,11 +78,11 @@ export function ProtectedContent({
     }
   }, [loading, user, isFreePage, currentUrl]);
 
-  // If Firebase not configured, block access for protected content but allow free pages
+  // If Azure not configured, block access for protected content but allow free pages
   if (!isConfigured && !isFreePage) {
     if (DEBUG_AUTH) {
       console.log(
-        "[ProtectedContent] Firebase not configured - blocking access",
+        "[ProtectedContent] Azure not configured - blocking access",
       );
     }
     return (
@@ -99,14 +99,14 @@ export function ProtectedContent({
           </p>
           <div className="protected-content-blocked-details">
             <p>
-              <strong>For administrators:</strong> Firebase environment
-              variables need to be set in your hosting platform (Netlify/Vercel)
-              and a new deployment triggered.
+              <strong>For administrators:</strong> Azure Entra ID environment
+              variables need to be set in your hosting platform and a new
+              deployment triggered.
             </p>
             <p>
-              Required variables: <code>FIREBASE_API_KEY</code>,{" "}
-              <code>FIREBASE_AUTH_DOMAIN</code>,{" "}
-              <code>FIREBASE_PROJECT_ID</code>, etc.
+              Required variables: <code>AZURE_ENTRA_CLIENT_ID</code>,{" "}
+              <code>AZURE_ENTRA_TENANT_ID</code>,{" "}
+              <code>AZURE_FUNCTIONS_BASE_URL</code>, etc.
             </p>
           </div>
           <a href="/" className="protected-content-blocked-link">
