@@ -390,6 +390,23 @@ const config: Config = {
               to: "/news",
             },
             {
+              label: "Downloads",
+              to: "/docs/resources/downloads",
+            },
+            {
+              label: "Documentation Status",
+              to: "/docs/resources/documentation-status",
+            },
+            {
+              label: "Main Website",
+              href: "https://phoenixrooivalk.netlify.app",
+            },
+          ],
+        },
+        {
+          title: "Support",
+          items: [
+            {
               label: "Support Center",
               to: "/support",
             },
@@ -398,16 +415,12 @@ const config: Config = {
               to: "/your-progress",
             },
             {
-              label: "Main Website",
-              href: "https://phoenixrooivalk.netlify.app",
+              label: "Contact Us",
+              to: "/contact",
             },
             {
-              label: "Documentation Status",
-              to: "/docs/resources/documentation-status",
-            },
-            {
-              label: "Downloads",
-              to: "/docs/resources/downloads",
+              label: "Request Access",
+              href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
             },
           ],
         },
@@ -427,12 +440,8 @@ const config: Config = {
               href: "https://x.com/PhoenixRooivalk",
             },
             {
-              label: "Contact Us",
-              to: "/contact",
-            },
-            {
-              label: "Request Access",
-              href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
+              label: "Email Us",
+              href: "mailto:contact@phoenixrooivalk.com",
             },
           ],
         },
