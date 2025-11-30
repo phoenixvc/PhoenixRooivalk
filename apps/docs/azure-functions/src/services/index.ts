@@ -28,3 +28,9 @@ export {
   type DocumentMetadata,
   type IndexingResult,
 } from "./indexing.service";
+
+export {
+  NewsAnalyticsService,
+  newsAnalyticsService,
+  type NewsAnalyticsResult,
+} from "./news-analytics.service";
