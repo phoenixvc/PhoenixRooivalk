@@ -19,8 +19,8 @@
 // Parameters
 // ============================================================================
 
-@description('Environment name (dev, staging, prod)')
-@allowed(['dev', 'staging', 'prod'])
+@description('Environment name (dev, stg, prd, prv for preview)')
+@allowed(['dev', 'stg', 'prd', 'prv'])
 param environment string = 'dev'
 
 @description('Azure region for resources')
@@ -67,12 +67,32 @@ param b2cTenantName string = ''
 // Variables
 // ============================================================================
 
-// Naming: {env}-{region}-{type}-{project} e.g., dev-eus2-kv-rooivalk
-var locationShort = location == 'eastus2' ? 'eus2' : location == 'westeurope' ? 'weu' : location == 'eastasia' ? 'eas' : take(location, 4)
+// Naming: {env}-{region}-{type}-rooivalk
+// Following Azure CAF naming conventions: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+var locationShortMap = {
+  eastus: 'eus'
+  eastus2: 'eus2'
+  westus: 'wus'
+  westus2: 'wus2'
+  centralus: 'cus'
+  westeurope: 'weu'
+  northeurope: 'neu'
+  uksouth: 'uks'
+  ukwest: 'ukw'
+  eastasia: 'eas'
+  southeastasia: 'seas'
+  southafricanorth: 'san'
+  australiaeast: 'aue'
+}
+var locationShort = contains(locationShortMap, location) ? locationShortMap[location] : take(location, 4)
+
+// Tags for cost management and organization
 var tags = {
-  project: projectName
+  project: 'rooivalk'
   environment: environment
   managedBy: 'bicep'
+  costCenter: 'phoenix-${environment}'
+  owner: 'JustAGhosT'
 }
 
 // Key Vault for secrets management

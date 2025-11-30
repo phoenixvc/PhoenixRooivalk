@@ -41,39 +41,67 @@ LOCATION="${2:-eastus2}"
 AZURE_OPENAI_ENDPOINT="${3:-}"
 AZURE_OPENAI_API_KEY="${4:-}"
 
+# Environment short codes for naming
+case "$ENVIRONMENT" in
+    "dev"|"development") ENV_SHORT="dev" ;;
+    "stg"|"staging") ENV_SHORT="stg" ;;
+    "prd"|"prod"|"production") ENV_SHORT="prd" ;;
+    "preview"|"pr-"*) ENV_SHORT="prv" ;;  # Preview environments for PRs
+    *) ENV_SHORT="${ENVIRONMENT:0:3}" ;;
+esac
+
 # Location short codes for naming: {env}-{region}-{type}-rooivalk
 case "$LOCATION" in
+    "eastus") LOCATION_SHORT="eus" ;;
     "eastus2") LOCATION_SHORT="eus2" ;;
-    "westeurope") LOCATION_SHORT="weu" ;;
-    "eastasia") LOCATION_SHORT="eas" ;;
-    "centralus") LOCATION_SHORT="cus" ;;
+    "westus") LOCATION_SHORT="wus" ;;
     "westus2") LOCATION_SHORT="wus2" ;;
+    "westeurope") LOCATION_SHORT="weu" ;;
+    "northeurope") LOCATION_SHORT="neu" ;;
+    "eastasia") LOCATION_SHORT="eas" ;;
+    "southeastasia") LOCATION_SHORT="seas" ;;
+    "centralus") LOCATION_SHORT="cus" ;;
+    "southafricanorth") LOCATION_SHORT="san" ;;
+    "uksouth") LOCATION_SHORT="uks" ;;
+    "ukwest") LOCATION_SHORT="ukw" ;;
     *) LOCATION_SHORT="${LOCATION:0:4}" ;;
 esac
 
-# Derived names using {env}-{region}-{type}-rooivalk format
-RESOURCE_GROUP="phoenix-rooivalk-${ENVIRONMENT}"
-KEY_VAULT_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-kv-rooivalk"
-STORAGE_NAME="${ENVIRONMENT}${LOCATION_SHORT}strooivalk"
-APPI_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-appi-rooivalk"
-COSMOS_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-cosmos-rooivalk"
-FUNC_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-func-rooivalk"
-SWA_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-swa-rooivalk"
+# Resource Group naming: rg-{project}-{env}-{region}
+RESOURCE_GROUP="rg-rooivalk-${ENV_SHORT}-${LOCATION_SHORT}"
+
+# Resource naming: {env}-{region}-{type}-rooivalk
+# Following Azure naming best practices: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+KEY_VAULT_NAME="${ENV_SHORT}-${LOCATION_SHORT}-kv-rooivalk"
+STORAGE_NAME="${ENV_SHORT}${LOCATION_SHORT}strooivalk"  # Storage: no hyphens, max 24 chars
+APPI_NAME="${ENV_SHORT}-${LOCATION_SHORT}-appi-rooivalk"
+COSMOS_NAME="${ENV_SHORT}-${LOCATION_SHORT}-cosmos-rooivalk"
+FUNC_NAME="${ENV_SHORT}-${LOCATION_SHORT}-func-rooivalk"
+SWA_NAME="${ENV_SHORT}-${LOCATION_SHORT}-swa-rooivalk"
+LOG_NAME="${ENV_SHORT}-${LOCATION_SHORT}-log-rooivalk"  # Log Analytics workspace
 
 print_banner
 
 log_info "Configuration:"
-echo "  Environment:    $ENVIRONMENT"
+echo "  Environment:    $ENVIRONMENT ($ENV_SHORT)"
 echo "  Location:       $LOCATION ($LOCATION_SHORT)"
 echo "  Resource Group: $RESOURCE_GROUP"
 echo ""
-echo "  Resource Names (${ENVIRONMENT}-${LOCATION_SHORT}-{type}-rooivalk):"
-echo "    Key Vault:      $KEY_VAULT_NAME"
-echo "    Storage:        $STORAGE_NAME"
-echo "    App Insights:   $APPI_NAME"
-echo "    Cosmos DB:      $COSMOS_NAME"
-echo "    Functions:      $FUNC_NAME"
-echo "    Static Web App: $SWA_NAME"
+echo "  Naming Convention: {env}-{region}-{type}-rooivalk"
+echo ""
+echo "  Resources:"
+echo "    Key Vault:        $KEY_VAULT_NAME"
+echo "    Storage:          $STORAGE_NAME"
+echo "    App Insights:     $APPI_NAME"
+echo "    Cosmos DB:        $COSMOS_NAME"
+echo "    Functions:        $FUNC_NAME"
+echo "    Static Web App:   $SWA_NAME"
+echo ""
+echo "  Environments supported:"
+echo "    dev/development  → dev-{region}-*-rooivalk"
+echo "    stg/staging      → stg-{region}-*-rooivalk"
+echo "    prd/prod         → prd-{region}-*-rooivalk"
+echo "    preview/pr-*     → prv-{region}-*-rooivalk"
 echo ""
 
 # Check prerequisites
