@@ -18,7 +18,68 @@ env:
   OUTPUT_LOCATION: "build"
 
 jobs:
+  # Fail fast if required secrets are missing
+  validate-secrets:
+    runs-on: ubuntu-latest
+    name: Validate Secrets
+    outputs:
+      has-swa-token: ${{ steps.check.outputs.has-swa-token }}
+      has-functions-profile: ${{ steps.check.outputs.has-functions-profile }}
+    steps:
+      - name: Check required secrets
+        id: check
+        run: |
+          MISSING=""
+
+          # Required for Static Web Apps deployment
+          if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
+            MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_API_TOKEN"
+          else
+            echo "has-swa-token=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Required for Functions deployment (only on main)
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            if [ -z "${{ secrets.AZURE_FUNCTIONS_APP_NAME }}" ]; then
+              MISSING="${MISSING}\n  - AZURE_FUNCTIONS_APP_NAME"
+            fi
+            if [ -z "${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}" ]; then
+              MISSING="${MISSING}\n  - AZURE_FUNCTIONS_PUBLISH_PROFILE"
+            else
+              echo "has-functions-profile=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+          # Recommended but not required (app works in offline mode without these)
+          WARNINGS=""
+          if [ -z "${{ secrets.AZURE_AD_B2C_TENANT_ID }}" ]; then
+            WARNINGS="${WARNINGS}\n  - AZURE_AD_B2C_TENANT_ID (auth will be disabled)"
+          fi
+          if [ -z "${{ secrets.AZURE_FUNCTIONS_BASE_URL }}" ]; then
+            WARNINGS="${WARNINGS}\n  - AZURE_FUNCTIONS_BASE_URL (API calls will fail)"
+          fi
+
+          # Print warnings
+          if [ -n "$WARNINGS" ]; then
+            echo "::warning::Optional secrets missing (app will run in degraded mode):${WARNINGS}"
+          fi
+
+          # Fail if required secrets are missing
+          if [ -n "$MISSING" ]; then
+            echo "::error::Required secrets are missing:${MISSING}"
+            echo ""
+            echo "To fix this, add the following secrets to your repository:"
+            echo "  Settings > Secrets and variables > Actions > New repository secret"
+            echo ""
+            echo "Run the setup script to get these values:"
+            echo "  cd infra/azure && ./scripts/setup-all.sh dev eastus"
+            exit 1
+          fi
+
+          echo "✅ All required secrets are configured"
+
   build-and-deploy:
+    needs: validate-secrets
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
@@ -42,12 +103,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ env.APP_LOCATION }}
-        run: |
-          if [ ! -f pnpm-lock.yaml ]; then
-            pnpm install --no-frozen-lockfile
-          else
-            pnpm install --frozen-lockfile
-          fi
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build
         working-directory: ${{ env.APP_LOCATION }}
@@ -108,10 +164,10 @@ jobs:
           action: "close"
 
   deploy-functions:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [validate-secrets, build-and-deploy]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.validate-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions
-    needs: build-and-deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
