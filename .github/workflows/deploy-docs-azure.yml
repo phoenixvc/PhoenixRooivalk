@@ -145,41 +145,30 @@ jobs:
             exit 1
           fi
 
-      # Copy build to a fresh location to avoid Azure SWA stored config override
-      - name: Prepare deployment folder
-        run: |
-          mkdir -p _swa_deploy
-          cp -r apps/docs/build/* _swa_deploy/
-          echo "=== Deployment folder contents ==="
-          ls -la _swa_deploy/
+      - name: Install SWA CLI
+        run: npm install -g @azure/static-web-apps-cli
 
-      - name: Deploy to Azure Static Web Apps
+      - name: Deploy with SWA CLI
         id: deploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          # Use fresh folder to avoid Azure SWA stored config overriding app_location
-          app_location: "_swa_deploy"
-          skip_app_build: true
-          skip_api_build: true
-          production_branch: "main"
+        env:
+          SWA_CLI_DEPLOYMENT_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+        run: |
+          swa deploy apps/docs/build \
+            --env production \
+            --no-use-keychain \
+            --verbose
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
-            const deploymentUrl = '${{ steps.deploy.outputs.static_web_app_url }}';
-            if (deploymentUrl) {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `🚀 **Azure Static Web Apps Preview**\n\nYour preview is ready!\n\n🔗 ${deploymentUrl}\n\n*This preview will be automatically deleted when the PR is closed.*`
-              });
-            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Azure Static Web Apps Preview**\n\nDeployment complete! Check your Static Web App URL.\n\n*This preview will be automatically deleted when the PR is closed.*`
+            });
 
   close-pull-request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
