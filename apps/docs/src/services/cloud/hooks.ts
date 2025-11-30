@@ -13,7 +13,7 @@ import {
   CloudServices,
 } from './provider';
 import { CloudUser } from './interfaces/types';
-import { UserProgress, UserProfileData, DEFAULT_USER_PROGRESS } from './interfaces/database';
+import { UserProgress, DEFAULT_USER_PROGRESS } from './interfaces/database';
 
 /**
  * Hook to get cloud services
