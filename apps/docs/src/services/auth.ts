@@ -37,6 +37,8 @@ export interface UserProgress {
       completed: boolean;
       completedAt?: string;
       lastVisited?: string;
+      timeSpentMs?: number;
+      lastReadAt?: string;
     }
   >;
   achievements: Record<string, { unlockedAt: string }>;
@@ -45,6 +47,7 @@ export interface UserProgress {
     level: number;
     streak: number;
     lastVisit?: string;
+    totalTimeSpentMs?: number;
   };
 }
 
