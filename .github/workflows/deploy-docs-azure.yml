@@ -38,15 +38,12 @@ jobs:
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
           fi
 
-          # Required for Functions deployment (only on main)
+          # Optional: Functions deployment (only on main)
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            if [ -z "${{ secrets.AZURE_FUNCTIONS_APP_NAME }}" ]; then
-              MISSING="${MISSING}\n  - AZURE_FUNCTIONS_APP_NAME"
-            fi
-            if [ -z "${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}" ]; then
-              MISSING="${MISSING}\n  - AZURE_FUNCTIONS_PUBLISH_PROFILE"
-            else
+            if [ -n "${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}" ]; then
               echo "has-functions-profile=true" >> $GITHUB_OUTPUT
+            else
+              echo "::notice::Azure Functions secrets not configured - skipping Functions deployment"
             fi
           fi
 
@@ -140,6 +137,7 @@ jobs:
           app_location: "apps/docs/build"
           skip_app_build: true  # We already built it above
           skip_api_build: true  # API is deployed separately
+          production_branch: "main"
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
