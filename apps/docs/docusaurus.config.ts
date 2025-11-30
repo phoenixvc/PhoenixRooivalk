@@ -56,6 +56,18 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
 };
 
+// Azure configuration from environment variables (exposed to client via customFields)
+const azureConfig = {
+  tenantId: process.env.AZURE_AD_B2C_TENANT_ID || "",
+  clientId: process.env.AZURE_AD_B2C_CLIENT_ID || "",
+  authority: process.env.AZURE_AD_B2C_AUTHORITY || "",
+  functionsBaseUrl: process.env.AZURE_FUNCTIONS_BASE_URL || "",
+  appInsightsConnectionString: process.env.AZURE_APP_INSIGHTS_CONNECTION_STRING || "",
+};
+
+// Cloud provider selection: 'firebase' | 'azure'
+const cloudProvider = process.env.CLOUD_PROVIDER || "firebase";
+
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
@@ -67,6 +79,8 @@ const config: Config = {
   // Custom fields exposed to client-side code via useDocusaurusContext()
   customFields: {
     firebaseConfig,
+    azureConfig,
+    cloudProvider,
   },
   onBrokenLinks: onBrokenLinksConfig,
   // Note: onBrokenMarkdownLinks is deprecated in Docusaurus v4

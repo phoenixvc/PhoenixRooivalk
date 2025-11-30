@@ -1,0 +1,23 @@
+# Azure Functions
+local.settings.json
+.env
+
+# Build output
+dist/
+*.js
+*.js.map
+*.d.ts
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
