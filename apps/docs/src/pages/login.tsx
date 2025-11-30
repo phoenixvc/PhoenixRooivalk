@@ -90,11 +90,11 @@ export default function LoginPage(): React.ReactElement {
               {!isConfigured ? (
                 <div className={styles.loginWarning}>
                   <p>
-                    <strong>⚠️ Firebase Authentication Not Configured</strong>
+                    <strong>⚠️ Azure Authentication Not Configured</strong>
                   </p>
                   <p>
-                    Authentication is not available because Firebase environment
-                    variables were not set at build time.
+                    Authentication is not available because Azure Entra ID
+                    environment variables were not set at build time.
                   </p>
                   <details className={styles.configDetails}>
                     <summary>Technical Details</summary>
@@ -117,9 +117,8 @@ export default function LoginPage(): React.ReactElement {
                     )}
                     <p className={styles.configHelp}>
                       <strong>For admins:</strong> Set these in your hosting
-                      platform's environment variables (Netlify: Site
-                      Configuration → Environment Variables). A new deploy is
-                      required after adding them.
+                      platform's environment variables (Azure Static Web Apps,
+                      Netlify, etc.). A new deploy is required after adding them.
                     </p>
                   </details>
                   <p className={styles.loginNote} style={{ marginTop: "1rem" }}>

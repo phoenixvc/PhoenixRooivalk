@@ -13,8 +13,8 @@ import React, {
 } from "react";
 import {
   User,
-  isFirebaseConfigured,
-  getMissingFirebaseConfig,
+  isAuthConfigured,
+  getMissingAuthConfig,
   onAuthChange,
   signInWithGoogle,
   signInWithGithub,
@@ -25,7 +25,7 @@ import {
   getUserProfileData,
   updateUserProfileData,
   UserProfileData,
-} from "../services/firebase";
+} from "../services/auth";
 import { analytics } from "../services/analytics";
 import {
   isOnline,
@@ -76,7 +76,7 @@ interface AuthContextType {
   refreshUserProfile: () => void;
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
-  saveProfileToFirebase: (data: Partial<UserProfileData>) => Promise<boolean>;
+  saveProfileToCloud: (data: Partial<UserProfileData>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -224,8 +224,8 @@ export function AuthProvider({
   const [userProfile, setUserProfile] = useState<UserProfileState>(
     DEFAULT_PROFILE_STATE,
   );
-  const isConfigured = isFirebaseConfigured();
-  const missingConfig = getMissingFirebaseConfig();
+  const isConfigured = isAuthConfigured();
+  const missingConfig = getMissingAuthConfig();
 
   // Debug logging on mount
   useEffect(() => {
@@ -256,7 +256,7 @@ export function AuthProvider({
     if (!isConfigured) {
       if (DEBUG_AUTH) {
         console.log(
-          "[AuthContext] Firebase not configured, setting loading=false",
+          "[AuthContext] Azure not configured, setting loading=false",
         );
       }
       setLoading(false);
@@ -348,7 +348,7 @@ export function AuthProvider({
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();
 
-      // Fetch profile data from Firestore
+      // Fetch profile data from cloud
       const cloudProfile = await getUserProfileData(currentUser.uid);
 
       // Merge strategy: Cloud wins for conflicts, but keep local-only data
@@ -587,8 +587,8 @@ export function AuthProvider({
     [progress, updateProgress],
   );
 
-  // Save user profile data to Firebase
-  const saveProfileToFirebase = useCallback(
+  // Save user profile data to cloud
+  const saveProfileToCloud = useCallback(
     async (data: Partial<UserProfileData>): Promise<boolean> => {
       if (!user) {
         console.warn("Cannot save profile: user not authenticated");
@@ -604,7 +604,7 @@ export function AuthProvider({
         return true; // Queued successfully
       }
 
-      // Online - save directly to Firebase
+      // Online - save directly to cloud
       const success = await updateUserProfileData(user.uid, data);
 
       if (success) {
@@ -639,7 +639,7 @@ export function AuthProvider({
     refreshUserProfile,
     markDocAsRead,
     unlockAchievement,
-    saveProfileToFirebase,
+    saveProfileToCloud,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

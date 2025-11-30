@@ -341,7 +341,7 @@ export function OnboardingWalkthrough({
     loading,
     userProfile,
     refreshUserProfile,
-    saveProfileToFirebase,
+    saveProfileToCloud,
   } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -463,7 +463,7 @@ export function OnboardingWalkthrough({
       setUserDetails(details);
 
       // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      await saveProfileToCloud({
         firstName: details.firstName,
         lastName: details.lastName,
         linkedIn: details.linkedIn,
@@ -477,7 +477,7 @@ export function OnboardingWalkthrough({
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToFirebase],
+    [user, currentStep, saveProfileToCloud],
   );
 
   // Handle AI fun facts completion
@@ -488,7 +488,7 @@ export function OnboardingWalkthrough({
       saveUserFunFacts(user.uid, facts);
 
       // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      await saveProfileToCloud({
         funFacts: facts,
         funFactsGeneratedAt: new Date().toISOString(),
       });
@@ -498,7 +498,7 @@ export function OnboardingWalkthrough({
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToFirebase],
+    [user, currentStep, saveProfileToCloud],
   );
 
   // Handle skipping fun facts
@@ -524,7 +524,7 @@ export function OnboardingWalkthrough({
       );
 
       // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      await saveProfileToCloud({
         profileKey: selectedTemplate.templateKey,
         roles: selectedTemplate.roles,
       });
@@ -548,7 +548,7 @@ export function OnboardingWalkthrough({
     selectedTemplate,
     user,
     refreshUserProfile,
-    saveProfileToFirebase,
+    saveProfileToCloud,
   ]);
 
   const handlePrevious = useCallback(() => {

@@ -17,7 +17,7 @@ import {
  * If a user scrolls to 90%+ but hasn't spent enough time, they get a challenge
  * instead of automatic completion credit.
  *
- * Progress is synced to Firebase when user is authenticated, otherwise saved locally.
+ * Progress is synced to cloud when user is authenticated, otherwise saved locally.
  */
 
 // Time tracking constants

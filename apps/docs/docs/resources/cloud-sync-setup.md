@@ -2,7 +2,7 @@
 id: cloud-sync-setup
 title: Cloud Sync Setup Guide
 sidebar_label: Cloud Sync Setup
-description: Configure Firebase to enable cross-device progress synchronization
+description: Configure Azure services to enable cross-device progress synchronization
 difficulty: beginner
 estimated_reading_time: 3
 points: 10
@@ -11,7 +11,7 @@ points: 10
 # Cloud Sync Setup Guide
 
 Enable cross-device synchronization for your reading progress and achievements
-by configuring Firebase.
+by configuring Azure services.
 
 ---
 
@@ -19,63 +19,53 @@ by configuring Firebase.
 
 The gamification system supports two modes:
 
-| Mode      | Storage              | Cross-Device | Setup Required   |
-| --------- | -------------------- | ------------ | ---------------- |
-| **Local** | Browser localStorage | No           | None             |
-| **Cloud** | Firebase Firestore   | Yes          | Firebase project |
+| Mode      | Storage              | Cross-Device | Setup Required      |
+| --------- | -------------------- | ------------ | ------------------- |
+| **Local** | Browser localStorage | No           | None                |
+| **Cloud** | Azure Cosmos DB      | Yes          | Azure configuration |
 
-Without Firebase configured, the system automatically falls back to local-only
+Without Azure configured, the system automatically falls back to local-only
 storage.
 
 ---
 
-## Firebase Setup Steps
+## Azure Setup Steps
 
-### 1. Create a Firebase Project
+### 1. Create Azure Resources
 
-1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Click "Add project"
-3. Enter a project name (e.g., "phoenixrooivalk-docs")
-4. Disable Google Analytics (optional for this use case)
-5. Click "Create project"
+1. Go to [Azure Portal](https://portal.azure.com)
+2. Create a new Resource Group for your project
+3. You'll need to set up these services:
+   - Azure Entra ID (for authentication)
+   - Azure Cosmos DB (for data storage)
+   - Azure Functions (optional, for AI features)
 
-### 2. Enable Authentication
+### 2. Set Up Azure Entra ID
 
-1. In Firebase Console, go to **Authentication** > **Sign-in method**
-2. Enable the providers you want:
-   - **Google** - Recommended, easy setup
-   - **GitHub** - Good for developers
-3. Configure OAuth redirect domains if needed
+1. Go to **Azure Active Directory** > **App registrations**
+2. Click **New registration**
+3. Enter your application name
+4. Set redirect URIs for your domain(s)
+5. Note the **Application (client) ID** and **Directory (tenant) ID**
 
-### 3. Create Firestore Database
+### 3. Configure Authentication Providers
 
-1. Go to **Firestore Database** > **Create database**
-2. Choose **Start in production mode**
+For social logins (Google, GitHub), set up Azure AD B2C:
+
+1. Create an Azure AD B2C tenant
+2. Add identity providers:
+   - **Google** - Add OAuth credentials from Google Cloud Console
+   - **GitHub** - Add OAuth credentials from GitHub Developer Settings
+3. Create user flows for sign-up and sign-in
+
+### 4. Create Cosmos DB Database
+
+1. Go to **Azure Cosmos DB** > **Create account**
+2. Choose **Azure Cosmos DB for NoSQL**
 3. Select a region closest to your users
-4. Click "Enable"
-
-### 4. Configure Security Rules
-
-In Firestore, go to **Rules** and set:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // User progress - users can only read/write their own data
-    match /userProgress/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-  }
-}
-```
-
-### 5. Get Configuration Values
-
-1. Go to **Project Settings** (gear icon)
-2. Scroll to "Your apps" section
-3. Click the web app icon (`</>`) to add a web app
-4. Copy the configuration values
+4. Create a database and containers:
+   - `users` - User profiles and progress
+   - `comments` - Comment system data
 
 ---
 
@@ -84,14 +74,17 @@ service cloud.firestore {
 Set these environment variables in your deployment:
 
 ```bash
-# Firebase Configuration
-FIREBASE_API_KEY=your-api-key
-FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-FIREBASE_MESSAGING_SENDER_ID=123456789
-FIREBASE_APP_ID=1:123456789:web:abcdef
+# Azure Configuration
+AZURE_ENTRA_CLIENT_ID=your-client-id
+AZURE_ENTRA_TENANT_ID=your-tenant-id
+AZURE_FUNCTIONS_BASE_URL=https://your-functions.azurewebsites.net
 ```
+
+### Azure Static Web Apps Setup
+
+1. Configure environment variables in Azure Portal
+2. Or use `staticwebapp.config.json` for configuration
+3. Redeploy your site
 
 ### Netlify Setup
 
@@ -104,46 +97,44 @@ FIREBASE_APP_ID=1:123456789:web:abcdef
 Create a `.env.local` file (not committed to git):
 
 ```bash
-FIREBASE_API_KEY=your-api-key
-FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-FIREBASE_MESSAGING_SENDER_ID=123456789
-FIREBASE_APP_ID=1:123456789:web:abcdef
+AZURE_ENTRA_CLIENT_ID=your-client-id
+AZURE_ENTRA_TENANT_ID=your-tenant-id
+AZURE_FUNCTIONS_BASE_URL=http://localhost:7071
 ```
 
 ---
 
 ## Data Structure
 
-User progress is stored in Firestore with this structure:
+User progress is stored in Cosmos DB with this structure:
 
 ```typescript
-// Collection: userProgress
-// Document ID: Firebase Auth UID
+// Container: users
+// Document ID: Azure Entra user ID
 
 {
-  docs: {
+  "id": "user-azure-id",
+  "docs": {
     "executive/executive-summary": {
-      completed: true,
-      completedAt: "2025-11-26T10:30:00Z",
-      scrollProgress: 100
-    },
+      "completed": true,
+      "completedAt": "2025-11-26T10:30:00Z",
+      "scrollProgress": 100
+    }
     // ... more docs
   },
-  achievements: {
+  "achievements": {
     "first-read": {
-      unlockedAt: "2025-11-26T10:30:00Z"
-    },
+      "unlockedAt": "2025-11-26T10:30:00Z"
+    }
     // ... more achievements
   },
-  stats: {
-    totalPoints: 150,
-    level: 2,
-    streak: 3,
-    lastVisit: "2025-11-26T10:30:00Z"
+  "stats": {
+    "totalPoints": 150,
+    "level": 2,
+    "streak": 3,
+    "lastVisit": "2025-11-26T10:30:00Z"
   },
-  updatedAt: Timestamp
+  "_updatedAt": "2025-11-26T10:30:00Z"
 }
 ```
 
@@ -151,9 +142,9 @@ User progress is stored in Firestore with this structure:
 
 ## Privacy Considerations
 
-- User data is isolated by Firebase Auth UID
+- User data is isolated by Azure Entra user ID
 - No personal information beyond email is stored
-- Users can delete their account via Firebase Console
+- Users can request data deletion
 - Progress data is minimal (doc IDs and timestamps)
 
 ---
@@ -163,33 +154,32 @@ User progress is stored in Firestore with this structure:
 ### "Cloud sync not available"
 
 - Check that all environment variables are set
-- Verify Firebase project is created and configured
-- Check browser console for Firebase errors
+- Verify Azure resources are created and configured
+- Check browser console for authentication errors
 
 ### Authentication fails
 
-- Ensure OAuth providers are enabled in Firebase
-- Check that your domain is authorized in Firebase Console
-- Verify OAuth credentials if using GitHub
+- Ensure redirect URIs are correctly configured
+- Check that your domain is authorized in Azure Entra ID
+- Verify OAuth credentials for social providers
 
 ### Data not syncing
 
-- Check Firestore rules allow read/write
+- Check Cosmos DB is accessible
 - Verify user is authenticated (check browser console)
-- Look for Firestore quota errors
+- Look for Azure Functions errors in Application Insights
 
 ---
 
 ## Cost Considerations
 
-Firebase free tier includes:
+Azure offers free tiers:
 
-| Resource          | Free Limit      |
-| ----------------- | --------------- |
-| Authentication    | Unlimited users |
-| Firestore reads   | 50,000/day      |
-| Firestore writes  | 20,000/day      |
-| Firestore storage | 1 GB            |
+| Resource          | Free Limit           |
+| ----------------- | -------------------- |
+| Azure Entra ID    | 50,000 MAU (B2C)     |
+| Cosmos DB         | 1000 RU/s, 25 GB     |
+| Functions         | 1M executions/month  |
 
 For a documentation site, this is typically more than sufficient.
 
@@ -197,7 +187,7 @@ For a documentation site, this is typically more than sufficient.
 
 ## Disabling Cloud Sync
 
-To run in local-only mode, simply don't set the Firebase environment variables.
+To run in local-only mode, simply don't set the Azure environment variables.
 The system will automatically use localStorage.
 
 ---

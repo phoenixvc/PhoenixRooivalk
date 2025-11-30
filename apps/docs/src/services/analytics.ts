@@ -1,6 +1,8 @@
 /**
  * Analytics Service for Phoenix Rooivalk Documentation
  *
+ * Uses Azure Application Insights via the cloud service abstraction.
+ *
  * Tracks:
  * - Page views with user identification
  * - Time spent on each page
@@ -12,75 +14,25 @@
  */
 
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  doc,
-  updateDoc,
-  setDoc,
-  increment,
-  serverTimestamp,
-} from "firebase/firestore";
-import { logEvent, Analytics } from "firebase/analytics";
-import {
-  isFirebaseConfigured,
-  isGA4Configured,
-  getGA4Analytics,
-} from "./firebase";
+  getAnalyticsService,
+  isCloudConfigured,
+  type IAnalyticsService,
+} from "./cloud";
 import { isAnalyticsAllowed } from "../components/CookieConsent";
 import { checkRateLimit, debounce } from "../utils/rateLimiter";
+import {
+  getOrCreateSessionId,
+  getOrCreateAnonymousId,
+  type PageViewEvent,
+  type TimeOnPageEvent,
+  type ConversionEvent,
+  type ConversionEventType,
+} from "./cloud/interfaces/analytics";
 
-// Import Node.js crypto in non-browser environments for secure random generation
-let nodeCrypto: typeof import("crypto") | null = null;
-if (typeof window === "undefined") {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    nodeCrypto = require("crypto");
-  } catch {
-    nodeCrypto = null;
-  }
-}
+// Re-export types for backward compatibility
+export type { PageViewEvent, TimeOnPageEvent, ConversionEvent };
 
-// Types for analytics events
-export interface PageViewEvent {
-  userId: string | null;
-  sessionId: string;
-  pageUrl: string;
-  pageTitle: string;
-  referrer: string;
-  timestamp: unknown;
-  userAgent: string;
-  screenWidth: number;
-  screenHeight: number;
-  isAuthenticated: boolean;
-}
-
-export interface TimeOnPageEvent {
-  userId: string | null;
-  sessionId: string;
-  pageUrl: string;
-  timeSpentMs: number;
-  maxScrollDepth: number;
-  timestamp: unknown;
-  completed: boolean; // Read 90%+ of page
-}
-
-export interface ConversionEvent {
-  userId: string | null;
-  sessionId: string;
-  eventType:
-    | "teaser_view"
-    | "signup_prompt_shown"
-    | "signup_started"
-    | "signup_completed"
-    | "first_doc_read"
-    | "achievement_unlocked"
-    | "path_completed";
-  eventData?: Record<string, unknown>;
-  timestamp: unknown;
-  pageUrl: string;
-}
-
+// Additional types for backward compatibility
 export interface UserSession {
   sessionId: string;
   userId: string | null;
@@ -95,57 +47,6 @@ export interface UserSession {
   referrer: string;
 }
 
-// Generate unique session ID (cryptographically secure)
-const generateSessionId = (): string => {
-  let randStr: string;
-  if (
-    typeof window !== "undefined" &&
-    window.crypto &&
-    window.crypto.getRandomValues
-  ) {
-    // Browser environment: use window.crypto
-    const randomValues = new Uint32Array(2);
-    window.crypto.getRandomValues(randomValues);
-    randStr = randomValues[0].toString(36) + randomValues[1].toString(36);
-    randStr = randStr.substring(0, 9);
-  } else if (nodeCrypto && nodeCrypto.randomBytes) {
-    // Node.js environment: use crypto.randomBytes
-    const buffer = nodeCrypto.randomBytes(8);
-    randStr = Array.from(buffer)
-      .map((b) => b.toString(36).padStart(2, "0"))
-      .join("")
-      .substring(0, 9);
-  } else {
-    // Last resort fallback - should rarely happen in practice
-    randStr = Date.now().toString(36);
-  }
-  return `${Date.now()}-${randStr}`;
-};
-
-// Get or create session ID from sessionStorage
-const getSessionId = (): string => {
-  if (typeof window === "undefined") return "ssr-session";
-
-  let sessionId = sessionStorage.getItem("phoenix-analytics-session");
-  if (!sessionId) {
-    sessionId = generateSessionId();
-    sessionStorage.setItem("phoenix-analytics-session", sessionId);
-  }
-  return sessionId;
-};
-
-// Get anonymous user ID for tracking non-authenticated users
-const getAnonymousId = (): string => {
-  if (typeof window === "undefined") return "ssr-anonymous";
-
-  let anonId = localStorage.getItem("phoenix-anonymous-id");
-  if (!anonId) {
-    anonId = `anon-${generateSessionId()}`;
-    localStorage.setItem("phoenix-anonymous-id", anonId);
-  }
-  return anonId;
-};
-
 // Rate limit constants
 const RATE_LIMITS = {
   pageViews: { max: 30, windowMs: 60000 }, // 30 per minute
@@ -154,26 +55,31 @@ const RATE_LIMITS = {
   dailyStats: { max: 30, windowMs: 60000 }, // 30 per minute
 };
 
+/**
+ * Analytics Service Wrapper
+ *
+ * Provides a simplified interface to the cloud analytics service
+ * with rate limiting and consent checking.
+ */
 class AnalyticsService {
-  private db: ReturnType<typeof getFirestore> | null = null;
-  private ga4: Analytics | null = null;
+  private analyticsService: IAnalyticsService | null = null;
   private sessionId: string = "";
   private currentPageStartTime: number = 0;
   private currentPageUrl: string = "";
   private maxScrollDepth: number = 0;
   private isInitialized: boolean = false;
 
-  // Debounced daily stats update
-  private debouncedDailyStats = debounce(
-    (pageUrl: string, isAuthenticated: boolean) => {
-      this._updateDailyStats(pageUrl, isAuthenticated);
+  // Debounced tracking for daily stats
+  private debouncedTrackEvent = debounce(
+    (eventName: string, params: Record<string, unknown>) => {
+      this._trackCustomEvent(eventName, params);
     },
     2000,
   );
 
   constructor() {
     if (typeof window !== "undefined") {
-      this.sessionId = getSessionId();
+      this.sessionId = getOrCreateSessionId("phoenix-analytics-session");
     }
   }
 
@@ -195,65 +101,14 @@ class AnalyticsService {
       return;
     }
 
-    if (isFirebaseConfigured() && typeof window !== "undefined") {
+    if (isCloudConfigured() && typeof window !== "undefined") {
       try {
-        this.db = getFirestore();
+        this.analyticsService = getAnalyticsService();
+        await this.analyticsService.init();
         this.isInitialized = true;
-        await this.initSession();
-
-        // Initialize GA4 if configured
-        if (isGA4Configured()) {
-          this.ga4 = getGA4Analytics();
-        }
       } catch (error) {
         console.warn("Analytics initialization failed:", error);
       }
-    }
-  }
-
-  /**
-   * Track event to GA4 (Google Analytics 4)
-   */
-  private trackGA4Event(
-    eventName: string,
-    params?: Record<string, unknown>,
-  ): void {
-    if (this.ga4 && this.hasConsent()) {
-      try {
-        logEvent(this.ga4, eventName, params);
-      } catch {
-        // Silently fail - GA4 is supplementary
-      }
-    }
-  }
-
-  /**
-   * Initialize or update user session
-   */
-  private async initSession(): Promise<void> {
-    if (!this.db) return;
-
-    try {
-      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
-      await setDoc(
-        sessionRef,
-        {
-          sessionId: this.sessionId,
-          userId: null,
-          startTime: serverTimestamp(),
-          lastActivity: serverTimestamp(),
-          pageViews: 0,
-          totalTimeMs: 0,
-          pagesVisited: [],
-          isAuthenticated: false,
-          convertedToSignup: false,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer || "direct",
-        },
-        { merge: true },
-      );
-    } catch (error) {
-      console.warn("Session init failed:", error);
     }
   }
 
@@ -282,7 +137,7 @@ class AnalyticsService {
       return; // Rate limited, skip this tracking
     }
 
-    if (!this.db) {
+    if (!this.analyticsService) {
       await this.init();
     }
 
@@ -296,43 +151,32 @@ class AnalyticsService {
     this.currentPageStartTime = Date.now();
     this.maxScrollDepth = 0;
 
-    if (!this.db) return;
+    if (!this.analyticsService) return;
 
     try {
       const event: PageViewEvent = {
-        userId: userId || getAnonymousId(),
+        userId: userId || getOrCreateAnonymousId("phoenix-anonymous-id"),
         sessionId: this.sessionId,
         pageUrl,
         pageTitle,
-        referrer: document.referrer || "direct",
-        timestamp: serverTimestamp(),
-        userAgent: navigator.userAgent,
-        screenWidth: window.innerWidth,
-        screenHeight: window.innerHeight,
+        referrer:
+          typeof document !== "undefined"
+            ? document.referrer || "direct"
+            : "direct",
+        userAgent:
+          typeof navigator !== "undefined" ? navigator.userAgent : "",
+        screenWidth: typeof window !== "undefined" ? window.innerWidth : 0,
+        screenHeight: typeof window !== "undefined" ? window.innerHeight : 0,
         isAuthenticated,
       };
 
-      await addDoc(collection(this.db, "analytics_pageviews"), event);
-
-      // Update session
-      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
-      await updateDoc(sessionRef, {
-        lastActivity: serverTimestamp(),
-        pageViews: increment(1),
-        userId: userId || getAnonymousId(),
-        isAuthenticated,
-      });
+      await this.analyticsService.trackPageView(event);
 
       // Track daily stats (debounced)
-      this.debouncedDailyStats(pageUrl, isAuthenticated);
-
-      // Track to GA4
-      this.trackGA4Event("page_view", {
-        page_path: pageUrl,
-        page_title: pageTitle,
-        page_location:
-          typeof window !== "undefined" ? window.location.href : "",
-        is_authenticated: isAuthenticated,
+      this.debouncedTrackEvent("daily_pageview", {
+        pageUrl,
+        isAuthenticated,
+        date: new Date().toISOString().split("T")[0],
       });
     } catch (error) {
       console.warn("Page view tracking failed:", error);
@@ -345,6 +189,7 @@ class AnalyticsService {
   updateScrollDepth(depth: number): void {
     if (depth > this.maxScrollDepth) {
       this.maxScrollDepth = depth;
+      this.analyticsService?.updateScrollDepth(depth);
     }
   }
 
@@ -352,7 +197,7 @@ class AnalyticsService {
    * Track time spent on page (called when leaving page)
    */
   async trackTimeOnPage(): Promise<void> {
-    if (!this.db || !this.currentPageUrl) return;
+    if (!this.analyticsService || !this.currentPageUrl) return;
 
     // Check rate limit
     if (
@@ -374,25 +219,10 @@ class AnalyticsService {
         pageUrl: this.currentPageUrl,
         timeSpentMs: timeSpent,
         maxScrollDepth: this.maxScrollDepth,
-        timestamp: serverTimestamp(),
         completed: this.maxScrollDepth >= 90,
       };
 
-      await addDoc(collection(this.db, "analytics_timeonpage"), event);
-
-      // Update session total time
-      const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
-      await updateDoc(sessionRef, {
-        totalTimeMs: increment(timeSpent),
-        lastActivity: serverTimestamp(),
-      });
-
-      // Track engagement to GA4
-      this.trackGA4Event("user_engagement", {
-        engagement_time_msec: timeSpent,
-        page_path: this.currentPageUrl,
-        scroll_depth: this.maxScrollDepth,
-      });
+      await this.analyticsService.trackTimeOnPage(event);
     } catch (error) {
       console.warn("Time tracking failed:", error);
     }
@@ -402,7 +232,7 @@ class AnalyticsService {
    * Track conversion funnel event
    */
   async trackConversion(
-    eventType: ConversionEvent["eventType"],
+    eventType: ConversionEventType,
     userId: string | null,
     eventData?: Record<string, unknown>,
   ): Promise<void> {
@@ -423,102 +253,45 @@ class AnalyticsService {
       return; // Rate limited, skip this tracking
     }
 
-    if (!this.db) {
+    if (!this.analyticsService) {
       await this.init();
     }
 
-    if (!this.db) return;
+    if (!this.analyticsService) return;
 
     try {
       const event: ConversionEvent = {
-        userId: userId || getAnonymousId(),
+        userId: userId || getOrCreateAnonymousId("phoenix-anonymous-id"),
         sessionId: this.sessionId,
         eventType,
         eventData,
-        timestamp: serverTimestamp(),
-        pageUrl: this.currentPageUrl || window.location.pathname,
+        pageUrl:
+          this.currentPageUrl ||
+          (typeof window !== "undefined" ? window.location.pathname : ""),
       };
 
-      await addDoc(collection(this.db, "analytics_conversions"), event);
-
-      // Update session if signup conversion
-      if (eventType === "signup_completed") {
-        const sessionRef = doc(this.db, "analytics_sessions", this.sessionId);
-        await updateDoc(sessionRef, {
-          convertedToSignup: true,
-          userId,
-        });
-      }
-
-      // Track to GA4 with mapped event names
-      const ga4EventName = this.mapConversionToGA4Event(eventType);
-      this.trackGA4Event(ga4EventName, {
-        event_category: "conversion",
-        event_label: eventType,
-        ...eventData,
-      });
+      await this.analyticsService.trackConversion(event);
     } catch (error) {
       console.warn("Conversion tracking failed:", error);
     }
   }
 
   /**
-   * Map internal conversion events to GA4 standard events
+   * Track custom event (internal)
    */
-  private mapConversionToGA4Event(
-    eventType: ConversionEvent["eventType"],
-  ): string {
-    const mapping: Record<ConversionEvent["eventType"], string> = {
-      teaser_view: "view_item",
-      signup_prompt_shown: "view_promotion",
-      signup_started: "begin_checkout",
-      signup_completed: "sign_up",
-      first_doc_read: "tutorial_complete",
-      achievement_unlocked: "unlock_achievement",
-      path_completed: "level_end",
-    };
-    return mapping[eventType] || eventType;
-  }
-
-  /**
-   * Update daily aggregated stats (internal, called via debounce)
-   */
-  private async _updateDailyStats(
-    pageUrl: string,
-    isAuthenticated: boolean,
+  private async _trackCustomEvent(
+    eventName: string,
+    params: Record<string, unknown>,
   ): Promise<void> {
-    if (!this.db) return;
-
-    // Check rate limit
-    if (
-      !checkRateLimit(
-        "dailyStats",
-        RATE_LIMITS.dailyStats.max,
-        RATE_LIMITS.dailyStats.windowMs,
-      )
-    ) {
-      return;
-    }
-
-    const today = new Date().toISOString().split("T")[0];
-    const statsRef = doc(this.db, "analytics_daily", today);
+    if (!this.analyticsService) return;
 
     try {
-      await setDoc(
-        statsRef,
-        {
-          date: today,
-          totalPageViews: increment(1),
-          uniqueSessions: increment(0), // Would need more complex logic
-          authenticatedViews: isAuthenticated ? increment(1) : increment(0),
-          anonymousViews: !isAuthenticated ? increment(1) : increment(0),
-          [`pages.${pageUrl.replace(/\//g, "_")}`]: increment(1),
-          lastUpdated: serverTimestamp(),
-        },
-        { merge: true },
-      );
+      await this.analyticsService.trackEvent({
+        name: eventName,
+        params,
+      });
     } catch (error) {
-      console.warn("Daily stats update failed:", error);
+      console.warn("Custom event tracking failed:", error);
     }
   }
 
