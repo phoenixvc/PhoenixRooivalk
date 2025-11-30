@@ -34,3 +34,15 @@ export {
   newsAnalyticsService,
   type NewsAnalyticsResult,
 } from "./news-analytics.service";
+
+export {
+  NewsIngestionService,
+  newsIngestionService,
+  type IngestionResult,
+} from "./news-ingestion.service";
+
+export {
+  NotificationsService,
+  notificationsService,
+  type NewsSubscription,
+} from "./notifications.service";

@@ -164,3 +164,45 @@ Title: {{title}}
   },
   outputFormat: "text",
 };
+
+/**
+ * News digest generation prompt
+ */
+export const NEWS_DIGEST_PROMPT: PromptTemplate = {
+  metadata: {
+    id: "news-digest",
+    name: "News Digest",
+    description: "Generate personalized news digest for users",
+    category: "generation",
+    version: "1.0.0",
+    recommendedModel: "chat",
+    maxTokens: 1500,
+    temperature: 0.5,
+    tags: ["news", "digest", "personalization"],
+  },
+  system: {
+    base: `You are a defense industry news analyst specializing in counter-drone technology.
+
+Generate a brief news digest covering recent developments in the specified topics.
+Focus on:
+- Recent contracts and funding announcements
+- Technology breakthroughs
+- Regulatory changes
+- Market trends
+- Notable incidents or deployments
+
+Be factual and cite general knowledge. If you're unsure about recent events, indicate the information may not be current.`,
+  },
+  user: {
+    template: `Generate a news digest for the following topics: {{topics}}
+
+{{#userRoles}}
+Focus on content relevant to these roles: {{userRoles}}
+{{/userRoles}}
+
+Format as a brief digest with 3-5 key items.`,
+    requiredVariables: ["topics"],
+    optionalVariables: { userRoles: "" },
+  },
+  outputFormat: "markdown",
+};

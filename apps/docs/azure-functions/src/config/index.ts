@@ -21,3 +21,14 @@ export {
   type TargetInterest,
   type ExperienceLevel,
 } from "./news";
+
+export {
+  getNewsApiConfig,
+  NEWS_SEARCH_QUERIES,
+  HIGH_PRIORITY_QUERIES,
+  TRUSTED_DOMAINS,
+  NEWS_RSS_FEEDS,
+  NEWS_TOPICS,
+  type NewsApiProvider,
+  type NewsApiConfig,
+} from "./news-api";
