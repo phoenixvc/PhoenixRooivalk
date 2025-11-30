@@ -60,3 +60,14 @@ export {
   type SearchResult,
   type HybridSearchOptions,
 } from "./hybrid-search.service";
+
+export {
+  runAgent,
+  runAgentStreaming,
+  createAgent,
+  tools as agentTools,
+  type AgentTool,
+  type AgentStep,
+  type AgentResult,
+  type AgentOptions,
+} from "./agent.service";
