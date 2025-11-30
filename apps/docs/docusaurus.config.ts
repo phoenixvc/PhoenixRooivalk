@@ -45,17 +45,6 @@ const onBrokenLinksConfig =
 const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
-// Firebase configuration from environment variables (exposed to client via customFields)
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY || "",
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.FIREBASE_APP_ID || "",
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
-};
-
 // Azure Entra ID configuration from environment variables (exposed to client via customFields)
 const azureConfig = {
   tenantId: process.env.AZURE_ENTRA_TENANT_ID || "",
@@ -69,8 +58,8 @@ const azureConfig = {
     process.env.AZURE_APP_INSIGHTS_CONNECTION_STRING || "",
 };
 
-// Cloud provider selection: 'firebase' | 'azure'
-const cloudProvider = process.env.CLOUD_PROVIDER || "firebase";
+// Cloud provider selection: 'azure' | 'offline'
+const cloudProvider = process.env.CLOUD_PROVIDER || "azure";
 
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
@@ -82,7 +71,6 @@ const config: Config = {
   projectName: "PhoenixRooivalk",
   // Custom fields exposed to client-side code via useDocusaurusContext()
   customFields: {
-    firebaseConfig,
     azureConfig,
     cloudProvider,
   },

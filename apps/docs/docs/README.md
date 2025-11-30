@@ -2,7 +2,7 @@
 id: phoenix-rooivalk-documentation
 title: Phoenix Rooivalk Documentation
 sidebar_label: "\U0001F3E0 Home"
-slug: /
+slug: /phoenix-rooivalk-documentation
 hide_title: true
 difficulty: intermediate
 estimated_reading_time: 4

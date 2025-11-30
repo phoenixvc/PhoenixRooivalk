@@ -1,8 +1,8 @@
 /**
  * Cloud Services Module
  *
- * Provides a unified interface for cloud services that can switch between
- * Firebase and Azure implementations.
+ * Provides a unified interface for cloud services using Azure
+ * with offline fallback support.
  *
  * Usage:
  * ```typescript
@@ -36,15 +36,6 @@ export {
   type CloudProvider,
   type CloudServices,
 } from "./provider";
-
-// Export Firebase implementations (for direct use if needed)
-export {
-  FirebaseAuthService,
-  FirebaseDatabaseService,
-  FirebaseAnalyticsService,
-  FirebaseMessagingService,
-  FirebaseFunctionsService,
-} from "./firebase";
 
 // Export Azure implementations (for direct use if needed)
 export {
