@@ -42,12 +42,17 @@ async function handler(
     if (!Array.isArray(competitors) || competitors.length === 0) {
       return {
         status: 400,
-        jsonBody: { error: "At least one competitor name required", code: "invalid-argument" },
+        jsonBody: {
+          error: "At least one competitor name required",
+          code: "invalid-argument",
+        },
       };
     }
 
     const normalizedFocusAreas = Array.isArray(focusAreas)
-      ? focusAreas.filter((a): a is string => typeof a === "string" && a.trim().length > 0)
+      ? focusAreas.filter(
+          (a): a is string => typeof a === "string" && a.trim().length > 0,
+        )
       : [];
 
     const systemPrompt = `You are a defense industry analyst specializing in counter-UAS systems.
@@ -80,9 +85,10 @@ Where competitors have advantages
 ## Strategic Recommendations
 Actionable insights for positioning against these competitors`;
 
-    const userPrompt = normalizedFocusAreas.length > 0
-      ? `Analyze these competitors: ${competitors.join(", ")}\n\nFocus on: ${normalizedFocusAreas.join(", ")}`
-      : `Analyze these competitors: ${competitors.join(", ")}`;
+    const userPrompt =
+      normalizedFocusAreas.length > 0
+        ? `Analyze these competitors: ${competitors.join(", ")}\n\nFocus on: ${normalizedFocusAreas.join(", ")}`
+        : `Analyze these competitors: ${competitors.join(", ")}`;
 
     const analysis = await generateCompletion(systemPrompt, userPrompt, {
       temperature: 0.7,

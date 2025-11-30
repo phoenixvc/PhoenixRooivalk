@@ -4,9 +4,9 @@ local.settings.json
 
 # Build output
 dist/
-*.js
-*.js.map
-*.d.ts
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
 
 # Dependencies
 node_modules/
@@ -21,3 +21,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Test coverage
+coverage/

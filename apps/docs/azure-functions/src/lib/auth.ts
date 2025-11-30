@@ -1,11 +1,16 @@
 /**
  * Authentication Helpers
  *
- * Validates Azure AD B2C tokens for authenticated functions using JWKS.
+ * Validates Azure AD B2C tokens for authenticated functions.
+ * Uses jose library for proper JWT validation.
  */
 
 import { HttpRequest } from "@azure/functions";
 import * as jose from "jose";
+import { createLogger, Logger } from "./logger";
+
+// Module-level logger
+const logger: Logger = createLogger({ feature: "auth" });
 
 export interface TokenClaims {
   sub: string;
@@ -26,123 +31,96 @@ export interface TokenClaims {
 const ADMIN_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 /**
- * JWKS cache for Azure AD B2C public keys
+ * JWKS cache for Azure AD B2C
  */
 let jwksCache: jose.JWTVerifyGetKey | null = null;
-let jwksCacheExpiry = 0;
-const JWKS_CACHE_TTL = 3600000; // 1 hour in ms
 
 /**
- * Get Azure AD B2C configuration from environment
+ * Get JWKS for token validation
  */
-function getAzureB2CConfig(): {
-  tenantId: string;
-  clientId: string;
-  policyName: string;
-} | null {
-  const tenantId = process.env.AZURE_ENTRA_TENANT_ID;
-  const clientId = process.env.AZURE_ENTRA_CLIENT_ID;
-  const policyName = process.env.AZURE_B2C_POLICY_NAME || "B2C_1_signupsignin";
+async function getJWKS(): Promise<jose.JWTVerifyGetKey> {
+  if (jwksCache) return jwksCache;
 
-  if (!tenantId || !clientId) {
-    return null;
+  const tenant = process.env.AZURE_AD_B2C_TENANT;
+  const policy = process.env.AZURE_AD_B2C_POLICY || "B2C_1_signupsignin";
+
+  if (!tenant) {
+    throw new Error("AZURE_AD_B2C_TENANT not configured");
   }
 
-  return { tenantId, clientId, policyName };
+  const jwksUrl = `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/${policy}/discovery/v2.0/keys`;
+  jwksCache = jose.createRemoteJWKSet(new URL(jwksUrl));
+
+  return jwksCache;
 }
 
 /**
- * Get JWKS remote key set for Azure AD B2C
+ * Validate JWT token properly
  */
-async function getJwks(): Promise<jose.JWTVerifyGetKey | null> {
-  const config = getAzureB2CConfig();
-  if (!config) {
-    return null;
-  }
-
-  const now = Date.now();
-  if (jwksCache && now < jwksCacheExpiry) {
-    return jwksCache;
-  }
-
+async function validateToken(token: string): Promise<TokenClaims | null> {
   try {
-    // Azure AD B2C JWKS endpoint
-    // Format: https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}/discovery/v2.0/keys
-    const jwksUrl = `https://${config.tenantId}.b2clogin.com/${config.tenantId}.onmicrosoft.com/${config.policyName}/discovery/v2.0/keys`;
+    const audience = process.env.AZURE_AD_B2C_CLIENT_ID;
+    const tenant = process.env.AZURE_AD_B2C_TENANT;
 
-    jwksCache = jose.createRemoteJWKSet(new URL(jwksUrl));
-    jwksCacheExpiry = now + JWKS_CACHE_TTL;
-
-    return jwksCache;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Validate JWT token with proper signature verification
- */
-async function validateJwtToken(token: string): Promise<TokenClaims | null> {
-  const config = getAzureB2CConfig();
-  if (!config) {
-    // Fall back to decode-only if Azure B2C is not configured
-    // This allows local development without B2C setup
-    console.warn(
-      "Azure B2C not configured - JWT validation disabled. Set AZURE_ENTRA_TENANT_ID and AZURE_ENTRA_CLIENT_ID for production.",
-    );
-    try {
+    // In development/testing, allow skipping validation
+    if (process.env.SKIP_TOKEN_VALIDATION === "true") {
       const [, payload] = token.split(".");
-      const decoded = JSON.parse(
-        Buffer.from(payload, "base64url").toString("utf8"),
-      );
-      return decoded as TokenClaims;
-    } catch {
-      return null;
+      return JSON.parse(Buffer.from(payload, "base64url").toString());
     }
-  }
 
-  const jwks = await getJwks();
-  if (!jwks) {
-    return null;
-  }
+    if (!audience || !tenant) {
+      logger.warn("Azure AD B2C not configured, using unvalidated decode", {
+        operation: "validateToken",
+      });
+      const [, payload] = token.split(".");
+      return JSON.parse(Buffer.from(payload, "base64url").toString());
+    }
 
-  try {
-    // Expected issuer format for Azure AD B2C
-    const expectedIssuer = `https://${config.tenantId}.b2clogin.com/${config.tenantId}.onmicrosoft.com/${config.policyName}/v2.0/`;
-
+    const jwks = await getJWKS();
     const { payload } = await jose.jwtVerify(token, jwks, {
-      issuer: expectedIssuer,
-      audience: config.clientId,
-      clockTolerance: 60, // Allow 60 seconds clock skew
+      audience,
+      issuer: `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/v2.0/`,
     });
 
     return payload as unknown as TokenClaims;
   } catch (error) {
-    if (error instanceof jose.errors.JWTExpired) {
-      console.error("JWT token has expired");
-    } else if (error instanceof jose.errors.JWTClaimValidationFailed) {
-      console.error("JWT claim validation failed:", error.message);
-    } else if (error instanceof jose.errors.JWSSignatureVerificationFailed) {
-      console.error("JWT signature verification failed");
-    } else {
-      console.error("JWT validation error:", error);
-    }
+    logger.error("Token validation failed", error, {
+      operation: "validateToken",
+    });
     return null;
   }
 }
 
 /**
- * Synchronously decode JWT payload (for backwards compatibility)
- * WARNING: Does not validate signature - use validateJwtToken for secure validation
+ * Extract user ID from request (from validated token)
  */
-function decodeJwtPayload(token: string): TokenClaims | null {
-  try {
-    const [, payload] = token.split(".");
-    if (!payload) return null;
-    return JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-  } catch {
+export async function getUserIdFromRequest(
+  request: HttpRequest,
+): Promise<string | null> {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
     return null;
   }
+
+  const token = authHeader.substring(7);
+  const claims = await validateToken(token);
+
+  return claims?.sub || null;
+}
+
+/**
+ * Get token claims from request (validated)
+ */
+export async function getTokenClaims(
+  request: HttpRequest,
+): Promise<TokenClaims | null> {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return null;
+  }
+
+  const token = authHeader.substring(7);
+  return validateToken(token);
 }
 
 /**
@@ -171,8 +149,8 @@ export function getUserIdFromRequest(request: HttpRequest): string | null {
 /**
  * Check if user is admin based on email domain
  */
-export function isAdmin(request: HttpRequest): boolean {
-  const claims = getTokenClaims(request);
+export async function isAdmin(request: HttpRequest): Promise<boolean> {
+  const claims = await getTokenClaims(request);
   if (!claims?.email) return false;
 
   const domain = claims.email.split("@")[1]?.toLowerCase();
@@ -249,9 +227,8 @@ export function requireAuth(request: HttpRequest): {
   userId: string | null;
   error?: { status: number; body: object };
 } {
-  const userId = getUserIdFromRequest(request);
-
-  if (!userId) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
     return {
       authenticated: false,
       userId: null,
@@ -262,7 +239,63 @@ export function requireAuth(request: HttpRequest): {
     };
   }
 
-  return { authenticated: true, userId };
+  // For sync usage, decode without validation
+  // Use requireAuthAsync for proper validation
+  const token = authHeader.substring(7);
+  try {
+    const [, payload] = token.split(".");
+    const decoded = JSON.parse(Buffer.from(payload, "base64url").toString());
+    const userId = decoded.sub || decoded.oid;
+
+    if (!userId) {
+      return {
+        authenticated: false,
+        userId: null,
+        error: {
+          status: 401,
+          body: { error: "Invalid token", code: "unauthenticated" },
+        },
+      };
+    }
+
+    return { authenticated: true, userId };
+  } catch (error) {
+    logger.warn("Token parsing failed", { operation: "requireAuth" });
+    return {
+      authenticated: false,
+      userId: null,
+      error: {
+        status: 401,
+        body: { error: "Invalid token", code: "unauthenticated" },
+      },
+    };
+  }
+}
+
+/**
+ * Require authentication with proper validation (async)
+ */
+export async function requireAuthAsync(request: HttpRequest): Promise<{
+  authenticated: boolean;
+  userId: string | null;
+  claims: TokenClaims | null;
+  error?: { status: number; body: object };
+}> {
+  const claims = await getTokenClaims(request);
+
+  if (!claims) {
+    return {
+      authenticated: false,
+      userId: null,
+      claims: null,
+      error: {
+        status: 401,
+        body: { error: "Authentication required", code: "unauthenticated" },
+      },
+    };
+  }
+
+  return { authenticated: true, userId: claims.sub, claims };
 }
 
 /**
@@ -295,17 +328,18 @@ export async function requireAdminAsync(request: HttpRequest): Promise<{
 /**
  * Require admin access - synchronous version (legacy)
  */
-export function requireAdmin(request: HttpRequest): {
+export async function requireAdmin(request: HttpRequest): Promise<{
   authorized: boolean;
   userId: string | null;
   error?: { status: number; body: object };
-} {
-  const authResult = requireAuth(request);
+}> {
+  const authResult = await requireAuthAsync(request);
   if (!authResult.authenticated) {
     return { authorized: false, userId: null, error: authResult.error };
   }
 
-  if (!isAdmin(request)) {
+  const adminCheck = await isAdmin(request);
+  if (!adminCheck) {
     return {
       authorized: false,
       userId: authResult.userId,
@@ -338,18 +372,17 @@ export async function validateAuthHeader(
   // Check for Bearer token (JWT)
   if (authHeader.startsWith("Bearer ")) {
     const token = authHeader.substring(7);
-    const claims = await validateJwtToken(token);
+    const claims = await validateToken(token);
 
     if (!claims) {
       return { valid: false };
     }
 
-    const userId = claims.sub || claims.oid;
-    if (!userId) {
-      return { valid: false };
-    }
+    const userId = claims.sub;
+    const email = claims.email || "";
+    const domain = email.split("@")[1]?.toLowerCase();
+    const isAdminUser = ADMIN_DOMAINS.includes(domain);
 
-    const isAdminUser = isAdminFromClaims(claims);
     return { valid: true, userId, isAdmin: isAdminUser };
   }
 

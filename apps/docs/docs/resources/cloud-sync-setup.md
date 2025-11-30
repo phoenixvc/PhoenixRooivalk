@@ -2,7 +2,8 @@
 id: cloud-sync-setup
 title: Cloud Sync Setup Guide
 sidebar_label: Cloud Sync Setup
-description: Configure Azure services to enable cross-device progress synchronization
+description:
+  Configure Azure services to enable cross-device progress synchronization
 difficulty: beginner
 estimated_reading_time: 3
 points: 10
@@ -175,11 +176,11 @@ User progress is stored in Cosmos DB with this structure:
 
 Azure offers free tiers:
 
-| Resource          | Free Limit           |
-| ----------------- | -------------------- |
-| Azure Entra ID    | 50,000 MAU (B2C)     |
-| Cosmos DB         | 1000 RU/s, 25 GB     |
-| Functions         | 1M executions/month  |
+| Resource       | Free Limit          |
+| -------------- | ------------------- |
+| Azure Entra ID | 50,000 MAU (B2C)    |
+| Cosmos DB      | 1000 RU/s, 25 GB    |
+| Functions      | 1M executions/month |
 
 For a documentation site, this is typically more than sufficient.
 
@@ -187,8 +188,8 @@ For a documentation site, this is typically more than sufficient.
 
 ## Disabling Cloud Sync
 
-To run in local-only mode, simply don't set the Azure environment variables.
-The system will automatically use localStorage.
+To run in local-only mode, simply don't set the Azure environment variables. The
+system will automatically use localStorage.
 
 ---
 

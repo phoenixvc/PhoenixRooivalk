@@ -50,7 +50,10 @@ async function handler(
     if (content.length < 100) {
       return {
         status: 400,
-        jsonBody: { error: "Content too short to summarize", code: "invalid-argument" },
+        jsonBody: {
+          error: "Content too short to summarize",
+          code: "invalid-argument",
+        },
       };
     }
 

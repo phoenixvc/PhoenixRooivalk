@@ -32,6 +32,8 @@ export interface UserProgress {
       completed: boolean;
       completedAt?: string;
       lastVisited?: string;
+      timeSpentMs?: number;
+      lastReadAt?: string;
     }
   >;
   achievements: Record<string, { unlockedAt: string }>;
@@ -40,6 +42,7 @@ export interface UserProgress {
     level: number;
     streak: number;
     lastVisit?: string;
+    totalTimeSpentMs?: number;
   };
 }
 
@@ -79,7 +82,9 @@ export function getMissingAuthConfig(): string[] {
 /**
  * Auth state change listener
  */
-export function onAuthChange(callback: (user: User | null) => void): () => void {
+export function onAuthChange(
+  callback: (user: User | null) => void,
+): () => void {
   const auth = getAuthService();
   return auth.onAuthStateChanged((cloudUser) => {
     if (cloudUser) {
@@ -148,18 +153,26 @@ export async function signOut(): Promise<void> {
  */
 export async function getUserProgress(userId: string): Promise<UserProgress> {
   const db = getDatabaseService();
-  const data = await db.getDocument<UserProgress>(`users/${userId}/progress`, "current");
-  return data || {
-    docs: {},
-    achievements: {},
-    stats: { totalPoints: 0, level: 1, streak: 0 },
-  };
+  const data = await db.getDocument<UserProgress>(
+    `users/${userId}/progress`,
+    "current",
+  );
+  return (
+    data || {
+      docs: {},
+      achievements: {},
+      stats: { totalPoints: 0, level: 1, streak: 0 },
+    }
+  );
 }
 
 /**
  * Save user progress to Cosmos DB
  */
-export async function saveUserProgress(userId: string, progress: UserProgress): Promise<void> {
+export async function saveUserProgress(
+  userId: string,
+  progress: UserProgress,
+): Promise<void> {
   const db = getDatabaseService();
   await db.setDocument(`users/${userId}/progress`, "current", progress);
 }
@@ -167,7 +180,9 @@ export async function saveUserProgress(userId: string, progress: UserProgress): 
 /**
  * Get user profile from Cosmos DB
  */
-export async function getUserProfileData(userId: string): Promise<UserProfileData | null> {
+export async function getUserProfileData(
+  userId: string,
+): Promise<UserProfileData | null> {
   const db = getDatabaseService();
   return db.getDocument<UserProfileData>("users", userId);
 }

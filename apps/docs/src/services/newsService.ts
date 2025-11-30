@@ -91,10 +91,16 @@ class NewsService {
     const message = err.message || "An error occurred";
 
     if (code === "unauthenticated" || code === "401") {
-      throw new NewsError("Please sign in to access news features", "unauthenticated");
+      throw new NewsError(
+        "Please sign in to access news features",
+        "unauthenticated",
+      );
     }
     if (code === "resource-exhausted" || code === "429") {
-      throw new NewsError("Rate limit exceeded. Please try again later.", "resource-exhausted");
+      throw new NewsError(
+        "Rate limit exceeded. Please try again later.",
+        "resource-exhausted",
+      );
     }
 
     throw new NewsError(message, code);
@@ -425,10 +431,7 @@ class NewsService {
           views: number;
           saves: number;
         }>;
-        engagementByCategory: Record<
-          string,
-          { views: number; saves: number }
-        >;
+        engagementByCategory: Record<string, { views: number; saves: number }>;
         dailyViews: Array<{ date: string; views: number }>;
       }>("getNewsAnalytics", options || {});
     } catch (error) {

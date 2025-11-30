@@ -1,6 +1,7 @@
 # Phoenix Rooivalk - Azure Quick Start Guide
 
-Get your documentation site running on Azure with Entra ID authentication in 15 minutes.
+Get your documentation site running on Azure with Entra ID authentication in 15
+minutes.
 
 ## Prerequisites
 
@@ -38,6 +39,7 @@ cd infra/azure
 ```
 
 This creates:
+
 - Azure Static Web Apps (hosting)
 - Azure Functions (backend APIs)
 - Cosmos DB (database)
@@ -54,7 +56,8 @@ This creates:
 2. Click **"New registration"**
 3. Fill in:
    - **Name:** `Phoenix Rooivalk`
-   - **Supported account types:** "Accounts in this organizational directory only (Single tenant)"
+   - **Supported account types:** "Accounts in this organizational directory
+     only (Single tenant)"
    - **Redirect URI:**
      - Platform: `Single-page application (SPA)`
      - URI: `http://localhost:3000/callback`
@@ -91,6 +94,7 @@ Object ID:               xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
 **Save these values:**
+
 ```bash
 AZURE_ENTRA_CLIENT_ID=<Application (client) ID>
 AZURE_ENTRA_TENANT_ID=<Directory (tenant) ID>
@@ -104,6 +108,7 @@ AZURE_ENTRA_AUTHORITY=https://login.microsoftonline.com/<Directory (tenant) ID>
 #### **Add Redirect URIs:**
 
 **Development:**
+
 ```
 http://localhost:3000
 http://localhost:3000/callback
@@ -111,6 +116,7 @@ http://localhost:3000/auth/callback
 ```
 
 **Production (add when deploying):**
+
 ```
 https://<your-app>.azurestaticapps.net
 https://<your-app>.azurestaticapps.net/callback
@@ -119,11 +125,13 @@ https://docs.phoenixrooivalk.com/callback
 ```
 
 #### **Configure Token Settings:**
+
 - **Platform type:** Single-page application
 - **Implicit grant:** Both unchecked (use PKCE instead)
 - **Allow public client flows:** No
 
 **Front-channel logout URL:**
+
 ```
 http://localhost:3000
 ```
@@ -135,6 +143,7 @@ http://localhost:3000
 Click **"Add a permission"** → **Microsoft Graph** → **Delegated permissions**
 
 **Select:**
+
 - `openid` (Sign users in)
 - `profile` (View users' basic profile)
 - `email` (View users' email address)
@@ -162,6 +171,7 @@ AZURE_ENTRA_CLIENT_SECRET=<paste the Value here>
 **Navigate:** App registration → **Token configuration**
 
 **Add optional claims for ID token:**
+
 - `email`
 - `family_name`
 - `given_name`
@@ -188,6 +198,7 @@ gh secret list
 ```
 
 **Example with actual values:**
+
 ```bash
 gh secret set AZURE_ENTRA_CLIENT_ID --body "d9934146-e585-467b-8932-8cec14b332fd"
 gh secret set AZURE_ENTRA_TENANT_ID --body "7edf4423-ccb3-4275-bc80-64dae3ef0148"
@@ -202,14 +213,14 @@ gh secret set AZURE_ENTRA_AUTHORITY --body "https://login.microsoftonline.com/7e
 3. Left sidebar → **"Secrets and variables"** → **"Actions"**
 4. Click **"New repository secret"** for each:
 
-| Secret Name | Value |
-|-------------|-------|
-| `AZURE_ENTRA_CLIENT_ID` | Your application (client) ID |
-| `AZURE_ENTRA_TENANT_ID` | Your directory (tenant) ID |
-| `AZURE_ENTRA_CLIENT_SECRET` | Your client secret value |
-| `AZURE_ENTRA_AUTHORITY` | `https://login.microsoftonline.com/{tenant-id}` |
-| `AZURE_ENTRA_REDIRECT_URI` | `https://your-app.azurestaticapps.net/callback` |
-| `AZURE_ENTRA_SCOPES` | `openid profile email User.Read` |
+| Secret Name                 | Value                                           |
+| --------------------------- | ----------------------------------------------- |
+| `AZURE_ENTRA_CLIENT_ID`     | Your application (client) ID                    |
+| `AZURE_ENTRA_TENANT_ID`     | Your directory (tenant) ID                      |
+| `AZURE_ENTRA_CLIENT_SECRET` | Your client secret value                        |
+| `AZURE_ENTRA_AUTHORITY`     | `https://login.microsoftonline.com/{tenant-id}` |
+| `AZURE_ENTRA_REDIRECT_URI`  | `https://your-app.azurestaticapps.net/callback` |
+| `AZURE_ENTRA_SCOPES`        | `openid profile email User.Read`                |
 
 ### **Method C: Local Development (.env.local)**
 
@@ -338,6 +349,7 @@ echo "Next: cd apps/docs && pnpm dev"
 ```
 
 **Run it:**
+
 ```bash
 chmod +x setup-entra-env.sh
 ./setup-entra-env.sh
@@ -399,9 +411,10 @@ open http://localhost:3000
 ```
 
 **Verify tokens in browser console:**
+
 ```javascript
 // Check localStorage for MSAL tokens
-Object.keys(localStorage).filter(key => key.includes('msal'))
+Object.keys(localStorage).filter((key) => key.includes("msal"));
 
 // Should see entries like:
 // msal.token.keys.{client-id}
@@ -429,14 +442,14 @@ infra/azure/
 
 Using free/consumption tiers:
 
-| Service | Tier | Cost |
-|---------|------|------|
-| Static Web Apps | Free | $0/month |
-| Cosmos DB | Serverless | ~$0-5/month |
-| Functions | Consumption | ~$0-2/month |
-| Entra ID | Free tier | $0/month |
-| App Insights | 5GB free | $0/month |
-| Key Vault | Standard | ~$0.03/month |
+| Service         | Tier        | Cost         |
+| --------------- | ----------- | ------------ |
+| Static Web Apps | Free        | $0/month     |
+| Cosmos DB       | Serverless  | ~$0-5/month  |
+| Functions       | Consumption | ~$0-2/month  |
+| Entra ID        | Free tier   | $0/month     |
+| App Insights    | 5GB free    | $0/month     |
+| Key Vault       | Standard    | ~$0.03/month |
 
 **Total: $0-10/month** for typical usage
 
@@ -444,32 +457,34 @@ Using free/consumption tiers:
 
 ### **Required Variables**
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `AZURE_ENTRA_CLIENT_ID` | Application (client) ID from app registration | `d9934146-e585-467b-8932-8cec14b332fd` |
-| `AZURE_ENTRA_TENANT_ID` | Directory (tenant) ID | `7edf4423-ccb3-4275-bc80-64dae3ef0148` |
-| `AZURE_ENTRA_CLIENT_SECRET` | Client secret value | `your-secret-value` |
-| `AZURE_ENTRA_AUTHORITY` | Authentication authority URL | `https://login.microsoftonline.com/{tenant-id}` |
-| `AZURE_ENTRA_REDIRECT_URI` | Where to redirect after login | `http://localhost:3000/callback` |
+| Variable                    | Description                                   | Example                                         |
+| --------------------------- | --------------------------------------------- | ----------------------------------------------- |
+| `AZURE_ENTRA_CLIENT_ID`     | Application (client) ID from app registration | `d9934146-e585-467b-8932-8cec14b332fd`          |
+| `AZURE_ENTRA_TENANT_ID`     | Directory (tenant) ID                         | `7edf4423-ccb3-4275-bc80-64dae3ef0148`          |
+| `AZURE_ENTRA_CLIENT_SECRET` | Client secret value                           | `your-secret-value`                             |
+| `AZURE_ENTRA_AUTHORITY`     | Authentication authority URL                  | `https://login.microsoftonline.com/{tenant-id}` |
+| `AZURE_ENTRA_REDIRECT_URI`  | Where to redirect after login                 | `http://localhost:3000/callback`                |
 
 ### **Optional Variables**
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `AZURE_ENTRA_SCOPES` | OAuth scopes to request | `openid profile email User.Read` |
-| `AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI` | Where to redirect after logout | `http://localhost:3000` |
-| `AZURE_ENTRA_INSTANCE` | Microsoft identity platform instance | `https://login.microsoftonline.com/` |
-| `AZURE_ENTRA_VALIDATE_AUTHORITY` | Validate authority URL | `true` |
-| `AZURE_ENTRA_KNOWN_AUTHORITIES` | Trusted authorities | `login.microsoftonline.com` |
+| Variable                               | Description                          | Default                              |
+| -------------------------------------- | ------------------------------------ | ------------------------------------ |
+| `AZURE_ENTRA_SCOPES`                   | OAuth scopes to request              | `openid profile email User.Read`     |
+| `AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI` | Where to redirect after logout       | `http://localhost:3000`              |
+| `AZURE_ENTRA_INSTANCE`                 | Microsoft identity platform instance | `https://login.microsoftonline.com/` |
+| `AZURE_ENTRA_VALIDATE_AUTHORITY`       | Validate authority URL               | `true`                               |
+| `AZURE_ENTRA_KNOWN_AUTHORITIES`        | Trusted authorities                  | `login.microsoftonline.com`          |
 
 ## Troubleshooting
 
 ### **"az: command not found"**
+
 ```bash
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ```
 
 ### **"gh: command not found"**
+
 ```bash
 # Ubuntu/Debian
 sudo apt install gh
@@ -482,12 +497,14 @@ gh auth login
 ```
 
 ### **"Not logged in to Azure"**
+
 ```bash
 az login
 az account show
 ```
 
 ### **"Deployment failed"**
+
 ```bash
 # Check deployment logs
 az deployment group list \
@@ -500,6 +517,7 @@ az deployment group show \
 ```
 
 ### **"Functions not working"**
+
 ```bash
 # Check function logs
 az functionapp log tail \
@@ -508,9 +526,11 @@ az functionapp log tail \
 ```
 
 ### **"AADSTS50011: Reply URL mismatch"**
+
 **Cause:** Redirect URI doesn't match what's registered
 
 **Solution:**
+
 ```bash
 # Check registered URIs
 az ad app show \
@@ -524,9 +544,11 @@ az ad app update \
 ```
 
 ### **"AADSTS700016: Application not found"**
+
 **Cause:** Wrong client ID or app doesn't exist in tenant
 
 **Solution:**
+
 ```bash
 # Verify client ID
 az ad app show --id $AZURE_ENTRA_CLIENT_ID
@@ -536,23 +558,29 @@ az ad app list --display-name "Phoenix Rooivalk"
 ```
 
 ### **"AADSTS65001: User or administrator has not consented"**
+
 **Cause:** API permissions not granted
 
 **Solution:**
+
 - Go to Azure Portal → App registration → API permissions
 - Click "Grant admin consent for [Your Org]"
 
 ### **"Token missing claims (email, name, etc.)"**
+
 **Cause:** Optional claims not configured
 
 **Solution:**
+
 - Go to Azure Portal → App registration → Token configuration
 - Add optional claims: email, family_name, given_name, upn
 
 ### **"Cannot read .env.local"**
+
 **Cause:** File not in correct location or not loaded
 
 **Solution:**
+
 ```bash
 # Verify file exists
 ls -la apps/docs/.env.local
@@ -566,6 +594,7 @@ pnpm dev
 ## Security Best Practices
 
 ### **1. Never Commit Secrets**
+
 ```bash
 # Always add to .gitignore
 echo ".env.local" >> .gitignore
@@ -577,6 +606,7 @@ git log -p | grep -i "client_secret"
 ```
 
 ### **2. Rotate Secrets Regularly**
+
 ```bash
 # Create new client secret
 az ad app credential reset --id $AZURE_ENTRA_CLIENT_ID --append
@@ -588,16 +618,19 @@ gh secret set AZURE_ENTRA_CLIENT_SECRET --body "new-secret-value"
 ```
 
 ### **3. Use Key Vault for Production**
+
 - Store all secrets in Azure Key Vault
 - Grant managed identity access
 - Reference secrets via Key Vault references
 
 ### **4. Limit Redirect URIs**
+
 - Only add URIs you actually use
 - Use HTTPS in production
 - Avoid wildcards
 
 ### **5. Enable Conditional Access (Optional)**
+
 - Require MFA for sensitive operations
 - Restrict access by location/device
 - Monitor sign-in logs

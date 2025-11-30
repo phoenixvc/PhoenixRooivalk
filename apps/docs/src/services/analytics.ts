@@ -163,8 +163,7 @@ class AnalyticsService {
           typeof document !== "undefined"
             ? document.referrer || "direct"
             : "direct",
-        userAgent:
-          typeof navigator !== "undefined" ? navigator.userAgent : "",
+        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
         screenWidth: typeof window !== "undefined" ? window.innerWidth : 0,
         screenHeight: typeof window !== "undefined" ? window.innerHeight : 0,
         isAuthenticated,
