@@ -816,3 +816,8 @@
   color: rgb(var(--gray));
   margin-top: 0.5rem;
 }
+
+.buttonActive {
+  background-color: var(--phoenix-amber);
+  color: var(--tactical-black);
+}

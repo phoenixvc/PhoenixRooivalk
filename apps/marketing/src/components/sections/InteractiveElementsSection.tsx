@@ -1,9 +1,11 @@
 "use client";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import styles from "./InteractiveElementsSection.module.css";
 import { AdaptationCard } from "./components/AdaptationCard";
+import { ThreatSimulatorSection } from "./components/ThreatSimulatorSection";
+import { formatCurrency } from "@/utils/formatter";
 import { adaptationCardsData } from "./data/adaptationData";
 import {
   calculateROI,
@@ -21,12 +23,6 @@ export const InteractiveElementsSection: React.FC = () => {
 
   const [sensitivity, setSensitivity] =
     useState<SensitivityLevel>("conservative");
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Standard Next.js hydration pattern
-    setIsClient(true);
-  }, []);
 
   const roi = calculateROI(roiInputs, sensitivity);
 
@@ -74,7 +70,7 @@ export const InteractiveElementsSection: React.FC = () => {
                             onClick={() => setSensitivity(option)}
                             className={`btn ${
                               sensitivity === option
-                                ? "btn--primary"
+                                ? styles.buttonActive
                                 : "btn--secondary"
                             } text-sm capitalize`}
                             aria-pressed={sensitivity === option}
@@ -170,10 +166,7 @@ export const InteractiveElementsSection: React.FC = () => {
                   <div className={styles.rangeLabels}>
                     <span className="flex-shrink-0">$100K</span>
                     <span className={styles.rangeValue}>
-                      $
-                      {isClient
-                        ? roiInputs.deploymentCost.toLocaleString()
-                        : roiInputs.deploymentCost.toString()}
+                      {formatCurrency(roiInputs.deploymentCost)}
                     </span>
                     <span className="flex-shrink-0">$1M</span>
                   </div>
@@ -206,9 +199,7 @@ export const InteractiveElementsSection: React.FC = () => {
                         Annual Savings:
                       </span>
                       <span className={styles.resultValueSuccess}>
-                        {isClient
-                          ? `$${Math.round(roi.phoenix.savings).toLocaleString()}`
-                          : `$${Math.round(roi.phoenix.savings).toString()}`}
+                        {formatCurrency(roi.phoenix.savings)}
                       </span>
                     </div>
                     <div
@@ -246,9 +237,7 @@ export const InteractiveElementsSection: React.FC = () => {
                         Annual Savings:
                       </span>
                       <span className={styles.resultValueWarning}>
-                        {isClient
-                          ? `$${Math.round(roi.traditional.savings).toLocaleString()}`
-                          : `$${Math.round(roi.traditional.savings).toString()}`}
+                        {formatCurrency(roi.traditional.savings)}
                       </span>
                     </div>
                     <div
@@ -266,43 +255,7 @@ export const InteractiveElementsSection: React.FC = () => {
           </div>
 
           {/* Interactive Demo CTA */}
-          <div className={styles.demoSection}>
-            <div className={styles.demoHeader}>
-              <h3 className={styles.demoTitle}>Experience the System</h3>
-              <p className={styles.demoSubtitle}>
-                Try our interactive defense simulator to see Phoenix Rooivalk
-                technology in action. Experience real-time threat detection,
-                autonomous response, and tactical coordination.
-              </p>
-            </div>
-
-            <div className={styles.demoCtaContainer}>
-              <div className={styles.demoCta}>
-                <div className={styles.demoCtaContent}>
-                  <div className={styles.demoCtaIcon}>🎮</div>
-                  <h4 className={styles.demoCtaTitle}>
-                    Interactive Simulator Demo
-                  </h4>
-                  <p className={styles.demoCtaDescription}>
-                    Launch the full-featured threat simulator built with Rust
-                    and WebAssembly. Control weapons, deploy drones, and
-                    neutralize aerial threats in real-time.
-                  </p>
-                  <ul className={styles.demoFeatureList}>
-                    <li>✓ Real-time threat detection and tracking</li>
-                    <li>✓ Multiple weapon systems and deployments</li>
-                    <li>✓ Advanced radar visualization</li>
-                    <li>✓ Energy management and synergy systems</li>
-                  </ul>
-                </div>
-                <div className={styles.demoButtonWrapper}>
-                  <Button href="/interactive-demo" variant="primary" size="lg">
-                    🚀 Launch Interactive Demo
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ThreatSimulatorSection />
 
           {/* Key Performance Metrics */}
           <div className={styles.performanceSection}>
