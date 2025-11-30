@@ -440,21 +440,131 @@ h3 {
 
 /* Footer */
 .footer {
-  background: rgb(15, 23, 42) !important;
-  border-top: 1px solid rgb(51, 65, 85);
+  background: linear-gradient(
+    180deg,
+    rgb(15, 23, 42) 0%,
+    rgb(9, 14, 28) 100%
+  ) !important;
+  border-top: 2px solid rgb(249, 115, 22);
+  padding: 3rem 0 1.5rem !important;
+  position: relative;
+}
+
+/* Subtle decorative accent */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(249, 115, 22, 0.08) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.footer__links {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 2rem !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 0 3rem !important;
+  position: relative;
+}
+
+.footer__col {
+  min-width: 0 !important;
 }
 
 .footer__title {
-  color: rgb(242, 244, 246) !important;
-  font-weight: 600;
+  color: rgb(249, 115, 22) !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  margin-bottom: 1rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid rgb(51, 65, 85) !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+}
+
+.footer__items {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.footer__item {
+  margin-bottom: 0.625rem !important;
 }
 
 .footer__link-item {
   color: rgb(148, 163, 184) !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.25rem 0 !important;
 }
 
 .footer__link-item:hover {
   color: rgb(249, 115, 22) !important;
+  transform: translateX(4px) !important;
+  text-decoration: none !important;
+}
+
+.footer__bottom {
+  margin-top: 2rem !important;
+  padding-top: 1.5rem !important;
+  border-top: 1px solid rgb(51, 65, 85) !important;
+}
+
+.footer__copyright {
+  color: rgb(100, 116, 139) !important;
+  font-size: 0.875rem !important;
+  text-align: center !important;
+}
+
+/* Footer responsive adjustments */
+@media (max-width: 1200px) {
+  .footer__links {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem 3rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 2rem 0 1rem !important;
+  }
+
+  .footer__links {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem 2rem !important;
+    padding: 0 1.5rem !important;
+  }
+
+  .footer__title {
+    font-size: 0.7rem !important;
+  }
+
+  .footer__link-item {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__links {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
 }
 
 /* Search */
