@@ -19,7 +19,7 @@ export function getAzureOpenAIClient(): AzureOpenAI {
   if (!azureClient) {
     const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
     const apiKey = process.env.AZURE_OPENAI_API_KEY;
-    const apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview';
+    const apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-10-21';
 
     if (!endpoint) {
       throw new Error('AZURE_OPENAI_ENDPOINT not configured');

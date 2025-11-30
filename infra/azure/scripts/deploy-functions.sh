@@ -98,7 +98,7 @@ EOF
     "COSMOS_DB_DATABASE": "phoenix-docs",
     "AZURE_OPENAI_ENDPOINT": "",
     "AZURE_OPENAI_API_KEY": "",
-    "AZURE_OPENAI_API_VERSION": "2024-08-01-preview",
+    "AZURE_OPENAI_API_VERSION": "2024-10-21",
     "AZURE_OPENAI_CHAT_DEPLOYMENT": "gpt-4",
     "AZURE_OPENAI_EMBEDDING_DEPLOYMENT": "text-embedding-3-small"
   },

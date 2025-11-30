@@ -133,7 +133,7 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
         }
         {
           name: 'AZURE_OPENAI_API_VERSION'
-          value: '2024-08-01-preview'
+          value: '2024-10-21'
         }
         {
           name: 'AZURE_OPENAI_CHAT_DEPLOYMENT'
