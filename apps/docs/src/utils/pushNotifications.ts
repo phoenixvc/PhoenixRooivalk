@@ -1,44 +1,11 @@
 /**
  * Push Notifications Utility
  *
- * Handles browser push notification permissions and FCM token management.
+ * Handles browser push notification permissions and token management.
+ * Uses Azure cloud messaging service for push notification delivery.
  */
 
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  Messaging,
-} from "firebase/messaging";
-import { app, isFirebaseConfigured } from "../services/firebase";
-
-// VAPID key for web push (should be set in Firebase Console)
-// Accessed via Docusaurus customFields at runtime
-const getVapidKey = (): string | null => {
-  if (typeof window === "undefined") return null;
-
-  try {
-    // Try to get from Docusaurus context
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const docusaurusData = (window as any).__DOCUSAURUS__;
-    const vapidKey = docusaurusData?.siteConfig?.customFields?.vapidKey;
-    if (vapidKey && typeof vapidKey === "string" && vapidKey.length > 0) {
-      return vapidKey;
-    }
-  } catch {
-    // Ignore errors
-  }
-
-  // Fallback to environment variable (for non-Docusaurus builds)
-  const envKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
-  if (envKey && envKey.length > 0) {
-    return envKey;
-  }
-
-  return null;
-};
-
-let messagingInstance: Messaging | null = null;
+import { getMessagingService, isCloudConfigured } from "../services/cloud";
 
 /**
  * Check if push notifications are supported in the browser
@@ -84,31 +51,10 @@ export async function requestNotificationPermission(): Promise<
 }
 
 /**
- * Initialize Firebase Cloud Messaging
- */
-function initializeMessaging(): Messaging | null {
-  if (!isFirebaseConfigured() || !app) {
-    console.warn("Firebase not configured for push notifications");
-    return null;
-  }
-
-  if (!messagingInstance) {
-    try {
-      messagingInstance = getMessaging(app);
-    } catch (error) {
-      console.error("Failed to initialize Firebase Messaging:", error);
-      return null;
-    }
-  }
-
-  return messagingInstance;
-}
-
-/**
- * Get FCM token for push notifications
+ * Get push notification token
  * Requires notification permission to be granted first
  */
-export async function getFCMToken(): Promise<string | null> {
+export async function getPushToken(): Promise<string | null> {
   if (!isPushSupported()) {
     console.warn("Push notifications not supported");
     return null;
@@ -119,141 +65,23 @@ export async function getFCMToken(): Promise<string | null> {
     return null;
   }
 
-  const vapidKey = getVapidKey();
-  if (!vapidKey) {
-    console.error(
-      "VAPID key not configured. Push notifications require a valid VAPID key.",
-    );
-    return null;
-  }
-
-  const messaging = initializeMessaging();
-  if (!messaging) {
+  if (!isCloudConfigured()) {
+    console.warn("Cloud services not configured for push notifications");
     return null;
   }
 
   try {
-    // Register service worker if not already registered
-    const registration = await registerServiceWorker();
-    if (!registration) {
-      console.error("Service worker registration failed");
-      return null;
-    }
-
-    const token = await getToken(messaging, {
-      vapidKey,
-      serviceWorkerRegistration: registration,
-    });
-
-    return token || null;
+    const messaging = getMessagingService();
+    const token = await messaging.getToken();
+    return token;
   } catch (error) {
-    console.error("Error getting FCM token:", error);
+    console.error("Error getting push token:", error);
     return null;
   }
 }
 
-/**
- * Get Firebase config from Docusaurus context
- */
-function getFirebaseConfig(): Record<string, string> | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const docusaurusData = (window as any).__DOCUSAURUS__;
-    const config = docusaurusData?.siteConfig?.customFields?.firebaseConfig;
-    if (config && config.apiKey && config.projectId) {
-      return config;
-    }
-  } catch {
-    // Ignore errors
-  }
-
-  return null;
-}
-
-/**
- * Send Firebase config to service worker
- */
-async function sendConfigToServiceWorker(
-  registration: ServiceWorkerRegistration,
-): Promise<void> {
-  const config = getFirebaseConfig();
-  if (!config) {
-    console.warn("Firebase config not available for service worker");
-    return;
-  }
-
-  // Wait for the service worker to be ready
-  const sw =
-    registration.active || registration.waiting || registration.installing;
-  if (!sw) return;
-
-  // Send config via postMessage
-  sw.postMessage({
-    type: "FIREBASE_CONFIG",
-    config,
-  });
-
-  // Also cache the config for SW restart scenarios
-  try {
-    const cache = await caches.open("firebase-config");
-    await cache.put(
-      "config",
-      new Response(JSON.stringify(config), {
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
-  } catch {
-    // Caching is optional, continue without it
-  }
-}
-
-/**
- * Register the service worker for push notifications
- */
-async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-  if (!("serviceWorker" in navigator)) {
-    return null;
-  }
-
-  try {
-    // Check for existing registration
-    let registration = await navigator.serviceWorker.getRegistration(
-      "/firebase-messaging-sw.js",
-    );
-
-    if (!registration) {
-      // Register new service worker
-      registration = await navigator.serviceWorker.register(
-        "/firebase-messaging-sw.js",
-      );
-    }
-
-    // Wait for the service worker to be active
-    if (registration.installing) {
-      await new Promise<void>((resolve) => {
-        registration!.installing!.addEventListener(
-          "statechange",
-          function handler() {
-            if (this.state === "activated") {
-              this.removeEventListener("statechange", handler);
-              resolve();
-            }
-          },
-        );
-      });
-    }
-
-    // Send Firebase config to service worker
-    await sendConfigToServiceWorker(registration);
-
-    return registration;
-  } catch (error) {
-    console.error("Service worker registration failed:", error);
-    return null;
-  }
-}
+// Legacy alias for backward compatibility
+export const getFCMToken = getPushToken;
 
 /**
  * Listen for foreground messages
@@ -267,19 +95,17 @@ export function onForegroundMessage(
     data?: Record<string, string>;
   }) => void,
 ): (() => void) | null {
-  const messaging = initializeMessaging();
-  if (!messaging) {
+  if (!isCloudConfigured()) {
     return null;
   }
 
-  const unsubscribe = onMessage(messaging, (payload) => {
-    callback({
-      notification: payload.notification,
-      data: payload.data,
-    });
-  });
-
-  return unsubscribe;
+  try {
+    const messaging = getMessagingService();
+    return messaging.onMessage(callback);
+  } catch (error) {
+    console.error("Error setting up message listener:", error);
+    return null;
+  }
 }
 
 /**
@@ -305,16 +131,19 @@ export function showLocalNotification(
 }
 
 /**
- * Check if VAPID key is configured
+ * Check if push notifications are configured
  */
-export function isVapidConfigured(): boolean {
-  return getVapidKey() !== null;
+export function isPushConfigured(): boolean {
+  return isCloudConfigured();
 }
+
+// Legacy alias
+export const isVapidConfigured = isPushConfigured;
 
 /**
  * Enable push notifications with full flow:
  * 1. Request permission
- * 2. Get FCM token
+ * 2. Get push token
  * 3. Return token for server registration
  */
 export async function enablePushNotifications(): Promise<{
@@ -333,8 +162,8 @@ export async function enablePushNotifications(): Promise<{
     };
   }
 
-  // Check VAPID key configuration
-  if (!isVapidConfigured()) {
+  // Check configuration
+  if (!isPushConfigured()) {
     return {
       success: false,
       token: null,
@@ -357,8 +186,8 @@ export async function enablePushNotifications(): Promise<{
     };
   }
 
-  // Get FCM token
-  const token = await getFCMToken();
+  // Get push token
+  const token = await getPushToken();
   if (!token) {
     return {
       success: false,

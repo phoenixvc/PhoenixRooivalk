@@ -1,11 +1,11 @@
 /**
  * Support Service
  *
- * Handles contact form submissions and support ticket management.
+ * Handles contact form submissions and support ticket management
+ * via Azure Functions.
  */
 
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { app } from "./firebase";
+import { getFunctionsService, isCloudConfigured } from "./cloud";
 
 /**
  * Contact form data structure
@@ -56,7 +56,6 @@ export interface SupportTicket {
 }
 
 class SupportService {
-  private functions: ReturnType<typeof getFunctions> | null = null;
   private isInitialized = false;
 
   /**
@@ -65,14 +64,24 @@ class SupportService {
   init(): boolean {
     if (this.isInitialized) return true;
 
-    if (!app) {
-      console.warn("Firebase app not initialized");
+    if (!isCloudConfigured() || typeof window === "undefined") {
+      console.warn("Support Service: Azure not configured");
       return false;
     }
 
-    this.functions = getFunctions(app);
     this.isInitialized = true;
     return true;
+  }
+
+  /**
+   * Call an Azure Function
+   */
+  private async callFunction<T>(
+    functionName: string,
+    data: Record<string, unknown>,
+  ): Promise<T> {
+    const functionsService = getFunctionsService();
+    return functionsService.call<T>(functionName, data);
   }
 
   /**
@@ -83,13 +92,10 @@ class SupportService {
       throw new Error("Support service not initialized");
     }
 
-    const submitContact = httpsCallable<ContactFormData, ContactFormResponse>(
-      this.functions!,
+    return this.callFunction<ContactFormResponse>(
       "submitContactForm",
+      data as unknown as Record<string, unknown>,
     );
-
-    const result = await submitContact(data);
-    return result.data;
   }
 
   /**
@@ -106,13 +112,10 @@ class SupportService {
     }
 
     try {
-      const getTimestamps = httpsCallable<void, ContentTimestamps>(
-        this.functions!,
+      return await this.callFunction<ContentTimestamps>(
         "getLatestContentTimestamps",
+        {},
       );
-
-      const result = await getTimestamps();
-      return result.data;
     } catch (error) {
       console.error("Failed to fetch content timestamps:", error);
       // Return defaults on error
@@ -132,13 +135,11 @@ class SupportService {
       throw new Error("Support service not initialized");
     }
 
-    const getTickets = httpsCallable<void, { tickets: SupportTicket[] }>(
-      this.functions!,
+    const result = await this.callFunction<{ tickets: SupportTicket[] }>(
       "getUserTickets",
+      {},
     );
-
-    const result = await getTickets();
-    return result.data.tickets;
+    return result.tickets;
   }
 
   /**
@@ -153,13 +154,11 @@ class SupportService {
       throw new Error("Support service not initialized");
     }
 
-    const getTickets = httpsCallable<
-      typeof filters,
-      { tickets: SupportTicket[] }
-    >(this.functions!, "getAdminTickets");
-
-    const result = await getTickets(filters);
-    return result.data.tickets;
+    const result = await this.callFunction<{ tickets: SupportTicket[] }>(
+      "getAdminTickets",
+      filters || {},
+    );
+    return result.tickets;
   }
 
   /**
@@ -174,13 +173,11 @@ class SupportService {
       throw new Error("Support service not initialized");
     }
 
-    const updateTicket = httpsCallable<
-      { ticketId: string; status: string; response?: string },
-      { success: boolean }
-    >(this.functions!, "updateTicketStatus");
-
-    const result = await updateTicket({ ticketId, status, response });
-    return result.data;
+    return this.callFunction<{ success: boolean }>("updateTicketStatus", {
+      ticketId,
+      status,
+      response,
+    });
   }
 }
 

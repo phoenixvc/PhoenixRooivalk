@@ -25,7 +25,7 @@ import {
   updateComment,
   organizeIntoThreads,
 } from "../../services/commentService";
-import { isFirebaseConfigured } from "../../services/firebase";
+import { isCloudConfigured } from "../../services/cloud";
 import { CommentForm } from "./CommentForm";
 import { CommentItem } from "./CommentItem";
 import { EditCommentModal } from "./EditCommentModal";
@@ -70,7 +70,7 @@ export function CommentSection({
 
   // Subscribe to real-time updates
   useEffect(() => {
-    if (!isFirebaseConfigured() || authLoading) {
+    if (!isCloudConfigured() || authLoading) {
       setIsLoading(false);
       return;
     }
@@ -213,8 +213,8 @@ export function CommentSection({
     setEditingComment(null);
   }, []);
 
-  // Don't render if Firebase isn't configured
-  if (!isFirebaseConfigured()) {
+  // Don't render if cloud services aren't configured
+  if (!isCloudConfigured()) {
     return null;
   }
 

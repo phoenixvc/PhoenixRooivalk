@@ -6,20 +6,14 @@
  * - Time spent on pages
  * - Conversion funnel metrics
  * - User engagement stats
+ *
+ * Uses Azure Cosmos DB for data storage via cloud abstraction.
  */
 
 import React, { useEffect, useState } from "react";
 import Layout from "@theme/Layout";
 import { useAuth } from "../../contexts/AuthContext";
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-} from "firebase/firestore";
-import { isFirebaseConfigured } from "../../services/firebase";
+import { getDatabaseService, isCloudConfigured } from "../../services/cloud";
 import styles from "./analytics.module.css";
 
 // Admin user IDs - configure via environment variable ADMIN_USER_IDS (comma-separated)
@@ -52,6 +46,25 @@ interface ConversionMetrics {
   conversionRate: number;
 }
 
+interface PageViewDoc {
+  pageUrl?: string;
+  timestamp?: string;
+}
+
+interface ConversionDoc {
+  eventType?: string;
+  timestamp?: string;
+}
+
+interface SessionDoc {
+  sessionId?: string;
+  isAuthenticated?: boolean;
+  pageViews?: number;
+  totalTimeMs?: number;
+  convertedToSignup?: boolean;
+  lastActivity?: string;
+}
+
 export default function AnalyticsDashboard(): React.ReactElement {
   const { user, loading } = useAuth();
   const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
@@ -59,7 +72,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
   const [conversions, setConversions] = useState<ConversionMetrics | null>(
     null,
   );
-  const [recentSessions, setRecentSessions] = useState<any[]>([]);
+  const [recentSessions, setRecentSessions] = useState<SessionDoc[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState(7); // Last 7 days
@@ -74,7 +87,7 @@ export default function AnalyticsDashboard(): React.ReactElement {
         )));
 
   useEffect(() => {
-    if (!loading && isAdmin && isFirebaseConfigured()) {
+    if (!loading && isAdmin && isCloudConfigured()) {
       fetchAnalytics();
     }
   }, [loading, isAdmin, dateRange]);
@@ -84,32 +97,32 @@ export default function AnalyticsDashboard(): React.ReactElement {
     setError(null);
 
     try {
-      const db = getFirestore();
+      const db = getDatabaseService();
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - dateRange);
 
       // Fetch daily stats
-      const dailyQuery = query(
-        collection(db, "analytics_daily"),
-        orderBy("date", "desc"),
-        limit(dateRange),
+      const dailyResult = await db.queryDocuments<DailyStats>(
+        "analytics_daily",
+        {
+          orderBy: [{ field: "date", direction: "desc" }],
+          limit: dateRange,
+        },
       );
-      const dailySnapshot = await getDocs(dailyQuery);
-      const daily = dailySnapshot.docs.map((doc) => doc.data() as DailyStats);
-      setDailyStats(daily);
+      setDailyStats(dailyResult.items);
 
       // Fetch page views for top pages
-      const pageViewsQuery = query(
-        collection(db, "analytics_pageviews"),
-        orderBy("timestamp", "desc"),
-        limit(1000),
+      const pageViewsResult = await db.queryDocuments<PageViewDoc>(
+        "analytics_pageviews",
+        {
+          orderBy: [{ field: "timestamp", direction: "desc" }],
+          limit: 1000,
+        },
       );
-      const pageViewsSnapshot = await getDocs(pageViewsQuery);
 
       // Aggregate page views
       const pageViewCounts: Record<string, number> = {};
-      pageViewsSnapshot.docs.forEach((doc) => {
-        const data = doc.data();
+      pageViewsResult.items.forEach((data) => {
         const url = data.pageUrl || "unknown";
         pageViewCounts[url] = (pageViewCounts[url] || 0) + 1;
       });
@@ -122,12 +135,13 @@ export default function AnalyticsDashboard(): React.ReactElement {
       setTopPages(sortedPages);
 
       // Fetch conversion events
-      const conversionsQuery = query(
-        collection(db, "analytics_conversions"),
-        orderBy("timestamp", "desc"),
-        limit(500),
+      const conversionsResult = await db.queryDocuments<ConversionDoc>(
+        "analytics_conversions",
+        {
+          orderBy: [{ field: "timestamp", direction: "desc" }],
+          limit: 500,
+        },
       );
-      const conversionsSnapshot = await getDocs(conversionsQuery);
 
       // Aggregate conversions
       const conversionCounts = {
@@ -136,9 +150,8 @@ export default function AnalyticsDashboard(): React.ReactElement {
         signup_started: 0,
         signup_completed: 0,
       };
-      conversionsSnapshot.docs.forEach((doc) => {
-        const data = doc.data();
-        if (data.eventType in conversionCounts) {
+      conversionsResult.items.forEach((data) => {
+        if (data.eventType && data.eventType in conversionCounts) {
           conversionCounts[data.eventType as keyof typeof conversionCounts]++;
         }
       });
@@ -159,13 +172,14 @@ export default function AnalyticsDashboard(): React.ReactElement {
       });
 
       // Fetch recent sessions
-      const sessionsQuery = query(
-        collection(db, "analytics_sessions"),
-        orderBy("lastActivity", "desc"),
-        limit(20),
+      const sessionsResult = await db.queryDocuments<SessionDoc>(
+        "analytics_sessions",
+        {
+          orderBy: [{ field: "lastActivity", direction: "desc" }],
+          limit: 20,
+        },
       );
-      const sessionsSnapshot = await getDocs(sessionsQuery);
-      setRecentSessions(sessionsSnapshot.docs.map((doc) => doc.data()));
+      setRecentSessions(sessionsResult.items);
     } catch (err) {
       console.error("Failed to fetch analytics:", err);
       setError("Failed to load analytics data");
@@ -174,13 +188,13 @@ export default function AnalyticsDashboard(): React.ReactElement {
     }
   };
 
-  if (!isFirebaseConfigured()) {
+  if (!isCloudConfigured()) {
     return (
       <Layout title="Analytics Dashboard">
         <main className="container margin-vert--xl">
           <div className={styles.errorCard}>
-            <h2>Firebase Not Configured</h2>
-            <p>Analytics requires Firebase to be configured.</p>
+            <h2>Azure Not Configured</h2>
+            <p>Analytics requires Azure cloud services to be configured.</p>
           </div>
         </main>
       </Layout>

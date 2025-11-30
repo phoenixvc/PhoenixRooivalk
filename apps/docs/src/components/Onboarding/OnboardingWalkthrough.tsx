@@ -462,7 +462,7 @@ export function OnboardingWalkthrough({
       saveUserDetails(user.uid, details);
       setUserDetails(details);
 
-      // Save to Firebase for persistence
+      // Save to cloud for persistence
       await saveProfileToCloud({
         firstName: details.firstName,
         lastName: details.lastName,
@@ -487,7 +487,7 @@ export function OnboardingWalkthrough({
       // Save to localStorage for quick access
       saveUserFunFacts(user.uid, facts);
 
-      // Save to Firebase for persistence
+      // Save to cloud for persistence
       await saveProfileToCloud({
         funFacts: facts,
         funFactsGeneratedAt: new Date().toISOString(),
@@ -523,7 +523,7 @@ export function OnboardingWalkthrough({
         selectedTemplate.roles,
       );
 
-      // Save to Firebase for persistence
+      // Save to cloud for persistence
       await saveProfileToCloud({
         profileKey: selectedTemplate.templateKey,
         roles: selectedTemplate.roles,

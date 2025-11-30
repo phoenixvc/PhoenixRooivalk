@@ -12,7 +12,7 @@ interface UserProfileProps {
  *
  * Displays user authentication status, profile information, and cloud sync controls.
  * Supports multiple display modes: compact (dropdown) and full (card).
- * Handles Firebase configuration states and loading/authenticated/guest states.
+ * Handles cloud configuration states and loading/authenticated/guest states.
  *
  * @param {UserProfileProps} props - Component props
  * @param {boolean} [props.compact=false] - Whether to render in compact dropdown mode
@@ -60,7 +60,7 @@ export function UserProfile({
     };
   }, [showDropdown]);
 
-  // If Firebase isn't configured, show local-only mode
+  // If cloud services aren't configured, show local-only mode
   if (!isConfigured) {
     return (
       <div className="user-profile user-profile--local">

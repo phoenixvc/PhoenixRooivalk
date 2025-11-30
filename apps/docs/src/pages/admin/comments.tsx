@@ -17,7 +17,7 @@ import {
   getCommentStats,
   reviewComment,
 } from "../../services/commentService";
-import { isFirebaseConfigured } from "../../services/firebase";
+import { isCloudConfigured } from "../../services/cloud";
 import type {
   Comment,
   CommentStats,
@@ -49,7 +49,7 @@ export default function CommentsAdminDashboard(): React.ReactElement {
 
   // Load data based on active tab
   const loadData = useCallback(async () => {
-    if (!isFirebaseConfigured() || !isAdmin) return;
+    if (!isCloudConfigured() || !isAdmin) return;
 
     setIsLoading(true);
     try {
@@ -125,13 +125,13 @@ export default function CommentsAdminDashboard(): React.ReactElement {
   };
 
   // Render error states
-  if (!isFirebaseConfigured()) {
+  if (!isCloudConfigured()) {
     return (
       <Layout title="Comments Dashboard">
         <main className="container margin-vert--xl">
           <div className={styles.errorCard}>
-            <h2>Firebase Not Configured</h2>
-            <p>Comments require Firebase to be configured.</p>
+            <h2>Azure Not Configured</h2>
+            <p>Comments require Azure cloud services to be configured.</p>
           </div>
         </main>
       </Layout>
