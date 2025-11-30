@@ -16,7 +16,11 @@
     "@azure/cosmos": "^4.0.0",
     "@azure/identity": "^4.0.0",
     "@azure/keyvault-secrets": "^4.8.0",
-    "openai": "^4.28.0"
+    "@types/uuid": "^10.0.0",
+    "jose": "^6.1.2",
+    "openai": "^4.28.0",
+    "uuid": "^13.0.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@azure/functions": "^4.3.0",
