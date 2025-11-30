@@ -1,8 +1,8 @@
 /**
- * Support Functions for Azure
+ * Support HTTP Endpoints
  *
- * Handles contact form submissions, support tickets, and notification timestamps.
- * Ported from Firebase Cloud Functions to Azure Functions.
+ * Thin HTTP handler layer that delegates to SupportService.
+ * Uses shared utilities for error handling and rate limiting.
  */
 
 import {
@@ -11,96 +11,14 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { getContainer, queryDocuments, upsertDocument } from "../lib/cosmos";
 import { validateAuthHeader } from "../lib/auth";
-
-/**
- * Contact form submission data
- */
-interface ContactFormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  category: "general" | "technical" | "sales" | "partnership" | "feedback";
-}
-
-/**
- * Contact ticket stored in Cosmos DB
- */
-interface ContactTicket extends ContactFormData {
-  id: string;
-  userId?: string;
-  status: "new" | "in_progress" | "resolved" | "closed";
-  priority: "low" | "medium" | "high";
-  createdAt: string;
-  updatedAt: string;
-  ticketNumber: string;
-}
-
-// In-memory rate limiting
-const rateLimits = new Map<string, { count: number; resetAt: number }>();
-
-/**
- * Check rate limit
- */
-function checkRateLimit(
-  key: string,
-  maxRequests: number = 5,
-  windowMs: number = 60000,
-): boolean {
-  const now = Date.now();
-  const limit = rateLimits.get(key);
-
-  if (!limit || now > limit.resetAt) {
-    rateLimits.set(key, { count: 1, resetAt: now + windowMs });
-    return true;
-  }
-
-  if (limit.count >= maxRequests) {
-    return false;
-  }
-
-  limit.count++;
-  return true;
-}
-
-/**
- * Generate a unique ticket number
- */
-function generateTicketNumber(): string {
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `PHX-${timestamp}-${random}`;
-}
-
-/**
- * Determine priority based on category
- */
-function determinePriority(
-  category: ContactFormData["category"],
-): ContactTicket["priority"] {
-  switch (category) {
-    case "technical":
-      return "high";
-    case "sales":
-    case "partnership":
-      return "medium";
-    default:
-      return "low";
-  }
-}
-
-/**
- * Sanitize input (basic XSS prevention)
- */
-function sanitize(str: string): string {
-  return str
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .trim();
-}
+import {
+  Errors,
+  successResponse,
+  applyRateLimit,
+  RateLimits,
+} from "../lib/utils";
+import { supportService, ContactFormData } from "../services";
 
 /**
  * Submit contact form handler
@@ -109,54 +27,17 @@ async function submitContactFormHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  // Rate limiting - use IP-based identifier for anonymous submissions
-  const clientIp =
-    request.headers.get("x-forwarded-for")?.split(",")[0] || "anonymous";
-  const rateLimitKey = `contact_${clientIp}`;
-
-  if (!checkRateLimit(rateLimitKey, 5, 60000)) {
-    return {
-      status: 429,
-      jsonBody: {
-        error: "Too many requests. Please wait before submitting another message.",
-        code: "resource-exhausted",
-      },
-    };
-  }
+  // Rate limiting for form submissions
+  const rateLimit = applyRateLimit(request, "contact-form", RateLimits.form);
+  if (!rateLimit.allowed) return rateLimit.response!;
 
   try {
     const data = (await request.json()) as ContactFormData;
 
     // Validate input
-    if (!data.name || !data.email || !data.subject || !data.message) {
-      return {
-        status: 400,
-        jsonBody: {
-          error: "Name, email, subject, and message are required",
-          code: "invalid-argument",
-        },
-      };
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-      return {
-        status: 400,
-        jsonBody: { error: "Invalid email format", code: "invalid-argument" },
-      };
-    }
-
-    // Validate category
-    const validCategories = [
-      "general",
-      "technical",
-      "sales",
-      "partnership",
-      "feedback",
-    ];
-    if (!validCategories.includes(data.category)) {
-      data.category = "general";
+    const validationError = supportService.validateContactForm(data);
+    if (validationError) {
+      return Errors.badRequest(validationError);
     }
 
     // Check for authenticated user
@@ -164,54 +45,22 @@ async function submitContactFormHandler(
       request.headers.get("authorization"),
     );
 
-    const ticketNumber = generateTicketNumber();
-    const now = new Date().toISOString();
-    const ticketId = `ticket_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const result = await supportService.submitContactForm(
+      data,
+      authResult.valid ? authResult.userId : undefined,
+    );
 
-    const ticket: ContactTicket = {
-      id: ticketId,
-      name: sanitize(data.name),
-      email: data.email.toLowerCase().trim(),
-      subject: sanitize(data.subject),
-      message: sanitize(data.message),
-      category: data.category,
-      userId: authResult.valid ? authResult.userId : undefined,
-      status: "new",
-      priority: determinePriority(data.category),
-      ticketNumber,
-      createdAt: now,
-      updatedAt: now,
-    };
+    context.log(`Contact form submitted: ${result.ticketNumber}`);
 
-    // Save to Cosmos DB
-    await upsertDocument("support_tickets", ticket);
-
-    context.log(`Contact form submitted: ${ticketNumber}`);
-
-    // Update latest support timestamp for notifications
-    await upsertDocument("metadata", {
-      id: "latest_updates",
-      supportUpdatedAt: now,
+    return successResponse({
+      success: true,
+      ticketNumber: result.ticketNumber,
+      message:
+        "Your message has been received. We'll respond within 1-2 business days.",
     });
-
-    return {
-      status: 200,
-      jsonBody: {
-        success: true,
-        ticketNumber,
-        message:
-          "Your message has been received. We'll respond within 1-2 business days.",
-      },
-    };
   } catch (error) {
     context.error("Failed to submit contact form:", error);
-    return {
-      status: 500,
-      jsonBody: {
-        error: "Failed to submit contact form. Please try again.",
-        code: "internal",
-      },
-    };
+    return Errors.internal("Failed to submit contact form. Please try again.");
   }
 }
 
@@ -223,56 +72,11 @@ async function getLatestContentTimestampsHandler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
-    const container = getContainer("metadata");
-
-    try {
-      const { resource } = await container
-        .item("latest_updates", "latest_updates")
-        .read();
-
-      if (resource) {
-        return {
-          status: 200,
-          jsonBody: {
-            newsUpdatedAt: resource.newsUpdatedAt
-              ? new Date(resource.newsUpdatedAt).getTime()
-              : Date.now(),
-            supportUpdatedAt: resource.supportUpdatedAt
-              ? new Date(resource.supportUpdatedAt).getTime()
-              : Date.now(),
-            docsUpdatedAt: resource.docsUpdatedAt
-              ? new Date(resource.docsUpdatedAt).getTime()
-              : Date.now(),
-          },
-        };
-      }
-    } catch {
-      // Document doesn't exist
-    }
-
-    // Initialize with current timestamps if not exists
-    const now = new Date().toISOString();
-    await upsertDocument("metadata", {
-      id: "latest_updates",
-      newsUpdatedAt: now,
-      supportUpdatedAt: now,
-      docsUpdatedAt: now,
-    });
-
-    return {
-      status: 200,
-      jsonBody: {
-        newsUpdatedAt: Date.now(),
-        supportUpdatedAt: Date.now(),
-        docsUpdatedAt: Date.now(),
-      },
-    };
+    const timestamps = await supportService.getLatestTimestamps();
+    return successResponse(timestamps);
   } catch (error) {
     context.error("Failed to get content timestamps:", error);
-    return {
-      status: 500,
-      jsonBody: { error: "Failed to get content timestamps", code: "internal" },
-    };
+    return Errors.internal("Failed to get content timestamps");
   }
 }
 
@@ -288,29 +92,15 @@ async function getUserTicketsHandler(
   );
 
   if (!authResult.valid) {
-    return {
-      status: 401,
-      jsonBody: { error: "Must be logged in to view tickets", code: "unauthenticated" },
-    };
+    return Errors.unauthenticated();
   }
 
   try {
-    const tickets = await queryDocuments<ContactTicket>(
-      "support_tickets",
-      "SELECT * FROM c WHERE c.userId = @userId ORDER BY c.createdAt DESC OFFSET 0 LIMIT 50",
-      [{ name: "@userId", value: authResult.userId! }],
-    );
-
-    return {
-      status: 200,
-      jsonBody: { tickets },
-    };
+    const result = await supportService.getUserTickets(authResult.userId!);
+    return successResponse({ tickets: result.items });
   } catch (error) {
     context.error("Failed to get user tickets:", error);
-    return {
-      status: 500,
-      jsonBody: { error: "Failed to get tickets", code: "internal" },
-    };
+    return Errors.internal("Failed to get tickets");
   }
 }
 
@@ -326,13 +116,7 @@ async function getAdminTicketsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return {
-      status: 403,
-      jsonBody: {
-        error: "Only admins can view all tickets",
-        code: "permission-denied",
-      },
-    };
+    return Errors.forbidden();
   }
 
   try {
@@ -340,42 +124,15 @@ async function getAdminTicketsHandler(
       request.query.entries(),
     );
 
-    let query = "SELECT * FROM c";
-    const conditions: string[] = [];
-    const parameters: Array<{ name: string; value: string }> = [];
-
-    if (status) {
-      conditions.push("c.status = @status");
-      parameters.push({ name: "@status", value: status });
-    }
-
-    if (category) {
-      conditions.push("c.category = @category");
-      parameters.push({ name: "@category", value: category });
-    }
-
-    if (conditions.length > 0) {
-      query += " WHERE " + conditions.join(" AND ");
-    }
-
-    query += ` ORDER BY c.createdAt DESC OFFSET 0 LIMIT ${parseInt(limit || "100", 10)}`;
-
-    const tickets = await queryDocuments<ContactTicket>(
-      "support_tickets",
-      query,
-      parameters,
+    const result = await supportService.getAdminTickets(
+      { status, category },
+      parseInt(limit || "100", 10),
     );
 
-    return {
-      status: 200,
-      jsonBody: { tickets },
-    };
+    return successResponse({ tickets: result.items });
   } catch (error) {
     context.error("Failed to get admin tickets:", error);
-    return {
-      status: 500,
-      jsonBody: { error: "Failed to get tickets", code: "internal" },
-    };
+    return Errors.internal("Failed to get tickets");
   }
 }
 
@@ -391,10 +148,7 @@ async function updateTicketStatusHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return {
-      status: 403,
-      jsonBody: { error: "Only admins can update tickets", code: "permission-denied" },
-    };
+    return Errors.forbidden();
   }
 
   try {
@@ -404,53 +158,30 @@ async function updateTicketStatusHandler(
       response?: string;
     };
 
-    const validStatuses = ["new", "in_progress", "resolved", "closed"];
-    if (!validStatuses.includes(status)) {
-      return {
-        status: 400,
-        jsonBody: { error: "Invalid status", code: "invalid-argument" },
-      };
+    if (!ticketId || !status) {
+      return Errors.badRequest("ticketId and status are required");
     }
 
-    // Get existing ticket
-    const container = getContainer("support_tickets");
-    const { resource: existingTicket } = await container
-      .item(ticketId, ticketId)
-      .read<ContactTicket>();
+    const ticket = await supportService.updateTicketStatus(
+      ticketId,
+      status as "new" | "in_progress" | "resolved" | "closed",
+      response,
+      authResult.userId,
+    );
 
-    if (!existingTicket) {
-      return {
-        status: 404,
-        jsonBody: { error: "Ticket not found", code: "not-found" },
-      };
+    if (!ticket) {
+      return Errors.notFound("Ticket not found");
     }
-
-    const now = new Date().toISOString();
-    const updatedTicket = {
-      ...existingTicket,
-      status,
-      updatedAt: now,
-      ...(response && {
-        adminResponse: response,
-        respondedAt: now,
-        respondedBy: authResult.userId,
-      }),
-    };
-
-    await upsertDocument("support_tickets", updatedTicket);
 
     context.log(`Ticket ${ticketId} updated to ${status}`);
 
-    return {
-      status: 200,
-      jsonBody: { success: true },
-    };
+    return successResponse({ success: true });
   } catch (error) {
+    if (error instanceof Error && error.message === "Invalid status") {
+      return Errors.badRequest("Invalid status");
+    }
     context.error("Failed to update ticket:", error);
-    return {
-      status: 500,
-      jsonBody: { error: "Failed to update ticket", code: "internal" },
-    };
+    return Errors.internal("Failed to update ticket");
   }
 }
 
