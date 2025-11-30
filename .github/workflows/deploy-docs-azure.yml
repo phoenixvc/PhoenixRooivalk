@@ -145,6 +145,14 @@ jobs:
             exit 1
           fi
 
+      # Copy build to a fresh location to avoid Azure SWA stored config override
+      - name: Prepare deployment folder
+        run: |
+          mkdir -p _swa_deploy
+          cp -r apps/docs/build/* _swa_deploy/
+          echo "=== Deployment folder contents ==="
+          ls -la _swa_deploy/
+
       - name: Deploy to Azure Static Web Apps
         id: deploy
         uses: Azure/static-web-apps-deploy@v1
@@ -152,8 +160,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          # Point directly to pre-built output; skip_app_build bypasses Oryx entirely
-          app_location: "apps/docs/build"
+          # Use fresh folder to avoid Azure SWA stored config overriding app_location
+          app_location: "_swa_deploy"
           skip_app_build: true
           skip_api_build: true
           production_branch: "main"
