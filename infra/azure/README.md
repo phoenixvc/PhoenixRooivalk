@@ -118,7 +118,9 @@ CLOUD_PROVIDER=azure
 # Azure Functions
 AZURE_FUNCTIONS_BASE_URL=https://your-func.azurewebsites.net
 
+
 # Azure Entra ID
+AZURE_ENTRA_CLIENT_ID=your-client-id
 AZURE_ENTRA_CLIENT_ID=your-client-id
 AZURE_ENTRA_TENANT_ID=your-tenant-id
 AZURE_ENTRA_AUTHORITY=https://login.microsoftonline.com/your-tenant-id
