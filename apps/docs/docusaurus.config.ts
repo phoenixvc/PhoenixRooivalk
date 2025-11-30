@@ -327,9 +327,18 @@ const config: Config = {
         {
           title: "PLATFORM",
           items: [
-            { label: "Overview", to: "/docs/overview" },
-            { label: "Features", to: "/docs/technical/technical-architecture" },
-            { label: "Pricing", to: "/docs/business/roi-analysis" },
+            {
+              label: "Overview",
+              to: "/docs/overview",
+            },
+            {
+              label: "Features",
+              to: "/docs/technical/technical-architecture",
+            },
+            {
+              label: "Pricing",
+              to: "/docs/business/roi-analysis",
+            },
           ],
         },
         {
@@ -352,8 +361,14 @@ const config: Config = {
         {
           title: "RESOURCES",
           items: [
-            { label: "News", to: "/news" },
-            { label: "Changelog", to: "/docs/resources/documentation-status" },
+            {
+              label: "News",
+              to: "/news",
+            },
+            {
+              label: "Changelog",
+              to: "/docs/resources/documentation-status",
+            },
             {
               label: "Security and Compliance",
               to: "/docs/legal/compliance-framework",
@@ -363,8 +378,14 @@ const config: Config = {
         {
           title: "COMPANY",
           items: [
-            { label: "About", href: "https://phoenixrooivalk.netlify.app" },
-            { label: "Contact and Support", to: "/contact" },
+            {
+              label: "About",
+              href: "https://phoenixrooivalk.netlify.app",
+            },
+            {
+              label: "Contact and Support",
+              to: "/contact",
+            },
             {
               label: "GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
