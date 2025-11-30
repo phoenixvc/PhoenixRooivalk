@@ -67,8 +67,8 @@ case "$LOCATION" in
     *) LOCATION_SHORT="${LOCATION:0:4}" ;;
 esac
 
-# Resource Group naming: rg-{project}-{env}-{region}
-RESOURCE_GROUP="rg-rooivalk-${ENV_SHORT}-${LOCATION_SHORT}"
+# Resource Group naming: {env}-{region}-rg-rooivalk (same pattern as resources)
+RESOURCE_GROUP="${ENV_SHORT}-${LOCATION_SHORT}-rg-rooivalk"
 
 # Resource naming: {env}-{region}-{type}-rooivalk
 # Following Azure naming best practices: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
