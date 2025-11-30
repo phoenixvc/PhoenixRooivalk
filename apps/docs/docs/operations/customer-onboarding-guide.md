@@ -2,6 +2,12 @@
 id: customer-onboarding-guide
 title: Customer Onboarding Guide
 sidebar_label: Customer Onboarding Guide
+difficulty: intermediate
+estimated_reading_time: 9
+points: 15
+tags:
+  - operations
+  - counter-uas
 ---
 
 # Phoenix Rooivalk Customer Onboarding Guide

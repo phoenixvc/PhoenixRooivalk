@@ -6,14 +6,23 @@ use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 
 pub mod connection;
 pub mod db;
+pub mod db_errors;
 pub mod handlers;
+pub mod handlers_x402;
 pub mod migrations;
 pub mod models;
+pub mod rate_limit;
 pub mod repository;
 
+/// Application state shared across all handlers
 #[derive(Clone)]
 pub struct AppState {
+    /// Database connection pool
     pub pool: Pool<Sqlite>,
+    /// x402 payment protocol state (None if not configured)
+    pub x402: Option<handlers_x402::X402State>,
+    /// Rate limiter for x402 endpoints
+    pub rate_limiter: rate_limit::X402RateLimiter,
 }
 
 pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
@@ -30,6 +39,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
                 sqlx::query("PRAGMA foreign_keys = ON")
                     .execute(&mut *conn)
                     .await?;
+                // Enable extended result codes so we get specific constraint violation codes
+                // (e.g., 2067 for UNIQUE, 1555 for PRIMARY KEY) instead of generic code 19.
+                // This improves the accuracy of is_unique_constraint_violation() detection.
+                sqlx::query("PRAGMA extended_result_codes = ON")
+                    .execute(&mut *conn)
+                    .await?;
                 Ok(())
             })
         })
@@ -40,7 +55,23 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
     let migration_manager = crate::migrations::MigrationManager::new(pool.clone());
     migration_manager.migrate().await?;
 
-    let state = AppState { pool: pool.clone() };
+    // Initialize x402 payment protocol (once at startup, not per-request)
+    let x402 = handlers_x402::X402State::from_env();
+    if x402.is_some() {
+        tracing::info!("x402 payment protocol enabled");
+    } else {
+        tracing::debug!("x402 payment protocol disabled (not configured)");
+    }
+
+    // Initialize rate limiter for x402 endpoints
+    let rate_limiter = rate_limit::X402RateLimiter::new();
+    tracing::debug!("x402 rate limiter initialized");
+
+    let state = AppState {
+        pool: pool.clone(),
+        x402,
+        rate_limiter,
+    };
     let app = Router::new()
         .route("/health", get(handlers::health))
         // Evidence
@@ -73,6 +104,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
             "/jamming-operations/{id}",
             get(handlers::get_jamming_operation),
         )
+        // x402 Premium Evidence Verification
+        .route(
+            "/api/v1/evidence/verify-premium",
+            post(handlers_x402::verify_evidence_premium),
+        )
+        .route("/api/v1/x402/status", get(handlers_x402::x402_status))
         .with_state(state);
     Ok((app, pool))
 }

@@ -4,6 +4,7 @@ import { resolve } from "path";
 import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
+import { remarkDocMetadata } from "./src/plugins/remark-doc-metadata";
 
 // Node.js environment declarations
 declare const process: {
@@ -32,20 +33,130 @@ const envClass =
     ? "navbar-env-badge"
     : "navbar-env-badge navbar-env-badge--preview";
 
+// Allow override of broken links behavior via environment variable
+// DOCUSAURUS_BROKEN_LINKS: 'warn' (default), 'throw' (fail build), 'ignore' (skip)
+const onBrokenLinksConfig =
+  (process.env.DOCUSAURUS_BROKEN_LINKS as
+    | "ignore"
+    | "log"
+    | "warn"
+    | "throw") || "warn";
+
 const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
+// Firebase configuration from environment variables (exposed to client via customFields)
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY || "",
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.FIREBASE_APP_ID || "",
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
+};
+
 const config: Config = {
-  title: "PhoenixRooivalk Docs",
-  favicon: "img/favicon.ico",
+  title: "Phoenix Rooivalk Documentation",
+  tagline: "Autonomous Counter-UAS Defense Platform",
+  favicon: "img/favicon.svg",
   url: "https://docs-phoenixrooivalk.netlify.app",
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",
-  onBrokenLinks: "ignore",
-  markdown: {
-    format: "md",
+  // Custom fields exposed to client-side code via useDocusaurusContext()
+  customFields: {
+    firebaseConfig,
   },
+  onBrokenLinks: onBrokenLinksConfig,
+  // Note: onBrokenMarkdownLinks is deprecated in Docusaurus v4
+  // It should be migrated to markdown.preprocessor in the future
+  onBrokenMarkdownLinks: onBrokenLinksConfig,
+  onBrokenAnchors: onBrokenLinksConfig,
+  headTags: [
+    // Prevent flash of unstyled content - set background immediately
+    {
+      tagName: "style",
+      attributes: {
+        type: "text/css",
+      },
+      innerHTML:
+        "html,body,#__docusaurus{background-color:rgb(15,23,42)!important;min-height:100vh}",
+    },
+    // Apple touch icon for iOS
+    {
+      tagName: "link",
+      attributes: {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/img/apple-touch-icon.svg",
+      },
+    },
+    // Theme color for browser chrome
+    {
+      tagName: "meta",
+      attributes: {
+        name: "theme-color",
+        content: "#0f172a",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "keywords",
+        content:
+          "counter-drone, counter-UAS, autonomous defense, blockchain, security, drone interception, AI, machine learning",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:type",
+        content: "website",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:title",
+        content: "Phoenix Rooivalk - Autonomous Counter-UAS Defense Platform",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        property: "og:description",
+        content:
+          "Comprehensive documentation for the world's most advanced autonomous counter-UAS defense platform.",
+      },
+    },
+    {
+      tagName: "meta",
+      attributes: {
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+    },
+  ],
+  markdown: {
+    format: "detect",
+    mermaid: true,
+  },
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        docsRouteBasePath: "/docs",
+        indexBlog: false,
+        searchBarShortcutHint: true,
+      },
+    ],
+  ],
   i18n: { defaultLocale: "en", locales: ["en"] },
   presets: [
     [
@@ -54,8 +165,15 @@ const config: Config = {
         docs: {
           routeBasePath: "docs",
           sidebarPath: resolve(__dirname, "./sidebars.ts"),
-          editUrl: undefined,
-          remarkPlugins: [],
+          // Enable "Edit this page" links to GitHub
+          editUrl:
+            "https://github.com/JustAGhosT/PhoenixRooivalk/edit/main/apps/docs/",
+          // Show last updated timestamps from git
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
+          // Enable breadcrumbs for navigation
+          breadcrumbs: true,
+          remarkPlugins: [remarkDocMetadata],
           rehypePlugins: [],
         },
         blog: false,
@@ -75,15 +193,17 @@ const config: Config = {
         height: 40,
       },
       items: [
+        // Primary navigation - Documentation home
         {
           type: "doc",
           docId: "phoenix-rooivalk-documentation",
           position: "left",
           label: "Documentation",
         },
+        // Key audience-focused dropdowns (consolidated)
         {
           type: "dropdown",
-          label: "Executive",
+          label: "For Investors",
           position: "left",
           items: [
             {
@@ -91,85 +211,99 @@ const config: Config = {
               to: "/docs/executive/executive-summary",
             },
             {
-              label: "Global Strategy",
-              to: "/docs/executive/Global_Strategy",
+              label: "Investor Summary",
+              to: "/docs/executive/investor-executive-summary",
+            },
+            {
+              label: "Pitch Deck",
+              to: "/docs/executive/phoenix-rooivalk-pitch-deck",
+            },
+            {
+              label: "Market Analysis",
+              to: "/docs/business/market-analysis",
+            },
+            {
+              label: "ROI Analysis",
+              to: "/docs/business/roi-analysis",
             },
           ],
         },
         {
           type: "dropdown",
-          label: "Technical",
+          label: "For Engineers",
           position: "left",
           items: [
             {
               label: "Technical Architecture",
-              to: "/docs/technical/Technical_Architecture",
+              to: "/docs/technical/technical-architecture",
+            },
+            {
+              label: "API Documentation",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
+              label: "Blockchain Architecture",
+              to: "/docs/technical/blockchain/blockchain-architecture",
             },
             {
               label: "System Architecture",
-              to: "/docs/technical/System_Architecture",
+              to: "/docs/technical/system-architecture",
+            },
+            {
+              label: "Glossary",
+              to: "/docs/technical/glossary",
             },
           ],
         },
         {
           type: "dropdown",
-          label: "Business",
+          label: "For Operations",
           position: "left",
           items: [
             {
-              label: "Market Analysis",
-              to: "/docs/business/Market_Analysis",
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
             },
             {
-              label: "Business Model",
-              to: "/docs/business/business-model",
+              label: "Operations Manual",
+              to: "/docs/operations/operations-manual",
+            },
+            {
+              label: "Training Materials",
+              to: "/docs/operations/training/training-materials",
+            },
+            {
+              label: "Compliance Framework",
+              to: "/docs/legal/compliance-framework",
             },
           ],
         },
+        // News - Industry updates
         {
-          type: "dropdown",
-          label: "Operations",
-          position: "left",
-          items: [
-            {
-              label: "Manufacturing Strategy",
-              to: "/docs/operations/Manufacturing_Strategy",
-            },
-          ],
-        },
-        // Cross-link to marketing site
-        ...(marketingUrl && marketingUrl !== "https://"
-          ? [
-              {
-                href: marketingUrl,
-                label: "Website",
-                position: "right",
-              } as const,
-            ]
-          : []),
-        // GitHub repository links
-        {
-          type: "dropdown",
-          label: "GitHub",
+          to: "/news",
+          label: "News",
           position: "right",
-          items: [
-            {
-              href: "https://github.com/JustAGhosT/PhoenixRooivalk",
-              label: "PhoenixRooivalk",
-            },
-            {
-              href: "https://github.com/justaghost/cognitive-mesh",
-              label: "Cognitive Mesh",
-            },
-          ],
+          className: "navbar__link--news",
+          "aria-label": "Industry news",
         },
-        // Environment badge (build-time)
+        // Support - Help and FAQ
         {
-          href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-          label: "Request Access",
+          to: "/support",
+          label: "Support",
           position: "right",
+          className: "navbar__link--support",
+          "aria-label": "Get help and support",
         },
-        ...(envBadge
+        // Login link
+        {
+          to: "/login",
+          label: "Login",
+          position: "right",
+          className: "navbar__link--login",
+          "aria-label": "Sign in to your account",
+        },
+        // Environment badge (only show in non-production)
+        ...(envBadge && envName !== "production"
           ? [
               {
                 to: "#",
@@ -181,24 +315,70 @@ const config: Config = {
           : []),
       ],
     },
-    // Enhanced footer
+    // Enhanced footer with role-based navigation
     footer: {
       style: "dark",
       links: [
         {
-          title: "Documentation",
+          title: "For Executives",
           items: [
             {
               label: "Executive Summary",
               to: "/docs/executive/executive-summary",
             },
             {
-              label: "Technical Architecture",
-              to: "/docs/technical/Technical_Architecture",
+              label: "Investor Summary",
+              to: "/docs/executive/investor-executive-summary",
             },
             {
               label: "Market Analysis",
-              to: "/docs/business/Market_Analysis",
+              to: "/docs/business/market-analysis",
+            },
+            {
+              label: "ROI Analysis",
+              to: "/docs/business/roi-analysis",
+            },
+          ],
+        },
+        {
+          title: "For Engineers",
+          items: [
+            {
+              label: "Technical Architecture",
+              to: "/docs/technical/technical-architecture",
+            },
+            {
+              label: "API Documentation",
+              to: "/docs/technical/integration/api-documentation",
+            },
+            {
+              label: "Blockchain Architecture",
+              to: "/docs/technical/blockchain/blockchain-architecture",
+            },
+            {
+              label: "Glossary",
+              to: "/docs/technical/glossary",
+            },
+          ],
+        },
+        {
+          title: "For Operations",
+          items: [
+            {
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
+            },
+            {
+              label: "Operations Manual",
+              to: "/docs/operations/operations-manual",
+            },
+            {
+              label: "Training Materials",
+              to: "/docs/operations/training/training-materials",
+            },
+            {
+              label: "Compliance Framework",
+              to: "/docs/legal/compliance-framework",
             },
           ],
         },
@@ -206,38 +386,58 @@ const config: Config = {
           title: "Resources",
           items: [
             {
-              label: "GitHub Repository",
+              label: "Industry News",
+              to: "/news",
+            },
+            {
+              label: "Support Center",
+              to: "/support",
+            },
+            {
+              label: "Your Progress",
+              to: "/your-progress",
+            },
+            {
+              label: "Main Website",
+              href: "https://phoenixrooivalk.netlify.app",
+            },
+            {
+              label: "Documentation Status",
+              to: "/docs/resources/documentation-status",
+            },
+            {
+              label: "Downloads",
+              to: "/docs/resources/downloads",
+            },
+          ],
+        },
+        {
+          title: "Connect",
+          items: [
+            {
+              label: "GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
+            },
+            {
+              label: "LinkedIn",
+              href: "https://linkedin.com/company/phoenix-rooivalk",
+            },
+            {
+              label: "X (Twitter)",
+              href: "https://x.com/PhoenixRooivalk",
+            },
+            {
+              label: "Contact Us",
+              to: "/contact",
             },
             {
               label: "Request Access",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
             },
-            {
-              label: "Getting Started",
-              to: "/docs",
-            },
-          ],
-        },
-        {
-          title: "Operations",
-          items: [
-            {
-              label: "Manufacturing Strategy",
-              to: "/docs/operations/Manufacturing_Strategy",
-            },
-            {
-              label: "System Architecture",
-              to: "/docs/technical/System_Architecture",
-            },
-            {
-              label: "Business Model",
-              to: "/docs/business/business-model",
-            },
           ],
         },
       ],
-      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security.`,
+      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security. | v0.2.0`,
     },
     // Enhanced color mode
     colorMode: {
@@ -245,11 +445,22 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
-    // Enhanced prism theme
+    // Enhanced prism theme with additional languages
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ["rust", "bash", "json", "yaml"],
+      additionalLanguages: [
+        "rust",
+        "bash",
+        "json",
+        "yaml",
+        "solidity",
+        "hcl",
+        "toml",
+        "python",
+        "typescript",
+        "go",
+      ],
     },
     // Enhanced announcement bar
     announcementBar: {

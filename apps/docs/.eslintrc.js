@@ -5,6 +5,7 @@ module.exports = {
     node: true,
     es6: true,
   },
+  // Browser and Node globals are provided by env settings above
   rules: {
     // Allow Docusaurus imports
     "import/no-unresolved": "off",
@@ -19,4 +20,29 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      // Test files
+      files: [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**/*.ts",
+        "**/__tests__/**/*.tsx",
+      ],
+      env: {
+        jest: true,
+      },
+      globals: {
+        jest: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        test: "readonly",
+      },
+    },
+  ],
 };

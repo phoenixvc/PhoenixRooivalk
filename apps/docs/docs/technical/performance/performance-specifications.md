@@ -2,6 +2,13 @@
 id: performance-specifications
 title: Performance Specifications
 sidebar_label: Performance Specifications
+difficulty: advanced
+estimated_reading_time: 8
+points: 25
+tags:
+  - technical
+  - performance
+  - counter-uas
 ---
 
 ## Executive Summary

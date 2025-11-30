@@ -1,3 +1,15 @@
+---
+id: decentralized-ai
+title: Phoenix Rooivalk Decentralized AI Integration
+sidebar_label: Phoenix Rooivalk Decentralized
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - ai
+---
+
 # Phoenix Rooivalk Decentralized AI Integration
 
 ## Morpheus Network Integration Potential

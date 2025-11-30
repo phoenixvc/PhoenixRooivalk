@@ -81,9 +81,6 @@ Structure:
 - `config/` — Tooling configuration files (ESLint, Prettier, Clippy, etc.).
   - Configuration files are symlinked to root for tool compatibility.
 - `.ai/` — AI IDE assistant rules (Cursor, Continue, Windsurf).
-- `docs/` — Project documentation and development guides.
-  - Includes technical summaries, improvement guides, and environment validation.
-  - Legacy documentation (migrated to `apps/docs/`).
 - `scripts/` — Root-level deployment and utility scripts.
 - Root configuration files:
   - `ACCESS.md` — Access request information for defense partners.
@@ -190,8 +187,6 @@ cross‑links.
 > defense partners. Redistribution or public disclosure is prohibited. See
 > `RESPONSIBLE_USE.md` and `ACCESS.md`.
 
-Quick access: [Glossary](./docs/glossary.md)
-
 ## Overview
 
 PhoenixRooivalk delivers a layered, modular counter‑UAS capability for contested
@@ -228,21 +223,21 @@ For detailed specifications and planning baselines, see [`index.md`](./index.md)
 - Fiber‑engage: Rover establishes fiber link for spoof‑resistant control.
 - Logistics: Resupply, magazine swap, and net deployment support.
 
-## Documentation map
+## Documentation
 
-- **Live Documentation**: [phoenixrooivalk-docs.netlify.app](https://phoenixrooivalk-docs.netlify.app) - Complete technical documentation
-- **Project Structure**: [docs/PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md) - Repository organization and file structure
-- **Environment Validation**: [docs/ENVIRONMENT_VALIDATION.md](./docs/ENVIRONMENT_VALIDATION.md) - Environment variable validation guide
+All project documentation is hosted on the live Docusaurus site:
+
+- **📚 Documentation Portal**: [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+  - Executive Summaries & Pitch Materials
+  - Technical Architecture & Specifications
+  - Business Plans & Market Analysis
+  - Operations Manuals & Deployment Guides
+  - Legal & Compliance Frameworks
+  - Funding Opportunities & Resources
+
 - **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment and configuration
-- **Legacy Documentation**: See `docs/` directory for historical reference
-  - Executive: [Executive Summary](./docs/executive/Executive_Summary.md)
-  - Business: [Market Analysis](./docs/business/Market_Analysis.md), [Business Model](./docs/business/Business_Model.md)
-  - Technical: [Technical Analysis](./docs/technical/Technical_Analysis.md), [Glossary](./docs/technical/Glossary.md)
-  - Operations: [Implementation Plan](./docs/operations/Implementation_Plan.md), [Operations Manual](./docs/operations/Operations_Manual.md)
-  - Legal: [Compliance Framework](./docs/legal/Compliance_Framework.md)
-  - Architecture Decisions: [Mechanical Design ADRs](./docs/technical/mechanical/Mechanical_Design_ADRs.md)
 
-> **Note**: The primary documentation is now hosted in the Docusaurus site at `apps/docs/`. The `docs/` directory contains legacy documentation for reference.
+> **Note**: Documentation source files are in `apps/docs/`. Run `pnpm --filter docs start` to view locally.
 
 ## Operational tasks
 
@@ -259,9 +254,7 @@ cargo run --bin evidence-cli -- record engagement_summary '{"missionId":"M-123",
 cargo run --bin keeper -- --interval 5 --batch-limit 25
 ```
 
-For runbook-style metrics capture, use the Operations Log template:
-
-- [Operations log template — anchoring runs](./docs/operations/monitoring/Operations_Log_Template.md)
+For runbook-style metrics capture, see the Operations Log template in the documentation portal.
 
 ## Access request (partners)
 

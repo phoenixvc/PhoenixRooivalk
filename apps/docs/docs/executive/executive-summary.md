@@ -2,6 +2,12 @@
 id: executive-summary
 title: Executive Summary
 sidebar_label: Executive Summary
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Company Status

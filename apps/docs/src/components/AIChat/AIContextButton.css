@@ -1,0 +1,79 @@
+/**
+ * AI Context Button Styles
+ */
+
+.ai-context-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 16px;
+  color: rgb(249, 115, 22);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ai-context-btn:hover {
+  background: rgba(249, 115, 22, 0.2);
+  border-color: rgb(249, 115, 22);
+  transform: scale(1.02);
+}
+
+.ai-context-btn--small {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+}
+
+.ai-context-btn--small .ai-context-btn__icon {
+  font-size: 0.8rem;
+}
+
+.ai-context-btn--medium {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.ai-context-btn--inline {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.ai-context-btn--floating {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+/* Show floating button on parent hover - use more specific selector */
+.heading-wrapper:hover > .ai-context-btn--floating,
+.section-header:hover > .ai-context-btn--floating,
+h2:hover > .ai-context-btn--floating,
+h3:hover > .ai-context-btn--floating {
+  opacity: 1;
+}
+
+.ai-context-btn__icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.ai-context-btn__label {
+  font-family: inherit;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .ai-context-btn {
+    transition: none;
+  }
+}

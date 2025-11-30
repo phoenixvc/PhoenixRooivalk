@@ -1,0 +1,14 @@
+{
+  "label": "Technical Documentation",
+  "position": 2,
+  "collapsible": true,
+  "collapsed": false,
+  "className": "category-technical",
+  "description": "Software architecture, AI/ML systems, mechanical design, hardware specifications, and integration documentation.",
+  "link": {
+    "type": "generated-index",
+    "title": "Technical Documentation",
+    "description": "Comprehensive technical documentation covering software, AI/ML, blockchain, mechanical design, and hardware specifications.",
+    "slug": "/technical"
+  }
+}

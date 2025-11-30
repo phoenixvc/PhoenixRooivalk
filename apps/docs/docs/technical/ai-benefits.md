@@ -2,6 +2,13 @@
 id: ai-benefits
 title: AI Benefits
 sidebar_label: AI Benefits
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - ai
+  - counter-uas
 ---
 
 ## Executive Summary

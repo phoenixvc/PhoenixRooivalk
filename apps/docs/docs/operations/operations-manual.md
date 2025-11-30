@@ -2,6 +2,12 @@
 id: operations-manual
 title: Operations Manual
 sidebar_label: Operations Manual
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - operations
+  - counter-uas
 ---
 
 ## Executive Summary
@@ -455,6 +461,18 @@ troubleshooting, and maintenance procedures.
 - **Process Improvement**: Process improvement recommendations
 - **Training Needs**: Training needs identification
 - **System Improvements**: System improvement recommendations
+
+---
+
+## Recommended External Resources
+
+:::tip sUAS Program Documentation
+
+See [sUAS Program Documentation](../resources/suas-program-documentation) for
+comprehensive DHS framework details and integration guidance with Phoenix
+Rooivalk operations.
+
+:::
 
 ---
 

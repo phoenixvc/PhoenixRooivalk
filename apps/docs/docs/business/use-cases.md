@@ -2,6 +2,14 @@
 id: use-cases
 title: Use Cases
 sidebar_label: Use Cases
+difficulty: intermediate
+estimated_reading_time: 7
+points: 15
+tags:
+  - business
+  - counter-uas
+prerequisites:
+  - executive-summary
 ---
 
 ## Executive Summary

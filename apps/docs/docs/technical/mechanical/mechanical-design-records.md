@@ -1,3 +1,15 @@
+---
+id: mechanical-design-records
+title: Phoenix Rooivalk Mechanical Design Records
+sidebar_label: Phoenix Rooivalk Mechanical
+difficulty: advanced
+estimated_reading_time: 7
+points: 25
+tags:
+  - technical
+  - hardware
+---
+
 # Phoenix Rooivalk Mechanical Design Records
 
 ## Executive Summary

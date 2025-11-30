@@ -1,179 +1,409 @@
 import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
+/**
+ * Phoenix Rooivalk Documentation Sidebar
+ *
+ * Navigation Structure:
+ * 1. Getting Started - Entry point for all users
+ * 2. Progress Reports - Weekly development updates
+ * 3. Executive - Leadership & investor materials
+ * 4. Technical - Software, AI, Hardware, Architecture
+ * 5. Business - Market, Strategy, Templates
+ * 6. Operations - Deployment, Maintenance, Training
+ * 7. Legal - Compliance & Framework
+ * 8. Research - Deep-dive technical research
+ * 9. Resources - Downloads, Guides, References
+ */
+
 const sidebars: SidebarsConfig = {
   docs: [
+    // ========================================
+    // GETTING STARTED (Entry Point)
+    // ========================================
     {
       type: "category",
-      label: "📊 Executive Documentation",
-      collapsed: false,
+      label: "🚀 Getting Started",
+      collapsed: true,
       items: [
+        {
+          type: "doc",
+          id: "phoenix-rooivalk-documentation",
+          label: "Documentation Home",
+        },
+        {
+          type: "link",
+          label: "📊 Your Progress",
+          href: "/your-progress",
+          description: "Track your learning journey",
+        },
+        "resources/documentation-status",
         "executive/executive-summary",
-        "executive/global-strategy",
-        "executive/system-overview",
-        "executive/system-overview-detailed",
-        "executive/team-status",
-        "executive/strategic-recommendations",
-        "executive/key-questions-cheatsheet",
-        "executive/presentation-materials",
-        "executive/phoenix-rooivalk-litepaper",
-        "executive/phoenix-rooivalk-pitch-deck",
-        "executive/phoenix-rooivalk-technical-whitepaper",
-      ],
-    },
-    {
-      type: "category",
-      label: "🔧 Technical Documentation",
-      collapsed: false,
-      items: [
-        "technical/technical-architecture",
-        "technical/system-architecture",
-        "technical/blockchain-integration",
-        "technical/multi-user-signing-cooperation",
-        "technical/decentralized-ai",
-        "technical/hardware-foundation",
-        "technical/defense-integration",
-        "technical/defense-technology-deep-dive",
-        "technical/ai-benefits",
         "technical/glossary",
-        "technical/technical-analysis",
-        "technical/technical-architecture-synthesis",
-        "technical/threatsimulator-enhancements",
+      ],
+    },
+
+    // ========================================
+    // PROGRESS REPORTS
+    // ========================================
+    {
+      type: "category",
+      label: "📈 Progress Reports",
+      collapsed: false,
+      items: [
+        "progress/progress-overview",
         {
           type: "category",
-          label: "Architecture",
-          collapsed: true,
-          items: [
-            "technical/architecture/technical-architecture",
-            "technical/architecture/architecture-decision-records",
-          ],
-        },
-        {
-          type: "category",
-          label: "Blockchain",
-          collapsed: true,
-          items: [
-            "technical/blockchain/blockchain-architecture",
-            "technical/blockchain/blockchain-architecture-detailed",
-            "technical/blockchain/blockchain-benefits",
-            "technical/blockchain/blockchain-implementation-guide",
-            "technical/blockchain/blockchain-implementation-phases",
-            "technical/blockchain/blockchain-protocols-analysis",
-            "technical/blockchain/blockchain-security-compliance",
-            "technical/blockchain/implementation-roadmap",
-          ],
-        },
-        {
-          type: "category",
-          label: "Integration",
-          collapsed: true,
-          items: [
-            "technical/integration/api-documentation",
-            "technical/integration/integration-guide",
-          ],
-        },
-        {
-          type: "category",
-          label: "Mechanical",
-          collapsed: true,
-          items: [
-            "technical/mechanical/mechanical-design-adrs",
-            "technical/mechanical/mechanical-design-records",
-          ],
-        },
-        {
-          type: "category",
-          label: "Performance",
-          collapsed: true,
-          items: ["technical/performance/performance-specifications"],
+          label: "2025",
+          collapsed: false,
+          items: ["progress/2025/week-48"],
         },
       ],
     },
+
+    // ========================================
+    // EXECUTIVE DOCUMENTATION
+    // ========================================
     {
       type: "category",
-      label: "💼 Business Documentation",
-      collapsed: false,
+      label: "📊 Executive",
+      collapsed: true,
       items: [
-        "business/market-analysis",
-        "business/business-model",
-        "business/competitive-analysis",
-        "business/emerging-trends",
-        "business/roi-analysis",
-        "business/use-cases",
-        "business/budget-timeline-templates",
-        "business/commercial-proposal-template",
-        "business/competitive-differentiation-guide",
-        "business/discovery-questionnaire",
-        "business/dod-proposal-template",
-        "business/presentation-video-script",
-        "business/technical-requirements-checklist",
-        "business/traction-metrics",
-      ],
-    },
-    {
-      type: "category",
-      label: "⚖️ Legal Documentation",
-      collapsed: false,
-      items: ["legal/compliance-framework", "legal/legal-framework"],
-    },
-    {
-      type: "category",
-      label: "🚀 Operations Documentation",
-      collapsed: false,
-      items: [
-        "operations/manufacturing-strategy",
-        "operations/operational-resilience",
-        "operations/implementation-plan",
-        "operations/operations-manual",
-        "operations/operations-modes",
-        "operations/customer-onboarding-guide",
         {
           type: "category",
-          label: "Deployment",
-          collapsed: true,
-          items: ["operations/deployment/deployment-guide"],
-        },
-        {
-          type: "category",
-          label: "Maintenance",
-          collapsed: true,
-          items: ["operations/maintenance/maintenance-procedures"],
-        },
-        {
-          type: "category",
-          label: "Monitoring",
+          label: "Investor Materials",
           collapsed: true,
           items: [
-            "operations/monitoring/operations-log-template",
+            "executive/investor-executive-summary",
+            "executive/phoenix-rooivalk-pitch-deck",
+            "executive/phoenix-rooivalk-litepaper",
+            "executive/phoenix-rooivalk-technical-whitepaper",
+          ],
+        },
+        {
+          type: "category",
+          label: "Strategy & Planning",
+          collapsed: true,
+          items: [
+            "executive/global-strategy",
+            "executive/strategic-recommendations",
+            "executive/system-overview",
+            "executive/system-overview-detailed",
+          ],
+        },
+        {
+          type: "category",
+          label: "Presentations",
+          collapsed: true,
+          items: [
+            "executive/presentation-materials",
+            "executive/key-questions-cheatsheet",
+            "executive/team-status",
+          ],
+        },
+        {
+          type: "category",
+          label: "Early Development",
+          collapsed: true,
+          items: [
+            "executive/early-development/early-spec-qa",
+            "executive/early-development/investment-phases",
+          ],
+        },
+      ],
+    },
+
+    // ========================================
+    // TECHNICAL DOCUMENTATION
+    // ========================================
+    {
+      type: "category",
+      label: "🔧 Technical",
+      collapsed: true,
+      items: [
+        {
+          type: "category",
+          label: "💻 Software & AI",
+          collapsed: true,
+          items: [
+            "technical/technical-architecture",
+            "technical/system-architecture",
+            "technical/ai-benefits",
+            "technical/decentralized-ai",
+            {
+              type: "category",
+              label: "Blockchain",
+              collapsed: true,
+              items: [
+                "technical/blockchain-integration",
+                "technical/blockchain/blockchain-architecture",
+                "technical/blockchain/blockchain-architecture-detailed",
+                "technical/blockchain/blockchain-benefits",
+                "technical/blockchain/blockchain-implementation-guide",
+                "technical/blockchain/blockchain-implementation-phases",
+                "technical/blockchain/blockchain-protocols-analysis",
+                "technical/blockchain/blockchain-security-compliance",
+                "technical/blockchain/implementation-roadmap",
+              ],
+            },
+            {
+              type: "category",
+              label: "ML & Training",
+              collapsed: true,
+              items: [
+                "technical/ml-training/ml-training-plan",
+                "technical/ml-training/drone-training-data-sources",
+              ],
+            },
+            {
+              type: "category",
+              label: "Integration & APIs",
+              collapsed: true,
+              items: [
+                "technical/integration/api-documentation",
+                "technical/integration/integration-guide",
+              ],
+            },
+            {
+              type: "category",
+              label: "Architecture Deep-Dive",
+              collapsed: true,
+              items: [
+                "technical/architecture/technical-architecture",
+                "technical/architecture/architecture-decision-records",
+                "technical/technical-analysis",
+                "technical/technical-architecture-synthesis",
+                "technical/threatsimulator-enhancements",
+              ],
+            },
+          ],
+        },
+        {
+          type: "category",
+          label: "🔩 Hardware & Mechanical",
+          collapsed: true,
+          items: [
+            "technical/hardware-foundation",
+            "technical/defense-integration",
+            "technical/defense-technology-deep-dive",
+            {
+              type: "category",
+              label: "Platform Specifications",
+              collapsed: true,
+              items: [
+                "technical/hardware/rkv-m-specifications",
+                "technical/hardware/net-specifications",
+                "technical/performance/performance-specifications",
+              ],
+            },
+            {
+              type: "category",
+              label: "Mechanical Design",
+              collapsed: true,
+              items: [
+                "technical/mechanical/mechanical-design-adrs",
+                "technical/mechanical/mechanical-design-records",
+              ],
+            },
+          ],
+        },
+        {
+          type: "category",
+          label: "📚 Reference",
+          collapsed: true,
+          items: [
+            "technical/glossary",
+            "technical/multi-user-signing-cooperation",
+            "technical/reusable-systems-architecture",
+          ],
+        },
+      ],
+    },
+
+    // ========================================
+    // BUSINESS DOCUMENTATION
+    // ========================================
+    {
+      type: "category",
+      label: "💼 Business",
+      collapsed: true,
+      items: [
+        {
+          type: "category",
+          label: "Market & Strategy",
+          collapsed: true,
+          items: [
+            "business/market-analysis",
+            "business/business-model",
+            "business/competitive-analysis",
+            "business/emerging-trends",
+            "business/roi-analysis",
+            "business/12-month-business-plan",
+          ],
+        },
+        {
+          type: "category",
+          label: "Sales & Use Cases",
+          collapsed: true,
+          items: [
+            "business/use-cases",
+            "business/competitive-differentiation-guide",
+            "business/traction-metrics",
+            "business/influencers-and-contacts",
+          ],
+        },
+        {
+          type: "category",
+          label: "Templates & Proposals",
+          collapsed: true,
+          items: [
+            "business/commercial-proposal-template",
+            "business/dod-proposal-template",
+            "business/discovery-questionnaire",
+            "business/budget-timeline-templates",
+            "business/technical-requirements-checklist",
+            "business/presentation-video-script",
+          ],
+        },
+        {
+          type: "category",
+          label: "Opportunities",
+          collapsed: true,
+          items: [
+            "business/opportunities/opportunities-summary",
+            "business/opportunities/soonami-cohort-8",
+            "business/opportunities/cuas-sandbox-2026",
+            "business/applications/cuas-sandbox-2026-application",
+          ],
+        },
+      ],
+    },
+
+    // ========================================
+    // OPERATIONS DOCUMENTATION
+    // ========================================
+    {
+      type: "category",
+      label: "🚀 Operations",
+      collapsed: true,
+      items: [
+        {
+          type: "category",
+          label: "Implementation",
+          collapsed: true,
+          items: [
+            "operations/implementation-plan",
+            "operations/manufacturing-strategy",
+            "operations/deployment/deployment-guide",
+          ],
+        },
+        {
+          type: "category",
+          label: "Day-to-Day Operations",
+          collapsed: true,
+          items: [
+            "operations/operations-manual",
+            "operations/operations-modes",
+            "operations/operational-resilience",
+            "operations/customer-onboarding-guide",
+          ],
+        },
+        {
+          type: "category",
+          label: "Maintenance & Monitoring",
+          collapsed: true,
+          items: [
+            "operations/maintenance/maintenance-procedures",
             "operations/monitoring/troubleshooting-guide",
+            "operations/monitoring/operations-log-template",
           ],
         },
         {
           type: "category",
           label: "Training",
           collapsed: true,
-          items: ["operations/training/training-materials"],
+          items: [
+            "operations/training/training-materials",
+            "operations/calendar/project-calendar",
+          ],
         },
       ],
     },
+
+    // ========================================
+    // LEGAL DOCUMENTATION
+    // ========================================
     {
       type: "category",
-      label: "🎨 Design Documentation",
-      collapsed: false,
-      items: ["design/icon-requirements"],
+      label: "⚖️ Legal & Compliance",
+      collapsed: true,
+      items: ["legal/compliance-framework", "legal/legal-framework"],
     },
+
+    // ========================================
+    // RESEARCH DOCUMENTATION
+    // ========================================
     {
       type: "category",
-      label: "📊 Visual Elements",
-      collapsed: false,
-      items: ["visual-elements/system-architecture-diagrams"],
-    },
-    {
-      type: "category",
-      label: "🔬 Research Documentation",
-      collapsed: false,
+      label: "🔬 Research",
+      collapsed: true,
       items: [
-        "research/experimental-counter-drone-effectors-transform-warfare",
-        "research/sensor-technologies-comprehensive-analysis",
+        {
+          type: "category",
+          label: "Key Research",
+          collapsed: true,
+          items: [
+            "research/experimental-counter-drone-effectors-transform-warfare",
+            "research/sensor-technologies-comprehensive-analysis",
+            "research/market-intelligence-notes",
+            "research/resp-airframe-analysis",
+          ],
+        },
+        {
+          type: "category",
+          label: "Research Instructions",
+          collapsed: true,
+          description: "Internal research guidance documents",
+          items: [
+            "research/inst-airframe-design",
+            "research/inst-avionics-autonomy",
+            "research/inst-business-economics",
+            "research/inst-combined-systems",
+            "research/inst-communications",
+            "research/inst-cross-cutting",
+            "research/inst-forward-looking",
+            "research/inst-maintenance-ops",
+            "research/inst-motor-specs",
+            "research/inst-power-electronics",
+            "research/inst-power-storage",
+            "research/inst-propulsion",
+            "research/inst-safety-certification",
+          ],
+        },
+      ],
+    },
+
+    // ========================================
+    // RESOURCES & REFERENCES
+    // ========================================
+    {
+      type: "category",
+      label: "📚 Resources",
+      collapsed: true,
+      items: [
+        "resources/downloads",
+        "resources/suas-program-documentation",
+        "resources/documentation-guide",
+        "resources/cloud-sync-setup",
+        "resources/changelog",
+        {
+          type: "category",
+          label: "Visual Assets",
+          collapsed: true,
+          items: [
+            "visual-elements/system-architecture-diagrams",
+            "design/icon-requirements",
+          ],
+        },
       ],
     },
   ],

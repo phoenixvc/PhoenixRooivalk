@@ -1,3 +1,15 @@
+---
+id: technical-architecture-synthesis
+title: Phoenix Rooivalk Technical Architecture Synthesis
+sidebar_label: Phoenix Rooivalk Technical
+difficulty: expert
+estimated_reading_time: 7
+points: 50
+tags:
+  - technical
+  - architecture
+---
+
 # Phoenix Rooivalk Technical Architecture Synthesis
 
 ## Recommended System Configuration

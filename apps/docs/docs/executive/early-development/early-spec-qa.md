@@ -1,0 +1,516 @@
+---
+id: early-spec-qa
+title: Early Development Spec & Q&A
+sidebar_label: Early Spec & Q&A
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - executive
+  - counter-uas
+---
+
+## What Phoenix Rooivalk Does (Plain English)
+
+Phoenix Rooivalk is a **defensive system** that detects, classifies, and
+responds to hostile small drones on its own when radios and backhaul are jammed.
+It makes **policy-bounded, "soft kill first" decisions at the edge** in 120–195
+ms (p50) / ≤250 ms (p95) and records tamper-evident receipts after the fact for
+accountability.
+
+When communications are available, it can optionally share sanitized,
+need-to-know alerts with partners; **real-time action never waits on external
+networks**. Humans remain in control for anything risky or lethal.
+
+---
+
+## Plain-Language Glossary
+
+| Term                          | Definition                                                           |
+| ----------------------------- | -------------------------------------------------------------------- |
+| **Sensor**                    | The "ears and eyes" (radar, cameras, microphones) that notice drones |
+| **Edge computer**             | The "brain in the box" nearby that thinks fast without the internet  |
+| **Soft-kill**                 | Stopping or redirecting a drone without blowing it up                |
+| **Audit trail**               | The unchangeable diary of what the system did and why                |
+| **Coalition/interop**         | Sharing a safe, short message with trusted partners                  |
+| **Rules of Engagement (ROE)** | Safety rules the system must follow                                  |
+
+### Technical Acronyms
+
+| Acronym | Meaning                                                         |
+| ------- | --------------------------------------------------------------- |
+| sUAS    | Small Unmanned Aircraft System (commercial drones under 55 lbs) |
+| C-UAS   | Counter-UAS (systems that defend against drones)                |
+| EW      | Electronic Warfare (jamming, spoofing)                          |
+| RF      | Radio Frequency (wireless signals)                              |
+| C2      | Command & Control (system that operators use)                   |
+| ROE     | Rules of Engagement (when you can/can't engage)                 |
+| TPS     | Transactions Per Second (blockchain speed)                      |
+| CIEA    | Comms-Independent Edge Autonomy (works without network)         |
+| PUF     | Physical Unclonable Function (unhackable hardware ID)           |
+| EO/IR   | Electro-Optical/Infrared (cameras that see visible & heat)      |
+| ESM     | Electronic Support Measures (detecting enemy signals)           |
+| GPS     | Global Positioning System (satellite navigation)                |
+| DoD     | Department of Defense                                           |
+| ITAR    | International Traffic in Arms Regulations (export controls)     |
+
+---
+
+## What It Does NOT Do
+
+- **It doesn't need the cloud** or a big server to make decisions
+- **It doesn't fire dangerous weapons by itself**; humans must authorize that
+- **It doesn't share private raw video or audio** by default—only small, safe
+  alerts unless approved
+
+---
+
+## Frequently Asked Questions
+
+### Q1: What happens with the "black box" if the drone is lost/shot-down/intercepted and no comms was available?
+
+**Great question!** As currently implemented, the "black box" will persist, so
+the data might be utilized if retrieved.
+
+**Solution - Automatic data wipe:**
+
+| Condition                    | Action             |
+| ---------------------------- | ------------------ |
+| No signal for 60 seconds     | Data erases itself |
+| Drone leaves authorized area | Data erases itself |
+| Someone tries to tamper      | Data erases itself |
+
+**Implementation:**
+
+- Cost to add: Almost nothing
+- Time to add: 1 week
+- **This should definitely be in Version 1**
+
+---
+
+### Q2: What is considered "nearby"? If the brain is not on the drone, and radio comms not available – how will decisions be made?
+
+**"Nearby" = 500m to 1km between defense nodes** (like cell towers but for drone
+defense)
+
+**How it works without radio - Think of a flock of birds:**
+
+- No radios
+- They still turn together instantly
+- Each bird watches its neighbors and reacts
+
+**Our system does the same:**
+
+Each defense node watches its area and shares what it sees using:
+
+| Method                | Description         |
+| --------------------- | ------------------- |
+| **Light signals**     | Like fireflies      |
+| **Sound pulses**      | Like dolphins       |
+| **Ground vibrations** | Not v1, but planned |
+
+**All nodes react together in 12 milliseconds**
+
+**Real example:**
+
+```
+Node A: "I see a drone!" (flashes light pattern)
+Node B: "I see it too!" (sends sound pulse)
+Both: "Attack!" (synchronized response)
+Time: 0.012 seconds - faster than a blink
+```
+
+**Why this matters:**
+
+| Advantage                           | Benefit                      |
+| ----------------------------------- | ---------------------------- |
+| Works when enemies jam everything   | Huge advantage               |
+| No expensive satellite links needed | Saves millions               |
+| Can't be hacked remotely            | No central control to attack |
+| Patent opportunity                  | Nobody else does this        |
+
+**Bottom line:** Like ants protecting their colony, our system keeps working
+even when "blind and deaf" to radio signals. **This is one of the best features,
+and not well documented.**
+
+---
+
+### Q3: How does the human "authorize" firing of weapons without radio signal or cloud comms?
+
+**Solution: Always Keep One "Phone Line" Open**
+
+| Type        | Method                                                                                       |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| **Primary** | Fiber cable from operator → rover → weapons authorization (Can't be jammed, can't be hacked) |
+| **Backup**  | Pre-set rules before mission starts ("If threat enters 200m zone, defend")                   |
+
+**How it works:**
+
+```
+Jamming starts → 9 nodes go autonomous (detect only)
+              → 1 node keeps fiber link through rover
+              → Human authorizes through fiber
+              → All nodes get the "go" signal via light/sound
+              → Response in <1 second
+```
+
+**Why this is better than radio:**
+
+- Fiber can't be jammed or hacked
+- Meets legal requirements (human decides lethal force)
+- Multiple backup paths if one fails
+
+---
+
+## System Architecture Overview
+
+### The Challenge
+
+Modern sUAS are proliferating, RF-silent, and swarm-capable. Centralized C2
+architectures fail under EW. Most systems degrade to detect-only when comms die.
+
+### Key Differentiators
+
+| Feature                  | Capability                                                                                   |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| **Network independence** | At the edge; ledger and interop strictly off-path                                            |
+| **RF silent detection**  | Via multi-modal fusion                                                                       |
+| **Swarm handling**       | ≥50 concurrent tracks (baseline)                                                             |
+| **Coalition sharing**    | Classification-aware controls; Link 16/MADL receive only initially                           |
+| **Evidence-grade audit** | Fabric: hashes & metadata on chain, full evidence in off-chain WORM stores; ~3,000–3,500 TPS |
+
+---
+
+## Visual Overview: Edge Decision Making
+
+```
+THREAT (Incoming Drone)
+        ↓ (8-12ms)
+┌─────────────────────────────────────────────────────────────────┐
+│ LAYER 0: THE EDGE (No Network Needed)                           │
+│ Physical Location: Defense nodes around protected               │
+│ area (base, convoy, infrastructure, event, etc.)                │
+│                                                                 │
+│ Decisions Made HERE:                                            │
+│ ✓ "I see a drone!"                                              │
+│ ✓ "It's heading toward us!"                                     │
+│ ✓ "Start jamming!" (if pre-authorized)                          │
+│ ✓ "Alert everyone!"                                             │
+│                                                                 │
+│ Speed: 8-12 milliseconds                                        │
+│ Works: Even with 100% jamming                                   │
+└─────────────────────────────────────────────────────────────────┘
+        ↓ When network available (optional)
+┌─────────────────────────────────────────────────────────────────┐
+│ LAYER 1: COMMAND CENTER (When Connected)                        │
+│ Physical Location: Operations tent/vehicle                      │
+│                                                                 │
+│ Decisions Made HERE:                                            │
+│ ✓ "Authorize kinetic response"                                  │
+│ ✓ "Change defense zones"                                        │
+│ ✓ "Update rules of engagement"                                  │
+│ ✓ "Coordinate with other units"                                 │
+│                                                                 │
+│ Speed: 1-3 seconds                                              │
+│                                                                 │
+│ Connection Options (Multiple Paths):                            │
+│ • Fiber optic cable (can't be jammed)                           │
+│ • Satellite uplink (backup)                                     │
+│ • Directional microwave (point-to-point)                        │
+│ • Mesh radio (frequency hopping)                                │
+│ • 5G/LTE (when available)                                       │
+│ • Laser communication (line-of-sight)                           │
+│ • Physical courier with USB (last resort)                       │
+└─────────────────────────────────────────────────────────────────┘
+        ↓ After the action (not real-time)
+┌─────────────────────────────────────────────────────────────────┐
+│ LAYER 2: BLOCKCHAIN AUDIT (After Action)                        │
+│ Physical Location: Secure servers                               │
+│                                                                 │
+│ What Happens HERE:                                              │
+│ ✓ Records what happened (permanent record)                      │
+│ ✓ Shares with coalition partners                                │
+│ ✓ Legal evidence chain                                          │
+│ ✓ Pattern analysis for next time                                │
+│                                                                 │
+│ Speed: Seconds to minutes (not urgent)                          │
+│ Purpose: Accountability, not combat                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Real Combat Example
+
+```
+Enemy drone swarm approaching (heavy jamming active):
+
+0.000s: Edge nodes detect drones (no network needed)
+0.008s: Nodes share via light/sound signals
+0.012s: Soft-kill jamming starts (pre-authorized)
+0.015s: Alert sent to operator (via fiber if available)
+
+1.000s: Human sees alert, authorizes harder response
+1.100s: Kinetic interceptor launched
+
+Later:  Full event recorded to blockchain for legal record
+```
+
+### Key Point for Investors
+
+**Traditional System (needs network):**
+
+```
+Detect → Send to HQ → Wait → Get Permission → Act
+Time: 3-10 seconds ❌ (drone already dropped payload)
+```
+
+**Phoenix Rooivalk (edge autonomy):**
+
+```
+Detect → Act (within pre-set rules) → Inform HQ → Record
+Time: 0.012 seconds ✅ (drone neutralization initialized)
+```
+
+**The Magic:** Critical decisions happen at the edge in milliseconds. Humans set
+the rules beforehand and can override when connected. Blockchain just keeps the
+receipts.
+
+---
+
+## Investment & Decision Points
+
+| Phase                 | Investment | Focus                                 |
+| --------------------- | ---------- | ------------------------------------- |
+| Phase 1 (Concept)     | $3.5M      | Architecture validation, simulation   |
+| Phase 2 (Prototype)   | $15M       | Hardware demo, lab tests              |
+| Phase 3 (Integration) | $25M       | Field trials, certification readiness |
+| **Total to TRL7**     | **$43.5M** | Over ~3 years                         |
+
+---
+
+## Phase 1 Deliverables ($3.5M)
+
+### What will the investor get for the money?
+
+**Month 1-3: Foundation ($1M)**
+
+- Working multi-node simulation (100+ drones vs 10+ defense nodes)
+- Hyperledger Fabric test network running with smart contracts
+- Edge computing prototype on NVIDIA Jetson hardware (3 units)
+- Detailed system architecture document (200+ pages)
+- Filed provisional patents (3-5 key innovations)
+
+**Month 4-6: Proof of Concept ($1M)**
+
+- Hardware-in-loop demo: Real sensors → Edge node → Blockchain
+- Sub-12ms threat detection proven on real hardware
+- Swarm coordination algorithm tested (20 simulated drones)
+- Video demonstration of system detecting/tracking drones
+- Independent security audit report
+
+**Month 7-9: Validation ($1.5M)**
+
+- Field test with 5 real drones at test range
+- Multi-vendor integration demo (at least 2 systems)
+- Complete technical documentation package
+- Cost analysis and Phase 2 detailed plan
+- Go/No-Go decision package with metrics
+
+### Stage Gates (Payment Released Upon Achievement)
+
+| Gate   | Payment         | Must Deliver              | Success Criteria                              |
+| ------ | --------------- | ------------------------- | --------------------------------------------- |
+| Gate 1 | $1M (Month 3)   | Simulation + Architecture | 100-drone sim working, <20ms latency          |
+| Gate 2 | $1M (Month 6)   | Hardware Demo             | Physical detection proven, blockchain logging |
+| Gate 3 | $750K (Month 8) | Field Test                | 5 real drones tracked simultaneously          |
+| Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Phase 2 ready        |
+
+---
+
+## Budget Breakdown ($3.5M)
+
+### Team (65% - $2.275M)
+
+**Core Team (Full-time for 9 months):**
+
+| Role                         | Budget |
+| ---------------------------- | ------ |
+| Project Lead/Architect       | $200K  |
+| Blockchain Developer         | $150K  |
+| Edge Computing Engineer      | $150K  |
+| Swarm Algorithm Specialist   | $150K  |
+| Systems Integration Engineer | $125K  |
+
+**Contractors (Part-time/Specific deliverables):**
+
+| Role                        | Budget |
+| --------------------------- | ------ |
+| Security Auditor (3 months) | $75K   |
+| Patent Attorney             | $50K   |
+| Technical Writer            | $40K   |
+| Test Pilot/Range Operations | $60K   |
+
+**Total People:** 5 full-time + 4 contractors = $1M (×2.275 for benefits,
+overhead, facilities)
+
+### Equipment & Infrastructure (20% - $700K)
+
+| Item                                     | Budget |
+| ---------------------------------------- | ------ |
+| Edge computing nodes (10× NVIDIA Jetson) | $30K   |
+| Sensors (Radar, RF, cameras)             | $150K  |
+| Test drones (10 units)                   | $50K   |
+| Servers and networking                   | $50K   |
+| Test range rental (20 days)              | $100K  |
+| Software licenses and tools              | $70K   |
+| Lab setup and equipment                  | $250K  |
+
+### Other Costs (15% - $525K)
+
+| Item                               | Budget |
+| ---------------------------------- | ------ |
+| Patent filings (provisional + PCT) | $125K  |
+| Insurance and legal                | $100K  |
+| Travel and demonstrations          | $75K   |
+| Contingency (risk buffer)          | $225K  |
+
+---
+
+## IP Ownership Structure Options
+
+### Option A: Full Acquisition
+
+- Investor owns 100% of IP after Phase 3 ($43.5M total)
+- Development team gets completion bonuses + 2-year contracts
+- Team retains right to publish (with approval)
+
+### Option B: Joint Venture (Recommended)
+
+**After Phase 1 ($3.5M):** | Stakeholder | Equity | |-------------|--------| |
+Investor | 40% | | Development team | 40% | | Reserved for Phase 2/3 investors |
+20% |
+
+**After Phase 3 ($43.5M total):** | Stakeholder | Equity |
+|-------------|--------| | Lead investor | 51% (controlling) | | Development
+team | 20% (incentive retention) | | Other investors | 29% |
+
+### Option C: License Model
+
+- Investor gets exclusive license for defense/military use
+- Team retains IP for commercial applications
+- Revenue sharing: 70% investor / 30% team on military contracts
+
+---
+
+## Risk Mitigation for Investors
+
+### What if it doesn't work?
+
+| Gate   | Investment | If Fails                      |
+| ------ | ---------- | ----------------------------- |
+| Gate 1 | $1M        | Stop, only lose $1M           |
+| Gate 2 | $2M        | Pivot or stop                 |
+| Gate 3 | $2.75M     | Have learned enough for pivot |
+
+### Protections
+
+- Escrow release upon deliverables
+- Independent technical review at each gate
+- IP transfers only upon payment completion
+- Right of first refusal on Phase 2
+
+**You're Not Just Buying Software:** You're buying a working system with
+hardware, patents, proven algorithms, and the team that built it.
+
+---
+
+## Programmatics & Roadmap
+
+| Phase   | Focus                                                                                |
+| ------- | ------------------------------------------------------------------------------------ |
+| Phase 0 | Software sims (fusion + scheduler)                                                   |
+| Phase 1 | Edge autonomy demo (micro loop timing; isolated Solana POC learnings)                |
+| Phase 2 | Fieldable prototype (multi-modal sensors + ≥1 soft-kill effector; Fabric audit live) |
+| Phase 3 | Coalition exercise (limited XCM pilot; standards first feeds)                        |
+
+### IOC (Illustrative)
+
+- 4 node site
+- 2 soft-kill effectors integrated
+- Fabric audit live on classification-appropriate channel
+- Ops handbook v1.0
+- Interop pilot active
+
+### Power Consumption
+
+- 60–100 W per node (Orin NX class)
+- Earlier internal studies referenced kW-class configurations for heavy/legacy
+  payloads; this proposal standardizes on Orin-class nodes
+
+---
+
+## Why We Win: The Simple Comparison
+
+```
+        🚁 Enemy Drone Approaching
+               ↓
+    ┌──────────────────────────┐
+    │  PHOENIX ROOIVALK        │
+    │  12ms to neutralize      │
+    │  No network needed       │
+    │  Can't be jammed         │
+    └──────────────────────────┘
+           ✓ SUCCESS
+
+    vs.
+
+    ┌──────────────────────────┐
+    │  COMPETITOR SYSTEM       │
+    │  3-10s to respond        │
+    │  Needs network           │
+    │  Fails when jammed       │
+    └──────────────────────────┘
+           ✗ FAILURE
+```
+
+**Bottom Line (Afrikaans: "Bottom-lyn"):**
+
+> Ons werk sonder netwerk. Hulle nie. Dis hoekom ons wen.
+>
+> _(We work without network. They don't. That's why we win.)_
+
+---
+
+## Team Reality (Honest Assessment)
+
+**Phase 1 Team Structure:**
+
+> "I'm currently a solo developer. Phase 1 funding would allow me to:
+>
+> - Month 1: Hire 2 core engineers
+> - Month 2: Add specialists as contractors
+> - Month 3-9: Full team delivering milestones"
+
+**Finding a Business Co-founder:**
+
+The technical vision is strong, but the business presentation needs support. Key
+areas for business partner:
+
+- Financial planning
+- Investor relations
+- Business development
+- Let technical founder focus on execution
+
+---
+
+## Related Documents
+
+- [Investment Phases Mapping](./investment-phases) _(coming soon)_
+- [Technical Whitepaper](../phoenix-rooivalk-technical-whitepaper)
+- [Investor Executive Summary](../investor-executive-summary)
+- [12-Month Business Plan](../../business/12-month-business-plan)
+
+---
+
+_This document represents early-stage technical specifications and Q&A from
+initial stakeholder discussions. Subject to revision as development progresses.
+© 2025 Phoenix Rooivalk. All rights reserved._

@@ -1,0 +1,1434 @@
+/* ================================================
+   GAMIFICATION STYLES
+   Phoenix Rooivalk Documentation
+   ================================================ */
+
+/* ================================================
+   READING PROGRESS CARD
+   ================================================ */
+
+.reading-progress-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.reading-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.reading-progress-icon {
+  font-size: 1.5rem;
+}
+
+.reading-progress-title {
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+}
+
+.reading-progress-bar-container {
+  height: 8px;
+  background: rgb(51, 65, 85);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.reading-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.reading-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.reading-progress-percentage {
+  font-weight: 600;
+  color: rgb(249, 115, 22);
+}
+
+/* Reading Progress Overview Card */
+.reading-progress-overview-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.reading-progress-overview-header {
+  margin-bottom: 2rem;
+}
+
+.reading-progress-overview-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.5rem;
+  border-bottom: none;
+}
+
+.reading-progress-overview-subtitle {
+  font-size: 1rem;
+  color: rgb(148, 163, 184);
+}
+
+.reading-progress-overview-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.reading-progress-stat-card {
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.reading-progress-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgb(249, 115, 22);
+}
+
+.reading-progress-stat-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.reading-progress-stat-content {
+  flex: 1;
+}
+
+.reading-progress-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  line-height: 1.2;
+}
+
+.reading-progress-stat-label {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin-top: 0.25rem;
+}
+
+.reading-progress-recent {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgb(51, 65, 85);
+}
+
+.reading-progress-recent-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+  margin-bottom: 1rem;
+  border-bottom: none;
+}
+
+.reading-progress-recent-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reading-progress-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: rgba(51, 65, 85, 0.3);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.reading-progress-recent-item:hover {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.reading-progress-recent-icon {
+  color: rgb(34, 197, 94);
+  font-weight: 700;
+}
+
+.reading-progress-recent-doc {
+  color: rgb(203, 213, 225);
+  font-size: 0.875rem;
+}
+
+/* ================================================
+   ACHIEVEMENTS
+   ================================================ */
+
+.achievements-panel {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.achievements-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(51, 65, 85);
+}
+
+.achievements-level {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.achievements-level-icon {
+  font-size: 2rem;
+}
+
+.achievements-level-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+}
+
+.achievements-level-number {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  background: rgb(51, 65, 85);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.achievements-points,
+.achievements-count {
+  display: flex;
+  flex-direction: column;
+}
+
+.achievements-points-value,
+.achievements-count-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(249, 115, 22);
+}
+
+.achievements-points-label,
+.achievements-count-label {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+}
+
+.achievements-category {
+  margin-bottom: 1.5rem;
+}
+
+.achievements-category-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(203, 213, 225);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+/* Achievement Badge */
+.achievement-badge {
+  background: rgb(15, 23, 42);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.achievement-badge--unlocked {
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+.achievement-badge--locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.achievement-badge:hover {
+  transform: translateY(-4px);
+}
+
+.achievement-badge-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-badge-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-badge-rarity {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Rarity colors */
+.achievement-rarity--common {
+  color: rgb(148, 163, 184);
+}
+
+.achievement-rarity--uncommon {
+  color: rgb(34, 197, 94);
+}
+
+.achievement-rarity--rare {
+  color: rgb(59, 130, 246);
+}
+
+.achievement-rarity--epic {
+  color: rgb(168, 85, 247);
+}
+
+.achievement-rarity--legendary {
+  color: rgb(251, 191, 36);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+/* Achievement Notification */
+.achievement-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42));
+  border: 2px solid rgb(249, 115, 22);
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-width: 320px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: achievement-slide-in 0.5s ease-out;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+@keyframes achievement-slide-in {
+  from {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.achievement-notification-content {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.achievement-notification-icon {
+  font-size: 3rem;
+  animation: achievement-bounce 0.5s ease-out 0.3s;
+}
+
+@keyframes achievement-bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.achievement-notification-text {
+  flex: 1;
+}
+
+.achievement-notification-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(249, 115, 22);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-notification-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+}
+
+.achievement-notification-desc {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin-bottom: 0.25rem;
+}
+
+.achievement-notification-points {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(251, 191, 36);
+}
+
+.achievement-notification-rarity {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ================================================
+   DOCUMENTATION JOURNEY
+   ================================================ */
+
+.doc-journey {
+  margin: 2rem 0;
+}
+
+.doc-journey-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.doc-journey-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.5rem;
+}
+
+.doc-journey-subtitle {
+  color: rgb(148, 163, 184);
+  margin-bottom: 1.5rem;
+}
+
+.doc-journey-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.doc-journey-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doc-journey-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(249, 115, 22);
+}
+
+.doc-journey-stat-label {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.doc-journey-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Journey Path Card */
+.journey-path-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.journey-path-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--path-color);
+  opacity: 0.5;
+}
+
+.journey-path-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--path-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.journey-path-card--complete {
+  border-color: rgb(34, 197, 94);
+}
+
+.journey-path-card--complete::before {
+  background: rgb(34, 197, 94);
+  opacity: 1;
+}
+
+.journey-path-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.journey-path-icon {
+  font-size: 2rem;
+}
+
+.journey-path-info {
+  flex: 1;
+}
+
+.journey-path-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin: 0 0 0.25rem 0;
+}
+
+.journey-path-desc {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.journey-path-complete-badge {
+  width: 28px;
+  height: 28px;
+  background: rgb(34, 197, 94);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+
+.journey-path-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.journey-path-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgb(51, 65, 85);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.journey-path-progress-fill {
+  height: 100%;
+  background: var(--path-color);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.journey-path-progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--path-color);
+  min-width: 3rem;
+  text-align: right;
+}
+
+.journey-path-time {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  background: rgba(51, 65, 85, 0.5);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
+.journey-path-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.journey-path-doc {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  color: rgb(203, 213, 225) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.journey-path-doc:hover {
+  background: rgba(249, 115, 22, 0.1);
+  color: rgb(249, 115, 22) !important;
+}
+
+.journey-path-doc-number {
+  width: 24px;
+  height: 24px;
+  background: rgb(51, 65, 85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.journey-path-doc-title {
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.journey-path-doc-time {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  background: rgba(51, 65, 85, 0.5);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+/* ================================================
+   FEEDBACK WIDGET
+   ================================================ */
+
+.feedback-widget {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 3rem;
+}
+
+.feedback-widget--submitted {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgb(34, 197, 94);
+}
+
+.feedback-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.feedback-question-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(242, 244, 246);
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.feedback-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgb(51, 65, 85);
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 8px;
+  color: rgb(203, 213, 225);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-btn:hover {
+  background: rgb(71, 85, 105);
+}
+
+.feedback-btn--selected {
+  background: rgb(249, 115, 22);
+  border-color: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+}
+
+.feedback-btn--yes:hover:not(.feedback-btn--selected) {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgb(34, 197, 94);
+}
+
+.feedback-btn--no:hover:not(.feedback-btn--selected) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgb(239, 68, 68);
+}
+
+.feedback-btn-icon {
+  font-size: 1.25rem;
+}
+
+.feedback-comment {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgb(51, 65, 85);
+}
+
+.feedback-comment-label {
+  display: block;
+  font-size: 0.875rem;
+  color: rgb(203, 213, 225);
+  margin-bottom: 0.5rem;
+}
+
+.feedback-comment-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgb(15, 23, 42);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 8px;
+  color: rgb(242, 244, 246);
+  font-size: 0.875rem;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.feedback-comment-input:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+}
+
+.feedback-submit-btn {
+  margin-top: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  background: rgb(249, 115, 22);
+  border: none;
+  border-radius: 8px;
+  color: rgb(15, 23, 42);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-submit-btn:hover {
+  background: rgb(234, 88, 12);
+  transform: translateY(-1px);
+}
+
+.feedback-thanks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.feedback-thanks-icon {
+  width: 24px;
+  height: 24px;
+  background: rgb(34, 197, 94);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.feedback-thanks-text {
+  color: rgb(34, 197, 94);
+  font-weight: 600;
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+@media (max-width: 768px) {
+  .achievements-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doc-journey-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-journey-stats {
+    gap: 1.5rem;
+  }
+
+  .achievement-notification {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    min-width: auto;
+  }
+
+  .feedback-question {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-notification {
+    animation: none;
+  }
+
+  .achievement-notification-icon {
+    animation: none;
+  }
+
+  .journey-path-card:hover,
+  .achievement-badge:hover {
+    transform: none;
+  }
+}
+
+/* ================================================
+   USER PROFILE & CLOUD SYNC
+   ================================================ */
+
+.user-profile {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+/* Local mode indicator */
+.user-profile--local {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.user-profile-local-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: rgb(203, 213, 225);
+}
+
+.user-profile-local-hint {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  margin-top: 0.25rem;
+}
+
+/* Loading state */
+.user-profile--loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgb(148, 163, 184);
+}
+
+.user-profile-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgb(51, 65, 85);
+  border-top-color: rgb(249, 115, 22);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Compact profile (for navbar) */
+.user-profile--compact {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.user-profile-avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.user-profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgb(249, 115, 22);
+}
+
+.user-profile-avatar--default {
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 191, 36));
+  color: rgb(15, 23, 42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.user-profile-avatar--large {
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
+}
+
+.user-profile-level-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+}
+
+/* Dropdown menu */
+.user-profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: rgb(30, 41, 59);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.user-profile-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(51, 65, 85);
+}
+
+.user-profile-dropdown-header strong {
+  color: rgb(242, 244, 246);
+}
+
+.user-profile-points {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(251, 191, 36);
+}
+
+.user-profile-dropdown-sync {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(34, 197, 94);
+  margin-bottom: 0.75rem;
+}
+
+.user-profile-dropdown-btn {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: rgb(51, 65, 85);
+  border: none;
+  border-radius: 6px;
+  color: rgb(203, 213, 225);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-dropdown-btn:hover {
+  background: rgb(71, 85, 105);
+}
+
+/* Full profile card */
+.user-profile--full {
+  text-align: center;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.user-profile-info {
+  flex: 1;
+}
+
+.user-profile-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin: 0 0 0.25rem 0;
+}
+
+.user-profile-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.user-profile-level {
+  color: rgb(249, 115, 22);
+  font-weight: 600;
+}
+
+.user-profile-sync-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(34, 197, 94);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+}
+
+.user-profile-logout-btn {
+  padding: 0.625rem 1.5rem;
+  background: rgb(51, 65, 85);
+  border: none;
+  border-radius: 8px;
+  color: rgb(203, 213, 225);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-logout-btn:hover {
+  background: rgb(71, 85, 105);
+}
+
+/* Profile actions container */
+.user-profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.user-profile-settings-btn {
+  padding: 0.625rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgb(71, 85, 105);
+  border-radius: 8px;
+  color: rgb(203, 213, 225) !important;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none !important;
+}
+
+.user-profile-settings-btn:hover {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgb(249, 115, 22);
+  color: rgb(249, 115, 22) !important;
+}
+
+/* Dropdown link styling */
+.user-profile-dropdown-link {
+  text-decoration: none !important;
+  color: rgb(226, 230, 234) !important;
+  text-align: center;
+}
+
+.user-profile-dropdown-link:hover {
+  color: rgb(249, 115, 22) !important;
+}
+
+/* Guest state (not logged in) */
+.user-profile--guest {
+  text-align: center;
+}
+
+.user-profile-guest-message {
+  margin-bottom: 1.5rem;
+}
+
+.user-profile-guest-message h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin: 0 0 0.5rem 0;
+}
+
+.user-profile-guest-message p {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.user-profile-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.user-profile-auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-auth-btn--google {
+  background: white;
+  color: rgb(51, 65, 85);
+}
+
+.user-profile-auth-btn--google:hover {
+  background: rgb(243, 244, 246);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-profile-auth-btn--github {
+  background: rgb(36, 41, 47);
+  color: white;
+}
+
+.user-profile-auth-btn--github:hover {
+  background: rgb(51, 56, 63);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-profile-local-note {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+/* Sync indicator */
+.sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.sync-indicator--synced {
+  background: rgba(34, 197, 94, 0.1);
+  color: rgb(34, 197, 94);
+}
+
+.sync-indicator--syncing {
+  background: rgba(245, 158, 11, 0.1);
+  color: rgb(245, 158, 11);
+}
+
+.sync-indicator--offline {
+  background: rgba(148, 163, 184, 0.1);
+  color: rgb(148, 163, 184);
+}
+
+/* ================================================
+   COMPLETION TOAST
+   ================================================ */
+
+.completion-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, rgb(30, 41, 59), rgb(15, 23, 42));
+  border: 2px solid rgb(34, 197, 94);
+  border-radius: 16px;
+  padding: 1.25rem;
+  min-width: 300px;
+  max-width: 380px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(34, 197, 94, 0.15);
+  animation: completion-toast-slide-in 0.4s ease-out;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+@keyframes completion-toast-slide-in {
+  from {
+    transform: translateX(120%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.completion-toast-content {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.completion-toast-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgb(34, 197, 94), rgb(22, 163, 74));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+  animation: completion-icon-pop 0.5s ease-out 0.2s both;
+}
+
+@keyframes completion-icon-pop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.completion-toast-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.completion-toast-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(34, 197, 94);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.completion-toast-doc {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(242, 244, 246);
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completion-toast-stats {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.completion-toast-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
+  color: rgb(34, 197, 94) !important;
+  text-decoration: none !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.completion-toast-link:hover {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgb(34, 197, 94);
+  transform: translateX(2px);
+}
+
+.completion-toast-link-arrow {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.completion-toast-link:hover .completion-toast-link-arrow {
+  transform: translateX(4px);
+}
+
+.completion-toast-dismiss {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 24px;
+  height: 24px;
+  background: rgba(51, 65, 85, 0.8);
+  border: none;
+  border-radius: 50%;
+  color: rgb(148, 163, 184);
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.completion-toast-dismiss:hover {
+  background: rgb(71, 85, 105);
+  color: rgb(242, 244, 246);
+}
+
+/* Responsive completion toast */
+@media (max-width: 768px) {
+  .completion-toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    min-width: auto;
+    max-width: none;
+  }
+}
+
+/* Reduced motion for completion toast */
+@media (prefers-reduced-motion: reduce) {
+  .completion-toast {
+    animation: none;
+  }
+
+  .completion-toast-icon {
+    animation: none;
+  }
+}
+
+/* ================================================
+   CHALLENGE TOAST (Reading verification failure)
+   ================================================ */
+
+.completion-toast--challenge {
+  border-color: rgb(239, 68, 68);
+  cursor: default;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(239, 68, 68, 0.15);
+}
+
+.completion-toast-icon--success {
+  background: linear-gradient(135deg, rgb(34, 197, 94), rgb(22, 163, 74));
+}
+
+.completion-toast-icon--challenge {
+  background: linear-gradient(135deg, rgb(239, 68, 68), rgb(185, 28, 28));
+}
+
+.completion-toast-title--challenge {
+  color: rgb(239, 68, 68);
+}
+
+.completion-toast-message {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.completion-toast-message--challenge {
+  color: rgb(252, 165, 165);
+}
+
+.completion-toast-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.completion-toast-action {
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-align: center;
+}
+
+.completion-toast-action--primary {
+  background: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+}
+
+.completion-toast-action--primary:hover {
+  background: rgb(234, 88, 12);
+  transform: translateY(-1px);
+}
+
+.completion-toast-action--secondary {
+  background: rgba(71, 85, 105, 0.5);
+  color: rgb(148, 163, 184);
+}
+
+.completion-toast-action--secondary:hover {
+  background: rgb(71, 85, 105);
+  color: rgb(203, 213, 225);
+}

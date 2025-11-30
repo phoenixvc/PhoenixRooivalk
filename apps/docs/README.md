@@ -27,6 +27,57 @@
 
 ---
 
+## Documentation Link Checking
+
+The documentation includes automated link checking to catch broken links before
+they reach production.
+
+### Local Link Checking
+
+Before committing documentation changes, run the link checker locally:
+
+```bash
+# From repository root
+pnpm -C apps/docs run check-links
+
+# Or from the apps/docs directory
+pnpm run check-links
+```
+
+This will:
+
+1. Build the documentation site
+2. Check for broken internal links
+3. Report any broken links with details on how to fix them
+
+### Strict Build Mode
+
+For CI/CD or strict local testing, you can use the strict build mode that fails
+on any broken link:
+
+```bash
+pnpm run build:strict
+```
+
+### Common Link Issues
+
+- **Wrong relative path depth**: Use `../../folder/file` to go up two levels
+- **Missing .md extension**: Don't include `.md` in internal links
+- **Case sensitivity**: File paths are case-sensitive
+- **Anchor IDs**: Docusaurus generates anchors from full heading text (lowercase,
+  spaces become dashes)
+
+### CI Integration
+
+The `docs-link-checker.yml` workflow runs automatically on:
+
+- Pull requests that modify `apps/docs/**`
+- Pushes to `main` branch
+- Weekly scheduled runs
+- Manual workflow dispatch
+
+---
+
 ## Deployment and access control (Netlify)
 
 1. Create a Netlify site for `docs-site/` and get the Site ID.

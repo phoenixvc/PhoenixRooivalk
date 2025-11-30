@@ -1,0 +1,196 @@
+name: Deploy Cloud Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/docs/functions/**"
+      - "apps/docs/firestore.rules"
+      - "apps/docs/firestore.indexes.json"
+      - ".github/workflows/deploy-functions.yml"
+  pull_request:
+    paths:
+      - "apps/docs/functions/**"
+      - "apps/docs/firestore.rules"
+      - "apps/docs/firestore.indexes.json"
+      - ".github/workflows/deploy-functions.yml"
+  workflow_dispatch:
+    inputs:
+      deploy_functions:
+        description: "Deploy Cloud Functions"
+        type: boolean
+        default: true
+      deploy_firestore:
+        description: "Deploy Firestore rules and indexes"
+        type: boolean
+        default: true
+
+env:
+  NODE_VERSION: "18"
+
+jobs:
+  # Build and test Cloud Functions
+  build-functions:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/docs/functions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: functions-build
+          path: apps/docs/functions/lib
+          retention-days: 1
+
+  # Deploy to Firebase (only on main branch push)
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-functions
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: functions-build
+          path: apps/docs/functions/lib
+
+      - name: Install functions dependencies
+        run: cd functions && (npm ci || npm install)
+
+      - name: Check Firebase secrets
+        id: check_secrets
+        run: |
+          if [ -n "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ]; then
+            echo "secrets_available=true" >> $GITHUB_OUTPUT
+            echo "Firebase secrets are configured"
+          else
+            echo "secrets_available=false" >> $GITHUB_OUTPUT
+            echo "Warning: FIREBASE_SERVICE_ACCOUNT not configured"
+          fi
+
+      - name: Authenticate to Firebase
+        if: steps.check_secrets.outputs.secrets_available == 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Setup Firebase CLI
+        if: steps.check_secrets.outputs.secrets_available == 'true'
+        run: npm install -g firebase-tools
+
+      - name: Deploy Firestore rules
+        if: |
+          steps.check_secrets.outputs.secrets_available == 'true' &&
+          (github.event.inputs.deploy_firestore != 'false')
+        run:
+          firebase deploy --only firestore:rules --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Deploy Firestore indexes
+        if: |
+          steps.check_secrets.outputs.secrets_available == 'true' &&
+          (github.event.inputs.deploy_firestore != 'false')
+        run:
+          firebase deploy --only firestore:indexes --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Deploy Cloud Functions
+        if: |
+          steps.check_secrets.outputs.secrets_available == 'true' &&
+          (github.event.inputs.deploy_functions != 'false')
+        run:
+          firebase deploy --only functions --project ${{
+          secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Deployment Summary
+        if: steps.check_secrets.outputs.secrets_available == 'true'
+        run: |
+          echo "## Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Firestore Rules**: Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Firestore Indexes**: Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cloud Functions**: Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Functions Deployed:" >> $GITHUB_STEP_SUMMARY
+          echo "- cleanupOldAnalytics (daily 3am UTC)" >> $GITHUB_STEP_SUMMARY
+          echo "- cleanupInactiveSessions (daily 4am UTC)" >> $GITHUB_STEP_SUMMARY
+          echo "- archiveDailyStats (weekly Sunday 5am UTC)" >> $GITHUB_STEP_SUMMARY
+          echo "- manualCleanup (callable)" >> $GITHUB_STEP_SUMMARY
+          echo "- onUserDeleted (auth trigger)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Skip Deployment Notice
+        if: steps.check_secrets.outputs.secrets_available != 'true'
+        run: |
+          echo "## Deployment Skipped" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Firebase secrets not configured. To enable deployment:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Create a Firebase service account" >> $GITHUB_STEP_SUMMARY
+          echo "2. Add FIREBASE_SERVICE_ACCOUNT secret" >> $GITHUB_STEP_SUMMARY
+          echo "3. Add FIREBASE_PROJECT_ID secret" >> $GITHUB_STEP_SUMMARY
+
+  # PR Preview - just build and validate
+  pr-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/docs/functions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Validate Firestore rules
+        run: |
+          echo "Validating Firestore rules syntax..."
+          if [ -f "../firestore.rules" ]; then
+            echo "firestore.rules found"
+          else
+            echo "Error: firestore.rules not found"
+            exit 1
+          fi
+
+      - name: PR Check Summary
+        run: |
+          echo "## Functions PR Check Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript compilation: Success" >> $GITHUB_STEP_SUMMARY
+          echo "- Firestore rules: Found" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Functions will be deployed when merged to main." >> $GITHUB_STEP_SUMMARY

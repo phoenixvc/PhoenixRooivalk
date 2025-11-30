@@ -2,6 +2,12 @@
 id: presentation-materials
 title: Presentation Materials
 sidebar_label: Presentation Materials
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - executive
+  - counter-uas
 ---
 
 ## Executive Presentation Script
@@ -117,9 +123,9 @@ competitors cannot match.
 
 **Market Size & Growth:**
 
-- **Current Market**: $2.0-2.5B (2025)
-- **Growth Rate**: 20-27% CAGR
-- **Projected 2030**: $9-16B annual market value
+- **Current Market**: $2.45-3.0B (2025)
+- **Growth Rate**: 23-27% CAGR
+- **Projected 2030**: $9-15B annual market value
 - **Total Drone Industry**: $73B across consumer, commercial, military
 
 **Target Segments:**
@@ -233,7 +239,7 @@ competitors cannot match.
 **Investment Highlights:**
 
 - **Proven Technology**: Working prototype with operational validation
-- **Strong Market**: $2.5B market growing at 20-27% CAGR
+- **Strong Market**: $2.45-3.0B market growing at 23-27% CAGR
 - **Competitive Advantage**: 10-40x performance improvement with unique
   capabilities
 - **Experienced Team**: Strong technical capabilities in Rust, blockchain,

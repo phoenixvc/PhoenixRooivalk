@@ -1,0 +1,366 @@
+/* Contact Page Styles */
+
+.contactMain {
+  min-height: calc(100vh - 60px);
+  background: rgb(15, 23, 42);
+  padding: 3rem 1.5rem;
+}
+
+.contactContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contactHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contactHeader h1 {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 1rem !important;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  border-bottom: none !important;
+}
+
+.contactHeader p {
+  color: rgb(148, 163, 184);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Inquiry Type Section */
+.inquirySection {
+  margin-bottom: 3rem;
+}
+
+.inquirySection h2 {
+  font-size: 1.25rem !important;
+  color: rgb(226, 230, 234) !important;
+  margin-bottom: 1.5rem !important;
+  border-bottom: none !important;
+}
+
+.inquiryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.inquiryCard {
+  background: rgb(30, 41, 59);
+  border: 2px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inquiryCard:hover {
+  border-color: rgb(249, 115, 22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+}
+
+.inquiryCardSelected {
+  border-color: rgb(249, 115, 22);
+  background: rgba(249, 115, 22, 0.1);
+}
+
+.inquiryIcon {
+  font-size: 2rem;
+}
+
+.inquiryCard h3 {
+  font-size: 1rem !important;
+  color: rgb(242, 244, 246) !important;
+  margin: 0 !important;
+  border-bottom: none !important;
+}
+
+.inquiryCard p {
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.inquiryAction {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgb(30, 41, 59);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.inquiryAction p {
+  color: rgb(203, 213, 225);
+  margin-bottom: 1rem;
+}
+
+.mailtoButton {
+  display: inline-block;
+  background: rgb(249, 115, 22) !important;
+  color: rgb(15, 23, 42) !important;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.mailtoButton:hover {
+  background: rgb(234, 88, 12) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.clearButton {
+  display: block;
+  margin: 1rem auto 0;
+  background: transparent;
+  border: none;
+  color: rgb(148, 163, 184);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.clearButton:hover {
+  color: rgb(203, 213, 225);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgb(51, 65, 85);
+}
+
+.divider span {
+  padding: 0 1rem;
+  color: rgb(100, 116, 139);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Form Section */
+.formSection {
+  background: rgb(30, 41, 59);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.formSection h2 {
+  font-size: 1.25rem !important;
+  color: rgb(242, 244, 246) !important;
+  margin-bottom: 1.5rem !important;
+  border-bottom: none !important;
+}
+
+.contactForm {
+  margin: 0;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroupFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label,
+.formGroupFull label {
+  color: rgb(226, 230, 234);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroupFull textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgb(15, 23, 42);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 8px;
+  color: rgb(242, 244, 246);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroupFull textarea:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.formGroup input::placeholder,
+.formGroupFull textarea::placeholder {
+  color: rgb(100, 116, 139);
+}
+
+.formGroup select {
+  cursor: pointer;
+}
+
+.formGroupFull textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.formActions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.submitButton {
+  background: rgb(249, 115, 22);
+  color: rgb(15, 23, 42);
+  border: none;
+  padding: 0.875rem 2.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover {
+  background: rgb(234, 88, 12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+/* Direct Contact Section */
+.directContact {
+  text-align: center;
+}
+
+.directContact h2 {
+  font-size: 1.25rem !important;
+  color: rgb(226, 230, 234) !important;
+  margin-bottom: 1.5rem !important;
+  border-bottom: none !important;
+}
+
+.contactCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.contactCard {
+  background: rgb(30, 41, 59);
+  border: 1px solid rgb(51, 65, 85);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.contactCardIcon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.contactCard h3 {
+  font-size: 0.875rem !important;
+  color: rgb(148, 163, 184) !important;
+  margin: 0 0 0.5rem 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: none !important;
+}
+
+.contactCard a {
+  color: rgb(249, 115, 22) !important;
+  font-weight: 500;
+  text-decoration: none !important;
+}
+
+.contactCard a:hover {
+  text-decoration: underline !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contactMain {
+    padding: 2rem 1rem;
+  }
+
+  .contactHeader h1 {
+    font-size: 2rem !important;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGroup {
+    grid-column: 1;
+  }
+
+  .inquiryGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .inquiryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formSection {
+    padding: 1.5rem;
+  }
+}
+
+/* Focus styles for accessibility */
+.inquiryCard:focus-visible,
+.mailtoButton:focus-visible,
+.clearButton:focus-visible,
+.submitButton:focus-visible {
+  outline: 3px solid rgb(249, 115, 22);
+  outline-offset: 2px;
+}

@@ -1,3 +1,14 @@
+---
+id: troubleshooting-guide
+title: Phoenix Rooivalk Troubleshooting Guide
+sidebar_label: Phoenix Rooivalk Troubleshooting
+difficulty: intermediate
+estimated_reading_time: 10
+points: 15
+tags:
+  - operations
+---
+
 # Phoenix Rooivalk Troubleshooting Guide
 
 ## Executive Summary

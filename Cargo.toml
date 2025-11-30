@@ -11,6 +11,7 @@ members = [
   "crates/anchor-solana",
   "crates/address-validation",
   "crates/phoenix-common",
+  "crates/x402",
 ]
 
 [workspace.package]

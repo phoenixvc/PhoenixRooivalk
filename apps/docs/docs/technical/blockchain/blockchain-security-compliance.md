@@ -1,3 +1,17 @@
+---
+id: blockchain-security-compliance
+title: Phoenix Rooivalk Blockchain Security and Compliance
+sidebar_label: Phoenix Rooivalk Blockchain
+difficulty: advanced
+estimated_reading_time: 6
+points: 25
+tags:
+  - technical
+  - blockchain
+  - security
+  - ai
+---
+
 # Phoenix Rooivalk Blockchain Security and Compliance
 
 ## Executive Summary

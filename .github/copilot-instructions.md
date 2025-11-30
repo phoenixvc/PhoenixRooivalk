@@ -304,6 +304,36 @@ chore: Update dependencies to latest versions
 
 ## Documentation Requirements
 
+### Architecture Decision Records (ADRs)
+
+When creating or restructuring ADRs, **ALWAYS** reference the canonical
+template:
+
+```md
+apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
+```
+
+**ADR Requirements:**
+
+1. Follow the exact structure defined in ADR-0000
+2. Include Executive Summary (Problem, Decision, Trade-off)
+3. Consider at least 3 options with comparison tables
+4. List both positive AND negative consequences
+5. Use correct numbering convention:
+   - `0001-0099`: Core System Architecture
+   - `0100-0199`: Security & Compliance
+   - `0200-0299`: Blockchain & Evidence
+   - `0300-0399`: AI/ML Architecture
+   - `D001-D999`: Development Decisions
+
+**Key Files:**
+
+- Template:
+  `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
+- Index:
+  `apps/docs/docs/technical/architecture/architecture-decision-records.md`
+- Location: `apps/docs/docs/technical/architecture/adr-XXXX-short-title.md`
+
 ### Code Comments
 
 - **JSDoc** for all exported functions/components
@@ -369,10 +399,11 @@ chore: Update dependencies to latest versions
 
 ### Getting Help
 
-1. Check existing documentation in `/docs`
+1. Check documentation at
+   [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+   or in `apps/docs/`
 2. Review similar implementations in codebase
 3. Check GitHub Issues for related problems
-4. Consult `docs/GAME_IMPROVEMENTS_TODO.md` for known issues
 
 ## Code Review Checklist
 
@@ -392,10 +423,10 @@ Before submitting PR:
 
 ## Additional Resources
 
-- **Design System**: See `docs/VISUAL_IMPROVEMENTS_GUIDE.md`
-- **Improvements Tracker**: See `docs/GAME_IMPROVEMENTS_TODO.md`
-- **Architecture**: See `docs/REFACTORING_SUMMARY.md`
-- **WASM Integration**: See `docs/WASM_EMBEDDING_SUMMARY.md`
+- **Documentation Portal**:
+  [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+- **Documentation Source**: `apps/docs/docs/` - Technical, business, and
+  operations documentation
 - **Responsible Use**: See `RESPONSIBLE_USE.md`
 
 ---
