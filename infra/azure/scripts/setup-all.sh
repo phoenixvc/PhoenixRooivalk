@@ -8,7 +8,7 @@
 # Usage: ./setup-all.sh <environment> <location> [azure-openai-endpoint] [azure-openai-api-key]
 #
 # Examples:
-#   ./setup-all.sh dev eastus
+#   ./setup-all.sh dev eastus2
 #   ./setup-all.sh prod westeurope https://myopenai.openai.azure.com your-api-key
 #
 
@@ -37,20 +37,43 @@ print_banner() {
 
 # Parse arguments
 ENVIRONMENT="${1:-dev}"
-LOCATION="${2:-eastus}"
+LOCATION="${2:-eastus2}"
 AZURE_OPENAI_ENDPOINT="${3:-}"
 AZURE_OPENAI_API_KEY="${4:-}"
 
-# Derived names
+# Location short codes for naming: {env}-{region}-{type}-rooivalk
+case "$LOCATION" in
+    "eastus2") LOCATION_SHORT="eus2" ;;
+    "westeurope") LOCATION_SHORT="weu" ;;
+    "eastasia") LOCATION_SHORT="eas" ;;
+    "centralus") LOCATION_SHORT="cus" ;;
+    "westus2") LOCATION_SHORT="wus2" ;;
+    *) LOCATION_SHORT="${LOCATION:0:4}" ;;
+esac
+
+# Derived names using {env}-{region}-{type}-rooivalk format
 RESOURCE_GROUP="phoenix-rooivalk-${ENVIRONMENT}"
-PROJECT_NAME="phoenix-rooivalk"
+KEY_VAULT_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-kv-rooivalk"
+STORAGE_NAME="${ENVIRONMENT}${LOCATION_SHORT}strooivalk"
+APPI_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-appi-rooivalk"
+COSMOS_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-cosmos-rooivalk"
+FUNC_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-func-rooivalk"
+SWA_NAME="${ENVIRONMENT}-${LOCATION_SHORT}-swa-rooivalk"
 
 print_banner
 
 log_info "Configuration:"
 echo "  Environment:    $ENVIRONMENT"
-echo "  Location:       $LOCATION"
+echo "  Location:       $LOCATION ($LOCATION_SHORT)"
 echo "  Resource Group: $RESOURCE_GROUP"
+echo ""
+echo "  Resource Names (${ENVIRONMENT}-${LOCATION_SHORT}-{type}-rooivalk):"
+echo "    Key Vault:      $KEY_VAULT_NAME"
+echo "    Storage:        $STORAGE_NAME"
+echo "    App Insights:   $APPI_NAME"
+echo "    Cosmos DB:      $COSMOS_NAME"
+echo "    Functions:      $FUNC_NAME"
+echo "    Static Web App: $SWA_NAME"
 echo ""
 
 # Check prerequisites
@@ -84,12 +107,37 @@ log_info "Step 2/6: Deploying Azure infrastructure (this takes 5-10 minutes)..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INFRA_DIR="$(dirname "$SCRIPT_DIR")"
 
-az deployment group create \
-    --resource-group "$RESOURCE_GROUP" \
-    --template-file "$INFRA_DIR/main.bicep" \
-    --parameters "$INFRA_DIR/parameters.${ENVIRONMENT}.json" \
-    --parameters location="$LOCATION" projectName="$PROJECT_NAME" \
-    --output none
+# Check if parameters file exists, create default if not
+PARAMS_FILE="$INFRA_DIR/parameters.${ENVIRONMENT}.json"
+if [ ! -f "$PARAMS_FILE" ]; then
+    log_warning "Parameters file not found, using defaults"
+    PARAMS_FILE=""
+fi
+
+DEPLOY_PARAMS="location=$LOCATION environment=$ENVIRONMENT"
+if [ -n "$AZURE_OPENAI_ENDPOINT" ]; then
+    DEPLOY_PARAMS="$DEPLOY_PARAMS azureOpenAiEndpoint=$AZURE_OPENAI_ENDPOINT"
+fi
+if [ -n "$AZURE_OPENAI_API_KEY" ]; then
+    DEPLOY_PARAMS="$DEPLOY_PARAMS azureOpenAiApiKey=$AZURE_OPENAI_API_KEY"
+fi
+
+if [ -n "$PARAMS_FILE" ]; then
+    az deployment group create \
+        --name "main" \
+        --resource-group "$RESOURCE_GROUP" \
+        --template-file "$INFRA_DIR/main.bicep" \
+        --parameters "@$PARAMS_FILE" \
+        --parameters $DEPLOY_PARAMS \
+        --output none
+else
+    az deployment group create \
+        --name "main" \
+        --resource-group "$RESOURCE_GROUP" \
+        --template-file "$INFRA_DIR/main.bicep" \
+        --parameters $DEPLOY_PARAMS \
+        --output none
+fi
 
 log_success "Infrastructure deployed successfully"
 
@@ -98,20 +146,22 @@ log_info "Step 3/6: Retrieving deployment outputs..."
 
 OUTPUTS=$(az deployment group show \
     --resource-group "$RESOURCE_GROUP" \
-    --name phoenix-rooivalk \
-    --query properties.outputs)
+    --name "main" \
+    --query properties.outputs 2>/dev/null || echo "{}")
 
-# Extract values
-STATIC_WEB_APP_NAME=$(echo "$OUTPUTS" | jq -r '.staticWebAppName.value // empty')
-FUNCTIONS_APP_NAME=$(echo "$OUTPUTS" | jq -r '.functionsAppName.value // empty')
-COSMOS_ENDPOINT=$(echo "$OUTPUTS" | jq -r '.cosmosEndpoint.value // empty')
+# Extract values from outputs or use computed names
+COSMOS_ENDPOINT=$(echo "$OUTPUTS" | jq -r '.cosmosDbEndpoint.value // empty')
 APP_INSIGHTS_CONNECTION=$(echo "$OUTPUTS" | jq -r '.appInsightsConnectionString.value // empty')
-KEY_VAULT_NAME=$(echo "$OUTPUTS" | jq -r '.keyVaultName.value // empty')
+FUNCTIONS_URL=$(echo "$OUTPUTS" | jq -r '.functionsUrl.value // empty')
 
-# Fallback to naming convention if outputs not available
-STATIC_WEB_APP_NAME="${STATIC_WEB_APP_NAME:-swa-${PROJECT_NAME}-${ENVIRONMENT}}"
-FUNCTIONS_APP_NAME="${FUNCTIONS_APP_NAME:-func-${PROJECT_NAME}-${ENVIRONMENT}}"
-KEY_VAULT_NAME="${KEY_VAULT_NAME:-kv-phoenixrooivalk-${ENVIRONMENT}}"
+# Use computed names (they match what Bicep creates)
+STATIC_WEB_APP_NAME="$SWA_NAME"
+FUNCTIONS_APP_NAME="$FUNC_NAME"
+
+# Fallback for Functions URL
+if [ -z "$FUNCTIONS_URL" ]; then
+    FUNCTIONS_URL="https://${FUNCTIONS_APP_NAME}.azurewebsites.net"
+fi
 
 log_success "Retrieved deployment outputs"
 
@@ -123,7 +173,7 @@ if [ -n "$AZURE_OPENAI_API_KEY" ]; then
         --vault-name "$KEY_VAULT_NAME" \
         --name "AzureOpenAiApiKey" \
         --value "$AZURE_OPENAI_API_KEY" \
-        --output none
+        --output none 2>/dev/null || log_warning "Could not set Key Vault secret (may need permissions)"
     log_success "Azure OpenAI API key stored in Key Vault"
 else
     log_warning "No Azure OpenAI API key provided. Add it later with:"
@@ -132,7 +182,6 @@ fi
 
 if [ -n "$AZURE_OPENAI_ENDPOINT" ]; then
     log_info "Azure OpenAI endpoint: $AZURE_OPENAI_ENDPOINT"
-    log_info "Configure this in your Function App settings or parameters file"
 fi
 
 # Step 5: Get Static Web Apps deployment token
@@ -151,14 +200,20 @@ fi
 # Step 6: Generate configuration
 log_info "Step 6/6: Generating configuration files..."
 
-FUNCTIONS_URL="https://${FUNCTIONS_APP_NAME}.azurewebsites.net"
-
 # Get App Insights connection string if not from outputs
 if [ -z "$APP_INSIGHTS_CONNECTION" ]; then
     APP_INSIGHTS_CONNECTION=$(az monitor app-insights component show \
-        --app "appi-${PROJECT_NAME}-${ENVIRONMENT}" \
+        --app "$APPI_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --query connectionString -o tsv 2>/dev/null || echo "")
+fi
+
+# Get Cosmos endpoint if not from outputs
+if [ -z "$COSMOS_ENDPOINT" ]; then
+    COSMOS_ENDPOINT=$(az cosmosdb show \
+        --name "$COSMOS_NAME" \
+        --resource-group "$RESOURCE_GROUP" \
+        --query documentEndpoint -o tsv 2>/dev/null || echo "")
 fi
 
 # Create output directory
@@ -171,6 +226,7 @@ cat > "$ENV_FILE" << EOF
 # Phoenix Rooivalk - Azure Configuration
 # Generated on $(date)
 # Environment: $ENVIRONMENT
+# Region: $LOCATION ($LOCATION_SHORT)
 
 # Cloud Provider Selection
 CLOUD_PROVIDER=azure
@@ -180,9 +236,13 @@ AZURE_STATIC_WEB_APP_NAME=$STATIC_WEB_APP_NAME
 
 # Azure Functions
 AZURE_FUNCTIONS_BASE_URL=$FUNCTIONS_URL
+AZURE_FUNCTIONS_APP_NAME=$FUNCTIONS_APP_NAME
 
 # Azure Application Insights
 AZURE_APP_INSIGHTS_CONNECTION_STRING=$APP_INSIGHTS_CONNECTION
+
+# Azure Key Vault
+AZURE_KEY_VAULT_NAME=$KEY_VAULT_NAME
 
 # Azure AD B2C (configure after running setup-b2c.sh)
 AZURE_AD_B2C_TENANT_ID=
@@ -209,8 +269,9 @@ gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body "$SWA_TOKEN"
 # Cloud Provider
 gh secret set CLOUD_PROVIDER --body "azure"
 
-# Azure Functions URL
+# Azure Functions
 gh secret set AZURE_FUNCTIONS_BASE_URL --body "$FUNCTIONS_URL"
+gh secret set AZURE_FUNCTIONS_APP_NAME --body "$FUNCTIONS_APP_NAME"
 
 # Azure Application Insights
 gh secret set AZURE_APP_INSIGHTS_CONNECTION_STRING --body "$APP_INSIGHTS_CONNECTION"
@@ -236,7 +297,10 @@ echo "Resources created:"
 echo "  - Resource Group:     $RESOURCE_GROUP"
 echo "  - Static Web App:     $STATIC_WEB_APP_NAME"
 echo "  - Azure Functions:    $FUNCTIONS_APP_NAME"
+echo "  - Cosmos DB:          $COSMOS_NAME"
 echo "  - Key Vault:          $KEY_VAULT_NAME"
+echo "  - App Insights:       $APPI_NAME"
+echo "  - Storage:            $STORAGE_NAME"
 echo ""
 echo "Next steps:"
 echo ""
@@ -246,13 +310,10 @@ echo ""
 echo "  2. Add GitHub secrets (requires gh CLI):"
 echo "     $SECRETS_FILE"
 echo ""
-echo "  3. Deploy Azure Functions:"
-echo "     ./scripts/deploy-functions.sh $ENVIRONMENT $RESOURCE_GROUP"
-echo ""
-echo "  4. Copy environment variables to your .env.local:"
+echo "  3. Copy environment variables to your .env.local:"
 echo "     cat $ENV_FILE"
 echo ""
-echo "  5. Push to trigger GitHub Actions deployment"
+echo "  4. Push to trigger GitHub Actions deployment"
 echo ""
 
 # Save deployment info
@@ -261,12 +322,21 @@ cat > "$INFO_FILE" << EOF
 {
   "environment": "$ENVIRONMENT",
   "location": "$LOCATION",
+  "locationShort": "$LOCATION_SHORT",
   "resourceGroup": "$RESOURCE_GROUP",
-  "staticWebApp": "$STATIC_WEB_APP_NAME",
-  "functionsApp": "$FUNCTIONS_APP_NAME",
-  "keyVault": "$KEY_VAULT_NAME",
-  "functionsUrl": "$FUNCTIONS_URL",
-  "cosmosEndpoint": "$COSMOS_ENDPOINT",
+  "naming": "${ENVIRONMENT}-${LOCATION_SHORT}-{type}-rooivalk",
+  "resources": {
+    "staticWebApp": "$STATIC_WEB_APP_NAME",
+    "functionsApp": "$FUNCTIONS_APP_NAME",
+    "cosmosDb": "$COSMOS_NAME",
+    "keyVault": "$KEY_VAULT_NAME",
+    "appInsights": "$APPI_NAME",
+    "storage": "$STORAGE_NAME"
+  },
+  "urls": {
+    "functions": "$FUNCTIONS_URL",
+    "cosmosEndpoint": "$COSMOS_ENDPOINT"
+  },
   "deployedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
 EOF
