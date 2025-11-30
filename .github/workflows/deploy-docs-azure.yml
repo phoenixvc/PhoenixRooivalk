@@ -152,11 +152,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          # Use app_location matching Azure's stored config, output_location for build output
-          app_location: "apps/docs"
-          output_location: "build"
-          # Skip Oryx build since we pre-built above (still respects output_location unlike skip_app_build)
-          app_build_command: "echo 'Using pre-built output'"
+          # Point directly to pre-built output; skip_app_build bypasses Oryx entirely
+          app_location: "apps/docs/build"
+          skip_app_build: true
           skip_api_build: true
           production_branch: "main"
 
