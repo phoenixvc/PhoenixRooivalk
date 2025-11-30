@@ -12,7 +12,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { SqlParameter } from "@azure/cosmos";
-import { requireAuth } from "../lib/auth";
+import { requireAuthAsync } from "../lib/auth";
 import { queryDocuments } from "../lib/cosmos";
 import {
   generateCompletion,
@@ -152,7 +152,7 @@ async function handler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   // Check authentication
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }

@@ -161,10 +161,23 @@ jobs:
           SWA_CLI_DEPLOYMENT_TOKEN:
             ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
         run: |
-          swa deploy apps/docs/build \
+          # Capture deployment output to extract preview URL
+          OUTPUT=$(swa deploy apps/docs/build \
             --env production \
             --no-use-keychain \
-            --verbose
+            --verbose 2>&1) || true
+          echo "$OUTPUT"
+          
+          # Try to extract the preview URL from SWA CLI output
+          PREVIEW_URL=$(echo "$OUTPUT" | grep -oP 'https://[a-zA-Z0-9-]+\.azurestaticapps\.net' | head -1 || echo "")
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+          
+          # Check if deployment was successful
+          if echo "$OUTPUT" | grep -q "Deployment succeeded"; then
+            echo "deployment_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "deployment_status=unknown" >> $GITHUB_OUTPUT
+          fi
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
@@ -172,15 +185,22 @@ jobs:
         with:
           script: |
             const prNumber = context.issue.number;
-            const appName = process.env.SWA_APP_NAME || 'phoenixrooivalk-docs';
-            const previewUrl = `https://${appName}-${prNumber}.azurestaticapps.net`;
+            const previewUrl = '${{ steps.deploy.outputs.preview_url }}';
             const portalUrl = 'https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Web%2FStaticSites';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let body;
+            if (previewUrl) {
+              body = `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n**Preview URL:** ${previewUrl}\n\n*This preview will be automatically deleted when the PR is closed.*`;
+            } else {
+              body = `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n> **Note:** The preview URL could not be automatically detected. Please check:\n> - [Workflow logs](${workflowUrl}) for the deployment URL\n> - [Azure Portal](${portalUrl}) for your Static Web App environments\n\n*This preview will be automatically deleted when the PR is closed.*`;
+            }
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n**Preview URL:** ${previewUrl}\n\n> **Note:** If the preview URL doesn't work, the deployment may use a different hostname. Check the [Azure Portal](${portalUrl}) or the workflow logs above for the actual URL.\n\n*This preview will be automatically deleted when the PR is closed.*`
+              body
             });
 
   close-pull-request:

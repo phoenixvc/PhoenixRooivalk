@@ -11,7 +11,7 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { requireAuth } from "../lib/auth";
+import { requireAuthAsync } from "../lib/auth";
 import { generateCompletion, checkRateLimit } from "../lib/openai";
 
 interface RecommendationRequest {
@@ -24,7 +24,7 @@ async function handler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }

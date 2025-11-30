@@ -12,7 +12,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { SqlParameter, JSONValue } from "@azure/cosmos";
-import { requireAuth } from "../lib/auth";
+import { requireAuthAsync } from "../lib/auth";
 import {
   getDocument,
   upsertDocument,
@@ -27,7 +27,7 @@ async function getDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
@@ -64,7 +64,7 @@ async function setDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
@@ -120,7 +120,7 @@ async function updateDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
@@ -173,7 +173,7 @@ async function queryDocumentsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }

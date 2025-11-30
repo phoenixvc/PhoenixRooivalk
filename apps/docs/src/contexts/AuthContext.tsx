@@ -9,6 +9,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useMemo,
   ReactNode,
 } from "react";
 import {
@@ -224,8 +225,8 @@ export function AuthProvider({
   const [userProfile, setUserProfile] = useState<UserProfileState>(
     DEFAULT_PROFILE_STATE,
   );
-  const isConfigured = isAuthConfigured();
-  const missingConfig = getMissingAuthConfig();
+  const isConfigured = useMemo(() => isAuthConfigured(), []);
+  const missingConfig = useMemo(() => getMissingAuthConfig(), []);
 
   // Debug logging on mount
   useEffect(() => {

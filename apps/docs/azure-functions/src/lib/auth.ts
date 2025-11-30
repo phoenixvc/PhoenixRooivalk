@@ -14,6 +14,7 @@ const logger: Logger = createLogger({ feature: "auth" });
 
 export interface TokenClaims {
   sub: string;
+  oid?: string;
   email?: string;
   name?: string;
   roles?: string[];
@@ -21,6 +22,7 @@ export interface TokenClaims {
   aud: string;
   exp: number;
   iat: number;
+  nbf?: number;
 }
 
 /**
@@ -122,6 +124,29 @@ export async function getTokenClaims(
 }
 
 /**
+ * Get token claims from request (synchronous, for legacy compatibility)
+ * NOTE: Does not validate signature - prefer requireAuthAsync for secure validation
+ */
+export function getTokenClaims(request: HttpRequest): TokenClaims | null {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return null;
+  }
+
+  const token = authHeader.substring(7);
+  return decodeJwtPayload(token);
+}
+
+/**
+ * Extract user ID from request (synchronous)
+ * NOTE: Does not validate signature - prefer requireAuthAsync for secure validation
+ */
+export function getUserIdFromRequest(request: HttpRequest): string | null {
+  const claims = getTokenClaims(request);
+  return claims?.sub || claims?.oid || null;
+}
+
+/**
  * Check if user is admin based on email domain
  */
 export async function isAdmin(request: HttpRequest): Promise<boolean> {
@@ -133,8 +158,69 @@ export async function isAdmin(request: HttpRequest): Promise<boolean> {
 }
 
 /**
- * Require authentication - returns error response if not authenticated
- * Note: This is sync for compatibility, use requireAuthAsync for proper validation
+ * Check if user is admin based on validated claims
+ */
+function isAdminFromClaims(claims: TokenClaims): boolean {
+  if (!claims?.email) return false;
+  const domain = claims.email.split("@")[1]?.toLowerCase();
+  return ADMIN_DOMAINS.includes(domain);
+}
+
+/**
+ * Require authentication with proper JWT validation (async)
+ * This validates JWT signature using Azure AD B2C JWKS
+ */
+export async function requireAuthAsync(request: HttpRequest): Promise<{
+  authenticated: boolean;
+  userId: string | null;
+  claims?: TokenClaims;
+  error?: { status: number; body: object };
+}> {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return {
+      authenticated: false,
+      userId: null,
+      error: {
+        status: 401,
+        body: { error: "Authentication required", code: "unauthenticated" },
+      },
+    };
+  }
+
+  const token = authHeader.substring(7);
+  const claims = await validateJwtToken(token);
+
+  if (!claims) {
+    return {
+      authenticated: false,
+      userId: null,
+      error: {
+        status: 401,
+        body: { error: "Invalid or expired token", code: "unauthenticated" },
+      },
+    };
+  }
+
+  const userId = claims.sub || claims.oid;
+  if (!userId) {
+    return {
+      authenticated: false,
+      userId: null,
+      error: {
+        status: 401,
+        body: { error: "Token missing user identifier", code: "unauthenticated" },
+      },
+    };
+  }
+
+  return { authenticated: true, userId, claims };
+}
+
+/**
+ * Require authentication - synchronous version (legacy)
+ * WARNING: Does not validate JWT signature. Use requireAuthAsync for secure validation.
+ * This exists for backwards compatibility during migration.
  */
 export function requireAuth(request: HttpRequest): {
   authenticated: boolean;
@@ -213,7 +299,34 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
 }
 
 /**
- * Require admin access
+ * Require admin access with proper JWT validation (async)
+ */
+export async function requireAdminAsync(request: HttpRequest): Promise<{
+  authorized: boolean;
+  userId: string | null;
+  error?: { status: number; body: object };
+}> {
+  const authResult = await requireAuthAsync(request);
+  if (!authResult.authenticated) {
+    return { authorized: false, userId: null, error: authResult.error };
+  }
+
+  if (!authResult.claims || !isAdminFromClaims(authResult.claims)) {
+    return {
+      authorized: false,
+      userId: authResult.userId,
+      error: {
+        status: 403,
+        body: { error: "Admin access required", code: "permission-denied" },
+      },
+    };
+  }
+
+  return { authorized: true, userId: authResult.userId };
+}
+
+/**
+ * Require admin access - synchronous version (legacy)
  */
 export async function requireAdmin(request: HttpRequest): Promise<{
   authorized: boolean;
@@ -241,8 +354,7 @@ export async function requireAdmin(request: HttpRequest): Promise<{
 }
 
 /**
- * Validate authorization header directly
- * For use with API keys or tokens passed as header string
+ * Validate authorization header with proper JWT validation
  */
 export async function validateAuthHeader(
   authHeader: string | null,

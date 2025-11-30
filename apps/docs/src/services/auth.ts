@@ -5,11 +5,7 @@
  * Uses Azure Entra ID (MSAL) for auth and Azure Functions/Cosmos DB for data.
  */
 
-import {
-  getAuthService,
-  getDatabaseService,
-  isCloudConfigured,
-} from "./cloud";
+import { getAuthService, getDatabaseService, isCloudConfigured } from "./cloud";
 
 // User type
 export interface User {
@@ -72,7 +68,15 @@ export function isAuthConfigured(): boolean {
  */
 export function getMissingAuthConfig(): string[] {
   if (isCloudConfigured()) return [];
-  return ["AZURE_ENTRA_CLIENT_ID", "AZURE_ENTRA_TENANT_ID"];
+
+  const missing: string[] = [];
+  if (!process.env.AZURE_ENTRA_CLIENT_ID) {
+    missing.push("AZURE_ENTRA_CLIENT_ID");
+  }
+  if (!process.env.AZURE_ENTRA_TENANT_ID) {
+    missing.push("AZURE_ENTRA_TENANT_ID");
+  }
+  return missing;
 }
 
 /**
