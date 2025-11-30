@@ -65,9 +65,6 @@ export function isAuthConfigured(): boolean {
   return isCloudConfigured();
 }
 
-// Backward compatibility alias
-export const isFirebaseConfigured = isAuthConfigured;
-
 /**
  * Get missing Azure configuration
  */
@@ -75,9 +72,6 @@ export function getMissingAuthConfig(): string[] {
   if (isCloudConfigured()) return [];
   return ["AZURE_ENTRA_CLIENT_ID", "AZURE_ENTRA_TENANT_ID"];
 }
-
-// Backward compatibility alias
-export const getMissingFirebaseConfig = getMissingAuthConfig;
 
 /**
  * Auth state change listener

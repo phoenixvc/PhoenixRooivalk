@@ -1,0 +1,46 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "analytics_pageviews",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
+    },
+    {
+      "collectionGroup": "analytics_timeonpage",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
+    },
+    {
+      "collectionGroup": "analytics_conversions",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
+    },
+    {
+      "collectionGroup": "analytics_sessions",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "lastActivity", "order": "DESCENDING" }]
+    },
+    {
+      "collectionGroup": "analytics_daily",
+      "queryScope": "COLLECTION",
+      "fields": [{ "fieldPath": "date", "order": "DESCENDING" }]
+    },
+    {
+      "collectionGroup": "comment_notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "authorId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "news_articles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "publishedAt", "order": "DESCENDING" },
+        { "fieldPath": "__name__", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
