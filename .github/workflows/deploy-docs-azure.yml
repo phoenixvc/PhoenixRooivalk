@@ -52,8 +52,8 @@ jobs:
 
           # Recommended but not required (app works in offline mode without these)
           WARNINGS=""
-          if [ -z "${{ secrets.AZURE_AD_B2C_TENANT_ID }}" ]; then
-            WARNINGS="${WARNINGS}\n  - AZURE_AD_B2C_TENANT_ID (auth will be disabled)"
+          if [ -z "${{ secrets.AZURE_ENTRA_TENANT_ID }}" ]; then
+            WARNINGS="${WARNINGS}\n  - AZURE_ENTRA_TENANT_ID (auth will be disabled)"
           fi
           if [ -z "${{ secrets.AZURE_FUNCTIONS_BASE_URL }}" ]; then
             WARNINGS="${WARNINGS}\n  - AZURE_FUNCTIONS_BASE_URL (API calls will fail)"
@@ -111,10 +111,15 @@ jobs:
           # Cloud provider configuration
           CLOUD_PROVIDER: ${{ secrets.CLOUD_PROVIDER || 'azure' }}
 
-          # Azure configuration
-          AZURE_AD_B2C_TENANT_ID: ${{ secrets.AZURE_AD_B2C_TENANT_ID }}
-          AZURE_AD_B2C_CLIENT_ID: ${{ secrets.AZURE_AD_B2C_CLIENT_ID }}
-          AZURE_AD_B2C_AUTHORITY: ${{ secrets.AZURE_AD_B2C_AUTHORITY }}
+          # Azure Entra ID configuration
+          AZURE_ENTRA_TENANT_ID: ${{ secrets.AZURE_ENTRA_TENANT_ID }}
+          AZURE_ENTRA_CLIENT_ID: ${{ secrets.AZURE_ENTRA_CLIENT_ID }}
+          AZURE_ENTRA_AUTHORITY: ${{ secrets.AZURE_ENTRA_AUTHORITY }}
+          AZURE_ENTRA_REDIRECT_URI: ${{ secrets.AZURE_ENTRA_REDIRECT_URI }}
+          AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI: ${{ secrets.AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI }}
+          AZURE_ENTRA_SCOPES: ${{ secrets.AZURE_ENTRA_SCOPES || 'openid profile email User.Read' }}
+
+          # Azure services configuration
           AZURE_FUNCTIONS_BASE_URL: ${{ secrets.AZURE_FUNCTIONS_BASE_URL }}
           AZURE_APP_INSIGHTS_CONNECTION_STRING: ${{ secrets.AZURE_APP_INSIGHTS_CONNECTION_STRING }}
 
