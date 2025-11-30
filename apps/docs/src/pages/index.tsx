@@ -126,8 +126,8 @@ export default function Home(): React.ReactElement {
         .marketing .hero-badge::before { content: '🛡️'; }
         @keyframes marketing-fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
 
-        .marketing .cta-button { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: var(--dark); padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all .3s; display: inline-block; font-size: 0.9rem; }
-        .marketing .cta-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35); color: var(--dark); }
+        .marketing .cta-button { background: var(--primary); color: var(--dark); padding: 0.75rem 1.75rem; border-radius: 6px; font-weight: 600; transition: all .2s ease; display: inline-block; font-size: 0.95rem; border: none; }
+        .marketing .cta-button:hover { background: #ea580c; transform: translateY(-1px); color: var(--dark); }
         .marketing .secondary-button { background: transparent; border: 1.5px solid rgba(249,115,22,0.6); color: var(--primary); padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: 600; transition: all .3s; font-size: 0.9rem; }
         .marketing .secondary-button:hover { background: rgba(249,115,22,0.1); border-color: var(--primary); color: var(--primary); }
 
