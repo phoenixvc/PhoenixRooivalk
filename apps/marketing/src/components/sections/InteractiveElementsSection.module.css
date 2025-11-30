@@ -816,3 +816,23 @@
   color: rgb(var(--gray));
   margin-top: 0.5rem;
 }
+
+.buttonActive {
+  background-color: var(--phoenix-amber);
+  color: var(--tactical-black);
+}
+
+.inputWithNumber {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.numberInput {
+  width: 100px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}

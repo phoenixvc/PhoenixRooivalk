@@ -19,6 +19,15 @@ export interface ROICalculation {
   traditional: ROIResult;
 }
 
+/**
+ * Calculates the return on investment (ROI) for the Phoenix Rooivalk system
+ * compared to traditional systems.
+ *
+ * @param inputs - The user-provided inputs for the ROI calculation.
+ * @param sensitivity - The sensitivity level for the calculation.
+ * @returns An object containing the ROI calculation results for both Phoenix
+ * Rooivalk and traditional systems.
+ */
 export const calculateROI = (
   inputs: ROIInputs,
   sensitivity: SensitivityLevel,
