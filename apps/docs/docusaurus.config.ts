@@ -365,7 +365,21 @@ const config: Config = {
           items: [
             { label: "About", href: "https://phoenixrooivalk.netlify.app" },
             { label: "Contact and Support", to: "/contact" },
-            { label: "GitHub", href: "https://github.com/JustAGhosT/PhoenixRooivalk" },
+            {
+              label: "GitHub",
+              href: "https://github.com/JustAGhosT/PhoenixRooivalk",
+              className: "footer__link-social footer__link-github",
+            },
+            {
+              label: "LinkedIn",
+              href: "https://linkedin.com/company/phoenix-rooivalk",
+              className: "footer__link-social footer__link-linkedin",
+            },
+            {
+              label: "X / Twitter",
+              href: "https://x.com/phoenixrooivalk",
+              className: "footer__link-social footer__link-twitter",
+            },
           ],
         },
       ],
