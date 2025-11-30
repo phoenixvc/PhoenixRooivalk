@@ -93,20 +93,35 @@ export const InteractiveElementsSection: React.FC = () => {
                   >
                     Threat Frequency (per month)
                   </label>
-                  <input
-                    id="roi-threat-frequency"
-                    type="range"
-                    min="1"
-                    max="20"
-                    value={roiInputs.threatFrequency}
-                    onChange={(e) =>
-                      setRoiInputs((prev) => ({
-                        ...prev,
-                        threatFrequency: parseInt(e.target.value),
-                      }))
-                    }
-                    className={styles.rangeInput}
-                  />
+                  <div className={styles.inputWithNumber}>
+                    <input
+                      id="roi-threat-frequency"
+                      type="range"
+                      min="1"
+                      max="20"
+                      value={roiInputs.threatFrequency}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          threatFrequency: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.rangeInput}
+                    />
+                    <input
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={roiInputs.threatFrequency}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          threatFrequency: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.numberInput}
+                    />
+                  </div>
                   <div className={styles.rangeLabels}>
                     <span className="flex-shrink-0">1</span>
                     <span className={styles.rangeValue}>
@@ -120,21 +135,37 @@ export const InteractiveElementsSection: React.FC = () => {
                   <label htmlFor="roi-response-time" className={styles.label}>
                     Current Response Time (ms)
                   </label>
-                  <input
-                    id="roi-response-time"
-                    type="range"
-                    min="1000"
-                    max="10000"
-                    step="500"
-                    value={roiInputs.averageResponseTime}
-                    onChange={(e) =>
-                      setRoiInputs((prev) => ({
-                        ...prev,
-                        averageResponseTime: parseInt(e.target.value),
-                      }))
-                    }
-                    className={styles.rangeInput}
-                  />
+                  <div className={styles.inputWithNumber}>
+                    <input
+                      id="roi-response-time"
+                      type="range"
+                      min="1000"
+                      max="10000"
+                      step="500"
+                      value={roiInputs.averageResponseTime}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          averageResponseTime: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.rangeInput}
+                    />
+                    <input
+                      type="number"
+                      min="1000"
+                      max="10000"
+                      step="500"
+                      value={roiInputs.averageResponseTime}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          averageResponseTime: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.numberInput}
+                    />
+                  </div>
                   <div className={styles.rangeLabels}>
                     <span className="flex-shrink-0">1s</span>
                     <span className={styles.rangeValue}>
@@ -148,21 +179,37 @@ export const InteractiveElementsSection: React.FC = () => {
                   <label htmlFor="roi-deployment-cost" className={styles.label}>
                     Deployment Cost (USD)
                   </label>
-                  <input
-                    id="roi-deployment-cost"
-                    type="range"
-                    min="100000"
-                    max="1000000"
-                    step="50000"
-                    value={roiInputs.deploymentCost}
-                    onChange={(e) =>
-                      setRoiInputs((prev) => ({
-                        ...prev,
-                        deploymentCost: parseInt(e.target.value),
-                      }))
-                    }
-                    className={styles.rangeInput}
-                  />
+                  <div className={styles.inputWithNumber}>
+                    <input
+                      id="roi-deployment-cost"
+                      type="range"
+                      min="100000"
+                      max="1000000"
+                      step="50000"
+                      value={roiInputs.deploymentCost}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          deploymentCost: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.rangeInput}
+                    />
+                    <input
+                      type="number"
+                      min="100000"
+                      max="1000000"
+                      step="50000"
+                      value={roiInputs.deploymentCost}
+                      onChange={(e) =>
+                        setRoiInputs((prev) => ({
+                          ...prev,
+                          deploymentCost: parseInt(e.target.value),
+                        }))
+                      }
+                      className={styles.numberInput}
+                    />
+                  </div>
                   <div className={styles.rangeLabels}>
                     <span className="flex-shrink-0">$100K</span>
                     <span className={styles.rangeValue}>
