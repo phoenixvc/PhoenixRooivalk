@@ -19,7 +19,7 @@ TechnologyComparison from "@site/src/components/mdx/TechnologyComparison";
 
 ## Executive Pitch Deck
 
-<PitchDeckSlide title="Phoenix Rooivalk: SAE Level 4 Autonomous Counter-UAS Defense" slideNumber={1} totalSlides={15}>
+<PitchDeckSlide title="Phoenix Rooivalk: SAE Level 4 Autonomous Counter-UAS Defense" slideNumber={1} totalSlides={16}>
 # Revolutionary Defense Technology
 
 **Phoenix Rooivalk** represents the next generation of counter-drone defense
@@ -37,7 +37,39 @@ resilience.
 _Revolutionizing Drone Defense Through Edge AI and Blockchain Accountability_
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Market Opportunity: $2.51B by 2030" slideNumber={2} totalSlides={15}>
+<PitchDeckSlide title="Recent Milestones: Week 48 (Nov 25 - Dec 1, 2025)" slideNumber={2} totalSlides={16}>
+# Rapid Development Progress
+
+<TechnicalHighlight title="Hardware Prototype Ready" type="success" icon="✅">
+Net launcher and net designs complete - ready for prototyping. In-house Kevlar manufacturing using domestic stock reduces costs by 60%, eliminates import delays, and protects IP.
+</TechnicalHighlight>
+
+### Key Achievements This Week
+
+- **370+ Commits Merged**: Massive engineering velocity across platform
+- **x402 Revenue Model Live**: Blockchain micropayments for evidence
+  verification API
+- **Market Validation Complete**: 3 SA airports + Boeing pilot interviewed
+- **10+ ADRs Published**: Architecture decisions documented for due diligence
+
+### Strategic Insights
+
+- **South Africa Market**: Zero drone incidents reported - validates
+  international-first strategy
+- **Target Markets Confirmed**: EU and Canada where the problem exists today
+- **Pre-Hardware Revenue**: x402 protocol enables monetization before hardware
+  ships
+- **Production-Ready Platform**: Full RAG integration, auth, gamification
+  deployed
+
+### Next Week Deliverables
+
+- Start net launcher prototype with Pieter's Kevlar stock
+- Continue x402 testing and security hardening
+- Begin international outreach (EU/Canada airports)
+- Ground-based launcher development for Grover UGV integration </PitchDeckSlide>
+
+<PitchDeckSlide title="Market Opportunity: $2.51B by 2030" slideNumber={3} totalSlides={16}>
 # Explosive Market Growth
 
 <MarketStats title="Global Counter-Drone Market" stats={[ { label: "2024 Market
@@ -59,7 +91,7 @@ Impact", value: "15%", description: "Drones account for casualties" } ]} />
 - **Critical Infrastructure**: $0.8B by 2030
 - **Commercial & Civilian**: $0.5B by 2030 </PitchDeckSlide>
 
-<PitchDeckSlide title="Technology Differentiation" slideNumber={3} totalSlides={15}>
+<PitchDeckSlide title="Technology Differentiation" slideNumber={4} totalSlides={16}>
 # Cutting-Edge Technology Stack
 
 <TechnicalHighlight title="Edge-First Architecture" type="success" icon="⚡">
@@ -91,7 +123,7 @@ processing. All critical decisions made locally without network dependency.
 
 - **Environmental Resilience**: -40°C to +70°C operation </PitchDeckSlide>
 
-<PitchDeckSlide title="Competitive Advantage" slideNumber={4} totalSlides={15}>
+<PitchDeckSlide title="Competitive Advantage" slideNumber={5} totalSlides={16}>
 # Industry-Leading Performance
 
 <TechnologyComparison title="Phoenix Rooivalk vs. Competitors"
@@ -114,7 +146,7 @@ competitor3: "false" } ]} />
 - **South African manufacturing advantages**
 - **Non-ITAR jurisdiction for global exports** </PitchDeckSlide>
 
-<PitchDeckSlide title="Business Model & Revenue" slideNumber={5} totalSlides={15}>
+<PitchDeckSlide title="Business Model & Revenue" slideNumber={6} totalSlides={16}>
 # Hybrid Hardware + SaaS Model
 
 ## Revenue Streams
@@ -140,7 +172,7 @@ Revenue", value: "R500M", description: "200 systems + recurring" }, { label:
 "Gross Margin", value: "65%", description: "Hardware + software combined" } ]}
 /> </PitchDeckSlide>
 
-<PitchDeckSlide title="Market Positioning" slideNumber={6} totalSlides={15}>
+<PitchDeckSlide title="Market Positioning" slideNumber={7} totalSlides={16}>
 # Strategic Market Focus
 
 ## Primary Markets
@@ -173,7 +205,7 @@ Revenue", value: "R500M", description: "200 systems + recurring" }, { label:
 - **Technology Transfer**: Willingness to share IP
 - **Political Neutrality**: Access to diverse markets </PitchDeckSlide>
 
-<PitchDeckSlide title="Technology Roadmap" slideNumber={7} totalSlides={15}>
+<PitchDeckSlide title="Technology Roadmap" slideNumber={8} totalSlides={16}>
 # Development Timeline
 
 ## Phase 1: Foundation (Months 1-6)
@@ -205,7 +237,7 @@ Revenue", value: "R500M", description: "200 systems + recurring" }, { label:
 </TechnicalHighlight>
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Financial Projections" slideNumber={8} totalSlides={15}>
+<PitchDeckSlide title="Financial Projections" slideNumber={9} totalSlides={16}>
 # 5-Year Financial Model
 
 ## Revenue Growth
@@ -231,7 +263,7 @@ equipment" }, { label: "Working Capital", value: "R40M", description: "Inventory
 and operations" }, { label: "Total Funding", value: "R120M", description:
 "Series A funding round" } ]} /> </PitchDeckSlide>
 
-<PitchDeckSlide title="Team & Expertise" slideNumber={9} totalSlides={15}>
+<PitchDeckSlide title="Team & Expertise" slideNumber={10} totalSlides={16}>
 # World-Class Team
 
 ## Core Team
@@ -290,7 +322,7 @@ and established defense industry partnerships.
 </TechnicalHighlight>
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Risk Analysis & Mitigation" slideNumber={10} totalSlides={15}>
+<PitchDeckSlide title="Risk Analysis & Mitigation" slideNumber={11} totalSlides={16}>
 # Risk Management Strategy
 
 ## Technical Risks
@@ -320,7 +352,7 @@ and strategic partnerships ensures sustainable growth and competitive advantage.
 </TechnicalHighlight>
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Use Cases & Applications" slideNumber={11} totalSlides={15}>
+<PitchDeckSlide title="Use Cases & Applications" slideNumber={12} totalSlides={16}>
 # Diverse Market Applications
 
 ## Military & Defense
@@ -351,7 +383,7 @@ value: "25%", description: "Critical facilities protection" }, { label:
 label: "International", value: "10%", description: "Export and partnerships" }
 ]} /> </PitchDeckSlide>
 
-<PitchDeckSlide title="Technology Validation" slideNumber={12} totalSlides={15}>
+<PitchDeckSlide title="Technology Validation" slideNumber={13} totalSlides={16}>
 # Proven Technology Foundation
 
 ## Combat-Proven Components
@@ -380,7 +412,7 @@ Every component has been validated in real-world combat conditions, ensuring rel
 </TechnicalHighlight>
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Investment Opportunity" slideNumber={13} totalSlides={15}>
+<PitchDeckSlide title="Investment Opportunity" slideNumber={14} totalSlides={16}>
 # Funding Requirements & Returns
 
 ## Series A Funding: R120M
@@ -409,7 +441,7 @@ description: "Months 12-18" }, { label: "Series C", value: "R500M", description:
 "Months 24-30" }, { label: "Exit/IPO", value: "R2-5B", description: "Year 5-7" }
 ]} /> </PitchDeckSlide>
 
-<PitchDeckSlide title="Next Steps & Call to Action" slideNumber={14} totalSlides={15}>
+<PitchDeckSlide title="Next Steps & Call to Action" slideNumber={15} totalSlides={16}>
 # Partnership & Investment Opportunities
 
 ## Immediate Opportunities
@@ -439,7 +471,7 @@ the future of counter-drone defense - secure, autonomous, and blockchain-verifie
 </TechnicalHighlight>
 </PitchDeckSlide>
 
-<PitchDeckSlide title="Contact & Investment Information" slideNumber={15} totalSlides={15}>
+<PitchDeckSlide title="Contact & Investment Information" slideNumber={16} totalSlides={16}>
 # Get Involved
 
 ## Investment Contact
@@ -469,3 +501,140 @@ the future of counter-drone defense - secure, autonomous, and blockchain-verifie
 
 _Revolutionary SAE Level 4 Autonomous Counter-UAS Defense Platform_
 </PitchDeckSlide>
+
+---
+
+## 3-Minute Executive Pitch Deck
+
+import { SlideDeck, SlideSection, DocumentDownload } from
+"@site/src/components/Downloads";
+
+<DocumentDownload title="Phoenix Rooivalk 3-Minute Pitch Deck" />
+
+<SlideDeck title="Phoenix Rooivalk: 3-Minute Executive Pitch" duration={3}
+audience="Investors/VCs" date="December 1, 2025"
+
+>
+
+<SlideSection number={1} title="The Problem" duration={30} icon="⚠️"
+keyPoints={[ "Drone threats increasing exponentially - 1M drones produced in
+Ukraine 2024", "Current solutions slow (>5 seconds response), expensive ($1-2M),
+cloud-dependent", "No blockchain accountability for legal admissibility",
+"$2.51B market by 2030 (23.5% CAGR)" ]} script="Drone threats are exploding -
+Ukraine produced 1 million drones this year alone. Current counter-UAS systems
+are too slow, expensive, and cloud-dependent. No one offers blockchain-verified
+evidence for legal proceedings. This is a $2.51 billion market growing at 23.5%
+annually." />
+
+<SlideSection number={2} title="Our Solution" duration={30} icon="🚀"
+keyPoints={[ "SAE Level 4 autonomous counter-drone system", "Sub-200ms response
+time with edge AI", "Solana blockchain for tamper-proof evidence", "60% cost
+advantage: R850K vs R1.2-1.5M competitors" ]} script="Phoenix Rooivalk is SAE
+Level 4 autonomous counter-UAS. Sub-200ms response with edge AI. Solana
+blockchain creates tamper-proof evidence chains. We're 60% cheaper than
+competitors at R850K per system." />
+
+<SlideSection number={3} title="Recent Progress" duration={25} icon="✅"
+keyPoints={[ "Net launcher prototype ready - 60% cost reduction with in-house
+Kevlar", "x402 revenue model live - pre-hardware monetization", "370+ commits
+this week - production-ready platform", "Market validated: International-first
+strategy (EU/Canada)" ]} script="This week we completed net launcher design with
+60% cost savings. Our x402 payment protocol is live for pre-hardware revenue. We
+merged 370+ commits - platform is production-ready. Market research confirms
+international-first strategy." />
+
+<SlideSection number={4} title="Technology Edge" duration={20} icon="⚡"
+keyPoints={[ "YOLOv9: 99.7% detection accuracy", "Edge-first: No cloud
+dependency, <50ms latency", "Multi-sensor fusion: RF, radar, EO/IR, acoustic,
+LiDAR", "Blockchain verified: Legal-grade evidence chains" ]} script="YOLOv9
+gives us 99.7% accuracy. Edge-first means no cloud needed, sub-50ms latency.
+Multi-sensor fusion with six sensor types. Blockchain verification makes
+evidence court-admissible." />
+
+<SlideSection number={5} title="Business Model" duration={20} icon="💰"
+keyPoints={[ "Hardware: R850K per system, 65% gross margin", "x402 API:
+Pre-hardware revenue from evidence verification", "Service: Maintenance
+contracts, software updates", "Target: 25 systems Year 1 = R25M revenue" ]}
+script="R850K per system with 65% margins. x402 API generates revenue before
+hardware ships. Maintenance and software subscriptions provide recurring income.
+Year 1 target: 25 systems, R25M revenue." />
+
+<SlideSection number={6} title="Market Strategy" duration={20} icon="🎯"
+keyPoints={[ "Phase 1: EU and Canada (problem exists now, regulations
+favorable)", "Phase 2: South Africa (2-3 years, market development needed)",
+"Canada CUAS Sandbox 2026 - government validation", "Export advantage via South
+Africa's neutral status" ]} script="We're targeting EU and Canada first - they
+have the problem today. South Africa is Phase 2 in 2-3 years. Canada CUAS
+Sandbox 2026 gives us government validation. South Africa's neutral status is
+our export advantage." />
+
+<SlideSection number={7} title="The Ask" duration={15} icon="🤝" keyPoints={[
+"Series A: R120M for prototype and team expansion", "12-month runway to first
+commercial deployments", "Milestones: Net prototype Q1, field trials Q3, first
+sales Q4", "Exit: R2-5B valuation in 5-7 years" ]} script="We're raising R120M
+Series A for prototype development and team expansion. 12-month runway to
+commercial deployment. Net prototype next quarter, field trials Q3, first sales
+Q4. Exit target: R2-5 billion in 5-7 years. Questions?" />
+
+</SlideDeck>
+
+### Presentation Script Notes
+
+#### Opening (Before Slide 1)
+
+> "I'm [Name] from Phoenix Rooivalk. We're building the world's first
+> blockchain-verified autonomous counter-drone system. Let me show you why this
+> matters."
+
+#### Transitions
+
+- **Slide 1 → 2**: "So how do we solve this?"
+- **Slide 2 → 3**: "And we're not just planning - we're executing."
+- **Slide 3 → 4**: "What makes our technology different?"
+- **Slide 4 → 5**: "Here's how we make money."
+- **Slide 5 → 6**: "Our go-to-market strategy is validated."
+- **Slide 6 → 7**: "Here's how you can be part of this."
+
+#### Closing (After Slide 7)
+
+> "Phoenix Rooivalk represents the future of counter-drone defense: autonomous,
+> blockchain-verified, and battle-tested technology. We have the team, the tech,
+> and the market timing. We're ready to scale. Let's discuss how you can be part
+> of securing the future."
+
+### Q&A Preparation
+
+**Common Questions:**
+
+1. **"Why blockchain?"**
+   - Legal admissibility requires tamper-proof evidence chains
+   - Insurance claims need verifiable incident footage
+   - Regulatory compliance demands immutable audit trails
+   - Solana's speed (65K TPS) matches our real-time requirements
+
+2. **"What about existing solutions?"**
+   - DroneShield: 5+ second response, $1.2M+ pricing, cloud-dependent
+   - Dedrone: Detection only, no neutralization, $1.5M+ pricing
+   - We're faster (<200ms), cheaper (R850K), and blockchain-verified
+
+3. **"How do you handle false positives?"**
+   - Multi-sensor fusion (6+ sensor types) reduces false positives to <0.3%
+   - AI confidence thresholds with human-in-the-loop for critical decisions
+   - Blockchain logs all decisions for review and improvement
+
+4. **"What's your competitive moat?"**
+   - Edge AI patents for offline autonomous operation
+   - Blockchain integration IP for evidence chains
+   - 60% cost advantage through in-house manufacturing
+   - 370+ commits/week engineering velocity
+
+5. **"Revenue timeline?"**
+   - x402 API revenue starting now (pre-hardware)
+   - First hardware sales Q4 2026
+   - Profitable by Year 3 with 25% EBITDA
+
+6. **"Team capabilities?"**
+   - Founder: [Experience]
+   - CTO: Edge AI and blockchain expertise
+   - Advisory: SANDF, CSIR, defense contractors
+   - 10+ ADRs published showing architectural maturity

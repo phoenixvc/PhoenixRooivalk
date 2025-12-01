@@ -113,6 +113,23 @@ function checkRateLimitInMemory(key: string, config: RateLimitConfig): boolean {
 }
 
 /**
+ * Create a new rate limit window document
+ */
+function createRateLimitWindow(
+  key: string,
+  now: number,
+  config: RateLimitConfig,
+): RateLimitDocument {
+  const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60; // Add buffer
+  return {
+    id: key,
+    count: 1,
+    resetAt: now + config.windowMs,
+    ttl: ttlSeconds,
+  };
+}
+
+/**
  * Check rate limit using Cosmos DB (distributed)
  */
 async function checkRateLimitDistributed(
@@ -123,20 +140,20 @@ async function checkRateLimitDistributed(
   const container = getContainer(RATE_LIMIT_CONTAINER);
 
   try {
-    // Try to read existing rate limit
-    const { resource: existing } = await container
-      .item(key, key)
-      .read<RateLimitDocument>();
+    // Try to read to check if window expired
+    let existing: RateLimitDocument | undefined;
+    try {
+      const { resource } = await container
+        .item(key, key)
+        .read<RateLimitDocument>();
+      existing = resource;
+    } catch (error: any) {
+      if (error.code !== 404) throw error;
+    }
 
     if (!existing || now > existing.resetAt) {
       // Create new rate limit window
-      const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60; // Add buffer
-      const doc: RateLimitDocument = {
-        id: key,
-        count: 1,
-        resetAt: now + config.windowMs,
-        ttl: ttlSeconds,
-      };
+      const doc = createRateLimitWindow(key, now, config);
       await container.items.upsert(doc);
       return true;
     }
@@ -145,13 +162,21 @@ async function checkRateLimitDistributed(
       return false;
     }
 
-    // Increment count atomically
-    const updatedDoc: RateLimitDocument = {
-      ...existing,
-      count: existing.count + 1,
-    };
-    await container.items.upsert(updatedDoc);
-    return true;
+    // Increment count using atomic patch operation
+    try {
+      await container
+        .item(key, key)
+        .patch([{ op: "incr", path: "/count", value: 1 }]);
+      return true;
+    } catch (patchError: any) {
+      // If document was deleted between read and patch, create new window
+      if (patchError.code === 404) {
+        const doc = createRateLimitWindow(key, now, config);
+        await container.items.upsert(doc);
+        return true;
+      }
+      throw patchError;
+    }
   } catch (error) {
     // If Cosmos fails, fall back to in-memory
     logger.warn("Distributed rate limit failed, using in-memory fallback", {
