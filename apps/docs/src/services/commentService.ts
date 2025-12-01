@@ -1,39 +1,22 @@
 /**
  * Comment Service for Phoenix Rooivalk Documentation
  *
- * Handles all Firestore operations for the commenting system:
+ * Uses Azure Cosmos DB via the cloud service abstraction.
+ *
+ * Handles all database operations for the commenting system:
  * - CRUD operations for comments
  * - Admin review functionality
  * - Comment statistics
- * - Real-time updates
+ * - Real-time updates (via polling for Cosmos DB)
  * - Input validation and sanitization
  * - Rate limiting
  */
 
 import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-  serverTimestamp,
-  Timestamp,
-  onSnapshot,
-  DocumentSnapshot,
-  QueryDocumentSnapshot,
-  Unsubscribe,
-  getCountFromServer,
-  QueryConstraint,
-} from "firebase/firestore";
-import { isFirebaseConfigured } from "./firebase";
+  getDatabaseService,
+  isCloudConfigured,
+  type IDatabaseService,
+} from "./cloud";
 import type {
   Comment,
   CommentThread,
@@ -202,7 +185,6 @@ export function sanitizeContent(content: string): string {
       .replace(/\r\n/g, "\n")
       .replace(/\r/g, "\n")
       // Remove null bytes and other non-printable control characters (except newlines and tabs)
-      // This sanitizes control chars for XSS prevention: U+0000-U+0008, U+000B, U+000C, U+000E-U+001F, U+007F
       .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
       .trim()
   );
@@ -278,52 +260,13 @@ const generateCommentId = (): string => {
 };
 
 /**
- * Convert Firestore timestamp to ISO string safely
+ * Get database service with validation
  */
-const timestampToString = (timestamp: unknown): string => {
-  if (typeof timestamp === "string") return timestamp;
-  if (timestamp instanceof Timestamp) {
-    return timestamp.toDate().toISOString();
+const getDb = (): IDatabaseService => {
+  if (!isCloudConfigured()) {
+    throw new Error("Cloud services are not configured");
   }
-  // Fallback for server timestamp that hasn't resolved yet
-  return new Date().toISOString();
-};
-
-/**
- * Parse Firestore document to Comment with type safety
- */
-function parseCommentDoc(
-  doc: DocumentSnapshot | QueryDocumentSnapshot,
-): Comment | null {
-  if (!doc.exists()) return null;
-
-  const data = doc.data();
-  if (!data) return null;
-
-  const comment = {
-    ...data,
-    id: doc.id,
-    createdAt: timestampToString(data.createdAt),
-    updatedAt: timestampToString(data.updatedAt),
-  };
-
-  // Validate the parsed data
-  if (!isComment(comment)) {
-    console.warn("Invalid comment data:", doc.id);
-    return null;
-  }
-
-  return comment;
-}
-
-/**
- * Get Firestore instance with validation
- */
-const getDb = () => {
-  if (!isFirebaseConfigured()) {
-    throw new Error("Firebase is not configured");
-  }
-  return getFirestore();
+  return getDatabaseService();
 };
 
 // ============================================================================
@@ -377,12 +320,7 @@ export const createComment = async (
     parentId: input.parentId,
   };
 
-  const docRef = doc(db, COMMENTS_COLLECTION, id);
-  await setDoc(docRef, {
-    ...comment,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+  await db.setDocument(COMMENTS_COLLECTION, id, comment);
 
   return comment;
 };
@@ -398,10 +336,12 @@ export const getComment = async (
   }
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
-  const docSnap = await getDoc(docRef);
+  const comment = await db.getDocument<Comment>(COMMENTS_COLLECTION, commentId);
 
-  return parseCommentDoc(docSnap);
+  if (comment && isComment(comment)) {
+    return comment;
+  }
+  return null;
 };
 
 /**
@@ -417,10 +357,8 @@ export const updateComment = async (
   }
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
-
   const updates: Record<string, unknown> = {
-    updatedAt: serverTimestamp(),
+    updatedAt: new Date().toISOString(),
     isEdited: true,
   };
 
@@ -467,13 +405,7 @@ export const updateComment = async (
     }
   }
 
-  try {
-    await updateDoc(docRef, updates);
-    return true;
-  } catch (error) {
-    console.error("Error updating comment:", error);
-    return false;
-  }
+  return db.updateDocument(COMMENTS_COLLECTION, commentId, updates);
 };
 
 /**
@@ -485,92 +417,68 @@ export const deleteComment = async (commentId: string): Promise<boolean> => {
   }
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
-
-  try {
-    await deleteDoc(docRef);
-    return true;
-  } catch (error) {
-    console.error("Error deleting comment:", error);
-    return false;
-  }
+  return db.deleteDocument(COMMENTS_COLLECTION, commentId);
 };
 
 // ============================================================================
-// Comment Queries with Cursor-Based Pagination
+// Comment Queries
 // ============================================================================
 
 /**
- * Pagination cursor for efficient querying
- */
-export interface CommentCursor {
-  lastDoc: DocumentSnapshot | null;
-  hasMore: boolean;
-}
-
-/**
- * Get comments with filters and cursor-based pagination
+ * Get comments with filters
  */
 export const getComments = async (
   filters: CommentFilters = {},
-  cursor?: DocumentSnapshot | null,
-): Promise<{ comments: Comment[]; lastDoc: DocumentSnapshot | null }> => {
+): Promise<{ comments: Comment[]; lastDoc: null }> => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
-  // Build query constraints
-  const constraints: QueryConstraint[] = [];
+  const conditions: Array<{
+    field: string;
+    operator: "==" | "!=" | "<" | "<=" | ">" | ">=" | "array-contains" | "in";
+    value: unknown;
+  }> = [];
 
   if (filters.pageId) {
-    constraints.push(where("pageId", "==", filters.pageId));
+    conditions.push({ field: "pageId", operator: "==", value: filters.pageId });
   }
   if (filters.category && isValidCategory(filters.category)) {
-    constraints.push(where("category", "==", filters.category));
+    conditions.push({
+      field: "category",
+      operator: "==",
+      value: filters.category,
+    });
   }
   if (filters.status && isValidStatus(filters.status)) {
-    constraints.push(where("status", "==", filters.status));
+    conditions.push({ field: "status", operator: "==", value: filters.status });
   }
   if (filters.authorId) {
-    constraints.push(where("author.uid", "==", filters.authorId));
+    conditions.push({
+      field: "author.uid",
+      operator: "==",
+      value: filters.authorId,
+    });
   }
   if (filters.sendForReview !== undefined) {
-    constraints.push(where("sendForReview", "==", filters.sendForReview));
-  }
-
-  // Add ordering
-  constraints.push(
-    orderBy(filters.orderBy || "createdAt", filters.orderDirection || "desc"),
-  );
-
-  // Add cursor for pagination
-  if (cursor) {
-    constraints.push(startAfter(cursor));
-  }
-
-  // Add limit
-  const queryLimit = Math.min(filters.limit || 20, 100);
-  constraints.push(limit(queryLimit));
-
-  try {
-    const q = query(commentsRef, ...constraints);
-    const snapshot = await getDocs(q);
-
-    const comments: Comment[] = [];
-    let lastDoc: DocumentSnapshot | null = null;
-
-    snapshot.docs.forEach((doc) => {
-      const comment = parseCommentDoc(doc);
-      if (comment) {
-        comments.push(comment);
-        lastDoc = doc;
-      }
+    conditions.push({
+      field: "sendForReview",
+      operator: "==",
+      value: filters.sendForReview,
     });
-
-    return { comments, lastDoc };
-  } catch (error) {
-    console.error("Error getting comments:", error);
-    return { comments: [], lastDoc: null };
   }
+
+  const result = await db.queryDocuments<Comment>(COMMENTS_COLLECTION, {
+    conditions,
+    orderBy: [
+      {
+        field: filters.orderBy || "createdAt",
+        direction: filters.orderDirection || "desc",
+      },
+    ],
+    limit: Math.min(filters.limit || 20, 100),
+  });
+
+  const validComments = result.items.filter(isComment);
+  return { comments: validComments, lastDoc: null };
 };
 
 /**
@@ -614,8 +522,10 @@ export const getUserComments = async (userId: string): Promise<Comment[]> => {
 };
 
 // ============================================================================
-// Real-Time Updates
+// Real-Time Updates (Polling-based for Cosmos DB)
 // ============================================================================
+
+type Unsubscribe = () => void;
 
 /**
  * Subscribe to real-time updates for comments on a page
@@ -627,36 +537,22 @@ export const subscribeToPageComments = (
   onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
-  const q = query(
-    commentsRef,
-    where("pageId", "==", pageId),
-    orderBy("createdAt", "desc"),
-  );
-
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const comments: Comment[] = [];
-      snapshot.docs.forEach((doc) => {
-        const comment = parseCommentDoc(doc);
-        if (comment) {
-          // Filter out drafts from other users
-          if (
-            comment.status !== "draft" ||
-            comment.author.uid === currentUserId
-          ) {
-            comments.push(comment);
-          }
-        }
-      });
-      onUpdate(comments);
+  return db.subscribeToQuery<Comment>(
+    COMMENTS_COLLECTION,
+    {
+      conditions: [{ field: "pageId", operator: "==", value: pageId }],
+      orderBy: [{ field: "createdAt", direction: "desc" }],
     },
-    (error) => {
-      console.error("Error in comments subscription:", error);
-      onError?.(error);
+    (comments) => {
+      const filtered = comments.filter(
+        (c) =>
+          isComment(c) &&
+          (c.status !== "draft" || c.author.uid === currentUserId),
+      );
+      onUpdate(filtered);
     },
+    onError,
   );
 };
 
@@ -668,31 +564,20 @@ export const subscribeToPendingComments = (
   onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
-  const q = query(
-    commentsRef,
-    where("sendForReview", "==", true),
-    where("status", "==", "pending"),
-    orderBy("createdAt", "asc"),
-  );
-
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const comments: Comment[] = [];
-      snapshot.docs.forEach((doc) => {
-        const comment = parseCommentDoc(doc);
-        if (comment) {
-          comments.push(comment);
-        }
-      });
-      onUpdate(comments);
+  return db.subscribeToQuery<Comment>(
+    COMMENTS_COLLECTION,
+    {
+      conditions: [
+        { field: "sendForReview", operator: "==", value: true },
+        { field: "status", operator: "==", value: "pending" },
+      ],
+      orderBy: [{ field: "createdAt", direction: "asc" }],
     },
-    (error) => {
-      console.error("Error in pending comments subscription:", error);
-      onError?.(error);
+    (comments) => {
+      onUpdate(comments.filter(isComment));
     },
+    onError,
   );
 };
 
@@ -734,7 +619,6 @@ export const reviewComment = async (
   }
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
 
   // Get the comment to create notification
   const comment = await getComment(commentId);
@@ -742,42 +626,38 @@ export const reviewComment = async (
     throw new Error("Comment not found");
   }
 
-  try {
-    // Update the comment
-    await updateDoc(docRef, {
-      status: input.status,
-      review: {
-        reviewedBy: reviewerId,
-        reviewerEmail,
-        reviewedAt: new Date().toISOString(),
-        status: input.status,
-        notes: input.notes ? sanitizeContent(input.notes) : undefined,
-      },
-      updatedAt: serverTimestamp(),
-    });
-
-    // Create notification for the comment author
-    const notificationId = `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const notificationRef = doc(db, NOTIFICATIONS_COLLECTION, notificationId);
-
-    await setDoc(notificationRef, {
-      id: notificationId,
-      authorId: comment.author.uid,
-      commentId: comment.id,
-      pageTitle: comment.pageTitle,
-      pageUrl: comment.pageUrl,
-      status: input.status,
+  // Update the comment
+  const success = await db.updateDocument(COMMENTS_COLLECTION, commentId, {
+    status: input.status,
+    review: {
+      reviewedBy: reviewerId,
       reviewerEmail,
-      reviewNotes: input.notes ? sanitizeContent(input.notes) : undefined,
-      read: false,
-      createdAt: serverTimestamp(),
-    });
+      reviewedAt: new Date().toISOString(),
+      status: input.status,
+      notes: input.notes ? sanitizeContent(input.notes) : undefined,
+    },
+    updatedAt: new Date().toISOString(),
+  });
 
-    return true;
-  } catch (error) {
-    console.error("Error reviewing comment:", error);
-    return false;
-  }
+  if (!success) return false;
+
+  // Create notification for the comment author
+  const notificationId = `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  await db.setDocument(NOTIFICATIONS_COLLECTION, notificationId, {
+    id: notificationId,
+    authorId: comment.author.uid,
+    commentId: comment.id,
+    pageTitle: comment.pageTitle,
+    pageUrl: comment.pageUrl,
+    status: input.status,
+    reviewerEmail,
+    reviewNotes: input.notes ? sanitizeContent(input.notes) : undefined,
+    read: false,
+    createdAt: new Date().toISOString(),
+  });
+
+  return true;
 };
 
 /**
@@ -787,29 +667,17 @@ export const getUserNotifications = async (
   userId: string,
 ): Promise<CommentNotification[]> => {
   const db = getDb();
-  const notificationsRef = collection(db, NOTIFICATIONS_COLLECTION);
 
-  const q = query(
-    notificationsRef,
-    where("authorId", "==", userId),
-    orderBy("createdAt", "desc"),
-    limit(50),
+  const result = await db.queryDocuments<CommentNotification>(
+    NOTIFICATIONS_COLLECTION,
+    {
+      conditions: [{ field: "authorId", operator: "==", value: userId }],
+      orderBy: [{ field: "createdAt", direction: "desc" }],
+      limit: 50,
+    },
   );
 
-  try {
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        ...data,
-        id: doc.id,
-        createdAt: timestampToString(data.createdAt),
-      } as CommentNotification;
-    });
-  } catch (error) {
-    console.error("Error getting notifications:", error);
-    return [];
-  }
+  return result.items;
 };
 
 /**
@@ -819,18 +687,10 @@ export const markNotificationRead = async (
   notificationId: string,
 ): Promise<boolean> => {
   const db = getDb();
-  const docRef = doc(db, NOTIFICATIONS_COLLECTION, notificationId);
-
-  try {
-    await updateDoc(docRef, {
-      read: true,
-      readAt: new Date().toISOString(),
-    });
-    return true;
-  } catch (error) {
-    console.error("Error marking notification as read:", error);
-    return false;
-  }
+  return db.updateDocument(NOTIFICATIONS_COLLECTION, notificationId, {
+    read: true,
+    readAt: new Date().toISOString(),
+  });
 };
 
 /**
@@ -842,32 +702,18 @@ export const subscribeToNotifications = (
   onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
-  const notificationsRef = collection(db, NOTIFICATIONS_COLLECTION);
 
-  const q = query(
-    notificationsRef,
-    where("authorId", "==", userId),
-    where("read", "==", false),
-    orderBy("createdAt", "desc"),
-  );
-
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const notifications: CommentNotification[] = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          ...data,
-          id: doc.id,
-          createdAt: timestampToString(data.createdAt),
-        } as CommentNotification;
-      });
-      onUpdate(notifications);
+  return db.subscribeToQuery<CommentNotification>(
+    NOTIFICATIONS_COLLECTION,
+    {
+      conditions: [
+        { field: "authorId", operator: "==", value: userId },
+        { field: "read", operator: "==", value: false },
+      ],
+      orderBy: [{ field: "createdAt", direction: "desc" }],
     },
-    (error) => {
-      console.error("Error in notifications subscription:", error);
-      onError?.(error);
-    },
+    onUpdate,
+    onError,
   );
 };
 
@@ -895,24 +741,16 @@ export const saveAIEnhancement = async (
     .filter((s) => s.length > 0);
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
-
-  try {
-    await updateDoc(docRef, {
+  return db.updateDocument(COMMENTS_COLLECTION, commentId, {
+    enhancedContent: sanitizedContent,
+    aiEnhancement: {
       enhancedContent: sanitizedContent,
-      aiEnhancement: {
-        enhancedContent: sanitizedContent,
-        suggestions: sanitizedSuggestions,
-        confidence,
-        timestamp: new Date().toISOString(),
-      },
-      updatedAt: serverTimestamp(),
-    });
-    return true;
-  } catch (error) {
-    console.error("Error saving AI enhancement:", error);
-    return false;
-  }
+      suggestions: sanitizedSuggestions,
+      confidence,
+      timestamp: new Date().toISOString(),
+    },
+    updatedAt: new Date().toISOString(),
+  });
 };
 
 /**
@@ -927,31 +765,21 @@ export const toggleAIVersion = async (
   }
 
   const db = getDb();
-  const docRef = doc(db, COMMENTS_COLLECTION, commentId);
-
-  try {
-    await updateDoc(docRef, {
-      useAIVersion,
-      updatedAt: serverTimestamp(),
-    });
-    return true;
-  } catch (error) {
-    console.error("Error toggling AI version:", error);
-    return false;
-  }
+  return db.updateDocument(COMMENTS_COLLECTION, commentId, {
+    useAIVersion,
+    updatedAt: new Date().toISOString(),
+  });
 };
 
 // ============================================================================
-// Statistics (Efficient Implementation)
+// Statistics
 // ============================================================================
 
 /**
  * Get comment statistics for admin dashboard
- * Uses aggregation queries where possible for efficiency
  */
 export const getCommentStats = async (): Promise<CommentStats> => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
   const stats: CommentStats = {
     total: 0,
@@ -975,44 +803,32 @@ export const getCommentStats = async (): Promise<CommentStats> => {
   };
 
   try {
-    // Get total count efficiently
-    const countSnapshot = await getCountFromServer(commentsRef);
-    stats.total = countSnapshot.data().count;
+    // Get total count
+    stats.total = await db.countDocuments(COMMENTS_COLLECTION);
 
     // Get pending review count
-    const pendingQuery = query(
-      commentsRef,
-      where("sendForReview", "==", true),
-      where("status", "==", "pending"),
-    );
-    const pendingCount = await getCountFromServer(pendingQuery);
-    stats.pendingReview = pendingCount.data().count;
+    stats.pendingReview = await db.countDocuments(COMMENTS_COLLECTION, {
+      conditions: [
+        { field: "sendForReview", operator: "==", value: true },
+        { field: "status", operator: "==", value: "pending" },
+      ],
+    });
 
-    // Get recent count (last 7 days)
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const recentQuery = query(
-      commentsRef,
-      where("createdAt", ">=", Timestamp.fromDate(sevenDaysAgo)),
-    );
-    const recentCount = await getCountFromServer(recentQuery);
-    stats.recentCount = recentCount.data().count;
-
-    // For category and status breakdowns, we need to query each
-    // This is still more efficient than fetching all documents
+    // Get category counts
     for (const category of VALID_CATEGORIES) {
-      const categoryQuery = query(
-        commentsRef,
-        where("category", "==", category),
+      stats.byCategory[category] = await db.countDocuments(
+        COMMENTS_COLLECTION,
+        {
+          conditions: [{ field: "category", operator: "==", value: category }],
+        },
       );
-      const categoryCount = await getCountFromServer(categoryQuery);
-      stats.byCategory[category] = categoryCount.data().count;
     }
 
+    // Get status counts
     for (const status of VALID_STATUSES) {
-      const statusQuery = query(commentsRef, where("status", "==", status));
-      const statusCount = await getCountFromServer(statusQuery);
-      stats.byStatus[status] = statusCount.data().count;
+      stats.byStatus[status] = await db.countDocuments(COMMENTS_COLLECTION, {
+        conditions: [{ field: "status", operator: "==", value: status }],
+      });
     }
 
     return stats;
@@ -1023,49 +839,30 @@ export const getCommentStats = async (): Promise<CommentStats> => {
 };
 
 /**
- * Get all comments for admin with cursor-based pagination
+ * Get all comments for admin
  */
 export const getAllComments = async (
   pageSize: number = 20,
-  cursor?: DocumentSnapshot | null,
 ): Promise<{
   comments: Comment[];
-  lastDoc: DocumentSnapshot | null;
+  lastDoc: null;
   total: number;
 }> => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
   try {
-    // Get total count efficiently
-    const countSnapshot = await getCountFromServer(commentsRef);
-    const total = countSnapshot.data().count;
+    const total = await db.countDocuments(COMMENTS_COLLECTION);
 
-    // Build query with cursor
-    const constraints: QueryConstraint[] = [
-      orderBy("createdAt", "desc"),
-      limit(Math.min(pageSize, 100)),
-    ];
-
-    if (cursor) {
-      constraints.push(startAfter(cursor));
-    }
-
-    const q = query(commentsRef, ...constraints);
-    const snapshot = await getDocs(q);
-
-    const comments: Comment[] = [];
-    let lastDoc: DocumentSnapshot | null = null;
-
-    snapshot.docs.forEach((doc) => {
-      const comment = parseCommentDoc(doc);
-      if (comment) {
-        comments.push(comment);
-        lastDoc = doc;
-      }
+    const result = await db.queryDocuments<Comment>(COMMENTS_COLLECTION, {
+      orderBy: [{ field: "createdAt", direction: "desc" }],
+      limit: Math.min(pageSize, 100),
     });
 
-    return { comments, lastDoc, total };
+    return {
+      comments: result.items.filter(isComment),
+      lastDoc: null,
+      total,
+    };
   } catch (error) {
     console.error("Error getting all comments:", error);
     return { comments: [], lastDoc: null, total: 0 };
@@ -1078,7 +875,6 @@ export const getAllComments = async (
 
 /**
  * Organize a flat list of comments into a threaded structure
- * Top-level comments (no parentId) are at the root, with nested replies
  */
 export function organizeIntoThreads(comments: Comment[]): CommentThread[] {
   const commentMap = new Map<string, CommentThread>();
@@ -1128,30 +924,13 @@ export function organizeIntoThreads(comments: Comment[]): CommentThread[] {
  */
 export const getReplies = async (parentId: string): Promise<Comment[]> => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
-  const q = query(
-    commentsRef,
-    where("parentId", "==", parentId),
-    orderBy("createdAt", "asc"),
-  );
+  const result = await db.queryDocuments<Comment>(COMMENTS_COLLECTION, {
+    conditions: [{ field: "parentId", operator: "==", value: parentId }],
+    orderBy: [{ field: "createdAt", direction: "asc" }],
+  });
 
-  try {
-    const snapshot = await getDocs(q);
-    const replies: Comment[] = [];
-
-    snapshot.docs.forEach((doc) => {
-      const comment = parseCommentDoc(doc);
-      if (comment) {
-        replies.push(comment);
-      }
-    });
-
-    return replies;
-  } catch (error) {
-    console.error("Error getting replies:", error);
-    return [];
-  }
+  return result.items.filter(isComment);
 };
 
 /**
@@ -1159,17 +938,9 @@ export const getReplies = async (parentId: string): Promise<Comment[]> => {
  */
 export const getReplyCount = async (parentId: string): Promise<number> => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
-
-  const q = query(commentsRef, where("parentId", "==", parentId));
-
-  try {
-    const countSnapshot = await getCountFromServer(q);
-    return countSnapshot.data().count;
-  } catch (error) {
-    console.error("Error getting reply count:", error);
-    return 0;
-  }
+  return db.countDocuments(COMMENTS_COLLECTION, {
+    conditions: [{ field: "parentId", operator: "==", value: parentId }],
+  });
 };
 
 /**
@@ -1182,35 +953,21 @@ export const subscribeToReplies = (
   onError?: (error: Error) => void,
 ): Unsubscribe => {
   const db = getDb();
-  const commentsRef = collection(db, COMMENTS_COLLECTION);
 
-  const q = query(
-    commentsRef,
-    where("parentId", "==", parentId),
-    orderBy("createdAt", "asc"),
-  );
-
-  return onSnapshot(
-    q,
-    (snapshot) => {
-      const replies: Comment[] = [];
-      snapshot.docs.forEach((doc) => {
-        const comment = parseCommentDoc(doc);
-        if (comment) {
-          // Filter out drafts from other users
-          if (
-            comment.status !== "draft" ||
-            comment.author.uid === currentUserId
-          ) {
-            replies.push(comment);
-          }
-        }
-      });
-      onUpdate(replies);
+  return db.subscribeToQuery<Comment>(
+    COMMENTS_COLLECTION,
+    {
+      conditions: [{ field: "parentId", operator: "==", value: parentId }],
+      orderBy: [{ field: "createdAt", direction: "asc" }],
     },
-    (error) => {
-      console.error("Error in replies subscription:", error);
-      onError?.(error);
+    (replies) => {
+      const filtered = replies.filter(
+        (c) =>
+          isComment(c) &&
+          (c.status !== "draft" || c.author.uid === currentUserId),
+      );
+      onUpdate(filtered);
     },
+    onError,
   );
 };

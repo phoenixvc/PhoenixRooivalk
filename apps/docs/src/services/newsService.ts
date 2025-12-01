@@ -1,14 +1,13 @@
 /**
  * News Service for Phoenix Rooivalk Documentation
  *
- * Provides client-side interface to News Cloud Functions:
+ * Provides client-side interface to Azure Functions for news:
  * - News feed retrieval (general + personalized)
  * - Article management (read, save)
  * - Semantic search
  */
 
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { app, isFirebaseConfigured } from "./firebase";
+import { getFunctionsService, isCloudConfigured } from "./cloud";
 import { withRetry, defaultIsRetryable } from "../utils/retry";
 import { memoryCache } from "../utils/cache";
 import type {
@@ -45,10 +44,9 @@ export class NewsError extends Error {
 }
 
 /**
- * News Service class - provides all news functionality
+ * News Service class - provides all news functionality via Azure Functions
  */
 class NewsService {
-  private functions: ReturnType<typeof getFunctions> | null = null;
   private isInitialized = false;
 
   /**
@@ -57,26 +55,31 @@ class NewsService {
   init(): boolean {
     if (this.isInitialized) return true;
 
-    if (!isFirebaseConfigured() || typeof window === "undefined") {
-      console.warn("News Service: Firebase not configured");
+    if (!isCloudConfigured() || typeof window === "undefined") {
+      console.warn("News Service: Azure not configured");
       return false;
     }
 
-    try {
-      this.functions = getFunctions(app!);
-      this.isInitialized = true;
-      return true;
-    } catch (error) {
-      console.error("News Service initialization failed:", error);
-      return false;
-    }
+    this.isInitialized = true;
+    return true;
   }
 
   /**
    * Check if news service is available
    */
   isAvailable(): boolean {
-    return this.isInitialized && this.functions !== null;
+    return this.isInitialized || isCloudConfigured();
+  }
+
+  /**
+   * Call an Azure Function
+   */
+  private async callFunction<T>(
+    functionName: string,
+    data: Record<string, unknown>,
+  ): Promise<T> {
+    const functionsService = getFunctionsService();
+    return functionsService.call<T>(functionName, data);
   }
 
   /**
@@ -87,11 +90,17 @@ class NewsService {
     const code = err.code || "unknown";
     const message = err.message || "An error occurred";
 
-    if (code === "unauthenticated") {
-      throw new NewsError("Please sign in to access news features", code);
+    if (code === "unauthenticated" || code === "401") {
+      throw new NewsError(
+        "Please sign in to access news features",
+        "unauthenticated",
+      );
     }
-    if (code === "resource-exhausted") {
-      throw new NewsError("Rate limit exceeded. Please try again later.", code);
+    if (code === "resource-exhausted" || code === "429") {
+      throw new NewsError(
+        "Rate limit exceeded. Please try again later.",
+        "resource-exhausted",
+      );
     }
 
     throw new NewsError(message, code);
@@ -111,7 +120,6 @@ class NewsService {
     if (options?.limit) parts.push(`limit:${options.limit}`);
     if (options?.categories?.length)
       parts.push(`cats:${options.categories.sort().join(",")}`);
-    // Don't include userProfile in cache key - it's user-specific
     return parts.join("_");
   }
 
@@ -138,31 +146,24 @@ class NewsService {
     }
 
     try {
-      const getNewsFeedFn = httpsCallable<
-        {
-          userProfile?: UserProfile;
-          limit?: number;
-          cursor?: string;
-          categories?: NewsCategory[];
-        },
-        NewsFeedResponse
-      >(this.functions!, "getNewsFeed");
-
       // Use retry with exponential backoff for network resilience
-      const result = await withRetry(() => getNewsFeedFn(options || {}), {
-        maxRetries: 3,
-        isRetryable: defaultIsRetryable,
-        onRetry: (attempt, error) => {
-          console.warn(`News feed fetch retry ${attempt}:`, error);
+      const result = await withRetry(
+        () => this.callFunction<NewsFeedResponse>("getNewsFeed", options || {}),
+        {
+          maxRetries: 3,
+          isRetryable: defaultIsRetryable,
+          onRetry: (attempt, error) => {
+            console.warn(`News feed fetch retry ${attempt}:`, error);
+          },
         },
-      });
+      );
 
       // Cache the result (only for non-personalized requests)
       if (!options?.userProfile) {
-        memoryCache.set(cacheKey, result.data, NEWS_FEED_CACHE_TTL);
+        memoryCache.set(cacheKey, result, NEWS_FEED_CACHE_TTL);
       }
 
-      return result.data;
+      return result;
     } catch (error) {
       this.handleError(error);
     }
@@ -180,13 +181,10 @@ class NewsService {
     }
 
     try {
-      const getPersonalizedNewsFn = httpsCallable<
-        { userProfile: UserProfile; limit?: number },
-        { articles: PersonalizedNewsItem[]; totalMatched: number }
-      >(this.functions!, "getPersonalizedNews");
-
-      const result = await getPersonalizedNewsFn({ userProfile, limit });
-      return result.data;
+      return await this.callFunction<{
+        articles: PersonalizedNewsItem[];
+        totalMatched: number;
+      }>("getPersonalizedNews", { userProfile, limit });
     } catch (error) {
       this.handleError(error);
     }
@@ -201,13 +199,9 @@ class NewsService {
     }
 
     try {
-      const markReadFn = httpsCallable<
-        { articleId: string },
-        { success: boolean }
-      >(this.functions!, "markArticleRead");
-
-      const result = await markReadFn({ articleId });
-      return result.data;
+      return await this.callFunction<{ success: boolean }>("markArticleRead", {
+        articleId,
+      });
     } catch (error) {
       this.handleError(error);
     }
@@ -225,17 +219,15 @@ class NewsService {
     }
 
     try {
-      const saveFn = httpsCallable<
-        { articleId: string; save: boolean },
-        { success: boolean; saved: boolean }
-      >(this.functions!, "saveArticle");
-
-      const result = await saveFn({ articleId, save });
+      const result = await this.callFunction<{
+        success: boolean;
+        saved: boolean;
+      }>("saveArticle", { articleId, save });
 
       // Invalidate saved articles cache
       memoryCache.delete("saved_articles");
 
-      return result.data;
+      return result;
     } catch (error) {
       this.handleError(error);
     }
@@ -258,17 +250,15 @@ class NewsService {
     }
 
     try {
-      const getSavedFn = httpsCallable<
-        Record<string, never>,
-        { articles: NewsArticle[] }
-      >(this.functions!, "getSavedArticles");
-
-      const result = await getSavedFn({});
+      const result = await this.callFunction<{ articles: NewsArticle[] }>(
+        "getSavedArticles",
+        {},
+      );
 
       // Cache the result
-      memoryCache.set("saved_articles", result.data, SAVED_ARTICLES_CACHE_TTL);
+      memoryCache.set("saved_articles", result, SAVED_ARTICLES_CACHE_TTL);
 
-      return result.data;
+      return result;
     } catch (error) {
       this.handleError(error);
     }
@@ -309,17 +299,15 @@ class NewsService {
     }
 
     try {
-      const searchFn = httpsCallable<
-        NewsSearchParams,
-        { results: NewsArticle[]; totalFound: number }
-      >(this.functions!, "searchNews");
-
-      const result = await searchFn(params);
+      const result = await this.callFunction<{
+        results: NewsArticle[];
+        totalFound: number;
+      }>("searchNews", params as Record<string, unknown>);
 
       // Cache the search results
-      memoryCache.set(cacheKey, result.data, SEARCH_CACHE_TTL);
+      memoryCache.set(cacheKey, result, SEARCH_CACHE_TTL);
 
-      return result.data;
+      return result;
     } catch (error) {
       this.handleError(error);
     }
@@ -342,22 +330,18 @@ class NewsService {
     }
 
     try {
-      const getStatsFn = httpsCallable<
-        Record<string, never>,
-        {
-          totalArticles: number;
-          lastIngestionTime: string | null;
-          articlesByCategory: Record<string, number>;
-          articlesLast24h: number;
-          articlesLast7d: number;
-        }
-      >(this.functions!, "getNewsIngestionStats");
+      const result = await this.callFunction<{
+        totalArticles: number;
+        lastIngestionTime: string | null;
+        articlesByCategory: Record<string, number>;
+        articlesLast24h: number;
+        articlesLast7d: number;
+      }>("getNewsIngestionStats", {});
 
-      const result = await getStatsFn({});
       return {
-        ...result.data,
-        lastIngestionTime: result.data.lastIngestionTime
-          ? new Date(result.data.lastIngestionTime)
+        ...result,
+        lastIngestionTime: result.lastIngestionTime
+          ? new Date(result.lastIngestionTime)
           : null,
       };
     } catch (error) {
@@ -381,13 +365,11 @@ class NewsService {
     }
 
     try {
-      const triggerFn = httpsCallable<
-        { topics?: string[]; force?: boolean },
-        { success: boolean; articlesAdded: number; errors: string[] }
-      >(this.functions!, "triggerNewsIngestion");
-
-      const result = await triggerFn(options || {});
-      return result.data;
+      return await this.callFunction<{
+        success: boolean;
+        articlesAdded: number;
+        errors: string[];
+      }>("triggerNewsIngestion", options || {});
     } catch (error) {
       this.handleError(error);
     }
@@ -406,13 +388,11 @@ class NewsService {
     }
 
     try {
-      const digestFn = httpsCallable<
-        Record<string, never>,
-        { success: boolean; articleCount: number; digest: string }
-      >(this.functions!, "generateAINewsDigest");
-
-      const result = await digestFn({});
-      return result.data;
+      return await this.callFunction<{
+        success: boolean;
+        articleCount: number;
+        digest: string;
+      }>("generateAINewsDigest", {});
     } catch (error) {
       this.handleError(error);
     }
@@ -440,29 +420,20 @@ class NewsService {
     }
 
     try {
-      const analyticsFn = httpsCallable<
-        { dateRange?: string },
-        {
-          totalViews: number;
-          totalSaves: number;
-          uniqueReaders: number;
-          avgReadTime: number;
-          topArticles: Array<{
-            id: string;
-            title: string;
-            views: number;
-            saves: number;
-          }>;
-          engagementByCategory: Record<
-            string,
-            { views: number; saves: number }
-          >;
-          dailyViews: Array<{ date: string; views: number }>;
-        }
-      >(this.functions!, "getNewsAnalytics");
-
-      const result = await analyticsFn(options || {});
-      return result.data;
+      return await this.callFunction<{
+        totalViews: number;
+        totalSaves: number;
+        uniqueReaders: number;
+        avgReadTime: number;
+        topArticles: Array<{
+          id: string;
+          title: string;
+          views: number;
+          saves: number;
+        }>;
+        engagementByCategory: Record<string, { views: number; saves: number }>;
+        dailyViews: Array<{ date: string; views: number }>;
+      }>("getNewsAnalytics", options || {});
     } catch (error) {
       this.handleError(error);
     }
@@ -481,13 +452,10 @@ class NewsService {
     }
 
     try {
-      const subscribeFn = httpsCallable<
-        typeof options,
-        { success: boolean; subscriptionId: string }
-      >(this.functions!, "subscribeToBreakingNews");
-
-      const result = await subscribeFn(options);
-      return result.data;
+      return await this.callFunction<{
+        success: boolean;
+        subscriptionId: string;
+      }>("subscribeToBreakingNews", options);
     } catch (error) {
       this.handleError(error);
     }
@@ -502,13 +470,10 @@ class NewsService {
     }
 
     try {
-      const unsubscribeFn = httpsCallable<
-        Record<string, never>,
-        { success: boolean }
-      >(this.functions!, "unsubscribeFromBreakingNews");
-
-      const result = await unsubscribeFn({});
-      return result.data;
+      return await this.callFunction<{ success: boolean }>(
+        "unsubscribeFromBreakingNews",
+        {},
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -531,23 +496,20 @@ class NewsService {
     }
 
     try {
-      const getPreferencesFn = httpsCallable<
-        Record<string, never>,
-        { preferences: UserNewsPreferences | null }
-      >(this.functions!, "getUserNewsPreferences");
-
-      const result = await getPreferencesFn({});
+      const result = await this.callFunction<{
+        preferences: UserNewsPreferences | null;
+      }>("getUserNewsPreferences", {});
 
       // Cache the result
-      if (result.data.preferences) {
+      if (result.preferences) {
         memoryCache.set(
           "user_news_preferences",
-          result.data.preferences,
+          result.preferences,
           NEWS_FEED_CACHE_TTL,
         );
       }
 
-      return result.data.preferences;
+      return result.preferences;
     } catch (error) {
       this.handleError(error);
     }
@@ -566,21 +528,15 @@ class NewsService {
     }
 
     try {
-      const savePreferencesFn = httpsCallable<
-        {
-          preferences: Partial<
-            Omit<UserNewsPreferences, "userId" | "createdAt" | "updatedAt">
-          >;
-        },
-        { success: boolean }
-      >(this.functions!, "saveUserNewsPreferences");
-
-      const result = await savePreferencesFn({ preferences });
+      const result = await this.callFunction<{ success: boolean }>(
+        "saveUserNewsPreferences",
+        { preferences },
+      );
 
       // Invalidate cache
       memoryCache.delete("user_news_preferences");
 
-      return result.data;
+      return result;
     } catch (error) {
       this.handleError(error);
     }

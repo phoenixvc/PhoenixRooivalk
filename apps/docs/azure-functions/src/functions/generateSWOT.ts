@@ -11,19 +11,20 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { requireAuth } from "../lib/auth";
-import { generateCompletion, checkRateLimit } from "../lib/openai";
+import { requireAuthAsync } from "../lib/auth";
+import { generateCompletion } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 async function handler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
 
-  if (!checkRateLimit(`swot:${auth.userId}`, 10, 60000)) {
+  if (!(await checkRateLimitAsync(`swot:${auth.userId}`, RateLimits.ai))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

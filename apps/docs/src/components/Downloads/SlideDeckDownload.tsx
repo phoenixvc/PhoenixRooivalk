@@ -1,5 +1,6 @@
 import * as React from "react";
 import DownloadButton from "./DownloadButton";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 export interface Slide {
   /** Slide number */
@@ -14,6 +15,51 @@ export interface Slide {
   script?: string;
   /** Optional icon/emoji */
   icon?: string;
+}
+
+interface PptxGeneratorProps {
+  slides: Slide[];
+  title: string;
+  duration: number;
+  audience?: string;
+  date?: string;
+}
+
+/**
+ * Client-only PPTX generator component
+ * This wrapper ensures pptxgenjs is only loaded in the browser
+ */
+function PptxGenerator({
+  slides,
+  title,
+  duration,
+  audience,
+  date,
+}: PptxGeneratorProps) {
+  const handleDownloadPptx = React.useCallback(async () => {
+    try {
+      // Dynamic import only in browser
+      const { generatePptx } = await import("../../utils/generatePptx");
+      await generatePptx(slides, {
+        title,
+        duration,
+        audience,
+        date,
+      });
+    } catch (error) {
+      console.error("Failed to generate PPTX:", error);
+      alert("Failed to generate PowerPoint file. Please try again.");
+    }
+  }, [slides, title, duration, audience, date]);
+
+  return (
+    <DownloadButton
+      label="Download PowerPoint"
+      type="slidedeck"
+      onDownload={handleDownloadPptx}
+      variant="primary"
+    />
+  );
 }
 
 interface SlideDeckDownloadProps {
@@ -51,7 +97,7 @@ export default function SlideDeckDownload({
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
   const printContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleDownload = React.useCallback(() => {
+  const handleDownloadScript = React.useCallback(() => {
     setIsPreviewOpen(true);
   }, []);
 
@@ -96,12 +142,25 @@ export default function SlideDeckDownload({
 
   return (
     <>
-      <DownloadButton
-        label={buttonLabel}
-        type="slidedeck"
-        onDownload={handleDownload}
-        variant={variant}
-      />
+      <div className="flex items-center gap-3">
+        <BrowserOnly fallback={<div>Loading...</div>}>
+          {() => (
+            <PptxGenerator
+              slides={slides}
+              title={title}
+              duration={duration}
+              audience={audience}
+              date={date}
+            />
+          )}
+        </BrowserOnly>
+        <DownloadButton
+          label="Download Script"
+          type="slidedeck"
+          onDownload={handleDownloadScript}
+          variant={variant}
+        />
+      </div>
 
       {isPreviewOpen && (
         <div

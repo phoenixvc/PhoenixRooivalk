@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { newsService, NewsError } from "../../services/newsService";
-import { isFirebaseConfigured } from "../../services/firebase";
+import { isCloudConfigured } from "../../services/cloud";
 import { NewsCard } from "./NewsCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import type {
@@ -51,8 +51,8 @@ export function NewsPanel({
   const [hasMore, setHasMore] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>();
 
-  // Check if Firebase is configured for news service
-  const firebaseConfigured = isFirebaseConfigured();
+  // Check if cloud services are configured for news service
+  const cloudConfigured = isCloudConfigured();
 
   // Get user profile for personalization
   // Use knownProfile from AuthContext which contains roles, interests, focusAreas
@@ -319,21 +319,21 @@ export function NewsPanel({
         </div>
       </div>
 
-      {/* Show message if Firebase is not configured */}
-      {!firebaseConfigured && (
+      {/* Show message if cloud services are not configured */}
+      {!cloudConfigured && (
         <div className="news-panel-notice">
           <p>
             <strong>News service requires configuration</strong>
           </p>
           <p>
-            The news feed is powered by Firebase Cloud Functions which are not
+            The news feed is powered by Azure cloud services which are not
             currently configured. Contact your administrator to enable this
             feature.
           </p>
         </div>
       )}
 
-      {error && firebaseConfigured && (
+      {error && cloudConfigured && (
         <div className="news-panel-error">{error}</div>
       )}
 

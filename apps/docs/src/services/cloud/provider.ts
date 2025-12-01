@@ -2,23 +2,14 @@
  * Cloud Service Provider
  *
  * Factory for creating and managing cloud service instances.
- * Supports switching between Firebase and Azure implementations.
- * Falls back gracefully: Primary -> Secondary -> Offline
+ * Supports Azure implementations with offline fallback.
  */
 
-import { initializeApp, getApps, FirebaseApp } from "firebase/app";
 import { IAuthService } from "./interfaces/auth";
 import { IDatabaseService } from "./interfaces/database";
 import { IAnalyticsService } from "./interfaces/analytics";
 import { IMessagingService } from "./interfaces/messaging";
 import { IAIFunctionsService } from "./interfaces/functions";
-
-// Firebase implementations
-import { FirebaseAuthService } from "./firebase/auth";
-import { FirebaseDatabaseService } from "./firebase/database";
-import { FirebaseAnalyticsService } from "./firebase/analytics";
-import { FirebaseMessagingService } from "./firebase/messaging";
-import { FirebaseFunctionsService } from "./firebase/functions";
 
 // Azure implementations
 import { AzureAuthService, AzureAuthConfig } from "./azure/auth";
@@ -39,7 +30,7 @@ import {
 /**
  * Cloud provider type
  */
-export type CloudProvider = "firebase" | "azure" | "offline";
+export type CloudProvider = "azure" | "offline";
 
 /**
  * Cloud services collection
@@ -52,26 +43,6 @@ export interface CloudServices {
   functions: IAIFunctionsService;
   provider: CloudProvider;
   isConfigured: boolean;
-}
-
-/**
- * Firebase configuration from environment/Docusaurus
- */
-function getFirebaseConfig() {
-  if (typeof window === "undefined") return null;
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const docusaurusData = (window as any).__DOCUSAURUS__;
-    const config = docusaurusData?.siteConfig?.customFields?.firebaseConfig;
-    if (config?.apiKey && config?.projectId) {
-      return config;
-    }
-  } catch {
-    // Ignore
-  }
-
-  return null;
 }
 
 /**
@@ -105,8 +76,8 @@ function detectProvider(): CloudProvider {
       const docusaurusData = (window as any).__DOCUSAURUS__;
       const explicitProvider =
         docusaurusData?.siteConfig?.customFields?.cloudProvider;
-      if (explicitProvider === "azure" || explicitProvider === "firebase") {
-        return explicitProvider;
+      if (explicitProvider === "azure") {
+        return "azure";
       }
     } catch {
       // Ignore
@@ -114,70 +85,25 @@ function detectProvider(): CloudProvider {
 
     // Check localStorage for user preference
     const savedProvider = localStorage.getItem("phoenix-cloud-provider");
-    if (savedProvider === "azure" || savedProvider === "firebase") {
+    if (savedProvider === "azure") {
       return savedProvider;
     }
   }
 
-  // Default to Firebase if configured, otherwise Azure
-  const firebaseConfig = getFirebaseConfig();
-  if (firebaseConfig) {
-    return "firebase";
-  }
-
+  // Default to Azure if configured
   const azureConfig = getAzureConfig();
   if (azureConfig) {
     return "azure";
   }
 
-  // Default to Firebase
-  return "firebase";
+  // Default to offline
+  return "offline";
 }
 
 /**
  * Singleton instance of cloud services
  */
 let cloudServicesInstance: CloudServices | null = null;
-let firebaseApp: FirebaseApp | null = null;
-
-/**
- * Initialize Firebase app if not already initialized
- */
-function getFirebaseApp(): FirebaseApp | null {
-  if (firebaseApp) return firebaseApp;
-
-  const config = getFirebaseConfig();
-  if (!config) return null;
-
-  try {
-    if (getApps().length === 0) {
-      firebaseApp = initializeApp(config);
-    } else {
-      firebaseApp = getApps()[0];
-    }
-    return firebaseApp;
-  } catch (error) {
-    console.error("Failed to initialize Firebase:", error);
-    return null;
-  }
-}
-
-/**
- * Create Firebase services
- */
-function createFirebaseServices(): CloudServices {
-  const app = getFirebaseApp();
-
-  return {
-    auth: new FirebaseAuthService(app),
-    database: new FirebaseDatabaseService(app),
-    analytics: new FirebaseAnalyticsService(app),
-    messaging: new FirebaseMessagingService(app),
-    functions: new FirebaseFunctionsService(app),
-    provider: "firebase",
-    isConfigured: app !== null,
-  };
-}
 
 /**
  * Create Azure services
@@ -259,9 +185,8 @@ function createOfflineServices(): CloudServices {
  * Get or create cloud services instance with fallback
  *
  * Fallback order:
- * 1. Requested provider (if configured)
- * 2. Alternative cloud provider (if configured)
- * 3. Offline mode (always available)
+ * 1. Azure (if configured)
+ * 2. Offline mode (always available)
  */
 export function getCloudServices(forceProvider?: CloudProvider): CloudServices {
   const requestedProvider = forceProvider || detectProvider();
@@ -280,43 +205,14 @@ export function getCloudServices(forceProvider?: CloudProvider): CloudServices {
     return cloudServicesInstance;
   }
 
-  // Try requested provider first
+  // Try Azure
   if (requestedProvider === "azure") {
     const azureServices = createAzureServices();
     if (azureServices.isConfigured) {
       cloudServicesInstance = azureServices;
       return cloudServicesInstance;
     }
-    console.warn("Azure not configured, trying Firebase...");
-  }
-
-  if (requestedProvider === "firebase") {
-    const firebaseServices = createFirebaseServices();
-    if (firebaseServices.isConfigured) {
-      cloudServicesInstance = firebaseServices;
-      return cloudServicesInstance;
-    }
-    console.warn("Firebase not configured, trying Azure...");
-  }
-
-  // Fallback to alternative provider
-  const azureConfig = getAzureConfig();
-  const firebaseConfig = getFirebaseConfig();
-
-  if (azureConfig) {
-    const azureServices = createAzureServices();
-    if (azureServices.isConfigured) {
-      cloudServicesInstance = azureServices;
-      return cloudServicesInstance;
-    }
-  }
-
-  if (firebaseConfig) {
-    const firebaseServices = createFirebaseServices();
-    if (firebaseServices.isConfigured) {
-      cloudServicesInstance = firebaseServices;
-      return cloudServicesInstance;
-    }
+    console.warn("Azure not configured, falling back to offline mode...");
   }
 
   // Final fallback: offline mode
@@ -343,19 +239,17 @@ export function switchProvider(provider: CloudProvider): void {
 export function getProviderStatus(): {
   active: CloudProvider;
   available: CloudProvider[];
-  configured: { firebase: boolean; azure: boolean };
+  configured: { azure: boolean };
 } {
-  const firebaseConfigured = getFirebaseConfig() !== null;
   const azureConfigured = getAzureConfig() !== null;
   const available: CloudProvider[] = ["offline"];
 
-  if (firebaseConfigured) available.unshift("firebase");
   if (azureConfigured) available.unshift("azure");
 
   return {
     active: cloudServicesInstance?.provider || detectProvider(),
     available,
-    configured: { firebase: firebaseConfigured, azure: azureConfigured },
+    configured: { azure: azureConfigured },
   };
 }
 
@@ -379,7 +273,6 @@ export function isCloudConfigured(): boolean {
  */
 export function resetCloudServices(): void {
   cloudServicesInstance = null;
-  firebaseApp = null;
 }
 
 // ============================================================================

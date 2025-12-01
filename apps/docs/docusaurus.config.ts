@@ -45,17 +45,6 @@ const onBrokenLinksConfig =
 const marketingUrl =
   process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
 
-// Firebase configuration from environment variables (exposed to client via customFields)
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY || "",
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.FIREBASE_APP_ID || "",
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID || "",
-};
-
 // Azure Entra ID configuration from environment variables (exposed to client via customFields)
 const azureConfig = {
   tenantId: process.env.AZURE_ENTRA_TENANT_ID || "",
@@ -69,8 +58,8 @@ const azureConfig = {
     process.env.AZURE_APP_INSIGHTS_CONNECTION_STRING || "",
 };
 
-// Cloud provider selection: 'firebase' | 'azure'
-const cloudProvider = process.env.CLOUD_PROVIDER || "firebase";
+// Cloud provider selection: 'azure' | 'offline'
+const cloudProvider = process.env.CLOUD_PROVIDER || "azure";
 
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
@@ -82,7 +71,6 @@ const config: Config = {
   projectName: "PhoenixRooivalk",
   // Custom fields exposed to client-side code via useDocusaurusContext()
   customFields: {
-    firebaseConfig,
     azureConfig,
     cloudProvider,
   },
@@ -333,138 +321,90 @@ const config: Config = {
           : []),
       ],
     },
-    // Enhanced footer with role-based navigation and icons
     footer: {
       style: "dark",
       links: [
         {
-          title: "📊 Executives",
+          title: "PLATFORM",
           items: [
             {
-              label: "📋 Executive Summary",
-              to: "/docs/executive/executive-summary",
+              label: "Overview",
+              to: "/docs/overview",
             },
             {
-              label: "💼 Investor Summary",
-              to: "/docs/executive/investor-executive-summary",
+              label: "Features",
+              to: "/docs/technical/technical-architecture",
             },
             {
-              label: "📈 Market Analysis",
-              to: "/docs/business/market-analysis",
-            },
-            {
-              label: "💰 ROI Analysis",
+              label: "Pricing",
               to: "/docs/business/roi-analysis",
             },
           ],
         },
         {
-          title: "⚙️ Engineers",
+          title: "DOCUMENTATION",
           items: [
             {
-              label: "🏗️ Technical Architecture",
-              to: "/docs/technical/technical-architecture",
+              label: "Getting Started",
+              to: "/docs/phoenix-rooivalk-documentation",
             },
             {
-              label: "📡 API Documentation",
+              label: "API Reference",
               to: "/docs/technical/integration/api-documentation",
             },
             {
-              label: "🔗 Blockchain Architecture",
-              to: "/docs/technical/blockchain/blockchain-architecture",
-            },
-            {
-              label: "📖 Glossary",
-              to: "/docs/technical/glossary",
+              label: "Deployment Guide",
+              to: "/docs/operations/deployment/deployment-guide",
             },
           ],
         },
         {
-          title: "🎯 Operations",
+          title: "RESOURCES",
           items: [
             {
-              label: "🚀 Deployment Guide",
-              to: "/docs/operations/deployment/deployment-guide",
+              label: "News",
+              to: "/news",
             },
             {
-              label: "📚 Operations Manual",
-              to: "/docs/operations/operations-manual",
+              label: "Changelog",
+              to: "/docs/resources/documentation-status",
             },
             {
-              label: "🎓 Training Materials",
-              to: "/docs/operations/training/training-materials",
-            },
-            {
-              label: "✅ Compliance Framework",
+              label: "Security and Compliance",
               to: "/docs/legal/compliance-framework",
             },
           ],
         },
         {
-          title: "📦 Resources",
+          title: "COMPANY",
           items: [
             {
-              label: "📰 Industry News",
-              to: "/news",
-            },
-            {
-              label: "⬇️ Downloads",
-              to: "/docs/resources/downloads",
-            },
-            {
-              label: "📊 Documentation Status",
-              to: "/docs/resources/documentation-status",
-            },
-            {
-              label: "🌐 Main Website",
+              label: "About",
               href: "https://phoenixrooivalk.netlify.app",
             },
-          ],
-        },
-        {
-          title: "💬 Support",
-          items: [
             {
-              label: "🛟 Support Center",
-              to: "/support",
-            },
-            {
-              label: "📈 Your Progress",
-              to: "/your-progress",
-            },
-            {
-              label: "✉️ Contact Us",
+              label: "Contact and Support",
               to: "/contact",
             },
             {
-              label: "🔑 Request Access",
-              href: "https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/ACCESS.md",
-            },
-          ],
-        },
-        {
-          title: "🔗 Connect",
-          items: [
-            {
-              label: "🐙 GitHub",
+              label: "GitHub",
               href: "https://github.com/JustAGhosT/PhoenixRooivalk",
+              className: "footer__link-social footer__link-github",
             },
             {
-              label: "💼 LinkedIn",
+              label: "LinkedIn",
               href: "https://linkedin.com/company/phoenix-rooivalk",
+              className: "footer__link-social footer__link-linkedin",
             },
             {
-              label: "🐦 X (Twitter)",
-              href: "https://x.com/PhoenixRooivalk",
-            },
-            {
-              label: "📧 Email Us",
-              href: "mailto:contact@phoenixrooivalk.com",
+              label: "X / Twitter",
+              href: "https://x.com/phoenixrooivalk",
+              className: "footer__link-social footer__link-twitter",
             },
           ],
         },
       ],
-      copyright: `© 2025 Phoenix Rooivalk. All rights reserved. Built with ❤️ for global defense security. | v0.2.0`,
+      copyright: `© 2025 Phoenix Rooivalk. All rights reserved.`,
     },
     // Enhanced color mode
     colorMode: {
@@ -511,6 +451,43 @@ const config: Config = {
       },
     },
   } satisfies Preset.ThemeConfig,
+
+  // Add custom webpack config to handle pptxgenjs node: protocol imports
+  plugins: [
+    function customWebpackPlugin() {
+      return {
+        name: "custom-webpack-plugin",
+        configureWebpack(config, isServer) {
+          if (isServer) {
+            return {};
+          }
+          
+          // Access webpack from the config
+          const webpack = require("webpack");
+          
+          return {
+            plugins: [
+              // Replace node: protocol imports with empty modules
+              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: { request: string; context?: string }) => {
+                resource.request = resource.request.replace(/^node:/, "");
+              }),
+            ],
+            resolve: {
+              fallback: {
+                fs: false,
+                https: false,
+                http: false,
+                stream: false,
+                zlib: false,
+                url: false,
+                buffer: false,
+              },
+            },
+          };
+        },
+      };
+    },
+  ],
 };
 
 export default config;

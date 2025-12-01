@@ -1,7 +1,7 @@
 /**
  * AI Service for Phoenix Rooivalk Documentation
  *
- * Provides client-side interface to AI Cloud Functions:
+ * Provides client-side interface to Azure Functions AI endpoints:
  * - Competitor analysis
  * - SWOT analysis
  * - Reading recommendations
@@ -10,8 +10,7 @@
  * - Content summarization
  */
 
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { app, isFirebaseConfigured } from "./firebase";
+import { getFunctionsService, isCloudConfigured } from "./cloud";
 
 // Types for AI responses
 export interface CompetitorAnalysisResult {
@@ -113,10 +112,9 @@ export class AIError extends Error {
 }
 
 /**
- * AI Service class - provides all AI functionality
+ * AI Service class - provides all AI functionality via Azure Functions
  */
 class AIService {
-  private functions: ReturnType<typeof getFunctions> | null = null;
   private isInitialized = false;
 
   /**
@@ -125,26 +123,31 @@ class AIService {
   init(): boolean {
     if (this.isInitialized) return true;
 
-    if (!isFirebaseConfigured() || typeof window === "undefined") {
-      console.warn("AI Service: Firebase not configured");
+    if (!isCloudConfigured() || typeof window === "undefined") {
+      console.warn("AI Service: Azure not configured");
       return false;
     }
 
-    try {
-      this.functions = getFunctions(app!);
-      this.isInitialized = true;
-      return true;
-    } catch (error) {
-      console.error("AI Service initialization failed:", error);
-      return false;
-    }
+    this.isInitialized = true;
+    return true;
   }
 
   /**
    * Check if AI service is available
    */
   isAvailable(): boolean {
-    return this.isInitialized && this.functions !== null;
+    return this.isInitialized || isCloudConfigured();
+  }
+
+  /**
+   * Call an Azure Function
+   */
+  private async callFunction<T>(
+    functionName: string,
+    data: Record<string, unknown>,
+  ): Promise<T> {
+    const functionsService = getFunctionsService();
+    return functionsService.call<T>(functionName, data);
   }
 
   /**
@@ -154,16 +157,19 @@ class AIService {
     const code = error.code || "unknown";
     const message = error.message || "An error occurred";
 
-    if (code === "unauthenticated") {
-      throw new AIError("Please sign in to use AI features", code);
+    if (code === "unauthenticated" || code === "401") {
+      throw new AIError("Please sign in to use AI features", "unauthenticated");
     }
-    if (code === "resource-exhausted") {
-      throw new AIError("Rate limit exceeded. Please try again later.", code);
+    if (code === "resource-exhausted" || code === "429") {
+      throw new AIError(
+        "Rate limit exceeded. Please try again later.",
+        "resource-exhausted",
+      );
     }
-    if (code === "failed-precondition") {
+    if (code === "failed-precondition" || code === "503") {
       throw new AIError(
         "AI service not configured. Contact administrator.",
-        code,
+        "failed-precondition",
       );
     }
 
@@ -182,13 +188,10 @@ class AIService {
     }
 
     try {
-      const analyzeCompetitorsFn = httpsCallable<
-        { competitors: string[]; focusAreas?: string[] },
-        CompetitorAnalysisResult
-      >(this.functions!, "analyzeCompetitors");
-
-      const result = await analyzeCompetitorsFn({ competitors, focusAreas });
-      return result.data;
+      return await this.callFunction<CompetitorAnalysisResult>(
+        "analyzeCompetitors",
+        { competitors, focusAreas },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -203,13 +206,10 @@ class AIService {
     }
 
     try {
-      const generateSWOTFn = httpsCallable<
-        { topic: string; context?: string },
-        SWOTResult
-      >(this.functions!, "generateSWOT");
-
-      const result = await generateSWOTFn({ topic, context });
-      return result.data;
+      return await this.callFunction<SWOTResult>("generateSWOT", {
+        topic,
+        context,
+      });
     } catch (error) {
       this.handleError(error);
     }
@@ -226,13 +226,10 @@ class AIService {
     }
 
     try {
-      const getRecommendationsFn = httpsCallable<
-        { currentDocId?: string },
-        RecommendationsResult
-      >(this.functions!, "getReadingRecommendations");
-
-      const result = await getRecommendationsFn({ currentDocId });
-      return result.data;
+      return await this.callFunction<RecommendationsResult>(
+        "getReadingRecommendations",
+        { currentDocId },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -251,18 +248,14 @@ class AIService {
     }
 
     try {
-      const suggestImprovementsFn = httpsCallable<
-        { docId: string; docTitle: string; docContent: string; userId: string },
-        DocumentImprovementResult
-      >(this.functions!, "suggestDocumentImprovements");
-
-      const result = await suggestImprovementsFn({
-        docId,
-        docTitle,
-        docContent,
-        userId: "", // Will be set by the function from context
-      });
-      return result.data;
+      return await this.callFunction<DocumentImprovementResult>(
+        "suggestImprovements",
+        {
+          documentPath: docId,
+          documentContent: docContent,
+          focusArea: "all",
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -280,13 +273,13 @@ class AIService {
     }
 
     try {
-      const getMarketInsightsFn = httpsCallable<
-        { topic: string; industry?: string },
-        MarketInsightsResult
-      >(this.functions!, "getMarketInsights");
-
-      const result = await getMarketInsightsFn({ topic, industry });
-      return result.data;
+      return await this.callFunction<MarketInsightsResult>(
+        "getMarketInsights",
+        {
+          topic,
+          industry,
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -304,13 +297,10 @@ class AIService {
     }
 
     try {
-      const summarizeContentFn = httpsCallable<
-        { content: string; maxLength?: number },
-        SummaryResult
-      >(this.functions!, "summarizeContent");
-
-      const result = await summarizeContentFn({ content, maxLength });
-      return result.data;
+      return await this.callFunction<SummaryResult>("summarizeContent", {
+        content,
+        maxLength,
+      });
     } catch (error) {
       this.handleError(error);
     }
@@ -329,13 +319,10 @@ class AIService {
     }
 
     try {
-      const reviewFn = httpsCallable<
-        { suggestionId: string; status: string; notes?: string },
-        { success: boolean; status: string }
-      >(this.functions!, "reviewDocumentImprovement");
-
-      const result = await reviewFn({ suggestionId, status, notes });
-      return result.data;
+      return await this.callFunction<{ success: boolean; status: string }>(
+        "reviewDocumentImprovement",
+        { suggestionId, status, notes },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -352,13 +339,10 @@ class AIService {
     }
 
     try {
-      const getPendingFn = httpsCallable<
-        { limit?: number },
-        { suggestions: PendingImprovement[] }
-      >(this.functions!, "getPendingImprovements");
-
-      const result = await getPendingFn({ limit });
-      return result.data;
+      return await this.callFunction<{ suggestions: PendingImprovement[] }>(
+        "getPendingImprovements",
+        { limit },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -380,24 +364,12 @@ class AIService {
     }
 
     try {
-      const askDocsFn = httpsCallable<
-        {
-          question: string;
-          category?: string;
-          format?: string;
-          history?: Array<{ role: string; content: string }>;
-        },
-        RAGResponse
-      >(this.functions!, "askDocumentation");
-
-      const result = await askDocsFn({
+      return await this.callFunction<RAGResponse>("askDocumentation", {
         question,
         category: options?.category,
         format: options?.format,
         history: options?.history,
       });
-
-      return result.data;
     } catch (error) {
       this.handleError(error);
     }
@@ -415,18 +387,15 @@ class AIService {
     }
 
     try {
-      const searchFn = httpsCallable<
-        { query: string; category?: string; topK?: number },
-        { results: SearchResultItem[] }
-      >(this.functions!, "searchDocs");
-
-      const result = await searchFn({
-        query,
-        category: options?.category,
-        topK: options?.topK,
-      });
-
-      return result.data.results;
+      const result = await this.callFunction<{ results: SearchResultItem[] }>(
+        "searchDocs",
+        {
+          query,
+          category: options?.category,
+          topK: options?.topK,
+        },
+      );
+      return result.results;
     } catch (error) {
       this.handleError(error);
     }
@@ -447,16 +416,10 @@ class AIService {
     }
 
     try {
-      const getSuggestionsFn = httpsCallable<
-        { docId?: string; category?: string },
-        {
-          suggestions: string[];
-          docInfo: { title: string; category: string } | null;
-        }
-      >(this.functions!, "getSuggestedQuestions");
-
-      const result = await getSuggestionsFn({ docId, category });
-      return result.data;
+      return await this.callFunction<{
+        suggestions: string[];
+        docInfo: { title: string; category: string } | null;
+      }>("getSuggestedQuestions", { docId, category });
     } catch (error) {
       this.handleError(error);
     }
@@ -471,13 +434,7 @@ class AIService {
     }
 
     try {
-      const getStatsFn = httpsCallable<Record<string, never>, IndexStats>(
-        this.functions!,
-        "getIndexStats",
-      );
-
-      const result = await getStatsFn({});
-      return result.data;
+      return await this.callFunction<IndexStats>("getIndexStats", {});
     } catch (error) {
       this.handleError(error);
     }
@@ -497,13 +454,11 @@ class AIService {
     }
 
     try {
-      const researchFn = httpsCallable<
-        { firstName: string; lastName: string; linkedInUrl: string },
-        FunFactsResult
-      >(this.functions!, "researchPerson");
-
-      const result = await researchFn({ firstName, lastName, linkedInUrl });
-      return result.data;
+      return await this.callFunction<FunFactsResult>("researchPerson", {
+        firstName,
+        lastName,
+        linkedInUrl,
+      });
     } catch (error) {
       this.handleError(error);
     }

@@ -10,6 +10,7 @@ import {
   Container,
   SqlParameter,
   ItemDefinition,
+  PatchOperation,
 } from "@azure/cosmos";
 
 let client: CosmosClient | null = null;
@@ -102,4 +103,28 @@ export async function queryDocuments<T>(
     .query<T>({ query, parameters })
     .fetchAll();
   return resources;
+}
+
+/**
+ * Re-export PatchOperation type from Azure Cosmos SDK for consumers
+ */
+export type { PatchOperation };
+
+/**
+ * Helper to patch document with atomic operations
+ */
+export async function patchDocument<T extends ItemDefinition>(
+  containerName: string,
+  id: string,
+  operations: PatchOperation[],
+  partitionKey?: string,
+): Promise<T> {
+  const container = getContainer(containerName);
+  const { resource } = await container
+    .item(id, partitionKey || id)
+    .patch<T>(operations);
+  if (!resource) {
+    throw new Error(`Failed to patch document with id: ${id}`);
+  }
+  return resource;
 }

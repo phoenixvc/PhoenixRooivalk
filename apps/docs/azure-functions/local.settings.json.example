@@ -3,14 +3,36 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "node",
-    "COSMOS_DB_CONNECTION_STRING": "your-cosmos-connection-string",
+
+    "COSMOS_DB_CONNECTION_STRING": "AccountEndpoint=https://your-cosmos.documents.azure.com:443/;AccountKey=your-key;",
     "COSMOS_DB_DATABASE": "phoenix-docs",
-    "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
-    "AZURE_OPENAI_API_KEY": "your-azure-openai-api-key",
+
+    "AZURE_AI_ENDPOINT": "https://your-openai.openai.azure.com/",
+    "AZURE_AI_API_KEY": "your-api-key",
+    "AZURE_AI_DEPLOYMENT_NAME": "gpt-4",
+    "AZURE_AI_EMBEDDING_DEPLOYMENT": "text-embedding-3-small",
     "AZURE_OPENAI_API_VERSION": "2024-10-21",
-    "AZURE_OPENAI_CHAT_DEPLOYMENT": "gpt-4",
-    "AZURE_OPENAI_EMBEDDING_DEPLOYMENT": "text-embedding-3-small",
-    "KEY_VAULT_NAME": "your-keyvault-name"
+
+    "AZURE_AD_B2C_TENANT": "your-tenant.onmicrosoft.com",
+    "AZURE_AD_B2C_CLIENT_ID": "your-client-id",
+    "AZURE_AD_B2C_POLICY": "B2C_1_signupsignin",
+    "SKIP_TOKEN_VALIDATION": "true",
+
+    "APPLICATIONINSIGHTS_CONNECTION_STRING": "",
+
+    "RATE_LIMIT_DISTRIBUTED": "false",
+
+    "SENDGRID_API_KEY": "",
+    "SENDGRID_FROM_EMAIL": "noreply@phoenixrooivalk.com",
+
+    "AZURE_NOTIFICATION_HUB_CONNECTION_STRING": "",
+    "AZURE_NOTIFICATION_HUB_NAME": "",
+
+    "NEWS_API_KEY": "",
+    "BING_SEARCH_API_KEY": "",
+
+    "KEY_VAULT_NAME": "your-keyvault-name",
+    "BASE_URL": "http://localhost:3000"
   },
   "Host": {
     "CORS": "*",

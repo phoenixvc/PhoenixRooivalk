@@ -28,6 +28,8 @@ const USER_FUN_FACTS_KEY = "phoenix-docs-user-fun-facts";
 type StepType =
   | "profile-completion"
   | "profile-selection"
+  | "access-verification"
+  | "apply-for-access"
   | "ai-fun-facts"
   | "tour";
 
@@ -153,6 +155,17 @@ function saveProfileSelection(
   );
 }
 
+/**
+ * Template keys that are reserved for internal team members.
+ * External users selecting these will be prompted to verify access.
+ */
+const INTERNAL_ONLY_TEMPLATE_KEYS = [
+  "operations",
+  "product",
+  "legal",
+  "advisory",
+];
+
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "profile-completion",
@@ -169,6 +182,22 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
       "Select the profile that best matches your role. This helps us personalize your documentation experience with relevant recommendations.",
     icon: "👤",
     stepType: "profile-selection",
+  },
+  {
+    id: "access-verification",
+    title: "Hmm, sure you belong here?",
+    description:
+      "This role is typically reserved for internal team members. If you're part of the team, please continue. Otherwise, you can apply for access.",
+    icon: "🔐",
+    stepType: "access-verification",
+  },
+  {
+    id: "apply-for-access",
+    title: "Apply for Access",
+    description:
+      "We'd love to have you! Please fill out the form below to request access to the Phoenix Rooivalk documentation portal.",
+    icon: "📋",
+    stepType: "apply-for-access",
   },
   {
     id: "ai-fun-facts",
@@ -336,13 +365,8 @@ export function OnboardingWalkthrough({
   forceShow = false,
   onClose,
 }: OnboardingWalkthroughProps): React.ReactElement | null {
-  const {
-    user,
-    loading,
-    userProfile,
-    refreshUserProfile,
-    saveProfileToFirebase,
-  } = useAuth();
+  const { user, loading, userProfile, refreshUserProfile, saveProfileToCloud } =
+    useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -462,8 +486,8 @@ export function OnboardingWalkthrough({
       saveUserDetails(user.uid, details);
       setUserDetails(details);
 
-      // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      // Save to cloud for persistence
+      await saveProfileToCloud({
         firstName: details.firstName,
         lastName: details.lastName,
         linkedIn: details.linkedIn,
@@ -477,7 +501,7 @@ export function OnboardingWalkthrough({
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToFirebase],
+    [user, currentStep, saveProfileToCloud],
   );
 
   // Handle AI fun facts completion
@@ -487,8 +511,8 @@ export function OnboardingWalkthrough({
       // Save to localStorage for quick access
       saveUserFunFacts(user.uid, facts);
 
-      // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      // Save to cloud for persistence
+      await saveProfileToCloud({
         funFacts: facts,
         funFactsGeneratedAt: new Date().toISOString(),
       });
@@ -498,7 +522,7 @@ export function OnboardingWalkthrough({
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToFirebase],
+    [user, currentStep, saveProfileToCloud],
   );
 
   // Handle skipping fun facts
@@ -509,13 +533,73 @@ export function OnboardingWalkthrough({
     saveStep(nextStep);
   }, [currentStep]);
 
+  // Handle "I'm part of the team" from access verification
+  const handleAccessConfirm = useCallback(async () => {
+    if (!user || !selectedTemplate) return;
+
+    // Save the profile selection
+    saveProfileSelection(
+      user.uid,
+      selectedTemplate.templateKey,
+      selectedTemplate.roles,
+    );
+
+    // Save to cloud for persistence
+    await saveProfileToCloud({
+      profileKey: selectedTemplate.templateKey,
+      roles: selectedTemplate.roles,
+    });
+
+    // Refresh the user profile in context
+    refreshUserProfile?.();
+
+    // Move to next step (ai-fun-facts or tour)
+    const nextStep = currentStep + 1;
+    setCurrentStep(nextStep);
+    saveStep(nextStep);
+  }, [
+    user,
+    selectedTemplate,
+    currentStep,
+    saveProfileToCloud,
+    refreshUserProfile,
+  ]);
+
+  // Handle "Nope" from access verification - go to apply for access
+  const handleAccessDeny = useCallback(() => {
+    const applyIndex = findStepIndex("apply-for-access");
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentStep(applyIndex);
+      saveStep(applyIndex);
+      setIsAnimating(false);
+    }, 200);
+  }, [findStepIndex]);
+
   const handleNext = useCallback(async () => {
     if (isAnimating) return;
 
     const step = ONBOARDING_STEPS[currentStep];
 
-    // If on profile selection step, save the selection before proceeding
+    // If on profile selection step, check if user needs access verification
     if (step.stepType === "profile-selection" && selectedTemplate && user) {
+      // Check if selected template requires internal access
+      const needsVerification = INTERNAL_ONLY_TEMPLATE_KEYS.includes(
+        selectedTemplate.templateKey,
+      );
+
+      if (needsVerification) {
+        // Navigate to access verification step
+        const verificationIndex = findStepIndex("access-verification");
+        setIsAnimating(true);
+        setTimeout(() => {
+          setCurrentStep(verificationIndex);
+          saveStep(verificationIndex);
+          setIsAnimating(false);
+        }, 200);
+        return;
+      }
+
       // Save to localStorage for quick access
       saveProfileSelection(
         user.uid,
@@ -523,8 +607,8 @@ export function OnboardingWalkthrough({
         selectedTemplate.roles,
       );
 
-      // Save to Firebase for persistence
-      await saveProfileToFirebase({
+      // Save to cloud for persistence
+      await saveProfileToCloud({
         profileKey: selectedTemplate.templateKey,
         roles: selectedTemplate.roles,
       });
@@ -548,7 +632,8 @@ export function OnboardingWalkthrough({
     selectedTemplate,
     user,
     refreshUserProfile,
-    saveProfileToFirebase,
+    saveProfileToCloud,
+    findStepIndex,
   ]);
 
   const handlePrevious = useCallback(() => {
@@ -556,16 +641,38 @@ export function OnboardingWalkthrough({
 
     const step = ONBOARDING_STEPS[currentStep];
 
-    // Don't allow going back from non-tour steps
-    // (can't go back from profile-completion, profile-selection, or ai-fun-facts)
-    if (step.stepType !== "tour") return;
+    // Don't allow going back from the first step
+    if (currentStep === 0) return;
 
-    // Don't allow going back to non-tour steps from the first tour step
+    // Don't allow going back from tour steps to non-tour steps
     const tourStartIndex = findStepIndex("tour");
-    if (currentStep <= tourStartIndex) return;
+    if (step.stepType === "tour" && currentStep <= tourStartIndex) return;
+
+    // Special case: if on access-verification, go back to profile-selection
+    if (step.stepType === "access-verification") {
+      const profileSelectionIndex = findStepIndex("profile-selection");
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentStep(profileSelectionIndex);
+        saveStep(profileSelectionIndex);
+        setIsAnimating(false);
+      }, 200);
+      return;
+    }
+
+    // Special case: if on apply-for-access, go back to access-verification
+    if (step.stepType === "apply-for-access") {
+      const verificationIndex = findStepIndex("access-verification");
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentStep(verificationIndex);
+        saveStep(verificationIndex);
+        setIsAnimating(false);
+      }, 200);
+      return;
+    }
 
     // Clear the highlight from current step before navigating back
-    // (the useEffect will apply the new step's highlight)
     if (step.highlight) {
       document
         .querySelector(step.highlight)
@@ -622,6 +729,8 @@ export function OnboardingWalkthrough({
   const step = ONBOARDING_STEPS[currentStep];
   const isProfileCompletionStep = step.stepType === "profile-completion";
   const isProfileSelectionStep = step.stepType === "profile-selection";
+  const isAccessVerificationStep = step.stepType === "access-verification";
+  const isApplyForAccessStep = step.stepType === "apply-for-access";
   const isAIFunFactsStep = step.stepType === "ai-fun-facts";
   const isTourStep = step.stepType === "tour";
   const isLastStep = currentStep === ONBOARDING_STEPS.length - 1;
@@ -630,6 +739,14 @@ export function OnboardingWalkthrough({
 
   // For profile selection step, require a selection to proceed
   const canProceed = !isProfileSelectionStep || selectedTemplate !== null;
+
+  // Only show skip button for verified users (those who passed access verification or didn't need it)
+  const accessVerificationIndex = findStepIndex("access-verification");
+  const canSkip =
+    currentStep > accessVerificationIndex ||
+    (isProfileSelectionStep &&
+      selectedTemplate &&
+      !INTERNAL_ONLY_TEMPLATE_KEYS.includes(selectedTemplate.templateKey));
 
   // Get modal size class based on step type
   const getModalClass = () => {
@@ -652,13 +769,15 @@ export function OnboardingWalkthrough({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <button
-              type="button"
-              className="onboarding-skip"
-              onClick={handleSkip}
-            >
-              Skip tour
-            </button>
+            {canSkip && (
+              <button
+                type="button"
+                className="onboarding-skip"
+                onClick={handleSkip}
+              >
+                Skip tour
+              </button>
+            )}
             <ProfileCompletion
               onComplete={handleProfileComplete}
               initialData={
@@ -671,6 +790,109 @@ export function OnboardingWalkthrough({
                   : undefined
               }
             />
+            <div className="onboarding-counter">
+              Step {currentStep + 1} of {ONBOARDING_STEPS.length}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Render access verification step
+  if (isAccessVerificationStep) {
+    return (
+      <>
+        <div className="onboarding-backdrop" />
+        <div className={`onboarding-modal ${getModalClass()}`}>
+          <div className="onboarding-content">
+            <div className="onboarding-progress">
+              <div
+                className="onboarding-progress-bar"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="onboarding-step">
+              <div className="onboarding-icon">{step.icon}</div>
+              <h2 className="onboarding-title">{step.title}</h2>
+              <p className="onboarding-description">{step.description}</p>
+              <div className="onboarding-access-buttons">
+                <button
+                  type="button"
+                  className="onboarding-nav-btn onboarding-nav-btn--complete"
+                  onClick={handleAccessConfirm}
+                  disabled={isAnimating}
+                >
+                  I'm part of the team
+                </button>
+                <button
+                  type="button"
+                  className="onboarding-nav-btn onboarding-nav-btn--deny"
+                  onClick={handleAccessDeny}
+                  disabled={isAnimating}
+                >
+                  Nope
+                </button>
+              </div>
+            </div>
+            <div className="onboarding-nav">
+              <button
+                type="button"
+                className="onboarding-nav-btn onboarding-nav-btn--prev"
+                onClick={handlePrevious}
+                disabled={isAnimating}
+              >
+                Back
+              </button>
+            </div>
+            <div className="onboarding-counter">
+              Step {currentStep + 1} of {ONBOARDING_STEPS.length}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Render apply for access step
+  if (isApplyForAccessStep) {
+    return (
+      <>
+        <div className="onboarding-backdrop" />
+        <div className={`onboarding-modal ${getModalClass()}`}>
+          <div className="onboarding-content">
+            <div className="onboarding-progress">
+              <div
+                className="onboarding-progress-bar"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="onboarding-step">
+              <div className="onboarding-icon">{step.icon}</div>
+              <h2 className="onboarding-title">{step.title}</h2>
+              <p className="onboarding-description">{step.description}</p>
+              <div className="onboarding-apply-access">
+                <p>
+                  Please contact the team at{" "}
+                  <a href="mailto:access@phoenixrooivalk.com">
+                    access@phoenixrooivalk.com
+                  </a>{" "}
+                  to request access. Include your name, role, and reason for
+                  needing access to the documentation portal.
+                </p>
+                <p>We'll review your request and get back to you shortly.</p>
+              </div>
+            </div>
+            <div className="onboarding-nav">
+              <button
+                type="button"
+                className="onboarding-nav-btn onboarding-nav-btn--prev"
+                onClick={handlePrevious}
+                disabled={isAnimating}
+              >
+                Back
+              </button>
+            </div>
             <div className="onboarding-counter">
               Step {currentStep + 1} of {ONBOARDING_STEPS.length}
             </div>
@@ -724,7 +946,7 @@ export function OnboardingWalkthrough({
           </div>
 
           {/* Skip button */}
-          {!isLastStep && (
+          {!isLastStep && canSkip && (
             <button
               type="button"
               className="onboarding-skip"
@@ -829,14 +1051,29 @@ export function OnboardingWalkthrough({
 
           {/* Navigation */}
           <div className="onboarding-nav">
-            <button
-              type="button"
-              className="onboarding-nav-btn onboarding-nav-btn--prev"
-              onClick={handlePrevious}
-              disabled={currentStep <= tourStartIndex || isAnimating}
-            >
-              Previous
-            </button>
+            {currentStep > 0 &&
+              !isTourStep &&
+              !isAccessVerificationStep &&
+              !isApplyForAccessStep && (
+                <button
+                  type="button"
+                  className="onboarding-nav-btn onboarding-nav-btn--prev"
+                  onClick={handlePrevious}
+                  disabled={isAnimating}
+                >
+                  Back
+                </button>
+              )}
+            {isTourStep && (
+              <button
+                type="button"
+                className="onboarding-nav-btn onboarding-nav-btn--prev"
+                onClick={handlePrevious}
+                disabled={currentStep <= tourStartIndex || isAnimating}
+              >
+                Previous
+              </button>
+            )}
 
             {isLastStep ? (
               <button

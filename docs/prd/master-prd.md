@@ -57,8 +57,7 @@ accountability.
 - **Performance:** Sub-200ms response times for the AeroNet™ system.
 - **Reliability:** 99.9% uptime for the AeroNet™ system.
 - **Security:** Adherence to OWASP Top 10 and other security best practices.
-- **Compliance:** CPSC certification for SkySnare™ and FAA waivers for
-  AeroNet™.
+- **Compliance:** CPSC certification for SkySnare™ and FAA waivers for AeroNet™.
 
 ## 6. Constraints & Assumptions
 

@@ -12,13 +12,10 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { SqlParameter } from "@azure/cosmos";
-import { requireAuth } from "../lib/auth";
+import { requireAuthAsync } from "../lib/auth";
 import { queryDocuments } from "../lib/cosmos";
-import {
-  generateCompletion,
-  generateEmbeddings,
-  checkRateLimit,
-} from "../lib/openai";
+import { generateCompletion, generateEmbeddings } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 interface RAGSource {
   docId: string;
@@ -152,13 +149,13 @@ async function handler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   // Check authentication
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
 
   // Rate limiting
-  if (!checkRateLimit(`ask:${auth.userId}`, 20, 60000)) {
+  if (!(await checkRateLimitAsync(`ask:${auth.userId}`, RateLimits.ai))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

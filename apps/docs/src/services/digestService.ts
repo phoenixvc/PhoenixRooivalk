@@ -3,22 +3,10 @@
  *
  * Handles weekly/daily digest generation for comment notifications.
  * Aggregates comment activity and prepares digest data.
- * Features AI-generated personalized summaries (Wave 2).
+ * Uses Azure cloud services for data storage.
  */
 
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  setDoc,
-  getDoc,
-  orderBy,
-  limit,
-} from "firebase/firestore";
-import { isFirebaseConfigured } from "./firebase";
+import { getDatabaseService, isCloudConfigured } from "./cloud";
 import { aiService } from "./aiService";
 
 export type DigestFrequency = "none" | "daily" | "weekly";
@@ -49,7 +37,7 @@ export interface DigestData {
     topPages: { url: string; title: string; count: number }[];
   };
   generatedAt: string;
-  // AI-generated personalized summary (Wave 2)
+  // AI-generated personalized summary
   aiSummary?: {
     overview: string;
     highlights: string[];
@@ -69,6 +57,7 @@ export interface UserDigestPreferences {
 
 const PREFERENCES_COLLECTION = "digest_preferences";
 const DIGEST_HISTORY_COLLECTION = "digest_history";
+const NOTIFICATIONS_COLLECTION = "comment_notifications";
 
 /**
  * Get user's digest preferences
@@ -76,17 +65,14 @@ const DIGEST_HISTORY_COLLECTION = "digest_history";
 export async function getDigestPreferences(
   userId: string,
 ): Promise<UserDigestPreferences | null> {
-  if (!isFirebaseConfigured()) return null;
+  if (!isCloudConfigured()) return null;
 
   try {
-    const db = getFirestore();
-    const docRef = doc(db, PREFERENCES_COLLECTION, userId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return docSnap.data() as UserDigestPreferences;
-    }
-    return null;
+    const db = getDatabaseService();
+    return await db.getDocument<UserDigestPreferences>(
+      PREFERENCES_COLLECTION,
+      userId,
+    );
   } catch (error) {
     console.error("Failed to get digest preferences:", error);
     return null;
@@ -101,25 +87,27 @@ export async function updateDigestPreferences(
   email: string,
   frequency: DigestFrequency,
 ): Promise<boolean> {
-  if (!isFirebaseConfigured()) return false;
+  if (!isCloudConfigured()) return false;
 
   try {
-    const db = getFirestore();
-    const docRef = doc(db, PREFERENCES_COLLECTION, userId);
-    const existing = await getDoc(docRef);
+    const db = getDatabaseService();
+    const existing = await db.getDocument<UserDigestPreferences>(
+      PREFERENCES_COLLECTION,
+      userId,
+    );
 
     const now = new Date().toISOString();
     const data: UserDigestPreferences = {
       userId,
       email,
       frequency,
-      lastDigestSent: existing.exists() ? existing.data().lastDigestSent : null,
+      lastDigestSent: existing?.lastDigestSent || null,
       enabled: frequency !== "none",
-      createdAt: existing.exists() ? existing.data().createdAt : now,
+      createdAt: existing?.createdAt || now,
       updatedAt: now,
     };
 
-    await setDoc(docRef, data);
+    await db.setDocument(PREFERENCES_COLLECTION, userId, data);
     return true;
   } catch (error) {
     console.error("Failed to update digest preferences:", error);
@@ -135,40 +123,42 @@ export async function getCommentActivities(
   startDate: Date,
   endDate: Date,
 ): Promise<CommentActivity[]> {
-  if (!isFirebaseConfigured()) return [];
+  if (!isCloudConfigured()) return [];
 
   try {
-    const db = getFirestore();
+    const db = getDatabaseService();
 
     // Query notifications for this user within the time period
-    const notificationsRef = collection(db, "comment_notifications");
-    const q = query(
-      notificationsRef,
-      where("authorId", "==", userId),
-      where("createdAt", ">=", startDate.toISOString()),
-      where("createdAt", "<=", endDate.toISOString()),
-      orderBy("createdAt", "desc"),
-      limit(100),
-    );
-
-    const snapshot = await getDocs(q);
-    const activities: CommentActivity[] = [];
-
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      activities.push({
-        commentId: data.commentId,
-        pageUrl: data.pageUrl,
-        pageTitle: data.pageTitle,
-        type: determineActivityType(data),
-        actorName: data.reviewerEmail?.split("@")[0] || "Someone",
-        actorEmail: data.reviewerEmail,
-        content: data.reviewNotes || "Interacted with your comment",
-        createdAt: data.createdAt,
-      });
+    const result = await db.queryDocuments<{
+      commentId: string;
+      pageUrl: string;
+      pageTitle: string;
+      reviewerEmail?: string;
+      reviewNotes?: string;
+      status?: string;
+      aiEnhanced?: boolean;
+      isReply?: boolean;
+      createdAt: string;
+    }>(NOTIFICATIONS_COLLECTION, {
+      conditions: [
+        { field: "authorId", operator: "==", value: userId },
+        { field: "createdAt", operator: ">=", value: startDate.toISOString() },
+        { field: "createdAt", operator: "<=", value: endDate.toISOString() },
+      ],
+      orderBy: [{ field: "createdAt", direction: "desc" }],
+      limit: 100,
     });
 
-    return activities;
+    return result.items.map((data) => ({
+      commentId: data.commentId,
+      pageUrl: data.pageUrl,
+      pageTitle: data.pageTitle,
+      type: determineActivityType(data),
+      actorName: data.reviewerEmail?.split("@")[0] || "Someone",
+      actorEmail: data.reviewerEmail,
+      content: data.reviewNotes || "Interacted with your comment",
+      createdAt: data.createdAt,
+    }));
   } catch (error) {
     console.error("Failed to get comment activities:", error);
     return [];
@@ -349,25 +339,19 @@ export async function recordDigestSent(
   userId: string,
   digest: DigestData,
 ): Promise<void> {
-  if (!isFirebaseConfigured()) return;
+  if (!isCloudConfigured()) return;
 
   try {
-    const db = getFirestore();
+    const db = getDatabaseService();
 
     // Update last sent timestamp
-    const prefsRef = doc(db, PREFERENCES_COLLECTION, userId);
-    await setDoc(
-      prefsRef,
-      { lastDigestSent: new Date().toISOString() },
-      { merge: true },
-    );
+    await db.updateDocument(PREFERENCES_COLLECTION, userId, {
+      lastDigestSent: new Date().toISOString(),
+    });
 
     // Store digest history
-    const historyRef = doc(
-      collection(db, DIGEST_HISTORY_COLLECTION),
-      `${userId}_${Date.now()}`,
-    );
-    await setDoc(historyRef, digest);
+    const historyId = `${userId}_${Date.now()}`;
+    await db.setDocument(DIGEST_HISTORY_COLLECTION, historyId, digest);
   } catch (error) {
     console.error("Failed to record digest sent:", error);
   }

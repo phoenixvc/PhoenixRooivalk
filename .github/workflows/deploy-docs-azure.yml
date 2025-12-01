@@ -77,7 +77,9 @@ jobs:
 
   build-and-deploy:
     needs: validate-secrets
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if:
+      github.event_name == 'push' || (github.event_name == 'pull_request' &&
+      github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
@@ -113,46 +115,108 @@ jobs:
           AZURE_ENTRA_CLIENT_ID: ${{ secrets.AZURE_ENTRA_CLIENT_ID }}
           AZURE_ENTRA_AUTHORITY: ${{ secrets.AZURE_ENTRA_AUTHORITY }}
           AZURE_ENTRA_REDIRECT_URI: ${{ secrets.AZURE_ENTRA_REDIRECT_URI }}
-          AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI: ${{ secrets.AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI }}
-          AZURE_ENTRA_SCOPES: ${{ secrets.AZURE_ENTRA_SCOPES || 'openid profile email User.Read' }}
+          AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI:
+            ${{ secrets.AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI }}
+          AZURE_ENTRA_SCOPES:
+            ${{ secrets.AZURE_ENTRA_SCOPES || 'openid profile email User.Read'
+            }}
 
           # Azure services configuration
           AZURE_FUNCTIONS_BASE_URL: ${{ secrets.AZURE_FUNCTIONS_BASE_URL }}
-          AZURE_APP_INSIGHTS_CONNECTION_STRING: ${{ secrets.AZURE_APP_INSIGHTS_CONNECTION_STRING }}
+          AZURE_APP_INSIGHTS_CONNECTION_STRING:
+            ${{ secrets.AZURE_APP_INSIGHTS_CONNECTION_STRING }}
 
           # Build environment
           NODE_ENV: production
           CI: true
-          ENV_NAME: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+          ENV_NAME:
+            ${{ github.event_name == 'push' && 'production' || 'preview' }}
           BRANCH: ${{ github.ref_name }}
         run: pnpm run build
 
-      - name: Deploy to Azure Static Web Apps
+      - name: Verify build output
+        working-directory: ${{ env.APP_LOCATION }}
+        run: |
+          echo "=== Checking build output ==="
+          if [ -f "build/index.html" ]; then
+            echo "✅ Found index.html in build/"
+            ls -la build/
+          else
+            echo "❌ ERROR: index.html not found in build/"
+            echo "Contents of current directory:"
+            ls -la
+            if [ -d "build" ]; then
+              echo "Contents of build/:"
+              ls -la build/
+            fi
+            exit 1
+          fi
+
+      - name: Install SWA CLI
+        run: npm install -g @azure/static-web-apps-cli@2.0.7
+
+      - name: Deploy with SWA CLI
         id: deploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "apps/docs/build"
-          skip_app_build: true  # We already built it above
-          skip_api_build: true  # API is deployed separately
-          production_branch: "main"
+        env:
+          SWA_CLI_DEPLOYMENT_TOKEN:
+            ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          ENV_NAME:
+            ${{ github.event_name == 'push' && 'production' || 'preview' }}
+        run: |
+          # Map ENV_NAME to SWA CLI expected values
+          if [ "$ENV_NAME" = "production" ]; then
+            SWA_ENV="prod"
+          else
+            SWA_ENV="preview"
+          fi
+          
+          echo "Deploying to environment: $SWA_ENV (ENV_NAME: $ENV_NAME)"
+          
+          # Capture deployment output and preserve exit code
+          set +e
+          OUTPUT=$(swa deploy apps/docs/build \
+            --env "$SWA_ENV" \
+            --no-use-keychain \
+            --verbose 2>&1)
+          EXIT_CODE=$?
+          set -e
+          echo "$OUTPUT"
+
+          # Extract preview URL from "Site URL:" line
+          PREVIEW_URL=$(echo "$OUTPUT" | grep "Site URL:" | sed 's/^.*Site URL:[[:space:]]*//' | sed 's/[[:space:]]*$//' || echo "")
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+
+          # Determine deployment status from exit code
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "deployment_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "deployment_status=failed" >> $GITHUB_OUTPUT
+            exit $EXIT_CODE
+          fi
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
-            const deploymentUrl = '${{ steps.deploy.outputs.static_web_app_url }}';
-            if (deploymentUrl) {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `🚀 **Azure Static Web Apps Preview**\n\nYour preview is ready!\n\n🔗 ${deploymentUrl}\n\n*This preview will be automatically deleted when the PR is closed.*`
-              });
+            const prNumber = context.issue.number;
+            const previewUrl = '${{ steps.deploy.outputs.preview_url }}';
+            const portalUrl = 'https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Web%2FStaticSites';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let body;
+            if (previewUrl) {
+              body = `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n**Preview URL:** ${previewUrl}\n\n*This preview will be automatically deleted when the PR is closed.*`;
+            } else {
+              body = `🚀 **Azure Static Web Apps Preview**\n\n✅ Deployment complete!\n\n> **Note:** The preview URL could not be automatically detected. Please check:\n> - [Workflow logs](${workflowUrl}) for the deployment URL\n> - [Azure Portal](${portalUrl}) for your Static Web App environments\n\n*This preview will be automatically deleted when the PR is closed.*`;
             }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
 
   close-pull-request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -162,12 +226,15 @@ jobs:
       - name: Close Pull Request
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token:
+            ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
 
   deploy-functions:
     needs: [validate-secrets, build-and-deploy]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.validate-secrets.outputs.has-functions-profile == 'true'
+    if:
+      github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      needs.validate-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions
     steps:
