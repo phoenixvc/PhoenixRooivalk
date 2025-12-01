@@ -11,8 +11,10 @@ tags:
   - investor
 ---
 
-import SlideDeckDownload from "@site/src/components/Downloads/SlideDeckDownload";
-import { pitchDeckSlides, pitchDeckMeta } from "@site/src/components/Downloads/slidedecks/pitch-deck-slides";
+import SlideDeckDownload from
+"@site/src/components/Downloads/SlideDeckDownload"; import { pitchDeckSlides,
+pitchDeckMeta } from
+"@site/src/components/Downloads/slidedecks/pitch-deck-slides";
 
 <!-- markdownlint-disable MD025 -->
 

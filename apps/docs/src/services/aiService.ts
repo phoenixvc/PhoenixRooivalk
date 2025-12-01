@@ -147,7 +147,10 @@ class AIService {
     data: Record<string, unknown>,
   ): Promise<T> {
     const functionsService = getFunctionsService();
-    return functionsService.call<T>(functionName, data);
+    return functionsService.call<Record<string, unknown>, T>(
+      functionName,
+      data,
+    );
   }
 
   /**

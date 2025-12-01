@@ -83,10 +83,11 @@ export class AzureMessagingService implements IMessagingService {
       }
 
       // Get push subscription from service worker
+      const vapidKey = await this.getVapidPublicKey();
       const subscription =
         await this.serviceWorkerRegistration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: await this.getVapidPublicKey(),
+          applicationServerKey: vapidKey as BufferSource,
         });
 
       // Convert subscription to token string

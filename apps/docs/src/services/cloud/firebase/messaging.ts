@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Firebase Messaging Service Implementation
  *

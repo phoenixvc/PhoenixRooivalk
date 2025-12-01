@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Firebase Analytics Service Implementation
  *

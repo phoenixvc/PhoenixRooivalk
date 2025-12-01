@@ -6,6 +6,13 @@
  */
 
 import { getAuthService, getDatabaseService, isCloudConfigured } from "./cloud";
+import type {
+  UserProgress,
+  UserProfileData,
+} from "./cloud/interfaces/database";
+
+// Re-export types for backwards compatibility
+export type { UserProgress, UserProfileData };
 
 // User type
 export interface User {
@@ -21,39 +28,6 @@ export interface User {
     email: string | null;
     photoURL: string | null;
   }>;
-}
-
-// User progress tracking
-export interface UserProgress {
-  docs: Record<
-    string,
-    {
-      scrollProgress: number;
-      completed: boolean;
-      completedAt?: string;
-      lastVisited?: string;
-      timeSpentMs?: number;
-      lastReadAt?: string;
-    }
-  >;
-  achievements: Record<string, { unlockedAt: string }>;
-  stats: {
-    totalPoints: number;
-    level: number;
-    streak: number;
-    lastVisit?: string;
-    totalTimeSpentMs?: number;
-  };
-}
-
-// User profile data
-export interface UserProfileData {
-  profileKey?: string | null;
-  roles: string[];
-  displayName?: string;
-  bio?: string;
-  company?: string;
-  updatedAt?: string;
 }
 
 /**
@@ -174,7 +148,11 @@ export async function saveUserProgress(
   progress: UserProgress,
 ): Promise<void> {
   const db = getDatabaseService();
-  await db.setDocument(`users/${userId}/progress`, "current", progress);
+  await db.setDocument(
+    `users/${userId}/progress`,
+    "current",
+    progress as unknown as Record<string, unknown>,
+  );
 }
 
 /**
@@ -212,7 +190,7 @@ export async function updateUserProfileData(
  */
 export function getCurrentUser(): User | null {
   const auth = getAuthService();
-  const cloudUser = auth.currentUser;
+  const cloudUser = auth.getCurrentUser();
   if (cloudUser) {
     return {
       uid: cloudUser.uid,

@@ -12,9 +12,16 @@ import {
   ITransaction,
   IBatchWriter,
 } from "../interfaces/database";
-import { IAnalyticsService } from "../interfaces/analytics";
-import { IMessagingService } from "../interfaces/messaging";
-import { IAIFunctionsService } from "../interfaces/functions";
+import { IAnalyticsService, UserProperties } from "../interfaces/analytics";
+import {
+  IMessagingService,
+  NotificationPermissionStatus,
+} from "../interfaces/messaging";
+import {
+  IAIFunctionsService,
+  RAGResponse,
+  SearchResultItem,
+} from "../interfaces/functions";
 import {
   CloudUser,
   OAuthProvider,
@@ -325,13 +332,13 @@ export class OfflineDatabaseService implements IDatabaseService {
             case "!=":
               return value !== cond.value;
             case "<":
-              return value < cond.value;
+              return (value as number) < (cond.value as number);
             case "<=":
-              return value <= cond.value;
+              return (value as number) <= (cond.value as number);
             case ">":
-              return value > cond.value;
+              return (value as number) > (cond.value as number);
             case ">=":
-              return value >= cond.value;
+              return (value as number) >= (cond.value as number);
             case "array-contains":
               return Array.isArray(value) && value.includes(cond.value);
             case "in":
@@ -465,27 +472,85 @@ export class OfflineDatabaseService implements IDatabaseService {
 // ============================================================================
 
 export class OfflineAnalyticsService implements IAnalyticsService {
+  private sessionId = "offline-session";
+
   isConfigured(): boolean {
     return true;
   }
 
-  async initialize(): Promise<boolean> {
+  hasConsent(): boolean {
     return true;
   }
 
-  logEvent(_name: string, _params?: Record<string, unknown>): void {
+  setConsent(_granted: boolean): void {
     // No-op in offline mode
   }
 
-  logPageView(_path: string, _title?: string): void {
+  async init(): Promise<void> {
     // No-op in offline mode
   }
 
-  setUserId(_userId: string | null): void {
+  getSessionId(): string {
+    return this.sessionId;
+  }
+
+  async trackPageView(_event: any): Promise<void> {
     // No-op in offline mode
   }
 
-  setUserProperties(_properties: Record<string, unknown>): void {
+  async trackTimeOnPage(_event: any): Promise<void> {
+    // No-op in offline mode
+  }
+
+  updateScrollDepth(_depth: number): void {
+    // No-op in offline mode
+  }
+
+  async trackConversion(_event: any): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async trackTeaserView(_pageUrl: string): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async trackSignupPromptShown(
+    _pageUrl: string,
+    _trigger: string,
+  ): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async trackSignupStarted(
+    _method: "google" | "github" | "microsoft",
+  ): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async trackSignupCompleted(_userId: string, _method: string): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async trackEvent(_event: any): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async setUserProperties(_properties: UserProperties): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async startSession(): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async endSession(): Promise<void> {
+    // No-op in offline mode
+  }
+
+  async updateSessionAuth(
+    _userId: string,
+    _isAuthenticated: boolean,
+  ): Promise<void> {
     // No-op in offline mode
   }
 }
@@ -499,25 +564,59 @@ export class OfflineMessagingService implements IMessagingService {
     return false; // Push not available offline
   }
 
-  async isSupported(): Promise<boolean> {
+  isSupported(): boolean {
     return false;
   }
 
-  async requestPermission(): Promise<boolean> {
+  getPermissionStatus(): NotificationPermissionStatus {
+    return "unsupported";
+  }
+
+  async requestPermission(): Promise<NotificationPermissionStatus> {
     console.warn("Push notifications not available in offline mode");
-    return false;
+    return "unsupported";
   }
 
   async getToken(): Promise<string | null> {
     return null;
   }
 
-  onMessage(_callback: (payload: any) => void): UnsubscribeFn {
-    return () => {};
+  async enablePushNotifications(): Promise<any> {
+    return {
+      success: false,
+      token: null,
+      permission: "unsupported" as NotificationPermissionStatus,
+      error: "Push notifications not available in offline mode",
+    };
   }
 
-  onTokenRefresh(_callback: (token: string) => void): UnsubscribeFn {
-    return () => {};
+  async subscribeToTopic(_topic: string, _token?: string): Promise<boolean> {
+    return false;
+  }
+
+  async unsubscribeFromTopic(
+    _topic: string,
+    _token?: string,
+  ): Promise<boolean> {
+    return false;
+  }
+
+  onForegroundMessage(
+    _callback: (notification: any) => void,
+  ): UnsubscribeFn | null {
+    return null;
+  }
+
+  showLocalNotification(_payload: any): void {
+    // No-op in offline mode
+  }
+
+  async deleteToken(): Promise<boolean> {
+    return false;
+  }
+
+  async getSubscription(): Promise<any> {
+    return null;
   }
 }
 
@@ -530,42 +629,123 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     return false; // AI features not available offline
   }
 
-  async askDocumentation(_question: string): Promise<{
-    answer: string;
-    sources: Array<{ title: string; url: string; relevance: number }>;
-    confidence: number;
-  }> {
+  async init(): Promise<boolean> {
+    return false;
+  }
+
+  async call<TInput, TOutput>(
+    _name: string,
+    _data: TInput,
+    _options?: any,
+  ): Promise<TOutput> {
+    throw new Error("Functions not available in offline mode");
+  }
+
+  async callAuthenticated<TInput, TOutput>(
+    _name: string,
+    _data: TInput,
+    _options?: any,
+  ): Promise<TOutput> {
+    throw new Error("Functions not available in offline mode");
+  }
+
+  async analyzeCompetitors(
+    _competitors: string[],
+    _focusAreas?: string[],
+  ): Promise<any> {
+    return { analysis: "Competitor analysis not available in offline mode" };
+  }
+
+  async generateSWOT(_topic: string, _context?: string): Promise<any> {
+    return { swot: "SWOT analysis not available in offline mode" };
+  }
+
+  async getReadingRecommendations(_currentDocId?: string): Promise<any> {
+    return {
+      recommendations: [],
+      learningPath: "",
+      message: "Recommendations not available in offline mode",
+    };
+  }
+
+  async suggestDocumentImprovements(
+    _docId: string,
+    _docTitle: string,
+    _docContent: string,
+  ): Promise<any> {
+    return {
+      suggestionId: "",
+      suggestions: "",
+      message: "Document improvements not available in offline mode",
+    };
+  }
+
+  async getMarketInsights(_topic: string, _industry?: string): Promise<any> {
+    return { insights: "Market insights not available in offline mode" };
+  }
+
+  async summarizeContent(_content: string, _maxLength?: number): Promise<any> {
+    return { summary: "Content summarization not available in offline mode" };
+  }
+
+  async askDocumentation(
+    _question: string,
+    _options?: {
+      category?: string;
+      format?: "detailed" | "concise";
+      history?: Array<{ role: "user" | "assistant"; content: string }>;
+    },
+  ): Promise<RAGResponse> {
     return {
       answer:
         "AI features are not available in offline mode. Please configure a cloud provider.",
       sources: [],
-      confidence: 0,
+      confidence: "low",
     };
   }
 
-  async searchDocumentation(_query: string): Promise<
-    Array<{
-      id: string;
-      title: string;
-      content: string;
-      url: string;
-      score: number;
-    }>
-  > {
+  async searchDocumentation(
+    _query: string,
+    _options?: { category?: string; topK?: number },
+  ): Promise<SearchResultItem[]> {
     return [];
   }
 
-  async generateSWOTAnalysis(): Promise<{
-    strengths: string[];
-    weaknesses: string[];
-    opportunities: string[];
-    threats: string[];
-  }> {
+  async getSuggestedQuestions(
+    _docId?: string,
+    _category?: string,
+  ): Promise<any> {
+    return { suggestions: [], docInfo: null };
+  }
+
+  async researchPerson(
+    _firstName: string,
+    _lastName: string,
+    _linkedInUrl: string,
+  ): Promise<any> {
     return {
-      strengths: ["Offline mode available"],
-      weaknesses: ["AI features require cloud connection"],
-      opportunities: ["Configure Azure or Firebase for full features"],
-      threats: [],
+      facts: [],
+      summary: "Person research not available in offline mode",
     };
+  }
+
+  async getIndexStats(): Promise<any> {
+    return {
+      totalChunks: 0,
+      totalDocuments: 0,
+      categories: {},
+    };
+  }
+
+  async reviewImprovement(
+    _suggestionId: string,
+    _status: "approved" | "rejected" | "implemented",
+    _notes?: string,
+  ): Promise<any> {
+    return { success: false, status: "offline" };
+  }
+
+  async getPendingImprovements(_limit?: number): Promise<any> {
+    return { suggestions: [] };
   }
 }

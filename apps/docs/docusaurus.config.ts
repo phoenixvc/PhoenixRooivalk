@@ -461,16 +461,19 @@ const config: Config = {
           if (isServer) {
             return {};
           }
-          
+
           // Access webpack from the config
           const webpack = require("webpack");
-          
+
           return {
             plugins: [
               // Replace node: protocol imports with empty modules
-              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: { request: string; context?: string }) => {
-                resource.request = resource.request.replace(/^node:/, "");
-              }),
+              new webpack.NormalModuleReplacementPlugin(
+                /^node:/,
+                (resource: { request: string; context?: string }) => {
+                  resource.request = resource.request.replace(/^node:/, "");
+                },
+              ),
             ],
             resolve: {
               fallback: {

@@ -243,6 +243,7 @@ export interface IBatchWriter {
  * User progress data structure
  */
 export interface UserProgress {
+  [key: string]: unknown; // Index signature
   docs: {
     [docId: string]: {
       completed: boolean;
@@ -271,6 +272,7 @@ export interface UserProgress {
  * User profile data structure
  */
 export interface UserProfileData {
+  [key: string]: unknown; // Index signature
   firstName: string;
   lastName: string;
   linkedIn: string;

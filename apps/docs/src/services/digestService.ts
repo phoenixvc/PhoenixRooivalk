@@ -23,6 +23,7 @@ export interface CommentActivity {
 }
 
 export interface DigestData {
+  [key: string]: unknown; // Index signature
   userId: string;
   email: string;
   frequency: DigestFrequency;
@@ -46,6 +47,7 @@ export interface DigestData {
 }
 
 export interface UserDigestPreferences {
+  [key: string]: unknown; // Index signature
   userId: string;
   email: string;
   frequency: DigestFrequency;
