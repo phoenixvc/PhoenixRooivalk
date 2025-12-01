@@ -5,7 +5,7 @@
  * Uses jose library for proper JWT validation.
  */
 
-import { HttpRequest } from "@azure/functions";
+import { HttpRequest, HttpResponseInit } from "@azure/functions";
 import * as jose from "jose";
 import { createLogger, Logger } from "./logger";
 
@@ -191,7 +191,7 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
   authenticated: boolean;
   userId: string | null;
   claims?: TokenClaims;
-  error?: { status: number; body: object };
+  error?: HttpResponseInit;
 }> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -200,7 +200,7 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
       userId: null,
       error: {
         status: 401,
-        body: { error: "Authentication required", code: "unauthenticated" },
+        jsonBody: { error: "Authentication required", code: "unauthenticated" },
       },
     };
   }
@@ -214,7 +214,10 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
       userId: null,
       error: {
         status: 401,
-        body: { error: "Invalid or expired token", code: "unauthenticated" },
+        jsonBody: {
+          error: "Invalid or expired token",
+          code: "unauthenticated",
+        },
       },
     };
   }
@@ -226,7 +229,7 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
       userId: null,
       error: {
         status: 401,
-        body: {
+        jsonBody: {
           error: "Token missing user identifier",
           code: "unauthenticated",
         },
@@ -298,7 +301,7 @@ export function requireAuth(request: HttpRequest): {
 export async function requireAdminAsync(request: HttpRequest): Promise<{
   authorized: boolean;
   userId: string | null;
-  error?: { status: number; body: object };
+  error?: HttpResponseInit;
 }> {
   const authResult = await requireAuthAsync(request);
   if (!authResult.authenticated) {
@@ -311,7 +314,7 @@ export async function requireAdminAsync(request: HttpRequest): Promise<{
       userId: authResult.userId,
       error: {
         status: 403,
-        body: { error: "Admin access required", code: "permission-denied" },
+        jsonBody: { error: "Admin access required", code: "permission-denied" },
       },
     };
   }
@@ -325,7 +328,7 @@ export async function requireAdminAsync(request: HttpRequest): Promise<{
 export async function requireAdminLegacy(request: HttpRequest): Promise<{
   authorized: boolean;
   userId: string | null;
-  error?: { status: number; body: object };
+  error?: HttpResponseInit;
 }> {
   const authResult = await requireAuthAsync(request);
   if (!authResult.authenticated) {
@@ -339,7 +342,7 @@ export async function requireAdminLegacy(request: HttpRequest): Promise<{
       userId: authResult.userId,
       error: {
         status: 403,
-        body: { error: "Admin access required", code: "permission-denied" },
+        jsonBody: { error: "Admin access required", code: "permission-denied" },
       },
     };
   }
