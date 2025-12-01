@@ -105,26 +105,33 @@ async function generateSasToken(
   expiresInMins: number = 60,
 ): Promise<string> {
   const expiry = Math.floor(Date.now() / 1000) + expiresInMins * 60;
-  const encodedUri = encodeURIComponent(resourceUri);
-  const stringToSign = `${encodedUri}\n${expiry}`;
 
-  // Compute HMAC-SHA256
+  // Use raw resourceUri in stringToSign (not encoded)
+  const stringToSign = `${resourceUri}\n${expiry}`;
+
+  // Decode the SharedAccessKey from base64 to get raw bytes
+  const keyBytes = Uint8Array.from(atob(key), (c) => c.charCodeAt(0));
+
+  // Encode the stringToSign as UTF-8
   const encoder = new TextEncoder();
-  const keyData = encoder.encode(key);
   const messageData = encoder.encode(stringToSign);
 
+  // Import key as raw bytes
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    keyData,
+    keyBytes,
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"],
   );
 
   const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
+
+  // Encode the signature and URI for the token
   const encodedSignature = encodeURIComponent(
     btoa(String.fromCharCode(...new Uint8Array(signature))),
   );
+  const encodedUri = encodeURIComponent(resourceUri);
 
   return `SharedAccessSignature sr=${encodedUri}&sig=${encodedSignature}&se=${expiry}&skn=${keyName}`;
 }
@@ -336,9 +343,13 @@ export async function registerDevice(
   // Create registration based on platform
   let registrationXml: string;
 
-  const tags = registration.tags || [];
+  // Escape user-controlled values to prevent XML injection
+  const escapedPushToken = escapeXml(registration.pushToken);
+
+  // Create a copy of tags and escape each tag
+  const tags = (registration.tags || []).map((tag) => escapeXml(tag));
   if (registration.userId) {
-    tags.push(`user:${registration.userId}`);
+    tags.push(`user:${escapeXml(registration.userId)}`);
   }
   const tagsXml = tags.length > 0 ? `<Tags>${tags.join(",")}</Tags>` : "";
 
@@ -348,7 +359,7 @@ export async function registerDevice(
         <entry xmlns="http://www.w3.org/2005/Atom">
           <content type="application/xml">
             <GcmRegistrationDescription xmlns="http://schemas.microsoft.com/netservices/2010/10/servicebus/connect">
-              <GcmRegistrationId>${registration.pushToken}</GcmRegistrationId>
+              <GcmRegistrationId>${escapedPushToken}</GcmRegistrationId>
               ${tagsXml}
             </GcmRegistrationDescription>
           </content>
@@ -360,7 +371,7 @@ export async function registerDevice(
         <entry xmlns="http://www.w3.org/2005/Atom">
           <content type="application/xml">
             <AppleRegistrationDescription xmlns="http://schemas.microsoft.com/netservices/2010/10/servicebus/connect">
-              <DeviceToken>${registration.pushToken}</DeviceToken>
+              <DeviceToken>${escapedPushToken}</DeviceToken>
               ${tagsXml}
             </AppleRegistrationDescription>
           </content>
@@ -372,7 +383,7 @@ export async function registerDevice(
         <entry xmlns="http://www.w3.org/2005/Atom">
           <content type="application/xml">
             <WindowsRegistrationDescription xmlns="http://schemas.microsoft.com/netservices/2010/10/servicebus/connect">
-              <ChannelUri>${registration.pushToken}</ChannelUri>
+              <ChannelUri>${escapedPushToken}</ChannelUri>
               ${tagsXml}
             </WindowsRegistrationDescription>
           </content>
