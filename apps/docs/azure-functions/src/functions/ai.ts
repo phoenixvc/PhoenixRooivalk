@@ -11,7 +11,7 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { requireAuth } from "../lib/auth";
+import { requireAuthAsync } from "../lib/auth";
 import {
   Errors,
   successResponse,
@@ -27,9 +27,9 @@ async function analyzeCompetitorsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -66,9 +66,9 @@ async function generateSWOTHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -101,9 +101,9 @@ async function getMarketInsightsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -141,9 +141,9 @@ async function summarizeContentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -186,9 +186,9 @@ async function getReadingRecommendationsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -235,9 +235,9 @@ async function suggestImprovementsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -279,9 +279,9 @@ async function askDocumentationHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
@@ -322,9 +322,9 @@ async function researchPersonHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return Errors.unauthenticated();
+    return auth.error!;
   }
 
   const rateLimit = applyRateLimit(
