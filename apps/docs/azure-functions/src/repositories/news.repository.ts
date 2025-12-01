@@ -116,12 +116,12 @@ export class NewsRepository extends BaseRepository<NewsArticle> {
    * Increment view count atomically using Cosmos DB patch
    */
   async incrementViewCount(id: string): Promise<void> {
-    const operation: PatchOperation = { op: "incr", path: "/viewCount", value: 1 };
-    await patchDocument(
-      this.containerName,
-      id,
-      [operation],
-    );
+    const operation: PatchOperation = {
+      op: "incr",
+      path: "/viewCount",
+      value: 1,
+    };
+    await patchDocument(this.containerName, id, [operation]);
   }
 
   /**

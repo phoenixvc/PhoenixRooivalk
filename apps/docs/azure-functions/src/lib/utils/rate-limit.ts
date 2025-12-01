@@ -90,10 +90,7 @@ function cleanupExpired(): void {
 /**
  * Check rate limit using in-memory storage
  */
-function checkRateLimitInMemory(
-  key: string,
-  config: RateLimitConfig,
-): boolean {
+function checkRateLimitInMemory(key: string, config: RateLimitConfig): boolean {
   cleanupExpired();
 
   const now = Date.now();

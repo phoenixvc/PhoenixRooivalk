@@ -12,10 +12,12 @@ Phoenix Rooivalk Azure Functions.
 
 ## Important: Resource Naming
 
-**Note:** The examples below use placeholder names like `rg-phoenix-rooivalk` and `cosmos-phoenix-rooivalk`. 
-**Replace these with your actual Azure resource names** when running commands. 
+**Note:** The examples below use placeholder names like `rg-phoenix-rooivalk`
+and `cosmos-phoenix-rooivalk`. **Replace these with your actual Azure resource
+names** when running commands.
 
 To find your existing resources:
+
 ```bash
 # List all resource groups
 az group list --output table

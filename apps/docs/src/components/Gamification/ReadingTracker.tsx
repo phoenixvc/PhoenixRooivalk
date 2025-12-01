@@ -198,7 +198,6 @@ export function ReadingTracker(): null {
                   scrollProgress: scrollPercent,
                   completed: true,
                   completedAt: new Date().toISOString(),
-                  engagementScore: engagement.engagementRatio,
                 },
               },
             });
@@ -240,7 +239,6 @@ export function ReadingTracker(): null {
                   ...currentDoc,
                   scrollProgress: scrollPercent,
                   completed: false,
-                  engagementScore: engagement.engagementRatio,
                 },
               },
             });

@@ -167,11 +167,11 @@ jobs:
             --no-use-keychain \
             --verbose 2>&1) || true
           echo "$OUTPUT"
-          
+
           # Try to extract the preview URL from SWA CLI output
           PREVIEW_URL=$(echo "$OUTPUT" | grep -oP 'https://[a-zA-Z0-9-]+\.azurestaticapps\.net' | head -1 || echo "")
           echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
-          
+
           # Check if deployment was successful
           if echo "$OUTPUT" | grep -q "Deployment succeeded"; then
             echo "deployment_status=success" >> $GITHUB_OUTPUT
