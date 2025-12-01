@@ -121,5 +121,8 @@ export async function patchDocument<T extends ItemDefinition>(
 ): Promise<T> {
   const container = getContainer(containerName);
   const { resource } = await container.item(id, partitionKey || id).patch<T>(operations);
-  return resource!;
+  if (!resource) {
+    throw new Error(`Failed to patch document with id: ${id}`);
+  }
+  return resource;
 }
