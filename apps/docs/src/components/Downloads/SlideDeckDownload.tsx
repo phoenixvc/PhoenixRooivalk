@@ -11,8 +11,6 @@ export interface Slide {
   duration: number;
   /** Key points (bullet points) */
   keyPoints: string[];
-  /** Visual description for image generation */
-  visualDescription?: string;
   /** Optional talking script */
   script?: string;
   /** Optional icon/emoji */
