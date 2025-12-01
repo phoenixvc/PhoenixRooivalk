@@ -7,4 +7,5 @@ docs/
 # Compiled function outputs
 functions/lib/
 functions/.eslintrc.js
+azure-functions/dist/
 
