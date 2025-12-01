@@ -50,7 +50,8 @@ jobs:
           MISSING_SECRETS=""
           PRESENT_SECRETS=""
           MISSING_VARS=""
-          PRESENT_VARS=""
+          CONFIGURED_SECRETS=""
+          CONFIGURED_VARS=""
           CAN_DEPLOY="true"
 
           # Required secrets for Azure Functions deployment
@@ -60,6 +61,7 @@ jobs:
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
             CAN_DEPLOY="false"
           else
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
           fi
 
@@ -67,6 +69,7 @@ jobs:
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_CREDENTIALS, "
             # Not blocking - publish profile is sufficient
           else
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_CREDENTIALS, "
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_CREDENTIALS, "
           fi
 
@@ -75,6 +78,7 @@ jobs:
             MISSING_SECRETS="${MISSING_SECRETS}COSMOS_DB_CONNECTION_STRING, "
             CAN_DEPLOY="false"
           else
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}COSMOS_DB_CONNECTION_STRING, "
             PRESENT_SECRETS="${PRESENT_SECRETS}COSMOS_DB_CONNECTION_STRING, "
           fi
 
@@ -86,6 +90,13 @@ jobs:
           else
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_ENDPOINT or AZURE_OPENAI_ENDPOINT, "
             CAN_DEPLOY="false"
+          else
+            if [ -n "${{ secrets.AZURE_AI_ENDPOINT }}" ]; then
+              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_ENDPOINT, "
+            fi
+            if [ -n "${{ secrets.AZURE_OPENAI_ENDPOINT }}" ]; then
+              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_ENDPOINT, "
+            fi
           fi
 
           if [ -n "${{ secrets.AZURE_AI_API_KEY }}" ]; then
@@ -95,6 +106,13 @@ jobs:
           else
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_API_KEY or AZURE_OPENAI_API_KEY, "
             CAN_DEPLOY="false"
+          else
+            if [ -n "${{ secrets.AZURE_AI_API_KEY }}" ]; then
+              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_API_KEY, "
+            fi
+            if [ -n "${{ secrets.AZURE_OPENAI_API_KEY }}" ]; then
+              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_API_KEY, "
+            fi
           fi
 
           # Check required variables
@@ -102,6 +120,7 @@ jobs:
             MISSING_VARS="${MISSING_VARS}AZURE_FUNCTIONAPP_NAME, "
             CAN_DEPLOY="false"
           else
+            CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_FUNCTIONAPP_NAME, "
             PRESENT_VARS="${PRESENT_VARS}AZURE_FUNCTIONAPP_NAME, "
           fi
 
@@ -112,6 +131,13 @@ jobs:
           else
             MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             # Warning only - has default
+          else
+            if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
+              CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
+            fi
+            if [ -n "${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}" ]; then
+              CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
+            fi
           fi
 
           # Output results
@@ -119,6 +145,8 @@ jobs:
           echo "missing_secrets=${MISSING_SECRETS%%, }" >> $GITHUB_OUTPUT
           echo "present_secrets=${PRESENT_SECRETS%%, }" >> $GITHUB_OUTPUT
           echo "missing_vars=${MISSING_VARS%%, }" >> $GITHUB_OUTPUT
+          echo "configured_secrets=${CONFIGURED_SECRETS%%, }" >> $GITHUB_OUTPUT
+          echo "configured_vars=${CONFIGURED_VARS%%, }" >> $GITHUB_OUTPUT
           echo "present_vars=${PRESENT_VARS%%, }" >> $GITHUB_OUTPUT
 
           # Summary
@@ -153,6 +181,21 @@ jobs:
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             fi
+            if [ -n "$CONFIGURED_SECRETS" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### ✅ Configured Secrets:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${CONFIGURED_SECRETS%%, }" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+            if [ -n "$CONFIGURED_VARS" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### ✅ Configured Variables:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${CONFIGURED_VARS%%, }" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Required Infrastructure Setup:" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "1. **Azure Function App**: Create in Azure Portal" >> $GITHUB_STEP_SUMMARY
@@ -165,6 +208,18 @@ jobs:
             echo "## ✅ Infrastructure Validation Passed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "All required secrets and variables are configured." >> $GITHUB_STEP_SUMMARY
+            if [ -n "$CONFIGURED_SECRETS" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### Configured Secrets:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${CONFIGURED_SECRETS%%, }" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+            if [ -n "$CONFIGURED_VARS" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### Configured Variables:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${CONFIGURED_VARS%%, }" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             if [ -n "$PRESENT_SECRETS" ]; then
               echo "### ✅ Configured Secrets:" >> $GITHUB_STEP_SUMMARY
@@ -184,6 +239,12 @@ jobs:
         if: steps.check.outputs.can_deploy == 'false'
         run: |
           echo "::error::Missing required infrastructure. See job summary for details."
+          echo ""
+          echo "❌ Missing secrets: ${{ steps.check.outputs.missing_secrets }}"
+          echo "❌ Missing variables: ${{ steps.check.outputs.missing_vars }}"
+          echo ""
+          echo "✅ Configured secrets: ${{ steps.check.outputs.configured_secrets }}"
+          echo "✅ Configured variables: ${{ steps.check.outputs.configured_vars }}"
           echo "Configured secrets: ${{ steps.check.outputs.present_secrets }}"
           echo "Missing secrets: ${{ steps.check.outputs.missing_secrets }}"
           echo "Configured variables: ${{ steps.check.outputs.present_vars }}"

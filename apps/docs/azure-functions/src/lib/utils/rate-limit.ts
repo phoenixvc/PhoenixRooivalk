@@ -9,10 +9,12 @@
  */
 
 import { HttpRequest } from "@azure/functions";
-import { Errors } from "./responses";
 import type { HttpResponseInit } from "@azure/functions";
+
 import { getContainer } from "../../lib/cosmos";
 import { createLogger, Logger } from "../../lib/logger";
+
+import { Errors } from "./responses";
 
 const logger: Logger = createLogger({ feature: "rate-limit" });
 
@@ -154,7 +156,29 @@ async function checkRateLimitDistributed(
     if (!existing || now > existing.resetAt) {
       // Create new rate limit window
       const doc = createRateLimitWindow(key, now, config);
-      await container.items.upsert(doc);
+      try {
+        await container.items.create(doc);
+        return true;
+      } catch (createError: any) {
+        // If another request created the window, retry the check
+        if (createError.code === 409) {
+          // Re-read and proceed to increment logic below
+          const { resource } = await container
+            .item(key, key)
+            .read<RateLimitDocument>();
+          existing = resource;
+          if (!existing || existing.count >= config.maxRequests) {
+            return false;
+          }
+          // Fall through to patch increment below
+        } else {
+          throw createError;
+        }
+      }
+    }
+
+    if (!existing) {
+      // Should not happen, but safety check
       return true;
     }
 
@@ -320,8 +344,6 @@ export async function getRateLimitInfo(
     const { resource } = await container
       .item(key, key)
       .read<RateLimitDocument>();
-
-    if (!resource) return null;
 
     return {
       remaining: Math.max(0, config.maxRequests - resource.count),

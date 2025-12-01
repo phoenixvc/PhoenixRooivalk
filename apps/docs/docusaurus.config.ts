@@ -468,7 +468,7 @@ const config: Config = {
           return {
             plugins: [
               // Replace node: protocol imports with empty modules
-              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: { request: string; context?: string }) => {
                 resource.request = resource.request.replace(/^node:/, "");
               }),
             ],
