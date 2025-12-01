@@ -161,22 +161,26 @@ jobs:
           SWA_CLI_DEPLOYMENT_TOKEN:
             ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
         run: |
-          # Capture deployment output to extract preview URL
+          # Capture deployment output and preserve exit code
+          set +e
           OUTPUT=$(swa deploy apps/docs/build \
             --env production \
             --no-use-keychain \
-            --verbose 2>&1) || true
+            --verbose 2>&1)
+          EXIT_CODE=$?
+          set -e
           echo "$OUTPUT"
 
-          # Try to extract the preview URL from SWA CLI output
-          PREVIEW_URL=$(echo "$OUTPUT" | grep -oP 'https://[a-zA-Z0-9-]+\.azurestaticapps\.net' | head -1 || echo "")
+          # Extract preview URL from "Site URL:" line
+          PREVIEW_URL=$(echo "$OUTPUT" | grep "Site URL:" | sed 's/.*Site URL: *//' | tr -d '[:space:]' || echo "")
           echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
 
-          # Check if deployment was successful
-          if echo "$OUTPUT" | grep -q "Deployment succeeded"; then
+          # Determine deployment status from exit code or output
+          if [ $EXIT_CODE -eq 0 ] || echo "$OUTPUT" | grep -q "Site URL:"; then
             echo "deployment_status=success" >> $GITHUB_OUTPUT
           else
-            echo "deployment_status=unknown" >> $GITHUB_OUTPUT
+            echo "deployment_status=failed" >> $GITHUB_OUTPUT
+            exit $EXIT_CODE
           fi
 
       - name: Comment on PR with preview URL
