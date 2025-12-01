@@ -11,8 +11,10 @@ tags:
   - investor
 ---
 
-import SlideDeckDownload from "@site/src/components/Downloads/SlideDeckDownload";
-import { pitchDeckSlides, pitchDeckMeta } from "@site/src/components/Downloads/slidedecks/pitch-deck-slides";
+import SlideDeckDownload from
+"@site/src/components/Downloads/SlideDeckDownload"; import { pitchDeckSlides,
+pitchDeckMeta } from
+"@site/src/components/Downloads/slidedecks/pitch-deck-slides";
 
 <!-- markdownlint-disable MD025 -->
 
@@ -20,13 +22,19 @@ import { pitchDeckSlides, pitchDeckMeta } from "@site/src/components/Downloads/s
 
 ## Revolutionary SAE Level 4 Autonomous Counter-UAS Defense Platform
 
-Phoenix Rooivalk represents the next generation of counter-drone defense systems, combining military-grade blockchain technology with advanced AI-driven threat detection to deliver unprecedented security, performance, and operational resilience.
+Phoenix Rooivalk represents the next generation of counter-drone defense
+systems, combining military-grade blockchain technology with advanced AI-driven
+threat detection to deliver unprecedented security, performance, and operational
+resilience.
 
 ### 🎯 Key Value Propositions
 
-- **10-150x Faster Response**: Sub-200ms end-to-end latency vs 5-30s for competitors
-- **True Edge Autonomy**: Fully offline-capable in RF-denied/GPS-denied environments
-- **Blockchain Accountability**: Immutable evidence anchoring for legal defensibility
+- **10-150x Faster Response**: Sub-200ms end-to-end latency vs 5-30s for
+  competitors
+- **True Edge Autonomy**: Fully offline-capable in RF-denied/GPS-denied
+  environments
+- **Blockchain Accountability**: Immutable evidence anchoring for legal
+  defensibility
 - **Pre-Hardware Revenue**: x402 protocol generating revenue today
 
 ### 📊 Market Snapshot
@@ -57,50 +65,59 @@ Phoenix Rooivalk represents the next generation of counter-drone defense systems
 The complete pitch deck covers these key areas:
 
 ### Problem & Solution (Slides 1-2)
+
 - Global drone threat escalation (1M+ drones in Ukraine, 15% casualties)
 - Phoenix Rooivalk's SAE Level 4 autonomous defense solution
 - Sub-200ms response time with full offline capability
 
 ### Market Opportunity (Slide 3)
+
 - $2.51B market by 2030 at 23.5% CAGR
 - Military ($1.2B), Infrastructure ($0.8B), Commercial ($0.5B) segments
 - International focus: EU/Canada primary, SA Phase 2
 
 ### Technology & Competitive Advantage (Slides 4-5)
+
 - Edge-first AI + blockchain architecture
 - 10-150x faster than competitors
 - Only solution with blockchain evidence generation
 
 ### Product Status (Slides 6, 9-10)
+
 - Net launcher prototype ready for production
 - In-house Kevlar manufacturing (60% cost reduction)
 - x402 protocol live and generating revenue
 - 370+ commits, 40+ PRs in Week 48 alone
 
 ### Business Model (Slide 7)
+
 - x402 Protocol: Blockchain micropayment API (live)
 - SaaS licensing for cloud AI and monitoring
 - Hardware sales: Launchers, UGVs, sensors
 - Professional services: Integration and compliance
 
 ### Market Validation (Slide 8)
+
 - Interviews with 3 SA airports + Boeing pilot
 - Validated international-first strategy
 - EU & Canada confirmed as priority markets
 
 ### Compliance & Deployment (Slides 11-12)
+
 - Built-in regulatory compliance
 - Blockchain evidence meets legal requirements
 - 4 flexible deployment models
 - 140+ pages of technical/legal documentation
 
 ### Team & Investment (Slides 13-14)
+
 - 15+ years combined aerospace/blockchain expertise
 - Seed round: $500K-$1M
 - 18-month runway to Series A
 - 5 pilots, 10 enterprise customers, certifications
 
 ### Roadmap & Vision (Slides 15-16)
+
 - Q1 2026: First EU pilot installation
 - Q2 2026: EU certification, 3 installations
 - Q3 2026: Series A with proven revenue
@@ -112,33 +129,42 @@ The complete pitch deck covers these key areas:
 
 ### Why Phoenix Rooivalk Wins
 
-1. **Speed is Everything**: In drone defense, milliseconds matter. Our sub-200ms response is 10-150x faster than any competitor.
+1. **Speed is Everything**: In drone defense, milliseconds matter. Our sub-200ms
+   response is 10-150x faster than any competitor.
 
-2. **True Autonomy**: We're the only system that operates completely offline. No connectivity required, no single point of failure.
+2. **True Autonomy**: We're the only system that operates completely offline. No
+   connectivity required, no single point of failure.
 
-3. **Legal Protection**: Blockchain-anchored evidence provides tamper-proof audit trails for legal defense and regulatory compliance.
+3. **Legal Protection**: Blockchain-anchored evidence provides tamper-proof
+   audit trails for legal defense and regulatory compliance.
 
-4. **Revenue Today**: x402 protocol is live and generating revenue before hardware ships. Most competitors are still in R&D.
+4. **Revenue Today**: x402 protocol is live and generating revenue before
+   hardware ships. Most competitors are still in R&D.
 
-5. **Open Architecture**: No vendor lock-in. Customers own their data and can customize integrations.
+5. **Open Architecture**: No vendor lock-in. Customers own their data and can
+   customize integrations.
 
 ### Competitive Landscape
 
-| Feature | Phoenix Rooivalk | Competitor A | Competitor B |
-|---------|------------------|--------------|--------------|
-| Response Time | **50-195ms** | 5,000-30,000ms | 10,000-25,000ms |
-| Offline Capable | **✅ Yes** | ❌ No | ⚠️ Limited |
-| Blockchain Evidence | **✅ Yes** | ❌ No | ❌ No |
-| Revenue Today | **✅ Yes (x402)** | ❌ No | ❌ No |
-| Open Architecture | **✅ Yes** | ❌ Proprietary | ❌ Proprietary |
+| Feature             | Phoenix Rooivalk  | Competitor A   | Competitor B    |
+| ------------------- | ----------------- | -------------- | --------------- |
+| Response Time       | **50-195ms**      | 5,000-30,000ms | 10,000-25,000ms |
+| Offline Capable     | **✅ Yes**        | ❌ No          | ⚠️ Limited      |
+| Blockchain Evidence | **✅ Yes**        | ❌ No          | ❌ No           |
+| Revenue Today       | **✅ Yes (x402)** | ❌ No          | ❌ No           |
+| Open Architecture   | **✅ Yes**        | ❌ Proprietary | ❌ Proprietary  |
 
 ### Investment Highlights
 
-- **Market Timing**: Drone threats accelerating globally (Ukraine, Middle East, civilian airspace)
-- **Proven Traction**: x402 protocol live, 370+ commits in one week, security audit passed
+- **Market Timing**: Drone threats accelerating globally (Ukraine, Middle East,
+  civilian airspace)
+- **Proven Traction**: x402 protocol live, 370+ commits in one week, security
+  audit passed
 - **Capital Efficient**: Pre-hardware revenue de-risks product development
-- **Clear Path to Scale**: EU/Canada entry → Series A → Manufacturing partnerships → IPO
-- **Defensible IP**: Blockchain evidence generation, edge-first architecture, modular weapons
+- **Clear Path to Scale**: EU/Canada entry → Series A → Manufacturing
+  partnerships → IPO
+- **Defensible IP**: Blockchain evidence generation, edge-first architecture,
+  modular weapons
 
 ---
 
@@ -146,9 +172,12 @@ The complete pitch deck covers these key areas:
 
 ### For Investors
 
-1. **Download the Full Deck**: Use the button above to get the complete PowerPoint presentation
-2. **Review Technical Documentation**: [Architecture ADRs](/docs/technical/architecture/architecture-decision-records)
-3. **Explore x402 Protocol**: [Payment Protocol Docs](/docs/technical/architecture/adr-0019-x402-payment-protocol)
+1. **Download the Full Deck**: Use the button above to get the complete
+   PowerPoint presentation
+2. **Review Technical Documentation**:
+   [Architecture ADRs](/docs/technical/architecture/architecture-decision-records)
+3. **Explore x402 Protocol**:
+   [Payment Protocol Docs](/docs/technical/architecture/adr-0019-x402-payment-protocol)
 4. **Schedule Deep Dive**: Contact us for technical architecture review
 
 ### For Strategic Partners
@@ -162,7 +191,8 @@ The complete pitch deck covers these key areas:
 
 - **x402 API Access**: Integrate blockchain-verified evidence into your systems
 - **Pilot Programs**: Early access to net launcher prototypes
-- **Custom Deployments**: Mobile, Site-Fixed, Fiber Engage, or Swarm configurations
+- **Custom Deployments**: Mobile, Site-Fixed, Fiber Engage, or Swarm
+  configurations
 - **Professional Services**: End-to-end integration and regulatory compliance
 
 ---
@@ -181,15 +211,16 @@ The complete pitch deck covers these key areas:
 ## 💡 Questions?
 
 Contact the Phoenix Rooivalk team:
+
 - **Technical Questions**: [Technical Documentation](/docs/technical)
 - **Investment Inquiries**: [Team Status](/docs/executive/team-status)
-- **Partnership Opportunities**: [Global Strategy](/docs/executive/global-strategy)
+- **Partnership Opportunities**:
+  [Global Strategy](/docs/executive/global-strategy)
 
 ---
 
-_Last Updated: December 2025 | Version 2.0_
-_This pitch deck reflects the most current product status, market validation, and financial projections._
-
+_Last Updated: December 2025 | Version 2.0_ _This pitch deck reflects the most
+current product status, market validation, and financial projections._
 
 ## Core Technology Components
 

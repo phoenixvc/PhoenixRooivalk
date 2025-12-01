@@ -160,11 +160,22 @@ jobs:
         env:
           SWA_CLI_DEPLOYMENT_TOKEN:
             ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          ENV_NAME:
+            ${{ github.event_name == 'push' && 'production' || 'preview' }}
         run: |
+          # Map ENV_NAME to SWA CLI expected values
+          if [ "$ENV_NAME" = "production" ]; then
+            SWA_ENV="prod"
+          else
+            SWA_ENV="preview"
+          fi
+          
+          echo "Deploying to environment: $SWA_ENV (ENV_NAME: $ENV_NAME)"
+          
           # Capture deployment output and preserve exit code
           set +e
           OUTPUT=$(swa deploy apps/docs/build \
-            --env production \
+            --env "$SWA_ENV" \
             --no-use-keychain \
             --verbose 2>&1)
           EXIT_CODE=$?

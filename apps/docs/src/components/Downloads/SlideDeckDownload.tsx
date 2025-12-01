@@ -2,8 +2,22 @@ import * as React from "react";
 import DownloadButton from "./DownloadButton";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
-// Import type only for type checking
-import type { Slide } from "./SlideDeckDownload";
+export interface Slide {
+  /** Slide number */
+  number: number;
+  /** Slide title */
+  title: string;
+  /** Duration in seconds */
+  duration: number;
+  /** Key points (bullet points) */
+  keyPoints: string[];
+  /** Visual description for image generation */
+  visualDescription?: string;
+  /** Optional talking script */
+  script?: string;
+  /** Optional icon/emoji */
+  icon?: string;
+}
 
 interface PptxGeneratorProps {
   slides: Slide[];
@@ -48,21 +62,6 @@ function PptxGenerator({
       variant="primary"
     />
   );
-}
-
-export interface Slide {
-  /** Slide number */
-  number: number;
-  /** Slide title */
-  title: string;
-  /** Duration in seconds */
-  duration: number;
-  /** Key points (bullet points) */
-  keyPoints: string[];
-  /** Optional talking script */
-  script?: string;
-  /** Optional icon/emoji */
-  icon?: string;
 }
 
 interface SlideDeckDownloadProps {
