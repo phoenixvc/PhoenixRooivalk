@@ -1,0 +1,8 @@
+node_modules/
+**/node_modules/
+.docusaurus/
+build/
+azure-functions/node_modules/
+azure-functions/dist/
+functions/node_modules/
+azure-functions/PR_ANALYSIS.md

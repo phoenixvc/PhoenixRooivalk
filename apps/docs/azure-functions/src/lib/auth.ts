@@ -214,7 +214,10 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
       userId: null,
       error: {
         status: 401,
-        jsonBody: { error: "Invalid or expired token", code: "unauthenticated" },
+        jsonBody: {
+          error: "Invalid or expired token",
+          code: "unauthenticated",
+        },
       },
     };
   }
