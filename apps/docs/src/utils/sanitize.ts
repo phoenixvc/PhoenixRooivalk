@@ -161,8 +161,9 @@ export function formatMarkdown(text: string): string {
       // Italic (single asterisks) - handle beginning/end of string and after non-asterisk chars
       .replace(/(^|[^*])\*([^*]+)\*($|[^*])/gm, "$1<em>$2</em>$3")
       // Code blocks (triple backticks)
-      .replace(/```(\w*)\n?([\s\S]*?)```/g, (_match, _lang, code) =>
-        `<pre><code>${code.trim()}</code></pre>`,
+      .replace(
+        /```(\w*)\n?([\s\S]*?)```/g,
+        (_match, _lang, code) => `<pre><code>${code.trim()}</code></pre>`,
       )
       // Inline code (single backticks)
       .replace(/`([^`]+)`/g, "<code>$1</code>")
