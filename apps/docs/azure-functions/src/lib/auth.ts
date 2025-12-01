@@ -226,7 +226,10 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
       userId: null,
       error: {
         status: 401,
-        body: { error: "Token missing user identifier", code: "unauthenticated" },
+        body: {
+          error: "Token missing user identifier",
+          code: "unauthenticated",
+        },
       },
     };
   }

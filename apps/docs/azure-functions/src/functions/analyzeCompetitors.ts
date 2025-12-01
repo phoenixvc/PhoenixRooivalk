@@ -29,7 +29,9 @@ async function handler(
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
 
-  if (!(await checkRateLimitAsync(`competitor:${auth.userId}`, RateLimits.ai))) {
+  if (
+    !(await checkRateLimitAsync(`competitor:${auth.userId}`, RateLimits.ai))
+  ) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },
