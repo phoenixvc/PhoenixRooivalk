@@ -5,10 +5,10 @@
   "main": "dist/src/functions/*.js",
   "scripts": {
     "build": "tsc",
-    "build:production": "npm run clean && tsc",
+    "build:production": "pnpm run clean && tsc",
     "watch": "tsc -w",
     "clean": "rimraf dist",
-    "prestart": "npm run build",
+    "prestart": "pnpm run build",
     "start": "func start",
     "test": "jest",
     "test:watch": "jest --watch",

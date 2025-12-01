@@ -10,6 +10,23 @@ Phoenix Rooivalk Azure Functions.
 - Node.js 20+
 - pnpm
 
+## Important: Resource Naming
+
+**Note:** The examples below use placeholder names like `rg-phoenix-rooivalk` and `cosmos-phoenix-rooivalk`. 
+**Replace these with your actual Azure resource names** when running commands. 
+
+To find your existing resources:
+```bash
+# List all resource groups
+az group list --output table
+
+# List Cosmos DB accounts in a resource group
+az cosmosdb list --resource-group YOUR_RESOURCE_GROUP_NAME --output table
+
+# List Function Apps in a resource group
+az functionapp list --resource-group YOUR_RESOURCE_GROUP_NAME --output table
+```
+
 ## Required Azure Resources
 
 ### 1. Azure Function App
