@@ -63,6 +63,7 @@ export interface AdminReview {
  * Main comment document structure
  */
 export interface Comment {
+  [key: string]: unknown; // Index signature
   id: string;
   // Content
   content: string;

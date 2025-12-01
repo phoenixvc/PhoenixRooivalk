@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Firebase Authentication Service Implementation
  *

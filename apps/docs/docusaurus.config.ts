@@ -75,9 +75,6 @@ const config: Config = {
     cloudProvider,
   },
   onBrokenLinks: onBrokenLinksConfig,
-  // Note: onBrokenMarkdownLinks is deprecated in Docusaurus v4
-  // It should be migrated to markdown.preprocessor in the future
-  onBrokenMarkdownLinks: onBrokenLinksConfig,
   onBrokenAnchors: onBrokenLinksConfig,
   headTags: [
     // Prevent flash of unstyled content - set background immediately
@@ -147,6 +144,9 @@ const config: Config = {
   markdown: {
     format: "detect",
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: onBrokenLinksConfig,
+    },
   },
   themes: [
     "@docusaurus/theme-mermaid",
@@ -461,16 +461,19 @@ const config: Config = {
           if (isServer) {
             return {};
           }
-          
+
           // Access webpack from the config
           const webpack = require("webpack");
-          
+
           return {
             plugins: [
               // Replace node: protocol imports with empty modules
-              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: { request: string; context?: string }) => {
-                resource.request = resource.request.replace(/^node:/, "");
-              }),
+              new webpack.NormalModuleReplacementPlugin(
+                /^node:/,
+                (resource: { request: string; context?: string }) => {
+                  resource.request = resource.request.replace(/^node:/, "");
+                },
+              ),
             ],
             resolve: {
               fallback: {

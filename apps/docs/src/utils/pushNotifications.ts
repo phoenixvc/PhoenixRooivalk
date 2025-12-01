@@ -101,7 +101,12 @@ export function onForegroundMessage(
 
   try {
     const messaging = getMessagingService();
-    return messaging.onMessage(callback);
+    return messaging.onForegroundMessage((notification) => {
+      callback({
+        notification: notification.notification,
+        data: notification.data,
+      });
+    });
   } catch (error) {
     console.error("Error setting up message listener:", error);
     return null;

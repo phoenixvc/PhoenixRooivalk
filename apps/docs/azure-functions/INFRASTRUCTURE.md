@@ -77,7 +77,8 @@ az functionapp create \
 
 #### Option A: Automated Setup (Recommended)
 
-Use the provided setup scripts to automatically create the database and all containers:
+Use the provided setup scripts to automatically create the database and all
+containers:
 
 **PowerShell:**
 
