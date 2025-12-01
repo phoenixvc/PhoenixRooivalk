@@ -158,12 +158,12 @@ export function formatMarkdown(text: string): string {
       .replace(/^# (.*$)/gm, "<h2>$1</h2>")
       // Bold (must not be adjacent to more asterisks)
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      // Italic (single asterisks, not adjacent to bold) - using simpler pattern without lookbehind
-      .replace(/([^*])\*([^*]+)\*([^*])/g, "$1<em>$2</em>$3")
+      // Italic (single asterisks) - handle beginning/end of string and after non-asterisk chars
+      .replace(/(^|[^*])\*([^*]+)\*($|[^*])/gm, "$1<em>$2</em>$3")
       // Code blocks (triple backticks)
-      .replace(/```(\w*)\n?([\s\S]*?)```/g, function (_match, _lang, code) {
-        return "<pre><code>" + code.trim() + "</code></pre>";
-      })
+      .replace(/```(\w*)\n?([\s\S]*?)```/g, (_match, _lang, code) =>
+        `<pre><code>${code.trim()}</code></pre>`,
+      )
       // Inline code (single backticks)
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       // Unordered lists (- item)
