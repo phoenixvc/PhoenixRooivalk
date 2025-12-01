@@ -85,37 +85,28 @@ jobs:
           # Required for Azure OpenAI - check both options
           if [ -n "${{ secrets.AZURE_AI_ENDPOINT }}" ]; then
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_AI_ENDPOINT, "
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_ENDPOINT, "
           elif [ -n "${{ secrets.AZURE_OPENAI_ENDPOINT }}" ]; then
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_OPENAI_ENDPOINT, "
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_ENDPOINT, "
           else
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_ENDPOINT or AZURE_OPENAI_ENDPOINT, "
             CAN_DEPLOY="false"
-          else
-            if [ -n "${{ secrets.AZURE_AI_ENDPOINT }}" ]; then
-              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_ENDPOINT, "
-            fi
-            if [ -n "${{ secrets.AZURE_OPENAI_ENDPOINT }}" ]; then
-              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_ENDPOINT, "
-            fi
           fi
 
           if [ -n "${{ secrets.AZURE_AI_API_KEY }}" ]; then
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_AI_API_KEY, "
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_API_KEY, "
           elif [ -n "${{ secrets.AZURE_OPENAI_API_KEY }}" ]; then
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_OPENAI_API_KEY, "
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_API_KEY, "
           else
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_API_KEY or AZURE_OPENAI_API_KEY, "
             CAN_DEPLOY="false"
-          else
-            if [ -n "${{ secrets.AZURE_AI_API_KEY }}" ]; then
-              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_AI_API_KEY, "
-            fi
-            if [ -n "${{ secrets.AZURE_OPENAI_API_KEY }}" ]; then
-              CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_OPENAI_API_KEY, "
-            fi
           fi
 
           # Check required variables
+          PRESENT_VARS=""
           if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
             MISSING_VARS="${MISSING_VARS}AZURE_FUNCTIONAPP_NAME, "
             CAN_DEPLOY="false"
@@ -126,18 +117,13 @@ jobs:
 
           if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
+            CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
           elif [ -n "${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}" ]; then
             PRESENT_VARS="${PRESENT_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
+            CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
           else
             MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             # Warning only - has default
-          else
-            if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
-              CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
-            fi
-            if [ -n "${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}" ]; then
-              CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
-            fi
           fi
 
           # Output results
@@ -220,6 +206,8 @@ jobs:
               echo "### Configured Variables:" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "${CONFIGURED_VARS%%, }" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
             echo "" >> $GITHUB_STEP_SUMMARY
             if [ -n "$PRESENT_SECRETS" ]; then
               echo "### ✅ Configured Secrets:" >> $GITHUB_STEP_SUMMARY
