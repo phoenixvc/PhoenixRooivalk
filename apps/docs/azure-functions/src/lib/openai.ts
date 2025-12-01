@@ -163,28 +163,6 @@ export async function generateEmbeddings(
   return response.data[0].embedding;
 }
 
-/**
- * Rate limiting helper
- */
-const rateLimits = new Map<string, { count: number; resetAt: number }>();
-
-export function checkRateLimit(
-  key: string,
-  maxRequests: number,
-  windowMs: number,
-): boolean {
-  const now = Date.now();
-  const limit = rateLimits.get(key);
-
-  if (!limit || now > limit.resetAt) {
-    rateLimits.set(key, { count: 1, resetAt: now + windowMs });
-    return true;
-  }
-
-  if (limit.count >= maxRequests) {
-    return false;
-  }
-
-  limit.count++;
-  return true;
-}
+// Rate limiting is now handled by src/lib/utils/rate-limit.ts
+// Use checkRateLimitAsync for distributed rate limiting across function instances
+// See rate-limit.ts for configuration options

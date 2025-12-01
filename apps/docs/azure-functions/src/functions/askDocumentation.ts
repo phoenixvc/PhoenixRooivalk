@@ -14,11 +14,8 @@ import {
 import { SqlParameter } from "@azure/cosmos";
 import { requireAuthAsync } from "../lib/auth";
 import { queryDocuments } from "../lib/cosmos";
-import {
-  generateCompletion,
-  generateEmbeddings,
-  checkRateLimit,
-} from "../lib/openai";
+import { generateCompletion, generateEmbeddings } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 interface RAGSource {
   docId: string;
@@ -158,7 +155,7 @@ async function handler(
   }
 
   // Rate limiting
-  if (!checkRateLimit(`ask:${auth.userId}`, 20, 60000)) {
+  if (!(await checkRateLimitAsync(`ask:${auth.userId}`, RateLimits.ai))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

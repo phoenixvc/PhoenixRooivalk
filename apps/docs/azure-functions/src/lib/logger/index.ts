@@ -124,8 +124,9 @@ export function createRequestLogger(
         );
         userId = decoded.sub || decoded.oid;
       }
-    } catch {
-      // Ignore token parsing errors for logging purposes
+    } catch (_error) {
+      // Intentionally ignore token parsing errors for logging purposes
+      // We don't want logger creation to fail due to malformed tokens
     }
   }
 

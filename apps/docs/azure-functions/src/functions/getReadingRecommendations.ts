@@ -12,7 +12,8 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { requireAuthAsync } from "../lib/auth";
-import { generateCompletion, checkRateLimit } from "../lib/openai";
+import { generateCompletion } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 interface RecommendationRequest {
   readHistory: string[];
@@ -29,7 +30,7 @@ async function handler(
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
 
-  if (!checkRateLimit(`recommend:${auth.userId}`, 10, 60000)) {
+  if (!(await checkRateLimitAsync(`recommend:${auth.userId}`, RateLimits.ai))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

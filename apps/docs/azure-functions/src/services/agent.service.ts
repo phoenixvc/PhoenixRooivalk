@@ -305,7 +305,12 @@ function createTimeTool(): AgentTool {
           formatted: now.toLocaleString("en-US", { timeZone: timezone }),
           timezone,
         };
-      } catch {
+      } catch (error) {
+        logger.warn("Invalid timezone, falling back to UTC", {
+          operation: "timeTool",
+          timezone,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
         return {
           iso: now.toISOString(),
           formatted: now.toUTCString(),
@@ -392,7 +397,12 @@ function parseAgentResponse(response: string): AgentStep {
     if (inputMatch) {
       try {
         step.actionInput = JSON.parse(inputMatch[1]);
-      } catch {
+      } catch (error) {
+        logger.debug("Failed to parse action input as JSON, using raw value", {
+          operation: "parseAgentResponse",
+          raw: inputMatch[1],
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
         step.actionInput = { raw: inputMatch[1] };
       }
     }

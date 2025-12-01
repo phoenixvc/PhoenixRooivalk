@@ -20,7 +20,8 @@ import {
 } from "@azure/functions";
 import { SqlParameter } from "@azure/cosmos";
 import { queryDocuments } from "../lib/cosmos";
-import { generateEmbeddings, checkRateLimit } from "../lib/openai";
+import { generateEmbeddings } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 // Maximum chunks to load for in-memory search (memory protection)
 const MAX_CHUNKS_IN_MEMORY = 5000;
@@ -66,7 +67,7 @@ async function handler(
   // Get client IP for rate limiting (anonymous users)
   const clientIp = request.headers.get("x-forwarded-for") || "unknown";
 
-  if (!checkRateLimit(`search:${clientIp}`, 30, 60000)) {
+  if (!(await checkRateLimitAsync(`search:${clientIp}`, RateLimits.search))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

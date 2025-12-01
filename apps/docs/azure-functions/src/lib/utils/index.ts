@@ -14,8 +14,11 @@ export {
 
 export {
   checkRateLimit,
+  checkRateLimitAsync,
   getRateLimitKey,
   applyRateLimit,
+  applyRateLimitAsync,
+  getRateLimitInfo,
   RateLimits,
   type RateLimitConfig,
   type RateLimitResult,

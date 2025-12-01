@@ -12,7 +12,8 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { requireAuthAsync } from "../lib/auth";
-import { generateCompletion, checkRateLimit } from "../lib/openai";
+import { generateCompletion } from "../lib/openai";
+import { checkRateLimitAsync, RateLimits } from "../lib/utils";
 
 interface CompetitorAnalysisRequest {
   competitors: string[];
@@ -28,7 +29,7 @@ async function handler(
     return { status: auth.error!.status, jsonBody: auth.error!.body };
   }
 
-  if (!checkRateLimit(`competitor:${auth.userId}`, 5, 60000)) {
+  if (!(await checkRateLimitAsync(`competitor:${auth.userId}`, RateLimits.ai))) {
     return {
       status: 429,
       jsonBody: { error: "Rate limit exceeded", code: "resource-exhausted" },

@@ -20,6 +20,8 @@
 
     "APPLICATIONINSIGHTS_CONNECTION_STRING": "",
 
+    "RATE_LIMIT_DISTRIBUTED": "false",
+
     "SENDGRID_API_KEY": "",
     "SENDGRID_FROM_EMAIL": "noreply@phoenixrooivalk.com",
 
