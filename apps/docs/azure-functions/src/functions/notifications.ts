@@ -10,7 +10,7 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { validateAuthHeader, requireAuth } from "../lib/auth";
+import { validateAuthHeader, requireAuthAsync } from "../lib/auth";
 import { Errors, successResponse } from "../lib/utils";
 import { notificationsService } from "../services";
 
@@ -21,7 +21,7 @@ async function subscribeHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return Errors.unauthenticated();
   }
@@ -63,7 +63,7 @@ async function unsubscribeHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return Errors.unauthenticated();
   }
@@ -87,7 +87,7 @@ async function getSubscriptionHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return Errors.unauthenticated();
   }

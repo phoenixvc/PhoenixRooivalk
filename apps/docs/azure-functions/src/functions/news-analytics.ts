@@ -10,7 +10,7 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import { validateAuthHeader, requireAuth } from "../lib/auth";
+import { validateAuthHeader, requireAuthAsync } from "../lib/auth";
 import { Errors, successResponse } from "../lib/utils";
 import { newsAnalyticsService } from "../services";
 
@@ -116,7 +116,7 @@ async function generateNewsDigestHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
-  const auth = requireAuth(request);
+  const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
     return Errors.unauthenticated();
   }
