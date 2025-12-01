@@ -162,19 +162,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm install
 
       - name: TypeScript Build
-        run: pnpm run build
+        run: npm run build
 
       - name: Run Tests
-        run: pnpm test || echo "No tests configured yet"
+        run: npm test || echo "No tests configured yet"
         continue-on-error: true
 
       - name: Validate Function Configuration
@@ -203,7 +198,6 @@ jobs:
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/dist
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/host.json
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package.json
-            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/pnpm-lock.yaml
           retention-days: 1
 
   # ===========================================
@@ -235,14 +229,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install production dependencies
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        run: pnpm install --frozen-lockfile --prod
+        run: npm install --omit=dev
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
@@ -332,19 +321,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm install
 
       - name: TypeScript Build
-        run: pnpm run build
+        run: npm run build
 
       - name: Run Tests
-        run: pnpm test || echo "Tests not configured"
+        run: npm test || echo "Tests not configured"
         continue-on-error: true
 
       - name: Check for Infrastructure Documentation
