@@ -76,8 +76,8 @@ jobs:
             CAN_DEPLOY="false"
           fi
 
-          if [ -z "${{ secrets.AZURE_AI_API_KEY }}" ] && [ -z "${{ secrets.AZURE_OPENAI_API_KEY }}" ] && [ -z "${{ secrets.AZURE_ENTRA_AUTHORITY }}" ]; then
-            MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_API_KEY or AZURE_OPENAI_API_KEY or AZURE_ENTRA_AUTHORITY, "
+          if [ -z "${{ secrets.AZURE_AI_API_KEY }}" ] && [ -z "${{ secrets.AZURE_OPENAI_API_KEY }}" ]; then
+            MISSING_SECRETS="${MISSING_SECRETS}AZURE_AI_API_KEY or AZURE_OPENAI_API_KEY, "
             CAN_DEPLOY="false"
           fi
 
