@@ -113,6 +113,23 @@ function checkRateLimitInMemory(key: string, config: RateLimitConfig): boolean {
 }
 
 /**
+ * Create a new rate limit window document
+ */
+function createRateLimitWindow(
+  key: string,
+  now: number,
+  config: RateLimitConfig,
+): RateLimitDocument {
+  const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60; // Add buffer
+  return {
+    id: key,
+    count: 1,
+    resetAt: now + config.windowMs,
+    ttl: ttlSeconds,
+  };
+}
+
+/**
  * Check rate limit using Cosmos DB (distributed)
  */
 async function checkRateLimitDistributed(
@@ -136,13 +153,7 @@ async function checkRateLimitDistributed(
 
     if (!existing || now > existing.resetAt) {
       // Create new rate limit window
-      const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60; // Add buffer
-      const doc: RateLimitDocument = {
-        id: key,
-        count: 1,
-        resetAt: now + config.windowMs,
-        ttl: ttlSeconds,
-      };
+      const doc = createRateLimitWindow(key, now, config);
       await container.items.upsert(doc);
       return true;
     }
@@ -160,13 +171,7 @@ async function checkRateLimitDistributed(
     } catch (patchError: any) {
       // If document was deleted between read and patch, create new window
       if (patchError.code === 404) {
-        const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60;
-        const doc: RateLimitDocument = {
-          id: key,
-          count: 1,
-          resetAt: now + config.windowMs,
-          ttl: ttlSeconds,
-        };
+        const doc = createRateLimitWindow(key, now, config);
         await container.items.upsert(doc);
         return true;
       }
