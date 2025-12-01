@@ -152,10 +152,26 @@ async function checkRateLimitDistributed(
     }
 
     // Increment count using atomic patch operation
-    await container
-      .item(key, key)
-      .patch([{ op: "incr", path: "/count", value: 1 }]);
-    return true;
+    try {
+      await container
+        .item(key, key)
+        .patch([{ op: "incr", path: "/count", value: 1 }]);
+      return true;
+    } catch (patchError: any) {
+      // If document was deleted between read and patch, create new window
+      if (patchError.code === 404) {
+        const ttlSeconds = Math.ceil(config.windowMs / 1000) + 60;
+        const doc: RateLimitDocument = {
+          id: key,
+          count: 1,
+          resetAt: now + config.windowMs,
+          ttl: ttlSeconds,
+        };
+        await container.items.upsert(doc);
+        return true;
+      }
+      throw patchError;
+    }
   } catch (error) {
     // If Cosmos fails, fall back to in-memory
     logger.warn("Distributed rate limit failed, using in-memory fallback", {
