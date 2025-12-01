@@ -3,6 +3,24 @@
 This document describes the required Azure infrastructure for deploying the
 Phoenix Rooivalk Azure Functions.
 
+## Quick Start
+
+If you already have a Cosmos DB account created, use the automated setup script:
+
+**PowerShell:**
+
+```powershell
+.\scripts\Setup-CosmosContainers.ps1 -ResourceGroup "your-rg-name" -CosmosAccountName "your-cosmos-name"
+```
+
+**Bash:**
+
+```bash
+./scripts/setup-cosmos-containers.sh your-rg-name your-cosmos-name
+```
+
+This will create the database and all required containers automatically.
+
 ## Prerequisites
 
 - Azure subscription
@@ -57,6 +75,33 @@ az functionapp create \
 
 ### 2. Azure Cosmos DB
 
+#### Option A: Automated Setup (Recommended)
+
+Use the provided setup scripts to automatically create the database and all containers:
+
+**PowerShell:**
+
+```powershell
+# From repository root
+.\scripts\Setup-CosmosContainers.ps1 -ResourceGroup "rg-phoenix-rooivalk" -CosmosAccountName "cosmos-phoenix-rooivalk"
+```
+
+**Bash:**
+
+```bash
+# From repository root
+./scripts/setup-cosmos-containers.sh rg-phoenix-rooivalk cosmos-phoenix-rooivalk
+```
+
+The scripts will:
+
+- Create the `phoenix-docs` database
+- Create all 10 required containers with correct partition keys
+- Verify each step and provide detailed output
+- Skip existing resources automatically
+
+#### Option B: Manual Setup
+
 ```bash
 # Create Cosmos DB account
 az cosmosdb create \
@@ -71,15 +116,23 @@ az cosmosdb sql database create \
   --resource-group rg-phoenix-rooivalk \
   --name phoenix-docs
 
-# Create containers
-for container in news_articles user_news_preferences documents support_tickets news_subscriptions notification_queue embeddings configuration monitoring_logs cache; do
-  az cosmosdb sql container create \
-    --account-name cosmos-phoenix-rooivalk \
-    --resource-group rg-phoenix-rooivalk \
-    --database-name phoenix-docs \
-    --name $container \
-    --partition-key-path "/id"
-done
+# Create containers (note: user_news_preferences uses /userId)
+az cosmosdb sql container create \
+  --account-name cosmos-phoenix-rooivalk \
+  --resource-group rg-phoenix-rooivalk \
+  --database-name phoenix-docs \
+  --name news_articles \
+  --partition-key-path "/id"
+
+az cosmosdb sql container create \
+  --account-name cosmos-phoenix-rooivalk \
+  --resource-group rg-phoenix-rooivalk \
+  --database-name phoenix-docs \
+  --name user_news_preferences \
+  --partition-key-path "/userId"
+
+# Continue for remaining containers...
+# See scripts/setup-cosmos-containers.sh for complete list
 ```
 
 ### 3. Azure OpenAI
