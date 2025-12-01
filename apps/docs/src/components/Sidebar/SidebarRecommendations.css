@@ -7,7 +7,7 @@
 .sidebar-rec {
   position: fixed;
   left: 0;
-  bottom: 80px;
+  bottom: 100px;
   width: 280px;
   margin: 0.5rem;
   background: linear-gradient(
