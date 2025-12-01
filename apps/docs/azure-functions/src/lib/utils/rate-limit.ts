@@ -345,6 +345,10 @@ export async function getRateLimitInfo(
       .item(key, key)
       .read<RateLimitDocument>();
 
+    if (!resource) {
+      return null;
+    }
+
     return {
       remaining: Math.max(0, config.maxRequests - resource.count),
       resetAt: resource.resetAt,
