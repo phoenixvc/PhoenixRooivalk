@@ -322,7 +322,7 @@ export async function requireAdminAsync(request: HttpRequest): Promise<{
 /**
  * Require admin access - synchronous version (legacy)
  */
-export async function requireAdmin(request: HttpRequest): Promise<{
+export async function requireAdminLegacy(request: HttpRequest): Promise<{
   authorized: boolean;
   userId: string | null;
   error?: { status: number; body: object };
