@@ -196,13 +196,11 @@ Be factual and cite general knowledge. If you're unsure about recent events, ind
   user: {
     template: `Generate a news digest for the following topics: {{topics}}
 
-{{#userRoles}}
 Focus on content relevant to these roles: {{userRoles}}
-{{/userRoles}}
 
 Format as a brief digest with 3-5 key items.`,
     requiredVariables: ["topics"],
-    optionalVariables: { userRoles: "" },
+    optionalVariables: { userRoles: "all users" },
   },
   outputFormat: "markdown",
 };

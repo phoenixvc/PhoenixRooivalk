@@ -11,6 +11,7 @@ import {
   PaginatedResult,
 } from "./base.repository";
 import { NewsCategory } from "../config";
+import { patchDocument, PatchOperation } from "../lib/cosmos";
 
 /**
  * News article entity
@@ -112,16 +113,15 @@ export class NewsRepository extends BaseRepository<NewsArticle> {
   }
 
   /**
-   * Increment view count
+   * Increment view count atomically using Cosmos DB patch
    */
   async incrementViewCount(id: string): Promise<void> {
-    const article = await this.findById(id);
-    if (article) {
-      await this.save({
-        ...article,
-        viewCount: (article.viewCount || 0) + 1,
-      });
-    }
+    const operation: PatchOperation = { op: "incr", path: "/viewCount", value: 1 };
+    await patchDocument(
+      this.containerName,
+      id,
+      [operation],
+    );
   }
 
   /**

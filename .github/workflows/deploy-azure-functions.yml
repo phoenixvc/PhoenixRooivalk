@@ -203,7 +203,7 @@ jobs:
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/dist
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/host.json
             ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package.json
-            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/node_modules
+            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/pnpm-lock.yaml
           retention-days: 1
 
   # ===========================================
@@ -229,6 +229,20 @@ jobs:
         with:
           name: azure-functions-build
           path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install production dependencies
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        run: pnpm install --frozen-lockfile --prod
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
