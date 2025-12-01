@@ -238,13 +238,13 @@ jobs:
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
       - name: Configure App Settings
-        if: secrets.AZURE_CREDENTIALS != ''
-        uses: azure/login@v1
+        if: vars.CONFIGURE_APP_SETTINGS == 'true'
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Set Environment Variables
-        if: secrets.AZURE_CREDENTIALS != ''
+        if: vars.CONFIGURE_APP_SETTINGS == 'true'
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
