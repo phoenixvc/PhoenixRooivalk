@@ -10,6 +10,18 @@
 
 import { createLogger, Logger } from "./logger";
 
+/**
+ * Escape XML special characters to prevent XML injection
+ */
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/'/g, "&apos;")
+    .replace(/"/g, "&quot;");
+}
+
 const logger: Logger = createLogger({ feature: "push-notifications" });
 
 /**
@@ -186,8 +198,8 @@ export async function sendPushNotification(
         <toast>
           <visual>
             <binding template="ToastText02">
-              <text id="1">${notification.title}</text>
-              <text id="2">${notification.body}</text>
+              <text id="1">${escapeXml(notification.title)}</text>
+              <text id="2">${escapeXml(notification.body)}</text>
             </binding>
           </visual>
         </toast>
