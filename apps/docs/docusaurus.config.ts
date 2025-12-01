@@ -451,6 +451,43 @@ const config: Config = {
       },
     },
   } satisfies Preset.ThemeConfig,
+
+  // Add custom webpack config to handle pptxgenjs node: protocol imports
+  plugins: [
+    function customWebpackPlugin() {
+      return {
+        name: "custom-webpack-plugin",
+        configureWebpack(config, isServer) {
+          if (isServer) {
+            return {};
+          }
+          
+          // Access webpack from the config
+          const webpack = require("webpack");
+          
+          return {
+            plugins: [
+              // Replace node: protocol imports with empty modules
+              new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+                resource.request = resource.request.replace(/^node:/, "");
+              }),
+            ],
+            resolve: {
+              fallback: {
+                fs: false,
+                https: false,
+                http: false,
+                stream: false,
+                zlib: false,
+                url: false,
+                buffer: false,
+              },
+            },
+          };
+        },
+      };
+    },
+  ],
 };
 
 export default config;
