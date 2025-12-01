@@ -381,6 +381,22 @@
   transform: translateY(0);
 }
 
+.downloadButtonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.downloadDeckButtonSecondary {
+  background: var(--ifm-color-secondary);
+  color: var(--ifm-font-color-base);
+}
+
+.downloadDeckButtonSecondary:hover {
+  background: var(--ifm-color-secondary-dark);
+}
+
 .slidesContainer {
   padding: 1.5rem;
 }

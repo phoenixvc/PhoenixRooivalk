@@ -1,5 +1,77 @@
 import * as React from "react";
 import styles from "./Downloads.module.css";
+import BrowserOnly from "@docusaurus/BrowserOnly";
+import type { Slide } from "./SlideDeckDownload";
+
+// Client-only PPTX generator for SlideDeck
+interface SlideDeckPptxGeneratorProps {
+  children: React.ReactNode;
+  title: string;
+  duration: number;
+  audience?: string;
+  date?: string;
+}
+
+function SlideDeckPptxGenerator({
+  children,
+  title,
+  duration,
+  audience,
+  date,
+}: SlideDeckPptxGeneratorProps) {
+  const handleDownloadPptx = React.useCallback(async () => {
+    try {
+      // Extract slides from children
+      const slidesData: Slide[] = [];
+      React.Children.forEach(children, (child) => {
+        if (React.isValidElement(child)) {
+          const props = child.props as {
+            number?: number;
+            title?: string;
+            duration?: number;
+            keyPoints?: string[];
+            script?: string;
+            icon?: string;
+          };
+          if (props.number && props.title && props.keyPoints) {
+            slidesData.push({
+              number: props.number,
+              title: props.title,
+              duration: props.duration || 0,
+              keyPoints: props.keyPoints,
+              script: props.script,
+              icon: props.icon,
+            });
+          }
+        }
+      });
+
+      // Dynamic import only in browser
+      const { generatePptx } = await import("../../utils/generatePptx");
+      await generatePptx(slidesData, {
+        title,
+        duration,
+        audience,
+        date,
+      });
+    } catch (error) {
+      console.error("Failed to generate PPTX:", error);
+      alert("Failed to generate PowerPoint file. Please try again.");
+    }
+  }, [children, title, duration, audience, date]);
+
+  return (
+    <button
+      type="button"
+      onClick={handleDownloadPptx}
+      className={styles.downloadDeckButton}
+      aria-label={`Download ${title} as PowerPoint`}
+    >
+      <span aria-hidden="true">{"\uD83D\uDCCA"}</span>
+      <span>Download PowerPoint</span>
+    </button>
+  );
+}
 
 export interface SlideDeckProps {
   /** Presentation title */
@@ -99,15 +171,29 @@ export default function SlideDeck({
             )}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={handlePrint}
-          className={styles.downloadDeckButton}
-          aria-label={`Download ${title} as PDF`}
-        >
-          <span aria-hidden="true">{"\uD83D\uDCE5"}</span>
-          <span>Download Slide Deck</span>
-        </button>
+        <div className={styles.downloadButtonGroup}>
+          <BrowserOnly fallback={<div>Loading...</div>}>
+            {() => (
+              <SlideDeckPptxGenerator
+                title={title}
+                duration={duration}
+                audience={audience}
+                date={date}
+              >
+                {children}
+              </SlideDeckPptxGenerator>
+            )}
+          </BrowserOnly>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className={`${styles.downloadDeckButton} ${styles.downloadDeckButtonSecondary}`}
+            aria-label={`Download ${title} script as PDF`}
+          >
+            <span aria-hidden="true">{"\uD83D\uDCE5"}</span>
+            <span>Download Script</span>
+          </button>
+        </div>
       </div>
 
       {/* Print-only title page */}
