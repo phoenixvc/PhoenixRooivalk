@@ -1,6 +1,7 @@
 # Troubleshooting Guide
 
-This guide helps you diagnose and fix common issues with the Phoenix Rooivalk documentation site.
+This guide helps you diagnose and fix common issues with the Phoenix Rooivalk
+documentation site.
 
 ## Table of Contents
 
@@ -13,7 +14,8 @@ This guide helps you diagnose and fix common issues with the Phoenix Rooivalk do
 
 ## AI Functions Not Available
 
-**Symptom**: You see the error message "⚠️ AI Functions not available. Please check your network connection and Azure Functions configuration."
+**Symptom**: You see the error message "⚠️ AI Functions not available. Please
+check your network connection and Azure Functions configuration."
 
 ### Root Causes
 
@@ -22,31 +24,40 @@ This guide helps you diagnose and fix common issues with the Phoenix Rooivalk do
 **The most common cause** - The frontend can't find the Azure Functions URL.
 
 **Check**:
-1. Go to your repository: Settings → Secrets and variables → Actions → Variables tab
+
+1. Go to your repository: Settings → Secrets and variables → Actions → Variables
+   tab
 2. Verify `AZURE_FUNCTIONS_BASE_URL` exists and is set correctly
 3. Example correct value: `https://phoenix-rooivalk-functions.azurewebsites.net`
 
 **Fix**:
+
 ```bash
 # The value should be in this format (without /api at the end):
 AZURE_FUNCTIONS_BASE_URL=https://your-function-app-name.azurewebsites.net
 ```
 
 **Important Notes**:
-- This must be a **Variable** (not a Secret) OR a Secret - the workflow now supports both
+
+- This must be a **Variable** (not a Secret) OR a Secret - the workflow now
+  supports both
 - It must be available with scope "All scopes" or "Builds" selected
 - The URL should NOT include `/api` at the end
-- After changing, you must trigger a new deployment (push to main or re-run workflow)
+- After changing, you must trigger a new deployment (push to main or re-run
+  workflow)
 
 #### 2. Variable vs Secret Configuration
 
 The GitHub workflow now supports `AZURE_FUNCTIONS_BASE_URL` as either:
-- **Variable** (recommended for non-sensitive URLs) - `vars.AZURE_FUNCTIONS_BASE_URL`
+
+- **Variable** (recommended for non-sensitive URLs) -
+  `vars.AZURE_FUNCTIONS_BASE_URL`
 - **Secret** (for additional security) - `secrets.AZURE_FUNCTIONS_BASE_URL`
 
 Variables take precedence if both are set.
 
 **To check which you have**:
+
 1. Settings → Secrets and variables → Actions
 2. Check both "Secrets" and "Variables" tabs
 3. Delete any duplicates (keep only one)
@@ -56,6 +67,7 @@ Variables take precedence if both are set.
 The frontend can reach the URL, but the Azure Functions aren't responding.
 
 **Check Azure Functions Health**:
+
 ```bash
 # Replace with your actual function app name
 curl https://your-function-app-name.azurewebsites.net/api/health
@@ -65,11 +77,13 @@ curl https://your-function-app-name.azurewebsites.net/api/health
 ```
 
 **Common Issues**:
+
 - Function app is stopped in Azure Portal
 - Recent deployment failed
 - OpenAI configuration is missing in Function App settings
 
 **Fix**:
+
 1. Go to Azure Portal → Function Apps → Your app
 2. Check Overview → Status should be "Running"
 3. Check Configuration → Application settings:
@@ -84,18 +98,23 @@ curl https://your-function-app-name.azurewebsites.net/api/health
 Azure Functions are deployed but Azure OpenAI settings are incorrect.
 
 **Required GitHub Secrets**:
+
 - `AZURE_AI_ENDPOINT` or `AZURE_OPENAI_ENDPOINT`
 - `AZURE_AI_API_KEY` or `AZURE_OPENAI_API_KEY`
 
 **Required GitHub Variables**:
-- `AZURE_AI_DEPLOYMENT_NAME` (e.g., `gpt-5.1`, `gpt-4o`, `gpt-4`, `gpt-35-turbo`)
+
+- `AZURE_AI_DEPLOYMENT_NAME` (e.g., `gpt-5.1`, `gpt-4o`, `gpt-4`,
+  `gpt-35-turbo`)
 
 **Check in Azure Portal**:
+
 1. Azure Portal → Your Function App → Configuration → Application settings
 2. Verify these settings exist and have correct values
 3. Test endpoint: `https://your-function-app.azurewebsites.net/api/health/ready`
 
 **Fix**:
+
 1. Set the missing secrets/variables in GitHub
 2. Set `CONFIGURE_APP_SETTINGS=true` as a repository variable
 3. Re-run the Azure Functions deployment workflow
@@ -106,11 +125,13 @@ Azure Functions are deployed but Azure OpenAI settings are incorrect.
 The browser blocks requests due to CORS policy.
 
 **Check Browser Console** (F12):
+
 ```
 Access to fetch at 'https://...' from origin 'https://...' has been blocked by CORS policy
 ```
 
 **Fix** (in Azure Portal):
+
 1. Function App → CORS
 2. Add your Static Web App URL (e.g., `https://your-site.azurestaticapps.net`)
 3. Or add `*` for testing (not recommended for production)
@@ -124,6 +145,7 @@ Access to fetch at 'https://...' from origin 'https://...' has been blocked by C
 **Symptom**: Clicking "Sign in" fails or redirects to an error page.
 
 **Check**:
+
 1. GitHub Secrets are set:
    - `AZURE_ENTRA_TENANT_ID`
    - `AZURE_ENTRA_CLIENT_ID`
@@ -137,6 +159,7 @@ Access to fetch at 'https://...' from origin 'https://...' has been blocked by C
    - API permissions are granted
 
 **Fix**:
+
 ```bash
 # Redirect URI should match your deployed site
 AZURE_ENTRA_REDIRECT_URI=https://your-site.azurestaticapps.net/callback
@@ -151,9 +174,11 @@ AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI=https://your-site.azurestaticapps.net
 
 **Symptom**: Build succeeds but features don't work at runtime.
 
-**Cause**: Docusaurus needs environment variables at **build time** to embed them in the static site.
+**Cause**: Docusaurus needs environment variables at **build time** to embed
+them in the static site.
 
 **Fix**:
+
 1. Ensure variables/secrets are set in GitHub (not just Azure Portal)
 2. Check workflow file passes them to the build step
 3. Verify scope is "All scopes" or "Builds" (not just "Runtime")
@@ -163,13 +188,15 @@ AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI=https://your-site.azurestaticapps.net
 **Symptom**: GitHub Action fails with "Infrastructure Validation Failed"
 
 **Check the Action logs** for specific missing items:
+
 ```
 Required secrets are missing:
   - AZURE_STATIC_WEB_APPS_API_TOKEN
   - COSMOS_DB_CONNECTION_STRING
 ```
 
-**Fix**: Add each missing secret/variable following the instructions in `.github/AZURE_SETUP.md`
+**Fix**: Add each missing secret/variable following the instructions in
+`.github/AZURE_SETUP.md`
 
 ---
 
@@ -177,19 +204,23 @@ Required secrets are missing:
 
 ### CONFIGURE_APP_SETTINGS Variable
 
-The Azure Functions deployment uses `CONFIGURE_APP_SETTINGS` to determine whether to update Function App settings automatically.
+The Azure Functions deployment uses `CONFIGURE_APP_SETTINGS` to determine
+whether to update Function App settings automatically.
 
 **Set this as a repository variable**:
+
 ```
 CONFIGURE_APP_SETTINGS=true
 ```
 
 When enabled, the workflow will:
+
 1. Login to Azure using `AZURE_CREDENTIALS`
 2. Push all required app settings to the Function App
 3. Including: AI endpoint, API key, deployment name, Cosmos DB connection, etc.
 
 **If you prefer manual configuration**:
+
 - Set `CONFIGURE_APP_SETTINGS=false` or don't set it
 - Manually configure settings in Azure Portal → Function App → Configuration
 
@@ -214,7 +245,8 @@ window.__DOCUSAURUS__?.siteConfig?.customFields?.azureConfig
 }
 ```
 
-If `functionsBaseUrl` is `""` or missing → `AZURE_FUNCTIONS_BASE_URL` wasn't available at build time.
+If `functionsBaseUrl` is `""` or missing → `AZURE_FUNCTIONS_BASE_URL` wasn't
+available at build time.
 
 ### Check Azure Functions Logs
 
@@ -265,7 +297,8 @@ When AI features aren't working, verify:
 1. **Check the GitHub Action logs** for specific error messages
 2. **Check Azure Function App logs** in Azure Portal
 3. **Check browser console** (F12) for frontend errors
-4. **Review** `.github/workflows/deploy-docs-azure.yml` to understand the deployment flow
+4. **Review** `.github/workflows/deploy-docs-azure.yml` to understand the
+   deployment flow
 5. **Review** `apps/docs/CONFIGURATION.md` for detailed setup instructions
 6. **Open an issue** with:
    - Error message screenshot
@@ -318,4 +351,6 @@ When AI features aren't working, verify:
 └─────────────────────────────────────────┘
 ```
 
-**Key Point**: `AZURE_FUNCTIONS_BASE_URL` must be available **during the build step** so it gets embedded into the static site. Setting it only in Azure Portal won't work because the static site has already been built without it.
+**Key Point**: `AZURE_FUNCTIONS_BASE_URL` must be available **during the build
+step** so it gets embedded into the static site. Setting it only in Azure Portal
+won't work because the static site has already been built without it.
