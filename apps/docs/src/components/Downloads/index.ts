@@ -16,3 +16,7 @@ export { default as ProgressReportDownloads } from "./ProgressReportDownloads";
 
 // Slide deck data exports (for modal approach)
 export { week48Slides, week48Meta } from "./slidedecks/week48-slides";
+export {
+  presentationMaterialsSlides,
+  presentationMaterialsMeta,
+} from "./slidedecks/presentation-materials-slides";
