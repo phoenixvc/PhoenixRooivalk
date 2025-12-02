@@ -197,6 +197,29 @@
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: relative;
+}
+
+/* Branded Icon - Small (appears on all slides) */
+.slideBrandIconSmall {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.25rem;
+  opacity: 0.4;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Branded Icon - Large (appears on first slide) */
+.slideBrandIconLarge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
 }
 
 .slidePage:last-child {
@@ -270,6 +293,183 @@
 .keyPointBullet {
   color: var(--ifm-color-primary);
   margin-top: 0.25rem;
+}
+
+/* Sub-points / Nested bullets */
+.keyPointsListSub {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0.5rem 1.5rem;
+}
+
+.keyPointSub {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9em;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.keyPointBulletSub {
+  color: var(--ifm-color-emphasis-400);
+  margin-top: 0.25rem;
+}
+
+/* Rich Text Formatting */
+.richTextBold {
+  font-weight: 700;
+  color: var(--ifm-font-color-base);
+}
+
+.richTextItalic {
+  font-style: italic;
+}
+
+/* Progress Bar */
+.slideProgressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 3rem;
+  height: 4px;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.slideProgressFill {
+  height: 100%;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+
+/* ============================================
+   Slide Layouts
+   ============================================ */
+
+/* Title-Only Layout (Section Divider) */
+.slideTitleOnly {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  text-align: center;
+}
+
+.slideTitleOnlyText {
+  font-size: 1.25rem;
+  color: var(--ifm-color-emphasis-600);
+  margin: 0;
+}
+
+/* Image Layout */
+.slideImageLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slideImage {
+  max-width: 100%;
+  max-height: 16rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.slideImageCaption {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-500);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Two-Column Layout */
+.slideTwoColumn {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+}
+
+.slideColumn {
+  min-width: 0;
+}
+
+.slideColumnTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin: 0 0 0.75rem 0;
+}
+
+.slideColumnDivider {
+  width: 2px;
+  background: var(--ifm-color-primary);
+  opacity: 0.5;
+}
+
+/* Quote Layout */
+.slideQuote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.slideQuoteText {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0 0 1rem 0;
+  max-width: 40rem;
+  line-height: 1.6;
+}
+
+.slideQuoteAuthor {
+  font-size: 1.125rem;
+  color: var(--ifm-color-emphasis-500);
+  margin: 0;
+}
+
+/* Code Layout */
+.slideCodeLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.slideCodeBlock {
+  position: relative;
+  background: #1e1e1e;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-primary);
+}
+
+.slideCodeLanguage {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  color: #888;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.slideCodePre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.slideCodePre code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.875rem;
+  color: #d4d4d4;
+  white-space: pre;
 }
 
 /* Script Section */
@@ -419,6 +619,12 @@
   display: none;
 }
 
+/* Print title brand icon - only shown during print (hidden with parent) */
+.printTitleBrandIcon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
 /* Focus styles for accessibility */
 .downloadDeckButton:focus-visible,
 .downloadButton:focus-visible {
@@ -448,6 +654,13 @@
     text-align: center;
     page-break-after: always;
     break-after: page;
+  }
+
+  /* Large branded icon on title page */
+  .printTitleBrandIcon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
   }
 
   .printTitle {

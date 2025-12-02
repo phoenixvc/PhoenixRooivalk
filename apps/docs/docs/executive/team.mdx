@@ -3,8 +3,8 @@ id: team
 title: "Phoenix Rooivalk: Founding Team"
 sidebar_label: Team
 difficulty: beginner
-estimated_reading_time: 8
-points: 10
+timeEstimate: 8
+xpReward: 10
 phase: ["seed", "series-a", "series-b", "series-c", "scale"]
 tags:
   - executive
@@ -16,157 +16,241 @@ import { TEAM, CAPITAL } from "@site/src/data/values";
 
 # Phoenix Rooivalk: Founding Team
 
+<div style={{textAlign: 'center', marginBottom: '2rem'}}>
+
+<img
+  src="/img/logo.svg"
+  alt="Phoenix Rooivalk"
+  style={{width: '120px', height: 'auto', marginBottom: '1rem'}}
+/>
+
 > **"The right team to build the future of drone defense."**
+
+</div>
 
 ---
 
 ## Executive Summary
 
-Phoenix Rooivalk is led by a founding team with **{TEAM.COMBINED_EXPERIENCE}
-combined experience** across software engineering, defense, energy, and finance.
-The team combines deep technical expertise in edge AI and embedded systems with
-proven business development and capital markets experience.
+<div style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', color: 'white'}}>
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', textAlign: 'center'}}>
+
+<div>
+  <div style={{fontSize: '2.5rem', fontWeight: 'bold', color: '#3b82f6'}}>{TEAM.COMBINED_EXPERIENCE}</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Combined Experience</div>
+</div>
+
+<div>
+  <div style={{fontSize: '2.5rem', fontWeight: 'bold', color: '#10b981'}}>{TEAM.TEAM_SIZE}</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Co-Founders</div>
+</div>
+
+<div>
+  <div style={{fontSize: '2.5rem', fontWeight: 'bold', color: '#f59e0b'}}>{CAPITAL.INVESTMENT_TO_DATE}</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Invested</div>
+</div>
+
+<div>
+  <div style={{fontSize: '2.5rem', fontWeight: 'bold', color: '#ec4899'}}>4</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Disciplines</div>
+</div>
+
+</div>
+
+</div>
+
+Phoenix Rooivalk is led by a founding team with deep technical expertise in edge AI and embedded systems, combined with proven business development and capital markets experience.
 
 ---
 
-## Founding Team
+## Leadership Team
 
-### Jurie Smit — Co-Founder & CTO
+### 🚀 Technical Leadership
 
-<div style={{display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-<div style={{flex: '1', minWidth: '280px'}}>
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem'}}>
 
-**Background:** {TEAM.CTO_BACKGROUND}
+{/* CTO Card */}
+<div style={{background: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 10px 40px rgba(30, 64, 175, 0.3)'}}>
 
-**Education:** {TEAM.CTO_EDUCATION}
-
-**Core Expertise:**
-
-- Edge AI/ML implementation
-- Embedded systems & hardware integration
-- Full-stack software development
-- Real-time computer vision systems
-
-**Role at Phoenix Rooivalk:**
-
-- Technical architecture & product development
-- AI/ML pipeline (YOLOv9, TensorRT, Jetson)
-- Blockchain evidence chain implementation
-- Hardware-software integration
-
-</div>
-<div style={{flex: '0 0 auto'}}>
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juriesmit/)
-
-</div>
+<div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
+  <div style={{width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', border: '3px solid white'}}>
+    JS
+  </div>
+  <div>
+    <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{TEAM.CTO_NAME}</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.9}}>{TEAM.CTO_TITLE}</div>
+  </div>
 </div>
 
----
-
-### Martyn Redelinghuys — Co-Founder & CEO
-
-<div style={{display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-<div style={{flex: '1', minWidth: '280px'}}>
-
-**Background:** {TEAM.CEO_BACKGROUND}
-
-**Education:** {TEAM.CEO_EDUCATION}
-
-**Core Expertise:**
-- Project management & portfolio optimization
-- Energy strategy & risk mitigation
-- Business development & capital projects
-- Multi-disciplinary engineering leadership
-
-**Role at Phoenix Rooivalk:**
-- Business strategy & operations
-- Enterprise sales & partnerships
-- Project execution & delivery
-- Regulatory & compliance strategy
-
-</div>
-<div style={{flex: '0 0 auto'}}>
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/martynrede/)
-
-</div>
+<div style={{fontSize: '0.875rem', marginBottom: '1rem', lineHeight: 1.6}}>
+  {TEAM.CTO_BACKGROUND}
 </div>
 
----
-
-### Pieter La Grange — {TEAM.MEMBER_3_TITLE}
-
-<div style={{display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-<div style={{flex: '1', minWidth: '280px'}}>
-
-**Background:** {TEAM.MEMBER_3_BACKGROUND}
-
-**Education:**
-{TEAM.MEMBER_3_EDUCATION}
-
-**Core Expertise:**
-- Embedded firmware development (C, RTOS)
-- Low-power ARM microcontroller design
-- BLE/WiFi wireless protocols
-- Medical device hardware (Snuza, HealthQ)
-- Production-ready hardware design
-
-**Role at Phoenix Rooivalk:**
-- Hardware architecture & design
-- Net launcher electronics & control systems
-- Sensor integration (RF, acoustic, EO/IR)
-- Embedded firmware development
-- Production engineering
-
-</div>
-<div style={{flex: '0 0 auto'}}>
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pieterlagrange/)
-
-</div>
+<div style={{borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1rem', marginTop: '1rem'}}>
+  <div style={{fontSize: '0.75rem', opacity: 0.8, marginBottom: '0.5rem'}}>EXPERTISE</div>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Edge AI/ML</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>System Architecture</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Full-Stack Dev</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Blockchain</span>
+  </div>
 </div>
 
----
-
-### Eben Maré — {TEAM.MEMBER_4_TITLE}
-
-<div style={{display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-<div style={{flex: '1', minWidth: '280px'}}>
-
-**Background:**
-{TEAM.MEMBER_4_BACKGROUND}
-
-**Education:**
-{TEAM.MEMBER_4_EDUCATION}
-
-**Core Expertise:**
-- Private equity & venture capital
-- Quantitative modeling & derivatives
-- Algorithmic trading systems
-- Investment banking & valuations
-- Cryptocurrency & blockchain investments
-
-**Role at Phoenix Rooivalk:**
-- Financial strategy & fundraising
-- Investor relations & due diligence
-- Valuation & financial modeling
-- Capital allocation & risk management
-- Token economics design (future)
+<div style={{marginTop: '1rem'}}>
+  <a href={TEAM.CTO_LINKEDIN} target="_blank" rel="noopener" style={{color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem'}}>
+    🔗 LinkedIn Profile →
+  </a>
+</div>
 
 </div>
-<div style={{flex: '0 0 auto'}}>
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ebenmare/)
+{/* Hardware Lead Card */}
+<div style={{background: 'linear-gradient(180deg, #059669 0%, #047857 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 10px 40px rgba(5, 150, 105, 0.3)'}}>
+
+<div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
+  <div style={{width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', border: '3px solid white'}}>
+    PL
+  </div>
+  <div>
+    <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{TEAM.MEMBER_3_NAME}</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.9}}>{TEAM.MEMBER_3_TITLE}</div>
+  </div>
+</div>
+
+<div style={{fontSize: '0.875rem', marginBottom: '1rem', lineHeight: 1.6}}>
+  {TEAM.MEMBER_3_BACKGROUND}
+</div>
+
+<div style={{borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1rem', marginTop: '1rem'}}>
+  <div style={{fontSize: '0.75rem', opacity: 0.8, marginBottom: '0.5rem'}}>EXPERTISE</div>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Embedded Firmware</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Hardware Design</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Low-Power ARM</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>BLE/WiFi</span>
+  </div>
+</div>
+
+<div style={{marginTop: '1rem'}}>
+  <a href={TEAM.MEMBER_3_LINKEDIN} target="_blank" rel="noopener" style={{color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem'}}>
+    🔗 LinkedIn Profile →
+  </a>
+</div>
 
 </div>
+
+</div>
+
+### 💼 Business Leadership
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem'}}>
+
+{/* CEO Card */}
+<div style={{background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 10px 40px rgba(124, 58, 237, 0.3)'}}>
+
+<div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
+  <div style={{width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', border: '3px solid white'}}>
+    MR
+  </div>
+  <div>
+    <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{TEAM.CEO_NAME}</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.9}}>{TEAM.CEO_TITLE}</div>
+  </div>
+</div>
+
+<div style={{fontSize: '0.875rem', marginBottom: '1rem', lineHeight: 1.6}}>
+  {TEAM.CEO_BACKGROUND}
+</div>
+
+<div style={{borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1rem', marginTop: '1rem'}}>
+  <div style={{fontSize: '0.75rem', opacity: 0.8, marginBottom: '0.5rem'}}>EXPERTISE</div>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Project Management</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Energy Strategy</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Business Dev</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Capital Projects</span>
+  </div>
+</div>
+
+<div style={{marginTop: '1rem'}}>
+  <a href={TEAM.CEO_LINKEDIN} target="_blank" rel="noopener" style={{color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem'}}>
+    🔗 LinkedIn Profile →
+  </a>
+</div>
+
+</div>
+
+{/* CFO Card */}
+<div style={{background: 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 10px 40px rgba(220, 38, 38, 0.3)'}}>
+
+<div style={{display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem'}}>
+  <div style={{width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #f87171 0%, #ef4444 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', border: '3px solid white'}}>
+    EM
+  </div>
+  <div>
+    <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{TEAM.MEMBER_4_NAME}</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.9}}>{TEAM.MEMBER_4_TITLE}</div>
+  </div>
+</div>
+
+<div style={{fontSize: '0.875rem', marginBottom: '1rem', lineHeight: 1.6}}>
+  {TEAM.MEMBER_4_BACKGROUND}
+</div>
+
+<div style={{borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1rem', marginTop: '1rem'}}>
+  <div style={{fontSize: '0.75rem', opacity: 0.8, marginBottom: '0.5rem'}}>EXPERTISE</div>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '0.5rem'}}>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Private Equity</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Investment Banking</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Quant Modeling</span>
+    <span style={{background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem'}}>Derivatives</span>
+  </div>
+</div>
+
+<div style={{marginTop: '1rem'}}>
+  <a href={TEAM.MEMBER_4_LINKEDIN} target="_blank" rel="noopener" style={{color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem'}}>
+    🔗 LinkedIn Profile →
+  </a>
+</div>
+
+</div>
+
 </div>
 
 ---
 
 ## Why This Team?
 
-### Technical Depth
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem'}}>
+
+<div style={{background: 'var(--ifm-color-emphasis-100)', borderRadius: '0.75rem', padding: '1.5rem', borderLeft: '4px solid #3b82f6'}}>
+  <div style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>🎯</div>
+  <div style={{fontWeight: 'bold', marginBottom: '0.5rem'}}>Technical Depth</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Edge AI, embedded systems, and blockchain expertise spanning 60+ years combined</div>
+</div>
+
+<div style={{background: 'var(--ifm-color-emphasis-100)', borderRadius: '0.75rem', padding: '1.5rem', borderLeft: '4px solid #10b981'}}>
+  <div style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>⚡</div>
+  <div style={{fontWeight: 'bold', marginBottom: '0.5rem'}}>Execution Speed</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>370+ commits weekly, rapid iteration from concept to prototype</div>
+</div>
+
+<div style={{background: 'var(--ifm-color-emphasis-100)', borderRadius: '0.75rem', padding: '1.5rem', borderLeft: '4px solid #f59e0b'}}>
+  <div style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>💰</div>
+  <div style={{fontWeight: 'bold', marginBottom: '0.5rem'}}>Business Acumen</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>R500M+ portfolio management, investment banking, PE experience</div>
+</div>
+
+<div style={{background: 'var(--ifm-color-emphasis-100)', borderRadius: '0.75rem', padding: '1.5rem', borderLeft: '4px solid #ec4899'}}>
+  <div style={{fontSize: '1.5rem', marginBottom: '0.5rem'}}>🌍</div>
+  <div style={{fontWeight: 'bold', marginBottom: '0.5rem'}}>Domain Knowledge</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.8}}>Defense, energy, and critical infrastructure sector expertise</div>
+</div>
+
+</div>
+
+### Capability Matrix
 
 | Capability | Team Member | Evidence |
 |------------|-------------|----------|
@@ -179,91 +263,113 @@ proven business development and capital markets experience.
 | **Investment Banking** | Eben Maré | 10 years Absa Capital, Head Quant at Deloitte |
 | **Venture Capital** | Eben Maré | Phoenix VC founder, private equity experience |
 
-### Complementary Skills
-
-```
-         TECHNICAL                                    BUSINESS
-         ─────────                                    ────────
-Jurie Smit      ████████████████░░░░░░░░░░░░░░   Martyn Redelinghuys
-Pieter La Grange ████████████████░░░░░░░░░░░░░░   Eben Maré
-
-AI/ML           ████████████████                     Strategy
-Hardware        ████████████████                     Fundraising
-Software        ████████████████                     Finance
-Blockchain      ████████████████                     Investments
-Embedded        ████████████████                     Valuations
-```
-
-### Execution Track Record
-
-| Founder                 | Track Record                                                         |
-| ----------------------- | -------------------------------------------------------------------- |
-| **Jurie Smit**          | Built and shipped multiple production systems. {TEAM.CTO_BACKGROUND} |
-| **Martyn Redelinghuys** | {TEAM.CEO_BACKGROUND}                                                |
-| **Pieter Lagrange**     | {TEAM.MEMBER_3_BACKGROUND}                                           |
-| **Eben Maré**           | {TEAM.MEMBER_4_BACKGROUND}                                           |
-
 ---
 
 ## Team Investment
 
-The founding team has made significant personal investment in Phoenix Rooivalk:
+<div style={{background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', borderRadius: '1rem', padding: '2rem', color: 'white', marginBottom: '2rem'}}>
 
-| Investment Type      | Amount                       | Notes                        |
-| -------------------- | ---------------------------- | ---------------------------- |
-| **Sweat Equity**     | {CAPITAL.INVESTMENT_TO_DATE} | Full-time founder commitment |
-| **Personal Capital** | [Add if applicable]          | Skin in the game             |
-| **Opportunity Cost** | Significant                  | Founders left paying roles   |
+<div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
+  <div style={{fontSize: '0.875rem', opacity: 0.7, marginBottom: '0.5rem'}}>FOUNDERS' INVESTMENT</div>
+  <div style={{fontSize: '3rem', fontWeight: 'bold', color: '#10b981'}}>{CAPITAL.INVESTMENT_TO_DATE}</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.7}}>Full-time commitment, significant opportunity cost</div>
+</div>
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', textAlign: 'center'}}>
+  <div>
+    <div style={{fontSize: '1.5rem'}}>✅</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.8}}>All founders full-time</div>
+  </div>
+  <div>
+    <div style={{fontSize: '1.5rem'}}>💼</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.8}}>Left paying roles</div>
+  </div>
+  <div>
+    <div style={{fontSize: '1.5rem'}}>🎯</div>
+    <div style={{fontSize: '0.875rem', opacity: 0.8}}>Skin in the game</div>
+  </div>
+</div>
+
+</div>
 
 ---
 
 ## Hiring Plan
 
-### Seed Stage (Current)
+### Current Stage (Seed)
 
-| Role                             | Status      | Priority |
-| -------------------------------- | ----------- | -------- |
-| Founding Team ({TEAM.TEAM_SIZE}) | ✅ In place | —        |
-| Part-time contractors            | As needed   | Medium   |
+| Role | Status | Notes |
+|------|--------|-------|
+| Founding Team ({TEAM.TEAM_SIZE}) | ✅ In place | Full-time committed |
+| Part-time contractors | As needed | Development support |
 
 ### Series A Hires
 
-| Role                  | Priority | Rationale               |
-| --------------------- | -------- | ----------------------- |
-| **VP Engineering**    | High     | Scale technical team    |
-| **VP Sales**          | High     | Enterprise go-to-market |
-| **ML Engineer**       | High     | Model optimization      |
-| **Hardware Engineer** | Medium   | Net launcher production |
-| **DevOps / SRE**      | Medium   | Platform reliability    |
+| Role | Priority | Rationale |
+|------|----------|-----------|
+| **VP Engineering** | 🔴 High | Scale technical team |
+| **VP Sales** | 🔴 High | Enterprise go-to-market |
+| **ML Engineer** | 🔴 High | Model optimization |
+| **Hardware Engineer** | 🟡 Medium | Net launcher production |
+| **DevOps / SRE** | 🟡 Medium | Platform reliability |
 
 ### Series B+ Scale
 
-| Role              | Count | Timing     |
-| ----------------- | ----- | ---------- |
-| Engineering       | 10-15 | Series B   |
-| Sales & Marketing | 5-8   | Series B   |
-| Operations        | 3-5   | Series B   |
-| Executive hires   | 2-3   | Series B/C |
+| Department | Headcount | Timing |
+|------------|-----------|--------|
+| Engineering | 10-15 | Series B |
+| Sales & Marketing | 5-8 | Series B |
+| Operations | 3-5 | Series B |
+| Executive hires | 2-3 | Series B/C |
 
 ---
 
 ## Advisors
 
-:::info Building Advisory Board We are currently recruiting world-class advisors
-in defense, blockchain, and hardware domains. See our
-[Advisory Board Playbook](/docs/playbooks/advisory-board-roadmap) for our
-approach to building a strategic advisory team. :::
+:::info Building Advisory Board
+We are currently recruiting world-class advisors in defense, blockchain, and hardware domains. See our [Advisory Board Playbook](/docs/playbooks/advisory-board-roadmap) for our approach to building a strategic advisory team.
+:::
+
+**Target Advisor Profiles:**
+
+| Domain | Target Profile | Value-Add |
+|--------|----------------|-----------|
+| **Defense** | Former SANDF / DoD senior official | Regulatory navigation, defense contracts |
+| **Aviation** | CAA / EASA certification expert | Airspace integration, compliance |
+| **Blockchain** | Web3 infrastructure leader | Tokenomics, community building |
+| **Hardware** | Consumer electronics scaling | Manufacturing, supply chain |
 
 ---
 
 ## Culture & Values
 
-### What We Believe
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem'}}>
 
-1. **Speed Wins** — 120ms beats 5 seconds. Always optimize for response time.
-2. **Evidence Matters** — Every claim backed by blockchain-verified data.
-3. **Dual Revenue** — Consumer funds R&D, enterprise scales the business.
-4. **South Africa First** — Build world-class tech from SA, for the world.
+<div style={{textAlign: 'center', padding: '1.5rem'}}>
+  <div style={{fontSize: '2rem', marginBottom: '0.5rem'}}>⚡</div>
+  <div style={{fontWeight: 'bold'}}>Speed Wins</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.7}}>120ms beats 5 seconds. Always.</div>
+</div>
+
+<div style={{textAlign: 'center', padding: '1.5rem'}}>
+  <div style={{fontSize: '2rem', marginBottom: '0.5rem'}}>📊</div>
+  <div style={{fontWeight: 'bold'}}>Evidence Matters</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.7}}>Every claim blockchain-verified.</div>
+</div>
+
+<div style={{textAlign: 'center', padding: '1.5rem'}}>
+  <div style={{fontSize: '2rem', marginBottom: '0.5rem'}}>💰</div>
+  <div style={{fontWeight: 'bold'}}>Dual Revenue</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.7}}>Consumer funds enterprise.</div>
+</div>
+
+<div style={{textAlign: 'center', padding: '1.5rem'}}>
+  <div style={{fontSize: '2rem', marginBottom: '0.5rem'}}>🌍</div>
+  <div style={{fontWeight: 'bold'}}>SA First</div>
+  <div style={{fontSize: '0.875rem', opacity: 0.7}}>World-class tech from SA.</div>
+</div>
+
+</div>
 
 ### How We Work
 
@@ -276,26 +382,21 @@ approach to building a strategic advisory team. :::
 
 ## Contact
 
-|                     |                                                                    |
-| ------------------- | ------------------------------------------------------------------ |
-| **Primary Contact** | {TEAM.CTO_NAME}                                                    |
-| **Email**           | {TEAM.CONTACT_EMAIL}                                               |
-| **Phone**           | {TEAM.CONTACT_PHONE}                                               |
-| **LinkedIn**        | [Company Page](https://www.linkedin.com/company/phoenix-rooivalk/) |
+| | |
+|---|---|
+| **General Inquiries** | {TEAM.CONTACT_EMAIL} |
+| **Investor Relations** | {TEAM.INVESTOR_EMAIL} |
+| **LinkedIn** | [Company Page](https://www.linkedin.com/company/phoenix-rooivalk/) |
 
 ---
 
 ## Related Documents
 
-- [Investor Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck) - Full
-  pitch deck
-- [Presentation Materials](/docs/executive/presentation-materials) - Supporting
-  materials
-- [Advisory Board Playbook](/docs/playbooks/advisory-board-roadmap) - Building
-  advisors
+- [Investor Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck) - Full pitch deck
+- [Presentation Materials](/docs/executive/presentation-materials) - Supporting materials
+- [Advisory Board Playbook](/docs/playbooks/advisory-board-roadmap) - Building advisors
 
 ---
 
 _This document contains confidential team information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
-reserved._
+restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights reserved._

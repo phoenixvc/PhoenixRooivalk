@@ -1,0 +1,531 @@
+---
+id: slide-deck-guide
+title: Slide Deck Components Guide
+sidebar_label: Slide Deck Guide
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+tags:
+  - documentation
+  - components
+  - slides
+  - presentations
+---
+
+# Slide Deck Components Guide
+
+This guide covers all the slide deck functionality available in the Phoenix Rooivalk documentation system. These components enable rich, interactive presentations that can be viewed inline, printed, exported to PowerPoint, or presented in full-screen mode.
+
+---
+
+## Quick Start
+
+```tsx
+import { SlideDeck, SlideSection } from "@site/src/components/Downloads";
+
+<SlideDeck title="My Presentation" duration={5} audience="Investors">
+  <SlideSection
+    number={1}
+    title="Introduction"
+    duration={60}
+    icon="🎯"
+    keyPoints={["First point", "Second point"]}
+    script="Speaker notes go here..."
+  />
+</SlideDeck>
+```
+
+---
+
+## Components Overview
+
+| Component | Purpose | Features |
+|-----------|---------|----------|
+| `SlideDeck` | Container for inline slides | Print support, duration tracking |
+| `SlideSection` | Individual slide content | Rich layouts, animations |
+| `SlideDeckDownload` | Modal-based slide viewer | PowerPoint export, presentation mode |
+| `PresentationMode` | Full-screen presenter | Timer, thumbnails, keyboard shortcuts |
+| `SlideChart` | Data visualizations | Bar, line, pie, donut charts |
+
+---
+
+## Rich Text Formatting
+
+Use markdown-style formatting in key points for visual emphasis:
+
+```tsx
+keyPoints={[
+  "**Bold text** for emphasis",
+  "*Italic text* for subtle emphasis",
+  "Combined **bold** and *italic* formatting",
+  "Regular text without formatting"
+]}
+```
+
+### Rendering
+
+- `**text**` renders as **bold**
+- `*text*` renders as *italic*
+- Formatting works in key points, column content, and nested bullets
+
+---
+
+## Nested Bullets (Sub-Points)
+
+For complex information, use `KeyPoint` objects with sub-points:
+
+```tsx
+keyPoints={[
+  {
+    text: "**Main point with details**",
+    subPoints: [
+      "First supporting detail",
+      "Second supporting detail",
+      "*Italicized* sub-point"
+    ]
+  },
+  "Simple string point (no sub-bullets)"
+]}
+```
+
+Sub-points render as indented secondary bullets beneath the main point.
+
+---
+
+## Slide Layouts
+
+### Default Layout
+
+Standard bullet-point slide with key points.
+
+```tsx
+<SlideSection
+  number={1}
+  title="Standard Slide"
+  keyPoints={["Point 1", "Point 2", "Point 3"]}
+/>
+```
+
+### Title-Only Layout
+
+Section dividers or emphasis slides with minimal content.
+
+```tsx
+<SlideSection
+  number={1}
+  title="Section Title"
+  layout="title-only"
+  keyPoints={["Optional subtitle or tagline"]}
+/>
+```
+
+### Two-Column Layout
+
+Side-by-side comparisons (great for vs. competitors, before/after, etc.).
+
+```tsx
+<SlideSection
+  number={1}
+  title="Comparison"
+  layout="two-column"
+  leftColumnTitle="Our Solution"
+  leftColumn={[
+    "**120-195ms** response",
+    "✅ Full offline capability",
+    "✅ Blockchain evidence"
+  ]}
+  rightColumnTitle="Competitors"
+  rightColumn={[
+    "**2-5 seconds** response",
+    "❌ Cloud dependent",
+    "❌ No evidence trail"
+  ]}
+  keyPoints={[]} // Empty for pure two-column
+/>
+```
+
+### Quote Layout
+
+For testimonials or impactful quotes.
+
+```tsx
+<SlideSection
+  number={1}
+  title="What Customers Say"
+  layout="quote"
+  keyPoints={["This solution changed everything for our airport security."]}
+  quoteAuthor="Airport Security Director"
+/>
+```
+
+### Code Layout
+
+For technical presentations with code examples.
+
+```tsx
+<SlideSection
+  number={1}
+  title="API Example"
+  layout="code"
+  codeBlock={`const response = await fetch('/api/detect');
+const threats = await response.json();`}
+  codeLanguage="typescript"
+  keyPoints={["Simple REST API integration"]}
+/>
+```
+
+### Image Layout
+
+For visual-heavy slides.
+
+```tsx
+<SlideSection
+  number={1}
+  title="System Architecture"
+  layout="image"
+  imageSrc="/img/architecture.png"
+  imageAlt="System architecture diagram"
+  imageCaption="Edge-first processing pipeline"
+  keyPoints={[]}
+/>
+```
+
+---
+
+## Speaker Notes
+
+Add presenter guidance that appears in the script view and presentation mode:
+
+```tsx
+<SlideSection
+  number={1}
+  title="The Problem"
+  keyPoints={["Key stat 1", "Key stat 2"]}
+  script="Full script for the presenter..."
+  speakerNotes="Pause here. Make eye contact. This is the emotional hook."
+/>
+```
+
+- `script`: Full narrative for the slide
+- `speakerNotes`: Quick presenter tips (separate from the full script)
+
+---
+
+## Color Themes
+
+Apply consistent theming across presentations:
+
+```tsx
+<SlideDeckDownload
+  slides={slides}
+  title="Investor Pitch"
+  theme="investor"
+/>
+```
+
+### Available Themes
+
+| Theme | Best For | Colors |
+|-------|----------|--------|
+| `default` | General use | Blue primary |
+| `investor` | Pitch decks | Professional blue |
+| `technical` | Engineering docs | Tech purple |
+| `military` | Defense audiences | Olive/tactical |
+| `light` | Print-friendly | Light backgrounds |
+
+### Custom Colors
+
+```tsx
+customColors={{
+  primary: '#0066CC',
+  secondary: '#4A90D9',
+  accent: '#FF6B00',
+  background: '#1A1A2E'
+}}
+```
+
+---
+
+## Presentation Mode
+
+Full-screen presentation with keyboard controls:
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `→` / `Space` / `PageDown` | Next slide |
+| `←` / `PageUp` | Previous slide |
+| `Home` | First slide |
+| `End` | Last slide |
+| `1-9` | Jump to slide 1-9 |
+| `N` | Toggle speaker notes |
+| `T` | Toggle slide thumbnails |
+| `A` | Toggle bullet animation |
+| `S` | Toggle timer |
+| `R` | Reset timer |
+| `Escape` | Exit presentation |
+
+### Timer & Pacing
+
+The presentation mode includes:
+- **Elapsed time** counter
+- **Target time** based on slide durations
+- **Pacing indicator**: Green (ahead), Yellow (on track), Red (behind)
+
+---
+
+## PowerPoint Export
+
+Slides export to .pptx with:
+
+- All layouts preserved
+- Rich text formatting
+- Color themes applied
+- Speaker notes included
+- Progress bar visualization
+- Branded footer with logo
+- QR code on summary slide (optional)
+
+### Export Options
+
+```tsx
+<SlideDeckDownload
+  slides={slides}
+  title="My Deck"
+  theme="investor"
+  contactUrl="https://phoenixrooivalk.com"
+  contactEmail="info@phoenixrooivalk.com"
+/>
+```
+
+---
+
+## Charts in Slides
+
+Use `SlideChart` for data visualization:
+
+```tsx
+import { SlideChart, createChartData } from "@site/src/components/Downloads";
+
+// In your slide content
+<SlideChart
+  type="bar"
+  data={[
+    { label: "Q1", value: 100 },
+    { label: "Q2", value: 150 },
+    { label: "Q3", value: 200 },
+    { label: "Q4", value: 250 }
+  ]}
+  title="Quarterly Growth"
+  showValues={true}
+  showLegend={true}
+/>
+```
+
+### Chart Types
+
+| Type | Best For |
+|------|----------|
+| `bar` | Comparisons, categories |
+| `line` | Trends over time |
+| `pie` | Part-to-whole relationships |
+| `donut` | Same as pie, with center space |
+
+### Helper Function
+
+```tsx
+// Convert object to chart data
+const data = createChartData({
+  "Military": 1200,
+  "Infrastructure": 600,
+  "Commercial": 400
+});
+```
+
+---
+
+## Slide Templates
+
+Use template functions for common patterns:
+
+```tsx
+import {
+  createStatsSlide,
+  createComparisonSlide,
+  createTimelineSlide,
+  createTeamSlide,
+  autoNumberSlides,
+  buildPresentation
+} from "@site/src/components/Downloads";
+
+// Stats slide
+const stats = createStatsSlide({
+  title: "Key Metrics",
+  stats: [
+    { value: "$2.5B", label: "Market Size" },
+    { value: "23%", label: "CAGR" },
+    { value: "10-40x", label: "Speed Advantage" }
+  ]
+});
+
+// Timeline slide
+const timeline = createTimelineSlide({
+  title: "Roadmap",
+  milestones: [
+    { date: "Q1 2026", event: "Prototype complete" },
+    { date: "Q2 2026", event: "First pilot" },
+    { date: "Q3 2026", event: "Series A" }
+  ]
+});
+
+// Auto-number and build
+const presentation = buildPresentation([
+  stats,
+  timeline,
+  // ... more slides
+], { addThankYou: true });
+```
+
+### Available Templates
+
+| Function | Creates |
+|----------|---------|
+| `createStatsSlide` | Metrics/KPI display |
+| `createComparisonSlide` | Two-column comparison |
+| `createTimelineSlide` | Milestone timeline |
+| `createTeamSlide` | Team member grid |
+| `createTestimonialSlide` | Quote layout |
+| `createCallToActionSlide` | CTA emphasis |
+| `createThankYouSlide` | Closing slide |
+| `createSectionDivider` | Section break |
+| `createCodeSlide` | Code example |
+| `createBeforeAfterSlide` | Transformation comparison |
+
+---
+
+## Using Data Files
+
+Import centralized data values for consistency:
+
+```tsx
+import { MARKET, PERFORMANCE, BLOCKCHAIN } from "@site/src/data/values";
+
+<SlideSection
+  number={1}
+  title="Market Opportunity"
+  keyPoints={[
+    `Current market: **${MARKET.CURRENT}**`,
+    `Response time: **${PERFORMANCE.RESPONSE_TIME}**`,
+    `Blockchain: ${BLOCKCHAIN.PRIMARY_CHAIN}`
+  ]}
+/>
+```
+
+This ensures values stay in sync across all documents when data changes.
+
+---
+
+## Print Optimization
+
+Slides include print-optimized CSS:
+
+- Automatic page breaks between slides
+- Hidden navigation elements
+- Preserved formatting and layouts
+- Optimized for A4/Letter paper
+
+### Print Tips
+
+1. Use `Ctrl/Cmd + P` to open print dialog
+2. Select "Save as PDF"
+3. Enable "Background graphics" for full styling
+4. Set margins to "Minimum" for best results
+
+---
+
+## Best Practices
+
+### Content Guidelines
+
+- **3-5 key points** per slide maximum
+- **One idea** per slide
+- Use **bold** for metrics and key terms
+- Keep bullet text **concise** (1-2 lines)
+
+### Visual Hierarchy
+
+- Use icons (`🎯`, `💰`, `🚀`) for quick recognition
+- Apply two-column layout for comparisons
+- Reserve title-only for section transitions
+
+### Timing
+
+- **30-60 seconds** per content slide
+- **10-15 seconds** for section dividers
+- Total duration should match intended presentation time
+
+### Accessibility
+
+- Always include `script` for screen reader support
+- Use descriptive `title` text
+- Ensure sufficient color contrast in custom themes
+
+---
+
+## Examples in Use
+
+See these pages for real examples:
+
+- [Investor Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck) - Full 16-slide deck
+- [Presentation Materials](/docs/executive/presentation-materials) - 3-minute elevator pitch
+- [Week 48 Progress](/docs/progress/2025/week-48) - Weekly update format
+
+---
+
+## Component Reference
+
+### SlideDeck Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `title` | string | Yes | Presentation title |
+| `duration` | number | Yes | Total duration in minutes |
+| `audience` | string | No | Target audience |
+| `date` | string | No | Presentation date |
+| `children` | ReactNode | Yes | SlideSection components |
+
+### SlideSection Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `number` | number | Yes | Slide number |
+| `title` | string | Yes | Slide title |
+| `duration` | number | Yes | Duration in seconds |
+| `icon` | string | No | Emoji icon |
+| `keyPoints` | (string \| KeyPoint)[] | Yes | Bullet points |
+| `script` | string | No | Full narrative |
+| `speakerNotes` | string | No | Presenter tips |
+| `layout` | SlideLayout | No | Layout type |
+| `leftColumn` | string[] | No | Left column content |
+| `rightColumn` | string[] | No | Right column content |
+| `leftColumnTitle` | string | No | Left column header |
+| `rightColumnTitle` | string | No | Right column header |
+
+### SlideDeckDownload Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `slides` | Slide[] | Yes | Array of slide objects |
+| `title` | string | Yes | Deck title |
+| `duration` | number | Yes | Total minutes |
+| `audience` | string | No | Target audience |
+| `date` | string | No | Date string |
+| `theme` | ColorTheme | No | Color theme |
+| `customColors` | ColorPalette | No | Custom color overrides |
+| `contactUrl` | string | No | Contact website |
+| `contactEmail` | string | No | Contact email |
+
+---
+
+_For questions or feature requests, contact the engineering team._

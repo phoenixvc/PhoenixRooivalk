@@ -83,10 +83,18 @@ counter-drone security.
   duration={30}
   icon="⚠️"
   keyPoints={[
-    "Nov 2025: Brussels Airport closed twice in one night, 54 flights cancelled, UK sent anti-drone troops",
-    "Regional airports need affordable drone defense - enterprise systems cost $1M+ with 5-30s response times",
-    "No solution offers sub-200ms edge AI detection + blockchain evidence chain for prosecution",
+    {
+      text: `**Nov 2025:** Brussels Airport closed *twice in one night*`,
+      subPoints: [
+        "54 flights cancelled, 25,000 passengers affected",
+        "UK deployed RAF anti-drone specialists",
+        `Incidents up **${MARKET.EUROPE_INCIDENTS_2025}**`,
+      ],
+    },
+    `Current C-UAS systems: **$1M+** with **5-30s** response times`,
+    `*No solution* offers sub-200ms AI + blockchain evidence chain`,
   ]}
+  speakerNotes="Start with urgency. The Brussels incident is recent and relatable. Pause after the market gap statement."
   script="This is happening right now. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled, 25,000 passengers affected. The UK sent Royal Air Force anti-drone specialists to help. Regional airports desperately need protection but current systems cost over a million dollars and take 5-30 seconds to respond. No one offers sub-200ms AI detection with immutable blockchain evidence for legal prosecution."
 />
 
@@ -95,11 +103,29 @@ counter-drone security.
   title="Our Solution"
   duration={35}
   icon="🚀"
-  keyPoints={[
-    `SkySnare™: ${SKYSNARE.MSRP} consumer launcher (funds R&D) | AeroNet™: ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
-    `Edge AI: YOLOv9 on Jetson Orin, ${PERFORMANCE.RESPONSE_TIME} response vs 5-30s competitors`,
-    `${BLOCKCHAIN.PRIMARY_CHAIN} blockchain: Immutable evidence chain for legal prosecution`,
+  layout="two-column"
+  leftColumnTitle="Consumer (SkySnare™)"
+  leftColumn={[
+    `**${SKYSNARE.MSRP}** MSRP`,
+    "Sports target launcher",
+    "D2C channel",
+    "*Funds enterprise R&D*",
   ]}
+  rightColumnTitle="Enterprise (AeroNet™)"
+  rightColumn={[
+    `**${AERONET.SETUP_FEE}** + ${AERONET.MONTHLY_FEE}`,
+    "C-UAS defense system",
+    "B2B managed service",
+    "*Court-admissible evidence*",
+  ]}
+  keyPoints={[
+    {
+      text: `**Edge AI:** YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM}`,
+      subPoints: [`${PERFORMANCE.RESPONSE_TIME} response (*10-150x faster*)`],
+    },
+    `**${BLOCKCHAIN.PRIMARY_CHAIN}** blockchain: Immutable evidence for prosecution`,
+  ]}
+  speakerNotes="Emphasize the dual-brand strategy. Consumer funds enterprise development."
   script={`Dual-brand platform. SkySnare is a ${SKYSNARE.MSRP} consumer product that funds enterprise R&D. AeroNet is the enterprise system at ${AERONET.SETUP_FEE} plus ${AERONET.MONTHLY_FEE}. The tech differentiator: Edge AI using YOLOv9 on NVIDIA Jetson with ${PERFORMANCE.RESPONSE_TIME} response time - that's 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for immutable, court-admissible evidence. No one else has this.`}
 />
 
@@ -109,10 +135,20 @@ counter-drone security.
   duration={35}
   icon="💰"
   keyPoints={[
-    `SkySnare: ${SKYSNARE.MSRP} price, ${SKYSNARE.COGS} COGS = ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin`,
-    `CAC: ${SKYSNARE.CAC} via D2C/influencer, Return rate: ${SKYSNARE.RETURN_RATE}`,
-    "In-house net manufacturing from existing Kevlar fiber stock",
+    {
+      text: `**SkySnare™ Economics:**`,
+      subPoints: [
+        `Price: **${SKYSNARE.MSRP}** | COGS: ${SKYSNARE.COGS}`,
+        `Contribution margin: **${SKYSNARE.CONTRIBUTION_MARGIN}**`,
+      ],
+    },
+    `CAC: **${SKYSNARE.CAC}** via D2C/influencer | Return rate: *${SKYSNARE.RETURN_RATE}*`,
+    {
+      text: `**Cost Advantage:** In-house Kevlar net manufacturing`,
+      subPoints: ["60% cost reduction vs imports", "No lead time delays"],
+    },
   ]}
+  speakerNotes="Strong margins are key. Emphasize the in-house manufacturing advantage."
   script={`Unit economics are strong. SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.COGS} cost of goods - that's ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Customer acquisition cost is ${SKYSNARE.CAC} through D2C and influencer channels. Return rate ${SKYSNARE.RETURN_RATE}. We manufacture nets in-house from Kevlar fiber stock we already have.`}
 />
 
@@ -122,10 +158,25 @@ counter-drone security.
   duration={35}
   icon="✅"
   keyPoints={[
-    `${CAPITAL.INVESTMENT_TO_DATE} - CAD complete, prototype 40% assembled`,
-    "CPSC/ASTM certification planned - target March 2026",
-    `Year 1 target: ${SKYSNARE.YEAR_1_UNITS} units shipped, $2.15M revenue`,
+    {
+      text: `**${CAPITAL.INVESTMENT_TO_DATE}** invested so far`,
+      subPoints: [
+        "CAD designs *complete*",
+        "Prototype **40% assembled**",
+        "Net designs tested",
+      ],
+    },
+    "**CPSC/ASTM** certification: Target *March 2026*",
+    {
+      text: `**Year 1 Targets:**`,
+      subPoints: [
+        `${SKYSNARE.YEAR_1_UNITS} SkySnare units shipped`,
+        "$2.15M revenue",
+        "1 enterprise pilot MOU",
+      ],
+    },
   ]}
+  speakerNotes="Show progress with specific numbers. The prototype status demonstrates execution capability."
   script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled, net designs tested. CPSC and ASTM certification planned post-prototype, targeting March 2026. Year 1 target: ${SKYSNARE.YEAR_1_UNITS} consumer units generating $2.15M revenue, plus one enterprise pilot MOU signed.`}
 />
 
@@ -134,15 +185,31 @@ counter-drone security.
   title="The Ask"
   duration={35}
   icon="🤝"
+  layout="title-only"
   keyPoints={[
-    `Raising ${CAPITAL.SEED_ROUND} seed round`,
-    `Use: Product dev ${CAPITAL.SEED_PRODUCT_DEV}, Inventory ${CAPITAL.SEED_INVENTORY}, Marketing ${CAPITAL.SEED_MARKETING}, Insurance ${CAPITAL.SEED_INSURANCE}`,
-    `Runway to ${CAPITAL.SEED_RUNWAY} - clear path to Series A with proven revenue`,
+    `**Raising: ${CAPITAL.SEED_ROUND}** seed round`,
+    "",
+    {
+      text: "**Use of Funds:**",
+      subPoints: [
+        `Product development: ${CAPITAL.SEED_PRODUCT_DEV}`,
+        `Inventory: ${CAPITAL.SEED_INVENTORY}`,
+        `Marketing: ${CAPITAL.SEED_MARKETING}`,
+        `Insurance: ${CAPITAL.SEED_INSURANCE}`,
+      ],
+    },
+    "",
+    `**Runway to ${CAPITAL.SEED_RUNWAY}** → Clear path to Series A`,
   ]}
+  speakerNotes="End with the ask. Be direct about the amount and use of funds. Leave time for questions."
   script={`We're raising ${CAPITAL.SEED_ROUND}. Product development gets ${CAPITAL.SEED_PRODUCT_DEV} for prototype completion and certification. Inventory gets ${CAPITAL.SEED_INVENTORY} for PO facility and initial production. Marketing gets ${CAPITAL.SEED_MARKETING} for D2C launch. Insurance gets ${CAPITAL.SEED_INSURANCE} for ${CAPITAL.LIABILITY_POLICY} product liability. This gives runway to ${CAPITAL.SEED_RUNWAY} with clear path to Series A. Questions?`}
 />
 
 </SlideDeck>
+
+:::tip Slide Deck Features
+These presentations use advanced slide deck features including **rich text**, **layouts**, and **presentation mode**. See the [Slide Deck Guide](/docs/resources/slide-deck-guide) for documentation.
+:::
 
 ---
 
@@ -161,11 +228,22 @@ counter-drone security.
   duration={50}
   icon="🎯"
   keyPoints={[
-    "Nov 2025: Brussels closed twice in one night, 54 flights cancelled, UK sent RAF troops - 4x YoY increase",
-    `Enterprise: ${MARKET.CURRENT} C-UAS market → ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR} (${MARKET.CAGR} CAGR)`,
-    "Current solutions: $1M+, 5-30s response, no evidence chain - Gatwick 2018 perps never caught",
-    `Consumer: ${SKYSNARE.TARGET_MARKET} growing at ${MARKET.OUTDOOR_TOY_CAGR} CAGR funds our R&D`,
+    {
+      text: `**Nov 2025:** Brussels Airport crisis`,
+      subPoints: [
+        "Closed *twice in one night*, 54 flights cancelled",
+        "UK deployed RAF anti-drone specialists",
+        `Incidents up **${MARKET.EUROPE_INCIDENTS_2025}**`,
+      ],
+    },
+    {
+      text: `**Enterprise Market:** ${MARKET.CURRENT} → ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR}`,
+      subPoints: [`**${MARKET.CAGR}** CAGR growth`],
+    },
+    "Current solutions: *$1M+*, **5-30s** response, *no evidence chain*",
+    `**Consumer Market:** ${SKYSNARE.TARGET_MARKET} at ${MARKET.OUTDOOR_TOY_CAGR} CAGR funds R&D`,
   ]}
+  speakerNotes="Start with urgency. Brussels is relatable. Gatwick 2018 is the evidence chain story."
   script={`The threat is real and accelerating. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled. The UK sent Royal Air Force anti-drone specialists. Drone sightings at Kleine Brogel where US nuclear weapons are stored. Incidents are up 4x year-over-year across Europe. The C-UAS market is ${MARKET.CURRENT} growing to ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR}. Current solutions cost over a million dollars, take 5-30 seconds to respond, and have no evidence chain. We solve this.`}
 />
 
@@ -174,12 +252,32 @@ counter-drone security.
   title="Our Solution: AI + Blockchain"
   duration={50}
   icon="🚀"
-  keyPoints={[
-    `Edge AI: YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM} (${HARDWARE.COMPUTE_TOPS}) - ${PERFORMANCE.RESPONSE_TIME} response`,
-    `Blockchain: ${BLOCKCHAIN.PRIMARY_CHAIN} evidence chain - ${BLOCKCHAIN.COST_PER_TX}/tx, ${BLOCKCHAIN.FINALITY} finality`,
-    `SkySnare™ ${SKYSNARE.MSRP} consumer | AeroNet™ ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
-    "Only C-UAS with court-admissible, tamper-proof evidence for prosecution",
+  layout="two-column"
+  leftColumnTitle="Edge AI"
+  leftColumn={[
+    `**YOLOv9** on ${HARDWARE.COMPUTE_PLATFORM}`,
+    `${HARDWARE.COMPUTE_TOPS} compute`,
+    `**${PERFORMANCE.RESPONSE_TIME}** response`,
+    "*10-150x faster* than competitors",
   ]}
+  rightColumnTitle="Blockchain Evidence"
+  rightColumn={[
+    `**${BLOCKCHAIN.PRIMARY_CHAIN}** chain`,
+    `${BLOCKCHAIN.COST_PER_TX}/tx`,
+    `${BLOCKCHAIN.FINALITY} finality`,
+    "*Court-admissible* proof",
+  ]}
+  keyPoints={[
+    {
+      text: "**Dual-Brand Platform:**",
+      subPoints: [
+        `SkySnare™: ${SKYSNARE.MSRP} consumer (funds R&D)`,
+        `AeroNet™: ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
+      ],
+    },
+    "*Only* C-UAS with tamper-proof evidence for prosecution",
+  ]}
+  speakerNotes="Emphasize the 10-150x speed advantage. Gatwick 2018 is the evidence story - perps never caught."
   script={`Our tech stack: Edge AI using YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM} delivering ${HARDWARE.COMPUTE_TOPS} - that's ${PERFORMANCE.RESPONSE_TIME} response time, 10-150x faster than cloud-dependent competitors. Every detection, every capture logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain at ${BLOCKCHAIN.COST_PER_TX} per transaction with ${BLOCKCHAIN.FINALITY} finality. Immutable evidence chain for court prosecution - remember, Gatwick perps were never caught because there was no evidence. SkySnare at ${SKYSNARE.MSRP} funds R&D, AeroNet at ${AERONET.SETUP_FEE} plus ${AERONET.MONTHLY_FEE} is the enterprise product.`}
 />
 
@@ -189,11 +287,23 @@ counter-drone security.
   duration={45}
   icon="✅"
   keyPoints={[
-    `${CAPITAL.INVESTMENT_TO_DATE} in R&D`,
-    "CAD designs complete, prototype 40% assembled",
-    "Net designs tested with existing Kevlar fiber stock",
-    "CPSC/ASTM certification planned (target Mar 2026)",
+    {
+      text: `**${CAPITAL.INVESTMENT_TO_DATE}** invested in R&D`,
+      subPoints: [
+        "CAD designs *complete*",
+        "Prototype **40% assembled**",
+      ],
+    },
+    {
+      text: "**In-house Manufacturing:**",
+      subPoints: [
+        "Net designs tested with existing Kevlar stock",
+        "60% cost reduction vs imports",
+      ],
+    },
+    "**CPSC/ASTM** certification: Target *March 2026*",
   ]}
+  speakerNotes="Show execution capability. The Kevlar manufacturing is a key differentiator."
   script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled. Net designs tested using Kevlar fiber stock we already have. CPSC and ASTM certification planned post-prototype, targeting March 2026.`}
 />
 
@@ -202,12 +312,28 @@ counter-drone security.
   title="The Team"
   duration={40}
   icon="👥"
-  keyPoints={[
-    `${TEAM.COMBINED_EXPERIENCE} combined experience across engineering, defense, and finance`,
-    `${TEAM.CTO_NAME} (CTO): ${TEAM.CTO_BACKGROUND}`,
-    `${TEAM.CEO_NAME} (CEO): ${TEAM.CEO_BACKGROUND}`,
-    "4 co-founders with complementary skills, full-time committed",
+  layout="two-column"
+  leftColumnTitle="Technical"
+  leftColumn={[
+    `**${TEAM.CTO_NAME}** (CTO)`,
+    "Edge AI/ML, System Architecture",
+    "15+ years fintech & platforms",
+    `**${TEAM.MEMBER_3_NAME}** (Hardware)`,
+    "Embedded systems, 15+ years",
   ]}
+  rightColumnTitle="Business"
+  rightColumn={[
+    `**${TEAM.CEO_NAME}** (CEO)`,
+    "Energy, Mining, Defense",
+    "R500M+ portfolio management",
+    `**${TEAM.MEMBER_4_NAME}** (CFO)`,
+    "Investment banking, PE",
+  ]}
+  keyPoints={[
+    `**${TEAM.COMBINED_EXPERIENCE}** combined experience`,
+    "**4 co-founders**, full-time committed, *${CAPITAL.INVESTMENT_TO_DATE} invested*",
+  ]}
+  speakerNotes="Highlight complementary skills. All founders are full-time and have skin in the game."
   script={`Let me introduce the team. ${TEAM.COMBINED_EXPERIENCE} combined experience. ${TEAM.CTO_NAME} is our CTO - ${TEAM.CTO_BACKGROUND}. ${TEAM.CEO_NAME} is CEO - ${TEAM.CEO_BACKGROUND}. We also have ${TEAM.MEMBER_3_NAME} and ${TEAM.MEMBER_4_NAME} on the founding team. All co-founders are full-time committed with ${CAPITAL.INVESTMENT_TO_DATE} invested.`}
 />
 
@@ -216,12 +342,32 @@ counter-drone security.
   title="Business Model & Unit Economics"
   duration={45}
   icon="💰"
-  keyPoints={[
-    `SkySnare D2C: ${SKYSNARE.MSRP} MSRP, ${SKYSNARE.COGS} COGS, ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin`,
-    `AeroNet: ${AERONET.SETUP_FEE} setup + ${AERONET.MONTHLY_FEE} recurring`,
-    `Year 1 target: $2.15M revenue from ${SKYSNARE.YEAR_1_UNITS} consumer units`,
-    "58-64% gross margin on consumer, 44% on enterprise",
+  layout="two-column"
+  leftColumnTitle="SkySnare™ (D2C)"
+  leftColumn={[
+    `MSRP: **${SKYSNARE.MSRP}**`,
+    `COGS: ${SKYSNARE.COGS}`,
+    `Margin: **${SKYSNARE.CONTRIBUTION_MARGIN}**`,
+    `CAC: ${SKYSNARE.CAC}`,
   ]}
+  rightColumnTitle="AeroNet™ (B2B)"
+  rightColumn={[
+    `Setup: **${AERONET.SETUP_FEE}**`,
+    `Monthly: ${AERONET.MONTHLY_FEE}`,
+    `Gross margin: **44%**`,
+    "*Recurring revenue*",
+  ]}
+  keyPoints={[
+    {
+      text: `**Year 1 Targets:**`,
+      subPoints: [
+        `${SKYSNARE.YEAR_1_UNITS} SkySnare units`,
+        "$2.15M total revenue",
+      ],
+    },
+    "**58-64%** gross margin consumer | **44%** enterprise",
+  ]}
+  speakerNotes="Strong unit economics. Consumer provides near-term revenue, enterprise provides scale."
   script={`SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.COGS} cost of goods - that's ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Customer acquisition is ${SKYSNARE.CAC}. AeroNet is ${AERONET.SETUP_FEE} setup plus ${AERONET.MONTHLY_FEE} managed service. Year 1 target is $2.15M revenue from ${SKYSNARE.YEAR_1_UNITS} consumer units.`}
 />
 
@@ -230,12 +376,32 @@ counter-drone security.
   title="The Ask: Seed Round"
   duration={50}
   icon="🤝"
+  layout="title-only"
   keyPoints={[
-    `Raising: ${CAPITAL.SEED_ROUND} seed round`,
-    `Use of funds: Product dev ${CAPITAL.SEED_PRODUCT_DEV}, Inventory ${CAPITAL.SEED_INVENTORY}, Marketing ${CAPITAL.SEED_MARKETING}`,
-    `Runway to ${CAPITAL.SEED_RUNWAY} with clear Series A path`,
-    `Milestones: Certification, ${SKYSNARE.YEAR_1_UNITS} units shipped, enterprise pilot MOU`,
+    `**Raising: ${CAPITAL.SEED_ROUND}** seed round`,
+    "",
+    {
+      text: "**Use of Funds:**",
+      subPoints: [
+        `Product development: ${CAPITAL.SEED_PRODUCT_DEV}`,
+        `Inventory: ${CAPITAL.SEED_INVENTORY}`,
+        `Marketing: ${CAPITAL.SEED_MARKETING}`,
+        `Insurance: ${CAPITAL.SEED_INSURANCE}`,
+      ],
+    },
+    "",
+    {
+      text: `**Milestones** (Runway to ${CAPITAL.SEED_RUNWAY}):`,
+      subPoints: [
+        "CPSC/ASTM certification complete",
+        `${SKYSNARE.YEAR_1_UNITS} units shipped`,
+        "Enterprise pilot MOU signed",
+      ],
+    },
+    "",
+    "**Clear path to Series A** with proven revenue traction",
   ]}
+  speakerNotes="End strong. Be clear about the ask and milestones. Leave time for Q&A."
   script={`We're raising ${CAPITAL.SEED_ROUND}. Funds go to product development at ${CAPITAL.SEED_PRODUCT_DEV}, inventory at ${CAPITAL.SEED_INVENTORY}, and marketing at ${CAPITAL.SEED_MARKETING}. This gives runway to ${CAPITAL.SEED_RUNWAY}. Milestones are certification complete, ${SKYSNARE.YEAR_1_UNITS} units shipped, and enterprise pilot MOU signed. Series A follows with proven traction.`}
 />
 
