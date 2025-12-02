@@ -282,7 +282,7 @@ export const demoPitchSlides: Slide[] = [
           "Edge AI/ML architecture",
           "B.Eng (Stellenbosch)",
         ],
-        color: "#1e40af",
+        color: "#f97316", // Phoenix Orange
       },
       {
         initials: "MR",
@@ -293,7 +293,7 @@ export const demoPitchSlides: Slide[] = [
           "R500M+ portfolio mgmt",
           "MBA (GIBS)",
         ],
-        color: "#7c3aed",
+        color: "#ea580c", // Dark Orange
       },
       {
         initials: "PL",
@@ -304,7 +304,7 @@ export const demoPitchSlides: Slide[] = [
           "Medical devices (Snuza)",
           "B.Eng (Stellenbosch)",
         ],
-        color: "#059669",
+        color: "#fb923c", // Light Orange
       },
       {
         initials: "EM",
@@ -315,7 +315,7 @@ export const demoPitchSlides: Slide[] = [
           "Head Quant (Deloitte)",
           "Phoenix VC founder",
         ],
-        color: "#dc2626",
+        color: "#fbbf24", // Amber
       },
     ],
     keyPoints: [
