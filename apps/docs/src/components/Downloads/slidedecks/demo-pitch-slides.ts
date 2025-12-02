@@ -266,55 +266,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 8: FINANCIALS & INVESTMENT ASK
+  // SLIDE 8: TEAM
   // ==========================================
   {
     number: 8,
-    title: "The Ask: $500K-$1M Seed Round",
-    duration: 60,
-    icon: "💰",
-    layout: "image",
-    image: "/img/investment-breakdown.svg",
-    imageCaption: "18-month runway with clear milestones to Series A",
-    keyPoints: [
-      {
-        text: "**Investment Allocation:**",
-        subPoints: [
-          "**40%** R&D / Engineering - AI/ML, edge processing, firmware",
-          "**25%** Hardware / Manufacturing - prototypes, tooling, BOM",
-          "**15%** Sales & Marketing - D2C launch, trade shows, pilots",
-          "**10%** Operations - legal, IP protection, infrastructure",
-          "**10%** Certification - CPSC, ASTM, CE marking",
-        ],
-      },
-      {
-        text: "**18-Month Runway to Series A:**",
-        subPoints: [
-          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
-          "**Q3-Q4 2026**: Scale to $500K ARR, 3-5 enterprise deals",
-          "**Series A ready** with proven revenue and market traction",
-        ],
-      },
-      {
-        text: "**Use of Funds Milestones:**",
-        subPoints: [
-          "Complete prototype → first 100 units",
-          "Achieve certifications → unlock EU/US markets",
-          "Close pilot deals → prove enterprise value",
-        ],
-      },
-    ],
-    speakerNotes:
-      "Be specific about how the money will be used. Investors want to see a clear path to next milestones. Emphasize the 18-month runway and Series A path.",
-    script:
-      "We're raising $500K to $1M in seed funding. Here's exactly how we'll use it: 40% goes to R&D - continuing our AI and edge processing development. 25% to hardware and manufacturing for prototypes and tooling. 15% to sales and marketing for our direct-to-consumer launch and pilot programs. 10% to operations including legal and IP protection. And 10% to certifications that unlock the EU and US markets. This gives us 18 months of runway with clear milestones: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4, and Series A ready with proven traction.",
-  },
-
-  // ==========================================
-  // SLIDE 9: TEAM
-  // ==========================================
-  {
-    number: 9,
     title: "Founding Team: 60+ Years Combined Expertise",
     duration: 45,
     icon: "👥",
@@ -373,6 +328,50 @@ export const demoPitchSlides: Slide[] = [
       "Quick team overview. Emphasize complementary skills and commitment. Don't linger - investors want to know the team is capable, then move on.",
     script:
       "Our founding team brings over 60 years of combined experience. Jurie leads technology with deep AI and systems architecture expertise. Martyn drives business with 20+ years managing major portfolios in energy and defense. Pieter heads hardware with medical device production experience. Eben handles finance with investment banking and private equity background. All four founders are full-time committed with skin in the game.",
+  },
+
+  // ==========================================
+  // SLIDE 9: ROI, FINANCIALS & THE ASK
+  // ==========================================
+  {
+    number: 9,
+    title: "The Ask: $500K-$1M Seed Round",
+    duration: 60,
+    icon: "💰",
+    layout: "image",
+    image: "/img/investment-breakdown.svg",
+    imageCaption: "18-month runway with clear milestones to Series A",
+    keyPoints: [
+      {
+        text: "**Investor ROI Potential:**",
+        subPoints: [
+          "**10-15x return** potential at Series A ($5-8M valuation)",
+          "**25-50x return** at exit (strategic acquisition or IPO)",
+          "Defense sector **M&A activity at record highs**",
+        ],
+      },
+      {
+        text: "**Investment Allocation:**",
+        subPoints: [
+          "**40%** R&D - AI/ML, edge processing, firmware",
+          "**25%** Hardware - prototypes, tooling, manufacturing",
+          "**15%** Sales - D2C launch, trade shows, pilots",
+          "**20%** Ops & Certification - legal, IP, CPSC/ASTM/CE",
+        ],
+      },
+      {
+        text: "**18-Month Runway to Series A:**",
+        subPoints: [
+          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
+          "**Q3-Q4 2026**: Scale to **$500K ARR**, 3-5 enterprise deals",
+          "**Series A ready** with proven revenue and market traction",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Lead with ROI potential - investors want to know the return. Be specific about allocation. Emphasize the 18-month runway and Series A path.",
+    script:
+      "We're raising $500K to $1M in seed funding. Here's the opportunity: at our target Series A valuation of $5 to $8 million, seed investors see 10 to 15x returns. At exit, we're looking at 25 to 50x potential - and defense sector M&A is at record highs. Here's how we allocate the funds: 40% to R&D for AI and edge processing. 25% to hardware for prototypes and manufacturing. 15% to sales for our D2C launch and pilot programs. 20% to operations and certifications. This gives us 18 months of runway: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4 2026, and Series A ready with proven traction.",
   },
 
   // ==========================================
