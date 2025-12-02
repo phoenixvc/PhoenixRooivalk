@@ -109,10 +109,51 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // THE SOLUTION
+  // MARKET & BUSINESS MODEL
   // ==========================================
   {
     number: 4,
+    title: "Market & Business Model",
+    duration: 60,
+    icon: "📊",
+    layout: "image",
+    image: "/img/tam-sam-som.svg",
+    imageCaption: "Counter-drone market growing at 25.1% CAGR to $20.3B by 2030",
+    keyPoints: [
+      {
+        text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
+        subPoints: [
+          "Counter-drone segment growing at **47%** CAGR",
+          "64% of facilities currently *unprotected*",
+        ],
+      },
+      {
+        text: "**Revenue model:** Hardware + SaaS + Services",
+        subPoints: [
+          "Hardware: **60%** (systems $25K-$100K)",
+          "SaaS: **25%** (monitoring, updates)",
+          "Services: **15%** (training, support)",
+        ],
+      },
+      {
+        text: "**Unit economics:**",
+        subPoints: [
+          "Gross margins: **65-70%** hardware, **80%+** software",
+          "CLV:CAC ratio: **6:1 to 10:1**",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Show the market opportunity is massive and growing. The TAM/SAM/SOM diagram makes the opportunity tangible. Emphasize the recurring revenue model.",
+    script:
+      "The counter-drone defense market is $6.64 billion today and growing to over $20 billion by 2030 at 25% CAGR. The counter-drone segment specifically is growing at 47% annually. Our serviceable market is $4.2 billion - regional airports and critical infrastructure that can't afford million-dollar systems. Our revenue model combines hardware sales at 60%, SaaS subscriptions at 25% for monitoring and updates, and professional services at 15%. This gives us strong unit economics with 65-70% gross margins on hardware and over 80% on software, with CLV to CAC ratios of 6 to 10 to 1.",
+  },
+
+  // ==========================================
+  // THE SOLUTION
+  // ==========================================
+  {
+    number: 5,
     title: "Our Solution: SAE Level 4 Autonomous Defense",
     duration: 60,
     icon: "🛡️",
@@ -153,7 +194,7 @@ export const demoPitchSlides: Slide[] = [
   // COMPETITIVE ADVANTAGE
   // ==========================================
   {
-    number: 5,
+    number: 6,
     title: "10-150x Faster Than Competitors",
     duration: 45,
     icon: "🏆",
@@ -185,7 +226,7 @@ export const demoPitchSlides: Slide[] = [
   // TEAM
   // ==========================================
   {
-    number: 6,
+    number: 7,
     title: "Founding Team: 60+ Years Combined Expertise",
     duration: 45,
     icon: "👥",
@@ -250,7 +291,7 @@ export const demoPitchSlides: Slide[] = [
   // CALL TO ACTION
   // ==========================================
   {
-    number: 7,
+    number: 8,
     title: "Let's Defend Critical Infrastructure Together",
     duration: 30,
     icon: "🎯",
@@ -274,7 +315,7 @@ export const demoPitchSlides: Slide[] = [
 
 export const demoPitchMeta = {
   title: "Phoenix Rooivalk: Demo Pitch",
-  duration: 7,
+  duration: 8,
   audience: "Investors, Strategic Partners, Demo Attendees",
   date: "December 2025",
   colorTheme: "investor" as const,
