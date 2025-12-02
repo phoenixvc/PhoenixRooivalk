@@ -154,13 +154,18 @@ function getKeyPointText(point: KeyPoint): string {
 async function getQrCodeUrl(data: string, size = 150): Promise<string> {
   try {
     const QRCode = (await import("qrcode")).default;
-    return await QRCode.toDataURL(data, { width: size });
-  } catch (err) {
-    console.error(
-      "[generatePptx] Failed to generate QR code:",
-      err instanceof Error ? err.message : err,
-    );
-    return "";
+    return await QRCode.toDataURL(data, {
+      width: size,
+      margin: 1,
+      color: {
+        dark: "#000000",
+        light: "#ffffff",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to generate QR code:", error);
+    // Fallback to external API if qrcode package fails
+    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(data)}`;
   }
 }
 
@@ -988,7 +993,7 @@ export async function generatePptx(
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
     const qrUrl = await getQrCodeUrl(qrData, 120);
 
-    // QR code placeholder text (actual QR code would need to be fetched)
+    // QR code header text
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
       y: 5.0,
