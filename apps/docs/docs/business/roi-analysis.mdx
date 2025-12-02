@@ -3,14 +3,18 @@ id: roi-analysis
 title: ROI Analysis
 sidebar_label: ROI Analysis
 difficulty: intermediate
-estimated_reading_time: 6
-points: 15
+timeEstimate: 6
+xpReward: 15
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - business
   - counter-uas
 prerequisites:
   - executive-summary
 ---
+
+import { MARKET, PRICING, PERFORMANCE, MANUFACTURING, FUNDING } from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -32,7 +36,7 @@ metrics.
 - **Revenue Generation**: $842M cumulative revenue
 - **Total Investment**: $145M across all phases
 - **Net Profit**: $697M after all costs
-- **Payback Period**: 18 months from first revenue
+- **Payback Period**: {MANUFACTURING.PAYBACK_PERIOD} from first revenue
 - **IRR**: 89% internal rate of return
 - **NPV**: $456M net present value (10% discount rate)
 
@@ -76,7 +80,7 @@ metrics.
 
 **Hardware Sales (60% of revenue)**
 
-- **Base Systems**: $25k-$100k per unit
+- **Base Systems**: {PRICING.SYSTEM_RANGE} per unit
 - **Sensor Upgrades**: $5k-$15k per additional sensor
 - **Annual Volume**: 2,000-8,000 units
 - **Revenue Contribution**: $50M-$320M annually
@@ -168,8 +172,8 @@ metrics.
 **Market Differentiation**
 
 - **Technology Leadership**: AI-powered autonomous operations
-- **Performance Advantage**: Sub-200ms response times
-- **Cost Effectiveness**: 40% lower total cost of ownership
+- **Performance Advantage**: Sub-200ms response times ({PERFORMANCE.RESPONSE_TIME})
+- **Cost Effectiveness**: {MANUFACTURING.COST_REDUCTION} lower total cost of ownership
 - **Regulatory Compliance**: Full ITAR and DoD compliance
 - **Blockchain Integration**: Immutable evidence and audit trails
 
@@ -274,7 +278,7 @@ metrics.
 **Internal Rate of Return (IRR)**
 
 - **IRR**: 89%
-- **Payback Period**: 18 months
+- **Payback Period**: {MANUFACTURING.PAYBACK_PERIOD}
 - **NPV (10% discount)**: $456M
 - **NPV (15% discount)**: $312M
 
@@ -357,7 +361,5 @@ establishing market leadership in the counter-drone defense industry.
 ---
 
 _This document contains confidential financial information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
-
-_Context improved by Giga AI_

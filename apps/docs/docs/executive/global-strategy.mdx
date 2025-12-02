@@ -3,17 +3,21 @@ id: global-strategy
 title: Global Strategy
 sidebar_label: Global Strategy
 difficulty: intermediate
-estimated_reading_time: 8
-points: 15
+timeEstimate: 8
+xpReward: 15
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - executive
   - counter-uas
 ---
 
+import { MARKET, HARDWARE, BLOCKCHAIN, MANUFACTURING, TEAM, PRICING, FUNDING, PERFORMANCE, CAPITAL } from "@site/src/data/values";
+
 ## Executive Summary: Dual Entity Strategy for Global Defense Markets
 
 Phoenix Rooivalk represents a next-generation counter-drone defense system
-operating under a dual entity structure: Delaware C-Corp for US/ITAR markets and
+operating under a dual entity structure: {TEAM.COMPANY_STRUCTURE} for US/ITAR markets and
 South African entity for global non-ITAR markets. The innovative multi-part
 architecture featuring ground rovers (GROVER), fiber-tethered drone motherships,
 autonomous swarm dispatch, and blockchain-anchored evidence provides unique
@@ -21,14 +25,14 @@ capabilities unavailable in current market solutions.
 
 ### Strategic Advantages of Dual Entity Structure
 
-**US Entity (Delaware C-Corp)**
+**US Entity ({TEAM.COMPANY_STRUCTURE})**
 
 - ITAR compliance for US DoD contracts
 - Direct access to US defense market
 - Enhanced credibility with US government customers
 - Full compliance with US export controls
 
-**South African Entity (Planned Q2 2026)**
+**South African Entity (Planned {TEAM.SECONDARY_ENTITY})**
 
 - Non-ITAR jurisdiction for global markets
 - Faster export to 140+ countries without US approval
@@ -55,14 +59,14 @@ capabilities unavailable in current market solutions.
 
 ### Regional Market Opportunities
 
-#### Europe (€3.2B by 2030, 24% CAGR)
+#### Europe ({MARKET.EUROPE_2030} by 2030, {MARKET.EUROPE_CAGR} CAGR)
 
 - **NATO Standardization**: Interoperability requirements driving adoption
-- **EU Funding**: European Defence Fund (€8B 2021-2027)
+- **EU Funding**: European Defence Fund ({MARKET.EU_DEFENCE_FUND})
 - **Key Markets**: Poland, Baltic States, Romania (Russian border concerns)
 - **Regulatory Advantage**: CE marking simpler than US FCC/FAA approval
 
-#### Middle East & Africa ($1.8B by 2030, 28% CAGR)
+#### Middle East & Africa ({MARKET.MIDDLE_EAST_2030} by 2030, {MARKET.MIDDLE_EAST_CAGR} CAGR)
 
 - **Highest Growth Rate**: Globally due to regional conflicts
 - **Key Markets**: Saudi Arabia, UAE investing heavily in autonomous systems
@@ -70,14 +74,14 @@ capabilities unavailable in current market solutions.
   partnerships
 - **No ITAR Restrictions**: Enable direct sales without US approval
 
-#### Asia-Pacific ($3.5B by 2030, 26% CAGR)
+#### Asia-Pacific ({MARKET.ASIA_PACIFIC_2030} by 2030, 26% CAGR)
 
 - **India's Make in India**: Initiative favors regional suppliers
 - **Australian Defence**: Requiring sovereign capability
 - **Japan Defense Spending**: Increasing to 2% GDP
 - **Non-Aligned Status**: Enables sales to diverse nations
 
-#### South Africa Domestic ($120M by 2030)
+#### South Africa Domestic ({MARKET.SOUTH_AFRICA_2030} by 2030)
 
 - **Critical Infrastructure**: Protection for Eskom, Transnet
 - **Mining Operations**: Security requirements
@@ -135,7 +139,7 @@ capabilities unavailable in current market solutions.
 
 **Manufacturing Strategy**
 
-- **In-House Advantages**: IP control, rapid iteration, 40% cost reduction at
+- **In-House Advantages**: IP control, rapid iteration, {MANUFACTURING.COST_REDUCTION} cost reduction at
   scale
 - **Hybrid Model**: Manufacture frames/integration in-house, source
   motors/electronics from established suppliers
@@ -148,16 +152,16 @@ capabilities unavailable in current market solutions.
 
 **Options Evaluated**
 
-1. **Solana** - 3000+ TPS, $0.00025/transaction, 400ms finality
-2. **Polygon** - 7000 TPS, $0.01/transaction, 2-3 second finality
-3. **Hedera Hashgraph** - 10000 TPS, $0.0001/transaction, 3-5 second finality
+1. **{BLOCKCHAIN.PRIMARY_CHAIN}** - {BLOCKCHAIN.TPS_REAL_WORLD} TPS, {BLOCKCHAIN.COST_PER_TX}/transaction, {BLOCKCHAIN.FINALITY} finality
+2. **Polygon** - 7000 TPS, {BLOCKCHAIN.POLYGON_COST}/transaction, 2-3 second finality
+3. **Hedera Hashgraph** - 10000 TPS, {BLOCKCHAIN.HEDERA_COST}/transaction, 3-5 second finality
 4. **Private Chain** - Unlimited TPS, no transaction cost, instant finality
 
 **Decision: Hybrid Approach**
 
 - Hedera for public evidence anchoring (lowest cost, highest throughput)
 - Private chain for classified operations
-- Solana for US market compliance where required
+- {BLOCKCHAIN.PRIMARY_CHAIN} for US market compliance where required
 
 **Rationale**: Hedera's governance council includes Boeing, IBM, and Google
 providing enterprise credibility. Non-US jurisdiction aligns with South African
@@ -183,14 +187,14 @@ sovereignty requirements.
 
 **Options Evaluated**
 
-1. **NVIDIA Jetson AGX Orin** - 275 TOPS, established ecosystem, $1,999
+1. **{HARDWARE.COMPUTE_PLATFORM}** - {HARDWARE.COMPUTE_TOPS}, established ecosystem, $1,999
 2. **Qualcomm RB5** - 15 TOPS, 5G integrated, $449
 3. **Intel NUC Extreme** - x86 architecture, higher power, $2,500
 4. **Hailo-15** - 20 TOPS, lowest power, $250
 
 **Decision: Tiered Deployment**
 
-- Jetson AGX Orin for mothership (maximum performance)
+- {HARDWARE.COMPUTE_PLATFORM} for mothership (maximum performance)
 - Hailo-15 for interceptor drones (power efficiency)
 - Qualcomm RB5 for ground station (5G connectivity)
 
@@ -216,10 +220,10 @@ sovereignty requirements.
 
 **Production Targets**
 
-- Year 1: 10 complete systems (prototype/demonstration)
-- Year 2: 50 systems (early customers)
-- Year 3: 200 systems (scale production)
-- Year 4+: 500+ systems with automated manufacturing
+- Year 1: {MANUFACTURING.YEAR_1_SYSTEMS} complete systems (prototype/demonstration)
+- Year 2: {MANUFACTURING.YEAR_2_SYSTEMS} systems (early customers)
+- Year 3: {MANUFACTURING.YEAR_3_SYSTEMS} systems (scale production)
+- Year 4+: {MANUFACTURING.YEAR_4_SYSTEMS} systems with automated manufacturing
 
 ### Sourced Components Strategy
 
@@ -240,17 +244,17 @@ sovereignty requirements.
 
 **In-House Manufacturing Investment**
 
-- Facility setup: R50M ($3.3M)
-- Equipment and tooling: R30M ($2M)
-- Working capital: R20M ($1.3M)
-- **Total: R100M ($6.6M)**
+- Facility setup: {MANUFACTURING.FACILITY_SETUP}
+- Equipment and tooling: {MANUFACTURING.EQUIPMENT_TOOLING}
+- Working capital: {MANUFACTURING.WORKING_CAPITAL}
+- **Total: {MANUFACTURING.TOTAL_INVESTMENT}**
 
 **Projected Unit Economics at 200 Units/Year**
 
-- In-house cost: R850,000 ($56,000) per complete system
-- Outsourced cost: R1,400,000 ($93,000) per system
-- Gross margin improvement: 40% to 65%
-- Payback period: 18 months
+- In-house cost: {MANUFACTURING.INHOUSE_COST} ({PRICING.INHOUSE_COST_USD}) per complete system
+- Outsourced cost: {MANUFACTURING.OUTSOURCED_COST} ($93,000) per system
+- Gross margin improvement: {MANUFACTURING.COST_REDUCTION} to {PRICING.GROSS_MARGIN}
+- Payback period: {MANUFACTURING.PAYBACK_PERIOD}
 
 ---
 
@@ -328,21 +332,21 @@ sovereignty requirements.
 
 ### Capital Requirements
 
-**Total Funding Needed: R500M ($33M)**
+**Total Funding Needed: {CAPITAL.TOTAL_FUNDING_ZAR} ({CAPITAL.TOTAL_FUNDING_USD})**
 
-- Product development: R150M
-- Manufacturing setup: R100M
-- Certification/testing: R50M
-- Sales/marketing: R50M
-- Working capital: R150M
+- Product development: {CAPITAL.PRODUCT_DEVELOPMENT}
+- Manufacturing setup: {CAPITAL.MANUFACTURING_SETUP}
+- Certification/testing: {CAPITAL.CERTIFICATION_TESTING}
+- Sales/marketing: {CAPITAL.SALES_MARKETING}
+- Working capital: {CAPITAL.WORKING_CAPITAL}
 
 **Funding Sources**
 
-- IDC manufacturing loan: R100M
-- DTI/Armscor grants: R50M
-- Strategic investor: R200M
-- Founders/angels: R50M
-- Export credit: R100M
+- IDC manufacturing loan: {CAPITAL.IDC_MANUFACTURING_LOAN}
+- DTI/Armscor grants: {CAPITAL.DTI_ARMSCOR_GRANTS}
+- Strategic investor: {CAPITAL.STRATEGIC_INVESTOR}
+- Founders/angels: {CAPITAL.FOUNDERS_ANGELS}
+- Export credit: {CAPITAL.EXPORT_CREDIT}
 
 ---
 
@@ -359,7 +363,7 @@ sourcing optimizes IP protection while managing capital requirements.
 Multi-modal technology choices for blockchain, AI, communication, and computing
 provide resilience through redundancy while controlling costs.
 
-With proper execution, Phoenix Rooivalk can capture 5-15% of the $15B global
+With proper execution, Phoenix Rooivalk can capture 5-15% of the {MARKET.PROJECTED} global
 counter-drone market by 2030, generating R3-5B in annual revenue while
 establishing South Africa as a leader in autonomous defense systems.
 
@@ -378,7 +382,5 @@ global defense technology leader from Africa.
 ---
 
 _This document contains confidential strategic information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
-
-_Context improved by Giga AI_

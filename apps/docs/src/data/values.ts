@@ -391,6 +391,39 @@ export const MANUFACTURING = {
   PAYBACK_PERIOD: "18 months",
 };
 
+/** Capital Requirements */
+export const CAPITAL = {
+  // Total funding needed
+  TOTAL_FUNDING_ZAR: "R500M",
+  TOTAL_FUNDING_USD: "$33M",
+
+  // Allocation breakdown (ZAR)
+  PRODUCT_DEVELOPMENT: "R150M",
+  MANUFACTURING_SETUP: "R100M",
+  CERTIFICATION_TESTING: "R50M",
+  SALES_MARKETING: "R50M",
+  WORKING_CAPITAL: "R150M",
+
+  // Funding sources
+  IDC_MANUFACTURING_LOAN: "R100M",
+  DTI_ARMSCOR_GRANTS: "R50M",
+  STRATEGIC_INVESTOR: "R200M",
+  FOUNDERS_ANGELS: "R50M",
+  EXPORT_CREDIT: "R100M",
+
+  // Seed round
+  SEED_ROUND: "$1.5M",
+  SEED_RUNWAY: "April 30, 2027",
+
+  // Use of seed funds (percentages)
+  SEED_PRODUCT_DEV: "40%",
+  SEED_INVENTORY: "20%",
+  SEED_MARKETING: "20%",
+  SEED_INSURANCE: "10%",
+  SEED_COMPLIANCE: "5%",
+  SEED_OPERATIONS: "5%",
+};
+
 /** Net Specifications */
 export const NETS = {
   // Air-to-Air Interceptor Net
@@ -442,4 +475,5 @@ export const ALL_VALUES = {
   RKV_M,
   MANUFACTURING,
   NETS,
+  CAPITAL,
 };
