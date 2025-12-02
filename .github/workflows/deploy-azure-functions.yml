@@ -107,14 +107,24 @@ jobs:
 
           # Check required variables
           PRESENT_VARS=""
+          MISCONFIG_WARNINGS=""
+          
+          # Check AZURE_FUNCTIONAPP_NAME
           if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
             MISSING_VARS="${MISSING_VARS}AZURE_FUNCTIONAPP_NAME, "
             CAN_DEPLOY="false"
+            
+            # Check if it was mistakenly set as a secret
+            if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+              MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
+              echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a secret but should be a variable. Delete the secret and set it as a variable instead."
+            fi
           else
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_FUNCTIONAPP_NAME, "
             PRESENT_VARS="${PRESENT_VARS}AZURE_FUNCTIONAPP_NAME, "
           fi
 
+          # Check AZURE_AI_DEPLOYMENT_NAME
           if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
@@ -122,8 +132,16 @@ jobs:
             PRESENT_VARS="${PRESENT_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
           else
-            MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME, "
-            # Warning only - has default
+            # Check for common typos
+            if [ -n "${{ vars.vAZURE_AI_DEPLOYMENT_NAME }}" ]; then
+              MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME (found as vAZURE_AI_DEPLOYMENT_NAME), "
+              MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  Found vAZURE_AI_DEPLOYMENT_NAME but it should be AZURE_AI_DEPLOYMENT_NAME (remove the 'v' prefix)"
+              echo "::error::Variable name typo detected: vAZURE_AI_DEPLOYMENT_NAME should be AZURE_AI_DEPLOYMENT_NAME"
+              CAN_DEPLOY="false"
+            else
+              MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME, "
+              # Warning only - has default
+            fi
           fi
 
           # Output results
@@ -139,6 +157,20 @@ jobs:
           if [ "$CAN_DEPLOY" = "false" ]; then
             echo "## ❌ Infrastructure Validation Failed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Show misconfiguration warnings first if any
+            if [ -n "$MISCONFIG_WARNINGS" ]; then
+              echo "### ⚠️ Configuration Issues Detected:" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo -e "$MISCONFIG_WARNINGS" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "**Fix these issues:**" >> $GITHUB_STEP_SUMMARY
+              echo "1. Delete incorrectly typed secrets/variables in Settings → Secrets and variables → Actions" >> $GITHUB_STEP_SUMMARY
+              echo "2. Add them with the correct name and type (Secret vs Variable)" >> $GITHUB_STEP_SUMMARY
+              echo "3. See \`.github/AZURE_SETUP.md\` for the complete list of correct names" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+            fi
+            
             if [ -n "$PRESENT_SECRETS" ]; then
               echo "### ✅ Configured Secrets:" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
