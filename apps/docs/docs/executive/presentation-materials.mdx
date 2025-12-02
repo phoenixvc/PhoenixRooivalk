@@ -62,16 +62,16 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
 
 <SlideSection
   number={1}
-  title="Two Markets, One Platform"
+  title="The Crisis & Our Solution"
   duration={40}
   icon="🎯"
   keyPoints={[
-    `Consumer: ${SKYSNARE.TARGET_MARKET} growing ${MARKET.OUTDOOR_TOY_CAGR}`,
-    `Enterprise: ${MARKET.CURRENT} C-UAS → ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR}`,
-    `SkySnare™: ${SKYSNARE.MSRP} sports trainer`,
-    `AeroNet™: ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} security`,
+    "Nov 2024: Brussels 8-day closure, Poland 4 airports, Denmark drone ban - 4x YoY increase",
+    `Edge AI: YOLOv9 on Jetson Orin - ${PERFORMANCE.RESPONSE_TIME} vs 5-30s competitors`,
+    `${BLOCKCHAIN.PRIMARY_CHAIN} blockchain: Immutable evidence chain (Gatwick 2018 perps never caught)`,
+    `SkySnare™ ${SKYSNARE.MSRP} funds R&D | AeroNet™ ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
   ]}
-  script={`We're building a dual-brand platform. SkySnare serves a ${SKYSNARE.TARGET_MARKET} consumer market growing at ${MARKET.OUTDOOR_TOY_CAGR}. AeroNet addresses a ${MARKET.CURRENT} counter-drone market growing to ${MARKET.PROJECTED}. Same core technology, two completely separate brands.`}
+  script={`Europe is in crisis. November 2024: Brussels closed 8 days, Poland shut 4 airports, Denmark banned civilian drones. Incidents up 4x year-over-year. Our solution: Edge AI with YOLOv9 on NVIDIA Jetson - ${PERFORMANCE.RESPONSE_TIME} response, 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for court-admissible evidence. Remember Gatwick 2018? 140,000 passengers stranded, perps never caught. We fix that.`}
 />
 
 <SlideSection
@@ -129,14 +129,23 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
 - Monthly: {AERONET.MONTHLY_FEE}
 - Gross Margin: 44%
 
-### Technology Advantage
+### Technology Advantage (For AI/Blockchain Investors)
 
 | Metric | Phoenix Rooivalk | Competitors |
 |--------|------------------|-------------|
-| Response Time | {PERFORMANCE.RESPONSE_TIME} | 5-30 seconds |
-| Detection | {PERFORMANCE.ACCURACY} | 85-95% |
-| Offline | Full autonomy | Cloud-dependent |
-| Evidence | {BLOCKCHAIN.PRIMARY_CHAIN} blockchain | None |
+| **Response Time** | {PERFORMANCE.RESPONSE_TIME} | 5-30 seconds |
+| **Detection Model** | YOLOv9 (mAP 95.7%) | Legacy CV |
+| **Hardware** | {HARDWARE.COMPUTE_PLATFORM} ({HARDWARE.COMPUTE_TOPS}) | Cloud-dependent |
+| **Accuracy** | {PERFORMANCE.ACCURACY} | 85-95% |
+| **False Positive** | {PERFORMANCE.FALSE_POSITIVE} | 15-25% |
+| **Evidence Chain** | {BLOCKCHAIN.PRIMARY_CHAIN} @ {BLOCKCHAIN.COST_PER_TX}/tx | None |
+| **Finality** | {BLOCKCHAIN.FINALITY} | N/A |
+
+:::info Why This Matters
+- **Edge AI**: No cloud latency, works offline, GDPR compliant (data stays local)
+- **Blockchain**: Court-admissible evidence, immutable audit trail, cross-border prosecution
+- **Gatwick 2018**: £60M cost, 140K passengers, perps never caught - no evidence chain
+:::
 
 ---
 
@@ -202,10 +211,29 @@ Consumer market is faster to enter:
 
 ### "Why now?"
 
-- Post-pandemic: Parents seeking screen-free activities
-- Drone threats: {MARKET.CAGR} CAGR market growth
-- Technology: Edge AI and blockchain mature
-- Regulatory: Increasing pressure on airports
+- **November 2024 crisis**: Brussels 8-day closure, Poland 4 airports, Denmark drone ban
+- **4x YoY increase** in European airport drone incidents
+- **Edge AI maturity**: YOLOv9 + Jetson Orin enables real-time edge inference
+- **Blockchain cost collapse**: {BLOCKCHAIN.PRIMARY_CHAIN} at {BLOCKCHAIN.COST_PER_TX}/tx makes continuous logging viable
+- **Regulatory pressure**: EU and US mandating airport drone defense
+
+### "Why Solana for blockchain?"
+
+| Consideration | {BLOCKCHAIN.PRIMARY_CHAIN} | Ethereum | Polygon |
+|---------------|---------|----------|---------|
+| **TPS** | {BLOCKCHAIN.TPS} | ~15 | ~7,000 |
+| **Cost/tx** | {BLOCKCHAIN.COST_PER_TX} | $5-50+ | $0.01 |
+| **Finality** | {BLOCKCHAIN.FINALITY} | 12-15 min | 2+ min |
+| **Annual cost** | ~{BLOCKCHAIN.ANNUAL_COST} | $150K+ | $10K+ |
+
+Solana gives us court-admissible evidence at negligible cost.
+
+### "What's your AI differentiation?"
+
+- **YOLOv9**: Latest YOLO with 95.7% mAP, 4.6% improvement over v8
+- **Edge-first**: {HARDWARE.COMPUTE_PLATFORM} with {HARDWARE.COMPUTE_TOPS} - no cloud dependency
+- **{PERFORMANCE.RESPONSE_TIME}**: 10-150x faster than cloud-dependent competitors
+- **{PERFORMANCE.FALSE_POSITIVE} false positive**: vs 15-25% industry average
 
 ### "Exit potential?"
 
