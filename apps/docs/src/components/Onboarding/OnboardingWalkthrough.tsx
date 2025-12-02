@@ -12,6 +12,8 @@ import { isProfileConfirmationPending } from "../Auth";
 import {
   PROFILE_TEMPLATES_ARRAY,
   ProfileTemplate,
+  getUserProfile as getKnownUserProfile,
+  INTERNAL_USER_PROFILES,
 } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import { ProfileCompletion, UserProfileDetails } from "./ProfileCompletion";
@@ -496,12 +498,43 @@ export function OnboardingWalkthrough({
         profileCompletedAt: new Date().toISOString(),
       });
 
+      // Check if the user's name matches a known internal profile
+      // This allows users who sign up with generic auth (e.g., "user@gmail.com")
+      // but enter their real name (e.g., "Jurie") to be recognized as internal users
+      const fullName = `${details.firstName} ${details.lastName}`.trim();
+      const knownProfile = getKnownUserProfile(user.email, fullName);
+
+      if (knownProfile) {
+        // User is a known internal member, save their profile immediately
+        console.log(`Detected internal profile for ${fullName}:`, knownProfile);
+        saveProfileSelection(
+          user.uid,
+          // Find the profile key that matches
+          Object.keys(INTERNAL_USER_PROFILES).find(
+            (key) => INTERNAL_USER_PROFILES[key] === knownProfile,
+          ) || "unknown",
+          knownProfile.roles,
+        );
+
+        // Save to cloud
+        await saveProfileToCloud({
+          profileKey:
+            Object.keys(INTERNAL_USER_PROFILES).find(
+              (key) => INTERNAL_USER_PROFILES[key] === knownProfile,
+            ) || "unknown",
+          roles: knownProfile.roles,
+        });
+
+        // Refresh the user profile in context
+        refreshUserProfile?.();
+      }
+
       // Move to next step
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToCloud],
+    [user, currentStep, saveProfileToCloud, refreshUserProfile],
   );
 
   // Handle AI fun facts completion
@@ -769,15 +802,14 @@ export function OnboardingWalkthrough({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            {canSkip && (
-              <button
-                type="button"
-                className="onboarding-skip"
-                onClick={handleSkip}
-              >
-                Skip tour
-              </button>
-            )}
+            {/* Always show skip button on profile completion step */}
+            <button
+              type="button"
+              className="onboarding-skip"
+              onClick={handleSkip}
+            >
+              Skip tour
+            </button>
             <ProfileCompletion
               onComplete={handleProfileComplete}
               initialData={
