@@ -132,7 +132,7 @@ jobs:
             PRESENT_VARS="${PRESENT_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
           else
-            # Check for common typos
+            # Check for common typos (specifically the 'v' prefix typo reported in the issue)
             if [ -n "${{ vars.vAZURE_AI_DEPLOYMENT_NAME }}" ]; then
               MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME (found as vAZURE_AI_DEPLOYMENT_NAME), "
               MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  Found vAZURE_AI_DEPLOYMENT_NAME but it should be AZURE_AI_DEPLOYMENT_NAME (remove the 'v' prefix)"
