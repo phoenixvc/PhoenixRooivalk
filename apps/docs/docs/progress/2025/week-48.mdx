@@ -28,6 +28,12 @@ import {
   SlideSection,
   DocumentDownload,
 } from "@site/src/components/Downloads";
+import {
+  BLOCKCHAIN,
+  HARDWARE,
+  PERFORMANCE,
+  MARKET,
+} from "@site/src/data/values";
 
 # Week 48: November 25 - December 1, 2025
 
@@ -87,12 +93,23 @@ import {
   duration={30}
   icon="✅"
   keyPoints={[
-    "Net launcher and net designs complete - ready for prototyping",
-    "In-house Kevlar manufacturing using Pieter's domestic stock",
-    "60% cost reduction, no import delays, IP stays with us",
-    "Prototype can start immediately",
+    {
+      text: `**${HARDWARE.NET_STATUS}**: Net launcher and net designs complete`,
+      subPoints: [
+        "Ready for prototyping immediately",
+        `Material: **${HARDWARE.NET_MATERIAL}** fiber`,
+      ],
+    },
+    {
+      text: "**In-house manufacturing** using Pieter's domestic stock",
+      subPoints: [
+        "**60% cost reduction** vs international orders",
+        "No import delays, IP stays with us",
+      ],
+    },
   ]}
-  script="Net launcher and net designs are done - ready for prototyping. We're manufacturing Kevlar nets in-house using Pieter's domestic stock. 60% cost reduction, no import delays, IP stays with us. Prototype can start immediately."
+  speakerNotes="Hardware milestone is a big deal - we can start building NOW."
+  script={`Net launcher and net designs are done - ${HARDWARE.NET_STATUS}. We're manufacturing ${HARDWARE.NET_MATERIAL} nets in-house using Pieter's domestic stock. 60% cost reduction, no import delays, IP stays with us. Prototype can start immediately.`}
 />
 
 <SlideSection
@@ -101,12 +118,13 @@ import {
   duration={25}
   icon="💰"
   keyPoints={[
-    "x402 payment protocol is live",
-    "Blockchain micropayments for premium API access",
-    "Revenue stream before hardware ships",
+    `**x402 payment protocol**: ${BLOCKCHAIN.X402_STATUS}`,
+    `**${BLOCKCHAIN.PRIMARY_CHAIN}** micropayments for premium API access`,
+    "Revenue stream **before hardware ships**",
     "Production-ready with full security",
   ]}
-  script="x402 payment protocol is live - blockchain micropayments for premium API access. Revenue stream before hardware ships. Production-ready with full security."
+  speakerNotes="This is pre-hardware revenue - proves we can monetize NOW."
+  script={`x402 payment protocol is ${BLOCKCHAIN.X402_STATUS} - ${BLOCKCHAIN.PRIMARY_CHAIN} micropayments for premium API access. Revenue stream before hardware ships. Production-ready with full security.`}
 />
 
 <SlideSection
@@ -115,13 +133,24 @@ import {
   duration={40}
   icon="🎯"
   keyPoints={[
-    "Spoke to three SA airports and a Boeing pilot",
-    "Finding: SA has zero drone incidents - operators are responsible",
-    "Current threats are lasers and kites - cheaper, accessible",
-    "Validates international-first strategy (EU and Canada)",
-    "SA is Phase 2 market",
+    {
+      text: "**Interviewed 3 SA airports + Boeing pilot**",
+      subPoints: [
+        "SA has zero drone incidents - operators are responsible",
+        "Current threats are lasers and kites - cheaper, accessible",
+      ],
+    },
+    {
+      text: `**EU is the market**: ${MARKET.EUROPE_INCIDENTS_2025}`,
+      subPoints: [
+        `Brussels closed ${MARKET.BRUSSELS_CLOSURE_NOV_2025}`,
+        `Poland: ${MARKET.POLAND_AIRPORTS_CLOSED} airports closed, ${MARKET.POLAND_DRONES_SEP_2025} drones`,
+      ],
+    },
+    "**Strategy validated**: International-first (EU/Canada), SA is Phase 2",
   ]}
-  script="Spoke to three SA airports and a Boeing pilot. Finding: SA has zero drone incidents - operators are responsible. Current threats are lasers and kites - cheaper, accessible. This validates our international-first strategy. EU and Canada have the problem today. SA is Phase 2."
+  speakerNotes="Market research confirms our strategy. Go where the problem is NOW."
+  script={`Spoke to three SA airports and a Boeing pilot. Finding: SA has zero drone incidents - operators are responsible. But EU has ${MARKET.EUROPE_INCIDENTS_2025}. Brussels closed ${MARKET.BRUSSELS_CLOSURE_NOV_2025}. This validates our international-first strategy. EU and Canada have the problem today. SA is Phase 2.`}
 />
 
 <SlideSection
@@ -158,16 +187,24 @@ import {
   title="x402 Revenue Model"
   duration={30}
   icon="💎"
-  keyPoints={[
-    "Solana blockchain for evidence verification micropayments",
-    "Pay-per-verification: ~$0.01-0.05 per tamper-proof timestamp",
-    "Solana fees: ~$0.00025/tx - scales to millions of verifications",
-    "Insurance: Drone damage claims need tamper-proof incident footage",
-    "Legal: Court-admissible evidence chain for prosecution/defense",
-    "Regulatory: Aviation authority compliance reports (CAA, EASA, FAA)",
-    "Revenue before hardware ships - funds development",
+  layout="two-column"
+  leftColumnTitle="How It Works"
+  leftColumn={[
+    `**${BLOCKCHAIN.PRIMARY_CHAIN}** blockchain for evidence verification`,
+    `Pay-per-verification: **${BLOCKCHAIN.X402_PRICE}** per tamper-proof timestamp`,
+    `${BLOCKCHAIN.PRIMARY_CHAIN} fees: **${BLOCKCHAIN.COST_PER_TX}** - scales to millions`,
+    "Revenue **before hardware ships** - funds development",
   ]}
-  script="x402 uses Solana for evidence verification micropayments. Insurance companies need tamper-proof footage for drone damage claims. Law enforcement needs court-admissible evidence chains. Aviation authorities require compliance reports. Each verification costs pennies, Solana fees are fraction of a cent. Revenue stream active before hardware ships."
+  rightColumnTitle="Who Pays"
+  rightColumn={[
+    "**Insurance**: Drone damage claims need tamper-proof footage",
+    "**Legal**: Court-admissible evidence chain for prosecution/defense",
+    "**Regulatory**: Aviation authority compliance (CAA, EASA, FAA)",
+    "**Corporate**: Due diligence, incident documentation",
+  ]}
+  keyPoints={[]}
+  speakerNotes="x402 is live NOW - pre-hardware revenue stream. Insurance, legal, and regulatory customers need verified evidence."
+  script={`x402 uses ${BLOCKCHAIN.PRIMARY_CHAIN} for evidence verification micropayments. Insurance companies need tamper-proof footage for drone damage claims. Law enforcement needs court-admissible evidence chains. Aviation authorities require compliance reports. Each verification costs ${BLOCKCHAIN.X402_PRICE}, ${BLOCKCHAIN.PRIMARY_CHAIN} fees are just ${BLOCKCHAIN.COST_PER_TX}. Revenue stream active before hardware ships.`}
 />
 
 <SlideSection

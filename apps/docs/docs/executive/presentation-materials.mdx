@@ -27,6 +27,7 @@ import {
   SKYSNARE,
   AERONET,
   FUNDING,
+  COMPETITORS,
 } from "@site/src/data/values";
 
 # Phoenix Rooivalk: Presentation Materials
@@ -66,12 +67,25 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
   duration={40}
   icon="🎯"
   keyPoints={[
-    "Nov 2025: Brussels closed twice in one night, UK sent RAF troops, drones near US nuclear base",
-    `Edge AI: YOLOv9 on Jetson Orin - ${PERFORMANCE.RESPONSE_TIME} vs 5-30s competitors`,
-    `${BLOCKCHAIN.PRIMARY_CHAIN} blockchain: Immutable evidence chain (Gatwick 2018 perps never caught)`,
-    `SkySnare™ ${SKYSNARE.MSRP} funds R&D | AeroNet™ ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
+    {
+      text: `**Nov 2025**: Brussels closed *twice in one night*`,
+      subPoints: [
+        `Incidents up **${MARKET.EUROPE_INCIDENTS_2025}**`,
+        `Gatwick 2018: **${MARKET.GATWICK_2018_COST}** cost, perps *never caught*`,
+      ],
+    },
+    {
+      text: `**Edge AI**: YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM}`,
+      subPoints: [
+        `**${PERFORMANCE.RESPONSE_TIME}** vs ${PERFORMANCE.COMPETITOR_RESPONSE_TIME} competitors`,
+        `**${PERFORMANCE.VS_COMPETITORS}** faster`,
+      ],
+    },
+    `**${BLOCKCHAIN.PRIMARY_CHAIN}** blockchain: Immutable evidence chain`,
+    `**Dual revenue**: SkySnare™ ${SKYSNARE.MSRP} funds AeroNet™ ${AERONET.SETUP_FEE} enterprise`,
   ]}
-  script={`This is happening right now. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled, 25,000 passengers stranded. Drones spotted near Kleine Brogel where US nuclear weapons are stored. The UK deployed RAF anti-drone specialists to help. Incidents up 4x year-over-year. Our solution: Edge AI with YOLOv9 on NVIDIA Jetson - ${PERFORMANCE.RESPONSE_TIME} response, 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for court-admissible evidence.`}
+  speakerNotes="Start with urgency. This is happening NOW. Then pivot to our solution."
+  script={`This is happening right now. Last month - November 2025 - Brussels Airport shut down twice in one night. Incidents up ${MARKET.EUROPE_INCIDENTS_2025}. The UK deployed RAF anti-drone specialists. Our solution: Edge AI with YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM} - ${PERFORMANCE.RESPONSE_TIME} response, ${PERFORMANCE.VS_COMPETITORS} faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for court-admissible evidence.`}
 />
 
 <SlideSection
@@ -79,13 +93,24 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
   title="Traction & Economics"
   duration={40}
   icon="💰"
-  keyPoints={[
-    `${CAPITAL.INVESTMENT_TO_DATE}, prototype 40% assembled`,
-    `SkySnare: ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin`,
-    `Year 1: ${SKYSNARE.YEAR_1_UNITS} units, $2.15M revenue`,
-    "CPSC/ASTM certification Mar 2026",
+  layout="two-column"
+  leftColumnTitle="Progress"
+  leftColumn={[
+    `**${CAPITAL.INVESTMENT_TO_DATE}** founder investment`,
+    "CAD designs **complete**",
+    `Net designs: **${HARDWARE.NET_STATUS}**`,
+    "Prototype **40% assembled**",
   ]}
-  script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled, net designs tested. SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Year 1 target: ${SKYSNARE.YEAR_1_UNITS} units generating $2.15M revenue.`}
+  rightColumnTitle="Unit Economics"
+  rightColumn={[
+    `SkySnare MSRP: **${SKYSNARE.MSRP}**`,
+    `COGS: **${SKYSNARE.COGS}**`,
+    `Contribution: **${SKYSNARE.CONTRIBUTION_MARGIN}**`,
+    `Year 1: **${SKYSNARE.YEAR_1_UNITS.toLocaleString()} units**`,
+  ]}
+  keyPoints={[]}
+  speakerNotes="Show traction AND economics. We're not just building - we have a business model."
+  script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled, net designs ${HARDWARE.NET_STATUS}. SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Year 1 target: ${SKYSNARE.YEAR_1_UNITS.toLocaleString()} units.`}
 />
 
 <SlideSection
@@ -94,12 +119,26 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
   duration={40}
   icon="🤝"
   keyPoints={[
-    `Raising: ${CAPITAL.SEED_ROUND} seed`,
-    `Product dev ${CAPITAL.SEED_PRODUCT_DEV}, Inventory ${CAPITAL.SEED_INVENTORY}, Marketing ${CAPITAL.SEED_MARKETING}`,
-    `Runway to ${CAPITAL.SEED_RUNWAY}`,
-    "Milestones: Certification, 5K units, enterprise pilot",
+    {
+      text: `**Raising**: ${CAPITAL.SEED_ROUND} seed`,
+      subPoints: [
+        `Product dev: **${CAPITAL.SEED_PRODUCT_DEV}**`,
+        `Inventory: **${CAPITAL.SEED_INVENTORY}** (PO facility ${CAPITAL.PO_FACILITY})`,
+        `Marketing: **${CAPITAL.SEED_MARKETING}**`,
+      ],
+    },
+    `**Runway** to ${CAPITAL.SEED_RUNWAY}`,
+    {
+      text: "**Milestones**:",
+      subPoints: [
+        "CPSC/ASTM certification complete",
+        `${SKYSNARE.YEAR_1_UNITS.toLocaleString()} SkySnare units shipped`,
+        "Enterprise pilot MOU signed",
+      ],
+    },
   ]}
-  script={`We're raising ${CAPITAL.SEED_ROUND} seed. Funds go to product development at ${CAPITAL.SEED_PRODUCT_DEV}, inventory at ${CAPITAL.SEED_INVENTORY}, and marketing at ${CAPITAL.SEED_MARKETING}. This gives runway to ${CAPITAL.SEED_RUNWAY}. Key milestones: certification complete, ${SKYSNARE.YEAR_1_UNITS} units shipped, and enterprise pilot MOU signed. Questions?`}
+  speakerNotes="Clear ask, clear use of funds, clear milestones. End strong."
+  script={`We're raising ${CAPITAL.SEED_ROUND} seed. Funds go to product development at ${CAPITAL.SEED_PRODUCT_DEV}, inventory at ${CAPITAL.SEED_INVENTORY}, and marketing at ${CAPITAL.SEED_MARKETING}. This gives runway to ${CAPITAL.SEED_RUNWAY}. Key milestones: certification complete, ${SKYSNARE.YEAR_1_UNITS.toLocaleString()} units shipped, and enterprise pilot MOU signed. Questions?`}
 />
 
 </SlideDeck>
