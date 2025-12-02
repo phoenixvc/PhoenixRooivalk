@@ -421,6 +421,93 @@ Before submitting PR:
 - [ ] Performance impact assessed
 - [ ] Security implications considered
 
+## Working with Issues
+
+### Issue Context
+When working on GitHub issues:
+
+1. **Read Thoroughly** - Understand the full context, including comments and related issues
+2. **Scope Appropriately** - Focus on the specific problem, avoid scope creep
+3. **Ask for Clarification** - If requirements are unclear, ask questions before implementing
+4. **Small Incremental Changes** - Make minimal, focused changes to address the issue
+5. **Test Thoroughly** - Validate changes work as expected before submitting
+
+### Ideal Task Types for Copilot
+- Bug fixes with clear reproduction steps
+- UI improvements with specific requirements
+- Test additions for existing functionality
+- Documentation updates and corrections
+- Accessibility enhancements
+- Refactoring well-defined components
+- Adding TypeScript types or improving type safety
+
+### Tasks Requiring Human Review
+- Major architectural changes
+- Security-critical modifications
+- Performance optimizations requiring profiling
+- Complex business logic without clear specification
+- Changes affecting multiple systems or services
+
+## Development Workflow
+
+### Before Starting Work
+1. **Pull Latest Changes** - Ensure you're working with the latest code
+2. **Understand the Build** - Know how to build, test, and lint the relevant code
+3. **Check Dependencies** - Verify all dependencies are installed: `pnpm install`
+4. **Review Related Code** - Understand the context around your changes
+
+### During Development
+1. **Make Small Commits** - Commit logical units of work
+2. **Test Incrementally** - Run tests after each significant change
+3. **Lint and Format** - Keep code clean: `pnpm lint --fix && pnpm format`
+4. **Document Changes** - Update relevant documentation as you go
+
+### Before Submitting PR
+1. **Run Full Test Suite** - Ensure all tests pass
+2. **Check TypeScript** - No type errors: `pnpm typecheck`
+3. **Verify Accessibility** - Test keyboard navigation and screen readers
+4. **Review Your Changes** - Read through the diff carefully
+5. **Update Changelog** - Add entry to `CHANGELOG.md` if significant
+
+## Monorepo Specifics
+
+### Turborepo Commands
+```bash
+# Run command in specific workspace
+turbo <command> --filter=<workspace>
+
+# Build only changed packages
+turbo build
+
+# Run tests across all packages
+turbo test
+```
+
+### Working with Workspaces
+- **apps/** - Full applications (marketing, docs, api, keeper, evidence-cli)
+- **packages/** - Shared libraries (types, ui, utils)
+- **crates/** - Rust libraries (evidence, anchor-solana, anchor-etherlink, address-validation)
+
+### Cross-Package Dependencies
+- Import from packages using workspace protocol: `"@phoenix/ui": "workspace:*"`
+- Changes to packages automatically trigger rebuilds in dependent apps
+- Use `pnpm --filter` to work with specific workspaces
+
+## Environment Variables
+
+### Marketing App
+- `NEXT_PUBLIC_DOCS_URL` - URL to documentation site (public runtime)
+- Set in Netlify site configuration
+
+### Docs App
+- `MARKETING_URL` - URL to marketing site (build-time)
+- Set in Netlify site configuration
+
+### Rust Services
+- Check individual app READMEs for service-specific env vars
+- Use `.env` files locally (never commit these)
+- Set secrets in GitHub Actions for CI/CD
+
 ## Additional Resources
 
 - **Documentation Portal**:
@@ -428,6 +515,7 @@ Before submitting PR:
 - **Documentation Source**: `apps/docs/docs/` - Technical, business, and
   operations documentation
 - **Responsible Use**: See `RESPONSIBLE_USE.md`
+- **Best Practices**: See [GitHub Copilot Best Practices](https://gh.io/copilot-coding-agent-tips)
 
 ---
 
