@@ -69,7 +69,13 @@ export function getOnboardingDiagnostics(): {
   let totalSize = 0;
   const keys = ONBOARDING_KEYS.map((key) => {
     const value = localStorage.getItem(key);
-    const size = value ? new Blob([value]).size : 0;
+    // More efficient size calculation: use byte length of UTF-8 encoding
+    // Fallback to simple length * 2 for environments without TextEncoder (like tests)
+    const size = value
+      ? typeof TextEncoder !== "undefined"
+        ? new TextEncoder().encode(value).length
+        : value.length * 2
+      : 0;
     totalSize += size;
 
     let parsed: unknown = undefined;
@@ -100,24 +106,34 @@ export function isOnboardingDataCorrupted(): boolean {
     const profileData = localStorage.getItem("phoenix-docs-user-profile");
 
     if (confirmed) {
-      const confirmedData = JSON.parse(confirmed);
-      if (confirmedData.confirmed && !confirmedData.skipped && !profileData) {
-        return true; // Profile confirmed but no profile data exists
+      try {
+        const confirmedData = JSON.parse(confirmed);
+        if (confirmedData.confirmed && !confirmedData.skipped && !profileData) {
+          return true; // Profile confirmed but no profile data exists
+        }
+      } catch {
+        // Failed to parse profile confirmation data - consider it corrupted
+        return true;
       }
     }
 
     // Check if onboarding completed but no profile
     const completed = localStorage.getItem("phoenix-docs-onboarding-completed");
     if (completed) {
-      const completedData = JSON.parse(completed);
-      if (completedData.completed && !confirmed) {
-        return true; // Onboarding completed but no profile confirmation
+      try {
+        const completedData = JSON.parse(completed);
+        if (completedData.completed && !confirmed) {
+          return true; // Onboarding completed but no profile confirmation
+        }
+      } catch {
+        // Failed to parse onboarding completion data - consider it corrupted
+        return true;
       }
     }
 
     return false;
   } catch {
-    // If we can't parse, consider it potentially corrupted
+    // If we encounter any unexpected error, consider it potentially corrupted
     return true;
   }
 }

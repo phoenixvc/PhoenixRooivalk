@@ -500,28 +500,24 @@ export function OnboardingWalkthrough({
 
       // Check if the user's name matches a known internal profile
       // This allows users who sign up with generic auth (e.g., "user@gmail.com")
-      // but enter their real name (e.g., "Jurie") to be recognized as internal users
+      // but enter their real name during signup to be recognized as internal users
       const fullName = `${details.firstName} ${details.lastName}`.trim();
       const knownProfile = getKnownUserProfile(user.email, fullName);
 
       if (knownProfile) {
         // User is a known internal member, save their profile immediately
+        // Find the profile key that matches this profile (only search once)
+        const profileKey =
+          Object.entries(INTERNAL_USER_PROFILES).find(
+            ([, profile]) => profile === knownProfile,
+          )?.[0] || "unknown";
+
         console.log(`Detected internal profile for ${fullName}:`, knownProfile);
-        saveProfileSelection(
-          user.uid,
-          // Find the profile key that matches
-          Object.keys(INTERNAL_USER_PROFILES).find(
-            (key) => INTERNAL_USER_PROFILES[key] === knownProfile,
-          ) || "unknown",
-          knownProfile.roles,
-        );
+        saveProfileSelection(user.uid, profileKey, knownProfile.roles);
 
         // Save to cloud
         await saveProfileToCloud({
-          profileKey:
-            Object.keys(INTERNAL_USER_PROFILES).find(
-              (key) => INTERNAL_USER_PROFILES[key] === knownProfile,
-            ) || "unknown",
+          profileKey,
           roles: knownProfile.roles,
         });
 
