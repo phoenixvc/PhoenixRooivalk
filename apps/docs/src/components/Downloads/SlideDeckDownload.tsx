@@ -1,6 +1,7 @@
 import * as React from "react";
 import DownloadButton from "./DownloadButton";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import PresentationMode from "./PresentationMode";
 
 /** Branded icon for slide decks - bar chart emoji */
 const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
@@ -321,10 +322,23 @@ export default function SlideDeckDownload({
   contactEmail,
 }: SlideDeckDownloadProps): React.ReactElement {
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
+  const [isPresentationMode, setIsPresentationMode] = React.useState(false);
   const printContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Auto-number slides if they don't have numbers
+  const numberedSlides = React.useMemo(() => {
+    return slides.map((slide, index) => ({
+      ...slide,
+      number: slide.number || index + 1,
+    }));
+  }, [slides]);
 
   const handleDownloadScript = React.useCallback(() => {
     setIsPreviewOpen(true);
+  }, []);
+
+  const handleStartPresentation = React.useCallback(() => {
+    setIsPresentationMode(true);
   }, []);
 
   const handlePrint = React.useCallback(() => {
@@ -367,16 +381,16 @@ export default function SlideDeckDownload({
   }, [isPreviewOpen]);
 
   // Calculate target duration per slide for pacing indicators
-  const totalSeconds = slides.reduce((acc, s) => acc + s.duration, 0);
-  const targetPerSlide = totalSeconds / slides.length;
+  const totalSeconds = numberedSlides.reduce((acc, s) => acc + s.duration, 0);
+  const targetPerSlide = totalSeconds / numberedSlides.length;
 
   return (
     <>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <BrowserOnly fallback={<div>Loading...</div>}>
           {() => (
             <PptxGenerator
-              slides={slides}
+              slides={numberedSlides}
               title={title}
               duration={duration}
               audience={audience}
@@ -394,7 +408,29 @@ export default function SlideDeckDownload({
           onDownload={handleDownloadScript}
           variant={variant}
         />
+        <button
+          type="button"
+          onClick={handleStartPresentation}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium text-sm"
+        >
+          <span>{"\u{1F3AC}"}</span>
+          Present
+        </button>
       </div>
+
+      {/* Presentation Mode */}
+      <BrowserOnly fallback={null}>
+        {() => (
+          <PresentationMode
+            title={title}
+            slides={numberedSlides}
+            duration={duration}
+            audience={audience}
+            isOpen={isPresentationMode}
+            onClose={() => setIsPresentationMode(false)}
+          />
+        )}
+      </BrowserOnly>
 
       {isPreviewOpen && (
         <div
@@ -487,7 +523,7 @@ export default function SlideDeckDownload({
                   Agenda
                 </h2>
                 <ol className="space-y-2">
-                  {slides.map((slide, index) => (
+                  {numberedSlides.map((slide, index) => (
                     <li
                       key={slide.number}
                       className="flex items-center gap-3 text-gray-700 dark:text-gray-300"
@@ -508,20 +544,20 @@ export default function SlideDeckDownload({
               </div>
 
               {/* Individual Slides */}
-              {slides.map((slide, index) => {
+              {numberedSlides.map((slide, index) => {
                 const pacing = getPacingColor(slide.duration, targetPerSlide);
 
                 return (
                   <div
                     key={slide.number}
-                    className={`slide-page mb-8 pb-8 relative ${index < slides.length - 1 ? "border-b border-gray-200 dark:border-gray-700 print:break-after-page" : ""}`}
+                    className={`slide-page mb-8 pb-8 relative ${index < numberedSlides.length - 1 ? "border-b border-gray-200 dark:border-gray-700 print:break-after-page" : ""}`}
                   >
                     {/* Progress Bar */}
                     <div className="absolute top-0 left-0 right-12 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-500 transition-all"
                         style={{
-                          width: `${((index + 1) / slides.length) * 100}%`,
+                          width: `${((index + 1) / numberedSlides.length) * 100}%`,
                         }}
                       />
                     </div>
@@ -548,7 +584,7 @@ export default function SlideDeckDownload({
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                         <span>
-                          Slide {slide.number}/{slides.length}
+                          Slide {slide.number}/{numberedSlides.length}
                         </span>
                         {/* Pacing Indicator */}
                         <span
@@ -686,7 +722,7 @@ export default function SlideDeckDownload({
               {/* Summary Footer */}
               <div className="mt-8 pt-8 border-t-2 border-gray-200 dark:border-gray-700 text-center">
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Total: {slides.length} slides | {duration} minutes |{" "}
+                  Total: {numberedSlides.length} slides | {duration} minutes |{" "}
                   {totalSeconds} seconds
                 </p>
                 {(contactUrl || contactEmail) && (
