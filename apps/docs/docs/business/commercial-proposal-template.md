@@ -5,6 +5,7 @@ sidebar_label: Commercial Proposal Template
 difficulty: intermediate
 estimated_reading_time: 8
 points: 15
+phase: ["series-b", "series-c", "scale"]
 tags:
   - business
   - counter-uas

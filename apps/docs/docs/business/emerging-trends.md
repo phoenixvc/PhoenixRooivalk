@@ -1,3 +1,16 @@
+---
+id: emerging-trends
+title: Emerging Trends and Opportunities
+sidebar_label: Emerging Trends
+difficulty: intermediate
+estimated_reading_time: 8
+points: 15
+phase: ["series-a", "series-b", "series-c", "scale"]
+tags:
+  - business
+  - counter-uas
+---
+
 # Phoenix Rooivalk Emerging Trends and Opportunities
 
 ## Executive Summary
