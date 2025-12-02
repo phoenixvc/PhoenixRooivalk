@@ -5,9 +5,12 @@
  * - First name, Last name (required)
  * - LinkedIn, Discord (required)
  * - WhatsApp (optional)
+ *
+ * Supports configurable skip button via Docusaurus customFields
  */
 
 import React, { useState, useCallback } from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import "./ProfileCompletion.css";
 
 export interface UserProfileDetails {
@@ -27,6 +30,7 @@ interface ValidationErrors {
 
 interface ProfileCompletionProps {
   onComplete: (details: UserProfileDetails) => void;
+  onSkip?: () => void;
   initialData?: Partial<UserProfileDetails>;
 }
 
@@ -39,8 +43,18 @@ const DISCORD_REGEX = /^.{2,32}(#\d{4})?$/;
 
 export function ProfileCompletion({
   onComplete,
+  onSkip,
   initialData,
 }: ProfileCompletionProps): React.ReactElement {
+  const { siteConfig } = useDocusaurusContext();
+  const onboardingConfig =
+    (siteConfig.customFields?.onboardingConfig as {
+      enableSkipSignup?: boolean;
+      enableSkipProfileCompletion?: boolean;
+    }) || {};
+
+  const showSkipButton =
+    onboardingConfig.enableSkipProfileCompletion !== false && onSkip;
   const [formData, setFormData] = useState<UserProfileDetails>({
     firstName: initialData?.firstName || "",
     lastName: initialData?.lastName || "",
@@ -273,9 +287,20 @@ export function ProfileCompletion({
         </div>
       </div>
 
-      <button type="submit" className="profile-completion-submit">
-        Continue
-      </button>
+      <div className="profile-completion-actions">
+        <button type="submit" className="profile-completion-submit">
+          Continue
+        </button>
+        {showSkipButton && (
+          <button
+            type="button"
+            className="profile-completion-skip"
+            onClick={onSkip}
+          >
+            Skip for now
+          </button>
+        )}
+      </div>
     </form>
   );
 }

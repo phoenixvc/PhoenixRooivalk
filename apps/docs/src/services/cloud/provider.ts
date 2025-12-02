@@ -151,6 +151,14 @@ function createAzureServices(): CloudServices {
         }
       : undefined;
 
+  // Check if functions are configured
+  if (!config?.functionsBaseUrl) {
+    console.warn(
+      "Azure Functions base URL not configured. AI features will not be available.",
+      "Set AZURE_FUNCTIONS_BASE_URL or configure functionsBaseUrl in Docusaurus config.",
+    );
+  }
+
   const isConfigured = Boolean(config?.clientId || config?.functionsBaseUrl);
 
   return {

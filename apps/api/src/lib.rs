@@ -7,10 +7,12 @@ use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 pub mod connection;
 pub mod db;
 pub mod db_errors;
+pub mod entities;
 pub mod handlers;
 pub mod handlers_x402;
 pub mod migrations;
 pub mod models;
+pub mod providers;
 pub mod rate_limit;
 pub mod repository;
 
@@ -107,13 +109,14 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         // Authentication
         .route("/auth/login", post(handlers::post_login))
         .route("/auth/me", get(handlers::get_me))
+        .route("/auth/profile", axum::routing::put(handlers::put_profile))
         // Career applications
-        .route(
-            "/career/apply",
-            post(handlers::post_career_application),
-        )
+        .route("/career/apply", post(handlers::post_career_application))
         // Admin endpoints
-        .route("/admin/seed-team-members", post(handlers::post_seed_team_members))
+        .route(
+            "/admin/seed-team-members",
+            post(handlers::post_seed_team_members),
+        )
         // x402 Premium Evidence Verification
         .route(
             "/api/v1/evidence/verify-premium",

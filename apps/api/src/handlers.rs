@@ -286,6 +286,56 @@ pub async fn get_me(
     }
 }
 
+/// Update user profile
+pub async fn put_profile(
+    State(state): State<AppState>,
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
+    Json(body): Json<crate::models::UserProfileUpdateIn>,
+) -> impl IntoResponse {
+    let session_id = match params.get("session_id") {
+        Some(id) => id,
+        None => {
+            return (
+                StatusCode::UNAUTHORIZED,
+                Json(serde_json::json!({ "error": "Missing session_id" })),
+            )
+                .into_response()
+        }
+    };
+
+    // Validate session and get user
+    let user = match crate::db::get_user_by_session(&state.pool, session_id).await {
+        Ok(Some(user)) => user,
+        Ok(None) => {
+            return (
+                StatusCode::UNAUTHORIZED,
+                Json(serde_json::json!({ "error": "Invalid or expired session" })),
+            )
+                .into_response()
+        }
+        Err(db_error) => return error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
+    };
+
+    // Update profile
+    match crate::db::update_user_profile(
+        &state.pool,
+        &user.id,
+        body.first_name.as_deref(),
+        body.last_name.as_deref(),
+        body.linkedin_url.as_deref(),
+        body.discord_handle.as_deref(),
+    )
+    .await
+    {
+        Ok(updated_user) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "user": updated_user })),
+        )
+            .into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
+    }
+}
+
 /// Submit career application
 pub async fn post_career_application(
     State(state): State<AppState>,

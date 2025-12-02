@@ -61,6 +61,14 @@ const azureConfig = {
 // Cloud provider selection: 'azure' | 'offline'
 const cloudProvider = process.env.CLOUD_PROVIDER || "azure";
 
+// Onboarding configuration
+const onboardingConfig = {
+  enableSkipSignup: process.env.ENABLE_SKIP_SIGNUP !== "false", // Default: true
+  enableSkipProfileCompletion:
+    process.env.ENABLE_SKIP_PROFILE_COMPLETION !== "false", // Default: true
+  requireProfileDetails: process.env.REQUIRE_PROFILE_DETAILS === "true", // Default: false
+};
+
 const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
@@ -73,6 +81,7 @@ const config: Config = {
   customFields: {
     azureConfig,
     cloudProvider,
+    onboardingConfig,
   },
   onBrokenLinks: onBrokenLinksConfig,
   onBrokenAnchors: onBrokenLinksConfig,

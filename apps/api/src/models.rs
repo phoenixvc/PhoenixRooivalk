@@ -118,6 +118,14 @@ pub struct UserLoginIn {
     pub email: String,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct UserProfileUpdateIn {
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    pub linkedin_url: Option<String>,
+    pub discord_handle: Option<String>,
+}
+
 #[derive(Debug, Serialize)]
 pub struct UserOut {
     pub id: String,
