@@ -12,7 +12,6 @@ export type SlideTemplateType =
   | "team"
   | "testimonial"
   | "call-to-action"
-  | "agenda"
   | "thank-you";
 
 /**
@@ -300,11 +299,10 @@ export function slide(
 export function buildPresentation(
   slides: Omit<Slide, "number">[],
   metadata?: {
-    addAgenda?: boolean;
     addThankYou?: boolean;
   },
 ): Slide[] {
-  let allSlides = [...slides];
+  const allSlides = [...slides];
 
   // Add thank you slide if requested
   if (metadata?.addThankYou) {

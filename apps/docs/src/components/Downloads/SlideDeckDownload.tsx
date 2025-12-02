@@ -434,8 +434,9 @@ export default function SlideDeckDownload({
           type="button"
           onClick={handleStartPresentation}
           className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium text-sm"
+          aria-label="Start presentation"
         >
-          <span>{"\u{1F3AC}"}</span>
+          <span aria-hidden="true">{"\u{1F3AC}"}</span>
           Present
         </button>
       </div>
