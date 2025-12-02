@@ -7,6 +7,11 @@ import {
   DocumentDownload,
   DownloadButton,
 } from "../components/Downloads";
+import {
+  PhaseFilter,
+  PhaseIndicator,
+  PhaseBanner,
+} from "../components/PhaseFilter";
 
 export default {
   ...MDXComponents,
@@ -16,4 +21,8 @@ export default {
   SlideSection,
   DocumentDownload,
   DownloadButton,
+  // Phase filter components
+  PhaseFilter,
+  PhaseIndicator,
+  PhaseBanner,
 };

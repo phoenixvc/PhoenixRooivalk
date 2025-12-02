@@ -1,0 +1,353 @@
+---
+id: performance-specifications
+title: Performance Specifications
+sidebar_label: Performance Specifications
+difficulty: advanced
+timeEstimate: 8
+xpReward: 25
+dataSource: centralized
+dataVersion: "1.0"
+tags:
+  - technical
+  - performance
+  - counter-uas
+phase: ["seed", "series-a", "series-b", "series-c", "scale"]
+---
+
+import { PERFORMANCE, HARDWARE, BLOCKCHAIN, TECH } from "@site/src/data/values";
+
+## Executive Summary
+
+This document provides comprehensive performance specifications for the Phoenix
+Rooivalk Counter-Drone Defense System. The specifications cover system
+performance, hardware capabilities, software performance, and operational
+metrics across all system components.
+
+---
+
+## System Performance Overview
+
+### Key Performance Indicators (KPIs)
+
+**Detection Performance**
+
+- **Detection Accuracy**: {PERFORMANCE.ACCURACY} AI detection accuracy
+- **Response Time**: {PERFORMANCE.RESPONSE_TIME} end-to-end response time
+- **False Positive Rate**: {PERFORMANCE.FALSE_POSITIVE} target false positive rate
+- **Detection Range**: {PERFORMANCE.DETECTION_RANGE} depending on sensor modality
+- **Concurrent Targets**: {PERFORMANCE.CONCURRENT_TARGETS} concurrent drone targets
+
+**System Performance**
+
+- **System Uptime**: {PERFORMANCE.AVAILABILITY} target system uptime
+- **Authentication Latency**: {PERFORMANCE.AUTH_LATENCY} authentication time
+- **Data Integrity**: 99.9% blockchain-verified data integrity
+- **Autonomous Operation**: {PERFORMANCE.AUTONOMY_LEVEL} edge autonomy without network dependency
+- **EW Resilience**: GPS-denied and jamming-resistant operation
+
+---
+
+## Hardware Performance Specifications
+
+### NVIDIA Jetson Performance
+
+**Jetson AGX Orin 64GB**
+
+- **AI Performance**: {HARDWARE.COMPUTE_TOPS} (Tera Operations Per Second)
+- **CUDA Cores**: {HARDWARE.CUDA_CORES} CUDA cores
+- **Tensor Cores**: {HARDWARE.TENSOR_CORES} Tensor cores
+- **Memory**: {HARDWARE.MEMORY} LPDDR5 unified memory
+- **Memory Bandwidth**: {HARDWARE.MEMORY_BANDWIDTH} unified memory bandwidth
+- **Power Consumption**: {HARDWARE.POWER_TYPICAL} typical, {HARDWARE.POWER_PEAK} peak
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL} (Industrial variants)
+
+**Jetson Orin NX 16GB**
+
+- **AI Performance**: {HARDWARE.ORIN_NX_TOPS}
+- **CUDA Cores**: {HARDWARE.ORIN_NX_CUDA} CUDA cores
+- **Tensor Cores**: 32 Tensor cores
+- **Memory**: {HARDWARE.ORIN_NX_MEMORY}
+- **Memory Bandwidth**: 102.4 GB/s unified memory bandwidth
+- **Power Consumption**: {HARDWARE.ORIN_NX_POWER}
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL}
+
+**Jetson Nano**
+
+- **AI Performance**: {HARDWARE.NANO_TOPS}
+- **CUDA Cores**: {HARDWARE.NANO_CUDA} CUDA cores
+- **Memory**: {HARDWARE.NANO_MEMORY}
+- **Power Consumption**: {HARDWARE.NANO_POWER}
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL}
+
+### Sensor Performance Specifications
+
+**Camera Systems**
+
+- **MIPI CSI-2**: {HARDWARE.CAMERA_COUNT}
+- **Resolution**: {HARDWARE.CAMERA_RESOLUTION} coverage
+- **Frame Rate**: {TECH.FRAME_RATE} sustained processing
+- **Latency**: {PERFORMANCE.DETECTION_LATENCY} sensor-to-decision latency
+- **Integration**: Seamless integration with Jetson platform
+
+**LiDAR Systems**
+
+- **PCIe Gen4**: 16 lanes for LiDAR and radar sensors
+- **Measurements**: {HARDWARE.LIDAR_MEASUREMENTS}
+- **Accuracy**: Sub-meter accuracy
+- **Range**: {PERFORMANCE.DETECTION_RANGE} depending on sensor modality
+- **Weather Performance**: Weather-dependent performance optimization
+
+**RF Detection Systems**
+
+- **Frequency Range**: {HARDWARE.RF_FREQUENCY_RANGE}
+- **Protocol Analysis**: MAC address capture and signal analysis
+- **Jamming Resistance**: Frequency hopping and adaptive filtering
+- **Range**: {TECH.JAMMING_RANGE} image transmission under active jamming
+- **Latency**: Microsecond response to jamming detection
+
+**Acoustic Arrays**
+
+- **I2S Interfaces**: 4 interfaces for acoustic sensor arrays
+- **Frequency Range**: 50Hz-20kHz
+- **Range**: {HARDWARE.ACOUSTIC_RANGE} detecting autonomous drones
+- **Environmental**: Works in GPS-denied areas
+- **Performance**: Real-time spectral analysis for rotor signature detection
+
+---
+
+## Software Performance Specifications
+
+### AI/ML Performance
+
+**{TECH.AI_MODEL} Performance**
+
+- **mAP**: {PERFORMANCE.YOLOV9_MAP} mean Average Precision
+- **Precision**: {PERFORMANCE.ACCURACY} precision
+- **Recall**: 99.2% recall
+- **Frame Rate**: 30+ FPS on Jetson Nano, 60+ FPS on Orin platforms
+- **Detection Range**: 100-1000 feet altitude with real-time processing
+
+**TensorRT Optimization**
+
+- **Speedup**: {TECH.TENSORRT_SPEEDUP} speedup over standard inference
+- **Model Size**: {TECH.MODEL_SIZE} optimized models for edge deployment
+- **Latency**: {PERFORMANCE.DETECTION_LATENCY} inference latency
+- **Throughput**: High throughput inference on edge devices
+- **Compatibility**: NVIDIA GPU acceleration
+
+**DeepStream 3D Performance**
+
+- **Sensor Fusion**: Heterogeneous data integration
+- **Temporal Synchronization**: Multi-sensor data synchronization
+- **Calibration**: Automatic sensor calibration
+- **Visualization**: Multi-view visualization capabilities
+- **Performance**: Real-time sensor fusion processing
+
+### Blockchain Performance
+
+**{BLOCKCHAIN.PRIMARY_CHAIN} Integration**
+
+- **Throughput**: {BLOCKCHAIN.TPS} TPS sustained
+- **Finality**: {BLOCKCHAIN.FINALITY} using Proof of History
+- **Cost**: {BLOCKCHAIN.COST_PER_TX} USD per evidence anchor
+- **Annual Cost**: {BLOCKCHAIN.ANNUAL_COST} {BLOCKCHAIN.ANNUAL_COST_CONTEXT}
+- **Reliability**: Proven mainnet performance
+
+**Evidence Anchoring**
+
+- **Hash Generation**: {BLOCKCHAIN.HASH_ALGORITHM} hashing for evidence
+- **Metadata Storage**: Location, timestamp, operator ID, sensor data
+- **On-Chain Storage**: 32-byte hash with metadata
+- **Off-Chain Storage**: Full evidence payloads in encrypted storage
+- **Chain of Custody**: Complete documentation from creation to presentation
+
+### Cognitive Mesh Performance
+
+**Multi-Agent Orchestration**
+
+- **Agent Registry**: Catalog of all drone and sensor agents
+- **Role Assignment**: Dynamic role assignment based on tactical situation
+- **Graceful Degradation**: Handling when drones are damaged
+- **Performance**: Real-time coordination of 5-50 drone swarms
+
+**Hierarchical Decision Confidence Pack (HDCP)**
+
+- **Accuracy Improvement**: Target 99.5-99.9% detection accuracy
+- **Ensemble Voting**: Multi-level analysis and voting
+- **Confidence Scoring**: Hierarchical confidence assessment
+- **Performance**: Real-time confidence scoring
+
+**Temporal Decision Core (TDC)**
+
+- **Context Enrichment**: 50-100ms after authentication
+- **Pattern Matching**: Historical scenario pattern matching
+- **Learning**: Eligibility traces for learning from past incidents
+- **Performance**: Real-time pattern recognition
+
+---
+
+## Network Performance Specifications
+
+### Mesh Networking Performance
+
+**MANETs (Mobile Ad-Hoc Networks)**
+
+- **Frequency Bands**: M1-M6 (400-2500MHz)
+- **Throughput**: Over {TECH.MESH_THROUGHPUT} with automatic failover routing
+- **Range**: Over {TECH.MESH_RANGE} with automatic network reconfiguration
+- **Latency**: {TECH.COORDINATION_LATENCY} coordination latency
+- **Resilience**: Automatic failover and network healing
+
+**Doodle Labs Mesh Rider**
+
+- **Multi-Band Operation**: Automatic frequency selection
+- **Jamming Resistance**: Frequency hopping across multiple bands
+- **Performance**: {TECH.JAMMING_RANGE} range under active jamming
+- **Latency**: Microsecond response to jamming detection
+- **Reliability**: MIL-STD compliance for tactical operations
+
+**Meshmerize Aerial Edge**
+
+- **Mobile Access Points**: Drones as mobile network nodes
+- **Range**: Over {TECH.MESH_RANGE} with automatic network reconfiguration
+- **Performance**: High-throughput mesh networking
+- **Resilience**: Automatic network healing and reconfiguration
+
+### Cloud Connectivity Performance
+
+**Azure Government Cloud**
+
+- **DoD Impact Level 2-6**: FedRAMP High through classified Secret networks
+- **SIPRNet Connectivity**: Exclusive US DoD regions
+- **Physical Separation**: Separation from non-DoD tenants
+- **Performance**: High-performance cloud connectivity
+
+**Edge-to-Cloud Architecture**
+
+- **Azure Stack Edge**: Hardware-accelerated ML inferencing
+- **Data Filtering**: Filter data before cloud transmission
+- **Satellite Connectivity**: Low-earth orbit satellite connectivity
+- **Performance**: Optimized edge-to-cloud data transfer
+
+---
+
+## Operational Performance Specifications
+
+### GPS-Denied Navigation Performance
+
+**Multi-Modal Navigation**
+
+- **Galileo**: 1m accuracy with free centimeter High Accuracy Service
+- **BeiDou**: Two-way messaging and PPP-B2b corrections across 30+ satellites
+- **VINS-Mono**: Nearly zero drift over 1.62km outdoor paths
+- **VINS-Fusion**: GPU acceleration processing 250Hz on edge devices
+- **Terrain-Aided SLAM**: 0.2m final position error over 218km (0.09% of
+  distance)
+
+**Visual-Inertial Odometry**
+
+- **Update Rates**: 20Hz visual/200Hz IMU update rates
+- **Drift**: Nearly zero drift over extended paths
+- **Performance**: Real-time visual-inertial odometry
+- **Accuracy**: Sub-meter positioning in GPS-denied environments
+
+### Electronic Warfare Resilience
+
+**Frequency Hopping Performance**
+
+- **Frequency Bands**: 2.4GHz, 5.2GHz, 5.8GHz, 900MHz
+- **Response Time**: Microsecond response to jamming detection
+- **Adaptive Filtering**: Configurable notch filters rejecting chirp jammers
+- **Performance**: {TECH.JAMMING_RANGE} image transmission under active jamming
+
+**Pentagon Demonstration 2025 Requirements**
+
+- **Frequency Range**: 30MHz-20GHz under active jamming
+- **Waveform Requirements**: Low probability of intercept/detect waveforms
+- **Autonomous Response**: Electromagnetic spectrum maneuvering
+- **Cueing Accuracy**: Accurate cueing within 2km slant range for Group 1 drones
+- **Performance**: Autonomous response to EMS impact without operator intervention
+
+---
+
+## Performance Requirements by Use Case
+
+### Defense Applications
+
+**Military Performance Requirements**
+
+- **Response Time**: &lt;200ms for critical threats
+- **Accuracy**: >99% detection accuracy
+- **Reliability**: {PERFORMANCE.AVAILABILITY} system uptime
+- **Range**: {PERFORMANCE.DETECTION_RANGE_EXTENDED} detection range
+- **Concurrent Targets**: {PERFORMANCE.CONCURRENT_TARGETS} concurrent threats
+
+**Tactical Performance Requirements**
+
+- **Mobility**: Rapid deployment and setup
+- **Power**: Extended operation on battery power
+- **Environmental**: Operation in extreme environmental conditions
+- **Security**: Military-grade security requirements
+- **Compliance**: ITAR and DoD compliance
+
+### Critical Infrastructure Applications
+
+**Infrastructure Performance Requirements**
+
+- **Response Time**: &lt;500ms for infrastructure threats
+- **Accuracy**: >99% detection accuracy
+- **Reliability**: {PERFORMANCE.AVAILABILITY} system uptime
+- **Range**: 1-3km detection range
+- **Integration**: Seamless integration with existing systems
+
+**Commercial Performance Requirements**
+
+- **Cost**: Cost-effective operation
+- **Maintenance**: Minimal maintenance requirements
+- **Scalability**: Scalable deployment
+- **Compliance**: Regulatory compliance
+- **Support**: Comprehensive support services
+
+---
+
+## Performance Standards and Compliance
+
+### Industry Standards
+
+**Performance Standards**
+
+- **IEEE Standards**: IEEE performance standards compliance
+- **Military Standards**: {HARDWARE.MIL_SPEC} compliance
+- **Industry Standards**: Industry performance standards
+- **Best Practices**: Industry best practices
+
+**Compliance Requirements**
+
+- **ITAR Compliance**: ITAR performance requirements
+- **DoD Compliance**: DoD performance requirements
+- **Export Control**: Export control compliance
+- **Regulatory**: Regulatory performance requirements
+
+---
+
+## Conclusion
+
+The Phoenix Rooivalk Performance Specifications provide comprehensive
+performance requirements and capabilities for the counter-drone defense system.
+The specifications ensure optimal performance across all system components while
+maintaining the highest standards of reliability, security, and compliance.
+
+Key performance features include:
+
+- **High Performance**: {HARDWARE.COMPUTE_TOPS} AI performance with &lt;200ms response times
+- **Multi-Sensor**: Comprehensive sensor integration with real-time processing
+- **Blockchain**: High-performance blockchain evidence anchoring
+- **Network**: Resilient mesh networking with {TECH.COORDINATION_LATENCY} latency
+- **Operational**: GPS-denied and EW-resistant operation
+- **Scalability**: Scalable performance across deployment scenarios
+
+---
+
+_This document contains confidential performance information. Distribution is
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
+reserved._

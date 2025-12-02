@@ -1,0 +1,11 @@
+{
+  "label": "Playbooks",
+  "position": 8,
+  "collapsible": true,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "title": "Startup Playbooks",
+    "description": "Actionable guides for building credibility and hitting milestones"
+  }
+}

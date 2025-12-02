@@ -1,14 +1,13 @@
 ---
 id: phoenix-rooivalk-pitch-deck
-title: Phoenix Rooivalk Pitch Deck
-sidebar_label: Phoenix Rooivalk Pitch Deck
+title: "Phoenix Rooivalk: Investor Pitch Deck"
+sidebar_label: "Pitch Deck"
+description: Seed round pitch deck for Phoenix Rooivalk dual-brand counter-drone platform
+keywords: [investor, pitch deck, counter-uas, SkySnare, AeroNet, seed round]
 difficulty: intermediate
-estimated_reading_time: 12
-points: 20
-tags:
-  - executive
-  - counter-uas
-  - investor
+timeEstimate: 12
+xpReward: 100
+phase: ["seed", "series-a"]
 ---
 
 import {
@@ -16,491 +15,650 @@ import {
   SlideSection,
   DocumentDownload,
 } from "@site/src/components/Downloads";
+import {
+  MARKET,
+  PERFORMANCE,
+  BLOCKCHAIN,
+  HARDWARE,
+  TEAM,
+  CAPITAL,
+  SKYSNARE,
+  AERONET,
+  FUNDING,
+} from "@site/src/data/values";
 
-<!-- markdownlint-disable MD025 -->
-
-# Phoenix Rooivalk: Investor Pitch Deck
-
-## Revolutionary SAE Level 4 Autonomous Counter-UAS Defense Platform
+# Phoenix Rooivalk: Seed Round Pitch Deck
 
 <DocumentDownload title="Phoenix Rooivalk Investor Pitch Deck" />
 
-## TL;DR (2-Minute Summary)
+## Dual-Brand Platform: Sports Training to Airport Security
 
-### 1. The Problem: Drone Threats Are Escalating Globally
+Phoenix Rooivalk operates two distinct brands sharing core technology:
+**SkySnare™** for consumer sports training and **AeroNet™** for enterprise
+counter-drone security.
 
-- **1M+ drones produced in Ukraine 2024** - accounting for 15% of casualties
-- **Critical infrastructure under constant threat** - airports, power plants, prisons
-- **Existing solutions are inadequate** - slow (5-30s), unreliable offline, no legal accountability
-- **$2.51B market by 2030** growing at 23.5% CAGR
-
-### 2. Our Solution: Sub-200ms Autonomous Defense
-
-- **10-150x faster than competitors** - sub-200ms end-to-end response
-- **True offline autonomy** - operates in RF-denied/GPS-denied environments
-- **Blockchain-anchored evidence** - legally defensible, tamper-proof audit trails
-- **Modular weapons system** - nets, RF jammers, kinetic options
-
-### 3. Traction: Pre-Hardware Revenue & Engineering Velocity
-
-- **x402 protocol live** - generating revenue before hardware ships
-- **Net launcher prototype ready** - 60% cost reduction with in-house Kevlar
-- **370+ commits in Week 48** - production-ready platform
-- **Market validated** - EU & Canada priority, SA Phase 2
-
-### 4. Investment Ask: $500K-$1M Seed Round
-
-- **Use of funds**: Hardware prototyping (30%), EU/Canada market entry (40%), team (30%)
-- **18-month runway** to Series A with proven revenue
-- **Target milestones**: 5 pilots, 10 x402 customers, certifications
+:::info Investment Opportunity
+**{CAPITAL.SEED_ROUND} Seed** | Runway to {CAPITAL.SEED_RUNWAY}
+:::
 
 ---
 
-## 5-Slide Quick Pitch (3 Minutes)
+## TL;DR (2-Minute Summary)
 
-<div style={{textAlign: 'center', marginBottom: '2rem'}}>
-  <img src="/img/logo.svg" alt="Phoenix Rooivalk" style={{height: '60px', marginBottom: '1rem'}} />
-</div>
+### The Opportunity
+
+| Brand | Market | Year 1 Focus |
+|-------|--------|--------------|
+| **SkySnare™** | {SKYSNARE.TARGET_MARKET} | D2C launch, {SKYSNARE.YEAR_1_UNITS} units |
+| **AeroNet™** | {MARKET.CURRENT} C-UAS market | Pilot preparation |
+
+### Key Value Propositions
+
+- **Dual Revenue Streams**: Consumer D2C + Enterprise security from shared platform
+- **Pre-Revenue Traction**: {CAPITAL.INVESTMENT_TO_DATE}, prototype 40% complete
+- **Cost Advantage**: In-house net manufacturing from Kevlar fiber stock
+- **Regulatory Pathway**: CPSC/ASTM certification (consumer), FAA/SORA (enterprise)
+
+### Year 1 Targets
+
+- **{SKYSNARE.YEAR_1_UNITS} SkySnare units** via D2C channel
+- **$2.15M total revenue** (consumer-led)
+- **1 AeroNet pilot MOU** signed
+- **{CAPITAL.LIABILITY_POLICY} liability insurance** bound
+
+---
+
+## 3-Minute Pitch (5 Slides)
 
 <SlideDeck
-  title="Phoenix Rooivalk: Quick Pitch"
+  title="Phoenix Rooivalk: 3-Minute Pitch"
   duration={3}
-  audience="Investors, Strategic Partners"
-  date="December 2, 2025"
+  audience="Seed Investors"
+  date="December 2025"
 >
 
 <SlideSection
   number={1}
-  title="The Problem & Solution"
-  duration={40}
-  icon="🚨"
+  title="The Problem"
+  duration={30}
+  icon="⚠️"
   keyPoints={[
-    "Problem: Drones = 15% casualties in Ukraine, 1M+ produced in 2024",
-    "Existing systems: 5-30s response, no offline capability, no legal evidence",
-    "Our solution: Sub-200ms response, true autonomy, blockchain evidence",
-    "💥 10-150x faster than all competitors",
+    "Nov 2025: Brussels Airport closed twice in one night, 54 flights cancelled, UK sent anti-drone troops",
+    "Regional airports need affordable drone defense - enterprise systems cost $1M+ with 5-30s response times",
+    "No solution offers sub-200ms edge AI detection + blockchain evidence chain for prosecution",
   ]}
-  script="Drones account for 15% of casualties in modern warfare. Ukraine alone produced over 1 million drones in 2024. Existing counter-drone systems are too slow at 5-30 seconds, fail offline, and provide no legal accountability. Phoenix Rooivalk delivers sub-200ms response times - that's 10 to 150 times faster - with true offline autonomy and blockchain-anchored evidence for legal defense."
+  script="This is happening right now. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled, 25,000 passengers affected. The UK sent Royal Air Force anti-drone specialists to help. Regional airports desperately need protection but current systems cost over a million dollars and take 5-30 seconds to respond. No one offers sub-200ms AI detection with immutable blockchain evidence for legal prosecution."
 />
 
 <SlideSection
   number={2}
-  title="Market & Traction"
-  duration={30}
-  icon="📈"
+  title="Our Solution"
+  duration={35}
+  icon="🚀"
   keyPoints={[
-    "💰 Market: $2.51B by 2030 at 23.5% CAGR",
-    "✅ x402 protocol live - generating revenue before hardware",
-    "🚀 Net launcher prototype ready - 60% cost reduction",
-    "🌍 EU & Canada priority markets (validated)",
+    `SkySnare™: ${SKYSNARE.MSRP} consumer launcher (funds R&D) | AeroNet™: ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
+    `Edge AI: YOLOv9 on Jetson Orin, ${PERFORMANCE.RESPONSE_TIME} response vs 5-30s competitors`,
+    `${BLOCKCHAIN.PRIMARY_CHAIN} blockchain: Immutable evidence chain for legal prosecution`,
   ]}
-  script="We're targeting a $2.51 billion market growing at 23.5% annually. The x402 protocol is live today, generating revenue before hardware ships. Net launcher prototype is ready with 60% cost reduction through in-house Kevlar manufacturing. Market validation confirms EU and Canada as priority markets with immediate need."
+  script={`Dual-brand platform. SkySnare is a ${SKYSNARE.MSRP} consumer product that funds enterprise R&D. AeroNet is the enterprise system at ${AERONET.SETUP_FEE} plus ${AERONET.MONTHLY_FEE}. The tech differentiator: Edge AI using YOLOv9 on NVIDIA Jetson with ${PERFORMANCE.RESPONSE_TIME} response time - that's 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for immutable, court-admissible evidence. No one else has this.`}
 />
 
 <SlideSection
   number={3}
-  title="Technology Advantage"
+  title="Unit Economics"
   duration={35}
-  icon="⚡"
+  icon="💰"
   keyPoints={[
-    "🧠 Edge AI: All processing on-device, no cloud dependency",
-    "⛓️ Blockchain: Solana + EtherLink for tamper-proof evidence",
-    "🎯 Modular weapons: Nets, RF jammers, kinetic options",
-    "🏆 Only solution with blockchain evidence generation",
+    `SkySnare: ${SKYSNARE.MSRP} price, ${SKYSNARE.COGS} COGS = ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin`,
+    `CAC: ${SKYSNARE.CAC} via D2C/influencer, Return rate: ${SKYSNARE.RETURN_RATE}`,
+    "In-house net manufacturing from existing Kevlar fiber stock",
   ]}
-  script="Our edge-first AI processes everything on-device with no cloud dependency. Blockchain provides immutable evidence using Solana and EtherLink. Modular weapon system adapts to any threat and regulatory environment. We're the only solution that generates blockchain-based legal evidence."
+  script={`Unit economics are strong. SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.COGS} cost of goods - that's ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Customer acquisition cost is ${SKYSNARE.CAC} through D2C and influencer channels. Return rate ${SKYSNARE.RETURN_RATE}. We manufacture nets in-house from Kevlar fiber stock we already have.`}
 />
 
 <SlideSection
   number={4}
-  title="Business Model & Velocity"
+  title="Traction & Milestones"
   duration={35}
-  icon="💰"
+  icon="✅"
   keyPoints={[
-    "💵 Pre-hardware revenue: x402 API live today",
-    "📊 Hardware + SaaS: 65-70% margins",
-    "⚡ Engineering velocity: 370+ commits in Week 48",
-    "✅ Production-ready platform deployed",
+    `${CAPITAL.INVESTMENT_TO_DATE} - CAD complete, prototype 40% assembled`,
+    "CPSC/ASTM certification planned - target March 2026",
+    `Year 1 target: ${SKYSNARE.YEAR_1_UNITS} units shipped, $2.15M revenue`,
   ]}
-  script="Revenue starts before hardware ships through our x402 protocol. Business model combines hardware and SaaS with 65-70% gross margins. Engineering velocity is exceptional - 370+ commits in Week 48 alone. The platform is production-ready and fully deployed."
+  script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled, net designs tested. CPSC and ASTM certification planned post-prototype, targeting March 2026. Year 1 target: ${SKYSNARE.YEAR_1_UNITS} consumer units generating $2.15M revenue, plus one enterprise pilot MOU signed.`}
 />
 
 <SlideSection
   number={5}
-  title="Investment Ask"
-  duration={40}
-  icon="💵"
+  title="The Ask"
+  duration={35}
+  icon="🤝"
   keyPoints={[
-    "🎯 Raising: $500K-$1M seed round",
-    "📍 Use: Hardware (30%), Market entry (40%), Team (30%)",
-    "✅ Milestones: 5 pilots, 10 x402 customers, certifications",
-    "⏱️ 18-month runway to Series A with proven revenue",
+    `Raising ${CAPITAL.SEED_ROUND} seed round`,
+    `Use: Product dev ${CAPITAL.SEED_PRODUCT_DEV}, Inventory ${CAPITAL.SEED_INVENTORY}, Marketing ${CAPITAL.SEED_MARKETING}, Insurance ${CAPITAL.SEED_INSURANCE}`,
+    `Runway to ${CAPITAL.SEED_RUNWAY} - clear path to Series A with proven revenue`,
   ]}
-  script="We're raising $500K to $1M seed round. Funds go to hardware prototyping, EU and Canada market entry, and team expansion. Target milestones are 5 pilot installations, 10 x402 enterprise customers, and regulatory certifications. This provides 18 months to Series A with proven revenue traction. Questions?"
+  script={`We're raising ${CAPITAL.SEED_ROUND}. Product development gets ${CAPITAL.SEED_PRODUCT_DEV} for prototype completion and certification. Inventory gets ${CAPITAL.SEED_INVENTORY} for PO facility and initial production. Marketing gets ${CAPITAL.SEED_MARKETING} for D2C launch. Insurance gets ${CAPITAL.SEED_INSURANCE} for ${CAPITAL.LIABILITY_POLICY} product liability. This gives runway to ${CAPITAL.SEED_RUNWAY} with clear path to Series A. Questions?`}
 />
 
 </SlideDeck>
 
 ---
 
-## 16-Slide Comprehensive Pitch Deck
-
-<div style={{textAlign: 'center', marginBottom: '2rem'}}>
-  <img src="/img/logo.svg" alt="Phoenix Rooivalk" style={{height: '60px', marginBottom: '1rem'}} />
-</div>
+## 5-Minute Pitch (Detailed)
 
 <SlideDeck
-  title="Phoenix Rooivalk: Investor Pitch Deck"
-  duration={12}
-  audience="Investors, Strategic Partners, Enterprise Customers"
-  date="December 2, 2025"
+  title="Phoenix Rooivalk: 5-Minute Pitch"
+  duration={5}
+  audience="Seed Investors"
+  date="December 2025"
 >
 
 <SlideSection
   number={1}
-  title="The Problem: Drone Threats Are Escalating Globally"
-  duration={60}
-  icon="🚨"
+  title="The Problem & Opportunity"
+  duration={50}
+  icon="🎯"
   keyPoints={[
-    "Ukraine produced 1M+ drones in 2024 - drones account for 15% of casualties",
-    "Critical infrastructure (airports, power plants, prisons) under constant threat",
-    "Existing solutions: slow (5-30s response), unreliable offline, no accountability",
-    "Market gap: No system combines speed, autonomy, and legal evidence generation",
+    "Nov 2025: Brussels closed twice in one night, 54 flights cancelled, UK sent RAF troops - 4x YoY increase",
+    `Enterprise: ${MARKET.CURRENT} C-UAS market → ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR} (${MARKET.CAGR} CAGR)`,
+    "Current solutions: $1M+, 5-30s response, no evidence chain - Gatwick 2018 perps never caught",
+    `Consumer: ${SKYSNARE.TARGET_MARKET} growing at ${MARKET.OUTDOOR_TOY_CAGR} CAGR funds our R&D`,
   ]}
-  script="Drones are no longer hobbyist toys. Ukraine produced over 1 million drones in 2024, and they account for 15% of all casualties in modern warfare. Airports, power plants, and prisons face daily threats. Existing counter-drone systems are too slow, fail offline, and provide no legal accountability. There's a massive gap in the market for a solution that's fast, autonomous, and legally defensible."
+  script={`The threat is real and accelerating. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled. The UK sent Royal Air Force anti-drone specialists. Drone sightings at Kleine Brogel where US nuclear weapons are stored. Incidents are up 4x year-over-year across Europe. The C-UAS market is ${MARKET.CURRENT} growing to ${MARKET.PROJECTED} by ${MARKET.PROJECTED_YEAR}. Current solutions cost over a million dollars, take 5-30 seconds to respond, and have no evidence chain. We solve this.`}
 />
 
 <SlideSection
   number={2}
-  title="Our Solution: SAE Level 4 Autonomous Defense"
-  duration={60}
-  icon="🛡️"
+  title="Our Solution: AI + Blockchain"
+  duration={50}
+  icon="🚀"
   keyPoints={[
-    "Sub-200ms end-to-end response time (10-150x faster than competitors)",
-    "True autonomy: Operates in RF-denied, GPS-denied, fully offline environments",
-    "Blockchain-anchored evidence: Legally defensible, tamper-proof audit trail",
-    "Modular weapons: Nets, RF jammers, kinetic - adapt to threat and regulations",
+    `Edge AI: YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM} (${HARDWARE.COMPUTE_TOPS}) - ${PERFORMANCE.RESPONSE_TIME} response`,
+    `Blockchain: ${BLOCKCHAIN.PRIMARY_CHAIN} evidence chain - ${BLOCKCHAIN.COST_PER_TX}/tx, ${BLOCKCHAIN.FINALITY} finality`,
+    `SkySnare™ ${SKYSNARE.MSRP} consumer | AeroNet™ ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
+    "Only C-UAS with court-admissible, tamper-proof evidence for prosecution",
   ]}
-  script="Phoenix Rooivalk is SAE Level 4 autonomous counter-drone defense. We deliver sub-200ms response times - that's 10 to 150 times faster than existing systems. We operate completely offline in RF-denied and GPS-denied environments where others fail. Every engagement generates blockchain-anchored evidence for legal defense. And our modular weapon system adapts to any threat level and regulatory environment."
+  script={`Our tech stack: Edge AI using YOLOv9 on ${HARDWARE.COMPUTE_PLATFORM} delivering ${HARDWARE.COMPUTE_TOPS} - that's ${PERFORMANCE.RESPONSE_TIME} response time, 10-150x faster than cloud-dependent competitors. Every detection, every capture logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain at ${BLOCKCHAIN.COST_PER_TX} per transaction with ${BLOCKCHAIN.FINALITY} finality. Immutable evidence chain for court prosecution - remember, Gatwick perps were never caught because there was no evidence. SkySnare at ${SKYSNARE.MSRP} funds R&D, AeroNet at ${AERONET.SETUP_FEE} plus ${AERONET.MONTHLY_FEE} is the enterprise product.`}
 />
 
 <SlideSection
   number={3}
-  title="Market Opportunity: $2.51B by 2030"
-  duration={50}
-  icon="📈"
+  title="Development Status & Traction"
+  duration={45}
+  icon="✅"
   keyPoints={[
-    "Current market: $1.2-1.8B (2024)",
-    "Projected: $2.51B by 2030 at 23.5% CAGR",
-    "Target segments: Military ($1.2B), Critical Infrastructure ($0.8B), Commercial ($0.5B)",
-    "International focus: EU & Canada (immediate need), South Africa (Phase 2)",
+    `${CAPITAL.INVESTMENT_TO_DATE} in R&D`,
+    "CAD designs complete, prototype 40% assembled",
+    "Net designs tested with existing Kevlar fiber stock",
+    "CPSC/ASTM certification planned (target Mar 2026)",
   ]}
-  script="The counter-drone market is $1.2 to $1.8 billion today and growing to $2.51 billion by 2030 at 23.5% annually. We're targeting military, critical infrastructure, and commercial segments. Our go-to-market strategy prioritizes EU and Canada where the threat is immediate, with South Africa as a Phase 2 expansion market."
+  script={`${CAPITAL.INVESTMENT_TO_DATE} so far. CAD designs complete, mechanical prototype 40% assembled. Net designs tested using Kevlar fiber stock we already have. CPSC and ASTM certification planned post-prototype, targeting March 2026.`}
 />
 
 <SlideSection
   number={4}
-  title="Technology: Edge-First AI + Blockchain"
-  duration={50}
-  icon="⚡"
+  title="The Team"
+  duration={40}
+  icon="👥"
   keyPoints={[
-    "Edge AI: All processing on-device, no cloud dependency, sub-2ms authentication",
-    "Blockchain: Solana (mainnet) + EtherLink (private) for evidence anchoring",
-    "x402 Protocol: Revenue-generating API for evidence verification (live today)",
-    "Modular architecture: Rust core, React UI, WASM for cross-platform deployment",
+    `${TEAM.COMBINED_EXPERIENCE} combined experience across engineering, defense, and finance`,
+    `${TEAM.CTO_NAME} (CTO): ${TEAM.CTO_BACKGROUND}`,
+    `${TEAM.CEO_NAME} (CEO): ${TEAM.CEO_BACKGROUND}`,
+    "4 co-founders with complementary skills, full-time committed",
   ]}
-  script="Our edge-first AI processes everything on-device with sub-2-millisecond authentication. Blockchain provides immutable evidence anchoring using Solana for public verification and EtherLink for private operations. Our x402 protocol is live today, generating revenue through evidence verification APIs. The modular Rust architecture with React UI and WASM ensures cross-platform deployment from embedded systems to web browsers."
+  script={`Let me introduce the team. ${TEAM.COMBINED_EXPERIENCE} combined experience. ${TEAM.CTO_NAME} is our CTO - ${TEAM.CTO_BACKGROUND}. ${TEAM.CEO_NAME} is CEO - ${TEAM.CEO_BACKGROUND}. We also have ${TEAM.MEMBER_3_NAME} and ${TEAM.MEMBER_4_NAME} on the founding team. All co-founders are full-time committed with ${CAPITAL.INVESTMENT_TO_DATE} invested.`}
 />
 
 <SlideSection
   number={5}
-  title="Competitive Advantage: 10-150x Faster"
-  duration={50}
-  icon="🏆"
+  title="Business Model & Unit Economics"
+  duration={45}
+  icon="💰"
   keyPoints={[
-    "Response time: 50-195ms vs competitors' 5,000-30,000ms",
-    "True offline capability (competitors require connectivity)",
-    "Only solution with blockchain evidence generation",
-    "Open architecture vs proprietary vendor lock-in",
+    `SkySnare D2C: ${SKYSNARE.MSRP} MSRP, ${SKYSNARE.COGS} COGS, ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin`,
+    `AeroNet: ${AERONET.SETUP_FEE} setup + ${AERONET.MONTHLY_FEE} recurring`,
+    `Year 1 target: $2.15M revenue from ${SKYSNARE.YEAR_1_UNITS} consumer units`,
+    "58-64% gross margin on consumer, 44% on enterprise",
   ]}
-  script="We're 10 to 150 times faster than any competitor. While others need 5 to 30 seconds to respond, we react in under 200 milliseconds. We're the only solution that works completely offline and generates blockchain-based legal evidence. Unlike proprietary systems, our open architecture prevents vendor lock-in and enables customer customization."
+  script={`SkySnare sells at ${SKYSNARE.MSRP} with ${SKYSNARE.COGS} cost of goods - that's ${SKYSNARE.CONTRIBUTION_MARGIN} contribution margin. Customer acquisition is ${SKYSNARE.CAC}. AeroNet is ${AERONET.SETUP_FEE} setup plus ${AERONET.MONTHLY_FEE} managed service. Year 1 target is $2.15M revenue from ${SKYSNARE.YEAR_1_UNITS} consumer units.`}
 />
 
 <SlideSection
   number={6}
-  title="Hardware Progress: Prototype Ready"
-  duration={45}
-  icon="🔧"
-  keyPoints={[
-    "Net launcher and net designs complete - ready for prototyping",
-    "In-house Kevlar manufacturing: 60% cost reduction, no import delays, IP protection",
-    "Using Pieter's domestic Kevlar stock for immediate production",
-    "Ground-based launcher designed for Grover UGV integration",
-  ]}
-  script="Hardware development is on track. Net launcher and net designs are complete and ready for prototyping. We're manufacturing Kevlar nets in-house using domestic stock, which cuts costs by 60%, eliminates import delays, and keeps our IP protected. The ground-based launcher is designed for integration with our Grover UGV platform."
-/>
-
-<SlideSection
-  number={7}
-  title="Business Model: Pre-Hardware Revenue"
+  title="The Ask: Seed Round"
   duration={50}
-  icon="💰"
+  icon="🤝"
   keyPoints={[
-    "x402 Protocol: Blockchain micropayments for evidence verification API (live)",
-    "SaaS licensing: Cloud-hosted AI analysis and monitoring dashboards",
-    "Hardware sales: Net launchers, UGV platforms, sensor suites",
-    "Professional services: Integration, training, regulatory compliance consulting",
+    `Raising: ${CAPITAL.SEED_ROUND} seed round`,
+    `Use of funds: Product dev ${CAPITAL.SEED_PRODUCT_DEV}, Inventory ${CAPITAL.SEED_INVENTORY}, Marketing ${CAPITAL.SEED_MARKETING}`,
+    `Runway to ${CAPITAL.SEED_RUNWAY} with clear Series A path`,
+    `Milestones: Certification, ${SKYSNARE.YEAR_1_UNITS} units shipped, enterprise pilot MOU`,
   ]}
-  script="Our business model generates revenue before hardware ships. The x402 protocol is live today, providing blockchain micropayments for evidence verification API access. We offer SaaS licensing for cloud-hosted AI and monitoring. Hardware sales include net launchers, UGV platforms, and sensor suites. Professional services cover integration, training, and regulatory compliance."
-/>
-
-<SlideSection
-  number={8}
-  title="Market Validation: EU & Canada Priority"
-  duration={50}
-  icon="🎯"
-  keyPoints={[
-    "Interviewed 3 South African airports + Boeing pilot",
-    "Finding: SA has zero drone incidents - operators are responsible",
-    "Current SA threats: Lasers and kites (cheaper, more accessible)",
-    "Strategy: EU & Canada first (immediate need), SA Phase 2",
-  ]}
-  script="We completed market validation by interviewing three South African airports and a Boeing pilot. Key finding: South Africa has zero drone incidents because operators are responsible. The real threats there are lasers and kites. This validates our international-first strategy. EU and Canada face the drone problem today. South Africa is our Phase 2 market."
-/>
-
-<SlideSection
-  number={9}
-  title="Engineering Velocity: Production-Ready"
-  duration={40}
-  icon="🚀"
-  keyPoints={[
-    "Week 48: 370+ commits, 40+ PRs, 10+ ADRs published",
-    "Full platform deployed: RAG integration, auth, gamification, monitoring",
-    "Azure Functions + Cosmos DB backend fully operational",
-    "Static site deployed on Azure SWA with CI/CD pipelines",
-  ]}
-  script="Our engineering velocity is exceptional. Week 48 alone saw 370+ commits, 40+ pull requests, and 10+ architecture decision records. The full platform is deployed with RAG integration, authentication, gamification, and monitoring. Azure Functions with Cosmos DB backend is operational. Static site runs on Azure SWA with complete CI/CD pipelines."
-/>
-
-<SlideSection
-  number={10}
-  title="Traction: x402 Protocol Live"
-  duration={40}
-  icon="✅"
-  keyPoints={[
-    "x402 payment protocol deployed to production",
-    "Blockchain micropayments operational (Solana + EtherLink)",
-    "Evidence verification API available for integration",
-    "Full security audit completed, zero critical vulnerabilities",
-  ]}
-  script="We have real traction. The x402 payment protocol is deployed to production with blockchain micropayments running on Solana and EtherLink. Our evidence verification API is available for third-party integration. We completed a full security audit with zero critical vulnerabilities found."
-/>
-
-<SlideSection
-  number={11}
-  title="Regulatory Compliance: Built-In from Day 1"
-  duration={45}
-  icon="⚖️"
-  keyPoints={[
-    "Blockchain evidence trail meets legal admissibility requirements",
-    "Modular weapons adapt to local regulations (nets vs kinetic vs RF)",
-    "Compliance-first documentation: 140+ pages of technical/legal specs",
-    "Integration with existing airspace management systems (ADS-B, FlightRadar24)",
-  ]}
-  script="Regulatory compliance is built into our architecture. Blockchain evidence trails meet legal admissibility requirements. Modular weapons adapt to local regulations - nets for civilian areas, kinetic for military zones. We maintain 140+ pages of compliance documentation. The system integrates with existing airspace management including ADS-B and FlightRadar24."
-/>
-
-<SlideSection
-  number={12}
-  title="Deployment Models: Flexible & Scalable"
-  duration={45}
-  icon="🌐"
-  keyPoints={[
-    "Mobile Picket: Portable UGV-based for temporary security perimeters",
-    "Site-Fixed: Permanent installation for airports, prisons, power plants",
-    "Fiber Engage: High-density urban with fiber backbone for coordination",
-    "Swarm Defense: Multi-unit coordination for large area coverage",
-  ]}
-  script="We support four deployment models. Mobile Picket uses portable UGV platforms for temporary perimeters. Site-Fixed provides permanent installations for airports and critical facilities. Fiber Engage handles high-density urban environments with fiber backbones for coordination. Swarm Defense coordinates multiple units for large area coverage."
-/>
-
-<SlideSection
-  number={13}
-  title="Team: Deep Aerospace & Blockchain Expertise"
-  duration={40}
-  icon="👥"
-  keyPoints={[
-    "Combined 15+ years experience in aerospace, defense, and blockchain",
-    "Prior work on military-grade systems and cryptographic protocols",
-    "Strategic advisors from airport operations and aviation safety",
-    "Growing network of university researchers and government contacts",
-  ]}
-  script="Our team brings deep domain expertise. Combined 15+ years in aerospace, defense, and blockchain. We've built military-grade systems and cryptographic protocols. Strategic advisors include airport operations and aviation safety professionals. We're building relationships with university researchers and government agencies."
-/>
-
-<SlideSection
-  number={14}
-  title="Investment Ask: Series Seed"
-  duration={50}
-  icon="💵"
-  keyPoints={[
-    "Raising: $500K-$1M seed round",
-    "Use of funds: Hardware prototyping (30%), EU/Canada market entry (40%), team expansion (30%)",
-    "Milestones: 5 pilot installations, 10 x402 enterprise customers, regulatory certifications",
-    "18-month runway to Series A with revenue traction",
-  ]}
-  script="We're raising a $500K to $1M seed round. Funds will go to hardware prototyping, EU and Canada market entry, and team expansion - 30, 40, 30 percent respectively. Target milestones are 5 pilot installations, 10 x402 enterprise customers, and key regulatory certifications. This provides an 18-month runway to Series A with proven revenue traction."
-/>
-
-<SlideSection
-  number={15}
-  title="Next 6 Months: Aggressive Milestones"
-  duration={45}
-  icon="📅"
-  keyPoints={[
-    "Q1 2026: Complete net launcher prototype, first pilot installation (EU airport)",
-    "Q2 2026: x402 enterprise contracts, regulatory certification (EU), 3 installations",
-    "Q3 2026: Series A fundraise with proven revenue and 5 operational installations",
-    "Q4 2026: Expand to Canada, begin scaling manufacturing partnerships",
-  ]}
-  script="Our roadmap is aggressive. Q1 2026: Complete net launcher prototype and secure our first EU airport pilot. Q2: Sign x402 enterprise contracts, achieve EU regulatory certification, reach 3 installations. Q3: Raise Series A with proven revenue and 5 operational sites. Q4: Expand to Canada and establish manufacturing partnerships for scale."
-/>
-
-<SlideSection
-  number={16}
-  title="Vision: The Standard for Autonomous Defense"
-  duration={40}
-  icon="🌟"
-  keyPoints={[
-    "Become the de facto standard for counter-drone defense globally",
-    "Open platform enabling ecosystem of third-party integrations",
-    "Expand beyond drones: Autonomous defense for all aerial threats",
-    "IPO candidate: $2.51B market with clear path to 20%+ market share",
-  ]}
-  script="Our vision is to become the global standard for counter-drone defense. We're building an open platform that enables an ecosystem of third-party integrations. Beyond drones, we see expansion to all autonomous aerial threat defense. This is an IPO-track company in a $2.51 billion market where we have a clear path to 20%+ market share. Let's build the future of autonomous defense together."
+  script={`We're raising ${CAPITAL.SEED_ROUND}. Funds go to product development at ${CAPITAL.SEED_PRODUCT_DEV}, inventory at ${CAPITAL.SEED_INVENTORY}, and marketing at ${CAPITAL.SEED_MARKETING}. This gives runway to ${CAPITAL.SEED_RUNWAY}. Milestones are certification complete, ${SKYSNARE.YEAR_1_UNITS} units shipped, and enterprise pilot MOU signed. Series A follows with proven traction.`}
 />
 
 </SlideDeck>
 
 ---
 
-## Presentation Walkthrough Script
+## Use of Funds ({CAPITAL.SEED_ROUND})
 
-> **Duration**: ~12 minutes  
-> **Audience**: Investors, Strategic Partners, Enterprise Customers
-
-### Opening (15 seconds)
-
-> "We're Phoenix Rooivalk. We've built the world's first blockchain-verified, SAE Level 4 autonomous counter-drone system. Let me show you why this matters and why we're raising now."
-
-### Key Transitions
-
-- **Slide 1 → 2**: "So how do we solve this global problem?"
-- **Slide 5 → 6**: "And we're not just PowerPoint - here's our hardware progress."
-- **Slide 8 → 9**: "Market research led us to pivot internationally. Here's the execution proof."
-- **Slide 13 → 14**: "With this team and traction, here's what we're raising."
-
-### Closing (After Slide 16)
-
-> "Phoenix Rooivalk represents the future of autonomous defense: fast, autonomous, legally defensible, and already generating revenue. We have the team, the tech, the market timing, and the traction. We're ready to scale globally. Let's discuss how you can be part of securing this future."
+| Allocation | Percentage | Purpose |
+|------------|------------|---------|
+| Product development | {CAPITAL.SEED_PRODUCT_DEV} | Mechanical prototype, testing, certification |
+| Inventory & working capital | {CAPITAL.SEED_INVENTORY} | PO facility {CAPITAL.PO_FACILITY}, {CAPITAL.CONVERSION_DAYS} conversion |
+| Marketing & brand building | {CAPITAL.SEED_MARKETING} | D2C and influencer campaigns |
+| Product liability & insurance | {CAPITAL.SEED_INSURANCE} | {CAPITAL.LIABILITY_POLICY} policy |
+| Enterprise compliance | {CAPITAL.SEED_COMPLIANCE} | FAA/SORA preparation |
+| Operations & overhead | {CAPITAL.SEED_OPERATIONS} | Team and facilities |
 
 ---
 
-## Q&A Preparation
+## Financial Projections
 
-### Common Questions
-
-#### "Why blockchain?"
-
-- **Legal admissibility** requires tamper-proof evidence chains
-- **Insurance claims** need verifiable incident footage for drone damage
-- **Regulatory compliance** demands immutable audit trails (CAA, EASA, FAA)
-- **Solana's speed** (65K TPS) matches our real-time requirements
-
-#### "What about existing solutions?"
-
-| Feature             | Phoenix Rooivalk  | DroneShield    | Dedrone         |
-| ------------------- | ----------------- | -------------- | --------------- |
-| Response Time       | **50-195ms**      | 5,000-30,000ms | 10,000-25,000ms |
-| Offline Capable     | **✅ Yes**        | ❌ No          | ⚠️ Limited      |
-| Blockchain Evidence | **✅ Yes**        | ❌ No          | ❌ No           |
-| Revenue Today       | **✅ Yes (x402)** | ❌ No          | ❌ No           |
-| Open Architecture   | **✅ Yes**        | ❌ Proprietary | ❌ Proprietary  |
-
-#### "How do you handle false positives?"
-
-- **Multi-sensor fusion** (6+ sensor types) reduces false positives to &lt;0.3%
-- **AI confidence thresholds** with human-in-the-loop for critical decisions
-- **Blockchain logs** all decisions for review and continuous improvement
-
-#### "What's your competitive moat?"
-
-- **Edge AI patents** for offline autonomous operation
-- **Blockchain integration IP** for legal-grade evidence chains
-- **60% cost advantage** through in-house Kevlar manufacturing
-- **370+ commits/week** engineering velocity
-
-#### "Revenue timeline?"
-
-- **x402 API revenue** starting now (pre-hardware)
-- **First hardware sales** Q4 2026
-- **Profitable** by Year 3 with 25% EBITDA margin
-
-#### "Team capabilities?"
-
-- **Co-Founder/CTO**: 15+ years systems engineering, AI/ML, blockchain
-- **Co-Founder/CEO**: 20+ years executive project management (energy, mining, defense)
-- **Advisory**: Airport operations, aviation safety, defense industry
-- **10+ ADRs published** showing architectural maturity
+| Year | Consumer | Enterprise | Total | EBITDA |
+|------|----------|------------|-------|--------|
+| 1 (FY26) | $1.75M | $0.40M | $2.15M | -$0.5M |
+| 2 (FY27) | $6.5M | $3.2M | $9.7M | $1.2M |
+| 3 (FY28) | $12M | $8.5M | $20.5M | $4.1M |
+| 4 (FY29) | $16M | $18M | $34M | $8.5M |
+| 5 (FY30) | $18M | $32M | $50M | $15M |
 
 ---
 
-## 📞 Next Steps
+## Key Milestones
+
+### 6-Month Targets (by Apr 30, 2026)
+
+- [ ] Mechanical prototype complete and validated at 50m range
+- [ ] CPSC/ASTM/EN-71 certification complete (Mar 2026)
+- [ ] {CAPITAL.LIABILITY_POLICY} liability policy bound
+- [ ] Enterprise safety case draft submitted
+
+### 12-Month Targets (by Oct 31, 2026)
+
+- [ ] {SKYSNARE.YEAR_1_UNITS} consumer units shipped
+- [ ] $2.1–$2.2M total revenue
+- [ ] Enterprise pilot MOU signed (Sep 2026)
+- [ ] Series A preparation complete
+
+---
+
+## Unit Economics
+
+### SkySnare™ Consumer (D2C)
+
+| Metric | Value |
+|--------|-------|
+| MSRP | {SKYSNARE.MSRP} |
+| COGS | {SKYSNARE.COGS} |
+| Contribution Margin | {SKYSNARE.CONTRIBUTION_MARGIN} |
+| CAC | {SKYSNARE.CAC} |
+| Return Rate | {SKYSNARE.RETURN_RATE} |
+| Year 1 Target | {SKYSNARE.YEAR_1_UNITS} units |
+
+### AeroNet™ Enterprise
+
+| Metric | Value |
+|--------|-------|
+| Setup Fee | {AERONET.SETUP_FEE} |
+| Monthly Service | {AERONET.MONTHLY_FEE} |
+| TAM | {AERONET.TAM} |
+| Gross Margin | 44% |
+
+---
+
+## Technology Platform
+
+### Edge AI Stack
+
+| Component | Specification | Advantage |
+|-----------|---------------|-----------|
+| **Model** | YOLOv9 (mAP 95.7%) | State-of-the-art detection |
+| **Hardware** | {HARDWARE.COMPUTE_PLATFORM} | {HARDWARE.COMPUTE_TOPS} on-device |
+| **Response** | {PERFORMANCE.RESPONSE_TIME} | 10-150x faster than competitors |
+| **Accuracy** | {PERFORMANCE.ACCURACY} | {PERFORMANCE.FALSE_POSITIVE} false positive rate |
+| **Latency** | {PERFORMANCE.DETECTION_LATENCY} detection | Real-time edge processing |
+
+### Blockchain Evidence Chain
+
+| Feature | Specification | Why It Matters |
+|---------|---------------|----------------|
+| **Chain** | {BLOCKCHAIN.PRIMARY_CHAIN} | {BLOCKCHAIN.TPS} TPS, proven at scale |
+| **Cost** | {BLOCKCHAIN.COST_PER_TX}/transaction | ~{BLOCKCHAIN.ANNUAL_COST}/year continuous logging |
+| **Finality** | {BLOCKCHAIN.FINALITY} | Near-instant confirmation |
+| **Security** | {BLOCKCHAIN.HASH_ALGORITHM} + {BLOCKCHAIN.SIGNATURE_ALGORITHM} | Court-admissible integrity |
+
+:::tip Why Blockchain Matters
+Gatwick 2018: 140,000+ passengers stranded, £60M cost - **perpetrators never caught**.
+With immutable blockchain evidence, we provide the prosecution trail that competitors lack.
+:::
+
+---
+
+## The Story: Why Us?
+
+:::info Soonami Element: The Story
+What is your connection? Why did you start this?
+:::
+
+### The Origin
+
+The founding team came together with a shared frustration: **watching the Gatwick 2018 incident unfold with no prosecution possible because there was no evidence chain.**
+
+We're engineers who've spent careers building systems that work in harsh conditions - mining, energy, defense. We saw:
+- Drones threatening critical infrastructure with no affordable defense
+- Enterprise solutions at $1M+ locked out regional airports
+- No one combining AI speed with blockchain evidence
+
+### Why This Team?
+
+- **Jurie Smit** (CTO): 15+ years building real-time systems. Saw the gap between AI capability and deployment speed.
+- **Martyn Redelinghuys** (CEO): 20+ years in defense & energy. Knows the procurement cycles and what enterprises actually buy.
+- **Founder-market fit**: We've built safety-critical systems before. We know hardware. We know blockchain. We're not learning on the job.
+
+### The Moment of Clarity
+
+*November 2025: Brussels Airport closes twice in one night. UK sends RAF troops. Drones spotted near nuclear weapons storage. And still - no affordable solution for regional airports.*
+
+We decided: **Build it ourselves, or watch the problem get worse.**
+
+---
+
+## Market: TAM → SAM → SOM
+
+:::info Soonami Element: The Market
+TAM, SAM, SOM - be realistic in your assessment. Investors will judge you on these assumptions.
+:::
+
+### Bottom-Up Market Analysis
+
+| Market Layer | Size | Calculation |
+|--------------|------|-------------|
+| **TAM** (Total) | {MARKET.CURRENT} → {MARKET.PROJECTED} | Global C-UAS market (MarketsandMarkets 2025) |
+| **SAM** (Serviceable) | ~$1.5B | Regional airports + event venues + critical infrastructure (non-military, non-government) |
+| **SOM** (Obtainable Y1-3) | $15-25M | 15-20 enterprise customers × avg $1M lifetime value |
+
+### SOM Calculation (Conservative)
+
+| Segment | Y1 | Y2 | Y3 | Rationale |
+|---------|-----|-----|-----|-----------|
+| **SkySnare Consumer** | $1.75M | $6.5M | $12M | 5K→15K→30K units |
+| **AeroNet Enterprise** | $0.4M | $3.2M | $8.5M | 2→8→15 customers |
+| **Total** | $2.15M | $9.7M | $20.5M | |
+
+### Why We Can Capture This
+
+1. **Price point**: $150K vs $1M+ = 10x more accessible
+2. **Edge AI**: Works offline, no cloud dependency
+3. **Blockchain evidence**: Only solution with prosecution trail
+4. **Dual brand**: Consumer funds enterprise R&D
+
+---
+
+## Go-to-Market Strategy
+
+:::info Soonami Element: Go2Market
+How do you specifically want to enter the market? Where do you want to focus first?
+:::
+
+### Phase 1: Consumer Beachhead (SkySnare)
+
+| Element | Strategy |
+|---------|----------|
+| **First customers** | Active families with HHI $75K+, 2+ children |
+| **Channel** | D2C website (70%), Amazon (30%) |
+| **Acquisition** | Influencer partnerships (outdoor sports), targeted Meta/Google |
+| **CAC target** | {SKYSNARE.CAC} |
+| **Geography** | USA first, then EU (CE marking) |
+| **Timeline** | Launch Q2 2026 |
+
+### Phase 2: Enterprise Entry (AeroNet)
+
+| Element | Strategy |
+|---------|----------|
+| **First customers** | Regional airports (non-hub), event venues |
+| **Beachhead** | South Africa (home market), then EU regional |
+| **Sales cycle** | 6-9 months (faster than enterprise norm) |
+| **Entry wedge** | Pilot program at $50K, convert to full at $150K |
+| **Channel** | Direct sales + security integrator partnerships |
+| **Timeline** | First pilot Q3 2026, first paying Q1 2027 |
+
+### Why This Sequence?
+
+```
+Consumer (SkySnare)          Enterprise (AeroNet)
+────────────────────         ────────────────────
+• Faster time to market      • Longer sales cycle
+• Lower regulatory bar       • Higher regulatory bar
+• Validates tech             • Validates at scale
+• Funds R&D                  • Higher margins
+        ↓                            ↓
+   Year 1 focus              Year 2+ expansion
+```
+
+---
+
+## Competitive Analysis
+
+:::info Soonami Element: Competition
+List competitors in a matrix with important categories and why you are better.
+:::
+
+### Competition Matrix
+
+| Feature | Phoenix Rooivalk | DroneShield | Dedrone | Fortem |
+|---------|------------------|-------------|---------|--------|
+| **Response Time** | ✅ {PERFORMANCE.RESPONSE_TIME} | ⚠️ 5+ seconds | ❌ 10+ seconds | ⚠️ 2-5 seconds |
+| **Price (Enterprise)** | ✅ {AERONET.SETUP_FEE} | ❌ $1.2M+ | ❌ $1.5M+ | ❌ $800K-1.2M |
+| **Evidence Chain** | ✅ Blockchain | ❌ None | ❌ None | ❌ None |
+| **Edge AI** | ✅ Full offline | ⚠️ Partial | ❌ Cloud-dependent | ⚠️ Partial |
+| **Physical Capture** | ✅ Net-based | ❌ RF jamming | ❌ Detection only | ✅ Net drone |
+| **Consumer Product** | ✅ SkySnare $349 | ❌ N/A | ❌ N/A | ❌ N/A |
+| **False Positive** | ✅ {PERFORMANCE.FALSE_POSITIVE} | ⚠️ ~15% | ⚠️ ~20% | ⚠️ ~15% |
+
+### Our Sustainable Advantage
+
+1. **Speed moat**: Edge AI architecture can't be easily retrofitted onto cloud systems
+2. **Evidence moat**: Blockchain integration from day 1, not bolted on
+3. **Cost moat**: In-house net manufacturing keeps margins high
+4. **Dual-revenue moat**: Consumer revenue insulates from enterprise sales cycles
+
+### Indirect Competition
+
+| Alternative | Why We Win |
+|-------------|------------|
+| **Do nothing** | Nov 2025 shows this is no longer acceptable |
+| **Manual patrols** | Can't match AI response time |
+| **RF jamming only** | No capture, no evidence, legal issues |
+| **Military systems** | $5M+, overkill for regional airports |
+
+---
+
+## Why Now?
+
+### The November 2025 Crisis
+
+| Incident | Impact | Source |
+|----------|--------|--------|
+| **Brussels Airport** | Closed twice Nov 4-5, 2025; 54 flights cancelled | [Euronews](https://www.euronews.com/2025/11/05/latest-drone-sightings-force-flight-cancellations-at-belgiums-main-airport) |
+| **Kleine Brogel** | Drones near US nuclear weapons storage | [CBS News](https://www.cbsnews.com/news/drones-europe-nato-airports-russia-hybrid-warfare-belgium-uk-anti-drone-troops/) |
+| **UK Response** | RAF anti-drone specialists deployed to Belgium | [Al Jazeera](https://www.aljazeera.com/news/2025/11/5/belgian-airports-disrupted-by-unidentified-drone-flights) |
+| **Poland** | 4 airports closed, 23 drones in one day (Sep 2025) | Reuters |
+| **Europe-wide** | 4x incident increase YoY | Euronews analysis |
+
+### Why Competitors Can't Solve This
+
+- **Response time**: 5-30 seconds (ours: {PERFORMANCE.RESPONSE_TIME})
+- **Cost**: $1M+ enterprise systems (ours: {AERONET.SETUP_FEE} + {AERONET.MONTHLY_FEE})
+- **Evidence**: No blockchain chain-of-custody (ours: {BLOCKCHAIN.PRIMARY_CHAIN} immutable logs)
+- **Prosecution**: Gatwick 2018 perps never caught - no evidence trail
+
+### Consumer Market Timing
+
+- Parents seeking screen-free outdoor activities
+- Sports training market growing at {MARKET.OUTDOOR_TOY_CAGR} CAGR
+- Consumer revenue funds enterprise R&D
+- D2C channel mature and cost-effective
+
+---
+
+## Risk Mitigation
+
+| Category | Risk | Mitigation |
+|----------|------|------------|
+| **Compliance** | Certification delays | CPSC/ASTM/EN-71 in progress; FAA SORA alignment |
+| **Legal** | Product liability | {CAPITAL.LIABILITY_POLICY} insurance; clear-use labeling |
+| **Working Capital** | Cash flow gaps | PO facility ({CAPITAL.PO_FACILITY}), staged production ({CAPITAL.PRODUCTION_RATE}) |
+| **Brand** | Confusion risk | Full separation (sites, tone, PR) |
+| **Timeline** | Delays | Enterprise deployment Year 2; consumer focus Year 1 |
+
+---
+
+## Team
+
+### Founding Team
+
+| Name | Role | Background | LinkedIn |
+|------|------|------------|----------|
+| **{TEAM.CTO_NAME}** | Co-Founder & CTO | {TEAM.CTO_BACKGROUND} | [Profile]({TEAM.CTO_LINKEDIN}) |
+| **{TEAM.CEO_NAME}** | Co-Founder & CEO | {TEAM.CEO_BACKGROUND} | [Profile]({TEAM.CEO_LINKEDIN}) |
+| **{TEAM.MEMBER_3_NAME}** | {TEAM.MEMBER_3_TITLE} | {TEAM.MEMBER_3_BACKGROUND} | [Profile]({TEAM.MEMBER_3_LINKEDIN}) |
+| **{TEAM.MEMBER_4_NAME}** | {TEAM.MEMBER_4_TITLE} | {TEAM.MEMBER_4_BACKGROUND} | [Profile]({TEAM.MEMBER_4_LINKEDIN}) |
+
+### Why This Team?
+
+- **{TEAM.COMBINED_EXPERIENCE} combined experience** across engineering, defense, and finance
+- **Technical depth**: Edge AI, embedded systems, blockchain implementation
+- **Business acumen**: R500M+ portfolio management, defense industry relationships
+- **Full-time commitment**: {CAPITAL.INVESTMENT_TO_DATE} invested
+
+### Corporate Structure
+
+- **{TEAM.COMPANY_STRUCTURE}** for US/ITAR markets
+- **{TEAM.SECONDARY_ENTITY}** for global non-ITAR exports
+
+:::tip More on the Team
+See the full [Team Profile](/docs/executive/team) for detailed backgrounds and hiring plan.
+:::
+
+---
+
+## Predicted Q&A
+
+:::info Soonami Element: Q&A Preparation
+Predict questions and how you would answer them.
+:::
+
+### "Why now?"
+
+**The short answer:** November 2025 proved the problem is urgent and the market is ready.
+
+**Detailed response:**
+- **Market timing**: 4x increase in European drone incidents YoY. Brussels closed twice in one night. This is front-page news.
+- **Technology timing**: YOLOv9 + Jetson Orin enables real-time edge AI that wasn't possible 2 years ago. Solana's $0.00025/tx makes continuous blockchain logging viable.
+- **Regulatory timing**: EU and US mandating airport drone defense. Budget being allocated.
+- **Team timing**: Our combined experience in defense, energy, and real-time systems means we're not learning - we're executing.
+
+### "Is your team complete?"
+
+**The short answer:** Core team is complete for seed stage. Hiring plan defined for Series A.
+
+**Detailed response:**
+- **Now (4 co-founders)**: Technical (CTO), Business (CEO), plus 2 additional co-founders covering operations and finance
+- **Seed hires**: Part-time contractors for specific needs (ML optimization, net manufacturing QA)
+- **Series A hires**: VP Engineering, VP Sales, ML Engineer, Hardware Engineer
+- **Advisory board**: Building with defense/aviation, blockchain, and D2C expertise (see [Advisory Playbook](/docs/playbooks/advisory-board-roadmap))
+
+### "What is your specific go-to-market strategy?"
+
+**The short answer:** Consumer first (SkySnare), enterprise second (AeroNet).
+
+**Detailed response:**
+1. **Year 1 - Consumer beachhead**:
+   - D2C website + Amazon
+   - Influencer marketing to active families
+   - 5,000 units target
+   - Validates tech, generates revenue, funds R&D
+
+2. **Year 2 - Enterprise entry**:
+   - Regional airports (not hubs - faster sales cycle)
+   - Start with pilots at $50K, convert to $150K+ deals
+   - South Africa first (home market), then EU regional
+   - 8-10 customers by end of Year 2
+
+### "When can you go live?"
+
+**The short answer:** SkySnare D2C launch Q2 2026. AeroNet pilot Q3 2026.
+
+**Detailed timeline:**
+| Milestone | Date | Dependencies |
+|-----------|------|--------------|
+| Prototype complete | Feb 2026 | Mechanical assembly |
+| CPSC/ASTM certification | Mar 2026 | Testing complete |
+| D2C website launch | Apr 2026 | Certification, inventory |
+| First SkySnare sales | May 2026 | Marketing ramp |
+| Enterprise pilot signed | Sep 2026 | Pilot customer identified |
+| First AeroNet deployment | Q1 2027 | Pilot success |
+
+**What could accelerate:** Strong pilot customer interest, faster certification.
+**What could delay:** Certification issues, supply chain for Jetson Orin.
+
+---
+
+## Long-Term Vision
+
+### Phase 1: Seed (Now → Oct 2026)
+- SkySnare D2C launch and scale
+- AeroNet pilot preparation
+- {SKYSNARE.YEAR_1_UNITS} units, $2.15M revenue
+
+### Phase 2: Series A (2027)
+- AeroNet enterprise deployment
+- International expansion (EU, Canada)
+- {FUNDING.BM_YEAR_2_REVENUE} revenue target
+
+### Phase 3: Scale (2028+)
+- Global airport partnerships
+- Defense contractor integration
+- Path to {FUNDING.BM_YEAR_5_REVENUE} annual revenue
+
+---
+
+## Next Steps
 
 ### For Investors
 
-1. **Download the Full Deck**: Use the download button above
-2. **Review Technical Documentation**: [Architecture ADRs](/docs/technical/architecture/architecture-decision-records)
-3. **Explore x402 Protocol**: [Payment Protocol Docs](/docs/technical/architecture/adr-0019-x402-payment-protocol)
-4. **Schedule Deep Dive**: Contact us for technical architecture review
+1. **Review**: [Investor Executive Summary](/docs/executive/investor-executive-summary)
+2. **Deep Dive**: [12-Month Business Plan](/docs/business/12-month-business-plan)
+3. **Technical**: [System Architecture](/docs/executive/system-architecture)
+4. **Contact**: {TEAM.CONTACT_EMAIL}
 
-### For Strategic Partners
+### Immediate Milestones
 
-- **Airport Operators**: Pilot installation opportunities in EU/Canada
-- **Defense Contractors**: Integration and go-to-market partnerships
-- **Regulatory Bodies**: Compliance validation and certification support
-- **Technology Providers**: Sensor, UGV, and AI/ML integration opportunities
-
-### For Enterprise Customers
-
-- **x402 API Access**: Integrate blockchain-verified evidence into your systems
-- **Pilot Programs**: Early access to net launcher prototypes
-- **Custom Deployments**: Mobile, Site-Fixed, Fiber Engage, or Swarm configurations
-- **Professional Services**: End-to-end integration and regulatory compliance
+- **Dec 2025**: Complete seed round
+- **Jan 2026**: Begin certification testing
+- **Mar 2026**: CPSC/ASTM approval
+- **Apr 2026**: D2C website launch
+- **Sep 2026**: Enterprise pilot MOU
 
 ---
 
-## 📚 Related Resources
+## Contact
 
-- [Executive Summary](/docs/executive/executive-summary)
-- [Technical Whitepaper](/docs/executive/phoenix-rooivalk-technical-whitepaper)
-- [System Overview](/docs/executive/system-overview)
-- [Global Strategy](/docs/executive/global-strategy)
-- [Architecture Decision Records](/docs/technical/architecture/architecture-decision-records)
-- [x402 Payment Protocol](/docs/technical/architecture/adr-0019-x402-payment-protocol)
-- [Week 48 Progress Report](/docs/progress/2025/week-48)
-
----
-
-## 💡 Questions?
-
-Contact the Phoenix Rooivalk team:
-
-- **Technical Questions**: [Technical Documentation](/docs/technical)
-- **Investment Inquiries**: [Team Status](/docs/executive/team-status)
-- **Partnership Opportunities**: [Global Strategy](/docs/executive/global-strategy)
+| Channel | Details |
+|---------|---------|
+| **Investment Inquiries** | {TEAM.CONTACT_EMAIL} |
+| **Phone** | {TEAM.CONTACT_PHONE} |
+| **Consumer** | www.skysnare.com |
+| **Enterprise** | www.aeronet-security.com |
 
 ---
 
-_Last Updated: December 2025 | Version 2.0_  
-_This pitch deck reflects the most current product status, market validation, and financial projections._
+_Last Updated: December 2025 | Seed Round Pitch Deck_
+
+_This document contains confidential business information. Distribution is
+restricted to authorized personnel and potential investors only. © 2025 Phoenix
+Rooivalk. All rights reserved._

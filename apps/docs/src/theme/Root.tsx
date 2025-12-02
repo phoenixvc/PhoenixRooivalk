@@ -22,7 +22,9 @@ import { NavbarNotifications } from "../components/NavbarNotifications";
 import { OfflineIndicator } from "../components/Offline";
 import { OnboardingWalkthrough } from "../components/Onboarding";
 import { SidebarRecommendations } from "../components/Sidebar";
+import { SidebarPhaseFilter } from "../components/PhaseFilter";
 import { AuthProvider } from "../contexts/AuthContext";
+import { PhaseFilterProvider } from "../contexts/PhaseFilterContext";
 import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
 import { ToastProvider } from "../contexts/ToastContext";
 import { autoFixOnboardingData } from "../utils/localStorage";
@@ -90,10 +92,11 @@ export default function Root({ children }: RootProps): React.ReactElement {
     <AuthProvider>
       <ToastProvider>
         <NotificationBadgeProvider>
-          <SilentErrorBoundary>
-            <NavbarProgressVisibility />
-            <NavbarNotifications />
-            <ProfileConfirmation>
+          <PhaseFilterProvider>
+            <SilentErrorBoundary>
+              <NavbarProgressVisibility />
+              <NavbarNotifications />
+              <ProfileConfirmation>
               <SilentErrorBoundary>
                 <ReadingTracker />
               </SilentErrorBoundary>
@@ -114,13 +117,17 @@ export default function Root({ children }: RootProps): React.ReactElement {
                 <SidebarRecommendations />
               </SilentErrorBoundary>
               <SilentErrorBoundary>
+                <SidebarPhaseFilter />
+              </SilentErrorBoundary>
+              <SilentErrorBoundary>
                 <AIFloatingWidget pageContext={pageContext} />
               </SilentErrorBoundary>
               <SilentErrorBoundary>
                 <OnboardingWalkthrough />
               </SilentErrorBoundary>
             </ProfileConfirmation>
-          </SilentErrorBoundary>
+            </SilentErrorBoundary>
+          </PhaseFilterProvider>
         </NotificationBadgeProvider>
       </ToastProvider>
     </AuthProvider>

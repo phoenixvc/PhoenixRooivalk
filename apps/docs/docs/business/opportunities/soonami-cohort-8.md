@@ -5,6 +5,7 @@ sidebar_label: Soonami Cohort 8
 difficulty: intermediate
 estimated_reading_time: 2
 points: 15
+phase: ["seed"]
 tags:
   - business
   - counter-uas

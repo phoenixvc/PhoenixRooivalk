@@ -5,6 +5,7 @@ sidebar_label: CUAS Sandbox 2026
 difficulty: intermediate
 estimated_reading_time: 7
 points: 15
+phase: ["seed", "series-a"]
 tags:
   - business
   - counter-uas

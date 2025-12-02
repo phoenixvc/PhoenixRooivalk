@@ -5,6 +5,7 @@ sidebar_label: DoD Proposal Template
 difficulty: intermediate
 estimated_reading_time: 8
 points: 15
+phase: ["series-a", "series-b"]
 tags:
   - business
   - counter-uas

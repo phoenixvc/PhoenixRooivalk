@@ -5,6 +5,7 @@ sidebar_label: Legal Framework
 difficulty: intermediate
 estimated_reading_time: 7
 points: 15
+phase: ["seed", "series-a", "series-b", "series-c", "scale"]
 tags:
   - legal
   - compliance
