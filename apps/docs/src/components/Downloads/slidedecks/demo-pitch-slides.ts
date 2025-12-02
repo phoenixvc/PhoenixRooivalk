@@ -12,7 +12,7 @@ import type { Slide, KeyPoint } from "../SlideDeckDownload";
  */
 export const demoPitchSlides: Slide[] = [
   // ==========================================
-  // TITLE / LANDING SLIDE
+  // SLIDE 1: TITLE / LANDING
   // ==========================================
   {
     number: 1,
@@ -34,7 +34,7 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // THE PROBLEM - THREAT LANDSCAPE
+  // SLIDE 2: THE PROBLEM - THREAT LANDSCAPE
   // ==========================================
   {
     number: 2,
@@ -77,7 +77,7 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // EXPANDING THE THREAT - WHY NOW
+  // SLIDE 3: WHY CURRENT SOLUTIONS FALL SHORT
   // ==========================================
   {
     number: 3,
@@ -109,51 +109,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // MARKET & BUSINESS MODEL
+  // SLIDE 4: OUR SOLUTION
   // ==========================================
   {
     number: 4,
-    title: "Market & Business Model",
-    duration: 60,
-    icon: "📊",
-    layout: "image",
-    image: "/img/tam-sam-som.svg",
-    imageCaption: "Counter-drone market growing at 25.1% CAGR to $20.3B by 2030",
-    keyPoints: [
-      {
-        text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
-        subPoints: [
-          "Counter-drone segment growing at **47%** CAGR",
-          "64% of facilities currently *unprotected*",
-        ],
-      },
-      {
-        text: "**Revenue model:** Hardware + SaaS + Services",
-        subPoints: [
-          "Hardware: **60%** (systems $25K-$100K)",
-          "SaaS: **25%** (monitoring, updates)",
-          "Services: **15%** (training, support)",
-        ],
-      },
-      {
-        text: "**Unit economics:**",
-        subPoints: [
-          "Gross margins: **65-70%** hardware, **80%+** software",
-          "CLV:CAC ratio: **6:1 to 10:1**",
-        ],
-      },
-    ],
-    speakerNotes:
-      "Show the market opportunity is massive and growing. The TAM/SAM/SOM diagram makes the opportunity tangible. Emphasize the recurring revenue model.",
-    script:
-      "The counter-drone defense market is $6.64 billion today and growing to over $20 billion by 2030 at 25% CAGR. The counter-drone segment specifically is growing at 47% annually. Our serviceable market is $4.2 billion - regional airports and critical infrastructure that can't afford million-dollar systems. Our revenue model combines hardware sales at 60%, SaaS subscriptions at 25% for monitoring and updates, and professional services at 15%. This gives us strong unit economics with 65-70% gross margins on hardware and over 80% on software, with CLV to CAC ratios of 6 to 10 to 1.",
-  },
-
-  // ==========================================
-  // THE SOLUTION
-  // ==========================================
-  {
-    number: 5,
     title: "Our Solution: SAE Level 4 Autonomous Defense",
     duration: 60,
     icon: "🛡️",
@@ -191,10 +150,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // COMPETITIVE ADVANTAGE
+  // SLIDE 5: COMPETITIVE ADVANTAGE
   // ==========================================
   {
-    number: 6,
+    number: 5,
     title: "10-150x Faster Than Competitors",
     duration: 45,
     icon: "🏆",
@@ -223,10 +182,94 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // TEAM
+  // SLIDE 6: MARKET & BUSINESS MODEL
+  // ==========================================
+  {
+    number: 6,
+    title: "Market & Business Model",
+    duration: 60,
+    icon: "📊",
+    layout: "image",
+    image: "/img/tam-sam-som.svg",
+    imageCaption: "Counter-drone market growing at 25.1% CAGR to $20.3B by 2030",
+    keyPoints: [
+      {
+        text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
+        subPoints: [
+          "Counter-drone segment growing at **47%** CAGR",
+          "64% of facilities currently *unprotected*",
+        ],
+      },
+      {
+        text: "**Revenue model:** Hardware + SaaS + Services",
+        subPoints: [
+          "Hardware: **60%** (systems $25K-$100K)",
+          "SaaS: **25%** (monitoring, updates)",
+          "Services: **15%** (training, support)",
+        ],
+      },
+      {
+        text: "**Unit economics:**",
+        subPoints: [
+          "Gross margins: **65-70%** hardware, **80%+** software",
+          "CLV:CAC ratio: **6:1 to 10:1**",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Show the market opportunity is massive and growing. The TAM/SAM/SOM diagram makes the opportunity tangible. Emphasize the recurring revenue model.",
+    script:
+      "The counter-drone defense market is $6.64 billion today and growing to over $20 billion by 2030 at 25% CAGR. The counter-drone segment specifically is growing at 47% annually. Our serviceable market is $4.2 billion - regional airports and critical infrastructure that can't afford million-dollar systems. Our revenue model combines hardware sales at 60%, SaaS subscriptions at 25% for monitoring and updates, and professional services at 15%. This gives us strong unit economics with 65-70% gross margins on hardware and over 80% on software, with CLV to CAC ratios of 6 to 10 to 1.",
+  },
+
+  // ==========================================
+  // SLIDE 7: ROADMAP & PROGRESS
   // ==========================================
   {
     number: 7,
+    title: "Roadmap & Current Progress",
+    duration: 60,
+    icon: "🗺️",
+    layout: "image",
+    image: "/img/roadmap-timeline.svg",
+    imageCaption: "18-month runway to Series A with proven traction",
+    keyPoints: [
+      {
+        text: "**Completed** (6 months founder R&D):",
+        subPoints: [
+          "CAD designs *complete*",
+          "Prototype **40% assembled**",
+          "Net designs tested with Kevlar stock",
+        ],
+      },
+      {
+        text: "**Q1-Q2 2026:** Consumer launch",
+        subPoints: [
+          "CPSC/ASTM certification (Mar 2026)",
+          "SkySnare D2C launch (Apr 2026)",
+          "First EU pilot signed",
+        ],
+      },
+      {
+        text: "**Q3-Q4 2026:** Scale & Series A",
+        subPoints: [
+          "5,000 consumer units shipped",
+          "3-5 enterprise installations",
+          "Series A with proven revenue",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Show concrete progress and clear milestones. The roadmap demonstrates execution capability. Emphasize that we're not starting from zero.",
+    script:
+      "Let me show you where we are and where we're going. We've already invested 6 months of founder R&D. CAD designs are complete, the mechanical prototype is 40% assembled, and we've tested net designs with Kevlar fiber stock we already have. Q1 and Q2 2026: We complete CPSC and ASTM certification by March, launch SkySnare direct-to-consumer in April, and sign our first EU pilot. By Q3 and Q4: We ship 5,000 consumer units, deploy 3 to 5 enterprise installations, and close Series A with proven revenue traction. This seed round gives us 18 months of runway with clear path to the next stage.",
+  },
+
+  // ==========================================
+  // SLIDE 8: TEAM
+  // ==========================================
+  {
+    number: 8,
     title: "Founding Team: 60+ Years Combined Expertise",
     duration: 45,
     icon: "👥",
@@ -288,10 +331,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // CALL TO ACTION
+  // SLIDE 9: CALL TO ACTION
   // ==========================================
   {
-    number: 8,
+    number: 9,
     title: "Let's Defend Critical Infrastructure Together",
     duration: 30,
     icon: "🎯",
@@ -315,7 +358,7 @@ export const demoPitchSlides: Slide[] = [
 
 export const demoPitchMeta = {
   title: "Phoenix Rooivalk: Demo Pitch",
-  duration: 8,
+  duration: 9,
   audience: "Investors, Strategic Partners, Demo Attendees",
   date: "December 2025",
   colorTheme: "investor" as const,
