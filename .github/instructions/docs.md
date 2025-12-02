@@ -5,7 +5,8 @@ patterns:
 
 # Documentation Site Instructions
 
-This Docusaurus application hosts comprehensive technical, business, and operations documentation.
+This Docusaurus application hosts comprehensive technical, business, and
+operations documentation.
 
 ## Technology Stack
 
@@ -53,6 +54,7 @@ apps/docs/docs/
 5. **Version Information** - Note when features were added/changed
 
 ### Markdown Style
+
 ```markdown
 # Page Title (H1 - only one per page)
 
@@ -60,7 +62,7 @@ Brief introduction paragraph.
 
 ## Main Section (H2)
 
-Content with **bold** and *italic* emphasis.
+Content with **bold** and _italic_ emphasis.
 
 ### Subsection (H3)
 
@@ -74,20 +76,12 @@ Detailed content...
 
 ## Code Examples
 
-\`\`\`typescript
-// TypeScript example
-function example(): void {
-  console.log('Example');
-}
-\`\`\`
+\`\`\`typescript // TypeScript example function example(): void {
+console.log('Example'); } \`\`\`
 
 ## Diagrams
 
-\`\`\`mermaid
-graph TD
-    A[Start] --> B[Process]
-    B --> C[End]
-\`\`\`
+\`\`\`mermaid graph TD A[Start] --> B[Process] B --> C[End] \`\`\`
 ```
 
 ### Writing Style
@@ -109,9 +103,12 @@ graph TD
 ## Architecture Decision Records (ADRs)
 
 ### Template Location
-Always reference: `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
+
+Always reference:
+`apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
 
 ### ADR Structure
+
 ```markdown
 # ADR-XXXX: Title
 
@@ -122,8 +119,7 @@ Always reference: `apps/docs/docs/technical/architecture/adr-0000-template-and-g
 
 ## Executive Summary
 
-**Problem**: One sentence problem statement
-**Decision**: One sentence decision
+**Problem**: One sentence problem statement **Decision**: One sentence decision
 **Trade-off**: One sentence key trade-off
 
 ## Context and Problem Statement
@@ -158,6 +154,7 @@ Chosen option: "[option]", because [justification].
 ## Pros and Cons of the Options
 
 ### Option 1
+
 - **Good**, because [reason]
 - **Bad**, because [reason]
 - **Neutral**, if [circumstance]
@@ -181,43 +178,35 @@ Chosen option: "[option]", because [justification].
 ## MDX Features
 
 ### Custom Components
-```mdx
-import { Callout } from '@site/src/components/Callout';
 
-<Callout type="warning">
-  This is an important warning message.
-</Callout>
+```mdx
+import { Callout } from "@site/src/components/Callout";
+
+<Callout type="warning">This is an important warning message.</Callout>
 ```
 
 ### Admonitions
+
 ```markdown
-:::note
-This is a note.
-:::
+:::note This is a note. :::
 
-:::tip
-This is a tip.
-:::
+:::tip This is a tip. :::
 
-:::warning
-This is a warning.
-:::
+:::warning This is a warning. :::
 
-:::danger
-This is a danger alert.
-:::
+:::danger This is a danger alert. :::
 
-:::info
-This is an info box.
-:::
+:::info This is an info box. :::
 ```
 
 ## Navigation and Sidebars
 
 ### Sidebar Configuration
+
 Edit `apps/docs/sidebars.js` to manage navigation structure.
 
 ### Frontmatter
+
 ```markdown
 ---
 sidebar_position: 1
@@ -230,12 +219,14 @@ keywords: [keyword1, keyword2]
 ## Assets and Media
 
 ### Images
+
 - Store in `apps/docs/static/img/`
 - Reference with `/img/filename.png`
 - Use descriptive alt text
 - Optimize file sizes (WebP preferred)
 
 ### Downloads
+
 - Store in `apps/docs/static/downloads/`
 - Link with `/downloads/filename.pdf`
 

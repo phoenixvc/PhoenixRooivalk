@@ -8,7 +8,8 @@ patterns:
 
 # Rust Development Instructions
 
-This covers Rust libraries (crates) and Rust services (api, keeper, evidence-cli).
+This covers Rust libraries (crates) and Rust services (api, keeper,
+evidence-cli).
 
 ## Technology Stack
 
@@ -125,10 +126,10 @@ impl std::error::Error for DeploymentError {}
 pub fn deploy_weapon(config: DeploymentConfig) -> Result<()> {
     validate_energy(&config)
         .context("Energy validation failed")?;
-    
+
     execute_deployment(&config)
         .context("Deployment execution failed")?;
-    
+
     Ok(())
 }
 ```
@@ -137,7 +138,7 @@ pub fn deploy_weapon(config: DeploymentConfig) -> Result<()> {
 
 Every public item MUST have documentation:
 
-```rust
+````rust
 /// Validates a weapon deployment against system constraints.
 ///
 /// This function checks energy availability, weapon type compatibility,
@@ -178,7 +179,7 @@ pub fn validate_deployment(
     }
     Ok(())
 }
-```
+````
 
 ### Testing
 
@@ -213,7 +214,7 @@ mod tests {
             energy_available: 1000.0,
         };
         let json = serde_json::to_string(&config).unwrap();
-        let deserialized: DeploymentConfig = 
+        let deserialized: DeploymentConfig =
             serde_json::from_str(&json).unwrap();
         assert_eq!(config.weapon_type, deserialized.weapon_type);
     }
@@ -240,12 +241,12 @@ async fn fetch_data() -> Result<Vec<u8>> {
         .send()
         .await
         .context("Failed to fetch data")?;
-    
+
     let bytes = response
         .bytes()
         .await
         .context("Failed to read response body")?;
-    
+
     Ok(bytes.to_vec())
 }
 ```
@@ -336,7 +337,7 @@ fn process_items_bad(items: &[Item]) -> Vec<Result> {
         .filter(|item| item.is_valid())
         .cloned()  // Unnecessary clone
         .collect();
-    
+
     valid
         .iter()
         .map(|item| process(item))
@@ -372,18 +373,21 @@ let result = value * factor + offset;
 ## Service-Specific Guidelines
 
 ### API Server (Axum)
+
 - RESTful endpoints with proper HTTP status codes
 - Request validation with middleware
 - Structured logging with `tracing`
 - Error responses in JSON format
 
 ### Keeper Service
+
 - Batch processing for efficiency
 - Graceful shutdown handling
 - Retry logic with exponential backoff
 - Metrics and health checks
 
 ### Evidence CLI
+
 - Clear command structure with `clap`
 - Progress indicators for long operations
 - Colored output for better UX
@@ -392,6 +396,7 @@ let result = value * factor + offset;
 ## Dependencies
 
 When adding dependencies:
+
 1. Check security advisories first
 2. Prefer well-maintained crates
 3. Review license compatibility

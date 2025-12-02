@@ -1,18 +1,22 @@
 # New Requirements - Future Implementation
 
-This document outlines new requirements identified after completing the career application authentication system.
+This document outlines new requirements identified after completing the career
+application authentication system.
 
 ## 1. Docs Site AI Assistant - Offline Mode Issue
 
-**Problem**: AI assistant shows "no functions available in offline mode" even when user is online.
+**Problem**: AI assistant shows "no functions available in offline mode" even
+when user is online.
 
 **Investigation Needed**:
+
 - Check `apps/docs/azure-functions/src/functions/ai.ts`
 - Review offline detection logic
 - Verify network connectivity checks
 - Test function availability in online mode
 
 **Files to Review**:
+
 - `apps/docs/azure-functions/src/functions/ai.ts`
 - `apps/docs/azure-functions/src/services/ai.service.ts`
 - `apps/docs/src/services/auth.ts`
@@ -20,13 +24,16 @@ This document outlines new requirements identified after completing the career a
 
 ## 2. Google OAuth Profile Confirmation Flow
 
-**Requirement**: After Google OAuth login, redirect user to profile confirmation page where they can verify/edit:
+**Requirement**: After Google OAuth login, redirect user to profile confirmation
+page where they can verify/edit:
+
 - First name
-- Last name  
+- Last name
 - Email (read-only from Google)
 - Optional: Profile picture
 
 **Implementation Steps**:
+
 1. Create `/profile/confirm` page in marketing app
 2. Add route to redirect after successful Google OAuth
 3. Store profile confirmation state
@@ -34,6 +41,7 @@ This document outlines new requirements identified after completing the career a
 5. Update user record with confirmed data
 
 **Files to Create/Modify**:
+
 - `apps/marketing/src/app/profile/confirm/page.tsx`
 - `apps/marketing/src/app/profile/confirm/confirm.module.css`
 - Update `apps/marketing/src/app/login/page.tsx` for OAuth flow
@@ -41,9 +49,11 @@ This document outlines new requirements identified after completing the career a
 
 ## 3. Skip Tour Button (Configurable)
 
-**Requirement**: Add a "Skip Tour" button that can be toggled on/off via configuration.
+**Requirement**: Add a "Skip Tour" button that can be toggled on/off via
+configuration.
 
 **Implementation Steps**:
+
 1. Add `ENABLE_TOUR_SKIP` to environment variables
 2. Create tour configuration file
 3. Add skip button to tour component
@@ -51,6 +61,7 @@ This document outlines new requirements identified after completing the career a
 5. Respect skip preference on subsequent visits
 
 **Configuration**:
+
 ```typescript
 // apps/marketing/src/config/tour.ts
 export const TOUR_CONFIG = {
@@ -60,27 +71,32 @@ export const TOUR_CONFIG = {
 ```
 
 **Files to Create/Modify**:
+
 - `apps/marketing/src/config/tour.ts`
 - `apps/marketing/.env.example` (add NEXT_PUBLIC_ENABLE_TOUR_SKIP)
 - Tour component (TBD - need to locate existing tour implementation)
 
 ## 4. Azure Cosmos DB Migration
 
-**Requirement**: Migrate from SQLite to Azure Cosmos DB with Entra authentication.
+**Requirement**: Migrate from SQLite to Azure Cosmos DB with Entra
+authentication.
 
 **Major Changes Required**:
 
 ### 4.1 Database Layer
+
 - Replace SQLite with Azure Cosmos DB client
 - Implement Cosmos DB connection management
 - Update all queries to use Cosmos DB API
 
 ### 4.2 Authentication
+
 - Integrate Microsoft Entra (formerly Azure AD)
 - Replace email-based auth with Entra OAuth
 - Update token management and session handling
 
 ### 4.3 Migration Strategy
+
 1. Create abstraction layer (see section 5)
 2. Implement Cosmos DB repository layer
 3. Create data migration scripts
@@ -88,6 +104,7 @@ export const TOUR_CONFIG = {
 5. Update environment variables and secrets
 
 **New Dependencies**:
+
 ```toml
 # Cargo.toml
 azure_data_cosmos = "0.20"
@@ -96,6 +113,7 @@ azure_core = "0.20"
 ```
 
 **Configuration Required**:
+
 - Azure Cosmos DB connection string
 - Entra tenant ID
 - Entra client ID and secret
@@ -103,7 +121,8 @@ azure_core = "0.20"
 
 ## 5. ORM/Abstraction Layer with Migrations
 
-**Requirement**: Add proper abstraction layer with migration support for database operations.
+**Requirement**: Add proper abstraction layer with migration support for
+database operations.
 
 ### 5.1 Design
 

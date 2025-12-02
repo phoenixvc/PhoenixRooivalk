@@ -5,7 +5,8 @@ patterns:
 
 # Marketing Website Instructions
 
-This Next.js 14 application serves as the primary marketing website for PhoenixRooivalk.
+This Next.js 14 application serves as the primary marketing website for
+PhoenixRooivalk.
 
 ## Technology Stack
 
@@ -41,6 +42,7 @@ pnpm --filter marketing lint
 ## Component Guidelines
 
 ### File Structure
+
 ```
 apps/marketing/src/
 ├── app/              # App Router pages
@@ -51,8 +53,9 @@ apps/marketing/src/
 ```
 
 ### Component Template
+
 ```tsx
-import styles from './ComponentName.module.css';
+import styles from "./ComponentName.module.css";
 
 export interface ComponentNameProps {
   // Props interface
@@ -60,11 +63,7 @@ export interface ComponentNameProps {
 
 export const ComponentName: React.FC<ComponentNameProps> = (props) => {
   // Component implementation
-  return (
-    <div className={styles.container}>
-      {/* Content */}
-    </div>
-  );
+  return <div className={styles.container}>{/* Content */}</div>;
 };
 ```
 
@@ -77,12 +76,13 @@ export const ComponentName: React.FC<ComponentNameProps> = (props) => {
 5. **Dark Theme Default** - Orange/amber accents on dark backgrounds
 
 ### Color Palette
+
 ```css
---primary: 249 115 22;        /* Orange accent */
---accent: 251 191 36;         /* Amber highlight */
---bg-primary: 15 23 42;       /* Dark background */
---bg-secondary: 9 10 15;      /* Darker background */
---text-primary: 255 255 255;  /* White text */
+--primary: 249 115 22; /* Orange accent */
+--accent: 251 191 36; /* Amber highlight */
+--bg-primary: 15 23 42; /* Dark background */
+--bg-secondary: 9 10 15; /* Darker background */
+--text-primary: 255 255 255; /* White text */
 ```
 
 ## Accessibility Requirements (Critical)
@@ -96,12 +96,13 @@ Every interactive component MUST include:
 5. **Color Contrast** - Minimum 4.5:1 ratio
 
 ### Example
+
 ```tsx
 <button
   aria-label="Start threat simulation"
   onClick={handleStart}
   onKeyDown={(e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       handleStart();
     }
@@ -120,9 +121,9 @@ Every interactive component MUST include:
 4. **Lazy Loading** - Defer non-critical components
 
 ```tsx
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
+const HeavyComponent = dynamic(() => import("./HeavyComponent"), {
   loading: () => <div>Loading...</div>,
 });
 ```
@@ -130,6 +131,7 @@ const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
 ## Testing
 
 ### Component Tests
+
 - Test rendering with different props
 - Test user interactions (clicks, keyboard)
 - Test accessibility features
@@ -164,6 +166,7 @@ describe('ComponentName', () => {
 
 ## Special Considerations
 
-- **Defense Context** - Marketing materials must be appropriate for defense industry
+- **Defense Context** - Marketing materials must be appropriate for defense
+  industry
 - **Restricted Content** - Some technical details are for approved partners only
 - **Compliance** - Follow responsible use guidelines in `RESPONSIBLE_USE.md`

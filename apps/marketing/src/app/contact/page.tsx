@@ -37,9 +37,7 @@ export default function ContactPage(): React.ReactElement {
   useEffect(() => {
     // Check if user is logged in
     const sessionId =
-      typeof window !== "undefined"
-        ? localStorage.getItem("session_id")
-        : null;
+      typeof window !== "undefined" ? localStorage.getItem("session_id") : null;
     const storedUser =
       typeof window !== "undefined" ? localStorage.getItem("user") : null;
 
@@ -80,9 +78,7 @@ export default function ContactPage(): React.ReactElement {
     }
 
     const sessionId =
-      typeof window !== "undefined"
-        ? localStorage.getItem("session_id")
-        : null;
+      typeof window !== "undefined" ? localStorage.getItem("session_id") : null;
 
     if (!sessionId) {
       setApplicationError("Session expired. Please log in again.");
@@ -445,9 +441,7 @@ export default function ContactPage(): React.ReactElement {
 
                 {!loadingUser && user && !user.is_team_member && (
                   <div>
-                    <h4 className={styles.jobTitle}>
-                      Submit Your Application
-                    </h4>
+                    <h4 className={styles.jobTitle}>Submit Your Application</h4>
                     <p className={styles.jobDescription}>
                       Welcome, {getUserDisplayName()}! Complete the form below
                       to apply.
@@ -457,10 +451,7 @@ export default function ContactPage(): React.ReactElement {
                       className={styles.applicationForm}
                     >
                       <div className={styles.formGroup}>
-                        <label
-                          htmlFor="position"
-                          className={styles.formLabel}
-                        >
+                        <label htmlFor="position" className={styles.formLabel}>
                           Position
                         </label>
                         <select
