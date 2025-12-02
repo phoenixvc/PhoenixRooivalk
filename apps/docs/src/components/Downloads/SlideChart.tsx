@@ -82,7 +82,14 @@ function BarChart({
   const chartHeight = height - 60;
 
   return (
-    <svg width={width} height={height} className="overflow-visible">
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible"
+      role="img"
+      aria-label={`Bar chart showing ${data.length} data points`}
+    >
+      <title>Bar chart visualization</title>
       {/* Y-axis */}
       <line x1="50" y1="20" x2="50" y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
       {/* X-axis */}
@@ -168,7 +175,14 @@ function LineChart({
   const areaPath = `${pathData} L ${60 + (data.length - 1) * pointSpacing} ${chartHeight + 20} L 60 ${chartHeight + 20} Z`;
 
   return (
-    <svg width={width} height={height} className="overflow-visible">
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible"
+      role="img"
+      aria-label={`Line chart showing ${data.length} data points`}
+    >
+      <title>Line chart visualization</title>
       {/* Y-axis */}
       <line x1="50" y1="20" x2="50" y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
       {/* X-axis */}
@@ -188,7 +202,7 @@ function LineChart({
         return (
           <g key={index}>
             {/* Point */}
-            <circle cx={x} cy={y} r="5" fill={color} className="transition-all duration-300 hover:r-7" />
+            <circle cx={x} cy={y} r="5" fill={color} className="transition-transform duration-300 hover:scale-125 origin-center" style={{ transformOrigin: `${x}px ${y}px` }} />
             {/* Value label */}
             {showValues && (
               <text x={x} y={y - 10} textAnchor="middle" className="text-xs fill-gray-300">
@@ -230,7 +244,25 @@ function PieChart({
   const radius = Math.min(width, height) / 2 - 40;
   const innerRadius = isDonut ? radius * 0.6 : 0;
 
-  let currentAngle = -Math.PI / 2; // Start from top
+  // Precompute segments with start/end angles (immutable)
+  const segments = data.reduce<Array<{
+    point: ChartDataPoint;
+    index: number;
+    startAngle: number;
+    endAngle: number;
+    angle: number;
+  }>>((acc, point, index) => {
+    const prevEndAngle = acc.length > 0 ? acc[acc.length - 1].endAngle : -Math.PI / 2;
+    const angle = (point.value / total) * 2 * Math.PI;
+    acc.push({
+      point,
+      index,
+      startAngle: prevEndAngle,
+      endAngle: prevEndAngle + angle,
+      angle,
+    });
+    return acc;
+  }, []);
 
   // Generate arc path
   const createArc = (
@@ -258,13 +290,15 @@ function PieChart({
   };
 
   return (
-    <svg width={width} height={height} className="overflow-visible">
-      {data.map((point, index) => {
-        const angle = (point.value / total) * 2 * Math.PI;
-        const startAngle = currentAngle;
-        const endAngle = currentAngle + angle;
-        currentAngle = endAngle;
-
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible"
+      role="img"
+      aria-label={`${isDonut ? "Donut" : "Pie"} chart showing ${data.length} segments`}
+    >
+      <title>{isDonut ? "Donut" : "Pie"} chart visualization</title>
+      {segments.map(({ point, index, startAngle, endAngle, angle }) => {
         const color = getColor(index, point, colors);
 
         // Label position (middle of arc)

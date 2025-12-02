@@ -1,4 +1,4 @@
-import type { Slide, KeyPoint } from "../SlideDeckDownload";
+import type { Slide } from "../SlideDeckDownload";
 
 /**
  * Phoenix Rooivalk Comprehensive Investor Pitch Deck
