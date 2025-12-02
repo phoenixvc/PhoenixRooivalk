@@ -5,7 +5,7 @@
  * When updating, change values here and all docs will reflect the change.
  */
 
-import type { RangeValue, CurrencyValue, DataPoint, DataSource } from "./types";
+import type { RangeValue, CurrencyValue, DataSource } from "./types";
 
 /** Market research sources */
 export const marketSources: Record<string, DataSource> = {

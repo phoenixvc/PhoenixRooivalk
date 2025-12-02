@@ -87,6 +87,7 @@ const sidebars: SidebarsConfig = {
             "executive/global-strategy",
             "executive/strategic-recommendations",
             "executive/system-overview",
+            "executive/system-overview-executive",
             "executive/system-overview-detailed",
           ],
         },
