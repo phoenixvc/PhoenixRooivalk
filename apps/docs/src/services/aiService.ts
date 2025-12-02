@@ -163,7 +163,7 @@ class AIService {
 
         if (!functionsBaseUrl) {
           issues.push(
-            "AZURE_FUNCTIONS_BASE_URL not set in build environment. This must be set in Netlify environment variables with 'All scopes' or 'Builds' selected.",
+            "AZURE_FUNCTIONS_BASE_URL not set in build environment. This must be set as a GitHub Secret or Variable (Repository Settings → Secrets and variables → Actions).",
           );
         }
 
