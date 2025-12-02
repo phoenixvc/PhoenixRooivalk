@@ -105,24 +105,24 @@ The workflow will detect common typos and show:
 
 #### 4. Unusual Deployment Name Value
 
-The `AZURE_AI_DEPLOYMENT_NAME` variable contains an unusual value like `gpt-5.1`.
+The `AZURE_AI_DEPLOYMENT_NAME` variable contains an unusual or unexpected value like `gpt-5.1`.
 
 **How to verify:**
 Look for the warning:
 ```
-⚠️ AZURE_AI_DEPLOYMENT_NAME value 'gpt-5.1' looks unusual
-⚠️ Did you mean 'gpt-4' or 'gpt-4o'? Azure OpenAI models don't include 'gpt-5.1'
+⚠️ AZURE_AI_DEPLOYMENT_NAME value 'gpt-5.1' may be unusual
+⚠️ Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e
 ```
 
 **Solution:**
 1. Go to Azure Portal → Azure OpenAI resource → Model deployments
-2. Note the exact deployment name (e.g., `gpt-4`, `gpt-35-turbo`, `gpt-4o`)
+2. Note the exact deployment name (e.g., `gpt-4`, `gpt-35-turbo`, `gpt-4o`, `text-embedding-ada-002`)
 3. Update the variable with the correct deployment name:
    ```bash
    gh variable set AZURE_AI_DEPLOYMENT_NAME --body "gpt-4"
    ```
 
-**Note:** The deployment name must match EXACTLY what you named it in Azure, including any suffixes or version numbers.
+**Note:** The deployment name must match EXACTLY what you named it in Azure, including any suffixes or version numbers. The workflow checks for common prefixes to catch potential typos or configuration errors.
 
 ### Quick Fix Checklist
 

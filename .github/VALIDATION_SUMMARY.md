@@ -117,11 +117,11 @@ A systematic checklist to verify:
    # Current value: gpt-5.1 ⚠️
    ```
    
-   **⚠️ WARNING**: "gpt-5.1" is not a valid Azure OpenAI model. 
+   **⚠️ WARNING**: "gpt-5.1" appears to be an unusual model name and may not match your Azure OpenAI deployment. 
    
    To fix:
    - Go to Azure Portal → Azure OpenAI → Model deployments
-   - Note your actual deployment name (e.g., "gpt-4", "gpt-35-turbo", "gpt-4o")
+   - Note your actual deployment name (common prefixes: gpt-3, gpt-35, gpt-4, text-embedding, dall-e)
    - Update the variable:
      ```bash
      gh variable set AZURE_AI_DEPLOYMENT_NAME --body "gpt-4"
@@ -147,8 +147,8 @@ After making corrections, test the deployment:
 
 4. **Check for warnings** about the AI deployment name:
    ```
-   ⚠️ AZURE_AI_DEPLOYMENT_NAME value 'gpt-5.1' looks unusual
-   ⚠️ Did you mean 'gpt-4' or 'gpt-4o'?
+   ⚠️ AZURE_AI_DEPLOYMENT_NAME value 'gpt-5.1' may be unusual
+   ⚠️ Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e
    ```
 
 ## Expected Behavior After Fix

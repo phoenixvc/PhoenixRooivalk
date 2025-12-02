@@ -58,7 +58,6 @@ jobs:
           echo "Checking required secrets..."
           echo "🔍 Debug: Checking AZURE_FUNCTIONAPP_PUBLISH_PROFILE..."
           echo "  Secret is set (boolean): ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
-          echo "  Secret length (chars): ${#{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}"
 
           if [ -z "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
             echo "::error::AZURE_FUNCTIONAPP_PUBLISH_PROFILE is NOT set or is EMPTY"
@@ -168,10 +167,11 @@ jobs:
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             
-            # Warn about unusual deployment names (common typos)
-            if [[ "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" == *"5.1"* ]]; then
-              echo "::warning::AZURE_AI_DEPLOYMENT_NAME value '${{ vars.AZURE_AI_DEPLOYMENT_NAME }}' looks unusual"
-              echo "::warning::Did you mean 'gpt-4' or 'gpt-4o'? Azure OpenAI models don't include 'gpt-5.1'"
+            # Warn about unusual deployment names (may indicate typos or configuration errors)
+            DEPLOYMENT_NAME="${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
+            if [[ ! "$DEPLOYMENT_NAME" =~ ^(gpt-3|gpt-35|gpt-4|text-embedding|dall-e) ]]; then
+              echo "::warning::AZURE_AI_DEPLOYMENT_NAME value '$DEPLOYMENT_NAME' may be unusual"
+              echo "::warning::Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e"
               echo "::warning::Verify this matches your Azure OpenAI deployment name exactly"
             fi
             
