@@ -411,7 +411,7 @@ export const demoPitchSlides: Slide[] = [
 ];
 
 export const demoPitchMeta = {
-  title: "Phoenix Rooivalk: Demo Pitch",
+  title: "Phoenix Rooivalk: Demo Pitch Deck",
   duration: 10,
   audience: "Investors, Strategic Partners, Demo Attendees",
   date: "December 2025",
