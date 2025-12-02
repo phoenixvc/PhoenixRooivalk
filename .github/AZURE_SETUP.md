@@ -194,6 +194,8 @@ gh workflow run deploy-azure-functions.yml
 
 ## Troubleshooting
 
+For detailed troubleshooting of deployment issues, including 401 Unauthorized errors, see [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md).
+
 ### Missing Variables/Secrets
 
 The workflows include validation steps that check for missing configuration and
@@ -206,6 +208,7 @@ provide clear error messages with setup instructions.
    `az resource list --resource-group rg-phoenix-rooivalk`
 3. Test connectivity:
    `az functionapp show --name func-phoenix-rooivalk --resource-group rg-phoenix-rooivalk`
+4. See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for common deployment issues and solutions
 
 ### Wrong Variable Type
 
