@@ -258,7 +258,7 @@ export const TEAM = {
   SECONDARY_ENTITY: "South African Entity (Q2 2026)",
 
   // Contact
-  CONTACT_EMAIL: "contact@phoenixvc.tech",
+  CONTACT_EMAIL: "jurie@phoenixvc.tech",
   CONTACT_PHONE: "+27 (0) 10 880 0000",
 };
 
