@@ -499,6 +499,88 @@ export const NETS = {
   EFFECTIVE_RANGE: "10-30m from target",
 };
 
+/** Development Phases - Unified timeline aligned with funding rounds */
+export const PHASES = {
+  // Phase definitions
+  SEED: {
+    id: "seed",
+    name: "Seed: SkySnare Launch",
+    shortName: "Seed",
+    timeline: "Nov 2025 - Oct 2026",
+    products: ["SkySnare D2C", "Core prototype"],
+    funding: "$1.5M",
+    trl: "TRL 3-5",
+    focus: "Consumer product launch, prototype validation",
+  },
+  SERIES_A: {
+    id: "series-a",
+    name: "Series A: AeroNet & DoD",
+    shortName: "Series A",
+    timeline: "Nov 2026 - 2027",
+    products: ["AeroNet Enterprise", "SBIR/DoD validation"],
+    funding: "$8-12M",
+    trl: "TRL 5-6",
+    focus: "Enterprise launch, DoD validation, SBIR contracts",
+  },
+  SERIES_B: {
+    id: "series-b",
+    name: "Series B: Ground Systems",
+    shortName: "Series B",
+    timeline: "2028",
+    products: ["RKV-G Rover/GCS", "Production scale"],
+    funding: "$15-20M",
+    trl: "TRL 6-7",
+    focus: "Ground control systems, production scaling",
+  },
+  SERIES_C: {
+    id: "series-c",
+    name: "Series C: Aerial Platform",
+    shortName: "Series C",
+    timeline: "2029",
+    products: ["RKV-M Mothership", "RKV-I Interceptors"],
+    funding: "$25M+",
+    trl: "TRL 7+",
+    focus: "Full aerial platform, interceptor systems",
+  },
+  SCALE: {
+    id: "scale",
+    name: "Scale: Global Deployment",
+    shortName: "Scale",
+    timeline: "2030+",
+    products: ["Full integrated system", "FMS", "NATO"],
+    funding: "Revenue-funded",
+    trl: "TRL 8-9",
+    focus: "Global deployment, FMS programs, NATO certification",
+  },
+};
+
+/** RKV System Components */
+export const RKV_SYSTEM = {
+  // RKV-M: Aerial VTOL Mothership
+  RKV_M_NAME: "RKV-M",
+  RKV_M_FULL_NAME: "Aerial VTOL Mothership",
+  RKV_M_FUNCTION: "Picket, relay, and mini launch platform",
+  RKV_M_PHASE: "series-c",
+
+  // RKV-I: Interceptor Minis
+  RKV_I_NAME: "RKV-I",
+  RKV_I_FULL_NAME: "Interceptor Minis",
+  RKV_I_FUNCTION: "Interceptor, decoy, and ISR operations",
+  RKV_I_PHASE: "series-c",
+
+  // RKV-G: Ground Control Station
+  RKV_G_NAME: "RKV-G",
+  RKV_G_FULL_NAME: "Ground Control Station (Rover)",
+  RKV_G_FUNCTION: "Mobile ground control, mast operations, logistics",
+  RKV_G_PHASE: "series-b",
+
+  // RKV-C2: Command and Control
+  RKV_C2_NAME: "RKV-C2",
+  RKV_C2_FULL_NAME: "Command and Control System",
+  RKV_C2_FUNCTION: "C2/data plane with strict QoS",
+  RKV_C2_PHASE: "series-a",
+};
+
 /** All values combined for easy import */
 export const ALL_VALUES = {
   MARKET,
@@ -519,4 +601,6 @@ export const ALL_VALUES = {
   MANUFACTURING,
   NETS,
   CAPITAL,
+  PHASES,
+  RKV_SYSTEM,
 };

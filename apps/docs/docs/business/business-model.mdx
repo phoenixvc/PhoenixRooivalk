@@ -12,10 +12,10 @@ tags:
   - counter-uas
 prerequisites:
   - executive-summary
-phase: ["phase-1", "phase-2", "phase-3"]
+phase: ["seed", "series-a", "series-b", "series-c", "scale"]
 ---
 
-import { MARKET, PERFORMANCE, PRICING, FUNDING, BLOCKCHAIN, TEAM } from "@site/src/data/values";
+import { MARKET, PERFORMANCE, PRICING, FUNDING, BLOCKCHAIN, TEAM, PHASES } from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -80,26 +80,29 @@ partnerships
 
 ### Funding Strategy
 
-**Phase 1 (6-12 months): DoD Validation**
+**{PHASES.SERIES_A.name} ({PHASES.SERIES_A.timeline})**
 
 - **Target**: SBIR/STTR and OTA contracts
-- **Funding**: $2-5M in development funding
+- **Funding**: {PHASES.SERIES_A.funding} in development funding
 - **Focus**: Technology demonstrations, Lockheed Martin integration
 - **Milestones**: Prototype validation, initial production deployment
+- **TRL**: {PHASES.SERIES_A.trl}
 
-**Phase 2 (12-24 months): Production Scale**
+**{PHASES.SERIES_B.name} ({PHASES.SERIES_B.timeline})**
 
 - **Target**: IDIQ contracts and FMS programs
-- **Funding**: $50M+ annual revenue through prime integrator partnerships
+- **Funding**: {PHASES.SERIES_B.funding} through prime integrator partnerships
 - **Focus**: Production scaling, international partnerships
 - **Milestones**: Multi-swarm coordination, NATO certification
+- **TRL**: {PHASES.SERIES_B.trl}
 
-**Phase 3 (24+ months): Commercial Expansion**
+**{PHASES.SCALE.name} ({PHASES.SCALE.timeline})**
 
 - **Target**: $100M+ pipeline with airport and critical infrastructure customers
-- **Funding**: Post-regulatory changes, commercial market entry
+- **Funding**: {PHASES.SCALE.funding}
 - **Focus**: Airport authorities, FAA Section 107 testing programs
 - **Milestones**: Commercial deployment, market leadership
+- **TRL**: {PHASES.SCALE.trl}
 
 ### SBIR/STTR Non-Dilutive Funding
 
@@ -259,21 +262,21 @@ partnerships
 
 ### Partnership Development Strategy
 
-**Phase 1 (6-12 months): Early-Stage Programs**
+**{PHASES.SERIES_A.shortName}: Early-Stage Programs**
 
 - Target Lockheed Martin early-stage programs
 - Establish supplier diversity relationships
 - Leverage Azure certifications and defense compliance
 - Focus on technology demonstrations and pilot programs
 
-**Phase 2 (12-24 months): Teaming Agreements**
+**{PHASES.SERIES_B.shortName}: Teaming Agreements**
 
 - Position as specialized C-UAS cloud integration provider
 - Execute teaming agreements with prime contractors
 - Secure subcontracting opportunities with existing C-UAS primes
 - Leverage Azure Government capabilities for competitive advantage
 
-**Phase 3 (24+ months): Technology Insertion**
+**{PHASES.SCALE.shortName}: Technology Insertion**
 
 - Achieve technology insertion into programs of record (M-SHORAD, IAMD)
 - Pursue international partnership opportunities through FMS programs
@@ -377,10 +380,13 @@ partnerships
 
 ### Development Roadmap
 
-**Phase 1**: DoD validation through SBIR/STTR and OTA contracts targeting $2-5M
-in development funding **Phase 2**: Production scale with IDIQ contracts and FMS
-targeting $50M+ annual revenue through partnerships with prime integrators
-**Phase 3**: Commercial expansion post-regulatory changes targeting $100M+
+**{PHASES.SERIES_A.shortName}**: DoD validation through SBIR/STTR and OTA contracts targeting {PHASES.SERIES_A.funding}
+in development funding
+
+**{PHASES.SERIES_B.shortName}**: Production scale with IDIQ contracts and FMS
+targeting {PHASES.SERIES_B.funding} annual revenue through partnerships with prime integrators
+
+**{PHASES.SCALE.shortName}**: Commercial expansion post-regulatory changes targeting $100M+
 pipeline with airport, critical infrastructure, and event security customers
 
 ### Partnership Strategy

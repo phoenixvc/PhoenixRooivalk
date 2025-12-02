@@ -4,7 +4,12 @@
  */
 
 import React from "react";
-import { usePhaseFilter, PhaseFilter as PhaseFilterType, PHASE_INFO } from "../../contexts/PhaseFilterContext";
+import {
+  usePhaseFilter,
+  PhaseFilter as PhaseFilterType,
+  PHASE_INFO,
+  Phase,
+} from "../../contexts/PhaseFilterContext";
 import "./PhaseFilter.css";
 
 interface PhaseFilterProps {
@@ -16,6 +21,21 @@ interface PhaseFilterProps {
   className?: string;
 }
 
+/**
+ * Format phase name for display
+ */
+function formatPhaseName(phase: string): string {
+  const info = PHASE_INFO[phase as Phase];
+  if (info) {
+    return info.shortLabel;
+  }
+  // Fallback: capitalize and format
+  return phase
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export function PhaseFilter({
   mode = "dropdown",
   compact = false,
@@ -25,7 +45,9 @@ export function PhaseFilter({
 
   if (mode === "buttons") {
     return (
-      <div className={`phase-filter phase-filter--buttons ${compact ? "phase-filter--compact" : ""} ${className}`}>
+      <div
+        className={`phase-filter phase-filter--buttons ${compact ? "phase-filter--compact" : ""} ${className}`}
+      >
         {!compact && <span className="phase-filter__label">Filter by Phase:</span>}
         <div className="phase-filter__button-group">
           {phaseOptions.map((option) => (
@@ -33,9 +55,13 @@ export function PhaseFilter({
               key={option.value}
               className={`phase-filter__button ${currentPhase === option.value ? "phase-filter__button--active" : ""}`}
               onClick={() => setCurrentPhase(option.value)}
-              title={option.value !== "all" ? PHASE_INFO[option.value as keyof typeof PHASE_INFO]?.description : "Show all documents"}
+              title={
+                option.value !== "all"
+                  ? PHASE_INFO[option.value as Phase]?.description
+                  : "Show all documents"
+              }
             >
-              {compact ? (option.value === "all" ? "All" : option.value.replace("phase-", "P")) : option.label}
+              {compact ? option.shortLabel : option.label}
             </button>
           ))}
         </div>
@@ -44,8 +70,14 @@ export function PhaseFilter({
   }
 
   return (
-    <div className={`phase-filter phase-filter--dropdown ${compact ? "phase-filter--compact" : ""} ${className}`}>
-      {!compact && <label className="phase-filter__label" htmlFor="phase-filter-select">Filter by Phase:</label>}
+    <div
+      className={`phase-filter phase-filter--dropdown ${compact ? "phase-filter--compact" : ""} ${className}`}
+    >
+      {!compact && (
+        <label className="phase-filter__label" htmlFor="phase-filter-select">
+          Filter by Phase:
+        </label>
+      )}
       <select
         id="phase-filter-select"
         className="phase-filter__select"
@@ -71,14 +103,17 @@ interface PhaseIndicatorProps {
   showMismatch?: boolean;
 }
 
-export function PhaseIndicator({ phases, showMismatch = false }: PhaseIndicatorProps): React.ReactElement | null {
+export function PhaseIndicator({
+  phases,
+  showMismatch = false,
+}: PhaseIndicatorProps): React.ReactElement | null {
   const phaseFilter = usePhaseFilter();
 
   if (!phases || phases.length === 0) {
     return null;
   }
 
-  const isMatch = phaseFilter.isPhaseMatch(phases as any);
+  const isMatch = phaseFilter.isPhaseMatch(phases as Phase[]);
 
   return (
     <div className={`phase-indicator ${!isMatch && showMismatch ? "phase-indicator--mismatch" : ""}`}>
@@ -91,7 +126,7 @@ export function PhaseIndicator({ phases, showMismatch = false }: PhaseIndicatorP
               phaseFilter.currentPhase === phase ? "phase-indicator__badge--active" : ""
             }`}
           >
-            {phase.replace("phase-", "Phase ")}
+            {formatPhaseName(phase)}
           </span>
         ))}
       </div>
@@ -113,25 +148,25 @@ interface PhaseBannerProps {
 }
 
 export function PhaseBanner({ phases }: PhaseBannerProps): React.ReactElement | null {
-  const { currentPhase, isPhaseMatch, setCurrentPhase } = usePhaseFilter();
+  const { currentPhase, isPhaseMatch, setCurrentPhase, getPhaseInfo } = usePhaseFilter();
 
   // Don't show if filter is "all" or phases match
-  if (currentPhase === "all" || !phases || isPhaseMatch(phases as any)) {
+  if (currentPhase === "all" || !phases || isPhaseMatch(phases as Phase[])) {
     return null;
   }
+
+  const currentPhaseInfo = getPhaseInfo(currentPhase as Phase);
+  const currentPhaseLabel = currentPhaseInfo?.shortLabel || currentPhase;
 
   return (
     <div className="phase-banner phase-banner--mismatch">
       <div className="phase-banner__content">
         <span className="phase-banner__icon">&#9432;</span>
         <span className="phase-banner__text">
-          This document applies to <strong>{phases.map(p => p.replace("phase-", "Phase ")).join(", ")}</strong>,
-          not the currently selected <strong>{currentPhase.replace("phase-", "Phase ")}</strong>.
+          This document applies to <strong>{phases.map(formatPhaseName).join(", ")}</strong>, not the
+          currently selected <strong>{currentPhaseLabel}</strong>.
         </span>
-        <button
-          className="phase-banner__action"
-          onClick={() => setCurrentPhase("all")}
-        >
+        <button className="phase-banner__action" onClick={() => setCurrentPhase("all")}>
           Show All Phases
         </button>
       </div>

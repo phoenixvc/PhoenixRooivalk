@@ -2,10 +2,12 @@
  * Phase Filter Context for Phoenix Rooivalk Documentation
  * Provides phase filtering state across the documentation site
  *
- * Phases:
- * - phase-1: Concept (TRL 3-4) - Architecture validation, simulation
- * - phase-2: Prototype (TRL 4-6) - Hardware demo, lab tests
- * - phase-3: Integration (TRL 6-7) - Field trials, certification readiness
+ * Phases aligned with funding rounds and product evolution:
+ * - seed: SkySnare Launch (Nov 2025 - Oct 2026) - Consumer product, prototype
+ * - series-a: AeroNet & DoD (Nov 2026 - 2027) - Enterprise, SBIR validation
+ * - series-b: Ground Systems (2028) - RKV-G Rover/GCS, production scale
+ * - series-c: Aerial Platform (2029) - RKV-M Mothership, RKV-I Interceptors
+ * - scale: Global Deployment (2030+) - Full system, FMS, NATO
  */
 
 import React, {
@@ -18,31 +20,75 @@ import React, {
   useEffect,
 } from "react";
 
-// Phase types
-export type Phase = "phase-1" | "phase-2" | "phase-3";
+// Phase types - aligned with funding rounds
+export type Phase = "seed" | "series-a" | "series-b" | "series-c" | "scale";
 export type PhaseFilter = Phase | "all";
 
-// Phase metadata
-export const PHASE_INFO: Record<Phase, { label: string; trl: string; description: string }> = {
-  "phase-1": {
-    label: "Phase 1: Concept",
-    trl: "TRL 3-4",
-    description: "Architecture validation, simulation",
+// Phase metadata with full details
+export const PHASE_INFO: Record<
+  Phase,
+  {
+    label: string;
+    shortLabel: string;
+    timeline: string;
+    trl: string;
+    products: string[];
+    funding: string;
+    description: string;
+  }
+> = {
+  seed: {
+    label: "Seed: SkySnare Launch",
+    shortLabel: "Seed",
+    timeline: "Nov 2025 - Oct 2026",
+    trl: "TRL 3-5",
+    products: ["SkySnare D2C", "Core prototype"],
+    funding: "$1.5M",
+    description: "Consumer product launch, prototype validation",
   },
-  "phase-2": {
-    label: "Phase 2: Prototype",
-    trl: "TRL 4-6",
-    description: "Hardware demo, lab tests",
+  "series-a": {
+    label: "Series A: AeroNet & DoD",
+    shortLabel: "Series A",
+    timeline: "Nov 2026 - 2027",
+    trl: "TRL 5-6",
+    products: ["AeroNet Enterprise", "SBIR/DoD validation"],
+    funding: "$8-12M",
+    description: "Enterprise launch, DoD validation, SBIR contracts",
   },
-  "phase-3": {
-    label: "Phase 3: Integration",
+  "series-b": {
+    label: "Series B: Ground Systems",
+    shortLabel: "Series B",
+    timeline: "2028",
     trl: "TRL 6-7",
-    description: "Field trials, certification readiness",
+    products: ["RKV-G Rover/GCS", "Production scale"],
+    funding: "$15-20M",
+    description: "Ground control systems, production scaling",
+  },
+  "series-c": {
+    label: "Series C: Aerial Platform",
+    shortLabel: "Series C",
+    timeline: "2029",
+    trl: "TRL 7+",
+    products: ["RKV-M Mothership", "RKV-I Interceptors"],
+    funding: "$25M+",
+    description: "Full aerial platform, interceptor systems",
+  },
+  scale: {
+    label: "Scale: Global Deployment",
+    shortLabel: "Scale",
+    timeline: "2030+",
+    trl: "TRL 8-9",
+    products: ["Full integrated system", "FMS", "NATO"],
+    funding: "Revenue-funded",
+    description: "Global deployment, FMS programs, NATO certification",
   },
 };
 
 // Local storage key
 const PHASE_FILTER_KEY = "phoenix-docs-phase-filter";
+
+// Valid phase values for validation
+const VALID_PHASES: Phase[] = ["seed", "series-a", "series-b", "series-c", "scale"];
 
 interface PhaseFilterContextType {
   // Current filter
@@ -52,9 +98,13 @@ interface PhaseFilterContextType {
   // Helper functions
   isPhaseMatch: (docPhases: Phase[] | undefined) => boolean;
   getPhaseLabel: (phase: Phase) => string;
+  getPhaseInfo: (phase: Phase) => (typeof PHASE_INFO)[Phase] | undefined;
 
   // All phase options
-  phaseOptions: { value: PhaseFilter; label: string }[];
+  phaseOptions: { value: PhaseFilter; label: string; shortLabel: string }[];
+
+  // Phase list for iteration
+  phases: Phase[];
 }
 
 const PhaseFilterContext = createContext<PhaseFilterContextType | undefined>(undefined);
@@ -68,7 +118,7 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
   const [currentPhase, setCurrentPhaseState] = useState<PhaseFilter>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(PHASE_FILTER_KEY);
-      if (stored && (stored === "all" || stored in PHASE_INFO)) {
+      if (stored === "all" || VALID_PHASES.includes(stored as Phase)) {
         return stored as PhaseFilter;
       }
     }
@@ -103,13 +153,20 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
     return PHASE_INFO[phase]?.label || phase;
   }, []);
 
+  // Get full info for a phase
+  const getPhaseInfo = useCallback((phase: Phase) => {
+    return PHASE_INFO[phase];
+  }, []);
+
   // Phase options for dropdown
   const phaseOptions = useMemo(
     () => [
-      { value: "all" as PhaseFilter, label: "All Phases" },
-      { value: "phase-1" as PhaseFilter, label: "Phase 1: Concept (TRL 3-4)" },
-      { value: "phase-2" as PhaseFilter, label: "Phase 2: Prototype (TRL 4-6)" },
-      { value: "phase-3" as PhaseFilter, label: "Phase 3: Integration (TRL 6-7)" },
+      { value: "all" as PhaseFilter, label: "All Phases", shortLabel: "All" },
+      { value: "seed" as PhaseFilter, label: "Seed: SkySnare Launch", shortLabel: "Seed" },
+      { value: "series-a" as PhaseFilter, label: "Series A: AeroNet & DoD", shortLabel: "Series A" },
+      { value: "series-b" as PhaseFilter, label: "Series B: Ground Systems", shortLabel: "Series B" },
+      { value: "series-c" as PhaseFilter, label: "Series C: Aerial Platform", shortLabel: "Series C" },
+      { value: "scale" as PhaseFilter, label: "Scale: Global Deployment", shortLabel: "Scale" },
     ],
     []
   );
@@ -118,7 +175,7 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(PHASE_FILTER_KEY);
-      if (stored && (stored === "all" || stored in PHASE_INFO)) {
+      if (stored === "all" || VALID_PHASES.includes(stored as Phase)) {
         setCurrentPhaseState(stored as PhaseFilter);
       }
     }
@@ -130,16 +187,14 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
       setCurrentPhase,
       isPhaseMatch,
       getPhaseLabel,
+      getPhaseInfo,
       phaseOptions,
+      phases: VALID_PHASES,
     }),
-    [currentPhase, setCurrentPhase, isPhaseMatch, getPhaseLabel, phaseOptions]
+    [currentPhase, setCurrentPhase, isPhaseMatch, getPhaseLabel, getPhaseInfo, phaseOptions]
   );
 
-  return (
-    <PhaseFilterContext.Provider value={value}>
-      {children}
-    </PhaseFilterContext.Provider>
-  );
+  return <PhaseFilterContext.Provider value={value}>{children}</PhaseFilterContext.Provider>;
 }
 
 export function usePhaseFilter(): PhaseFilterContextType {
