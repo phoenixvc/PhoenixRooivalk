@@ -41,9 +41,7 @@ export const demoPitchSlides: Slide[] = [
     title: "The Problem: Drone Threats Are Escalating",
     duration: 90,
     icon: "🚨",
-    layout: "image",
-    image: "/img/drone_over_treetops.png",
-    imageCaption: "Drone incursions at critical infrastructure are increasing exponentially",
+    layout: "default",
     keyPoints: [
       {
         text: "**Drone attacks are ever increasing** in Military and Civilian environments:",
@@ -331,11 +329,11 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 9: THE ASK - $860K SEED
+  // SLIDE 9: THE ASK - $960K SEED
   // ==========================================
   {
     number: 9,
-    title: "The Ask: $860K Seed Round",
+    title: "The Ask: $960K Seed Round",
     duration: 60,
     icon: "💰",
     layout: "image-right",
@@ -343,12 +341,13 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
-        text: "**$860K Seed** | 18-month runway",
+        text: "**$960K Seed** | 18-month runway",
         subPoints: [
-          "**40%** R&D ($344K) - AI/ML, edge processing",
-          "**25%** Hardware ($215K) - prototypes, tooling",
-          "**15%** Sales ($129K) - D2C launch, pilots",
-          "**20%** Ops & Cert ($172K) - legal, IP, compliance",
+          "**40%** Engineering/Software ($384K) - AI/ML, edge processing, firmware",
+          "**25%** Hardware ($240K) - prototypes, tooling, components",
+          "**15%** Sales ($144K) - D2C launch, trade shows, pilots",
+          "**10%** Operations ($96K) - legal, IP, infrastructure",
+          "**10%** Certification ($96K) - CPSC, ASTM, CE marking",
         ],
       },
       {
@@ -370,7 +369,7 @@ export const demoPitchSlides: Slide[] = [
     speakerNotes:
       "Be specific about the ask and allocation. End with clear next step: schedule the demo.",
     script:
-      "We're raising $860K in seed funding. Here's exactly how we'll use it: $344K to R&D for AI and edge processing. $215K to hardware for prototypes and tooling. $129K to sales for our D2C launch and pilot programs. $172K to operations and certifications. This gives us 18 months of runway with clear milestones: certifications and product launch by Q2, 5,000 consumer units and enterprise deployments by Q4, and Series A ready with over $500K in ARR. Your next step? Schedule a live demo and see sub-200 millisecond response time for yourself.",
+      "We're raising $960K in seed funding. Here's exactly how we'll use it: $384K to engineering and software for AI, edge processing, and firmware. $240K to hardware for prototypes, tooling, and components. $144K to sales for our D2C launch, trade shows, and pilot programs. $96K each to operations and certifications. This gives us 18 months of runway with clear milestones: certifications and product launch by Q2, 5,000 consumer units and enterprise deployments by Q4, and Series A ready with over $500K in ARR. Your next step? Schedule a live demo and see sub-200 millisecond response time for yourself.",
   },
 
   // ==========================================
