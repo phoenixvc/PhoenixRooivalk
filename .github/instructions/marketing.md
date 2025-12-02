@@ -78,11 +78,21 @@ export const ComponentName: React.FC<ComponentNameProps> = (props) => {
 ### Color Palette
 
 ```css
+/* These values are used with rgb() function: rgb(var(--primary)) */
 --primary: 249 115 22; /* Orange accent */
 --accent: 251 191 36; /* Amber highlight */
 --bg-primary: 15 23 42; /* Dark background */
 --bg-secondary: 9 10 15; /* Darker background */
 --text-primary: 255 255 255; /* White text */
+```
+
+**Usage:**
+
+```css
+.button {
+  background-color: rgb(var(--primary));
+  color: rgb(var(--text-primary));
+}
 ```
 
 ## Accessibility Requirements (Critical)

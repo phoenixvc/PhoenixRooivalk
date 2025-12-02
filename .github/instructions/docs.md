@@ -55,7 +55,7 @@ apps/docs/docs/
 
 ### Markdown Style
 
-```markdown
+````markdown
 # Page Title (H1 - only one per page)
 
 Brief introduction paragraph.
@@ -76,13 +76,23 @@ Detailed content...
 
 ## Code Examples
 
-\`\`\`typescript // TypeScript example function example(): void {
-console.log('Example'); } \`\`\`
+```typescript
+// TypeScript example
+function example(): void {
+  console.log("Example");
+}
+```
+````
 
 ## Diagrams
 
-\`\`\`mermaid graph TD A[Start] --> B[Process] B --> C[End] \`\`\`
+```mermaid
+graph TD
+    A[Start] --> B[Process]
+    B --> C[End]
 ```
+
+````
 
 ### Writing Style
 
@@ -112,9 +122,9 @@ Always reference:
 ```markdown
 # ADR-XXXX: Title
 
-**Status**: [Proposed | Accepted | Deprecated | Superseded]  
-**Date**: YYYY-MM-DD  
-**Deciders**: [Names]  
+**Status**: [Proposed | Accepted | Deprecated | Superseded]
+**Date**: YYYY-MM-DD
+**Deciders**: [Names]
 **Technical Story**: [Link to issue/PR]
 
 ## Executive Summary
@@ -165,7 +175,7 @@ Chosen option: "[option]", because [justification].
 
 - [Related ADR](link)
 - [Reference](link)
-```
+````
 
 ### ADR Numbering
 
