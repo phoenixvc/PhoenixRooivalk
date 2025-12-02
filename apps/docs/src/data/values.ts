@@ -302,16 +302,16 @@ export const SKYSNARE = {
   TARGET_MARKET: "$3.22B outdoor sports toy market",
   TAM: "$1.68B",
   YEAR_1_UNITS: 5000,
-  RETURN_RATE: "<3%",
+  RETURN_RATE: "8-10%",
   COGS: "$135",
   CONTRIBUTION_MARGIN: "59%",
-  CAC: "$60",
+  CAC: "$80-100",
 };
 
 /** AeroNet Enterprise */
 export const AERONET = {
-  SETUP_FEE: "$75K",
-  MONTHLY_FEE: "$45K/month",
+  SETUP_FEE: "$150K",
+  MONTHLY_FEE: "$25K/month",
   TAM: "$4.2B",
 };
 
@@ -489,7 +489,7 @@ export const CAPITAL = {
   SEED_OPERATIONS: "5%",
 
   // Specific amounts
-  INVESTMENT_TO_DATE: "$150K",
+  INVESTMENT_TO_DATE: "6 months founder R&D",
   PO_FACILITY: "$350K",
   LIABILITY_POLICY: "$5M",
   CONVERSION_DAYS: "35-day",
