@@ -143,7 +143,8 @@ class SupportService {
       }
 
       // Log network and configuration status
-      console.error("Network status:", navigator.onLine ? "Online" : "Offline");
+      const networkStatus = navigator.onLine ? "Online" : "Offline";
+      console.error("Network status:", networkStatus);
       console.error("Timestamp:", new Date().toISOString());
 
       // Log cloud configuration status
@@ -160,7 +161,6 @@ class SupportService {
         );
 
         if (!services.functions.isConfigured()) {
-          const networkStatus = navigator.onLine ? "Online" : "Offline";
           console.error(
             "⚠️  AI Functions not available. Please check:",
             `\n  • Network connection (currently: ${networkStatus})`,
