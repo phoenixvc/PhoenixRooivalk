@@ -41,16 +41,33 @@ jobs:
 
           # Optional: Functions deployment (only on main)
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            # Debug: Print actual values (secrets show as *** but we can check if they're set)
+            echo "🔍 Debugging Azure Functions deployment prerequisites:"
+            echo "  AZURE_FUNCTIONAPP_PUBLISH_PROFILE is set: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
+            echo "  AZURE_FUNCTIONAPP_NAME (var) value: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'"
+            echo "  AZURE_FUNCTIONAPP_NAME is set as secret: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}"
+            
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
               # Check if AZURE_FUNCTIONAPP_NAME is properly configured as a variable
               if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
                 # Check if it was mistakenly set as a secret
                 if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
-                  echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a secret but should be a variable"
+                  echo "::error::AZURE_FUNCTIONAPP_NAME is configured as a SECRET but should be a VARIABLE"
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
+                  echo "::error::To fix: Delete the AZURE_FUNCTIONAPP_NAME secret and add it as a variable instead"
+                  echo "::error::  1. Go to Settings → Secrets and variables → Actions → Secrets tab"
+                  echo "::error::  2. Delete AZURE_FUNCTIONAPP_NAME"
+                  echo "::error::  3. Go to Variables tab → New repository variable"
+                  echo "::error::  4. Name: AZURE_FUNCTIONAPP_NAME, Value: phoenix-rooivalk-functions"
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
                 else
-                  echo "::warning::AZURE_FUNCTIONAPP_NAME variable is not set - Functions deployment will be skipped"
+                  echo "::error::AZURE_FUNCTIONAPP_NAME variable is NOT set - Functions deployment will be skipped"
+                  echo "::error::To fix: Add AZURE_FUNCTIONAPP_NAME as a repository VARIABLE (not secret)"
+                  echo "::error::  1. Go to Settings → Secrets and variables → Actions → Variables tab"
+                  echo "::error::  2. Click 'New repository variable'"
+                  echo "::error::  3. Name: AZURE_FUNCTIONAPP_NAME"
+                  echo "::error::  4. Value: phoenix-rooivalk-functions (your function app name)"
+                  echo "::error::  5. See .github/AZURE_SETUP.md for details"
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
                 fi
               else
@@ -59,11 +76,30 @@ jobs:
                   echo "::warning::AZURE_FUNCTIONAPP_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
                 fi
+                echo "✅ Azure Functions deployment prerequisites met:"
+                echo "  - AZURE_FUNCTIONAPP_PUBLISH_PROFILE: configured"
+                echo "  - AZURE_FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}"
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else
-              echo "::notice::Azure Functions secrets not configured - skipping Functions deployment"
+              echo "::error::AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret is NOT configured or is EMPTY"
+              echo "::error::Functions deployment will be skipped"
+              echo "::error::"
+              echo "::error::To fix this issue:"
+              echo "::error::  1. Go to Azure Portal → Your Function App → Get publish profile"
+              echo "::error::  2. Download the .PublishSettings XML file"
+              echo "::error::  3. Go to GitHub Settings → Secrets and variables → Actions → Secrets tab"
+              echo "::error::  4. Click 'New repository secret'"
+              echo "::error::  5. Name: AZURE_FUNCTIONAPP_PUBLISH_PROFILE"
+              echo "::error::  6. Value: Paste the ENTIRE contents of the XML file"
+              echo "::error::  7. Ensure there are no extra spaces or newlines at the beginning/end"
+              echo "::error::"
+              echo "::error::Alternatively, run: gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE < publish-profile.xml"
+              echo "has-functions-profile=false" >> $GITHUB_OUTPUT
             fi
+          else
+            # Not on main branch - skip functions deployment
+            echo "has-functions-profile=false" >> $GITHUB_OUTPUT
           fi
 
           # Recommended but not required (app works in offline mode without these)

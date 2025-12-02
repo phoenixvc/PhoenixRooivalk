@@ -252,3 +252,18 @@ To answer the original question about which variables are correct:
 
 All workflows and scripts have been updated to use the correct, standardized
 names.
+
+## Troubleshooting
+
+If you're experiencing issues with Azure Functions deployment being skipped or failing:
+
+1. **Check Secret/Variable Configuration**: Ensure all required items are set as the correct type (Secret vs Variable)
+2. **Verify Secret Content**: Ensure `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` contains the complete XML (not empty)
+3. **Check for Typos**: Variable names must match exactly (no extra prefixes like 'v')
+4. **Review Workflow Logs**: The workflows now include detailed diagnostic output showing what's missing
+
+See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for detailed troubleshooting steps, including:
+- "Azure Functions secrets not configured" despite secrets being set
+- Variables set as secrets instead of variables
+- Common typos and unusual values
+- Step-by-step fix instructions

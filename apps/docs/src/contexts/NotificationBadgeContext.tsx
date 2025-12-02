@@ -15,6 +15,7 @@ import React, {
 } from "react";
 import { supportService, ContentTimestamps } from "../services/supportService";
 import { useAuth } from "./AuthContext";
+import { isCloudConfigured, getCurrentProvider } from "../services/cloud";
 
 const NEWS_LAST_SEEN_KEY = "phoenix-news-last-seen";
 const SUPPORT_LAST_SEEN_KEY = "phoenix-support-last-seen";
@@ -97,12 +98,55 @@ export function NotificationBadgeProvider({
         JSON.stringify({ data, timestamp: Date.now() }),
       );
     } catch (error) {
-      console.error("Failed to fetch content timestamps:", error);
-      // Use cached data as fallback even if stale
+      // Enhanced error logging with diagnostic information
+      console.group(
+        "❌ Failed to fetch content timestamps (NotificationBadgeContext)",
+      );
+      console.error("Error:", error);
+      console.error(
+        "Error type:",
+        error instanceof Error ? error.constructor.name : typeof error,
+      );
+      console.error(
+        "Error message:",
+        error instanceof Error ? error.message : String(error),
+      );
+
+      // Log stack trace if available
+      if (error instanceof Error && error.stack) {
+        console.error("Stack trace:", error.stack);
+      }
+
+      // Check cached data for fallback
       const cached = localStorage.getItem(TIMESTAMPS_CACHE_KEY);
+
+      // Log context information
+      console.error("Context:", {
+        networkStatus: navigator.onLine ? "Online" : "Offline",
+        timestamp: new Date().toISOString(),
+        hasUser: !!user,
+        hasCachedData: !!cached,
+      });
+
+      // Log cloud service status
+      try {
+        console.error("Cloud provider:", getCurrentProvider());
+        console.error("Cloud configured:", isCloudConfigured());
+      } catch (configError) {
+        console.error("Failed to retrieve cloud configuration:", configError);
+      }
+
+      console.groupEnd();
+
+      // Use cached data as fallback even if stale
       if (cached) {
         const { data } = JSON.parse(cached);
         setTimestamps(data);
+        console.info("✓ Using stale cached data as fallback");
+      } else {
+        console.warn(
+          "⚠️  No cached data available, notification badges may not work properly",
+        );
       }
     } finally {
       setIsLoading(false);
