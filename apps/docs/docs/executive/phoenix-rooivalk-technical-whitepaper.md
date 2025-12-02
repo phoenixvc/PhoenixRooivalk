@@ -5,6 +5,7 @@ sidebar_label: Phoenix Rooivalk Technical Whitepaper
 difficulty: expert
 estimated_reading_time: 13
 points: 50
+phase: ["seed", "series-a", "series-b", "series-c", "scale"]
 tags:
   - executive
   - counter-uas
@@ -29,8 +30,8 @@ sub-200ms response times with 95%+ detection accuracy while maintaining complete
 operational autonomy in GPS-denied and electronically contested environments.
 The platform leverages advanced AI integration (Morpheus Network, Cognitive
 Mesh) and dual-chain blockchain evidence (Hedera + Private Chain + Solana) to
-deliver cost-competitive solutions to the rapidly growing $2.45-3.0 billion
-global counter-drone market.
+deliver cost-competitive solutions to the rapidly growing $6.64 billion
+global counter-drone market (projected to reach $20.31B by 2030).
 
 ---
 
@@ -90,9 +91,9 @@ dependency or human intervention.
 
 **Global Counter-Drone Market:**
 
-- **2025 Market**: $2.45-3.0B (current market size)
-- **2030 Projection**: $9-15B (projected market size)
-- **Growth Rate**: 23-27% (annual CAGR)
+- **2025 Market**: $6.64B (current market size)
+- **2030 Projection**: $20.31B (projected market size)
+- **Growth Rate**: 25.1% CAGR
 - **Ukraine Impact**: 80% (drones account for casualties)
 
 #### Competitive Advantages
@@ -293,9 +294,9 @@ dependency or human intervention.
 
 #### Global Counter-Drone Market
 
-- **2025 Market Size**: $2.45-3.0 billion
-- **2030 Projection**: $9-15 billion
-- **CAGR**: 23-27% annual growth rate
+- **2025 Market Size**: $6.64 billion
+- **2030 Projection**: $20.31 billion
+- **CAGR**: 25.1% annual growth rate
 - **Government Investment**: $500M Pentagon Replicator Program
 
 #### Market Drivers

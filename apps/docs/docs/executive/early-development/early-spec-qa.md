@@ -5,6 +5,7 @@ sidebar_label: Early Spec & Q&A
 difficulty: intermediate
 estimated_reading_time: 10
 points: 15
+phase: ["seed", "series-a", "series-b"]
 tags:
   - executive
   - counter-uas
@@ -278,16 +279,16 @@ receipts.
 
 ## Investment & Decision Points
 
-| Phase                 | Investment | Focus                                 |
-| --------------------- | ---------- | ------------------------------------- |
-| Phase 1 (Concept)     | $3.5M      | Architecture validation, simulation   |
-| Phase 2 (Prototype)   | $15M       | Hardware demo, lab tests              |
-| Phase 3 (Integration) | $25M       | Field trials, certification readiness |
-| **Total to TRL7**     | **$43.5M** | Over ~3 years                         |
+| Phase                  | Investment | Focus                                 |
+| ---------------------- | ---------- | ------------------------------------- |
+| Seed (Concept)         | $1.5M      | Architecture validation, simulation   |
+| Series A (Prototype)   | $8-12M     | Hardware demo, lab tests              |
+| Series B (Integration) | $15-20M    | Field trials, certification readiness |
+| **Total to TRL7**      | **$40-50M**| Over ~3 years                         |
 
 ---
 
-## Phase 1 Deliverables ($3.5M)
+## Seed Phase Deliverables ($1.5M)
 
 ### What will the investor get for the money?
 
@@ -312,7 +313,7 @@ receipts.
 - Field test with 5 real drones at test range
 - Multi-vendor integration demo (at least 2 systems)
 - Complete technical documentation package
-- Cost analysis and Phase 2 detailed plan
+- Cost analysis and Series A detailed plan
 - Go/No-Go decision package with metrics
 
 ### Stage Gates (Payment Released Upon Achievement)
@@ -322,11 +323,11 @@ receipts.
 | Gate 1 | $1M (Month 3)   | Simulation + Architecture | 100-drone sim working, <20ms latency          |
 | Gate 2 | $1M (Month 6)   | Hardware Demo             | Physical detection proven, blockchain logging |
 | Gate 3 | $750K (Month 8) | Field Test                | 5 real drones tracked simultaneously          |
-| Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Phase 2 ready        |
+| Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Series A ready       |
 
 ---
 
-## Budget Breakdown ($3.5M)
+## Budget Breakdown ($1.5M)
 
 ### Team (65% - $2.275M)
 

@@ -5,6 +5,7 @@ sidebar_label: Strategic Recommendations
 difficulty: intermediate
 estimated_reading_time: 8
 points: 15
+phase: ["series-a", "series-b", "series-c", "scale"]
 tags:
   - executive
   - counter-uas
