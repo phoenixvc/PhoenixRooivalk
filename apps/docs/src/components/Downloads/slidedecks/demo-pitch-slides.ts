@@ -331,11 +331,11 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 9: ROI, FINANCIALS & THE ASK
+  // SLIDE 9: THE ASK - $860K SEED
   // ==========================================
   {
     number: 9,
-    title: "The Opportunity: $500K-$1M Seed",
+    title: "The Ask: $860K Seed Round",
     duration: 60,
     icon: "💰",
     layout: "image-right",
@@ -343,59 +343,71 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
-        text: "**Your Return Potential:**",
+        text: "**$860K Seed** | 18-month runway",
         subPoints: [
-          "**10-15x** at Series A ($5-8M target valuation)",
-          "**25-50x** at exit (strategic M&A or IPO)",
-          "Defense sector **acquisitions at record highs**",
+          "**40%** R&D ($344K) - AI/ML, edge processing",
+          "**25%** Hardware ($215K) - prototypes, tooling",
+          "**15%** Sales ($129K) - D2C launch, pilots",
+          "**20%** Ops & Cert ($172K) - legal, IP, compliance",
         ],
       },
       {
-        text: "**Investment Allocation:**",
+        text: "**Milestones to Series A:**",
         subPoints: [
-          "**40%** R&D - AI/ML, edge processing, firmware",
-          "**25%** Hardware - prototypes, tooling, manufacturing",
-          "**15%** Sales - D2C launch, trade shows, pilots",
-          "**20%** Ops & Certification - legal, IP, CPSC/ASTM/CE",
+          "**Q2 2026**: CPSC/ASTM cert, D2C launch, first EU pilot",
+          "**Q4 2026**: 5K consumer units, 3-5 enterprise installs",
+          "**Series A**: $500K+ ARR, proven market traction",
         ],
       },
       {
-        text: "**18-Month Runway to Series A:**",
+        text: "**Your Next Step:**",
         subPoints: [
-          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
-          "**Q3-Q4 2026**: Scale to **$500K ARR**, 3-5 enterprise deals",
-          "**Series A ready** with proven revenue and market traction",
+          "**Schedule a live demo** - see sub-200ms in action",
+          "*contact@phoenixrooivalk.com*",
         ],
       },
     ],
     speakerNotes:
-      "Lead with ROI potential - investors want to know the return. Be specific about allocation. Emphasize the 18-month runway and Series A path.",
+      "Be specific about the ask and allocation. End with clear next step: schedule the demo.",
     script:
-      "We're raising $500K to $1M in seed funding. Here's the opportunity: at our target Series A valuation of $5 to $8 million, seed investors see 10 to 15x returns. At exit, we're looking at 25 to 50x potential - and defense sector M&A is at record highs. Here's how we allocate the funds: 40% to R&D for AI and edge processing. 25% to hardware for prototypes and manufacturing. 15% to sales for our D2C launch and pilot programs. 20% to operations and certifications. This gives us 18 months of runway: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4 2026, and Series A ready with proven traction.",
+      "We're raising $860K in seed funding. Here's exactly how we'll use it: $344K to R&D for AI and edge processing. $215K to hardware for prototypes and tooling. $129K to sales for our D2C launch and pilot programs. $172K to operations and certifications. This gives us 18 months of runway with clear milestones: certifications and product launch by Q2, 5,000 consumer units and enterprise deployments by Q4, and Series A ready with over $500K in ARR. Your next step? Schedule a live demo and see sub-200 millisecond response time for yourself.",
   },
 
   // ==========================================
-  // SLIDE 10: CALL TO ACTION
+  // SLIDE 10: ROI & EXIT EXPECTATIONS
   // ==========================================
   {
     number: 10,
-    title: "Join Us in Defending Critical Infrastructure",
-    duration: 30,
-    icon: "🚀",
-    layout: "title-only",
-    keyPoints: [
-      "**$500K-$1M Seed Round** | *18-month runway to Series A*",
+    title: "Your Return: When & How Much",
+    duration: 45,
+    icon: "📈",
+    layout: "two-column",
+    leftColumnTitle: "Exit Timeline",
+    leftColumn: [
+      "**Series A (Q4 2026):** $5-8M valuation",
+      "→ Seed investors: **10-15x paper return**",
       "",
-      "**Your Next Step:**",
+      "**Series B (2028):** $25-40M valuation",
+      "→ Early liquidity options available",
       "",
-      "**Schedule a live demo** - see sub-200ms response in action",
-      "",
-      "*contact@phoenixrooivalk.com | phoenixrooivalk.com*",
+      "**Exit (2029-2030):** Strategic M&A or IPO",
+      "→ **25-50x total return potential**",
     ],
+    rightColumnTitle: "Why Defense Exits Big",
+    rightColumn: [
+      "**$4.2B** in defense M&A (2024)",
+      "**Anduril:** $14B valuation, 5 years",
+      "**Shield AI:** $2.7B valuation, 6 years",
+      "**Dedrone:** Acquired by Axon",
+      "",
+      "**Strategic acquirers actively looking:**",
+      "Lockheed, Northrop, L3Harris, Raytheon",
+    ],
+    keyPoints: [],
     speakerNotes:
-      "End strong. One clear ask: schedule the demo. Make it easy for them to say yes.",
+      "Investors want to know when they get paid. Be specific about timeline and comparable exits. Defense sector is hot for M&A.",
     script:
-      "We're raising $500K to $1M to bring this to market. You've seen the numbers - 10 to 150x faster, true offline capability, blockchain evidence. Now let me show you. Schedule a live demo and see sub-200 millisecond response time for yourself. Let's defend critical infrastructure together.",
+      "Let's talk returns. At our target Series A valuation of $5 to $8 million in Q4 2026, seed investors see 10 to 15x paper returns. By Series B in 2028, early liquidity options become available. At exit in 2029 to 2030, we're targeting 25 to 50x total returns. Why are we confident? Defense tech M&A hit $4.2 billion in 2024. Anduril reached $14 billion in 5 years. Shield AI hit $2.7 billion in 6. Dedrone was acquired by Axon. The strategic acquirers - Lockheed, Northrop, L3Harris, Raytheon - they're all actively looking for counter-drone solutions. This is a sector where exits happen and they happen big.",
   },
 ];
 
