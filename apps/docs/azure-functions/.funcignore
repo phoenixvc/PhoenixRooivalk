@@ -4,7 +4,6 @@
 
 # Source files (only dist/ is needed after build)
 src/
-*.ts
 *.js.map
 tsconfig.json
 
@@ -17,9 +16,8 @@ __tests__/
 jest.config.js
 coverage/
 
-# Documentation
+# Documentation (not needed for runtime)
 *.md
-!README.md
 
 # Git
 .git/
