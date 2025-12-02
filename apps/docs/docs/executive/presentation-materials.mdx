@@ -10,6 +10,27 @@ tags:
   - counter-uas
 ---
 
+import SlideDeckDownload from "@site/src/components/Downloads/SlideDeckDownload";
+import { DocumentDownload } from "@site/src/components/Downloads";
+import {
+  presentationMaterialsSlides,
+  presentationMaterialsMeta,
+} from "@site/src/components/Downloads/slidedecks/presentation-materials-slides";
+
+<DocumentDownload title="Executive Presentation Materials - Phoenix Rooivalk" />
+
+## 📥 Download Complete Presentation
+
+<SlideDeckDownload
+  title={presentationMaterialsMeta.title}
+  duration={presentationMaterialsMeta.duration}
+  slides={presentationMaterialsSlides}
+  audience={presentationMaterialsMeta.audience}
+  date={presentationMaterialsMeta.date}
+/>
+
+---
+
 ## Executive Presentation Script
 
 ### Slide 1: Title Slide
