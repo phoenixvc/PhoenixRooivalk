@@ -324,14 +324,14 @@ export const demoPitchSlides: Slide[] = [
       },
     ],
     keyPoints: [
-      "**Advisors:** Defense procurement (TBA), Counter-drone specialist (TBA)",
+      "**Advisors:** Available upon request",
       "**All founders full-time** with personal capital committed",
       "**Hiring Q1:** VP Sales (defense background), Head of Ops",
     ],
     speakerNotes:
-      "30 seconds max. Hit the highlights, mention advisors are being finalized, show hiring plans. Investors want to know you can execute, then move to the ask.",
+      "30 seconds max. Hit the highlights, emphasize full-time commitment and hiring plans. Investors want to know you can execute, then move to the ask.",
     script:
-      "Our team: Jurie on tech with edge AI and SaaS exits. Martyn on business with 20 years in energy and defense, including contractor relationships. Pieter on hardware with medical device mass manufacturing. Eben on finance with investment banking and VC experience. We're finalizing two advisors: one in defense procurement, one counter-drone specialist. All founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
+      "Our team: Jurie on tech with edge AI and SaaS exits. Martyn on business with 20 years in energy and defense, including contractor relationships. Pieter on hardware with medical device mass manufacturing. Eben on finance with investment banking and VC experience. All founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
   },
 
   // ==========================================
