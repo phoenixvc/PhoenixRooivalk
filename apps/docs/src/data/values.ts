@@ -216,11 +216,47 @@ export const HARDWARE = {
 
 /** Team Values */
 export const TEAM = {
-  CTO_NAME: "Jurie (Hans Jurgens) Smit",
+  // Core Team
+  CTO_NAME: "Jurie Smit",
+  CTO_FULL_NAME: "Hans Jurgens (Jurie) Smit",
+  CTO_TITLE: "Co-Founder & CTO",
+  CTO_LINKEDIN: "https://www.linkedin.com/in/juriesmit/",
+  CTO_BACKGROUND: "Systems Engineer, 15+ years software & hardware development",
+  CTO_EDUCATION: "[ADD EDUCATION]",
+  CTO_EXPERTISE: ["Edge AI/ML", "Embedded Systems", "Full-Stack Development", "Hardware Integration"],
+
   CEO_NAME: "Martyn Redelinghuys",
-  COMBINED_EXPERIENCE: "35+ years",
+  CEO_FULL_NAME: "Martyn Redelinghuys",
+  CEO_TITLE: "Co-Founder & CEO",
+  CEO_LINKEDIN: "https://www.linkedin.com/in/martynrede/",
+  CEO_BACKGROUND: "20+ years energy, mining, defense. R500M+ portfolio management",
+  CEO_EDUCATION: "MBA (GIBS)",
+  CEO_EXPERTISE: ["Business Development", "Strategic Partnerships", "Capital Markets", "Defense Industry"],
+
+  // Additional Team Members
+  MEMBER_3_NAME: "Pieter Lagrange",
+  MEMBER_3_TITLE: "[ADD TITLE - e.g., Co-Founder & COO]",
+  MEMBER_3_LINKEDIN: "https://www.linkedin.com/in/pieterlagrange/",
+  MEMBER_3_BACKGROUND: "[ADD BACKGROUND]",
+  MEMBER_3_EDUCATION: "[ADD EDUCATION]",
+  MEMBER_3_EXPERTISE: ["[ADD EXPERTISE]"],
+
+  MEMBER_4_NAME: "Eben Maré",
+  MEMBER_4_TITLE: "[ADD TITLE - e.g., Co-Founder & CFO]",
+  MEMBER_4_LINKEDIN: "https://www.linkedin.com/in/ebenmare/",
+  MEMBER_4_BACKGROUND: "[ADD BACKGROUND]",
+  MEMBER_4_EDUCATION: "[ADD EDUCATION]",
+  MEMBER_4_EXPERTISE: ["[ADD EXPERTISE]"],
+
+  // Team Stats
+  COMBINED_EXPERIENCE: "50+ years",
+  TEAM_SIZE: 4,
+
+  // Company Structure
   COMPANY_STRUCTURE: "Delaware C-Corp (in progress)",
   SECONDARY_ENTITY: "South African Entity (Q2 2026)",
+
+  // Contact
   CONTACT_EMAIL: "jurie@phoenixvc.tech",
   CONTACT_PHONE: "+27 (069) 140-6835",
 };
