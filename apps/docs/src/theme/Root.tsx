@@ -25,6 +25,7 @@ import { SidebarRecommendations } from "../components/Sidebar";
 import { AuthProvider } from "../contexts/AuthContext";
 import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
 import { ToastProvider } from "../contexts/ToastContext";
+import { autoFixOnboardingData } from "../utils/localStorage";
 
 interface RootProps {
   children: ReactNode;
@@ -73,6 +74,17 @@ function usePageContext() {
 
 export default function Root({ children }: RootProps): React.ReactElement {
   const pageContext = usePageContext();
+
+  // Auto-fix corrupted onboarding data on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        autoFixOnboardingData();
+      } catch (error) {
+        console.error("Failed to auto-fix onboarding data:", error);
+      }
+    }
+  }, []);
 
   return (
     <AuthProvider>
