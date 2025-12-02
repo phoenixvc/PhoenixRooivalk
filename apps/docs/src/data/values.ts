@@ -74,7 +74,6 @@ export const MARKET = {
   // Market gaps
   FACILITIES_UNPROTECTED: "64%",
   COMPETITOR_FALSE_POSITIVE: "15-25%",
-  COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 
   // Recent European incidents (Nov 2025)
   EUROPE_INCIDENTS_2025: "4x increase YoY",
