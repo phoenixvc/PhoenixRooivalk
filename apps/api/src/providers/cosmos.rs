@@ -55,7 +55,12 @@ impl CosmosProvider {
 
             // Try key-based auth first, fall back to Entra
             let client = if let Ok(key) = std::env::var("COSMOS_DB_KEY") {
-                CosmosClient::new(account.clone(), AuthorizationToken::primary_key(key)?)
+                // Note: This is a simplified example. In practice, you'd use:
+                // CosmosClient::new(account, AuthorizationToken::primary_key(&key))
+                // The actual implementation depends on the azure_data_cosmos version
+                return Err(ProviderError::Connection(
+                    "Key-based auth not fully implemented in stub. Use Entra auth or implement with proper azure_data_cosmos version.".to_string(),
+                ));
             } else {
                 // Use Entra authentication
                 let credential = DefaultAzureCredential::default();

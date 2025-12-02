@@ -31,9 +31,9 @@ export default function ProfileConfirmPage() {
     const lastName = searchParams?.get("lastName") || "";
     const picture = searchParams?.get("picture") || "";
 
-    // Alternatively, check localStorage for OAuth data
+    // Alternatively, check sessionStorage for OAuth data (more secure)
     if (typeof window !== "undefined") {
-      const oauthData = localStorage.getItem("oauth_profile");
+      const oauthData = sessionStorage.getItem("oauth_profile");
       if (oauthData) {
         try {
           const data = JSON.parse(oauthData);
@@ -43,8 +43,8 @@ export default function ProfileConfirmPage() {
             lastName: data.family_name || lastName,
             profilePicture: data.picture || picture,
           });
-          // Clear OAuth data from localStorage
-          localStorage.removeItem("oauth_profile");
+          // Clear OAuth data from sessionStorage
+          sessionStorage.removeItem("oauth_profile");
         } catch (err) {
           console.error("Failed to parse OAuth data:", err);
         }
@@ -70,19 +70,21 @@ export default function ProfileConfirmPage() {
         throw new Error("No active session. Please log in again.");
       }
 
-      // Update user profile
-      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionId}`,
+      // Update user profile - API expects session_id as query parameter
+      const response = await fetch(
+        `${API_BASE_URL}/auth/profile?session_id=${encodeURIComponent(sessionId)}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            first_name: profileData.firstName,
+            last_name: profileData.lastName,
+            // Note: email is read-only from OAuth provider
+          }),
         },
-        body: JSON.stringify({
-          first_name: profileData.firstName,
-          last_name: profileData.lastName,
-          // Note: email is read-only from OAuth provider
-        }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update profile");

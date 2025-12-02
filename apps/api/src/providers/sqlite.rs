@@ -71,7 +71,8 @@ impl DatabaseProvider for SqliteProvider {
             .fetch_optional(&self.pool)
             .await?;
 
-        Ok(result.unwrap_or(0) as u32)
+        // Convert i32 to u32, treating negative values as 0
+        Ok(result.unwrap_or(0).max(0) as u32)
     }
 
     async fn migrate(&self, _target_version: Option<u32>) -> Result<()> {

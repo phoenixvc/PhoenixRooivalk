@@ -26,7 +26,12 @@ export function Tour() {
       const timer = setTimeout(() => {
         setIsOpen(true);
         const savedStep = getCurrentStep();
-        setCurrentStepState(savedStep);
+        // Ensure step is within bounds
+        const validStep = Math.min(
+          Math.max(0, savedStep),
+          TOUR_CONFIG.steps.length - 1,
+        );
+        setCurrentStepState(validStep);
       }, 1000);
 
       return () => clearTimeout(timer);
