@@ -394,6 +394,8 @@ jobs:
           app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          respect-funcignore: true
+          scm-do-build-during-deployment: true
 
       - name: Configure App Settings
         if: vars.CONFIGURE_APP_SETTINGS == 'true'
