@@ -23,14 +23,14 @@ export const demoPitchSlides: Slide[] = [
     keyPoints: [
       "**Autonomous Counter-Drone Defense**",
       "",
-      "*Sub-200ms response. True offline capability. Blockchain evidence.*",
+      "*Sub-200ms response | True offline | Blockchain evidence*",
       "",
-      "**Protecting Critical Infrastructure from Aerial Threats**",
+      "**When seconds matter, we respond in milliseconds**",
     ],
     speakerNotes:
-      "Open with confidence. Pause on the tagline. Let the title sink in before moving to the problem.",
+      "Open with confidence. Pause on the tagline. Let 'milliseconds' land - it's our core differentiator.",
     script:
-      "Welcome to Phoenix Rooivalk. We're building the next generation of autonomous counter-drone defense systems. Sub-200 millisecond response times. True offline capability. And blockchain-anchored evidence for legal accountability. We protect critical infrastructure from aerial threats.",
+      "Welcome to Phoenix Rooivalk. We're building autonomous counter-drone defense that responds in under 200 milliseconds - that's 10 to 150 times faster than anything else on the market. True offline capability for denied environments. Blockchain-anchored evidence for legal accountability. When seconds matter, we respond in milliseconds.",
   },
 
   // ==========================================
@@ -154,9 +154,9 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 5,
-    title: "10-150x Faster Than Competitors",
+    title: "Why We Win: 10-150x Speed Advantage",
     duration: 45,
-    icon: "🏆",
+    icon: "⚡",
     layout: "two-column",
     leftColumnTitle: "Phoenix Rooivalk",
     leftColumn: [
@@ -335,7 +335,7 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 9,
-    title: "The Ask: $500K-$1M Seed Round",
+    title: "The Opportunity: $500K-$1M Seed",
     duration: 60,
     icon: "💰",
     layout: "image",
@@ -343,11 +343,11 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "18-month runway with clear milestones to Series A",
     keyPoints: [
       {
-        text: "**Investor ROI Potential:**",
+        text: "**Your Return Potential:**",
         subPoints: [
-          "**10-15x return** potential at Series A ($5-8M valuation)",
-          "**25-50x return** at exit (strategic acquisition or IPO)",
-          "Defense sector **M&A activity at record highs**",
+          "**10-15x** at Series A ($5-8M target valuation)",
+          "**25-50x** at exit (strategic M&A or IPO)",
+          "Defense sector **acquisitions at record highs**",
         ],
       },
       {
@@ -379,24 +379,23 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 10,
-    title: "Let's Defend Critical Infrastructure Together",
+    title: "Join Us in Defending Critical Infrastructure",
     duration: 30,
-    icon: "🎯",
+    icon: "🚀",
     layout: "title-only",
     keyPoints: [
-      "**Raising:** $500K-$1M Seed Round",
+      "**$500K-$1M Seed Round** | *18-month runway to Series A*",
       "",
-      "**Next Steps:**",
-      "• Technical deep-dive demo",
-      "• Pilot program discussion",
-      "• Partnership opportunities",
+      "**Your Next Step:**",
       "",
-      "*contact@phoenixrooivalk.com*",
+      "**Schedule a live demo** - see sub-200ms response in action",
+      "",
+      "*contact@phoenixrooivalk.com | phoenixrooivalk.com*",
     ],
     speakerNotes:
-      "End with clear call to action. Be specific about what you're asking for and what comes next.",
+      "End strong. One clear ask: schedule the demo. Make it easy for them to say yes.",
     script:
-      "We're raising a $500K to $1M seed round to accelerate our go-to-market. If you're interested, let's schedule a technical deep-dive where we can demonstrate the system in action. We're also exploring pilot programs and strategic partnerships. Let's build the future of autonomous defense together.",
+      "We're raising $500K to $1M to bring this to market. You've seen the numbers - 10 to 150x faster, true offline capability, blockchain evidence. Now let me show you. Schedule a live demo and see sub-200 millisecond response time for yourself. Let's defend critical infrastructure together.",
   },
 ];
 
