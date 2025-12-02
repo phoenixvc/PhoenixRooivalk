@@ -30,6 +30,7 @@ jobs:
         id: check
         run: |
           MISSING=""
+          MISCONFIG_WARNINGS=""
 
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
@@ -41,7 +42,25 @@ jobs:
           # Optional: Functions deployment (only on main)
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
-              echo "has-functions-profile=true" >> $GITHUB_OUTPUT
+              # Check if AZURE_FUNCTIONAPP_NAME is properly configured as a variable
+              if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                # Check if it was mistakenly set as a secret
+                if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a secret but should be a variable"
+                  MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
+                  echo "has-functions-profile=false" >> $GITHUB_OUTPUT
+                else
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME variable is not set - Functions deployment will be skipped"
+                  echo "has-functions-profile=false" >> $GITHUB_OUTPUT
+                fi
+              else
+                # Variable exists correctly, but check if it's ALSO set as a secret (duplicate)
+                if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
+                  MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
+                fi
+                echo "has-functions-profile=true" >> $GITHUB_OUTPUT
+              fi
             else
               echo "::notice::Azure Functions secrets not configured - skipping Functions deployment"
             fi
@@ -54,6 +73,18 @@ jobs:
           fi
           if [ -z "${{ secrets.AZURE_FUNCTIONS_BASE_URL }}" ]; then
             WARNINGS="${WARNINGS}\n  - AZURE_FUNCTIONS_BASE_URL (API calls will fail)"
+          fi
+
+          # Print misconfiguration warnings
+          if [ -n "$MISCONFIG_WARNINGS" ]; then
+            echo "::error::Configuration issues detected:${MISCONFIG_WARNINGS}"
+            echo ""
+            echo "Fix these issues:"
+            echo "  1. Go to Settings → Secrets and variables → Actions"
+            echo "  2. Review the Secrets and Variables tabs"
+            echo "  3. Delete any incorrectly named or typed items"
+            echo "  4. Add them with the correct name and type (Secret vs Variable)"
+            echo "  5. See .github/AZURE_SETUP.md for the complete list of correct names"
           fi
 
           # Print warnings
