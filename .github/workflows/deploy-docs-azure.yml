@@ -63,7 +63,11 @@ jobs:
               fi
             else
               echo "::notice::Azure Functions secrets not configured - skipping Functions deployment"
+              echo "has-functions-profile=false" >> $GITHUB_OUTPUT
             fi
+          else
+            # Not on main branch - skip functions deployment
+            echo "has-functions-profile=false" >> $GITHUB_OUTPUT
           fi
 
           # Recommended but not required (app works in offline mode without these)
