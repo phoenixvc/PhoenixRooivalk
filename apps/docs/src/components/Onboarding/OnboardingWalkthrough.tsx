@@ -12,6 +12,8 @@ import { isProfileConfirmationPending } from "../Auth";
 import {
   PROFILE_TEMPLATES_ARRAY,
   ProfileTemplate,
+  getUserProfile as getKnownUserProfile,
+  INTERNAL_USER_PROFILES,
 } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import { ProfileCompletion, UserProfileDetails } from "./ProfileCompletion";
@@ -496,13 +498,60 @@ export function OnboardingWalkthrough({
         profileCompletedAt: new Date().toISOString(),
       });
 
+      // Check if the user's name matches a known internal profile
+      // This allows users who sign up with generic auth (e.g., "user@gmail.com")
+      // but enter their real name during signup to be recognized as internal users
+      const fullName = `${details.firstName} ${details.lastName}`.trim();
+      const knownProfile = getKnownUserProfile(user.email, fullName);
+
+      if (knownProfile) {
+        // User is a known internal member, save their profile immediately
+        // Find the profile key that matches this profile (only search once)
+        const profileKey =
+          Object.entries(INTERNAL_USER_PROFILES).find(
+            ([, profile]) => profile === knownProfile,
+          )?.[0] || "unknown";
+
+        console.log(`Detected internal profile for ${fullName}:`, knownProfile);
+        saveProfileSelection(user.uid, profileKey, knownProfile.roles);
+
+        // Save to cloud
+        await saveProfileToCloud({
+          profileKey,
+          roles: knownProfile.roles,
+        });
+
+        // Refresh the user profile in context
+        refreshUserProfile?.();
+      }
+
       // Move to next step
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       saveStep(nextStep);
     },
-    [user, currentStep, saveProfileToCloud],
+    [user, currentStep, saveProfileToCloud, refreshUserProfile],
   );
+
+  // Handle skipping profile completion
+  const handleProfileCompletionSkip = useCallback(() => {
+    if (!user) return;
+    // Mark as skipped but continue
+    localStorage.setItem(
+      USER_DETAILS_KEY,
+      JSON.stringify({
+        userId: user.uid,
+        completed: true,
+        skipped: true,
+        completedAt: new Date().toISOString(),
+      }),
+    );
+
+    // Move to next step without saving details
+    const nextStep = currentStep + 1;
+    setCurrentStep(nextStep);
+    saveStep(nextStep);
+  }, [user, currentStep]);
 
   // Handle AI fun facts completion
   const handleFunFactsComplete = useCallback(
@@ -769,17 +818,17 @@ export function OnboardingWalkthrough({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            {canSkip && (
-              <button
-                type="button"
-                className="onboarding-skip"
-                onClick={handleSkip}
-              >
-                Skip tour
-              </button>
-            )}
+            {/* Always show skip button on profile completion step */}
+            <button
+              type="button"
+              className="onboarding-skip"
+              onClick={handleSkip}
+            >
+              Skip tour
+            </button>
             <ProfileCompletion
               onComplete={handleProfileComplete}
+              onSkip={handleProfileCompletionSkip}
               initialData={
                 user
                   ? {

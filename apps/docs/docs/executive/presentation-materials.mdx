@@ -3,27 +3,590 @@ id: presentation-materials
 title: Presentation Materials
 sidebar_label: Presentation Materials
 difficulty: intermediate
-timeEstimate: 8
-xpReward: 15
-dataSource: centralized
-dataVersion: "1.0"
-phase: ["seed", "series-a"]
+estimated_reading_time: 12
+points: 15
 tags:
   - executive
   - counter-uas
 ---
 
-import { MARKET, PERFORMANCE, PRICING, FUNDING, BLOCKCHAIN, HARDWARE, COMPETITORS, TEAM } from "@site/src/data/values";
+import {
+  SlideDeck,
+  SlideSection,
+  DocumentDownload,
+} from "@site/src/components/Downloads";
 
-## Executive Presentation Script
+# Phoenix Rooivalk: Executive Presentation Materials
+
+## SAE Level 4 Autonomous Counter-UAS Defense Platform
+
+<DocumentDownload title="Executive Presentation Materials - Phoenix Rooivalk" />
+
+## TL;DR (2-Minute Summary)
+
+### 1. The Challenge: Modern Drone Threats Evolving Faster Than Defenses
+
+- **Swarm attacks**: 300% increase in coordinated multi-drone assaults
+- **Autonomous drones**: RF-silent threats bypass 64% of current systems
+- **Current limitations**: 2-5 second response time, cloud dependency, no audit trail
+- **Market gap**: Critical infrastructure remains vulnerable
+
+### 2. The Solution: PhoenixRooivalk
+
+- **120-195ms response time**: 10-40x faster than competitors
+- **99.7% detection accuracy**: Eliminates false positives
+- **SAE Level 4 autonomy**: Complete offline operation
+- **Blockchain evidence**: Court-admissible audit trails
+
+### 3. Market Opportunity: $9-15B by 2030
+
+- **Current market**: $2.45-3.0B (2025) growing at 23-27% CAGR
+- **Target segments**: Defense ($1.2B), Critical Infrastructure ($600M), Commercial ($400M)
+- **Strong unit economics**: 6:1 to 10:1 CLV:CAC ratio
+
+### 4. Investment Ask: $43.5M to TRL7
+
+- **Phase 1**: $3.5M (Architecture validation)
+- **Phase 2**: $15M (Hardware demo)
+- **Phase 3**: $25M (Field trials, certification)
+- **Return potential**: 10-15x Series A, $2B-$5B strategic exit
+
+---
+
+## 6-Slide Quick Presentation (3 Minutes)
+
+<div style={{textAlign: 'center', marginBottom: '2rem'}}>
+  <img src="/img/logo.svg" alt="Phoenix Rooivalk" style={{height: '60px', marginBottom: '1rem'}} />
+  <div style={{fontSize: '0.875rem', color: 'var(--ifm-color-emphasis-600)', marginTop: '0.5rem'}}>
+    <strong>Presenter:</strong> Martyn Redelinghuys, Co-Founder & CEO | <strong>Date:</strong> December 2, 2025
+  </div>
+</div>
+
+<SlideDeck
+  title="PhoenixRooivalk: Quick Executive Presentation"
+  duration={3}
+  audience="Investors/Executives"
+  date="December 2, 2025"
+>
+
+<SlideSection
+  number={1}
+  title="The Challenge & Our Solution"
+  duration={35}
+  icon="🛡️"
+  keyPoints={[
+    "⚠️ Challenge: 300% increase in drone swarms, 64% bypass current systems",
+    "❌ Current defenses: 2-5s response, cloud-dependent, no legal evidence",
+    "✅ Phoenix Rooivalk: 120-195ms response (10-40x faster)",
+    "🏆 True autonomy + blockchain evidence = game changer",
+  ]}
+  script="Modern drone threats are evolving faster than defenses. We're seeing a 300% increase in coordinated swarm attacks, and RF-silent autonomous drones bypass 64% of current systems. Existing defenses are too slow at 2-5 seconds and fail when communications are jammed. Phoenix Rooivalk delivers 120-195ms response times - 10 to 40 times faster - with true offline autonomy and blockchain-verified evidence that's court-admissible."
+/>
+
+<SlideSection
+  number={2}
+  title="Technology Stack"
+  duration={30}
+  icon="⚡"
+  keyPoints={[
+    "🧠 Morpheus AI: Decentralized peer-to-peer agents with edge processing",
+    "⛓️ Solana Blockchain: 3,000-4,500 TPS, $0.0003 per anchor",
+    "🌐 Cognitive Mesh: Coordinates 100-200 drone swarm responses",
+    "📡 Custom Sensor Fusion: RF, EO/IR, radar, acoustic - 30-50ms processing",
+  ]}
+  script="Our technology has four pillars. The Morpheus AI Decision Engine uses decentralized peer-to-peer agents with explainable AI. Solana blockchain provides 3,000-4,500 transactions per second with 400ms finality at just $0.0003 per anchor. Cognitive Mesh Orchestration coordinates responses to massive drone swarms. And our custom sensor fusion integrates multiple sensor types with 30-50ms processing time."
+/>
+
+<SlideSection
+  number={3}
+  title="Market & Business Model"
+  duration={30}
+  icon="📈"
+  keyPoints={[
+    "💰 Market: $2.45-3.0B (2025) → $9-15B (2030) at 23-27% CAGR",
+    "📊 Revenue: Hardware (60%), SaaS (25%), Services (15%)",
+    "🎯 Unit economics: 6:1 to 10:1 CLV:CAC ratio",
+    "💎 Gross margins: 65-70% hardware, 80%+ software",
+  ]}
+  script="We're targeting a $2.45-3.0 billion market in 2025, growing to $9-15 billion by 2030 at 23-27% annually. Our hybrid business model generates 60% revenue from hardware, 25% from SaaS subscriptions, and 15% from services. Unit economics are strong with CLV to CAC ratios of 6 to 10 to 1. Gross margins are 65-70% on hardware and over 80% on software."
+/>
+
+<SlideSection
+  number={4}
+  title="Competitive Advantage"
+  duration={30}
+  icon="🏆"
+  keyPoints={[
+    "⚡ Speed: 120-195ms vs 2-5 seconds (edge-first architecture)",
+    "🔒 Autonomy: SAE Level 4, operates under EW and GPS denial",
+    "⚖️ Accountability: Only solution with blockchain evidence",
+    "🔐 Quantum-resistant design for beyond 2030 security",
+  ]}
+  script="Our competitive advantage rests on three pillars. Speed: our 120-195ms response time comes from edge-first architecture that eliminates network latency. Autonomy: we provide SAE Level 4 autonomous decision making that operates under electronic warfare and GPS denial with no single point of failure. Accountability: blockchain-verified engagement records provide cryptographically anchored audit trails. We're the only solution with cryptographic ROE compliance proof and quantum-resistant design."
+/>
+
+<SlideSection
+  number={5}
+  title="Traction & Roadmap"
+  duration={30}
+  icon="🚀"
+  keyPoints={[
+    "✅ Current: Software complete, pilot deployments operational",
+    "📅 Q4 2026: Full production deployment, customer acquisition",
+    "🌍 Q1 2027: Market expansion, Series B funding",
+    "🤝 Track record: Security audit passed, partnerships ongoing",
+  ]}
+  script="We have proven progress. Our software foundation is complete with operational pilot deployments. Security evaluation shows red-team assessment completed with all vulnerabilities patched. Next milestones: Q4 2026 full production deployment, Q1 2027 market expansion with Series B funding. We're in active discussions with Lockheed Martin and other strategic partners."
+/>
+
+<SlideSection
+  number={6}
+  title="Investment Ask"
+  duration={25}
+  icon="💎"
+  keyPoints={[
+    "💵 Total investment to TRL7: $43.5M across 3 phases",
+    "📍 Phase 1: $3.5M (Architecture), Phase 2: $15M (Prototype), Phase 3: $25M (Integration)",
+    "📈 Return potential: 10-15x Series A, $2B-$5B strategic exit",
+    "🎯 Immediate: Series A $15M for MVP completion",
+  ]}
+  script="We're seeking $43.5 million total investment across three phases to reach TRL7. Phase 1 needs $3.5 million for architecture validation. Phase 2 requires $15 million for hardware demo. Phase 3 needs $25 million for field trials and certification. Series A offers 10-15x return potential with strategic acquisition potential of $2B-$5B. Let's discuss how you can be part of securing the future. Questions?"
+/>
+
+</SlideDeck>
+
+---
+
+## 12-Slide Executive Presentation
+
+<div style={{textAlign: 'center', marginBottom: '2rem'}}>
+  <img src="/img/logo.svg" alt="Phoenix Rooivalk" style={{height: '60px', marginBottom: '1rem'}} />
+  <div style={{fontSize: '0.875rem', color: 'var(--ifm-color-emphasis-600)', marginTop: '0.5rem'}}>
+    <strong>Presenter:</strong> Martyn Redelinghuys, Co-Founder & CEO | <strong>Date:</strong> December 2, 2025
+  </div>
+</div>
+
+<SlideDeck
+  title="PhoenixRooivalk Executive Presentation"
+  duration={12}
+  audience="Investors/Executives"
+  date="December 2, 2025"
+>
+
+<SlideSection
+  number={1}
+  title="PhoenixRooivalk: SAE Level 4 Autonomous Counter-UAS Defense"
+  duration={30}
+  icon="🚁"
+  keyPoints={[
+    "Revolutionizing Drone Defense Through Edge AI and Blockchain Accountability",
+    "Presenter: Martyn Redelinghuys, Co-Founder & CEO",
+    "Date: October 3, 2025",
+    "Audience: [Customize based on audience]",
+  ]}
+  script="Welcome to PhoenixRooivalk - the world's first SAE Level 4 autonomous counter-UAS defense system. I'm Martyn Redelinghuys, Co-Founder and CEO. Today we'll show you how we're revolutionizing drone defense through edge AI and blockchain accountability."
+/>
+
+<SlideSection
+  number={2}
+  title="The Challenge"
+  duration={60}
+  icon="⚠️"
+  keyPoints={[
+    "Swarm Attacks: 300% increase in coordinated multi-drone assaults",
+    "Autonomous Drones: RF-silent threats bypass 64% of current systems",
+    "Current Defense Limitations: 2-5 second response time too slow",
+    "No Audit Trail: Legal defensibility concerns",
+  ]}
+  script="Modern drone threats are evolving faster than defenses. We're seeing a 300% increase in coordinated swarm attacks. RF-silent autonomous drones bypass 64% of current systems. Existing defenses have 2-5 second response times - too slow for fast-moving threats. They rely on cloud connectivity that fails when communications are jammed. And critically, there's no audit trail for legal defensibility. The result: critical infrastructure and military installations remain vulnerable."
+/>
+
+<SlideSection
+  number={3}
+  title="The Solution"
+  duration={60}
+  icon="🛡️"
+  keyPoints={[
+    "120-195ms Response Time: 10-40x faster than current systems",
+    "99.7% Detection Accuracy: Eliminates environmental false positives",
+    "RF-Silent Detection: Handles autonomous threats",
+    "Blockchain Evidence: Court-admissible audit trails",
+    "SAE Level 4 Autonomy: Complete offline operation",
+    "Swarm Defense: Handles 100+ concurrent threats",
+  ]}
+  script="PhoenixRooivalk delivers unprecedented protection. Our 120-195ms response time is 10-40 times faster than competitors. We achieve 99.7% detection accuracy, eliminating false positives. We detect RF-silent threats that others miss. Every engagement creates blockchain-verified evidence that's court-admissible. We operate at SAE Level 4 autonomy - completely offline without communications. And we handle 100+ concurrent threats with graceful degradation."
+/>
+
+<SlideSection
+  number={4}
+  title="Technology Stack"
+  duration={60}
+  icon="⚡"
+  keyPoints={[
+    "Morpheus AI Decision Engine: Decentralized peer-to-peer AI agents",
+    "Solana Blockchain: 3,000-4,500 TPS with ~400ms finality",
+    "Cognitive Mesh Orchestration: Multi-agent coordination",
+    "Custom Sensor Fusion: RF, EO/IR, radar, acoustic sensors",
+  ]}
+  script="Our technology has four pillars. The Morpheus AI Decision Engine uses decentralized peer-to-peer agents with explainable AI and smart contract ROE enforcement. Solana blockchain provides 3,000-4,500 TPS with 400ms finality at just $0.0003 per anchor. Cognitive Mesh Orchestration coordinates responses to 100-200 drone swarms. And our custom sensor fusion integrates RF spectrum, cameras, radar, and acoustic sensors with 30-50ms processing."
+/>
+
+<SlideSection
+  number={5}
+  title="Performance Comparison"
+  duration={45}
+  icon="📊"
+  keyPoints={[
+    "Response Time: 120-195ms vs 2-5s for competitors",
+    "RF-Silent Detection: Yes vs No for all competitors",
+    "Autonomous Operation: SAE Level 4 vs Partial",
+    "Swarm Handling: 100+ vs Limited/Sequential",
+    "Blockchain Evidence: Only PhoenixRooivalk has it",
+  ]}
+  script="The numbers speak for themselves. Our 120-195ms response time beats Anduril, Fortem, and DroneShield by 10-40 times. We're the only solution with RF-silent detection. We're the only one with true SAE Level 4 autonomy. We handle 100+ drone swarms while competitors are limited to sequential engagement. And we're the only system with blockchain evidence generation. This is a 10-40x performance improvement with unique capabilities competitors cannot match."
+/>
+
+<SlideSection
+  number={6}
+  title="Market Opportunity"
+  duration={60}
+  icon="📈"
+  keyPoints={[
+    "Current Market: $2.45-3.0B (2025)",
+    "Growth Rate: 23-27% CAGR",
+    "Projected 2030: $9-15B annual market value",
+    "Defense & Military: $1.2B (48%)",
+    "Critical Infrastructure: $600M (24%)",
+  ]}
+  script="We're targeting a $2.45-3.0 billion market in 2025, growing at 23-27% annually to reach $9-15 billion by 2030. This is part of a $73 billion total drone industry. Our target segments are Defense & Military at $1.2 billion representing 48% of the market, Critical Infrastructure at $600 million or 24%, and Commercial & Events at $400 million or 16%. Market drivers include evolving threat landscape, regulatory requirements, and technology evolution enabling edge computing and blockchain integration."
+/>
+
+<SlideSection
+  number={7}
+  title="Business Model"
+  duration={60}
+  icon="💰"
+  keyPoints={[
+    "Hardware Sales (60%): $25k-$100k per unit",
+    "Software Subscriptions (25%): $1k-$3k/month monitoring",
+    "Support & Services (15%): $2k-$5k/year support",
+    "CLV:CAC Ratio: 6:1 to 10:1 across all segments",
+    "Gross Margins: 65-70% hardware, 80%+ software",
+  ]}
+  script="We have a hybrid hardware plus SaaS model with strong unit economics. Hardware sales represent 60% of revenue at $25k-$100k per unit. Software subscriptions provide 25% of revenue with monitoring at $1k-$3k monthly and evidence storage at $500-$2k monthly. Support and services add 15% with $2k-$5k annual support contracts. Our CLV to CAC ratio ranges from 6:1 to 10:1. Gross margins are 65-70% on hardware and over 80% on software. We project $3.5M in Year 1, scaling to $160M by Year 5."
+/>
+
+<SlideSection
+  number={8}
+  title="Competitive Advantage"
+  duration={60}
+  icon="🏆"
+  keyPoints={[
+    "Speed: 120-195ms p50 vs 2-5 seconds",
+    "Autonomy: Complete edge operation without communications",
+    "Accountability: Blockchain-verified engagement records",
+    "Only solution with cryptographic ROE compliance proof",
+    "Quantum-resistant design for beyond 2030 security",
+  ]}
+  script="Our competitive advantage rests on three pillars. Speed: our 120-195ms response time comes from edge-first architecture that eliminates network latency. Autonomy: we provide SAE Level 4 autonomous decision making that operates under EW and GPS denial with no single point of failure. Accountability: blockchain-verified engagement records provide cryptographically anchored audit trails that are court-admissible. We're the only solution with cryptographic ROE compliance proof, the fastest edge decision latency in the market, and quantum-resistant design for security beyond 2030."
+/>
+
+<SlideSection
+  number={9}
+  title="Development Roadmap"
+  duration={60}
+  icon="🗓️"
+  keyPoints={[
+    "Q1 2026: Two-site pilot deployment, soft-kill ROE",
+    "Q2 2026: Public on-chain proof tests, Lockheed Martin integration",
+    "Q3 2026: NATO certification, multi-swarm coordination demo",
+    "Current: Software complete, pilot deployments operational",
+    "Q4 2026: Full production deployment, customer acquisition",
+  ]}
+  script="We have proven progress with a clear path to market leadership. We've completed Q1 2026 two-site pilot deployment and soft-kill ROE implementation. Q2 2026 brought public on-chain proof tests and Lockheed Martin integration progress. Q3 2026 delivered NATO certification process and multi-swarm coordination demos. Currently, our software foundation is complete with monorepo and core components, pilot deployments are production-ready with operational validation, and security evaluation shows red-team assessment completed with vulnerabilities patched. Next milestones include Q4 2026 full production deployment and Q1 2027 market expansion."
+/>
+
+<SlideSection
+  number={10}
+  title="Investment Opportunity"
+  duration={60}
+  icon="💎"
+  keyPoints={[
+    "$43.5M Total Investment to TRL7",
+    "Phase 1 (Concept): $3.5M - Architecture validation",
+    "Phase 2 (Prototype): $15M - Hardware demo, lab tests",
+    "Phase 3 (Integration): $25M - Field trials, certification",
+    "Series A: 10-15x return potential",
+  ]}
+  script="We're seeking $43.5 million total investment to reach TRL7. Phase 1 needs $3.5 million for architecture validation and simulation. Phase 2 requires $15 million for hardware demo and lab tests. Phase 3 needs $25 million for field trials and certification readiness. Investment highlights include proven technology with working prototype, strong market growing at 23-27% CAGR, 10-40x performance improvement, experienced team with strong technical capabilities, and clear path to exit. Series A offers 10-15x return potential with strategic acquisition potential of $2B-$5B or IPO path of $5B-$10B."
+/>
+
+<SlideSection
+  number={11}
+  title="Team & Execution"
+  duration={60}
+  icon="👥"
+  keyPoints={[
+    "Jurie Smit: Technical Lead (LinkedIn: juriesmit, GitHub: JustAGhosT)",
+    "Martyn Redelinghuys: Co-Founder (LinkedIn: martynrede)",
+    "Technical Capabilities: Rust, Distributed Systems, Blockchain",
+    "Software Foundation: Complete and production-ready",
+    "Pilot Deployments: Operational validation completed",
+  ]}
+  script="Our experienced team has proven technical capabilities. Jurie Smit serves as Technical Lead with deep expertise in Rust development, distributed systems, and blockchain integration. Martyn Redelinghuys is Co-Founder bringing additional technical depth. Our development status shows a complete monorepo structure with core components built, Axum API service providing RESTful APIs, blockchain keeper for Solana and Etherlink anchoring, custom Rust crates for evidence handling, Next.js marketing with professional website, and comprehensive Docusaurus documentation. Our execution track record includes complete software foundation, operational pilot deployments, passed security assessment, and ongoing Lockheed Martin integration discussions."
+/>
+
+<SlideSection
+  number={12}
+  title="Call to Action"
+  duration={60}
+  icon="🎯"
+  keyPoints={[
+    "Series A Investment: $15M for MVP completion",
+    "Strategic Partnerships: Defense contractors, technology partners",
+    "Pilot Programs: Early customer validation",
+    "Technical Demo: See the system in action",
+  ]}
+  script="Join us in revolutionizing drone defense. Immediate opportunities include Series A investment of $15 million for MVP completion and market expansion, strategic partnerships with defense contractors and technology partners, pilot programs for early customer validation, and technical collaboration for joint development. Why now? Market timing demands better solutions as threats evolve. Technology readiness shows edge computing and blockchain are mature. We have competitive window as first-movers in autonomous systems. And regulatory support from DoD Directive 3000.09 enables autonomous defense. Next steps: technical demo to see the system in action, pilot program to deploy at your facility, partnership discussion to explore collaboration, and investment discussion to join our funding round. Contact us at jurie@phoenixvc.tech for technical demo or partnership inquiries."
+/>
+
+</SlideDeck>
+
+---
+
+## Presentation Walkthrough Script
+
+> **Duration**: ~12 minutes  
+> **Audience**: Investors, Executives, Strategic Partners
+
+### Opening (30 seconds)
+
+> "Welcome to PhoenixRooivalk - the world's first SAE Level 4 autonomous counter-UAS defense system. I'm Jurie Smit, Technical Lead. Today we'll show you how we're revolutionizing drone defense through edge AI and blockchain accountability."
+
+### Key Transitions
+
+- **Slide 2 → 3**: "So how do we solve these critical challenges?"
+- **Slide 5 → 6**: "The performance advantage translates to a massive market opportunity."
+- **Slide 8 → 9**: "Our competitive advantage is backed by proven execution."
+- **Slide 11 → 12**: "With this team and technology, here's how you can be part of it."
+
+### Closing (After Slide 12)
+
+> "Join us in revolutionizing drone defense. We have proven technology, strong market position, experienced team, and clear path to exit. The window for first-mover advantage is now. Let's discuss how you can be part of securing the future."
+
+---
+
+## Q&A Preparation
+
+### Common Questions
+
+#### "Why blockchain for evidence?"
+
+- **Legal admissibility**: Courts require tamper-proof evidence chains
+- **Insurance claims**: Drone damage verification needs immutable records
+- **Regulatory compliance**: Aviation authorities demand verifiable audit trails
+- **Cost efficiency**: Solana provides high throughput at $0.0003 per transaction
+
+#### "How does this compare to existing solutions?"
+
+| Capability               | Phoenix Rooivalk | Anduril    | Fortem        | DroneShield |
+| ------------------------ | ---------------- | ---------- | ------------- | ----------- |
+| **Response Time**        | 120-195ms        | 2-5s       | 2-5s          | 2-5s        |
+| **RF-Silent Detection**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
+| **Autonomous Operation** | ✅ SAE Level 4   | ⚠️ Partial | ⚠️ Partial    | ❌ No       |
+| **Swarm Handling**       | ✅ 100+          | ⚠️ Limited | ❌ Sequential | ⚠️ Limited  |
+| **Blockchain Evidence**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
+| **EW Resilience**        | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
+
+#### "What about false positives?"
+
+- **Multi-sensor fusion**: 6+ sensor types reduce false positives to &lt;0.3%
+- **AI confidence thresholds**: Human-in-the-loop for edge cases
+- **Blockchain logging**: All decisions recorded for continuous improvement
+- **99.7% detection accuracy**: Eliminates environmental false positives
+
+#### "What's your go-to-market strategy?"
+
+- **Phase 1**: Defense & Military (48% of market, highest margins)
+- **Phase 2**: Critical Infrastructure (24% of market, regulatory drivers)
+- **Phase 3**: Commercial & Events (16% of market, volume opportunity)
+- **Geographic**: US first, then EU/NATO, then global expansion
+
+#### "Team capabilities?"
+
+- **Jurie Smit**: Technical Lead - Rust, distributed systems, blockchain expertise
+- **Martyn Redelinghuys**: Co-Founder - 20+ years executive project management
+- **Development status**: Complete software foundation, operational pilots
+- **Track record**: Security audit passed, ongoing Lockheed Martin integration
+
+#### "Exit potential?"
+
+- **Strategic acquisition**: $2B-$5B (precedents: Shield AI $2.7B, Anduril $8.5B)
+- **IPO path**: $5B-$10B public market potential
+- **Timeline**: 5-7 years to exit event
+- **Acquirers**: Defense primes (LM, Raytheon), tech giants (MSFT, Google), PE firms
+
+---
+
+## Demo Script
+
+### Technical Demonstration Flow (45 minutes)
+
+**1. System Overview (5 minutes)**
+
+- Show live system dashboard with real-time metrics
+- Demonstrate edge compute nodes and sensor array
+- Explain architecture and component relationships
+- Display Cognitive Mesh orchestration
+
+**2. Threat Detection (10 minutes)**
+
+- Launch test drone with various flight patterns
+- Show multi-sensor fusion in real-time
+- Demonstrate RF-silent detection capabilities
+- Display confidence scores and decision rationale
+- Show environmental filtering (birds, weather, aircraft)
+
+**3. Autonomous Response (10 minutes)**
+
+- Show 120-195ms response time in action
+- Demonstrate soft-kill countermeasures (RF jamming)
+- Show human override capabilities
+- Display ROE compliance and policy enforcement
+- Demonstrate degraded mode operation
+
+**4. Evidence Generation (5 minutes)**
+
+- Show blockchain evidence anchoring in real-time
+- Demonstrate tamper-proof audit trail
+- Display court-admissible evidence packages
+- Show cross-chain verification capabilities
+- Demonstrate evidence retrieval and verification
+
+**5. Swarm Coordination (10 minutes)**
+
+- Launch multiple test drones simultaneously
+- Show swarm detection and coordination
+- Demonstrate graceful degradation under load
+- Display Cognitive Mesh orchestration
+- Show multi-unit coordination
+
+**6. Q&A and Discussion (15 minutes)**
+
+- Address technical questions
+- Discuss deployment scenarios
+- Explore partnership opportunities
+- Review investment details
+
+---
+
+## Visual Elements
+
+### System Architecture Diagram
+
+```
+[Edge Compute Nodes] ←→ [Sensor Array]
+        ↓
+[Cognitive Mesh] ←→ [Morpheus AI]
+        ↓
+[Evidence Queue] → [Solana Blockchain]
+        ↓
+[Countermeasures] ←→ [Human Override]
+```
+
+### Performance Comparison Chart
+
+```
+Response Time (ms)
+5000 ┤
+4000 ┤                    ■ Anduril
+3000 ┤                    ■ Fortem
+2000 ┤                    ■ DroneShield
+1000 ┤
+ 200 ┤    ■ Phoenix Rooivalk
+   0 └─────────────────────────────
+      Phoenix  Anduril  Fortem  DroneShield
+```
+
+### Market Opportunity Chart
+
+```
+Market Size ($B)
+20 ┤
+15 ┤           ████████████████
+10 ┤        ████████████
+ 5 ┤     ████████
+ 0 └─────────────────────────────
+   2025  2027  2029  2031
+```
+
+---
+
+## Presentation Templates
+
+### Key Messages by Audience
+
+**For Investors:**
+
+- Focus on market opportunity, competitive advantage, and return potential
+- Emphasize proven technology and experienced team
+- Highlight clear path to market leadership and exit opportunities
+- Present strong unit economics and scalability
+
+**For Defense Contractors:**
+
+- Focus on performance superiority and compliance capabilities
+- Emphasize integration possibilities and partnership opportunities
+- Highlight operational advantages and cost effectiveness
+- Demonstrate compatibility with existing systems
+
+**For Critical Infrastructure:**
+
+- Focus on ROI, regulatory compliance, and operational efficiency
+- Emphasize ease of deployment and maintenance requirements
+- Highlight cost savings and risk mitigation benefits
+- Show insurance and liability reduction
+
+**For Technical Evaluators:**
+
+- Focus on architecture, performance metrics, and technical specifications
+- Emphasize security, reliability, and scalability
+- Highlight innovation and competitive differentiation
+- Provide detailed technical documentation
+
+---
+
+## 📚 Related Resources
+
+- [Phoenix Rooivalk Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck)
+- [Executive Summary](/docs/executive/executive-summary)
+- [Technical Whitepaper](/docs/executive/phoenix-rooivalk-technical-whitepaper)
+- [System Overview](/docs/executive/system-overview)
+- [Architecture Decision Records](/docs/technical/architecture/architecture-decision-records)
+- [Week 48 Progress Report](/docs/progress/2025/week-48)
+
+---
+
+## 💡 Contact
+
+**Investment & Partnership Inquiries:**
+
+- **Email**: jurie@phoenixvc.tech
+- **Technical Demo**: Schedule a live system demonstration
+- **Pilot Programs**: Deploy at your facility for validation
+- **Strategic Partnerships**: Explore integration and go-to-market opportunities
+
+---
+
+_This document contains confidential presentation materials. Distribution is restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights reserved._
 
 ### Slide 1: Title Slide
 
-**PhoenixRooivalk: {PERFORMANCE.AUTONOMY_LEVEL} Autonomous Counter-UAS Defense**
+**PhoenixRooivalk: SAE Level 4 Autonomous Counter-UAS Defense**
 
 > _Revolutionizing Drone Defense Through Edge AI and Blockchain Accountability_
 
-**Presenter**: {TEAM.CTO_NAME}, Technical Lead **Date**: October 3, 2025
+**Presenter**: Martyn Redelinghuys, Co-Founder & CEO **Date**: December 2, 2025
 **Audience**: [Customize based on audience]
 
 ---
@@ -35,16 +598,16 @@ import { MARKET, PERFORMANCE, PRICING, FUNDING, BLOCKCHAIN, HARDWARE, COMPETITOR
 **Current Threats:**
 
 - **Swarm Attacks**: 300% increase in coordinated multi-drone assaults
-- **Autonomous Drones**: RF-silent threats bypass {MARKET.FACILITIES_UNPROTECTED} of current systems
+- **Autonomous Drones**: RF-silent threats bypass 64% of current systems
 - **Commercial Proliferation**: 2.8M registered drones in US alone
 - **Malicious Use**: Drug smuggling, surveillance, kinetic attacks
 
 **Current Defense Limitations:**
 
-- **{MARKET.COMPETITOR_RESPONSE_TIME} Response Time**: Too slow for fast-moving threats
+- **2-5 Second Response Time**: Too slow for fast-moving threats
 - **Cloud Dependency**: Systems fail when communications are jammed
 - **No Audit Trail**: Legal defensibility concerns
-- **High False Positive Rates**: {MARKET.COMPETITOR_FALSE_POSITIVE} causing operational disruption
+- **High False Positive Rates**: 15-25% causing operational disruption
 
 **The Result**: Critical infrastructure and military installations remain
 vulnerable to evolving drone threats.
@@ -53,17 +616,17 @@ vulnerable to evolving drone threats.
 
 ### Slide 3: The Solution
 
-**PhoenixRooivalk: {PERFORMANCE.AUTONOMY_LEVEL} Autonomous Counter-UAS Defense**
+**PhoenixRooivalk: SAE Level 4 Autonomous Counter-UAS Defense**
 
 **Core Innovation**: Comms-Independent Edge Autonomy (CIEA)
 
 **Key Capabilities:**
 
-- **{PERFORMANCE.RESPONSE_TIME} Response Time**: {PERFORMANCE.VS_COMPETITORS} than current systems
-- **{PERFORMANCE.YOLOV9_MAP} Detection Accuracy**: Eliminates environmental false positives
+- **120-195ms Response Time**: 10-40x faster than current systems
+- **99.7% Detection Accuracy**: Eliminates environmental false positives
 - **RF-Silent Detection**: Handles autonomous threats others cannot detect
 - **Blockchain Evidence**: Court-admissible audit trails for all engagements
-- **{PERFORMANCE.AUTONOMY_LEVEL} Autonomy**: Complete offline operation without communications
+- **SAE Level 4 Autonomy**: Complete offline operation without communications
 - **Swarm Defense**: Handles 100+ concurrent threats with graceful degradation
 
 **The Result**: Unprecedented protection with verifiable accountability.
@@ -81,11 +644,11 @@ vulnerable to evolving drone threats.
 - Smart contract ROE enforcement
 - Offline operation with no central server dependency
 
-**2. {BLOCKCHAIN.PRIMARY_CHAIN} Blockchain Evidence**
+**2. Solana Blockchain Evidence**
 
-- {BLOCKCHAIN.TPS_REAL_WORLD} TPS with ~{BLOCKCHAIN.FINALITY} finality
+- 3,000-4,500 TPS with ~400ms finality
 - Hash-chained, Merkle-batched evidence packets
-- ~{BLOCKCHAIN.COST_PER_TX} per anchor cost
+- ~$0.0003 per anchor cost
 - Dual-chain redundancy with Etherlink bridge
 
 **3. Cognitive Mesh Orchestration**
@@ -97,7 +660,7 @@ vulnerable to evolving drone threats.
 
 **4. Custom Sensor Fusion**
 
-- {TECH.SENSOR_TYPES}
+- RF spectrum, EO/IR cameras, radar, acoustic sensors
 - Real-time track generation with 30-50ms processing
 - Unified protobuf streams with validated, deduplicated tracks
 - Vendor-agnostic adapter pattern for easy upgrades
@@ -110,14 +673,14 @@ vulnerable to evolving drone threats.
 
 | Capability               | Phoenix Rooivalk | Anduril    | Fortem        | DroneShield |
 | ------------------------ | ---------------- | ---------- | ------------- | ----------- |
-| **Response Time**        | {PERFORMANCE.RESPONSE_TIME}        | {COMPETITORS.ANDURIL_RESPONSE}       | {COMPETITORS.FORTEM_RESPONSE}          | {COMPETITORS.DRONESHIELD_RESPONSE}        |
+| **Response Time**        | 120-195ms        | 2-5s       | 2-5s          | 2-5s        |
 | **RF-Silent Detection**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
-| **Autonomous Operation** | ✅ {PERFORMANCE.AUTONOMY_LEVEL}   | ⚠️ Partial | ⚠️ Partial    | ❌ No       |
+| **Autonomous Operation** | ✅ SAE Level 4   | ⚠️ Partial | ⚠️ Partial    | ❌ No       |
 | **Swarm Handling**       | ✅ 100+          | ⚠️ Limited | ❌ Sequential | ⚠️ Limited  |
 | **Blockchain Evidence**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
 | **EW Resilience**        | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       |
 
-**The Result**: {PERFORMANCE.VS_COMPETITORS} performance improvement with unique capabilities
+**The Result**: 10-40x performance improvement with unique capabilities
 competitors cannot match.
 
 ---
@@ -128,17 +691,17 @@ competitors cannot match.
 
 **Market Size & Growth:**
 
-- **Current Market**: {MARKET.CURRENT} (2025)
-- **Growth Rate**: {MARKET.CAGR} CAGR
-- **Projected 2030**: {MARKET.PROJECTED} annual market value
+- **Current Market**: $2.45-3.0B (2025)
+- **Growth Rate**: 23-27% CAGR
+- **Projected 2030**: $9-15B annual market value
 - **Total Drone Industry**: $73B across consumer, commercial, military
 
 **Target Segments:**
 
-- **Defense & Military**: {MARKET.MILITARY_VALUE} ({MARKET.MILITARY_SHARE}) - Performance premium, compliance
+- **Defense & Military**: $1.2B (48%) - Performance premium, compliance
   requirements
-- **Critical Infrastructure**: {MARKET.INFRASTRUCTURE_VALUE} ({MARKET.INFRASTRUCTURE_SHARE}) - ROI-focused, regulatory compliance
-- **Commercial & Events**: {MARKET.COMMERCIAL_VALUE} ({MARKET.COMMERCIAL_SHARE}) - Cost-sensitive, volume-based
+- **Critical Infrastructure**: $600M (24%) - ROI-focused, regulatory compliance
+- **Commercial & Events**: $400M (16%) - Cost-sensitive, volume-based
 
 **Market Drivers:**
 
@@ -154,7 +717,7 @@ competitors cannot match.
 
 **Revenue Streams:**
 
-- **Hardware Sales (60%)**: {PRICING.SYSTEM_RANGE} per unit based on configuration
+- **Hardware Sales (60%)**: $25k-$100k per unit based on configuration
 - **Software Subscriptions (25%)**: $1k-$3k/month monitoring, $500-$2k/month
   evidence storage
 - **Support & Services (15%)**: $2k-$5k/year support, $5k-$15k training programs
@@ -164,13 +727,13 @@ competitors cannot match.
 - **Customer Acquisition Cost**: $15k-$100k depending on segment
 - **Customer Lifetime Value**: $120k-$500k depending on segment
 - **CLV:CAC Ratio**: 6:1 to 10:1 across all segments
-- **Gross Margins**: {PRICING.GROSS_MARGIN} hardware, 80%+ software
+- **Gross Margins**: 65-70% hardware, 80%+ software
 
 **Financial Projections:**
 
-- **Year 1**: {FUNDING.BM_YEAR_1_REVENUE} revenue ({FUNDING.YEAR_1_SYSTEMS} units)
-- **Year 3**: {FUNDING.BM_YEAR_3_REVENUE} revenue ({FUNDING.YEAR_3_SYSTEMS} units)
-- **Year 5**: {FUNDING.BM_YEAR_5_REVENUE} revenue ({FUNDING.YEAR_5_SYSTEMS} units)
+- **Year 1**: $3.5M revenue (50 units)
+- **Year 3**: $45M revenue (500 units)
+- **Year 5**: $160M revenue (1,500 units)
 
 ---
 
@@ -178,7 +741,7 @@ competitors cannot match.
 
 **Three Pillars of Differentiation**
 
-**1. Speed**: {PERFORMANCE.RESPONSE_TIME} p50 vs 2-5 seconds for competitors
+**1. Speed**: 120-195ms p50 vs 2-5 seconds for competitors
 
 - Edge-first architecture eliminates network latency
 - Parallel processing across sensor fusion and AI decision
@@ -186,7 +749,7 @@ competitors cannot match.
 
 **2. Autonomy**: Complete edge operation without communications
 
-- {PERFORMANCE.AUTONOMY_LEVEL} autonomous decision making
+- SAE Level 4 autonomous decision making
 - Operates under EW and GPS denial conditions
 - No single point of failure or decapitation risk
 
@@ -233,19 +796,19 @@ competitors cannot match.
 
 ### Slide 10: Investment Opportunity
 
-**{FUNDING.TOTAL_TO_TRL7} Total Investment to TRL7 with Strong Return Potential**
+**$43.5M Total Investment to TRL7 with Strong Return Potential**
 
 **Funding Requirements:**
 
-- **Phase 1 (Concept)**: {FUNDING.PHASE_1_CONCEPT} → Architecture validation, simulation
-- **Phase 2 (Prototype)**: {FUNDING.PHASE_2_PROTOTYPE} → Hardware demo, lab tests
-- **Phase 3 (Integration)**: {FUNDING.PHASE_3_INTEGRATION} → Field trials, certification readiness
+- **Phase 1 (Concept)**: $3.5M → Architecture validation, simulation
+- **Phase 2 (Prototype)**: $15M → Hardware demo, lab tests
+- **Phase 3 (Integration)**: $25M → Field trials, certification readiness
 
 **Investment Highlights:**
 
 - **Proven Technology**: Working prototype with operational validation
-- **Strong Market**: {MARKET.CURRENT} market growing at {MARKET.CAGR} CAGR
-- **Competitive Advantage**: {PERFORMANCE.VS_COMPETITORS} performance improvement with unique
+- **Strong Market**: $2.45-3.0B market growing at 23-27% CAGR
+- **Competitive Advantage**: 10-40x performance improvement with unique
   capabilities
 - **Experienced Team**: Strong technical capabilities in Rust, blockchain,
   distributed systems
@@ -265,21 +828,21 @@ competitors cannot match.
 
 **Leadership Team:**
 
-- **{TEAM.CTO_NAME}**: Technical Lead (LinkedIn: juriesmit, GitHub: JustAGhosT)
-- **{TEAM.CEO_NAME}**: Co-Founder (LinkedIn: martynrede)
+- **Jurie Smit**: Technical Lead (LinkedIn: juriesmit, GitHub: JustAGhosT)
+- **Martyn Redelinghuys**: Co-Founder (LinkedIn: martynrede)
 
 **Technical Capabilities:**
 
 - **Rust Development**: Core systems and blockchain integration
 - **Distributed Systems**: Edge computing and mesh networking
-- **Blockchain Integration**: {BLOCKCHAIN.PRIMARY_CHAIN} and Etherlink anchoring
+- **Blockchain Integration**: Solana and Etherlink anchoring
 - **Modern DevOps**: CI/CD, containerization, cloud deployment
 
 **Development Status:**
 
 - **Monorepo Structure**: Complete with core components built
 - **Axum API Service**: RESTful APIs for system integration
-- **Blockchain Keeper**: {BLOCKCHAIN.PRIMARY_CHAIN}/Etherlink anchoring service
+- **Blockchain Keeper**: Solana/Etherlink anchoring service
 - **Custom Rust Crates**: Evidence handling and sensor fusion
 - **Next.js Marketing**: Professional website and documentation
 - **Docusaurus Docs**: Comprehensive technical documentation
@@ -322,7 +885,7 @@ competitors cannot match.
 **Contact Information:**
 
 - **Technical Demo** | **Partnership Inquiries**:
-  [{TEAM.CONTACT_EMAIL}](mailto:{TEAM.CONTACT_EMAIL})
+  [jurie@phoenixvc.tech](mailto:jurie@phoenixvc.tech)
 
 ---
 
@@ -345,7 +908,7 @@ competitors cannot match.
 
 **3. Autonomous Response (10 minutes)**
 
-- Show {PERFORMANCE.RESPONSE_TIME} response time in action
+- Show 120-195ms response time in action
 - Demonstrate soft-kill countermeasures (RF jamming)
 - Show human override capabilities
 - Display ROE compliance and policy enforcement
@@ -382,7 +945,7 @@ competitors cannot match.
         ↓
 [Cognitive Mesh] ←→ [Morpheus AI]
         ↓
-[Evidence Queue] → [{BLOCKCHAIN.PRIMARY_CHAIN} Blockchain]
+[Evidence Queue] → [Solana Blockchain]
         ↓
 [Countermeasures] ←→ [Human Override]
 ```
@@ -462,5 +1025,5 @@ Market Size ($B)
 ---
 
 _This document contains confidential presentation materials. Distribution is
-restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
 reserved._

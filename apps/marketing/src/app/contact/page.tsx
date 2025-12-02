@@ -1,10 +1,21 @@
 "use client";
 import Link from "next/link";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
+import { API_BASE_URL } from "../../config/constants";
 import styles from "./contact.module.css";
+
+interface User {
+  id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  is_team_member: boolean;
+  linkedin_url: string | null;
+  discord_handle: string | null;
+}
 
 export default function ContactPage(): React.ReactElement {
   // Obfuscate email at render time to prevent scraping
@@ -14,6 +25,33 @@ export default function ContactPage(): React.ReactElement {
     return `${user}@${domain}`;
   });
 
+  const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [applicationStatus, setApplicationStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [applicationError, setApplicationError] = useState("");
+  const [position, setPosition] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+
+  useEffect(() => {
+    // Check if user is logged in
+    const sessionId =
+      typeof window !== "undefined" ? localStorage.getItem("session_id") : null;
+    const storedUser =
+      typeof window !== "undefined" ? localStorage.getItem("user") : null;
+
+    if (sessionId && storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser) as User;
+        setUser(parsedUser);
+      } catch (err) {
+        console.error("Failed to parse user:", err);
+      }
+    }
+    setLoadingUser(false);
+  }, []);
+
   const handleEmailClick = (subject?: string, body?: string) => {
     if (!email) return;
     const params = new URLSearchParams();
@@ -21,6 +59,76 @@ export default function ContactPage(): React.ReactElement {
     if (body) params.append("body", body);
     const queryString = params.toString();
     window.location.href = `mailto:${email}${queryString ? "?" + queryString : ""}`;
+  };
+
+  const handleCareerApplication = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user) {
+      // Redirect to login
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    if (user.is_team_member) {
+      setApplicationError("Team members cannot apply for positions");
+      return;
+    }
+
+    const sessionId =
+      typeof window !== "undefined" ? localStorage.getItem("session_id") : null;
+
+    if (!sessionId) {
+      setApplicationError("Session expired. Please log in again.");
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    setApplicationStatus("submitting");
+    setApplicationError("");
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/career/apply?session_id=${encodeURIComponent(sessionId)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            position,
+            cover_letter: coverLetter || null,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Application failed");
+      }
+
+      setApplicationStatus("success");
+      setPosition("");
+      setCoverLetter("");
+    } catch (err) {
+      setApplicationStatus("error");
+      setApplicationError(
+        err instanceof Error ? err.message : "Application failed",
+      );
+    }
+  };
+
+  const getUserDisplayName = () => {
+    if (!user) return "";
+    if (user.first_name && user.last_name) {
+      return `${user.first_name} ${user.last_name}`;
+    }
+    if (user.first_name) return user.first_name;
+    return user.email;
   };
 
   return (
@@ -264,6 +372,29 @@ export default function ContactPage(): React.ReactElement {
       <section id="careers" className={styles.careersSection}>
         <div className={styles.container}>
           <h2 className={styles.careersTitle}>Career Opportunities</h2>
+
+          {!loadingUser && user && user.is_team_member && (
+            <div className={styles.teamMemberNotice}>
+              <p>
+                <strong>Welcome back, {getUserDisplayName()}!</strong>
+                <br />
+                You are already a team member. If you have any questions about
+                your role or the team, please contact Jurie directly.
+              </p>
+            </div>
+          )}
+
+          {!loadingUser && !user && (
+            <div className={styles.loginNotice}>
+              <p>
+                <strong>Please sign in to apply for positions</strong>
+              </p>
+              <Link href="/login" className={styles.loginLink}>
+                Sign In / Create Account
+              </Link>
+            </div>
+          )}
+
           <div className={styles.careersGrid}>
             <div className={styles.careerCard}>
               <h3 className={styles.careerCardTitle}>Current Openings</h3>
@@ -307,24 +438,96 @@ export default function ContactPage(): React.ReactElement {
                     <li>• Strong problem-solving skills</li>
                   </ul>
                 </div>
-                <div>
-                  <h4 className={styles.jobTitle}>Next Steps</h4>
-                  <p className={styles.jobDescription}>
-                    Submit your application with CV and cover letter detailing
-                    your relevant experience.
-                  </p>
-                  <button
-                    onClick={() =>
-                      handleEmailClick(
-                        "Career Application",
-                        "I am interested in career opportunities at Phoenix Rooivalk. Please find my application attached.",
-                      )
-                    }
-                    className={styles.applyButton}
-                  >
-                    Apply Now
-                  </button>
-                </div>
+
+                {!loadingUser && user && !user.is_team_member && (
+                  <div>
+                    <h4 className={styles.jobTitle}>Submit Your Application</h4>
+                    <p className={styles.jobDescription}>
+                      Welcome, {getUserDisplayName()}! Complete the form below
+                      to apply.
+                    </p>
+                    <form
+                      onSubmit={handleCareerApplication}
+                      className={styles.applicationForm}
+                    >
+                      <div className={styles.formGroup}>
+                        <label htmlFor="position" className={styles.formLabel}>
+                          Position
+                        </label>
+                        <select
+                          id="position"
+                          value={position}
+                          onChange={(e) => setPosition(e.target.value)}
+                          className={styles.formSelect}
+                          required
+                          disabled={applicationStatus === "submitting"}
+                        >
+                          <option value="">Select a position</option>
+                          <option value="Senior Software Engineer">
+                            Senior Software Engineer
+                          </option>
+                          <option value="Defense Systems Engineer">
+                            Defense Systems Engineer
+                          </option>
+                        </select>
+                      </div>
+
+                      <div className={styles.formGroup}>
+                        <label
+                          htmlFor="coverLetter"
+                          className={styles.formLabel}
+                        >
+                          Cover Letter (Optional)
+                        </label>
+                        <textarea
+                          id="coverLetter"
+                          value={coverLetter}
+                          onChange={(e) => setCoverLetter(e.target.value)}
+                          className={styles.formTextarea}
+                          rows={5}
+                          placeholder="Tell us about your relevant experience and why you're interested in this position..."
+                          disabled={applicationStatus === "submitting"}
+                        />
+                      </div>
+
+                      {applicationError && (
+                        <div className={styles.errorMessage} role="alert">
+                          {applicationError}
+                        </div>
+                      )}
+
+                      {applicationStatus === "success" && (
+                        <div className={styles.successMessage} role="status">
+                          Application submitted successfully! We&apos;ll be in
+                          touch soon.
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        className={styles.applyButton}
+                        disabled={applicationStatus === "submitting"}
+                      >
+                        {applicationStatus === "submitting"
+                          ? "Submitting..."
+                          : "Submit Application"}
+                      </button>
+                    </form>
+                  </div>
+                )}
+
+                {!loadingUser && !user && (
+                  <div>
+                    <h4 className={styles.jobTitle}>Next Steps</h4>
+                    <p className={styles.jobDescription}>
+                      Sign in to submit your application. We&apos;ll
+                      auto-populate your details from your email.
+                    </p>
+                    <Link href="/login" className={styles.applyButton}>
+                      Sign In to Apply
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -78,13 +78,48 @@ The `docs-link-checker.yml` workflow runs automatically on:
 
 ---
 
-## Deployment and access control (Netlify)
+## Deployment and access control (Azure Static Web Apps)
+
+The documentation site is deployed to Azure Static Web Apps. See `.github/workflows/deploy-docs-azure.yml` for the deployment workflow.
+
+### Required Configuration
+
+**GitHub Secrets:**
+- `AZURE_STATIC_WEB_APPS_API_TOKEN` - Deployment token
+- `AZURE_ENTRA_TENANT_ID` - Azure AD tenant ID for authentication
+- `AZURE_ENTRA_CLIENT_ID` - Azure AD client ID
+- `AZURE_FUNCTIONS_BASE_URL` - Azure Functions URL (can also be a Variable)
+- Additional secrets for AI features - see `TROUBLESHOOTING.md`
+
+**GitHub Variables:**
+- `AZURE_FUNCTIONAPP_NAME` - Function app name
+- `AZURE_AI_DEPLOYMENT_NAME` - AI model deployment name (e.g., `gpt-5.1`)
+- `CONFIGURE_APP_SETTINGS` - Set to `true` to auto-configure Function App settings
+
+### Troubleshooting
+
+If you see "⚠️ AI Functions not available" or other configuration issues, see **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** for detailed diagnostic steps.
+
+Common issues:
+- `AZURE_FUNCTIONS_BASE_URL` not set or set incorrectly
+- Variable scope set to "Runtime" instead of "Builds"
+- Azure Functions not deployed or unhealthy
+- Azure OpenAI configuration missing
+
+---
+
+## Legacy: Netlify Deployment
+
+> **Note**: The project now deploys to Azure Static Web Apps. The information below is kept for reference only.
+
+<details>
+<summary>Click to expand Netlify deployment instructions</summary>
 
 1. Create a Netlify site for `docs-site/` and get the Site ID.
 2. Add GitHub repository secrets (see `USER_TODO.md`):
    - `NETLIFY_AUTH_TOKEN`
    - `NETLIFY_SITE_ID`
-3. CI/CD is pre-configured in `.github/workflows/deploy-docs-site.yml`:
+3. CI/CD is pre-configured in `.github/workflows/deploy-docs-site.yml.disabled`:
    - Push to `main` deploys to production.
    - Pull requests create Deploy Previews.
 4. Basic access control (fastest):
@@ -92,3 +127,5 @@ The `docs-link-checker.yml` workflow runs automatically on:
 5. Stronger control (optional):
    - Netlify SSO/Access Controls or Cloudflare Access (Zero Trust).
 6. SEO/Indexing: `static/robots.txt` is set to `Disallow: /`.
+
+</details>

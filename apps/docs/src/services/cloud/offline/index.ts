@@ -638,7 +638,9 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _data: TInput,
     _options?: any,
   ): Promise<TOutput> {
-    throw new Error("Functions not available in offline mode");
+    throw new Error(
+      "AI Functions not available. Please check your network connection and Azure Functions configuration.",
+    );
   }
 
   async callAuthenticated<TInput, TOutput>(
@@ -646,25 +648,33 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _data: TInput,
     _options?: any,
   ): Promise<TOutput> {
-    throw new Error("Functions not available in offline mode");
+    throw new Error(
+      "AI Functions not available. Please check your network connection and Azure Functions configuration.",
+    );
   }
 
   async analyzeCompetitors(
     _competitors: string[],
     _focusAreas?: string[],
   ): Promise<any> {
-    return { analysis: "Competitor analysis not available in offline mode" };
+    return {
+      analysis:
+        "Competitor analysis not available. Please check your Azure Functions configuration.",
+    };
   }
 
   async generateSWOT(_topic: string, _context?: string): Promise<any> {
-    return { swot: "SWOT analysis not available in offline mode" };
+    return {
+      swot: "SWOT analysis not available. Please check your Azure Functions configuration.",
+    };
   }
 
   async getReadingRecommendations(_currentDocId?: string): Promise<any> {
     return {
       recommendations: [],
       learningPath: "",
-      message: "Recommendations not available in offline mode",
+      message:
+        "Recommendations not available. Please check your Azure Functions configuration.",
     };
   }
 
