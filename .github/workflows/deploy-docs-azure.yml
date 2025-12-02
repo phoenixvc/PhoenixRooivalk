@@ -76,9 +76,10 @@ jobs:
             echo ""
             echo "Fix these issues:"
             echo "  1. Go to Settings → Secrets and variables → Actions"
-            echo "  2. Delete AZURE_FUNCTIONAPP_NAME from Secrets tab"
-            echo "  3. Add AZURE_FUNCTIONAPP_NAME in Variables tab"
-            echo "  4. See .github/AZURE_SETUP.md for details"
+            echo "  2. Review the Secrets and Variables tabs"
+            echo "  3. Delete any incorrectly named or typed items"
+            echo "  4. Add them with the correct name and type (Secret vs Variable)"
+            echo "  5. See .github/AZURE_SETUP.md for the complete list of correct names"
           fi
 
           # Print warnings

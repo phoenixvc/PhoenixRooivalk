@@ -167,7 +167,7 @@ jobs:
               echo "**Fix these issues:**" >> $GITHUB_STEP_SUMMARY
               echo "1. Delete incorrectly typed secrets/variables in Settings → Secrets and variables → Actions" >> $GITHUB_STEP_SUMMARY
               echo "2. Add them with the correct name and type (Secret vs Variable)" >> $GITHUB_STEP_SUMMARY
-              echo "3. See \`.github/AZURE_SETUP.md\` for the complete list of correct names" >> $GITHUB_STEP_SUMMARY
+              echo '3. See `.github/AZURE_SETUP.md` for the complete list of correct names' >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             fi
             
