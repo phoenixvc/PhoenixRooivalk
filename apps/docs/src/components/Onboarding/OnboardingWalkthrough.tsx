@@ -504,6 +504,26 @@ export function OnboardingWalkthrough({
     [user, currentStep, saveProfileToCloud],
   );
 
+  // Handle skipping profile completion
+  const handleProfileCompletionSkip = useCallback(() => {
+    if (!user) return;
+    // Mark as skipped but continue
+    localStorage.setItem(
+      USER_DETAILS_KEY,
+      JSON.stringify({
+        userId: user.uid,
+        completed: true,
+        skipped: true,
+        completedAt: new Date().toISOString(),
+      }),
+    );
+
+    // Move to next step without saving details
+    const nextStep = currentStep + 1;
+    setCurrentStep(nextStep);
+    saveStep(nextStep);
+  }, [user, currentStep]);
+
   // Handle AI fun facts completion
   const handleFunFactsComplete = useCallback(
     async (facts: Array<{ id: string; fact: string; category: string }>) => {
@@ -780,6 +800,7 @@ export function OnboardingWalkthrough({
             )}
             <ProfileCompletion
               onComplete={handleProfileComplete}
+              onSkip={handleProfileCompletionSkip}
               initialData={
                 user
                   ? {

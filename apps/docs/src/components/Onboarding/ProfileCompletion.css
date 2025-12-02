@@ -108,9 +108,15 @@
   color: rgb(100, 116, 139);
 }
 
+.profile-completion-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
 .profile-completion-submit {
   width: 100%;
-  margin-top: 1.5rem;
   padding: 0.875rem 1.5rem;
   background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
   border: none;
@@ -135,6 +141,29 @@
   transform: none;
 }
 
+.profile-completion-skip {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 8px;
+  color: rgb(148, 163, 184);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-completion-skip:hover {
+  border-color: rgba(100, 116, 139, 0.8);
+  background: rgba(51, 65, 85, 0.3);
+  color: rgb(203, 213, 225);
+}
+
+.profile-completion-skip:active {
+  transform: scale(0.98);
+}
+
 /* Mobile adjustments */
 @media (max-width: 560px) {
   .profile-completion {
@@ -157,7 +186,8 @@
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .profile-completion-input,
-  .profile-completion-submit {
+  .profile-completion-submit,
+  .profile-completion-skip {
     transition: none;
   }
 }
