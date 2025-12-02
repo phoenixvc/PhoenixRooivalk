@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 450" width="650" height="450">
+  <defs>
+    <!-- Phoenix Rooivalk brand gradients -->
+    <linearGradient id="phoenixGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="defensePrimesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f"/>
+      <stop offset="100%" style="stop-color:#2d5a87"/>
+    </linearGradient>
+    <linearGradient id="dedicatedCuasGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a5568"/>
+      <stop offset="100%" style="stop-color:#718096"/>
+    </linearGradient>
+    <linearGradient id="rfRadarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c5282"/>
+      <stop offset="100%" style="stop-color:#4299e1"/>
+    </linearGradient>
+    <linearGradient id="regionalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a67d8"/>
+      <stop offset="100%" style="stop-color:#7f9cf5"/>
+    </linearGradient>
+    <linearGradient id="emergingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38a169"/>
+      <stop offset="100%" style="stop-color:#68d391"/>
+    </linearGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="650" height="450" fill="#0f172a" rx="12"/>
+
+  <!-- Phoenix logo mark (top left) -->
+  <g transform="translate(18, 15)" filter="url(#dropShadow)">
+    <circle cx="18" cy="18" r="16" fill="url(#phoenixGrad)"/>
+    <path d="M18 7 L21.5 14 L25 10.5 L22.5 17 L28 16 L23 20.5 L25.5 24 L21 22.5 L18 28 L15 22.5 L10.5 24 L13 20.5 L8 16 L13.5 17 L11 10.5 L14.5 14 L18 7 Z"
+          fill="#0f172a" stroke="#f97316" stroke-width="1" stroke-linejoin="round"/>
+    <circle cx="18" cy="18" r="2.5" fill="#0f172a"/>
+  </g>
+
+  <!-- Title -->
+  <text x="58" y="28" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f97316">Phoenix Rooivalk</text>
+  <text x="325" y="55" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#f8fafc" text-anchor="middle">Projected Market Share 2030</text>
+  <text x="325" y="78" font-family="Arial, sans-serif" font-size="13" fill="#94a3b8" text-anchor="middle">Counter-Drone Defense TAM: $20.3B</text>
+
+  <!-- Dotted outer circle showing TAM growth potential -->
+  <circle cx="220" cy="255" r="160" fill="none" stroke="#f97316" stroke-width="2" stroke-dasharray="10,8" opacity="0.5"/>
+
+  <!-- Pie chart center: 220, 255, radius: 130 -->
+  <!-- Slices calculated with proper arc paths -->
+  <!-- Defense Primes: 32% = 115.2° (0 to 115.2) -->
+  <!-- Dedicated C-UAS: 28% = 100.8° (115.2 to 216) -->
+  <!-- RF/Radar: 15% = 54° (216 to 270) -->
+  <!-- Regional: 14% = 50.4° (270 to 320.4) -->
+  <!-- Emerging: 7% = 25.2° (320.4 to 345.6) -->
+  <!-- Phoenix: 4% = 14.4° (345.6 to 360) - enlarged for visibility -->
+
+  <!-- Defense Primes - 32% (dark blue) -->
+  <path d="M220,255 L350,255 A130,130 0 0,1 164.8,131.5 Z"
+        fill="url(#defensePrimesGrad)" stroke="#0f172a" stroke-width="2" filter="url(#dropShadow)"/>
+  <text x="280" y="180" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">32%</text>
+
+  <!-- Dedicated C-UAS - 28% (gray) -->
+  <path d="M220,255 L164.8,131.5 A130,130 0 0,1 93,298 Z"
+        fill="url(#dedicatedCuasGrad)" stroke="#0f172a" stroke-width="2"/>
+  <text x="130" y="220" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">28%</text>
+
+  <!-- RF/Radar - 15% (blue) -->
+  <path d="M220,255 L93,298 A130,130 0 0,1 220,385 Z"
+        fill="url(#rfRadarGrad)" stroke="#0f172a" stroke-width="2"/>
+  <text x="155" y="340" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fff" text-anchor="middle">15%</text>
+
+  <!-- Regional - 14% (purple) -->
+  <path d="M220,255 L220,385 A130,130 0 0,1 320,340 Z"
+        fill="url(#regionalGrad)" stroke="#0f172a" stroke-width="2"/>
+  <text x="260" y="355" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fff" text-anchor="middle">14%</text>
+
+  <!-- Emerging - 7% (green) -->
+  <path d="M220,255 L320,340 A130,130 0 0,1 346,275 Z"
+        fill="url(#emergingGrad)" stroke="#0f172a" stroke-width="2"/>
+  <text x="310" y="310" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">7%</text>
+
+  <!-- Phoenix Rooivalk - 4% (orange) - EXPLODED OUT for emphasis -->
+  <g transform="translate(8, -3)">
+    <path d="M220,255 L346,275 A130,130 0 0,1 350,255 Z"
+          fill="url(#phoenixGrad)" stroke="#fbbf24" stroke-width="3" filter="url(#glow)"/>
+  </g>
+
+  <!-- Phoenix callout line -->
+  <line x1="358" y1="258" x2="400" y2="230" stroke="#f97316" stroke-width="2"/>
+  <circle cx="405" cy="225" r="5" fill="#f97316"/>
+  <text x="415" y="220" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#f97316">Phoenix Rooivalk</text>
+  <text x="415" y="238" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fbbf24">4% = $800M+</text>
+
+  <!-- Center hole -->
+  <circle cx="220" cy="255" r="50" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <text x="220" y="248" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#94a3b8" text-anchor="middle">2030</text>
+  <text x="220" y="270" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#fbbf24" text-anchor="middle">$20.3B</text>
+
+  <!-- Legend panel -->
+  <g transform="translate(440, 100)">
+    <rect x="0" y="0" width="195" height="200" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1" filter="url(#dropShadow)"/>
+
+    <text x="97" y="24" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#f8fafc" text-anchor="middle">Market Leaders</text>
+    <line x1="15" y1="36" x2="180" y2="36" stroke="#334155" stroke-width="1"/>
+
+    <!-- Defense Primes -->
+    <g transform="translate(15, 50)">
+      <rect width="16" height="16" rx="3" fill="url(#defensePrimesGrad)"/>
+      <text x="24" y="8" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">Defense Primes</text>
+      <text x="24" y="22" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Lockheed, Northrop, Raytheon</text>
+      <text x="165" y="13" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="end">32%</text>
+    </g>
+
+    <!-- Dedicated C-UAS -->
+    <g transform="translate(15, 80)">
+      <rect width="16" height="16" rx="3" fill="url(#dedicatedCuasGrad)"/>
+      <text x="24" y="8" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">Dedicated C-UAS</text>
+      <text x="24" y="22" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Dedrone, DroneShield, Fortem</text>
+      <text x="165" y="13" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="end">28%</text>
+    </g>
+
+    <!-- RF/Radar -->
+    <g transform="translate(15, 110)">
+      <rect width="16" height="16" rx="3" fill="url(#rfRadarGrad)"/>
+      <text x="24" y="8" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">RF/Radar Specialists</text>
+      <text x="24" y="22" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Robin Radar, Blighter, Echodyne</text>
+      <text x="165" y="13" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="end">15%</text>
+    </g>
+
+    <!-- Regional -->
+    <g transform="translate(15, 140)">
+      <rect width="16" height="16" rx="3" fill="url(#regionalGrad)"/>
+      <text x="24" y="8" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">Regional Players</text>
+      <text x="24" y="22" font-family="Arial, sans-serif" font-size="9" fill="#64748b">EU, Asia-Pacific vendors</text>
+      <text x="165" y="13" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="end">14%</text>
+    </g>
+
+    <!-- Emerging -->
+    <g transform="translate(15, 170)">
+      <rect width="16" height="16" rx="3" fill="url(#emergingGrad)"/>
+      <text x="24" y="8" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#f8fafc">Emerging Startups</text>
+      <text x="24" y="22" font-family="Arial, sans-serif" font-size="9" fill="#64748b">New entrants, niche players</text>
+      <text x="165" y="13" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="end">7%</text>
+    </g>
+  </g>
+
+  <!-- Phoenix target callout box -->
+  <g transform="translate(440, 315)">
+    <rect x="0" y="0" width="195" height="85" rx="8" fill="#1e293b" stroke="#f97316" stroke-width="2" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="195" height="28" rx="8" fill="#f97316" opacity="0.2"/>
+    <rect x="0" y="0" width="195" height="28" rx="8" fill="none" stroke="#f97316" stroke-width="0"/>
+
+    <circle cx="20" cy="14" r="8" fill="url(#phoenixGrad)"/>
+    <text x="35" y="19" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#f97316">Our 2030 Target</text>
+
+    <text x="97" y="50" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#fbbf24" text-anchor="middle">4% = $800M+</text>
+    <text x="97" y="72" font-family="Arial, sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">32x growth from Year 3 SOM ($25M)</text>
+  </g>
+
+  <!-- TAM Growth indicator -->
+  <g transform="translate(60, 410)">
+    <line x1="0" y1="0" x2="25" y2="0" stroke="#f97316" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+    <text x="35" y="5" font-family="Arial, sans-serif" font-size="11" fill="#f97316">Potential TAM Growth: $30B+ by 2032</text>
+  </g>
+</svg>
