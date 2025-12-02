@@ -14,18 +14,18 @@
 
 /** Market Values */
 export const MARKET = {
-  // Current market size
-  CURRENT: "$2.45-3.0B",
+  // Current market size (Source: MarketsandMarkets, November 2025)
+  CURRENT: "$6.64B",
   CURRENT_YEAR: 2025,
 
-  // Projected market size
-  PROJECTED: "$9-15B",
+  // Projected market size (Source: MarketsandMarkets, November 2025)
+  PROJECTED: "$20.31B",
   PROJECTED_YEAR: 2030,
 
-  // Growth rate
-  CAGR: "23-27%",
-  CAGR_MIN: 23,
-  CAGR_MAX: 27,
+  // Growth rate (Source: MarketsandMarkets, November 2025)
+  CAGR: "25.1%",
+  CAGR_MIN: 25,
+  CAGR_MAX: 25,
 
   // Segments (by revenue)
   MILITARY_SHARE: "48%",
