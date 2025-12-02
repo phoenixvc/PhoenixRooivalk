@@ -23,8 +23,8 @@ const COLOR_THEMES: Record<ColorTheme, ColorPalette> = {
     textMuted: "94A3B8", // Muted gray
   },
   investor: {
-    primary: "2563EB", // Blue
-    accent: "3B82F6", // Light blue
+    primary: "F97316", // Phoenix Orange
+    accent: "FBBF24", // Phoenix Amber
     dark: "1E293B", // Slate
     darker: "0F172A", // Darker slate
     text: "FFFFFF",
@@ -141,10 +141,21 @@ function parseRichTextForPptx(
 }
 
 /**
+ * Strip markdown markers from text for clean display
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*([^*]+)\*\*/g, "$1") // Remove bold markers
+    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, "$1"); // Remove italic markers
+}
+
+/**
  * Get key point text (handles both string and object formats)
+ * Strips markdown for clean PPTX display
  */
 function getKeyPointText(point: KeyPoint): string {
-  return typeof point === "string" ? point : point.text;
+  const text = typeof point === "string" ? point : point.text;
+  return stripMarkdown(text);
 }
 
 /**
@@ -872,10 +883,9 @@ export async function generatePptx(
 
       for (const point of slide.keyPoints) {
         if (typeof point === "string") {
-          // Parse rich text for formatting
-          const runs = parseRichTextForPptx(point, colors.text, 16);
+          // Strip markdown for clean display
           allBullets.push({
-            text: runs.map((r) => r.text).join(""),
+            text: stripMarkdown(point),
             options: {
               bullet: { type: "number" as const, code: "2022" },
               color: colors.text,
@@ -885,9 +895,9 @@ export async function generatePptx(
             },
           });
         } else {
-          // Main point
+          // Main point - strip markdown
           allBullets.push({
-            text: point.text,
+            text: stripMarkdown(point.text),
             options: {
               bullet: { type: "number" as const, code: "2022" },
               color: colors.text,
@@ -897,11 +907,11 @@ export async function generatePptx(
             },
           });
 
-          // Sub-points
+          // Sub-points - strip markdown
           if (point.subPoints) {
             for (const subPoint of point.subPoints) {
               allBullets.push({
-                text: subPoint,
+                text: stripMarkdown(subPoint),
                 options: {
                   bullet: { type: "number" as const, code: "25E6" }, // Circle bullet
                   color: colors.textSecondary,
