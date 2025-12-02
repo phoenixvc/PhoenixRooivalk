@@ -22,15 +22,17 @@ export const demoPitchSlides: Slide[] = [
     layout: "title-only",
     keyPoints: [
       "**Autonomous Counter-Drone Defense**",
+      "*Seed Round 2025*",
       "",
-      "*Sub-200ms response | True offline | Blockchain evidence*",
+      "**10-150x faster** than any competitor",
+      "Protecting **$20B+** in critical infrastructure",
       "",
       "**When seconds matter, we respond in milliseconds**",
     ],
     speakerNotes:
-      "Open with confidence. Pause on the tagline. Let 'milliseconds' land - it's our core differentiator.",
+      "Open with confidence. Lead with '10-150x faster' - it's concrete and memorable. Pause on the tagline. The $20B figure anchors the opportunity.",
     script:
-      "Welcome to Phoenix Rooivalk. We're building autonomous counter-drone defense that responds in under 200 milliseconds - that's 10 to 150 times faster than anything else on the market. True offline capability for denied environments. Blockchain-anchored evidence for legal accountability. When seconds matter, we respond in milliseconds.",
+      "Welcome to Phoenix Rooivalk. We're building autonomous counter-drone defense that's 10 to 150 times faster than anything else on the market. Sub-200 millisecond response time. True offline capability for denied environments. Blockchain-anchored evidence for legal accountability. We're protecting over $20 billion in critical infrastructure globally. When seconds matter, we respond in milliseconds.",
   },
 
   // ==========================================
@@ -38,40 +40,40 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 2,
-    title: "The Problem: Drone Threats Are Escalating",
-    duration: 90,
+    title: "The Problem: 64% of Facilities Are Unprotected",
+    duration: 60,
     icon: "🚨",
     layout: "default",
     keyPoints: [
       {
-        text: "**Drone attacks are ever increasing** in Military and Civilian environments:",
+        text: "**November 2025: Brussels Airport closed twice in one night**",
         subPoints: [
-          "**300% increase** in drone swarms globally",
-          "**64%** of facilities have *no counter-drone protection*",
-          "Ukraine: **1M+ drones** produced in 2024, causing **15%** of casualties",
+          "54 flights cancelled, RAF specialists deployed",
+          "European drone incidents up **4x year-over-year**",
+          "Perpetrators: *still at large*",
         ],
       },
       {
-        text: "**Current defenses are failing:**",
+        text: "**The Gatwick precedent** (Dec 2018):",
         subPoints: [
-          "**2-5 second response time** - *far too slow*",
-          "Cloud-dependent - *fails in denied environments*",
-          "No legal evidence chain - *no accountability*",
+          "**£60M+ in damages**, 140,000 passengers stranded",
+          "Investigation cost: millions more",
+          "Perpetrators: **never caught** - *no evidence chain*",
         ],
       },
       {
-        text: "**Recent incidents prove the urgency:**",
+        text: "**Why current solutions fail:**",
         subPoints: [
-          "**Nov 2025**: Brussels Airport closed *twice in one night*",
-          "European incidents up **4x YoY**",
-          "Gatwick 2018: **£60M cost**, perpetrators *never caught*",
+          "**5-30 second** response time - drones travel 500m in that time",
+          "Cloud-dependent systems fail in denied environments",
+          "No admissible evidence = no prosecution = no deterrent",
         ],
       },
     ],
     speakerNotes:
-      "This slide is critical. Let the statistics land. Pause after each major point. The Brussels incident is recent and relatable. Gatwick shows the cost of inaction.",
+      "Lead with Brussels - it's recent, relatable, and proves this isn't hypothetical. Gatwick shows the cost and the evidence problem. Keep it punchy - 60 seconds max.",
     script:
-      "Drone attacks are escalating rapidly in both military and civilian environments. We've seen a 300% increase in drone swarm attacks globally. 64% of critical facilities have zero counter-drone protection. In Ukraine alone, over 1 million drones were produced in 2024, accounting for 15% of all casualties. Current defense systems are failing us - they take 2 to 5 seconds to respond, which is far too slow. They're cloud-dependent and fail in denied environments. And critically, they provide no legal evidence chain for accountability. Just last month, Brussels Airport was closed twice in one night due to drone incursions. European incidents are up 4x year over year. Remember Gatwick in 2018? £60 million in damages, and the perpetrators were never caught. The threat is real, it's growing, and current solutions aren't working.",
+      "Last month, Brussels Airport was closed twice in one night. 54 flights cancelled. The Royal Air Force deployed specialists. European drone incidents are up 4x year over year. And the perpetrators? Still at large. Remember Gatwick in 2018? £60 million in damages, 140,000 passengers stranded. And the perpetrators were never caught. Why? No evidence chain. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail in denied environments. And without admissible evidence, there's no prosecution and no deterrent. 64% of critical facilities have zero protection today.",
   },
 
   // ==========================================
@@ -83,27 +85,27 @@ export const demoPitchSlides: Slide[] = [
     duration: 60,
     icon: "❌",
     layout: "two-column",
-    leftColumnTitle: "The Gap in Protection",
+    leftColumnTitle: "The Cost of Inaction",
     leftColumn: [
-      "**Airports** - daily incursions worldwide",
-      "**Power Plants** - critical infrastructure at risk",
-      "**Prisons** - contraband delivery via drone",
-      "**Military Bases** - reconnaissance & attack vectors",
-      "**Events** - stadiums, concerts, VIP gatherings",
+      "**Airports** - $100K-$60M per incident",
+      "**Power Plants** - $500K+ downtime per hour",
+      "**Prisons** - $2M+ contraband annually per facility",
+      "**Military** - classified losses, lives at stake",
+      "**Events** - $10M+ liability exposure",
     ],
     rightColumnTitle: "Why Competitors Fail",
     rightColumn: [
-      "**5,000-30,000ms** response times",
-      "**Require cloud connectivity** to operate",
-      "**No offline capability** in RF/GPS denied areas",
-      "**Vendor lock-in** with proprietary systems",
-      "**No evidence trail** for legal prosecution",
+      "**5,000-30,000ms** response - drone travels 500m",
+      "**Cloud-dependent** - fails when you need it most",
+      "**No offline mode** - useless in RF/GPS-denied areas",
+      "**$800K-$1.5M+** - priced out of reach",
+      "**No evidence** - perpetrators walk free",
     ],
     keyPoints: [],
     speakerNotes:
-      "Walk through the left column first to establish the scope of the threat. Then pivot to why existing solutions don't work. This sets up our differentiation.",
+      "The left column now quantifies the pain. Every vertical has a dollar figure. Right column shows why competitors can't solve it. This sets up our value prop perfectly.",
     script:
-      "Let me paint the picture of what's at risk. Airports face daily drone incursions worldwide. Power plants and critical infrastructure are vulnerable. Prisons deal with contraband delivery via drone. Military bases face reconnaissance and attack vectors. Major events like stadiums and concerts are exposed. Now, why do current solutions fail? Competitor systems take 5 to 30 seconds to respond - that's an eternity when a drone is traveling at speed. They require cloud connectivity, which means they fail in denied environments. They have no offline capability. They lock you into proprietary systems. And critically, they provide no evidence trail for legal prosecution. When the perpetrators at Gatwick were never caught, it's because there was no admissible evidence chain.",
+      "Let's quantify what's at stake. Airports face $100K to $60 million per incident - we saw that at Gatwick. Power plants lose $500K or more per hour of downtime. Prisons see over $2 million in contraband delivered by drone annually per facility. Military losses are classified, but we're talking about lives. Major events carry $10 million plus in liability exposure. Now, why don't current solutions work? They take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail exactly when you need them most. No offline capability for denied environments. They cost $800K to over $1.5 million - priced out of reach for most facilities. And without evidence, perpetrators walk free. No prosecution, no deterrent.",
   },
 
   // ==========================================
@@ -111,40 +113,39 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 4,
-    title: "Our Solution: SAE Level 4 Autonomous Defense",
-    duration: 60,
+    title: "Our Solution: 3 Unfair Advantages",
+    duration: 75,
     icon: "🛡️",
     keyPoints: [
-      "**Sub-200ms** end-to-end response time (*10-150x faster* than competitors)",
       {
-        text: "**True autonomy:** Operates where others can't",
+        text: "**1. SPEED:** Sub-200ms response (10-150x faster)",
         subPoints: [
-          "RF-denied operation",
-          "GPS-denied operation",
-          "Fully offline edge processing",
+          "Detect → Track → Neutralize in **under 200 milliseconds**",
+          "Competitors: 5,000-30,000ms - *we're 2 orders of magnitude faster*",
+          "Edge AI processing - no cloud latency",
         ],
       },
       {
-        text: "**Blockchain-anchored evidence:**",
+        text: "**2. AUTONOMY:** Works where others fail",
         subPoints: [
-          "Legally defensible audit trail",
-          "Tamper-proof chain of custody",
+          "**True offline** - no internet required",
+          "RF-denied & GPS-denied operation",
+          "SAE Level 4 autonomous decision-making",
+        ],
+      },
+      {
+        text: "**3. EVIDENCE:** Catch the perpetrators",
+        subPoints: [
+          "**Blockchain-anchored** chain of custody",
           "Court-admissible documentation",
-        ],
-      },
-      {
-        text: "**Modular weapons:** Adapt to any scenario",
-        subPoints: [
-          "Nets for soft capture",
-          "RF jammers for disruption",
-          "Kinetic options for military zones",
+          "Finally: prosecution becomes possible",
         ],
       },
     ],
     speakerNotes:
-      "This is our value proposition. Emphasize the 10-150x speed advantage first - it's our strongest differentiator. The blockchain evidence is unique in the market.",
+      "Three clear differentiators, numbered for memory. Speed is #1 because it's the most dramatic. Evidence is #3 because it's unique and memorable. Don't mention weapons here - save for Q&A.",
     script:
-      "Phoenix Rooivalk delivers SAE Level 4 autonomous counter-drone defense. Sub-200 millisecond response times - that's 10 to 150 times faster than any competitor. We operate with true autonomy in environments where others fail: RF-denied, GPS-denied, fully offline with edge processing. Every engagement generates blockchain-anchored evidence that's legally defensible and court-admissible. Our modular weapon system adapts to any regulatory environment - nets for civilian areas, RF jammers where permitted, kinetic options for military zones.",
+      "Phoenix Rooivalk has three unfair advantages. Number one: Speed. We respond in under 200 milliseconds - that's 10 to 150 times faster than any competitor. While they're still processing in the cloud, we've already neutralized the threat with edge AI. Number two: Autonomy. We work where others fail. True offline operation, no internet required. RF-denied, GPS-denied environments - exactly where you need counter-drone most. SAE Level 4 autonomous decision-making. Number three: Evidence. For the first time, you can actually catch the perpetrators. Blockchain-anchored chain of custody. Court-admissible documentation. No more 'never caught' headlines.",
   },
 
   // ==========================================
@@ -152,7 +153,7 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 5,
-    title: "Why We Win: 10-150x Speed Advantage",
+    title: "Why We Win: The Comparison",
     duration: 45,
     icon: "⚡",
     layout: "two-column",
@@ -160,23 +161,25 @@ export const demoPitchSlides: Slide[] = [
     leftColumn: [
       "**50-195ms** response",
       "✅ True offline capability",
-      "✅ Blockchain evidence",
+      "✅ Blockchain evidence chain",
       "✅ Open architecture",
-      "✅ $25K-$100K systems",
+      "✅ **$25K-$100K** systems",
+      "✅ Deploy in **days**",
     ],
     rightColumnTitle: "Competitors",
     rightColumn: [
       "**5,000-30,000ms** response",
-      "❌ Requires connectivity",
+      "❌ Requires cloud connectivity",
       "❌ No evidence trail",
       "❌ Vendor lock-in",
-      "❌ $800K-$1.5M+ systems",
+      "❌ **$800K-$1.5M+** systems",
+      "❌ Deploy in **months**",
     ],
     keyPoints: [],
     speakerNotes:
-      "Let the comparison speak for itself. The visual contrast is powerful. Point to each row as you speak.",
+      "Let the comparison speak for itself. Point to each row. The deployment time is new - emphasize we can protect a facility in days, not months of integration work.",
     script:
-      "Let's compare directly. Phoenix Rooivalk responds in 50 to 195 milliseconds. Competitors take 5 to 30 seconds. We operate completely offline. They require connectivity. We generate blockchain evidence. They have no evidence trail. Our open architecture prevents lock-in. Their proprietary systems trap you. And we deliver at a fraction of the cost - $25K to $100K versus $800K to over $1.5 million.",
+      "Let's compare directly. Response time: we're at 50 to 195 milliseconds, competitors take 5 to 30 seconds. Offline: we work completely offline, they require cloud. Evidence: we generate blockchain evidence for prosecution, they have nothing. Architecture: we're open, they lock you in. Cost: $25K to $100K versus $800K to over $1.5 million. And deployment: we protect a facility in days, not months of integration work. Six advantages, all decisive.",
   },
 
   // ==========================================
@@ -184,7 +187,7 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 6,
-    title: "Market & Business Model",
+    title: "Market Opportunity: Why Now",
     duration: 60,
     icon: "📊",
     layout: "image-right",
@@ -192,32 +195,33 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "Drone Defense Market TAM/SAM/SOM",
     keyPoints: [
       {
-        text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
+        text: "**Why NOW is the moment:**",
         subPoints: [
-          "Counter-drone segment growing at **47%** CAGR",
-          "64% of facilities currently *unprotected*",
+          "Brussels, Gatwick incidents driving **regulatory urgency**",
+          "EU mandating airport protection by **2027**",
+          "US FAA BVLOS rules enabling **new drone threats**",
         ],
       },
       {
-        text: "**Revenue model:** Hardware + SaaS + Services",
+        text: "**Market:** $6.64B → **$20.3B** (2030) at **25% CAGR**",
         subPoints: [
-          "Hardware: **60%** (systems $25K-$100K)",
-          "SaaS: **25%** (monitoring, updates)",
-          "Services: **15%** (training, support)",
+          "Counter-drone segment: **47% CAGR** - fastest growing",
+          "64% of facilities unprotected = **massive whitespace**",
         ],
       },
       {
-        text: "**Unit economics:**",
+        text: "**Revenue model:** Hardware + Recurring",
         subPoints: [
-          "Gross margins: **65-70%** hardware, **80%+** software",
-          "CLV:CAC ratio: **6:1 to 10:1**",
+          "Hardware: **60%** ($25K-$100K systems)",
+          "SaaS + Services: **40%** (80%+ gross margin)",
+          "Target: **6:1 CLV:CAC**",
         ],
       },
     ],
     speakerNotes:
-      "Show the market opportunity is massive and growing. The TAM/SAM/SOM diagram makes the opportunity tangible. Emphasize the recurring revenue model.",
+      "Lead with WHY NOW - regulatory tailwinds are real. Brussels and Gatwick created political will. EU mandates are coming. Then show the market size and our model.",
     script:
-      "The counter-drone defense market is $6.64 billion today and growing to over $20 billion by 2030 at 25% CAGR. The counter-drone segment specifically is growing at 47% annually. Our serviceable market is $4.2 billion - regional airports and critical infrastructure that can't afford million-dollar systems. Our revenue model combines hardware sales at 60%, SaaS subscriptions at 25% for monitoring and updates, and professional services at 15%. This gives us strong unit economics with 65-70% gross margins on hardware and over 80% on software, with CLV to CAC ratios of 6 to 10 to 1.",
+      "Why is now the moment? Brussels and Gatwick created regulatory urgency. The EU is mandating airport counter-drone protection by 2027. In the US, new FAA BVLOS rules are enabling more drones in the sky - which means more threats. The market is $6.64 billion today, growing to over $20 billion by 2030. The counter-drone segment is the fastest growing at 47% CAGR. And 64% of facilities are still unprotected - massive whitespace for us. Our model: 60% hardware revenue from $25K to $100K systems, 40% recurring from SaaS and services with 80%+ gross margins. Target CLV to CAC of 6 to 1.",
   },
 
   // ==========================================
@@ -225,42 +229,43 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 7,
-    title: "Roadmap & Current Progress",
+    title: "Traction & Roadmap",
     duration: 60,
     icon: "🗺️",
     layout: "image",
     image: "/img/roadmap-timeline.svg",
-    imageCaption: "18-month runway to Series A with proven traction",
+    imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
-        text: "**Completed** (6 months founder R&D):",
+        text: "**Already completed** (6 months, $0 raised):",
         subPoints: [
-          "CAD designs *complete*",
-          "Prototype **40% assembled**",
-          "Net designs tested with Kevlar stock",
+          "Full system CAD designs **complete**",
+          "Prototype **in assembly** - Q1 2026 completion",
+          "Kevlar net tested successfully",
+          "**2 LOIs** from EU facilities (pending seed close)",
         ],
       },
       {
-        text: "**Q1-Q2 2026:** Consumer launch",
+        text: "**Go-to-market strategy:**",
         subPoints: [
-          "CPSC/ASTM certification (Mar 2026)",
-          "SkySnare D2C launch (Apr 2026)",
-          "First EU pilot signed",
+          "**Consumer first** (SkySnare) - proves tech, builds brand",
+          "**Enterprise second** (AeroNet) - higher margins, longer sales",
+          "Consumer revenue funds enterprise sales cycle",
         ],
       },
       {
-        text: "**Q3-Q4 2026:** Scale & Series A",
+        text: "**Key milestones:**",
         subPoints: [
-          "5,000 consumer units shipped",
-          "3-5 enterprise installations",
-          "Series A with proven revenue",
+          "**Q2 2026**: CPSC/ASTM cert, D2C launch, first EU pilot",
+          "**Q4 2026**: 5K consumer, 3-5 enterprise, **$500K+ ARR**",
+          "**Hiring**: VP Sales (Q1), Head of Ops (Q2)",
         ],
       },
     ],
     speakerNotes:
-      "Show concrete progress and clear milestones. The roadmap demonstrates execution capability. Emphasize that we're not starting from zero.",
+      "Lead with traction - we're not starting from zero. LOIs show enterprise interest. Explain the consumer-first strategy before investors ask. Hiring shows we're thinking about scale.",
     script:
-      "Let me show you where we are and where we're going. We've already invested 6 months of founder R&D. CAD designs are complete, the mechanical prototype is 40% assembled, and we've tested net designs with Kevlar fiber stock we already have. Q1 and Q2 2026: We complete CPSC and ASTM certification by March, launch SkySnare direct-to-consumer in April, and sign our first EU pilot. By Q3 and Q4: We ship 5,000 consumer units, deploy 3 to 5 enterprise installations, and close Series A with proven revenue traction. This seed round gives us 18 months of runway with clear path to the next stage.",
+      "We're not starting from zero. Six months of founder R&D with zero capital raised. Full CAD designs complete. Prototype in final assembly for Q1 completion. Kevlar nets tested and validated. And we have 2 LOIs from EU facilities pending our seed close. Our strategy: consumer first with SkySnare, then enterprise with AeroNet. Why? Consumer proves the technology, builds the brand, and generates revenue to fund the longer enterprise sales cycle. Higher enterprise margins follow. Key milestones: Q2 we get certifications, launch D2C, deploy our first EU pilot. Q4 we hit 5,000 consumer units, 3 to 5 enterprise installations, and over $500K in ARR. We're also hiring: VP Sales in Q1, Head of Ops in Q2.",
   },
 
   // ==========================================
@@ -268,8 +273,8 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 8,
-    title: "Founding Team: 60+ Years Combined Expertise",
-    duration: 45,
+    title: "Team: 60+ Years Defense & Tech Expertise",
+    duration: 30,
     icon: "👥",
     layout: "team" as const,
     teamMembers: [
@@ -279,8 +284,8 @@ export const demoPitchSlides: Slide[] = [
         title: "Co-Founder & CTO",
         highlights: [
           "15+ years fintech & SaaS",
-          "Edge AI/ML architecture",
-          "B.Eng (Stellenbosch)",
+          "Edge AI/ML systems",
+          "Previously: enterprise SaaS exits",
         ],
         color: "#f97316", // Phoenix Orange
       },
@@ -291,7 +296,7 @@ export const demoPitchSlides: Slide[] = [
         highlights: [
           "20+ years energy/defense",
           "R500M+ portfolio mgmt",
-          "MBA (GIBS)",
+          "Defense contractor relationships",
         ],
         color: "#ea580c", // Dark Orange
       },
@@ -300,9 +305,9 @@ export const demoPitchSlides: Slide[] = [
         name: "Pieter La Grange",
         title: "Hardware Lead",
         highlights: [
-          "15+ years embedded",
-          "Medical devices (Snuza)",
-          "B.Eng (Stellenbosch)",
+          "15+ years embedded systems",
+          "Medical device production (Snuza)",
+          "Mass manufacturing experience",
         ],
         color: "#fb923c", // Light Orange
       },
@@ -313,19 +318,20 @@ export const demoPitchSlides: Slide[] = [
         highlights: [
           "15+ years IB & PE",
           "Head Quant (Deloitte)",
-          "Phoenix VC founder",
+          "Phoenix VC founding partner",
         ],
         color: "#fbbf24", // Amber
       },
     ],
     keyPoints: [
-      "**Complementary expertise** across tech, business, hardware, and finance",
-      "All founders **full-time committed** with significant personal investment",
+      "**Advisors:** Available upon request",
+      "**All founders full-time** with personal capital committed",
+      "**Hiring Q1:** VP Sales (defense background), Head of Ops",
     ],
     speakerNotes:
-      "Quick team overview. Emphasize complementary skills and commitment. Don't linger - investors want to know the team is capable, then move on.",
+      "30 seconds max. Hit the highlights, emphasize full-time commitment and hiring plans. Investors want to know you can execute, then move to the ask.",
     script:
-      "Our founding team brings over 60 years of combined experience. Jurie leads technology with deep AI and systems architecture expertise. Martyn drives business with 20+ years managing major portfolios in energy and defense. Pieter heads hardware with medical device production experience. Eben handles finance with investment banking and private equity background. All four founders are full-time committed with skin in the game.",
+      "Our team: Jurie on tech with edge AI and SaaS exits. Martyn on business with 20 years in energy and defense, including contractor relationships. Pieter on hardware with medical device mass manufacturing. Eben on finance with investment banking and VC experience. All founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
   },
 
   // ==========================================
@@ -333,43 +339,42 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 9,
-    title: "The Ask: $960K Seed Round",
-    duration: 60,
+    title: "The Ask: $960K at $3.5M Pre-Money",
+    duration: 75,
     icon: "💰",
     layout: "image-right",
     image: "/img/investment-breakdown.svg",
     imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
-        text: "**$960K Seed** | 18-month runway",
+        text: "**$960K Seed** on SAFE | **$3.5M pre-money cap**",
         subPoints: [
-          "**40%** Engineering/Software ($384K) - AI/ML, edge processing, firmware",
-          "**25%** Hardware ($240K) - prototypes, tooling, components",
-          "**15%** Sales ($144K) - D2C launch, trade shows, pilots",
-          "**10%** Operations ($96K) - legal, IP, infrastructure",
-          "**10%** Certification ($96K) - CPSC, ASTM, CE marking",
+          "**40%** Engineering ($384K) - AI/ML, edge processing",
+          "**25%** Hardware ($240K) - prototypes, tooling",
+          "**15%** Sales ($144K) - D2C launch, trade shows",
+          "**20%** Ops + Cert ($192K) - legal, IP, CPSC/ASTM/CE",
         ],
       },
       {
-        text: "**Milestones to Series A:**",
+        text: "**What you get for $960K:**",
         subPoints: [
-          "**Q2 2026**: CPSC/ASTM cert, D2C launch, first EU pilot",
-          "**Q4 2026**: 5K consumer units, 3-5 enterprise installs",
-          "**Series A**: $500K+ ARR, proven market traction",
+          "Certified product in market (Q2 2026)",
+          "**$500K+ ARR** by Q4 2026",
+          "Series A ready with proven traction",
         ],
       },
       {
-        text: "**Your Next Step:**",
+        text: "**Round status:** $350K committed (36%)",
         subPoints: [
-          "**Schedule a live demo** - see sub-200ms in action",
-          "*contact@phoenixrooivalk.com*",
+          "Lead investor confirmed",
+          "Closing by **end of Q4 2025**",
         ],
       },
     ],
     speakerNotes:
-      "Be specific about the ask and allocation. End with clear next step: schedule the demo.",
+      "State terms upfront - no ambiguity. Show round momentum with committed capital. The 36% creates urgency. End with demo CTA verbally.",
     script:
-      "We're raising $960K in seed funding. Here's exactly how we'll use it: $384K to engineering and software for AI, edge processing, and firmware. $240K to hardware for prototypes, tooling, and components. $144K to sales for our D2C launch, trade shows, and pilot programs. $96K each to operations and certifications. This gives us 18 months of runway with clear milestones: certifications and product launch by Q2, 5,000 consumer units and enterprise deployments by Q4, and Series A ready with over $500K in ARR. Your next step? Schedule a live demo and see sub-200 millisecond response time for yourself.",
+      "We're raising $960K on a SAFE at $3.5 million pre-money cap. Use of funds: 40% to engineering for AI and edge processing. 25% to hardware for prototypes and tooling. 15% to sales for D2C launch. 20% to operations and certification including CPSC, ASTM, and CE marking. What do you get? Certified product in market by Q2 2026. Over $500K ARR by Q4. Series A ready with proven traction. Round status: we have $350K committed - 36% of the round - with our lead investor confirmed. We're closing by end of Q4 2025. Let's schedule a live demo so you can see sub-200 millisecond response for yourself.",
   },
 
   // ==========================================
@@ -377,41 +382,44 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 10,
-    title: "Your Return: When & How Much",
+    title: "Your Return: Three Scenarios",
     duration: 45,
     icon: "📈",
     layout: "two-column",
-    leftColumnTitle: "Exit Timeline",
+    leftColumnTitle: "Return Scenarios",
     leftColumn: [
-      "**Series A (Q4 2026):** $5-8M valuation",
-      "→ Seed investors: **10-15x paper return**",
+      "**Conservative** (base case):",
+      "Series A at $5M → **5-8x** seed return",
+      "Acqui-hire or small exit → **8-12x**",
       "",
-      "**Series B (2028):** $25-40M valuation",
-      "→ Early liquidity options available",
+      "**Base** (expected):",
+      "Series B at $25M → **10-15x** paper",
+      "M&A 2028-2029 → **15-25x** realized",
       "",
-      "**Exit (2029-2030):** Strategic M&A or IPO",
-      "→ **25-50x total return potential**",
+      "**Upside** (sector tailwinds):",
+      "Strategic acquisition → **25-50x**",
     ],
-    rightColumnTitle: "Why Defense Exits Big",
+    rightColumnTitle: "Why Defense Exits Work",
     rightColumn: [
-      "**$4.2B** in defense M&A (2024)",
-      "**Anduril:** $14B valuation, 5 years",
-      "**Shield AI:** $2.7B valuation, 6 years",
-      "**Dedrone:** Acquired by Axon",
+      "**Relevant comps:**",
+      "**Dedrone** → Acquired by Axon (2024)",
+      "**DroneShield** → ASX: $400M+ market cap",
+      "**Fortem** → $100M+ raised, acquisition target",
       "",
-      "**Strategic acquirers actively looking:**",
+      "**Strategic buyers actively looking:**",
       "Lockheed, Northrop, L3Harris, Raytheon",
+      "All have counter-drone gaps to fill",
     ],
     keyPoints: [],
     speakerNotes:
-      "Investors want to know when they get paid. Be specific about timeline and comparable exits. Defense sector is hot for M&A.",
+      "Three scenarios shows you've thought through downside. Use relevant comps - not Anduril ($14B) which is unrealistic. Emphasize defense M&A is active and we fit the profile.",
     script:
-      "Let's talk returns. At our target Series A valuation of $5 to $8 million in Q4 2026, seed investors see 10 to 15x paper returns. By Series B in 2028, early liquidity options become available. At exit in 2029 to 2030, we're targeting 25 to 50x total returns. Why are we confident? Defense tech M&A hit $4.2 billion in 2024. Anduril reached $14 billion in 5 years. Shield AI hit $2.7 billion in 6. Dedrone was acquired by Axon. The strategic acquirers - Lockheed, Northrop, L3Harris, Raytheon - they're all actively looking for counter-drone solutions. This is a sector where exits happen and they happen big.",
+      "Three return scenarios. Conservative: even if we only hit Series A at $5 million, you're looking at 5 to 8x. If we get acqui-hired, 8 to 12x. That's your downside protection. Base case: Series B at $25 million gives you 10 to 15x on paper. M&A in 2028 or 2029 realizes 15 to 25x. Upside: strategic acquisition in a hot market, 25 to 50x. Why do we believe defense exits work? Look at relevant comps. Dedrone was acquired by Axon in 2024. DroneShield on the ASX is at $400 million plus market cap. Fortem has raised over $100 million and is an acquisition target. The strategics - Lockheed, Northrop, L3Harris, Raytheon - they all have counter-drone gaps to fill. We fit the profile.",
   },
 ];
 
 export const demoPitchMeta = {
-  title: "Phoenix Rooivalk: Demo Pitch",
+  title: "Phoenix Rooivalk: Demo Pitch Deck",
   duration: 10,
   audience: "Investors, Strategic Partners, Demo Attendees",
   date: "December 2025",
