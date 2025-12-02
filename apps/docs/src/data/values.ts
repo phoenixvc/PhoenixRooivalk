@@ -82,7 +82,9 @@ export const PERFORMANCE = {
 
   // Accuracy
   ACCURACY: "99.5%",
-  YOLOV9_MAP: "99.7%",
+  YOLOV9_MAP: "95.7%",
+  YOLOV9_PRECISION: "0.946",
+  YOLOV9_RECALL: "0.864",
   FALSE_POSITIVE: "<0.3%",
 
   // Range
