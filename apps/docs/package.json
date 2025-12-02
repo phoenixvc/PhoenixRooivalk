@@ -40,6 +40,7 @@
     "dompurify": "^3.2.4",
     "pptxgenjs": "^4.0.1",
     "prism-react-renderer": "^2.3.1",
+    "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -51,6 +52,7 @@
     "@types/jest": "^29.5.0",
     "@types/mdast": "^4.0.0",
     "@types/node": "^24.10.1",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
