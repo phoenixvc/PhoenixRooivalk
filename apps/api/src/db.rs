@@ -430,30 +430,43 @@ fn parse_name_from_email(email: &str) -> (Option<String>, Option<String>) {
         .filter(|s| !s.is_empty())
         .collect();
     
+    // Helper function to capitalize first letter safely
+    fn capitalize(s: &str) -> String {
+        if s.is_empty() {
+            return String::new();
+        }
+        let mut chars = s.chars();
+        match chars.next() {
+            Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+            None => String::new(),
+        }
+    }
+    
     match parts.len() {
         0 => (None, None),
         1 => {
             // Single part, can't determine first/last
-            let name = parts[0].to_string();
-            // Capitalize first letter
-            let capitalized = name[0..1].to_uppercase() + &name[1..];
-            (Some(capitalized), None)
+            if parts[0].is_empty() {
+                return (None, None);
+            }
+            (Some(capitalize(parts[0])), None)
         }
         2 => {
             // Two parts, assume first.last format
-            let first = parts[0].to_string();
-            let last = parts[1].to_string();
-            let first_cap = first[0..1].to_uppercase() + &first[1..];
-            let last_cap = last[0..1].to_uppercase() + &last[1..];
-            (Some(first_cap), Some(last_cap))
+            if parts[0].is_empty() || parts[1].is_empty() {
+                return (None, None);
+            }
+            (Some(capitalize(parts[0])), Some(capitalize(parts[1])))
         }
         _ => {
             // Multiple parts, take first and last
-            let first = parts[0].to_string();
-            let last = parts[parts.len() - 1].to_string();
-            let first_cap = first[0..1].to_uppercase() + &first[1..];
-            let last_cap = last[0..1].to_uppercase() + &last[1..];
-            (Some(first_cap), Some(last_cap))
+            if parts[0].is_empty() || parts[parts.len() - 1].is_empty() {
+                return (None, None);
+            }
+            (
+                Some(capitalize(parts[0])),
+                Some(capitalize(parts[parts.len() - 1])),
+            )
         }
     }
 }

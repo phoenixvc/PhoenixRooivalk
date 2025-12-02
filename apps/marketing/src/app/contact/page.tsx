@@ -4,6 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
+import { API_BASE_URL } from "../../config/constants";
 import styles from "./contact.module.css";
 
 interface User {
@@ -78,15 +79,25 @@ export default function ContactPage(): React.ReactElement {
       return;
     }
 
+    const sessionId =
+      typeof window !== "undefined"
+        ? localStorage.getItem("session_id")
+        : null;
+
+    if (!sessionId) {
+      setApplicationError("Session expired. Please log in again.");
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
     setApplicationStatus("submitting");
     setApplicationError("");
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-      const sessionId = localStorage.getItem("session_id");
-
       const response = await fetch(
-        `${apiUrl}/career/apply?session_id=${sessionId}`,
+        `${API_BASE_URL}/career/apply?session_id=${encodeURIComponent(sessionId)}`,
         {
           method: "POST",
           headers: {

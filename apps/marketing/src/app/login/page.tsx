@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../../config/constants";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
@@ -17,8 +18,7 @@ export default function LoginPage() {
 
     try {
       // Call the API to login
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-      const response = await fetch(`${apiUrl}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
