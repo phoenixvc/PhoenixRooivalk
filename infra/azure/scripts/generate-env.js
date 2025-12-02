@@ -95,7 +95,7 @@ const keyVaultName = `kv-phoenixrooivalk-${shortEnv}`;
 const config = {
   CLOUD_PROVIDER: "azure",
   AZURE_STATIC_WEB_APP_NAME: staticWebAppName,
-  AZURE_FUNCTIONS_APP_NAME: functionsAppName,
+  AZURE_FUNCTIONAPP_NAME: functionsAppName,
   AZURE_FUNCTIONS_BASE_URL: "",
   AZURE_APP_INSIGHTS_CONNECTION_STRING: "",
   AZURE_COSMOS_ENDPOINT: "",
@@ -106,7 +106,7 @@ const config = {
   AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI: "",
   AZURE_ENTRA_SCOPES: "openid profile email User.Read",
   AZURE_STATIC_WEB_APPS_API_TOKEN: "",
-  AZURE_FUNCTIONS_PUBLISH_PROFILE: "",
+  AZURE_FUNCTIONAPP_PUBLISH_PROFILE: "",
 };
 
 // Get Static Web App token
@@ -140,7 +140,7 @@ const publishProfile = az(
   `functionapp deployment list-publishing-profiles --name "${functionsAppName}" --resource-group "${resourceGroup}" --xml`,
 );
 if (publishProfile) {
-  config.AZURE_FUNCTIONS_PUBLISH_PROFILE = publishProfile;
+  config.AZURE_FUNCTIONAPP_PUBLISH_PROFILE = publishProfile;
   console.log("  ✓ Functions publish profile retrieved");
 } else {
   console.log("  ⚠ Could not retrieve Functions publish profile");
@@ -235,15 +235,15 @@ gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body "${config.AZURE_STATIC_WEB_
 echo "✓ AZURE_STATIC_WEB_APPS_API_TOKEN set"
 
 # Azure Functions
-gh secret set AZURE_FUNCTIONS_APP_NAME --body "${functionsAppName}"
-echo "✓ AZURE_FUNCTIONS_APP_NAME set"
+gh variable set AZURE_FUNCTIONAPP_NAME --body "${functionsAppName}"
+echo "✓ AZURE_FUNCTIONAPP_NAME set (as GitHub Variable)"
 
 gh secret set AZURE_FUNCTIONS_BASE_URL --body "${config.AZURE_FUNCTIONS_BASE_URL}"
 echo "✓ AZURE_FUNCTIONS_BASE_URL set"
 
 # Azure Functions Publish Profile (for deployment)
-gh secret set AZURE_FUNCTIONS_PUBLISH_PROFILE --body '${config.AZURE_FUNCTIONS_PUBLISH_PROFILE.replace(/'/g, "'\\''")}'
-echo "✓ AZURE_FUNCTIONS_PUBLISH_PROFILE set"
+gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE --body '${config.AZURE_FUNCTIONAPP_PUBLISH_PROFILE.replace(/'/g, "'\\''")}'
+echo "✓ AZURE_FUNCTIONAPP_PUBLISH_PROFILE set"
 
 # Application Insights
 gh secret set AZURE_APP_INSIGHTS_CONNECTION_STRING --body "${config.AZURE_APP_INSIGHTS_CONNECTION_STRING}"
@@ -287,7 +287,7 @@ const jsonContent = {
   },
   hasSecrets: {
     swaToken: !!config.AZURE_STATIC_WEB_APPS_API_TOKEN,
-    functionsPublishProfile: !!config.AZURE_FUNCTIONS_PUBLISH_PROFILE,
+    functionsPublishProfile: !!config.AZURE_FUNCTIONAPP_PUBLISH_PROFILE,
     appInsightsConnection: !!config.AZURE_APP_INSIGHTS_CONNECTION_STRING,
   },
 };
