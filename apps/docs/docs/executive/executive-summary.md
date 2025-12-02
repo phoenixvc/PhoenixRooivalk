@@ -78,7 +78,7 @@ The C-UAS market presents exceptional opportunities, valued at **$2.45-3.0B in
 2025** and projected to reach **$9-15B by 2030** at 23-27% CAGR. The Pentagon
 Replicator program alone commits **$500M** to deploy thousands of autonomous
 drones by August 2025, while recent contract awards total over **$6B** including
-Raytheon's massive $1.04B Coyote interceptor contract through 2027. Ukraine's
+Raytheon's massive $5.04B Coyote interceptor contract through 2033. Ukraine's
 experience losing 10,000+ drones monthly to jamming demonstrates urgent
 operational needs driving procurement.
 

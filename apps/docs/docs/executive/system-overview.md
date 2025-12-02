@@ -188,7 +188,7 @@ neutralization
 
 ### Performance Metrics
 
-- **Detection Range**: 3-5 km (standard configuration)
+- **Detection Range**: 0.5-2 km (standard configuration, sensor-dependent)
 - **Response Time**: <200ms end-to-end decision latency
 - **Accuracy**: 99.5% threat detection accuracy
 - **Availability**: 99.9% system availability
