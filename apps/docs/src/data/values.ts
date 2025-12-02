@@ -324,10 +324,24 @@ export const TECH = {
 
 /** Funding Values */
 export const FUNDING = {
+  // Investment rounds
   SEED_ROUND: "$500K-$1M",
   SERIES_A_TARGET: "$30-50M",
   BURN_RATE: "$200K/month",
   RUNWAY: "18 months",
+
+  // Phased investment (TRL path)
+  PHASE_1_CONCEPT: "$3.5M",
+  PHASE_1_DURATION: "9 months",
+  PHASE_1_TRL: "TRL 3-4",
+  PHASE_2_PROTOTYPE: "$15M",
+  PHASE_2_DURATION: "12 months",
+  PHASE_2_TRL: "TRL 4-6",
+  PHASE_3_INTEGRATION: "$25M",
+  PHASE_3_DURATION: "15 months",
+  PHASE_3_TRL: "TRL 6-7",
+  TOTAL_TO_TRL7: "$43.5M",
+  TOTAL_TIMELINE: "~3 years",
 
   // Use of funds
   HARDWARE_PROTOTYPING: "30%",
@@ -341,10 +355,39 @@ export const FUNDING = {
   REVENUE_2029: "$100M",
   REVENUE_2030: "$150M",
 
+  // Business model projections
+  BM_YEAR_1_REVENUE: "$2.5M",
+  BM_YEAR_2_REVENUE: "$15M",
+  BM_YEAR_3_REVENUE: "$45M",
+  BM_YEAR_4_REVENUE: "$100M",
+  BM_YEAR_5_REVENUE: "$160M",
+
   // Targets
   YEAR_1_SYSTEMS: 25,
+  YEAR_2_SYSTEMS: 75,
+  YEAR_3_SYSTEMS: 150,
+  YEAR_4_SYSTEMS: 300,
+  YEAR_5_SYSTEMS: 500,
   PILOT_INSTALLATIONS: 5,
   X402_CUSTOMERS: 10,
+
+  // Funding sources (phased)
+  PHASE_1_ANGEL: "$1M-$2M",
+  PHASE_1_VC: "$1.5M-$2.5M",
+  PHASE_1_SBIR: "$500K",
+  PHASE_2_SERIES_A: "$8M-$12M",
+  PHASE_2_DOD: "$2M-$3M",
+  PHASE_2_STRATEGIC: "$2M-$5M",
+  PHASE_3_SERIES_B: "$15M-$20M",
+  PHASE_3_PRODUCTION: "$3M-$5M",
+  PHASE_3_INTERNATIONAL: "$2M-$5M",
+
+  // IOC per site
+  IOC_PER_SITE: "$3M",
+  IOC_HARDWARE: "$2M",
+  IOC_INSTALLATION: "$500K",
+  IOC_TRAINING: "$200K",
+  IOC_SUPPORT_YEAR1: "$300K",
 };
 
 /** RKV-M Interceptor Specs */

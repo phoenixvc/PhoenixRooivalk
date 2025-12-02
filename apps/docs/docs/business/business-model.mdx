@@ -3,14 +3,18 @@ id: business-model
 title: Business Model
 sidebar_label: Business Model
 difficulty: intermediate
-estimated_reading_time: 9
-points: 15
+timeEstimate: 9
+xpReward: 15
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - business
   - counter-uas
 prerequisites:
   - executive-summary
 ---
+
+import { MARKET, PERFORMANCE, PRICING, FUNDING, BLOCKCHAIN, TEAM } from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -20,12 +24,12 @@ streams. The business model is designed to maximize customer lifetime value
 while maintaining competitive pricing and strong unit economics across defense,
 critical infrastructure, and commercial market segments.
 
-**Market Opportunity**: $2.45-3.0B (2025) growing to $9-15B (2030) at 23-27%
-CAGR  
-**Competitive Advantage**: 25-40x faster response times (120-195ms vs 3-10s
-industry average)  
-**Technology Differentiation**: SAE Level 4 edge autonomy, blockchain evidence,
-Morpheus AI integration  
+**Market Opportunity**: {MARKET.CURRENT} (2025) growing to {MARKET.PROJECTED} (2030) at {MARKET.CAGR}
+CAGR
+**Competitive Advantage**: 25-40x faster response times ({PERFORMANCE.RESPONSE_TIME} vs 3-10s
+industry average)
+**Technology Differentiation**: {PERFORMANCE.AUTONOMY_LEVEL} edge autonomy, blockchain evidence,
+Morpheus AI integration
 **Revenue Potential**: $50M+ annual revenue through DoD contracts and commercial
 partnerships
 
@@ -37,7 +41,7 @@ partnerships
 
 **1. Hardware Sales (60% of revenue)**
 
-- **Base System Units**: $25k-$100k per unit depending on configuration
+- **Base System Units**: {PRICING.SYSTEM_RANGE} per unit depending on configuration
 - **Sensor Upgrades**: $5k-$15k per additional sensor type
 - **Swarm Expansion**: $15k-$25k per additional drone
 - **Installation Services**: $5k-$10k per deployment
@@ -60,7 +64,7 @@ partnerships
 
 ## Capital Requirements for Competitive Positioning
 
-**Total Capital Needs: $30-50M**
+**Total Capital Needs: {FUNDING.SERIES_A_TARGET}**
 
 - **Development**: $10-20M for AI algorithms and systems integration
 - **Manufacturing**: $5-10M for supply chain and assembly infrastructure
@@ -69,10 +73,9 @@ partnerships
 
 ### Corporate Structure
 
-**Legal Entity**: Delaware C-Corp registration (in progress) + South African
-Entity (planned Q2 2026) **Business Purpose**: Defense contracting, IP
-protection, and government compliance **Regulatory Pathway**: ITAR registration
-and DoD contractor eligibility development
+**Legal Entity**: {TEAM.COMPANY_STRUCTURE} + {TEAM.SECONDARY_ENTITY}
+**Business Purpose**: Defense contracting, IP protection, and government compliance
+**Regulatory Pathway**: ITAR registration and DoD contractor eligibility development
 
 ### Funding Strategy
 
@@ -121,7 +124,7 @@ and DoD contractor eligibility development
 
 **Defense & Military**
 
-- **Base System**: $75k-$100k per unit
+- **Base System**: {PRICING.MILITARY_RANGE} per unit
 - **Rationale**: Performance premium, compliance requirements, longer sales
   cycles
 - **Target Margin**: 60-70%
@@ -129,14 +132,14 @@ and DoD contractor eligibility development
 
 **Critical Infrastructure**
 
-- **Base System**: $45k-$65k per unit
+- **Base System**: {PRICING.INFRASTRUCTURE_RANGE} per unit
 - **Rationale**: ROI-focused, compliance-driven, moderate complexity
 - **Target Margin**: 50-60%
 - **Sales Cycle**: 6-12 months
 
 **Commercial & Events**
 
-- **Base System**: $25k-$45k per unit
+- **Base System**: {PRICING.COMMERCIAL_RANGE} per unit
 - **Rationale**: Price-sensitive, volume-based, simplified deployment
 - **Target Margin**: 40-50%
 - **Sales Cycle**: 3-6 months
@@ -146,8 +149,8 @@ and DoD contractor eligibility development
 **Performance Premium**
 
 - **Speed Advantage**: 25-40x faster response time
-- **Accuracy Premium**: 95.5% vs 85-90% for competitors
-- **Autonomy Value**: SAE Level 4 operation vs partial autonomy
+- **Accuracy Premium**: {PERFORMANCE.ACCURACY} vs 85-90% for competitors
+- **Autonomy Value**: {PERFORMANCE.AUTONOMY_LEVEL} operation vs partial autonomy
 
 **Compliance Premium**
 
@@ -159,7 +162,7 @@ and DoD contractor eligibility development
 
 - **Lower TCO**: Reduced maintenance and operational costs
 - **EW Resilience**: Operates under jamming conditions
-- **Swarm Capability**: Handles 10+ concurrent threats
+- **Swarm Capability**: Handles {PERFORMANCE.CONCURRENT_TARGETS} concurrent threats
 
 ---
 
@@ -240,7 +243,7 @@ and DoD contractor eligibility development
 
 - **NVIDIA**: Hardware optimization, AI model development (planned)
 - **Microsoft Azure Government**: C2 infrastructure, DoD compliance (planned)
-- **Solana Foundation**: Blockchain infrastructure, developer support
+- **{BLOCKCHAIN.PRIMARY_CHAIN} Foundation**: Blockchain infrastructure, developer support
 - **Sensor Manufacturers**: Robin Radar, QinetiQ for multi-modal fusion
 - **Revenue Share**: 10-20% of software revenue
 
@@ -284,47 +287,47 @@ and DoD contractor eligibility development
 
 **Year 1 (2026)**
 
-- **Units Sold**: 25
+- **Units Sold**: {FUNDING.YEAR_1_SYSTEMS}
 - **Hardware Revenue**: $1.5M
 - **Software Revenue**: $600k
 - **Service Revenue**: $400k
-- **Total Revenue**: $2.5M
+- **Total Revenue**: {FUNDING.BM_YEAR_1_REVENUE}
 - **Gross Margin**: 45%
 
 **Year 2 (2027)**
 
-- **Units Sold**: 75
+- **Units Sold**: {FUNDING.YEAR_2_SYSTEMS}
 - **Hardware Revenue**: $11M
 - **Software Revenue**: $2.6M
 - **Service Revenue**: $1.4M
-- **Total Revenue**: $15M
+- **Total Revenue**: {FUNDING.BM_YEAR_2_REVENUE}
 - **Gross Margin**: 55%
 
 **Year 3 (2028)**
 
-- **Units Sold**: 150
+- **Units Sold**: {FUNDING.YEAR_3_SYSTEMS}
 - **Hardware Revenue**: $25M
 - **Software Revenue**: $12M
 - **Service Revenue**: $8M
-- **Total Revenue**: $45M
+- **Total Revenue**: {FUNDING.BM_YEAR_3_REVENUE}
 - **Gross Margin**: 60%
 
 **Year 4 (2029)**
 
-- **Units Sold**: Hardware: 300; Software Licenses: 50
+- **Units Sold**: Hardware: {FUNDING.YEAR_4_SYSTEMS}; Software Licenses: 50
 - **Hardware Revenue**: $50M
 - **Software Revenue**: $30M
 - **Service Revenue**: $20M
-- **Total Revenue**: $100M
-- **Gross Margin**: 65%
+- **Total Revenue**: {FUNDING.BM_YEAR_4_REVENUE}
+- **Gross Margin**: {PRICING.GROSS_MARGIN}
 
 **Year 5 (2030)**
 
-- **Units Sold**: Hardware: 500; Software Licenses: 100
+- **Units Sold**: Hardware: {FUNDING.YEAR_5_SYSTEMS}; Software Licenses: 100
 - **Hardware Revenue**: $75M
 - **Software Revenue**: $50M
 - **Service Revenue**: $35M
-- **Total Revenue**: $160M
+- **Total Revenue**: {FUNDING.BM_YEAR_5_REVENUE}
 - **Gross Margin**: 70%
 
 ### Profitability Analysis
@@ -367,7 +370,7 @@ and DoD contractor eligibility development
 - Hybrid soft-kill/hard-kill with layered response optimizing effector selection
 - Performance advantages: detection range over 5km, response time under 200
   milliseconds
-- Success rate over 95%, multi-target capacity handling 10+ simultaneous threats
+- Success rate over 95%, multi-target capacity handling {PERFORMANCE.CONCURRENT_TARGETS} simultaneous threats
 - Autonomous operation with minimal operator intervention through pre-authorized
   engagement protocols
 
@@ -452,8 +455,8 @@ pipeline with airport, critical infrastructure, and event security customers
 
 **Operational Metrics**
 
-- **Gross Margin**: Target >60%
-- **Operating Margin**: Target >25%
+- **Gross Margin**: Target >{PRICING.GROSS_MARGIN}
+- **Operating Margin**: Target >{PRICING.EBITDA_TARGET}
 - **Cash Conversion Cycle**: Target <90 days
 - **Employee Productivity**: Target >$500k revenue per employee
 
@@ -481,5 +484,5 @@ customers.
 ---
 
 _This document contains confidential business model information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
