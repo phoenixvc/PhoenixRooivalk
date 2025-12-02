@@ -76,9 +76,9 @@ export const MARKET = {
   COMPETITOR_FALSE_POSITIVE: "15-25%",
   COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 
-  // Recent European incidents (Nov 2024)
-  EUROPE_INCIDENTS_2024: "4x increase",
-  BRUSSELS_CLOSURE_NOV_2024: "8-day cluster",
+  // Recent European incidents (Nov 2025)
+  EUROPE_INCIDENTS_2025: "4x increase YoY",
+  BRUSSELS_CLOSURE_NOV_2025: "Nov 4-5, 2025",
   BRUSSELS_FLIGHTS_CANCELLED: "dozens",
   DENMARK_ILLEGAL_FLIGHTS_2025: 107,
   POLAND_DRONES_SEP_2025: 23,

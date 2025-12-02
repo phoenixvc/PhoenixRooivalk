@@ -66,12 +66,12 @@ For the main pitch deck, see [Investor Pitch Deck](/docs/executive/phoenix-rooiv
   duration={40}
   icon="🎯"
   keyPoints={[
-    "Nov 2024: Brussels 8-day closure, Poland 4 airports, Denmark drone ban - 4x YoY increase",
+    "Nov 2025: Brussels closed twice in one night, UK sent RAF troops, drones near US nuclear base",
     `Edge AI: YOLOv9 on Jetson Orin - ${PERFORMANCE.RESPONSE_TIME} vs 5-30s competitors`,
     `${BLOCKCHAIN.PRIMARY_CHAIN} blockchain: Immutable evidence chain (Gatwick 2018 perps never caught)`,
     `SkySnare™ ${SKYSNARE.MSRP} funds R&D | AeroNet™ ${AERONET.SETUP_FEE} + ${AERONET.MONTHLY_FEE} enterprise`,
   ]}
-  script={`Europe is in crisis. November 2024: Brussels closed 8 days, Poland shut 4 airports, Denmark banned civilian drones. Incidents up 4x year-over-year. Our solution: Edge AI with YOLOv9 on NVIDIA Jetson - ${PERFORMANCE.RESPONSE_TIME} response, 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for court-admissible evidence. Remember Gatwick 2018? 140,000 passengers stranded, perps never caught. We fix that.`}
+  script={`This is happening right now. Last month - November 2025 - Brussels Airport shut down twice in one night. 54 flights cancelled, 25,000 passengers stranded. Drones spotted near Kleine Brogel where US nuclear weapons are stored. The UK deployed RAF anti-drone specialists to help. Incidents up 4x year-over-year. Our solution: Edge AI with YOLOv9 on NVIDIA Jetson - ${PERFORMANCE.RESPONSE_TIME} response, 10-150x faster than competitors. Every detection logged to ${BLOCKCHAIN.PRIMARY_CHAIN} blockchain for court-admissible evidence.`}
 />
 
 <SlideSection
@@ -211,7 +211,7 @@ Consumer market is faster to enter:
 
 ### "Why now?"
 
-- **November 2024 crisis**: Brussels 8-day closure, Poland 4 airports, Denmark drone ban
+- **November 2025 crisis**: Brussels closed twice in one night, UK sent RAF troops, drones near nuclear base
 - **4x YoY increase** in European airport drone incidents
 - **Edge AI maturity**: YOLOv9 + Jetson Orin enables real-time edge inference
 - **Blockchain cost collapse**: {BLOCKCHAIN.PRIMARY_CHAIN} at {BLOCKCHAIN.COST_PER_TX}/tx makes continuous logging viable
@@ -242,6 +242,103 @@ Solana gives us court-admissible evidence at negligible cost.
 | Series A | 18 months | 3-5x |
 | Strategic acquisition | 3-5 years | 10-15x |
 | IPO | 5-7 years | 20-30x |
+
+### "What about swarm attacks?"
+
+Our roadmap includes **multi-agent swarm coordination** for Series B/C:
+
+| Capability | Technology | Timeline |
+|------------|------------|----------|
+| **Single-target tracking** | YOLOv9 + Kalman filter | Seed (now) |
+| **Multi-target coordination** | MARL (Multi-Agent RL) | Series A |
+| **Swarm interception** | Decentralized consensus | Series B |
+| **Autonomous counter-swarm** | Swarm intelligence (separation, alignment, cohesion) | Series C |
+
+**Industry context:**
+- IAI unveiled C-UAS Swarm solution at AUSA 2025 for coordinated, layered defense
+- Saab's BlueBear demonstrated 100-drone control at Arctic Strike 2025
+- Thales COHESION showed AI-based "intelligent agents" for swarm coordination
+- We're building on same principles with edge-first, blockchain-verified approach
+
+---
+
+## Technology Glossary (Presenter Background)
+
+### Edge AI Terms
+
+| Term | Definition | Why It Matters |
+|------|------------|----------------|
+| **YOLOv9** | "You Only Look Once" v9 - latest real-time object detection model (2024). mAP 95.7%, 4.6% improvement over YOLOv8. | State-of-the-art accuracy at inference speeds suitable for real-time drone detection |
+| **mAP** | Mean Average Precision - standard metric for object detection accuracy (0-100%). Industry benchmark. | Our 95.7% vs competitors' 85-95% means fewer missed detections |
+| **Jetson Orin** | NVIDIA's edge AI platform. AGX Orin delivers 275 TOPS (trillion operations/second). | Enables on-device inference without cloud latency |
+| **TOPS** | Tera Operations Per Second - measure of AI compute capability. | 275 TOPS = can run complex models in real-time |
+| **Edge inference** | Running AI models on-device rather than in cloud. | No network latency, works offline, GDPR compliant (data stays local) |
+| **TensorRT** | NVIDIA's inference optimizer. 5-10x speedup over raw PyTorch. | How we achieve sub-200ms response times |
+
+### Blockchain Terms
+
+| Term | Definition | Why It Matters |
+|------|------------|----------------|
+| **Solana** | High-performance L1 blockchain. 65K-100K TPS, 400ms finality, $0.00025/tx. | Only chain with speed + cost for continuous evidence logging |
+| **TPS** | Transactions Per Second - blockchain throughput. Solana: 65K+, Ethereum: ~15. | We need high TPS for real-time event logging |
+| **Finality** | Time until transaction is irreversible. Solana: 400ms, Ethereum: 12-15 min. | Evidence must be immutable quickly for legal validity |
+| **Chain of custody** | Legal term for documented, unbroken evidence trail. | Blockchain provides tamper-proof, timestamped audit trail |
+| **Ed25519** | Digital signature algorithm used by Solana. 256-bit security. | Cryptographic proof of who logged what and when |
+
+### Counter-UAS Terms
+
+| Term | Definition | Why It Matters |
+|------|------------|----------------|
+| **C-UAS** | Counter-Unmanned Aircraft Systems - technologies to detect, track, and defeat drones. | Our core enterprise market |
+| **SORA** | Specific Operations Risk Assessment - EU drone regulation framework. | Required for commercial drone defense operations |
+| **False positive rate** | Percentage of non-drone objects incorrectly identified as drones. Industry: 15-25%, ours: <0.3%. | False positives = costly false alarms, liability risk |
+| **Response time** | Time from detection to action. Industry: 5-30s, ours: 120-195ms. | Faster response = higher intercept success |
+
+### Swarm / Multi-Agent Terms
+
+| Term | Definition | Why It Matters |
+|------|------------|----------------|
+| **MARL** | Multi-Agent Reinforcement Learning - AI technique where multiple agents learn cooperative behaviors. | Enables coordinated multi-drone defense |
+| **Swarm intelligence** | Collective behavior emerging from simple local rules (separation, alignment, cohesion). | Decentralized coordination without central control |
+| **Decentralized consensus** | Agreement protocol without central authority. | Resilient to single-point failures |
+| **ACT** | Autonomous Collaborative Teaming - Pentagon's swarm coordination program. | Industry-standard approach we're aligned with |
+
+### Competitor Reference
+
+| Company | Product | Approach | Our Advantage |
+|---------|---------|----------|---------------|
+| **Lockheed Martin** | MORFIUS | Microwave-based drone defeat | We capture for evidence; they destroy |
+| **DroneShield** | DroneGun, DroneSentry | RF detection + jamming | Slower response (5s+), no blockchain |
+| **Dedrone** | DedroneSmart | RF/radar/camera fusion | Cloud-dependent, $1.5M+, no evidence chain |
+| **Fortem** | DroneHunter F700 | Autonomous net-capture drone | Similar approach but $800K-1.2M, 2-5s response |
+| **IAI** | C-UAS Swarm | Multi-layered defense | Military-focused, $5M+, not airport-accessible |
+
+---
+
+## Recent Incident Timeline (For Context)
+
+### November 2025 - Brussels Crisis
+
+| Date | Event | Impact |
+|------|-------|--------|
+| **Nov 4, 8pm** | First drone sighted at Brussels Airport | Airspace closed |
+| **Nov 4, 9pm** | Reopened briefly | - |
+| **Nov 4, 10pm** | Second sighting, closed again | 54 flights cancelled |
+| **Nov 4, 11pm** | Reopened | 25,000 passengers affected |
+| **Nov 4-5** | Drones at Kleine Brogel (US nuclear storage) | Security escalation |
+| **Nov 5** | UK deploys RAF anti-drone specialists | International response |
+| **Nov 6** | Belgium National Security Council convenes | Government-level crisis |
+
+**Defence Minister Theo Francken**: "This is not the work of amateurs."
+
+### Historical Context
+
+| Incident | Impact | Outcome |
+|----------|--------|---------|
+| **Gatwick 2018** | 3-day closure, 140K passengers, £60M cost | Perpetrators never caught |
+| **Heathrow 2019** | Multiple disruptions | Limited response capability |
+| **Sweden Sep 2024** | Stockholm Arlanda closed 2+ hours | Growing awareness |
+| **Poland Sep 2025** | 4 airports closed, 23 drones | Coordinated attack pattern |
 
 ---
 
