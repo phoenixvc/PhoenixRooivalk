@@ -189,9 +189,9 @@ export const demoPitchSlides: Slide[] = [
     title: "Market & Business Model",
     duration: 60,
     icon: "📊",
-    layout: "image",
+    layout: "image-right",
     image: "/img/tam-sam-som.svg",
-    imageCaption: "Counter-drone market growing at 25.1% CAGR to $20.3B by 2030",
+    imageCaption: "Drone Defense Market TAM/SAM/SOM",
     keyPoints: [
       {
         text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
@@ -338,9 +338,9 @@ export const demoPitchSlides: Slide[] = [
     title: "The Opportunity: $500K-$1M Seed",
     duration: 60,
     icon: "💰",
-    layout: "image",
+    layout: "image-right",
     image: "/img/investment-breakdown.svg",
-    imageCaption: "18-month runway with clear milestones to Series A",
+    imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
         text: "**Your Return Potential:**",

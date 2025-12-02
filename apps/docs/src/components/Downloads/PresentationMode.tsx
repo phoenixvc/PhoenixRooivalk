@@ -402,6 +402,37 @@ export default function PresentationMode({
                   <p className="text-gray-400 italic">{slide.imageCaption}</p>
                 )}
               </div>
+            ) : slide.layout === "image-right" && slide.image ? (
+              // Split layout: key points left, image right
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <ul className="space-y-3">
+                    {slide.keyPoints.map((point, i) => (
+                      <li
+                        key={i}
+                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
+                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                        }`}
+                      >
+                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                        <span>{parseRichText(getKeyPointText(point))}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <img
+                    src={slide.image}
+                    alt={slide.imageCaption || slide.title}
+                    className="max-h-64 rounded-lg"
+                  />
+                  {slide.imageCaption && (
+                    <p className="text-sm text-gray-400 italic mt-2 text-center">
+                      {slide.imageCaption}
+                    </p>
+                  )}
+                </div>
+              </div>
             ) : slide.layout === "code" && slide.codeBlock ? (
               <div>
                 <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm mb-4">
