@@ -20,6 +20,7 @@ import {
   HARDWARE,
   TEAM,
   ROADMAP,
+  PHASES,
 } from "@site/src/data/values";
 
 ## Company Status
@@ -232,11 +233,11 @@ real-time processing of multiple concurrent streams.
 
 | Phase       | Focus                                              | Funding Target                                                                      | Timeline   |
 | ----------- | -------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- |
-| **Phase 1** | DoD validation through SBIR/STTR and OTA contracts | $2-5M development funding                                                           | Q1-Q4 2026 |
-| **Phase 2** | Production scale with IDIQ contracts and FMS       | $50M+ annual revenue through prime integrator partnerships                          | 2027-2028  |
-| **Phase 3** | Commercial expansion post-regulatory changes       | $100M+ pipeline with airport, critical infrastructure, and event security customers | 2029+      |
+| **{PHASES.SERIES_A.shortName}** | {PHASES.SERIES_A.focus} | {PHASES.SERIES_A.funding} development funding                                                           | {PHASES.SERIES_A.timeline} |
+| **{PHASES.SERIES_B.shortName}** | {PHASES.SERIES_B.focus}       | {PHASES.SERIES_B.funding} through prime integrator partnerships                          | {PHASES.SERIES_B.timeline}  |
+| **{PHASES.SCALE.shortName}** | {PHASES.SCALE.focus}       | $100M+ pipeline with airport, critical infrastructure, and event security customers | {PHASES.SCALE.timeline}      |
 
-#### Phase 1: DoD Validation (Q1-Q4 2026)
+#### {PHASES.SERIES_A.shortName}: DoD Validation ({PHASES.SERIES_A.timeline})
 
 - **Primary Focus**: Government contract validation and technology demonstration
 - **Key Activities**:
@@ -247,7 +248,7 @@ real-time processing of multiple concurrent streams.
 - **Success Metrics**: 2-3 DoD contracts awarded, technology validated in field
   conditions
 
-#### Phase 2: Production Scale (2027-2028)
+#### {PHASES.SERIES_B.shortName}: Production Scale ({PHASES.SERIES_B.timeline})
 
 - **Primary Focus**: Commercial production and market expansion
 - **Key Activities**:
@@ -257,7 +258,7 @@ real-time processing of multiple concurrent streams.
   - Manufacturing scale-up and supply chain development
 - **Success Metrics**: $50M+ annual revenue, 100+ systems deployed
 
-#### Phase 3: Commercial Expansion (2029+)
+#### {PHASES.SCALE.shortName}: Commercial Expansion ({PHASES.SCALE.timeline})
 
 - **Primary Focus**: Civilian market penetration and global expansion
 - **Key Activities**:

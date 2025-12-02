@@ -17,12 +17,12 @@ tags:
   - counter-uas
 ---
 
-import { FUNDING, PERFORMANCE, HARDWARE, BLOCKCHAIN, TECH } from "@site/src/data/values";
+import { FUNDING, PERFORMANCE, HARDWARE, BLOCKCHAIN, TECH, PHASES, RKV_SYSTEM } from "@site/src/data/values";
 
 # Investment Phases Mapping
 
 This document provides a comprehensive overview of Phoenix Rooivalk's
-development phases, from concept validation through full operational capability,
+development phases aligned with funding rounds, from seed stage through global scale,
 with detailed investment requirements, milestones, and risk mitigation
 strategies.
 
@@ -30,28 +30,30 @@ strategies.
 
 ## Executive Summary
 
-| Phase                 | Investment | Duration  | TRL Level | Focus                                 |
-| --------------------- | ---------- | --------- | --------- | ------------------------------------- |
-| Phase 1 (Concept)     | {FUNDING.PHASE_1_CONCEPT}      | {FUNDING.PHASE_1_DURATION}  | {FUNDING.PHASE_1_TRL}   | Architecture validation, simulation   |
-| Phase 2 (Prototype)   | {FUNDING.PHASE_2_PROTOTYPE}       | {FUNDING.PHASE_2_DURATION} | {FUNDING.PHASE_2_TRL}   | Hardware demo, lab tests              |
-| Phase 3 (Integration) | {FUNDING.PHASE_3_INTEGRATION}       | {FUNDING.PHASE_3_DURATION} | {FUNDING.PHASE_3_TRL}   | Field trials, certification readiness |
-| **Total to TRL7**     | **{FUNDING.TOTAL_TO_TRL7}** | {FUNDING.TOTAL_TIMELINE}  | TRL 7     | System demonstration                  |
+| Phase | Investment | Timeline | TRL | Focus |
+| ----- | ---------- | -------- | --- | ----- |
+| **{PHASES.SEED.shortName}** | {PHASES.SEED.funding} | {PHASES.SEED.timeline} | {PHASES.SEED.trl} | {PHASES.SEED.focus} |
+| **{PHASES.SERIES_A.shortName}** | {PHASES.SERIES_A.funding} | {PHASES.SERIES_A.timeline} | {PHASES.SERIES_A.trl} | {PHASES.SERIES_A.focus} |
+| **{PHASES.SERIES_B.shortName}** | {PHASES.SERIES_B.funding} | {PHASES.SERIES_B.timeline} | {PHASES.SERIES_B.trl} | {PHASES.SERIES_B.focus} |
+| **{PHASES.SERIES_C.shortName}** | {PHASES.SERIES_C.funding} | {PHASES.SERIES_C.timeline} | {PHASES.SERIES_C.trl} | {PHASES.SERIES_C.focus} |
+| **{PHASES.SCALE.shortName}** | {PHASES.SCALE.funding} | {PHASES.SCALE.timeline} | {PHASES.SCALE.trl} | {PHASES.SCALE.focus} |
 
 **Note:** TRL (Technology Readiness Level) is a DoD standard scale from 1-9.
 
 ---
 
-## Phase 1: Concept Validation ({FUNDING.PHASE_1_CONCEPT}, {FUNDING.PHASE_1_DURATION})
+## {PHASES.SEED.name} ({PHASES.SEED.funding}, {PHASES.SEED.timeline})
 
 ### Objectives
 
+- Launch SkySnare™ D2C consumer product
 - Validate core architectural concepts
-- Prove edge autonomy feasibility
-- Demonstrate sub-12ms detection capability
+- Complete mechanical prototype development
+- Achieve CPSC/ASTM/EN-71 certifications
 - Establish blockchain audit trail
 - File provisional patents
 
-### Technology Readiness Level: {FUNDING.PHASE_1_TRL}
+### Technology Readiness Level: {PHASES.SEED.trl}
 
 - **TRL 3:** Analytical and experimental critical function/characteristic proof
   of concept
@@ -130,7 +132,7 @@ strategies.
 - Field test with 5 real drones at test range
 - Multi-vendor integration demo (at least 2 systems)
 - Complete technical documentation package
-- Cost analysis and Phase 2 detailed plan
+- Cost analysis and {PHASES.SERIES_A.shortName} detailed plan
 - Go/No-Go decision package with metrics
 
 ### Stage Gates (Payment Released Upon Achievement)
@@ -140,7 +142,7 @@ strategies.
 | Gate 1 | $1M (Month 3)   | Simulation + Architecture | 100-drone sim working, <20ms latency          |
 | Gate 2 | $1M (Month 6)   | Hardware Demo             | Physical detection proven, blockchain logging |
 | Gate 3 | $750K (Month 8) | Field Test                | 5 real drones tracked simultaneously          |
-| Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Phase 2 ready        |
+| Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Series A ready       |
 
 ### Risk Mitigation
 
@@ -153,17 +155,19 @@ strategies.
 
 ---
 
-## Phase 2: Prototype Development ({FUNDING.PHASE_2_PROTOTYPE}, {FUNDING.PHASE_2_DURATION})
+## {PHASES.SERIES_A.name} ({PHASES.SERIES_A.funding}, {PHASES.SERIES_A.timeline})
 
 ### Objectives
 
+- Launch AeroNet™ enterprise product
+- Secure SBIR/STTR and OTA contracts
 - Develop fieldable prototype system
 - Integrate multi-modal sensors
 - Demonstrate soft-kill capabilities
 - Achieve {BLOCKCHAIN.PRIMARY_CHAIN} audit trail
-- Begin certification process
+- Begin DoD certification process
 
-### Technology Readiness Level: {FUNDING.PHASE_2_TRL}
+### Technology Readiness Level: {PHASES.SERIES_A.trl}
 
 - **TRL 5:** Component validation in relevant environment
 - **TRL 6:** System/subsystem model or prototype demonstration in relevant
@@ -215,7 +219,7 @@ strategies.
 - Coalition data sharing prototype
 - Preliminary certification package
 - Operations manual v1.0
-- Phase 3 detailed plan
+- {PHASES.SERIES_B.shortName} detailed plan
 
 ### Milestones
 
@@ -224,7 +228,7 @@ strategies.
 | 3     | Design freeze            | Final system specifications   |
 | 6     | First prototype complete | Unit 1 functional demo        |
 | 9     | Multi-system testing     | 3 prototypes in field         |
-| 12    | Phase 2 completion       | All 5 units operational, docs |
+| 12    | Series A completion      | All 5 units operational, docs |
 
 ### Exit Criteria
 
@@ -236,17 +240,19 @@ strategies.
 
 ---
 
-## Phase 3: Integration & Certification ({FUNDING.PHASE_3_INTEGRATION}, {FUNDING.PHASE_3_DURATION})
+## {PHASES.SERIES_B.name} ({PHASES.SERIES_B.funding}, {PHASES.SERIES_B.timeline})
 
 ### Objectives
 
+- Deploy {RKV_SYSTEM.RKV_G_NAME} ({RKV_SYSTEM.RKV_G_FULL_NAME})
 - Field trials at military test ranges
 - Achieve TRL 7 (system demonstration)
 - Complete certification process
 - Establish coalition interoperability
+- Production scaling and manufacturing setup
 - Prepare for Initial Operating Capability (IOC)
 
-### Technology Readiness Level: {FUNDING.PHASE_3_TRL}
+### Technology Readiness Level: {PHASES.SERIES_B.trl}
 
 - **TRL 7:** System prototype demonstration in operational environment
 
@@ -346,21 +352,21 @@ strategies.
 
 ### Option A: Full Acquisition
 
-- Investor owns 100% of IP after Phase 3 ({FUNDING.TOTAL_TO_TRL7} total)
+- Investor owns 100% of IP after {PHASES.SERIES_B.shortName}
 - Development team gets completion bonuses + 2-year contracts
 - Team retains right to publish (with approval)
 
 ### Option B: Joint Venture (Recommended)
 
-**After Phase 1 ({FUNDING.PHASE_1_CONCEPT}):**
+**After {PHASES.SEED.shortName} ({PHASES.SEED.funding}):**
 
 | Stakeholder                      | Equity |
 | -------------------------------- | ------ |
 | Investor                         | 40%    |
 | Development team                 | 40%    |
-| Reserved for Phase 2/3 investors | 20%    |
+| Reserved for Series A/B investors | 20%    |
 
-**After Phase 3 ({FUNDING.TOTAL_TO_TRL7} total):**
+**After {PHASES.SERIES_B.shortName} (cumulative investment):**
 
 | Stakeholder      | Equity |
 | ---------------- | ------ |
@@ -434,20 +440,21 @@ strategies.
 
 ## Funding Strategy
 
-### Phase 1 Sources
+### {PHASES.SEED.shortName} Sources
 
 - Angel investors: {FUNDING.PHASE_1_ANGEL}
 - Defense tech VCs: {FUNDING.PHASE_1_VC}
 - Government grants (SBIR): Target {FUNDING.PHASE_1_SBIR}
 - Strategic partners: Target $500K
+- Kickstarter campaign: $300K net
 
-### Phase 2 Sources
+### {PHASES.SERIES_A.shortName} Sources
 
 - Series A round: {FUNDING.PHASE_2_SERIES_A}
 - DoD contracts: {FUNDING.PHASE_2_DOD}
 - Strategic investors (defense primes): {FUNDING.PHASE_2_STRATEGIC}
 
-### Phase 3 Sources
+### {PHASES.SERIES_B.shortName} Sources
 
 - Series B round: {FUNDING.PHASE_3_SERIES_B}
 - Production contracts: {FUNDING.PHASE_3_PRODUCTION}
@@ -459,23 +466,23 @@ strategies.
 
 ### Technical Metrics
 
-| Metric                    | Phase 1 Target | Phase 2 Target | Phase 3 Target |
-| ------------------------- | -------------- | -------------- | -------------- |
-| Response time (p95)       | <250ms sim     | <200ms proto   | <{PERFORMANCE.RESPONSE_TIME} field   |
-| Detection accuracy        | >95% sim       | >99% proto     | >{PERFORMANCE.ACCURACY} field   |
-| False positive rate       | <5%            | <2%            | {PERFORMANCE.FALSE_POSITIVE}            |
-| Concurrent track capacity | 50 sim         | 50 proto       | 100+ field     |
-| Uptime                    | N/A            | >95%           | >{PERFORMANCE.AVAILABILITY}           |
+| Metric                    | Seed Target | Series A Target | Series B Target |
+| ------------------------- | ----------- | --------------- | --------------- |
+| Response time (p95)       | <250ms sim  | <200ms proto    | <{PERFORMANCE.RESPONSE_TIME} field    |
+| Detection accuracy        | >95% sim    | >99% proto      | >{PERFORMANCE.ACCURACY} field    |
+| False positive rate       | <5%         | <2%             | {PERFORMANCE.FALSE_POSITIVE}             |
+| Concurrent track capacity | 50 sim      | 50 proto        | 100+ field      |
+| Uptime                    | N/A         | >95%            | >{PERFORMANCE.AVAILABILITY}            |
 
 ### Business Metrics
 
-| Metric                     | Phase 1 Target | Phase 2 Target | Phase 3 Target |
-| -------------------------- | -------------- | -------------- | -------------- |
-| Customer engagement        | 5 meetings     | 3 LOIs         | 1 contract     |
-| Patent applications        | 3-5 filed      | 8-10 filed     | 12-15 filed    |
-| Partnership MOUs           | 2              | 5              | 10             |
-| Team size                  | 9              | 30             | 50             |
-| Revenue (contracts/grants) | $0             | $2M            | $5M+           |
+| Metric                     | Seed Target | Series A Target | Series B Target |
+| -------------------------- | ----------- | --------------- | --------------- |
+| Customer engagement        | 5 meetings  | 3 LOIs          | 1 contract      |
+| Patent applications        | 3-5 filed   | 8-10 filed      | 12-15 filed     |
+| Partnership MOUs           | 2           | 5               | 10              |
+| Team size                  | 9           | 30              | 50              |
+| Revenue (contracts/grants) | $0          | $2M             | $5M+            |
 
 ---
 
@@ -484,15 +491,15 @@ strategies.
 ```
 Year 1          Year 2                    Year 3
 ├─────┬─────────┬────────┬────────────────┬────────┐
-│Phase│  Phase  │ Phase  │     Phase      │  IOC   │
-│  1  │    1    │   2    │       3        │  Prep  │
+│     │  Seed   │Series A│   Series B     │  IOC   │
+│Seed │  Phase  │ Phase  │     Phase      │  Prep  │
 │0-3mo│  3-9mo  │0-12mo  │    0-15mo      │        │
 └─────┴─────────┴────────┴────────────────┴────────┘
 $1M   $2.5M     $15M     $25M              Deploy
 
 Gates:
-  G1    G2  G3 G4    P2 Complete      P3 Complete
-  ↓     ↓   ↓  ↓         ↓                 ↓
+  G1    G2  G3 G4   Series A          Series B
+  ↓     ↓   ↓  ↓    Complete          Complete
 Decision Decision    Decision          Decision
 Points  Points      Points            Points
 ```
