@@ -197,6 +197,29 @@
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: relative;
+}
+
+/* Branded Icon - Small (appears on all slides) */
+.slideBrandIconSmall {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.25rem;
+  opacity: 0.4;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Branded Icon - Large (appears on first slide) */
+.slideBrandIconLarge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
 }
 
 .slidePage:last-child {
@@ -419,6 +442,12 @@
   display: none;
 }
 
+/* Print title brand icon - only shown during print (hidden with parent) */
+.printTitleBrandIcon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
 /* Focus styles for accessibility */
 .downloadDeckButton:focus-visible,
 .downloadButton:focus-visible {
@@ -448,6 +477,13 @@
     text-align: center;
     page-break-after: always;
     break-after: page;
+  }
+
+  /* Large branded icon on title page */
+  .printTitleBrandIcon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
   }
 
   .printTitle {

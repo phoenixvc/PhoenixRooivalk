@@ -1,5 +1,8 @@
 import type { Slide } from "../components/Downloads/SlideDeckDownload";
 
+/** Branded icon for slide decks - bar chart emoji */
+const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+
 export interface PptxMetadata {
   title: string;
   duration: number;
@@ -42,6 +45,17 @@ export async function generatePptx(
   // Create title slide
   const titleSlide = pptx.addSlide();
   titleSlide.background = { color: colors.dark };
+
+  // Large Brand Icon on title slide
+  titleSlide.addText(SLIDE_DECK_BRAND_ICON, {
+    x: 0.5,
+    y: 1.0,
+    w: 9.0,
+    h: 0.8,
+    fontSize: 48,
+    color: colors.textMuted,
+    align: "center",
+  });
 
   // Title
   titleSlide.addText(metadata.title, {
@@ -96,6 +110,16 @@ export async function generatePptx(
   for (const slide of slides) {
     const contentSlide = pptx.addSlide();
     contentSlide.background = { color: colors.dark };
+
+    // Small Brand Icon in top left corner (larger on first slide)
+    contentSlide.addText(SLIDE_DECK_BRAND_ICON, {
+      x: 0.3,
+      y: 0.2,
+      w: 0.5,
+      h: 0.4,
+      fontSize: slide.number === 1 ? 20 : 14,
+      color: colors.textMuted,
+    });
 
     // Add slide number and duration in top right
     contentSlide.addText(`Slide ${slide.number} • ${slide.duration}s`, {
@@ -226,6 +250,16 @@ export async function generatePptx(
   // Add summary slide
   const summarySlide = pptx.addSlide();
   summarySlide.background = { color: colors.dark };
+
+  // Small Brand Icon in top left corner
+  summarySlide.addText(SLIDE_DECK_BRAND_ICON, {
+    x: 0.3,
+    y: 0.2,
+    w: 0.5,
+    h: 0.4,
+    fontSize: 14,
+    color: colors.textMuted,
+  });
 
   summarySlide.addText("Summary", {
     x: 0.5,

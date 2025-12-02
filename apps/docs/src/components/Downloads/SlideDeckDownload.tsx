@@ -2,6 +2,9 @@ import * as React from "react";
 import DownloadButton from "./DownloadButton";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
+/** Branded icon for slide decks - bar chart emoji */
+const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+
 export interface Slide {
   /** Slide number */
   number: number;
@@ -222,6 +225,13 @@ export default function SlideDeckDownload({
               {/* Title Slide */}
               <div className="slide-page mb-8 pb-8 border-b-2 border-gray-200 dark:border-gray-700 print:break-after-page">
                 <div className="text-center py-12">
+                  {/* Large Brand Icon on Title Slide */}
+                  <div
+                    className="text-6xl mb-6 opacity-60"
+                    aria-hidden="true"
+                  >
+                    {SLIDE_DECK_BRAND_ICON}
+                  </div>
                   <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     {title}
                   </h1>
@@ -243,8 +253,16 @@ export default function SlideDeckDownload({
               {slides.map((slide, index) => (
                 <div
                   key={slide.number}
-                  className={`slide-page mb-8 pb-8 ${index < slides.length - 1 ? "border-b border-gray-200 dark:border-gray-700 print:break-after-page" : ""}`}
+                  className={`slide-page mb-8 pb-8 relative ${index < slides.length - 1 ? "border-b border-gray-200 dark:border-gray-700 print:break-after-page" : ""}`}
                 >
+                  {/* Small Brand Icon - larger on first slide */}
+                  <div
+                    className={`absolute top-0 right-0 ${index === 0 ? "text-3xl opacity-50" : "text-xl opacity-40"}`}
+                    aria-hidden="true"
+                  >
+                    {SLIDE_DECK_BRAND_ICON}
+                  </div>
+
                   {/* Slide Header */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">

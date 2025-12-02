@@ -1,6 +1,9 @@
 import * as React from "react";
 import styles from "./Downloads.module.css";
 
+/** Branded icon for slide decks - bar chart emoji */
+const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+
 export interface SlideSectionProps {
   /** Slide number */
   number: number;
@@ -16,6 +19,8 @@ export interface SlideSectionProps {
   script?: string;
   /** Children content (alternative to keyPoints) */
   children?: React.ReactNode;
+  /** Whether this is the first slide (shows larger brand icon) */
+  isFirst?: boolean;
 }
 
 /**
@@ -30,9 +35,20 @@ export default function SlideSection({
   keyPoints,
   script,
   children,
+  isFirst,
 }: SlideSectionProps): React.ReactElement {
   return (
     <div className={styles.slidePage} data-slide-number={number}>
+      {/* Brand Icon - larger on first slide, smaller on others */}
+      <div
+        className={
+          isFirst ? styles.slideBrandIconLarge : styles.slideBrandIconSmall
+        }
+        aria-hidden="true"
+      >
+        {SLIDE_DECK_BRAND_ICON}
+      </div>
+
       {/* Slide Header */}
       <div className={styles.slideHeader}>
         <div className={styles.slideHeaderLeft}>

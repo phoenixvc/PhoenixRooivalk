@@ -3,6 +3,9 @@ import styles from "./Downloads.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import type { Slide } from "./SlideDeckDownload";
 
+/** Branded icon for slide decks - bar chart emoji */
+const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+
 // Client-only PPTX generator for SlideDeck
 interface SlideDeckPptxGeneratorProps {
   children: React.ReactNode;
@@ -198,6 +201,9 @@ export default function SlideDeck({
 
       {/* Print-only title page */}
       <div className={styles.printTitlePage}>
+        <div className={styles.printTitleBrandIcon} aria-hidden="true">
+          {SLIDE_DECK_BRAND_ICON}
+        </div>
         <h1 className={styles.printTitle}>{title}</h1>
         <p className={styles.printMeta}>
           {duration}-Minute Presentation | {slideCount} Slides
