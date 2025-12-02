@@ -15,6 +15,7 @@ import React, {
 } from "react";
 import { supportService, ContentTimestamps } from "../services/supportService";
 import { useAuth } from "./AuthContext";
+import { isCloudConfigured, getCurrentProvider } from "../services/cloud";
 
 const NEWS_LAST_SEEN_KEY = "phoenix-news-last-seen";
 const SUPPORT_LAST_SEEN_KEY = "phoenix-support-last-seen";
@@ -126,10 +127,6 @@ export function NotificationBadgeProvider({
 
       // Log cloud service status
       try {
-        const {
-          isCloudConfigured,
-          getCurrentProvider,
-        } = require("../services/cloud");
         console.error("Cloud provider:", getCurrentProvider());
         console.error("Cloud configured:", isCloudConfigured());
       } catch (configError) {

@@ -5,7 +5,12 @@
  * via Azure Functions.
  */
 
-import { getFunctionsService, isCloudConfigured } from "./cloud";
+import {
+  getFunctionsService,
+  isCloudConfigured,
+  getCurrentProvider,
+  getCloudServices,
+} from "./cloud";
 
 /**
  * Contact form data structure
@@ -143,11 +148,6 @@ class SupportService {
 
       // Log cloud configuration status
       try {
-        const {
-          isCloudConfigured,
-          getCurrentProvider,
-          getCloudServices,
-        } = require("./cloud");
         const configured = isCloudConfigured();
         const provider = getCurrentProvider();
         const services = getCloudServices();
@@ -160,13 +160,12 @@ class SupportService {
         );
 
         if (!services.functions.isConfigured()) {
+          const networkStatus = navigator.onLine ? "Online" : "Offline";
           console.error(
             "⚠️  AI Functions not available. Please check:",
-            "\n  • Network connection (currently: " +
-              (navigator.onLine ? "Online" : "Offline") +
-              ")",
-            "\n  • Azure Functions configuration (AZURE_FUNCTIONS_BASE_URL)",
-            "\n  • Cloud provider settings (currently: " + provider + ")",
+            `\n  • Network connection (currently: ${networkStatus})`,
+            `\n  • Azure Functions configuration (AZURE_FUNCTIONS_BASE_URL)`,
+            `\n  • Cloud provider settings (currently: ${provider})`,
           );
         }
       } catch (configError) {
