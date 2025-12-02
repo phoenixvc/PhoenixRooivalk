@@ -95,6 +95,7 @@ const sidebars: SidebarsConfig = {
           label: "Presentations",
           collapsed: true,
           items: [
+            "executive/demo-pitch",
             "executive/presentation-materials",
             "executive/key-questions-cheatsheet",
             "executive/team-status",
