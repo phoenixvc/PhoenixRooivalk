@@ -367,6 +367,62 @@ export const RKV_M = {
   TRL: 7,
 };
 
+/** Manufacturing Values */
+export const MANUFACTURING = {
+  // Investment
+  FACILITY_SETUP: "R50M ($3.3M)",
+  EQUIPMENT_TOOLING: "R30M ($2M)",
+  WORKING_CAPITAL: "R20M ($1.3M)",
+  TOTAL_INVESTMENT: "R100M ($6.6M)",
+
+  // Production targets
+  YEAR_1_SYSTEMS: 10,
+  YEAR_2_SYSTEMS: 50,
+  YEAR_3_SYSTEMS: 200,
+  YEAR_4_SYSTEMS: "500+",
+
+  // Costs
+  INHOUSE_COST: "R850,000",
+  OUTSOURCED_COST: "R1,400,000",
+  COST_REDUCTION: "40%",
+  MARGIN_IMPROVEMENT: "65%",
+
+  // Payback
+  PAYBACK_PERIOD: "18 months",
+};
+
+/** Net Specifications */
+export const NETS = {
+  // Air-to-Air Interceptor Net
+  AIR_TO_AIR_SIZE: "3m × 3m (9 m²)",
+  AIR_TO_AIR_STOWED: "150mm × 80mm cylinder",
+  AIR_TO_AIR_MESH: "50mm × 50mm",
+  AIR_TO_AIR_STRENGTH: "450 kg per strand",
+  AIR_TO_AIR_WEIGHT: "180g",
+  AIR_TO_AIR_DEPLOYMENT: "15 m/s expansion",
+  AIR_TO_AIR_TEMP_RANGE: "-40°C to +85°C",
+
+  // Large Format Net
+  LARGE_FORMAT_SIZE: "6m × 6m (36 m²)",
+  LARGE_FORMAT_STRENGTH: "800 kg per strand",
+  LARGE_FORMAT_TARGET_SPEED: "Up to 150 km/h",
+
+  // Ground-Launched Net (SkySnare)
+  GROUND_SIZE: "2m × 2m (4 m²)",
+  GROUND_RANGE: "15-30m effective",
+  GROUND_MATERIAL: "HDPE/Nylon blend",
+  GROUND_MESH: "40mm × 40mm",
+  GROUND_WEIGHT: "85g",
+  GROUND_RELOAD_TIME: "30 seconds",
+
+  // Net Launcher Pod
+  POD_DIMENSIONS: "180mm × 100mm × 100mm",
+  POD_WEIGHT: "350g",
+  PODS_PER_RKV_M: 4,
+  LAUNCH_VELOCITY: "25 m/s",
+  EFFECTIVE_RANGE: "10-30m from target",
+};
+
 /** All values combined for easy import */
 export const ALL_VALUES = {
   MARKET,
@@ -384,4 +440,6 @@ export const ALL_VALUES = {
   TECH,
   FUNDING,
   RKV_M,
+  MANUFACTURING,
+  NETS,
 };

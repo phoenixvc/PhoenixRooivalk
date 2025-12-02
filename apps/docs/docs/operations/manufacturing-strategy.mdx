@@ -3,18 +3,20 @@ id: manufacturing-strategy
 title: Phoenix Rooivalk Manufacturing Strategy
 sidebar_label: Phoenix Rooivalk Manufacturing
 difficulty: intermediate
-estimated_reading_time: 6
-points: 15
+timeEstimate: 6
+xpReward: 15
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - operations
 ---
 
-# Phoenix Rooivalk Manufacturing Strategy
+import { MANUFACTURING, PRICING, HARDWARE, TEAM } from "@site/src/data/values";
 
 ## Executive Summary
 
 Phoenix Rooivalk's manufacturing strategy leverages a dual entity approach:
-Delaware C-Corp for US/ITAR markets and South African entity for global non-ITAR
+{TEAM.COMPANY_STRUCTURE} for US/ITAR markets and {TEAM.SECONDARY_ENTITY} for global non-ITAR
 markets. The hybrid production model balances in-house manufacturing for IP
 protection with strategic sourcing for cost optimization and supply chain
 resilience.
@@ -119,10 +121,10 @@ resilience.
 
 **Investment Requirements**
 
-- Facility setup: R50M ($3.3M)
-- Equipment and tooling: R30M ($2M)
-- Working capital: R20M ($1.3M)
-- **Total: R100M ($6.6M)**
+- Facility setup: {MANUFACTURING.FACILITY_SETUP}
+- Equipment and tooling: {MANUFACTURING.EQUIPMENT_TOOLING}
+- Working capital: {MANUFACTURING.WORKING_CAPITAL}
+- **Total: {MANUFACTURING.TOTAL_INVESTMENT}**
 
 ### Secondary Manufacturing Sites
 
@@ -144,7 +146,7 @@ resilience.
 
 ## Production Targets and Scaling
 
-### Year 1: Prototype and Demonstration (10 systems)
+### Year 1: Prototype and Demonstration ({MANUFACTURING.YEAR_1_SYSTEMS} systems)
 
 **Production Focus**
 
@@ -160,7 +162,7 @@ resilience.
 - 50 Interceptor drones
 - Complete software integration
 
-### Year 2: Early Customer Production (50 systems)
+### Year 2: Early Customer Production ({MANUFACTURING.YEAR_2_SYSTEMS} systems)
 
 **Production Focus**
 
@@ -176,7 +178,7 @@ resilience.
 - 250 Interceptor drones
 - Training and support systems
 
-### Year 3: Scale Production (200 systems)
+### Year 3: Scale Production ({MANUFACTURING.YEAR_3_SYSTEMS} systems)
 
 **Production Focus**
 
@@ -192,7 +194,7 @@ resilience.
 - 1,000 Interceptor drones
 - Global support network
 
-### Year 4+: Mass Production (500+ systems)
+### Year 4+: Mass Production ({MANUFACTURING.YEAR_4_SYSTEMS} systems)
 
 **Production Focus**
 
@@ -214,37 +216,37 @@ resilience.
 
 ### Manufacturing Cost Breakdown
 
-**In-House Manufacturing (R850,000 per system)**
+**In-House Manufacturing ({MANUFACTURING.INHOUSE_COST} per system)**
 
 - **Materials**: R400,000 (47%)
 - **Labor**: R200,000 (24%)
 - **Overhead**: R150,000 (18%)
 - **Profit**: R100,000 (11%)
 
-**Outsourced Manufacturing (R1,400,000 per system)**
+**Outsourced Manufacturing ({MANUFACTURING.OUTSOURCED_COST} per system)**
 
 - **Materials**: R700,000 (50%)
 - **Labor**: R350,000 (25%)
 - **Overhead**: R200,000 (14%)
 - **Profit**: R150,000 (11%)
 
-**Cost Advantage**: 40% cost reduction through in-house manufacturing
+**Cost Advantage**: {MANUFACTURING.COST_REDUCTION} cost reduction through in-house manufacturing
 
 ### Gross Margin Analysis
 
 **In-House Manufacturing**
 
-- **Cost**: R850,000 per system
+- **Cost**: {MANUFACTURING.INHOUSE_COST} per system
 - **Selling Price**: R1,200,000 per system
 - **Gross Margin**: 29% (R350,000 per system)
 
 **Outsourced Manufacturing**
 
-- **Cost**: R1,400,000 per system
+- **Cost**: {MANUFACTURING.OUTSOURCED_COST} per system
 - **Selling Price**: R1,200,000 per system
 - **Gross Margin**: -17% (R200,000 loss per system)
 
-**Margin Improvement**: 46% through in-house manufacturing
+**Margin Improvement**: {MANUFACTURING.MARGIN_IMPROVEMENT} through in-house manufacturing
 
 ---
 
@@ -299,7 +301,7 @@ resilience.
 
 - ISO 9001:2015 quality management
 - AS9100 aerospace quality standards
-- MIL-STD-810H environmental testing
+- {HARDWARE.MIL_SPEC} environmental testing
 - MIL-STD-461 electromagnetic compatibility
 
 **Testing Facilities**
@@ -423,14 +425,12 @@ advantages to build a global defense technology leader. The hybrid production
 model balances IP protection with cost optimization, while the multi-facility
 approach ensures supply chain resilience and market responsiveness.
 
-With proper execution, the manufacturing strategy can deliver 40% cost
+With proper execution, the manufacturing strategy can deliver {MANUFACTURING.COST_REDUCTION} cost
 advantages while maintaining world-class quality standards, positioning Phoenix
 Rooivalk for global market leadership.
 
 ---
 
 _This document contains confidential manufacturing information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
-
-_Context improved by Giga AI_
