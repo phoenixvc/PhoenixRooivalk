@@ -184,14 +184,14 @@ export const companyStructure = {
 /** Contact Information */
 export const contact = {
   general: {
-    email: "jurie@phoenixvc.tech",
-    phone: "+27 (069) 140-6835",
+    email: "contact@phoenixvc.tech",
+    phone: "+27 (0) 10 880 0000",
     website: "https://phoenixrooivalk.netlify.app/",
     linkedin: "Phoenix Rooivalk Defense Systems",
   },
   inquiries: {
-    investment: "jurie@phoenixvc.tech",
-    technical: "jurie@phoenixvc.tech",
-    partnerships: "jurie@phoenixvc.tech",
+    investment: "investors@phoenixvc.tech",
+    technical: "technical@phoenixvc.tech",
+    partnerships: "partnerships@phoenixvc.tech",
   },
 };

@@ -95,6 +95,7 @@ export const PERFORMANCE = {
   RESPONSE_TIME_MAX: 195,
   VS_COMPETITORS: "10-150x faster",
   COMPETITOR_RANGE: "5,000-30,000ms",
+  COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 
   // Detection
   DETECTION_LATENCY: "50ms",
@@ -257,8 +258,8 @@ export const TEAM = {
   SECONDARY_ENTITY: "South African Entity (Q2 2026)",
 
   // Contact
-  CONTACT_EMAIL: "jurie@phoenixvc.tech",
-  CONTACT_PHONE: "+27 (069) 140-6835",
+  CONTACT_EMAIL: "contact@phoenixvc.tech",
+  CONTACT_PHONE: "+27 (0) 10 880 0000",
 };
 
 /** Roadmap Values */
@@ -296,6 +297,7 @@ export const COMPETITORS = {
 
   // Pricing
   DRONESHIELD_PRICE: "$1.2M+",
+  DRONESHIELD_VALUATION: "$500M+",
   DEDRONE_PRICE: "$1.5M+",
   FORTEM_PRICE: "$800K-1.2M",
   ANDURIL_PRICE: "$100K-$500K",
