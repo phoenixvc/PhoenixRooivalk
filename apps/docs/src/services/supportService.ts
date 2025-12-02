@@ -120,7 +120,61 @@ class SupportService {
         {},
       );
     } catch (error) {
-      console.error("Failed to fetch content timestamps:", error);
+      // Enhanced error logging with diagnostic information
+      console.group("❌ Failed to fetch content timestamps");
+      console.error("Error:", error);
+      console.error(
+        "Error type:",
+        error instanceof Error ? error.constructor.name : typeof error,
+      );
+      console.error(
+        "Error message:",
+        error instanceof Error ? error.message : String(error),
+      );
+
+      // Log stack trace if available
+      if (error instanceof Error && error.stack) {
+        console.error("Stack trace:", error.stack);
+      }
+
+      // Log network and configuration status
+      console.error("Network status:", navigator.onLine ? "Online" : "Offline");
+      console.error("Timestamp:", new Date().toISOString());
+
+      // Log cloud configuration status
+      try {
+        const {
+          isCloudConfigured,
+          getCurrentProvider,
+          getCloudServices,
+        } = require("./cloud");
+        const configured = isCloudConfigured();
+        const provider = getCurrentProvider();
+        const services = getCloudServices();
+
+        console.error("Cloud configured:", configured);
+        console.error("Cloud provider:", provider);
+        console.error(
+          "Functions service configured:",
+          services.functions.isConfigured(),
+        );
+
+        if (!services.functions.isConfigured()) {
+          console.error(
+            "⚠️  AI Functions not available. Please check:",
+            "\n  • Network connection (currently: " +
+              (navigator.onLine ? "Online" : "Offline") +
+              ")",
+            "\n  • Azure Functions configuration (AZURE_FUNCTIONS_BASE_URL)",
+            "\n  • Cloud provider settings (currently: " + provider + ")",
+          );
+        }
+      } catch (configError) {
+        console.error("Failed to retrieve cloud configuration:", configError);
+      }
+
+      console.groupEnd();
+
       // Return defaults on error
       return {
         newsUpdatedAt: Date.now(),
