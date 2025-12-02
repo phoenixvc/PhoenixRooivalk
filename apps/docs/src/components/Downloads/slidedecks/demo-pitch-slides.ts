@@ -266,10 +266,55 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 8: TEAM
+  // SLIDE 8: FINANCIALS & INVESTMENT ASK
   // ==========================================
   {
     number: 8,
+    title: "The Ask: $500K-$1M Seed Round",
+    duration: 60,
+    icon: "💰",
+    layout: "image",
+    image: "/img/investment-breakdown.svg",
+    imageCaption: "18-month runway with clear milestones to Series A",
+    keyPoints: [
+      {
+        text: "**Investment Allocation:**",
+        subPoints: [
+          "**40%** R&D / Engineering - AI/ML, edge processing, firmware",
+          "**25%** Hardware / Manufacturing - prototypes, tooling, BOM",
+          "**15%** Sales & Marketing - D2C launch, trade shows, pilots",
+          "**10%** Operations - legal, IP protection, infrastructure",
+          "**10%** Certification - CPSC, ASTM, CE marking",
+        ],
+      },
+      {
+        text: "**18-Month Runway to Series A:**",
+        subPoints: [
+          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
+          "**Q3-Q4 2026**: Scale to $500K ARR, 3-5 enterprise deals",
+          "**Series A ready** with proven revenue and market traction",
+        ],
+      },
+      {
+        text: "**Use of Funds Milestones:**",
+        subPoints: [
+          "Complete prototype → first 100 units",
+          "Achieve certifications → unlock EU/US markets",
+          "Close pilot deals → prove enterprise value",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Be specific about how the money will be used. Investors want to see a clear path to next milestones. Emphasize the 18-month runway and Series A path.",
+    script:
+      "We're raising $500K to $1M in seed funding. Here's exactly how we'll use it: 40% goes to R&D - continuing our AI and edge processing development. 25% to hardware and manufacturing for prototypes and tooling. 15% to sales and marketing for our direct-to-consumer launch and pilot programs. 10% to operations including legal and IP protection. And 10% to certifications that unlock the EU and US markets. This gives us 18 months of runway with clear milestones: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4, and Series A ready with proven traction.",
+  },
+
+  // ==========================================
+  // SLIDE 9: TEAM
+  // ==========================================
+  {
+    number: 9,
     title: "Founding Team: 60+ Years Combined Expertise",
     duration: 45,
     icon: "👥",
@@ -331,10 +376,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 9: CALL TO ACTION
+  // SLIDE 10: CALL TO ACTION
   // ==========================================
   {
-    number: 9,
+    number: 10,
     title: "Let's Defend Critical Infrastructure Together",
     duration: 30,
     icon: "🎯",
@@ -358,7 +403,7 @@ export const demoPitchSlides: Slide[] = [
 
 export const demoPitchMeta = {
   title: "Phoenix Rooivalk: Demo Pitch",
-  duration: 9,
+  duration: 10,
   audience: "Investors, Strategic Partners, Demo Attendees",
   date: "December 2025",
   colorTheme: "investor" as const,
