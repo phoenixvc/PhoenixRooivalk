@@ -147,8 +147,8 @@ function getKeyPointText(point: KeyPoint): string {
 }
 
 /**
- * Generate QR code as data URL
- * Uses qrcode package for offline generation
+ * Generate QR code as data URL using the qrcode npm library
+ * Returns a base64 data URL or empty string on error
  */
 async function getQrCodeUrl(data: string, size = 150): Promise<string> {
   try {
@@ -454,7 +454,13 @@ export async function generatePptx(
           w: 6.0,
           h: 3.0,
         });
-      } catch {
+      } catch (err) {
+        // Log the error for debugging
+        console.error(
+          `[generatePptx] Failed to add image on slide ${slide.number} ("${slide.title}"):`,
+          err instanceof Error ? err.message : err,
+          err instanceof Error ? err.stack : "",
+        );
         // If image fails, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 2.0,
@@ -876,17 +882,36 @@ export async function generatePptx(
       align: "center",
     });
 
-    // Add QR code image
-    try {
-      summarySlide.addImage({
-        data: qrUrl,
-        x: 4.0,
-        y: 5.4,
-        w: 1.5,
-        h: 1.5,
-      });
-    } catch {
-      // If QR code fails, show URL text instead
+    // Add QR code image if generated successfully
+    if (qrUrl) {
+      try {
+        summarySlide.addImage({
+          data: qrUrl, // Use data instead of path for base64 data URLs
+          x: 4.0,
+          y: 5.4,
+          w: 1.5,
+          h: 1.5,
+        });
+      } catch (err) {
+        // Log the error for debugging
+        console.error(
+          `[generatePptx] Failed to add QR code on summary slide:`,
+          err instanceof Error ? err.message : err,
+          err instanceof Error ? err.stack : "",
+        );
+        // If QR code fails, show URL text instead
+        summarySlide.addText(qrData, {
+          x: 2.5,
+          y: 5.5,
+          w: 5.0,
+          h: 0.3,
+          fontSize: 12,
+          color: colors.primary,
+          align: "center",
+        });
+      }
+    } else {
+      // If QR code generation failed, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
         y: 5.5,

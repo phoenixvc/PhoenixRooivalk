@@ -387,9 +387,17 @@
 
 /* Two-Column Layout */
 .slideTwoColumn {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .slideTwoColumn {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .slideColumn {
@@ -404,9 +412,16 @@
 }
 
 .slideColumnDivider {
+  display: none;
   width: 2px;
   background: var(--ifm-color-primary);
   opacity: 0.5;
+}
+
+@media (min-width: 640px) {
+  .slideColumnDivider {
+    display: block;
+  }
 }
 
 /* Quote Layout */
@@ -444,7 +459,7 @@
 
 .slideCodeBlock {
   position: relative;
-  background: #1e1e1e;
+  background: var(--ifm-background-color);
   border-radius: 0.5rem;
   overflow: hidden;
   border: 1px solid var(--ifm-color-primary);
@@ -455,7 +470,7 @@
   top: 0.5rem;
   right: 0.75rem;
   font-size: 0.75rem;
-  color: #888;
+  color: var(--ifm-color-emphasis-500);
   font-family: var(--ifm-font-family-monospace);
 }
 
@@ -468,7 +483,7 @@
 .slideCodePre code {
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.875rem;
-  color: #d4d4d4;
+  color: var(--ifm-font-color-base);
   white-space: pre;
 }
 
