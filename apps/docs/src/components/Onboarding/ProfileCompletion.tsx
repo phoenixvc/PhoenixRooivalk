@@ -5,7 +5,7 @@
  * - First name, Last name (required)
  * - LinkedIn, Discord (required)
  * - WhatsApp (optional)
- * 
+ *
  * Supports configurable skip button via Docusaurus customFields
  */
 
@@ -47,10 +47,11 @@ export function ProfileCompletion({
   initialData,
 }: ProfileCompletionProps): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
-  const onboardingConfig = (siteConfig.customFields?.onboardingConfig as {
-    enableSkipSignup?: boolean;
-    enableSkipProfileCompletion?: boolean;
-  }) || {};
+  const onboardingConfig =
+    (siteConfig.customFields?.onboardingConfig as {
+      enableSkipSignup?: boolean;
+      enableSkipProfileCompletion?: boolean;
+    }) || {};
 
   const showSkipButton =
     onboardingConfig.enableSkipProfileCompletion !== false && onSkip;
