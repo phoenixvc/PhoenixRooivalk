@@ -1,0 +1,296 @@
+/**
+ * Phase Filter Styles
+ */
+
+/* Base filter container */
+.phase-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.phase-filter--compact {
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+/* Label */
+.phase-filter__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-content-secondary);
+  white-space: nowrap;
+}
+
+/* Dropdown mode */
+.phase-filter__select {
+  padding: 0.375rem 2rem 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.375rem;
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  min-width: 180px;
+}
+
+.phase-filter__select:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.phase-filter__select:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px var(--ifm-color-primary-lightest);
+}
+
+/* Button mode */
+.phase-filter--buttons {
+  flex-wrap: wrap;
+}
+
+.phase-filter__button-group {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.phase-filter__button {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.375rem;
+  background-color: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.phase-filter__button:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.phase-filter__button--active {
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.phase-filter__button--active:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+  color: white;
+}
+
+/* Compact mode buttons */
+.phase-filter--compact .phase-filter__button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6875rem;
+}
+
+/* Phase Indicator */
+.phase-indicator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.phase-indicator--mismatch {
+  background-color: var(--ifm-color-warning-lightest);
+  border: 1px solid var(--ifm-color-warning-light);
+}
+
+.phase-indicator__label {
+  color: var(--ifm-color-content-secondary);
+  font-weight: 500;
+}
+
+.phase-indicator__badges {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.phase-indicator__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  border-radius: 9999px;
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content-secondary);
+}
+
+.phase-indicator__badge--phase-1 {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.phase-indicator__badge--phase-2 {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.phase-indicator__badge--phase-3 {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.phase-indicator__badge--active {
+  box-shadow: 0 0 0 2px var(--ifm-color-primary);
+}
+
+.phase-indicator__mismatch-warning {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--ifm-color-warning-dark);
+  font-style: italic;
+}
+
+/* Phase Banner */
+.phase-banner {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.phase-banner--mismatch {
+  background-color: var(--ifm-color-info-lightest);
+  border: 1px solid var(--ifm-color-info-light);
+}
+
+.phase-banner__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.phase-banner__icon {
+  font-size: 1.25rem;
+  color: var(--ifm-color-info-dark);
+}
+
+.phase-banner__text {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content);
+  min-width: 200px;
+}
+
+.phase-banner__action {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--ifm-color-info);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.phase-banner__action:hover {
+  background-color: var(--ifm-color-info-dark);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .phase-indicator__badge--phase-1 {
+  background-color: #1e3a5f;
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .phase-indicator__badge--phase-2 {
+  background-color: #78350f;
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .phase-indicator__badge--phase-3 {
+  background-color: #064e3b;
+  color: #6ee7b7;
+}
+
+/* Sidebar integration */
+.sidebar-phase-filter {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-phase-filter .phase-filter__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-phase-filter .phase-filter__select {
+  width: 100%;
+}
+
+/* Sidebar mode specific */
+.phase-filter--sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.phase-filter--sidebar .phase-filter__label {
+  display: block;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-content-secondary);
+  font-weight: 600;
+}
+
+.phase-filter--sidebar .phase-filter__select {
+  width: 100%;
+  font-size: 0.8125rem;
+}
+
+.phase-filter__clear {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ifm-color-content-secondary);
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  align-self: flex-start;
+}
+
+.phase-filter__clear:hover {
+  color: var(--ifm-color-danger);
+  border-color: var(--ifm-color-danger);
+}
+
+/* Phase filter container in sidebar */
+#phase-filter-container {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background-color: var(--ifm-background-surface-color);
+}
