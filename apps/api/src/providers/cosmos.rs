@@ -54,7 +54,7 @@ impl CosmosProvider {
                 .map_err(|_| ProviderError::Connection("COSMOS_DB_DATABASE not set".to_string()))?;
 
             // Try key-based auth first, fall back to Entra
-            let client = if let Ok(key) = std::env::var("COSMOS_DB_KEY") {
+            let client = if std::env::var("COSMOS_DB_KEY").is_ok() {
                 // Note: This is a simplified example. In practice, you'd use:
                 // CosmosClient::new(account, AuthorizationToken::primary_key(&key))
                 // The actual implementation depends on the azure_data_cosmos version
