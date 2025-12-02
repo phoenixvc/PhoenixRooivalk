@@ -582,6 +582,48 @@ pub async fn get_user_by_session(
     }))
 }
 
+/// Update user profile
+pub async fn update_user_profile(
+    pool: &Pool<Sqlite>,
+    user_id: &str,
+    first_name: Option<&str>,
+    last_name: Option<&str>,
+    linkedin_url: Option<&str>,
+    discord_handle: Option<&str>,
+) -> Result<crate::models::UserOut, sqlx::Error> {
+    let current_timestamp_ms = Utc::now().timestamp_millis();
+
+    sqlx::query(
+        "UPDATE users SET first_name = ?1, last_name = ?2, linkedin_url = ?3, discord_handle = ?4, updated_ms = ?5 WHERE id = ?6"
+    )
+    .bind(first_name)
+    .bind(last_name)
+    .bind(linkedin_url)
+    .bind(discord_handle)
+    .bind(current_timestamp_ms)
+    .bind(user_id)
+    .execute(pool)
+    .await?;
+
+    // Fetch and return updated user
+    let row = sqlx::query(
+        "SELECT id, email, first_name, last_name, is_team_member, linkedin_url, discord_handle FROM users WHERE id = ?1"
+    )
+    .bind(user_id)
+    .fetch_one(pool)
+    .await?;
+
+    Ok(crate::models::UserOut {
+        id: row.get::<String, _>(0),
+        email: row.get::<String, _>(1),
+        first_name: row.get::<Option<String>, _>(2),
+        last_name: row.get::<Option<String>, _>(3),
+        is_team_member: row.get::<i64, _>(4) == 1,
+        linkedin_url: row.get::<Option<String>, _>(5),
+        discord_handle: row.get::<Option<String>, _>(6),
+    })
+}
+
 /// Create a career application
 pub async fn create_career_application(
     pool: &Pool<Sqlite>,

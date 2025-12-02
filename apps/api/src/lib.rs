@@ -109,6 +109,7 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         // Authentication
         .route("/auth/login", post(handlers::post_login))
         .route("/auth/me", get(handlers::get_me))
+        .route("/auth/profile", axum::routing::put(handlers::put_profile))
         // Career applications
         .route(
             "/career/apply",

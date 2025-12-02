@@ -26,6 +26,13 @@ sha2 = "0.10"
 hex = "0.4"
 # Async trait support for database providers
 async-trait = "0.1"
+# Azure Cosmos DB support (optional feature)
+azure_data_cosmos = { version = "0.20", optional = true }
+azure_identity = { version = "0.20", optional = true }
+azure_core = { version = "0.20", optional = true }
+
+[features]
+cosmos = ["azure_data_cosmos", "azure_identity", "azure_core"]
 
 [dev-dependencies]
 reqwest = { version = "0.12", features = ["json"] }
