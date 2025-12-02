@@ -13,7 +13,7 @@ tags:
   - counter-uas
 ---
 
-import { PERFORMANCE, HARDWARE, TECH } from "@site/src/data/values";
+import { PERFORMANCE, HARDWARE, TECH, RKV_SYSTEM } from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -34,7 +34,7 @@ resilient FSO and RF links.
 
 ### Core System Components
 
-#### RKV-M: Aerial VTOL Mothership
+#### {RKV_SYSTEM.RKV_M_NAME}: {RKV_SYSTEM.RKV_M_FULL_NAME}
 
 - **Primary Function**: Picket, relay, and mini launch platform
 - **Capabilities**:
@@ -45,7 +45,7 @@ resilient FSO and RF links.
 - **Design**: Tilt-quad configuration with ducted rotors
 - **Performance**: High-altitude operations, extended range, payload capacity
 
-#### RKV-I: Interceptor Minis
+#### {RKV_SYSTEM.RKV_I_NAME}: Interceptor Minis
 
 - **Primary Function**: Interceptor, decoy, and ISR (Intelligence, Surveillance,
   Reconnaissance) operations
@@ -57,7 +57,7 @@ resilient FSO and RF links.
 - **Control**: RF control or optional fiber-optic control
 - **Design**: Compact, high-performance interceptors
 
-#### RKV-G: Ground Control Station (GCS)
+#### {RKV_SYSTEM.RKV_G_NAME}: {RKV_SYSTEM.RKV_G_FULL_NAME}
 
 - **Primary Function**: Mobile ground control, mast operations, and logistics
   support
@@ -69,7 +69,7 @@ resilient FSO and RF links.
 - **Design**: Rover-based mobile platform
 - **Performance**: All-terrain mobility, extended operational range
 
-#### RKV-C2: Command and Control System
+#### {RKV_SYSTEM.RKV_C2_NAME}: Command and Control System
 
 - **Primary Function**: C2/data plane with strict Quality of Service (QoS)
 - **Capabilities**:
