@@ -74,7 +74,6 @@ export const MARKET = {
   // Market gaps
   FACILITIES_UNPROTECTED: "64%",
   COMPETITOR_FALSE_POSITIVE: "15-25%",
-  COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 
   // Recent European incidents (Nov 2025)
   EUROPE_INCIDENTS_2025: "4x increase YoY",
@@ -95,6 +94,7 @@ export const PERFORMANCE = {
   RESPONSE_TIME_MAX: 195,
   VS_COMPETITORS: "10-150x faster",
   COMPETITOR_RANGE: "5,000-30,000ms",
+  COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 
   // Detection
   DETECTION_LATENCY: "50ms",
@@ -221,46 +221,36 @@ export const TEAM = {
   CTO_FULL_NAME: "Hans Jurgens (Jurie) Smit",
   CTO_TITLE: "Co-Founder & CTO",
   CTO_LINKEDIN: "https://www.linkedin.com/in/juriesmit/",
-  CTO_BACKGROUND: "Systems Engineer, 15+ years software & hardware development",
-  CTO_EDUCATION: "TBD",
-  CTO_EXPERTISE: [
-    "Edge AI/ML",
-    "Embedded Systems",
-    "Full-Stack Development",
-    "Hardware Integration",
-  ],
+  CTO_BACKGROUND: "Systems Engineer & AI Architect, 15+ years fintech, citizen platforms, multi-tenant SaaS",
+  CTO_EDUCATION: "B.Eng Industrial-Electronic (Stellenbosch), B.Com Quantitative Management (UNISA)",
+  CTO_EXPERTISE: ["Edge AI/ML", "System Architecture", "Full-Stack Development", "Agile Methodologies"],
 
   CEO_NAME: "Martyn Redelinghuys",
   CEO_FULL_NAME: "Martyn Redelinghuys",
   CEO_TITLE: "Co-Founder & CEO",
   CEO_LINKEDIN: "https://www.linkedin.com/in/martynrede/",
-  CEO_BACKGROUND:
-    "20+ years energy, mining, defense. R500M+ portfolio management",
-  CEO_EDUCATION: "MBA (GIBS)",
-  CEO_EXPERTISE: [
-    "Business Development",
-    "Strategic Partnerships",
-    "Capital Markets",
-    "Defense Industry",
-  ],
+  CEO_BACKGROUND: "20+ years energy, mining, defense. R500M+ portfolio management. Executive Project Manager.",
+  CEO_EDUCATION: "MBA (GIBS), B.Eng Electrical & Electronic (Stellenbosch)",
+  CEO_EXPERTISE: ["Project Management", "Energy Strategy", "Business Development", "Capital Projects"],
+  CEO_CERTIFICATIONS: ["Certified Energy Manager (CEM)", "Certified Measurement & Verification Professional (CMVP)"],
 
   // Additional Team Members
-  MEMBER_3_NAME: "Pieter Lagrange",
-  MEMBER_3_TITLE: "TBD",
+  MEMBER_3_NAME: "Pieter La Grange",
+  MEMBER_3_TITLE: "Co-Founder & Hardware Lead",
   MEMBER_3_LINKEDIN: "https://www.linkedin.com/in/pieterlagrange/",
-  MEMBER_3_BACKGROUND: "TBD",
-  MEMBER_3_EDUCATION: "TBD",
-  MEMBER_3_EXPERTISE: ["TBD"],
+  MEMBER_3_BACKGROUND: "Electronics Design Engineer at Snuza, 15+ years embedded systems & medical devices",
+  MEMBER_3_EDUCATION: "B.Eng Electrical & Electronics (Stellenbosch)",
+  MEMBER_3_EXPERTISE: ["Embedded Firmware", "Hardware Design", "Low-Power ARM", "BLE/WiFi", "RTOS"],
 
   MEMBER_4_NAME: "Eben Maré",
-  MEMBER_4_TITLE: "TBD",
+  MEMBER_4_TITLE: "Co-Founder & CFO",
   MEMBER_4_LINKEDIN: "https://www.linkedin.com/in/ebenmare/",
-  MEMBER_4_BACKGROUND: "TBD",
-  MEMBER_4_EDUCATION: "TBD",
-  MEMBER_4_EXPERTISE: ["TBD"],
+  MEMBER_4_BACKGROUND: "15+ years investment banking, private equity, quantitative finance. Former Head Quant at Deloitte, CIO experience.",
+  MEMBER_4_EDUCATION: "BSc (Hons) Operations Research (UNISA), BSc Applied Mathematics (University of Pretoria)",
+  MEMBER_4_EXPERTISE: ["Private Equity", "Investment Management", "Quantitative Modeling", "Algorithmic Trading", "Derivatives"],
 
   // Team Stats
-  COMBINED_EXPERIENCE: "50+ years",
+  COMBINED_EXPERIENCE: "60+ years",
   TEAM_SIZE: 4,
 
   // Company Structure
@@ -268,8 +258,8 @@ export const TEAM = {
   SECONDARY_ENTITY: "South African Entity (Q2 2026)",
 
   // Contact
-  CONTACT_EMAIL: "investors@phoenixvc.tech",
-  CONTACT_PHONE: "TBD",
+  CONTACT_EMAIL: "jurie@phoenixvc.tech",
+  CONTACT_PHONE: "+27 (0) 10 880 0000",
 };
 
 /** Roadmap Values */
@@ -307,6 +297,7 @@ export const COMPETITORS = {
 
   // Pricing
   DRONESHIELD_PRICE: "$1.2M+",
+  DRONESHIELD_VALUATION: "$500M+",
   DEDRONE_PRICE: "$1.5M+",
   FORTEM_PRICE: "$800K-1.2M",
   ANDURIL_PRICE: "$100K-$500K",
