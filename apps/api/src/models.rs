@@ -111,3 +111,45 @@ pub struct PaymentReceiptOut {
     pub verified_at: i64,
     pub created_ms: i64,
 }
+
+// User Authentication models
+#[derive(Debug, Deserialize)]
+pub struct UserLoginIn {
+    pub email: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct UserOut {
+    pub id: String,
+    pub email: String,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    pub is_team_member: bool,
+    pub linkedin_url: Option<String>,
+    pub discord_handle: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SessionOut {
+    pub session_id: String,
+    pub user: UserOut,
+    pub expires_at: i64,
+}
+
+// Career Application models
+#[derive(Debug, Deserialize)]
+pub struct CareerApplicationIn {
+    pub position: String,
+    pub cover_letter: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct CareerApplicationOut {
+    pub id: String,
+    pub user_id: String,
+    pub position: String,
+    pub cover_letter: Option<String>,
+    pub status: String,
+    pub created_ms: i64,
+    pub updated_ms: i64,
+}
