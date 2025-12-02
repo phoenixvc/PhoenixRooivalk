@@ -1,5 +1,5 @@
 ---
-id: visual-elements/system-architecture-diagrams
+id: system-architecture-diagrams
 title: PhoenixRooivalk System Architecture Diagrams
 sidebar_label: PhoenixRooivalk System Architecture
 difficulty: expert

@@ -155,14 +155,20 @@ export const REVENUE = {
 /** Blockchain Values */
 export const BLOCKCHAIN = {
   PRIMARY_CHAIN: "Solana",
-  TPS: "65,000-100,000",
-  TPS_REAL_WORLD: "3,000-4,500",
-  TPS_MIN: 65000,
-  TPS_MAX: 100000,
-  FINALITY: "400ms",
+  // Legacy field for backward compatibility
+  TPS: "~107,000 (noop peak), ≈1,000 sustained",
+  // Peak theoretical performance (noop/test transactions)
+  TPS_PEAK: "~107,000 (noop peak)",
+  // Sustained real-world throughput
+  TPS_SUSTAINED: "≈1,000",
+  TPS_MIN: 1000, // Sustained minimum
+  TPS_MAX: 107000, // Peak maximum
+  // Post-Alpenglow upgrade finality target
+  FINALITY: "100–150ms (median, post-Alpenglow target)",
   FINALITY_SUB: "sub-2-second",
-  COST_PER_TX: "$0.00025",
-  ANNUAL_COST: "$7,884",
+  // Transaction cost with priority fee variability
+  COST_PER_TX: "~0.000005 SOL (~$0.0005) with variability for priority fees",
+  ANNUAL_COST: "$157.68", // Updated for new cost: 0.000005 SOL * 31,536,000 tx/year * $100/SOL
   ANNUAL_COST_CONTEXT: "for continuous logging (1 TPS)",
   HASH_ALGORITHM: "SHA-256",
   SIGNATURE_ALGORITHM: "Ed25519",
