@@ -3,13 +3,17 @@ id: performance-specifications
 title: Performance Specifications
 sidebar_label: Performance Specifications
 difficulty: advanced
-estimated_reading_time: 8
-points: 25
+timeEstimate: 8
+xpReward: 25
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - technical
   - performance
   - counter-uas
 ---
+
+import { PERFORMANCE, HARDWARE, BLOCKCHAIN, TECH } from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -26,18 +30,18 @@ metrics across all system components.
 
 **Detection Performance**
 
-- **Detection Accuracy**: 99.5% AI detection accuracy
-- **Response Time**: 50-195ms end-to-end response time
-- **False Positive Rate**: <1-2% target false positive rate
-- **Detection Range**: 500m-2km depending on sensor modality
-- **Concurrent Targets**: 10+ concurrent drone targets
+- **Detection Accuracy**: {PERFORMANCE.ACCURACY} AI detection accuracy
+- **Response Time**: {PERFORMANCE.RESPONSE_TIME} end-to-end response time
+- **False Positive Rate**: {PERFORMANCE.FALSE_POSITIVE} target false positive rate
+- **Detection Range**: {PERFORMANCE.DETECTION_RANGE} depending on sensor modality
+- **Concurrent Targets**: {PERFORMANCE.CONCURRENT_TARGETS} concurrent drone targets
 
 **System Performance**
 
-- **System Uptime**: 99.9% target system uptime
-- **Authentication Latency**: sub 2ms authentication time
+- **System Uptime**: {PERFORMANCE.AVAILABILITY} target system uptime
+- **Authentication Latency**: {PERFORMANCE.AUTH_LATENCY} authentication time
 - **Data Integrity**: 99.9% blockchain-verified data integrity
-- **Autonomous Operation**: Level-4 edge autonomy without network dependency
+- **Autonomous Operation**: {PERFORMANCE.AUTONOMY_LEVEL} edge autonomy without network dependency
 - **EW Resilience**: GPS-denied and jamming-resistant operation
 
 ---
@@ -48,63 +52,63 @@ metrics across all system components.
 
 **Jetson AGX Orin 64GB**
 
-- **AI Performance**: 275 TOPS (Tera Operations Per Second)
-- **CUDA Cores**: 2048 CUDA cores
-- **Tensor Cores**: 64 Tensor cores
-- **Memory**: 32GB LPDDR5 unified memory
-- **Memory Bandwidth**: 204.8 GB/s unified memory bandwidth
-- **Power Consumption**: 60W typical, 100W peak
-- **Operating Temperature**: -40°C to +85°C (Industrial variants)
+- **AI Performance**: {HARDWARE.COMPUTE_TOPS} (Tera Operations Per Second)
+- **CUDA Cores**: {HARDWARE.CUDA_CORES} CUDA cores
+- **Tensor Cores**: {HARDWARE.TENSOR_CORES} Tensor cores
+- **Memory**: {HARDWARE.MEMORY} LPDDR5 unified memory
+- **Memory Bandwidth**: {HARDWARE.MEMORY_BANDWIDTH} unified memory bandwidth
+- **Power Consumption**: {HARDWARE.POWER_TYPICAL} typical, {HARDWARE.POWER_PEAK} peak
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL} (Industrial variants)
 
 **Jetson Orin NX 16GB**
 
-- **AI Performance**: 100 TOPS
-- **CUDA Cores**: 1024 CUDA cores
+- **AI Performance**: {HARDWARE.ORIN_NX_TOPS}
+- **CUDA Cores**: {HARDWARE.ORIN_NX_CUDA} CUDA cores
 - **Tensor Cores**: 32 Tensor cores
-- **Memory**: 16GB LPDDR5 unified memory
+- **Memory**: {HARDWARE.ORIN_NX_MEMORY}
 - **Memory Bandwidth**: 102.4 GB/s unified memory bandwidth
-- **Power Consumption**: 30W typical, 50W peak
-- **Operating Temperature**: -40°C to +85°C
+- **Power Consumption**: {HARDWARE.ORIN_NX_POWER}
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL}
 
 **Jetson Nano**
 
-- **AI Performance**: 0.5 TOPS
-- **CUDA Cores**: 128 CUDA cores
-- **Memory**: 4GB LPDDR4
-- **Power Consumption**: 7W typical, 15W peak
-- **Operating Temperature**: -40°C to +85°C
+- **AI Performance**: {HARDWARE.NANO_TOPS}
+- **CUDA Cores**: {HARDWARE.NANO_CUDA} CUDA cores
+- **Memory**: {HARDWARE.NANO_MEMORY}
+- **Power Consumption**: {HARDWARE.NANO_POWER}
+- **Operating Temperature**: {HARDWARE.TEMP_RANGE_INDUSTRIAL}
 
 ### Sensor Performance Specifications
 
 **Camera Systems**
 
-- **MIPI CSI-2**: Up to 8 cameras (16 via virtual channels)
-- **Resolution**: 1080p-4K coverage
-- **Frame Rate**: 30-60 FPS sustained processing
-- **Latency**: <50ms sensor-to-decision latency
+- **MIPI CSI-2**: {HARDWARE.CAMERA_COUNT}
+- **Resolution**: {HARDWARE.CAMERA_RESOLUTION} coverage
+- **Frame Rate**: {TECH.FRAME_RATE} sustained processing
+- **Latency**: {PERFORMANCE.DETECTION_LATENCY} sensor-to-decision latency
 - **Integration**: Seamless integration with Jetson platform
 
 **LiDAR Systems**
 
 - **PCIe Gen4**: 16 lanes for LiDAR and radar sensors
-- **Measurements**: 1,000,000 measurements per second
+- **Measurements**: {HARDWARE.LIDAR_MEASUREMENTS}
 - **Accuracy**: Sub-meter accuracy
-- **Range**: 500m-2km depending on sensor modality
+- **Range**: {PERFORMANCE.DETECTION_RANGE} depending on sensor modality
 - **Weather Performance**: Weather-dependent performance optimization
 
 **RF Detection Systems**
 
-- **Frequency Range**: 100MHz-6GHz
+- **Frequency Range**: {HARDWARE.RF_FREQUENCY_RANGE}
 - **Protocol Analysis**: MAC address capture and signal analysis
 - **Jamming Resistance**: Frequency hopping and adaptive filtering
-- **Range**: 15km image transmission under active jamming
+- **Range**: {TECH.JAMMING_RANGE} image transmission under active jamming
 - **Latency**: Microsecond response to jamming detection
 
 **Acoustic Arrays**
 
 - **I2S Interfaces**: 4 interfaces for acoustic sensor arrays
 - **Frequency Range**: 50Hz-20kHz
-- **Range**: 200-500m range detecting autonomous drones
+- **Range**: {HARDWARE.ACOUSTIC_RANGE} detecting autonomous drones
 - **Environmental**: Works in GPS-denied areas
 - **Performance**: Real-time spectral analysis for rotor signature detection
 
@@ -114,19 +118,19 @@ metrics across all system components.
 
 ### AI/ML Performance
 
-**YOLOv9 Performance**
+**{TECH.AI_MODEL} Performance**
 
-- **mAP**: 99.7% mean Average Precision
-- **Precision**: 99.5% precision
+- **mAP**: {PERFORMANCE.YOLOV9_MAP} mean Average Precision
+- **Precision**: {PERFORMANCE.ACCURACY} precision
 - **Recall**: 99.2% recall
 - **Frame Rate**: 30+ FPS on Jetson Nano, 60+ FPS on Orin platforms
 - **Detection Range**: 100-1000 feet altitude with real-time processing
 
 **TensorRT Optimization**
 
-- **Speedup**: 5-10x speedup over standard inference
-- **Model Size**: <50MB optimized models for edge deployment
-- **Latency**: <50ms inference latency
+- **Speedup**: {TECH.TENSORRT_SPEEDUP} speedup over standard inference
+- **Model Size**: {TECH.MODEL_SIZE} optimized models for edge deployment
+- **Latency**: {PERFORMANCE.DETECTION_LATENCY} inference latency
 - **Throughput**: High throughput inference on edge devices
 - **Compatibility**: NVIDIA GPU acceleration
 
@@ -140,17 +144,17 @@ metrics across all system components.
 
 ### Blockchain Performance
 
-**Solana Integration**
+**{BLOCKCHAIN.PRIMARY_CHAIN} Integration**
 
-- **Throughput**: 65,000-100,000 TPS sustained
-- **Finality**: ~400ms using Proof of History
-- **Cost**: ~$0.00025 USD per evidence anchor
-- **Annual Cost**: $1,000 for continuous operation
+- **Throughput**: {BLOCKCHAIN.TPS} TPS sustained
+- **Finality**: {BLOCKCHAIN.FINALITY} using Proof of History
+- **Cost**: {BLOCKCHAIN.COST_PER_TX} USD per evidence anchor
+- **Annual Cost**: {BLOCKCHAIN.ANNUAL_COST} {BLOCKCHAIN.ANNUAL_COST_CONTEXT}
 - **Reliability**: Proven mainnet performance
 
 **Evidence Anchoring**
 
-- **Hash Generation**: SHA-256 hashing for evidence
+- **Hash Generation**: {BLOCKCHAIN.HASH_ALGORITHM} hashing for evidence
 - **Metadata Storage**: Location, timestamp, operator ID, sensor data
 - **On-Chain Storage**: 32-byte hash with metadata
 - **Off-Chain Storage**: Full evidence payloads in encrypted storage
@@ -188,23 +192,23 @@ metrics across all system components.
 **MANETs (Mobile Ad-Hoc Networks)**
 
 - **Frequency Bands**: M1-M6 (400-2500MHz)
-- **Throughput**: Over 100 Mbps with automatic failover routing
-- **Range**: Over 50km with automatic network reconfiguration
-- **Latency**: Sub-100ms coordination latency
+- **Throughput**: Over {TECH.MESH_THROUGHPUT} with automatic failover routing
+- **Range**: Over {TECH.MESH_RANGE} with automatic network reconfiguration
+- **Latency**: {TECH.COORDINATION_LATENCY} coordination latency
 - **Resilience**: Automatic failover and network healing
 
 **Doodle Labs Mesh Rider**
 
 - **Multi-Band Operation**: Automatic frequency selection
 - **Jamming Resistance**: Frequency hopping across multiple bands
-- **Performance**: 15km range under active jamming
+- **Performance**: {TECH.JAMMING_RANGE} range under active jamming
 - **Latency**: Microsecond response to jamming detection
 - **Reliability**: MIL-STD compliance for tactical operations
 
 **Meshmerize Aerial Edge**
 
 - **Mobile Access Points**: Drones as mobile network nodes
-- **Range**: Over 50km with automatic network reconfiguration
+- **Range**: Over {TECH.MESH_RANGE} with automatic network reconfiguration
 - **Performance**: High-throughput mesh networking
 - **Resilience**: Automatic network healing and reconfiguration
 
@@ -253,7 +257,7 @@ metrics across all system components.
 - **Frequency Bands**: 2.4GHz, 5.2GHz, 5.8GHz, 900MHz
 - **Response Time**: Microsecond response to jamming detection
 - **Adaptive Filtering**: Configurable notch filters rejecting chirp jammers
-- **Performance**: 15km image transmission under active jamming
+- **Performance**: {TECH.JAMMING_RANGE} image transmission under active jamming
 
 **Pentagon Demonstration 2025 Requirements**
 
@@ -261,47 +265,7 @@ metrics across all system components.
 - **Waveform Requirements**: Low probability of intercept/detect waveforms
 - **Autonomous Response**: Electromagnetic spectrum maneuvering
 - **Cueing Accuracy**: Accurate cueing within 2km slant range for Group 1 drones
-- **Performance**: Autonomous response to EMS impact without operator
-  intervention
-
----
-
-## Performance Testing and Validation
-
-### Performance Benchmarks
-
-**Detection Performance Testing**
-
-- **Accuracy Testing**: Comprehensive accuracy testing across scenarios
-- **False Positive Testing**: False positive rate validation
-- **Response Time Testing**: End-to-end response time measurement
-- **Range Testing**: Detection range validation across sensor modalities
-- **Environmental Testing**: Performance testing in various environmental
-  conditions
-
-**System Performance Testing**
-
-- **Load Testing**: System performance under high load conditions
-- **Stress Testing**: System behavior under extreme stress conditions
-- **Endurance Testing**: Long-term system performance validation
-- **Reliability Testing**: System reliability and fault tolerance testing
-- **Security Testing**: Security performance and vulnerability testing
-
-### Performance Monitoring
-
-**Real-Time Monitoring**
-
-- **Performance Metrics**: Real-time performance metric collection
-- **Alert Systems**: Automated alerting for performance degradation
-- **Dashboard**: Real-time performance dashboards
-- **Reporting**: Automated performance reporting
-
-**Performance Optimization**
-
-- **Continuous Optimization**: Continuous performance optimization
-- **Resource Management**: Efficient resource management
-- **Load Balancing**: Dynamic load balancing
-- **Scaling**: Automatic scaling based on demand
+- **Performance**: Autonomous response to EMS impact without operator intervention
 
 ---
 
@@ -313,9 +277,9 @@ metrics across all system components.
 
 - **Response Time**: <200ms for critical threats
 - **Accuracy**: >99% detection accuracy
-- **Reliability**: 99.9% system uptime
-- **Range**: 3-5km detection range
-- **Concurrent Targets**: 10+ concurrent threats
+- **Reliability**: {PERFORMANCE.AVAILABILITY} system uptime
+- **Range**: {PERFORMANCE.DETECTION_RANGE_EXTENDED} detection range
+- **Concurrent Targets**: {PERFORMANCE.CONCURRENT_TARGETS} concurrent threats
 
 **Tactical Performance Requirements**
 
@@ -331,7 +295,7 @@ metrics across all system components.
 
 - **Response Time**: <500ms for infrastructure threats
 - **Accuracy**: >99% detection accuracy
-- **Reliability**: 99.9% system uptime
+- **Reliability**: {PERFORMANCE.AVAILABILITY} system uptime
 - **Range**: 1-3km detection range
 - **Integration**: Seamless integration with existing systems
 
@@ -345,42 +309,6 @@ metrics across all system components.
 
 ---
 
-## Performance Optimization
-
-### System Optimization
-
-**Hardware Optimization**
-
-- **GPU Acceleration**: NVIDIA GPU acceleration for AI/ML workloads
-- **Memory Optimization**: Optimized memory usage and allocation
-- **Storage Optimization**: Optimized storage performance
-- **Network Optimization**: Optimized network performance
-
-**Software Optimization**
-
-- **Algorithm Optimization**: Optimized algorithms for edge deployment
-- **Code Optimization**: Optimized code for performance
-- **Resource Management**: Efficient resource management
-- **Caching**: Multi-level caching strategies
-
-### Performance Tuning
-
-**Parameter Tuning**
-
-- **Detection Thresholds**: Optimized detection thresholds
-- **Response Times**: Optimized response time parameters
-- **Resource Allocation**: Optimized resource allocation
-- **Performance Targets**: Optimized performance targets
-
-**Continuous Optimization**
-
-- **Performance Monitoring**: Continuous performance monitoring
-- **Optimization**: Continuous performance optimization
-- **Tuning**: Dynamic performance tuning
-- **Improvement**: Continuous performance improvement
-
----
-
 ## Performance Standards and Compliance
 
 ### Industry Standards
@@ -388,7 +316,7 @@ metrics across all system components.
 **Performance Standards**
 
 - **IEEE Standards**: IEEE performance standards compliance
-- **Military Standards**: MIL-STD compliance
+- **Military Standards**: {HARDWARE.MIL_SPEC} compliance
 - **Industry Standards**: Industry performance standards
 - **Best Practices**: Industry best practices
 
@@ -398,22 +326,6 @@ metrics across all system components.
 - **DoD Compliance**: DoD performance requirements
 - **Export Control**: Export control compliance
 - **Regulatory**: Regulatory performance requirements
-
-### Performance Certification
-
-**Certification Requirements**
-
-- **Performance Testing**: Comprehensive performance testing
-- **Validation**: Performance validation and certification
-- **Documentation**: Performance documentation and reporting
-- **Compliance**: Performance compliance verification
-
-**Ongoing Performance**
-
-- **Monitoring**: Continuous performance monitoring
-- **Validation**: Ongoing performance validation
-- **Improvement**: Continuous performance improvement
-- **Certification**: Ongoing performance certification
 
 ---
 
@@ -426,19 +338,15 @@ maintaining the highest standards of reliability, security, and compliance.
 
 Key performance features include:
 
-- **High Performance**: 275 TOPS AI performance with sub-200ms response times
+- **High Performance**: {HARDWARE.COMPUTE_TOPS} AI performance with <200ms response times
 - **Multi-Sensor**: Comprehensive sensor integration with real-time processing
 - **Blockchain**: High-performance blockchain evidence anchoring
-- **Network**: Resilient mesh networking with sub-100ms latency
+- **Network**: Resilient mesh networking with {TECH.COORDINATION_LATENCY} latency
 - **Operational**: GPS-denied and EW-resistant operation
 - **Scalability**: Scalable performance across deployment scenarios
-
-The performance specifications ensure operational effectiveness across the full
-spectrum of defense scenarios while maintaining the highest standards of
-performance, reliability, and compliance.
 
 ---
 
 _This document contains confidential performance information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._

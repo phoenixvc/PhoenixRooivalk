@@ -3,8 +3,10 @@ id: blockchain-integration
 title: Blockchain Integration
 sidebar_label: Blockchain Integration
 difficulty: advanced
-estimated_reading_time: 6
-points: 25
+timeEstimate: 6
+xpReward: 25
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - technical
   - blockchain
@@ -12,13 +14,15 @@ tags:
   - counter-uas
 ---
 
+import { BLOCKCHAIN } from "@site/src/data/values";
+
 ## Solana for Immutable Evidence Anchoring
 
 Solana provides exceptional capabilities for evidence anchoring in counter-drone
-operations with **3,000-4,500 real-world TPS**, **sub-2-second finality**, and
-remarkably low costs at **$0.00025 per transaction**. For a high-frequency
+operations with **{BLOCKCHAIN.TPS_REAL_WORLD} real-world TPS**, **{BLOCKCHAIN.FINALITY_SUB} finality**, and
+remarkably low costs at **{BLOCKCHAIN.COST_PER_TX} per transaction**. For a high-frequency
 logging scenario of one transaction per second continuously, annual costs would
-be only $7,884 compared to orders of magnitude more on other blockchains.
+be only {BLOCKCHAIN.ANNUAL_COST} compared to orders of magnitude more on other blockchains.
 
 ---
 
@@ -28,15 +32,16 @@ be only $7,884 compared to orders of magnitude more on other blockchains.
 
 **Transaction Throughput**
 
-- **Real-world TPS**: 3,000-4,500 transactions per second
-- **Finality Time**: Sub-2-second confirmation
-- **Transaction Cost**: $0.00025 per transaction
-- **Annual Cost**: $7,884 for continuous logging (1 TPS)
+- **Real-world TPS**: {BLOCKCHAIN.TPS_REAL_WORLD} transactions per second
+- **Theoretical TPS**: {BLOCKCHAIN.TPS} transactions per second
+- **Finality Time**: {BLOCKCHAIN.FINALITY_SUB} confirmation
+- **Transaction Cost**: {BLOCKCHAIN.COST_PER_TX} per transaction
+- **Annual Cost**: {BLOCKCHAIN.ANNUAL_COST} {BLOCKCHAIN.ANNUAL_COST_CONTEXT}
 
 **Cryptographic Security**
 
-- **Ed25519 Signatures**: 256-bit security with fast verification
-- **SHA-256 Hashing**: Collision-resistant 32-byte fingerprints
+- **{BLOCKCHAIN.SIGNATURE_ALGORITHM} Signatures**: {BLOCKCHAIN.SECURITY_BITS} security with fast verification
+- **{BLOCKCHAIN.HASH_ALGORITHM} Hashing**: Collision-resistant 32-byte fingerprints
 - **Proof of History**: Cryptographically verifiable timestamps
 - **Immutable Programs**: Permanent deployment without upgrade authority
 
@@ -44,9 +49,9 @@ be only $7,884 compared to orders of magnitude more on other blockchains.
 
 **Evidence Anchoring Pattern**
 
-1. **Hash Generation**: SHA-256 hash of drone intercept evidence
+1. **Hash Generation**: {BLOCKCHAIN.HASH_ALGORITHM} hash of drone intercept evidence
 2. **Metadata Storage**: Location, timestamp, operator ID, sensor data
-3. **On-chain Storage**: 32-byte hash with metadata on Solana
+3. **On-chain Storage**: 32-byte hash with metadata on {BLOCKCHAIN.PRIMARY_CHAIN}
 4. **Off-chain Storage**: Full evidence payloads in encrypted IPFS/Arweave
 5. **Audit Trail**: Immutable blockchain transaction with cryptographic proof
 
@@ -55,7 +60,7 @@ be only $7,884 compared to orders of magnitude more on other blockchains.
 - **Legal Proceedings**: Cryptographic proof of when events occurred
 - **Audit Trails**: Immutable records supporting legal requirements
 - **Timestamp Verification**: Proof of History ensures chronological ordering
-- **Data Integrity**: SHA-256 hashing prevents tampering
+- **Data Integrity**: {BLOCKCHAIN.HASH_ALGORITHM} hashing prevents tampering
 
 ---
 
@@ -143,16 +148,18 @@ pub struct DroneInterceptEvidence {
 
 ### Transaction Cost Comparison
 
-**Solana vs Other Blockchains**
+**{BLOCKCHAIN.PRIMARY_CHAIN} vs Other Blockchains**
 
-- **Solana**: $0.00025 per transaction
-- **Ethereum**: $5-50+ per transaction (variable)
-- **Polygon**: $0.01 per transaction
-- **Hedera**: $0.0001 per transaction
+| Blockchain | Cost per Transaction |
+|------------|---------------------|
+| **{BLOCKCHAIN.PRIMARY_CHAIN}** | {BLOCKCHAIN.COST_PER_TX} |
+| **Ethereum** | {BLOCKCHAIN.ETHEREUM_COST} (variable) |
+| **Polygon** | {BLOCKCHAIN.POLYGON_COST} |
+| **Hedera** | {BLOCKCHAIN.HEDERA_COST} |
 
 **Annual Cost Projections**
 
-- **Continuous Logging (1 TPS)**: $7,884 annually
+- **Continuous Logging (1 TPS)**: {BLOCKCHAIN.ANNUAL_COST} annually
 - **High-Frequency Logging (10 TPS)**: $78,840 annually
 - **Peak Operations (100 TPS)**: $788,400 annually
 - **Cost Efficiency**: Orders of magnitude lower than alternatives
@@ -163,7 +170,7 @@ pub struct DroneInterceptEvidence {
 
 - **Transaction Fees**: Minimal per-transaction costs
 - **Storage Costs**: Off-chain storage for full evidence
-- **Network Costs**: Solana network maintenance
+- **Network Costs**: {BLOCKCHAIN.PRIMARY_CHAIN} network maintenance
 - **Development Costs**: Smart contract development and maintenance
 
 **ROI Analysis**
@@ -181,15 +188,15 @@ pub struct DroneInterceptEvidence {
 
 **Hash Function Security**
 
-- **SHA-256**: Industry-standard cryptographic hash function
+- **{BLOCKCHAIN.HASH_ALGORITHM}**: Industry-standard cryptographic hash function
 - **Collision Resistance**: Extremely difficult to find hash collisions
 - **Preimage Resistance**: Cannot reverse-engineer original data
 - **Second Preimage Resistance**: Cannot find alternative data with same hash
 
 **Digital Signature Security**
 
-- **Ed25519**: Elliptic curve digital signature algorithm
-- **256-bit Security**: Equivalent to 128-bit symmetric key security
+- **{BLOCKCHAIN.SIGNATURE_ALGORITHM}**: Elliptic curve digital signature algorithm
+- **{BLOCKCHAIN.SECURITY_BITS} Security**: Equivalent to 128-bit symmetric key security
 - **Fast Verification**: Optimized for high-throughput applications
 - **Quantum Resistance**: Current security level adequate for near-term
 
@@ -286,10 +293,10 @@ pub struct DroneInterceptEvidence {
 
 ## Conclusion
 
-Solana blockchain integration provides Phoenix Rooivalk with exceptional
+{BLOCKCHAIN.PRIMARY_CHAIN} blockchain integration provides Phoenix Rooivalk with exceptional
 capabilities for immutable evidence anchoring, legal compliance, and operational
 audit trails. The combination of high performance, low costs, and strong
-security makes Solana the optimal choice for defense-grade evidence management.
+security makes {BLOCKCHAIN.PRIMARY_CHAIN} the optimal choice for defense-grade evidence management.
 
 The implementation enables automated compliance with regulatory requirements
 while providing cryptographic proof of all system activities, supporting both
@@ -298,7 +305,7 @@ operational excellence and legal admissibility in court proceedings.
 ---
 
 _This document contains confidential technical information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
 
 _Context improved by Giga AI_

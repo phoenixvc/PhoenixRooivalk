@@ -134,10 +134,20 @@ export const REVENUE = {
 export const BLOCKCHAIN = {
   PRIMARY_CHAIN: "Solana",
   TPS: "65,000-100,000",
+  TPS_REAL_WORLD: "3,000-4,500",
   TPS_MIN: 65000,
   TPS_MAX: 100000,
   FINALITY: "400ms",
+  FINALITY_SUB: "sub-2-second",
   COST_PER_TX: "$0.00025",
+  ANNUAL_COST: "$7,884",
+  ANNUAL_COST_CONTEXT: "for continuous logging (1 TPS)",
+  HASH_ALGORITHM: "SHA-256",
+  SIGNATURE_ALGORITHM: "Ed25519",
+  SECURITY_BITS: "256-bit",
+  ETHEREUM_COST: "$5-50+",
+  POLYGON_COST: "$0.01",
+  HEDERA_COST: "$0.0001",
   X402_STATUS: "Live",
   X402_PRICE: "$0.01-0.05",
 };
@@ -147,10 +157,35 @@ export const HARDWARE = {
   COMPUTE_PLATFORM: "NVIDIA Jetson AGX Orin",
   COMPUTE_TOPS: "275 TOPS",
   MEMORY: "64GB",
+  MEMORY_BANDWIDTH: "204.8 GB/s",
+  CUDA_CORES: "2048",
+  TENSOR_CORES: "64",
   MIL_SPEC: "MIL-STD-810H",
   IP_RATING: "IP67",
   TEMP_RANGE: "-40°C to +70°C",
+  TEMP_RANGE_INDUSTRIAL: "-40°C to +85°C",
+  POWER_TYPICAL: "60W",
+  POWER_PEAK: "100W",
   POWER_AVG: "150-250W",
+
+  // Orin NX
+  ORIN_NX_TOPS: "100 TOPS",
+  ORIN_NX_CUDA: "1024",
+  ORIN_NX_MEMORY: "16GB LPDDR5",
+  ORIN_NX_POWER: "30W typical, 50W peak",
+
+  // Nano
+  NANO_TOPS: "0.5 TOPS",
+  NANO_CUDA: "128",
+  NANO_MEMORY: "4GB LPDDR4",
+  NANO_POWER: "7W typical, 15W peak",
+
+  // Sensors
+  CAMERA_COUNT: "Up to 8 (16 via virtual channels)",
+  CAMERA_RESOLUTION: "1080p-4K",
+  LIDAR_MEASUREMENTS: "1,000,000/second",
+  RF_FREQUENCY_RANGE: "100MHz-6GHz",
+  ACOUSTIC_RANGE: "200-500m",
 
   // Net launcher
   NET_MATERIAL: "Kevlar",
@@ -268,6 +303,70 @@ export const AERONET = {
   TAM: "$4.2B",
 };
 
+/** Technology/Technical Values */
+export const TECH = {
+  // AI/ML
+  AI_MODEL: "YOLOv9",
+  MODEL_SIZE: "<50MB",
+  TENSORRT_SPEEDUP: "5-10x",
+  FRAME_RATE: "30-60 FPS",
+
+  // Network
+  MESH_THROUGHPUT: "100+ Mbps",
+  MESH_RANGE: "50+ km",
+  COORDINATION_LATENCY: "sub-100ms",
+  JAMMING_RANGE: "15km",
+
+  // Sensors
+  SENSOR_TYPES: "RF, radar, EO/IR, acoustic, LiDAR",
+  SENSOR_COUNT: 6,
+};
+
+/** Funding Values */
+export const FUNDING = {
+  SEED_ROUND: "$500K-$1M",
+  SERIES_A_TARGET: "$30-50M",
+  BURN_RATE: "$200K/month",
+  RUNWAY: "18 months",
+
+  // Use of funds
+  HARDWARE_PROTOTYPING: "30%",
+  MARKET_ENTRY: "40%",
+  TEAM_EXPANSION: "30%",
+
+  // Revenue projections (USD)
+  REVENUE_2026: "$2M",
+  REVENUE_2027: "$15M",
+  REVENUE_2028: "$50M",
+  REVENUE_2029: "$100M",
+  REVENUE_2030: "$150M",
+
+  // Targets
+  YEAR_1_SYSTEMS: 25,
+  PILOT_INSTALLATIONS: 5,
+  X402_CUSTOMERS: 10,
+};
+
+/** RKV-M Interceptor Specs */
+export const RKV_M = {
+  MAX_SPEED: ">150 km/h",
+  HOVER_ENDURANCE: "8-12 minutes",
+  CRUISE_ENDURANCE: "15-20 minutes",
+  OPERATING_ALTITUDE: "0-500m AGL",
+  MAX_ALTITUDE: "1,000m AGL",
+  TIME_TO_LAUNCH: "<3 seconds",
+  INTERCEPT_RANGE: "500m",
+  CLOSURE_RATE: ">200 km/h",
+  YAW_RATE: "±60°/s",
+  DUCT_DIAMETER: "0.60m (600mm)",
+  TIP_GAP: "10mm",
+  BLADE_COUNT: 3,
+  TIP_SPEED: "≤120 m/s",
+  ASSEMBLY_TIME: "3.5 hours",
+  MOTOR_CONFIG: "16-20S HV outrunner",
+  TRL: 7,
+};
+
 /** All values combined for easy import */
 export const ALL_VALUES = {
   MARKET,
@@ -282,4 +381,7 @@ export const ALL_VALUES = {
   CUAS_SANDBOX,
   SKYSNARE,
   AERONET,
+  TECH,
+  FUNDING,
+  RKV_M,
 };
