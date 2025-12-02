@@ -140,6 +140,61 @@ class AIService {
   }
 
   /**
+   * Get diagnostic information about AI service configuration
+   * Helps users troubleshoot configuration issues
+   */
+  getDiagnostics(): {
+    available: boolean;
+    configured: boolean;
+    functionsBaseUrl: string | null;
+    provider: string;
+    issues: string[];
+  } {
+    const issues: string[] = [];
+    let functionsBaseUrl: string | null = null;
+
+    // Check if window and Docusaurus data are available
+    if (typeof window !== "undefined") {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const docusaurusData = (window as any).__DOCUSAURUS__;
+        const config = docusaurusData?.siteConfig?.customFields?.azureConfig;
+        functionsBaseUrl = config?.functionsBaseUrl || null;
+
+        if (!functionsBaseUrl) {
+          issues.push(
+            "AZURE_FUNCTIONS_BASE_URL not set in build environment. This must be set in Netlify environment variables with 'All scopes' or 'Builds' selected.",
+          );
+        }
+
+        if (!config?.clientId) {
+          issues.push(
+            "AZURE_ENTRA_CLIENT_ID not set. User authentication may not work.",
+          );
+        }
+
+        if (!config?.tenantId) {
+          issues.push(
+            "AZURE_ENTRA_TENANT_ID not set. User authentication may not work.",
+          );
+        }
+      } catch (error) {
+        issues.push("Failed to read Docusaurus configuration.");
+      }
+    } else {
+      issues.push("Window object not available (server-side rendering).");
+    }
+
+    return {
+      available: this.isAvailable(),
+      configured: isCloudConfigured(),
+      functionsBaseUrl,
+      provider: typeof window !== "undefined" ? "azure" : "unknown",
+      issues,
+    };
+  }
+
+  /**
    * Call an Azure Function
    */
   private async callFunction<T>(
