@@ -29,6 +29,15 @@ import {
   pitchDeckSlides,
   pitchDeckMeta,
 } from "@site/src/components/Downloads/slidedecks/pitch-deck-slides";
+import {
+  MARKET,
+  PERFORMANCE,
+  PRICING,
+  BLOCKCHAIN,
+  HARDWARE,
+  TEAM,
+  ROADMAP,
+} from "@site/src/data/values";
 
 # Phoenix Rooivalk: Investor Pitch Deck
 
@@ -47,7 +56,7 @@ resilience.
 
 ### Key Value Propositions
 
-- **10-150x Faster Response**: 120-195ms end-to-end latency vs 5-30s for
+- **{PERFORMANCE.VS_COMPETITORS}**: {PERFORMANCE.RESPONSE_TIME} end-to-end latency vs 5-30s for
   competitors
 - **True Edge Autonomy**: Fully offline-capable in RF-denied/GPS-denied
   environments
@@ -57,10 +66,10 @@ resilience.
 
 ### Market Opportunity
 
-- **Current Market Size**: $2.45-3.0B (2025)
-- **Projected by 2030**: $9-15B at 23-27% CAGR
+- **Current Market Size**: {MARKET.CURRENT} ({MARKET.CURRENT_YEAR})
+- **Projected by {MARKET.PROJECTED_YEAR}**: {MARKET.PROJECTED} at {MARKET.CAGR} CAGR
 - **Target Markets**: EU & Canada (primary), South Africa (Phase 2)
-- **Segments**: Military, Critical Infrastructure, Commercial
+- **Segments**: Military ({MARKET.MILITARY_SHARE}), Critical Infrastructure ({MARKET.INFRASTRUCTURE_SHARE}), Commercial ({MARKET.COMMERCIAL_SHARE})
 
 ### Recent Progress (Week 48)
 
@@ -233,24 +242,24 @@ resilience.
 
 ### AI/ML Capabilities
 
-- **YOLOv9 Detection**: 99.5% detection accuracy
+- **YOLOv9 Detection**: {PERFORMANCE.ACCURACY} detection accuracy
 - **Multi-Sensor Fusion**: RF, radar, EO/IR, acoustic, LiDAR
 - **Autonomous Decision Making**: Morpheus Network integration
-- **Real-Time Processing**: <50ms detection latency
+- **Real-Time Processing**: {PERFORMANCE.DETECTION_LATENCY} detection latency
 
 ### Blockchain Integration
 
-- **Solana Anchoring**: 65,000-100,000 TPS evidence recording
+- **{BLOCKCHAIN.PRIMARY_CHAIN} Anchoring**: {BLOCKCHAIN.TPS} TPS evidence recording
 - **Tamper-Evident Logs**: Immutable audit trails
 - **Legal Admissibility**: Court-ready evidence
 - **Multi-Chain Ready**: Extensible architecture
 
 ### Hardware Foundation
 
-- **NVIDIA Jetson AGX Orin**: 275 TOPS AI performance
-- **Defense-Grade Ruggedization**: MIL-STD-810H compliant
+- **{HARDWARE.COMPUTE_PLATFORM}**: {HARDWARE.COMPUTE_TOPS} AI performance
+- **Defense-Grade Ruggedization**: {HARDWARE.MIL_SPEC} compliant
 - **Multi-Sensor Integration**: MIPI CSI-2, PCIe Gen4, 10GbE
-- **Environmental Resilience**: -40°C to +70°C operation
+- **Environmental Resilience**: {HARDWARE.TEMP_RANGE} operation
 
 ---
 
@@ -341,7 +350,7 @@ defense industry partnerships.
 
 **Technical Questions**: [Technical Documentation](/docs/technical)
 
-**Investment Inquiries**: jurie@phoenixvc.tech | +27 (069) 140-6835
+**Investment Inquiries**: {TEAM.CONTACT_EMAIL} | {TEAM.CONTACT_PHONE}
 
 **Partnership Opportunities**: [Global Strategy](/docs/executive/global-strategy)
 
