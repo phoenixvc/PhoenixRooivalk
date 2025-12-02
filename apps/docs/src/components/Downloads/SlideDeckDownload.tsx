@@ -2,9 +2,7 @@ import * as React from "react";
 import DownloadButton from "./DownloadButton";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import PresentationMode from "./PresentationMode";
-
-/** Branded icon for slide decks - bar chart emoji */
-const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 /**
  * Represents a key point that can be plain text or have nested sub-points
@@ -20,7 +18,26 @@ export type SlideLayout =
   | "image" // Image-focused with optional caption
   | "two-column" // Side-by-side comparison
   | "quote" // Quote/testimonial layout
-  | "code"; // Code block layout for technical content
+  | "code" // Code block layout for technical content
+  | "team"; // Team members grid layout
+
+/**
+ * Team member for team layout slides
+ */
+export interface TeamMember {
+  /** Initials for avatar */
+  initials: string;
+  /** Full name */
+  name: string;
+  /** Role/title */
+  title: string;
+  /** Key highlights/experience points */
+  highlights: string[];
+  /** Optional avatar color (hex) */
+  color?: string;
+  /** Optional LinkedIn URL */
+  linkedin?: string;
+}
 
 /**
  * Color theme presets for different audiences
@@ -75,6 +92,10 @@ export interface Slide {
   leftColumnTitle?: string;
   /** Right column title (for two-column layout) */
   rightColumnTitle?: string;
+  /** Team members (for team layout) */
+  teamMembers?: TeamMember[];
+  /** Speaker notes (for presenter view) */
+  speakerNotes?: string;
 }
 
 interface PptxGeneratorProps {
@@ -321,6 +342,7 @@ export default function SlideDeckDownload({
   contactUrl,
   contactEmail,
 }: SlideDeckDownloadProps): React.ReactElement {
+  const logoUrl = useBaseUrl("/img/logo.svg");
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
   const [isPresentationMode, setIsPresentationMode] = React.useState(false);
   const printContainerRef = React.useRef<HTMLDivElement>(null);
@@ -490,9 +512,13 @@ export default function SlideDeckDownload({
               {/* Title Slide */}
               <div className="slide-page mb-8 pb-8 border-b-2 border-gray-200 dark:border-gray-700 print:break-after-page">
                 <div className="text-center py-12">
-                  {/* Large Brand Icon on Title Slide */}
-                  <div className="text-6xl mb-6 opacity-60" aria-hidden="true">
-                    {SLIDE_DECK_BRAND_ICON}
+                  {/* Large Brand Logo on Title Slide */}
+                  <div className="mb-6 flex justify-center">
+                    <img
+                      src={logoUrl}
+                      alt="Phoenix Rooivalk"
+                      className="w-20 h-20 opacity-80"
+                    />
                   </div>
                   <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     {title}
@@ -513,12 +539,12 @@ export default function SlideDeckDownload({
 
               {/* Table of Contents / Agenda Slide */}
               <div className="slide-page mb-8 pb-8 border-b-2 border-gray-200 dark:border-gray-700 print:break-after-page relative">
-                <div
-                  className="absolute top-0 right-0 text-xl opacity-40"
+                <img
+                  src={logoUrl}
+                  alt=""
+                  className="absolute top-0 right-0 w-8 h-8 opacity-40"
                   aria-hidden="true"
-                >
-                  {SLIDE_DECK_BRAND_ICON}
-                </div>
+                />
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
                   <span aria-hidden="true">{"\u{1F4CB}"}</span>
                   Agenda
@@ -563,13 +589,13 @@ export default function SlideDeckDownload({
                       />
                     </div>
 
-                    {/* Small Brand Icon - larger on first slide */}
-                    <div
-                      className={`absolute top-2 right-0 ${index === 0 ? "text-3xl opacity-50" : "text-xl opacity-40"}`}
+                    {/* Small Brand Logo - larger on first slide */}
+                    <img
+                      src={logoUrl}
+                      alt=""
+                      className={`absolute top-2 right-0 ${index === 0 ? "w-10 h-10 opacity-50" : "w-6 h-6 opacity-40"}`}
                       aria-hidden="true"
-                    >
-                      {SLIDE_DECK_BRAND_ICON}
-                    </div>
+                    />
 
                     {/* Slide Header */}
                     <div className="flex items-center justify-between mb-6 mt-4">
@@ -689,6 +715,57 @@ export default function SlideDeckDownload({
                               renderKeyPoint(point, i),
                             )}
                           </ul>
+                        )}
+                      </div>
+                    ) : slide.layout === "team" && slide.teamMembers ? (
+                      // Team members grid layout
+                      <div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                          {slide.teamMembers.map((member, memberIndex) => (
+                            <div
+                              key={memberIndex}
+                              className="text-center p-4 rounded-lg"
+                              style={{
+                                background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
+                                border: `1px solid ${member.color || "#1e40af"}30`,
+                              }}
+                            >
+                              <div
+                                className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl"
+                                style={{
+                                  background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                                }}
+                              >
+                                {member.initials}
+                              </div>
+                              <h4 className="font-bold text-gray-900 dark:text-white text-sm">
+                                {member.name}
+                              </h4>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                                {member.title}
+                              </p>
+                              <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1 text-left">
+                                {member.highlights.map((highlight, hIndex) => (
+                                  <li key={hIndex} className="flex items-start gap-1">
+                                    <span className="text-gray-400 mt-0.5">{"\u2022"}</span>
+                                    <span>{highlight}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                        {slide.keyPoints.length > 0 && (
+                          <div>
+                            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                              Key Points
+                            </h3>
+                            <ul className="space-y-2">
+                              {slide.keyPoints.map((point, i) =>
+                                renderKeyPoint(point, i),
+                              )}
+                            </ul>
+                          </div>
                         )}
                       </div>
                     ) : (

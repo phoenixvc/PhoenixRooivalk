@@ -386,33 +386,73 @@ export const pitchDeckSlides: Slide[] = [
   },
   {
     number: 13,
-    title: "Team: Deep Aerospace & Blockchain Expertise",
-    duration: 40,
+    title: "Founding Team: 60+ Years Combined Expertise",
+    duration: 50,
     icon: "👥",
+    layout: "team" as const,
+    teamMembers: [
+      {
+        initials: "JS",
+        name: "Jurie Smit",
+        title: "Co-Founder & CTO",
+        highlights: [
+          "15+ years fintech & SaaS platforms",
+          "Edge AI/ML & system architecture",
+          "B.Eng Industrial-Electronic (Stellenbosch)",
+        ],
+        color: "#1e40af",
+      },
+      {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Co-Founder & CEO",
+        highlights: [
+          "20+ years energy, mining, defense",
+          "R500M+ portfolio management",
+          "MBA (GIBS), B.Eng (Stellenbosch)",
+        ],
+        color: "#7c3aed",
+      },
+      {
+        initials: "PL",
+        name: "Pieter La Grange",
+        title: "Co-Founder & Hardware Lead",
+        highlights: [
+          "15+ years embedded systems",
+          "Medical device production (Snuza)",
+          "B.Eng Electrical (Stellenbosch)",
+        ],
+        color: "#059669",
+      },
+      {
+        initials: "EM",
+        name: "Eben Maré",
+        title: "Co-Founder & CFO",
+        highlights: [
+          "15+ years investment banking & PE",
+          "Former Head Quant at Deloitte",
+          "Phoenix VC founder",
+        ],
+        color: "#dc2626",
+      },
+    ],
     keyPoints: [
-      "Combined **15+ years** experience in aerospace, defense, and blockchain",
+      "**4 co-founders** with complementary expertise across tech, business, hardware, and finance",
       {
         text: "**Core competencies:**",
         subPoints: [
-          "Military-grade systems development",
-          "Cryptographic protocol design",
-          "Distributed systems architecture",
+          "Edge AI & embedded systems",
+          "Large-scale project management",
+          "Blockchain & cryptographic protocols",
+          "Hardware design & manufacturing",
         ],
       },
-      {
-        text: "**Strategic advisors:**",
-        subPoints: [
-          "Airport operations professionals",
-          "Aviation safety experts",
-          "Defense industry veterans",
-        ],
-      },
-      "Growing network of *university researchers* and *government contacts*",
+      "All founders **full-time committed** with significant personal investment",
     ],
     speakerNotes:
-      "Team credibility is critical. Emphasize domain expertise and advisor network.",
+      "Team credibility is critical. Each founder brings unique expertise. Emphasize the complementary skills and full-time commitment. The combined 60+ years of experience spans all domains needed for success.",
     script:
-      "Our team brings deep domain expertise. Combined 15+ years in aerospace, defense, and blockchain. We've built military-grade systems and cryptographic protocols. Strategic advisors include airport operations and aviation safety professionals. We're building relationships with university researchers and government agencies.",
+      "Our founding team brings over 60 years of combined experience. Jurie leads technology with 15+ years in fintech and AI systems. Martyn drives business development with 20+ years managing R500M+ portfolios in energy and defense. Pieter heads hardware with 15 years in embedded systems and medical device production. Eben handles finance with extensive investment banking and private equity experience. All four founders are full-time committed with skin in the game.",
   },
   {
     number: 14,

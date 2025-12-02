@@ -3,10 +3,11 @@ import type {
   KeyPoint,
   ColorTheme,
   ColorPalette,
+  TeamMember,
 } from "../components/Downloads/SlideDeckDownload";
 
-/** Branded icon for slide decks - bar chart emoji */
-const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+/** Branded text for slide decks - Phoenix Rooivalk */
+const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials
 
 /**
  * Color theme presets
@@ -203,7 +204,7 @@ export async function generatePptx(
   titleSlide.background = { color: colors.dark };
 
   // Large Brand Icon on title slide
-  titleSlide.addText(SLIDE_DECK_BRAND_ICON, {
+  titleSlide.addText(SLIDE_DECK_BRAND_TEXT, {
     x: 0.5,
     y: 1.0,
     w: 9.0,
@@ -269,7 +270,7 @@ export async function generatePptx(
   agendaSlide.background = { color: colors.dark };
 
   // Brand icon
-  agendaSlide.addText(SLIDE_DECK_BRAND_ICON, {
+  agendaSlide.addText(SLIDE_DECK_BRAND_TEXT, {
     x: 0.3,
     y: 0.2,
     w: 0.5,
@@ -363,7 +364,7 @@ export async function generatePptx(
     });
 
     // Small Brand Icon in top left corner (larger on first slide)
-    contentSlide.addText(SLIDE_DECK_BRAND_ICON, {
+    contentSlide.addText(SLIDE_DECK_BRAND_TEXT, {
       x: 0.3,
       y: 0.3,
       w: 0.5,
@@ -683,6 +684,127 @@ export async function generatePptx(
           valign: "top",
         });
       }
+    } else if (layout === "team" && slide.teamMembers) {
+      // Team members grid layout
+      const members = slide.teamMembers;
+      const memberCount = members.length;
+      const cols = Math.min(memberCount, 4);
+      const cardWidth = 2.1;
+      const cardHeight = 2.6;
+      const startX = (10 - cols * cardWidth - (cols - 1) * 0.15) / 2;
+      const startY = 1.9;
+
+      members.forEach((member, memberIndex) => {
+        const col = memberIndex % cols;
+        const row = Math.floor(memberIndex / cols);
+        const x = startX + col * (cardWidth + 0.15);
+        const y = startY + row * (cardHeight + 0.2);
+        const memberColor = member.color?.replace("#", "") || "1E40AF";
+
+        // Card background
+        contentSlide.addShape("rect" as any, {
+          x,
+          y,
+          w: cardWidth,
+          h: cardHeight,
+          fill: { color: colors.darker },
+          line: { color: memberColor, width: 1 },
+        });
+
+        // Avatar circle
+        contentSlide.addShape("ellipse" as any, {
+          x: x + cardWidth / 2 - 0.35,
+          y: y + 0.15,
+          w: 0.7,
+          h: 0.7,
+          fill: { color: memberColor },
+        });
+
+        // Initials
+        contentSlide.addText(member.initials, {
+          x: x + cardWidth / 2 - 0.35,
+          y: y + 0.25,
+          w: 0.7,
+          h: 0.5,
+          fontSize: 14,
+          bold: true,
+          color: "FFFFFF",
+          align: "center",
+          valign: "middle",
+        });
+
+        // Name
+        contentSlide.addText(member.name, {
+          x,
+          y: y + 0.95,
+          w: cardWidth,
+          h: 0.3,
+          fontSize: 11,
+          bold: true,
+          color: colors.text,
+          align: "center",
+        });
+
+        // Title
+        contentSlide.addText(member.title, {
+          x,
+          y: y + 1.2,
+          w: cardWidth,
+          h: 0.25,
+          fontSize: 8,
+          color: colors.textSecondary,
+          align: "center",
+        });
+
+        // Highlights
+        const highlightText = member.highlights
+          .map((h) => `• ${h}`)
+          .join("\n");
+        contentSlide.addText(highlightText, {
+          x: x + 0.1,
+          y: y + 1.5,
+          w: cardWidth - 0.2,
+          h: 1.0,
+          fontSize: 7,
+          color: colors.textMuted,
+          valign: "top",
+          lineSpacing: 10,
+        });
+      });
+
+      // Key points below team cards
+      if (slide.keyPoints.length > 0) {
+        const keyPointsY = startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
+
+        contentSlide.addText("Key Points", {
+          x: 0.5,
+          y: keyPointsY,
+          w: 9.0,
+          h: 0.3,
+          fontSize: 12,
+          bold: true,
+          color: colors.textSecondary,
+        });
+
+        const bulletPoints = slide.keyPoints.map((point) => ({
+          text: getKeyPointText(point),
+          options: {
+            bullet: { type: "number" as const, code: "2022" },
+            color: colors.text,
+            fontSize: 12,
+            paraSpaceBefore: 3,
+            paraSpaceAfter: 3,
+          },
+        }));
+
+        contentSlide.addText(bulletPoints, {
+          x: 0.7,
+          y: keyPointsY + 0.35,
+          w: 8.6,
+          h: 1.5,
+          valign: "top",
+        });
+      }
     } else {
       // Default layout with key points
       // Add key points header
@@ -824,7 +946,7 @@ export async function generatePptx(
   summarySlide.transition = { type: "fade", speed: "fast" };
 
   // Small Brand Icon in top left corner
-  summarySlide.addText(SLIDE_DECK_BRAND_ICON, {
+  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
     x: 0.3,
     y: 0.2,
     w: 0.5,

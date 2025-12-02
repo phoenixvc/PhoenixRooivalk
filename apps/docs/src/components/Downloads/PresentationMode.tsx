@@ -1,8 +1,6 @@
 import * as React from "react";
-import type { Slide, KeyPoint } from "./SlideDeckDownload";
-
-/** Branded icon for slide decks */
-const SLIDE_DECK_BRAND_ICON = "\u{1F4CA}"; // 📊
+import type { Slide, KeyPoint, TeamMember } from "./SlideDeckDownload";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 interface PresentationModeProps {
   /** Presentation title */
@@ -110,7 +108,7 @@ export default function PresentationMode({
   onClose,
   startSlide = 0,
 }: PresentationModeProps): React.ReactElement | null {
-  // _duration is available for future use (e.g., total presentation time validation)
+  const logoUrl = useBaseUrl("/img/logo.svg");
   const [currentSlide, setCurrentSlide] = React.useState(startSlide);
   const [showNotes, setShowNotes] = React.useState(false);
   const [showThumbnails, setShowThumbnails] = React.useState(false);
@@ -263,9 +261,11 @@ export default function PresentationMode({
       {/* Top Bar */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-4">
-          <span className="text-2xl" aria-hidden="true">
-            {SLIDE_DECK_BRAND_ICON}
-          </span>
+          <img
+            src={logoUrl}
+            alt="Phoenix Rooivalk"
+            className="w-8 h-8"
+          />
           <h1 className="text-lg font-semibold truncate max-w-md">{title}</h1>
         </div>
 
@@ -455,6 +455,55 @@ export default function PresentationMode({
                     ))}
                   </ul>
                 </div>
+              </div>
+            ) : slide.layout === "team" && slide.teamMembers ? (
+              <div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {slide.teamMembers.map((member, memberIndex) => (
+                    <div
+                      key={memberIndex}
+                      className="text-center p-4 rounded-lg"
+                      style={{
+                        background: `linear-gradient(180deg, ${member.color || "#1e40af"}20 0%, ${member.color || "#1e40af"}10 100%)`,
+                        border: `1px solid ${member.color || "#1e40af"}40`,
+                      }}
+                    >
+                      <div
+                        className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg"
+                        style={{
+                          background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                        }}
+                      >
+                        {member.initials}
+                      </div>
+                      <h4 className="font-bold text-white text-sm">{member.name}</h4>
+                      <p className="text-xs text-gray-400 mb-2">{member.title}</p>
+                      <ul className="text-xs text-gray-500 space-y-1 text-left">
+                        {member.highlights.map((highlight, hIndex) => (
+                          <li key={hIndex} className="flex items-start gap-1">
+                            <span className="text-gray-500 mt-0.5">{"\u2022"}</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                {slide.keyPoints.length > 0 && (
+                  <ul className="space-y-3 mt-4">
+                    {slide.keyPoints.map((point, i) => (
+                      <li
+                        key={i}
+                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
+                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                        }`}
+                      >
+                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                        <span>{parseRichText(getKeyPointText(point))}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ) : (
               // Default layout
