@@ -62,8 +62,12 @@ impl CosmosProvider {
                 ));
             } else {
                 // Use Entra authentication
-                let credential = DefaultAzureCredential::create(azure_identity::TokenCredentialOptions::default())
-                    .map_err(|e| ProviderError::Connection(format!("Failed to create Azure credential: {}", e)))?;
+                let credential = DefaultAzureCredential::create(
+                    azure_identity::TokenCredentialOptions::default(),
+                )
+                .map_err(|e| {
+                    ProviderError::Connection(format!("Failed to create Azure credential: {}", e))
+                })?;
                 CosmosClient::new(
                     account.clone(),
                     std::sync::Arc::new(credential) as std::sync::Arc<dyn TokenCredential>,
