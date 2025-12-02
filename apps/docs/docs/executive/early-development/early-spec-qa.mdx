@@ -11,12 +11,21 @@ tags:
   - counter-uas
 ---
 
+import {
+  PERFORMANCE,
+  BLOCKCHAIN,
+  PHASES,
+  FUNDING,
+  HARDWARE,
+  CAPITAL,
+  TECH,
+} from "@site/src/data/values";
+
 ## What Phoenix Rooivalk Does (Plain English)
 
 Phoenix Rooivalk is a **defensive system** that detects, classifies, and
 responds to hostile small drones on its own when radios and backhaul are jammed.
-It makes **policy-bounded, "soft kill first" decisions at the edge** in 120–195
-ms (p50) / ≤250 ms (p95) and records tamper-evident receipts after the fact for
+It makes **policy-bounded, "soft kill first" decisions at the edge** in {PERFORMANCE.RESPONSE_TIME} (p50) / ≤250 ms (p95) and records tamper-evident receipts after the fact for
 accountability.
 
 When communications are available, it can optionally share sanitized,
@@ -178,7 +187,7 @@ architectures fail under EW. Most systems degrade to detect-only when comms die.
 | **RF silent detection**  | Via multi-modal fusion                                                                       |
 | **Swarm handling**       | ≥50 concurrent tracks (baseline)                                                             |
 | **Coalition sharing**    | Classification-aware controls; Link 16/MADL receive only initially                           |
-| **Evidence-grade audit** | Fabric: hashes & metadata on chain, full evidence in off-chain WORM stores; ~3,000–3,500 TPS |
+| **Evidence-grade audit** | Fabric: hashes & metadata on chain, full evidence in off-chain WORM stores; ~{BLOCKCHAIN.TPS_REAL_WORLD} TPS |
 
 ---
 
@@ -281,14 +290,14 @@ receipts.
 
 | Phase                  | Investment | Focus                                 |
 | ---------------------- | ---------- | ------------------------------------- |
-| Seed (Concept)         | $1.5M      | Architecture validation, simulation   |
-| Series A (Prototype)   | $8-12M     | Hardware demo, lab tests              |
-| Series B (Integration) | $15-20M    | Field trials, certification readiness |
-| **Total to TRL7**      | **$40-50M**| Over ~3 years                         |
+| Seed (Concept)         | {CAPITAL.SEED_ROUND}      | Architecture validation, simulation   |
+| Series A (Prototype)   | {FUNDING.PHASE_2_SERIES_A}     | Hardware demo, lab tests              |
+| Series B (Integration) | {FUNDING.PHASE_3_SERIES_B}    | Field trials, certification readiness |
+| **Total to TRL7**      | **{FUNDING.TOTAL_TO_TRL7}**| Over {FUNDING.TOTAL_TIMELINE}                         |
 
 ---
 
-## Seed Phase Deliverables ($1.5M)
+## Seed Phase Deliverables ({CAPITAL.SEED_ROUND})
 
 ### What will the investor get for the money?
 
@@ -327,7 +336,7 @@ receipts.
 
 ---
 
-## Budget Breakdown ($1.5M)
+## Budget Breakdown ({CAPITAL.SEED_ROUND})
 
 ### Team (65% - $2.275M)
 
@@ -443,7 +452,7 @@ hardware, patents, proven algorithms, and the team that built it.
 
 ### Power Consumption
 
-- 60–100 W per node (Orin NX class)
+- {HARDWARE.POWER_TYPICAL}-{HARDWARE.POWER_PEAK} per node ({HARDWARE.COMPUTE_PLATFORM} class)
 - Earlier internal studies referenced kW-class configurations for heavy/legacy
   payloads; this proposal standardizes on Orin-class nodes
 
