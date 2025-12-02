@@ -1,0 +1,276 @@
+---
+id: demo-video-roadmap
+title: "Demo Video Roadmap: 2 Weeks to Investor-Ready Assets"
+sidebar_label: Demo Video
+difficulty: beginner
+timeEstimate: 10
+xpReward: 25
+phase: ["seed"]
+tags:
+  - playbook
+  - marketing
+  - investor
+---
+
+# Demo Video Roadmap
+
+**Goal**: Create 3 demo assets in 2 weeks that make investors say "show me more."
+
+---
+
+## The 3 Assets You Need
+
+| Asset | Duration | Purpose | Difficulty |
+|-------|----------|---------|------------|
+| **Product Demo** | 60s | Show net deployment in action | Medium |
+| **AI Detection Demo** | 45s | Prove the tech works | Easy |
+| **Blockchain Log Demo** | 30s | Show evidence chain | Easy |
+
+---
+
+## Week 1: Quick Wins (Days 1-7)
+
+### Day 1-2: AI Detection Demo (Easiest Win)
+
+**What you need:**
+- Laptop with Python
+- Drone footage (YouTube is fine for demo)
+- YOLOv9 or YOLOv8 model
+
+**Steps:**
+1. Download drone detection footage from YouTube (search "drone footage sky")
+2. Run YOLOv9 inference with bounding boxes
+3. Screen record the detection running
+4. Add simple text overlay: "YOLOv9 - 120ms response - 99.5% accuracy"
+
+**Tools (all free):**
+- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) - easiest to set up
+- OBS Studio - screen recording
+- CapCut or DaVinci Resolve - free video editing
+
+**Script for the demo:**
+```
+[Show drone flying across frame]
+Text: "Threat detected in 120ms"
+[Bounding box appears around drone]
+Text: "YOLOv9 on Jetson Orin - Edge AI"
+[Show confidence score: 99.2%]
+Text: "No cloud. No latency. Works offline."
+```
+
+**Output:** 45-second screen recording showing real-time detection
+
+---
+
+### Day 3-4: Blockchain Log Demo
+
+**What you need:**
+- Solana devnet account (free)
+- Basic transaction script
+- Solana Explorer
+
+**Steps:**
+1. Create a simple detection event JSON:
+```json
+{
+  "event": "drone_detected",
+  "timestamp": "2025-12-02T14:30:00Z",
+  "location": "Zone A",
+  "confidence": 0.992,
+  "hash": "sha256:abc123..."
+}
+```
+2. Submit to Solana devnet (costs nothing)
+3. Screen record the Solana Explorer showing:
+   - Transaction confirmed
+   - Timestamp immutable
+   - Data hash visible
+
+**Script:**
+```
+Text: "Detection event logged"
+[Show JSON payload]
+Text: "Submitted to Solana blockchain"
+[Show Explorer - transaction pending]
+[Show Explorer - confirmed in 400ms]
+Text: "Immutable. Court-admissible. $0.00025 per event."
+```
+
+**Output:** 30-second screen recording showing evidence chain
+
+---
+
+### Day 5-7: Product Demo (CAD Animation)
+
+**Option A: CAD Animation (if you have CAD files)**
+
+**Tools:**
+- Fusion 360 (free for startups) - has built-in animation
+- Blender (free) - import STEP files, animate
+- KeyShot (trial) - quick renders
+
+**Steps:**
+1. Export CAD assembly to Blender/Fusion
+2. Create simple animation sequence:
+   - Launcher at rest
+   - Trigger pull
+   - Net deploys
+   - Net wraps around target drone model
+3. Render at 1080p (4K if time permits)
+4. Add text overlays and sound effects
+
+**Option B: Physical Prototype Demo (if you have hardware)**
+
+**Steps:**
+1. Set up phone on tripod
+2. Film net deployment (even partial mechanism)
+3. Slow-mo the deployment
+4. Add text: "Prototype - Full deployment in 0.3s"
+
+**Option C: Napkin Sketch Animation (fastest)**
+
+Use a tool like [Animaker](https://www.animaker.com/) or Canva to create:
+- Simple 2D animation of concept
+- Labeled diagram that "builds" on screen
+- Clear enough for investors to understand mechanism
+
+**Output:** 60-second video showing product concept
+
+---
+
+## Week 2: Polish & Combine (Days 8-14)
+
+### Day 8-10: Edit & Brand
+
+1. **Create consistent intro/outro:**
+   - Phoenix Rooivalk logo (3s)
+   - "Phoenix Rooivalk | Counter-UAS" tagline
+   - Consistent color scheme (match pitch deck)
+
+2. **Add professional touches:**
+   - Background music (use [Epidemic Sound](https://www.epidemicsound.com/) free trial or YouTube Audio Library)
+   - Smooth transitions
+   - Consistent fonts (match pitch deck)
+
+3. **Export settings:**
+   - 1080p minimum
+   - MP4 format
+   - Under 100MB for easy sharing
+
+### Day 11-12: Create Sizzle Reel
+
+Combine all 3 into a 2-minute "sizzle reel":
+
+```
+[0:00-0:05] Logo + "The drone threat is real"
+[0:05-0:15] News clips of Brussels, Gatwick (fair use)
+[0:15-0:45] Product demo
+[0:45-1:15] AI detection demo
+[1:15-1:35] Blockchain demo
+[1:35-1:50] Team/traction slide
+[1:50-2:00] CTA: "Phoenix Rooivalk - Seed Round Open"
+```
+
+### Day 13-14: Upload & Prepare
+
+1. **Upload locations:**
+   - YouTube (unlisted) - for easy sharing
+   - Vimeo (if you want password protection)
+   - Google Drive - backup
+
+2. **Prepare for pitch:**
+   - Download to laptop (don't rely on WiFi)
+   - Test on your presentation device
+   - Have phone backup with videos loaded
+
+3. **Create QR code:**
+   - Link to YouTube playlist
+   - Add to pitch deck last slide
+   - Investors can watch later
+
+---
+
+## Budget Breakdown
+
+| Item | Cost | Notes |
+|------|------|-------|
+| Software | $0 | All free options available |
+| Stock footage | $0-50 | YouTube free, Pexels, or buy 1-2 clips |
+| Music | $0 | YouTube Audio Library or Epidemic trial |
+| Your time | ~20 hours | Spread over 2 weeks |
+| **Total** | **$0-50** | |
+
+---
+
+## Quick Alternatives (If Short on Time)
+
+### 1-Day Option: PowerPoint Animation
+
+1. Create animated PowerPoint with:
+   - Diagram that builds step-by-step
+   - Embedded detection GIF
+   - Embedded Solana explorer screenshot
+2. Screen record the presentation
+3. Add voiceover explaining each step
+
+### 3-Day Option: Hire on Fiverr
+
+- **CAD animation**: $100-300 for 60s
+- **Explainer video**: $150-400 for 2 min
+- Search: "product animation" or "3D product video"
+- Provide: CAD files, script, brand colors
+
+### No-Time Option: Live Demo
+
+If you have *any* working hardware:
+- Bring it to the pitch
+- Live demos beat videos every time
+- Even a janky prototype shows you can build
+
+---
+
+## Checklist
+
+### Week 1
+- [ ] Day 1-2: AI detection demo recorded
+- [ ] Day 3-4: Blockchain demo recorded
+- [ ] Day 5-7: Product animation/demo created
+
+### Week 2
+- [ ] Day 8-10: All videos branded and polished
+- [ ] Day 11-12: Sizzle reel created
+- [ ] Day 13-14: Uploaded and tested on devices
+
+### Before Pitch
+- [ ] Videos downloaded to laptop
+- [ ] Tested on presentation screen
+- [ ] QR code ready for leave-behind
+- [ ] Phone backup loaded
+
+---
+
+## Example Scripts
+
+### AI Demo Voiceover (45s)
+> "This is our edge AI system running on NVIDIA Jetson Orin. Watch as it detects a drone entering the frame... [pause] ...detected in 120 milliseconds. That's 10 to 150 times faster than cloud-based competitors. The model runs entirely on-device - no internet required, no latency, fully GDPR compliant. 99.5% accuracy with under 0.3% false positives."
+
+### Blockchain Demo Voiceover (30s)
+> "Every detection event is immediately logged to Solana blockchain. Here's the transaction... confirmed in 400 milliseconds. This creates an immutable, court-admissible evidence chain. Cost per transaction: a quarter of a cent. Annual cost for continuous logging: about $800. Competitors have no evidence chain - that's why Gatwick 2018 perps were never caught."
+
+### Product Demo Voiceover (60s)
+> "The Phoenix Rooivalk net launcher deploys a Kevlar capture net in under 300 milliseconds. The net is manufactured in-house from Kevlar fiber stock, giving us control over quality and cost. On impact, the weighted corners wrap around the target drone, entangling the rotors and bringing it down safely. The captured drone is preserved as evidence, along with its payload. This is SkySnare for consumers at $349, and AeroNet for enterprise starting at $150K."
+
+---
+
+## Resources
+
+- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) - Detection model
+- [OBS Studio](https://obsproject.com/) - Screen recording
+- [DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve/) - Free pro editing
+- [Canva](https://www.canva.com/) - Quick graphics
+- [Pexels](https://www.pexels.com/) - Free stock video
+- [YouTube Audio Library](https://studio.youtube.com/channel/audio) - Free music
+
+---
+
+_You've got this. Two weeks, three videos, zero excuses. Go build._
