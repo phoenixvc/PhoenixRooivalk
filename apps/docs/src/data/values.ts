@@ -263,9 +263,13 @@ export const TEAM = {
   COMPANY_STRUCTURE: "Delaware C-Corp (in progress)",
   SECONDARY_ENTITY: "South African Entity (Q2 2026)",
 
-  // Contact
-  CONTACT_EMAIL: "jurie@phoenixvc.tech",
-  CONTACT_PHONE: "+27 (0) 10 880 0000",
+  // Contact (role-based, not personal PII)
+  CONTACT_EMAIL: "contact@phoenixrooivalk.com",
+  CONTACT_PHONE: "+27 (0) 10 880 0000", // Company switchboard
+  INVESTOR_EMAIL: "investors@phoenixrooivalk.com",
+  SUPPORT_EMAIL: "support@phoenixrooivalk.com",
+  ENTERPRISE_EMAIL: "enterprise@aeronet-security.com",
+  CONSUMER_EMAIL: "hello@skysnare.com",
 };
 
 /** Roadmap Values */
