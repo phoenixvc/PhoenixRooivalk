@@ -1,5 +1,4 @@
 /// SQLite database provider implementation
-
 use super::{
     ApplicationRepository, DatabaseProvider, EvidenceRepository, Filter, ProviderError, Result,
     SessionRepository, UserRepository,
@@ -161,7 +160,10 @@ impl UserRepository for SqliteProvider {
         .await?;
 
         if result.rows_affected() == 0 {
-            return Err(ProviderError::NotFound(format!("User with id '{}' not found", id)));
+            return Err(ProviderError::NotFound(format!(
+                "User with id '{}' not found",
+                id
+            )));
         }
 
         Ok(())
@@ -174,7 +176,10 @@ impl UserRepository for SqliteProvider {
             .await?;
 
         if result.rows_affected() == 0 {
-            return Err(ProviderError::NotFound(format!("User with id '{}' not found", id)));
+            return Err(ProviderError::NotFound(format!(
+                "User with id '{}' not found",
+                id
+            )));
         }
 
         Ok(())
@@ -222,7 +227,7 @@ impl UserRepository for SqliteProvider {
 impl SessionRepository for SqliteProvider {
     async fn create(&self, session: &Session) -> Result<String> {
         sqlx::query(
-            "INSERT INTO sessions (id, user_id, expires_at, created_ms) VALUES (?1, ?2, ?3, ?4)"
+            "INSERT INTO sessions (id, user_id, expires_at, created_ms) VALUES (?1, ?2, ?3, ?4)",
         )
         .bind(&session.id)
         .bind(&session.user_id)
@@ -235,12 +240,11 @@ impl SessionRepository for SqliteProvider {
     }
 
     async fn get_by_id(&self, id: &str) -> Result<Option<Session>> {
-        let row = sqlx::query(
-            "SELECT id, user_id, expires_at, created_ms FROM sessions WHERE id = ?1"
-        )
-        .bind(id)
-        .fetch_optional(&self.pool)
-        .await?;
+        let row =
+            sqlx::query("SELECT id, user_id, expires_at, created_ms FROM sessions WHERE id = ?1")
+                .bind(id)
+                .fetch_optional(&self.pool)
+                .await?;
 
         Ok(row.map(|row| Session {
             id: row.get(0),
@@ -252,7 +256,7 @@ impl SessionRepository for SqliteProvider {
 
     async fn get_by_user_id(&self, user_id: &str) -> Result<Vec<Session>> {
         let rows = sqlx::query(
-            "SELECT id, user_id, expires_at, created_ms FROM sessions WHERE user_id = ?1"
+            "SELECT id, user_id, expires_at, created_ms FROM sessions WHERE user_id = ?1",
         )
         .bind(user_id)
         .fetch_all(&self.pool)
@@ -278,7 +282,10 @@ impl SessionRepository for SqliteProvider {
             .await?;
 
         if result.rows_affected() == 0 {
-            return Err(ProviderError::NotFound(format!("Session with id '{}' not found", id)));
+            return Err(ProviderError::NotFound(format!(
+                "Session with id '{}' not found",
+                id
+            )));
         }
 
         Ok(())
@@ -338,7 +345,7 @@ impl EvidenceRepository for SqliteProvider {
     async fn update_status(&self, id: &str, status: &str, error: Option<&str>) -> Result<()> {
         let now = chrono::Utc::now().timestamp_millis();
         let result = sqlx::query(
-            "UPDATE outbox_jobs SET status = ?1, last_error = ?2, updated_ms = ?3 WHERE id = ?4"
+            "UPDATE outbox_jobs SET status = ?1, last_error = ?2, updated_ms = ?3 WHERE id = ?4",
         )
         .bind(status)
         .bind(error)
@@ -348,7 +355,10 @@ impl EvidenceRepository for SqliteProvider {
         .await?;
 
         if result.rows_affected() == 0 {
-            return Err(ProviderError::NotFound(format!("Evidence with id '{}' not found", id)));
+            return Err(ProviderError::NotFound(format!(
+                "Evidence with id '{}' not found",
+                id
+            )));
         }
 
         Ok(())
@@ -483,7 +493,7 @@ impl ApplicationRepository for SqliteProvider {
     async fn update_status(&self, id: &str, status: &str) -> Result<()> {
         let now = chrono::Utc::now().timestamp_millis();
         let result = sqlx::query(
-            "UPDATE career_applications SET status = ?1, updated_ms = ?2 WHERE id = ?3"
+            "UPDATE career_applications SET status = ?1, updated_ms = ?2 WHERE id = ?3",
         )
         .bind(status)
         .bind(now)
@@ -492,7 +502,10 @@ impl ApplicationRepository for SqliteProvider {
         .await?;
 
         if result.rows_affected() == 0 {
-            return Err(ProviderError::NotFound(format!("Application with id '{}' not found", id)));
+            return Err(ProviderError::NotFound(format!(
+                "Application with id '{}' not found",
+                id
+            )));
         }
 
         Ok(())
@@ -578,23 +591,36 @@ mod tests {
         assert_eq!(id, user.id);
 
         // Read
-        let retrieved = UserRepository::get_by_id(&provider, &id).await.unwrap().unwrap();
+        let retrieved = UserRepository::get_by_id(&provider, &id)
+            .await
+            .unwrap()
+            .unwrap();
         assert_eq!(retrieved.email, user.email);
 
         // Read by email
-        let by_email = UserRepository::get_by_email(&provider, "test@example.com").await.unwrap().unwrap();
+        let by_email = UserRepository::get_by_email(&provider, "test@example.com")
+            .await
+            .unwrap()
+            .unwrap();
         assert_eq!(by_email.id, user.id);
 
         // Update
         let mut updated = retrieved.clone();
         updated.first_name = Some("Updated".to_string());
-        UserRepository::update(&provider, &id, &updated).await.unwrap();
+        UserRepository::update(&provider, &id, &updated)
+            .await
+            .unwrap();
 
-        let retrieved = UserRepository::get_by_id(&provider, &id).await.unwrap().unwrap();
+        let retrieved = UserRepository::get_by_id(&provider, &id)
+            .await
+            .unwrap()
+            .unwrap();
         assert_eq!(retrieved.first_name, Some("Updated".to_string()));
 
         // List
-        let (users, total) = UserRepository::list(&provider, &Filter::default()).await.unwrap();
+        let (users, total) = UserRepository::list(&provider, &Filter::default())
+            .await
+            .unwrap();
         assert!(total >= 1);
         assert!(!users.is_empty());
 
@@ -626,15 +652,22 @@ mod tests {
             user.id.clone(),
             chrono::Utc::now().timestamp_millis() + 3600000,
         );
-        let id = SessionRepository::create(&provider, &session).await.unwrap();
+        let id = SessionRepository::create(&provider, &session)
+            .await
+            .unwrap();
         assert_eq!(id, session.id);
 
         // Read
-        let retrieved = SessionRepository::get_by_id(&provider, &id).await.unwrap().unwrap();
+        let retrieved = SessionRepository::get_by_id(&provider, &id)
+            .await
+            .unwrap()
+            .unwrap();
         assert_eq!(retrieved.user_id, user.id);
 
         // Get by user ID
-        let sessions = SessionRepository::get_by_user_id(&provider, &user.id).await.unwrap();
+        let sessions = SessionRepository::get_by_user_id(&provider, &user.id)
+            .await
+            .unwrap();
         assert_eq!(sessions.len(), 1);
 
         // Delete

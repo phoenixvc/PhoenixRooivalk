@@ -1,9 +1,9 @@
 /// Azure Cosmos DB provider implementation
-/// 
+///
 /// This module provides Cosmos DB integration when the "cosmos" feature is enabled.
-/// 
+///
 /// # Configuration
-/// 
+///
 /// Required environment variables:
 /// - COSMOS_DB_ACCOUNT: Azure Cosmos DB account name
 /// - COSMOS_DB_DATABASE: Database name
@@ -11,7 +11,6 @@
 /// - AZURE_TENANT_ID: Azure AD tenant ID (for Entra auth)
 /// - AZURE_CLIENT_ID: Azure AD client ID (for Entra auth)
 /// - AZURE_CLIENT_SECRET: Azure AD client secret (for Entra auth)
-
 use super::{
     ApplicationRepository, DatabaseProvider, EvidenceRepository, Filter, ProviderError, Result,
     SessionRepository, UserRepository,
@@ -39,9 +38,9 @@ pub struct CosmosProvider {
 
 impl CosmosProvider {
     /// Create a new Cosmos DB provider from environment variables
-    /// 
+    ///
     /// # Environment Variables
-    /// 
+    ///
     /// - COSMOS_DB_ACCOUNT: Azure Cosmos DB account name
     /// - COSMOS_DB_DATABASE: Database name
     /// - COSMOS_DB_KEY: Account key (optional, will use Entra if not provided)

@@ -423,13 +423,13 @@ pub async fn get_payment_receipt_by_signature(
 fn parse_name_from_email(email: &str) -> (Option<String>, Option<String>) {
     // Extract username part before @
     let username = email.split('@').next().unwrap_or(email);
-    
+
     // Split on common separators: dot, underscore, dash
     let parts: Vec<&str> = username
         .split(|c| c == '.' || c == '_' || c == '-')
         .filter(|s| !s.is_empty())
         .collect();
-    
+
     // Helper function to capitalize first letter safely
     fn capitalize(s: &str) -> String {
         if s.is_empty() {
@@ -441,7 +441,7 @@ fn parse_name_from_email(email: &str) -> (Option<String>, Option<String>) {
             None => String::new(),
         }
     }
-    
+
     match parts.len() {
         0 => (None, None),
         1 => {
@@ -541,7 +541,7 @@ pub async fn create_session(
     let expires_at = current_timestamp_ms + (ttl_seconds * 1000);
 
     sqlx::query(
-        "INSERT INTO sessions (id, user_id, expires_at, created_ms) VALUES (?1, ?2, ?3, ?4)"
+        "INSERT INTO sessions (id, user_id, expires_at, created_ms) VALUES (?1, ?2, ?3, ?4)",
     )
     .bind(&session_id)
     .bind(user_id)
@@ -666,9 +666,27 @@ pub async fn seed_team_members(pool: &Pool<Sqlite>) -> Result<(), sqlx::Error> {
             Some("https://www.linkedin.com/in/chanelle-fellinger/"),
             None::<&str>,
         ),
-        ("martyn@phoenixrooivalk.com", "Martyn", "", None::<&str>, None::<&str>),
-        ("pieter@phoenixrooivalk.com", "Pieter", "", None::<&str>, None::<&str>),
-        ("eben@phoenixrooivalk.com", "Eben", "", None::<&str>, None::<&str>),
+        (
+            "martyn@phoenixrooivalk.com",
+            "Martyn",
+            "",
+            None::<&str>,
+            None::<&str>,
+        ),
+        (
+            "pieter@phoenixrooivalk.com",
+            "Pieter",
+            "",
+            None::<&str>,
+            None::<&str>,
+        ),
+        (
+            "eben@phoenixrooivalk.com",
+            "Eben",
+            "",
+            None::<&str>,
+            None::<&str>,
+        ),
     ];
 
     for (email, first_name, last_name, linkedin_url, discord_handle) in team_members {

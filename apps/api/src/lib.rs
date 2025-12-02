@@ -111,12 +111,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         .route("/auth/me", get(handlers::get_me))
         .route("/auth/profile", axum::routing::put(handlers::put_profile))
         // Career applications
-        .route(
-            "/career/apply",
-            post(handlers::post_career_application),
-        )
+        .route("/career/apply", post(handlers::post_career_application))
         // Admin endpoints
-        .route("/admin/seed-team-members", post(handlers::post_seed_team_members))
+        .route(
+            "/admin/seed-team-members",
+            post(handlers::post_seed_team_members),
+        )
         // x402 Premium Evidence Verification
         .route(
             "/api/v1/evidence/verify-premium",

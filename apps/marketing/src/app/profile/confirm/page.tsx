@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { API_BASE_URL } from "../../../config/constants";
 import styles from "./confirm.module.css";
@@ -12,7 +12,7 @@ interface ProfileData {
   profilePicture?: string;
 }
 
-export default function ProfileConfirmPage() {
+function ProfileConfirmContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -224,5 +224,24 @@ export default function ProfileConfirmPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfileConfirmPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <div className={styles.header}>
+              <h1 className={styles.title}>Loading...</h1>
+              <p className={styles.subtitle}>Please wait</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <ProfileConfirmContent />
+    </Suspense>
   );
 }

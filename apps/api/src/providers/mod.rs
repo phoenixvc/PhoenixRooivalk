@@ -1,6 +1,5 @@
 /// Database provider abstraction layer
 /// Defines traits for database operations that can be implemented by different providers
-
 use crate::entities::{CareerApplication, Evidence, Session, User};
 use async_trait::async_trait;
 use std::fmt::Debug;
