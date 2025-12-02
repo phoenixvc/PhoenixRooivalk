@@ -52,6 +52,7 @@ export type {
 // Slide deck data exports (for modal approach)
 export { week48Slides, week48Meta } from "./slidedecks/week48-slides";
 export { pitchDeckSlides, pitchDeckMeta } from "./slidedecks/pitch-deck-slides";
+export { demoPitchSlides, demoPitchMeta } from "./slidedecks/demo-pitch-slides";
 export {
   presentationMaterialsSlides,
   presentationMaterialsMeta,
