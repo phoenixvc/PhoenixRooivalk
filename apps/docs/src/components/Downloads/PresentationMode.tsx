@@ -104,12 +104,13 @@ function getKeyPointText(point: KeyPoint): string {
 export default function PresentationMode({
   title,
   slides,
-  duration,
+  duration: _duration,
   audience,
   isOpen,
   onClose,
   startSlide = 0,
 }: PresentationModeProps): React.ReactElement | null {
+  // _duration is available for future use (e.g., total presentation time validation)
   const [currentSlide, setCurrentSlide] = React.useState(startSlide);
   const [showNotes, setShowNotes] = React.useState(false);
   const [showThumbnails, setShowThumbnails] = React.useState(false);
@@ -118,8 +119,15 @@ export default function PresentationMode({
   const [revealedBullets, setRevealedBullets] = React.useState<number>(999); // Show all by default
   const [animationMode, setAnimationMode] = React.useState(false);
 
-  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const totalSlides = slides.length;
+
+  // Get key points count for current slide (used for animation mode)
+  const getCurrentSlideKeyPointsCount = React.useCallback(() => {
+    const slide = slides[currentSlide];
+    if (!slide) return 0;
+    return slide.keyPoints.length;
+  }, [slides, currentSlide]);
 
   // Calculate cumulative time for pacing
   const cumulativeTargetTime = React.useMemo(() => {
@@ -231,7 +239,7 @@ export default function PresentationMode({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentSlide, totalSlides, onClose, animationMode, revealedBullets]);
+  }, [isOpen, currentSlide, totalSlides, onClose, animationMode, revealedBullets, getCurrentSlideKeyPointsCount]);
 
   // Reset state when opening
   React.useEffect(() => {
@@ -242,12 +250,6 @@ export default function PresentationMode({
       setRevealedBullets(animationMode ? 0 : 999);
     }
   }, [isOpen, startSlide, animationMode]);
-
-  const getCurrentSlideKeyPointsCount = () => {
-    const slide = slides[currentSlide];
-    if (!slide) return 0;
-    return slide.keyPoints.length;
-  };
 
   if (!isOpen) return null;
 
@@ -286,6 +288,7 @@ export default function PresentationMode({
                 ? "bg-red-600 hover:bg-red-700"
                 : "bg-green-600 hover:bg-green-700"
             }`}
+            aria-label={isTimerRunning ? "Pause timer" : "Start timer"}
           >
             {isTimerRunning ? "Pause" : "Start"}
           </button>
@@ -297,6 +300,8 @@ export default function PresentationMode({
             onClick={() => setShowNotes((prev) => !prev)}
             className={`px-3 py-1.5 rounded text-sm ${showNotes ? "bg-blue-600" : "bg-gray-700 hover:bg-gray-600"}`}
             title="Toggle Notes (N)"
+            aria-label="Toggle notes"
+            aria-pressed={showNotes}
           >
             Notes
           </button>
@@ -304,6 +309,8 @@ export default function PresentationMode({
             onClick={() => setShowThumbnails((prev) => !prev)}
             className={`px-3 py-1.5 rounded text-sm ${showThumbnails ? "bg-blue-600" : "bg-gray-700 hover:bg-gray-600"}`}
             title="Toggle Thumbnails (T)"
+            aria-label="Toggle thumbnails"
+            aria-pressed={showThumbnails}
           >
             Thumbnails
           </button>
@@ -318,6 +325,8 @@ export default function PresentationMode({
             }}
             className={`px-3 py-1.5 rounded text-sm ${animationMode ? "bg-purple-600" : "bg-gray-700 hover:bg-gray-600"}`}
             title="Toggle Animation Mode (A)"
+            aria-label="Toggle animation mode"
+            aria-pressed={animationMode}
           >
             Animate
           </button>
@@ -325,8 +334,9 @@ export default function PresentationMode({
             onClick={onClose}
             className="p-2 hover:bg-gray-700 rounded"
             title="Exit (Escape)"
+            aria-label="Close presentation"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>

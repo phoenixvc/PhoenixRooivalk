@@ -147,11 +147,20 @@ function getKeyPointText(point: KeyPoint): string {
 }
 
 /**
- * Generate QR code as data URL (simple implementation)
- * Uses a free QR code API for simplicity
+ * Generate QR code as data URL using the qrcode npm library
+ * Returns a base64 data URL or empty string on error
  */
-function getQrCodeUrl(data: string, size = 150): string {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(data)}`;
+async function getQrCodeUrl(data: string, size = 150): Promise<string> {
+  try {
+    const QRCode = (await import("qrcode")).default;
+    return await QRCode.toDataURL(data, { width: size });
+  } catch (err) {
+    console.error(
+      "[generatePptx] Failed to generate QR code:",
+      err instanceof Error ? err.message : err,
+    );
+    return "";
+  }
 }
 
 /**
@@ -440,7 +449,13 @@ export async function generatePptx(
           w: 6.0,
           h: 3.0,
         });
-      } catch {
+      } catch (err) {
+        // Log the error for debugging
+        console.error(
+          `[generatePptx] Failed to add image on slide ${slide.number} ("${slide.title}"):`,
+          err instanceof Error ? err.message : err,
+          err instanceof Error ? err.stack : "",
+        );
         // If image fails, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 2.0,
@@ -849,7 +864,7 @@ export async function generatePptx(
   // Add QR code if contact URL is provided
   if (metadata.contactUrl || metadata.contactEmail) {
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
-    const qrUrl = getQrCodeUrl(qrData, 120);
+    const qrUrl = await getQrCodeUrl(qrData, 120);
 
     // QR code placeholder text (actual QR code would need to be fetched)
     summarySlide.addText("Scan to connect:", {
@@ -862,17 +877,36 @@ export async function generatePptx(
       align: "center",
     });
 
-    // Add QR code image
-    try {
-      summarySlide.addImage({
-        path: qrUrl,
-        x: 4.0,
-        y: 5.4,
-        w: 1.5,
-        h: 1.5,
-      });
-    } catch {
-      // If QR code fails, show URL text instead
+    // Add QR code image if generated successfully
+    if (qrUrl) {
+      try {
+        summarySlide.addImage({
+          data: qrUrl, // Use data instead of path for base64 data URLs
+          x: 4.0,
+          y: 5.4,
+          w: 1.5,
+          h: 1.5,
+        });
+      } catch (err) {
+        // Log the error for debugging
+        console.error(
+          `[generatePptx] Failed to add QR code on summary slide:`,
+          err instanceof Error ? err.message : err,
+          err instanceof Error ? err.stack : "",
+        );
+        // If QR code fails, show URL text instead
+        summarySlide.addText(qrData, {
+          x: 2.5,
+          y: 5.5,
+          w: 5.0,
+          h: 0.3,
+          fontSize: 12,
+          color: colors.primary,
+          align: "center",
+        });
+      }
+    } else {
+      // If QR code generation failed, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
         y: 5.5,
