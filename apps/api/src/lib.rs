@@ -7,10 +7,12 @@ use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 pub mod connection;
 pub mod db;
 pub mod db_errors;
+pub mod entities;
 pub mod handlers;
 pub mod handlers_x402;
 pub mod migrations;
 pub mod models;
+pub mod providers;
 pub mod rate_limit;
 pub mod repository;
 
