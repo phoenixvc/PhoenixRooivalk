@@ -5,6 +5,7 @@
 # Source files (only dist/ is needed after build)
 src/
 *.js.map
+*.d.ts.map
 tsconfig.json
 
 # Tests
@@ -46,7 +47,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dependencies (will be restored by SCM during deployment)
+# Dependencies (excluded - Azure SCM rebuilds them with scm-do-build-during-deployment)
 node_modules/
 
 # Other build tools
