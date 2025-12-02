@@ -8,14 +8,25 @@ points: 15
 tags:
   - executive
   - counter-uas
+dataSource: centralized
+dataVersion: "1.0"
 ---
+
+import {
+  MARKET,
+  PERFORMANCE,
+  BLOCKCHAIN,
+  HARDWARE,
+  TEAM,
+  ROADMAP,
+} from "@site/src/data/values";
 
 ## Company Status
 
 ### Legal Structure
 
-- **Primary Entity**: Delaware C-Corp registration (in progress)
-- **Secondary Entity**: South African entity (planned Q2 2026)
+- **Primary Entity**: {TEAM.COMPANY_STRUCTURE}
+- **Secondary Entity**: {TEAM.SECONDARY_ENTITY}
 - **Business Structure**: Corporate entity established for defense contracting
   and IP protection
 
@@ -27,7 +38,7 @@ tags:
 
 ## System Overview
 
-Phoenix Rooivalk is a SAE Level 4 Autonomous Counter-UAS (Counter-Unmanned
+Phoenix Rooivalk is a {PERFORMANCE.AUTONOMY_LEVEL} Autonomous Counter-UAS (Counter-Unmanned
 Aerial System) defense platform that represents a revolutionary advancement in
 drone defense technology. The system combines cutting-edge artificial
 intelligence with military-grade blockchain infrastructure to deliver
@@ -74,12 +85,12 @@ defense.
 
 ## Market Opportunity: Explosive Growth in Counter-Drone Systems
 
-The C-UAS market presents exceptional opportunities, valued at **$2.45-3.0B in
-2025** and projected to reach **$9-15B by 2030** at 23-27% CAGR. The Pentagon
-Replicator program alone commits **$500M** to deploy thousands of autonomous
-drones by August 2025, while recent contract awards total over **$6B** including
-Raytheon's massive $5.04B Coyote interceptor contract through 2033. Ukraine's
-experience losing 10,000+ drones monthly to jamming demonstrates urgent
+The C-UAS market presents exceptional opportunities, valued at **{MARKET.CURRENT} in
+{MARKET.CURRENT_YEAR}** and projected to reach **{MARKET.PROJECTED} by {MARKET.PROJECTED_YEAR}** at {MARKET.CAGR} CAGR. The Pentagon
+Replicator program alone commits **{MARKET.PENTAGON_REPLICATOR}** to deploy thousands of autonomous
+drones by {MARKET.PENTAGON_TIMELINE}, while recent contract awards total over **{MARKET.TOTAL_CONTRACTS}** including
+Raytheon's massive {MARKET.RAYTHEON_COYOTE} Coyote interceptor contract {MARKET.RAYTHEON_TIMELINE}. Ukraine's
+experience losing {MARKET.UKRAINE_MONTHLY_LOSSES} drones monthly to jamming demonstrates urgent
 operational needs driving procurement.
 
 ### Critical Market Gaps
@@ -90,8 +101,8 @@ operational needs driving procurement.
 
 ### Regional Market Dynamics
 
-- **North America**: Dominates with 40-45% market share
-- **Asia-Pacific**: Fastest growth at 25.5% CAGR
+- **North America**: Dominates with {MARKET.NORTH_AMERICA_SHARE} market share
+- **Asia-Pacific**: Fastest growth at {MARKET.ASIA_PACIFIC_CAGR} CAGR
 - **Regulatory Tailwinds**: Pending Counter-UAS Authority Act potentially
   extending authorization to state/local law enforcement and critical
   infrastructure operators by 2026
@@ -104,18 +115,18 @@ operational needs driving procurement.
 
 | Metric                    | Target   | Industry Standard | Advantage                                     |
 | ------------------------- | -------- | ----------------- | --------------------------------------------- |
-| **AI Detection Accuracy** | 99.5%    | 70-85%            | Eliminates environmental false positives      |
-| **Response Time**         | 50-195ms | 2-5 seconds       | 25-40x faster than current systems            |
-| **Data Integrity**        | 99.9%    | Variable          | Blockchain-verified audit trails              |
-| **System Uptime**         | 99.9%    | 95-99%            | High availability with redundant architecture |
+| **AI Detection Accuracy** | {PERFORMANCE.ACCURACY}    | 70-85%            | Eliminates environmental false positives      |
+| **Response Time**         | {PERFORMANCE.RESPONSE_TIME} | {MARKET.COMPETITOR_RESPONSE_TIME}       | {PERFORMANCE.VS_COMPETITORS} than current systems            |
+| **Data Integrity**        | {PERFORMANCE.AVAILABILITY}    | Variable          | Blockchain-verified audit trails              |
+| **System Uptime**         | {PERFORMANCE.AVAILABILITY}    | 95-99%            | High availability with redundant architecture |
 
 ### Unique Capabilities
 
-- **SAE Level 4 Autonomous Operation**: Complete edge operation without
+- **{PERFORMANCE.AUTONOMY_LEVEL} Autonomous Operation**: Complete edge operation without
   communications dependency
 - **RF-Silent Drone Detection**: Handles autonomous threats that 80% of current
   systems cannot detect
-- **<2ms Authentication**: Ultra-fast friend-or-foe identification
+- **{PERFORMANCE.AUTH_LATENCY} Authentication**: Ultra-fast friend-or-foe identification
 
 ---
 
@@ -130,9 +141,9 @@ operational needs driving procurement.
 - **Integration**: Consumes fused sensor tracks, produces engagement decisions,
   includes human override channels
 
-### 2. Solana (Evidence Blockchain Anchoring)
+### 2. {BLOCKCHAIN.PRIMARY_CHAIN} (Evidence Blockchain Anchoring)
 
-- **Performance**: 65,000–100,000 TPS, ~400ms finality, ~$0.00025 per anchor
+- **Performance**: {BLOCKCHAIN.TPS} TPS, ~{BLOCKCHAIN.FINALITY} finality, ~{BLOCKCHAIN.COST_PER_TX} per anchor
 - **Architecture**: Hash-chained batches, on-chain Merkle roots, off-chain
   encrypted storage
 - **Resilience**: Dual-chain option with Etherlink bridge, local evidence
@@ -161,15 +172,15 @@ operational needs driving procurement.
 
 ### Core Platform
 
-NVIDIA Jetson AGX Orin 64GB delivers **275 TOPS of AI performance** with 2048
+{HARDWARE.COMPUTE_PLATFORM} {HARDWARE.MEMORY} delivers **{HARDWARE.COMPUTE_TOPS} of AI performance** with 2048
 CUDA cores, 64 Tensor cores, and dedicated Deep Learning Accelerators providing
 the computational foundation for real-time multi-sensor fusion. The platform
 achieves **30-60 FPS sustained processing** for 4K video streams with
-sensor-to-decision latency under 50ms using TensorRT optimization.
+sensor-to-decision latency under {PERFORMANCE.DETECTION_LATENCY} using TensorRT optimization.
 
 ### Detection Performance
 
-YOLOv9 achieves **65.2% mAP** at 30+ FPS on Jetson Nano, scaling to 60+ FPS on
+YOLOv9 achieves **{PERFORMANCE.YOLOV9_MAP} mAP** on optimized platforms with 60+ FPS on
 Orin platforms. Effective detection ranges from 50-500 feet altitude with
 real-time processing of multiple concurrent streams.
 
@@ -184,10 +195,10 @@ real-time processing of multiple concurrent streams.
 
 ### Defense-Grade Specifications
 
-- **Operating Range**: -40°C to +85°C with MIL-STD-810G shock and vibration
+- **Operating Range**: {HARDWARE.TEMP_RANGE} with {HARDWARE.MIL_SPEC} shock and vibration
   compliance
 - **Ruggedized Options**: Curtiss-Wright DuraCOR and FORECR MILBOX integrators
-- **Protection**: Fanless operation, IP67 ingress protection
+- **Protection**: Fanless operation, {HARDWARE.IP_RATING} ingress protection
 - **Power**: 9-36 VDC input suitable for tactical vehicle integration
 
 ---
@@ -201,7 +212,7 @@ real-time processing of multiple concurrent streams.
 - **Specialization**: Swarm defense capabilities most competitors lack
 - **Strategy**: Position as sensor-agnostic systems integrator rather than point
   solution provider
-- **Export Markets**: Target Middle East and Asia-Pacific (25.5% CAGR) with less
+- **Export Markets**: Target Middle East and Asia-Pacific ({MARKET.ASIA_PACIFIC_CAGR} CAGR) with less
   regulatory constraint than US commercial market
 
 ### Technology Differentiation
@@ -211,10 +222,10 @@ real-time processing of multiple concurrent streams.
 - **Hybrid Response**: Implement soft-kill/hard-kill with layered response
   optimizing effector selection
 - **Performance Targets**:
-  - Detection range over 5km
-  - Response time under 200ms
-  - Success rate over 99%
-  - Multi-target capacity handling 10+ simultaneous threats
+  - Detection range: {PERFORMANCE.DETECTION_RANGE_EXTENDED}
+  - Response time: &lt;200ms
+  - Success rate: over 99%
+  - Multi-target capacity: {PERFORMANCE.CONCURRENT_TARGETS} simultaneous threats
 
 ### Development Roadmap
 
@@ -272,8 +283,8 @@ Total $25-50M for competitive positioning:
 
 **Primary Contact**
 
-- **Email**: [jurie@phoenixvc.tech](mailto:jurie@phoenixvc.tech)
-- **Phone**: +27 (069) 140-6835
+- **Email**: [{TEAM.CONTACT_EMAIL}](mailto:{TEAM.CONTACT_EMAIL})
+- **Phone**: {TEAM.CONTACT_PHONE}
 - **Website**:
   [phoenixrooivalk.netlify.app](https://phoenixrooivalk.netlify.app/)
 

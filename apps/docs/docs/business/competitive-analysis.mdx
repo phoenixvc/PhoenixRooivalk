@@ -10,7 +10,16 @@ tags:
   - counter-uas
 prerequisites:
   - executive-summary
+dataSource: centralized
+dataVersion: "1.0"
 ---
+
+import {
+  MARKET,
+  PERFORMANCE,
+  PRICING,
+  COMPETITORS,
+} from "@site/src/data/values";
 
 ## Executive Summary
 
@@ -28,7 +37,7 @@ substantial market share by addressing critical gaps in current solutions.
 
 **Military & Defense**
 
-1. **Anduril Industries** - $28B valuation (Series G, June 2025), strong defense
+1. **Anduril Industries** - {COMPETITORS.ANDURIL_VALUATION} valuation (Series G, June 2025), strong defense
    relationships
 2. **Lockheed Martin** - Traditional defense contractor with integrated
    solutions
@@ -36,8 +45,8 @@ substantial market share by addressing critical gaps in current solutions.
 
 **Critical Infrastructure**
 
-1. **Fortem Technologies** - $1.2B valuation, kinetic interceptor focus
-2. **DroneShield Ltd** - 4,000+ deployments, multi-sensor approach
+1. **Fortem Technologies** - {COMPETITORS.FORTEM_VALUATION} valuation, kinetic interceptor focus
+2. **DroneShield Ltd** - {COMPETITORS.DRONESHIELD_DEPLOYED} deployments, multi-sensor approach
 3. **Dedrone** - Software-focused, enterprise security emphasis
 
 **Commercial & Events**
@@ -55,11 +64,11 @@ substantial market share by addressing critical gaps in current solutions.
 **Company Overview**
 
 - **Founded**: 2017
-- **Valuation**: $28B (Series G, June 2025)
-- **Recent Funding**: $2.5B Series G (June 2025), $1.5B Series F (August 2024),
+- **Valuation**: {COMPETITORS.ANDURIL_VALUATION} (Series G, June 2025)
+- **Recent Funding**: {COMPETITORS.ANDURIL_SERIES_G} Series G (June 2025), $1.5B Series F (August 2024),
   $1.5B Series E (December 2022)
-- **Employees**: 2,500+
-- **Revenue**: $1B+ (estimated)
+- **Employees**: {COMPETITORS.ANDURIL_EMPLOYEES}
+- **Revenue**: {COMPETITORS.ANDURIL_REVENUE} (estimated)
 - **Focus**: AI-powered defense systems, autonomous weapons
 
 **Product Portfolio**
@@ -80,7 +89,7 @@ substantial market share by addressing critical gaps in current solutions.
 **Weaknesses**
 
 - **Cloud Dependency**: Systems require network connectivity
-- **Slow Response Time**: 2-5 second detection-to-action latency
+- **Slow Response Time**: {COMPETITORS.ANDURIL_RESPONSE} detection-to-action latency
 - **No RF-Silent Detection**: Cannot detect autonomous drones
 - **Limited Autonomy**: Requires human oversight for decisions
 - **No Audit Trail**: No blockchain or cryptographic evidence
@@ -88,8 +97,8 @@ substantial market share by addressing critical gaps in current solutions.
 **Market Position**
 
 - **Target Market**: Military and defense contractors
-- **Market Share**: ~15% of military counter-drone segment
-- **Pricing**: $100k-$500k per system
+- **Market Share**: {COMPETITORS.ANDURIL_MARKET_SHARE} of military counter-drone segment
+- **Pricing**: {COMPETITORS.ANDURIL_PRICE} per system
 - **Sales Model**: Direct sales to government and defense contractors
 
 **Competitive Assessment**
@@ -105,9 +114,9 @@ substantial market share by addressing critical gaps in current solutions.
 **Company Overview**
 
 - **Founded**: 2016
-- **Valuation**: $1.2B (Series C, 2025)
-- **Employees**: 500+
-- **Revenue**: $200M+ (estimated)
+- **Valuation**: {COMPETITORS.FORTEM_VALUATION} (Series C, 2025)
+- **Employees**: {COMPETITORS.FORTEM_EMPLOYEES}
+- **Revenue**: {COMPETITORS.FORTEM_REVENUE} (estimated)
 - **Focus**: Kinetic counter-drone systems, airport security
 
 **Product Portfolio**
@@ -119,7 +128,7 @@ substantial market share by addressing critical gaps in current solutions.
 
 **Strengths**
 
-- **Kinetic Capability**: Physical drone interception
+- **Kinetic Capability**: Physical drone interception ({COMPETITORS.FORTEM_CAPTURE_RATE} mid-air capture success)
 - **Airport Focus**: Strong presence in aviation security
 - **Proven Technology**: Multiple successful deployments
 - **Regulatory Compliance**: FAA-approved systems
@@ -136,8 +145,8 @@ substantial market share by addressing critical gaps in current solutions.
 **Market Position**
 
 - **Target Market**: Airports, critical infrastructure, government
-- **Market Share**: ~12% of critical infrastructure segment
-- **Pricing**: $150k-$300k per system
+- **Market Share**: {COMPETITORS.FORTEM_MARKET_SHARE} of critical infrastructure segment
+- **Pricing**: {COMPETITORS.FORTEM_PRICE} per system
 - **Sales Model**: Direct sales and channel partners
 
 **Competitive Assessment**
@@ -153,9 +162,9 @@ substantial market share by addressing critical gaps in current solutions.
 **Company Overview**
 
 - **Founded**: 2014
-- **Employees**: 200+
-- **Revenue**: $50M+ (estimated)
-- **Deployments**: 4,000+ systems globally
+- **Employees**: {COMPETITORS.DRONESHIELD_EMPLOYEES}
+- **Revenue**: {COMPETITORS.DRONESHIELD_REVENUE} (estimated)
+- **Deployments**: {COMPETITORS.DRONESHIELD_DEPLOYED} systems globally
 - **Focus**: Multi-sensor detection and jamming systems
 - **Stock**: ASX: DRO (Australian Stock Exchange)
 
@@ -202,8 +211,8 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 **Market Position**
 
 - **Target Market**: Broad commercial and government markets
-- **Market Share**: ~8% across all segments
-- **Pricing**: $25k-$100k per system
+- **Market Share**: {COMPETITORS.DRONESHIELD_MARKET_SHARE} across all segments
+- **Pricing**: {PRICING.SYSTEM_RANGE} per system
 - **Sales Model**: Direct sales and international distributors
 
 **Competitive Assessment**
@@ -222,10 +231,10 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 
 | Capability               | Phoenix Rooivalk | Anduril    | Fortem        | DroneShield | Aaronia |
 | ------------------------ | ---------------- | ---------- | ------------- | ----------- | ------- |
-| **Response Time**        | 120-195ms        | 2-5s       | 2-5s          | 2-5s        | 1-3s    |
-| **Detection Accuracy**   | 99.7%            | 95%        | 90%           | 85%         | 80%     |
+| **Response Time**        | {PERFORMANCE.RESPONSE_TIME}        | {COMPETITORS.ANDURIL_RESPONSE}       | {COMPETITORS.FORTEM_RESPONSE}          | {COMPETITORS.DRONESHIELD_RESPONSE}        | {COMPETITORS.AARONIA_RESPONSE}    |
+| **Detection Accuracy**   | {PERFORMANCE.ACCURACY}            | {COMPETITORS.ANDURIL_ACCURACY}        | {COMPETITORS.FORTEM_ACCURACY}           | {COMPETITORS.DRONESHIELD_ACCURACY}         | {COMPETITORS.AARONIA_ACCURACY}     |
 | **RF-Silent Detection**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       | ❌ No   |
-| **Autonomous Operation** | ✅ SAE Level 4   | ⚠️ Partial | ❌ No         | ❌ No       | ❌ No   |
+| **Autonomous Operation** | ✅ {PERFORMANCE.AUTONOMY_LEVEL}   | ⚠️ Partial | ❌ No         | ❌ No       | ❌ No   |
 | **Swarm Handling**       | ✅ 100+          | ⚠️ Limited | ❌ Sequential | ⚠️ Limited  | ❌ No   |
 | **Blockchain Evidence**  | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       | ❌ No   |
 | **EW Resilience**        | ✅ Yes           | ❌ No      | ❌ No         | ❌ No       | ❌ No   |
@@ -262,7 +271,7 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 
 **1. Edge Autonomy**
 
-- **Phoenix Rooivalk**: Complete SAE Level 4 autonomous operation
+- **Phoenix Rooivalk**: Complete {PERFORMANCE.AUTONOMY_LEVEL} autonomous operation
 - **Competitors**: Cloud-dependent or human-operated systems
 - **Advantage**: Operates in contested environments, no single point of failure
 
@@ -270,7 +279,7 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 
 - **Phoenix Rooivalk**: Multi-sensor fusion detects autonomous drones
 - **Competitors**: RF-dependent systems cannot detect autonomous threats
-- **Advantage**: Addresses 64% of current system vulnerabilities
+- **Advantage**: Addresses {MARKET.FACILITIES_UNPROTECTED} of current system vulnerabilities
 
 **3. Blockchain Evidence**
 
@@ -280,9 +289,9 @@ multi-sensor fusion with RF-silent detection directly addresses this gap.
 
 **4. Performance Superiority**
 
-- **Phoenix Rooivalk**: 120-195ms response time
-- **Competitors**: 2-5 second response times
-- **Advantage**: 10-40x faster threat neutralization
+- **Phoenix Rooivalk**: {PERFORMANCE.RESPONSE_TIME} response time
+- **Competitors**: {MARKET.COMPETITOR_RESPONSE_TIME} response times
+- **Advantage**: {PERFORMANCE.VS_COMPETITORS} threat neutralization
 
 **5. Non-Kinetic Safety Advantage**
 
@@ -491,7 +500,7 @@ limitations that PhoenixRooivalk addresses directly.
 
 Key competitive advantages include:
 
-- **10-40x Performance Improvement**: Unmatched speed and accuracy
+- **{PERFORMANCE.VS_COMPETITORS} Performance Improvement**: Unmatched speed and accuracy
 - **RF-Silent Detection**: Only solution for autonomous threats
 - **Blockchain Evidence**: Unique compliance and audit capabilities
 - **Edge Autonomy**: Complete offline operation capability
@@ -505,5 +514,5 @@ can achieve market leadership despite the presence of well-funded competitors.
 ---
 
 _This document contains confidential competitive analysis. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. © {MARKET.CURRENT_YEAR} Phoenix Rooivalk. All rights
 reserved._

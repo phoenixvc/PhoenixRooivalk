@@ -27,16 +27,44 @@ export const MARKET = {
   CAGR_MIN: 23,
   CAGR_MAX: 27,
 
-  // Segments
-  MILITARY_SHARE: "50%",
-  INFRASTRUCTURE_SHARE: "25%",
-  COMMERCIAL_SHARE: "15%",
-  INTERNATIONAL_SHARE: "10%",
+  // Segments (by revenue)
+  MILITARY_SHARE: "48%",
+  MILITARY_VALUE: "$1.2B",
+  INFRASTRUCTURE_SHARE: "24%",
+  INFRASTRUCTURE_VALUE: "$600M",
+  COMMERCIAL_SHARE: "16%",
+  COMMERCIAL_VALUE: "$400M",
+  BORDER_SHARE: "12%",
+  BORDER_VALUE: "$300M",
 
-  // Key events
+  // Regional markets
+  NORTH_AMERICA_SHARE: "41-42%",
+  ASIA_PACIFIC_CAGR: "25.7%",
+  EUROPE_2030: "€3.2B",
+  EUROPE_CAGR: "24%",
+  MIDDLE_EAST_2030: "$1.8B",
+  MIDDLE_EAST_CAGR: "28%",
+  ASIA_PACIFIC_2030: "$3.5B",
+  SOUTH_AFRICA_2030: "$120M",
+
+  // Key events & contracts
   PENTAGON_REPLICATOR: "$500M",
+  PENTAGON_TIMELINE: "August 2025",
   RAYTHEON_COYOTE: "$5.04B",
   RAYTHEON_TIMELINE: "Through 2033",
+  TOTAL_CONTRACTS: "$6B+",
+  EU_DEFENCE_FUND: "€8B (2021-2027)",
+
+  // Ukraine statistics
+  UKRAINE_DRONES_2024: "1M+",
+  UKRAINE_CASUALTY_RATE: "15%",
+  UKRAINE_MONTHLY_LOSSES: "10,000+",
+  DRONE_DAMAGE_2023: "$2.3B",
+
+  // Market gaps
+  FACILITIES_UNPROTECTED: "64%",
+  COMPETITOR_FALSE_POSITIVE: "15-25%",
+  COMPETITOR_RESPONSE_TIME: "2-5 seconds",
 };
 
 /** Performance Values */
@@ -165,14 +193,43 @@ export const ROADMAP = {
 
 /** Competitor Values */
 export const COMPETITORS = {
+  // Response times
   DRONESHIELD_RESPONSE: ">5,000ms",
   DEDRONE_RESPONSE: ">10,000ms",
-  ANDURIL_RESPONSE: "~2,000ms",
+  ANDURIL_RESPONSE: "2-5 seconds",
   RAFAEL_RESPONSE: ">10,000ms",
+  FORTEM_RESPONSE: "2-5 seconds",
+  AARONIA_RESPONSE: "1-3 seconds",
 
+  // Pricing
   DRONESHIELD_PRICE: "$1.2M+",
   DEDRONE_PRICE: "$1.5M+",
   FORTEM_PRICE: "$800K-1.2M",
+  ANDURIL_PRICE: "$100K-$500K",
+
+  // Accuracy
+  ANDURIL_ACCURACY: "95%",
+  FORTEM_ACCURACY: "90%",
+  DRONESHIELD_ACCURACY: "85%",
+  AARONIA_ACCURACY: "80%",
+  FORTEM_CAPTURE_RATE: "85%",
+
+  // Valuations & funding
+  ANDURIL_VALUATION: "$28B",
+  ANDURIL_SERIES_G: "$2.5B",
+  ANDURIL_EMPLOYEES: "2,500+",
+  ANDURIL_REVENUE: "$1B+",
+  ANDURIL_MARKET_SHARE: "~15%",
+
+  FORTEM_VALUATION: "$1.2B",
+  FORTEM_EMPLOYEES: "500+",
+  FORTEM_REVENUE: "$200M+",
+  FORTEM_MARKET_SHARE: "~12%",
+
+  DRONESHIELD_EMPLOYEES: "200+",
+  DRONESHIELD_REVENUE: "$50M+",
+  DRONESHIELD_DEPLOYED: "4,000+",
+  DRONESHIELD_MARKET_SHARE: "~8%",
 
   UNIQUE_FEATURES: [
     "Blockchain evidence (only us)",
@@ -180,6 +237,35 @@ export const COMPETITORS = {
     "Pre-hardware revenue (x402)",
     "Non-ITAR jurisdiction",
   ],
+};
+
+/** Canada CUAS Sandbox */
+export const CUAS_SANDBOX = {
+  EVENT_DATES: "September 14 - October 9, 2026",
+  APPLICATION_DEADLINE: "December 15, 2025, 2:00 PM ET",
+  PRIZE_POOL: "$1.75 million CAD",
+  PERIMETER_RADIUS: "2.5 km",
+  BORDER_COVERAGE: "10 km",
+  MIN_TRL: "TRL 5",
+};
+
+/** SkySnare Consumer Product */
+export const SKYSNARE = {
+  MSRP: "$349",
+  TARGET_MARKET: "$3.22B outdoor sports toy market",
+  TAM: "$1.68B",
+  YEAR_1_UNITS: 5000,
+  RETURN_RATE: "<3%",
+  COGS: "$135",
+  CONTRIBUTION_MARGIN: "59%",
+  CAC: "$60",
+};
+
+/** AeroNet Enterprise */
+export const AERONET = {
+  SETUP_FEE: "$75K",
+  MONTHLY_FEE: "$45K/month",
+  TAM: "$4.2B",
 };
 
 /** All values combined for easy import */
@@ -193,4 +279,7 @@ export const ALL_VALUES = {
   TEAM,
   ROADMAP,
   COMPETITORS,
+  CUAS_SANDBOX,
+  SKYSNARE,
+  AERONET,
 };
