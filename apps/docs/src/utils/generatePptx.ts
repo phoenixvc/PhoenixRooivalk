@@ -510,6 +510,67 @@ export async function generatePptx(
           valign: "top",
         });
       }
+    } else if (layout === "image-right" && slide.image) {
+      // Split layout: key points left, image right
+      // Key points on the left (55% width)
+      if (slide.keyPoints.length > 0) {
+        const bulletPoints = slide.keyPoints.map((point) => ({
+          text: getKeyPointText(point),
+          options: {
+            bullet: { type: "number" as const, code: "2022" },
+            color: colors.text,
+            fontSize: 13,
+            paraSpaceBefore: 5,
+            paraSpaceAfter: 5,
+          },
+        }));
+
+        contentSlide.addText(bulletPoints, {
+          x: 0.5,
+          y: 1.9,
+          w: 5.0,
+          h: 4.5,
+          color: colors.text,
+          fontSize: 13,
+          valign: "top",
+        });
+      }
+
+      // Image on the right (45% width)
+      try {
+        contentSlide.addImage({
+          path: slide.image,
+          x: 5.7,
+          y: 1.9,
+          w: 3.8,
+          h: 3.5,
+        });
+      } catch {
+        // If image fails, add placeholder text
+        contentSlide.addText("[Image: " + slide.image + "]", {
+          x: 5.7,
+          y: 2.8,
+          w: 3.8,
+          h: 1.0,
+          fontSize: 12,
+          color: colors.textMuted,
+          align: "center",
+        });
+      }
+
+      // Image caption below image
+      if (slide.imageCaption) {
+        contentSlide.addText(slide.imageCaption, {
+          x: 5.7,
+          y: 5.5,
+          w: 3.8,
+          h: 0.4,
+          fontSize: 10,
+          color: colors.textMuted,
+          align: "center",
+          italic: true,
+        });
+      }
     } else if (layout === "two-column") {
       // Two-column comparison layout
       const leftItems = slide.leftColumn || [];

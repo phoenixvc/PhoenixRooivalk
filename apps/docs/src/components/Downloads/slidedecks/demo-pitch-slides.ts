@@ -23,14 +23,14 @@ export const demoPitchSlides: Slide[] = [
     keyPoints: [
       "**Autonomous Counter-Drone Defense**",
       "",
-      "*Sub-200ms response. True offline capability. Blockchain evidence.*",
+      "*Sub-200ms response | True offline | Blockchain evidence*",
       "",
-      "**Protecting Critical Infrastructure from Aerial Threats**",
+      "**When seconds matter, we respond in milliseconds**",
     ],
     speakerNotes:
-      "Open with confidence. Pause on the tagline. Let the title sink in before moving to the problem.",
+      "Open with confidence. Pause on the tagline. Let 'milliseconds' land - it's our core differentiator.",
     script:
-      "Welcome to Phoenix Rooivalk. We're building the next generation of autonomous counter-drone defense systems. Sub-200 millisecond response times. True offline capability. And blockchain-anchored evidence for legal accountability. We protect critical infrastructure from aerial threats.",
+      "Welcome to Phoenix Rooivalk. We're building autonomous counter-drone defense that responds in under 200 milliseconds - that's 10 to 150 times faster than anything else on the market. True offline capability for denied environments. Blockchain-anchored evidence for legal accountability. When seconds matter, we respond in milliseconds.",
   },
 
   // ==========================================
@@ -154,9 +154,9 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 5,
-    title: "10-150x Faster Than Competitors",
+    title: "Why We Win: 10-150x Speed Advantage",
     duration: 45,
-    icon: "🏆",
+    icon: "⚡",
     layout: "two-column",
     leftColumnTitle: "Phoenix Rooivalk",
     leftColumn: [
@@ -189,9 +189,9 @@ export const demoPitchSlides: Slide[] = [
     title: "Market & Business Model",
     duration: 60,
     icon: "📊",
-    layout: "image",
+    layout: "image-right",
     image: "/img/tam-sam-som.svg",
-    imageCaption: "Counter-drone market growing at 25.1% CAGR to $20.3B by 2030",
+    imageCaption: "Drone Defense Market TAM/SAM/SOM",
     keyPoints: [
       {
         text: "**Market:** $6.64B (2025) → **$20.3B** (2030) at **25.1% CAGR**",
@@ -266,55 +266,10 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 8: FINANCIALS & INVESTMENT ASK
+  // SLIDE 8: TEAM
   // ==========================================
   {
     number: 8,
-    title: "The Ask: $500K-$1M Seed Round",
-    duration: 60,
-    icon: "💰",
-    layout: "image",
-    image: "/img/investment-breakdown.svg",
-    imageCaption: "18-month runway with clear milestones to Series A",
-    keyPoints: [
-      {
-        text: "**Investment Allocation:**",
-        subPoints: [
-          "**40%** R&D / Engineering - AI/ML, edge processing, firmware",
-          "**25%** Hardware / Manufacturing - prototypes, tooling, BOM",
-          "**15%** Sales & Marketing - D2C launch, trade shows, pilots",
-          "**10%** Operations - legal, IP protection, infrastructure",
-          "**10%** Certification - CPSC, ASTM, CE marking",
-        ],
-      },
-      {
-        text: "**18-Month Runway to Series A:**",
-        subPoints: [
-          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
-          "**Q3-Q4 2026**: Scale to $500K ARR, 3-5 enterprise deals",
-          "**Series A ready** with proven revenue and market traction",
-        ],
-      },
-      {
-        text: "**Use of Funds Milestones:**",
-        subPoints: [
-          "Complete prototype → first 100 units",
-          "Achieve certifications → unlock EU/US markets",
-          "Close pilot deals → prove enterprise value",
-        ],
-      },
-    ],
-    speakerNotes:
-      "Be specific about how the money will be used. Investors want to see a clear path to next milestones. Emphasize the 18-month runway and Series A path.",
-    script:
-      "We're raising $500K to $1M in seed funding. Here's exactly how we'll use it: 40% goes to R&D - continuing our AI and edge processing development. 25% to hardware and manufacturing for prototypes and tooling. 15% to sales and marketing for our direct-to-consumer launch and pilot programs. 10% to operations including legal and IP protection. And 10% to certifications that unlock the EU and US markets. This gives us 18 months of runway with clear milestones: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4, and Series A ready with proven traction.",
-  },
-
-  // ==========================================
-  // SLIDE 9: TEAM
-  // ==========================================
-  {
-    number: 9,
     title: "Founding Team: 60+ Years Combined Expertise",
     duration: 45,
     icon: "👥",
@@ -376,28 +331,71 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
+  // SLIDE 9: ROI, FINANCIALS & THE ASK
+  // ==========================================
+  {
+    number: 9,
+    title: "The Opportunity: $500K-$1M Seed",
+    duration: 60,
+    icon: "💰",
+    layout: "image-right",
+    image: "/img/investment-breakdown.svg",
+    imageCaption: "18-month runway to Series A",
+    keyPoints: [
+      {
+        text: "**Your Return Potential:**",
+        subPoints: [
+          "**10-15x** at Series A ($5-8M target valuation)",
+          "**25-50x** at exit (strategic M&A or IPO)",
+          "Defense sector **acquisitions at record highs**",
+        ],
+      },
+      {
+        text: "**Investment Allocation:**",
+        subPoints: [
+          "**40%** R&D - AI/ML, edge processing, firmware",
+          "**25%** Hardware - prototypes, tooling, manufacturing",
+          "**15%** Sales - D2C launch, trade shows, pilots",
+          "**20%** Ops & Certification - legal, IP, CPSC/ASTM/CE",
+        ],
+      },
+      {
+        text: "**18-Month Runway to Series A:**",
+        subPoints: [
+          "**Q1-Q2 2026**: Product launch, first revenue, EU pilot",
+          "**Q3-Q4 2026**: Scale to **$500K ARR**, 3-5 enterprise deals",
+          "**Series A ready** with proven revenue and market traction",
+        ],
+      },
+    ],
+    speakerNotes:
+      "Lead with ROI potential - investors want to know the return. Be specific about allocation. Emphasize the 18-month runway and Series A path.",
+    script:
+      "We're raising $500K to $1M in seed funding. Here's the opportunity: at our target Series A valuation of $5 to $8 million, seed investors see 10 to 15x returns. At exit, we're looking at 25 to 50x potential - and defense sector M&A is at record highs. Here's how we allocate the funds: 40% to R&D for AI and edge processing. 25% to hardware for prototypes and manufacturing. 15% to sales for our D2C launch and pilot programs. 20% to operations and certifications. This gives us 18 months of runway: product launch and first revenue in Q1-Q2, scaling to $500K ARR by Q4 2026, and Series A ready with proven traction.",
+  },
+
+  // ==========================================
   // SLIDE 10: CALL TO ACTION
   // ==========================================
   {
     number: 10,
-    title: "Let's Defend Critical Infrastructure Together",
+    title: "Join Us in Defending Critical Infrastructure",
     duration: 30,
-    icon: "🎯",
+    icon: "🚀",
     layout: "title-only",
     keyPoints: [
-      "**Raising:** $500K-$1M Seed Round",
+      "**$500K-$1M Seed Round** | *18-month runway to Series A*",
       "",
-      "**Next Steps:**",
-      "• Technical deep-dive demo",
-      "• Pilot program discussion",
-      "• Partnership opportunities",
+      "**Your Next Step:**",
       "",
-      "*contact@phoenixrooivalk.com*",
+      "**Schedule a live demo** - see sub-200ms response in action",
+      "",
+      "*contact@phoenixrooivalk.com | phoenixrooivalk.com*",
     ],
     speakerNotes:
-      "End with clear call to action. Be specific about what you're asking for and what comes next.",
+      "End strong. One clear ask: schedule the demo. Make it easy for them to say yes.",
     script:
-      "We're raising a $500K to $1M seed round to accelerate our go-to-market. If you're interested, let's schedule a technical deep-dive where we can demonstrate the system in action. We're also exploring pilot programs and strategic partnerships. Let's build the future of autonomous defense together.",
+      "We're raising $500K to $1M to bring this to market. You've seen the numbers - 10 to 150x faster, true offline capability, blockchain evidence. Now let me show you. Schedule a live demo and see sub-200 millisecond response time for yourself. Let's defend critical infrastructure together.",
   },
 ];
 

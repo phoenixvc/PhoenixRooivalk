@@ -16,6 +16,7 @@ export type SlideLayout =
   | "default" // Standard bullet points layout
   | "title-only" // Section divider with just title
   | "image" // Image-focused with optional caption
+  | "image-right" // Key points left, image right (split layout)
   | "two-column" // Side-by-side comparison
   | "quote" // Quote/testimonial layout
   | "code" // Code block layout for technical content
@@ -655,6 +656,29 @@ export default function SlideDeckDownload({
                             )}
                           </ul>
                         )}
+                      </div>
+                    ) : slide.layout === "image-right" && slide.image ? (
+                      // Split layout: key points left, image right
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <ul className="space-y-2">
+                            {slide.keyPoints.map((point, i) =>
+                              renderKeyPoint(point, i),
+                            )}
+                          </ul>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <img
+                            src={slide.image}
+                            alt={slide.imageCaption || slide.title}
+                            className="max-w-full max-h-56 rounded-lg shadow-lg"
+                          />
+                          {slide.imageCaption && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 italic mt-2 text-center">
+                              {slide.imageCaption}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     ) : slide.layout === "two-column" ? (
                       // Two-column comparison layout
