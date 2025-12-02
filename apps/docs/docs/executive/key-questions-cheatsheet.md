@@ -5,6 +5,7 @@ sidebar_label: Key Questions Cheatsheet
 difficulty: beginner
 estimated_reading_time: 13
 points: 10
+phase: ["seed", "series-a", "series-b"]
 tags:
   - executive
   - counter-uas

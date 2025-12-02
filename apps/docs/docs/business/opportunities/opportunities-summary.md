@@ -5,6 +5,7 @@ sidebar_label: Opportunities Summary
 difficulty: intermediate
 estimated_reading_time: 28
 points: 15
+phase: ["seed", "series-a"]
 tags:
   - business
   - counter-uas

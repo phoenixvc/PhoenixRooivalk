@@ -5,6 +5,7 @@ sidebar_label: Implementation Plan
 difficulty: expert
 estimated_reading_time: 7
 points: 50
+phase: ["seed", "series-a", "series-b"]
 tags:
   - operations
   - counter-uas

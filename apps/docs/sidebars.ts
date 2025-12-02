@@ -135,14 +135,10 @@ const sidebars: SidebarsConfig = {
               collapsed: true,
               items: [
                 "technical/blockchain-integration",
+                "technical/blockchain/blockchain-analysis",
                 "technical/blockchain/blockchain-architecture",
-                "technical/blockchain/blockchain-architecture-detailed",
-                "technical/blockchain/blockchain-benefits",
-                "technical/blockchain/blockchain-implementation-guide",
-                "technical/blockchain/blockchain-implementation-phases",
-                "technical/blockchain/blockchain-protocols-analysis",
+                "technical/blockchain/blockchain-implementation",
                 "technical/blockchain/blockchain-security-compliance",
-                "technical/blockchain/implementation-roadmap",
               ],
             },
             {

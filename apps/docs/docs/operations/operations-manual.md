@@ -5,6 +5,7 @@ sidebar_label: Operations Manual
 difficulty: intermediate
 estimated_reading_time: 8
 points: 15
+phase: ["series-b", "series-c", "scale"]
 tags:
   - operations
   - counter-uas
