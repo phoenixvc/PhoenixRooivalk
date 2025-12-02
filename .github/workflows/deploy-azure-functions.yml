@@ -56,11 +56,17 @@ jobs:
 
           # Required secrets for Azure Functions deployment
           echo "Checking required secrets..."
+          echo "🔍 Debug: Checking AZURE_FUNCTIONAPP_PUBLISH_PROFILE..."
+          echo "  Secret is set (boolean): ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
 
           if [ -z "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
+            echo "::error::AZURE_FUNCTIONAPP_PUBLISH_PROFILE is NOT set or is EMPTY"
+            echo "::error::This secret must contain the publish profile XML from Azure"
+            echo "::error::To fix: Download publish profile from Azure Portal and set as secret"
             MISSING_SECRETS="${MISSING_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
             CAN_DEPLOY="false"
           else
+            echo "✅ AZURE_FUNCTIONAPP_PUBLISH_PROFILE is configured"
             CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
             PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
           fi
@@ -109,17 +115,37 @@ jobs:
           PRESENT_VARS=""
           MISCONFIG_WARNINGS=""
           
+          echo "🔍 Debug: Checking AZURE_FUNCTIONAPP_NAME..."
+          echo "  Variable value: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'"
+          echo "  Variable is set (boolean): ${{ vars.AZURE_FUNCTIONAPP_NAME != '' }}"
+          echo "  Also set as secret (boolean): ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}"
+          
           # Check AZURE_FUNCTIONAPP_NAME
           if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
+            echo "::error::AZURE_FUNCTIONAPP_NAME is NOT set as a VARIABLE"
             MISSING_VARS="${MISSING_VARS}AZURE_FUNCTIONAPP_NAME, "
             CAN_DEPLOY="false"
             
             # Check if it was mistakenly set as a secret
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+              echo "::error::AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
+              echo "::error::To fix:"
+              echo "::error::  1. Go to Settings → Secrets and variables → Actions → Secrets tab"
+              echo "::error::  2. Delete the AZURE_FUNCTIONAPP_NAME secret"
+              echo "::error::  3. Go to Variables tab → New repository variable"
+              echo "::error::  4. Name: AZURE_FUNCTIONAPP_NAME"
+              echo "::error::  5. Value: Your function app name (e.g., phoenix-rooivalk-functions)"
               MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
               echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a secret but should be a variable. Delete the secret and set it as a variable instead."
+            else
+              echo "::error::To fix: Add AZURE_FUNCTIONAPP_NAME as a repository VARIABLE (not secret)"
+              echo "::error::  1. Go to Settings → Secrets and variables → Actions → Variables tab"
+              echo "::error::  2. Click 'New repository variable'"
+              echo "::error::  3. Name: AZURE_FUNCTIONAPP_NAME"
+              echo "::error::  4. Value: Your function app name (e.g., phoenix-rooivalk-functions)"
             fi
           else
+            echo "✅ AZURE_FUNCTIONAPP_NAME is configured: ${{ vars.AZURE_FUNCTIONAPP_NAME }}"
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_FUNCTIONAPP_NAME, "
             PRESENT_VARS="${PRESENT_VARS}AZURE_FUNCTIONAPP_NAME, "
             
@@ -131,9 +157,23 @@ jobs:
           fi
 
           # Check AZURE_AI_DEPLOYMENT_NAME
+          echo "🔍 Debug: Checking AZURE_AI_DEPLOYMENT_NAME..."
+          echo "  Variable value: '${{ vars.AZURE_AI_DEPLOYMENT_NAME }}'"
+          echo "  Variable is set (boolean): ${{ vars.AZURE_AI_DEPLOYMENT_NAME != '' }}"
+          echo "  Also set as secret (boolean): ${{ secrets.AZURE_AI_DEPLOYMENT_NAME != '' }}"
+          
           if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
+            echo "✅ AZURE_AI_DEPLOYMENT_NAME is configured: ${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
+            
+            # Warn about unusual deployment names (may indicate typos or configuration errors)
+            DEPLOYMENT_NAME="${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
+            if [[ ! "$DEPLOYMENT_NAME" =~ ^(gpt-3|gpt-35|gpt-4|text-embedding|dall-e) ]]; then
+              echo "::warning::AZURE_AI_DEPLOYMENT_NAME value '$DEPLOYMENT_NAME' may be unusual"
+              echo "::warning::Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e"
+              echo "::warning::Verify this matches your Azure OpenAI deployment name exactly"
+            fi
             
             # Warn if it's ALSO set as a secret (duplicate configuration)
             if [ -n "${{ secrets.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
@@ -141,18 +181,26 @@ jobs:
               echo "::warning::AZURE_AI_DEPLOYMENT_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
             fi
           elif [ -n "${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}" ]; then
+            echo "✅ AZURE_OPENAI_CHAT_DEPLOYMENT is configured: ${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}"
             PRESENT_VARS="${PRESENT_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
           else
-            # Check for common typos (specifically the 'v' prefix typo reported in the issue)
+            # Check for common typos (specifically the 'v' prefix typo)
             if [ -n "${{ vars.vAZURE_AI_DEPLOYMENT_NAME }}" ]; then
+              echo "::error::Variable name typo detected: vAZURE_AI_DEPLOYMENT_NAME should be AZURE_AI_DEPLOYMENT_NAME"
+              echo "::error::Found: vAZURE_AI_DEPLOYMENT_NAME (with 'v' prefix)"
+              echo "::error::Should be: AZURE_AI_DEPLOYMENT_NAME (without 'v' prefix)"
+              echo "::error::To fix:"
+              echo "::error::  1. Go to Settings → Secrets and variables → Actions → Variables tab"
+              echo "::error::  2. Delete vAZURE_AI_DEPLOYMENT_NAME"
+              echo "::error::  3. Create new variable: AZURE_AI_DEPLOYMENT_NAME with value from Azure OpenAI deployment"
               MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME (found as vAZURE_AI_DEPLOYMENT_NAME), "
               MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  Found vAZURE_AI_DEPLOYMENT_NAME but it should be AZURE_AI_DEPLOYMENT_NAME (remove the 'v' prefix)"
-              echo "::error::Variable name typo detected: vAZURE_AI_DEPLOYMENT_NAME should be AZURE_AI_DEPLOYMENT_NAME"
               CAN_DEPLOY="false"
             else
+              echo "::warning::AZURE_AI_DEPLOYMENT_NAME is not set (will use default 'gpt-4')"
               MISSING_VARS="${MISSING_VARS}AZURE_AI_DEPLOYMENT_NAME, "
-              # Warning only - has default
+              # Warning only - has default in workflow
             fi
           fi
 
