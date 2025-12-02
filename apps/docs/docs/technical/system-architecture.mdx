@@ -3,13 +3,17 @@ id: system-architecture
 title: System Architecture
 sidebar_label: System Architecture
 difficulty: expert
-estimated_reading_time: 6
-points: 50
+timeEstimate: 6
+xpReward: 50
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - technical
   - architecture
   - counter-uas
 ---
+
+import { BLOCKCHAIN, HARDWARE, PERFORMANCE, PRICING, TECH } from "@site/src/data/values";
 
 ## Revolutionary Multi-Part Design
 
@@ -99,7 +103,7 @@ providing capabilities unmatched by current market solutions.
 **Integrated Command System**
 
 - **Morpheus AI**: Autonomous decision-making and threat analysis
-- **Solana Blockchain**: Evidence anchoring and audit trails
+- **{BLOCKCHAIN.PRIMARY_CHAIN} Blockchain**: Evidence anchoring and audit trails
 - **Cognitive Mesh**: Swarm coordination and communication
 - **Cloud Analytics**: Azure/AWS for region-specific deployment
 
@@ -111,9 +115,9 @@ providing capabilities unmatched by current market solutions.
 
 **Options Evaluated**
 
-1. **Solana** - 3000+ TPS, $0.00025/transaction, 400ms finality
-2. **Polygon** - 7000 TPS, $0.01/transaction, 2-3 second finality
-3. **Hedera Hashgraph** - 10000 TPS, $0.0001/transaction, 3-5 second finality
+1. **Solana** - 3000+ TPS, {BLOCKCHAIN.COST_PER_TX}/transaction, {BLOCKCHAIN.FINALITY} finality
+2. **Polygon** - 7000 TPS, {BLOCKCHAIN.POLYGON_COST}/transaction, 2-3 second finality
+3. **Hedera Hashgraph** - 10000 TPS, {BLOCKCHAIN.HEDERA_COST}/transaction, 3-5 second finality
 4. **Private Chain** - Unlimited TPS, no transaction cost, instant finality
 
 **Decision: Hybrid Approach**
@@ -147,7 +151,7 @@ Delaware C-Corp entity.
 
 **Options Evaluated**
 
-1. **NVIDIA Jetson AGX Orin** - 275 TOPS, established ecosystem, $1,999
+1. **{HARDWARE.COMPUTE_PLATFORM}** - {HARDWARE.COMPUTE_TOPS}, established ecosystem, $1,999
 2. **Qualcomm RB5** - 15 TOPS, 5G integrated, $449
 3. **Intel NUC Extreme** - x86 architecture, higher power, $2,500
 4. **Hailo-15** - 20 TOPS, lowest power, $250
@@ -274,9 +278,9 @@ Delaware C-Corp entity.
 
 **Projected Unit Economics at 200 Units/Year**
 
-- In-house cost: R850,000 ($56,000) per complete system
+- In-house cost: {PRICING.INHOUSE_COST_ZAR} ({PRICING.INHOUSE_COST_USD}) per complete system
 - Outsourced cost: R1,400,000 ($93,000) per system
-- Gross margin improvement: 40% to 65%
+- Gross margin improvement: 40% to {PRICING.GROSS_MARGIN}
 - Payback period: 18 months
 
 ---
@@ -311,18 +315,18 @@ Delaware C-Corp entity.
 
 ### System Performance Metrics
 
-- **Detection Range**: 5-10 km (configurable)
-- **Response Time**: 3-6 seconds end-to-end
-- **Accuracy**: 95%+ threat identification
-- **False Positive Rate**: <5%
-- **System Availability**: 99.9% uptime
-- **Power Consumption**: 100-250W average
+- **Detection Range**: {PERFORMANCE.DETECTION_RANGE} (configurable up to {PERFORMANCE.DETECTION_RANGE_EXTENDED})
+- **Response Time**: {PERFORMANCE.RESPONSE_TIME} end-to-end
+- **Accuracy**: {PERFORMANCE.ACCURACY} threat identification
+- **False Positive Rate**: {PERFORMANCE.FALSE_POSITIVE}
+- **System Availability**: {PERFORMANCE.AVAILABILITY} uptime
+- **Power Consumption**: {HARDWARE.POWER_AVG} average
 
 ### Swarm Coordination
 
 - **Swarm Size**: 5-20 interceptor drones
-- **Coordination Latency**: <100ms
-- **Autonomous Decision**: SAE Level 4 autonomy
+- **Coordination Latency**: {TECH.COORDINATION_LATENCY}
+- **Autonomous Decision**: {PERFORMANCE.AUTONOMY_LEVEL} autonomy
 - **Human Override**: Always available
 - **Collision Avoidance**: Real-time path planning
 
@@ -352,5 +356,5 @@ next-generation counter-drone defense systems.
 ---
 
 _This document contains confidential technical information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._

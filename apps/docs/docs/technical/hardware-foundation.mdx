@@ -3,21 +3,25 @@ id: hardware-foundation
 title: Hardware Foundation
 sidebar_label: Hardware Foundation
 difficulty: advanced
-estimated_reading_time: 7
-points: 25
+timeEstimate: 7
+xpReward: 25
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - technical
   - hardware
   - counter-uas
 ---
 
+import { HARDWARE, PERFORMANCE, TECH } from "@site/src/data/values";
+
 ## NVIDIA Jetson for Edge AI
 
-NVIDIA Jetson AGX Orin 64GB delivers **275 TOPS of AI performance** with 2048
-CUDA cores, 64 Tensor cores, and dedicated Deep Learning Accelerators providing
+{HARDWARE.COMPUTE_PLATFORM} delivers **{HARDWARE.COMPUTE_TOPS} of AI performance** with {HARDWARE.CUDA_CORES}
+CUDA cores, {HARDWARE.TENSOR_CORES} Tensor cores, and dedicated Deep Learning Accelerators providing
 the computational foundation for real-time multi-sensor fusion. The platform
-achieves **30-60 FPS sustained processing** for 4K video streams with
-sensor-to-decision latency under 50ms using TensorRT optimization.
+achieves **{TECH.FRAME_RATE} sustained processing** for 4K video streams with
+sensor-to-decision latency under {PERFORMANCE.DETECTION_LATENCY} using TensorRT optimization.
 
 ---
 
@@ -27,16 +31,16 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Computational Power**
 
-- **AI Performance**: 275 TOPS (Tera Operations Per Second)
-- **CUDA Cores**: 2048 Ampere architecture cores
-- **Tensor Cores**: 64 dedicated AI acceleration cores
+- **AI Performance**: {HARDWARE.COMPUTE_TOPS} (Tera Operations Per Second)
+- **CUDA Cores**: {HARDWARE.CUDA_CORES} Ampere architecture cores
+- **Tensor Cores**: {HARDWARE.TENSOR_CORES} dedicated AI acceleration cores
 - **Deep Learning Accelerators**: 2x NVDLA v2.0 for CNN processing
-- **Memory**: 64GB LPDDR5 with 204.8 GB/s bandwidth
+- **Memory**: {HARDWARE.MEMORY} LPDDR5 with {HARDWARE.MEMORY_BANDWIDTH} bandwidth
 
 **Real-Time Processing**
 
-- **Video Processing**: 30-60 FPS sustained for 4K video streams
-- **Sensor-to-Decision Latency**: Under 50ms with TensorRT optimization
+- **Video Processing**: {TECH.FRAME_RATE} sustained for 4K video streams
+- **Sensor-to-Decision Latency**: Under {PERFORMANCE.DETECTION_LATENCY} with TensorRT optimization
 - **Multi-Stream Processing**: Concurrent processing of multiple sensor streams
 - **Power Efficiency**: 7W-60W configurable power modes
 
@@ -52,7 +56,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 **TensorRT Optimization**
 
 - **Sparsity Support**: Doubles Tensor Core throughput for INT8 inference
-- **Model Optimization**: 8-10x speedup through TensorRT optimization
+- **Model Optimization**: {TECH.TENSORRT_SPEEDUP} speedup through TensorRT optimization
 - **Quantization**: INT8 quantization for enhanced performance
 - **Dynamic Batching**: Optimized batch processing for throughput
 
@@ -64,9 +68,9 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Camera Integration**
 
-- **MIPI CSI-2**: Up to 6 cameras (16 via virtual channels)
-- **Resolution Support**: 1080p to 4K video processing
-- **Frame Rates**: 30-60 FPS sustained processing
+- **MIPI CSI-2**: {HARDWARE.CAMERA_COUNT}
+- **Resolution Support**: {HARDWARE.CAMERA_RESOLUTION} video processing
+- **Frame Rates**: {TECH.FRAME_RATE} sustained processing
 - **Synchronization**: Hardware-synchronized multi-camera capture
 
 **High-Speed Sensors**
@@ -78,7 +82,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Data Fusion Architecture**
 
-- **Unified Memory**: 204.8 GB/s memory bandwidth for real-time fusion
+- **Unified Memory**: {HARDWARE.MEMORY_BANDWIDTH} memory bandwidth for real-time fusion
 - **DeepStream 3D**: Heterogeneous data integration framework
 - **Temporal Synchronization**: Multi-sensor temporal alignment
 - **Calibration Support**: Multi-sensor calibration and alignment
@@ -87,7 +91,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **RF Detection Arrays**
 
-- **Frequency Range**: 300MHz-6GHz coverage
+- **Frequency Range**: {HARDWARE.RF_FREQUENCY_RANGE} coverage
 - **Protocol Analysis**: Real-time protocol identification
 - **MAC Address Capture**: Device identification and tracking
 - **Passive Detection**: No transmission required for detection
@@ -108,14 +112,14 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Acoustic Sensors**
 
-- **Audio Detection**: 300-500m range for autonomous drone detection
+- **Audio Detection**: {HARDWARE.ACOUSTIC_RANGE} range for autonomous drone detection
 - **GPS-Denied Operation**: Audio-based detection in GPS-denied areas
 - **Signature Analysis**: Drone signature identification and classification
 - **Multi-Directional**: 360-degree audio coverage
 
 **LiDAR Systems**
 
-- **3D Mapping**: 42,000 measurements per second with sub-meter accuracy
+- **3D Mapping**: {HARDWARE.LIDAR_MEASUREMENTS} with sub-meter accuracy
 - **Obstacle Detection**: Real-time obstacle detection and avoidance
 - **Weather Dependent**: Performance varies with weather conditions
 - **High Resolution**: Sub-meter accuracy for precise positioning
@@ -136,7 +140,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 **Swarm Performance**
 
 - **Swarm Size**: Demonstrated swarms of 3-300 drones
-- **Coordination Latency**: Under 50ms for swarm coordination
+- **Coordination Latency**: {TECH.COORDINATION_LATENCY} for swarm coordination
 - **Fault Tolerance**: Resilience to partial network loss
 - **Scalability**: Linear scaling with swarm size
 
@@ -164,9 +168,9 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Operating Conditions**
 
-- **Temperature Range**: -40°C to +85°C operation
+- **Temperature Range**: {HARDWARE.TEMP_RANGE_INDUSTRIAL} operation
 - **MIL-STD-810G**: Shock and vibration compliance
-- **Ingress Protection**: IP67 rated for dust and water resistance
+- **Ingress Protection**: {HARDWARE.IP_RATING} rated for dust and water resistance
 - **EMI/EMC**: MIL-STD-461 compliant for electromagnetic compatibility
 
 **Power Management**
@@ -180,11 +184,10 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Industrial Solutions**
 
-- **Curtiss-Wright DuraCOR**: Fanless operation with IP67 protection
+- **Curtiss-Wright DuraCOR**: Fanless operation with {HARDWARE.IP_RATING} protection
 - **FORECR MILBOX**: 18-32 VDC power input for tactical vehicle integration
 - **Shock Resistance**: MIL-STD-810G shock and vibration compliance
-- **Environmental Sealing**: Protection against dust, moisture, and temperature
-  extremes
+- **Environmental Sealing**: Protection against dust, moisture, and temperature extremes
 
 **Tactical Vehicle Integration**
 
@@ -204,8 +207,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 - **Sub-5 Microsecond**: Event response latency for critical operations
 - **Processor Shielding**: Real-time cores isolated from Linux
 - **Deterministic Performance**: Guaranteed performance for critical operations
-- **Mission-Critical Control**: Weapon station control and mission-critical
-  operations
+- **Mission-Critical Control**: Weapon station control and mission-critical operations
 
 **Real-Time Capabilities**
 
@@ -238,7 +240,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Model Optimization**
 
-- **8-10x Speedup**: TensorRT optimization for inference performance
+- **{TECH.TENSORRT_SPEEDUP} Speedup**: TensorRT optimization for inference performance
 - **INT8 Quantization**: Reduced precision for enhanced performance
 - **Dynamic Batching**: Optimized batch processing
 - **Model Pruning**: Reduced model size and complexity
@@ -246,7 +248,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 **Memory Optimization**
 
 - **Unified Memory**: Shared memory between CPU and GPU
-- **Memory Bandwidth**: 204.8 GB/s memory bandwidth utilization
+- **Memory Bandwidth**: {HARDWARE.MEMORY_BANDWIDTH} memory bandwidth utilization
 - **Cache Optimization**: Optimized cache usage for performance
 - **Memory Management**: Efficient memory management and allocation
 
@@ -290,7 +292,7 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 
 **Performance Advantages**
 
-- **Low Latency**: Sub-50ms sensor-to-decision latency
+- **Low Latency**: Sub-{PERFORMANCE.DETECTION_LATENCY} sensor-to-decision latency
 - **High Throughput**: High-throughput multi-sensor processing
 - **Real-Time Processing**: Real-time processing capabilities
 - **Scalability**: Scalable processing for large swarms
@@ -301,42 +303,6 @@ sensor-to-decision latency under 50ms using TensorRT optimization.
 - **Graceful Degradation**: Reduced functionality rather than failure
 - **Redundancy**: Multiple processing nodes for redundancy
 - **Recovery**: Automatic recovery from failures
-
----
-
-## Future Enhancements
-
-### Technology Evolution
-
-**Next-Generation Hardware**
-
-- **Jetson Orin Next**: Next-generation Jetson platform
-- **Enhanced Performance**: Improved AI performance and capabilities
-- **Power Efficiency**: Enhanced power efficiency and management
-- **Integration**: Improved sensor integration and connectivity
-
-**Advanced Capabilities**
-
-- **Quantum Computing**: Quantum computing integration
-- **Edge AI**: Advanced edge AI capabilities
-- **5G Integration**: 5G connectivity and integration
-- **Autonomous Systems**: Enhanced autonomous system capabilities
-
-### Strategic Opportunities
-
-**Market Expansion**
-
-- **New Applications**: Expansion into new application areas
-- **Partnership Opportunities**: Strategic partnership opportunities
-- **Technology Transfer**: Technology transfer and licensing
-- **International Expansion**: International market expansion
-
-**Innovation Opportunities**
-
-- **Research and Development**: Advanced research and development
-- **Technology Innovation**: Technology innovation and advancement
-- **Market Leadership**: Market leadership and competitive advantage
-- **Strategic Positioning**: Strategic positioning and market leadership
 
 ---
 
@@ -356,7 +322,7 @@ resilience.
 ---
 
 _This document contains confidential technical information. Distribution is
-restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
 reserved._
 
 _Context improved by Giga AI_

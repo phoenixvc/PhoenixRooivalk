@@ -3,12 +3,16 @@ id: rkv-m-specifications
 title: RKV-M Tilt Quad Rotor Specifications
 sidebar_label: RKV-M Specifications
 difficulty: advanced
-estimated_reading_time: 4
-points: 25
+timeEstimate: 4
+xpReward: 25
+dataSource: centralized
+dataVersion: "1.0"
 tags:
   - technical
   - counter-uas
 ---
+
+import { RKV_M } from "@site/src/data/values";
 
 ## Overview
 
@@ -31,10 +35,10 @@ study results. Subject to revision as development progresses.
 
 | Parameter             | Specification                             |
 | --------------------- | ----------------------------------------- |
-| **Configuration**     | Ducted, single rotor, 3-blade             |
-| **Duct Diameter**     | 0.60 m (600 mm)                           |
-| **Tip Gap**           | 10 mm                                     |
-| **Blade Count**       | 3                                         |
+| **Configuration**     | Ducted, single rotor, {RKV_M.BLADE_COUNT}-blade |
+| **Duct Diameter**     | {RKV_M.DUCT_DIAMETER}                     |
+| **Tip Gap**           | {RKV_M.TIP_GAP}                           |
+| **Blade Count**       | {RKV_M.BLADE_COUNT}                       |
 | **Design Philosophy** | Maximum thrust efficiency in compact form |
 
 ### Motor/ESC System
@@ -43,7 +47,7 @@ study results. Subject to revision as development progresses.
 | ------------------------- | ---------------------------------------------------- |
 | **Motor Type**            | HV outrunner                                         |
 | **Voltage Configuration** | 16-20S LiPo                                          |
-| **Kv Selection**          | Sized to maintain tip speed ≤120 m/s at hover thrust |
+| **Kv Selection**          | Sized to maintain tip speed {RKV_M.TIP_SPEED} at hover thrust |
 | **ESC**                   | High-voltage capable, matched to motor               |
 
 ---
@@ -88,20 +92,20 @@ All pods capable of 0-90° tilt for transition flight
 
 | Parameter              | Target        | Notes                       |
 | ---------------------- | ------------- | --------------------------- |
-| **Max Speed**          | >150 km/h     | Cruise configuration        |
-| **Hover Endurance**    | 8-12 minutes  | Depends on payload          |
-| **Cruise Endurance**   | 15-20 minutes | Optimized flight profile    |
-| **Operating Altitude** | 0-500 m AGL   | Primary engagement envelope |
-| **Max Altitude**       | 1,000 m AGL   | Extended operations         |
+| **Max Speed**          | {RKV_M.MAX_SPEED} | Cruise configuration    |
+| **Hover Endurance**    | {RKV_M.HOVER_ENDURANCE} | Depends on payload |
+| **Cruise Endurance**   | {RKV_M.CRUISE_ENDURANCE} | Optimized flight profile |
+| **Operating Altitude** | {RKV_M.OPERATING_ALTITUDE} | Primary engagement envelope |
+| **Max Altitude**       | {RKV_M.MAX_ALTITUDE} | Extended operations     |
 
 ### Intercept Performance
 
 | Parameter               | Target             | Notes                       |
 | ----------------------- | ------------------ | --------------------------- |
-| **Time to Launch**      | <3 seconds         | From alert to airborne      |
-| **Intercept Range**     | 500 m              | Effective engagement radius |
-| **Target Closure Rate** | >200 km/h combined | Relative velocity           |
-| **Maneuverability**     | ±60°/s yaw rate    | High-G capable              |
+| **Time to Launch**      | {RKV_M.TIME_TO_LAUNCH} | From alert to airborne  |
+| **Intercept Range**     | {RKV_M.INTERCEPT_RANGE} | Effective engagement radius |
+| **Target Closure Rate** | {RKV_M.CLOSURE_RATE} combined | Relative velocity |
+| **Maneuverability**     | {RKV_M.YAW_RATE} yaw rate | High-G capable        |
 
 ---
 
@@ -111,10 +115,10 @@ All pods capable of 0-90° tilt for transition flight
 
 | Attribute         | Value                                 |
 | ----------------- | ------------------------------------- |
-| **Configuration** | 16-20S HV outrunner                   |
+| **Configuration** | {RKV_M.MOTOR_CONFIG}                  |
 | **Pros**          | Proven technology, good power density |
 | **Cons**          | Battery weight, thermal management    |
-| **TRL**           | 7                                     |
+| **TRL**           | {RKV_M.TRL}                           |
 | **Risk**          | Low                                   |
 
 ### Option B: High-Voltage Direct Drive
@@ -158,8 +162,8 @@ All pods capable of 0-90° tilt for transition flight
 
 | Parameter         | Requirement   | Rationale                       |
 | ----------------- | ------------- | ------------------------------- |
-| **Tip Speed**     | ≤120 m/s      | Noise reduction, efficiency     |
-| **Tip Gap**       | 10 mm nominal | Duct efficiency optimization    |
+| **Tip Speed**     | {RKV_M.TIP_SPEED} | Noise reduction, efficiency |
+| **Tip Gap**       | {RKV_M.TIP_GAP} nominal | Duct efficiency optimization |
 | **Blade Loading** | Moderate      | Responsive control authority    |
 | **Disk Loading**  | 250-350 N/m²  | Balance hover/cruise efficiency |
 
@@ -167,7 +171,7 @@ All pods capable of 0-90° tilt for transition flight
 
 | Source        | Mitigation                         |
 | ------------- | ---------------------------------- |
-| Blade passing | 3-blade design (reduced harmonics) |
+| Blade passing | {RKV_M.BLADE_COUNT}-blade design (reduced harmonics) |
 | Tip vortex    | Ducted configuration               |
 | Motor noise   | Outrunner (external rotor shields) |
 | ESC switching | High-frequency PWM (>20 kHz)       |
@@ -200,7 +204,7 @@ All pods capable of 0-90° tilt for transition flight
 | Link             | Purpose              | Range |
 | ---------------- | -------------------- | ----- |
 | **C2 Link**      | Command/control      | 2 km  |
-| **Mesh Network** | Swarm coordination   | 500 m |
+| **Mesh Network** | Swarm coordination   | {RKV_M.INTERCEPT_RANGE} |
 | **Emergency**    | Lost link procedures | N/A   |
 
 ---
@@ -223,7 +227,7 @@ All pods capable of 0-90° tilt for transition flight
 | Airframe  | 2 hours       | Pre-assembled subassemblies |
 | Avionics  | 1 hour        | Modular harnesses           |
 | Testing   | 30 minutes    | Automated checkout          |
-| **Total** | **3.5 hours** | Target for production units |
+| **Total** | **{RKV_M.ASSEMBLY_TIME}** | Target for production units |
 
 ---
 
@@ -271,5 +275,5 @@ All pods capable of 0-90° tilt for transition flight
 ---
 
 _This document represents initial trade study results for the RKV-M interceptor
-platform. Specifications subject to change as development progresses. © 2025
+platform. Specifications subject to change as development progresses. &copy; 2025
 Phoenix Rooivalk. All rights reserved._
