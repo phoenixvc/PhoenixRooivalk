@@ -199,6 +199,51 @@ impl MigrationManager {
                 CREATE INDEX IF NOT EXISTS idx_payment_receipts_tier ON payment_receipts(tier);
                 "#,
             },
+            Migration {
+                version: 10,
+                name: "add_users_and_sessions_tables",
+                sql: r#"
+                -- Users table for authentication
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    email TEXT NOT NULL UNIQUE,
+                    first_name TEXT,
+                    last_name TEXT,
+                    is_team_member INTEGER NOT NULL DEFAULT 0,
+                    linkedin_url TEXT,
+                    discord_handle TEXT,
+                    created_ms INTEGER NOT NULL,
+                    updated_ms INTEGER NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+                CREATE INDEX IF NOT EXISTS idx_users_is_team_member ON users(is_team_member);
+                
+                -- Sessions table for managing user sessions
+                CREATE TABLE IF NOT EXISTS sessions (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+                    expires_at INTEGER NOT NULL,
+                    created_ms INTEGER NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+                CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+                
+                -- Career applications table
+                CREATE TABLE IF NOT EXISTS career_applications (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+                    position TEXT NOT NULL,
+                    cover_letter TEXT,
+                    status TEXT NOT NULL DEFAULT 'pending',
+                    created_ms INTEGER NOT NULL,
+                    updated_ms INTEGER NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                );
+                CREATE INDEX IF NOT EXISTS idx_career_applications_user_id ON career_applications(user_id);
+                CREATE INDEX IF NOT EXISTS idx_career_applications_status ON career_applications(status);
+                "#,
+            },
         ]
     }
 
@@ -375,8 +420,8 @@ mod tests {
         // Check status
         let status = migration_manager.get_status().await.unwrap();
         assert!(status.is_up_to_date);
-        assert_eq!(status.current_version, 9);
-        assert_eq!(status.applied_migrations.len(), 9);
+        assert_eq!(status.current_version, 10);
+        assert_eq!(status.applied_migrations.len(), 10);
 
         // Verify tables exist
         let tables = sqlx::query("SELECT name FROM sqlite_master WHERE type='table'")

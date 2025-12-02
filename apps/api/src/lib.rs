@@ -104,6 +104,16 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
             "/jamming-operations/{id}",
             get(handlers::get_jamming_operation),
         )
+        // Authentication
+        .route("/auth/login", post(handlers::post_login))
+        .route("/auth/me", get(handlers::get_me))
+        // Career applications
+        .route(
+            "/career/apply",
+            post(handlers::post_career_application),
+        )
+        // Admin endpoints
+        .route("/admin/seed-team-members", post(handlers::post_seed_team_members))
         // x402 Premium Evidence Verification
         .route(
             "/api/v1/evidence/verify-premium",
