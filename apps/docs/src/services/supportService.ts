@@ -162,10 +162,10 @@ class SupportService {
 
         if (!services.functions.isConfigured()) {
           console.error(
-            "⚠️  AI Functions not available. Please check:",
-            `\n  • Network connection (currently: ${networkStatus})`,
-            `\n  • Azure Functions configuration (AZURE_FUNCTIONS_BASE_URL)`,
-            `\n  • Cloud provider settings (currently: ${provider})`,
+            `⚠️  AI Functions not available. Please check:
+  • Network connection (currently: ${networkStatus})
+  • Azure Functions configuration (AZURE_FUNCTIONS_BASE_URL)
+  • Cloud provider settings (currently: ${provider})`,
           );
         }
       } catch (configError) {

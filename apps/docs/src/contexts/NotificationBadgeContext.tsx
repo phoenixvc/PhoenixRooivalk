@@ -117,12 +117,15 @@ export function NotificationBadgeProvider({
         console.error("Stack trace:", error.stack);
       }
 
+      // Check cached data for fallback
+      const cached = localStorage.getItem(TIMESTAMPS_CACHE_KEY);
+
       // Log context information
       console.error("Context:", {
         networkStatus: navigator.onLine ? "Online" : "Offline",
         timestamp: new Date().toISOString(),
         hasUser: !!user,
-        hasCachedData: !!localStorage.getItem(TIMESTAMPS_CACHE_KEY),
+        hasCachedData: !!cached,
       });
 
       // Log cloud service status
@@ -136,7 +139,6 @@ export function NotificationBadgeProvider({
       console.groupEnd();
 
       // Use cached data as fallback even if stale
-      const cached = localStorage.getItem(TIMESTAMPS_CACHE_KEY);
       if (cached) {
         const { data } = JSON.parse(cached);
         setTimestamps(data);
