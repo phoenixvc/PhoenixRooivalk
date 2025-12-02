@@ -400,6 +400,12 @@ export const FUNDING = {
   IOC_INSTALLATION: "$500K",
   IOC_TRAINING: "$200K",
   IOC_SUPPORT_YEAR1: "$300K",
+
+  // Implementation costs (specific projects)
+  BLOCKCHAIN_IMPLEMENTATION: "$9.95M",
+  BLOCKCHAIN_IMPLEMENTATION_DURATION: "15 months",
+  BLOCKCHAIN_EXPECTED_ROI: "300%",
+  BLOCKCHAIN_ROI_TIMELINE: "24 months",
 };
 
 /** RKV-M Interceptor Specs */
@@ -424,11 +430,15 @@ export const RKV_M = {
 
 /** Manufacturing Values */
 export const MANUFACTURING = {
-  // Investment
+  // Investment - Primary Facility
   FACILITY_SETUP: "R50M ($3.3M)",
   EQUIPMENT_TOOLING: "R30M ($2M)",
   WORKING_CAPITAL: "R20M ($1.3M)",
   TOTAL_INVESTMENT: "R100M ($6.6M)",
+
+  // Investment - Secondary Facilities
+  CAPE_TOWN_INVESTMENT: "R20M ($1.3M)",
+  JOHANNESBURG_INVESTMENT: "R30M ($2M)",
 
   // Production targets
   YEAR_1_SYSTEMS: 10,

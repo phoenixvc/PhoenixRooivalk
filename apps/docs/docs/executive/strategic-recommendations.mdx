@@ -11,6 +11,8 @@ tags:
   - counter-uas
 ---
 
+import { MARKET, PERFORMANCE, FUNDING, PHASES } from "@site/src/data/values";
+
 ## Path to Global Leadership
 
 Phoenix Rooivalk's strategic recommendations provide a comprehensive roadmap for
@@ -50,7 +52,7 @@ strategy, and capital requirements.
 
 **Export Markets**
 
-- **Middle East and Asia-Pacific**: 25.7% CAGR with less regulatory constraint
+- **Middle East and Asia-Pacific**: {MARKET.ASIA_PACIFIC_CAGR} CAGR with less regulatory constraint
   than US commercial market
 - **Non-ITAR Advantage**: Non-ITAR jurisdiction enables sales to 140+ countries
 - **Strategic Positioning**: Strategic positioning for high-growth emerging
@@ -96,11 +98,10 @@ strategy, and capital requirements.
 
 **Performance Advantages**
 
-- **Detection Range**: Detection range over 5km
-- **Response Time**: Response time under 30 seconds
-- **Success Rate**: Success rate over 90%
-- **Multi-Target Capacity**: Multi-target capacity handling 5+ simultaneous
-  threats
+- **Detection Range**: {PERFORMANCE.DETECTION_RANGE_EXTENDED}
+- **Response Time**: {PERFORMANCE.RESPONSE_TIME}
+- **Success Rate**: {PERFORMANCE.ACCURACY}
+- **Multi-Target Capacity**: {PERFORMANCE.CONCURRENT_TARGETS} simultaneous threats
 
 ### Autonomous Operation
 
@@ -114,10 +115,10 @@ strategy, and capital requirements.
 
 **Performance Metrics**
 
-- **Detection Range**: Over 5km detection range
-- **Response Time**: Under 30 seconds response time
-- **Success Rate**: Over 90% success rate
-- **Multi-Target**: 5+ simultaneous threat handling
+- **Detection Range**: {PERFORMANCE.DETECTION_RANGE_EXTENDED}
+- **Response Time**: {PERFORMANCE.RESPONSE_TIME}
+- **Success Rate**: {PERFORMANCE.ACCURACY}
+- **Multi-Target**: {PERFORMANCE.CONCURRENT_TARGETS} simultaneous threats
 
 ---
 
@@ -256,7 +257,7 @@ strategy, and capital requirements.
 
 ## Capital Requirements
 
-### Total Funding Needed: $30-50M
+### Total Funding Needed: {FUNDING.SERIES_A_TARGET}
 
 **Development Funding ($10-20M)**
 
