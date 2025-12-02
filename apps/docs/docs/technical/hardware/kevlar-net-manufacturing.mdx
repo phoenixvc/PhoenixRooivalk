@@ -1,0 +1,397 @@
+---
+id: kevlar-net-manufacturing
+title: Kevlar Net Manufacturing Guide
+sidebar_label: Net Manufacturing
+difficulty: advanced
+timeEstimate: 15
+xpReward: 50
+phase: ["seed", "series-a", "series-b"]
+tags:
+  - technical
+  - manufacturing
+  - counter-uas
+---
+
+import { NETS, HARDWARE, SKYSNARE } from "@site/src/data/values";
+
+# Kevlar Net Manufacturing Guide
+
+This document covers the manufacturing process for Kevlar capture nets used in
+Phoenix Rooivalk products, from raw fiber to finished net.
+
+:::info Phoenix Rooivalk Approach
+
+We manufacture nets in-house from Kevlar fiber stock, giving us control over
+quality, specifications, and costs. This guide documents our manufacturing
+process and the underlying science.
+
+:::
+
+---
+
+## Part 1: Understanding Kevlar Fiber
+
+### What is Kevlar?
+
+Kevlar is a para-aramid synthetic fiber developed by Stephanie Kwolek at DuPont
+in 1965. It's known for:
+
+- **High tensile strength**: 5x stronger than steel by weight
+- **Low weight**: Density of 1.44 g/cm³
+- **Heat resistance**: Decomposes at ~450°C
+- **Chemical resistance**: Resistant to most solvents and chemicals
+- **No melting point**: Kevlar decomposes rather than melts
+
+### How Kevlar Fiber is Made (Industry Process)
+
+:::note We Don't Make Kevlar Fiber
+
+Phoenix Rooivalk purchases Kevlar fiber from suppliers (primarily DuPont). The
+fiber manufacturing process below is for educational purposes - we convert
+purchased fiber into nets.
+
+:::
+
+#### Step 1: Polymerization
+
+```
+Monomers:
+  1,4-phenylene-diamine + terephthaloyl chloride
+                    ↓
+           Condensation reaction
+                    ↓
+         Poly-paraphenylene terephthalamide
+                    ↓
+              + HCl (byproduct)
+```
+
+The reaction occurs at low temperatures in a solution of N-methyl-pyrrolidone
+and calcium chloride.
+
+#### Step 2: Fiber Spinning (Wet/Dry-Jet Process)
+
+```
+Polymer solution → Spinneret → Air gap → Coagulation bath
+        ↓              ↓           ↓            ↓
+   Dissolved in    Extrusion    Molecular    Acid removed,
+   sulfuric acid   into fiber   alignment    fiber solidifies
+```
+
+| Stage                | Temperature | Details                        |
+| -------------------- | ----------- | ------------------------------ |
+| **Extrusion**        | ~100°C      | Through spinneret capillaries  |
+| **Air gap**          | Ambient     | ~1cm, molecular alignment      |
+| **Coagulation bath** | 0-4°C       | Cold water, acid extraction    |
+| **Washing/drying**   | Variable    | Remove residual acid, dry      |
+
+#### Step 3: Post-Processing
+
+- **Heat treatment**: Improves crystallinity and strength
+- **Surface treatment**: Enhances bonding for composite applications
+- **Twisting/plying**: Creates multi-filament yarns
+
+### Kevlar Grades
+
+| Grade               | Strength | Modulus | Use Case                 |
+| ------------------- | -------- | ------- | ------------------------ |
+| **Kevlar 29**       | Standard | Medium  | Body armor, ropes        |
+| **Kevlar 49**       | High     | High    | Aerospace, composites    |
+| **Kevlar 149**      | Highest  | Highest | Advanced composites      |
+| **Kevlar 956**      | Standard | Medium  | Netting, cordage         |
+
+For drone capture nets, we primarily use **Kevlar 29** or **Kevlar 956** -
+optimizing for strength-to-weight ratio and cost.
+
+---
+
+## Part 2: From Fiber to Net
+
+### Our Manufacturing Process
+
+```
+Raw Materials         Intermediate           Final Product
+─────────────────────────────────────────────────────────────
+Kevlar fiber    →    Twisted twine    →    Knotted net
+(purchased)          (in-house)            (in-house)
+                           ↓
+                     Edge binding
+                     Corner weights
+                     Packaging
+```
+
+### Required Equipment
+
+| Equipment               | Purpose                        | Estimated Cost |
+| ----------------------- | ------------------------------ | -------------- |
+| **Twisting machine**    | Create multi-strand twine      | $2,000-5,000   |
+| **Netting loom/shuttle**| Hand or semi-auto net knotting | $500-3,000     |
+| **Edge binding machine**| Reinforce net perimeter        | $1,000-2,500   |
+| **Cutting station**     | Precision cutting to size      | $200-500       |
+| **Heat gun/sealer**     | Prevent fraying                | $50-150        |
+| **Tensile tester**      | QC strength testing            | $500-2,000     |
+
+### Step 1: Twine Production
+
+#### 1.1 Fiber Selection
+
+| Property         | Specification               | Test Method        |
+| ---------------- | --------------------------- | ------------------ |
+| **Denier**       | 1000-1500D                  | Weight per length  |
+| **Tensile**      | Min 2,920 MPa               | ASTM D885          |
+| **Elongation**   | 2.4-3.6%                    | ASTM D885          |
+| **Moisture**     | <0.5%                       | Karl Fischer       |
+
+#### 1.2 Twisting Process
+
+```
+Single Kevlar filaments
+        ↓
+  Combine 3 strands
+        ↓
+  Twist (S or Z direction)
+        ↓
+  Urethane coating (optional)
+        ↓
+  Curing/drying
+        ↓
+  Spool for storage
+```
+
+**Twist specifications:**
+- **Twist per inch (TPI)**: 4-8 TPI
+- **Direction**: S-twist for final product
+- **Tension**: 0.5-1.0 N per strand
+
+### Step 2: Net Construction
+
+#### 2.1 Knotted Net Method (Preferred)
+
+```
+Net Construction Pattern:
+
+     ●─────●─────●─────●
+     │╲   ╱│╲   ╱│╲   ╱│
+     │ ╲ ╱ │ ╲ ╱ │ ╲ ╱ │
+     │  ●  │  ●  │  ●  │   ← Knot points
+     │ ╱ ╲ │ ╱ ╲ │ ╱ ╲ │
+     │╱   ╲│╱   ╲│╱   ╲│
+     ●─────●─────●─────●
+
+     Mesh size: {NETS.AIR_TO_AIR_MESH}
+```
+
+**Knot types:**
+- **Sheet bend**: Standard netting knot
+- **Double sheet bend**: Higher security
+- **Fisherman's knot**: Maximum strength
+
+#### 2.2 Knotless Net Method (Alternative)
+
+| Pros                     | Cons                      |
+| ------------------------ | ------------------------- |
+| No weak points at knots  | Requires special loom     |
+| Smoother surface         | Higher equipment cost     |
+| Faster production        | Less repair flexibility   |
+
+### Step 3: Edge Reinforcement
+
+```
+Cross-section of edge binding:
+
+         Net mesh
+            │
+     ┌──────┼──────┐
+     │      │      │
+─────●══════●══════●─────  ← Edge rope (5mm braided)
+     │      │      │
+     └──────┴──────┘
+            │
+     Double stitching
+```
+
+**Edge specifications:**
+- **Rope diameter**: 5mm braided Kevlar or nylon
+- **Stitch spacing**: 25mm
+- **Thread**: Heavy-duty polyester or Kevlar
+- **Overlap**: 50mm fold-over
+
+### Step 4: Corner Weights
+
+```
+Corner Assembly:
+
+    Net corner
+         │
+         ▼
+    ┌────────┐
+    │ D-ring │  ← Stainless steel, 15mm
+    └───┬────┘
+        │
+    ┌───┴───┐
+    │Swivel │  ← Ball-bearing, prevents tangling
+    └───┬───┘
+        │
+    ┌───┴───┐
+    │Weight │  ← Tungsten, 25g each
+    └───────┘
+```
+
+| Component    | Material         | Weight  | Supplier Options       |
+| ------------ | ---------------- | ------- | ---------------------- |
+| **D-ring**   | Stainless steel  | 5g      | McMaster-Carr, Amazon  |
+| **Swivel**   | Brass/steel      | 8g      | Fishing supply         |
+| **Weight**   | Tungsten/steel   | 25-30g  | Fishing supply, custom |
+
+---
+
+## Part 3: Net Specifications by Product
+
+### SkySnare Consumer Net
+
+| Parameter             | Specification              |
+| --------------------- | -------------------------- |
+| **Deployed size**     | {NETS.GROUND_SIZE}         |
+| **Material**          | {NETS.GROUND_MATERIAL}     |
+| **Mesh size**         | {NETS.GROUND_MESH}         |
+| **Weight**            | {NETS.GROUND_WEIGHT}       |
+| **Corner weights**    | 4 × 15g                    |
+| **Target cost**       | $8-12 per net              |
+
+### AeroNet Interceptor Net
+
+| Parameter             | Specification              |
+| --------------------- | -------------------------- |
+| **Deployed size**     | {NETS.AIR_TO_AIR_SIZE}     |
+| **Material**          | {HARDWARE.NET_MATERIAL}/Dyneema blend |
+| **Mesh size**         | {NETS.AIR_TO_AIR_MESH}     |
+| **Weight**            | {NETS.AIR_TO_AIR_WEIGHT}   |
+| **Breaking strength** | {NETS.AIR_TO_AIR_STRENGTH} |
+| **Corner weights**    | 4 × 25g tungsten           |
+| **Target cost**       | $35-50 per net             |
+
+---
+
+## Part 4: Quality Control
+
+### Incoming Material Inspection
+
+| Test              | Method                  | Accept Criteria        |
+| ----------------- | ----------------------- | ---------------------- |
+| **Visual**        | Inspect for damage      | No cuts, fraying       |
+| **Tensile**       | Pull test per ASTM D885 | ≥ 2,920 MPa            |
+| **Weight/denier** | Precision scale         | Within ±5% of spec     |
+| **Moisture**      | Moisture analyzer       | < 0.5%                 |
+
+### In-Process Checks
+
+| Stage         | Check                      | Frequency      |
+| ------------- | -------------------------- | -------------- |
+| **Twisting**  | TPI, tension               | Every 100m     |
+| **Netting**   | Mesh size, knot integrity  | Every 10 knots |
+| **Edge**      | Stitch spacing, overlap    | Every edge     |
+| **Corner**    | Weight accuracy, swivel    | Every corner   |
+
+### Final Net Testing
+
+```
+Test Protocol:
+
+1. Deployment Test
+   ├── Drop from 3m height
+   ├── Measure opening time
+   └── Pass: < 0.5 seconds to full open
+
+2. Strength Test
+   ├── Hang 50kg for 1 hour
+   ├── Inspect for strand failure
+   └── Pass: No breakage
+
+3. Wrap Test
+   ├── Deploy onto test frame (simulated drone)
+   ├── Measure coverage
+   └── Pass: > 80% wrap coverage
+
+4. Cycle Test
+   ├── 10 deployment/repack cycles
+   ├── Check for tangling
+   └── Pass: No deployment failures
+```
+
+---
+
+## Part 5: Production Scaling
+
+### Current State (Prototype)
+
+| Metric                | Value                  |
+| --------------------- | ---------------------- |
+| **Production rate**   | 5-10 nets/week         |
+| **Method**            | Hand construction      |
+| **QC**                | 100% inspection        |
+| **Cost per net**      | $40-60                 |
+
+### Year 1 Target (Seed Phase)
+
+| Metric                | Value                  |
+| --------------------- | ---------------------- |
+| **Production rate**   | 50-100 nets/week       |
+| **Method**            | Semi-automated         |
+| **QC**                | Statistical sampling   |
+| **Cost per net**      | $15-25                 |
+
+### Year 2+ Target (Scale)
+
+| Metric                | Value                  |
+| --------------------- | ---------------------- |
+| **Production rate**   | 500+ nets/week         |
+| **Method**            | Automated line         |
+| **QC**                | In-line sensors        |
+| **Cost per net**      | $8-12                  |
+
+---
+
+## Part 6: Supplier Resources
+
+### Kevlar Fiber Sources
+
+| Supplier              | Product              | MOQ    | Lead Time |
+| --------------------- | -------------------- | ------ | --------- |
+| **DuPont** (direct)   | Kevlar 29, 49, 956   | 100kg  | 4-6 weeks |
+| **Teijin Aramid**     | Twaron (para-aramid) | 50kg   | 3-4 weeks |
+| **Distributors**      | Various grades       | 10kg   | 1-2 weeks |
+
+### Alternative Materials
+
+| Material          | Strength   | Cost    | Notes                    |
+| ----------------- | ---------- | ------- | ------------------------ |
+| **Dyneema**       | Very high  | High    | UHMWPE, floats on water  |
+| **Spectra**       | Very high  | High    | Similar to Dyneema       |
+| **Vectran**       | High       | Medium  | Good creep resistance    |
+| **Technora**      | High       | Medium  | Teijin para-aramid       |
+| **HDPE**          | Medium     | Low     | Consumer-grade option    |
+
+### Hardware Sources
+
+| Component        | Supplier Options                          |
+| ---------------- | ----------------------------------------- |
+| **D-rings**      | McMaster-Carr, Strapworks, Amazon         |
+| **Swivels**      | Bass Pro, Cabela's, fishing supply        |
+| **Weights**      | Tungsten: tackle shops; Steel: hardware   |
+| **Edge rope**    | SGT Knots, Paracord Planet, rope supply   |
+| **Thread**     | Its, Gütermann (heavy-duty polyester)   |
+
+---
+
+## References
+
+- [DuPont Kevlar Technical Guide](https://www.dupont.com/content/dam/dupont/amer/us/en/safety/public/documents/en/Kevlar_Technical_Guide_0319.pdf)
+- [Gourock Kevlar Netting](https://www.gourock.com/kevlar_dyneema_netting.html)
+- [US Netting - Custom Kevlar](https://www.usnetting.com/custom-netting/kevlar/)
+- [Net Specifications](./net-specifications)
+- [ResearchGate - Net Launch Device Design](https://www.researchgate.net/publication/357563196_Design_and_Testing_of_a_Net-Launch_Device_for_Drone_Capture)
+
+---
+
+_This document covers Kevlar net manufacturing for Phoenix Rooivalk products.
+For net specifications and deployment, see [Net Specifications](./net-specifications).
+© 2025 Phoenix Rooivalk. All rights reserved._
