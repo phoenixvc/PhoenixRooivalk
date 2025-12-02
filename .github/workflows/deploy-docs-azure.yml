@@ -54,6 +54,11 @@ jobs:
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
                 fi
               else
+                # Variable exists correctly, but check if it's ALSO set as a secret (duplicate)
+                if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
+                  MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
+                fi
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else

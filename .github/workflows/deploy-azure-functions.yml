@@ -122,12 +122,24 @@ jobs:
           else
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_FUNCTIONAPP_NAME, "
             PRESENT_VARS="${PRESENT_VARS}AZURE_FUNCTIONAPP_NAME, "
+            
+            # Even if variable exists, warn if it's ALSO set as a secret (duplicate configuration)
+            if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+              MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
+              echo "::warning::AZURE_FUNCTIONAPP_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
+            fi
           fi
 
           # Check AZURE_AI_DEPLOYMENT_NAME
           if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
+            
+            # Warn if it's ALSO set as a secret (duplicate configuration)
+            if [ -n "${{ secrets.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
+              MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_AI_DEPLOYMENT_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
+              echo "::warning::AZURE_AI_DEPLOYMENT_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
+            fi
           elif [ -n "${{ vars.AZURE_OPENAI_CHAT_DEPLOYMENT }}" ]; then
             PRESENT_VARS="${PRESENT_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_OPENAI_CHAT_DEPLOYMENT, "
