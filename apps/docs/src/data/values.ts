@@ -274,7 +274,7 @@ export const TEAM = {
 
 /** Roadmap Values */
 export const ROADMAP = {
-  CURRENT_WEEK: "Week 48",
+  CURRENT_WEEK: "Week 49",
   CURRENT_YEAR: 2025,
 
   // Q1 2026

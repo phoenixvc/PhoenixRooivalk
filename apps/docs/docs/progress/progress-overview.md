@@ -42,6 +42,12 @@ Each weekly report follows a consistent format:
 
 ## 2025 Reports
 
+### December 2025
+
+| Week                      | Dates          | Highlights                                                                                                                                               |
+| ------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Week 49](./2025/week-49) | Dec 2 - Dec 5  | **240+ commits**: Demo pitch deck complete, Microsoft Founders Hub Phase 3 ($25K), net prototype started (3D tools), Google/AWS applications, $960K seed ask |
+
 ### November 2025
 
 | Week                      | Dates          | Highlights                                                                                                                                               |
