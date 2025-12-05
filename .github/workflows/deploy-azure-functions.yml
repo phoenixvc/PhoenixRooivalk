@@ -482,7 +482,11 @@ jobs:
               { "name": "AZURE_AI_DEPLOYMENT_NAME", "value": "${{ vars.AZURE_AI_DEPLOYMENT_NAME || 'gpt-4' }}", "slotSetting": false },
               { "name": "APPLICATIONINSIGHTS_CONNECTION_STRING", "value": "${{ secrets.APPLICATIONINSIGHTS_CONNECTION_STRING }}", "slotSetting": false },
               { "name": "SENDGRID_API_KEY", "value": "${{ secrets.SENDGRID_API_KEY }}", "slotSetting": false },
-              { "name": "AZURE_NOTIFICATION_HUB_CONNECTION_STRING", "value": "${{ secrets.AZURE_NOTIFICATION_HUB_CONNECTION_STRING }}", "slotSetting": false }
+              { "name": "AZURE_NOTIFICATION_HUB_CONNECTION_STRING", "value": "${{ secrets.AZURE_NOTIFICATION_HUB_CONNECTION_STRING }}", "slotSetting": false },
+              { "name": "GITHUB_TOKEN", "value": "${{ secrets.GITHUB_TOKEN }}", "slotSetting": false },
+              { "name": "ADMIN_NOTIFICATION_EMAIL", "value": "${{ vars.ADMIN_NOTIFICATION_EMAIL }}", "slotSetting": false },
+              { "name": "DOCS_BASE_URL", "value": "${{ vars.DOCS_BASE_URL }}", "slotSetting": false },
+              { "name": "WEEKLY_REPORT_REPOS", "value": "${{ vars.WEEKLY_REPORT_REPOS || 'JustAGhosT/PhoenixRooivalk' }}", "slotSetting": false }
             ]
 
       - name: Verify Deployment
@@ -516,12 +520,16 @@ jobs:
           echo "- Health: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/health" >> $GITHUB_STEP_SUMMARY
           echo "- News: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/news" >> $GITHUB_STEP_SUMMARY
           echo "- AI: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/ai" >> $GITHUB_STEP_SUMMARY
+          echo "- Weekly Reports: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/reports/weekly" >> $GITHUB_STEP_SUMMARY
+          echo "- Access Applications: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/access/applications" >> $GITHUB_STEP_SUMMARY
+          echo "- Known Emails: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/known-emails" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Scheduled Jobs:" >> $GITHUB_STEP_SUMMARY
           echo "- fetchNewsScheduled (every 6 hours)" >> $GITHUB_STEP_SUMMARY
           echo "- processEmailQueueScheduled (every 5 minutes)" >> $GITHUB_STEP_SUMMARY
           echo "- sendDailyDigestScheduled (daily 8 AM UTC)" >> $GITHUB_STEP_SUMMARY
           echo "- cacheCleanupScheduled (hourly)" >> $GITHUB_STEP_SUMMARY
+          echo "- generateWeeklyReportScheduled (Mondays 9 AM UTC)" >> $GITHUB_STEP_SUMMARY
 
   # ===========================================
   # PR Validation (no deployment)

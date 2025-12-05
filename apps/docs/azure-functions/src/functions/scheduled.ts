@@ -9,6 +9,8 @@ import { app, InvocationContext, Timer } from "@azure/functions";
 import { newsIngestionService } from "../services/news-ingestion.service";
 import { notificationsService } from "../services/notifications.service";
 import { newsAnalyticsService } from "../services/news-analytics.service";
+import { weeklyReportsService } from "../services/weekly-reports.service";
+import { gitHubService } from "../services/github.service";
 import { cleanupExpiredCache } from "../lib/cache";
 import { checkAndStoreAlerts } from "../lib/monitoring";
 import { createLogger, Logger } from "../lib/logger";
@@ -257,4 +259,59 @@ app.timer("aiNewsDigestScheduled", {
   // Run twice daily at 6 AM and 6 PM UTC
   schedule: "0 0 6,18 * * *",
   handler: aiNewsDigestJob,
+});
+
+/**
+ * Generate weekly development report
+ * Runs every Monday at 9 AM UTC
+ * Cron: 0 0 9 * * 1
+ */
+async function generateWeeklyReportJob(
+  timer: Timer,
+  context: InvocationContext,
+): Promise<void> {
+  const jobLogger = logger.child({ operation: "generateWeeklyReportJob" });
+
+  jobLogger.info("Starting scheduled weekly report generation", {
+    scheduledTime: timer.scheduleStatus?.last || new Date().toISOString(),
+  });
+
+  // Check if GitHub is configured
+  if (!gitHubService.isConfigured()) {
+    jobLogger.warn("GitHub not configured, skipping weekly report generation");
+    return;
+  }
+
+  try {
+    // Default repositories to track - can be configured via environment
+    const defaultRepos = process.env.WEEKLY_REPORT_REPOS?.split(",").map((r) =>
+      r.trim(),
+    ) || ["JustAGhosT/PhoenixRooivalk"];
+
+    const result = await weeklyReportsService.generateReport(
+      {
+        repositories: defaultRepos,
+        includeAISummary: true,
+      },
+      "scheduled-job",
+    );
+
+    if (result.success) {
+      jobLogger.info("Weekly report generated successfully", {
+        reportNumber: result.report?.reportNumber,
+        weekStart: result.report?.weekStartDate,
+        weekEnd: result.report?.weekEndDate,
+      });
+    } else {
+      jobLogger.error("Weekly report generation failed", new Error(result.error || "Unknown error"), {});
+    }
+  } catch (error) {
+    jobLogger.error("Weekly report generation failed", error as Error, {});
+  }
+}
+
+app.timer("generateWeeklyReportScheduled", {
+  // Run every Monday at 9 AM UTC
+  schedule: "0 0 9 * * 1",
+  handler: generateWeeklyReportJob,
 });

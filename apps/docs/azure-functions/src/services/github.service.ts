@@ -34,6 +34,19 @@ function getRetryDelay(attempt: number): number {
 }
 
 /**
+ * Sanitize error message to remove any potential token exposure
+ */
+function sanitizeErrorMessage(message: string): string {
+  // Remove any Bearer tokens that might appear in error messages
+  return message
+    .replace(/Bearer\s+[a-zA-Z0-9_-]+/gi, "Bearer [REDACTED]")
+    .replace(/token[=:]\s*[a-zA-Z0-9_-]+/gi, "token=[REDACTED]")
+    .replace(/ghp_[a-zA-Z0-9]+/g, "[REDACTED_TOKEN]")
+    .replace(/gho_[a-zA-Z0-9]+/g, "[REDACTED_TOKEN]")
+    .replace(/github_pat_[a-zA-Z0-9_]+/g, "[REDACTED_TOKEN]");
+}
+
+/**
  * GitHub commit data
  */
 export interface GitHubCommit {
@@ -222,19 +235,20 @@ class GitHubService {
 
         // Handle other errors
         if (!response.ok) {
-          const error = await response.text();
+          const errorText = await response.text();
+          const sanitizedError = sanitizeErrorMessage(errorText);
 
           // Don't retry on 4xx errors (except 403 rate limit)
           if (response.status >= 400 && response.status < 500) {
-            logger.error("GitHub API client error", new Error(error), {
+            logger.error("GitHub API client error", new Error(sanitizedError), {
               endpoint,
               status: response.status,
             });
-            throw new Error(`GitHub API error: ${response.status} - ${error}`);
+            throw new Error(`GitHub API error: ${response.status} - ${sanitizedError}`);
           }
 
           // Retry on 5xx errors
-          throw new Error(`GitHub API error: ${response.status} - ${error}`);
+          throw new Error(`GitHub API error: ${response.status} - ${sanitizedError}`);
         }
 
         return response.json();
@@ -522,6 +536,27 @@ class GitHubService {
    */
   isConfigured(): boolean {
     return !!this.token;
+  }
+
+  /**
+   * Get configuration error message if not configured
+   * Returns null if properly configured
+   */
+  getConfigurationError(): string | null {
+    if (!this.token) {
+      return "GitHub integration not configured. Set GITHUB_TOKEN or GITHUB_PAT environment variable to enable repository activity fetching.";
+    }
+    return null;
+  }
+
+  /**
+   * Require GitHub configuration or throw descriptive error
+   */
+  requireConfiguration(): void {
+    const error = this.getConfigurationError();
+    if (error) {
+      throw new Error(error);
+    }
   }
 
   /**

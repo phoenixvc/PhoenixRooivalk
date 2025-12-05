@@ -11,7 +11,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { validateAuthHeader } from "../lib/auth";
-import { Errors, successResponse } from "../lib/utils";
+import { Errors, successResponse, checkRateLimitAsync, RateLimits } from "../lib/utils";
 import {
   weeklyReportsService,
   GenerateReportOptions,
@@ -34,11 +34,44 @@ async function generateReportHandler(
     return Errors.forbidden();
   }
 
+  // Rate limit - expensive AI operation
+  if (!(await checkRateLimitAsync(`weekly-report:${authResult.userId}`, RateLimits.ai))) {
+    return Errors.rateLimited("Rate limit exceeded. Please wait before generating another report.");
+  }
+
   try {
+    // Check GitHub configuration first
+    const configError = gitHubService.getConfigurationError();
+    if (configError) {
+      return Errors.badRequest(configError);
+    }
+
     const data = (await request.json()) as GenerateReportOptions;
 
     if (!data.repositories || data.repositories.length === 0) {
       return Errors.badRequest("At least one repository is required");
+    }
+
+    // Validate repositories array
+    if (!Array.isArray(data.repositories)) {
+      return Errors.badRequest("repositories must be an array");
+    }
+
+    if (data.repositories.length > 10) {
+      return Errors.badRequest("Maximum 10 repositories allowed per report");
+    }
+
+    // Validate each repository format (owner/repo)
+    const invalidRepos = data.repositories.filter((repo) => {
+      if (typeof repo !== "string") return true;
+      const parsed = gitHubService.parseRepository(repo);
+      return !parsed;
+    });
+
+    if (invalidRepos.length > 0) {
+      return Errors.badRequest(
+        `Invalid repository format: ${invalidRepos.join(", ")}. Use owner/repo format.`,
+      );
     }
 
     context.log(`Generating weekly report for ${data.repositories.length} repositories`);
