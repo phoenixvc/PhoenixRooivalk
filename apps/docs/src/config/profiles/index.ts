@@ -20,7 +20,9 @@ export {
   getUserProfile,
   getUserProfileWithMetadata,
   isInternalDomain,
+  getKnownInternalEmail,
   INTERNAL_DOMAINS,
+  KNOWN_INTERNAL_EMAILS,
   DEFAULT_INTERNAL_PROFILE,
 } from "./internal-users";
 export type { UserProfileResult } from "./internal-users";

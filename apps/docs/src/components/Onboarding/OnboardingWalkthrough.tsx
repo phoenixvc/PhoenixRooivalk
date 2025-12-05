@@ -19,6 +19,8 @@ import {
 import Link from "@docusaurus/Link";
 import { ProfileCompletion, UserProfileDetails } from "./ProfileCompletion";
 import { AIFunFacts } from "./AIFunFacts";
+import { AccessApplicationForm, AccessApplication } from "./AccessApplicationForm";
+import { submitAccessApplication } from "../../services/access-applications";
 import "./OnboardingWalkthrough.css";
 
 const ONBOARDING_COMPLETED_KEY = "phoenix-docs-onboarding-completed";
@@ -907,12 +909,55 @@ export function OnboardingWalkthrough({
     );
   }
 
+  // Handler for application form submission
+  const handleApplicationSubmit = useCallback(
+    async (
+      data: Omit<
+        AccessApplication,
+        "userId" | "email" | "displayName" | "submittedAt" | "status"
+      >,
+    ): Promise<boolean> => {
+      const result = await submitAccessApplication({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        company: data.company,
+        currentRole: data.currentRole,
+        requestedRole: data.requestedRole,
+        reason: data.reason,
+        linkedIn: data.linkedIn,
+      });
+      return result.success;
+    },
+    [],
+  );
+
+  // Handler for skipping the application (go to next step with default profile)
+  const handleApplicationCancel = useCallback(() => {
+    // Reset to a public profile template and skip to AI fun facts or tour
+    const publicTemplateIndex = PROFILE_TEMPLATES_ARRAY.findIndex(
+      (t) => !INTERNAL_ONLY_TEMPLATE_KEYS.includes(t.templateKey),
+    );
+    if (publicTemplateIndex !== -1) {
+      setSelectedTemplate(PROFILE_TEMPLATES_ARRAY[publicTemplateIndex]);
+    }
+    // Skip to fun facts or tour
+    const funFactsIndex = findStepIndex("ai-fun-facts");
+    if (funFactsIndex > 0 && userDetails) {
+      setCurrentStep(funFactsIndex);
+      saveStep(funFactsIndex);
+    } else {
+      const tourIndex = findStepIndex("welcome-tour");
+      setCurrentStep(tourIndex);
+      saveStep(tourIndex);
+    }
+  }, [findStepIndex, userDetails]);
+
   // Render apply for access step
   if (isApplyForAccessStep) {
     return (
       <>
         <div className="onboarding-backdrop" />
-        <div className={`onboarding-modal ${getModalClass()}`}>
+        <div className={`onboarding-modal onboarding-modal--wide ${getModalClass()}`}>
           <div className="onboarding-content">
             <div className="onboarding-progress">
               <div
@@ -920,32 +965,12 @@ export function OnboardingWalkthrough({
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <div className="onboarding-step">
-              <div className="onboarding-icon">{step.icon}</div>
-              <h2 className="onboarding-title">{step.title}</h2>
-              <p className="onboarding-description">{step.description}</p>
-              <div className="onboarding-apply-access">
-                <p>
-                  Please contact the team at{" "}
-                  <a href="mailto:access@phoenixrooivalk.com">
-                    access@phoenixrooivalk.com
-                  </a>{" "}
-                  to request access. Include your name, role, and reason for
-                  needing access to the documentation portal.
-                </p>
-                <p>We'll review your request and get back to you shortly.</p>
-              </div>
-            </div>
-            <div className="onboarding-nav">
-              <button
-                type="button"
-                className="onboarding-nav-btn onboarding-nav-btn--prev"
-                onClick={handlePrevious}
-                disabled={isAnimating}
-              >
-                Back
-              </button>
-            </div>
+            <AccessApplicationForm
+              requestedRole={selectedTemplate?.name || "Internal Access"}
+              onSubmit={handleApplicationSubmit}
+              onCancel={handleApplicationCancel}
+              onBack={handlePrevious}
+            />
             <div className="onboarding-counter">
               Step {currentStep + 1} of {ONBOARDING_STEPS.length}
             </div>

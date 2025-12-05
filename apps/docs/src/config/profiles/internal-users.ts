@@ -18,12 +18,36 @@ export const INTERNAL_DOMAINS = [
 ];
 
 /**
+ * Explicit mapping of known internal user email addresses to their profile keys.
+ * This allows team members using personal email addresses (like Gmail) to be
+ * automatically recognized and assigned their correct profile.
+ */
+export const KNOWN_INTERNAL_EMAILS: Record<string, string> = {
+  "martynrede@gmail.com": "martyn",
+  "smit.jurie@gmail.com": "jurie",
+  "megatesla@gmail.com": "pieter", // Pieter's personal email
+  "eben.mare@gmail.com": "eben",
+};
+
+/**
  * Check if an email belongs to an internal domain.
  */
 export function isInternalDomain(email?: string | null): boolean {
   if (!email) return false;
   const domain = email.toLowerCase().split("@")[1];
   return INTERNAL_DOMAINS.includes(domain);
+}
+
+/**
+ * Check if an email is a known internal user email.
+ * Returns the profile key if found, null otherwise.
+ */
+export function getKnownInternalEmail(
+  email?: string | null,
+): string | null {
+  if (!email) return null;
+  const normalizedEmail = email.toLowerCase().trim();
+  return KNOWN_INTERNAL_EMAILS[normalizedEmail] || null;
 }
 
 /**
@@ -467,7 +491,19 @@ export function getUserProfileWithMetadata(
   const normalizedName = displayName?.toLowerCase().trim() || "";
   const isDomainInternal = isInternalDomain(email);
 
-  // Check each profile for a match
+  // Priority 1: Check for exact email match in known internal emails
+  // This is the most reliable method for team members using personal emails
+  const knownEmailProfileKey = getKnownInternalEmail(email);
+  if (knownEmailProfileKey && INTERNAL_USER_PROFILES[knownEmailProfileKey]) {
+    return {
+      profile: INTERNAL_USER_PROFILES[knownEmailProfileKey],
+      profileKey: knownEmailProfileKey,
+      isInternalDomain: true, // Treat known emails as internal
+      matchType: "specific",
+    };
+  }
+
+  // Priority 2: Check each profile for name/email pattern matches
   for (const [key, profile] of Object.entries(INTERNAL_USER_PROFILES)) {
     const profileKey = key.toLowerCase();
     const profileName = profile.name.toLowerCase();
@@ -507,8 +543,7 @@ export function getUserProfileWithMetadata(
     }
   }
 
-  // No specific profile match, but check if user has internal domain
-  // This grants them team member status with default profile
+  // Priority 3: Check if user has internal domain (grants default profile)
   if (isDomainInternal) {
     return {
       profile: DEFAULT_INTERNAL_PROFILE,

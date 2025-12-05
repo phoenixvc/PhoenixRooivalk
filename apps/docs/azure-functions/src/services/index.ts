@@ -71,3 +71,9 @@ export {
   type AgentResult,
   type AgentOptions,
 } from "./agent.service";
+
+export {
+  accessApplicationsService,
+  type SubmitApplicationData,
+  type SubmitApplicationResult,
+} from "./access-applications.service";

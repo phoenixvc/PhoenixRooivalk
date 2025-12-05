@@ -54,6 +54,16 @@ const LOCAL_STATS_KEY = "phoenix-docs-stats";
 const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
 
 /**
+ * Access application status for pending verification
+ */
+export interface PendingAccessState {
+  hasPendingApplication: boolean;
+  applicationNumber?: string;
+  requestedRole?: string;
+  submittedAt?: string;
+}
+
+/**
  * User profile state for centralized profile management
  */
 export interface UserProfileState {
@@ -63,6 +73,7 @@ export interface UserProfileState {
   isProfileLoaded: boolean; // True once profile detection is complete
   isInternalDomain: boolean; // True if user's email is from an internal domain
   matchType: "specific" | "domain" | "name" | null; // How the profile was matched
+  pendingAccess: PendingAccessState; // Pending access application state
 }
 
 interface AuthContextType {
@@ -82,9 +93,15 @@ interface AuthContextType {
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
   saveProfileToCloud: (data: Partial<UserProfileData>) => Promise<boolean>;
+  setPendingAccess: (state: PendingAccessState) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Default pending access state
+const DEFAULT_PENDING_ACCESS: PendingAccessState = {
+  hasPendingApplication: false,
+};
 
 // Default profile state
 const DEFAULT_PROFILE_STATE: UserProfileState = {
@@ -94,6 +111,7 @@ const DEFAULT_PROFILE_STATE: UserProfileState = {
   isProfileLoaded: false,
   isInternalDomain: false,
   matchType: null,
+  pendingAccess: DEFAULT_PENDING_ACCESS,
 };
 
 // Helper to get saved profile data from localStorage
@@ -393,14 +411,15 @@ export function AuthProvider({
       // Update localStorage with merged data for fast access
       saveProfileData(mergedProfileKey, mergedRoles);
 
-      setUserProfile({
+      setUserProfile((prev) => ({
         knownProfile: profile,
         confirmedRoles: mergedRoles,
         profileKey: mergedProfileKey,
         isProfileLoaded: true,
         isInternalDomain: isDomainInternal,
         matchType: detectedMatchType,
-      });
+        pendingAccess: prev.pendingAccess, // Preserve pending access state
+      }));
 
       if (DEBUG_AUTH) {
         console.log("[AuthContext] Profile loaded", {
@@ -453,14 +472,15 @@ export function AuthProvider({
       confirmedRoles = profile.roles;
     }
 
-    setUserProfile({
+    setUserProfile((prev) => ({
       knownProfile: profile,
       confirmedRoles,
       profileKey: effectiveProfileKey,
       isProfileLoaded: true,
       isInternalDomain: isDomainInternal,
       matchType: detectedMatchType,
-    });
+      pendingAccess: prev.pendingAccess, // Preserve pending access state
+    }));
   }, [user]);
 
   const signInGoogle = useCallback(async () => {
@@ -658,6 +678,14 @@ export function AuthProvider({
     [user],
   );
 
+  // Update pending access state
+  const setPendingAccess = useCallback((state: PendingAccessState) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      pendingAccess: state,
+    }));
+  }, []);
+
   const value: AuthContextType = {
     user,
     loading,
@@ -675,6 +703,7 @@ export function AuthProvider({
     markDocAsRead,
     unlockAchievement,
     saveProfileToCloud,
+    setPendingAccess,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

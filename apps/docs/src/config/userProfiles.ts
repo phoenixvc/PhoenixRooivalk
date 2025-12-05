@@ -22,6 +22,7 @@ export {
   AVAILABLE_INTERESTS,
   CATEGORY_PATHS,
   INTERNAL_DOMAINS,
+  KNOWN_INTERNAL_EMAILS,
   DEFAULT_INTERNAL_PROFILE,
   // Internal users
   INTERNAL_USER_PROFILES,
@@ -33,6 +34,7 @@ export {
   getUserProfile,
   getUserProfileWithMetadata,
   isInternalDomain,
+  getKnownInternalEmail,
   getRecommendedPaths,
   profileToRecommendations,
   getCategoryFromDocPath,

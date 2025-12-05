@@ -450,6 +450,19 @@
   padding-bottom: 0;
 }
 
+/* ================================================
+   ACCESS APPLICATION STEP
+   Wider modal for the application form
+   ================================================ */
+
+.onboarding-modal--wide {
+  max-width: 600px;
+}
+
+.onboarding-modal--wide .onboarding-content {
+  padding-bottom: 0;
+}
+
 /* Mobile adjustments for profile selection */
 @media (max-width: 640px) {
   .onboarding-modal--profile {
@@ -478,7 +491,8 @@
   }
 
   .onboarding-modal--profile-completion,
-  .onboarding-modal--fun-facts {
+  .onboarding-modal--fun-facts,
+  .onboarding-modal--wide {
     max-width: 100%;
   }
 }

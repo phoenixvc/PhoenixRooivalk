@@ -44,3 +44,11 @@ export {
   type DomainConfig,
   type ConfigVersion,
 } from "./configuration.repository";
+
+export {
+  AccessApplicationsRepository,
+  accessApplicationsRepository,
+  type AccessApplication,
+  type ApplicationStatus,
+  type AccessApplicationFilters,
+} from "./access-applications.repository";
