@@ -86,3 +86,17 @@ export {
   AVAILABLE_PROFILE_KEYS,
   type ProfileKey,
 } from "./known-emails.service";
+
+export {
+  gitHubService,
+  type GitHubCommit,
+  type GitHubPullRequest,
+  type GitHubIssue,
+  type RepositoryActivity,
+} from "./github.service";
+
+export {
+  weeklyReportsService,
+  type GenerateReportOptions,
+  type GenerateReportResult,
+} from "./weekly-reports.service";

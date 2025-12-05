@@ -1,0 +1,685 @@
+/* Admin Weekly Reports Dashboard Styles */
+
+.main {
+  min-height: calc(100vh - 60px);
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.header p {
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+}
+
+.generateBtn {
+  white-space: nowrap;
+}
+
+.warning {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
+  color: rgb(180, 116, 8);
+  font-size: 0.875rem;
+}
+
+/* Loading and unauthorized states */
+.loading,
+.unauthorized,
+.emptyList,
+.loadingList {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.unauthorized h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.unauthorized p {
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Stats cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.statGenerating {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.statCompleted {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.statFailed {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.statValue {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.statGenerating .statValue {
+  color: rgb(59, 130, 246);
+}
+
+.statCompleted .statValue {
+  color: rgb(34, 197, 94);
+}
+
+.statFailed .statValue {
+  color: rgb(239, 68, 68);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Filter tabs */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.filterBtn.active {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Reports list */
+.reportsList {
+  display: grid;
+  gap: 1rem;
+}
+
+.reportCard {
+  padding: 1.25rem;
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reportCard:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reportCard.selected {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.reportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.reportNumber {
+  font-family: monospace;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusGenerating {
+  background: rgba(59, 130, 246, 0.15);
+  color: rgb(37, 99, 235);
+}
+
+.statusCompleted {
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(22, 163, 74);
+}
+
+.statusFailed {
+  background: rgba(239, 68, 68, 0.15);
+  color: rgb(185, 28, 28);
+}
+
+.reportBody h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.reportPeriod {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.25rem 0;
+}
+
+.reportRepos {
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+}
+
+.reportFooter {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.reportDate {
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--ifm-background-color);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modalContent {
+  padding: 1.25rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin-top: 1rem;
+}
+
+/* Form elements */
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-content);
+}
+
+.formGroup textarea,
+.formGroup input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+  resize: vertical;
+}
+
+.formGroup textarea:focus,
+.formGroup input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.repoList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.repoTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: monospace;
+}
+
+.repoTag button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: var(--ifm-color-emphasis-300);
+  border-radius: 50%;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+.repoTag button:hover {
+  background: rgb(239, 68, 68);
+  color: white;
+}
+
+.addRepo {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.addRepo input {
+  flex: 1;
+}
+
+.addRepo button {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-primary);
+  background: transparent;
+  color: var(--ifm-color-primary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addRepo button:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.error {
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: rgb(185, 28, 28);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Detail panel */
+.detailPanel {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  width: 500px;
+  max-width: 100%;
+  background: var(--ifm-background-color);
+  border-left: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: sticky;
+  top: 0;
+  background: var(--ifm-background-color);
+}
+
+.detailHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.detailContent {
+  padding: 1.25rem;
+}
+
+.detailSection {
+  margin-bottom: 1.5rem;
+}
+
+.detailSection h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.detailSection p {
+  font-size: 0.9375rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.summaryText {
+  padding: 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.sectionPreview {
+  padding: 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.sectionPreview strong {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.sectionPreview p {
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.errorText {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: rgb(185, 28, 28);
+}
+
+/* Actions */
+.detailActions {
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.detailActions h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.actionBtn {
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.exportBtn {
+  background: rgb(59, 130, 246);
+  color: white;
+}
+
+.exportBtn:hover:not(:disabled) {
+  background: rgb(37, 99, 235);
+}
+
+.regenerateBtn {
+  background: rgb(168, 85, 247);
+  color: white;
+}
+
+.regenerateBtn:hover:not(:disabled) {
+  background: rgb(147, 51, 234);
+}
+
+.deleteBtn {
+  background: rgb(239, 68, 68);
+  color: white;
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background: rgb(220, 38, 38);
+}
+
+/* Navigation */
+.navigation {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .headerTop {
+    flex-direction: column;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .detailPanel {
+    width: 100%;
+    top: 0;
+  }
+
+  .filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+  }
+
+  .modal {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .addRepo {
+    flex-direction: column;
+  }
+
+  .addRepo button {
+    width: 100%;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .reportCard {
+  background: rgb(30, 41, 59);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .reportCard:hover {
+  border-color: rgb(249, 115, 22);
+}
+
+[data-theme="dark"] .modal {
+  background: rgb(15, 23, 42);
+}
+
+[data-theme="dark"] .modalHeader {
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .detailPanel {
+  background: rgb(15, 23, 42);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .detailHeader {
+  background: rgb(15, 23, 42);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .summaryText,
+[data-theme="dark"] .sectionPreview {
+  background: rgb(30, 41, 59);
+}
+
+[data-theme="dark"] .repoTag {
+  background: rgb(30, 41, 59);
+}
+
+[data-theme="dark"] .formGroup textarea,
+[data-theme="dark"] .formGroup input[type="text"] {
+  background: rgb(30, 41, 59);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: rgb(251, 191, 36);
+}
+
+[data-theme="dark"] .error,
+[data-theme="dark"] .errorText {
+  background: rgba(239, 68, 68, 0.15);
+  color: rgb(248, 113, 113);
+}
+
+[data-theme="dark"] .statusGenerating {
+  background: rgba(59, 130, 246, 0.2);
+  color: rgb(96, 165, 250);
+}
+
+[data-theme="dark"] .statusCompleted {
+  background: rgba(34, 197, 94, 0.2);
+  color: rgb(74, 222, 128);
+}
+
+[data-theme="dark"] .statusFailed {
+  background: rgba(239, 68, 68, 0.2);
+  color: rgb(248, 113, 113);
+}

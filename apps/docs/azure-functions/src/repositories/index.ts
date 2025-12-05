@@ -59,3 +59,13 @@ export {
   type KnownEmail,
   type KnownEmailFilters,
 } from "./known-emails.repository";
+
+export {
+  WeeklyReportsRepository,
+  weeklyReportsRepository,
+  type WeeklyReport,
+  type ReportStatus,
+  type ReportSection,
+  type GitHubActivitySummary,
+  type WeeklyReportFilters,
+} from "./weekly-reports.repository";
