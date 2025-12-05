@@ -42,6 +42,12 @@ Each weekly report follows a consistent format:
 
 ## 2025 Reports
 
+### December 2025
+
+| Week                      | Dates          | Highlights                                                                                                                                               |
+| ------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Week 49](./2025/week-49) | Dec 2 - Dec 5  | **240+ commits**: Demo pitch deck complete, $960K seed ask finalized, PPTX generation, QR codes, investor visuals polished, market share pie chart |
+
 ### November 2025
 
 | Week                      | Dates          | Highlights                                                                                                                                               |
