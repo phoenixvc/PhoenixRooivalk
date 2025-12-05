@@ -1,4 +1,4 @@
-/* Admin Applications Dashboard Styles */
+/* Admin Known Emails Management Styles */
 
 .main {
   min-height: calc(100vh - 60px);
@@ -29,6 +29,10 @@
   margin: 0;
 }
 
+.addBtn {
+  flex-shrink: 0;
+}
+
 /* Loading and unauthorized states */
 .loading,
 .unauthorized,
@@ -51,7 +55,7 @@
 /* Stats cards */
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -60,39 +64,15 @@
   padding: 1.25rem;
   border-radius: 12px;
   text-align: center;
-}
-
-.statPending {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.statApproved {
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.statRejected {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
 }
 
 .statValue {
   display: block;
   font-size: 2rem;
   font-weight: 700;
-}
-
-.statPending .statValue {
-  color: rgb(245, 158, 11);
-}
-
-.statApproved .statValue {
-  color: rgb(34, 197, 94);
-}
-
-.statRejected .statValue {
-  color: rgb(239, 68, 68);
+  color: rgb(249, 115, 22);
 }
 
 .statLabel {
@@ -102,42 +82,34 @@
   letter-spacing: 0.05em;
 }
 
-/* Filter tabs */
-.filters {
-  display: flex;
-  gap: 0.5rem;
+/* Search bar */
+.searchBar {
   margin-bottom: 1.5rem;
-  flex-wrap: wrap;
 }
 
-.filterBtn {
-  padding: 0.5rem 1rem;
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--ifm-color-content-secondary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
 }
 
-.filterBtn:hover {
-  background: var(--ifm-color-emphasis-100);
-}
-
-.filterBtn.active {
-  background: var(--ifm-color-primary);
+.searchInput:focus {
+  outline: none;
   border-color: var(--ifm-color-primary);
-  color: white;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
-/* Applications list */
-.applicationsList {
+/* Emails list */
+.emailsList {
   display: grid;
   gap: 1rem;
 }
 
-.applicationCard {
+.emailCard {
   padding: 1.25rem;
   background: var(--ifm-card-background-color);
   border: 1px solid var(--ifm-color-emphasis-200);
@@ -146,27 +118,31 @@
   transition: all 0.2s ease;
 }
 
-.applicationCard:hover {
+.emailCard:hover {
   border-color: var(--ifm-color-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.applicationCard.selected {
+.emailCard.selected {
   border-color: var(--ifm-color-primary);
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
 }
 
-.applicationHeader {
+.emailCard.inactive {
+  opacity: 0.7;
+}
+
+.emailHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
 }
 
-.applicationNumber {
+.emailAddress {
   font-family: monospace;
-  font-size: 0.8125rem;
-  color: var(--ifm-color-content-secondary);
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
 .statusBadge {
@@ -174,56 +150,131 @@
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: capitalize;
 }
 
-.statusPending {
-  background: rgba(245, 158, 11, 0.15);
-  color: rgb(180, 116, 8);
-}
-
-.statusApproved {
+.statusBadge.active {
   background: rgba(34, 197, 94, 0.15);
   color: rgb(22, 163, 74);
 }
 
-.statusRejected {
-  background: rgba(239, 68, 68, 0.15);
-  color: rgb(185, 28, 28);
+.statusBadge.inactiveBadge {
+  background: rgba(156, 163, 175, 0.15);
+  color: rgb(107, 114, 128);
 }
 
-.applicationBody h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
+.emailBody .displayName {
+  font-size: 1rem;
+  font-weight: 500;
   margin: 0 0 0.25rem 0;
 }
 
-.applicationEmail {
+.profileKey {
   font-size: 0.875rem;
-  color: var(--ifm-color-content-secondary);
-  margin: 0 0 0.5rem 0;
-}
-
-.applicationRole {
-  font-size: 0.875rem;
-  margin: 0 0 0.25rem 0;
-}
-
-.applicationCompany {
-  font-size: 0.8125rem;
   color: var(--ifm-color-content-secondary);
   margin: 0;
 }
 
-.applicationFooter {
+.emailFooter {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--ifm-color-emphasis-100);
 }
 
-.applicationDate {
+.emailDate {
   font-size: 0.75rem;
   color: var(--ifm-color-content-secondary);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--ifm-background-color);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Form */
+.form {
+  padding: 1.25rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.formActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.error {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: rgb(185, 28, 28);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
 }
 
 /* Detail panel */
@@ -300,11 +351,7 @@
   margin: 0 0 0.5rem 0;
 }
 
-.detailSection a {
-  color: var(--ifm-color-primary);
-}
-
-.reasonText {
+.notesText {
   padding: 0.75rem;
   background: var(--ifm-color-emphasis-100);
   border-radius: 6px;
@@ -313,7 +360,7 @@
   white-space: pre-wrap;
 }
 
-/* Review actions */
+/* Detail actions */
 .detailActions {
   padding-top: 1rem;
   border-top: 1px solid var(--ifm-color-emphasis-200);
@@ -326,24 +373,6 @@
   letter-spacing: 0.05em;
   color: var(--ifm-color-content-secondary);
   margin: 0 0 0.75rem 0;
-}
-
-.notesInput {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 6px;
-  font-size: 0.9375rem;
-  resize: vertical;
-  margin-bottom: 1rem;
-  background: var(--ifm-background-surface-color);
-  color: var(--ifm-color-content);
-}
-
-.notesInput:focus {
-  outline: none;
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
 .actionButtons {
@@ -367,28 +396,52 @@
   cursor: not-allowed;
 }
 
-.approveBtn {
+.deactivateBtn {
+  background: rgba(245, 158, 11, 0.15);
+  color: rgb(180, 116, 8);
+}
+
+.deactivateBtn:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.activateBtn {
   background: rgb(34, 197, 94);
   color: white;
 }
 
-.approveBtn:hover:not(:disabled) {
+.activateBtn:hover:not(:disabled) {
   background: rgb(22, 163, 74);
 }
 
-.rejectBtn {
+.deleteBtn {
   background: rgb(239, 68, 68);
   color: white;
 }
 
-.rejectBtn:hover:not(:disabled) {
+.deleteBtn:hover:not(:disabled) {
   background: rgb(220, 38, 38);
+}
+
+/* Navigation */
+.navigation {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .main {
     padding: 1rem;
+  }
+
+  .headerTop {
+    flex-direction: column;
+  }
+
+  .addBtn {
+    width: 100%;
   }
 
   .stats {
@@ -399,21 +452,15 @@
     width: 100%;
     top: 0;
   }
-
-  .filters {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 0.5rem;
-  }
 }
 
 /* Dark mode adjustments */
-[data-theme="dark"] .applicationCard {
+[data-theme="dark"] .emailCard {
   background: rgb(30, 41, 59);
   border-color: rgb(51, 65, 85);
 }
 
-[data-theme="dark"] .applicationCard:hover {
+[data-theme="dark"] .emailCard:hover {
   border-color: rgb(249, 115, 22);
 }
 
@@ -427,26 +474,32 @@
   border-color: rgb(51, 65, 85);
 }
 
-[data-theme="dark"] .reasonText {
+[data-theme="dark"] .modal {
+  background: rgb(15, 23, 42);
+}
+
+[data-theme="dark"] .modalHeader {
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .notesText {
   background: rgb(30, 41, 59);
 }
 
-[data-theme="dark"] .notesInput {
+[data-theme="dark"] .formGroup input,
+[data-theme="dark"] .formGroup select,
+[data-theme="dark"] .formGroup textarea,
+[data-theme="dark"] .searchInput {
   background: rgb(30, 41, 59);
   border-color: rgb(51, 65, 85);
 }
 
-[data-theme="dark"] .statusPending {
-  background: rgba(245, 158, 11, 0.2);
-  color: rgb(251, 191, 36);
-}
-
-[data-theme="dark"] .statusApproved {
+[data-theme="dark"] .statusBadge.active {
   background: rgba(34, 197, 94, 0.2);
   color: rgb(74, 222, 128);
 }
 
-[data-theme="dark"] .statusRejected {
-  background: rgba(239, 68, 68, 0.2);
-  color: rgb(248, 113, 113);
+[data-theme="dark"] .deactivateBtn {
+  background: rgba(245, 158, 11, 0.2);
+  color: rgb(251, 191, 36);
 }

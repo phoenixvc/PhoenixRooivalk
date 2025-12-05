@@ -33,8 +33,10 @@ export {
   // Functions
   getUserProfile,
   getUserProfileWithMetadata,
+  getUserProfileWithMetadataAsync,
   isInternalDomain,
   getKnownInternalEmail,
+  getKnownInternalEmailAsync,
   getRecommendedPaths,
   profileToRecommendations,
   getCategoryFromDocPath,

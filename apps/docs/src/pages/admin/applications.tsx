@@ -146,8 +146,15 @@ export default function ApplicationsAdminPage(): React.ReactElement {
     >
       <main className={styles.main}>
         <header className={styles.header}>
-          <h1>Access Applications</h1>
-          <p>Review and manage team access requests</p>
+          <div className={styles.headerTop}>
+            <div>
+              <h1>Access Applications</h1>
+              <p>Review and manage team access requests</p>
+            </div>
+            <a href="/admin/known-emails" className="button button--secondary">
+              Manage Known Emails
+            </a>
+          </div>
         </header>
 
         {/* Stats */}

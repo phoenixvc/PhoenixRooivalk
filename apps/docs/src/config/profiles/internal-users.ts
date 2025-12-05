@@ -39,7 +39,7 @@ export function isInternalDomain(email?: string | null): boolean {
 }
 
 /**
- * Check if an email is a known internal user email.
+ * Check if an email is a known internal user email (local fallback).
  * Returns the profile key if found, null otherwise.
  */
 export function getKnownInternalEmail(
@@ -48,6 +48,30 @@ export function getKnownInternalEmail(
   if (!email) return null;
   const normalizedEmail = email.toLowerCase().trim();
   return KNOWN_INTERNAL_EMAILS[normalizedEmail] || null;
+}
+
+/**
+ * Check if an email is a known internal user email from the database.
+ * Falls back to local list if API call fails.
+ */
+export async function getKnownInternalEmailAsync(
+  email?: string | null,
+): Promise<string | null> {
+  if (!email) return null;
+
+  try {
+    // Dynamic import to avoid circular dependencies
+    const { checkKnownEmail } = await import("../../services/known-emails");
+    const result = await checkKnownEmail(email);
+    if (result.isKnown && result.profileKey) {
+      return result.profileKey;
+    }
+  } catch (error) {
+    console.warn("Failed to check known email from API, using local fallback:", error);
+  }
+
+  // Fallback to local list
+  return getKnownInternalEmail(email);
 }
 
 /**
@@ -479,6 +503,7 @@ export function getUserProfile(
 /**
  * Get user profile with additional metadata about match type.
  * Useful for determining access levels and verification requirements.
+ * This is the synchronous version - use getUserProfileWithMetadataAsync for database lookup.
  */
 export function getUserProfileWithMetadata(
   email?: string | null,
@@ -491,9 +516,89 @@ export function getUserProfileWithMetadata(
   const normalizedName = displayName?.toLowerCase().trim() || "";
   const isDomainInternal = isInternalDomain(email);
 
-  // Priority 1: Check for exact email match in known internal emails
+  // Priority 1: Check for exact email match in known internal emails (local fallback)
   // This is the most reliable method for team members using personal emails
   const knownEmailProfileKey = getKnownInternalEmail(email);
+  if (knownEmailProfileKey && INTERNAL_USER_PROFILES[knownEmailProfileKey]) {
+    return {
+      profile: INTERNAL_USER_PROFILES[knownEmailProfileKey],
+      profileKey: knownEmailProfileKey,
+      isInternalDomain: true, // Treat known emails as internal
+      matchType: "specific",
+    };
+  }
+
+  // Priority 2: Check each profile for name/email pattern matches
+  for (const [key, profile] of Object.entries(INTERNAL_USER_PROFILES)) {
+    const profileKey = key.toLowerCase();
+    const profileName = profile.name.toLowerCase();
+
+    // Match by email containing the key (e.g., "martyn@company.com" matches "martyn")
+    if (normalizedEmail.includes(profileKey)) {
+      return {
+        profile,
+        profileKey: key,
+        isInternalDomain: isDomainInternal,
+        matchType: "specific",
+      };
+    }
+
+    // Match by display name
+    if (
+      normalizedName.includes(profileName) ||
+      normalizedName.includes(profileKey)
+    ) {
+      return {
+        profile,
+        profileKey: key,
+        isInternalDomain: isDomainInternal,
+        matchType: "name",
+      };
+    }
+
+    // Match by first name from email (before @)
+    const emailName = normalizedEmail.split("@")[0];
+    if (emailName === profileKey || emailName.includes(profileKey)) {
+      return {
+        profile,
+        profileKey: key,
+        isInternalDomain: isDomainInternal,
+        matchType: "specific",
+      };
+    }
+  }
+
+  // Priority 3: Check if user has internal domain (grants default profile)
+  if (isDomainInternal) {
+    return {
+      profile: DEFAULT_INTERNAL_PROFILE,
+      profileKey: "internal-domain",
+      isInternalDomain: true,
+      matchType: "domain",
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Get user profile with additional metadata about match type.
+ * This async version checks the database first for known emails.
+ */
+export async function getUserProfileWithMetadataAsync(
+  email?: string | null,
+  displayName?: string | null,
+): Promise<UserProfileResult | null> {
+  if (!email && !displayName) return null;
+
+  // Normalize inputs
+  const normalizedEmail = email?.toLowerCase().trim() || "";
+  const normalizedName = displayName?.toLowerCase().trim() || "";
+  const isDomainInternal = isInternalDomain(email);
+
+  // Priority 1: Check for exact email match in known internal emails (from database)
+  // This checks the database first, then falls back to local list
+  const knownEmailProfileKey = await getKnownInternalEmailAsync(email);
   if (knownEmailProfileKey && INTERNAL_USER_PROFILES[knownEmailProfileKey]) {
     return {
       profile: INTERNAL_USER_PROFILES[knownEmailProfileKey],

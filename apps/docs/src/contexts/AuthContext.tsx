@@ -37,6 +37,7 @@ import {
 import {
   getUserProfile as getKnownUserProfile,
   getUserProfileWithMetadata,
+  getUserProfileWithMetadataAsync,
   isInternalDomain,
   UserProfile,
   INTERNAL_USER_PROFILES,
@@ -134,7 +135,7 @@ const saveProfileData = (profileKey: string | null, roles: string[]): void => {
   localStorage.setItem(PROFILE_DATA_KEY, JSON.stringify({ profileKey, roles }));
 };
 
-// Helper to detect profile for a user
+// Helper to detect profile for a user (sync version - fallback)
 const detectUserProfile = (
   email?: string | null,
   displayName?: string | null,
@@ -145,6 +146,34 @@ const detectUserProfile = (
   matchType: "specific" | "domain" | "name" | null;
 } => {
   const result = getUserProfileWithMetadata(email, displayName);
+  if (!result) {
+    return {
+      profile: null,
+      profileKey: null,
+      isInternalDomain: isInternalDomain(email),
+      matchType: null,
+    };
+  }
+
+  return {
+    profile: result.profile,
+    profileKey: result.profileKey,
+    isInternalDomain: result.isInternalDomain,
+    matchType: result.matchType,
+  };
+};
+
+// Helper to detect profile for a user (async version - checks database)
+const detectUserProfileAsync = async (
+  email?: string | null,
+  displayName?: string | null,
+): Promise<{
+  profile: UserProfile | null;
+  profileKey: string | null;
+  isInternalDomain: boolean;
+  matchType: "specific" | "domain" | "name" | null;
+}> => {
+  const result = await getUserProfileWithMetadataAsync(email, displayName);
   if (!result) {
     return {
       profile: null,
@@ -376,12 +405,13 @@ export function AuthProvider({
     // Async function to load and merge profile data
     async function loadUserProfile() {
       // Detect known profile from internal profiles (includes domain detection)
+      // Uses async version to check database for known emails first
       const {
         profile,
         profileKey: detectedProfileKey,
         isInternalDomain: isDomainInternal,
         matchType: detectedMatchType,
-      } = detectUserProfile(currentUser.email, currentUser.displayName);
+      } = await detectUserProfileAsync(currentUser.email, currentUser.displayName);
 
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();

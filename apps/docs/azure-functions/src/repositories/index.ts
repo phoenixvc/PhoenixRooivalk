@@ -52,3 +52,10 @@ export {
   type ApplicationStatus,
   type AccessApplicationFilters,
 } from "./access-applications.repository";
+
+export {
+  KnownEmailsRepository,
+  knownEmailsRepository,
+  type KnownEmail,
+  type KnownEmailFilters,
+} from "./known-emails.repository";

@@ -77,3 +77,12 @@ export {
   type SubmitApplicationData,
   type SubmitApplicationResult,
 } from "./access-applications.service";
+
+export {
+  knownEmailsService,
+  type AddKnownEmailData,
+  type UpdateKnownEmailData,
+  type AddKnownEmailResult,
+  AVAILABLE_PROFILE_KEYS,
+  type ProfileKey,
+} from "./known-emails.service";
