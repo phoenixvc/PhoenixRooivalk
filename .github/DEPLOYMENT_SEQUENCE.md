@@ -242,36 +242,67 @@ The WASM output is then incorporated into the marketing site build.
 
 ### Standalone Desktop App Releases
 
-For distributing native desktop applications, you would need a separate release workflow. This is **not currently configured** but could be added as:
+For distributing native desktop applications, a dedicated release workflow is now available at `.github/workflows/release-desktop.yml`.
 
-```yaml
-name: Release Desktop App
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+#### Creating a Desktop Release
 
-jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install Tauri dependencies
-        # ... setup steps
-      - name: Build Tauri app
-        working-directory: apps/threat-simulator-desktop
-        run: |
-          cargo tauri build
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: desktop-app-${{ matrix.os }}
-          path: apps/threat-simulator-desktop/target/release/bundle/
+**Option 1: Tag-based Release (Recommended)**
+
+Push a version tag to automatically trigger the release:
+
+```bash
+# Update version in apps/threat-simulator-desktop/src-tauri/tauri.conf.json
+git add apps/threat-simulator-desktop/src-tauri/tauri.conf.json
+git commit -m "Bump desktop app version to 0.2.0"
+git push
+
+# Create and push release tag
+git tag desktop-v0.2.0
+git push origin desktop-v0.2.0
 ```
 
-**Note:** This is a future enhancement. Currently, the desktop app is deployed as a web application (WASM) embedded in the marketing site.
+**Option 2: Manual Workflow Dispatch**
+
+Trigger a release manually via GitHub Actions:
+1. Go to Actions → "Release Desktop App"
+2. Click "Run workflow"
+3. Enter version (e.g., `0.2.0`)
+4. Click "Run workflow"
+
+#### Release Artifacts
+
+The workflow builds native installers for all platforms:
+
+- **Windows**: MSI installer (`phoenix-rooivalk-threat-simulator_{version}_x64.msi`)
+- **macOS Intel**: DMG disk image (`phoenix-rooivalk-threat-simulator_{version}_x64-intel.dmg`)
+- **macOS Apple Silicon**: DMG disk image (`phoenix-rooivalk-threat-simulator_{version}_arm64.dmg`)
+- **Linux**: AppImage portable (`phoenix-rooivalk-threat-simulator_{version}_amd64.AppImage`)
+- **Linux**: DEB package (`phoenix-rooivalk-threat-simulator_{version}_amd64.deb`)
+
+#### Setup Requirements
+
+Before creating your first release:
+
+1. **Configure icons** (optional but recommended):
+   ```bash
+   cd apps/threat-simulator-desktop
+   cargo tauri icon path/to/source-icon.png
+   ```
+   - Source icon should be at least 1024×1024 pixels
+   - PNG format with transparent background
+
+2. **Test local build**:
+   ```bash
+   cd apps/threat-simulator-desktop
+   trunk build --release
+   cargo tauri build
+   ```
+
+3. **Create changelog**: Add release notes to `apps/threat-simulator-desktop/CHANGELOG.md`
+
+See `apps/threat-simulator-desktop/RELEASE.md` for complete release documentation.
+
+**Note:** The desktop app is also deployed as a web application (WASM) embedded in the marketing site for online demos. The release workflow is for distributing native installers.
 
 ## 📚 Required Secrets Reference
 
