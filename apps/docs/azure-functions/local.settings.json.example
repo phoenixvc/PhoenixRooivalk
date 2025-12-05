@@ -31,8 +31,14 @@
     "NEWS_API_KEY": "",
     "BING_SEARCH_API_KEY": "",
 
+    "GITHUB_TOKEN": "",
+    "GITHUB_PAT": "",
+    "WEEKLY_REPORT_REPOS": "JustAGhosT/PhoenixRooivalk",
+
     "KEY_VAULT_NAME": "your-keyvault-name",
-    "BASE_URL": "http://localhost:3000"
+    "BASE_URL": "http://localhost:3000",
+    "DOCS_BASE_URL": "http://localhost:3000",
+    "ADMIN_NOTIFICATION_EMAIL": ""
   },
   "Host": {
     "CORS": "*",

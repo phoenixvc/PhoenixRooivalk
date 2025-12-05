@@ -250,6 +250,94 @@ resource aiCacheContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
   }
 }
 
+// Container: weekly_reports (for AI-generated weekly reports)
+resource weeklyReportsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  parent: database
+  name: 'weekly_reports'
+  properties: {
+    resource: {
+      id: 'weekly_reports'
+      partitionKey: {
+        paths: ['/id']
+        kind: 'Hash'
+      }
+      indexingPolicy: {
+        indexingMode: 'consistent'
+        automatic: true
+        includedPaths: [
+          { path: '/*' }
+        ]
+        compositeIndexes: [
+          [
+            { path: '/status', order: 'ascending' }
+            { path: '/weekStartDate', order: 'descending' }
+          ]
+        ]
+      }
+    }
+  }
+}
+
+// Container: known_emails (for internal user email mappings)
+resource knownEmailsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  parent: database
+  name: 'known_emails'
+  properties: {
+    resource: {
+      id: 'known_emails'
+      partitionKey: {
+        paths: ['/id']
+        kind: 'Hash'
+      }
+      indexingPolicy: {
+        indexingMode: 'consistent'
+        automatic: true
+        includedPaths: [
+          { path: '/*' }
+        ]
+        compositeIndexes: [
+          [
+            { path: '/profileKey', order: 'ascending' }
+            { path: '/createdAt', order: 'descending' }
+          ]
+        ]
+      }
+    }
+  }
+}
+
+// Container: access_applications (for team member access applications)
+resource accessApplicationsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  parent: database
+  name: 'access_applications'
+  properties: {
+    resource: {
+      id: 'access_applications'
+      partitionKey: {
+        paths: ['/userId']
+        kind: 'Hash'
+      }
+      indexingPolicy: {
+        indexingMode: 'consistent'
+        automatic: true
+        includedPaths: [
+          { path: '/*' }
+        ]
+        compositeIndexes: [
+          [
+            { path: '/status', order: 'ascending' }
+            { path: '/createdAt', order: 'descending' }
+          ]
+          [
+            { path: '/userId', order: 'ascending' }
+            { path: '/createdAt', order: 'descending' }
+          ]
+        ]
+      }
+    }
+  }
+}
+
 @description('Cosmos DB account name')
 output name string = cosmosAccount.name
 

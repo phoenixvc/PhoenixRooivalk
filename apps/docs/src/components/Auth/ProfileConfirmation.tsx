@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   getUserProfile as getKnownUserProfile,
+  getUserProfileWithMetadata,
   UserProfile,
   INTERNAL_USER_PROFILES,
 } from "../../config/userProfiles";
@@ -118,6 +119,7 @@ export function ProfileConfirmation({
 
   // Check for known profile on user change
   // Note: Unknown users now select profiles in onboarding, not here
+  // Internal domain users skip this confirmation and go straight to onboarding
   useEffect(() => {
     if (!user || loading) return;
 
@@ -127,18 +129,21 @@ export function ProfileConfirmation({
       return;
     }
 
-    // Try to detect known profile
-    const profile = getKnownUserProfile(user.email, user.displayName);
-    if (profile) {
-      // Find the profile key
-      for (const [key, p] of Object.entries(INTERNAL_USER_PROFILES)) {
-        if (p.name === profile.name) {
-          setDetectedProfileKey(key);
-          break;
-        }
+    // Try to detect known profile with metadata
+    const result = getUserProfileWithMetadata(user.email, user.displayName);
+
+    if (result) {
+      // If matched by domain only (not a specific known profile),
+      // skip this modal and let onboarding handle it
+      if (result.matchType === "domain") {
+        setShowConfirmation(false);
+        return;
       }
-      setDetectedProfile(profile);
-      setSelectedRoles(profile.roles);
+
+      // Specific profile match - show confirmation
+      setDetectedProfileKey(result.profileKey);
+      setDetectedProfile(result.profile);
+      setSelectedRoles(result.profile.roles);
       setShowConfirmation(true);
     } else {
       // Unknown user - profile selection happens in onboarding, not here

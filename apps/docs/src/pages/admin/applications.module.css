@@ -1,0 +1,452 @@
+/* Admin Applications Dashboard Styles */
+
+.main {
+  min-height: calc(100vh - 60px);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.header p {
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+}
+
+/* Loading and unauthorized states */
+.loading,
+.unauthorized,
+.emptyList,
+.loadingList {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.unauthorized h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.unauthorized p {
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Stats cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.statPending {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.statApproved {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.statRejected {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.statValue {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.statPending .statValue {
+  color: rgb(245, 158, 11);
+}
+
+.statApproved .statValue {
+  color: rgb(34, 197, 94);
+}
+
+.statRejected .statValue {
+  color: rgb(239, 68, 68);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Filter tabs */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.filterBtn.active {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Applications list */
+.applicationsList {
+  display: grid;
+  gap: 1rem;
+}
+
+.applicationCard {
+  padding: 1.25rem;
+  background: var(--ifm-card-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.applicationCard:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.applicationCard.selected {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.applicationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.applicationNumber {
+  font-family: monospace;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusPending {
+  background: rgba(245, 158, 11, 0.15);
+  color: rgb(180, 116, 8);
+}
+
+.statusApproved {
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(22, 163, 74);
+}
+
+.statusRejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: rgb(185, 28, 28);
+}
+
+.applicationBody h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.applicationEmail {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.5rem 0;
+}
+
+.applicationRole {
+  font-size: 0.875rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.applicationCompany {
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+  margin: 0;
+}
+
+.applicationFooter {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.applicationDate {
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+/* Detail panel */
+.detailPanel {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  width: 450px;
+  max-width: 100%;
+  background: var(--ifm-background-color);
+  border-left: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  position: sticky;
+  top: 0;
+  background: var(--ifm-background-color);
+}
+
+.detailHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--ifm-color-content-secondary);
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.detailContent {
+  padding: 1.25rem;
+}
+
+.detailSection {
+  margin-bottom: 1.5rem;
+}
+
+.detailSection h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.detailSection p {
+  font-size: 0.9375rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.detailSection a {
+  color: var(--ifm-color-primary);
+}
+
+.reasonText {
+  padding: 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Review actions */
+.detailActions {
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.detailActions h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-content-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.notesInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  resize: vertical;
+  margin-bottom: 1rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-content);
+}
+
+.notesInput:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.actionBtn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.approveBtn {
+  background: rgb(34, 197, 94);
+  color: white;
+}
+
+.approveBtn:hover:not(:disabled) {
+  background: rgb(22, 163, 74);
+}
+
+.rejectBtn {
+  background: rgb(239, 68, 68);
+  color: white;
+}
+
+.rejectBtn:hover:not(:disabled) {
+  background: rgb(220, 38, 38);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .detailPanel {
+    width: 100%;
+    top: 0;
+  }
+
+  .filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .applicationCard {
+  background: rgb(30, 41, 59);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .applicationCard:hover {
+  border-color: rgb(249, 115, 22);
+}
+
+[data-theme="dark"] .detailPanel {
+  background: rgb(15, 23, 42);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .detailHeader {
+  background: rgb(15, 23, 42);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .reasonText {
+  background: rgb(30, 41, 59);
+}
+
+[data-theme="dark"] .notesInput {
+  background: rgb(30, 41, 59);
+  border-color: rgb(51, 65, 85);
+}
+
+[data-theme="dark"] .statusPending {
+  background: rgba(245, 158, 11, 0.2);
+  color: rgb(251, 191, 36);
+}
+
+[data-theme="dark"] .statusApproved {
+  background: rgba(34, 197, 94, 0.2);
+  color: rgb(74, 222, 128);
+}
+
+[data-theme="dark"] .statusRejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: rgb(248, 113, 113);
+}

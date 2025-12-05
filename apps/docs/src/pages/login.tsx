@@ -1,8 +1,58 @@
 import Layout from "@theme/Layout";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { isInternalDomain } from "../config/userProfiles";
 
 import styles from "./login.module.css";
+
+// Local storage keys to check onboarding status
+const ONBOARDING_COMPLETED_KEY = "phoenix-docs-onboarding-completed";
+const USER_DETAILS_KEY = "phoenix-docs-user-details";
+
+interface SetupStatus {
+  profileComplete: boolean;
+  onboardingComplete: boolean;
+  isInternalUser: boolean;
+}
+
+function getSetupStatus(userId: string, email?: string | null): SetupStatus {
+  if (typeof window === "undefined") {
+    return {
+      profileComplete: false,
+      onboardingComplete: false,
+      isInternalUser: false,
+    };
+  }
+
+  try {
+    // Check profile completion
+    const detailsData = localStorage.getItem(USER_DETAILS_KEY);
+    const details = detailsData ? JSON.parse(detailsData) : null;
+    const profileComplete = details?.userId === userId && details?.completed;
+
+    // Check onboarding completion
+    const onboardingData = localStorage.getItem(ONBOARDING_COMPLETED_KEY);
+    const onboarding = onboardingData ? JSON.parse(onboardingData) : null;
+    const onboardingComplete =
+      onboarding?.userId === userId && onboarding?.completed;
+
+    // Check if internal domain user
+    const isInternalUser = isInternalDomain(email);
+
+    return {
+      profileComplete: !!profileComplete,
+      onboardingComplete: !!onboardingComplete,
+      isInternalUser,
+    };
+  } catch {
+    return {
+      profileComplete: false,
+      onboardingComplete: false,
+      isInternalUser: false,
+    };
+  }
+}
 
 export default function LoginPage(): React.ReactElement {
   const {
@@ -13,7 +63,21 @@ export default function LoginPage(): React.ReactElement {
     logout,
     isConfigured,
     missingConfig,
+    userProfile,
   } = useAuth();
+
+  const [setupStatus, setSetupStatus] = useState<SetupStatus>({
+    profileComplete: false,
+    onboardingComplete: false,
+    isInternalUser: false,
+  });
+
+  // Update setup status when user changes
+  useEffect(() => {
+    if (user) {
+      setSetupStatus(getSetupStatus(user.uid, user.email));
+    }
+  }, [user, userProfile.isProfileLoaded]);
 
   const handleGoogleLogin = async () => {
     await signInGoogle();
@@ -26,6 +90,9 @@ export default function LoginPage(): React.ReactElement {
   const handleLogout = async () => {
     await logout();
   };
+
+  // Determine if user needs to complete setup
+  const needsSetup = user && !setupStatus.onboardingComplete;
 
   return (
     <Layout
@@ -41,7 +108,9 @@ export default function LoginPage(): React.ReactElement {
             </div>
           ) : user ? (
             <div className={styles.loginWelcome}>
-              <h1>Welcome back!</h1>
+              <h1>
+                {needsSetup ? "Complete Your Setup" : "Welcome back!"}
+              </h1>
               <div className={styles.userInfo}>
                 {user.photoURL && (
                   <img
@@ -55,29 +124,78 @@ export default function LoginPage(): React.ReactElement {
                     {user.displayName || "User"}
                   </p>
                   <p className={styles.userEmail}>{user.email}</p>
+                  {setupStatus.isInternalUser && (
+                    <span className={styles.internalBadge}>
+                      Internal Team Member
+                    </span>
+                  )}
                 </div>
               </div>
-              <div className={styles.loginActions}>
-                <a href="/docs" className="button button--primary">
-                  📚 View Documentation
-                </a>
-                <a href="/your-progress" className="button button--secondary">
-                  🏆 View Progress
-                </a>
-                <a
-                  href="/profile-settings"
-                  className="button button--secondary"
-                >
-                  ⚙️ Profile Settings
-                </a>
+
+              {needsSetup && (
+                <div className={styles.setupStatus}>
+                  <p className={styles.setupMessage}>
+                    Complete your profile setup to get personalized
+                    documentation recommendations.
+                  </p>
+                  <div className={styles.setupProgress}>
+                    <div
+                      className={`${styles.setupStep} ${setupStatus.profileComplete ? styles.setupStepComplete : ""}`}
+                    >
+                      <span className={styles.setupStepIcon}>
+                        {setupStatus.profileComplete ? "✓" : "1"}
+                      </span>
+                      <span>Profile Details</span>
+                    </div>
+                    <div className={styles.setupStepConnector} />
+                    <div
+                      className={`${styles.setupStep} ${setupStatus.onboardingComplete ? styles.setupStepComplete : ""}`}
+                    >
+                      <span className={styles.setupStepIcon}>
+                        {setupStatus.onboardingComplete ? "✓" : "2"}
+                      </span>
+                      <span>Role Selection</span>
+                    </div>
+                  </div>
+                  <a href="/docs" className="button button--primary">
+                    Continue Setup
+                  </a>
+                </div>
+              )}
+
+              {!needsSetup && (
+                <div className={styles.loginActions}>
+                  <a href="/docs" className="button button--primary">
+                    📚 View Documentation
+                  </a>
+                  <a href="/your-progress" className="button button--secondary">
+                    🏆 View Progress
+                  </a>
+                  <a
+                    href="/profile-settings"
+                    className="button button--secondary"
+                  >
+                    ⚙️ Profile Settings
+                  </a>
+                  <button
+                    onClick={handleLogout}
+                    className="button button--outline"
+                    type="button"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+
+              {needsSetup && (
                 <button
                   onClick={handleLogout}
-                  className="button button--outline"
+                  className={`button button--outline ${styles.signOutSecondary}`}
                   type="button"
                 >
                   Sign Out
                 </button>
-              </div>
+              )}
             </div>
           ) : (
             <div className={styles.loginContent}>

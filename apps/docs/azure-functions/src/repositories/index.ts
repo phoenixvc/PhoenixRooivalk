@@ -44,3 +44,28 @@ export {
   type DomainConfig,
   type ConfigVersion,
 } from "./configuration.repository";
+
+export {
+  AccessApplicationsRepository,
+  accessApplicationsRepository,
+  type AccessApplication,
+  type ApplicationStatus,
+  type AccessApplicationFilters,
+} from "./access-applications.repository";
+
+export {
+  KnownEmailsRepository,
+  knownEmailsRepository,
+  type KnownEmail,
+  type KnownEmailFilters,
+} from "./known-emails.repository";
+
+export {
+  WeeklyReportsRepository,
+  weeklyReportsRepository,
+  type WeeklyReport,
+  type ReportStatus,
+  type ReportSection,
+  type GitHubActivitySummary,
+  type WeeklyReportFilters,
+} from "./weekly-reports.repository";

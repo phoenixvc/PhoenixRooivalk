@@ -36,6 +36,9 @@ import {
 } from "../components/Offline";
 import {
   getUserProfile as getKnownUserProfile,
+  getUserProfileWithMetadata,
+  getUserProfileWithMetadataAsync,
+  isInternalDomain,
   UserProfile,
   INTERNAL_USER_PROFILES,
 } from "../config/userProfiles";
@@ -52,6 +55,16 @@ const LOCAL_STATS_KEY = "phoenix-docs-stats";
 const PROFILE_DATA_KEY = "phoenix-docs-user-profile";
 
 /**
+ * Access application status for pending verification
+ */
+export interface PendingAccessState {
+  hasPendingApplication: boolean;
+  applicationNumber?: string;
+  requestedRole?: string;
+  submittedAt?: string;
+}
+
+/**
  * User profile state for centralized profile management
  */
 export interface UserProfileState {
@@ -59,6 +72,9 @@ export interface UserProfileState {
   confirmedRoles: string[]; // User's confirmed/selected roles
   profileKey: string | null; // Key in INTERNAL_USER_PROFILES (e.g., "martyn")
   isProfileLoaded: boolean; // True once profile detection is complete
+  isInternalDomain: boolean; // True if user's email is from an internal domain
+  matchType: "specific" | "domain" | "name" | null; // How the profile was matched
+  pendingAccess: PendingAccessState; // Pending access application state
 }
 
 interface AuthContextType {
@@ -78,9 +94,15 @@ interface AuthContextType {
   markDocAsRead: (docId: string) => Promise<void>;
   unlockAchievement: (achievementId: string, points: number) => Promise<void>;
   saveProfileToCloud: (data: Partial<UserProfileData>) => Promise<boolean>;
+  setPendingAccess: (state: PendingAccessState) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Default pending access state
+const DEFAULT_PENDING_ACCESS: PendingAccessState = {
+  hasPendingApplication: false,
+};
 
 // Default profile state
 const DEFAULT_PROFILE_STATE: UserProfileState = {
@@ -88,6 +110,9 @@ const DEFAULT_PROFILE_STATE: UserProfileState = {
   confirmedRoles: [],
   profileKey: null,
   isProfileLoaded: false,
+  isInternalDomain: false,
+  matchType: null,
+  pendingAccess: DEFAULT_PENDING_ACCESS,
 };
 
 // Helper to get saved profile data from localStorage
@@ -110,21 +135,60 @@ const saveProfileData = (profileKey: string | null, roles: string[]): void => {
   localStorage.setItem(PROFILE_DATA_KEY, JSON.stringify({ profileKey, roles }));
 };
 
-// Helper to detect profile for a user
+// Helper to detect profile for a user (sync version - fallback)
 const detectUserProfile = (
   email?: string | null,
   displayName?: string | null,
-): { profile: UserProfile | null; profileKey: string | null } => {
-  const profile = getKnownUserProfile(email, displayName);
-  if (!profile) return { profile: null, profileKey: null };
-
-  // Find the profile key
-  for (const [key, p] of Object.entries(INTERNAL_USER_PROFILES)) {
-    if (p.name === profile.name) {
-      return { profile, profileKey: key };
-    }
+): {
+  profile: UserProfile | null;
+  profileKey: string | null;
+  isInternalDomain: boolean;
+  matchType: "specific" | "domain" | "name" | null;
+} => {
+  const result = getUserProfileWithMetadata(email, displayName);
+  if (!result) {
+    return {
+      profile: null,
+      profileKey: null,
+      isInternalDomain: isInternalDomain(email),
+      matchType: null,
+    };
   }
-  return { profile, profileKey: null };
+
+  return {
+    profile: result.profile,
+    profileKey: result.profileKey,
+    isInternalDomain: result.isInternalDomain,
+    matchType: result.matchType,
+  };
+};
+
+// Helper to detect profile for a user (async version - checks database)
+const detectUserProfileAsync = async (
+  email?: string | null,
+  displayName?: string | null,
+): Promise<{
+  profile: UserProfile | null;
+  profileKey: string | null;
+  isInternalDomain: boolean;
+  matchType: "specific" | "domain" | "name" | null;
+}> => {
+  const result = await getUserProfileWithMetadataAsync(email, displayName);
+  if (!result) {
+    return {
+      profile: null,
+      profileKey: null,
+      isInternalDomain: isInternalDomain(email),
+      matchType: null,
+    };
+  }
+
+  return {
+    profile: result.profile,
+    profileKey: result.profileKey,
+    isInternalDomain: result.isInternalDomain,
+    matchType: result.matchType,
+  };
 };
 
 // Helper to get local progress
@@ -340,11 +404,14 @@ export function AuthProvider({
 
     // Async function to load and merge profile data
     async function loadUserProfile() {
-      // Detect known profile from internal profiles
-      const { profile, profileKey: detectedProfileKey } = detectUserProfile(
-        currentUser.email,
-        currentUser.displayName,
-      );
+      // Detect known profile from internal profiles (includes domain detection)
+      // Uses async version to check database for known emails first
+      const {
+        profile,
+        profileKey: detectedProfileKey,
+        isInternalDomain: isDomainInternal,
+        matchType: detectedMatchType,
+      } = await detectUserProfileAsync(currentUser.email, currentUser.displayName);
 
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();
@@ -374,12 +441,24 @@ export function AuthProvider({
       // Update localStorage with merged data for fast access
       saveProfileData(mergedProfileKey, mergedRoles);
 
-      setUserProfile({
+      setUserProfile((prev) => ({
         knownProfile: profile,
         confirmedRoles: mergedRoles,
         profileKey: mergedProfileKey,
         isProfileLoaded: true,
-      });
+        isInternalDomain: isDomainInternal,
+        matchType: detectedMatchType,
+        pendingAccess: prev.pendingAccess, // Preserve pending access state
+      }));
+
+      if (DEBUG_AUTH) {
+        console.log("[AuthContext] Profile loaded", {
+          profileKey: mergedProfileKey,
+          isInternalDomain: isDomainInternal,
+          matchType: detectedMatchType,
+          hasKnownProfile: !!profile,
+        });
+      }
     }
 
     loadUserProfile();
@@ -401,11 +480,13 @@ export function AuthProvider({
   const refreshUserProfile = useCallback(() => {
     if (!user) return;
 
-    // Re-detect known profile
-    const { profile, profileKey } = detectUserProfile(
-      user.email,
-      user.displayName,
-    );
+    // Re-detect known profile (includes domain detection)
+    const {
+      profile,
+      profileKey,
+      isInternalDomain: isDomainInternal,
+      matchType: detectedMatchType,
+    } = detectUserProfile(user.email, user.displayName);
 
     // Get saved profile data (may have been updated by onboarding)
     const savedProfile = getSavedProfileData();
@@ -421,12 +502,15 @@ export function AuthProvider({
       confirmedRoles = profile.roles;
     }
 
-    setUserProfile({
+    setUserProfile((prev) => ({
       knownProfile: profile,
       confirmedRoles,
       profileKey: effectiveProfileKey,
       isProfileLoaded: true,
-    });
+      isInternalDomain: isDomainInternal,
+      matchType: detectedMatchType,
+      pendingAccess: prev.pendingAccess, // Preserve pending access state
+    }));
   }, [user]);
 
   const signInGoogle = useCallback(async () => {
@@ -624,6 +708,14 @@ export function AuthProvider({
     [user],
   );
 
+  // Update pending access state
+  const setPendingAccess = useCallback((state: PendingAccessState) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      pendingAccess: state,
+    }));
+  }, []);
+
   const value: AuthContextType = {
     user,
     loading,
@@ -641,6 +733,7 @@ export function AuthProvider({
     markDocAsRead,
     unlockAchievement,
     saveProfileToCloud,
+    setPendingAccess,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -14,8 +14,20 @@ export {
   getCategoryFromDocPath,
 } from "./types";
 
-// Re-export internal user profiles
-export { INTERNAL_USER_PROFILES, getUserProfile } from "./internal-users";
+// Re-export internal user profiles and domain utilities
+export {
+  INTERNAL_USER_PROFILES,
+  getUserProfile,
+  getUserProfileWithMetadata,
+  getUserProfileWithMetadataAsync,
+  isInternalDomain,
+  getKnownInternalEmail,
+  getKnownInternalEmailAsync,
+  INTERNAL_DOMAINS,
+  KNOWN_INTERNAL_EMAILS,
+  DEFAULT_INTERNAL_PROFILE,
+} from "./internal-users";
+export type { UserProfileResult } from "./internal-users";
 
 // Import individual templates
 import { technicalSoftwareTemplate } from "./technical-software";

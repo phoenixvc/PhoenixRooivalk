@@ -355,7 +355,7 @@ export async function requireAdminLegacy(request: HttpRequest): Promise<{
  */
 export async function validateAuthHeader(
   authHeader: string | null,
-): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean }> {
+): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean; email?: string; name?: string }> {
   if (!authHeader) {
     return { valid: false };
   }
@@ -377,10 +377,11 @@ export async function validateAuthHeader(
 
     const userId = claims.sub;
     const email = claims.email || "";
+    const name = claims.name || "";
     const domain = email.split("@")[1]?.toLowerCase();
     const isAdminUser = ADMIN_DOMAINS.includes(domain);
 
-    return { valid: true, userId, isAdmin: isAdminUser };
+    return { valid: true, userId, isAdmin: isAdminUser, email, name };
   }
 
   return { valid: false };
