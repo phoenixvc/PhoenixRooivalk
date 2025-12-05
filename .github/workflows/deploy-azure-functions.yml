@@ -281,7 +281,12 @@ jobs:
             echo "3. **Azure OpenAI**: Deploy chat and embedding models" >> $GITHUB_STEP_SUMMARY
             echo "4. **Application Insights**: For monitoring (optional)" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "See \`apps/docs/azure-functions/INFRASTRUCTURE.md\` for setup instructions." >> $GITHUB_STEP_SUMMARY
+            echo "📖 **Complete Setup Guide**: \`.github/DEPLOYMENT_SEQUENCE.md\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See also:" >> $GITHUB_STEP_SUMMARY
+            echo "- \`apps/docs/azure-functions/INFRASTRUCTURE.md\` for Functions setup" >> $GITHUB_STEP_SUMMARY
+            echo "- \`.github/AZURE_SETUP.md\` for secrets configuration" >> $GITHUB_STEP_SUMMARY
+            echo "- \`infra/azure/README.md\` for infrastructure overview" >> $GITHUB_STEP_SUMMARY
           else
             echo "## ✅ Infrastructure Validation Passed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
@@ -318,6 +323,10 @@ jobs:
       - name: Fail if missing infrastructure
         if: steps.check.outputs.can_deploy == 'false'
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚨 DEPLOYMENT BLOCKED: Azure Infrastructure Not Yet Configured"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
           echo "::error::Missing required infrastructure. See job summary for details."
           echo ""
           echo "❌ Missing secrets: ${{ steps.check.outputs.missing_secrets }}"
@@ -325,10 +334,19 @@ jobs:
           echo ""
           echo "✅ Configured secrets: ${{ steps.check.outputs.configured_secrets }}"
           echo "✅ Configured variables: ${{ steps.check.outputs.configured_vars }}"
-          echo "Configured secrets: ${{ steps.check.outputs.present_secrets }}"
-          echo "Missing secrets: ${{ steps.check.outputs.missing_secrets }}"
-          echo "Configured variables: ${{ steps.check.outputs.present_vars }}"
-          echo "Missing variables: ${{ steps.check.outputs.missing_vars }}"
+          echo ""
+          echo "📖 COMPLETE SETUP GUIDE: .github/DEPLOYMENT_SEQUENCE.md"
+          echo ""
+          echo "Quick Start:"
+          echo "  1️⃣  Deploy Azure infrastructure:"
+          echo "      cd infra/azure && ./scripts/setup-all.sh dev eastus"
+          echo ""
+          echo "  2️⃣  Configure GitHub secrets using generated script:"
+          echo "      ./infra/azure/output/github-secrets.dev.sh"
+          echo ""
+          echo "  3️⃣  Re-run this workflow"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           exit 1
 
   # ===========================================
