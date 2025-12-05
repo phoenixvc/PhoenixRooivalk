@@ -2,11 +2,36 @@
  * GitHub Integration Service
  *
  * Fetches repository activity data from GitHub API for weekly reports.
+ * Includes rate limit handling, retry logic, and pagination support.
  */
 
 import { createLogger } from "../lib/logger";
 
 const logger = createLogger({ feature: "github" });
+
+/**
+ * Retry configuration
+ */
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  baseDelayMs: 1000,
+  maxDelayMs: 10000,
+};
+
+/**
+ * Sleep helper for retry delays
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Calculate exponential backoff delay
+ */
+function getRetryDelay(attempt: number): number {
+  const delay = RETRY_CONFIG.baseDelayMs * Math.pow(2, attempt);
+  return Math.min(delay, RETRY_CONFIG.maxDelayMs);
+}
 
 /**
  * GitHub commit data
@@ -32,6 +57,7 @@ export interface GitHubPullRequest {
   merged: boolean;
   author: string;
   createdAt: string;
+  updatedAt: string;
   closedAt?: string;
   mergedAt?: string;
   url: string;
@@ -47,6 +73,7 @@ export interface GitHubIssue {
   state: "open" | "closed";
   author: string;
   createdAt: string;
+  updatedAt: string;
   closedAt?: string;
   url: string;
   labels: string[];
@@ -73,6 +100,16 @@ interface GitHubApiOptions {
   since?: string;
   until?: string;
   perPage?: number;
+  page?: number;
+}
+
+/**
+ * Rate limit info from GitHub headers
+ */
+interface RateLimitInfo {
+  remaining: number;
+  reset: Date;
+  limit: number;
 }
 
 /**
@@ -80,10 +117,14 @@ interface GitHubApiOptions {
  */
 class GitHubService {
   private baseUrl = "https://api.github.com";
-  private token: string | null = null;
+  private rateLimitInfo: RateLimitInfo | null = null;
 
-  constructor() {
-    this.token = process.env.GITHUB_TOKEN || process.env.GITHUB_PAT || null;
+  /**
+   * Get GitHub token lazily from environment
+   * This allows token changes without service restart
+   */
+  private get token(): string | null {
+    return process.env.GITHUB_TOKEN || process.env.GITHUB_PAT || null;
   }
 
   /**
@@ -103,7 +144,46 @@ class GitHubService {
   }
 
   /**
-   * Make a GitHub API request
+   * Parse rate limit headers from response
+   */
+  private parseRateLimitHeaders(response: Response): RateLimitInfo {
+    const remaining = parseInt(
+      response.headers.get("x-ratelimit-remaining") || "0",
+      10,
+    );
+    const reset = new Date(
+      parseInt(response.headers.get("x-ratelimit-reset") || "0", 10) * 1000,
+    );
+    const limit = parseInt(
+      response.headers.get("x-ratelimit-limit") || "0",
+      10,
+    );
+
+    return { remaining, reset, limit };
+  }
+
+  /**
+   * Wait for rate limit reset if needed
+   */
+  private async waitForRateLimitReset(): Promise<void> {
+    if (!this.rateLimitInfo || this.rateLimitInfo.remaining > 0) {
+      return;
+    }
+
+    const now = new Date();
+    const waitMs = this.rateLimitInfo.reset.getTime() - now.getTime();
+
+    if (waitMs > 0) {
+      logger.warn("Rate limit hit, waiting for reset", {
+        resetAt: this.rateLimitInfo.reset.toISOString(),
+        waitMs,
+      });
+      await sleep(Math.min(waitMs + 1000, 60000)); // Max 60s wait
+    }
+  }
+
+  /**
+   * Make a GitHub API request with retry logic
    */
   private async fetchApi<T>(
     endpoint: string,
@@ -114,22 +194,100 @@ class GitHubService {
       if (value) url.searchParams.set(key, value);
     });
 
-    logger.debug("GitHub API request", { endpoint, params });
+    let lastError: Error | null = null;
 
-    const response = await fetch(url.toString(), {
-      headers: this.getHeaders(),
-    });
+    for (let attempt = 0; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
+      try {
+        // Check rate limit before request
+        await this.waitForRateLimitReset();
 
-    if (!response.ok) {
-      const error = await response.text();
-      logger.error("GitHub API error", new Error(error), {
-        endpoint,
-        status: response.status,
-      });
-      throw new Error(`GitHub API error: ${response.status} - ${error}`);
+        logger.debug("GitHub API request", { endpoint, params, attempt });
+
+        const response = await fetch(url.toString(), {
+          headers: this.getHeaders(),
+        });
+
+        // Update rate limit info
+        this.rateLimitInfo = this.parseRateLimitHeaders(response);
+
+        // Handle rate limit exceeded (403 with specific header)
+        if (response.status === 403 && this.rateLimitInfo.remaining === 0) {
+          logger.warn("Rate limit exceeded", {
+            endpoint,
+            reset: this.rateLimitInfo.reset.toISOString(),
+          });
+          await this.waitForRateLimitReset();
+          continue; // Retry after waiting
+        }
+
+        // Handle other errors
+        if (!response.ok) {
+          const error = await response.text();
+
+          // Don't retry on 4xx errors (except 403 rate limit)
+          if (response.status >= 400 && response.status < 500) {
+            logger.error("GitHub API client error", new Error(error), {
+              endpoint,
+              status: response.status,
+            });
+            throw new Error(`GitHub API error: ${response.status} - ${error}`);
+          }
+
+          // Retry on 5xx errors
+          throw new Error(`GitHub API error: ${response.status} - ${error}`);
+        }
+
+        return response.json();
+      } catch (error) {
+        lastError = error as Error;
+
+        if (attempt < RETRY_CONFIG.maxRetries) {
+          const delay = getRetryDelay(attempt);
+          logger.warn("GitHub API request failed, retrying", {
+            endpoint,
+            attempt: attempt + 1,
+            maxRetries: RETRY_CONFIG.maxRetries,
+            delayMs: delay,
+            error: lastError.message,
+          });
+          await sleep(delay);
+        }
+      }
     }
 
-    return response.json();
+    logger.error("GitHub API request failed after retries", lastError!, {
+      endpoint,
+    });
+    throw lastError;
+  }
+
+  /**
+   * Fetch all pages for a paginated endpoint
+   */
+  private async fetchAllPages<T>(
+    endpoint: string,
+    params: Record<string, string> = {},
+    maxPages = 5,
+  ): Promise<T[]> {
+    const allItems: T[] = [];
+    let page = 1;
+    const perPage = parseInt(params.per_page || "100", 10);
+
+    while (page <= maxPages) {
+      const pageParams = { ...params, page: page.toString() };
+      const items = await this.fetchApi<T[]>(endpoint, pageParams);
+
+      allItems.push(...items);
+
+      // If we got fewer items than per_page, we've reached the end
+      if (items.length < perPage) {
+        break;
+      }
+
+      page++;
+    }
+
+    return allItems;
   }
 
   /**
@@ -139,16 +297,14 @@ class GitHubService {
     const { owner, repo, since, until, perPage = 100 } = options;
 
     try {
-      const data = await this.fetchApi<
-        Array<{
-          sha: string;
-          commit: {
-            message: string;
-            author: { name: string; email: string; date: string };
-          };
-          html_url: string;
-        }>
-      >(`/repos/${owner}/${repo}/commits`, {
+      const data = await this.fetchAllPages<{
+        sha: string;
+        commit: {
+          message: string;
+          author: { name: string; email: string; date: string };
+        };
+        html_url: string;
+      }>(`/repos/${owner}/${repo}/commits`, {
         since: since || "",
         until: until || "",
         per_page: perPage.toString(),
@@ -173,24 +329,25 @@ class GitHubService {
   /**
    * Fetch pull requests for a repository
    */
-  async getPullRequests(options: GitHubApiOptions): Promise<GitHubPullRequest[]> {
+  async getPullRequests(
+    options: GitHubApiOptions,
+  ): Promise<GitHubPullRequest[]> {
     const { owner, repo, since, perPage = 100 } = options;
 
     try {
       // Fetch both open and closed PRs
-      const data = await this.fetchApi<
-        Array<{
-          number: number;
-          title: string;
-          state: "open" | "closed";
-          merged_at: string | null;
-          user: { login: string };
-          created_at: string;
-          closed_at: string | null;
-          html_url: string;
-          labels: Array<{ name: string }>;
-        }>
-      >(`/repos/${owner}/${repo}/pulls`, {
+      const data = await this.fetchAllPages<{
+        number: number;
+        title: string;
+        state: "open" | "closed";
+        merged_at: string | null;
+        user: { login: string };
+        created_at: string;
+        updated_at: string;
+        closed_at: string | null;
+        html_url: string;
+        labels: Array<{ name: string }>;
+      }>(`/repos/${owner}/${repo}/pulls`, {
         state: "all",
         sort: "updated",
         direction: "desc",
@@ -202,7 +359,8 @@ class GitHubService {
       return data
         .filter((pr) => {
           if (!sinceDate) return true;
-          const updatedAt = new Date(pr.created_at);
+          // Filter by updated_at since we're sorting by updated
+          const updatedAt = new Date(pr.updated_at);
           return updatedAt >= sinceDate;
         })
         .map((pr) => ({
@@ -212,6 +370,7 @@ class GitHubService {
           merged: !!pr.merged_at,
           author: pr.user.login,
           createdAt: pr.created_at,
+          updatedAt: pr.updated_at,
           closedAt: pr.closed_at || undefined,
           mergedAt: pr.merged_at || undefined,
           url: pr.html_url,
@@ -233,19 +392,18 @@ class GitHubService {
     const { owner, repo, since, perPage = 100 } = options;
 
     try {
-      const data = await this.fetchApi<
-        Array<{
-          number: number;
-          title: string;
-          state: "open" | "closed";
-          user: { login: string };
-          created_at: string;
-          closed_at: string | null;
-          html_url: string;
-          labels: Array<{ name: string }>;
-          pull_request?: object;
-        }>
-      >(`/repos/${owner}/${repo}/issues`, {
+      const data = await this.fetchAllPages<{
+        number: number;
+        title: string;
+        state: "open" | "closed";
+        user: { login: string };
+        created_at: string;
+        updated_at: string;
+        closed_at: string | null;
+        html_url: string;
+        labels: Array<{ name: string }>;
+        pull_request?: object;
+      }>(`/repos/${owner}/${repo}/issues`, {
         state: "all",
         sort: "updated",
         direction: "desc",
@@ -262,6 +420,7 @@ class GitHubService {
           state: issue.state,
           author: issue.user.login,
           createdAt: issue.created_at,
+          updatedAt: issue.updated_at,
           closedAt: issue.closed_at || undefined,
           url: issue.html_url,
           labels: issue.labels.map((l) => l.name),
@@ -331,12 +490,31 @@ class GitHubService {
    * Parse repository string (owner/repo format)
    */
   parseRepository(repoString: string): { owner: string; repo: string } | null {
-    const parts = repoString.split("/");
-    if (parts.length !== 2) {
-      logger.warn("Invalid repository format", { repoString });
+    // Basic input validation
+    if (!repoString || typeof repoString !== "string") {
+      logger.warn("Invalid repository input", { repoString });
       return null;
     }
-    return { owner: parts[0], repo: parts[1] };
+
+    // Trim and check format
+    const trimmed = repoString.trim();
+    const parts = trimmed.split("/");
+
+    if (parts.length !== 2) {
+      logger.warn("Invalid repository format", { repoString: trimmed });
+      return null;
+    }
+
+    const [owner, repo] = parts;
+
+    // Validate owner and repo names (GitHub naming rules)
+    const validNamePattern = /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$/;
+    if (!validNamePattern.test(owner) || !validNamePattern.test(repo)) {
+      logger.warn("Invalid repository name characters", { owner, repo });
+      return null;
+    }
+
+    return { owner, repo };
   }
 
   /**
@@ -344,6 +522,13 @@ class GitHubService {
    */
   isConfigured(): boolean {
     return !!this.token;
+  }
+
+  /**
+   * Get current rate limit status
+   */
+  getRateLimitStatus(): RateLimitInfo | null {
+    return this.rateLimitInfo;
   }
 
   /**

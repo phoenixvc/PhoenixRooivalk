@@ -283,6 +283,51 @@ async function exportReportHandler(
 }
 
 /**
+ * Export report as MDX for docs/progress folder (admin)
+ */
+async function exportReportMDXHandler(
+  request: HttpRequest,
+  context: InvocationContext,
+): Promise<HttpResponseInit> {
+  const authResult = await validateAuthHeader(
+    request.headers.get("authorization"),
+  );
+
+  if (!authResult.valid || !authResult.isAdmin) {
+    return Errors.forbidden();
+  }
+
+  try {
+    const id = request.params.id;
+    if (!id) {
+      return Errors.badRequest("Report ID is required");
+    }
+
+    const report = await weeklyReportsService.getReport(id);
+    if (!report) {
+      return Errors.notFound("Report not found");
+    }
+
+    const mdx = weeklyReportsService.exportAsMDX(report);
+    const filePath = weeklyReportsService.getMDXFilePath(report);
+    const fileName = filePath.split("/").pop() || "report.mdx";
+
+    return {
+      status: 200,
+      headers: {
+        "Content-Type": "text/markdown",
+        "Content-Disposition": `attachment; filename="${fileName}"`,
+        "X-MDX-Path": filePath,
+      },
+      body: mdx,
+    };
+  } catch (error) {
+    context.error("Failed to export report as MDX:", error);
+    return Errors.internal("Failed to export report");
+  }
+}
+
+/**
  * Get report counts handler (admin)
  */
 async function getReportCountsHandler(
@@ -416,6 +461,13 @@ app.http("exportWeeklyReport", {
   authLevel: "anonymous",
   route: "reports/weekly/{id}/export",
   handler: exportReportHandler,
+});
+
+app.http("exportWeeklyReportMDX", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "reports/weekly/{id}/export-mdx",
+  handler: exportReportMDXHandler,
 });
 
 app.http("getWeeklyReportCounts", {

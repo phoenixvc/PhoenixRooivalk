@@ -2,18 +2,21 @@
  * Admin Weekly Reports Dashboard
  *
  * Admin page for generating and managing AI-powered weekly reports.
+ * Includes polling for generating reports, date picker, and full report view.
  */
 
 import Layout from "@theme/Layout";
 import * as React from "react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import {
   getWeeklyReports,
+  getWeeklyReport,
   generateWeeklyReport,
   deleteWeeklyReport,
   regenerateWeeklyReport,
   exportReportAsMarkdown,
+  exportReportAsMDX,
   getReportCounts,
   checkGitHubConfig,
   validateGitHubRepository,
@@ -23,6 +26,9 @@ import {
 } from "../../services/weekly-reports";
 
 import styles from "./reports.module.css";
+
+// Polling interval for generating reports (5 seconds)
+const POLL_INTERVAL = 5000;
 
 export default function ReportsAdminPage(): React.ReactElement {
   const { user, loading, userProfile } = useAuth();
@@ -34,8 +40,11 @@ export default function ReportsAdminPage(): React.ReactElement {
   });
   const [statusFilter, setStatusFilter] = useState<ReportStatus | "all">("all");
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedReport, setSelectedReport] = useState<WeeklyReport | null>(null);
+  const [selectedReport, setSelectedReport] = useState<WeeklyReport | null>(
+    null,
+  );
   const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [showFullReportModal, setShowFullReportModal] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [gitHubConfigured, setGitHubConfigured] = useState(false);
 
@@ -47,8 +56,42 @@ export default function ReportsAdminPage(): React.ReactElement {
   const [customPrompt, setCustomPrompt] = useState("");
   const [generateError, setGenerateError] = useState("");
 
+  // Date range state
+  const [useCustomDates, setUseCustomDates] = useState(false);
+  const [weekStartDate, setWeekStartDate] = useState("");
+  const [weekEndDate, setWeekEndDate] = useState("");
+
+  // Polling ref
+  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   // Check if user is admin
   const isAdmin = userProfile.isInternalDomain;
+
+  // Get default week dates (current week, Monday to Sunday)
+  const getDefaultWeekDates = useCallback(() => {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMonday);
+    monday.setHours(0, 0, 0, 0);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    return {
+      start: monday.toISOString().split("T")[0],
+      end: sunday.toISOString().split("T")[0],
+    };
+  }, []);
+
+  // Initialize default dates
+  useEffect(() => {
+    const { start, end } = getDefaultWeekDates();
+    setWeekStartDate(start);
+    setWeekEndDate(end);
+  }, [getDefaultWeekDates]);
 
   // Fetch reports
   const fetchReports = useCallback(async () => {
@@ -70,6 +113,49 @@ export default function ReportsAdminPage(): React.ReactElement {
       setIsLoading(false);
     }
   }, [statusFilter]);
+
+  // Poll for generating reports
+  const pollGeneratingReports = useCallback(async () => {
+    const generatingReports = reports.filter((r) => r.status === "generating");
+
+    if (generatingReports.length === 0) {
+      return;
+    }
+
+    // Check each generating report
+    for (const report of generatingReports) {
+      try {
+        const updated = await getWeeklyReport(report.id);
+        if (updated && updated.status !== "generating") {
+          // Report finished, refresh the list
+          await fetchReports();
+          // Update selected report if it was being watched
+          if (selectedReport?.id === report.id) {
+            setSelectedReport(updated);
+          }
+          break;
+        }
+      } catch (error) {
+        console.error("Error polling report:", error);
+      }
+    }
+  }, [reports, selectedReport, fetchReports]);
+
+  // Set up polling for generating reports
+  useEffect(() => {
+    const hasGenerating = reports.some((r) => r.status === "generating");
+
+    if (hasGenerating) {
+      pollIntervalRef.current = setInterval(pollGeneratingReports, POLL_INTERVAL);
+    }
+
+    return () => {
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
+    };
+  }, [reports, pollGeneratingReports]);
 
   useEffect(() => {
     if (user && isAdmin) {
@@ -112,11 +198,24 @@ export default function ReportsAdminPage(): React.ReactElement {
     setGenerateError("");
 
     try {
-      const result = await generateWeeklyReport({
+      const options: {
+        repositories: string[];
+        includeAISummary: boolean;
+        customPrompt?: string;
+        weekStartDate?: string;
+        weekEndDate?: string;
+      } = {
         repositories,
         includeAISummary: true,
         customPrompt: customPrompt || undefined,
-      });
+      };
+
+      if (useCustomDates && weekStartDate && weekEndDate) {
+        options.weekStartDate = new Date(weekStartDate).toISOString();
+        options.weekEndDate = new Date(weekEndDate).toISOString();
+      }
+
+      const result = await generateWeeklyReport(options);
 
       if (result.success) {
         setShowGenerateModal(false);
@@ -152,7 +251,9 @@ export default function ReportsAdminPage(): React.ReactElement {
 
   // Handle regenerate report
   const handleRegenerateReport = async (id: string) => {
-    if (!confirm("Regenerate this report? The current version will be replaced."))
+    if (
+      !confirm("Regenerate this report? The current version will be replaced.")
+    )
       return;
 
     const result = await regenerateWeeklyReport(id);
@@ -166,8 +267,8 @@ export default function ReportsAdminPage(): React.ReactElement {
     }
   };
 
-  // Handle export report
-  const handleExportReport = async (id: string) => {
+  // Handle export report as markdown
+  const handleExportMarkdown = async (id: string) => {
     const markdown = await exportReportAsMarkdown(id);
     if (markdown) {
       const blob = new Blob([markdown], { type: "text/markdown" });
@@ -175,6 +276,20 @@ export default function ReportsAdminPage(): React.ReactElement {
       const a = document.createElement("a");
       a.href = url;
       a.download = `${selectedReport?.reportNumber || "report"}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  // Handle export report as MDX
+  const handleExportMDX = async (id: string) => {
+    const result = await exportReportAsMDX(id);
+    if (result) {
+      const blob = new Blob([result.content], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = result.filePath.split("/").pop() || "report.mdx";
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -244,7 +359,9 @@ export default function ReportsAdminPage(): React.ReactElement {
           <div className={styles.headerTop}>
             <div>
               <h1>Weekly Reports</h1>
-              <p>AI-generated weekly development reports with GitHub integration</p>
+              <p>
+                AI-generated weekly development reports with GitHub integration
+              </p>
             </div>
             <button
               type="button"
@@ -257,8 +374,8 @@ export default function ReportsAdminPage(): React.ReactElement {
           </div>
           {!gitHubConfigured && (
             <div className={styles.warning}>
-              GitHub token not configured. Set GITHUB_TOKEN environment variable to
-              enable report generation.
+              GitHub token not configured. Set GITHUB_TOKEN environment variable
+              to enable report generation.
             </div>
           )}
         </header>
@@ -363,6 +480,37 @@ export default function ReportsAdminPage(): React.ReactElement {
                 </div>
 
                 <div className={styles.formGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={useCustomDates}
+                      onChange={(e) => setUseCustomDates(e.target.checked)}
+                    />
+                    <span>Use custom date range</span>
+                  </label>
+                  {useCustomDates && (
+                    <div className={styles.dateRange}>
+                      <div>
+                        <label>Start Date</label>
+                        <input
+                          type="date"
+                          value={weekStartDate}
+                          onChange={(e) => setWeekStartDate(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label>End Date</label>
+                        <input
+                          type="date"
+                          value={weekEndDate}
+                          onChange={(e) => setWeekEndDate(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
                   <label>Custom Instructions (optional)</label>
                   <textarea
                     placeholder="Add any specific focus areas or instructions for the AI..."
@@ -389,6 +537,94 @@ export default function ReportsAdminPage(): React.ReactElement {
                     {isGenerating ? "Generating..." : "Generate Report"}
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Full Report Modal */}
+        {showFullReportModal && selectedReport && (
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setShowFullReportModal(false)}
+          >
+            <div
+              className={`${styles.modal} ${styles.fullReportModal}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className={styles.modalHeader}>
+                <h2>{selectedReport.title}</h2>
+                <button
+                  type="button"
+                  className={styles.closeBtn}
+                  onClick={() => setShowFullReportModal(false)}
+                >
+                  &times;
+                </button>
+              </div>
+              <div className={styles.fullReportContent}>
+                {selectedReport.executiveSummary && (
+                  <div className={styles.fullReportSection}>
+                    <h3>TL;DR Summary</h3>
+                    <div className={styles.markdownContent}>
+                      {selectedReport.executiveSummary}
+                    </div>
+                  </div>
+                )}
+
+                {selectedReport.sections.map((section, index) => (
+                  <div key={index} className={styles.fullReportSection}>
+                    <h3>{section.title}</h3>
+                    <div className={styles.markdownContent}>
+                      {section.content}
+                    </div>
+                  </div>
+                ))}
+
+                {selectedReport.gitHubActivity &&
+                  selectedReport.gitHubActivity.length > 0 && (
+                    <div className={styles.fullReportSection}>
+                      <h3>GitHub Activity</h3>
+                      <table className={styles.activityTable}>
+                        <thead>
+                          <tr>
+                            <th>Repository</th>
+                            <th>Commits</th>
+                            <th>PRs Merged</th>
+                            <th>Issues Closed</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedReport.gitHubActivity.map(
+                            (activity, idx) => (
+                              <tr key={idx}>
+                                <td>{activity.repository}</td>
+                                <td>{activity.commits.total}</td>
+                                <td>{activity.pullRequests.merged}</td>
+                                <td>{activity.issues.closed}</td>
+                              </tr>
+                            ),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+              </div>
+              <div className={styles.modalActions}>
+                <button
+                  type="button"
+                  className="button button--secondary"
+                  onClick={() => setShowFullReportModal(false)}
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="button button--primary"
+                  onClick={() => handleExportMDX(selectedReport.id)}
+                >
+                  Export as MDX
+                </button>
               </div>
             </div>
           </div>
@@ -433,6 +669,9 @@ export default function ReportsAdminPage(): React.ReactElement {
                     className={`${styles.statusBadge} ${getStatusClass(report.status)}`}
                   >
                     {report.status}
+                    {report.status === "generating" && (
+                      <span className={styles.pollingIndicator}></span>
+                    )}
                   </span>
                 </div>
                 <div className={styles.reportBody}>
@@ -480,8 +719,9 @@ export default function ReportsAdminPage(): React.ReactElement {
                   <strong>Title:</strong> {selectedReport.title}
                 </p>
                 <p>
-                  <strong>Period:</strong> {formatDate(selectedReport.weekStartDate)}{" "}
-                  - {formatDate(selectedReport.weekEndDate)}
+                  <strong>Period:</strong>{" "}
+                  {formatDate(selectedReport.weekStartDate)} -{" "}
+                  {formatDate(selectedReport.weekEndDate)}
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
@@ -491,6 +731,11 @@ export default function ReportsAdminPage(): React.ReactElement {
                     {selectedReport.status}
                   </span>
                 </p>
+                {selectedReport.aiModel && (
+                  <p>
+                    <strong>AI Model:</strong> {selectedReport.aiModel}
+                  </p>
+                )}
                 {selectedReport.generationTimeMs && (
                   <p>
                     <strong>Generation Time:</strong>{" "}
@@ -514,23 +759,29 @@ export default function ReportsAdminPage(): React.ReactElement {
                 <div className={styles.detailSection}>
                   <h4>Executive Summary</h4>
                   <div className={styles.summaryText}>
-                    {selectedReport.executiveSummary}
+                    {selectedReport.executiveSummary.substring(0, 500)}
+                    {selectedReport.executiveSummary.length > 500 && "..."}
                   </div>
                 </div>
               )}
 
               {selectedReport.sections.length > 0 && (
                 <div className={styles.detailSection}>
-                  <h4>Report Sections</h4>
-                  {selectedReport.sections.map((section, index) => (
+                  <h4>Report Sections ({selectedReport.sections.length})</h4>
+                  {selectedReport.sections.slice(0, 3).map((section, index) => (
                     <div key={index} className={styles.sectionPreview}>
                       <strong>{section.title}</strong>
                       <p>
-                        {section.content.substring(0, 200)}
-                        {section.content.length > 200 ? "..." : ""}
+                        {section.content.substring(0, 150)}
+                        {section.content.length > 150 ? "..." : ""}
                       </p>
                     </div>
                   ))}
+                  {selectedReport.sections.length > 3 && (
+                    <p className={styles.moreIndicator}>
+                      +{selectedReport.sections.length - 3} more sections
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -547,13 +798,29 @@ export default function ReportsAdminPage(): React.ReactElement {
                 <h4>Actions</h4>
                 <div className={styles.actionButtons}>
                   {selectedReport.status === "completed" && (
-                    <button
-                      type="button"
-                      className={`${styles.actionBtn} ${styles.exportBtn}`}
-                      onClick={() => handleExportReport(selectedReport.id)}
-                    >
-                      Export Markdown
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        className={`${styles.actionBtn} ${styles.viewBtn}`}
+                        onClick={() => setShowFullReportModal(true)}
+                      >
+                        View Full Report
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.actionBtn} ${styles.exportBtn}`}
+                        onClick={() => handleExportMarkdown(selectedReport.id)}
+                      >
+                        Export Markdown
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.actionBtn} ${styles.mdxBtn}`}
+                        onClick={() => handleExportMDX(selectedReport.id)}
+                      >
+                        Export MDX
+                      </button>
+                    </>
                   )}
                   <button
                     type="button"

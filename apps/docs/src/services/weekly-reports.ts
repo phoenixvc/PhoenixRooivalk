@@ -308,6 +308,32 @@ export async function exportReportAsMarkdown(id: string): Promise<string | null>
 }
 
 /**
+ * Export report as MDX for docs/progress folder
+ */
+export async function exportReportAsMDX(
+  id: string,
+): Promise<{ content: string; filePath: string } | null> {
+  try {
+    const headers = await getAuthHeader();
+    const response = await fetch(`${API_BASE}/reports/weekly/${id}/export-mdx`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const content = await response.text();
+    const filePath = response.headers.get("X-MDX-Path") || "report.mdx";
+
+    return { content, filePath };
+  } catch (error) {
+    console.error("Error exporting report as MDX:", error);
+    return null;
+  }
+}
+
+/**
  * Get report counts
  */
 export async function getReportCounts(): Promise<ReportCounts> {

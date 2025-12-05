@@ -2,9 +2,10 @@
  * Weekly Reports Service
  *
  * Business logic for generating AI-powered weekly reports with GitHub integration.
+ * Generates reports in a format compatible with the docs progress section.
  */
 
-import { generateCompletion } from "../lib/openai";
+import { generateCompletion, getChatDeployment } from "../lib/openai";
 import { createLogger } from "../lib/logger";
 import {
   weeklyReportsRepository,
@@ -13,11 +14,11 @@ import {
   GitHubActivitySummary,
   WeeklyReportFilters,
 } from "../repositories/weekly-reports.repository";
+import { gitHubService, RepositoryActivity } from "./github.service";
 import {
-  gitHubService,
-  RepositoryActivity,
-} from "./github.service";
-import { PaginatedResult, PaginationOptions } from "../repositories/base.repository";
+  PaginatedResult,
+  PaginationOptions,
+} from "../repositories/base.repository";
 
 const logger = createLogger({ feature: "weekly-reports" });
 
@@ -46,11 +47,25 @@ export interface GenerateReportResult {
  */
 class WeeklyReportsService {
   /**
+   * Get week number from date
+   */
+  private getWeekNumber(date: Date): number {
+    const d = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    );
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  }
+
+  /**
    * Get week date range (Monday to Sunday)
    */
   private getWeekDateRange(referenceDate?: Date): {
     start: string;
     end: string;
+    weekNumber: number;
   } {
     const date = referenceDate || new Date();
     const dayOfWeek = date.getDay();
@@ -67,7 +82,29 @@ class WeeklyReportsService {
     return {
       start: monday.toISOString(),
       end: sunday.toISOString(),
+      weekNumber: this.getWeekNumber(monday),
     };
+  }
+
+  /**
+   * Format date for display
+   */
+  private formatDate(
+    dateString: string,
+    format: "short" | "long" = "short",
+  ): string {
+    const date = new Date(dateString);
+    if (format === "long") {
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
   }
 
   /**
@@ -75,6 +112,7 @@ class WeeklyReportsService {
    */
   private async generateAISummary(
     activities: RepositoryActivity[],
+    weekInfo: { start: string; end: string; weekNumber: number },
     customPrompt?: string,
   ): Promise<{
     executiveSummary: string;
@@ -90,13 +128,19 @@ class WeeklyReportsService {
           .join(", ");
 
         const prSummary = activity.pullRequests
-          .slice(0, 10)
-          .map((pr) => `- [${pr.merged ? "MERGED" : pr.state.toUpperCase()}] #${pr.number}: ${pr.title}`)
+          .slice(0, 15)
+          .map(
+            (pr) =>
+              `- [${pr.merged ? "MERGED" : pr.state.toUpperCase()}] #${pr.number}: ${pr.title}`,
+          )
           .join("\n");
 
         const issueSummary = activity.issues
           .slice(0, 10)
-          .map((issue) => `- [${issue.state.toUpperCase()}] #${issue.number}: ${issue.title}`)
+          .map(
+            (issue) =>
+              `- [${issue.state.toUpperCase()}] #${issue.number}: ${issue.title}`,
+          )
           .join("\n");
 
         return `
@@ -105,7 +149,7 @@ Commits: ${activity.commits.length}
 Top Contributors: ${commitAuthors || "None"}
 
 Recent Commit Messages:
-${activity.commits.slice(0, 10).map((c) => `- ${c.message}`).join("\n") || "None"}
+${activity.commits.slice(0, 15).map((c) => `- ${c.message}`).join("\n") || "None"}
 
 Pull Requests (${activity.pullRequests.length} total):
 ${prSummary || "None"}
@@ -116,33 +160,63 @@ ${issueSummary || "None"}
       })
       .join("\n---\n");
 
-    const systemPrompt = `You are a technical writer creating a weekly development report.
-Your task is to analyze the GitHub activity data and create a professional, concise report.
+    const systemPrompt = `You are a technical writer creating a weekly development progress report for Phoenix Rooivalk, a defense technology startup.
+
+Your task is to analyze the GitHub activity data and create a professional, comprehensive report matching the style of existing progress reports.
+
+The report should follow this structure:
+
+## TL;DR (2-Minute Summary)
+Provide 3-5 numbered sections with key highlights, each with:
+- A bold headline describing the category
+- 2-4 bullet points with specific accomplishments
+- Use **bold** for emphasis on important items
+
+## Full Weekly Report
+
+### 1. Software & AI Development
+Detail software changes, features, bug fixes, and technical improvements.
+Include tables where appropriate:
+| Feature | Status | Details |
+| ------- | ------ | ------- |
+| Example | ✅ Complete | Description |
+
+### 2. Code Quality & DevOps
+Document CI/CD improvements, testing, linting, infrastructure changes.
+
+### 3. Key Decisions Made
+Create a table of decisions with rationale and impact.
+
+### 4. Next Week Priorities
+Numbered list of priorities for the following week.
+
+### 5. Metrics & KPIs
+Table showing key metrics with trends (↑↑, ↑, →, ↓).
+
+### 6. Risks & Blockers
+Table with risk, severity (High/Medium/Low), and mitigation.
 
 Guidelines:
 - Be factual and specific about what was accomplished
 - Highlight significant changes, features, and fixes
 - Group related work together logically
 - Use clear, professional language
+- Include specific PR numbers when available
 - Focus on impact and outcomes, not just activity
-
-Output format (use Markdown):
-Start with an executive summary (2-3 sentences), then provide sections for:
-1. Key Accomplishments
-2. Technical Highlights
-3. Pull Requests Summary
-4. Issues & Bug Fixes
-5. Team Activity
-6. Next Steps (if apparent from the data)`;
+- Use markdown tables for structured data
+- Use ✅ for complete items, 🔄 for in progress
+- End with "_Report compiled: [date]_"`;
 
     const userPrompt = customPrompt
-      ? `${customPrompt}\n\nGitHub Activity Data:\n${activitySummary}`
-      : `Generate a weekly development report from the following GitHub activity data:\n\n${activitySummary}`;
+      ? `${customPrompt}\n\nWeek ${weekInfo.weekNumber} (${this.formatDate(weekInfo.start)} - ${this.formatDate(weekInfo.end)})\n\nGitHub Activity Data:\n${activitySummary}`
+      : `Generate a weekly development progress report for Week ${weekInfo.weekNumber} (${this.formatDate(weekInfo.start)} - ${this.formatDate(weekInfo.end)}) from the following GitHub activity data:\n\n${activitySummary}`;
 
-    logger.info("Generating AI summary for weekly report");
+    logger.info("Generating AI summary for weekly report", {
+      weekNumber: weekInfo.weekNumber,
+    });
 
     const aiResponse = await generateCompletion(systemPrompt, userPrompt, {
-      maxTokens: 3000,
+      maxTokens: 4000,
       temperature: 0.5,
     });
 
@@ -151,29 +225,41 @@ Start with an executive summary (2-3 sentences), then provide sections for:
     const lines = aiResponse.split("\n");
     let currentSection: ReportSection | null = null;
     let executiveSummary = "";
-    let inExecutiveSummary = true;
+    let inTLDR = false;
 
     for (const line of lines) {
+      // Check for TL;DR section
+      if (line.match(/^##\s+TL;DR/i)) {
+        inTLDR = true;
+        continue;
+      }
+
       // Check for section headers (## or ###)
-      const headerMatch = line.match(/^#{1,3}\s+(.+)$/);
+      const headerMatch = line.match(/^#{2,3}\s+(.+)$/);
       if (headerMatch) {
         if (currentSection) {
           sections.push(currentSection);
         }
-        inExecutiveSummary = false;
+
+        // End of TL;DR when we hit Full Weekly Report
+        if (line.match(/Full Weekly Report/i)) {
+          inTLDR = false;
+        }
+
         currentSection = {
           title: headerMatch[1].trim(),
           content: "",
           highlights: [],
         };
+      } else if (inTLDR && line.trim()) {
+        // Capture TL;DR content as executive summary
+        executiveSummary += line + "\n";
       } else if (currentSection) {
         currentSection.content += line + "\n";
         // Extract bullet points as highlights
         if (line.match(/^[-*]\s+/)) {
           currentSection.highlights?.push(line.replace(/^[-*]\s+/, "").trim());
         }
-      } else if (inExecutiveSummary && line.trim()) {
-        executiveSummary += line + " ";
       }
     }
 
@@ -256,19 +342,26 @@ Start with an executive summary (2-3 sentences), then provide sections for:
     if (!gitHubService.isConfigured()) {
       return {
         success: false,
-        error: "GitHub token not configured. Set GITHUB_TOKEN environment variable.",
+        error:
+          "GitHub token not configured. Set GITHUB_TOKEN environment variable.",
       };
     }
 
     // Get week date range
-    const { start, end } = options.weekStartDate && options.weekEndDate
-      ? { start: options.weekStartDate, end: options.weekEndDate }
-      : this.getWeekDateRange();
+    const weekInfo =
+      options.weekStartDate && options.weekEndDate
+        ? {
+            start: options.weekStartDate,
+            end: options.weekEndDate,
+            weekNumber: this.getWeekNumber(new Date(options.weekStartDate)),
+          }
+        : this.getWeekDateRange();
 
     logger.info("Generating weekly report", {
       repositories: options.repositories,
-      startDate: start,
-      endDate: end,
+      weekNumber: weekInfo.weekNumber,
+      startDate: weekInfo.start,
+      endDate: weekInfo.end,
       generatedBy,
     });
 
@@ -276,12 +369,15 @@ Start with an executive summary (2-3 sentences), then provide sections for:
     const reportNumber = weeklyReportsRepository.generateReportNumber();
     const reportId = `report_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
+    const startDate = new Date(weekInfo.start);
+    const endDate = new Date(weekInfo.end);
+
     const initialReport: WeeklyReport = {
       id: reportId,
       reportNumber,
-      title: `Weekly Report ${new Date(start).toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${new Date(end).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`,
-      weekStartDate: start,
-      weekEndDate: end,
+      title: `Week ${weekInfo.weekNumber}: ${this.formatDate(weekInfo.start)} - ${this.formatDate(weekInfo.end)}, ${startDate.getFullYear()}`,
+      weekStartDate: weekInfo.start,
+      weekEndDate: weekInfo.end,
       status: "generating",
       generatedBy,
       sections: [],
@@ -304,8 +400,8 @@ Start with an executive summary (2-3 sentences), then provide sections for:
       // Fetch GitHub activity
       const activities = await gitHubService.getMultiRepoActivity(
         repos,
-        start,
-        end,
+        weekInfo.start,
+        weekInfo.end,
       );
 
       // Convert to summary format
@@ -320,6 +416,7 @@ Start with an executive summary (2-3 sentences), then provide sections for:
       if (options.includeAISummary !== false) {
         const aiResult = await this.generateAISummary(
           activities,
+          weekInfo,
           options.customPrompt,
         );
         executiveSummary = aiResult.executiveSummary;
@@ -341,6 +438,9 @@ Start with an executive summary (2-3 sentences), then provide sections for:
 
       const generationTimeMs = Date.now() - startTime;
 
+      // Get actual AI model used
+      const aiModel = getChatDeployment();
+
       // Update report with results
       const completedReport: WeeklyReport = {
         ...initialReport,
@@ -348,7 +448,7 @@ Start with an executive summary (2-3 sentences), then provide sections for:
         executiveSummary,
         sections,
         gitHubActivity,
-        aiModel: "gpt-4",
+        aiModel,
         generationTimeMs,
       };
 
@@ -358,6 +458,7 @@ Start with an executive summary (2-3 sentences), then provide sections for:
         reportNumber,
         generationTimeMs,
         repositoriesCount: repos.length,
+        aiModel,
       });
 
       return { success: true, report: savedReport };
@@ -455,30 +556,134 @@ Start with an executive summary (2-3 sentences), then provide sections for:
    * Export report as markdown
    */
   exportAsMarkdown(report: WeeklyReport): string {
-    let markdown = `# ${report.title}\n\n`;
-    markdown += `**Report Number:** ${report.reportNumber}\n`;
-    markdown += `**Period:** ${new Date(report.weekStartDate).toLocaleDateString()} - ${new Date(report.weekEndDate).toLocaleDateString()}\n`;
-    markdown += `**Generated:** ${new Date(report.createdAt || "").toLocaleString()}\n\n`;
+    const startDate = new Date(report.weekStartDate);
+    const endDate = new Date(report.weekEndDate);
+    const weekNumber = this.getWeekNumber(startDate);
+
+    let markdown = `# Week ${weekNumber}: ${this.formatDate(report.weekStartDate, "long")} - ${this.formatDate(report.weekEndDate, "long")}\n\n`;
 
     if (report.executiveSummary) {
-      markdown += `## Executive Summary\n\n${report.executiveSummary}\n\n`;
+      markdown += `## TL;DR (2-Minute Summary)\n\n${report.executiveSummary}\n\n---\n\n`;
     }
 
+    markdown += `## Full Weekly Report\n\n`;
+
     for (const section of report.sections) {
-      markdown += `## ${section.title}\n\n${section.content}\n\n`;
+      // Skip the TL;DR section in the full report as it's already included
+      if (section.title.toLowerCase().includes("tl;dr")) continue;
+      if (section.title.toLowerCase().includes("full weekly report")) continue;
+
+      markdown += `### ${section.title}\n\n${section.content}\n\n`;
     }
 
     if (report.gitHubActivity && report.gitHubActivity.length > 0) {
-      markdown += `## GitHub Activity Details\n\n`;
+      markdown += `### GitHub Activity Details\n\n`;
       for (const activity of report.gitHubActivity) {
-        markdown += `### ${activity.repository}\n\n`;
-        markdown += `- **Commits:** ${activity.commits.total}\n`;
-        markdown += `- **PRs Merged:** ${activity.pullRequests.merged}\n`;
-        markdown += `- **Issues Closed:** ${activity.issues.closed}\n\n`;
+        markdown += `#### ${activity.repository}\n\n`;
+        markdown += `| Metric | Value |\n`;
+        markdown += `| ------ | ----- |\n`;
+        markdown += `| Commits | ${activity.commits.total} |\n`;
+        markdown += `| PRs Opened | ${activity.pullRequests.opened} |\n`;
+        markdown += `| PRs Merged | ${activity.pullRequests.merged} |\n`;
+        markdown += `| Issues Opened | ${activity.issues.opened} |\n`;
+        markdown += `| Issues Closed | ${activity.issues.closed} |\n\n`;
+
+        if (activity.commits.authors.length > 0) {
+          markdown += `**Top Contributors:**\n`;
+          for (const author of activity.commits.authors.slice(0, 5)) {
+            markdown += `- ${author.name}: ${author.count} commits\n`;
+          }
+          markdown += `\n`;
+        }
       }
     }
 
+    markdown += `---\n\n`;
+    markdown += `_Report compiled: ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}_\n`;
+
     return markdown;
+  }
+
+  /**
+   * Export report as MDX for docs/progress folder
+   */
+  exportAsMDX(report: WeeklyReport): string {
+    const startDate = new Date(report.weekStartDate);
+    const endDate = new Date(report.weekEndDate);
+    const weekNumber = this.getWeekNumber(startDate);
+    const year = startDate.getFullYear();
+
+    const startFormatted = this.formatDate(report.weekStartDate);
+    const endFormatted = `${this.formatDate(report.weekEndDate)}, ${year}`;
+
+    // Generate frontmatter
+    let mdx = `---
+title: "Week ${weekNumber}: ${startFormatted} - ${endFormatted}"
+sidebar_label: "Week ${weekNumber} (${startFormatted.replace(",", "")}-${endFormatted.replace(`, ${year}`, "")})"
+description: Weekly progress report generated from GitHub activity
+keywords: [progress, weekly, development, github]
+difficulty: beginner
+timeEstimate: 5
+xpReward: 75
+phase: ["seed"]
+---
+
+import {
+  SlideDeck,
+  SlideSection,
+  DocumentDownload,
+} from "@site/src/components/Downloads";
+
+# Week ${weekNumber}: ${this.formatDate(report.weekStartDate, "long")} - ${this.formatDate(report.weekEndDate, "long")}
+
+<DocumentDownload title="Week ${weekNumber} Progress Report - Phoenix Rooivalk" />
+
+`;
+
+    // Add TL;DR section
+    if (report.executiveSummary) {
+      mdx += `## TL;DR (2-Minute Summary)\n\n${report.executiveSummary}\n\n---\n\n`;
+    }
+
+    // Add full report sections
+    mdx += `## Full Weekly Report\n\n`;
+
+    for (const section of report.sections) {
+      // Skip sections already handled
+      if (section.title.toLowerCase().includes("tl;dr")) continue;
+      if (section.title.toLowerCase().includes("full weekly report")) continue;
+
+      mdx += `### ${section.title}\n\n${section.content}\n\n`;
+    }
+
+    // Add GitHub activity
+    if (report.gitHubActivity && report.gitHubActivity.length > 0) {
+      mdx += `### GitHub Activity Summary\n\n`;
+      mdx += `| Repository | Commits | PRs Merged | Issues Closed |\n`;
+      mdx += `| ---------- | ------- | ---------- | ------------- |\n`;
+
+      for (const activity of report.gitHubActivity) {
+        mdx += `| ${activity.repository} | ${activity.commits.total} | ${activity.pullRequests.merged} | ${activity.issues.closed} |\n`;
+      }
+
+      mdx += `\n`;
+    }
+
+    mdx += `---\n\n`;
+    mdx += `_Report compiled: ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}_\n`;
+
+    return mdx;
+  }
+
+  /**
+   * Get the file path for saving an MDX report
+   */
+  getMDXFilePath(report: WeeklyReport): string {
+    const startDate = new Date(report.weekStartDate);
+    const weekNumber = this.getWeekNumber(startDate);
+    const year = startDate.getFullYear();
+
+    return `docs/progress/${year}/week-${weekNumber}.mdx`;
   }
 }
 
