@@ -1,0 +1,57 @@
+{
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "tailwindCSS.includeLanguages": {
+    "css": "css",
+    "postcss": "postcss"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "cx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
+  ],
+  "webhint.enable": false,
+  "problems.decorations.enabled": false,
+  "diagnostics.enable": true,
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "files.associations": {
+    "*.module.css": "css"
+  },
+  "css.customData": [
+    {
+      "atDirectives": [
+        {
+          "name": "@apply",
+          "description": "Tailwind CSS @apply directive"
+        }
+      ]
+    }
+  ],
+  "cSpell.words": [
+    "webhint"
+  ],
+  "cSpell.ignoreWords": [
+    "webhint"
+  ],
+  "diagnostics.source": {
+    "webhint": false
+  },
+  "extensions.ignoreRecommendations": true,
+  "autopr.qualityMode": "fast",
+  "autopr.autoMode": false,
+  "autopr.showNotifications": true,
+  "autopr.notificationLevel": "warnings",
+  "autopr.initialized": true,
+  "azureFunctions.deploySubpath": "apps\\docs\\azure-functions",
+  "azureFunctions.postDeployTask": "npm install (functions)",
+  "azureFunctions.projectLanguage": "TypeScript",
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "npm prune (functions)"
+}

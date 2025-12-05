@@ -1,29 +1,34 @@
-# Docs site migration plan (Docusaurus-ready)
+# Phoenix Rooivalk Documentation Site
 
-- **Goal**
+A comprehensive Docusaurus-based documentation site for the Phoenix Rooivalk autonomous counter-UAS defense platform.
 
-  - Prepare to migrate from Jekyll to Docusaurus (MDX) without breaking current
-    pages.
+## Current Structure
 
-- **Proposed structure**
+The documentation is organized into the following sections:
 
-  - docs/overview.md (from repository index-level overview)
-  - docs/architecture/ (C2, comms, autonomy, safety)
-  - docs/operations/ (modes, deployment, observability)
-  - docs/legal/ (responsible use, access, export control)
+- **Getting Started** - Entry point with documentation home, progress tracking, and executive summary
+- **Progress Reports** - Weekly development updates and progress tracking
+- **Executive** - Leadership materials, investor resources, pitch decks, and strategic documents
+- **Technical** - Software architecture, AI/ML systems, hardware specifications, blockchain integration, and development guides
+- **Business** - Market analysis, business models, competitive analysis, ROI analysis, and proposal templates
+- **Operations** - Deployment guides, maintenance procedures, training materials, and operational modes
+- **Legal** - Compliance frameworks and legal documentation
+- **Research** - Deep-dive technical research and analysis
+- **Resources** - Downloads, guides, troubleshooting, and reference materials
+- **Playbooks** - Strategic roadmaps and execution guides
 
-- **Steps**
+## Features
 
-  1. Initialize Docusaurus in `docs-site/` (separate from current Jekyll root).
-  2. Migrate `index.md` high‑level content to `docs/overview.md` with restricted
-     banner.
-  3. Move selected `docs/*.md` into topical folders; keep partner-only content
-     out of the public build.
-  4. Configure navbar/sidebar, add markdownlint/prettier hooks.
-  5. Add deployment to GitHub Pages or Netlify (private or public per policy).
-
-- **Notes**
-  - Do not publish restricted content. Public docs remain weapon‑agnostic.
+- **Docusaurus 3.9** with MDX support
+- **Azure Static Web Apps** deployment with automatic CI/CD
+- **Azure Functions** integration for serverless backend features
+- **Azure Entra ID** authentication (formerly Azure AD)
+- **AI-powered features** with Azure OpenAI integration
+- **Local search** with `@easyops-cn/docusaurus-search-local`
+- **Mermaid diagrams** support
+- **PWA** capabilities with offline support
+- **Analytics** integration with Azure Application Insights
+- **Link checking** automation in CI/CD
 
 ---
 
@@ -78,29 +83,97 @@ The `docs-link-checker.yml` workflow runs automatically on:
 
 ---
 
-## Deployment and access control (Azure Static Web Apps)
+## Development
 
-The documentation site is deployed to Azure Static Web Apps. See `.github/workflows/deploy-docs-azure.yml` for the deployment workflow.
+### Local Development
+
+```bash
+# From repository root
+pnpm --filter docs start
+
+# Or from apps/docs directory
+pnpm start
+```
+
+The site will be available at `http://localhost:3000`.
+
+### Building
+
+```bash
+# Standard build
+pnpm run build
+
+# Strict build (fails on broken links)
+pnpm run build:strict
+```
+
+### Linting and Formatting
+
+```bash
+# Check formatting and markdown linting
+pnpm run lint
+
+# Fix markdown linting issues
+pnpm run lint:fix
+
+# Format code
+pnpm run format
+```
+
+### Type Checking
+
+```bash
+pnpm run typecheck
+```
+
+### Testing
+
+```bash
+# Run tests
+pnpm test
+
+# Watch mode
+pnpm run test:watch
+
+# With coverage
+pnpm run test:coverage
+```
+
+## Deployment and Access Control
+
+The documentation site is deployed to **Azure Static Web Apps** via GitHub Actions. See `.github/workflows/deploy-docs-azure.yml` for the deployment workflow.
+
+### Deployment Triggers
+
+- **Production**: Automatic deployment on push to `main` branch when `apps/docs/**` files change
+- **Preview**: Automatic preview deployments for pull requests
+- **Manual**: Can be triggered via `workflow_dispatch`
 
 ### Required Configuration
 
 **GitHub Secrets:**
-- `AZURE_STATIC_WEB_APPS_API_TOKEN` - Deployment token
-- `AZURE_ENTRA_TENANT_ID` - Azure AD tenant ID for authentication
-- `AZURE_ENTRA_CLIENT_ID` - Azure AD client ID
-- `AZURE_FUNCTIONS_BASE_URL` - Azure Functions URL (can also be a Variable)
+
+- `AZURE_STATIC_WEB_APPS_API_TOKEN` - Deployment token for Azure Static Web Apps
+- `AZURE_ENTRA_TENANT_ID` - Azure Entra ID (formerly Azure AD) tenant ID for authentication
+- `AZURE_ENTRA_CLIENT_ID` - Azure Entra ID client ID for authentication
+- `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` - Publish profile XML for Azure Functions deployment
 - Additional secrets for AI features - see `TROUBLESHOOTING.md`
 
 **GitHub Variables:**
-- `AZURE_FUNCTIONAPP_NAME` - Function app name
+
+- `AZURE_FUNCTIONAPP_NAME` - Function app name (e.g., `phoenix-rooivalk-functions`)
+- `AZURE_FUNCTIONS_BASE_URL` - Azure Functions base URL (can also be a Secret)
 - `AZURE_AI_DEPLOYMENT_NAME` - AI model deployment name (e.g., `gpt-5.1`)
 - `CONFIGURE_APP_SETTINGS` - Set to `true` to auto-configure Function App settings
+
+> **Note**: `AZURE_FUNCTIONAPP_NAME` must be a **Variable**, not a Secret. See `.github/AZURE_SETUP.md` for detailed setup instructions.
 
 ### Troubleshooting
 
 If you see "⚠️ AI Functions not available" or other configuration issues, see **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** for detailed diagnostic steps.
 
 Common issues:
+
 - `AZURE_FUNCTIONS_BASE_URL` not set or set incorrectly
 - Variable scope set to "Runtime" instead of "Builds"
 - Azure Functions not deployed or unhealthy
@@ -108,24 +181,10 @@ Common issues:
 
 ---
 
-## Legacy: Netlify Deployment
+## Additional Resources
 
-> **Note**: The project now deploys to Azure Static Web Apps. The information below is kept for reference only.
-
-<details>
-<summary>Click to expand Netlify deployment instructions</summary>
-
-1. Create a Netlify site for `docs-site/` and get the Site ID.
-2. Add GitHub repository secrets (see `USER_TODO.md`):
-   - `NETLIFY_AUTH_TOKEN`
-   - `NETLIFY_SITE_ID`
-3. CI/CD is pre-configured in `.github/workflows/deploy-docs-site.yml.disabled`:
-   - Push to `main` deploys to production.
-   - Pull requests create Deploy Previews.
-4. Basic access control (fastest):
-   - Netlify > Site settings > Visitor access > Password protect.
-5. Stronger control (optional):
-   - Netlify SSO/Access Controls or Cloudflare Access (Zero Trust).
-6. SEO/Indexing: `static/robots.txt` is set to `Disallow: /`.
-
-</details>
+- **[CONFIGURATION.md](./CONFIGURATION.md)** - Detailed configuration guide for Azure setup, authentication, analytics, and features
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions, especially for Azure Functions and AI features
+- **[FRONTMATTER_SCHEMA.md](./FRONTMATTER_SCHEMA.md)** - Documentation frontmatter schema and metadata
+- **[.github/AZURE_SETUP.md](../../.github/AZURE_SETUP.md)** - Complete Azure infrastructure setup guide
+- **[.github/SECRETS_SETUP.md](../../.github/SECRETS_SETUP.md)** - GitHub secrets and variables configuration

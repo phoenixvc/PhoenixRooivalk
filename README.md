@@ -151,21 +151,32 @@ cargo test                             # Run Rust tests
 
 ### Deployment
 
-Deployments are performed by GitHub Actions to two separate Netlify sites:
+Deployments are performed by GitHub Actions to Azure Static Web Apps:
 
-- **Docs**: `.github/workflows/deploy-docs-site.yml` publishes `apps/docs/build/`
-  - Secrets: `NETLIFY_AUTH_TOKEN`, `NETLIFY_DOCS_SITE_ID`
+- **Docs**: `.github/workflows/deploy-docs-azure.yml` publishes `apps/docs/build/`
+  - Deployed to: Azure Static Web Apps
+  - Secrets: `AZURE_STATIC_WEB_APPS_API_TOKEN`
+  - Optional: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`, `AZURE_FUNCTIONAPP_NAME` (for Functions deployment)
   - Triggers: Push to `main` branch, changes to `apps/docs/**`
-- **Marketing**: `.github/workflows/deploy-marketing-site.yml` publishes `apps/marketing/out/`
-  - Secrets: `NETLIFY_AUTH_TOKEN`, `NETLIFY_MARKETING_SITE_ID`
+  - Preview deployments: Automatic for pull requests
+
+- **Marketing**: `.github/workflows/deploy-marketing-azure.yml` publishes `apps/marketing/out/`
+  - Deployed to: Azure Static Web Apps
+  - Secrets: `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN`
   - Triggers: Push to `main` branch, changes to `apps/marketing/**`
+  - Preview deployments: Automatic for pull requests
+
+**Legacy Netlify deployments** (kept for reference):
+- `.github/workflows/deploy-marketing-site.yml` - Marketing site (Netlify, disabled)
+- `.github/workflows/deploy-docs-site.yml.disabled` - Docs site (Netlify, disabled)
 
 Additional workflows:
 
 - **CI/CD**: `.github/workflows/ci-marketing.yml`, `.github/workflows/ci-rust.yml`
 - **Security**: `.github/workflows/codeql.yml` for vulnerability scanning
+- **Link Checking**: `.github/workflows/docs-link-checker.yml` for documentation links
 
-Netlify's "Deploys from Git" is disabled; Actions upload artifacts directly.
+See `.github/AZURE_SETUP.md` for Azure infrastructure setup and configuration.
 
 ### Cross‑site links (env)
 
@@ -174,8 +185,8 @@ Netlify's "Deploys from Git" is disabled; Actions upload artifacts directly.
 - Marketing site can link to docs via `NEXT_PUBLIC_DOCS_URL` (public runtime env
   for `apps/marketing`).
 
-Set these in each Netlify site’s Environment variables if you want absolute
-cross‑links.
+Set these as GitHub repository variables or Azure Static Web App environment variables
+if you want absolute cross‑links.
 
 ### Redirects
 

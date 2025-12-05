@@ -1,0 +1,228 @@
+name: Deploy Marketing (Next.js) to Azure Static Web Apps
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/marketing/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+      - "tsconfig.base.json"
+      - ".eslintrc.js"
+      - ".github/workflows/deploy-marketing-azure.yml"
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths:
+      - "apps/marketing/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+      - "tsconfig.base.json"
+      - ".eslintrc.js"
+      - ".github/workflows/deploy-marketing-azure.yml"
+  workflow_dispatch:
+
+env:
+  APP_LOCATION: "apps/marketing"
+  OUTPUT_LOCATION: "out"
+
+jobs:
+  # Fail fast if required secrets are missing
+  validate-secrets:
+    runs-on: ubuntu-latest
+    name: Validate Secrets
+    outputs:
+      has-swa-token: ${{ steps.check.outputs.has-swa-token }}
+    steps:
+      - name: Check required secrets
+        id: check
+        run: |
+          MISSING=""
+
+          # Required for Static Web Apps deployment
+          if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}" ]; then
+            MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN"
+          else
+            echo "has-swa-token=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Fail if required secrets are missing
+          if [ -n "$MISSING" ]; then
+            echo "::error::Required secrets are missing:${MISSING}"
+            echo ""
+            echo "To fix this, add the following secrets to your repository:"
+            echo "  Settings > Secrets and variables > Actions > New repository secret"
+            echo ""
+            echo "The deployment token can be obtained from:"
+            echo "  Azure Portal > Static Web Apps > Your Marketing Site > Manage deployment token"
+            exit 1
+          fi
+
+          echo "✅ All required secrets are configured"
+
+  build-and-deploy:
+    needs: validate-secrets
+    if:
+      github.event_name == 'push' || (github.event_name == 'pull_request' &&
+      github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Rust (for threat-simulator-desktop WASM dependencies)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install Trunk (for WASM builds)
+        uses: jetli/trunk-action@v0.5.1
+        with:
+          version: "latest"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate environment variables
+        run: |
+          chmod +x ./scripts/validate-env.sh
+          ./scripts/validate-env.sh marketing
+
+      - name: Type Check
+        run: pnpm typecheck
+
+      - name: Clean build cache
+        run: |
+          rm -rf apps/marketing/.next
+          rm -rf apps/marketing/out
+
+      - name: Build WASM (threat-simulator-desktop)
+        run: |
+          cd apps/threat-simulator-desktop
+          trunk build --release
+
+      - name: Build (marketing)
+        working-directory: ${{ env.APP_LOCATION }}
+        env:
+          # Build environment
+          NODE_ENV: production
+          CI: true
+          ENV_NAME:
+            ${{ github.event_name == 'push' && 'production' || 'preview' }}
+          BRANCH: ${{ github.ref_name }}
+        run: pnpm run build
+
+      - name: Verify build output
+        working-directory: ${{ env.APP_LOCATION }}
+        run: |
+          echo "=== Checking build output ==="
+          if [ -f "out/index.html" ]; then
+            echo "✅ Found index.html in out/"
+            ls -la out/
+          else
+            echo "❌ ERROR: index.html not found in out/"
+            echo "Contents of current directory:"
+            ls -la
+            if [ -d "out" ]; then
+              echo "Contents of out/:"
+              ls -la out/
+            fi
+            exit 1
+          fi
+
+      - name: Install SWA CLI
+        run: npm install -g @azure/static-web-apps-cli@2.0.7
+
+      - name: Deploy with SWA CLI
+        id: deploy
+        env:
+          SWA_CLI_DEPLOYMENT_TOKEN:
+            ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
+          ENV_NAME:
+            ${{ github.event_name == 'push' && 'production' || 'preview' }}
+        run: |
+          # Map ENV_NAME to SWA CLI expected values
+          if [ "$ENV_NAME" = "production" ]; then
+            SWA_ENV="prod"
+          else
+            SWA_ENV="preview"
+          fi
+
+          echo "Deploying to environment: $SWA_ENV (ENV_NAME: $ENV_NAME)"
+
+          # Capture deployment output and preserve exit code
+          set +e
+          OUTPUT=$(swa deploy apps/marketing/out \
+            --env "$SWA_ENV" \
+            --no-use-keychain \
+            --verbose 2>&1)
+          EXIT_CODE=$?
+          set -e
+          echo "$OUTPUT"
+
+          # Extract preview URL from "Site URL:" line
+          PREVIEW_URL=$(echo "$OUTPUT" | grep "Site URL:" | sed 's/^.*Site URL:[[:space:]]*//' | sed 's/[[:space:]]*$//' || echo "")
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+
+          # Determine deployment status from exit code
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "deployment_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "deployment_status=failed" >> $GITHUB_OUTPUT
+            exit $EXIT_CODE
+          fi
+
+      - name: Comment on PR with preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const previewUrl = '${{ steps.deploy.outputs.preview_url }}';
+            const portalUrl = 'https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Web%2FStaticSites';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let body;
+            if (previewUrl) {
+              body = `🚀 **Azure Static Web Apps Preview (Marketing)**\n\n✅ Deployment complete!\n\n**Preview URL:** ${previewUrl}\n\n*This preview will be automatically deleted when the PR is closed.*`;
+            } else {
+              body = `🚀 **Azure Static Web Apps Preview (Marketing)**\n\n✅ Deployment complete!\n\n> **Note:** The preview URL could not be automatically detected. Please check:\n> - [Workflow logs](${workflowUrl}) for the deployment URL\n> - [Azure Portal](${portalUrl}) for your Static Web App environments\n\n*This preview will be automatically deleted when the PR is closed.*`;
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+  close-pull-request:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request
+    steps:
+      - name: Close Pull Request
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token:
+            ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
+          action: "close"
+

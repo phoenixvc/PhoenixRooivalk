@@ -2,10 +2,10 @@
  * Phoenix Rooivalk - Azure Infrastructure
  *
  * This Bicep template deploys all Azure resources needed for the Phoenix Rooivalk
- * documentation site, replacing Firebase/Netlify services.
+ * documentation and marketing sites, replacing Firebase/Netlify services.
  *
  * Resources deployed:
- * - Azure Static Web Apps (hosting)
+ * - Azure Static Web Apps (hosting for docs and marketing)
  * - Azure Cosmos DB (database - replaces Firestore)
  * - Azure Application Insights (analytics)
  * - Azure Notification Hub (push notifications - replaces FCM)
@@ -166,9 +166,9 @@ module functions 'modules/functions.bicep' = {
   }
 }
 
-// Static Web App for hosting (replaces Netlify)
-module staticWebApp 'modules/staticwebapp.bicep' = {
-  name: 'staticWebApp'
+// Static Web App for documentation site (replaces Netlify)
+module staticWebAppDocs 'modules/staticwebapp.bicep' = {
+  name: 'staticWebAppDocs'
   params: {
     name: '${environment}-${locationShort}-swa-rooivalk'
     location: location
@@ -179,6 +179,22 @@ module staticWebApp 'modules/staticwebapp.bicep' = {
     appLocation: 'apps/docs'
     outputLocation: 'build'
     apiLocation: ''  // Using separate Azure Functions
+  }
+}
+
+// Static Web App for marketing site (replaces Netlify)
+module staticWebAppMarketing 'modules/staticwebapp.bicep' = {
+  name: 'staticWebAppMarketing'
+  params: {
+    name: '${environment}-${locationShort}-swa-marketing-rooivalk'
+    location: location
+    tags: tags
+    sku: staticWebAppSku
+    repositoryUrl: repositoryUrl
+    branch: branch
+    appLocation: 'apps/marketing'
+    outputLocation: 'out'
+    apiLocation: ''  // Marketing site doesn't use Functions
   }
 }
 
@@ -220,11 +236,17 @@ module notificationHubSecret 'modules/keyvault-secret.bicep' = {
 // Outputs
 // ============================================================================
 
-@description('Static Web App URL')
-output staticWebAppUrl string = staticWebApp.outputs.url
+@description('Documentation Static Web App URL')
+output staticWebAppDocsUrl string = staticWebAppDocs.outputs.url
 
-@description('Static Web App default hostname')
-output staticWebAppHostname string = staticWebApp.outputs.defaultHostname
+@description('Documentation Static Web App default hostname')
+output staticWebAppDocsHostname string = staticWebAppDocs.outputs.defaultHostname
+
+@description('Marketing Static Web App URL')
+output staticWebAppMarketingUrl string = staticWebAppMarketing.outputs.url
+
+@description('Marketing Static Web App default hostname')
+output staticWebAppMarketingHostname string = staticWebAppMarketing.outputs.defaultHostname
 
 @description('Functions App URL')
 output functionsUrl string = functions.outputs.url

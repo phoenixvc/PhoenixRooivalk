@@ -48,7 +48,7 @@ out/
 Thumbs.db
 
 # IDE-specific files
-.vscode/
+
 .idea/
 
 # Python
