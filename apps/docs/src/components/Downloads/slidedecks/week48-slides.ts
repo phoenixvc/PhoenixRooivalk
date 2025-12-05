@@ -56,10 +56,7 @@ export const week48Slides: Slide[] = [
       "Production-ready with *full security audit passed*",
       {
         text: "Enterprise-ready features",
-        subPoints: [
-          "Rate limiting and quotas",
-          "Usage analytics dashboard",
-        ],
+        subPoints: ["Rate limiting and quotas", "Usage analytics dashboard"],
       },
     ],
     speakerNotes:

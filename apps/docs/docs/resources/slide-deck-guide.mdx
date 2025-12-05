@@ -14,7 +14,10 @@ tags:
 
 # Slide Deck Components Guide
 
-This guide covers all the slide deck functionality available in the Phoenix Rooivalk documentation system. These components enable rich, interactive presentations that can be viewed inline, printed, exported to PowerPoint, or presented in full-screen mode.
+This guide covers all the slide deck functionality available in the Phoenix
+Rooivalk documentation system. These components enable rich, interactive
+presentations that can be viewed inline, printed, exported to PowerPoint, or
+presented in full-screen mode.
 
 ---
 
@@ -32,20 +35,20 @@ import { SlideDeck, SlideSection } from "@site/src/components/Downloads";
     keyPoints={["First point", "Second point"]}
     script="Speaker notes go here..."
   />
-</SlideDeck>
+</SlideDeck>;
 ```
 
 ---
 
 ## Components Overview
 
-| Component | Purpose | Features |
-|-----------|---------|----------|
-| `SlideDeck` | Container for inline slides | Print support, duration tracking |
-| `SlideSection` | Individual slide content | Rich layouts, animations |
-| `SlideDeckDownload` | Modal-based slide viewer | PowerPoint export, presentation mode |
-| `PresentationMode` | Full-screen presenter | Timer, thumbnails, keyboard shortcuts |
-| `SlideChart` | Data visualizations | Bar, line, pie, donut charts |
+| Component           | Purpose                     | Features                              |
+| ------------------- | --------------------------- | ------------------------------------- |
+| `SlideDeck`         | Container for inline slides | Print support, duration tracking      |
+| `SlideSection`      | Individual slide content    | Rich layouts, animations              |
+| `SlideDeckDownload` | Modal-based slide viewer    | PowerPoint export, presentation mode  |
+| `PresentationMode`  | Full-screen presenter       | Timer, thumbnails, keyboard shortcuts |
+| `SlideChart`        | Data visualizations         | Bar, line, pie, donut charts          |
 
 ---
 
@@ -65,7 +68,7 @@ keyPoints={[
 ### Rendering
 
 - `**text**` renders as **bold**
-- `*text*` renders as *italic*
+- `*text*` renders as _italic_
 - Formatting works in key points, column content, and nested bullets
 
 ---
@@ -132,13 +135,13 @@ Side-by-side comparisons (great for vs. competitors, before/after, etc.).
   leftColumn={[
     "**120-195ms** response",
     "✅ Full offline capability",
-    "✅ Blockchain evidence"
+    "✅ Blockchain evidence",
   ]}
   rightColumnTitle="Competitors"
   rightColumn={[
     "**2-5 seconds** response",
     "❌ Cloud dependent",
-    "❌ No evidence trail"
+    "❌ No evidence trail",
   ]}
   keyPoints={[]} // Empty for pure two-column
 />
@@ -216,22 +219,18 @@ Add presenter guidance that appears in the script view and presentation mode:
 Apply consistent theming across presentations:
 
 ```tsx
-<SlideDeckDownload
-  slides={slides}
-  title="Investor Pitch"
-  theme="investor"
-/>
+<SlideDeckDownload slides={slides} title="Investor Pitch" theme="investor" />
 ```
 
 ### Available Themes
 
-| Theme | Best For | Colors |
-|-------|----------|--------|
-| `default` | General use | Blue primary |
-| `investor` | Pitch decks | Professional blue |
-| `technical` | Engineering docs | Tech purple |
-| `military` | Defense audiences | Olive/tactical |
-| `light` | Print-friendly | Light backgrounds |
+| Theme       | Best For          | Colors            |
+| ----------- | ----------------- | ----------------- |
+| `default`   | General use       | Blue primary      |
+| `investor`  | Pitch decks       | Professional blue |
+| `technical` | Engineering docs  | Tech purple       |
+| `military`  | Defense audiences | Olive/tactical    |
+| `light`     | Print-friendly    | Light backgrounds |
 
 ### Custom Colors
 
@@ -252,23 +251,24 @@ Full-screen presentation with keyboard controls:
 
 ### Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `→` / `Space` / `PageDown` | Next slide |
-| `←` / `PageUp` | Previous slide |
-| `Home` | First slide |
-| `End` | Last slide |
-| `1-9` | Jump to slide 1-9 |
-| `N` | Toggle speaker notes |
-| `T` | Toggle slide thumbnails |
-| `A` | Toggle bullet animation |
-| `S` | Toggle timer |
-| `R` | Reset timer |
-| `Escape` | Exit presentation |
+| Key                        | Action                  |
+| -------------------------- | ----------------------- |
+| `→` / `Space` / `PageDown` | Next slide              |
+| `←` / `PageUp`             | Previous slide          |
+| `Home`                     | First slide             |
+| `End`                      | Last slide              |
+| `1-9`                      | Jump to slide 1-9       |
+| `N`                        | Toggle speaker notes    |
+| `T`                        | Toggle slide thumbnails |
+| `A`                        | Toggle bullet animation |
+| `S`                        | Toggle timer            |
+| `R`                        | Reset timer             |
+| `Escape`                   | Exit presentation       |
 
 ### Timer & Pacing
 
 The presentation mode includes:
+
 - **Elapsed time** counter
 - **Target time** based on slide durations
 - **Pacing indicator**: Green (ahead), Yellow (on track), Red (behind)
@@ -315,21 +315,21 @@ import { SlideChart, createChartData } from "@site/src/components/Downloads";
     { label: "Q1", value: 100 },
     { label: "Q2", value: 150 },
     { label: "Q3", value: 200 },
-    { label: "Q4", value: 250 }
+    { label: "Q4", value: 250 },
   ]}
   title="Quarterly Growth"
   showValues={true}
   showLegend={true}
-/>
+/>;
 ```
 
 ### Chart Types
 
-| Type | Best For |
-|------|----------|
-| `bar` | Comparisons, categories |
-| `line` | Trends over time |
-| `pie` | Part-to-whole relationships |
+| Type    | Best For                       |
+| ------- | ------------------------------ |
+| `bar`   | Comparisons, categories        |
+| `line`  | Trends over time               |
+| `pie`   | Part-to-whole relationships    |
 | `donut` | Same as pie, with center space |
 
 ### Helper Function
@@ -337,9 +337,9 @@ import { SlideChart, createChartData } from "@site/src/components/Downloads";
 ```tsx
 // Convert object to chart data
 const data = createChartData({
-  "Military": 1200,
-  "Infrastructure": 600,
-  "Commercial": 400
+  Military: 1200,
+  Infrastructure: 600,
+  Commercial: 400,
 });
 ```
 
@@ -356,7 +356,7 @@ import {
   createTimelineSlide,
   createTeamSlide,
   autoNumberSlides,
-  buildPresentation
+  buildPresentation,
 } from "@site/src/components/Downloads";
 
 // Stats slide
@@ -365,8 +365,8 @@ const stats = createStatsSlide({
   stats: [
     { value: "$2.5B", label: "Market Size" },
     { value: "23%", label: "CAGR" },
-    { value: "10-40x", label: "Speed Advantage" }
-  ]
+    { value: "10-40x", label: "Speed Advantage" },
+  ],
 });
 
 // Timeline slide
@@ -375,32 +375,35 @@ const timeline = createTimelineSlide({
   milestones: [
     { date: "Q1 2026", event: "Prototype complete" },
     { date: "Q2 2026", event: "First pilot" },
-    { date: "Q3 2026", event: "Series A" }
-  ]
+    { date: "Q3 2026", event: "Series A" },
+  ],
 });
 
 // Auto-number and build
-const presentation = buildPresentation([
-  stats,
-  timeline,
-  // ... more slides
-], { addThankYou: true });
+const presentation = buildPresentation(
+  [
+    stats,
+    timeline,
+    // ... more slides
+  ],
+  { addThankYou: true },
+);
 ```
 
 ### Available Templates
 
-| Function | Creates |
-|----------|---------|
-| `createStatsSlide` | Metrics/KPI display |
-| `createComparisonSlide` | Two-column comparison |
-| `createTimelineSlide` | Milestone timeline |
-| `createTeamSlide` | Team member grid |
-| `createTestimonialSlide` | Quote layout |
-| `createCallToActionSlide` | CTA emphasis |
-| `createThankYouSlide` | Closing slide |
-| `createSectionDivider` | Section break |
-| `createCodeSlide` | Code example |
-| `createBeforeAfterSlide` | Transformation comparison |
+| Function                  | Creates                   |
+| ------------------------- | ------------------------- |
+| `createStatsSlide`        | Metrics/KPI display       |
+| `createComparisonSlide`   | Two-column comparison     |
+| `createTimelineSlide`     | Milestone timeline        |
+| `createTeamSlide`         | Team member grid          |
+| `createTestimonialSlide`  | Quote layout              |
+| `createCallToActionSlide` | CTA emphasis              |
+| `createThankYouSlide`     | Closing slide             |
+| `createSectionDivider`    | Section break             |
+| `createCodeSlide`         | Code example              |
+| `createBeforeAfterSlide`  | Transformation comparison |
 
 ---
 
@@ -417,9 +420,9 @@ import { MARKET, PERFORMANCE, BLOCKCHAIN } from "@site/src/data/values";
   keyPoints={[
     `Current market: **${MARKET.CURRENT}**`,
     `Response time: **${PERFORMANCE.RESPONSE_TIME}**`,
-    `Blockchain: ${BLOCKCHAIN.PRIMARY_CHAIN}`
+    `Blockchain: ${BLOCKCHAIN.PRIMARY_CHAIN}`,
   ]}
-/>
+/>;
 ```
 
 This ensures values stay in sync across all documents when data changes.
@@ -477,8 +480,10 @@ Slides include print-optimized CSS:
 
 See these pages for real examples:
 
-- [Investor Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck) - Full 16-slide deck
-- [Presentation Materials](/docs/executive/presentation-materials) - 3-minute elevator pitch
+- [Investor Pitch Deck](/docs/executive/phoenix-rooivalk-pitch-deck) - Full
+  16-slide deck
+- [Presentation Materials](/docs/executive/presentation-materials) - 3-minute
+  elevator pitch
 - [Week 48 Progress](/docs/progress/2025/week-48) - Weekly update format
 
 ---
@@ -487,44 +492,44 @@ See these pages for real examples:
 
 ### SlideDeck Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `title` | string | Yes | Presentation title |
-| `duration` | number | Yes | Total duration in minutes |
-| `audience` | string | No | Target audience |
-| `date` | string | No | Presentation date |
-| `children` | ReactNode | Yes | SlideSection components |
+| Prop       | Type      | Required | Description               |
+| ---------- | --------- | -------- | ------------------------- |
+| `title`    | string    | Yes      | Presentation title        |
+| `duration` | number    | Yes      | Total duration in minutes |
+| `audience` | string    | No       | Target audience           |
+| `date`     | string    | No       | Presentation date         |
+| `children` | ReactNode | Yes      | SlideSection components   |
 
 ### SlideSection Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `number` | number | Yes | Slide number |
-| `title` | string | Yes | Slide title |
-| `duration` | number | Yes | Duration in seconds |
-| `icon` | string | No | Emoji icon |
-| `keyPoints` | (string \| KeyPoint)[] | Yes | Bullet points |
-| `script` | string | No | Full narrative |
-| `speakerNotes` | string | No | Presenter tips |
-| `layout` | SlideLayout | No | Layout type |
-| `leftColumn` | string[] | No | Left column content |
-| `rightColumn` | string[] | No | Right column content |
-| `leftColumnTitle` | string | No | Left column header |
-| `rightColumnTitle` | string | No | Right column header |
+| Prop               | Type                   | Required | Description          |
+| ------------------ | ---------------------- | -------- | -------------------- |
+| `number`           | number                 | Yes      | Slide number         |
+| `title`            | string                 | Yes      | Slide title          |
+| `duration`         | number                 | Yes      | Duration in seconds  |
+| `icon`             | string                 | No       | Emoji icon           |
+| `keyPoints`        | (string \| KeyPoint)[] | Yes      | Bullet points        |
+| `script`           | string                 | No       | Full narrative       |
+| `speakerNotes`     | string                 | No       | Presenter tips       |
+| `layout`           | SlideLayout            | No       | Layout type          |
+| `leftColumn`       | string[]               | No       | Left column content  |
+| `rightColumn`      | string[]               | No       | Right column content |
+| `leftColumnTitle`  | string                 | No       | Left column header   |
+| `rightColumnTitle` | string                 | No       | Right column header  |
 
 ### SlideDeckDownload Props
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `slides` | Slide[] | Yes | Array of slide objects |
-| `title` | string | Yes | Deck title |
-| `duration` | number | Yes | Total minutes |
-| `audience` | string | No | Target audience |
-| `date` | string | No | Date string |
-| `theme` | ColorTheme | No | Color theme |
-| `customColors` | ColorPalette | No | Custom color overrides |
-| `contactUrl` | string | No | Contact website |
-| `contactEmail` | string | No | Contact email |
+| Prop           | Type         | Required | Description            |
+| -------------- | ------------ | -------- | ---------------------- |
+| `slides`       | Slide[]      | Yes      | Array of slide objects |
+| `title`        | string       | Yes      | Deck title             |
+| `duration`     | number       | Yes      | Total minutes          |
+| `audience`     | string       | No       | Target audience        |
+| `date`         | string       | No       | Date string            |
+| `theme`        | ColorTheme   | No       | Color theme            |
+| `customColors` | ColorPalette | No       | Custom color overrides |
+| `contactUrl`   | string       | No       | Contact website        |
+| `contactEmail` | string       | No       | Contact email          |
 
 ---
 

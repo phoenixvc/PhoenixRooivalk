@@ -122,7 +122,12 @@ export const presentationMaterialsSlides: Slide[] = [
       },
       {
         text: "**Custom Sensor Fusion:** 30-50ms processing",
-        subPoints: ["RF spectrum", "EO/IR cameras", "Radar", "Acoustic sensors"],
+        subPoints: [
+          "RF spectrum",
+          "EO/IR cameras",
+          "Radar",
+          "Acoustic sensors",
+        ],
       },
     ],
     speakerNotes:
@@ -196,17 +201,11 @@ export const presentationMaterialsSlides: Slide[] = [
       },
       {
         text: "**Software Subscriptions (25%):** $1k-$3k/month",
-        subPoints: [
-          "Monitoring dashboards",
-          "Evidence storage and retrieval",
-        ],
+        subPoints: ["Monitoring dashboards", "Evidence storage and retrieval"],
       },
       {
         text: "**Support & Services (15%):** $2k-$5k/year",
-        subPoints: [
-          "Integration consulting",
-          "Training and certification",
-        ],
+        subPoints: ["Integration consulting", "Training and certification"],
       },
       "**CLV:CAC Ratio:** 6:1 to 10:1 across all segments",
       "**Gross Margins:** 65-70% hardware, *80%+ software*",
@@ -260,11 +259,17 @@ export const presentationMaterialsSlides: Slide[] = [
     keyPoints: [
       {
         text: "**Q1 2026:** Two-site pilot deployment",
-        subPoints: ["Soft-kill ROE implementation", "Initial customer validation"],
+        subPoints: [
+          "Soft-kill ROE implementation",
+          "Initial customer validation",
+        ],
       },
       {
         text: "**Q2 2026:** Public on-chain proof tests",
-        subPoints: ["Lockheed Martin integration progress", "Partner API launch"],
+        subPoints: [
+          "Lockheed Martin integration progress",
+          "Partner API launch",
+        ],
       },
       {
         text: "**Q3 2026:** NATO certification process",
@@ -272,7 +277,10 @@ export const presentationMaterialsSlides: Slide[] = [
       },
       {
         text: "**Q4 2026:** Full production deployment",
-        subPoints: ["Customer acquisition at scale", "Manufacturing partnerships"],
+        subPoints: [
+          "Customer acquisition at scale",
+          "Manufacturing partnerships",
+        ],
       },
       "**Current Status:** Software complete, pilot deployments *operational*",
     ],

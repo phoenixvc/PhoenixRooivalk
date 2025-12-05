@@ -97,35 +97,35 @@ export default function Root({ children }: RootProps): React.ReactElement {
               <NavbarProgressVisibility />
               <NavbarNotifications />
               <ProfileConfirmation>
-              <SilentErrorBoundary>
-                <ReadingTracker />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <AnalyticsTracker />
-              </SilentErrorBoundary>
-              {children}
-              <SilentErrorBoundary>
-                <CookieConsentBanner />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <OfflineIndicator />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <EngagementToasts />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <SidebarRecommendations />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <SidebarPhaseFilter />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <AIFloatingWidget pageContext={pageContext} />
-              </SilentErrorBoundary>
-              <SilentErrorBoundary>
-                <OnboardingWalkthrough />
-              </SilentErrorBoundary>
-            </ProfileConfirmation>
+                <SilentErrorBoundary>
+                  <ReadingTracker />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <AnalyticsTracker />
+                </SilentErrorBoundary>
+                {children}
+                <SilentErrorBoundary>
+                  <CookieConsentBanner />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <OfflineIndicator />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <EngagementToasts />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <SidebarRecommendations />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <SidebarPhaseFilter />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <AIFloatingWidget pageContext={pageContext} />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <OnboardingWalkthrough />
+                </SilentErrorBoundary>
+              </ProfileConfirmation>
             </SilentErrorBoundary>
           </PhaseFilterProvider>
         </NotificationBadgeProvider>

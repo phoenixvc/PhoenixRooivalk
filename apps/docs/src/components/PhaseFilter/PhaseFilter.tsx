@@ -48,7 +48,9 @@ export function PhaseFilter({
       <div
         className={`phase-filter phase-filter--buttons ${compact ? "phase-filter--compact" : ""} ${className}`}
       >
-        {!compact && <span className="phase-filter__label">Filter by Phase:</span>}
+        {!compact && (
+          <span className="phase-filter__label">Filter by Phase:</span>
+        )}
         <div className="phase-filter__button-group">
           {phaseOptions.map((option) => (
             <button
@@ -116,14 +118,18 @@ export function PhaseIndicator({
   const isMatch = phaseFilter.isPhaseMatch(phases as Phase[]);
 
   return (
-    <div className={`phase-indicator ${!isMatch && showMismatch ? "phase-indicator--mismatch" : ""}`}>
+    <div
+      className={`phase-indicator ${!isMatch && showMismatch ? "phase-indicator--mismatch" : ""}`}
+    >
       <span className="phase-indicator__label">Applies to:</span>
       <div className="phase-indicator__badges">
         {phases.map((phase) => (
           <span
             key={phase}
             className={`phase-indicator__badge phase-indicator__badge--${phase} ${
-              phaseFilter.currentPhase === phase ? "phase-indicator__badge--active" : ""
+              phaseFilter.currentPhase === phase
+                ? "phase-indicator__badge--active"
+                : ""
             }`}
           >
             {formatPhaseName(phase)}
@@ -147,8 +153,11 @@ interface PhaseBannerProps {
   phases: string[] | undefined;
 }
 
-export function PhaseBanner({ phases }: PhaseBannerProps): React.ReactElement | null {
-  const { currentPhase, isPhaseMatch, setCurrentPhase, getPhaseInfo } = usePhaseFilter();
+export function PhaseBanner({
+  phases,
+}: PhaseBannerProps): React.ReactElement | null {
+  const { currentPhase, isPhaseMatch, setCurrentPhase, getPhaseInfo } =
+    usePhaseFilter();
 
   // Don't show if filter is "all" or phases match
   if (currentPhase === "all" || !phases || isPhaseMatch(phases as Phase[])) {
@@ -163,10 +172,14 @@ export function PhaseBanner({ phases }: PhaseBannerProps): React.ReactElement | 
       <div className="phase-banner__content">
         <span className="phase-banner__icon">&#9432;</span>
         <span className="phase-banner__text">
-          This document applies to <strong>{phases.map(formatPhaseName).join(", ")}</strong>, not the
+          This document applies to{" "}
+          <strong>{phases.map(formatPhaseName).join(", ")}</strong>, not the
           currently selected <strong>{currentPhaseLabel}</strong>.
         </span>
-        <button className="phase-banner__action" onClick={() => setCurrentPhase("all")}>
+        <button
+          className="phase-banner__action"
+          onClick={() => setCurrentPhase("all")}
+        >
           Show All Phases
         </button>
       </div>

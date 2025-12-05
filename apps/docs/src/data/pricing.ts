@@ -277,7 +277,9 @@ export const fundingRounds = {
 };
 
 /** Helper for pricing display */
-export function formatPriceRange(segment: "military" | "infrastructure" | "commercial"): string {
+export function formatPriceRange(
+  segment: "military" | "infrastructure" | "commercial",
+): string {
   const pricing = hardwarePricing.baseSystem[segment];
   return `$${(pricing.range.min / 1000).toFixed(0)}K-$${(pricing.range.max / 1000).toFixed(0)}K`;
 }

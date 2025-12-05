@@ -20,10 +20,12 @@ import { BLOCKCHAIN } from "@site/src/data/values";
 ## Solana for Immutable Evidence Anchoring
 
 Solana provides exceptional capabilities for evidence anchoring in counter-drone
-operations with **{BLOCKCHAIN.TPS_REAL_WORLD} real-world TPS**, **{BLOCKCHAIN.FINALITY_SUB} finality**, and
-remarkably low costs at **{BLOCKCHAIN.COST_PER_TX} per transaction**. For a high-frequency
-logging scenario of one transaction per second continuously, annual costs would
-be only {BLOCKCHAIN.ANNUAL_COST} compared to orders of magnitude more on other blockchains.
+operations with **{BLOCKCHAIN.TPS_REAL_WORLD} real-world TPS**,
+**{BLOCKCHAIN.FINALITY_SUB} finality**, and remarkably low costs at
+**{BLOCKCHAIN.COST_PER_TX} per transaction**. For a high-frequency logging
+scenario of one transaction per second continuously, annual costs would be only
+{BLOCKCHAIN.ANNUAL_COST} compared to orders of magnitude more on other
+blockchains.
 
 ---
 
@@ -41,8 +43,10 @@ be only {BLOCKCHAIN.ANNUAL_COST} compared to orders of magnitude more on other b
 
 **Cryptographic Security**
 
-- **{BLOCKCHAIN.SIGNATURE_ALGORITHM} Signatures**: {BLOCKCHAIN.SECURITY_BITS} security with fast verification
-- **{BLOCKCHAIN.HASH_ALGORITHM} Hashing**: Collision-resistant 32-byte fingerprints
+- **{BLOCKCHAIN.SIGNATURE_ALGORITHM} Signatures**: {BLOCKCHAIN.SECURITY_BITS}
+  security with fast verification
+- **{BLOCKCHAIN.HASH_ALGORITHM} Hashing**: Collision-resistant 32-byte
+  fingerprints
 - **Proof of History**: Cryptographically verifiable timestamps
 - **Immutable Programs**: Permanent deployment without upgrade authority
 
@@ -50,9 +54,11 @@ be only {BLOCKCHAIN.ANNUAL_COST} compared to orders of magnitude more on other b
 
 **Evidence Anchoring Pattern**
 
-1. **Hash Generation**: {BLOCKCHAIN.HASH_ALGORITHM} hash of drone intercept evidence
+1. **Hash Generation**: {BLOCKCHAIN.HASH_ALGORITHM} hash of drone intercept
+   evidence
 2. **Metadata Storage**: Location, timestamp, operator ID, sensor data
-3. **On-chain Storage**: 32-byte hash with metadata on {BLOCKCHAIN.PRIMARY_CHAIN}
+3. **On-chain Storage**: 32-byte hash with metadata on
+   {BLOCKCHAIN.PRIMARY_CHAIN}
 4. **Off-chain Storage**: Full evidence payloads in encrypted IPFS/Arweave
 5. **Audit Trail**: Immutable blockchain transaction with cryptographic proof
 
@@ -151,12 +157,12 @@ pub struct DroneInterceptEvidence {
 
 **{BLOCKCHAIN.PRIMARY_CHAIN} vs Other Blockchains**
 
-| Blockchain | Cost per Transaction |
-|------------|---------------------|
-| **{BLOCKCHAIN.PRIMARY_CHAIN}** | {BLOCKCHAIN.COST_PER_TX} |
-| **Ethereum** | {BLOCKCHAIN.ETHEREUM_COST} (variable) |
-| **Polygon** | {BLOCKCHAIN.POLYGON_COST} |
-| **Hedera** | {BLOCKCHAIN.HEDERA_COST} |
+| Blockchain                     | Cost per Transaction                  |
+| ------------------------------ | ------------------------------------- |
+| **{BLOCKCHAIN.PRIMARY_CHAIN}** | {BLOCKCHAIN.COST_PER_TX}              |
+| **Ethereum**                   | {BLOCKCHAIN.ETHEREUM_COST} (variable) |
+| **Polygon**                    | {BLOCKCHAIN.POLYGON_COST}             |
+| **Hedera**                     | {BLOCKCHAIN.HEDERA_COST}              |
 
 **Annual Cost Projections**
 
@@ -196,8 +202,10 @@ pub struct DroneInterceptEvidence {
 
 **Digital Signature Security**
 
-- **{BLOCKCHAIN.SIGNATURE_ALGORITHM}**: Elliptic curve digital signature algorithm
-- **{BLOCKCHAIN.SECURITY_BITS} Security**: Equivalent to 128-bit symmetric key security
+- **{BLOCKCHAIN.SIGNATURE_ALGORITHM}**: Elliptic curve digital signature
+  algorithm
+- **{BLOCKCHAIN.SECURITY_BITS} Security**: Equivalent to 128-bit symmetric key
+  security
 - **Fast Verification**: Optimized for high-throughput applications
 - **Quantum Resistance**: Current security level adequate for near-term
 
@@ -294,10 +302,11 @@ pub struct DroneInterceptEvidence {
 
 ## Conclusion
 
-{BLOCKCHAIN.PRIMARY_CHAIN} blockchain integration provides Phoenix Rooivalk with exceptional
-capabilities for immutable evidence anchoring, legal compliance, and operational
-audit trails. The combination of high performance, low costs, and strong
-security makes {BLOCKCHAIN.PRIMARY_CHAIN} the optimal choice for defense-grade evidence management.
+{BLOCKCHAIN.PRIMARY_CHAIN} blockchain integration provides Phoenix Rooivalk with
+exceptional capabilities for immutable evidence anchoring, legal compliance, and
+operational audit trails. The combination of high performance, low costs, and
+strong security makes {BLOCKCHAIN.PRIMARY_CHAIN} the optimal choice for
+defense-grade evidence management.
 
 The implementation enables automated compliance with regulatory requirements
 while providing cryptographic proof of all system activities, supporting both
@@ -306,7 +315,7 @@ operational excellence and legal admissibility in court proceedings.
 ---
 
 _This document contains confidential technical information. Distribution is
-restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All rights
-reserved._
+restricted to authorized personnel only. &copy; 2025 Phoenix Rooivalk. All
+rights reserved._
 
 _Context improved by Giga AI_

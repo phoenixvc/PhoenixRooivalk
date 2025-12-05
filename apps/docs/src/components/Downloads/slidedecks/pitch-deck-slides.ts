@@ -72,7 +72,11 @@ export const pitchDeckSlides: Slide[] = [
       },
       {
         text: "**Modular weapons:** Adapt to threat and regulations",
-        subPoints: ["Nets for soft capture", "RF jammers for disruption", "Kinetic for military zones"],
+        subPoints: [
+          "Nets for soft capture",
+          "RF jammers for disruption",
+          "Kinetic for military zones",
+        ],
       },
     ],
     speakerNotes:
@@ -139,7 +143,11 @@ export const pitchDeckSlides: Slide[] = [
       },
       {
         text: "**Modular architecture:**",
-        subPoints: ["Rust core for performance", "React UI for dashboards", "WASM for cross-platform"],
+        subPoints: [
+          "Rust core for performance",
+          "React UI for dashboards",
+          "WASM for cross-platform",
+        ],
       },
     ],
     speakerNotes:
@@ -225,11 +233,19 @@ export const pitchDeckSlides: Slide[] = [
       },
       {
         text: "**Hardware sales:**",
-        subPoints: ["Net launchers: $25k-$50k", "UGV platforms: $50k-$100k", "Sensor suites: $15k-$30k"],
+        subPoints: [
+          "Net launchers: $25k-$50k",
+          "UGV platforms: $50k-$100k",
+          "Sensor suites: $15k-$30k",
+        ],
       },
       {
         text: "**Professional services:**",
-        subPoints: ["Integration consulting", "Training programs", "Regulatory compliance support"],
+        subPoints: [
+          "Integration consulting",
+          "Training programs",
+          "Regulatory compliance support",
+        ],
       },
     ],
     speakerNotes:
@@ -303,7 +319,11 @@ export const pitchDeckSlides: Slide[] = [
       "**x402 payment protocol** deployed to *production*",
       {
         text: "**Blockchain micropayments operational:**",
-        subPoints: ["Solana mainnet integration", "EtherLink private network", "Real-time settlement"],
+        subPoints: [
+          "Solana mainnet integration",
+          "EtherLink private network",
+          "Real-time settlement",
+        ],
       },
       "Evidence verification API *available for integration*",
       {
@@ -336,12 +356,20 @@ export const pitchDeckSlides: Slide[] = [
       },
       {
         text: "**Modular weapons adapt to local regulations:**",
-        subPoints: ["Nets for civilian areas", "RF jammers where permitted", "Kinetic for military zones"],
+        subPoints: [
+          "Nets for civilian areas",
+          "RF jammers where permitted",
+          "Kinetic for military zones",
+        ],
       },
       "**140+ pages** of technical/legal specs (*compliance-first documentation*)",
       {
         text: "**Airspace integration:**",
-        subPoints: ["ADS-B transponder data", "FlightRadar24 API", "Local ATC coordination"],
+        subPoints: [
+          "ADS-B transponder data",
+          "FlightRadar24 API",
+          "Local ATC coordination",
+        ],
       },
     ],
     speakerNotes:
@@ -515,10 +543,7 @@ export const pitchDeckSlides: Slide[] = [
       },
       {
         text: "**Q4 2026:**",
-        subPoints: [
-          "Expand to Canada",
-          "Manufacturing partnerships at scale",
-        ],
+        subPoints: ["Expand to Canada", "Manufacturing partnerships at scale"],
       },
     ],
     speakerNotes:

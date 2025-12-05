@@ -508,7 +508,10 @@ export default function SlideDeckDownload({
             </div>
 
             {/* Slide Content */}
-            <div ref={printContainerRef} className="p-8 slidedeck-print-content">
+            <div
+              ref={printContainerRef}
+              className="p-8 slidedeck-print-content"
+            >
               {/* Title Slide */}
               <div className="slide-page mb-8 pb-8 border-b-2 border-gray-200 dark:border-gray-700 print:break-after-page">
                 <div className="text-center py-12">
@@ -769,8 +772,13 @@ export default function SlideDeckDownload({
                               </p>
                               <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1 text-left">
                                 {member.highlights.map((highlight, hIndex) => (
-                                  <li key={hIndex} className="flex items-start gap-1">
-                                    <span className="text-gray-400 mt-0.5">{"\u2022"}</span>
+                                  <li
+                                    key={hIndex}
+                                    className="flex items-start gap-1"
+                                  >
+                                    <span className="text-gray-400 mt-0.5">
+                                      {"\u2022"}
+                                    </span>
                                     <span>{highlight}</span>
                                   </li>
                                 ))}

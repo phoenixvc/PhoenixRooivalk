@@ -114,12 +114,12 @@ jobs:
           # Check required variables
           PRESENT_VARS=""
           MISCONFIG_WARNINGS=""
-          
+
           echo "🔍 Debug: Checking AZURE_FUNCTIONAPP_NAME..."
           echo "  Variable value: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'"
           echo "  Variable is set (boolean): ${{ vars.AZURE_FUNCTIONAPP_NAME != '' }}"
           echo "  Also set as secret (boolean): ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}"
-          
+
           # Check AZURE_FUNCTIONAPP_NAME
           if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
             echo "::error::AZURE_FUNCTIONAPP_NAME is NOT set as a VARIABLE"
@@ -161,7 +161,7 @@ jobs:
           echo "  Variable value: '${{ vars.AZURE_AI_DEPLOYMENT_NAME }}'"
           echo "  Variable is set (boolean): ${{ vars.AZURE_AI_DEPLOYMENT_NAME != '' }}"
           echo "  Also set as secret (boolean): ${{ secrets.AZURE_AI_DEPLOYMENT_NAME != '' }}"
-          
+
           if [ -n "${{ vars.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
             echo "✅ AZURE_AI_DEPLOYMENT_NAME is configured: ${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "

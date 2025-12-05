@@ -13,7 +13,13 @@ tags:
 phase: ["seed", "series-a", "series-b"]
 ---
 
-import { NETS, RKV_M, SKYSNARE, HARDWARE, RKV_SYSTEM } from "@site/src/data/values";
+import {
+  NETS,
+  RKV_M,
+  SKYSNARE,
+  HARDWARE,
+  RKV_SYSTEM,
+} from "@site/src/data/values";
 
 ## Overview
 
@@ -38,22 +44,22 @@ collateral damage.
 
 ### By Deployment Method
 
-| Type                         | Range   | Use Case                 | Complexity |
-| ---------------------------- | ------- | ------------------------ | ---------- |
-| **Air-to-Air (Interceptor)** | {RKV_M.INTERCEPT_RANGE}+  | Active pursuit/intercept | High       |
-| **Ground-Launched**          | 30-100m | Point defense            | Medium     |
-| **Handheld Net Gun**         | 15-30m  | Close-range personnel    | Low        |
-| **Fixed Turret**             | 50-150m | Perimeter defense        | Medium     |
+| Type                         | Range                    | Use Case                 | Complexity |
+| ---------------------------- | ------------------------ | ------------------------ | ---------- |
+| **Air-to-Air (Interceptor)** | {RKV_M.INTERCEPT_RANGE}+ | Active pursuit/intercept | High       |
+| **Ground-Launched**          | 30-100m                  | Point defense            | Medium     |
+| **Handheld Net Gun**         | 15-30m                   | Close-range personnel    | Low        |
+| **Fixed Turret**             | 50-150m                  | Perimeter defense        | Medium     |
 
 ### By Net Material
 
-| Material              | Weight | Strength  | Cost | UV Resistance |
-| --------------------- | ------ | --------- | ---- | ------------- |
+| Material                    | Weight | Strength  | Cost | UV Resistance |
+| --------------------------- | ------ | --------- | ---- | ------------- |
 | **{HARDWARE.NET_MATERIAL}** | Medium | Very High | High | Excellent     |
-| **Dyneema (UHMWPE)**  | Light  | Very High | High | Good          |
-| **Nylon (Polyamide)** | Medium | Medium    | Low  | Fair          |
-| **HDPE**              | Light  | Medium    | Low  | Good          |
-| **Spectra**           | Light  | Very High | High | Excellent     |
+| **Dyneema (UHMWPE)**        | Light  | Very High | High | Good          |
+| **Nylon (Polyamide)**       | Medium | Medium    | Low  | Fair          |
+| **HDPE**                    | Light  | Medium    | Low  | Good          |
+| **Spectra**                 | Light  | Very High | High | Excellent     |
 
 ---
 
@@ -63,44 +69,44 @@ collateral damage.
 
 For use with {RKV_SYSTEM.RKV_M_NAME} interceptor drone:
 
-| Parameter             | Specification         | Notes                            |
-| --------------------- | --------------------- | -------------------------------- |
-| **Deployed Size**     | {NETS.AIR_TO_AIR_SIZE} | Covers Group 1-2 UAS             |
-| **Stowed Size**       | {NETS.AIR_TO_AIR_STOWED} | Fits net launcher pod            |
-| **Material**          | Kevlar/Dyneema blend  | High strength, low weight        |
-| **Mesh Size**         | {NETS.AIR_TO_AIR_MESH} | Captures rotors, prevents escape |
-| **Breaking Strength** | {NETS.AIR_TO_AIR_STRENGTH} | Handles high-speed impact        |
+| Parameter             | Specification                       | Notes                            |
+| --------------------- | ----------------------------------- | -------------------------------- |
+| **Deployed Size**     | {NETS.AIR_TO_AIR_SIZE}              | Covers Group 1-2 UAS             |
+| **Stowed Size**       | {NETS.AIR_TO_AIR_STOWED}            | Fits net launcher pod            |
+| **Material**          | Kevlar/Dyneema blend                | High strength, low weight        |
+| **Mesh Size**         | {NETS.AIR_TO_AIR_MESH}              | Captures rotors, prevents escape |
+| **Breaking Strength** | {NETS.AIR_TO_AIR_STRENGTH}          | Handles high-speed impact        |
 | **Weight**            | {NETS.AIR_TO_AIR_WEIGHT} (net only) | Includes weighted corners        |
-| **Corner Weights**    | 4 × 25g tungsten      | Rapid deployment, stable flight  |
-| **Deployment Speed**  | {NETS.AIR_TO_AIR_DEPLOYMENT} | Full size in 0.2 seconds         |
-| **Operating Temp**    | {NETS.AIR_TO_AIR_TEMP_RANGE} | All-weather capable              |
+| **Corner Weights**    | 4 × 25g tungsten                    | Rapid deployment, stable flight  |
+| **Deployment Speed**  | {NETS.AIR_TO_AIR_DEPLOYMENT}        | Full size in 0.2 seconds         |
+| **Operating Temp**    | {NETS.AIR_TO_AIR_TEMP_RANGE}        | All-weather capable              |
 
 ### Large Format Net (Defense Mode)
 
 For larger Group 2-3 fixed-wing targets:
 
-| Parameter             | Specification          | Notes                          |
-| --------------------- | ---------------------- | ------------------------------ |
-| **Deployed Size**     | {NETS.LARGE_FORMAT_SIZE} | Matches UAVOS standard         |
-| **Stowed Size**       | 200mm × 120mm cylinder | Larger launcher required       |
-| **Material**          | Reinforced Kevlar      | Higher impact tolerance        |
-| **Mesh Size**         | 75mm × 75mm            | Allows airflow, captures wings |
-| **Breaking Strength** | {NETS.LARGE_FORMAT_STRENGTH} | Fixed-wing impact speeds       |
-| **Weight**            | 450g                   | Includes deployment mechanism  |
+| Parameter             | Specification                    | Notes                          |
+| --------------------- | -------------------------------- | ------------------------------ |
+| **Deployed Size**     | {NETS.LARGE_FORMAT_SIZE}         | Matches UAVOS standard         |
+| **Stowed Size**       | 200mm × 120mm cylinder           | Larger launcher required       |
+| **Material**          | Reinforced Kevlar                | Higher impact tolerance        |
+| **Mesh Size**         | 75mm × 75mm                      | Allows airflow, captures wings |
+| **Breaking Strength** | {NETS.LARGE_FORMAT_STRENGTH}     | Fixed-wing impact speeds       |
+| **Weight**            | 450g                             | Includes deployment mechanism  |
 | **Target Speed**      | {NETS.LARGE_FORMAT_TARGET_SPEED} | Relative closure rate          |
 
 ### Ground-Launched Net
 
 For SkySnare™ consumer product (MSRP: {SKYSNARE.MSRP}):
 
-| Parameter             | Specification              | Notes                       |
-| --------------------- | -------------------------- | --------------------------- |
-| **Deployed Size**     | {NETS.GROUND_SIZE}         | Consumer drone sizes        |
-| **Launch Range**      | {NETS.GROUND_RANGE}        | Compressed air propulsion   |
-| **Material**          | {NETS.GROUND_MATERIAL}     | Cost-effective, reusable    |
-| **Mesh Size**         | {NETS.GROUND_MESH}         | Small drone capture         |
-| **Breaking Strength** | 150 kg per strand          | Consumer drone weights      |
-| **Weight**            | {NETS.GROUND_WEIGHT}       | Lightweight for portability |
+| Parameter             | Specification              | Notes                                 |
+| --------------------- | -------------------------- | ------------------------------------- |
+| **Deployed Size**     | {NETS.GROUND_SIZE}         | Consumer drone sizes                  |
+| **Launch Range**      | {NETS.GROUND_RANGE}        | Compressed air propulsion             |
+| **Material**          | {NETS.GROUND_MATERIAL}     | Cost-effective, reusable              |
+| **Mesh Size**         | {NETS.GROUND_MESH}         | Small drone capture                   |
+| **Breaking Strength** | 150 kg per strand          | Consumer drone weights                |
+| **Weight**            | {NETS.GROUND_WEIGHT}       | Lightweight for portability           |
 | **Reloads**           | User-replaceable cartridge | {NETS.GROUND_RELOAD_TIME} reload time |
 
 ---
@@ -300,12 +306,12 @@ For reliable deployment:
 
 ### Testing Protocol
 
-| Test           | Method                      | Pass Criteria      |
-| -------------- | --------------------------- | ------------------ |
+| Test           | Method                      | Pass Criteria         |
+| -------------- | --------------------------- | --------------------- |
 | **Deployment** | Manual throw from 3m height | Full open in &lt;0.5s |
-| **Strength**   | Hang 50kg weight for 1 hour | No strand breakage |
-| **Wrap**       | Deploy onto test frame      | >80% coverage      |
-| **Recovery**   | 10 deployment cycles        | No tangling        |
+| **Strength**   | Hang 50kg weight for 1 hour | No strand breakage    |
+| **Wrap**       | Deploy onto test frame      | >80% coverage         |
+| **Recovery**   | 10 deployment cycles        | No tangling           |
 
 ---
 
@@ -413,7 +419,7 @@ For reliable deployment:
 | Parameter       | Requirement             |
 | --------------- | ----------------------- |
 | **Temperature** | 5-35°C                  |
-| **Humidity**    | &lt;70% RH                 |
+| **Humidity**    | &lt;70% RH              |
 | **Light**       | Dark (UV protection)    |
 | **Container**   | Breathable bag or case  |
 | **Position**    | Flat or properly folded |

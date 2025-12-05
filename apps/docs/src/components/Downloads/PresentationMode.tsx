@@ -153,7 +153,10 @@ export default function PresentationMode({
         case " ":
         case "Enter":
           e.preventDefault();
-          if (animationMode && revealedBullets < getCurrentSlideKeyPointsCount()) {
+          if (
+            animationMode &&
+            revealedBullets < getCurrentSlideKeyPointsCount()
+          ) {
             // Reveal next bullet
             setRevealedBullets((prev) => prev + 1);
           } else {
@@ -230,7 +233,14 @@ export default function PresentationMode({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentSlide, totalSlides, onClose, animationMode, revealedBullets]);
+  }, [
+    isOpen,
+    currentSlide,
+    totalSlides,
+    onClose,
+    animationMode,
+    revealedBullets,
+  ]);
 
   // Reset state when opening
   React.useEffect(() => {
@@ -260,11 +270,7 @@ export default function PresentationMode({
       {/* Top Bar */}
       <div className="flex items-center justify-between px-6 py-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-4">
-          <img
-            src={logoUrl}
-            alt="Phoenix Rooivalk"
-            className="w-8 h-8"
-          />
+          <img src={logoUrl} alt="Phoenix Rooivalk" className="w-8 h-8" />
           <h1 className="text-lg font-semibold truncate max-w-md">{title}</h1>
         </div>
 
@@ -327,8 +333,18 @@ export default function PresentationMode({
             className="p-2 hover:bg-gray-700 rounded"
             title="Exit (Escape)"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -372,20 +388,26 @@ export default function PresentationMode({
                   {slide.icon}
                 </span>
               )}
-              <h2 className="text-4xl font-bold">{parseRichText(slide.title)}</h2>
+              <h2 className="text-4xl font-bold">
+                {parseRichText(slide.title)}
+              </h2>
             </div>
 
             {/* Slide Body */}
             {slide.layout === "title-only" ? (
               <div className="text-center py-8">
                 <p className="text-2xl text-gray-300">
-                  {slide.keyPoints[0] && parseRichText(getKeyPointText(slide.keyPoints[0]))}
+                  {slide.keyPoints[0] &&
+                    parseRichText(getKeyPointText(slide.keyPoints[0]))}
                 </p>
               </div>
             ) : slide.layout === "quote" ? (
               <div className="text-center py-8">
                 <blockquote className="text-3xl italic text-gray-300 mb-4">
-                  &ldquo;{slide.keyPoints[0] && parseRichText(getKeyPointText(slide.keyPoints[0]))}&rdquo;
+                  &ldquo;
+                  {slide.keyPoints[0] &&
+                    parseRichText(getKeyPointText(slide.keyPoints[0]))}
+                  &rdquo;
                 </blockquote>
                 {slide.quoteAuthor && (
                   <p className="text-xl text-gray-400">— {slide.quoteAuthor}</p>
@@ -411,7 +433,9 @@ export default function PresentationMode({
                       <li
                         key={i}
                         className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                          animationMode && i >= revealedBullets
+                            ? "opacity-0"
+                            : "opacity-100"
                         }`}
                       >
                         <span className="text-blue-400 mt-1">{"\u25CF"}</span>
@@ -443,14 +467,18 @@ export default function PresentationMode({
               <div className="grid grid-cols-2 gap-8">
                 <div>
                   {slide.leftColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">{slide.leftColumnTitle}</h4>
+                    <h4 className="text-xl font-semibold mb-4">
+                      {slide.leftColumnTitle}
+                    </h4>
                   )}
                   <ul className="space-y-3">
                     {(slide.leftColumn || []).map((point, i) => (
                       <li
                         key={i}
                         className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                          animationMode && i >= revealedBullets
+                            ? "opacity-0"
+                            : "opacity-100"
                         }`}
                       >
                         <span className="text-blue-400 mt-1">{"\u25CF"}</span>
@@ -461,14 +489,18 @@ export default function PresentationMode({
                 </div>
                 <div>
                   {slide.rightColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">{slide.rightColumnTitle}</h4>
+                    <h4 className="text-xl font-semibold mb-4">
+                      {slide.rightColumnTitle}
+                    </h4>
                   )}
                   <ul className="space-y-3">
                     {(slide.rightColumn || []).map((point, i) => (
                       <li
                         key={i}
                         className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                          animationMode && i >= revealedBullets
+                            ? "opacity-0"
+                            : "opacity-100"
                         }`}
                       >
                         <span className="text-blue-400 mt-1">{"\u25CF"}</span>
@@ -498,12 +530,18 @@ export default function PresentationMode({
                       >
                         {member.initials}
                       </div>
-                      <h4 className="font-bold text-white text-sm">{member.name}</h4>
-                      <p className="text-xs text-gray-400 mb-2">{member.title}</p>
+                      <h4 className="font-bold text-white text-sm">
+                        {member.name}
+                      </h4>
+                      <p className="text-xs text-gray-400 mb-2">
+                        {member.title}
+                      </p>
                       <ul className="text-xs text-gray-500 space-y-1 text-left">
                         {member.highlights.map((highlight, hIndex) => (
                           <li key={hIndex} className="flex items-start gap-1">
-                            <span className="text-gray-500 mt-0.5">{"\u2022"}</span>
+                            <span className="text-gray-500 mt-0.5">
+                              {"\u2022"}
+                            </span>
                             <span>{highlight}</span>
                           </li>
                         ))}
@@ -517,7 +555,9 @@ export default function PresentationMode({
                       <li
                         key={i}
                         className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                          animationMode && i >= revealedBullets
+                            ? "opacity-0"
+                            : "opacity-100"
                         }`}
                       >
                         <span className="text-blue-400 mt-1">{"\u25CF"}</span>
@@ -534,7 +574,9 @@ export default function PresentationMode({
                   <li
                     key={i}
                     className={`flex items-start gap-3 text-xl transition-opacity duration-300 ${
-                      animationMode && i >= revealedBullets ? "opacity-0" : "opacity-100"
+                      animationMode && i >= revealedBullets
+                        ? "opacity-0"
+                        : "opacity-100"
                     }`}
                   >
                     <span className="text-blue-400 mt-1">{"\u25CF"}</span>
@@ -578,8 +620,18 @@ export default function PresentationMode({
             className="p-2 rounded hover:bg-gray-700"
             title="First Slide (Home)"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+              />
             </svg>
           </button>
           <button
@@ -593,8 +645,18 @@ export default function PresentationMode({
             className="p-2 rounded hover:bg-gray-700 disabled:opacity-50"
             title="Previous Slide (Left Arrow)"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
           <span className="px-4 text-lg font-mono">
@@ -602,19 +664,36 @@ export default function PresentationMode({
           </span>
           <button
             onClick={() => {
-              if (animationMode && revealedBullets < getCurrentSlideKeyPointsCount()) {
+              if (
+                animationMode &&
+                revealedBullets < getCurrentSlideKeyPointsCount()
+              ) {
                 setRevealedBullets((prev) => prev + 1);
               } else if (currentSlide < totalSlides - 1) {
                 setCurrentSlide((prev) => prev + 1);
                 if (animationMode) setRevealedBullets(0);
               }
             }}
-            disabled={currentSlide === totalSlides - 1 && (!animationMode || revealedBullets >= getCurrentSlideKeyPointsCount())}
+            disabled={
+              currentSlide === totalSlides - 1 &&
+              (!animationMode ||
+                revealedBullets >= getCurrentSlideKeyPointsCount())
+            }
             className="p-2 rounded hover:bg-gray-700 disabled:opacity-50"
             title="Next Slide (Right Arrow / Space)"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
           <button
@@ -622,19 +701,42 @@ export default function PresentationMode({
             className="p-2 rounded hover:bg-gray-700"
             title="Last Slide (End)"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 5l7 7-7 7M5 5l7 7-7 7"
+              />
             </svg>
           </button>
         </div>
 
         {/* Keyboard Shortcuts Help */}
         <div className="text-xs text-gray-500">
-          <span className="bg-gray-700 px-1.5 py-0.5 rounded mr-1">←→</span> Navigate
-          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">N</span> Notes
-          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">T</span> Thumbnails
-          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">A</span> Animate
-          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">S</span> Timer
+          <span className="bg-gray-700 px-1.5 py-0.5 rounded mr-1">←→</span>{" "}
+          Navigate
+          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">
+            N
+          </span>{" "}
+          Notes
+          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">
+            T
+          </span>{" "}
+          Thumbnails
+          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">
+            A
+          </span>{" "}
+          Animate
+          <span className="bg-gray-700 px-1.5 py-0.5 rounded mx-1 ml-3">
+            S
+          </span>{" "}
+          Timer
         </div>
       </div>
     </div>

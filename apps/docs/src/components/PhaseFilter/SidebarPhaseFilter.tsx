@@ -5,7 +5,10 @@
 
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { usePhaseFilter, PhaseFilter as PhaseFilterType } from "../../contexts/PhaseFilterContext";
+import {
+  usePhaseFilter,
+  PhaseFilter as PhaseFilterType,
+} from "../../contexts/PhaseFilterContext";
 import "./PhaseFilter.css";
 
 export function SidebarPhaseFilter(): React.ReactElement | null {
