@@ -8,7 +8,12 @@
  */
 
 // Re-export types
-export type { UserProfile, RecommendedPath, ProfileTemplate } from "./profiles";
+export type {
+  UserProfile,
+  RecommendedPath,
+  ProfileTemplate,
+  UserProfileResult,
+} from "./profiles";
 
 // Re-export values and functions from profiles
 export {
@@ -16,6 +21,8 @@ export {
   AVAILABLE_ROLES,
   AVAILABLE_INTERESTS,
   CATEGORY_PATHS,
+  INTERNAL_DOMAINS,
+  DEFAULT_INTERNAL_PROFILE,
   // Internal users
   INTERNAL_USER_PROFILES,
   // Template collections
@@ -24,6 +31,8 @@ export {
   PROFILE_TEMPLATES_MAP,
   // Functions
   getUserProfile,
+  getUserProfileWithMetadata,
+  isInternalDomain,
   getRecommendedPaths,
   profileToRecommendations,
   getCategoryFromDocPath,

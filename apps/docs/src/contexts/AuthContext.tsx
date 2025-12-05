@@ -36,6 +36,8 @@ import {
 } from "../components/Offline";
 import {
   getUserProfile as getKnownUserProfile,
+  getUserProfileWithMetadata,
+  isInternalDomain,
   UserProfile,
   INTERNAL_USER_PROFILES,
 } from "../config/userProfiles";
@@ -59,6 +61,8 @@ export interface UserProfileState {
   confirmedRoles: string[]; // User's confirmed/selected roles
   profileKey: string | null; // Key in INTERNAL_USER_PROFILES (e.g., "martyn")
   isProfileLoaded: boolean; // True once profile detection is complete
+  isInternalDomain: boolean; // True if user's email is from an internal domain
+  matchType: "specific" | "domain" | "name" | null; // How the profile was matched
 }
 
 interface AuthContextType {
@@ -88,6 +92,8 @@ const DEFAULT_PROFILE_STATE: UserProfileState = {
   confirmedRoles: [],
   profileKey: null,
   isProfileLoaded: false,
+  isInternalDomain: false,
+  matchType: null,
 };
 
 // Helper to get saved profile data from localStorage
@@ -114,17 +120,28 @@ const saveProfileData = (profileKey: string | null, roles: string[]): void => {
 const detectUserProfile = (
   email?: string | null,
   displayName?: string | null,
-): { profile: UserProfile | null; profileKey: string | null } => {
-  const profile = getKnownUserProfile(email, displayName);
-  if (!profile) return { profile: null, profileKey: null };
-
-  // Find the profile key
-  for (const [key, p] of Object.entries(INTERNAL_USER_PROFILES)) {
-    if (p.name === profile.name) {
-      return { profile, profileKey: key };
-    }
+): {
+  profile: UserProfile | null;
+  profileKey: string | null;
+  isInternalDomain: boolean;
+  matchType: "specific" | "domain" | "name" | null;
+} => {
+  const result = getUserProfileWithMetadata(email, displayName);
+  if (!result) {
+    return {
+      profile: null,
+      profileKey: null,
+      isInternalDomain: isInternalDomain(email),
+      matchType: null,
+    };
   }
-  return { profile, profileKey: null };
+
+  return {
+    profile: result.profile,
+    profileKey: result.profileKey,
+    isInternalDomain: result.isInternalDomain,
+    matchType: result.matchType,
+  };
 };
 
 // Helper to get local progress
@@ -340,11 +357,13 @@ export function AuthProvider({
 
     // Async function to load and merge profile data
     async function loadUserProfile() {
-      // Detect known profile from internal profiles
-      const { profile, profileKey: detectedProfileKey } = detectUserProfile(
-        currentUser.email,
-        currentUser.displayName,
-      );
+      // Detect known profile from internal profiles (includes domain detection)
+      const {
+        profile,
+        profileKey: detectedProfileKey,
+        isInternalDomain: isDomainInternal,
+        matchType: detectedMatchType,
+      } = detectUserProfile(currentUser.email, currentUser.displayName);
 
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();
@@ -379,7 +398,18 @@ export function AuthProvider({
         confirmedRoles: mergedRoles,
         profileKey: mergedProfileKey,
         isProfileLoaded: true,
+        isInternalDomain: isDomainInternal,
+        matchType: detectedMatchType,
       });
+
+      if (DEBUG_AUTH) {
+        console.log("[AuthContext] Profile loaded", {
+          profileKey: mergedProfileKey,
+          isInternalDomain: isDomainInternal,
+          matchType: detectedMatchType,
+          hasKnownProfile: !!profile,
+        });
+      }
     }
 
     loadUserProfile();
@@ -401,11 +431,13 @@ export function AuthProvider({
   const refreshUserProfile = useCallback(() => {
     if (!user) return;
 
-    // Re-detect known profile
-    const { profile, profileKey } = detectUserProfile(
-      user.email,
-      user.displayName,
-    );
+    // Re-detect known profile (includes domain detection)
+    const {
+      profile,
+      profileKey,
+      isInternalDomain: isDomainInternal,
+      matchType: detectedMatchType,
+    } = detectUserProfile(user.email, user.displayName);
 
     // Get saved profile data (may have been updated by onboarding)
     const savedProfile = getSavedProfileData();
@@ -426,6 +458,8 @@ export function AuthProvider({
       confirmedRoles,
       profileKey: effectiveProfileKey,
       isProfileLoaded: true,
+      isInternalDomain: isDomainInternal,
+      matchType: detectedMatchType,
     });
   }, [user]);
 

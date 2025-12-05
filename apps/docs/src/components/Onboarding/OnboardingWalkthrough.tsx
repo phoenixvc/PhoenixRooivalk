@@ -14,6 +14,7 @@ import {
   ProfileTemplate,
   getUserProfile as getKnownUserProfile,
   INTERNAL_USER_PROFILES,
+  isInternalDomain,
 } from "../../config/userProfiles";
 import Link from "@docusaurus/Link";
 import { ProfileCompletion, UserProfileDetails } from "./ProfileCompletion";
@@ -637,8 +638,11 @@ export function OnboardingWalkthrough({
         selectedTemplate.templateKey,
       );
 
-      if (needsVerification) {
-        // Navigate to access verification step
+      // Internal domain users automatically bypass verification
+      const userIsInternalDomain = isInternalDomain(user.email);
+
+      if (needsVerification && !userIsInternalDomain) {
+        // Navigate to access verification step (only for non-internal domain users)
         const verificationIndex = findStepIndex("access-verification");
         setIsAnimating(true);
         setTimeout(() => {
