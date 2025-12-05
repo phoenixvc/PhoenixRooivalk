@@ -28,15 +28,22 @@
     }
   },
   "bundle": {
-    "active": false,
-    "targets": [],
-    "icon": [],
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/icon.png"
+    ],
     "resources": [],
     "externalBin": [],
     "copyright": "Copyright © 2025 Phoenix Rooivalk",
     "category": "Simulation",
     "shortDescription": "Counter-drone defense simulation and training platform",
-    "longDescription": "Advanced counter-drone defense simulation platform with blockchain-based evidence recording for military training and evaluation."
+    "longDescription": "Advanced counter-drone defense simulation platform with blockchain-based evidence recording for military training and evaluation.",
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    }
   },
   "plugins": {
     "shell": {

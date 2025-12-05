@@ -1,5 +1,14 @@
 # Phoenix Rooivalk - Azure Infrastructure
 
+> **⚠️ IMPORTANT: Deploy This Infrastructure BEFORE Running CI/CD Workflows**
+>
+> The GitHub Actions workflows (`deploy-marketing-azure.yml` and `deploy-docs-azure.yml`) **will fail** until you:
+> 1. Deploy this Azure infrastructure
+> 2. Extract the deployment tokens
+> 3. Configure GitHub repository secrets
+>
+> **📖 See [../../.github/DEPLOYMENT_SEQUENCE.md](../../.github/DEPLOYMENT_SEQUENCE.md) for the complete deployment order.**
+
 This directory contains the Azure infrastructure as code (Bicep) and deployment scripts for the Phoenix Rooivalk documentation platform.
 
 ## Architecture
