@@ -134,9 +134,10 @@ class AccessApplicationsService {
       applicationNumber,
     };
 
-    const saved = await accessApplicationsRepository.create(
-      application as AccessApplication,
-    );
+    const saved = await accessApplicationsRepository.save({
+      id: crypto.randomUUID(),
+      ...application,
+    } as AccessApplication);
 
     // Send notification email to admins
     await this.notifyAdminsOfNewApplication(saved);

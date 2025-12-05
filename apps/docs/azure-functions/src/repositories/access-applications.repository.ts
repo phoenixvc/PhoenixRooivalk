@@ -147,7 +147,7 @@ export class AccessApplicationsRepository extends BaseRepository<AccessApplicati
   async hasApprovedApplication(userId: string): Promise<boolean> {
     const query =
       "SELECT VALUE COUNT(1) FROM c WHERE c.userId = @userId AND c.status = @status";
-    const container = this.getContainer();
+    const container = this.getContainerRef();
     const { resources } = await container.items
       .query<number>({
         query,
@@ -198,7 +198,7 @@ export class AccessApplicationsRepository extends BaseRepository<AccessApplicati
   async getCountByStatus(): Promise<Record<ApplicationStatus, number>> {
     const query =
       "SELECT c.status, COUNT(1) as count FROM c GROUP BY c.status";
-    const container = this.getContainer();
+    const container = this.getContainerRef();
     const { resources } = await container.items
       .query<{ status: ApplicationStatus; count: number }>({ query })
       .fetchAll();
@@ -210,7 +210,9 @@ export class AccessApplicationsRepository extends BaseRepository<AccessApplicati
     };
 
     for (const item of resources) {
-      counts[item.status] = item.count;
+      if (item.status in counts) {
+        counts[item.status] = item.count;
+      }
     }
 
     return counts;
