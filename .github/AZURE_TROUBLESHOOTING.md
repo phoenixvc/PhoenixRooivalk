@@ -1,17 +1,20 @@
 # Azure Functions Deployment Troubleshooting Guide
 
-This document covers common issues encountered when deploying Azure Functions through GitHub Actions and their solutions.
+This document covers common issues encountered when deploying Azure Functions
+through GitHub Actions and their solutions.
 
 ## Issue: "Azure Functions secrets not configured" Despite Secrets Being Set
 
 ### Symptoms
 
 The workflow shows the message:
+
 ```
 Azure Functions secrets not configured - skipping Functions deployment
 ```
 
 Even though you have configured:
+
 - `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` secret
 - `AZURE_FUNCTIONAPP_NAME` variable
 - Other required secrets
@@ -25,19 +28,19 @@ This can happen for several reasons:
 #### 1. Empty or Whitespace-Only Secret Value
 
 The `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` secret is set but contains:
+
 - An empty string
 - Only whitespace characters
 - Incomplete XML content
 
-**How to verify:**
-Look for the debug output in the workflow logs:
+**How to verify:** Look for the debug output in the workflow logs:
+
 ```
 🔍 Debugging Azure Functions deployment prerequisites:
   AZURE_FUNCTIONAPP_PUBLISH_PROFILE is set: false  ← Should be true
 ```
 
-**Solution:**
-Re-download and re-set the publish profile:
+**Solution:** Re-download and re-set the publish profile:
 
 ```bash
 # Download fresh publish profile from Azure
@@ -54,8 +57,9 @@ gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE < publish-profile.xml
 ```
 
 Or via Azure Portal:
+
 1. Go to your Function App → Overview
-2. Click "Get publish profile"  
+2. Click "Get publish profile"
 3. Download the `.PublishSettings` file
 4. Open in a text editor and copy the ENTIRE contents
 5. Go to GitHub repo → Settings → Secrets → Actions
@@ -64,40 +68,47 @@ Or via Azure Portal:
 
 #### 2. Variable Set as Secret Instead
 
-The `AZURE_FUNCTIONAPP_NAME` is configured as a **secret** instead of a **variable**.
+The `AZURE_FUNCTIONAPP_NAME` is configured as a **secret** instead of a
+**variable**.
 
-**How to verify:**
-Look for the error message in workflow logs:
+**How to verify:** Look for the error message in workflow logs:
+
 ```
 ⚠️ AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE
 ```
 
 **Solution:**
+
 1. Go to GitHub repo → Settings → Secrets and variables → Actions
 2. Click the **Secrets** tab
 3. Delete `AZURE_FUNCTIONAPP_NAME` from secrets
-4. Click the **Variables** tab  
+4. Click the **Variables** tab
 5. Click "New repository variable"
 6. Name: `AZURE_FUNCTIONAPP_NAME`
 7. Value: `phoenix-rooivalk-functions` (or your function app name)
 8. Click "Add variable"
 
-**Why this matters:** GitHub Actions treats secrets and variables differently. Variables can be used in conditionals and shown in logs (for debugging), while secrets are always masked. The workflow needs to check the actual value to determine if deployment should proceed.
+**Why this matters:** GitHub Actions treats secrets and variables differently.
+Variables can be used in conditionals and shown in logs (for debugging), while
+secrets are always masked. The workflow needs to check the actual value to
+determine if deployment should proceed.
 
 #### 3. Wrong Variable Name (Typo)
 
 Common typos include:
+
 - `vAZURE_AI_DEPLOYMENT_NAME` instead of `AZURE_AI_DEPLOYMENT_NAME`
 - `AZURE_FUNCTIONS_APP_NAME` instead of `AZURE_FUNCTIONAPP_NAME`
 - Extra spaces in the variable name
 
-**How to verify:**
-The workflow will detect common typos and show:
+**How to verify:** The workflow will detect common typos and show:
+
 ```
 ⚠️ Found vAZURE_AI_DEPLOYMENT_NAME but it should be AZURE_AI_DEPLOYMENT_NAME (remove the 'v' prefix)
 ```
 
 **Solution:**
+
 1. Go to Settings → Secrets and variables → Actions → Variables
 2. Delete the incorrectly named variable
 3. Create a new variable with the correct name
@@ -105,24 +116,29 @@ The workflow will detect common typos and show:
 
 #### 4. Unusual Deployment Name Value
 
-The `AZURE_AI_DEPLOYMENT_NAME` variable contains an unusual or unexpected value like `gpt-5.1`.
+The `AZURE_AI_DEPLOYMENT_NAME` variable contains an unusual or unexpected value
+like `gpt-5.1`.
 
-**How to verify:**
-Look for the warning:
+**How to verify:** Look for the warning:
+
 ```
 ⚠️ AZURE_AI_DEPLOYMENT_NAME value 'gpt-5.1' may be unusual
 ⚠️ Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e
 ```
 
 **Solution:**
+
 1. Go to Azure Portal → Azure OpenAI resource → Model deployments
-2. Note the exact deployment name (e.g., `gpt-4`, `gpt-35-turbo`, `gpt-4o`, `text-embedding-ada-002`)
+2. Note the exact deployment name (e.g., `gpt-4`, `gpt-35-turbo`, `gpt-4o`,
+   `text-embedding-ada-002`)
 3. Update the variable with the correct deployment name:
    ```bash
    gh variable set AZURE_AI_DEPLOYMENT_NAME --body "gpt-4"
    ```
 
-**Note:** The deployment name must match EXACTLY what you named it in Azure, including any suffixes or version numbers. The workflow checks for common prefixes to catch potential typos or configuration errors.
+**Note:** The deployment name must match EXACTLY what you named it in Azure,
+including any suffixes or version numbers. The workflow checks for common
+prefixes to catch potential typos or configuration errors.
 
 ### Quick Fix Checklist
 
@@ -154,11 +170,13 @@ Run through this checklist to resolve the issue:
 After making changes:
 
 1. Trigger a new workflow run:
+
    ```bash
    gh workflow run deploy-docs-azure.yml
    ```
 
 2. Watch the "Validate Secrets" job output for:
+
    ```
    ✅ Azure Functions deployment prerequisites met:
      - AZURE_FUNCTIONAPP_PUBLISH_PROFILE: configured
@@ -180,15 +198,21 @@ Unauthorized (CODE: 401)
 
 ### Root Cause
 
-The `Azure/functions-action@v1` attempts to validate Azure resources and fetch Kudu app settings using the SCM credentials from the publish profile. This validation step can fail with a 401 Unauthorized error due to:
+The `Azure/functions-action@v1` attempts to validate Azure resources and fetch
+Kudu app settings using the SCM credentials from the publish profile. This
+validation step can fail with a 401 Unauthorized error due to:
 
-1. **Expired publish profile**: Publish profiles have expiration dates and need to be regenerated periodically
-2. **Permission issues**: The SCM credentials may not have sufficient permissions to access the Kudu API
-3. **Resource validation overhead**: The action performs unnecessary resource validation that can timeout or fail
+1. **Expired publish profile**: Publish profiles have expiration dates and need
+   to be regenerated periodically
+2. **Permission issues**: The SCM credentials may not have sufficient
+   permissions to access the Kudu API
+3. **Resource validation overhead**: The action performs unnecessary resource
+   validation that can timeout or fail
 
 ### Solution
 
-Add two parameters to the `Azure/functions-action@v1` configuration to skip resource validation and ensure proper build handling:
+Add two parameters to the `Azure/functions-action@v1` configuration to skip
+resource validation and ensure proper build handling:
 
 ```yaml
 - name: Deploy to Azure Functions
@@ -197,14 +221,15 @@ Add two parameters to the `Azure/functions-action@v1` configuration to skip reso
     app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
     package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-    respect-funcignore: true              # Skip unnecessary resource validation
-    scm-do-build-during-deployment: true  # Ensure proper build on SCM side
+    respect-funcignore: true # Skip unnecessary resource validation
+    scm-do-build-during-deployment: true # Ensure proper build on SCM side
 ```
 
 #### Parameter Explanations
 
-- **`respect-funcignore: true`**: 
-  - Tells the action to respect `.funcignore` files and skip trying to validate resources
+- **`respect-funcignore: true`**:
+  - Tells the action to respect `.funcignore` files and skip trying to validate
+    resources
   - Prevents the action from making unnecessary API calls to fetch app settings
   - Reduces deployment time and avoids authentication issues
 
@@ -215,14 +240,16 @@ Add two parameters to the `Azure/functions-action@v1` configuration to skip reso
 
 ### When to Regenerate Publish Profile
 
-If you continue to see 401 errors after adding these parameters, you may need to regenerate the publish profile:
+If you continue to see 401 errors after adding these parameters, you may need to
+regenerate the publish profile:
 
 #### Using Azure Portal
 
 1. Navigate to your Function App in Azure Portal
 2. Click **Get publish profile** in the Overview section
 3. Download the `.PublishSettings` XML file
-4. Update the GitHub secret `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` with the new content
+4. Update the GitHub secret `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` with the new
+   content
 
 #### Using Azure CLI
 
@@ -239,7 +266,8 @@ gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE --body "$(cat publish-profile.xm
 
 ### Alternative: Use Service Principal Authentication
 
-For more robust authentication, consider switching to service principal authentication instead of publish profiles:
+For more robust authentication, consider switching to service principal
+authentication instead of publish profiles:
 
 ```yaml
 - name: Login to Azure
@@ -282,7 +310,8 @@ Ensure you're installing production dependencies before deployment:
   run: pnpm install --prod --no-frozen-lockfile
 ```
 
-Or use `scm-do-build-during-deployment: true` to let Azure handle dependency installation.
+Or use `scm-do-build-during-deployment: true` to let Azure handle dependency
+installation.
 
 ## Issue: Timeout During Deployment
 
@@ -313,11 +342,13 @@ Functions can't connect to Cosmos DB or Azure OpenAI.
 ### Solution
 
 1. Check that required secrets are configured in GitHub:
+
    ```bash
    gh secret list | grep AZURE
    ```
 
 2. Verify app settings are deployed:
+
    ```yaml
    - name: Set Environment Variables
      if: vars.CONFIGURE_APP_SETTINGS == 'true'
@@ -337,8 +368,10 @@ Functions can't connect to Cosmos DB or Azure OpenAI.
 ## Related Documentation
 
 - [Azure Setup Guide](.github/AZURE_SETUP.md) - Complete Azure configuration
-- [Infrastructure Setup](../apps/docs/azure-functions/INFRASTRUCTURE.md) - Azure resources setup
-- [Azure Functions Action Docs](https://github.com/Azure/functions-action) - Official action documentation
+- [Infrastructure Setup](../apps/docs/azure-functions/INFRASTRUCTURE.md) - Azure
+  resources setup
+- [Azure Functions Action Docs](https://github.com/Azure/functions-action) -
+  Official action documentation
 
 ## Support
 
@@ -352,4 +385,5 @@ If you continue to experience issues:
 
 ## Changelog
 
-- **2024-12-02**: Added fix for 401 Unauthorized error with `respect-funcignore` and `scm-do-build-during-deployment` parameters
+- **2024-12-02**: Added fix for 401 Unauthorized error with `respect-funcignore`
+  and `scm-do-build-during-deployment` parameters

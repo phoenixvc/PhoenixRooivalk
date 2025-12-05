@@ -15,7 +15,17 @@ prerequisites:
 phase: ["seed", "series-a"]
 ---
 
-import { MARKET, PERFORMANCE, PRICING, COMPETITORS, TEAM, HARDWARE, BLOCKCHAIN, ROADMAP, FUNDING } from "@site/src/data/values";
+import {
+  MARKET,
+  PERFORMANCE,
+  PRICING,
+  COMPETITORS,
+  TEAM,
+  HARDWARE,
+  BLOCKCHAIN,
+  ROADMAP,
+  FUNDING,
+} from "@site/src/data/values";
 
 ## Purpose
 
@@ -31,8 +41,10 @@ and demonstrate growth to investors and stakeholders.
 
 - **Company Stage**: Pre-revenue, development phase
 - **Funding Status**: Seeking {FUNDING.SERIES_A_TARGET} Series A
-- **Market Position**: Technology leader in {PERFORMANCE.AUTONOMY_LEVEL} autonomous counter-drone defense
-- **Key Milestones**: Technical validation, partnership development, market entry preparation
+- **Market Position**: Technology leader in {PERFORMANCE.AUTONOMY_LEVEL}
+  autonomous counter-drone defense
+- **Key Milestones**: Technical validation, partnership development, market
+  entry preparation
 
 ### Key Metrics Overview
 
@@ -50,45 +62,45 @@ and demonstrate growth to investors and stakeholders.
 
 #### Hardware Development
 
-| Component                     | Status         | Completion | Notes                                         |
-| ----------------------------- | -------------- | ---------- | --------------------------------------------- |
+| Component                     | Status         | Completion | Notes                                                            |
+| ----------------------------- | -------------- | ---------- | ---------------------------------------------------------------- |
 | **NVIDIA Jetson Integration** | ✅ Complete    | 100%       | {HARDWARE.COMPUTE_PLATFORM}, {HARDWARE.COMPUTE_TOPS} performance |
-| **Sensor Fusion System**      | 🔄 In Progress | 85%        | RF, radar, EO/IR, acoustic, LiDAR integration |
-| **VTOL Mothership Platform**  | 🔄 In Progress | 70%        | Autonomous takeoff/landing capability         |
-| **Interceptor Drones**        | 🔄 In Progress | 60%        | High-speed threat neutralization              |
-| **Ground Control Station**    | 🔄 In Progress | 80%        | Command and control interface                 |
+| **Sensor Fusion System**      | 🔄 In Progress | 85%        | RF, radar, EO/IR, acoustic, LiDAR integration                    |
+| **VTOL Mothership Platform**  | 🔄 In Progress | 70%        | Autonomous takeoff/landing capability                            |
+| **Interceptor Drones**        | 🔄 In Progress | 60%        | High-speed threat neutralization                                 |
+| **Ground Control Station**    | 🔄 In Progress | 80%        | Command and control interface                                    |
 
 #### Software Development
 
-| Component                        | Status         | Completion | Notes                            |
-| -------------------------------- | -------------- | ---------- | -------------------------------- |
-| **AI/ML Engine (YOLOv9)**        | ✅ Complete    | 100%       | {PERFORMANCE.YOLOV9_MAP} mAP detection accuracy     |
-| **Morpheus Network Integration** | 🔄 In Progress | 75%        | Decentralized AI decision engine |
-| **Cognitive Mesh Framework**     | 🔄 In Progress | 65%        | Multi-agent orchestration        |
+| Component                        | Status         | Completion | Notes                                             |
+| -------------------------------- | -------------- | ---------- | ------------------------------------------------- |
+| **AI/ML Engine (YOLOv9)**        | ✅ Complete    | 100%       | {PERFORMANCE.YOLOV9_MAP} mAP detection accuracy   |
+| **Morpheus Network Integration** | 🔄 In Progress | 75%        | Decentralized AI decision engine                  |
+| **Cognitive Mesh Framework**     | 🔄 In Progress | 65%        | Multi-agent orchestration                         |
 | **Blockchain Evidence System**   | 🔄 In Progress | 80%        | {BLOCKCHAIN.PRIMARY_CHAIN} + EtherLink dual-chain |
-| **User Interface**               | 🔄 In Progress | 70%        | Control and monitoring interface |
+| **User Interface**               | 🔄 In Progress | 70%        | Control and monitoring interface                  |
 
 ### 1.2 Performance Validation
 
 #### Technical Benchmarks
 
-| Metric                   | Target | Current | Status      |
-| ------------------------ | ------ | ------- | ----------- |
+| Metric                   | Target    | Current | Status      |
+| ------------------------ | --------- | ------- | ----------- |
 | **Response Time**        | &lt;200ms | 195ms   | ✅ Achieved |
-| **Detection Accuracy**   | >95%   | 96.2%   | ✅ Exceeded |
+| **Detection Accuracy**   | >95%      | 96.2%   | ✅ Exceeded |
 | **False Positive Rate**  | &lt;5%    | 3.8%    | ✅ Exceeded |
-| **System Uptime**        | >99%   | 99.2%   | ✅ Exceeded |
-| **GPS-Denied Operation** | Yes    | Yes     | ✅ Achieved |
+| **System Uptime**        | >99%      | 99.2%   | ✅ Exceeded |
+| **GPS-Denied Operation** | Yes       | Yes     | ✅ Achieved |
 
 #### AI Performance Metrics
 
-| Metric                 | Target   | Current  | Status       |
-| ---------------------- | -------- | -------- | ------------ |
-| **AI Inference Speed** | &lt;50ms    | 42ms     | ✅ Exceeded  |
-| **Model Accuracy**     | >95%     | 96.8%    | ✅ Exceeded  |
-| **Edge Processing**    | {HARDWARE.COMPUTE_TOPS} | {HARDWARE.COMPUTE_TOPS} | ✅ Achieved |
-| **Memory Usage**       | &lt;32GB    | 28GB     | ✅ Optimized |
-| **Power Consumption**  | &lt;100W    | 85W      | ✅ Optimized |
+| Metric                 | Target                  | Current                 | Status       |
+| ---------------------- | ----------------------- | ----------------------- | ------------ |
+| **AI Inference Speed** | &lt;50ms                | 42ms                    | ✅ Exceeded  |
+| **Model Accuracy**     | >95%                    | 96.8%                   | ✅ Exceeded  |
+| **Edge Processing**    | {HARDWARE.COMPUTE_TOPS} | {HARDWARE.COMPUTE_TOPS} | ✅ Achieved  |
+| **Memory Usage**       | &lt;32GB                | 28GB                    | ✅ Optimized |
+| **Power Consumption**  | &lt;100W                | 85W                     | ✅ Optimized |
 
 ---
 
@@ -119,22 +131,22 @@ and demonstrate growth to investors and stakeholders.
 
 #### Industry Analysis
 
-| Metric                             | Value       | Source            | Date    |
-| ---------------------------------- | ----------- | ----------------- | ------- |
-| **Total Addressable Market**       | {MARKET.CURRENT}  | Industry Reports  | Q4 2025 |
-| **Serviceable Addressable Market** | $800M       | Internal Analysis | Q4 2025 |
-| **Serviceable Obtainable Market**  | $50M        | Market Research   | Q4 2025 |
-| **Market Growth Rate**             | {MARKET.CAGR} CAGR | Industry Reports | Q4 2025 |
+| Metric                             | Value              | Source            | Date    |
+| ---------------------------------- | ------------------ | ----------------- | ------- |
+| **Total Addressable Market**       | {MARKET.CURRENT}   | Industry Reports  | Q4 2025 |
+| **Serviceable Addressable Market** | $800M              | Internal Analysis | Q4 2025 |
+| **Serviceable Obtainable Market**  | $50M               | Market Research   | Q4 2025 |
+| **Market Growth Rate**             | {MARKET.CAGR} CAGR | Industry Reports  | Q4 2025 |
 
 #### Competitive Analysis
 
-| Competitor              | Market Share | Strengths                            | Weaknesses                        |
-| ----------------------- | ------------ | ------------------------------------ | --------------------------------- |
-| **Anduril Industries**  | {COMPETITORS.ANDURIL_MARKET_SHARE} | AI capabilities, funding | High cost, network dependency |
-| **Fortem Technologies** | {COMPETITORS.FORTEM_MARKET_SHARE} | Radar technology | Limited autonomy, high cost |
-| **DroneShield**         | {COMPETITORS.DRONESHIELD_MARKET_SHARE} | Portable systems | Basic AI, limited performance |
-| **Raytheon**            | 20%          | Military contracts | Legacy systems, high cost |
-| **Phoenix Rooivalk**    | 0%           | Superior performance, cost advantage | New company, limited track record |
+| Competitor              | Market Share                           | Strengths                            | Weaknesses                        |
+| ----------------------- | -------------------------------------- | ------------------------------------ | --------------------------------- |
+| **Anduril Industries**  | {COMPETITORS.ANDURIL_MARKET_SHARE}     | AI capabilities, funding             | High cost, network dependency     |
+| **Fortem Technologies** | {COMPETITORS.FORTEM_MARKET_SHARE}      | Radar technology                     | Limited autonomy, high cost       |
+| **DroneShield**         | {COMPETITORS.DRONESHIELD_MARKET_SHARE} | Portable systems                     | Basic AI, limited performance     |
+| **Raytheon**            | 20%                                    | Military contracts                   | Legacy systems, high cost         |
+| **Phoenix Rooivalk**    | 0%                                     | Superior performance, cost advantage | New company, limited track record |
 
 ---
 
@@ -190,13 +202,13 @@ and demonstrate growth to investors and stakeholders.
 
 #### 5-Year Revenue Forecast
 
-| Year     | Revenue | Growth | Key Drivers                      |
-| -------- | ------- | ------ | -------------------------------- |
-| **2026** | {FUNDING.REVENUE_2026} | - | SBIR contracts, pilot programs |
-| **2027** | {FUNDING.REVENUE_2027} | 650% | DoD contracts, commercial pilots |
-| **2028** | {FUNDING.REVENUE_2028} | 233% | Production scale, international |
-| **2029** | {FUNDING.REVENUE_2029} | 100% | Market expansion, partnerships |
-| **2030** | {FUNDING.REVENUE_2030} | 50% | Market leadership, new products |
+| Year     | Revenue                | Growth | Key Drivers                      |
+| -------- | ---------------------- | ------ | -------------------------------- |
+| **2026** | {FUNDING.REVENUE_2026} | -      | SBIR contracts, pilot programs   |
+| **2027** | {FUNDING.REVENUE_2027} | 650%   | DoD contracts, commercial pilots |
+| **2028** | {FUNDING.REVENUE_2028} | 233%   | Production scale, international  |
+| **2029** | {FUNDING.REVENUE_2029} | 100%   | Market expansion, partnerships   |
+| **2030** | {FUNDING.REVENUE_2030} | 50%    | Market leadership, new products  |
 
 #### Revenue by Segment
 
@@ -264,12 +276,12 @@ and demonstrate growth to investors and stakeholders.
 
 #### Risk Matrix
 
-| Risk                         | Probability | Impact | Mitigation               | Status        |
-| ---------------------------- | ----------- | ------ | ------------------------ | ------------- |
-| **AI Performance**           | Medium      | High   | NVIDIA Jetson validation | 🟡 Monitoring |
+| Risk                         | Probability | Impact | Mitigation                                      | Status        |
+| ---------------------------- | ----------- | ------ | ----------------------------------------------- | ------------- |
+| **AI Performance**           | Medium      | High   | NVIDIA Jetson validation                        | 🟡 Monitoring |
 | **Blockchain Scalability**   | Low         | Medium | {BLOCKCHAIN.PRIMARY_CHAIN} {BLOCKCHAIN.TPS} TPS | 🟢 Controlled |
-| **Sensor Integration**       | Medium      | Medium | Modular architecture     | 🟡 Monitoring |
-| **Security Vulnerabilities** | Low         | High   | Zero-trust architecture  | 🟢 Controlled |
+| **Sensor Integration**       | Medium      | Medium | Modular architecture                            | 🟡 Monitoring |
+| **Security Vulnerabilities** | Low         | High   | Zero-trust architecture                         | 🟢 Controlled |
 
 ### 6.2 Business Risks
 

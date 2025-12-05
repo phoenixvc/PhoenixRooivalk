@@ -70,9 +70,11 @@ graph TB
 
 #### Edge Layer Components
 
-- **Sensor Networks**: Multi-modal sensor arrays ({HARDWARE.RF_FREQUENCY_RANGE} RF, radar, EO/IR, acoustic, LiDAR)
+- **Sensor Networks**: Multi-modal sensor arrays ({HARDWARE.RF_FREQUENCY_RANGE}
+  RF, radar, EO/IR, acoustic, LiDAR)
 - **Counter-Drone Systems**: Autonomous defense platforms
-- **Edge Computing Nodes**: {HARDWARE.COMPUTE_PLATFORM} with {HARDWARE.COMPUTE_TOPS}
+- **Edge Computing Nodes**: {HARDWARE.COMPUTE_PLATFORM} with
+  {HARDWARE.COMPUTE_TOPS}
 
 #### Blockchain Layer Components
 
@@ -94,7 +96,8 @@ graph TB
 
 **Technical Specifications**
 
-- **Throughput**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS sustained in real-world conditions
+- **Throughput**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS sustained in real-world
+  conditions
 - **Finality**: ~{BLOCKCHAIN.FINALITY} using Proof of History consensus
 - **Cost**: ~{BLOCKCHAIN.COST_PER_TX} USD per evidence anchor
 - **Reliability**: Proven mainnet performance with independent validator network
@@ -102,7 +105,8 @@ graph TB
 **Cost Efficiency Analysis**
 
 - **Per Transaction**: {BLOCKCHAIN.COST_PER_TX} per transaction
-- **Annual Cost**: {BLOCKCHAIN.ANNUAL_COST} for one transaction per second continuously
+- **Annual Cost**: {BLOCKCHAIN.ANNUAL_COST} for one transaction per second
+  continuously
 - **Comparison**: Orders of magnitude more cost-effective than other blockchains
 - **Scalability**: Handles 10,000+ evidence anchors per day per site
 
@@ -137,10 +141,12 @@ graph TB
 
 **Implementation Pattern**
 
-1. **Evidence Hashing**: {BLOCKCHAIN.HASH_ALGORITHM} hash of drone intercept evidence
+1. **Evidence Hashing**: {BLOCKCHAIN.HASH_ALGORITHM} hash of drone intercept
+   evidence
 2. **Metadata Storage**: Location, timestamp, operator ID, sensor data
 3. **On-Chain Storage**: 32-byte hash with metadata on Solana
-4. **Off-Chain Storage**: Full evidence payloads in encrypted storage (IPFS/Arweave)
+4. **Off-Chain Storage**: Full evidence payloads in encrypted storage
+   (IPFS/Arweave)
 5. **Chain of Custody**: Complete documentation from creation to presentation
 
 **Merkle Root Storage**
@@ -154,7 +160,8 @@ graph TB
 
 **Primary Chain: Solana**
 
-- **Performance**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS with {BLOCKCHAIN.FINALITY_SUB} finality
+- **Performance**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS with
+  {BLOCKCHAIN.FINALITY_SUB} finality
 - **Cost**: {BLOCKCHAIN.COST_PER_TX} per transaction
 - **Reliability**: Proven mainnet performance
 - **Ecosystem**: Mature developer tools and infrastructure
@@ -211,7 +218,8 @@ permissioned operations in military applications.
 
 **Arizona Blockchain Records**
 
-- **Presumption of Authenticity**: Blockchain records presumption of authenticity
+- **Presumption of Authenticity**: Blockchain records presumption of
+  authenticity
 - **Legal Framework**: Comprehensive blockchain evidence legislation
 - **Standards**: Clear requirements for admissibility
 
@@ -231,7 +239,8 @@ permissioned operations in military applications.
 
 **Rule 803(6) (Business Records Exception)**
 
-- **Regular Business Operations**: Blockchain maintained in regular business operations
+- **Regular Business Operations**: Blockchain maintained in regular business
+  operations
 - **Documentation**: Proper documentation of business practices
 - **Reliability**: Evidence of system reliability and accuracy
 
@@ -251,7 +260,8 @@ permissioned operations in military applications.
 
 **Consensus Mechanisms**
 
-- **Practical Byzantine Fault Tolerance (PBFT)**: Tolerates up to 1/3 compromised nodes
+- **Practical Byzantine Fault Tolerance (PBFT)**: Tolerates up to 1/3
+  compromised nodes
 - **Raft Consensus**: Leader election and log replication for ordering
 - **Proof of History**: Solana's cryptographically verifiable timestamps
 - **Hybrid Consensus**: Multi-algorithm approach for resilience
@@ -269,13 +279,13 @@ permissioned operations in military applications.
 
 **Attack Vectors Addressed**
 
-| Attack Type | Mitigation Strategy |
-|-------------|---------------------|
-| DDoS Protection | Rate limiting, distributed validators |
-| Eclipse Attacks | Network topology protection |
-| Sybil Attacks | Identity verification and validation |
-| 51% Attacks | Permissioned network, stake requirements |
-| Smart Contract Vulnerabilities | Formal verification, audits |
+| Attack Type                    | Mitigation Strategy                      |
+| ------------------------------ | ---------------------------------------- |
+| DDoS Protection                | Rate limiting, distributed validators    |
+| Eclipse Attacks                | Network topology protection              |
+| Sybil Attacks                  | Identity verification and validation     |
+| 51% Attacks                    | Permissioned network, stake requirements |
+| Smart Contract Vulnerabilities | Formal verification, audits              |
 
 ---
 
@@ -329,12 +339,12 @@ permissioned operations in military applications.
 
 ### Operational Costs
 
-| Component | Cost | Description |
-|-----------|------|-------------|
-| Transaction Costs | {BLOCKCHAIN.COST_PER_TX}/tx | Per evidence anchor |
-| Annual Cost | {BLOCKCHAIN.ANNUAL_COST} | Continuous operation (1 TPS) |
-| Storage | Minimal | Off-chain for full payloads |
-| Comparison | vs {BLOCKCHAIN.ETHEREUM_COST}/tx | Ethereum alternative |
+| Component         | Cost                             | Description                  |
+| ----------------- | -------------------------------- | ---------------------------- |
+| Transaction Costs | {BLOCKCHAIN.COST_PER_TX}/tx      | Per evidence anchor          |
+| Annual Cost       | {BLOCKCHAIN.ANNUAL_COST}         | Continuous operation (1 TPS) |
+| Storage           | Minimal                          | Off-chain for full payloads  |
+| Comparison        | vs {BLOCKCHAIN.ETHEREUM_COST}/tx | Ethereum alternative         |
 
 ### ROI Analysis
 
@@ -377,8 +387,10 @@ legally compliant evidence anchoring system. The hybrid multi-chain architecture
 combining Hyperledger Fabric for enterprise operations with Solana for
 high-performance evidence anchoring offers:
 
-- **Performance**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS with {BLOCKCHAIN.FINALITY_SUB} finality
-- **Cost Efficiency**: {BLOCKCHAIN.COST_PER_TX} per transaction with {BLOCKCHAIN.ANNUAL_COST} annual cost
+- **Performance**: {BLOCKCHAIN.TPS_REAL_WORLD} TPS with
+  {BLOCKCHAIN.FINALITY_SUB} finality
+- **Cost Efficiency**: {BLOCKCHAIN.COST_PER_TX} per transaction with
+  {BLOCKCHAIN.ANNUAL_COST} annual cost
 - **Legal Compliance**: Court-admissible evidence with international precedent
 - **Security**: Quantum-resistant with Byzantine fault tolerance
 - **Integration**: Seamless integration with Phoenix Rooivalk systems

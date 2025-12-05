@@ -178,8 +178,10 @@ export const groverUgv = {
 
 /** System Components Summary */
 export const systemComponents = {
-  "RKV-M (Mothership)": "Aerial VTOL mothership for picket, relay, and mini launch operations",
-  "RKV-I (Interceptor)": "Expendable/recoverable interceptor drones with net/other payloads",
+  "RKV-M (Mothership)":
+    "Aerial VTOL mothership for picket, relay, and mini launch operations",
+  "RKV-I (Interceptor)":
+    "Expendable/recoverable interceptor drones with net/other payloads",
   "Grover (UGV)": "Ground vehicle for logistics, launch, and comms relay",
   "Command Node": "Fixed or mobile command and control center",
   "Sensor Nodes": "Distributed detection network",

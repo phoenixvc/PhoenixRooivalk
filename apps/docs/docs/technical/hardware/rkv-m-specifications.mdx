@@ -34,22 +34,22 @@ study results. Subject to revision as development progresses.
 
 ### Pod Design
 
-| Parameter             | Specification                             |
-| --------------------- | ----------------------------------------- |
+| Parameter             | Specification                                   |
+| --------------------- | ----------------------------------------------- |
 | **Configuration**     | Ducted, single rotor, {RKV_M.BLADE_COUNT}-blade |
-| **Duct Diameter**     | {RKV_M.DUCT_DIAMETER}                     |
-| **Tip Gap**           | {RKV_M.TIP_GAP}                           |
-| **Blade Count**       | {RKV_M.BLADE_COUNT}                       |
-| **Design Philosophy** | Maximum thrust efficiency in compact form |
+| **Duct Diameter**     | {RKV_M.DUCT_DIAMETER}                           |
+| **Tip Gap**           | {RKV_M.TIP_GAP}                                 |
+| **Blade Count**       | {RKV_M.BLADE_COUNT}                             |
+| **Design Philosophy** | Maximum thrust efficiency in compact form       |
 
 ### Motor/ESC System
 
-| Parameter                 | Specification                                        |
-| ------------------------- | ---------------------------------------------------- |
-| **Motor Type**            | HV outrunner                                         |
-| **Voltage Configuration** | 16-20S LiPo                                          |
+| Parameter                 | Specification                                                 |
+| ------------------------- | ------------------------------------------------------------- |
+| **Motor Type**            | HV outrunner                                                  |
+| **Voltage Configuration** | 16-20S LiPo                                                   |
 | **Kv Selection**          | Sized to maintain tip speed {RKV_M.TIP_SPEED} at hover thrust |
-| **ESC**                   | High-voltage capable, matched to motor               |
+| **ESC**                   | High-voltage capable, matched to motor                        |
 
 ---
 
@@ -91,22 +91,22 @@ All pods capable of 0-90° tilt for transition flight
 
 ### Flight Performance
 
-| Parameter              | Target        | Notes                       |
-| ---------------------- | ------------- | --------------------------- |
-| **Max Speed**          | {RKV_M.MAX_SPEED} | Cruise configuration    |
-| **Hover Endurance**    | {RKV_M.HOVER_ENDURANCE} | Depends on payload |
-| **Cruise Endurance**   | {RKV_M.CRUISE_ENDURANCE} | Optimized flight profile |
+| Parameter              | Target                     | Notes                       |
+| ---------------------- | -------------------------- | --------------------------- |
+| **Max Speed**          | {RKV_M.MAX_SPEED}          | Cruise configuration        |
+| **Hover Endurance**    | {RKV_M.HOVER_ENDURANCE}    | Depends on payload          |
+| **Cruise Endurance**   | {RKV_M.CRUISE_ENDURANCE}   | Optimized flight profile    |
 | **Operating Altitude** | {RKV_M.OPERATING_ALTITUDE} | Primary engagement envelope |
-| **Max Altitude**       | {RKV_M.MAX_ALTITUDE} | Extended operations     |
+| **Max Altitude**       | {RKV_M.MAX_ALTITUDE}       | Extended operations         |
 
 ### Intercept Performance
 
-| Parameter               | Target             | Notes                       |
-| ----------------------- | ------------------ | --------------------------- |
-| **Time to Launch**      | {RKV_M.TIME_TO_LAUNCH} | From alert to airborne  |
-| **Intercept Range**     | {RKV_M.INTERCEPT_RANGE} | Effective engagement radius |
-| **Target Closure Rate** | {RKV_M.CLOSURE_RATE} combined | Relative velocity |
-| **Maneuverability**     | {RKV_M.YAW_RATE} yaw rate | High-G capable        |
+| Parameter               | Target                        | Notes                       |
+| ----------------------- | ----------------------------- | --------------------------- |
+| **Time to Launch**      | {RKV_M.TIME_TO_LAUNCH}        | From alert to airborne      |
+| **Intercept Range**     | {RKV_M.INTERCEPT_RANGE}       | Effective engagement radius |
+| **Target Closure Rate** | {RKV_M.CLOSURE_RATE} combined | Relative velocity           |
+| **Maneuverability**     | {RKV_M.YAW_RATE} yaw rate     | High-G capable              |
 
 ---
 
@@ -161,21 +161,21 @@ All pods capable of 0-90° tilt for transition flight
 
 ### Design Constraints
 
-| Parameter         | Requirement   | Rationale                       |
-| ----------------- | ------------- | ------------------------------- |
-| **Tip Speed**     | {RKV_M.TIP_SPEED} | Noise reduction, efficiency |
-| **Tip Gap**       | {RKV_M.TIP_GAP} nominal | Duct efficiency optimization |
-| **Blade Loading** | Moderate      | Responsive control authority    |
-| **Disk Loading**  | 250-350 N/m²  | Balance hover/cruise efficiency |
+| Parameter         | Requirement             | Rationale                       |
+| ----------------- | ----------------------- | ------------------------------- |
+| **Tip Speed**     | {RKV_M.TIP_SPEED}       | Noise reduction, efficiency     |
+| **Tip Gap**       | {RKV_M.TIP_GAP} nominal | Duct efficiency optimization    |
+| **Blade Loading** | Moderate                | Responsive control authority    |
+| **Disk Loading**  | 250-350 N/m²            | Balance hover/cruise efficiency |
 
 ### Acoustic Considerations
 
-| Source        | Mitigation                         |
-| ------------- | ---------------------------------- |
+| Source        | Mitigation                                           |
+| ------------- | ---------------------------------------------------- |
 | Blade passing | {RKV_M.BLADE_COUNT}-blade design (reduced harmonics) |
-| Tip vortex    | Ducted configuration               |
-| Motor noise   | Outrunner (external rotor shields) |
-| ESC switching | High-frequency PWM (>20 kHz)       |
+| Tip vortex    | Ducted configuration                                 |
+| Motor noise   | Outrunner (external rotor shields)                   |
+| ESC switching | High-frequency PWM (>20 kHz)                         |
 
 ---
 
@@ -202,11 +202,11 @@ All pods capable of 0-90° tilt for transition flight
 
 ### Communication
 
-| Link             | Purpose              | Range |
-| ---------------- | -------------------- | ----- |
-| **C2 Link**      | Command/control      | 2 km  |
+| Link             | Purpose              | Range                   |
+| ---------------- | -------------------- | ----------------------- |
+| **C2 Link**      | Command/control      | 2 km                    |
 | **Mesh Network** | Swarm coordination   | {RKV_M.INTERCEPT_RANGE} |
-| **Emergency**    | Lost link procedures | N/A   |
+| **Emergency**    | Lost link procedures | N/A                     |
 
 ---
 
@@ -223,11 +223,11 @@ All pods capable of 0-90° tilt for transition flight
 
 ### Assembly
 
-| Phase     | Time          | Notes                       |
-| --------- | ------------- | --------------------------- |
-| Airframe  | 2 hours       | Pre-assembled subassemblies |
-| Avionics  | 1 hour        | Modular harnesses           |
-| Testing   | 30 minutes    | Automated checkout          |
+| Phase     | Time                      | Notes                       |
+| --------- | ------------------------- | --------------------------- |
+| Airframe  | 2 hours                   | Pre-assembled subassemblies |
+| Avionics  | 1 hour                    | Modular harnesses           |
+| Testing   | 30 minutes                | Automated checkout          |
 | **Total** | **{RKV_M.ASSEMBLY_TIME}** | Target for production units |
 
 ---
@@ -276,5 +276,5 @@ All pods capable of 0-90° tilt for transition flight
 ---
 
 _This document represents initial trade study results for the RKV-M interceptor
-platform. Specifications subject to change as development progresses. &copy; 2025
-Phoenix Rooivalk. All rights reserved._
+platform. Specifications subject to change as development progresses. &copy;
+2025 Phoenix Rooivalk. All rights reserved._

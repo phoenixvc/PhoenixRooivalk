@@ -25,9 +25,7 @@ export interface SlideTemplateConfig {
 /**
  * Auto-number slides - takes slides without numbers and assigns them sequentially
  */
-export function autoNumberSlides(
-  slides: Omit<Slide, "number">[],
-): Slide[] {
+export function autoNumberSlides(slides: Omit<Slide, "number">[]): Slide[] {
   return slides.map((slide, index) => ({
     ...slide,
     number: index + 1,

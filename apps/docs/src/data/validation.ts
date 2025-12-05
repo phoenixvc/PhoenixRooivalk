@@ -7,7 +7,11 @@
 
 import { market, marketEvents, tam } from "./market";
 import { performance, autonomyLevel, environmentalSpecs } from "./performance";
-import { hardwarePricing, financialProjections, fundingRounds } from "./pricing";
+import {
+  hardwarePricing,
+  financialProjections,
+  fundingRounds,
+} from "./pricing";
 import { jetsonOrin, sensorSuite, netLauncher } from "./hardware";
 import { solana, x402Protocol, blockchainStrategy } from "./blockchain";
 import { founders, companyStructure, contact } from "./team";

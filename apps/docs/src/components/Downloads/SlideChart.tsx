@@ -91,9 +91,23 @@ function BarChart({
     >
       <title>Bar chart visualization</title>
       {/* Y-axis */}
-      <line x1="50" y1="20" x2="50" y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
+      <line
+        x1="50"
+        y1="20"
+        x2="50"
+        y2={chartHeight + 20}
+        stroke="#6B7280"
+        strokeWidth="1"
+      />
       {/* X-axis */}
-      <line x1="50" y1={chartHeight + 20} x2={width - 10} y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
+      <line
+        x1="50"
+        y1={chartHeight + 20}
+        x2={width - 10}
+        y2={chartHeight + 20}
+        stroke="#6B7280"
+        strokeWidth="1"
+      />
 
       {/* Bars */}
       {data.map((point, index) => {
@@ -184,15 +198,36 @@ function LineChart({
     >
       <title>Line chart visualization</title>
       {/* Y-axis */}
-      <line x1="50" y1="20" x2="50" y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
+      <line
+        x1="50"
+        y1="20"
+        x2="50"
+        y2={chartHeight + 20}
+        stroke="#6B7280"
+        strokeWidth="1"
+      />
       {/* X-axis */}
-      <line x1="50" y1={chartHeight + 20} x2={width - 10} y2={chartHeight + 20} stroke="#6B7280" strokeWidth="1" />
+      <line
+        x1="50"
+        y1={chartHeight + 20}
+        x2={width - 10}
+        y2={chartHeight + 20}
+        stroke="#6B7280"
+        strokeWidth="1"
+      />
 
       {/* Area fill */}
       <path d={areaPath} fill={color} fillOpacity="0.1" />
 
       {/* Line */}
-      <path d={pathData} stroke={color} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d={pathData}
+        stroke={color}
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
 
       {/* Points and labels */}
       {data.map((point, index) => {
@@ -202,15 +237,32 @@ function LineChart({
         return (
           <g key={index}>
             {/* Point */}
-            <circle cx={x} cy={y} r="5" fill={color} className="transition-transform duration-300 hover:scale-125 origin-center" style={{ transformOrigin: `${x}px ${y}px` }} />
+            <circle
+              cx={x}
+              cy={y}
+              r="5"
+              fill={color}
+              className="transition-transform duration-300 hover:scale-125 origin-center"
+              style={{ transformOrigin: `${x}px ${y}px` }}
+            />
             {/* Value label */}
             {showValues && (
-              <text x={x} y={y - 10} textAnchor="middle" className="text-xs fill-gray-300">
+              <text
+                x={x}
+                y={y - 10}
+                textAnchor="middle"
+                className="text-xs fill-gray-300"
+              >
                 {point.value}
               </text>
             )}
             {/* X-axis label */}
-            <text x={x} y={chartHeight + 38} textAnchor="middle" className="text-xs fill-gray-400">
+            <text
+              x={x}
+              y={chartHeight + 38}
+              textAnchor="middle"
+              className="text-xs fill-gray-400"
+            >
               {point.label}
             </text>
           </g>
@@ -245,14 +297,17 @@ function PieChart({
   const innerRadius = isDonut ? radius * 0.6 : 0;
 
   // Precompute segments with start/end angles (immutable)
-  const segments = data.reduce<Array<{
-    point: ChartDataPoint;
-    index: number;
-    startAngle: number;
-    endAngle: number;
-    angle: number;
-  }>>((acc, point, index) => {
-    const prevEndAngle = acc.length > 0 ? acc[acc.length - 1].endAngle : -Math.PI / 2;
+  const segments = data.reduce<
+    Array<{
+      point: ChartDataPoint;
+      index: number;
+      startAngle: number;
+      endAngle: number;
+      angle: number;
+    }>
+  >((acc, point, index) => {
+    const prevEndAngle =
+      acc.length > 0 ? acc[acc.length - 1].endAngle : -Math.PI / 2;
     const angle = (point.value / total) * 2 * Math.PI;
     acc.push({
       point,

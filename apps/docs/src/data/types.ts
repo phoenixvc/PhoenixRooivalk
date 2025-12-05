@@ -67,7 +67,7 @@ export function formatRange(range: RangeValue): string {
 
 export function formatCurrency(
   value: CurrencyValue,
-  currency: "usd" | "zar" = "usd"
+  currency: "usd" | "zar" = "usd",
 ): string {
   const amount = currency === "zar" && value.zar ? value.zar : value.usd;
   const symbol = currency === "zar" ? "R" : "$";

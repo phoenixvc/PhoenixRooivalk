@@ -194,7 +194,8 @@ gh workflow run deploy-azure-functions.yml
 
 ## Troubleshooting
 
-For detailed troubleshooting of deployment issues, including 401 Unauthorized errors, see [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md).
+For detailed troubleshooting of deployment issues, including 401 Unauthorized
+errors, see [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md).
 
 ### Missing Variables/Secrets
 
@@ -208,7 +209,8 @@ provide clear error messages with setup instructions.
    `az resource list --resource-group rg-phoenix-rooivalk`
 3. Test connectivity:
    `az functionapp show --name func-phoenix-rooivalk --resource-group rg-phoenix-rooivalk`
-4. See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for common deployment issues and solutions
+4. See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for common
+   deployment issues and solutions
 
 ### Wrong Variable Type
 
@@ -255,14 +257,21 @@ names.
 
 ## Troubleshooting
 
-If you're experiencing issues with Azure Functions deployment being skipped or failing:
+If you're experiencing issues with Azure Functions deployment being skipped or
+failing:
 
-1. **Check Secret/Variable Configuration**: Ensure all required items are set as the correct type (Secret vs Variable)
-2. **Verify Secret Content**: Ensure `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` contains the complete XML (not empty)
-3. **Check for Typos**: Variable names must match exactly (no extra prefixes like 'v')
-4. **Review Workflow Logs**: The workflows now include detailed diagnostic output showing what's missing
+1. **Check Secret/Variable Configuration**: Ensure all required items are set as
+   the correct type (Secret vs Variable)
+2. **Verify Secret Content**: Ensure `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+   contains the complete XML (not empty)
+3. **Check for Typos**: Variable names must match exactly (no extra prefixes
+   like 'v')
+4. **Review Workflow Logs**: The workflows now include detailed diagnostic
+   output showing what's missing
 
-See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for detailed troubleshooting steps, including:
+See [AZURE_TROUBLESHOOTING.md](AZURE_TROUBLESHOOTING.md) for detailed
+troubleshooting steps, including:
+
 - "Azure Functions secrets not configured" despite secrets being set
 - Variables set as secrets instead of variables
 - Common typos and unusual values

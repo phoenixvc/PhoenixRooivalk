@@ -69,19 +69,22 @@ export const quarterlyRoadmap: TimelinePoint[] = [
   {
     quarter: "Q2",
     year: 2026,
-    description: "EU certification achieved, 3 installations operational, x402 enterprise contracts",
+    description:
+      "EU certification achieved, 3 installations operational, x402 enterprise contracts",
     status: "planned",
   },
   {
     quarter: "Q3",
     year: 2026,
-    description: "Series A fundraise with proven revenue, 5 operational installations",
+    description:
+      "Series A fundraise with proven revenue, 5 operational installations",
     status: "planned",
   },
   {
     quarter: "Q4",
     year: 2026,
-    description: "Canada expansion begins, manufacturing partnerships established",
+    description:
+      "Canada expansion begins, manufacturing partnerships established",
     status: "planned",
   },
   {

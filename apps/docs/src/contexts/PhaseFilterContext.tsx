@@ -88,7 +88,13 @@ export const PHASE_INFO: Record<
 const PHASE_FILTER_KEY = "phoenix-docs-phase-filter";
 
 // Valid phase values for validation
-const VALID_PHASES: Phase[] = ["seed", "series-a", "series-b", "series-c", "scale"];
+const VALID_PHASES: Phase[] = [
+  "seed",
+  "series-a",
+  "series-b",
+  "series-c",
+  "scale",
+];
 
 interface PhaseFilterContextType {
   // Current filter
@@ -107,13 +113,17 @@ interface PhaseFilterContextType {
   phases: Phase[];
 }
 
-const PhaseFilterContext = createContext<PhaseFilterContextType | undefined>(undefined);
+const PhaseFilterContext = createContext<PhaseFilterContextType | undefined>(
+  undefined,
+);
 
 interface PhaseFilterProviderProps {
   children: ReactNode;
 }
 
-export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): React.ReactElement {
+export function PhaseFilterProvider({
+  children,
+}: PhaseFilterProviderProps): React.ReactElement {
   // Initialize from localStorage if available
   const [currentPhase, setCurrentPhaseState] = useState<PhaseFilter>(() => {
     if (typeof window !== "undefined") {
@@ -145,7 +155,7 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
       // Check if the doc's phases include the current filter
       return docPhases.includes(currentPhase);
     },
-    [currentPhase]
+    [currentPhase],
   );
 
   // Get label for a phase
@@ -162,13 +172,33 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
   const phaseOptions = useMemo(
     () => [
       { value: "all" as PhaseFilter, label: "All Phases", shortLabel: "All" },
-      { value: "seed" as PhaseFilter, label: "Seed: SkySnare Launch", shortLabel: "Seed" },
-      { value: "series-a" as PhaseFilter, label: "Series A: AeroNet & DoD", shortLabel: "Series A" },
-      { value: "series-b" as PhaseFilter, label: "Series B: Ground Systems", shortLabel: "Series B" },
-      { value: "series-c" as PhaseFilter, label: "Series C: Aerial Platform", shortLabel: "Series C" },
-      { value: "scale" as PhaseFilter, label: "Scale: Global Deployment", shortLabel: "Scale" },
+      {
+        value: "seed" as PhaseFilter,
+        label: "Seed: SkySnare Launch",
+        shortLabel: "Seed",
+      },
+      {
+        value: "series-a" as PhaseFilter,
+        label: "Series A: AeroNet & DoD",
+        shortLabel: "Series A",
+      },
+      {
+        value: "series-b" as PhaseFilter,
+        label: "Series B: Ground Systems",
+        shortLabel: "Series B",
+      },
+      {
+        value: "series-c" as PhaseFilter,
+        label: "Series C: Aerial Platform",
+        shortLabel: "Series C",
+      },
+      {
+        value: "scale" as PhaseFilter,
+        label: "Scale: Global Deployment",
+        shortLabel: "Scale",
+      },
     ],
-    []
+    [],
   );
 
   // Sync with localStorage on mount
@@ -191,10 +221,21 @@ export function PhaseFilterProvider({ children }: PhaseFilterProviderProps): Rea
       phaseOptions,
       phases: VALID_PHASES,
     }),
-    [currentPhase, setCurrentPhase, isPhaseMatch, getPhaseLabel, getPhaseInfo, phaseOptions]
+    [
+      currentPhase,
+      setCurrentPhase,
+      isPhaseMatch,
+      getPhaseLabel,
+      getPhaseInfo,
+      phaseOptions,
+    ],
   );
 
-  return <PhaseFilterContext.Provider value={value}>{children}</PhaseFilterContext.Provider>;
+  return (
+    <PhaseFilterContext.Provider value={value}>
+      {children}
+    </PhaseFilterContext.Provider>
+  );
 }
 
 export function usePhaseFilter(): PhaseFilterContextType {

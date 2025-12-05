@@ -25,8 +25,9 @@ import {
 
 Phoenix Rooivalk is a **defensive system** that detects, classifies, and
 responds to hostile small drones on its own when radios and backhaul are jammed.
-It makes **policy-bounded, "soft kill first" decisions at the edge** in {PERFORMANCE.RESPONSE_TIME} (p50) / ≤250 ms (p95) and records tamper-evident receipts after the fact for
-accountability.
+It makes **policy-bounded, "soft kill first" decisions at the edge** in
+{PERFORMANCE.RESPONSE_TIME} (p50) / ≤250 ms (p95) and records tamper-evident
+receipts after the fact for accountability.
 
 When communications are available, it can optionally share sanitized,
 need-to-know alerts with partners; **real-time action never waits on external
@@ -181,12 +182,12 @@ architectures fail under EW. Most systems degrade to detect-only when comms die.
 
 ### Key Differentiators
 
-| Feature                  | Capability                                                                                   |
-| ------------------------ | -------------------------------------------------------------------------------------------- |
-| **Network independence** | At the edge; ledger and interop strictly off-path                                            |
-| **RF silent detection**  | Via multi-modal fusion                                                                       |
-| **Swarm handling**       | ≥50 concurrent tracks (baseline)                                                             |
-| **Coalition sharing**    | Classification-aware controls; Link 16/MADL receive only initially                           |
+| Feature                  | Capability                                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Network independence** | At the edge; ledger and interop strictly off-path                                                           |
+| **RF silent detection**  | Via multi-modal fusion                                                                                      |
+| **Swarm handling**       | ≥50 concurrent tracks (baseline)                                                                            |
+| **Coalition sharing**    | Classification-aware controls; Link 16/MADL receive only initially                                          |
 | **Evidence-grade audit** | Fabric: hashes & metadata on chain, full evidence in off-chain WORM stores; ~{BLOCKCHAIN.TPS_SUSTAINED} TPS |
 
 ---
@@ -288,12 +289,12 @@ receipts.
 
 ## Investment & Decision Points
 
-| Phase                  | Investment | Focus                                 |
-| ---------------------- | ---------- | ------------------------------------- |
-| Seed (Concept)         | {CAPITAL.SEED_ROUND}      | Architecture validation, simulation   |
-| Series A (Prototype)   | {FUNDING.PHASE_2_SERIES_A}     | Hardware demo, lab tests              |
-| Series B (Integration) | {FUNDING.PHASE_3_SERIES_B}    | Field trials, certification readiness |
-| **Total to TRL7**      | **{FUNDING.TOTAL_TO_TRL7}**| Over {FUNDING.TOTAL_TIMELINE}                         |
+| Phase                  | Investment                  | Focus                                 |
+| ---------------------- | --------------------------- | ------------------------------------- |
+| Seed (Concept)         | {CAPITAL.SEED_ROUND}        | Architecture validation, simulation   |
+| Series A (Prototype)   | {FUNDING.PHASE_2_SERIES_A}  | Hardware demo, lab tests              |
+| Series B (Integration) | {FUNDING.PHASE_3_SERIES_B}  | Field trials, certification readiness |
+| **Total to TRL7**      | **{FUNDING.TOTAL_TO_TRL7}** | Over {FUNDING.TOTAL_TIMELINE}         |
 
 ---
 
@@ -329,7 +330,7 @@ receipts.
 
 | Gate   | Payment         | Must Deliver              | Success Criteria                              |
 | ------ | --------------- | ------------------------- | --------------------------------------------- |
-| Gate 1 | $1M (Month 3)   | Simulation + Architecture | 100-drone sim working, &lt;20ms latency          |
+| Gate 1 | $1M (Month 3)   | Simulation + Architecture | 100-drone sim working, &lt;20ms latency       |
 | Gate 2 | $1M (Month 6)   | Hardware Demo             | Physical detection proven, blockchain logging |
 | Gate 3 | $750K (Month 8) | Field Test                | 5 real drones tracked simultaneously          |
 | Gate 4 | $750K (Month 9) | Full Package              | All docs, patents filed, Series A ready       |
@@ -452,7 +453,8 @@ hardware, patents, proven algorithms, and the team that built it.
 
 ### Power Consumption
 
-- {HARDWARE.POWER_TYPICAL}-{HARDWARE.POWER_PEAK} per node ({HARDWARE.COMPUTE_PLATFORM} class)
+- {HARDWARE.POWER_TYPICAL}-{HARDWARE.POWER_PEAK} per node
+  ({HARDWARE.COMPUTE_PLATFORM} class)
 - Earlier internal studies referenced kW-class configurations for heavy/legacy
   payloads; this proposal standardizes on Orin-class nodes
 

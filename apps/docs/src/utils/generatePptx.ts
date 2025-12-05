@@ -137,7 +137,9 @@ function parseRichTextForPptx(
     }
   }
 
-  return runs.length > 0 ? runs : [{ text, options: { color: baseColor, fontSize } }];
+  return runs.length > 0
+    ? runs
+    : [{ text, options: { color: baseColor, fontSize } }];
 }
 
 /**
@@ -814,9 +816,7 @@ export async function generatePptx(
         });
 
         // Highlights
-        const highlightText = member.highlights
-          .map((h) => `• ${h}`)
-          .join("\n");
+        const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
           x: x + 0.1,
           y: y + 1.5,
@@ -831,7 +831,8 @@ export async function generatePptx(
 
       // Key points below team cards
       if (slide.keyPoints.length > 0) {
-        const keyPointsY = startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
+        const keyPointsY =
+          startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
 
         contentSlide.addText("Key Points", {
           x: 0.5,

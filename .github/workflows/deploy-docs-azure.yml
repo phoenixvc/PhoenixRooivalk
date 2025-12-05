@@ -191,7 +191,9 @@ jobs:
 
           # Azure services configuration
           # AZURE_FUNCTIONS_BASE_URL can be either a secret or a variable (variables take precedence)
-          AZURE_FUNCTIONS_BASE_URL: ${{ vars.AZURE_FUNCTIONS_BASE_URL || secrets.AZURE_FUNCTIONS_BASE_URL }}
+          AZURE_FUNCTIONS_BASE_URL:
+            ${{ vars.AZURE_FUNCTIONS_BASE_URL ||
+            secrets.AZURE_FUNCTIONS_BASE_URL }}
           AZURE_APP_INSIGHTS_CONNECTION_STRING:
             ${{ secrets.AZURE_APP_INSIGHTS_CONNECTION_STRING }}
 

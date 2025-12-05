@@ -365,10 +365,7 @@ export const demoPitchSlides: Slide[] = [
       },
       {
         text: "**Round status:** $350K committed (36%)",
-        subPoints: [
-          "Lead investor confirmed",
-          "Closing by **end of Q4 2025**",
-        ],
+        subPoints: ["Lead investor confirmed", "Closing by **end of Q4 2025**"],
       },
     ],
     speakerNotes:

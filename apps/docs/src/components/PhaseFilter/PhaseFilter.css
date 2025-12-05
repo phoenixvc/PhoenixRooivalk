@@ -7,19 +7,19 @@
   /* Seed phase */
   --phase-seed-bg: #dbeafe;
   --phase-seed-fg: #1e40af;
-  
+
   /* Series A phase */
   --phase-series-a-bg: #fef3c7;
   --phase-series-a-fg: #92400e;
-  
+
   /* Series B phase */
   --phase-series-b-bg: #d1fae5;
   --phase-series-b-fg: #065f46;
-  
+
   /* Series C phase */
   --phase-series-c-bg: #fae8ff;
   --phase-series-c-fg: #86198f;
-  
+
   /* Scale phase */
   --phase-scale-bg: #fee2e2;
   --phase-scale-fg: #991b1b;
@@ -29,16 +29,16 @@
 [data-theme="dark"] {
   --phase-seed-bg: #1e3a5f;
   --phase-seed-fg: #93c5fd;
-  
+
   --phase-series-a-bg: #78350f;
   --phase-series-a-fg: #fcd34d;
-  
+
   --phase-series-b-bg: #064e3b;
   --phase-series-b-fg: #6ee7b7;
-  
+
   --phase-series-c-bg: #701a75;
   --phase-series-c-fg: #f5d0fe;
-  
+
   --phase-scale-bg: #7f1d1d;
   --phase-scale-fg: #fecaca;
 }

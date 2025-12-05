@@ -227,33 +227,64 @@ export const TEAM = {
   CTO_FULL_NAME: "Hans Jurgens (Jurie) Smit",
   CTO_TITLE: "Co-Founder & CTO",
   CTO_LINKEDIN: "https://www.linkedin.com/in/juriesmit/",
-  CTO_BACKGROUND: "Systems Engineer & AI Architect, 15+ years fintech, citizen platforms, multi-tenant SaaS",
-  CTO_EDUCATION: "B.Eng Industrial-Electronic (Stellenbosch), B.Com Quantitative Management (UNISA)",
-  CTO_EXPERTISE: ["Edge AI/ML", "System Architecture", "Full-Stack Development", "Agile Methodologies"],
+  CTO_BACKGROUND:
+    "Systems Engineer & AI Architect, 15+ years fintech, citizen platforms, multi-tenant SaaS",
+  CTO_EDUCATION:
+    "B.Eng Industrial-Electronic (Stellenbosch), B.Com Quantitative Management (UNISA)",
+  CTO_EXPERTISE: [
+    "Edge AI/ML",
+    "System Architecture",
+    "Full-Stack Development",
+    "Agile Methodologies",
+  ],
 
   CEO_NAME: "Martyn Redelinghuys",
   CEO_FULL_NAME: "Martyn Redelinghuys",
   CEO_TITLE: "Co-Founder & CEO",
   CEO_LINKEDIN: "https://www.linkedin.com/in/martynrede/",
-  CEO_BACKGROUND: "20+ years energy, mining, defense. R500M+ portfolio management. Executive Project Manager.",
+  CEO_BACKGROUND:
+    "20+ years energy, mining, defense. R500M+ portfolio management. Executive Project Manager.",
   CEO_EDUCATION: "MBA (GIBS), B.Eng Electrical & Electronic (Stellenbosch)",
-  CEO_EXPERTISE: ["Project Management", "Energy Strategy", "Business Development", "Capital Projects"],
-  CEO_CERTIFICATIONS: ["Certified Energy Manager (CEM)", "Certified Measurement & Verification Professional (CMVP)"],
+  CEO_EXPERTISE: [
+    "Project Management",
+    "Energy Strategy",
+    "Business Development",
+    "Capital Projects",
+  ],
+  CEO_CERTIFICATIONS: [
+    "Certified Energy Manager (CEM)",
+    "Certified Measurement & Verification Professional (CMVP)",
+  ],
 
   // Additional Team Members
   MEMBER_3_NAME: "Pieter La Grange",
   MEMBER_3_TITLE: "Co-Founder & Hardware Lead",
   MEMBER_3_LINKEDIN: "https://www.linkedin.com/in/pieterlagrange/",
-  MEMBER_3_BACKGROUND: "Electronics Design Engineer at Snuza, 15+ years embedded systems & medical devices",
+  MEMBER_3_BACKGROUND:
+    "Electronics Design Engineer at Snuza, 15+ years embedded systems & medical devices",
   MEMBER_3_EDUCATION: "B.Eng Electrical & Electronics (Stellenbosch)",
-  MEMBER_3_EXPERTISE: ["Embedded Firmware", "Hardware Design", "Low-Power ARM", "BLE/WiFi", "RTOS"],
+  MEMBER_3_EXPERTISE: [
+    "Embedded Firmware",
+    "Hardware Design",
+    "Low-Power ARM",
+    "BLE/WiFi",
+    "RTOS",
+  ],
 
   MEMBER_4_NAME: "Eben Maré",
   MEMBER_4_TITLE: "Co-Founder & CFO",
   MEMBER_4_LINKEDIN: "https://www.linkedin.com/in/ebenmare/",
-  MEMBER_4_BACKGROUND: "15+ years investment banking, private equity, quantitative finance. Former Head Quant at Deloitte, CIO experience.",
-  MEMBER_4_EDUCATION: "BSc (Hons) Operations Research (UNISA), BSc Applied Mathematics (University of Pretoria)",
-  MEMBER_4_EXPERTISE: ["Private Equity", "Investment Management", "Quantitative Modeling", "Algorithmic Trading", "Derivatives"],
+  MEMBER_4_BACKGROUND:
+    "15+ years investment banking, private equity, quantitative finance. Former Head Quant at Deloitte, CIO experience.",
+  MEMBER_4_EDUCATION:
+    "BSc (Hons) Operations Research (UNISA), BSc Applied Mathematics (University of Pretoria)",
+  MEMBER_4_EXPERTISE: [
+    "Private Equity",
+    "Investment Management",
+    "Quantitative Modeling",
+    "Algorithmic Trading",
+    "Derivatives",
+  ],
 
   // Team Stats
   COMBINED_EXPERIENCE: "60+ years",

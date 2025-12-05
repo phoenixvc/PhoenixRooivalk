@@ -75,7 +75,8 @@ export const performance = {
         value: 65.2,
         unit: "%",
         confidence: "verified",
-        notes: "Baseline YOLOv9 on Jetson Nano at 30+ FPS - not our production target",
+        notes:
+          "Baseline YOLOv9 on Jetson Nano at 30+ FPS - not our production target",
       } as DataPoint,
     },
 
@@ -111,7 +112,8 @@ export const performance = {
     } as RangeValue,
 
     // Note about older docs
-    _legacy: "Some older docs show 3-5km - that was extended config, not standard",
+    _legacy:
+      "Some older docs show 3-5km - that was extended config, not standard",
   },
 
   /** Concurrent target handling */
@@ -159,7 +161,8 @@ export const performance = {
 /** SAE Autonomy Level */
 export const autonomyLevel = {
   level: 4,
-  description: "High Automation - System performs all driving tasks under certain conditions",
+  description:
+    "High Automation - System performs all driving tasks under certain conditions",
   standard: "SAE J3016",
   capabilities: [
     "Autonomous threat detection",
@@ -225,7 +228,11 @@ export const performanceComparison = {
   headers: ["Metric", "Phoenix Rooivalk", "Typical Competitor"],
   rows: [
     ["Response Time", performance.responseTime.formatted, "5-30 seconds"],
-    ["Detection Accuracy", `${performance.accuracy.detection.value}%`, "85-95%"],
+    [
+      "Detection Accuracy",
+      `${performance.accuracy.detection.value}%`,
+      "85-95%",
+    ],
     ["Offline Capable", "Yes", "No/Limited"],
     ["Blockchain Evidence", "Yes", "No"],
     ["Detection Range", performance.detectionRange.formatted, "1-3 km"],
