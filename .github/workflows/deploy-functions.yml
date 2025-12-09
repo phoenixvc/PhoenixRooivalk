@@ -37,10 +37,10 @@ jobs:
         working-directory: apps/docs/functions
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -67,15 +67,15 @@ jobs:
         working-directory: apps/docs
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4.1.3
+        uses: actions/download-artifact@v6
         with:
           name: functions-build
           path: apps/docs/functions/lib
@@ -96,7 +96,7 @@ jobs:
 
       - name: Authenticate to Firebase
         if: steps.check_secrets.outputs.secrets_available == 'true'
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
@@ -163,10 +163,10 @@ jobs:
         working-directory: apps/docs/functions
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
