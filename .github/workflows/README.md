@@ -2,6 +2,26 @@
 
 This directory contains the CI/CD workflows for the Phoenix Rooivalk project.
 
+## Prerequisites
+
+⚠️ **Important**: Azure deployment workflows require Azure infrastructure to be deployed **first** before they can run successfully.
+
+### First-Time Setup
+
+If you see workflows being **skipped** with a notice about missing secrets:
+
+1. This is **expected behavior** - the workflows will automatically skip until infrastructure is deployed
+2. Follow the setup guide: `.github/DEPLOYMENT_SEQUENCE.md`
+3. Quick start:
+   ```bash
+   cd infra/azure
+   ./scripts/setup-all.sh dev eastus
+   ```
+4. After infrastructure is deployed, configure the deployment secrets in GitHub
+5. Workflows will then run automatically on the next push/PR
+
+The workflows will show as **skipped** (not failed) when secrets are missing, which is the correct behavior.
+
 ## Deployment Environments
 
 ### Environment Naming
@@ -34,6 +54,7 @@ Deploys the Next.js marketing website to Azure Static Web Apps.
 - **Triggers**: Push to `main`, Pull Requests, Manual workflow dispatch
 - **Build Output**: `apps/marketing/out`
 - **Deployment Timeout**: 15 minutes
+- **Behavior**: Skips automatically if `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN` secret is not configured
 
 ### Documentation Site (`deploy-docs-azure.yml`)
 
@@ -42,7 +63,8 @@ Deploys the Docusaurus documentation site to Azure Static Web Apps.
 - **Triggers**: Push to `main`, Pull Requests, Manual workflow dispatch
 - **Build Output**: `apps/docs/build`
 - **Deployment Timeout**: 15 minutes
-- **Additional**: Deploys Azure Functions on main branch pushes
+- **Behavior**: Skips automatically if `AZURE_STATIC_WEB_APPS_API_TOKEN` secret is not configured
+- **Additional**: Deploys Azure Functions on main branch pushes (if configured)
 
 ## Deployment Timeout
 

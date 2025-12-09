@@ -18,7 +18,7 @@ env:
   OUTPUT_LOCATION: "build"
 
 jobs:
-  # Fail fast if required secrets are missing
+  # Check if required secrets are configured
   validate-secrets:
     runs-on: ubuntu-latest
     name: Validate Secrets
@@ -29,12 +29,28 @@ jobs:
       - name: Check required secrets
         id: check
         run: |
-          MISSING=""
           MISCONFIG_WARNINGS=""
 
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
-            MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "has-swa-token=false" >> $GITHUB_OUTPUT
+            echo "::notice::⏭️ Skipping deployment - Azure infrastructure not yet configured"
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "ℹ️  Azure Infrastructure Not Yet Configured"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo ""
+            echo "This workflow requires Azure infrastructure to be deployed first."
+            echo "The deployment will be skipped until secrets are configured."
+            echo ""
+            echo "📖 Setup guide: .github/DEPLOYMENT_SEQUENCE.md"
+            echo ""
+            echo "Quick start:"
+            echo "  1. Deploy Azure infrastructure: cd infra/azure && ./scripts/setup-all.sh dev eastus"
+            echo "  2. Extract token: az staticwebapp secrets list --name <app-name> --query 'properties.apiKey' -o tsv"
+            echo "  3. Add to GitHub: gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body \"<token>\""
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           else
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
           fi
@@ -82,19 +98,7 @@ jobs:
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else
-              echo "::error::AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret is NOT configured or is EMPTY"
-              echo "::error::Functions deployment will be skipped"
-              echo "::error::"
-              echo "::error::To fix this issue:"
-              echo "::error::  1. Go to Azure Portal → Your Function App → Get publish profile"
-              echo "::error::  2. Download the .PublishSettings XML file"
-              echo "::error::  3. Go to GitHub Settings → Secrets and variables → Actions → Secrets tab"
-              echo "::error::  4. Click 'New repository secret'"
-              echo "::error::  5. Name: AZURE_FUNCTIONAPP_PUBLISH_PROFILE"
-              echo "::error::  6. Value: Paste the ENTIRE contents of the XML file"
-              echo "::error::  7. Ensure there are no extra spaces or newlines at the beginning/end"
-              echo "::error::"
-              echo "::error::Alternatively, run: gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE < publish-profile.xml"
+              echo "::notice::AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret is NOT configured - Functions deployment will be skipped"
               echo "has-functions-profile=false" >> $GITHUB_OUTPUT
             fi
           else
@@ -129,55 +133,16 @@ jobs:
             echo "::warning::Optional secrets missing (app will run in degraded mode):${WARNINGS}"
           fi
 
-          # Fail if required secrets are missing
-          if [ -n "$MISSING" ]; then
-            echo "::error::Required secrets are missing:${MISSING}"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🚨 DEPLOYMENT BLOCKED: Azure Infrastructure Not Yet Configured"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "This workflow requires Azure infrastructure to be deployed FIRST."
-            echo "The deployment tokens are generated during Azure resource provisioning."
-            echo ""
-            echo "📖 COMPLETE SETUP GUIDE: .github/DEPLOYMENT_SEQUENCE.md"
-            echo ""
-            echo "Quick Start:"
-            echo ""
-            echo "  1️⃣  Deploy Azure infrastructure:"
-            echo "      cd infra/azure"
-            echo "      ./scripts/setup-all.sh dev eastus"
-            echo ""
-            echo "  2️⃣  Extract deployment token:"
-            echo "      az staticwebapp secrets list \\"
-            echo "        --name <your-app-name> \\"
-            echo "        --query 'properties.apiKey' -o tsv"
-            echo ""
-            echo "  3️⃣  Add secret to GitHub:"
-            echo "      gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body \"<token>\""
-            echo ""
-            echo "      OR via GitHub UI:"
-            echo "      Settings → Secrets and variables → Actions → New repository secret"
-            echo ""
-            echo "  4️⃣  Re-run this workflow"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "For detailed instructions, see:"
-            echo "  • .github/DEPLOYMENT_SEQUENCE.md (deployment order)"
-            echo "  • .github/AZURE_SETUP.md (secrets configuration)"
-            echo "  • infra/azure/README.md (infrastructure overview)"
-            echo ""
-            exit 1
+          if [ "${{ steps.check.outputs.has-swa-token }}" == "true" ]; then
+            echo "✅ All required secrets are configured"
           fi
-
-          echo "✅ All required secrets are configured"
 
   build-and-deploy:
     needs: validate-secrets
-    if:
-      github.event_name == 'push' || (github.event_name == 'pull_request' &&
-      github.event.action != 'closed')
+    if: |
+      needs.validate-secrets.outputs.has-swa-token == 'true' &&
+      (github.event_name == 'push' || (github.event_name == 'pull_request' &&
+      github.event.action != 'closed'))
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
