@@ -45,9 +45,6 @@ function getVapidKey(): string | null {
   return null;
 }
 
-  return null;
-}
-
 /**
  * Firebase Messaging Service
  */
