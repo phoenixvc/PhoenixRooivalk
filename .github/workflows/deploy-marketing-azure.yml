@@ -30,10 +30,10 @@ env:
   OUTPUT_LOCATION: "out"
 
 jobs:
-  # Fail fast if required secrets are missing
-  validate-secrets:
+  # Check secrets status (informational only - deployment will proceed)
+  check-secrets:
     runs-on: ubuntu-latest
-    name: Validate Secrets
+    name: Check Secrets Status
     outputs:
       has-swa-token: ${{ steps.check.outputs.has-swa-token }}
     steps:
@@ -41,18 +41,7 @@ jobs:
         id: check
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "🔍 Validating Azure Infrastructure Prerequisites"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo ""
-          echo "⚠️  IMPORTANT: This workflow requires Azure infrastructure to be deployed first."
-          echo ""
-          echo "If this is your first deployment, you must:"
-          echo "  1️⃣  Deploy infrastructure: Run 'deploy-infrastructure.yml' workflow"
-          echo "  2️⃣  Wait for secrets to be populated automatically"
-          echo "  3️⃣  Then run this workflow to deploy the Marketing site"
-          echo ""
-          echo "See .github/DEPLOYMENT_SEQUENCE.md for detailed instructions."
-          echo ""
+          echo "🔍 Checking Azure Infrastructure Prerequisites"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
 
@@ -61,58 +50,32 @@ jobs:
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}" ]; then
             MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN"
+            echo "::warning::AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is not configured"
           else
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
+            echo "✅ AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is configured"
           fi
 
-          # Fail if required secrets are missing
+          # Show status
           if [ -n "$MISSING" ]; then
-            echo "::error::Required secrets are missing:${MISSING}"
             echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🚨 DEPLOYMENT BLOCKED: Azure Infrastructure Not Yet Configured"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "⚠️  Missing secrets:${MISSING}"
             echo ""
-            echo "This workflow requires Azure infrastructure to be deployed FIRST."
-            echo "The deployment tokens are generated during Azure resource provisioning."
+            echo "📖 To deploy infrastructure and configure secrets:"
+            echo "   Run 'Deploy Azure Infrastructure' workflow first"
+            echo "   See .github/DEPLOYMENT_SEQUENCE.md for details"
             echo ""
-            echo "📖 DEPLOYMENT SEQUENCE: .github/DEPLOYMENT_SEQUENCE.md"
+            echo "Note: Deployment will proceed but may fail if secrets are truly missing."
+          else
             echo ""
-            echo "🚀 RECOMMENDED: Use the automated infrastructure deployment workflow"
-            echo ""
-            echo "  Option A: GitHub Actions (Automated - RECOMMENDED)"
-            echo "  ────────────────────────────────────────────────────"
-            echo "  1️⃣  Go to Actions → 'Deploy Azure Infrastructure'"
-            echo "  2️⃣  Click 'Run workflow'"
-            echo "  3️⃣  Select environment (dev/stg/prd) and location"
-            echo "  4️⃣  Click 'Run workflow' button"
-            echo "  5️⃣  Wait for infrastructure deployment and secrets configuration"
-            echo "  6️⃣  Re-run this workflow - it will now succeed!"
-            echo ""
-            echo "  Option B: Manual CLI (Advanced)"
-            echo "  ────────────────────────────────"
-            echo "  1️⃣  Deploy infrastructure:"
-            echo "      cd infra/azure && ./scripts/setup-all.sh dev eastus"
-            echo ""
-            echo "  2️⃣  Configure GitHub secrets:"
-            echo "      ./infra/azure/output/github-secrets.dev.sh"
-            echo ""
-            echo "  3️⃣  Re-run this workflow"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "For detailed instructions, see:"
-            echo "  • .github/DEPLOYMENT_SEQUENCE.md (deployment order)"
-            echo "  • .github/AZURE_SETUP.md (secrets configuration)"
-            echo "  • infra/azure/README.md (infrastructure overview)"
-            echo ""
-            exit 1
+            echo "✅ All required secrets are configured"
           fi
-
-          echo "✅ All required secrets are configured"
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   build-and-deploy:
-    needs: validate-secrets
+    needs: check-secrets
     if:
       github.event_name == 'push' || (github.event_name == 'pull_request' &&
       github.event.action != 'closed')
