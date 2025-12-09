@@ -279,6 +279,9 @@ jobs:
         run: |
           echo "Deploying Azure infrastructure..."
 
+          # Store deployment name for later reference
+          DEPLOYMENT_NAME="infra-$(date +%Y%m%d-%H%M%S)"
+
           DEPLOY_PARAMS="location=${{ steps.env.outputs.location }} environment=${{ steps.env.outputs.environment }}"
 
           # Add Azure OpenAI endpoint if provided
@@ -290,7 +293,7 @@ jobs:
           PARAMS_FILE="infra/azure/parameters.${{ steps.env.outputs.environment }}.json"
           if [ -f "$PARAMS_FILE" ]; then
             az deployment group create \
-              --name "infra-$(date +%Y%m%d-%H%M%S)" \
+              --name "$DEPLOYMENT_NAME" \
               --resource-group "${{ steps.env.outputs.resource_group }}" \
               --template-file infra/azure/main.bicep \
               --parameters "@$PARAMS_FILE" \
@@ -298,17 +301,17 @@ jobs:
               --output none
           else
             az deployment group create \
-              --name "infra-$(date +%Y%m%d-%H%M%S)" \
+              --name "$DEPLOYMENT_NAME" \
               --resource-group "${{ steps.env.outputs.resource_group }}" \
               --template-file infra/azure/main.bicep \
               --parameters $DEPLOY_PARAMS \
               --output none
           fi
 
-          # Get deployment outputs
+          # Get deployment outputs using the deployment name we just created
           OUTPUTS=$(az deployment group show \
             --resource-group "${{ steps.env.outputs.resource_group }}" \
-            --name "main" \
+            --name "$DEPLOYMENT_NAME" \
             --query properties.outputs 2>/dev/null || echo "{}")
 
           # Extract values
