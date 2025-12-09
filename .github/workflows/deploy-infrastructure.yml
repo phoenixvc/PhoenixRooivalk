@@ -1,0 +1,557 @@
+name: Deploy Azure Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        type: choice
+        options:
+          - dev
+          - stg
+          - prd
+        default: dev
+      location:
+        description: "Azure region"
+        type: choice
+        options:
+          - eastus
+          - eastus2
+          - westus2
+          - westeurope
+          - northeurope
+          - southafricanorth
+        default: eastus2
+      azure_openai_endpoint:
+        description: "Azure OpenAI endpoint (optional)"
+        type: string
+        required: false
+      skip_secrets_setup:
+        description: "Skip GitHub secrets setup (for testing)"
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      environment:
+        description: "Environment to deploy"
+        type: string
+        default: dev
+      location:
+        description: "Azure region"
+        type: string
+        default: eastus2
+    outputs:
+      resource_group:
+        description: "Created resource group name"
+        value: ${{ jobs.deploy-infrastructure.outputs.resource_group }}
+      static_web_app_name:
+        description: "Static Web App name"
+        value: ${{ jobs.deploy-infrastructure.outputs.static_web_app_name }}
+      functions_app_name:
+        description: "Functions App name"
+        value: ${{ jobs.deploy-infrastructure.outputs.functions_app_name }}
+      cosmos_db_name:
+        description: "Cosmos DB name"
+        value: ${{ jobs.deploy-infrastructure.outputs.cosmos_db_name }}
+      deployment_status:
+        description: "Deployment status (success/failed)"
+        value: ${{ jobs.deploy-infrastructure.outputs.deployment_status }}
+  push:
+    branches: [main]
+    paths:
+      - "infra/azure/**"
+      - ".github/workflows/deploy-infrastructure.yml"
+
+permissions:
+  contents: read
+  id-token: write # Required for OIDC authentication with Azure
+
+env:
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+jobs:
+  # ===========================================
+  # Validate Prerequisites
+  # ===========================================
+  validate-prerequisites:
+    name: Validate Prerequisites
+    runs-on: ubuntu-latest
+    outputs:
+      can_deploy: ${{ steps.check.outputs.can_deploy }}
+      missing_items: ${{ steps.check.outputs.missing_items }}
+    steps:
+      - name: Check Azure credentials
+        id: check
+        run: |
+          MISSING=""
+          CAN_DEPLOY="true"
+
+          # Check for Azure credentials
+          if [ -z "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ]; then
+            MISSING="${MISSING}\n  - AZURE_SUBSCRIPTION_ID (secret)"
+            CAN_DEPLOY="false"
+          fi
+
+          # Check for either Service Principal or OIDC credentials
+          HAS_SP=false
+          HAS_OIDC=false
+
+          if [ -n "${{ secrets.AZURE_CREDENTIALS }}" ]; then
+            HAS_SP=true
+            echo "✅ Found Azure Service Principal credentials"
+          fi
+
+          if [ -n "${{ secrets.AZURE_CLIENT_ID }}" ] && [ -n "${{ secrets.AZURE_TENANT_ID }}" ]; then
+            HAS_OIDC=true
+            echo "✅ Found Azure OIDC credentials (Workload Identity)"
+          fi
+
+          if [ "$HAS_SP" = false ] && [ "$HAS_OIDC" = false ]; then
+            MISSING="${MISSING}\n  - AZURE_CREDENTIALS (service principal JSON) OR"
+            MISSING="${MISSING}\n  - AZURE_CLIENT_ID + AZURE_TENANT_ID (for OIDC)"
+            CAN_DEPLOY="false"
+          fi
+
+          # Optional: GitHub token for automated secrets setup
+          if [ -z "${{ secrets.GH_PAT }}" ] && [ "${{ github.event.inputs.skip_secrets_setup }}" != "true" ]; then
+            echo "::warning::GH_PAT secret not found - GitHub secrets setup will be skipped"
+            echo "::warning::You will need to manually configure secrets after deployment"
+          fi
+
+          # Output results
+          echo "can_deploy=${CAN_DEPLOY}" >> $GITHUB_OUTPUT
+          echo "missing_items=${MISSING}" >> $GITHUB_OUTPUT
+
+          # Create summary
+          if [ "$CAN_DEPLOY" = "false" ]; then
+            echo "## ❌ Prerequisites Check Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Missing Required Items:" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo -e "$MISSING" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Setup Instructions:" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "1. **Azure Subscription ID**:" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "   az account show --query id -o tsv" >> $GITHUB_STEP_SUMMARY
+            echo "   gh secret set AZURE_SUBSCRIPTION_ID --body \"<subscription-id>\"" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "2. **Azure Credentials** (choose one method):" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "   **Option A: Service Principal (simpler)**" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "   az ad sp create-for-rbac \\" >> $GITHUB_STEP_SUMMARY
+            echo "     --name \"PhoenixRooivalk-GitHub\" \\" >> $GITHUB_STEP_SUMMARY
+            echo "     --role contributor \\" >> $GITHUB_STEP_SUMMARY
+            echo "     --scopes /subscriptions/<subscription-id> \\" >> $GITHUB_STEP_SUMMARY
+            echo "     --sdk-auth" >> $GITHUB_STEP_SUMMARY
+            echo "   gh secret set AZURE_CREDENTIALS --body '<output-json>'" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "   **Option B: OIDC (recommended for production)**" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "   # See: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure" >> $GITHUB_STEP_SUMMARY
+            echo "   gh secret set AZURE_CLIENT_ID --body '<client-id>'" >> $GITHUB_STEP_SUMMARY
+            echo "   gh secret set AZURE_TENANT_ID --body '<tenant-id>'" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "3. **GitHub PAT** (optional, for automated secrets setup):" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "   # Create PAT with 'repo' scope at: https://github.com/settings/tokens" >> $GITHUB_STEP_SUMMARY
+            echo "   gh secret set GH_PAT --body '<your-pat>'" >> $GITHUB_STEP_SUMMARY
+            echo "   \`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ✅ Prerequisites Check Passed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "All required credentials are configured." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if prerequisites missing
+        if: steps.check.outputs.can_deploy == 'false'
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚨 DEPLOYMENT BLOCKED: Azure Credentials Not Configured"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "::error::Missing required Azure credentials. See job summary for setup instructions."
+          echo ""
+          echo "Missing items:"
+          echo -e "${{ steps.check.outputs.missing_items }}"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          exit 1
+
+  # ===========================================
+  # Deploy Azure Infrastructure
+  # ===========================================
+  deploy-infrastructure:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    needs: validate-prerequisites
+    if: needs.validate-prerequisites.outputs.can_deploy == 'true'
+    outputs:
+      resource_group: ${{ steps.deploy.outputs.resource_group }}
+      static_web_app_name: ${{ steps.deploy.outputs.static_web_app_name }}
+      functions_app_name: ${{ steps.deploy.outputs.functions_app_name }}
+      cosmos_db_name: ${{ steps.deploy.outputs.cosmos_db_name }}
+      key_vault_name: ${{ steps.deploy.outputs.key_vault_name }}
+      app_insights_name: ${{ steps.deploy.outputs.app_insights_name }}
+      storage_name: ${{ steps.deploy.outputs.storage_name }}
+      deployment_status: ${{ steps.deploy.outputs.deployment_status }}
+      functions_url: ${{ steps.deploy.outputs.functions_url }}
+      cosmos_endpoint: ${{ steps.deploy.outputs.cosmos_endpoint }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Azure Login (Service Principal)
+        if: secrets.AZURE_CREDENTIALS != ''
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure Login (OIDC)
+        if: secrets.AZURE_CREDENTIALS == '' && secrets.AZURE_CLIENT_ID != ''
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set environment variables
+        id: env
+        run: |
+          ENV="${{ github.event.inputs.environment || inputs.environment || 'dev' }}"
+          LOCATION="${{ github.event.inputs.location || inputs.location || 'eastus2' }}"
+          
+          # Environment short code
+          case "$ENV" in
+            "dev"|"development") ENV_SHORT="dev" ;;
+            "stg"|"staging") ENV_SHORT="stg" ;;
+            "prd"|"prod"|"production") ENV_SHORT="prd" ;;
+            *) ENV_SHORT="${ENV:0:3}" ;;
+          esac
+
+          # Location short code
+          case "$LOCATION" in
+            "eastus") LOCATION_SHORT="eus" ;;
+            "eastus2") LOCATION_SHORT="eus2" ;;
+            "westus2") LOCATION_SHORT="wus2" ;;
+            "westeurope") LOCATION_SHORT="weu" ;;
+            "northeurope") LOCATION_SHORT="neu" ;;
+            "southafricanorth") LOCATION_SHORT="san" ;;
+            *) LOCATION_SHORT="${LOCATION:0:4}" ;;
+          esac
+
+          # Resource names
+          RESOURCE_GROUP="${ENV_SHORT}-${LOCATION_SHORT}-rg-rooivalk"
+          KEY_VAULT_NAME="${ENV_SHORT}-${LOCATION_SHORT}-kv-rooivalk"
+          STORAGE_NAME="${ENV_SHORT}${LOCATION_SHORT}strooivalk"
+          APPI_NAME="${ENV_SHORT}-${LOCATION_SHORT}-appi-rooivalk"
+          COSMOS_NAME="${ENV_SHORT}-${LOCATION_SHORT}-cosmos-rooivalk"
+          FUNC_NAME="${ENV_SHORT}-${LOCATION_SHORT}-func-rooivalk"
+          SWA_NAME="${ENV_SHORT}-${LOCATION_SHORT}-swa-rooivalk"
+
+          # Export for later steps
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "location=$LOCATION" >> $GITHUB_OUTPUT
+          echo "resource_group=$RESOURCE_GROUP" >> $GITHUB_OUTPUT
+          echo "key_vault_name=$KEY_VAULT_NAME" >> $GITHUB_OUTPUT
+          echo "storage_name=$STORAGE_NAME" >> $GITHUB_OUTPUT
+          echo "app_insights_name=$APPI_NAME" >> $GITHUB_OUTPUT
+          echo "cosmos_db_name=$COSMOS_NAME" >> $GITHUB_OUTPUT
+          echo "functions_app_name=$FUNC_NAME" >> $GITHUB_OUTPUT
+          echo "static_web_app_name=$SWA_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create Resource Group
+        run: |
+          echo "Creating resource group: ${{ steps.env.outputs.resource_group }}"
+          az group create \
+            --name "${{ steps.env.outputs.resource_group }}" \
+            --location "${{ steps.env.outputs.location }}" \
+            --output none
+
+      - name: Deploy Bicep Template
+        id: deploy
+        run: |
+          echo "Deploying Azure infrastructure..."
+          
+          DEPLOY_PARAMS="location=${{ steps.env.outputs.location }} environment=${{ steps.env.outputs.environment }}"
+          
+          # Add Azure OpenAI endpoint if provided
+          if [ -n "${{ github.event.inputs.azure_openai_endpoint }}" ]; then
+            DEPLOY_PARAMS="$DEPLOY_PARAMS azureOpenAiEndpoint=${{ github.event.inputs.azure_openai_endpoint }}"
+          fi
+
+          # Check for parameters file
+          PARAMS_FILE="infra/azure/parameters.${{ steps.env.outputs.environment }}.json"
+          if [ -f "$PARAMS_FILE" ]; then
+            az deployment group create \
+              --name "infra-$(date +%Y%m%d-%H%M%S)" \
+              --resource-group "${{ steps.env.outputs.resource_group }}" \
+              --template-file infra/azure/main.bicep \
+              --parameters "@$PARAMS_FILE" \
+              --parameters $DEPLOY_PARAMS \
+              --output none
+          else
+            az deployment group create \
+              --name "infra-$(date +%Y%m%d-%H%M%S)" \
+              --resource-group "${{ steps.env.outputs.resource_group }}" \
+              --template-file infra/azure/main.bicep \
+              --parameters $DEPLOY_PARAMS \
+              --output none
+          fi
+
+          # Get deployment outputs
+          OUTPUTS=$(az deployment group show \
+            --resource-group "${{ steps.env.outputs.resource_group }}" \
+            --name "main" \
+            --query properties.outputs 2>/dev/null || echo "{}")
+
+          # Extract values
+          COSMOS_ENDPOINT=$(echo "$OUTPUTS" | jq -r '.cosmosDbEndpoint.value // empty')
+          APP_INSIGHTS_CONNECTION=$(echo "$OUTPUTS" | jq -r '.appInsightsConnectionString.value // empty')
+          FUNCTIONS_URL=$(echo "$OUTPUTS" | jq -r '.functionsUrl.value // empty')
+
+          # Fallback to computed values
+          if [ -z "$FUNCTIONS_URL" ]; then
+            FUNCTIONS_URL="https://${{ steps.env.outputs.functions_app_name }}.azurewebsites.net"
+          fi
+
+          # Set outputs
+          echo "deployment_status=success" >> $GITHUB_OUTPUT
+          echo "resource_group=${{ steps.env.outputs.resource_group }}" >> $GITHUB_OUTPUT
+          echo "static_web_app_name=${{ steps.env.outputs.static_web_app_name }}" >> $GITHUB_OUTPUT
+          echo "functions_app_name=${{ steps.env.outputs.functions_app_name }}" >> $GITHUB_OUTPUT
+          echo "cosmos_db_name=${{ steps.env.outputs.cosmos_db_name }}" >> $GITHUB_OUTPUT
+          echo "key_vault_name=${{ steps.env.outputs.key_vault_name }}" >> $GITHUB_OUTPUT
+          echo "app_insights_name=${{ steps.env.outputs.app_insights_name }}" >> $GITHUB_OUTPUT
+          echo "storage_name=${{ steps.env.outputs.storage_name }}" >> $GITHUB_OUTPUT
+          echo "functions_url=$FUNCTIONS_URL" >> $GITHUB_OUTPUT
+          echo "cosmos_endpoint=$COSMOS_ENDPOINT" >> $GITHUB_OUTPUT
+
+          echo "✅ Infrastructure deployment completed successfully"
+
+      - name: Deployment Summary
+        run: |
+          echo "## ✅ Azure Infrastructure Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: ${{ steps.env.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Location**: ${{ steps.env.outputs.location }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Resource Group**: ${{ steps.deploy.outputs.resource_group }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Resources Created:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Static Web App**: ${{ steps.deploy.outputs.static_web_app_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Functions App**: ${{ steps.deploy.outputs.functions_app_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cosmos DB**: ${{ steps.deploy.outputs.cosmos_db_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Key Vault**: ${{ steps.deploy.outputs.key_vault_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **App Insights**: ${{ steps.deploy.outputs.app_insights_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Storage**: ${{ steps.deploy.outputs.storage_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Endpoints:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Functions URL**: ${{ steps.deploy.outputs.functions_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cosmos Endpoint**: ${{ steps.deploy.outputs.cosmos_endpoint }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Configure GitHub secrets (see next job)" >> $GITHUB_STEP_SUMMARY
+          echo "2. Deploy applications using deployment workflows" >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================
+  # Populate GitHub Secrets
+  # ===========================================
+  populate-secrets:
+    name: Populate GitHub Secrets
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure
+    if: |
+      needs.deploy-infrastructure.outputs.deployment_status == 'success' &&
+      github.event.inputs.skip_secrets_setup != 'true' &&
+      secrets.GH_PAT != ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Azure Login (Service Principal)
+        if: secrets.AZURE_CREDENTIALS != ''
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure Login (OIDC)
+        if: secrets.AZURE_CREDENTIALS == '' && secrets.AZURE_CLIENT_ID != ''
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Extract Deployment Tokens
+        id: tokens
+        run: |
+          echo "Extracting deployment tokens..."
+
+          # Get Static Web Apps token
+          SWA_TOKEN=$(az staticwebapp secrets list \
+            --name "${{ needs.deploy-infrastructure.outputs.static_web_app_name }}" \
+            --query "properties.apiKey" -o tsv 2>/dev/null || echo "")
+
+          if [ -z "$SWA_TOKEN" ]; then
+            echo "::warning::Could not retrieve Static Web Apps token. It may still be provisioning."
+            SWA_TOKEN="PROVISIONING"
+          fi
+
+          # Get Function App publish profile
+          FUNC_PROFILE=$(az functionapp deployment list-publishing-profiles \
+            --name "${{ needs.deploy-infrastructure.outputs.functions_app_name }}" \
+            --resource-group "${{ needs.deploy-infrastructure.outputs.resource_group }}" \
+            --xml 2>/dev/null || echo "")
+
+          if [ -z "$FUNC_PROFILE" ]; then
+            echo "::warning::Could not retrieve Function App publish profile."
+            FUNC_PROFILE="PROVISIONING"
+          fi
+
+          # Get Cosmos DB connection string
+          COSMOS_CONN=$(az cosmosdb keys list \
+            --name "${{ needs.deploy-infrastructure.outputs.cosmos_db_name }}" \
+            --resource-group "${{ needs.deploy-infrastructure.outputs.resource_group }}" \
+            --type connection-strings \
+            --query 'connectionStrings[0].connectionString' -o tsv 2>/dev/null || echo "")
+
+          # Get App Insights connection string
+          APP_INSIGHTS_CONN=$(az monitor app-insights component show \
+            --app "${{ needs.deploy-infrastructure.outputs.app_insights_name }}" \
+            --resource-group "${{ needs.deploy-infrastructure.outputs.resource_group }}" \
+            --query connectionString -o tsv 2>/dev/null || echo "")
+
+          # Save to outputs (masked)
+          echo "::add-mask::$SWA_TOKEN"
+          echo "::add-mask::$FUNC_PROFILE"
+          echo "::add-mask::$COSMOS_CONN"
+          echo "::add-mask::$APP_INSIGHTS_CONN"
+
+          echo "swa_token=$SWA_TOKEN" >> $GITHUB_OUTPUT
+          echo "func_profile=$FUNC_PROFILE" >> $GITHUB_OUTPUT
+          echo "cosmos_connection=$COSMOS_CONN" >> $GITHUB_OUTPUT
+          echo "app_insights_connection=$APP_INSIGHTS_CONN" >> $GITHUB_OUTPUT
+
+      - name: Configure GitHub Secrets
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          echo "Configuring GitHub secrets..."
+
+          # Set secrets
+          if [ "${{ steps.tokens.outputs.swa_token }}" != "PROVISIONING" ]; then
+            echo "${{ steps.tokens.outputs.swa_token }}" | gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN
+            echo "${{ steps.tokens.outputs.swa_token }}" | gh secret set AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN
+            echo "✅ Set Static Web Apps deployment tokens"
+          fi
+
+          if [ "${{ steps.tokens.outputs.func_profile }}" != "PROVISIONING" ]; then
+            echo "${{ steps.tokens.outputs.func_profile }}" | gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+            echo "✅ Set Function App publish profile"
+          fi
+
+          if [ -n "${{ steps.tokens.outputs.cosmos_connection }}" ]; then
+            echo "${{ steps.tokens.outputs.cosmos_connection }}" | gh secret set COSMOS_DB_CONNECTION_STRING
+            echo "✅ Set Cosmos DB connection string"
+          fi
+
+          if [ -n "${{ steps.tokens.outputs.app_insights_connection }}" ]; then
+            echo "${{ steps.tokens.outputs.app_insights_connection }}" | gh secret set APPLICATIONINSIGHTS_CONNECTION_STRING
+            echo "${{ steps.tokens.outputs.app_insights_connection }}" | gh secret set AZURE_APP_INSIGHTS_CONNECTION_STRING
+            echo "✅ Set Application Insights connection string"
+          fi
+
+          # Set variables
+          gh variable set AZURE_FUNCTIONAPP_NAME --body "${{ needs.deploy-infrastructure.outputs.functions_app_name }}"
+          gh variable set AZURE_FUNCTIONS_BASE_URL --body "${{ needs.deploy-infrastructure.outputs.functions_url }}"
+          echo "✅ Set Function App variables"
+
+          # Set cloud provider
+          gh secret set CLOUD_PROVIDER --body "azure"
+          echo "✅ Set cloud provider"
+
+      - name: Secrets Configuration Summary
+        run: |
+          echo "## ✅ GitHub Secrets Configured" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following secrets and variables have been configured:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Secrets:" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_FUNCTIONAPP_PUBLISH_PROFILE" >> $GITHUB_STEP_SUMMARY
+          echo "- COSMOS_DB_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
+          echo "- APPLICATIONINSIGHTS_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_APP_INSIGHTS_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
+          echo "- CLOUD_PROVIDER" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Variables:" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_FUNCTIONAPP_NAME: ${{ needs.deploy-infrastructure.outputs.functions_app_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_FUNCTIONS_BASE_URL: ${{ needs.deploy-infrastructure.outputs.functions_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Ready for Deployment:" >> $GITHUB_STEP_SUMMARY
+          echo "✅ You can now run the application deployment workflows:" >> $GITHUB_STEP_SUMMARY
+          echo "- `deploy-marketing-azure.yml`" >> $GITHUB_STEP_SUMMARY
+          echo "- `deploy-docs-azure.yml`" >> $GITHUB_STEP_SUMMARY
+          echo "- `deploy-azure-functions.yml`" >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================
+  # Manual Secrets Instructions (fallback)
+  # ===========================================
+  manual-secrets-instructions:
+    name: Manual Secrets Setup Guide
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure
+    if: |
+      needs.deploy-infrastructure.outputs.deployment_status == 'success' &&
+      (github.event.inputs.skip_secrets_setup == 'true' || secrets.GH_PAT == '')
+    steps:
+      - name: Generate Setup Instructions
+        run: |
+          echo "## 📋 Manual Secrets Setup Required" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Automatic secrets configuration was skipped. Follow these steps to configure GitHub secrets manually:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 1. Extract Deployment Tokens" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "# Static Web Apps token" >> $GITHUB_STEP_SUMMARY
+          echo "az staticwebapp secrets list \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --name ${{ needs.deploy-infrastructure.outputs.static_web_app_name }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --query 'properties.apiKey' -o tsv" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Function App publish profile" >> $GITHUB_STEP_SUMMARY
+          echo "az functionapp deployment list-publishing-profiles \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --name ${{ needs.deploy-infrastructure.outputs.functions_app_name }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --resource-group ${{ needs.deploy-infrastructure.outputs.resource_group }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --xml" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Cosmos DB connection string" >> $GITHUB_STEP_SUMMARY
+          echo "az cosmosdb keys list \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --name ${{ needs.deploy-infrastructure.outputs.cosmos_db_name }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --resource-group ${{ needs.deploy-infrastructure.outputs.resource_group }} \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --type connection-strings \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --query 'connectionStrings[0].connectionString' -o tsv" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 2. Configure GitHub Secrets" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Go to: **Settings → Secrets and variables → Actions**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Add these **Secrets**:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_STATIC_WEB_APPS_API_TOKEN\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN\` (same as above)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_FUNCTIONAPP_PUBLISH_PROFILE\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`COSMOS_DB_CONNECTION_STRING\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`APPLICATIONINSIGHTS_CONNECTION_STRING\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`CLOUD_PROVIDER\` (value: \`azure\`)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Add these **Variables**:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_FUNCTIONAPP_NAME\`: \`${{ needs.deploy-infrastructure.outputs.functions_app_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_FUNCTIONS_BASE_URL\`: \`${{ needs.deploy-infrastructure.outputs.functions_url }}\`" >> $GITHUB_STEP_SUMMARY

@@ -2,21 +2,174 @@
 
 ## Overview
 
-This document explains the correct order of operations for deploying the PhoenixRooivalk platform to Azure. The workflows **cannot succeed** until Azure infrastructure is deployed and secrets are configured.
+This document explains the correct order of operations for deploying the PhoenixRooivalk platform to Azure. The deployment follows a **three-phase approach**:
 
-## 🚨 Important: Infrastructure Must Be Deployed First
+1. **Phase 1**: Deploy Azure Infrastructure
+2. **Phase 2**: Populate GitHub Secrets (automated)
+3. **Phase 3**: Deploy Applications/Services
 
-The GitHub Actions workflows (`deploy-marketing-azure.yml` and `deploy-docs-azure.yml`) **require** Azure infrastructure to exist before they can run. The workflows will fail with validation errors if the required secrets are not configured.
+## 🚨 Important: Infrastructure-First Deployment
+
+The application deployment workflows (`deploy-marketing-azure.yml`, `deploy-docs-azure.yml`, `deploy-azure-functions.yml`) **require** Azure infrastructure to exist before they can run. The workflows will fail with validation errors if the required secrets are not configured.
 
 ### Why This Order Matters
 
-1. **Azure Static Web Apps** generate deployment tokens when created
-2. These tokens must be added to GitHub repository secrets
-3. Only then can the CI/CD workflows deploy successfully
+1. **Azure resources must exist** before applications can be deployed to them
+2. **Deployment tokens are generated** during infrastructure provisioning
+3. **Secrets must be configured** in GitHub for CI/CD workflows to authenticate
+4. Only then can application code be deployed successfully
 
-## 📋 Complete Deployment Checklist
+## 🚀 Automated Deployment (Recommended)
 
-### Phase 1: Azure Infrastructure Setup (One-Time)
+The **new automated workflow** handles infrastructure deployment and secrets configuration in one streamlined process.
+
+### Prerequisites
+
+- [ ] Azure account with active subscription
+- [ ] GitHub repository access with appropriate permissions
+- [ ] Azure credentials configured as GitHub secrets (one-time setup)
+
+### One-Time Setup: Configure Azure Credentials
+
+Before your first deployment, configure Azure authentication secrets:
+
+#### Option A: Service Principal (Simpler)
+
+```bash
+# Create service principal with contributor role
+az ad sp create-for-rbac \
+  --name "PhoenixRooivalk-GitHub" \
+  --role contributor \
+  --scopes /subscriptions/<subscription-id> \
+  --sdk-auth
+
+# Copy the JSON output and add as GitHub secret
+gh secret set AZURE_CREDENTIALS --body '<json-output>'
+
+# Also set subscription ID
+az account show --query id -o tsv
+gh secret set AZURE_SUBSCRIPTION_ID --body '<subscription-id>'
+```
+
+#### Option B: OIDC Workload Identity (Recommended for Production)
+
+```bash
+# Follow Azure's OIDC setup guide:
+# https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
+
+# Set these secrets:
+gh secret set AZURE_CLIENT_ID --body '<client-id>'
+gh secret set AZURE_TENANT_ID --body '<tenant-id>'
+gh secret set AZURE_SUBSCRIPTION_ID --body '<subscription-id>'
+```
+
+#### Optional: Automated Secrets Configuration
+
+For fully automated secrets setup, configure a GitHub Personal Access Token:
+
+```bash
+# Create PAT with 'repo' scope at: https://github.com/settings/tokens
+gh secret set GH_PAT --body '<your-personal-access-token>'
+```
+
+This allows the infrastructure workflow to automatically configure all deployment secrets.
+
+### Phase 1: Deploy Infrastructure (Automated)
+
+**Using GitHub Actions UI:**
+
+1. Go to your repository on GitHub
+2. Navigate to: **Actions** → **Deploy Azure Infrastructure**
+3. Click **"Run workflow"**
+4. Configure deployment:
+   - **Environment**: `dev`, `stg`, or `prd`
+   - **Location**: Select your Azure region (e.g., `eastus2`)
+   - **Azure OpenAI Endpoint** (optional): Your Azure OpenAI endpoint
+   - **Skip secrets setup**: Leave unchecked for automated setup
+5. Click **"Run workflow"** button
+6. Wait 5-10 minutes for:
+   - ✅ Infrastructure deployment
+   - ✅ Secrets configuration (if GH_PAT is set)
+
+**Using GitHub CLI:**
+
+```bash
+# Deploy to dev environment in eastus2
+gh workflow run deploy-infrastructure.yml \
+  -f environment=dev \
+  -f location=eastus2
+
+# Monitor the workflow
+gh run list --workflow=deploy-infrastructure.yml --limit 1
+gh run watch
+```
+
+**What Happens:**
+- Creates Azure resource group
+- Deploys all infrastructure (Static Web Apps, Functions, Cosmos DB, Key Vault, etc.)
+- Extracts deployment tokens
+- Configures GitHub secrets automatically (if GH_PAT provided)
+- Provides manual setup instructions if automated setup is skipped
+
+### Phase 2: Verify Secrets (Automatic)
+
+If you configured `GH_PAT`, the infrastructure workflow automatically populates:
+
+**Secrets:**
+- `AZURE_STATIC_WEB_APPS_API_TOKEN`
+- `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN`
+- `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+- `COSMOS_DB_CONNECTION_STRING`
+- `APPLICATIONINSIGHTS_CONNECTION_STRING`
+- `CLOUD_PROVIDER`
+
+**Variables:**
+- `AZURE_FUNCTIONAPP_NAME`
+- `AZURE_FUNCTIONS_BASE_URL`
+
+Verify secrets were configured:
+
+```bash
+gh secret list | grep AZURE
+gh variable list | grep AZURE
+```
+
+### Phase 3: Deploy Applications
+
+Once infrastructure and secrets are configured, deploy your applications:
+
+**Option 1: Automatic on Push**
+
+Push to `main` branch triggers automatic deployment:
+
+```bash
+git push origin main
+```
+
+**Option 2: Manual Workflow Trigger**
+
+```bash
+# Deploy marketing site
+gh workflow run deploy-marketing-azure.yml
+
+# Deploy documentation site
+gh workflow run deploy-docs-azure.yml
+
+# Deploy Azure Functions
+gh workflow run deploy-azure-functions.yml
+```
+
+**Expected Results:**
+- ✅ Validation passes
+- ✅ Applications build successfully
+- ✅ Deployments complete
+- ✅ Sites are accessible at their URLs
+
+## 📋 Manual Deployment (Advanced)
+
+For those who prefer CLI-based deployment or need more control.
+
+### Phase 1: Azure Infrastructure Setup
 
 This phase creates all Azure resources and generates the deployment tokens needed for CI/CD.
 
@@ -35,7 +188,7 @@ This phase creates all Azure resources and generates the deployment tokens neede
    ```bash
    # For development
    ENVIRONMENT="dev"
-   LOCATION="eastus"  # or your preferred Azure region
+   LOCATION="eastus2"  # or your preferred Azure region
    
    # For production
    # ENVIRONMENT="prd"
@@ -69,7 +222,145 @@ This phase creates all Azure resources and generates the deployment tokens neede
    - `github-secrets.{environment}.sh` - Script to configure GitHub secrets
    - `deployment-info.{environment}.json` - Deployment metadata
 
-### Phase 2: Extract Deployment Tokens
+### Phase 2: Populate GitHub Secrets
+
+### Phase 2: Populate GitHub Secrets
+
+After infrastructure deployment, configure GitHub secrets to enable CI/CD workflows.
+
+#### Option A: Automated Setup (Recommended)
+
+The `setup-all.sh` script generates a shell script to configure all secrets automatically:
+
+```bash
+# Review the generated script
+cat infra/azure/output/github-secrets.dev.sh
+
+# Run it to configure GitHub secrets (requires gh CLI)
+./infra/azure/output/github-secrets.dev.sh
+```
+
+#### Option B: Manual Setup via Commands
+
+If you prefer to run commands individually:
+
+```bash
+# Get resource names from deployment
+RESOURCE_GROUP="dev-eus2-rg-rooivalk"  # Adjust for your environment
+SWA_NAME="dev-eus2-swa-rooivalk"
+FUNC_NAME="dev-eus2-func-rooivalk"
+COSMOS_NAME="dev-eus2-cosmos-rooivalk"
+
+# Extract deployment tokens
+SWA_TOKEN=$(az staticwebapp secrets list \
+  --name "$SWA_NAME" \
+  --query "properties.apiKey" -o tsv)
+
+FUNC_PROFILE=$(az functionapp deployment list-publishing-profiles \
+  --name "$FUNC_NAME" \
+  --resource-group "$RESOURCE_GROUP" \
+  --xml)
+
+COSMOS_CONN=$(az cosmosdb keys list \
+  --name "$COSMOS_NAME" \
+  --resource-group "$RESOURCE_GROUP" \
+  --type connection-strings \
+  --query 'connectionStrings[0].connectionString' -o tsv)
+
+# Configure GitHub secrets
+echo "$SWA_TOKEN" | gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN
+echo "$SWA_TOKEN" | gh secret set AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN
+echo "$FUNC_PROFILE" | gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+echo "$COSMOS_CONN" | gh secret set COSMOS_DB_CONNECTION_STRING
+
+# Configure GitHub variables
+gh variable set AZURE_FUNCTIONAPP_NAME --body "$FUNC_NAME"
+gh variable set AZURE_FUNCTIONS_BASE_URL --body "https://${FUNC_NAME}.azurewebsites.net"
+```
+
+#### Option C: Manual Setup via GitHub Web UI
+
+1. Go to your repository on GitHub
+2. Navigate to: **Settings** → **Secrets and variables** → **Actions**
+3. Click **Secrets** tab → **New repository secret**
+4. Add each secret (get values from Azure Portal or CLI)
+5. Click **Variables** tab → **New repository variable**
+6. Add required variables
+
+### Phase 3: Deploy Applications
+
+Once secrets are configured, deploy your applications using the deployment workflows.
+
+#### Via Git Push (Automatic)
+
+```bash
+# Commit and push changes to main branch
+git add .
+git commit -m "Deploy applications"
+git push origin main
+
+# Workflows will trigger automatically for changed paths
+```
+
+#### Via Manual Workflow Trigger
+
+```bash
+# Deploy marketing site
+gh workflow run deploy-marketing-azure.yml
+
+# Deploy documentation site  
+gh workflow run deploy-docs-azure.yml
+
+# Deploy Azure Functions
+gh workflow run deploy-azure-functions.yml
+
+# Monitor workflow runs
+gh run list --limit 5
+gh run watch
+```
+
+## 🔄 Comparison: Automated vs Manual
+
+| Aspect | Automated Workflow | Manual CLI |
+|--------|-------------------|------------|
+| **Setup Time** | ~10 minutes | ~15-20 minutes |
+| **Complexity** | Low (few clicks) | Medium (CLI commands) |
+| **Secrets Config** | Automatic (if GH_PAT set) | Manual or scripted |
+| **Repeatability** | High (same process each time) | Medium (script-based) |
+| **Troubleshooting** | Workflow logs in GitHub UI | CLI output |
+| **Best For** | Teams, production | Advanced users, custom setups |
+
+## 🔄 Updating/Redeploying Infrastructure
+
+### Automated Update
+
+```bash
+# Trigger infrastructure workflow again
+gh workflow run deploy-infrastructure.yml \
+  -f environment=dev \
+  -f location=eastus2
+
+# Secrets will be updated automatically if GH_PAT is configured
+```
+
+### Manual Update
+
+```bash
+cd infra/azure
+./scripts/setup-all.sh dev eastus2
+
+# Secrets remain unchanged unless you re-run the secrets script
+./infra/azure/output/github-secrets.dev.sh
+```
+
+## 🔄 Legacy Documentation (Pre-Workflow Era)
+
+The following sections document the original manual deployment process for reference.
+
+<details>
+<summary>Click to expand legacy documentation</summary>
+
+### Legacy Phase 2: Extract Deployment Tokens (Manual)
 
 The deployment tokens are required for GitHub Actions to deploy to Azure Static Web Apps.
 
@@ -78,7 +369,7 @@ The deployment tokens are required for GitHub Actions to deploy to Azure Static 
 ```bash
 # Get the Static Web App name from deployment
 SWA_DOCS_NAME=$(az staticwebapp list \
-  --resource-group dev-eus-rg-rooivalk \
+  --resource-group dev-eus2-rg-rooivalk \
   --query "[?contains(name, 'swa-rooivalk')].name | [0]" \
   -o tsv)
 
@@ -97,7 +388,7 @@ echo "$DOCS_TOKEN"
 ```bash
 # Get the Marketing Static Web App name
 SWA_MARKETING_NAME=$(az staticwebapp list \
-  --resource-group dev-eus-rg-rooivalk \
+  --resource-group dev-eus2-rg-rooivalk \
   --query "[?contains(name, 'marketing')].name | [0]" \
   -o tsv)
 
@@ -111,7 +402,7 @@ echo "Marketing site deployment token:"
 echo "$MARKETING_TOKEN"
 ```
 
-### Phase 3: Configure GitHub Repository Secrets
+### Legacy Phase 3: Configure GitHub Repository Secrets
 
 Now that you have the deployment tokens, add them to your GitHub repository.
 
@@ -137,11 +428,11 @@ gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body "$DOCS_TOKEN"
 gh secret set AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN --body "$MARKETING_TOKEN"
 
 # Other required secrets (from deployment outputs)
-gh secret set AZURE_FUNCTIONS_BASE_URL --body "https://dev-eus-func-rooivalk.azurewebsites.net"
+gh secret set AZURE_FUNCTIONS_BASE_URL --body "https://dev-eus2-func-rooivalk.azurewebsites.net"
 gh secret set AZURE_APP_INSIGHTS_CONNECTION_STRING --body "<connection-string>"
 
 # Set the function app name as a VARIABLE (not secret)
-gh variable set AZURE_FUNCTIONAPP_NAME --body "dev-eus-func-rooivalk"
+gh variable set AZURE_FUNCTIONAPP_NAME --body "dev-eus2-func-rooivalk"
 ```
 
 #### Option C: Manual Setup via GitHub Web UI
@@ -156,9 +447,9 @@ gh variable set AZURE_FUNCTIONAPP_NAME --body "dev-eus-func-rooivalk"
 6. Click **Variables** tab → **New repository variable**
 7. Add:
    - Name: `AZURE_FUNCTIONAPP_NAME`
-   - Value: `dev-eus-func-rooivalk` (or your function app name)
+   - Value: `dev-eus2-func-rooivalk` (or your function app name)
 
-### Phase 4: Verify Deployment Workflows
+### Legacy Phase 4: Verify Deployment Workflows
 
 Once secrets are configured, the workflows should pass validation.
 
@@ -206,7 +497,9 @@ Once secrets are configured, the workflows should pass validation.
    Deployment complete!
 ```
 
-## 🔄 Updating Secrets
+</details>
+
+## 🔄 Rotating Secrets
 
 If you need to rotate deployment tokens or update configuration:
 
