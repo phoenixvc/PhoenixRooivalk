@@ -50,7 +50,6 @@ export function getMissingAuthConfig(): string[] {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const docusaurusData = (window as any).__DOCUSAURUS__;
       const config = docusaurusData?.siteConfig?.customFields?.azureConfig;
-      
       if (!config?.clientId) {
         missing.push("AZURE_ENTRA_CLIENT_ID");
       }
