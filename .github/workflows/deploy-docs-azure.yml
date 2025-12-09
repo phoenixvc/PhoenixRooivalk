@@ -62,7 +62,7 @@ jobs:
             echo "  AZURE_FUNCTIONAPP_PUBLISH_PROFILE is set: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
             echo "  AZURE_FUNCTIONAPP_NAME (var) value: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'"
             echo "  AZURE_FUNCTIONAPP_NAME is set as secret: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}"
-            
+
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
               # Check if AZURE_FUNCTIONAPP_NAME is properly configured as a variable
               if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then

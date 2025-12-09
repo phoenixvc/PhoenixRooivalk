@@ -226,7 +226,7 @@ jobs:
         run: |
           ENV="${{ github.event.inputs.environment || inputs.environment || 'dev' }}"
           LOCATION="${{ github.event.inputs.location || inputs.location || 'eastus2' }}"
-          
+
           # Environment short code
           case "$ENV" in
             "dev"|"development") ENV_SHORT="dev" ;;
@@ -278,9 +278,9 @@ jobs:
         id: deploy
         run: |
           echo "Deploying Azure infrastructure..."
-          
+
           DEPLOY_PARAMS="location=${{ steps.env.outputs.location }} environment=${{ steps.env.outputs.environment }}"
-          
+
           # Add Azure OpenAI endpoint if provided
           if [ -n "${{ github.event.inputs.azure_openai_endpoint }}" ]; then
             DEPLOY_PARAMS="$DEPLOY_PARAMS azureOpenAiEndpoint=${{ github.event.inputs.azure_openai_endpoint }}"
