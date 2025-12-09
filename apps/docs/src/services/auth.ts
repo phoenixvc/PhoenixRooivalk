@@ -44,7 +44,6 @@ export function getMissingAuthConfig(): string[] {
   if (isCloudConfigured()) return [];
 
   const missing: string[] = [];
-  
   // Only check config on browser side
   if (typeof window !== "undefined") {
     try {
