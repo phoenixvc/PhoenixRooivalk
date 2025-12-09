@@ -536,6 +536,10 @@ export function AuthProvider({
   const logout = useCallback(async () => {
     await signOut();
     setUser(null);
+    // Clear offline auth localStorage as safety net
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("phoenix_offline_user");
+    }
     // Keep local progress on logout
   }, []);
 
