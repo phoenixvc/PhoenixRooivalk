@@ -258,6 +258,7 @@ jobs:
 
       - name: Deploy with SWA CLI
         id: deploy
+        timeout-minutes: 15
         env:
           SWA_CLI_DEPLOYMENT_TOKEN:
             ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
@@ -272,19 +273,19 @@ jobs:
           fi
 
           echo "Deploying to environment: $SWA_ENV (ENV_NAME: $ENV_NAME)"
+          echo "Event type: ${{ github.event_name }}"
 
-          # Capture deployment output and preserve exit code
+          # Deploy without verbose flag to avoid buffering issues
+          # Redirect output to both console and file for URL extraction
           set +e
-          OUTPUT=$(swa deploy apps/docs/build \
+          swa deploy apps/docs/build \
             --env "$SWA_ENV" \
-            --no-use-keychain \
-            --verbose 2>&1)
+            --no-use-keychain 2>&1 | tee /tmp/swa-deploy.log
           EXIT_CODE=$?
           set -e
-          echo "$OUTPUT"
 
-          # Extract preview URL from "Site URL:" line
-          PREVIEW_URL=$(echo "$OUTPUT" | grep "Site URL:" | sed 's/^.*Site URL:[[:space:]]*//' | sed 's/[[:space:]]*$//' || echo "")
+          # Extract preview URL from deployment log
+          PREVIEW_URL=$(grep "Site URL:" /tmp/swa-deploy.log | sed 's/^.*Site URL:[[:space:]]*//' | sed 's/[[:space:]]*$//' || echo "")
           echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
 
           # Determine deployment status from exit code
