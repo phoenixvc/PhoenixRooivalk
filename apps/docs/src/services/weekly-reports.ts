@@ -6,7 +6,27 @@
 
 import { getAuthService } from "./cloud";
 
-const API_BASE = process.env.AZURE_FUNCTIONS_BASE_URL || "/api";
+/**
+ * Get API base URL from Docusaurus config or fallback to /api
+ */
+function getApiBase(): string {
+  if (typeof window !== "undefined") {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const docusaurusData = (window as any).__DOCUSAURUS__;
+      const functionsBaseUrl =
+        docusaurusData?.siteConfig?.customFields?.azureConfig?.functionsBaseUrl;
+      if (functionsBaseUrl) {
+        return functionsBaseUrl;
+      }
+    } catch {
+      // Ignore
+    }
+  }
+  return "/api";
+}
+
+const API_BASE = getApiBase();
 
 /**
  * Report status types

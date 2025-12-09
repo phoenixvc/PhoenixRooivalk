@@ -42,12 +42,6 @@ function getVapidKey(): string | null {
     // Ignore
   }
 
-  // Fallback to environment variable
-  const envKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
-  if (envKey && envKey.length > 0) {
-    return envKey;
-  }
-
   return null;
 }
 

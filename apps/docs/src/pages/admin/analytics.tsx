@@ -16,11 +16,29 @@ import { useAuth } from "../../contexts/AuthContext";
 import { getDatabaseService, isCloudConfigured } from "../../services/cloud";
 import styles from "./analytics.module.css";
 
+/**
+ * Get admin user IDs from Docusaurus config
+ */
+function getAdminUsers(): string[] {
+  if (typeof window !== "undefined") {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const docusaurusData = (window as any).__DOCUSAURUS__;
+      const adminUserIds =
+        docusaurusData?.siteConfig?.customFields?.adminUserIds;
+      if (adminUserIds) {
+        return adminUserIds.split(",").map((id: string) => id.trim());
+      }
+    } catch {
+      // Ignore
+    }
+  }
+  return [];
+}
+
 // Admin user IDs - configure via environment variable ADMIN_USER_IDS (comma-separated)
 // If not set, falls back to checking user email domain
-const ADMIN_USERS: string[] = process.env.ADMIN_USER_IDS
-  ? process.env.ADMIN_USER_IDS.split(",").map((id) => id.trim())
-  : [];
+const ADMIN_USERS: string[] = getAdminUsers();
 
 // Admin email domains that are allowed (fallback if no specific UIDs configured)
 const ADMIN_EMAIL_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
