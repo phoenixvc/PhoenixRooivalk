@@ -47,6 +47,22 @@ jobs:
       - name: Check Required Secrets
         id: check
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔍 Validating Azure Infrastructure Prerequisites"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "⚠️  IMPORTANT: This workflow requires Azure infrastructure to be deployed first."
+          echo ""
+          echo "If this is your first deployment, you must:"
+          echo "  1️⃣  Deploy infrastructure: Run 'deploy-infrastructure.yml' workflow"
+          echo "  2️⃣  Wait for secrets to be populated automatically"
+          echo "  3️⃣  Then run this workflow to deploy the Functions app"
+          echo ""
+          echo "See .github/DEPLOYMENT_SEQUENCE.md for detailed instructions."
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
           MISSING_SECRETS=""
           PRESENT_SECRETS=""
           MISSING_VARS=""
@@ -125,7 +141,7 @@ jobs:
             echo "::error::AZURE_FUNCTIONAPP_NAME is NOT set as a VARIABLE"
             MISSING_VARS="${MISSING_VARS}AZURE_FUNCTIONAPP_NAME, "
             CAN_DEPLOY="false"
-            
+
             # Check if it was mistakenly set as a secret
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
               echo "::error::AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
@@ -148,7 +164,7 @@ jobs:
             echo "✅ AZURE_FUNCTIONAPP_NAME is configured: ${{ vars.AZURE_FUNCTIONAPP_NAME }}"
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_FUNCTIONAPP_NAME, "
             PRESENT_VARS="${PRESENT_VARS}AZURE_FUNCTIONAPP_NAME, "
-            
+
             # Even if variable exists, warn if it's ALSO set as a secret (duplicate configuration)
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
               MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
@@ -166,7 +182,7 @@ jobs:
             echo "✅ AZURE_AI_DEPLOYMENT_NAME is configured: ${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
             PRESENT_VARS="${PRESENT_VARS}AZURE_AI_DEPLOYMENT_NAME, "
             CONFIGURED_VARS="${CONFIGURED_VARS}AZURE_AI_DEPLOYMENT_NAME, "
-            
+
             # Warn about unusual deployment names (may indicate typos or configuration errors)
             DEPLOYMENT_NAME="${{ vars.AZURE_AI_DEPLOYMENT_NAME }}"
             if [[ ! "$DEPLOYMENT_NAME" =~ ^(gpt-3|gpt-35|gpt-4|text-embedding|dall-e) ]]; then
@@ -174,7 +190,7 @@ jobs:
               echo "::warning::Common Azure OpenAI deployment names start with: gpt-3, gpt-35, gpt-4, text-embedding, dall-e"
               echo "::warning::Verify this matches your Azure OpenAI deployment name exactly"
             fi
-            
+
             # Warn if it's ALSO set as a secret (duplicate configuration)
             if [ -n "${{ secrets.AZURE_AI_DEPLOYMENT_NAME }}" ]; then
               MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_AI_DEPLOYMENT_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
@@ -217,7 +233,7 @@ jobs:
           if [ "$CAN_DEPLOY" = "false" ]; then
             echo "## ❌ Infrastructure Validation Failed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            
+
             # Show misconfiguration warnings first if any
             if [ -n "$MISCONFIG_WARNINGS" ]; then
               echo "### ⚠️ Configuration Issues Detected:" >> $GITHUB_STEP_SUMMARY
@@ -230,7 +246,7 @@ jobs:
               echo '3. See `.github/AZURE_SETUP.md` for the complete list of correct names' >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             if [ -n "$PRESENT_SECRETS" ]; then
               echo "### ✅ Configured Secrets:" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
@@ -335,13 +351,25 @@ jobs:
           echo "✅ Configured secrets: ${{ steps.check.outputs.configured_secrets }}"
           echo "✅ Configured variables: ${{ steps.check.outputs.configured_vars }}"
           echo ""
-          echo "📖 COMPLETE SETUP GUIDE: .github/DEPLOYMENT_SEQUENCE.md"
+          echo "📖 DEPLOYMENT SEQUENCE: .github/DEPLOYMENT_SEQUENCE.md"
           echo ""
-          echo "Quick Start:"
-          echo "  1️⃣  Deploy Azure infrastructure:"
+          echo "🚀 RECOMMENDED: Use the automated infrastructure deployment workflow"
+          echo ""
+          echo "  Option A: GitHub Actions (Automated - RECOMMENDED)"
+          echo "  ────────────────────────────────────────────────────"
+          echo "  1️⃣  Go to Actions → 'Deploy Azure Infrastructure'"
+          echo "  2️⃣  Click 'Run workflow'"
+          echo "  3️⃣  Select environment (dev/stg/prd) and location"
+          echo "  4️⃣  Click 'Run workflow' button"
+          echo "  5️⃣  Wait for infrastructure deployment and secrets configuration"
+          echo "  6️⃣  Re-run this workflow - it will now succeed!"
+          echo ""
+          echo "  Option B: Manual CLI (Advanced)"
+          echo "  ────────────────────────────────"
+          echo "  1️⃣  Deploy infrastructure:"
           echo "      cd infra/azure && ./scripts/setup-all.sh dev eastus"
           echo ""
-          echo "  2️⃣  Configure GitHub secrets using generated script:"
+          echo "  2️⃣  Configure GitHub secrets:"
           echo "      ./infra/azure/output/github-secrets.dev.sh"
           echo ""
           echo "  3️⃣  Re-run this workflow"
@@ -375,8 +403,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -424,7 +450,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [validate-infrastructure, build]
     if: |
-      github.event_name == 'push' && 
+      github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.validate-infrastructure.outputs.can_deploy == 'true'
     permissions:
@@ -447,8 +473,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
 
       - name: Install production dependencies
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
@@ -554,8 +578,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 8
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile

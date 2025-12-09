@@ -30,47 +30,55 @@ env:
   OUTPUT_LOCATION: "out"
 
 jobs:
-  # Check if required secrets are configured
-  validate-secrets:
+  # Check secrets status (informational only - deployment will proceed)
+  check-secrets:
     runs-on: ubuntu-latest
-    name: Validate Secrets
+    name: Check Secrets Status
     outputs:
       has-swa-token: ${{ steps.check.outputs.has-swa-token }}
     steps:
       - name: Check required secrets
         id: check
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔍 Checking Azure Infrastructure Prerequisites"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          MISSING=""
+
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}" ]; then
-            echo "has-swa-token=false" >> $GITHUB_OUTPUT
-            echo "::notice::⏭️ Skipping deployment - Azure infrastructure not yet configured"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "ℹ️  Azure Infrastructure Not Yet Configured"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "This workflow requires Azure infrastructure to be deployed first."
-            echo "The deployment will be skipped until secrets are configured."
-            echo ""
-            echo "📖 Setup guide: .github/DEPLOYMENT_SEQUENCE.md"
-            echo ""
-            echo "Quick start:"
-            echo "  1. Deploy Azure infrastructure: cd infra/azure && ./scripts/setup-all.sh dev eastus"
-            echo "  2. Extract token: az staticwebapp secrets list --name <app-name> --query 'properties.apiKey' -o tsv"
-            echo "  3. Add to GitHub: gh secret set AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN --body \"<token>\""
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN"
+            echo "::warning::AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is not configured"
           else
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
-            echo "✅ All required secrets are configured"
+            echo "✅ AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is configured"
           fi
 
+          # Show status
+          if [ -n "$MISSING" ]; then
+            echo ""
+            echo "⚠️  Missing secrets:${MISSING}"
+            echo ""
+            echo "📖 To deploy infrastructure and configure secrets:"
+            echo "   Run 'Deploy Azure Infrastructure' workflow first"
+            echo "   See .github/DEPLOYMENT_SEQUENCE.md for details"
+            echo ""
+            echo "Note: Deployment will proceed but may fail if secrets are truly missing."
+          else
+            echo ""
+            echo "✅ All required secrets are configured"
+          fi
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
   build-and-deploy:
-    needs: validate-secrets
-    if: |
-      needs.validate-secrets.outputs.has-swa-token == 'true' &&
-      (github.event_name == 'push' || (github.event_name == 'pull_request' &&
-      github.event.action != 'closed'))
+    needs: check-secrets
+    if:
+      github.event_name == 'push' || (github.event_name == 'pull_request' &&
+      github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:

@@ -18,10 +18,10 @@ env:
   OUTPUT_LOCATION: "build"
 
 jobs:
-  # Check if required secrets are configured
-  validate-secrets:
+  # Check secrets status (informational only - deployment will proceed)
+  check-secrets:
     runs-on: ubuntu-latest
-    name: Validate Secrets
+    name: Check Secrets Status
     outputs:
       has-swa-token: ${{ steps.check.outputs.has-swa-token }}
       has-functions-profile: ${{ steps.check.outputs.has-functions-profile }}
@@ -29,61 +29,35 @@ jobs:
       - name: Check required secrets
         id: check
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔍 Checking Azure Infrastructure Prerequisites"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          MISSING=""
           MISCONFIG_WARNINGS=""
 
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
-            echo "has-swa-token=false" >> $GITHUB_OUTPUT
-            echo "::notice::⏭️ Skipping deployment - Azure infrastructure not yet configured"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "ℹ️  Azure Infrastructure Not Yet Configured"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "This workflow requires Azure infrastructure to be deployed first."
-            echo "The deployment will be skipped until secrets are configured."
-            echo ""
-            echo "📖 Setup guide: .github/DEPLOYMENT_SEQUENCE.md"
-            echo ""
-            echo "Quick start:"
-            echo "  1. Deploy Azure infrastructure: cd infra/azure && ./scripts/setup-all.sh dev eastus"
-            echo "  2. Extract token: az staticwebapp secrets list --name <app-name> --query 'properties.apiKey' -o tsv"
-            echo "  3. Add to GitHub: gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body \"<token>\""
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_API_TOKEN"
+            echo "::warning::AZURE_STATIC_WEB_APPS_API_TOKEN is not configured"
           else
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
+            echo "✅ AZURE_STATIC_WEB_APPS_API_TOKEN is configured"
           fi
 
           # Optional: Functions deployment (only on main)
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            # Debug: Print actual values (secrets show as *** but we can check if they're set)
-            echo "🔍 Debugging Azure Functions deployment prerequisites:"
-            echo "  AZURE_FUNCTIONAPP_PUBLISH_PROFILE is set: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
-            echo "  AZURE_FUNCTIONAPP_NAME (var) value: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'"
-            echo "  AZURE_FUNCTIONAPP_NAME is set as secret: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}"
-            
             if [ -n "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
               # Check if AZURE_FUNCTIONAPP_NAME is properly configured as a variable
               if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
                 # Check if it was mistakenly set as a secret
                 if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
-                  echo "::error::AZURE_FUNCTIONAPP_NAME is configured as a SECRET but should be a VARIABLE"
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a SECRET but should be a VARIABLE"
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
-                  echo "::error::To fix: Delete the AZURE_FUNCTIONAPP_NAME secret and add it as a variable instead"
-                  echo "::error::  1. Go to Settings → Secrets and variables → Actions → Secrets tab"
-                  echo "::error::  2. Delete AZURE_FUNCTIONAPP_NAME"
-                  echo "::error::  3. Go to Variables tab → New repository variable"
-                  echo "::error::  4. Name: AZURE_FUNCTIONAPP_NAME, Value: phoenix-rooivalk-functions"
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
                 else
-                  echo "::error::AZURE_FUNCTIONAPP_NAME variable is NOT set - Functions deployment will be skipped"
-                  echo "::error::To fix: Add AZURE_FUNCTIONAPP_NAME as a repository VARIABLE (not secret)"
-                  echo "::error::  1. Go to Settings → Secrets and variables → Actions → Variables tab"
-                  echo "::error::  2. Click 'New repository variable'"
-                  echo "::error::  3. Name: AZURE_FUNCTIONAPP_NAME"
-                  echo "::error::  4. Value: phoenix-rooivalk-functions (your function app name)"
-                  echo "::error::  5. See .github/AZURE_SETUP.md for details"
+                  echo "::warning::AZURE_FUNCTIONAPP_NAME variable is NOT set - Functions deployment will be skipped"
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
                 fi
               else
@@ -98,7 +72,7 @@ jobs:
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else
-              echo "::notice::AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret is NOT configured - Functions deployment will be skipped"
+              echo "::warning::AZURE_FUNCTIONAPP_PUBLISH_PROFILE secret is NOT configured - Functions deployment will be skipped"
               echo "has-functions-profile=false" >> $GITHUB_OUTPUT
             fi
           else
@@ -118,14 +92,7 @@ jobs:
 
           # Print misconfiguration warnings
           if [ -n "$MISCONFIG_WARNINGS" ]; then
-            echo "::error::Configuration issues detected:${MISCONFIG_WARNINGS}"
-            echo ""
-            echo "Fix these issues:"
-            echo "  1. Go to Settings → Secrets and variables → Actions"
-            echo "  2. Review the Secrets and Variables tabs"
-            echo "  3. Delete any incorrectly named or typed items"
-            echo "  4. Add them with the correct name and type (Secret vs Variable)"
-            echo "  5. See .github/AZURE_SETUP.md for the complete list of correct names"
+            echo "::warning::Configuration issues detected:${MISCONFIG_WARNINGS}"
           fi
 
           # Print warnings
@@ -133,16 +100,29 @@ jobs:
             echo "::warning::Optional secrets missing (app will run in degraded mode):${WARNINGS}"
           fi
 
-          if [ "${{ steps.check.outputs.has-swa-token }}" == "true" ]; then
+          # Show status
+          if [ -n "$MISSING" ]; then
+            echo ""
+            echo "⚠️  Missing required secrets:${MISSING}"
+            echo ""
+            echo "📖 To deploy infrastructure and configure secrets:"
+            echo "   Run 'Deploy Azure Infrastructure' workflow first"
+            echo "   See .github/DEPLOYMENT_SEQUENCE.md for details"
+            echo ""
+            echo "Note: Deployment will proceed but may fail if secrets are truly missing."
+          else
+            echo ""
             echo "✅ All required secrets are configured"
           fi
 
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
   build-and-deploy:
-    needs: validate-secrets
-    if: |
-      needs.validate-secrets.outputs.has-swa-token == 'true' &&
-      (github.event_name == 'push' || (github.event_name == 'pull_request' &&
-      github.event.action != 'closed'))
+    needs: check-secrets
+    if:
+      github.event_name == 'push' || (github.event_name == 'pull_request' &&
+      github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
@@ -298,10 +278,10 @@ jobs:
           action: "close"
 
   deploy-functions:
-    needs: [validate-secrets, build-and-deploy]
+    needs: [check-secrets, build-and-deploy]
     if:
       github.event_name == 'push' && github.ref == 'refs/heads/main' &&
-      needs.validate-secrets.outputs.has-functions-profile == 'true'
+      needs.check-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions
     steps:

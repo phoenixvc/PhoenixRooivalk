@@ -151,20 +151,45 @@ cargo test                             # Run Rust tests
 
 ### Deployment
 
-Deployments are performed by GitHub Actions to Azure Static Web Apps:
+**🚀 Automated Infrastructure-First Deployment**
 
-- **Docs**: `.github/workflows/deploy-docs-azure.yml` publishes `apps/docs/build/`
-  - Deployed to: Azure Static Web Apps
-  - Secrets: `AZURE_STATIC_WEB_APPS_API_TOKEN`
-  - Optional: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`, `AZURE_FUNCTIONAPP_NAME` (for Functions deployment)
-  - Triggers: Push to `main` branch, changes to `apps/docs/**`
-  - Preview deployments: Automatic for pull requests
+PhoenixRooivalk uses a three-phase deployment approach:
 
-- **Marketing**: `.github/workflows/deploy-marketing-azure.yml` publishes `apps/marketing/out/`
-  - Deployed to: Azure Static Web Apps
-  - Secrets: `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN`
-  - Triggers: Push to `main` branch, changes to `apps/marketing/**`
-  - Preview deployments: Automatic for pull requests
+1. **Infrastructure** (`.github/workflows/deploy-infrastructure.yml`):
+   - Deploy all Azure resources (Static Web Apps, Functions, Cosmos DB, Key Vault)
+   - Automatically configure GitHub secrets
+   - Run via GitHub Actions UI or CLI
+   - See [Quick Reference](.github/QUICK_REFERENCE.md)
+
+2. **Secrets** (Automated):
+   - Deployment tokens extracted automatically
+   - GitHub secrets populated (if GH_PAT configured)
+   - Manual fallback instructions provided
+
+3. **Applications** (Triggered on push or manual):
+   - **Docs**: `.github/workflows/deploy-docs-azure.yml` → Azure Static Web Apps
+   - **Marketing**: `.github/workflows/deploy-marketing-azure.yml` → Azure Static Web Apps
+   - **Functions**: `.github/workflows/deploy-azure-functions.yml` → Azure Functions
+
+**Quick Start:**
+```bash
+# One-time: Configure Azure credentials
+gh secret set AZURE_SUBSCRIPTION_ID --body "<subscription-id>"
+gh secret set AZURE_CREDENTIALS --body '<service-principal-json>'
+
+# Deploy infrastructure via UI: Actions → Deploy Azure Infrastructure → Run workflow
+# Or via CLI:
+gh workflow run deploy-infrastructure.yml -f environment=dev -f location=eastus2
+
+# Deploy applications (automatic on push to main)
+git push origin main
+```
+
+**Documentation:**
+- 📖 [Deployment Workflow Guide](.github/DEPLOYMENT_WORKFLOW_GUIDE.md) - Complete guide
+- 🚀 [Quick Reference](.github/QUICK_REFERENCE.md) - Cheat sheet
+- 📋 [Deployment Sequence](.github/DEPLOYMENT_SEQUENCE.md) - Detailed steps
+- 🔧 [Azure Setup](.github/AZURE_SETUP.md) - Secrets configuration
 
 **Legacy Netlify deployments** (kept for reference):
 - `.github/workflows/deploy-marketing-site.yml` - Marketing site (Netlify, disabled)
