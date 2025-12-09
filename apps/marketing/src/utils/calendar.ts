@@ -176,9 +176,14 @@ export function generateGoogleCalendarURL(event: CalendarEvent): string {
     return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
 
-  params.append("dates", formatGoogleDate(event.startDate));
+  // Google Calendar expects dates in format: startDate/endDate
+  const startDateFormatted = formatGoogleDate(event.startDate);
   if (event.endDate) {
-    params.append("dates", `${formatGoogleDate(event.startDate)}/${formatGoogleDate(event.endDate)}`);
+    const endDateFormatted = formatGoogleDate(event.endDate);
+    params.append("dates", `${startDateFormatted}/${endDateFormatted}`);
+  } else {
+    // For all-day events without end date, use same date
+    params.append("dates", `${startDateFormatted}/${startDateFormatted}`);
   }
 
   return `${baseURL}?${params.toString()}`;
