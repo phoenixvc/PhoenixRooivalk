@@ -253,8 +253,8 @@ importers:
         version: 3.25.76
     devDependencies:
       '@azure/functions':
-        specifier: ^4.3.0
-        version: 4.9.0
+        specifier: ^4.10.0
+        version: 4.10.0
       '@types/jest':
         specifier: ^29.5.0
         version: 29.5.14
@@ -627,8 +627,8 @@ packages:
   '@azure/functions@3.5.1':
     resolution: {integrity: sha512-6UltvJiuVpvHSwLcK/Zc6NfUwlkDLOFFx97BHCJzlWNsfiWwzwmTsxJXg4kE/LemKTHxPpfoPE+kOJ8hAdiKFQ==}
 
-  '@azure/functions@4.9.0':
-    resolution: {integrity: sha512-IlgCl2/OiSXjMaow5oUhtMQMlsxEAZwsk7BXoT44vgzdIaiZz1VjCzGK9D/7pi6bd0FSyDo6H/1mZASzcD0K6A==}
+  '@azure/functions@4.10.0':
+    resolution: {integrity: sha512-hJ58IrZ4vyzcD/2FXTAoBr9iJO1gtb7jUbdU0lCOYOIeQNezVjNXaqLjECuP0GMGVq12RsqZoDfTRNo8xqcLYg==}
     engines: {node: '>=20.0'}
 
   '@azure/identity@4.13.0':
@@ -5093,6 +5093,10 @@ packages:
 
   cookie@0.7.1:
     resolution: {integrity: sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w==}
+    engines: {node: '>= 0.6'}
+
+  cookie@0.7.2:
+    resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
 
   copy-webpack-plugin@11.0.0:
@@ -11354,10 +11358,10 @@ snapshots:
       long: 4.0.0
       uuid: 8.3.2
 
-  '@azure/functions@4.9.0':
+  '@azure/functions@4.10.0':
     dependencies:
       '@azure/functions-extensions-base': 0.2.0
-      cookie: 0.7.1
+      cookie: 0.7.2
       long: 4.0.0
       undici: 5.29.0
 
@@ -16695,7 +16699,7 @@ snapshots:
   applicationinsights@3.12.1:
     dependencies:
       '@azure/core-auth': 1.10.1
-      '@azure/functions': 4.9.0
+      '@azure/functions': 4.10.0
       '@azure/functions-old': '@azure/functions@3.5.1'
       '@azure/identity': 4.13.0
       '@azure/monitor-opentelemetry': 1.14.2
@@ -17458,6 +17462,8 @@ snapshots:
   cookie-signature@1.0.6: {}
 
   cookie@0.7.1: {}
+
+  cookie@0.7.2: {}
 
   copy-webpack-plugin@11.0.0(webpack@5.102.1):
     dependencies:
