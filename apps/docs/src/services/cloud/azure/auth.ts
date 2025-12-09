@@ -185,18 +185,22 @@ export class AzureAuthService implements IAuthService {
   }
 
   async signOut(): Promise<void> {
-    if (!this.msalInstance) return;
+    // Always clear local state, even if MSAL isn't initialized
+    this.currentUser = null;
 
-    try {
-      await this.msalInstance.logoutPopup({
-        postLogoutRedirectUri:
-          this.config?.postLogoutRedirectUri || window.location.origin,
-      });
-      this.currentUser = null;
-      this.notifyAuthStateChange(null);
-    } catch (error) {
-      console.error("Sign-out error:", error);
+    if (this.msalInstance) {
+      try {
+        await this.msalInstance.logoutPopup({
+          postLogoutRedirectUri:
+            this.config?.postLogoutRedirectUri || window.location.origin,
+        });
+      } catch (error) {
+        console.error("Sign-out error:", error);
+      }
     }
+
+    // Always notify listeners that user is signed out
+    this.notifyAuthStateChange(null);
   }
 
   getCurrentUser(): CloudUser | null {
