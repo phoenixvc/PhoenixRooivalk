@@ -98,7 +98,7 @@ export const schemas = {
     type: z.enum(["category", "role", "interest", "prompt", "topic", "domain"]),
     name: z.string().min(1).max(100),
     description: z.string().max(500).optional(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
     isActive: z.boolean().optional(),
     order: z.number().int().min(0).optional(),
   }),

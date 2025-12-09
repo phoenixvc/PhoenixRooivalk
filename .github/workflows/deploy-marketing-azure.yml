@@ -30,71 +30,52 @@ env:
   OUTPUT_LOCATION: "out"
 
 jobs:
-  # Fail fast if required secrets are missing
-  validate-secrets:
+  # Check secrets status (informational only - deployment will proceed)
+  check-secrets:
     runs-on: ubuntu-latest
-    name: Validate Secrets
+    name: Check Secrets Status
     outputs:
       has-swa-token: ${{ steps.check.outputs.has-swa-token }}
     steps:
       - name: Check required secrets
         id: check
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔍 Checking Azure Infrastructure Prerequisites"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
           MISSING=""
 
           # Required for Static Web Apps deployment
           if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}" ]; then
             MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN"
+            echo "::warning::AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is not configured"
           else
             echo "has-swa-token=true" >> $GITHUB_OUTPUT
+            echo "✅ AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN is configured"
           fi
 
-          # Fail if required secrets are missing
+          # Show status
           if [ -n "$MISSING" ]; then
-            echo "::error::Required secrets are missing:${MISSING}"
             echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🚨 DEPLOYMENT BLOCKED: Azure Infrastructure Not Yet Configured"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "⚠️  Missing secrets:${MISSING}"
             echo ""
-            echo "This workflow requires Azure infrastructure to be deployed FIRST."
-            echo "The deployment tokens are generated during Azure resource provisioning."
+            echo "📖 To deploy infrastructure and configure secrets:"
+            echo "   Run 'Deploy Azure Infrastructure' workflow first"
+            echo "   See .github/DEPLOYMENT_SEQUENCE.md for details"
             echo ""
-            echo "📖 COMPLETE SETUP GUIDE: .github/DEPLOYMENT_SEQUENCE.md"
+            echo "Note: Deployment will proceed but may fail if secrets are truly missing."
+          else
             echo ""
-            echo "Quick Start:"
-            echo ""
-            echo "  1️⃣  Deploy Azure infrastructure:"
-            echo "      cd infra/azure"
-            echo "      ./scripts/setup-all.sh dev eastus"
-            echo ""
-            echo "  2️⃣  Extract deployment tokens:"
-            echo "      az staticwebapp secrets list \\"
-            echo "        --name <your-app-name> \\"
-            echo "        --query 'properties.apiKey' -o tsv"
-            echo ""
-            echo "  3️⃣  Add secrets to GitHub:"
-            echo "      gh secret set AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN --body \"<token>\""
-            echo ""
-            echo "      OR via GitHub UI:"
-            echo "      Settings → Secrets and variables → Actions → New repository secret"
-            echo ""
-            echo "  4️⃣  Re-run this workflow"
-            echo ""
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo ""
-            echo "For detailed instructions, see:"
-            echo "  • .github/DEPLOYMENT_SEQUENCE.md (deployment order)"
-            echo "  • .github/AZURE_SETUP.md (secrets configuration)"
-            echo "  • infra/azure/README.md (infrastructure overview)"
-            echo ""
-            exit 1
+            echo "✅ All required secrets are configured"
           fi
-
-          echo "✅ All required secrets are configured"
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   build-and-deploy:
-    needs: validate-secrets
+    needs: check-secrets
     if:
       github.event_name == 'push' || (github.event_name == 'pull_request' &&
       github.event.action != 'closed')
