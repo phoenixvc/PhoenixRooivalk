@@ -701,6 +701,30 @@ Embed WASM simulator via iframe for true DOM isolation.
 
 ---
 
+### ADR-D001: Calendar Export and Integration
+
+**Date**: 2025-12-09 **Status**: Accepted
+
+#### Context
+
+Project timeline and milestones need to be importable into user calendars for tracking and reminders.
+
+#### Decision
+
+Implement iCal/ICS export with Google Calendar and Outlook integration, plus Cal.com scheduling widget.
+
+#### Rationale
+
+- **Universal Compatibility**: iCal format works with all major calendar applications
+- **Privacy-Preserving**: No OAuth or calendar permissions required
+- **Low Maintenance**: No API dependencies for core functionality
+- **Enhanced UX**: Direct calendar links reduce friction
+- **Scheduling Integration**: Cal.com widget enables demo/meeting booking
+
+For detailed analysis and implementation plan, see [ADR-D001: Calendar Export and Integration](./adr-D001-calendar-export-integration.md).
+
+---
+
 _This document contains confidential architectural information. Distribution is
 restricted to authorized personnel only. © 2025 Phoenix Rooivalk. All rights
 reserved._
