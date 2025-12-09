@@ -19,7 +19,7 @@ anyhow = "1.0"
 thiserror = "2.0"
 # Rate limiting
 tower = "0.5"
-tower_governor = "0.4"
+tower_governor = "0.8"
 governor = "0.10"
 # Cryptographic hashing for attestation preview
 sha2 = "0.10"
