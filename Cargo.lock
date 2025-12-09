@@ -455,17 +455,14 @@ dependencies = [
  "dyn-clone",
  "futures",
  "getrandom 0.2.16",
- "hmac",
  "http-types",
  "once_cell",
  "paste",
  "pin-project",
  "rand 0.8.5",
- "reqwest",
  "rustc_version",
  "serde",
  "serde_json",
- "sha2",
  "time",
  "tracing",
  "url",
@@ -483,10 +480,12 @@ dependencies = [
  "azure_core_macros",
  "bytes",
  "futures",
+ "hmac",
  "pin-project",
  "rustc_version",
  "serde",
  "serde_json",
+ "sha2",
  "tracing",
  "typespec",
  "typespec_client_core",
@@ -506,21 +505,17 @@ dependencies = [
 
 [[package]]
 name = "azure_data_cosmos"
-version = "0.20.0"
+version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5334f9d569a14c3d707a61d40bebd65d87e4fb886093b8f593d3878d3df84b9"
+checksum = "1c1be6a61e3e1ee0a7065b4b9e1396f485151f5e97d5b364b9d08f81bc982038"
 dependencies = [
  "async-trait",
- "azure_core 0.20.0",
- "bytes",
+ "azure_core 0.30.1",
  "futures",
  "serde",
  "serde_json",
- "thiserror 1.0.69",
- "time",
  "tracing",
  "url",
- "uuid",
 ]
 
 [[package]]
