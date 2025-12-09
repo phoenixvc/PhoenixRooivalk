@@ -483,9 +483,15 @@ const config: Config = {
                   resource.request = resource.request.replace(/^node:/, "");
                 },
               ),
+              // Provide process polyfill for client-side code
+              new webpack.ProvidePlugin({
+                process: require.resolve("process/browser.js"),
+              }),
             ],
             resolve: {
               fallback: {
+                process: require.resolve("process/browser.js"),
+                crypto: false,
                 fs: false,
                 https: false,
                 http: false,

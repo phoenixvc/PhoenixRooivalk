@@ -44,12 +44,27 @@ export function getMissingAuthConfig(): string[] {
   if (isCloudConfigured()) return [];
 
   const missing: string[] = [];
-  if (!process.env.AZURE_ENTRA_CLIENT_ID) {
-    missing.push("AZURE_ENTRA_CLIENT_ID");
+  
+  // Only check config on browser side
+  if (typeof window !== "undefined") {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const docusaurusData = (window as any).__DOCUSAURUS__;
+      const config = docusaurusData?.siteConfig?.customFields?.azureConfig;
+      
+      if (!config?.clientId) {
+        missing.push("AZURE_ENTRA_CLIENT_ID");
+      }
+      if (!config?.tenantId) {
+        missing.push("AZURE_ENTRA_TENANT_ID");
+      }
+    } catch {
+      // If we can't access config, assume both are missing
+      missing.push("AZURE_ENTRA_CLIENT_ID");
+      missing.push("AZURE_ENTRA_TENANT_ID");
+    }
   }
-  if (!process.env.AZURE_ENTRA_TENANT_ID) {
-    missing.push("AZURE_ENTRA_TENANT_ID");
-  }
+  
   return missing;
 }
 
