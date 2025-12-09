@@ -1,5 +1,7 @@
 import * as React from "react";
 import { RevealSection } from "../RevealSection";
+import { CalendarExport } from "../CalendarExport";
+import type { CalendarEvent } from "../../utils/calendar";
 import styles from "./TimelineSection.module.css";
 
 export const TimelineSection: React.FC = () => {
@@ -81,6 +83,46 @@ export const TimelineSection: React.FC = () => {
     },
   ];
 
+  // Convert timeline items to calendar events
+  const calendarEvents: CalendarEvent[] = timelineItems.flatMap((item) => {
+    return item.milestones.map((milestone) => {
+      // Extract date from milestone text if available
+      const dateMatch = milestone.match(/\(([^)]+)\)/);
+      let eventDate = new Date();
+
+      if (dateMatch) {
+        const dateStr = dateMatch[1];
+        // Parse dates like "May 2026", "June 2026", "Q2 2027"
+        if (dateStr.includes("Q1")) {
+          eventDate = new Date(dateStr.replace("Q1", "March"));
+        } else if (dateStr.includes("Q2")) {
+          eventDate = new Date(dateStr.replace("Q2", "June"));
+        } else if (dateStr.includes("Q3")) {
+          eventDate = new Date(dateStr.replace("Q3", "September"));
+        } else if (dateStr.includes("Q4")) {
+          eventDate = new Date(dateStr.replace("Q4", "December"));
+        } else {
+          eventDate = new Date(dateStr + " 1");
+        }
+      } else {
+        // Use the phase's start date
+        const startDateMatch = item.duration.match(/([A-Za-z]+)\s+(\d{4})/);
+        if (startDateMatch) {
+          eventDate = new Date(`${startDateMatch[1]} 1, ${startDateMatch[2]}`);
+        }
+      }
+
+      return {
+        title: `${item.phase}: ${milestone}`,
+        description: `${item.title} - ${item.description}\n\nPhase: ${item.phase}\nStatus: ${item.status}`,
+        startDate: eventDate,
+        allDay: true,
+        category: "PhoenixRooivalk Milestone",
+        url: "https://phoenixrooivalk.com/timeline",
+      };
+    });
+  });
+
   const getStatusClass = (status: string) => {
     switch (status) {
       case "Completed":
@@ -113,6 +155,12 @@ export const TimelineSection: React.FC = () => {
               validation to AeroNet™ enterprise dominance, targeting $50M
               revenue by FY30.
             </p>
+            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "center" }}>
+              <CalendarExport
+                events={calendarEvents}
+                filename="phoenix-rooivalk-timeline"
+              />
+            </div>
           </RevealSection>
 
           <div className={styles.timeline}>

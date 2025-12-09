@@ -1,0 +1,190 @@
+.integrationContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: rgb(var(--text-secondary));
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.schedulingSection {
+  background: rgb(var(--bg-secondary));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary));
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sectionIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgb(var(--primary));
+}
+
+.sectionDescription {
+  font-size: 1rem;
+  color: rgb(var(--text-secondary));
+  margin-bottom: 2rem;
+}
+
+.calWidget {
+  width: 100%;
+  min-height: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  background: rgb(var(--darker));
+}
+
+.placeholderWidget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 3rem;
+  text-align: center;
+  background: rgb(var(--darker));
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.placeholderIcon {
+  width: 4rem;
+  height: 4rem;
+  color: rgb(var(--primary));
+  margin-bottom: 1.5rem;
+}
+
+.placeholderTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary));
+  margin-bottom: 0.5rem;
+}
+
+.placeholderText {
+  font-size: 1rem;
+  color: rgb(var(--text-muted));
+  margin-bottom: 1.5rem;
+}
+
+.placeholderLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.placeholderLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
+}
+
+.eventTypes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.eventType {
+  background: rgb(var(--darker));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.eventType:hover {
+  border-color: rgb(var(--primary));
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  transform: translateY(-2px);
+}
+
+.eventTypeHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.eventTypeIcon {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+  background: rgba(249, 115, 22, 0.1);
+  border-radius: 0.5rem;
+  color: rgb(var(--primary));
+}
+
+.eventTypeName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary));
+}
+
+.eventTypeDuration {
+  font-size: 0.875rem;
+  color: rgb(var(--text-muted));
+  margin-bottom: 0.75rem;
+}
+
+.eventTypeDescription {
+  font-size: 0.95rem;
+  color: rgb(var(--text-secondary));
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .integrationContainer {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .schedulingSection {
+    padding: 1.5rem;
+  }
+
+  .eventTypes {
+    grid-template-columns: 1fr;
+  }
+}

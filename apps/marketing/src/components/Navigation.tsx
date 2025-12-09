@@ -78,6 +78,11 @@ export const Navigation: React.FC = () => {
           description: "Project roadmap",
         },
         {
+          href: "/schedule",
+          label: "Schedule Meeting",
+          description: "Book a demo or consultation",
+        },
+        {
           href: "/partnerships",
           label: "Partnerships",
           description: "Collaboration opportunities",
