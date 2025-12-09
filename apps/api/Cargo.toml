@@ -28,7 +28,7 @@ hex = "0.4"
 async-trait = "0.1"
 # Azure Cosmos DB support (optional feature)
 azure_data_cosmos = { version = "0.20", optional = true }
-azure_identity = { version = "0.20", optional = true }
+azure_identity = { version = "0.30", optional = true }
 azure_core = { version = "0.20", optional = true }
 
 [features]
