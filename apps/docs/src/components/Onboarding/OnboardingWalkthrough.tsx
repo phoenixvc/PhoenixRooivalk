@@ -946,7 +946,7 @@ export function OnboardingWalkthrough({
       setCurrentStep(funFactsIndex);
       saveStep(funFactsIndex);
     } else {
-      const tourIndex = findStepIndex("welcome-tour");
+      const tourIndex = findStepIndex("tour");
       setCurrentStep(tourIndex);
       saveStep(tourIndex);
     }
