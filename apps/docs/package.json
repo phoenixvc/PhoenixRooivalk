@@ -33,7 +33,7 @@
     "@docusaurus/theme-classic": "^3.9.2",
     "@docusaurus/theme-common": "^3.9.2",
     "@docusaurus/theme-mermaid": "^3.9.2",
-    "@easyops-cn/docusaurus-search-local": "^0.45.0",
+    "@easyops-cn/docusaurus-search-local": "^0.52.2",
     "@microsoft/applicationinsights-web": "^3.1.0",
     "ajv": "^8.17.1",
     "clsx": "^2.1.0",
