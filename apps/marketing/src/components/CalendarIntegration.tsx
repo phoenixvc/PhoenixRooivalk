@@ -148,7 +148,7 @@ export const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
           Book Your Meeting
         </h3>
         <p className={styles.sectionDescription}>
-          Select your preferred date and time below. You'll receive a
+          Select your preferred date and time below. You&apos;ll receive a
           confirmation email with meeting details and calendar invite.
         </p>
 
