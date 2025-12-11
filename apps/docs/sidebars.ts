@@ -103,6 +103,14 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "Meeting Notes",
+          collapsed: true,
+          items: [
+            "executive/meeting-notes/2025-12-11-strategic-resources-action-tracker",
+          ],
+        },
+        {
+          type: "category",
           label: "Early Development",
           collapsed: true,
           items: [
