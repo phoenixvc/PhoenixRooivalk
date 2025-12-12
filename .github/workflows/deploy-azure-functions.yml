@@ -403,6 +403,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -473,6 +475,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
 
       - name: Install production dependencies
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
@@ -578,6 +582,8 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
