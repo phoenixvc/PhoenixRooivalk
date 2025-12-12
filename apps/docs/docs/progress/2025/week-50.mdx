@@ -31,6 +31,9 @@ keywords:
     ITAR,
     edge-cloud,
     code stats,
+    OmniPost,
+    content_creation,
+    multi-platform publishing,
   ]
 difficulty: beginner
 timeEstimate: 5
@@ -100,6 +103,14 @@ import {
 - **ADR-0040**: Edge-Cloud Communication - offline operation with priority sync
 - **ADR-0050**: ITAR Compliance - US market readiness architecture
 - **Fixed**: ADR numbering conflicts (0015, 0016 duplicates resolved → 0026, 0027, 0028)
+
+### 7. Related Project: OmniPost Updates
+
+- **Repository**: [content_creation](https://github.com/JustAGhosT/content_creation) - AI-powered multi-platform publishing
+- **Security hardening**: Format string injection fixes, pinned dependencies
+- **Database updates**: Prisma schema with HTTP audit fields, PII retention policies
+- **Testing**: Enhanced integration tests with Zod, rate limiting, auth checks
+- **Purpose**: Automates investor communications and marketing content distribution
 
 ---
 
@@ -646,6 +657,47 @@ ADRs created this week to formalize architectural decisions:
 | ADR-0050| ITAR Compliance                | Proposed | US market readiness architecture         |
 
 **Also fixed:** Resolved ADR numbering conflicts (duplicate 0015, 0016 numbers)
+
+---
+
+### 16. Related Project: OmniPost (content_creation)
+
+Development continued on [OmniPost](https://github.com/JustAGhosT/content_creation), an AI-powered multi-platform content publishing tool created to support Phoenix Rooivalk's marketing and investor communications.
+
+#### Repository Overview
+
+| Metric | Value |
+|--------|-------|
+| Repository | [JustAGhosT/content_creation](https://github.com/JustAGhosT/content_creation) |
+| Total Commits | 581+ |
+| Tech Stack | Next.js 14, React 18, TypeScript 5.3, Prisma |
+| AI Providers | DeepSeek, OpenAI, Azure OpenAI, Hugging Face |
+
+#### Key Features
+
+- **Multi-Platform Publishing**: Facebook, Instagram, LinkedIn, Twitter, custom platforms
+- **AI Content Tools**: Text summarization, image generation, platform-specific adaptation
+- **Enterprise Features**: JWT auth, audit trails, Airtable integration, rate limiting
+- **Notifications**: Email, Slack, SMS (Twilio)
+
+#### December 2025 Updates
+
+| Category | Changes |
+|----------|---------|
+| **Security** | Fixed format string injection vulnerabilities, pinned package versions |
+| **Database** | Prisma schema updated with HTTP audit fields (path, method, body, statusCode) |
+| **Privacy** | PII retention policies: 90-day retention, SHA-256 hashing for IPs |
+| **Testing** | Enhanced integration tests with Zod validation, rate limiting, bearer auth |
+| **Code Quality** | SonarCloud fixes, reduced cognitive complexity, CSS modules organized |
+| **UI/UX** | Landing page fixes, Prettier formatting, AbortController for fetch cleanup |
+
+#### Relevance to Phoenix Rooivalk
+
+OmniPost supports the project by:
+- Automating investor update distribution across platforms
+- Generating AI-assisted marketing content
+- Managing content queues with human review workflows
+- Tracking engagement across channels for investor relations
 
 ---
 
