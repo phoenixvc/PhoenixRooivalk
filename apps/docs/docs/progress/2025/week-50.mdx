@@ -2,16 +2,13 @@
 title: "Week 50: Dec 9 - Dec 12, 2025"
 sidebar_label: "Week 50 (Dec 9-12)"
 description:
-  Weekly progress report covering strategic pivot to airport defense, SOSV
-  accelerator strategy, Alistair Kim advisory discussions, hardware prototype
-  sourcing, documentation improvements with calendar integration and meeting
-  summaries, and Soonami final cohort meeting
+  Weekly progress report covering SOSV accelerator strategy, Alistair Kim
+  advisory discussions, hardware prototype sourcing, documentation improvements
+  with calendar integration and meeting summaries, and Azure naming conventions
 keywords:
   [
     progress,
     weekly,
-    strategic pivot,
-    airport defense,
     SOSV,
     accelerator,
     hardware accelerator,
@@ -23,10 +20,11 @@ keywords:
     net launcher,
     calendar integration,
     meeting summaries,
-    Soonami,
-    cohort 8,
-    European markets,
-    Middle East,
+    movement m1,
+    evidence trail,
+    azure naming conventions,
+    infrastructure,
+    bicep,
   ]
 difficulty: beginner
 timeEstimate: 5
@@ -54,89 +52,56 @@ import {
 
 ## TL;DR (2-Minute Summary)
 
-### 1. Strategic Pivot: Airport Defense Focus
-
-- **Market refocus**: From broad military drone swarm defense to **airport drone defense**
-- **Target markets**: High-risk European markets (near Russia/Belgium) with clear ROI
-- **Rationale**: South African market has minimal threat/demand; international markets better
-- **Entry strategy**: Prove concept in airport defense → Build credibility → Scale to broader defense
-
-### 2. Funding Strategy: SOSV as Primary Target
+### 1. Funding Strategy: SOSV as Primary Target
 
 - **SOSV accelerator**: $500K pre-seed, hardware-focused - Alistair's top recommendation
 - **Critical insight**: Apply to accelerators **BEFORE** incorporation (maintains eligibility)
 - **Multi-track approach**: Accelerators + SA grants + Middle East hubs + commercial AI projects
 - **Application list coming**: Alistair to provide VC/accelerator list early next week
 
-### 3. Advisory Partnership: Alistair Kim
+### 2. Advisory Partnership: Alistair Kim
 
 - **Expressed interest** in advisory role based on drone AI industry experience
 - **Previous success**: Built drone startup to $80M valuation
 - **Current work**: Japanese drone company with Tokyo market listing
 - **Next steps**: Offline discussion to define collaboration structure as equal partners
 
-### 4. Hardware Progress: Launcher Prototype Sourcing
+### 3. Hardware Progress: Launcher Prototype Sourcing
 
 - **Pieter visited 5+ shops** sourcing pipes and fittings for first launcher prototype
 - **More or less found** the materials needed for initial build
 - **Next step**: Return tomorrow to purchase and begin assembly
 - **Validates**: In-house manufacturing approach for launcher components
 
-### 5. Documentation Features: Calendar & Meeting Summaries
+### 4. Documentation Features: Calendar, Meeting Summaries & M1 Integration
 
 - **Calendar integration**: New feature added to documentation portal
 - **Meeting summaries**: Automatic meeting summary generation added
+- **Movement M1 integration**: Evidence trail tracking system integrated for activity logging
 - **Continuing improvements**: Building out documentation infrastructure
 
-### 6. Soonami Cohort 8: Final Meeting
+### 5. Infrastructure: Azure Naming Conventions v2.1
 
-- **Last meeting of the year**: December 12, 2025
-- **Cohort wrap-up**: Concluding Soonami accelerator program for 2025
-- **Relationships built**: Valuable network and mentorship connections established
+- **New naming standard**: `[org]-[env]-[project]-[type]-[region]` pattern
+- **Org codes defined**: nl (NeuralLiquid/Jurie), pvc (Phoenix VC/Eben), tws (Twines & Straps/Martyn), mys (Mystira/Eben)
+- **Documentation added**: Comprehensive naming conventions guide with examples, Bicep module, and CLI commands
+- **Migration mapping**: Legacy naming to v2.1 conversion guide included
 
 ---
 
-## 3-Minute Presentation (Weekly Feedback Meeting)
+## 3-Minute Presentation (Soonami Final Meeting)
 
 <SlideDeck
   title="Week 50 Progress Update"
   duration={3}
-  audience="Investors/Advisors"
+  audience="Soonami Cohort 8"
   date="December 12, 2025"
 >
 
 <SlideSection
   number={1}
-  title="Strategic Pivot: Airport Defense"
-  duration={40}
-  icon="🎯"
-  keyPoints={[
-    {
-      text: "**Market refocus**: Airport drone defense in high-risk European markets",
-      subPoints: [
-        "Near Russia/Belgium - clear threat landscape",
-        "South African market has minimal threat/demand",
-      ],
-    },
-    {
-      text: "**Unique value prop**: Counter-drone swarms using edge AI + drone-to-drone comms",
-      subPoints: [
-        "No GPS/fiber dependency",
-        "Clear differentiation from DJI and competitors",
-      ],
-    },
-    {
-      text: "**Entry strategy**: Prove airport defense → Build credibility → Scale to broader defense",
-    },
-  ]}
-  speakerNotes="Strategic pivot based on Alistair meeting - focus on niche with clear ROI."
-  script="We're pivoting our market focus from broad military drone swarm defense to airport drone defense in high-risk European markets. Our unique value prop is counter-drone swarms using edge AI with no GPS dependency. Strategy is to prove the concept in airports first, then scale."
-/>
-
-<SlideSection
-  number={2}
   title="Funding Strategy: SOSV Priority"
-  duration={35}
+  duration={40}
   icon="💰"
   keyPoints={[
     "**SOSV accelerator**: $500K pre-seed, hardware-focused - top recommendation",
@@ -155,9 +120,9 @@ import {
 />
 
 <SlideSection
-  number={3}
+  number={2}
   title="Advisory Partnership: Alistair Kim"
-  duration={30}
+  duration={35}
   icon="🤝"
   keyPoints={[
     "**Expressed interest** in advisory role with PhoenixRooivalk",
@@ -176,9 +141,9 @@ import {
 />
 
 <SlideSection
-  number={4}
+  number={3}
   title="Hardware: Launcher Prototype Progress"
-  duration={25}
+  duration={30}
   icon="🔧"
   keyPoints={[
     "**Pieter sourcing materials**: Visited 5+ shops for pipes and fittings",
@@ -191,9 +156,9 @@ import {
 />
 
 <SlideSection
-  number={5}
-  title="Documentation & Soonami"
-  duration={25}
+  number={4}
+  title="Documentation & Infrastructure"
+  duration={30}
   icon="📚"
   keyPoints={[
     {
@@ -201,19 +166,25 @@ import {
       subPoints: [
         "Calendar integration for project scheduling",
         "Meeting summaries - automatic generation",
+        "Movement M1 integration - evidence trail tracking",
       ],
     },
-    "**Soonami Cohort 8**: Final meeting today (Dec 12)",
-    "**Year wrap-up**: Valuable network and mentorship connections",
+    {
+      text: "**Azure Naming Conventions v2.1**:",
+      subPoints: [
+        "Standardized: [org]-[env]-[project]-[type]-[region]",
+        "Full documentation with Bicep module",
+      ],
+    },
   ]}
-  speakerNotes="Documentation improvements and Soonami program wrapping up for the year."
-  script="Added two new features to the docs - calendar integration and meeting summaries. Today is our final Soonami meeting for the year, wrapping up Cohort 8 with valuable connections made."
+  speakerNotes="Documentation improvements, M1 evidence tracking, and infrastructure standardization."
+  script="Added three new features to the docs - calendar integration, meeting summaries, and Movement M1 integration for evidence trail tracking. Also standardized our Azure naming conventions to v2.1 with full documentation and a Bicep module."
 />
 
 <SlideSection
-  number={6}
+  number={5}
   title="Key Quote from Alistair"
-  duration={15}
+  duration={20}
   icon="💡"
   keyPoints={[
     {
@@ -228,9 +199,9 @@ import {
 />
 
 <SlideSection
-  number={7}
+  number={6}
   title="Next Week Priorities"
-  duration={20}
+  duration={25}
   icon="📅"
   keyPoints={[
     "**Receive accelerator list** from Alistair and begin applications",
@@ -243,10 +214,6 @@ import {
 />
 
 </SlideDeck>
-
-:::tip Strategic Insight
-This week marked a significant strategic pivot based on expert advice. The focus on airport defense in European markets provides a clear niche with demonstrable ROI - essential for hardware startup funding.
-:::
 
 ### Discussion Points for Meeting
 
@@ -261,53 +228,47 @@ This week marked a significant strategic pivot based on expert advice. The focus
 ## Presentation Walkthrough Script
 
 > **Duration**: ~3 minutes + discussion
-> **Audience**: Weekly feedback meeting (investors/advisors)
+> **Audience**: Soonami Cohort 8 Final Meeting
 
 ---
 
 ### Opening (10 seconds)
 
-> "This week we had a strategic meeting with Alistair Kim that led to a significant market pivot, plus progress on hardware prototyping and documentation. Quick overview."
+> "This week we had a strategic meeting with Alistair Kim on funding strategy, plus progress on hardware prototyping and infrastructure. Quick overview."
 
 ---
 
-### Slide 1: Strategic Pivot (40 seconds)
-
-> "We're pivoting from broad military drone swarm defense to focused airport drone defense in high-risk European markets - near Russia and Belgium where the threat is clear. Our unique value prop is counter-drone swarms using edge AI with no GPS dependency. Strategy is to prove the concept in airports first, build credibility, then scale to broader defense markets."
-
----
-
-### Slide 2: Funding Strategy (35 seconds)
+### Slide 1: Funding Strategy (40 seconds)
 
 > "SOSV is our primary funding target - $500K pre-seed specifically for hardware startups. Critical insight from Alistair: apply to accelerators before incorporating to maintain eligibility. We're taking a multi-track approach - accelerators, South African grants through TIA and IDC, and Middle East innovation hubs. Alistair is providing his VC and accelerator list early next week."
 
 ---
 
-### Slide 3: Advisory Partnership (30 seconds)
+### Slide 2: Advisory Partnership (35 seconds)
 
 > "Alistair Kim expressed interest in an advisory role. He has strong credentials - previous drone AI startup reached $80M valuation, currently involved with a Japanese drone company on the Tokyo market. Next step is an offline discussion to define collaboration structure, treating us as equal partners not contractors."
 
 ---
 
-### Slide 4: Hardware Progress (25 seconds)
+### Slide 3: Hardware Progress (30 seconds)
 
 > "Pieter made hands-on progress on the launcher prototype - visited five different shops sourcing pipes and fittings. He found what we need and is returning tomorrow to purchase components. This validates our in-house manufacturing approach for the launcher."
 
 ---
 
-### Slide 5: Documentation & Soonami (25 seconds)
+### Slide 4: Documentation & Infrastructure (30 seconds)
 
-> "Added two new features to the documentation portal - calendar integration and automatic meeting summaries. Today is our final Soonami meeting for the year, wrapping up Cohort 8 with valuable network connections."
+> "Added three new features to the documentation portal - calendar integration, automatic meeting summaries, and Movement M1 integration for evidence trail tracking. Also standardized our Azure naming conventions to v2.1 with a full documentation guide and Bicep module for consistent infrastructure deployment."
 
 ---
 
-### Slide 6: Key Quote (15 seconds)
+### Slide 5: Key Quote (20 seconds)
 
 > "Key strategic guidance from Alistair: Find a niche market that's hard to penetrate but has sizeable opportunity. DJI dominates hardware - our edge is the unserved niche with clear ROI."
 
 ---
 
-### Slide 7: Next Week (20 seconds)
+### Slide 6: Next Week (25 seconds)
 
 > "Next week priorities: receive Alistair's accelerator list and start applications, purchase launcher components and begin assembly, prepare Gazebo simulator demos for pitches, research Middle East innovation hubs, and complete Canada CUAS application - deadline December 15. Questions?"
 
@@ -317,7 +278,7 @@ This week marked a significant strategic pivot based on expert advice. The focus
 
 ### 1. Strategic Meeting: Alistair Kim (December 11, 2025)
 
-A pivotal meeting this week reshaped our market strategy and funding approach.
+A pivotal meeting this week refined our funding approach and introduced a potential advisory partnership.
 
 #### Meeting Participants
 
@@ -328,26 +289,11 @@ A pivotal meeting this week reshaped our market strategy and funding approach.
 | Jurie Smit (Yuri)  | Co-founder, Software/AI Lead      |
 | Alistair Kim       | Advisor, Drone AI Industry Expert |
 
-#### Strategic Pivot
+#### Key Quote
 
-| From                              | To                                         |
-| --------------------------------- | ------------------------------------------ |
-| Broad military drone swarm defense | Focused airport drone defense              |
-| South African market focus        | High-risk European markets (Russia/Belgium border) |
-| General defense positioning       | Niche entry with clear ROI demonstration   |
-
-**Rationale:**
-- South African market has minimal drone threat and limited demand
-- European airport markets have immediate, demonstrable need
-- Niche positioning differentiates from DJI hardware dominance
-- Clear ROI story essential for hardware startup funding
-
-#### Unique Value Proposition
-
-Counter-drone swarms using:
-- **Edge AI**: On-device processing, no cloud dependency
-- **Drone-to-drone communication**: Mesh networking for swarm coordination
-- **No GPS/fiber dependency**: Operates in denied environments
+> "Find a very niche market that is hard to penetrate but has sizeable opportunity. Big players like DJI dominate hardware — your edge is the unserved niche with clear ROI."
+>
+> — Alistair Kim
 
 ---
 
@@ -401,12 +347,6 @@ Counter-drone swarms using:
 | Contribution          | Strategic guidance, network access, funding connections |
 | Next Step             | Offline discussion to define terms         |
 
-#### Key Quote
-
-> "Find a very niche market that is hard to penetrate but has sizeable opportunity. Big players like DJI dominate hardware — your edge is the unserved niche with clear ROI."
->
-> — Alistair Kim
-
 ---
 
 ### 4. Hardware Development
@@ -444,32 +384,36 @@ This hands-on sourcing validates:
 | ------------------- | ---------------------------------------------- | ----------- |
 | Calendar Integration | Project scheduling within documentation portal | ✅ Complete |
 | Meeting Summaries   | Automatic meeting summary generation           | ✅ Complete |
+| Movement M1 Integration | Evidence trail tracking for activity logging | ✅ Complete |
 
 These features enhance the documentation portal's utility for:
 - Team coordination and scheduling
 - Meeting follow-up and action tracking
+- Evidence trail and activity logging for compliance
 - Investor/stakeholder communication
 
 ---
 
-### 6. Soonami Cohort 8
+### 6. Infrastructure: Azure Naming Conventions v2.1
 
-#### Final Meeting
+#### New Naming Standard
 
-| Detail            | Information                    |
-| ----------------- | ------------------------------ |
-| Date              | December 12, 2025              |
-| Event             | Final cohort meeting of 2025   |
-| Status            | Year wrap-up session           |
+Pattern: `[org]-[env]-[project]-[type]-[region]`
 
-#### Program Value Delivered
+| Org Code | Organisation | Owner  |
+|----------|--------------|--------|
+| nl       | NeuralLiquid | Jurie  |
+| pvc      | Phoenix VC   | Eben   |
+| tws      | Twines & Straps | Martyn |
+| mys      | Mystira      | Eben   |
 
-| Benefit               | Details                                  |
-| --------------------- | ---------------------------------------- |
-| Mentorship            | Regular feedback and guidance            |
-| Network               | Connections with other founders          |
-| Pitch Practice        | Multiple presentation opportunities      |
-| Accountability        | Weekly progress check-ins                |
+#### Documentation Added
+
+- Comprehensive naming guide with all segment vocabularies
+- Bicep naming module for consistent IaC
+- Azure CLI resource discovery commands
+- Legacy to v2.1 migration mapping
+- AI guidance for infrastructure tools
 
 ---
 
@@ -477,12 +421,12 @@ These features enhance the documentation portal's utility for:
 
 | Decision                          | Rationale                                | Impact                                    |
 | --------------------------------- | ---------------------------------------- | ----------------------------------------- |
-| Pivot to airport defense          | Clear niche with demonstrable ROI        | Focused market entry strategy             |
 | SOSV as primary funding target    | Hardware-focused, $500K pre-seed         | Clear application priority                |
 | Apply before incorporation        | Maintains accelerator eligibility        | Strategic flexibility preserved           |
 | Pursue Alistair advisory role     | Drone AI expertise, network access       | Strengthened advisory board               |
 | Multi-track funding approach      | Risk mitigation, competition leverage    | Multiple paths to capital                 |
 | Local launcher component sourcing | Availability validated, cost savings     | In-house manufacturing confirmed          |
+| Azure naming conventions v2.1     | Cross-org consistency                    | Standardized infrastructure naming        |
 
 ---
 
@@ -533,13 +477,12 @@ These features enhance the documentation portal's utility for:
 | Metric                      | This Week                      | Trend  |
 | --------------------------- | ------------------------------ | ------ |
 | Strategic meetings          | 1 (Alistair Kim)               | ✅ NEW |
-| Market pivot completed      | Airport defense focus          | ✅ NEW |
 | Advisory interest           | Alistair Kim (verbal)          | ✅ NEW |
 | Hardware shops visited      | 5                              | ✅ NEW |
 | Prototype components found  | Yes                            | ✅ NEW |
-| Doc features added          | 2 (calendar, meeting summaries)| ✅ NEW |
-| Soonami meetings remaining  | 0 (final today)                | ✅     |
+| Doc features added          | 3 (calendar, meeting summaries, M1 integration) | ✅ NEW |
 | Accelerator targets         | 6+ identified                  | ✅ NEW |
+| Infrastructure docs         | Naming conventions v2.1        | ✅ NEW |
 
 ---
 
