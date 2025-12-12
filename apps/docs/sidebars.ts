@@ -396,6 +396,7 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         "resources/downloads",
+        "resources/azure-naming-conventions",
         "resources/suas-program-documentation",
         "resources/documentation-guide",
         "resources/cloud-sync-setup",
