@@ -1,7 +1,7 @@
 ---
-id: adr-0016-x402-payment-protocol
-title: "ADR 0016: x402 Payment Protocol Integration"
-sidebar_label: "ADR 0016: x402 Protocol"
+id: adr-0027-x402-payment-protocol
+title: "ADR 0027: x402 Payment Protocol Integration"
+sidebar_label: "ADR 0027: x402 Protocol"
 difficulty: expert
 estimated_reading_time: 7
 points: 45
@@ -18,7 +18,7 @@ prerequisites:
   - architecture-decision-records
 ---
 
-# ADR 0016: x402 Payment Protocol Integration
+# ADR 0027: x402 Payment Protocol Integration
 
 **Date**: 2025-11-28 **Status**: Accepted (Implementation Started) **Updated**:
 2025-11-28

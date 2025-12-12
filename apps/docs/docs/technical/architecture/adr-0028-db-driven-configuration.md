@@ -1,7 +1,7 @@
 ---
-id: adr-0016-db-driven-configuration
-title: "ADR 0016: Database-Driven Configuration Management"
-sidebar_label: "ADR 0016: DB-Driven Config"
+id: adr-0028-db-driven-configuration
+title: "ADR 0028: Database-Driven Configuration Management"
+sidebar_label: "ADR 0028: DB-Driven Config"
 difficulty: intermediate
 estimated_reading_time: 8
 points: 40
@@ -17,7 +17,7 @@ prerequisites:
   - adr-0012
 ---
 
-# ADR 0016: Database-Driven Configuration Management
+# ADR 0028: Database-Driven Configuration Management
 
 **Date**: 2025-11-30 **Status**: Proposed
 

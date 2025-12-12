@@ -1,7 +1,7 @@
 ---
-id: adr-0015-movement-network-integration
-title: "ADR 0015: Movement Network (MoveNet) Integration Evaluation"
-sidebar_label: "ADR 0015: Movement Network"
+id: adr-0026-movement-network-integration
+title: "ADR 0026: Movement Network (MoveNet) Integration Evaluation"
+sidebar_label: "ADR 0026: Movement Network"
 difficulty: expert
 estimated_reading_time: 8
 points: 50
@@ -17,7 +17,7 @@ prerequisites:
   - adr-0001-chain-selection
 ---
 
-# ADR 0015: Movement Network (MoveNet) Integration Evaluation
+# ADR 0026: Movement Network (MoveNet) Integration Evaluation
 
 **Date**: 2025-11-28 **Status**: Proposed (Hackathon Pilot Recommended)
 
