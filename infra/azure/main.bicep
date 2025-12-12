@@ -67,69 +67,93 @@ param b2cTenantName string = ''
 // Variables
 // ============================================================================
 
-// Naming: {env}-{region}-{type}-rooivalk
-// Following Azure CAF naming conventions: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+// Naming Convention v2.1: [org]-[env]-[project]-[type]-[region]
+// See: docs/azure-naming-conventions.md
+// Org codes: nl (NeuralLiquid), pvc (Phoenix VC), tws (Twines & Straps), mys (Mystira)
+var org = 'nl'  // NeuralLiquid owns Rooivalk
+var project = 'rooivalk'
+
+// Environment mapping (internal to standard)
+var envMap = {
+  dev: 'dev'
+  stg: 'staging'
+  prd: 'prod'
+  prv: 'dev'  // preview maps to dev
+}
+var envStandard = contains(envMap, environment) ? envMap[environment] : environment
+
+// Region short codes per naming convention v2.1
 var locationShortMap = {
   eastus: 'eus'
   eastus2: 'eus2'
   westus: 'wus'
   westus2: 'wus2'
   centralus: 'cus'
-  westeurope: 'weu'
-  northeurope: 'neu'
+  westeurope: 'euw'
+  northeurope: 'eun'
   uksouth: 'uks'
   ukwest: 'ukw'
   eastasia: 'eas'
   southeastasia: 'seas'
   southafricanorth: 'san'
+  southafricawest: 'saf'
+  swedencentral: 'swe'
   australiaeast: 'aue'
 }
 var locationShort = contains(locationShortMap, location) ? locationShortMap[location] : take(location, 4)
 
+// Base naming prefix: [org]-[env]-[project]
+var baseName = '${org}-${envStandard}-${project}'
+
 // Tags for cost management and organization
 var tags = {
-  project: 'rooivalk'
-  environment: environment
+  org: org
+  project: project
+  environment: envStandard
   managedBy: 'bicep'
-  costCenter: 'phoenix-${environment}'
+  costCenter: 'phoenix-${envStandard}'
   owner: 'JustAGhosT'
 }
 
 // Key Vault for secrets management
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module keyVault 'modules/keyvault.bicep' = {
   name: 'keyVault'
   params: {
-    name: '${environment}-${locationShort}-kv-rooivalk'
+    name: '${baseName}-kv-${locationShort}'
     location: location
     tags: tags
   }
 }
 
 // Storage Account for Functions and assets
+// Pattern: [org][env][project]st[region] (no hyphens, max 24 chars)
 module storage 'modules/storage.bicep' = {
   name: 'storage'
   params: {
-    name: '${environment}${locationShort}strooivalk'  // Storage accounts can't have hyphens, max 24 chars
+    name: '${org}${envStandard}${project}st${locationShort}'
     location: location
     tags: tags
   }
 }
 
 // Application Insights for monitoring and analytics
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module appInsights 'modules/appinsights.bicep' = {
   name: 'appInsights'
   params: {
-    name: '${environment}-${locationShort}-appi-rooivalk'
+    name: '${baseName}-appi-${locationShort}'
     location: location
     tags: tags
   }
 }
 
 // Cosmos DB for database (replaces Firestore)
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module cosmosDb 'modules/cosmosdb.bicep' = {
   name: 'cosmosDb'
   params: {
-    name: '${environment}-${locationShort}-cosmos-rooivalk'
+    name: '${baseName}-cosmos-${locationShort}'
     location: location
     tags: tags
     throughput: cosmosDbThroughput
@@ -138,21 +162,23 @@ module cosmosDb 'modules/cosmosdb.bicep' = {
 }
 
 // Notification Hub for push notifications (replaces FCM)
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module notificationHub 'modules/notificationhub.bicep' = {
   name: 'notificationHub'
   params: {
-    namespaceName: '${environment}-${locationShort}-nhns-rooivalk'
-    hubName: '${environment}-${locationShort}-nh-rooivalk'
+    namespaceName: '${baseName}-nhns-${locationShort}'
+    hubName: '${baseName}-nh-${locationShort}'
     location: location
     tags: tags
   }
 }
 
 // Azure Functions for serverless compute (replaces Cloud Functions)
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module functions 'modules/functions.bicep' = {
   name: 'functions'
   params: {
-    name: '${environment}-${locationShort}-func-rooivalk'
+    name: '${baseName}-func-${locationShort}'
     location: location
     tags: tags
     storageAccountName: storage.outputs.name
@@ -167,10 +193,11 @@ module functions 'modules/functions.bicep' = {
 }
 
 // Static Web App for documentation site (replaces Netlify)
+// Pattern: [org]-[env]-[project]-[type]-[region]
 module staticWebAppDocs 'modules/staticwebapp.bicep' = {
   name: 'staticWebAppDocs'
   params: {
-    name: '${environment}-${locationShort}-swa-rooivalk'
+    name: '${baseName}-swa-${locationShort}'
     location: location
     tags: tags
     sku: staticWebAppSku
@@ -183,10 +210,11 @@ module staticWebAppDocs 'modules/staticwebapp.bicep' = {
 }
 
 // Static Web App for marketing site (replaces Netlify)
+// Pattern: [org]-[env]-[project]-marketing-[type]-[region]
 module staticWebAppMarketing 'modules/staticwebapp.bicep' = {
   name: 'staticWebAppMarketing'
   params: {
-    name: '${environment}-${locationShort}-swa-marketing-rooivalk'
+    name: '${baseName}-marketing-swa-${locationShort}'
     location: location
     tags: tags
     sku: staticWebAppSku
