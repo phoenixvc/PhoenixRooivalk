@@ -3,9 +3,9 @@ title: "Week 50: Dec 5 - Dec 12, 2025"
 sidebar_label: "Week 50 (Dec 5-12)"
 description:
   Weekly progress report covering SOSV accelerator strategy, Alistair Kim
-  advisory discussions, hardware prototype sourcing, documentation improvements
-  with calendar integration and meeting summaries, Azure naming conventions,
-  and significant DevOps improvements
+  advisory discussions, hardware prototype sourcing, documentation improvements,
+  7 new ADRs (naming conventions, net launcher, edge-cloud, ITAR compliance),
+  and 27K lines of code changes
 keywords:
   [
     progress,
@@ -26,6 +26,11 @@ keywords:
     azure naming conventions,
     infrastructure,
     bicep,
+    ADR,
+    architecture decision records,
+    ITAR,
+    edge-cloud,
+    code stats,
   ]
 difficulty: beginner
 timeEstimate: 5
@@ -87,6 +92,14 @@ import {
 - **Org codes defined**: nl (NeuralLiquid/Jurie), pvc (Phoenix VC/Eben), tws (Twines & Straps/Martyn), mys (Mystira/Eben)
 - **Documentation added**: Comprehensive naming conventions guide with examples, Bicep module, and CLI commands
 - **Migration mapping**: Legacy naming to v2.1 conversion guide included
+
+### 6. Architecture: 7 New ADRs Created
+
+- **ADR-0025**: Azure Naming Conventions - formalized v2.1 standard
+- **ADR-0030**: Net Launcher Architecture - in-house effector system design
+- **ADR-0040**: Edge-Cloud Communication - offline operation with priority sync
+- **ADR-0050**: ITAR Compliance - US market readiness architecture
+- **Fixed**: ADR numbering conflicts (0015, 0016 duplicates resolved → 0026, 0027, 0028)
 
 ---
 
@@ -483,8 +496,12 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 | Metric                      | This Week                      | vs Week 49     | Trend  |
 | --------------------------- | ------------------------------ | -------------- | ------ |
-| Commits merged              | 127                            | 240+           | ↓      |
+| Commits merged              | 124                            | 240+           | ↓      |
 | Pull requests merged        | 12 feature + 26 dependabot     | 13+            | →      |
+| Lines added                 | 27,063                         | -              | ✅     |
+| Lines deleted               | 9,263                          | -              | ✅     |
+| Files changed               | 288                            | -              | ✅     |
+| Net lines                   | +17,800                        | -              | ✅     |
 | Strategic meetings          | 1 (Alistair Kim)               | 0              | ✅ NEW |
 | Advisory interest           | Alistair Kim (verbal)          | -              | ✅ NEW |
 | Hardware shops visited      | 5                              | -              | ✅ NEW |
@@ -574,6 +591,61 @@ Dependency updates: #309-333 (Rust crates, npm packages, GitHub Actions)
 - **Infrastructure**: Bicep templates updated to naming convention v2.1
 - **Documentation**: Week 50 report, Azure naming conventions, meeting notes
 - **Dependencies**: 26 packages updated via Dependabot
+
+---
+
+### 14. Code Progress Statistics
+
+#### Lines of Code Changed (Dec 5-12)
+
+| Metric          | Count    | Notes                              |
+|-----------------|----------|------------------------------------|
+| Lines added     | 27,063   | New features, docs, dependencies   |
+| Lines deleted   | 9,263    | Refactoring, cleanup               |
+| Net change      | +17,800  | Codebase growth                    |
+| Files modified  | 288      | Across all packages                |
+| Commits         | 124      | 46 Jurie, 36 Copilot, 25 Dependabot, 16 Claude |
+
+#### Changes by Area
+
+| Directory                          | Lines Changed | Category        |
+|------------------------------------|---------------|-----------------|
+| `pnpm-lock.yaml`                   | 9,425         | Dependencies    |
+| `apps/docs/src/pages/admin`        | 3,589         | Admin Dashboard |
+| `apps/docs/azure-functions/src`    | 3,369         | Backend Services|
+| `apps/docs/docs/executive`         | 2,099         | Executive Docs  |
+| `.github/workflows`                | 1,977         | CI/CD Pipelines |
+| `apps/docs/docs/technical/architecture` | 1,729    | ADRs            |
+| `apps/docs/docs/progress/2025`     | 1,218         | Weekly Reports  |
+| `apps/docs/docs/playbooks`         | 1,165         | Playbooks       |
+
+#### Commits by Contributor
+
+| Contributor         | Commits | Focus Areas                        |
+|---------------------|---------|-------------------------------------|
+| Jurie Smit          | 46      | Features, reviews, merges          |
+| copilot-swe-agent   | 36      | Bug fixes, workflow improvements   |
+| dependabot[bot]     | 25      | Dependency updates                 |
+| Claude              | 16      | Documentation, ADRs, infrastructure|
+| JustAGhosT          | 1       | Manual fixes                       |
+
+---
+
+### 15. New Architecture Decision Records
+
+ADRs created this week to formalize architectural decisions:
+
+| ADR     | Title                          | Status   | Key Decision                              |
+|---------|--------------------------------|----------|-------------------------------------------|
+| ADR-0025| Azure Naming Conventions       | Accepted | `[org]-[env]-[project]-[type]-[region]`  |
+| ADR-0026| Movement Network Integration   | Proposed | M1 Hackathon pilot for evidence anchoring|
+| ADR-0027| x402 Payment Protocol          | Accepted | Solana-based API monetization            |
+| ADR-0028| DB-Driven Configuration        | Proposed | Cosmos DB for dynamic config             |
+| ADR-0030| Net Launcher Architecture      | Proposed | In-house pneumatic effector system       |
+| ADR-0040| Edge-Cloud Communication       | Proposed | Store-and-forward with priority queues   |
+| ADR-0050| ITAR Compliance                | Proposed | US market readiness architecture         |
+
+**Also fixed:** Resolved ADR numbering conflicts (duplicate 0015, 0016 numbers)
 
 ---
 
