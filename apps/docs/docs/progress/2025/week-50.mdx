@@ -3,9 +3,9 @@ title: "Week 50: Dec 5 - Dec 12, 2025"
 sidebar_label: "Week 50 (Dec 5-12)"
 description:
   Weekly progress report covering SOSV accelerator strategy, Alistair Kim
-  advisory discussions, hardware prototype sourcing, documentation improvements,
-  7 new ADRs (naming conventions, net launcher, edge-cloud, ITAR compliance),
-  and 27K lines of code changes
+  advisory discussions, hardware prototype sourcing, Movement M1 infrastructure
+  integration, 28 new ADRs, documentation improvements, known issues (AI Functions,
+  inline comments), and 27K+ lines of code changes
 keywords:
   [
     progress,
@@ -82,11 +82,12 @@ import {
 - **Next step**: Return tomorrow to purchase and begin assembly
 - **Validates**: In-house manufacturing approach for launcher components
 
-### 4. Documentation Features: Calendar, Meeting Summaries & M1 Integration
+### 4. Infrastructure: Movement M1 Integration (In Progress)
 
+- **Movement M1**: Integrating evidence trail tracking into core infrastructure (not just docs)
+- **Implementation status**: Actively being integrated into Azure Functions and backend services
 - **Calendar integration**: New feature added to documentation portal
 - **Meeting summaries**: Automatic meeting summary generation added
-- **Movement M1 integration**: Evidence trail tracking system integrated for activity logging
 - **Continuing improvements**: Building out documentation infrastructure
 
 ### 5. Infrastructure: Azure Naming Conventions v2.1
@@ -96,13 +97,16 @@ import {
 - **Documentation added**: Comprehensive naming conventions guide with examples, Bicep module, and CLI commands
 - **Migration mapping**: Legacy naming to v2.1 conversion guide included
 
-### 6. Architecture: 7 New ADRs Created
+### 6. Architecture: 28 New ADRs Created
 
+**Core ADRs (7)**:
 - **ADR-0025**: Azure Naming Conventions - formalized v2.1 standard
 - **ADR-0030**: Net Launcher Architecture - in-house effector system design
 - **ADR-0040**: Edge-Cloud Communication - offline operation with priority sync
 - **ADR-0050**: ITAR Compliance - US market readiness architecture
 - **Fixed**: ADR numbering conflicts (0015, 0016 duplicates resolved → 0026, 0027, 0028)
+
+**Additional ADRs (21)**: Infrastructure, Hardware, Communication, Compliance, Testing, Operations - see Section 15 for full list
 
 ### 7. Related Project: OmniPost Updates
 
@@ -111,6 +115,17 @@ import {
 - **Database updates**: Prisma schema with HTTP audit fields, PII retention policies
 - **Testing**: Enhanced integration tests with Zod, rate limiting, auth checks
 - **Purpose**: Automates investor communications and marketing content distribution
+
+### 8. Known Issues & In Progress
+
+| Issue | Status | Priority | Details |
+|-------|--------|----------|---------|
+| AI Functions unavailable | 🔴 Broken | High | Docs site shows "AI Functions not available. Please check network connection and Azure Functions configuration" |
+| Inline comments | 🔄 Fixing | High (Eben) | Feature broken, one of highest priority items to fix |
+
+**AI Functions Issue**: The "Summarize this page" feature on the documentation site is returning an error. Requires investigation of Azure Functions configuration and network connectivity.
+
+**Inline Comments**: Cool documentation feature that needs repair. Eben has flagged this as one of his highest priority items.
 
 ---
 
@@ -401,7 +416,7 @@ This hands-on sourcing validates:
 
 ---
 
-### 5. Documentation Improvements
+### 5. Documentation & Infrastructure Improvements
 
 #### New Features Added
 
@@ -409,7 +424,15 @@ This hands-on sourcing validates:
 | ------------------- | ---------------------------------------------- | ----------- |
 | Calendar Integration | Project scheduling within documentation portal | ✅ Complete |
 | Meeting Summaries   | Automatic meeting summary generation           | ✅ Complete |
-| Movement M1 Integration | Evidence trail tracking for activity logging | ✅ Complete |
+| Movement M1 Integration | Evidence trail tracking for activity logging | 🔄 In Progress |
+
+#### Movement M1 Infrastructure (In Progress)
+
+M1 is being integrated into the **core infrastructure**, not just documentation:
+- Azure Functions integration for evidence anchoring
+- Backend service hooks for activity logging
+- API endpoints for M1 blockchain interactions
+- Implementation actively underway
 
 **Related ADRs:**
 - [ADR-D001: Calendar Export and Integration](/docs/technical/architecture/adr-D001-calendar-export-integration) - iCal export with Google Calendar and Outlook integration
@@ -422,6 +445,13 @@ These features enhance the documentation portal's utility for:
 - Investor/stakeholder communication
 
 **Key PRs:** #342
+
+#### Known Issues
+
+| Issue | Description | Owner |
+|-------|-------------|-------|
+| AI Functions | "AI Functions not available" error on docs site | Jurie |
+| Inline Comments | Feature broken, needs repair | Eben (high priority) |
 
 ---
 
@@ -646,6 +676,8 @@ Dependency updates: #309-333 (Rust crates, npm packages, GitHub Actions)
 
 ADRs created this week to formalize architectural decisions:
 
+#### Core ADRs (7)
+
 | ADR     | Title                          | Status   | Key Decision                              |
 |---------|--------------------------------|----------|-------------------------------------------|
 | ADR-0025| Azure Naming Conventions       | Accepted | `[org]-[env]-[project]-[type]-[region]`  |
@@ -655,6 +687,19 @@ ADRs created this week to formalize architectural decisions:
 | ADR-0030| Net Launcher Architecture      | Proposed | In-house pneumatic effector system       |
 | ADR-0040| Edge-Cloud Communication       | Proposed | Store-and-forward with priority queues   |
 | ADR-0050| ITAR Compliance                | Proposed | US market readiness architecture         |
+
+#### Additional ADRs (21)
+
+| Category | ADRs | Description |
+|----------|------|-------------|
+| **Infrastructure** | ADR-0029, ADR-0035 | Secrets Management, CI/CD Pipeline Strategy |
+| **Hardware** | ADR-0031, ADR-0032, ADR-0033 | Effector Selection, Sensor-to-Effector Protocol, Hardware Versioning |
+| **Communication** | ADR-0041, ADR-0042, ADR-0043, ADR-0044 | Mesh Networking, Offline Sync, Real-time Communication, Push Notifications |
+| **Compliance** | ADR-0051, ADR-0052, ADR-0053, ADR-0054 | SA Export Control (NCACC), Data Retention, Privacy Regulations, Audit Trail |
+| **Testing** | ADR-0060, ADR-0061, ADR-0062, ADR-0063 | Testing Strategy, HIL Testing, Simulation Framework, E2E Testing |
+| **Operations** | ADR-0070, ADR-0071, ADR-0072, ADR-0073 | Multi-Tenancy, Feature Flags, Incident Response, Disaster Recovery |
+
+**Total: 28 ADRs** covering all major architectural domains.
 
 **Also fixed:** Resolved ADR numbering conflicts (duplicate 0015, 0016 numbers)
 

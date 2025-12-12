@@ -213,9 +213,29 @@ export function CommentSection({
     setEditingComment(null);
   }, []);
 
-  // Don't render if cloud services aren't configured
+  // Show message if cloud services aren't configured
   if (!isCloudConfigured()) {
-    return null;
+    return (
+      <section className={styles.commentSection}>
+        <div className={styles.sectionHeader}>
+          <h3>Comments & Feedback</h3>
+        </div>
+        <div className={styles.configWarning}>
+          <p>
+            <strong>Comments are temporarily unavailable.</strong>
+          </p>
+          <p>
+            Azure cloud services are not configured. This requires setting up{" "}
+            <code>AZURE_FUNCTIONS_BASE_URL</code> and Azure Entra ID
+            credentials.
+          </p>
+          <p>
+            <a href="/admin/diagnostics">View diagnostics</a> for setup
+            instructions.
+          </p>
+        </div>
+      </section>
+    );
   }
 
   // Find the parent comment for reply context

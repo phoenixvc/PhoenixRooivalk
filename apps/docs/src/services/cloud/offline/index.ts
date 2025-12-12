@@ -639,7 +639,8 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _options?: any,
   ): Promise<TOutput> {
     throw new Error(
-      "AI Functions not available. Please check your network connection and Azure Functions configuration.",
+      "AI Functions not available. AZURE_FUNCTIONS_BASE_URL is not configured. " +
+        "Admins: Visit /admin/diagnostics for setup instructions.",
     );
   }
 
@@ -649,7 +650,8 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _options?: any,
   ): Promise<TOutput> {
     throw new Error(
-      "AI Functions not available. Please check your network connection and Azure Functions configuration.",
+      "AI Functions not available. AZURE_FUNCTIONS_BASE_URL is not configured. " +
+        "Admins: Visit /admin/diagnostics for setup instructions.",
     );
   }
 
@@ -659,13 +661,13 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
   ): Promise<any> {
     return {
       analysis:
-        "Competitor analysis not available. Please check your Azure Functions configuration.",
+        "Competitor analysis not available. Configure AZURE_FUNCTIONS_BASE_URL to enable AI features.",
     };
   }
 
   async generateSWOT(_topic: string, _context?: string): Promise<any> {
     return {
-      swot: "SWOT analysis not available. Please check your Azure Functions configuration.",
+      swot: "SWOT analysis not available. Configure AZURE_FUNCTIONS_BASE_URL to enable AI features.",
     };
   }
 
@@ -674,7 +676,7 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
       recommendations: [],
       learningPath: "",
       message:
-        "Recommendations not available. Please check your Azure Functions configuration.",
+        "Recommendations not available. Configure AZURE_FUNCTIONS_BASE_URL to enable AI features.",
     };
   }
 
