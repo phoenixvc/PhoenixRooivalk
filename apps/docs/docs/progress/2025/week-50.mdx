@@ -1,10 +1,11 @@
 ---
-title: "Week 50: Dec 9 - Dec 12, 2025"
-sidebar_label: "Week 50 (Dec 9-12)"
+title: "Week 50: Dec 5 - Dec 12, 2025"
+sidebar_label: "Week 50 (Dec 5-12)"
 description:
   Weekly progress report covering SOSV accelerator strategy, Alistair Kim
   advisory discussions, hardware prototype sourcing, documentation improvements
-  with calendar integration and meeting summaries, and Azure naming conventions
+  with calendar integration and meeting summaries, Azure naming conventions,
+  and significant DevOps improvements
 keywords:
   [
     progress,
@@ -46,7 +47,7 @@ import {
   TEAM,
 } from "@site/src/data/values";
 
-# Week 50: December 9 - December 12, 2025
+# Week 50: December 5 - December 12, 2025
 
 <DocumentDownload title="Week 50 Progress Report - Phoenix Rooivalk" />
 
@@ -480,17 +481,19 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 ### 10. Metrics & KPIs
 
-| Metric                      | This Week                      | Trend  |
-| --------------------------- | ------------------------------ | ------ |
-| Commits merged              | 8                              | ✅     |
-| Pull requests merged        | 1 (#342)                       | ✅     |
-| Strategic meetings          | 1 (Alistair Kim)               | ✅ NEW |
-| Advisory interest           | Alistair Kim (verbal)          | ✅ NEW |
-| Hardware shops visited      | 5                              | ✅ NEW |
-| Prototype components found  | Yes                            | ✅ NEW |
-| Doc features added          | 3 (calendar, meeting summaries, M1 integration) | ✅ NEW |
-| Accelerator targets         | 6+ identified                  | ✅ NEW |
-| Infrastructure docs         | Naming conventions v2.1        | ✅ NEW |
+| Metric                      | This Week                      | vs Week 49     | Trend  |
+| --------------------------- | ------------------------------ | -------------- | ------ |
+| Commits merged              | 127                            | 240+           | ↓      |
+| Pull requests merged        | 12 feature + 26 dependabot     | 13+            | →      |
+| Strategic meetings          | 1 (Alistair Kim)               | 0              | ✅ NEW |
+| Advisory interest           | Alistair Kim (verbal)          | -              | ✅ NEW |
+| Hardware shops visited      | 5                              | -              | ✅ NEW |
+| Prototype components found  | Yes                            | 3D tools done  | →      |
+| Doc features added          | 3                              | PPTX, QR       | →      |
+| Accelerator targets         | 6+ identified                  | -              | ✅ NEW |
+| Infrastructure docs         | Naming conventions v2.1        | -              | ✅ NEW |
+
+**Note:** Lower commit volume this week reflects focus on strategic planning (Alistair meeting) and hardware sourcing rather than feature development. Week 49 was exceptionally productive with 240+ commits.
 
 ---
 
@@ -534,31 +537,43 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 ### 13. Weekly Commits & Pull Requests
 
-#### Pull Requests Merged
+#### Feature Pull Requests Merged (Dec 5-12)
 
-| PR    | Title                                                    | Author                |
-| ----- | -------------------------------------------------------- | --------------------- |
-| #342  | Add Meeting Notes section with December 11 strategic meeting | copilot-swe-agent[bot] |
+| PR    | Title                                                    | Category        |
+| ----- | -------------------------------------------------------- | --------------- |
+| #342  | Add Meeting Notes section with strategic meeting         | Documentation   |
+| #341  | Fix sign out not clearing user state                     | Bug Fix         |
+| #340  | Fix workflow secrets context access                      | DevOps          |
+| #339  | Fix secrets context usage in deploy workflow             | DevOps          |
+| #338  | Map env name to SWA CLI                                  | DevOps          |
+| #337  | Fix environment issue                                    | DevOps          |
+| #336  | Fix Azure SWA deployment timeout                         | DevOps          |
+| #335  | Add downloadable calendar events (ADR-D001)              | Feature         |
+| #334  | Fix process.env reference error                          | Bug Fix         |
+| #308  | Fix profile template login                               | Bug Fix         |
+| #307  | Validate secrets for deployment                          | DevOps          |
+| #305  | Fix documentation formatting                             | Documentation   |
 
-#### Commits (Dec 9-12, 2025)
+#### Dependabot PRs Merged (26 total)
 
-| Hash      | Message                                                | Author   |
-| --------- | ------------------------------------------------------ | -------- |
-| `9de4664` | Update Bicep templates to naming convention v2.1       | Claude   |
-| `1ae023b` | Add Movement M1 integration for evidence trail to Week 50 | Claude   |
-| `dafd802` | Update Week 50 report for Soonami presentation         | Claude   |
-| `885fe7d` | Add Azure Naming Conventions v2.1 documentation        | Claude   |
-| `ff11fe7` | Add Week 50 progress update (Dec 9-12, 2025)           | Claude   |
-| `5ef8819` | Merge pull request #342                                | Jurie    |
-| `2cd130e` | Add Meeting Notes section with December 11 meeting     | Copilot  |
-| `4145a48` | Initial plan                                           | Copilot  |
+Dependency updates: #309-333 (Rust crates, npm packages, GitHub Actions)
+
+**Key Updates:**
+- `openai`: 4.104.0 → 6.10.0
+- `zod`: 3.25.76 → 4.1.13
+- `firebase-admin`: 12.7.0 → 13.6.0
+- `azure_identity`: 0.20.0 → 0.30.0
+- `tauri`: 2.9.3 → 2.9.4
+- GitHub Actions: checkout v6, setup-node v6, download-artifact v6
 
 #### Key Changes This Week
 
+- **DevOps**: 6 workflow fixes for Azure SWA deployment
+- **Authentication**: Sign out bug fix, profile template improvements
+- **Calendar**: ADR-D001 calendar export integration
 - **Infrastructure**: Bicep templates updated to naming convention v2.1
-- **Documentation**: Week 50 progress report, Azure naming conventions guide
-- **Meeting Notes**: Strategic meeting with Alistair Kim captured
-- **ADR Integration**: Movement M1 evidence trail referenced
+- **Documentation**: Week 50 report, Azure naming conventions, meeting notes
+- **Dependencies**: 26 packages updated via Dependabot
 
 ---
 
