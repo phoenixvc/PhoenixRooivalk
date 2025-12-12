@@ -55,7 +55,7 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "2025",
           collapsed: false,
-          items: ["progress/2025/week-48", "progress/2025/week-49"],
+          items: ["progress/2025/week-48", "progress/2025/week-49", "progress/2025/week-50"],
         },
       ],
     },
