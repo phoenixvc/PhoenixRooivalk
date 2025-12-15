@@ -1,5 +1,11 @@
 /* Phoenix Rooivalk Documentation Theme */
 
+/* Import Z-Index Management System */
+@import "./z-index.css";
+
+/* Import Button Sizing Tokens */
+@import "./button-tokens.css";
+
 /* Import Gamification Styles */
 @import "./gamification.css";
 
@@ -36,12 +42,11 @@ body,
   background-color: rgb(15, 23, 42) !important;
 }
 
-/* Even light theme uses dark background for this project */
-[data-theme="light"] html,
-[data-theme="light"] body,
-[data-theme="light"] #__docusaurus {
-  background-color: rgb(15, 23, 42) !important;
-}
+/*
+ * Note: Light theme is intentionally disabled via docusaurus.config.ts
+ * Phoenix Rooivalk's tactical obsidian background is a core brand element.
+ * The theme toggle has been removed from the UI.
+ */
 
 /* Instant background application - no transition delay */
 html,
@@ -148,9 +153,9 @@ body,
   --ifm-button-hover-background-color: rgb(234, 88, 12);
   --ifm-button-hover-border-color: rgb(234, 88, 12);
 
-  /* Links */
-  --ifm-link-color: rgb(249, 115, 22);
-  --ifm-link-hover-color: rgb(251, 146, 60);
+  /* Links - Improved contrast for accessibility (WCAG AA compliant) */
+  --ifm-link-color: rgb(251, 146, 60); /* Lighter orange for better contrast */
+  --ifm-link-hover-color: rgb(253, 186, 116); /* Even lighter on hover */
   --ifm-link-decoration: none;
   --ifm-link-hover-decoration: underline;
 
@@ -1147,27 +1152,37 @@ a:focus {
 
 /* ================================================
    BREADCRUMBS ENHANCEMENT
+   Improved visual hierarchy and distinction from content
    ================================================ */
 
 .breadcrumbs {
   margin-bottom: 1.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba(30, 41, 59, 0.5);
-  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.6) 0%,
+    rgba(30, 41, 59, 0.3) 100%
+  );
+  border-radius: 6px;
+  border-left: 3px solid rgb(249, 115, 22);
+  font-size: 0.8125rem;
 }
 
 .breadcrumbs__item {
   color: rgb(148, 163, 184);
+  display: inline-flex;
+  align-items: center;
 }
 
 .breadcrumbs__link {
   color: rgb(148, 163, 184) !important;
   transition: color 0.2s ease;
+  text-decoration: none !important;
 }
 
 .breadcrumbs__link:hover {
-  color: rgb(249, 115, 22) !important;
-  text-decoration: none !important;
+  color: rgb(251, 146, 60) !important;
+  text-decoration: underline !important;
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
@@ -1175,10 +1190,12 @@ a:focus {
   font-weight: 600;
 }
 
+/* Breadcrumb separator */
 .breadcrumbs__item:not(:last-child)::after {
   content: "›";
   margin: 0 0.5rem;
   color: rgb(71, 85, 105);
+  font-weight: 400;
 }
 
 /* ================================================
@@ -1417,12 +1434,12 @@ html {
   color: rgb(249, 115, 22) !important;
 }
 
-/* Login button - primary action style */
+/* Login button - secondary action style (reduced prominence) */
 .navbar__link--login {
-  background: rgb(249, 115, 22) !important;
-  color: rgb(15, 23, 42) !important;
+  background: transparent !important;
+  color: rgb(249, 115, 22) !important;
   font-weight: 600 !important;
-  border: none;
+  border: 1px solid rgb(249, 115, 22) !important;
   margin-left: 0.5rem !important;
 }
 
@@ -1433,11 +1450,11 @@ html {
 }
 
 .navbar__link--login:hover {
-  background: rgb(234, 88, 12) !important;
-  color: rgb(15, 23, 42) !important;
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
   text-decoration: none !important;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
 }
 
 /* Environment Badge */

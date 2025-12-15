@@ -415,11 +415,12 @@ const config: Config = {
       ],
       copyright: `© 2025 Phoenix Rooivalk. All rights reserved.`,
     },
-    // Enhanced color mode
+    // Color mode - Phoenix Rooivalk uses a branded dark theme only
+    // The tactical obsidian background is part of the brand identity
     colorMode: {
       defaultMode: "dark",
-      disableSwitch: false,
-      respectPrefersColorScheme: true,
+      disableSwitch: true, // Disabled: brand requires dark theme
+      respectPrefersColorScheme: false,
     },
     // Enhanced prism theme with additional languages
     prism: {

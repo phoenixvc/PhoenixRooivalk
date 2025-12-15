@@ -24,8 +24,15 @@
 }
 
 .ai-search-bar--navbar {
-  width: 200px;
+  width: 220px;
   margin-right: 12px;
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(71, 85, 105, 0.6);
+}
+
+.ai-search-bar--navbar:hover {
+  border-color: rgb(100, 116, 139);
+  background: rgb(30, 41, 59);
 }
 
 .ai-search-bar--small {
