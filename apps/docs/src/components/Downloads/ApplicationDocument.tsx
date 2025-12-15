@@ -23,6 +23,10 @@ interface ApplicationDocumentProps {
   showPdf?: boolean;
   /** Custom label for PDF button */
   pdfLabel?: string;
+  /** URL to auxiliary/supporting document PDF */
+  auxiliaryPdfUrl?: string;
+  /** Label for auxiliary PDF download button */
+  auxiliaryPdfLabel?: string;
   /** Additional content */
   children?: React.ReactNode;
 }
@@ -41,6 +45,8 @@ export default function ApplicationDocument({
   logoUrl,
   showPdf = true,
   pdfLabel = "Download as PDF",
+  auxiliaryPdfUrl,
+  auxiliaryPdfLabel = "Download Supporting Document",
   children,
 }: ApplicationDocumentProps): React.ReactElement {
   const handlePdfDownload = React.useCallback(() => {
@@ -67,6 +73,13 @@ export default function ApplicationDocument({
       setTimeout(cleanup, 1000);
     }
   }, [title, applicant]);
+
+  const handleAuxiliaryDownload = React.useCallback(() => {
+    if (auxiliaryPdfUrl) {
+      // Open the pre-generated PDF in a new tab for download
+      window.open(auxiliaryPdfUrl, "_blank");
+    }
+  }, [auxiliaryPdfUrl]);
 
   const statusLabels = {
     draft: "DRAFT",
@@ -96,6 +109,14 @@ export default function ApplicationDocument({
             type="pdf"
             onDownload={handlePdfDownload}
             variant="primary"
+          />
+        )}
+        {auxiliaryPdfUrl && (
+          <DownloadButton
+            label={auxiliaryPdfLabel}
+            type="pdf"
+            onDownload={handleAuxiliaryDownload}
+            variant="secondary"
           />
         )}
         {children}
