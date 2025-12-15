@@ -1,6 +1,7 @@
 import Layout from "@theme/Layout";
 import React, { useState } from "react";
 import styles from "./contact.module.css";
+import { BookingWidget } from "@site/src/components/Calendar";
 
 // Inquiry types with mailto templates
 const INQUIRY_TYPES = {
@@ -317,6 +318,49 @@ export default function Contact(): React.ReactElement {
                 </div>
               </div>
             </form>
+          </section>
+
+          {/* Schedule a Meeting */}
+          <section className={styles.bookingSection}>
+            <h2>Schedule a Meeting</h2>
+            <p className={styles.bookingSectionDescription}>
+              Book time directly with our team for demos, consultations, or investor discussions.
+            </p>
+            <BookingWidget
+              calUsername="phoenixrooivalk"
+              title="Book a Meeting"
+              subtitle="Select a meeting type below to schedule"
+              bookingTypes={[
+                {
+                  id: "demo",
+                  name: "Product Demo",
+                  duration: 30,
+                  description: "See Phoenix Rooivalk in action - live system demonstration",
+                  slug: "demo",
+                },
+                {
+                  id: "consultation",
+                  name: "Technical Consultation",
+                  duration: 45,
+                  description: "Discuss your counter-UAS requirements with our engineering team",
+                  slug: "consultation",
+                },
+                {
+                  id: "investor",
+                  name: "Investor Meeting",
+                  duration: 60,
+                  description: "Investment opportunity discussion with founding team",
+                  slug: "investor-meeting",
+                },
+                {
+                  id: "partnership",
+                  name: "Partnership Discussion",
+                  duration: 45,
+                  description: "Explore strategic partnership opportunities",
+                  slug: "partnership",
+                },
+              ]}
+            />
           </section>
 
           {/* Direct Contact Info */}
