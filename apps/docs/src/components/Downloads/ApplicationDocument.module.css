@@ -31,26 +31,27 @@
 }
 
 .statusBadge[data-status="draft"] {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fcd34d;
+  background: #fbbf24;
+  color: #1a1a1a;
+  border: 1px solid #f59e0b;
 }
 
 .statusBadge[data-status="final"] {
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
+  background: #22c55e;
+  color: #ffffff;
+  border: 1px solid #16a34a;
 }
 
 .statusBadge[data-status="submitted"] {
-  background: #dbeafe;
-  color: #1e40af;
-  border: 1px solid #93c5fd;
+  background: #3b82f6;
+  color: #ffffff;
+  border: 1px solid #2563eb;
 }
 
 .versionInfo {
   font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-600);
+  color: var(--ifm-font-color-base);
+  opacity: 0.8;
 }
 
 /* Cover Page - Hidden on screen, visible in print */
