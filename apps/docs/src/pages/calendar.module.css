@@ -399,3 +399,133 @@
     min-width: auto;
   }
 }
+
+/* ============================================
+   Action Cards - Book Meeting & Subscribe
+   ============================================ */
+.actionCards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.actionCard {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.actionCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.actionCardHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--ifm-color-content);
+}
+
+.actionCardIcon {
+  font-size: 1.5rem;
+}
+
+.actionCardDescription {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.5;
+}
+
+/* Integration Options */
+.integrationOptions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.integrationButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.integrationButton:hover {
+  border-color: rgb(249, 115, 22);
+  background: rgba(249, 115, 22, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.integrationIcon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.integrationLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.integrationTitle {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ifm-color-content);
+}
+
+.integrationDesc {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  margin-top: 0.125rem;
+}
+
+.subscribeHint {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(249, 115, 22, 0.1);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.subscribeHint strong {
+  color: rgb(249, 115, 22);
+}
+
+/* Responsive - Action Cards */
+@media (max-width: 992px) {
+  .actionCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .integrationOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .actionCard {
+    padding: 1rem;
+  }
+}

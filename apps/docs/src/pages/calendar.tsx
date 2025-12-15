@@ -8,7 +8,8 @@
 import React, { useState, useMemo } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
-import { downloadICS, type CalendarEvent } from "../components/Calendar";
+import { downloadICS, generateICS, type CalendarEvent } from "../components/Calendar";
+import BookingWidget from "../components/Calendar/BookingWidget";
 import styles from "./calendar.module.css";
 
 interface CalendarItem {
@@ -226,6 +227,42 @@ export default function CalendarPage(): React.ReactElement {
     (e) => e.priority === "critical" && getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 90
   );
 
+  // Generate ICS content for subscription
+  const allEventsForExport: CalendarEvent[] = calendarEvents.map((item) => ({
+    title: item.title,
+    description: item.description,
+    startDate: new Date(item.date),
+    allDay: true,
+    category: item.category,
+  }));
+
+  const handleCopyICS = async () => {
+    const icsContent = generateICS(allEventsForExport);
+    try {
+      await navigator.clipboard.writeText(icsContent);
+      alert("Calendar data copied! Paste into a .ics file to import.");
+    } catch {
+      // Fallback - download instead
+      downloadICS(allEventsForExport, "phoenix-rooivalk-calendar.ics");
+    }
+  };
+
+  const handleSubscribeGoogle = () => {
+    // Google Calendar subscribe URL (would need hosted ICS file in production)
+    window.open(
+      "https://calendar.google.com/calendar/r?cid=webcal://docs.phoenixrooivalk.com/calendar.ics",
+      "_blank"
+    );
+  };
+
+  const handleSubscribeOutlook = () => {
+    // Outlook subscribe URL
+    window.open(
+      "https://outlook.live.com/calendar/0/addfromweb?url=webcal://docs.phoenixrooivalk.com/calendar.ics",
+      "_blank"
+    );
+  };
+
   return (
     <Layout
       title="Project Calendar"
@@ -251,6 +288,85 @@ export default function CalendarPage(): React.ReactElement {
             >
               View Full Details →
             </Link>
+          </div>
+        </div>
+
+        {/* Action Cards - Book Meeting & Subscribe */}
+        <div className={styles.actionCards}>
+          {/* Book a Meeting */}
+          <div className={styles.actionCard}>
+            <div className={styles.actionCardHeader}>
+              <span className={styles.actionCardIcon}>📅</span>
+              <h2>Book a Meeting</h2>
+            </div>
+            <p className={styles.actionCardDescription}>
+              Schedule time with our team to discuss your counter-UAS requirements,
+              see a product demo, or explore investment opportunities.
+            </p>
+            <BookingWidget
+              calUsername="phoenixrooivalk"
+              title=""
+              subtitle=""
+              embed={false}
+            />
+          </div>
+
+          {/* Calendar Integration */}
+          <div className={styles.actionCard}>
+            <div className={styles.actionCardHeader}>
+              <span className={styles.actionCardIcon}>🔗</span>
+              <h2>Sync to Your Calendar</h2>
+            </div>
+            <p className={styles.actionCardDescription}>
+              Stay updated with all Phoenix Rooivalk deadlines and milestones
+              by adding our calendar to your favorite app.
+            </p>
+            <div className={styles.integrationOptions}>
+              <button
+                className={styles.integrationButton}
+                onClick={handleSubscribeGoogle}
+              >
+                <span className={styles.integrationIcon}>G</span>
+                <span className={styles.integrationLabel}>
+                  <span className={styles.integrationTitle}>Google Calendar</span>
+                  <span className={styles.integrationDesc}>Subscribe & auto-sync</span>
+                </span>
+              </button>
+              <button
+                className={styles.integrationButton}
+                onClick={handleSubscribeOutlook}
+              >
+                <span className={styles.integrationIcon}>O</span>
+                <span className={styles.integrationLabel}>
+                  <span className={styles.integrationTitle}>Outlook Calendar</span>
+                  <span className={styles.integrationDesc}>Subscribe & auto-sync</span>
+                </span>
+              </button>
+              <button
+                className={styles.integrationButton}
+                onClick={handleExportAll}
+              >
+                <span className={styles.integrationIcon}>📥</span>
+                <span className={styles.integrationLabel}>
+                  <span className={styles.integrationTitle}>Download .ics File</span>
+                  <span className={styles.integrationDesc}>Apple Calendar & others</span>
+                </span>
+              </button>
+              <button
+                className={styles.integrationButton}
+                onClick={handleCopyICS}
+              >
+                <span className={styles.integrationIcon}>📋</span>
+                <span className={styles.integrationLabel}>
+                  <span className={styles.integrationTitle}>Copy Calendar Data</span>
+                  <span className={styles.integrationDesc}>For manual import</span>
+                </span>
+              </button>
+            </div>
+            <div className={styles.subscribeHint}>
+              <strong>Pro tip:</strong> Subscribing keeps your calendar automatically
+              updated when new events are added.
+            </div>
           </div>
         </div>
 
