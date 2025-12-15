@@ -141,11 +141,12 @@
   }
 }
 
-/* Hide on mobile */
+/* Mobile adjustments */
 @media (max-width: 768px) {
   .pdf-download-button {
     bottom: 16px;
     left: 16px;
+    z-index: var(--z-index-ai-widget, 700); /* Same level as AI widget */
   }
 
   .pdf-download-button__label {
@@ -155,6 +156,10 @@
   .pdf-download-button__trigger {
     padding: 10px;
     border-radius: 50%;
+    background: var(--ifm-color-primary, rgb(249, 115, 22));
+    border-color: var(--ifm-color-primary, rgb(249, 115, 22));
+    color: white;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
   }
 
   .pdf-download-button__tooltip {

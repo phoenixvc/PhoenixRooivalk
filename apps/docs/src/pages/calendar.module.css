@@ -399,3 +399,401 @@
     min-width: auto;
   }
 }
+
+/* ============================================
+   Action Cards - Book Meeting & Subscribe
+   ============================================ */
+.actionCards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.actionCard {
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.actionCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.actionCardHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--ifm-color-content);
+}
+
+.actionCardIcon {
+  font-size: 1.5rem;
+}
+
+.actionCardDescription {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.5;
+}
+
+/* Integration Options */
+.integrationOptions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.integrationButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.integrationButton:hover {
+  border-color: rgb(249, 115, 22);
+  background: rgba(249, 115, 22, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.integrationIcon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.integrationLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.integrationTitle {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ifm-color-content);
+}
+
+.integrationDesc {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  margin-top: 0.125rem;
+}
+
+.subscribeHint {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(249, 115, 22, 0.1);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.subscribeHint strong {
+  color: rgb(249, 115, 22);
+}
+
+/* Responsive - Action Cards */
+@media (max-width: 992px) {
+  .actionCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .integrationOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .actionCard {
+    padding: 1rem;
+  }
+}
+
+/* ============================================
+   Add Event Modal
+   ============================================ */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--ifm-color-content);
+}
+
+.modalClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  font-size: 1.5rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalClose:hover {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-content);
+}
+
+.modalContent {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: var(--ifm-color-content);
+  transition: border-color 0.2s ease;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+}
+
+.formInput::placeholder {
+  color: var(--ifm-color-content-secondary);
+}
+
+textarea.formInput {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.modalCancel {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalCancel:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-content);
+}
+
+.modalSubmit {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalSubmit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+/* Custom Event Badge & Delete Button */
+.deleteEventButton {
+  margin-left: 0.5rem;
+  padding: 0 0.375rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  font-size: 1rem;
+  color: rgb(239, 68, 68);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.deleteEventButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgb(239, 68, 68);
+}
+
+.customBadge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgb(249, 115, 22);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Responsive - Modal */
+@media (max-width: 576px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   Assignee Filter & Badge
+   ============================================ */
+.filterControls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.assigneeFilter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.assigneeFilter label {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+  white-space: nowrap;
+}
+
+.assigneeSelect {
+  padding: 0.375rem 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content);
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.assigneeSelect:focus {
+  outline: none;
+  border-color: rgb(249, 115, 22);
+}
+
+.assigneeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 20px;
+  padding: 0 0.375rem;
+  background: var(--assignee-color, #6b7280);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive - Filters */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filterControls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .categoryFilters {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+}
