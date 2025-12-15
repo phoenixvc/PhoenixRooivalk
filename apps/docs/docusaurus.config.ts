@@ -293,6 +293,14 @@ const config: Config = {
             },
           ],
         },
+        // Calendar - Project timeline and deadlines
+        {
+          to: "/calendar",
+          label: "Calendar",
+          position: "right",
+          className: "navbar__link--calendar",
+          "aria-label": "Project calendar and deadlines",
+        },
         // News - Industry updates
         {
           to: "/news",

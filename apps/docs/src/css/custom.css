@@ -1348,6 +1348,7 @@ html {
    ================================================ */
 
 /* Base styling for navbar action links */
+.navbar__link--calendar,
 .navbar__link--news,
 .navbar__link--support,
 .navbar__link--progress,
@@ -1361,6 +1362,21 @@ html {
   border-radius: 6px;
   transition: all 0.2s ease;
   margin: 0 0.25rem !important;
+}
+
+/* Calendar link */
+.navbar__link--calendar {
+  color: rgb(226, 230, 234) !important;
+}
+
+.navbar__link--calendar::before {
+  content: "📅";
+  font-size: 0.875rem;
+}
+
+.navbar__link--calendar:hover {
+  background: rgba(249, 115, 22, 0.15) !important;
+  color: rgb(249, 115, 22) !important;
 }
 
 /* News link */
