@@ -799,7 +799,7 @@ blockchain evidence anchoring strategy and Move language security model.
 - Linear types ensure evidence cannot be copied or forged
 
 **Related ADR:**
-[ADR 0015: Movement Network Integration](../../technical/architecture/adr-0015-movement-network-integration.md)
+[ADR 0026: Movement Network Integration](../../technical/architecture/adr-0026-movement-network-integration.md)
 
 [Encode Club Movement M1](https://www.encodeclub.com/programmes)
 
@@ -861,7 +861,7 @@ x402 is a payment protocol built on HTTP 402 "Payment Required":
 - Pricing: $0.01/verification, $0.05 multi-chain, $1.00 legal attestation
 
 **Related ADR:**
-[ADR 0016: x402 Payment Protocol Integration](../../technical/architecture/adr-0016-x402-payment-protocol.md)
+[ADR 0027: x402 Payment Protocol Integration](../../technical/architecture/adr-0027-x402-payment-protocol.md)
 
 [x402 Protocol](https://www.x402.org/) |
 [Solana x402 Docs](https://solana.com/x402/what-is-x402) |
@@ -1563,11 +1563,11 @@ feedback.
 1. **Register for Movement M1 Hackathon** - Starts Dec 1, 2025 ($30K prizes)
    - Build `anchor-movement` crate for Move-based evidence anchoring
    - See
-     [ADR 0015](../../technical/architecture/adr-0015-movement-network-integration.md)
+     [ADR 0026](../../technical/architecture/adr-0026-movement-network-integration.md)
 2. **Register for Solana Winter Build (x402)** - Dec 2025 ($10K+ prizes)
    - Implement x402 payment protocol for evidence API monetization
    - See
-     [ADR 0016](../../technical/architecture/adr-0016-x402-payment-protocol.md)
+     [ADR 0027](../../technical/architecture/adr-0027-x402-payment-protocol.md)
 3. **Finalize Canada CUAS Application** - Deadline Dec 15, 2025
 4. **Apply to NVIDIA Inception** - Free, immediate access to credits
 5. **Apply to AWS Activate** - Non-dilutive cloud resources

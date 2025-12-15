@@ -299,7 +299,7 @@ GET    /api/admin/config/optimize           # AI suggestions
 ## Related ADRs
 
 - [ADR 0011: Vector Database Selection](./adr-0011-vector-database-selection.md)
-- [ADR 0012: Azure Functions Architecture](./adr-0012-azure-functions-architecture.md)
+- [ADR 0012: Runtime Functions](./adr-0012-runtime-functions.md)
 
 ---
 
