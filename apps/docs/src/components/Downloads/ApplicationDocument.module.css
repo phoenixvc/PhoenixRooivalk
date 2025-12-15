@@ -238,6 +238,24 @@
   font-weight: 600;
 }
 
+/* Deadline Row with Calendar Export */
+.deadlineRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.calendarExportWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.calendarExportWrapper button {
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
 /* Progress Bar */
 .progressWrapper {
   display: flex;

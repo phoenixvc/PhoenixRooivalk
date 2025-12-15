@@ -1,5 +1,7 @@
 import * as React from "react";
 import styles from "./ApplicationDocument.module.css";
+import { CalendarExport } from "@site/src/components/Calendar";
+import type { CalendarEvent } from "@site/src/components/Calendar";
 
 interface VersionHistoryItem {
   version: string;
@@ -217,6 +219,21 @@ export default function ApplicationDocument({
   // Calculate deadline info
   const deadlineInfo = deadline ? formatDeadline(deadline) : null;
 
+  // Create calendar event for deadline
+  const deadlineEvent: CalendarEvent | null = deadline
+    ? {
+        title: `${title} - Deadline`,
+        description: subtitle
+          ? `Submission deadline for ${title}: ${subtitle}\n\nApplicant: ${applicant}`
+          : `Submission deadline for ${title}\n\nApplicant: ${applicant}`,
+        startDate: new Date(deadline),
+        allDay: false,
+        location: "Online Submission",
+        category: "Deadline",
+        url: typeof window !== "undefined" ? window.location.href : undefined,
+      }
+    : null;
+
   // Calculate checklist progress
   const checklistProgress = checklist
     ? {
@@ -272,9 +289,22 @@ export default function ApplicationDocument({
 
           {/* Deadline Indicator */}
           {deadlineInfo && (
-            <div className={styles.deadlineIndicator} data-urgency={deadlineInfo.urgency}>
-              <span className={styles.deadlineIcon}>{"\u23F0"}</span>
-              <span className={styles.deadlineText}>{deadlineInfo.text}</span>
+            <div className={styles.deadlineRow}>
+              <div className={styles.deadlineIndicator} data-urgency={deadlineInfo.urgency}>
+                <span className={styles.deadlineIcon}>{"\u23F0"}</span>
+                <span className={styles.deadlineText}>{deadlineInfo.text}</span>
+              </div>
+              {deadlineEvent && (
+                <div className={styles.calendarExportWrapper}>
+                  <CalendarExport
+                    events={[deadlineEvent]}
+                    buttonText="Add to Calendar"
+                    filename={`${title.replace(/\s+/g, "-")}-Deadline`}
+                    variant="outline"
+                    size="small"
+                  />
+                </div>
+              )}
             </div>
           )}
 

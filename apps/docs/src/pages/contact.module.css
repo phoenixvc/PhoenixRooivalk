@@ -272,6 +272,25 @@
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 
+/* Booking Section */
+.bookingSection {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.bookingSection h2 {
+  font-size: 1.25rem !important;
+  color: rgb(226, 230, 234) !important;
+  margin-bottom: 0.75rem !important;
+  border-bottom: none !important;
+}
+
+.bookingSectionDescription {
+  color: rgb(148, 163, 184);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 /* Direct Contact Section */
 .directContact {
   text-align: center;
