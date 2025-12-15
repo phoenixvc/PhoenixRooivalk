@@ -1,0 +1,269 @@
+/* Application Document Styles */
+
+/* Download Controls - Visible on screen */
+.downloadControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary-lightest) 0%, var(--ifm-background-surface-color) 100%);
+  border-radius: 0.75rem;
+  border: 1px solid var(--ifm-color-primary-light);
+}
+
+.downloadInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 9999px;
+}
+
+.statusBadge[data-status="draft"] {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.statusBadge[data-status="final"] {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.statusBadge[data-status="submitted"] {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.versionInfo {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* Cover Page - Hidden on screen, visible in print */
+.coverPage {
+  display: none;
+}
+
+/* Print Styles */
+@media print {
+  /* Hide download controls in print */
+  .downloadControls {
+    display: none !important;
+  }
+
+  /* Show and style cover page */
+  .coverPage {
+    display: flex !important;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 1in;
+    page-break-after: always;
+    break-after: page;
+    background: white;
+  }
+
+  .coverHeader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .coverLogo {
+    max-width: 200px;
+    max-height: 80px;
+    object-fit: contain;
+  }
+
+  .coverLogoPlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logoIcon {
+    font-size: 3rem;
+  }
+
+  .companyName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.05em;
+  }
+
+  .coverContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .coverStatus {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+
+  .coverStatus[data-status="draft"] {
+    background: #fef3c7;
+    color: #92400e;
+    border: 2px solid #fcd34d;
+  }
+
+  .coverStatus[data-status="final"] {
+    background: #d1fae5;
+    color: #065f46;
+    border: 2px solid #6ee7b7;
+  }
+
+  .coverStatus[data-status="submitted"] {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 2px solid #93c5fd;
+  }
+
+  .coverTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    max-width: 80%;
+  }
+
+  .coverSubtitle {
+    font-size: 1.25rem;
+    color: #4a4a4a;
+    margin: 0;
+    max-width: 70%;
+  }
+
+  .coverDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 2rem;
+  }
+
+  .detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .detailLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .detailValue {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
+  .coverFooter {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .confidential {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #dc2626;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .copyright {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin: 0;
+  }
+}
+
+/* Application-specific print enhancements */
+@media print {
+  /* Ensure nice page breaks */
+  body.printing-application h2 {
+    page-break-before: auto;
+    break-before: auto;
+    margin-top: 24pt;
+  }
+
+  /* Add subtle section dividers */
+  body.printing-application hr {
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 24pt 0;
+  }
+
+  /* Style tables professionally */
+  body.printing-application table {
+    margin: 16pt 0;
+    border: 1px solid #d1d5db;
+  }
+
+  body.printing-application th {
+    background: #f3f4f6 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 9pt;
+    letter-spacing: 0.03em;
+  }
+
+  body.printing-application td {
+    font-size: 10pt;
+  }
+
+  /* Style code blocks */
+  body.printing-application pre {
+    background: #f8f9fa !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 4pt;
+    font-size: 9pt !important;
+  }
+
+  /* Caution/warning boxes */
+  body.printing-application .alert,
+  body.printing-application [class*="admonition"] {
+    border: 2px solid #fbbf24;
+    background: #fffbeb !important;
+    padding: 12pt;
+    border-radius: 4pt;
+    margin: 16pt 0;
+  }
+}

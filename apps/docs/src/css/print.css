@@ -231,3 +231,86 @@
     background: white;
   }
 }
+
+/* Application document print styles */
+@media print {
+  body.printing-application {
+    background: white !important;
+  }
+
+  /* Professional table styling for applications */
+  body.printing-application table {
+    margin: 12pt 0 !important;
+    font-size: 10pt !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 4pt;
+  }
+
+  body.printing-application th {
+    background: #f3f4f6 !important;
+    font-weight: 600 !important;
+    font-size: 9pt !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+    padding: 8pt 10pt !important;
+  }
+
+  body.printing-application td {
+    padding: 6pt 10pt !important;
+    font-size: 10pt !important;
+  }
+
+  /* Section headers */
+  body.printing-application h2 {
+    color: #1a1a1a !important;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 8pt;
+    margin-top: 24pt !important;
+  }
+
+  body.printing-application h3 {
+    color: #374151 !important;
+  }
+
+  /* Code/diagram blocks */
+  body.printing-application pre {
+    background: #f8f9fa !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 4pt !important;
+    font-size: 8pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Admonitions/callouts */
+  body.printing-application [class*="admonition"],
+  body.printing-application .alert {
+    border-left: 4pt solid #f59e0b !important;
+    background: #fffbeb !important;
+    padding: 10pt 12pt !important;
+    margin: 12pt 0 !important;
+    border-radius: 0 4pt 4pt 0 !important;
+  }
+
+  /* Horizontal rules as section dividers */
+  body.printing-application hr {
+    border: none !important;
+    border-top: 1px solid #e5e7eb !important;
+    margin: 20pt 0 !important;
+  }
+
+  /* Lists */
+  body.printing-application ul,
+  body.printing-application ol {
+    margin: 8pt 0 !important;
+    padding-left: 20pt !important;
+  }
+
+  body.printing-application li {
+    margin-bottom: 4pt !important;
+  }
+
+  /* Checklist items */
+  body.printing-application li input[type="checkbox"] {
+    margin-right: 8pt !important;
+  }
+}

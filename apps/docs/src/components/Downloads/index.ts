@@ -1,6 +1,7 @@
 // Core download components
 export { default as DownloadButton } from "./DownloadButton";
 export { default as DocumentDownload } from "./DocumentDownload";
+export { default as ApplicationDocument } from "./ApplicationDocument";
 
 // Inline slide deck components (recommended for progress reports)
 export { default as SlideDeck } from "./SlideDeck";
