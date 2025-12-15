@@ -21,6 +21,7 @@ import { EngagementToasts, ReadingTracker } from "../components/Gamification";
 import { NavbarNotifications } from "../components/NavbarNotifications";
 import { OfflineIndicator } from "../components/Offline";
 import { OnboardingWalkthrough } from "../components/Onboarding";
+import { PDFDownloadButton } from "../components/PDFDownload";
 import { SidebarRecommendations } from "../components/Sidebar";
 import { SidebarPhaseFilter } from "../components/PhaseFilter";
 import { AuthProvider } from "../contexts/AuthContext";
@@ -121,6 +122,9 @@ export default function Root({ children }: RootProps): React.ReactElement {
                 </SilentErrorBoundary>
                 <SilentErrorBoundary>
                   <AIFloatingWidget pageContext={pageContext} />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <PDFDownloadButton />
                 </SilentErrorBoundary>
                 <SilentErrorBoundary>
                   <OnboardingWalkthrough />
