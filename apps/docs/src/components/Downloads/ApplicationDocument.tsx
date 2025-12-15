@@ -77,7 +77,8 @@ export default function ApplicationDocument({
   const handleAuxiliaryDownload = React.useCallback(() => {
     if (auxiliaryPdfUrl) {
       // Open the pre-generated PDF in a new tab for download
-      window.open(auxiliaryPdfUrl, "_blank");
+      // noopener,noreferrer prevents tabnabbing attacks
+      window.open(auxiliaryPdfUrl, "_blank", "noopener,noreferrer");
     }
   }, [auxiliaryPdfUrl]);
 
