@@ -12,14 +12,27 @@ import { downloadICS, generateICS, type CalendarEvent } from "../components/Cale
 import BookingWidget from "../components/Calendar/BookingWidget";
 import styles from "./calendar.module.css";
 
+// Team member assignments
+type TeamMember = "all" | "martyn" | "peter" | "jurie" | "alistair" | "team";
+
 interface CalendarItem {
   date: string;
   title: string;
   description: string;
-  category: "opportunity" | "development" | "compliance" | "meeting" | "funding" | "hackathon";
+  category: "opportunity" | "development" | "compliance" | "meeting" | "funding" | "hackathon" | "accelerator";
   priority: "critical" | "high" | "medium" | "low";
   link?: string;
+  assignee?: TeamMember;
 }
+
+const teamConfig: Record<TeamMember, { label: string; color: string; initials: string }> = {
+  all: { label: "Everyone", color: "#6b7280", initials: "ALL" },
+  team: { label: "Core Team", color: "#8b5cf6", initials: "TM" },
+  martyn: { label: "Martyn", color: "#ef4444", initials: "MR" },
+  peter: { label: "Peter", color: "#3b82f6", initials: "PL" },
+  jurie: { label: "Jurie", color: "#22c55e", initials: "JS" },
+  alistair: { label: "Alistair", color: "#f59e0b", initials: "AK" },
+};
 
 // All calendar events consolidated from project data
 const calendarEvents: CalendarItem[] = [
@@ -32,6 +45,7 @@ const calendarEvents: CalendarItem[] = [
     description: "4-week hackathon, $30K prize pool - Move language for evidence anchoring",
     category: "hackathon",
     priority: "high",
+    assignee: "jurie",
   },
   {
     date: "2025-12-06",
@@ -39,6 +53,16 @@ const calendarEvents: CalendarItem[] = [
     description: "London event, $10K prizes, AI agent track",
     category: "hackathon",
     priority: "medium",
+    assignee: "jurie",
+  },
+  {
+    date: "2025-12-11",
+    title: "Strategic Meeting - Alistair Advisory",
+    description: "Define partnership terms, accelerator strategy, market pivot to airport defense",
+    category: "meeting",
+    priority: "critical",
+    assignee: "team",
+    link: "/docs/executive/meeting-notes/2025-12-11-strategic-resources-action-tracker",
   },
   {
     date: "2025-12-15",
@@ -46,6 +70,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Submit application via PriviDox by 2:00 PM ET - $1.75M CAD prize pool",
     category: "opportunity",
     priority: "critical",
+    assignee: "martyn",
     link: "/docs/business/opportunities/cuas-sandbox-2026",
   },
   {
@@ -54,6 +79,23 @@ const calendarEvents: CalendarItem[] = [
     description: "4-week sprint, $10K+ prizes, x402 payment protocol integration",
     category: "hackathon",
     priority: "high",
+    assignee: "jurie",
+  },
+  {
+    date: "2025-12-18",
+    title: "Receive Alistair's Accelerator List",
+    description: "Hardware-focused accelerators and pre-seed investors list (US focus)",
+    category: "meeting",
+    priority: "high",
+    assignee: "alistair",
+  },
+  {
+    date: "2025-12-20",
+    title: "Prepare Gazebo Simulator Demo",
+    description: "Build simulator demonstration for investor pitches per Alistair recommendation",
+    category: "development",
+    priority: "high",
+    assignee: "peter",
   },
   {
     date: "2025-12-31",
@@ -61,6 +103,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Free Kiro Pro+ access - Apply before year end",
     category: "funding",
     priority: "high",
+    assignee: "jurie",
   },
   {
     date: "2025-12-31",
@@ -68,6 +111,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Quarterly review of progress and objectives",
     category: "meeting",
     priority: "high",
+    assignee: "team",
   },
 
   // ============================================
@@ -79,6 +123,15 @@ const calendarEvents: CalendarItem[] = [
     description: "Heavy-lift drone challenge, $6.5M total prizes",
     category: "opportunity",
     priority: "high",
+    assignee: "peter",
+  },
+  {
+    date: "2026-01-10",
+    title: "SOSV HAX Accelerator Application",
+    description: "Hardware accelerator - $250K funding, 10% equity. Per Alistair recommendation.",
+    category: "accelerator",
+    priority: "critical",
+    assignee: "martyn",
   },
   {
     date: "2026-01-15",
@@ -86,7 +139,24 @@ const calendarEvents: CalendarItem[] = [
     description: "Net launcher prototype manufactured and validated",
     category: "development",
     priority: "critical",
+    assignee: "peter",
     link: "/docs/progress/progress-overview",
+  },
+  {
+    date: "2026-01-15",
+    title: "mHUB Chicago Accelerator Application",
+    description: "$200K investment, 6.5% equity, access to $6M prototyping labs",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+  },
+  {
+    date: "2026-01-20",
+    title: "Research Middle East Innovation Hubs",
+    description: "UAE, Abu Dhabi tech hubs - per Alistair's contacts recommendation",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "alistair",
   },
   {
     date: "2026-01-31",
@@ -94,6 +164,23 @@ const calendarEvents: CalendarItem[] = [
     description: "Apply for $150K+ cloud credits, hardware discounts",
     category: "funding",
     priority: "high",
+    assignee: "jurie",
+  },
+  {
+    date: "2026-02-04",
+    title: "Counter-UAS Homeland Security USA 2026",
+    description: "Conference in United States - networking opportunity",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "martyn",
+  },
+  {
+    date: "2026-02-10",
+    title: "DIU Defense Tech Accelerator Application",
+    description: "4-month program in Renton WA, $15K funding, C-UAS focus area",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
   },
   {
     date: "2026-02-15",
@@ -101,6 +188,15 @@ const calendarEvents: CalendarItem[] = [
     description: "Expected notification 6-8 weeks after deadline",
     category: "opportunity",
     priority: "high",
+    assignee: "martyn",
+  },
+  {
+    date: "2026-02-15",
+    title: "Crucible Accelerator (NavalX) Application",
+    description: "10-week program, $75K prize, naval tech focus. TRL 4-6 required.",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
   },
   {
     date: "2026-02-28",
@@ -108,20 +204,31 @@ const calendarEvents: CalendarItem[] = [
     description: "10-12 weeks program, $350K cloud credits",
     category: "funding",
     priority: "high",
+    assignee: "jurie",
   },
   {
     date: "2026-03-01",
     title: "First EU Pilot Installation",
-    description: "Initial deployment in European market",
+    description: "Initial deployment in European market - airport defense focus",
     category: "development",
     priority: "critical",
+    assignee: "team",
+  },
+  {
+    date: "2026-03-01",
+    title: "National Congress Counter-UAS Technology 2026",
+    description: "4th Annual conference - key networking for airport defense market",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "martyn",
   },
   {
     date: "2026-03-15",
     title: "DHS C-UAS Grant Program Opens",
-    description: "FY2026 state/local grants for C-UAS capabilities",
+    description: "FY2026 state/local grants for C-UAS capabilities - $500M total",
     category: "opportunity",
     priority: "high",
+    assignee: "martyn",
   },
   {
     date: "2026-03-31",
@@ -129,6 +236,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Safety certification for consumer product",
     category: "compliance",
     priority: "critical",
+    assignee: "peter",
   },
   {
     date: "2026-03-31",
@@ -136,6 +244,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Army xTechCounter Strike live competition, $350K winners",
     category: "opportunity",
     priority: "high",
+    assignee: "team",
   },
   {
     date: "2026-03-31",
@@ -143,6 +252,7 @@ const calendarEvents: CalendarItem[] = [
     description: "End of quarter progress review",
     category: "meeting",
     priority: "medium",
+    assignee: "team",
   },
 
   // ============================================
@@ -152,8 +262,17 @@ const calendarEvents: CalendarItem[] = [
     date: "2026-04-01",
     title: "Techstars Air Force Accelerator Begins",
     description: "$120K funding + equity, Boston-based program",
-    category: "funding",
+    category: "accelerator",
     priority: "high",
+    assignee: "team",
+  },
+  {
+    date: "2026-04-15",
+    title: "NSIN Emerge Accelerator Application",
+    description: "12-week university-based dual-use program, DoD partnership",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "martyn",
   },
   {
     date: "2026-04-30",
@@ -161,6 +280,7 @@ const calendarEvents: CalendarItem[] = [
     description: "Core platform prototype finished",
     category: "development",
     priority: "critical",
+    assignee: "peter",
   },
   {
     date: "2026-05-01",
@@ -341,6 +461,7 @@ const categoryConfig = {
   meeting: { label: "Meeting", color: "#22c55e", icon: "👥" },
   funding: { label: "Funding", color: "#a855f7", icon: "💰" },
   hackathon: { label: "Hackathon", color: "#06b6d4", icon: "💻" },
+  accelerator: { label: "Accelerator", color: "#ec4899", icon: "🚀" },
 };
 
 const priorityConfig = {
@@ -403,6 +524,7 @@ function saveCustomEvents(events: CustomEvent[]): void {
 
 export default function CalendarPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedAssignee, setSelectedAssignee] = useState<string>("all");
   const [showPast, setShowPast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [customEvents, setCustomEvents] = useState<CustomEvent[]>([]);
@@ -412,6 +534,7 @@ export default function CalendarPage(): React.ReactElement {
     date: "",
     category: "meeting" as CalendarItem["category"],
     priority: "medium" as CalendarItem["priority"],
+    assignee: "all" as TeamMember,
   });
 
   // Load custom events from localStorage on mount
@@ -431,6 +554,16 @@ export default function CalendarPage(): React.ReactElement {
       events = events.filter((e) => e.category === selectedCategory);
     }
 
+    // Filter by assignee
+    if (selectedAssignee !== "all") {
+      events = events.filter((e) =>
+        e.assignee === selectedAssignee ||
+        e.assignee === "all" ||
+        e.assignee === "team" ||
+        !e.assignee
+      );
+    }
+
     // Filter past events
     if (!showPast) {
       events = events.filter((e) => getDaysUntil(e.date) >= 0);
@@ -440,7 +573,7 @@ export default function CalendarPage(): React.ReactElement {
     events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return events;
-  }, [selectedCategory, showPast, allEvents]);
+  }, [selectedCategory, selectedAssignee, showPast, allEvents]);
 
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.date) {
@@ -461,6 +594,7 @@ export default function CalendarPage(): React.ReactElement {
       date: "",
       category: "meeting",
       priority: "medium",
+      assignee: "all",
     });
     setShowAddModal(false);
   };
@@ -672,14 +806,31 @@ export default function CalendarPage(): React.ReactElement {
               </button>
             ))}
           </div>
-          <label className={styles.showPastToggle}>
-            <input
-              type="checkbox"
-              checked={showPast}
-              onChange={(e) => setShowPast(e.target.checked)}
-            />
-            Show past events
-          </label>
+          <div className={styles.filterControls}>
+            <div className={styles.assigneeFilter}>
+              <label>Assigned to:</label>
+              <select
+                value={selectedAssignee}
+                onChange={(e) => setSelectedAssignee(e.target.value)}
+                className={styles.assigneeSelect}
+              >
+                <option value="all">Everyone</option>
+                {Object.entries(teamConfig).filter(([key]) => key !== "all").map(([key, config]) => (
+                  <option key={key} value={key}>
+                    {config.initials} - {config.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <label className={styles.showPastToggle}>
+              <input
+                type="checkbox"
+                checked={showPast}
+                onChange={(e) => setShowPast(e.target.checked)}
+              />
+              Show past events
+            </label>
+          </div>
         </div>
 
         {/* Timeline */}
@@ -716,6 +867,14 @@ export default function CalendarPage(): React.ReactElement {
                       <span className={styles.categoryBadge}>
                         {config.icon} {config.label}
                       </span>
+                      {event.assignee && event.assignee !== "all" && (
+                        <span
+                          className={styles.assigneeBadge}
+                          style={{ "--assignee-color": teamConfig[event.assignee]?.color || "#6b7280" } as React.CSSProperties}
+                        >
+                          {teamConfig[event.assignee]?.initials || "?"}
+                        </span>
+                      )}
                     </div>
                     <h3 className={styles.eventTitle}>
                       {event.link ? (
@@ -845,6 +1004,20 @@ export default function CalendarPage(): React.ReactElement {
                       ))}
                     </select>
                   </div>
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Assign To</label>
+                  <select
+                    value={newEvent.assignee}
+                    onChange={(e) => setNewEvent({ ...newEvent, assignee: e.target.value as TeamMember })}
+                    className={styles.formInput}
+                  >
+                    {Object.entries(teamConfig).map(([key, config]) => (
+                      <option key={key} value={key}>
+                        {config.initials} - {config.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className={styles.modalActions}>
                   <button
