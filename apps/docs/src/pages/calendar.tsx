@@ -23,6 +23,8 @@ interface CalendarItem {
   priority: "critical" | "high" | "medium" | "low";
   link?: string;
   assignee?: TeamMember;
+  completed?: boolean;
+  weeklyTarget?: number; // Target percentage progress per week for larger items
 }
 
 const teamConfig: Record<TeamMember, { label: string; color: string; initials: string }> = {
@@ -46,6 +48,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
+    weeklyTarget: 25,
   },
   {
     date: "2025-12-06",
@@ -80,6 +83,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
+    weeklyTarget: 25,
   },
   {
     date: "2025-12-18",
@@ -129,10 +133,12 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-01",
     title: "DARPA Lift Challenge Registration Opens",
-    description: "Heavy-lift drone challenge, $6.5M total prizes",
+    description: "Heavy-lift drone challenge, $6.5M total prizes - registration closes May 2026",
     category: "opportunity",
     priority: "high",
     assignee: "peter",
+    link: "https://www.darpa.mil/news/2025/lift-challenge",
+    weeklyTarget: 10,
   },
   {
     date: "2026-01-05",
@@ -177,6 +183,7 @@ const calendarEvents: CalendarItem[] = [
     priority: "critical",
     assignee: "peter",
     link: "/docs/progress/progress-overview",
+    weeklyTarget: 20,
   },
   {
     date: "2026-01-15",
@@ -207,10 +214,11 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-04",
     title: "Counter-UAS Homeland Security USA 2026",
-    description: "Conference in United States - networking opportunity",
+    description: "Conference Feb 4-5, United States - networking & demo opportunity",
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
+    link: "https://www.unmannedsystemstechnology.com/events/counter-uas-homeland-security-usa/",
   },
   {
     date: "2026-02-10",
@@ -265,10 +273,11 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "National Congress Counter-UAS Technology 2026",
-    description: "4th Annual conference - key networking for airport defense market",
+    description: "4th Annual conference Mar 18-19 - key networking for airport defense market",
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
+    link: "https://www.unmannedsystemstechnology.com/events/",
   },
   {
     date: "2026-03-01",
@@ -314,10 +323,12 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-31",
     title: "Operation Flytrap 5.0",
-    description: "Army xTechCounter Strike live competition, $350K winners",
+    description: "Army xTechCounter Strike live competition, $350K winners - Project FlyTrap series",
     category: "opportunity",
     priority: "high",
     assignee: "team",
+    link: "https://www.army.mil/article/289184/air_defenders_in_europe_test_new_counter_uas_technologies_during_project_flytrap_4_5",
+    weeklyTarget: 15,
   },
   {
     date: "2026-03-31",
@@ -629,6 +640,86 @@ const calendarEvents: CalendarItem[] = [
     priority: "medium",
     assignee: "alistair",
   },
+
+  // ============================================
+  // NEW OPPORTUNITIES FROM RESEARCH (Dec 2025)
+  // ============================================
+  {
+    date: "2026-02-02",
+    title: "UAV Technology USA Conference",
+    description: "Feb 2-3, 2026 - Key networking for commercial drone market",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://www.unmannedsystemstechnology.com/events/",
+  },
+  {
+    date: "2026-03-15",
+    title: "Drone Defense Hackathon Paris",
+    description: "48-hour hackathon at Grand Palais during Adopt AI Summit - 300+ engineers, defense & AI focus",
+    category: "hackathon",
+    priority: "high",
+    assignee: "team",
+    link: "https://www.agorize.com/en/challenges/drone-defense-hackathon",
+    weeklyTarget: 25,
+  },
+  {
+    date: "2026-06-01",
+    title: "NATO SAPIENCE 2026 Final Competition",
+    description: "Third and final autonomous drone competition in Netherlands - indoor/outdoor tasks",
+    category: "opportunity",
+    priority: "high",
+    assignee: "team",
+    link: "https://www.nato.int/cps/en/natohq/news_237011.htm",
+    weeklyTarget: 10,
+  },
+  {
+    date: "2026-09-28",
+    title: "Counter-UAS Homeland Security Europe 2026",
+    description: "Sep 28-29 London - Counter-UAS strategies, critical infrastructure protection",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://www.unmannedsystemstechnology.com/events/counter-uas-homeland-security-europe/",
+  },
+  {
+    date: "2026-10-15",
+    title: "Shield Capital Defense Tech Pitch",
+    description: "Target pitch to Shield Capital (former military operators turned VCs) - seed to growth stage",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.openvc.app/investor-lists/defensetech-investors",
+  },
+  {
+    date: "2026-11-01",
+    title: "In-Q-Tel Briefing Target",
+    description: "CIA venture arm - backs dual-use technologies with national security applications",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.openvc.app/investor-lists/defensetech-investors",
+  },
+  {
+    date: "2026-06-15",
+    title: "Army Best Drone Warfighter Competition",
+    description: "Army UAS/counter-UAS experimentation - winning teams advance to 2027 competition",
+    category: "opportunity",
+    priority: "high",
+    assignee: "team",
+    link: "https://thedefensepost.com/2025/12/10/us-army-drone-warfighter-competition/",
+    weeklyTarget: 15,
+  },
+  {
+    date: "2026-05-15",
+    title: "AFWERX SBIR Phase I Application",
+    description: "Air Force small business innovation - up to $2M contract potential via Techstars pathway",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "/docs/business/opportunities/techstars-programs",
+    weeklyTarget: 10,
+  },
 ];
 
 const categoryConfig = {
@@ -683,6 +774,7 @@ interface CustomEvent extends CalendarItem {
 }
 
 const CUSTOM_EVENTS_KEY = "phoenix-calendar-custom-events";
+const COMPLETED_EVENTS_KEY = "phoenix-calendar-completed";
 
 function loadCustomEvents(): CustomEvent[] {
   if (typeof window === "undefined") return [];
@@ -697,6 +789,26 @@ function loadCustomEvents(): CustomEvent[] {
 function saveCustomEvents(events: CustomEvent[]): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(CUSTOM_EVENTS_KEY, JSON.stringify(events));
+}
+
+// Completion tracking - stored as event title hash -> boolean
+function loadCompletedEvents(): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try {
+    const stored = localStorage.getItem(COMPLETED_EVENTS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCompletedEvents(completed: Record<string, boolean>): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(COMPLETED_EVENTS_KEY, JSON.stringify(completed));
+}
+
+function getEventKey(event: CalendarItem): string {
+  return `${event.date}-${event.title}`.replace(/\s+/g, "-").toLowerCase();
 }
 
 // Time range options
@@ -721,6 +833,7 @@ export default function CalendarPage(): React.ReactElement {
   const [showPast, setShowPast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [customEvents, setCustomEvents] = useState<CustomEvent[]>([]);
+  const [completedEvents, setCompletedEvents] = useState<Record<string, boolean>>({});
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -730,10 +843,24 @@ export default function CalendarPage(): React.ReactElement {
     assignee: "all" as TeamMember,
   });
 
-  // Load custom events from localStorage on mount
+  // Load custom events and completed status from localStorage on mount
   React.useEffect(() => {
     setCustomEvents(loadCustomEvents());
+    setCompletedEvents(loadCompletedEvents());
   }, []);
+
+  // Toggle event completion
+  const handleToggleComplete = (event: CalendarItem) => {
+    const key = getEventKey(event);
+    const updated = { ...completedEvents, [key]: !completedEvents[key] };
+    setCompletedEvents(updated);
+    saveCompletedEvents(updated);
+  };
+
+  // Check if event is completed
+  const isEventCompleted = (event: CalendarItem) => {
+    return completedEvents[getEventKey(event)] || false;
+  };
 
   const allEvents = useMemo(() => {
     return [...calendarEvents, ...customEvents];
@@ -809,7 +936,14 @@ export default function CalendarPage(): React.ReactElement {
     const thisMonth = upcoming.filter((e) => getDaysUntil(e.date) <= 30);
     const critical = upcoming.filter((e) => e.priority === "critical");
     const high = upcoming.filter((e) => e.priority === "high");
-    const overdue = allEvents.filter((e) => getDaysUntil(e.date) < 0);
+    const overdue = assigneeEvents.filter((e) => getDaysUntil(e.date) < 0);
+
+    // Completion stats
+    const completedCount = assigneeEvents.filter((e) => isEventCompleted(e)).length;
+    const completedThisMonth = thisMonth.filter((e) => isEventCompleted(e)).length;
+    const completionRate = thisMonth.length > 0
+      ? Math.round((completedThisMonth / thisMonth.length) * 100)
+      : 0;
 
     // Breakdown by category
     const byCategory = Object.keys(categoryConfig).reduce((acc, cat) => {
@@ -824,9 +958,12 @@ export default function CalendarPage(): React.ReactElement {
       critical: critical.length,
       high: high.length,
       overdue: overdue.length,
+      completed: completedCount,
+      completedThisMonth,
+      completionRate,
       byCategory,
     };
-  }, [selectedAssignee, allEvents]);
+  }, [selectedAssignee, allEvents, completedEvents]);
 
   // Export personal calendar (only assigned events)
   const handleExportPersonal = () => {
@@ -1058,13 +1195,23 @@ export default function CalendarPage(): React.ReactElement {
               </button>
             </div>
             <div className={styles.statsGrid}>
+              <div className={`${styles.statCard} ${styles.statCompletion}`}>
+                <span className={styles.statNumber}>{personalStats.completionRate}%</span>
+                <span className={styles.statLabel}>Monthly Progress</span>
+                <div className={styles.progressBar}>
+                  <div
+                    className={styles.progressFill}
+                    style={{ width: `${personalStats.completionRate}%` }}
+                  />
+                </div>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statNumber}>{personalStats.completedThisMonth}/{personalStats.thisMonth}</span>
+                <span className={styles.statLabel}>Done This Month</span>
+              </div>
               <div className={styles.statCard}>
                 <span className={styles.statNumber}>{personalStats.thisWeek}</span>
                 <span className={styles.statLabel}>This Week</span>
-              </div>
-              <div className={styles.statCard}>
-                <span className={styles.statNumber}>{personalStats.thisMonth}</span>
-                <span className={styles.statLabel}>This Month</span>
               </div>
               <div className={`${styles.statCard} ${styles.statCritical}`}>
                 <span className={styles.statNumber}>{personalStats.critical}</span>
@@ -1074,16 +1221,97 @@ export default function CalendarPage(): React.ReactElement {
                 <span className={styles.statNumber}>{personalStats.high}</span>
                 <span className={styles.statLabel}>🟡 High Priority</span>
               </div>
-              <div className={styles.statCard}>
-                <span className={styles.statNumber}>{personalStats.total}</span>
-                <span className={styles.statLabel}>Total Upcoming</span>
-              </div>
               {personalStats.overdue > 0 && (
                 <div className={`${styles.statCard} ${styles.statOverdue}`}>
                   <span className={styles.statNumber}>{personalStats.overdue}</span>
                   <span className={styles.statLabel}>⚠️ Overdue</span>
                 </div>
               )}
+            </div>
+
+            {/* Roadmap Overview */}
+            <div className={styles.roadmapOverview}>
+              <h4>Quick Roadmap</h4>
+              <div className={styles.roadmapTimeline}>
+                <div className={styles.roadmapSection}>
+                  <div className={styles.roadmapPeriod}>This Week</div>
+                  <div className={styles.roadmapItems}>
+                    {filteredEvents
+                      .filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)
+                      .slice(0, 3)
+                      .map((e, i) => (
+                        <div
+                          key={i}
+                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
+                        >
+                          <button
+                            className={styles.roadmapCheckbox}
+                            onClick={() => handleToggleComplete(e)}
+                          >
+                            {isEventCompleted(e) ? "✓" : "○"}
+                          </button>
+                          <span className={styles.roadmapTitle}>{e.title}</span>
+                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+                        </div>
+                      ))}
+                    {filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length === 0 && (
+                      <div className={styles.roadmapEmpty}>No items this week</div>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.roadmapSection}>
+                  <div className={styles.roadmapPeriod}>Next 2 Weeks</div>
+                  <div className={styles.roadmapItems}>
+                    {filteredEvents
+                      .filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)
+                      .slice(0, 3)
+                      .map((e, i) => (
+                        <div
+                          key={i}
+                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
+                        >
+                          <button
+                            className={styles.roadmapCheckbox}
+                            onClick={() => handleToggleComplete(e)}
+                          >
+                            {isEventCompleted(e) ? "✓" : "○"}
+                          </button>
+                          <span className={styles.roadmapTitle}>{e.title}</span>
+                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+                        </div>
+                      ))}
+                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14).length === 0 && (
+                      <div className={styles.roadmapEmpty}>No items next 2 weeks</div>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.roadmapSection}>
+                  <div className={styles.roadmapPeriod}>This Month</div>
+                  <div className={styles.roadmapItems}>
+                    {filteredEvents
+                      .filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)
+                      .slice(0, 3)
+                      .map((e, i) => (
+                        <div
+                          key={i}
+                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
+                        >
+                          <button
+                            className={styles.roadmapCheckbox}
+                            onClick={() => handleToggleComplete(e)}
+                          >
+                            {isEventCompleted(e) ? "✓" : "○"}
+                          </button>
+                          <span className={styles.roadmapTitle}>{e.title}</span>
+                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+                        </div>
+                      ))}
+                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30).length === 0 && (
+                      <div className={styles.roadmapEmpty}>No items later this month</div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -1228,10 +1456,12 @@ export default function CalendarPage(): React.ReactElement {
               const isSoon = days > 0 && days <= 7;
               const config = categoryConfig[event.category];
 
+              const completed = isEventCompleted(event);
+
               return (
                 <div
                   key={idx}
-                  className={`${styles.timelineItem} ${isPast ? styles.past : ""} ${isToday ? styles.today : ""} ${isSoon ? styles.soon : ""}`}
+                  className={`${styles.timelineItem} ${isPast ? styles.past : ""} ${isToday ? styles.today : ""} ${isSoon ? styles.soon : ""} ${completed ? styles.completed : ""}`}
                   style={{ "--category-color": config.color } as React.CSSProperties}
                 >
                   <div className={styles.timelineDate}>
@@ -1239,9 +1469,13 @@ export default function CalendarPage(): React.ReactElement {
                     <span className={styles.countdown}>{getTimeLabel(days)}</span>
                   </div>
                   <div className={styles.timelineMarker}>
-                    <span className={styles.priorityBadge}>
-                      {priorityConfig[event.priority].badge}
-                    </span>
+                    <button
+                      className={`${styles.completionCheckbox} ${completed ? styles.checked : ""}`}
+                      onClick={() => handleToggleComplete(event)}
+                      title={completed ? "Mark as incomplete" : "Mark as complete"}
+                    >
+                      {completed ? "✓" : priorityConfig[event.priority].badge}
+                    </button>
                   </div>
                   <div className={styles.timelineContent}>
                     <div className={styles.eventHeader}>
@@ -1256,13 +1490,19 @@ export default function CalendarPage(): React.ReactElement {
                           {teamConfig[event.assignee]?.initials || "?"}
                         </span>
                       )}
+                      {event.weeklyTarget && (
+                        <span className={styles.weeklyTargetBadge}>
+                          {event.weeklyTarget}%/wk target
+                        </span>
+                      )}
                     </div>
-                    <h3 className={styles.eventTitle}>
+                    <h3 className={`${styles.eventTitle} ${completed ? styles.titleCompleted : ""}`}>
                       {event.link ? (
                         <Link to={event.link}>{event.title}</Link>
                       ) : (
                         event.title
                       )}
+                      {completed && <span className={styles.completedBadge}>Done</span>}
                       {"isCustom" in event && (
                         <button
                           className={styles.deleteEventButton}
