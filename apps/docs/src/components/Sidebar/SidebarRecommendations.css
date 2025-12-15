@@ -23,30 +23,32 @@
   backdrop-filter: blur(8px);
 }
 
-/* Mobile: Convert to bottom sheet/drawer instead of hiding */
+/* Mobile: Convert to collapsible drawer that doesn't overlap floating widgets */
 @media (max-width: 996px) {
   .sidebar-rec {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 16px;
+    right: auto;
+    bottom: 80px; /* Above the PDF download button */
     top: auto;
-    width: 100%;
-    max-width: 100%;
+    width: calc(100% - 100px); /* Leave space for AI widget on right */
+    max-width: 320px;
     margin: 0;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    max-height: 60vh;
+    border-radius: 12px;
+    border-bottom: 1px solid rgba(249, 115, 22, 0.3);
+    max-height: 50vh;
     overflow-y: auto;
-    transform: translateY(calc(100% - 48px));
-    transition: transform 0.3s ease;
+    transform: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     z-index: var(--z-index-sidebar, 400);
+    opacity: 0.95;
   }
 
   .sidebar-rec:hover,
   .sidebar-rec:focus-within,
   .sidebar-rec--expanded {
-    transform: translateY(0);
+    transform: none;
+    opacity: 1;
   }
 
   .sidebar-rec-header {
@@ -54,17 +56,16 @@
     border-bottom: 1px solid rgba(249, 115, 22, 0.2);
   }
 
-  /* Add drag handle indicator for mobile */
+  /* Subtle indicator dot instead of drag handle */
   .sidebar-rec::before {
     content: "";
     position: absolute;
     top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 4px;
-    background: rgba(148, 163, 184, 0.4);
-    border-radius: 2px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: rgba(249, 115, 22, 0.6);
+    border-radius: 50%;
   }
 }
 
@@ -347,6 +348,13 @@
 /* Category highlighting - parent category of recommended docs */
 .menu__list-item-collapsible:has(.menu__link--recommended) > .menu__link {
   color: rgb(249, 115, 22) !important;
+}
+
+/* Very small screens - hide recommendations to avoid overlap */
+@media (max-width: 480px) {
+  .sidebar-rec {
+    display: none;
+  }
 }
 
 /* Large screens - position in sidebar area */

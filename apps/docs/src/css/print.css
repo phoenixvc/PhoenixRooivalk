@@ -1,5 +1,6 @@
 /**
  * Print styles for PDF download and slide deck generation
+ * Optimized for Phoenix Rooivalk dark theme documentation
  */
 
 @media print {
@@ -20,26 +21,65 @@
   .print\\:hidden,
   /* Hide floating widgets */
   .sidebar-rec,
+  .ai-widget,
   .ai-floating-widget,
   .cookie-consent,
   .offline-indicator,
   .completion-toast,
   .onboarding-walkthrough,
+  .pdf-download-button,
   [class*="AIFloating"],
   [class*="SidebarRec"],
   [class*="CookieConsent"],
   [class*="floating"],
   [class*="toast"],
-  [class*="widget"] {
+  [class*="widget"],
+  /* Hide edit/feedback buttons */
+  .theme-edit-this-page,
+  [class*="feedbackWidget"],
+  [class*="editThisPage"],
+  /* Hide search */
+  [class*="searchBar"],
+  [class*="DocSearch"],
+  /* Hide theme toggle */
+  [class*="colorMode"],
+  [class*="themeSwitcher"] {
     display: none !important;
   }
 
+  /* Force page setup */
+  @page {
+    size: letter;
+    margin: 0.75in;
+  }
+
+  /* Reset ALL elements to print-friendly colors */
+  *,
+  *::before,
+  *::after {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   /* Reset body and main styles */
+  html,
   body {
     background: white !important;
-    color: black !important;
-    font-size: 12pt !important;
-    line-height: 1.5 !important;
+    background-color: white !important;
+    color: #1a1a1a !important;
+    font-size: 11pt !important;
+    line-height: 1.6 !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Reset Docusaurus root element */
+  #__docusaurus,
+  [data-theme="dark"],
+  [data-theme="light"] {
+    background: white !important;
+    background-color: white !important;
+    color: #1a1a1a !important;
   }
 
   /* Main content takes full width */
@@ -47,16 +87,33 @@
   .main-wrapper,
   .docMainContainer,
   [class*="docMainContainer"],
-  article {
+  article,
+  .markdown,
+  [class*="markdown"] {
     margin: 0 !important;
     padding: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
+    background: white !important;
+    background-color: white !important;
   }
 
   /* Article content styling */
-  article {
-    padding: 0.5in !important;
+  article,
+  .markdown {
+    padding: 0.25in 0 !important;
+  }
+
+  /* Reset all text colors for dark theme */
+  p, span, div, li, dt, dd, label, strong, em, b, i {
+    color: #1a1a1a !important;
+    background: transparent !important;
+  }
+
+  /* Links should be dark with underline */
+  a {
+    color: #1a1a1a !important;
+    text-decoration: underline !important;
   }
 
   /* Headings */
@@ -68,31 +125,43 @@
   h6 {
     page-break-after: avoid !important;
     break-after: avoid !important;
-    color: black !important;
+    color: #1a1a1a !important;
+    background: transparent !important;
   }
 
   h1 {
-    font-size: 24pt !important;
-    margin-bottom: 16pt !important;
+    font-size: 22pt !important;
+    margin-bottom: 14pt !important;
+    border-bottom: 2pt solid #333 !important;
+    padding-bottom: 8pt !important;
   }
 
   h2 {
-    font-size: 18pt !important;
-    margin-top: 20pt !important;
-    margin-bottom: 12pt !important;
+    font-size: 16pt !important;
+    margin-top: 18pt !important;
+    margin-bottom: 10pt !important;
+    border-bottom: 1pt solid #666 !important;
+    padding-bottom: 6pt !important;
   }
 
   h3 {
-    font-size: 14pt !important;
-    margin-top: 16pt !important;
+    font-size: 13pt !important;
+    margin-top: 14pt !important;
     margin-bottom: 8pt !important;
+  }
+
+  h4, h5, h6 {
+    font-size: 11pt !important;
+    margin-top: 12pt !important;
+    margin-bottom: 6pt !important;
   }
 
   /* Paragraphs */
   p {
     orphans: 3 !important;
     widows: 3 !important;
-    color: black !important;
+    color: #1a1a1a !important;
+    margin-bottom: 8pt !important;
   }
 
   /* Tables */
@@ -114,20 +183,37 @@
     font-weight: bold !important;
   }
 
-  /* Code blocks */
+  /* Code blocks - ensure readable on print */
   pre,
   code {
-    font-size: 10pt !important;
-    background: #f5f5f5 !important;
-    border: 1px solid #ddd !important;
+    font-size: 9pt !important;
+    background: #f8f9fa !important;
+    color: #1a1a1a !important;
+    border: 1px solid #ccc !important;
     page-break-inside: avoid !important;
   }
 
   pre {
-    padding: 12pt !important;
+    padding: 10pt !important;
     overflow: visible !important;
     white-space: pre-wrap !important;
     word-wrap: break-word !important;
+    margin: 8pt 0 !important;
+  }
+
+  /* Inline code */
+  code:not(pre code) {
+    padding: 1pt 4pt !important;
+    border-radius: 3pt !important;
+  }
+
+  /* Code syntax highlighting - force dark text on light bg */
+  pre span,
+  pre code span,
+  .token,
+  [class*="token"] {
+    color: #1a1a1a !important;
+    background: transparent !important;
   }
 
   /* Links - show URL */
@@ -216,6 +302,96 @@
   [class*="dark:"] {
     background: white !important;
     color: black !important;
+  }
+
+  /* Docusaurus specific overrides */
+  .theme-doc-markdown,
+  [class*="docItemCol"],
+  [class*="docMainContainer"],
+  [class*="docItemContainer"],
+  [class*="docPage"] {
+    background: white !important;
+    color: #1a1a1a !important;
+  }
+
+  /* Admonitions/alerts */
+  [class*="admonition"],
+  .alert,
+  .admonition {
+    background: #f8f9fa !important;
+    border-left: 4px solid #666 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+    padding: 10pt 12pt !important;
+    margin: 12pt 0 !important;
+    page-break-inside: avoid !important;
+    color: #1a1a1a !important;
+  }
+
+  [class*="admonition"] * {
+    color: #1a1a1a !important;
+    background: transparent !important;
+  }
+
+  [class*="admonitionHeading"] {
+    font-weight: bold !important;
+    margin-bottom: 6pt !important;
+  }
+
+  /* Tabs - show all tab content */
+  [class*="tabItem"],
+  [role="tabpanel"] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Details/accordion - expand all */
+  details {
+    display: block !important;
+  }
+
+  details[open] summary ~ * {
+    display: block !important;
+  }
+
+  /* Mermaid diagrams */
+  .mermaid,
+  [class*="mermaid"] {
+    background: white !important;
+    page-break-inside: avoid !important;
+  }
+
+  .mermaid text,
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node ellipse {
+    fill: white !important;
+    stroke: #333 !important;
+  }
+
+  .mermaid .edgePath path {
+    stroke: #333 !important;
+  }
+
+  /* Cards and containers */
+  [class*="card"],
+  [class*="Card"] {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    color: #1a1a1a !important;
+  }
+
+  /* Badges */
+  [class*="badge"],
+  .badge {
+    background: #e5e7eb !important;
+    color: #1a1a1a !important;
+    border: 1px solid #ccc !important;
+    padding: 2pt 6pt !important;
   }
 }
 
