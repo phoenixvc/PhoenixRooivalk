@@ -120,6 +120,7 @@ const calendarEvents: CalendarItem[] = [
     category: "funding",
     priority: "high",
     assignee: "jurie",
+    link: "/docs/business/opportunities/cloud-credits-programs",
   },
 
   // ============================================
@@ -148,6 +149,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
+    link: "/docs/business/opportunities/nato-diana-accelerator",
   },
   {
     date: "2026-01-06",
@@ -156,6 +158,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "peter",
+    link: "/docs/business/opportunities/nato-diana-accelerator",
   },
   {
     date: "2026-01-10",
@@ -164,6 +167,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
+    link: "/docs/business/opportunities/sosv-hax-accelerator",
   },
   {
     date: "2026-01-15",
@@ -181,6 +185,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
+    link: "/docs/business/opportunities/mhub-chicago",
   },
   {
     date: "2026-01-20",
@@ -197,6 +202,7 @@ const calendarEvents: CalendarItem[] = [
     category: "funding",
     priority: "high",
     assignee: "jurie",
+    link: "/docs/business/opportunities/cloud-credits-programs",
   },
   {
     date: "2026-02-04",
@@ -237,6 +243,7 @@ const calendarEvents: CalendarItem[] = [
     category: "funding",
     priority: "high",
     assignee: "jurie",
+    link: "/docs/business/opportunities/cloud-credits-programs",
   },
   {
     date: "2026-02-09",
@@ -245,6 +252,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
+    link: "/docs/business/opportunities/y-combinator",
   },
   {
     date: "2026-03-01",
@@ -277,6 +285,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "medium",
     assignee: "martyn",
+    link: "/docs/business/opportunities/techstars-programs",
   },
   {
     date: "2026-03-16",
@@ -329,6 +338,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "team",
+    link: "/docs/business/opportunities/techstars-programs",
   },
   {
     date: "2026-04-03",
@@ -337,6 +347,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-04-15",
@@ -353,6 +364,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-04-30",
@@ -405,6 +417,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-06-30",
@@ -439,6 +452,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-07-01",
@@ -498,6 +512,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-09-30",
@@ -525,6 +540,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "/docs/business/opportunities/ethglobal-hackathons",
   },
   {
     date: "2026-11-15",
@@ -533,6 +549,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
+    link: "/docs/business/opportunities/cloud-credits-programs",
   },
   {
     date: "2026-10-01",
