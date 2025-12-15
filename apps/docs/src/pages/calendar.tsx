@@ -113,6 +113,14 @@ const calendarEvents: CalendarItem[] = [
     priority: "high",
     assignee: "team",
   },
+  {
+    date: "2025-12-31",
+    title: "AWS Activate Founders Credits",
+    description: "Apply for $1K-$100K AWS credits for cloud, IoT, and ML services",
+    category: "funding",
+    priority: "high",
+    assignee: "jurie",
+  },
 
   // ============================================
   // Q1 2026
@@ -122,6 +130,30 @@ const calendarEvents: CalendarItem[] = [
     title: "DARPA Lift Challenge Registration Opens",
     description: "Heavy-lift drone challenge, $6.5M total prizes",
     category: "opportunity",
+    priority: "high",
+    assignee: "peter",
+  },
+  {
+    date: "2026-01-05",
+    title: "CrowdStrike Cybersecurity Accelerator Begins",
+    description: "8-week program with AWS & NVIDIA, runs Jan 5 - Mar 3, 2026",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "jurie",
+  },
+  {
+    date: "2026-01-06",
+    title: "NATO DIANA Accelerator Phase 1 Begins",
+    description: "6-month program, €100K funding, access to 200+ test centres across NATO",
+    category: "accelerator",
+    priority: "critical",
+    assignee: "martyn",
+  },
+  {
+    date: "2026-01-06",
+    title: "VTT DIANA Finland - Advanced Communications",
+    description: "NATO DIANA site focusing on secure networks, RF, quantum encryption",
+    category: "accelerator",
     priority: "high",
     assignee: "peter",
   },
@@ -201,10 +233,18 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-28",
     title: "Google for Startups AI Accelerator Application",
-    description: "10-12 weeks program, $350K cloud credits",
+    description: "10-12 weeks program, $350K cloud credits for AI-first startups",
     category: "funding",
     priority: "high",
     assignee: "jurie",
+  },
+  {
+    date: "2026-02-09",
+    title: "Y Combinator S26 Application Deadline",
+    description: "$500K investment, defense tech now accepted. Delaware entity required.",
+    category: "accelerator",
+    priority: "critical",
+    assignee: "martyn",
   },
   {
     date: "2026-03-01",
@@ -221,6 +261,30 @@ const calendarEvents: CalendarItem[] = [
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
+  },
+  {
+    date: "2026-03-01",
+    title: "EUDIS Defence Hackathon 2026",
+    description: "EU-funded hackathon: autonomous systems, cyber defense, aerospace tech",
+    category: "hackathon",
+    priority: "high",
+    assignee: "team",
+  },
+  {
+    date: "2026-03-09",
+    title: "Techstars Anywhere Accelerator Begins",
+    description: "Remote accelerator program, Demo Day June 4, 2026",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "martyn",
+  },
+  {
+    date: "2026-03-16",
+    title: "NVIDIA GTC 2026 San Jose",
+    description: "AI conference March 16-19, meet Inception startups, pitch opportunities",
+    category: "opportunity",
+    priority: "high",
+    assignee: "jurie",
   },
   {
     date: "2026-03-15",
@@ -267,12 +331,28 @@ const calendarEvents: CalendarItem[] = [
     assignee: "team",
   },
   {
+    date: "2026-04-03",
+    title: "ETHGlobal Cannes Hackathon",
+    description: "April 3-5, Web3/blockchain hackathon with Pragma summit",
+    category: "hackathon",
+    priority: "medium",
+    assignee: "jurie",
+  },
+  {
     date: "2026-04-15",
     title: "NSIN Emerge Accelerator Application",
     description: "12-week university-based dual-use program, DoD partnership",
     category: "accelerator",
     priority: "medium",
     assignee: "martyn",
+  },
+  {
+    date: "2026-05-08",
+    title: "ETHPrague Conference & Hackathon",
+    description: "May 8-10, Ethereum conference and hackathon in Prague",
+    category: "hackathon",
+    priority: "medium",
+    assignee: "jurie",
   },
   {
     date: "2026-04-30",
@@ -319,9 +399,17 @@ const calendarEvents: CalendarItem[] = [
     priority: "high",
   },
   {
+    date: "2026-06-12",
+    title: "ETHGlobal New York Hackathon",
+    description: "June 12-14, Web3 hackathon: ZK proofs, DeFi, Layer-2, AI+crypto",
+    category: "hackathon",
+    priority: "high",
+    assignee: "jurie",
+  },
+  {
     date: "2026-06-30",
     title: "NATO Innovation Fund Pitch Target",
-    description: "Rolling submissions - up to \u20AC15M per company",
+    description: "Rolling submissions - up to €15M per company",
     category: "funding",
     priority: "high",
   },
@@ -336,6 +424,22 @@ const calendarEvents: CalendarItem[] = [
   // ============================================
   // Q3 2026
   // ============================================
+  {
+    date: "2026-07-18",
+    title: "Robotics Factory Accelerate Application Deadline",
+    description: "Up to $100K funding, production-grade prototyping space access",
+    category: "accelerator",
+    priority: "high",
+    assignee: "peter",
+  },
+  {
+    date: "2026-07-24",
+    title: "ETHGlobal Lisbon Hackathon",
+    description: "July 24-26, Web3 hackathon in Lisbon",
+    category: "hackathon",
+    priority: "medium",
+    assignee: "jurie",
+  },
   {
     date: "2026-07-01",
     title: "Series A Fundraise",
@@ -388,6 +492,14 @@ const calendarEvents: CalendarItem[] = [
     link: "/docs/business/opportunities/cuas-sandbox-2026",
   },
   {
+    date: "2026-09-25",
+    title: "ETHGlobal Tokyo Hackathon",
+    description: "September 25-27, Web3 hackathon in Tokyo",
+    category: "hackathon",
+    priority: "medium",
+    assignee: "jurie",
+  },
+  {
     date: "2026-09-30",
     title: "Q3 2026 Milestone Review",
     description: "End of quarter progress review",
@@ -398,6 +510,30 @@ const calendarEvents: CalendarItem[] = [
   // ============================================
   // Q4 2026
   // ============================================
+  {
+    date: "2026-10-01",
+    title: "AWS Robotics Startup Accelerator Application",
+    description: "With MassRobotics, for hardware/software robotics startups <$10M revenue",
+    category: "accelerator",
+    priority: "high",
+    assignee: "peter",
+  },
+  {
+    date: "2026-11-01",
+    title: "ETHGlobal Mumbai Hackathon",
+    description: "Q4 2026, Web3 hackathon in Mumbai (dates TBD)",
+    category: "hackathon",
+    priority: "medium",
+    assignee: "jurie",
+  },
+  {
+    date: "2026-11-15",
+    title: "Microsoft for Startups Pegasus Program",
+    description: "$250K investment, $350K Azure credits, top-tier advisors",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+  },
   {
     date: "2026-10-01",
     title: "Canada Expansion Begins",
@@ -451,6 +587,30 @@ const calendarEvents: CalendarItem[] = [
     description: "Initial customer deployment target",
     category: "development",
     priority: "critical",
+  },
+  {
+    date: "2027-01-31",
+    title: "Silicon Valley Robotics Accelerator Application",
+    description: "Free accelerator for SVR members, hardware/robotics focus",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "peter",
+  },
+  {
+    date: "2027-02-01",
+    title: "South Africa Innovation Fund Application",
+    description: "DSTI fund for high-tech SME sector, FY2027 cycle",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+  },
+  {
+    date: "2027-03-01",
+    title: "Google for Startups MENA Accelerator",
+    description: "10-week program for Middle East/Africa tech startups",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
   },
 ];
 
