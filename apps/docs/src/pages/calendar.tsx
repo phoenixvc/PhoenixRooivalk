@@ -682,9 +682,25 @@ function saveCustomEvents(events: CustomEvent[]): void {
   localStorage.setItem(CUSTOM_EVENTS_KEY, JSON.stringify(events));
 }
 
+// Time range options
+type TimeRange = "all" | "week" | "month" | "quarter" | "30days" | "60days" | "90days";
+
+const timeRangeConfig: Record<TimeRange, { label: string; days: number | null }> = {
+  all: { label: "All Time", days: null },
+  week: { label: "This Week", days: 7 },
+  month: { label: "This Month", days: 30 },
+  quarter: { label: "This Quarter", days: 90 },
+  "30days": { label: "Next 30 Days", days: 30 },
+  "60days": { label: "Next 60 Days", days: 60 },
+  "90days": { label: "Next 90 Days", days: 90 },
+};
+
 export default function CalendarPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedAssignee, setSelectedAssignee] = useState<string>("all");
+  const [selectedPriority, setSelectedPriority] = useState<string>("all");
+  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [showPast, setShowPast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [customEvents, setCustomEvents] = useState<CustomEvent[]>([]);
@@ -709,9 +725,23 @@ export default function CalendarPage(): React.ReactElement {
   const filteredEvents = useMemo(() => {
     let events = [...allEvents];
 
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      events = events.filter((e) =>
+        e.title.toLowerCase().includes(query) ||
+        e.description.toLowerCase().includes(query)
+      );
+    }
+
     // Filter by category
     if (selectedCategory !== "all") {
       events = events.filter((e) => e.category === selectedCategory);
+    }
+
+    // Filter by priority
+    if (selectedPriority !== "all") {
+      events = events.filter((e) => e.priority === selectedPriority);
     }
 
     // Filter by assignee
@@ -724,6 +754,17 @@ export default function CalendarPage(): React.ReactElement {
       );
     }
 
+    // Filter by time range
+    if (selectedTimeRange !== "all") {
+      const maxDays = timeRangeConfig[selectedTimeRange].days;
+      if (maxDays !== null) {
+        events = events.filter((e) => {
+          const days = getDaysUntil(e.date);
+          return days >= 0 && days <= maxDays;
+        });
+      }
+    }
+
     // Filter past events
     if (!showPast) {
       events = events.filter((e) => getDaysUntil(e.date) >= 0);
@@ -733,7 +774,63 @@ export default function CalendarPage(): React.ReactElement {
     events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return events;
-  }, [selectedCategory, selectedAssignee, showPast, allEvents]);
+  }, [selectedCategory, selectedAssignee, selectedPriority, selectedTimeRange, searchQuery, showPast, allEvents]);
+
+  // Personal stats for selected assignee
+  const personalStats = useMemo(() => {
+    const assigneeEvents = selectedAssignee !== "all"
+      ? allEvents.filter((e) =>
+          e.assignee === selectedAssignee ||
+          e.assignee === "all" ||
+          e.assignee === "team" ||
+          !e.assignee
+        )
+      : allEvents;
+
+    const upcoming = assigneeEvents.filter((e) => getDaysUntil(e.date) >= 0);
+    const thisWeek = upcoming.filter((e) => getDaysUntil(e.date) <= 7);
+    const thisMonth = upcoming.filter((e) => getDaysUntil(e.date) <= 30);
+    const critical = upcoming.filter((e) => e.priority === "critical");
+    const high = upcoming.filter((e) => e.priority === "high");
+    const overdue = allEvents.filter((e) => getDaysUntil(e.date) < 0);
+
+    // Breakdown by category
+    const byCategory = Object.keys(categoryConfig).reduce((acc, cat) => {
+      acc[cat] = upcoming.filter((e) => e.category === cat).length;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return {
+      total: upcoming.length,
+      thisWeek: thisWeek.length,
+      thisMonth: thisMonth.length,
+      critical: critical.length,
+      high: high.length,
+      overdue: overdue.length,
+      byCategory,
+    };
+  }, [selectedAssignee, allEvents]);
+
+  // Export personal calendar (only assigned events)
+  const handleExportPersonal = () => {
+    const personalEvents = selectedAssignee !== "all"
+      ? filteredEvents
+      : allEvents.filter((e) => getDaysUntil(e.date) >= 0);
+
+    const events: CalendarEvent[] = personalEvents.map((item) => ({
+      title: item.title,
+      description: item.description,
+      startDate: new Date(item.date),
+      allDay: true,
+      category: item.category,
+    }));
+
+    const filename = selectedAssignee !== "all"
+      ? `phoenix-calendar-${selectedAssignee}.ics`
+      : "phoenix-rooivalk-calendar.ics";
+
+    downloadICS(events, filename);
+  };
 
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.date) {
@@ -926,6 +1023,54 @@ export default function CalendarPage(): React.ReactElement {
           </div>
         </div>
 
+        {/* Personal Stats Dashboard */}
+        {selectedAssignee !== "all" && (
+          <div className={styles.statsDashboard}>
+            <div className={styles.statsHeader}>
+              <h3>
+                <span
+                  className={styles.statsAvatar}
+                  style={{ backgroundColor: teamConfig[selectedAssignee as TeamMember]?.color }}
+                >
+                  {teamConfig[selectedAssignee as TeamMember]?.initials}
+                </span>
+                {teamConfig[selectedAssignee as TeamMember]?.label}'s Dashboard
+              </h3>
+              <button className={styles.exportPersonalBtn} onClick={handleExportPersonal}>
+                📥 Export My Calendar
+              </button>
+            </div>
+            <div className={styles.statsGrid}>
+              <div className={styles.statCard}>
+                <span className={styles.statNumber}>{personalStats.thisWeek}</span>
+                <span className={styles.statLabel}>This Week</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statNumber}>{personalStats.thisMonth}</span>
+                <span className={styles.statLabel}>This Month</span>
+              </div>
+              <div className={`${styles.statCard} ${styles.statCritical}`}>
+                <span className={styles.statNumber}>{personalStats.critical}</span>
+                <span className={styles.statLabel}>🔴 Critical</span>
+              </div>
+              <div className={`${styles.statCard} ${styles.statHigh}`}>
+                <span className={styles.statNumber}>{personalStats.high}</span>
+                <span className={styles.statLabel}>🟡 High Priority</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statNumber}>{personalStats.total}</span>
+                <span className={styles.statLabel}>Total Upcoming</span>
+              </div>
+              {personalStats.overdue > 0 && (
+                <div className={`${styles.statCard} ${styles.statOverdue}`}>
+                  <span className={styles.statNumber}>{personalStats.overdue}</span>
+                  <span className={styles.statLabel}>⚠️ Overdue</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Critical Deadlines Alert */}
         {upcomingCritical.length > 0 && (
           <div className={styles.criticalAlert}>
@@ -946,7 +1091,88 @@ export default function CalendarPage(): React.ReactElement {
           </div>
         )}
 
-        {/* Filters */}
+        {/* Search & Filters */}
+        <div className={styles.searchAndFilters}>
+          {/* Search Bar */}
+          <div className={styles.searchBar}>
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+            {searchQuery && (
+              <button
+                className={styles.clearSearch}
+                onClick={() => setSearchQuery("")}
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Filter Row */}
+          <div className={styles.filterRow}>
+            <div className={styles.filterGroup}>
+              <label>Time Range:</label>
+              <select
+                value={selectedTimeRange}
+                onChange={(e) => setSelectedTimeRange(e.target.value as TimeRange)}
+                className={styles.filterSelect}
+              >
+                {Object.entries(timeRangeConfig).map(([key, config]) => (
+                  <option key={key} value={key}>
+                    {config.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.filterGroup}>
+              <label>Priority:</label>
+              <select
+                value={selectedPriority}
+                onChange={(e) => setSelectedPriority(e.target.value)}
+                className={styles.filterSelect}
+              >
+                <option value="all">All Priorities</option>
+                {Object.entries(priorityConfig).map(([key, config]) => (
+                  <option key={key} value={key}>
+                    {config.badge} {config.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.filterGroup}>
+              <label>Assigned to:</label>
+              <select
+                value={selectedAssignee}
+                onChange={(e) => setSelectedAssignee(e.target.value)}
+                className={styles.filterSelect}
+              >
+                <option value="all">Everyone</option>
+                {Object.entries(teamConfig).filter(([key]) => key !== "all").map(([key, config]) => (
+                  <option key={key} value={key}>
+                    {config.initials} - {config.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <label className={styles.showPastToggle}>
+              <input
+                type="checkbox"
+                checked={showPast}
+                onChange={(e) => setShowPast(e.target.checked)}
+              />
+              Show past
+            </label>
+          </div>
+        </div>
+
+        {/* Category Filters */}
         <div className={styles.filters}>
           <div className={styles.categoryFilters}>
             <button
@@ -966,30 +1192,8 @@ export default function CalendarPage(): React.ReactElement {
               </button>
             ))}
           </div>
-          <div className={styles.filterControls}>
-            <div className={styles.assigneeFilter}>
-              <label>Assigned to:</label>
-              <select
-                value={selectedAssignee}
-                onChange={(e) => setSelectedAssignee(e.target.value)}
-                className={styles.assigneeSelect}
-              >
-                <option value="all">Everyone</option>
-                {Object.entries(teamConfig).filter(([key]) => key !== "all").map(([key, config]) => (
-                  <option key={key} value={key}>
-                    {config.initials} - {config.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <label className={styles.showPastToggle}>
-              <input
-                type="checkbox"
-                checked={showPast}
-                onChange={(e) => setShowPast(e.target.checked)}
-              />
-              Show past events
-            </label>
+          <div className={styles.resultsCount}>
+            Showing {filteredEvents.length} events
           </div>
         </div>
 
