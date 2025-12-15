@@ -253,7 +253,16 @@
 
 .calendarExportWrapper button {
   font-size: 0.75rem !important;
-  padding: 0.25rem 0.5rem !important;
+  padding: 0.25rem 0.75rem !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid var(--ifm-color-primary) !important;
+  color: var(--ifm-color-primary) !important;
+  font-weight: 600 !important;
+  border-radius: 0.375rem !important;
+}
+
+.calendarExportWrapper button:hover {
+  background: #ffffff !important;
 }
 
 /* Progress Bar */
@@ -280,7 +289,8 @@
 
 .progressText {
   font-size: 0.75rem;
-  color: var(--ifm-color-emphasis-600);
+  color: #1e293b;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -305,17 +315,18 @@
   width: 36px;
   height: 36px;
   font-size: 1rem;
-  background: transparent;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: var(--ifm-font-color-base);
+  color: #1e293b;
 }
 
 .iconButton:hover {
-  background: var(--ifm-color-emphasis-100);
-  border-color: var(--ifm-color-emphasis-400);
+  background: #ffffff;
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
 }
 
 /* Download Buttons */
@@ -350,13 +361,23 @@
 }
 
 .downloadButtonSecondary {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--ifm-color-primary);
-  color: var(--ifm-color-primary);
+  color: #1e293b;
 }
 
 .downloadButtonSecondary:hover {
-  background: var(--ifm-color-primary-lightest);
+  background: #ffffff;
+  border-color: var(--ifm-color-primary-dark);
+}
+
+.downloadButtonSecondary .buttonLabel {
+  color: #1e293b;
+}
+
+.downloadButtonSecondary .buttonMeta {
+  color: #475569;
+  opacity: 1;
 }
 
 .buttonIcon {

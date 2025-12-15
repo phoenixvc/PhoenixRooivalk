@@ -4,7 +4,9 @@
  * Wraps document content with ProtectedContent component to enforce
  * authentication and show teaser mode for non-authenticated users.
  * ErrorBoundary ensures auth issues don't crash the documentation.
- * Also adds a CommentSection at the bottom of each doc page.
+ * Also adds:
+ * - InlineComments for Google Docs-style text selection commenting
+ * - CommentSection at the bottom of each doc page
  */
 
 import React from "react";
@@ -15,6 +17,7 @@ import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { ProtectedContent } from "../../../components/Auth";
 import { ErrorBoundary } from "../../../components/ErrorBoundary";
 import { CommentSection } from "../../../components/Comments";
+import { InlineComments } from "../../../components/InlineComments";
 
 type Props = WrapperProps<typeof ContentType>;
 
@@ -34,8 +37,14 @@ export default function ContentWrapper(props: Props): React.ReactElement {
       }
     >
       <ProtectedContent>
-        <Content {...props} />
-        {/* Comments Section */}
+        {/* Inline Comments - Google Docs style text selection */}
+        <ErrorBoundary fallback={<Content {...props} />}>
+          <InlineComments pageId={pageId} pageTitle={pageTitle}>
+            <Content {...props} />
+          </InlineComments>
+        </ErrorBoundary>
+
+        {/* Bottom Comments Section */}
         <ErrorBoundary
           fallback={
             <div
