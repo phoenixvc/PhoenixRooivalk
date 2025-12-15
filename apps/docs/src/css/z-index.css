@@ -1,0 +1,82 @@
+/**
+ * Z-Index Management System
+ * =========================
+ *
+ * This file defines a centralized z-index scale to prevent
+ * z-index collisions across components.
+ *
+ * Usage: var(--z-index-<level>)
+ *
+ * Levels (lowest to highest):
+ * - base: Default stacking context
+ * - dropdown: Dropdowns, tooltips
+ * - sticky: Sticky headers, sidebars
+ * - fixed: Fixed position elements
+ * - sidebar: Sidebar recommendations, panels
+ * - modal-backdrop: Modal/overlay backgrounds
+ * - modal: Modal dialogs, AI panels
+ * - notification: Toasts, alerts
+ * - popover: Popovers, inline comments
+ * - overlay: Full-screen overlays
+ * - tooltip: Tooltips that need to be above everything
+ * - max: Critical UI (onboarding, confirmations)
+ */
+
+:root {
+  /* Base layer - default content */
+  --z-index-base: 1;
+
+  /* Dropdown menus and basic tooltips */
+  --z-index-dropdown: 100;
+
+  /* Sticky elements like headers */
+  --z-index-sticky: 200;
+
+  /* Fixed position elements */
+  --z-index-fixed: 300;
+
+  /* Sidebar panels and recommendations */
+  --z-index-sidebar: 400;
+
+  /* Modal backdrop/overlay */
+  --z-index-modal-backdrop: 500;
+
+  /* Modal dialogs */
+  --z-index-modal: 600;
+
+  /* AI floating widget and panels */
+  --z-index-ai-widget: 700;
+
+  /* Notifications, toasts, alerts */
+  --z-index-notification: 800;
+
+  /* Popovers and inline comments */
+  --z-index-popover: 900;
+
+  /* Full-screen overlays */
+  --z-index-overlay: 950;
+
+  /* Cookie consent, critical notices */
+  --z-index-critical: 1000;
+
+  /* Onboarding walkthroughs */
+  --z-index-onboarding: 1100;
+
+  /* Maximum priority - profile confirmations, critical dialogs */
+  --z-index-max: 1200;
+}
+
+/*
+ * Legacy z-index mapping (for reference during migration):
+ *
+ * OLD VALUE → NEW VARIABLE
+ * z-index: 1         → var(--z-index-base)
+ * z-index: 90-100    → var(--z-index-dropdown)
+ * z-index: 200       → var(--z-index-sticky)
+ * z-index: 400       → var(--z-index-sidebar)
+ * z-index: 1000      → var(--z-index-modal) or var(--z-index-ai-widget)
+ * z-index: 1001      → var(--z-index-ai-widget)
+ * z-index: 9997-9999 → var(--z-index-onboarding)
+ * z-index: 9999      → var(--z-index-critical)
+ * z-index: 10000     → var(--z-index-max)
+ */

@@ -332,3 +332,13 @@
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
   background-color: var(--ifm-background-surface-color);
 }
+
+/* Add helper text for context */
+#phase-filter-container::before {
+  content: "Show docs relevant to your funding stage";
+  display: block;
+  font-size: 0.625rem;
+  color: var(--ifm-color-content-secondary);
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
