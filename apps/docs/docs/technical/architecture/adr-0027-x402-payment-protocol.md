@@ -451,7 +451,7 @@ this):
 ## Related ADRs
 
 - [ADR 0001: Chain Selection for On-Chain Anchoring](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others)
-- [ADR 0015: Movement Network Integration](./adr-0015-movement-network-integration.md)
+- [ADR 0026: Movement Network Integration](./adr-0026-movement-network-integration.md)
 - [ADR-D002: Dual Blockchain Anchoring](./architecture-decision-records#adr-d002-dual-blockchain-anchoring-solana--etherlink)
 
 ---

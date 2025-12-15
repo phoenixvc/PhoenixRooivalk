@@ -548,7 +548,7 @@ az functionapp config appsettings set \
 
 - [ADR 0012: Runtime Functions](./adr-0012-runtime-functions.md)
 - [ADR 0023: AI Observability](./adr-0023-ai-observability.md)
-- [ADR 0016: DB-Driven Configuration](./adr-0016-db-driven-configuration.md)
+- [ADR 0028: DB-Driven Configuration](./adr-0028-db-driven-configuration.md)
 
 ---
 
