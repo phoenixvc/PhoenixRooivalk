@@ -1,0 +1,407 @@
+/* ============================================
+   Calendar Export Component
+   ============================================ */
+.calendarExport {
+  position: relative;
+  display: inline-block;
+}
+
+.calendarButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Variants */
+.calendarButtonPrimary {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+.calendarButtonPrimary:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.calendarButtonSecondary {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.calendarButtonSecondary:hover {
+  background: var(--ifm-color-emphasis-300);
+}
+
+.calendarButtonOutline {
+  background: transparent;
+  border: 2px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.calendarButtonOutline:hover {
+  background: var(--ifm-color-primary-lightest);
+}
+
+/* Sizes */
+.calendarButtonSmall {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.calendarButtonMedium {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+}
+
+.calendarButtonLarge {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+}
+
+.calendarIcon {
+  font-size: 1.1em;
+}
+
+.chevron {
+  font-size: 0.625rem;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+/* Dropdown */
+.calendarDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 280px;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  background: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--ifm-font-color-base);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-dark);
+}
+
+.dropdownIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.dropdownLabel {
+  flex: 1;
+}
+
+.dropdownTitle {
+  display: block;
+  font-weight: 500;
+}
+
+.dropdownDescription {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 0.125rem;
+}
+
+.divider {
+  height: 1px;
+  background: var(--ifm-color-emphasis-200);
+  margin: 0.5rem 0;
+}
+
+/* ============================================
+   Booking Widget Component
+   ============================================ */
+.bookingWidget {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--ifm-color-primary-lightest) 0%, var(--ifm-background-surface-color) 100%);
+  border-radius: 0.75rem;
+  border: 1px solid var(--ifm-color-primary-light);
+}
+
+.bookingHeader {
+  margin-bottom: 1.25rem;
+}
+
+.bookingTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--ifm-font-color-base);
+}
+
+.bookingSubtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.bookingTypes {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.bookingType {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bookingType:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.bookingTypeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+}
+
+.bookingTypeName {
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+}
+
+.bookingDuration {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 9999px;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.bookingTypeDescription {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.bookingCta {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+}
+
+.bookingFooter {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  text-align: center;
+}
+
+.poweredBy {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.calLink {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.calLink:hover {
+  text-decoration: underline;
+}
+
+/* Embed Modal */
+.embedOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.embedModal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: var(--ifm-background-surface-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.embedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.embedHeader h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.embedClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 1.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--ifm-font-color-base);
+  transition: all 0.2s;
+}
+
+.embedClose:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.embedContent {
+  flex: 1;
+  min-height: 600px;
+}
+
+.embedIframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* ============================================
+   Add to Calendar Button (Inline Single Event)
+   ============================================ */
+.addToCalendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-primary);
+  background: transparent;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addToCalendar:hover {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  .calendarDropdown {
+    right: 0;
+    left: auto;
+    min-width: 260px;
+  }
+
+  .bookingWidget {
+    padding: 1rem;
+  }
+
+  .embedModal {
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .embedContent {
+    min-height: 500px;
+  }
+
+  .embedIframe {
+    height: 500px;
+  }
+}
