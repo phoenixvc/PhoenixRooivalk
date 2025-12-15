@@ -148,7 +148,7 @@ class SectionHeader:
         text: str,
         number: Optional[str] = None,
         level: int = 1,
-        accent_line: bool = True,
+        accent_line: bool = False,
     ):
         self.text = text
         self.number = number
