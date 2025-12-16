@@ -22,28 +22,31 @@ technologies including UAS and autonomous systems.
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | Defence Innovation Organisation (DIO), Ministry of Defence |
-| **Founded** | April 2018 |
-| **Budget** | Rs. 498.78 crore (2021-2026) |
-| **Contracts Signed** | 430+ (as of Feb 2025) |
-| **Focus** | Defence and aerospace innovation |
+| Aspect               | Details                                                    |
+| -------------------- | ---------------------------------------------------------- |
+| **Organizer**        | Defence Innovation Organisation (DIO), Ministry of Defence |
+| **Founded**          | April 2018                                                 |
+| **Budget**           | Rs. 498.78 crore (2021-2026)                               |
+| **Contracts Signed** | 430+ (as of Feb 2025)                                      |
+| **Focus**            | Defence and aerospace innovation                           |
 
 ---
 
 ## Funding Tracks
 
 ### DISC (Defence India Startup Challenge)
+
 - **Grants:** Up to Rs. 1.5 Crore (~$180,000 USD)
 - **Focus:** Specific problem statements from armed forces
 - **Current Edition:** DISC 12 (41 problem statements)
 
 ### iDEX Prime
+
 - **Grants:** Up to Rs. 10 Crore (~$1.2M USD)
 - **Focus:** Higher-value technology development
 
 ### ADITI (Acing Development of Innovative Technologies)
+
 - **Grants:** Up to Rs. 25 Crore (~$3M USD)
 - **Focus:** High-value strategic technologies
 
@@ -53,14 +56,14 @@ technologies including UAS and autonomous systems.
 
 iDEX covers 50+ technology categories including:
 
-| Category | Relevance to Phoenix Rooivalk |
-|----------|------------------------------|
-| **Unmanned Aerial Systems** | Direct fit |
-| **Autonomous Systems** | Direct fit |
-| **AI-enabled Surveillance** | Direct fit |
-| **Counter-drone Systems** | Direct fit |
-| **Advanced Propulsion** | Partial fit |
-| **Miniaturized Guidance** | Partial fit |
+| Category                    | Relevance to Phoenix Rooivalk |
+| --------------------------- | ----------------------------- |
+| **Unmanned Aerial Systems** | Direct fit                    |
+| **Autonomous Systems**      | Direct fit                    |
+| **AI-enabled Surveillance** | Direct fit                    |
+| **Counter-drone Systems**   | Direct fit                    |
+| **Advanced Propulsion**     | Partial fit                   |
+| **Miniaturized Guidance**   | Partial fit                   |
 
 ---
 
@@ -78,12 +81,12 @@ problem statements. Typical CUAS-relevant challenges include:
 
 ## Eligibility
 
-| Requirement | Phoenix Rooivalk Status |
-|-------------|------------------------|
-| Startup/MSME | Meets requirement |
-| Innovative solution | Meets requirement |
-| Indian presence | May need local partner |
-| Technology alignment | Strong alignment |
+| Requirement          | Phoenix Rooivalk Status |
+| -------------------- | ----------------------- |
+| Startup/MSME         | Meets requirement       |
+| Innovative solution  | Meets requirement       |
+| Indian presence      | May need local partner  |
+| Technology alignment | Strong alignment        |
 
 :::info International Participation
 
@@ -107,13 +110,13 @@ partnerships. Contact iDEX directly for foreign company participation options.
 
 ## Program Benefits
 
-| Benefit | Description |
-|---------|-------------|
-| **Grant Funding** | Non-dilutive funding up to Rs. 25 Cr |
-| **Accelerator Access** | Partner incubator programs |
-| **Mentorship** | Defense industry experts |
-| **Procurement Path** | Direct path to Indian military |
-| **Testing Facilities** | Access to military test ranges |
+| Benefit                | Description                          |
+| ---------------------- | ------------------------------------ |
+| **Grant Funding**      | Non-dilutive funding up to Rs. 25 Cr |
+| **Accelerator Access** | Partner incubator programs           |
+| **Mentorship**         | Defense industry experts             |
+| **Procurement Path**   | Direct path to Indian military       |
+| **Testing Facilities** | Access to military test ranges       |
 
 ---
 
@@ -145,12 +148,12 @@ partnerships. Contact iDEX directly for foreign company participation options.
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | UAS/CUAS direct alignment |
-| Stage Fit | High | Development stage accepted |
-| Geographic Fit | Medium | Need Indian partner |
-| Funding Level | High | Significant grants available |
+| Criteria        | Score    | Notes                           |
+| --------------- | -------- | ------------------------------- |
+| Technology Fit  | High     | UAS/CUAS direct alignment       |
+| Stage Fit       | High     | Development stage accepted      |
+| Geographic Fit  | Medium   | Need Indian partner             |
+| Funding Level   | High     | Significant grants available    |
 | **Overall Fit** | **High** | Strong opportunity with partner |
 
 ---

@@ -25,9 +25,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Phoenix Rooivalk needs a non-kinetic effector system to neutralize drone threats without collateral damage
-2. **Decision**: Develop in-house pneumatic net launcher with local material sourcing and modular design
-3. **Trade-off**: Development time vs. commercial off-the-shelf (COTS) systems with licensing restrictions
+1. **Problem**: Phoenix Rooivalk needs a non-kinetic effector system to
+   neutralize drone threats without collateral damage
+2. **Decision**: Develop in-house pneumatic net launcher with local material
+   sourcing and modular design
+3. **Trade-off**: Development time vs. commercial off-the-shelf (COTS) systems
+   with licensing restrictions
 
 ---
 
@@ -35,7 +38,8 @@ prerequisites:
 
 ### Operational Requirement
 
-Counter-UAS systems require effector mechanisms to neutralize identified threats. Options include:
+Counter-UAS systems require effector mechanisms to neutralize identified
+threats. Options include:
 
 - **Kinetic**: Projectiles, shotguns (collateral damage risk)
 - **Electronic**: Jamming, spoofing (spectrum regulations)
@@ -63,14 +67,17 @@ For civilian infrastructure protection (airports, stadiums, prisons):
 
 ### Option 1: Commercial Off-the-Shelf (COTS) ❌
 
-Purchase existing net launcher systems (e.g., OpenWorks SkyWall, Fortem DroneHunter).
+Purchase existing net launcher systems (e.g., OpenWorks SkyWall, Fortem
+DroneHunter).
 
 **Pros**:
+
 - Proven technology
 - Immediate availability
 - Certification may transfer
 
 **Cons**:
+
 - **High cost**: $50K-$200K per unit
 - **Licensing restrictions**: Export controls, end-user agreements
 - **Integration challenges**: Proprietary interfaces
@@ -81,10 +88,12 @@ Purchase existing net launcher systems (e.g., OpenWorks SkyWall, Fortem DroneHun
 License net launcher design from existing manufacturer.
 
 **Pros**:
+
 - Faster development
 - Proven design
 
 **Cons**:
+
 - **Royalty costs**: Per-unit fees reduce margins
 - **Design constraints**: Cannot modify for mission requirements
 - **IP limitations**: Cannot patent improvements
@@ -94,6 +103,7 @@ License net launcher design from existing manufacturer.
 Develop proprietary net launcher system with local sourcing.
 
 **Pros**:
+
 - **Full IP ownership**: Patent potential, no licensing fees
 - **Local sourcing**: South African materials, no import delays
 - **Mission-specific optimization**: Tailored to RKV-M platform
@@ -101,6 +111,7 @@ Develop proprietary net launcher system with local sourcing.
 - **Rapid iteration**: Can test and improve quickly
 
 **Cons**:
+
 - **Development time**: 3-6 months to operational prototype
 - **Certification path**: Must establish own testing regime
 - **Technical risk**: Unproven design
@@ -147,41 +158,41 @@ Adopt **Option 3: In-House Development** for the net launcher effector system.
 
 #### 1. Pneumatic System
 
-| Component          | Specification                    |
-|--------------------|----------------------------------|
-| Reservoir          | High-pressure air cylinder       |
-| Operating Pressure | 150-300 PSI                      |
-| Regulator          | Adjustable for range control     |
-| Refill Method      | Hand pump or compressor          |
+| Component          | Specification                |
+| ------------------ | ---------------------------- |
+| Reservoir          | High-pressure air cylinder   |
+| Operating Pressure | 150-300 PSI                  |
+| Regulator          | Adjustable for range control |
+| Refill Method      | Hand pump or compressor      |
 
 #### 2. Launch Mechanism
 
-| Component        | Specification                     |
-|------------------|-----------------------------------|
-| Barrel           | PVC/aluminum pipe, 50-75mm ID     |
-| Trigger          | Electronic solenoid valve         |
-| Safety           | Mechanical safety + software lock |
-| Reload           | Quick-change cartridge system     |
+| Component | Specification                     |
+| --------- | --------------------------------- |
+| Barrel    | PVC/aluminum pipe, 50-75mm ID     |
+| Trigger   | Electronic solenoid valve         |
+| Safety    | Mechanical safety + software lock |
+| Reload    | Quick-change cartridge system     |
 
 #### 3. Net Payload
 
-| Parameter        | Specification                     |
-|------------------|-----------------------------------|
-| Net Size         | 3m x 3m deployed                  |
-| Material         | High-strength nylon/Dyneema       |
-| Mesh Size        | 10cm x 10cm                       |
-| Corner Weights   | 50-100g each for stability        |
-| Packing          | Compressed cartridge              |
+| Parameter      | Specification               |
+| -------------- | --------------------------- |
+| Net Size       | 3m x 3m deployed            |
+| Material       | High-strength nylon/Dyneema |
+| Mesh Size      | 10cm x 10cm                 |
+| Corner Weights | 50-100g each for stability  |
+| Packing        | Compressed cartridge        |
 
 ### Performance Targets
 
-| Metric              | Target           | Rationale                    |
-|---------------------|------------------|------------------------------|
-| Effective Range     | 15-30m           | Typical engagement distance  |
-| Net Deployment Time | <100ms           | Faster than drone evasion    |
-| Accuracy            | 80% hit @ 20m    | Account for target movement  |
-| Reload Time         | <10 seconds      | Multiple engagement capability|
-| Weight              | <5kg total       | UAV payload constraint       |
+| Metric              | Target        | Rationale                      |
+| ------------------- | ------------- | ------------------------------ |
+| Effective Range     | 15-30m        | Typical engagement distance    |
+| Net Deployment Time | <100ms        | Faster than drone evasion      |
+| Accuracy            | 80% hit @ 20m | Account for target movement    |
+| Reload Time         | <10 seconds   | Multiple engagement capability |
+| Weight              | <5kg total    | UAV payload constraint         |
 
 ---
 
@@ -249,13 +260,13 @@ pub struct EngagementEvidence {
 
 ### Phase 1: Prototype (Current - Q1 2026)
 
-| Task                          | Status       | Owner  |
-|-------------------------------|--------------|--------|
-| Source pipes and fittings     | ✅ Complete  | Pieter |
-| Purchase components           | 🔄 Tomorrow  | Pieter |
-| Assemble first prototype      | 📅 Planned   | Pieter |
-| Static ground tests           | 📅 Planned   | Team   |
-| Document specifications       | 📅 Planned   | Jurie  |
+| Task                      | Status      | Owner  |
+| ------------------------- | ----------- | ------ |
+| Source pipes and fittings | ✅ Complete | Pieter |
+| Purchase components       | 🔄 Tomorrow | Pieter |
+| Assemble first prototype  | 📅 Planned  | Pieter |
+| Static ground tests       | 📅 Planned  | Team   |
+| Document specifications   | 📅 Planned  | Jurie  |
 
 ### Phase 2: Integration (Q1 2026)
 
@@ -275,13 +286,13 @@ pub struct EngagementEvidence {
 
 ## Risks and Mitigations
 
-| Risk                        | Likelihood | Impact | Mitigation                          |
-|-----------------------------|------------|--------|-------------------------------------|
-| Insufficient range          | Medium     | High   | Adjustable pressure system          |
-| Net deployment failure      | Medium     | High   | Redundant deployment mechanism      |
-| Component availability      | Low        | Medium | Multiple supplier relationships     |
-| Integration complexity      | Medium     | Medium | Modular interface design            |
-| Certification challenges    | High       | High   | Early engagement with regulators    |
+| Risk                     | Likelihood | Impact | Mitigation                       |
+| ------------------------ | ---------- | ------ | -------------------------------- |
+| Insufficient range       | Medium     | High   | Adjustable pressure system       |
+| Net deployment failure   | Medium     | High   | Redundant deployment mechanism   |
+| Component availability   | Low        | Medium | Multiple supplier relationships  |
+| Integration complexity   | Medium     | Medium | Modular interface design         |
+| Certification challenges | High       | High   | Early engagement with regulators |
 
 ---
 
@@ -289,23 +300,23 @@ pub struct EngagementEvidence {
 
 ### Development Costs
 
-| Item                    | Estimate (ZAR) | Estimate (USD) |
-|-------------------------|----------------|----------------|
-| Prototype materials     | R5,000         | ~$270          |
-| Testing equipment       | R10,000        | ~$540          |
-| Iteration (3 cycles)    | R15,000        | ~$810          |
-| **Total Development**   | **R30,000**    | **~$1,620**    |
+| Item                  | Estimate (ZAR) | Estimate (USD) |
+| --------------------- | -------------- | -------------- |
+| Prototype materials   | R5,000         | ~$270          |
+| Testing equipment     | R10,000        | ~$540          |
+| Iteration (3 cycles)  | R15,000        | ~$810          |
+| **Total Development** | **R30,000**    | **~$1,620**    |
 
 ### Per-Unit Production Cost (Target)
 
-| Component               | Cost (ZAR)     | Cost (USD)     |
-|-------------------------|----------------|----------------|
-| Pneumatic system        | R2,000         | ~$110          |
-| Launch mechanism        | R1,500         | ~$80           |
-| Net payload (x3)        | R1,500         | ~$80           |
-| Electronics             | R1,000         | ~$55           |
-| Assembly                | R500           | ~$30           |
-| **Total Per Unit**      | **R6,500**     | **~$355**      |
+| Component          | Cost (ZAR) | Cost (USD) |
+| ------------------ | ---------- | ---------- |
+| Pneumatic system   | R2,000     | ~$110      |
+| Launch mechanism   | R1,500     | ~$80       |
+| Net payload (x3)   | R1,500     | ~$80       |
+| Electronics        | R1,000     | ~$55       |
+| Assembly           | R500       | ~$30       |
+| **Total Per Unit** | **R6,500** | **~$355**  |
 
 vs. COTS: $50,000+ = **99% cost reduction**
 

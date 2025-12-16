@@ -10,7 +10,10 @@ import {
   ApplicationStatus,
   AccessApplicationFilters,
 } from "../repositories/access-applications.repository";
-import { PaginatedResult, PaginationOptions } from "../repositories/base.repository";
+import {
+  PaginatedResult,
+  PaginationOptions,
+} from "../repositories/base.repository";
 import { sendEmail } from "../lib/email";
 
 /**
@@ -119,7 +122,10 @@ class AccessApplicationsService {
     const applicationNumber =
       accessApplicationsRepository.generateApplicationNumber();
 
-    const application: Omit<AccessApplication, "id" | "createdAt" | "updatedAt"> = {
+    const application: Omit<
+      AccessApplication,
+      "id" | "createdAt" | "updatedAt"
+    > = {
       userId,
       email: email.toLowerCase(),
       displayName,
@@ -169,7 +175,9 @@ class AccessApplicationsService {
   /**
    * Get user's pending application
    */
-  async getPendingApplication(userId: string): Promise<AccessApplication | null> {
+  async getPendingApplication(
+    userId: string,
+  ): Promise<AccessApplication | null> {
     return accessApplicationsRepository.findPendingByUserId(userId);
   }
 

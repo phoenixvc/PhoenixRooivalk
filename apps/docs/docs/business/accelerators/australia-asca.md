@@ -15,21 +15,21 @@ tags:
 # Australia Advanced Strategic Capabilities Accelerator (ASCA)
 
 The **Advanced Strategic Capabilities Accelerator (ASCA)** is Australia's
-premier defense innovation program, superseding the Defence Innovation Hub
-and Next Generation Technologies Fund to rapidly test, develop, and procure
+premier defense innovation program, superseding the Defence Innovation Hub and
+Next Generation Technologies Fund to rapidly test, develop, and procure
 innovative military technologies.
 
 ---
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | Australian Department of Defence |
-| **Superseded** | Defence Innovation Hub, NGTF |
-| **Focus** | Rapid technology adoption |
-| **Partnership** | Close ties with US DIU |
-| **Location** | Australia |
+| Aspect          | Details                          |
+| --------------- | -------------------------------- |
+| **Organizer**   | Australian Department of Defence |
+| **Superseded**  | Defence Innovation Hub, NGTF     |
+| **Focus**       | Rapid technology adoption        |
+| **Partnership** | Close ties with US DIU           |
+| **Location**    | Australia                        |
 
 ---
 
@@ -37,15 +37,15 @@ innovative military technologies.
 
 ASCA focuses on strategic capability priorities:
 
-| Area | Priority | PR Alignment |
-|------|----------|--------------|
-| **Undersea Warfare** | High | Low |
-| **Enhanced Targeting** | High | Medium |
-| **Amphibious Operations** | Medium | Low |
-| **Sea Denial & Control** | High | Medium |
-| **Air & Missile Defense** | High | **Direct fit** |
-| **Logistics** | Medium | Low |
-| **Autonomous Systems** | High | **Direct fit** |
+| Area                      | Priority | PR Alignment   |
+| ------------------------- | -------- | -------------- |
+| **Undersea Warfare**      | High     | Low            |
+| **Enhanced Targeting**    | High     | Medium         |
+| **Amphibious Operations** | Medium   | Low            |
+| **Sea Denial & Control**  | High     | Medium         |
+| **Air & Missile Defense** | High     | **Direct fit** |
+| **Logistics**             | Medium   | Low            |
+| **Autonomous Systems**    | High     | **Direct fit** |
 
 ---
 
@@ -61,6 +61,7 @@ ASCA works closely with US Defense Innovation Unit (DIU):
 ### AUKUS Implications
 
 Under AUKUS partnership:
+
 - Enhanced technology sharing with US/UK
 - Access to advanced capability areas
 - Streamlined export controls (potentially)
@@ -69,22 +70,22 @@ Under AUKUS partnership:
 
 ## Funding Mechanism
 
-| Track | Description | Typical Funding |
-|-------|-------------|-----------------|
-| Challenge Programs | Specific problem statements | Variable |
-| Open Innovation | General capability gaps | Variable |
-| Rapid Acquisition | Fast-track procurement | Market rates |
+| Track              | Description                 | Typical Funding |
+| ------------------ | --------------------------- | --------------- |
+| Challenge Programs | Specific problem statements | Variable        |
+| Open Innovation    | General capability gaps     | Variable        |
+| Rapid Acquisition  | Fast-track procurement      | Market rates    |
 
 ---
 
 ## Eligibility
 
-| Requirement | Phoenix Rooivalk Status |
-|-------------|------------------------|
-| Innovative technology | Meets requirement |
-| Defense-relevant | Meets requirement |
-| Australian presence | Not required |
-| Security clearance | May be needed for some programs |
+| Requirement           | Phoenix Rooivalk Status         |
+| --------------------- | ------------------------------- |
+| Innovative technology | Meets requirement               |
+| Defense-relevant      | Meets requirement               |
+| Australian presence   | Not required                    |
+| Security clearance    | May be needed for some programs |
 
 :::info International Access
 
@@ -112,6 +113,7 @@ partner but counter-UAS capability is a priority area.
 ### Regional Security
 
 Australia faces growing regional challenges:
+
 - Drone proliferation in Indo-Pacific
 - Need for counter-UAS capability
 - $36.7B annual defense budget (2024)
@@ -120,6 +122,7 @@ Australia faces growing regional challenges:
 ### Why Counter-UAS Matters
 
 Australia is a key counter-UAS market:
+
 - Critical infrastructure protection
 - Northern approaches defense
 - Pacific island presence
@@ -132,12 +135,14 @@ Australia is a key counter-UAS market:
 ### Approach
 
 **Direct Engagement:**
+
 1. Contact ASCA with capability brief
 2. Highlight counter-UAS / autonomous systems
 3. Propose testing collaboration
 4. Explore manufacturing partnership
 
 **Partnership Option:**
+
 - Australian defense contractor partnership
 - Local manufacturing arrangement
 - Technology license to Australian entity
@@ -162,13 +167,13 @@ Australia is a key counter-UAS market:
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | Air defense priority |
-| Stage Fit | Medium | Prefer higher TRL |
-| Geographic Fit | Medium | International accepted |
-| Market Size | High | Significant budget |
-| **Overall Fit** | **High** | Strong opportunity |
+| Criteria        | Score    | Notes                  |
+| --------------- | -------- | ---------------------- |
+| Technology Fit  | High     | Air defense priority   |
+| Stage Fit       | Medium   | Prefer higher TRL      |
+| Geographic Fit  | Medium   | International accepted |
+| Market Size     | High     | Significant budget     |
+| **Overall Fit** | **High** | Strong opportunity     |
 
 ---
 

@@ -24,8 +24,11 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Multiple organizations (NeuralLiquid, Phoenix VC, Twines & Straps, Mystira) need consistent Azure resource naming across shared subscriptions
-2. **Decision**: Adopt `[org]-[env]-[project]-[type]-[region]` naming pattern with controlled vocabulary
+1. **Problem**: Multiple organizations (NeuralLiquid, Phoenix VC, Twines &
+   Straps, Mystira) need consistent Azure resource naming across shared
+   subscriptions
+2. **Decision**: Adopt `[org]-[env]-[project]-[type]-[region]` naming pattern
+   with controlled vocabulary
 3. **Trade-off**: Longer names vs. clarity and predictability for automation
 
 ---
@@ -34,7 +37,8 @@ prerequisites:
 
 ### Current Situation
 
-Phoenix Rooivalk infrastructure spans multiple Azure subscriptions shared between organizations:
+Phoenix Rooivalk infrastructure spans multiple Azure subscriptions shared
+between organizations:
 
 - **NeuralLiquid (nl)**: Core AI, defence, Rooivalk platform
 - **Phoenix VC (pvc)**: VC brand and investor tooling
@@ -42,13 +46,16 @@ Phoenix Rooivalk infrastructure spans multiple Azure subscriptions shared betwee
 - **Mystira (mys)**: Storytelling/AI platform
 
 Prior naming conventions varied:
-- Legacy pattern: `{env}-{region}-{type}-rooivalk` (e.g., `prd-eus2-swa-rooivalk`)
+
+- Legacy pattern: `{env}-{region}-{type}-rooivalk` (e.g.,
+  `prd-eus2-swa-rooivalk`)
 - Inconsistent org identification
 - No machine-derivable naming rules
 
 ### Why Decision Needed
 
-1. **Multi-org collaboration**: Multiple stakeholders deploying to shared subscriptions
+1. **Multi-org collaboration**: Multiple stakeholders deploying to shared
+   subscriptions
 2. **AI tooling**: Claude, Copilot, and automation tools need predictable naming
 3. **Cost allocation**: Tag-based cost tracking requires consistent metadata
 4. **Pipeline failures**: Inconsistent naming causing deployment issues
@@ -61,27 +68,29 @@ Prior naming conventions varied:
 
 Use Microsoft Cloud Adoption Framework default patterns.
 
-**Pros**: Industry standard, well-documented
-**Cons**: Doesn't include org identifier, verbose for multi-tenant
+**Pros**: Industry standard, well-documented **Cons**: Doesn't include org
+identifier, verbose for multi-tenant
 
 ### Option 2: Environment-First Pattern ❌
 
 Pattern: `{env}-{region}-{type}-{project}` (legacy)
 
-**Pros**: Environment visible first
-**Cons**: No org identifier, region placement inconsistent
+**Pros**: Environment visible first **Cons**: No org identifier, region
+placement inconsistent
 
 ### Option 3: Org-First Pattern ✅ Selected
 
 Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 **Pros**:
+
 - Org ownership immediately visible
 - Consistent segment ordering
 - Machine-derivable from parameters
 - Supports cross-org queries
 
 **Cons**:
+
 - Longer names
 - Migration required from legacy
 
@@ -102,41 +111,41 @@ Resource Groups: [org]-[env]-[project]-rg-[region]
 
 #### Organization Codes (Authoritative)
 
-| Code | Organisation     | Owner  |
-|------|------------------|--------|
-| nl   | NeuralLiquid     | Jurie  |
-| pvc  | Phoenix VC       | Eben   |
-| tws  | Twines & Straps  | Martyn |
-| mys  | Mystira          | Eben   |
+| Code | Organisation    | Owner  |
+| ---- | --------------- | ------ |
+| nl   | NeuralLiquid    | Jurie  |
+| pvc  | Phoenix VC      | Eben   |
+| tws  | Twines & Straps | Martyn |
+| mys  | Mystira         | Eben   |
 
 #### Environment Codes
 
 | Code    | Meaning             |
-|---------|---------------------|
+| ------- | ------------------- |
 | dev     | Development         |
 | staging | Pre-production / QA |
 | prod    | Production          |
 
 #### Type Codes (Common)
 
-| Type   | Resource                 |
-|--------|--------------------------|
-| swa    | Static Web App           |
-| func   | Function App             |
-| kv     | Key Vault                |
-| cosmos | Cosmos DB                |
-| appi   | Application Insights     |
-| st     | Storage Account          |
-| rg     | Resource Group           |
+| Type   | Resource             |
+| ------ | -------------------- |
+| swa    | Static Web App       |
+| func   | Function App         |
+| kv     | Key Vault            |
+| cosmos | Cosmos DB            |
+| appi   | Application Insights |
+| st     | Storage Account      |
+| rg     | Resource Group       |
 
 #### Region Codes
 
-| Region          | Code |
-|-----------------|------|
-| eastus2         | eus2 |
-| westeurope      | euw  |
-| southafricanorth| san  |
-| swedencentral   | swe  |
+| Region           | Code |
+| ---------------- | ---- |
+| eastus2          | eus2 |
+| westeurope       | euw  |
+| southafricanorth | san  |
+| swedencentral    | swe  |
 
 ---
 
@@ -191,11 +200,11 @@ var tags = {
 
 ### Legacy to v2.1 Mapping
 
-| Legacy Name              | New Name (v2.1)              |
-|--------------------------|------------------------------|
-| prd-eus2-swa-rooivalk    | nl-prod-rooivalk-swa-eus2    |
-| prd-eus2-kv-rooivalk     | nl-prod-rooivalk-kv-eus2     |
-| prdeus2strooivalk        | nlprodrooivalksteus2         |
+| Legacy Name           | New Name (v2.1)           |
+| --------------------- | ------------------------- |
+| prd-eus2-swa-rooivalk | nl-prod-rooivalk-swa-eus2 |
+| prd-eus2-kv-rooivalk  | nl-prod-rooivalk-kv-eus2  |
+| prdeus2strooivalk     | nlprodrooivalksteus2      |
 
 ### Migration Strategy
 
@@ -204,7 +213,8 @@ var tags = {
 3. Update DNS/endpoints
 4. Decommission legacy resources
 
-**Note**: Azure resource names are immutable. Migration requires new resource creation.
+**Note**: Azure resource names are immutable. Migration requires new resource
+creation.
 
 ---
 
@@ -234,18 +244,19 @@ var tags = {
 
 ### Azure Constraints Handled
 
-| Constraint              | Solution                          |
-|-------------------------|-----------------------------------|
-| Storage: no hyphens     | Concatenate without hyphens       |
-| Storage: 24 char max    | Short codes keep under limit      |
-| Key Vault: 24 char max  | Short codes keep under limit      |
-| Global uniqueness       | Org+project provides uniqueness   |
+| Constraint             | Solution                        |
+| ---------------------- | ------------------------------- |
+| Storage: no hyphens    | Concatenate without hyphens     |
+| Storage: 24 char max   | Short codes keep under limit    |
+| Key Vault: 24 char max | Short codes keep under limit    |
+| Global uniqueness      | Org+project provides uniqueness |
 
 ---
 
 ## Related Documents
 
-- [Azure Naming Conventions v2.1](/docs/resources/azure-naming-conventions) - Full reference
+- [Azure Naming Conventions v2.1](/docs/resources/azure-naming-conventions) -
+  Full reference
 - [ADR-D001: Monorepo Structure](./architecture-decision-records#adr-d001-monorepo-structure-with-turborepo)
 - `infra/azure/main.bicep` - Implementation
 

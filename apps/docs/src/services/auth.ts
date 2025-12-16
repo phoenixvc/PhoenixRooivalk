@@ -62,7 +62,7 @@ export function getMissingAuthConfig(): string[] {
       missing.push("AZURE_ENTRA_TENANT_ID");
     }
   }
-  
+
   return missing;
 }
 

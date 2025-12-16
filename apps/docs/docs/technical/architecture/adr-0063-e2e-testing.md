@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: UI workflows and cross-system integrations require automated testing to prevent regressions and ensure user experience
-2. **Decision**: Implement Playwright-based E2E testing with visual regression detection and cross-browser coverage
+1. **Problem**: UI workflows and cross-system integrations require automated
+   testing to prevent regressions and ensure user experience
+2. **Decision**: Implement Playwright-based E2E testing with visual regression
+   detection and cross-browser coverage
 3. **Trade-off**: Test execution time vs. comprehensive coverage
 
 ---
@@ -35,22 +37,22 @@ prerequisites:
 
 ### E2E Testing Scope
 
-| Application | Critical Flows |
-|-------------|----------------|
+| Application        | Critical Flows                         |
+| ------------------ | -------------------------------------- |
 | Operator Dashboard | Login, track view, engagement workflow |
-| Admin Portal | User management, config changes |
-| Documentation | Search, navigation, downloads |
-| API | Authentication, CRUD operations |
+| Admin Portal       | User management, config changes        |
+| Documentation      | Search, navigation, downloads          |
+| API                | Authentication, CRUD operations        |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Browser coverage | Chrome, Firefox, Safari, Edge |
-| Mobile testing | iOS Safari, Android Chrome |
-| Visual regression | Detect unintended UI changes |
-| Parallelization | <10 min total test time |
-| CI integration | Run on every PR |
+| Requirement       | Specification                 |
+| ----------------- | ----------------------------- |
+| Browser coverage  | Chrome, Firefox, Safari, Edge |
+| Mobile testing    | iOS Safari, Android Chrome    |
+| Visual regression | Detect unintended UI changes  |
+| Parallelization   | <10 min total test time       |
+| CI integration    | Run on every PR               |
 
 ---
 
@@ -106,56 +108,56 @@ Implement **Playwright** for E2E testing:
 
 ```typescript
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 4 : undefined,
 
   reporter: [
-    ['html', { open: 'never' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ["html", { open: "never" }],
+    ["junit", { outputFile: "test-results/junit.xml" }],
   ],
 
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    baseURL: process.env.BASE_URL || "http://localhost:3000",
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
 
   projects: [
     // Desktop browsers
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
 
     // Mobile viewports
     {
-      name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] },
+      name: "mobile-chrome",
+      use: { ...devices["Pixel 5"] },
     },
     {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 12'] },
+      name: "mobile-safari",
+      use: { ...devices["iPhone 12"] },
     },
   ],
 
   webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
+    command: "pnpm dev",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
 });
@@ -165,7 +167,7 @@ export default defineConfig({
 
 ```typescript
 // e2e/pages/dashboard.page.ts
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 export class DashboardPage {
   readonly page: Page;
@@ -175,19 +177,19 @@ export class DashboardPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.trackList = page.getByTestId('track-list');
-    this.searchInput = page.getByPlaceholder('Search tracks...');
-    this.alertBanner = page.getByRole('alert');
+    this.trackList = page.getByTestId("track-list");
+    this.searchInput = page.getByPlaceholder("Search tracks...");
+    this.alertBanner = page.getByRole("alert");
   }
 
   async goto() {
-    await this.page.goto('/dashboard');
+    await this.page.goto("/dashboard");
   }
 
   async searchTracks(query: string) {
     await this.searchInput.fill(query);
-    await this.searchInput.press('Enter');
-    await this.page.waitForLoadState('networkidle');
+    await this.searchInput.press("Enter");
+    await this.page.waitForLoadState("networkidle");
   }
 
   async getTrackCount(): Promise<number> {
@@ -200,7 +202,7 @@ export class DashboardPage {
 
   async waitForTracksLoaded() {
     await expect(this.trackList).toBeVisible();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 }
 ```
@@ -213,16 +215,16 @@ export class DashboardPage {
 
 ```typescript
 // e2e/auth.spec.ts
-import { test, expect } from '@playwright/test';
-import { LoginPage } from './pages/login.page';
-import { DashboardPage } from './pages/dashboard.page';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "./pages/login.page";
+import { DashboardPage } from "./pages/dashboard.page";
 
-test.describe('Authentication', () => {
-  test('successful login redirects to dashboard', async ({ page }) => {
+test.describe("Authentication", () => {
+  test("successful login redirects to dashboard", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
-    await loginPage.login('test@example.com', 'password123');
+    await loginPage.login("test@example.com", "password123");
 
     // Should redirect to dashboard
     await expect(page).toHaveURL(/\/dashboard/);
@@ -231,21 +233,21 @@ test.describe('Authentication', () => {
     await expect(dashboard.trackList).toBeVisible();
   });
 
-  test('invalid credentials shows error', async ({ page }) => {
+  test("invalid credentials shows error", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
-    await loginPage.login('test@example.com', 'wrongpassword');
+    await loginPage.login("test@example.com", "wrongpassword");
 
     await expect(loginPage.errorMessage).toBeVisible();
-    await expect(loginPage.errorMessage).toContainText('Invalid credentials');
+    await expect(loginPage.errorMessage).toContainText("Invalid credentials");
   });
 
-  test('logout clears session', async ({ page }) => {
+  test("logout clears session", async ({ page }) => {
     // Login first
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await loginPage.login('test@example.com', 'password123');
+    await loginPage.login("test@example.com", "password123");
 
     // Logout
     const dashboard = new DashboardPage(page);
@@ -255,7 +257,7 @@ test.describe('Authentication', () => {
     await expect(page).toHaveURL(/\/login/);
 
     // Accessing dashboard should redirect back to login
-    await page.goto('/dashboard');
+    await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/login/);
   });
 });
@@ -265,21 +267,21 @@ test.describe('Authentication', () => {
 
 ```typescript
 // e2e/operator-workflow.spec.ts
-import { test, expect } from '@playwright/test';
-import { DashboardPage } from './pages/dashboard.page';
-import { TrackDetailPage } from './pages/track-detail.page';
+import { test, expect } from "@playwright/test";
+import { DashboardPage } from "./pages/dashboard.page";
+import { TrackDetailPage } from "./pages/track-detail.page";
 
-test.describe('Operator Workflow', () => {
+test.describe("Operator Workflow", () => {
   test.beforeEach(async ({ page }) => {
     // Login as operator
-    await page.goto('/login');
-    await page.fill('[name="email"]', 'operator@example.com');
-    await page.fill('[name="password"]', 'password123');
+    await page.goto("/login");
+    await page.fill('[name="email"]', "operator@example.com");
+    await page.fill('[name="password"]', "password123");
     await page.click('button[type="submit"]');
     await page.waitForURL(/\/dashboard/);
   });
 
-  test('view and filter tracks', async ({ page }) => {
+  test("view and filter tracks", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.waitForTracksLoaded();
 
@@ -291,28 +293,30 @@ test.describe('Operator Workflow', () => {
     expect(tracks).toBeGreaterThan(0);
 
     // All visible tracks should be hostile
-    const trackStatuses = await page.locator('[data-testid="track-status"]').allTextContents();
+    const trackStatuses = await page
+      .locator('[data-testid="track-status"]')
+      .allTextContents();
     trackStatuses.forEach((status) => {
-      expect(status).toBe('Hostile');
+      expect(status).toBe("Hostile");
     });
   });
 
-  test('view track details', async ({ page }) => {
+  test("view track details", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.waitForTracksLoaded();
 
     // Click first track
-    await dashboard.selectTrack('track-001');
+    await dashboard.selectTrack("track-001");
 
     const detail = new TrackDetailPage(page);
-    await expect(detail.trackId).toContainText('track-001');
+    await expect(detail.trackId).toContainText("track-001");
     await expect(detail.positionInfo).toBeVisible();
     await expect(detail.classificationBadge).toBeVisible();
   });
 
-  test('engagement authorization flow', async ({ page }) => {
+  test("engagement authorization flow", async ({ page }) => {
     // Navigate to hostile track
-    await page.goto('/dashboard/tracks/hostile-001');
+    await page.goto("/dashboard/tracks/hostile-001");
 
     const detail = new TrackDetailPage(page);
 
@@ -324,7 +328,7 @@ test.describe('Operator Workflow', () => {
     await detail.confirmEngagement();
 
     // Should show engagement in progress
-    await expect(detail.engagementStatus).toContainText('Authorized');
+    await expect(detail.engagementStatus).toContainText("Authorized");
   });
 });
 ```
@@ -333,40 +337,40 @@ test.describe('Operator Workflow', () => {
 
 ```typescript
 // e2e/visual.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Visual Regression', () => {
-  test('dashboard matches snapshot', async ({ page }) => {
-    await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
+test.describe("Visual Regression", () => {
+  test("dashboard matches snapshot", async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
 
     // Hide dynamic elements
     await page.evaluate(() => {
       document.querySelectorAll('[data-testid="timestamp"]').forEach((el) => {
-        (el as HTMLElement).style.visibility = 'hidden';
+        (el as HTMLElement).style.visibility = "hidden";
       });
     });
 
-    await expect(page).toHaveScreenshot('dashboard.png', {
+    await expect(page).toHaveScreenshot("dashboard.png", {
       maxDiffPixels: 100,
     });
   });
 
-  test('track detail matches snapshot', async ({ page }) => {
-    await page.goto('/dashboard/tracks/track-001');
-    await page.waitForLoadState('networkidle');
+  test("track detail matches snapshot", async ({ page }) => {
+    await page.goto("/dashboard/tracks/track-001");
+    await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveScreenshot('track-detail.png', {
+    await expect(page).toHaveScreenshot("track-detail.png", {
       maxDiffPixels: 100,
     });
   });
 
-  test('responsive - mobile view', async ({ page }) => {
+  test("responsive - mobile view", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveScreenshot('dashboard-mobile.png', {
+    await expect(page).toHaveScreenshot("dashboard-mobile.png", {
       maxDiffPixels: 100,
     });
   });
@@ -405,7 +409,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

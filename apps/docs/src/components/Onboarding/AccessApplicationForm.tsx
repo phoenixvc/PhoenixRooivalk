@@ -26,7 +26,12 @@ export interface AccessApplication {
 
 interface AccessApplicationFormProps {
   requestedRole: string;
-  onSubmit: (application: Omit<AccessApplication, "userId" | "email" | "displayName" | "submittedAt" | "status">) => Promise<boolean>;
+  onSubmit: (
+    application: Omit<
+      AccessApplication,
+      "userId" | "email" | "displayName" | "submittedAt" | "status"
+    >,
+  ) => Promise<boolean>;
   onCancel: () => void;
   onBack?: () => void;
 }
@@ -79,7 +84,9 @@ export function AccessApplicationForm({
   }, [formData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -134,8 +141,8 @@ export function AccessApplicationForm({
         <div className="access-form-success-icon">✓</div>
         <h3>Application Submitted!</h3>
         <p>
-          Thank you for your application. Our team will review your request
-          and get back to you within 2-3 business days.
+          Thank you for your application. Our team will review your request and
+          get back to you within 2-3 business days.
         </p>
         <p className="access-form-success-note">
           You'll receive an email notification at <strong>{user?.email}</strong>{" "}
@@ -157,15 +164,13 @@ export function AccessApplicationForm({
       <div className="access-form-header">
         <h3>Apply for {requestedRole} Access</h3>
         <p>
-          This role requires verification. Please provide some information
-          about yourself so we can review your request.
+          This role requires verification. Please provide some information about
+          yourself so we can review your request.
         </p>
       </div>
 
       {submitError && (
-        <div className="access-form-error-banner">
-          {submitError}
-        </div>
+        <div className="access-form-error-banner">{submitError}</div>
       )}
 
       <div className="access-form-fields">
@@ -185,7 +190,9 @@ export function AccessApplicationForm({
               disabled={isSubmitting}
             />
             {errors.firstName && (
-              <span className="access-form-field-error">{errors.firstName}</span>
+              <span className="access-form-field-error">
+                {errors.firstName}
+              </span>
             )}
           </div>
           <div className="access-form-field">
@@ -242,7 +249,9 @@ export function AccessApplicationForm({
             disabled={isSubmitting}
           />
           {errors.currentRole && (
-            <span className="access-form-field-error">{errors.currentRole}</span>
+            <span className="access-form-field-error">
+              {errors.currentRole}
+            </span>
           )}
         </div>
 

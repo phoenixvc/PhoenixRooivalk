@@ -2,22 +2,29 @@
 
 ## Overview
 
-The Phoenix Rooivalk timeline now includes comprehensive calendar export functionality, allowing users to import project milestones and events into their personal calendars. This feature provides multiple integration options to ensure maximum compatibility and ease of use.
+The Phoenix Rooivalk timeline now includes comprehensive calendar export
+functionality, allowing users to import project milestones and events into their
+personal calendars. This feature provides multiple integration options to ensure
+maximum compatibility and ease of use.
 
 ## Features
 
 ### 1. iCal/ICS Export
+
 - **Universal Format**: RFC 5545-compliant iCalendar files
-- **Broad Compatibility**: Works with Google Calendar, Outlook, Apple Calendar, and more
+- **Broad Compatibility**: Works with Google Calendar, Outlook, Apple Calendar,
+  and more
 - **All Events**: Export all 25 timeline milestones with a single click
 - **Event Details**: Each event includes title, description, date, and category
 
 ### 2. Direct Calendar Integration
+
 - **Google Calendar**: Direct link for quick event addition
 - **Outlook Calendar**: Direct link for Outlook users
 - **Apple Calendar**: Download and import ICS file
 
 ### 3. Meeting Scheduler (Cal.com)
+
 - **Product Demos**: 30-minute interactive demonstrations
 - **Investor Meetings**: 45-minute strategy sessions
 - **Technical Consultations**: 60-minute deep dives with engineering team
@@ -41,6 +48,7 @@ The Phoenix Rooivalk timeline now includes comprehensive calendar export functio
 ### Importing to Specific Calendar Apps
 
 #### Google Calendar
+
 1. Click "Google Calendar" in the dropdown
 2. Download the ICS file
 3. Open Google Calendar
@@ -50,6 +58,7 @@ The Phoenix Rooivalk timeline now includes comprehensive calendar export functio
 7. Select destination calendar and click "Import"
 
 #### Outlook Calendar
+
 1. Click "Outlook Calendar" in the dropdown
 2. Download the ICS file
 3. Open Outlook
@@ -60,6 +69,7 @@ The Phoenix Rooivalk timeline now includes comprehensive calendar export functio
 8. Click "OK"
 
 #### Apple Calendar
+
 1. Click "Apple Calendar" in the dropdown
 2. Download the ICS file
 3. Double-click the downloaded file
@@ -79,11 +89,13 @@ The Phoenix Rooivalk timeline now includes comprehensive calendar export functio
 
 3. **Book Appointment**
    - Click "Visit Our Scheduling Page" to access Cal.com booking interface
-   - (Once Cal.com is configured, the widget will be embedded directly on the page)
+   - (Once Cal.com is configured, the widget will be embedded directly on the
+     page)
 
 ## Event Details
 
 ### Timeline Events Included
+
 - **25 Milestones** spanning 5 years (FY26-FY30)
 - Events organized by phase:
   - Year 1 (FY26): Foundation & Validation
@@ -93,7 +105,9 @@ The Phoenix Rooivalk timeline now includes comprehensive calendar export functio
   - Year 5 (FY30): Leadership & Exit Preparation
 
 ### Event Information
+
 Each calendar event includes:
+
 - **Title**: Phase and milestone name
 - **Description**: Detailed phase description and status
 - **Date**: Specific milestone date or quarter
@@ -103,11 +117,15 @@ Each calendar event includes:
 ## Technical Implementation
 
 ### Architecture
-See [ADR-D001: Calendar Export and Integration](../docs/docs/technical/architecture/adr-D001-calendar-export-integration.md) for detailed architecture decisions.
+
+See
+[ADR-D001: Calendar Export and Integration](../docs/docs/technical/architecture/adr-D001-calendar-export-integration.md)
+for detailed architecture decisions.
 
 ### Key Components
 
 #### Calendar Utilities (`src/utils/calendar.ts`)
+
 - `generateICS()`: Creates RFC 5545-compliant ICS files
 - `eventToICS()`: Converts single event to VEVENT format
 - `downloadICS()`: Triggers browser download
@@ -115,13 +133,18 @@ See [ADR-D001: Calendar Export and Integration](../docs/docs/technical/architect
 - `generateOutlookCalendarURL()`: Creates Outlook Calendar links
 
 #### UI Components
-- **CalendarExport** (`src/components/CalendarExport.tsx`): Dropdown button interface
-- **CalendarIntegration** (`src/components/CalendarIntegration.tsx`): Cal.com scheduling widget
-- **TimelineSection** (`src/components/sections/TimelineSection.tsx`): Timeline with calendar export
+
+- **CalendarExport** (`src/components/CalendarExport.tsx`): Dropdown button
+  interface
+- **CalendarIntegration** (`src/components/CalendarIntegration.tsx`): Cal.com
+  scheduling widget
+- **TimelineSection** (`src/components/sections/TimelineSection.tsx`): Timeline
+  with calendar export
 
 ### File Format
 
 ICS files generated follow RFC 5545 specifications:
+
 ```ics
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -146,7 +169,9 @@ END:VCALENDAR
 ## Testing
 
 ### Automated Tests
+
 18 comprehensive unit tests cover:
+
 - ICS format generation and validation
 - Date formatting (all-day and timed events)
 - Special character escaping
@@ -154,12 +179,14 @@ END:VCALENDAR
 - Multiple event handling
 
 Run tests:
+
 ```bash
 cd apps/marketing
 pnpm test calendar.test.ts
 ```
 
 ### Manual Testing
+
 - ✅ Google Calendar import verified
 - ✅ Outlook Calendar import verified
 - ✅ Apple Calendar import verified
@@ -178,6 +205,7 @@ Note: Internet Explorer 11 is not supported due to Blob URL limitations.
 ## Future Enhancements
 
 ### Planned Features
+
 1. **Cal.com Widget Embedding**: Direct booking interface on schedule page
 2. **Individual Event Export**: Download single milestone as ICS file
 3. **Calendar Sync**: Automatic updates when timeline changes
@@ -185,7 +213,9 @@ Note: Internet Explorer 11 is not supported due to Blob URL limitations.
 5. **Team Calendar Sharing**: Share timeline with team members
 
 ### Configuration Required
+
 To activate Cal.com integration:
+
 1. Create Cal.com account at https://cal.com
 2. Configure event types (demo, investor, consultation)
 3. Add Cal.com embed code to CalendarIntegration component
@@ -203,6 +233,7 @@ To activate Cal.com integration:
 ## Support
 
 For issues or questions:
+
 - **Documentation**: See ADR-D001 for detailed implementation
 - **Tests**: Review `calendar.test.ts` for usage examples
 - **Contact**: Visit `/contact` for support

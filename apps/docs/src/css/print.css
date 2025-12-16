@@ -105,7 +105,17 @@
   }
 
   /* Reset all text colors for dark theme */
-  p, span, div, li, dt, dd, label, strong, em, b, i {
+  p,
+  span,
+  div,
+  li,
+  dt,
+  dd,
+  label,
+  strong,
+  em,
+  b,
+  i {
     color: #1a1a1a !important;
     background: transparent !important;
   }
@@ -150,7 +160,9 @@
     margin-bottom: 8pt !important;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-size: 11pt !important;
     margin-top: 12pt !important;
     margin-bottom: 6pt !important;

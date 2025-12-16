@@ -64,7 +64,8 @@ export default function CalendarExport({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen]);
 
@@ -119,7 +120,9 @@ export default function CalendarExport({
 
   const buttonClasses = [
     styles.calendarButton,
-    styles[`calendarButton${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
+    styles[
+      `calendarButton${variant.charAt(0).toUpperCase() + variant.slice(1)}`
+    ],
     styles[`calendarButton${size.charAt(0).toUpperCase() + size.slice(1)}`],
   ].join(" ");
 

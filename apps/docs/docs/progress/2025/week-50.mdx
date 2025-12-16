@@ -4,8 +4,8 @@ sidebar_label: "Week 50 (Dec 5-12)"
 description:
   Weekly progress report covering SOSV accelerator strategy, Alistair Kim
   advisory discussions, hardware prototype sourcing, Movement M1 infrastructure
-  integration, 28 new ADRs, documentation improvements, known issues (AI Functions,
-  inline comments), and 27K+ lines of code changes
+  integration, 28 new ADRs, documentation improvements, known issues (AI
+  Functions, inline comments), and 27K+ lines of code changes
 keywords:
   [
     progress,
@@ -63,29 +63,37 @@ import {
 
 ### 1. Funding Strategy: SOSV as Primary Target
 
-- **SOSV accelerator**: $500K pre-seed, hardware-focused - Alistair's top recommendation
-- **Critical insight**: Apply to accelerators **BEFORE** incorporation (maintains eligibility)
-- **Multi-track approach**: Accelerators + SA grants + Middle East hubs + commercial AI projects
-- **Application list coming**: Alistair to provide VC/accelerator list early next week
+- **SOSV accelerator**: $500K pre-seed, hardware-focused - Alistair's top
+  recommendation
+- **Critical insight**: Apply to accelerators **BEFORE** incorporation
+  (maintains eligibility)
+- **Multi-track approach**: Accelerators + SA grants + Middle East hubs +
+  commercial AI projects
+- **Application list coming**: Alistair to provide VC/accelerator list early
+  next week
 
 ### 2. Advisory Partnership: Alistair Kim
 
 - **Expressed interest** in advisory role based on drone AI industry experience
 - **Previous success**: Built drone startup to $80M valuation
 - **Current work**: Japanese drone company with Tokyo market listing
-- **Next steps**: Offline discussion to define collaboration structure as equal partners
+- **Next steps**: Offline discussion to define collaboration structure as equal
+  partners
 
 ### 3. Hardware Progress: Launcher Prototype Sourcing
 
-- **Pieter visited 5+ shops** sourcing pipes and fittings for first launcher prototype
+- **Pieter visited 5+ shops** sourcing pipes and fittings for first launcher
+  prototype
 - **More or less found** the materials needed for initial build
 - **Next step**: Return tomorrow to purchase and begin assembly
 - **Validates**: In-house manufacturing approach for launcher components
 
 ### 4. Infrastructure: Movement M1 Integration (In Progress)
 
-- **Movement M1**: Integrating evidence trail tracking into core infrastructure (not just docs)
-- **Implementation status**: Actively being integrated into Azure Functions and backend services
+- **Movement M1**: Integrating evidence trail tracking into core infrastructure
+  (not just docs)
+- **Implementation status**: Actively being integrated into Azure Functions and
+  backend services
 - **Calendar integration**: New feature added to documentation portal
 - **Meeting summaries**: Automatic meeting summary generation added
 - **Continuing improvements**: Building out documentation infrastructure
@@ -93,39 +101,51 @@ import {
 ### 5. Infrastructure: Azure Naming Conventions v2.1
 
 - **New naming standard**: `[org]-[env]-[project]-[type]-[region]` pattern
-- **Org codes defined**: nl (NeuralLiquid/Jurie), pvc (Phoenix VC/Eben), tws (Twines & Straps/Martyn), mys (Mystira/Eben)
-- **Documentation added**: Comprehensive naming conventions guide with examples, Bicep module, and CLI commands
+- **Org codes defined**: nl (NeuralLiquid/Jurie), pvc (Phoenix VC/Eben), tws
+  (Twines & Straps/Martyn), mys (Mystira/Eben)
+- **Documentation added**: Comprehensive naming conventions guide with examples,
+  Bicep module, and CLI commands
 - **Migration mapping**: Legacy naming to v2.1 conversion guide included
 
 ### 6. Architecture: 28 New ADRs Created
 
 **Core ADRs (7)**:
+
 - **ADR-0025**: Azure Naming Conventions - formalized v2.1 standard
 - **ADR-0030**: Net Launcher Architecture - in-house effector system design
 - **ADR-0040**: Edge-Cloud Communication - offline operation with priority sync
 - **ADR-0050**: ITAR Compliance - US market readiness architecture
-- **Fixed**: ADR numbering conflicts (0015, 0016 duplicates resolved → 0026, 0027, 0028)
+- **Fixed**: ADR numbering conflicts (0015, 0016 duplicates resolved → 0026,
+  0027, 0028)
 
-**Additional ADRs (21)**: Infrastructure, Hardware, Communication, Compliance, Testing, Operations - see Section 15 for full list
+**Additional ADRs (21)**: Infrastructure, Hardware, Communication, Compliance,
+Testing, Operations - see Section 15 for full list
 
 ### 7. Related Project: OmniPost Updates
 
-- **Repository**: [content_creation](https://github.com/JustAGhosT/content_creation) - AI-powered multi-platform publishing
+- **Repository**:
+  [content_creation](https://github.com/JustAGhosT/content_creation) -
+  AI-powered multi-platform publishing
 - **Security hardening**: Format string injection fixes, pinned dependencies
-- **Database updates**: Prisma schema with HTTP audit fields, PII retention policies
+- **Database updates**: Prisma schema with HTTP audit fields, PII retention
+  policies
 - **Testing**: Enhanced integration tests with Zod, rate limiting, auth checks
-- **Purpose**: Automates investor communications and marketing content distribution
+- **Purpose**: Automates investor communications and marketing content
+  distribution
 
 ### 8. Known Issues & In Progress
 
-| Issue | Status | Priority | Details |
-|-------|--------|----------|---------|
-| AI Functions unavailable | 🔴 Broken | High | Docs site shows "AI Functions not available. Please check network connection and Azure Functions configuration" |
-| Inline comments | 🔄 Fixing | High (Eben) | Feature broken, one of highest priority items to fix |
+| Issue                    | Status    | Priority    | Details                                                                                                         |
+| ------------------------ | --------- | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| AI Functions unavailable | 🔴 Broken | High        | Docs site shows "AI Functions not available. Please check network connection and Azure Functions configuration" |
+| Inline comments          | 🔄 Fixing | High (Eben) | Feature broken, one of highest priority items to fix                                                            |
 
-**AI Functions Issue**: The "Summarize this page" feature on the documentation site is returning an error. Requires investigation of Azure Functions configuration and network connectivity.
+**AI Functions Issue**: The "Summarize this page" feature on the documentation
+site is returning an error. Requires investigation of Azure Functions
+configuration and network connectivity.
 
-**Inline Comments**: Cool documentation feature that needs repair. Eben has flagged this as one of his highest priority items.
+**Inline Comments**: Cool documentation feature that needs repair. Eben has
+flagged this as one of his highest priority items.
 
 ---
 
@@ -260,57 +280,80 @@ import {
 1. **Accelerator applications**: Which programs should we prioritize after SOSV?
 2. **Incorporation timing**: When is the optimal point to incorporate?
 3. **Middle East outreach**: Who are the key contacts for UAE/Abu Dhabi hubs?
-4. **Simulator demos**: What scenarios should we prioritize for investor pitches?
+4. **Simulator demos**: What scenarios should we prioritize for investor
+   pitches?
 5. **Canada CUAS**: Status check on December 15 deadline
 
 ---
 
 ## Presentation Walkthrough Script
 
-> **Duration**: ~3 minutes + discussion
-> **Audience**: Soonami Cohort 8 Final Meeting
+> **Duration**: ~3 minutes + discussion **Audience**: Soonami Cohort 8 Final
+> Meeting
 
 ---
 
 ### Opening (10 seconds)
 
-> "This week we had a strategic meeting with Alistair Kim on funding strategy, plus progress on hardware prototyping and infrastructure. Quick overview."
+> "This week we had a strategic meeting with Alistair Kim on funding strategy,
+> plus progress on hardware prototyping and infrastructure. Quick overview."
 
 ---
 
 ### Slide 1: Funding Strategy (40 seconds)
 
-> "SOSV is our primary funding target - $500K pre-seed specifically for hardware startups. Critical insight from Alistair: apply to accelerators before incorporating to maintain eligibility. We're taking a multi-track approach - accelerators, South African grants through TIA and IDC, and Middle East innovation hubs. Alistair is providing his VC and accelerator list early next week."
+> "SOSV is our primary funding target - $500K pre-seed specifically for hardware
+> startups. Critical insight from Alistair: apply to accelerators before
+> incorporating to maintain eligibility. We're taking a multi-track approach -
+> accelerators, South African grants through TIA and IDC, and Middle East
+> innovation hubs. Alistair is providing his VC and accelerator list early next
+> week."
 
 ---
 
 ### Slide 2: Advisory Partnership (35 seconds)
 
-> "Alistair Kim expressed interest in an advisory role. He has strong credentials - previous drone AI startup reached $80M valuation, currently involved with a Japanese drone company on the Tokyo market. Next step is an offline discussion to define collaboration structure, treating us as equal partners not contractors."
+> "Alistair Kim expressed interest in an advisory role. He has strong
+> credentials - previous drone AI startup reached $80M valuation, currently
+> involved with a Japanese drone company on the Tokyo market. Next step is an
+> offline discussion to define collaboration structure, treating us as equal
+> partners not contractors."
 
 ---
 
 ### Slide 3: Hardware Progress (30 seconds)
 
-> "Pieter made hands-on progress on the launcher prototype - visited five different shops sourcing pipes and fittings. He found what we need and is returning tomorrow to purchase components. This validates our in-house manufacturing approach for the launcher."
+> "Pieter made hands-on progress on the launcher prototype - visited five
+> different shops sourcing pipes and fittings. He found what we need and is
+> returning tomorrow to purchase components. This validates our in-house
+> manufacturing approach for the launcher."
 
 ---
 
 ### Slide 4: Documentation & Infrastructure (30 seconds)
 
-> "Added three new features to the documentation portal - calendar integration, automatic meeting summaries, and Movement M1 integration for evidence trail tracking. Also standardized our Azure naming conventions to v2.1 with a full documentation guide and Bicep module for consistent infrastructure deployment."
+> "Added three new features to the documentation portal - calendar integration,
+> automatic meeting summaries, and Movement M1 integration for evidence trail
+> tracking. Also standardized our Azure naming conventions to v2.1 with a full
+> documentation guide and Bicep module for consistent infrastructure
+> deployment."
 
 ---
 
 ### Slide 5: Key Quote (20 seconds)
 
-> "Key strategic guidance from Alistair: Find a niche market that's hard to penetrate but has sizeable opportunity. DJI dominates hardware - our edge is the unserved niche with clear ROI."
+> "Key strategic guidance from Alistair: Find a niche market that's hard to
+> penetrate but has sizeable opportunity. DJI dominates hardware - our edge is
+> the unserved niche with clear ROI."
 
 ---
 
 ### Slide 6: Next Week (25 seconds)
 
-> "Next week priorities: receive Alistair's accelerator list and start applications, purchase launcher components and begin assembly, prepare Gazebo simulator demos for pitches, research Middle East innovation hubs, and complete Canada CUAS application - deadline December 15. Questions?"
+> "Next week priorities: receive Alistair's accelerator list and start
+> applications, purchase launcher components and begin assembly, prepare Gazebo
+> simulator demos for pitches, research Middle East innovation hubs, and
+> complete Canada CUAS application - deadline December 15. Questions?"
 
 ---
 
@@ -318,20 +361,23 @@ import {
 
 ### 1. Strategic Meeting: Alistair Kim (December 11, 2025)
 
-A pivotal meeting this week refined our funding approach and introduced a potential advisory partnership.
+A pivotal meeting this week refined our funding approach and introduced a
+potential advisory partnership.
 
 #### Meeting Participants
 
-| Name               | Role                              |
-| ------------------ | --------------------------------- |
+| Name                | Role                              |
+| ------------------- | --------------------------------- |
 | Martyn Redelinghuys | Co-founder                        |
-| Peter La Grange    | Co-founder, Hardware Lead         |
-| Jurie Smit (Yuri)  | Co-founder, Software/AI Lead      |
-| Alistair Kim       | Advisor, Drone AI Industry Expert |
+| Peter La Grange     | Co-founder, Hardware Lead         |
+| Jurie Smit (Yuri)   | Co-founder, Software/AI Lead      |
+| Alistair Kim        | Advisor, Drone AI Industry Expert |
 
 #### Key Quote
 
-> "Find a very niche market that is hard to penetrate but has sizeable opportunity. Big players like DJI dominate hardware — your edge is the unserved niche with clear ROI."
+> "Find a very niche market that is hard to penetrate but has sizeable
+> opportunity. Big players like DJI dominate hardware — your edge is the
+> unserved niche with clear ROI."
 >
 > — Alistair Kim
 
@@ -341,30 +387,30 @@ A pivotal meeting this week refined our funding approach and introduced a potent
 
 #### Primary Target: SOSV
 
-| Attribute        | Details                                |
-| ---------------- | -------------------------------------- |
-| Program          | SOSV Hardware Accelerator              |
-| Investment       | ~$500K pre-seed                        |
-| Focus            | Hardware/Deep Tech startups            |
-| Recommendation   | Alistair's #1 recommendation           |
+| Attribute      | Details                      |
+| -------------- | ---------------------------- |
+| Program        | SOSV Hardware Accelerator    |
+| Investment     | ~$500K pre-seed              |
+| Focus          | Hardware/Deep Tech startups  |
+| Recommendation | Alistair's #1 recommendation |
 
 #### Multi-Track Approach
 
-| Track                    | Programs                        | Status        |
-| ------------------------ | ------------------------------- | ------------- |
-| Hardware Accelerators    | SOSV, mHUB, Highway1, Rev       | 🔄 Preparing  |
-| General Accelerators     | Y Combinator, Ascent            | 🔄 Preparing  |
-| South African Grants     | TIA, IDC                        | 📝 Research   |
-| Middle East Innovation   | UAE Innovation Hub, ADGM        | 📝 Research   |
-| Commercial AI Projects   | Adjacent revenue opportunities  | 📝 Planning   |
+| Track                  | Programs                       | Status       |
+| ---------------------- | ------------------------------ | ------------ |
+| Hardware Accelerators  | SOSV, mHUB, Highway1, Rev      | 🔄 Preparing |
+| General Accelerators   | Y Combinator, Ascent           | 🔄 Preparing |
+| South African Grants   | TIA, IDC                       | 📝 Research  |
+| Middle East Innovation | UAE Innovation Hub, ADGM       | 📝 Research  |
+| Commercial AI Projects | Adjacent revenue opportunities | 📝 Planning  |
 
 #### Critical Insight: Incorporation Timing
 
-| Guideline                                | Rationale                              |
-| ---------------------------------------- | -------------------------------------- |
-| Apply to accelerators BEFORE incorporating | Maintains startup eligibility         |
-| Incorporate AFTER funding/contracts       | Strategic flexibility preserved       |
-| US incorporation may be required          | For US accelerator participation      |
+| Guideline                                  | Rationale                        |
+| ------------------------------------------ | -------------------------------- |
+| Apply to accelerators BEFORE incorporating | Maintains startup eligibility    |
+| Incorporate AFTER funding/contracts        | Strategic flexibility preserved  |
+| US incorporation may be required           | For US accelerator participation |
 
 ---
 
@@ -372,20 +418,20 @@ A pivotal meeting this week refined our funding approach and introduced a potent
 
 #### Background
 
-| Experience                        | Details                                    |
-| --------------------------------- | ------------------------------------------ |
-| Previous Startup                  | Drone AI company, $80M valuation reached   |
-| Current Role                      | Japanese drone company, Tokyo market listing |
-| Industry Expertise                | Drone AI, hardware manufacturing, market entry |
+| Experience         | Details                                        |
+| ------------------ | ---------------------------------------------- |
+| Previous Startup   | Drone AI company, $80M valuation reached       |
+| Current Role       | Japanese drone company, Tokyo market listing   |
+| Industry Expertise | Drone AI, hardware manufacturing, market entry |
 
 #### Proposed Partnership
 
-| Aspect                | Details                                    |
-| --------------------- | ------------------------------------------ |
-| Role                  | Advisory partnership                       |
-| Structure             | Equal partners (not contractor arrangement) |
-| Contribution          | Strategic guidance, network access, funding connections |
-| Next Step             | Offline discussion to define terms         |
+| Aspect       | Details                                                 |
+| ------------ | ------------------------------------------------------- |
+| Role         | Advisory partnership                                    |
+| Structure    | Equal partners (not contractor arrangement)             |
+| Contribution | Strategic guidance, network access, funding connections |
+| Next Step    | Offline discussion to define terms                      |
 
 ---
 
@@ -393,22 +439,27 @@ A pivotal meeting this week refined our funding approach and introduced a potent
 
 #### Launcher Prototype Progress
 
-| Activity                        | Status       | Details                              |
-| ------------------------------- | ------------ | ------------------------------------ |
-| Materials sourcing              | ✅ Complete  | Visited 5+ shops for pipes/fittings  |
-| Components identified           | ✅ Complete  | Found required materials             |
-| Purchase scheduled              | 🔄 Tomorrow  | Returning to purchase components     |
-| Assembly                        | 📅 Planned   | Beginning after purchase             |
+| Activity              | Status      | Details                             |
+| --------------------- | ----------- | ----------------------------------- |
+| Materials sourcing    | ✅ Complete | Visited 5+ shops for pipes/fittings |
+| Components identified | ✅ Complete | Found required materials            |
+| Purchase scheduled    | 🔄 Tomorrow | Returning to purchase components    |
+| Assembly              | 📅 Planned  | Beginning after purchase            |
 
 **Pieter's Update (translated from Afrikaans):**
 
-> "Ek het 'n paar uur rond gery en was by 5 verskillende winkels om die pype en fittings te probeer kry wat ek kort vir my eerste prototype. Het min of meer opgespoor wat ek wil hê, maar ek gaan eers more terug soontoe om te koop."
+> "Ek het 'n paar uur rond gery en was by 5 verskillende winkels om die pype en
+> fittings te probeer kry wat ek kort vir my eerste prototype. Het min of meer
+> opgespoor wat ek wil hê, maar ek gaan eers more terug soontoe om te koop."
 >
-> (I drove around for a few hours and visited 5 different shops trying to find the pipes and fittings I need for my first prototype. More or less found what I wanted, but I'm going back tomorrow to buy.)
+> (I drove around for a few hours and visited 5 different shops trying to find
+> the pipes and fittings I need for my first prototype. More or less found what
+> I wanted, but I'm going back tomorrow to buy.)
 
 #### Significance
 
 This hands-on sourcing validates:
+
 - **Local supply availability**: Materials available in South Africa
 - **In-house manufacturing**: No import dependencies for prototype
 - **Rapid iteration**: Can build and test quickly
@@ -420,25 +471,30 @@ This hands-on sourcing validates:
 
 #### New Features Added
 
-| Feature             | Description                                    | Status      |
-| ------------------- | ---------------------------------------------- | ----------- |
-| Calendar Integration | Project scheduling within documentation portal | ✅ Complete |
-| Meeting Summaries   | Automatic meeting summary generation           | ✅ Complete |
-| Movement M1 Integration | Evidence trail tracking for activity logging | 🔄 In Progress |
+| Feature                 | Description                                    | Status         |
+| ----------------------- | ---------------------------------------------- | -------------- |
+| Calendar Integration    | Project scheduling within documentation portal | ✅ Complete    |
+| Meeting Summaries       | Automatic meeting summary generation           | ✅ Complete    |
+| Movement M1 Integration | Evidence trail tracking for activity logging   | 🔄 In Progress |
 
 #### Movement M1 Infrastructure (In Progress)
 
 M1 is being integrated into the **core infrastructure**, not just documentation:
+
 - Azure Functions integration for evidence anchoring
 - Backend service hooks for activity logging
 - API endpoints for M1 blockchain interactions
 - Implementation actively underway
 
 **Related ADRs:**
-- [ADR-D001: Calendar Export and Integration](/docs/technical/architecture/adr-D001-calendar-export-integration) - iCal export with Google Calendar and Outlook integration
-- [ADR-0026: Movement Network Integration](/docs/technical/architecture/adr-0026-movement-network-integration) - M1 Hackathon pilot for third-chain evidence anchoring
+
+- [ADR-D001: Calendar Export and Integration](/docs/technical/architecture/adr-D001-calendar-export-integration) -
+  iCal export with Google Calendar and Outlook integration
+- [ADR-0026: Movement Network Integration](/docs/technical/architecture/adr-0026-movement-network-integration) -
+  M1 Hackathon pilot for third-chain evidence anchoring
 
 These features enhance the documentation portal's utility for:
+
 - Team coordination and scheduling
 - Meeting follow-up and action tracking
 - Evidence trail and activity logging for compliance
@@ -448,10 +504,10 @@ These features enhance the documentation portal's utility for:
 
 #### Known Issues
 
-| Issue | Description | Owner |
-|-------|-------------|-------|
-| AI Functions | "AI Functions not available" error on docs site | Jurie |
-| Inline Comments | Feature broken, needs repair | Eben (high priority) |
+| Issue           | Description                                     | Owner                |
+| --------------- | ----------------------------------------------- | -------------------- |
+| AI Functions    | "AI Functions not available" error on docs site | Jurie                |
+| Inline Comments | Feature broken, needs repair                    | Eben (high priority) |
 
 ---
 
@@ -461,12 +517,12 @@ These features enhance the documentation portal's utility for:
 
 Pattern: `[org]-[env]-[project]-[type]-[region]`
 
-| Org Code | Organisation | Owner  |
-|----------|--------------|--------|
-| nl       | NeuralLiquid | Jurie  |
-| pvc      | Phoenix VC   | Eben   |
+| Org Code | Organisation    | Owner  |
+| -------- | --------------- | ------ |
+| nl       | NeuralLiquid    | Jurie  |
+| pvc      | Phoenix VC      | Eben   |
 | tws      | Twines & Straps | Martyn |
-| mys      | Mystira      | Eben   |
+| mys      | Mystira         | Eben   |
 
 #### Documentation Added
 
@@ -480,14 +536,14 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 ### 7. Key Decisions Made
 
-| Decision                          | Rationale                                | Impact                                    |
-| --------------------------------- | ---------------------------------------- | ----------------------------------------- |
-| SOSV as primary funding target    | Hardware-focused, $500K pre-seed         | Clear application priority                |
-| Apply before incorporation        | Maintains accelerator eligibility        | Strategic flexibility preserved           |
-| Pursue Alistair advisory role     | Drone AI expertise, network access       | Strengthened advisory board               |
-| Multi-track funding approach      | Risk mitigation, competition leverage    | Multiple paths to capital                 |
-| Local launcher component sourcing | Availability validated, cost savings     | In-house manufacturing confirmed          |
-| Azure naming conventions v2.1     | Cross-org consistency                    | Standardized infrastructure naming        |
+| Decision                          | Rationale                             | Impact                             |
+| --------------------------------- | ------------------------------------- | ---------------------------------- |
+| SOSV as primary funding target    | Hardware-focused, $500K pre-seed      | Clear application priority         |
+| Apply before incorporation        | Maintains accelerator eligibility     | Strategic flexibility preserved    |
+| Pursue Alistair advisory role     | Drone AI expertise, network access    | Strengthened advisory board        |
+| Multi-track funding approach      | Risk mitigation, competition leverage | Multiple paths to capital          |
+| Local launcher component sourcing | Availability validated, cost savings  | In-house manufacturing confirmed   |
+| Azure naming conventions v2.1     | Cross-org consistency                 | Standardized infrastructure naming |
 
 ---
 
@@ -525,7 +581,8 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 ### 9. Next Week Priorities
 
-1. **Accelerator Applications**: Receive Alistair's list and begin SOSV application
+1. **Accelerator Applications**: Receive Alistair's list and begin SOSV
+   application
 2. **Launcher Prototype**: Purchase components and begin assembly
 3. **Simulator Demos**: Prepare Gazebo demonstrations for investor pitches
 4. **Middle East Research**: Identify UAE/Abu Dhabi innovation hub contacts
@@ -535,35 +592,37 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 ### 10. Metrics & KPIs
 
-| Metric                      | This Week                      | vs Week 49     | Trend  |
-| --------------------------- | ------------------------------ | -------------- | ------ |
-| Commits merged              | 124                            | 240+           | ↓      |
-| Pull requests merged        | 12 feature + 26 dependabot     | 13+            | →      |
-| Lines added                 | 27,063                         | -              | ✅     |
-| Lines deleted               | 9,263                          | -              | ✅     |
-| Files changed               | 288                            | -              | ✅     |
-| Net lines                   | +17,800                        | -              | ✅     |
-| Strategic meetings          | 1 (Alistair Kim)               | 0              | ✅ NEW |
-| Advisory interest           | Alistair Kim (verbal)          | -              | ✅ NEW |
-| Hardware shops visited      | 5                              | -              | ✅ NEW |
-| Prototype components found  | Yes                            | 3D tools done  | →      |
-| Doc features added          | 3                              | PPTX, QR       | →      |
-| Accelerator targets         | 6+ identified                  | -              | ✅ NEW |
-| Infrastructure docs         | Naming conventions v2.1        | -              | ✅ NEW |
+| Metric                     | This Week                  | vs Week 49    | Trend  |
+| -------------------------- | -------------------------- | ------------- | ------ |
+| Commits merged             | 124                        | 240+          | ↓      |
+| Pull requests merged       | 12 feature + 26 dependabot | 13+           | →      |
+| Lines added                | 27,063                     | -             | ✅     |
+| Lines deleted              | 9,263                      | -             | ✅     |
+| Files changed              | 288                        | -             | ✅     |
+| Net lines                  | +17,800                    | -             | ✅     |
+| Strategic meetings         | 1 (Alistair Kim)           | 0             | ✅ NEW |
+| Advisory interest          | Alistair Kim (verbal)      | -             | ✅ NEW |
+| Hardware shops visited     | 5                          | -             | ✅ NEW |
+| Prototype components found | Yes                        | 3D tools done | →      |
+| Doc features added         | 3                          | PPTX, QR      | →      |
+| Accelerator targets        | 6+ identified              | -             | ✅ NEW |
+| Infrastructure docs        | Naming conventions v2.1    | -             | ✅ NEW |
 
-**Note:** Lower commit volume this week reflects focus on strategic planning (Alistair meeting) and hardware sourcing rather than feature development. Week 49 was exceptionally productive with 240+ commits.
+**Note:** Lower commit volume this week reflects focus on strategic planning
+(Alistair meeting) and hardware sourcing rather than feature development. Week
+49 was exceptionally productive with 240+ commits.
 
 ---
 
 ### 11. Risks & Blockers
 
-| Risk                              | Severity | Mitigation                                   |
-| --------------------------------- | -------- | -------------------------------------------- |
-| Accelerator rejection             | High     | Multi-track approach, apply to 5+ programs   |
-| Prototype component availability  | Low      | Pieter found materials, backup shops known   |
-| Canada CUAS deadline (Dec 15)     | High     | Prioritize application this week             |
-| Advisory terms disagreement       | Medium   | Clear equal partnership framing from start   |
-| Incorporation timing complexity   | Medium   | Legal advice before any incorporation        |
+| Risk                             | Severity | Mitigation                                 |
+| -------------------------------- | -------- | ------------------------------------------ |
+| Accelerator rejection            | High     | Multi-track approach, apply to 5+ programs |
+| Prototype component availability | Low      | Pieter found materials, backup shops known |
+| Canada CUAS deadline (Dec 15)    | High     | Prioritize application this week           |
+| Advisory terms disagreement      | Medium   | Clear equal partnership framing from start |
+| Incorporation timing complexity  | Medium   | Legal advice before any incorporation      |
 
 ---
 
@@ -571,18 +630,18 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 #### Target Markets
 
-| Market            | Priority   | Rationale                                |
-| ----------------- | ---------- | ---------------------------------------- |
-| European airports | ⭐⭐⭐ HIGH | Near-Russia threat, clear ROI            |
-| Middle East       | ⭐⭐ MEDIUM | Government innovation hubs, direct access |
+| Market            | Priority    | Rationale                                   |
+| ----------------- | ----------- | ------------------------------------------- |
+| European airports | ⭐⭐⭐ HIGH | Near-Russia threat, clear ROI               |
+| Middle East       | ⭐⭐ MEDIUM | Government innovation hubs, direct access   |
 | United States     | ⭐⭐ MEDIUM | Accelerator participation requires presence |
 
 #### Middle East Innovation Hubs
 
-| Organization                 | Location   | Opportunity                    |
-| ---------------------------- | ---------- | ------------------------------ |
-| UAE University Innovation Hub | UAE        | Startup ecosystem support      |
-| ADGM Tech Startup Program    | Abu Dhabi  | Tech incorporation & support   |
+| Organization                  | Location  | Opportunity                  |
+| ----------------------------- | --------- | ---------------------------- |
+| UAE University Innovation Hub | UAE       | Startup ecosystem support    |
+| ADGM Tech Startup Program     | Abu Dhabi | Tech incorporation & support |
 
 #### Engagement Strategy
 
@@ -597,26 +656,27 @@ Pattern: `[org]-[env]-[project]-[type]-[region]`
 
 #### Feature Pull Requests Merged (Dec 5-12)
 
-| PR    | Title                                                    | Category        |
-| ----- | -------------------------------------------------------- | --------------- |
-| #342  | Add Meeting Notes section with strategic meeting         | Documentation   |
-| #341  | Fix sign out not clearing user state                     | Bug Fix         |
-| #340  | Fix workflow secrets context access                      | DevOps          |
-| #339  | Fix secrets context usage in deploy workflow             | DevOps          |
-| #338  | Map env name to SWA CLI                                  | DevOps          |
-| #337  | Fix environment issue                                    | DevOps          |
-| #336  | Fix Azure SWA deployment timeout                         | DevOps          |
-| #335  | Add downloadable calendar events (ADR-D001)              | Feature         |
-| #334  | Fix process.env reference error                          | Bug Fix         |
-| #308  | Fix profile template login                               | Bug Fix         |
-| #307  | Validate secrets for deployment                          | DevOps          |
-| #305  | Fix documentation formatting                             | Documentation   |
+| PR   | Title                                            | Category      |
+| ---- | ------------------------------------------------ | ------------- |
+| #342 | Add Meeting Notes section with strategic meeting | Documentation |
+| #341 | Fix sign out not clearing user state             | Bug Fix       |
+| #340 | Fix workflow secrets context access              | DevOps        |
+| #339 | Fix secrets context usage in deploy workflow     | DevOps        |
+| #338 | Map env name to SWA CLI                          | DevOps        |
+| #337 | Fix environment issue                            | DevOps        |
+| #336 | Fix Azure SWA deployment timeout                 | DevOps        |
+| #335 | Add downloadable calendar events (ADR-D001)      | Feature       |
+| #334 | Fix process.env reference error                  | Bug Fix       |
+| #308 | Fix profile template login                       | Bug Fix       |
+| #307 | Validate secrets for deployment                  | DevOps        |
+| #305 | Fix documentation formatting                     | Documentation |
 
 #### Dependabot PRs Merged (26 total)
 
 Dependency updates: #309-333 (Rust crates, npm packages, GitHub Actions)
 
 **Key Updates:**
+
 - `openai`: 4.104.0 → 6.10.0
 - `zod`: 3.25.76 → 4.1.13
 - `firebase-admin`: 12.7.0 → 13.6.0
@@ -639,36 +699,36 @@ Dependency updates: #309-333 (Rust crates, npm packages, GitHub Actions)
 
 #### Lines of Code Changed (Dec 5-12)
 
-| Metric          | Count    | Notes                              |
-|-----------------|----------|------------------------------------|
-| Lines added     | 27,063   | New features, docs, dependencies   |
-| Lines deleted   | 9,263    | Refactoring, cleanup               |
-| Net change      | +17,800  | Codebase growth                    |
-| Files modified  | 288      | Across all packages                |
-| Commits         | 124      | 46 Jurie, 36 Copilot, 25 Dependabot, 16 Claude |
+| Metric         | Count   | Notes                                          |
+| -------------- | ------- | ---------------------------------------------- |
+| Lines added    | 27,063  | New features, docs, dependencies               |
+| Lines deleted  | 9,263   | Refactoring, cleanup                           |
+| Net change     | +17,800 | Codebase growth                                |
+| Files modified | 288     | Across all packages                            |
+| Commits        | 124     | 46 Jurie, 36 Copilot, 25 Dependabot, 16 Claude |
 
 #### Changes by Area
 
-| Directory                          | Lines Changed | Category        |
-|------------------------------------|---------------|-----------------|
-| `pnpm-lock.yaml`                   | 9,425         | Dependencies    |
-| `apps/docs/src/pages/admin`        | 3,589         | Admin Dashboard |
-| `apps/docs/azure-functions/src`    | 3,369         | Backend Services|
-| `apps/docs/docs/executive`         | 2,099         | Executive Docs  |
-| `.github/workflows`                | 1,977         | CI/CD Pipelines |
-| `apps/docs/docs/technical/architecture` | 1,729    | ADRs            |
-| `apps/docs/docs/progress/2025`     | 1,218         | Weekly Reports  |
-| `apps/docs/docs/playbooks`         | 1,165         | Playbooks       |
+| Directory                               | Lines Changed | Category         |
+| --------------------------------------- | ------------- | ---------------- |
+| `pnpm-lock.yaml`                        | 9,425         | Dependencies     |
+| `apps/docs/src/pages/admin`             | 3,589         | Admin Dashboard  |
+| `apps/docs/azure-functions/src`         | 3,369         | Backend Services |
+| `apps/docs/docs/executive`              | 2,099         | Executive Docs   |
+| `.github/workflows`                     | 1,977         | CI/CD Pipelines  |
+| `apps/docs/docs/technical/architecture` | 1,729         | ADRs             |
+| `apps/docs/docs/progress/2025`          | 1,218         | Weekly Reports   |
+| `apps/docs/docs/playbooks`              | 1,165         | Playbooks        |
 
 #### Commits by Contributor
 
-| Contributor         | Commits | Focus Areas                        |
-|---------------------|---------|-------------------------------------|
-| Jurie Smit          | 46      | Features, reviews, merges          |
-| copilot-swe-agent   | 36      | Bug fixes, workflow improvements   |
-| dependabot[bot]     | 25      | Dependency updates                 |
-| Claude              | 16      | Documentation, ADRs, infrastructure|
-| JustAGhosT          | 1       | Manual fixes                       |
+| Contributor       | Commits | Focus Areas                         |
+| ----------------- | ------- | ----------------------------------- |
+| Jurie Smit        | 46      | Features, reviews, merges           |
+| copilot-swe-agent | 36      | Bug fixes, workflow improvements    |
+| dependabot[bot]   | 25      | Dependency updates                  |
+| Claude            | 16      | Documentation, ADRs, infrastructure |
+| JustAGhosT        | 1       | Manual fixes                        |
 
 ---
 
@@ -678,26 +738,26 @@ ADRs created this week to formalize architectural decisions:
 
 #### Core ADRs (7)
 
-| ADR     | Title                          | Status   | Key Decision                              |
-|---------|--------------------------------|----------|-------------------------------------------|
-| ADR-0025| Azure Naming Conventions       | Accepted | `[org]-[env]-[project]-[type]-[region]`  |
-| ADR-0026| Movement Network Integration   | Proposed | M1 Hackathon pilot for evidence anchoring|
-| ADR-0027| x402 Payment Protocol          | Accepted | Solana-based API monetization            |
-| ADR-0028| DB-Driven Configuration        | Proposed | Cosmos DB for dynamic config             |
-| ADR-0030| Net Launcher Architecture      | Proposed | In-house pneumatic effector system       |
-| ADR-0040| Edge-Cloud Communication       | Proposed | Store-and-forward with priority queues   |
-| ADR-0050| ITAR Compliance                | Proposed | US market readiness architecture         |
+| ADR      | Title                        | Status   | Key Decision                              |
+| -------- | ---------------------------- | -------- | ----------------------------------------- |
+| ADR-0025 | Azure Naming Conventions     | Accepted | `[org]-[env]-[project]-[type]-[region]`   |
+| ADR-0026 | Movement Network Integration | Proposed | M1 Hackathon pilot for evidence anchoring |
+| ADR-0027 | x402 Payment Protocol        | Accepted | Solana-based API monetization             |
+| ADR-0028 | DB-Driven Configuration      | Proposed | Cosmos DB for dynamic config              |
+| ADR-0030 | Net Launcher Architecture    | Proposed | In-house pneumatic effector system        |
+| ADR-0040 | Edge-Cloud Communication     | Proposed | Store-and-forward with priority queues    |
+| ADR-0050 | ITAR Compliance              | Proposed | US market readiness architecture          |
 
 #### Additional ADRs (21)
 
-| Category | ADRs | Description |
-|----------|------|-------------|
-| **Infrastructure** | ADR-0029, ADR-0035 | Secrets Management, CI/CD Pipeline Strategy |
-| **Hardware** | ADR-0031, ADR-0032, ADR-0033 | Effector Selection, Sensor-to-Effector Protocol, Hardware Versioning |
-| **Communication** | ADR-0041, ADR-0042, ADR-0043, ADR-0044 | Mesh Networking, Offline Sync, Real-time Communication, Push Notifications |
-| **Compliance** | ADR-0051, ADR-0052, ADR-0053, ADR-0054 | SA Export Control (NCACC), Data Retention, Privacy Regulations, Audit Trail |
-| **Testing** | ADR-0060, ADR-0061, ADR-0062, ADR-0063 | Testing Strategy, HIL Testing, Simulation Framework, E2E Testing |
-| **Operations** | ADR-0070, ADR-0071, ADR-0072, ADR-0073 | Multi-Tenancy, Feature Flags, Incident Response, Disaster Recovery |
+| Category           | ADRs                                   | Description                                                                 |
+| ------------------ | -------------------------------------- | --------------------------------------------------------------------------- |
+| **Infrastructure** | ADR-0029, ADR-0035                     | Secrets Management, CI/CD Pipeline Strategy                                 |
+| **Hardware**       | ADR-0031, ADR-0032, ADR-0033           | Effector Selection, Sensor-to-Effector Protocol, Hardware Versioning        |
+| **Communication**  | ADR-0041, ADR-0042, ADR-0043, ADR-0044 | Mesh Networking, Offline Sync, Real-time Communication, Push Notifications  |
+| **Compliance**     | ADR-0051, ADR-0052, ADR-0053, ADR-0054 | SA Export Control (NCACC), Data Retention, Privacy Regulations, Audit Trail |
+| **Testing**        | ADR-0060, ADR-0061, ADR-0062, ADR-0063 | Testing Strategy, HIL Testing, Simulation Framework, E2E Testing            |
+| **Operations**     | ADR-0070, ADR-0071, ADR-0072, ADR-0073 | Multi-Tenancy, Feature Flags, Incident Response, Disaster Recovery          |
 
 **Total: 28 ADRs** covering all major architectural domains.
 
@@ -707,38 +767,45 @@ ADRs created this week to formalize architectural decisions:
 
 ### 16. Related Project: OmniPost (content_creation)
 
-Development continued on [OmniPost](https://github.com/JustAGhosT/content_creation), an AI-powered multi-platform content publishing tool created to support Phoenix Rooivalk's marketing and investor communications.
+Development continued on
+[OmniPost](https://github.com/JustAGhosT/content_creation), an AI-powered
+multi-platform content publishing tool created to support Phoenix Rooivalk's
+marketing and investor communications.
 
 #### Repository Overview
 
-| Metric | Value |
-|--------|-------|
-| Repository | [JustAGhosT/content_creation](https://github.com/JustAGhosT/content_creation) |
-| Total Commits | 581+ |
-| Tech Stack | Next.js 14, React 18, TypeScript 5.3, Prisma |
-| AI Providers | DeepSeek, OpenAI, Azure OpenAI, Hugging Face |
+| Metric        | Value                                                                         |
+| ------------- | ----------------------------------------------------------------------------- |
+| Repository    | [JustAGhosT/content_creation](https://github.com/JustAGhosT/content_creation) |
+| Total Commits | 581+                                                                          |
+| Tech Stack    | Next.js 14, React 18, TypeScript 5.3, Prisma                                  |
+| AI Providers  | DeepSeek, OpenAI, Azure OpenAI, Hugging Face                                  |
 
 #### Key Features
 
-- **Multi-Platform Publishing**: Facebook, Instagram, LinkedIn, Twitter, custom platforms
-- **AI Content Tools**: Text summarization, image generation, platform-specific adaptation
-- **Enterprise Features**: JWT auth, audit trails, Airtable integration, rate limiting
+- **Multi-Platform Publishing**: Facebook, Instagram, LinkedIn, Twitter, custom
+  platforms
+- **AI Content Tools**: Text summarization, image generation, platform-specific
+  adaptation
+- **Enterprise Features**: JWT auth, audit trails, Airtable integration, rate
+  limiting
 - **Notifications**: Email, Slack, SMS (Twilio)
 
 #### December 2025 Updates
 
-| Category | Changes |
-|----------|---------|
-| **Security** | Fixed format string injection vulnerabilities, pinned package versions |
-| **Database** | Prisma schema updated with HTTP audit fields (path, method, body, statusCode) |
-| **Privacy** | PII retention policies: 90-day retention, SHA-256 hashing for IPs |
-| **Testing** | Enhanced integration tests with Zod validation, rate limiting, bearer auth |
-| **Code Quality** | SonarCloud fixes, reduced cognitive complexity, CSS modules organized |
-| **UI/UX** | Landing page fixes, Prettier formatting, AbortController for fetch cleanup |
+| Category         | Changes                                                                       |
+| ---------------- | ----------------------------------------------------------------------------- |
+| **Security**     | Fixed format string injection vulnerabilities, pinned package versions        |
+| **Database**     | Prisma schema updated with HTTP audit fields (path, method, body, statusCode) |
+| **Privacy**      | PII retention policies: 90-day retention, SHA-256 hashing for IPs             |
+| **Testing**      | Enhanced integration tests with Zod validation, rate limiting, bearer auth    |
+| **Code Quality** | SonarCloud fixes, reduced cognitive complexity, CSS modules organized         |
+| **UI/UX**        | Landing page fixes, Prettier formatting, AbortController for fetch cleanup    |
 
 #### Relevance to Phoenix Rooivalk
 
 OmniPost supports the project by:
+
 - Automating investor update distribution across platforms
 - Generating AI-assisted marketing content
 - Managing content queues with human review workflows

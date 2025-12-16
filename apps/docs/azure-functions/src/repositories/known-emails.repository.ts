@@ -156,7 +156,9 @@ export class KnownEmailsRepository extends BaseRepository<KnownEmail> {
    */
   async updateEmail(
     id: string,
-    updates: Partial<Pick<KnownEmail, "profileKey" | "displayName" | "notes" | "isActive">>,
+    updates: Partial<
+      Pick<KnownEmail, "profileKey" | "displayName" | "notes" | "isActive">
+    >,
   ): Promise<KnownEmail | null> {
     const existing = await this.findById(id);
     if (!existing) return null;

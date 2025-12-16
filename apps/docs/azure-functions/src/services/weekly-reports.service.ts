@@ -149,7 +149,12 @@ Commits: ${activity.commits.length}
 Top Contributors: ${commitAuthors || "None"}
 
 Recent Commit Messages:
-${activity.commits.slice(0, 15).map((c) => `- ${c.message}`).join("\n") || "None"}
+${
+  activity.commits
+    .slice(0, 15)
+    .map((c) => `- ${c.message}`)
+    .join("\n") || "None"
+}
 
 Pull Requests (${activity.pullRequests.length} total):
 ${prSummary || "None"}

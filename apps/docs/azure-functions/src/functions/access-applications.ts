@@ -31,7 +31,11 @@ async function submitApplicationHandler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   // Rate limiting
-  const rateLimit = applyRateLimit(request, "access-application", RateLimits.form);
+  const rateLimit = applyRateLimit(
+    request,
+    "access-application",
+    RateLimits.form,
+  );
   if (!rateLimit.allowed) return rateLimit.response!;
 
   // Require authentication
@@ -182,7 +186,10 @@ async function getAdminApplicationsHandler(
       { limit },
     );
 
-    return successResponse({ applications: result.items, hasMore: result.hasMore });
+    return successResponse({
+      applications: result.items,
+      hasMore: result.hasMore,
+    });
   } catch (error) {
     context.error("Failed to get admin applications:", error);
     return Errors.internal("Failed to get applications");

@@ -39,7 +39,9 @@
     max-height: 50vh;
     overflow-y: auto;
     transform: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
     z-index: var(--z-index-sidebar, 400);
     opacity: 0.95;
   }

@@ -25,8 +25,7 @@ export function PDFDownloadButton({
   // Only show on doc pages
   useEffect(() => {
     const isDocPage =
-      location.pathname.startsWith("/docs/") ||
-      location.pathname === "/docs";
+      location.pathname.startsWith("/docs/") || location.pathname === "/docs";
     setIsVisible(isDocPage);
   }, [location.pathname]);
 

@@ -355,7 +355,13 @@ export async function requireAdminLegacy(request: HttpRequest): Promise<{
  */
 export async function validateAuthHeader(
   authHeader: string | null,
-): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean; email?: string; name?: string }> {
+): Promise<{
+  valid: boolean;
+  userId?: string;
+  isAdmin?: boolean;
+  email?: string;
+  name?: string;
+}> {
   if (!authHeader) {
     return { valid: false };
   }

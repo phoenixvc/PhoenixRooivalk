@@ -57,7 +57,7 @@ interface ApplicationDocumentProps {
 function Toast({
   message,
   visible,
-  type = "success"
+  type = "success",
 }: {
   message: string;
   visible: boolean;
@@ -87,7 +87,11 @@ function getDaysUntil(deadline: string): number {
 }
 
 // Format deadline with urgency
-function formatDeadline(deadline: string): { text: string; daysLeft: number; urgency: "critical" | "urgent" | "normal" } {
+function formatDeadline(deadline: string): {
+  text: string;
+  daysLeft: number;
+  urgency: "critical" | "urgent" | "normal";
+} {
   const daysLeft = getDaysUntil(deadline);
 
   let urgency: "critical" | "urgent" | "normal" = "normal";
@@ -131,15 +135,22 @@ export default function ApplicationDocument({
   checklist,
   children,
 }: ApplicationDocumentProps): React.ReactElement {
-  const [toast, setToast] = React.useState({ visible: false, message: "", type: "success" as const });
+  const [toast, setToast] = React.useState({
+    visible: false,
+    message: "",
+    type: "success" as const,
+  });
   const [showVersionHistory, setShowVersionHistory] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(false);
   const [linkCopied, setLinkCopied] = React.useState(false);
 
-  const showToast = React.useCallback((message: string, type: "success" | "info" | "error" = "success") => {
-    setToast({ visible: true, message, type });
-    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
-  }, []);
+  const showToast = React.useCallback(
+    (message: string, type: "success" | "info" | "error" = "success") => {
+      setToast({ visible: true, message, type });
+      setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 3000);
+    },
+    [],
+  );
 
   const handlePdfDownload = React.useCallback(() => {
     const originalTitle = document.title;
@@ -210,11 +221,13 @@ export default function ApplicationDocument({
     submitted: "SUBMITTED",
   };
 
-  const currentDate = date || new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const currentDate =
+    date ||
+    new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
   // Calculate deadline info
   const deadlineInfo = deadline ? formatDeadline(deadline) : null;
@@ -237,16 +250,24 @@ export default function ApplicationDocument({
   // Calculate checklist progress
   const checklistProgress = checklist
     ? {
-        completed: checklist.filter(item => item.completed).length,
+        completed: checklist.filter((item) => item.completed).length,
         total: checklist.length,
-        percent: Math.round((checklist.filter(item => item.completed).length / checklist.length) * 100)
+        percent: Math.round(
+          (checklist.filter((item) => item.completed).length /
+            checklist.length) *
+            100,
+        ),
       }
     : null;
 
   return (
     <>
       {/* Toast Notification */}
-      <Toast message={toast.message} visible={toast.visible} type={toast.type} />
+      <Toast
+        message={toast.message}
+        visible={toast.visible}
+        type={toast.type}
+      />
 
       {/* Main Download Controls */}
       <div className={styles.downloadControls}>
@@ -261,25 +282,39 @@ export default function ApplicationDocument({
             <div className={styles.versionWrapper}>
               <button
                 className={styles.versionButton}
-                onClick={() => versionHistory && setShowVersionHistory(!showVersionHistory)}
+                onClick={() =>
+                  versionHistory && setShowVersionHistory(!showVersionHistory)
+                }
                 disabled={!versionHistory}
                 title={versionHistory ? "View version history" : undefined}
               >
                 <span>v{version}</span>
                 {versionHistory && (
-                  <span className={styles.dropdownIcon}>{showVersionHistory ? "\u25B2" : "\u25BC"}</span>
+                  <span className={styles.dropdownIcon}>
+                    {showVersionHistory ? "\u25B2" : "\u25BC"}
+                  </span>
                 )}
               </button>
 
               {/* Version History Dropdown */}
               {showVersionHistory && versionHistory && (
                 <div className={styles.versionDropdown}>
-                  <div className={styles.versionDropdownHeader}>Version History</div>
+                  <div className={styles.versionDropdownHeader}>
+                    Version History
+                  </div>
                   {versionHistory.map((v, i) => (
-                    <div key={i} className={styles.versionItem} data-current={v.version === version}>
+                    <div
+                      key={i}
+                      className={styles.versionItem}
+                      data-current={v.version === version}
+                    >
                       <span className={styles.versionNumber}>v{v.version}</span>
                       <span className={styles.versionDate}>{v.date}</span>
-                      {v.changes && <span className={styles.versionChanges}>{v.changes}</span>}
+                      {v.changes && (
+                        <span className={styles.versionChanges}>
+                          {v.changes}
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -290,7 +325,10 @@ export default function ApplicationDocument({
           {/* Deadline Indicator */}
           {deadlineInfo && (
             <div className={styles.deadlineRow}>
-              <div className={styles.deadlineIndicator} data-urgency={deadlineInfo.urgency}>
+              <div
+                className={styles.deadlineIndicator}
+                data-urgency={deadlineInfo.urgency}
+              >
                 <span className={styles.deadlineIcon}>{"\u23F0"}</span>
                 <span className={styles.deadlineText}>{deadlineInfo.text}</span>
               </div>
@@ -371,7 +409,9 @@ export default function ApplicationDocument({
                 >
                   <span className={styles.buttonIcon}>{"\u{1F4C4}"}</span>
                   <span className={styles.buttonContent}>
-                    <span className={styles.buttonLabel}>{auxiliaryPdfLabel}</span>
+                    <span className={styles.buttonLabel}>
+                      {auxiliaryPdfLabel}
+                    </span>
                     <span className={styles.buttonMeta}>
                       {auxiliaryPdfDescription}
                       {auxiliaryPdfSize && ` (${auxiliaryPdfSize})`}
@@ -395,8 +435,14 @@ export default function ApplicationDocument({
 
       {/* PDF Preview Modal */}
       {showPreview && auxiliaryPdfUrl && (
-        <div className={styles.previewOverlay} onClick={() => setShowPreview(false)}>
-          <div className={styles.previewModal} onClick={e => e.stopPropagation()}>
+        <div
+          className={styles.previewOverlay}
+          onClick={() => setShowPreview(false)}
+        >
+          <div
+            className={styles.previewModal}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.previewHeader}>
               <h3>{auxiliaryPdfLabel}</h3>
               <button

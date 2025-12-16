@@ -7,14 +7,8 @@
     "postcss": "postcss"
   },
   "tailwindCSS.experimental.classRegex": [
-    [
-      "cva\\(([^)]*)\\)",
-      "[\"'`]([^\"'`]*).*?[\"'`]"
-    ],
-    [
-      "cx\\(([^)]*)\\)",
-      "(?:'|\"|`)([^']*)(?:'|\"|`)"
-    ]
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
   "webhint.enable": false,
   "problems.decorations.enabled": false,
@@ -33,12 +27,8 @@
       ]
     }
   ],
-  "cSpell.words": [
-    "webhint"
-  ],
-  "cSpell.ignoreWords": [
-    "webhint"
-  ],
+  "cSpell.words": ["webhint"],
+  "cSpell.ignoreWords": ["webhint"],
   "diagnostics.source": {
     "webhint": false
   },

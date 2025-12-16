@@ -26,8 +26,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Development, testing, and investor demos require realistic simulation of C-UAS scenarios without physical hardware or flight operations
-2. **Decision**: Implement Gazebo-based simulation with ROS 2 integration, enabling software-in-the-loop testing and visual demonstrations
+1. **Problem**: Development, testing, and investor demos require realistic
+   simulation of C-UAS scenarios without physical hardware or flight operations
+2. **Decision**: Implement Gazebo-based simulation with ROS 2 integration,
+   enabling software-in-the-loop testing and visual demonstrations
 3. **Trade-off**: Simulation fidelity vs. development/computation cost
 
 ---
@@ -36,23 +38,23 @@ prerequisites:
 
 ### Simulation Use Cases
 
-| Use Case | Fidelity Required | Real-time? |
-|----------|-------------------|------------|
-| Algorithm development | Medium | No |
-| Integration testing | High | Yes |
-| Investor demos | High visual | Yes |
-| Operator training | High | Yes |
-| Scenario planning | Low | No |
+| Use Case              | Fidelity Required | Real-time? |
+| --------------------- | ----------------- | ---------- |
+| Algorithm development | Medium            | No         |
+| Integration testing   | High              | Yes        |
+| Investor demos        | High visual       | Yes        |
+| Operator training     | High              | Yes        |
+| Scenario planning     | Low               | No         |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Physics | Rigid body dynamics, aerodynamics |
-| Sensors | Radar, camera, IMU simulation |
-| Visualization | 3D rendering for demos |
-| Integration | ROS 2, direct API |
-| Performance | Real-time capable |
+| Requirement   | Specification                     |
+| ------------- | --------------------------------- |
+| Physics       | Rigid body dynamics, aerodynamics |
+| Sensors       | Radar, camera, IMU simulation     |
+| Visualization | 3D rendering for demos            |
+| Integration   | ROS 2, direct API                 |
+| Performance   | Real-time capable                 |
 
 ---
 

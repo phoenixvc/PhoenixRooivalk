@@ -26,8 +26,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Flight controller, sensors, and effectors must be tested with real hardware before field deployment to catch timing and integration issues
-2. **Decision**: Implement HIL test framework with simulated environment feeding real hardware, enabling repeatable automated testing
+1. **Problem**: Flight controller, sensors, and effectors must be tested with
+   real hardware before field deployment to catch timing and integration issues
+2. **Decision**: Implement HIL test framework with simulated environment feeding
+   real hardware, enabling repeatable automated testing
 3. **Trade-off**: Test infrastructure cost vs. field failure risk reduction
 
 ---
@@ -36,22 +38,22 @@ prerequisites:
 
 ### Why HIL Testing
 
-| Issue Type | Caught by Unit Tests | Caught by HIL |
-|------------|---------------------|---------------|
-| Logic errors | ✅ | ✅ |
-| Timing issues | ❌ | ✅ |
-| Sensor noise handling | ❌ | ✅ |
-| Hardware interface bugs | ❌ | ✅ |
-| Real-time performance | ❌ | ✅ |
+| Issue Type              | Caught by Unit Tests | Caught by HIL |
+| ----------------------- | -------------------- | ------------- |
+| Logic errors            | ✅                   | ✅            |
+| Timing issues           | ❌                   | ✅            |
+| Sensor noise handling   | ❌                   | ✅            |
+| Hardware interface bugs | ❌                   | ✅            |
+| Real-time performance   | ❌                   | ✅            |
 
 ### Components Requiring HIL
 
-| Component | Interface | Test Focus |
-|-----------|-----------|------------|
-| Flight controller | PWM, serial | Control loops, safety |
-| Net launcher | GPIO, serial | Firing sequence, safety interlocks |
-| Radar module | SPI, serial | Detection, tracking |
-| Camera system | USB, CSI | Recognition, latency |
+| Component         | Interface    | Test Focus                         |
+| ----------------- | ------------ | ---------------------------------- |
+| Flight controller | PWM, serial  | Control loops, safety              |
+| Net launcher      | GPIO, serial | Firing sequence, safety interlocks |
+| Radar module      | SPI, serial  | Detection, tracking                |
+| Camera system     | USB, CSI     | Recognition, latency               |
 
 ---
 
@@ -386,13 +388,13 @@ impl InterfaceBridge {
 
 ### HIL Test Rig
 
-| Component | Purpose | Interface |
-|-----------|---------|-----------|
-| Test PC | Orchestration, simulation | USB, Ethernet |
-| Signal interface | DAC/ADC, GPIO | USB |
-| PWM capture board | Motor/servo signals | USB |
-| Power supply | Controlled power delivery | USB (programmable) |
-| Load simulator | Motor loading | I2C |
+| Component         | Purpose                   | Interface          |
+| ----------------- | ------------------------- | ------------------ |
+| Test PC           | Orchestration, simulation | USB, Ethernet      |
+| Signal interface  | DAC/ADC, GPIO             | USB                |
+| PWM capture board | Motor/servo signals       | USB                |
+| Power supply      | Controlled power delivery | USB (programmable) |
+| Load simulator    | Motor loading             | I2C                |
 
 ### Test Rig Schematic
 

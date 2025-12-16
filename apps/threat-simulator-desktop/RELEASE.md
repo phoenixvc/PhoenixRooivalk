@@ -16,7 +16,8 @@ Update the version in `src-tauri/tauri.conf.json`:
 
 ### 2. Update Changelog
 
-Add release notes to `CHANGELOG.md` documenting new features, bug fixes, and breaking changes.
+Add release notes to `CHANGELOG.md` documenting new features, bug fixes, and
+breaking changes.
 
 ### 3. Create Release Tag
 
@@ -28,6 +29,7 @@ git push origin desktop-v0.2.0
 ```
 
 This will automatically trigger the release workflow which will:
+
 - Build native binaries for Windows, macOS (Intel + Apple Silicon), and Linux
 - Create a GitHub release with all installers
 - Upload release artifacts
@@ -46,16 +48,19 @@ Alternatively, you can manually trigger a release via GitHub Actions:
 The workflow generates the following installers:
 
 ### Windows
+
 - **MSI Installer**: `phoenix-rooivalk-threat-simulator_{version}_x64.msi`
   - Standard Windows installer package
 
 ### macOS
+
 - **Intel DMG**: `phoenix-rooivalk-threat-simulator_{version}_x64-intel.dmg`
   - For Intel-based Macs
 - **Apple Silicon DMG**: `phoenix-rooivalk-threat-simulator_{version}_arm64.dmg`
   - For M1/M2/M3 Macs
 
 ### Linux
+
 - **AppImage**: `phoenix-rooivalk-threat-simulator_{version}_amd64.AppImage`
   - Portable, no installation required
   - Works on most Linux distributions
@@ -64,7 +69,8 @@ The workflow generates the following installers:
 
 ## Icon Setup
 
-The application uses icons defined in `src-tauri/tauri.conf.json`. To generate all required icon sizes:
+The application uses icons defined in `src-tauri/tauri.conf.json`. To generate
+all required icon sizes:
 
 ### Option 1: Using Tauri CLI (Recommended)
 
@@ -74,6 +80,7 @@ cargo tauri icon path/to/source-icon.png
 ```
 
 This will generate all required icon sizes in `src-tauri/icons/`:
+
 - `32x32.png`
 - `128x128.png`
 - `128x128@2x.png`
@@ -81,6 +88,7 @@ This will generate all required icon sizes in `src-tauri/icons/`:
 - `icon.ico` (Windows)
 
 **Source icon requirements:**
+
 - At least 1024x1024 pixels
 - PNG format
 - Square (1:1 aspect ratio)
@@ -120,18 +128,21 @@ Installers will be created in `src-tauri/target/release/bundle/`.
 ### Platform-Specific Testing
 
 **Windows:**
+
 ```powershell
 # Install and test MSI
 msiexec /i "target\release\bundle\msi\Phoenix Rooivalk Threat Simulator_0.1.0_x64_en-US.msi"
 ```
 
 **macOS:**
+
 ```bash
 # Mount and test DMG
 open "target/release/bundle/dmg/Phoenix Rooivalk Threat Simulator_0.1.0_x64.dmg"
 ```
 
 **Linux:**
+
 ```bash
 # Test AppImage
 chmod +x target/release/bundle/appimage/*.AppImage
@@ -146,6 +157,7 @@ sudo dpkg -i target/release/bundle/deb/*.deb
 ### Build Fails with Missing Dependencies
 
 **Linux:**
+
 ```bash
 sudo apt-get install -y \
   libwebkit2gtk-4.1-dev \
@@ -162,16 +174,20 @@ sudo apt-get install -y \
 ```
 
 **macOS:**
+
 ```bash
 xcode-select --install
 ```
 
 **Windows:**
-- Install [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+
+- Install
+  [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
 ### Icon Generation Fails
 
 If `cargo tauri icon` fails:
+
 1. Ensure source icon is at least 1024×1024 pixels
 2. Use PNG format with transparent background
 3. Manually create icons using image editing software
@@ -181,11 +197,13 @@ If `cargo tauri icon` fails:
 The workflow expects specific file paths. If builds succeed but uploads fail:
 
 1. Check the bundle directory structure:
+
    ```bash
    ls -R src-tauri/target/release/bundle/
    ```
 
-2. Update asset paths in `.github/workflows/release-desktop.yml` to match actual output
+2. Update asset paths in `.github/workflows/release-desktop.yml` to match actual
+   output
 
 ## Version Numbering
 
@@ -196,6 +214,7 @@ Follow [Semantic Versioning](https://semver.org/):
 - **PATCH**: Bug fixes, backward compatible
 
 Examples:
+
 - `0.1.0` → Initial release
 - `0.2.0` → New features added
 - `0.2.1` → Bug fixes
@@ -223,6 +242,7 @@ After release:
 ## Continuous Integration
 
 The release workflow automatically:
+
 1. ✅ Validates version format
 2. ✅ Builds for all platforms in parallel
 3. ✅ Creates GitHub release with changelogs

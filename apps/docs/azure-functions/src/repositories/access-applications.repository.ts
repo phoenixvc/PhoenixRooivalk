@@ -196,8 +196,7 @@ export class AccessApplicationsRepository extends BaseRepository<AccessApplicati
    * Get count by status
    */
   async getCountByStatus(): Promise<Record<ApplicationStatus, number>> {
-    const query =
-      "SELECT c.status, COUNT(1) as count FROM c GROUP BY c.status";
+    const query = "SELECT c.status, COUNT(1) as count FROM c GROUP BY c.status";
     const container = this.getContainerRef();
     const { resources } = await container.items
       .query<{ status: ApplicationStatus; count: number }>({ query })

@@ -19,7 +19,10 @@ import {
 import Link from "@docusaurus/Link";
 import { ProfileCompletion, UserProfileDetails } from "./ProfileCompletion";
 import { AIFunFacts } from "./AIFunFacts";
-import { AccessApplicationForm, AccessApplication } from "./AccessApplicationForm";
+import {
+  AccessApplicationForm,
+  AccessApplication,
+} from "./AccessApplicationForm";
 import { submitAccessApplication } from "../../services/access-applications";
 import "./OnboardingWalkthrough.css";
 
@@ -957,7 +960,9 @@ export function OnboardingWalkthrough({
     return (
       <>
         <div className="onboarding-backdrop" />
-        <div className={`onboarding-modal onboarding-modal--wide ${getModalClass()}`}>
+        <div
+          className={`onboarding-modal onboarding-modal--wide ${getModalClass()}`}
+        >
           <div className="onboarding-content">
             <div className="onboarding-progress">
               <div

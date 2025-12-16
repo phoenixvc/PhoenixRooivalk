@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Operator interfaces require real-time updates (<500ms) for situational awareness, alerts, and system control
-2. **Decision**: Implement Azure SignalR for cloud-to-client real-time communication with WebSocket fallback and priority messaging
+1. **Problem**: Operator interfaces require real-time updates (<500ms) for
+   situational awareness, alerts, and system control
+2. **Decision**: Implement Azure SignalR for cloud-to-client real-time
+   communication with WebSocket fallback and priority messaging
 3. **Trade-off**: Infrastructure cost vs. real-time responsiveness
 
 ---
@@ -35,23 +37,23 @@ prerequisites:
 
 ### Use Cases
 
-| Use Case | Latency Requirement | Direction |
-|----------|---------------------|-----------|
-| Track updates | <500ms | Edge → Cloud → Client |
-| Alert notifications | <200ms | Cloud → Client |
-| Operator commands | <100ms | Client → Cloud → Edge |
-| System status | <1s | Edge → Cloud → Client |
-| Video streams | <2s | Edge → Cloud → Client |
+| Use Case            | Latency Requirement | Direction             |
+| ------------------- | ------------------- | --------------------- |
+| Track updates       | <500ms              | Edge → Cloud → Client |
+| Alert notifications | <200ms              | Cloud → Client        |
+| Operator commands   | <100ms              | Client → Cloud → Edge |
+| System status       | <1s                 | Edge → Cloud → Client |
+| Video streams       | <2s                 | Edge → Cloud → Client |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Latency | <500ms typical, <2s max |
-| Connections | 100+ concurrent operators |
+| Requirement | Specification                    |
+| ----------- | -------------------------------- |
+| Latency     | <500ms typical, <2s max          |
+| Connections | 100+ concurrent operators        |
 | Reliability | Auto-reconnect, message ordering |
-| Security | Authenticated, encrypted |
-| Scalability | Horizontal scaling |
+| Security    | Authenticated, encrypted         |
+| Scalability | Horizontal scaling               |
 
 ---
 
@@ -112,7 +114,7 @@ Adopt **Azure SignalR Service** with custom protocol layers:
 
 ```typescript
 interface TrackUpdate {
-  type: 'track.update';
+  type: "track.update";
   trackId: string;
   timestamp: number;
   position: {
@@ -138,9 +140,9 @@ interface TrackUpdate {
 
 ```typescript
 interface AlertNotification {
-  type: 'alert';
+  type: "alert";
   alertId: string;
-  severity: 'critical' | 'warning' | 'info';
+  severity: "critical" | "warning" | "info";
   timestamp: number;
   title: string;
   message: string;
@@ -152,7 +154,7 @@ interface AlertNotification {
 interface AlertAction {
   id: string;
   label: string;
-  action: 'acknowledge' | 'engage' | 'dismiss' | 'escalate';
+  action: "acknowledge" | "engage" | "dismiss" | "escalate";
 }
 ```
 
@@ -160,7 +162,7 @@ interface AlertAction {
 
 ```typescript
 interface OperatorCommand {
-  type: 'command';
+  type: "command";
   commandId: string;
   targetNode: string;
   action: string;
@@ -278,18 +280,21 @@ public async Task BroadcastAlert(
 ### React Hook
 
 ```typescript
-import { useEffect, useState, useCallback } from 'react';
-import * as signalR from '@microsoft/signalr';
+import { useEffect, useState, useCallback } from "react";
+import * as signalR from "@microsoft/signalr";
 
 export function useSignalR() {
-  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
-  const [connectionState, setConnectionState] = useState<signalR.HubConnectionState>(
-    signalR.HubConnectionState.Disconnected
+  const [connection, setConnection] = useState<signalR.HubConnection | null>(
+    null,
   );
+  const [connectionState, setConnectionState] =
+    useState<signalR.HubConnectionState>(
+      signalR.HubConnectionState.Disconnected,
+    );
 
   useEffect(() => {
     const conn = new signalR.HubConnectionBuilder()
-      .withUrl('/api/signalr', {
+      .withUrl("/api/signalr", {
         accessTokenFactory: () => getAuthToken(),
       })
       .withAutomaticReconnect({
@@ -297,18 +302,25 @@ export function useSignalR() {
           // Exponential backoff: 0, 2, 4, 8, 16, 30, 30, 30...
           return Math.min(
             Math.pow(2, retryContext.previousRetryCount) * 1000,
-            30000
+            30000,
           );
         },
       })
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    conn.onclose(() => setConnectionState(signalR.HubConnectionState.Disconnected));
-    conn.onreconnecting(() => setConnectionState(signalR.HubConnectionState.Reconnecting));
-    conn.onreconnected(() => setConnectionState(signalR.HubConnectionState.Connected));
+    conn.onclose(() =>
+      setConnectionState(signalR.HubConnectionState.Disconnected),
+    );
+    conn.onreconnecting(() =>
+      setConnectionState(signalR.HubConnectionState.Reconnecting),
+    );
+    conn.onreconnected(() =>
+      setConnectionState(signalR.HubConnectionState.Connected),
+    );
 
-    conn.start()
+    conn
+      .start()
       .then(() => setConnectionState(signalR.HubConnectionState.Connected))
       .catch(console.error);
 
@@ -326,7 +338,7 @@ export function useSignalR() {
         return () => connection.off(event, handler);
       }
     },
-    [connection]
+    [connection],
   );
 
   const send = useCallback(
@@ -334,9 +346,9 @@ export function useSignalR() {
       if (connection?.state === signalR.HubConnectionState.Connected) {
         return connection.invoke(method, ...args);
       }
-      throw new Error('Not connected');
+      throw new Error("Not connected");
     },
-    [connection]
+    [connection],
   );
 
   return { connection, connectionState, subscribe, send };
@@ -351,7 +363,7 @@ export function useTracks() {
   const [tracks, setTracks] = useState<Map<string, Track>>(new Map());
 
   useEffect(() => {
-    const unsubscribe = subscribe('TrackUpdate', (update: TrackUpdate) => {
+    const unsubscribe = subscribe("TrackUpdate", (update: TrackUpdate) => {
       setTracks((prev) => {
         const next = new Map(prev);
         next.set(update.trackId, {
@@ -395,10 +407,10 @@ export function useTracks() {
 
 ```typescript
 enum MessagePriority {
-  Critical = 0,    // Engagement alerts
-  High = 1,        // Active track updates
-  Normal = 2,      // Status updates
-  Low = 3,         // Telemetry
+  Critical = 0, // Engagement alerts
+  High = 1, // Active track updates
+  Normal = 2, // Status updates
+  Low = 3, // Telemetry
 }
 
 interface PrioritizedMessage {
