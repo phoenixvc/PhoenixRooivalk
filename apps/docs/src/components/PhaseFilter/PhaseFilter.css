@@ -68,13 +68,13 @@
 .phase-filter__select {
   padding: 0.375rem 2rem 0.375rem 0.75rem;
   font-size: 0.875rem;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  border: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-300));
   border-radius: 0.375rem;
-  background-color: var(--ifm-background-surface-color);
-  color: var(--ifm-color-content);
+  background-color: var(--pr-bg-muted, var(--ifm-background-surface-color));
+  color: var(--pr-fg-base, var(--ifm-color-content));
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
   background-position: right 0.5rem center;
   background-repeat: no-repeat;
   background-size: 1.25rem;
@@ -82,13 +82,13 @@
 }
 
 .phase-filter__select:hover {
-  border-color: var(--ifm-color-primary);
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
 }
 
 .phase-filter__select:focus {
   outline: none;
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 2px var(--ifm-color-primary-lightest);
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
 }
 
 /* Button mode */
@@ -106,29 +106,29 @@
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  border: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-300));
   border-radius: 0.375rem;
-  background-color: var(--ifm-background-surface-color);
-  color: var(--ifm-color-content-secondary);
+  background-color: var(--pr-bg-muted, var(--ifm-background-surface-color));
+  color: var(--pr-fg-muted, var(--ifm-color-content-secondary));
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
 }
 
 .phase-filter__button:hover {
-  border-color: var(--ifm-color-primary);
-  color: var(--ifm-color-primary);
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
+  color: var(--pr-brand-orange, var(--ifm-color-primary));
 }
 
 .phase-filter__button--active {
-  background-color: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
+  background-color: var(--pr-brand-orange, var(--ifm-color-primary));
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
   color: white;
 }
 
 .phase-filter__button--active:hover {
-  background-color: var(--ifm-color-primary-dark);
-  border-color: var(--ifm-color-primary-dark);
+  background-color: var(--pr-brand-orange-dark, var(--ifm-color-primary-dark));
+  border-color: var(--pr-brand-orange-dark, var(--ifm-color-primary-dark));
   color: white;
 }
 
@@ -146,7 +146,7 @@
   gap: 0.5rem;
   margin: 0.75rem 0;
   padding: 0.5rem 0.75rem;
-  background-color: var(--ifm-color-emphasis-100);
+  background-color: var(--pr-bg-muted, var(--ifm-color-emphasis-100));
   border-radius: 0.5rem;
   font-size: 0.8125rem;
 }
@@ -271,8 +271,9 @@
 /* Sidebar integration */
 .sidebar-phase-filter {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-200));
   margin-bottom: 0.5rem;
+  background-color: var(--pr-bg-subtle, var(--ifm-background-color));
 }
 
 .sidebar-phase-filter .phase-filter__label {
@@ -299,7 +300,7 @@
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ifm-color-content-secondary);
+  color: var(--pr-fg-muted, var(--ifm-color-content-secondary));
   font-weight: 600;
 }
 
@@ -312,9 +313,9 @@
   padding: 0.25rem 0.5rem;
   font-size: 0.6875rem;
   font-weight: 500;
-  color: var(--ifm-color-content-secondary);
+  color: var(--pr-fg-muted, var(--ifm-color-content-secondary));
   background: transparent;
-  border: 1px solid var(--ifm-color-emphasis-300);
+  border: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-300));
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -322,15 +323,15 @@
 }
 
 .phase-filter__clear:hover {
-  color: var(--ifm-color-danger);
-  border-color: var(--ifm-color-danger);
+  color: var(--pr-status-error, var(--ifm-color-danger));
+  border-color: var(--pr-status-error, var(--ifm-color-danger));
 }
 
 /* Phase filter container in sidebar */
 #phase-filter-container {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  background-color: var(--ifm-background-surface-color);
+  border-bottom: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-200));
+  background-color: var(--pr-bg-subtle, var(--ifm-background-color));
 }
 
 /* Add helper text for context */
@@ -338,7 +339,7 @@
   content: "Show docs relevant to your funding stage";
   display: block;
   font-size: 0.625rem;
-  color: var(--ifm-color-content-secondary);
+  color: var(--pr-fg-subtle, var(--ifm-color-content-secondary));
   margin-bottom: 0.5rem;
   opacity: 0.8;
 }
