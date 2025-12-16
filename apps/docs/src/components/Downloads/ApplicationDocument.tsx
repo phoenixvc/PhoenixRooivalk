@@ -169,9 +169,10 @@ export default function ApplicationDocument({
 
       // Focus trap: keep Tab cycling inside the modal
       if (e.key === "Tab" && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        );
+        const focusableElements =
+          modalRef.current.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          );
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
 
