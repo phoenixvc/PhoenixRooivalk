@@ -20,7 +20,7 @@
     "@phoenix-rooivalk/utils": "workspace:*",
     "next": "16.0.10",
     "react": "19.2.3",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
