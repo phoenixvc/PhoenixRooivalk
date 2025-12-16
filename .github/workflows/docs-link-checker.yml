@@ -30,8 +30,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.6.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -97,7 +95,7 @@ jobs:
         if:
           failure() && github.event_name == 'pull_request' &&
           steps.link-check.outputs.has_broken_links == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const brokenLinks = `${{ steps.link-check.outputs.broken_links }}`;
