@@ -57,6 +57,61 @@ prerequisites:
 
 ---
 
+## Options Considered
+
+### Comparison Table
+
+| Option | Technology | Latency | Scalability | Cost | Complexity |
+| --- | --- | --- | --- | --- | --- |
+| **Option 1: Azure SignalR** ✅ | Managed WebSocket service | <500ms | High (auto-scale) | Medium ($) | Low |
+| **Option 2: gRPC Streaming** | HTTP/2 bidirectional | <200ms | Medium | Low | High |
+| **Option 3: Kafka + WebSocket** | Event streaming + WS | <1s | Very High | High ($$) | Very High |
+| **Option 4: Raw WebSocket** | Native WS implementation | <100ms | Low | Very Low | Medium |
+
+### Detailed Comparison
+
+#### Option 1: Azure SignalR Service ✅ Selected
+
+| Aspect | Details |
+| --- | --- |
+| **Description** | Managed real-time messaging service with automatic WebSocket/SSE fallback |
+| **Pros** | Managed scaling, auto-reconnect, Azure Functions integration, built-in auth |
+| **Cons** | Azure lock-in, per-unit pricing, limited customization |
+
+**Why Selected**: Best balance of reliability, scalability, and development speed. Native Azure Functions integration reduces operational complexity. Managed service handles connection scaling automatically.
+
+#### Option 2: gRPC Streaming ❌ Rejected
+
+| Aspect | Details |
+| --- | --- |
+| **Description** | HTTP/2-based bidirectional streaming with Protocol Buffers |
+| **Pros** | Lowest latency, strong typing, efficient binary protocol |
+| **Cons** | Limited browser support (requires grpc-web proxy), complex error handling |
+
+**Why Rejected**: Browser clients require proxy layer (Envoy/grpc-web), adding infrastructure complexity. Not suitable for direct web client connections.
+
+#### Option 3: Kafka + WebSocket ❌ Rejected
+
+| Aspect | Details |
+| --- | --- |
+| **Description** | Apache Kafka for event streaming with WebSocket gateway for client delivery |
+| **Pros** | Highest throughput, event replay capability, decoupled architecture |
+| **Cons** | High operational overhead, latency from Kafka consumer lag, expensive infrastructure |
+
+**Why Rejected**: Over-engineered for our 100+ operator scale. Kafka adds unnecessary complexity and cost without proportional benefits at current scale.
+
+#### Option 4: Raw WebSocket ❌ Rejected
+
+| Aspect | Details |
+| --- | --- |
+| **Description** | Custom WebSocket server implementation (Node.js ws or uWebSockets.js) |
+| **Pros** | Full control, lowest cost, no vendor lock-in |
+| **Cons** | Manual scaling, reconnection logic, no built-in auth/groups |
+
+**Why Rejected**: Requires significant development effort for connection management, scaling, and reliability features that SignalR provides out-of-box.
+
+---
+
 ## Decision
 
 Adopt **Azure SignalR Service** with custom protocol layers:

@@ -144,6 +144,56 @@ export default function ApplicationDocument({
   const [showPreview, setShowPreview] = React.useState(false);
   const [linkCopied, setLinkCopied] = React.useState(false);
 
+  // Refs for modal accessibility
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const previousActiveElement = React.useRef<HTMLElement | null>(null);
+
+  // Focus trap and keyboard handling for modal
+  React.useEffect(() => {
+    if (!showPreview) return;
+
+    // Save the currently focused element to restore later
+    previousActiveElement.current = document.activeElement as HTMLElement;
+
+    // Focus the modal when it opens
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+
+    // Handle Escape key to close modal
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowPreview(false);
+        return;
+      }
+
+      // Focus trap: keep Tab cycling inside the modal
+      if (e.key === "Tab" && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      // Restore focus to the previously focused element when modal closes
+      previousActiveElement.current?.focus();
+    };
+  }, [showPreview]);
+
   const showToast = React.useCallback(
     (message: string, type: "success" | "info" | "error" = "success") => {
       setToast({ visible: true, message, type });
@@ -440,11 +490,16 @@ export default function ApplicationDocument({
           onClick={() => setShowPreview(false)}
         >
           <div
+            ref={modalRef}
             className={styles.previewModal}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="preview-title"
+            tabIndex={-1}
           >
             <div className={styles.previewHeader}>
-              <h3>{auxiliaryPdfLabel}</h3>
+              <h3 id="preview-title">{auxiliaryPdfLabel}</h3>
               <button
                 className={styles.previewClose}
                 onClick={() => setShowPreview(false)}
