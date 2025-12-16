@@ -205,12 +205,21 @@ to understand what successful applicants demonstrated.
 
 ## Next Steps
 
+### PriviDox Response
+
+A draft response to the PriviDox missing documents email has been prepared with a
+strategy to maintain our application position while honestly disclosing our TRL
+status. See
+[Draft Response to PriviDox Email](./cuas-sandbox-missing-documents#draft-response-to-prividox-email)
+for the full email template and risk assessment.
+
 ### Immediate Actions
 
-1. [ ] Assess if partial application already submitted needs withdrawal
-2. [ ] Identify Q1 2026 accelerator applications
-3. [ ] Create TRL 5 achievement roadmap
-4. [ ] Document current capabilities for future applications
+1. [ ] Review and send the draft PriviDox response email
+2. [ ] Assess if partial application already submitted needs withdrawal
+3. [ ] Identify Q1 2026 accelerator applications
+4. [ ] Create TRL 5 achievement roadmap
+5. [ ] Document current capabilities for future applications
 
 ### Accelerator Applications to Prioritize
 

@@ -416,6 +416,28 @@ body,
   border-bottom: 1px solid var(--pr-border-muted);
   box-shadow: var(--pr-shadow-sm);
   transition: background-color var(--pr-duration-slow) var(--pr-ease);
+  height: 60px;
+}
+
+/* Navbar inner container - proper vertical alignment */
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  max-width: 100%;
+}
+
+/* Navbar items containers - proper vertical alignment */
+.navbar__items {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navbar__items--right {
+  display: flex;
+  align-items: center;
+  gap: var(--pr-space-2);
 }
 
 [data-theme="light"] .navbar {
@@ -424,12 +446,16 @@ body,
 }
 
 .navbar__brand {
+  display: flex;
+  align-items: center;
   font-weight: 700;
   font-size: var(--pr-text-xl);
   color: var(--pr-brand-orange) !important;
 }
 
 .navbar__link {
+  display: flex;
+  align-items: center;
   color: var(--pr-fg-base) !important;
   font-weight: 500;
   transition: color var(--pr-duration-normal) var(--pr-ease);
@@ -826,7 +852,7 @@ h3 {
   }
 }
 
-/* Search */
+/* Search - Dark mode (default) */
 .DocSearch {
   --docsearch-primary-color: rgb(249, 115, 22);
   --docsearch-text-color: rgb(242, 244, 246);
@@ -843,6 +869,27 @@ h3 {
   --docsearch-hit-background: rgb(30, 41, 59);
   --docsearch-key-gradient: rgb(51, 65, 85);
   --docsearch-key-shadow: none;
+}
+
+/* Search - Light mode */
+[data-theme="light"] .DocSearch {
+  --docsearch-text-color: rgb(15, 23, 42);
+  --docsearch-muted-color: rgb(100, 116, 139);
+  --docsearch-container-background: rgba(241, 245, 249, 0.9);
+  --docsearch-modal-background: rgb(255, 255, 255);
+  --docsearch-searchbox-background: rgb(241, 245, 249);
+  --docsearch-searchbox-focus-background: rgb(241, 245, 249);
+  --docsearch-hit-color: rgb(15, 23, 42);
+  --docsearch-hit-background: rgb(248, 250, 252);
+  --docsearch-key-gradient: rgb(226, 232, 240);
+}
+
+/* Search button alignment in navbar */
+.DocSearch-Button {
+  display: flex !important;
+  align-items: center !important;
+  height: 36px;
+  margin: 0 !important;
 }
 
 /* ============================================
@@ -1349,6 +1396,14 @@ select:focus-visible {
 }
 
 /* Theme toggle button */
+[class*="colorMode"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+}
+
 .navbar__items button:focus-visible,
 [class*="colorMode"]:focus-visible {
   outline: 2px solid var(--pr-brand-orange);
@@ -2290,22 +2345,35 @@ html {
    Using Design Tokens
    ================================================ */
 
-/* Hide the right TOC sidebar completely */
-.theme-doc-toc-desktop,
+/* Hide the right TOC sidebar - use visibility to preserve layout space */
+.theme-doc-toc-desktop {
+  visibility: hidden !important;
+  pointer-events: none;
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
 .theme-doc-toc-mobile {
   display: none !important;
 }
 
-/* Main doc container */
+/* Main doc container - ensures content is centered */
 .docMainContainer {
   max-width: 100%;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Container - full width */
+/* Container - full width but centered content */
 .container {
+  width: 100%;
   max-width: 100% !important;
-  margin: 0;
+  margin: 0 auto;
   padding: 0 var(--pr-space-8);
 }
 
@@ -2377,9 +2445,15 @@ article {
   padding: 0;
 }
 
-/* Remove the col--3 spacing that was for TOC */
+/* Hide the col--3 (TOC column) - preserve layout space */
 .col.col--3 {
-  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none;
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 0 !important;
 }
 
 /* Doc item wrapper - centered with fixed max-width for proper centering */
@@ -2409,11 +2483,127 @@ article {
   }
 }
 
-/* Sidebar left */
+/* ================================================
+   SIDEBAR: Collapsible & Resizable
+   User-adjustable sidebar with collapse toggle
+   ================================================ */
+
+/* Sidebar left - resizable */
 .theme-doc-sidebar-container {
-  width: 280px;
-  min-width: 280px;
+  --sidebar-width: 280px;
+  --sidebar-min-width: 200px;
+  --sidebar-max-width: 400px;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-min-width);
+  max-width: var(--sidebar-max-width);
   flex-shrink: 0;
+  position: relative;
+  transition: width 0.2s ease, min-width 0.2s ease, opacity 0.2s ease;
+}
+
+/* Collapsed state */
+.theme-doc-sidebar-container.sidebar--collapsed {
+  --sidebar-width: 48px;
+  min-width: 48px;
+  width: 48px;
+}
+
+.theme-doc-sidebar-container.sidebar--collapsed .menu,
+.theme-doc-sidebar-container.sidebar--collapsed .sidebar-phase-filter,
+.theme-doc-sidebar-container.sidebar--collapsed #phase-filter-container,
+.theme-doc-sidebar-container.sidebar--collapsed .sidebar-rec {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Sidebar collapse toggle button */
+.sidebar-toggle {
+  position: absolute;
+  top: 12px;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--pr-bg-muted);
+  border: 1px solid var(--pr-border-muted);
+  color: var(--pr-fg-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 100;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-toggle:hover {
+  background: var(--pr-brand-orange);
+  border-color: var(--pr-brand-orange);
+  color: white;
+  transform: scale(1.1);
+}
+
+.sidebar-toggle__icon {
+  transition: transform 0.2s ease;
+}
+
+.sidebar--collapsed .sidebar-toggle__icon {
+  transform: rotate(180deg);
+}
+
+/* Sidebar resize handle */
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 0.2s ease;
+  z-index: 50;
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle.resizing {
+  background: var(--pr-brand-orange);
+}
+
+.sidebar-resize-handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 40px;
+  background: var(--pr-border-muted);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-resize-handle:hover::after {
+  opacity: 1;
+  background: var(--pr-brand-orange);
+}
+
+/* Collapsed sidebar toggle position */
+.sidebar--collapsed .sidebar-toggle {
+  right: 10px;
+}
+
+/* Hide resize handle when collapsed */
+.sidebar--collapsed .sidebar-resize-handle {
+  display: none;
+}
+
+/* Ensure sidebar content wrapper */
+.theme-doc-sidebar-container > div {
+  height: 100%;
+  overflow: hidden;
 }
 
 /* Main wrapper */

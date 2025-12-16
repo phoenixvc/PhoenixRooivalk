@@ -22,7 +22,7 @@ import { NavbarNotifications } from "../components/NavbarNotifications";
 import { OfflineIndicator } from "../components/Offline";
 import { OnboardingWalkthrough } from "../components/Onboarding";
 import { PDFDownloadButton } from "../components/PDFDownload";
-import { SidebarRecommendations } from "../components/Sidebar";
+import { SidebarRecommendations, SidebarControls } from "../components/Sidebar";
 import { SidebarPhaseFilter } from "../components/PhaseFilter";
 import { AuthProvider } from "../contexts/AuthContext";
 import { PhaseFilterProvider } from "../contexts/PhaseFilterContext";
@@ -119,6 +119,9 @@ export default function Root({ children }: RootProps): React.ReactElement {
                 </SilentErrorBoundary>
                 <SilentErrorBoundary>
                   <SidebarPhaseFilter />
+                </SilentErrorBoundary>
+                <SilentErrorBoundary>
+                  <SidebarControls />
                 </SilentErrorBoundary>
                 <SilentErrorBoundary>
                   <AIFloatingWidget pageContext={pageContext} />

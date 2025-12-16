@@ -59,28 +59,31 @@
 
 /* ============================================
    Floating Comment Button
+   Positioned to avoid overlap with AI widget (bottom-right)
    ============================================ */
 .floatingCommentBtn {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 56px;
-  height: 56px;
+  bottom: 90px; /* Above AI widget which is at bottom: 24px */
+  right: 24px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: var(--ifm-color-primary);
-  color: white;
-  border: none;
+  background: var(--pr-bg-muted, var(--ifm-color-primary));
+  color: var(--pr-fg-base, white);
+  border: 1px solid var(--pr-border-muted, transparent);
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  z-index: 90;
+  z-index: var(--z-index-ai-widget, 700);
 }
 
 .floatingCommentBtn:hover {
-  background: var(--ifm-color-primary-dark);
+  background: var(--pr-brand-orange, var(--ifm-color-primary));
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
+  color: white;
   transform: scale(1.05);
 }
 
@@ -474,10 +477,10 @@
   }
 
   .floatingCommentBtn {
-    bottom: 1rem;
-    right: 1rem;
-    width: 48px;
-    height: 48px;
+    bottom: 80px; /* Above AI widget on mobile */
+    right: 16px;
+    width: 44px;
+    height: 44px;
   }
 
   .commentBtnIcon {
