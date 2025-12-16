@@ -87,7 +87,7 @@ async function sendEmailHandler(
     );
 
     if (!authResult.valid) {
-      return Errors.unauthorized("Authentication required to send emails");
+      return Errors.unauthenticated("Authentication required to send emails");
     }
 
     const data = (await request.json()) as SendEmailRequest;
