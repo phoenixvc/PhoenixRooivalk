@@ -6,21 +6,35 @@
 
 .sidebar-rec {
   position: fixed;
-  left: 0;
-  bottom: 100px;
-  width: 280px;
-  margin: 0.5rem;
+  left: 12px;
+  bottom: 120px;
+  width: 260px;
   background: linear-gradient(
-    135deg,
-    rgba(30, 41, 59, 0.98),
+    145deg,
+    rgba(30, 41, 59, 0.96),
     rgba(15, 23, 42, 0.98)
   );
-  border: 1px solid rgba(249, 115, 22, 0.3);
-  border-radius: 12px;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 14px;
   overflow: hidden;
   z-index: 100;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  backdrop-filter: blur(12px);
+}
+
+/* Light mode */
+[data-theme="light"] .sidebar-rec {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(248, 250, 252, 0.98)
+  );
+  border-color: rgba(249, 115, 22, 0.2);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 /* Mobile: Convert to collapsible drawer that doesn't overlap floating widgets */
@@ -76,26 +90,30 @@
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   background: transparent;
   border: none;
   cursor: pointer;
   color: rgb(242, 244, 246);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: background-color 0.2s ease;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .sidebar-rec-header {
+  color: rgb(30, 41, 59);
 }
 
 /* Widget label - distinguish from nav items */
 .sidebar-rec-header::after {
   content: "WIDGET";
   font-size: 0.5625rem;
-  font-weight: 500;
-  padding: 0.125rem 0.375rem;
-  background: rgba(249, 115, 22, 0.2);
+  font-weight: 600;
+  padding: 0.1875rem 0.4375rem;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(249, 115, 22, 0.15));
   color: rgb(249, 115, 22);
   border-radius: 4px;
   margin-left: auto;
@@ -103,7 +121,11 @@
 }
 
 .sidebar-rec-header:hover {
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(249, 115, 22, 0.08);
+}
+
+[data-theme="light"] .sidebar-rec-header:hover {
+  background: rgba(249, 115, 22, 0.06);
 }
 
 .sidebar-rec-icon {
@@ -161,10 +183,16 @@
 }
 
 .sidebar-rec-profile {
-  padding: 0.5rem 0.75rem;
-  background: rgba(51, 65, 85, 0.5);
+  padding: 0.625rem 0.875rem;
+  background: rgba(51, 65, 85, 0.4);
   border-radius: 8px;
   margin-bottom: 0.75rem;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+[data-theme="light"] .sidebar-rec-profile {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(203, 213, 225, 0.5);
 }
 
 .sidebar-rec-profile-label {
@@ -176,10 +204,19 @@
   margin-bottom: 0.25rem;
 }
 
+[data-theme="light"] .sidebar-rec-profile-label {
+  color: rgb(100, 116, 139);
+}
+
 .sidebar-rec-profile-text {
   font-size: 0.8125rem;
   color: rgb(226, 230, 234);
   font-style: italic;
+  line-height: 1.4;
+}
+
+[data-theme="light"] .sidebar-rec-profile-text {
+  color: rgb(51, 65, 85);
 }
 
 .sidebar-rec-list {
@@ -197,8 +234,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(51, 65, 85, 0.4);
-  border: 1px solid transparent;
+  background: rgba(51, 65, 85, 0.35);
+  border: 1px solid rgba(71, 85, 105, 0.2);
   border-radius: 8px;
   color: rgb(226, 230, 234) !important;
   text-decoration: none !important;
@@ -206,10 +243,21 @@
   transition: all 0.2s ease;
 }
 
+[data-theme="light"] .sidebar-rec-link {
+  background: rgba(241, 245, 249, 0.7);
+  border-color: rgba(203, 213, 225, 0.4);
+  color: rgb(51, 65, 85) !important;
+}
+
 .sidebar-rec-link:hover {
-  background: rgba(249, 115, 22, 0.15);
+  background: rgba(249, 115, 22, 0.12);
   border-color: rgba(249, 115, 22, 0.4);
   color: rgb(249, 115, 22) !important;
+  transform: translateX(2px);
+}
+
+[data-theme="light"] .sidebar-rec-link:hover {
+  background: rgba(249, 115, 22, 0.08);
 }
 
 .sidebar-rec-emoji {
