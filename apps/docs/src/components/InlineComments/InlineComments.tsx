@@ -36,10 +36,11 @@ export function InlineComments({
   const containerRef = useRef<HTMLDivElement>(null);
   const [comments, setComments] = useState<InlineComment[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [pendingSelection, setPendingSelection] = useState<TextSelection | null>(null);
+  const [pendingSelection, setPendingSelection] =
+    useState<TextSelection | null>(null);
 
   const isAdmin = Boolean(
-    user?.email && ADMIN_DOMAINS.some((d) => user.email?.endsWith(`@${d}`))
+    user?.email && ADMIN_DOMAINS.some((d) => user.email?.endsWith(`@${d}`)),
   );
 
   // Subscribe to comments
@@ -49,7 +50,7 @@ export function InlineComments({
     const unsubscribe = subscribeToInlineComments(
       pageId,
       (updatedComments) => setComments(updatedComments),
-      (error) => console.error("Failed to load inline comments:", error)
+      (error) => console.error("Failed to load inline comments:", error),
     );
 
     return () => unsubscribe?.();
@@ -66,7 +67,7 @@ export function InlineComments({
       setPendingSelection(selection);
       setIsPanelOpen(true);
     },
-    [user]
+    [user],
   );
 
   // Submit comment
@@ -81,7 +82,7 @@ export function InlineComments({
         comment,
       });
     },
-    [pageId, user]
+    [pageId, user],
   );
 
   // Delete comment

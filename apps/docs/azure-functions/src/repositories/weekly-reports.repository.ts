@@ -213,8 +213,7 @@ export class WeeklyReportsRepository extends BaseRepository<WeeklyReport> {
    * Get reports count by status
    */
   async getCountByStatus(): Promise<Record<ReportStatus, number>> {
-    const query =
-      "SELECT c.status, COUNT(1) as count FROM c GROUP BY c.status";
+    const query = "SELECT c.status, COUNT(1) as count FROM c GROUP BY c.status";
     const container = this.getContainerRef();
     const { resources } = await container.items
       .query<{ status: ReportStatus; count: number }>({ query })

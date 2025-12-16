@@ -30,9 +30,11 @@ tags:
 
 **From:** Broad military drone swarm defense system
 
-**To:** Focused airport drone defense targeting high-risk European markets (near Russia/Belgium)
+**To:** Focused airport drone defense targeting high-risk European markets (near
+Russia/Belgium)
 
-**Rationale:** South African market has minimal threat/demand; international markets offer better ROI and funding opportunities.
+**Rationale:** South African market has minimal threat/demand; international
+markets offer better ROI and funding opportunities.
 
 ---
 
@@ -53,11 +55,14 @@ tags:
 
 ### 🌍 Market Positioning
 
-**Unique Value Prop:** Counter-drone swarms using edge AI + drone-to-drone comms (no GPS/fiber dependency)
+**Unique Value Prop:** Counter-drone swarms using edge AI + drone-to-drone comms
+(no GPS/fiber dependency)
 
-**Competitive Reality:** DJI dominates hardware; heavy AI competition requires clear niche differentiation
+**Competitive Reality:** DJI dominates hardware; heavy AI competition requires
+clear niche differentiation
 
-**Entry Strategy:** Prove concept in airport defense → Build credibility → Scale to broader defense market
+**Entry Strategy:** Prove concept in airport defense → Build credibility → Scale
+to broader defense market
 
 ### 🌐 International Expansion
 
@@ -71,11 +76,13 @@ tags:
 
 **Current Assets:** 700K+ lines of documented AI software (Yuri)
 
-**Hardware Needs:** Custom drone platform required (no off-shelf solutions meet processing requirements)
+**Hardware Needs:** Custom drone platform required (no off-shelf solutions meet
+processing requirements)
 
 **Development Split:** Estimated 50/50 hardware/software effort
 
-**Demo Strategy:** Use simulators (Gazebo) for early investor pitches before physical prototypes
+**Demo Strategy:** Use simulators (Gazebo) for early investor pitches before
+physical prototypes
 
 ### ⚠️ Reality Check
 
@@ -100,13 +107,16 @@ Alastair Kim expressed interest in advisory role based on:
 - Current involvement with Japanese drone company (Tokyo market listing)
 - Alignment with team's technical capabilities and market approach
 
-**Next Step:** Offline discussion to define collaboration structure treating team as equal partners (not contractors)
+**Next Step:** Offline discussion to define collaboration structure treating
+team as equal partners (not contractors)
 
 ---
 
 ## Key Quote
 
-> "Find a very niche market that is hard to penetrate but has sizeable opportunity. Big players like DJI dominate hardware — your edge is the unserved niche with clear ROI."
+> "Find a very niche market that is hard to penetrate but has sizeable
+> opportunity. Big players like DJI dominate hardware — your edge is the
+> unserved niche with clear ROI."
 >
 > — Alastair Kim
 
@@ -116,14 +126,14 @@ Alastair Kim expressed interest in advisory role based on:
 
 ### Primary Targets (Hardware-Focused)
 
-| Program                                | Focus                    | Typical Investment | Priority       | Notes                                                        |
-| -------------------------------------- | ------------------------ | ------------------ | -------------- | ------------------------------------------------------------ |
-| SOSV                                   | Hardware/Deep Tech       | ~$500K pre-seed    | ⭐⭐⭐ HIGH     | Alastair's top recommendation; strong industry network       |
-| mHUB Accelerator                       | Manufacturing Hardware   | Varies             | ⭐⭐ MEDIUM     | Chicago-based, manufacturing focus                           |
-| Rev: Manufacturing Hardware Accelerator| Hardware Manufacturing   | Varies             | ⭐⭐ MEDIUM     | Production-scale focus                                       |
-| Highway1 (PCH)                         | Hardware Startups        | Varies             | ⭐⭐ MEDIUM     | Part of PCH ecosystem                                        |
-| Y Combinator (YC)                      | General (some hardware)  | $500K              | ⭐⭐ MEDIUM     | Competitive but prestigious                                  |
-| Ascent Deep Tech Accelerator           | Deep Tech                | Varies             | ⭐⭐ MEDIUM     | Deep tech specialization                                     |
+| Program                                 | Focus                   | Typical Investment | Priority    | Notes                                                  |
+| --------------------------------------- | ----------------------- | ------------------ | ----------- | ------------------------------------------------------ |
+| SOSV                                    | Hardware/Deep Tech      | ~$500K pre-seed    | ⭐⭐⭐ HIGH | Alastair's top recommendation; strong industry network |
+| mHUB Accelerator                        | Manufacturing Hardware  | Varies             | ⭐⭐ MEDIUM | Chicago-based, manufacturing focus                     |
+| Rev: Manufacturing Hardware Accelerator | Hardware Manufacturing  | Varies             | ⭐⭐ MEDIUM | Production-scale focus                                 |
+| Highway1 (PCH)                          | Hardware Startups       | Varies             | ⭐⭐ MEDIUM | Part of PCH ecosystem                                  |
+| Y Combinator (YC)                       | General (some hardware) | $500K              | ⭐⭐ MEDIUM | Competitive but prestigious                            |
+| Ascent Deep Tech Accelerator            | Deep Tech               | Varies             | ⭐⭐ MEDIUM | Deep tech specialization                               |
 
 ### Application Strategy
 
@@ -137,10 +147,10 @@ Alastair Kim expressed interest in advisory role based on:
 
 ### Simulation & Prototyping
 
-| Tool                    | Purpose                          | Link                                     | Status                              |
-| ----------------------- | -------------------------------- | ---------------------------------------- | ----------------------------------- |
-| Gazebo Simulator        | Drone simulation environment     | [gazebosim.org](https://gazebosim.org)   | ✅ Recommended for demos            |
-| PX4 + Gazebo Integration| Flight controller simulation     | [PX4 Docs](https://docs.px4.io)          | ✅ For AI algorithm validation      |
+| Tool                     | Purpose                      | Link                                   | Status                         |
+| ------------------------ | ---------------------------- | -------------------------------------- | ------------------------------ |
+| Gazebo Simulator         | Drone simulation environment | [gazebosim.org](https://gazebosim.org) | ✅ Recommended for demos       |
+| PX4 + Gazebo Integration | Flight controller simulation | [PX4 Docs](https://docs.px4.io)        | ✅ For AI algorithm validation |
 
 ### Demo Strategy
 
@@ -154,10 +164,10 @@ Alastair Kim expressed interest in advisory role based on:
 
 ### Middle East Innovation Hubs
 
-| Organization                       | Location   | Focus                                | Link                                                                   |
-| ---------------------------------- | ---------- | ------------------------------------ | ---------------------------------------------------------------------- |
-| UAE University Innovation Hub      | UAE        | Startup ecosystem support            | [innovationhub.uaeu.ac.ae](https://innovationhub.uaeu.ac.ae)           |
-| ADGM Tech Startup Program          | Abu Dhabi  | Tech startup incorporation & support | [adgm.com/tech-startup](https://adgm.com/tech-startup)                 |
+| Organization                  | Location  | Focus                                | Link                                                         |
+| ----------------------------- | --------- | ------------------------------------ | ------------------------------------------------------------ |
+| UAE University Innovation Hub | UAE       | Startup ecosystem support            | [innovationhub.uaeu.ac.ae](https://innovationhub.uaeu.ac.ae) |
+| ADGM Tech Startup Program     | Abu Dhabi | Tech startup incorporation & support | [adgm.com/tech-startup](https://adgm.com/tech-startup)       |
 
 ### Engagement Strategy
 
@@ -201,19 +211,26 @@ Alastair Kim expressed interest in advisory role based on:
 
 ### Funding Philosophy
 
-Multi-track approach: Pursue accelerators, grants, government hubs, and commercial projects simultaneously. Competition between funding sources strengthens negotiating position.
+Multi-track approach: Pursue accelerators, grants, government hubs, and
+commercial projects simultaneously. Competition between funding sources
+strengthens negotiating position.
 
 ### Market Positioning
 
-**Unique Value Proposition:** Counter-drone swarms using edge AI + drone-to-drone communication (no GPS/fiber dependency) — this is your differentiation in a crowded market.
+**Unique Value Proposition:** Counter-drone swarms using edge AI +
+drone-to-drone communication (no GPS/fiber dependency) — this is your
+differentiation in a crowded market.
 
 ### Incorporation Timing
 
-Wait to incorporate until after initial funding or contract awards. Premature incorporation limits accelerator eligibility and strategic flexibility.
+Wait to incorporate until after initial funding or contract awards. Premature
+incorporation limits accelerator eligibility and strategic flexibility.
 
 ### Risk-Reward Balance
 
-Despite low success probability in capital-intensive hardware sector, potential returns justify the risk. Focus on niche entry point (airport defense) as wedge into broader defense market.
+Despite low success probability in capital-intensive hardware sector, potential
+returns justify the risk. Focus on niche entry point (airport defense) as wedge
+into broader defense market.
 
 ---
 
@@ -221,42 +238,51 @@ Despite low success probability in capital-intensive hardware sector, potential 
 
 ### Martyn Redelinghuys
 
-- Await list of hardware-focused VCs and accelerators from Alastair (early next week)
+- Await list of hardware-focused VCs and accelerators from Alastair (early next
+  week)
 - Forward list to team and coordinate application strategy
-- Explore grant opportunities through South African research institutes and international innovation funds
-- Investigate prison drone defense use case and align potential markets outside South Africa
+- Explore grant opportunities through South African research institutes and
+  international innovation funds
+- Investigate prison drone defense use case and align potential markets outside
+  South Africa
 
 ### Peter La Grange
 
-- Support development of in-house custom drone hardware for demonstration purposes
-- Collaborate on defining technical demonstration requirements and simulator testing
+- Support development of in-house custom drone hardware for demonstration
+  purposes
+- Collaborate on defining technical demonstration requirements and simulator
+  testing
 - Finalize hardware specifications for investor presentations
 
 ### Jurie Smit (Yuri)
 
-- Continue documenting and refining software architecture and simulator tools for effective demos
+- Continue documenting and refining software architecture and simulator tools
+  for effective demos
 - Pursue potential partnerships or ideas for AI vision collaboration
 - Discuss offline with Alastair regarding technical collaboration opportunities
 
 ### Alastair Kim
 
-- Provide list of hardware-focused accelerators and pre-seed investors suitable for drone startups (US focus)
-- Share relevant government innovation hub contacts and strategic advice for Middle East market entry
+- Provide list of hardware-focused accelerators and pre-seed investors suitable
+  for drone startups (US focus)
+- Share relevant government innovation hub contacts and strategic advice for
+  Middle East market entry
 - Advise on pitching approach using simulators and phased incorporation strategy
-- Engage in further discussions regarding potential advisory or partnership role with PhoenixRooivalk
+- Engage in further discussions regarding potential advisory or partnership role
+  with PhoenixRooivalk
 
 ---
 
 ## 📊 Success Metrics (6-Month Horizon)
 
-| Milestone                             | Target Date | Owner  | Status      |
-| ------------------------------------- | ----------- | ------ | ----------- |
-| Accelerator applications submitted    | Week 4      | Martyn | 🔄 Pending  |
-| Simulator demo completed              | Week 6      | Yuri   | 🔄 Pending  |
-| Hardware specs finalized              | Week 8      | Peter  | 🔄 Pending  |
-| At least 1 accelerator acceptance     | Month 4     | All    | 🔄 Pending  |
-| Middle East hub engagement            | Month 3     | Martyn | 🔄 Pending  |
-| Advisory agreement with Alastair      | Month 2     | All    | 🔄 Pending  |
+| Milestone                          | Target Date | Owner  | Status     |
+| ---------------------------------- | ----------- | ------ | ---------- |
+| Accelerator applications submitted | Week 4      | Martyn | 🔄 Pending |
+| Simulator demo completed           | Week 6      | Yuri   | 🔄 Pending |
+| Hardware specs finalized           | Week 8      | Peter  | 🔄 Pending |
+| At least 1 accelerator acceptance  | Month 4     | All    | 🔄 Pending |
+| Middle East hub engagement         | Month 3     | Martyn | 🔄 Pending |
+| Advisory agreement with Alastair   | Month 2     | All    | 🔄 Pending |
 
 ---
 

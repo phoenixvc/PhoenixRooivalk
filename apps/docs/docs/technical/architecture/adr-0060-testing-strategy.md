@@ -24,8 +24,11 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Mission-critical C-UAS system requires rigorous testing across unit, integration, and system levels with coverage of edge cases and failure modes
-2. **Decision**: Implement testing pyramid with property-based testing, mutation testing, and mandatory coverage thresholds
+1. **Problem**: Mission-critical C-UAS system requires rigorous testing across
+   unit, integration, and system levels with coverage of edge cases and failure
+   modes
+2. **Decision**: Implement testing pyramid with property-based testing, mutation
+   testing, and mandatory coverage thresholds
 3. **Trade-off**: Test development time vs. system reliability
 
 ---
@@ -34,21 +37,21 @@ prerequisites:
 
 ### Testing Challenges
 
-| Challenge | Description |
-|-----------|-------------|
-| Safety-critical code | Engagement logic must be exhaustively tested |
-| Hardware dependencies | Testing without physical hardware |
-| Real-time constraints | Timing-sensitive operations |
-| Distributed system | Multi-node coordination |
+| Challenge             | Description                                  |
+| --------------------- | -------------------------------------------- |
+| Safety-critical code  | Engagement logic must be exhaustively tested |
+| Hardware dependencies | Testing without physical hardware            |
+| Real-time constraints | Timing-sensitive operations                  |
+| Distributed system    | Multi-node coordination                      |
 
 ### Quality Requirements
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| Code coverage | >80% | Industry standard for critical systems |
-| Branch coverage | >70% | Ensure decision paths tested |
-| Mutation score | >60% | Verify test effectiveness |
-| Integration test pass | 100% | No known failures in main |
+| Metric                | Target | Rationale                              |
+| --------------------- | ------ | -------------------------------------- |
+| Code coverage         | >80%   | Industry standard for critical systems |
+| Branch coverage       | >70%   | Ensure decision paths tested           |
+| Mutation score        | >60%   | Verify test effectiveness              |
+| Integration test pass | 100%   | No known failures in main              |
 
 ---
 
@@ -144,30 +147,30 @@ mod tests {
 
 ```typescript
 // TypeScript unit tests - src/utils/formatting.test.ts
-import { describe, it, expect } from 'vitest';
-import { formatCoordinate, formatDistance, formatSpeed } from './formatting';
+import { describe, it, expect } from "vitest";
+import { formatCoordinate, formatDistance, formatSpeed } from "./formatting";
 
-describe('formatCoordinate', () => {
-  it('formats latitude correctly', () => {
-    expect(formatCoordinate(-33.9249, 'lat')).toBe('33°55\'29.64"S');
+describe("formatCoordinate", () => {
+  it("formats latitude correctly", () => {
+    expect(formatCoordinate(-33.9249, "lat")).toBe("33°55'29.64\"S");
   });
 
-  it('formats longitude correctly', () => {
-    expect(formatCoordinate(18.4241, 'lon')).toBe('18°25\'26.76"E');
+  it("formats longitude correctly", () => {
+    expect(formatCoordinate(18.4241, "lon")).toBe("18°25'26.76\"E");
   });
 
-  it('handles zero values', () => {
-    expect(formatCoordinate(0, 'lat')).toBe('0°0\'0.00"N');
+  it("handles zero values", () => {
+    expect(formatCoordinate(0, "lat")).toBe("0°0'0.00\"N");
   });
 });
 
-describe('formatDistance', () => {
-  it('uses meters for short distances', () => {
-    expect(formatDistance(500)).toBe('500 m');
+describe("formatDistance", () => {
+  it("uses meters for short distances", () => {
+    expect(formatDistance(500)).toBe("500 m");
   });
 
-  it('uses kilometers for long distances', () => {
-    expect(formatDistance(2500)).toBe('2.5 km');
+  it("uses kilometers for long distances", () => {
+    expect(formatDistance(2500)).toBe("2.5 km");
   });
 });
 ```
@@ -276,10 +279,10 @@ async fn test_full_engagement_flow() {
 
 ```typescript
 // API integration tests - tests/api/tracks.test.ts
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { createTestServer, TestServer } from '../utils/test-server';
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { createTestServer, TestServer } from "../utils/test-server";
 
-describe('Tracks API', () => {
+describe("Tracks API", () => {
   let server: TestServer;
 
   beforeAll(async () => {
@@ -290,26 +293,26 @@ describe('Tracks API', () => {
     await server.close();
   });
 
-  it('returns active tracks', async () => {
+  it("returns active tracks", async () => {
     // Seed test data
     await server.seedTracks([
-      { trackId: 'track-1', status: 'active' },
-      { trackId: 'track-2', status: 'active' },
-      { trackId: 'track-3', status: 'lost' },
+      { trackId: "track-1", status: "active" },
+      { trackId: "track-2", status: "active" },
+      { trackId: "track-3", status: "lost" },
     ]);
 
-    const response = await server.request('GET', '/api/tracks?status=active');
+    const response = await server.request("GET", "/api/tracks?status=active");
 
     expect(response.status).toBe(200);
     expect(response.body.tracks).toHaveLength(2);
     expect(response.body.tracks.map((t: any) => t.trackId)).toEqual(
-      expect.arrayContaining(['track-1', 'track-2'])
+      expect.arrayContaining(["track-1", "track-2"]),
     );
   });
 
-  it('requires authentication', async () => {
-    const response = await server.request('GET', '/api/tracks', {
-      headers: { Authorization: '' },
+  it("requires authentication", async () => {
+    const response = await server.request("GET", "/api/tracks", {
+      headers: { Authorization: "" },
     });
 
     expect(response.status).toBe(401);
@@ -343,14 +346,9 @@ minimum-score = 60
 export default defineConfig({
   test: {
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'lcov', 'html'],
-      exclude: [
-        'node_modules',
-        'tests',
-        '**/*.d.ts',
-        '**/generated/**',
-      ],
+      provider: "v8",
+      reporter: ["text", "lcov", "html"],
+      exclude: ["node_modules", "tests", "**/*.d.ts", "**/generated/**"],
       thresholds: {
         lines: 80,
         branches: 70,

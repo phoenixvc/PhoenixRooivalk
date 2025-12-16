@@ -26,9 +26,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: System must recover from catastrophic failures (region outage, data corruption, ransomware) with minimal data loss and downtime
-2. **Decision**: Implement tiered DR strategy with geo-redundant backups, automated failover for critical systems, and tested recovery procedures
-3. **Trade-off**: DR infrastructure cost vs. recovery time and data loss tolerance
+1. **Problem**: System must recover from catastrophic failures (region outage,
+   data corruption, ransomware) with minimal data loss and downtime
+2. **Decision**: Implement tiered DR strategy with geo-redundant backups,
+   automated failover for critical systems, and tested recovery procedures
+3. **Trade-off**: DR infrastructure cost vs. recovery time and data loss
+   tolerance
 
 ---
 
@@ -36,22 +39,22 @@ prerequisites:
 
 ### Disaster Scenarios
 
-| Scenario | Likelihood | Impact |
-|----------|------------|--------|
-| Region outage | Low | Critical |
-| Database corruption | Medium | High |
-| Ransomware attack | Medium | Critical |
-| Accidental deletion | High | Medium |
-| Hardware failure (edge) | High | Medium |
+| Scenario                | Likelihood | Impact   |
+| ----------------------- | ---------- | -------- |
+| Region outage           | Low        | Critical |
+| Database corruption     | Medium     | High     |
+| Ransomware attack       | Medium     | Critical |
+| Accidental deletion     | High       | Medium   |
+| Hardware failure (edge) | High       | Medium   |
 
 ### Recovery Objectives
 
-| System | RPO (Data Loss) | RTO (Downtime) |
-|--------|-----------------|----------------|
-| Evidence store | 0 (no loss) | <1 hour |
-| Operational data | <15 minutes | <30 minutes |
-| Configuration | <1 hour | <15 minutes |
-| Documentation | <24 hours | <4 hours |
+| System           | RPO (Data Loss) | RTO (Downtime) |
+| ---------------- | --------------- | -------------- |
+| Evidence store   | 0 (no loss)     | <1 hour        |
+| Operational data | <15 minutes     | <30 minutes    |
+| Configuration    | <1 hour         | <15 minutes    |
+| Documentation    | <24 hours       | <4 hours       |
 
 ---
 
@@ -103,12 +106,12 @@ Implement **tiered disaster recovery** strategy:
 
 ### Backup Types
 
-| Data Type | Backup Method | Frequency | Retention |
-|-----------|---------------|-----------|-----------|
-| Evidence | Continuous replication + daily snapshot | Real-time | 7 years |
-| Operational | Continuous replication | Real-time | 90 days |
-| Config | Git + daily export | Daily | 1 year |
-| Audit logs | Continuous + weekly archive | Real-time | 5 years |
+| Data Type   | Backup Method                           | Frequency | Retention |
+| ----------- | --------------------------------------- | --------- | --------- |
+| Evidence    | Continuous replication + daily snapshot | Real-time | 7 years   |
+| Operational | Continuous replication                  | Real-time | 90 days   |
+| Config      | Git + daily export                      | Daily     | 1 year    |
+| Audit logs  | Continuous + weekly archive             | Real-time | 5 years   |
 
 ### Cosmos DB Backup
 
@@ -404,11 +407,11 @@ recovery_steps:
 
 ### DR Test Schedule
 
-| Test Type | Frequency | Duration | Scope |
-|-----------|-----------|----------|-------|
-| Backup validation | Weekly | Automated | Data integrity |
-| Failover drill | Quarterly | 4 hours | Full failover |
-| Tabletop exercise | Annually | 1 day | All scenarios |
+| Test Type         | Frequency | Duration  | Scope          |
+| ----------------- | --------- | --------- | -------------- |
+| Backup validation | Weekly    | Automated | Data integrity |
+| Failover drill    | Quarterly | 4 hours   | Full failover  |
+| Tabletop exercise | Annually  | 1 day     | All scenarios  |
 
 ### Automated DR Test
 
@@ -448,21 +451,21 @@ async fn test_dr_failover() {
 
 ### DR Infrastructure Cost
 
-| Component | Primary | DR | Monthly Cost |
-|-----------|---------|-----|--------------|
-| Cosmos DB | Multi-region write | Read replica | +50% |
-| Blob Storage | RA-GRS | Included | +100% |
-| Functions | Active | Standby (consumption) | ~$0 |
-| Total | - | - | ~$200/month |
+| Component    | Primary            | DR                    | Monthly Cost |
+| ------------ | ------------------ | --------------------- | ------------ |
+| Cosmos DB    | Multi-region write | Read replica          | +50%         |
+| Blob Storage | RA-GRS             | Included              | +100%        |
+| Functions    | Active             | Standby (consumption) | ~$0          |
+| Total        | -                  | -                     | ~$200/month  |
 
 ### Cost vs. Risk Analysis
 
-| RPO/RTO | Architecture | Monthly Cost | Suitable For |
-|---------|--------------|--------------|--------------|
-| 24h / 24h | Daily backup, manual restore | $50 | Dev/test |
-| 1h / 4h | GRS storage, periodic snapshot | $100 | Non-critical |
-| 15m / 30m | Multi-region, auto-failover | $200 | Production |
-| 0 / 5m | Active-active multi-region | $500+ | Mission-critical |
+| RPO/RTO   | Architecture                   | Monthly Cost | Suitable For     |
+| --------- | ------------------------------ | ------------ | ---------------- |
+| 24h / 24h | Daily backup, manual restore   | $50          | Dev/test         |
+| 1h / 4h   | GRS storage, periodic snapshot | $100         | Non-critical     |
+| 15m / 30m | Multi-region, auto-failover    | $200         | Production       |
+| 0 / 5m    | Active-active multi-region     | $500+        | Mission-critical |
 
 ---
 

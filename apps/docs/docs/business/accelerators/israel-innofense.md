@@ -15,19 +15,19 @@ tags:
 # Israel Innofense Program
 
 **Innofense** is Israel's premier defense innovation accelerator, created by
-DDR&D (Directorate of Defense Research and Development) to connect startups
-with funding, military end-users, and the defense VC ecosystem.
+DDR&D (Directorate of Defense Research and Development) to connect startups with
+funding, military end-users, and the defense VC ecosystem.
 
 ---
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | DDR&D (MAFAT), Ministry of Defense |
-| **Founded** | 2019 |
-| **Graduates** | 43+ companies |
-| **Focus** | Dual-use defense technologies |
+| Aspect             | Details                            |
+| ------------------ | ---------------------------------- |
+| **Organizer**      | DDR&D (MAFAT), Ministry of Defense |
+| **Founded**        | 2019                               |
+| **Graduates**      | 43+ companies                      |
+| **Focus**          | Dual-use defense technologies      |
 | **2025 Milestone** | $1B+ raised by portfolio companies |
 
 ---
@@ -36,24 +36,24 @@ with funding, military end-users, and the defense VC ecosystem.
 
 Israel's defense tech ecosystem is experiencing unprecedented growth:
 
-| Metric | Value |
-|--------|-------|
-| Defense Startups (2024) | 312 companies |
-| 2025 Investment | $1B+ raised |
-| MAFAT Contracts (2024) | 300 companies, Rs. 1.2B shekels |
-| Growth (Q1 2023 - Q4 2024) | 72% increase in DDR&D startups |
+| Metric                     | Value                           |
+| -------------------------- | ------------------------------- |
+| Defense Startups (2024)    | 312 companies                   |
+| 2025 Investment            | $1B+ raised                     |
+| MAFAT Contracts (2024)     | 300 companies, Rs. 1.2B shekels |
+| Growth (Q1 2023 - Q4 2024) | 72% increase in DDR&D startups  |
 
 ---
 
 ## What Innofense Provides
 
-| Benefit | Description |
-|---------|-------------|
-| **VC Network** | Direct connection to defense-focused VCs |
-| **Scouting** | Exposure to commercial technology needs |
-| **Acceleration** | Business and technology development |
-| **Military Access** | Introduction to IDF end-users |
-| **Export Support** | International market access |
+| Benefit             | Description                              |
+| ------------------- | ---------------------------------------- |
+| **VC Network**      | Direct connection to defense-focused VCs |
+| **Scouting**        | Exposure to commercial technology needs  |
+| **Acceleration**    | Business and technology development      |
+| **Military Access** | Introduction to IDF end-users            |
+| **Export Support**  | International market access              |
 
 ---
 
@@ -61,13 +61,13 @@ Israel's defense tech ecosystem is experiencing unprecedented growth:
 
 Israel's defense priorities align well with Phoenix Rooivalk:
 
-| Area | Priority | PR Alignment |
-|------|----------|--------------|
-| **AI & Autonomous Systems** | High | Direct fit |
-| **Advanced Sensors** | High | Direct fit |
-| **Counter-drone** | High | Direct fit |
-| **Robotics** | Medium | Partial fit |
-| **Cyber Security** | High | Partial fit |
+| Area                        | Priority | PR Alignment |
+| --------------------------- | -------- | ------------ |
+| **AI & Autonomous Systems** | High     | Direct fit   |
+| **Advanced Sensors**        | High     | Direct fit   |
+| **Counter-drone**           | High     | Direct fit   |
+| **Robotics**                | Medium   | Partial fit  |
+| **Cyber Security**          | High     | Partial fit  |
 
 ---
 
@@ -94,12 +94,12 @@ Startup accelerator backed by Unit 8200 alumni (elite cybersecurity unit).
 
 ## Eligibility
 
-| Requirement | Phoenix Rooivalk Status |
-|-------------|------------------------|
-| Defense-relevant tech | Meets requirement |
-| Dual-use potential | Meets requirement |
-| Israeli presence | May need partnership |
-| Stage | Early stage accepted |
+| Requirement           | Phoenix Rooivalk Status |
+| --------------------- | ----------------------- |
+| Defense-relevant tech | Meets requirement       |
+| Dual-use potential    | Meets requirement       |
+| Israeli presence      | May need partnership    |
+| Stage                 | Early stage accepted    |
 
 ---
 
@@ -110,6 +110,7 @@ Startup accelerator backed by Unit 8200 alumni (elite cybersecurity unit).
 **Opportunity:** Israel is highly receptive to foreign defense tech partnerships
 
 **Approach:**
+
 1. **Direct Contact:** Reach out to Innofense program
 2. **Matara Connection:** Contact Matara for international bridge
 3. **VC Introduction:** Connect with Israeli defense VCs
@@ -128,20 +129,21 @@ Startup accelerator backed by Unit 8200 alumni (elite cybersecurity unit).
 ## Key Contacts
 
 - **Innofense:** Contact through MAFAT
-- **Matara:** [calcalistech article](https://www.calcalistech.com/ctechnews/article/hyvkgwqjwg)
+- **Matara:**
+  [calcalistech article](https://www.calcalistech.com/ctechnews/article/hyvkgwqjwg)
 - **8200 ESIP:** Tel Aviv based
 
 ---
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | Counter-drone expertise valued |
-| Stage Fit | High | Early stage welcomed |
-| Geographic Fit | Medium | International partnerships common |
-| Ecosystem Fit | High | Strong VC network |
-| **Overall Fit** | **High** | Excellent opportunity |
+| Criteria        | Score    | Notes                             |
+| --------------- | -------- | --------------------------------- |
+| Technology Fit  | High     | Counter-drone expertise valued    |
+| Stage Fit       | High     | Early stage welcomed              |
+| Geographic Fit  | Medium   | International partnerships common |
+| Ecosystem Fit   | High     | Strong VC network                 |
+| **Overall Fit** | **High** | Excellent opportunity             |
 
 ---
 
@@ -149,12 +151,12 @@ Startup accelerator backed by Unit 8200 alumni (elite cybersecurity unit).
 
 Israeli defense VCs actively investing:
 
-| Investor | Focus |
-|----------|-------|
-| Shield Capital | Counter-drone systems |
-| OurCrowd | Defense tech portfolio |
-| Viola Ventures | Dual-use technologies |
-| Pitango | Deep tech including defense |
+| Investor       | Focus                       |
+| -------------- | --------------------------- |
+| Shield Capital | Counter-drone systems       |
+| OurCrowd       | Defense tech portfolio      |
+| Viola Ventures | Dual-use technologies       |
+| Pitango        | Deep tech including defense |
 
 ---
 

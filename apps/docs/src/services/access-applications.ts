@@ -168,9 +168,7 @@ export async function getPendingApplication(): Promise<AccessApplication | null>
 /**
  * Check if user has approved access for a role
  */
-export async function checkApprovedAccess(
-  role?: string,
-): Promise<boolean> {
+export async function checkApprovedAccess(role?: string): Promise<boolean> {
   try {
     const headers = await getAuthHeader();
     const url = role

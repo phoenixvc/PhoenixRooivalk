@@ -155,7 +155,13 @@ export const TimelineSection: React.FC = () => {
               validation to AeroNet™ enterprise dominance, targeting $50M
               revenue by FY30.
             </p>
-            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                marginTop: "2rem",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <CalendarExport
                 events={calendarEvents}
                 filename="phoenix-rooivalk-timeline"

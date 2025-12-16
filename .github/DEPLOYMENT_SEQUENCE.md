@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document explains the correct order of operations for deploying the PhoenixRooivalk platform to Azure. The deployment follows a **three-phase approach**:
+This document explains the correct order of operations for deploying the
+PhoenixRooivalk platform to Azure. The deployment follows a **three-phase
+approach**:
 
 1. **Phase 1**: Deploy Azure Infrastructure
 2. **Phase 2**: Populate GitHub Secrets (automated)
@@ -10,7 +12,10 @@ This document explains the correct order of operations for deploying the Phoenix
 
 ## 🚨 Important: Infrastructure-First Deployment
 
-The application deployment workflows (`deploy-marketing-azure.yml`, `deploy-docs-azure.yml`, `deploy-azure-functions.yml`) **require** Azure infrastructure to exist before they can run. The workflows will fail with validation errors if the required secrets are not configured.
+The application deployment workflows (`deploy-marketing-azure.yml`,
+`deploy-docs-azure.yml`, `deploy-azure-functions.yml`) **require** Azure
+infrastructure to exist before they can run. The workflows will fail with
+validation errors if the required secrets are not configured.
 
 ### Why This Order Matters
 
@@ -21,7 +26,8 @@ The application deployment workflows (`deploy-marketing-azure.yml`, `deploy-docs
 
 ## 🚀 Automated Deployment (Recommended)
 
-The **new automated workflow** handles infrastructure deployment and secrets configuration in one streamlined process.
+The **new automated workflow** handles infrastructure deployment and secrets
+configuration in one streamlined process.
 
 ### Prerequisites
 
@@ -72,7 +78,8 @@ For fully automated secrets setup, configure a GitHub Personal Access Token:
 gh secret set GH_PAT --body '<your-personal-access-token>'
 ```
 
-This allows the infrastructure workflow to automatically configure all deployment secrets.
+This allows the infrastructure workflow to automatically configure all
+deployment secrets.
 
 ### Phase 1: Deploy Infrastructure (Automated)
 
@@ -105,8 +112,10 @@ gh run watch
 ```
 
 **What Happens:**
+
 - Creates Azure resource group
-- Deploys all infrastructure (Static Web Apps, Functions, Cosmos DB, Key Vault, etc.)
+- Deploys all infrastructure (Static Web Apps, Functions, Cosmos DB, Key Vault,
+  etc.)
 - Extracts deployment tokens
 - Configures GitHub secrets automatically (if GH_PAT provided)
 - Provides manual setup instructions if automated setup is skipped
@@ -116,6 +125,7 @@ gh run watch
 If you configured `GH_PAT`, the infrastructure workflow automatically populates:
 
 **Secrets:**
+
 - `AZURE_STATIC_WEB_APPS_API_TOKEN`
 - `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN`
 - `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
@@ -124,6 +134,7 @@ If you configured `GH_PAT`, the infrastructure workflow automatically populates:
 - `CLOUD_PROVIDER`
 
 **Variables:**
+
 - `AZURE_FUNCTIONAPP_NAME`
 - `AZURE_FUNCTIONS_BASE_URL`
 
@@ -160,6 +171,7 @@ gh workflow run deploy-azure-functions.yml
 ```
 
 **Expected Results:**
+
 - ✅ Validation passes
 - ✅ Applications build successfully
 - ✅ Deployments complete
@@ -171,14 +183,16 @@ For those who prefer CLI-based deployment or need more control.
 
 ### Phase 1: Azure Infrastructure Setup
 
-This phase creates all Azure resources and generates the deployment tokens needed for CI/CD.
+This phase creates all Azure resources and generates the deployment tokens
+needed for CI/CD.
 
 #### Prerequisites
 
 - [ ] Azure account with active subscription
 - [ ] Azure CLI installed: `az --version`
 - [ ] Logged in to Azure: `az login`
-- [ ] GitHub CLI installed (optional, for automated secret setup): `gh --version`
+- [ ] GitHub CLI installed (optional, for automated secret setup):
+      `gh --version`
 - [ ] Appropriate permissions to create resources in Azure
 
 #### Steps
@@ -189,7 +203,7 @@ This phase creates all Azure resources and generates the deployment tokens neede
    # For development
    ENVIRONMENT="dev"
    LOCATION="eastus2"  # or your preferred Azure region
-   
+
    # For production
    # ENVIRONMENT="prd"
    # LOCATION="westeurope"
@@ -226,11 +240,13 @@ This phase creates all Azure resources and generates the deployment tokens neede
 
 ### Phase 2: Populate GitHub Secrets
 
-After infrastructure deployment, configure GitHub secrets to enable CI/CD workflows.
+After infrastructure deployment, configure GitHub secrets to enable CI/CD
+workflows.
 
 #### Option A: Automated Setup (Recommended)
 
-The `setup-all.sh` script generates a shell script to configure all secrets automatically:
+The `setup-all.sh` script generates a shell script to configure all secrets
+automatically:
 
 ```bash
 # Review the generated script
@@ -289,7 +305,8 @@ gh variable set AZURE_FUNCTIONS_BASE_URL --body "https://${FUNC_NAME}.azurewebsi
 
 ### Phase 3: Deploy Applications
 
-Once secrets are configured, deploy your applications using the deployment workflows.
+Once secrets are configured, deploy your applications using the deployment
+workflows.
 
 #### Via Git Push (Automatic)
 
@@ -308,7 +325,7 @@ git push origin main
 # Deploy marketing site
 gh workflow run deploy-marketing-azure.yml
 
-# Deploy documentation site  
+# Deploy documentation site
 gh workflow run deploy-docs-azure.yml
 
 # Deploy Azure Functions
@@ -321,14 +338,14 @@ gh run watch
 
 ## 🔄 Comparison: Automated vs Manual
 
-| Aspect | Automated Workflow | Manual CLI |
-|--------|-------------------|------------|
-| **Setup Time** | ~10 minutes | ~15-20 minutes |
-| **Complexity** | Low (few clicks) | Medium (CLI commands) |
-| **Secrets Config** | Automatic (if GH_PAT set) | Manual or scripted |
-| **Repeatability** | High (same process each time) | Medium (script-based) |
-| **Troubleshooting** | Workflow logs in GitHub UI | CLI output |
-| **Best For** | Teams, production | Advanced users, custom setups |
+| Aspect              | Automated Workflow            | Manual CLI                    |
+| ------------------- | ----------------------------- | ----------------------------- |
+| **Setup Time**      | ~10 minutes                   | ~15-20 minutes                |
+| **Complexity**      | Low (few clicks)              | Medium (CLI commands)         |
+| **Secrets Config**  | Automatic (if GH_PAT set)     | Manual or scripted            |
+| **Repeatability**   | High (same process each time) | Medium (script-based)         |
+| **Troubleshooting** | Workflow logs in GitHub UI    | CLI output                    |
+| **Best For**        | Teams, production             | Advanced users, custom setups |
 
 ## 🔄 Updating/Redeploying Infrastructure
 
@@ -355,14 +372,16 @@ cd infra/azure
 
 ## 🔄 Legacy Documentation (Pre-Workflow Era)
 
-The following sections document the original manual deployment process for reference.
+The following sections document the original manual deployment process for
+reference.
 
 <details>
 <summary>Click to expand legacy documentation</summary>
 
 ### Legacy Phase 2: Extract Deployment Tokens (Manual)
 
-The deployment tokens are required for GitHub Actions to deploy to Azure Static Web Apps.
+The deployment tokens are required for GitHub Actions to deploy to Azure Static
+Web Apps.
 
 #### For Documentation Site
 
@@ -408,7 +427,8 @@ Now that you have the deployment tokens, add them to your GitHub repository.
 
 #### Option A: Automated Setup (Recommended)
 
-The `setup-all.sh` script generates a shell script to configure all secrets automatically:
+The `setup-all.sh` script generates a shell script to configure all secrets
+automatically:
 
 ```bash
 # Review the generated script
@@ -460,7 +480,7 @@ Once secrets are configured, the workflows should pass validation.
    ```bash
    # Test documentation deployment
    gh workflow run deploy-docs-azure.yml
-   
+
    # Test marketing deployment
    gh workflow run deploy-marketing-azure.yml
    ```
@@ -480,19 +500,21 @@ Once secrets are configured, the workflows should pass validation.
 #### Expected Workflow Behavior
 
 **Before configuration:**
+
 ```
 ❌ Validate Secrets → FAILED
    Required secrets are missing:
    - AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN
-   
+
 ⏭️  Build and Deploy → SKIPPED
 ```
 
 **After configuration:**
+
 ```
 ✅ Validate Secrets → SUCCESS
    All required secrets are configured
-   
+
 ✅ Build and Deploy → SUCCESS
    Deployment complete!
 ```
@@ -518,11 +540,13 @@ If you need to rotate deployment tokens or update configuration:
 
 ## 🖥️ Desktop App / WASM Deployment
 
-The `threat-simulator-desktop` app is a Leptos + Tauri application that builds to WASM and native desktop binaries.
+The `threat-simulator-desktop` app is a Leptos + Tauri application that builds
+to WASM and native desktop binaries.
 
 ### Current Status
 
-The desktop app is **built as part of the marketing site deployment** workflow (`deploy-marketing-azure.yml`). The workflow includes:
+The desktop app is **built as part of the marketing site deployment** workflow
+(`deploy-marketing-azure.yml`). The workflow includes:
 
 ```yaml
 - name: Build WASM (threat-simulator-desktop)
@@ -535,7 +559,8 @@ The WASM output is then incorporated into the marketing site build.
 
 ### Standalone Desktop App Releases
 
-For distributing native desktop applications, a dedicated release workflow is now available at `.github/workflows/release-desktop.yml`.
+For distributing native desktop applications, a dedicated release workflow is
+now available at `.github/workflows/release-desktop.yml`.
 
 #### Creating a Desktop Release
 
@@ -557,6 +582,7 @@ git push origin desktop-v0.2.0
 **Option 2: Manual Workflow Dispatch**
 
 Trigger a release manually via GitHub Actions:
+
 1. Go to Actions → "Release Desktop App"
 2. Click "Run workflow"
 3. Enter version (e.g., `0.2.0`)
@@ -566,81 +592,99 @@ Trigger a release manually via GitHub Actions:
 
 The workflow builds native installers for all platforms:
 
-- **Windows**: MSI installer (`phoenix-rooivalk-threat-simulator_{version}_x64.msi`)
-- **macOS Intel**: DMG disk image (`phoenix-rooivalk-threat-simulator_{version}_x64-intel.dmg`)
-- **macOS Apple Silicon**: DMG disk image (`phoenix-rooivalk-threat-simulator_{version}_arm64.dmg`)
-- **Linux**: AppImage portable (`phoenix-rooivalk-threat-simulator_{version}_amd64.AppImage`)
-- **Linux**: DEB package (`phoenix-rooivalk-threat-simulator_{version}_amd64.deb`)
+- **Windows**: MSI installer
+  (`phoenix-rooivalk-threat-simulator_{version}_x64.msi`)
+- **macOS Intel**: DMG disk image
+  (`phoenix-rooivalk-threat-simulator_{version}_x64-intel.dmg`)
+- **macOS Apple Silicon**: DMG disk image
+  (`phoenix-rooivalk-threat-simulator_{version}_arm64.dmg`)
+- **Linux**: AppImage portable
+  (`phoenix-rooivalk-threat-simulator_{version}_amd64.AppImage`)
+- **Linux**: DEB package
+  (`phoenix-rooivalk-threat-simulator_{version}_amd64.deb`)
 
 #### Setup Requirements
 
 Before creating your first release:
 
 1. **Configure icons** (optional but recommended):
+
    ```bash
    cd apps/threat-simulator-desktop
    cargo tauri icon path/to/source-icon.png
    ```
+
    - Source icon should be at least 1024×1024 pixels
    - PNG format with transparent background
 
 2. **Test local build**:
+
    ```bash
    cd apps/threat-simulator-desktop
    trunk build --release
    cargo tauri build
    ```
 
-3. **Create changelog**: Add release notes to `apps/threat-simulator-desktop/CHANGELOG.md`
+3. **Create changelog**: Add release notes to
+   `apps/threat-simulator-desktop/CHANGELOG.md`
 
-See `apps/threat-simulator-desktop/RELEASE.md` for complete release documentation.
+See `apps/threat-simulator-desktop/RELEASE.md` for complete release
+documentation.
 
-**Note:** The desktop app is also deployed as a web application (WASM) embedded in the marketing site for online demos. The release workflow is for distributing native installers.
+**Note:** The desktop app is also deployed as a web application (WASM) embedded
+in the marketing site for online demos. The release workflow is for distributing
+native installers.
 
 ## 📚 Required Secrets Reference
 
 ### Documentation Site (`deploy-docs-azure.yml`)
 
-| Secret/Variable | Type | Required | Purpose |
-|----------------|------|----------|---------|
-| `AZURE_STATIC_WEB_APPS_API_TOKEN` | Secret | ✅ Yes | Deployment token for docs Static Web App |
-| `AZURE_FUNCTIONAPP_NAME` | Variable | Optional | Function App name (for optional Functions deployment) |
-| `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` | Secret | Optional | Function App publish profile (XML) |
-| `AZURE_FUNCTIONS_BASE_URL` | Secret | Optional | Functions API endpoint for client |
-| `AZURE_ENTRA_TENANT_ID` | Secret | Optional | Entra ID tenant (for auth) |
-| `AZURE_ENTRA_CLIENT_ID` | Secret | Optional | Entra ID client (for auth) |
+| Secret/Variable                     | Type     | Required | Purpose                                               |
+| ----------------------------------- | -------- | -------- | ----------------------------------------------------- |
+| `AZURE_STATIC_WEB_APPS_API_TOKEN`   | Secret   | ✅ Yes   | Deployment token for docs Static Web App              |
+| `AZURE_FUNCTIONAPP_NAME`            | Variable | Optional | Function App name (for optional Functions deployment) |
+| `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` | Secret   | Optional | Function App publish profile (XML)                    |
+| `AZURE_FUNCTIONS_BASE_URL`          | Secret   | Optional | Functions API endpoint for client                     |
+| `AZURE_ENTRA_TENANT_ID`             | Secret   | Optional | Entra ID tenant (for auth)                            |
+| `AZURE_ENTRA_CLIENT_ID`             | Secret   | Optional | Entra ID client (for auth)                            |
 
 ### Marketing Site (`deploy-marketing-azure.yml`)
 
-| Secret/Variable | Type | Required | Purpose |
-|----------------|------|----------|---------|
-| `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN` | Secret | ✅ Yes | Deployment token for marketing Static Web App |
+| Secret/Variable                             | Type   | Required | Purpose                                       |
+| ------------------------------------------- | ------ | -------- | --------------------------------------------- |
+| `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN` | Secret | ✅ Yes   | Deployment token for marketing Static Web App |
 
 ### Common Mistakes
 
 ❌ **Setting `AZURE_FUNCTIONAPP_NAME` as a Secret** → Should be a **Variable**
-❌ **Using old names** like `AZURE_FUNCTIONS_APP_NAME` → Use `AZURE_FUNCTIONAPP_NAME`
-❌ **Empty publish profile** → Ensure the XML file content is complete
-❌ **Wrong resource group** → Check that names match your deployment
+❌ **Using old names** like `AZURE_FUNCTIONS_APP_NAME` → Use
+`AZURE_FUNCTIONAPP_NAME` ❌ **Empty publish profile** → Ensure the XML file
+content is complete ❌ **Wrong resource group** → Check that names match your
+deployment
 
 ## 🔧 Troubleshooting
 
 ### Workflow fails with "Required secrets are missing"
 
-**Cause:** The Azure infrastructure hasn't been deployed yet, or secrets haven't been added to GitHub.
+**Cause:** The Azure infrastructure hasn't been deployed yet, or secrets haven't
+been added to GitHub.
 
-**Solution:** Follow **Phase 1-3** above to deploy infrastructure and configure secrets.
+**Solution:** Follow **Phase 1-3** above to deploy infrastructure and configure
+secrets.
 
 ### Can't extract deployment token
 
 **Error:** `az staticwebapp secrets list` returns empty or fails
 
 **Causes:**
+
 1. Static Web App is still provisioning (wait 2-3 minutes)
-2. Insufficient permissions (need Contributor or Static Web Apps Contributor role)
+2. Insufficient permissions (need Contributor or Static Web Apps Contributor
+   role)
 3. Wrong resource name or resource group
 
 **Solution:**
+
 ```bash
 # List all static web apps in resource group
 az staticwebapp list --resource-group dev-eus-rg-rooivalk --output table
@@ -656,11 +700,13 @@ az staticwebapp secrets list --name dev-eus-swa-rooivalk --query "properties.api
 ### Deployment succeeds but site doesn't update
 
 **Possible causes:**
+
 1. Browser cache - try hard refresh (Ctrl+Shift+R)
 2. CDN cache - wait 5-10 minutes for propagation
 3. Wrong deployment environment - check if deploying to preview vs production
 
 **Solution:**
+
 ```bash
 # Check deployment history
 az staticwebapp show --name dev-eus-swa-rooivalk \
@@ -674,11 +720,13 @@ gh run list --workflow deploy-marketing-azure.yml --limit 5
 ### Infrastructure deployment fails
 
 **Common issues:**
+
 1. **Quota limits** - Check Azure subscription quotas
 2. **Name conflicts** - Resource names must be globally unique
 3. **Permissions** - Need Owner or Contributor role on subscription
 
 **Solution:**
+
 ```bash
 # Check deployment errors
 az deployment group list --resource-group dev-eus-rg-rooivalk --output table
@@ -692,10 +740,14 @@ az deployment group show \
 
 ## 📖 Related Documentation
 
-- [AZURE_SETUP.md](./AZURE_SETUP.md) - Detailed guide for setting up Azure secrets and variables
-- [AZURE_TROUBLESHOOTING.md](./AZURE_TROUBLESHOOTING.md) - Common issues and solutions
-- [../infra/azure/README.md](../infra/azure/README.md) - Infrastructure architecture overview
-- [../infra/azure/scripts/setup-all.sh](../infra/azure/scripts/setup-all.sh) - Automated setup script
+- [AZURE_SETUP.md](./AZURE_SETUP.md) - Detailed guide for setting up Azure
+  secrets and variables
+- [AZURE_TROUBLESHOOTING.md](./AZURE_TROUBLESHOOTING.md) - Common issues and
+  solutions
+- [../infra/azure/README.md](../infra/azure/README.md) - Infrastructure
+  architecture overview
+- [../infra/azure/scripts/setup-all.sh](../infra/azure/scripts/setup-all.sh) -
+  Automated setup script
 
 ## 🎯 Quick Reference Commands
 
@@ -727,7 +779,8 @@ gh run view <run-id> --log
 You've completed the setup correctly when:
 
 1. ✅ Azure resource group exists: `az group show --name dev-eus-rg-rooivalk`
-2. ✅ Static Web Apps are deployed: `az staticwebapp list --resource-group dev-eus-rg-rooivalk`
+2. ✅ Static Web Apps are deployed:
+   `az staticwebapp list --resource-group dev-eus-rg-rooivalk`
 3. ✅ GitHub secrets are configured: `gh secret list | grep AZURE`
 4. ✅ Workflows pass validation: "✅ All required secrets are configured"
 5. ✅ Sites are accessible at their URLs

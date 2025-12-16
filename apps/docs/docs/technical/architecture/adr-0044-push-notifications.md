@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Operators need alerts even when not actively using the application, requiring push notifications to mobile and desktop devices
-2. **Decision**: Implement Azure Notification Hub for cross-platform push with priority-based delivery and offline queuing
+1. **Problem**: Operators need alerts even when not actively using the
+   application, requiring push notifications to mobile and desktop devices
+2. **Decision**: Implement Azure Notification Hub for cross-platform push with
+   priority-based delivery and offline queuing
 3. **Trade-off**: Third-party service dependency vs. cross-platform simplicity
 
 ---
@@ -36,20 +38,20 @@ prerequisites:
 ### Notification Requirements
 
 | Notification Type | Priority | Delivery SLA |
-|-------------------|----------|--------------|
-| Engagement alert | Critical | <30 seconds |
-| Threat detection | High | <1 minute |
-| System status | Normal | <5 minutes |
-| Daily summary | Low | Best effort |
+| ----------------- | -------- | ------------ |
+| Engagement alert  | Critical | <30 seconds  |
+| Threat detection  | High     | <1 minute    |
+| System status     | Normal   | <5 minutes   |
+| Daily summary     | Low      | Best effort  |
 
 ### Target Platforms
 
-| Platform | Push Service |
-|----------|--------------|
-| iOS | Apple Push Notification Service (APNs) |
-| Android | Firebase Cloud Messaging (FCM) |
-| Windows | Windows Push Notification Service (WNS) |
-| Web | Web Push (VAPID) |
+| Platform | Push Service                            |
+| -------- | --------------------------------------- |
+| iOS      | Apple Push Notification Service (APNs)  |
+| Android  | Firebase Cloud Messaging (FCM)          |
+| Windows  | Windows Push Notification Service (WNS) |
+| Web      | Web Push (VAPID)                        |
 
 ---
 

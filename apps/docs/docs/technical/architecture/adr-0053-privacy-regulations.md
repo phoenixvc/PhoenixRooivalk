@@ -26,8 +26,11 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Operator data, system access logs, and potentially captured drone operator information must comply with GDPR, POPIA, and other privacy regulations
-2. **Decision**: Implement privacy-by-design with consent management, data minimization, and jurisdiction-aware processing
+1. **Problem**: Operator data, system access logs, and potentially captured
+   drone operator information must comply with GDPR, POPIA, and other privacy
+   regulations
+2. **Decision**: Implement privacy-by-design with consent management, data
+   minimization, and jurisdiction-aware processing
 3. **Trade-off**: Privacy controls vs. operational efficiency
 
 ---
@@ -36,21 +39,21 @@ prerequisites:
 
 ### Applicable Regulations
 
-| Regulation | Jurisdiction | Key Requirements |
-|------------|--------------|------------------|
-| POPIA | South Africa | Consent, purpose limitation, data subject rights |
-| GDPR | EU/EEA | Lawful basis, data minimization, right to erasure |
-| CCPA | California | Disclosure, opt-out, deletion rights |
-| LGPD | Brazil | Similar to GDPR |
+| Regulation | Jurisdiction | Key Requirements                                  |
+| ---------- | ------------ | ------------------------------------------------- |
+| POPIA      | South Africa | Consent, purpose limitation, data subject rights  |
+| GDPR       | EU/EEA       | Lawful basis, data minimization, right to erasure |
+| CCPA       | California   | Disclosure, opt-out, deletion rights              |
+| LGPD       | Brazil       | Similar to GDPR                                   |
 
 ### Personal Data in Phoenix Rooivalk
 
-| Data Category | Examples | Source |
-|---------------|----------|--------|
-| Operator data | Name, email, login history | User registration |
-| Access logs | IP addresses, device info | System logs |
-| Drone operator info | Potentially PII if drone captured | Evidence collection |
-| Location data | Operator GPS, deployment locations | Operations |
+| Data Category       | Examples                           | Source              |
+| ------------------- | ---------------------------------- | ------------------- |
+| Operator data       | Name, email, login history         | User registration   |
+| Access logs         | IP addresses, device info          | System logs         |
+| Drone operator info | Potentially PII if drone captured  | Evidence collection |
+| Location data       | Operator GPS, deployment locations | Operations          |
 
 ---
 
@@ -98,12 +101,12 @@ Implement **privacy-by-design** framework:
 
 ### Processing Basis by Data Type
 
-| Data Type | Lawful Basis | Justification |
-|-----------|--------------|---------------|
-| Operator account | Contract | Required for service delivery |
-| Access logs | Legitimate interest | Security monitoring |
-| Evidence data | Legal obligation | Regulatory compliance |
-| Analytics | Consent | Optional, improvement purposes |
+| Data Type        | Lawful Basis        | Justification                  |
+| ---------------- | ------------------- | ------------------------------ |
+| Operator account | Contract            | Required for service delivery  |
+| Access logs      | Legitimate interest | Security monitoring            |
+| Evidence data    | Legal obligation    | Regulatory compliance          |
+| Analytics        | Consent             | Optional, improvement purposes |
 
 ### Basis Validation
 
@@ -359,10 +362,10 @@ impl DataSubjectRightsService {
 interface PrivacyRequest {
   userId: string;
   verification: {
-    method: 'email' | 'id_document' | 'video_call';
+    method: "email" | "id_document" | "video_call";
     token: string;
   };
-  requestType: 'access' | 'erasure' | 'rectification' | 'portability';
+  requestType: "access" | "erasure" | "rectification" | "portability";
   details?: Record<string, unknown>;
 }
 ```
@@ -417,12 +420,12 @@ impl DataMinimizer {
 
 ### Transfer Rules
 
-| From | To | Mechanism |
-|------|-----|-----------|
-| SA | EU | Adequate (mutual) |
-| EU | US | SCCs + supplementary measures |
-| SA | US | Contract + consent |
-| Any | SA | No restrictions |
+| From | To  | Mechanism                     |
+| ---- | --- | ----------------------------- |
+| SA   | EU  | Adequate (mutual)             |
+| EU   | US  | SCCs + supplementary measures |
+| SA   | US  | Contract + consent            |
+| Any  | SA  | No restrictions               |
 
 ### Transfer Validation
 

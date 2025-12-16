@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Engagement evidence, system access, and configuration changes must be audited for legal admissibility and compliance
-2. **Decision**: Implement comprehensive audit logging with cryptographic integrity, immutable storage, and chain-of-custody tracking
+1. **Problem**: Engagement evidence, system access, and configuration changes
+   must be audited for legal admissibility and compliance
+2. **Decision**: Implement comprehensive audit logging with cryptographic
+   integrity, immutable storage, and chain-of-custody tracking
 3. **Trade-off**: Storage and performance overhead vs. legal defensibility
 
 ---
@@ -35,16 +37,17 @@ prerequisites:
 
 ### Audit Requirements by Domain
 
-| Domain | Requirements | Standard |
-|--------|--------------|----------|
-| Engagement evidence | Chain of custody, non-repudiation | Legal proceedings |
-| System access | Who accessed what, when | SOC 2, ISO 27001 |
-| Configuration changes | Change history, approval | ITIL, change management |
-| Export control | Access to controlled data | ITAR, NCACC |
+| Domain                | Requirements                      | Standard                |
+| --------------------- | --------------------------------- | ----------------------- |
+| Engagement evidence   | Chain of custody, non-repudiation | Legal proceedings       |
+| System access         | Who accessed what, when           | SOC 2, ISO 27001        |
+| Configuration changes | Change history, approval          | ITIL, change management |
+| Export control        | Access to controlled data         | ITAR, NCACC             |
 
 ### Legal Admissibility Criteria
 
 For evidence to be admissible:
+
 1. **Authenticity**: Proof of origin
 2. **Integrity**: Not modified since creation
 3. **Reliability**: System producing evidence is trustworthy
@@ -371,11 +374,11 @@ pub async fn anchor_to_blockchain(
 
 ### Immutability Guarantees
 
-| Storage Type | Immutability | Use Case |
-|--------------|--------------|----------|
-| Append-only log (local) | Software-enforced | Real-time logging |
-| WORM blob storage | Hardware/policy enforced | Long-term archive |
-| Blockchain anchor | Cryptographic | Integrity proof |
+| Storage Type            | Immutability             | Use Case          |
+| ----------------------- | ------------------------ | ----------------- |
+| Append-only log (local) | Software-enforced        | Real-time logging |
+| WORM blob storage       | Hardware/policy enforced | Long-term archive |
+| Blockchain anchor       | Cryptographic            | Integrity proof   |
 
 ### Azure Immutable Storage
 
@@ -429,7 +432,7 @@ interface AuditQuery {
   eventTypes?: AuditEventType[];
   actorId?: string;
   resourceId?: string;
-  outcome?: 'success' | 'failure';
+  outcome?: "success" | "failure";
 
   // Pagination
   pageSize: number;

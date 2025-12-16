@@ -27,9 +27,13 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Phoenix Rooivalk's counter-UAS technology may be subject to US ITAR (International Traffic in Arms Regulations), requiring compliance architecture before US accelerator participation (SOSV) or defense contracts
-2. **Decision**: Implement ITAR-compliant architecture with data segregation, access controls, and audit trails from the start
-3. **Trade-off**: Development complexity and cost vs. US market access and defense contract eligibility
+1. **Problem**: Phoenix Rooivalk's counter-UAS technology may be subject to US
+   ITAR (International Traffic in Arms Regulations), requiring compliance
+   architecture before US accelerator participation (SOSV) or defense contracts
+2. **Decision**: Implement ITAR-compliant architecture with data segregation,
+   access controls, and audit trails from the start
+3. **Trade-off**: Development complexity and cost vs. US market access and
+   defense contract eligibility
 
 ---
 
@@ -38,25 +42,28 @@ prerequisites:
 ### Regulatory Landscape
 
 **ITAR** (22 CFR 120-130) controls:
+
 - Defense articles (USML Categories)
 - Technical data related to defense articles
 - Defense services
 
 **Relevant USML Categories for C-UAS**:
 
-| Category | Description                                    | Relevance                      |
-|----------|------------------------------------------------|--------------------------------|
-| IV       | Launch vehicles, guided missiles               | Net launcher may qualify       |
-| XI       | Military electronics                           | Sensor fusion, targeting       |
-| XII      | Fire control systems                           | Autonomous engagement          |
-| XIII     | Materials/miscellaneous                        | Specialized materials          |
+| Category | Description                      | Relevance                |
+| -------- | -------------------------------- | ------------------------ |
+| IV       | Launch vehicles, guided missiles | Net launcher may qualify |
+| XI       | Military electronics             | Sensor fusion, targeting |
+| XII      | Fire control systems             | Autonomous engagement    |
+| XIII     | Materials/miscellaneous          | Specialized materials    |
 
 ### Why ITAR Matters
 
-1. **SOSV Application**: US-based hardware accelerator, may require ITAR-ready posture
+1. **SOSV Application**: US-based hardware accelerator, may require ITAR-ready
+   posture
 2. **US Defense Contracts**: DoD procurement requires ITAR compliance
 3. **US Investors**: Export control violations create liability risk
-4. **Penalties**: Criminal penalties up to $1M and 20 years imprisonment per violation
+4. **Penalties**: Criminal penalties up to $1M and 20 years imprisonment per
+   violation
 
 ### Current Status
 
@@ -73,8 +80,8 @@ prerequisites:
 
 Proceed without ITAR architecture; address when needed.
 
-**Pros**: No upfront cost, faster initial development
-**Cons**:
+**Pros**: No upfront cost, faster initial development **Cons**:
+
 - **Retroactive compliance**: Extremely expensive and disruptive
 - **Deal breaker**: Disqualifies from US accelerators/contracts
 - **Legal exposure**: Potential violations during development
@@ -83,23 +90,26 @@ Proceed without ITAR architecture; address when needed.
 
 Register with DDTC and implement full compliance immediately.
 
-**Pros**: Complete compliance, US market ready
-**Cons**:
+**Pros**: Complete compliance, US market ready **Cons**:
+
 - **Premature cost**: $2,750/year registration + compliance costs
 - **Overhead**: Significant administrative burden
 - **May not be needed**: If classification excludes us
 
 ### Option 3: ITAR-Ready Architecture ✅ Selected
 
-Design architecture for ITAR compliance; implement controls before US engagement.
+Design architecture for ITAR compliance; implement controls before US
+engagement.
 
 **Pros**:
+
 - **Prepared**: Ready to activate when needed
 - **Minimal overhead**: No registration until required
 - **Risk mitigation**: Architecture prevents inadvertent violations
 - **Investor confidence**: Demonstrates regulatory awareness
 
 **Cons**:
+
 - **Some upfront cost**: Architecture design effort
 - **Constraints**: May limit some development practices
 
@@ -109,7 +119,9 @@ Design architecture for ITAR compliance; implement controls before US engagement
 
 Adopt **Option 3: ITAR-Ready Architecture**.
 
-Implement technical and procedural controls that enable ITAR compliance activation when:
+Implement technical and procedural controls that enable ITAR compliance
+activation when:
+
 - Formal USML classification obtained
 - US accelerator participation confirmed
 - US defense contract pursued
@@ -175,17 +187,16 @@ phoenix-rooivalk-itar/               # ITAR (Level 3) - FUTURE
 
 ### Access Control Matrix
 
-| Role                    | Level 0 | Level 1 | Level 2 | Level 3 |
-|-------------------------|---------|---------|---------|---------|
-| Public                  | ✅      | ❌      | ❌      | ❌      |
-| Team (Non-US)           | ✅      | ✅      | ⚠️*     | ❌      |
-| Team (US Person)        | ✅      | ✅      | ✅      | ✅      |
-| Investor (Non-US)       | ✅      | ✅      | ❌      | ❌      |
-| Investor (US Person)    | ✅      | ✅      | ✅      | ⚠️**   |
-| DoD Contractor          | ✅      | ✅      | ✅      | ✅      |
+| Role                 | Level 0 | Level 1 | Level 2 | Level 3 |
+| -------------------- | ------- | ------- | ------- | ------- |
+| Public               | ✅      | ❌      | ❌      | ❌      |
+| Team (Non-US)        | ✅      | ✅      | ⚠️\*    | ❌      |
+| Team (US Person)     | ✅      | ✅      | ✅      | ✅      |
+| Investor (Non-US)    | ✅      | ✅      | ❌      | ❌      |
+| Investor (US Person) | ✅      | ✅      | ✅      | ⚠️\*\*  |
+| DoD Contractor       | ✅      | ✅      | ✅      | ✅      |
 
-\* Requires export license determination
-\** Requires need-to-know and NDA
+\* Requires export license determination \*\* Requires need-to-know and NDA
 
 ### Infrastructure Segregation
 
@@ -235,15 +246,15 @@ Before Level 2/3 access:
 
 ### Technology Control Plan (TCP)
 
-| Control Area          | Measure                                          |
-|-----------------------|--------------------------------------------------|
-| Physical security     | Secured development environment                  |
-| Network security      | VPN, firewall, intrusion detection               |
-| Access control        | Role-based, MFA required                         |
-| Audit logging         | All access to controlled data logged             |
-| Visitor control       | No unescorted access to controlled areas         |
-| Foreign travel        | Pre-approval for devices with controlled data    |
-| Publications          | Review before public release                     |
+| Control Area      | Measure                                       |
+| ----------------- | --------------------------------------------- |
+| Physical security | Secured development environment               |
+| Network security  | VPN, firewall, intrusion detection            |
+| Access control    | Role-based, MFA required                      |
+| Audit logging     | All access to controlled data logged          |
+| Visitor control   | No unescorted access to controlled areas      |
+| Foreign travel    | Pre-approval for devices with controlled data |
+| Publications      | Review before public release                  |
 
 ### Audit Trail Requirements
 
@@ -284,30 +295,30 @@ pub enum AccessAction {
 
 ### Phase 1: Foundation (Current)
 
-| Task                              | Status       | Owner  |
-|-----------------------------------|--------------|--------|
-| Data classification scheme        | ✅ Defined   | Jurie  |
-| Repository structure planning     | ✅ Designed  | Team   |
-| Access control design             | ✅ Designed  | Team   |
-| Azure subscription separation     | 📅 Planned   | Jurie  |
+| Task                          | Status      | Owner |
+| ----------------------------- | ----------- | ----- |
+| Data classification scheme    | ✅ Defined  | Jurie |
+| Repository structure planning | ✅ Designed | Team  |
+| Access control design         | ✅ Designed | Team  |
+| Azure subscription separation | 📅 Planned  | Jurie |
 
 ### Phase 2: Pre-US Engagement (Before SOSV)
 
-| Task                              | Timeline     | Owner  |
-|-----------------------------------|--------------|--------|
-| Formal USML classification request| Q1 2026      | Legal  |
-| Repository segregation            | Q1 2026      | Jurie  |
-| Personnel screening process       | Q1 2026      | Martyn |
-| Export control training           | Q1 2026      | All    |
+| Task                               | Timeline | Owner  |
+| ---------------------------------- | -------- | ------ |
+| Formal USML classification request | Q1 2026  | Legal  |
+| Repository segregation             | Q1 2026  | Jurie  |
+| Personnel screening process        | Q1 2026  | Martyn |
+| Export control training            | Q1 2026  | All    |
 
 ### Phase 3: ITAR Activation (If Required)
 
-| Task                              | Timeline     | Owner  |
-|-----------------------------------|--------------|--------|
-| DDTC registration ($2,750/year)   | When needed  | Legal  |
-| Azure Government migration        | When needed  | Jurie  |
-| Full TCP implementation           | When needed  | Team   |
-| Annual compliance audit           | Ongoing      | External|
+| Task                            | Timeline    | Owner    |
+| ------------------------------- | ----------- | -------- |
+| DDTC registration ($2,750/year) | When needed | Legal    |
+| Azure Government migration      | When needed | Jurie    |
+| Full TCP implementation         | When needed | Team     |
+| Annual compliance audit         | Ongoing     | External |
 
 ---
 
@@ -315,23 +326,23 @@ pub enum AccessAction {
 
 ### ITAR-Ready (Current Phase)
 
-| Item                          | Cost         | Frequency   |
-|-------------------------------|--------------|-------------|
-| Architecture design           | Internal     | One-time    |
-| Repository setup              | Internal     | One-time    |
-| Azure subscription separation | ~$50/month   | Ongoing     |
-| **Total**                     | **~$600/yr** | -           |
+| Item                          | Cost         | Frequency |
+| ----------------------------- | ------------ | --------- |
+| Architecture design           | Internal     | One-time  |
+| Repository setup              | Internal     | One-time  |
+| Azure subscription separation | ~$50/month   | Ongoing   |
+| **Total**                     | **~$600/yr** | -         |
 
 ### Full ITAR Compliance (Future)
 
-| Item                          | Cost         | Frequency   |
-|-------------------------------|--------------|-------------|
-| DDTC registration             | $2,750       | Annual      |
-| Legal counsel (ITAR)          | $10,000+     | As needed   |
-| Compliance officer (part-time)| $20,000+     | Annual      |
-| Azure Government premium      | ~$200/month  | Ongoing     |
-| Annual audit                  | $5,000+      | Annual      |
-| **Total**                     | **~$45K/yr** | -           |
+| Item                           | Cost         | Frequency |
+| ------------------------------ | ------------ | --------- |
+| DDTC registration              | $2,750       | Annual    |
+| Legal counsel (ITAR)           | $10,000+     | As needed |
+| Compliance officer (part-time) | $20,000+     | Annual    |
+| Azure Government premium       | ~$200/month  | Ongoing   |
+| Annual audit                   | $5,000+      | Annual    |
+| **Total**                      | **~$45K/yr** | -         |
 
 ### ROI Justification
 
@@ -366,16 +377,21 @@ pub enum AccessAction {
 
 ## Related ADRs
 
-- [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture) - Zero-trust foundation
-- [ADR 0008: Compliance Architecture](./architecture-decision-records#adr-0008-compliance-architecture) - General compliance
-- [ADR 0040: Edge-Cloud Communication](./adr-0040-edge-cloud-communication) - Data handling
-- [ADR 0025: Azure Naming](./adr-0025-azure-naming-conventions) - Subscription structure
+- [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture) -
+  Zero-trust foundation
+- [ADR 0008: Compliance Architecture](./architecture-decision-records#adr-0008-compliance-architecture) -
+  General compliance
+- [ADR 0040: Edge-Cloud Communication](./adr-0040-edge-cloud-communication) -
+  Data handling
+- [ADR 0025: Azure Naming](./adr-0025-azure-naming-conventions) - Subscription
+  structure
 
 ---
 
 ## Open Questions
 
-1. **USML classification**: Formal determination needed - is C-UAS net launcher covered?
+1. **USML classification**: Formal determination needed - is C-UAS net launcher
+   covered?
 2. **South African NCACC**: Local export control requirements parallel to ITAR?
 3. **Dual registration**: Can we maintain both US and SA export licenses?
 4. **Team structure**: How to handle mixed US/non-US development team?

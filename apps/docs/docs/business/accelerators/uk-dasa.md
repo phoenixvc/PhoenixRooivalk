@@ -22,13 +22,13 @@ innovation to support UK defence and security. Part of UK Defence Innovation
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | UK Ministry of Defence |
-| **Part of** | UK Defence Innovation (UKDI) |
-| **Funding** | Up to £350K per proposal |
-| **Focus** | Defence and security innovation |
-| **Vision** | UK strategic advantage through innovation |
+| Aspect        | Details                                   |
+| ------------- | ----------------------------------------- |
+| **Organizer** | UK Ministry of Defence                    |
+| **Part of**   | UK Defence Innovation (UKDI)              |
+| **Funding**   | Up to £350K per proposal                  |
+| **Focus**     | Defence and security innovation           |
+| **Vision**    | UK strategic advantage through innovation |
 
 ---
 
@@ -45,22 +45,24 @@ innovation to support UK defence and security. Part of UK Defence Innovation
 
 The Open Call for Innovation is closing for transition to new UKDI service:
 
-| Phase | Date | Status |
-|-------|------|--------|
-| Cycle 4 Extended | Until Jan 13, 2026 | Open |
-| Transition Period | Jan - July 2026 | Closed |
-| New Service | July 2026 | Opens |
+| Phase             | Date               | Status |
+| ----------------- | ------------------ | ------ |
+| Cycle 4 Extended  | Until Jan 13, 2026 | Open   |
+| Transition Period | Jan - July 2026    | Closed |
+| New Service       | July 2026          | Opens  |
 
 ---
 
 ## Funding Opportunities
 
 ### Open Call for Innovation
+
 - **Funding:** Variable based on proposal
 - **Focus:** Wide range of defense challenges
 - **Process:** Rolling submissions
 
 ### Themed Competitions
+
 - **Funding:** Challenge-specific
 - **Focus:** Specific defense problems
 - **Example:** Ministry of Justice competition (Feb 2026)
@@ -69,10 +71,11 @@ The Open Call for Innovation is closing for transition to new UKDI service:
 
 ## NATO DIANA UK Partnership
 
-DASA partners with Janus Consortium to deliver the **NATO DIANA** programme
-in the UK.
+DASA partners with Janus Consortium to deliver the **NATO DIANA** programme in
+the UK.
 
 ### 2026 DIANA Cohort
+
 - **Challenge:** Contested Electromagnetic Environments
 - **Funding:** £100K+ contractual funding
 - **Applications:** 3,680 submissions (top 4% accepted)
@@ -84,12 +87,12 @@ in the UK.
 
 ## Eligibility
 
-| Requirement | Phoenix Rooivalk Status |
-|-------------|------------------------|
-| Innovative solution | Meets requirement |
-| Defence/security relevant | Meets requirement |
-| UK presence | Not required but helpful |
-| Previous government work | Not required |
+| Requirement               | Phoenix Rooivalk Status  |
+| ------------------------- | ------------------------ |
+| Innovative solution       | Meets requirement        |
+| Defence/security relevant | Meets requirement        |
+| UK presence               | Not required but helpful |
+| Previous government work  | Not required             |
 
 :::info International Access
 
@@ -113,12 +116,12 @@ required, though UK collaboration may strengthen applications.
 
 ## Support Available
 
-| Support Type | Description |
-|--------------|-------------|
-| **Innovation Partners** | Regional support team |
-| **Guidance** | Application assistance |
-| **Feedback** | Even for unsuccessful bids |
-| **Connections** | Link to defence end-users |
+| Support Type            | Description                |
+| ----------------------- | -------------------------- |
+| **Innovation Partners** | Regional support team      |
+| **Guidance**            | Application assistance     |
+| **Feedback**            | Even for unsuccessful bids |
+| **Connections**         | Link to defence end-users  |
 
 ---
 
@@ -126,13 +129,13 @@ required, though UK collaboration may strengthen applications.
 
 UK defence priorities relevant to Phoenix Rooivalk:
 
-| Area | Priority | PR Alignment |
-|------|----------|--------------|
-| **Counter-UAS** | High | Direct fit |
-| **Autonomous Systems** | High | Direct fit |
-| **Sensor Fusion** | High | Direct fit |
-| **AI/ML Applications** | High | Direct fit |
-| **Electronic Warfare** | Medium | Partial fit |
+| Area                   | Priority | PR Alignment |
+| ---------------------- | -------- | ------------ |
+| **Counter-UAS**        | High     | Direct fit   |
+| **Autonomous Systems** | High     | Direct fit   |
+| **Sensor Fusion**      | High     | Direct fit   |
+| **AI/ML Applications** | High     | Direct fit   |
+| **Electronic Warfare** | Medium   | Partial fit  |
 
 ---
 
@@ -144,6 +147,7 @@ UK defence priorities relevant to Phoenix Rooivalk:
 before the transition period.
 
 **Recommended Action:**
+
 1. Review current Open Call themes
 2. Contact DASA Innovation Partner
 3. Prepare proposal for counter-UAS capability
@@ -158,8 +162,10 @@ mechanisms and application processes.
 
 ## Key Contacts
 
-- **Website:** [gov.uk/dasa](https://www.gov.uk/government/organisations/defence-and-security-accelerator)
-- **Apply:** [Apply for Funding](https://www.gov.uk/government/collections/apply-for-funding)
+- **Website:**
+  [gov.uk/dasa](https://www.gov.uk/government/organisations/defence-and-security-accelerator)
+- **Apply:**
+  [Apply for Funding](https://www.gov.uk/government/collections/apply-for-funding)
 - **Email:** accelerator@dstl.gov.uk
 - **Innovation Partners:** Regional contacts on website
 
@@ -167,13 +173,13 @@ mechanisms and application processes.
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | Counter-UAS priority area |
-| Stage Fit | High | Development stage accepted |
-| Geographic Fit | High | International welcome |
-| Funding Level | High | Significant grants available |
-| **Overall Fit** | **High** | Strong opportunity |
+| Criteria        | Score    | Notes                        |
+| --------------- | -------- | ---------------------------- |
+| Technology Fit  | High     | Counter-UAS priority area    |
+| Stage Fit       | High     | Development stage accepted   |
+| Geographic Fit  | High     | International welcome        |
+| Funding Level   | High     | Significant grants available |
+| **Overall Fit** | **High** | Strong opportunity           |
 
 ---
 

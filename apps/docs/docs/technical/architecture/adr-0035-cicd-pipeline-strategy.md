@@ -25,9 +25,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Need reliable, automated deployment pipelines for monorepo with multiple apps, packages, and deployment targets
-2. **Decision**: GitHub Actions with environment-based deployment gates, Turborepo for build orchestration, and Azure SWA CLI for preview deployments
-3. **Trade-off**: GitHub Actions complexity vs. unified platform for code and deployments
+1. **Problem**: Need reliable, automated deployment pipelines for monorepo with
+   multiple apps, packages, and deployment targets
+2. **Decision**: GitHub Actions with environment-based deployment gates,
+   Turborepo for build orchestration, and Azure SWA CLI for preview deployments
+3. **Trade-off**: GitHub Actions complexity vs. unified platform for code and
+   deployments
 
 ---
 
@@ -36,20 +39,21 @@ prerequisites:
 ### Current State
 
 Phoenix Rooivalk uses a Turborepo monorepo with:
+
 - **apps/docs**: Docusaurus documentation site → Azure SWA
 - **apps/marketing**: Next.js marketing site → Azure SWA
 - **apps/tauri**: Desktop application → GitHub Releases
-- **packages/***: Shared libraries
+- **packages/\***: Shared libraries
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Monorepo support | Build only affected packages |
-| Environment gates | Require approval for production |
-| Preview deployments | PR previews for review |
+| Requirement         | Specification                    |
+| ------------------- | -------------------------------- |
+| Monorepo support    | Build only affected packages     |
+| Environment gates   | Require approval for production  |
+| Preview deployments | PR previews for review           |
 | Rollback capability | Quick revert to previous version |
-| Secret management | Secure credential handling |
+| Secret management   | Secure credential handling       |
 
 ---
 
@@ -83,11 +87,11 @@ Adopt **GitHub Actions** with the following architecture:
 
 ### Environment Strategy
 
-| Environment | Trigger | Approval | URL Pattern |
-|-------------|---------|----------|-------------|
-| Preview | PR created | None | `pr-{number}.preview.rooivalk.dev` |
-| Staging | Merge to main | None | `staging.rooivalk.dev` |
-| Production | Staging success | Required | `rooivalk.dev` |
+| Environment | Trigger         | Approval | URL Pattern                        |
+| ----------- | --------------- | -------- | ---------------------------------- |
+| Preview     | PR created      | None     | `pr-{number}.preview.rooivalk.dev` |
+| Staging     | Merge to main   | None     | `staging.rooivalk.dev`             |
+| Production  | Staging success | Required | `rooivalk.dev`                     |
 
 ---
 
@@ -111,7 +115,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # For Turborepo change detection
+          fetch-depth: 2 # For Turborepo change detection
 
       - uses: pnpm/action-setup@v4
         with:
@@ -120,7 +124,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -263,10 +267,10 @@ jobs:
 
 ### Environment Protection Rules
 
-| Environment | Rules |
-|-------------|-------|
-| staging | Branch: main only |
-| production | Reviewers: @JustAGhosT, Wait: 5 minutes after staging |
+| Environment | Rules                                                 |
+| ----------- | ----------------------------------------------------- |
+| staging     | Branch: main only                                     |
+| production  | Reviewers: @JustAGhosT, Wait: 5 minutes after staging |
 
 ### Required Status Checks
 
@@ -289,14 +293,14 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to rollback'
+        description: "Environment to rollback"
         required: true
         type: choice
         options:
           - staging
           - production
       version:
-        description: 'Git SHA or tag to rollback to'
+        description: "Git SHA or tag to rollback to"
         required: true
 
 jobs:
@@ -325,13 +329,13 @@ jobs:
 
 ### Repository Secrets
 
-| Secret | Purpose |
-|--------|---------|
-| `AZURE_CLIENT_ID` | OIDC authentication |
-| `AZURE_TENANT_ID` | Azure AD tenant |
-| `AZURE_SUBSCRIPTION_ID` | Target subscription |
-| `SWA_TOKEN_STAGING` | Staging deployment |
-| `SWA_TOKEN_PROD` | Production deployment |
+| Secret                  | Purpose               |
+| ----------------------- | --------------------- |
+| `AZURE_CLIENT_ID`       | OIDC authentication   |
+| `AZURE_TENANT_ID`       | Azure AD tenant       |
+| `AZURE_SUBSCRIPTION_ID` | Target subscription   |
+| `SWA_TOKEN_STAGING`     | Staging deployment    |
+| `SWA_TOKEN_PROD`        | Production deployment |
 
 ### Environment Secrets
 
@@ -363,8 +367,10 @@ production/
   if: failure()
   uses: slackapi/slack-github-action@v1
   with:
-    channel-id: 'C0XXXXXXXXX'
-    slack-message: 'Workflow ${{ github.workflow }} failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+    channel-id: "C0XXXXXXXXX"
+    slack-message:
+      "Workflow ${{ github.workflow }} failed: ${{ github.server_url }}/${{
+      github.repository }}/actions/runs/${{ github.run_id }}"
 ```
 
 ---

@@ -146,9 +146,7 @@ describe("Calendar Export Utilities", () => {
       expect(url).toContain("calendar.google.com/calendar/render");
       expect(url).toContain("action=TEMPLATE");
       expect(url).toContain("text=Test+Event");
-      expect(url).toContain(
-        "details=This+is+a+test+event+description",
-      );
+      expect(url).toContain("details=This+is+a+test+event+description");
       expect(url).toContain("location=Test+Location");
     });
 
@@ -176,9 +174,7 @@ describe("Calendar Export Utilities", () => {
 
       expect(url).toContain("outlook.live.com/calendar");
       expect(url).toContain("subject=Test+Event");
-      expect(url).toContain(
-        "body=This+is+a+test+event+description",
-      );
+      expect(url).toContain("body=This+is+a+test+event+description");
       expect(url).toContain("location=Test+Location");
     });
 

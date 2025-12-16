@@ -117,13 +117,13 @@ export const CalendarIntegration: React.FC<CalendarIntegrationProps> = ({
           {eventTypes.map((event, index) => (
             <div key={index} className={styles.eventType}>
               <div className={styles.eventTypeHeader}>
-                <div className={styles.eventTypeIcon}>{getIcon(event.icon)}</div>
+                <div className={styles.eventTypeIcon}>
+                  {getIcon(event.icon)}
+                </div>
                 <h3 className={styles.eventTypeName}>{event.name}</h3>
               </div>
               <div className={styles.eventTypeDuration}>{event.duration}</div>
-              <p className={styles.eventTypeDescription}>
-                {event.description}
-              </p>
+              <p className={styles.eventTypeDescription}>{event.description}</p>
             </div>
           ))}
         </div>

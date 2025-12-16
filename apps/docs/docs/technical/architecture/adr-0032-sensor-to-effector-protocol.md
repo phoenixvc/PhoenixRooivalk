@@ -27,9 +27,12 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Real-time targeting handoff from sensor fusion to effector systems requires sub-50ms latency with cryptographic integrity
-2. **Decision**: Implement dedicated targeting bus with predictive lead calculation, priority messaging, and evidence chain integration
-3. **Trade-off**: Protocol complexity vs. engagement accuracy and legal defensibility
+1. **Problem**: Real-time targeting handoff from sensor fusion to effector
+   systems requires sub-50ms latency with cryptographic integrity
+2. **Decision**: Implement dedicated targeting bus with predictive lead
+   calculation, priority messaging, and evidence chain integration
+3. **Trade-off**: Protocol complexity vs. engagement accuracy and legal
+   defensibility
 
 ---
 
@@ -37,13 +40,13 @@ prerequisites:
 
 ### Timing Requirements
 
-| Phase | Latency Budget | Critical Path |
-|-------|----------------|---------------|
-| Sensor detection | 0-20ms | Radar/camera processing |
-| Track fusion | 20-35ms | Multi-sensor correlation |
-| Threat classification | 35-45ms | AI inference |
-| Effector handoff | 45-50ms | **This protocol** |
-| Engagement | 50-150ms | Physical deployment |
+| Phase                 | Latency Budget | Critical Path            |
+| --------------------- | -------------- | ------------------------ |
+| Sensor detection      | 0-20ms         | Radar/camera processing  |
+| Track fusion          | 20-35ms        | Multi-sensor correlation |
+| Threat classification | 35-45ms        | AI inference             |
+| Effector handoff      | 45-50ms        | **This protocol**        |
+| Engagement            | 50-150ms       | Physical deployment      |
 
 ### Key Challenges
 
@@ -303,12 +306,12 @@ impl LeadCalculator {
 
 ### Reliability
 
-| Guarantee | Mechanism |
-|-----------|-----------|
-| Ordered delivery | Sequence numbers |
-| No duplicates | Idempotency keys |
-| Bounded latency | Priority queuing, <5ms bus latency |
-| Integrity | Ed25519 signatures |
+| Guarantee        | Mechanism                          |
+| ---------------- | ---------------------------------- |
+| Ordered delivery | Sequence numbers                   |
+| No duplicates    | Idempotency keys                   |
+| Bounded latency  | Priority queuing, <5ms bus latency |
+| Integrity        | Ed25519 signatures                 |
 
 ### Quality of Service
 

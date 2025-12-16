@@ -7,7 +7,8 @@ A unified, opinionated naming standard for all Azure resources across:
 - **tws** – Twines & Straps (Martyn)
 - **mys** – Mystira (Eben)
 
-This document is designed for both humans and AI systems. All patterns herein MUST be followed unless explicitly superseded.
+This document is designed for both humans and AI systems. All patterns herein
+MUST be followed unless explicitly superseded.
 
 ---
 
@@ -58,11 +59,11 @@ This document is designed for both humans and AI systems. All patterns herein MU
 ### 2.1 Org Codes (Ownership)
 
 | Code | Organisation / Brand | Owner  | Notes                                       |
-|------|----------------------|--------|---------------------------------------------|
-| nl   | NeuralLiquid         | Jurie  | Core AI, defence, Autopr, Rooivalk         |
-| pvc  | Phoenix VC           | Eben   | VC brand, investor tooling, market data    |
-| tws  | Twines & Straps      | Martyn | E-commerce & operations, Tassa integrations|
-| mys  | Mystira              | Eben   | Mystira platform + Story generator         |
+| ---- | -------------------- | ------ | ------------------------------------------- |
+| nl   | NeuralLiquid         | Jurie  | Core AI, defence, Autopr, Rooivalk          |
+| pvc  | Phoenix VC           | Eben   | VC brand, investor tooling, market data     |
+| tws  | Twines & Straps      | Martyn | E-commerce & operations, Tassa integrations |
+| mys  | Mystira              | Eben   | Mystira platform + Story generator          |
 
 These codes are **authoritative** — NEVER invent new org codes.
 
@@ -71,7 +72,7 @@ These codes are **authoritative** — NEVER invent new org codes.
 ### 2.2 Environment Codes
 
 | Env     | Meaning             |
-|---------|---------------------|
+| ------- | ------------------- |
 | dev     | Development         |
 | staging | Pre-production / QA |
 | prod    | Production          |
@@ -84,33 +85,33 @@ No additional values allowed without updating this doc.
 
 #### NeuralLiquid (nl)
 
-| Project  | Description                    |
-|----------|--------------------------------|
+| Project  | Description                             |
+| -------- | --------------------------------------- |
 | rooivalk | Counter-UAS platform (Phoenix Rooivalk) |
-| autopr   | Autopr automation platform    |
-| nl-core  | Shared NL foundation services |
-| nl-ai    | Shared NL AI services         |
+| autopr   | Autopr automation platform              |
+| nl-core  | Shared NL foundation services           |
+| nl-ai    | Shared NL AI services                   |
 
 #### Phoenix VC (pvc)
 
 | Project | Description              |
-|---------|--------------------------|
+| ------- | ------------------------ |
 | website | Public brand website     |
 | portal  | Investor portal (future) |
 | mktdata | Market/crypto pipelines  |
 
 #### Twines & Straps (tws)
 
-| Project   | Description                  |
-|-----------|------------------------------|
-| website   | Public e-commerce frontend   |
-| backoffice| Internal management systems  |
-| tassa-int | Tassa integration services   |
+| Project    | Description                 |
+| ---------- | --------------------------- |
+| website    | Public e-commerce frontend  |
+| backoffice | Internal management systems |
+| tassa-int  | Tassa integration services  |
 
 #### Mystira (mys)
 
 | Project       | Description                          |
-|---------------|--------------------------------------|
+| ------------- | ------------------------------------ |
 | mystira       | Core storytelling/AI engine          |
 | mystira-story | Dedicated Story Generator deployment |
 
@@ -126,28 +127,28 @@ No additional values allowed without updating this doc.
 
 ### 2.4 Type Codes (Resource Types)
 
-| Type    | Meaning                        |
-|---------|--------------------------------|
-| app     | App Service / Web frontend     |
-| api     | Backend API                    |
-| func    | Function App                   |
-| swa     | Static Web App                 |
-| db      | Database (SQL/Postgres/etc.)   |
-| storage | Storage account                |
-| kv      | Key Vault                      |
-| queue   | Service Bus / queues           |
-| cache   | Redis or similar               |
-| ai      | AI services (OpenAI/Cog/etc.)  |
-| acr     | Container registry             |
-| vnet    | Virtual network                |
-| subnet  | Subnet                         |
-| dns     | DNS zone or DNS resource       |
-| log     | Monitoring / log workspace     |
+| Type    | Meaning                               |
+| ------- | ------------------------------------- |
+| app     | App Service / Web frontend            |
+| api     | Backend API                           |
+| func    | Function App                          |
+| swa     | Static Web App                        |
+| db      | Database (SQL/Postgres/etc.)          |
+| storage | Storage account                       |
+| kv      | Key Vault                             |
+| queue   | Service Bus / queues                  |
+| cache   | Redis or similar                      |
+| ai      | AI services (OpenAI/Cog/etc.)         |
+| acr     | Container registry                    |
+| vnet    | Virtual network                       |
+| subnet  | Subnet                                |
+| dns     | DNS zone or DNS resource              |
+| log     | Monitoring / log workspace            |
 | rg      | **Reserved** for resource groups only |
-| cosmos  | Cosmos DB                      |
-| appi    | Application Insights           |
-| nhns    | Notification Hub Namespace     |
-| nh      | Notification Hub               |
+| cosmos  | Cosmos DB                             |
+| appi    | Application Insights                  |
+| nhns    | Notification Hub Namespace            |
+| nh      | Notification Hub                      |
 
 Do not invent new `type` values ad hoc. Extend this table explicitly.
 
@@ -156,7 +157,7 @@ Do not invent new `type` values ad hoc. Extend this table explicitly.
 ### 2.5 Region Codes
 
 | Code | Azure Region           |
-|------|------------------------|
+| ---- | ---------------------- |
 | euw  | West Europe            |
 | eun  | North Europe           |
 | wus  | West US                |
@@ -174,8 +175,8 @@ Do not invent new `type` values ad hoc. Extend this table explicitly.
 | aue  | Australia East         |
 | glob | Global / regionless    |
 
-`saf` (South Africa West) exists but not all services are available.
-Always verify service support before using it.
+`saf` (South Africa West) exists but not all services are available. Always
+verify service support before using it.
 
 ---
 
@@ -257,21 +258,21 @@ Most Azure resource names are **immutable**.
 
 ### 5.1 Capabilities Matrix
 
-| Resource Type              | Rename Name? | Move RG/Sub? | Typical Action to Fix Naming        |
-|---------------------------|--------------|--------------|-------------------------------------|
-| Resource Group            | ❌ No        | n/a          | New RG + move resources if supported|
-| App Service               | ❌ No        | ✅ Often     | New app + DNS/traffic cutover       |
-| Function App              | ❌ No        | ✅ Often     | New app + config migration          |
-| Static Web App            | ❌ No        | ⚠ Limited   | New SWA + rebind domains            |
-| Storage Account           | ❌ No        | ⚠ Limited   | New account + data migration        |
-| SQL / DB / Managed Instance| ❌ No       | ⚠ Depends   | New server/db + data migration      |
-| Key Vault                 | ❌ No        | ⚠ Limited   | New vault + re-seed secrets         |
-| VNet / Subnet             | ❌ No        | ⚠ Limited   | New VNet/Subnets + reattach resources|
-| DNS Zone                  | ❌ No        | ⚠ Limited   | New zone (domain = name)            |
-| Log Analytics Workspace   | ❌ No        | ✅ Often     | New workspace + update diagnostics  |
-| Cosmos DB                 | ❌ No        | ⚠ Limited   | New account + data migration        |
-| Dashboards / Workbooks    | ✅ Yes       | n/a          | Rename in portal                    |
-| Tags                      | ✅ Yes       | n/a          | Edit freely                         |
+| Resource Type               | Rename Name? | Move RG/Sub? | Typical Action to Fix Naming          |
+| --------------------------- | ------------ | ------------ | ------------------------------------- |
+| Resource Group              | ❌ No        | n/a          | New RG + move resources if supported  |
+| App Service                 | ❌ No        | ✅ Often     | New app + DNS/traffic cutover         |
+| Function App                | ❌ No        | ✅ Often     | New app + config migration            |
+| Static Web App              | ❌ No        | ⚠ Limited    | New SWA + rebind domains              |
+| Storage Account             | ❌ No        | ⚠ Limited    | New account + data migration          |
+| SQL / DB / Managed Instance | ❌ No        | ⚠ Depends    | New server/db + data migration        |
+| Key Vault                   | ❌ No        | ⚠ Limited    | New vault + re-seed secrets           |
+| VNet / Subnet               | ❌ No        | ⚠ Limited    | New VNet/Subnets + reattach resources |
+| DNS Zone                    | ❌ No        | ⚠ Limited    | New zone (domain = name)              |
+| Log Analytics Workspace     | ❌ No        | ✅ Often     | New workspace + update diagnostics    |
+| Cosmos DB                   | ❌ No        | ⚠ Limited    | New account + data migration          |
+| Dashboards / Workbooks      | ✅ Yes       | n/a          | Rename in portal                      |
+| Tags                        | ✅ Yes       | n/a          | Edit freely                           |
 
 Always verify current Azure documentation before planning large migrations.
 
@@ -281,22 +282,22 @@ Always verify current Azure documentation before planning large migrations.
 
 The previous naming convention used: `{env}-{region}-{type}-rooivalk`
 
-| Old Name (Legacy)                    | New Name (v2.1)                    | Notes                           |
-|--------------------------------------|------------------------------------|---------------------------------|
-| dev-eus2-rg-rooivalk                 | nl-dev-rooivalk-rg-eus2           | NeuralLiquid owns Rooivalk      |
-| prd-eus2-rg-rooivalk                 | nl-prod-rooivalk-rg-eus2          |                                 |
-| dev-eus2-swa-rooivalk                | nl-dev-rooivalk-swa-eus2          |                                 |
-| prd-eus2-swa-rooivalk                | nl-prod-rooivalk-swa-eus2         |                                 |
-| dev-eus2-func-rooivalk               | nl-dev-rooivalk-func-eus2         |                                 |
-| prd-eus2-func-rooivalk               | nl-prod-rooivalk-func-eus2        |                                 |
-| dev-eus2-cosmos-rooivalk             | nl-dev-rooivalk-cosmos-eus2       |                                 |
-| prd-eus2-cosmos-rooivalk             | nl-prod-rooivalk-cosmos-eus2      |                                 |
-| dev-eus2-kv-rooivalk                 | nl-dev-rooivalk-kv-eus2           |                                 |
-| prd-eus2-kv-rooivalk                 | nl-prod-rooivalk-kv-eus2          |                                 |
-| deveus2strooivalk                    | nldevrooivalksteus2               | Storage account (no hyphens)    |
-| prdeus2strooivalk                    | nlprodrooivalksteus2              |                                 |
-| dev-eus2-swa-marketing-rooivalk      | nl-dev-rooivalk-marketing-swa-eus2| Marketing site                  |
-| prd-eus2-swa-marketing-rooivalk      | nl-prod-rooivalk-marketing-swa-eus2|                                |
+| Old Name (Legacy)               | New Name (v2.1)                     | Notes                        |
+| ------------------------------- | ----------------------------------- | ---------------------------- |
+| dev-eus2-rg-rooivalk            | nl-dev-rooivalk-rg-eus2             | NeuralLiquid owns Rooivalk   |
+| prd-eus2-rg-rooivalk            | nl-prod-rooivalk-rg-eus2            |                              |
+| dev-eus2-swa-rooivalk           | nl-dev-rooivalk-swa-eus2            |                              |
+| prd-eus2-swa-rooivalk           | nl-prod-rooivalk-swa-eus2           |                              |
+| dev-eus2-func-rooivalk          | nl-dev-rooivalk-func-eus2           |                              |
+| prd-eus2-func-rooivalk          | nl-prod-rooivalk-func-eus2          |                              |
+| dev-eus2-cosmos-rooivalk        | nl-dev-rooivalk-cosmos-eus2         |                              |
+| prd-eus2-cosmos-rooivalk        | nl-prod-rooivalk-cosmos-eus2        |                              |
+| dev-eus2-kv-rooivalk            | nl-dev-rooivalk-kv-eus2             |                              |
+| prd-eus2-kv-rooivalk            | nl-prod-rooivalk-kv-eus2            |                              |
+| deveus2strooivalk               | nldevrooivalksteus2                 | Storage account (no hyphens) |
+| prdeus2strooivalk               | nlprodrooivalksteus2                |                              |
+| dev-eus2-swa-marketing-rooivalk | nl-dev-rooivalk-marketing-swa-eus2  | Marketing site               |
+| prd-eus2-swa-marketing-rooivalk | nl-prod-rooivalk-marketing-swa-eus2 |                              |
 
 ---
 
@@ -464,7 +465,8 @@ done
 
 When migrating from legacy naming to v2.1:
 
-1. **Do NOT rename existing resources in-place** — most Azure resource names are immutable
+1. **Do NOT rename existing resources in-place** — most Azure resource names are
+   immutable
 2. **Create new resources with correct names** in the new resource group
 3. **Migrate data/configuration** from old to new resources
 4. **Update DNS/traffic routing** to point to new resources

@@ -11,7 +11,12 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import { validateAuthHeader } from "../lib/auth";
-import { Errors, successResponse, checkRateLimitAsync, RateLimits } from "../lib/utils";
+import {
+  Errors,
+  successResponse,
+  checkRateLimitAsync,
+  RateLimits,
+} from "../lib/utils";
 import {
   weeklyReportsService,
   GenerateReportOptions,
@@ -35,8 +40,15 @@ async function generateReportHandler(
   }
 
   // Rate limit - expensive AI operation
-  if (!(await checkRateLimitAsync(`weekly-report:${authResult.userId}`, RateLimits.ai))) {
-    return Errors.rateLimited("Rate limit exceeded. Please wait before generating another report.");
+  if (
+    !(await checkRateLimitAsync(
+      `weekly-report:${authResult.userId}`,
+      RateLimits.ai,
+    ))
+  ) {
+    return Errors.rateLimited(
+      "Rate limit exceeded. Please wait before generating another report.",
+    );
   }
 
   try {
@@ -74,7 +86,9 @@ async function generateReportHandler(
       );
     }
 
-    context.log(`Generating weekly report for ${data.repositories.length} repositories`);
+    context.log(
+      `Generating weekly report for ${data.repositories.length} repositories`,
+    );
 
     const result = await weeklyReportsService.generateReport(
       data,
@@ -402,7 +416,9 @@ async function validateRepositoryHandler(
   try {
     const repoString = request.query.get("repository");
     if (!repoString) {
-      return Errors.badRequest("Repository parameter is required (format: owner/repo)");
+      return Errors.badRequest(
+        "Repository parameter is required (format: owner/repo)",
+      );
     }
 
     const parsed = gitHubService.parseRepository(repoString);

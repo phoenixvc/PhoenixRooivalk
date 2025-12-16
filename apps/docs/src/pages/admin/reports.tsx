@@ -146,7 +146,10 @@ export default function ReportsAdminPage(): React.ReactElement {
     const hasGenerating = reports.some((r) => r.status === "generating");
 
     if (hasGenerating) {
-      pollIntervalRef.current = setInterval(pollGeneratingReports, POLL_INTERVAL);
+      pollIntervalRef.current = setInterval(
+        pollGeneratingReports,
+        POLL_INTERVAL,
+      );
     }
 
     return () => {
@@ -657,7 +660,9 @@ export default function ReportsAdminPage(): React.ReactElement {
                 key={report.id}
                 className={`${styles.reportCard} ${selectedReport?.id === report.id ? styles.selected : ""}`}
                 onClick={() => setSelectedReport(report)}
-                onKeyDown={(e) => e.key === "Enter" && setSelectedReport(report)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setSelectedReport(report)
+                }
                 role="button"
                 tabIndex={0}
               >

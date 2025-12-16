@@ -198,7 +198,9 @@ export async function getWeeklyReports(filters?: {
 /**
  * Get a single weekly report
  */
-export async function getWeeklyReport(id: string): Promise<WeeklyReport | null> {
+export async function getWeeklyReport(
+  id: string,
+): Promise<WeeklyReport | null> {
   try {
     const headers = await getAuthHeader();
     const response = await fetch(`${API_BASE}/reports/weekly/${id}`, {
@@ -279,10 +281,13 @@ export async function regenerateWeeklyReport(
 ): Promise<{ success: boolean; report?: WeeklyReport; error?: string }> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/reports/weekly/${id}/regenerate`, {
-      method: "POST",
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE}/reports/weekly/${id}/regenerate`,
+      {
+        method: "POST",
+        headers,
+      },
+    );
 
     const result = await response.json();
 
@@ -309,7 +314,9 @@ export async function regenerateWeeklyReport(
 /**
  * Export report as markdown
  */
-export async function exportReportAsMarkdown(id: string): Promise<string | null> {
+export async function exportReportAsMarkdown(
+  id: string,
+): Promise<string | null> {
   try {
     const headers = await getAuthHeader();
     const response = await fetch(`${API_BASE}/reports/weekly/${id}/export`, {
@@ -335,9 +342,12 @@ export async function exportReportAsMDX(
 ): Promise<{ content: string; filePath: string } | null> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/reports/weekly/${id}/export-mdx`, {
-      headers,
-    });
+    const response = await fetch(
+      `${API_BASE}/reports/weekly/${id}/export-mdx`,
+      {
+        headers,
+      },
+    );
 
     if (!response.ok) {
       return null;

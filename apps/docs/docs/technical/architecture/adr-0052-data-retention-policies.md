@@ -27,8 +27,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Different data types have different legal retention requirements, storage costs, and operational needs
-2. **Decision**: Implement tiered retention policy with automated lifecycle management, legal hold capability, and jurisdiction-aware purging
+1. **Problem**: Different data types have different legal retention
+   requirements, storage costs, and operational needs
+2. **Decision**: Implement tiered retention policy with automated lifecycle
+   management, legal hold capability, and jurisdiction-aware purging
 3. **Trade-off**: Storage costs vs. legal compliance and operational value
 
 ---
@@ -37,22 +39,22 @@ prerequisites:
 
 ### Legal Requirements
 
-| Jurisdiction | Regulation | Retention Requirements |
-|--------------|------------|------------------------|
-| South Africa | POPIA | Personal data: purpose-limited |
-| EU | GDPR | Personal data: minimize retention |
-| US | Various | Industry-specific (defense: 5-10 years) |
-| Aviation | ICAO | Flight data: varies by incident |
+| Jurisdiction | Regulation | Retention Requirements                  |
+| ------------ | ---------- | --------------------------------------- |
+| South Africa | POPIA      | Personal data: purpose-limited          |
+| EU           | GDPR       | Personal data: minimize retention       |
+| US           | Various    | Industry-specific (defense: 5-10 years) |
+| Aviation     | ICAO       | Flight data: varies by incident         |
 
 ### Data Categories
 
-| Category | Example | Sensitivity | Volume |
-|----------|---------|-------------|--------|
-| Evidence | Engagement logs | Critical | Medium |
-| Operational | Track history | High | High |
-| Telemetry | Sensor readings | Medium | Very High |
-| Audit | Access logs | Medium | High |
-| Debug | Application logs | Low | Very High |
+| Category    | Example          | Sensitivity | Volume    |
+| ----------- | ---------------- | ----------- | --------- |
+| Evidence    | Engagement logs  | Critical    | Medium    |
+| Operational | Track history    | High        | High      |
+| Telemetry   | Sensor readings  | Medium      | Very High |
+| Audit       | Access logs      | Medium      | High      |
+| Debug       | Application logs | Low         | Very High |
 
 ---
 
@@ -108,18 +110,18 @@ Implement **tiered retention policy** with four retention classes:
 
 ### Retention Matrix
 
-| Data Type | Tier | Retention | Archive | Purge |
-|-----------|------|-----------|---------|-------|
-| Engagement evidence | 1 | Permanent | Glacier | Never |
-| Legal hold items | 1 | Hold duration | Glacier | On release |
-| Export control records | 2 | 5 years | Glacier 1yr | Auto |
-| Audit logs | 2 | 5 years | Glacier 1yr | Auto |
-| Track history | 3 | 1 year | Cool 90d | Auto |
-| Performance metrics | 3 | 1 year | Cool 90d | Auto |
-| User activity | 3 | 1 year | Cool 90d | Auto |
-| Raw telemetry | 4 | 90 days | None | Auto |
-| Debug logs | 4 | 30 days | None | Auto |
-| Temp processing | 4 | 7 days | None | Auto |
+| Data Type              | Tier | Retention     | Archive     | Purge      |
+| ---------------------- | ---- | ------------- | ----------- | ---------- |
+| Engagement evidence    | 1    | Permanent     | Glacier     | Never      |
+| Legal hold items       | 1    | Hold duration | Glacier     | On release |
+| Export control records | 2    | 5 years       | Glacier 1yr | Auto       |
+| Audit logs             | 2    | 5 years       | Glacier 1yr | Auto       |
+| Track history          | 3    | 1 year        | Cool 90d    | Auto       |
+| Performance metrics    | 3    | 1 year        | Cool 90d    | Auto       |
+| User activity          | 3    | 1 year        | Cool 90d    | Auto       |
+| Raw telemetry          | 4    | 90 days       | None        | Auto       |
+| Debug logs             | 4    | 30 days       | None        | Auto       |
+| Temp processing        | 4    | 7 days        | None        | Auto       |
 
 ### Classification Rules
 
@@ -359,12 +361,12 @@ impl LegalHold {
 
 ### Personal Data Retention
 
-| Data Element | Retention | Anonymization | Deletion |
-|--------------|-----------|---------------|----------|
-| Operator ID | Session + 1 year | Hash after 1 year | On request |
-| IP addresses | 90 days | Hash after 90 days | Auto |
-| Location data | Purpose duration | Aggregate after 30 days | Auto |
-| Access logs | 1 year | Anonymize after 1 year | Auto |
+| Data Element  | Retention        | Anonymization           | Deletion   |
+| ------------- | ---------------- | ----------------------- | ---------- |
+| Operator ID   | Session + 1 year | Hash after 1 year       | On request |
+| IP addresses  | 90 days          | Hash after 90 days      | Auto       |
+| Location data | Purpose duration | Aggregate after 30 days | Auto       |
+| Access logs   | 1 year           | Anonymize after 1 year  | Auto       |
 
 ### Anonymization Process
 
@@ -413,23 +415,23 @@ impl Anonymizer {
 
 ### Cost Model
 
-| Storage Tier | Cost/GB/Month | Use Case |
-|--------------|---------------|----------|
-| Hot (Cosmos) | $0.25 | Active data |
-| Hot (Blob) | $0.018 | Recent files |
-| Cool (Blob) | $0.01 | Archived recent |
-| Archive (Blob) | $0.002 | Long-term |
+| Storage Tier   | Cost/GB/Month | Use Case        |
+| -------------- | ------------- | --------------- |
+| Hot (Cosmos)   | $0.25         | Active data     |
+| Hot (Blob)     | $0.018        | Recent files    |
+| Cool (Blob)    | $0.01         | Archived recent |
+| Archive (Blob) | $0.002        | Long-term       |
 
 ### Estimated Monthly Costs
 
-| Data Type | Volume | Tier | Monthly Cost |
-|-----------|--------|------|--------------|
-| Active evidence | 50 GB | Hot | $12.50 |
-| Track history | 200 GB | Cool | $2.00 |
-| Telemetry | 500 GB | Hot (30d) → Delete | $9.00 |
-| Audit logs | 100 GB | Cool → Archive | $0.50 |
-| Debug logs | 1 TB | Hot (30d) → Delete | $18.00 |
-| **Total** | **1.85 TB** | | **~$42/month** |
+| Data Type       | Volume      | Tier               | Monthly Cost   |
+| --------------- | ----------- | ------------------ | -------------- |
+| Active evidence | 50 GB       | Hot                | $12.50         |
+| Track history   | 200 GB      | Cool               | $2.00          |
+| Telemetry       | 500 GB      | Hot (30d) → Delete | $9.00          |
+| Audit logs      | 100 GB      | Cool → Archive     | $0.50          |
+| Debug logs      | 1 TB        | Hot (30d) → Delete | $18.00         |
+| **Total**       | **1.85 TB** |                    | **~$42/month** |
 
 ---
 

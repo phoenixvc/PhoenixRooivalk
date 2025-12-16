@@ -24,8 +24,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Need to safely roll out features, enable A/B testing, and provide tenant-specific functionality without separate deployments
-2. **Decision**: Implement feature flag system with Azure App Configuration, supporting percentage rollouts, tenant targeting, and kill switches
+1. **Problem**: Need to safely roll out features, enable A/B testing, and
+   provide tenant-specific functionality without separate deployments
+2. **Decision**: Implement feature flag system with Azure App Configuration,
+   supporting percentage rollouts, tenant targeting, and kill switches
 3. **Trade-off**: Runtime complexity vs. deployment flexibility
 
 ---
@@ -34,23 +36,23 @@ prerequisites:
 
 ### Use Cases
 
-| Use Case | Description |
-|----------|-------------|
+| Use Case        | Description                                  |
+| --------------- | -------------------------------------------- |
 | Gradual rollout | Enable feature for 10% → 50% → 100% of users |
-| Tenant features | Premium features for Enterprise tier only |
-| Kill switch | Instantly disable problematic feature |
-| A/B testing | Compare feature variants |
-| Beta testing | Enable for specific users |
+| Tenant features | Premium features for Enterprise tier only    |
+| Kill switch     | Instantly disable problematic feature        |
+| A/B testing     | Compare feature variants                     |
+| Beta testing    | Enable for specific users                    |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Evaluation speed | <10ms local, <100ms remote |
-| Update latency | Changes reflect within 30 seconds |
-| Targeting | User, tenant, percentage, custom rules |
-| Audit | Who changed what, when |
-| SDK support | Rust, TypeScript, .NET |
+| Requirement      | Specification                          |
+| ---------------- | -------------------------------------- |
+| Evaluation speed | <10ms local, <100ms remote             |
+| Update latency   | Changes reflect within 30 seconds      |
+| Targeting        | User, tenant, percentage, custom rules |
+| Audit            | Who changed what, when                 |
+| SDK support      | Rust, TypeScript, .NET                 |
 
 ---
 
@@ -184,9 +186,7 @@ pub enum FlagValue {
         },
         {
           "name": "Enterprise tenants",
-          "conditions": [
-            { "type": "TenantTier", "values": ["Enterprise"] }
-          ],
+          "conditions": [{ "type": "TenantTier", "values": ["Enterprise"] }],
           "value": true,
           "allocation": { "percentage": 50, "seed": "targeting-v2" }
         }
@@ -201,9 +201,7 @@ pub enum FlagValue {
       "targeting": [
         {
           "name": "Enterprise",
-          "conditions": [
-            { "type": "TenantTier", "values": ["Enterprise"] }
-          ],
+          "conditions": [{ "type": "TenantTier", "values": ["Enterprise"] }],
           "value": 1000
         }
       ],
@@ -305,7 +303,7 @@ pub struct EvaluationContext {
 ### TypeScript SDK
 
 ```typescript
-import { FeatureManager, EvaluationContext } from '@phoenix/features';
+import { FeatureManager, EvaluationContext } from "@phoenix/features";
 
 const features = new FeatureManager({
   connectionString: process.env.APP_CONFIG_CONNECTION_STRING,
@@ -313,14 +311,14 @@ const features = new FeatureManager({
 });
 
 // Boolean check
-if (features.isEnabled('new_targeting_algo', context)) {
+if (features.isEnabled("new_targeting_algo", context)) {
   useNewAlgorithm();
 } else {
   useLegacyAlgorithm();
 }
 
 // Value retrieval
-const maxTracks = features.getValue<number>('max_tracks_display', context, 100);
+const maxTracks = features.getValue<number>("max_tracks_display", context, 100);
 
 // React hook
 function useFeature(flagId: string): boolean {

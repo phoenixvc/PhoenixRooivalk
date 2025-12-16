@@ -47,10 +47,9 @@ export default function DiagnosticsPage(): JSX.Element {
   }, []);
 
   const runDiagnostics = () => {
-    const azureConfig = siteConfig.customFields?.azureConfig as Record<
-      string,
-      string
-    > | undefined;
+    const azureConfig = siteConfig.customFields?.azureConfig as
+      | Record<string, string>
+      | undefined;
 
     // Check configuration values
     const configs: ConfigValue[] = [
@@ -131,7 +130,7 @@ export default function DiagnosticsPage(): JSX.Element {
 
     // 3. Authentication Configuration
     const authConfigured = Boolean(
-      azureConfig?.tenantId && azureConfig?.clientId
+      azureConfig?.tenantId && azureConfig?.clientId,
     );
     results.push({
       name: "Authentication",
@@ -175,10 +174,9 @@ export default function DiagnosticsPage(): JSX.Element {
   const testFunctionsConnectivity = async () => {
     setFunctionsTest({ status: "testing", message: "Testing connection..." });
 
-    const azureConfig = siteConfig.customFields?.azureConfig as Record<
-      string,
-      string
-    > | undefined;
+    const azureConfig = siteConfig.customFields?.azureConfig as
+      | Record<string, string>
+      | undefined;
 
     if (!azureConfig?.functionsBaseUrl) {
       setFunctionsTest({
@@ -216,7 +214,7 @@ export default function DiagnosticsPage(): JSX.Element {
   };
 
   const getStatusIcon = (
-    status: "ok" | "warning" | "error" | "unknown"
+    status: "ok" | "warning" | "error" | "unknown",
   ): string => {
     switch (status) {
       case "ok":
@@ -231,7 +229,7 @@ export default function DiagnosticsPage(): JSX.Element {
   };
 
   const getStatusColor = (
-    status: "ok" | "warning" | "error" | "unknown"
+    status: "ok" | "warning" | "error" | "unknown",
   ): string => {
     switch (status) {
       case "ok":
@@ -417,7 +415,8 @@ export default function DiagnosticsPage(): JSX.Element {
               {d.fix && (
                 <div
                   style={{
-                    backgroundColor: "var(--ifm-color-warning-contrast-background)",
+                    backgroundColor:
+                      "var(--ifm-color-warning-contrast-background)",
                     padding: "0.5rem 1rem",
                     borderRadius: "4px",
                     marginTop: "0.5rem",
@@ -467,9 +466,7 @@ cd infra/azure
                   <code>AZURE_FUNCTIONS_BASE_URL</code>
                 </td>
                 <td>
-                  <code>
-                    https://[your-function-app].azurewebsites.net
-                  </code>
+                  <code>https://[your-function-app].azurewebsites.net</code>
                 </td>
               </tr>
               <tr>

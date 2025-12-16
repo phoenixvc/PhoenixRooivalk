@@ -109,14 +109,16 @@ export default function BookingWidget({
           >
             <div className={styles.bookingTypeHeader}>
               <span className={styles.bookingTypeName}>{type.name}</span>
-              <span className={styles.bookingDuration}>{type.duration} min</span>
+              <span className={styles.bookingDuration}>
+                {type.duration} min
+              </span>
             </div>
             {type.description && (
-              <p className={styles.bookingTypeDescription}>{type.description}</p>
+              <p className={styles.bookingTypeDescription}>
+                {type.description}
+              </p>
             )}
-            <span className={styles.bookingCta}>
-              Schedule {"\u2192"}
-            </span>
+            <span className={styles.bookingCta}>Schedule {"\u2192"}</span>
           </button>
         ))}
       </div>
@@ -138,7 +140,10 @@ export default function BookingWidget({
       {/* Embed Modal */}
       {showEmbed && selectedType && (
         <div className={styles.embedOverlay} onClick={closeEmbed}>
-          <div className={styles.embedModal} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={styles.embedModal}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.embedHeader}>
               <h4>{selectedType.name}</h4>
               <button

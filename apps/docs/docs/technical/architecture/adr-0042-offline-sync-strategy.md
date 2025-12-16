@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Edge nodes operate offline for extended periods; data reconciliation after reconnection must handle conflicts without data loss
-2. **Decision**: Implement CRDT-based sync for operational data, append-only logs for evidence, and last-write-wins for configuration
+1. **Problem**: Edge nodes operate offline for extended periods; data
+   reconciliation after reconnection must handle conflicts without data loss
+2. **Decision**: Implement CRDT-based sync for operational data, append-only
+   logs for evidence, and last-write-wins for configuration
 3. **Trade-off**: Sync complexity vs. data consistency guarantees
 
 ---
@@ -35,21 +37,21 @@ prerequisites:
 
 ### Offline Scenarios
 
-| Scenario | Duration | Data Volume | Priority |
-|----------|----------|-------------|----------|
-| Communication jam | Minutes-hours | High (engagements) | Evidence critical |
-| Remote deployment | Days-weeks | Medium | Config sync needed |
-| Network partition | Hours | Variable | Mesh coordination |
-| Scheduled maintenance | Hours | Low | Planned sync window |
+| Scenario              | Duration      | Data Volume        | Priority            |
+| --------------------- | ------------- | ------------------ | ------------------- |
+| Communication jam     | Minutes-hours | High (engagements) | Evidence critical   |
+| Remote deployment     | Days-weeks    | Medium             | Config sync needed  |
+| Network partition     | Hours         | Variable           | Mesh coordination   |
+| Scheduled maintenance | Hours         | Low                | Planned sync window |
 
 ### Data Categories
 
-| Category | Conflict Strategy | Example |
-|----------|-------------------|---------|
-| Evidence | Append-only | Engagement logs |
-| Tracks | Merge/expire | Target history |
-| Configuration | Last-write-wins | System settings |
-| Models | Version replace | AI model updates |
+| Category      | Conflict Strategy | Example          |
+| ------------- | ----------------- | ---------------- |
+| Evidence      | Append-only       | Engagement logs  |
+| Tracks        | Merge/expire      | Target history   |
+| Configuration | Last-write-wins   | System settings  |
+| Models        | Version replace   | AI model updates |
 
 ---
 
@@ -93,7 +95,8 @@ Implement **hybrid sync strategy** with category-specific conflict resolution:
 
 ### Design Principle
 
-Evidence is never modified or deleted locally. All evidence syncs to cloud as append-only log.
+Evidence is never modified or deleted locally. All evidence syncs to cloud as
+append-only log.
 
 ```rust
 pub struct EvidenceLog {
@@ -150,7 +153,8 @@ impl EvidenceLog {
 
 ### Conflict Resolution: None Required
 
-Evidence is node-local and append-only. Each node's evidence is independent and merged chronologically in cloud.
+Evidence is node-local and append-only. Each node's evidence is independent and
+merged chronologically in cloud.
 
 ---
 
