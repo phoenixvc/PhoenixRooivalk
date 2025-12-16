@@ -1669,6 +1669,7 @@ export default function CalendarPage(): React.ReactElement {
                 value={selectedCompletion}
                 onChange={(e) => setSelectedCompletion(e.target.value)}
                 className={styles.filterSelect}
+                aria-label="Filter by completion status"
               >
                 <option value="all">All Items</option>
                 <option value="incomplete">Incomplete</option>
