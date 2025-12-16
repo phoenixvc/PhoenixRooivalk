@@ -1,0 +1,132 @@
+/**
+ * DraftEmailComposer Styles
+ */
+
+.draft-email-composer {
+  margin: 1.5rem 0;
+  border: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-300));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.draft-email-composer--sent {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* Toggle Button */
+.draft-email-composer__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--ifm-color-emphasis-100);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.draft-email-composer__toggle:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.draft-email-composer__toggle:focus-visible {
+  outline: 2px solid var(--pr-brand-orange, var(--ifm-color-primary));
+  outline-offset: -2px;
+}
+
+[data-theme="dark"] .draft-email-composer__toggle {
+  background: var(--pr-bg-muted, rgb(30, 41, 59));
+}
+
+[data-theme="dark"] .draft-email-composer__toggle:hover {
+  background: rgb(51, 65, 85);
+}
+
+.draft-email-composer__toggle-icon {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+  transition: transform 0.2s ease;
+}
+
+.draft-email-composer__toggle-title {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+}
+
+.draft-email-composer__toggle-badge {
+  padding: 0.25rem 0.75rem;
+  background: var(--pr-brand-orange, rgb(249, 115, 22));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+/* Content */
+.draft-email-composer__content {
+  padding: 1rem;
+  border-top: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-200));
+  background: var(--ifm-background-color);
+}
+
+.draft-email-composer__description {
+  margin: 0 0 1rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  color: var(--ifm-color-emphasis-800);
+  line-height: 1.5;
+}
+
+[data-theme="dark"] .draft-email-composer__description {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Override SendEmail styles when nested */
+.draft-email-composer__content .send-email {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+/* Sent Message */
+.draft-email-composer__sent-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-weight: 600;
+  color: rgb(34, 197, 94);
+}
+
+.draft-email-composer__sent-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgb(34, 197, 94);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .draft-email-composer__toggle {
+    padding: 0.75rem 1rem;
+  }
+
+  .draft-email-composer__content {
+    padding: 0.75rem;
+  }
+}
