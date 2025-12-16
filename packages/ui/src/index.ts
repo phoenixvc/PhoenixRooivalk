@@ -9,5 +9,8 @@ export { QuickActionsWidget } from "./components/QuickActionsWidget";
 // Hooks
 export { useIntersectionObserver } from "./hooks/useIntersectionObserver";
 
+// Design Tokens
+export * from "./tokens/tokens";
+
 // Types
 export type { ButtonProps } from "./components/Button";

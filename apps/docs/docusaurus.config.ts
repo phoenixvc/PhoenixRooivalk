@@ -86,14 +86,14 @@ const config: Config = {
   onBrokenLinks: onBrokenLinksConfig,
   onBrokenAnchors: onBrokenLinksConfig,
   headTags: [
-    // Prevent flash of unstyled content - set background immediately
+    // Prevent flash of unstyled content - respects user theme preference
     {
       tagName: "style",
       attributes: {
         type: "text/css",
       },
       innerHTML:
-        "html,body,#__docusaurus{background-color:rgb(15,23,42)!important;min-height:100vh}",
+        "html,body,#__docusaurus{min-height:100vh;transition:background-color 0.2s ease}html[data-theme='dark'],html[data-theme='dark'] body{background-color:#0f172a!important}html[data-theme='light'],html[data-theme='light'] body{background-color:#ffffff!important}",
     },
     // Apple touch icon for iOS
     {
@@ -104,12 +104,22 @@ const config: Config = {
         href: "/img/apple-touch-icon.svg",
       },
     },
-    // Theme color for browser chrome
+    // Theme color for browser chrome - dark mode
     {
       tagName: "meta",
       attributes: {
         name: "theme-color",
+        media: "(prefers-color-scheme: dark)",
         content: "#0f172a",
+      },
+    },
+    // Theme color for browser chrome - light mode
+    {
+      tagName: "meta",
+      attributes: {
+        name: "theme-color",
+        media: "(prefers-color-scheme: light)",
+        content: "#ffffff",
       },
     },
     {
@@ -423,12 +433,11 @@ const config: Config = {
       ],
       copyright: `© 2025 Phoenix Rooivalk. All rights reserved.`,
     },
-    // Color mode - Phoenix Rooivalk uses a branded dark theme only
-    // The tactical obsidian background is part of the brand identity
+    // Color mode - Support both light and dark themes
     colorMode: {
       defaultMode: "dark",
-      disableSwitch: true, // Disabled: brand requires dark theme
-      respectPrefersColorScheme: false,
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
     },
     // Enhanced prism theme with additional languages
     prism: {
