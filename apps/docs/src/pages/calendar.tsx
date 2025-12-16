@@ -970,6 +970,55 @@ const timeRangeConfig: Record<TimeRange, { label: string; days: number | null }>
   "90days": { label: "Next 90 Days", days: 90 },
 };
 
+// Reusable RoadmapSection component for accessibility and code reuse
+interface RoadmapSectionProps {
+  title: string;
+  events: CalendarItem[];
+  emptyMessage: string;
+  maxItems: number;
+  onToggleComplete: (event: CalendarItem) => void;
+  isEventCompleted: (event: CalendarItem) => boolean;
+}
+
+function RoadmapSection({
+  title,
+  events,
+  emptyMessage,
+  maxItems,
+  onToggleComplete,
+  isEventCompleted,
+}: RoadmapSectionProps): React.ReactElement {
+  return (
+    <div className={styles.roadmapSection}>
+      <div className={styles.roadmapPeriod}>{title}</div>
+      <div className={styles.roadmapItems}>
+        {events.slice(0, maxItems).map((e, i) => {
+          const completed = isEventCompleted(e);
+          return (
+            <div
+              key={i}
+              className={`${styles.roadmapItem} ${completed ? styles.roadmapCompleted : ""}`}
+            >
+              <button
+                className={styles.roadmapCheckbox}
+                onClick={() => onToggleComplete(e)}
+                aria-label={`Mark "${e.title}" as ${completed ? "incomplete" : "complete"}`}
+              >
+                {completed ? "✓" : "○"}
+              </button>
+              <span className={styles.roadmapTitle}>{e.title}</span>
+              <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+            </div>
+          );
+        })}
+        {events.length === 0 && (
+          <div className={styles.roadmapEmpty}>{emptyMessage}</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CalendarPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedAssignee, setSelectedAssignee] = useState<string>("all");
@@ -1352,84 +1401,30 @@ export default function CalendarPage(): React.ReactElement {
               </div>
             </div>
             <div className={styles.roadmapTimeline}>
-              <div className={styles.roadmapSection}>
-                <div className={styles.roadmapPeriod}>This Week</div>
-                <div className={styles.roadmapItems}>
-                  {filteredEvents
-                    .filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)
-                    .slice(0, 4)
-                    .map((e, i) => (
-                      <div
-                        key={i}
-                        className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                      >
-                        <button
-                          className={styles.roadmapCheckbox}
-                          onClick={() => handleToggleComplete(e)}
-                        >
-                          {isEventCompleted(e) ? "✓" : "○"}
-                        </button>
-                        <span className={styles.roadmapTitle}>{e.title}</span>
-                        <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                      </div>
-                    ))}
-                  {filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length === 0 && (
-                    <div className={styles.roadmapEmpty}>No items this week</div>
-                  )}
-                </div>
-              </div>
-              <div className={styles.roadmapSection}>
-                <div className={styles.roadmapPeriod}>Next 2 Weeks</div>
-                <div className={styles.roadmapItems}>
-                  {filteredEvents
-                    .filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)
-                    .slice(0, 4)
-                    .map((e, i) => (
-                      <div
-                        key={i}
-                        className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                      >
-                        <button
-                          className={styles.roadmapCheckbox}
-                          onClick={() => handleToggleComplete(e)}
-                        >
-                          {isEventCompleted(e) ? "✓" : "○"}
-                        </button>
-                        <span className={styles.roadmapTitle}>{e.title}</span>
-                        <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                      </div>
-                    ))}
-                  {filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14).length === 0 && (
-                    <div className={styles.roadmapEmpty}>No items next 2 weeks</div>
-                  )}
-                </div>
-              </div>
-              <div className={styles.roadmapSection}>
-                <div className={styles.roadmapPeriod}>This Month</div>
-                <div className={styles.roadmapItems}>
-                  {filteredEvents
-                    .filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)
-                    .slice(0, 4)
-                    .map((e, i) => (
-                      <div
-                        key={i}
-                        className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                      >
-                        <button
-                          className={styles.roadmapCheckbox}
-                          onClick={() => handleToggleComplete(e)}
-                        >
-                          {isEventCompleted(e) ? "✓" : "○"}
-                        </button>
-                        <span className={styles.roadmapTitle}>{e.title}</span>
-                        <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                      </div>
-                    ))}
-                  {filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30).length === 0 && (
-                    <div className={styles.roadmapEmpty}>No items later this month</div>
-                  )}
-                </div>
-              </div>
+              <RoadmapSection
+                title="This Week"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                emptyMessage="No items this week"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
+              <RoadmapSection
+                title="Next 2 Weeks"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                emptyMessage="No items next 2 weeks"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
+              <RoadmapSection
+                title="This Month"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                emptyMessage="No items later this month"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
             </div>
           </div>
         )}
@@ -1490,84 +1485,30 @@ export default function CalendarPage(): React.ReactElement {
             <div className={styles.roadmapOverview}>
               <h4>Quick Roadmap</h4>
               <div className={styles.roadmapTimeline}>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>This Week</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items this week</div>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>Next 2 Weeks</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items next 2 weeks</div>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>This Month</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items later this month</div>
-                    )}
-                  </div>
-                </div>
+                <RoadmapSection
+                  title="This Week"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                  emptyMessage="No items this week"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
+                <RoadmapSection
+                  title="Next 2 Weeks"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                  emptyMessage="No items next 2 weeks"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
+                <RoadmapSection
+                  title="This Month"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                  emptyMessage="No items later this month"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
               </div>
             </div>
           </div>
