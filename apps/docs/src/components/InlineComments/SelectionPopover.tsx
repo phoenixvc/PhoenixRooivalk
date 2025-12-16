@@ -9,7 +9,7 @@ import styles from "./InlineComments.module.css";
 import type { TextSelection } from "./types";
 
 interface SelectionPopoverProps {
-  containerRef: React.RefObject<HTMLElement>;
+  containerRef: React.RefObject<HTMLElement | null>;
   onAddComment: (selection: TextSelection) => void;
   disabled?: boolean;
 }

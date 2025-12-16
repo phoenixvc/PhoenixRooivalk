@@ -13,7 +13,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@site/*": ["./*"]
+    }
   },
   "include": ["src/**/*", "docusaurus.config.ts", "sidebars.ts"],
   "exclude": ["node_modules", "build", ".docusaurus"]

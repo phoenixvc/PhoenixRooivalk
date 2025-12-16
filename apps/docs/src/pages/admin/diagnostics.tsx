@@ -31,7 +31,21 @@ interface ConfigValue {
   purpose: string;
 }
 
-export default function DiagnosticsPage(): JSX.Element {
+/**
+ * System Diagnostics Page Component
+ *
+ * Displays Azure/cloud service configuration status and diagnostic information.
+ * Helps administrators debug configuration issues with cloud services.
+ *
+ * @returns The diagnostics page React element with configuration status and tests
+ *
+ * @example
+ * ```tsx
+ * // Used as a Docusaurus page at /admin/diagnostics
+ * import { DiagnosticsPage } from './diagnostics';
+ * ```
+ */
+export function DiagnosticsPage(): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
   const [diagnostics, setDiagnostics] = useState<DiagnosticResult[]>([]);
   const [configValues, setConfigValues] = useState<ConfigValue[]>([]);
@@ -522,3 +536,5 @@ cd infra/azure
     </Layout>
   );
 }
+
+export default DiagnosticsPage;
