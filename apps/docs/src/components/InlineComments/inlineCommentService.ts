@@ -37,7 +37,7 @@ export function subscribeToInlineComments(
       const db = getDatabaseService();
       const result = await db.queryDocuments<InlineComment>(COLLECTION, {
         where: [{ field: "pageId", op: "==", value: pageId }],
-        orderBy: { field: "createdAt", direction: "desc" },
+        orderBy: [{ field: "createdAt", direction: "desc" }],
       });
 
       if (isActive) {

@@ -52,7 +52,9 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
   const containerRef = useRef<T>(null);
   const activeIndexRef = useRef<number>(-1);
   const typeAheadBufferRef = useRef<string>("");
-  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const getFocusableItems = useCallback((): HTMLElement[] => {
     if (!containerRef.current) return [];
