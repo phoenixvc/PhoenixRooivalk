@@ -135,10 +135,14 @@ export default function ApplicationDocument({
   checklist,
   children,
 }: ApplicationDocumentProps): React.ReactElement {
-  const [toast, setToast] = React.useState({
+  const [toast, setToast] = React.useState<{
+    visible: boolean;
+    message: string;
+    type: "success" | "info" | "error";
+  }>({
     visible: false,
     message: "",
-    type: "success" as const,
+    type: "success",
   });
   const [showVersionHistory, setShowVersionHistory] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(false);
