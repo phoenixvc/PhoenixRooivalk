@@ -227,6 +227,28 @@
   color: var(--ifm-font-color-base);
 }
 
+.send-email__btn--github {
+  display: inline-flex;
+  align-items: center;
+  background: #24292e;
+  color: white;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+.send-email__btn--github:hover:not(:disabled) {
+  background: #2f363d;
+}
+
+[data-theme="dark"] .send-email__btn--github {
+  background: #333;
+  border: 1px solid #444;
+}
+
+[data-theme="dark"] .send-email__btn--github:hover:not(:disabled) {
+  background: #444;
+}
+
 /* Spinner */
 .send-email__spinner {
   width: 16px;

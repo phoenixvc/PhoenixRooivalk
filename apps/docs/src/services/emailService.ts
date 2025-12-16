@@ -178,6 +178,79 @@ ${draft.body}`;
       .map((e) => e.trim())
       .filter((e) => this.isValidEmail(e));
   }
+
+  /**
+   * Create a GitHub issue from email draft (opens in new tab)
+   * Useful for logging correspondence as issues for tracking
+   */
+  openAsGitHubIssue(
+    draft: EmailDraft,
+    options: GitHubIssueOptions = {}
+  ): void {
+    const {
+      repo = "JustAGhosT/PhoenixRooivalk",
+      labels = ["correspondence", "email-log"],
+      template,
+    } = options;
+
+    // Build issue title
+    const title = `[Email Log] ${draft.subject}`;
+
+    // Build issue body with email metadata
+    const body = `## Email Correspondence Log
+
+**To:** ${draft.to}
+${draft.cc ? `**Cc:** ${draft.cc}\n` : ""}${draft.bcc ? `**Bcc:** ${draft.bcc}\n` : ""}**Subject:** ${draft.subject}
+**Date:** ${new Date().toISOString().split("T")[0]}
+
+---
+
+## Email Content
+
+${draft.body}
+
+---
+
+<sub>📧 Logged via documentation email composer</sub>`;
+
+    // Build GitHub URL
+    const params = new URLSearchParams();
+    params.set("title", title);
+    params.set("body", body);
+    if (labels.length > 0) {
+      params.set("labels", labels.join(","));
+    }
+    if (template) {
+      params.set("template", template);
+    }
+
+    const url = `https://github.com/${repo}/issues/new?${params.toString()}`;
+    window.open(url, "_blank");
+  }
+
+  /**
+   * Format email draft as markdown for issue body
+   */
+  formatAsMarkdown(draft: EmailDraft): string {
+    return `**To:** ${draft.to}
+${draft.cc ? `**Cc:** ${draft.cc}\n` : ""}${draft.bcc ? `**Bcc:** ${draft.bcc}\n` : ""}**Subject:** ${draft.subject}
+
+---
+
+${draft.body}`;
+  }
+}
+
+/**
+ * Options for creating GitHub issues from emails
+ */
+export interface GitHubIssueOptions {
+  /** GitHub repository (owner/repo format) */
+  repo?: string;
+  /** Labels to apply to the issue */
+  labels?: string[];
+  /** Issue template file name */
+  template?: string;
 }
 
 // Export singleton instance

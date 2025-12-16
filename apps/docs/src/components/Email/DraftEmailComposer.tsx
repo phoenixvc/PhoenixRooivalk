@@ -7,6 +7,7 @@
 
 import React, { useState } from "react";
 import { SendEmail, SendEmailProps } from "./SendEmail";
+import { GitHubIssueOptions } from "../../services/emailService";
 import "./DraftEmailComposer.css";
 
 export interface DraftEmailComposerProps {
@@ -28,6 +29,10 @@ export interface DraftEmailComposerProps {
   editableSubject?: boolean;
   /** Allow editing the body */
   editableBody?: boolean;
+  /** Show GitHub log button */
+  showGitHubLog?: boolean;
+  /** GitHub issue options */
+  gitHubOptions?: GitHubIssueOptions;
 }
 
 export function DraftEmailComposer({
@@ -40,6 +45,8 @@ export function DraftEmailComposer({
   editableTo = false,
   editableSubject = true,
   editableBody = true,
+  showGitHubLog = true,
+  gitHubOptions,
 }: DraftEmailComposerProps): React.ReactElement {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [isSent, setIsSent] = useState(false);
@@ -91,6 +98,8 @@ export function DraftEmailComposer({
             onCancel={() => setIsExpanded(false)}
             hideHeader
             compact
+            showGitHubLog={showGitHubLog}
+            gitHubOptions={gitHubOptions}
           />
         </div>
       )}
