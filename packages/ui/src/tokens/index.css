@@ -14,25 +14,29 @@
      SPACING SCALE
      =================== */
   --pr-space-0: 0;
-  --pr-space-1: 0.25rem;   /* 4px */
-  --pr-space-2: 0.5rem;    /* 8px */
-  --pr-space-3: 0.75rem;   /* 12px */
-  --pr-space-4: 1rem;      /* 16px */
-  --pr-space-5: 1.25rem;   /* 20px */
-  --pr-space-6: 1.5rem;    /* 24px */
-  --pr-space-8: 2rem;      /* 32px */
-  --pr-space-10: 2.5rem;   /* 40px */
-  --pr-space-12: 3rem;     /* 48px */
-  --pr-space-16: 4rem;     /* 64px */
-  --pr-space-20: 5rem;     /* 80px */
-  --pr-space-24: 6rem;     /* 96px */
+  --pr-space-1: 0.25rem; /* 4px */
+  --pr-space-2: 0.5rem; /* 8px */
+  --pr-space-3: 0.75rem; /* 12px */
+  --pr-space-4: 1rem; /* 16px */
+  --pr-space-5: 1.25rem; /* 20px */
+  --pr-space-6: 1.5rem; /* 24px */
+  --pr-space-8: 2rem; /* 32px */
+  --pr-space-10: 2.5rem; /* 40px */
+  --pr-space-12: 3rem; /* 48px */
+  --pr-space-16: 4rem; /* 64px */
+  --pr-space-20: 5rem; /* 80px */
+  --pr-space-24: 6rem; /* 96px */
 
   /* ===================
      TYPOGRAPHY
      =================== */
   /* Font Families */
-  --pr-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --pr-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --pr-font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --pr-font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
 
   /* Font Sizes (fluid scale) */
   --pr-text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
@@ -73,12 +77,12 @@
      BORDER RADIUS
      =================== */
   --pr-radius-none: 0;
-  --pr-radius-sm: 0.25rem;    /* 4px */
-  --pr-radius-md: 0.375rem;   /* 6px */
-  --pr-radius-lg: 0.5rem;     /* 8px */
-  --pr-radius-xl: 0.75rem;    /* 12px */
-  --pr-radius-2xl: 1rem;      /* 16px */
-  --pr-radius-3xl: 1.5rem;    /* 24px */
+  --pr-radius-sm: 0.25rem; /* 4px */
+  --pr-radius-md: 0.375rem; /* 6px */
+  --pr-radius-lg: 0.5rem; /* 8px */
+  --pr-radius-xl: 0.75rem; /* 12px */
+  --pr-radius-2xl: 1rem; /* 16px */
+  --pr-radius-3xl: 1.5rem; /* 24px */
   --pr-radius-full: 9999px;
 
   /* ===================
@@ -111,18 +115,18 @@
   /* ===================
      CONTAINER WIDTHS
      =================== */
-  --pr-container-xs: 20rem;    /* 320px */
-  --pr-container-sm: 24rem;    /* 384px */
-  --pr-container-md: 28rem;    /* 448px */
-  --pr-container-lg: 32rem;    /* 512px */
-  --pr-container-xl: 36rem;    /* 576px */
-  --pr-container-2xl: 42rem;   /* 672px */
-  --pr-container-3xl: 48rem;   /* 768px */
-  --pr-container-4xl: 56rem;   /* 896px */
-  --pr-container-5xl: 64rem;   /* 1024px */
-  --pr-container-6xl: 72rem;   /* 1152px */
-  --pr-container-7xl: 80rem;   /* 1280px */
-  --pr-container-max: 90rem;   /* 1440px */
+  --pr-container-xs: 20rem; /* 320px */
+  --pr-container-sm: 24rem; /* 384px */
+  --pr-container-md: 28rem; /* 448px */
+  --pr-container-lg: 32rem; /* 512px */
+  --pr-container-xl: 36rem; /* 576px */
+  --pr-container-2xl: 42rem; /* 672px */
+  --pr-container-3xl: 48rem; /* 768px */
+  --pr-container-4xl: 56rem; /* 896px */
+  --pr-container-5xl: 64rem; /* 1024px */
+  --pr-container-6xl: 72rem; /* 1152px */
+  --pr-container-7xl: 80rem; /* 1280px */
+  --pr-container-max: 90rem; /* 1440px */
 
   /* ===================
      BRAND COLORS (static)
@@ -141,7 +145,6 @@
   --pr-status-info: #3b82f6;
 }
 
-
 /* ============================================
    DARK THEME (Default)
    ============================================ */
@@ -153,18 +156,18 @@
      =================== */
 
   /* Background */
-  --pr-bg-base: #020617;           /* Darkest - page bg */
-  --pr-bg-subtle: #0f172a;         /* Subtle - sections */
-  --pr-bg-muted: #1e293b;          /* Muted - cards */
-  --pr-bg-emphasis: #334155;       /* Emphasis - elevated */
-  --pr-bg-inverse: #f8fafc;        /* Inverse - tooltips */
+  --pr-bg-base: #020617; /* Darkest - page bg */
+  --pr-bg-subtle: #0f172a; /* Subtle - sections */
+  --pr-bg-muted: #1e293b; /* Muted - cards */
+  --pr-bg-emphasis: #334155; /* Emphasis - elevated */
+  --pr-bg-inverse: #f8fafc; /* Inverse - tooltips */
 
   /* Foreground (text) */
-  --pr-fg-base: #f1f5f9;           /* Primary text */
-  --pr-fg-muted: #94a3b8;          /* Secondary text */
-  --pr-fg-subtle: #64748b;         /* Tertiary text */
-  --pr-fg-inverse: #0f172a;        /* Inverse text */
-  --pr-fg-on-accent: #ffffff;      /* Text on accent bg */
+  --pr-fg-base: #f1f5f9; /* Primary text */
+  --pr-fg-muted: #94a3b8; /* Secondary text */
+  --pr-fg-subtle: #64748b; /* Tertiary text */
+  --pr-fg-inverse: #0f172a; /* Inverse text */
+  --pr-fg-on-accent: #ffffff; /* Text on accent bg */
 
   /* Borders */
   --pr-border-base: #1e293b;
@@ -185,9 +188,12 @@
 
   /* Shadows */
   --pr-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --pr-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --pr-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --pr-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --pr-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --pr-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --pr-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
   --pr-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
   --pr-shadow-glow: 0 0 20px rgba(249, 115, 22, 0.3);
 
@@ -206,7 +212,6 @@
   --pr-link-visited: #c084fc;
 }
 
-
 /* ============================================
    LIGHT THEME
    ============================================ */
@@ -217,18 +222,18 @@
      =================== */
 
   /* Background */
-  --pr-bg-base: #ffffff;           /* Lightest - page bg */
-  --pr-bg-subtle: #f8fafc;         /* Subtle - sections */
-  --pr-bg-muted: #f1f5f9;          /* Muted - cards */
-  --pr-bg-emphasis: #e2e8f0;       /* Emphasis - elevated */
-  --pr-bg-inverse: #0f172a;        /* Inverse - tooltips */
+  --pr-bg-base: #ffffff; /* Lightest - page bg */
+  --pr-bg-subtle: #f8fafc; /* Subtle - sections */
+  --pr-bg-muted: #f1f5f9; /* Muted - cards */
+  --pr-bg-emphasis: #e2e8f0; /* Emphasis - elevated */
+  --pr-bg-inverse: #0f172a; /* Inverse - tooltips */
 
   /* Foreground (text) */
-  --pr-fg-base: #0f172a;           /* Primary text */
-  --pr-fg-muted: #475569;          /* Secondary text */
-  --pr-fg-subtle: #64748b;         /* Tertiary text */
-  --pr-fg-inverse: #f8fafc;        /* Inverse text */
-  --pr-fg-on-accent: #ffffff;      /* Text on accent bg */
+  --pr-fg-base: #0f172a; /* Primary text */
+  --pr-fg-muted: #475569; /* Secondary text */
+  --pr-fg-subtle: #64748b; /* Tertiary text */
+  --pr-fg-inverse: #f8fafc; /* Inverse text */
+  --pr-fg-on-accent: #ffffff; /* Text on accent bg */
 
   /* Borders */
   --pr-border-base: #e2e8f0;
@@ -249,9 +254,12 @@
 
   /* Shadows */
   --pr-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --pr-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --pr-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --pr-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --pr-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --pr-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --pr-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   --pr-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --pr-shadow-glow: 0 0 20px rgba(249, 115, 22, 0.2);
 
@@ -269,7 +277,6 @@
   --pr-link-hover: var(--pr-brand-orange);
   --pr-link-visited: #7c3aed;
 }
-
 
 /* ============================================
    UTILITY CLASSES

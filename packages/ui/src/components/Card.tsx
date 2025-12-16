@@ -55,8 +55,7 @@ export const Card: React.FC<CardProps> = ({
       "bg-[var(--pr-bg-muted,#1e293b)] border border-[var(--pr-border-muted,#334155)]",
     elevated:
       "bg-[var(--pr-bg-muted,#1e293b)] border border-[var(--pr-border-muted,#334155)] shadow-[var(--pr-shadow-md,0_4px_6px_-1px_rgba(0,0,0,0.4))]",
-    outlined:
-      "bg-transparent border-2 border-[var(--pr-border-muted,#334155)]",
+    outlined: "bg-transparent border-2 border-[var(--pr-border-muted,#334155)]",
     interactive:
       "bg-[var(--pr-bg-muted,#1e293b)] border border-[var(--pr-border-muted,#334155)] cursor-pointer hover:border-[var(--pr-brand-orange,#f97316)] hover:shadow-[var(--pr-shadow-lg,0_10px_15px_-3px_rgba(0,0,0,0.4))] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pr-brand-orange,#f97316)]",
   };
@@ -86,11 +85,7 @@ export const Card: React.FC<CardProps> = ({
       : {};
 
   return (
-    <Component
-      className={classes}
-      onClick={onClick}
-      {...interactiveProps}
-    >
+    <Component className={classes} onClick={onClick} {...interactiveProps}>
       {children}
     </Component>
   );
@@ -119,7 +114,11 @@ export const CardBody: React.FC<CardBodyProps> = ({
   children,
   className = "",
 }) => {
-  return <div className={`text-[var(--pr-fg-muted,#94a3b8)] ${className}`}>{children}</div>;
+  return (
+    <div className={`text-[var(--pr-fg-muted,#94a3b8)] ${className}`}>
+      {children}
+    </div>
+  );
 };
 
 /**

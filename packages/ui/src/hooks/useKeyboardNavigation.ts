@@ -36,7 +36,7 @@ export interface KeyboardNavigationOptions {
  * ```
  */
 export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
-  options: KeyboardNavigationOptions = {}
+  options: KeyboardNavigationOptions = {},
 ) {
   const {
     enableArrowKeys = true,
@@ -57,33 +57,36 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
   const getFocusableItems = useCallback((): HTMLElement[] => {
     if (!containerRef.current) return [];
     return Array.from(
-      containerRef.current.querySelectorAll<HTMLElement>(itemSelector)
+      containerRef.current.querySelectorAll<HTMLElement>(itemSelector),
     ).filter(
       (el) =>
         !el.hasAttribute("disabled") &&
         el.getAttribute("aria-disabled") !== "true" &&
-        el.tabIndex !== -1
+        el.tabIndex !== -1,
     );
   }, [itemSelector]);
 
-  const focusItem = useCallback((index: number) => {
-    const items = getFocusableItems();
-    if (items.length === 0) return;
+  const focusItem = useCallback(
+    (index: number) => {
+      const items = getFocusableItems();
+      if (items.length === 0) return;
 
-    // Handle bounds
-    let targetIndex = index;
-    if (loop) {
-      targetIndex = ((index % items.length) + items.length) % items.length;
-    } else {
-      targetIndex = Math.max(0, Math.min(index, items.length - 1));
-    }
+      // Handle bounds
+      let targetIndex = index;
+      if (loop) {
+        targetIndex = ((index % items.length) + items.length) % items.length;
+      } else {
+        targetIndex = Math.max(0, Math.min(index, items.length - 1));
+      }
 
-    const item = items[targetIndex];
-    if (item) {
-      item.focus();
-      activeIndexRef.current = targetIndex;
-    }
-  }, [getFocusableItems, loop]);
+      const item = items[targetIndex];
+      if (item) {
+        item.focus();
+        activeIndexRef.current = targetIndex;
+      }
+    },
+    [getFocusableItems, loop],
+  );
 
   const handleTypeAhead = useCallback(
     (char: string) => {
@@ -113,7 +116,7 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
         typeAheadBufferRef.current = "";
       }, 500);
     },
-    [enableTypeAhead, getFocusableItems, focusItem]
+    [enableTypeAhead, getFocusableItems, focusItem],
   );
 
   const handleKeyDown = useCallback(
@@ -122,33 +125,45 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
       if (items.length === 0) return;
 
       const currentIndex = items.findIndex(
-        (item) => item === document.activeElement
+        (item) => item === document.activeElement,
       );
 
       switch (event.key) {
         case "ArrowDown":
-          if (enableArrowKeys && (orientation === "vertical" || orientation === "both")) {
+          if (
+            enableArrowKeys &&
+            (orientation === "vertical" || orientation === "both")
+          ) {
             event.preventDefault();
             focusItem(currentIndex + 1);
           }
           break;
 
         case "ArrowUp":
-          if (enableArrowKeys && (orientation === "vertical" || orientation === "both")) {
+          if (
+            enableArrowKeys &&
+            (orientation === "vertical" || orientation === "both")
+          ) {
             event.preventDefault();
             focusItem(currentIndex - 1);
           }
           break;
 
         case "ArrowRight":
-          if (enableArrowKeys && (orientation === "horizontal" || orientation === "both")) {
+          if (
+            enableArrowKeys &&
+            (orientation === "horizontal" || orientation === "both")
+          ) {
             event.preventDefault();
             focusItem(currentIndex + 1);
           }
           break;
 
         case "ArrowLeft":
-          if (enableArrowKeys && (orientation === "horizontal" || orientation === "both")) {
+          if (
+            enableArrowKeys &&
+            (orientation === "horizontal" || orientation === "both")
+          ) {
             event.preventDefault();
             focusItem(currentIndex - 1);
           }
@@ -185,7 +200,12 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
 
         default:
           // Handle type-ahead for single printable characters
-          if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          if (
+            event.key.length === 1 &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey
+          ) {
             handleTypeAhead(event.key);
           }
           break;
@@ -200,7 +220,7 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
       getFocusableItems,
       focusItem,
       handleTypeAhead,
-    ]
+    ],
   );
 
   useEffect(() => {

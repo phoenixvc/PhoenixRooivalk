@@ -56,18 +56,18 @@
 
   /* Spacing Scale */
   --pr-space-0: 0;
-  --pr-space-1: 0.25rem;   /* 4px */
-  --pr-space-2: 0.5rem;    /* 8px */
-  --pr-space-3: 0.75rem;   /* 12px */
-  --pr-space-4: 1rem;      /* 16px */
-  --pr-space-5: 1.25rem;   /* 20px */
-  --pr-space-6: 1.5rem;    /* 24px */
-  --pr-space-8: 2rem;      /* 32px */
-  --pr-space-10: 2.5rem;   /* 40px */
-  --pr-space-12: 3rem;     /* 48px */
-  --pr-space-16: 4rem;     /* 64px */
-  --pr-space-20: 5rem;     /* 80px */
-  --pr-space-24: 6rem;     /* 96px */
+  --pr-space-1: 0.25rem; /* 4px */
+  --pr-space-2: 0.5rem; /* 8px */
+  --pr-space-3: 0.75rem; /* 12px */
+  --pr-space-4: 1rem; /* 16px */
+  --pr-space-5: 1.25rem; /* 20px */
+  --pr-space-6: 1.5rem; /* 24px */
+  --pr-space-8: 2rem; /* 32px */
+  --pr-space-10: 2.5rem; /* 40px */
+  --pr-space-12: 3rem; /* 48px */
+  --pr-space-16: 4rem; /* 64px */
+  --pr-space-20: 5rem; /* 80px */
+  --pr-space-24: 6rem; /* 96px */
 
   /* Typography - Fluid Scale */
   --pr-text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
@@ -82,12 +82,12 @@
 
   /* Border Radius */
   --pr-radius-none: 0;
-  --pr-radius-sm: 0.25rem;   /* 4px */
-  --pr-radius-md: 0.375rem;  /* 6px */
-  --pr-radius-lg: 0.5rem;    /* 8px */
-  --pr-radius-xl: 0.75rem;   /* 12px */
-  --pr-radius-2xl: 1rem;     /* 16px */
-  --pr-radius-3xl: 1.5rem;   /* 24px */
+  --pr-radius-sm: 0.25rem; /* 4px */
+  --pr-radius-md: 0.375rem; /* 6px */
+  --pr-radius-lg: 0.5rem; /* 8px */
+  --pr-radius-xl: 0.75rem; /* 12px */
+  --pr-radius-2xl: 1rem; /* 16px */
+  --pr-radius-3xl: 1.5rem; /* 24px */
   --pr-radius-full: 9999px;
 
   /* Brand Colors (static) */
@@ -203,8 +203,10 @@ body,
   --ifm-color-primary-lightest: #fed7aa;
 
   /* Typography */
-  --ifm-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --ifm-font-family-monospace: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --ifm-font-family-base:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ifm-font-family-monospace:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --ifm-font-size-base: 16px;
   --ifm-line-height-base: 1.6;
 
@@ -385,7 +387,11 @@ body,
 
 /* Phoenix Rooivalk Brand Header */
 .phoenix-header {
-  background: linear-gradient(135deg, var(--pr-bg-subtle) 0%, var(--pr-bg-muted) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--pr-bg-subtle) 0%,
+    var(--pr-bg-muted) 100%
+  );
   border-bottom: 2px solid var(--pr-brand-orange);
   padding: var(--pr-space-4) 0;
 }
@@ -1286,7 +1292,9 @@ textarea:focus-visible {
 [class*="card"]:focus-visible {
   outline: 2px solid var(--pr-brand-orange);
   outline-offset: 2px;
-  box-shadow: var(--pr-shadow-lg), 0 0 0 4px rgba(249, 115, 22, 0.2);
+  box-shadow:
+    var(--pr-shadow-lg),
+    0 0 0 4px rgba(249, 115, 22, 0.2);
 }
 
 /* Form inputs */
@@ -1550,28 +1558,65 @@ button {
 }
 
 /* Spacing utilities */
-.p-4 { padding: var(--pr-space-4); }
-.p-6 { padding: var(--pr-space-6); }
-.p-8 { padding: var(--pr-space-8); }
-.m-auto { margin: auto; }
-.mx-auto { margin-left: auto; margin-right: auto; }
+.p-4 {
+  padding: var(--pr-space-4);
+}
+.p-6 {
+  padding: var(--pr-space-6);
+}
+.p-8 {
+  padding: var(--pr-space-8);
+}
+.m-auto {
+  margin: auto;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* Border radius */
-.rounded-sm { border-radius: var(--pr-radius-sm); }
-.rounded-md { border-radius: var(--pr-radius-md); }
-.rounded-lg { border-radius: var(--pr-radius-lg); }
-.rounded-xl { border-radius: var(--pr-radius-xl); }
-.rounded-full { border-radius: var(--pr-radius-full); }
+.rounded-sm {
+  border-radius: var(--pr-radius-sm);
+}
+.rounded-md {
+  border-radius: var(--pr-radius-md);
+}
+.rounded-lg {
+  border-radius: var(--pr-radius-lg);
+}
+.rounded-xl {
+  border-radius: var(--pr-radius-xl);
+}
+.rounded-full {
+  border-radius: var(--pr-radius-full);
+}
 
 /* Flexbox utilities */
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.gap-2 { gap: var(--pr-space-2); }
-.gap-4 { gap: var(--pr-space-4); }
-.gap-6 { gap: var(--pr-space-6); }
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.gap-2 {
+  gap: var(--pr-space-2);
+}
+.gap-4 {
+  gap: var(--pr-space-4);
+}
+.gap-6 {
+  gap: var(--pr-space-6);
+}
 
 /* Contact Page Styles - Using Design Tokens */
 .contactMain {
@@ -1614,7 +1659,11 @@ button {
   font-weight: 800 !important;
   margin-bottom: var(--pr-space-4) !important;
   text-align: center;
-  background: linear-gradient(135deg, var(--pr-brand-orange), var(--pr-brand-orange-light));
+  background: linear-gradient(
+    135deg,
+    var(--pr-brand-orange),
+    var(--pr-brand-orange-light)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1785,7 +1834,11 @@ button {
   left: 0;
   width: 0%;
   height: 3px;
-  background: linear-gradient(90deg, var(--pr-brand-orange), var(--pr-brand-gold));
+  background: linear-gradient(
+    90deg,
+    var(--pr-brand-orange),
+    var(--pr-brand-gold)
+  );
   z-index: 1000;
   transition: width var(--pr-duration-fast) var(--pr-ease);
 }
