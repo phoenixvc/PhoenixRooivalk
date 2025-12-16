@@ -201,6 +201,130 @@ See [Test Plan Guide](./test-plan-guide)
 
 ---
 
+## Draft Response to PriviDox Email
+
+:::tip Recommended Response Strategy
+
+**Objective:** Maintain application position while honestly disclosing current
+TRL status, with commitment to reach TRL 5 before the Sandbox event.
+
+**Precedent:** The 2025 Urban Sandbox accepted TRL 4 applications with a plan
+to achieve TRL 5 before the event date.
+
+:::
+
+### Draft Email Response
+
+```
+Subject: RE: CUAS Sandbox 2026 Application - Phoenix Rooivalk - Missing Documents
+
+Dear IDEaS Team,
+
+Thank you for confirming receipt of our CUAS 2026 Application Form and for
+identifying the outstanding documents required to complete our submission.
+
+We are actively preparing the following materials:
+
+1. Company and Technology Overview (One-Pager) - In preparation
+2. Test Plan Template - In development
+3. DND 552 Radio Frequency Spectrum form - Being completed
+4. Demonstration Video - Scheduling recording
+
+TECHNOLOGY READINESS DISCLOSURE
+
+In the interest of transparency, we wish to clarify our current technology
+readiness status. Phoenix Rooivalk's counter-UAS system is presently at
+TRL 4 (Component validation in laboratory environment) with validated
+detection capabilities and proof-of-concept defeat mechanisms.
+
+We note that the 2025 Urban CUAS Sandbox accepted applications at TRL 4
+with a commitment to achieve TRL 5 prior to the event. We respectfully
+inquire whether a similar arrangement may be considered for our application.
+
+TRL 5 ACHIEVEMENT PLAN
+
+We have a concrete development roadmap to achieve TRL 5 (Component
+integration validated in relevant environment) well in advance of the
+Sandbox dates (September 14 - October 9, 2026):
+
+| Milestone                      | Target Date    | Status      |
+|-------------------------------|----------------|-------------|
+| Multi-sensor integration      | February 2026  | In progress |
+| Field validation testing      | April 2026     | Planned     |
+| RF communications operational | May 2026       | Planned     |
+| TRL 5 validation complete     | June 2026      | Planned     |
+| Demonstration video recording | July 2026      | Planned     |
+
+This timeline provides a 2-3 month buffer before the Sandbox commences.
+
+OUR COMMITMENT
+
+Phoenix Rooivalk is deeply committed to participating in the CUAS Sandbox
+2026. We believe our kinetic interceptor approach offers a unique
+capability that would benefit from the testing environment and end-user
+feedback that the Sandbox provides.
+
+We are prepared to:
+- Provide monthly progress updates toward TRL 5
+- Submit interim validation evidence as milestones are achieved
+- Accept conditional selection pending TRL 5 demonstration
+
+REQUEST
+
+We kindly request guidance on:
+1. Whether our application can proceed with a TRL 5 achievement plan
+2. What interim evidence would support our continued consideration
+3. The deadline for submitting our demonstration video
+
+We remain committed to completing all outstanding documentation and
+achieving TRL 5 readiness before the Sandbox event.
+
+Thank you for your consideration. We look forward to your response.
+
+Best regards,
+
+[Name]
+Phoenix Rooivalk
+[Contact Information]
+```
+
+### Key Points in Response
+
+| Element | Purpose |
+|---------|---------|
+| **Acknowledgment** | Confirms receipt, shows responsiveness |
+| **Document Status** | Shows active progress on requirements |
+| **TRL Disclosure** | Honest about current TRL 4 status |
+| **Precedent Citation** | References 2025 Urban Sandbox TRL 4 allowance |
+| **Concrete Plan** | Demonstrates serious commitment with dates |
+| **Buffer Timeline** | Shows TRL 5 achievable 2-3 months before event |
+| **Commitment Offers** | Progress updates, interim evidence, conditional terms |
+| **Specific Questions** | Requests actionable guidance |
+
+### Risk Assessment
+
+| Risk | Likelihood | Mitigation |
+|------|------------|------------|
+| Application rejected for TRL | Medium | Precedent argument, concrete plan |
+| No response | Low | Follow up in 1 week |
+| Conditional acceptance | Favorable | Accept any reasonable terms |
+| Full rejection | Medium | Pivot to accelerator strategy |
+
+### Follow-up Actions
+
+If response is **positive or conditional:**
+- [ ] Accelerate TRL 5 development plan
+- [ ] Prepare monthly progress reports
+- [ ] Schedule video recording for July 2026
+- [ ] Complete all documentation immediately
+
+If response is **negative:**
+- [ ] Request feedback for future applications
+- [ ] Focus on accelerator applications (see [Eligibility Assessment](./cuas-sandbox-eligibility-assessment))
+- [ ] Target CUAS Sandbox 2027/2028
+
+---
+
 ## Related Documents
 
 - [CUAS Sandbox 2026 Overview](../opportunities/cuas-sandbox-2026)
