@@ -35,7 +35,7 @@ export function subscribeToInlineComments(
 
     try {
       const db = getDatabaseService();
-      const result = await db.query<InlineComment>(COLLECTION, {
+      const result = await db.queryDocuments<InlineComment>(COLLECTION, {
         where: [{ field: "pageId", op: "==", value: pageId }],
         orderBy: { field: "createdAt", direction: "desc" },
       });
@@ -95,7 +95,10 @@ export async function addInlineComment(input: InlineCommentInput): Promise<Inlin
       resolved: false,
     };
 
-    const id = await db.create(COLLECTION, comment);
+    const id = await db.addDocument(COLLECTION, comment);
+    if (!id) {
+      throw new Error("Failed to create comment document");
+    }
     return { ...comment, id } as InlineComment;
   } catch (err) {
     console.error("Failed to add inline comment:", err);
@@ -111,7 +114,7 @@ export async function deleteInlineComment(commentId: string): Promise<boolean> {
 
   try {
     const db = getDatabaseService();
-    await db.delete(COLLECTION, commentId);
+    await db.deleteDocument(COLLECTION, commentId);
     return true;
   } catch (err) {
     console.error("Failed to delete inline comment:", err);
@@ -127,7 +130,7 @@ export async function resolveInlineComment(commentId: string): Promise<boolean> 
 
   try {
     const db = getDatabaseService();
-    await db.update(COLLECTION, commentId, {
+    await db.updateDocument(COLLECTION, commentId, {
       resolved: true,
       updatedAt: new Date().toISOString(),
     });
@@ -146,7 +149,7 @@ export async function getInlineComments(pageId: string): Promise<InlineComment[]
 
   try {
     const db = getDatabaseService();
-    const result = await db.query<InlineComment>(COLLECTION, {
+    const result = await db.queryDocuments<InlineComment>(COLLECTION, {
       where: [{ field: "pageId", op: "==", value: pageId }],
       orderBy: { field: "createdAt", direction: "desc" },
     });
