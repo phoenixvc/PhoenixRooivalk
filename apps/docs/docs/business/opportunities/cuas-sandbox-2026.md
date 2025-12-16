@@ -198,6 +198,20 @@ Sandboxes are not exclusively restricted to made-in-Canada products; however,
 - Solution must have completed integration of components
 - Validation testing associated with TRL 5 must be complete
 
+:::tip CUAS Readiness Framework
+
+For detailed readiness level definitions, roadmaps, and gap analysis, see the
+comprehensive **[CUAS Readiness Levels (CRL) Framework](./cuas-readiness-levels)**.
+
+**Phoenix Rooivalk Current Status:**
+| Capability | Current | Minimum Required | Status |
+|------------|---------|------------------|--------|
+| Detection (DRL) | DRL-4 | DRL-4 | Meets |
+| Defeat (KRL) | KRL-3 | KRL-3 | Meets |
+| Integration (IRL) | IRL-3 | IRL-3 | Meets |
+
+:::
+
 ---
 
 ## Solution Categories

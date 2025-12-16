@@ -666,6 +666,13 @@ textarea.formInput {
   gap: 1rem;
 }
 
+.formHint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--ifm-color-content-secondary);
+}
+
 .modalActions {
   display: flex;
   gap: 0.75rem;
@@ -1336,5 +1343,64 @@ textarea.formInput {
 @media (max-width: 768px) {
   .roadmapTimeline {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Quick Overview (Everyone View)
+   ============================================ */
+.quickOverview {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.overviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.overviewHeader h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--ifm-color-content);
+}
+
+.overviewStats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.overviewStat {
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.overviewStat strong {
+  color: rgb(249, 115, 22);
+  font-weight: 700;
+}
+
+/* Responsive - Quick Overview */
+@media (max-width: 768px) {
+  .overviewHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .overviewStats {
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 }

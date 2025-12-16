@@ -1,0 +1,337 @@
+---
+id: cuas-sandbox-missing-documents
+title: CUAS Sandbox 2026 - Missing Documents Checklist
+sidebar_label: Missing Documents
+difficulty: intermediate
+estimated_reading_time: 5
+points: 10
+phase: ["seed"]
+tags:
+  - business
+  - counter-uas
+  - applications
+prerequisites:
+  - cuas-sandbox-2026
+---
+
+# CUAS Sandbox 2026 - Missing Documents
+
+:::danger Action Required - Upload Soonest
+
+PriviDox has confirmed receipt of the **CUAS 2026 Application Form**. However,
+the following required documents are still missing and must be uploaded as soon
+as possible to complete the application.
+
+:::
+
+---
+
+## Missing Documents Status
+
+| # | Document | Status | Priority | Assigned |
+|---|----------|--------|----------|----------|
+| 1 | Company and Technology Overview "One-Pager" | Missing | Critical | Martyn |
+| 2 | Test Plan Template | Missing | Critical | Alistair |
+| 3 | Radio Frequency Spectrum (DND 552) | Missing (if applicable) | High | Jurie |
+| 4 | 3-Minute Demonstration Video | Missing | Critical | Team |
+
+---
+
+## Document Requirements
+
+### 1. Company and Technology Overview "One-Pager"
+
+A concise single-page document summarizing Phoenix Rooivalk and our CUAS
+technology.
+
+**Required Content:**
+- [ ] Company overview (founding, mission, team)
+- [ ] Technology description (detection + defeat capabilities)
+- [ ] Key differentiators vs. existing solutions
+- [ ] Current TRL/CRL status
+- [ ] Contact information
+
+**Format:** PDF, single page, professional layout
+
+**Template Location:** Create in `/docs/business/applications/one-pager.md`
+
+---
+
+### 2. Test Plan Template
+
+The official DND/IDEaS Test Plan template must be completed to demonstrate
+competency in building a viable test plan.
+
+**Required Sections:**
+- [ ] Test objectives and success criteria
+- [ ] Equipment and resources required
+- [ ] Safety considerations
+- [ ] Proposed test scenarios (mapped to operational scenarios)
+- [ ] Data collection methodology
+- [ ] Expected outcomes and metrics
+
+**Official Template:** [Download from IDEaS](https://www.canada.ca/en/department-national-defence/programs/defence-ideas/element/sandboxes/challenge/counter-uncrewed-aerial-systems-sandbox-2026/2026-counter-uncrewed-aerial-systems-sandbox-test-plan-template.html)
+
+:::warning Pass/Fail Criterion
+
+The Test Plan is a **mandatory PASS/FAIL criterion**. Applications without a
+properly completed test plan will be disqualified.
+
+:::
+
+---
+
+### 3. Radio Frequency Spectrum - DND 552
+
+**Applicability:** Required ONLY if your solution uses RF transmission for:
+- RF jamming/spoofing
+- RF detection
+- RF-based communication with interceptors
+- Any other RF emission
+
+**Phoenix Rooivalk Assessment:**
+
+| Component | RF Usage | DND 552 Required |
+|-----------|----------|------------------|
+| RF Detection Sensor | Passive receive only | No |
+| Mesh Communications | Active transmission | **Yes** |
+| Backup C2C Link | Active transmission | **Yes** |
+| Interceptor Control | Active transmission | **Yes** |
+
+:::info DND 552 Required
+
+Based on our system architecture, we **do require** DND 552 spectrum
+authorization for:
+- Drone-to-drone mesh communications
+- Ground station to interceptor C2 links
+
+:::
+
+**Action Required:**
+- [ ] Document all RF frequencies used
+- [ ] List transmission power levels
+- [ ] Specify bandwidth requirements
+- [ ] Complete DND 552 form
+
+---
+
+### 4. Three-Minute Demonstration Video
+
+An **untouched/unedited** video demonstrating the CUAS system capabilities.
+
+**Requirements:**
+- [ ] Maximum 3 minutes duration
+- [ ] Unedited/raw footage (no post-processing)
+- [ ] Must show actual system operation
+- [ ] Real drone detection and/or defeat demonstration
+- [ ] Clear visibility of key components
+
+**Suggested Content Structure:**
+
+| Segment | Duration | Content |
+|---------|----------|---------|
+| Introduction | 20 sec | System overview, components shown |
+| Detection Demo | 60 sec | Drone detection sequence |
+| Tracking Demo | 40 sec | Target tracking capability |
+| Defeat Demo | 60 sec | Intercept/neutralization |
+| Summary | 20 sec | Key metrics, results |
+
+**Technical Specs:**
+- Resolution: 1080p minimum
+- Format: MP4, MOV, or AVI
+- File size: Check PriviDox limits
+- Audio: Optional but recommended for narration
+
+:::tip Video Recording Checklist
+
+Before recording:
+- [ ] Weather conditions suitable
+- [ ] All system components charged/ready
+- [ ] Test drone targets prepared
+- [ ] Camera/recording equipment tested
+- [ ] Safety protocols in place
+- [ ] Recording location cleared
+
+:::
+
+---
+
+## Upload Instructions
+
+1. Log into **PriviDox** platform
+2. Navigate to your CUAS 2026 application
+3. Upload each document to the appropriate section
+4. Verify upload success
+5. Screenshot confirmation for records
+
+---
+
+## Timeline
+
+| Milestone | Date | Status |
+|-----------|------|--------|
+| Application Form Submitted | Completed | Done |
+| Missing Documents Identified | Dec 16, 2025 | Current |
+| One-Pager Draft | Dec 18, 2025 | Pending |
+| Test Plan Draft | Dec 20, 2025 | Pending |
+| DND 552 Completion | Dec 22, 2025 | Pending |
+| Video Recording | Dec 28, 2025 | Pending |
+| All Documents Uploaded | Jan 5, 2026 | Pending |
+| **Application Deadline** | **Dec 15, 2025, 2:00 PM ET** | - |
+
+:::danger Deadline Alert
+
+The application deadline was **December 15, 2025**. If your application form
+was submitted before this deadline but documents are still missing, contact
+IDEaS immediately to confirm your application status.
+
+:::
+
+---
+
+## Document Templates
+
+### One-Pager Template
+
+See [Company One-Pager Template](./one-pager-template)
+
+### Test Plan Template
+
+See [Test Plan Guide](./test-plan-guide)
+
+---
+
+## Draft Response to PriviDox Email
+
+:::tip Recommended Response Strategy
+
+**Objective:** Maintain application position while honestly disclosing current
+TRL status, with commitment to reach TRL 5 before the Sandbox event.
+
+**Precedent:** The 2025 Urban Sandbox accepted TRL 4 applications with a plan
+to achieve TRL 5 before the event date.
+
+:::
+
+### Draft Email Response
+
+```
+Subject: RE: CUAS Sandbox 2026 Application - Phoenix Rooivalk - Missing Documents
+
+Dear IDEaS Team,
+
+Thank you for confirming receipt of our CUAS 2026 Application Form and for
+identifying the outstanding documents required to complete our submission.
+
+We are actively preparing the following materials:
+
+1. Company and Technology Overview (One-Pager) - In preparation
+2. Test Plan Template - In development
+3. DND 552 Radio Frequency Spectrum form - Being completed
+4. Demonstration Video - Scheduling recording
+
+TECHNOLOGY READINESS DISCLOSURE
+
+In the interest of transparency, we wish to clarify our current technology
+readiness status. Phoenix Rooivalk's counter-UAS system is presently at
+TRL 4 (Component validation in laboratory environment) with validated
+detection capabilities and proof-of-concept defeat mechanisms.
+
+We note that the 2025 Urban CUAS Sandbox accepted applications at TRL 4
+with a commitment to achieve TRL 5 prior to the event. We respectfully
+inquire whether a similar arrangement may be considered for our application.
+
+TRL 5 ACHIEVEMENT PLAN
+
+We have a concrete development roadmap to achieve TRL 5 (Component
+integration validated in relevant environment) well in advance of the
+Sandbox dates (September 14 - October 9, 2026):
+
+| Milestone                      | Target Date    | Status      |
+|-------------------------------|----------------|-------------|
+| Multi-sensor integration      | February 2026  | In progress |
+| Field validation testing      | April 2026     | Planned     |
+| RF communications operational | May 2026       | Planned     |
+| TRL 5 validation complete     | June 2026      | Planned     |
+| Demonstration video recording | July 2026      | Planned     |
+
+This timeline provides a 2-3 month buffer before the Sandbox commences.
+
+OUR COMMITMENT
+
+Phoenix Rooivalk is deeply committed to participating in the CUAS Sandbox
+2026. We believe our kinetic interceptor approach offers a unique
+capability that would benefit from the testing environment and end-user
+feedback that the Sandbox provides.
+
+We are prepared to:
+- Provide monthly progress updates toward TRL 5
+- Submit interim validation evidence as milestones are achieved
+- Accept conditional selection pending TRL 5 demonstration
+
+REQUEST
+
+We kindly request guidance on:
+1. Whether our application can proceed with a TRL 5 achievement plan
+2. What interim evidence would support our continued consideration
+3. The deadline for submitting our demonstration video
+
+We remain committed to completing all outstanding documentation and
+achieving TRL 5 readiness before the Sandbox event.
+
+Thank you for your consideration. We look forward to your response.
+
+Best regards,
+
+[Name]
+Phoenix Rooivalk
+[Contact Information]
+```
+
+### Key Points in Response
+
+| Element | Purpose |
+|---------|---------|
+| **Acknowledgment** | Confirms receipt, shows responsiveness |
+| **Document Status** | Shows active progress on requirements |
+| **TRL Disclosure** | Honest about current TRL 4 status |
+| **Precedent Citation** | References 2025 Urban Sandbox TRL 4 allowance |
+| **Concrete Plan** | Demonstrates serious commitment with dates |
+| **Buffer Timeline** | Shows TRL 5 achievable 2-3 months before event |
+| **Commitment Offers** | Progress updates, interim evidence, conditional terms |
+| **Specific Questions** | Requests actionable guidance |
+
+### Risk Assessment
+
+| Risk | Likelihood | Mitigation |
+|------|------------|------------|
+| Application rejected for TRL | Medium | Precedent argument, concrete plan |
+| No response | Low | Follow up in 1 week |
+| Conditional acceptance | Favorable | Accept any reasonable terms |
+| Full rejection | Medium | Pivot to accelerator strategy |
+
+### Follow-up Actions
+
+If response is **positive or conditional:**
+- [ ] Accelerate TRL 5 development plan
+- [ ] Prepare monthly progress reports
+- [ ] Schedule video recording for July 2026
+- [ ] Complete all documentation immediately
+
+If response is **negative:**
+- [ ] Request feedback for future applications
+- [ ] Focus on accelerator applications (see [Eligibility Assessment](./cuas-sandbox-eligibility-assessment))
+- [ ] Target CUAS Sandbox 2027/2028
+
+---
+
+## Related Documents
+
+- [CUAS Sandbox 2026 Overview](../opportunities/cuas-sandbox-2026)
+- [CUAS Readiness Levels](../opportunities/cuas-readiness-levels)
+- [Eligibility Assessment](./cuas-sandbox-eligibility-assessment)
+
+---
+
+_Document tracking for Phoenix Rooivalk CUAS Sandbox 2026 application.
+© 2025 Phoenix Rooivalk. All rights reserved._

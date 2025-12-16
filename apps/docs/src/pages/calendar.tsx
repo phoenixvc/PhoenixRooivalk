@@ -57,6 +57,7 @@ const calendarEvents: CalendarItem[] = [
     category: "hackathon",
     priority: "medium",
     assignee: "jurie",
+    link: "https://www.encode.club/",
   },
   {
     date: "2025-12-11",
@@ -108,6 +109,7 @@ const calendarEvents: CalendarItem[] = [
     category: "funding",
     priority: "high",
     assignee: "jurie",
+    link: "https://aws.amazon.com/blogs/aws/kiro-ai-powered-ide-for-building-applications-on-aws/",
   },
   {
     date: "2025-12-31",
@@ -147,6 +149,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "medium",
     assignee: "jurie",
+    link: "https://www.crowdstrike.com/en-us/press-releases/crowdstrike-launches-startup-accelerator/",
   },
   {
     date: "2026-01-06",
@@ -174,6 +177,7 @@ const calendarEvents: CalendarItem[] = [
     priority: "critical",
     assignee: "martyn",
     link: "/docs/business/opportunities/sosv-hax-accelerator",
+    weeklyTarget: 25,
   },
   {
     date: "2026-01-15",
@@ -227,6 +231,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
+    link: "https://www.diu.mil/",
   },
   {
     date: "2026-02-15",
@@ -243,6 +248,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
+    link: "https://www.navalx.org/crucible",
   },
   {
     date: "2026-02-28",
@@ -261,6 +267,7 @@ const calendarEvents: CalendarItem[] = [
     priority: "critical",
     assignee: "martyn",
     link: "/docs/business/opportunities/y-combinator",
+    weeklyTarget: 20,
   },
   {
     date: "2026-03-01",
@@ -269,6 +276,7 @@ const calendarEvents: CalendarItem[] = [
     category: "development",
     priority: "critical",
     assignee: "team",
+    weeklyTarget: 15,
   },
   {
     date: "2026-03-01",
@@ -311,6 +319,7 @@ const calendarEvents: CalendarItem[] = [
     category: "opportunity",
     priority: "high",
     assignee: "martyn",
+    link: "https://www.dhs.gov/science-and-technology/countering-unmanned-aircraft-systems",
   },
   {
     date: "2026-03-31",
@@ -367,6 +376,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "medium",
     assignee: "martyn",
+    link: "https://www.nsin.us/emerge/",
   },
   {
     date: "2026-05-08",
@@ -395,9 +405,11 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-01",
     title: "MBDA Swarm Drone Challenge Registration",
-    description: "Indoor swarm competition, \u20AC50K prizes - German-based",
+    description: "Indoor swarm competition, €50K prizes - German-based",
     category: "opportunity",
     priority: "medium",
+    assignee: "peter",
+    link: "https://www.mbda-systems.com/",
   },
   {
     date: "2026-05-15",
@@ -471,7 +483,9 @@ const calendarEvents: CalendarItem[] = [
     description: "Target: R120M (~$6.7M) with proven revenue",
     category: "funding",
     priority: "critical",
+    assignee: "martyn",
     link: "/docs/executive/investor-executive-summary",
+    weeklyTarget: 10,
   },
   {
     date: "2026-07-01",
@@ -479,6 +493,8 @@ const calendarEvents: CalendarItem[] = [
     description: "2-week Navy experimentation (maritime environment), free CRADA",
     category: "opportunity",
     priority: "high",
+    assignee: "team",
+    link: "https://www.navalx.org/",
   },
   {
     date: "2026-07-22",
@@ -493,6 +509,8 @@ const calendarEvents: CalendarItem[] = [
     description: "AI Cyber Challenge at DEF CON, up to $4M prizes",
     category: "hackathon",
     priority: "high",
+    assignee: "jurie",
+    link: "https://aicyberchallenge.com/",
   },
   {
     date: "2026-08-15",
@@ -514,7 +532,9 @@ const calendarEvents: CalendarItem[] = [
     description: "CFB Suffield, Alberta - Live demonstration (Sep 14 - Oct 9)",
     category: "opportunity",
     priority: "critical",
+    assignee: "team",
     link: "/docs/business/opportunities/cuas-sandbox-2026",
+    weeklyTarget: 20,
   },
   {
     date: "2026-09-25",
@@ -543,6 +563,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "high",
     assignee: "peter",
+    link: "https://aws.amazon.com/startups/accelerators/robotics/",
   },
   {
     date: "2026-11-01",
@@ -583,6 +604,8 @@ const calendarEvents: CalendarItem[] = [
     description: "Annual event, $100K+ prizes",
     category: "opportunity",
     priority: "high",
+    assignee: "team",
+    link: "https://www.pendletonuasrange.com/",
   },
   {
     date: "2026-11-01",
@@ -623,6 +646,7 @@ const calendarEvents: CalendarItem[] = [
     category: "accelerator",
     priority: "medium",
     assignee: "peter",
+    link: "https://svrobo.org/",
   },
   {
     date: "2027-02-01",
@@ -719,6 +743,249 @@ const calendarEvents: CalendarItem[] = [
     assignee: "martyn",
     link: "/docs/business/opportunities/techstars-programs",
     weeklyTarget: 10,
+  },
+
+  // ============================================
+  // ADDITIONAL OPPORTUNITIES (Research Phase 5)
+  // ============================================
+
+  // European Programs
+  {
+    date: "2026-03-01",
+    title: "EUDIS Business Accelerator Spring Cohort",
+    description: "EU defense accelerator - 300+ hours coaching, 5 bootcamps across Europe. EU/Norway startups only.",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.eudis-business-accelerator.eu/",
+    weeklyTarget: 15,
+  },
+  {
+    date: "2026-04-13",
+    title: "Military Robotics & Autonomous Systems UK 2026",
+    description: "April 13-15 London - Conference on RAS integration into military operations",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "team",
+    link: "https://www.smgconferences.com/defence/uk/conference/robotic-autonomous-systems",
+  },
+  {
+    date: "2026-09-01",
+    title: "EUDIS Business Accelerator Fall Cohort",
+    description: "EU defense accelerator fall intake - 300+ hours coaching, bootcamps across Europe",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.eudis-business-accelerator.eu/",
+    weeklyTarget: 15,
+  },
+
+  // African & MENA Programs
+  {
+    date: "2026-03-15",
+    title: "Google for Startups MENA 2026 Application",
+    description: "10-week accelerator for Middle East & North Africa startups using innovative tech",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://startup.google.com/programs/accelerator/",
+  },
+  {
+    date: "2026-05-01",
+    title: "Katapult Africa Accelerator Application",
+    description: "90-day program with $150K-$500K investment for African impact tech startups",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://katapult.vc/africa/accelerator/",
+  },
+  {
+    date: "2026-06-25",
+    title: "Africa Technology Expo 2026",
+    description: "June 25-26 - Hardware, robotics, drone tech, smart hardware showcase",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "team",
+    link: "https://africatechnologyexpo.com/",
+  },
+  {
+    date: "2026-06-30",
+    title: "Africa Startup Accelerator (ASA) 2026",
+    description: "3-week program at University of Iowa (June 30 - July 25) for African founders",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://opportunitiesforeveryone.net/call-for-applications-2026-africa-startup-accelerator-asa-program-in-usa/",
+  },
+  {
+    date: "2026-10-28",
+    title: "AI Expo Africa 2026",
+    description: "Oct 28-29 Sandton, South Africa - Africa's largest AI and smart tech trade event",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "team",
+    link: "https://aiexpoafrica.com/",
+  },
+
+  // US Events & Conferences
+  {
+    date: "2026-07-08",
+    title: "Military Robotics & Autonomous Systems USA 2026",
+    description: "July 8-9 - Conference on military robotics with 100+ attendees, 25+ speakers",
+    category: "opportunity",
+    priority: "high",
+    assignee: "team",
+    link: "https://www.unmannedsystemstechnology.com/events/military-robotics-and-autonomous-systems-usa/",
+  },
+
+  // Corporate Venture Targets
+  {
+    date: "2026-04-01",
+    title: "Lockheed Martin Ventures Pitch Preparation",
+    description: "Prepare pitch for Lockheed Martin corporate VC - deep pockets, pilot customers, acquisition pathway",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.openvc.app/investor-lists/defensetech-investors",
+  },
+  {
+    date: "2026-05-01",
+    title: "Boeing HorizonX Ventures Outreach",
+    description: "Target Boeing's VC arm - focused on autonomous systems, advanced manufacturing",
+    category: "funding",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://www.openvc.app/investor-lists/defensetech-investors",
+  },
+  {
+    date: "2026-06-01",
+    title: "RTX Ventures Introduction",
+    description: "Connect with RTX (formerly Raytheon) venture arm for defense tech partnership",
+    category: "funding",
+    priority: "medium",
+    assignee: "martyn",
+    link: "https://www.openvc.app/investor-lists/defensetech-investors",
+  },
+
+  // ============================================
+  // INTERNATIONAL ACCELERATORS (Research Phase 5b)
+  // ============================================
+
+  // Asia-Pacific Programs
+  {
+    date: "2026-01-15",
+    title: "Japan DITI Defense Innovation Outreach",
+    description: "Japan's Defense Innovation Technology Institute - contact for dual-use tech opportunities",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.asianmilitaryreview.com/2024/08/japan-announces-new-defence-technology-accelerator/",
+  },
+  {
+    date: "2026-02-01",
+    title: "Australia ASCA Application",
+    description: "Advanced Strategic Capabilities Accelerator - undersea, air defense, autonomous systems focus",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://carnegieindia.org/research/2024/09/innovative-alliance-us-australian-defense-science-and-technology-cooperation-for-a-dangerous-decade",
+  },
+  {
+    date: "2026-03-01",
+    title: "India iDEX DISC Challenge Application",
+    description: "Defence India Startup Challenge - grants up to Rs 1.5Cr, UAS/autonomous systems focus",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://idex.gov.in/challenges",
+  },
+  {
+    date: "2026-03-15",
+    title: "DSEI Japan 2027 Registration",
+    description: "Japan's premier defense & security exhibition - early registration for 2027 event",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "team",
+    link: "https://www.dsei-japan.com/",
+  },
+
+  // Israel Programs
+  {
+    date: "2026-02-15",
+    title: "Israel Innofense Program Application",
+    description: "Israeli DDR&D accelerator - VC network, defense tech scouting, 43+ graduates",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://breakingdefense.com/2023/07/how-israels-military-is-prioritizing-dual-use-start-ups-to-accelerate-defense-tech/",
+  },
+  {
+    date: "2026-04-01",
+    title: "Matara Defense Platform Introduction",
+    description: "Israeli defense innovation platform - bridges foreign defense needs with Israeli tech",
+    category: "funding",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.calcalistech.com/ctechnews/article/hyvkgwqjwg",
+  },
+  {
+    date: "2026-05-15",
+    title: "8200 ESIP Accelerator Application",
+    description: "Tel Aviv cybersecurity accelerator backed by elite military unit alumni network",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "jurie",
+    link: "https://sharpsheets.io/blog/israel-top-startup-accelerators/",
+  },
+
+  // UK & NATO Programs
+  {
+    date: "2026-01-13",
+    title: "UK DASA Open Call Cycle 4 Deadline",
+    description: "Final DASA open call before July 2026 relaunch - up to £350K per proposal",
+    category: "funding",
+    priority: "critical",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/collections/apply-for-funding",
+    weeklyTarget: 20,
+  },
+  {
+    date: "2026-07-01",
+    title: "UK DASA New Service Launch",
+    description: "UKDI Full Operating Capability - new funding service opens",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/organisations/defence-and-security-accelerator",
+  },
+  {
+    date: "2026-09-15",
+    title: "NATO DIANA 2027 Application Prep",
+    description: "Prepare for next NATO DIANA cohort - top 4% acceptance rate, £100K+ funding",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/news/the-uk-accelerator-welcomes-eight-companies-into-the-2026-nato-diana-programme",
+  },
+
+  // Middle East Programs
+  {
+    date: "2026-01-11",
+    title: "UAE SANDBOX Dubai Application Deadline",
+    description: "Dubai VC-backed accelerator - growth and fundraising focus",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://sandboxaccelerator.com/",
+  },
+  {
+    date: "2026-04-15",
+    title: "Hub71 Abu Dhabi Application",
+    description: "Abu Dhabi global tech ecosystem - strategic East-West location, tax-friendly",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.hub71.com/",
   },
 ];
 
@@ -824,11 +1091,61 @@ const timeRangeConfig: Record<TimeRange, { label: string; days: number | null }>
   "90days": { label: "Next 90 Days", days: 90 },
 };
 
+// Reusable RoadmapSection component for accessibility and code reuse
+interface RoadmapSectionProps {
+  title: string;
+  events: CalendarItem[];
+  emptyMessage: string;
+  maxItems: number;
+  onToggleComplete: (event: CalendarItem) => void;
+  isEventCompleted: (event: CalendarItem) => boolean;
+}
+
+function RoadmapSection({
+  title,
+  events,
+  emptyMessage,
+  maxItems,
+  onToggleComplete,
+  isEventCompleted,
+}: RoadmapSectionProps): React.ReactElement {
+  return (
+    <div className={styles.roadmapSection}>
+      <div className={styles.roadmapPeriod}>{title}</div>
+      <div className={styles.roadmapItems}>
+        {events.slice(0, maxItems).map((e, i) => {
+          const completed = isEventCompleted(e);
+          return (
+            <div
+              key={i}
+              className={`${styles.roadmapItem} ${completed ? styles.roadmapCompleted : ""}`}
+            >
+              <button
+                className={styles.roadmapCheckbox}
+                onClick={() => onToggleComplete(e)}
+                aria-label={`Mark "${e.title}" as ${completed ? "incomplete" : "complete"}`}
+              >
+                {completed ? "✓" : "○"}
+              </button>
+              <span className={styles.roadmapTitle}>{e.title}</span>
+              <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+            </div>
+          );
+        })}
+        {events.length === 0 && (
+          <div className={styles.roadmapEmpty}>{emptyMessage}</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CalendarPage(): React.ReactElement {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedAssignee, setSelectedAssignee] = useState<string>("all");
   const [selectedPriority, setSelectedPriority] = useState<string>("all");
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>("all");
+  const [selectedCompletion, setSelectedCompletion] = useState<string>("all"); // all, incomplete, completed
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showPast, setShowPast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -841,6 +1158,7 @@ export default function CalendarPage(): React.ReactElement {
     category: "meeting" as CalendarItem["category"],
     priority: "medium" as CalendarItem["priority"],
     assignee: "all" as TeamMember,
+    weeklyTarget: undefined as number | undefined,
   });
 
   // Load custom events and completed status from localStorage on mount
@@ -909,6 +1227,14 @@ export default function CalendarPage(): React.ReactElement {
       }
     }
 
+    // Filter by completion status
+    if (selectedCompletion !== "all") {
+      events = events.filter((e) => {
+        const isCompleted = completedEvents[getEventKey(e)] || false;
+        return selectedCompletion === "completed" ? isCompleted : !isCompleted;
+      });
+    }
+
     // Filter past events
     if (!showPast) {
       events = events.filter((e) => getDaysUntil(e.date) >= 0);
@@ -918,7 +1244,7 @@ export default function CalendarPage(): React.ReactElement {
     events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return events;
-  }, [selectedCategory, selectedAssignee, selectedPriority, selectedTimeRange, searchQuery, showPast, allEvents]);
+  }, [selectedCategory, selectedAssignee, selectedPriority, selectedTimeRange, selectedCompletion, searchQuery, showPast, allEvents, completedEvents]);
 
   // Personal stats for selected assignee
   const personalStats = useMemo(() => {
@@ -1006,6 +1332,7 @@ export default function CalendarPage(): React.ReactElement {
       category: "meeting",
       priority: "medium",
       assignee: "all",
+      weeklyTarget: undefined,
     });
     setShowAddModal(false);
   };
@@ -1177,6 +1504,52 @@ export default function CalendarPage(): React.ReactElement {
           </div>
         </div>
 
+        {/* Quick Overview - Always Visible */}
+        {selectedAssignee === "all" && (
+          <div className={styles.quickOverview}>
+            <div className={styles.overviewHeader}>
+              <h3>Quick Overview</h3>
+              <div className={styles.overviewStats}>
+                <span className={styles.overviewStat}>
+                  <strong>{filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length}</strong> this week
+                </span>
+                <span className={styles.overviewStat}>
+                  <strong>{filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 30).length}</strong> this month
+                </span>
+                <span className={styles.overviewStat}>
+                  <strong>{filteredEvents.filter((e) => isEventCompleted(e)).length}</strong> completed
+                </span>
+              </div>
+            </div>
+            <div className={styles.roadmapTimeline}>
+              <RoadmapSection
+                title="This Week"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                emptyMessage="No items this week"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
+              <RoadmapSection
+                title="Next 2 Weeks"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                emptyMessage="No items next 2 weeks"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
+              <RoadmapSection
+                title="This Month"
+                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                emptyMessage="No items later this month"
+                maxItems={4}
+                onToggleComplete={handleToggleComplete}
+                isEventCompleted={isEventCompleted}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Personal Stats Dashboard */}
         {selectedAssignee !== "all" && (
           <div className={styles.statsDashboard}>
@@ -1233,84 +1606,30 @@ export default function CalendarPage(): React.ReactElement {
             <div className={styles.roadmapOverview}>
               <h4>Quick Roadmap</h4>
               <div className={styles.roadmapTimeline}>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>This Week</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items this week</div>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>Next 2 Weeks</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items next 2 weeks</div>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.roadmapSection}>
-                  <div className={styles.roadmapPeriod}>This Month</div>
-                  <div className={styles.roadmapItems}>
-                    {filteredEvents
-                      .filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)
-                      .slice(0, 3)
-                      .map((e, i) => (
-                        <div
-                          key={i}
-                          className={`${styles.roadmapItem} ${isEventCompleted(e) ? styles.roadmapCompleted : ""}`}
-                        >
-                          <button
-                            className={styles.roadmapCheckbox}
-                            onClick={() => handleToggleComplete(e)}
-                          >
-                            {isEventCompleted(e) ? "✓" : "○"}
-                          </button>
-                          <span className={styles.roadmapTitle}>{e.title}</span>
-                          <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
-                        </div>
-                      ))}
-                    {filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30).length === 0 && (
-                      <div className={styles.roadmapEmpty}>No items later this month</div>
-                    )}
-                  </div>
-                </div>
+                <RoadmapSection
+                  title="This Week"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                  emptyMessage="No items this week"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
+                <RoadmapSection
+                  title="Next 2 Weeks"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                  emptyMessage="No items next 2 weeks"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
+                <RoadmapSection
+                  title="This Month"
+                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                  emptyMessage="No items later this month"
+                  maxItems={3}
+                  onToggleComplete={handleToggleComplete}
+                  isEventCompleted={isEventCompleted}
+                />
               </div>
             </div>
           </div>
@@ -1406,6 +1725,20 @@ export default function CalendarPage(): React.ReactElement {
               </select>
             </div>
 
+            <div className={styles.filterGroup}>
+              <label>Status:</label>
+              <select
+                value={selectedCompletion}
+                onChange={(e) => setSelectedCompletion(e.target.value)}
+                className={styles.filterSelect}
+                aria-label="Filter by completion status"
+              >
+                <option value="all">All Items</option>
+                <option value="incomplete">Incomplete</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+
             <label className={styles.showPastToggle}>
               <input
                 type="checkbox"
@@ -1498,7 +1831,11 @@ export default function CalendarPage(): React.ReactElement {
                     </div>
                     <h3 className={`${styles.eventTitle} ${completed ? styles.titleCompleted : ""}`}>
                       {event.link ? (
-                        <Link to={event.link}>{event.title}</Link>
+                        event.link.startsWith("http") ? (
+                          <a href={event.link} target="_blank" rel="noopener noreferrer">{event.title}</a>
+                        ) : (
+                          <Link to={event.link}>{event.title}</Link>
+                        )
                       ) : (
                         event.title
                       )}
@@ -1639,6 +1976,24 @@ export default function CalendarPage(): React.ReactElement {
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Weekly Target (% progress/week)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={newEvent.weeklyTarget || ""}
+                    onChange={(e) => setNewEvent({
+                      ...newEvent,
+                      weeklyTarget: e.target.value ? parseInt(e.target.value) : undefined
+                    })}
+                    placeholder="e.g., 25 for 25%/week"
+                    className={styles.formInput}
+                  />
+                  <span className={styles.formHint}>
+                    Optional - Set a weekly progress target for longer-term items
+                  </span>
                 </div>
                 <div className={styles.modalActions}>
                   <button
