@@ -73,6 +73,51 @@ Please ensure your code adheres to the following style guidelines:
 - Write clear, descriptive comments where necessary.
 - Ensure your code is well-documented and easy to read.
 
+### CSS Layout Standards
+
+#### Container Width Guidelines
+
+The project uses two canonical width standards:
+
+| Context | Max Width | Side Padding | Use Case |
+|---------|-----------|--------------|----------|
+| **General containers** | `1440px` (`--pr-container-max`) | `5%` | Marketing pages, dashboards, wide layouts |
+| **Documentation content** | `850px` (`--pr-content-width`) | `5%` | Long-form reading content (docs, articles) |
+
+#### Documentation Width Exception
+
+Documentation pages intentionally use a narrower `850px` max-width instead of
+the standard `1440px`. This is because:
+
+1. **Optimal line length**: 50-75 characters per line is ideal for readability
+2. **Reduced eye strain**: Shorter lines reduce horizontal eye movement
+3. **Better comprehension**: Studies show narrower text columns improve reading
+   comprehension
+
+#### Responsive Breakpoints
+
+All layouts should follow mobile-first responsive design:
+
+| Breakpoint | Width | Target |
+|------------|-------|--------|
+| Mobile | `<600px` | Small phones, full-width content |
+| Tablet | `600px - 899px` | Tablets, intermediate width |
+| Desktop | `≥900px` | Full content width applies |
+
+#### CSS Variables Reference
+
+```css
+/* General containers */
+--pr-container-max: 1440px;
+
+/* Documentation-specific */
+--pr-content-width: 850px;
+--pr-content-padding: 5%;
+```
+
+When creating new layouts, use these variables rather than hard-coded values to
+maintain consistency across the project.
+
 ## Code of Conduct
 
 Please note that this project is governed by a Code of Conduct. By

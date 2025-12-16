@@ -117,6 +117,15 @@
   --pr-container-lg: 1024px;
   --pr-container-xl: 1280px;
   --pr-container-max: 1440px;
+
+  /* Documentation Content Width
+   * Note: Documentation uses a narrower max-width (850px) than the general
+   * container (1440px) to maintain optimal line length for readability
+   * (50-75 characters per line at base font-size). This is an intentional
+   * exception for long-form reading content. See CONTRIBUTING.md for details.
+   */
+  --pr-content-width: 850px;
+  --pr-content-padding: 5%;
 }
 
 /* ============================================
@@ -2300,15 +2309,58 @@ html {
   padding: 0 var(--pr-space-8);
 }
 
-/* Article content - use full available width */
+/* ============================================
+   DOCUMENTATION CONTENT LAYOUT
+   Mobile-first responsive approach
+
+   Width Strategy:
+   - System standard: 1440px max container with 5% side padding
+   - Documentation exception: 850px max for optimal readability
+   - Uses min() for fluid responsive sizing
+   ============================================ */
+
+/* Article content - responsive centered layout */
 article {
-  max-width: 100%;
-  margin: 0;
+  /* Mobile-first: fluid width with padding */
+  width: 100%;
+  max-width: min(var(--pr-content-width), 90vw);
+  margin: 0 auto;
+  padding: 0 var(--pr-content-padding);
 }
 
-/* Markdown content wrapper */
+/* Markdown content wrapper - responsive centered layout */
 .markdown {
-  max-width: 100%;
+  /* Mobile-first: fluid width with padding */
+  width: 100%;
+  max-width: min(var(--pr-content-width), 90vw);
+  margin: 0 auto;
+}
+
+/* Mobile (<600px): Tighter constraints for small screens */
+@media (max-width: 599px) {
+  article,
+  .markdown {
+    max-width: 100%;
+    padding: 0 var(--pr-space-4);
+  }
+}
+
+/* Tablet (600px - 899px): Intermediate width */
+@media (min-width: 600px) and (max-width: 899px) {
+  article,
+  .markdown {
+    max-width: min(680px, 85vw);
+    padding: 0 var(--pr-space-6);
+  }
+}
+
+/* Desktop (≥900px): Full content width */
+@media (min-width: 900px) {
+  article,
+  .markdown {
+    max-width: var(--pr-content-width);
+    padding: 0 var(--pr-space-8);
+  }
 }
 
 /* Row layout */
@@ -2330,11 +2382,31 @@ article {
   display: none !important;
 }
 
-/* Doc item wrapper */
+/* Doc item wrapper - centered with fixed max-width for proper centering */
 .docItemContainer {
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  max-width: var(--pr-content-width);
+  margin: 0 auto;
+  padding: 0 var(--pr-content-padding);
+}
+
+/* Responsive docItemContainer */
+@media (max-width: 599px) {
+  .docItemContainer {
+    padding: 0 var(--pr-space-4);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .docItemContainer {
+    padding: 0 var(--pr-space-6);
+  }
+}
+
+@media (min-width: 900px) {
+  .docItemContainer {
+    padding: 0 var(--pr-space-8);
+  }
 }
 
 /* Sidebar left */
