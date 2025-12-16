@@ -54,8 +54,14 @@
   background: transparent;
   color: rgb(242, 244, 246);
   font-size: 0.875rem;
-  outline: none;
+  outline: 2px solid transparent;
   min-width: 0;
+}
+
+.ai-search-bar__input:focus-visible {
+  outline: 2px solid var(--pr-brand-orange, rgb(249, 115, 22));
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .ai-search-bar__input::placeholder {

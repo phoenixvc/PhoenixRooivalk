@@ -85,9 +85,17 @@
 .access-form-field input:focus,
 .access-form-field textarea:focus,
 .access-form-field select:focus {
-  outline: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   border-color: var(--ifm-color-primary);
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.access-form-field input:focus-visible,
+.access-form-field textarea:focus-visible,
+.access-form-field select:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
 }
 
 .access-form-field input.error,
