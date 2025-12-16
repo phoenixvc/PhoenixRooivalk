@@ -79,10 +79,10 @@ Please ensure your code adheres to the following style guidelines:
 
 The project uses two canonical width standards:
 
-| Context | Max Width | Side Padding | Use Case |
-|---------|-----------|--------------|----------|
-| **General containers** | `1440px` (`--pr-container-max`) | `5%` | Marketing pages, dashboards, wide layouts |
-| **Documentation content** | `850px` (`--pr-content-width`) | `5%` | Long-form reading content (docs, articles) |
+| Context                   | Max Width                       | Side Padding | Use Case                                   |
+| ------------------------- | ------------------------------- | ------------ | ------------------------------------------ |
+| **General containers**    | `1440px` (`--pr-container-max`) | `5%`         | Marketing pages, dashboards, wide layouts  |
+| **Documentation content** | `850px` (`--pr-content-width`)  | `5%`         | Long-form reading content (docs, articles) |
 
 #### Documentation Width Exception
 
@@ -98,11 +98,11 @@ the standard `1440px`. This is because:
 
 All layouts should follow mobile-first responsive design:
 
-| Breakpoint | Width | Target |
-|------------|-------|--------|
-| Mobile | `<600px` | Small phones, full-width content |
-| Tablet | `600px - 899px` | Tablets, intermediate width |
-| Desktop | `≥900px` | Full content width applies |
+| Breakpoint | Width           | Target                           |
+| ---------- | --------------- | -------------------------------- |
+| Mobile     | `<600px`        | Small phones, full-width content |
+| Tablet     | `600px - 899px` | Tablets, intermediate width      |
+| Desktop    | `≥900px`        | Full content width applies       |
 
 #### CSS Variables Reference
 

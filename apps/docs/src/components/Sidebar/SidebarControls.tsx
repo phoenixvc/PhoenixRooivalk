@@ -18,7 +18,7 @@ export function SidebarControls(): null {
   // Initialize sidebar state from localStorage
   useEffect(() => {
     const sidebar = document.querySelector(
-      ".theme-doc-sidebar-container"
+      ".theme-doc-sidebar-container",
     ) as HTMLElement;
     if (!sidebar) return;
 
@@ -31,7 +31,10 @@ export function SidebarControls(): null {
     // Restore width
     const savedWidth = localStorage.getItem(STORAGE_KEY_WIDTH);
     if (savedWidth && !isCollapsed) {
-      const width = Math.min(Math.max(parseInt(savedWidth, 10), MIN_WIDTH), MAX_WIDTH);
+      const width = Math.min(
+        Math.max(parseInt(savedWidth, 10), MIN_WIDTH),
+        MAX_WIDTH,
+      );
       sidebar.style.setProperty("--sidebar-width", `${width}px`);
     }
 
@@ -72,7 +75,7 @@ export function SidebarControls(): null {
 
   const handleToggle = useCallback(() => {
     const sidebar = document.querySelector(
-      ".theme-doc-sidebar-container"
+      ".theme-doc-sidebar-container",
     ) as HTMLElement;
     if (!sidebar) return;
 
@@ -82,7 +85,7 @@ export function SidebarControls(): null {
 
   const handleResizeStart = useCallback((e: MouseEvent) => {
     const sidebar = document.querySelector(
-      ".theme-doc-sidebar-container"
+      ".theme-doc-sidebar-container",
     ) as HTMLElement;
     if (!sidebar || sidebar.classList.contains("sidebar--collapsed")) return;
 
@@ -92,7 +95,7 @@ export function SidebarControls(): null {
     startWidth.current =
       parseInt(
         getComputedStyle(sidebar).getPropertyValue("--sidebar-width"),
-        10
+        10,
       ) || DEFAULT_WIDTH;
 
     const handle = sidebar.querySelector(".sidebar-resize-handle");
@@ -106,7 +109,7 @@ export function SidebarControls(): null {
       const delta = e.clientX - startX.current;
       const newWidth = Math.min(
         Math.max(startWidth.current + delta, MIN_WIDTH),
-        MAX_WIDTH
+        MAX_WIDTH,
       );
       sidebar.style.setProperty("--sidebar-width", `${newWidth}px`);
     };
@@ -120,10 +123,12 @@ export function SidebarControls(): null {
       document.body.style.userSelect = "";
 
       // Save width to localStorage
-      const currentWidth = getComputedStyle(sidebar).getPropertyValue(
-        "--sidebar-width"
+      const currentWidth =
+        getComputedStyle(sidebar).getPropertyValue("--sidebar-width");
+      localStorage.setItem(
+        STORAGE_KEY_WIDTH,
+        parseInt(currentWidth, 10).toString(),
       );
-      localStorage.setItem(STORAGE_KEY_WIDTH, parseInt(currentWidth, 10).toString());
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);

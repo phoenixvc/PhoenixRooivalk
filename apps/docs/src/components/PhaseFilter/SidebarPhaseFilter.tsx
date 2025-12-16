@@ -17,10 +17,16 @@ const ROLE_FILTER_KEY = "phoenix-docs-role-filter";
 
 // Role groups for easier selection
 const ROLE_GROUPS = {
-  "Executive & Business": ["Executive", "Business", "Financial", "Sales", "Marketing"],
-  "Technical": ["Technical - Software/AI", "Technical - Mechanical", "Research"],
+  "Executive & Business": [
+    "Executive",
+    "Business",
+    "Financial",
+    "Sales",
+    "Marketing",
+  ],
+  Technical: ["Technical - Software/AI", "Technical - Mechanical", "Research"],
   "Operations & Support": ["Operations", "Legal", "Product", "Advisory"],
-  "Leadership": ["Founder", "Lead"],
+  Leadership: ["Founder", "Lead"],
 };
 
 export function SidebarPhaseFilter(): React.ReactElement | null {
@@ -33,7 +39,11 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(ROLE_FILTER_KEY);
-      if (stored && (stored === "all" || AVAILABLE_ROLES.includes(stored as typeof AVAILABLE_ROLES[number]))) {
+      if (
+        stored &&
+        (stored === "all" ||
+          AVAILABLE_ROLES.includes(stored as (typeof AVAILABLE_ROLES)[number]))
+      ) {
         setCurrentRoleState(stored);
       }
     }

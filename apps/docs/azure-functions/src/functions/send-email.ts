@@ -42,7 +42,10 @@ function validateEmailRequest(data: SendEmailRequest): string | null {
 
   // Basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const recipients = data.to.split(/[,;]/).map((e) => e.trim()).filter(Boolean);
+  const recipients = data.to
+    .split(/[,;]/)
+    .map((e) => e.trim())
+    .filter(Boolean);
 
   for (const email of recipients) {
     if (!emailRegex.test(email)) {
@@ -99,7 +102,10 @@ async function sendEmailHandler(
     }
 
     // Parse recipients
-    const toRecipients = data.to.split(/[,;]/).map((e) => e.trim()).filter(Boolean);
+    const toRecipients = data.to
+      .split(/[,;]/)
+      .map((e) => e.trim())
+      .filter(Boolean);
 
     // Build email message
     const message: EmailMessage = {
@@ -117,10 +123,13 @@ async function sendEmailHandler(
     const result = await sendEmail(message);
 
     if (result.success) {
-      context.log(`Email sent successfully to ${toRecipients.length} recipients`, {
-        userId: authResult.userId,
-        messageId: result.messageId,
-      });
+      context.log(
+        `Email sent successfully to ${toRecipients.length} recipients`,
+        {
+          userId: authResult.userId,
+          messageId: result.messageId,
+        },
+      );
 
       return successResponse({
         success: true,
@@ -155,10 +164,13 @@ async function emailStatusHandler(
 
     return successResponse({
       available: hasProvider,
-      provider: process.env.EMAIL_PROVIDER || (
-        process.env.SENDGRID_API_KEY ? "sendgrid" :
-        process.env.AZURE_COMMUNICATION_CONNECTION_STRING ? "azure" : "none"
-      ),
+      provider:
+        process.env.EMAIL_PROVIDER ||
+        (process.env.SENDGRID_API_KEY
+          ? "sendgrid"
+          : process.env.AZURE_COMMUNICATION_CONNECTION_STRING
+            ? "azure"
+            : "none"),
     });
   } catch (error) {
     context.error("Email status check failed:", error);

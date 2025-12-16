@@ -218,7 +218,15 @@ export function AdminImprovementReview({
 /**
  * Format Firestore timestamp to readable date
  */
-function formatDate(timestamp: { toDate?: () => Date } | Date | string | number | null | undefined): string {
+function formatDate(
+  timestamp:
+    | { toDate?: () => Date }
+    | Date
+    | string
+    | number
+    | null
+    | undefined,
+): string {
   if (!timestamp) return "Unknown";
 
   try {

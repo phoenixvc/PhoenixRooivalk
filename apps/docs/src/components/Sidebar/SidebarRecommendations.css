@@ -113,7 +113,11 @@
   font-size: 0.5625rem;
   font-weight: 600;
   padding: 0.1875rem 0.4375rem;
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(249, 115, 22, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.25),
+    rgba(249, 115, 22, 0.15)
+  );
   color: rgb(249, 115, 22);
   border-radius: 4px;
   margin-left: auto;
