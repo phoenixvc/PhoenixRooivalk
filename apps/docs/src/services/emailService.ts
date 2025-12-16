@@ -250,6 +250,3 @@ export interface GitHubIssueOptions {
 
 // Export singleton instance
 export const emailService = new EmailService();
-
-// Export types
-export type { EmailDraft, EmailSendResult, EmailTemplate };

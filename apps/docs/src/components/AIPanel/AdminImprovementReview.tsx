@@ -216,21 +216,41 @@ export function AdminImprovementReview({
 }
 
 /**
+ * Timestamp type that can come from Firestore or other sources
+ */
+type TimestampLike =
+  | { toDate?: () => Date }
+  | Date
+  | string
+  | number
+  | null
+  | undefined;
+
+/**
  * Format Firestore timestamp to readable date
  */
-function formatDate(
-  timestamp:
-    | { toDate?: () => Date }
-    | Date
-    | string
-    | number
-    | null
-    | undefined,
-): string {
+function formatDate(timestamp: unknown): string {
   if (!timestamp) return "Unknown";
 
   try {
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    const ts = timestamp as TimestampLike;
+    let date: Date;
+
+    if (
+      ts &&
+      typeof ts === "object" &&
+      "toDate" in ts &&
+      typeof ts.toDate === "function"
+    ) {
+      date = ts.toDate();
+    } else if (ts instanceof Date) {
+      date = ts;
+    } else if (typeof ts === "string" || typeof ts === "number") {
+      date = new Date(ts);
+    } else {
+      return "Unknown";
+    }
+
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
