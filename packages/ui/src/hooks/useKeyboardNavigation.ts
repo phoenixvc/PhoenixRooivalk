@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface KeyboardNavigationOptions {
   /** Enable arrow key navigation */
@@ -51,6 +51,7 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
 
   const containerRef = useRef<T>(null);
   const activeIndexRef = useRef<number>(-1);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const typeAheadBufferRef = useRef<string>("");
   const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
@@ -85,6 +86,7 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
       if (item) {
         item.focus();
         activeIndexRef.current = targetIndex;
+        setActiveIndex(targetIndex);
       }
     },
     [getFocusableItems, loop],
@@ -241,7 +243,7 @@ export function useKeyboardNavigation<T extends HTMLElement = HTMLElement>(
 
   return {
     containerRef,
-    activeIndex: activeIndexRef.current,
+    activeIndex,
     focusItem,
     focusFirst: () => focusItem(0),
     focusLast: () => focusItem(getFocusableItems().length - 1),

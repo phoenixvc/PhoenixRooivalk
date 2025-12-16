@@ -92,7 +92,25 @@ export const Card: React.FC<CardProps> = ({
 };
 
 /**
- * Card Header - for title and optional actions
+ * Card Header component for displaying title and optional actions.
+ *
+ * Renders a header section with bottom border separator using Phoenix Rooivalk design tokens.
+ *
+ * @param props - The component props
+ * @param props.children - Content to render inside the header (typically title, subtitle, or actions)
+ * @param props.className - Optional additional CSS classes to apply. Defaults to empty string.
+ *
+ * @returns A styled div element containing the header content
+ *
+ * @example
+ * ```tsx
+ * <Card>
+ *   <CardHeader>
+ *     <h3>Card Title</h3>
+ *   </CardHeader>
+ *   <CardBody>Content here</CardBody>
+ * </Card>
+ * ```
  */
 export const CardHeader: React.FC<CardHeaderProps> = ({
   children,
@@ -108,7 +126,25 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
 };
 
 /**
- * Card Body - main content area
+ * Card Body component for the main content area of a card.
+ *
+ * Renders the primary content section with muted text color using Phoenix Rooivalk design tokens.
+ *
+ * @param props - The component props
+ * @param props.children - The main content to render inside the card body
+ * @param props.className - Optional additional CSS classes to apply. Defaults to empty string.
+ *
+ * @returns A styled div element containing the body content with muted text styling
+ *
+ * @example
+ * ```tsx
+ * <Card>
+ *   <CardBody>
+ *     <p>This is the main content of the card.</p>
+ *     <p>It can contain any React elements.</p>
+ *   </CardBody>
+ * </Card>
+ * ```
  */
 export const CardBody: React.FC<CardBodyProps> = ({
   children,
@@ -122,7 +158,27 @@ export const CardBody: React.FC<CardBodyProps> = ({
 };
 
 /**
- * Card Footer - for actions or metadata
+ * Card Footer component for actions or metadata at the bottom of a card.
+ *
+ * Renders a footer section with top border separator using Phoenix Rooivalk design tokens.
+ * Typically used for action buttons, links, or supplementary information.
+ *
+ * @param props - The component props
+ * @param props.children - Content to render inside the footer (typically buttons or metadata)
+ * @param props.className - Optional additional CSS classes to apply. Defaults to empty string.
+ *
+ * @returns A styled div element containing the footer content with top border
+ *
+ * @example
+ * ```tsx
+ * <Card>
+ *   <CardBody>Card content</CardBody>
+ *   <CardFooter>
+ *     <Button variant="primary">Save</Button>
+ *     <Button variant="secondary">Cancel</Button>
+ *   </CardFooter>
+ * </Card>
+ * ```
  */
 export const CardFooter: React.FC<CardFooterProps> = ({
   children,
