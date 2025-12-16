@@ -2300,15 +2300,16 @@ html {
   padding: 0 var(--pr-space-8);
 }
 
-/* Article content - use full available width */
+/* Article content - centered with optimal reading width */
 article {
-  max-width: 100%;
-  margin: 0;
+  max-width: 850px;
+  margin: 0 auto;
 }
 
-/* Markdown content wrapper */
+/* Markdown content wrapper - centered with optimal line length */
 .markdown {
-  max-width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
 }
 
 /* Row layout */
@@ -2330,11 +2331,11 @@ article {
   display: none !important;
 }
 
-/* Doc item wrapper */
+/* Doc item wrapper - allow centered content */
 .docItemContainer {
   max-width: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 0 auto;
+  padding: 0 var(--pr-space-4);
 }
 
 /* Sidebar left */
