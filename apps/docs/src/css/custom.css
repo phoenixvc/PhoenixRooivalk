@@ -494,6 +494,44 @@ body,
   color: var(--pr-fg-base) !important;
 }
 
+/* Sidebar alignment fix - ensure consistent indentation for nested items */
+.menu__list .menu__list {
+  padding-left: 0.75rem;
+  margin-left: 0.5rem;
+  border-left: 1px solid var(--pr-border-muted, rgba(255, 255, 255, 0.1));
+}
+
+[data-theme="light"] .menu__list .menu__list {
+  border-left-color: var(--pr-border-base, rgba(0, 0, 0, 0.1));
+}
+
+/* Child menu items - align text consistently */
+.menu__list .menu__list .menu__link {
+  padding-left: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Remove the angle bracket pseudo-element if present and use proper styling */
+.menu__list .menu__list .menu__link::before {
+  content: none;
+}
+
+/* Style the caret/arrow indicators consistently */
+.menu__link--sublist-caret::after {
+  background-size: 1rem;
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menu__link--sublist-caret:hover::after {
+  opacity: 1;
+}
+
+/* Active category styling */
+.menu__list-item-collapsible--active > .menu__link--sublist-caret::after {
+  transform: rotate(90deg);
+}
+
 /* Cards and Content */
 .card {
   background: var(--pr-bg-muted) !important;

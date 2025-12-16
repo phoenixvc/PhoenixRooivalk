@@ -124,7 +124,7 @@ interface PhaseFilterProviderProps {
 export function PhaseFilterProvider({
   children,
 }: PhaseFilterProviderProps): React.ReactElement {
-  // Initialize from localStorage if available
+  // Initialize from localStorage if available, default to earliest phase ("seed")
   const [currentPhase, setCurrentPhaseState] = useState<PhaseFilter>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(PHASE_FILTER_KEY);
@@ -132,7 +132,8 @@ export function PhaseFilterProvider({
         return stored as PhaseFilter;
       }
     }
-    return "all";
+    // Default to earliest phase for new users
+    return "seed";
   });
 
   // Persist to localStorage
@@ -201,12 +202,16 @@ export function PhaseFilterProvider({
     [],
   );
 
-  // Sync with localStorage on mount
+  // Sync with localStorage on mount (default to "seed" if not stored)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(PHASE_FILTER_KEY);
       if (stored === "all" || VALID_PHASES.includes(stored as Phase)) {
         setCurrentPhaseState(stored as PhaseFilter);
+      } else {
+        // Set default to "seed" and persist it
+        setCurrentPhaseState("seed");
+        localStorage.setItem(PHASE_FILTER_KEY, "seed");
       }
     }
   }, []);
