@@ -200,6 +200,71 @@ Sandboxes are not exclusively restricted to made-in-Canada products; however,
 
 ---
 
+## CUAS Readiness Levels (CRL)
+
+Beyond standard Technology Readiness Levels (TRL), CUAS systems can be assessed
+against CUAS-specific Readiness Levels (CRL) that evaluate operational
+effectiveness across detection, defeat, and integration capabilities.
+
+### Detection Readiness Levels (DRL)
+
+| Level | Description                                               | Criteria                                                        |
+| ----- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| DRL-1 | **Concept Validation**                                    | Detection concept proven in lab environment                     |
+| DRL-2 | **Single-Sensor Prototype**                               | One sensor type detects UAS in controlled conditions            |
+| DRL-3 | **Multi-Sensor Prototype**                                | Multiple sensors (RF, radar, optical) integrated                |
+| DRL-4 | **Field-Validated Detection**                             | Detection proven against real UAS in field conditions           |
+| DRL-5 | **All-Weather Detection**                                 | Reliable detection in day/night, varied weather                 |
+| DRL-6 | **Multi-Target Tracking**                                 | Simultaneous tracking of 5+ UAS with classification             |
+| DRL-7 | **Swarm Detection**                                       | Detection and tracking of coordinated swarm formations          |
+| DRL-8 | **Operational Detection**                                 | Full operational capability with <5% false positive rate        |
+
+### Defeat Readiness Levels (KRL - Kill Readiness Level)
+
+| Level | Description                                               | Criteria                                                        |
+| ----- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| KRL-1 | **Concept Validation**                                    | Defeat mechanism proven in lab                                  |
+| KRL-2 | **Static Target Defeat**                                  | Defeat of hovering/slow UAS in controlled conditions            |
+| KRL-3 | **Moving Target Defeat**                                  | Defeat of maneuvering UAS at speeds <20 m/s                     |
+| KRL-4 | **High-Speed Defeat**                                     | Defeat of UAS at speeds >20 m/s                                 |
+| KRL-5 | **Multi-Target Engagement**                               | Sequential defeat of 3+ targets                                 |
+| KRL-6 | **Simultaneous Engagement**                               | Defeat of multiple UAS simultaneously                           |
+| KRL-7 | **Swarm Defeat**                                          | Effective against coordinated swarm attacks                     |
+| KRL-8 | **Operational Defeat**                                    | >90% defeat rate in operational conditions                      |
+
+### Integration Readiness Levels (IRL)
+
+| Level | Description                                               | Criteria                                                        |
+| ----- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| IRL-1 | **Standalone Operation**                                  | System operates independently                                   |
+| IRL-2 | **Data Export**                                           | Can export detection data via standard formats                  |
+| IRL-3 | **C2 Interface**                                          | Basic command and control integration                           |
+| IRL-4 | **Network Integration**                                   | Full network integration with other sensors                     |
+| IRL-5 | **STANAG Compliance**                                     | NATO STANAG 4586/4609 compliant                                 |
+| IRL-6 | **Multi-Domain Integration**                              | Integration across air, land, sea domains                       |
+| IRL-7 | **Coalition Interoperability**                            | Interoperable with allied nation systems                        |
+| IRL-8 | **Full Battle Management**                                | Integrated into theater-level battle management                 |
+
+### Phoenix Rooivalk CRL Assessment
+
+| Capability Area         | Current Level | Target (Sandbox) | Notes                                    |
+| ----------------------- | ------------- | ---------------- | ---------------------------------------- |
+| Detection (DRL)         | DRL-4         | DRL-6            | Multi-sensor fusion operational          |
+| Defeat (KRL)            | KRL-3         | KRL-5            | Kinetic interceptor in development       |
+| Integration (IRL)       | IRL-3         | IRL-5            | STANAG compliance in progress            |
+| **Combined CRL Score**  | **3.3**       | **5.3**          | Average across capability areas          |
+
+:::info Sandbox Success Criteria
+
+For CUAS Sandbox 2026, a competitive solution should demonstrate:
+- **Minimum DRL-4**: Field-validated detection capability
+- **Minimum KRL-3** (if defeat category): Moving target defeat
+- **Minimum IRL-3**: Basic C2 integration capability
+
+:::
+
+---
+
 ## Solution Categories
 
 Applications are evaluated within one of three categories:

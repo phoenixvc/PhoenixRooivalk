@@ -866,6 +866,127 @@ const calendarEvents: CalendarItem[] = [
     assignee: "martyn",
     link: "https://www.openvc.app/investor-lists/defensetech-investors",
   },
+
+  // ============================================
+  // INTERNATIONAL ACCELERATORS (Research Phase 5b)
+  // ============================================
+
+  // Asia-Pacific Programs
+  {
+    date: "2026-01-15",
+    title: "Japan DITI Defense Innovation Outreach",
+    description: "Japan's Defense Innovation Technology Institute - contact for dual-use tech opportunities",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.asianmilitaryreview.com/2024/08/japan-announces-new-defence-technology-accelerator/",
+  },
+  {
+    date: "2026-02-01",
+    title: "Australia ASCA Application",
+    description: "Advanced Strategic Capabilities Accelerator - undersea, air defense, autonomous systems focus",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://carnegieindia.org/research/2024/09/innovative-alliance-us-australian-defense-science-and-technology-cooperation-for-a-dangerous-decade",
+  },
+  {
+    date: "2026-03-01",
+    title: "India iDEX DISC Challenge Application",
+    description: "Defence India Startup Challenge - grants up to Rs 1.5Cr, UAS/autonomous systems focus",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://idex.gov.in/challenges",
+  },
+  {
+    date: "2026-03-15",
+    title: "DSEI Japan 2027 Registration",
+    description: "Japan's premier defense & security exhibition - early registration for 2027 event",
+    category: "opportunity",
+    priority: "medium",
+    assignee: "team",
+    link: "https://www.dsei-japan.com/",
+  },
+
+  // Israel Programs
+  {
+    date: "2026-02-15",
+    title: "Israel Innofense Program Application",
+    description: "Israeli DDR&D accelerator - VC network, defense tech scouting, 43+ graduates",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://breakingdefense.com/2023/07/how-israels-military-is-prioritizing-dual-use-start-ups-to-accelerate-defense-tech/",
+  },
+  {
+    date: "2026-04-01",
+    title: "Matara Defense Platform Introduction",
+    description: "Israeli defense innovation platform - bridges foreign defense needs with Israeli tech",
+    category: "funding",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.calcalistech.com/ctechnews/article/hyvkgwqjwg",
+  },
+  {
+    date: "2026-05-15",
+    title: "8200 ESIP Accelerator Application",
+    description: "Tel Aviv cybersecurity accelerator backed by elite military unit alumni network",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "jurie",
+    link: "https://sharpsheets.io/blog/israel-top-startup-accelerators/",
+  },
+
+  // UK & NATO Programs
+  {
+    date: "2026-01-13",
+    title: "UK DASA Open Call Cycle 4 Deadline",
+    description: "Final DASA open call before July 2026 relaunch - up to £350K per proposal",
+    category: "funding",
+    priority: "critical",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/collections/apply-for-funding",
+    weeklyTarget: 20,
+  },
+  {
+    date: "2026-07-01",
+    title: "UK DASA New Service Launch",
+    description: "UKDI Full Operating Capability - new funding service opens",
+    category: "funding",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/organisations/defence-and-security-accelerator",
+  },
+  {
+    date: "2026-09-15",
+    title: "NATO DIANA 2027 Application Prep",
+    description: "Prepare for next NATO DIANA cohort - top 4% acceptance rate, £100K+ funding",
+    category: "accelerator",
+    priority: "high",
+    assignee: "martyn",
+    link: "https://www.gov.uk/government/news/the-uk-accelerator-welcomes-eight-companies-into-the-2026-nato-diana-programme",
+  },
+
+  // Middle East Programs
+  {
+    date: "2026-01-11",
+    title: "UAE SANDBOX Dubai Application Deadline",
+    description: "Dubai VC-backed accelerator - growth and fundraising focus",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://sandboxaccelerator.com/",
+  },
+  {
+    date: "2026-04-15",
+    title: "Hub71 Abu Dhabi Application",
+    description: "Abu Dhabi global tech ecosystem - strategic East-West location, tax-friendly",
+    category: "accelerator",
+    priority: "medium",
+    assignee: "alistair",
+    link: "https://www.hub71.com/",
+  },
 ];
 
 const categoryConfig = {
