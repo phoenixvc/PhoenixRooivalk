@@ -36,7 +36,7 @@ export function subscribeToInlineComments(
     try {
       const db = getDatabaseService();
       const result = await db.queryDocuments<InlineComment>(COLLECTION, {
-        where: [{ field: "pageId", op: "==", value: pageId }],
+        conditions: [{ field: "pageId", operator: "==", value: pageId }],
         orderBy: [{ field: "createdAt", direction: "desc" }],
       });
 
@@ -150,8 +150,8 @@ export async function getInlineComments(pageId: string): Promise<InlineComment[]
   try {
     const db = getDatabaseService();
     const result = await db.queryDocuments<InlineComment>(COLLECTION, {
-      where: [{ field: "pageId", op: "==", value: pageId }],
-      orderBy: { field: "createdAt", direction: "desc" },
+      conditions: [{ field: "pageId", operator: "==", value: pageId }],
+      orderBy: [{ field: "createdAt", direction: "desc" }],
     });
     return result.items;
   } catch (err) {

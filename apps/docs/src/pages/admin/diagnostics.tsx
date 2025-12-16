@@ -31,7 +31,7 @@ interface ConfigValue {
   purpose: string;
 }
 
-export default function DiagnosticsPage(): JSX.Element {
+export default function DiagnosticsPage(): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
   const [diagnostics, setDiagnostics] = useState<DiagnosticResult[]>([]);
   const [configValues, setConfigValues] = useState<ConfigValue[]>([]);
