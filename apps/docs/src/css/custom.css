@@ -17,32 +17,54 @@
    ============================================ */
 
 :root {
-  /* Spacing Scale */
-  --pr-space-1: 0.25rem;
-  --pr-space-2: 0.5rem;
-  --pr-space-3: 0.75rem;
-  --pr-space-4: 1rem;
-  --pr-space-6: 1.5rem;
-  --pr-space-8: 2rem;
-  --pr-space-12: 3rem;
-  --pr-space-16: 4rem;
+  /* ============================================
+     STANDARDIZED BREAKPOINTS
+     Mobile-first approach
+     ============================================ */
+  /*
+   * Breakpoint Reference (use in media queries):
+   * --pr-bp-xs: 320px   (small phones)
+   * --pr-bp-sm: 480px   (phones)
+   * --pr-bp-md: 768px   (tablets)
+   * --pr-bp-lg: 996px   (Docusaurus sidebar breakpoint)
+   * --pr-bp-xl: 1280px  (desktops)
+   * --pr-bp-2xl: 1536px (large desktops)
+   */
 
-  /* Typography */
-  --pr-text-xs: 0.75rem;
-  --pr-text-sm: 0.875rem;
-  --pr-text-base: 1rem;
-  --pr-text-lg: 1.125rem;
-  --pr-text-xl: 1.25rem;
-  --pr-text-2xl: 1.5rem;
-  --pr-text-3xl: 1.875rem;
-  --pr-text-4xl: 2.25rem;
+  /* Spacing Scale */
+  --pr-space-0: 0;
+  --pr-space-1: 0.25rem;   /* 4px */
+  --pr-space-2: 0.5rem;    /* 8px */
+  --pr-space-3: 0.75rem;   /* 12px */
+  --pr-space-4: 1rem;      /* 16px */
+  --pr-space-5: 1.25rem;   /* 20px */
+  --pr-space-6: 1.5rem;    /* 24px */
+  --pr-space-8: 2rem;      /* 32px */
+  --pr-space-10: 2.5rem;   /* 40px */
+  --pr-space-12: 3rem;     /* 48px */
+  --pr-space-16: 4rem;     /* 64px */
+  --pr-space-20: 5rem;     /* 80px */
+  --pr-space-24: 6rem;     /* 96px */
+
+  /* Typography - Fluid Scale */
+  --pr-text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+  --pr-text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+  --pr-text-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+  --pr-text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --pr-text-xl: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
+  --pr-text-2xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --pr-text-3xl: clamp(1.5rem, 1.25rem + 1.25vw, 1.875rem);
+  --pr-text-4xl: clamp(1.75rem, 1.4rem + 1.75vw, 2.25rem);
+  --pr-text-5xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
 
   /* Border Radius */
-  --pr-radius-sm: 0.25rem;
-  --pr-radius-md: 0.375rem;
-  --pr-radius-lg: 0.5rem;
-  --pr-radius-xl: 0.75rem;
-  --pr-radius-2xl: 1rem;
+  --pr-radius-none: 0;
+  --pr-radius-sm: 0.25rem;   /* 4px */
+  --pr-radius-md: 0.375rem;  /* 6px */
+  --pr-radius-lg: 0.5rem;    /* 8px */
+  --pr-radius-xl: 0.75rem;   /* 12px */
+  --pr-radius-2xl: 1rem;     /* 16px */
+  --pr-radius-3xl: 1.5rem;   /* 24px */
   --pr-radius-full: 9999px;
 
   /* Brand Colors (static) */
@@ -62,7 +84,16 @@
   --pr-duration-fast: 100ms;
   --pr-duration-normal: 150ms;
   --pr-duration-slow: 200ms;
+  --pr-duration-slower: 300ms;
   --pr-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --pr-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Container Widths */
+  --pr-container-sm: 640px;
+  --pr-container-md: 768px;
+  --pr-container-lg: 1024px;
+  --pr-container-xl: 1280px;
+  --pr-container-max: 1440px;
 }
 
 /* ============================================
@@ -776,36 +807,185 @@ h3 {
   --docsearch-key-shadow: none;
 }
 
-/* Responsive Design */
-@media (max-width: 996px) {
-  .navbar__brand {
-    font-size: 1.125rem;
-  }
+/* ============================================
+   RESPONSIVE DESIGN - Standardized Breakpoints
+   Mobile-first approach (min-width)
 
-  h1 {
-    font-size: 2rem !important;
-  }
+   Breakpoints:
+   - xs: 320px (small phones)
+   - sm: 480px (phones)
+   - md: 768px (tablets)
+   - lg: 996px (Docusaurus sidebar)
+   - xl: 1280px (desktops)
+   - 2xl: 1536px (large desktops)
+   ============================================ */
 
-  h2 {
-    font-size: 1.75rem !important;
-  }
+/* Base (Mobile First - < 480px) */
+.phoenix-header {
+  padding: var(--pr-space-3) 0;
 }
 
-@media (max-width: 768px) {
-  .phoenix-header {
-    padding: 0.75rem 0;
-  }
+.phoenix-logo {
+  height: 28px;
+}
 
+/* Small phones and up (480px+) */
+@media (min-width: 480px) {
   .phoenix-logo {
     height: 32px;
   }
+}
 
-  h1 {
-    font-size: 1.75rem !important;
+/* Tablets and up (768px+) */
+@media (min-width: 768px) {
+  .phoenix-header {
+    padding: var(--pr-space-4) 0;
   }
 
-  h2 {
-    font-size: 1.5rem !important;
+  .phoenix-logo {
+    height: 36px;
+  }
+}
+
+/* Desktop sidebar breakpoint (996px+) - Docusaurus specific */
+@media (min-width: 996px) {
+  .phoenix-logo {
+    height: 40px;
+  }
+}
+
+/* Large desktop (1280px+) */
+@media (min-width: 1280px) {
+  /* Add any large screen specific styles */
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   Uses fluid type from tokens, these are fallbacks
+   ============================================ */
+
+/* Typography is now fluid via clamp(), no breakpoint overrides needed */
+/* Heading sizes auto-adjust based on viewport */
+
+/* Navbar responsive */
+@media (max-width: 996px) {
+  .navbar__brand {
+    font-size: var(--pr-text-lg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE GRID UTILITIES
+   ============================================ */
+
+.pr-grid {
+  display: grid;
+  gap: var(--pr-space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+  .pr-grid {
+    gap: var(--pr-space-6);
+  }
+}
+
+@media (min-width: 768px) {
+  .pr-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pr-grid {
+    gap: var(--pr-space-8);
+  }
+}
+
+@media (min-width: 996px) {
+  .pr-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pr-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================
+   RESPONSIVE SPACING UTILITIES
+   ============================================ */
+
+.pr-section {
+  padding: var(--pr-space-8) var(--pr-space-4);
+}
+
+@media (min-width: 768px) {
+  .pr-section {
+    padding: var(--pr-space-12) var(--pr-space-6);
+  }
+}
+
+@media (min-width: 996px) {
+  .pr-section {
+    padding: var(--pr-space-16) var(--pr-space-8);
+  }
+}
+
+/* ============================================
+   RESPONSIVE CONTAINER
+   ============================================ */
+
+.pr-container {
+  width: 100%;
+  max-width: var(--pr-container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--pr-space-4);
+  padding-right: var(--pr-space-4);
+}
+
+@media (min-width: 768px) {
+  .pr-container {
+    padding-left: var(--pr-space-6);
+    padding-right: var(--pr-space-6);
+  }
+}
+
+@media (min-width: 996px) {
+  .pr-container {
+    padding-left: var(--pr-space-8);
+    padding-right: var(--pr-space-8);
+  }
+}
+
+/* ============================================
+   RESPONSIVE VISIBILITY
+   ============================================ */
+
+.pr-hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .pr-hide-mobile {
+    display: block;
+  }
+
+  .pr-hide-desktop {
+    display: none;
+  }
+}
+
+/* Stack on mobile, row on desktop */
+.pr-stack-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pr-space-4);
+}
+
+@media (min-width: 768px) {
+  .pr-stack-mobile {
+    flex-direction: row;
+    align-items: center;
   }
 }
 
@@ -952,31 +1132,306 @@ h3 {
   }
 }
 
-/* Accessibility */
+/* ============================================
+   ACCESSIBILITY - Phase 1 Improvements
+   ============================================ */
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.skip-to-main:focus {
+  position: fixed;
+  top: var(--pr-space-4);
+  left: var(--pr-space-4);
+  width: auto;
+  height: auto;
+  padding: var(--pr-space-3) var(--pr-space-6);
+  background: var(--pr-brand-orange);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--pr-radius-md);
+  text-decoration: none;
+  box-shadow: var(--pr-shadow-lg);
+  outline: none;
+}
+
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* High Contrast Mode */
+/* High Contrast Mode - Dark */
 @media (prefers-contrast: high) {
-  :root {
-    --ifm-color-primary: rgb(255, 255, 255);
-    --ifm-color-content: rgb(255, 255, 255);
-    --ifm-background-color: rgb(0, 0, 0);
+  :root,
+  [data-theme="dark"] {
+    --pr-fg-base: #ffffff;
+    --pr-fg-muted: #e5e5e5;
+    --pr-bg-base: #000000;
+    --pr-bg-subtle: #000000;
+    --pr-bg-muted: #1a1a1a;
+    --pr-border-base: #ffffff;
+    --pr-border-muted: #cccccc;
+    --ifm-color-primary: #ff8c00;
+  }
+
+  [data-theme="light"] {
+    --pr-fg-base: #000000;
+    --pr-fg-muted: #1a1a1a;
+    --pr-bg-base: #ffffff;
+    --pr-bg-subtle: #ffffff;
+    --pr-bg-muted: #f0f0f0;
+    --pr-border-base: #000000;
+    --pr-border-muted: #333333;
   }
 }
 
-/* Focus Styles */
-.button:focus,
-.navbar__link:focus,
-.menu__link:focus,
-a:focus {
-  outline: 2px solid rgb(249, 115, 22) !important;
-  outline-offset: 2px !important;
+/* ============================================
+   FOCUS STYLES - Comprehensive
+   ============================================ */
+
+/* Focus ring token */
+:root {
+  --pr-focus-ring: 0 0 0 3px var(--pr-brand-orange);
+  --pr-focus-ring-offset: 2px;
+}
+
+/* Remove default focus outline, use focus-visible instead */
+*:focus {
+  outline: none;
+}
+
+/* Global focus-visible styles */
+*:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: var(--pr-focus-ring-offset);
+  border-radius: var(--pr-radius-sm);
+}
+
+/* Interactive elements - enhanced focus states */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: var(--pr-focus-ring-offset);
+  box-shadow: var(--pr-focus-ring);
+}
+
+/* Navbar links */
+.navbar__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-radius: var(--pr-radius-md);
+  background: rgba(249, 115, 22, 0.1);
+}
+
+/* Menu/sidebar links */
+.menu__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  background: var(--pr-bg-muted);
+}
+
+/* Buttons - distinct focus state */
+.button:focus-visible,
+.button--primary:focus-visible,
+.button--secondary:focus-visible {
+  outline: 3px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3);
+}
+
+/* Cards - focus for clickable cards */
+.card:focus-visible,
+[class*="card"]:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  box-shadow: var(--pr-shadow-lg), 0 0 0 4px rgba(249, 115, 22, 0.2);
+}
+
+/* Form inputs */
+.contactInput:focus-visible,
+.contactTextarea:focus-visible,
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="search"]:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--pr-brand-orange);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+/* Dropdown items */
+.dropdown__link:focus-visible,
+.navbar__item.dropdown:focus-within .dropdown__menu {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+}
+
+/* Search input */
+.DocSearch-Button:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  box-shadow: var(--pr-focus-ring);
+}
+
+/* Pagination links */
+.pagination-nav__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-color: var(--pr-brand-orange);
+}
+
+/* TOC links */
+.table-of-contents__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  background: rgba(249, 115, 22, 0.1);
+  border-radius: var(--pr-radius-sm);
+}
+
+/* Theme toggle button */
+.navbar__items button:focus-visible,
+[class*="colorMode"]:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-radius: var(--pr-radius-md);
+}
+
+/* ============================================
+   ARIA & SEMANTIC IMPROVEMENTS
+   ============================================ */
+
+/* Visually hidden but accessible */
+.sr-only,
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Make sure disabled elements look disabled */
+[disabled],
+[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Current page indicator for screen readers */
+[aria-current="page"] {
+  font-weight: 600;
+  color: var(--pr-brand-orange);
+}
+
+/* Expanded/collapsed state indicators */
+[aria-expanded="true"]::after {
+  content: "";
+}
+
+[aria-expanded="false"]::after {
+  content: "";
+}
+
+/* Required field indicator */
+.required::after,
+[required] + label::after {
+  content: " *";
+  color: var(--pr-status-error);
+}
+
+/* Error states */
+[aria-invalid="true"],
+.input-error {
+  border-color: var(--pr-status-error) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Success states */
+[aria-valid="true"],
+.input-success {
+  border-color: var(--pr-status-success) !important;
+}
+
+/* Live region styling */
+[aria-live="polite"],
+[aria-live="assertive"] {
+  position: absolute;
+  left: -9999px;
+}
+
+/* ============================================
+   TOUCH TARGET SIZES (44x44 minimum)
+   ============================================ */
+
+/* Ensure minimum touch targets */
+.navbar__link,
+.menu__link,
+.button,
+.pagination-nav__link,
+a[class*="link"],
+button {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Mobile-specific touch targets */
+@media (max-width: 996px) {
+  .navbar__link,
+  .menu__link {
+    padding: var(--pr-space-3) var(--pr-space-4);
+    min-height: 48px;
+  }
+}
+
+/* ============================================
+   COLOR CONTRAST HELPERS
+   ============================================ */
+
+/* Ensure sufficient contrast for text on colored backgrounds */
+.bg-primary-text {
+  color: white;
+}
+
+.bg-light-text {
+  color: var(--pr-fg-base);
+}
+
+/* Link underlines for better visibility */
+.content-area a:not(.button):not(.card):not([class*="nav"]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.content-area a:not(.button):not(.card):not([class*="nav"]):hover {
+  text-decoration-thickness: 2px;
 }
 
 /* Documentation Landing Hero Styles (for README.md) */
