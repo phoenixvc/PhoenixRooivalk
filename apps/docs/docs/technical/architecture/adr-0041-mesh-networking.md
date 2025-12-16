@@ -106,7 +106,7 @@ Implement **multi-layer mesh network** with automatic failover:
 | 900 MHz | LoRa       | 10+ km | 50 kbps   | Control, status   |
 | 2.4 GHz | WiFi Mesh  | 500m   | 50 Mbps   | Video, bulk data  |
 | 5.8 GHz | WiFi Mesh  | 300m   | 100 Mbps  | High bandwidth    |
-| UHF     | Custom SDR | 20+ km | 1 Mbps    | Long range backup |
+| UHF     | Custom SDR | 20+ km | 1 Mbps    | Long-range backup |
 
 ### Radio Stack
 
