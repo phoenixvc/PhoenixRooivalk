@@ -99,7 +99,7 @@ export function ReadingRecommendations({
   // Calculate reading progress stats
   const totalDocs = Object.keys(userProgress?.docs || {}).length;
   const completedDocs = Object.values(userProgress?.docs || {}).filter(
-    (doc: any) => doc.completed,
+    (doc: { completed?: boolean }) => doc.completed,
   ).length;
 
   if (variant === "compact") {

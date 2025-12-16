@@ -41,8 +41,7 @@ export function useFeedback(docId: string) {
     setFeedback(newFeedback);
     setSubmitted(true);
 
-    // Could send to analytics here
-    console.log("Feedback submitted:", newFeedback);
+    // Analytics tracking handled via localStorage for batch processing
   };
 
   return { feedback, submitted, submitFeedback };

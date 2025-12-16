@@ -1,5 +1,6 @@
 /**
  * AI Search Bar Styles
+ * Uses --pr-* design tokens with fallbacks for consistency
  */
 
 .ai-search-bar {
@@ -7,14 +8,14 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: rgb(30, 41, 59);
-  border: 1px solid rgb(51, 65, 85);
+  background: var(--pr-bg-muted, rgb(30, 41, 59));
+  border: 1px solid var(--pr-border-muted, rgb(51, 65, 85));
   border-radius: 24px;
   transition: all 0.2s;
 }
 
 .ai-search-bar--focused {
-  border-color: rgb(249, 115, 22);
+  border-color: var(--pr-brand-orange, rgb(249, 115, 22));
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
 }
 
@@ -26,13 +27,13 @@
 .ai-search-bar--navbar {
   width: 220px;
   margin-right: 12px;
-  background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(71, 85, 105, 0.6);
+  background: var(--pr-bg-muted-alpha, rgba(30, 41, 59, 0.8));
+  border-color: var(--pr-border-muted-alpha, rgba(71, 85, 105, 0.6));
 }
 
 .ai-search-bar--navbar:hover {
-  border-color: rgb(100, 116, 139);
-  background: rgb(30, 41, 59);
+  border-color: var(--pr-text-muted, rgb(100, 116, 139));
+  background: var(--pr-bg-muted, rgb(30, 41, 59));
 }
 
 .ai-search-bar--small {
@@ -52,18 +53,24 @@
   flex: 1;
   border: none;
   background: transparent;
-  color: rgb(242, 244, 246);
+  color: var(--pr-text-primary, rgb(242, 244, 246));
   font-size: 0.875rem;
-  outline: none;
+  outline: 2px solid transparent;
   min-width: 0;
 }
 
+.ai-search-bar__input:focus-visible {
+  outline: 2px solid var(--pr-brand-orange, rgb(249, 115, 22));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .ai-search-bar__input::placeholder {
-  color: rgb(100, 116, 139);
+  color: var(--pr-text-muted, rgb(100, 116, 139));
 }
 
 .ai-search-bar__submit {
-  background: rgb(249, 115, 22);
+  background: var(--pr-brand-orange, rgb(249, 115, 22));
   border: none;
   border-radius: 50%;
   width: 24px;
@@ -88,13 +95,13 @@
 }
 
 .ai-search-bar__shortcut kbd {
-  background: rgb(51, 65, 85);
-  border: 1px solid rgb(71, 85, 105);
+  background: var(--pr-bg-elevated, rgb(51, 65, 85));
+  border: 1px solid var(--pr-border-muted, rgb(71, 85, 105));
   border-radius: 4px;
   padding: 2px 6px;
   font-size: 0.65rem;
   font-family: inherit;
-  color: rgb(148, 163, 184);
+  color: var(--pr-text-secondary, rgb(148, 163, 184));
 }
 
 /* Hide shortcut when focused or has query */

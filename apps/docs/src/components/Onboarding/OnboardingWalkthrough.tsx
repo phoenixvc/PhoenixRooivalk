@@ -518,7 +518,6 @@ export function OnboardingWalkthrough({
             ([, profile]) => profile === knownProfile,
           )?.[0] || "unknown";
 
-        console.log(`Detected internal profile for ${fullName}:`, knownProfile);
         saveProfileSelection(user.uid, profileKey, knownProfile.roles);
 
         // Save to cloud

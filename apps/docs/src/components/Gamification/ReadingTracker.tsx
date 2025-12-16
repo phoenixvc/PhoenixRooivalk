@@ -77,6 +77,7 @@ export function ReadingTracker(): null {
   const wordCountRef = useRef<number>(0);
   const hasShownChallengeRef = useRef<Set<string>>(new Set());
   const scrollCompletedRef = useRef(false);
+  const pendingCompletionRef = useRef(false); // Track if user scrolled to end but didn't meet time requirement
 
   // Check if user has engaged enough to earn completion credit
   const checkEngagement = useCallback(
@@ -165,6 +166,55 @@ export function ReadingTracker(): null {
     [progress, updateProgress],
   );
 
+  // Check if pending completion can now be granted (user spent more time)
+  const checkPendingCompletion = useCallback(
+    async (docId: string) => {
+      if (!progress || !pendingCompletionRef.current) return;
+
+      const currentDoc = progress.docs[docId];
+      if (!currentDoc || currentDoc.completed) {
+        pendingCompletionRef.current = false;
+        return;
+      }
+
+      const totalTime =
+        totalSessionTimeRef.current + (currentDoc.timeSpentMs || 0);
+      const engagement = checkEngagement(docId, totalTime);
+
+      if (engagement.isEngaged) {
+        // User has now engaged enough - grant completion
+        pendingCompletionRef.current = false;
+
+        await updateProgress({
+          docs: {
+            [docId]: {
+              ...currentDoc,
+              completed: true,
+              completedAt: new Date().toISOString(),
+            },
+          },
+        });
+
+        // Show success toast and check achievements
+        const now = Date.now();
+        if (now - lastAchievementCheckRef.current > 1000) {
+          lastAchievementCheckRef.current = now;
+          const completedCount =
+            Object.values(progress.docs).filter((d) => d.completed).length + 1;
+          checkAndUnlockAchievements(completedCount);
+
+          emitDocumentCompletion({
+            docId,
+            title: docId,
+            completedAt: new Date().toISOString(),
+            message: engagement.message,
+          });
+        }
+      }
+    },
+    [progress, updateProgress, checkEngagement, checkAndUnlockAchievements],
+  );
+
   // Update scroll progress for a document with engagement verification
   const updateScrollProgress = useCallback(
     async (docId: string, scrollPercent: number) => {
@@ -219,7 +269,9 @@ export function ReadingTracker(): null {
               });
             }
           } else {
-            // Not enough engagement - show challenge
+            // Not enough engagement - show challenge and mark as pending
+            pendingCompletionRef.current = true;
+
             if (!hasShownChallengeRef.current.has(docId)) {
               hasShownChallengeRef.current.add(docId);
 
@@ -275,6 +327,7 @@ export function ReadingTracker(): null {
     accumulatedTimeRef.current = 0;
     totalSessionTimeRef.current = 0;
     scrollCompletedRef.current = false;
+    pendingCompletionRef.current = false;
 
     // Estimate word count after DOM is ready
     requestAnimationFrame(() => {
@@ -336,6 +389,11 @@ export function ReadingTracker(): null {
       if (timeToRecord >= MIN_TIME_UPDATE) {
         updateTimeSpent(currentDocIdRef.current, timeToRecord);
       }
+
+      // Check if pending completion can now be granted
+      if (pendingCompletionRef.current && currentDocIdRef.current) {
+        checkPendingCompletion(currentDocIdRef.current);
+      }
     }, TIME_UPDATE_INTERVAL);
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -359,7 +417,7 @@ export function ReadingTracker(): null {
         updateTimeSpent(currentDocIdRef.current, finalTime);
       }
     };
-  }, [location.pathname, updateTimeSpent]);
+  }, [location.pathname, updateTimeSpent, checkPendingCompletion]);
 
   // Effect for scroll tracking
   useEffect(() => {
