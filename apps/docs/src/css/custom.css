@@ -2323,3 +2323,227 @@ article {
     flex-wrap: wrap;
   }
 }
+
+/* ================================================
+   PHASE 5: KEYBOARD NAVIGATION SUPPORT
+   Enhanced keyboard accessibility for navigation
+   ================================================ */
+
+/* Dropdown keyboard navigation */
+.navbar__item.dropdown:focus-within .dropdown__menu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Ensure dropdown items are focusable in sequence */
+.dropdown__menu .dropdown__link {
+  display: block;
+  width: 100%;
+}
+
+.dropdown__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: -2px;
+  background: var(--pr-bg-muted);
+}
+
+/* Sidebar keyboard navigation */
+.menu__list {
+  /* Ensure all menu items are in tab order */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu__list-item {
+  position: relative;
+}
+
+/* Collapsible menu button focus states */
+.menu__caret:focus-visible,
+.menu__link--sublist-caret:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-radius: var(--pr-radius-sm);
+}
+
+/* Show collapsed content when focused within */
+.menu__list-item:focus-within > .menu__list {
+  display: block;
+  height: auto;
+  overflow: visible;
+}
+
+/* Arrow key navigation indicators */
+.menu__link[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 70%;
+  background: var(--pr-brand-orange);
+  border-radius: var(--pr-radius-sm);
+}
+
+/* Mobile menu keyboard support */
+.navbar-sidebar__back:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  background: var(--pr-bg-muted);
+}
+
+.navbar-sidebar__items .menu__link:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  background: var(--pr-bg-muted);
+}
+
+/* Hamburger menu button accessibility */
+.navbar__toggle:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-radius: var(--pr-radius-md);
+}
+
+/* Search keyboard navigation */
+.DocSearch-Modal:focus-visible {
+  outline: none;
+}
+
+.DocSearch-Hit:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: -2px;
+}
+
+/* Tab trapping indicator for modals */
+.modal--open [tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Roving tabindex support for menu items */
+.menu__link[tabindex="0"] {
+  position: relative;
+}
+
+.menu__link[tabindex="0"]::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px dashed transparent;
+  border-radius: var(--pr-radius-md);
+  transition: border-color var(--pr-duration-fast) var(--pr-ease);
+}
+
+.menu__link[tabindex="0"]:focus::after {
+  border-color: var(--pr-brand-orange);
+}
+
+/* Keyboard shortcut hints */
+.keyboard-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pr-space-1) var(--pr-space-2);
+  background: var(--pr-bg-muted);
+  border: 1px solid var(--pr-border-muted);
+  border-radius: var(--pr-radius-sm);
+  font-size: var(--pr-text-xs);
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--pr-fg-muted);
+  min-width: 1.5rem;
+}
+
+/* Focus indicator for main content sections */
+main:focus {
+  outline: none;
+}
+
+main:focus-visible::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--pr-brand-orange) 0%,
+    var(--pr-brand-gold) 50%,
+    var(--pr-brand-orange) 100%
+  );
+}
+
+/* Ensure all interactive elements have visible focus */
+[role="navigation"] a:focus-visible,
+[role="navigation"] button:focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+  border-radius: var(--pr-radius-sm);
+}
+
+/* Skip link target styling */
+#main-content:target {
+  scroll-margin-top: calc(60px + var(--pr-space-4));
+}
+
+/* Indicate keyboard-only focus (hide from mouse users) */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+.js-focus-visible .focus-visible {
+  outline: 2px solid var(--pr-brand-orange);
+  outline-offset: 2px;
+}
+
+/* ================================================
+   KEYBOARD NAVIGATION - Escape key handling
+   Visual feedback for escapable elements
+   ================================================ */
+
+/* Modal/dropdown escape indicator */
+[data-escapable="true"] {
+  position: relative;
+}
+
+[data-escapable="true"]::after {
+  content: "ESC";
+  position: absolute;
+  top: var(--pr-space-2);
+  right: var(--pr-space-2);
+  padding: var(--pr-space-1) var(--pr-space-2);
+  background: var(--pr-bg-muted);
+  border: 1px solid var(--pr-border-muted);
+  border-radius: var(--pr-radius-sm);
+  font-size: var(--pr-text-xs);
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--pr-fg-subtle);
+  opacity: 0;
+  transition: opacity var(--pr-duration-fast) var(--pr-ease);
+}
+
+[data-escapable="true"]:focus-within::after {
+  opacity: 1;
+}
+
+/* ================================================
+   KEYBOARD NAVIGATION - Focus trap indicator
+   ================================================ */
+
+.focus-trap-active {
+  position: relative;
+}
+
+.focus-trap-active::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px dashed var(--pr-brand-orange);
+  border-radius: var(--pr-radius-lg);
+  pointer-events: none;
+  opacity: 0.5;
+}
