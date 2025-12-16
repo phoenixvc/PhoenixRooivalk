@@ -467,7 +467,7 @@ jobs:
           fi
 
           if [ "${{ steps.tokens.outputs.func_profile }}" != "PROVISIONING" ]; then
-            echo "${{ steps.tokens.outputs.func_profile }}" | gh secret set AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+            echo "${{ steps.tokens.outputs.func_profile }}" | gh secret set AZURE_FUNCTIONS_PUBLISH_PROFILE
             echo "✅ Set Function App publish profile"
           fi
 
@@ -500,7 +500,7 @@ jobs:
           echo "### Secrets:" >> $GITHUB_STEP_SUMMARY
           echo "- AZURE_STATIC_WEB_APPS_API_TOKEN" >> $GITHUB_STEP_SUMMARY
           echo "- AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN" >> $GITHUB_STEP_SUMMARY
-          echo "- AZURE_FUNCTIONAPP_PUBLISH_PROFILE" >> $GITHUB_STEP_SUMMARY
+          echo "- AZURE_FUNCTIONS_PUBLISH_PROFILE" >> $GITHUB_STEP_SUMMARY
           echo "- COSMOS_DB_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
           echo "- APPLICATIONINSIGHTS_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
           echo "- AZURE_APP_INSIGHTS_CONNECTION_STRING" >> $GITHUB_STEP_SUMMARY
@@ -562,7 +562,7 @@ jobs:
           echo "Add these **Secrets**:" >> $GITHUB_STEP_SUMMARY
           echo "- \`AZURE_STATIC_WEB_APPS_API_TOKEN\`" >> $GITHUB_STEP_SUMMARY
           echo "- \`AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN\` (same as above)" >> $GITHUB_STEP_SUMMARY
-          echo "- \`AZURE_FUNCTIONAPP_PUBLISH_PROFILE\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`AZURE_FUNCTIONS_PUBLISH_PROFILE\`" >> $GITHUB_STEP_SUMMARY
           echo "- \`COSMOS_DB_CONNECTION_STRING\`" >> $GITHUB_STEP_SUMMARY
           echo "- \`APPLICATIONINSIGHTS_CONNECTION_STRING\`" >> $GITHUB_STEP_SUMMARY
           echo "- \`CLOUD_PROVIDER\` (value: \`azure\`)" >> $GITHUB_STEP_SUMMARY

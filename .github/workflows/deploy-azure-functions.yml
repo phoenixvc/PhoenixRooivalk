@@ -72,19 +72,19 @@ jobs:
 
           # Required secrets for Azure Functions deployment
           echo "Checking required secrets..."
-          echo "🔍 Debug: Checking AZURE_FUNCTIONAPP_PUBLISH_PROFILE..."
-          echo "  Secret is set (boolean): ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE != '' }}"
+          echo "🔍 Debug: Checking AZURE_FUNCTIONS_PUBLISH_PROFILE..."
+          echo "  Secret is set (boolean): ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE != '' }}"
 
-          if [ -z "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
-            echo "::error::AZURE_FUNCTIONAPP_PUBLISH_PROFILE is NOT set or is EMPTY"
+          if [ -z "${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}" ]; then
+            echo "::error::AZURE_FUNCTIONS_PUBLISH_PROFILE is NOT set or is EMPTY"
             echo "::error::This secret must contain the publish profile XML from Azure"
             echo "::error::To fix: Download publish profile from Azure Portal and set as secret"
-            MISSING_SECRETS="${MISSING_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
+            MISSING_SECRETS="${MISSING_SECRETS}AZURE_FUNCTIONS_PUBLISH_PROFILE, "
             CAN_DEPLOY="false"
           else
-            echo "✅ AZURE_FUNCTIONAPP_PUBLISH_PROFILE is configured"
-            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
-            PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_FUNCTIONAPP_PUBLISH_PROFILE, "
+            echo "✅ AZURE_FUNCTIONS_PUBLISH_PROFILE is configured"
+            CONFIGURED_SECRETS="${CONFIGURED_SECRETS}AZURE_FUNCTIONS_PUBLISH_PROFILE, "
+            PRESENT_SECRETS="${PRESENT_SECRETS}AZURE_FUNCTIONS_PUBLISH_PROFILE, "
           fi
 
           if [ -z "${{ secrets.AZURE_CREDENTIALS }}" ]; then
@@ -483,7 +483,7 @@ jobs:
         with:
           app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
           respect-funcignore: true
           scm-do-build-during-deployment: true
 
