@@ -353,9 +353,13 @@ export async function requireAdminLegacy(request: HttpRequest): Promise<{
 /**
  * Validate authorization header with proper JWT validation
  */
-export async function validateAuthHeader(
-  authHeader: string | null,
-): Promise<{ valid: boolean; userId?: string; isAdmin?: boolean; email?: string; name?: string }> {
+export async function validateAuthHeader(authHeader: string | null): Promise<{
+  valid: boolean;
+  userId?: string;
+  isAdmin?: boolean;
+  email?: string;
+  name?: string;
+}> {
   if (!authHeader) {
     return { valid: false };
   }

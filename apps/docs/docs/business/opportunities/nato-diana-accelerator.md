@@ -17,7 +17,10 @@ prerequisites:
 
 ## Program Overview
 
-**NATO DIANA** (Defence Innovation Accelerator for the North Atlantic) is NATO's flagship innovation initiative to foster transatlantic cooperation on critical technologies. DIANA connects defense startups with NATO's 200+ test centers and provides funding for dual-use technologies.
+**NATO DIANA** (Defence Innovation Accelerator for the North Atlantic) is NATO's
+flagship innovation initiative to foster transatlantic cooperation on critical
+technologies. DIANA connects defense startups with NATO's 200+ test centers and
+provides funding for dual-use technologies.
 
 :::info Key Details
 
@@ -35,6 +38,7 @@ prerequisites:
 ## DIANA Structure
 
 ### Accelerator Sites (Primary)
+
 - **United States**: Boston, Austin
 - **United Kingdom**: London, Imperial College
 - **Denmark**: Copenhagen
@@ -43,7 +47,9 @@ prerequisites:
 - **Canada**: Toronto, Montreal
 
 ### Test Centers (200+)
+
 Access to NATO-wide testing facilities for:
+
 - Electronics and RF testing
 - Autonomous systems evaluation
 - Environmental stress testing
@@ -56,19 +62,20 @@ Access to NATO-wide testing facilities for:
 
 DIANA focuses on technologies critical to NATO's future:
 
-| Challenge | Description | Phoenix Rooivalk Relevance |
-|-----------|-------------|---------------------------|
-| **Autonomy** | Unmanned systems, swarms, AI decision-making | Direct fit |
-| **AI/ML** | Computer vision, predictive systems | Core technology |
-| **Secure Comms** | Quantum-resistant, mesh networks | Key differentiator |
-| **Energy** | Batteries, power systems, efficiency | Important for drones |
-| **Sensing** | Multi-modal detection, sensor fusion | Primary capability |
+| Challenge        | Description                                  | Phoenix Rooivalk Relevance |
+| ---------------- | -------------------------------------------- | -------------------------- |
+| **Autonomy**     | Unmanned systems, swarms, AI decision-making | Direct fit                 |
+| **AI/ML**        | Computer vision, predictive systems          | Core technology            |
+| **Secure Comms** | Quantum-resistant, mesh networks             | Key differentiator         |
+| **Energy**       | Batteries, power systems, efficiency         | Important for drones       |
+| **Sensing**      | Multi-modal detection, sensor fusion         | Primary capability         |
 
 ---
 
 ## Funding Structure
 
 ### Phase 1: Accelerator
+
 - **Funding**: €100,000 non-dilutive grant
 - **Duration**: 6 months
 - **Deliverables**:
@@ -77,12 +84,14 @@ DIANA focuses on technologies critical to NATO's future:
   - Demo preparation
 
 ### Phase 2: Scaling
+
 - **Funding**: €300,000 additional
 - **Duration**: 6 months
 - **Requirements**: Successful Phase 1 completion
 - **Focus**: Production readiness, NATO integration
 
 ### NATO Innovation Fund (Follow-on)
+
 - **Available**: Up to €15M per company
 - **Structure**: Equity investment
 - **Purpose**: Series A/B support for DIANA graduates
@@ -91,9 +100,11 @@ DIANA focuses on technologies critical to NATO's future:
 
 ## VTT DIANA Finland Site
 
-**VTT Technical Research Centre of Finland** hosts a specialized DIANA accelerator site focused on:
+**VTT Technical Research Centre of Finland** hosts a specialized DIANA
+accelerator site focused on:
 
 ### Focus Areas
+
 - Advanced communications
 - Secure networks and RF
 - Quantum encryption
@@ -101,6 +112,7 @@ DIANA focuses on technologies critical to NATO's future:
 - Signal processing
 
 ### Facilities
+
 - Anechoic chambers
 - RF testing labs
 - Quantum computing access
@@ -111,14 +123,21 @@ DIANA focuses on technologies critical to NATO's future:
 ## Eligibility
 
 ### Eligible Entities
+
 - Startups from NATO member nations
 - Dual-use technology focus
 - Allied partner nations (case-by-case)
 
 ### NATO Members (31 Nations)
-Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, Turkey, United Kingdom, United States
+
+Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia,
+Finland, France, Germany, Greece, Hungary, Iceland, Italy, Latvia, Lithuania,
+Luxembourg, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal,
+Romania, Slovakia, Slovenia, Spain, Sweden, Turkey, United Kingdom, United
+States
 
 ### Technology Requirements
+
 - TRL 3-6 typically preferred
 - Dual-use application (civilian + defense)
 - Scalable to NATO operations
@@ -128,22 +147,26 @@ Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, F
 ## Application Process
 
 ### Step 1: Challenge Call Response
+
 - Monitor DIANA website for open challenges
 - Submit concept paper (5-10 pages)
 - Technology and team overview
 
 ### Step 2: Evaluation
+
 - Technical merit assessment
 - Market potential review
 - NATO relevance scoring
 - Security screening
 
 ### Step 3: Selection
+
 - Interview with DIANA team
 - Site assignment
 - Accelerator cohort placement
 
 ### Step 4: Program Entry
+
 - Onboarding at accelerator site
 - Test center matching
 - Mentor assignment
@@ -152,33 +175,34 @@ Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, F
 
 ## Timeline
 
-| Date | Milestone |
-|------|-----------|
-| January 2026 | Apply to open challenge call |
-| February 2026 | Initial screening |
-| March 2026 | Partner interviews |
-| April 2026 | Selection notification |
-| June 2026 | Phase 1 begins |
-| December 2026 | Phase 1 Demo Day |
-| January 2027 | Phase 2 begins (if selected) |
+| Date          | Milestone                    |
+| ------------- | ---------------------------- |
+| January 2026  | Apply to open challenge call |
+| February 2026 | Initial screening            |
+| March 2026    | Partner interviews           |
+| April 2026    | Selection notification       |
+| June 2026     | Phase 1 begins               |
+| December 2026 | Phase 1 Demo Day             |
+| January 2027  | Phase 2 begins (if selected) |
 
 ---
 
 ## Phoenix Rooivalk Alignment
 
-| DIANA Requirement | Phoenix Rooivalk Capability |
-|-------------------|----------------------------|
-| Autonomy focus | Autonomous interceptor drones |
-| AI/ML integration | Computer vision, tracking |
-| NATO interoperability | STANAG-compatible systems |
-| Dual-use application | Airport/military markets |
-| Scalable technology | Modular, swarm-capable |
+| DIANA Requirement     | Phoenix Rooivalk Capability   |
+| --------------------- | ----------------------------- |
+| Autonomy focus        | Autonomous interceptor drones |
+| AI/ML integration     | Computer vision, tracking     |
+| NATO interoperability | STANAG-compatible systems     |
+| Dual-use application  | Airport/military markets      |
+| Scalable technology   | Modular, swarm-capable        |
 
 ---
 
 ## Strategic Value
 
 ### Beyond Funding
+
 - **NATO Validation**: Credibility with defense customers
 - **Test Infrastructure**: Free access to €100M+ facilities
 - **Procurement Path**: Direct route to NATO contracts
@@ -186,6 +210,7 @@ Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, F
 - **Standards**: Early input to NATO standards
 
 ### Market Access
+
 - European defense market: €250B+
 - NATO collective defense spending
 - Allied procurement programs
@@ -196,11 +221,13 @@ Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, F
 ## Competition Considerations
 
 ### DIANA Cohort Size
+
 - Highly competitive: ~5% acceptance rate
 - 20-30 companies per cohort
 - Multiple challenge tracks
 
 ### Differentiators Needed
+
 1. Clear NATO operational relevance
 2. Tested prototype (TRL 4+)
 3. Unique technology approach
@@ -228,4 +255,5 @@ Albania, Belgium, Bulgaria, Canada, Croatia, Czech Republic, Denmark, Estonia, F
 
 ---
 
-_NATO DIANA represents a unique opportunity to access €400K+ in non-dilutive funding while gaining NATO credibility and test infrastructure access._
+_NATO DIANA represents a unique opportunity to access €400K+ in non-dilutive
+funding while gaining NATO credibility and test infrastructure access._

@@ -23,13 +23,13 @@ expertise.
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | Ministry of Defense (JMOD) |
-| **Under** | Acquisition, Technology and Logistics Agency (ATLA) |
-| **Launched** | October 2024 |
-| **Staff** | ~100 personnel |
-| **Budget** | $140M+ (establishment) |
+| Aspect        | Details                                             |
+| ------------- | --------------------------------------------------- |
+| **Organizer** | Ministry of Defense (JMOD)                          |
+| **Under**     | Acquisition, Technology and Logistics Agency (ATLA) |
+| **Launched**  | October 2024                                        |
+| **Staff**     | ~100 personnel                                      |
+| **Budget**    | $140M+ (establishment)                              |
 
 ---
 
@@ -47,6 +47,7 @@ sectors - similar to how DARPA and DIU operate in the United States.
 
 Comprehensive support platform for Japanese startups entering international
 markets:
+
 - Overseas dispatch opportunities
 - Innovation hub access globally
 - Sector-specific tracks
@@ -54,8 +55,9 @@ markets:
 
 ### SBIR Japan
 
-Small Business Innovation Research scheme including the **Innovative Science
-and Technology Initiative for Security Program**:
+Small Business Innovation Research scheme including the **Innovative Science and
+Technology Initiative for Security Program**:
+
 - Funding for security-relevant R&D
 - Technology development grants
 - Commercialization support
@@ -66,17 +68,18 @@ and Technology Initiative for Security Program**:
 
 Japan's defense technology priorities relevant to Phoenix Rooivalk:
 
-| Area | Priority | PR Alignment |
-|------|----------|--------------|
-| **Unmanned Systems** | High | Direct fit |
-| **Autonomous Technology** | High | Direct fit |
-| **Space Domain Awareness** | High | Partial fit |
-| **Cross-domain Operations** | High | Partial fit |
-| **Electronic Warfare** | Medium | Partial fit |
+| Area                        | Priority | PR Alignment |
+| --------------------------- | -------- | ------------ |
+| **Unmanned Systems**        | High     | Direct fit   |
+| **Autonomous Technology**   | High     | Direct fit   |
+| **Space Domain Awareness**  | High     | Partial fit  |
+| **Cross-domain Operations** | High     | Partial fit  |
+| **Electronic Warfare**      | Medium   | Partial fit  |
 
 ### 2026 Focus
 
 By 2026, Japan plans to deploy:
+
 - Space-based optical telescopes
 - Enhanced unmanned systems
 - Advanced air defense capabilities
@@ -85,18 +88,19 @@ By 2026, Japan plans to deploy:
 
 ## Eligibility
 
-| Requirement | Phoenix Rooivalk Status |
-|-------------|------------------------|
-| Innovative technology | Meets requirement |
-| Defense-relevant | Meets requirement |
-| Japanese presence | Not required for initial contact |
-| Partnership option | Available |
+| Requirement           | Phoenix Rooivalk Status          |
+| --------------------- | -------------------------------- |
+| Innovative technology | Meets requirement                |
+| Defense-relevant      | Meets requirement                |
+| Japanese presence     | Not required for initial contact |
+| Partnership option    | Available                        |
 
 :::info International Engagement
 
 Japan is actively seeking international defense technology partnerships,
-particularly within the US-Japan-Australia trilateral framework. While not
-a direct treaty partner, South Africa may access through:
+particularly within the US-Japan-Australia trilateral framework. While not a
+direct treaty partner, South Africa may access through:
+
 - Academic partnerships
 - Japanese company collaboration
 - Trade mission engagement
@@ -120,6 +124,7 @@ Japan participates in trilateral defense cooperation:
 ### Japanese Defense Budget
 
 Japan has significantly increased defense spending:
+
 - 2024: $54.1B (record high)
 - Projected growth through 2027
 - Counter-UAS/air defense priority
@@ -127,6 +132,7 @@ Japan has significantly increased defense spending:
 ### Why Counter-UAS Matters
 
 Japan faces:
+
 - Regional drone proliferation
 - North Korean UAV threats
 - Chinese UAS activity
@@ -145,12 +151,12 @@ Japan faces:
 
 ### Partnership Targets
 
-| Company | Focus |
-|---------|-------|
-| Mitsubishi Heavy Industries | Defense systems |
-| Kawasaki Heavy Industries | Aerospace |
-| NEC | Defense electronics |
-| Fujitsu | C2 systems |
+| Company                     | Focus               |
+| --------------------------- | ------------------- |
+| Mitsubishi Heavy Industries | Defense systems     |
+| Kawasaki Heavy Industries   | Aerospace           |
+| NEC                         | Defense electronics |
+| Fujitsu                     | C2 systems          |
 
 ---
 
@@ -159,6 +165,7 @@ Japan faces:
 ### DSEI Japan 2027
 
 Japan's premier defense exhibition:
+
 - Biennial event
 - Major international participation
 - Government procurement presence
@@ -179,12 +186,12 @@ Japan's premier defense exhibition:
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | UAS/counter-UAS priority |
-| Stage Fit | Medium | Prefer proven tech |
-| Geographic Fit | Medium | Partnership pathway |
-| Market Size | High | Major defense budget |
+| Criteria        | Score           | Notes                        |
+| --------------- | --------------- | ---------------------------- |
+| Technology Fit  | High            | UAS/counter-UAS priority     |
+| Stage Fit       | Medium          | Prefer proven tech           |
+| Geographic Fit  | Medium          | Partnership pathway          |
+| Market Size     | High            | Major defense budget         |
 | **Overall Fit** | **Medium-High** | Good opportunity with effort |
 
 ---

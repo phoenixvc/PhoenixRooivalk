@@ -68,7 +68,11 @@ export function CommentPanel({
         {/* Header */}
         <div className={styles.panelHeader}>
           <h3>Comments</h3>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close panel">
+          <button
+            className={styles.closeBtn}
+            onClick={onClose}
+            aria-label="Close panel"
+          >
             {"\u2715"}
           </button>
         </div>
@@ -144,8 +148,8 @@ export function CommentPanel({
                 {filter === "all"
                   ? "No comments yet. Select text to add one."
                   : filter === "open"
-                  ? "No open comments."
-                  : "No resolved comments."}
+                    ? "No open comments."
+                    : "No resolved comments."}
               </p>
             </div>
           ) : (
@@ -188,15 +192,16 @@ export function CommentPanel({
 
                 {/* Comment actions */}
                 <div className={styles.commentActions}>
-                  {!comment.resolved && (currentUserId === comment.author.uid || isAdmin) && (
-                    <button
-                      className={styles.actionBtn}
-                      onClick={() => onResolveComment(comment.id)}
-                      title="Mark as resolved"
-                    >
-                      {"\u2713"} Resolve
-                    </button>
-                  )}
+                  {!comment.resolved &&
+                    (currentUserId === comment.author.uid || isAdmin) && (
+                      <button
+                        className={styles.actionBtn}
+                        onClick={() => onResolveComment(comment.id)}
+                        title="Mark as resolved"
+                      >
+                        {"\u2713"} Resolve
+                      </button>
+                    )}
                   {(currentUserId === comment.author.uid || isAdmin) && (
                     <button
                       className={`${styles.actionBtn} ${styles.deleteBtn}`}

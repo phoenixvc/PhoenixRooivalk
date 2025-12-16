@@ -41,7 +41,8 @@ git push origin main
 
 **Location**: `.github/workflows/deploy-infrastructure.yml`
 
-**Purpose**: Deploy all Azure infrastructure (Static Web Apps, Functions, Cosmos DB, Key Vault, etc.) and automatically configure GitHub secrets.
+**Purpose**: Deploy all Azure infrastructure (Static Web Apps, Functions, Cosmos
+DB, Key Vault, etc.) and automatically configure GitHub secrets.
 
 ### Features
 
@@ -130,7 +131,9 @@ gh secret set AZURE_CREDENTIALS --body '<json-output>'
 
 **Option B: OIDC Workload Identity** (More Secure)
 
-Follow [GitHub's OIDC guide](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure), then:
+Follow
+[GitHub's OIDC guide](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure),
+then:
 
 ```bash
 gh secret set AZURE_CLIENT_ID --body "<client-id>"
@@ -149,7 +152,9 @@ For automated secrets configuration:
 gh secret set GH_PAT --body "<your-personal-access-token>"
 ```
 
-**Why?** Allows the infrastructure workflow to automatically configure deployment secrets. Without this, you'll need to manually configure secrets after infrastructure deployment.
+**Why?** Allows the infrastructure workflow to automatically configure
+deployment secrets. Without this, you'll need to manually configure secrets
+after infrastructure deployment.
 
 ## Updated Application Workflows
 
@@ -187,11 +192,13 @@ When workflows fail due to missing infrastructure:
 ### Phase 1: Infrastructure (NEW!)
 
 **Automated via workflow** ⭐
+
 - Run `deploy-infrastructure.yml` workflow
 - Infrastructure deployed
 - Secrets populated automatically (if GH_PAT configured)
 
 **Manual (legacy)**
+
 - Run `infra/azure/scripts/setup-all.sh`
 - Extract tokens manually
 - Configure secrets manually
@@ -199,11 +206,13 @@ When workflows fail due to missing infrastructure:
 ### Phase 2: Secrets (AUTOMATED!)
 
 **If GH_PAT configured:**
+
 - ✅ Secrets populated automatically by infrastructure workflow
 - ✅ Variables configured automatically
 - ✅ Ready to deploy applications immediately
 
 **If GH_PAT not configured:**
+
 - 📋 Manual instructions provided in workflow summary
 - 🔧 Run commands to configure secrets
 - ✅ Ready to deploy applications
@@ -211,6 +220,7 @@ When workflows fail due to missing infrastructure:
 ### Phase 3: Applications (UNCHANGED)
 
 Deploy applications as before:
+
 - Push to `main` branch (automatic)
 - Manual workflow trigger
 - No changes needed in application code
@@ -222,6 +232,7 @@ Deploy applications as before:
 **Problem**: Infrastructure workflow fails at prerequisites check.
 
 **Solution**:
+
 ```bash
 # Check what's configured
 gh secret list | grep AZURE
@@ -236,6 +247,7 @@ gh secret set AZURE_CREDENTIALS --body "<service-principal-json>"
 **Problem**: Resources are still provisioning.
 
 **Solution**: Wait 2-3 minutes and check deployment status:
+
 ```bash
 az deployment group show \
   --resource-group dev-eus2-rg-rooivalk \
@@ -248,6 +260,7 @@ az deployment group show \
 **Problem**: GH_PAT not provided or insufficient permissions.
 
 **Solution**:
+
 1. Check if GH_PAT is configured: `gh secret list | grep GH_PAT`
 2. If not configured, follow manual instructions in workflow summary
 3. Or configure GH_PAT and re-run workflow
@@ -257,6 +270,7 @@ az deployment group show \
 **Problem**: Infrastructure deployed but application workflow still fails.
 
 **Solution**:
+
 1. Verify secrets are configured: `gh secret list | grep AZURE`
 2. Check for typos in resource names
 3. Ensure resources are in "Succeeded" state in Azure Portal
@@ -345,6 +359,7 @@ gh run view <run-id> --log
 ### 4. Document Custom Changes
 
 If you customize infrastructure:
+
 - Update Bicep templates in `infra/azure/`
 - Test changes in dev environment first
 - Document changes in ADRs if significant
@@ -360,7 +375,9 @@ If you customize infrastructure:
 ## Resources
 
 - **Main Documentation**: [DEPLOYMENT_SEQUENCE.md](./DEPLOYMENT_SEQUENCE.md)
-- **Infrastructure Details**: [../infra/azure/README.md](../infra/azure/README.md)
+- **Infrastructure Details**:
+  [../infra/azure/README.md](../infra/azure/README.md)
 - **Secrets Setup**: [AZURE_SETUP.md](./AZURE_SETUP.md)
 - **Troubleshooting**: [AZURE_TROUBLESHOOTING.md](./AZURE_TROUBLESHOOTING.md)
-- **GitHub Actions**: [Deploy Infrastructure](./.github/workflows/deploy-infrastructure.yml)
+- **GitHub Actions**:
+  [Deploy Infrastructure](./.github/workflows/deploy-infrastructure.yml)

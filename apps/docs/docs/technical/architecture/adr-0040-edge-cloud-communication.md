@@ -26,8 +26,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Edge nodes must operate autonomously in contested/disconnected environments while syncing with cloud when available
-2. **Decision**: Implement store-and-forward architecture with priority-based sync and cryptographic integrity verification
+1. **Problem**: Edge nodes must operate autonomously in contested/disconnected
+   environments while syncing with cloud when available
+2. **Decision**: Implement store-and-forward architecture with priority-based
+   sync and cryptographic integrity verification
 3. **Trade-off**: Storage requirements on edge vs. real-time cloud visibility
 
 ---
@@ -45,17 +47,18 @@ Phoenix Rooivalk edge nodes operate in challenging conditions:
 
 ### Requirements
 
-| Requirement           | Specification                                    |
-|-----------------------|--------------------------------------------------|
-| Autonomous operation  | 100% functionality without cloud connectivity    |
-| Latency tolerance     | Critical decisions <50ms (edge-only)             |
-| Sync when available   | Opportunistic upload when connected              |
-| Data integrity        | Cryptographic proof of unmodified data           |
-| Bandwidth efficiency  | Minimize data transfer over constrained links    |
+| Requirement          | Specification                                 |
+| -------------------- | --------------------------------------------- |
+| Autonomous operation | 100% functionality without cloud connectivity |
+| Latency tolerance    | Critical decisions <50ms (edge-only)          |
+| Sync when available  | Opportunistic upload when connected           |
+| Data integrity       | Cryptographic proof of unmodified data        |
+| Bandwidth efficiency | Minimize data transfer over constrained links |
 
 ### Current Architecture
 
 Per ADR 0006 (AI/ML Architecture):
+
 - **Edge AI**: All critical decisions made locally
 - **Cloud backup**: Secondary processing and long-term storage
 - **Distributed learning**: Federated model updates
@@ -68,8 +71,8 @@ Per ADR 0006 (AI/ML Architecture):
 
 All data flows through cloud; edge caches for offline.
 
-**Pros**: Simple architecture, single source of truth
-**Cons**:
+**Pros**: Simple architecture, single source of truth **Cons**:
+
 - **Fails closed**: No connectivity = no operation
 - **Latency**: Cloud round-trip unacceptable for real-time
 - **Compliance**: Evidence gaps during disconnection
@@ -78,8 +81,8 @@ All data flows through cloud; edge caches for offline.
 
 Edge operates independently; bulk sync on schedule.
 
-**Pros**: Full autonomy, predictable sync windows
-**Cons**:
+**Pros**: Full autonomy, predictable sync windows **Cons**:
+
 - **Stale cloud data**: Hours/days between updates
 - **Large sync payloads**: Bandwidth spikes
 - **No priority handling**: Critical data waits with routine
@@ -89,12 +92,14 @@ Edge operates independently; bulk sync on schedule.
 Edge maintains local store; priority-based opportunistic sync.
 
 **Pros**:
+
 - **Full autonomy**: Edge operates indefinitely offline
 - **Priority sync**: Critical data uploads first
 - **Bandwidth efficient**: Delta sync, compression
 - **Integrity preserved**: Cryptographic chain maintained
 
 **Cons**:
+
 - **Storage requirements**: Edge needs significant local storage
 - **Complexity**: Priority queue management
 - **Conflict resolution**: Potential for divergent state
@@ -162,14 +167,14 @@ Adopt **Option 3: Store-and-Forward with Priority Queues**.
 
 ### Priority Queues
 
-| Priority | Data Type              | Max Latency  | Retention    |
-|----------|------------------------|--------------|--------------|
-| P0       | Engagement evidence    | Immediate    | Indefinite   |
-| P1       | Threat detections      | 1 minute     | 30 days      |
-| P2       | System health/alerts   | 5 minutes    | 7 days       |
-| P3       | Track history          | 1 hour       | 7 days       |
-| P4       | Telemetry/metrics      | Best effort  | 24 hours     |
-| P5       | Debug logs             | Best effort  | 12 hours     |
+| Priority | Data Type            | Max Latency | Retention  |
+| -------- | -------------------- | ----------- | ---------- |
+| P0       | Engagement evidence  | Immediate   | Indefinite |
+| P1       | Threat detections    | 1 minute    | 30 days    |
+| P2       | System health/alerts | 5 minutes   | 7 days     |
+| P3       | Track history        | 1 hour      | 7 days     |
+| P4       | Telemetry/metrics    | Best effort | 24 hours   |
+| P5       | Debug logs           | Best effort | 12 hours   |
 
 ### Sync Protocol
 
@@ -248,7 +253,7 @@ impl SyncEngine {
 ### Local Storage Requirements
 
 | Data Type          | Estimated Size/Day | Retention | Total Storage |
-|--------------------|--------------------|-----------|---------------|
+| ------------------ | ------------------ | --------- | ------------- |
 | Evidence records   | 50 MB              | 30 days   | 1.5 GB        |
 | Track history      | 200 MB             | 7 days    | 1.4 GB        |
 | System logs        | 100 MB             | 7 days    | 700 MB        |
@@ -256,7 +261,8 @@ impl SyncEngine {
 | Config cache       | 10 MB              | Static    | 10 MB         |
 | **Total Required** |                    |           | **~5 GB**     |
 
-Edge nodes spec 512GB NVMe (per technical-architecture.md), providing 100x headroom.
+Edge nodes spec 512GB NVMe (per technical-architecture.md), providing 100x
+headroom.
 
 ### Data Integrity During Offline
 
@@ -283,23 +289,23 @@ Edge nodes spec 512GB NVMe (per technical-architecture.md), providing 100x headr
 
 ### Sync Gateway (Azure)
 
-| Service              | Purpose                              |
-|----------------------|--------------------------------------|
-| Azure SignalR        | Real-time bidirectional when online  |
-| Azure Service Bus    | Message queue for reliable delivery  |
-| Azure Functions      | Sync message processing              |
-| Azure Blob Storage   | Evidence archive (encrypted)         |
-| Azure Cosmos DB      | Operational data store               |
+| Service            | Purpose                             |
+| ------------------ | ----------------------------------- |
+| Azure SignalR      | Real-time bidirectional when online |
+| Azure Service Bus  | Message queue for reliable delivery |
+| Azure Functions    | Sync message processing             |
+| Azure Blob Storage | Evidence archive (encrypted)        |
+| Azure Cosmos DB    | Operational data store              |
 
 ### Downlink (Cloud → Edge)
 
-| Data Type           | Trigger                    | Priority |
-|---------------------|----------------------------|----------|
-| Model updates       | New model available        | P2       |
-| Config changes      | Admin update               | P1       |
-| Threat intelligence | New threat signatures      | P1       |
-| Time sync           | Periodic (1 hour)          | P3       |
-| Commands            | Operator initiated         | P0       |
+| Data Type           | Trigger               | Priority |
+| ------------------- | --------------------- | -------- |
+| Model updates       | New model available   | P2       |
+| Config changes      | Admin update          | P1       |
+| Threat intelligence | New threat signatures | P1       |
+| Time sync           | Periodic (1 hour)     | P3       |
+| Commands            | Operator initiated    | P0       |
 
 ---
 
@@ -349,10 +355,14 @@ Edge nodes spec 512GB NVMe (per technical-architecture.md), providing 100x headr
 
 ## Related ADRs
 
-- [ADR 0001: Chain Selection](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others) - Blockchain anchoring
-- [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture) - Edge AI design
-- [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture) - Zero-trust model
-- [ADR-D007: Evidence-Based Architecture](./architecture-decision-records#adr-d007-evidence-based-architecture) - Evidence model
+- [ADR 0001: Chain Selection](./architecture-decision-records#adr-0001-chain-selection-for-on-chain-anchoring-solana-vs-others) -
+  Blockchain anchoring
+- [ADR 0006: AI/ML Architecture](./architecture-decision-records#adr-0006-aiml-architecture) -
+  Edge AI design
+- [ADR 0007: Security Architecture](./architecture-decision-records#adr-0007-security-architecture) -
+  Zero-trust model
+- [ADR-D007: Evidence-Based Architecture](./architecture-decision-records#adr-d007-evidence-based-architecture) -
+  Evidence model
 
 ---
 

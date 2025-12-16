@@ -211,7 +211,10 @@ export default function ApplicationsAdminPage(): React.ReactElement {
             <div className={styles.loadingList}>Loading applications...</div>
           ) : applications.length === 0 ? (
             <div className={styles.emptyList}>
-              <p>No {statusFilter !== "all" ? statusFilter : ""} applications found.</p>
+              <p>
+                No {statusFilter !== "all" ? statusFilter : ""} applications
+                found.
+              </p>
             </div>
           ) : (
             applications.map((app) => (
@@ -285,7 +288,8 @@ export default function ApplicationsAdminPage(): React.ReactElement {
                   <strong>Company:</strong> {selectedApplication.company}
                 </p>
                 <p>
-                  <strong>Current Role:</strong> {selectedApplication.currentRole}
+                  <strong>Current Role:</strong>{" "}
+                  {selectedApplication.currentRole}
                 </p>
                 {selectedApplication.linkedIn && (
                   <p>
@@ -337,7 +341,8 @@ export default function ApplicationsAdminPage(): React.ReactElement {
                     </p>
                     {selectedApplication.reviewNotes && (
                       <p>
-                        <strong>Notes:</strong> {selectedApplication.reviewNotes}
+                        <strong>Notes:</strong>{" "}
+                        {selectedApplication.reviewNotes}
                       </p>
                     )}
                   </>

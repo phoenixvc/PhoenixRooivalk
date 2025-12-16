@@ -96,7 +96,7 @@ export function SelectionPopover({
         setSelection(null);
       }
     },
-    [selection, onAddComment]
+    [selection, onAddComment],
   );
 
   useEffect(() => {

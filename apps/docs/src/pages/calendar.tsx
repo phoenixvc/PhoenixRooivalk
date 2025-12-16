@@ -8,7 +8,11 @@
 import React, { useState, useMemo } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
-import { downloadICS, generateICS, type CalendarEvent } from "../components/Calendar";
+import {
+  downloadICS,
+  generateICS,
+  type CalendarEvent,
+} from "../components/Calendar";
 import BookingWidget from "../components/Calendar/BookingWidget";
 import styles from "./calendar.module.css";
 
@@ -19,7 +23,14 @@ interface CalendarItem {
   date: string;
   title: string;
   description: string;
-  category: "opportunity" | "development" | "compliance" | "meeting" | "funding" | "hackathon" | "accelerator";
+  category:
+    | "opportunity"
+    | "development"
+    | "compliance"
+    | "meeting"
+    | "funding"
+    | "hackathon"
+    | "accelerator";
   priority: "critical" | "high" | "medium" | "low";
   link?: string;
   assignee?: TeamMember;
@@ -27,7 +38,10 @@ interface CalendarItem {
   weeklyTarget?: number; // Target percentage progress per week for larger items
 }
 
-const teamConfig: Record<TeamMember, { label: string; color: string; initials: string }> = {
+const teamConfig: Record<
+  TeamMember,
+  { label: string; color: string; initials: string }
+> = {
   all: { label: "Everyone", color: "#6b7280", initials: "ALL" },
   team: { label: "Core Team", color: "#8b5cf6", initials: "TM" },
   martyn: { label: "Martyn", color: "#ef4444", initials: "MR" },
@@ -44,7 +58,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-01",
     title: "Movement M1 Hackathon Starts",
-    description: "4-week hackathon, $30K prize pool - Move language for evidence anchoring",
+    description:
+      "4-week hackathon, $30K prize pool - Move language for evidence anchoring",
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
@@ -62,7 +77,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-11",
     title: "Strategic Meeting - Alistair Advisory",
-    description: "Define partnership terms, accelerator strategy, market pivot to airport defense",
+    description:
+      "Define partnership terms, accelerator strategy, market pivot to airport defense",
     category: "meeting",
     priority: "critical",
     assignee: "team",
@@ -71,7 +87,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-15",
     title: "Canada CUAS Sandbox Application Deadline",
-    description: "Submit application via PriviDox by 2:00 PM ET - $1.75M CAD prize pool",
+    description:
+      "Submit application via PriviDox by 2:00 PM ET - $1.75M CAD prize pool",
     category: "opportunity",
     priority: "critical",
     assignee: "martyn",
@@ -80,7 +97,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-15",
     title: "Solana Winter Build Challenge",
-    description: "4-week sprint, $10K+ prizes, x402 payment protocol integration",
+    description:
+      "4-week sprint, $10K+ prizes, x402 payment protocol integration",
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
@@ -89,7 +107,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-18",
     title: "Receive Alistair's Accelerator List",
-    description: "Hardware-focused accelerators and pre-seed investors list (US focus)",
+    description:
+      "Hardware-focused accelerators and pre-seed investors list (US focus)",
     category: "meeting",
     priority: "high",
     assignee: "alistair",
@@ -97,7 +116,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-20",
     title: "Prepare Gazebo Simulator Demo",
-    description: "Build simulator demonstration for investor pitches per Alistair recommendation",
+    description:
+      "Build simulator demonstration for investor pitches per Alistair recommendation",
     category: "development",
     priority: "high",
     assignee: "peter",
@@ -122,7 +142,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2025-12-31",
     title: "AWS Activate Founders Credits",
-    description: "Apply for $1K-$100K AWS credits for cloud, IoT, and ML services",
+    description:
+      "Apply for $1K-$100K AWS credits for cloud, IoT, and ML services",
     category: "funding",
     priority: "high",
     assignee: "jurie",
@@ -135,7 +156,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-01",
     title: "DARPA Lift Challenge Registration Opens",
-    description: "Heavy-lift drone challenge, $6.5M total prizes - registration closes May 2026",
+    description:
+      "Heavy-lift drone challenge, $6.5M total prizes - registration closes May 2026",
     category: "opportunity",
     priority: "high",
     assignee: "peter",
@@ -154,7 +176,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-06",
     title: "NATO DIANA Accelerator Phase 1 Begins",
-    description: "6-month program, €100K funding, access to 200+ test centres across NATO",
+    description:
+      "6-month program, €100K funding, access to 200+ test centres across NATO",
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
@@ -163,7 +186,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-06",
     title: "VTT DIANA Finland - Advanced Communications",
-    description: "NATO DIANA site focusing on secure networks, RF, quantum encryption",
+    description:
+      "NATO DIANA site focusing on secure networks, RF, quantum encryption",
     category: "accelerator",
     priority: "high",
     assignee: "peter",
@@ -172,7 +196,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-10",
     title: "SOSV HAX Accelerator Application",
-    description: "Hardware accelerator - $250K funding, 10% equity. Per Alistair recommendation.",
+    description:
+      "Hardware accelerator - $250K funding, 10% equity. Per Alistair recommendation.",
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
@@ -192,7 +217,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-15",
     title: "mHUB Chicago Accelerator Application",
-    description: "$200K investment, 6.5% equity, access to $6M prototyping labs",
+    description:
+      "$200K investment, 6.5% equity, access to $6M prototyping labs",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -201,7 +227,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-20",
     title: "Research Middle East Innovation Hubs",
-    description: "UAE, Abu Dhabi tech hubs - per Alistair's contacts recommendation",
+    description:
+      "UAE, Abu Dhabi tech hubs - per Alistair's contacts recommendation",
     category: "opportunity",
     priority: "medium",
     assignee: "alistair",
@@ -218,7 +245,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-04",
     title: "Counter-UAS Homeland Security USA 2026",
-    description: "Conference Feb 4-5, United States - networking & demo opportunity",
+    description:
+      "Conference Feb 4-5, United States - networking & demo opportunity",
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
@@ -244,7 +272,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-15",
     title: "Crucible Accelerator (NavalX) Application",
-    description: "10-week program, $75K prize, naval tech focus. TRL 4-6 required.",
+    description:
+      "10-week program, $75K prize, naval tech focus. TRL 4-6 required.",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -253,7 +282,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-28",
     title: "Google for Startups AI Accelerator Application",
-    description: "10-12 weeks program, $350K cloud credits for AI-first startups",
+    description:
+      "10-12 weeks program, $350K cloud credits for AI-first startups",
     category: "funding",
     priority: "high",
     assignee: "jurie",
@@ -262,7 +292,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-09",
     title: "Y Combinator S26 Application Deadline",
-    description: "$500K investment, defense tech now accepted. Delaware entity required.",
+    description:
+      "$500K investment, defense tech now accepted. Delaware entity required.",
     category: "accelerator",
     priority: "critical",
     assignee: "martyn",
@@ -272,7 +303,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "First EU Pilot Installation",
-    description: "Initial deployment in European market - airport defense focus",
+    description:
+      "Initial deployment in European market - airport defense focus",
     category: "development",
     priority: "critical",
     assignee: "team",
@@ -281,7 +313,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "National Congress Counter-UAS Technology 2026",
-    description: "4th Annual conference Mar 18-19 - key networking for airport defense market",
+    description:
+      "4th Annual conference Mar 18-19 - key networking for airport defense market",
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
@@ -290,7 +323,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "EUDIS Defence Hackathon 2026",
-    description: "EU-funded hackathon: autonomous systems, cyber defense, aerospace tech",
+    description:
+      "EU-funded hackathon: autonomous systems, cyber defense, aerospace tech",
     category: "hackathon",
     priority: "high",
     assignee: "team",
@@ -307,7 +341,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-16",
     title: "NVIDIA GTC 2026 San Jose",
-    description: "AI conference March 16-19, meet Inception startups, pitch opportunities",
+    description:
+      "AI conference March 16-19, meet Inception startups, pitch opportunities",
     category: "opportunity",
     priority: "high",
     assignee: "jurie",
@@ -315,7 +350,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-15",
     title: "DHS C-UAS Grant Program Opens",
-    description: "FY2026 state/local grants for C-UAS capabilities - $500M total",
+    description:
+      "FY2026 state/local grants for C-UAS capabilities - $500M total",
     category: "opportunity",
     priority: "high",
     assignee: "martyn",
@@ -332,7 +368,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-31",
     title: "Operation Flytrap 5.0",
-    description: "Army xTechCounter Strike live competition, $350K winners - Project FlyTrap series",
+    description:
+      "Army xTechCounter Strike live competition, $350K winners - Project FlyTrap series",
     category: "opportunity",
     priority: "high",
     assignee: "team",
@@ -414,7 +451,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-15",
     title: "UK DASA Cycle Submission",
-    description: "Defence and Security Accelerator - up to \u00A3350K per proposal",
+    description:
+      "Defence and Security Accelerator - up to \u00A3350K per proposal",
     category: "opportunity",
     priority: "high",
     link: "/docs/business/opportunities/opportunities-summary",
@@ -436,7 +474,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-12",
     title: "ETHGlobal New York Hackathon",
-    description: "June 12-14, Web3 hackathon: ZK proofs, DeFi, Layer-2, AI+crypto",
+    description:
+      "June 12-14, Web3 hackathon: ZK proofs, DeFi, Layer-2, AI+crypto",
     category: "hackathon",
     priority: "high",
     assignee: "jurie",
@@ -463,7 +502,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-07-18",
     title: "Robotics Factory Accelerate Application Deadline",
-    description: "Up to $100K funding, production-grade prototyping space access",
+    description:
+      "Up to $100K funding, production-grade prototyping space access",
     category: "accelerator",
     priority: "high",
     assignee: "peter",
@@ -490,7 +530,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-07-01",
     title: "Silent Swarm 2026 Experimentation",
-    description: "2-week Navy experimentation (maritime environment), free CRADA",
+    description:
+      "2-week Navy experimentation (maritime environment), free CRADA",
     category: "opportunity",
     priority: "high",
     assignee: "team",
@@ -559,7 +600,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-10-01",
     title: "AWS Robotics Startup Accelerator Application",
-    description: "With MassRobotics, for hardware/software robotics startups <$10M revenue",
+    description:
+      "With MassRobotics, for hardware/software robotics startups <$10M revenue",
     category: "accelerator",
     priority: "high",
     assignee: "peter",
@@ -680,7 +722,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-15",
     title: "Drone Defense Hackathon Paris",
-    description: "48-hour hackathon at Grand Palais during Adopt AI Summit - 300+ engineers, defense & AI focus",
+    description:
+      "48-hour hackathon at Grand Palais during Adopt AI Summit - 300+ engineers, defense & AI focus",
     category: "hackathon",
     priority: "high",
     assignee: "team",
@@ -690,7 +733,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-01",
     title: "NATO SAPIENCE 2026 Final Competition",
-    description: "Third and final autonomous drone competition in Netherlands - indoor/outdoor tasks",
+    description:
+      "Third and final autonomous drone competition in Netherlands - indoor/outdoor tasks",
     category: "opportunity",
     priority: "high",
     assignee: "team",
@@ -700,7 +744,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-09-28",
     title: "Counter-UAS Homeland Security Europe 2026",
-    description: "Sep 28-29 London - Counter-UAS strategies, critical infrastructure protection",
+    description:
+      "Sep 28-29 London - Counter-UAS strategies, critical infrastructure protection",
     category: "opportunity",
     priority: "medium",
     assignee: "martyn",
@@ -709,7 +754,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-10-15",
     title: "Shield Capital Defense Tech Pitch",
-    description: "Target pitch to Shield Capital (former military operators turned VCs) - seed to growth stage",
+    description:
+      "Target pitch to Shield Capital (former military operators turned VCs) - seed to growth stage",
     category: "funding",
     priority: "high",
     assignee: "martyn",
@@ -718,7 +764,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-11-01",
     title: "In-Q-Tel Briefing Target",
-    description: "CIA venture arm - backs dual-use technologies with national security applications",
+    description:
+      "CIA venture arm - backs dual-use technologies with national security applications",
     category: "funding",
     priority: "high",
     assignee: "martyn",
@@ -727,7 +774,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-15",
     title: "Army Best Drone Warfighter Competition",
-    description: "Army UAS/counter-UAS experimentation - winning teams advance to 2027 competition",
+    description:
+      "Army UAS/counter-UAS experimentation - winning teams advance to 2027 competition",
     category: "opportunity",
     priority: "high",
     assignee: "team",
@@ -737,7 +785,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-15",
     title: "AFWERX SBIR Phase I Application",
-    description: "Air Force small business innovation - up to $2M contract potential via Techstars pathway",
+    description:
+      "Air Force small business innovation - up to $2M contract potential via Techstars pathway",
     category: "funding",
     priority: "high",
     assignee: "martyn",
@@ -753,7 +802,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "EUDIS Business Accelerator Spring Cohort",
-    description: "EU defense accelerator - 300+ hours coaching, 5 bootcamps across Europe. EU/Norway startups only.",
+    description:
+      "EU defense accelerator - 300+ hours coaching, 5 bootcamps across Europe. EU/Norway startups only.",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -763,7 +813,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-04-13",
     title: "Military Robotics & Autonomous Systems UK 2026",
-    description: "April 13-15 London - Conference on RAS integration into military operations",
+    description:
+      "April 13-15 London - Conference on RAS integration into military operations",
     category: "opportunity",
     priority: "medium",
     assignee: "team",
@@ -772,7 +823,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-09-01",
     title: "EUDIS Business Accelerator Fall Cohort",
-    description: "EU defense accelerator fall intake - 300+ hours coaching, bootcamps across Europe",
+    description:
+      "EU defense accelerator fall intake - 300+ hours coaching, bootcamps across Europe",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -784,7 +836,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-15",
     title: "Google for Startups MENA 2026 Application",
-    description: "10-week accelerator for Middle East & North Africa startups using innovative tech",
+    description:
+      "10-week accelerator for Middle East & North Africa startups using innovative tech",
     category: "accelerator",
     priority: "medium",
     assignee: "alistair",
@@ -793,7 +846,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-01",
     title: "Katapult Africa Accelerator Application",
-    description: "90-day program with $150K-$500K investment for African impact tech startups",
+    description:
+      "90-day program with $150K-$500K investment for African impact tech startups",
     category: "accelerator",
     priority: "medium",
     assignee: "martyn",
@@ -802,7 +856,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-25",
     title: "Africa Technology Expo 2026",
-    description: "June 25-26 - Hardware, robotics, drone tech, smart hardware showcase",
+    description:
+      "June 25-26 - Hardware, robotics, drone tech, smart hardware showcase",
     category: "opportunity",
     priority: "medium",
     assignee: "team",
@@ -811,7 +866,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-30",
     title: "Africa Startup Accelerator (ASA) 2026",
-    description: "3-week program at University of Iowa (June 30 - July 25) for African founders",
+    description:
+      "3-week program at University of Iowa (June 30 - July 25) for African founders",
     category: "accelerator",
     priority: "medium",
     assignee: "martyn",
@@ -820,7 +876,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-10-28",
     title: "AI Expo Africa 2026",
-    description: "Oct 28-29 Sandton, South Africa - Africa's largest AI and smart tech trade event",
+    description:
+      "Oct 28-29 Sandton, South Africa - Africa's largest AI and smart tech trade event",
     category: "opportunity",
     priority: "medium",
     assignee: "team",
@@ -831,7 +888,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-07-08",
     title: "Military Robotics & Autonomous Systems USA 2026",
-    description: "July 8-9 - Conference on military robotics with 100+ attendees, 25+ speakers",
+    description:
+      "July 8-9 - Conference on military robotics with 100+ attendees, 25+ speakers",
     category: "opportunity",
     priority: "high",
     assignee: "team",
@@ -842,7 +900,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-04-01",
     title: "Lockheed Martin Ventures Pitch Preparation",
-    description: "Prepare pitch for Lockheed Martin corporate VC - deep pockets, pilot customers, acquisition pathway",
+    description:
+      "Prepare pitch for Lockheed Martin corporate VC - deep pockets, pilot customers, acquisition pathway",
     category: "funding",
     priority: "high",
     assignee: "martyn",
@@ -851,7 +910,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-01",
     title: "Boeing HorizonX Ventures Outreach",
-    description: "Target Boeing's VC arm - focused on autonomous systems, advanced manufacturing",
+    description:
+      "Target Boeing's VC arm - focused on autonomous systems, advanced manufacturing",
     category: "funding",
     priority: "medium",
     assignee: "martyn",
@@ -860,7 +920,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-06-01",
     title: "RTX Ventures Introduction",
-    description: "Connect with RTX (formerly Raytheon) venture arm for defense tech partnership",
+    description:
+      "Connect with RTX (formerly Raytheon) venture arm for defense tech partnership",
     category: "funding",
     priority: "medium",
     assignee: "martyn",
@@ -875,7 +936,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-15",
     title: "Japan DITI Defense Innovation Outreach",
-    description: "Japan's Defense Innovation Technology Institute - contact for dual-use tech opportunities",
+    description:
+      "Japan's Defense Innovation Technology Institute - contact for dual-use tech opportunities",
     category: "accelerator",
     priority: "medium",
     assignee: "alistair",
@@ -884,7 +946,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-01",
     title: "Australia ASCA Application",
-    description: "Advanced Strategic Capabilities Accelerator - undersea, air defense, autonomous systems focus",
+    description:
+      "Advanced Strategic Capabilities Accelerator - undersea, air defense, autonomous systems focus",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -893,7 +956,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-01",
     title: "India iDEX DISC Challenge Application",
-    description: "Defence India Startup Challenge - grants up to Rs 1.5Cr, UAS/autonomous systems focus",
+    description:
+      "Defence India Startup Challenge - grants up to Rs 1.5Cr, UAS/autonomous systems focus",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -902,7 +966,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-03-15",
     title: "DSEI Japan 2027 Registration",
-    description: "Japan's premier defense & security exhibition - early registration for 2027 event",
+    description:
+      "Japan's premier defense & security exhibition - early registration for 2027 event",
     category: "opportunity",
     priority: "medium",
     assignee: "team",
@@ -913,7 +978,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-02-15",
     title: "Israel Innofense Program Application",
-    description: "Israeli DDR&D accelerator - VC network, defense tech scouting, 43+ graduates",
+    description:
+      "Israeli DDR&D accelerator - VC network, defense tech scouting, 43+ graduates",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -922,7 +988,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-04-01",
     title: "Matara Defense Platform Introduction",
-    description: "Israeli defense innovation platform - bridges foreign defense needs with Israeli tech",
+    description:
+      "Israeli defense innovation platform - bridges foreign defense needs with Israeli tech",
     category: "funding",
     priority: "medium",
     assignee: "alistair",
@@ -931,7 +998,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-05-15",
     title: "8200 ESIP Accelerator Application",
-    description: "Tel Aviv cybersecurity accelerator backed by elite military unit alumni network",
+    description:
+      "Tel Aviv cybersecurity accelerator backed by elite military unit alumni network",
     category: "accelerator",
     priority: "medium",
     assignee: "jurie",
@@ -942,7 +1010,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-01-13",
     title: "UK DASA Open Call Cycle 4 Deadline",
-    description: "Final DASA open call before July 2026 relaunch - up to £350K per proposal",
+    description:
+      "Final DASA open call before July 2026 relaunch - up to £350K per proposal",
     category: "funding",
     priority: "critical",
     assignee: "martyn",
@@ -961,7 +1030,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-09-15",
     title: "NATO DIANA 2027 Application Prep",
-    description: "Prepare for next NATO DIANA cohort - top 4% acceptance rate, £100K+ funding",
+    description:
+      "Prepare for next NATO DIANA cohort - top 4% acceptance rate, £100K+ funding",
     category: "accelerator",
     priority: "high",
     assignee: "martyn",
@@ -981,7 +1051,8 @@ const calendarEvents: CalendarItem[] = [
   {
     date: "2026-04-15",
     title: "Hub71 Abu Dhabi Application",
-    description: "Abu Dhabi global tech ecosystem - strategic East-West location, tax-friendly",
+    description:
+      "Abu Dhabi global tech ecosystem - strategic East-West location, tax-friendly",
     category: "accelerator",
     priority: "medium",
     assignee: "alistair",
@@ -1079,9 +1150,19 @@ function getEventKey(event: CalendarItem): string {
 }
 
 // Time range options
-type TimeRange = "all" | "week" | "month" | "quarter" | "30days" | "60days" | "90days";
+type TimeRange =
+  | "all"
+  | "week"
+  | "month"
+  | "quarter"
+  | "30days"
+  | "60days"
+  | "90days";
 
-const timeRangeConfig: Record<TimeRange, { label: string; days: number | null }> = {
+const timeRangeConfig: Record<
+  TimeRange,
+  { label: string; days: number | null }
+> = {
   all: { label: "All Time", days: null },
   week: { label: "This Week", days: 7 },
   month: { label: "This Month", days: 30 },
@@ -1128,7 +1209,9 @@ function RoadmapSection({
                 {completed ? "✓" : "○"}
               </button>
               <span className={styles.roadmapTitle}>{e.title}</span>
-              <span className={styles.roadmapPriority}>{priorityConfig[e.priority].badge}</span>
+              <span className={styles.roadmapPriority}>
+                {priorityConfig[e.priority].badge}
+              </span>
             </div>
           );
         })}
@@ -1150,7 +1233,9 @@ export default function CalendarPage(): React.ReactElement {
   const [showPast, setShowPast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [customEvents, setCustomEvents] = useState<CustomEvent[]>([]);
-  const [completedEvents, setCompletedEvents] = useState<Record<string, boolean>>({});
+  const [completedEvents, setCompletedEvents] = useState<
+    Record<string, boolean>
+  >({});
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -1190,9 +1275,10 @@ export default function CalendarPage(): React.ReactElement {
     // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      events = events.filter((e) =>
-        e.title.toLowerCase().includes(query) ||
-        e.description.toLowerCase().includes(query)
+      events = events.filter(
+        (e) =>
+          e.title.toLowerCase().includes(query) ||
+          e.description.toLowerCase().includes(query),
       );
     }
 
@@ -1208,11 +1294,12 @@ export default function CalendarPage(): React.ReactElement {
 
     // Filter by assignee
     if (selectedAssignee !== "all") {
-      events = events.filter((e) =>
-        e.assignee === selectedAssignee ||
-        e.assignee === "all" ||
-        e.assignee === "team" ||
-        !e.assignee
+      events = events.filter(
+        (e) =>
+          e.assignee === selectedAssignee ||
+          e.assignee === "all" ||
+          e.assignee === "team" ||
+          !e.assignee,
       );
     }
 
@@ -1241,21 +1328,35 @@ export default function CalendarPage(): React.ReactElement {
     }
 
     // Sort by date
-    events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    events.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
 
     return events;
-  }, [selectedCategory, selectedAssignee, selectedPriority, selectedTimeRange, selectedCompletion, searchQuery, showPast, allEvents, completedEvents]);
+  }, [
+    selectedCategory,
+    selectedAssignee,
+    selectedPriority,
+    selectedTimeRange,
+    selectedCompletion,
+    searchQuery,
+    showPast,
+    allEvents,
+    completedEvents,
+  ]);
 
   // Personal stats for selected assignee
   const personalStats = useMemo(() => {
-    const assigneeEvents = selectedAssignee !== "all"
-      ? allEvents.filter((e) =>
-          e.assignee === selectedAssignee ||
-          e.assignee === "all" ||
-          e.assignee === "team" ||
-          !e.assignee
-        )
-      : allEvents;
+    const assigneeEvents =
+      selectedAssignee !== "all"
+        ? allEvents.filter(
+            (e) =>
+              e.assignee === selectedAssignee ||
+              e.assignee === "all" ||
+              e.assignee === "team" ||
+              !e.assignee,
+          )
+        : allEvents;
 
     const upcoming = assigneeEvents.filter((e) => getDaysUntil(e.date) >= 0);
     const thisWeek = upcoming.filter((e) => getDaysUntil(e.date) <= 7);
@@ -1265,17 +1366,25 @@ export default function CalendarPage(): React.ReactElement {
     const overdue = assigneeEvents.filter((e) => getDaysUntil(e.date) < 0);
 
     // Completion stats
-    const completedCount = assigneeEvents.filter((e) => isEventCompleted(e)).length;
-    const completedThisMonth = thisMonth.filter((e) => isEventCompleted(e)).length;
-    const completionRate = thisMonth.length > 0
-      ? Math.round((completedThisMonth / thisMonth.length) * 100)
-      : 0;
+    const completedCount = assigneeEvents.filter((e) =>
+      isEventCompleted(e),
+    ).length;
+    const completedThisMonth = thisMonth.filter((e) =>
+      isEventCompleted(e),
+    ).length;
+    const completionRate =
+      thisMonth.length > 0
+        ? Math.round((completedThisMonth / thisMonth.length) * 100)
+        : 0;
 
     // Breakdown by category
-    const byCategory = Object.keys(categoryConfig).reduce((acc, cat) => {
-      acc[cat] = upcoming.filter((e) => e.category === cat).length;
-      return acc;
-    }, {} as Record<string, number>);
+    const byCategory = Object.keys(categoryConfig).reduce(
+      (acc, cat) => {
+        acc[cat] = upcoming.filter((e) => e.category === cat).length;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     return {
       total: upcoming.length,
@@ -1293,9 +1402,10 @@ export default function CalendarPage(): React.ReactElement {
 
   // Export personal calendar (only assigned events)
   const handleExportPersonal = () => {
-    const personalEvents = selectedAssignee !== "all"
-      ? filteredEvents
-      : allEvents.filter((e) => getDaysUntil(e.date) >= 0);
+    const personalEvents =
+      selectedAssignee !== "all"
+        ? filteredEvents
+        : allEvents.filter((e) => getDaysUntil(e.date) >= 0);
 
     const events: CalendarEvent[] = personalEvents.map((item) => ({
       title: item.title,
@@ -1305,9 +1415,10 @@ export default function CalendarPage(): React.ReactElement {
       category: item.category,
     }));
 
-    const filename = selectedAssignee !== "all"
-      ? `phoenix-calendar-${selectedAssignee}.ics`
-      : "phoenix-rooivalk-calendar.ics";
+    const filename =
+      selectedAssignee !== "all"
+        ? `phoenix-calendar-${selectedAssignee}.ics`
+        : "phoenix-rooivalk-calendar.ics";
 
     downloadICS(events, filename);
   };
@@ -1355,7 +1466,10 @@ export default function CalendarPage(): React.ReactElement {
   };
 
   const upcomingCritical = filteredEvents.filter(
-    (e) => e.priority === "critical" && getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 90
+    (e) =>
+      e.priority === "critical" &&
+      getDaysUntil(e.date) >= 0 &&
+      getDaysUntil(e.date) <= 90,
   );
 
   // Generate ICS content for subscription (includes custom events)
@@ -1382,7 +1496,7 @@ export default function CalendarPage(): React.ReactElement {
     // Google Calendar subscribe URL (would need hosted ICS file in production)
     window.open(
       "https://calendar.google.com/calendar/r?cid=webcal://docs.phoenixrooivalk.com/calendar.ics",
-      "_blank"
+      "_blank",
     );
   };
 
@@ -1390,7 +1504,7 @@ export default function CalendarPage(): React.ReactElement {
     // Outlook subscribe URL
     window.open(
       "https://outlook.live.com/calendar/0/addfromweb?url=webcal://docs.phoenixrooivalk.com/calendar.ics",
-      "_blank"
+      "_blank",
     );
   };
 
@@ -1406,14 +1520,25 @@ export default function CalendarPage(): React.ReactElement {
               <span className={styles.headerIcon}>📅</span> Project Calendar
             </h1>
             <p>
-              Track all deadlines, milestones, opportunities, and events in one place.
+              Track all deadlines, milestones, opportunities, and events in one
+              place.
             </p>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.exportButton} onClick={() => setShowAddModal(true)}>
+            <button
+              className={styles.exportButton}
+              onClick={() => setShowAddModal(true)}
+            >
               + Add Event
             </button>
-            <button className={styles.exportButton} onClick={handleExportAll} style={{ background: "var(--ifm-color-emphasis-200)", color: "var(--ifm-color-content)" }}>
+            <button
+              className={styles.exportButton}
+              onClick={handleExportAll}
+              style={{
+                background: "var(--ifm-color-emphasis-200)",
+                color: "var(--ifm-color-content)",
+              }}
+            >
               📥 Export
             </button>
             <Link
@@ -1434,8 +1559,9 @@ export default function CalendarPage(): React.ReactElement {
               <h2>Book a Meeting</h2>
             </div>
             <p className={styles.actionCardDescription}>
-              Schedule time with our team to discuss your counter-UAS requirements,
-              see a product demo, or explore investment opportunities.
+              Schedule time with our team to discuss your counter-UAS
+              requirements, see a product demo, or explore investment
+              opportunities.
             </p>
             <BookingWidget
               calUsername="phoenixrooivalk"
@@ -1452,8 +1578,8 @@ export default function CalendarPage(): React.ReactElement {
               <h2>Sync to Your Calendar</h2>
             </div>
             <p className={styles.actionCardDescription}>
-              Stay updated with all Phoenix Rooivalk deadlines and milestones
-              by adding our calendar to your favorite app.
+              Stay updated with all Phoenix Rooivalk deadlines and milestones by
+              adding our calendar to your favorite app.
             </p>
             <div className={styles.integrationOptions}>
               <button
@@ -1462,8 +1588,12 @@ export default function CalendarPage(): React.ReactElement {
               >
                 <span className={styles.integrationIcon}>G</span>
                 <span className={styles.integrationLabel}>
-                  <span className={styles.integrationTitle}>Google Calendar</span>
-                  <span className={styles.integrationDesc}>Subscribe & auto-sync</span>
+                  <span className={styles.integrationTitle}>
+                    Google Calendar
+                  </span>
+                  <span className={styles.integrationDesc}>
+                    Subscribe & auto-sync
+                  </span>
                 </span>
               </button>
               <button
@@ -1472,8 +1602,12 @@ export default function CalendarPage(): React.ReactElement {
               >
                 <span className={styles.integrationIcon}>O</span>
                 <span className={styles.integrationLabel}>
-                  <span className={styles.integrationTitle}>Outlook Calendar</span>
-                  <span className={styles.integrationDesc}>Subscribe & auto-sync</span>
+                  <span className={styles.integrationTitle}>
+                    Outlook Calendar
+                  </span>
+                  <span className={styles.integrationDesc}>
+                    Subscribe & auto-sync
+                  </span>
                 </span>
               </button>
               <button
@@ -1482,8 +1616,12 @@ export default function CalendarPage(): React.ReactElement {
               >
                 <span className={styles.integrationIcon}>📥</span>
                 <span className={styles.integrationLabel}>
-                  <span className={styles.integrationTitle}>Download .ics File</span>
-                  <span className={styles.integrationDesc}>Apple Calendar & others</span>
+                  <span className={styles.integrationTitle}>
+                    Download .ics File
+                  </span>
+                  <span className={styles.integrationDesc}>
+                    Apple Calendar & others
+                  </span>
                 </span>
               </button>
               <button
@@ -1492,14 +1630,18 @@ export default function CalendarPage(): React.ReactElement {
               >
                 <span className={styles.integrationIcon}>📋</span>
                 <span className={styles.integrationLabel}>
-                  <span className={styles.integrationTitle}>Copy Calendar Data</span>
-                  <span className={styles.integrationDesc}>For manual import</span>
+                  <span className={styles.integrationTitle}>
+                    Copy Calendar Data
+                  </span>
+                  <span className={styles.integrationDesc}>
+                    For manual import
+                  </span>
                 </span>
               </button>
             </div>
             <div className={styles.subscribeHint}>
-              <strong>Pro tip:</strong> Subscribing keeps your calendar automatically
-              updated when new events are added.
+              <strong>Pro tip:</strong> Subscribing keeps your calendar
+              automatically updated when new events are added.
             </div>
           </div>
         </div>
@@ -1511,20 +1653,43 @@ export default function CalendarPage(): React.ReactElement {
               <h3>Quick Overview</h3>
               <div className={styles.overviewStats}>
                 <span className={styles.overviewStat}>
-                  <strong>{filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7).length}</strong> this week
+                  <strong>
+                    {
+                      filteredEvents.filter(
+                        (e) =>
+                          getDaysUntil(e.date) >= 0 &&
+                          getDaysUntil(e.date) <= 7,
+                      ).length
+                    }
+                  </strong>{" "}
+                  this week
                 </span>
                 <span className={styles.overviewStat}>
-                  <strong>{filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 30).length}</strong> this month
+                  <strong>
+                    {
+                      filteredEvents.filter(
+                        (e) =>
+                          getDaysUntil(e.date) >= 0 &&
+                          getDaysUntil(e.date) <= 30,
+                      ).length
+                    }
+                  </strong>{" "}
+                  this month
                 </span>
                 <span className={styles.overviewStat}>
-                  <strong>{filteredEvents.filter((e) => isEventCompleted(e)).length}</strong> completed
+                  <strong>
+                    {filteredEvents.filter((e) => isEventCompleted(e)).length}
+                  </strong>{" "}
+                  completed
                 </span>
               </div>
             </div>
             <div className={styles.roadmapTimeline}>
               <RoadmapSection
                 title="This Week"
-                events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                events={filteredEvents.filter(
+                  (e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7,
+                )}
                 emptyMessage="No items this week"
                 maxItems={4}
                 onToggleComplete={handleToggleComplete}
@@ -1532,7 +1697,9 @@ export default function CalendarPage(): React.ReactElement {
               />
               <RoadmapSection
                 title="Next 2 Weeks"
-                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                events={filteredEvents.filter(
+                  (e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14,
+                )}
                 emptyMessage="No items next 2 weeks"
                 maxItems={4}
                 onToggleComplete={handleToggleComplete}
@@ -1540,7 +1707,10 @@ export default function CalendarPage(): React.ReactElement {
               />
               <RoadmapSection
                 title="This Month"
-                events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                events={filteredEvents.filter(
+                  (e) =>
+                    getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30,
+                )}
                 emptyMessage="No items later this month"
                 maxItems={4}
                 onToggleComplete={handleToggleComplete}
@@ -1557,19 +1727,27 @@ export default function CalendarPage(): React.ReactElement {
               <h3>
                 <span
                   className={styles.statsAvatar}
-                  style={{ backgroundColor: teamConfig[selectedAssignee as TeamMember]?.color }}
+                  style={{
+                    backgroundColor:
+                      teamConfig[selectedAssignee as TeamMember]?.color,
+                  }}
                 >
                   {teamConfig[selectedAssignee as TeamMember]?.initials}
                 </span>
                 {teamConfig[selectedAssignee as TeamMember]?.label}'s Dashboard
               </h3>
-              <button className={styles.exportPersonalBtn} onClick={handleExportPersonal}>
+              <button
+                className={styles.exportPersonalBtn}
+                onClick={handleExportPersonal}
+              >
                 📥 Export My Calendar
               </button>
             </div>
             <div className={styles.statsGrid}>
               <div className={`${styles.statCard} ${styles.statCompletion}`}>
-                <span className={styles.statNumber}>{personalStats.completionRate}%</span>
+                <span className={styles.statNumber}>
+                  {personalStats.completionRate}%
+                </span>
                 <span className={styles.statLabel}>Monthly Progress</span>
                 <div className={styles.progressBar}>
                   <div
@@ -1579,15 +1757,21 @@ export default function CalendarPage(): React.ReactElement {
                 </div>
               </div>
               <div className={styles.statCard}>
-                <span className={styles.statNumber}>{personalStats.completedThisMonth}/{personalStats.thisMonth}</span>
+                <span className={styles.statNumber}>
+                  {personalStats.completedThisMonth}/{personalStats.thisMonth}
+                </span>
                 <span className={styles.statLabel}>Done This Month</span>
               </div>
               <div className={styles.statCard}>
-                <span className={styles.statNumber}>{personalStats.thisWeek}</span>
+                <span className={styles.statNumber}>
+                  {personalStats.thisWeek}
+                </span>
                 <span className={styles.statLabel}>This Week</span>
               </div>
               <div className={`${styles.statCard} ${styles.statCritical}`}>
-                <span className={styles.statNumber}>{personalStats.critical}</span>
+                <span className={styles.statNumber}>
+                  {personalStats.critical}
+                </span>
                 <span className={styles.statLabel}>🔴 Critical</span>
               </div>
               <div className={`${styles.statCard} ${styles.statHigh}`}>
@@ -1596,7 +1780,9 @@ export default function CalendarPage(): React.ReactElement {
               </div>
               {personalStats.overdue > 0 && (
                 <div className={`${styles.statCard} ${styles.statOverdue}`}>
-                  <span className={styles.statNumber}>{personalStats.overdue}</span>
+                  <span className={styles.statNumber}>
+                    {personalStats.overdue}
+                  </span>
                   <span className={styles.statLabel}>⚠️ Overdue</span>
                 </div>
               )}
@@ -1608,7 +1794,10 @@ export default function CalendarPage(): React.ReactElement {
               <div className={styles.roadmapTimeline}>
                 <RoadmapSection
                   title="This Week"
-                  events={filteredEvents.filter((e) => getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7)}
+                  events={filteredEvents.filter(
+                    (e) =>
+                      getDaysUntil(e.date) >= 0 && getDaysUntil(e.date) <= 7,
+                  )}
                   emptyMessage="No items this week"
                   maxItems={3}
                   onToggleComplete={handleToggleComplete}
@@ -1616,7 +1805,10 @@ export default function CalendarPage(): React.ReactElement {
                 />
                 <RoadmapSection
                   title="Next 2 Weeks"
-                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14)}
+                  events={filteredEvents.filter(
+                    (e) =>
+                      getDaysUntil(e.date) > 7 && getDaysUntil(e.date) <= 14,
+                  )}
                   emptyMessage="No items next 2 weeks"
                   maxItems={3}
                   onToggleComplete={handleToggleComplete}
@@ -1624,7 +1816,10 @@ export default function CalendarPage(): React.ReactElement {
                 />
                 <RoadmapSection
                   title="This Month"
-                  events={filteredEvents.filter((e) => getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30)}
+                  events={filteredEvents.filter(
+                    (e) =>
+                      getDaysUntil(e.date) > 14 && getDaysUntil(e.date) <= 30,
+                  )}
                   emptyMessage="No items later this month"
                   maxItems={3}
                   onToggleComplete={handleToggleComplete}
@@ -1682,7 +1877,9 @@ export default function CalendarPage(): React.ReactElement {
               <label>Time Range:</label>
               <select
                 value={selectedTimeRange}
-                onChange={(e) => setSelectedTimeRange(e.target.value as TimeRange)}
+                onChange={(e) =>
+                  setSelectedTimeRange(e.target.value as TimeRange)
+                }
                 className={styles.filterSelect}
               >
                 {Object.entries(timeRangeConfig).map(([key, config]) => (
@@ -1717,11 +1914,13 @@ export default function CalendarPage(): React.ReactElement {
                 className={styles.filterSelect}
               >
                 <option value="all">Everyone</option>
-                {Object.entries(teamConfig).filter(([key]) => key !== "all").map(([key, config]) => (
-                  <option key={key} value={key}>
-                    {config.initials} - {config.label}
-                  </option>
-                ))}
+                {Object.entries(teamConfig)
+                  .filter(([key]) => key !== "all")
+                  .map(([key, config]) => (
+                    <option key={key} value={key}>
+                      {config.initials} - {config.label}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -1764,7 +1963,9 @@ export default function CalendarPage(): React.ReactElement {
                 key={key}
                 className={`${styles.filterButton} ${selectedCategory === key ? styles.active : ""}`}
                 onClick={() => setSelectedCategory(key)}
-                style={{ "--category-color": config.color } as React.CSSProperties}
+                style={
+                  { "--category-color": config.color } as React.CSSProperties
+                }
               >
                 {config.icon} {config.label}
               </button>
@@ -1795,17 +1996,25 @@ export default function CalendarPage(): React.ReactElement {
                 <div
                   key={idx}
                   className={`${styles.timelineItem} ${isPast ? styles.past : ""} ${isToday ? styles.today : ""} ${isSoon ? styles.soon : ""} ${completed ? styles.completed : ""}`}
-                  style={{ "--category-color": config.color } as React.CSSProperties}
+                  style={
+                    { "--category-color": config.color } as React.CSSProperties
+                  }
                 >
                   <div className={styles.timelineDate}>
-                    <span className={styles.dateLabel}>{formatDate(event.date)}</span>
-                    <span className={styles.countdown}>{getTimeLabel(days)}</span>
+                    <span className={styles.dateLabel}>
+                      {formatDate(event.date)}
+                    </span>
+                    <span className={styles.countdown}>
+                      {getTimeLabel(days)}
+                    </span>
                   </div>
                   <div className={styles.timelineMarker}>
                     <button
                       className={`${styles.completionCheckbox} ${completed ? styles.checked : ""}`}
                       onClick={() => handleToggleComplete(event)}
-                      title={completed ? "Mark as incomplete" : "Mark as complete"}
+                      title={
+                        completed ? "Mark as incomplete" : "Mark as complete"
+                      }
                     >
                       {completed ? "✓" : priorityConfig[event.priority].badge}
                     </button>
@@ -1818,7 +2027,12 @@ export default function CalendarPage(): React.ReactElement {
                       {event.assignee && event.assignee !== "all" && (
                         <span
                           className={styles.assigneeBadge}
-                          style={{ "--assignee-color": teamConfig[event.assignee]?.color || "#6b7280" } as React.CSSProperties}
+                          style={
+                            {
+                              "--assignee-color":
+                                teamConfig[event.assignee]?.color || "#6b7280",
+                            } as React.CSSProperties
+                          }
                         >
                           {teamConfig[event.assignee]?.initials || "?"}
                         </span>
@@ -1829,21 +2043,33 @@ export default function CalendarPage(): React.ReactElement {
                         </span>
                       )}
                     </div>
-                    <h3 className={`${styles.eventTitle} ${completed ? styles.titleCompleted : ""}`}>
+                    <h3
+                      className={`${styles.eventTitle} ${completed ? styles.titleCompleted : ""}`}
+                    >
                       {event.link ? (
                         event.link.startsWith("http") ? (
-                          <a href={event.link} target="_blank" rel="noopener noreferrer">{event.title}</a>
+                          <a
+                            href={event.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {event.title}
+                          </a>
                         ) : (
                           <Link to={event.link}>{event.title}</Link>
                         )
                       ) : (
                         event.title
                       )}
-                      {completed && <span className={styles.completedBadge}>Done</span>}
+                      {completed && (
+                        <span className={styles.completedBadge}>Done</span>
+                      )}
                       {"isCustom" in event && (
                         <button
                           className={styles.deleteEventButton}
-                          onClick={() => handleDeleteCustomEvent((event as CustomEvent).id)}
+                          onClick={() =>
+                            handleDeleteCustomEvent((event as CustomEvent).id)
+                          }
                           title="Delete custom event"
                         >
                           ×
@@ -1892,7 +2118,10 @@ export default function CalendarPage(): React.ReactElement {
 
         {/* Add Event Modal */}
         {showAddModal && (
-          <div className={styles.modalOverlay} onClick={() => setShowAddModal(false)}>
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setShowAddModal(false)}
+          >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
                 <h2>Add Custom Event</h2>
@@ -1909,7 +2138,9 @@ export default function CalendarPage(): React.ReactElement {
                   <input
                     type="text"
                     value={newEvent.title}
-                    onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                    onChange={(e) =>
+                      setNewEvent({ ...newEvent, title: e.target.value })
+                    }
                     placeholder="Event title"
                     className={styles.formInput}
                   />
@@ -1919,7 +2150,9 @@ export default function CalendarPage(): React.ReactElement {
                   <input
                     type="date"
                     value={newEvent.date}
-                    onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+                    onChange={(e) =>
+                      setNewEvent({ ...newEvent, date: e.target.value })
+                    }
                     className={styles.formInput}
                   />
                 </div>
@@ -1927,7 +2160,9 @@ export default function CalendarPage(): React.ReactElement {
                   <label>Description</label>
                   <textarea
                     value={newEvent.description}
-                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                    onChange={(e) =>
+                      setNewEvent({ ...newEvent, description: e.target.value })
+                    }
                     placeholder="Event description"
                     className={styles.formInput}
                     rows={3}
@@ -1938,7 +2173,12 @@ export default function CalendarPage(): React.ReactElement {
                     <label>Category</label>
                     <select
                       value={newEvent.category}
-                      onChange={(e) => setNewEvent({ ...newEvent, category: e.target.value as CalendarItem["category"] })}
+                      onChange={(e) =>
+                        setNewEvent({
+                          ...newEvent,
+                          category: e.target.value as CalendarItem["category"],
+                        })
+                      }
                       className={styles.formInput}
                     >
                       {Object.entries(categoryConfig).map(([key, config]) => (
@@ -1952,7 +2192,12 @@ export default function CalendarPage(): React.ReactElement {
                     <label>Priority</label>
                     <select
                       value={newEvent.priority}
-                      onChange={(e) => setNewEvent({ ...newEvent, priority: e.target.value as CalendarItem["priority"] })}
+                      onChange={(e) =>
+                        setNewEvent({
+                          ...newEvent,
+                          priority: e.target.value as CalendarItem["priority"],
+                        })
+                      }
                       className={styles.formInput}
                     >
                       {Object.entries(priorityConfig).map(([key, config]) => (
@@ -1967,7 +2212,12 @@ export default function CalendarPage(): React.ReactElement {
                   <label>Assign To</label>
                   <select
                     value={newEvent.assignee}
-                    onChange={(e) => setNewEvent({ ...newEvent, assignee: e.target.value as TeamMember })}
+                    onChange={(e) =>
+                      setNewEvent({
+                        ...newEvent,
+                        assignee: e.target.value as TeamMember,
+                      })
+                    }
                     className={styles.formInput}
                   >
                     {Object.entries(teamConfig).map(([key, config]) => (
@@ -1984,15 +2234,20 @@ export default function CalendarPage(): React.ReactElement {
                     min="0"
                     max="100"
                     value={newEvent.weeklyTarget || ""}
-                    onChange={(e) => setNewEvent({
-                      ...newEvent,
-                      weeklyTarget: e.target.value ? parseInt(e.target.value) : undefined
-                    })}
+                    onChange={(e) =>
+                      setNewEvent({
+                        ...newEvent,
+                        weeklyTarget: e.target.value
+                          ? parseInt(e.target.value)
+                          : undefined,
+                      })
+                    }
                     placeholder="e.g., 25 for 25%/week"
                     className={styles.formInput}
                   />
                   <span className={styles.formHint}>
-                    Optional - Set a weekly progress target for longer-term items
+                    Optional - Set a weekly progress target for longer-term
+                    items
                   </span>
                 </div>
                 <div className={styles.modalActions}>

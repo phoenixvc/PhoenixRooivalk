@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Hardware iterations, firmware updates, and component changes must be tracked with clear compatibility matrices to prevent field failures
-2. **Decision**: Implement semantic versioning for hardware with firmware compatibility matrices, OTA update capability, and rollback support
+1. **Problem**: Hardware iterations, firmware updates, and component changes
+   must be tracked with clear compatibility matrices to prevent field failures
+2. **Decision**: Implement semantic versioning for hardware with firmware
+   compatibility matrices, OTA update capability, and rollback support
 3. **Trade-off**: Version management overhead vs. deployment reliability
 
 ---
@@ -35,13 +37,13 @@ prerequisites:
 
 ### Hardware Components
 
-| Component | Update Frequency | Criticality |
-|-----------|------------------|-------------|
-| Flight controller firmware | Monthly | Critical |
-| Sensor firmware | Quarterly | High |
-| Effector controller | As needed | Critical |
-| Edge compute OS | Monthly | High |
-| AI models | Weekly | Medium |
+| Component                  | Update Frequency | Criticality |
+| -------------------------- | ---------------- | ----------- |
+| Flight controller firmware | Monthly          | Critical    |
+| Sensor firmware            | Quarterly        | High        |
+| Effector controller        | As needed        | Critical    |
+| Edge compute OS            | Monthly          | High        |
+| AI models                  | Weekly           | Medium      |
 
 ### Challenges
 

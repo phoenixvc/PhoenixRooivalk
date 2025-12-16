@@ -24,8 +24,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Phoenix Rooivalk must support multiple organizations (customers) with data isolation, per-tenant configuration, and usage-based billing
-2. **Decision**: Implement logical multi-tenancy with shared infrastructure, tenant-scoped data, and feature flag-based customization
+1. **Problem**: Phoenix Rooivalk must support multiple organizations (customers)
+   with data isolation, per-tenant configuration, and usage-based billing
+2. **Decision**: Implement logical multi-tenancy with shared infrastructure,
+   tenant-scoped data, and feature flag-based customization
 3. **Trade-off**: Resource efficiency vs. isolation guarantees
 
 ---
@@ -34,21 +36,21 @@ prerequisites:
 
 ### Multi-Tenancy Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
+| Requirement    | Specification                       |
+| -------------- | ----------------------------------- |
 | Data isolation | Tenant A cannot see Tenant B's data |
-| Configuration | Per-tenant feature toggles |
-| Usage tracking | Per-tenant metrics for billing |
-| Performance | No tenant can starve others |
-| Compliance | Tenant-specific retention policies |
+| Configuration  | Per-tenant feature toggles          |
+| Usage tracking | Per-tenant metrics for billing      |
+| Performance    | No tenant can starve others         |
+| Compliance     | Tenant-specific retention policies  |
 
 ### Tenant Types
 
-| Type | Description | Isolation Level |
-|------|-------------|-----------------|
-| Enterprise | Large organization, dedicated support | High |
-| Standard | Medium business, shared resources | Medium |
-| Trial | Evaluation period | Low |
+| Type       | Description                           | Isolation Level |
+| ---------- | ------------------------------------- | --------------- |
+| Enterprise | Large organization, dedicated support | High            |
+| Standard   | Medium business, shared resources     | Medium          |
+| Trial      | Evaluation period                     | Low             |
 
 ---
 

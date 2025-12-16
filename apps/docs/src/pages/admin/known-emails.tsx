@@ -121,7 +121,11 @@ export default function KnownEmailsAdminPage(): React.ReactElement {
 
   // Handle delete email
   const handleDeleteEmail = async (id: string, hard = false) => {
-    if (!confirm(hard ? "Permanently delete this email?" : "Deactivate this email?")) {
+    if (
+      !confirm(
+        hard ? "Permanently delete this email?" : "Deactivate this email?",
+      )
+    ) {
       return;
     }
 
@@ -188,7 +192,9 @@ export default function KnownEmailsAdminPage(): React.ReactElement {
           <div className={styles.headerTop}>
             <div>
               <h1>Known Emails</h1>
-              <p>Manage internal user email mappings for automatic recognition</p>
+              <p>
+                Manage internal user email mappings for automatic recognition
+              </p>
             </div>
             <button
               type="button"
@@ -225,7 +231,10 @@ export default function KnownEmailsAdminPage(): React.ReactElement {
 
         {/* Add Form Modal */}
         {showAddForm && (
-          <div className={styles.modalOverlay} onClick={() => setShowAddForm(false)}>
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setShowAddForm(false)}
+          >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
               <div className={styles.modalHeader}>
                 <h2>Add Known Email</h2>

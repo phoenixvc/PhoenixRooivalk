@@ -117,21 +117,22 @@ az deployment group show \
 
 Resources follow the pattern: `{env}-{region}-{type}-rooivalk`
 
-| Environment | Code | Example |
-|-------------|------|---------|
+| Environment | Code | Example                |
+| ----------- | ---- | ---------------------- |
 | Development | dev  | `dev-eus2-rg-rooivalk` |
 | Staging     | stg  | `stg-eus2-rg-rooivalk` |
-| Production  | prd  | `prd-weu-rg-rooivalk` |
+| Production  | prd  | `prd-weu-rg-rooivalk`  |
 
-| Location | Code | Full Name |
-|----------|------|-----------|
-| East US 2 | eus2 | eastus2 |
-| West Europe | weu | westeurope |
-| South Africa North | san | southafricanorth |
+| Location           | Code | Full Name        |
+| ------------------ | ---- | ---------------- |
+| East US 2          | eus2 | eastus2          |
+| West Europe        | weu  | westeurope       |
+| South Africa North | san  | southafricanorth |
 
 ## Key Secrets & Variables
 
 ### Secrets (Sensitive)
+
 - `AZURE_SUBSCRIPTION_ID` - Your Azure subscription
 - `AZURE_CREDENTIALS` - Service principal JSON
 - `AZURE_STATIC_WEB_APPS_API_TOKEN` - Docs site deployment
@@ -142,6 +143,7 @@ Resources follow the pattern: `{env}-{region}-{type}-rooivalk`
 - `GH_PAT` - GitHub token (optional, for auto-secrets)
 
 ### Variables (Public)
+
 - `AZURE_FUNCTIONAPP_NAME` - Functions app name
 - `AZURE_FUNCTIONS_BASE_URL` - Functions endpoint
 
@@ -189,7 +191,8 @@ gh workflow run deploy-infrastructure.yml \
 
 ## Documentation Links
 
-- 📖 **Full Guide**: [DEPLOYMENT_WORKFLOW_GUIDE.md](./DEPLOYMENT_WORKFLOW_GUIDE.md)
+- 📖 **Full Guide**:
+  [DEPLOYMENT_WORKFLOW_GUIDE.md](./DEPLOYMENT_WORKFLOW_GUIDE.md)
 - 📋 **Detailed Sequence**: [DEPLOYMENT_SEQUENCE.md](./DEPLOYMENT_SEQUENCE.md)
 - 🔧 **Azure Setup**: [AZURE_SETUP.md](./AZURE_SETUP.md)
 - 🐛 **Troubleshooting**: [AZURE_TROUBLESHOOTING.md](./AZURE_TROUBLESHOOTING.md)
@@ -197,20 +200,22 @@ gh workflow run deploy-infrastructure.yml \
 
 ## Cheat Sheet
 
-| Task | Command |
-|------|---------|
+| Task                  | Command                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------- |
 | Deploy infrastructure | `gh workflow run deploy-infrastructure.yml -f environment=dev -f location=eastus2` |
-| Deploy marketing site | `gh workflow run deploy-marketing-azure.yml` |
-| Deploy docs site | `gh workflow run deploy-docs-azure.yml` |
-| Deploy functions | `gh workflow run deploy-azure-functions.yml` |
-| List recent runs | `gh run list --limit 10` |
-| Watch current run | `gh run watch` |
-| View run logs | `gh run view <run-id> --log` |
-| List secrets | `gh secret list` |
-| List variables | `gh variable list` |
-| Check Azure resources | `az group show --name dev-eus2-rg-rooivalk` |
-| List all resources | `az resource list --resource-group dev-eus2-rg-rooivalk -o table` |
+| Deploy marketing site | `gh workflow run deploy-marketing-azure.yml`                                       |
+| Deploy docs site      | `gh workflow run deploy-docs-azure.yml`                                            |
+| Deploy functions      | `gh workflow run deploy-azure-functions.yml`                                       |
+| List recent runs      | `gh run list --limit 10`                                                           |
+| Watch current run     | `gh run watch`                                                                     |
+| View run logs         | `gh run view <run-id> --log`                                                       |
+| List secrets          | `gh secret list`                                                                   |
+| List variables        | `gh variable list`                                                                 |
+| Check Azure resources | `az group show --name dev-eus2-rg-rooivalk`                                        |
+| List all resources    | `az resource list --resource-group dev-eus2-rg-rooivalk -o table`                  |
 
 ---
 
-**Need help?** See [DEPLOYMENT_WORKFLOW_GUIDE.md](./DEPLOYMENT_WORKFLOW_GUIDE.md) for detailed instructions.
+**Need help?** See
+[DEPLOYMENT_WORKFLOW_GUIDE.md](./DEPLOYMENT_WORKFLOW_GUIDE.md) for detailed
+instructions.

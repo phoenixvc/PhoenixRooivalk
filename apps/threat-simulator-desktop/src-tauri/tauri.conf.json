@@ -30,9 +30,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "icon": [
-      "icons/icon.png"
-    ],
+    "icon": ["icons/icon.png"],
     "resources": [],
     "externalBin": [],
     "copyright": "Copyright © 2025 Phoenix Rooivalk",

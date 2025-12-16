@@ -411,7 +411,10 @@ export function AuthProvider({
         profileKey: detectedProfileKey,
         isInternalDomain: isDomainInternal,
         matchType: detectedMatchType,
-      } = await detectUserProfileAsync(currentUser.email, currentUser.displayName);
+      } = await detectUserProfileAsync(
+        currentUser.email,
+        currentUser.displayName,
+      );
 
       // Get local profile data from localStorage
       const localProfile = getSavedProfileData();

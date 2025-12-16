@@ -244,11 +244,15 @@ class GitHubService {
               endpoint,
               status: response.status,
             });
-            throw new Error(`GitHub API error: ${response.status} - ${sanitizedError}`);
+            throw new Error(
+              `GitHub API error: ${response.status} - ${sanitizedError}`,
+            );
           }
 
           // Retry on 5xx errors
-          throw new Error(`GitHub API error: ${response.status} - ${sanitizedError}`);
+          throw new Error(
+            `GitHub API error: ${response.status} - ${sanitizedError}`,
+          );
         }
 
         return response.json();

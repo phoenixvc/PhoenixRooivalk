@@ -25,9 +25,14 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Secrets (API keys, connection strings, certificates) need secure storage, rotation, and access control across edge nodes, cloud services, and CI/CD pipelines
-2. **Decision**: Implement hierarchical secrets management with Azure Key Vault as primary store, GitHub Secrets for CI/CD, and edge-local HSM for offline operation
-3. **Trade-off**: Management complexity vs. security isolation and audit compliance
+1. **Problem**: Secrets (API keys, connection strings, certificates) need secure
+   storage, rotation, and access control across edge nodes, cloud services, and
+   CI/CD pipelines
+2. **Decision**: Implement hierarchical secrets management with Azure Key Vault
+   as primary store, GitHub Secrets for CI/CD, and edge-local HSM for offline
+   operation
+3. **Trade-off**: Management complexity vs. security isolation and audit
+   compliance
 
 ---
 
@@ -42,13 +47,13 @@ prerequisites:
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Zero plaintext | Secrets never stored in plaintext in repos |
-| Rotation support | Automated rotation without downtime |
-| Audit trail | All secret access logged |
-| Offline capability | Edge nodes operate without cloud access |
-| Least privilege | Secrets scoped to specific services |
+| Requirement        | Specification                              |
+| ------------------ | ------------------------------------------ |
+| Zero plaintext     | Secrets never stored in plaintext in repos |
+| Rotation support   | Automated rotation without downtime        |
+| Audit trail        | All secret access logged                   |
+| Offline capability | Edge nodes operate without cloud access    |
+| Least privilege    | Secrets scoped to specific services        |
 
 ---
 
@@ -80,12 +85,12 @@ Adopt **hierarchical secrets management** with three tiers:
 
 ### Tier 2: GitHub Secrets (CI/CD)
 
-| Secret Category | Example | Scope |
-|-----------------|---------|-------|
-| Azure credentials | `AZURE_CLIENT_ID` | Repository |
+| Secret Category   | Example                | Scope       |
+| ----------------- | ---------------------- | ----------- |
+| Azure credentials | `AZURE_CLIENT_ID`      | Repository  |
 | Deployment tokens | `SWA_DEPLOYMENT_TOKEN` | Environment |
-| API keys | `OPENAI_API_KEY` | Repository |
-| Signing keys | `CODESIGN_CERTIFICATE` | Repository |
+| API keys          | `OPENAI_API_KEY`       | Repository  |
+| Signing keys      | `CODESIGN_CERTIFICATE` | Repository  |
 
 ### Tier 3: Edge HSM (Offline)
 
@@ -124,28 +129,28 @@ impl EdgeSecretStore {
 
 ### Application Secrets
 
-| Secret | Storage | Rotation | Access |
-|--------|---------|----------|--------|
-| Database connection strings | Key Vault | 90 days | Functions MI |
-| API keys (OpenAI, etc.) | Key Vault | Manual | Functions MI |
-| JWT signing keys | Key Vault | 365 days | Auth service |
-| Webhook secrets | Key Vault | 90 days | Specific functions |
+| Secret                      | Storage   | Rotation | Access             |
+| --------------------------- | --------- | -------- | ------------------ |
+| Database connection strings | Key Vault | 90 days  | Functions MI       |
+| API keys (OpenAI, etc.)     | Key Vault | Manual   | Functions MI       |
+| JWT signing keys            | Key Vault | 365 days | Auth service       |
+| Webhook secrets             | Key Vault | 90 days  | Specific functions |
 
 ### Infrastructure Secrets
 
-| Secret | Storage | Rotation | Access |
-|--------|---------|----------|--------|
-| Azure service principal | GitHub Secrets | 90 days | CI/CD workflows |
-| SWA deployment tokens | GitHub Secrets | On-demand | Deploy workflow |
-| Container registry creds | Key Vault | 90 days | Build workflow |
+| Secret                   | Storage        | Rotation  | Access          |
+| ------------------------ | -------------- | --------- | --------------- |
+| Azure service principal  | GitHub Secrets | 90 days   | CI/CD workflows |
+| SWA deployment tokens    | GitHub Secrets | On-demand | Deploy workflow |
+| Container registry creds | Key Vault      | 90 days   | Build workflow  |
 
 ### Edge Secrets
 
-| Secret | Storage | Rotation | Access |
-|--------|---------|----------|--------|
-| Device identity cert | TPM | 2 years | Edge runtime |
-| Cloud auth token | TPM cache | 24 hours | Sync engine |
-| Encryption keys | TPM | On compromise | Local storage |
+| Secret               | Storage   | Rotation      | Access        |
+| -------------------- | --------- | ------------- | ------------- |
+| Device identity cert | TPM       | 2 years       | Edge runtime  |
+| Cloud auth token     | TPM cache | 24 hours      | Sync engine   |
+| Encryption keys      | TPM       | On compromise | Local storage |
 
 ---
 
@@ -174,7 +179,7 @@ resource apiKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
 name: Secret Rotation
 on:
   schedule:
-    - cron: '0 0 1 */3 *'  # Quarterly
+    - cron: "0 0 1 */3 *" # Quarterly
   workflow_dispatch:
 
 jobs:
@@ -199,12 +204,12 @@ jobs:
 
 ### RBAC Roles
 
-| Role | Permissions | Assigned To |
-|------|-------------|-------------|
-| Key Vault Administrator | Full access | Jurie (break-glass) |
+| Role                      | Permissions        | Assigned To             |
+| ------------------------- | ------------------ | ----------------------- |
+| Key Vault Administrator   | Full access        | Jurie (break-glass)     |
 | Key Vault Secrets Officer | Read/write secrets | CI/CD service principal |
-| Key Vault Secrets User | Read secrets | Function App MI |
-| Key Vault Crypto User | Use keys | Edge devices |
+| Key Vault Secrets User    | Read secrets       | Function App MI         |
+| Key Vault Crypto User     | Use keys           | Edge devices            |
 
 ### Managed Identity Flow
 
@@ -240,11 +245,11 @@ AzureDiagnostics
 
 ### Alerts
 
-| Alert | Condition | Action |
-|-------|-----------|--------|
-| Unauthorized access | 403 errors > 5/hour | Page on-call |
-| Secret expiring | Days to expiry < 14 | Create rotation ticket |
-| Unusual access pattern | Access from new IP | Security review |
+| Alert                  | Condition           | Action                 |
+| ---------------------- | ------------------- | ---------------------- |
+| Unauthorized access    | 403 errors > 5/hour | Page on-call           |
+| Secret expiring        | Days to expiry < 14 | Create rotation ticket |
+| Unusual access pattern | Access from new IP  | Security review        |
 
 ---
 

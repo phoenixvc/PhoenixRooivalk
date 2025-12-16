@@ -25,8 +25,11 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: System failures, security incidents, and operational issues require standardized response procedures to minimize impact and ensure consistent handling
-2. **Decision**: Implement structured incident response framework with severity classification, escalation paths, and automated runbooks
+1. **Problem**: System failures, security incidents, and operational issues
+   require standardized response procedures to minimize impact and ensure
+   consistent handling
+2. **Decision**: Implement structured incident response framework with severity
+   classification, escalation paths, and automated runbooks
 3. **Trade-off**: Process overhead vs. response consistency and speed
 
 ---
@@ -35,27 +38,28 @@ prerequisites:
 
 ### Incident Types
 
-| Category | Examples |
-|----------|----------|
-| System | Service outage, performance degradation |
-| Security | Breach attempt, data exposure |
-| Operational | Engagement failure, sensor malfunction |
-| Data | Corruption, sync failure, evidence loss |
+| Category    | Examples                                |
+| ----------- | --------------------------------------- |
+| System      | Service outage, performance degradation |
+| Security    | Breach attempt, data exposure           |
+| Operational | Engagement failure, sensor malfunction  |
+| Data        | Corruption, sync failure, evidence loss |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Detection | <5 minutes for critical issues |
-| Response | <15 minutes for SEV1 |
+| Requirement   | Specification                        |
+| ------------- | ------------------------------------ |
+| Detection     | <5 minutes for critical issues       |
+| Response      | <15 minutes for SEV1                 |
 | Communication | Stakeholder updates every 30 minutes |
-| Resolution | Documented RCA within 48 hours |
+| Resolution    | Documented RCA within 48 hours       |
 
 ---
 
 ## Decision
 
-Implement **structured incident response** with automated detection and runbooks:
+Implement **structured incident response** with automated detection and
+runbooks:
 
 ### Incident Framework
 
@@ -108,12 +112,12 @@ Implement **structured incident response** with automated detection and runbooks
 
 ### Severity Levels
 
-| Level | Name | Criteria | Response Time |
-|-------|------|----------|---------------|
-| SEV1 | Critical | Complete outage, data loss, security breach | <15 min |
-| SEV2 | Major | Significant degradation, partial outage | <1 hour |
-| SEV3 | Minor | Limited impact, workaround available | <4 hours |
-| SEV4 | Low | Minimal impact, cosmetic issues | <24 hours |
+| Level | Name     | Criteria                                    | Response Time |
+| ----- | -------- | ------------------------------------------- | ------------- |
+| SEV1  | Critical | Complete outage, data loss, security breach | <15 min       |
+| SEV2  | Major    | Significant degradation, partial outage     | <1 hour       |
+| SEV3  | Minor    | Limited impact, workaround available        | <4 hours      |
+| SEV4  | Low      | Minimal impact, cosmetic issues             | <24 hours     |
 
 ### Classification Matrix
 
@@ -208,12 +212,12 @@ pub enum IncidentStatus {
 
 ### Escalation Matrix
 
-| Severity | Primary | Escalate After | Secondary |
-|----------|---------|----------------|-----------|
-| SEV1 | On-call engineer | 15 min | Engineering lead + Management |
-| SEV2 | On-call engineer | 1 hour | Engineering lead |
-| SEV3 | Assigned engineer | 4 hours | Team lead |
-| SEV4 | Assigned engineer | 24 hours | Team lead |
+| Severity | Primary           | Escalate After | Secondary                     |
+| -------- | ----------------- | -------------- | ----------------------------- |
+| SEV1     | On-call engineer  | 15 min         | Engineering lead + Management |
+| SEV2     | On-call engineer  | 1 hour         | Engineering lead              |
+| SEV3     | Assigned engineer | 4 hours        | Team lead                     |
+| SEV4     | Assigned engineer | 24 hours       | Team lead                     |
 
 ### Automated Escalation
 
@@ -401,28 +405,33 @@ impl RunbookExecutor {
 ```markdown
 ## Incident Update - {{ incident.id }}
 
-**Status**: {{ incident.status }}
-**Severity**: {{ incident.severity }}
+**Status**: {{ incident.status }} **Severity**: {{ incident.severity }}
 **Duration**: {{ duration_since(incident.detected_at) }}
 
 ### Current Situation
+
 {{ current_situation }}
 
 ### Impact
+
 - Affected systems: {{ incident.affected_systems | join(", ") }}
 - User impact: {{ incident.user_impact }}
 
 ### Actions Taken
+
 {{ actions_taken }}
 
 ### Next Steps
+
 {{ next_steps }}
 
 ### Next Update
+
 Expected in {{ next_update_minutes }} minutes or when status changes.
 
 ---
-*Incident Commander: {{ incident.owner }}*
+
+_Incident Commander: {{ incident.owner }}_
 ```
 
 ---

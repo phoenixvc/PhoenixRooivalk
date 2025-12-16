@@ -77,7 +77,9 @@
   border-radius: 6px;
   background: var(--ifm-background-surface-color);
   color: var(--ifm-color-content);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .access-form-field input:focus,

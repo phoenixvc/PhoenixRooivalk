@@ -21,7 +21,7 @@ const POLL_INTERVAL = 5000; // 5 seconds
 export function subscribeToInlineComments(
   pageId: string,
   onUpdate: (comments: InlineComment[]) => void,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
 ): (() => void) | undefined {
   if (!isCloudConfigured()) {
     onUpdate([]);
@@ -45,7 +45,9 @@ export function subscribeToInlineComments(
       }
     } catch (err) {
       if (isActive) {
-        onError(err instanceof Error ? err : new Error("Failed to fetch comments"));
+        onError(
+          err instanceof Error ? err : new Error("Failed to fetch comments"),
+        );
       }
     }
   };
@@ -66,7 +68,9 @@ export function subscribeToInlineComments(
 /**
  * Add a new inline comment
  */
-export async function addInlineComment(input: InlineCommentInput): Promise<InlineComment | null> {
+export async function addInlineComment(
+  input: InlineCommentInput,
+): Promise<InlineComment | null> {
   if (!isCloudConfigured()) return null;
 
   try {
@@ -125,7 +129,9 @@ export async function deleteInlineComment(commentId: string): Promise<boolean> {
 /**
  * Mark an inline comment as resolved
  */
-export async function resolveInlineComment(commentId: string): Promise<boolean> {
+export async function resolveInlineComment(
+  commentId: string,
+): Promise<boolean> {
   if (!isCloudConfigured()) return false;
 
   try {
@@ -144,7 +150,9 @@ export async function resolveInlineComment(commentId: string): Promise<boolean> 
 /**
  * Get all inline comments for a page
  */
-export async function getInlineComments(pageId: string): Promise<InlineComment[]> {
+export async function getInlineComments(
+  pageId: string,
+): Promise<InlineComment[]> {
   if (!isCloudConfigured()) return [];
 
   try {

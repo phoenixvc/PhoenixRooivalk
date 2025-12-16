@@ -337,7 +337,11 @@
   display: inline-block;
   margin-top: 0.5rem;
   padding: 0.25rem 0.75rem;
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(251, 146, 60, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.2),
+    rgba(251, 146, 60, 0.2)
+  );
   border: 1px solid rgba(249, 115, 22, 0.4);
   border-radius: 999px;
   font-size: 0.75rem;

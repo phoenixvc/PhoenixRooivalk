@@ -26,8 +26,11 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Phoenix Rooivalk's counter-UAS technology is subject to South African export controls under the National Conventional Arms Control Act (NCAC Act)
-2. **Decision**: Implement dual-compliance architecture that satisfies both SA NCACC requirements and US ITAR readiness
+1. **Problem**: Phoenix Rooivalk's counter-UAS technology is subject to South
+   African export controls under the National Conventional Arms Control Act
+   (NCAC Act)
+2. **Decision**: Implement dual-compliance architecture that satisfies both SA
+   NCACC requirements and US ITAR readiness
 3. **Trade-off**: Compliance overhead vs. international market access
 
 ---
@@ -36,22 +39,22 @@ prerequisites:
 
 ### South African Regulatory Framework
 
-| Regulation | Authority | Scope |
-|------------|-----------|-------|
-| NCAC Act (2002) | NCACC | Conventional arms, ammunition, related equipment |
-| Non-Proliferation Act | NPC | WMD-related, dual-use |
-| Firearms Control Act | SAPS | Civilian firearms |
-| Civil Aviation Act | SACAA | UAV operations |
+| Regulation            | Authority | Scope                                            |
+| --------------------- | --------- | ------------------------------------------------ |
+| NCAC Act (2002)       | NCACC     | Conventional arms, ammunition, related equipment |
+| Non-Proliferation Act | NPC       | WMD-related, dual-use                            |
+| Firearms Control Act  | SAPS      | Civilian firearms                                |
+| Civil Aviation Act    | SACAA     | UAV operations                                   |
 
 ### NCACC Controlled Items (Relevant)
 
-| Category | Description | Phoenix Relevance |
-|----------|-------------|-------------------|
-| ML4 | Bombs, torpedoes, missiles | Net launcher TBD |
-| ML5 | Fire control systems | Targeting system |
-| ML11 | Electronic equipment | Sensors, radar |
-| ML21 | Software for controlled items | AI/ML algorithms |
-| ML22 | Technology for controlled items | Technical data |
+| Category | Description                     | Phoenix Relevance |
+| -------- | ------------------------------- | ----------------- |
+| ML4      | Bombs, torpedoes, missiles      | Net launcher TBD  |
+| ML5      | Fire control systems            | Targeting system  |
+| ML11     | Electronic equipment            | Sensors, radar    |
+| ML21     | Software for controlled items   | AI/ML algorithms  |
+| ML22     | Technology for controlled items | Technical data    |
 
 ### Why This Matters
 
@@ -68,8 +71,8 @@ prerequisites:
 
 Focus only on ITAR, address NCACC later.
 
-**Pros**: Simpler initial compliance
-**Cons**:
+**Pros**: Simpler initial compliance **Cons**:
+
 - **Illegal exports**: SA exports without NCACC approval are criminal
 - **Retroactive compliance**: Cannot undo violations
 - **Market restriction**: Cannot export from SA
@@ -79,11 +82,13 @@ Focus only on ITAR, address NCACC later.
 Design for both NCACC and ITAR from the start.
 
 **Pros**:
+
 - **Legal operations**: Compliant in both jurisdictions
 - **Market flexibility**: Can export to US and other markets
 - **Investor confidence**: Demonstrates regulatory sophistication
 
 **Cons**:
+
 - **Complexity**: Two compliance regimes
 - **Cost**: Dual permit applications
 
@@ -134,12 +139,12 @@ Adopt **dual-compliance architecture** with:
 
 ### Permit Types
 
-| Type | Use Case | Validity |
-|------|----------|----------|
-| Registration | Required for all arms dealers | Annual |
-| Export Permit | Each export transaction | Per shipment |
-| End-User Certificate | Required from recipient | Per transaction |
-| Transit Permit | Goods passing through SA | Per transit |
+| Type                 | Use Case                      | Validity        |
+| -------------------- | ----------------------------- | --------------- |
+| Registration         | Required for all arms dealers | Annual          |
+| Export Permit        | Each export transaction       | Per shipment    |
+| End-User Certificate | Required from recipient       | Per transaction |
+| Transit Permit       | Goods passing through SA      | Per transit     |
 
 ### Application Process
 
@@ -187,24 +192,24 @@ Adopt **dual-compliance architecture** with:
 
 ### SA ML to US USML
 
-| SA Category | US Category | Phoenix Component |
-|-------------|-------------|-------------------|
-| ML4 | IV | Net launcher (TBD) |
-| ML5 | XII | Targeting/fire control |
-| ML11 | XI | Sensors, electronics |
-| ML21 | - | Software |
-| ML22 | - | Technical data |
+| SA Category | US Category | Phoenix Component      |
+| ----------- | ----------- | ---------------------- |
+| ML4         | IV          | Net launcher (TBD)     |
+| ML5         | XII         | Targeting/fire control |
+| ML11        | XI          | Sensors, electronics   |
+| ML21        | -           | Software               |
+| ML22        | -           | Technical data         |
 
 ### Controlled Components Matrix
 
-| Component | SA ML | US USML | Controls Apply |
-|-----------|-------|---------|----------------|
-| Net launcher | ML4? | IV? | Pending classification |
-| Radar module | ML11 | XI | Yes (dual-use threshold) |
-| Targeting AI | ML21 | - | Yes (for controlled items) |
-| Sensor fusion | ML21 | XI | Yes |
-| Evidence system | No | No | General encryption rules |
-| Documentation portal | No | No | Public information |
+| Component            | SA ML | US USML | Controls Apply             |
+| -------------------- | ----- | ------- | -------------------------- |
+| Net launcher         | ML4?  | IV?     | Pending classification     |
+| Radar module         | ML11  | XI      | Yes (dual-use threshold)   |
+| Targeting AI         | ML21  | -       | Yes (for controlled items) |
+| Sensor fusion        | ML21  | XI      | Yes                        |
+| Evidence system      | No    | No      | General encryption rules   |
+| Documentation portal | No    | No      | Public information         |
 
 ---
 
@@ -294,13 +299,13 @@ impl DualExportControl {
 
 ### Required Documentation
 
-| Document | SA Requirement | US Requirement | Retention |
-|----------|----------------|----------------|-----------|
-| Export permits | 5 years | 5 years | 5 years |
-| End-user certificates | 5 years | 5 years | 5 years |
-| Delivery verification | Yes | Varies | 5 years |
-| Technology transfer records | Yes | Yes | 5 years |
-| Classification determinations | Recommended | Required | Indefinite |
+| Document                      | SA Requirement | US Requirement | Retention  |
+| ----------------------------- | -------------- | -------------- | ---------- |
+| Export permits                | 5 years        | 5 years        | 5 years    |
+| End-user certificates         | 5 years        | 5 years        | 5 years    |
+| Delivery verification         | Yes            | Varies         | 5 years    |
+| Technology transfer records   | Yes            | Yes            | 5 years    |
+| Classification determinations | Recommended    | Required       | Indefinite |
 
 ### Audit Log Structure
 
@@ -333,27 +338,27 @@ pub enum ExportControlEvent {
 
 ### Phase 1: Classification (Q1 2026)
 
-| Task | Owner | Status |
-|------|-------|--------|
+| Task                         | Owner | Status  |
+| ---------------------------- | ----- | ------- |
 | Request NCACC classification | Legal | Planned |
 | Document ML category mapping | Jurie | Planned |
-| Parallel USML assessment | Legal | Planned |
+| Parallel USML assessment     | Legal | Planned |
 
 ### Phase 2: Registration (Q1-Q2 2026)
 
-| Task | Owner | Status |
-|------|-------|--------|
-| NCACC dealer registration | Martyn | Planned |
-| Compliance officer appointment | Team | Planned |
-| Internal controls implementation | Jurie | Planned |
+| Task                             | Owner  | Status  |
+| -------------------------------- | ------ | ------- |
+| NCACC dealer registration        | Martyn | Planned |
+| Compliance officer appointment   | Team   | Planned |
+| Internal controls implementation | Jurie  | Planned |
 
 ### Phase 3: First Export (When needed)
 
-| Task | Owner | Status |
-|------|-------|--------|
+| Task                           | Owner | Status |
+| ------------------------------ | ----- | ------ |
 | End-user certificate from SOSV | Legal | Future |
-| Export permit application | Legal | Future |
-| DDTC registration (US) | Legal | Future |
+| Export permit application      | Legal | Future |
+| DDTC registration (US)         | Legal | Future |
 
 ---
 
@@ -361,20 +366,20 @@ pub enum ExportControlEvent {
 
 ### SA NCACC Costs
 
-| Item | Cost (ZAR) | Frequency |
-|------|------------|-----------|
-| Dealer registration | ~R5,000 | Annual |
-| Export permit application | ~R1,000 | Per export |
-| Legal consultation | R50,000+ | As needed |
-| Compliance officer | R200,000+ | Annual (part-time) |
+| Item                      | Cost (ZAR) | Frequency          |
+| ------------------------- | ---------- | ------------------ |
+| Dealer registration       | ~R5,000    | Annual             |
+| Export permit application | ~R1,000    | Per export         |
+| Legal consultation        | R50,000+   | As needed          |
+| Compliance officer        | R200,000+  | Annual (part-time) |
 
 ### Combined Compliance Budget
 
-| Item | Annual Cost (USD) |
-|------|-------------------|
-| SA compliance | ~$15,000 |
-| US compliance (when active) | ~$45,000 |
-| **Total (dual)** | **~$60,000** |
+| Item                        | Annual Cost (USD) |
+| --------------------------- | ----------------- |
+| SA compliance               | ~$15,000          |
+| US compliance (when active) | ~$45,000          |
+| **Total (dual)**            | **~$60,000**      |
 
 ---
 

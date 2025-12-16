@@ -42,9 +42,7 @@ export function isInternalDomain(email?: string | null): boolean {
  * Check if an email is a known internal user email (local fallback).
  * Returns the profile key if found, null otherwise.
  */
-export function getKnownInternalEmail(
-  email?: string | null,
-): string | null {
+export function getKnownInternalEmail(email?: string | null): string | null {
   if (!email) return null;
   const normalizedEmail = email.toLowerCase().trim();
   return KNOWN_INTERNAL_EMAILS[normalizedEmail] || null;
@@ -67,7 +65,10 @@ export async function getKnownInternalEmailAsync(
       return result.profileKey;
     }
   } catch (error) {
-    console.warn("Failed to check known email from API, using local fallback:", error);
+    console.warn(
+      "Failed to check known email from API, using local fallback:",
+      error,
+    );
   }
 
   // Fallback to local list

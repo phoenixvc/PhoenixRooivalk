@@ -108,9 +108,7 @@ export default function LoginPage(): React.ReactElement {
             </div>
           ) : user ? (
             <div className={styles.loginWelcome}>
-              <h1>
-                {needsSetup ? "Complete Your Setup" : "Welcome back!"}
-              </h1>
+              <h1>{needsSetup ? "Complete Your Setup" : "Welcome back!"}</h1>
               <div className={styles.userInfo}>
                 {user.photoURL && (
                   <img

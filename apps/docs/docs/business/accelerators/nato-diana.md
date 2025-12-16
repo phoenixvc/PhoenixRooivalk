@@ -15,20 +15,20 @@ tags:
 # NATO DIANA - Defence Innovation Accelerator for the North Atlantic
 
 **NATO DIANA** accelerates transatlantic defence innovation by connecting
-deep-tech startups with Allied defence and security challenges. One of the
-most prestigious defense accelerator programs globally.
+deep-tech startups with Allied defence and security challenges. One of the most
+prestigious defense accelerator programs globally.
 
 ---
 
 ## Program Overview
 
-| Aspect | Details |
-|--------|---------|
-| **Organizer** | NATO |
-| **Launched** | 2022 |
-| **Funding** | €100K+ contractual funding |
-| **Duration** | 6-month accelerator program (Phase 1) |
-| **Test Facilities** | 180+ across Europe and North America |
+| Aspect              | Details                               |
+| ------------------- | ------------------------------------- |
+| **Organizer**       | NATO                                  |
+| **Launched**        | 2022                                  |
+| **Funding**         | €100K+ contractual funding            |
+| **Duration**        | 6-month accelerator program (Phase 1) |
+| **Test Facilities** | 180+ across Europe and North America  |
 
 ---
 
@@ -46,6 +46,7 @@ most prestigious defense accelerator programs globally.
 **Contested Electromagnetic Environments**
 
 Focus areas include:
+
 - Electronic warfare
 - Spectrum management
 - RF resilience
@@ -55,14 +56,14 @@ Focus areas include:
 
 ## What You Get
 
-| Benefit | Description |
-|---------|-------------|
-| **Funding** | €100K+ non-dilutive |
-| **Test Facilities** | Access to 180+ facilities |
-| **Mentorship** | NATO and industry experts |
-| **Network** | All NATO member nations |
-| **Validation** | NATO credibility for future sales |
-| **Follow-on** | Phase 2 opportunities |
+| Benefit             | Description                       |
+| ------------------- | --------------------------------- |
+| **Funding**         | €100K+ non-dilutive               |
+| **Test Facilities** | Access to 180+ facilities         |
+| **Mentorship**      | NATO and industry experts         |
+| **Network**         | All NATO member nations           |
+| **Validation**      | NATO credibility for future sales |
+| **Follow-on**       | Phase 2 opportunities             |
 
 ---
 
@@ -70,30 +71,31 @@ Focus areas include:
 
 DIANA operates through regional accelerator hubs:
 
-| Region | Location | Partner |
-|--------|----------|---------|
-| **UK** | London (Imperial) | Janus Consortium |
-| **Estonia** | Tallinn | NATO CCD COE |
-| **Canada** | Various | IDEaS Program |
-| **US** | Various | DIU Partnership |
+| Region      | Location          | Partner          |
+| ----------- | ----------------- | ---------------- |
+| **UK**      | London (Imperial) | Janus Consortium |
+| **Estonia** | Tallinn           | NATO CCD COE     |
+| **Canada**  | Various           | IDEaS Program    |
+| **US**      | Various           | DIU Partnership  |
 
 ---
 
 ## Eligibility
 
-| Requirement | Status |
-|-------------|--------|
-| NATO member state company | Required |
-| Deep-tech focus | Required |
-| Dual-use technology | Preferred |
-| TRL 3-6 | Typical range |
+| Requirement               | Status        |
+| ------------------------- | ------------- |
+| NATO member state company | Required      |
+| Deep-tech focus           | Required      |
+| Dual-use technology       | Preferred     |
+| TRL 3-6                   | Typical range |
 
 :::warning Eligibility Restriction
 
-DIANA is restricted to companies from **NATO member states**. This includes
-31 countries but does **not** include South Africa.
+DIANA is restricted to companies from **NATO member states**. This includes 31
+countries but does **not** include South Africa.
 
 **Options for Phoenix Rooivalk:**
+
 - Establish presence in NATO member state
 - Partner with NATO-country company
 - License technology to NATO-country partner
@@ -117,6 +119,7 @@ DIANA is restricted to companies from **NATO member states**. This includes
 ## Success Metrics
 
 From 2025 cohort:
+
 - 3,680 applications received
 - ~150 companies selected
 - 4% acceptance rate
@@ -128,15 +131,15 @@ From 2025 cohort:
 
 NATO DIANA addresses emerging and disruptive technologies:
 
-| Technology | Relevance |
-|------------|-----------|
-| AI/ML | High - autonomous systems |
-| Autonomy | High - UAS/counter-UAS |
-| Biotechnology | Low |
-| Energy | Medium |
-| Quantum | Low |
-| Space | Medium |
-| **Counter-UAS** | **High** |
+| Technology      | Relevance                 |
+| --------------- | ------------------------- |
+| AI/ML           | High - autonomous systems |
+| Autonomy        | High - UAS/counter-UAS    |
+| Biotechnology   | Low                       |
+| Energy          | Medium                    |
+| Quantum         | Low                       |
+| Space           | Medium                    |
+| **Counter-UAS** | **High**                  |
 
 ---
 
@@ -145,16 +148,19 @@ NATO DIANA addresses emerging and disruptive technologies:
 ### Path to DIANA Eligibility
 
 **Option 1: UK Subsidiary**
+
 - Establish UK limited company
 - Apply through Janus/DASA pipeline
 - Leverage Commonwealth connections
 
 **Option 2: EU Subsidiary**
+
 - Establish EU entity (Ireland, Netherlands)
 - Access European DIANA accelerators
 - EUDIS pathway first
 
 **Option 3: Partnership**
+
 - Partner with NATO-country company
 - Joint application
 - Technology license arrangement
@@ -180,19 +186,20 @@ Q4 2026: Prepare if selected
 
 ## Phoenix Rooivalk Fit Assessment
 
-| Criteria | Score | Notes |
-|----------|-------|-------|
-| Technology Fit | High | Counter-UAS highly relevant |
-| Stage Fit | High | TRL 3-6 appropriate |
-| Geographic Fit | Low | Not NATO member |
-| Prestige Value | Very High | NATO validation invaluable |
-| **Overall Fit** | **Medium** | Geographic barrier |
+| Criteria        | Score      | Notes                       |
+| --------------- | ---------- | --------------------------- |
+| Technology Fit  | High       | Counter-UAS highly relevant |
+| Stage Fit       | High       | TRL 3-6 appropriate         |
+| Geographic Fit  | Low        | Not NATO member             |
+| Prestige Value  | Very High  | NATO validation invaluable  |
+| **Overall Fit** | **Medium** | Geographic barrier          |
 
 ---
 
 ## Why DIANA Matters
 
 NATO validation provides:
+
 - Credibility with all 31 member nations
 - Access to massive procurement pipeline
 - Technical validation from military experts

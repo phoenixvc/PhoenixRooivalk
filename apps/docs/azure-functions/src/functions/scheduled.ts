@@ -303,7 +303,11 @@ async function generateWeeklyReportJob(
         weekEnd: result.report?.weekEndDate,
       });
     } else {
-      jobLogger.error("Weekly report generation failed", new Error(result.error || "Unknown error"), {});
+      jobLogger.error(
+        "Weekly report generation failed",
+        new Error(result.error || "Unknown error"),
+        {},
+      );
     }
   } catch (error) {
     jobLogger.error("Weekly report generation failed", error as Error, {});

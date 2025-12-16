@@ -9,7 +9,10 @@ import {
   KnownEmail,
   KnownEmailFilters,
 } from "../repositories/known-emails.repository";
-import { PaginatedResult, PaginationOptions } from "../repositories/base.repository";
+import {
+  PaginatedResult,
+  PaginationOptions,
+} from "../repositories/base.repository";
 
 /**
  * Input data for adding a known email

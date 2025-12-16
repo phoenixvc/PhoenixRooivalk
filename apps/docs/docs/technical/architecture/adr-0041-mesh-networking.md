@@ -26,9 +26,13 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Multi-node C-UAS deployments require resilient communication in contested/denied environments where traditional infrastructure may be unavailable or compromised
-2. **Decision**: Implement self-organizing mesh network with multiple radio technologies, automatic failover, and distributed coordination
-3. **Trade-off**: Network complexity vs. operational resilience and coverage extension
+1. **Problem**: Multi-node C-UAS deployments require resilient communication in
+   contested/denied environments where traditional infrastructure may be
+   unavailable or compromised
+2. **Decision**: Implement self-organizing mesh network with multiple radio
+   technologies, automatic failover, and distributed coordination
+3. **Trade-off**: Network complexity vs. operational resilience and coverage
+   extension
 
 ---
 
@@ -36,24 +40,24 @@ prerequisites:
 
 ### Operational Scenarios
 
-| Scenario | Nodes | Communication Challenge |
-|----------|-------|------------------------|
-| Airport perimeter | 5-10 | Large area, some infrastructure |
-| Military forward base | 3-5 | No infrastructure, jamming likely |
-| Stadium event | 10-20 | Dense RF environment, temporary |
-| Border patrol | 2-5 | Mobile, extreme distances |
-| Prison | 3-8 | Fixed positions, no external links |
+| Scenario              | Nodes | Communication Challenge            |
+| --------------------- | ----- | ---------------------------------- |
+| Airport perimeter     | 5-10  | Large area, some infrastructure    |
+| Military forward base | 3-5   | No infrastructure, jamming likely  |
+| Stadium event         | 10-20 | Dense RF environment, temporary    |
+| Border patrol         | 2-5   | Mobile, extreme distances          |
+| Prison                | 3-8   | Fixed positions, no external links |
 
 ### Requirements
 
-| Requirement | Specification |
-|-------------|---------------|
-| Self-healing | Auto-route around failed nodes |
-| Range extension | Relay through intermediate nodes |
-| Latency | <100ms for tactical data |
-| Bandwidth | 1 Mbps minimum per link |
-| Security | End-to-end encryption |
-| Jamming resilience | Multiple frequency bands |
+| Requirement        | Specification                    |
+| ------------------ | -------------------------------- |
+| Self-healing       | Auto-route around failed nodes   |
+| Range extension    | Relay through intermediate nodes |
+| Latency            | <100ms for tactical data         |
+| Bandwidth          | 1 Mbps minimum per link          |
+| Security           | End-to-end encryption            |
+| Jamming resilience | Multiple frequency bands         |
 
 ---
 
@@ -97,12 +101,12 @@ Implement **multi-layer mesh network** with automatic failover:
 
 ### Multi-Band Approach
 
-| Band | Technology | Range | Bandwidth | Use Case |
-|------|------------|-------|-----------|----------|
-| 900 MHz | LoRa | 10+ km | 50 kbps | Control, status |
-| 2.4 GHz | WiFi Mesh | 500m | 50 Mbps | Video, bulk data |
-| 5.8 GHz | WiFi Mesh | 300m | 100 Mbps | High bandwidth |
-| UHF | Custom SDR | 20+ km | 1 Mbps | Long range backup |
+| Band    | Technology | Range  | Bandwidth | Use Case          |
+| ------- | ---------- | ------ | --------- | ----------------- |
+| 900 MHz | LoRa       | 10+ km | 50 kbps   | Control, status   |
+| 2.4 GHz | WiFi Mesh  | 500m   | 50 Mbps   | Video, bulk data  |
+| 5.8 GHz | WiFi Mesh  | 300m   | 100 Mbps  | High bandwidth    |
+| UHF     | Custom SDR | 20+ km | 1 Mbps    | Long-range backup |
 
 ### Radio Stack
 

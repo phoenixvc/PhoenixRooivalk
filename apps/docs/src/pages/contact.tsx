@@ -324,7 +324,8 @@ export default function Contact(): React.ReactElement {
           <section className={styles.bookingSection}>
             <h2>Schedule a Meeting</h2>
             <p className={styles.bookingSectionDescription}>
-              Book time directly with our team for demos, consultations, or investor discussions.
+              Book time directly with our team for demos, consultations, or
+              investor discussions.
             </p>
             <BookingWidget
               calUsername="phoenixrooivalk"
@@ -335,21 +336,24 @@ export default function Contact(): React.ReactElement {
                   id: "demo",
                   name: "Product Demo",
                   duration: 30,
-                  description: "See Phoenix Rooivalk in action - live system demonstration",
+                  description:
+                    "See Phoenix Rooivalk in action - live system demonstration",
                   slug: "demo",
                 },
                 {
                   id: "consultation",
                   name: "Technical Consultation",
                   duration: 45,
-                  description: "Discuss your counter-UAS requirements with our engineering team",
+                  description:
+                    "Discuss your counter-UAS requirements with our engineering team",
                   slug: "consultation",
                 },
                 {
                   id: "investor",
                   name: "Investor Meeting",
                   duration: 60,
-                  description: "Investment opportunity discussion with founding team",
+                  description:
+                    "Investment opportunity discussion with founding team",
                   slug: "investor-meeting",
                 },
                 {

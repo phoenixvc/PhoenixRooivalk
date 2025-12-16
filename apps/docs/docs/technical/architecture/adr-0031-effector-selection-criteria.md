@@ -25,8 +25,10 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Counter-UAS systems require appropriate effector selection based on threat type, environment, and rules of engagement
-2. **Decision**: Implement tiered effector framework with automated selection based on threat classification, environment constraints, and ROE parameters
+1. **Problem**: Counter-UAS systems require appropriate effector selection based
+   on threat type, environment, and rules of engagement
+2. **Decision**: Implement tiered effector framework with automated selection
+   based on threat classification, environment constraints, and ROE parameters
 3. **Trade-off**: Operational flexibility vs. system complexity and cost
 
 ---
@@ -35,12 +37,12 @@ prerequisites:
 
 ### Effector Categories
 
-| Category | Examples | Characteristics |
-|----------|----------|-----------------|
-| Kinetic | Projectiles, missiles | Lethal, high collateral risk |
-| Non-kinetic capture | Nets, tethers | Non-lethal, evidence preservation |
-| Electronic | Jamming, spoofing | Non-destructive, spectrum regulations |
-| Directed energy | Lasers, HPM | Precision, power requirements |
+| Category            | Examples              | Characteristics                       |
+| ------------------- | --------------------- | ------------------------------------- |
+| Kinetic             | Projectiles, missiles | Lethal, high collateral risk          |
+| Non-kinetic capture | Nets, tethers         | Non-lethal, evidence preservation     |
+| Electronic          | Jamming, spoofing     | Non-destructive, spectrum regulations |
+| Directed energy     | Lasers, HPM           | Precision, power requirements         |
 
 ### Selection Factors
 
@@ -153,13 +155,13 @@ impl EffectorSelector {
 
 ### Selection Criteria Weights
 
-| Criterion | Weight | Description |
-|-----------|--------|-------------|
-| Effectiveness | 30% | Probability of successful neutralization |
-| Collateral risk | 25% | Risk to bystanders and property |
-| Evidence preservation | 20% | Ability to capture drone for forensics |
-| Cost efficiency | 15% | Cost per engagement |
-| Legal compliance | 10% | Regulatory approval status |
+| Criterion             | Weight | Description                              |
+| --------------------- | ------ | ---------------------------------------- |
+| Effectiveness         | 30%    | Probability of successful neutralization |
+| Collateral risk       | 25%    | Risk to bystanders and property          |
+| Evidence preservation | 20%    | Ability to capture drone for forensics   |
+| Cost efficiency       | 15%    | Cost per engagement                      |
+| Legal compliance      | 10%    | Regulatory approval status               |
 
 ---
 
@@ -167,14 +169,14 @@ impl EffectorSelector {
 
 ### Environment Classification
 
-| Environment | Kinetic | Electronic | Net Launcher | Notes |
-|-------------|---------|------------|--------------|-------|
-| Military base | ✅ | ✅ | ✅ | Full authorization |
-| Airport | ❌ | ⚠️ | ✅ | RF restrictions |
-| Stadium | ❌ | ❌ | ✅ | Civilian density |
-| Prison | ❌ | ⚠️ | ✅ | Controlled airspace |
-| Border | ✅ | ✅ | ✅ | Remote location |
-| Urban | ❌ | ❌ | ⚠️ | High collateral risk |
+| Environment   | Kinetic | Electronic | Net Launcher | Notes                |
+| ------------- | ------- | ---------- | ------------ | -------------------- |
+| Military base | ✅      | ✅         | ✅           | Full authorization   |
+| Airport       | ❌      | ⚠️         | ✅           | RF restrictions      |
+| Stadium       | ❌      | ❌         | ✅           | Civilian density     |
+| Prison        | ❌      | ⚠️         | ✅           | Controlled airspace  |
+| Border        | ✅      | ✅         | ✅           | Remote location      |
+| Urban         | ❌      | ❌         | ⚠️           | High collateral risk |
 
 ### Constraint Enforcement
 
@@ -216,12 +218,12 @@ impl EnvironmentAnalyzer {
 
 ### Authorization Levels
 
-| Level | Authority | Allowed Tiers | Latency |
-|-------|-----------|---------------|---------|
-| Pre-authorized | Standing order | 1-2 | 0ms |
-| Operator | Local operator | 1-3 | <5s |
-| Command | Ops center | 1-4 | <30s |
-| Executive | Senior command | All | Variable |
+| Level          | Authority      | Allowed Tiers | Latency  |
+| -------------- | -------------- | ------------- | -------- |
+| Pre-authorized | Standing order | 1-2           | 0ms      |
+| Operator       | Local operator | 1-3           | <5s      |
+| Command        | Ops center     | 1-4           | <30s     |
+| Executive      | Senior command | All           | Variable |
 
 ### ROE Parameters
 
@@ -248,12 +250,12 @@ pub struct RulesOfEngagement {
 
 ### Phoenix Rooivalk Effector Roadmap
 
-| Effector | Tier | Status | Target Date |
-|----------|------|--------|-------------|
-| Net Launcher v1 | 3 | Prototype | Q1 2026 |
-| Acoustic Deterrent | 2 | Planned | Q2 2026 |
-| RF Jammer (licensed) | 2 | Research | Q3 2026 |
-| Net Launcher v2 (multi-shot) | 3 | Planned | Q3 2026 |
+| Effector                     | Tier | Status    | Target Date |
+| ---------------------------- | ---- | --------- | ----------- |
+| Net Launcher v1              | 3    | Prototype | Q1 2026     |
+| Acoustic Deterrent           | 2    | Planned   | Q2 2026     |
+| RF Jammer (licensed)         | 2    | Research  | Q3 2026     |
+| Net Launcher v2 (multi-shot) | 3    | Planned   | Q3 2026     |
 
 ### Effector Specifications
 
