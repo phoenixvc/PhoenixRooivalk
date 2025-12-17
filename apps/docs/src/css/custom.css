@@ -523,6 +523,18 @@ body,
   transition:
     transform 0.2s ease,
     opacity 0.2s ease;
+  /* Fix caret positioning */
+  position: relative;
+  top: 0;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Ensure menu link has proper flex layout for caret alignment */
+.menu__link--sublist-caret {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .menu__link--sublist-caret:hover::after {
@@ -2660,11 +2672,11 @@ article {
     opacity 0.2s ease;
 }
 
-/* Collapsed state */
+/* Collapsed state - minimal width */
 .theme-doc-sidebar-container.sidebar--collapsed {
-  --sidebar-width: 48px;
-  min-width: 48px;
-  width: 48px;
+  --sidebar-width: 20px;
+  min-width: 20px;
+  width: 20px;
 }
 
 .theme-doc-sidebar-container.sidebar--collapsed .menu,
@@ -2680,9 +2692,9 @@ article {
 .sidebar-toggle {
   position: absolute;
   top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   background: var(--pr-bg-muted);
   border: 1px solid var(--pr-border-muted);
@@ -2691,7 +2703,7 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 9px;
   z-index: 100;
   transition: all 0.15s ease;
   opacity: 0.7;
