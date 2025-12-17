@@ -47,8 +47,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dependencies (excluded - Azure SCM rebuilds them with scm-do-build-during-deployment)
-node_modules/
+# Dependencies are installed locally and deployed (scm-do-build-during-deployment is disabled)
+# node_modules/ - DO NOT exclude, we deploy pre-built with dependencies
 
 # Other build tools
 .eslintrc*
