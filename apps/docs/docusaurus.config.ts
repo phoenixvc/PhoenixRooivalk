@@ -43,7 +43,7 @@ const onBrokenLinksConfig =
     | "throw") || "warn";
 
 const marketingUrl =
-  process.env.MARKETING_URL || "https://phoenixrooivalk.netlify.app";
+  process.env.MARKETING_URL || process.env.NEXT_PUBLIC_MARKETING_URL || "";
 
 // Azure Entra ID configuration from environment variables (exposed to client via customFields)
 const azureConfig = {
@@ -73,7 +73,7 @@ const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
   favicon: "img/favicon.svg",
-  url: "https://docs-phoenixrooivalk.netlify.app",
+  url: process.env.DOCS_URL || process.env.NEXT_PUBLIC_DOCS_URL || "https://localhost:3000",
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",
@@ -407,7 +407,7 @@ const config: Config = {
           items: [
             {
               label: "About",
-              href: "https://phoenixrooivalk.netlify.app",
+              href: marketingUrl || "/",
             },
             {
               label: "Contact and Support",

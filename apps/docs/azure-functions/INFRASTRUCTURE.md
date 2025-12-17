@@ -289,7 +289,7 @@ az functionapp deployment list-publishing-profiles \
 | `AZURE_NOTIFICATION_HUB_NAME`              | ❌       | Notification hub name                                                    |
 | `NEWS_API_KEY`                             | ❌       | NewsAPI.org API key                                                      |
 | `BING_SEARCH_API_KEY`                      | ❌       | Bing News Search API key                                                 |
-| `BASE_URL`                                 | ❌       | Base URL for links (default: `https://docs-phoenixrooivalk.netlify.app`) |
+| `BASE_URL`                                 | ❌       | Base URL for links (should match your docs site URL)                    |
 
 \*Either `AZURE_AI_API_KEY` or `AZURE_ENTRA_AUTHORITY` is required for
 authentication.

@@ -6,8 +6,7 @@
 [![Docusaurus](https://img.shields.io/badge/Docusaurus-2CA5E0?logo=docusaurus&logoColor=white)](https://docusaurus.io/)
 [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![Turbo](https://img.shields.io/badge/Turbo-5C4EE5?logo=turbo&logoColor=white)](https://turbo.build/)
-[![Netlify](https://img.shields.io/badge/Netlify-00C7B7?logo=netlify&logoColor=white)](https://netlify.com/)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d93acd89-28c3-4edd-9af3-cd5497ceadb9/deploy-status)](https://app.netlify.com/projects/docs-phoenixrooivalk/deploys)
+[![Azure](https://img.shields.io/badge/Azure-0078D4?logo=microsoft-azure&logoColor=white)](https://azure.microsoft.com/)
 [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
 [![CodeQL](https://img.shields.io/badge/CodeQL-2088FF?logo=github&logoColor=white)](https://codeql.github.com/)
 [![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)](https://eslint.org/)
@@ -50,8 +49,12 @@ Modular Counter‑UAS System (restricted partner access)
 
 ## 🌐 Live Sites
 
-- **Marketing Website**: [phoenixrooivalk.netlify.app](https://phoenixrooivalk.netlify.app) - Interactive demo, capabilities overview, and contact information
-- **Documentation Site**: [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app) - Technical specifications, architecture, and implementation guides
+The project is deployed to Azure Static Web Apps via GitHub Actions:
+
+- **Marketing Website** - Interactive demo, capabilities overview, and contact information
+- **Documentation Site** - Technical specifications, architecture, and implementation guides
+
+See [Deployment](#deployment) section below for details on Azure infrastructure and CI/CD workflows.
 
 ## Monorepo overview
 
@@ -191,9 +194,7 @@ git push origin main
 - 📋 [Deployment Sequence](.github/DEPLOYMENT_SEQUENCE.md) - Detailed steps
 - 🔧 [Azure Setup](.github/AZURE_SETUP.md) - Secrets configuration
 
-**Legacy Netlify deployments** (kept for reference):
-- `.github/workflows/deploy-marketing-site.yml` - Marketing site (Netlify, disabled)
-- `.github/workflows/deploy-docs-site.yml.disabled` - Docs site (Netlify, disabled)
+
 
 Additional workflows:
 
@@ -215,9 +216,7 @@ if you want absolute cross‑links.
 
 ### Redirects
 
-- Marketing site publishes `public/_redirects` to forward common paths to the
-  docs site. Update the hostnames there to match your actual docs domain if it
-  changes.
+Azure Static Web Apps handles routing via `staticwebapp.config.json` files in each app. Update these files if you need to configure custom redirects or routing rules.
 
 > Notice: This repository contains restricted content intended for approved
 > defense partners. Redistribution or public disclosure is prohibited. See
@@ -261,9 +260,9 @@ For detailed specifications and planning baselines, see [`index.md`](./index.md)
 
 ## Documentation
 
-All project documentation is hosted on the live Docusaurus site:
+All project documentation is hosted on the live Docusaurus site (deployed to Azure Static Web Apps):
 
-- **📚 Documentation Portal**: [docs-phoenixrooivalk.netlify.app](https://docs-phoenixrooivalk.netlify.app)
+- **📚 Documentation Portal**:
   - Executive Summaries & Pitch Materials
   - Technical Architecture & Specifications
   - Business Plans & Market Analysis
@@ -272,6 +271,7 @@ All project documentation is hosted on the live Docusaurus site:
   - Funding Opportunities & Resources
 
 - **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment and configuration
+- **Azure Infrastructure**: [infra/azure/README.md](./infra/azure/README.md) - Azure deployment setup
 
 > **Note**: Documentation source files are in `apps/docs/`. Run `pnpm --filter docs start` to view locally.
 
@@ -304,14 +304,14 @@ This project is weapon‑agnostic by design. Integration of restricted payloads
 occurs only under applicable law and export controls. See
 [`RESPONSIBLE_USE.md`](./RESPONSIBLE_USE.md).
 
-## Site preview
+## Site Deployment
 
-Both sites are automatically deployed to Netlify via GitHub Actions:
+Both sites are automatically deployed to Azure Static Web Apps via GitHub Actions:
 
-- **Marketing Site**: Built with Next.js 14 and deployed from `apps/marketing/out/`
-- **Documentation Site**: Built with Docusaurus and deployed from `apps/docs/build/`
+- **Marketing Site**: Built with Next.js 14 (static export from `apps/marketing/out/`)
+- **Documentation Site**: Built with Docusaurus (static site from `apps/docs/build/`)
 
-You can view the live sites at the configured Netlify domains (see [Live Sites](#-live-sites) section above).
+Deployment is triggered automatically on push to `main` branch. See the [Deployment](#deployment) section and `.github/workflows/` for workflow details.
 
 ## Contributing
 

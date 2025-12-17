@@ -308,7 +308,7 @@ export const EmailTemplates = {
         <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
         <p style="color: #666; font-size: 12px;">
           You received this email because you subscribed to breaking news alerts from Phoenix Rooivalk.
-          <a href="${process.env.BASE_URL || "https://docs-phoenixrooivalk.netlify.app"}/unsubscribe">Unsubscribe</a>
+          <a href="${process.env.BASE_URL || process.env.DOCS_URL || ""}/unsubscribe">Unsubscribe</a>
         </p>
       </div>
     `,
@@ -339,7 +339,7 @@ export const EmailTemplates = {
           .join("")}
         <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
         <p style="color: #666; font-size: 12px;">
-          <a href="${process.env.BASE_URL || "https://docs-phoenixrooivalk.netlify.app"}/unsubscribe">Unsubscribe</a>
+          <a href="${process.env.BASE_URL || process.env.DOCS_URL || ""}/unsubscribe">Unsubscribe</a>
         </p>
       </div>
     `,
@@ -373,7 +373,7 @@ export const EmailTemplates = {
           .join("")}
         <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
         <p style="color: #666; font-size: 12px;">
-          <a href="${process.env.BASE_URL || "https://docs-phoenixrooivalk.netlify.app"}/unsubscribe">Unsubscribe</a>
+          <a href="${process.env.BASE_URL || process.env.DOCS_URL || ""}/unsubscribe">Unsubscribe</a>
         </p>
       </div>
     `,
