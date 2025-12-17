@@ -2676,14 +2676,14 @@ article {
   pointer-events: none;
 }
 
-/* Sidebar collapse toggle button */
+/* Sidebar collapse toggle button - More visible */
 .sidebar-toggle {
   position: absolute;
-  top: 12px;
-  right: -14px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   background: var(--pr-bg-muted);
   border: 1px solid var(--pr-border-muted);
   color: var(--pr-fg-muted);
@@ -2691,21 +2691,22 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 10px;
   z-index: 100;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease;
+  opacity: 0.7;
 }
 
 .sidebar-toggle:hover {
   background: var(--pr-brand-orange);
   border-color: var(--pr-brand-orange);
   color: white;
-  transform: scale(1.1);
+  opacity: 1;
 }
 
 .sidebar-toggle__icon {
   transition: transform 0.2s ease;
+  font-size: 10px;
 }
 
 .sidebar--collapsed .sidebar-toggle__icon {
@@ -2749,9 +2750,11 @@ article {
   background: var(--pr-brand-orange);
 }
 
-/* Collapsed sidebar toggle position */
+/* Collapsed sidebar toggle position - Centered in collapsed bar */
 .sidebar--collapsed .sidebar-toggle {
-  right: 10px;
+  right: 50%;
+  transform: translateX(50%);
+  opacity: 1;
 }
 
 /* Hide resize handle when collapsed */
