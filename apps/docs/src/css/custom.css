@@ -476,6 +476,10 @@ body,
   border-radius: var(--pr-radius-md);
   margin: 2px 0;
   transition: all var(--pr-duration-normal) var(--pr-ease);
+  /* Keep emoji icons and text on same line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu__link:hover {
@@ -509,6 +513,8 @@ body,
 .menu__list .menu__list .menu__link {
   padding-left: 0.75rem;
   font-size: 0.875rem;
+  /* Allow longer nested items to wrap */
+  white-space: normal;
 }
 
 /* Remove the angle bracket pseudo-element if present and use proper styling */
@@ -535,6 +541,10 @@ body,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Prevent emoji icons from wrapping to separate line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu__link--sublist-caret:hover::after {

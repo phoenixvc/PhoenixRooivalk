@@ -336,18 +336,18 @@
   display: none;
 }
 
-/* Multiple filters container - Flexible wrapping layout */
+/* Multiple filters container - Inline layout with clear button */
 .sidebar-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.375rem;
   align-items: center;
 }
 
 .sidebar-filters .phase-filter__select {
-  flex: 1 1 calc(50% - 0.375rem);
-  min-width: 80px;
-  max-width: 100%;
+  flex: 1 1 auto;
+  min-width: 70px;
+  max-width: none;
 }
 
 .sidebar-filters .phase-filter--sidebar {
@@ -357,4 +357,5 @@
 .sidebar-filters .phase-filter__clear {
   margin-top: 0;
   flex-shrink: 0;
+  margin-left: auto;
 }
