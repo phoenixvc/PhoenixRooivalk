@@ -437,6 +437,9 @@ jobs:
       - name: Install production dependencies
         run: pnpm install --no-frozen-lockfile --prod --ignore-scripts
 
+      - name: Install Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
       - name: Create deployment package
         run: |
           echo "Creating deployment package for Flex Consumption..."
@@ -452,8 +455,37 @@ jobs:
           cd deploy-package
           npm install --omit=dev --legacy-peer-deps
 
+          # Generate .azurefunctions directory for Flex Consumption
+          # This directory contains metadata required by Flex Consumption plan
+          echo "Generating .azurefunctions metadata..."
+          mkdir -p .azurefunctions
+
+          # Create functions metadata by scanning the dist folder
+          # The v4 model uses programmatic registration, so we create a simple metadata file
+          cat > .azurefunctions/functions.metadata.json << 'METADATA'
+          {
+            "version": "1.0.0",
+            "workerRuntime": "node",
+            "languageWorkers": {
+              "node": {
+                "arguments": ["--max-old-space-size=8192"]
+              }
+            }
+          }
+          METADATA
+
+          # Create extensions.json if not exists
+          cat > .azurefunctions/extensions.json << 'EXTENSIONS'
+          {
+            "extensions": []
+          }
+          EXTENSIONS
+
           echo "✅ Deployment package created"
+          echo "Contents:"
           ls -la
+          echo ".azurefunctions contents:"
+          ls -la .azurefunctions/
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
@@ -491,25 +523,25 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create deployment ZIP
+      - name: Install Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+      - name: Deploy to Azure Functions
         run: |
           cd deploy-package
           echo "Package contents:"
           ls -la
-          echo "Creating deployment ZIP..."
-          zip -r ../deploy.zip .
-          cd ..
-          echo "ZIP file size: $(ls -lh deploy.zip | awk '{print $5}')"
-
-      - name: Deploy to Azure Functions
-        run: |
+          echo ""
           echo "Deploying to Azure Functions Flex Consumption..."
-          az functionapp deployment source config-zip \
-            --resource-group "${{ vars.AZURE_RESOURCE_GROUP || 'dev-euw-rg-rooivalk' }}" \
-            --name "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
-            --src deploy.zip \
-            --build-remote false \
-            --timeout 600
+          echo "Using Azure Functions Core Tools for proper Flex Consumption deployment..."
+
+          # Use func publish which properly handles Flex Consumption requirements
+          # including .azurefunctions directory generation
+          func azure functionapp publish "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
+            --javascript \
+            --no-build \
+            --force
+
           echo "✅ Deployment complete"
 
       - name: Set Environment Variables

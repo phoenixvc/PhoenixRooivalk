@@ -200,8 +200,8 @@ Unauthorized (CODE: 401)
 
 The `Azure/functions-action@v1` attempts to validate Azure resources and fetch
 Kudu app settings using the SCM credentials from the publish profile when
-`scm-do-build-during-deployment: true` is enabled. This validation step can
-fail with a 401 Unauthorized error due to:
+`scm-do-build-during-deployment: true` is enabled. This validation step can fail
+with a 401 Unauthorized error due to:
 
 1. **SCM Basic Auth disabled**: Azure may have SCM Basic Auth Publishing
    Credentials disabled for security
@@ -248,12 +248,14 @@ Kudu API calls entirely:
 When using `scm-do-build-during-deployment: false`, ensure your workflow:
 
 1. **Builds the application locally** before deployment:
+
    ```yaml
    - name: TypeScript Build
      run: pnpm run build
    ```
 
 2. **Installs production dependencies** in the deploy job:
+
    ```yaml
    - name: Install production dependencies
      working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
@@ -338,10 +340,10 @@ Ensure you're installing production dependencies before deployment:
   run: pnpm install --prod --no-frozen-lockfile
 ```
 
-**Note:** As of December 2024, we use `scm-do-build-during-deployment: false`
-to avoid 401 Unauthorized errors. This means dependencies MUST be installed in
-the GitHub Actions workflow before deployment, and `node_modules/` should NOT
-be excluded in `.funcignore`.
+**Note:** As of December 2024, we use `scm-do-build-during-deployment: false` to
+avoid 401 Unauthorized errors. This means dependencies MUST be installed in the
+GitHub Actions workflow before deployment, and `node_modules/` should NOT be
+excluded in `.funcignore`.
 
 ## Issue: Timeout During Deployment
 
