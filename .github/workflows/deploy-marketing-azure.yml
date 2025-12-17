@@ -159,48 +159,22 @@ jobs:
             exit 1
           fi
 
-      - name: Install SWA CLI
-        run: npm install -g @azure/static-web-apps-cli@2.0.7
-
-      - name: Deploy with SWA CLI
+      - name: Deploy to Azure Static Web Apps
         id: deploy
-        timeout-minutes: 15
-        env:
-          SWA_CLI_DEPLOYMENT_TOKEN:
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
-          ENV_NAME:
-            ${{ github.event_name == 'push' && 'production' || 'preview' }}
-        run: |
-          # Map ENV_NAME to SWA CLI expected values
-          if [ "$ENV_NAME" = "production" ]; then
-            SWA_ENV="prod"
-          else
-            SWA_ENV="preview"
-          fi
-
-          echo "Deploying to environment: $SWA_ENV (ENV_NAME: $ENV_NAME)"
-          echo "Event type: ${{ github.event_name }}"
-
-          # Deploy without verbose flag to avoid buffering issues
-          # Redirect output to both console and file for URL extraction
-          set +e
-          swa deploy apps/marketing/out \
-            --env "$SWA_ENV" \
-            --no-use-keychain 2>&1 | tee /tmp/swa-deploy.log
-          EXIT_CODE=$?
-          set -e
-
-          # Extract preview URL from deployment log
-          PREVIEW_URL=$(grep "Site URL:" /tmp/swa-deploy.log | sed 's/^.*Site URL:[[:space:]]*//' | sed 's/[[:space:]]*$//' || echo "")
-          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
-
-          # Determine deployment status from exit code
-          if [ $EXIT_CODE -eq 0 ]; then
-            echo "deployment_status=success" >> $GITHUB_OUTPUT
-          else
-            echo "deployment_status=failed" >> $GITHUB_OUTPUT
-            exit $EXIT_CODE
-          fi
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: ${{ env.APP_LOCATION }}
+          output_location: ${{ env.OUTPUT_LOCATION }}
+          skip_app_build: true
+          skip_api_build: true
+          # Production deploys go to production slot, PR deploys create preview environments
+          production_branch: main
+          deployment_environment:
+            ${{ github.event_name == 'push' && 'production' || '' }}
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
@@ -208,7 +182,7 @@ jobs:
         with:
           script: |
             const prNumber = context.issue.number;
-            const previewUrl = '${{ steps.deploy.outputs.preview_url }}';
+            const previewUrl = '${{ steps.deploy.outputs.static_web_app_url }}';
             const portalUrl = 'https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Web%2FStaticSites';
             const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
