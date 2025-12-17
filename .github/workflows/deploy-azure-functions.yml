@@ -460,26 +460,11 @@ jobs:
           echo "Generating .azurefunctions metadata..."
           mkdir -p .azurefunctions
 
-          # Create functions metadata by scanning the dist folder
-          # The v4 model uses programmatic registration, so we create a simple metadata file
-          cat > .azurefunctions/functions.metadata.json << 'METADATA'
-          {
-            "version": "1.0.0",
-            "workerRuntime": "node",
-            "languageWorkers": {
-              "node": {
-                "arguments": ["--max-old-space-size=8192"]
-              }
-            }
-          }
-          METADATA
+          # Create functions metadata
+          echo '{"version":"1.0.0","workerRuntime":"node","languageWorkers":{"node":{"arguments":["--max-old-space-size=8192"]}}}' > .azurefunctions/functions.metadata.json
 
-          # Create extensions.json if not exists
-          cat > .azurefunctions/extensions.json << 'EXTENSIONS'
-          {
-            "extensions": []
-          }
-          EXTENSIONS
+          # Create extensions.json
+          echo '{"extensions":[]}' > .azurefunctions/extensions.json
 
           echo "✅ Deployment package created"
           echo "Contents:"
@@ -492,6 +477,7 @@ jobs:
         with:
           name: azure-functions-build
           path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/deploy-package
+          include-hidden-files: true
           retention-days: 1
 
   # ===========================================
