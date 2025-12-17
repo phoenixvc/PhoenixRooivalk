@@ -1,8 +1,24 @@
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 import "../css/docs-landing.css";
+
+/**
+ * Detects if the user is on a Mac platform
+ */
+function useIsMac(): boolean {
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform));
+    }
+  }, []);
+
+  return isMac;
+}
 
 interface CategoryLink {
   label: string;
@@ -18,6 +34,12 @@ interface Category {
 }
 
 export default function DocsLanding(): React.ReactElement {
+  const isMac = useIsMac();
+  const modifierKey = isMac ? "⌘" : "Ctrl";
+  const ariaLabel = isMac
+    ? "Search shortcut: Press Command K to search documentation"
+    : "Search shortcut: Press Control K to search documentation";
+
   const categories: Category[] = [
     {
       emoji: "📊",
@@ -143,11 +165,11 @@ export default function DocsLanding(): React.ReactElement {
             <div
               className="search-prompt"
               role="status"
-              aria-label="Search shortcut: Press Control K or Command K to search documentation"
+              aria-label={ariaLabel}
             >
               <span aria-hidden="true">🔍</span>
               <span>Press</span>
-              <kbd aria-label="Control key">Ctrl</kbd>
+              <kbd aria-label={isMac ? "Command key" : "Control key"}>{modifierKey}</kbd>
               <kbd aria-label="K key">K</kbd>
               <span>to search documentation</span>
             </div>

@@ -5,7 +5,7 @@
  * Can be embedded in the sidebar or navbar.
  */
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import "./AISearchBar.css";
 
@@ -20,6 +20,21 @@ interface AISearchBarProps {
   variant?: "sidebar" | "navbar";
 }
 
+/**
+ * Detects if the user is on a Mac platform
+ */
+function useIsMac(): boolean {
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform));
+    }
+  }, []);
+
+  return isMac;
+}
+
 export function AISearchBar({
   onAsk,
   placeholder = "Ask AI about docs...",
@@ -30,6 +45,7 @@ export function AISearchBar({
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMac = useIsMac();
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -82,7 +98,7 @@ export function AISearchBar({
         </button>
       )}
       <div className="ai-search-bar__shortcut">
-        <kbd>⌘</kbd>
+        <kbd>{isMac ? "⌘" : "Ctrl"}</kbd>
         <kbd>K</kbd>
       </div>
     </form>
