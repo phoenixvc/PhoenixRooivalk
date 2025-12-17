@@ -434,14 +434,32 @@ jobs:
           # Validate required files
           echo "✅ Configuration files validated"
 
+      - name: Install production dependencies
+        run: pnpm install --no-frozen-lockfile --prod
+
+      - name: Create deployment package
+        run: |
+          echo "Creating deployment package for Flex Consumption..."
+          # Create a clean deployment directory
+          mkdir -p deploy-package
+
+          # Copy required files
+          cp -r dist deploy-package/
+          cp host.json deploy-package/
+          cp package.json deploy-package/
+
+          # Install production dependencies in the deployment package
+          cd deploy-package
+          npm install --omit=dev --legacy-peer-deps
+
+          echo "✅ Deployment package created"
+          ls -la
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
         with:
           name: azure-functions-build
-          path: |
-            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/dist
-            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/host.json
-            ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package.json
+          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/deploy-package
           retention-days: 1
 
   # ===========================================
@@ -466,35 +484,33 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: azure-functions-build
-          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.6.0
-
-      - name: Install production dependencies
-        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        run: pnpm install --no-frozen-lockfile --prod
+          path: deploy-package
 
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Create deployment ZIP
+        run: |
+          cd deploy-package
+          echo "Package contents:"
+          ls -la
+          echo "Creating deployment ZIP..."
+          zip -r ../deploy.zip .
+          cd ..
+          echo "ZIP file size: $(ls -lh deploy.zip | awk '{print $5}')"
+
       - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
-        with:
-          app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          respect-funcignore: true
-          scm-do-build-during-deployment: false
-          enable-oryx-build: false
+        run: |
+          echo "Deploying to Azure Functions Flex Consumption..."
+          az functionapp deployment source config-zip \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP || 'dev-euw-rg-rooivalk' }}" \
+            --name "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
+            --src deploy.zip \
+            --build-remote false \
+            --timeout 600
+          echo "✅ Deployment complete"
 
       - name: Set Environment Variables
         if: vars.CONFIGURE_APP_SETTINGS == 'true'
