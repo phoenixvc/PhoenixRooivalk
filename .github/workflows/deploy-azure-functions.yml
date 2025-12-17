@@ -490,6 +490,7 @@ jobs:
           publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
           respect-funcignore: true
           scm-do-build-during-deployment: false
+          enable-oryx-build: false
 
       - name: Configure App Settings
         if: vars.CONFIGURE_APP_SETTINGS == 'true'
