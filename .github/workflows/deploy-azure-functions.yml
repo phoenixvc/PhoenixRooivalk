@@ -435,7 +435,7 @@ jobs:
           echo "✅ Configuration files validated"
 
       - name: Install production dependencies
-        run: pnpm install --no-frozen-lockfile --prod
+        run: pnpm install --no-frozen-lockfile --prod --ignore-scripts
 
       - name: Create deployment package
         run: |
