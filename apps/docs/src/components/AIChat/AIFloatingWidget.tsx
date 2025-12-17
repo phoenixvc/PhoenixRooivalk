@@ -12,6 +12,21 @@ import { useAuth } from "../../contexts/AuthContext";
 import { AIChatInterface } from "./AIChatInterface";
 import "./AIFloatingWidget.css";
 
+/**
+ * Detects if the user is on a Mac platform
+ */
+function useIsMac(): boolean {
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform));
+    }
+  }, []);
+
+  return isMac;
+}
+
 interface AIFloatingWidgetProps {
   /** Initial question to ask when opened */
   initialQuestion?: string;
@@ -31,6 +46,7 @@ export function AIFloatingWidget({
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState(initialQuestion || "");
   const [showQuickActions, setShowQuickActions] = useState(false);
+  const isMac = useIsMac();
 
   // Keyboard shortcut: Cmd/Ctrl + K to open
   useEffect(() => {
@@ -145,7 +161,7 @@ export function AIFloatingWidget({
           <span className="ai-widget__toggle-label">
             {isOpen ? "Close" : "AI"}
           </span>
-          {!isOpen && <span className="ai-widget__toggle-shortcut">⌘K</span>}
+          {!isOpen && <span className="ai-widget__toggle-shortcut">{isMac ? "⌘" : "Ctrl+"}K</span>}
         </button>
       </div>
 
