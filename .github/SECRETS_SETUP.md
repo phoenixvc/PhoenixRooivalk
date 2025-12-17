@@ -1,4 +1,10 @@
-# GitHub Actions Secrets Setup
+# GitHub Actions Secrets Setup (DEPRECATED)
+
+> **⚠️ DEPRECATED**: This document describes Netlify deployment secrets.
+> The project now deploys exclusively to Azure Static Web Apps.
+> See `.github/AZURE_SETUP.md` for current deployment configuration.
+
+---
 
 This document explains how to set up the required secrets for GitHub Actions
 workflows to deploy to Netlify.

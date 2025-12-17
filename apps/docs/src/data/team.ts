@@ -186,7 +186,7 @@ export const contact = {
   general: {
     email: "contact@phoenixvc.tech",
     phone: "+27 (0) 10 880 0000",
-    website: "https://phoenixrooivalk.netlify.app/",
+    website: process.env.MARKETING_URL || "",
     linkedin: "Phoenix Rooivalk Defense Systems",
   },
   inquiries: {

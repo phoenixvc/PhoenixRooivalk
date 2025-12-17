@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Phoenix Rooivalk" }],
   creator: "Phoenix Rooivalk",
   publisher: "Phoenix Rooivalk",
-  metadataBase: new URL("https://phoenixrooivalk.netlify.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000"),
   alternates: {
     canonical: "/",
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Phoenix Rooivalk - SAE Level 4 Autonomous Counter-Drone Defense",
     description:
       "Edge autonomy in RF-denied environments. Sub-200ms response time. SAE Level 4 autonomous counter-drone defense.",
-    url: "https://phoenixrooivalk.netlify.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "",
     siteName: "Phoenix Rooivalk",
     locale: "en_US",
     type: "website",

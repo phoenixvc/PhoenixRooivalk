@@ -1,15 +1,21 @@
-# GitHub Actions Workflow Improvements
+# GitHub Actions Workflow Improvements (DEPRECATED)
+
+> **⚠️ DEPRECATED**: This document contains references to Netlify deployment.
+> The project now deploys exclusively to Azure Static Web Apps.
+> Current workflows are in `.github/workflows/deploy-marketing-azure.yml` and `.github/workflows/deploy-docs-azure.yml`.
+
+---
 
 This document outlines a comprehensive plan to improve the GitHub Actions
 workflows for the Phoenix Rooivalk project, organized into implementation
 phases.
 
-## 🎯 **Current State**
+## 🎯 **Current State (Historical)**
 
-- **Marketing Site**: Next.js app deployed to Netlify
-- **Documentation Site**: Docusaurus app deployed to Netlify
+- **Marketing Site**: Next.js app deployed to Azure Static Web Apps (previously Netlify)
+- **Documentation Site**: Docusaurus app deployed to Azure Static Web Apps (previously Netlify)
 - **Basic CI/CD**: Format checks, linting, type checking, and deployment
-- **Preview Deployments**: Working for both sites on PRs
+- **Preview Deployments**: Handled by Azure Static Web Apps
 
 ## 📋 **Improvement Phases**
 

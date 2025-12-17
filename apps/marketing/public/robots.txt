@@ -7,8 +7,8 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /private/
 
-# Sitemap location
-Sitemap: https://phoenixrooivalk.netlify.app/sitemap.xml
+# Sitemap location - update this with your production domain
+# Sitemap: https://your-domain.com/sitemap.xml
 
 # Rate limiting for aggressive crawlers (defense industry best practice)
 User-agent: AhrefsBot

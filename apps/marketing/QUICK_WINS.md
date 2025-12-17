@@ -1,3 +1,7 @@
+> **⚠️ DEPRECATED**: This document contains references to Netlify deployment.
+> The project now deploys exclusively to Azure Static Web Apps.
+> See `.github/workflows/deploy-marketing-azure.yml` for current deployment configuration.
+
 # ⚡ Quick Wins - Immediate Action Items
 
 This document contains the **highest-impact, lowest-effort improvements** you

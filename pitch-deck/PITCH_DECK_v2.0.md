@@ -55,7 +55,7 @@ Enterprise Scale_
 
 - Consumer: www.skysnare.com
 - Enterprise: www.aeronet-security.com
-- Corporate: phoenixrooivalk.netlify.app
+- Corporate: See GitHub repository for deployment details
 
 ---
 
@@ -130,7 +130,7 @@ AI-enabled, compliance-focused counter-drone systems.
 
 ### 1. Marketing Website
 
-**phoenixrooivalk.netlify.app**
+**Deployed to Azure Static Web Apps**
 
 - Interactive threat detection visualization
 - ROI calculator
@@ -147,7 +147,7 @@ AI-enabled, compliance-focused counter-drone systems.
 
 ### 3. Documentation Site
 
-**docs-phoenixrooivalk.netlify.app**
+**Deployed to Azure Static Web Apps**
 
 - Technical architecture
 - Integration guides

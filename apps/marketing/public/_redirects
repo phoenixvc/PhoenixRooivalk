@@ -1,4 +1,10 @@
-/overview https://phoenixrooivalk.netlify.app/overview 301
-/contact https://phoenixrooivalk.netlify.app/contact 301
-/whitepaper https://phoenixrooivalk.netlify.app/whitepaper 301
-/docs/* https://phoenixrooivalk.netlify.app/:splat 301
+# Phoenix Rooivalk - Redirect Configuration
+# Note: Azure Static Web Apps uses staticwebapp.config.json for routing
+# This file is kept for reference but may not be used
+# Update staticwebapp.config.json for production redirects
+
+# Example redirects - update with your actual domains:
+# /overview https://your-marketing-domain.com/overview 301
+# /contact https://your-marketing-domain.com/contact 301
+# /whitepaper https://your-marketing-domain.com/whitepaper 301
+# /docs/* https://your-docs-domain.com/:splat 301

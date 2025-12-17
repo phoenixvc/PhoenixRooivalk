@@ -1,82 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Phoenix Rooivalk Marketing Site Sitemap
+  Update the URL values below with your production domain
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://phoenixrooivalk.netlify.app</loc>
+    <loc>https://your-domain.com</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/about</loc>
+    <loc>https://your-domain.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/capabilities</loc>
+    <loc>https://your-domain.com/capabilities</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/technical</loc>
+    <loc>https://your-domain.com/technical</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/interactive-demo</loc>
+    <loc>https://your-domain.com/interactive-demo</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/methods</loc>
+    <loc>https://your-domain.com/methods</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/contact</loc>
+    <loc>https://your-domain.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/compliance</loc>
+    <loc>https://your-domain.com/compliance</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/compliance/itar</loc>
+    <loc>https://your-domain.com/compliance/itar</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/compliance/iso-27001</loc>
+    <loc>https://your-domain.com/compliance/iso-27001</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/compliance/security-clearance</loc>
+    <loc>https://your-domain.com/compliance/security-clearance</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/sbir</loc>
+    <loc>https://your-domain.com/sbir</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/partnerships</loc>
+    <loc>https://your-domain.com/partnerships</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/financial</loc>
+    <loc>https://your-domain.com/financial</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/roi-calculator</loc>
+    <loc>https://your-domain.com/roi-calculator</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://phoenixrooivalk.netlify.app/timeline</loc>
+    <loc>https://your-domain.com/timeline</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

@@ -7,8 +7,9 @@
  *
  * To enable:
  * 1. Sign up at https://plausible.io
- * 2. Add domain: phoenixrooivalk.netlify.app
- * 3. Uncomment the Script tag below
+ * 2. Add your production domain
+ * 3. Set NEXT_PUBLIC_PLAUSIBLE_DOMAIN environment variable
+ * 4. Uncomment the Script tag below
  */
 export function Analytics() {
   // Set to false to disable analytics (development)
@@ -24,7 +25,7 @@ export function Analytics() {
       {/* 
       <Script
         defer
-        data-domain="phoenixrooivalk.netlify.app"
+        data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || ""}
         src="https://plausible.io/js/script.js"
       />
       */}

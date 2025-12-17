@@ -242,8 +242,6 @@ export default function Contact(): React.ReactElement {
             <form
               name="contact"
               method="POST"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
               action="/contact"
               className={styles.contactForm}
             >

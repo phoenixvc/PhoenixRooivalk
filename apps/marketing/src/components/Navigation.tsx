@@ -347,7 +347,7 @@ export const Navigation: React.FC = () => {
                   </a>
                   <div className={styles.divider}></div>
                   <a
-                    href="https://docs-phoenixrooivalk.netlify.app"
+                    href={process.env.NEXT_PUBLIC_DOCS_URL || "/docs"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.githubDropdownLink}
