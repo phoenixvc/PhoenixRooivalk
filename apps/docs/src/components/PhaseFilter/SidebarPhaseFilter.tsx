@@ -121,48 +121,40 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
 
   const filterContent = (
     <div className="sidebar-filters">
-      {/* Phase Filter */}
-      <div className="phase-filter phase-filter--sidebar">
-        <label className="phase-filter__label" htmlFor="sidebar-phase-select">
-          Filter by Phase
-        </label>
-        <select
-          id="sidebar-phase-select"
-          className="phase-filter__select"
-          value={currentPhase}
-          onChange={(e) => setCurrentPhase(e.target.value as PhaseFilterType)}
-        >
-          {phaseOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Phase Filter - Compact */}
+      <select
+        id="sidebar-phase-select"
+        className="phase-filter__select"
+        value={currentPhase}
+        onChange={(e) => setCurrentPhase(e.target.value as PhaseFilterType)}
+        title="Filter by Phase"
+      >
+        {phaseOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.value === "all" ? "Phase" : option.label}
+          </option>
+        ))}
+      </select>
 
-      {/* Role Filter */}
-      <div className="phase-filter phase-filter--sidebar">
-        <label className="phase-filter__label" htmlFor="sidebar-role-select">
-          Filter by Role
-        </label>
-        <select
-          id="sidebar-role-select"
-          className="phase-filter__select"
-          value={currentRole}
-          onChange={(e) => setCurrentRole(e.target.value)}
-        >
-          <option value="all">All Roles</option>
-          {Object.entries(ROLE_GROUPS).map(([groupName, roles]) => (
-            <optgroup key={groupName} label={groupName}>
-              {roles.map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
-      </div>
+      {/* Role Filter - Compact */}
+      <select
+        id="sidebar-role-select"
+        className="phase-filter__select"
+        value={currentRole}
+        onChange={(e) => setCurrentRole(e.target.value)}
+        title="Filter by Role"
+      >
+        <option value="all">Role</option>
+        {Object.entries(ROLE_GROUPS).map(([groupName, roles]) => (
+          <optgroup key={groupName} label={groupName}>
+            {roles.map((role) => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
 
       {/* Clear All Button */}
       {hasActiveFilters && (
@@ -174,7 +166,7 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
           }}
           title="Clear all filters"
         >
-          Clear
+          ✕
         </button>
       )}
     </div>

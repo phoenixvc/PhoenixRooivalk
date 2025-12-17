@@ -44,7 +44,7 @@ export function SidebarControls(): null {
       toggleBtn.className = "sidebar-toggle";
       toggleBtn.setAttribute("aria-label", "Toggle sidebar");
       toggleBtn.setAttribute("title", "Toggle sidebar (Ctrl+B)");
-      toggleBtn.innerHTML = '<span class="sidebar-toggle__icon">◀</span>';
+      toggleBtn.innerHTML = '<span class="sidebar-toggle__icon">«</span>';
       toggleBtn.addEventListener("click", handleToggle);
       sidebar.appendChild(toggleBtn);
     }
