@@ -219,7 +219,7 @@ export function AdminImprovementReview({
  * Timestamp type that can come from Firestore or other sources
  */
 type TimestampLike =
-  | { toDate?: () => Date }
+  | { toDate: () => Date }
   | Date
   | string
   | number
