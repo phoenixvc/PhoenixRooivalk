@@ -19,8 +19,9 @@
   [class*="tableOfContents"],
   [class*="tocCollapsible"],
   .print\\:hidden,
-  /* Hide floating widgets */
+  /* Hide floating widgets and overlays */
   .sidebar-rec,
+  .sidebar-rec-widget,
   .ai-widget,
   .ai-floating-widget,
   .cookie-consent,
@@ -28,12 +29,26 @@
   .completion-toast,
   .onboarding-walkthrough,
   .pdf-download-button,
+  .pdf-download-fab,
   [class*="AIFloating"],
   [class*="SidebarRec"],
   [class*="CookieConsent"],
   [class*="floating"],
   [class*="toast"],
   [class*="widget"],
+  [class*="Widget"],
+  [class*="fab"],
+  [class*="Fab"],
+  /* Hide FOR YOU recommendations */
+  [class*="for-you"],
+  [class*="ForYou"],
+  [class*="recommendations"],
+  [class*="Recommendations"],
+  /* Hide comments section */
+  [class*="comment"],
+  [class*="Comment"],
+  [class*="feedback"],
+  [class*="Feedback"],
   /* Hide edit/feedback buttons */
   .theme-edit-this-page,
   [class*="feedbackWidget"],
@@ -43,7 +58,10 @@
   [class*="DocSearch"],
   /* Hide theme toggle */
   [class*="colorMode"],
-  [class*="themeSwitcher"] {
+  [class*="themeSwitcher"],
+  /* Hide any fixed/sticky positioned elements */
+  [style*="position: fixed"],
+  [style*="position:fixed"] {
     display: none !important;
   }
 
