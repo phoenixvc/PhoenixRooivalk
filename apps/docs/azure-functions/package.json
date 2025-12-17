@@ -2,7 +2,7 @@
   "name": "phoenix-rooivalk-functions",
   "version": "1.0.0",
   "description": "Azure Functions for Phoenix Rooivalk - replaces Firebase Cloud Functions",
-  "main": "dist/src/functions/*.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc",
     "build:production": "pnpm run clean && tsc",
@@ -15,6 +15,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@azure/functions": "^4.10.0",
     "@azure/cosmos": "^4.0.0",
     "@azure/identity": "^4.0.0",
     "@azure/keyvault-secrets": "^4.8.0",
@@ -26,7 +27,6 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@azure/functions": "^4.10.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.11.0",
     "jest": "^30.2.0",
