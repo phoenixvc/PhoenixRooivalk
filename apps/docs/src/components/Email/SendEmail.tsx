@@ -7,7 +7,11 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { emailService, EmailDraft, GitHubIssueOptions } from "../../services/emailService";
+import {
+  emailService,
+  EmailDraft,
+  GitHubIssueOptions,
+} from "../../services/emailService";
 import "./SendEmail.css";
 
 export interface SendEmailProps {
@@ -79,7 +83,10 @@ export function SendEmail({
 
     // Apply template variables if provided
     if (template?.variables) {
-      base.subject = emailService.applyVariables(base.subject, template.variables);
+      base.subject = emailService.applyVariables(
+        base.subject,
+        template.variables,
+      );
       base.body = emailService.applyVariables(base.body, template.variables);
     }
 
@@ -99,8 +106,14 @@ export function SendEmail({
       };
 
       if (template?.variables) {
-        newDraft.subject = emailService.applyVariables(newDraft.subject, template.variables);
-        newDraft.body = emailService.applyVariables(newDraft.body, template.variables);
+        newDraft.subject = emailService.applyVariables(
+          newDraft.subject,
+          template.variables,
+        );
+        newDraft.body = emailService.applyVariables(
+          newDraft.body,
+          template.variables,
+        );
       }
 
       setDraft(newDraft);
@@ -108,14 +121,13 @@ export function SendEmail({
   }, [initialDraft?.to, initialDraft?.subject, template?.subject]);
 
   const handleFieldChange = useCallback(
-    (field: keyof EmailDraft) => (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-      setDraft((prev) => ({ ...prev, [field]: e.target.value }));
-      setStatus("idle");
-      setErrorMessage("");
-    },
-    []
+    (field: keyof EmailDraft) =>
+      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setDraft((prev) => ({ ...prev, [field]: e.target.value }));
+        setStatus("idle");
+        setErrorMessage("");
+      },
+    [],
   );
 
   const validateDraft = useCallback((): string | null => {

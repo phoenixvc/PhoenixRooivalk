@@ -207,9 +207,9 @@ to understand what successful applicants demonstrated.
 
 ### PriviDox Response
 
-A draft response to the PriviDox missing documents email has been prepared with a
-strategy to maintain our application position while honestly disclosing our TRL
-status. See
+A draft response to the PriviDox missing documents email has been prepared with
+a strategy to maintain our application position while honestly disclosing our
+TRL status. See
 [Draft Response to PriviDox Email](./cuas-sandbox-missing-documents#draft-response-to-prividox-email)
 for the full email template and risk assessment.
 

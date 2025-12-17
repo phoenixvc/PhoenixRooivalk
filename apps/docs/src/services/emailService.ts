@@ -5,10 +5,7 @@
  * Supports draft emails, templates, and direct sending.
  */
 
-import {
-  getFunctionsService,
-  isCloudConfigured,
-} from "./cloud";
+import { getFunctionsService, isCloudConfigured } from "./cloud";
 
 /**
  * Email draft structure for composing emails
@@ -108,7 +105,8 @@ class EmailService {
 
       return result;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       return {
         success: false,
         error: errorMessage,
@@ -183,10 +181,7 @@ ${draft.body}`;
    * Create a GitHub issue from email draft (opens in new tab)
    * Useful for logging correspondence as issues for tracking
    */
-  openAsGitHubIssue(
-    draft: EmailDraft,
-    options: GitHubIssueOptions = {}
-  ): void {
+  openAsGitHubIssue(draft: EmailDraft, options: GitHubIssueOptions = {}): void {
     const {
       repo = "JustAGhosT/PhoenixRooivalk",
       labels = ["correspondence", "email-log"],
@@ -255,6 +250,3 @@ export interface GitHubIssueOptions {
 
 // Export singleton instance
 export const emailService = new EmailService();
-
-// Export types
-export type { EmailDraft, EmailSendResult, EmailTemplate };
