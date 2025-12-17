@@ -2698,14 +2698,14 @@ article {
   pointer-events: none;
 }
 
-/* Sidebar collapse toggle button - More visible */
+/* Sidebar collapse toggle button - Bottom left position */
 .sidebar-toggle {
   position: absolute;
-  top: 8px;
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  bottom: 12px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   background: var(--pr-bg-muted);
   border: 1px solid var(--pr-border-muted);
   color: var(--pr-fg-muted);
@@ -2713,10 +2713,10 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: 11px;
   z-index: 100;
   transition: all 0.15s ease;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .sidebar-toggle:hover {
@@ -2774,8 +2774,8 @@ article {
 
 /* Collapsed sidebar toggle position - Centered in collapsed bar */
 .sidebar--collapsed .sidebar-toggle {
-  right: 50%;
-  transform: translateX(50%);
+  left: 50%;
+  transform: translateX(-50%);
   opacity: 1;
 }
 

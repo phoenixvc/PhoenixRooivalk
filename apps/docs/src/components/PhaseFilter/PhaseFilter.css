@@ -343,8 +343,37 @@
 #phase-filter-container {
   position: relative;
   padding: 0.5rem 0.75rem;
+  padding-top: 0.75rem;
   border-bottom: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-200));
   background-color: var(--pr-bg-subtle, var(--ifm-background-color));
+}
+
+/* Clear button - small orange circle at top right */
+#phase-filter-container .phase-filter__clear {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1;
+  color: white;
+  background: var(--pr-brand-orange, #f97316);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+}
+
+#phase-filter-container .phase-filter__clear:hover {
+  background: var(--pr-brand-orange-dark, #ea580c);
+  transform: scale(1.15);
 }
 
 /* Remove helper text for compact view */
