@@ -199,20 +199,23 @@ Unauthorized (CODE: 401)
 ### Root Cause
 
 The `Azure/functions-action@v1` attempts to validate Azure resources and fetch
-Kudu app settings using the SCM credentials from the publish profile. This
-validation step can fail with a 401 Unauthorized error due to:
+Kudu app settings using the SCM credentials from the publish profile when
+`scm-do-build-during-deployment: true` is enabled. This validation step can
+fail with a 401 Unauthorized error due to:
 
-1. **Expired publish profile**: Publish profiles have expiration dates and need
+1. **SCM Basic Auth disabled**: Azure may have SCM Basic Auth Publishing
+   Credentials disabled for security
+2. **Kudu API access issues**: The action attempts to access Kudu/SCM endpoints
+   which may be restricted or misconfigured
+3. **Expired publish profile**: Publish profiles have expiration dates and need
    to be regenerated periodically
-2. **Permission issues**: The SCM credentials may not have sufficient
+4. **Permission issues**: The SCM credentials may not have sufficient
    permissions to access the Kudu API
-3. **Resource validation overhead**: The action performs unnecessary resource
-   validation that can timeout or fail
 
 ### Solution
 
-Add two parameters to the `Azure/functions-action@v1` configuration to skip
-resource validation and ensure proper build handling:
+**Recommended:** Deploy pre-built artifacts without server-side build to avoid
+Kudu API calls entirely:
 
 ```yaml
 - name: Deploy to Azure Functions
@@ -221,22 +224,47 @@ resource validation and ensure proper build handling:
     app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
     package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-    respect-funcignore: true # Skip unnecessary resource validation
-    scm-do-build-during-deployment: true # Ensure proper build on SCM side
+    respect-funcignore: true
+    scm-do-build-during-deployment: false # Deploy pre-built artifacts
 ```
 
 #### Parameter Explanations
 
 - **`respect-funcignore: true`**:
-  - Tells the action to respect `.funcignore` files and skip trying to validate
-    resources
-  - Prevents the action from making unnecessary API calls to fetch app settings
-  - Reduces deployment time and avoids authentication issues
+  - Tells the action to respect `.funcignore` files
+  - Prevents deployment of unnecessary files (tests, source code, etc.)
+  - Only deploys the built artifacts and runtime dependencies
 
-- **`scm-do-build-during-deployment: true`**:
-  - Ensures that the SCM site (Kudu) performs a build during deployment
-  - Handles dependency installation and compilation on the Azure side
-  - Recommended for Node.js Azure Functions
+- **`scm-do-build-during-deployment: false`**:
+  - **NEW (December 2024)**: Changed from `true` to `false` to fix 401 errors
+  - Deploys pre-built artifacts instead of building on Azure's SCM/Kudu
+  - Avoids Kudu API calls that can fail with 401 Unauthorized
+  - Faster and more reliable deployments
+  - Requires that build and dependency installation happen in GitHub Actions
+    before deployment
+
+#### Required Workflow Changes
+
+When using `scm-do-build-during-deployment: false`, ensure your workflow:
+
+1. **Builds the application locally** before deployment:
+   ```yaml
+   - name: TypeScript Build
+     run: pnpm run build
+   ```
+
+2. **Installs production dependencies** in the deploy job:
+   ```yaml
+   - name: Install production dependencies
+     working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+     run: pnpm install --no-frozen-lockfile --prod
+   ```
+
+3. **Does NOT exclude node_modules in `.funcignore`**:
+   ```bash
+   # .funcignore
+   # node_modules/ - DO NOT exclude when scm-do-build-during-deployment: false
+   ```
 
 ### When to Regenerate Publish Profile
 
@@ -310,8 +338,10 @@ Ensure you're installing production dependencies before deployment:
   run: pnpm install --prod --no-frozen-lockfile
 ```
 
-Or use `scm-do-build-during-deployment: true` to let Azure handle dependency
-installation.
+**Note:** As of December 2024, we use `scm-do-build-during-deployment: false`
+to avoid 401 Unauthorized errors. This means dependencies MUST be installed in
+the GitHub Actions workflow before deployment, and `node_modules/` should NOT
+be excluded in `.funcignore`.
 
 ## Issue: Timeout During Deployment
 
@@ -385,5 +415,8 @@ If you continue to experience issues:
 
 ## Changelog
 
-- **2024-12-02**: Added fix for 401 Unauthorized error with `respect-funcignore`
-  and `scm-do-build-during-deployment` parameters
+- **2024-12-17**: Updated 401 Unauthorized error fix to use
+  `scm-do-build-during-deployment: false` (deploy pre-built artifacts) instead
+  of `true` (server-side build) to avoid Kudu API authentication issues
+- **2024-12-02**: Added initial fix for 401 Unauthorized error with
+  `respect-funcignore` and `scm-do-build-during-deployment` parameters
