@@ -7,9 +7,10 @@
  * analytics/tracking errors from crashing the documentation site.
  */
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect } from "react";
 
-import { AIFloatingWidget } from "../components/AIChat";
+// AI Widget temporarily disabled
+// import { AIFloatingWidget } from "../components/AIChat";
 import { AnalyticsTracker } from "../components/Analytics";
 import {
   NavbarProgressVisibility,
@@ -34,49 +35,12 @@ interface RootProps {
   children: ReactNode;
 }
 
-/**
- * Get current page context for AI assistant
- */
-function usePageContext() {
-  const [pageContext, setPageContext] = useState<
-    | {
-        title: string;
-        path: string;
-        section?: string;
-      }
-    | undefined
-  >(undefined);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const updateContext = () => {
-        const title = document.title.split(" | ")[0] || "Documentation";
-        const path = window.location.pathname;
-        setPageContext({ title, path });
-      };
-
-      updateContext();
-
-      // Update on navigation - observe the title element specifically
-      const titleElement = document.querySelector("title");
-      if (titleElement) {
-        const observer = new MutationObserver(updateContext);
-        observer.observe(titleElement, {
-          subtree: true,
-          characterData: true,
-          childList: true,
-        });
-
-        return () => observer.disconnect();
-      }
-    }
-  }, []);
-
-  return pageContext;
-}
+// AI Widget temporarily disabled - usePageContext not needed
+// function usePageContext() { ... }
 
 export default function Root({ children }: RootProps): React.ReactElement {
-  const pageContext = usePageContext();
+  // AI Widget temporarily disabled
+  // const pageContext = usePageContext();
 
   // Auto-fix corrupted onboarding data on mount
   useEffect(() => {
@@ -123,9 +87,11 @@ export default function Root({ children }: RootProps): React.ReactElement {
                 <SilentErrorBoundary>
                   <SidebarControls />
                 </SilentErrorBoundary>
+                {/* AI Widget temporarily disabled
                 <SilentErrorBoundary>
                   <AIFloatingWidget pageContext={pageContext} />
                 </SilentErrorBoundary>
+                */}
                 <SilentErrorBoundary>
                   <PDFDownloadButton />
                 </SilentErrorBoundary>
