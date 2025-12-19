@@ -56,9 +56,10 @@ const sidebars: SidebarsConfig = {
           label: "2025",
           collapsed: false,
           items: [
-            "progress/2025/week-48",
-            "progress/2025/week-49",
+            "progress/2025/week-51",
             "progress/2025/week-50",
+            "progress/2025/week-49",
+            "progress/2025/week-48",
           ],
         },
       ],
