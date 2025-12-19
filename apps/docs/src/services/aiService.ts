@@ -10,7 +10,13 @@
  * - Content summarization
  */
 
-import { getFunctionsService, isCloudConfigured } from "./cloud";
+import { getFunctionsService, getAuthService, isCloudConfigured } from "./cloud";
+import { AzureFunctionsService } from "./cloud/azure/functions";
+
+// Debug flag - enable for development debugging
+const DEBUG_AI = typeof window !== "undefined" &&
+  (localStorage.getItem("phoenix-debug-ai") === "true" ||
+   window.location.search.includes("debug-ai"));
 
 // Types for AI responses
 export interface CompetitorAnalysisResult {
@@ -118,6 +124,22 @@ class AIService {
   private isInitialized = false;
 
   /**
+   * Log debug messages when DEBUG_AI is enabled
+   */
+  private log(message: string, data?: unknown): void {
+    if (DEBUG_AI) {
+      console.log(`[AI Service] ${message}`, data ?? "");
+    }
+  }
+
+  /**
+   * Log errors (always logged, not just in debug mode)
+   */
+  private logError(message: string, error?: unknown): void {
+    console.error(`[AI Service] ${message}`, error ?? "");
+  }
+
+  /**
    * Initialize the AI service
    */
   init(): boolean {
@@ -129,6 +151,7 @@ class AIService {
     }
 
     this.isInitialized = true;
+    this.log("Initialized successfully");
     return true;
   }
 
@@ -137,6 +160,35 @@ class AIService {
    */
   isAvailable(): boolean {
     return this.isInitialized || isCloudConfigured();
+  }
+
+  /**
+   * Ensure auth token is set on the functions service
+   * Returns the token if available, null otherwise
+   */
+  private async ensureAuthToken(): Promise<string | null> {
+    const authService = getAuthService();
+    const functionsService = getFunctionsService();
+
+    try {
+      this.log("Getting auth token...");
+      const token = await authService.getIdToken();
+
+      if (token) {
+        // Set the token on the functions service if it supports it
+        if (functionsService && "setAuthToken" in functionsService) {
+          (functionsService as AzureFunctionsService).setAuthToken(token);
+          this.log("Auth token set successfully");
+        }
+        return token;
+      } else {
+        this.log("No auth token available - user may not be signed in");
+        return null;
+      }
+    } catch (error) {
+      this.logError("Failed to get auth token", error);
+      return null;
+    }
   }
 
   /**
@@ -195,17 +247,69 @@ class AIService {
   }
 
   /**
-   * Call an Azure Function
+   * Call an Azure Function (unauthenticated)
    */
   private async callFunction<T>(
     functionName: string,
     data: Record<string, unknown>,
   ): Promise<T> {
-    const functionsService = getFunctionsService();
-    return functionsService.call<Record<string, unknown>, T>(
-      functionName,
-      data,
-    );
+    this.log(`Calling function: ${functionName}`, { data });
+    const startTime = Date.now();
+
+    try {
+      const functionsService = getFunctionsService();
+      const result = await functionsService.call<Record<string, unknown>, T>(
+        functionName,
+        data,
+      );
+      this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
+      return result;
+    } catch (error) {
+      this.logError(`Function ${functionName} failed after ${Date.now() - startTime}ms`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Call an Azure Function with authentication
+   */
+  private async callFunctionAuthenticated<T>(
+    functionName: string,
+    data: Record<string, unknown>,
+  ): Promise<T> {
+    this.log(`Calling authenticated function: ${functionName}`, { data });
+    const startTime = Date.now();
+
+    try {
+      // Ensure we have a valid auth token
+      const token = await this.ensureAuthToken();
+      if (!token) {
+        throw new AIError("Please sign in to use AI features", "unauthenticated");
+      }
+
+      const functionsService = getFunctionsService();
+
+      // Use callAuthenticated if available, otherwise fall back to call
+      if ("callAuthenticated" in functionsService) {
+        const result = await (functionsService as AzureFunctionsService).callAuthenticated<
+          Record<string, unknown>,
+          T
+        >(functionName, data);
+        this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
+        return result;
+      }
+
+      // Fall back to regular call (token already set via setAuthToken)
+      const result = await functionsService.call<Record<string, unknown>, T>(
+        functionName,
+        data,
+      );
+      this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
+      return result;
+    } catch (error) {
+      this.logError(`Function ${functionName} failed after ${Date.now() - startTime}ms`, error);
+      throw error;
+    }
   }
 
   /**
@@ -246,7 +350,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<CompetitorAnalysisResult>(
+      return await this.callFunctionAuthenticated<CompetitorAnalysisResult>(
         "analyzeCompetitors",
         { competitors, focusAreas },
       );
@@ -264,7 +368,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<SWOTResult>("generateSWOT", {
+      return await this.callFunctionAuthenticated<SWOTResult>("generateSWOT", {
         topic,
         context,
       });
@@ -284,7 +388,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<RecommendationsResult>(
+      return await this.callFunctionAuthenticated<RecommendationsResult>(
         "getReadingRecommendations",
         { currentDocId },
       );
@@ -306,7 +410,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<DocumentImprovementResult>(
+      return await this.callFunctionAuthenticated<DocumentImprovementResult>(
         "suggestImprovements",
         {
           documentPath: docId,
@@ -331,7 +435,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<MarketInsightsResult>(
+      return await this.callFunctionAuthenticated<MarketInsightsResult>(
         "getMarketInsights",
         {
           topic,
@@ -355,7 +459,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<SummaryResult>("summarizeContent", {
+      return await this.callFunctionAuthenticated<SummaryResult>("summarizeContent", {
         content,
         maxLength,
       });
@@ -377,7 +481,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<{ success: boolean; status: string }>(
+      return await this.callFunctionAuthenticated<{ success: boolean; status: string }>(
         "reviewDocumentImprovement",
         { suggestionId, status, notes },
       );
@@ -397,7 +501,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<{ suggestions: PendingImprovement[] }>(
+      return await this.callFunctionAuthenticated<{ suggestions: PendingImprovement[] }>(
         "getPendingImprovements",
         { limit },
       );
@@ -421,14 +525,18 @@ class AIService {
       throw new AIError("AI service not available", "unavailable");
     }
 
+    this.log("askDocumentation called", { question, options });
+
     try {
-      return await this.callFunction<RAGResponse>("askDocumentation", {
+      // Use authenticated call since backend requires auth
+      return await this.callFunctionAuthenticated<RAGResponse>("askDocumentation", {
         question,
         category: options?.category,
         format: options?.format,
         history: options?.history,
       });
     } catch (error) {
+      this.logError("askDocumentation failed", error);
       this.handleError(error);
     }
   }
@@ -492,7 +600,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<IndexStats>("getIndexStats", {});
+      return await this.callFunctionAuthenticated<IndexStats>("getIndexStats", {});
     } catch (error) {
       this.handleError(error);
     }
@@ -512,7 +620,7 @@ class AIService {
     }
 
     try {
-      return await this.callFunction<FunFactsResult>("researchPerson", {
+      return await this.callFunctionAuthenticated<FunFactsResult>("researchPerson", {
         firstName,
         lastName,
         linkedInUrl,
