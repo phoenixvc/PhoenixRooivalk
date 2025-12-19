@@ -501,4 +501,74 @@ Dependency updates across Rust crates, npm packages, and GitHub Actions.
 
 ---
 
+### 12. Related Project: OmniPost (content_creation)
+
+Development continued on
+[OmniPost](https://github.com/JustAGhosT/content_creation), an AI-powered
+multi-platform content publishing tool supporting Phoenix Rooivalk's marketing
+and investor communications.
+
+#### Repository Overview
+
+| Metric        | Value                                                                         |
+| ------------- | ----------------------------------------------------------------------------- |
+| Repository    | [JustAGhosT/content_creation](https://github.com/JustAGhosT/content_creation) |
+| Total Commits | 584+                                                                          |
+| Tech Stack    | Next.js 14, React 18, TypeScript 5.3, Prisma                                  |
+| AI Providers  | DeepSeek, OpenAI, Azure OpenAI, Hugging Face                                  |
+| Deployment    | Azure Web Apps with Bicep IaC                                                 |
+
+#### Key Features
+
+- **Multi-Platform Publishing**: Facebook, Instagram, LinkedIn, Twitter, custom
+  platforms
+- **AI Content Tools**: Text summarization, image generation, platform-specific
+  adaptation
+- **Enterprise Features**: JWT auth, audit trails, Airtable integration, rate
+  limiting
+- **Notifications**: Email, Slack, SMS (Twilio)
+
+#### December 2025 Updates (Week 51)
+
+| Category            | Changes                                                                   |
+| ------------------- | ------------------------------------------------------------------------- |
+| **Database**        | Prisma ORM integration with SQLite, comprehensive schema for audit logs  |
+| **Security**        | Fixed format string injection, pinned package versions, removed hardcoded credentials |
+| **Infrastructure**  | Distributed rate limiting via Upstash Redis with fallback support         |
+| **UI Components**   | Converted to CSS modules: WorkflowStage, LoadingState, ErrorMessage, AuditTrail |
+| **Deployment**      | Fixed Azure deployment issues (.next directory, styled-jsx, startup command) |
+| **Code Quality**    | ESLint fixes, TypeScript types, runtime validation for siteConfig         |
+
+#### Pull Requests Merged (Dec 10-12)
+
+| PR   | Title                                              | Category       |
+| ---- | -------------------------------------------------- | -------------- |
+| #98  | Fix landing page improvements                      | UI/UX          |
+| #97  | Bump next from 16.0.8 to 16.0.10                   | Dependencies   |
+| #96  | Fix Prettier formatting in Header component        | Code Quality   |
+| #95  | Fix landing page and other pages                   | UI/UX          |
+| #94  | Fix Azure deployment - .next directory excluded    | DevOps         |
+| #93  | Fix Azure deployment module resolution (styled-jsx)| DevOps         |
+| #92  | Fix Azure App Service startup                      | DevOps         |
+| #91  | Fix ESLint errors in review components             | Code Quality   |
+| #90  | Fix ESLint warnings and update infra naming        | Code Quality   |
+| #89  | Fix Bicep DNS scope errors and TypeScript types    | Infrastructure |
+
+#### Privacy & Compliance
+
+- **PII Retention Policy**: 90-day retention with SHA-256 hashing for IPs
+- **Audit Logging**: Comprehensive HTTP audit fields (path, method, body, statusCode)
+- **Security Scanning**: Codacy and SonarCloud integration for compliance
+
+#### Relevance to Phoenix Rooivalk
+
+OmniPost supports the project by:
+
+- Automating investor update distribution across platforms
+- Generating AI-assisted marketing content
+- Managing content queues with human review workflows
+- Tracking engagement across channels for investor relations
+
+---
+
 _Report compiled: December 19, 2025_
