@@ -175,6 +175,8 @@ jobs:
           production_branch: main
           deployment_environment:
             ${{ github.event_name == 'push' && 'production' || '' }}
+          # Skip deployment gracefully if token is not configured
+          skip_deploy_on_missing_secrets: true
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
@@ -211,3 +213,4 @@ jobs:
           deployment_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
           action: "close"
+          skip_deploy_on_missing_secrets: true
