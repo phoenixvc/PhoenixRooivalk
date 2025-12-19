@@ -31,7 +31,7 @@ jobs:
         env:
           # Use env vars to safely check multiline secrets (XML breaks shell syntax)
           HAS_SWA_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN != '' }}
-          HAS_FUNCTIONS_PROFILE: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE != '' }}
+          HAS_FUNCTIONS_PROFILE: ${{ secrets.AZURE_CREDENTIALS != '' }}
           HAS_FUNCTIONAPP_NAME_VAR: ${{ vars.AZURE_FUNCTIONAPP_NAME != '' }}
           HAS_FUNCTIONAPP_NAME_SECRET: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}
           FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
@@ -77,12 +77,12 @@ jobs:
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
                 fi
                 echo "✅ Azure Functions deployment prerequisites met:"
-                echo "  - AZURE_FUNCTIONS_PUBLISH_PROFILE: configured"
+                echo "  - AZURE_CREDENTIALS: configured"
                 echo "  - AZURE_FUNCTIONAPP_NAME: $FUNCTIONAPP_NAME"
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else
-              echo "::warning::AZURE_FUNCTIONS_PUBLISH_PROFILE secret is NOT configured - Functions deployment will be skipped"
+              echo "::warning::AZURE_CREDENTIALS secret is NOT configured - Functions deployment will be skipped"
               echo "has-functions-profile=false" >> $GITHUB_OUTPUT
             fi
           else
@@ -296,6 +296,9 @@ jobs:
       needs.check-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions
+    permissions:
+      contents: read
+      id-token: write # Required for OIDC auth with Azure
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -316,11 +319,39 @@ jobs:
         working-directory: apps/docs/azure-functions
         run: pnpm run build
 
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
+      - name: Install production dependencies
+        working-directory: apps/docs/azure-functions
+        run: pnpm install --no-frozen-lockfile --prod --ignore-scripts
+
+      - name: Create deployment package
+        working-directory: apps/docs/azure-functions
+        run: |
+          echo "Creating deployment package for Flex Consumption..."
+          mkdir -p deploy-package
+          cp -r dist deploy-package/
+          cp host.json deploy-package/
+          cp package.json deploy-package/
+          cd deploy-package
+          npm install --omit=dev --legacy-peer-deps
+          mkdir -p .azurefunctions
+          echo '{"version":"1.0.0","workerRuntime":"node","languageWorkers":{"node":{"arguments":["--max-old-space-size=8192"]}}}' > .azurefunctions/functions.metadata.json
+          echo '{"extensions":[]}' > .azurefunctions/extensions.json
+          echo "✅ Deployment package created"
+
+      - name: Azure Login
+        uses: azure/login@v2
         with:
-          app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
-          package: apps/docs/azure-functions
-          publish-profile: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}
-          respect-funcignore: true
-          scm-do-build-during-deployment: true
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+      - name: Deploy to Azure Functions
+        working-directory: apps/docs/azure-functions/deploy-package
+        run: |
+          echo "Deploying to Azure Functions Flex Consumption..."
+          func azure functionapp publish "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
+            --javascript \
+            --no-build \
+            --force
+          echo "✅ Deployment complete"
