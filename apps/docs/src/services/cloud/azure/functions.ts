@@ -70,10 +70,22 @@ export class AzureFunctionsService implements IAIFunctionsService {
     }
 
     if (!this.config) {
-      throw new CloudFunctionError(
-        "Functions service not configured",
-        "unavailable",
-      );
+      // Return a graceful response instead of throwing
+      // This allows the UI to handle unconfigured state gracefully
+      return {
+        success: false,
+        offline: true,
+        answer:
+          "I'm currently unable to answer questions because the AI backend is not configured.\n\n" +
+          "**What you can do:**\n" +
+          "- Browse the documentation manually using the sidebar\n" +
+          "- Use the search feature to find specific topics\n" +
+          "- Check back later once the AI service is set up\n\n" +
+          "If you're an administrator, visit `/admin/diagnostics` to configure the AI backend.",
+        sources: [],
+        confidence: "low",
+        message: "AI backend not configured. Set AZURE_FUNCTIONS_BASE_URL.",
+      } as TOutput;
     }
 
     const url = `${this.config.baseUrl}/api/${name}`;
@@ -132,10 +144,21 @@ export class AzureFunctionsService implements IAIFunctionsService {
     }
 
     if (!this.config) {
-      throw new CloudFunctionError(
-        "Functions service not configured",
-        "unavailable",
-      );
+      // Return a graceful response instead of throwing
+      return {
+        success: false,
+        offline: true,
+        answer:
+          "I'm currently unable to answer questions because the AI backend is not configured.\n\n" +
+          "**What you can do:**\n" +
+          "- Browse the documentation manually using the sidebar\n" +
+          "- Use the search feature to find specific topics\n" +
+          "- Check back later once the AI service is set up\n\n" +
+          "If you're an administrator, visit `/admin/diagnostics` to configure the AI backend.",
+        sources: [],
+        confidence: "low",
+        message: "AI backend not configured. Set AZURE_FUNCTIONS_BASE_URL.",
+      } as TOutput;
     }
 
     if (!this.authToken) {

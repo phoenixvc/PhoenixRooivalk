@@ -625,6 +625,9 @@ export class OfflineMessagingService implements IMessagingService {
 // ============================================================================
 
 export class OfflineAIFunctionsService implements IAIFunctionsService {
+  private static readonly OFFLINE_MESSAGE =
+    "AI features require backend configuration. The assistant works best when AZURE_FUNCTIONS_BASE_URL is configured.";
+
   isConfigured(): boolean {
     return false; // AI features not available offline
   }
@@ -638,10 +641,13 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _data: TInput,
     _options?: any,
   ): Promise<TOutput> {
-    throw new Error(
-      "AI Functions not available. AZURE_FUNCTIONS_BASE_URL is not configured. " +
-        "Admins: Visit /admin/diagnostics for setup instructions.",
-    );
+    // Return a typed response that matches common function return types
+    // This allows the UI to handle offline mode gracefully
+    return {
+      success: false,
+      offline: true,
+      message: OfflineAIFunctionsService.OFFLINE_MESSAGE,
+    } as TOutput;
   }
 
   async callAuthenticated<TInput, TOutput>(
@@ -649,10 +655,12 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
     _data: TInput,
     _options?: any,
   ): Promise<TOutput> {
-    throw new Error(
-      "AI Functions not available. AZURE_FUNCTIONS_BASE_URL is not configured. " +
-        "Admins: Visit /admin/diagnostics for setup instructions.",
-    );
+    // Return a typed response that matches common function return types
+    return {
+      success: false,
+      offline: true,
+      message: OfflineAIFunctionsService.OFFLINE_MESSAGE,
+    } as TOutput;
   }
 
   async analyzeCompetitors(
@@ -710,7 +718,12 @@ export class OfflineAIFunctionsService implements IAIFunctionsService {
   ): Promise<RAGResponse> {
     return {
       answer:
-        "AI features are not available in offline mode. Please configure a cloud provider.",
+        "I'm currently unable to answer questions because the AI backend is not configured.\n\n" +
+        "**What you can do:**\n" +
+        "- Browse the documentation manually using the sidebar\n" +
+        "- Use the search feature to find specific topics\n" +
+        "- Check back later once the AI service is set up\n\n" +
+        "If you're an administrator, visit `/admin/diagnostics` to configure the AI backend.",
       sources: [],
       confidence: "low",
     };
