@@ -1,0 +1,503 @@
+---
+title: "Week 51: Dec 12 - Dec 19, 2025"
+sidebar_label: "Week 51 (Dec 12-19)"
+description:
+  Weekly progress report covering documentation portal UX overhaul, Azure Static
+  Web Apps migration, CUAS readiness framework, design tokens system, 194
+  commits, 59 merged PRs, and 16K+ net lines of code changes
+keywords:
+  [
+    progress,
+    weekly,
+    documentation UX,
+    Azure Static Web Apps,
+    SWA migration,
+    Netlify removal,
+    CUAS readiness,
+    Canada CUAS Sandbox,
+    PriviDox,
+    design tokens,
+    dark mode,
+    responsive design,
+    accessibility,
+    keyboard navigation,
+    sidebar UI,
+    center-align,
+    mobile-first,
+    Azure Functions,
+    OIDC authentication,
+    Flex Consumption,
+    Firebase removal,
+    UI/UX improvements,
+  ]
+difficulty: beginner
+timeEstimate: 5
+xpReward: 75
+phase: ["seed"]
+---
+
+import {
+  SlideDeck,
+  SlideSection,
+  DocumentDownload,
+} from "@site/src/components/Downloads";
+import {
+  BLOCKCHAIN,
+  HARDWARE,
+  PERFORMANCE,
+  MARKET,
+  FUNDING,
+  TEAM,
+} from "@site/src/data/values";
+
+# Week 51: December 12 - December 19, 2025
+
+<DocumentDownload title="Week 51 Progress Report - Phoenix Rooivalk" />
+
+## TL;DR (2-Minute Summary)
+
+### 1. Documentation Portal UX Overhaul
+
+- **Center-aligned content**: Improved readability for documentation pages
+- **Responsive mobile-first layout**: Better experience across all devices
+- **Collapsible sidebar**: Resizable and collapsible filtering sidebar
+- **Keyboard navigation**: Phase 5 implementation with full keyboard support
+- **PDF export fixes**: Hide floating widgets and comments from PDF output
+
+### 2. Azure Infrastructure Migration
+
+- **Netlify to Azure SWA**: Complete migration to Azure Static Web Apps
+- **Azure Functions fixes**: Resolved 401 deployment errors with OIDC
+  authentication
+- **Firebase removal**: Cleaned up unused Firebase Functions package and
+  workflows
+- **Flex Consumption**: Fixed Azure Functions Flex Consumption deployment issues
+
+### 3. Design System Implementation
+
+- **Design tokens**: New design tokens system for consistent styling
+- **Dark mode improvements**: Enhanced light/dark theme toggle functionality
+- **Component consolidation**: Phase 4 consolidation of UI components
+- **CSS refactoring**: Phase 3 CSS refactoring using design tokens consistently
+
+### 4. CUAS Readiness & Accelerator Progress
+
+- **CUAS readiness framework**: Added comprehensive readiness level documentation
+- **PriviDox draft response**: Draft email response for Canada CUAS Sandbox
+  application
+- **International accelerators**: Added accelerator pages and application docs
+- **Roadmap improvements**: Accessibility improvements and refactored sections
+
+### 5. Code Quality & Infrastructure
+
+- **194 commits merged**: Highest weekly commit volume yet
+- **59 pull requests**: Including feature PRs and Dependabot updates
+- **TypeScript fixes**: Resolved multiple TypeScript errors across components
+- **Accessibility improvements**: Enhanced a11y across documentation portal
+
+### 6. Known Issues Resolved
+
+| Issue                         | Status      | Resolution                                  |
+| ----------------------------- | ----------- | ------------------------------------------- |
+| Azure Functions 401 errors    | ✅ Resolved | Switched to OIDC authentication             |
+| Netlify deployment references | ✅ Resolved | Fully migrated to Azure Static Web Apps     |
+| Firebase Functions unused     | ✅ Resolved | Removed package and workflows               |
+| Sidebar filter layout         | ✅ Resolved | Improved UI with collapse functionality     |
+
+---
+
+## 3-Minute Presentation
+
+<SlideDeck
+  title="Week 51 Progress Update"
+  duration={3}
+  audience="Team & Stakeholders"
+  date="December 19, 2025"
+>
+
+<SlideSection
+  number={1}
+  title="Documentation UX Overhaul"
+  duration={40}
+  icon="🎨"
+  keyPoints={[
+    "**Center-aligned content**: Improved readability across all doc pages",
+    {
+      text: "**Responsive design**: Mobile-first layout implementation",
+      subPoints: [
+        "Collapsible and resizable sidebar",
+        "Keyboard navigation support (Phase 5)",
+      ],
+    },
+    "**Design tokens system**: Consistent styling with light/dark theme toggle",
+    "**PDF improvements**: Clean export without floating widgets",
+  ]}
+  speakerNotes="Major UX improvements to the documentation portal this week."
+  script="This week we completed a major UX overhaul of the documentation portal. We center-aligned content for better readability, implemented responsive mobile-first design with a collapsible sidebar, added full keyboard navigation support, and created a design tokens system for consistent light/dark theming."
+/>
+
+<SlideSection
+  number={2}
+  title="Azure Infrastructure Migration"
+  duration={35}
+  icon="☁️"
+  keyPoints={[
+    "**Netlify → Azure SWA**: Complete migration to Azure Static Web Apps",
+    {
+      text: "**Azure Functions fixes**:",
+      subPoints: [
+        "Resolved 401 deployment errors",
+        "Implemented OIDC authentication",
+        "Fixed Flex Consumption deployment",
+      ],
+    },
+    "**Firebase cleanup**: Removed unused Functions package and workflows",
+    "**CI/CD improvements**: Fixed pnpm version and husky errors",
+  ]}
+  speakerNotes="Infrastructure consolidation on Azure platform."
+  script="We completed the migration from Netlify to Azure Static Web Apps. Fixed multiple Azure Functions deployment issues including 401 errors by switching to OIDC authentication. Cleaned up by removing the unused Firebase Functions package, streamlining our infrastructure on Azure."
+/>
+
+<SlideSection
+  number={3}
+  title="CUAS Readiness & Accelerators"
+  duration={30}
+  icon="🎯"
+  keyPoints={[
+    "**CUAS readiness framework**: Comprehensive documentation of readiness levels",
+    "**PriviDox draft response**: Email for Canada CUAS Sandbox application",
+    "**International accelerators**: Added accelerator pages and docs",
+    "**Application support**: Eligibility assessment and direct links",
+  ]}
+  speakerNotes="Continued progress on CUAS applications and accelerator outreach."
+  script="We added a comprehensive CUAS readiness framework to track our progress toward certification. Created a draft response for the PriviDox Canada CUAS Sandbox application. Also added international accelerator pages to support our multi-track funding approach."
+/>
+
+<SlideSection
+  number={4}
+  title="Code Quality & Stats"
+  duration={30}
+  icon="📊"
+  keyPoints={[
+    "**194 commits**: Highest weekly commit volume yet",
+    "**59 PRs merged**: Including 44 feature + 15 Dependabot updates",
+    {
+      text: "**Contributors**:",
+      subPoints: [
+        "Claude: 101 commits",
+        "Jurie Smit: 64 commits",
+        "Dependabot: 15 updates",
+        "Copilot: 14 commits",
+      ],
+    },
+    "**Net code change**: +16,299 lines",
+  ]}
+  speakerNotes="Strong development velocity this week."
+  script="This was our highest commit volume week yet with 194 commits and 59 merged PRs. Contributors included Claude with 101 commits, Jurie with 64, plus Dependabot and Copilot automation. Net code change was plus 16,000 lines."
+/>
+
+<SlideSection
+  number={5}
+  title="Design System Phases"
+  duration={25}
+  icon="🔧"
+  keyPoints={[
+    "**Phase 1-2**: Accessibility and responsive design improvements",
+    "**Phase 3**: CSS refactoring with design tokens",
+    "**Phase 4**: UI component consolidation",
+    "**Phase 5**: Keyboard navigation support",
+  ]}
+  speakerNotes="Systematic improvement of the documentation portal."
+  script="We executed a phased design system implementation: Phases 1 and 2 for accessibility and responsive design, Phase 3 for CSS refactoring with design tokens, Phase 4 for component consolidation, and Phase 5 for keyboard navigation. This systematic approach ensures consistent quality."
+/>
+
+<SlideSection
+  number={6}
+  title="Next Week Priorities"
+  duration={20}
+  icon="📅"
+  keyPoints={[
+    "**Continue accelerator applications**: SOSV and others from Alistair's list",
+    "**Hardware prototype progress**: Launcher assembly and testing",
+    "**CUAS Sandbox follow-up**: Track PriviDox application status",
+    "**Holiday planning**: Prepare for reduced capacity during holidays",
+  ]}
+  script="Next week priorities: continue accelerator applications, advance the launcher prototype, follow up on CUAS Sandbox application, and plan for holiday capacity. Questions?"
+/>
+
+</SlideDeck>
+
+---
+
+## Full Weekly Report
+
+### 1. Documentation Portal UX Overhaul
+
+This week saw a major focus on improving the documentation portal user
+experience across multiple phases of implementation.
+
+#### Phase Implementation
+
+| Phase   | Focus Area              | Status      | Key Changes                               |
+| ------- | ----------------------- | ----------- | ----------------------------------------- |
+| Phase 1 | Accessibility           | ✅ Complete | ARIA labels, focus states, color contrast |
+| Phase 2 | Responsive Design       | ✅ Complete | Mobile-first layout, breakpoints          |
+| Phase 3 | CSS Design Tokens       | ✅ Complete | Consistent token usage across components  |
+| Phase 4 | Component Consolidation | ✅ Complete | Unified UI components                     |
+| Phase 5 | Keyboard Navigation     | ✅ Complete | Full keyboard support with focus trapping |
+
+#### Key Improvements
+
+- **Center-aligned content**: Documentation pages now use centered content
+  layout for improved readability
+- **Collapsible sidebar**: Sidebar is now resizable and collapsible with toggle
+  button
+- **Dark mode fixes**: Improved color consistency in dark mode
+- **PDF export**: Floating widgets and comments now hidden from PDF output
+- **Filter clear button**: Styled as small orange circle, positioned top-right
+
+**Key PRs:** #380-#405
+
+---
+
+### 2. Azure Infrastructure Migration
+
+Complete migration from Netlify to Azure Static Web Apps with multiple
+deployment fixes.
+
+#### Migration Summary
+
+| Component           | Previous     | Current                      | Status      |
+| ------------------- | ------------ | ---------------------------- | ----------- |
+| Static Hosting      | Netlify      | Azure Static Web Apps        | ✅ Complete |
+| Serverless Backend  | Firebase     | Azure Functions              | ✅ Complete |
+| Authentication      | N/A          | OIDC Authentication          | ✅ Complete |
+| Deployment Model    | Netlify CLI  | Azure SWA Action             | ✅ Complete |
+
+#### Issues Resolved
+
+| Issue                          | Root Cause                   | Solution                               |
+| ------------------------------ | ---------------------------- | -------------------------------------- |
+| Azure Functions 401 error      | SCM build authentication     | Disabled Oryx build, switched to OIDC  |
+| SWA deployment timeout         | Wrong GitHub Action          | Used official Azure SWA action         |
+| Flex Consumption deploy fails  | Package configuration        | Fixed @azure/functions dependency      |
+| Husky error in CI              | Git hooks in production      | Added --ignore-scripts flag            |
+| pnpm version mismatch          | Workflow specification       | Fixed version in deploy workflow       |
+
+#### Cleanup Completed
+
+- Removed all Netlify references from codebase
+- Deleted Firebase Functions package and workflow
+- Removed unused Firebase service files and configuration
+- Regenerated pnpm-lock.yaml without Firebase dependencies
+
+**Key PRs:** #388-#405
+
+---
+
+### 3. Design System Implementation
+
+New design tokens system for consistent styling across the documentation portal.
+
+#### Design Tokens Structure
+
+```css
+/* Example token usage */
+--phoenix-color-primary: var(--ifm-color-primary);
+--phoenix-spacing-md: 1rem;
+--phoenix-radius-default: 8px;
+--phoenix-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+```
+
+#### Theme Support
+
+| Feature              | Light Mode   | Dark Mode    |
+| -------------------- | ------------ | ------------ |
+| Background colors    | ✅ Supported | ✅ Supported |
+| Text colors          | ✅ Supported | ✅ Supported |
+| Border colors        | ✅ Supported | ✅ Supported |
+| Shadow values        | ✅ Supported | ✅ Supported |
+| Theme toggle         | ✅ Working   | ✅ Working   |
+
+#### Components Updated
+
+- AISearchBar: Updated to use design tokens
+- Sidebar filters: Consistent styling with tokens
+- Calendar module: Design token integration
+- Admin components: Consolidated with token system
+
+---
+
+### 4. CUAS Readiness & Accelerator Progress
+
+Continued focus on Counter-UAS certification readiness and accelerator
+applications.
+
+#### CUAS Documentation Added
+
+| Document                     | Purpose                                   |
+| ---------------------------- | ----------------------------------------- |
+| CUAS Readiness Framework     | Track certification readiness levels      |
+| Eligibility Assessment       | Self-assessment for sandbox applications  |
+| PriviDox Draft Response      | Email for Canada CUAS Sandbox             |
+| International Accelerators   | Listing of relevant accelerator programs  |
+
+#### Application Status
+
+| Application           | Deadline    | Status         |
+| --------------------- | ----------- | -------------- |
+| Canada CUAS Sandbox   | Dec 15      | Draft prepared |
+| SOSV Accelerator      | Rolling     | Preparing      |
+| Other accelerators    | Various     | Research phase |
+
+---
+
+### 5. Key Decisions Made
+
+| Decision                       | Rationale                              | Impact                              |
+| ------------------------------ | -------------------------------------- | ----------------------------------- |
+| Migrate to Azure SWA           | Consolidate on Azure platform          | Simplified deployment pipeline      |
+| Remove Firebase Functions      | Unused, adds complexity                | Cleaner codebase                    |
+| Implement design tokens        | Consistent styling across themes       | Maintainable CSS architecture       |
+| Center-align documentation     | Improved readability                   | Better user experience              |
+| Add keyboard navigation        | Accessibility requirement              | Full a11y compliance                |
+| OIDC for Azure Functions       | More secure than publish profile       | Better security posture             |
+
+---
+
+### 6. Action Items Completed
+
+#### Jurie Smit (Yuri)
+
+- [x] Complete documentation portal UX overhaul
+- [x] Fix Azure Functions deployment issues
+- [x] Implement design tokens system
+- [x] Add CUAS readiness framework
+- [x] Migrate from Netlify to Azure SWA
+- [x] Remove unused Firebase components
+
+#### Automation (Claude/Copilot/Dependabot)
+
+- [x] 115 automated commits for features and fixes
+- [x] 15 dependency updates via Dependabot
+- [x] TypeScript error fixes
+- [x] Prettier formatting enforcement
+
+---
+
+### 7. Next Week Priorities
+
+1. **Accelerator Applications**: Continue SOSV and other accelerator
+   applications
+2. **Hardware Prototype**: Support Pieter with launcher assembly and testing
+3. **CUAS Follow-up**: Track Canada CUAS Sandbox application status
+4. **Documentation**: Add any missing technical documentation
+5. **Holiday Planning**: Prepare for reduced capacity during holiday period
+
+---
+
+### 8. Metrics & KPIs
+
+| Metric                | This Week    | vs Week 50   | Trend  |
+| --------------------- | ------------ | ------------ | ------ |
+| Commits merged        | 194          | 124          | ↑ 56%  |
+| Pull requests merged  | 59           | 38           | ↑ 55%  |
+| Lines added           | 62,028       | 27,063       | ↑ 129% |
+| Lines deleted         | 45,729       | 9,263        | ↑ 393% |
+| Net lines             | +16,299      | +17,800      | →      |
+| Contributors active   | 4            | 5            | →      |
+| UX phases completed   | 5            | -            | ✅ NEW |
+| Infrastructure issues | 6 resolved   | -            | ✅ NEW |
+| Design tokens added   | Yes          | -            | ✅ NEW |
+| Azure migration       | Complete     | -            | ✅ NEW |
+
+**Note:** Higher deletion count reflects significant refactoring (Firebase
+removal, Netlify cleanup) and CSS consolidation with design tokens.
+
+---
+
+### 9. Risks & Blockers
+
+| Risk                          | Severity | Mitigation                                |
+| ----------------------------- | -------- | ----------------------------------------- |
+| Holiday reduced capacity      | Medium   | Plan critical work before break           |
+| CUAS application timeline     | Medium   | Draft prepared, follow up post-deadline   |
+| Accelerator competition       | High     | Multi-track approach continues            |
+| Infrastructure changes        | Low      | Migration complete, monitoring in place   |
+
+---
+
+### 10. Weekly Commits & Pull Requests
+
+#### Feature Pull Requests Merged (Dec 12-19)
+
+| PR   | Title                                            | Category       |
+| ---- | ------------------------------------------------ | -------------- |
+| #405 | Fix: use deployment_token for Azure SWA action   | DevOps         |
+| #404 | Fix SWA deployment timeout with official action  | DevOps         |
+| #403 | Remove all Netlify references                    | Infrastructure |
+| #402 | Fix clear button position                        | UI/UX          |
+| #401 | Move sidebar toggle to bottom-left               | UI/UX          |
+| #400 | Hide floating widgets from PDF output            | UI/UX          |
+| #399 | Fix sidebar filter layout                        | UI/UX          |
+| #398 | Improve UI/UX for sidebar filters                | UI/UX          |
+| #397 | Fix filter button layout issues                  | UI/UX          |
+| #396 | Fix .azurefunctions deployment artifact          | DevOps         |
+| #395 | Fix CI failures: Prettier and Azure Functions    | DevOps         |
+| #394 | Fix husky error with --ignore-scripts            | DevOps         |
+| #393 | Fix Azure Functions Flex Consumption             | DevOps         |
+| #392 | Improve sidebar filtering UI                     | UI/UX          |
+| #391 | Fix Azure Functions 401 with OIDC                | DevOps         |
+| #390 | Fix Azure Functions 401 with disable oryx-build  | DevOps         |
+| #389 | Fix Azure Functions 401 by disabling SCM build   | DevOps         |
+| #388 | Fix pnpm version specification                   | DevOps         |
+| #387 | Fix TypeScript errors                            | Code Quality   |
+| #386 | Fix TypeScript: unauthenticated                  | Code Quality   |
+| #385 | Fix read tracker bug and UI styling              | Bug Fix        |
+| #384 | Add PriviDox draft response link                 | Documentation  |
+| #383 | Implement responsive mobile-first layout         | UI/UX          |
+| #382 | Improve code quality: JSDoc, exports             | Code Quality   |
+| #381 | Phase 5: Keyboard navigation                     | Accessibility  |
+| #380 | Add CUAS readiness framework                     | Documentation  |
+| #379 | Add hackathons and accelerators pages            | Documentation  |
+
+#### Dependabot PRs Merged (15 total)
+
+Dependency updates across Rust crates, npm packages, and GitHub Actions.
+
+---
+
+### 11. Code Progress Statistics
+
+#### Lines of Code Changed (Dec 12-19)
+
+| Metric         | Count    | Notes                                  |
+| -------------- | -------- | -------------------------------------- |
+| Lines added    | 62,028   | Features, design tokens, docs          |
+| Lines deleted  | 45,729   | Firebase removal, Netlify cleanup, CSS |
+| Net change     | +16,299  | Codebase growth                        |
+| Commits        | 194      | Highest weekly volume                  |
+
+#### Commits by Contributor
+
+| Contributor       | Commits | Focus Areas                            |
+| ----------------- | ------- | -------------------------------------- |
+| Claude            | 101     | UI/UX, infrastructure, documentation   |
+| Jurie Smit        | 64      | Features, reviews, merges              |
+| dependabot[bot]   | 15      | Dependency updates                     |
+| copilot-swe-agent | 14      | Bug fixes, workflow improvements       |
+
+#### Changes by Area
+
+| Directory                         | Focus                        |
+| --------------------------------- | ---------------------------- |
+| `pnpm-lock.yaml`                  | Dependencies                 |
+| `apps/docs/src/pages`             | Calendar, admin, UI          |
+| `apps/docs/src/css`               | Design tokens, custom styles |
+| `apps/docs/src/components`        | UI component updates         |
+| `.github/workflows`               | CI/CD pipelines              |
+| `apps/docs/docs/technical`        | ADRs and documentation       |
+
+---
+
+_Report compiled: December 19, 2025_
