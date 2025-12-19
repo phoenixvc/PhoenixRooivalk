@@ -778,6 +778,51 @@ export function OnboardingWalkthrough({
     onClose?.();
   }, [user, onClose]);
 
+  // Handler for application form submission
+  // NOTE: Must be defined before early returns to avoid React #310 hook ordering error
+  const handleApplicationSubmit = useCallback(
+    async (
+      data: Omit<
+        AccessApplication,
+        "userId" | "email" | "displayName" | "submittedAt" | "status"
+      >,
+    ): Promise<boolean> => {
+      const result = await submitAccessApplication({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        company: data.company,
+        currentRole: data.currentRole,
+        requestedRole: data.requestedRole,
+        reason: data.reason,
+        linkedIn: data.linkedIn,
+      });
+      return result.success;
+    },
+    [],
+  );
+
+  // Handler for skipping the application (go to next step with default profile)
+  // NOTE: Must be defined before early returns to avoid React #310 hook ordering error
+  const handleApplicationCancel = useCallback(() => {
+    // Reset to a public profile template and skip to AI fun facts or tour
+    const publicTemplateIndex = PROFILE_TEMPLATES_ARRAY.findIndex(
+      (t) => !INTERNAL_ONLY_TEMPLATE_KEYS.includes(t.templateKey),
+    );
+    if (publicTemplateIndex !== -1) {
+      setSelectedTemplate(PROFILE_TEMPLATES_ARRAY[publicTemplateIndex]);
+    }
+    // Skip to fun facts or tour
+    const funFactsIndex = findStepIndex("ai-fun-facts");
+    if (funFactsIndex > 0 && userDetails) {
+      setCurrentStep(funFactsIndex);
+      saveStep(funFactsIndex);
+    } else {
+      const tourIndex = findStepIndex("tour");
+      setCurrentStep(tourIndex);
+      saveStep(tourIndex);
+    }
+  }, [findStepIndex, userDetails]);
+
   // Don't render if not visible
   if (!isVisible || loading) {
     return null;
@@ -910,49 +955,6 @@ export function OnboardingWalkthrough({
       </>
     );
   }
-
-  // Handler for application form submission
-  const handleApplicationSubmit = useCallback(
-    async (
-      data: Omit<
-        AccessApplication,
-        "userId" | "email" | "displayName" | "submittedAt" | "status"
-      >,
-    ): Promise<boolean> => {
-      const result = await submitAccessApplication({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        company: data.company,
-        currentRole: data.currentRole,
-        requestedRole: data.requestedRole,
-        reason: data.reason,
-        linkedIn: data.linkedIn,
-      });
-      return result.success;
-    },
-    [],
-  );
-
-  // Handler for skipping the application (go to next step with default profile)
-  const handleApplicationCancel = useCallback(() => {
-    // Reset to a public profile template and skip to AI fun facts or tour
-    const publicTemplateIndex = PROFILE_TEMPLATES_ARRAY.findIndex(
-      (t) => !INTERNAL_ONLY_TEMPLATE_KEYS.includes(t.templateKey),
-    );
-    if (publicTemplateIndex !== -1) {
-      setSelectedTemplate(PROFILE_TEMPLATES_ARRAY[publicTemplateIndex]);
-    }
-    // Skip to fun facts or tour
-    const funFactsIndex = findStepIndex("ai-fun-facts");
-    if (funFactsIndex > 0 && userDetails) {
-      setCurrentStep(funFactsIndex);
-      saveStep(funFactsIndex);
-    } else {
-      const tourIndex = findStepIndex("tour");
-      setCurrentStep(tourIndex);
-      saveStep(tourIndex);
-    }
-  }, [findStepIndex, userDetails]);
 
   // Render apply for access step
   if (isApplyForAccessStep) {
