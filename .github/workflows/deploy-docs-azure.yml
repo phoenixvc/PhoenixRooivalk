@@ -291,7 +291,8 @@ jobs:
   deploy-functions:
     needs: [check-secrets, build-and-deploy]
     if:
-      github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      github.ref == 'refs/heads/main' &&
       needs.check-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions
