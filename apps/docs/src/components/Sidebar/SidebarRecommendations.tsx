@@ -99,11 +99,15 @@ export function SidebarRecommendations({
   const { knownProfile, isProfileLoaded, profileKey, confirmedRoles } =
     userProfile;
 
-  // Get selected template for unknown users
-  const selectedTemplate =
-    !knownProfile && profileKey && profileKey in PROFILE_TEMPLATES
-      ? PROFILE_TEMPLATES[profileKey]
-      : null;
+  // Memoize selected template to prevent callback instability
+  // This ensures stable references for callbacks that depend on it
+  const selectedTemplate = useMemo(
+    () =>
+      !knownProfile && profileKey && profileKey in PROFILE_TEMPLATES
+        ? PROFILE_TEMPLATES[profileKey]
+        : null,
+    [knownProfile, profileKey],
+  );
 
   // Reset state when user changes (fixes loadedRef persistence bug)
   useEffect(() => {

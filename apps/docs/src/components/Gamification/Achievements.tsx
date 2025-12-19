@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
 export interface Achievement {
@@ -221,10 +221,13 @@ export function useAchievements() {
     null,
   );
 
-  // Get unlocked achievements from auth context
-  const unlockedAchievements = progress?.achievements
-    ? Object.keys(progress.achievements)
-    : [];
+  // Memoize unlocked achievements to prevent callback instability
+  // Without this, a new array is created every render causing cascading updates
+  const unlockedAchievements = useMemo(
+    () =>
+      progress?.achievements ? Object.keys(progress.achievements) : [],
+    [progress?.achievements],
+  );
   const totalPoints = progress?.stats?.totalPoints || 0;
 
   const unlockAchievement = useCallback(
