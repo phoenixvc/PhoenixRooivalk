@@ -299,6 +299,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -306,11 +309,11 @@ jobs:
 
       - name: Install Azure Functions dependencies
         working-directory: apps/docs/azure-functions
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Azure Functions
         working-directory: apps/docs/azure-functions
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
