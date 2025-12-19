@@ -4,7 +4,7 @@
  * Frontend service for managing known internal user email mappings.
  */
 
-import { getAuthService } from "./cloud";
+import { getAuthService, getCurrentProvider } from "./cloud";
 
 /**
  * Get API base URL from Docusaurus config or fallback to /api
@@ -254,6 +254,11 @@ export async function checkKnownEmail(
   email: string,
 ): Promise<{ isKnown: boolean; profileKey: string | null }> {
   if (!email) {
+    return { isKnown: false, profileKey: null };
+  }
+
+  // Skip API call in offline mode - the local fallback in internal-users.ts will handle it
+  if (getCurrentProvider() === "offline") {
     return { isKnown: false, profileKey: null };
   }
 
