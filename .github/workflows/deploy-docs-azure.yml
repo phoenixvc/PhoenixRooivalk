@@ -28,6 +28,16 @@ jobs:
     steps:
       - name: Check required secrets
         id: check
+        env:
+          # Use env vars to safely check multiline secrets (XML breaks shell syntax)
+          HAS_SWA_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN != '' }}
+          HAS_FUNCTIONS_PROFILE: ${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE != '' }}
+          HAS_FUNCTIONAPP_NAME_VAR: ${{ vars.AZURE_FUNCTIONAPP_NAME != '' }}
+          HAS_FUNCTIONAPP_NAME_SECRET: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}
+          FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+          IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' }}
+          HAS_ENTRA_TENANT: ${{ secrets.AZURE_ENTRA_TENANT_ID != '' }}
+          HAS_FUNCTIONS_BASE_URL: ${{ vars.AZURE_FUNCTIONS_BASE_URL != '' || secrets.AZURE_FUNCTIONS_BASE_URL != '' }}
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "🔍 Checking Azure Infrastructure Prerequisites"
@@ -38,7 +48,7 @@ jobs:
           MISCONFIG_WARNINGS=""
 
           # Required for Static Web Apps deployment
-          if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
+          if [ "$HAS_SWA_TOKEN" != "true" ]; then
             MISSING="${MISSING}\n  - AZURE_STATIC_WEB_APPS_API_TOKEN"
             echo "::warning::AZURE_STATIC_WEB_APPS_API_TOKEN is not configured"
           else
@@ -47,12 +57,12 @@ jobs:
           fi
 
           # Optional: Functions deployment (only on main)
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            if [ -n "${{ secrets.AZURE_FUNCTIONS_PUBLISH_PROFILE }}" ]; then
+          if [ "$IS_MAIN_BRANCH" == "true" ]; then
+            if [ "$HAS_FUNCTIONS_PROFILE" == "true" ]; then
               # Check if AZURE_FUNCTIONAPP_NAME is properly configured as a variable
-              if [ -z "${{ vars.AZURE_FUNCTIONAPP_NAME }}" ]; then
+              if [ "$HAS_FUNCTIONAPP_NAME_VAR" != "true" ]; then
                 # Check if it was mistakenly set as a secret
-                if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                if [ "$HAS_FUNCTIONAPP_NAME_SECRET" == "true" ]; then
                   echo "::warning::AZURE_FUNCTIONAPP_NAME is configured as a SECRET but should be a VARIABLE"
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME is set as a SECRET but should be a VARIABLE"
                   echo "has-functions-profile=false" >> $GITHUB_OUTPUT
@@ -62,13 +72,13 @@ jobs:
                 fi
               else
                 # Variable exists correctly, but check if it's ALSO set as a secret (duplicate)
-                if [ -n "${{ secrets.AZURE_FUNCTIONAPP_NAME }}" ]; then
+                if [ "$HAS_FUNCTIONAPP_NAME_SECRET" == "true" ]; then
                   echo "::warning::AZURE_FUNCTIONAPP_NAME is set as both a secret and a variable. Delete the secret version to avoid confusion."
                   MISCONFIG_WARNINGS="${MISCONFIG_WARNINGS}\n  ⚠️  AZURE_FUNCTIONAPP_NAME exists as both SECRET and VARIABLE - delete the SECRET version"
                 fi
                 echo "✅ Azure Functions deployment prerequisites met:"
                 echo "  - AZURE_FUNCTIONS_PUBLISH_PROFILE: configured"
-                echo "  - AZURE_FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}"
+                echo "  - AZURE_FUNCTIONAPP_NAME: $FUNCTIONAPP_NAME"
                 echo "has-functions-profile=true" >> $GITHUB_OUTPUT
               fi
             else
@@ -82,11 +92,11 @@ jobs:
 
           # Recommended but not required (app works in offline mode without these)
           WARNINGS=""
-          if [ -z "${{ secrets.AZURE_ENTRA_TENANT_ID }}" ]; then
+          if [ "$HAS_ENTRA_TENANT" != "true" ]; then
             WARNINGS="${WARNINGS}\n  - AZURE_ENTRA_TENANT_ID (auth will be disabled)"
           fi
           # Check for AZURE_FUNCTIONS_BASE_URL in both variables and secrets
-          if [ -z "${{ vars.AZURE_FUNCTIONS_BASE_URL }}" ] && [ -z "${{ secrets.AZURE_FUNCTIONS_BASE_URL }}" ]; then
+          if [ "$HAS_FUNCTIONS_BASE_URL" != "true" ]; then
             WARNINGS="${WARNINGS}\n  - AZURE_FUNCTIONS_BASE_URL (AI features will not be available)"
           fi
 
