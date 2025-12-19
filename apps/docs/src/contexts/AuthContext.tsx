@@ -468,16 +468,19 @@ export function AuthProvider({
   }, [user]);
 
   // Update user roles (called from ProfileConfirmation or Profile Settings)
-  const updateUserRoles = useCallback(
-    (roles: string[]) => {
-      setUserProfile((prev) => ({
+  // Note: This callback is stable (empty deps) because it uses functional update
+  // to access the current profileKey from state
+  const updateUserRoles = useCallback((roles: string[]) => {
+    setUserProfile((prev) => {
+      // Save to localStorage synchronously before returning new state
+      // This ensures localStorage stays in sync with React state
+      saveProfileData(prev.profileKey, roles);
+      return {
         ...prev,
         confirmedRoles: roles,
-      }));
-      saveProfileData(userProfile.profileKey, roles);
-    },
-    [userProfile.profileKey],
-  );
+      };
+    });
+  }, []);
 
   // Refresh user profile from localStorage (called after onboarding profile selection)
   const refreshUserProfile = useCallback(() => {
@@ -723,25 +726,46 @@ export function AuthProvider({
     }));
   }, []);
 
-  const value: AuthContextType = {
-    user,
-    loading,
-    isConfigured,
-    missingConfig,
-    progress,
-    userProfile,
-    signInGoogle,
-    signInGithub,
-    logout,
-    syncProgress,
-    updateProgress,
-    updateUserRoles,
-    refreshUserProfile,
-    markDocAsRead,
-    unlockAchievement,
-    saveProfileToCloud,
-    setPendingAccess,
-  };
+  const value = useMemo<AuthContextType>(
+    () => ({
+      user,
+      loading,
+      isConfigured,
+      missingConfig,
+      progress,
+      userProfile,
+      signInGoogle,
+      signInGithub,
+      logout,
+      syncProgress,
+      updateProgress,
+      updateUserRoles,
+      refreshUserProfile,
+      markDocAsRead,
+      unlockAchievement,
+      saveProfileToCloud,
+      setPendingAccess,
+    }),
+    [
+      user,
+      loading,
+      isConfigured,
+      missingConfig,
+      progress,
+      userProfile,
+      signInGoogle,
+      signInGithub,
+      logout,
+      syncProgress,
+      updateProgress,
+      updateUserRoles,
+      refreshUserProfile,
+      markDocAsRead,
+      unlockAchievement,
+      saveProfileToCloud,
+      setPendingAccess,
+    ],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
