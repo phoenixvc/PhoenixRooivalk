@@ -24,6 +24,7 @@ interface ChatMessage {
   sources?: RAGResponse["sources"];
   confidence?: RAGResponse["confidence"];
   isLoading?: boolean;
+  loadingStatus?: "authenticating" | "sending" | "thinking" | "generating";
 }
 
 interface AIChatInterfaceProps {
@@ -77,6 +78,18 @@ export function AIChatInterface({
   const generateMessageId = () =>
     `msg-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
+  // Helper to update loading status
+  const updateLoadingStatus = useCallback(
+    (placeholderId: string, status: ChatMessage["loadingStatus"]) => {
+      setMessages((prev: ChatMessage[]) =>
+        prev.map((msg: ChatMessage) =>
+          msg.id === placeholderId ? { ...msg, loadingStatus: status } : msg,
+        ),
+      );
+    },
+    [],
+  );
+
   const handleSendMessage = useCallback(
     async (questionText?: string) => {
       const question = questionText || inputValue.trim();
@@ -93,13 +106,14 @@ export function AIChatInterface({
         timestamp: new Date(),
       };
 
-      // Add placeholder for assistant response
+      // Add placeholder for assistant response with initial status
       const assistantPlaceholder: ChatMessage = {
         id: generateMessageId(),
         role: "assistant",
         content: "",
         timestamp: new Date(),
         isLoading: true,
+        loadingStatus: "authenticating",
       };
 
       setMessages((prev: ChatMessage[]) => [
@@ -109,11 +123,17 @@ export function AIChatInterface({
       ]);
 
       try {
+        // Update status: sending request
+        updateLoadingStatus(assistantPlaceholder.id, "sending");
+
         // Build conversation history for context
         const history = messages.map((msg: ChatMessage) => ({
           role: msg.role as "user" | "assistant",
           content: msg.content,
         }));
+
+        // Update status: AI is thinking
+        updateLoadingStatus(assistantPlaceholder.id, "thinking");
 
         const response = await aiService.askDocumentation(question, {
           category: category || undefined,
@@ -131,11 +151,14 @@ export function AIChatInterface({
                   sources: response.sources,
                   confidence: response.confidence,
                   isLoading: false,
+                  loadingStatus: undefined,
                 }
               : msg,
           ),
         );
       } catch (err) {
+        console.error("[AI Chat] Error:", err);
+
         const errorMessage =
           err instanceof AIError
             ? err.message
@@ -143,13 +166,26 @@ export function AIChatInterface({
               ? err.message
               : "Failed to get response. Please try again.";
 
+        // Add specific error guidance
+        let guidance = "";
+        if (err instanceof AIError) {
+          if (err.code === "unauthenticated") {
+            guidance = "\n\nPlease sign in to use the AI assistant.";
+          } else if (err.code === "resource-exhausted") {
+            guidance = "\n\nYou've reached the rate limit. Please wait a moment and try again.";
+          } else if (err.code === "unavailable" || err.code === "failed-precondition") {
+            guidance = "\n\nThe AI service is not configured. Contact your administrator.";
+          }
+        }
+
         setMessages((prev: ChatMessage[]) =>
           prev.map((msg: ChatMessage) =>
             msg.id === assistantPlaceholder.id
               ? {
                   ...msg,
-                  content: `⚠️ ${errorMessage}`,
+                  content: `⚠️ ${errorMessage}${guidance}`,
                   isLoading: false,
+                  loadingStatus: undefined,
                 }
               : msg,
           ),
@@ -159,7 +195,7 @@ export function AIChatInterface({
         inputRef.current?.focus();
       }
     },
-    [inputValue, isLoading, messages, category],
+    [inputValue, isLoading, messages, category, updateLoadingStatus],
   );
 
   // Send initial question if provided
@@ -290,9 +326,19 @@ export function AIChatInterface({
                 <div className="ai-chat__message-content">
                   {message.isLoading ? (
                     <div className="ai-chat__typing">
-                      <span></span>
-                      <span></span>
-                      <span></span>
+                      <div className="ai-chat__typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                      {message.loadingStatus && (
+                        <span className="ai-chat__typing-status">
+                          {message.loadingStatus === "authenticating" && "Authenticating..."}
+                          {message.loadingStatus === "sending" && "Sending request..."}
+                          {message.loadingStatus === "thinking" && "AI is thinking..."}
+                          {message.loadingStatus === "generating" && "Generating response..."}
+                        </span>
+                      )}
                     </div>
                   ) : (
                     <>
