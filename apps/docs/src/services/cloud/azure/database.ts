@@ -22,6 +22,7 @@ import {
   FieldOperations,
   QueryCondition,
 } from "../interfaces/types";
+import { getAuthService } from "../index";
 
 /**
  * Azure Cosmos DB Configuration
@@ -663,13 +664,26 @@ export class AzureDatabaseService implements IDatabaseService {
     // Remove trailing slash to prevent double-slash in URL
     const baseUrl = this.config.functionsBaseUrl.replace(/\/+$/, "");
 
+    // Get auth token for the request
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const auth = getAuthService();
+      const token = await auth.getIdToken();
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    } catch {
+      // Auth service may not be available, continue without token
+    }
+
     const response = await fetch(
       `${baseUrl}/api/cosmos/${operation}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify(params),
       },
     );
