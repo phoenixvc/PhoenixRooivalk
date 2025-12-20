@@ -64,6 +64,8 @@ declare -a CONTAINERS=(
     "configuration:/type:Dynamic configuration"
     "monitoring_logs:/id:Monitoring and metrics"
     "cache:/id:General caching"
+    "user_progress:/id:User reading progress"
+    "known_emails:/id:Known internal emails"
 )
 
 print_header "Cosmos DB Containers Setup for Phoenix Rooivalk"
