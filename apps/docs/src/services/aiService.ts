@@ -289,21 +289,11 @@ class AIService {
 
       const functionsService = getFunctionsService();
 
-      // Use callAuthenticated if available, otherwise fall back to call
-      if ("callAuthenticated" in functionsService) {
-        const result = await (functionsService as AzureFunctionsService).callAuthenticated<
-          Record<string, unknown>,
-          T
-        >(functionName, data);
-        this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
-        return result;
-      }
-
-      // Fall back to regular call (token already set via setAuthToken)
-      const result = await functionsService.call<Record<string, unknown>, T>(
-        functionName,
-        data,
-      );
+      // Use callAuthenticated which is part of the IFunctionsService interface
+      const result = await functionsService.callAuthenticated<
+        Record<string, unknown>,
+        T
+      >(functionName, data);
       this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
       return result;
     } catch (error) {
