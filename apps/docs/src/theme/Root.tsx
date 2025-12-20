@@ -8,6 +8,7 @@
  */
 
 import React, { ReactNode, useEffect, useState } from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import { AIFloatingWidget } from "../components/AIChat";
 import { AnalyticsTracker } from "../components/Analytics";
@@ -29,6 +30,16 @@ import { PhaseFilterProvider } from "../contexts/PhaseFilterContext";
 import { NotificationBadgeProvider } from "../contexts/NotificationBadgeContext";
 import { ToastProvider } from "../contexts/ToastContext";
 import { autoFixOnboardingData } from "../utils/localStorage";
+
+// Extend window type for Phoenix config
+declare global {
+  interface Window {
+    __PHOENIX_CONFIG__?: {
+      azureConfig?: Record<string, string>;
+      cloudProvider?: string;
+    };
+  }
+}
 
 interface RootProps {
   children: ReactNode;
@@ -76,6 +87,16 @@ function usePageContext() {
 
 export default function Root({ children }: RootProps): React.ReactElement {
   const pageContext = usePageContext();
+  const { siteConfig } = useDocusaurusContext();
+
+  // Inject config into window SYNCHRONOUSLY for service modules to access
+  // This must happen before AuthProvider renders (which happens in return statement)
+  if (typeof window !== "undefined" && siteConfig.customFields && !window.__PHOENIX_CONFIG__) {
+    window.__PHOENIX_CONFIG__ = {
+      azureConfig: siteConfig.customFields.azureConfig as Record<string, string>,
+      cloudProvider: siteConfig.customFields.cloudProvider as string,
+    };
+  }
 
   // Auto-fix corrupted onboarding data on mount
   useEffect(() => {
