@@ -34,35 +34,34 @@
 /* Teaser mode */
 .protected-content--teaser {
   position: relative;
+  min-height: 100vh;
 }
 
 .protected-content-teaser {
-  max-height: 400px;
+  max-height: 60vh;
   overflow: hidden;
   position: relative;
+  filter: blur(2px);
+  pointer-events: none;
 }
 
 .protected-content-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--ifm-background-color) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal-backdrop, 1000);
 }
 
-/* CTA Card */
+/* CTA Card - Now a proper modal */
 .protected-content-cta {
-  position: relative;
-  z-index: 2;
-  margin-top: -100px;
-  padding: 0 1rem;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 1001);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .protected-content-cta-card {
@@ -181,19 +180,33 @@
   margin: 0;
 }
 
-/* Animation for CTA card */
+/* Animation for CTA card - modal scale in */
 .protected-content-cta-card {
-  animation: slideUp 0.5s ease-out;
+  animation: modalIn 0.3s ease-out;
 }
 
-@keyframes slideUp {
+@keyframes modalIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
+  }
+}
+
+/* Backdrop fade in */
+.protected-content-fade {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
