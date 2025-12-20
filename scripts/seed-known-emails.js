@@ -25,9 +25,9 @@ const KNOWN_EMAILS = [
   },
   {
     email: "megatesla@gmail.com",
-    profileKey: "member",
-    displayName: "MegaTesla",
-    notes: "Team member",
+    profileKey: "pieter",
+    displayName: "Pieter",
+    notes: "Core team member",
   },
   {
     email: "martynrede@gmail.com",
