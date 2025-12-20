@@ -244,6 +244,17 @@ body,
 
 :root,
 [data-theme="dark"] {
+  /* Emphasis Colors (grayscale scale for UI elements) */
+  --ifm-color-emphasis-100: #1e293b;
+  --ifm-color-emphasis-200: #334155;
+  --ifm-color-emphasis-300: #475569;
+  --ifm-color-emphasis-400: #64748b;
+  --ifm-color-emphasis-500: #94a3b8;
+  --ifm-color-emphasis-600: #94a3b8;
+  --ifm-color-emphasis-700: #cbd5e1;
+  --ifm-color-emphasis-800: #e2e8f0;
+  --ifm-color-emphasis-900: #f1f5f9;
+
   /* Background Colors */
   --ifm-background-color: var(--pr-bg-subtle);
   --ifm-background-surface-color: var(--pr-bg-muted);
@@ -319,6 +330,17 @@ body,
    ============================================ */
 
 [data-theme="light"] {
+  /* Emphasis Colors (grayscale scale for UI elements - inverted for light theme) */
+  --ifm-color-emphasis-100: #f1f5f9;
+  --ifm-color-emphasis-200: #e2e8f0;
+  --ifm-color-emphasis-300: #cbd5e1;
+  --ifm-color-emphasis-400: #94a3b8;
+  --ifm-color-emphasis-500: #64748b;
+  --ifm-color-emphasis-600: #64748b;
+  --ifm-color-emphasis-700: #475569;
+  --ifm-color-emphasis-800: #334155;
+  --ifm-color-emphasis-900: #1e293b;
+
   /* Background Colors */
   --ifm-background-color: var(--pr-bg-base);
   --ifm-background-surface-color: var(--pr-bg-subtle);
