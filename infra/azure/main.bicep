@@ -63,6 +63,12 @@ param azureOpenAiEmbeddingDeployment string = 'text-embedding-3-small'
 @description('Azure AD B2C Tenant Name (e.g., phoenixrooivalkb2c)')
 param b2cTenantName string = ''
 
+@description('Azure AD B2C Client ID for token validation')
+param b2cClientId string = ''
+
+@description('Azure AD B2C User Flow/Policy name')
+param b2cPolicy string = 'B2C_1_signupsignin'
+
 // ============================================================================
 // Variables
 // ============================================================================
@@ -189,6 +195,9 @@ module functions 'modules/functions.bicep' = {
     azureOpenAIEndpoint: azureOpenAiEndpoint
     azureOpenAIChatDeployment: azureOpenAiChatDeployment
     azureOpenAIEmbeddingDeployment: azureOpenAiEmbeddingDeployment
+    azureAdB2cTenant: b2cTenantName
+    azureAdB2cClientId: b2cClientId
+    azureAdB2cPolicy: b2cPolicy
   }
 }
 
