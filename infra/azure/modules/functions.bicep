@@ -43,6 +43,15 @@ param azureOpenAIChatDeployment string = 'gpt-4'
 @description('Azure OpenAI embedding deployment name')
 param azureOpenAIEmbeddingDeployment string = 'text-embedding-3-small'
 
+@description('Azure AD B2C tenant name (without .onmicrosoft.com)')
+param azureAdB2cTenant string = ''
+
+@description('Azure AD B2C client ID for token validation')
+param azureAdB2cClientId string = ''
+
+@description('Azure AD B2C user flow/policy name')
+param azureAdB2cPolicy string = 'B2C_1_signupsignin'
+
 // Reference existing storage account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
@@ -142,6 +151,19 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
         {
           name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT'
           value: azureOpenAIEmbeddingDeployment
+        }
+        // Azure AD B2C configuration for token validation
+        {
+          name: 'AZURE_AD_B2C_TENANT'
+          value: azureAdB2cTenant
+        }
+        {
+          name: 'AZURE_AD_B2C_CLIENT_ID'
+          value: azureAdB2cClientId
+        }
+        {
+          name: 'AZURE_AD_B2C_POLICY'
+          value: azureAdB2cPolicy
         }
       ]
       cors: {

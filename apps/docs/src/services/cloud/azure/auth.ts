@@ -85,10 +85,16 @@ export class AzureAuthService implements IAuthService {
       // Dynamically import MSAL to avoid bundling when not used
       const msal = await import("@azure/msal-browser");
 
-      // Azure Entra ID uses login.microsoftonline.com
+      // Azure Entra ID or B2C authority
+      // B2C format: https://{tenant}.b2clogin.com/{tenant}.onmicrosoft.com/{policy}
+      // Regular AD format: https://login.microsoftonline.com/{tenantId}
       const authority =
         this.config.authority ||
         `https://login.microsoftonline.com/${this.config.tenantId}`;
+
+      // Extract known authority domain from the authority URL
+      const authorityUrl = new URL(authority);
+      const knownAuthorities = [authorityUrl.hostname];
 
       const msalConfig = {
         auth: {
@@ -97,7 +103,7 @@ export class AzureAuthService implements IAuthService {
           redirectUri: this.config.redirectUri || window.location.origin,
           postLogoutRedirectUri:
             this.config.postLogoutRedirectUri || window.location.origin,
-          knownAuthorities: ["login.microsoftonline.com"],
+          knownAuthorities,
           navigateToLoginRequestUrl: true,
         },
         cache: {

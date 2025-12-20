@@ -171,8 +171,7 @@ jobs:
           AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI:
             ${{ secrets.AZURE_ENTRA_POST_LOGOUT_REDIRECT_URI }}
           AZURE_ENTRA_SCOPES:
-            ${{ secrets.AZURE_ENTRA_SCOPES || 'openid profile email User.Read'
-            }}
+            ${{ secrets.AZURE_ENTRA_SCOPES || 'openid profile email' }}
 
           # Azure services configuration
           # AZURE_FUNCTIONS_BASE_URL can be either a secret or a variable (variables take precedence)

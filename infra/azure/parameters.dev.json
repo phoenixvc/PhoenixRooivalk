@@ -25,6 +25,12 @@
     },
     "b2cTenantName": {
       "value": ""
+    },
+    "b2cClientId": {
+      "value": ""
+    },
+    "b2cPolicy": {
+      "value": "B2C_1_signupsignin"
     }
   }
 }
