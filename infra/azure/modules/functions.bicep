@@ -150,7 +150,8 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
           'http://localhost:3001'
           'https://*.azurestaticapps.net'
           'https://phoenixrooivalk.com'
-          'https://*.phoenixrooivalk.com'
+          'https://docs.phoenixrooivalk.com'
+          'https://www.phoenixrooivalk.com'
         ]
         supportCredentials: true
       }

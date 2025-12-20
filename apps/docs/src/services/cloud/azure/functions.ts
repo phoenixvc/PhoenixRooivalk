@@ -88,7 +88,9 @@ export class AzureFunctionsService implements IAIFunctionsService {
       } as TOutput;
     }
 
-    const url = `${this.config.baseUrl}/api/${name}`;
+    // Remove trailing slash to prevent double-slash in URL
+    const baseUrl = this.config.baseUrl.replace(/\/+$/, "");
+    const url = `${baseUrl}/api/${name}`;
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -165,7 +167,9 @@ export class AzureFunctionsService implements IAIFunctionsService {
       throw new CloudFunctionError("Not authenticated", "unauthenticated");
     }
 
-    const url = `${this.config.baseUrl}/api/${name}`;
+    // Remove trailing slash to prevent double-slash in URL
+    const baseUrl = this.config.baseUrl.replace(/\/+$/, "");
+    const url = `${baseUrl}/api/${name}`;
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${this.authToken}`,
