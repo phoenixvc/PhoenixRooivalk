@@ -29,7 +29,7 @@ async function getDocumentHandler(
 ): Promise<HttpResponseInit> {
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return { status: auth.error!.status, jsonBody: auth.error!.body };
+    return auth.error!;
   }
 
   try {
@@ -66,7 +66,7 @@ async function setDocumentHandler(
 ): Promise<HttpResponseInit> {
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return { status: auth.error!.status, jsonBody: auth.error!.body };
+    return auth.error!;
   }
 
   try {
@@ -122,7 +122,7 @@ async function updateDocumentHandler(
 ): Promise<HttpResponseInit> {
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return { status: auth.error!.status, jsonBody: auth.error!.body };
+    return auth.error!;
   }
 
   try {
@@ -175,7 +175,7 @@ async function queryDocumentsHandler(
 ): Promise<HttpResponseInit> {
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return { status: auth.error!.status, jsonBody: auth.error!.body };
+    return auth.error!;
   }
 
   try {
