@@ -165,6 +165,11 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
           name: 'AZURE_AD_B2C_POLICY'
           value: azureAdB2cPolicy
         }
+        // Also set as AZURE_ENTRA_CLIENT_ID for multi-tenant Azure AD support
+        {
+          name: 'AZURE_ENTRA_CLIENT_ID'
+          value: azureAdB2cClientId
+        }
       ]
       cors: {
         allowedOrigins: [

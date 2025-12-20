@@ -1,7 +1,8 @@
 /**
  * Authentication Helpers
  *
- * Validates Azure AD B2C tokens for authenticated functions.
+ * Validates Azure AD tokens for authenticated functions.
+ * Supports both Azure AD B2C and regular Azure AD (multi-tenant/common endpoint).
  * Uses jose library for proper JWT validation.
  */
 
@@ -16,6 +17,7 @@ export interface TokenClaims {
   sub: string;
   oid?: string;
   email?: string;
+  emails?: string[]; // B2C uses 'emails' array
   name?: string;
   roles?: string[];
   iss: string;
@@ -23,6 +25,8 @@ export interface TokenClaims {
   exp: number;
   iat: number;
   nbf?: number;
+  tid?: string; // Tenant ID
+  preferred_username?: string;
 }
 
 /**
@@ -31,15 +35,16 @@ export interface TokenClaims {
 const ADMIN_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 /**
- * JWKS cache for Azure AD B2C
+ * JWKS cache - supports both B2C and regular Azure AD
  */
-let jwksCache: jose.JWTVerifyGetKey | null = null;
+let jwksCacheB2C: jose.JWTVerifyGetKey | null = null;
+let jwksCacheAzureAD: jose.JWTVerifyGetKey | null = null;
 
 /**
- * Get JWKS for token validation
+ * Get JWKS for B2C token validation
  */
-async function getJWKS(): Promise<jose.JWTVerifyGetKey> {
-  if (jwksCache) return jwksCache;
+async function getB2CJWKS(): Promise<jose.JWTVerifyGetKey> {
+  if (jwksCacheB2C) return jwksCacheB2C;
 
   const tenant = process.env.AZURE_AD_B2C_TENANT;
   const policy = process.env.AZURE_AD_B2C_POLICY || "B2C_1_signupsignin";
@@ -49,46 +54,119 @@ async function getJWKS(): Promise<jose.JWTVerifyGetKey> {
   }
 
   const jwksUrl = `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/${policy}/discovery/v2.0/keys`;
-  jwksCache = jose.createRemoteJWKSet(new URL(jwksUrl));
+  jwksCacheB2C = jose.createRemoteJWKSet(new URL(jwksUrl));
 
-  return jwksCache;
+  return jwksCacheB2C;
 }
 
 /**
- * Validate JWT token properly
+ * Get JWKS for regular Azure AD token validation (common endpoint)
+ */
+async function getAzureADJWKS(): Promise<jose.JWTVerifyGetKey> {
+  if (jwksCacheAzureAD) return jwksCacheAzureAD;
+
+  const jwksUrl = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
+  jwksCacheAzureAD = jose.createRemoteJWKSet(new URL(jwksUrl));
+
+  return jwksCacheAzureAD;
+}
+
+/**
+ * Detect if token is from B2C or regular Azure AD based on issuer
+ */
+function isB2CToken(payload: jose.JWTPayload): boolean {
+  const issuer = payload.iss as string;
+  return issuer?.includes("b2clogin.com") || false;
+}
+
+/**
+ * Validate JWT token - supports both B2C and regular Azure AD
  */
 async function validateToken(token: string): Promise<TokenClaims | null> {
   try {
-    const audience = process.env.AZURE_AD_B2C_CLIENT_ID;
-    const tenant = process.env.AZURE_AD_B2C_TENANT;
-
     // In development/testing, allow skipping validation
     if (process.env.SKIP_TOKEN_VALIDATION === "true") {
       const [, payload] = token.split(".");
       return JSON.parse(Buffer.from(payload, "base64url").toString());
     }
 
-    if (!audience || !tenant) {
-      logger.warn("Azure AD B2C not configured, using unvalidated decode", {
+    // First, decode the token to check the issuer (without verification)
+    const [, payloadB64] = token.split(".");
+    const unverifiedPayload = JSON.parse(
+      Buffer.from(payloadB64, "base64url").toString()
+    ) as jose.JWTPayload;
+
+    const audience =
+      process.env.AZURE_AD_B2C_CLIENT_ID ||
+      process.env.AZURE_ENTRA_CLIENT_ID ||
+      process.env.AZURE_AD_CLIENT_ID;
+
+    // If no audience configured, use unvalidated decode
+    if (!audience) {
+      logger.warn("No client ID configured, using unvalidated token decode", {
         operation: "validateToken",
       });
-      const [, payload] = token.split(".");
-      return JSON.parse(Buffer.from(payload, "base64url").toString());
+      return unverifiedPayload as unknown as TokenClaims;
     }
 
-    const jwks = await getJWKS();
-    const { payload } = await jose.jwtVerify(token, jwks, {
-      audience,
-      issuer: `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/v2.0/`,
-    });
+    // Check if it's a B2C token or regular Azure AD token
+    if (isB2CToken(unverifiedPayload)) {
+      // B2C token validation
+      const tenant = process.env.AZURE_AD_B2C_TENANT;
+      if (!tenant) {
+        logger.warn("B2C token detected but AZURE_AD_B2C_TENANT not configured", {
+          operation: "validateToken",
+        });
+        return unverifiedPayload as unknown as TokenClaims;
+      }
 
-    return payload as unknown as TokenClaims;
+      const jwks = await getB2CJWKS();
+      const { payload } = await jose.jwtVerify(token, jwks, {
+        audience,
+        issuer: `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/v2.0/`,
+      });
+
+      return payload as unknown as TokenClaims;
+    } else {
+      // Regular Azure AD token validation (common/multi-tenant)
+      const jwks = await getAzureADJWKS();
+
+      // For multi-tenant apps, we validate the signature but accept any tenant issuer
+      const { payload } = await jose.jwtVerify(token, jwks, {
+        audience,
+        // Don't validate issuer for multi-tenant - just validate signature
+      });
+
+      // Optionally validate issuer format
+      const issuer = payload.iss as string;
+      if (!issuer?.startsWith("https://login.microsoftonline.com/") &&
+          !issuer?.startsWith("https://sts.windows.net/")) {
+        logger.warn("Unexpected issuer format", {
+          operation: "validateToken",
+          issuer,
+        });
+      }
+
+      return payload as unknown as TokenClaims;
+    }
   } catch (error) {
     logger.error("Token validation failed", error, {
       operation: "validateToken",
     });
     return null;
   }
+}
+
+/**
+ * Extract email from token claims (handles both B2C and regular Azure AD)
+ */
+function getEmailFromClaims(claims: TokenClaims): string | null {
+  // Regular Azure AD uses 'email' or 'preferred_username'
+  if (claims.email) return claims.email;
+  if (claims.preferred_username?.includes("@")) return claims.preferred_username;
+  // B2C uses 'emails' array
+  if (claims.emails && claims.emails.length > 0) return claims.emails[0];
+  return null;
 }
 
 /**
@@ -105,7 +183,7 @@ export async function getUserIdFromRequest(
   const token = authHeader.substring(7);
   const claims = await validateToken(token);
 
-  return claims?.sub || null;
+  return claims?.sub || claims?.oid || null;
 }
 
 /**
@@ -168,9 +246,12 @@ export function getUserIdFromRequestSync(request: HttpRequest): string | null {
  */
 export async function isAdmin(request: HttpRequest): Promise<boolean> {
   const claims = await getTokenClaims(request);
-  if (!claims?.email) return false;
+  if (!claims) return false;
 
-  const domain = claims.email.split("@")[1]?.toLowerCase();
+  const email = getEmailFromClaims(claims);
+  if (!email) return false;
+
+  const domain = email.split("@")[1]?.toLowerCase();
   return ADMIN_DOMAINS.includes(domain);
 }
 
@@ -178,14 +259,15 @@ export async function isAdmin(request: HttpRequest): Promise<boolean> {
  * Check if user is admin based on validated claims
  */
 function isAdminFromClaims(claims: TokenClaims): boolean {
-  if (!claims?.email) return false;
-  const domain = claims.email.split("@")[1]?.toLowerCase();
+  const email = getEmailFromClaims(claims);
+  if (!email) return false;
+  const domain = email.split("@")[1]?.toLowerCase();
   return ADMIN_DOMAINS.includes(domain);
 }
 
 /**
  * Require authentication with proper JWT validation (async)
- * This validates JWT signature using Azure AD B2C JWKS
+ * Supports both Azure AD B2C and regular Azure AD tokens
  */
 export async function requireAuthAsync(request: HttpRequest): Promise<{
   authenticated: boolean;
@@ -379,8 +461,8 @@ export async function validateAuthHeader(authHeader: string | null): Promise<{
       return { valid: false };
     }
 
-    const userId = claims.sub;
-    const email = claims.email || "";
+    const userId = claims.sub || claims.oid;
+    const email = getEmailFromClaims(claims) || "";
     const name = claims.name || "";
     const domain = email.split("@")[1]?.toLowerCase();
     const isAdminUser = ADMIN_DOMAINS.includes(domain);
