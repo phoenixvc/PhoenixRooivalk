@@ -27,7 +27,7 @@ async function handler(
 ): Promise<HttpResponseInit> {
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return { status: auth.error!.status, jsonBody: auth.error!.body };
+    return auth.error!;
   }
 
   if (!(await checkRateLimitAsync(`recommend:${auth.userId}`, RateLimits.ai))) {
