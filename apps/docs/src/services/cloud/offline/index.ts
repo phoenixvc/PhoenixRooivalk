@@ -60,7 +60,11 @@ export class OfflineAuthService implements IAuthService {
   ): Promise<CloudUser | null> {
     // Do NOT create fake users - auth is not configured
     console.warn(
-      "Authentication is not configured. Please configure Azure AD to enable sign-in.",
+      "[Phoenix Auth] Authentication is not configured.\n\n" +
+        "To enable sign-in, set these environment variables:\n" +
+        "  • AZURE_ENTRA_CLIENT_ID - Your Azure AD B2C application client ID\n" +
+        "  • AZURE_ENTRA_TENANT_ID - Your Azure AD B2C tenant ID\n\n" +
+        "Then trigger a new deployment. Visit /admin/diagnostics for status.",
     );
     return null;
   }
