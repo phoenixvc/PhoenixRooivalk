@@ -570,6 +570,20 @@ jobs:
             echo "::warning::Health check failed after deployment. Status: $STATUS"
           fi
 
+      - name: Checkout for seeding
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: scripts
+
+      - name: Seed Known Emails
+        env:
+          COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
+          COSMOS_DB_DATABASE: phoenix-docs
+        run: |
+          echo "🌱 Seeding known emails to Cosmos DB..."
+          npm install @azure/cosmos --no-save
+          node scripts/seed-known-emails.js
+
       - name: Deployment Summary
         run: |
           echo "## ✅ Azure Functions Deployed" >> $GITHUB_STEP_SUMMARY
