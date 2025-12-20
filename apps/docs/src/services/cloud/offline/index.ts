@@ -42,21 +42,13 @@ export class OfflineAuthService implements IAuthService {
   private callbacks: Set<(user: CloudUser | null) => void> = new Set();
 
   constructor() {
-    // Restore user from localStorage
-    if (typeof window !== "undefined") {
-      const savedUser = localStorage.getItem(`${STORAGE_PREFIX}user`);
-      if (savedUser) {
-        try {
-          this.currentUser = JSON.parse(savedUser);
-        } catch {
-          // Ignore invalid data
-        }
-      }
-    }
+    // Do NOT auto-restore user from localStorage
+    // Users should not be auto-logged in with a fake offline user
+    // If auth isn't configured, users should remain logged out
   }
 
   isConfigured(): boolean {
-    return true; // Always "configured" as fallback
+    return false; // Auth is NOT configured in offline mode
   }
 
   getMissingConfig(): string[] {
@@ -66,24 +58,11 @@ export class OfflineAuthService implements IAuthService {
   async signInWithProvider(
     _provider: OAuthProvider,
   ): Promise<CloudUser | null> {
-    // Create a mock user for offline mode
-    const mockUser: CloudUser = {
-      uid: `offline_${Date.now()}`,
-      email: "offline@local.dev",
-      displayName: "Offline User",
-      photoURL: null,
-      emailVerified: false,
-      providerData: [],
-    };
-
-    this.currentUser = mockUser;
-    this.saveUser();
-    this.notifyListeners();
-
+    // Do NOT create fake users - auth is not configured
     console.warn(
-      "Using offline authentication - data will only be stored locally",
+      "Authentication is not configured. Please configure Azure AD to enable sign-in.",
     );
-    return mockUser;
+    return null;
   }
 
   async signInWithGoogle(): Promise<CloudUser | null> {
@@ -124,15 +103,6 @@ export class OfflineAuthService implements IAuthService {
 
   isAdmin(): boolean {
     return false;
-  }
-
-  private saveUser(): void {
-    if (typeof window !== "undefined" && this.currentUser) {
-      localStorage.setItem(
-        `${STORAGE_PREFIX}user`,
-        JSON.stringify(this.currentUser),
-      );
-    }
   }
 
   private notifyListeners(): void {
