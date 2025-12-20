@@ -47,11 +47,21 @@ export interface CloudServices {
 
 /**
  * Azure configuration from environment/Docusaurus
+ * Reads from window.__PHOENIX_CONFIG__ (set by Root.tsx) or falls back to __DOCUSAURUS__
  */
 function getAzureConfig() {
   if (typeof window === "undefined") return null;
 
   try {
+    // First try the Phoenix config (set by Root.tsx via useDocusaurusContext)
+    // This is the reliable way to get config in production builds
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const phoenixConfig = (window as any).__PHOENIX_CONFIG__?.azureConfig;
+    if (phoenixConfig?.tenantId && phoenixConfig?.clientId) {
+      return phoenixConfig;
+    }
+
+    // Fallback to __DOCUSAURUS__ (works in dev, may not work in prod)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const docusaurusData = (window as any).__DOCUSAURUS__;
     const config = docusaurusData?.siteConfig?.customFields?.azureConfig;
@@ -72,6 +82,14 @@ function detectProvider(): CloudProvider {
   // Check for explicit provider setting
   if (typeof window !== "undefined") {
     try {
+      // First try Phoenix config (set by Root.tsx)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const phoenixProvider = (window as any).__PHOENIX_CONFIG__?.cloudProvider;
+      if (phoenixProvider === "azure") {
+        return "azure";
+      }
+
+      // Fallback to __DOCUSAURUS__
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const docusaurusData = (window as any).__DOCUSAURUS__;
       const explicitProvider =
