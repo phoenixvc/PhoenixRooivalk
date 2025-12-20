@@ -291,6 +291,10 @@ async function getKnownEmailsCountHandler(
 }
 
 // Register endpoints
+// IMPORTANT: Specific literal routes must be registered BEFORE parameterized routes
+// Otherwise Azure Functions will match "check", "profile-keys", "count" as {id} values
+
+// Base route - GET all known emails
 app.http("getKnownEmails", {
   methods: ["GET"],
   authLevel: "anonymous",
@@ -298,13 +302,7 @@ app.http("getKnownEmails", {
   handler: getKnownEmailsHandler,
 });
 
-app.http("getKnownEmail", {
-  methods: ["GET"],
-  authLevel: "anonymous",
-  route: "known-emails/{id}",
-  handler: getKnownEmailHandler,
-});
-
+// POST to base route - add email
 app.http("addKnownEmail", {
   methods: ["POST"],
   authLevel: "anonymous",
@@ -312,20 +310,7 @@ app.http("addKnownEmail", {
   handler: addKnownEmailHandler,
 });
 
-app.http("updateKnownEmail", {
-  methods: ["PUT"],
-  authLevel: "anonymous",
-  route: "known-emails/{id}",
-  handler: updateKnownEmailHandler,
-});
-
-app.http("deleteKnownEmail", {
-  methods: ["DELETE"],
-  authLevel: "anonymous",
-  route: "known-emails/{id}",
-  handler: deleteKnownEmailHandler,
-});
-
+// Specific literal routes - must come BEFORE parameterized {id} routes
 app.http("checkKnownEmail", {
   methods: ["GET"],
   authLevel: "anonymous",
@@ -345,4 +330,26 @@ app.http("getKnownEmailsCount", {
   authLevel: "anonymous",
   route: "known-emails/count",
   handler: getKnownEmailsCountHandler,
+});
+
+// Parameterized routes - must come AFTER specific literal routes
+app.http("getKnownEmail", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "known-emails/{id}",
+  handler: getKnownEmailHandler,
+});
+
+app.http("updateKnownEmail", {
+  methods: ["PUT"],
+  authLevel: "anonymous",
+  route: "known-emails/{id}",
+  handler: updateKnownEmailHandler,
+});
+
+app.http("deleteKnownEmail", {
+  methods: ["DELETE"],
+  authLevel: "anonymous",
+  route: "known-emails/{id}",
+  handler: deleteKnownEmailHandler,
 });
