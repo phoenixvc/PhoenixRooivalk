@@ -194,9 +194,9 @@ app.http("submitContactForm", {
 });
 
 app.http("getLatestContentTimestamps", {
-  methods: ["GET"],
+  methods: ["GET", "POST"],
   authLevel: "anonymous",
-  route: "support/timestamps",
+  route: "getLatestContentTimestamps",
   handler: getLatestContentTimestampsHandler,
 });
 
