@@ -660,8 +660,11 @@ export class AzureDatabaseService implements IDatabaseService {
       throw new Error("Functions base URL not configured");
     }
 
+    // Remove trailing slash to prevent double-slash in URL
+    const baseUrl = this.config.functionsBaseUrl.replace(/\/+$/, "");
+
     const response = await fetch(
-      `${this.config.functionsBaseUrl}/api/cosmos/${operation}`,
+      `${baseUrl}/api/cosmos/${operation}`,
       {
         method: "POST",
         headers: {

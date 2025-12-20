@@ -38,6 +38,16 @@ export class AzureMessagingService implements IMessagingService {
     this.config = config || null;
   }
 
+  /**
+   * Get the base URL with trailing slashes removed to prevent double-slash URLs
+   */
+  private getBaseUrl(): string {
+    if (!this.config?.functionsBaseUrl) {
+      throw new Error("Functions base URL not configured");
+    }
+    return this.config.functionsBaseUrl.replace(/\/+$/, "");
+  }
+
   isSupported(): boolean {
     return isNotificationApiSupported();
   }
@@ -161,7 +171,7 @@ export class AzureMessagingService implements IMessagingService {
 
     try {
       const response = await fetch(
-        `${this.config.functionsBaseUrl}/api/notifications/subscribe`,
+        `${this.getBaseUrl()}/api/notifications/subscribe`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -183,7 +193,7 @@ export class AzureMessagingService implements IMessagingService {
 
     try {
       const response = await fetch(
-        `${this.config.functionsBaseUrl}/api/notifications/unsubscribe`,
+        `${this.getBaseUrl()}/api/notifications/unsubscribe`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -322,7 +332,7 @@ export class AzureMessagingService implements IMessagingService {
     }
 
     const response = await fetch(
-      `${this.config.functionsBaseUrl}/api/notifications/vapid-key`,
+      `${this.getBaseUrl()}/api/notifications/vapid-key`,
     );
 
     if (!response.ok) {
@@ -337,7 +347,7 @@ export class AzureMessagingService implements IMessagingService {
     if (!this.config?.functionsBaseUrl) return;
 
     const response = await fetch(
-      `${this.config.functionsBaseUrl}/api/notifications/register`,
+      `${this.getBaseUrl()}/api/notifications/register`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -357,7 +367,7 @@ export class AzureMessagingService implements IMessagingService {
     if (!this.config?.functionsBaseUrl) return;
 
     await fetch(
-      `${this.config.functionsBaseUrl}/api/notifications/unregister`,
+      `${this.getBaseUrl()}/api/notifications/unregister`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
