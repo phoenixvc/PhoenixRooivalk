@@ -154,8 +154,10 @@ function createAzureServices(): CloudServices {
   // Check if functions are configured
   if (!config?.functionsBaseUrl) {
     console.warn(
-      "Azure Functions base URL not configured. AI features will not be available.",
-      "Set AZURE_FUNCTIONS_BASE_URL or configure functionsBaseUrl in Docusaurus config.",
+      "[Phoenix Auth] Azure Functions not configured - AI features disabled.\n\n" +
+        "To fix this, set the following environment variables:\n" +
+        "  • AZURE_FUNCTIONS_BASE_URL - Your Azure Functions endpoint URL\n\n" +
+        "Then trigger a new deployment. See /admin/diagnostics for more details.",
     );
   }
 
@@ -176,7 +178,10 @@ function createAzureServices(): CloudServices {
  * Create offline fallback services
  */
 function createOfflineServices(): CloudServices {
-  console.warn("Using offline mode - data will be stored locally");
+  console.info(
+    "[Phoenix Auth] Offline mode active - data stored in localStorage.\n" +
+      "Sign-in features are disabled. Configure Azure AD to enable authentication.",
+  );
 
   return {
     auth: new OfflineAuthService(),
@@ -220,11 +225,26 @@ export function getCloudServices(forceProvider?: CloudProvider): CloudServices {
       cloudServicesInstance = azureServices;
       return cloudServicesInstance;
     }
-    console.warn("Azure not configured, falling back to offline mode...");
+    console.warn(
+      "[Phoenix Auth] Azure not configured - falling back to offline mode.\n\n" +
+        "To enable authentication, set these environment variables:\n" +
+        "  • AZURE_ENTRA_CLIENT_ID - Your Azure AD B2C application client ID\n" +
+        "  • AZURE_ENTRA_TENANT_ID - Your Azure AD B2C tenant ID\n" +
+        "  • AZURE_FUNCTIONS_BASE_URL - Your Azure Functions endpoint URL\n\n" +
+        "After setting these, trigger a new deployment.\n" +
+        "For detailed setup instructions, see: docs/technical/architecture/adr-0014-service-auth.md",
+    );
   }
 
   // Final fallback: offline mode
-  console.warn("No cloud provider configured, falling back to offline mode");
+  console.warn(
+    "[Phoenix Auth] No cloud provider configured - using offline mode.\n\n" +
+      "Authentication is disabled. To enable it, configure Azure AD:\n" +
+      "  1. Set AZURE_ENTRA_CLIENT_ID and AZURE_ENTRA_TENANT_ID\n" +
+      "  2. Set AZURE_FUNCTIONS_BASE_URL for backend services\n" +
+      "  3. Trigger a new deployment\n\n" +
+      "Visit /admin/diagnostics for configuration status.",
+  );
   cloudServicesInstance = createOfflineServices();
   return cloudServicesInstance;
 }
