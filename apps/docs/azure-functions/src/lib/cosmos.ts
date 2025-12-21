@@ -23,16 +23,19 @@ export function getCosmosClient(): CosmosClient {
   if (!client) {
     const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
     if (!connectionString) {
-      const error = new Error("COSMOS_DB_CONNECTION_STRING not configured. Please set this environment variable in Azure Functions configuration.");
+      const error = new Error(
+        "COSMOS_DB_CONNECTION_STRING not configured. Please set this environment variable in Azure Functions configuration.",
+      );
       console.error("[Cosmos] Configuration error:", error.message);
       throw error;
     }
-    
+
     try {
       client = new CosmosClient(connectionString);
       console.log("[Cosmos] Client initialized successfully");
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error("[Cosmos] Failed to initialize client:", errorMessage);
       throw new Error(`Failed to initialize Cosmos DB client: ${errorMessage}`);
     }
@@ -87,12 +90,14 @@ export async function upsertDocument<T extends { id: string }>(
     const container = getContainer(containerName);
     const { resource } = await container.items.upsert<T>(document);
     if (!resource) {
-      throw new Error(`Upsert operation returned no resource for document: ${document.id || 'unknown'}`);
+      throw new Error(
+        `Upsert operation returned no resource for document: ${document.id || "unknown"}`,
+      );
     }
     return resource;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    const documentId = document.id || 'unknown';
+    const documentId = document.id || "unknown";
     console.error(`[Cosmos] Failed to upsert document in ${containerName}:`, {
       documentId,
       error: errorMessage,

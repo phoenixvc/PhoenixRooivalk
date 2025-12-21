@@ -70,6 +70,7 @@ The easiest way to deploy is using the automated GitHub Actions workflow:
 For local testing or manual deployment:
 
 1. **Install Dependencies**:
+
    ```bash
    cd apps/docs/azure-functions
    npm install
@@ -131,6 +132,7 @@ curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
 ```
 
 **Expected Response (Unhealthy - Missing Config)**:
+
 ```json
 {
   "status": "unhealthy",
@@ -379,6 +381,7 @@ Then trigger the deployment workflow for the reverted code.
 If Application Insights is configured:
 
 **Error Rate**:
+
 ```kusto
 traces
 | where severityLevel > 2
@@ -454,6 +457,7 @@ After deployment:
 ## Support
 
 For issues or questions:
+
 - Check [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) first
 - Review Application Insights logs
 - Create a GitHub issue with detailed error messages

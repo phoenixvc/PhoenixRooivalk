@@ -61,11 +61,13 @@ environment variables.
 **Diagnosis Steps:**
 
 1. **Check health endpoint:**
+
    ```bash
    curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
    ```
 
    Expected response:
+
    ```json
    {
      "status": "healthy",
@@ -178,13 +180,15 @@ Access to fetch at 'https://...' from origin
 ### 4. Authentication Errors
 
 **Symptom:**
-```
+
+```text
 [AuthContext] Auth state changed
 [AuthContext] User signed in, syncing progress...
 Uncaught (in promise) Error: Functions proxy error: Internal Server Error
 ```
 
-**Cause:** User is authenticated but Functions cannot validate the token or access the database.
+**Cause:** User is authenticated but Functions cannot validate the token or
+access the database.
 
 **Solution:**
 
@@ -259,6 +263,7 @@ Error: Container 'userProgress' does not exist
 ### 1. Function App Diagnostics
 
 **Azure Portal:**
+
 - Navigate to Function App → Diagnose and solve problems
 - Run "Availability and Performance" diagnostic
 - Check "Configuration and Management" diagnostic
@@ -364,5 +369,7 @@ If issues persist:
 ## Related Documentation
 
 - [Infrastructure Setup](./INFRASTRUCTURE.md) - Initial Azure setup guide
-- [Deployment Workflow](../../.github/workflows/deploy-azure-functions.yml) - CI/CD pipeline
-- [CORS Fix Summary](../../CORS_LOGIN_FIX.md) - CORS and login issue history
+- [Deployment Workflow](../../.github/workflows/deploy-azure-functions.yml) -
+  CI/CD pipeline
+- [CORS Fix Summary](../../CORS_LOGIN_FIX.md) - CORS and login issue
+  history
