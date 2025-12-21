@@ -63,10 +63,13 @@ async function getDocumentHandler(
     const { collection, documentId } = body;
 
     if (!collection || !documentId) {
-      return addCorsHeaders({
-        status: 400,
-        jsonBody: { error: "Collection and documentId required" },
-      }, request);
+      return addCorsHeaders(
+        {
+          status: 400,
+          jsonBody: { error: "Collection and documentId required" },
+        },
+        request,
+      );
     }
 
     // Security: Restrict certain collections or add user-based filtering
@@ -75,10 +78,13 @@ async function getDocumentHandler(
     return addCorsHeaders({ status: 200, jsonBody: doc }, request);
   } catch (error) {
     context.error("Error getting document:", error);
-    return addCorsHeaders({ 
-      status: 500, 
-      jsonBody: { error: "Failed to get document" } 
-    }, request);
+    return addCorsHeaders(
+      {
+        status: 500,
+        jsonBody: { error: "Failed to get document" },
+      },
+      request,
+    );
   }
 }
 
@@ -110,10 +116,13 @@ async function setDocumentHandler(
     const { collection, documentId, data, merge } = body;
 
     if (!collection || !documentId || !data) {
-      return addCorsHeaders({
-        status: 400,
-        jsonBody: { error: "Collection, documentId, and data required" },
-      }, request);
+      return addCorsHeaders(
+        {
+          status: 400,
+          jsonBody: { error: "Collection, documentId, and data required" },
+        },
+        request,
+      );
     }
 
     // Add metadata
@@ -136,13 +145,19 @@ async function setDocumentHandler(
 
     await upsertDocument(collection, doc);
 
-    return addCorsHeaders({ status: 200, jsonBody: { success: true } }, request);
+    return addCorsHeaders(
+      { status: 200, jsonBody: { success: true } },
+      request,
+    );
   } catch (error) {
     context.error("Error setting document:", error);
-    return addCorsHeaders({ 
-      status: 500, 
-      jsonBody: { error: "Failed to set document" } 
-    }, request);
+    return addCorsHeaders(
+      {
+        status: 500,
+        jsonBody: { error: "Failed to set document" },
+      },
+      request,
+    );
   }
 }
 
@@ -173,10 +188,13 @@ async function updateDocumentHandler(
     const { collection, documentId, updates } = body;
 
     if (!collection || !documentId || !updates) {
-      return addCorsHeaders({
-        status: 400,
-        jsonBody: { error: "Collection, documentId, and updates required" },
-      }, request);
+      return addCorsHeaders(
+        {
+          status: 400,
+          jsonBody: { error: "Collection, documentId, and updates required" },
+        },
+        request,
+      );
     }
 
     const existing = await getDocument<Record<string, unknown>>(
@@ -184,10 +202,13 @@ async function updateDocumentHandler(
       documentId,
     );
     if (!existing) {
-      return addCorsHeaders({ 
-        status: 404, 
-        jsonBody: { error: "Document not found" } 
-      }, request);
+      return addCorsHeaders(
+        {
+          status: 404,
+          jsonBody: { error: "Document not found" },
+        },
+        request,
+      );
     }
 
     const doc = {
@@ -200,13 +221,19 @@ async function updateDocumentHandler(
 
     await upsertDocument(collection, doc);
 
-    return addCorsHeaders({ status: 200, jsonBody: { success: true } }, request);
+    return addCorsHeaders(
+      { status: 200, jsonBody: { success: true } },
+      request,
+    );
   } catch (error) {
     context.error("Error updating document:", error);
-    return addCorsHeaders({ 
-      status: 500, 
-      jsonBody: { error: "Failed to update document" } 
-    }, request);
+    return addCorsHeaders(
+      {
+        status: 500,
+        jsonBody: { error: "Failed to update document" },
+      },
+      request,
+    );
   }
 }
 
@@ -244,10 +271,13 @@ async function queryDocumentsHandler(
     const { collection, options } = body;
 
     if (!collection) {
-      return addCorsHeaders({
-        status: 400,
-        jsonBody: { error: "Collection required" },
-      }, request);
+      return addCorsHeaders(
+        {
+          status: 400,
+          jsonBody: { error: "Collection required" },
+        },
+        request,
+      );
     }
 
     // Build SQL query
@@ -275,16 +305,22 @@ async function queryDocumentsHandler(
 
     const items = await queryDocuments(collection, query, params);
 
-    return addCorsHeaders({
-      status: 200,
-      jsonBody: { items, cursor: null, hasMore: false },
-    }, request);
+    return addCorsHeaders(
+      {
+        status: 200,
+        jsonBody: { items, cursor: null, hasMore: false },
+      },
+      request,
+    );
   } catch (error) {
     context.error("Error querying documents:", error);
-    return addCorsHeaders({ 
-      status: 500, 
-      jsonBody: { error: "Failed to query documents" } 
-    }, request);
+    return addCorsHeaders(
+      {
+        status: 500,
+        jsonBody: { error: "Failed to query documents" },
+      },
+      request,
+    );
   }
 }
 

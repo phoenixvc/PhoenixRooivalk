@@ -50,10 +50,14 @@ async function indexDocumentsHandler(
 
     const result = await indexingService.indexDocuments(documents);
 
-    return successResponse({
-      message: `Indexed ${result.totalChunks} chunks from ${documents.length} documents`,
-      results: result.results,
-    }, 200, request);
+    return successResponse(
+      {
+        message: `Indexed ${result.totalChunks} chunks from ${documents.length} documents`,
+        results: result.results,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Indexing error:", error);
     return Errors.internal("Indexing failed", request);
@@ -84,9 +88,13 @@ async function deleteDocumentIndexHandler(
 
     const deleted = await indexingService.deleteDocumentEmbeddings(docId);
 
-    return successResponse({
-      message: `Deleted ${deleted} chunks for document ${docId}`,
-    }, 200, request);
+    return successResponse(
+      {
+        message: `Deleted ${deleted} chunks for document ${docId}`,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Delete error:", error);
     return Errors.internal("Delete failed", request);

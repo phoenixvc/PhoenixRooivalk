@@ -66,15 +66,22 @@ async function submitApplicationHandler(
       `Access application submitted: ${result.applicationNumber} by ${authResult.userId}`,
     );
 
-    return successResponse({
-      success: true,
-      applicationNumber: result.applicationNumber,
-      message:
-        "Your application has been submitted. We'll review it and get back to you within 2-3 business days.",
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        applicationNumber: result.applicationNumber,
+        message:
+          "Your application has been submitted. We'll review it and get back to you within 2-3 business days.",
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to submit access application:", error);
-    return Errors.internal("Failed to submit application. Please try again.", request);
+    return Errors.internal(
+      "Failed to submit application. Please try again.",
+      request,
+    );
   }
 }
 
@@ -186,10 +193,14 @@ async function getAdminApplicationsHandler(
       { limit },
     );
 
-    return successResponse({
-      applications: result.items,
-      hasMore: result.hasMore,
-    }, 200, request);
+    return successResponse(
+      {
+        applications: result.items,
+        hasMore: result.hasMore,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to get admin applications:", error);
     return Errors.internal("Failed to get applications", request);
@@ -243,7 +254,10 @@ async function updateApplicationStatusHandler(
     };
 
     if (!applicationId || !status) {
-      return Errors.badRequest("applicationId and status are required", request);
+      return Errors.badRequest(
+        "applicationId and status are required",
+        request,
+      );
     }
 
     if (!["pending", "approved", "rejected"].includes(status)) {

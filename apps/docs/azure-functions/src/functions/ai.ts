@@ -47,7 +47,10 @@ async function analyzeCompetitorsHandler(
     };
 
     if (!Array.isArray(competitors) || competitors.length === 0) {
-      return Errors.badRequest("At least one competitor name required", request);
+      return Errors.badRequest(
+        "At least one competitor name required",
+        request,
+      );
     }
 
     const result = await aiService.analyzeCompetitors(competitors, focusAreas);
@@ -209,7 +212,10 @@ async function getReadingRecommendationsHandler(
       };
 
     if (!role || !interests || !experienceLevel) {
-      return Errors.badRequest("role, interests, and experienceLevel are required", request);
+      return Errors.badRequest(
+        "role, interests, and experienceLevel are required",
+        request,
+      );
     }
 
     const result = await aiService.getReadingRecommendations({

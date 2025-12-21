@@ -46,10 +46,14 @@ async function subscribeHandler(
 
     context.log(`User ${auth.userId} subscribed to notifications`);
 
-    return successResponse({
-      success: true,
-      ...result,
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        ...result,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Subscribe error:", error);
     return Errors.internal("Failed to subscribe", request);
@@ -135,7 +139,10 @@ async function markBreakingHandler(
     };
 
     if (!articleId || typeof isBreaking !== "boolean") {
-      return Errors.badRequest("articleId and isBreaking are required", request);
+      return Errors.badRequest(
+        "articleId and isBreaking are required",
+        request,
+      );
     }
 
     await notificationsService.markAsBreaking(articleId, isBreaking);
@@ -203,7 +210,10 @@ async function sendDigestHandler(
     };
 
     if (!frequency || !["daily", "weekly"].includes(frequency)) {
-      return Errors.badRequest("frequency must be 'daily' or 'weekly'", request);
+      return Errors.badRequest(
+        "frequency must be 'daily' or 'weekly'",
+        request,
+      );
     }
 
     const result = await notificationsService.sendDigest(frequency);

@@ -49,10 +49,14 @@ async function getKnownEmailsHandler(
       { limit },
     );
 
-    return successResponse({
-      emails: result.items,
-      hasMore: result.hasMore,
-    }, 200, request);
+    return successResponse(
+      {
+        emails: result.items,
+        hasMore: result.hasMore,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to get known emails:", error);
     return Errors.internal("Failed to get known emails", request);
@@ -120,7 +124,11 @@ async function addKnownEmailHandler(
       `Known email added: ${result.email?.email} for profile ${result.email?.profileKey} by ${authResult.userId}`,
     );
 
-    return successResponse({ success: true, email: result.email }, 200, request);
+    return successResponse(
+      { success: true, email: result.email },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to add known email:", error);
     return Errors.internal("Failed to add email", request);
@@ -153,12 +161,19 @@ async function updateKnownEmailHandler(
     const result = await knownEmailsService.updateEmail(id, data);
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to update email", request);
+      return Errors.badRequest(
+        result.error || "Failed to update email",
+        request,
+      );
     }
 
     context.log(`Known email updated: ${id} by ${authResult.userId}`);
 
-    return successResponse({ success: true, email: result.email }, 200, request);
+    return successResponse(
+      { success: true, email: result.email },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to update known email:", error);
     return Errors.internal("Failed to update email", request);
@@ -197,7 +212,10 @@ async function deleteKnownEmailHandler(
     }
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to delete email", request);
+      return Errors.badRequest(
+        result.error || "Failed to delete email",
+        request,
+      );
     }
 
     context.log(
@@ -236,10 +254,14 @@ async function checkKnownEmailHandler(
 
     const profileKey = await knownEmailsService.getProfileKeyForEmail(email);
 
-    return successResponse({
-      isKnown: !!profileKey,
-      profileKey: profileKey || null,
-    }, 200, request);
+    return successResponse(
+      {
+        isKnown: !!profileKey,
+        profileKey: profileKey || null,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to check known email:", error);
     return Errors.internal("Failed to check email", request);
@@ -261,9 +283,13 @@ async function getProfileKeysHandler(
     return Errors.forbidden("Admin access required", request);
   }
 
-  return successResponse({
-    profileKeys: AVAILABLE_PROFILE_KEYS,
-  }, 200, request);
+  return successResponse(
+    {
+      profileKeys: AVAILABLE_PROFILE_KEYS,
+    },
+    200,
+    request,
+  );
 }
 
 /**

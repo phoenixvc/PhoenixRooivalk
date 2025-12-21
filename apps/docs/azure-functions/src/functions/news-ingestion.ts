@@ -97,10 +97,14 @@ async function getIngestionConfigHandler(
     return Errors.forbidden("Admin access required", request);
   }
 
-  return successResponse({
-    searchQueries: newsIngestionService.getSearchQueries(),
-    rssFeeds: newsIngestionService.getRSSFeeds(),
-  }, 200, request);
+  return successResponse(
+    {
+      searchQueries: newsIngestionService.getSearchQueries(),
+      rssFeeds: newsIngestionService.getRSSFeeds(),
+    },
+    200,
+    request,
+  );
 }
 
 // Register endpoints

@@ -99,10 +99,14 @@ async function importNewsArticlesHandler(
 
     const result = await newsAnalyticsService.importArticles(articles);
 
-    return successResponse({
-      success: true,
-      ...result,
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        ...result,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error importing articles:", error);
     return Errors.internal("Failed to import articles", request);

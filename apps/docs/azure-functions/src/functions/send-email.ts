@@ -90,7 +90,10 @@ async function sendEmailHandler(
     );
 
     if (!authResult.valid) {
-      return Errors.unauthenticated("Authentication required to send emails", request);
+      return Errors.unauthenticated(
+        "Authentication required to send emails",
+        request,
+      );
     }
 
     const data = (await request.json()) as SendEmailRequest;
@@ -131,10 +134,14 @@ async function sendEmailHandler(
         },
       );
 
-      return successResponse({
-        success: true,
-        messageId: result.messageId,
-      }, 200, request);
+      return successResponse(
+        {
+          success: true,
+          messageId: result.messageId,
+        },
+        200,
+        request,
+      );
     } else {
       context.warn("Email sending failed", {
         userId: authResult.userId,
@@ -162,16 +169,20 @@ async function emailStatusHandler(
       process.env.AZURE_COMMUNICATION_CONNECTION_STRING
     );
 
-    return successResponse({
-      available: hasProvider,
-      provider:
-        process.env.EMAIL_PROVIDER ||
-        (process.env.SENDGRID_API_KEY
-          ? "sendgrid"
-          : process.env.AZURE_COMMUNICATION_CONNECTION_STRING
-            ? "azure"
-            : "none"),
-    }, 200, request);
+    return successResponse(
+      {
+        available: hasProvider,
+        provider:
+          process.env.EMAIL_PROVIDER ||
+          (process.env.SENDGRID_API_KEY
+            ? "sendgrid"
+            : process.env.AZURE_COMMUNICATION_CONNECTION_STRING
+              ? "azure"
+              : "none"),
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Email status check failed:", error);
     return Errors.internal("Failed to check email status", request);

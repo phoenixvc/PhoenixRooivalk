@@ -63,10 +63,14 @@ async function listConfigHandler(
 
     const config = await configurationService.exportConfig(type || undefined);
 
-    return successResponse({
-      items: config,
-      count: config.length,
-    }, 200, request);
+    return successResponse(
+      {
+        items: config,
+        count: config.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error listing config:", error);
     return Errors.internal("Failed to list configuration", request);
@@ -119,11 +123,15 @@ async function getConfigByTypeHandler(
         items = await configurationService.exportConfig(type);
     }
 
-    return successResponse({
-      type,
-      items,
-      count: items.length,
-    }, 200, request);
+    return successResponse(
+      {
+        type,
+        items,
+        count: items.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error getting config:", error);
     return Errors.internal("Failed to get configuration", request);
@@ -260,10 +268,14 @@ async function deleteConfigHandler(
 
     context.log(`Deactivated config: ${id}`);
 
-    return successResponse({
-      success: true,
-      message: "Configuration deactivated",
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        message: "Configuration deactivated",
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error deleting config:", error);
     return Errors.internal("Failed to delete configuration", request);
@@ -290,11 +302,15 @@ async function getConfigHistoryHandler(
 
     const history = await configurationService.getConfigHistory(id);
 
-    return successResponse({
-      configId: id,
-      versions: history,
-      count: history.length,
-    }, 200, request);
+    return successResponse(
+      {
+        configId: id,
+        versions: history,
+        count: history.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error getting history:", error);
     return Errors.internal("Failed to get configuration history", request);
@@ -448,11 +464,15 @@ async function getOptimizationsHandler(
   try {
     const optimizations = await configurationService.analyzeOptimizations();
 
-    return successResponse({
-      suggestions: optimizations,
-      count: optimizations.length,
-      analyzedAt: new Date().toISOString(),
-    }, 200, request);
+    return successResponse(
+      {
+        suggestions: optimizations,
+        count: optimizations.length,
+        analyzedAt: new Date().toISOString(),
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error analyzing optimizations:", error);
     return Errors.internal("Failed to analyze configuration", request);
@@ -479,10 +499,14 @@ async function seedDefaultsHandler(
 
     context.log(`Seeded ${result.seeded} default configs`);
 
-    return successResponse({
-      message: "Default configuration seeded",
-      ...result,
-    }, 200, request);
+    return successResponse(
+      {
+        message: "Default configuration seeded",
+        ...result,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error seeding defaults:", error);
     return Errors.internal("Failed to seed defaults", request);
@@ -517,11 +541,15 @@ async function searchConfigHandler(
       type || undefined,
     );
 
-    return successResponse({
-      query,
-      results,
-      count: results.length,
-    }, 200, request);
+    return successResponse(
+      {
+        query,
+        results,
+        count: results.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error searching config:", error);
     return Errors.internal("Failed to search configuration", request);

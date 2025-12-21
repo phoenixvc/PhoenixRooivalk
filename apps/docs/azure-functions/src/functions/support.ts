@@ -52,15 +52,22 @@ async function submitContactFormHandler(
 
     context.log(`Contact form submitted: ${result.ticketNumber}`);
 
-    return successResponse({
-      success: true,
-      ticketNumber: result.ticketNumber,
-      message:
-        "Your message has been received. We'll respond within 1-2 business days.",
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        ticketNumber: result.ticketNumber,
+        message:
+          "Your message has been received. We'll respond within 1-2 business days.",
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to submit contact form:", error);
-    return Errors.internal("Failed to submit contact form. Please try again.", request);
+    return Errors.internal(
+      "Failed to submit contact form. Please try again.",
+      request,
+    );
   }
 }
 

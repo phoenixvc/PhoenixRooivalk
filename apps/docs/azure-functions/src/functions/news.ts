@@ -45,7 +45,10 @@ async function getNewsFeedHandler(
 
     // Validate categories
     if (body.categories && body.categories.length > 10) {
-      return Errors.badRequest("Cannot filter by more than 10 categories", request);
+      return Errors.badRequest(
+        "Cannot filter by more than 10 categories",
+        request,
+      );
     }
 
     const result = await newsService.getNewsFeed({
@@ -96,19 +99,26 @@ async function addNewsArticleHandler(
     };
 
     if (!body.title || !body.content || !body.source) {
-      return Errors.badRequest("Title, content, and source are required", request);
+      return Errors.badRequest(
+        "Title, content, and source are required",
+        request,
+      );
     }
 
     const article = await newsService.addArticle(body);
 
     context.log(`Added news article: ${article.id}`);
 
-    return successResponse({
-      success: true,
-      articleId: article.id,
-      category: article.category,
-      type: article.type,
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        articleId: article.id,
+        category: article.category,
+        type: article.type,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error adding news article:", error);
     return Errors.internal("Failed to add news article", request);
@@ -168,7 +178,10 @@ async function saveArticleHandler(
     };
 
     if (!articleId || typeof save !== "boolean") {
-      return Errors.badRequest("articleId and save (boolean) are required", request);
+      return Errors.badRequest(
+        "articleId and save (boolean) are required",
+        request,
+      );
     }
 
     await newsService.toggleSaveArticle(authResult.userId!, articleId, save);
@@ -228,7 +241,10 @@ async function searchNewsHandler(
 
     // Validate categories
     if (categories && categories.length > 10) {
-      return Errors.badRequest("Cannot filter by more than 10 categories", request);
+      return Errors.badRequest(
+        "Cannot filter by more than 10 categories",
+        request,
+      );
     }
 
     const validCategoryIds = getCategoryIds();
@@ -245,10 +261,14 @@ async function searchNewsHandler(
 
     const results = await newsService.searchNews(query, { categories, limit });
 
-    return successResponse({
-      results,
-      totalFound: results.length,
-    }, 200, request);
+    return successResponse(
+      {
+        results,
+        totalFound: results.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error searching news:", error);
     return Errors.internal("Failed to search news", request);

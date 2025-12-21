@@ -46,7 +46,10 @@ async function generateReportHandler(
       RateLimits.ai,
     ))
   ) {
-    return Errors.rateLimited("Rate limit exceeded. Please wait before generating another report.", request);
+    return Errors.rateLimited(
+      "Rate limit exceeded. Please wait before generating another report.",
+      request,
+    );
   }
 
   try {
@@ -68,7 +71,10 @@ async function generateReportHandler(
     }
 
     if (data.repositories.length > 10) {
-      return Errors.badRequest("Maximum 10 repositories allowed per report", request);
+      return Errors.badRequest(
+        "Maximum 10 repositories allowed per report",
+        request,
+      );
     }
 
     // Validate each repository format (owner/repo)
@@ -94,15 +100,22 @@ async function generateReportHandler(
     );
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to generate report", request);
+      return Errors.badRequest(
+        result.error || "Failed to generate report",
+        request,
+      );
     }
 
     context.log(`Weekly report generated: ${result.report?.reportNumber}`);
 
-    return successResponse({
-      success: true,
-      report: result.report,
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        report: result.report,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to generate weekly report:", error);
     return Errors.internal("Failed to generate report", request);
@@ -141,10 +154,14 @@ async function getReportsHandler(
       { limit },
     );
 
-    return successResponse({
-      reports: result.items,
-      hasMore: result.hasMore,
-    }, 200, request);
+    return successResponse(
+      {
+        reports: result.items,
+        hasMore: result.hasMore,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to get reports:", error);
     return Errors.internal("Failed to get reports", request);
@@ -270,15 +287,22 @@ async function regenerateReportHandler(
     );
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to regenerate report", request);
+      return Errors.badRequest(
+        result.error || "Failed to regenerate report",
+        request,
+      );
     }
 
     context.log(`Report regenerated: ${result.report?.reportNumber}`);
 
-    return successResponse({
-      success: true,
-      report: result.report,
-    }, 200, request);
+    return successResponse(
+      {
+        success: true,
+        report: result.report,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to regenerate report:", error);
     return Errors.internal("Failed to regenerate report", request);
@@ -414,12 +438,18 @@ async function validateRepositoryHandler(
   try {
     const repoString = request.query.get("repository");
     if (!repoString) {
-      return Errors.badRequest("Repository parameter is required (format: owner/repo)", request);
+      return Errors.badRequest(
+        "Repository parameter is required (format: owner/repo)",
+        request,
+      );
     }
 
     const parsed = gitHubService.parseRepository(repoString);
     if (!parsed) {
-      return Errors.badRequest("Invalid repository format. Use owner/repo", request);
+      return Errors.badRequest(
+        "Invalid repository format. Use owner/repo",
+        request,
+      );
     }
 
     const isValid = await gitHubService.validateRepository(
@@ -427,11 +457,15 @@ async function validateRepositoryHandler(
       parsed.repo,
     );
 
-    return successResponse({
-      repository: repoString,
-      valid: isValid,
-      configured: gitHubService.isConfigured(),
-    }, 200, request);
+    return successResponse(
+      {
+        repository: repoString,
+        valid: isValid,
+        configured: gitHubService.isConfigured(),
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to validate repository:", error);
     return Errors.internal("Failed to validate repository", request);
@@ -453,9 +487,13 @@ async function checkGitHubConfigHandler(
     return Errors.forbidden("Admin access required", request);
   }
 
-  return successResponse({
-    configured: gitHubService.isConfigured(),
-  }, 200, request);
+  return successResponse(
+    {
+      configured: gitHubService.isConfigured(),
+    },
+    200,
+    request,
+  );
 }
 
 // Register endpoints
