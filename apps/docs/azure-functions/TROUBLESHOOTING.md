@@ -81,6 +81,7 @@ environment variables.
    If `cosmos: "error"`, see solution below.
 
 2. **Check Azure Functions logs:**
+
    ```bash
    # Stream live logs
    az functionapp log tail \
@@ -224,7 +225,8 @@ access the database.
 ### 5. Database Container Not Found
 
 **Symptom:**
-```
+
+```text
 Error: Container 'userProgress' does not exist
 ```
 

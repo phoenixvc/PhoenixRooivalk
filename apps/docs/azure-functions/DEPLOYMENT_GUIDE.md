@@ -77,6 +77,7 @@ For local testing or manual deployment:
    ```
 
 2. **Build the Functions**:
+
    ```bash
    npm run build
    ```
@@ -174,6 +175,7 @@ curl -X POST https://YOUR-FUNCTION-APP.azurewebsites.net/api/cosmos/setDocument 
 ```
 
 **Expected Response (Success)**:
+
 ```json
 {
   "success": true
@@ -391,6 +393,7 @@ traces
 ```
 
 **Cosmos DB Operations**:
+
 ```kusto
 traces
 | where message contains "cosmos" or message contains "Cosmos"
