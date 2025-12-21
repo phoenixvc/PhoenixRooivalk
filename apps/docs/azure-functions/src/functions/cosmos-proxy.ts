@@ -19,8 +19,8 @@ import {
   deleteDocument,
   queryDocuments,
 } from "../lib/cosmos";
-import { handleOptionsRequest, getCorsHeaders } from "../lib/utils";
 import { createRequestLogger } from "../lib/logger";
+import { handleOptionsRequest, getCorsHeaders } from "../lib/utils";
 
 /**
  * Helper to add CORS headers to response
@@ -46,7 +46,7 @@ async function getDocumentHandler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   const logger = createRequestLogger(request, "cosmos-proxy");
-  
+
   // Handle OPTIONS preflight
   if (request.method === "OPTIONS") {
     return addCorsHeaders(handleOptionsRequest(request), request);
@@ -69,9 +69,9 @@ async function getDocumentHandler(
       return addCorsHeaders(
         {
           status: 500,
-          jsonBody: { 
+          jsonBody: {
             error: "Database not configured",
-            code: "DB_CONFIG_ERROR"
+            code: "DB_CONFIG_ERROR",
           },
         },
         request,
@@ -101,9 +101,9 @@ async function getDocumentHandler(
       return addCorsHeaders(
         {
           status: 400,
-          jsonBody: { 
+          jsonBody: {
             error: "Collection and documentId required",
-            code: "INVALID_REQUEST"
+            code: "INVALID_REQUEST",
           },
         },
         request,
@@ -124,24 +124,25 @@ async function getDocumentHandler(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : undefined;
-    
+
     logger.error("Error getting document", error as Error, {
       operation: "getDocument",
       errorMessage,
     });
-    
+
     context.error("Error getting document:", {
       error: errorMessage,
       stack: errorStack,
     });
-    
+
     return addCorsHeaders(
       {
         status: 500,
-        jsonBody: { 
+        jsonBody: {
           error: "Failed to get document",
           code: "DB_OPERATION_FAILED",
-          details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+          details:
+            process.env.NODE_ENV === "development" ? errorMessage : undefined,
         },
       },
       request,
@@ -157,7 +158,7 @@ async function setDocumentHandler(
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   const logger = createRequestLogger(request, "cosmos-proxy");
-  
+
   // Handle OPTIONS preflight
   if (request.method === "OPTIONS") {
     return addCorsHeaders(handleOptionsRequest(request), request);
@@ -180,9 +181,9 @@ async function setDocumentHandler(
       return addCorsHeaders(
         {
           status: 500,
-          jsonBody: { 
+          jsonBody: {
             error: "Database not configured",
-            code: "DB_CONFIG_ERROR"
+            code: "DB_CONFIG_ERROR",
           },
         },
         request,
@@ -216,9 +217,9 @@ async function setDocumentHandler(
       return addCorsHeaders(
         {
           status: 400,
-          jsonBody: { 
+          jsonBody: {
             error: "Collection, documentId, and data required",
-            code: "INVALID_REQUEST"
+            code: "INVALID_REQUEST",
           },
         },
         request,
@@ -255,7 +256,10 @@ async function setDocumentHandler(
         logger.warn("Failed to fetch existing document for merge", {
           operation: "setDocument",
           documentId,
-          error: mergeError instanceof Error ? mergeError.message : String(mergeError),
+          error:
+            mergeError instanceof Error
+              ? mergeError.message
+              : String(mergeError),
         });
         // Continue with upsert even if merge fails
       }
@@ -276,24 +280,25 @@ async function setDocumentHandler(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : undefined;
-    
+
     logger.error("Error setting document", error as Error, {
       operation: "setDocument",
       errorMessage,
     });
-    
+
     context.error("Error setting document:", {
       error: errorMessage,
       stack: errorStack,
     });
-    
+
     return addCorsHeaders(
       {
         status: 500,
-        jsonBody: { 
+        jsonBody: {
           error: "Failed to set document",
           code: "DB_OPERATION_FAILED",
-          details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+          details:
+            process.env.NODE_ENV === "development" ? errorMessage : undefined,
         },
       },
       request,

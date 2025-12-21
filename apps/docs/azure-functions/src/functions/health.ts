@@ -71,7 +71,8 @@ async function readinessHandler(
       context.log("[Health] Cosmos DB connection successful");
     } catch (error) {
       checks.cosmos = "error";
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       errors.push(`Cosmos DB: ${errorMessage}`);
       context.error("[Health] Cosmos DB connection failed:", errorMessage);
     }
@@ -79,14 +80,14 @@ async function readinessHandler(
 
   // Check OpenAI configuration
   const openAIConfigs = [
-    { endpoint: 'AZURE_OPENAI_ENDPOINT', key: 'AZURE_OPENAI_API_KEY' },
-    { endpoint: 'AZURE_AI_ENDPOINT', key: 'AZURE_AI_API_KEY' },
+    { endpoint: "AZURE_OPENAI_ENDPOINT", key: "AZURE_OPENAI_API_KEY" },
+    { endpoint: "AZURE_AI_ENDPOINT", key: "AZURE_AI_API_KEY" },
   ];
-  
+
   const hasOpenAI = openAIConfigs.some(
-    config => process.env[config.endpoint] && process.env[config.key]
+    (config) => process.env[config.endpoint] && process.env[config.key],
   );
-  
+
   if (hasOpenAI) {
     checks.openai = "ok";
   }
