@@ -95,6 +95,7 @@ For local testing or manual deployment:
    ```
 
 5. **Configure Environment Variables** (if not already set):
+
    ```bash
    az functionapp config appsettings set \
      --name YOUR-FUNCTION-APP-NAME \

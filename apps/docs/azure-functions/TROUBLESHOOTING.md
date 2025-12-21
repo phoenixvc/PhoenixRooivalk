@@ -128,6 +128,7 @@ environment variables.
    ```
 
 3. **Restart the Function App:**
+
    ```bash
    az functionapp restart \
      --name YOUR-FUNCTION-APP \
