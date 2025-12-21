@@ -1,6 +1,8 @@
 # Azure Functions Deployment Guide
 
-This guide provides step-by-step instructions for deploying the Phoenix Rooivalk Azure Functions after the COOP and error handling improvements.
+This guide provides step-by-step instructions for deploying the
+Phoenix Rooivalk Azure Functions after the COOP and error handling
+improvements.
 
 ## Prerequisites
 
@@ -48,6 +50,7 @@ The easiest way to deploy is using the automated GitHub Actions workflow:
    - Verify the deployment summary at the end
 
 4. **Verify Deployment**:
+
    ```bash
    # Check health endpoint
    curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
@@ -113,6 +116,7 @@ curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
 ```
 
 **Expected Response (Healthy)**:
+
 ```json
 {
   "status": "healthy",
@@ -230,6 +234,7 @@ curl -I https://docs.phoenixrooivalk.com
 ```
 
 **Verify**:
+
 - ✅ `Cross-Origin-Embedder-Policy: unsafe-none` is present
 - ✅ `Cross-Origin-Opener-Policy` is **NOT** present (should be absent)
 
@@ -241,6 +246,7 @@ If COOP header is present, redeploy the docs site.
 2. Click "Sign In"
 3. Try Google or GitHub OAuth
 4. **Verify**:
+
    - ✅ OAuth popup opens
    - ✅ No "Cross-Origin-Opener-Policy" errors in console
    - ✅ Popup closes after authentication
@@ -262,6 +268,7 @@ az functionapp log tail \
 ```
 
 **Look for**:
+
 - ✅ `[Cosmos] Client initialized successfully`
 - ✅ `getDocument request` with successful operations
 - ✅ `Document upserted successfully`
@@ -329,6 +336,7 @@ az functionapp config appsettings set \
 **Cause**: Browser cache or CDN cache
 
 **Fix**:
+
 1. Clear browser cache completely
 2. Try incognito/private browsing mode
 3. Wait for CDN cache to expire (usually 5-10 minutes)
@@ -400,6 +408,7 @@ traces
 ### Set Up Alerts
 
 Consider setting up alerts for:
+
 - Health check failures (cosmos: error)
 - High error rate (>5% of requests)
 - Authentication failures spike
@@ -434,10 +443,13 @@ After deployment:
 
 ## Additional Resources
 
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Detailed troubleshooting guide
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Detailed troubleshooting
+  guide
 - [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) - Azure infrastructure setup
-- [CORS_LOGIN_FIX.md](../../../CORS_LOGIN_FIX.md) - CORS and COOP fix history
-- [GitHub Workflow](../../../.github/workflows/deploy-azure-functions.yml) - CI/CD pipeline
+- [CORS_LOGIN_FIX.md](../../../CORS_LOGIN_FIX.md) - CORS and COOP fix
+  history
+- [GitHub Workflow](../../../.github/workflows/deploy-azure-functions.yml) -
+  CI/CD pipeline
 
 ## Support
 

@@ -1,21 +1,26 @@
 # Azure Functions Troubleshooting Guide
 
-This guide helps diagnose and fix common issues with the Phoenix Rooivalk Azure Functions deployment.
+This guide helps diagnose and fix common issues with the Phoenix Rooivalk
+Azure Functions deployment.
 
 ## Common Issues
 
 ### 1. Cross-Origin-Opener-Policy (COOP) Errors
 
 **Symptom:**
-```
+
+```text
 Cross-Origin-Opener-Policy policy would block the window.closed call.
 ```
 
-**Cause:** OAuth popup windows cannot communicate with the parent window due to restrictive COOP headers.
+**Cause:** OAuth popup windows cannot communicate with the parent window due
+to restrictive COOP headers.
 
 **Solution:**
 
-1. **Check `apps/docs/staticwebapp.config.json`** - ensure COOP header is NOT set:
+1. **Check `apps/docs/staticwebapp.config.json`** - ensure COOP header is
+   NOT set:
+
    ```json
    {
      "globalHeaders": {
@@ -23,9 +28,11 @@ Cross-Origin-Opener-Policy policy would block the window.closed call.
      }
    }
    ```
+
    ✅ COOP header should be absent (not set to any value)
 
 2. **Verify deployment** - if the config is correct but errors persist:
+
    ```bash
    # Redeploy the docs site
    cd apps/docs
@@ -40,12 +47,16 @@ Cross-Origin-Opener-Policy policy would block the window.closed call.
 ### 2. 500 Internal Server Error from `/api/cosmos/setDocument`
 
 **Symptom:**
-```
-Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-Uncaught (in promise) Error: Functions proxy error: Internal Server Error - {"error":"Failed to set document"}
+
+```text
+Failed to load resource: the server responded with a status of 500
+(Internal Server Error)
+Uncaught (in promise) Error: Functions proxy error: Internal Server
+Error - {"error":"Failed to set document"}
 ```
 
-**Cause:** Azure Functions cannot connect to Cosmos DB or missing environment variables.
+**Cause:** Azure Functions cannot connect to Cosmos DB or missing
+environment variables.
 
 **Diagnosis Steps:**
 
@@ -127,8 +138,10 @@ Uncaught (in promise) Error: Functions proxy error: Internal Server Error - {"er
 ### 3. CORS Errors
 
 **Symptom:**
-```
-Access to fetch at 'https://...' from origin 'https://docs.phoenixrooivalk.com' has been blocked by CORS policy
+
+```text
+Access to fetch at 'https://...' from origin
+'https://docs.phoenixrooivalk.com' has been blocked by CORS policy
 ```
 
 **Solution:**
@@ -230,6 +243,7 @@ Error: Container 'userProgress' does not exist
    ```
 
    Or manually:
+
    ```bash
    # Create userProgress container
    az cosmosdb sql container create \
@@ -302,15 +316,18 @@ curl -X POST http://localhost:7071/api/cosmos/setDocument \
 ## Environment Variable Checklist
 
 Required for Cosmos DB operations:
+
 - ✅ `COSMOS_DB_CONNECTION_STRING` - Cosmos DB connection
 - ✅ `COSMOS_DB_DATABASE` - Database name (default: `phoenix-docs`)
 
 Required for Authentication:
+
 - ✅ `AZURE_AD_B2C_TENANT` - B2C tenant name
 - ✅ `AZURE_AD_B2C_CLIENT_ID` - Application client ID
 - ✅ `AZURE_AD_B2C_POLICY` - Sign-up/sign-in policy name
 
 Optional but recommended:
+
 - 📋 `APPLICATIONINSIGHTS_CONNECTION_STRING` - Application Insights
 - 📋 `AZURE_AI_ENDPOINT` - Azure OpenAI endpoint
 - 📋 `AZURE_AI_API_KEY` - Azure OpenAI key
@@ -340,7 +357,8 @@ If issues persist:
    ```
 
 4. **Contact support:**
-   - Check GitHub Issues: https://github.com/JustAGhosT/PhoenixRooivalk/issues
+   - Check GitHub Issues:
+     <https://github.com/JustAGhosT/PhoenixRooivalk/issues>
    - Review documentation: `apps/docs/azure-functions/INFRASTRUCTURE.md`
 
 ## Related Documentation
