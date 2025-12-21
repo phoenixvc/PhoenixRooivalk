@@ -37,7 +37,7 @@ async function submitContactFormHandler(
     // Validate input
     const validationError = supportService.validateContactForm(data);
     if (validationError) {
-      return Errors.badRequest(validationError);
+      return Errors.badRequest(validationError, request);
     }
 
     // Check for authenticated user
@@ -52,15 +52,22 @@ async function submitContactFormHandler(
 
     context.log(`Contact form submitted: ${result.ticketNumber}`);
 
-    return successResponse({
-      success: true,
-      ticketNumber: result.ticketNumber,
-      message:
-        "Your message has been received. We'll respond within 1-2 business days.",
-    });
+    return successResponse(
+      {
+        success: true,
+        ticketNumber: result.ticketNumber,
+        message:
+          "Your message has been received. We'll respond within 1-2 business days.",
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to submit contact form:", error);
-    return Errors.internal("Failed to submit contact form. Please try again.");
+    return Errors.internal(
+      "Failed to submit contact form. Please try again.",
+      request,
+    );
   }
 }
 
@@ -68,15 +75,15 @@ async function submitContactFormHandler(
  * Get latest content timestamps handler
  */
 async function getLatestContentTimestampsHandler(
-  _request: HttpRequest,
+  request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
     const timestamps = await supportService.getLatestTimestamps();
-    return successResponse(timestamps);
+    return successResponse(timestamps, 200, request);
   } catch (error) {
     context.error("Failed to get content timestamps:", error);
-    return Errors.internal("Failed to get content timestamps");
+    return Errors.internal("Failed to get content timestamps", request);
   }
 }
 
@@ -92,15 +99,15 @@ async function getUserTicketsHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     const result = await supportService.getUserTickets(authResult.userId!);
-    return successResponse({ tickets: result.items });
+    return successResponse({ tickets: result.items }, 200, request);
   } catch (error) {
     context.error("Failed to get user tickets:", error);
-    return Errors.internal("Failed to get tickets");
+    return Errors.internal("Failed to get tickets", request);
   }
 }
 
@@ -116,7 +123,7 @@ async function getAdminTicketsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -129,10 +136,10 @@ async function getAdminTicketsHandler(
       parseInt(limit || "100", 10),
     );
 
-    return successResponse({ tickets: result.items });
+    return successResponse({ tickets: result.items }, 200, request);
   } catch (error) {
     context.error("Failed to get admin tickets:", error);
-    return Errors.internal("Failed to get tickets");
+    return Errors.internal("Failed to get tickets", request);
   }
 }
 
@@ -148,7 +155,7 @@ async function updateTicketStatusHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -159,7 +166,7 @@ async function updateTicketStatusHandler(
     };
 
     if (!ticketId || !status) {
-      return Errors.badRequest("ticketId and status are required");
+      return Errors.badRequest("ticketId and status are required", request);
     }
 
     const ticket = await supportService.updateTicketStatus(
@@ -170,18 +177,18 @@ async function updateTicketStatusHandler(
     );
 
     if (!ticket) {
-      return Errors.notFound("Ticket not found");
+      return Errors.notFound("Ticket not found", request);
     }
 
     context.log(`Ticket ${ticketId} updated to ${status}`);
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     if (error instanceof Error && error.message === "Invalid status") {
-      return Errors.badRequest("Invalid status");
+      return Errors.badRequest("Invalid status", request);
     }
     context.error("Failed to update ticket:", error);
-    return Errors.internal("Failed to update ticket");
+    return Errors.internal("Failed to update ticket", request);
   }
 }
 

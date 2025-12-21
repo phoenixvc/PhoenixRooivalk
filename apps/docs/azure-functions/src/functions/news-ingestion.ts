@@ -26,7 +26,7 @@ async function runIngestionHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -48,10 +48,10 @@ async function runIngestionHandler(
       `Ingestion complete: ${result.articlesProcessed} articles processed`,
     );
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Ingestion error:", error);
-    return Errors.internal("Failed to run ingestion");
+    return Errors.internal("Failed to run ingestion", request);
   }
 }
 
@@ -67,7 +67,7 @@ async function fetchBreakingNewsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -75,10 +75,10 @@ async function fetchBreakingNewsHandler(
 
     const result = await newsIngestionService.fetchBreakingNews();
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Breaking news fetch error:", error);
-    return Errors.internal("Failed to fetch breaking news");
+    return Errors.internal("Failed to fetch breaking news", request);
   }
 }
 
@@ -94,13 +94,17 @@ async function getIngestionConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
-  return successResponse({
-    searchQueries: newsIngestionService.getSearchQueries(),
-    rssFeeds: newsIngestionService.getRSSFeeds(),
-  });
+  return successResponse(
+    {
+      searchQueries: newsIngestionService.getSearchQueries(),
+      rssFeeds: newsIngestionService.getRSSFeeds(),
+    },
+    200,
+    request,
+  );
 }
 
 // Register endpoints

@@ -36,7 +36,7 @@ async function generateReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   // Rate limit - expensive AI operation
@@ -48,6 +48,7 @@ async function generateReportHandler(
   ) {
     return Errors.rateLimited(
       "Rate limit exceeded. Please wait before generating another report.",
+      request,
     );
   }
 
@@ -55,22 +56,25 @@ async function generateReportHandler(
     // Check GitHub configuration first
     const configError = gitHubService.getConfigurationError();
     if (configError) {
-      return Errors.badRequest(configError);
+      return Errors.badRequest(configError, request);
     }
 
     const data = (await request.json()) as GenerateReportOptions;
 
     if (!data.repositories || data.repositories.length === 0) {
-      return Errors.badRequest("At least one repository is required");
+      return Errors.badRequest("At least one repository is required", request);
     }
 
     // Validate repositories array
     if (!Array.isArray(data.repositories)) {
-      return Errors.badRequest("repositories must be an array");
+      return Errors.badRequest("repositories must be an array", request);
     }
 
     if (data.repositories.length > 10) {
-      return Errors.badRequest("Maximum 10 repositories allowed per report");
+      return Errors.badRequest(
+        "Maximum 10 repositories allowed per report",
+        request,
+      );
     }
 
     // Validate each repository format (owner/repo)
@@ -96,18 +100,25 @@ async function generateReportHandler(
     );
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to generate report");
+      return Errors.badRequest(
+        result.error || "Failed to generate report",
+        request,
+      );
     }
 
     context.log(`Weekly report generated: ${result.report?.reportNumber}`);
 
-    return successResponse({
-      success: true,
-      report: result.report,
-    });
+    return successResponse(
+      {
+        success: true,
+        report: result.report,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to generate weekly report:", error);
-    return Errors.internal("Failed to generate report");
+    return Errors.internal("Failed to generate report", request);
   }
 }
 
@@ -123,7 +134,7 @@ async function getReportsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -143,13 +154,17 @@ async function getReportsHandler(
       { limit },
     );
 
-    return successResponse({
-      reports: result.items,
-      hasMore: result.hasMore,
-    });
+    return successResponse(
+      {
+        reports: result.items,
+        hasMore: result.hasMore,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to get reports:", error);
-    return Errors.internal("Failed to get reports");
+    return Errors.internal("Failed to get reports", request);
   }
 }
 
@@ -165,24 +180,24 @@ async function getReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Report ID is required");
+      return Errors.badRequest("Report ID is required", request);
     }
 
     const report = await weeklyReportsService.getReport(id);
     if (!report) {
-      return Errors.notFound("Report not found");
+      return Errors.notFound("Report not found", request);
     }
 
-    return successResponse({ report });
+    return successResponse({ report }, 200, request);
   } catch (error) {
     context.error("Failed to get report:", error);
-    return Errors.internal("Failed to get report");
+    return Errors.internal("Failed to get report", request);
   }
 }
 
@@ -198,15 +213,15 @@ async function getMostRecentReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const report = await weeklyReportsService.getMostRecentReport();
-    return successResponse({ report });
+    return successResponse({ report }, 200, request);
   } catch (error) {
     context.error("Failed to get most recent report:", error);
-    return Errors.internal("Failed to get report");
+    return Errors.internal("Failed to get report", request);
   }
 }
 
@@ -222,26 +237,26 @@ async function deleteReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Report ID is required");
+      return Errors.badRequest("Report ID is required", request);
     }
 
     const success = await weeklyReportsService.deleteReport(id);
     if (!success) {
-      return Errors.badRequest("Failed to delete report");
+      return Errors.badRequest("Failed to delete report", request);
     }
 
     context.log(`Report deleted: ${id} by ${authResult.userId}`);
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     context.error("Failed to delete report:", error);
-    return Errors.internal("Failed to delete report");
+    return Errors.internal("Failed to delete report", request);
   }
 }
 
@@ -257,13 +272,13 @@ async function regenerateReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Report ID is required");
+      return Errors.badRequest("Report ID is required", request);
     }
 
     const result = await weeklyReportsService.regenerateReport(
@@ -272,18 +287,25 @@ async function regenerateReportHandler(
     );
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to regenerate report");
+      return Errors.badRequest(
+        result.error || "Failed to regenerate report",
+        request,
+      );
     }
 
     context.log(`Report regenerated: ${result.report?.reportNumber}`);
 
-    return successResponse({
-      success: true,
-      report: result.report,
-    });
+    return successResponse(
+      {
+        success: true,
+        report: result.report,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to regenerate report:", error);
-    return Errors.internal("Failed to regenerate report");
+    return Errors.internal("Failed to regenerate report", request);
   }
 }
 
@@ -299,18 +321,18 @@ async function exportReportHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Report ID is required");
+      return Errors.badRequest("Report ID is required", request);
     }
 
     const report = await weeklyReportsService.getReport(id);
     if (!report) {
-      return Errors.notFound("Report not found");
+      return Errors.notFound("Report not found", request);
     }
 
     const markdown = weeklyReportsService.exportAsMarkdown(report);
@@ -325,7 +347,7 @@ async function exportReportHandler(
     };
   } catch (error) {
     context.error("Failed to export report:", error);
-    return Errors.internal("Failed to export report");
+    return Errors.internal("Failed to export report", request);
   }
 }
 
@@ -341,18 +363,18 @@ async function exportReportMDXHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Report ID is required");
+      return Errors.badRequest("Report ID is required", request);
     }
 
     const report = await weeklyReportsService.getReport(id);
     if (!report) {
-      return Errors.notFound("Report not found");
+      return Errors.notFound("Report not found", request);
     }
 
     const mdx = weeklyReportsService.exportAsMDX(report);
@@ -370,7 +392,7 @@ async function exportReportMDXHandler(
     };
   } catch (error) {
     context.error("Failed to export report as MDX:", error);
-    return Errors.internal("Failed to export report");
+    return Errors.internal("Failed to export report", request);
   }
 }
 
@@ -386,15 +408,15 @@ async function getReportCountsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const counts = await weeklyReportsService.getReportCounts();
-    return successResponse({ counts });
+    return successResponse({ counts }, 200, request);
   } catch (error) {
     context.error("Failed to get report counts:", error);
-    return Errors.internal("Failed to get counts");
+    return Errors.internal("Failed to get counts", request);
   }
 }
 
@@ -410,7 +432,7 @@ async function validateRepositoryHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -418,12 +440,16 @@ async function validateRepositoryHandler(
     if (!repoString) {
       return Errors.badRequest(
         "Repository parameter is required (format: owner/repo)",
+        request,
       );
     }
 
     const parsed = gitHubService.parseRepository(repoString);
     if (!parsed) {
-      return Errors.badRequest("Invalid repository format. Use owner/repo");
+      return Errors.badRequest(
+        "Invalid repository format. Use owner/repo",
+        request,
+      );
     }
 
     const isValid = await gitHubService.validateRepository(
@@ -431,14 +457,18 @@ async function validateRepositoryHandler(
       parsed.repo,
     );
 
-    return successResponse({
-      repository: repoString,
-      valid: isValid,
-      configured: gitHubService.isConfigured(),
-    });
+    return successResponse(
+      {
+        repository: repoString,
+        valid: isValid,
+        configured: gitHubService.isConfigured(),
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Failed to validate repository:", error);
-    return Errors.internal("Failed to validate repository");
+    return Errors.internal("Failed to validate repository", request);
   }
 }
 
@@ -454,12 +484,16 @@ async function checkGitHubConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
-  return successResponse({
-    configured: gitHubService.isConfigured(),
-  });
+  return successResponse(
+    {
+      configured: gitHubService.isConfigured(),
+    },
+    200,
+    request,
+  );
 }
 
 // Register endpoints

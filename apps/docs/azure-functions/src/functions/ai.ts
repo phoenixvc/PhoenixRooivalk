@@ -47,15 +47,18 @@ async function analyzeCompetitorsHandler(
     };
 
     if (!Array.isArray(competitors) || competitors.length === 0) {
-      return Errors.badRequest("At least one competitor name required");
+      return Errors.badRequest(
+        "At least one competitor name required",
+        request,
+      );
     }
 
     const result = await aiService.analyzeCompetitors(competitors, focusAreas);
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error analyzing competitors:", error);
-    return Errors.internal("Failed to analyze competitors");
+    return Errors.internal("Failed to analyze competitors", request);
   }
 }
 
@@ -87,10 +90,10 @@ async function generateSWOTHandler(
 
     const result = await aiService.generateSWOT({ context: ctx, focusArea });
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error generating SWOT:", error);
-    return Errors.internal("Failed to generate SWOT analysis");
+    return Errors.internal("Failed to generate SWOT analysis", request);
   }
 }
 
@@ -127,10 +130,10 @@ async function getMarketInsightsHandler(
       timeframe,
     });
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error getting market insights:", error);
-    return Errors.internal("Failed to get market insights");
+    return Errors.internal("Failed to get market insights", request);
   }
 }
 
@@ -163,7 +166,7 @@ async function summarizeContentHandler(
     };
 
     if (!content) {
-      return Errors.badRequest("Content is required");
+      return Errors.badRequest("Content is required", request);
     }
 
     const summary = await aiService.summarizeContent(content, {
@@ -172,10 +175,10 @@ async function summarizeContentHandler(
       format,
     });
 
-    return successResponse({ summary });
+    return successResponse({ summary }, 200, request);
   } catch (error) {
     context.error("Error summarizing content:", error);
-    return Errors.internal("Failed to summarize content");
+    return Errors.internal("Failed to summarize content", request);
   }
 }
 
@@ -211,6 +214,7 @@ async function getReadingRecommendationsHandler(
     if (!role || !interests || !experienceLevel) {
       return Errors.badRequest(
         "role, interests, and experienceLevel are required",
+        request,
       );
     }
 
@@ -221,10 +225,10 @@ async function getReadingRecommendationsHandler(
       readHistory,
     });
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error getting recommendations:", error);
-    return Errors.internal("Failed to get recommendations");
+    return Errors.internal("Failed to get recommendations", request);
   }
 }
 
@@ -256,7 +260,7 @@ async function suggestImprovementsHandler(
     };
 
     if (!title || !content) {
-      return Errors.badRequest("title and content are required");
+      return Errors.badRequest("title and content are required", request);
     }
 
     const suggestions = await aiService.suggestImprovements(
@@ -265,10 +269,10 @@ async function suggestImprovementsHandler(
       focusArea,
     );
 
-    return successResponse({ suggestions });
+    return successResponse({ suggestions }, 200, request);
   } catch (error) {
     context.error("Error suggesting improvements:", error);
-    return Errors.internal("Failed to suggest improvements");
+    return Errors.internal("Failed to suggest improvements", request);
   }
 }
 
@@ -300,7 +304,7 @@ async function askDocumentationHandler(
     };
 
     if (!question) {
-      return Errors.badRequest("question is required");
+      return Errors.badRequest("question is required", request);
     }
 
     const result = await aiService.askDocumentation(question, {
@@ -308,10 +312,10 @@ async function askDocumentationHandler(
       topK,
     });
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error answering question:", error);
-    return Errors.internal("Failed to answer question");
+    return Errors.internal("Failed to answer question", request);
   }
 }
 
@@ -349,7 +353,7 @@ async function researchPersonHandler(
     };
 
     if (!name) {
-      return Errors.badRequest("name is required");
+      return Errors.badRequest("name is required", request);
     }
 
     const research = await aiService.researchPerson(name, {
@@ -358,10 +362,10 @@ async function researchPersonHandler(
       context: ctx,
     });
 
-    return successResponse({ research });
+    return successResponse({ research }, 200, request);
   } catch (error) {
     context.error("Error researching person:", error);
-    return Errors.internal("Failed to research person");
+    return Errors.internal("Failed to research person", request);
   }
 }
 
@@ -383,7 +387,7 @@ async function searchDocsHandler(
     };
 
     if (!query) {
-      return Errors.badRequest("Query is required");
+      return Errors.badRequest("Query is required", request);
     }
 
     const results = await aiService.searchDocuments(query, {
@@ -402,7 +406,7 @@ async function searchDocsHandler(
     });
   } catch (error) {
     context.error("Error searching:", error);
-    return Errors.internal("Search failed");
+    return Errors.internal("Search failed", request);
   }
 }
 

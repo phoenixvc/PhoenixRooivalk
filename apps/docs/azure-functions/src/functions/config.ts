@@ -48,7 +48,7 @@ async function listConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -57,18 +57,23 @@ async function listConfigHandler(
     if (type && !isValidConfigType(type)) {
       return Errors.badRequest(
         `Invalid type. Must be one of: category, role, interest, prompt, topic, domain, setting`,
+        request,
       );
     }
 
     const config = await configurationService.exportConfig(type || undefined);
 
-    return successResponse({
-      items: config,
-      count: config.length,
-    });
+    return successResponse(
+      {
+        items: config,
+        count: config.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error listing config:", error);
-    return Errors.internal("Failed to list configuration");
+    return Errors.internal("Failed to list configuration", request);
   }
 }
 
@@ -84,14 +89,14 @@ async function getConfigByTypeHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const type = request.params.type as string;
 
     if (!isValidConfigType(type)) {
-      return Errors.badRequest(`Invalid type: ${type}`);
+      return Errors.badRequest(`Invalid type: ${type}`, request);
     }
 
     let items: ConfigItem[];
@@ -118,14 +123,18 @@ async function getConfigByTypeHandler(
         items = await configurationService.exportConfig(type);
     }
 
-    return successResponse({
-      type,
-      items,
-      count: items.length,
-    });
+    return successResponse(
+      {
+        type,
+        items,
+        count: items.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error getting config:", error);
-    return Errors.internal("Failed to get configuration");
+    return Errors.internal("Failed to get configuration", request);
   }
 }
 
@@ -141,14 +150,14 @@ async function createConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const type = request.params.type as string;
 
     if (!isValidConfigType(type)) {
-      return Errors.badRequest(`Invalid type: ${type}`);
+      return Errors.badRequest(`Invalid type: ${type}`, request);
     }
 
     const body = (await request.json()) as {
@@ -159,7 +168,7 @@ async function createConfigHandler(
     };
 
     if (!body.name || !body.description) {
-      return Errors.badRequest("name and description are required");
+      return Errors.badRequest("name and description are required", request);
     }
 
     const item = await configurationService.createConfig(
@@ -176,10 +185,10 @@ async function createConfigHandler(
 
     context.log(`Created config: ${item.id}`);
 
-    return successResponse(item, 201);
+    return successResponse(item, 201, request);
   } catch (error) {
     context.error("Error creating config:", error);
-    return Errors.internal("Failed to create configuration");
+    return Errors.internal("Failed to create configuration", request);
   }
 }
 
@@ -195,7 +204,7 @@ async function updateConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -225,15 +234,15 @@ async function updateConfigHandler(
     );
 
     if (!item) {
-      return Errors.notFound("Configuration not found");
+      return Errors.notFound("Configuration not found", request);
     }
 
     context.log(`Updated config: ${item.id}`);
 
-    return successResponse(item);
+    return successResponse(item, 200, request);
   } catch (error) {
     context.error("Error updating config:", error);
-    return Errors.internal("Failed to update configuration");
+    return Errors.internal("Failed to update configuration", request);
   }
 }
 
@@ -249,7 +258,7 @@ async function deleteConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -259,13 +268,17 @@ async function deleteConfigHandler(
 
     context.log(`Deactivated config: ${id}`);
 
-    return successResponse({
-      success: true,
-      message: "Configuration deactivated",
-    });
+    return successResponse(
+      {
+        success: true,
+        message: "Configuration deactivated",
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error deleting config:", error);
-    return Errors.internal("Failed to delete configuration");
+    return Errors.internal("Failed to delete configuration", request);
   }
 }
 
@@ -281,7 +294,7 @@ async function getConfigHistoryHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -289,14 +302,18 @@ async function getConfigHistoryHandler(
 
     const history = await configurationService.getConfigHistory(id);
 
-    return successResponse({
-      configId: id,
-      versions: history,
-      count: history.length,
-    });
+    return successResponse(
+      {
+        configId: id,
+        versions: history,
+        count: history.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error getting history:", error);
-    return Errors.internal("Failed to get configuration history");
+    return Errors.internal("Failed to get configuration history", request);
   }
 }
 
@@ -312,7 +329,7 @@ async function revertConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -320,7 +337,7 @@ async function revertConfigHandler(
     const version = parseInt(request.params.version as string, 10);
 
     if (isNaN(version) || version < 1) {
-      return Errors.badRequest("Invalid version number");
+      return Errors.badRequest("Invalid version number", request);
     }
 
     const item = await configurationService.revertConfig(
@@ -330,15 +347,15 @@ async function revertConfigHandler(
     );
 
     if (!item) {
-      return Errors.notFound("Configuration or version not found");
+      return Errors.notFound("Configuration or version not found", request);
     }
 
     context.log(`Reverted config ${id} to version ${version}`);
 
-    return successResponse(item);
+    return successResponse(item, 200, request);
   } catch (error) {
     context.error("Error reverting config:", error);
-    return Errors.internal("Failed to revert configuration");
+    return Errors.internal("Failed to revert configuration", request);
   }
 }
 
@@ -354,7 +371,7 @@ async function importConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -369,7 +386,7 @@ async function importConfigHandler(
     };
 
     if (!body.items || !Array.isArray(body.items)) {
-      return Errors.badRequest("items array is required");
+      return Errors.badRequest("items array is required", request);
     }
 
     const result = await configurationService.importConfig(
@@ -385,10 +402,10 @@ async function importConfigHandler(
       `Imported ${result.imported} configs, skipped ${result.skipped}`,
     );
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error importing config:", error);
-    return Errors.internal("Failed to import configuration");
+    return Errors.internal("Failed to import configuration", request);
   }
 }
 
@@ -404,7 +421,7 @@ async function exportConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -425,7 +442,7 @@ async function exportConfigHandler(
     };
   } catch (error) {
     context.error("Error exporting config:", error);
-    return Errors.internal("Failed to export configuration");
+    return Errors.internal("Failed to export configuration", request);
   }
 }
 
@@ -441,20 +458,24 @@ async function getOptimizationsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const optimizations = await configurationService.analyzeOptimizations();
 
-    return successResponse({
-      suggestions: optimizations,
-      count: optimizations.length,
-      analyzedAt: new Date().toISOString(),
-    });
+    return successResponse(
+      {
+        suggestions: optimizations,
+        count: optimizations.length,
+        analyzedAt: new Date().toISOString(),
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error analyzing optimizations:", error);
-    return Errors.internal("Failed to analyze configuration");
+    return Errors.internal("Failed to analyze configuration", request);
   }
 }
 
@@ -470,7 +491,7 @@ async function seedDefaultsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -478,13 +499,17 @@ async function seedDefaultsHandler(
 
     context.log(`Seeded ${result.seeded} default configs`);
 
-    return successResponse({
-      message: "Default configuration seeded",
-      ...result,
-    });
+    return successResponse(
+      {
+        message: "Default configuration seeded",
+        ...result,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error seeding defaults:", error);
-    return Errors.internal("Failed to seed defaults");
+    return Errors.internal("Failed to seed defaults", request);
   }
 }
 
@@ -500,7 +525,7 @@ async function searchConfigHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -508,7 +533,7 @@ async function searchConfigHandler(
     const type = request.query.get("type") as ConfigType | null;
 
     if (!query) {
-      return Errors.badRequest("Query parameter 'q' is required");
+      return Errors.badRequest("Query parameter 'q' is required", request);
     }
 
     const results = await configurationService.searchConfig(
@@ -516,14 +541,18 @@ async function searchConfigHandler(
       type || undefined,
     );
 
-    return successResponse({
-      query,
-      results,
-      count: results.length,
-    });
+    return successResponse(
+      {
+        query,
+        results,
+        count: results.length,
+      },
+      200,
+      request,
+    );
   } catch (error) {
     context.error("Error searching config:", error);
-    return Errors.internal("Failed to search configuration");
+    return Errors.internal("Failed to search configuration", request);
   }
 }
 
