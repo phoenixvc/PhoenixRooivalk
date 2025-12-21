@@ -6,14 +6,28 @@
 
 import { getAuthService, getCurrentProvider } from "./cloud";
 
-// Production Azure Functions URL fallback (must include /api)
-const AZURE_FUNCTIONS_FALLBACK =
-  "https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net/api";
+// Cached API base URL (evaluated lazily)
+let cachedApiBase: string | null = null;
 
 /**
- * Get API base URL from Docusaurus config or fallback to Azure Functions
+ * Normalize URL to ensure it has /api suffix
+ */
+function normalizeApiUrl(url: string): string {
+  // Remove trailing slashes and ensure /api suffix
+  const normalized = url.replace(/\/+$/, "");
+  return normalized.endsWith("/api") ? normalized : `${normalized}/api`;
+}
+
+/**
+ * Get API base URL from Docusaurus config
+ * Evaluated lazily to ensure window.__DOCUSAURUS__ is available
  */
 function getApiBase(): string {
+  // Return cached value if available
+  if (cachedApiBase) {
+    return cachedApiBase;
+  }
+
   if (typeof window !== "undefined") {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,17 +35,25 @@ function getApiBase(): string {
       const functionsBaseUrl =
         docusaurusData?.siteConfig?.customFields?.azureConfig?.functionsBaseUrl;
       if (functionsBaseUrl) {
-        return functionsBaseUrl;
+        cachedApiBase = normalizeApiUrl(functionsBaseUrl);
+        return cachedApiBase;
       }
     } catch {
-      // Ignore
+      // Ignore - will use fallback
     }
   }
-  // Fallback to production Azure Functions URL
-  return AZURE_FUNCTIONS_FALLBACK;
-}
 
-const API_BASE = getApiBase();
+  // Fallback: Use window location origin with /api prefix for relative calls
+  // This works when Azure Functions are deployed as part of the same SWA
+  // or when proxied via the SWA API routing
+  if (typeof window !== "undefined") {
+    cachedApiBase = `${window.location.origin}/api`;
+    return cachedApiBase;
+  }
+
+  // SSR fallback - return empty and let the call fail gracefully
+  return "/api";
+}
 
 /**
  * Known email data
@@ -98,7 +120,7 @@ export async function getKnownEmails(filters?: {
       params.set("isActive", filters.isActive.toString());
     if (filters?.limit) params.set("limit", filters.limit.toString());
 
-    const url = `${API_BASE}/known-emails${params.toString() ? `?${params}` : ""}`;
+    const url = `${getApiBase()}/known-emails${params.toString() ? `?${params}` : ""}`;
     const response = await fetch(url, { headers });
 
     if (!response.ok) {
@@ -122,7 +144,7 @@ export async function getKnownEmails(filters?: {
 export async function getKnownEmail(id: string): Promise<KnownEmail | null> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/known-emails/${id}`, { headers });
+    const response = await fetch(`${getApiBase()}/known-emails/${id}`, { headers });
 
     if (!response.ok) {
       return null;
@@ -144,7 +166,7 @@ export async function addKnownEmail(
 ): Promise<{ success: boolean; email?: KnownEmail; error?: string }> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/known-emails`, {
+    const response = await fetch(`${getApiBase()}/known-emails`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -184,7 +206,7 @@ export async function updateKnownEmail(
 ): Promise<{ success: boolean; email?: KnownEmail; error?: string }> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/known-emails/${id}`, {
+    const response = await fetch(`${getApiBase()}/known-emails/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -225,8 +247,8 @@ export async function deleteKnownEmail(
   try {
     const headers = await getAuthHeader();
     const url = hardDelete
-      ? `${API_BASE}/known-emails/${id}?hard=true`
-      : `${API_BASE}/known-emails/${id}`;
+      ? `${getApiBase()}/known-emails/${id}?hard=true`
+      : `${getApiBase()}/known-emails/${id}`;
 
     const response = await fetch(url, {
       method: "DELETE",
@@ -269,7 +291,7 @@ export async function checkKnownEmail(
 
   try {
     const headers = await getAuthHeader();
-    const url = `${API_BASE}/known-emails/check?email=${encodeURIComponent(email)}`;
+    const url = `${getApiBase()}/known-emails/check?email=${encodeURIComponent(email)}`;
 
     const response = await fetch(url, { headers });
 
@@ -294,7 +316,7 @@ export async function checkKnownEmail(
 export async function getProfileKeys(): Promise<string[]> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/known-emails/profile-keys`, {
+    const response = await fetch(`${getApiBase()}/known-emails/profile-keys`, {
       headers,
     });
 
@@ -316,7 +338,7 @@ export async function getProfileKeys(): Promise<string[]> {
 export async function getKnownEmailsCount(): Promise<number> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${API_BASE}/known-emails/count`, { headers });
+    const response = await fetch(`${getApiBase()}/known-emails/count`, { headers });
 
     if (!response.ok) {
       return 0;
