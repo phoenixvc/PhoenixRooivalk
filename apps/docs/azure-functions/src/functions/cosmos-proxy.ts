@@ -13,6 +13,7 @@ import {
 } from "@azure/functions";
 import { SqlParameter, JSONValue } from "@azure/cosmos";
 import { requireAuthAsync } from "../lib/auth";
+import { handleOptionsRequest } from "../lib/utils";
 import {
   getDocument,
   upsertDocument,
@@ -21,15 +22,57 @@ import {
 } from "../lib/cosmos";
 
 /**
+ * Helper to add CORS headers to response
+ */
+function addCorsHeaders(
+  response: HttpResponseInit,
+  request: HttpRequest,
+): HttpResponseInit {
+  const origin = request.headers.get("origin") || "*";
+  
+  // List of allowed origins
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://phoenixrooivalk.com",
+    "https://docs.phoenixrooivalk.com",
+    "https://www.phoenixrooivalk.com",
+  ];
+  
+  const isAllowedOrigin = 
+    allowedOrigins.includes(origin) || 
+    origin.includes(".azurestaticapps.net");
+  
+  const allowedOrigin = isAllowedOrigin ? origin : allowedOrigins[0];
+  
+  return {
+    ...response,
+    headers: {
+      ...response.headers,
+      "Access-Control-Allow-Origin": allowedOrigin,
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Max-Age": "86400",
+    },
+  };
+}
+
+/**
  * Get Document
  */
 async function getDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  // Handle OPTIONS preflight
+  if (request.method === "OPTIONS") {
+    return addCorsHeaders(handleOptionsRequest(request), request);
+  }
+
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return auth.error!;
+    return addCorsHeaders(auth.error!, request);
   }
 
   try {
@@ -41,19 +84,22 @@ async function getDocumentHandler(
     const { collection, documentId } = body;
 
     if (!collection || !documentId) {
-      return {
+      return addCorsHeaders({
         status: 400,
         jsonBody: { error: "Collection and documentId required" },
-      };
+      }, request);
     }
 
     // Security: Restrict certain collections or add user-based filtering
     const doc = await getDocument(collection, documentId);
 
-    return { status: 200, jsonBody: doc };
+    return addCorsHeaders({ status: 200, jsonBody: doc }, request);
   } catch (error) {
     context.error("Error getting document:", error);
-    return { status: 500, jsonBody: { error: "Failed to get document" } };
+    return addCorsHeaders({ 
+      status: 500, 
+      jsonBody: { error: "Failed to get document" } 
+    }, request);
   }
 }
 
@@ -64,9 +110,14 @@ async function setDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  // Handle OPTIONS preflight
+  if (request.method === "OPTIONS") {
+    return addCorsHeaders(handleOptionsRequest(request), request);
+  }
+
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return auth.error!;
+    return addCorsHeaders(auth.error!, request);
   }
 
   try {
@@ -80,10 +131,10 @@ async function setDocumentHandler(
     const { collection, documentId, data, merge } = body;
 
     if (!collection || !documentId || !data) {
-      return {
+      return addCorsHeaders({
         status: 400,
         jsonBody: { error: "Collection, documentId, and data required" },
-      };
+      }, request);
     }
 
     // Add metadata
@@ -106,10 +157,13 @@ async function setDocumentHandler(
 
     await upsertDocument(collection, doc);
 
-    return { status: 200, jsonBody: { success: true } };
+    return addCorsHeaders({ status: 200, jsonBody: { success: true } }, request);
   } catch (error) {
     context.error("Error setting document:", error);
-    return { status: 500, jsonBody: { error: "Failed to set document" } };
+    return addCorsHeaders({ 
+      status: 500, 
+      jsonBody: { error: "Failed to set document" } 
+    }, request);
   }
 }
 
@@ -120,9 +174,14 @@ async function updateDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  // Handle OPTIONS preflight
+  if (request.method === "OPTIONS") {
+    return addCorsHeaders(handleOptionsRequest(request), request);
+  }
+
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return auth.error!;
+    return addCorsHeaders(auth.error!, request);
   }
 
   try {
@@ -135,10 +194,10 @@ async function updateDocumentHandler(
     const { collection, documentId, updates } = body;
 
     if (!collection || !documentId || !updates) {
-      return {
+      return addCorsHeaders({
         status: 400,
         jsonBody: { error: "Collection, documentId, and updates required" },
-      };
+      }, request);
     }
 
     const existing = await getDocument<Record<string, unknown>>(
@@ -146,7 +205,10 @@ async function updateDocumentHandler(
       documentId,
     );
     if (!existing) {
-      return { status: 404, jsonBody: { error: "Document not found" } };
+      return addCorsHeaders({ 
+        status: 404, 
+        jsonBody: { error: "Document not found" } 
+      }, request);
     }
 
     const doc = {
@@ -159,10 +221,13 @@ async function updateDocumentHandler(
 
     await upsertDocument(collection, doc);
 
-    return { status: 200, jsonBody: { success: true } };
+    return addCorsHeaders({ status: 200, jsonBody: { success: true } }, request);
   } catch (error) {
     context.error("Error updating document:", error);
-    return { status: 500, jsonBody: { error: "Failed to update document" } };
+    return addCorsHeaders({ 
+      status: 500, 
+      jsonBody: { error: "Failed to update document" } 
+    }, request);
   }
 }
 
@@ -173,9 +238,14 @@ async function queryDocumentsHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  // Handle OPTIONS preflight
+  if (request.method === "OPTIONS") {
+    return addCorsHeaders(handleOptionsRequest(request), request);
+  }
+
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
-    return auth.error!;
+    return addCorsHeaders(auth.error!, request);
   }
 
   try {
@@ -195,10 +265,10 @@ async function queryDocumentsHandler(
     const { collection, options } = body;
 
     if (!collection) {
-      return {
+      return addCorsHeaders({
         status: 400,
         jsonBody: { error: "Collection required" },
-      };
+      }, request);
     }
 
     // Build SQL query
@@ -226,40 +296,43 @@ async function queryDocumentsHandler(
 
     const items = await queryDocuments(collection, query, params);
 
-    return {
+    return addCorsHeaders({
       status: 200,
       jsonBody: { items, cursor: null, hasMore: false },
-    };
+    }, request);
   } catch (error) {
     context.error("Error querying documents:", error);
-    return { status: 500, jsonBody: { error: "Failed to query documents" } };
+    return addCorsHeaders({ 
+      status: 500, 
+      jsonBody: { error: "Failed to query documents" } 
+    }, request);
   }
 }
 
 // Register endpoints
 app.http("cosmos-getDocument", {
-  methods: ["POST"],
+  methods: ["POST", "OPTIONS"],
   route: "cosmos/getDocument",
   authLevel: "anonymous",
   handler: getDocumentHandler,
 });
 
 app.http("cosmos-setDocument", {
-  methods: ["POST"],
+  methods: ["POST", "OPTIONS"],
   route: "cosmos/setDocument",
   authLevel: "anonymous",
   handler: setDocumentHandler,
 });
 
 app.http("cosmos-updateDocument", {
-  methods: ["POST"],
+  methods: ["POST", "OPTIONS"],
   route: "cosmos/updateDocument",
   authLevel: "anonymous",
   handler: updateDocumentHandler,
 });
 
 app.http("cosmos-queryDocuments", {
-  methods: ["POST"],
+  methods: ["POST", "OPTIONS"],
   route: "cosmos/queryDocuments",
   authLevel: "anonymous",
   handler: queryDocumentsHandler,

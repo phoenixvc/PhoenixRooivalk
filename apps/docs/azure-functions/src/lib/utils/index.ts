@@ -9,6 +9,7 @@ export {
   successResponse,
   Errors,
   withErrorHandling,
+  handleOptionsRequest,
   type ErrorCode,
 } from "./responses";
 
