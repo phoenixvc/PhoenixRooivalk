@@ -112,6 +112,7 @@ export class AzureFunctionsService implements IAIFunctionsService {
         headers,
         body: JSON.stringify(data),
         signal: controller.signal,
+        credentials: "include",
       });
 
       clearTimeout(timeoutId);
@@ -191,6 +192,7 @@ export class AzureFunctionsService implements IAIFunctionsService {
         headers,
         body: JSON.stringify(data),
         signal: controller.signal,
+        credentials: "include",
       });
 
       clearTimeout(timeoutId);

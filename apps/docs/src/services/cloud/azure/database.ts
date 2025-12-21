@@ -685,13 +685,29 @@ export class AzureDatabaseService implements IDatabaseService {
         method: "POST",
         headers,
         body: JSON.stringify(params),
+        credentials: "include",
       },
     );
 
     if (!response.ok) {
-      throw new Error(`Functions proxy error: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Functions proxy error: ${response.statusText} - ${errorText}`,
+      );
     }
 
-    return response.json();
+    // Check if response has content before parsing
+    const text = await response.text();
+    if (!text || text.trim() === "") {
+      // Return empty object for successful operations with no response body
+      return {} as T;
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (parseError) {
+      console.error("Failed to parse JSON response:", text);
+      throw new Error(`Invalid JSON response: ${text}`);
+    }
   }
 }

@@ -9,6 +9,8 @@ export {
   successResponse,
   Errors,
   withErrorHandling,
+  handleOptionsRequest,
+  getCorsHeaders,
   type ErrorCode,
 } from "./responses";
 
