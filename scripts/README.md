@@ -83,6 +83,151 @@ Retrieves all Azure secrets and configuration values needed for GitHub Actions d
 - Deployment tokens
 - Configuration file: `azure-secrets-output.txt`
 
+### diagnose-azure-functions.sh
+
+**NEW** - Comprehensive diagnostic tool for Azure Functions deployment issues.
+
+Validates Azure Functions configuration and diagnoses common problems like missing connection strings, CORS errors, and health check failures.
+
+**Features:**
+
+- ✅ Tests health endpoint and parses response
+- ✅ Validates COSMOS_DB_CONNECTION_STRING is set
+- ✅ Checks CORS configuration and credentials support
+- ✅ Verifies Azure OpenAI settings
+- ✅ Provides actionable fix commands for each issue
+- ✅ Color-coded output for easy reading
+- ✅ Detailed summary of all configuration issues
+
+**Usage:**
+
+```bash
+# Using environment variables
+export AZURE_FUNCTIONAPP_NAME="phoenix-rooivalk-functions-cjfde7dng4hsbtfk"
+export AZURE_RESOURCE_GROUP="dev-euw-rg-rooivalk"
+./scripts/diagnose-azure-functions.sh
+
+# Or provide as arguments
+./scripts/diagnose-azure-functions.sh phoenix-rooivalk-functions-cjfde7dng4hsbtfk dev-euw-rg-rooivalk
+```
+
+**When to use:**
+
+- Troubleshooting 500 errors from Azure Functions
+- Verifying deployment configuration
+- Diagnosing CORS issues
+- Checking Cosmos DB connectivity
+- After infrastructure changes
+- Before reporting deployment issues
+
+**Example output:**
+
+```
+🔍 Azure Functions Configuration Diagnostic Tool
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔐 Checking Azure authentication...
+✅ Authenticated to Azure
+
+🏥 Testing health endpoint...
+✅ Health endpoint returned 200 OK
+
+⚙️  Checking application settings...
+✅ COSMOS_DB_CONNECTION_STRING is set
+✅ COSMOS_DB_DATABASE is set to: phoenix-docs
+
+🌐 Checking CORS configuration...
+✅ CORS origins configured:
+  - https://docs.phoenixrooivalk.com
+  - http://localhost:3000
+✅ CORS credentials enabled
+
+📊 Configuration Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ All critical configurations are present
+```
+
+### validate-deployment-config.sh
+
+**NEW** - Pre-deployment configuration validator for CI/CD pipelines.
+
+Validates that all required secrets and variables are configured before deploying to Azure.
+
+**Features:**
+
+- ✅ Validates required GitHub secrets (AZURE_CREDENTIALS, COSMOS_DB_CONNECTION_STRING, etc.)
+- ✅ Checks optional settings with warnings
+- ✅ Verifies staticwebapp.config.json headers
+- ✅ Ensures COOP header is absent (OAuth fix)
+- ✅ Provides detailed error messages with fix instructions
+- ✅ Supports both GitHub Actions and local validation
+
+**Usage in GitHub Actions:**
+
+```yaml
+- name: Validate Configuration
+  run: ./scripts/validate-deployment-config.sh
+  env:
+    AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
+    AZURE_AI_ENDPOINT: ${{ secrets.AZURE_AI_ENDPOINT }}
+    AZURE_AI_API_KEY: ${{ secrets.AZURE_AI_API_KEY }}
+    AZURE_FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+    AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+```
+
+**Local usage:**
+
+```bash
+# Set environment variables
+export AZURE_CREDENTIALS='<service-principal-json>'
+export COSMOS_DB_CONNECTION_STRING='<connection-string>'
+export AZURE_AI_ENDPOINT='<openai-endpoint>'
+export AZURE_AI_API_KEY='<openai-key>'
+export AZURE_FUNCTIONAPP_NAME='<function-app-name>'
+export AZURE_RESOURCE_GROUP='<resource-group>'
+
+# Run validation
+./scripts/validate-deployment-config.sh
+```
+
+**When to use:**
+
+- Before deploying to production
+- In CI/CD pipelines as a gate
+- After infrastructure changes
+- When troubleshooting deployment failures
+- To verify all secrets are configured correctly
+
+**Example output:**
+
+```
+🔍 Pre-Deployment Configuration Validator
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Running in GitHub Actions environment
+
+Checking required secrets...
+✅ AZURE_CREDENTIALS is set
+✅ COSMOS_DB_CONNECTION_STRING is set
+✅ Azure OpenAI endpoint is set
+✅ Azure OpenAI API key is set
+
+Checking required variables...
+✅ AZURE_FUNCTIONAPP_NAME is set
+✅ AZURE_RESOURCE_GROUP is set
+
+Checking Static Web App Configuration...
+✅ staticwebapp.config.json found
+✅ Cross-Origin-Opener-Policy header correctly absent
+✅ Cross-Origin-Embedder-Policy correctly set to 'unsafe-none'
+
+Validation Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ All required configuration is present
+🚀 Ready to deploy!
+```
+
 ## Best Practices
 
 ### Infrastructure Setup
