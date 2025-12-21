@@ -110,6 +110,7 @@ environment variables.
    ```
 
 2. **Set the connection string if missing:**
+
    ```bash
    # Get Cosmos DB connection string
    COSMOS_CONNECTION_STRING=$(az cosmosdb keys list \

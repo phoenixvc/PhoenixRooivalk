@@ -89,6 +89,7 @@ For local testing or manual deployment:
    ```
 
 4. **Deploy**:
+
    ```bash
    func azure functionapp publish YOUR-FUNCTION-APP-NAME --javascript
    ```
@@ -203,6 +204,7 @@ az functionapp cors show \
 ```
 
 **Expected Output**:
+
 ```json
 [
   "https://docs.phoenixrooivalk.com",

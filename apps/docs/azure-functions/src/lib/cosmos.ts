@@ -101,7 +101,7 @@ export async function upsertDocument<T extends { id: string }>(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const documentId = document.id || "unknown";
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console, security/detect-object-injection
     console.error(`[Cosmos] Failed to upsert document in ${containerName}:`, {
       documentId,
       error: errorMessage,
