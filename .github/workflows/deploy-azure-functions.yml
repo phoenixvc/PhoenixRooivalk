@@ -530,6 +530,24 @@ jobs:
 
           echo "✅ Deployment complete"
 
+      - name: Configure CORS
+        run: |
+          echo "Configuring CORS for Azure Functions..."
+          az functionapp cors add \
+            --name "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP || 'dev-euw-rg-rooivalk' }}" \
+            --allowed-origins "https://docs.phoenixrooivalk.com" "https://phoenixrooivalk.com" "http://localhost:3000" "http://localhost:3001" \
+            2>/dev/null || echo "CORS origins may already exist"
+
+          # Enable credentials
+          az functionapp cors credentials \
+            --name "${{ vars.AZURE_FUNCTIONAPP_NAME }}" \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP || 'dev-euw-rg-rooivalk' }}" \
+            --enable true \
+            2>/dev/null || echo "CORS credentials already enabled"
+
+          echo "✅ CORS configured"
+
       - name: Set Environment Variables
         if: vars.CONFIGURE_APP_SETTINGS == 'true'
         uses: azure/appservice-settings@v1

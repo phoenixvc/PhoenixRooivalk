@@ -21,7 +21,10 @@
   },
   "extensions": {
     "http": {
-      "routePrefix": "api"
+      "routePrefix": "api",
+      "customHeaders": {
+        "Access-Control-Allow-Credentials": "true"
+      }
     }
   },
   "functionTimeout": "00:05:00"
