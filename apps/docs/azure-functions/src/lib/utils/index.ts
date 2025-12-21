@@ -10,6 +10,7 @@ export {
   Errors,
   withErrorHandling,
   handleOptionsRequest,
+  getCorsHeaders,
   type ErrorCode,
 } from "./responses";
 

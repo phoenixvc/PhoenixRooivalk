@@ -13,13 +13,13 @@ import {
 } from "@azure/functions";
 import { SqlParameter, JSONValue } from "@azure/cosmos";
 import { requireAuthAsync } from "../lib/auth";
-import { handleOptionsRequest } from "../lib/utils";
 import {
   getDocument,
   upsertDocument,
   deleteDocument,
   queryDocuments,
 } from "../lib/cosmos";
+import { handleOptionsRequest, getCorsHeaders } from "../lib/utils";
 
 /**
  * Helper to add CORS headers to response
@@ -28,32 +28,11 @@ function addCorsHeaders(
   response: HttpResponseInit,
   request: HttpRequest,
 ): HttpResponseInit {
-  const origin = request.headers.get("origin") || "*";
-  
-  // List of allowed origins
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "https://phoenixrooivalk.com",
-    "https://docs.phoenixrooivalk.com",
-    "https://www.phoenixrooivalk.com",
-  ];
-  
-  const isAllowedOrigin = 
-    allowedOrigins.includes(origin) || 
-    origin.includes(".azurestaticapps.net");
-  
-  const allowedOrigin = isAllowedOrigin ? origin : allowedOrigins[0];
-  
   return {
     ...response,
     headers: {
       ...response.headers,
-      "Access-Control-Allow-Origin": allowedOrigin,
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Max-Age": "86400",
+      ...getCorsHeaders(request),
     },
   };
 }
