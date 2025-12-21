@@ -100,6 +100,7 @@ environment variables.
 **Solution:**
 
 1. **Verify environment variable is set:**
+
    ```bash
    # Check if COSMOS_DB_CONNECTION_STRING exists
    az functionapp config appsettings list \

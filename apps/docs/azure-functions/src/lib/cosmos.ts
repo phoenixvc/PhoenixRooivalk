@@ -26,16 +26,19 @@ export function getCosmosClient(): CosmosClient {
       const error = new Error(
         "COSMOS_DB_CONNECTION_STRING not configured. Please set this environment variable in Azure Functions configuration.",
       );
+      // eslint-disable-next-line no-console
       console.error("[Cosmos] Configuration error:", error.message);
       throw error;
     }
 
     try {
       client = new CosmosClient(connectionString);
+      // eslint-disable-next-line no-console
       console.log("[Cosmos] Client initialized successfully");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
+      // eslint-disable-next-line no-console
       console.error("[Cosmos] Failed to initialize client:", errorMessage);
       throw new Error(`Failed to initialize Cosmos DB client: ${errorMessage}`);
     }
@@ -98,6 +101,7 @@ export async function upsertDocument<T extends { id: string }>(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const documentId = document.id || "unknown";
+    // eslint-disable-next-line no-console
     console.error(`[Cosmos] Failed to upsert document in ${containerName}:`, {
       documentId,
       error: errorMessage,

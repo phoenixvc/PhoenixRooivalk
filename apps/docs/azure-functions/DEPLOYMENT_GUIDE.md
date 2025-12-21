@@ -83,6 +83,7 @@ For local testing or manual deployment:
    ```
 
 3. **Login to Azure**:
+
    ```bash
    az login
    ```
@@ -183,6 +184,7 @@ curl -X POST https://YOUR-FUNCTION-APP.azurewebsites.net/api/cosmos/setDocument 
 ```
 
 **Expected Response (Missing Config)**:
+
 ```json
 {
   "error": "Database not configured",
@@ -403,6 +405,7 @@ traces
 ```
 
 **Authentication Issues**:
+
 ```kusto
 traces
 | where message contains "Authentication" or message contains "auth"
