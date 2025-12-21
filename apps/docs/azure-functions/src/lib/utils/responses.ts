@@ -25,7 +25,7 @@ export type ErrorCode =
  * CORS headers for responses
  */
 export function getCorsHeaders(request?: HttpRequest): Record<string, string> {
-  const origin = request?.headers.get("origin") || "*";
+  const origin = request?.headers.get("origin") || "";
   
   // List of allowed origins (from bicep configuration)
   const allowedOrigins = [
@@ -39,8 +39,9 @@ export function getCorsHeaders(request?: HttpRequest): Record<string, string> {
   // Check if origin matches allowed origins or azurestaticapps.net domain
   const isAllowedOrigin = 
     allowedOrigins.includes(origin) || 
-    origin.endsWith(".azurestaticapps.net");
+    (origin && origin.endsWith(".azurestaticapps.net"));
   
+  // Use the request origin if allowed, otherwise use first allowed origin as safe default
   const allowedOrigin = isAllowedOrigin ? origin : allowedOrigins[0];
   
   return {
