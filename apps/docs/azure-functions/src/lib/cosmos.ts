@@ -87,13 +87,14 @@ export async function upsertDocument<T extends { id: string }>(
     const container = getContainer(containerName);
     const { resource } = await container.items.upsert<T>(document);
     if (!resource) {
-      throw new Error(`Upsert operation returned no resource for document: ${document.id}`);
+      throw new Error(`Upsert operation returned no resource for document: ${document.id || 'unknown'}`);
     }
     return resource;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
+    const documentId = document.id || 'unknown';
     console.error(`[Cosmos] Failed to upsert document in ${containerName}:`, {
-      documentId: document.id,
+      documentId,
       error: errorMessage,
     });
     throw error;

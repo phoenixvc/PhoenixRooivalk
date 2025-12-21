@@ -78,9 +78,16 @@ async function readinessHandler(
   }
 
   // Check OpenAI configuration
-  if (process.env.AZURE_OPENAI_ENDPOINT && process.env.AZURE_OPENAI_API_KEY) {
-    checks.openai = "ok";
-  } else if (process.env.AZURE_AI_ENDPOINT && process.env.AZURE_AI_API_KEY) {
+  const openAIConfigs = [
+    { endpoint: 'AZURE_OPENAI_ENDPOINT', key: 'AZURE_OPENAI_API_KEY' },
+    { endpoint: 'AZURE_AI_ENDPOINT', key: 'AZURE_AI_API_KEY' },
+  ];
+  
+  const hasOpenAI = openAIConfigs.some(
+    config => process.env[config.endpoint] && process.env[config.key]
+  );
+  
+  if (hasOpenAI) {
     checks.openai = "ok";
   }
 

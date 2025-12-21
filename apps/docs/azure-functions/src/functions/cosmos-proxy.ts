@@ -240,7 +240,12 @@ async function setDocumentHandler(
           documentId,
         );
         if (existing) {
-          Object.assign(doc, existing, doc);
+          // Merge: start with existing, overlay with new data, preserve metadata
+          Object.assign(doc, existing, data, {
+            id: documentId,
+            _updatedAt: doc._updatedAt,
+            _updatedBy: doc._updatedBy,
+          });
           logger.debug("Merged with existing document", {
             operation: "setDocument",
             documentId,
