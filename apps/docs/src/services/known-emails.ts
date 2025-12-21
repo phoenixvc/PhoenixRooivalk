@@ -6,9 +6,9 @@
 
 import { getAuthService, getCurrentProvider } from "./cloud";
 
-// Production Azure Functions URL fallback
+// Production Azure Functions URL fallback (must include /api)
 const AZURE_FUNCTIONS_FALLBACK =
-  "https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net";
+  "https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net/api";
 
 /**
  * Get API base URL from Docusaurus config or fallback to Azure Functions
