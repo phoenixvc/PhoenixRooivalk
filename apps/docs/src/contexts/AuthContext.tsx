@@ -243,30 +243,39 @@ const mergeProgress = (
   const mergedAchievements = { ...local.achievements };
 
   // Merge docs - keep the one with higher scroll progress or completed status
-  for (const [docId, cloudDoc] of Object.entries(cloud.docs)) {
-    const localDoc = mergedDocs[docId];
-    if (!localDoc) {
-      mergedDocs[docId] = cloudDoc;
-    } else if (cloudDoc.completed && !localDoc.completed) {
-      mergedDocs[docId] = cloudDoc;
-    } else if (cloudDoc.scrollProgress > localDoc.scrollProgress) {
-      mergedDocs[docId] = cloudDoc;
+  // Guard against null/undefined cloud.docs
+  if (cloud.docs && typeof cloud.docs === "object") {
+    for (const [docId, cloudDoc] of Object.entries(cloud.docs)) {
+      const localDoc = mergedDocs[docId];
+      if (!localDoc) {
+        mergedDocs[docId] = cloudDoc;
+      } else if (cloudDoc.completed && !localDoc.completed) {
+        mergedDocs[docId] = cloudDoc;
+      } else if (cloudDoc.scrollProgress > localDoc.scrollProgress) {
+        mergedDocs[docId] = cloudDoc;
+      }
     }
   }
 
   // Merge achievements - keep all unlocked
-  for (const [achId, cloudAch] of Object.entries(cloud.achievements)) {
-    if (!mergedAchievements[achId]) {
-      mergedAchievements[achId] = cloudAch;
+  // Guard against null/undefined cloud.achievements
+  if (cloud.achievements && typeof cloud.achievements === "object") {
+    for (const [achId, cloudAch] of Object.entries(cloud.achievements)) {
+      if (!mergedAchievements[achId]) {
+        mergedAchievements[achId] = cloudAch;
+      }
     }
   }
 
   // Use cloud stats if higher, otherwise keep local
+  // Guard against null/undefined cloud.stats
+  const cloudStats = cloud.stats || { totalPoints: 0, level: 1, streak: 0 };
+  const localStats = local.stats || { totalPoints: 0, level: 1, streak: 0 };
   const mergedStats = {
-    totalPoints: Math.max(cloud.stats.totalPoints, local.stats.totalPoints),
-    level: Math.max(cloud.stats.level, local.stats.level),
-    streak: Math.max(cloud.stats.streak, local.stats.streak),
-    lastVisit: cloud.stats.lastVisit || local.stats.lastVisit,
+    totalPoints: Math.max(cloudStats.totalPoints, localStats.totalPoints),
+    level: Math.max(cloudStats.level, localStats.level),
+    streak: Math.max(cloudStats.streak, localStats.streak),
+    lastVisit: cloudStats.lastVisit || localStats.lastVisit,
   };
 
   return {
