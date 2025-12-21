@@ -19,6 +19,7 @@ import {
   deleteDocument,
   queryDocuments,
 } from "../lib/cosmos";
+import { createRequestLogger } from "../lib/logger";
 import { handleOptionsRequest, getCorsHeaders } from "../lib/utils";
 
 /**
@@ -44,6 +45,8 @@ async function getDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  const logger = createRequestLogger(request, "cosmos-proxy");
+
   // Handle OPTIONS preflight
   if (request.method === "OPTIONS") {
     return addCorsHeaders(handleOptionsRequest(request), request);
@@ -51,10 +54,30 @@ async function getDocumentHandler(
 
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
+    logger.warn("Authentication failed for getDocument", {
+      operation: "getDocument",
+    });
     return addCorsHeaders(auth.error!, request);
   }
 
   try {
+    // Validate environment configuration
+    if (!process.env.COSMOS_DB_CONNECTION_STRING) {
+      logger.error("COSMOS_DB_CONNECTION_STRING not configured", {
+        operation: "getDocument",
+      });
+      return addCorsHeaders(
+        {
+          status: 500,
+          jsonBody: {
+            error: "Database not configured",
+            code: "DB_CONFIG_ERROR",
+          },
+        },
+        request,
+      );
+    }
+
     const body = (await request.json()) as {
       collection: string;
       documentId: string;
@@ -62,11 +85,26 @@ async function getDocumentHandler(
 
     const { collection, documentId } = body;
 
+    logger.info("getDocument request", {
+      operation: "getDocument",
+      collection,
+      documentId,
+      userId: auth.userId ?? undefined,
+    });
+
     if (!collection || !documentId) {
+      logger.warn("Missing required parameters", {
+        operation: "getDocument",
+        hasCollection: !!collection,
+        hasDocumentId: !!documentId,
+      });
       return addCorsHeaders(
         {
           status: 400,
-          jsonBody: { error: "Collection and documentId required" },
+          jsonBody: {
+            error: "Collection and documentId required",
+            code: "INVALID_REQUEST",
+          },
         },
         request,
       );
@@ -75,13 +113,37 @@ async function getDocumentHandler(
     // Security: Restrict certain collections or add user-based filtering
     const doc = await getDocument(collection, documentId);
 
+    logger.info("Document retrieved successfully", {
+      operation: "getDocument",
+      collection,
+      documentId,
+      found: !!doc,
+    });
+
     return addCorsHeaders({ status: 200, jsonBody: doc }, request);
   } catch (error) {
-    context.error("Error getting document:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    logger.error("Error getting document", error as Error, {
+      operation: "getDocument",
+      errorMessage,
+    });
+
+    context.error("Error getting document:", {
+      error: errorMessage,
+      stack: errorStack,
+    });
+
     return addCorsHeaders(
       {
         status: 500,
-        jsonBody: { error: "Failed to get document" },
+        jsonBody: {
+          error: "Failed to get document",
+          code: "DB_OPERATION_FAILED",
+          details:
+            process.env.NODE_ENV === "development" ? errorMessage : undefined,
+        },
       },
       request,
     );
@@ -95,6 +157,8 @@ async function setDocumentHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  const logger = createRequestLogger(request, "cosmos-proxy");
+
   // Handle OPTIONS preflight
   if (request.method === "OPTIONS") {
     return addCorsHeaders(handleOptionsRequest(request), request);
@@ -102,10 +166,30 @@ async function setDocumentHandler(
 
   const auth = await requireAuthAsync(request);
   if (!auth.authenticated) {
+    logger.warn("Authentication failed for setDocument", {
+      operation: "setDocument",
+    });
     return addCorsHeaders(auth.error!, request);
   }
 
   try {
+    // Validate environment configuration
+    if (!process.env.COSMOS_DB_CONNECTION_STRING) {
+      logger.error("COSMOS_DB_CONNECTION_STRING not configured", {
+        operation: "setDocument",
+      });
+      return addCorsHeaders(
+        {
+          status: 500,
+          jsonBody: {
+            error: "Database not configured",
+            code: "DB_CONFIG_ERROR",
+          },
+        },
+        request,
+      );
+    }
+
     const body = (await request.json()) as {
       collection: string;
       documentId: string;
@@ -115,11 +199,28 @@ async function setDocumentHandler(
 
     const { collection, documentId, data, merge } = body;
 
+    logger.info("setDocument request", {
+      operation: "setDocument",
+      collection,
+      documentId,
+      merge,
+      userId: auth.userId ?? undefined,
+    });
+
     if (!collection || !documentId || !data) {
+      logger.warn("Missing required parameters", {
+        operation: "setDocument",
+        hasCollection: !!collection,
+        hasDocumentId: !!documentId,
+        hasData: !!data,
+      });
       return addCorsHeaders(
         {
           status: 400,
-          jsonBody: { error: "Collection, documentId, and data required" },
+          jsonBody: {
+            error: "Collection, documentId, and data required",
+            code: "INVALID_REQUEST",
+          },
         },
         request,
       );
@@ -134,27 +235,71 @@ async function setDocumentHandler(
     };
 
     if (merge) {
-      const existing = await getDocument<Record<string, unknown>>(
-        collection,
-        documentId,
-      );
-      if (existing) {
-        Object.assign(doc, existing, doc);
+      try {
+        const existing = await getDocument<Record<string, unknown>>(
+          collection,
+          documentId,
+        );
+        if (existing) {
+          // Merge: start with existing, overlay with new data, preserve metadata
+          Object.assign(doc, existing, data, {
+            id: documentId,
+            _updatedAt: doc._updatedAt,
+            _updatedBy: doc._updatedBy,
+          });
+          logger.debug("Merged with existing document", {
+            operation: "setDocument",
+            documentId,
+          });
+        }
+      } catch (mergeError) {
+        logger.warn("Failed to fetch existing document for merge", {
+          operation: "setDocument",
+          documentId,
+          error:
+            mergeError instanceof Error
+              ? mergeError.message
+              : String(mergeError),
+        });
+        // Continue with upsert even if merge fails
       }
     }
 
     await upsertDocument(collection, doc);
+
+    logger.info("Document upserted successfully", {
+      operation: "setDocument",
+      collection,
+      documentId,
+    });
 
     return addCorsHeaders(
       { status: 200, jsonBody: { success: true } },
       request,
     );
   } catch (error) {
-    context.error("Error setting document:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+
+    logger.error("Error setting document", error as Error, {
+      operation: "setDocument",
+      errorMessage,
+    });
+
+    context.error("Error setting document:", {
+      error: errorMessage,
+      stack: errorStack,
+    });
+
     return addCorsHeaders(
       {
         status: 500,
-        jsonBody: { error: "Failed to set document" },
+        jsonBody: {
+          error: "Failed to set document",
+          code: "DB_OPERATION_FAILED",
+          details:
+            process.env.NODE_ENV === "development" ? errorMessage : undefined,
+        },
       },
       request,
     );

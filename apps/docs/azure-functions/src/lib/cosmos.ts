@@ -23,9 +23,25 @@ export function getCosmosClient(): CosmosClient {
   if (!client) {
     const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
     if (!connectionString) {
-      throw new Error("COSMOS_DB_CONNECTION_STRING not configured");
+      const error = new Error(
+        "COSMOS_DB_CONNECTION_STRING not configured. Please set this environment variable in Azure Functions configuration.",
+      );
+      // eslint-disable-next-line no-console
+      console.error("[Cosmos] Configuration error:", error.message);
+      throw error;
     }
-    client = new CosmosClient(connectionString);
+
+    try {
+      client = new CosmosClient(connectionString);
+      // eslint-disable-next-line no-console
+      console.log("[Cosmos] Client initialized successfully");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      // eslint-disable-next-line no-console
+      console.error("[Cosmos] Failed to initialize client:", errorMessage);
+      throw new Error(`Failed to initialize Cosmos DB client: ${errorMessage}`);
+    }
   }
   return client;
 }
@@ -73,9 +89,29 @@ export async function upsertDocument<T extends { id: string }>(
   containerName: string,
   document: T,
 ): Promise<T> {
-  const container = getContainer(containerName);
-  const { resource } = await container.items.upsert<T>(document);
-  return resource!;
+  try {
+    const container = getContainer(containerName);
+    const { resource } = await container.items.upsert<T>(document);
+    if (!resource) {
+      throw new Error(
+        `Upsert operation returned no resource for document: ${document.id || "unknown"}`,
+      );
+    }
+    return resource;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const documentId = document.id || "unknown";
+    // Suppress security warning - containerName is a trusted function parameter
+    // eslint-disable-next-line no-console, security/detect-object-injection
+    console.error(
+      "[Cosmos] Failed to upsert document in " + containerName + ":",
+      {
+        documentId,
+        error: errorMessage,
+      },
+    );
+    throw error;
+  }
 }
 
 /**

@@ -59,19 +59,36 @@ async function readinessHandler(
     openai: "not-configured" as "ok" | "error" | "not-configured",
   };
 
-  // Check Cosmos DB
-  try {
-    const container = getContainer("configuration");
-    await container.items.query("SELECT TOP 1 * FROM c").fetchAll();
-  } catch (error) {
+  // Check Cosmos DB connection string
+  if (!process.env.COSMOS_DB_CONNECTION_STRING) {
     checks.cosmos = "error";
-    errors.push(
-      `Cosmos DB: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+    errors.push("Cosmos DB: COSMOS_DB_CONNECTION_STRING not configured");
+  } else {
+    // Check Cosmos DB connectivity
+    try {
+      const container = getContainer("configuration");
+      await container.items.query("SELECT TOP 1 * FROM c").fetchAll();
+      context.log("[Health] Cosmos DB connection successful");
+    } catch (error) {
+      checks.cosmos = "error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      errors.push(`Cosmos DB: ${errorMessage}`);
+      context.error("[Health] Cosmos DB connection failed:", errorMessage);
+    }
   }
 
   // Check OpenAI configuration
-  if (process.env.AZURE_OPENAI_ENDPOINT && process.env.AZURE_OPENAI_API_KEY) {
+  const openAIConfigs = [
+    { endpoint: "AZURE_OPENAI_ENDPOINT", key: "AZURE_OPENAI_API_KEY" },
+    { endpoint: "AZURE_AI_ENDPOINT", key: "AZURE_AI_API_KEY" },
+  ];
+
+  const hasOpenAI = openAIConfigs.some(
+    (config) => process.env[config.endpoint] && process.env[config.key],
+  );
+
+  if (hasOpenAI) {
     checks.openai = "ok";
   }
 
@@ -88,6 +105,12 @@ async function readinessHandler(
     checks,
     errors: errors.length > 0 ? errors : undefined,
   };
+
+  context.log("[Health] Status check completed:", {
+    status: status.status,
+    checks,
+    errorCount: errors.length,
+  });
 
   return {
     status:

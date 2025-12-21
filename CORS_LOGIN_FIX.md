@@ -239,9 +239,59 @@ This fix addresses:
 - Missing credentials in cross-origin requests
 - CORS preflight handling
 
+## Update: Enhanced Error Handling (2024-12-21)
+
+Following the initial CORS fixes, additional improvements were made to provide better diagnostics for deployment issues:
+
+### Azure Functions Error Handling Improvements
+
+**Problem**: When `/api/cosmos/setDocument` failed with 500 errors, there was insufficient diagnostic information to identify the root cause.
+
+**Enhancements Made**:
+
+1. **Detailed Logging** - Added structured logging with correlation IDs to track operations
+2. **Configuration Validation** - Check for `COSMOS_DB_CONNECTION_STRING` before attempting database operations
+3. **Error Codes** - Structured error responses with codes:
+   - `DB_CONFIG_ERROR` - Database not configured
+   - `DB_OPERATION_FAILED` - Database operation failed
+   - `INVALID_REQUEST` - Missing required parameters
+4. **Enhanced Health Check** - Health endpoint now reports configuration issues
+5. **Development Mode Details** - Error messages include detailed information when `NODE_ENV=development`
+
+**Files Modified**:
+- `apps/docs/azure-functions/src/functions/cosmos-proxy.ts` - Enhanced error handling
+- `apps/docs/azure-functions/src/lib/cosmos.ts` - Better error messages
+- `apps/docs/azure-functions/src/functions/health.ts` - Configuration validation
+- `apps/docs/azure-functions/TROUBLESHOOTING.md` - Comprehensive troubleshooting guide (new)
+- `apps/docs/azure-functions/DEPLOYMENT_GUIDE.md` - Deployment procedures (new)
+
+**Testing the Fix**:
+
+```bash
+# Check health endpoint to verify configuration
+curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
+
+# If configuration is missing, response will indicate:
+{
+  "status": "unhealthy",
+  "checks": {
+    "cosmos": "error"
+  },
+  "errors": [
+    "Cosmos DB: COSMOS_DB_CONNECTION_STRING not configured"
+  ]
+}
+```
+
+**Deployment Guide**: See `apps/docs/azure-functions/DEPLOYMENT_GUIDE.md` for complete deployment instructions.
+
+**Troubleshooting Guide**: See `apps/docs/azure-functions/TROUBLESHOOTING.md` for detailed troubleshooting steps.
+
 ## Additional Resources
 
 - [MDN: Cross-Origin-Opener-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy)
 - [MDN: CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 - [Azure Static Web Apps: Configuration](https://learn.microsoft.com/en-us/azure/static-web-apps/configuration)
 - [Azure Functions: CORS](https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings#cors)
+- [Azure Functions Deployment Guide](apps/docs/azure-functions/DEPLOYMENT_GUIDE.md)
+- [Azure Functions Troubleshooting](apps/docs/azure-functions/TROUBLESHOOTING.md)
