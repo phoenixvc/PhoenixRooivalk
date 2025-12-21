@@ -123,8 +123,8 @@ if [ ! -f "$STATICWEBAPP_CONFIG" ]; then
 else
   echo -e "${GREEN}✅ staticwebapp.config.json found${NC}"
   
-  # Check if COOP header is present (it should NOT be)
-  if grep -q "Cross-Origin-Opener-Policy" "$STATICWEBAPP_CONFIG"; then
+  # Check if COOP header is present (it should NOT be) - case insensitive
+  if grep -qi "Cross-Origin-Opener-Policy" "$STATICWEBAPP_CONFIG"; then
     echo -e "${RED}❌ Cross-Origin-Opener-Policy header found in staticwebapp.config.json${NC}"
     echo -e "   This header blocks OAuth popup communication and should be removed"
     echo -e "   See: CORS_LOGIN_FIX.md for details"
@@ -133,19 +133,36 @@ else
     echo -e "${GREEN}✅ Cross-Origin-Opener-Policy header correctly absent${NC}"
   fi
   
-  # Check if COEP header is present
-  if grep -q "Cross-Origin-Embedder-Policy" "$STATICWEBAPP_CONFIG"; then
-    COEP_VALUE=$(grep "Cross-Origin-Embedder-Policy" "$STATICWEBAPP_CONFIG" | grep -o '"[^"]*"' | tail -1 | tr -d '"')
-    if [ "$COEP_VALUE" = "unsafe-none" ]; then
-      echo -e "${GREEN}✅ Cross-Origin-Embedder-Policy correctly set to 'unsafe-none'${NC}"
+  # Check if COEP header is present - use jq for reliable JSON parsing
+  if command -v jq &> /dev/null; then
+    COEP_VALUE=$(jq -r '.globalHeaders["Cross-Origin-Embedder-Policy"] // empty' "$STATICWEBAPP_CONFIG" 2>/dev/null)
+    if [ -n "$COEP_VALUE" ]; then
+      if [ "$COEP_VALUE" = "unsafe-none" ]; then
+        echo -e "${GREEN}✅ Cross-Origin-Embedder-Policy correctly set to 'unsafe-none'${NC}"
+      else
+        echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy is set to '${COEP_VALUE}'${NC}"
+        echo -e "   Recommended value: 'unsafe-none'"
+        ((WARNINGS++))
+      fi
     else
-      echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy is set to '${COEP_VALUE}'${NC}"
-      echo -e "   Recommended value: 'unsafe-none'"
+      echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy header not found${NC}"
       ((WARNINGS++))
     fi
   else
-    echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy header not found${NC}"
-    ((WARNINGS++))
+    # Fallback to grep if jq not available
+    if grep -qi "Cross-Origin-Embedder-Policy" "$STATICWEBAPP_CONFIG"; then
+      COEP_VALUE=$(grep -i "Cross-Origin-Embedder-Policy" "$STATICWEBAPP_CONFIG" | grep -o '"[^"]*"' | tail -1 | tr -d '"')
+      if [ "$COEP_VALUE" = "unsafe-none" ]; then
+        echo -e "${GREEN}✅ Cross-Origin-Embedder-Policy correctly set to 'unsafe-none'${NC}"
+      else
+        echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy is set to '${COEP_VALUE}'${NC}"
+        echo -e "   Recommended value: 'unsafe-none'"
+        ((WARNINGS++))
+      fi
+    else
+      echo -e "${YELLOW}⚠️  Cross-Origin-Embedder-Policy header not found${NC}"
+      ((WARNINGS++))
+    fi
   fi
 fi
 

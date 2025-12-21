@@ -81,20 +81,45 @@ echo ""
 # Test health endpoint
 echo -e "${BLUE}🏥 Testing health endpoint...${NC}"
 HEALTH_URL="https://${FUNCTION_URL}/api/health/ready"
-HEALTH_RESPONSE=$(curl -s -w "\n%{http_code}" "$HEALTH_URL" || echo -e "\n000")
-HEALTH_STATUS=$(echo "$HEALTH_RESPONSE" | tail -1)
-HEALTH_BODY=$(echo "$HEALTH_RESPONSE" | sed '$d')
+
+# Robust error handling for curl
+if ! HEALTH_RESPONSE=$(curl -s -w "\n%{http_code}" "$HEALTH_URL" 2>&1); then
+  echo -e "${RED}❌ Failed to connect to health endpoint${NC}"
+  echo -e "${RED}Error: $HEALTH_RESPONSE${NC}"
+  HEALTH_STATUS="000"
+  HEALTH_BODY=""
+else
+  HEALTH_STATUS=$(echo "$HEALTH_RESPONSE" | tail -1)
+  HEALTH_BODY=$(echo "$HEALTH_RESPONSE" | sed '$d')
+fi
 
 if [ "$HEALTH_STATUS" = "200" ]; then
   echo -e "${GREEN}✅ Health endpoint returned 200 OK${NC}"
   echo ""
   echo -e "${BLUE}Health Response:${NC}"
-  echo "$HEALTH_BODY" | jq . 2>/dev/null || echo "$HEALTH_BODY"
+  
+  # Check if jq is available for pretty printing
+  if command -v jq &> /dev/null; then
+    echo "$HEALTH_BODY" | jq . 2>/dev/null || echo "$HEALTH_BODY"
+  else
+    echo "$HEALTH_BODY"
+  fi
   echo ""
   
-  # Parse health check results
-  COSMOS_STATUS=$(echo "$HEALTH_BODY" | jq -r '.checks.cosmos // "unknown"' 2>/dev/null)
-  OPENAI_STATUS=$(echo "$HEALTH_BODY" | jq -r '.checks.openai // "unknown"' 2>/dev/null)
+  # Parse health check results - check if jq is available first
+  if command -v jq &> /dev/null; then
+    COSMOS_STATUS=$(echo "$HEALTH_BODY" | jq -r '.checks.cosmos // "unknown"' 2>/dev/null)
+    OPENAI_STATUS=$(echo "$HEALTH_BODY" | jq -r '.checks.openai // "unknown"' 2>/dev/null)
+  else
+    # Fallback parsing without jq
+    COSMOS_STATUS="unknown"
+    OPENAI_STATUS="unknown"
+    if echo "$HEALTH_BODY" | grep -q '"cosmos":"ok"'; then
+      COSMOS_STATUS="ok"
+    elif echo "$HEALTH_BODY" | grep -q '"cosmos":"error"'; then
+      COSMOS_STATUS="error"
+    fi
+  fi
   
   if [ "$COSMOS_STATUS" = "error" ]; then
     echo -e "${RED}❌ Cosmos DB: Error${NC}"
@@ -193,9 +218,14 @@ if [ -z "$CORS_ORIGINS" ]; then
   echo ""
 else
   echo -e "${GREEN}✅ CORS origins configured:${NC}"
-  echo "$CORS_ORIGINS" | while read -r origin; do
-    echo -e "  - ${origin}"
-  done
+  # Handle CORS origins more robustly
+  if [ -n "$CORS_ORIGINS" ]; then
+    echo "$CORS_ORIGINS" | tr '\t' '\n' | while IFS= read -r origin; do
+      if [ -n "$origin" ]; then
+        echo -e "  - ${origin}"
+      fi
+    done
+  fi
   echo ""
 fi
 
