@@ -140,17 +140,26 @@ export async function signOut(): Promise<void> {
  */
 export async function getUserProgress(userId: string): Promise<UserProgress> {
   const db = getDatabaseService();
-  const data = await db.getDocument<UserProgress>(
-    "user_progress",
-    userId,
-  );
-  return (
-    data || {
-      docs: {},
-      achievements: {},
-      stats: { totalPoints: 0, level: 1, streak: 0 },
-    }
-  );
+  const data = await db.getDocument<UserProgress>("user_progress", userId);
+
+  // Ensure we always return a complete UserProgress structure
+  // even if the database returns null, undefined, or partial data
+  const defaultProgress = {
+    docs: {},
+    achievements: {},
+    stats: { totalPoints: 0, level: 1, streak: 0 },
+  };
+
+  if (!data) {
+    return defaultProgress;
+  }
+
+  // Ensure all required fields are present
+  return {
+    docs: data.docs || {},
+    achievements: data.achievements || {},
+    stats: data.stats || { totalPoints: 0, level: 1, streak: 0 },
+  };
 }
 
 /**

@@ -301,10 +301,19 @@ export class AzureDatabaseService implements IDatabaseService {
 
     if (typeof window !== "undefined" && this.config?.functionsBaseUrl) {
       // Use Functions proxy
-      return this.callFunctionsProxy<T>("getDocument", {
+      const result = await this.callFunctionsProxy<T | null>("getDocument", {
         collection: collectionName,
         documentId,
       });
+      // If result is an empty object, treat it as null (document not found)
+      if (
+        result &&
+        typeof result === "object" &&
+        Object.keys(result).length === 0
+      ) {
+        return null;
+      }
+      return result;
     }
 
     // Direct Cosmos access (server-side)
@@ -679,15 +688,12 @@ export class AzureDatabaseService implements IDatabaseService {
       // Auth service may not be available, continue without token
     }
 
-    const response = await fetch(
-      `${baseUrl}/api/cosmos/${operation}`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify(params),
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${baseUrl}/api/cosmos/${operation}`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(params),
+      credentials: "include",
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
