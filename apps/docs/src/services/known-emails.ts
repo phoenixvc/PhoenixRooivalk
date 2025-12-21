@@ -6,6 +6,10 @@
 
 import { getAuthService, getCurrentProvider } from "./cloud";
 
+// Production Azure Functions URL - used when AZURE_FUNCTIONS_BASE_URL env var is not set
+const AZURE_FUNCTIONS_URL =
+  "https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net/api";
+
 // Cached API base URL (evaluated lazily)
 let cachedApiBase: string | null = null;
 
@@ -19,7 +23,7 @@ function normalizeApiUrl(url: string): string {
 }
 
 /**
- * Get API base URL from Docusaurus config
+ * Get API base URL from Docusaurus config or production fallback
  * Evaluated lazily to ensure window.__DOCUSAURUS__ is available
  */
 function getApiBase(): string {
@@ -43,16 +47,9 @@ function getApiBase(): string {
     }
   }
 
-  // Fallback: Use window location origin with /api prefix for relative calls
-  // This works when Azure Functions are deployed as part of the same SWA
-  // or when proxied via the SWA API routing
-  if (typeof window !== "undefined") {
-    cachedApiBase = `${window.location.origin}/api`;
-    return cachedApiBase;
-  }
-
-  // SSR fallback - return empty and let the call fail gracefully
-  return "/api";
+  // Fallback to production Azure Functions URL
+  cachedApiBase = AZURE_FUNCTIONS_URL;
+  return cachedApiBase;
 }
 
 /**
