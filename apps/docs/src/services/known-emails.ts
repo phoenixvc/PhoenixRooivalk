@@ -6,8 +6,12 @@
 
 import { getAuthService, getCurrentProvider } from "./cloud";
 
+// Production Azure Functions URL fallback
+const AZURE_FUNCTIONS_FALLBACK =
+  "https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net";
+
 /**
- * Get API base URL from Docusaurus config or fallback to /api
+ * Get API base URL from Docusaurus config or fallback to Azure Functions
  */
 function getApiBase(): string {
   if (typeof window !== "undefined") {
@@ -23,7 +27,8 @@ function getApiBase(): string {
       // Ignore
     }
   }
-  return "/api";
+  // Fallback to production Azure Functions URL
+  return AZURE_FUNCTIONS_FALLBACK;
 }
 
 const API_BASE = getApiBase();
