@@ -306,7 +306,11 @@ export class AzureDatabaseService implements IDatabaseService {
         documentId,
       });
       // If result is an empty object, treat it as null (document not found)
-      if (result && typeof result === "object" && Object.keys(result).length === 0) {
+      if (
+        result &&
+        typeof result === "object" &&
+        Object.keys(result).length === 0
+      ) {
         return null;
       }
       return result;
@@ -684,15 +688,12 @@ export class AzureDatabaseService implements IDatabaseService {
       // Auth service may not be available, continue without token
     }
 
-    const response = await fetch(
-      `${baseUrl}/api/cosmos/${operation}`,
-      {
-        method: "POST",
-        headers,
-        body: JSON.stringify(params),
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${baseUrl}/api/cosmos/${operation}`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(params),
+      credentials: "include",
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

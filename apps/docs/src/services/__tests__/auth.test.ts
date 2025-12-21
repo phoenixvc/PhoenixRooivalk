@@ -11,7 +11,7 @@ import type { UserProgress } from "../cloud/interfaces/database";
  * This tests the logic without requiring actual database connection
  */
 function getUserProgressTestImplementation(
-  data: any,
+  data: Partial<UserProgress> | null | undefined,
 ): UserProgress {
   // Ensure we always return a complete UserProgress structure
   // even if the database returns null, undefined, or partial data
@@ -129,7 +129,9 @@ describe("Auth Service - getUserProgress", () => {
       docs: { doc1: { completed: true, scrollProgress: 100 } },
       stats: { totalPoints: 50, level: 1, streak: 0 },
     });
-    expect(result.docs).toEqual({ doc1: { completed: true, scrollProgress: 100 } });
+    expect(result.docs).toEqual({
+      doc1: { completed: true, scrollProgress: 100 },
+    });
     expect(result.achievements).toEqual({});
     expect(result.stats).toEqual({ totalPoints: 50, level: 1, streak: 0 });
   });
@@ -139,7 +141,9 @@ describe("Auth Service - getUserProgress", () => {
       docs: { doc1: { completed: true, scrollProgress: 100 } },
       achievements: { ach1: { unlockedAt: "2024-01-01" } },
     });
-    expect(result.docs).toEqual({ doc1: { completed: true, scrollProgress: 100 } });
+    expect(result.docs).toEqual({
+      doc1: { completed: true, scrollProgress: 100 },
+    });
     expect(result.achievements).toEqual({ ach1: { unlockedAt: "2024-01-01" } });
     expect(result.stats).toEqual({ totalPoints: 0, level: 1, streak: 0 });
   });
@@ -168,13 +172,16 @@ describe("Auth Service - mergeProgress", () => {
   };
 
   it("should handle cloud progress with undefined docs", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: undefined,
       achievements: { ach2: { unlockedAt: "2024-01-02" } },
       stats: { totalPoints: 100, level: 2, streak: 5 },
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should preserve local docs when cloud.docs is undefined
     expect(result.docs).toEqual(localProgress.docs);
@@ -189,26 +196,32 @@ describe("Auth Service - mergeProgress", () => {
   });
 
   it("should handle cloud progress with null docs", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: null,
       achievements: {},
       stats: { totalPoints: 0, level: 1, streak: 0 },
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should preserve local docs when cloud.docs is null
     expect(result.docs).toEqual(localProgress.docs);
   });
 
   it("should handle cloud progress with undefined achievements", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: { doc3: { completed: true, scrollProgress: 100 } },
       achievements: undefined,
       stats: { totalPoints: 100, level: 2, streak: 5 },
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should merge cloud docs
     expect(result.docs.doc3).toEqual({ completed: true, scrollProgress: 100 });
@@ -217,52 +230,64 @@ describe("Auth Service - mergeProgress", () => {
   });
 
   it("should handle cloud progress with null achievements", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: {},
       achievements: null,
       stats: { totalPoints: 0, level: 1, streak: 0 },
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should preserve local achievements when cloud.achievements is null
     expect(result.achievements).toEqual(localProgress.achievements);
   });
 
   it("should handle cloud progress with undefined stats", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: {},
       achievements: {},
       stats: undefined,
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should use local stats when cloud.stats is undefined
     expect(result.stats).toEqual(localProgress.stats);
   });
 
   it("should handle cloud progress with null stats", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: {},
       achievements: {},
       stats: null,
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should use local stats when cloud.stats is null
     expect(result.stats).toEqual(localProgress.stats);
   });
 
   it("should handle completely empty cloud progress", () => {
-    const cloudProgress: any = {
+    const cloudProgress = {
       docs: undefined,
       achievements: undefined,
       stats: undefined,
-    };
+    } as Partial<UserProgress> as UserProgress;
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     // Should preserve all local data
     expect(result).toEqual(localProgress);
@@ -280,7 +305,10 @@ describe("Auth Service - mergeProgress", () => {
       stats: { totalPoints: 100, level: 2, streak: 5 }, // Higher than local
     };
 
-    const result = mergeProgressTestImplementation(cloudProgress, localProgress);
+    const result = mergeProgressTestImplementation(
+      cloudProgress,
+      localProgress,
+    );
 
     expect(result.docs).toEqual({
       doc1: { completed: true, scrollProgress: 100 }, // From local
