@@ -141,8 +141,8 @@ export async function signOut(): Promise<void> {
 export async function getUserProgress(userId: string): Promise<UserProgress> {
   const db = getDatabaseService();
   const data = await db.getDocument<UserProgress>(
-    `users/${userId}/progress`,
-    "current",
+    "user_progress",
+    userId,
   );
   return (
     data || {
@@ -162,8 +162,8 @@ export async function saveUserProgress(
 ): Promise<void> {
   const db = getDatabaseService();
   await db.setDocument(
-    `users/${userId}/progress`,
-    "current",
+    "user_progress",
+    userId,
     progress as unknown as Record<string, unknown>,
   );
 }
