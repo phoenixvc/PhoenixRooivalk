@@ -45,7 +45,7 @@ async function getNewsFeedHandler(
 
     // Validate categories
     if (body.categories && body.categories.length > 10) {
-      return Errors.badRequest("Cannot filter by more than 10 categories");
+      return Errors.badRequest("Cannot filter by more than 10 categories", request);
     }
 
     const result = await newsService.getNewsFeed({
@@ -55,10 +55,10 @@ async function getNewsFeedHandler(
       limit: body.limit,
     });
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Error fetching news feed:", error);
-    return Errors.internal("Failed to fetch news feed");
+    return Errors.internal("Failed to fetch news feed", request);
   }
 }
 
@@ -74,7 +74,7 @@ async function addNewsArticleHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   // Rate limiting for admin
@@ -96,7 +96,7 @@ async function addNewsArticleHandler(
     };
 
     if (!body.title || !body.content || !body.source) {
-      return Errors.badRequest("Title, content, and source are required");
+      return Errors.badRequest("Title, content, and source are required", request);
     }
 
     const article = await newsService.addArticle(body);
@@ -108,10 +108,10 @@ async function addNewsArticleHandler(
       articleId: article.id,
       category: article.category,
       type: article.type,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Error adding news article:", error);
-    return Errors.internal("Failed to add news article");
+    return Errors.internal("Failed to add news article", request);
   }
 }
 
@@ -127,22 +127,22 @@ async function markArticleReadHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     const { articleId } = (await request.json()) as { articleId: string };
 
     if (!articleId) {
-      return Errors.badRequest("articleId is required");
+      return Errors.badRequest("articleId is required", request);
     }
 
     await newsService.markArticleRead(authResult.userId!, articleId);
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     context.error("Error marking article as read:", error);
-    return Errors.internal("Failed to mark article as read");
+    return Errors.internal("Failed to mark article as read", request);
   }
 }
 
@@ -158,7 +158,7 @@ async function saveArticleHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
@@ -168,15 +168,15 @@ async function saveArticleHandler(
     };
 
     if (!articleId || typeof save !== "boolean") {
-      return Errors.badRequest("articleId and save (boolean) are required");
+      return Errors.badRequest("articleId and save (boolean) are required", request);
     }
 
     await newsService.toggleSaveArticle(authResult.userId!, articleId, save);
 
-    return successResponse({ success: true, saved: save });
+    return successResponse({ success: true, saved: save }, 200, request);
   } catch (error) {
     context.error("Error saving article:", error);
-    return Errors.internal("Failed to save article");
+    return Errors.internal("Failed to save article", request);
   }
 }
 
@@ -192,15 +192,15 @@ async function getSavedArticlesHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     const articles = await newsService.getSavedArticles(authResult.userId!);
-    return successResponse({ articles });
+    return successResponse({ articles }, 200, request);
   } catch (error) {
     context.error("Error getting saved articles:", error);
-    return Errors.internal("Failed to get saved articles");
+    return Errors.internal("Failed to get saved articles", request);
   }
 }
 
@@ -223,12 +223,12 @@ async function searchNewsHandler(
     };
 
     if (!query) {
-      return Errors.badRequest("Query is required");
+      return Errors.badRequest("Query is required", request);
     }
 
     // Validate categories
     if (categories && categories.length > 10) {
-      return Errors.badRequest("Cannot filter by more than 10 categories");
+      return Errors.badRequest("Cannot filter by more than 10 categories", request);
     }
 
     const validCategoryIds = getCategoryIds();
@@ -248,10 +248,10 @@ async function searchNewsHandler(
     return successResponse({
       results,
       totalFound: results.length,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Error searching news:", error);
-    return Errors.internal("Failed to search news");
+    return Errors.internal("Failed to search news", request);
   }
 }
 

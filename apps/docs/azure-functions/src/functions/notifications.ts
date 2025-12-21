@@ -49,10 +49,10 @@ async function subscribeHandler(
     return successResponse({
       success: true,
       ...result,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Subscribe error:", error);
-    return Errors.internal("Failed to subscribe");
+    return Errors.internal("Failed to subscribe", request);
   }
 }
 
@@ -73,10 +73,10 @@ async function unsubscribeHandler(
 
     context.log(`User ${auth.userId} unsubscribed from notifications`);
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     context.error("Unsubscribe error:", error);
-    return Errors.internal("Failed to unsubscribe");
+    return Errors.internal("Failed to unsubscribe", request);
   }
 }
 
@@ -109,7 +109,7 @@ async function getSubscriptionHandler(
     });
   } catch (error) {
     context.error("Get subscription error:", error);
-    return Errors.internal("Failed to get subscription");
+    return Errors.internal("Failed to get subscription", request);
   }
 }
 
@@ -125,7 +125,7 @@ async function markBreakingHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -135,7 +135,7 @@ async function markBreakingHandler(
     };
 
     if (!articleId || typeof isBreaking !== "boolean") {
-      return Errors.badRequest("articleId and isBreaking are required");
+      return Errors.badRequest("articleId and isBreaking are required", request);
     }
 
     await notificationsService.markAsBreaking(articleId, isBreaking);
@@ -144,10 +144,10 @@ async function markBreakingHandler(
       `Article ${articleId} marked as ${isBreaking ? "breaking" : "normal"}`,
     );
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     context.error("Mark breaking error:", error);
-    return Errors.internal("Failed to update article");
+    return Errors.internal("Failed to update article", request);
   }
 }
 
@@ -163,7 +163,7 @@ async function processEmailQueueHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -175,10 +175,10 @@ async function processEmailQueueHandler(
       `Processed ${result.processed} emails, ${result.failed} failed`,
     );
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Process email queue error:", error);
-    return Errors.internal("Failed to process email queue");
+    return Errors.internal("Failed to process email queue", request);
   }
 }
 
@@ -194,7 +194,7 @@ async function sendDigestHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -203,17 +203,17 @@ async function sendDigestHandler(
     };
 
     if (!frequency || !["daily", "weekly"].includes(frequency)) {
-      return Errors.badRequest("frequency must be 'daily' or 'weekly'");
+      return Errors.badRequest("frequency must be 'daily' or 'weekly'", request);
     }
 
     const result = await notificationsService.sendDigest(frequency);
 
     context.log(`Queued ${result.emailsQueued} ${frequency} digest emails`);
 
-    return successResponse(result);
+    return successResponse(result, 200, request);
   } catch (error) {
     context.error("Send digest error:", error);
-    return Errors.internal("Failed to send digest");
+    return Errors.internal("Failed to send digest", request);
   }
 }
 

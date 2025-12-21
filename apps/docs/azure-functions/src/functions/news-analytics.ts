@@ -26,7 +26,7 @@ async function getNewsAnalyticsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -36,10 +36,10 @@ async function getNewsAnalyticsHandler(
 
     const analytics = await newsAnalyticsService.getAnalytics(dateRange);
 
-    return successResponse(analytics);
+    return successResponse(analytics, 200, request);
   } catch (error) {
     context.error("Error getting news analytics:", error);
-    return Errors.internal("Failed to get analytics");
+    return Errors.internal("Failed to get analytics", request);
   }
 }
 
@@ -55,15 +55,15 @@ async function getNewsIngestionStatsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const stats = await newsAnalyticsService.getIngestionStats();
-    return successResponse(stats);
+    return successResponse(stats, 200, request);
   } catch (error) {
     context.error("Error getting ingestion stats:", error);
-    return Errors.internal("Failed to get ingestion stats");
+    return Errors.internal("Failed to get ingestion stats", request);
   }
 }
 
@@ -79,7 +79,7 @@ async function importNewsArticlesHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -94,7 +94,7 @@ async function importNewsArticlesHandler(
     };
 
     if (!articles || !Array.isArray(articles)) {
-      return Errors.badRequest("articles array is required");
+      return Errors.badRequest("articles array is required", request);
     }
 
     const result = await newsAnalyticsService.importArticles(articles);
@@ -102,10 +102,10 @@ async function importNewsArticlesHandler(
     return successResponse({
       success: true,
       ...result,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Error importing articles:", error);
-    return Errors.internal("Failed to import articles");
+    return Errors.internal("Failed to import articles", request);
   }
 }
 
@@ -132,10 +132,10 @@ async function generateNewsDigestHandler(
       userRoles,
     );
 
-    return successResponse(digest);
+    return successResponse(digest, 200, request);
   } catch (error) {
     context.error("Error generating news digest:", error);
-    return Errors.internal("Failed to generate news digest");
+    return Errors.internal("Failed to generate news digest", request);
   }
 }
 

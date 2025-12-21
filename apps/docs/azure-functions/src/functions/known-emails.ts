@@ -31,7 +31,7 @@ async function getKnownEmailsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -52,10 +52,10 @@ async function getKnownEmailsHandler(
     return successResponse({
       emails: result.items,
       hasMore: result.hasMore,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Failed to get known emails:", error);
-    return Errors.internal("Failed to get known emails");
+    return Errors.internal("Failed to get known emails", request);
   }
 }
 
@@ -71,24 +71,24 @@ async function getKnownEmailHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Email ID is required");
+      return Errors.badRequest("Email ID is required", request);
     }
 
     const email = await knownEmailsService.getEmail(id);
     if (!email) {
-      return Errors.notFound("Email not found");
+      return Errors.notFound("Email not found", request);
     }
 
-    return successResponse({ email });
+    return successResponse({ email }, 200, request);
   } catch (error) {
     context.error("Failed to get known email:", error);
-    return Errors.internal("Failed to get email");
+    return Errors.internal("Failed to get email", request);
   }
 }
 
@@ -104,7 +104,7 @@ async function addKnownEmailHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -113,17 +113,17 @@ async function addKnownEmailHandler(
     const result = await knownEmailsService.addEmail(data, authResult.userId);
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to add email");
+      return Errors.badRequest(result.error || "Failed to add email", request);
     }
 
     context.log(
       `Known email added: ${result.email?.email} for profile ${result.email?.profileKey} by ${authResult.userId}`,
     );
 
-    return successResponse({ success: true, email: result.email });
+    return successResponse({ success: true, email: result.email }, 200, request);
   } catch (error) {
     context.error("Failed to add known email:", error);
-    return Errors.internal("Failed to add email");
+    return Errors.internal("Failed to add email", request);
   }
 }
 
@@ -139,13 +139,13 @@ async function updateKnownEmailHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Email ID is required");
+      return Errors.badRequest("Email ID is required", request);
     }
 
     const data = (await request.json()) as UpdateKnownEmailData;
@@ -153,15 +153,15 @@ async function updateKnownEmailHandler(
     const result = await knownEmailsService.updateEmail(id, data);
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to update email");
+      return Errors.badRequest(result.error || "Failed to update email", request);
     }
 
     context.log(`Known email updated: ${id} by ${authResult.userId}`);
 
-    return successResponse({ success: true, email: result.email });
+    return successResponse({ success: true, email: result.email }, 200, request);
   } catch (error) {
     context.error("Failed to update known email:", error);
-    return Errors.internal("Failed to update email");
+    return Errors.internal("Failed to update email", request);
   }
 }
 
@@ -177,13 +177,13 @@ async function deleteKnownEmailHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const id = request.params.id;
     if (!id) {
-      return Errors.badRequest("Email ID is required");
+      return Errors.badRequest("Email ID is required", request);
     }
 
     // Check if we should hard delete or soft delete
@@ -197,17 +197,17 @@ async function deleteKnownEmailHandler(
     }
 
     if (!result.success) {
-      return Errors.badRequest(result.error || "Failed to delete email");
+      return Errors.badRequest(result.error || "Failed to delete email", request);
     }
 
     context.log(
       `Known email ${hardDelete ? "deleted" : "deactivated"}: ${id} by ${authResult.userId}`,
     );
 
-    return successResponse({ success: true });
+    return successResponse({ success: true }, 200, request);
   } catch (error) {
     context.error("Failed to delete known email:", error);
-    return Errors.internal("Failed to delete email");
+    return Errors.internal("Failed to delete email", request);
   }
 }
 
@@ -224,14 +224,14 @@ async function checkKnownEmailHandler(
 
   // Allow authenticated users to check their own email
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     // Get email from query parameter (required for this endpoint)
     const email = request.query.get("email");
     if (!email) {
-      return Errors.badRequest("Email query parameter is required");
+      return Errors.badRequest("Email query parameter is required", request);
     }
 
     const profileKey = await knownEmailsService.getProfileKeyForEmail(email);
@@ -239,10 +239,10 @@ async function checkKnownEmailHandler(
     return successResponse({
       isKnown: !!profileKey,
       profileKey: profileKey || null,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Failed to check known email:", error);
-    return Errors.internal("Failed to check email");
+    return Errors.internal("Failed to check email", request);
   }
 }
 
@@ -258,12 +258,12 @@ async function getProfileKeysHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   return successResponse({
     profileKeys: AVAILABLE_PROFILE_KEYS,
-  });
+  }, 200, request);
 }
 
 /**
@@ -278,15 +278,15 @@ async function getKnownEmailsCountHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const count = await knownEmailsService.getActiveCount();
-    return successResponse({ count });
+    return successResponse({ count }, 200, request);
   } catch (error) {
     context.error("Failed to get known emails count:", error);
-    return Errors.internal("Failed to get count");
+    return Errors.internal("Failed to get count", request);
   }
 }
 

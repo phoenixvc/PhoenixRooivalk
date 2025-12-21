@@ -43,7 +43,7 @@ async function submitApplicationHandler(
     request.headers.get("authorization"),
   );
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
@@ -52,7 +52,7 @@ async function submitApplicationHandler(
     // Validate input
     const validationError = accessApplicationsService.validateApplication(data);
     if (validationError) {
-      return Errors.badRequest(validationError);
+      return Errors.badRequest(validationError, request);
     }
 
     const result = await accessApplicationsService.submitApplication(
@@ -71,10 +71,10 @@ async function submitApplicationHandler(
       applicationNumber: result.applicationNumber,
       message:
         "Your application has been submitted. We'll review it and get back to you within 2-3 business days.",
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Failed to submit access application:", error);
-    return Errors.internal("Failed to submit application. Please try again.");
+    return Errors.internal("Failed to submit application. Please try again.", request);
   }
 }
 
@@ -90,17 +90,17 @@ async function getUserApplicationsHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     const result = await accessApplicationsService.getUserApplications(
       authResult.userId!,
     );
-    return successResponse({ applications: result.items });
+    return successResponse({ applications: result.items }, 200, request);
   } catch (error) {
     context.error("Failed to get user applications:", error);
-    return Errors.internal("Failed to get applications");
+    return Errors.internal("Failed to get applications", request);
   }
 }
 
@@ -116,17 +116,17 @@ async function getPendingApplicationHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
     const application = await accessApplicationsService.getPendingApplication(
       authResult.userId!,
     );
-    return successResponse({ application });
+    return successResponse({ application }, 200, request);
   } catch (error) {
     context.error("Failed to get pending application:", error);
-    return Errors.internal("Failed to get application status");
+    return Errors.internal("Failed to get application status", request);
   }
 }
 
@@ -142,7 +142,7 @@ async function checkApprovedAccessHandler(
   );
 
   if (!authResult.valid) {
-    return Errors.unauthenticated();
+    return Errors.unauthenticated("Must be signed in", request);
   }
 
   try {
@@ -151,10 +151,10 @@ async function checkApprovedAccessHandler(
       authResult.userId!,
       role,
     );
-    return successResponse({ hasAccess, role });
+    return successResponse({ hasAccess, role }, 200, request);
   } catch (error) {
     context.error("Failed to check access:", error);
-    return Errors.internal("Failed to check access status");
+    return Errors.internal("Failed to check access status", request);
   }
 }
 
@@ -170,7 +170,7 @@ async function getAdminApplicationsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -189,10 +189,10 @@ async function getAdminApplicationsHandler(
     return successResponse({
       applications: result.items,
       hasMore: result.hasMore,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Failed to get admin applications:", error);
-    return Errors.internal("Failed to get applications");
+    return Errors.internal("Failed to get applications", request);
   }
 }
 
@@ -208,15 +208,15 @@ async function getApplicationCountsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const counts = await accessApplicationsService.getApplicationCounts();
-    return successResponse({ counts });
+    return successResponse({ counts }, 200, request);
   } catch (error) {
     context.error("Failed to get application counts:", error);
-    return Errors.internal("Failed to get counts");
+    return Errors.internal("Failed to get counts", request);
   }
 }
 
@@ -232,7 +232,7 @@ async function updateApplicationStatusHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -243,11 +243,11 @@ async function updateApplicationStatusHandler(
     };
 
     if (!applicationId || !status) {
-      return Errors.badRequest("applicationId and status are required");
+      return Errors.badRequest("applicationId and status are required", request);
     }
 
     if (!["pending", "approved", "rejected"].includes(status)) {
-      return Errors.badRequest("Invalid status");
+      return Errors.badRequest("Invalid status", request);
     }
 
     const application = await accessApplicationsService.updateApplicationStatus(
@@ -258,17 +258,17 @@ async function updateApplicationStatusHandler(
     );
 
     if (!application) {
-      return Errors.notFound("Application not found");
+      return Errors.notFound("Application not found", request);
     }
 
     context.log(
       `Application ${applicationId} updated to ${status} by ${authResult.userId}`,
     );
 
-    return successResponse({ success: true, application });
+    return successResponse({ success: true, application }, 200, request);
   } catch (error) {
     context.error("Failed to update application:", error);
-    return Errors.internal("Failed to update application");
+    return Errors.internal("Failed to update application", request);
   }
 }
 

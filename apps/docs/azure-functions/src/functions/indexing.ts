@@ -26,7 +26,7 @@ async function indexDocumentsHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
@@ -43,7 +43,7 @@ async function indexDocumentsHandler(
     };
 
     if (!documents || !Array.isArray(documents)) {
-      return Errors.badRequest("documents array is required");
+      return Errors.badRequest("documents array is required", request);
     }
 
     context.log(`Indexing ${documents.length} documents...`);
@@ -53,10 +53,10 @@ async function indexDocumentsHandler(
     return successResponse({
       message: `Indexed ${result.totalChunks} chunks from ${documents.length} documents`,
       results: result.results,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Indexing error:", error);
-    return Errors.internal("Indexing failed");
+    return Errors.internal("Indexing failed", request);
   }
 }
 
@@ -72,24 +72,24 @@ async function deleteDocumentIndexHandler(
   );
 
   if (!authResult.valid || !authResult.isAdmin) {
-    return Errors.forbidden();
+    return Errors.forbidden("Admin access required", request);
   }
 
   try {
     const { docId } = (await request.json()) as { docId: string };
 
     if (!docId) {
-      return Errors.badRequest("docId is required");
+      return Errors.badRequest("docId is required", request);
     }
 
     const deleted = await indexingService.deleteDocumentEmbeddings(docId);
 
     return successResponse({
       message: `Deleted ${deleted} chunks for document ${docId}`,
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Delete error:", error);
-    return Errors.internal("Delete failed");
+    return Errors.internal("Delete failed", request);
   }
 }
 
@@ -97,15 +97,15 @@ async function deleteDocumentIndexHandler(
  * Get indexing stats handler
  */
 async function getIndexStatsHandler(
-  _request: HttpRequest,
+  request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
     const stats = await indexingService.getStats();
-    return successResponse(stats);
+    return successResponse(stats, 200, request);
   } catch (error) {
     context.error("Stats error:", error);
-    return Errors.internal("Failed to get stats");
+    return Errors.internal("Failed to get stats", request);
   }
 }
 

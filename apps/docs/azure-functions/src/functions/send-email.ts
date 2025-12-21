@@ -90,7 +90,7 @@ async function sendEmailHandler(
     );
 
     if (!authResult.valid) {
-      return Errors.unauthenticated("Authentication required to send emails");
+      return Errors.unauthenticated("Authentication required to send emails", request);
     }
 
     const data = (await request.json()) as SendEmailRequest;
@@ -98,7 +98,7 @@ async function sendEmailHandler(
     // Validate input
     const validationError = validateEmailRequest(data);
     if (validationError) {
-      return Errors.badRequest(validationError);
+      return Errors.badRequest(validationError, request);
     }
 
     // Parse recipients
@@ -134,18 +134,18 @@ async function sendEmailHandler(
       return successResponse({
         success: true,
         messageId: result.messageId,
-      });
+      }, 200, request);
     } else {
       context.warn("Email sending failed", {
         userId: authResult.userId,
         error: result.error,
       });
 
-      return Errors.internal(result.error || "Failed to send email");
+      return Errors.internal(result.error || "Failed to send email", request);
     }
   } catch (error) {
     context.error("Send email handler error:", error);
-    return Errors.internal("Failed to send email. Please try again.");
+    return Errors.internal("Failed to send email. Please try again.", request);
   }
 }
 
@@ -153,7 +153,7 @@ async function sendEmailHandler(
  * Check email service status
  */
 async function emailStatusHandler(
-  _request: HttpRequest,
+  request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
@@ -171,10 +171,10 @@ async function emailStatusHandler(
           : process.env.AZURE_COMMUNICATION_CONNECTION_STRING
             ? "azure"
             : "none"),
-    });
+    }, 200, request);
   } catch (error) {
     context.error("Email status check failed:", error);
-    return Errors.internal("Failed to check email status");
+    return Errors.internal("Failed to check email status", request);
   }
 }
 
