@@ -22,7 +22,7 @@
     "@types/uuid": "^10.0.0",
     "applicationinsights": "^3.4.0",
     "jose": "^6.1.2",
-    "openai": "^6.10.0",
+    "openai": "^6.15.0",
     "uuid": "^13.0.0",
     "zod": "^4.1.13"
   },
