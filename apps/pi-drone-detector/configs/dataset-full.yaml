@@ -1,0 +1,66 @@
+# Full 27-class dataset configuration for production drone detection
+# Use this for maximum granularity and classification accuracy
+
+path: /data/drone-detection
+train: images/train
+val: images/val
+test: images/test
+
+nc: 27
+names:
+  # === DRONES (TARGET CLASSES) ===
+  0: drone_multirotor    # DJI, Autel, custom quads/hex/octo
+  1: drone_fixedwing     # Fixed-wing UAVs, eBee, Disco
+  2: drone_vtol          # Hybrid VTOL drones
+  3: drone_racing        # FPV racing drones, TinyWhoop
+  4: drone_toy           # Cheap toy drones, Holy Stone, Syma
+
+  # === BIRDS ===
+  5: bird_tiny           # Hummingbird, sparrow, finch (<15cm)
+  6: bird_small          # Pigeon, crow, starling (15-40cm)
+  7: bird_medium         # Seagull, duck, owl (40-80cm)
+  8: bird_large          # Eagle, hawk, vulture, goose (>80cm)
+  9: bird_flock          # Multiple birds, murmurations
+
+  # === MANNED AIRCRAFT ===
+  10: aircraft_fixed     # Planes (Cessna to 747)
+  11: aircraft_rotary    # Helicopters
+  12: aircraft_glider    # Hang glider, paraglider, sailplane
+  13: aircraft_balloon   # Hot air balloon, blimp, aerostat
+
+  # === RECREATIONAL ===
+  14: kite               # All kite types
+  15: balloon_party      # Helium balloons
+  16: balloon_weather    # Weather/research balloons
+  17: lantern            # Sky lanterns, Chinese lanterns
+  18: rc_plane           # RC planes, RC helicopters (non-drone)
+
+  # === SPORTS/THROWN ===
+  19: ball               # All sports balls
+  20: projectile         # Frisbee, arrow, javelin, clay pigeon
+
+  # === DEBRIS/ENVIRONMENTAL ===
+  21: debris_light       # Plastic bag, paper, wrapper, leaf
+  22: debris_organic     # Seeds, feathers, pollen
+  23: insect             # Flying insects (close to camera)
+
+  # === ATMOSPHERIC/ARTIFACTS ===
+  24: weather            # Rain, snow, hail, dust
+  25: artifact           # Lens flare, reflection, spider web
+  26: background         # Sky, clouds, nothing
+
+# Class groupings for hierarchical evaluation
+groups:
+  drone: [0, 1, 2, 3, 4]
+  bird: [5, 6, 7, 8, 9]
+  aircraft: [10, 11, 12, 13]
+  recreational: [14, 15, 16, 17, 18]
+  sports: [19, 20]
+  debris: [21, 22, 23]
+  atmospheric: [24, 25, 26]
+
+# Alert classes (these trigger alerts)
+alert_classes: [0, 1, 2, 3, 4]
+
+# Critical non-alert classes (must not be mistaken for drones)
+critical_non_alert: [10, 11, 12, 13]  # Manned aircraft
