@@ -200,7 +200,7 @@ describe("Auth Service - mergeProgress", () => {
       docs: null,
       achievements: {},
       stats: { totalPoints: 0, level: 1, streak: 0 },
-    } as Partial<UserProgress> as UserProgress;
+    } as unknown as UserProgress;
 
     const result = mergeProgressTestImplementation(
       cloudProgress,
@@ -234,7 +234,7 @@ describe("Auth Service - mergeProgress", () => {
       docs: {},
       achievements: null,
       stats: { totalPoints: 0, level: 1, streak: 0 },
-    } as Partial<UserProgress> as UserProgress;
+    } as unknown as UserProgress;
 
     const result = mergeProgressTestImplementation(
       cloudProgress,
@@ -266,7 +266,7 @@ describe("Auth Service - mergeProgress", () => {
       docs: {},
       achievements: {},
       stats: null,
-    } as Partial<UserProgress> as UserProgress;
+    } as unknown as UserProgress;
 
     const result = mergeProgressTestImplementation(
       cloudProgress,
