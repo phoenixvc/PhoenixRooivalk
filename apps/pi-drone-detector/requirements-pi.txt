@@ -1,0 +1,20 @@
+# Requirements for Raspberry Pi inference
+# Install with: pip install -r requirements-pi.txt
+
+# TFLite runtime (Pi-optimized, much smaller than full TensorFlow)
+# For Pi 4/5 (64-bit OS):
+tflite-runtime>=2.14.0
+
+# OpenCV for camera and image processing
+opencv-python-headless>=4.8.0
+
+# Core dependencies
+numpy>=1.24.0
+pillow>=9.5.0
+
+# Optional: Coral Edge TPU support
+# Uncomment if using Coral USB Accelerator:
+# pycoral>=2.0.0
+
+# Optional: For webhook alerts
+# requests>=2.31.0
