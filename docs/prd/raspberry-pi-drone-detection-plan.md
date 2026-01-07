@@ -18,6 +18,220 @@ This plan outlines a **minimal viable drone detection system** that can distingu
 
 ---
 
+## Azure ML Fine-Tuning Guide
+
+Fine-tuning YOLOv5 on Azure Machine Learning gives you better accuracy than heuristics alone. Here's how to set it up:
+
+### Cost Estimate
+
+| Resource | Config | Cost/Hour | Training Time | Total |
+|----------|--------|-----------|---------------|-------|
+| **NC6s_v3** | 1x V100 (16GB) | ~$3.06 | 2-4 hours | ~$6-12 |
+| **NC4as_T4_v3** | 1x T4 (16GB) | ~$0.53 | 4-6 hours | ~$2-4 |
+| **Standard_NC24ads_A100_v4** | 1x A100 (80GB) | ~$3.67 | 1-2 hours | ~$4-7 |
+
+**Recommended**: `NC4as_T4_v3` - Best cost/performance for small dataset fine-tuning (~$3-5 total)
+
+### Quick Setup (Azure CLI)
+
+```bash
+# 1. Install Azure ML CLI extension
+az extension add -n ml
+
+# 2. Create resource group (if needed)
+az group create --name rg-drone-training --location eastus
+
+# 3. Create Azure ML workspace
+az ml workspace create \
+  --name mlw-drone-detection \
+  --resource-group rg-drone-training \
+  --location eastus
+
+# 4. Create compute cluster (auto-scales to 0 when idle)
+az ml compute create \
+  --name gpu-cluster \
+  --type AmlCompute \
+  --size Standard_NC4as_T4_v3 \
+  --min-instances 0 \
+  --max-instances 1 \
+  --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
+```
+
+### Dataset Preparation
+
+Create this folder structure locally:
+
+```
+drone-dataset/
+├── images/
+│   ├── train/
+│   │   ├── drone_001.jpg
+│   │   ├── drone_002.jpg
+│   │   ├── cokecan_001.jpg
+│   │   └── ...
+│   └── val/
+│       ├── drone_100.jpg
+│       └── cokecan_100.jpg
+├── labels/
+│   ├── train/
+│   │   ├── drone_001.txt    # YOLO format: class x_center y_center width height
+│   │   └── ...
+│   └── val/
+│       └── ...
+└── dataset.yaml
+```
+
+**dataset.yaml:**
+```yaml
+path: /mnt/data/drone-dataset
+train: images/train
+val: images/val
+
+nc: 2  # number of classes
+names: ['drone', 'not_drone']  # class names
+```
+
+### Training Script (train_azure.py)
+
+```python
+import os
+import argparse
+from ultralytics import YOLO
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data', type=str, required=True)
+    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--imgsz', type=int, default=320)
+    parser.add_argument('--batch', type=int, default=16)
+    parser.add_argument('--output', type=str, default='./outputs')
+    args = parser.parse_args()
+
+    # Load YOLOv5n pretrained
+    model = YOLO('yolov5n.pt')
+
+    # Fine-tune on drone dataset
+    results = model.train(
+        data=args.data,
+        epochs=args.epochs,
+        imgsz=args.imgsz,
+        batch=args.batch,
+        project=args.output,
+        name='drone-detector',
+        exist_ok=True,
+        # Optimizations for small dataset
+        patience=10,           # Early stopping
+        save_period=10,        # Save every 10 epochs
+        amp=True,              # Mixed precision (faster)
+        workers=4,
+        cache=True,            # Cache images in RAM
+    )
+
+    # Export to TFLite for Raspberry Pi
+    best_model = YOLO(f'{args.output}/drone-detector/weights/best.pt')
+    best_model.export(format='tflite', imgsz=320, int8=True)
+
+    print(f"Training complete! Model saved to {args.output}")
+
+if __name__ == '__main__':
+    main()
+```
+
+### Azure ML Job Definition (job.yaml)
+
+```yaml
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+code: ./src
+command: >-
+  pip install ultralytics &&
+  python train_azure.py
+  --data ${{inputs.dataset}}/dataset.yaml
+  --epochs 50
+  --imgsz 320
+  --batch 16
+  --output ${{outputs.model}}
+inputs:
+  dataset:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/drone-dataset
+outputs:
+  model:
+    type: uri_folder
+compute: azureml:gpu-cluster
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-cuda11.8-cudnn8-ubuntu22.04:latest
+  conda_file: conda.yaml
+display_name: drone-detection-finetune
+experiment_name: drone-detection
+```
+
+### Submit Training Job
+
+```bash
+# Upload dataset to Azure ML
+az ml data create \
+  --name drone-dataset \
+  --path ./drone-dataset \
+  --type uri_folder \
+  --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
+
+# Submit training job
+az ml job create \
+  --file job.yaml \
+  --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
+
+# Monitor job
+az ml job stream \
+  --name <job-name> \
+  --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
+```
+
+### Download Trained Model
+
+```bash
+# List job outputs
+az ml job download \
+  --name <job-name> \
+  --output-name model \
+  --download-path ./trained-model \
+  --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
+
+# Copy TFLite model to Raspberry Pi
+scp ./trained-model/drone-detector/weights/best-int8.tflite pi@raspberrypi:/home/pi/
+```
+
+### Alternative: Azure ML Studio (GUI)
+
+1. Go to [ml.azure.com](https://ml.azure.com)
+2. Create workspace → Compute → Create compute cluster
+3. Notebooks → Upload training script
+4. Jobs → Create job → Select compute and script
+5. Download model from job outputs
+
+### Labeling Tool Recommendation
+
+If you need to label images:
+
+- **Label Studio** (free, self-hosted): `pip install label-studio`
+- **Roboflow** (free tier): Upload images, label, export YOLO format
+- **CVAT** (free): Computer Vision Annotation Tool
+
+### Quick Dataset Sources
+
+| Dataset | Images | Notes |
+|---------|--------|-------|
+| [Drone-vs-Bird](https://github.com/wosdetc/drone-vs-bird) | 2,000+ | Video frames, good variety |
+| [Anti-UAV](https://anti-uav.github.io/) | 300+ videos | Thermal + RGB |
+| [USC Drone Dataset](https://data.mendeley.com/datasets/zcsj2g2m4c/4) | 2,600+ | Labeled drones |
+| DIY: Record coke cans | 200+ | Hold can at various distances/angles |
+
+---
+
 ## Recommended Hardware
 
 ### Minimum (Budget ~$75-100)
