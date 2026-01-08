@@ -29,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_AUDIT_VERSION: 0.21.2
+      # TODO: Remove CARGO_AUDIT_SKIP once rustsec supports CVSS 4.0
+      # See: https://github.com/EmbarkStudios/cargo-deny/issues/804
+      CARGO_AUDIT_SKIP: true
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -94,7 +97,9 @@ jobs:
           threat-simulator-tauri
 
       - name: Install cargo-audit
+        if: env.CARGO_AUDIT_SKIP != 'true'
         run: cargo install cargo-audit --locked --version "$CARGO_AUDIT_VERSION"
 
       - name: Security audit
+        if: env.CARGO_AUDIT_SKIP != 'true'
         run: cargo audit --ignore RUSTSEC-2023-0071
