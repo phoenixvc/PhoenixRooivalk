@@ -342,43 +342,16 @@
 /* Phase filter container in sidebar - Compact */
 #phase-filter-container {
   position: relative;
-  padding: 0.5rem 0.75rem;
-  padding-top: 0.75rem;
+  padding: 0.625rem 0.75rem;
   border-bottom: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-200));
   background-color: var(--pr-bg-subtle, var(--ifm-background-color));
 }
 
-/* Clear button - small orange circle at top right */
-#phase-filter-container .phase-filter__clear {
-  position: absolute !important;
-  top: 4px !important;
-  right: 4px !important;
+/* Wrapper for all filter content */
+.sidebar-filter-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  font-size: 0.625rem;
-  font-weight: 600;
-  line-height: 1;
-  color: white;
-  background: var(--pr-brand-orange, #f97316);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  z-index: 10;
-}
-
-#phase-filter-container .phase-filter__clear:hover {
-  background: var(--pr-brand-orange-dark, #ea580c);
-  transform: scale(1.15);
-}
-
-/* Remove helper text for compact view */
-#phase-filter-container::before {
-  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* Multiple filters container - Inline layout */
@@ -393,4 +366,75 @@
   flex: 1 1 auto;
   min-width: 0;
   max-width: none;
+  height: 30px;
+  font-size: 0.75rem;
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+  background-position: right 0.25rem center;
+  background-size: 1rem;
+}
+
+/* Actions row */
+.sidebar-actions {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+}
+
+/* Action buttons */
+.sidebar-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--pr-fg-muted, var(--ifm-color-content-secondary));
+  background: transparent;
+  border: 1px solid var(--pr-border-muted, var(--ifm-color-emphasis-300));
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.sidebar-action-btn:hover {
+  color: var(--pr-brand-orange, var(--ifm-color-primary));
+  border-color: var(--pr-brand-orange, var(--ifm-color-primary));
+  background: var(--pr-bg-muted, var(--ifm-color-emphasis-100));
+}
+
+.sidebar-action-btn:focus-visible {
+  outline: 2px solid var(--pr-brand-orange, var(--ifm-color-primary));
+  outline-offset: 1px;
+}
+
+.sidebar-action-icon {
+  font-size: 0.625rem;
+  line-height: 1;
+}
+
+.sidebar-action-text {
+  line-height: 1;
+}
+
+/* Clear button variant */
+.sidebar-action-btn--clear {
+  color: var(--pr-brand-orange, #f97316);
+  border-color: var(--pr-brand-orange, #f97316);
+}
+
+.sidebar-action-btn--clear:hover {
+  color: white;
+  background: var(--pr-brand-orange, #f97316);
+  border-color: var(--pr-brand-orange, #f97316);
+}
+
+/* Legacy clear button - hide if present */
+#phase-filter-container .phase-filter__clear {
+  display: none;
+}
+
+/* Remove helper text for compact view */
+#phase-filter-container::before {
+  display: none;
 }
