@@ -32,7 +32,7 @@ export function InlineComments({
   pageTitle,
   children,
 }: InlineCommentsProps): React.ReactElement {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   const [comments, setComments] = useState<InlineComment[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -45,16 +45,29 @@ export function InlineComments({
 
   // Subscribe to comments
   useEffect(() => {
-    if (!isCloudConfigured()) return;
+    if (!isCloudConfigured() || authLoading) return;
 
-    const unsubscribe = subscribeToInlineComments(
-      pageId,
-      (updatedComments) => setComments(updatedComments),
-      (error) => console.error("Failed to load inline comments:", error),
-    );
+    let unsubscribe: (() => void) | undefined;
 
-    return () => unsubscribe?.();
-  }, [pageId]);
+    // Small delay to ensure auth token is ready after state change
+    const timeoutId = setTimeout(() => {
+      unsubscribe = subscribeToInlineComments(
+        pageId,
+        (updatedComments) => setComments(updatedComments),
+        (error) => {
+          // Only log non-auth errors
+          if (!error.message?.includes("Unauthorized")) {
+            console.error("Failed to load inline comments:", error);
+          }
+        },
+      );
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe?.();
+    };
+  }, [pageId, authLoading]);
 
   // Handle add comment from selection
   const handleAddComment = useCallback(

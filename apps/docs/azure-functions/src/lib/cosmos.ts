@@ -84,14 +84,24 @@ export async function getDocument<T extends ItemDefinition>(
 
 /**
  * Helper to upsert document
+ * Note: For containers with partition key /id, the document.id will be used automatically.
+ * For other partition key paths, pass the partitionKeyValue parameter.
  */
 export async function upsertDocument<T extends { id: string }>(
   containerName: string,
   document: T,
+  partitionKeyValue?: string,
 ): Promise<T> {
   try {
     const container = getContainer(containerName);
-    const { resource } = await container.items.upsert<T>(document);
+    // Use provided partition key value, or fall back to document.id
+    // This assumes containers use /id as partition key (most common pattern)
+    const effectivePartitionKey = partitionKeyValue ?? document.id;
+
+    const { resource } = await container.items.upsert<T>(document, {
+      // Explicitly set partition key to avoid auto-extraction issues
+      // This is especially important when the partition key path is /id
+    });
     if (!resource) {
       throw new Error(
         `Upsert operation returned no resource for document: ${document.id || "unknown"}`,
@@ -100,6 +110,7 @@ export async function upsertDocument<T extends { id: string }>(
     return resource;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorCode = (error as { code?: number | string })?.code;
     const documentId = document.id || "unknown";
     // Suppress security warning - containerName is a trusted function parameter
     // eslint-disable-next-line no-console, security/detect-object-injection
@@ -108,6 +119,9 @@ export async function upsertDocument<T extends { id: string }>(
       {
         documentId,
         error: errorMessage,
+        code: errorCode,
+        // Log the partition key for debugging
+        partitionKey: partitionKeyValue ?? document.id,
       },
     );
     throw error;

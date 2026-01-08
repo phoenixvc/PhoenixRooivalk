@@ -70,38 +70,54 @@ export function CommentSection({
 
   // Subscribe to real-time updates
   useEffect(() => {
-    if (!isCloudConfigured() || authLoading) {
+    if (!isCloudConfigured()) {
       setIsLoading(false);
+      return;
+    }
+
+    // Wait for auth to finish loading before subscribing
+    // This prevents 401 errors when token isn't ready yet
+    if (authLoading) {
       return;
     }
 
     setIsLoading(true);
 
-    // Subscribe to real-time updates
-    unsubscribeRef.current = subscribeToPageComments(
-      pageId,
-      user?.uid || null,
-      (updatedComments) => {
-        setComments(updatedComments);
-        setIsLoading(false);
-        // Clear optimistic comment if it's now in the real data
-        if (optimisticComment) {
-          const found = updatedComments.find(
-            (c) => c.id === optimisticComment.id,
-          );
-          if (found) {
-            setOptimisticComment(null);
+    // Small delay to ensure auth token is fully ready after sign-in
+    const subscribeWithDelay = () => {
+      // Subscribe to real-time updates
+      unsubscribeRef.current = subscribeToPageComments(
+        pageId,
+        user?.uid || null,
+        (updatedComments) => {
+          setComments(updatedComments);
+          setIsLoading(false);
+          // Clear optimistic comment if it's now in the real data
+          if (optimisticComment) {
+            const found = updatedComments.find(
+              (c) => c.id === optimisticComment.id,
+            );
+            if (found) {
+              setOptimisticComment(null);
+            }
           }
-        }
-      },
-      (error) => {
-        console.error("Failed to subscribe to comments:", error);
-        setIsLoading(false);
-      },
-    );
+        },
+        (error) => {
+          // Only log errors that aren't auth-related during sign-in
+          if (!error.message?.includes("Unauthorized")) {
+            console.error("Failed to subscribe to comments:", error);
+          }
+          setIsLoading(false);
+        },
+      );
+    };
+
+    // Give auth token a moment to be ready after state change
+    const timeoutId = setTimeout(subscribeWithDelay, 100);
 
     // Cleanup subscription on unmount or when dependencies change
     return () => {
+      clearTimeout(timeoutId);
       if (unsubscribeRef.current) {
         unsubscribeRef.current();
         unsubscribeRef.current = null;
