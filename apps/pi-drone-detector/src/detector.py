@@ -175,22 +175,11 @@ class DroneDetector:
             x2 = int((x_center + width / 2) * x_scale)
             y2 = int((y_center + height / 2) * y_scale)
 
-    def postprocess(
-        self,
-        outputs: np.ndarray,
-        x_scale: float,
-        y_scale: float,
-        orig_w: int = None,
-        orig_h: int = None,
-    ) -> List[Detection]:
-        ...
             # Clamp to image bounds
             x1 = max(0, x1)
             y1 = max(0, y1)
-            if orig_w is not None:
-                x2 = min(orig_w, max(0, x2))
-            if orig_h is not None:
-                y2 = min(orig_h, max(0, y2))
+            x2 = max(0, x2)
+            y2 = max(0, y2)
 
             # Calculate drone likelihood score with heuristics
             drone_score = self._calculate_drone_score(

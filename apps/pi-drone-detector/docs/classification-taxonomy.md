@@ -123,22 +123,22 @@ Add sub-classes for specific drone models, bird species, etc.
 
 ## Data Sources by Class
 
-| Class        | Primary Sources                            | Est. Available Images   |
-| ------------ | ------------------------------------------ | ----------------------- |
-| drone\_\*    | Drone-vs-Bird, Anti-UAV, Roboflow, MAV-VID | 10,000+                 |
-| bird\_\*     | Drone-vs-Bird, CUB-200, iNaturalist, eBird | 100,000+                |
-| aircraft\_\* | OpenImages, Flickr, PlaneSpotters          | 50,000+                 |
-| kite         | OpenImages, Flickr, custom                 | 5,000+                  |
-| balloon\_\*  | OpenImages, Flickr, custom                 | 10,000+                 |
-| lantern      | Flickr, YouTube frames, custom             | 2,000+                  |
-| rc_plane     | YouTube frames, RC forums, custom          | 3,000+                  |
-| ball         | COCO, OpenImages                           | 50,000+                 |
-| projectile   | COCO, OpenImages, sports datasets          | 10,000+                 |
-| debris\_\*   | Custom collection required                 | 1,000+ (need to create) |
-| insect       | iNaturalist, custom close-range shots      | 20,000+                 |
-| weather      | Custom, weather datasets                   | 5,000+                  |
-| artifact     | Custom, lens flare datasets                | 2,000+                  |
-| background   | Any sky images, ImageNet sky               | 100,000+                |
+| Class       | Primary Sources                   | Est. Images |
+| ----------- | --------------------------------- | ----------- |
+| drone\_\*   | Drone-vs-Bird, Anti-UAV, Roboflow | 10,000+     |
+| bird\_\*    | CUB-200, iNaturalist, eBird       | 100,000+    |
+| aircraft    | OpenImages, Flickr, PlaneSpotters | 50,000+     |
+| kite        | OpenImages, Flickr, custom        | 5,000+      |
+| balloon\_\* | OpenImages, Flickr, custom        | 10,000+     |
+| lantern     | Flickr, YouTube frames            | 2,000+      |
+| rc_plane    | YouTube frames, RC forums         | 3,000+      |
+| ball        | COCO, OpenImages                  | 50,000+     |
+| projectile  | COCO, OpenImages, sports          | 10,000+     |
+| debris\_\*  | Custom collection required        | 1,000+      |
+| insect      | iNaturalist, custom               | 20,000+     |
+| weather     | Custom, weather datasets          | 5,000+      |
+| artifact    | Custom, lens flare datasets       | 2,000+      |
+| background  | Any sky images, ImageNet          | 100,000+    |
 
 ---
 
@@ -158,7 +158,7 @@ Add sub-classes for specific drone models, bird species, etc.
 
 ### Phase 3: Hierarchical Classifier (Week 3+)
 
-```
+```text
 Input Image
     │
     ▼

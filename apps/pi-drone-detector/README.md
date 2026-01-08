@@ -1,6 +1,7 @@
 # Raspberry Pi Drone Detector
 
-Real-time drone detection system for Raspberry Pi, distinguishing drones from common objects like coke cans.
+Real-time drone detection system for Raspberry Pi, distinguishing drones
+from common objects like coke cans.
 
 Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
@@ -32,7 +33,8 @@ sudo raspi-config  # Interface Options > Camera > Enable
 ```bash
 # Download YOLOv5n and convert to TFLite
 pip install ultralytics
-python -c "from ultralytics import YOLO; YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
+python -c "from ultralytics import YOLO; \
+  YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
 cp yolov5n_int8.tflite models/
 ```
 
@@ -101,8 +103,9 @@ python download_datasets.py --output ../data
 # - Label with Roboflow (free): https://roboflow.com
 
 # 4. Upload to Azure
-az ml data create --name drone-dataset --path ../data/combined --type uri_folder \
-  --resource-group rg-drone-training --workspace-name mlw-drone-detection
+az ml data create --name drone-dataset --path ../data/combined \
+  --type uri_folder --resource-group rg-drone-training \
+  --workspace-name mlw-drone-detection
 
 # 5. Start training
 az ml job create --file job.yaml \

@@ -12,17 +12,15 @@ Usage:
     python download_public_datasets.py --output ./data --all
 """
 
-import os
 import sys
 import json
 import shutil
 import argparse
 import urllib.request
+import urllib.error
 import zipfile
-import tarfile
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import List, Dict, Set
+from typing import List, Dict
 
 
 # COCO class mapping to our taxonomy
@@ -226,7 +224,8 @@ def download_coco_subset(output_dir: Path, year: str = '2017') -> Path:
         if download_file(ann_url, ann_zip, "COCO annotations"):
             print("  Extracting annotations...")
             with zipfile.ZipFile(ann_zip, 'r') as zf:
-                zf.extractall(coco_dir)
+                for member in zf.namelist():
+                    zf.extract(member, coco_dir)
 
     print(f"  COCO ready at: {coco_dir}")
     print("  NOTE: Images will be downloaded on-demand during extraction")
@@ -453,7 +452,7 @@ def main():
     # Download COCO if requested
     if args.coco or args.all:
         if not args.skip_large:
-            coco_dir = download_coco_subset(output_dir)
+            download_coco_subset(output_dir)
             # Note: Actual image download requires more code
             print("  NOTE: Run with COCO images downloaded separately")
 

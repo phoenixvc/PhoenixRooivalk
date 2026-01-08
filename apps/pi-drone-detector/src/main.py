@@ -10,13 +10,10 @@ Usage:
 
 import argparse
 import sys
-import time
 import json
-from pathlib import Path
 from datetime import datetime
 
 import cv2
-import numpy as np
 
 from detector import DroneDetector, draw_detections
 

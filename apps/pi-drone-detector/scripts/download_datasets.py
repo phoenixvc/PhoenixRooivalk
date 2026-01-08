@@ -11,16 +11,13 @@ Usage:
     python download_datasets.py --output ./data --datasets drone-vs-bird usc
 """
 
-import os
 import sys
 import argparse
-import shutil
-import random
 import zipfile
 import tarfile
 from pathlib import Path
 from urllib.request import urlretrieve
-from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urlparse
 
 
 def download_file(url: str, dest: Path, desc: str = None) -> Path:
@@ -29,12 +26,17 @@ def download_file(url: str, dest: Path, desc: str = None) -> Path:
         print(f"  [SKIP] {desc or dest.name} already exists")
         return dest
 
+    # Validate URL scheme for security (prevent file:// and other schemes)
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https'):
+        raise ValueError(f"Invalid URL scheme: {parsed.scheme} - only http/https")
+
     print(f"  Downloading {desc or url}...")
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     def progress(count, block_size, total_size):
-        percent = int(count * block_size * 100 / total_size) if total_size > 0 else 0
-        sys.stdout.write(f"\r  Progress: {percent}%")
+        pct = int(count * block_size * 100 / total_size) if total_size > 0 else 0
+        sys.stdout.write(f"\r  Progress: {pct}%")
         sys.stdout.flush()
 
     urlretrieve(url, dest, reporthook=progress)
@@ -59,16 +61,22 @@ def extract_archive(archive: Path, dest: Path):
 
     if archive.suffix == '.zip':
         with zipfile.ZipFile(archive, 'r') as zf:
+            # Validate all paths first, then extract individually
             for member in zf.namelist():
                 if not _is_safe_path(dest, member):
                     raise ValueError(f"Unsafe path in archive: {member}")
-            zf.extractall(dest)
+            for member in zf.namelist():
+                zf.extract(member, dest)
     elif archive.suffix in ['.gz', '.tgz', '.tar']:
         with tarfile.open(archive, 'r:*') as tf:
+            # Validate all paths first, then extract individually
+            safe_members = []
             for member in tf.getmembers():
                 if not _is_safe_path(dest, member.name):
                     raise ValueError(f"Unsafe path in archive: {member.name}")
-            tf.extractall(dest)
+                safe_members.append(member)
+            for member in safe_members:
+                tf.extract(member, dest)
     else:
         raise ValueError(f"Unknown archive format: {archive.suffix}")
 
