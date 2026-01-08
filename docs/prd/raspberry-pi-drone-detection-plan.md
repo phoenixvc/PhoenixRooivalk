@@ -260,7 +260,7 @@ Links:
 
 ## Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    RASPBERRY PI                              │
 ├─────────────────────────────────────────────────────────────┤
@@ -283,7 +283,7 @@ Links:
 
 ### Day 1-2: Environment Setup & Model Selection
 
-#### Tasks
+#### Setup Tasks
 
 1. **Set up Raspberry Pi OS (64-bit)**
 
@@ -321,7 +321,7 @@ Links:
    python3 -c "import cv2; cap=cv2.VideoCapture(0); print(cap.read()[0])"
    ```
 
-#### Deliverable
+#### Setup Deliverable
 
 - Working Pi with camera capturing frames
 - TFLite runtime installed and tested
@@ -330,7 +330,7 @@ Links:
 
 ### Day 3-4: Model Integration & Basic Detection
 
-#### Tasks
+#### Integration Tasks
 
 1. **Download/convert YOLOv5n to TFLite**
 
@@ -374,7 +374,7 @@ Links:
    - Verify model produces bounding boxes
    - Measure inference time
 
-#### Deliverable
+#### Integration Deliverable
 
 - Detection script running on Pi
 - Baseline FPS measurement
@@ -432,7 +432,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    python export.py --weights runs/train/exp/weights/best.pt --include tflite
    ```
 
-#### Deliverable
+#### Classification Deliverable
 
 - Classification logic implemented
 - Drone vs coke can differentiation working
@@ -442,7 +442,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
 
 ### Day 7: Integration, Testing & Documentation
 
-#### Tasks
+#### Final Tasks
 
 1. **Create real-time detection loop**
 
@@ -497,7 +497,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    - Detection accuracy (TP, FP, TN, FN)
    - Known limitations
 
-#### Deliverable
+#### Final Deliverable
 
 - Working real-time detection system
 - Performance metrics documented

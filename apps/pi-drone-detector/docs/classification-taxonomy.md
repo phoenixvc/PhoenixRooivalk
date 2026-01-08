@@ -220,7 +220,7 @@ FPS: 8-15 on Pi 4, 15-25 on Pi 5
 
 ### For Edge Device with Coral (Accuracy Priority)
 
-```
+```text
 YOLOv5s/YOLOv8s
 ├── Input: 416x416
 ├── Binary head: drone confidence
