@@ -31,7 +31,8 @@ features, analytics, and Azure cloud integration.
 
 ### Configuration
 
-Environment variables are configured in Azure Static Web Apps and exposed via `docusaurus.config.ts`:
+Environment variables are configured in Azure Static Web Apps and exposed via
+`docusaurus.config.ts`:
 
 ```typescript
 // docusaurus.config.ts

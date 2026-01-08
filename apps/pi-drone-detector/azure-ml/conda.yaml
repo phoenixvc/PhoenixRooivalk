@@ -21,4 +21,4 @@ dependencies:
       - scipy>=1.10.0
       - onnx>=1.14.0
       - onnxruntime>=1.15.0
-      - tensorflow>=2.13.0  # For TFLite export
+      - tensorflow>=2.13.0 # For TFLite export

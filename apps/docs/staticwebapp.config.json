@@ -10,7 +10,12 @@
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/img/*", "/static/*", "/assets/*", "/*.{css,js,json,svg,png,jpg,jpeg,gif,ico,woff,woff2,ttf,eot}"]
+    "exclude": [
+      "/img/*",
+      "/static/*",
+      "/assets/*",
+      "/*.{css,js,json,svg,png,jpg,jpeg,gif,ico,woff,woff2,ttf,eot}"
+    ]
   },
   "responseOverrides": {
     "401": {

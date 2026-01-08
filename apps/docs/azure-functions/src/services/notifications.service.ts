@@ -54,8 +54,7 @@ interface EmailNotification {
 /**
  * Base URL for article links
  */
-const BASE_URL =
-  process.env.BASE_URL || process.env.DOCS_URL || "";
+const BASE_URL = process.env.BASE_URL || process.env.DOCS_URL || "";
 
 /**
  * Notifications Service class

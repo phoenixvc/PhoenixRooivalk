@@ -366,14 +366,11 @@ export class AzureMessagingService implements IMessagingService {
   private async unregisterFromHub(token: string): Promise<void> {
     if (!this.config?.functionsBaseUrl) return;
 
-    await fetch(
-      `${this.getBaseUrl()}/api/notifications/unregister`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      },
-    );
+    await fetch(`${this.getBaseUrl()}/api/notifications/unregister`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
   }
 
   private urlBase64ToUint8Array(base64String: string): Uint8Array {

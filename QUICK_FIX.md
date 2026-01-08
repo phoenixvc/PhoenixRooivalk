@@ -16,9 +16,11 @@
 
 ### Fix 1: COOP Error (OAuth Popup Blocked)
 
-**Already Fixed** ✅ - The COOP header has been removed from `staticwebapp.config.json`
+**Already Fixed** ✅ - The COOP header has been removed from
+`staticwebapp.config.json`
 
 **Verify the fix:**
+
 ```bash
 # Should NOT contain "Cross-Origin-Opener-Policy"
 grep "Cross-Origin-Opener-Policy" apps/docs/staticwebapp.config.json
@@ -28,6 +30,7 @@ grep "Cross-Origin-Opener-Policy" apps/docs/staticwebapp.config.json
 ```
 
 **Clear cache and test:**
+
 ```bash
 # 1. Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
 # 2. Test login at: https://docs.phoenixrooivalk.com
@@ -38,6 +41,7 @@ grep "Cross-Origin-Opener-Policy" apps/docs/staticwebapp.config.json
 ### Fix 2: Cosmos DB Connection Error (500 from /api/cosmos/setDocument)
 
 **One-line fix:**
+
 ```bash
 # Replace <placeholders> with your actual values
 az functionapp config appsettings set \
@@ -47,6 +51,7 @@ az functionapp config appsettings set \
 ```
 
 **Step-by-step fix:**
+
 ```bash
 # 1. Get Cosmos DB connection string
 COSMOS_CONNECTION=$(az cosmosdb keys list \
@@ -99,7 +104,8 @@ curl -I https://docs.phoenixrooivalk.com | grep -i "cross-origin"
 
 ## 🧪 End-to-End Test
 
-1. **Clear browser cache**: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac)
+1. **Clear browser cache**: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R`
+   (Mac)
 2. **Open docs site**: https://docs.phoenixrooivalk.com
 3. **Open DevTools Console**: F12
 4. **Click "Sign In"**
@@ -164,23 +170,28 @@ curl -I https://docs.phoenixrooivalk.com | grep -i "cross-origin"
 ## 🔗 Full Documentation
 
 - **Comprehensive Fix Guide**: [FIX_GUIDE.md](./FIX_GUIDE.md)
-- **Troubleshooting**: [apps/docs/azure-functions/TROUBLESHOOTING.md](./apps/docs/azure-functions/TROUBLESHOOTING.md)
-- **Deployment Guide**: [apps/docs/azure-functions/DEPLOYMENT_GUIDE.md](./apps/docs/azure-functions/DEPLOYMENT_GUIDE.md)
+- **Troubleshooting**:
+  [apps/docs/azure-functions/TROUBLESHOOTING.md](./apps/docs/azure-functions/TROUBLESHOOTING.md)
+- **Deployment Guide**:
+  [apps/docs/azure-functions/DEPLOYMENT_GUIDE.md](./apps/docs/azure-functions/DEPLOYMENT_GUIDE.md)
 - **CORS Fix History**: [CORS_LOGIN_FIX.md](./CORS_LOGIN_FIX.md)
 
 ## 💡 Pro Tips
 
 1. **Always run diagnostics first**:
+
    ```bash
    ./scripts/diagnose-azure-functions.sh <app-name> <rg>
    ```
 
 2. **Use validation before deployment**:
+
    ```bash
    ./scripts/validate-deployment-config.sh
    ```
 
 3. **Monitor health endpoint after changes**:
+
    ```bash
    watch -n 5 'curl -s https://<app>.azurewebsites.net/api/health/ready | jq'
    ```
@@ -195,11 +206,13 @@ curl -I https://docs.phoenixrooivalk.com | grep -i "cross-origin"
 If the quick fixes don't resolve your issue:
 
 1. Run full diagnostics and save output:
+
    ```bash
    ./scripts/diagnose-azure-functions.sh <app> <rg> > diagnostics.txt
    ```
 
 2. Check detailed logs:
+
    ```bash
    az functionapp log tail --name <app> --resource-group <rg>
    ```

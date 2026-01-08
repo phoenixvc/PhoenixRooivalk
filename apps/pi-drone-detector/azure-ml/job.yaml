@@ -14,13 +14,9 @@ code: .
 
 # Training command
 command: >-
-  pip install ultralytics opencv-python-headless &&
-  python train.py
-  --data ${{inputs.dataset}}/dataset.yaml
-  --epochs ${{inputs.epochs}}
-  --imgsz ${{inputs.imgsz}}
-  --batch ${{inputs.batch}}
-  --output ${{outputs.model}}
+  pip install ultralytics opencv-python-headless && python train.py --data
+  ${{inputs.dataset}}/dataset.yaml --epochs ${{inputs.epochs}} --imgsz
+  ${{inputs.imgsz}} --batch ${{inputs.batch}} --output ${{outputs.model}}
   --device 0
 
 # Input datasets

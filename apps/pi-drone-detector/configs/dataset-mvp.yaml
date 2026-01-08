@@ -8,32 +8,32 @@ test: images/test
 
 nc: 10
 names:
-  0: drone           # All drones (multirotor, fixed-wing, racing, toy)
-  1: bird_small      # Small birds (<40cm wingspan)
-  2: bird_large      # Large birds + flocks (>40cm wingspan)
-  3: aircraft        # All manned aircraft (planes, helis, gliders, balloons)
-  4: recreational    # Kites, party balloons, weather balloons, RC, lanterns
-  5: sports          # Balls, frisbees, projectiles
-  6: debris          # Plastic bags, paper, leaves, seeds, feathers
-  7: insect          # Flying insects close to camera
-  8: atmospheric     # Weather (rain/snow), lens artifacts
-  9: background      # Sky, clouds, nothing detected
+  0: drone # All drones (multirotor, fixed-wing, racing, toy)
+  1: bird_small # Small birds (<40cm wingspan)
+  2: bird_large # Large birds + flocks (>40cm wingspan)
+  3: aircraft # All manned aircraft (planes, helis, gliders, balloons)
+  4: recreational # Kites, party balloons, weather balloons, RC, lanterns
+  5: sports # Balls, frisbees, projectiles
+  6: debris # Plastic bags, paper, leaves, seeds, feathers
+  7: insect # Flying insects close to camera
+  8: atmospheric # Weather (rain/snow), lens artifacts
+  9: background # Sky, clouds, nothing detected
 
 # Mapping from MVP classes to full taxonomy (for future upgrade)
 full_taxonomy_mapping:
-  0: [0, 1, 2, 3, 4]      # drone -> drone_*
-  1: [5, 6]               # bird_small -> bird_tiny, bird_small
-  2: [7, 8, 9]            # bird_large -> bird_medium, bird_large, bird_flock
-  3: [10, 11, 12, 13]     # aircraft -> aircraft_*
+  0: [0, 1, 2, 3, 4] # drone -> drone_*
+  1: [5, 6] # bird_small -> bird_tiny, bird_small
+  2: [7, 8, 9] # bird_large -> bird_medium, bird_large, bird_flock
+  3: [10, 11, 12, 13] # aircraft -> aircraft_*
   4: [14, 15, 16, 17, 18] # recreational -> kite, balloon_*, lantern, rc_plane
-  5: [19, 20]             # sports -> ball, projectile
-  6: [21, 22]             # debris -> debris_light, debris_organic
-  7: [23]                 # insect -> insect
-  8: [24, 25]             # atmospheric -> weather, artifact
-  9: [26]                 # background -> background
+  5: [19, 20] # sports -> ball, projectile
+  6: [21, 22] # debris -> debris_light, debris_organic
+  7: [23] # insect -> insect
+  8: [24, 25] # atmospheric -> weather, artifact
+  9: [26] # background -> background
 
 # Alert classes
 alert_classes: [0]
 
 # Critical non-alert classes
-critical_non_alert: [3]  # Manned aircraft
+critical_non_alert: [3] # Manned aircraft

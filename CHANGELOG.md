@@ -11,16 +11,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Infrastructure
 
-- **BREAKING**: Remove all Netlify references - project now deploys exclusively to Azure Static Web Apps
+- **BREAKING**: Remove all Netlify references - project now deploys exclusively
+  to Azure Static Web Apps
   - Removed Netlify badges and deployment status from README.md
   - Deleted `apps/docs/netlify.toml` configuration file
-  - Updated all hardcoded `netlify.app` URLs to use environment variables or placeholders
-  - Updated marketing site metadata to use `NEXT_PUBLIC_SITE_URL` environment variable
-  - Updated docs site to use `DOCS_URL` and `MARKETING_URL` environment variables
-  - Updated Analytics component to use `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` environment variable
-  - Removed Netlify form attributes from contact page (data-netlify, netlify-honeypot)
+  - Updated all hardcoded `netlify.app` URLs to use environment variables or
+    placeholders
+  - Updated marketing site metadata to use `NEXT_PUBLIC_SITE_URL` environment
+    variable
+  - Updated docs site to use `DOCS_URL` and `MARKETING_URL` environment
+    variables
+  - Updated Analytics component to use `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`
+    environment variable
+  - Removed Netlify form attributes from contact page (data-netlify,
+    netlify-honeypot)
   - Updated sitemap.xml and robots.txt to use placeholder URLs
-  - Updated _redirects file with Azure Static Web Apps note
+  - Updated \_redirects file with Azure Static Web Apps note
   - Updated pitch deck to reference Azure deployment
   - Updated documentation to reflect Azure-only deployment
 

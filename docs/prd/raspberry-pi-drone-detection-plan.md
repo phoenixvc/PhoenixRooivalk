@@ -2,35 +2,40 @@
 
 ## Executive Summary
 
-This plan outlines a **minimal viable drone detection system** that can distinguish drones from common objects (like coke cans) on a Raspberry Pi within one week. This is a scaled-down proof-of-concept aligned with the broader PhoenixRooivalk platform.
+This plan outlines a **minimal viable drone detection system** that can
+distinguish drones from common objects (like coke cans) on a Raspberry Pi within
+one week. This is a scaled-down proof-of-concept aligned with the broader
+PhoenixRooivalk platform.
 
 ---
 
 ## Constraints & Realities
 
-| Factor | Full PhoenixRooivalk | This Project |
-|--------|---------------------|--------------|
-| **Hardware** | Jetson AGX Orin (275 TOPS) | Raspberry Pi 4/5 (~13 TOPS max) |
-| **Timeline** | Production system | 1 week MVP |
-| **Detection** | Multi-modal sensor fusion | Single camera only |
-| **Model** | YOLOv9 @ 30+ FPS | YOLOv5n/YOLOv8n @ 5-15 FPS |
-| **Range** | 500m - 2km | 10-50m (visual) |
+| Factor        | Full PhoenixRooivalk       | This Project                    |
+| ------------- | -------------------------- | ------------------------------- |
+| **Hardware**  | Jetson AGX Orin (275 TOPS) | Raspberry Pi 4/5 (~13 TOPS max) |
+| **Timeline**  | Production system          | 1 week MVP                      |
+| **Detection** | Multi-modal sensor fusion  | Single camera only              |
+| **Model**     | YOLOv9 @ 30+ FPS           | YOLOv5n/YOLOv8n @ 5-15 FPS      |
+| **Range**     | 500m - 2km                 | 10-50m (visual)                 |
 
 ---
 
 ## Azure ML Fine-Tuning Guide
 
-Fine-tuning YOLOv5 on Azure Machine Learning gives you better accuracy than heuristics alone. Here's how to set it up:
+Fine-tuning YOLOv5 on Azure Machine Learning gives you better accuracy than
+heuristics alone. Here's how to set it up:
 
 ### Cost Estimate
 
-| Resource | Config | Cost/Hour | Training Time | Total |
-|----------|--------|-----------|---------------|-------|
-| **NC6s_v3** | 1x V100 (16GB) | ~$3.06 | 2-4 hours | ~$6-12 |
-| **NC4as_T4_v3** | 1x T4 (16GB) | ~$0.53 | 4-6 hours | ~$2-4 |
-| **Standard_NC24ads_A100_v4** | 1x A100 (80GB) | ~$3.67 | 1-2 hours | ~$4-7 |
+| Resource                     | Config         | Cost/Hour | Training Time | Total  |
+| ---------------------------- | -------------- | --------- | ------------- | ------ |
+| **NC6s_v3**                  | 1x V100 (16GB) | ~$3.06    | 2-4 hours     | ~$6-12 |
+| **NC4as_T4_v3**              | 1x T4 (16GB)   | ~$0.53    | 4-6 hours     | ~$2-4  |
+| **Standard_NC24ads_A100_v4** | 1x A100 (80GB) | ~$3.67    | 1-2 hours     | ~$4-7  |
 
-**Recommended**: `NC4as_T4_v3` - Best cost/performance for small dataset fine-tuning (~$3-5 total)
+**Recommended**: `NC4as_T4_v3` - Best cost/performance for small dataset
+fine-tuning (~$3-5 total)
 
 ### Quick Setup (Azure CLI)
 
@@ -83,13 +88,14 @@ drone-dataset/
 ```
 
 **dataset.yaml:**
+
 ```yaml
 path: /mnt/data/drone-dataset
 train: images/train
 val: images/val
 
-nc: 2  # number of classes
-names: ['drone', 'not_drone']  # class names
+nc: 2 # number of classes
+names: ["drone", "not_drone"] # class names
 ```
 
 ### Training Script (train_azure.py)
@@ -144,13 +150,9 @@ if __name__ == '__main__':
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 code: ./src
 command: >-
-  pip install ultralytics &&
-  python train_azure.py
-  --data ${{inputs.dataset}}/dataset.yaml
-  --epochs 50
-  --imgsz 320
-  --batch 16
-  --output ${{outputs.model}}
+  pip install ultralytics && python train_azure.py --data
+  ${{inputs.dataset}}/dataset.yaml --epochs 50 --imgsz 320 --batch 16 --output
+  ${{outputs.model}}
 inputs:
   dataset:
     type: uri_folder
@@ -223,24 +225,26 @@ If you need to label images:
 
 ### Quick Dataset Sources
 
-| Dataset | Images | Notes |
-|---------|--------|-------|
-| [Drone-vs-Bird](https://github.com/wosdetc/drone-vs-bird) | 2,000+ | Video frames, good variety |
-| [Anti-UAV](https://anti-uav.github.io/) | 300+ videos | Thermal + RGB |
-| [USC Drone Dataset](https://data.mendeley.com/datasets/zcsj2g2m4c/4) | 2,600+ | Labeled drones |
-| DIY: Record coke cans | 200+ | Hold can at various distances/angles |
+| Dataset                                                              | Images      | Notes                                |
+| -------------------------------------------------------------------- | ----------- | ------------------------------------ |
+| [Drone-vs-Bird](https://github.com/wosdetc/drone-vs-bird)            | 2,000+      | Video frames, good variety           |
+| [Anti-UAV](https://anti-uav.github.io/)                              | 300+ videos | Thermal + RGB                        |
+| [USC Drone Dataset](https://data.mendeley.com/datasets/zcsj2g2m4c/4) | 2,600+      | Labeled drones                       |
+| DIY: Record coke cans                                                | 200+        | Hold can at various distances/angles |
 
 ---
 
 ## Recommended Hardware
 
 ### Minimum (Budget ~$75-100)
+
 - **Raspberry Pi 4 (4GB)** - Already owned?
 - **Pi Camera Module v2** or USB webcam (1080p)
 - **32GB microSD** (Class 10 or better)
 - **5V 3A Power Supply**
 
 ### Recommended (Budget ~$150-200)
+
 - **Raspberry Pi 5 (8GB)** - 2-3x faster inference
 - **Pi Camera Module 3** (HDR, autofocus)
 - **Coral USB Accelerator** - 4 TOPS edge TPU (+$60, 10x speedup)
@@ -274,7 +278,9 @@ If you need to label images:
 ### Day 1-2: Environment Setup & Model Selection
 
 #### Tasks
+
 1. **Set up Raspberry Pi OS (64-bit)**
+
    ```bash
    # Flash Raspberry Pi OS Lite (64-bit) for better performance
    # Enable camera interface
@@ -282,6 +288,7 @@ If you need to label images:
    ```
 
 2. **Install dependencies**
+
    ```bash
    sudo apt update && sudo apt upgrade -y
    sudo apt install -y python3-pip python3-opencv libatlas-base-dev
@@ -291,12 +298,12 @@ If you need to label images:
 
 3. **Select and download pre-trained model**
 
-   | Model | Size | Pi 4 FPS | Pi 5 FPS | Accuracy |
-   |-------|------|----------|----------|----------|
-   | YOLOv5n | 3.9MB | ~5-8 | ~12-15 | Good |
-   | YOLOv8n | 6.3MB | ~4-6 | ~10-12 | Better |
-   | MobileNet-SSD | 4.3MB | ~8-12 | ~15-20 | Moderate |
-   | EfficientDet-Lite0 | 4.4MB | ~6-10 | ~12-18 | Good |
+   | Model              | Size  | Pi 4 FPS | Pi 5 FPS | Accuracy |
+   | ------------------ | ----- | -------- | -------- | -------- |
+   | YOLOv5n            | 3.9MB | ~5-8     | ~12-15   | Good     |
+   | YOLOv8n            | 6.3MB | ~4-6     | ~10-12   | Better   |
+   | MobileNet-SSD      | 4.3MB | ~8-12    | ~15-20   | Moderate |
+   | EfficientDet-Lite0 | 4.4MB | ~6-10    | ~12-18   | Good     |
 
    **Recommendation**: Start with **YOLOv5n** (TFLite quantized) - best balance
 
@@ -308,6 +315,7 @@ If you need to label images:
    ```
 
 #### Deliverable
+
 - Working Pi with camera capturing frames
 - TFLite runtime installed and tested
 
@@ -316,7 +324,9 @@ If you need to label images:
 ### Day 3-4: Model Integration & Basic Detection
 
 #### Tasks
+
 1. **Download/convert YOLOv5n to TFLite**
+
    ```bash
    # Option 1: Use pre-converted model
    wget https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5n.pt
@@ -327,6 +337,7 @@ If you need to label images:
    ```
 
 2. **Create basic detection script**
+
    ```python
    # detector.py - Basic structure
    import cv2
@@ -357,6 +368,7 @@ If you need to label images:
    - Measure inference time
 
 #### Deliverable
+
 - Detection script running on Pi
 - Baseline FPS measurement
 - Detection working on test images
@@ -366,9 +378,11 @@ If you need to label images:
 ### Day 5-6: Drone vs Non-Drone Classification
 
 #### Challenge
+
 Standard COCO-trained models don't have a "drone" class. Options:
 
 #### Option A: Use Existing Classes + Heuristics (Fastest - Recommended for 1 week)
+
 ```python
 # Drones often detected as: 'bird', 'airplane', 'kite', 'frisbee'
 DRONE_LIKE_CLASSES = ['bird', 'airplane', 'kite']
@@ -392,6 +406,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
 ```
 
 #### Option B: Fine-tune on Drone Dataset (Better accuracy, more time)
+
 1. **Dataset sources**:
    - [Drone-vs-Bird Dataset](https://github.com/wosdetc/drone-vs-bird)
    - [Anti-UAV Dataset](https://anti-uav.github.io/)
@@ -399,6 +414,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    - Custom: Collect 200-500 images of drones + 200-500 of coke cans/bottles
 
 2. **Quick fine-tuning** (on separate GPU machine, not Pi):
+
    ```bash
    # Using YOLOv5
    git clone https://github.com/ultralytics/yolov5
@@ -410,6 +426,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    ```
 
 #### Deliverable
+
 - Classification logic implemented
 - Drone vs coke can differentiation working
 - Accuracy metrics documented
@@ -419,7 +436,9 @@ def classify(detection, class_name, bbox, aspect_ratio):
 ### Day 7: Integration, Testing & Documentation
 
 #### Tasks
+
 1. **Create real-time detection loop**
+
    ```python
    # main.py
    import cv2
@@ -449,6 +468,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    ```
 
 2. **Performance optimization**
+
    ```python
    # Key optimizations for Raspberry Pi
    - Use threading for camera capture (separate thread)
@@ -471,6 +491,7 @@ def classify(detection, class_name, bbox, aspect_ratio):
    - Known limitations
 
 #### Deliverable
+
 - Working real-time detection system
 - Performance metrics documented
 - README with usage instructions
@@ -479,16 +500,17 @@ def classify(detection, class_name, bbox, aspect_ratio):
 
 ## Key Differentiators: Drone vs Coke Can
 
-| Feature | Drone | Coke Can |
-|---------|-------|----------|
-| **Aspect Ratio** | ~1.0-2.5 (wider) | ~0.3-0.4 (tall/thin) |
-| **Motion** | Complex (hover, lateral) | Simple (fall, roll) |
-| **Size @ Distance** | Decreases predictably | Very small quickly |
-| **Symmetry** | High (rotors) | Cylindrical |
-| **Color Pattern** | Often multi-color | Red/silver uniform |
-| **Edge Sharpness** | Sharp propeller edges | Smooth curves |
+| Feature             | Drone                    | Coke Can             |
+| ------------------- | ------------------------ | -------------------- |
+| **Aspect Ratio**    | ~1.0-2.5 (wider)         | ~0.3-0.4 (tall/thin) |
+| **Motion**          | Complex (hover, lateral) | Simple (fall, roll)  |
+| **Size @ Distance** | Decreases predictably    | Very small quickly   |
+| **Symmetry**        | High (rotors)            | Cylindrical          |
+| **Color Pattern**   | Often multi-color        | Red/silver uniform   |
+| **Edge Sharpness**  | Sharp propeller edges    | Smooth curves        |
 
 ### Heuristic Scoring Function
+
 ```python
 def drone_likelihood_score(detection):
     score = 0.0
@@ -522,14 +544,15 @@ def drone_likelihood_score(detection):
 
 ## Performance Expectations
 
-| Configuration | Expected FPS | Detection Range | Accuracy |
-|--------------|--------------|-----------------|----------|
-| Pi 4 + YOLOv5n (320x320) | 5-8 FPS | 5-30m | ~70-80% |
-| Pi 4 + Coral USB | 15-25 FPS | 5-30m | ~70-80% |
-| Pi 5 + YOLOv5n (320x320) | 12-18 FPS | 5-30m | ~70-80% |
-| Pi 5 + Coral USB | 30-40 FPS | 5-30m | ~70-80% |
+| Configuration            | Expected FPS | Detection Range | Accuracy |
+| ------------------------ | ------------ | --------------- | -------- |
+| Pi 4 + YOLOv5n (320x320) | 5-8 FPS      | 5-30m           | ~70-80%  |
+| Pi 4 + Coral USB         | 15-25 FPS    | 5-30m           | ~70-80%  |
+| Pi 5 + YOLOv5n (320x320) | 12-18 FPS    | 5-30m           | ~70-80%  |
+| Pi 5 + Coral USB         | 30-40 FPS    | 5-30m           | ~70-80%  |
 
-**Note**: Accuracy depends heavily on whether you fine-tune on drone data or use heuristics.
+**Note**: Accuracy depends heavily on whether you fine-tune on drone data or use
+heuristics.
 
 ---
 
@@ -559,13 +582,13 @@ python main.py
 
 ## Risk Mitigation
 
-| Risk | Mitigation |
-|------|------------|
-| Pi too slow | Use Coral USB Accelerator or Pi 5 |
-| Poor drone detection | Fine-tune model on drone dataset |
-| False positives on birds | Add motion tracking (drones hover) |
-| Lighting variations | Use camera with HDR or auto-exposure |
-| Model too large | Use MobileNet-SSD instead |
+| Risk                     | Mitigation                           |
+| ------------------------ | ------------------------------------ |
+| Pi too slow              | Use Coral USB Accelerator or Pi 5    |
+| Poor drone detection     | Fine-tune model on drone dataset     |
+| False positives on birds | Add motion tracking (drones hover)   |
+| Lighting variations      | Use camera with HDR or auto-exposure |
+| Model too large          | Use MobileNet-SSD instead            |
 
 ---
 
@@ -582,7 +605,8 @@ python main.py
 
 ## Integration with PhoenixRooivalk
 
-This MVP can serve as a **low-cost edge sensor node** feeding into the larger system:
+This MVP can serve as a **low-cost edge sensor node** feeding into the larger
+system:
 
 ```
 Pi Detector ──► MQTT/HTTP ──► PhoenixRooivalk API ──► Evidence System
@@ -593,6 +617,7 @@ Pi Detector ──► MQTT/HTTP ──► PhoenixRooivalk API ──► Evidence
 ```
 
 The detection events from the Pi can be formatted as:
+
 ```json
 {
   "timestamp": "2026-01-07T12:00:00Z",
@@ -632,5 +657,5 @@ The detection events from the Pi can be formatted as:
 
 ---
 
-*Document created: 2026-01-07*
-*Project: PhoenixRooivalk - Raspberry Pi Drone Detection MVP*
+_Document created: 2026-01-07_ _Project: PhoenixRooivalk - Raspberry Pi Drone
+Detection MVP_

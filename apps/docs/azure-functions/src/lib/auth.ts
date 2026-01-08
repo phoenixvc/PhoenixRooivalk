@@ -74,7 +74,7 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
       });
       const [, payload] = token.split(".");
       return JSON.parse(
-        Buffer.from(payload, "base64url").toString()
+        Buffer.from(payload, "base64url").toString(),
       ) as TokenClaims;
     }
 
@@ -113,7 +113,8 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
  */
 function getEmailFromClaims(claims: TokenClaims): string | null {
   if (claims.email) return claims.email;
-  if (claims.preferred_username?.includes("@")) return claims.preferred_username;
+  if (claims.preferred_username?.includes("@"))
+    return claims.preferred_username;
   if (claims.upn?.includes("@")) return claims.upn;
   return null;
 }
@@ -122,7 +123,7 @@ function getEmailFromClaims(claims: TokenClaims): string | null {
  * Extract user ID from request (from validated token)
  */
 export async function getUserIdFromRequest(
-  request: HttpRequest
+  request: HttpRequest,
 ): Promise<string | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -139,7 +140,7 @@ export async function getUserIdFromRequest(
  * Get token claims from request (validated)
  */
 export async function getTokenClaims(
-  request: HttpRequest
+  request: HttpRequest,
 ): Promise<TokenClaims | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {

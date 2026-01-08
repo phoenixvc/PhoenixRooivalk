@@ -33,11 +33,14 @@ jobs:
           HAS_SWA_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN != '' }}
           HAS_FUNCTIONS_PROFILE: ${{ secrets.AZURE_CREDENTIALS != '' }}
           HAS_FUNCTIONAPP_NAME_VAR: ${{ vars.AZURE_FUNCTIONAPP_NAME != '' }}
-          HAS_FUNCTIONAPP_NAME_SECRET: ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}
+          HAS_FUNCTIONAPP_NAME_SECRET:
+            ${{ secrets.AZURE_FUNCTIONAPP_NAME != '' }}
           FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
           IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' }}
           HAS_ENTRA_TENANT: ${{ secrets.AZURE_ENTRA_TENANT_ID != '' }}
-          HAS_FUNCTIONS_BASE_URL: ${{ vars.AZURE_FUNCTIONS_BASE_URL != '' || secrets.AZURE_FUNCTIONS_BASE_URL != '' }}
+          HAS_FUNCTIONS_BASE_URL:
+            ${{ vars.AZURE_FUNCTIONS_BASE_URL != '' ||
+            secrets.AZURE_FUNCTIONS_BASE_URL != '' }}
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "🔍 Checking Azure Infrastructure Prerequisites"
@@ -291,8 +294,8 @@ jobs:
   deploy-functions:
     needs: [check-secrets, build-and-deploy]
     if:
-      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
-      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      && github.ref == 'refs/heads/main' &&
       needs.check-secrets.outputs.has-functions-profile == 'true'
     runs-on: ubuntu-latest
     name: Deploy Azure Functions

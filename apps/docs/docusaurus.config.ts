@@ -73,7 +73,10 @@ const config: Config = {
   title: "Phoenix Rooivalk Documentation",
   tagline: "Autonomous Counter-UAS Defense Platform",
   favicon: "img/favicon.svg",
-  url: process.env.DOCS_URL || process.env.NEXT_PUBLIC_DOCS_URL || "https://localhost:3000",
+  url:
+    process.env.DOCS_URL ||
+    process.env.NEXT_PUBLIC_DOCS_URL ||
+    "https://localhost:3000",
   baseUrl: "/",
   organizationName: "JustAGhosT",
   projectName: "PhoenixRooivalk",

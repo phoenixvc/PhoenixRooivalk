@@ -10,13 +10,18 @@
  * - Content summarization
  */
 
-import { getFunctionsService, getAuthService, isCloudConfigured } from "./cloud";
+import {
+  getFunctionsService,
+  getAuthService,
+  isCloudConfigured,
+} from "./cloud";
 import { AzureFunctionsService } from "./cloud/azure/functions";
 
 // Debug flag - enable for development debugging
-const DEBUG_AI = typeof window !== "undefined" &&
+const DEBUG_AI =
+  typeof window !== "undefined" &&
   (localStorage.getItem("phoenix-debug-ai") === "true" ||
-   window.location.search.includes("debug-ai"));
+    window.location.search.includes("debug-ai"));
 
 // Types for AI responses
 export interface CompetitorAnalysisResult {
@@ -262,10 +267,15 @@ class AIService {
         functionName,
         data,
       );
-      this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
+      this.log(
+        `Function ${functionName} completed in ${Date.now() - startTime}ms`,
+      );
       return result;
     } catch (error) {
-      this.logError(`Function ${functionName} failed after ${Date.now() - startTime}ms`, error);
+      this.logError(
+        `Function ${functionName} failed after ${Date.now() - startTime}ms`,
+        error,
+      );
       throw error;
     }
   }
@@ -284,7 +294,10 @@ class AIService {
       // Ensure we have a valid auth token
       const token = await this.ensureAuthToken();
       if (!token) {
-        throw new AIError("Please sign in to use AI features", "unauthenticated");
+        throw new AIError(
+          "Please sign in to use AI features",
+          "unauthenticated",
+        );
       }
 
       const functionsService = getFunctionsService();
@@ -294,10 +307,15 @@ class AIService {
         Record<string, unknown>,
         T
       >(functionName, data);
-      this.log(`Function ${functionName} completed in ${Date.now() - startTime}ms`);
+      this.log(
+        `Function ${functionName} completed in ${Date.now() - startTime}ms`,
+      );
       return result;
     } catch (error) {
-      this.logError(`Function ${functionName} failed after ${Date.now() - startTime}ms`, error);
+      this.logError(
+        `Function ${functionName} failed after ${Date.now() - startTime}ms`,
+        error,
+      );
       throw error;
     }
   }
@@ -449,10 +467,13 @@ class AIService {
     }
 
     try {
-      return await this.callFunctionAuthenticated<SummaryResult>("summarizeContent", {
-        content,
-        maxLength,
-      });
+      return await this.callFunctionAuthenticated<SummaryResult>(
+        "summarizeContent",
+        {
+          content,
+          maxLength,
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -471,10 +492,10 @@ class AIService {
     }
 
     try {
-      return await this.callFunctionAuthenticated<{ success: boolean; status: string }>(
-        "reviewDocumentImprovement",
-        { suggestionId, status, notes },
-      );
+      return await this.callFunctionAuthenticated<{
+        success: boolean;
+        status: string;
+      }>("reviewDocumentImprovement", { suggestionId, status, notes });
     } catch (error) {
       this.handleError(error);
     }
@@ -491,10 +512,9 @@ class AIService {
     }
 
     try {
-      return await this.callFunctionAuthenticated<{ suggestions: PendingImprovement[] }>(
-        "getPendingImprovements",
-        { limit },
-      );
+      return await this.callFunctionAuthenticated<{
+        suggestions: PendingImprovement[];
+      }>("getPendingImprovements", { limit });
     } catch (error) {
       this.handleError(error);
     }
@@ -519,12 +539,15 @@ class AIService {
 
     try {
       // Use authenticated call since backend requires auth
-      return await this.callFunctionAuthenticated<RAGResponse>("askDocumentation", {
-        question,
-        category: options?.category,
-        format: options?.format,
-        history: options?.history,
-      });
+      return await this.callFunctionAuthenticated<RAGResponse>(
+        "askDocumentation",
+        {
+          question,
+          category: options?.category,
+          format: options?.format,
+          history: options?.history,
+        },
+      );
     } catch (error) {
       this.logError("askDocumentation failed", error);
       this.handleError(error);
@@ -590,7 +613,10 @@ class AIService {
     }
 
     try {
-      return await this.callFunctionAuthenticated<IndexStats>("getIndexStats", {});
+      return await this.callFunctionAuthenticated<IndexStats>(
+        "getIndexStats",
+        {},
+      );
     } catch (error) {
       this.handleError(error);
     }
@@ -610,11 +636,14 @@ class AIService {
     }
 
     try {
-      return await this.callFunctionAuthenticated<FunFactsResult>("researchPerson", {
-        firstName,
-        lastName,
-        linkedInUrl,
-      });
+      return await this.callFunctionAuthenticated<FunFactsResult>(
+        "researchPerson",
+        {
+          firstName,
+          lastName,
+          linkedInUrl,
+        },
+      );
     } catch (error) {
       this.handleError(error);
     }

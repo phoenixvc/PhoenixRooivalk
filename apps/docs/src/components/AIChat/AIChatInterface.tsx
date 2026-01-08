@@ -172,9 +172,14 @@ export function AIChatInterface({
           if (err.code === "unauthenticated") {
             guidance = "\n\nPlease sign in to use the AI assistant.";
           } else if (err.code === "resource-exhausted") {
-            guidance = "\n\nYou've reached the rate limit. Please wait a moment and try again.";
-          } else if (err.code === "unavailable" || err.code === "failed-precondition") {
-            guidance = "\n\nThe AI service is not configured. Contact your administrator.";
+            guidance =
+              "\n\nYou've reached the rate limit. Please wait a moment and try again.";
+          } else if (
+            err.code === "unavailable" ||
+            err.code === "failed-precondition"
+          ) {
+            guidance =
+              "\n\nThe AI service is not configured. Contact your administrator.";
           }
         }
 
@@ -333,10 +338,14 @@ export function AIChatInterface({
                       </div>
                       {message.loadingStatus && (
                         <span className="ai-chat__typing-status">
-                          {message.loadingStatus === "authenticating" && "Authenticating..."}
-                          {message.loadingStatus === "sending" && "Sending request..."}
-                          {message.loadingStatus === "thinking" && "AI is thinking..."}
-                          {message.loadingStatus === "generating" && "Generating response..."}
+                          {message.loadingStatus === "authenticating" &&
+                            "Authenticating..."}
+                          {message.loadingStatus === "sending" &&
+                            "Sending request..."}
+                          {message.loadingStatus === "thinking" &&
+                            "AI is thinking..."}
+                          {message.loadingStatus === "generating" &&
+                            "Generating response..."}
                         </span>
                       )}
                     </div>

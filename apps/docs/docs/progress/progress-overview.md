@@ -44,11 +44,11 @@ Each weekly report follows a consistent format:
 
 ### December 2025
 
-| Week                      | Dates          | Highlights                                                                                                                                                    |
-| ------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Week                      | Dates           | Highlights                                                                                                                                                        |
+| ------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Week 51](./2025/week-51) | Dec 12 - Dec 19 | **194 commits**: Azure infrastructure consolidation (Netlify→SWA, Firebase removal), CUAS certification readiness, OmniPost 10 PRs, 59 PRs merged, +16K net lines |
-| [Week 50](./2025/week-50) | Dec 5 - Dec 12  | **124 commits**: SOSV accelerator strategy, Alistair Kim advisory, launcher prototype sourcing, Movement M1, Azure naming v2.1, 28 ADRs                      |
-| [Week 49](./2025/week-49) | Dec 2 - Dec 5   | **240+ commits**: Demo pitch deck complete, Microsoft Founders Hub Phase 3 ($25K), net prototype started (3D tools), Google/AWS applications, $960K seed ask |
+| [Week 50](./2025/week-50) | Dec 5 - Dec 12  | **124 commits**: SOSV accelerator strategy, Alistair Kim advisory, launcher prototype sourcing, Movement M1, Azure naming v2.1, 28 ADRs                           |
+| [Week 49](./2025/week-49) | Dec 2 - Dec 5   | **240+ commits**: Demo pitch deck complete, Microsoft Founders Hub Phase 3 ($25K), net prototype started (3D tools), Google/AWS applications, $960K seed ask      |
 
 ### November 2025
 

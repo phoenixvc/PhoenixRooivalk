@@ -1,8 +1,7 @@
 # Azure Functions Deployment Guide
 
-This guide provides step-by-step instructions for deploying the
-Phoenix Rooivalk Azure Functions after the COOP and error handling
-improvements.
+This guide provides step-by-step instructions for deploying the Phoenix Rooivalk
+Azure Functions after the COOP and error handling improvements.
 
 ## Prerequisites
 
@@ -25,7 +24,8 @@ Before deploying, ensure you have:
    - `AZURE_RESOURCE_GROUP` - Resource group name
    - `AZURE_AI_DEPLOYMENT_NAME` - AI model deployment name
 
-See [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) for detailed Azure setup instructions.
+See [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) for detailed Azure setup
+instructions.
 
 ## Deployment Methods
 
@@ -54,7 +54,7 @@ The easiest way to deploy is using the automated GitHub Actions workflow:
    ```bash
    # Check health endpoint
    curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
-   
+
    # Expected response (200 OK):
    {
      "status": "healthy",
@@ -147,13 +147,12 @@ curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
     "cosmos": "error",
     "openai": "not-configured"
   },
-  "errors": [
-    "Cosmos DB: COSMOS_DB_CONNECTION_STRING not configured"
-  ]
+  "errors": ["Cosmos DB: COSMOS_DB_CONNECTION_STRING not configured"]
 }
 ```
 
-If unhealthy, see [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for resolution steps.
+If unhealthy, see [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for resolution
+steps.
 
 ### 2. Test Cosmos DB Operations
 
@@ -216,6 +215,7 @@ az functionapp cors show \
 ```
 
 If missing, add origins:
+
 ```bash
 az functionapp cors add \
   --name YOUR-FUNCTION-APP-NAME \
@@ -255,7 +255,6 @@ If COOP header is present, redeploy the docs site.
 2. Click "Sign In"
 3. Try Google or GitHub OAuth
 4. **Verify**:
-
    - ✅ OAuth popup opens
    - ✅ No "Cross-Origin-Opener-Policy" errors in console
    - ✅ Popup closes after authentication
@@ -291,6 +290,7 @@ az functionapp log tail \
 **Cause**: Missing or invalid `COSMOS_DB_CONNECTION_STRING`
 
 **Fix**:
+
 ```bash
 # Get connection string from Cosmos DB
 COSMOS_CONNECTION=$(az cosmosdb keys list \
@@ -323,6 +323,7 @@ az functionapp restart \
 **Cause**: Azure AD B2C not configured correctly
 
 **Fix**:
+
 ```bash
 # Verify B2C settings
 az functionapp config appsettings list \
@@ -455,11 +456,9 @@ After deployment:
 
 ## Additional Resources
 
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Detailed troubleshooting
-  guide
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Detailed troubleshooting guide
 - [INFRASTRUCTURE.md](./INFRASTRUCTURE.md) - Azure infrastructure setup
-- [CORS_LOGIN_FIX.md](../../../CORS_LOGIN_FIX.md) - CORS and COOP fix
-  history
+- [CORS_LOGIN_FIX.md](../../../CORS_LOGIN_FIX.md) - CORS and COOP fix history
 - [GitHub Workflow](../../../.github/workflows/deploy-azure-functions.yml) -
   CI/CD pipeline
 

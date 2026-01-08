@@ -1,15 +1,18 @@
 # Fix Guide: Cross-Origin-Opener-Policy and Cosmos DB Connection Errors
 
-This guide provides step-by-step instructions to resolve the two critical errors reported in the issue.
+This guide provides step-by-step instructions to resolve the two critical errors
+reported in the issue.
 
 ## Issue Overview
 
 **Error 1: Cross-Origin-Opener-Policy (COOP) Errors**
+
 ```
 Cross-Origin-Opener-Policy policy would block the window.closed call.
 ```
 
 **Error 2: Cosmos DB Connection Failure**
+
 ```
 POST https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azurewebsites.net/api/cosmos/setDocument 500 (Internal Server Error)
 Uncaught (in promise) Error: Functions proxy error: Internal Server Error - {"error":"Failed to set document","code":"DB_OPERATION_FAILED"}
@@ -37,23 +40,29 @@ Or provide as arguments:
 ## Fix 1: Cross-Origin-Opener-Policy (COOP) Error
 
 ### Problem
-OAuth popup windows (Google, GitHub login) cannot communicate with the parent window due to restrictive COOP headers.
+
+OAuth popup windows (Google, GitHub login) cannot communicate with the parent
+window due to restrictive COOP headers.
 
 ### Root Cause
-The `staticwebapp.config.json` file contains a `Cross-Origin-Opener-Policy` header that blocks popup communication.
+
+The `staticwebapp.config.json` file contains a `Cross-Origin-Opener-Policy`
+header that blocks popup communication.
 
 ### Solution
 
 **Step 1: Verify Current Configuration**
 
 Check if COOP header exists:
+
 ```bash
 grep "Cross-Origin-Opener-Policy" apps/docs/staticwebapp.config.json
 ```
 
 **Step 2: Remove COOP Header**
 
-The header should already be removed (as per previous fix). Verify that `apps/docs/staticwebapp.config.json` looks like this:
+The header should already be removed (as per previous fix). Verify that
+`apps/docs/staticwebapp.config.json` looks like this:
 
 ```json
 {
@@ -66,8 +75,8 @@ The header should already be removed (as per previous fix). Verify that `apps/do
 }
 ```
 
-✅ **CORRECT**: No `Cross-Origin-Opener-Policy` header
-❌ **INCORRECT**: Contains `"Cross-Origin-Opener-Policy": "same-origin-allow-popups"`
+✅ **CORRECT**: No `Cross-Origin-Opener-Policy` header ❌ **INCORRECT**:
+Contains `"Cross-Origin-Opener-Policy": "same-origin-allow-popups"`
 
 **Step 3: Verify Deployment**
 
@@ -78,10 +87,11 @@ If the file is correct but errors persist, the old configuration may be cached:
    - Hard refresh: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac)
 
 2. **Check deployed version**:
+
    ```bash
    curl -I https://docs.phoenixrooivalk.com | grep -i "cross-origin"
    ```
-   
+
    Expected output:
    - ✅ `Cross-Origin-Embedder-Policy: unsafe-none` (present)
    - ✅ No `Cross-Origin-Opener-Policy` header (absent)
@@ -99,6 +109,7 @@ npm run build
 ### Verification
 
 Test OAuth login:
+
 1. Navigate to https://docs.phoenixrooivalk.com
 2. Click "Sign In"
 3. Try Google or GitHub OAuth
@@ -108,10 +119,14 @@ Test OAuth login:
 ## Fix 2: Cosmos DB Connection Error (500 Internal Server Error)
 
 ### Problem
-Azure Functions cannot connect to Cosmos DB, causing `/api/cosmos/setDocument` to return 500 errors.
+
+Azure Functions cannot connect to Cosmos DB, causing `/api/cosmos/setDocument`
+to return 500 errors.
 
 ### Root Cause
+
 The `COSMOS_DB_CONNECTION_STRING` environment variable is either:
+
 - Not set in Azure Functions configuration
 - Set to an invalid/expired connection string
 - Pointing to a Cosmos DB account that doesn't exist or lacks permissions
@@ -127,6 +142,7 @@ curl https://phoenix-rooivalk-functions-cjfde7dng4hsbtfk.southafricanorth-01.azu
 ```
 
 Expected response (healthy):
+
 ```json
 {
   "status": "healthy",
@@ -227,6 +243,7 @@ az cosmosdb sql container list \
 ```
 
 Required containers:
+
 - `userProgress`
 - `userProfiles`
 - `knownEmails`
@@ -301,11 +318,13 @@ export AZURE_AI_API_KEY="<openai-key>"
 ### Issue Persists After Fix
 
 **Clear all caches**:
+
 1. Browser cache (hard refresh)
 2. CDN cache (wait 5-10 minutes or purge manually)
 3. Service worker cache (unregister in DevTools)
 
 **Check logs**:
+
 ```bash
 # Stream Function App logs
 az functionapp log tail \
@@ -314,11 +333,13 @@ az functionapp log tail \
 ```
 
 Look for:
+
 - ✅ `[Cosmos] Client initialized successfully`
 - ❌ `COSMOS_DB_CONNECTION_STRING not configured`
 - ❌ `Failed to initialize Cosmos DB client`
 
 **Verify in Azure Portal**:
+
 1. Navigate to Function App → Configuration → Application settings
 2. Find `COSMOS_DB_CONNECTION_STRING`
 3. Verify it's set and not expired
@@ -337,6 +358,7 @@ az functionapp config appsettings list \
 ```
 
 Required settings:
+
 - `AZURE_AD_B2C_TENANT`
 - `AZURE_AD_B2C_CLIENT_ID`
 - `AZURE_AD_B2C_POLICY`
@@ -382,6 +404,7 @@ Before deploying to production:
 If issues persist after following this guide:
 
 1. **Run diagnostics**:
+
    ```bash
    ./scripts/diagnose-azure-functions.sh <function-app> <resource-group> > diagnostics.txt
    ```
@@ -404,8 +427,11 @@ If issues persist after following this guide:
 
 ## Summary
 
-**COOP Error Fix**: Remove `Cross-Origin-Opener-Policy` header from `staticwebapp.config.json`
+**COOP Error Fix**: Remove `Cross-Origin-Opener-Policy` header from
+`staticwebapp.config.json`
 
-**Cosmos DB Error Fix**: Set `COSMOS_DB_CONNECTION_STRING` in Azure Functions configuration
+**Cosmos DB Error Fix**: Set `COSMOS_DB_CONNECTION_STRING` in Azure Functions
+configuration
 
-Both fixes are straightforward and can be validated using the provided diagnostic tools.
+Both fixes are straightforward and can be validated using the provided
+diagnostic tools.

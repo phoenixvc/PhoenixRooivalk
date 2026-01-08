@@ -62,20 +62,24 @@ import {
 - **194 commits merged**: Highest weekly commit volume in project history
 - **59 pull requests**: 44 feature PRs + 15 Dependabot security updates
 - **+16,299 net lines**: Major codebase growth with 62K added, 46K refactored
-- **4 active contributors**: Claude (101), Jurie (64), Dependabot (15), Copilot (14)
+- **4 active contributors**: Claude (101), Jurie (64), Dependabot (15), Copilot
+  (14)
 
 ### 2. Infrastructure Consolidation on Azure
 
 - **Netlify → Azure SWA**: Complete migration to Azure Static Web Apps
 - **Firebase removal**: Eliminated unused Firebase Functions, streamlined stack
 - **Azure Functions fixes**: Resolved 401 deployment errors, OIDC authentication
-- **CI/CD hardening**: Fixed multiline secret handling in GitHub Actions workflows
+- **CI/CD hardening**: Fixed multiline secret handling in GitHub Actions
+  workflows
 
 ### 3. CUAS Certification Readiness
 
-- **CUAS readiness framework**: Comprehensive certification tracking documentation
+- **CUAS readiness framework**: Comprehensive certification tracking
+  documentation
 - **Canada CUAS Sandbox**: PriviDox draft application prepared (Dec 15 deadline)
-- **International accelerators**: Added accelerator comparison and application docs
+- **International accelerators**: Added accelerator comparison and application
+  docs
 - **Regulatory pathway**: Clear path to counter-drone certification documented
 
 ### 4. OmniPost Platform Progress
@@ -94,12 +98,12 @@ import {
 
 ### 6. Known Issues Resolved
 
-| Issue                         | Status      | Resolution                                  |
-| ----------------------------- | ----------- | ------------------------------------------- |
-| Azure Functions 401 errors    | ✅ Resolved | Switched to OIDC authentication             |
-| Netlify deployment references | ✅ Resolved | Fully migrated to Azure Static Web Apps     |
-| Firebase Functions unused     | ✅ Resolved | Removed package and workflows               |
-| Sidebar filter layout         | ✅ Resolved | Improved UI with collapse functionality     |
+| Issue                         | Status      | Resolution                              |
+| ----------------------------- | ----------- | --------------------------------------- |
+| Azure Functions 401 errors    | ✅ Resolved | Switched to OIDC authentication         |
+| Netlify deployment references | ✅ Resolved | Fully migrated to Azure Static Web Apps |
+| Firebase Functions unused     | ✅ Resolved | Removed package and workflows           |
+| Sidebar filter layout         | ✅ Resolved | Improved UI with collapse functionality |
 
 ---
 
@@ -242,22 +246,22 @@ deployment fixes.
 
 #### Migration Summary
 
-| Component           | Previous     | Current                      | Status      |
-| ------------------- | ------------ | ---------------------------- | ----------- |
-| Static Hosting      | Netlify      | Azure Static Web Apps        | ✅ Complete |
-| Serverless Backend  | Firebase     | Azure Functions              | ✅ Complete |
-| Authentication      | N/A          | OIDC Authentication          | ✅ Complete |
-| Deployment Model    | Netlify CLI  | Azure SWA Action             | ✅ Complete |
+| Component          | Previous    | Current               | Status      |
+| ------------------ | ----------- | --------------------- | ----------- |
+| Static Hosting     | Netlify     | Azure Static Web Apps | ✅ Complete |
+| Serverless Backend | Firebase    | Azure Functions       | ✅ Complete |
+| Authentication     | N/A         | OIDC Authentication   | ✅ Complete |
+| Deployment Model   | Netlify CLI | Azure SWA Action      | ✅ Complete |
 
 #### Issues Resolved
 
-| Issue                          | Root Cause                   | Solution                               |
-| ------------------------------ | ---------------------------- | -------------------------------------- |
-| Azure Functions 401 error      | SCM build authentication     | Disabled Oryx build, switched to OIDC  |
-| SWA deployment timeout         | Wrong GitHub Action          | Used official Azure SWA action         |
-| Flex Consumption deploy fails  | Package configuration        | Fixed @azure/functions dependency      |
-| Husky error in CI              | Git hooks in production      | Added --ignore-scripts flag            |
-| pnpm version mismatch          | Workflow specification       | Fixed version in deploy workflow       |
+| Issue                         | Root Cause               | Solution                              |
+| ----------------------------- | ------------------------ | ------------------------------------- |
+| Azure Functions 401 error     | SCM build authentication | Disabled Oryx build, switched to OIDC |
+| SWA deployment timeout        | Wrong GitHub Action      | Used official Azure SWA action        |
+| Flex Consumption deploy fails | Package configuration    | Fixed @azure/functions dependency     |
+| Husky error in CI             | Git hooks in production  | Added --ignore-scripts flag           |
+| pnpm version mismatch         | Workflow specification   | Fixed version in deploy workflow      |
 
 #### Cleanup Completed
 
@@ -286,13 +290,13 @@ New design tokens system for consistent styling across the documentation portal.
 
 #### Theme Support
 
-| Feature              | Light Mode   | Dark Mode    |
-| -------------------- | ------------ | ------------ |
-| Background colors    | ✅ Supported | ✅ Supported |
-| Text colors          | ✅ Supported | ✅ Supported |
-| Border colors        | ✅ Supported | ✅ Supported |
-| Shadow values        | ✅ Supported | ✅ Supported |
-| Theme toggle         | ✅ Working   | ✅ Working   |
+| Feature           | Light Mode   | Dark Mode    |
+| ----------------- | ------------ | ------------ |
+| Background colors | ✅ Supported | ✅ Supported |
+| Text colors       | ✅ Supported | ✅ Supported |
+| Border colors     | ✅ Supported | ✅ Supported |
+| Shadow values     | ✅ Supported | ✅ Supported |
+| Theme toggle      | ✅ Working   | ✅ Working   |
 
 #### Components Updated
 
@@ -310,33 +314,33 @@ applications.
 
 #### CUAS Documentation Added
 
-| Document                     | Purpose                                   |
-| ---------------------------- | ----------------------------------------- |
-| CUAS Readiness Framework     | Track certification readiness levels      |
-| Eligibility Assessment       | Self-assessment for sandbox applications  |
-| PriviDox Draft Response      | Email for Canada CUAS Sandbox             |
-| International Accelerators   | Listing of relevant accelerator programs  |
+| Document                   | Purpose                                  |
+| -------------------------- | ---------------------------------------- |
+| CUAS Readiness Framework   | Track certification readiness levels     |
+| Eligibility Assessment     | Self-assessment for sandbox applications |
+| PriviDox Draft Response    | Email for Canada CUAS Sandbox            |
+| International Accelerators | Listing of relevant accelerator programs |
 
 #### Application Status
 
-| Application           | Deadline    | Status         |
-| --------------------- | ----------- | -------------- |
-| Canada CUAS Sandbox   | Dec 15      | Draft prepared |
-| SOSV Accelerator      | Rolling     | Preparing      |
-| Other accelerators    | Various     | Research phase |
+| Application         | Deadline | Status         |
+| ------------------- | -------- | -------------- |
+| Canada CUAS Sandbox | Dec 15   | Draft prepared |
+| SOSV Accelerator    | Rolling  | Preparing      |
+| Other accelerators  | Various  | Research phase |
 
 ---
 
 ### 5. Key Decisions Made
 
-| Decision                       | Rationale                              | Impact                              |
-| ------------------------------ | -------------------------------------- | ----------------------------------- |
-| Migrate to Azure SWA           | Consolidate on Azure platform          | Simplified deployment pipeline      |
-| Remove Firebase Functions      | Unused, adds complexity                | Cleaner codebase                    |
-| Implement design tokens        | Consistent styling across themes       | Maintainable CSS architecture       |
-| Center-align documentation     | Improved readability                   | Better user experience              |
-| Add keyboard navigation        | Accessibility requirement              | Full a11y compliance                |
-| OIDC for Azure Functions       | More secure than publish profile       | Better security posture             |
+| Decision                   | Rationale                        | Impact                         |
+| -------------------------- | -------------------------------- | ------------------------------ |
+| Migrate to Azure SWA       | Consolidate on Azure platform    | Simplified deployment pipeline |
+| Remove Firebase Functions  | Unused, adds complexity          | Cleaner codebase               |
+| Implement design tokens    | Consistent styling across themes | Maintainable CSS architecture  |
+| Center-align documentation | Improved readability             | Better user experience         |
+| Add keyboard navigation    | Accessibility requirement        | Full a11y compliance           |
+| OIDC for Azure Functions   | More secure than publish profile | Better security posture        |
 
 ---
 
@@ -373,18 +377,18 @@ applications.
 
 ### 8. Metrics & KPIs
 
-| Metric                | This Week    | vs Week 50   | Trend  |
-| --------------------- | ------------ | ------------ | ------ |
-| Commits merged        | 194          | 124          | ↑ 56%  |
-| Pull requests merged  | 59           | 38           | ↑ 55%  |
-| Lines added           | 62,028       | 27,063       | ↑ 129% |
-| Lines deleted         | 45,729       | 9,263        | ↑ 393% |
-| Net lines             | +16,299      | +17,800      | →      |
-| Contributors active   | 4            | 5            | →      |
-| UX phases completed   | 5            | -            | ✅ NEW |
-| Infrastructure issues | 6 resolved   | -            | ✅ NEW |
-| Design tokens added   | Yes          | -            | ✅ NEW |
-| Azure migration       | Complete     | -            | ✅ NEW |
+| Metric                | This Week  | vs Week 50 | Trend  |
+| --------------------- | ---------- | ---------- | ------ |
+| Commits merged        | 194        | 124        | ↑ 56%  |
+| Pull requests merged  | 59         | 38         | ↑ 55%  |
+| Lines added           | 62,028     | 27,063     | ↑ 129% |
+| Lines deleted         | 45,729     | 9,263      | ↑ 393% |
+| Net lines             | +16,299    | +17,800    | →      |
+| Contributors active   | 4          | 5          | →      |
+| UX phases completed   | 5          | -          | ✅ NEW |
+| Infrastructure issues | 6 resolved | -          | ✅ NEW |
+| Design tokens added   | Yes        | -          | ✅ NEW |
+| Azure migration       | Complete   | -          | ✅ NEW |
 
 **Note:** Higher deletion count reflects significant refactoring (Firebase
 removal, Netlify cleanup) and CSS consolidation with design tokens.
@@ -393,12 +397,12 @@ removal, Netlify cleanup) and CSS consolidation with design tokens.
 
 ### 9. Risks & Blockers
 
-| Risk                          | Severity | Mitigation                                |
-| ----------------------------- | -------- | ----------------------------------------- |
-| Holiday reduced capacity      | Medium   | Plan critical work before break           |
-| CUAS application timeline     | Medium   | Draft prepared, follow up post-deadline   |
-| Accelerator competition       | High     | Multi-track approach continues            |
-| Infrastructure changes        | Low      | Migration complete, monitoring in place   |
+| Risk                      | Severity | Mitigation                              |
+| ------------------------- | -------- | --------------------------------------- |
+| Holiday reduced capacity  | Medium   | Plan critical work before break         |
+| CUAS application timeline | Medium   | Draft prepared, follow up post-deadline |
+| Accelerator competition   | High     | Multi-track approach continues          |
+| Infrastructure changes    | Low      | Migration complete, monitoring in place |
 
 ---
 
@@ -406,35 +410,35 @@ removal, Netlify cleanup) and CSS consolidation with design tokens.
 
 #### Feature Pull Requests Merged (Dec 12-19)
 
-| PR   | Title                                            | Category       |
-| ---- | ------------------------------------------------ | -------------- |
-| #405 | Fix: use deployment_token for Azure SWA action   | DevOps         |
-| #404 | Fix SWA deployment timeout with official action  | DevOps         |
-| #403 | Remove all Netlify references                    | Infrastructure |
-| #402 | Fix clear button position                        | UI/UX          |
-| #401 | Move sidebar toggle to bottom-left               | UI/UX          |
-| #400 | Hide floating widgets from PDF output            | UI/UX          |
-| #399 | Fix sidebar filter layout                        | UI/UX          |
-| #398 | Improve UI/UX for sidebar filters                | UI/UX          |
-| #397 | Fix filter button layout issues                  | UI/UX          |
-| #396 | Fix .azurefunctions deployment artifact          | DevOps         |
-| #395 | Fix CI failures: Prettier and Azure Functions    | DevOps         |
-| #394 | Fix husky error with --ignore-scripts            | DevOps         |
-| #393 | Fix Azure Functions Flex Consumption             | DevOps         |
-| #392 | Improve sidebar filtering UI                     | UI/UX          |
-| #391 | Fix Azure Functions 401 with OIDC                | DevOps         |
-| #390 | Fix Azure Functions 401 with disable oryx-build  | DevOps         |
-| #389 | Fix Azure Functions 401 by disabling SCM build   | DevOps         |
-| #388 | Fix pnpm version specification                   | DevOps         |
-| #387 | Fix TypeScript errors                            | Code Quality   |
-| #386 | Fix TypeScript: unauthenticated                  | Code Quality   |
-| #385 | Fix read tracker bug and UI styling              | Bug Fix        |
-| #384 | Add PriviDox draft response link                 | Documentation  |
-| #383 | Implement responsive mobile-first layout         | UI/UX          |
-| #382 | Improve code quality: JSDoc, exports             | Code Quality   |
-| #381 | Phase 5: Keyboard navigation                     | Accessibility  |
-| #380 | Add CUAS readiness framework                     | Documentation  |
-| #379 | Add hackathons and accelerators pages            | Documentation  |
+| PR   | Title                                           | Category       |
+| ---- | ----------------------------------------------- | -------------- |
+| #405 | Fix: use deployment_token for Azure SWA action  | DevOps         |
+| #404 | Fix SWA deployment timeout with official action | DevOps         |
+| #403 | Remove all Netlify references                   | Infrastructure |
+| #402 | Fix clear button position                       | UI/UX          |
+| #401 | Move sidebar toggle to bottom-left              | UI/UX          |
+| #400 | Hide floating widgets from PDF output           | UI/UX          |
+| #399 | Fix sidebar filter layout                       | UI/UX          |
+| #398 | Improve UI/UX for sidebar filters               | UI/UX          |
+| #397 | Fix filter button layout issues                 | UI/UX          |
+| #396 | Fix .azurefunctions deployment artifact         | DevOps         |
+| #395 | Fix CI failures: Prettier and Azure Functions   | DevOps         |
+| #394 | Fix husky error with --ignore-scripts           | DevOps         |
+| #393 | Fix Azure Functions Flex Consumption            | DevOps         |
+| #392 | Improve sidebar filtering UI                    | UI/UX          |
+| #391 | Fix Azure Functions 401 with OIDC               | DevOps         |
+| #390 | Fix Azure Functions 401 with disable oryx-build | DevOps         |
+| #389 | Fix Azure Functions 401 by disabling SCM build  | DevOps         |
+| #388 | Fix pnpm version specification                  | DevOps         |
+| #387 | Fix TypeScript errors                           | Code Quality   |
+| #386 | Fix TypeScript: unauthenticated                 | Code Quality   |
+| #385 | Fix read tracker bug and UI styling             | Bug Fix        |
+| #384 | Add PriviDox draft response link                | Documentation  |
+| #383 | Implement responsive mobile-first layout        | UI/UX          |
+| #382 | Improve code quality: JSDoc, exports            | Code Quality   |
+| #381 | Phase 5: Keyboard navigation                    | Accessibility  |
+| #380 | Add CUAS readiness framework                    | Documentation  |
+| #379 | Add hackathons and accelerators pages           | Documentation  |
 
 #### Dependabot PRs Merged (15 total)
 
@@ -446,32 +450,32 @@ Dependency updates across Rust crates, npm packages, and GitHub Actions.
 
 #### Lines of Code Changed (Dec 12-19)
 
-| Metric         | Count    | Notes                                  |
-| -------------- | -------- | -------------------------------------- |
-| Lines added    | 62,028   | Features, design tokens, docs          |
-| Lines deleted  | 45,729   | Firebase removal, Netlify cleanup, CSS |
-| Net change     | +16,299  | Codebase growth                        |
-| Commits        | 194      | Highest weekly volume                  |
+| Metric        | Count   | Notes                                  |
+| ------------- | ------- | -------------------------------------- |
+| Lines added   | 62,028  | Features, design tokens, docs          |
+| Lines deleted | 45,729  | Firebase removal, Netlify cleanup, CSS |
+| Net change    | +16,299 | Codebase growth                        |
+| Commits       | 194     | Highest weekly volume                  |
 
 #### Commits by Contributor
 
-| Contributor       | Commits | Focus Areas                            |
-| ----------------- | ------- | -------------------------------------- |
-| Claude            | 101     | UI/UX, infrastructure, documentation   |
-| Jurie Smit        | 64      | Features, reviews, merges              |
-| dependabot[bot]   | 15      | Dependency updates                     |
-| copilot-swe-agent | 14      | Bug fixes, workflow improvements       |
+| Contributor       | Commits | Focus Areas                          |
+| ----------------- | ------- | ------------------------------------ |
+| Claude            | 101     | UI/UX, infrastructure, documentation |
+| Jurie Smit        | 64      | Features, reviews, merges            |
+| dependabot[bot]   | 15      | Dependency updates                   |
+| copilot-swe-agent | 14      | Bug fixes, workflow improvements     |
 
 #### Changes by Area
 
-| Directory                         | Focus                        |
-| --------------------------------- | ---------------------------- |
-| `pnpm-lock.yaml`                  | Dependencies                 |
-| `apps/docs/src/pages`             | Calendar, admin, UI          |
-| `apps/docs/src/css`               | Design tokens, custom styles |
-| `apps/docs/src/components`        | UI component updates         |
-| `.github/workflows`               | CI/CD pipelines              |
-| `apps/docs/docs/technical`        | ADRs and documentation       |
+| Directory                  | Focus                        |
+| -------------------------- | ---------------------------- |
+| `pnpm-lock.yaml`           | Dependencies                 |
+| `apps/docs/src/pages`      | Calendar, admin, UI          |
+| `apps/docs/src/css`        | Design tokens, custom styles |
+| `apps/docs/src/components` | UI component updates         |
+| `.github/workflows`        | CI/CD pipelines              |
+| `apps/docs/docs/technical` | ADRs and documentation       |
 
 ---
 
@@ -504,34 +508,35 @@ and investor communications.
 
 #### December 2025 Updates (Week 51)
 
-| Category            | Changes                                                                   |
-| ------------------- | ------------------------------------------------------------------------- |
-| **Database**        | Prisma ORM integration with SQLite, comprehensive schema for audit logs  |
-| **Security**        | Fixed format string injection, pinned package versions, removed hardcoded credentials |
-| **Infrastructure**  | Distributed rate limiting via Upstash Redis with fallback support         |
-| **UI Components**   | Converted to CSS modules: WorkflowStage, LoadingState, ErrorMessage, AuditTrail |
-| **Deployment**      | Fixed Azure deployment issues (.next directory, styled-jsx, startup command) |
-| **Code Quality**    | ESLint fixes, TypeScript types, runtime validation for siteConfig         |
+| Category           | Changes                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| **Database**       | Prisma ORM integration with SQLite, comprehensive schema for audit logs               |
+| **Security**       | Fixed format string injection, pinned package versions, removed hardcoded credentials |
+| **Infrastructure** | Distributed rate limiting via Upstash Redis with fallback support                     |
+| **UI Components**  | Converted to CSS modules: WorkflowStage, LoadingState, ErrorMessage, AuditTrail       |
+| **Deployment**     | Fixed Azure deployment issues (.next directory, styled-jsx, startup command)          |
+| **Code Quality**   | ESLint fixes, TypeScript types, runtime validation for siteConfig                     |
 
 #### Pull Requests Merged (Dec 10-12)
 
-| PR   | Title                                              | Category       |
-| ---- | -------------------------------------------------- | -------------- |
-| #98  | Fix landing page improvements                      | UI/UX          |
-| #97  | Bump next from 16.0.8 to 16.0.10                   | Dependencies   |
-| #96  | Fix Prettier formatting in Header component        | Code Quality   |
-| #95  | Fix landing page and other pages                   | UI/UX          |
-| #94  | Fix Azure deployment - .next directory excluded    | DevOps         |
-| #93  | Fix Azure deployment module resolution (styled-jsx)| DevOps         |
-| #92  | Fix Azure App Service startup                      | DevOps         |
-| #91  | Fix ESLint errors in review components             | Code Quality   |
-| #90  | Fix ESLint warnings and update infra naming        | Code Quality   |
-| #89  | Fix Bicep DNS scope errors and TypeScript types    | Infrastructure |
+| PR  | Title                                               | Category       |
+| --- | --------------------------------------------------- | -------------- |
+| #98 | Fix landing page improvements                       | UI/UX          |
+| #97 | Bump next from 16.0.8 to 16.0.10                    | Dependencies   |
+| #96 | Fix Prettier formatting in Header component         | Code Quality   |
+| #95 | Fix landing page and other pages                    | UI/UX          |
+| #94 | Fix Azure deployment - .next directory excluded     | DevOps         |
+| #93 | Fix Azure deployment module resolution (styled-jsx) | DevOps         |
+| #92 | Fix Azure App Service startup                       | DevOps         |
+| #91 | Fix ESLint errors in review components              | Code Quality   |
+| #90 | Fix ESLint warnings and update infra naming         | Code Quality   |
+| #89 | Fix Bicep DNS scope errors and TypeScript types     | Infrastructure |
 
 #### Privacy & Compliance
 
 - **PII Retention Policy**: 90-day retention with SHA-256 hashing for IPs
-- **Audit Logging**: Comprehensive HTTP audit fields (path, method, body, statusCode)
+- **Audit Logging**: Comprehensive HTTP audit fields (path, method, body,
+  statusCode)
 - **Security Scanning**: Codacy and SonarCloud integration for compliance
 
 #### Relevance to Phoenix Rooivalk

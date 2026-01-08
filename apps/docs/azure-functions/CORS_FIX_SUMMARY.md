@@ -4,13 +4,13 @@
 
 The Azure Functions response utilities (`successResponse()` and `Errors.*()`)
 were not receiving the `request` parameter, causing them to default to
-`http://localhost:3000` for the `Access-Control-Allow-Origin` header. This
-broke CORS for production callers like `https://docs.phoenixrooivalk.com`
-because:
+`http://localhost:3000` for the `Access-Control-Allow-Origin` header. This broke
+CORS for production callers like `https://docs.phoenixrooivalk.com` because:
 
 1. The response would set `Access-Control-Allow-Origin: http://localhost:3000`
 2. But the request came from `https://docs.phoenixrooivalk.com`
-3. With `Access-Control-Allow-Credentials: true`, the origin **must** match exactly
+3. With `Access-Control-Allow-Credentials: true`, the origin **must** match
+   exactly
 4. Result: Browser blocks the response due to CORS policy violation
 
 ## Solution
@@ -64,8 +64,7 @@ The `getCorsHeaders(request)` function:
    - `https://www.phoenixrooivalk.com`
    - `*.azurestaticapps.net` (wildcard)
 
-3. If allowed, returns that origin in the
-   `Access-Control-Allow-Origin` header
+3. If allowed, returns that origin in the `Access-Control-Allow-Origin` header
 4. If not allowed or no request provided, safely falls back to
    `http://localhost:3000`
 5. Always sets `Access-Control-Allow-Credentials: true`
@@ -123,20 +122,20 @@ All 8 comprehensive tests passed:
 
 ### Pattern Used
 
-Every handler function signature already had `request: HttpRequest` as the
-first parameter. The fix simply ensures this parameter is passed through to
-the response utilities:
+Every handler function signature already had `request: HttpRequest` as the first
+parameter. The fix simply ensures this parameter is passed through to the
+response utilities:
 
 ```typescript
 async function myHandler(
-  request: HttpRequest,  // Already available
+  request: HttpRequest, // Already available
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
   try {
     // ... handler logic ...
-    return successResponse(data, 200, request);  // Now passes request
+    return successResponse(data, 200, request); // Now passes request
   } catch (error) {
-    return Errors.internal("Error", request);  // Now passes request
+    return Errors.internal("Error", request); // Now passes request
   }
 }
 ```
@@ -146,10 +145,10 @@ async function myHandler(
 1. **Fallback behavior**: If `request` is undefined, system falls back to
    localhost:3000 (safe default)
 2. **Whitelist approach**: Only explicitly allowed origins are reflected back
-3. **Wildcard support**: Azure Static Apps domains (*.azurestaticapps.net)
-   are supported
-4. **Credentials always set**: `Access-Control-Allow-Credentials: true`
-   ensures authenticated requests work
+3. **Wildcard support**: Azure Static Apps domains (\*.azurestaticapps.net) are
+   supported
+4. **Credentials always set**: `Access-Control-Allow-Credentials: true` ensures
+   authenticated requests work
 
 ## Commit History
 
@@ -159,8 +158,8 @@ async function myHandler(
 
 ## References
 
-- Original issue: CORS breaks for production when handlers don't pass
-  request parameter
+- Original issue: CORS breaks for production when handlers don't pass request
+  parameter
 - Root cause: `getCorsHeaders()` defaulting to localhost:3000
 - Fix: Pass request parameter to all response utilities
 - Testing: Comprehensive CORS header tests (8 scenarios)

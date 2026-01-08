@@ -1,7 +1,7 @@
 # Azure Functions Troubleshooting Guide
 
-This guide helps diagnose and fix common issues with the Phoenix Rooivalk
-Azure Functions deployment.
+This guide helps diagnose and fix common issues with the Phoenix Rooivalk Azure
+Functions deployment.
 
 ## Common Issues
 
@@ -13,13 +13,13 @@ Azure Functions deployment.
 Cross-Origin-Opener-Policy policy would block the window.closed call.
 ```
 
-**Cause:** OAuth popup windows cannot communicate with the parent window due
-to restrictive COOP headers.
+**Cause:** OAuth popup windows cannot communicate with the parent window due to
+restrictive COOP headers.
 
 **Solution:**
 
-1. **Check `apps/docs/staticwebapp.config.json`** - ensure COOP header is
-   NOT set:
+1. **Check `apps/docs/staticwebapp.config.json`** - ensure COOP header is NOT
+   set:
 
    ```json
    {
@@ -55,8 +55,8 @@ Uncaught (in promise) Error: Functions proxy error: Internal Server
 Error - {"error":"Failed to set document"}
 ```
 
-**Cause:** Azure Functions cannot connect to Cosmos DB or missing
-environment variables.
+**Cause:** Azure Functions cannot connect to Cosmos DB or missing environment
+variables.
 
 **Diagnosis Steps:**
 
@@ -153,6 +153,7 @@ Access to fetch at 'https://...' from origin
 **Solution:**
 
 1. **Verify CORS is configured in Azure:**
+
    ```bash
    # List current CORS origins
    az functionapp cors show \
@@ -197,6 +198,7 @@ access the database.
 **Solution:**
 
 1. **Check Azure AD B2C configuration:**
+
    ```bash
    # Verify B2C environment variables
    az functionapp config appsettings list \
@@ -216,6 +218,7 @@ access the database.
    - Check that the tenant name is correct
 
 3. **Temporarily skip token validation for debugging (NOT for production):**
+
    ```bash
    az functionapp config appsettings set \
      --name YOUR-FUNCTION-APP \
@@ -236,6 +239,7 @@ Error: Container 'userProgress' does not exist
 **Solution:**
 
 1. **Check if containers exist:**
+
    ```bash
    # List containers in the database
    az cosmosdb sql container list \
@@ -245,6 +249,7 @@ Error: Container 'userProgress' does not exist
    ```
 
 2. **Create missing containers:**
+
    ```bash
    # Use the automated setup script
    cd /home/runner/work/PhoenixRooivalk/PhoenixRooivalk
@@ -308,6 +313,7 @@ func start
 ```
 
 Then test endpoints:
+
 ```bash
 # Test health
 curl http://localhost:7071/api/health
@@ -352,6 +358,7 @@ If issues persist:
    - Look for detailed error messages with stack traces
 
 2. **Enable verbose logging temporarily:**
+
    ```bash
    az functionapp config appsettings set \
      --name YOUR-FUNCTION-APP \
@@ -360,6 +367,7 @@ If issues persist:
    ```
 
 3. **Review recent deployments:**
+
    ```bash
    az functionapp deployment list-publishing-profiles \
      --name YOUR-FUNCTION-APP \
@@ -367,8 +375,7 @@ If issues persist:
    ```
 
 4. **Contact support:**
-   - Check GitHub Issues:
-     <https://github.com/JustAGhosT/PhoenixRooivalk/issues>
+   - Check GitHub Issues: <https://github.com/JustAGhosT/PhoenixRooivalk/issues>
    - Review documentation: `apps/docs/azure-functions/INFRASTRUCTURE.md`
 
 ## Related Documentation
@@ -376,5 +383,4 @@ If issues persist:
 - [Infrastructure Setup](./INFRASTRUCTURE.md) - Initial Azure setup guide
 - [Deployment Workflow](../../.github/workflows/deploy-azure-functions.yml) -
   CI/CD pipeline
-- [CORS Fix Summary](../../CORS_LOGIN_FIX.md) - CORS and login issue
-  history
+- [CORS Fix Summary](../../CORS_LOGIN_FIX.md) - CORS and login issue history
