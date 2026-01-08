@@ -365,7 +365,7 @@ Insects close to camera lens appear large and can trigger false positives.
 
 
 def create_combined_dataset(output_dir: Path, classes: List[str]):
-    """Create combined dataset structure."""
+    """Create combined dataset structure with class folders merged."""
     print("\n[Creating Combined Dataset]")
 
     combined = output_dir / 'combined'
@@ -374,8 +374,59 @@ def create_combined_dataset(output_dir: Path, classes: List[str]):
     (combined / 'labels' / 'train').mkdir(parents=True, exist_ok=True)
     (combined / 'labels' / 'val').mkdir(parents=True, exist_ok=True)
 
-    # Create symlinks/copies from individual class folders
+    # Create dataset.yaml with class mapping
+    class_mapping = {name: idx for idx, name in enumerate(classes)}
+    dataset_yaml = combined / 'dataset.yaml'
+    yaml_content = f"""# Combined Drone Detection Dataset
+path: {combined.absolute()}
+train: images/train
+val: images/val
+
+nc: {len(classes)}
+names:
+"""
+    for idx, name in enumerate(classes):
+        yaml_content += f"  {idx}: {name}\n"
+
+    dataset_yaml.write_text(yaml_content)
+
+    # Copy/link images from individual class folders
+    copied = 0
+    for class_name in classes:
+        class_dir = output_dir / class_name
+        if not class_dir.exists():
+            continue
+
+        for split in ['train', 'val']:
+            src_images = class_dir / 'images' / split
+            src_labels = class_dir / 'labels' / split
+
+            if src_images.exists():
+                for img_file in src_images.glob('*'):
+                    if img_file.suffix.lower() in ['.jpg', '.jpeg', '.png']:
+                        dst = combined / 'images' / split / f"{class_name}_{img_file.name}"
+                        if not dst.exists():
+                            shutil.copy2(img_file, dst)
+                            copied += 1
+
+            if src_labels.exists():
+                for lbl_file in src_labels.glob('*.txt'):
+                    # Remap class IDs in label files
+                    src_content = lbl_file.read_text()
+                    dst_content = []
+                    for line in src_content.strip().split('\n'):
+                        if line:
+                            parts = line.split()
+                            # Remap class 0 to the actual class index
+                            parts[0] = str(class_mapping.get(class_name, 0))
+                            dst_content.append(' '.join(parts))
+
+                    dst = combined / 'labels' / split / f"{class_name}_{lbl_file.name}"
+                    dst.write_text('\n'.join(dst_content))
+
     print(f"  Combined dataset at: {combined}")
+    print(f"  Copied {copied} images from {len(classes)} classes")
+    print(f"  Dataset config: {dataset_yaml}")
 
 
 def main():

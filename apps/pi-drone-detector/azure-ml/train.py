@@ -25,7 +25,7 @@ def main():
     # Import here to allow --help without ultralytics installed
     from ultralytics import YOLO
 
-    print(f"Starting training with config:")
+    print("Starting training with config:")
     print(f"  Dataset: {args.data}")
     print(f"  Epochs: {args.epochs}")
     print(f"  Image size: {args.imgsz}")

@@ -122,10 +122,31 @@ scp trained/exports/drone-detector_int8.tflite pi@raspberrypi:~/models/
 
 ## Classes
 
+The model supports multiple classification configurations. See `configs/` for options.
+
+### MVP Configuration (10 classes)
+
 | Class ID | Name | Examples |
 |----------|------|----------|
-| 0 | drone | Quadcopters, multirotors, fixed-wing UAVs |
-| 1 | not_drone | Coke cans, birds, balloons, kites |
+| 0 | drone | Quadcopters, multirotors, fixed-wing UAVs, racing drones |
+| 1 | bird_small | Sparrows, finches (<40cm wingspan) |
+| 2 | bird_large | Eagles, hawks, flocks (>40cm wingspan) |
+| 3 | aircraft | Planes, helicopters, gliders, hot air balloons |
+| 4 | recreational | Kites, party balloons, weather balloons, RC planes |
+| 5 | sports | Balls, frisbees, projectiles |
+| 6 | debris | Plastic bags, paper, leaves, feathers |
+| 7 | insect | Flies, bees, dragonflies (close to camera) |
+| 8 | atmospheric | Rain, snow, lens flare, artifacts |
+| 9 | background | Sky, clouds, nothing detected |
+
+### Binary Configuration (2 classes)
+
+For simpler use cases, use `configs/dataset-binary.yaml`:
+
+| Class ID | Name | Examples |
+|----------|------|----------|
+| 0 | drone | All UAVs/drones |
+| 1 | not_drone | Everything else |
 
 ## Detection Output
 

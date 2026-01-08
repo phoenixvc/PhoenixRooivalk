@@ -12,12 +12,11 @@ description: Fine-tune YOLOv5n for drone vs not-drone classification
 # Source code directory
 code: .
 
-# Training command
+# Training command (dependencies come from conda.yaml)
 command: >-
-  pip install ultralytics opencv-python-headless && python train.py --data
-  ${{inputs.dataset}}/dataset.yaml --epochs ${{inputs.epochs}} --imgsz
-  ${{inputs.imgsz}} --batch ${{inputs.batch}} --output ${{outputs.model}}
-  --device 0
+  python train.py --data ${{inputs.dataset}}/dataset.yaml --epochs
+  ${{inputs.epochs}} --imgsz ${{inputs.imgsz}} --batch ${{inputs.batch}}
+  --output ${{outputs.model}} --device 0
 
 # Input datasets
 inputs:

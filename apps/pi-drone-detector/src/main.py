@@ -162,8 +162,16 @@ def main():
 def send_alert(webhook_url: str, detection: dict):
     """Send drone detection alert to webhook."""
     try:
+        from urllib.parse import urlparse
         import urllib.request
+        import urllib.error
         import json
+
+        # Validate URL scheme to prevent file:// and other unsafe schemes
+        parsed = urlparse(webhook_url)
+        if parsed.scheme not in ('http', 'https'):
+            print(f"Webhook error: Invalid URL scheme '{parsed.scheme}' - only http/https allowed")
+            return
 
         data = json.dumps({
             'event': 'drone_detected',
@@ -176,7 +184,7 @@ def send_alert(webhook_url: str, detection: dict):
             headers={'Content-Type': 'application/json'},
         )
         urllib.request.urlopen(req, timeout=5)
-    except Exception as e:
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
         print(f"Webhook error: {e}")
 
 

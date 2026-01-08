@@ -42,16 +42,32 @@ def download_file(url: str, dest: Path, desc: str = None) -> Path:
     return dest
 
 
+def _is_safe_path(base: Path, target: str) -> bool:
+    """Check if extraction path is safe (no path traversal)."""
+    # Resolve the full path and ensure it's within base directory
+    try:
+        full_path = (base / target).resolve()
+        return str(full_path).startswith(str(base.resolve()))
+    except (ValueError, OSError):
+        return False
+
+
 def extract_archive(archive: Path, dest: Path):
-    """Extract zip or tar archive."""
+    """Extract zip or tar archive with path traversal protection."""
     print(f"  Extracting {archive.name}...")
     dest.mkdir(parents=True, exist_ok=True)
 
     if archive.suffix == '.zip':
         with zipfile.ZipFile(archive, 'r') as zf:
+            for member in zf.namelist():
+                if not _is_safe_path(dest, member):
+                    raise ValueError(f"Unsafe path in archive: {member}")
             zf.extractall(dest)
     elif archive.suffix in ['.gz', '.tgz', '.tar']:
         with tarfile.open(archive, 'r:*') as tf:
+            for member in tf.getmembers():
+                if not _is_safe_path(dest, member.name):
+                    raise ValueError(f"Unsafe path in archive: {member.name}")
             tf.extractall(dest)
     else:
         raise ValueError(f"Unknown archive format: {archive.suffix}")
@@ -226,7 +242,7 @@ For `cokecan_001.txt`:
     return negatives_dir
 
 
-def create_combined_dataset(output_dir: Path, train_split: float = 0.8):
+def create_combined_dataset(output_dir: Path):
     """
     Combine all datasets into a single YOLO-format dataset.
     """
