@@ -29,8 +29,10 @@ use azure_identity::AzureCliCredential;
 #[derive(Debug)]
 pub struct CosmosProvider {
     #[cfg(feature = "cosmos")]
+    #[allow(dead_code)]
     client: CosmosClient,
     #[cfg(feature = "cosmos")]
+    #[allow(dead_code)]
     database: String,
     #[cfg(not(feature = "cosmos"))]
     _phantom: std::marker::PhantomData<()>,
