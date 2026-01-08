@@ -329,24 +329,68 @@ Hardware and software roadmap alignment for consumer product launch.
 
 ---
 
-### 5. Key Decisions Made
+### 5. Hardware Progress (Pieter La Grange)
+
+Hardware development continued with drone fleet preparation and launcher prototype
+assembly. See [Hardware Signoff Runbook](/docs/playbooks/hardware-signoff-runbook)
+for the collaboration workflow.
+
+#### Training Target Drones
+
+Two small quadcopters ready for training data capture:
+
+![Training drones - small quads](/img/progress/2026-week-01/training-drones.jpg)
+
+*Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad (~100mm)
+with orange props. Both available for capturing training footage.*
+
+#### Hexacopter Development
+
+Large hexacopter in development for enterprise-class detection testing:
+
+![Hexacopter in workshop](/img/progress/2026-week-01/hexacopter-workshop.jpg)
+
+*Professional hexacopter (~600mm) with camera gimbal. In progress - represents larger
+drone class for detection model training.*
+
+#### Launcher Prototype
+
+PVC-based launcher prototype for net deployment testing:
+
+![Launcher prototype](/img/progress/2026-week-01/launcher-prototype.jpg)
+
+*PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure testing.
+Target: 50m deployment range.*
+
+#### Hardware Status Summary
+
+| Component | Status | Next Steps |
+|-----------|--------|------------|
+| Small training quads (2x) | ✅ Ready | Capture training footage |
+| Hexacopter | 🟡 In progress | Complete wiring, test flight |
+| Launcher prototype | 🟡 In progress | Trigger wiring, pressure test |
+| Pi 4 demo unit | ✅ Working | Field testing |
+
+---
+
+### 6. Key Decisions Made
 
 | Decision                      | Rationale                           | Impact                           |
 | ----------------------------- | ----------------------------------- | -------------------------------- |
 | YOLOv8n for edge deployment   | Best performance/accuracy tradeoff  | Enables real-time detection      |
-| INT8 quantization default     | 2x speedup with minimal accuracy loss | Better FPS on Pi 5              |
+| Pi 4 for demo, Jetson for prod| Cost-effective validation           | Demo on $50 hardware, prod on Jetson |
 | Azure ML for training         | Cost-effective, scalable            | $3-5 per training run            |
 | MLflow for experiment tracking| Industry standard, open source      | Better reproducibility           |
 | Three BOM tiers               | Market segmentation                 | Addresses different price points |
 
 ---
 
-### 6. Action Items Completed
+### 7. Action Items Completed
 
 #### Technical Team
 
-- [x] Complete Pi Drone Detector MVP
-- [x] Validate YOLOv8 on Raspberry Pi 5
+- [x] Complete Pi Drone Detector demo
+- [x] Validate YOLOv8n on Raspberry Pi 4
 - [x] Set up Azure ML training pipelines
 - [x] Implement MLflow experiment tracking
 - [x] Fix cross-platform build issues
@@ -361,17 +405,17 @@ Hardware and software roadmap alignment for consumer product launch.
 
 ---
 
-### 7. Next Week Priorities
+### 8. Next Week Priorities
 
 1. **Field Testing**: Begin real-world drone detection trials
 2. **TensorRT Optimization**: Further inference speed improvements
-3. **Hardware Integration**: Complete Pi 5 + camera module testing
+3. **Hardware Integration**: Complete Pi 4 + camera module field testing
 4. **Documentation**: API and integration guides
 5. **Accelerator Follow-ups**: Continue funding application discussions
 
 ---
 
-### 8. Metrics & KPIs
+### 9. Metrics & KPIs
 
 | Metric                | This Period | vs Week 51 | Trend  |
 | --------------------- | ----------- | ---------- | ------ |
@@ -387,7 +431,7 @@ significant technical milestones achieved.
 
 ---
 
-### 9. Risk Register
+### 10. Risk Register
 
 | Risk                        | Severity | Probability | Mitigation                              |
 | --------------------------- | -------- | ----------- | --------------------------------------- |
@@ -399,7 +443,7 @@ significant technical milestones achieved.
 
 ---
 
-### 10. Weekly Commits & Pull Requests
+### 11. Weekly Commits & Pull Requests
 
 #### Feature Pull Requests Merged (Dec 19 - Jan 8)
 
@@ -421,7 +465,7 @@ reviews.
 
 ---
 
-### 11. Code Progress Statistics
+### 12. Code Progress Statistics
 
 #### Lines of Code Changed (Dec 19 - Jan 8)
 
@@ -444,7 +488,7 @@ reviews.
 
 ---
 
-### 12. Technical Deep Dive: Edge AI Performance
+### 13. Technical Deep Dive: Edge AI Performance
 
 #### Optimization Techniques Applied
 
