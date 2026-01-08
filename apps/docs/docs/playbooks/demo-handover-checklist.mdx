@@ -18,38 +18,54 @@ tags:
 **What Jurie (Software) needs to provide to Pieter (Hardware) for the Pi Drone
 Detector demo.**
 
+> **Note:** Jurie is in Bela Bela, Pieter is in Cape Town - all handover is
+> remote/electronic.
+
 ---
 
 ## Pre-Handover Status
 
-| Item | Status | Notes |
-|------|--------|-------|
+| Item                  | Status         | Notes            |
+| --------------------- | -------------- | ---------------- |
 | YOLOv8n model trained | 🟡 In progress | Need ~600 images |
-| Inference script | ✅ Ready | Python + OpenCV |
-| Pi 4 setup guide | 📋 This doc | See below |
-| Camera config | ✅ Documented | 640x480 @ 30fps |
+| Inference script      | ✅ Ready       | Python + OpenCV  |
+| Pi 4 setup guide      | 📋 This doc    | See below        |
+| Camera config         | ✅ Documented  | 640x480 @ 30fps  |
 
 ---
 
-## 1. SD Card Image / Software Package
+## 1. Remote File Delivery
 
-### Option A: Pre-configured SD Card (Recommended)
+### Download Package (Google Drive / OneDrive)
 
-Jurie provides:
-- [ ] Flashed SD card with Raspberry Pi OS (64-bit Lite)
-- [ ] Pre-installed dependencies (Python, OpenCV, etc.)
-- [ ] YOLOv8n model file in `/home/pi/models/`
-- [ ] Inference script in `/home/pi/detector/`
-- [ ] Auto-start service configured
+Jurie uploads to shared folder:
 
-### Option B: Manual Setup
+- [ ] `setup_pi_detector.sh` - One-click setup script
+- [ ] `yolov8n_drone.onnx` - Model file (~12MB)
+- [ ] `detect.py` - Inference script
+- [ ] `requirements.txt` - Python dependencies
+- [ ] `README.md` - Step-by-step instructions
 
-Pieter receives:
-- [ ] Setup script (`setup_pi_detector.sh`)
-- [ ] Model file (`yolov8n_drone.pt` or `.onnx`)
-- [ ] Inference script (`detect.py`)
-- [ ] Requirements file (`requirements.txt`)
-- [ ] README with step-by-step instructions
+### Direct Download on Pi
+
+Pieter runs on the Pi:
+
+```bash
+# Download package from shared link
+wget -O detector.zip "https://[shared-link]"
+unzip detector.zip -d ~/
+cd ~/detector
+chmod +x setup_pi_detector.sh
+./setup_pi_detector.sh
+```
+
+### Alternative: Git Clone (if repo is public)
+
+```bash
+git clone https://github.com/JustAGhosT/pi-drone-detector.git ~/detector
+cd ~/detector
+./setup.sh
+```
 
 ---
 
@@ -133,9 +149,10 @@ pip3 install ultralytics opencv-python numpy picamera2
 # Create directories
 mkdir -p ~/models ~/detector ~/logs
 
-# Copy files (Pieter does this from USB)
-# cp /media/usb/yolov8n_drone.onnx ~/models/
-# cp /media/usb/detect.py ~/detector/
+# Download files from shared link (Jurie provides URL)
+echo "Download model and scripts from shared Google Drive/OneDrive link"
+echo "Place yolov8n_drone.onnx in ~/models/"
+echo "Place detect.py in ~/detector/"
 
 echo "Setup complete. Run: python3 ~/detector/detect.py"
 ```
@@ -208,18 +225,18 @@ python3 -c "from ultralytics import YOLO; print('OK')"
 
 ## 7. Demo Day Checklist
 
-### Before Demo (Jurie)
+### Before Demo (Jurie - Remote)
 
 - [ ] Final model trained and tested
-- [ ] SD card prepared or files on USB
-- [ ] Handover meeting with Pieter
-- [ ] Test run on actual hardware
+- [ ] Files uploaded to shared drive
+- [ ] Video call scheduled with Pieter
+- [ ] Available on WhatsApp for support
 
-### Before Demo (Pieter)
+### Before Demo (Pieter - On-site)
 
 - [ ] Pi 4 powered and booted
 - [ ] Camera connected and working
-- [ ] Software running (test with hand/object)
+- [ ] Software downloaded and running
 - [ ] Training drones charged and ready
 - [ ] Launcher prototype ready (if showing)
 
@@ -229,23 +246,29 @@ python3 -c "from ultralytics import YOLO; print('OK')"
 - [ ] Keep drone in camera field of view
 - [ ] Monitor terminal for detection logs
 - [ ] Record screen/output if needed
+- [ ] Jurie on standby via WhatsApp
 
 ---
 
-## 8. Handover Meeting Agenda
+## 8. Remote Handover Meeting
 
-### 15-minute sync before demo:
+### 15-minute video call (Google Meet / WhatsApp):
 
 1. **Software status** (2 min)
+
    - Model version and accuracy
    - Any known issues
 
-2. **File transfer** (5 min)
-   - SD card swap or USB copy
+2. **Remote file transfer** (5 min)
+
+   - Confirm download link works
+   - Pieter downloads on Pi
    - Verify files in correct locations
 
-3. **Quick test** (5 min)
-   - Boot Pi, run detection
+3. **Screen share test** (5 min)
+
+   - Pieter shares Pi terminal
+   - Run detection script together
    - Wave hand in front of camera
    - Confirm FPS is 12-18
 
@@ -256,44 +279,70 @@ python3 -c "from ultralytics import YOLO; print('OK')"
 
 ---
 
-## 9. Contact During Demo
+## 9. Remote Support Options
 
-| Issue | Contact | Method |
-|-------|---------|--------|
-| Software crash | Jurie | WhatsApp |
-| Hardware issue | Pieter handles | - |
-| Model not detecting | Jurie | WhatsApp call |
+### During Setup
+
+| Method          | Use Case                     | Response Time |
+| --------------- | ---------------------------- | ------------- |
+| WhatsApp text   | Quick questions              | Minutes       |
+| WhatsApp call   | Troubleshooting              | Immediate     |
+| Google Meet     | Screen share for complex fix | Schedule      |
+| SSH (if set up) | Direct Pi access             | Immediate     |
+
+### SSH Remote Access (Optional)
+
+If Pieter sets up port forwarding or uses a service like Tailscale:
+
+```bash
+# Jurie can SSH directly to help
+ssh pi@[pieter-pi-address]
+
+# Or use Tailscale for easy VPN access
+# https://tailscale.com/download/linux
+```
 
 ---
 
-## Current Blockers for Handover
+## 10. Current Blockers for Handover
 
-### Jurie Must Complete
+### Jurie Must Complete (Remote)
 
 1. **Train model with drone images**
+
    - Need: ~200 images per class (drone, bird, aircraft)
    - From: Pieter's training drones + public datasets
    - ETA: [TBD - depends on training footage]
 
-2. **Test on actual Pi 4 hardware**
-   - Need: Access to Pieter's Pi 4
-   - Or: Jurie gets own Pi 4 for testing
+2. **Test model locally**
 
-3. **Package software**
-   - Create SD card image OR
-   - Create USB with all files + setup script
+   - Simulate Pi 4 environment on desktop
+   - Or: Buy own Pi 4 for remote testing
 
-### Pieter Must Complete
+3. **Package software for download**
+   - Upload to Google Drive / OneDrive
+   - Create shareable download link
+   - Include setup script + README
+
+### Pieter Must Complete (On-site)
 
 1. **Capture training footage**
+
    - Fly small quads, record video
    - Multiple angles, distances, backgrounds
    - Target: 200+ frames per drone
+   - Upload to shared folder for Jurie
 
 2. **Prepare demo hardware**
+
    - Pi 4 with camera mounted
    - Power supply
+   - Internet connection for downloads
    - Test location identified
+
+3. **Enable remote support (optional)**
+   - Install Tailscale for SSH access
+   - Or: Set up port forwarding
 
 ---
 
