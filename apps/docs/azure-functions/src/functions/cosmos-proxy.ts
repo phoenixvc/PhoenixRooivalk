@@ -135,14 +135,18 @@ async function getDocumentHandler(
       stack: errorStack,
     });
 
+    const cosmosCode = (error as { code?: number | string })?.code;
+    const cosmosSubStatus = (error as { substatus?: number })?.substatus;
+
     return addCorsHeaders(
       {
         status: 500,
         jsonBody: {
           error: "Failed to get document",
           code: "DB_OPERATION_FAILED",
-          details:
-            process.env.NODE_ENV === "development" ? errorMessage : undefined,
+          cosmosCode,
+          cosmosSubStatus,
+          message: errorMessage,
         },
       },
       request,
@@ -291,14 +295,20 @@ async function setDocumentHandler(
       stack: errorStack,
     });
 
+    // Extract Cosmos-specific error codes for better debugging
+    const cosmosCode = (error as { code?: number | string })?.code;
+    const cosmosSubStatus = (error as { substatus?: number })?.substatus;
+
     return addCorsHeaders(
       {
         status: 500,
         jsonBody: {
           error: "Failed to set document",
           code: "DB_OPERATION_FAILED",
-          details:
-            process.env.NODE_ENV === "development" ? errorMessage : undefined,
+          // Include error details for debugging
+          cosmosCode,
+          cosmosSubStatus,
+          message: errorMessage,
         },
       },
       request,
@@ -458,11 +468,21 @@ async function queryDocumentsHandler(
       request,
     );
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const cosmosCode = (error as { code?: number | string })?.code;
+    const cosmosSubStatus = (error as { substatus?: number })?.substatus;
+
     context.error("Error querying documents:", error);
     return addCorsHeaders(
       {
         status: 500,
-        jsonBody: { error: "Failed to query documents" },
+        jsonBody: {
+          error: "Failed to query documents",
+          code: "DB_OPERATION_FAILED",
+          cosmosCode,
+          cosmosSubStatus,
+          message: errorMessage,
+        },
       },
       request,
     );
