@@ -6,11 +6,18 @@
  * will be hidden from the sidebar.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, type JSX } from "react";
 import DocSidebarItemOriginal from "@theme-original/DocSidebarItem";
 import type { Props } from "@theme/DocSidebarItem";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import { usePhaseFilterSafe, Phase } from "../../contexts/PhaseFilterContext";
+
+// Extend sidebar item type to include doc type which exists in raw config
+type ExtendedSidebarItem = Props["item"] & {
+  type: Props["item"]["type"] | "doc";
+  docId?: string;
+  id?: string;
+};
 
 // Type for the plugin's global data
 interface PhasePluginData {
@@ -36,7 +43,10 @@ function usePhaseMap(): Record<string, Phase[]> {
  * Get the docId from a sidebar item, handling various formats
  */
 function getDocId(item: Props["item"]): string | null {
-  if (item.type !== "doc") {
+  const itemType = item.type as string;
+
+  // Check for doc type (raw config) or link type (processed)
+  if (itemType !== "doc" && itemType !== "link") {
     return null;
   }
 
@@ -80,8 +90,9 @@ function shouldShowItem(
     return true;
   }
 
-  // For doc items, check their phase metadata
-  if (item.type === "doc") {
+  // For doc/link items, check their phase metadata
+  const itemType = item.type as string;
+  if (itemType === "doc" || itemType === "link") {
     const docId = getDocId(item);
 
     if (docId) {

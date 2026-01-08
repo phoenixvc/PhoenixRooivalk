@@ -9,15 +9,16 @@ import {
   DEFAULT_RESOURCE_STATE,
   EFFECTOR_UNLOCK_DATA,
   DRONE_UNLOCK_DATA,
+  type ResourceState,
 } from "../components/utils/resourceManager";
 import { createMockResourceState } from "./__mocks__/gameMocks";
 
 describe("ResourceManager", () => {
   let manager: ResourceManager;
-  let onStateChange: ReturnType<typeof vi.fn>;
+  let onStateChange: ReturnType<typeof vi.fn<(state: ResourceState) => void>>;
 
   beforeEach(() => {
-    onStateChange = vi.fn();
+    onStateChange = vi.fn<(state: ResourceState) => void>();
     manager = new ResourceManager(undefined, onStateChange);
   });
 
