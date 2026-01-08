@@ -31,6 +31,7 @@ Print this section and keep it next to the Pi.
 | Stop detection      | `Ctrl+C`                                  |
 | Check FPS           | Look for `FPS: XX` in terminal            |
 | Expected FPS        | 12-18 FPS                                 |
+| False positive test | Loop Coke can - should NOT detect         |
 | Restart Pi          | `sudo reboot`                             |
 | Check camera        | `libcamera-hello --list-cameras`          |
 | Call Jurie          | WhatsApp if issues                        |
@@ -86,12 +87,15 @@ python3 detect.py
 [INFO] FPS: 15.2 | Detections: 0
 ```
 
-Wave your hand in front of camera - should see output change.
+**Test with Coke can:** Loop a Coke can in front of camera at arm's length.
+The model should **NOT** detect it as a drone - this proves the model can
+distinguish drones from random objects (low false positive rate).
 
 Press `Ctrl+C` to stop.
 
 - [ ] Test run successful
 - [ ] FPS shows 12-18
+- [ ] Coke can NOT detected as drone (proves accuracy)
 
 ---
 
@@ -128,15 +132,37 @@ using a YOLOv8 nano model to detect drones in real-time."
 
 **Show:** Point to the Pi and camera setup.
 
-### Live Detection (2-3 minutes)
+### False Positive Test - Coke Can Demo (1-2 minutes)
+
+> **Key demo:** Show the model correctly rejects non-drone objects.
 
 **Say:** "Watch the terminal - it's processing video at 12-18 frames per second.
-Right now it shows zero detections because there's no drone in view."
+Let me show you how accurate this is."
+
+**Action:** Loop a Coke can slowly in front of the camera at arm's length.
+
+**Say:** "See? The system sees the object but correctly identifies it's NOT a
+drone. Zero false positives. This is critical - you don't want security alerts
+every time a bird flies by or someone waves their coffee cup."
+
+**Show:** Point to terminal still showing:
+
+```
+[INFO] FPS: 15.1 | Detections: 0
+```
+
+**Say:** "The model is trained to distinguish drones from everyday objects,
+birds, and aircraft. It only alerts on actual drone signatures."
+
+### Live Detection - With Drone (if available)
 
 **Action:** Have someone fly a training drone into camera view.
 
-**Say:** "There - drone detected. You can see the confidence score - that's how
-certain the AI is that it's a drone and not a bird."
+**Say:** "Now watch what happens with an actual drone..."
+
+**Say:** "There - drone detected instantly. You can see the confidence score -
+that's how certain the AI is. The same model that ignored the Coke can
+immediately recognizes the drone."
 
 **Show:** Point to terminal showing:
 
@@ -148,8 +174,8 @@ certain the AI is that it's a drone and not a bird."
 
 **Action:** Fly second drone into view.
 
-**Say:** "The system can track multiple targets. Each gets its own bounding box
-and confidence score."
+**Say:** "The system can track multiple targets simultaneously. Each gets its
+own bounding box and confidence score."
 
 ### Edge AI Explanation (1 minute)
 
@@ -374,13 +400,15 @@ FPS: 12-18 (detection rate)
 - [ ] Pi powered and green LED solid
 - [ ] Camera connected
 - [ ] Test run successful (12-18 FPS)
-- [ ] Drones ready
+- [ ] Coke can test passed (NOT detected as drone)
+- [ ] Drones ready (if outdoor demo)
 
 ### 10 min before
 
 - [ ] Message Jurie "all systems go"
 - [ ] Detection script running
 - [ ] Camera pointed at demo area
+- [ ] Coke can ready for false positive demo
 
 ### During demo
 
