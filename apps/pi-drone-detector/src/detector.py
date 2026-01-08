@@ -10,7 +10,7 @@ import time
 import numpy as np
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
 # Try to import TFLite runtime (Pi-optimized) first, fall back to full TF
 try:
@@ -81,7 +81,7 @@ class DroneDetector:
             try:
                 from pycoral.utils.edgetpu import make_interpreter
                 self.interpreter = make_interpreter(str(self.model_path))
-                print(f"Loaded model on Coral Edge TPU")
+                print("Loaded model on Coral Edge TPU")
             except Exception as e:
                 print(f"Coral not available ({e}), using CPU")
                 self.interpreter = tflite.Interpreter(model_path=str(self.model_path))

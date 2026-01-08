@@ -28,11 +28,11 @@ heuristics alone. Here's how to set it up:
 
 ### Cost Estimate
 
-| Resource                     | Config         | Cost/Hour | Training Time | Total  |
-| ---------------------------- | -------------- | --------- | ------------- | ------ |
-| **NC6s_v3**                  | 1x V100 (16GB) | ~$3.06    | 2-4 hours     | ~$6-12 |
-| **NC4as_T4_v3**              | 1x T4 (16GB)   | ~$0.53    | 4-6 hours     | ~$2-4  |
-| **Standard_NC24ads_A100_v4** | 1x A100 (80GB) | ~$3.67    | 1-2 hours     | ~$4-7  |
+| Resource         | Config    | Cost/Hour | Time    | Total  |
+| ---------------- | --------- | --------- | ------- | ------ |
+| **NC6s_v3**      | V100 16GB | ~$3.06    | 2-4 hrs | ~$6-12 |
+| **NC4as_T4_v3**  | T4 16GB   | ~$0.53    | 4-6 hrs | ~$2-4  |
+| **NC24ads_A100** | A100 80GB | ~$3.67    | 1-2 hrs | ~$4-7  |
 
 **Recommended**: `NC4as_T4_v3` - Best cost/performance for small dataset
 fine-tuning (~$3-5 total)
@@ -67,7 +67,7 @@ az ml compute create \
 
 Create this folder structure locally:
 
-```
+```text
 drone-dataset/
 ├── images/
 │   ├── train/
@@ -225,12 +225,18 @@ If you need to label images:
 
 ### Quick Dataset Sources
 
-| Dataset                                                              | Images      | Notes                                |
-| -------------------------------------------------------------------- | ----------- | ------------------------------------ |
-| [Drone-vs-Bird](https://github.com/wosdetc/drone-vs-bird)            | 2,000+      | Video frames, good variety           |
-| [Anti-UAV](https://anti-uav.github.io/)                              | 300+ videos | Thermal + RGB                        |
-| [USC Drone Dataset](https://data.mendeley.com/datasets/zcsj2g2m4c/4) | 2,600+      | Labeled drones                       |
-| DIY: Record coke cans                                                | 200+        | Hold can at various distances/angles |
+| Dataset          | Images | Notes                     |
+| ---------------- | ------ | ------------------------- |
+| Drone-vs-Bird    | 2,000+ | Video frames, variety     |
+| Anti-UAV         | 300+   | Thermal + RGB videos      |
+| USC Drone        | 2,600+ | Labeled drones            |
+| DIY: Coke cans   | 200+   | Various distances/angles  |
+
+Links:
+
+- [Drone-vs-Bird](https://github.com/wosdetc/drone-vs-bird)
+- [Anti-UAV](https://anti-uav.github.io/)
+- [USC Drone](https://data.mendeley.com/datasets/zcsj2g2m4c/4)
 
 ---
 
@@ -308,6 +314,7 @@ If you need to label images:
    **Recommendation**: Start with **YOLOv5n** (TFLite quantized) - best balance
 
 4. **Verify camera works**
+
    ```bash
    libcamera-hello --timeout 5000  # Pi Camera
    # or

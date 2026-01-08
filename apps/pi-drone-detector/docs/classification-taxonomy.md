@@ -207,7 +207,7 @@ Input Image
 
 ### For Raspberry Pi (Speed Priority)
 
-```
+```text
 YOLOv5n/YOLOv8n
 ├── Input: 320x320
 ├── Binary head: drone confidence
