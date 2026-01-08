@@ -51,12 +51,12 @@ import {
 
 ## TL;DR (2-Minute Summary)
 
-### 1. Pi Drone Detector MVP Complete
+### 1. Pi Drone Detector Demo Validated
 
-- **Edge AI validated**: YOLOv8 nano model running on Raspberry Pi 5
-- **5-50 FPS performance**: Depending on resolution and inference mode
+- **Edge AI demo**: YOLOv8n model running on Raspberry Pi 4 (2GB)
+- **12-18 FPS performance**: Native inference on Pi 4 hardware
 - **Azure ML pipeline**: Complete training infrastructure with cost-effective runs
-- **Production-ready**: Detection pipeline validated with real drone footage
+- **Demo-ready**: Detection pipeline validated for demonstrations (prod uses Jetson)
 
 ### 2. Development Velocity
 
@@ -101,12 +101,12 @@ import {
 
 <SlideSection
   number={1}
-  title="Pi Drone Detector MVP"
+  title="Pi Drone Detector Demo"
   duration={40}
   icon="🎯"
   keyPoints={[
-    "**Edge AI validated**: YOLOv8 nano on Raspberry Pi 5",
-    "**5-50 FPS performance**: Resolution-dependent inference",
+    "**Edge AI demo**: YOLOv8n on Raspberry Pi 4 (2GB)",
+    "**12-18 FPS performance**: Native inference validated",
     {
       text: "**Key capabilities**:",
       subPoints: [
@@ -115,10 +115,10 @@ import {
         "Low-latency alert pipeline",
       ],
     },
-    "**Production-ready**: Validated with real drone footage",
+    "**Demo-ready**: Validates edge approach (prod uses Jetson)",
   ]}
-  speakerNotes="Lead with the MVP completion - this is a major milestone."
-  script="We completed the Pi Drone Detector MVP this week. YOLOv8 nano model running on Raspberry Pi 5 achieving 5-50 FPS depending on resolution. Real-time detection validated with actual drone footage. Multi-class detection distinguishes drones from birds and aircraft. This validates our edge AI approach."
+  speakerNotes="Lead with the demo validation - proves our edge AI approach works."
+  script="We validated the Pi Drone Detector demo this week. YOLOv8n model running on Raspberry Pi 4 achieving 12-18 FPS. This proves our edge deployment approach works on constrained hardware. Production deployment will use Jetson for sub-200ms response times. Multi-class detection distinguishes drones from birds and aircraft."
 />
 
 <SlideSection
@@ -193,36 +193,43 @@ import {
 
 ## Full Weekly Report
 
-### 1. Pi Drone Detector MVP
+### 1. Pi Drone Detector Demo
 
-This week marked a significant milestone with the completion of our Pi Drone
-Detector MVP, validating our edge AI approach for real-time drone detection.
+This week marked a significant milestone with the validation of our Pi Drone
+Detector demo, proving our edge AI approach works on constrained hardware.
 
-#### Performance Benchmarks
+#### Performance Benchmarks (Pi 4, 2GB RAM)
 
 | Configuration          | Resolution | FPS   | Inference Time | Notes                    |
 | ---------------------- | ---------- | ----- | -------------- | ------------------------ |
-| YOLOv8n (FP16)         | 640×480    | 25-30 | ~35ms          | Recommended for real-time |
-| YOLOv8n (INT8)         | 640×480    | 40-50 | ~22ms          | Best performance          |
-| YOLOv8n (FP32)         | 640×480    | 15-20 | ~55ms          | Baseline accuracy         |
-| YOLOv8n (FP16)         | 1280×720   | 8-12  | ~90ms          | Higher resolution         |
+| YOLOv8n (native)       | 640×480    | 12-18 | ~55-80ms       | Current demo hardware    |
+| YOLOv8n (native)       | 1280×720   | 0-8   | ~125-145ms     | Higher resolution        |
+
+**Note:** Production deployment targets NVIDIA Jetson for sub-200ms response times.
+Pi 4 demo validates the edge deployment approach on low-cost hardware.
 
 #### Model Capabilities
 
 - **Detection classes**: Drone, bird, aircraft, helicopter
 - **Confidence threshold**: 0.5 (configurable)
 - **NMS threshold**: 0.45
-- **mAP@0.5**: 0.89 on validation set
+- **Training status**: Model training in progress, ~600 images needed
 
-#### Hardware Configuration
+#### Hardware Configuration (Demo)
 
 | Component       | Specification                    |
 | --------------- | -------------------------------- |
-| Compute         | Raspberry Pi 5 (8GB)             |
-| Camera          | Pi Camera Module 3 (12MP)        |
-| Storage         | 64GB microSD (Class 10)          |
-| Power           | 5V 5A USB-C                      |
-| Cooling         | Active cooling fan               |
+| Compute         | Raspberry Pi 4 (2GB)             |
+| Camera          | Pi Camera (30fps @ 1080p)        |
+| Storage         | microSD                          |
+| Power           | 5V USB-C                         |
+
+#### Production Target
+
+| Component       | Specification                    |
+| --------------- | -------------------------------- |
+| Compute         | NVIDIA Jetson Orin               |
+| Response Time   | <200ms                           |
 
 **Key PRs:** #460-#467
 
@@ -369,9 +376,8 @@ Hardware and software roadmap alignment for consumer product launch.
 | Metric                | This Period | vs Week 51 | Trend  |
 | --------------------- | ----------- | ---------- | ------ |
 | Commits merged        | 137         | 194        | ↓ 29%  |
-| Edge AI FPS achieved  | 50          | N/A        | ✅ NEW |
+| Edge AI FPS (Pi 4)    | 12-18       | N/A        | ✅ NEW |
 | Training cost/run     | $3-5        | N/A        | ✅ NEW |
-| Model mAP@0.5         | 0.89        | N/A        | ✅ NEW |
 | BOM estimate validated| Yes         | N/A        | ✅ NEW |
 | Rust test coverage    | 85%+        | 80%+       | ↑ 5%   |
 | Python test coverage  | 80%+        | 75%+       | ↑ 5%   |
@@ -385,8 +391,8 @@ significant technical milestones achieved.
 
 | Risk                        | Severity | Probability | Mitigation                              |
 | --------------------------- | -------- | ----------- | --------------------------------------- |
-| Pi 5 supply constraints     | Medium   | Low         | Secondary supplier identified           |
-| Model accuracy degradation  | Medium   | Medium      | Continuous evaluation pipeline          |
+| Jetson supply constraints   | Medium   | Low         | Pi 4 demo as fallback, pre-orders       |
+| Training data shortage      | Medium   | Medium      | ~600 images needed, public datasets     |
 | Azure ML cost overruns      | Low      | Low         | Spot instances, budget alerts           |
 | Certification delays        | Medium   | Medium      | Early engagement with test labs         |
 | Component cost increases    | Medium   | Medium      | Multiple BOM tiers, supplier agreements |
