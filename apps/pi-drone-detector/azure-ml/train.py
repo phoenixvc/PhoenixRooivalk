@@ -5,7 +5,6 @@ Azure ML Training Script for Drone Detection Model
 Fine-tunes YOLOv5n on drone dataset and exports to TFLite for Raspberry Pi.
 """
 
-import os
 import argparse
 import shutil
 from pathlib import Path

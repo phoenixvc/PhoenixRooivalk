@@ -27,7 +27,8 @@ sudo raspi-config  # Interface Options > Camera > Enable
 
 ### 2. Get a Model
 
-**Option A: Use pre-trained YOLOv5n (quick start, less accurate)**
+#### Option A: Use pre-trained YOLOv5n (quick start, less accurate)
+
 ```bash
 # Download YOLOv5n and convert to TFLite
 pip install ultralytics
@@ -35,7 +36,8 @@ python -c "from ultralytics import YOLO; YOLO('yolov5n.pt').export(format='tflit
 cp yolov5n_int8.tflite models/
 ```
 
-**Option B: Train custom model on Azure (recommended)**
+#### Option B: Train custom model on Azure (recommended)
+
 ```bash
 # See azure-ml/ folder for training scripts
 cd azure-ml
@@ -61,7 +63,7 @@ python src/main.py --model models/drone-detector_int8.tflite --save-detections d
 
 ## Project Structure
 
-```
+```text
 pi-drone-detector/
 ├── azure-ml/              # Azure ML training infrastructure
 │   ├── train.py           # Training script
@@ -174,6 +176,7 @@ python src/main.py --model models/drone-detector_int8.tflite \
 ## Troubleshooting
 
 ### Camera not found
+
 ```bash
 # Enable legacy camera support
 sudo raspi-config  # Interface Options > Legacy Camera > Enable
@@ -186,12 +189,14 @@ ls -la /dev/video*
 ```
 
 ### Low FPS
+
 - Use smaller input size: `--width 320 --height 240`
 - Add Coral USB Accelerator
 - Use Pi 5 instead of Pi 4
 - Enable headless mode: `--headless`
 
 ### TFLite import error
+
 ```bash
 # Install Pi-optimized TFLite runtime
 pip install tflite-runtime
