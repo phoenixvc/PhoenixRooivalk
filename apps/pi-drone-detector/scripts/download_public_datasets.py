@@ -81,7 +81,7 @@ OPENIMAGES_CLASS_MAPPING = {
 }
 
 
-def download_file(url: str, dest: Path, desc: str = None) -> bool:
+def download_file(url: str, dest: Path, desc: str | None = None) -> bool:
     """Download file with progress."""
     if dest.exists():
         print(f"  [EXISTS] {dest.name}")
@@ -91,6 +91,13 @@ def download_file(url: str, dest: Path, desc: str = None) -> bool:
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     try:
+        # Validate URL scheme for security
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        if parsed.scheme not in ('http', 'https'):
+            print(f"\n  ERROR: Invalid URL scheme: {parsed.scheme}")
+            return False
+        
         def progress(count, block_size, total_size):
             pct = int(count * block_size * 100 / total_size) if total_size > 0 else 0
             sys.stdout.write(f"\r    {pct}%")
@@ -99,7 +106,7 @@ def download_file(url: str, dest: Path, desc: str = None) -> bool:
         urllib.request.urlretrieve(url, dest, reporthook=progress)
         print()
         return True
-    except Exception as e:
+    except (urllib.error.URLError, OSError, ValueError) as e:
         print(f"\n  ERROR: {e}")
         return False
 
