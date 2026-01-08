@@ -1,0 +1,300 @@
+---
+id: demo-handover-checklist
+title: "Demo Handover Checklist: Software → Hardware"
+sidebar_label: Demo Handover
+difficulty: beginner
+timeEstimate: 15
+xpReward: 25
+phase: ["seed"]
+tags:
+  - playbook
+  - demo
+  - handover
+  - hardware
+---
+
+# Demo Handover Checklist
+
+**What Jurie (Software) needs to provide to Pieter (Hardware) for the Pi Drone
+Detector demo.**
+
+---
+
+## Pre-Handover Status
+
+| Item | Status | Notes |
+|------|--------|-------|
+| YOLOv8n model trained | 🟡 In progress | Need ~600 images |
+| Inference script | ✅ Ready | Python + OpenCV |
+| Pi 4 setup guide | 📋 This doc | See below |
+| Camera config | ✅ Documented | 640x480 @ 30fps |
+
+---
+
+## 1. SD Card Image / Software Package
+
+### Option A: Pre-configured SD Card (Recommended)
+
+Jurie provides:
+- [ ] Flashed SD card with Raspberry Pi OS (64-bit Lite)
+- [ ] Pre-installed dependencies (Python, OpenCV, etc.)
+- [ ] YOLOv8n model file in `/home/pi/models/`
+- [ ] Inference script in `/home/pi/detector/`
+- [ ] Auto-start service configured
+
+### Option B: Manual Setup
+
+Pieter receives:
+- [ ] Setup script (`setup_pi_detector.sh`)
+- [ ] Model file (`yolov8n_drone.pt` or `.onnx`)
+- [ ] Inference script (`detect.py`)
+- [ ] Requirements file (`requirements.txt`)
+- [ ] README with step-by-step instructions
+
+---
+
+## 2. Model Files
+
+### Required Files
+
+| File | Size | Location | Description |
+|------|------|----------|-------------|
+| `yolov8n_drone.pt` | ~6MB | `/home/pi/models/` | PyTorch weights |
+| `yolov8n_drone.onnx` | ~12MB | `/home/pi/models/` | ONNX format (faster) |
+| `labels.txt` | <1KB | `/home/pi/models/` | Class names |
+
+### Model Info
+
+```yaml
+Model: YOLOv8n (nano)
+Input: 640x480 RGB
+Classes:
+  - 0: drone
+  - 1: bird
+  - 2: aircraft
+  - 3: helicopter
+Confidence threshold: 0.5
+NMS threshold: 0.45
+```
+
+---
+
+## 3. Hardware Requirements
+
+### Pieter Provides
+
+- [ ] Raspberry Pi 4 (2GB+ RAM)
+- [ ] Pi Camera Module (v2 or v3)
+- [ ] microSD card (32GB+ Class 10)
+- [ ] 5V 3A power supply (USB-C)
+- [ ] (Optional) Active cooling fan
+- [ ] (Optional) Enclosure/mount
+
+### Jurie Verifies
+
+- [ ] Camera ribbon cable connected correctly
+- [ ] Camera enabled in raspi-config
+- [ ] Sufficient storage space (>5GB free)
+
+---
+
+## 4. Software Dependencies
+
+### Pre-installed on SD Card
+
+```bash
+# System
+python3.11
+libopencv-dev
+libcamera-apps
+
+# Python packages
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+picamera2>=0.3.12
+```
+
+### Installation Script (if manual)
+
+```bash
+#!/bin/bash
+# setup_pi_detector.sh
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install dependencies
+sudo apt install -y python3-pip python3-opencv libcamera-apps
+
+# Install Python packages
+pip3 install ultralytics opencv-python numpy picamera2
+
+# Create directories
+mkdir -p ~/models ~/detector ~/logs
+
+# Copy files (Pieter does this from USB)
+# cp /media/usb/yolov8n_drone.onnx ~/models/
+# cp /media/usb/detect.py ~/detector/
+
+echo "Setup complete. Run: python3 ~/detector/detect.py"
+```
+
+---
+
+## 5. Running the Demo
+
+### Quick Start
+
+```bash
+# SSH into Pi or use terminal
+cd ~/detector
+python3 detect.py
+```
+
+### With Options
+
+```bash
+# Specify model and confidence
+python3 detect.py --model ~/models/yolov8n_drone.onnx --conf 0.5
+
+# Save output video
+python3 detect.py --save-video ~/logs/demo_$(date +%Y%m%d).mp4
+
+# Show preview (if display connected)
+python3 detect.py --preview
+```
+
+### Expected Output
+
+```
+[INFO] Loading model: yolov8n_drone.onnx
+[INFO] Camera initialized: 640x480 @ 30fps
+[INFO] Starting detection loop...
+[INFO] FPS: 15.2 | Detections: 0
+[INFO] FPS: 14.8 | Detections: 1 (drone: 0.87)
+[INFO] FPS: 15.1 | Detections: 1 (drone: 0.92)
+```
+
+---
+
+## 6. Troubleshooting Guide
+
+### Common Issues
+
+| Problem | Likely Cause | Fix |
+|---------|--------------|-----|
+| "Camera not found" | Ribbon cable loose | Reseat cable, check raspi-config |
+| "Model not found" | Wrong path | Check ~/models/ directory |
+| Low FPS (<10) | Resolution too high | Use 640x480, not 1080p |
+| No detections | Confidence too high | Lower --conf to 0.3 |
+| Out of memory | Model too large | Use .onnx not .pt |
+
+### Debug Mode
+
+```bash
+# Run with verbose logging
+python3 detect.py --debug
+
+# Check camera
+libcamera-hello --list-cameras
+
+# Check Python environment
+python3 -c "import cv2; print(cv2.__version__)"
+python3 -c "from ultralytics import YOLO; print('OK')"
+```
+
+---
+
+## 7. Demo Day Checklist
+
+### Before Demo (Jurie)
+
+- [ ] Final model trained and tested
+- [ ] SD card prepared or files on USB
+- [ ] Handover meeting with Pieter
+- [ ] Test run on actual hardware
+
+### Before Demo (Pieter)
+
+- [ ] Pi 4 powered and booted
+- [ ] Camera connected and working
+- [ ] Software running (test with hand/object)
+- [ ] Training drones charged and ready
+- [ ] Launcher prototype ready (if showing)
+
+### During Demo
+
+- [ ] Start detection script before flying
+- [ ] Keep drone in camera field of view
+- [ ] Monitor terminal for detection logs
+- [ ] Record screen/output if needed
+
+---
+
+## 8. Handover Meeting Agenda
+
+### 15-minute sync before demo:
+
+1. **Software status** (2 min)
+   - Model version and accuracy
+   - Any known issues
+
+2. **File transfer** (5 min)
+   - SD card swap or USB copy
+   - Verify files in correct locations
+
+3. **Quick test** (5 min)
+   - Boot Pi, run detection
+   - Wave hand in front of camera
+   - Confirm FPS is 12-18
+
+4. **Demo plan** (3 min)
+   - Who controls what
+   - Signal for "detection working"
+   - Backup plan if issues
+
+---
+
+## 9. Contact During Demo
+
+| Issue | Contact | Method |
+|-------|---------|--------|
+| Software crash | Jurie | WhatsApp |
+| Hardware issue | Pieter handles | - |
+| Model not detecting | Jurie | WhatsApp call |
+
+---
+
+## Current Blockers for Handover
+
+### Jurie Must Complete
+
+1. **Train model with drone images**
+   - Need: ~200 images per class (drone, bird, aircraft)
+   - From: Pieter's training drones + public datasets
+   - ETA: [TBD - depends on training footage]
+
+2. **Test on actual Pi 4 hardware**
+   - Need: Access to Pieter's Pi 4
+   - Or: Jurie gets own Pi 4 for testing
+
+3. **Package software**
+   - Create SD card image OR
+   - Create USB with all files + setup script
+
+### Pieter Must Complete
+
+1. **Capture training footage**
+   - Fly small quads, record video
+   - Multiple angles, distances, backgrounds
+   - Target: 200+ frames per drone
+
+2. **Prepare demo hardware**
+   - Pi 4 with camera mounted
+   - Power supply
+   - Test location identified
+
+---
+
+_Last Updated: January 8, 2026_
