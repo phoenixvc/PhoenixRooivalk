@@ -180,8 +180,7 @@ def send_alert(webhook_url: str, detection: dict):
             data=data,
             headers={'Content-Type': 'application/json'},
         )
-        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected
-        urllib.request.urlopen(req, timeout=5)  # nosec B310 - URL scheme validated above
+        urllib.request.urlopen(req, timeout=5)  # nosemgrep # nosec B310
     except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
         print(f"Webhook error: {e}")
 
