@@ -25,16 +25,16 @@ tags:
 
 Print this section and keep it next to the Pi.
 
-| Action              | Command / Step                            |
-| ------------------- | ----------------------------------------- |
-| Start detection     | `python3 ~/detector/detect.py`            |
-| Stop detection      | `Ctrl+C`                                  |
-| Check FPS           | Look for `FPS: XX` in terminal            |
-| Expected FPS        | 12-18 FPS                                 |
-| False positive test | Loop Coke can - should NOT detect         |
-| Restart Pi          | `sudo reboot`                             |
-| Check camera        | `libcamera-hello --list-cameras`          |
-| Call Jurie          | WhatsApp if issues                        |
+| Action              | Command / Step                    |
+| ------------------- | --------------------------------- |
+| Start detection     | `python3 ~/detector/detect.py`    |
+| Stop detection      | `Ctrl+C`                          |
+| Check FPS           | Look for `FPS: XX` in terminal    |
+| Expected FPS        | 12-18 FPS                         |
+| False positive test | Loop Coke can - should NOT detect |
+| Restart Pi          | `sudo reboot`                     |
+| Check camera        | `libcamera-hello --list-cameras`  |
+| Call Jurie          | WhatsApp if issues                |
 
 ---
 
@@ -87,8 +87,8 @@ python3 detect.py
 [INFO] FPS: 15.2 | Detections: 0
 ```
 
-**Test with Coke can:** Loop a Coke can in front of camera at arm's length.
-The model should **NOT** detect it as a drone - this proves the model can
+**Test with Coke can:** Loop a Coke can in front of camera at arm's length. The
+model should **NOT** detect it as a drone - this proves the model can
 distinguish drones from random objects (low false positive rate).
 
 Press `Ctrl+C` to stop.

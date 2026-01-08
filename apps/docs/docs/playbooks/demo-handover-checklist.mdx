@@ -38,15 +38,15 @@ Detector demo.**
 
 Two approaches are available depending on demo timeline:
 
-| Approach | Setup Time | FPS on Pi 4 | Best For |
-|----------|------------|-------------|----------|
-| **Ultralytics/ONNX** | 30 min | 12-18 FPS | Quick demo setup |
-| **TFLite Optimized** | 1 hour | 5-8 FPS (25-35 with Coral) | Production deployment |
+| Approach             | Setup Time | FPS on Pi 4                | Best For              |
+| -------------------- | ---------- | -------------------------- | --------------------- |
+| **Ultralytics/ONNX** | 30 min     | 12-18 FPS                  | Quick demo setup      |
+| **TFLite Optimized** | 1 hour     | 5-8 FPS (25-35 with Coral) | Production deployment |
 
 ### Option A: Ultralytics/ONNX (This Guide)
 
-Uses `ultralytics` package with ONNX export. Faster setup, slightly higher FPS on
-CPU. Instructions below.
+Uses `ultralytics` package with ONNX export. Faster setup, slightly higher FPS
+on CPU. Instructions below.
 
 ### Option B: TFLite Optimized
 
@@ -54,6 +54,7 @@ For production deployment or if using Coral USB Accelerator, see the full setup
 guide: [`apps/pi-drone-detector/README.md`](/docs/pi-drone-detector)
 
 Key benefits of TFLite:
+
 - INT8 quantization (smaller model, ~6MB)
 - Coral Edge TPU support (25-35 FPS)
 - Custom drone scoring with coke can rejection heuristics
@@ -99,11 +100,11 @@ cd ~/detector
 
 ### Required Files
 
-| File | Size | Location | Description |
-|------|------|----------|-------------|
-| `yolov8n_drone.pt` | ~6MB | `/home/pi/models/` | PyTorch weights |
+| File                 | Size  | Location           | Description          |
+| -------------------- | ----- | ------------------ | -------------------- |
+| `yolov8n_drone.pt`   | ~6MB  | `/home/pi/models/` | PyTorch weights      |
 | `yolov8n_drone.onnx` | ~12MB | `/home/pi/models/` | ONNX format (faster) |
-| `labels.txt` | <1KB | `/home/pi/models/` | Class names |
+| `labels.txt`         | <1KB  | `/home/pi/models/` | Class names          |
 
 ### Model Info
 
@@ -225,13 +226,13 @@ python3 detect.py --preview
 
 ### Common Issues
 
-| Problem | Likely Cause | Fix |
-|---------|--------------|-----|
-| "Camera not found" | Ribbon cable loose | Reseat cable, check raspi-config |
-| "Model not found" | Wrong path | Check ~/models/ directory |
-| Low FPS (<10) | Resolution too high | Use 640x480, not 1080p |
-| No detections | Confidence too high | Lower --conf to 0.3 |
-| Out of memory | Model too large | Use .onnx not .pt |
+| Problem            | Likely Cause        | Fix                              |
+| ------------------ | ------------------- | -------------------------------- |
+| "Camera not found" | Ribbon cable loose  | Reseat cable, check raspi-config |
+| "Model not found"  | Wrong path          | Check ~/models/ directory        |
+| Low FPS (<10)      | Resolution too high | Use 640x480, not 1080p           |
+| No detections      | Confidence too high | Lower --conf to 0.3              |
+| Out of memory      | Model too large     | Use .onnx not .pt                |
 
 ### Debug Mode
 
@@ -281,18 +282,15 @@ python3 -c "from ultralytics import YOLO; print('OK')"
 ### 15-minute video call (Google Meet / WhatsApp):
 
 1. **Software status** (2 min)
-
    - Model version and accuracy
    - Any known issues
 
 2. **Remote file transfer** (5 min)
-
    - Confirm download link works
    - Pieter downloads on Pi
    - Verify files in correct locations
 
 3. **Screen share test** (5 min)
-
    - Pieter shares Pi terminal
    - Run detection script together
    - Coke can test: loop in front of camera - should NOT detect
@@ -335,13 +333,11 @@ ssh pi@[pieter-pi-address]
 ### Jurie Must Complete (Remote)
 
 1. **Train model with drone images**
-
    - Need: ~200 images per class (drone, bird, aircraft)
    - From: Pieter's training drones + public datasets
    - ETA: [TBD - depends on training footage]
 
 2. **Test model locally**
-
    - Simulate Pi 4 environment on desktop
    - Or: Buy own Pi 4 for remote testing
 
@@ -353,14 +349,12 @@ ssh pi@[pieter-pi-address]
 ### Pieter Must Complete (On-site)
 
 1. **Capture training footage**
-
    - Fly small quads, record video
    - Multiple angles, distances, backgrounds
    - Target: 200+ frames per drone
    - Upload to shared folder for Jurie
 
 2. **Prepare demo hardware**
-
    - Pi 4 with camera mounted
    - Power supply
    - Internet connection for downloads
