@@ -104,7 +104,7 @@ cd ~/detector
 | -------------------- | ----- | ------------------ | -------------------- |
 | `yolov8n_drone.pt`   | ~6MB  | `/home/pi/models/` | PyTorch weights      |
 | `yolov8n_drone.onnx` | ~12MB | `/home/pi/models/` | ONNX format (faster) |
-| `labels.txt`         | <1KB  | `/home/pi/models/` | Class names          |
+| `labels.txt`         | `<1KB`  | `/home/pi/models/` | Class names          |
 
 ### Model Info
 
@@ -230,7 +230,7 @@ python3 detect.py --preview
 | ------------------ | ------------------- | -------------------------------- |
 | "Camera not found" | Ribbon cable loose  | Reseat cable, check raspi-config |
 | "Model not found"  | Wrong path          | Check ~/models/ directory        |
-| Low FPS (<10)      | Resolution too high | Use 640x480, not 1080p           |
+| Low FPS (`<10`)    | Resolution too high | Use 640x480, not 1080p           |
 | No detections      | Confidence too high | Lower --conf to 0.3              |
 | Out of memory      | Model too large     | Use .onnx not .pt                |
 

@@ -231,7 +231,7 @@ times. Pi 4 demo validates the edge deployment approach on low-cost hardware.
 | Component     | Specification      |
 | ------------- | ------------------ |
 | Compute       | NVIDIA Jetson Orin |
-| Response Time | <200ms             |
+| Response Time | `<200ms`           |
 
 **Key PRs:** #460-#467
 
@@ -342,7 +342,7 @@ collaboration workflow.
 
 Two small quadcopters ready for training data capture:
 
-![Training drones - small quads](/img/progress/training-drones.jpeg)
+![Training drones - small quads](/img/training-drones.jpeg)
 
 _Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad
 (~100mm) with orange props. Both available for capturing training footage._
@@ -351,7 +351,7 @@ _Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad
 
 Large hexacopter in development for enterprise-class detection testing:
 
-![Hexacopter in workshop](/img/progress/hexacopter-workshop.jpeg)
+![Hexacopter in workshop](/img/hexacopter-workshop.jpeg)
 
 _Professional hexacopter (~600mm) with camera gimbal. In progress - represents
 larger drone class for detection model training._
@@ -360,7 +360,7 @@ larger drone class for detection model training._
 
 PVC-based launcher prototype for net deployment testing:
 
-![Launcher prototype](/img/progress/launcher-prototype.jpeg)
+![Launcher prototype](/img/launcher-prototype.jpeg)
 
 _PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure
 testing. Target: 50m deployment range._
@@ -497,8 +497,8 @@ reviews.
 
 | Technique           | Speedup | Accuracy Impact | Notes                      |
 | ------------------- | ------- | --------------- | -------------------------- |
-| FP16 inference      | 1.5x    | <0.1% drop      | Default recommendation     |
-| INT8 quantization   | 2.0x    | <0.5% drop      | Best for real-time         |
+| FP16 inference      | 1.5x    | `<0.1%` drop    | Default recommendation     |
+| INT8 quantization   | 2.0x    | `<0.5%` drop    | Best for real-time         |
 | TensorRT conversion | 1.3x    | None            | NVIDIA-optimized runtime   |
 | Batch size 1        | N/A     | N/A             | Required for low latency   |
 | Image preprocessing | 1.2x    | None            | Optimized resize/normalize |
