@@ -91,9 +91,16 @@ export default function Root({ children }: RootProps): React.ReactElement {
 
   // Inject config into window SYNCHRONOUSLY for service modules to access
   // This must happen before AuthProvider renders (which happens in return statement)
-  if (typeof window !== "undefined" && siteConfig.customFields && !window.__PHOENIX_CONFIG__) {
+  if (
+    typeof window !== "undefined" &&
+    siteConfig.customFields &&
+    !window.__PHOENIX_CONFIG__
+  ) {
     window.__PHOENIX_CONFIG__ = {
-      azureConfig: siteConfig.customFields.azureConfig as Record<string, string>,
+      azureConfig: siteConfig.customFields.azureConfig as Record<
+        string,
+        string
+      >,
       cloudProvider: siteConfig.customFields.cloudProvider as string,
     };
   }

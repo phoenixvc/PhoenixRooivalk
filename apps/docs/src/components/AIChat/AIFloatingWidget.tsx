@@ -161,7 +161,11 @@ export function AIFloatingWidget({
           <span className="ai-widget__toggle-label">
             {isOpen ? "Close" : "AI"}
           </span>
-          {!isOpen && <span className="ai-widget__toggle-shortcut">{isMac ? "⌘" : "Ctrl+"}K</span>}
+          {!isOpen && (
+            <span className="ai-widget__toggle-shortcut">
+              {isMac ? "⌘" : "Ctrl+"}K
+            </span>
+          )}
         </button>
       </div>
 

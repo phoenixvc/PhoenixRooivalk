@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# Models (large files - download separately)
+models/*.pt
+models/*.tflite
+models/*.onnx
+!models/.gitkeep
+
+# Data (large files - download separately)
+data/
+!data/.gitkeep
+
+# Training outputs
+outputs/
+runs/
+wandb/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+detections*.json
+
+# Temp
+*.tmp
+.cache/

@@ -23,14 +23,11 @@
     "useServerlessCosmosDb": {
       "value": true
     },
-    "b2cTenantName": {
-      "value": "phoenixrooivalkb2c"
+    "entraIdTenantId": {
+      "value": ""
     },
-    "b2cClientId": {
-      "value": "55b6aa54-8d3d-4902-8d96-81ead3b9f10c"
-    },
-    "b2cPolicy": {
-      "value": "B2C_1_signupsignin"
+    "entraIdClientId": {
+      "value": ""
     }
   }
 }

@@ -399,7 +399,8 @@ apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md
 
 ### Getting Help
 
-1. Check documentation in `apps/docs/` (run `pnpm --filter docs start` to view locally)
+1. Check documentation in `apps/docs/` (run `pnpm --filter docs start` to view
+   locally)
 2. Review similar implementations in codebase
 3. Check GitHub Issues for related problems
 
@@ -526,7 +527,8 @@ turbo test
 
 ## Additional Resources
 
-- **Documentation Portal**: Deployed to Azure Static Web Apps (see deployment workflows in `.github/workflows/`)
+- **Documentation Portal**: Deployed to Azure Static Web Apps (see deployment
+  workflows in `.github/workflows/`)
 - **Documentation Source**: `apps/docs/docs/` - Technical, business, and
   operations documentation
 - **Responsible Use**: See `RESPONSIBLE_USE.md`

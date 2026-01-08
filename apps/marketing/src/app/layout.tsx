@@ -24,7 +24,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Phoenix Rooivalk" }],
   creator: "Phoenix Rooivalk",
   publisher: "Phoenix Rooivalk",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000",
+  ),
   alternates: {
     canonical: "/",
   },

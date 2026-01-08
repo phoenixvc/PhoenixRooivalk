@@ -426,7 +426,7 @@ fn parse_name_from_email(email: &str) -> (Option<String>, Option<String>) {
 
     // Split on common separators: dot, underscore, dash
     let parts: Vec<&str> = username
-        .split(|c| c == '.' || c == '_' || c == '-')
+        .split(['.', '_', '-'])
         .filter(|s| !s.is_empty())
         .collect();
 

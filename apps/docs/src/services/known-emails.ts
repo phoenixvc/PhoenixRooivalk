@@ -141,7 +141,9 @@ export async function getKnownEmails(filters?: {
 export async function getKnownEmail(id: string): Promise<KnownEmail | null> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${getApiBase()}/known-emails/${id}`, { headers });
+    const response = await fetch(`${getApiBase()}/known-emails/${id}`, {
+      headers,
+    });
 
     if (!response.ok) {
       return null;
@@ -335,7 +337,9 @@ export async function getProfileKeys(): Promise<string[]> {
 export async function getKnownEmailsCount(): Promise<number> {
   try {
     const headers = await getAuthHeader();
-    const response = await fetch(`${getApiBase()}/known-emails/count`, { headers });
+    const response = await fetch(`${getApiBase()}/known-emails/count`, {
+      headers,
+    });
 
     if (!response.ok) {
       return 0;

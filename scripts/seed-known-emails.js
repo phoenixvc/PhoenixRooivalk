@@ -42,7 +42,9 @@ async function seedKnownEmails() {
   const databaseName = process.env.COSMOS_DB_DATABASE || "phoenix-docs";
 
   if (!connectionString) {
-    console.error("❌ COSMOS_DB_CONNECTION_STRING environment variable is required");
+    console.error(
+      "❌ COSMOS_DB_CONNECTION_STRING environment variable is required",
+    );
     process.exit(1);
   }
 

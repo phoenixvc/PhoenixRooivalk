@@ -23,14 +23,11 @@
     "useServerlessCosmosDb": {
       "value": true
     },
-    "b2cTenantName": {
+    "entraIdTenantId": {
       "value": ""
     },
-    "b2cClientId": {
+    "entraIdClientId": {
       "value": ""
-    },
-    "b2cPolicy": {
-      "value": "B2C_1_signupsignin"
     }
   }
 }

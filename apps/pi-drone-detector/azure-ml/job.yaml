@@ -1,0 +1,56 @@
+# Azure ML Job Definition for Drone Detection Training
+#
+# Usage:
+#   az ml job create --file job.yaml --resource-group rg-drone-training --workspace-name mlw-drone-detection
+#
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+
+display_name: drone-detection-finetune
+experiment_name: drone-detection
+description: Fine-tune YOLOv5n for drone vs not-drone classification
+
+# Source code directory
+code: .
+
+# Training command (dependencies come from conda.yaml)
+command: >-
+  python train.py --data ${{inputs.dataset}}/dataset.yaml --epochs
+  ${{inputs.epochs}} --imgsz ${{inputs.imgsz}} --batch ${{inputs.batch}}
+  --output ${{outputs.model}} --device 0
+
+# Input datasets
+inputs:
+  dataset:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/drone-dataset
+  epochs:
+    type: integer
+    default: 100
+  imgsz:
+    type: integer
+    default: 320
+  batch:
+    type: integer
+    default: 16
+
+# Output artifacts
+outputs:
+  model:
+    type: uri_folder
+    mode: rw_mount
+
+# Compute target
+compute: azureml:gpu-cluster
+
+# Environment
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-cuda11.8-cudnn8-ubuntu22.04:latest
+  conda_file: conda.yaml
+
+# Resources
+resources:
+  instance_count: 1
+
+# Timeout (4 hours max)
+limits:
+  timeout: 14400

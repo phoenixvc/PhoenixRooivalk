@@ -162,14 +162,12 @@ export default function DocsLanding(): React.ReactElement {
               autonomous counter-UAS defense platform. Explore technical
               specifications, business insights, and operational guides.
             </p>
-            <div
-              className="search-prompt"
-              role="status"
-              aria-label={ariaLabel}
-            >
+            <div className="search-prompt" role="status" aria-label={ariaLabel}>
               <span aria-hidden="true">🔍</span>
               <span>Press</span>
-              <kbd aria-label={isMac ? "Command key" : "Control key"}>{modifierKey}</kbd>
+              <kbd aria-label={isMac ? "Command key" : "Control key"}>
+                {modifierKey}
+              </kbd>
               <kbd aria-label="K key">K</kbd>
               <span>to search documentation</span>
             </div>

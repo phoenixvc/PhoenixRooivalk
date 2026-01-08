@@ -273,23 +273,23 @@ az functionapp deployment list-publishing-profiles \
 
 ## Environment Variables Reference
 
-| Variable                                   | Required | Description                                                              |
-| ------------------------------------------ | -------- | ------------------------------------------------------------------------ |
-| `COSMOS_DB_CONNECTION_STRING`              | ✅       | Cosmos DB connection                                                     |
-| `COSMOS_DB_DATABASE`                       | ❌       | Database name (default: `phoenix-docs`)                                  |
-| `AZURE_AI_ENDPOINT`                        | ✅       | Azure OpenAI endpoint                                                    |
-| `AZURE_AI_API_KEY`                         | ✅\*     | Azure OpenAI API key                                                     |
-| `AZURE_ENTRA_AUTHORITY`                    | ✅\*     | For managed identity auth                                                |
-| `AZURE_AI_DEPLOYMENT_NAME`                 | ❌       | Chat model deployment (default: `gpt-4`)                                 |
-| `AZURE_AI_EMBEDDING_DEPLOYMENT`            | ❌       | Embedding model (default: `text-embedding-3-small`)                      |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING`    | ❌       | For monitoring                                                           |
-| `SENDGRID_API_KEY`                         | ❌       | For email sending                                                        |
-| `SENDGRID_FROM_EMAIL`                      | ❌       | Sender email address                                                     |
-| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | ❌       | For push notifications                                                   |
-| `AZURE_NOTIFICATION_HUB_NAME`              | ❌       | Notification hub name                                                    |
-| `NEWS_API_KEY`                             | ❌       | NewsAPI.org API key                                                      |
-| `BING_SEARCH_API_KEY`                      | ❌       | Bing News Search API key                                                 |
-| `BASE_URL`                                 | ❌       | Base URL for links (should match your docs site URL)                    |
+| Variable                                   | Required | Description                                          |
+| ------------------------------------------ | -------- | ---------------------------------------------------- |
+| `COSMOS_DB_CONNECTION_STRING`              | ✅       | Cosmos DB connection                                 |
+| `COSMOS_DB_DATABASE`                       | ❌       | Database name (default: `phoenix-docs`)              |
+| `AZURE_AI_ENDPOINT`                        | ✅       | Azure OpenAI endpoint                                |
+| `AZURE_AI_API_KEY`                         | ✅\*     | Azure OpenAI API key                                 |
+| `AZURE_ENTRA_AUTHORITY`                    | ✅\*     | For managed identity auth                            |
+| `AZURE_AI_DEPLOYMENT_NAME`                 | ❌       | Chat model deployment (default: `gpt-4`)             |
+| `AZURE_AI_EMBEDDING_DEPLOYMENT`            | ❌       | Embedding model (default: `text-embedding-3-small`)  |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING`    | ❌       | For monitoring                                       |
+| `SENDGRID_API_KEY`                         | ❌       | For email sending                                    |
+| `SENDGRID_FROM_EMAIL`                      | ❌       | Sender email address                                 |
+| `AZURE_NOTIFICATION_HUB_CONNECTION_STRING` | ❌       | For push notifications                               |
+| `AZURE_NOTIFICATION_HUB_NAME`              | ❌       | Notification hub name                                |
+| `NEWS_API_KEY`                             | ❌       | NewsAPI.org API key                                  |
+| `BING_SEARCH_API_KEY`                      | ❌       | Bing News Search API key                             |
+| `BASE_URL`                                 | ❌       | Base URL for links (should match your docs site URL) |
 
 \*Either `AZURE_AI_API_KEY` or `AZURE_ENTRA_AUTHORITY` is required for
 authentication.

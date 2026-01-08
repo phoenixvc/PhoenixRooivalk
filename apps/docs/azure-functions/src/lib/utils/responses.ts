@@ -26,7 +26,7 @@ export type ErrorCode =
  */
 export function getCorsHeaders(request?: HttpRequest): Record<string, string> {
   const origin = request?.headers.get("origin") || "";
-  
+
   // List of allowed origins (from bicep configuration)
   const allowedOrigins = [
     "http://localhost:3000",
@@ -35,19 +35,20 @@ export function getCorsHeaders(request?: HttpRequest): Record<string, string> {
     "https://docs.phoenixrooivalk.com",
     "https://www.phoenixrooivalk.com",
   ];
-  
+
   // Check if origin matches allowed origins or azurestaticapps.net domain
-  const isAllowedOrigin = 
-    allowedOrigins.includes(origin) || 
+  const isAllowedOrigin =
+    allowedOrigins.includes(origin) ||
     (origin && origin.endsWith(".azurestaticapps.net"));
-  
+
   // Use the request origin if allowed, otherwise use first allowed origin as safe default
   const allowedOrigin = isAllowedOrigin ? origin : allowedOrigins[0];
-  
+
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, X-Requested-With, Accept",
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Max-Age": "86400",
   };
@@ -73,7 +74,7 @@ export function errorResponse(
  * Success response with data
  */
 export function successResponse<T>(
-  data: T, 
+  data: T,
   status = 200,
   request?: HttpRequest,
 ): HttpResponseInit {
@@ -101,12 +102,14 @@ export const Errors = {
     errorResponse(400, message, "invalid-argument", request),
 
   /** 404 - Resource not found */
-  notFound: (message: string, request?: HttpRequest) => 
+  notFound: (message: string, request?: HttpRequest) =>
     errorResponse(404, message, "not-found", request),
 
   /** 429 - Rate limit exceeded */
-  rateLimited: (message = "Too many requests. Please try again later.", request?: HttpRequest) =>
-    errorResponse(429, message, "resource-exhausted", request),
+  rateLimited: (
+    message = "Too many requests. Please try again later.",
+    request?: HttpRequest,
+  ) => errorResponse(429, message, "resource-exhausted", request),
 
   /** 500 - Internal server error */
   internal: (message = "An error occurred", request?: HttpRequest) =>

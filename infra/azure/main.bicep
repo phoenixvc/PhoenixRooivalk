@@ -10,7 +10,7 @@
  * - Azure Application Insights (analytics)
  * - Azure Notification Hub (push notifications - replaces FCM)
  * - Azure Functions (serverless - replaces Cloud Functions)
- * - Azure AD B2C (authentication - replaces Firebase Auth)
+ * - Azure Entra ID (authentication - replaces Firebase Auth)
  * - Azure Key Vault (secrets management)
  * - Azure Storage (for Functions and static assets)
  */
@@ -60,14 +60,11 @@ param azureOpenAiChatDeployment string = 'gpt-4'
 @description('Azure OpenAI embedding deployment name')
 param azureOpenAiEmbeddingDeployment string = 'text-embedding-3-small'
 
-@description('Azure AD B2C Tenant Name (e.g., phoenixrooivalkb2c)')
-param b2cTenantName string = ''
+@description('Azure Entra ID Tenant ID')
+param entraIdTenantId string = ''
 
-@description('Azure AD B2C Client ID for token validation')
-param b2cClientId string = ''
-
-@description('Azure AD B2C User Flow/Policy name')
-param b2cPolicy string = 'B2C_1_signupsignin'
+@description('Azure Entra ID Client ID for token validation')
+param entraIdClientId string = ''
 
 // ============================================================================
 // Variables
@@ -195,9 +192,8 @@ module functions 'modules/functions.bicep' = {
     azureOpenAIEndpoint: azureOpenAiEndpoint
     azureOpenAIChatDeployment: azureOpenAiChatDeployment
     azureOpenAIEmbeddingDeployment: azureOpenAiEmbeddingDeployment
-    azureAdB2cTenant: b2cTenantName
-    azureAdB2cClientId: b2cClientId
-    azureAdB2cPolicy: b2cPolicy
+    azureEntraTenantId: entraIdTenantId
+    azureEntraClientId: entraIdClientId
   }
 }
 
@@ -311,5 +307,5 @@ output clientConfig object = {
   functionsBaseUrl: functions.outputs.url
   appInsightsConnectionString: appInsights.outputs.connectionString
   cosmosDbEndpoint: cosmosDb.outputs.endpoint
-  b2cTenantName: b2cTenantName
+  entraIdTenantId: entraIdTenantId
 }
