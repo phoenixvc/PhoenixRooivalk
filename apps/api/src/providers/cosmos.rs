@@ -70,7 +70,9 @@ impl CosmosProvider {
                 })?;
                 CosmosClient::new(
                     account.clone(),
-                    AuthorizationToken::TokenCredential(std::sync::Arc::new(credential) as std::sync::Arc<dyn TokenCredential>),
+                    AuthorizationToken::TokenCredential(
+                        std::sync::Arc::new(credential) as std::sync::Arc<dyn TokenCredential>
+                    ),
                 )
             };
 
