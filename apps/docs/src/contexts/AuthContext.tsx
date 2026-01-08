@@ -354,39 +354,53 @@ export function AuthProvider({
         if (DEBUG_AUTH) {
           console.log("[AuthContext] User signed in, syncing progress...");
         }
-        // User signed in - sync progress
-        const cloudProgress = await getUserProgress(authUser.uid);
-        const localProgress = getLocalProgress();
-        const merged = mergeProgress(cloudProgress, localProgress);
 
-        // Check if this is a new user (no cloud progress = first sign in)
-        const isNewUser = Object.keys(cloudProgress.docs).length === 0;
+        // Wrap sync operations in try-catch to ensure loading state is always updated
+        try {
+          // User signed in - sync progress
+          const cloudProgress = await getUserProgress(authUser.uid);
+          const localProgress = getLocalProgress();
+          const merged = mergeProgress(cloudProgress, localProgress);
 
-        setProgress(merged);
-        saveLocalProgress(merged);
+          // Check if this is a new user (no cloud progress = first sign in)
+          const isNewUser = Object.keys(cloudProgress.docs).length === 0;
 
-        // Save merged progress back to cloud
-        await saveUserProgress(authUser.uid, merged);
+          setProgress(merged);
+          saveLocalProgress(merged);
 
-        // Track signup/signin events
-        if (wasSignedOut) {
-          const method = authUser.providerData[0]?.providerId || "unknown";
-          const authMethod = method.includes("google")
-            ? "google"
-            : method.includes("github")
-              ? "github"
-              : method;
+          // Save merged progress back to cloud (don't await - fire and forget)
+          // This prevents blocking auth flow if cloud save fails
+          saveUserProgress(authUser.uid, merged).catch((error) => {
+            console.error("[AuthContext] Failed to save progress to cloud:", error);
+          });
 
-          if (isNewUser) {
-            // First time signup - track as new conversion
-            await analytics.trackSignupCompleted(authUser.uid, authMethod);
+          // Track signup/signin events
+          if (wasSignedOut) {
+            const method = authUser.providerData[0]?.providerId || "unknown";
+            const authMethod = method.includes("google")
+              ? "google"
+              : method.includes("github")
+                ? "github"
+                : method;
+
+            if (isNewUser) {
+              // First time signup - track as new conversion
+              analytics.trackSignupCompleted(authUser.uid, authMethod).catch(() => {
+                // Ignore analytics errors
+              });
+            }
+            // Could also track returning user sign-ins separately if needed
           }
-          // Could also track returning user sign-ins separately if needed
-        }
-        if (DEBUG_AUTH) {
-          console.log(
-            "[AuthContext] User sync complete, setting loading=false",
-          );
+          if (DEBUG_AUTH) {
+            console.log(
+              "[AuthContext] User sync complete, setting loading=false",
+            );
+          }
+        } catch (error) {
+          console.error("[AuthContext] Error during auth sync:", error);
+          // Still update progress from local storage on error
+          const localProgress = getLocalProgress();
+          setProgress(localProgress);
         }
       } else {
         if (DEBUG_AUTH) {
@@ -473,7 +487,14 @@ export function AuthProvider({
       }
     }
 
-    loadUserProfile();
+    loadUserProfile().catch((error) => {
+      console.error("[AuthContext] Error loading user profile:", error);
+      // Still mark profile as loaded so UI doesn't stay stuck
+      setUserProfile((prev) => ({
+        ...prev,
+        isProfileLoaded: true,
+      }));
+    });
   }, [user]);
 
   // Update user roles (called from ProfileConfirmation or Profile Settings)
