@@ -136,6 +136,7 @@ variables.
    ```
 
 4. **Verify the fix:**
+
    ```bash
    # Check health endpoint again
    curl https://YOUR-FUNCTION-APP.azurewebsites.net/api/health/ready
