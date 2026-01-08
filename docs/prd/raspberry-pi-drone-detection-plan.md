@@ -225,12 +225,12 @@ If you need to label images:
 
 ### Quick Dataset Sources
 
-| Dataset          | Images | Notes                     |
-| ---------------- | ------ | ------------------------- |
-| Drone-vs-Bird    | 2,000+ | Video frames, variety     |
-| Anti-UAV         | 300+   | Thermal + RGB videos      |
-| USC Drone        | 2,600+ | Labeled drones            |
-| DIY: Coke cans   | 200+   | Various distances/angles  |
+| Dataset        | Images | Notes                    |
+| -------------- | ------ | ------------------------ |
+| Drone-vs-Bird  | 2,000+ | Video frames, variety    |
+| Anti-UAV       | 300+   | Thermal + RGB videos     |
+| USC Drone      | 2,600+ | Labeled drones           |
+| DIY: Coke cans | 200+   | Various distances/angles |
 
 Links:
 
