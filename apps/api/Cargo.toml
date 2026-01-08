@@ -35,7 +35,7 @@ azure_core = { version = "0.30", optional = true }
 cosmos = ["azure_data_cosmos", "azure_identity", "azure_core"]
 
 [dev-dependencies]
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.13", features = ["json"] }
 tempfile = "3"
 phoenix-keeper = { path = "../keeper" }
 anchor-etherlink = { path = "../../crates/anchor-etherlink" }
