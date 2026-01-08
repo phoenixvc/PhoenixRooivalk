@@ -101,7 +101,7 @@ def download_file(url: str, dest: Path, desc: str | None = None) -> bool:
             sys.stdout.write(f"\r    {pct}%")
             sys.stdout.flush()
 
-        urllib.request.urlretrieve(url, dest, reporthook=progress)
+        urllib.request.urlretrieve(url, dest, reporthook=progress)  # nosec B310 - scheme validated above
         print()
         return True
     except (urllib.error.URLError, OSError, ValueError) as e:

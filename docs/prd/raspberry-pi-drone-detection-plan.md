@@ -615,7 +615,7 @@ python main.py
 This MVP can serve as a **low-cost edge sensor node** feeding into the larger
 system:
 
-```
+```text
 Pi Detector ──► MQTT/HTTP ──► PhoenixRooivalk API ──► Evidence System
                               │
                               ├── Sensor Fusion

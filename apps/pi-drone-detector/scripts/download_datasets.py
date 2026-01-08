@@ -39,7 +39,7 @@ def download_file(url: str, dest: Path, desc: str = None) -> Path:
         sys.stdout.write(f"\r  Progress: {pct}%")
         sys.stdout.flush()
 
-    urlretrieve(url, dest, reporthook=progress)
+    urlretrieve(url, dest, reporthook=progress)  # nosec B310 - URL scheme validated above
     print()
     return dest
 
