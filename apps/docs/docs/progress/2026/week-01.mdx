@@ -55,8 +55,10 @@ import {
 
 - **Edge AI demo**: YOLOv8n model running on Raspberry Pi 4 (2GB)
 - **12-18 FPS performance**: Native inference on Pi 4 hardware
-- **Azure ML pipeline**: Complete training infrastructure with cost-effective runs
-- **Demo-ready**: Detection pipeline validated for demonstrations (prod uses Jetson)
+- **Azure ML pipeline**: Complete training infrastructure with cost-effective
+  runs
+- **Demo-ready**: Detection pipeline validated for demonstrations (prod uses
+  Jetson)
 
 ### 2. Development Velocity
 
@@ -81,12 +83,12 @@ import {
 
 ### 5. Known Issues Resolved
 
-| Issue                      | Status      | Resolution                                |
-| -------------------------- | ----------- | ----------------------------------------- |
-| Model inference latency    | ✅ Resolved | Optimized with TensorRT and quantization  |
-| Azure ML authentication    | ✅ Resolved | Managed identity configuration fixed      |
-| Cross-platform builds      | ✅ Resolved | CI/CD pipeline updates for ARM64          |
-| Documentation gaps         | ✅ Resolved | Technical docs updated with new API specs |
+| Issue                   | Status      | Resolution                                |
+| ----------------------- | ----------- | ----------------------------------------- |
+| Model inference latency | ✅ Resolved | Optimized with TensorRT and quantization  |
+| Azure ML authentication | ✅ Resolved | Managed identity configuration fixed      |
+| Cross-platform builds   | ✅ Resolved | CI/CD pipeline updates for ARM64          |
+| Documentation gaps      | ✅ Resolved | Technical docs updated with new API specs |
 
 ---
 
@@ -200,13 +202,13 @@ Detector demo, proving our edge AI approach works on constrained hardware.
 
 #### Performance Benchmarks (Pi 4, 2GB RAM)
 
-| Configuration          | Resolution | FPS   | Inference Time | Notes                    |
-| ---------------------- | ---------- | ----- | -------------- | ------------------------ |
-| YOLOv8n (native)       | 640×480    | 12-18 | ~55-80ms       | Current demo hardware    |
-| YOLOv8n (native)       | 1280×720   | 0-8   | ~125-145ms     | Higher resolution        |
+| Configuration    | Resolution | FPS   | Inference Time | Notes                 |
+| ---------------- | ---------- | ----- | -------------- | --------------------- |
+| YOLOv8n (native) | 640×480    | 12-18 | ~55-80ms       | Current demo hardware |
+| YOLOv8n (native) | 1280×720   | 0-8   | ~125-145ms     | Higher resolution     |
 
-**Note:** Production deployment targets NVIDIA Jetson for sub-200ms response times.
-Pi 4 demo validates the edge deployment approach on low-cost hardware.
+**Note:** Production deployment targets NVIDIA Jetson for sub-200ms response
+times. Pi 4 demo validates the edge deployment approach on low-cost hardware.
 
 #### Model Capabilities
 
@@ -217,19 +219,19 @@ Pi 4 demo validates the edge deployment approach on low-cost hardware.
 
 #### Hardware Configuration (Demo)
 
-| Component       | Specification                    |
-| --------------- | -------------------------------- |
-| Compute         | Raspberry Pi 4 (2GB)             |
-| Camera          | Pi Camera (30fps @ 1080p)        |
-| Storage         | microSD                          |
-| Power           | 5V USB-C                         |
+| Component | Specification             |
+| --------- | ------------------------- |
+| Compute   | Raspberry Pi 4 (2GB)      |
+| Camera    | Pi Camera (30fps @ 1080p) |
+| Storage   | microSD                   |
+| Power     | 5V USB-C                  |
 
 #### Production Target
 
-| Component       | Specification                    |
-| --------------- | -------------------------------- |
-| Compute         | NVIDIA Jetson Orin               |
-| Response Time   | <200ms                           |
+| Component     | Specification      |
+| ------------- | ------------------ |
+| Compute       | NVIDIA Jetson Orin |
+| Response Time | <200ms             |
 
 **Key PRs:** #460-#467
 
@@ -249,22 +251,22 @@ Data Ingestion → Preprocessing → Training → Evaluation → Registration
 
 #### Cost Analysis
 
-| Resource          | Cost/Hour | Usage Pattern | Monthly Estimate |
-| ----------------- | --------- | ------------- | ---------------- |
-| NC6s_v3 (GPU)     | $0.90     | Spot instance | $15-25           |
-| Standard_DS3_v2   | $0.19     | Preprocessing | $5-10            |
-| Blob Storage      | $0.02/GB  | Data storage  | $2-5             |
-| **Total/Run**     | -         | ~1-2 hours    | **$3-5**         |
+| Resource        | Cost/Hour | Usage Pattern | Monthly Estimate |
+| --------------- | --------- | ------------- | ---------------- |
+| NC6s_v3 (GPU)   | $0.90     | Spot instance | $15-25           |
+| Standard_DS3_v2 | $0.19     | Preprocessing | $5-10            |
+| Blob Storage    | $0.02/GB  | Data storage  | $2-5             |
+| **Total/Run**   | -         | ~1-2 hours    | **$3-5**         |
 
 #### MLOps Features Implemented
 
-| Feature                | Status      | Details                              |
-| ---------------------- | ----------- | ------------------------------------ |
-| Experiment tracking    | ✅ Complete | MLflow integration                   |
-| Model versioning       | ✅ Complete | Azure ML Model Registry              |
-| Hyperparameter tuning  | ✅ Complete | Bayesian optimization                |
-| Automated evaluation   | ✅ Complete | mAP, precision, recall metrics       |
-| Data versioning        | ✅ Complete | Dataset registration and tracking    |
+| Feature               | Status      | Details                           |
+| --------------------- | ----------- | --------------------------------- |
+| Experiment tracking   | ✅ Complete | MLflow integration                |
+| Model versioning      | ✅ Complete | Azure ML Model Registry           |
+| Hyperparameter tuning | ✅ Complete | Bayesian optimization             |
+| Automated evaluation  | ✅ Complete | mAP, precision, recall metrics    |
+| Data versioning       | ✅ Complete | Dataset registration and tracking |
 
 ---
 
@@ -274,30 +276,30 @@ Multi-stack code quality and security improvements across the codebase.
 
 #### Rust Stack
 
-| Improvement              | Files Changed | Impact                         |
-| ------------------------ | ------------- | ------------------------------ |
-| Clippy warnings fixed    | 23            | Cleaner, idiomatic code        |
-| Security audit           | All deps      | No critical vulnerabilities    |
-| Documentation updated    | 15            | Improved API documentation     |
-| Test coverage increased  | 12            | 85%+ coverage on core modules  |
+| Improvement             | Files Changed | Impact                        |
+| ----------------------- | ------------- | ----------------------------- |
+| Clippy warnings fixed   | 23            | Cleaner, idiomatic code       |
+| Security audit          | All deps      | No critical vulnerabilities   |
+| Documentation updated   | 15            | Improved API documentation    |
+| Test coverage increased | 12            | 85%+ coverage on core modules |
 
 #### JavaScript/TypeScript Stack
 
-| Improvement              | Files Changed | Impact                         |
-| ------------------------ | ------------- | ------------------------------ |
-| ESLint errors fixed      | 45            | Consistent code style          |
-| Type safety improved     | 28            | Reduced runtime errors         |
-| Prettier formatting      | All           | Standardized formatting        |
-| Dependency updates       | 12 packages   | Security patches applied       |
+| Improvement          | Files Changed | Impact                   |
+| -------------------- | ------------- | ------------------------ |
+| ESLint errors fixed  | 45            | Consistent code style    |
+| Type safety improved | 28            | Reduced runtime errors   |
+| Prettier formatting  | All           | Standardized formatting  |
+| Dependency updates   | 12 packages   | Security patches applied |
 
 #### Python Stack
 
-| Improvement              | Files Changed | Impact                         |
-| ------------------------ | ------------- | ------------------------------ |
-| Ruff linting applied     | 34            | Fast, comprehensive linting    |
-| Type hints added         | 22            | Better IDE support             |
-| pytest coverage          | 18            | 80%+ test coverage             |
-| Requirements pinned      | All           | Reproducible environments      |
+| Improvement          | Files Changed | Impact                      |
+| -------------------- | ------------- | --------------------------- |
+| Ruff linting applied | 34            | Fast, comprehensive linting |
+| Type hints added     | 22            | Better IDE support          |
+| pytest coverage      | 18            | 80%+ test coverage          |
+| Requirements pinned  | All           | Reproducible environments   |
 
 ---
 
@@ -307,81 +309,82 @@ Hardware and software roadmap alignment for consumer product launch.
 
 #### Bill of Materials Estimate
 
-| Component               | Budget Option | Standard Option | Premium Option |
-| ----------------------- | ------------- | --------------- | -------------- |
-| Launcher mechanism      | $25           | $40             | $60            |
-| Net cartridge           | $15           | $20             | $30            |
-| Electronics/PCB         | $20           | $35             | $55            |
-| Enclosure               | $10           | $20             | $35            |
-| Assembly/packaging      | $5            | $10             | $20            |
-| **Total BOM**           | **$75**       | **$125**        | **$200**       |
+| Component          | Budget Option | Standard Option | Premium Option |
+| ------------------ | ------------- | --------------- | -------------- |
+| Launcher mechanism | $25           | $40             | $60            |
+| Net cartridge      | $15           | $20             | $30            |
+| Electronics/PCB    | $20           | $35             | $55            |
+| Enclosure          | $10           | $20             | $35            |
+| Assembly/packaging | $5            | $10             | $20            |
+| **Total BOM**      | **$75**       | **$125**        | **$200**       |
 
 #### Roadmap Status
 
-| Milestone                   | Target Date | Status      |
-| --------------------------- | ----------- | ----------- |
-| CAD designs finalized       | Complete    | ✅ Done     |
-| Prototype 40% assembled     | Complete    | ✅ Done     |
-| BOM validation              | Jan 2026    | ✅ Complete |
-| CPSC/ASTM certification     | Mar 2026    | 🟡 Planned  |
-| Manufacturing setup         | Apr 2026    | 🟡 Planned  |
-| D2C launch                  | Q2 2026     | 🟡 On track |
+| Milestone               | Target Date | Status      |
+| ----------------------- | ----------- | ----------- |
+| CAD designs finalized   | Complete    | ✅ Done     |
+| Prototype 40% assembled | Complete    | ✅ Done     |
+| BOM validation          | Jan 2026    | ✅ Complete |
+| CPSC/ASTM certification | Mar 2026    | 🟡 Planned  |
+| Manufacturing setup     | Apr 2026    | 🟡 Planned  |
+| D2C launch              | Q2 2026     | 🟡 On track |
 
 ---
 
 ### 5. Hardware Progress (Pieter La Grange)
 
-Hardware development continued with drone fleet preparation and launcher prototype
-assembly. See [Hardware Signoff Runbook](/docs/playbooks/hardware-signoff-runbook)
-for the collaboration workflow.
+Hardware development continued with drone fleet preparation and launcher
+prototype assembly. See
+[Hardware Signoff Runbook](/docs/playbooks/hardware-signoff-runbook) for the
+collaboration workflow.
 
 #### Training Target Drones
 
 Two small quadcopters ready for training data capture:
 
-![Training drones - small quads](/img/progress/2026-week-01/training-drones.jpg)
+![Training drones - small quads](/img/progress/training-drones.jpg)
 
-*Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad (~100mm)
-with orange props. Both available for capturing training footage.*
+_Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad
+(~100mm) with orange props. Both available for capturing training footage._
 
 #### Hexacopter Development
 
 Large hexacopter in development for enterprise-class detection testing:
 
-![Hexacopter in workshop](/img/progress/2026-week-01/hexacopter-workshop.jpg)
+![Hexacopter in workshop](/img/progress/hexacopter-workshop.jpg)
 
-*Professional hexacopter (~600mm) with camera gimbal. In progress - represents larger
-drone class for detection model training.*
+_Professional hexacopter (~600mm) with camera gimbal. In progress - represents
+larger drone class for detection model training._
 
 #### Launcher Prototype
 
 PVC-based launcher prototype for net deployment testing:
 
-![Launcher prototype](/img/progress/2026-week-01/launcher-prototype.jpg)
+![Launcher prototype](/img/progress/launcher-prototype.jpg)
 
-*PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure testing.
-Target: 50m deployment range.*
+_PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure
+testing. Target: 50m deployment range._
 
 #### Hardware Status Summary
 
-| Component | Status | Next Steps |
-|-----------|--------|------------|
-| Small training quads (2x) | ✅ Ready | Capture training footage |
-| Hexacopter | 🟡 In progress | Complete wiring, test flight |
-| Launcher prototype | 🟡 In progress | Trigger wiring, pressure test |
-| Pi 4 demo unit | ✅ Working | Field testing |
+| Component                 | Status         | Next Steps                    |
+| ------------------------- | -------------- | ----------------------------- |
+| Small training quads (2x) | ✅ Ready       | Capture training footage      |
+| Hexacopter                | 🟡 In progress | Complete wiring, test flight  |
+| Launcher prototype        | 🟡 In progress | Trigger wiring, pressure test |
+| Pi 4 demo unit            | ✅ Working     | Field testing                 |
 
 ---
 
 ### 6. Key Decisions Made
 
-| Decision                      | Rationale                           | Impact                           |
-| ----------------------------- | ----------------------------------- | -------------------------------- |
-| YOLOv8n for edge deployment   | Best performance/accuracy tradeoff  | Enables real-time detection      |
-| Pi 4 for demo, Jetson for prod| Cost-effective validation           | Demo on $50 hardware, prod on Jetson |
-| Azure ML for training         | Cost-effective, scalable            | $3-5 per training run            |
-| MLflow for experiment tracking| Industry standard, open source      | Better reproducibility           |
-| Three BOM tiers               | Market segmentation                 | Addresses different price points |
+| Decision                       | Rationale                          | Impact                               |
+| ------------------------------ | ---------------------------------- | ------------------------------------ |
+| YOLOv8n for edge deployment    | Best performance/accuracy tradeoff | Enables real-time detection          |
+| Pi 4 for demo, Jetson for prod | Cost-effective validation          | Demo on $50 hardware, prod on Jetson |
+| Azure ML for training          | Cost-effective, scalable           | $3-5 per training run                |
+| MLflow for experiment tracking | Industry standard, open source     | Better reproducibility               |
+| Three BOM tiers                | Market segmentation                | Addresses different price points     |
 
 ---
 
@@ -417,14 +420,14 @@ Target: 50m deployment range.*
 
 ### 9. Metrics & KPIs
 
-| Metric                | This Period | vs Week 51 | Trend  |
-| --------------------- | ----------- | ---------- | ------ |
-| Commits merged        | 137         | 194        | ↓ 29%  |
-| Edge AI FPS (Pi 4)    | 12-18       | N/A        | ✅ NEW |
-| Training cost/run     | $3-5        | N/A        | ✅ NEW |
-| BOM estimate validated| Yes         | N/A        | ✅ NEW |
-| Rust test coverage    | 85%+        | 80%+       | ↑ 5%   |
-| Python test coverage  | 80%+        | 75%+       | ↑ 5%   |
+| Metric                 | This Period | vs Week 51 | Trend  |
+| ---------------------- | ----------- | ---------- | ------ |
+| Commits merged         | 137         | 194        | ↓ 29%  |
+| Edge AI FPS (Pi 4)     | 12-18       | N/A        | ✅ NEW |
+| Training cost/run      | $3-5        | N/A        | ✅ NEW |
+| BOM estimate validated | Yes         | N/A        | ✅ NEW |
+| Rust test coverage     | 85%+        | 80%+       | ↑ 5%   |
+| Python test coverage   | 80%+        | 75%+       | ↑ 5%   |
 
 **Note:** Holiday period (Dec 19 - Jan 8) resulted in lower commit volume but
 significant technical milestones achieved.
@@ -433,13 +436,13 @@ significant technical milestones achieved.
 
 ### 10. Risk Register
 
-| Risk                        | Severity | Probability | Mitigation                              |
-| --------------------------- | -------- | ----------- | --------------------------------------- |
-| Jetson supply constraints   | Medium   | Low         | Pi 4 demo as fallback, pre-orders       |
-| Training data shortage      | Medium   | Medium      | ~600 images needed, public datasets     |
-| Azure ML cost overruns      | Low      | Low         | Spot instances, budget alerts           |
-| Certification delays        | Medium   | Medium      | Early engagement with test labs         |
-| Component cost increases    | Medium   | Medium      | Multiple BOM tiers, supplier agreements |
+| Risk                      | Severity | Probability | Mitigation                              |
+| ------------------------- | -------- | ----------- | --------------------------------------- |
+| Jetson supply constraints | Medium   | Low         | Pi 4 demo as fallback, pre-orders       |
+| Training data shortage    | Medium   | Medium      | ~600 images needed, public datasets     |
+| Azure ML cost overruns    | Low      | Low         | Spot instances, budget alerts           |
+| Certification delays      | Medium   | Medium      | Early engagement with test labs         |
+| Component cost increases  | Medium   | Medium      | Multiple BOM tiers, supplier agreements |
 
 ---
 
@@ -447,16 +450,16 @@ significant technical milestones achieved.
 
 #### Feature Pull Requests Merged (Dec 19 - Jan 8)
 
-| PR   | Title                                          | Category      |
-| ---- | ---------------------------------------------- | ------------- |
-| #467 | Pi Drone Detector MVP complete                 | Edge AI       |
-| #466 | Azure ML training pipeline                     | MLOps         |
-| #465 | YOLOv8 INT8 quantization                       | Performance   |
-| #464 | MLflow experiment tracking                     | MLOps         |
-| #463 | Rust clippy fixes                              | Code Quality  |
-| #462 | Python type hints and ruff                     | Code Quality  |
-| #461 | ESLint and Prettier updates                    | Code Quality  |
-| #460 | Cross-platform ARM64 builds                    | CI/CD         |
+| PR   | Title                          | Category     |
+| ---- | ------------------------------ | ------------ |
+| #467 | Pi Drone Detector MVP complete | Edge AI      |
+| #466 | Azure ML training pipeline     | MLOps        |
+| #465 | YOLOv8 INT8 quantization       | Performance  |
+| #464 | MLflow experiment tracking     | MLOps        |
+| #463 | Rust clippy fixes              | Code Quality |
+| #462 | Python type hints and ruff     | Code Quality |
+| #461 | ESLint and Prettier updates    | Code Quality |
+| #460 | Cross-platform ARM64 builds    | CI/CD        |
 
 #### Dependency Updates
 
@@ -469,22 +472,22 @@ reviews.
 
 #### Lines of Code Changed (Dec 19 - Jan 8)
 
-| Metric        | Count   | Notes                                      |
-| ------------- | ------- | ------------------------------------------ |
-| Lines added   | 15,234  | Edge AI, MLOps, code quality               |
-| Lines deleted | 8,127   | Refactoring, cleanup                       |
-| Net change    | +7,107  | Focused growth                             |
-| Commits       | 137     | Holiday period, quality over quantity      |
+| Metric        | Count  | Notes                                 |
+| ------------- | ------ | ------------------------------------- |
+| Lines added   | 15,234 | Edge AI, MLOps, code quality          |
+| Lines deleted | 8,127  | Refactoring, cleanup                  |
+| Net change    | +7,107 | Focused growth                        |
+| Commits       | 137    | Holiday period, quality over quantity |
 
 #### Commits by Area
 
-| Directory                    | Focus                          |
-| ---------------------------- | ------------------------------ |
-| `apps/pi-detector/`          | Edge AI inference pipeline     |
-| `apps/ml-training/`          | Azure ML training scripts      |
-| `apps/docs/`                 | Documentation updates          |
-| `libs/common/`               | Shared utilities               |
-| `.github/workflows/`         | CI/CD improvements             |
+| Directory            | Focus                      |
+| -------------------- | -------------------------- |
+| `apps/pi-detector/`  | Edge AI inference pipeline |
+| `apps/ml-training/`  | Azure ML training scripts  |
+| `apps/docs/`         | Documentation updates      |
+| `libs/common/`       | Shared utilities           |
+| `.github/workflows/` | CI/CD improvements         |
 
 ---
 
@@ -492,21 +495,21 @@ reviews.
 
 #### Optimization Techniques Applied
 
-| Technique            | Speedup | Accuracy Impact | Notes                     |
-| -------------------- | ------- | --------------- | ------------------------- |
-| FP16 inference       | 1.5x    | <0.1% drop      | Default recommendation    |
-| INT8 quantization    | 2.0x    | <0.5% drop      | Best for real-time        |
-| TensorRT conversion  | 1.3x    | None            | NVIDIA-optimized runtime  |
-| Batch size 1         | N/A     | N/A             | Required for low latency  |
-| Image preprocessing  | 1.2x    | None            | Optimized resize/normalize|
+| Technique           | Speedup | Accuracy Impact | Notes                      |
+| ------------------- | ------- | --------------- | -------------------------- |
+| FP16 inference      | 1.5x    | <0.1% drop      | Default recommendation     |
+| INT8 quantization   | 2.0x    | <0.5% drop      | Best for real-time         |
+| TensorRT conversion | 1.3x    | None            | NVIDIA-optimized runtime   |
+| Batch size 1        | N/A     | N/A             | Required for low latency   |
+| Image preprocessing | 1.2x    | None            | Optimized resize/normalize |
 
 #### Power Consumption
 
-| Mode                 | Power Draw | Notes                      |
-| -------------------- | ---------- | -------------------------- |
-| Idle                 | 3.5W       | Raspberry Pi 5 baseline    |
-| Active inference     | 8.2W       | During detection           |
-| Peak (with camera)   | 12W        | Full system load           |
+| Mode               | Power Draw | Notes                   |
+| ------------------ | ---------- | ----------------------- |
+| Idle               | 3.5W       | Raspberry Pi 5 baseline |
+| Active inference   | 8.2W       | During detection        |
+| Peak (with camera) | 12W        | Full system load        |
 
 ---
 
