@@ -1,9 +1,10 @@
 /**
  * SidebarPhaseFilter Component
  * Adds phase and role filter dropdowns to the docs sidebar
+ * Also includes collapse/expand all categories functionality
  */
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   usePhaseFilter,
@@ -14,6 +15,7 @@ import "./PhaseFilter.css";
 
 // Role filter local storage key
 const ROLE_FILTER_KEY = "phoenix-docs-role-filter";
+const CATEGORIES_COLLAPSED_KEY = "phoenix-docs-categories-collapsed";
 
 // Role groups for easier selection
 const ROLE_GROUPS = {
@@ -29,11 +31,79 @@ const ROLE_GROUPS = {
   Leadership: ["Founder", "Lead"],
 };
 
+/**
+ * Collapse all sidebar categories
+ */
+function collapseAllCategories(): void {
+  if (typeof document === "undefined") return;
+
+  // Find all expanded category buttons and click them to collapse
+  const expandedCategories = document.querySelectorAll(
+    ".menu__list-item--collapsed:not(.menu__list-item--collapsed) > .menu__link--sublist-caret," +
+    ".menu__caret"
+  );
+
+  // Find all category containers that are NOT collapsed
+  const categoryItems = document.querySelectorAll(
+    ".menu__list-item:has(> .menu__link--sublist-caret):not(.menu__list-item--collapsed)"
+  );
+
+  categoryItems.forEach((item) => {
+    const button = item.querySelector(".menu__link--sublist-caret, .menu__caret");
+    if (button instanceof HTMLElement) {
+      button.click();
+    }
+  });
+
+  // Store state
+  localStorage.setItem(CATEGORIES_COLLAPSED_KEY, "true");
+}
+
+/**
+ * Expand all sidebar categories
+ */
+function expandAllCategories(): void {
+  if (typeof document === "undefined") return;
+
+  // Find all collapsed category items and expand them
+  const collapsedItems = document.querySelectorAll(
+    ".menu__list-item--collapsed"
+  );
+
+  collapsedItems.forEach((item) => {
+    const button = item.querySelector(".menu__link--sublist-caret, .menu__caret");
+    if (button instanceof HTMLElement) {
+      button.click();
+    }
+  });
+
+  // Store state
+  localStorage.setItem(CATEGORIES_COLLAPSED_KEY, "false");
+}
+
+/**
+ * Check if most categories are collapsed
+ */
+function areCategoriesCollapsed(): boolean {
+  if (typeof document === "undefined") return false;
+
+  const total = document.querySelectorAll(
+    ".menu__list-item:has(> .menu__link--sublist-caret)"
+  ).length;
+  const collapsed = document.querySelectorAll(
+    ".menu__list-item--collapsed"
+  ).length;
+
+  return collapsed > total / 2;
+}
+
 export function SidebarPhaseFilter(): React.ReactElement | null {
   const { currentPhase, setCurrentPhase, phaseOptions } = usePhaseFilter();
   const [mounted, setMounted] = useState(false);
   const [container, setContainer] = useState<HTMLElement | null>(null);
   const [currentRole, setCurrentRoleState] = useState<string>("all");
+  const [categoriesCollapsed, setCategoriesCollapsed] = useState(false);
+  const checkCollapseStateRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load role from localStorage
   useEffect(() => {
@@ -46,6 +116,23 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
       ) {
         setCurrentRoleState(stored);
       }
+
+      // Check collapse state periodically to stay in sync with manual collapses
+      const checkState = () => {
+        setCategoriesCollapsed(areCategoriesCollapsed());
+      };
+
+      // Initial check after a delay to let sidebar render
+      setTimeout(checkState, 500);
+
+      // Check periodically for manual collapse changes
+      checkCollapseStateRef.current = setInterval(checkState, 1000);
+
+      return () => {
+        if (checkCollapseStateRef.current) {
+          clearInterval(checkCollapseStateRef.current);
+        }
+      };
     }
   }, []);
 
@@ -56,6 +143,17 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
       localStorage.setItem(ROLE_FILTER_KEY, role);
     }
   }, []);
+
+  // Toggle collapse/expand all categories
+  const handleToggleCategories = useCallback(() => {
+    if (categoriesCollapsed) {
+      expandAllCategories();
+      setCategoriesCollapsed(false);
+    } else {
+      collapseAllCategories();
+      setCategoriesCollapsed(true);
+    }
+  }, [categoriesCollapsed]);
 
   useEffect(() => {
     setMounted(true);
@@ -120,21 +218,8 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
   const hasActiveFilters = currentPhase !== "all" || currentRole !== "all";
 
   const filterContent = (
-    <>
-      {/* Clear button - positioned absolutely at top right */}
-      {hasActiveFilters && (
-        <button
-          className="phase-filter__clear"
-          onClick={() => {
-            setCurrentPhase("all");
-            setCurrentRole("all");
-          }}
-          title="Clear all filters"
-        >
-          ✕
-        </button>
-      )}
-
+    <div className="sidebar-filter-wrapper">
+      {/* Top row: Filters */}
       <div className="sidebar-filters">
         {/* Phase Filter - Compact */}
         <select
@@ -143,10 +228,11 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
           value={currentPhase}
           onChange={(e) => setCurrentPhase(e.target.value as PhaseFilterType)}
           title="Filter by Phase"
+          aria-label="Filter documentation by development phase"
         >
           {phaseOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.value === "all" ? "Phase" : option.label}
+              {option.value === "all" ? "All Phases" : option.shortLabel}
             </option>
           ))}
         </select>
@@ -158,8 +244,9 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
           value={currentRole}
           onChange={(e) => setCurrentRole(e.target.value)}
           title="Filter by Role"
+          aria-label="Filter documentation by role"
         >
-          <option value="all">Role</option>
+          <option value="all">All Roles</option>
           {Object.entries(ROLE_GROUPS).map(([groupName, roles]) => (
             <optgroup key={groupName} label={groupName}>
               {roles.map((role) => (
@@ -171,7 +258,44 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
           ))}
         </select>
       </div>
-    </>
+
+      {/* Bottom row: Actions */}
+      <div className="sidebar-actions">
+        {/* Collapse/Expand All Categories */}
+        <button
+          type="button"
+          className="sidebar-action-btn"
+          onClick={handleToggleCategories}
+          title={categoriesCollapsed ? "Expand all categories" : "Collapse all categories"}
+          aria-label={categoriesCollapsed ? "Expand all categories" : "Collapse all categories"}
+          aria-expanded={!categoriesCollapsed}
+        >
+          <span className="sidebar-action-icon" aria-hidden="true">
+            {categoriesCollapsed ? "▶" : "▼"}
+          </span>
+          <span className="sidebar-action-text">
+            {categoriesCollapsed ? "Expand All" : "Collapse All"}
+          </span>
+        </button>
+
+        {/* Clear filters button - only show when filters are active */}
+        {hasActiveFilters && (
+          <button
+            type="button"
+            className="sidebar-action-btn sidebar-action-btn--clear"
+            onClick={() => {
+              setCurrentPhase("all");
+              setCurrentRole("all");
+            }}
+            title="Clear all filters"
+            aria-label="Clear all filters"
+          >
+            <span className="sidebar-action-icon" aria-hidden="true">✕</span>
+            <span className="sidebar-action-text">Clear</span>
+          </button>
+        )}
+      </div>
+    </div>
   );
 
   return createPortal(filterContent, container);

@@ -3166,3 +3166,63 @@ main:focus-visible::before {
   pointer-events: none;
   opacity: 0.5;
 }
+
+/* ================================================
+   SIDEBAR CATEGORY ALIGNMENT FIX
+   Fix nested category caret alignment
+   ================================================ */
+
+/* Ensure nested category links have proper flex alignment */
+.menu__list .menu__list .menu__link--sublist-caret {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Fix caret positioning for nested categories */
+.menu__list .menu__list .menu__link--sublist-caret::after {
+  position: static;
+  flex-shrink: 0;
+  margin-left: auto;
+  /* Ensure caret stays on same line */
+  display: inline-block;
+}
+
+/* Ensure category label text doesn't wrap incorrectly */
+.menu__link--sublist-caret > span,
+.menu__link--sublist-caret > .menu__link-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fix for when label is direct text content */
+.menu__link--sublist-caret {
+  flex-wrap: nowrap;
+}
+
+/* ================================================
+   PHASE FILTER - Sidebar Item Visibility
+   Hide items that don't match the current phase
+   ================================================ */
+
+/* Items marked as filtered out */
+.menu__list-item[data-phase-hidden="true"] {
+  display: none !important;
+}
+
+/* Categories that have no visible children */
+.menu__list-item[data-category-empty="true"] {
+  display: none !important;
+}
+
+/* Filtered state indicator on visible items */
+.menu__link[data-phase-match="false"] {
+  opacity: 0.5;
+}
+
+.menu__link[data-phase-match="true"] {
+  opacity: 1;
+}

@@ -469,6 +469,8 @@ const config: Config = {
 
   // Add custom webpack config to handle pptxgenjs node: protocol imports
   plugins: [
+    // Phase enricher plugin - provides phase metadata for sidebar filtering
+    resolve(__dirname, "./src/plugins/sidebar-phase-enricher.ts"),
     function customWebpackPlugin() {
       return {
         name: "custom-webpack-plugin",
