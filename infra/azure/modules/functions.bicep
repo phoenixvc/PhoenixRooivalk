@@ -43,14 +43,11 @@ param azureOpenAIChatDeployment string = 'gpt-4'
 @description('Azure OpenAI embedding deployment name')
 param azureOpenAIEmbeddingDeployment string = 'text-embedding-3-small'
 
-@description('Azure AD B2C tenant name (without .onmicrosoft.com)')
-param azureAdB2cTenant string = ''
+@description('Azure Entra ID tenant ID')
+param azureEntraTenantId string = ''
 
-@description('Azure AD B2C client ID for token validation')
-param azureAdB2cClientId string = ''
-
-@description('Azure AD B2C user flow/policy name')
-param azureAdB2cPolicy string = 'B2C_1_signupsignin'
+@description('Azure Entra ID client ID for token validation')
+param azureEntraClientId string = ''
 
 // Reference existing storage account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
@@ -152,23 +149,14 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
           name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT'
           value: azureOpenAIEmbeddingDeployment
         }
-        // Azure AD B2C configuration for token validation
+        // Azure Entra ID configuration for token validation
         {
-          name: 'AZURE_AD_B2C_TENANT'
-          value: azureAdB2cTenant
+          name: 'AZURE_ENTRA_TENANT_ID'
+          value: azureEntraTenantId
         }
-        {
-          name: 'AZURE_AD_B2C_CLIENT_ID'
-          value: azureAdB2cClientId
-        }
-        {
-          name: 'AZURE_AD_B2C_POLICY'
-          value: azureAdB2cPolicy
-        }
-        // Also set as AZURE_ENTRA_CLIENT_ID for multi-tenant Azure AD support
         {
           name: 'AZURE_ENTRA_CLIENT_ID'
-          value: azureAdB2cClientId
+          value: azureEntraClientId
         }
       ]
       cors: {

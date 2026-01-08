@@ -1,8 +1,7 @@
 /**
  * Authentication Helpers
  *
- * Validates Azure AD tokens for authenticated functions.
- * Supports both Azure AD B2C and regular Azure AD (multi-tenant/common endpoint).
+ * Validates Azure Entra ID tokens for authenticated functions.
  * Uses jose library for proper JWT validation.
  */
 
@@ -17,7 +16,6 @@ export interface TokenClaims {
   sub: string;
   oid?: string;
   email?: string;
-  emails?: string[]; // B2C uses 'emails' array
   name?: string;
   roles?: string[];
   iss: string;
@@ -27,6 +25,7 @@ export interface TokenClaims {
   nbf?: number;
   tid?: string; // Tenant ID
   preferred_username?: string;
+  upn?: string; // User Principal Name
 }
 
 /**
@@ -35,52 +34,27 @@ export interface TokenClaims {
 const ADMIN_DOMAINS = ["phoenixrooivalk.com", "justaghost.dev"];
 
 /**
- * JWKS cache - supports both B2C and regular Azure AD
+ * JWKS cache for Azure Entra ID
  */
-let jwksCacheB2C: jose.JWTVerifyGetKey | null = null;
-let jwksCacheAzureAD: jose.JWTVerifyGetKey | null = null;
+let jwksCache: jose.JWTVerifyGetKey | null = null;
 
 /**
- * Get JWKS for B2C token validation
+ * Get JWKS for Azure Entra ID token validation
  */
-async function getB2CJWKS(): Promise<jose.JWTVerifyGetKey> {
-  if (jwksCacheB2C) return jwksCacheB2C;
+async function getEntraJWKS(): Promise<jose.JWTVerifyGetKey> {
+  if (jwksCache) return jwksCache;
 
-  const tenant = process.env.AZURE_AD_B2C_TENANT;
-  const policy = process.env.AZURE_AD_B2C_POLICY || "B2C_1_signupsignin";
+  // Use common endpoint for multi-tenant support
+  // Or use tenant-specific: https://login.microsoftonline.com/{tenantId}/discovery/v2.0/keys
+  const tenantId = process.env.AZURE_ENTRA_TENANT_ID || "common";
+  const jwksUrl = `https://login.microsoftonline.com/${tenantId}/discovery/v2.0/keys`;
 
-  if (!tenant) {
-    throw new Error("AZURE_AD_B2C_TENANT not configured");
-  }
-
-  const jwksUrl = `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/${policy}/discovery/v2.0/keys`;
-  jwksCacheB2C = jose.createRemoteJWKSet(new URL(jwksUrl));
-
-  return jwksCacheB2C;
+  jwksCache = jose.createRemoteJWKSet(new URL(jwksUrl));
+  return jwksCache;
 }
 
 /**
- * Get JWKS for regular Azure AD token validation (common endpoint)
- */
-async function getAzureADJWKS(): Promise<jose.JWTVerifyGetKey> {
-  if (jwksCacheAzureAD) return jwksCacheAzureAD;
-
-  const jwksUrl = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
-  jwksCacheAzureAD = jose.createRemoteJWKSet(new URL(jwksUrl));
-
-  return jwksCacheAzureAD;
-}
-
-/**
- * Detect if token is from B2C or regular Azure AD based on issuer
- */
-function isB2CToken(payload: jose.JWTPayload): boolean {
-  const issuer = payload.iss as string;
-  return issuer?.includes("b2clogin.com") || false;
-}
-
-/**
- * Validate JWT token - supports both B2C and regular Azure AD
+ * Validate JWT token from Azure Entra ID
  */
 async function validateToken(token: string): Promise<TokenClaims | null> {
   try {
@@ -90,65 +64,42 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
       return JSON.parse(Buffer.from(payload, "base64url").toString());
     }
 
-    // First, decode the token to check the issuer (without verification)
-    const [, payloadB64] = token.split(".");
-    const unverifiedPayload = JSON.parse(
-      Buffer.from(payloadB64, "base64url").toString()
-    ) as jose.JWTPayload;
-
     const audience =
-      process.env.AZURE_AD_B2C_CLIENT_ID ||
-      process.env.AZURE_ENTRA_CLIENT_ID ||
-      process.env.AZURE_AD_CLIENT_ID;
+      process.env.AZURE_ENTRA_CLIENT_ID || process.env.AZURE_AD_CLIENT_ID;
 
-    // If no audience configured, use unvalidated decode
+    // If no audience configured, decode without validation (dev mode)
     if (!audience) {
       logger.warn("No client ID configured, using unvalidated token decode", {
         operation: "validateToken",
       });
-      return unverifiedPayload as unknown as TokenClaims;
+      const [, payload] = token.split(".");
+      return JSON.parse(
+        Buffer.from(payload, "base64url").toString()
+      ) as TokenClaims;
     }
 
-    // Check if it's a B2C token or regular Azure AD token
-    if (isB2CToken(unverifiedPayload)) {
-      // B2C token validation
-      const tenant = process.env.AZURE_AD_B2C_TENANT;
-      if (!tenant) {
-        logger.warn("B2C token detected but AZURE_AD_B2C_TENANT not configured", {
-          operation: "validateToken",
-        });
-        return unverifiedPayload as unknown as TokenClaims;
-      }
+    const jwks = await getEntraJWKS();
 
-      const jwks = await getB2CJWKS();
-      const { payload } = await jose.jwtVerify(token, jwks, {
-        audience,
-        issuer: `https://${tenant}.b2clogin.com/${tenant}.onmicrosoft.com/v2.0/`,
+    // Validate token
+    const { payload } = await jose.jwtVerify(token, jwks, {
+      audience,
+      // For multi-tenant apps, don't validate issuer strictly
+      // The signature validation is sufficient for security
+    });
+
+    // Validate issuer format
+    const issuer = payload.iss as string;
+    if (
+      !issuer?.startsWith("https://login.microsoftonline.com/") &&
+      !issuer?.startsWith("https://sts.windows.net/")
+    ) {
+      logger.warn("Unexpected issuer format", {
+        operation: "validateToken",
+        issuer,
       });
-
-      return payload as unknown as TokenClaims;
-    } else {
-      // Regular Azure AD token validation (common/multi-tenant)
-      const jwks = await getAzureADJWKS();
-
-      // For multi-tenant apps, we validate the signature but accept any tenant issuer
-      const { payload } = await jose.jwtVerify(token, jwks, {
-        audience,
-        // Don't validate issuer for multi-tenant - just validate signature
-      });
-
-      // Optionally validate issuer format
-      const issuer = payload.iss as string;
-      if (!issuer?.startsWith("https://login.microsoftonline.com/") &&
-          !issuer?.startsWith("https://sts.windows.net/")) {
-        logger.warn("Unexpected issuer format", {
-          operation: "validateToken",
-          issuer,
-        });
-      }
-
-      return payload as unknown as TokenClaims;
     }
+
+    return payload as unknown as TokenClaims;
   } catch (error) {
     logger.error("Token validation failed", error, {
       operation: "validateToken",
@@ -158,14 +109,12 @@ async function validateToken(token: string): Promise<TokenClaims | null> {
 }
 
 /**
- * Extract email from token claims (handles both B2C and regular Azure AD)
+ * Extract email from token claims
  */
 function getEmailFromClaims(claims: TokenClaims): string | null {
-  // Regular Azure AD uses 'email' or 'preferred_username'
   if (claims.email) return claims.email;
   if (claims.preferred_username?.includes("@")) return claims.preferred_username;
-  // B2C uses 'emails' array
-  if (claims.emails && claims.emails.length > 0) return claims.emails[0];
+  if (claims.upn?.includes("@")) return claims.upn;
   return null;
 }
 
@@ -173,7 +122,7 @@ function getEmailFromClaims(claims: TokenClaims): string | null {
  * Extract user ID from request (from validated token)
  */
 export async function getUserIdFromRequest(
-  request: HttpRequest,
+  request: HttpRequest
 ): Promise<string | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -190,7 +139,7 @@ export async function getUserIdFromRequest(
  * Get token claims from request (validated)
  */
 export async function getTokenClaims(
-  request: HttpRequest,
+  request: HttpRequest
 ): Promise<TokenClaims | null> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -220,7 +169,7 @@ function decodeJwtPayload(token: string): TokenClaims | null {
 
 /**
  * Get token claims from request (synchronous, for legacy compatibility)
- * NOTE: Does not validate signature - prefer getTokenClaimsAsync for secure validation
+ * NOTE: Does not validate signature - prefer getTokenClaims for secure validation
  */
 export function getTokenClaimsSync(request: HttpRequest): TokenClaims | null {
   const authHeader = request.headers.get("authorization");
@@ -234,7 +183,7 @@ export function getTokenClaimsSync(request: HttpRequest): TokenClaims | null {
 
 /**
  * Extract user ID from request (synchronous)
- * NOTE: Does not validate signature - prefer getUserIdFromRequestAsync for secure validation
+ * NOTE: Does not validate signature - prefer getUserIdFromRequest for secure validation
  */
 export function getUserIdFromRequestSync(request: HttpRequest): string | null {
   const claims = getTokenClaimsSync(request);
@@ -266,8 +215,7 @@ function isAdminFromClaims(claims: TokenClaims): boolean {
 }
 
 /**
- * Require authentication with proper JWT validation (async)
- * Supports both Azure AD B2C and regular Azure AD tokens
+ * Require authentication with proper JWT validation
  */
 export async function requireAuthAsync(request: HttpRequest): Promise<{
   authenticated: boolean;
@@ -325,7 +273,6 @@ export async function requireAuthAsync(request: HttpRequest): Promise<{
 /**
  * Require authentication - synchronous version (legacy)
  * WARNING: Does not validate JWT signature. Use requireAuthAsync for secure validation.
- * This exists for backwards compatibility during migration.
  */
 export function requireAuth(request: HttpRequest): {
   authenticated: boolean;
@@ -344,8 +291,6 @@ export function requireAuth(request: HttpRequest): {
     };
   }
 
-  // For sync usage, decode without validation
-  // Use requireAuthAsync for proper validation
   const token = authHeader.substring(7);
   try {
     const [, payload] = token.split(".");
@@ -378,7 +323,7 @@ export function requireAuth(request: HttpRequest): {
 }
 
 /**
- * Require admin access with proper JWT validation (async)
+ * Require admin access with proper JWT validation
  */
 export async function requireAdminAsync(request: HttpRequest): Promise<{
   authorized: boolean;
@@ -391,34 +336,6 @@ export async function requireAdminAsync(request: HttpRequest): Promise<{
   }
 
   if (!authResult.claims || !isAdminFromClaims(authResult.claims)) {
-    return {
-      authorized: false,
-      userId: authResult.userId,
-      error: {
-        status: 403,
-        jsonBody: { error: "Admin access required", code: "permission-denied" },
-      },
-    };
-  }
-
-  return { authorized: true, userId: authResult.userId };
-}
-
-/**
- * Require admin access - synchronous version (legacy)
- */
-export async function requireAdminLegacy(request: HttpRequest): Promise<{
-  authorized: boolean;
-  userId: string | null;
-  error?: HttpResponseInit;
-}> {
-  const authResult = await requireAuthAsync(request);
-  if (!authResult.authenticated) {
-    return { authorized: false, userId: null, error: authResult.error };
-  }
-
-  const adminCheck = await isAdmin(request);
-  if (!adminCheck) {
     return {
       authorized: false,
       userId: authResult.userId,
