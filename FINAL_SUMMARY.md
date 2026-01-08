@@ -81,15 +81,15 @@ cross-origin requests.
 
 ## Files Modified
 
-| File | Changes | Impact |
-|------|---------|--------|
-| `staticwebapp.config.json` | Removed COOP header | OAuth popups work |
-| `cosmos-proxy.ts` | Added CORS/OPTIONS | API calls succeed |
-| `responses.ts` | CORS utilities | Consistent security |
-| `database.ts` | JSON parsing fix | No parse errors |
-| `functions.ts` | Added credentials | Auth cross-origin |
-| `CORS_LOGIN_FIX.md` | Technical docs | Knowledge sharing |
-| `CODE_REVIEW_RESPONSE.md` | Design rationale | Audit trail |
+| File                       | Changes             | Impact              |
+| -------------------------- | ------------------- | ------------------- |
+| `staticwebapp.config.json` | Removed COOP header | OAuth popups work   |
+| `cosmos-proxy.ts`          | Added CORS/OPTIONS  | API calls succeed   |
+| `responses.ts`             | CORS utilities      | Consistent security |
+| `database.ts`              | JSON parsing fix    | No parse errors     |
+| `functions.ts`             | Added credentials   | Auth cross-origin   |
+| `CORS_LOGIN_FIX.md`        | Technical docs      | Knowledge sharing   |
+| `CODE_REVIEW_RESPONSE.md`  | Design rationale    | Audit trail         |
 
 ---
 

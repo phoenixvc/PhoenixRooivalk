@@ -16,77 +16,77 @@ For production drone detection, we need to:
 
 What we want to detect and alert on.
 
-| ID | Class | Examples | Characteristics |
-|----|-------|----------|-----------------|
-| 0 | `drone_multirotor` | DJI Mavic, Phantom | 4-8 arms, rotors, hover |
-| 1 | `drone_fixedwing` | senseFly eBee, Disco | Wing shape, gliding |
-| 2 | `drone_vtol` | Wingcopter, Trinity | Hybrid hover/flight |
-| 3 | `drone_racing` | TinyWhoop, FPV quads | Small, fast, agile |
-| 4 | `drone_toy` | Holy Stone, Syma | Small, colorful |
+| ID  | Class              | Examples             | Characteristics         |
+| --- | ------------------ | -------------------- | ----------------------- |
+| 0   | `drone_multirotor` | DJI Mavic, Phantom   | 4-8 arms, rotors, hover |
+| 1   | `drone_fixedwing`  | senseFly eBee, Disco | Wing shape, gliding     |
+| 2   | `drone_vtol`       | Wingcopter, Trinity  | Hybrid hover/flight     |
+| 3   | `drone_racing`     | TinyWhoop, FPV quads | Small, fast, agile      |
+| 4   | `drone_toy`        | Holy Stone, Syma     | Small, colorful         |
 
 ### Birds (Classes 5-9)
 
 Highest confusion risk - similar size, flight patterns.
 
-| ID | Class | Examples | Size | Flight Pattern |
-|----|-------|----------|------|----------------|
-| 5 | `bird_tiny` | Hummingbird, sparrow | <15cm | Darting, hover |
-| 6 | `bird_small` | Pigeon, crow, magpie | 15-40cm | Flapping |
-| 7 | `bird_medium` | Seagull, duck, owl | 40-80cm | Soaring |
-| 8 | `bird_large` | Eagle, hawk, vulture | >80cm | Circling |
-| 9 | `bird_flock` | Murmurations, geese | Multiple | Group movement |
+| ID  | Class         | Examples             | Size     | Flight Pattern |
+| --- | ------------- | -------------------- | -------- | -------------- |
+| 5   | `bird_tiny`   | Hummingbird, sparrow | <15cm    | Darting, hover |
+| 6   | `bird_small`  | Pigeon, crow, magpie | 15-40cm  | Flapping       |
+| 7   | `bird_medium` | Seagull, duck, owl   | 40-80cm  | Soaring        |
+| 8   | `bird_large`  | Eagle, hawk, vulture | >80cm    | Circling       |
+| 9   | `bird_flock`  | Murmurations, geese  | Multiple | Group movement |
 
 ### Manned Aircraft (Classes 10-13)
 
 CRITICAL: Must never be misidentified as target.
 
-| ID | Class | Examples | Features |
-|----|-------|----------|----------|
-| 10 | `aircraft_fixed` | Cessna, 747, jets | Wings, tail, fast |
-| 11 | `aircraft_rotary` | News/military heli | Main+tail rotor |
-| 12 | `aircraft_glider` | Hang/paraglider | No engine, slow |
-| 13 | `aircraft_balloon` | Hot air, blimp | Large, slow |
+| ID  | Class              | Examples           | Features          |
+| --- | ------------------ | ------------------ | ----------------- |
+| 10  | `aircraft_fixed`   | Cessna, 747, jets  | Wings, tail, fast |
+| 11  | `aircraft_rotary`  | News/military heli | Main+tail rotor   |
+| 12  | `aircraft_glider`  | Hang/paraglider    | No engine, slow   |
+| 13  | `aircraft_balloon` | Hot air, blimp     | Large, slow       |
 
 ### Recreational Objects (Classes 14-18)
 
 Common in parks, beaches, events.
 
-| ID | Class | Examples | Characteristics |
-|----|-------|----------|-----------------|
-| 14 | `kite` | Diamond, stunt kite | Tethered, wind-dependent |
-| 15 | `balloon_party` | Helium balloons | Small, drifting |
-| 16 | `balloon_weather` | Radiosonde | High altitude, payload |
-| 17 | `lantern` | Sky lantern | Glowing, night-time |
-| 18 | `rc_plane` | RC aircraft/heli | Different profile |
+| ID  | Class             | Examples            | Characteristics          |
+| --- | ----------------- | ------------------- | ------------------------ |
+| 14  | `kite`            | Diamond, stunt kite | Tethered, wind-dependent |
+| 15  | `balloon_party`   | Helium balloons     | Small, drifting          |
+| 16  | `balloon_weather` | Radiosonde          | High altitude, payload   |
+| 17  | `lantern`         | Sky lantern         | Glowing, night-time      |
+| 18  | `rc_plane`        | RC aircraft/heli    | Different profile        |
 
 ### Sports/Thrown Objects (Classes 19-20)
 
 Brief airtime, predictable trajectory.
 
-| ID | Class | Examples | Characteristics |
-|----|-------|----------|-----------------|
-| 19 | `ball` | Soccer, basketball, golf | Spherical, parabolic |
-| 20 | `projectile` | Frisbee, arrow, javelin | Fast, spinning |
+| ID  | Class        | Examples                 | Characteristics      |
+| --- | ------------ | ------------------------ | -------------------- |
+| 19  | `ball`       | Soccer, basketball, golf | Spherical, parabolic |
+| 20  | `projectile` | Frisbee, arrow, javelin  | Fast, spinning       |
 
 ### Debris/Environmental (Classes 21-23)
 
 Common false positives in outdoor environments.
 
-| ID | Class | Examples | Characteristics |
-|----|-------|----------|-----------------|
-| 21 | `debris_light` | Plastic bag, paper, leaf | Irregular, wind-driven |
-| 22 | `debris_organic` | Seeds, feathers, pollen | Small, drifting |
-| 23 | `insect` | Fly, bee, dragonfly | Close-up looks large |
+| ID  | Class            | Examples                 | Characteristics        |
+| --- | ---------------- | ------------------------ | ---------------------- |
+| 21  | `debris_light`   | Plastic bag, paper, leaf | Irregular, wind-driven |
+| 22  | `debris_organic` | Seeds, feathers, pollen  | Small, drifting        |
+| 23  | `insect`         | Fly, bee, dragonfly      | Close-up looks large   |
 
 ### Atmospheric/Artifacts (Classes 24-26)
 
 Camera and environmental artifacts.
 
-| ID | Class | Examples | Characteristics |
-|----|-------|----------|-----------------|
-| 24 | `weather` | Rain, snow, hail, dust | Many small, uniform |
-| 25 | `artifact` | Lens flare, web | Static, optical |
-| 26 | `background` | Sky, clouds, sun | No distinct object |
+| ID  | Class        | Examples               | Characteristics     |
+| --- | ------------ | ---------------------- | ------------------- |
+| 24  | `weather`    | Rain, snow, hail, dust | Many small, uniform |
+| 25  | `artifact`   | Lens flare, web        | Static, optical     |
+| 26  | `background` | Sky, clouds, sun       | No distinct object  |
 
 ---
 
