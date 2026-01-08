@@ -11,8 +11,7 @@ The login system was experiencing two critical issues:
      parent window
 
 2. **Empty JSON responses causing parse errors**
-   - Error:
-     `Uncaught (in promise) SyntaxError: Failed to execute 'json' on 'Response': Unexpected end of JSON input`
+   - Error: `SyntaxError: Failed to execute 'json' on 'Response'`
    - API calls were failing silently or returning empty bodies
 
 ## Root Causes

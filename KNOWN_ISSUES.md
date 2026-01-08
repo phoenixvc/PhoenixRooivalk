@@ -81,9 +81,7 @@ Validates configuration before deploying:
   commands
 - **Comprehensive Guide**: [FIX_GUIDE.md](./FIX_GUIDE.md) - Detailed
   step-by-step instructions
-- **Troubleshooting**:
-  [apps/docs/azure-functions/TROUBLESHOOTING.md](./apps/docs/azure-functions/TROUBLESHOOTING.md) -
-  Detailed troubleshooting
+- **Troubleshooting**: See `apps/docs/azure-functions/TROUBLESHOOTING.md`
 - **CORS Fix History**: [CORS_LOGIN_FIX.md](./CORS_LOGIN_FIX.md) - Complete fix
   history and background
 
