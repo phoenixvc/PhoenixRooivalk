@@ -34,6 +34,32 @@ Detector demo.**
 
 ---
 
+## Setup Guides
+
+Two approaches are available depending on demo timeline:
+
+| Approach | Setup Time | FPS on Pi 4 | Best For |
+|----------|------------|-------------|----------|
+| **Ultralytics/ONNX** | 30 min | 12-18 FPS | Quick demo setup |
+| **TFLite Optimized** | 1 hour | 5-8 FPS (25-35 with Coral) | Production deployment |
+
+### Option A: Ultralytics/ONNX (This Guide)
+
+Uses `ultralytics` package with ONNX export. Faster setup, slightly higher FPS on
+CPU. Instructions below.
+
+### Option B: TFLite Optimized
+
+For production deployment or if using Coral USB Accelerator, see the full setup
+guide: [`apps/pi-drone-detector/README.md`](/docs/pi-drone-detector)
+
+Key benefits of TFLite:
+- INT8 quantization (smaller model, ~6MB)
+- Coral Edge TPU support (25-35 FPS)
+- Custom drone scoring with coke can rejection heuristics
+
+---
+
 ## 1. Remote File Delivery
 
 ### Download Package (Google Drive / OneDrive)
