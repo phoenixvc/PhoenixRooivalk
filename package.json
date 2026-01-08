@@ -57,7 +57,7 @@
     }
   },
   "dependencies": {
-    "@types/node": "^24.10.4",
+    "@types/node": "^25.0.3",
     "pptxgenjs": "^4.0.1"
   }
 }
