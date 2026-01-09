@@ -1,0 +1,11 @@
+{
+  "label": "Pi Drone Detector",
+  "position": 5,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "title": "Pi Drone Detector",
+    "description": "Documentation for the Raspberry Pi-based drone detection and countermeasure system.",
+    "keywords": ["detector", "drone", "raspberry pi", "countermeasures", "net launcher"]
+  }
+}

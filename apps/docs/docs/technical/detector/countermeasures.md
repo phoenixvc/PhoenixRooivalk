@@ -1,3 +1,10 @@
+---
+sidebar_position: 5
+title: Countermeasure Options
+description: Complete guide to drone countermeasure systems from DIY to commercial
+keywords: [countermeasures, net launcher, SkyWall, commercial, DIY, NetSentry]
+---
+
 # Drone Countermeasure Options
 
 This document covers countermeasure options that can be triggered by the Pi Drone Detector's GPIO output system.
