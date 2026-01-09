@@ -156,11 +156,14 @@ class BaseInferenceEngine(InferenceEngine):
             x2 = int((x_center + width / 2) * x_scale)
             y2 = int((y_center + height / 2) * y_scale)
 
-            # Clamp
-            x1 = max(0, x1)
-            y1 = max(0, y1)
-            x2 = max(0, x2)
-            y2 = max(0, y2)
+            # Clamp to frame bounds
+            # Calculate original frame dimensions from scale factors
+            orig_w = int(x_scale * self._input_shape[2])
+            orig_h = int(y_scale * self._input_shape[1])
+            x1 = max(0, min(x1, orig_w - 1))
+            y1 = max(0, min(y1, orig_h - 1))
+            x2 = max(0, min(x2, orig_w))
+            y2 = max(0, min(y2, orig_h))
 
             bbox = BoundingBox(x1, y1, x2, y2)
             drone_score = self._scorer.calculate_score(class_id, confidence, bbox)
@@ -403,7 +406,19 @@ class ONNXEngine(BaseInferenceEngine):
             self._output_name = self._session.get_outputs()[0].name
 
             input_info = self._session.get_inputs()[0]
-            self._input_shape = tuple(input_info.shape)
+            # Handle dynamic dimensions (e.g., 'batch_size', None) by replacing with defaults
+            raw_shape = input_info.shape
+            resolved_shape = []
+            for i, dim in enumerate(raw_shape):
+                if isinstance(dim, int) and dim > 0:
+                    resolved_shape.append(dim)
+                elif i == 0:
+                    # Batch dimension - default to 1
+                    resolved_shape.append(1)
+                else:
+                    # Other dimensions - use default 320
+                    resolved_shape.append(320)
+            self._input_shape = tuple(resolved_shape)
 
             # ONNX models are typically float32
             self._is_quantized = False
@@ -555,7 +570,8 @@ def create_inference_engine(
         if not engine.load_model(model_path):
             print("Coral not available, falling back to TFLite")
             engine = TFLiteEngine(**kwargs)
-            engine.load_model(model_path)
+            if not engine.load_model(model_path):
+                raise RuntimeError(f"Failed to load model with both Coral and TFLite: {model_path}")
         return engine
 
     if engine_type == "onnx":

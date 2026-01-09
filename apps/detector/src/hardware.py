@@ -138,11 +138,11 @@ def _detect_camera() -> str:
         pass
 
     # Check for Picamera2
+    picam = None
     try:
         from picamera2 import Picamera2
         picam = Picamera2()
         camera_info = picam.global_camera_info()
-        picam.close()
 
         if camera_info:
             model = camera_info[0].get('Model', '').lower()
@@ -151,8 +151,16 @@ def _detect_camera() -> str:
             elif 'imx219' in model:
                 return 'picam_v2'
             return 'picam_unknown'
-    except (ImportError, Exception):
+    except ImportError:
         pass
+    except Exception:
+        pass
+    finally:
+        if picam is not None:
+            try:
+                picam.close()
+            except Exception:
+                pass
 
     # Check for USB camera
     try:

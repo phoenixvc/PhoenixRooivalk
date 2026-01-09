@@ -450,8 +450,15 @@ def create_frame_source(
     if source_type == "auto":
         # Try Pi Camera first
         pi_cam = PiCameraSource(width=width, height=height, fps=fps)
-        if pi_cam.open():
-            return pi_cam
+        try:
+            if pi_cam.open():
+                return pi_cam
+        except Exception:
+            pass
+        finally:
+            # Ensure Pi camera is closed if we didn't return it
+            if not pi_cam.is_open():
+                pi_cam.close()
 
         # Fall back to USB camera
         usb_cam = USBCameraSource(
@@ -460,8 +467,15 @@ def create_frame_source(
             height=height,
             fps=fps,
         )
-        if usb_cam.open():
-            return usb_cam
+        try:
+            if usb_cam.open():
+                return usb_cam
+        except Exception:
+            pass
+        finally:
+            # Ensure USB camera is closed if we didn't return it
+            if not usb_cam.is_open():
+                usb_cam.close()
 
         # Last resort: mock
         print("WARNING: No camera found, using mock frame source")
