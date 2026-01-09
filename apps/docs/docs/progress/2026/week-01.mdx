@@ -74,19 +74,23 @@ import {
 - **Model versioning**: MLflow integration for experiment tracking
 - **Scalable architecture**: Ready for production model iteration
 
-### 4. SkySnare Product Roadmap
+### 4. Product Catalog Defined
 
-- **BOM estimate**: $75-200 per unit depending on configuration
-- **Manufacturing readiness**: Component sourcing validated
-- **Design alignment**: Hardware designs match software capabilities
-- **Q2 2026 launch target**: On track for consumer market entry
+- **SkyWatch Line**: 8 detection-only products ($50 Nano to $20K Enterprise)
+- **NetSentry Line**: 3 countermeasure systems ($150 Lite to $2K Pro)
+- **11 products total**: Complete BOMs, specifications, and configs documented
+- **Market coverage**: Hobbyist, consumer, professional, and enterprise tiers
+- **Q2 2026 target**: Consumer products on track for market entry
 
 ### 5. Code Quality & Security Improvements
 
 - **YOLO Training Audit**: Complete audit and fixes for ML training infrastructure (PR #476)
 - **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during testing (PR #475)
+- **OAuth/CORS Fixes**: Major authentication overhaul - COOP blocking, CORS config, Azure Functions auth (PRs #417-#443)
+- **Production Deployment**: Azure config injection, offline mode support, auto-login removal
 - **Codacy Compliance**: Resolved static analysis issues across Python, JavaScript, and Rust
-- **Security Hardening**: GitHub Actions SHA pinning, workflow security improvements
+- **Security Hardening**: GitHub Actions SHA pinning, Semgrep nosec fixes, workflow improvements
+- **UI/UX Fixes**: Document filters, category UI, authentication context errors resolved
 
 ### 6. Known Issues Resolved
 
@@ -95,9 +99,18 @@ import {
 | Model inference latency | ✅ Resolved | Optimized with TensorRT and quantization  |
 | Azure ML authentication | ✅ Resolved | Managed identity configuration fixed      |
 | Cross-platform builds   | ✅ Resolved | CI/CD pipeline updates for ARM64          |
-| Documentation gaps      | ✅ Resolved | Technical docs updated with new API specs |
+| OAuth COOP blocking     | ✅ Resolved | Fixed cross-origin policy (#439-#443)     |
+| CORS configuration      | ✅ Resolved | Azure Functions CORS headers fixed        |
+| Azure Functions auth    | ✅ Resolved | Error response property mismatch (#431)   |
+| Production config       | ✅ Resolved | Azure config via Root.tsx (#424)          |
+| Auto-login issues       | ✅ Resolved | Removed automatic login on startup (#420) |
+| Offline mode API calls  | ✅ Resolved | Skip known-emails in offline mode (#417)  |
+| AI assistant auth       | ✅ Resolved | Authentication and debugging added (#419) |
 | Codacy static analysis  | ✅ Resolved | Fixed issues in Python, JS, and Rust code |
 | Auth bypass security    | ✅ Resolved | Production safeguards for DISABLE_LOGIN   |
+| Document filters UI     | ✅ Resolved | Category and filter issues fixed (#470)   |
+| Auth context errors     | ✅ Resolved | Initialization debugging complete (#469)  |
+| Semgrep warnings        | ✅ Resolved | Nosemgrep inline comments fixed (#471)    |
 
 ---
 
@@ -171,21 +184,50 @@ import {
 
 <SlideSection
   number={4}
-  title="SkySnare Alignment"
-  duration={25}
-  icon="🎮"
+  title="Auth & Infrastructure"
+  duration={30}
+  icon="🔐"
   keyPoints={[
-    "**BOM estimate**: $75-200 per unit validated",
-    "**Component sourcing**: Key parts identified and priced",
-    "**Hardware-software fit**: Designs aligned with AI capabilities",
-    "**Q2 2026 target**: Consumer launch on track",
+    "**OAuth/CORS fixes**: Major authentication overhaul (PRs #417-#443)",
+    "**Production deployment**: Azure config injection, offline mode",
+    {
+      text: "**Issues resolved**:",
+      subPoints: [
+        "COOP blocking and cross-origin policies",
+        "Azure Functions auth error responses",
+        "Auto-login removal and config injection",
+      ],
+    },
+    "**15+ issues fixed**: Auth context, Codacy, Semgrep warnings",
   ]}
-  speakerNotes="SkySnare roadmap aligned with edge AI progress."
-  script="SkySnare product roadmap is aligned with our edge AI progress. BOM estimate of 75-200 dollars per unit depending on configuration. Component sourcing validated. Hardware designs match our software capabilities. On track for Q2 2026 consumer launch."
+  speakerNotes="Critical production readiness work - auth is now solid."
+  script="Major authentication and infrastructure work this period. We fixed OAuth COOP blocking issues, CORS configuration problems, and Azure Functions auth error responses. Production deployment now uses proper config injection through Root.tsx instead of hardcoded values. We resolved over 15 issues including auth context errors, Codacy static analysis, and Semgrep security warnings."
 />
 
 <SlideSection
   number={5}
+  title="Product Lines"
+  duration={30}
+  icon="📦"
+  keyPoints={[
+    "**SkyWatch Line**: 8 detection products ($50 - $20K)",
+    "**NetSentry Line**: 3 countermeasure systems ($150 - $2K)",
+    {
+      text: "**Market tiers**:",
+      subPoints: [
+        "Consumer: Nano, Standard, Mobile ($50-500)",
+        "Professional: Pro, Thermal, Marine ($250-2K)",
+        "Enterprise: Mesh, Enterprise ($500-20K)",
+      ],
+    },
+    "**Full catalog**: 11 products with complete BOMs validated",
+  ]}
+  speakerNotes="Two distinct product lines covering detection and countermeasures across all market segments."
+  script="We've defined two complete product lines. SkyWatch covers detection-only products with 8 variants from the 50 dollar Nano for hobbyists up to the 20 thousand dollar Enterprise system for critical infrastructure. NetSentry adds net countermeasures with 3 tiers from the 150 dollar Lite for makers up to the 2000 dollar Pro for security professionals. All 11 products have validated BOMs and complete specifications documented."
+/>
+
+<SlideSection
+  number={6}
   title="Hardware Progress"
   duration={30}
   icon="🔧"
@@ -200,7 +242,7 @@ import {
 />
 
 <SlideSection
-  number={6}
+  number={7}
   title="Next Priorities"
   duration={20}
   icon="📅"
@@ -355,31 +397,51 @@ Multi-stack code quality and security improvements across the codebase.
 
 ---
 
-### 4. SkySnare Product Alignment
+### 4. Product Catalog
 
-Hardware and software roadmap alignment for consumer product launch.
+Complete product catalog defined with two product lines covering all market segments.
 
-#### Bill of Materials Estimate
+#### SkyWatch Line (Detection-Only)
 
-| Component          | Budget Option | Standard Option | Premium Option |
-| ------------------ | ------------- | --------------- | -------------- |
-| Launcher mechanism | $25           | $40             | $60            |
-| Net cartridge      | $15           | $20             | $30            |
-| Electronics/PCB    | $20           | $35             | $55            |
-| Enclosure          | $10           | $20             | $35            |
-| Assembly/packaging | $5            | $10             | $20            |
-| **Total BOM**      | **$75**       | **$125**        | **$200**       |
+| Product             | SKU         | Target Market                | Price Range   | Detection Range        |
+| ------------------- | ----------- | ---------------------------- | ------------- | ---------------------- |
+| SkyWatch Nano       | SW-NANO-001 | Hobbyists, makers            | $50-100       | 30-50m (daylight)      |
+| SkyWatch Standard   | SW-STD-001  | Homeowners, small property   | $100-250      | 50-150m                |
+| SkyWatch Pro        | SW-PRO-001  | Farms, estates, commercial   | $250-600      | 150-500m visual, 2km RF|
+| SkyWatch Mobile     | SW-MOB-001  | Security patrols, events     | $200-500      | 100-300m               |
+| SkyWatch Thermal    | SW-THM-001  | 24/7 operations, night       | $400-1,500    | 100-500m thermal       |
+| SkyWatch Marine     | SW-MAR-001  | Vessels, marinas, coastal    | $600-2,000    | 200-800m               |
+| SkyWatch Mesh       | SW-MESH-001 | Large perimeters, industrial | $500-2K/node  | 100-200m per node      |
+| SkyWatch Enterprise | SW-ENT-001  | Corporate, critical infra    | $5,000-20,000 | 1-5km (multi-sensor)   |
+
+#### NetSentry Line (Detection + Countermeasures)
+
+| Product          | SKU         | Target Market        | Price Range | Launch Range           |
+| ---------------- | ----------- | -------------------- | ----------- | ---------------------- |
+| NetSentry Lite   | NS-LITE-001 | Makers, hobbyists    | $150-400    | 5-15m (spring-loaded)  |
+| NetSentry Standard | NS-STD-001 | Property protection  | $400-800    | 15-30m (CO2-powered)   |
+| NetSentry Pro    | NS-PRO-001  | Security professionals | $800-2,000 | 25-50m (pneumatic)     |
+
+#### Sample BOMs
+
+| Product           | Key Components                                    | Total BOM  |
+| ----------------- | ------------------------------------------------- | ---------- |
+| SkyWatch Nano     | Pi Zero, Pi Camera v2, MicroSD, case              | ~$66       |
+| SkyWatch Standard | Pi 4, Pi Camera v3, Coral USB, PoE HAT, enclosure | ~$210      |
+| NetSentry Standard| Detection unit + CO2 launcher + net cartridges    | ~$500      |
 
 #### Roadmap Status
 
 | Milestone               | Target Date | Status      |
 | ----------------------- | ----------- | ----------- |
-| CAD designs finalized   | Complete    | ✅ Done     |
+| Product catalog defined | Complete    | ✅ Done     |
+| BOMs validated          | Jan 2026    | ✅ Complete |
 | Prototype 40% assembled | Complete    | ✅ Done     |
-| BOM validation          | Jan 2026    | ✅ Complete |
 | CPSC/ASTM certification | Mar 2026    | 🟡 Planned  |
 | Manufacturing setup     | Apr 2026    | 🟡 Planned  |
-| D2C launch              | Q2 2026     | 🟡 On track |
+| Consumer launch         | Q2 2026     | 🟡 On track |
+
+See [Product Catalog](/docs/technical/detector/product-catalog) for complete specifications.
 
 ---
 
@@ -502,20 +564,31 @@ significant technical milestones achieved.
 
 #### Feature Pull Requests Merged (Dec 19 - Jan 9)
 
-| PR   | Title                                        | Category      |
-| ---- | -------------------------------------------- | ------------- |
-| #476 | Complete YOLO training infrastructure audit  | ML/Security   |
-| #475 | Add DISABLE_LOGIN flag with prod safeguards  | Auth/Security |
-| #474 | Fix remaining Codacy static analysis issues  | Code Quality  |
-| #473 | Evaluate system improvements                 | Refactoring   |
-| #467 | Pi Drone Detector MVP complete               | Edge AI       |
-| #466 | Azure ML training pipeline                   | MLOps         |
-| #465 | YOLOv8 INT8 quantization                     | Performance   |
-| #464 | MLflow experiment tracking                   | MLOps         |
-| #463 | Rust clippy fixes                            | Code Quality  |
-| #462 | Python type hints and ruff                   | Code Quality  |
-| #461 | ESLint and Prettier updates                  | Code Quality  |
-| #460 | Cross-platform ARM64 builds                  | CI/CD         |
+| PR   | Title                                            | Category       |
+| ---- | ------------------------------------------------ | -------------- |
+| #476 | Complete YOLO training infrastructure audit      | ML/Security    |
+| #475 | Add DISABLE_LOGIN flag with prod safeguards      | Auth/Security  |
+| #474 | Fix build, lint, and CI/CD errors                | DevOps         |
+| #473 | Evaluate system performance and functionality    | Refactoring    |
+| #472 | Add Week 1 2026 progress report and pitch deck   | Documentation  |
+| #471 | Fix nosemgrep inline comments for Semgrep        | Security       |
+| #470 | Fix document filters and category UI issues      | UI/UX          |
+| #469 | Debug authentication context initialization      | Bug Fix        |
+| #467 | Plan drone detection system for Raspberry Pi     | Edge AI        |
+| #466 | Azure ML training pipeline                       | MLOps          |
+| #465 | YOLOv8 INT8 quantization                         | Performance    |
+| #464 | MLflow experiment tracking                       | MLOps          |
+| #463 | Rust clippy fixes                                | Code Quality   |
+| #462 | Python type hints and ruff                       | Code Quality   |
+| #461 | ESLint and Prettier updates                      | Code Quality   |
+| #460 | Cross-platform ARM64 builds                      | CI/CD          |
+| #443 | Diagnostic tools for COOP and Cosmos DB errors   | DevOps         |
+| #439 | Fix OAuth login COOP blocking and CORS config    | Auth/Security  |
+| #431 | Fix auth error response in Azure Functions       | Auth/Security  |
+| #424 | Inject Azure config via Root.tsx for prod builds | Infrastructure |
+| #420 | Remove automatic user login on startup           | Auth/Security  |
+| #419 | AI assistant authentication and debugging        | AI/Auth        |
+| #417 | Skip known-emails API call in offline mode       | Offline Mode   |
 
 #### Dependency Updates
 
