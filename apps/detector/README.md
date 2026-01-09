@@ -227,35 +227,66 @@ export STREAM_PORT=8080
 
 ## Training on Azure ML
 
-### Cost: ~$3-5 for full training run
+### Quick Start (GitHub Actions - Recommended)
+
+Use the automated CI/CD pipeline for training:
+
+1. Go to **Actions** tab → **ML Training Pipeline** → **Run workflow**
+2. Select parameters (model, epochs, dataset)
+3. Download trained model from artifacts when complete
+
+### Manual Training (~$3-5 for MVP)
 
 ```bash
-# 1. Setup Azure resources
+# 1. Setup infrastructure with Terraform
+cd infra/terraform/ml-training
+terraform init
+terraform apply -var-file="environments/dev.tfvars"
+
+# 2. Download training data
+cd apps/detector
+python scripts/download_public_datasets.py --output ./data --all
+# Or with Roboflow API key for more datasets:
+ROBOFLOW_API_KEY=xxx python scripts/download_public_datasets.py --output ./data --roboflow
+
+# 3. Upload dataset to Azure ML
+RG=$(cd ../../../infra/terraform/ml-training && terraform output -raw resource_group_name)
+WS=$(cd ../../../infra/terraform/ml-training && terraform output -raw ml_workspace_name)
+
+az ml data create --name drone-dataset --path ./data/combined \
+  --type uri_folder --resource-group $RG --workspace-name $WS
+
+# 4. Submit training job
 cd azure-ml
-./setup-azure.sh
+az ml job create --file job.yaml --resource-group $RG --workspace-name $WS
 
-# 2. Prepare dataset
-cd ../scripts
-python download_datasets.py --output ../data
+# 5. Monitor training
+az ml job stream --name <JOB_NAME> --resource-group $RG --workspace-name $WS
 
-# 3. Add your own images
-# - Add drone images to data/combined/images/train/
-# - Add coke can images to data/negatives/images/
-# - Label with Roboflow (free): https://roboflow.com
+# 6. Download and validate model
+az ml job download --name <JOB_NAME> --output-name model --download-path ./outputs
+python ../scripts/validate_model.py --model-dir ./outputs/model/exports --benchmark
 
-# 4. Upload to Azure
-az ml data create --name drone-dataset --path ../data/combined \
-  --type uri_folder --resource-group rg-drone-training \
-  --workspace-name mlw-drone-detection
-
-# 5. Start training
-az ml job create --file job.yaml \
-  --resource-group rg-drone-training --workspace-name mlw-drone-detection
-
-# 6. Download trained model
-az ml job download --name <job-name> --output-name model --download-path ./trained
-scp trained/exports/drone-detector_int8.tflite pi@raspberrypi:~/models/
+# 7. Deploy to Pi
+scp outputs/model/exports/drone-detector_int8.tflite pi@raspberrypi:~/models/
 ```
+
+### Training Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `model` | yolov8n.pt | Base model (yolov8n/s/m) |
+| `epochs` | 100 | Training epochs |
+| `imgsz` | 320 | Image size |
+| `batch` | 16 | Batch size |
+
+### Cost Estimates
+
+| Configuration | GPU | Time | Cost |
+|---------------|-----|------|------|
+| MVP (10 classes) | T4 | 6-10 hrs | $3-5 |
+| Full (27 classes) | T4 | 20-30 hrs | $10-15 |
+| Full (27 classes) | V100 | 5-8 hrs | $15-25 |
 
 ## Performance
 

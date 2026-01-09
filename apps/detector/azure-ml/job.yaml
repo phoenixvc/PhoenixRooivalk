@@ -1,56 +1,114 @@
 # Azure ML Job Definition for Drone Detection Training
 #
 # Usage:
-#   az ml job create --file job.yaml --resource-group rg-drone-training --workspace-name mlw-drone-detection
+#   # Submit training job
+#   az ml job create --file job.yaml \
+#     --resource-group rg-drone-training \
+#     --workspace-name mlw-drone-detection
+#
+#   # Submit with custom parameters
+#   az ml job create --file job.yaml \
+#     --resource-group rg-drone-training \
+#     --workspace-name mlw-drone-detection \
+#     --set inputs.epochs=150 inputs.model=yolov8s.pt
+#
+#   # Monitor training
+#   az ml job stream --name <job-name> \
+#     --resource-group rg-drone-training \
+#     --workspace-name mlw-drone-detection
 #
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 
 display_name: drone-detection-finetune
 experiment_name: drone-detection
-description: Fine-tune YOLOv5n for drone vs not-drone classification
+description: Fine-tune YOLOv8n for drone detection and export to TFLite/ONNX
 
-# Source code directory
+# Source code directory (relative to this file)
 code: .
 
-# Training command (dependencies come from conda.yaml)
+# Training command
+# Note: Each argument on same line to avoid YAML parsing issues
 command: >-
-  python train.py --data ${{inputs.dataset}}/dataset.yaml --epochs
-  ${{inputs.epochs}} --imgsz ${{inputs.imgsz}} --batch ${{inputs.batch}}
-  --output ${{outputs.model}} --device 0
+  python train.py
+  --data ${{inputs.dataset}}/dataset.yaml
+  --epochs ${{inputs.epochs}}
+  --imgsz ${{inputs.imgsz}}
+  --batch ${{inputs.batch}}
+  --model ${{inputs.model}}
+  --output ${{outputs.model}}
+  --device 0
+  --patience ${{inputs.patience}}
+  --workers ${{inputs.workers}}
 
-# Input datasets
+# Input parameters
 inputs:
+  # Dataset location in Azure ML datastore
   dataset:
     type: uri_folder
     path: azureml://datastores/workspaceblobstore/paths/drone-dataset
+    description: "Path to dataset folder containing dataset.yaml and images/labels"
+
+  # Training hyperparameters
   epochs:
     type: integer
     default: 100
+    description: "Number of training epochs"
+
   imgsz:
     type: integer
     default: 320
+    description: "Image size (square). 320 recommended for Pi deployment"
+
   batch:
     type: integer
     default: 16
+    description: "Batch size. Reduce if OOM errors occur"
+
+  model:
+    type: string
+    default: "yolov8n.pt"
+    description: "Base model: yolov8n.pt (fast), yolov8s.pt (balanced), yolov8m.pt (accurate)"
+
+  patience:
+    type: integer
+    default: 20
+    description: "Early stopping patience (epochs without improvement)"
+
+  workers:
+    type: integer
+    default: 4
+    description: "DataLoader worker threads"
 
 # Output artifacts
 outputs:
   model:
     type: uri_folder
     mode: rw_mount
+    description: "Output folder containing trained model and exports"
 
-# Compute target
+# Compute target (must exist in workspace)
 compute: azureml:gpu-cluster
 
-# Environment
+# Environment definition
 environment:
   image: mcr.microsoft.com/azureml/openmpi4.1.0-cuda11.8-cudnn8-ubuntu22.04:latest
   conda_file: conda.yaml
 
-# Resources
+# Resource allocation
 resources:
   instance_count: 1
 
-# Timeout (4 hours max)
+# Job limits
 limits:
-  timeout: 14400
+  timeout: 14400  # 4 hours max
+
+# Tags for organization
+tags:
+  project: phoenix-rooivalk
+  model_type: yolo
+  deployment_target: edge
+
+# Distribution settings (single GPU for now)
+distribution:
+  type: pytorch
+  process_count_per_instance: 1
