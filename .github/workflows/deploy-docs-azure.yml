@@ -135,6 +135,10 @@ jobs:
           if [ "$DISABLE_LOGIN" == "true" ]; then
             echo "⚠️  Login is DISABLED (DISABLE_LOGIN=true)"
             echo "   All documentation will be publicly accessible without authentication"
+            # Production safeguard: emit GitHub Actions warning for production deployments
+            if [ "$IS_MAIN_BRANCH" == "true" ]; then
+              echo "::warning::🔓 SECURITY: Login is disabled for PRODUCTION deployment! All documentation will be publicly accessible. If unintentional, remove DISABLE_LOGIN variable and re-run workflow."
+            fi
           else
             echo "🔐 Login is ENABLED (authentication required for protected content)"
           fi

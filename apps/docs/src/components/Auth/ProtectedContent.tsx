@@ -46,6 +46,24 @@ export function ProtectedContent({
   // Check if login is disabled site-wide via DISABLE_LOGIN environment variable
   const disableLogin = siteConfig.customFields?.disableLogin === true;
 
+  // Production safeguard: warn if login is disabled in production environment
+  useEffect(() => {
+    if (disableLogin && typeof window !== "undefined") {
+      const isProduction =
+        window.location.hostname !== "localhost" &&
+        !window.location.hostname.includes("preview") &&
+        !window.location.hostname.includes("staging");
+
+      if (isProduction) {
+        console.warn(
+          "[ProtectedContent] ⚠️ SECURITY WARNING: Login is disabled (DISABLE_LOGIN=true) in what appears to be a production environment. " +
+            "All documentation is publicly accessible without authentication. " +
+            "If this is unintentional, remove the DISABLE_LOGIN variable and redeploy.",
+        );
+      }
+    }
+  }, [disableLogin]);
+
   const currentUrl =
     pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
   // When login is disabled, treat all pages as free (bypass authentication)
