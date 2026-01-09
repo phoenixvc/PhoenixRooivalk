@@ -1,0 +1,455 @@
+name: ML Training Pipeline
+
+on:
+  # Manual trigger with parameters
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment (dev/prod)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+      model:
+        description: 'Base model'
+        required: true
+        default: 'yolov8n.pt'
+        type: choice
+        options:
+          - yolov8n.pt
+          - yolov8s.pt
+          - yolov8m.pt
+          - yolov5nu.pt
+      epochs:
+        description: 'Training epochs'
+        required: true
+        default: '100'
+        type: string
+      dataset_config:
+        description: 'Dataset configuration'
+        required: true
+        default: 'dataset-mvp.yaml'
+        type: choice
+        options:
+          - dataset-mvp.yaml
+          - dataset-full.yaml
+      skip_infrastructure:
+        description: 'Skip infrastructure deployment'
+        required: false
+        default: false
+        type: boolean
+
+  # Trigger on dataset config changes (optional)
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'apps/detector/configs/dataset-*.yaml'
+  #     - 'apps/detector/azure-ml/**'
+
+env:
+  AZURE_RESOURCE_GROUP: rg-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk-ml-eus
+  AZURE_ML_WORKSPACE: mlw-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk
+  AZURE_LOCATION: eastus
+  TERRAFORM_DIR: infra/terraform/ml-training
+  DETECTOR_DIR: apps/detector
+
+jobs:
+  # ==========================================================================
+  # Validate Training Configuration
+  # ==========================================================================
+  validate:
+    name: Validate Configuration
+    runs-on: ubuntu-latest
+
+    outputs:
+      dataset_valid: ${{ steps.validate-dataset.outputs.valid }}
+      model_valid: ${{ steps.validate-model.outputs.valid }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install validation dependencies
+        run: |
+          pip install pyyaml
+
+      - name: Validate dataset configuration
+        id: validate-dataset
+        run: |
+          python -c "
+          import yaml
+          import sys
+
+          config_file = '${{ env.DETECTOR_DIR }}/configs/${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }}'
+
+          try:
+              with open(config_file) as f:
+                  config = yaml.safe_load(f)
+
+              required = ['train', 'val', 'nc', 'names']
+              missing = [f for f in required if f not in config]
+
+              if missing:
+                  print(f'ERROR: Missing required fields: {missing}')
+                  sys.exit(1)
+
+              print(f'Dataset config valid: {config[\"nc\"]} classes')
+              print(f'Classes: {list(config[\"names\"].values())}')
+
+          except Exception as e:
+              print(f'ERROR: {e}')
+              sys.exit(1)
+          "
+          echo "valid=true" >> $GITHUB_OUTPUT
+
+      - name: Validate model selection
+        id: validate-model
+        run: |
+          MODEL="${{ github.event.inputs.model || 'yolov8n.pt' }}"
+          VALID_MODELS="yolov8n.pt yolov8s.pt yolov8m.pt yolov5nu.pt yolov5su.pt"
+
+          if echo "$VALID_MODELS" | grep -q "$MODEL"; then
+            echo "Model $MODEL is valid"
+            echo "valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "ERROR: Invalid model $MODEL"
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Training Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | ${{ github.event.inputs.environment || 'dev' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Model | ${{ github.event.inputs.model || 'yolov8n.pt' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Epochs | ${{ github.event.inputs.epochs || '100' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dataset | ${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ==========================================================================
+  # Deploy Infrastructure (optional)
+  # ==========================================================================
+  infrastructure:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    needs: validate
+    if: ${{ github.event.inputs.skip_infrastructure != 'true' }}
+
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.6.0"
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: |
+          terraform plan \
+            -var-file="environments/${{ github.event.inputs.environment || 'dev' }}.tfvars" \
+            -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: terraform apply -auto-approve tfplan
+
+      - name: Get Terraform Outputs
+        id: tf-outputs
+        working-directory: ${{ env.TERRAFORM_DIR }}
+        run: |
+          echo "resource_group=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
+          echo "workspace=$(terraform output -raw ml_workspace_name)" >> $GITHUB_OUTPUT
+          echo "storage=$(terraform output -raw storage_account_name)" >> $GITHUB_OUTPUT
+
+  # ==========================================================================
+  # Upload Dataset
+  # ==========================================================================
+  upload-dataset:
+    name: Upload Dataset
+    runs-on: ubuntu-latest
+    needs: [validate, infrastructure]
+    if: always() && needs.validate.result == 'success'
+
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure ML CLI
+        run: |
+          az extension add -n ml --upgrade -y
+
+      - name: Check if dataset exists
+        id: check-dataset
+        continue-on-error: true
+        run: |
+          az ml data show \
+            --name drone-dataset \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --workspace-name ${{ env.AZURE_ML_WORKSPACE }} \
+            2>/dev/null && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
+
+      - name: Upload dataset (if changed)
+        if: steps.check-dataset.outputs.exists != 'true'
+        run: |
+          echo "Dataset not found or needs update. Please upload manually:"
+          echo ""
+          echo "az ml data create \\"
+          echo "  --name drone-dataset \\"
+          echo "  --path ./data/combined \\"
+          echo "  --type uri_folder \\"
+          echo "  --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \\"
+          echo "  --workspace-name ${{ env.AZURE_ML_WORKSPACE }}"
+          echo ""
+          echo "NOTE: Automatic dataset upload skipped - requires local data."
+
+  # ==========================================================================
+  # Submit Training Job
+  # ==========================================================================
+  train:
+    name: Submit Training Job
+    runs-on: ubuntu-latest
+    needs: [validate, upload-dataset]
+    if: always() && needs.validate.result == 'success'
+
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+
+    outputs:
+      job_name: ${{ steps.submit-job.outputs.job_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure ML CLI
+        run: |
+          az extension add -n ml --upgrade -y
+
+      - name: Submit training job
+        id: submit-job
+        working-directory: ${{ env.DETECTOR_DIR }}/azure-ml
+        run: |
+          # Generate unique job name
+          JOB_NAME="drone-train-$(date +%Y%m%d-%H%M%S)"
+
+          # Submit the job with parameters
+          az ml job create \
+            --file job.yaml \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --workspace-name ${{ env.AZURE_ML_WORKSPACE }} \
+            --name $JOB_NAME \
+            --set display_name="GitHub Actions Training - ${{ github.run_id }}" \
+            --set inputs.epochs=${{ github.event.inputs.epochs || '100' }} \
+            --set inputs.model="${{ github.event.inputs.model || 'yolov8n.pt' }}" \
+            --stream
+
+          echo "job_name=$JOB_NAME" >> $GITHUB_OUTPUT
+
+      - name: Job Summary
+        run: |
+          echo "## Training Job Submitted" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Job Name**: ${{ steps.submit-job.outputs.job_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workspace**: ${{ env.AZURE_ML_WORKSPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Monitor Progress" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "az ml job stream --name ${{ steps.submit-job.outputs.job_name }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --workspace-name ${{ env.AZURE_ML_WORKSPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  # ==========================================================================
+  # Download and Validate Model
+  # ==========================================================================
+  validate-model:
+    name: Validate Trained Model
+    runs-on: ubuntu-latest
+    needs: train
+    if: success()
+
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install dependencies
+        run: |
+          pip install ultralytics onnx onnxruntime
+          az extension add -n ml --upgrade -y
+
+      - name: Download trained model
+        run: |
+          mkdir -p ./outputs
+
+          az ml job download \
+            --name ${{ needs.train.outputs.job_name }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --workspace-name ${{ env.AZURE_ML_WORKSPACE }} \
+            --output-name model \
+            --download-path ./outputs
+
+      - name: Validate model files
+        run: |
+          echo "Checking exported model files..."
+
+          # Check for required exports
+          EXPORTS_DIR="./outputs/model/exports"
+
+          if [ -d "$EXPORTS_DIR" ]; then
+            echo "Found exports directory"
+            ls -la "$EXPORTS_DIR"
+
+            # Validate PyTorch model
+            if [ -f "$EXPORTS_DIR/drone-detector.pt" ]; then
+              echo "PyTorch model found"
+              python -c "
+          from ultralytics import YOLO
+          model = YOLO('$EXPORTS_DIR/drone-detector.pt')
+          print(f'Model loaded: {model.info()}')
+          "
+            fi
+
+            # Validate ONNX model
+            if [ -f "$EXPORTS_DIR/drone-detector.onnx" ]; then
+              echo "ONNX model found"
+              python -c "
+          import onnx
+          model = onnx.load('$EXPORTS_DIR/drone-detector.onnx')
+          onnx.checker.check_model(model)
+          print('ONNX model valid')
+          "
+            fi
+
+            # Check for TFLite
+            if ls "$EXPORTS_DIR"/*.tflite 1> /dev/null 2>&1; then
+              echo "TFLite model(s) found"
+              ls -la "$EXPORTS_DIR"/*.tflite
+            fi
+          else
+            echo "WARNING: Exports directory not found"
+          fi
+
+      - name: Check training metrics
+        run: |
+          METADATA="./outputs/model/training_metadata.json"
+
+          if [ -f "$METADATA" ]; then
+            echo "Training metadata:"
+            cat "$METADATA"
+
+            python -c "
+          import json
+
+          with open('$METADATA') as f:
+              meta = json.load(f)
+
+          results = meta.get('results', {})
+          mAP50 = results.get('best_mAP50')
+
+          print(f'mAP50: {mAP50}')
+
+          # Fail if mAP50 is too low
+          if mAP50 and float(mAP50) < 0.3:
+              print('WARNING: mAP50 is below 0.3 - model may need more training')
+          "
+          fi
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model-${{ needs.train.outputs.job_name }}
+          path: ./outputs/model/exports/
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## Model Validation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Model artifacts uploaded as workflow artifact." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Download for Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "Download from the Actions artifacts tab or use:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "gh run download ${{ github.run_id }} -n trained-model-${{ needs.train.outputs.job_name }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  # ==========================================================================
+  # Register Model (optional)
+  # ==========================================================================
+  register-model:
+    name: Register Model
+    runs-on: ubuntu-latest
+    needs: [train, validate-model]
+    if: success() && github.event.inputs.environment == 'prod'
+
+    environment: prod
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure ML CLI
+        run: |
+          az extension add -n ml --upgrade -y
+
+      - name: Register model in ML workspace
+        run: |
+          VERSION=$(date +%Y%m%d%H%M%S)
+
+          az ml model create \
+            --name drone-detector \
+            --version $VERSION \
+            --path azureml://jobs/${{ needs.train.outputs.job_name }}/outputs/model/exports \
+            --type custom_model \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --workspace-name ${{ env.AZURE_ML_WORKSPACE }} \
+            --description "Drone detection model trained on $(date)" \
+            --tags project=phoenix-rooivalk model=${{ github.event.inputs.model }} epochs=${{ github.event.inputs.epochs }}
+
+          echo "Model registered: drone-detector v$VERSION"
