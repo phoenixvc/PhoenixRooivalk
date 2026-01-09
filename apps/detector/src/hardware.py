@@ -51,28 +51,28 @@ def _detect_platform() -> str:
     """Detect the platform type."""
     # Check for Raspberry Pi
     try:
-        with open('/proc/device-tree/model') as f:
+        with open("/proc/device-tree/model") as f:
             model = f.read().lower()
 
-            if 'raspberry pi 5' in model:
-                return 'pi5'
-            elif 'raspberry pi 4' in model:
-                return 'pi4'
-            elif 'raspberry pi 3' in model:
-                return 'pi3'
-            elif 'raspberry pi' in model:
-                return 'pi_other'
+            if "raspberry pi 5" in model:
+                return "pi5"
+            elif "raspberry pi 4" in model:
+                return "pi4"
+            elif "raspberry pi 3" in model:
+                return "pi3"
+            elif "raspberry pi" in model:
+                return "pi_other"
     except FileNotFoundError:
         pass
 
     # Check /proc/cpuinfo for Pi
     try:
-        with open('/proc/cpuinfo') as f:
+        with open("/proc/cpuinfo") as f:
             cpuinfo = f.read().lower()
-            if 'raspberry pi' in cpuinfo or 'bcm2711' in cpuinfo:
-                return 'pi4'
-            elif 'bcm2712' in cpuinfo:
-                return 'pi5'
+            if "raspberry pi" in cpuinfo or "bcm2711" in cpuinfo:
+                return "pi4"
+            elif "bcm2712" in cpuinfo:
+                return "pi5"
     except FileNotFoundError:
         pass
 
@@ -80,24 +80,24 @@ def _detect_platform() -> str:
     system = platform.system().lower()
     machine = platform.machine().lower()
 
-    if system == 'linux':
-        if 'arm' in machine or 'aarch64' in machine:
-            return 'arm_linux'
-        return 'x86_linux'
-    elif system == 'darwin':
-        return 'macos'
-    elif system == 'windows':
-        return 'windows'
+    if system == "linux":
+        if "arm" in machine or "aarch64" in machine:
+            return "arm_linux"
+        return "x86_linux"
+    elif system == "darwin":
+        return "macos"
+    elif system == "windows":
+        return "windows"
 
-    return 'unknown'
+    return "unknown"
 
 
 def _detect_ram_mb() -> int:
     """Detect total RAM in MB."""
     try:
-        with open('/proc/meminfo') as f:
+        with open("/proc/meminfo") as f:
             for line in f:
-                if line.startswith('MemTotal:'):
+                if line.startswith("MemTotal:"):
                     # Format: "MemTotal:       1929620 kB"
                     kb = int(line.split()[1])
                     return kb // 1024
@@ -107,6 +107,7 @@ def _detect_ram_mb() -> int:
     # Fallback: try psutil
     try:
         import psutil
+
         return psutil.virtual_memory().total // (1024 * 1024)
     except ImportError:
         pass
@@ -119,21 +120,21 @@ def _detect_camera() -> str:
     # Check for Pi Camera via libcamera
     try:
         result = subprocess.run(
-            ['libcamera-hello', '--list-cameras'],
+            ["libcamera-hello", "--list-cameras"],
             capture_output=True,
             text=True,
             timeout=5,
         )
         output = result.stdout.lower() + result.stderr.lower()
 
-        if 'imx708' in output:
-            return 'picam_v3'
-        elif 'imx219' in output:
-            return 'picam_v2'
-        elif 'imx477' in output:
-            return 'picam_hq'
-        elif 'available cameras' in output and '0 :' in output:
-            return 'picam_unknown'
+        if "imx708" in output:
+            return "picam_v3"
+        elif "imx219" in output:
+            return "picam_v2"
+        elif "imx477" in output:
+            return "picam_hq"
+        elif "available cameras" in output and "0 :" in output:
+            return "picam_unknown"
     except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
         pass
 
@@ -141,16 +142,17 @@ def _detect_camera() -> str:
     picam = None
     try:
         from picamera2 import Picamera2
+
         picam = Picamera2()
         camera_info = picam.global_camera_info()
 
         if camera_info:
-            model = camera_info[0].get('Model', '').lower()
-            if 'imx708' in model:
-                return 'picam_v3'
-            elif 'imx219' in model:
-                return 'picam_v2'
-            return 'picam_unknown'
+            model = camera_info[0].get("Model", "").lower()
+            if "imx708" in model:
+                return "picam_v3"
+            elif "imx219" in model:
+                return "picam_v2"
+            return "picam_unknown"
     except ImportError:
         pass
     except Exception:
@@ -165,25 +167,26 @@ def _detect_camera() -> str:
     # Check for USB camera
     try:
         import cv2
+
         cap = cv2.VideoCapture(0)
         if cap.isOpened():
             cap.release()
-            return 'usb'
+            return "usb"
     except Exception:
         pass
 
-    return 'none'
+    return "none"
 
 
 def _get_camera_capabilities(camera_type: str) -> tuple[int, tuple[int, int]]:
     """Get max FPS and resolution for camera type."""
     capabilities = {
-        'picam_v3': (120, (4608, 2592)),  # Up to 120fps at lower res
-        'picam_v2': (60, (3280, 2464)),   # Up to 60fps at 720p
-        'picam_hq': (50, (4056, 3040)),
-        'picam_unknown': (30, (1920, 1080)),
-        'usb': (30, (1920, 1080)),
-        'none': (30, (640, 480)),
+        "picam_v3": (120, (4608, 2592)),  # Up to 120fps at lower res
+        "picam_v2": (60, (3280, 2464)),  # Up to 60fps at 720p
+        "picam_hq": (50, (4056, 3040)),
+        "picam_unknown": (30, (1920, 1080)),
+        "usb": (30, (1920, 1080)),
+        "none": (30, (640, 480)),
     }
 
     return capabilities.get(camera_type, (30, (640, 480)))
@@ -195,18 +198,19 @@ def _detect_accelerator() -> AcceleratorType:
     try:
         # Look for Coral device
         result = subprocess.run(
-            ['lsusb'],
+            ["lsusb"],
             capture_output=True,
             text=True,
             timeout=5,
         )
-        if '1a6e:089a' in result.stdout or 'Google Inc.' in result.stdout:
+        if "1a6e:089a" in result.stdout or "Google Inc." in result.stdout:
             # Verify with pycoral
             try:
                 from pycoral.utils.edgetpu import list_edge_tpus
+
                 tpus = list_edge_tpus()
                 if tpus:
-                    if 'pci' in str(tpus[0]).lower():
+                    if "pci" in str(tpus[0]).lower():
                         return AcceleratorType.CORAL_PCIE
                     return AcceleratorType.CORAL_USB
             except ImportError:
@@ -217,7 +221,7 @@ def _detect_accelerator() -> AcceleratorType:
 
     # Check for Coral PCIe
     try:
-        apex_path = Path('/dev/apex_0')
+        apex_path = Path("/dev/apex_0")
         if apex_path.exists():
             return AcceleratorType.CORAL_PCIE
     except Exception:
@@ -229,14 +233,14 @@ def _detect_accelerator() -> AcceleratorType:
 def _set_recommendations(profile: HardwareProfile) -> None:
     """Set recommended settings based on detected hardware."""
     # Base recommendations on platform and RAM
-    if profile.platform in ('pi3', 'pi_other'):
+    if profile.platform in ("pi3", "pi_other"):
         # Very limited - use smallest settings
         profile.recommended_capture_resolution = (320, 240)
         profile.recommended_capture_fps = 15
         profile.recommended_model_input = (192, 192)
         profile.recommended_inference_threads = 2
 
-    elif profile.platform == 'pi4':
+    elif profile.platform == "pi4":
         if profile.ram_mb < 3000:  # 2GB or less
             profile.recommended_capture_resolution = (480, 360)
             profile.recommended_capture_fps = 24
@@ -248,7 +252,7 @@ def _set_recommendations(profile: HardwareProfile) -> None:
             profile.recommended_model_input = (320, 320)
             profile.recommended_inference_threads = 4
 
-    elif profile.platform == 'pi5':
+    elif profile.platform == "pi5":
         profile.recommended_capture_resolution = (640, 480)
         profile.recommended_capture_fps = 30
         profile.recommended_model_input = (320, 320)
@@ -319,13 +323,15 @@ def print_hardware_report(profile: HardwareProfile) -> None:
     print(f"  Available:  {profile.accelerator_available}")
     print("-" * 50)
     print("Recommended Settings:")
-    print(f"  Capture:    {profile.recommended_capture_resolution} @ {profile.recommended_capture_fps}fps")
+    print(
+        f"  Capture:    {profile.recommended_capture_resolution} @ {profile.recommended_capture_fps}fps"
+    )
     print(f"  Model Input: {profile.recommended_model_input}")
     print(f"  Threads:    {profile.recommended_inference_threads}")
     print("=" * 50)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Run hardware detection when executed directly
     profile = detect_hardware()
     print_hardware_report(profile)

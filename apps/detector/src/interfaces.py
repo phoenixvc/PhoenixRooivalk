@@ -18,9 +18,11 @@ import numpy as np
 # Data Classes
 # ============================================================================
 
+
 @dataclass
 class FrameData:
     """Container for a captured frame with metadata."""
+
     frame: np.ndarray
     timestamp: float
     frame_number: int
@@ -32,6 +34,7 @@ class FrameData:
 @dataclass
 class BoundingBox:
     """Bounding box in pixel coordinates."""
+
     x1: int
     y1: int
     x2: int
@@ -64,6 +67,7 @@ class BoundingBox:
 @dataclass
 class Detection:
     """Single detection result from inference."""
+
     class_id: int
     class_name: str
     confidence: float
@@ -78,19 +82,20 @@ class Detection:
 
     def to_dict(self) -> dict:
         return {
-            'class_id': self.class_id,
-            'class_name': self.class_name,
-            'confidence': self.confidence,
-            'bbox': self.bbox.to_tuple(),
-            'drone_score': self.drone_score,
-            'track_id': self.track_id,
-            'is_drone': self.is_drone,
+            "class_id": self.class_id,
+            "class_name": self.class_name,
+            "confidence": self.confidence,
+            "bbox": self.bbox.to_tuple(),
+            "drone_score": self.drone_score,
+            "track_id": self.track_id,
+            "is_drone": self.is_drone,
         }
 
 
 @dataclass
 class TrackedObject:
     """Object being tracked across frames."""
+
     track_id: int
     detection: Detection
     frames_tracked: int = 1
@@ -102,6 +107,7 @@ class TrackedObject:
 @dataclass
 class InferenceResult:
     """Result from running inference."""
+
     detections: list[Detection]
     inference_time_ms: float
     model_name: str = "unknown"
@@ -112,8 +118,10 @@ class InferenceResult:
 # Hardware Profile
 # ============================================================================
 
+
 class AcceleratorType(Enum):
     """Available hardware accelerators."""
+
     NONE = "none"
     CORAL_USB = "coral_usb"
     CORAL_PCIE = "coral_pcie"
@@ -123,6 +131,7 @@ class AcceleratorType(Enum):
 @dataclass
 class HardwareProfile:
     """Detected hardware capabilities."""
+
     # Platform
     platform: str = "unknown"  # "pi4", "pi5", "desktop", etc.
     cpu_cores: int = 4
@@ -145,20 +154,21 @@ class HardwareProfile:
 
     def to_dict(self) -> dict:
         return {
-            'platform': self.platform,
-            'cpu_cores': self.cpu_cores,
-            'ram_mb': self.ram_mb,
-            'camera_type': self.camera_type,
-            'accelerator': self.accelerator.value,
-            'accelerator_available': self.accelerator_available,
-            'recommended_capture_resolution': self.recommended_capture_resolution,
-            'recommended_capture_fps': self.recommended_capture_fps,
+            "platform": self.platform,
+            "cpu_cores": self.cpu_cores,
+            "ram_mb": self.ram_mb,
+            "camera_type": self.camera_type,
+            "accelerator": self.accelerator.value,
+            "accelerator_available": self.accelerator_available,
+            "recommended_capture_resolution": self.recommended_capture_resolution,
+            "recommended_capture_fps": self.recommended_capture_fps,
         }
 
 
 # ============================================================================
 # Abstract Interfaces (Protocols)
 # ============================================================================
+
 
 class FrameSource(ABC):
     """
@@ -272,7 +282,9 @@ class ObjectTracker(ABC):
     """
 
     @abstractmethod
-    def update(self, detections: list[Detection], frame: Optional[np.ndarray] = None) -> list[TrackedObject]:
+    def update(
+        self, detections: list[Detection], frame: Optional[np.ndarray] = None
+    ) -> list[TrackedObject]:
         """
         Update tracker with new detections.
 
@@ -385,6 +397,7 @@ class FrameRenderer(ABC):
 # Scoring Strategy (for drone likelihood calculation)
 # ============================================================================
 
+
 class DroneScorer(ABC):
     """
     Abstract interface for calculating drone likelihood scores.
@@ -419,9 +432,11 @@ class DroneScorer(ABC):
 # Pipeline Configuration
 # ============================================================================
 
+
 @dataclass
 class PipelineConfig:
     """Configuration for the detection pipeline."""
+
     # Capture settings
     capture_width: int = 640
     capture_height: int = 480
@@ -453,21 +468,21 @@ class PipelineConfig:
 
     def to_dict(self) -> dict:
         return {
-            'capture': {
-                'width': self.capture_width,
-                'height': self.capture_height,
-                'fps': self.capture_fps,
+            "capture": {
+                "width": self.capture_width,
+                "height": self.capture_height,
+                "fps": self.capture_fps,
             },
-            'model': {
-                'path': self.model_path,
-                'input_size': self.model_input_size,
-                'confidence_threshold': self.confidence_threshold,
-                'nms_threshold': self.nms_threshold,
+            "model": {
+                "path": self.model_path,
+                "input_size": self.model_input_size,
+                "confidence_threshold": self.confidence_threshold,
+                "nms_threshold": self.nms_threshold,
             },
-            'processing': {
-                'inference_threads': self.inference_threads,
-                'use_accelerator': self.use_accelerator,
-                'enable_tracking': self.enable_tracking,
+            "processing": {
+                "inference_threads": self.inference_threads,
+                "use_accelerator": self.use_accelerator,
+                "enable_tracking": self.enable_tracking,
             },
-            'headless': self.headless,
+            "headless": self.headless,
         }

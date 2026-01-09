@@ -7,29 +7,29 @@ Centralized geometry operations to avoid code duplication.
 from typing import Callable, Optional, Protocol, TypeVar
 
 # Type variable for generic detection objects
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class HasBBox(Protocol):
     """Protocol for objects with a bounding box."""
-    @property
-    def bbox(self) -> "BoundingBoxLike":
-        ...
 
     @property
-    def confidence(self) -> float:
-        ...
+    def bbox(self) -> "BoundingBoxLike": ...
+
+    @property
+    def confidence(self) -> float: ...
 
 
 class BoundingBoxLike(Protocol):
     """Protocol for bounding box objects."""
-    def to_tuple(self) -> tuple[int, int, int, int]:
-        ...
+
+    def to_tuple(self) -> tuple[int, int, int, int]: ...
 
 
 # =============================================================================
 # Core Functions
 # =============================================================================
+
 
 def calculate_iou(
     box1: tuple[int, int, int, int],
@@ -87,11 +87,14 @@ def non_max_suppression(
 
     # Default key functions for Detection-like objects
     if confidence_key is None:
+
         def confidence_key(d):
             return d.confidence
+
     if bbox_key is None:
+
         def bbox_key(d):
-            return d.bbox.to_tuple() if hasattr(d.bbox, 'to_tuple') else d.bbox
+            return d.bbox.to_tuple() if hasattr(d.bbox, "to_tuple") else d.bbox
 
     # Sort by confidence (descending)
     sorted_dets = sorted(detections, key=confidence_key, reverse=True)
@@ -105,8 +108,7 @@ def non_max_suppression(
         # Remove detections with high IoU overlap
         best_bbox = bbox_key(best)
         sorted_dets = [
-            d for d in sorted_dets
-            if calculate_iou(best_bbox, bbox_key(d)) < iou_threshold
+            d for d in sorted_dets if calculate_iou(best_bbox, bbox_key(d)) < iou_threshold
         ]
 
     return keep
@@ -265,6 +267,7 @@ def calculate_distance(
         Euclidean distance
     """
     import math
+
     dx = point2[0] - point1[0]
     dy = point2[1] - point1[1]
     return math.sqrt(dx * dx + dy * dy)

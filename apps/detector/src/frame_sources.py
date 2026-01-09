@@ -102,13 +102,13 @@ class OpenCVFrameSource(FrameSource):
     @property
     def source_info(self) -> dict[str, Any]:
         return {
-            'type': 'opencv',
-            'source': self._source,
-            'source_id': self._source_id,
-            'resolution': self.resolution,
-            'fps': self.fps,
-            'frame_count': self._frame_count,
-            'buffer_size': self._buffer_size,
+            "type": "opencv",
+            "source": self._source,
+            "source_id": self._source_id,
+            "resolution": self.resolution,
+            "fps": self.fps,
+            "frame_count": self._frame_count,
+            "buffer_size": self._buffer_size,
         }
 
 
@@ -169,6 +169,7 @@ class PiCameraSource(FrameSource):
             pass  # Picamera2 not installed
         except Exception as e:
             import logging
+
             logging.debug(f"Picamera2 initialization failed: {e}")
 
         # Fall back to OpenCV with libcamera pipeline
@@ -213,6 +214,7 @@ class PiCameraSource(FrameSource):
                 frame = self._picam2.capture_array()
                 # Picamera2 returns RGB, convert to BGR for OpenCV compatibility
                 import cv2
+
                 frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                 return FrameData(
                     frame=frame,
@@ -267,12 +269,12 @@ class PiCameraSource(FrameSource):
     @property
     def source_info(self) -> dict[str, Any]:
         return {
-            'type': 'picamera',
-            'using_libcamera': self._using_libcamera,
-            'using_picamera2': self._picam2 is not None,
-            'resolution': self.resolution,
-            'fps': self.fps,
-            'frame_count': self._frame_count,
+            "type": "picamera",
+            "using_libcamera": self._using_libcamera,
+            "using_picamera2": self._picam2 is not None,
+            "resolution": self.resolution,
+            "fps": self.fps,
+            "frame_count": self._frame_count,
         }
 
 
@@ -302,6 +304,7 @@ class VideoFileSource(OpenCVFrameSource):
         if frame_data is None and self._loop:
             # Reset to beginning
             import cv2
+
             if self._cap is not None:
                 self._cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
                 self._frame_count = 0
@@ -312,11 +315,13 @@ class VideoFileSource(OpenCVFrameSource):
     @property
     def source_info(self) -> dict[str, Any]:
         info = super().source_info
-        info.update({
-            'type': 'video_file',
-            'file_path': str(self._file_path),
-            'loop': self._loop,
-        })
+        info.update(
+            {
+                "type": "video_file",
+                "file_path": str(self._file_path),
+                "loop": self._loop,
+            }
+        )
         return info
 
 
@@ -372,7 +377,7 @@ class MockFrameSource(FrameSource):
             # Add a moving rectangle to simulate an object
             x = (self._frame_count * 5) % (self._width - 50)
             y = self._height // 2 - 25
-            frame[y:y+50, x:x+50] = [0, 255, 0]  # Green box
+            frame[y : y + 50, x : x + 50] = [0, 255, 0]  # Green box
 
         return FrameData(
             frame=frame,
@@ -400,18 +405,15 @@ class MockFrameSource(FrameSource):
     @property
     def source_info(self) -> dict[str, Any]:
         return {
-            'type': 'mock',
-            'resolution': self.resolution,
-            'fps': self.fps,
-            'generate_objects': self._generate_objects,
-            'frame_count': self._frame_count,
+            "type": "mock",
+            "resolution": self.resolution,
+            "fps": self.fps,
+            "generate_objects": self._generate_objects,
+            "frame_count": self._frame_count,
         }
 
 
-def create_frame_source(
-    source_type: str = "auto",
-    **kwargs
-) -> FrameSource:
+def create_frame_source(source_type: str = "auto", **kwargs) -> FrameSource:
     """
     Factory function to create appropriate frame source.
 
@@ -422,20 +424,20 @@ def create_frame_source(
     Returns:
         Configured FrameSource instance
     """
-    width = kwargs.get('width', 640)
-    height = kwargs.get('height', 480)
-    fps = kwargs.get('fps', 30)
+    width = kwargs.get("width", 640)
+    height = kwargs.get("height", 480)
+    fps = kwargs.get("fps", 30)
 
     if source_type == "mock":
         return MockFrameSource(width=width, height=height, fps=fps)
 
     if source_type == "video":
-        file_path = kwargs.get('file_path', '')
-        loop = kwargs.get('loop', False)
+        file_path = kwargs.get("file_path", "")
+        loop = kwargs.get("loop", False)
         return VideoFileSource(file_path=file_path, loop=loop)
 
     if source_type == "usb":
-        camera_index = kwargs.get('camera_index', 0)
+        camera_index = kwargs.get("camera_index", 0)
         return USBCameraSource(
             camera_index=camera_index,
             width=width,

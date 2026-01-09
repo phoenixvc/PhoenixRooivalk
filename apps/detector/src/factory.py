@@ -33,6 +33,7 @@ try:
         create_streaming_manager,
         create_streaming_renderer,
     )
+
     STREAMING_AVAILABLE = True
 except ImportError:
     STREAMING_AVAILABLE = False
@@ -41,6 +42,7 @@ except ImportError:
 @dataclass
 class DetectionPipeline:
     """Container for all pipeline components."""
+
     frame_source: FrameSource
     inference_engine: InferenceEngine
     tracker: ObjectTracker
@@ -225,19 +227,23 @@ def create_pipeline(
 
     # Add webhook if configured
     if alert_webhook:
-        handlers.append(create_alert_handler(
-            handler_type="webhook",
-            webhook_url=alert_webhook,
-            throttle=True,
-            cooldown_per_track=5.0,
-        ))
+        handlers.append(
+            create_alert_handler(
+                handler_type="webhook",
+                webhook_url=alert_webhook,
+                throttle=True,
+                cooldown_per_track=5.0,
+            )
+        )
 
     # Add file logger if configured
     if save_detections:
-        handlers.append(create_alert_handler(
-            handler_type="file",
-            file_path=save_detections,
-        ))
+        handlers.append(
+            create_alert_handler(
+                handler_type="file",
+                file_path=save_detections,
+            )
+        )
 
     if len(handlers) == 1:
         alert_handler = handlers[0]

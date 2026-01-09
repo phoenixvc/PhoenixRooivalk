@@ -57,9 +57,9 @@ class ConsoleAlertHandler(AlertHandler):
     @property
     def handler_info(self) -> dict[str, Any]:
         return {
-            'type': 'console',
-            'prefix': self._prefix,
-            'alert_count': self._alert_count,
+            "type": "console",
+            "prefix": self._prefix,
+            "alert_count": self._alert_count,
         }
 
 
@@ -76,7 +76,7 @@ class WebhookAlertHandler(AlertHandler):
     ):
         # Validate URL
         parsed = urlparse(webhook_url)
-        if parsed.scheme not in ('http', 'https'):
+        if parsed.scheme not in ("http", "https"):
             raise ValueError(f"Invalid URL scheme: {parsed.scheme}")
 
         self._webhook_url = webhook_url
@@ -97,11 +97,11 @@ class WebhookAlertHandler(AlertHandler):
             return False
 
         alert_data = {
-            'event': 'drone_detected',
-            'timestamp': datetime.now().isoformat(),
-            'frame_number': frame_data.frame_number,
-            'detection': detection.to_dict(),
-            'source_id': frame_data.source_id,
+            "event": "drone_detected",
+            "timestamp": datetime.now().isoformat(),
+            "frame_number": frame_data.frame_number,
+            "detection": detection.to_dict(),
+            "source_id": frame_data.source_id,
         }
 
         if self._batch_alerts:
@@ -117,14 +117,16 @@ class WebhookAlertHandler(AlertHandler):
             import urllib.error
             import urllib.request
 
-            data = json.dumps(alert_data).encode('utf-8')
+            data = json.dumps(alert_data).encode("utf-8")
 
             req = urllib.request.Request(
                 self._webhook_url,
                 data=data,
-                headers={'Content-Type': 'application/json'},
+                headers={"Content-Type": "application/json"},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310 - URL scheme validated in __init__
+            urllib.request.urlopen(
+                req, timeout=self._timeout
+            )  # nosec B310 - URL scheme validated in __init__
 
             self._alert_count += 1
             self._last_alert_time = time.time()
@@ -144,19 +146,21 @@ class WebhookAlertHandler(AlertHandler):
             import urllib.request
 
             batch_data = {
-                'event': 'drone_alerts_batch',
-                'timestamp': datetime.now().isoformat(),
-                'alerts': self._pending_batch,
+                "event": "drone_alerts_batch",
+                "timestamp": datetime.now().isoformat(),
+                "alerts": self._pending_batch,
             }
 
-            data = json.dumps(batch_data).encode('utf-8')
+            data = json.dumps(batch_data).encode("utf-8")
 
             req = urllib.request.Request(
                 self._webhook_url,
                 data=data,
-                headers={'Content-Type': 'application/json'},
+                headers={"Content-Type": "application/json"},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310 - URL scheme validated in __init__
+            urllib.request.urlopen(
+                req, timeout=self._timeout
+            )  # nosec B310 - URL scheme validated in __init__
 
             self._alert_count += len(self._pending_batch)
             self._pending_batch = []
@@ -176,12 +180,12 @@ class WebhookAlertHandler(AlertHandler):
     @property
     def handler_info(self) -> dict[str, Any]:
         return {
-            'type': 'webhook',
-            'url': self._webhook_url,
-            'alert_count': self._alert_count,
-            'failed_count': self._failed_count,
-            'cooldown': self._cooldown,
-            'batch_mode': self._batch_alerts,
+            "type": "webhook",
+            "url": self._webhook_url,
+            "alert_count": self._alert_count,
+            "failed_count": self._failed_count,
+            "cooldown": self._cooldown,
+            "batch_mode": self._batch_alerts,
         }
 
 
@@ -211,9 +215,9 @@ class FileAlertHandler(AlertHandler):
 
     def send_alert(self, detection: Detection, frame_data: FrameData) -> bool:
         alert_data = {
-            'timestamp': datetime.now().isoformat(),
-            'frame_number': frame_data.frame_number,
-            'source_id': frame_data.source_id,
+            "timestamp": datetime.now().isoformat(),
+            "frame_number": frame_data.frame_number,
+            "source_id": frame_data.source_id,
             **detection.to_dict(),
         }
 
@@ -231,7 +235,7 @@ class FileAlertHandler(AlertHandler):
 
         try:
             all_data = self._existing_data + self._buffer
-            with open(self._file_path, 'w') as f:
+            with open(self._file_path, "w") as f:
                 json.dump(all_data, f, indent=2)
 
             self._existing_data = all_data
@@ -246,10 +250,10 @@ class FileAlertHandler(AlertHandler):
     @property
     def handler_info(self) -> dict[str, Any]:
         return {
-            'type': 'file',
-            'file_path': str(self._file_path),
-            'alert_count': self._alert_count,
-            'buffered': len(self._buffer),
+            "type": "file",
+            "file_path": str(self._file_path),
+            "alert_count": self._alert_count,
+            "buffered": len(self._buffer),
         }
 
 
@@ -276,9 +280,9 @@ class CompositeAlertHandler(AlertHandler):
     @property
     def handler_info(self) -> dict[str, Any]:
         return {
-            'type': 'composite',
-            'handler_count': len(self._handlers),
-            'handlers': [h.handler_info for h in self._handlers],
+            "type": "composite",
+            "handler_count": len(self._handlers),
+            "handlers": [h.handler_info for h in self._handlers],
         }
 
 
@@ -307,8 +311,7 @@ class ThrottledAlertHandler(AlertHandler):
         # Prune entries older than 10x the cooldown period
         stale_threshold = now - (self._cooldown_per_track * 10)
         self._last_alert_per_track = {
-            k: v for k, v in self._last_alert_per_track.items()
-            if v > stale_threshold
+            k: v for k, v in self._last_alert_per_track.items() if v > stale_threshold
         }
 
     def send_alert(self, detection: Detection, frame_data: FrameData) -> bool:
@@ -345,11 +348,11 @@ class ThrottledAlertHandler(AlertHandler):
     @property
     def handler_info(self) -> dict[str, Any]:
         return {
-            'type': 'throttled',
-            'cooldown_per_track': self._cooldown_per_track,
-            'global_cooldown': self._global_cooldown,
-            'throttled_count': self._throttled_count,
-            'inner': self._inner.handler_info,
+            "type": "throttled",
+            "cooldown_per_track": self._cooldown_per_track,
+            "global_cooldown": self._global_cooldown,
+            "throttled_count": self._throttled_count,
+            "inner": self._inner.handler_info,
         }
 
 
@@ -364,13 +367,10 @@ class NullAlertHandler(AlertHandler):
 
     @property
     def handler_info(self) -> dict[str, Any]:
-        return {'type': 'null'}
+        return {"type": "null"}
 
 
-def create_alert_handler(
-    handler_type: str = "console",
-    **kwargs
-) -> AlertHandler:
+def create_alert_handler(handler_type: str = "console", **kwargs) -> AlertHandler:
     """
     Factory function to create appropriate alert handler.
 
@@ -386,41 +386,41 @@ def create_alert_handler(
 
     if handler_type == "console":
         return ConsoleAlertHandler(
-            prefix=kwargs.get('prefix', '[DRONE DETECTED]'),
-            include_bbox=kwargs.get('include_bbox', True),
-            include_score=kwargs.get('include_score', True),
+            prefix=kwargs.get("prefix", "[DRONE DETECTED]"),
+            include_bbox=kwargs.get("include_bbox", True),
+            include_score=kwargs.get("include_score", True),
         )
 
     if handler_type == "webhook":
-        webhook_url = kwargs.get('webhook_url', '')
+        webhook_url = kwargs.get("webhook_url", "")
         if not webhook_url:
             raise ValueError("webhook_url required for webhook handler")
 
         handler = WebhookAlertHandler(
             webhook_url=webhook_url,
-            timeout_seconds=kwargs.get('timeout_seconds', 5.0),
-            cooldown_seconds=kwargs.get('cooldown_seconds', 1.0),
+            timeout_seconds=kwargs.get("timeout_seconds", 5.0),
+            cooldown_seconds=kwargs.get("cooldown_seconds", 1.0),
         )
 
         # Optionally wrap with throttling
-        if kwargs.get('throttle', True):
+        if kwargs.get("throttle", True):
             handler = ThrottledAlertHandler(
                 handler,
-                cooldown_per_track=kwargs.get('cooldown_per_track', 5.0),
-                global_cooldown=kwargs.get('global_cooldown', 1.0),
+                cooldown_per_track=kwargs.get("cooldown_per_track", 5.0),
+                global_cooldown=kwargs.get("global_cooldown", 1.0),
             )
 
         return handler
 
     if handler_type == "file":
-        file_path = kwargs.get('file_path', '')
+        file_path = kwargs.get("file_path", "")
         if not file_path:
             raise ValueError("file_path required for file handler")
 
         return FileAlertHandler(
             file_path=file_path,
-            append=kwargs.get('append', True),
-            buffer_size=kwargs.get('buffer_size', 10),
+            append=kwargs.get("append", True),
+            buffer_size=kwargs.get("buffer_size", 10),
         )
 
     raise ValueError(f"Unknown handler type: {handler_type}")

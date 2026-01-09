@@ -44,108 +44,133 @@ except ImportError:
 def parse_args():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description='Real-time drone detection with swappable components',
+        description="Real-time drone detection with swappable components",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
 
     # Model
     parser.add_argument(
-        '--model', type=str,
-        help='Path to model file (TFLite, ONNX)',
+        "--model",
+        type=str,
+        help="Path to model file (TFLite, ONNX)",
     )
 
     # Frame source
-    source_group = parser.add_argument_group('Frame Source')
+    source_group = parser.add_argument_group("Frame Source")
     source_group.add_argument(
-        '--camera', type=str, default='auto',
-        choices=['auto', 'picamera', 'usb', 'mock'],
-        help='Camera source type (default: auto)',
+        "--camera",
+        type=str,
+        default="auto",
+        choices=["auto", "picamera", "usb", "mock"],
+        help="Camera source type (default: auto)",
     )
     source_group.add_argument(
-        '--camera-index', type=int, default=0,
-        help='USB camera index (default: 0)',
+        "--camera-index",
+        type=int,
+        default=0,
+        help="USB camera index (default: 0)",
     )
     source_group.add_argument(
-        '--video', type=str,
-        help='Use video file instead of camera',
+        "--video",
+        type=str,
+        help="Use video file instead of camera",
     )
     source_group.add_argument(
-        '--width', type=int,
-        help='Capture width (default: auto from hardware)',
+        "--width",
+        type=int,
+        help="Capture width (default: auto from hardware)",
     )
     source_group.add_argument(
-        '--height', type=int,
-        help='Capture height (default: auto from hardware)',
+        "--height",
+        type=int,
+        help="Capture height (default: auto from hardware)",
     )
     source_group.add_argument(
-        '--fps', type=int,
-        help='Target FPS (default: auto from hardware)',
+        "--fps",
+        type=int,
+        help="Target FPS (default: auto from hardware)",
     )
 
     # Inference
-    inference_group = parser.add_argument_group('Inference')
+    inference_group = parser.add_argument_group("Inference")
     inference_group.add_argument(
-        '--engine', type=str, default='auto',
-        choices=['auto', 'tflite', 'onnx', 'coral', 'mock'],
-        help='Inference engine type (default: auto)',
+        "--engine",
+        type=str,
+        default="auto",
+        choices=["auto", "tflite", "onnx", "coral", "mock"],
+        help="Inference engine type (default: auto)",
     )
     inference_group.add_argument(
-        '--coral', action='store_true',
-        help='Use Coral Edge TPU if available',
+        "--coral",
+        action="store_true",
+        help="Use Coral Edge TPU if available",
     )
     inference_group.add_argument(
-        '--confidence', type=float, default=0.5,
-        help='Confidence threshold (default: 0.5)',
+        "--confidence",
+        type=float,
+        default=0.5,
+        help="Confidence threshold (default: 0.5)",
     )
     inference_group.add_argument(
-        '--nms', type=float, default=0.45,
-        help='NMS threshold (default: 0.45)',
+        "--nms",
+        type=float,
+        default=0.45,
+        help="NMS threshold (default: 0.45)",
     )
 
     # Tracking
-    tracking_group = parser.add_argument_group('Tracking')
+    tracking_group = parser.add_argument_group("Tracking")
     tracking_group.add_argument(
-        '--tracker', type=str, default='centroid',
-        choices=['none', 'centroid', 'kalman'],
-        help='Object tracker type (default: centroid)',
+        "--tracker",
+        type=str,
+        default="centroid",
+        choices=["none", "centroid", "kalman"],
+        help="Object tracker type (default: centroid)",
     )
 
     # Alerts
-    alert_group = parser.add_argument_group('Alerts')
+    alert_group = parser.add_argument_group("Alerts")
     alert_group.add_argument(
-        '--alert-webhook', type=str,
-        help='Webhook URL for drone alerts',
+        "--alert-webhook",
+        type=str,
+        help="Webhook URL for drone alerts",
     )
     alert_group.add_argument(
-        '--save-detections', type=str,
-        help='Save detections to JSON file',
+        "--save-detections",
+        type=str,
+        help="Save detections to JSON file",
     )
 
     # Display
-    display_group = parser.add_argument_group('Display')
+    display_group = parser.add_argument_group("Display")
     display_group.add_argument(
-        '--headless', action='store_true',
-        help='Run without display',
+        "--headless",
+        action="store_true",
+        help="Run without display",
     )
 
     # Demo/testing
-    demo_group = parser.add_argument_group('Demo/Testing')
+    demo_group = parser.add_argument_group("Demo/Testing")
     demo_group.add_argument(
-        '--demo', action='store_true',
-        help='Run in demo mode with optimized settings',
+        "--demo",
+        action="store_true",
+        help="Run in demo mode with optimized settings",
     )
     demo_group.add_argument(
-        '--mock', action='store_true',
-        help='Use mock camera and inference (no hardware needed)',
+        "--mock",
+        action="store_true",
+        help="Use mock camera and inference (no hardware needed)",
     )
     demo_group.add_argument(
-        '--no-auto-configure', action='store_true',
-        help='Disable automatic hardware-based configuration',
+        "--no-auto-configure",
+        action="store_true",
+        help="Disable automatic hardware-based configuration",
     )
     demo_group.add_argument(
-        '--quiet', action='store_true',
-        help='Suppress hardware report',
+        "--quiet",
+        action="store_true",
+        help="Suppress hardware report",
     )
 
     return parser.parse_args()
@@ -262,5 +287,5 @@ def main():
         pipeline.stop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -10,9 +10,9 @@ from .geometry import calculate_iou, non_max_suppression, scale_bbox
 from .logging_config import get_logger, setup_logging
 
 __all__ = [
-    'calculate_iou',
-    'non_max_suppression',
-    'scale_bbox',
-    'setup_logging',
-    'get_logger',
+    "calculate_iou",
+    "non_max_suppression",
+    "scale_bbox",
+    "setup_logging",
+    "get_logger",
 ]

@@ -31,9 +31,7 @@ class NoOpTracker(ObjectTracker):
         self._current_tracks: list[TrackedObject] = []
 
     def update(
-        self,
-        detections: list[Detection],
-        frame: Optional[np.ndarray] = None
+        self, detections: list[Detection], frame: Optional[np.ndarray] = None
     ) -> list[TrackedObject]:
         self._current_tracks = []
 
@@ -41,12 +39,14 @@ class NoOpTracker(ObjectTracker):
             det.track_id = self._next_id
             self._next_id += 1
 
-            self._current_tracks.append(TrackedObject(
-                track_id=det.track_id,
-                detection=det,
-                frames_tracked=1,
-                frames_since_seen=0,
-            ))
+            self._current_tracks.append(
+                TrackedObject(
+                    track_id=det.track_id,
+                    detection=det,
+                    frames_tracked=1,
+                    frames_since_seen=0,
+                )
+            )
 
         return self._current_tracks
 
@@ -61,9 +61,9 @@ class NoOpTracker(ObjectTracker):
     @property
     def tracker_info(self) -> dict[str, Any]:
         return {
-            'type': 'noop',
-            'next_id': self._next_id,
-            'active_count': len(self._current_tracks),
+            "type": "noop",
+            "next_id": self._next_id,
+            "active_count": len(self._current_tracks),
         }
 
 
@@ -91,9 +91,7 @@ class CentroidTracker(ObjectTracker):
         self._objects: OrderedDict[int, TrackedObject] = OrderedDict()
 
     def update(
-        self,
-        detections: list[Detection],
-        frame: Optional[np.ndarray] = None
+        self, detections: list[Detection], frame: Optional[np.ndarray] = None
     ) -> list[TrackedObject]:
         # No detections - increment disappeared count for all
         if len(detections) == 0:
@@ -117,10 +115,7 @@ class CentroidTracker(ObjectTracker):
 
         # Match existing objects to new detections
         object_ids = list(self._objects.keys())
-        object_centroids = [
-            self._objects[oid].detection.bbox.center
-            for oid in object_ids
-        ]
+        object_centroids = [self._objects[oid].detection.bbox.center for oid in object_ids]
 
         # Compute distance matrix
         distances = np.zeros((len(object_centroids), len(input_centroids)))
@@ -200,11 +195,11 @@ class CentroidTracker(ObjectTracker):
     @property
     def tracker_info(self) -> dict[str, Any]:
         return {
-            'type': 'centroid',
-            'max_disappeared': self._max_disappeared,
-            'max_distance': self._max_distance,
-            'next_id': self._next_id,
-            'active_count': len(self._objects),
+            "type": "centroid",
+            "max_disappeared": self._max_disappeared,
+            "max_distance": self._max_distance,
+            "next_id": self._next_id,
+            "active_count": len(self._objects),
         }
 
 
@@ -230,9 +225,7 @@ class KalmanTracker(ObjectTracker):
         self._tracks: dict[int, _KalmanTrack] = {}
 
     def update(
-        self,
-        detections: list[Detection],
-        frame: Optional[np.ndarray] = None
+        self, detections: list[Detection], frame: Optional[np.ndarray] = None
     ) -> list[TrackedObject]:
         # Predict step for all existing tracks
         for track in self._tracks.values():
@@ -255,15 +248,9 @@ class KalmanTracker(ObjectTracker):
 
         # Match predictions to detections
         track_ids = list(self._tracks.keys())
-        predicted_positions = [
-            self._tracks[tid].predicted_position()
-            for tid in track_ids
-        ]
+        predicted_positions = [self._tracks[tid].predicted_position() for tid in track_ids]
 
-        input_centroids = [
-            (det.bbox.center[0], det.bbox.center[1], det)
-            for det in detections
-        ]
+        input_centroids = [(det.bbox.center[0], det.bbox.center[1], det) for det in detections]
 
         # Compute distance matrix
         distances = np.zeros((len(predicted_positions), len(input_centroids)))
@@ -333,14 +320,16 @@ class KalmanTracker(ObjectTracker):
             px, py = track.predicted_position()
             vx, vy = track.velocity()
 
-            result.append(TrackedObject(
-                track_id=track.track_id,
-                detection=track.detection,
-                frames_tracked=track.frames_tracked,
-                frames_since_seen=track.frames_since_seen,
-                velocity=(vx, vy),
-                predicted_position=(int(px), int(py)),
-            ))
+            result.append(
+                TrackedObject(
+                    track_id=track.track_id,
+                    detection=track.detection,
+                    frames_tracked=track.frames_tracked,
+                    frames_since_seen=track.frames_since_seen,
+                    velocity=(vx, vy),
+                    predicted_position=(int(px), int(py)),
+                )
+            )
         return result
 
     def reset(self) -> None:
@@ -354,13 +343,13 @@ class KalmanTracker(ObjectTracker):
     @property
     def tracker_info(self) -> dict[str, Any]:
         return {
-            'type': 'kalman',
-            'max_disappeared': self._max_disappeared,
-            'max_distance': self._max_distance,
-            'process_noise': self._process_noise,
-            'measurement_noise': self._measurement_noise,
-            'next_id': self._next_id,
-            'active_count': len(self._tracks),
+            "type": "kalman",
+            "max_disappeared": self._max_disappeared,
+            "max_distance": self._max_distance,
+            "process_noise": self._process_noise,
+            "measurement_noise": self._measurement_noise,
+            "next_id": self._next_id,
+            "active_count": len(self._tracks),
         }
 
 
@@ -388,18 +377,24 @@ class _KalmanTrack:
         self._P = np.eye(4) * 100
 
         # State transition matrix (constant velocity model)
-        self._F = np.array([
-            [1, 0, 1, 0],
-            [0, 1, 0, 1],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1],
-        ], dtype=np.float64)
+        self._F = np.array(
+            [
+                [1, 0, 1, 0],
+                [0, 1, 0, 1],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
+            ],
+            dtype=np.float64,
+        )
 
         # Measurement matrix (we only observe position)
-        self._H = np.array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-        ], dtype=np.float64)
+        self._H = np.array(
+            [
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+            ],
+            dtype=np.float64,
+        )
 
         # Process noise
         self._Q = np.eye(4) * process_noise
@@ -441,10 +436,7 @@ class _KalmanTrack:
         return (self._state[2], self._state[3])
 
 
-def create_tracker(
-    tracker_type: str = "centroid",
-    **kwargs
-) -> ObjectTracker:
+def create_tracker(tracker_type: str = "centroid", **kwargs) -> ObjectTracker:
     """
     Factory function to create appropriate tracker.
 
@@ -460,16 +452,16 @@ def create_tracker(
 
     if tracker_type == "centroid":
         return CentroidTracker(
-            max_disappeared=kwargs.get('max_disappeared', 30),
-            max_distance=kwargs.get('max_distance', 100.0),
+            max_disappeared=kwargs.get("max_disappeared", 30),
+            max_distance=kwargs.get("max_distance", 100.0),
         )
 
     if tracker_type == "kalman":
         return KalmanTracker(
-            max_disappeared=kwargs.get('max_disappeared', 30),
-            max_distance=kwargs.get('max_distance', 150.0),
-            process_noise=kwargs.get('process_noise', 1.0),
-            measurement_noise=kwargs.get('measurement_noise', 1.0),
+            max_disappeared=kwargs.get("max_disappeared", 30),
+            max_distance=kwargs.get("max_distance", 150.0),
+            process_noise=kwargs.get("process_noise", 1.0),
+            measurement_noise=kwargs.get("measurement_noise", 1.0),
         )
 
     raise ValueError(f"Unknown tracker type: {tracker_type}")

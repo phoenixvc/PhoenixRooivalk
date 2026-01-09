@@ -29,9 +29,11 @@ logger = logging.getLogger(__name__)
 # Frame Buffer
 # =============================================================================
 
+
 @dataclass
 class StreamFrame:
     """Frame ready for streaming."""
+
     jpeg_data: bytes
     timestamp: float
     frame_number: int
@@ -99,6 +101,7 @@ class FrameBuffer:
 # =============================================================================
 # Streaming Renderer
 # =============================================================================
+
 
 class StreamingRenderer(FrameRenderer):
     """
@@ -176,7 +179,7 @@ class StreamingRenderer(FrameRenderer):
 
             # Encode to JPEG
             encode_params = [cv2.IMWRITE_JPEG_QUALITY, self._quality]
-            success, jpeg_data = cv2.imencode('.jpg', frame, encode_params)
+            success, jpeg_data = cv2.imencode(".jpg", frame, encode_params)
 
             if success:
                 stream_frame = StreamFrame(
@@ -209,18 +212,19 @@ class StreamingRenderer(FrameRenderer):
             base_info = self._base_renderer.renderer_info
 
         return {
-            'type': 'streaming',
-            'quality': self._quality,
-            'max_fps': self._max_fps,
-            'encode_count': self._encode_count,
-            'skip_count': self._skip_count,
-            'base_renderer': base_info,
+            "type": "streaming",
+            "quality": self._quality,
+            "max_fps": self._max_fps,
+            "encode_count": self._encode_count,
+            "skip_count": self._skip_count,
+            "base_renderer": base_info,
         }
 
 
 # =============================================================================
 # MJPEG Streaming Server
 # =============================================================================
+
 
 class MJPEGStreamServer:
     """
@@ -269,13 +273,13 @@ class MJPEGStreamServer:
         if not self._auth_enabled:
             return True
 
-        auth_header = request.headers.get('Authorization', '')
-        if auth_header.startswith('Bearer '):
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
             token = auth_header[7:]
             return token == self._auth_token
 
         # Check query param fallback
-        token = request.query.get('token', '')
+        token = request.query.get("token", "")
         return token == self._auth_token
 
     async def _handle_stream(self, request):
@@ -290,12 +294,12 @@ class MJPEGStreamServer:
         response = web.StreamResponse(
             status=200,
             headers={
-                'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
-                'Connection': 'close',
-            }
+                "Content-Type": "multipart/x-mixed-replace; boundary=frame",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+                "Connection": "close",
+            },
         )
         await response.prepare(request)
 
@@ -309,10 +313,10 @@ class MJPEGStreamServer:
 
                     # Write MJPEG frame
                     await response.write(
-                        b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n'
-                        b'Content-Length: ' + str(len(frame.jpeg_data)).encode() + b'\r\n'
-                        b'\r\n' + frame.jpeg_data + b'\r\n'
+                        b"--frame\r\n"
+                        b"Content-Type: image/jpeg\r\n"
+                        b"Content-Length: " + str(len(frame.jpeg_data)).encode() + b"\r\n"
+                        b"\r\n" + frame.jpeg_data + b"\r\n"
                     )
 
                 except asyncio.TimeoutError:
@@ -344,13 +348,13 @@ class MJPEGStreamServer:
 
         return web.Response(
             body=frame.jpeg_data,
-            content_type='image/jpeg',
+            content_type="image/jpeg",
             headers={
-                'Cache-Control': 'no-cache',
-                'X-Frame-Number': str(frame.frame_number),
-                'X-Detection-Count': str(frame.detection_count),
-                'X-Inference-Time-Ms': f'{frame.inference_time_ms:.1f}',
-            }
+                "Cache-Control": "no-cache",
+                "X-Frame-Number": str(frame.frame_number),
+                "X-Detection-Count": str(frame.detection_count),
+                "X-Inference-Time-Ms": f"{frame.inference_time_ms:.1f}",
+            },
         )
 
     async def _handle_status(self, request):
@@ -365,18 +369,18 @@ class MJPEGStreamServer:
         frame = self._frame_buffer.get_latest()
 
         status = {
-            'server': {
-                'uptime_seconds': time.time() - self._start_time if self._start_time else 0,
-                'stream_clients': self._stream_clients,
-                'total_requests': self._total_requests,
+            "server": {
+                "uptime_seconds": time.time() - self._start_time if self._start_time else 0,
+                "stream_clients": self._stream_clients,
+                "total_requests": self._total_requests,
             },
-            'stream': {
-                'available': frame is not None,
-                'frame_number': frame.frame_number if frame else 0,
-                'detection_count': frame.detection_count if frame else 0,
-                'inference_time_ms': frame.inference_time_ms if frame else 0,
+            "stream": {
+                "available": frame is not None,
+                "frame_number": frame.frame_number if frame else 0,
+                "detection_count": frame.detection_count if frame else 0,
+                "inference_time_ms": frame.inference_time_ms if frame else 0,
             },
-            'system': self._system_status,
+            "system": self._system_status,
         }
 
         return web.json_response(status)
@@ -391,27 +395,24 @@ class MJPEGStreamServer:
         healthy = frame is not None and (time.time() - frame.timestamp) < 10.0
 
         status = {
-            'status': 'healthy' if healthy else 'unhealthy',
-            'timestamp': time.time(),
+            "status": "healthy" if healthy else "unhealthy",
+            "timestamp": time.time(),
         }
 
-        return web.json_response(
-            status,
-            status=200 if healthy else 503
-        )
+        return web.json_response(status, status=200 if healthy else 503)
 
     async def start(self) -> None:
         """Start the streaming server."""
         from aiohttp import web
 
         self._app = web.Application()
-        self._app.router.add_get('/stream', self._handle_stream)
-        self._app.router.add_get('/snapshot', self._handle_snapshot)
-        self._app.router.add_get('/status', self._handle_status)
-        self._app.router.add_get('/health', self._handle_health)
+        self._app.router.add_get("/stream", self._handle_stream)
+        self._app.router.add_get("/snapshot", self._handle_snapshot)
+        self._app.router.add_get("/status", self._handle_status)
+        self._app.router.add_get("/health", self._handle_health)
 
         # Add index page
-        self._app.router.add_get('/', self._handle_index)
+        self._app.router.add_get("/", self._handle_index)
 
         self._runner = web.AppRunner(self._app)
         await self._runner.setup()
@@ -496,7 +497,7 @@ class MJPEGStreamServer:
 </body>
 </html>
 """
-        return web.Response(text=html, content_type='text/html')
+        return web.Response(text=html, content_type="text/html")
 
     async def stop(self) -> None:
         """Stop the streaming server."""
@@ -522,6 +523,7 @@ class MJPEGStreamServer:
 # =============================================================================
 # Streaming Manager
 # =============================================================================
+
 
 class StreamingManager:
     """
@@ -615,6 +617,7 @@ class StreamingManager:
 # Factory Functions
 # =============================================================================
 
+
 def create_streaming_renderer(
     base_renderer: Optional[FrameRenderer] = None,
     streaming_settings: Optional[Any] = None,
@@ -633,8 +636,8 @@ def create_streaming_renderer(
     max_fps = 15
 
     if streaming_settings:
-        quality = getattr(streaming_settings, 'quality', 80)
-        max_fps = getattr(streaming_settings, 'max_fps', 15)
+        quality = getattr(streaming_settings, "quality", 80)
+        max_fps = getattr(streaming_settings, "max_fps", 15)
 
     return StreamingRenderer(
         base_renderer=base_renderer,
@@ -663,10 +666,10 @@ def create_streaming_manager(
     auth_token = None
 
     if streaming_settings:
-        host = getattr(streaming_settings, 'host', "0.0.0.0")  # nosec B104
-        port = getattr(streaming_settings, 'port', 8080)
-        auth_enabled = getattr(streaming_settings, 'auth_enabled', False)
-        auth_token = getattr(streaming_settings, 'auth_token', None)
+        host = getattr(streaming_settings, "host", "0.0.0.0")  # nosec B104
+        port = getattr(streaming_settings, "port", 8080)
+        auth_enabled = getattr(streaming_settings, "auth_enabled", False)
+        auth_token = getattr(streaming_settings, "auth_token", None)
 
     return StreamingManager(
         frame_buffer=streaming_renderer.frame_buffer,

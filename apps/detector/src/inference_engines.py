@@ -70,7 +70,7 @@ class AspectRatioDroneScorer(DroneScorer):
 class BaseInferenceEngine(InferenceEngine):
     """Base class with common functionality for inference engines."""
 
-    DEFAULT_CLASS_NAMES = ['drone', 'not_drone']
+    DEFAULT_CLASS_NAMES = ["drone", "not_drone"]
 
     def __init__(
         self,
@@ -169,18 +169,18 @@ class BaseInferenceEngine(InferenceEngine):
             drone_score = self._scorer.calculate_score(class_id, confidence, bbox)
 
             class_name = (
-                self._class_names[class_id]
-                if class_id < len(self._class_names)
-                else 'unknown'
+                self._class_names[class_id] if class_id < len(self._class_names) else "unknown"
             )
 
-            detections.append(Detection(
-                class_id=class_id,
-                class_name=class_name,
-                confidence=confidence,
-                bbox=bbox,
-                drone_score=drone_score,
-            ))
+            detections.append(
+                Detection(
+                    class_id=class_id,
+                    class_name=class_name,
+                    confidence=confidence,
+                    bbox=bbox,
+                    drone_score=drone_score,
+                )
+            )
 
         # Apply NMS
         return self._nms(detections)
@@ -198,8 +198,7 @@ class BaseInferenceEngine(InferenceEngine):
             keep.append(best)
 
             detections = [
-                d for d in detections
-                if self._iou(best.bbox, d.bbox) < self._nms_threshold
+                d for d in detections if self._iou(best.bbox, d.bbox) < self._nms_threshold
             ]
 
         return keep
@@ -233,10 +232,12 @@ class TFLiteEngine(BaseInferenceEngine):
         # Try tflite_runtime first (optimized for Pi)
         try:
             import tflite_runtime.interpreter as tflite
+
             self._using_tflite_runtime = True
         except ImportError:
             try:
                 import tensorflow.lite as tflite
+
                 self._using_tflite_runtime = False
             except ImportError:
                 print("ERROR: Neither tflite_runtime nor tensorflow available")
@@ -253,8 +254,8 @@ class TFLiteEngine(BaseInferenceEngine):
             self._output_details = self._interpreter.get_output_details()
 
             # Get input shape
-            self._input_shape = tuple(self._input_details[0]['shape'])
-            self._is_quantized = self._input_details[0]['dtype'] == np.uint8
+            self._input_shape = tuple(self._input_details[0]["shape"])
+            self._is_quantized = self._input_details[0]["dtype"] == np.uint8
 
             return True
 
@@ -270,9 +271,9 @@ class TFLiteEngine(BaseInferenceEngine):
 
         start_time = time.perf_counter()
 
-        self._interpreter.set_tensor(self._input_details[0]['index'], input_data)
+        self._interpreter.set_tensor(self._input_details[0]["index"], input_data)
         self._interpreter.invoke()
-        outputs = self._interpreter.get_tensor(self._output_details[0]['index'])
+        outputs = self._interpreter.get_tensor(self._output_details[0]["index"])
 
         inference_time = (time.perf_counter() - start_time) * 1000
 
@@ -288,14 +289,14 @@ class TFLiteEngine(BaseInferenceEngine):
     @property
     def engine_info(self) -> dict[str, Any]:
         return {
-            'type': 'tflite',
-            'model_path': self._model_path,
-            'using_tflite_runtime': self._using_tflite_runtime,
-            'input_shape': self._input_shape,
-            'is_quantized': self._is_quantized,
-            'num_threads': self._num_threads,
-            'confidence_threshold': self._confidence_threshold,
-            'nms_threshold': self._nms_threshold,
+            "type": "tflite",
+            "model_path": self._model_path,
+            "using_tflite_runtime": self._using_tflite_runtime,
+            "input_shape": self._input_shape,
+            "is_quantized": self._is_quantized,
+            "num_threads": self._num_threads,
+            "confidence_threshold": self._confidence_threshold,
+            "nms_threshold": self._nms_threshold,
         }
 
 
@@ -320,8 +321,8 @@ class CoralEngine(BaseInferenceEngine):
             self._input_details = self._interpreter.get_input_details()
             self._output_details = self._interpreter.get_output_details()
 
-            self._input_shape = tuple(self._input_details[0]['shape'])
-            self._is_quantized = self._input_details[0]['dtype'] == np.uint8
+            self._input_shape = tuple(self._input_details[0]["shape"])
+            self._is_quantized = self._input_details[0]["dtype"] == np.uint8
 
             return True
 
@@ -340,9 +341,9 @@ class CoralEngine(BaseInferenceEngine):
 
         start_time = time.perf_counter()
 
-        self._interpreter.set_tensor(self._input_details[0]['index'], input_data)
+        self._interpreter.set_tensor(self._input_details[0]["index"], input_data)
         self._interpreter.invoke()
-        outputs = self._interpreter.get_tensor(self._output_details[0]['index'])
+        outputs = self._interpreter.get_tensor(self._output_details[0]["index"])
 
         inference_time = (time.perf_counter() - start_time) * 1000
 
@@ -358,12 +359,12 @@ class CoralEngine(BaseInferenceEngine):
     @property
     def engine_info(self) -> dict[str, Any]:
         return {
-            'type': 'coral',
-            'model_path': self._model_path,
-            'input_shape': self._input_shape,
-            'is_quantized': self._is_quantized,
-            'confidence_threshold': self._confidence_threshold,
-            'nms_threshold': self._nms_threshold,
+            "type": "coral",
+            "model_path": self._model_path,
+            "input_shape": self._input_shape,
+            "is_quantized": self._is_quantized,
+            "confidence_threshold": self._confidence_threshold,
+            "nms_threshold": self._nms_threshold,
         }
 
 
@@ -388,10 +389,10 @@ class ONNXEngine(BaseInferenceEngine):
             sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
 
             # Try to use available providers
-            providers = ['CPUExecutionProvider']
+            providers = ["CPUExecutionProvider"]
             try:
-                if 'CUDAExecutionProvider' in ort.get_available_providers():
-                    providers.insert(0, 'CUDAExecutionProvider')
+                if "CUDAExecutionProvider" in ort.get_available_providers():
+                    providers.insert(0, "CUDAExecutionProvider")
             except Exception:
                 pass
 
@@ -440,10 +441,7 @@ class ONNXEngine(BaseInferenceEngine):
 
         start_time = time.perf_counter()
 
-        outputs = self._session.run(
-            [self._output_name],
-            {self._input_name: input_data}
-        )[0]
+        outputs = self._session.run([self._output_name], {self._input_name: input_data})[0]
 
         inference_time = (time.perf_counter() - start_time) * 1000
 
@@ -459,13 +457,13 @@ class ONNXEngine(BaseInferenceEngine):
     @property
     def engine_info(self) -> dict[str, Any]:
         return {
-            'type': 'onnx',
-            'model_path': self._model_path,
-            'input_shape': self._input_shape,
-            'is_quantized': self._is_quantized,
-            'num_threads': self._num_threads,
-            'confidence_threshold': self._confidence_threshold,
-            'nms_threshold': self._nms_threshold,
+            "type": "onnx",
+            "model_path": self._model_path,
+            "input_shape": self._input_shape,
+            "is_quantized": self._is_quantized,
+            "num_threads": self._num_threads,
+            "confidence_threshold": self._confidence_threshold,
+            "nms_threshold": self._nms_threshold,
         }
 
 
@@ -473,10 +471,7 @@ class MockInferenceEngine(BaseInferenceEngine):
     """Mock inference engine for testing without a model."""
 
     def __init__(
-        self,
-        simulate_latency_ms: float = 100,
-        generate_detections: bool = True,
-        **kwargs
+        self, simulate_latency_ms: float = 100, generate_detections: bool = True, **kwargs
     ):
         super().__init__(**kwargs)
         self._simulate_latency_ms = simulate_latency_ms
@@ -503,13 +498,15 @@ class MockInferenceEngine(BaseInferenceEngine):
             y = h // 2 - 50
 
             bbox = BoundingBox(x, y, x + 100, y + 100)
-            detections.append(Detection(
-                class_id=0,
-                class_name='drone',
-                confidence=0.85,
-                bbox=bbox,
-                drone_score=0.9,
-            ))
+            detections.append(
+                Detection(
+                    class_id=0,
+                    class_name="drone",
+                    confidence=0.85,
+                    bbox=bbox,
+                    drone_score=0.9,
+                )
+            )
 
         return InferenceResult(
             detections=detections,
@@ -521,18 +518,15 @@ class MockInferenceEngine(BaseInferenceEngine):
     @property
     def engine_info(self) -> dict[str, Any]:
         return {
-            'type': 'mock',
-            'simulate_latency_ms': self._simulate_latency_ms,
-            'generate_detections': self._generate_detections,
-            'frame_count': self._frame_count,
+            "type": "mock",
+            "simulate_latency_ms": self._simulate_latency_ms,
+            "generate_detections": self._generate_detections,
+            "frame_count": self._frame_count,
         }
 
 
 def create_inference_engine(
-    engine_type: str = "auto",
-    model_path: str = "",
-    use_coral: bool = False,
-    **kwargs
+    engine_type: str = "auto", model_path: str = "", use_coral: bool = False, **kwargs
 ) -> InferenceEngine:
     """
     Factory function to create appropriate inference engine.
@@ -555,11 +549,11 @@ def create_inference_engine(
     if engine_type == "auto":
         model_ext = Path(model_path).suffix.lower()
 
-        if use_coral or '_edgetpu' in model_path.lower():
+        if use_coral or "_edgetpu" in model_path.lower():
             engine_type = "coral"
-        elif model_ext in ['.tflite']:
+        elif model_ext in [".tflite"]:
             engine_type = "tflite"
-        elif model_ext in ['.onnx']:
+        elif model_ext in [".onnx"]:
             engine_type = "onnx"
         else:
             engine_type = "tflite"  # Default

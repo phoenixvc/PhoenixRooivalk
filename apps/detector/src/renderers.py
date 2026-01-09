@@ -72,8 +72,7 @@ class OpenCVRenderer(FrameRenderer):
 
             # Draw label text
             cv2.putText(
-                frame, label, (x1 + 5, y1 - 5),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1
+                frame, label, (x1 + 5, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1
             )
 
             # Draw drone score bar
@@ -100,16 +99,25 @@ class OpenCVRenderer(FrameRenderer):
         if self._show_fps:
             fps = 1000 / inference_time_ms if inference_time_ms > 0 else 0
             cv2.putText(
-                frame, f"FPS: {fps:.1f} ({inference_time_ms:.1f}ms)",
-                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2
+                frame,
+                f"FPS: {fps:.1f} ({inference_time_ms:.1f}ms)",
+                (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                (0, 255, 0),
+                2,
             )
 
         # Draw frame info
         status = f"Frame: {frame_data.frame_number} | Detections: {len(detections)} | Tracks: {len(tracked_objects)}"
         cv2.putText(
-            frame, status,
+            frame,
+            status,
             (10, frame.shape[0] - 10),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (255, 255, 255),
+            1,
         )
 
         return frame
@@ -124,11 +132,12 @@ class OpenCVRenderer(FrameRenderer):
         cv2.imshow(self._window_name, rendered_frame)
 
         key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
+        if key == ord("q"):
             return False
-        elif key == ord('s'):
+        elif key == ord("s"):
             # Save screenshot
             from datetime import datetime
+
             filename = f"detection_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
             cv2.imwrite(filename, rendered_frame)
             print(f"Saved: {filename}")
@@ -137,16 +146,17 @@ class OpenCVRenderer(FrameRenderer):
 
     def close(self) -> None:
         import cv2
+
         cv2.destroyAllWindows()
         self._window_created = False
 
     @property
     def renderer_info(self) -> dict[str, Any]:
         return {
-            'type': 'opencv',
-            'window_name': self._window_name,
-            'show_fps': self._show_fps,
-            'show_drone_score': self._show_drone_score,
+            "type": "opencv",
+            "window_name": self._window_name,
+            "show_fps": self._show_fps,
+            "show_drone_score": self._show_drone_score,
         }
 
 
@@ -181,7 +191,9 @@ class HeadlessRenderer(FrameRenderer):
         # Periodic logging
         if self._frame_count % self._log_interval == 0:
             avg_fps = sum(self._fps_history) / len(self._fps_history) if self._fps_history else 0
-            print(f"Frame {self._frame_count} | FPS: {avg_fps:.1f} | Detections: {len(detections)} | Tracks: {len(tracked_objects)}")
+            print(
+                f"Frame {self._frame_count} | FPS: {avg_fps:.1f} | Detections: {len(detections)} | Tracks: {len(tracked_objects)}"
+            )
 
         # Verbose mode: log every detection
         if self._verbose:
@@ -200,17 +212,13 @@ class HeadlessRenderer(FrameRenderer):
     @property
     def renderer_info(self) -> dict[str, Any]:
         return {
-            'type': 'headless',
-            'log_interval': self._log_interval,
-            'frame_count': self._frame_count,
+            "type": "headless",
+            "log_interval": self._log_interval,
+            "frame_count": self._frame_count,
         }
 
 
-def create_renderer(
-    renderer_type: str = "auto",
-    headless: bool = False,
-    **kwargs
-) -> FrameRenderer:
+def create_renderer(renderer_type: str = "auto", headless: bool = False, **kwargs) -> FrameRenderer:
     """
     Factory function to create appropriate renderer.
 
@@ -224,8 +232,8 @@ def create_renderer(
     """
     if headless or renderer_type == "headless":
         return HeadlessRenderer(
-            log_interval=kwargs.get('log_interval', 30),
-            verbose=kwargs.get('verbose', False),
+            log_interval=kwargs.get("log_interval", 30),
+            verbose=kwargs.get("verbose", False),
         )
 
     if renderer_type in ("auto", "opencv"):
@@ -237,12 +245,12 @@ def create_renderer(
             # Check if cv2 is available
             if importlib.util.find_spec("cv2") is None:
                 raise ImportError("cv2 not available")
-            if os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY'):
+            if os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"):
                 return OpenCVRenderer(
-                    window_name=kwargs.get('window_name', 'Drone Detection'),
-                    show_fps=kwargs.get('show_fps', True),
-                    show_drone_score=kwargs.get('show_drone_score', True),
-                    show_track_id=kwargs.get('show_track_id', True),
+                    window_name=kwargs.get("window_name", "Drone Detection"),
+                    show_fps=kwargs.get("show_fps", True),
+                    show_drone_score=kwargs.get("show_drone_score", True),
+                    show_track_id=kwargs.get("show_track_id", True),
                 )
         except ImportError:
             pass

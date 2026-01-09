@@ -46,28 +46,28 @@ from .interfaces import (
     TrackedObject,
 )
 
-__version__ = '2.0.0'
+__version__ = "2.0.0"
 __all__ = [
     # Interfaces
-    'FrameSource',
-    'InferenceEngine',
-    'ObjectTracker',
-    'AlertHandler',
-    'FrameRenderer',
+    "FrameSource",
+    "InferenceEngine",
+    "ObjectTracker",
+    "AlertHandler",
+    "FrameRenderer",
     # Data classes
-    'Detection',
-    'BoundingBox',
-    'TrackedObject',
-    'InferenceResult',
-    'FrameData',
-    'HardwareProfile',
-    'PipelineConfig',
+    "Detection",
+    "BoundingBox",
+    "TrackedObject",
+    "InferenceResult",
+    "FrameData",
+    "HardwareProfile",
+    "PipelineConfig",
     # Factory
-    'create_pipeline',
-    'create_demo_pipeline',
-    'create_minimal_pipeline',
-    'DetectionPipeline',
+    "create_pipeline",
+    "create_demo_pipeline",
+    "create_minimal_pipeline",
+    "DetectionPipeline",
     # Hardware
-    'detect_hardware',
-    'print_hardware_report',
+    "detect_hardware",
+    "print_hardware_report",
 ]

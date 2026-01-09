@@ -33,17 +33,20 @@ logger = logging.getLogger("drone_detector.targeting")
 # Enums and Data Classes
 # =============================================================================
 
+
 class TargetState(Enum):
     """Target engagement states."""
-    SEARCHING = "searching"      # Looking for targets
-    TRACKING = "tracking"        # Target acquired, building confidence
-    LOCKED = "locked"            # Target locked, ready to engage
-    ENGAGING = "engaging"        # Active engagement
-    COOLDOWN = "cooldown"        # Post-engagement cooldown
+
+    SEARCHING = "searching"  # Looking for targets
+    TRACKING = "tracking"  # Target acquired, building confidence
+    LOCKED = "locked"  # Target locked, ready to engage
+    ENGAGING = "engaging"  # Active engagement
+    COOLDOWN = "cooldown"  # Post-engagement cooldown
 
 
 class EngagementResult(Enum):
     """Result of engagement attempt."""
+
     SUCCESS = "success"
     FAILED_NOT_ARMED = "failed_not_armed"
     FAILED_NOT_ENABLED = "failed_not_enabled"
@@ -58,6 +61,7 @@ class EngagementResult(Enum):
 @dataclass
 class TargetLock:
     """Information about a locked target."""
+
     track_id: int
     detection: Detection
     lock_time: float
@@ -86,18 +90,19 @@ class TargetLock:
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for logging."""
         return {
-            'track_id': self.track_id,
-            'lock_duration': self.lock_duration,
-            'frames_locked': self.frames_locked,
-            'estimated_distance_m': self.estimated_distance_m,
-            'average_confidence': self.average_confidence,
-            'velocity_ms': self.estimated_velocity_ms,
+            "track_id": self.track_id,
+            "lock_duration": self.lock_duration,
+            "frames_locked": self.frames_locked,
+            "estimated_distance_m": self.estimated_distance_m,
+            "average_confidence": self.average_confidence,
+            "velocity_ms": self.estimated_velocity_ms,
         }
 
 
 # =============================================================================
 # Distance Estimation
 # =============================================================================
+
 
 class DistanceEstimator:
     """
@@ -150,7 +155,7 @@ class DistanceEstimator:
         bbox_size_px = max(bbox.width, bbox.height)
 
         if bbox_size_px <= 0:
-            return float('inf')
+            return float("inf")
 
         # Convert focal length to pixels
         focal_length_px = (self._focal_length_mm / self._sensor_width_mm) * frame_width
@@ -180,7 +185,7 @@ class DistanceEstimator:
         bbox_size_px = max(width, height)
 
         if bbox_size_px <= 0:
-            return float('inf')
+            return float("inf")
 
         focal_length_px = (self._focal_length_mm / self._sensor_width_mm) * frame_width
         distance_m = (self._assumed_size_m * focal_length_px) / bbox_size_px
@@ -195,6 +200,7 @@ class DistanceEstimator:
 # =============================================================================
 # Targeting System
 # =============================================================================
+
 
 class TargetingSystem:
     """
@@ -294,9 +300,9 @@ class TargetingSystem:
             # Calculate target priority score
             # Higher is better: prefer closer, higher confidence, longer tracked
             score = (
-                det.confidence * 0.4 +
-                (1 - min(distance / self._settings.max_targeting_distance_m, 1.0)) * 0.3 +
-                min(track.frames_tracked / 30, 1.0) * 0.3
+                det.confidence * 0.4
+                + (1 - min(distance / self._settings.max_targeting_distance_m, 1.0)) * 0.3
+                + min(track.frames_tracked / 30, 1.0) * 0.3
             )
 
             candidates.append((track, distance, score))
@@ -337,8 +343,8 @@ class TargetingSystem:
         # Upgrade to LOCKED if stable enough
         if self._state == TargetState.TRACKING:
             if (
-                len(self._current_lock.confidence_history) >= 10 and
-                self._current_lock.average_confidence >= self._settings.min_confidence_for_lock
+                len(self._current_lock.confidence_history) >= 10
+                and self._current_lock.average_confidence >= self._settings.min_confidence_for_lock
             ):
                 self._set_state(TargetState.LOCKED)
                 logger.warning(
@@ -359,9 +365,7 @@ class TargetingSystem:
             position_history=[track.detection.bbox.center],
         )
         self._set_state(TargetState.TRACKING)
-        logger.info(
-            f"Target acquired: track {track.track_id}, distance {distance:.1f}m"
-        )
+        logger.info(f"Target acquired: track {track.track_id}, distance {distance:.1f}m")
 
     def _set_state(self, new_state: TargetState) -> None:
         """Update targeting state."""
@@ -405,16 +409,17 @@ class TargetingSystem:
     def get_status(self) -> dict[str, Any]:
         """Get targeting system status for display/logging."""
         return {
-            'state': self._state.value,
-            'locked': self.is_locked,
-            'lock': self._current_lock.to_dict() if self._current_lock else None,
-            'state_duration': time.time() - self._last_state_change,
+            "state": self._state.value,
+            "locked": self.is_locked,
+            "lock": self._current_lock.to_dict() if self._current_lock else None,
+            "state_duration": time.time() - self._last_state_change,
         }
 
 
 # =============================================================================
 # Fire Net Controller
 # =============================================================================
+
 
 class FireNetController:
     """
@@ -542,7 +547,7 @@ class FireNetController:
             return (False, EngagementResult.FAILED_OUT_OF_RANGE)
 
         # Velocity check - don't fire at very fast targets
-        velocity = math.sqrt(track.velocity[0]**2 + track.velocity[1]**2)
+        velocity = math.sqrt(track.velocity[0] ** 2 + track.velocity[1] ** 2)
         if velocity > self._settings.fire_net_velocity_threshold_ms:
             return (False, EngagementResult.FAILED_TOO_FAST)
 
@@ -586,6 +591,7 @@ class FireNetController:
 
         try:
             import RPi.GPIO as GPIO
+
             self._gpio = GPIO
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(self._settings.fire_net_gpio_pin, GPIO.OUT)
@@ -631,18 +637,19 @@ class FireNetController:
     def get_status(self) -> dict[str, Any]:
         """Get fire net status for display/logging."""
         return {
-            'enabled': self.is_enabled,
-            'armed': self.is_armed,
-            'in_cooldown': self.in_cooldown,
-            'cooldown_remaining': self.cooldown_remaining,
-            'fire_count': self.fire_count,
-            'gpio_initialized': self._gpio_initialized,
+            "enabled": self.is_enabled,
+            "armed": self.is_armed,
+            "in_cooldown": self.in_cooldown,
+            "cooldown_remaining": self.cooldown_remaining,
+            "fire_count": self.fire_count,
+            "gpio_initialized": self._gpio_initialized,
         }
 
 
 # =============================================================================
 # Combined Engagement System
 # =============================================================================
+
 
 class EngagementSystem:
     """
@@ -719,9 +726,9 @@ class EngagementSystem:
                 )
 
         return {
-            'targeting': self._targeting.get_status(),
-            'fire_net': self._fire_net.get_status(),
-            'engagement_result': engagement_result.value if engagement_result else None,
+            "targeting": self._targeting.get_status(),
+            "fire_net": self._fire_net.get_status(),
+            "engagement_result": engagement_result.value if engagement_result else None,
         }
 
     def arm(self) -> bool:

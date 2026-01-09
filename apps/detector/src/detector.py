@@ -15,15 +15,18 @@ import numpy as np
 # Try to import TFLite runtime (Pi-optimized) first, fall back to full TF
 try:
     import tflite_runtime.interpreter as tflite
+
     USING_TFLITE_RUNTIME = True
 except ImportError:
     import tensorflow.lite as tflite
+
     USING_TFLITE_RUNTIME = False
 
 
 @dataclass
 class Detection:
     """Single detection result."""
+
     class_id: int
     class_name: str
     confidence: float
@@ -36,12 +39,12 @@ class Detection:
 
     def to_dict(self) -> dict:
         return {
-            'class_id': self.class_id,
-            'class_name': self.class_name,
-            'confidence': self.confidence,
-            'bbox': self.bbox,
-            'drone_score': self.drone_score,
-            'is_drone': self.is_drone,
+            "class_id": self.class_id,
+            "class_name": self.class_name,
+            "confidence": self.confidence,
+            "bbox": self.bbox,
+            "drone_score": self.drone_score,
+            "is_drone": self.is_drone,
         }
 
 
@@ -54,7 +57,7 @@ class DroneDetector:
         1: not_drone (coke cans, birds, etc.)
     """
 
-    CLASS_NAMES = ['drone', 'not_drone']
+    CLASS_NAMES = ["drone", "not_drone"]
 
     def __init__(
         self,
@@ -80,6 +83,7 @@ class DroneDetector:
         if use_coral:
             try:
                 from pycoral.utils.edgetpu import make_interpreter
+
                 self.interpreter = make_interpreter(str(self.model_path))
                 print("Loaded model on Coral Edge TPU")
             except Exception as e:
@@ -98,10 +102,10 @@ class DroneDetector:
         self.output_details = self.interpreter.get_output_details()
 
         # Input shape
-        self.input_shape = self.input_details[0]['shape']
+        self.input_shape = self.input_details[0]["shape"]
         self.input_height = self.input_shape[1]
         self.input_width = self.input_shape[2]
-        self.input_dtype = self.input_details[0]['dtype']
+        self.input_dtype = self.input_details[0]["dtype"]
 
         # Check for quantization
         self.is_quantized = self.input_dtype == np.uint8
@@ -122,6 +126,7 @@ class DroneDetector:
 
         # Resize to model input size
         import cv2
+
         resized = cv2.resize(frame, (self.input_width, self.input_height))
 
         # Convert BGR to RGB
@@ -182,17 +187,21 @@ class DroneDetector:
             y2 = max(0, y2)
 
             # Calculate drone likelihood score with heuristics
-            drone_score = self._calculate_drone_score(
-                class_id, confidence, (x1, y1, x2, y2)
-            )
+            drone_score = self._calculate_drone_score(class_id, confidence, (x1, y1, x2, y2))
 
-            detections.append(Detection(
-                class_id=int(class_id),
-                class_name=self.CLASS_NAMES[class_id] if class_id < len(self.CLASS_NAMES) else 'unknown',
-                confidence=float(confidence),
-                bbox=(x1, y1, x2, y2),
-                drone_score=drone_score,
-            ))
+            detections.append(
+                Detection(
+                    class_id=int(class_id),
+                    class_name=(
+                        self.CLASS_NAMES[class_id]
+                        if class_id < len(self.CLASS_NAMES)
+                        else "unknown"
+                    ),
+                    confidence=float(confidence),
+                    bbox=(x1, y1, x2, y2),
+                    drone_score=drone_score,
+                )
+            )
 
         # Apply NMS
         detections = self._nms(detections)
@@ -252,8 +261,7 @@ class DroneDetector:
             keep.append(best)
 
             detections = [
-                d for d in detections
-                if self._iou(best.bbox, d.bbox) < self.nms_threshold
+                d for d in detections if self._iou(best.bbox, d.bbox) < self.nms_threshold
             ]
 
         return keep
@@ -290,11 +298,11 @@ class DroneDetector:
         # Run inference
         start_time = time.perf_counter()
 
-        self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
+        self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
         self.interpreter.invoke()
 
         # Get outputs
-        outputs = self.interpreter.get_tensor(self.output_details[0]['index'])
+        outputs = self.interpreter.get_tensor(self.output_details[0]["index"])
 
         inference_time = (time.perf_counter() - start_time) * 1000  # ms
 
@@ -334,8 +342,7 @@ def draw_detections(
 
         # Draw label text
         cv2.putText(
-            frame, label, (x1 + 5, y1 - 5),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1
+            frame, label, (x1 + 5, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1
         )
 
         # Draw drone score bar
@@ -347,8 +354,13 @@ def draw_detections(
     if inference_time is not None:
         fps = 1000 / inference_time if inference_time > 0 else 0
         cv2.putText(
-            frame, f"FPS: {fps:.1f} ({inference_time:.1f}ms)",
-            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2
+            frame,
+            f"FPS: {fps:.1f} ({inference_time:.1f}ms)",
+            (10, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 255, 0),
+            2,
         )
 
     return frame

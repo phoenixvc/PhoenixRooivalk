@@ -13,18 +13,24 @@ from enum import Enum
 from typing import Any, Optional
 
 try:
-    from pydantic import BaseModel, Field, root_validator, validator  # noqa: F401 - v1 compat
-    from pydantic import BaseSettings as PydanticBaseSettings
+    # fmt: off
+    # isort: off
+    # Pydantic v1 imports
+    from pydantic import BaseModel, BaseSettings as PydanticBaseSettings, Field  # noqa: I001
+    from pydantic import root_validator, validator  # noqa: F401, I001
+    # isort: on
+    # fmt: on
     PYDANTIC_V2 = False
 except ImportError:
     try:
-        from pydantic import (  # noqa: F401 - v2 compat
-            BaseModel,
-            Field,
-            field_validator,
-            model_validator,
-        )
-        from pydantic_settings import BaseSettings as PydanticBaseSettings
+        # fmt: off
+        # isort: off
+        # Pydantic v2 imports
+        from pydantic import BaseModel, Field  # noqa: I001
+        from pydantic import field_validator, model_validator  # noqa: F401, I001
+        from pydantic_settings import BaseSettings as PydanticBaseSettings  # noqa: I001
+        # isort: on
+        # fmt: on
         PYDANTIC_V2 = True
     except ImportError:
         # Fallback for environments without pydantic
@@ -37,8 +43,10 @@ except ImportError:
 # Enums
 # =============================================================================
 
+
 class CameraType(str, Enum):
     """Available camera source types."""
+
     AUTO = "auto"
     PICAMERA = "picamera"
     USB = "usb"
@@ -48,6 +56,7 @@ class CameraType(str, Enum):
 
 class EngineType(str, Enum):
     """Available inference engine types."""
+
     AUTO = "auto"
     TFLITE = "tflite"
     ONNX = "onnx"
@@ -57,6 +66,7 @@ class EngineType(str, Enum):
 
 class TrackerType(str, Enum):
     """Available tracker types."""
+
     NONE = "none"
     CENTROID = "centroid"
     KALMAN = "kalman"
@@ -64,6 +74,7 @@ class TrackerType(str, Enum):
 
 class LogLevel(str, Enum):
     """Logging levels."""
+
     DEBUG = "DEBUG"
     INFO = "INFO"
     WARNING = "WARNING"
@@ -74,6 +85,7 @@ class LogLevel(str, Enum):
 # =============================================================================
 # Settings Models
 # =============================================================================
+
 
 class CaptureSettings(BaseModel):
     """Camera capture configuration."""
@@ -95,8 +107,12 @@ class InferenceSettings(BaseModel):
 
     model_path: str = Field("", description="Path to model file (.tflite or .onnx)")
     input_size: int = Field(320, ge=128, le=640, description="Model input size (square)")
-    confidence_threshold: float = Field(0.5, ge=0.0, le=1.0, description="Minimum detection confidence")
-    nms_threshold: float = Field(0.45, ge=0.0, le=1.0, description="Non-max suppression IoU threshold")
+    confidence_threshold: float = Field(
+        0.5, ge=0.0, le=1.0, description="Minimum detection confidence"
+    )
+    nms_threshold: float = Field(
+        0.45, ge=0.0, le=1.0, description="Non-max suppression IoU threshold"
+    )
     num_threads: int = Field(4, ge=1, le=16, description="CPU threads for inference")
     use_coral: bool = Field(False, description="Use Coral Edge TPU if available")
 
@@ -108,15 +124,29 @@ class DroneScoreSettings(BaseModel):
     """Drone likelihood scoring configuration."""
 
     drone_class_id: int = Field(0, ge=0, description="Class ID for drone detection")
-    model_weight: float = Field(0.7, ge=0.0, le=1.0, description="Weight for model confidence in scoring")
-    drone_threshold: float = Field(0.5, ge=0.0, le=1.0, description="Threshold for is_drone classification")
+    model_weight: float = Field(
+        0.7, ge=0.0, le=1.0, description="Weight for model confidence in scoring"
+    )
+    drone_threshold: float = Field(
+        0.5, ge=0.0, le=1.0, description="Threshold for is_drone classification"
+    )
 
     # Aspect ratio heuristics
-    aspect_ratio_min: float = Field(0.8, ge=0.1, le=5.0, description="Minimum drone-like aspect ratio")
-    aspect_ratio_max: float = Field(2.5, ge=0.5, le=10.0, description="Maximum drone-like aspect ratio")
-    aspect_bonus: float = Field(0.15, ge=0.0, le=0.5, description="Score bonus for drone-like aspect ratio")
-    tall_object_ratio: float = Field(0.6, ge=0.1, le=1.0, description="Aspect ratio threshold for tall objects")
-    tall_penalty: float = Field(0.2, ge=0.0, le=0.5, description="Score penalty for tall/thin objects")
+    aspect_ratio_min: float = Field(
+        0.8, ge=0.1, le=5.0, description="Minimum drone-like aspect ratio"
+    )
+    aspect_ratio_max: float = Field(
+        2.5, ge=0.5, le=10.0, description="Maximum drone-like aspect ratio"
+    )
+    aspect_bonus: float = Field(
+        0.15, ge=0.0, le=0.5, description="Score bonus for drone-like aspect ratio"
+    )
+    tall_object_ratio: float = Field(
+        0.6, ge=0.1, le=1.0, description="Aspect ratio threshold for tall objects"
+    )
+    tall_penalty: float = Field(
+        0.2, ge=0.0, le=0.5, description="Score penalty for tall/thin objects"
+    )
 
     class Config:
         env_prefix = "DRONE_SCORE_"
@@ -126,7 +156,9 @@ class TrackerSettings(BaseModel):
     """Object tracking configuration."""
 
     max_disappeared: int = Field(30, ge=1, le=300, description="Frames before track is deleted")
-    max_distance: float = Field(100.0, ge=10.0, le=1000.0, description="Max centroid distance for matching")
+    max_distance: float = Field(
+        100.0, ge=10.0, le=1000.0, description="Max centroid distance for matching"
+    )
 
     # Kalman filter specific
     process_noise: float = Field(1.0, ge=0.01, le=100.0, description="Kalman process noise")
@@ -140,22 +172,44 @@ class TargetingSettings(BaseModel):
     """Targeting and engagement configuration."""
 
     # Distance estimation
-    max_targeting_distance_m: float = Field(100.0, ge=10.0, le=1000.0, description="Maximum targeting distance (meters)")
-    assumed_drone_size_m: float = Field(0.3, ge=0.1, le=2.0, description="Assumed drone size for distance calc")
+    max_targeting_distance_m: float = Field(
+        100.0, ge=10.0, le=1000.0, description="Maximum targeting distance (meters)"
+    )
+    assumed_drone_size_m: float = Field(
+        0.3, ge=0.1, le=2.0, description="Assumed drone size for distance calc"
+    )
 
     # Target lock
-    min_confidence_for_lock: float = Field(0.7, ge=0.3, le=1.0, description="Minimum confidence to lock target")
-    lock_timeout_seconds: float = Field(5.0, ge=1.0, le=30.0, description="Seconds before lock is lost")
-    tracking_lead_factor: float = Field(1.2, ge=1.0, le=5.0, description="Lead factor for interception")
+    min_confidence_for_lock: float = Field(
+        0.7, ge=0.3, le=1.0, description="Minimum confidence to lock target"
+    )
+    lock_timeout_seconds: float = Field(
+        5.0, ge=1.0, le=30.0, description="Seconds before lock is lost"
+    )
+    tracking_lead_factor: float = Field(
+        1.2, ge=1.0, le=5.0, description="Lead factor for interception"
+    )
 
     # Fire net trigger
     fire_net_enabled: bool = Field(False, description="Enable fire net system")
-    fire_net_min_confidence: float = Field(0.85, ge=0.5, le=1.0, description="Minimum confidence to fire")
-    fire_net_min_track_frames: int = Field(10, ge=3, le=60, description="Minimum frames tracked before fire")
-    fire_net_max_distance_m: float = Field(50.0, ge=5.0, le=200.0, description="Maximum fire distance")
-    fire_net_min_distance_m: float = Field(5.0, ge=1.0, le=50.0, description="Minimum fire distance (safety)")
-    fire_net_velocity_threshold_ms: float = Field(30.0, ge=0.0, le=100.0, description="Max target velocity for fire")
-    fire_net_cooldown_seconds: float = Field(10.0, ge=1.0, le=60.0, description="Cooldown between fires")
+    fire_net_min_confidence: float = Field(
+        0.85, ge=0.5, le=1.0, description="Minimum confidence to fire"
+    )
+    fire_net_min_track_frames: int = Field(
+        10, ge=3, le=60, description="Minimum frames tracked before fire"
+    )
+    fire_net_max_distance_m: float = Field(
+        50.0, ge=5.0, le=200.0, description="Maximum fire distance"
+    )
+    fire_net_min_distance_m: float = Field(
+        5.0, ge=1.0, le=50.0, description="Minimum fire distance (safety)"
+    )
+    fire_net_velocity_threshold_ms: float = Field(
+        30.0, ge=0.0, le=100.0, description="Max target velocity for fire"
+    )
+    fire_net_cooldown_seconds: float = Field(
+        10.0, ge=1.0, le=60.0, description="Cooldown between fires"
+    )
     fire_net_arm_required: bool = Field(True, description="Require explicit arming")
     fire_net_gpio_pin: int = Field(17, ge=2, le=27, description="GPIO pin for fire trigger (BCM)")
 
@@ -172,7 +226,9 @@ class AlertSettings(BaseModel):
     webhook_retry_count: int = Field(3, ge=0, le=10, description="Number of webhook retries")
 
     # Throttling
-    cooldown_per_track: float = Field(5.0, ge=0.0, le=60.0, description="Alert cooldown per track ID")
+    cooldown_per_track: float = Field(
+        5.0, ge=0.0, le=60.0, description="Alert cooldown per track ID"
+    )
     global_cooldown: float = Field(1.0, ge=0.0, le=10.0, description="Global alert cooldown")
 
     # File logging
@@ -187,7 +243,9 @@ class StreamingSettings(BaseModel):
     """Web streaming configuration."""
 
     enabled: bool = Field(False, description="Enable MJPEG streaming server")
-    host: str = Field("0.0.0.0", description="Streaming server host")  # nosec B104 - intentional for LAN access
+    host: str = Field(
+        "0.0.0.0", description="Streaming server host"
+    )  # nosec B104 - intentional for LAN access
     port: int = Field(8080, ge=1024, le=65535, description="Streaming server port")
     quality: int = Field(80, ge=10, le=100, description="JPEG quality (10-100)")
     max_fps: int = Field(15, ge=1, le=60, description="Maximum stream FPS")
@@ -206,7 +264,9 @@ class LoggingSettings(BaseModel):
     level: LogLevel = Field(LogLevel.INFO, description="Log level")
     json_format: bool = Field(False, description="Use JSON log format")
     log_file: Optional[str] = Field(None, description="Log file path")
-    max_bytes: int = Field(10_000_000, ge=1_000_000, le=100_000_000, description="Max log file size")
+    max_bytes: int = Field(
+        10_000_000, ge=1_000_000, le=100_000_000, description="Max log file size"
+    )
     backup_count: int = Field(5, ge=1, le=20, description="Number of log backups")
 
     class Config:
@@ -234,6 +294,7 @@ class DisplaySettings(BaseModel):
 # =============================================================================
 
 if PydanticBaseSettings is not object:
+
     class Settings(PydanticBaseSettings):
         """
         Root configuration aggregating all settings.
@@ -270,6 +331,7 @@ if PydanticBaseSettings is not object:
         def from_yaml(cls, path: str) -> "Settings":
             """Load settings from YAML file."""
             import yaml
+
             with open(path) as f:
                 data = yaml.safe_load(f) or {}
             return cls(**data)
@@ -278,26 +340,29 @@ if PydanticBaseSettings is not object:
         def from_json(cls, path: str) -> "Settings":
             """Load settings from JSON file."""
             import json
+
             with open(path) as f:
                 data = json.load(f)
             return cls(**data)
 
         def _get_dict(self) -> dict[str, Any]:
             """Get dictionary representation (Pydantic v1/v2 compatible)."""
-            if hasattr(self, 'model_dump'):
+            if hasattr(self, "model_dump"):
                 return self.model_dump()  # Pydantic v2
             return self.dict()  # Pydantic v1
 
         def to_yaml(self, path: str) -> None:
             """Save settings to YAML file."""
             import yaml
-            with open(path, 'w') as f:
+
+            with open(path, "w") as f:
                 yaml.dump(self._get_dict(), f, default_flow_style=False, sort_keys=False)
 
         def to_json(self, path: str, indent: int = 2) -> None:
             """Save settings to JSON file."""
             import json
-            with open(path, 'w') as f:
+
+            with open(path, "w") as f:
                 json.dump(self._get_dict(), f, indent=indent)
 
         def to_dict(self) -> dict[str, Any]:
@@ -313,47 +378,47 @@ if PydanticBaseSettings is not object:
             updates = {}
 
             # Map CLI args to nested settings
-            if hasattr(args, 'model') and args.model:
-                updates.setdefault('inference', {})['model_path'] = args.model
+            if hasattr(args, "model") and args.model:
+                updates.setdefault("inference", {})["model_path"] = args.model
 
-            if hasattr(args, 'confidence') and args.confidence is not None:
-                updates.setdefault('inference', {})['confidence_threshold'] = args.confidence
+            if hasattr(args, "confidence") and args.confidence is not None:
+                updates.setdefault("inference", {})["confidence_threshold"] = args.confidence
 
-            if hasattr(args, 'coral') and args.coral:
-                updates.setdefault('inference', {})['use_coral'] = True
+            if hasattr(args, "coral") and args.coral:
+                updates.setdefault("inference", {})["use_coral"] = True
 
-            if hasattr(args, 'width') and args.width:
-                updates.setdefault('capture', {})['width'] = args.width
+            if hasattr(args, "width") and args.width:
+                updates.setdefault("capture", {})["width"] = args.width
 
-            if hasattr(args, 'height') and args.height:
-                updates.setdefault('capture', {})['height'] = args.height
+            if hasattr(args, "height") and args.height:
+                updates.setdefault("capture", {})["height"] = args.height
 
-            if hasattr(args, 'fps') and args.fps:
-                updates.setdefault('capture', {})['fps'] = args.fps
+            if hasattr(args, "fps") and args.fps:
+                updates.setdefault("capture", {})["fps"] = args.fps
 
-            if hasattr(args, 'camera') and args.camera:
-                updates['camera_type'] = CameraType(args.camera)
+            if hasattr(args, "camera") and args.camera:
+                updates["camera_type"] = CameraType(args.camera)
 
-            if hasattr(args, 'engine') and args.engine:
-                updates['engine_type'] = EngineType(args.engine)
+            if hasattr(args, "engine") and args.engine:
+                updates["engine_type"] = EngineType(args.engine)
 
-            if hasattr(args, 'tracker') and args.tracker:
-                updates['tracker_type'] = TrackerType(args.tracker)
+            if hasattr(args, "tracker") and args.tracker:
+                updates["tracker_type"] = TrackerType(args.tracker)
 
-            if hasattr(args, 'headless') and args.headless:
-                updates.setdefault('display', {})['headless'] = True
+            if hasattr(args, "headless") and args.headless:
+                updates.setdefault("display", {})["headless"] = True
 
-            if hasattr(args, 'alert_webhook') and args.alert_webhook:
-                updates.setdefault('alert', {})['webhook_url'] = args.alert_webhook
+            if hasattr(args, "alert_webhook") and args.alert_webhook:
+                updates.setdefault("alert", {})["webhook_url"] = args.alert_webhook
 
-            if hasattr(args, 'save_detections') and args.save_detections:
-                updates.setdefault('alert', {})['save_detections_path'] = args.save_detections
+            if hasattr(args, "save_detections") and args.save_detections:
+                updates.setdefault("alert", {})["save_detections_path"] = args.save_detections
 
-            if hasattr(args, 'stream') and args.stream:
-                updates.setdefault('streaming', {})['enabled'] = True
+            if hasattr(args, "stream") and args.stream:
+                updates.setdefault("streaming", {})["enabled"] = True
 
-            if hasattr(args, 'stream_port') and args.stream_port:
-                updates.setdefault('streaming', {})['port'] = args.stream_port
+            if hasattr(args, "stream_port") and args.stream_port:
+                updates.setdefault("streaming", {})["port"] = args.stream_port
 
             # Create new settings with updates
             current = self._get_dict()
@@ -371,18 +436,26 @@ else:
         """Fallback settings class without pydantic validation."""
 
         def __init__(self, **kwargs):
-            self.capture = CaptureSettings() if 'capture' not in kwargs else kwargs['capture']
-            self.inference = InferenceSettings() if 'inference' not in kwargs else kwargs['inference']
-            self.drone_score = DroneScoreSettings() if 'drone_score' not in kwargs else kwargs['drone_score']
-            self.tracker = TrackerSettings() if 'tracker' not in kwargs else kwargs['tracker']
-            self.targeting = TargetingSettings() if 'targeting' not in kwargs else kwargs['targeting']
-            self.alert = AlertSettings() if 'alert' not in kwargs else kwargs['alert']
-            self.streaming = StreamingSettings() if 'streaming' not in kwargs else kwargs['streaming']
-            self.logging = LoggingSettings() if 'logging' not in kwargs else kwargs['logging']
-            self.display = DisplaySettings() if 'display' not in kwargs else kwargs['display']
-            self.camera_type = kwargs.get('camera_type', CameraType.AUTO)
-            self.engine_type = kwargs.get('engine_type', EngineType.AUTO)
-            self.tracker_type = kwargs.get('tracker_type', TrackerType.CENTROID)
+            self.capture = CaptureSettings() if "capture" not in kwargs else kwargs["capture"]
+            self.inference = (
+                InferenceSettings() if "inference" not in kwargs else kwargs["inference"]
+            )
+            self.drone_score = (
+                DroneScoreSettings() if "drone_score" not in kwargs else kwargs["drone_score"]
+            )
+            self.tracker = TrackerSettings() if "tracker" not in kwargs else kwargs["tracker"]
+            self.targeting = (
+                TargetingSettings() if "targeting" not in kwargs else kwargs["targeting"]
+            )
+            self.alert = AlertSettings() if "alert" not in kwargs else kwargs["alert"]
+            self.streaming = (
+                StreamingSettings() if "streaming" not in kwargs else kwargs["streaming"]
+            )
+            self.logging = LoggingSettings() if "logging" not in kwargs else kwargs["logging"]
+            self.display = DisplaySettings() if "display" not in kwargs else kwargs["display"]
+            self.camera_type = kwargs.get("camera_type", CameraType.AUTO)
+            self.engine_type = kwargs.get("engine_type", EngineType.AUTO)
+            self.tracker_type = kwargs.get("tracker_type", TrackerType.CENTROID)
 
     # Simple dataclass fallbacks
     class CaptureSettings:
@@ -559,5 +632,5 @@ display:
 
 def create_default_config(path: str) -> None:
     """Create a default configuration file."""
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         f.write(DEFAULT_CONFIG_YAML)
