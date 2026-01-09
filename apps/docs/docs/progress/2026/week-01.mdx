@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Dec 19, 2025 - Jan 8, 2026"
-sidebar_label: "Week 1 (Dec 19-Jan 8)"
+title: "Week 1: Dec 19, 2025 - Jan 9, 2026"
+sidebar_label: "Week 1 (Dec 19-Jan 9)"
 sidebar_position: 1
 description:
   Weekly progress report covering Pi Drone Detector MVP, Azure ML training
@@ -45,7 +45,7 @@ import {
   TEAM,
 } from "@site/src/data/values";
 
-# Week 1: December 19, 2025 - January 8, 2026
+# Week 1: December 19, 2025 - January 9, 2026
 
 <DocumentDownload title="Week 1 Progress Report - Phoenix Rooivalk" />
 
@@ -81,7 +81,14 @@ import {
 - **Design alignment**: Hardware designs match software capabilities
 - **Q2 2026 launch target**: On track for consumer market entry
 
-### 5. Known Issues Resolved
+### 5. Code Quality & Security Improvements
+
+- **YOLO Training Audit**: Complete audit and fixes for ML training infrastructure (PR #476)
+- **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during testing (PR #475)
+- **Codacy Compliance**: Resolved static analysis issues across Python, JavaScript, and Rust
+- **Security Hardening**: GitHub Actions SHA pinning, workflow security improvements
+
+### 6. Known Issues Resolved
 
 | Issue                   | Status      | Resolution                                |
 | ----------------------- | ----------- | ----------------------------------------- |
@@ -89,6 +96,8 @@ import {
 | Azure ML authentication | ✅ Resolved | Managed identity configuration fixed      |
 | Cross-platform builds   | ✅ Resolved | CI/CD pipeline updates for ARM64          |
 | Documentation gaps      | ✅ Resolved | Technical docs updated with new API specs |
+| Codacy static analysis  | ✅ Resolved | Fixed issues in Python, JS, and Rust code |
+| Auth bypass security    | ✅ Resolved | Production safeguards for DISABLE_LOGIN   |
 
 ---
 
@@ -448,18 +457,22 @@ significant technical milestones achieved.
 
 ### 11. Weekly Commits & Pull Requests
 
-#### Feature Pull Requests Merged (Dec 19 - Jan 8)
+#### Feature Pull Requests Merged (Dec 19 - Jan 9)
 
-| PR   | Title                          | Category     |
-| ---- | ------------------------------ | ------------ |
-| #467 | Pi Drone Detector MVP complete | Edge AI      |
-| #466 | Azure ML training pipeline     | MLOps        |
-| #465 | YOLOv8 INT8 quantization       | Performance  |
-| #464 | MLflow experiment tracking     | MLOps        |
-| #463 | Rust clippy fixes              | Code Quality |
-| #462 | Python type hints and ruff     | Code Quality |
-| #461 | ESLint and Prettier updates    | Code Quality |
-| #460 | Cross-platform ARM64 builds    | CI/CD        |
+| PR   | Title                                        | Category      |
+| ---- | -------------------------------------------- | ------------- |
+| #476 | Complete YOLO training infrastructure audit  | ML/Security   |
+| #475 | Add DISABLE_LOGIN flag with prod safeguards  | Auth/Security |
+| #474 | Fix remaining Codacy static analysis issues  | Code Quality  |
+| #473 | Evaluate system improvements                 | Refactoring   |
+| #467 | Pi Drone Detector MVP complete               | Edge AI       |
+| #466 | Azure ML training pipeline                   | MLOps         |
+| #465 | YOLOv8 INT8 quantization                     | Performance   |
+| #464 | MLflow experiment tracking                   | MLOps         |
+| #463 | Rust clippy fixes                            | Code Quality  |
+| #462 | Python type hints and ruff                   | Code Quality  |
+| #461 | ESLint and Prettier updates                  | Code Quality  |
+| #460 | Cross-platform ARM64 builds                  | CI/CD         |
 
 #### Dependency Updates
 
@@ -513,4 +526,4 @@ reviews.
 
 ---
 
-_Report compiled: January 8, 2026_
+_Report compiled: January 9, 2026_
