@@ -165,6 +165,7 @@ class WebhookAlertHandler(AlertHandler):
 
         except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
             self._failed_count += 1
+            self._pending_batch = []
             print(f"Webhook batch error: {e}")
             return False
 
