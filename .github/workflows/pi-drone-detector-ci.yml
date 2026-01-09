@@ -171,4 +171,3 @@ jobs:
       - name: Run bandit security scan
         run: |
           bandit -r src/ -ll -ii -x tests/
-        continue-on-error: true
