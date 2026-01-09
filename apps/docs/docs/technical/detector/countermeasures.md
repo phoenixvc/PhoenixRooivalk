@@ -2,7 +2,7 @@
 sidebar_position: 5
 title: Countermeasure Options
 description: Complete guide to drone countermeasure and detection systems from DIY to commercial, including deployment, legal considerations, and multi-tier product lines
-keywords: [countermeasures, net launcher, SkyWall, commercial, DIY, NetSentry, SkyWatch, detection, thermal, maritime, enterprise, legal, GDPR]
+keywords: [countermeasures, net launcher, SkyWall, commercial, DIY, NetSentry, SkyWatch, detection, thermal, maritime, enterprise, legal, GDPR, pilot localization, controller detection]
 ---
 
 # Drone Countermeasure Options
@@ -747,6 +747,205 @@ LIDAR Scan → Point Cloud → Clustering → Object Detection → Classificatio
 - Weather affects performance (rain, dust)
 - Small drones harder to detect
 - Processing intensive
+
+---
+
+### Controller/Pilot Localization
+
+**Why locate the controller?**
+- Identifying the drone is only half the problem
+- Finding the pilot enables enforcement action
+- Controller location helps predict drone behavior
+- Required for prosecution/evidence
+
+#### Method 1: RF Direction Finding (RDF)
+
+**How it works:** Multiple directional antennas determine the bearing to the RF source. Intersection of bearings gives location.
+
+```
+        Antenna 1                    Antenna 2
+           │                            │
+           │ Bearing: 045°              │ Bearing: 315°
+           │                            │
+           └────────────┬───────────────┘
+                        │
+                   Controller
+                   Location
+                   (intersection)
+```
+
+**Hardware:**
+| Item | Cost | Source |
+|------|------|--------|
+| Yagi antenna (×2-3) | $50-100 each | Amazon/HAM suppliers |
+| RTL-SDR dongles (×2-3) | $30 each | RTL-SDR.com |
+| USB hub | $20 | Amazon |
+| Raspberry Pi 4 | $55 | Pi supplier |
+| **Total (2-antenna)** | **$185-235** | |
+
+**Accuracy:** ±5-15° bearing, ~50-200m location accuracy at 1km range
+
+#### Method 2: Time Difference of Arrival (TDOA)
+
+**How it works:** Measures the time difference between signal arrival at multiple synchronized receivers. More accurate than RDF.
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  Receiver 1 │     │  Receiver 2 │     │  Receiver 3 │
+│  (t = 0ms)  │     │  (t = 2ms)  │     │  (t = 3ms)  │
+└──────┬──────┘     └──────┬──────┘     └──────┬──────┘
+       │                   │                   │
+       └───────────────────┴───────────────────┘
+                           │
+                    Hyperbolic curves
+                    intersection = source
+```
+
+**Requirements:**
+- 3+ synchronized receivers (GPS-disciplined)
+- High-speed data links between nodes
+- Significant processing power
+- Typically commercial/military systems
+
+**Accuracy:** 10-50m at 1km range
+
+#### Method 3: DJI AeroScope / Remote ID
+
+**How it works:** DJI drones broadcast their location AND pilot location via AeroScope protocol. New drones (2024+) use Remote ID (FAA-mandated).
+
+**DJI AeroScope Data:**
+| Field | Description |
+|-------|-------------|
+| Drone serial number | Unique identifier |
+| Drone GPS position | Lat/lon/altitude |
+| Pilot GPS position | From controller GPS |
+| Home point | Takeoff location |
+| Flight speed/heading | Current velocity |
+
+**DIY AeroScope Receiver:**
+```bash
+# Open-source DJI receiver (research purposes)
+git clone https://github.com/RyanKellyBME/DroneID
+cd DroneID
+# Requires HackRF or USRP SDR
+```
+
+**Remote ID (USA, 2024+):**
+| Field | Description |
+|-------|-------------|
+| UAS ID | Registration number |
+| Latitude/Longitude | Current position |
+| Altitude | Geometric/pressure |
+| Velocity | Speed and direction |
+| Takeoff location | Or pilot location |
+| Timestamp | UTC time |
+
+**Remote ID Receiver:**
+```bash
+# Bluetooth-based Remote ID receiver
+# Works with phone apps or dedicated receiver
+# Range: ~300m (Bluetooth 5 long range)
+```
+
+#### Method 4: WiFi RSSI Mapping
+
+**How it works:** Multiple receivers measure signal strength (RSSI). Stronger signal = closer to source.
+
+**Simple RSSI Triangulation:**
+```python
+# Basic RSSI-based distance estimation
+def estimate_distance(rssi_dbm, tx_power=-40, path_loss_exp=2.0):
+    """
+    Estimate distance from RSSI using log-distance path loss model.
+    tx_power: RSSI at 1 meter (calibrate for your environment)
+    path_loss_exp: 2.0 (free space) to 4.0 (urban)
+    """
+    distance_m = 10 ** ((tx_power - rssi_dbm) / (10 * path_loss_exp))
+    return distance_m
+
+# Example: -60 dBm signal
+distance = estimate_distance(-60)  # ~10 meters
+```
+
+**Multi-node RSSI:**
+```
+┌─────────────────────────────────────────────────────┐
+│                    Coverage Area                     │
+│                                                      │
+│   Node 1: -55dBm    Node 2: -70dBm    Node 3: -62dBm│
+│       ●                 ●                 ●         │
+│        \               /                 /          │
+│         \             /                 /           │
+│          \           /                 /            │
+│           \         /                 /             │
+│            ●───────●                 ●              │
+│         Controller location                         │
+│         (weighted centroid)                         │
+│                                                      │
+└─────────────────────────────────────────────────────┘
+```
+
+#### Controller Detection Configuration
+
+```yaml
+# controller-detection.yaml
+controller_detection:
+  enabled: true
+
+  # RF Direction Finding
+  rdf:
+    enabled: true
+    antennas:
+      - id: north
+        bearing_offset: 0    # Antenna pointing north
+        usb_device: /dev/rtlsdr0
+      - id: east
+        bearing_offset: 90   # Antenna pointing east
+        usb_device: /dev/rtlsdr1
+    frequencies: [2400000000, 2450000000, 5800000000]
+    scan_interval: 0.5  # seconds
+
+  # RSSI triangulation
+  rssi:
+    enabled: true
+    min_nodes: 3
+    calibration_tx_power: -40  # dBm at 1m
+    path_loss_exponent: 2.5
+
+  # DJI AeroScope
+  aeroscope:
+    enabled: true
+    sdr_device: /dev/hackrf0
+
+  # Remote ID (Bluetooth)
+  remote_id:
+    enabled: true
+    bluetooth_adapter: hci0
+    scan_interval: 1.0
+
+  # Output
+  output:
+    log_pilot_locations: true
+    alert_on_pilot_detected: true
+    overlay_on_map: true
+```
+
+#### Commercial Controller Detection Systems
+
+| System | Method | Range | Pilot Location | Price |
+|--------|--------|-------|----------------|-------|
+| DJI AeroScope | Protocol decode | 50km | Yes (DJI only) | $15,000+ |
+| CACI SkyTracker | RF fingerprint | 5km | Yes | $75,000+ |
+| Dedrone | Multi-sensor | 5km | Approximate | $20,000+ |
+| DroneShield | RF analysis | 2km | Direction only | $20,000+ |
+| Sentrycs | Protocol analysis | 2km | Yes (takeover) | $75,000+ |
+
+#### Legal Considerations for Pilot Tracking
+
+- **Privacy laws**: Tracking individuals may require authorization
+- **Evidence handling**: Chain of custody for prosecution
+- **Data retention**: GDPR/privacy policy implications
+- **Notification**: Some jurisdictions require signage
 
 ---
 
