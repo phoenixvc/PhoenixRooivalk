@@ -60,13 +60,13 @@ def validate_model(model_name: str) -> str:
         corrected = MODEL_CORRECTIONS[model_name]
         print(f"WARNING: '{model_name}' is incompatible with ultralytics library.")
         print(f"         Auto-correcting to '{corrected}'")
-        print(f"         (Old yolov5*.pt files require the legacy yolov5 repo)")
+        print("         (Old yolov5*.pt files require the legacy yolov5 repo)")
         return corrected
 
     if model_name not in SUPPORTED_MODELS and not Path(model_name).exists():
         print(f"WARNING: Model '{model_name}' not in supported list.")
         print(f"         Supported models: {list(SUPPORTED_MODELS.keys())}")
-        print(f"         Proceeding anyway (may work if it's a valid checkpoint)")
+        print("         Proceeding anyway (may work if it's a valid checkpoint)")
 
     return model_name
 
@@ -362,7 +362,7 @@ Supported Models:
 
         # Print metrics
         metrics = results.results_dict
-        print(f"\nBest Metrics:")
+        print("\nBest Metrics:")
         print(f"  mAP50:     {metrics.get('metrics/mAP50(B)', 'N/A')}")
         print(f"  mAP50-95:  {metrics.get('metrics/mAP50-95(B)', 'N/A')}")
         print(f"  Precision: {metrics.get('metrics/precision(B)', 'N/A')}")
@@ -391,7 +391,7 @@ Supported Models:
 
             # Copy PyTorch model
             shutil.copy(best_weights, exports_dir / 'drone-detector.pt')
-            print(f"  drone-detector.pt (PyTorch)")
+            print("  drone-detector.pt (PyTorch)")
 
             # Copy exported formats
             for fmt, src_path in exports.items():
@@ -429,11 +429,11 @@ For desktop testing:
 """.format(exports=exports_dir if not args.no_export else output_path / args.name / 'weights'))
 
     else:
-        print(f"\nERROR: Training may have failed - best weights not found")
+        print("\nERROR: Training may have failed - best weights not found")
         print(f"  Expected: {best_weights}")
         print(f"  Last checkpoint: {last_weights}")
         if last_weights.exists():
-            print(f"  NOTE: last.pt exists - training may have been interrupted")
+            print("  NOTE: last.pt exists - training may have been interrupted")
             print(f"        Resume with: --resume {last_weights}")
         sys.exit(1)
 

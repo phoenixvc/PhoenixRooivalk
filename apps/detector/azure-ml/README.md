@@ -1,6 +1,7 @@
 # Azure ML Training
 
-Training infrastructure for the Phoenix Rooivalk drone detection model using Azure Machine Learning.
+Training infrastructure for the Phoenix Rooivalk drone detection model
+using Azure Machine Learning.
 
 ## Quick Start
 
@@ -111,6 +112,7 @@ az ml job download --name <JOB_NAME> --resource-group $RG --workspace-name $WS \
 ## Outputs
 
 Training produces:
+
 - `drone-detector.pt` - PyTorch model
 - `drone-detector_int8.tflite` - TFLite INT8 (for Pi)
 - `drone-detector.onnx` - ONNX (for Jetson)
@@ -119,12 +121,15 @@ Training produces:
 ## Troubleshooting
 
 ### GPU Quota Error
+
 Request quota increase in Azure Portal: Subscriptions → Usage + quotas → Search "NC"
 
 ### OOM Error
+
 Reduce batch size: `--set inputs.batch=8`
 
 ### Training Stuck
+
 Check logs: `az ml job stream --name <JOB_NAME> ...`
 
 ## CI/CD

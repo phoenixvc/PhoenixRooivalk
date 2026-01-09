@@ -117,8 +117,9 @@ jobs:
 
       - name: Validate model selection
         id: validate-model
+        env:
+          MODEL: ${{ github.event.inputs.model || 'yolov8n.pt' }}
         run: |
-          MODEL="${{ github.event.inputs.model || 'yolov8n.pt' }}"
           VALID_MODELS="yolov8n.pt yolov8s.pt yolov8m.pt yolov5nu.pt yolov5su.pt"
 
           if echo "$VALID_MODELS" | grep -q "$MODEL"; then

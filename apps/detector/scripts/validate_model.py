@@ -24,7 +24,7 @@ import json
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -184,7 +184,6 @@ def benchmark_tflite(model_path: Path, imgsz: int = 320, iterations: int = 100) 
 
     # Get input details
     input_details = interpreter.get_input_details()
-    output_details = interpreter.get_output_details()
 
     input_shape = input_details[0]['shape']
     input_dtype = input_details[0]['dtype']

@@ -6,6 +6,7 @@ for the Phoenix Rooivalk drone detection model training.
 ## Prerequisites
 
 1. **Azure CLI** installed and logged in:
+
    ```bash
    az login
    az account set --subscription "YOUR_SUBSCRIPTION_ID"
@@ -58,6 +59,7 @@ terraform output cli_commands
 ## Environments
 
 ### Development (`environments/dev.tfvars`)
+
 - T4 GPU (cost-effective, ~$0.53/hr)
 - Single node, quick scale-down
 - Minimal resources

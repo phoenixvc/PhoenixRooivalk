@@ -224,7 +224,7 @@ def download_roboflow_dataset(
 
     if not api_key:
         print("  [SKIP] No Roboflow API key. Set ROBOFLOW_API_KEY or use --roboflow-key")
-        print(f"  Get free key at: https://roboflow.com")
+        print("  Get free key at: https://roboflow.com")
         print(f"  Manual download: https://universe.roboflow.com/{config['workspace']}/{config['project']}")
         return None
 
@@ -269,7 +269,7 @@ def extract_coco_classes(
         print(f"  [ERROR] Annotations not found: {ann_file}")
         return 0
 
-    print(f"  Loading annotations...")
+    print("  Loading annotations...")
     with open(ann_file) as f:
         coco = json.load(f)
 
@@ -278,7 +278,7 @@ def extract_coco_classes(
     target_cat_ids = {cat_name_to_id[c] for c in target_classes if c in cat_name_to_id}
 
     if not target_cat_ids:
-        print(f"  [ERROR] No matching categories found")
+        print("  [ERROR] No matching categories found")
         return 0
 
     print(f"  Found categories: {[c for c in target_classes if c in cat_name_to_id]}")
@@ -380,7 +380,7 @@ names:
 
     print(f"  Created {labels_created} label files")
     print(f"  Output: {coco_out}")
-    print(f"  NOTE: Download images using instructions in DOWNLOAD_IMAGES.md")
+    print("  NOTE: Download images using instructions in DOWNLOAD_IMAGES.md")
 
     return labels_created
 
