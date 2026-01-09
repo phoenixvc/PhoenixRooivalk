@@ -9,9 +9,9 @@ import os
 import platform
 import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
-from .interfaces import HardwareProfile, AcceleratorType, PipelineConfig
+from .interfaces import AcceleratorType, HardwareProfile, PipelineConfig
 
 
 def detect_hardware() -> HardwareProfile:
@@ -51,7 +51,7 @@ def _detect_platform() -> str:
     """Detect the platform type."""
     # Check for Raspberry Pi
     try:
-        with open('/proc/device-tree/model', 'r') as f:
+        with open('/proc/device-tree/model') as f:
             model = f.read().lower()
 
             if 'raspberry pi 5' in model:
@@ -67,7 +67,7 @@ def _detect_platform() -> str:
 
     # Check /proc/cpuinfo for Pi
     try:
-        with open('/proc/cpuinfo', 'r') as f:
+        with open('/proc/cpuinfo') as f:
             cpuinfo = f.read().lower()
             if 'raspberry pi' in cpuinfo or 'bcm2711' in cpuinfo:
                 return 'pi4'
@@ -95,7 +95,7 @@ def _detect_platform() -> str:
 def _detect_ram_mb() -> int:
     """Detect total RAM in MB."""
     try:
-        with open('/proc/meminfo', 'r') as f:
+        with open('/proc/meminfo') as f:
             for line in f:
                 if line.startswith('MemTotal:'):
                     # Format: "MemTotal:       1929620 kB"
@@ -175,7 +175,7 @@ def _detect_camera() -> str:
     return 'none'
 
 
-def _get_camera_capabilities(camera_type: str) -> Tuple[int, Tuple[int, int]]:
+def _get_camera_capabilities(camera_type: str) -> tuple[int, tuple[int, int]]:
     """Get max FPS and resolution for camera type."""
     capabilities = {
         'picam_v3': (120, (4608, 2592)),  # Up to 120fps at lower res

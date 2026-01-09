@@ -6,17 +6,16 @@ Supports hot-swapping between no tracking, centroid tracking, or Kalman filter
 based on demo requirements.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
-from collections import OrderedDict
 import math
+from collections import OrderedDict
+from typing import Any, Optional
 
 import numpy as np
 
 from .interfaces import (
+    Detection,
     ObjectTracker,
     TrackedObject,
-    Detection,
-    BoundingBox,
 )
 
 
@@ -29,13 +28,13 @@ class NoOpTracker(ObjectTracker):
 
     def __init__(self):
         self._next_id = 0
-        self._current_tracks: List[TrackedObject] = []
+        self._current_tracks: list[TrackedObject] = []
 
     def update(
         self,
-        detections: List[Detection],
+        detections: list[Detection],
         frame: Optional[np.ndarray] = None
-    ) -> List[TrackedObject]:
+    ) -> list[TrackedObject]:
         self._current_tracks = []
 
         for det in detections:
@@ -56,11 +55,11 @@ class NoOpTracker(ObjectTracker):
         self._current_tracks = []
 
     @property
-    def active_tracks(self) -> List[TrackedObject]:
+    def active_tracks(self) -> list[TrackedObject]:
         return self._current_tracks
 
     @property
-    def tracker_info(self) -> Dict[str, Any]:
+    def tracker_info(self) -> dict[str, Any]:
         return {
             'type': 'noop',
             'next_id': self._next_id,
@@ -93,9 +92,9 @@ class CentroidTracker(ObjectTracker):
 
     def update(
         self,
-        detections: List[Detection],
+        detections: list[Detection],
         frame: Optional[np.ndarray] = None
-    ) -> List[TrackedObject]:
+    ) -> list[TrackedObject]:
         # No detections - increment disappeared count for all
         if len(detections) == 0:
             for track_id in list(self._objects.keys()):
@@ -112,7 +111,7 @@ class CentroidTracker(ObjectTracker):
 
         # No existing objects - register all
         if len(self._objects) == 0:
-            for cx, cy, det in input_centroids:
+            for _cx, _cy, det in input_centroids:
                 self._register(det)
             return list(self._objects.values())
 
@@ -195,11 +194,11 @@ class CentroidTracker(ObjectTracker):
         self._objects.clear()
 
     @property
-    def active_tracks(self) -> List[TrackedObject]:
+    def active_tracks(self) -> list[TrackedObject]:
         return list(self._objects.values())
 
     @property
-    def tracker_info(self) -> Dict[str, Any]:
+    def tracker_info(self) -> dict[str, Any]:
         return {
             'type': 'centroid',
             'max_disappeared': self._max_disappeared,
@@ -228,13 +227,13 @@ class KalmanTracker(ObjectTracker):
         self._process_noise = process_noise
         self._measurement_noise = measurement_noise
         self._next_id = 0
-        self._tracks: Dict[int, '_KalmanTrack'] = {}
+        self._tracks: dict[int, _KalmanTrack] = {}
 
     def update(
         self,
-        detections: List[Detection],
+        detections: list[Detection],
         frame: Optional[np.ndarray] = None
-    ) -> List[TrackedObject]:
+    ) -> list[TrackedObject]:
         # Predict step for all existing tracks
         for track in self._tracks.values():
             track.predict()
@@ -327,7 +326,7 @@ class KalmanTracker(ObjectTracker):
         )
         self._next_id += 1
 
-    def _get_tracked_objects(self) -> List[TrackedObject]:
+    def _get_tracked_objects(self) -> list[TrackedObject]:
         """Convert internal tracks to TrackedObject list."""
         result = []
         for track in self._tracks.values():
@@ -349,11 +348,11 @@ class KalmanTracker(ObjectTracker):
         self._tracks.clear()
 
     @property
-    def active_tracks(self) -> List[TrackedObject]:
+    def active_tracks(self) -> list[TrackedObject]:
         return self._get_tracked_objects()
 
     @property
-    def tracker_info(self) -> Dict[str, Any]:
+    def tracker_info(self) -> dict[str, Any]:
         return {
             'type': 'kalman',
             'max_disappeared': self._max_disappeared,
@@ -430,14 +429,14 @@ class _KalmanTrack:
         self._state = self._state + K @ y_residual
 
         # Update covariance
-        I = np.eye(4)
-        self._P = (I - K @ self._H) @ self._P
+        identity = np.eye(4)
+        self._P = (identity - K @ self._H) @ self._P
 
-    def predicted_position(self) -> Tuple[float, float]:
+    def predicted_position(self) -> tuple[float, float]:
         """Get predicted position."""
         return (self._state[0], self._state[1])
 
-    def velocity(self) -> Tuple[float, float]:
+    def velocity(self) -> tuple[float, float]:
         """Get estimated velocity."""
         return (self._state[2], self._state[3])
 

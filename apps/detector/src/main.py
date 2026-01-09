@@ -26,20 +26,19 @@ Usage:
 """
 
 import argparse
-import sys
 import signal
+import sys
 from pathlib import Path
-from typing import Optional
 
 # Support running as both script and module
 try:
-    from .factory import create_pipeline, create_demo_pipeline, DetectionPipeline
+    from .factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 except ImportError:
     # Running as script - add src to path
     src_dir = Path(__file__).parent
     if str(src_dir) not in sys.path:
         sys.path.insert(0, str(src_dir))
-    from factory import create_pipeline, create_demo_pipeline, DetectionPipeline
+    from factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 
 
 def parse_args():

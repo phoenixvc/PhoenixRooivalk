@@ -7,7 +7,7 @@ Provides shared functionality:
 """
 
 from .geometry import calculate_iou, non_max_suppression, scale_bbox
-from .logging_config import setup_logging, get_logger
+from .logging_config import get_logger, setup_logging
 
 __all__ = [
     'calculate_iou',

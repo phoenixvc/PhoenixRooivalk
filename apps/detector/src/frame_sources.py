@@ -7,12 +7,12 @@ based on what's available on demo day.
 """
 
 import time
-from typing import Optional, Dict, Any, Tuple
 from pathlib import Path
+from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import FrameSource, FrameData
+from .interfaces import FrameData, FrameSource
 
 
 class OpenCVFrameSource(FrameSource):
@@ -92,7 +92,7 @@ class OpenCVFrameSource(FrameSource):
         return self._cap is not None and self._cap.isOpened()
 
     @property
-    def resolution(self) -> Tuple[int, int]:
+    def resolution(self) -> tuple[int, int]:
         return (self._actual_width, self._actual_height)
 
     @property
@@ -100,7 +100,7 @@ class OpenCVFrameSource(FrameSource):
         return self._actual_fps
 
     @property
-    def source_info(self) -> Dict[str, Any]:
+    def source_info(self) -> dict[str, Any]:
         return {
             'type': 'opencv',
             'source': self._source,
@@ -257,7 +257,7 @@ class PiCameraSource(FrameSource):
         return self._cap is not None and self._cap.isOpened()
 
     @property
-    def resolution(self) -> Tuple[int, int]:
+    def resolution(self) -> tuple[int, int]:
         return (self._width, self._height)
 
     @property
@@ -265,7 +265,7 @@ class PiCameraSource(FrameSource):
         return float(self._fps)
 
     @property
-    def source_info(self) -> Dict[str, Any]:
+    def source_info(self) -> dict[str, Any]:
         return {
             'type': 'picamera',
             'using_libcamera': self._using_libcamera,
@@ -310,7 +310,7 @@ class VideoFileSource(OpenCVFrameSource):
         return frame_data
 
     @property
-    def source_info(self) -> Dict[str, Any]:
+    def source_info(self) -> dict[str, Any]:
         info = super().source_info
         info.update({
             'type': 'video_file',
@@ -390,7 +390,7 @@ class MockFrameSource(FrameSource):
         return self._is_open
 
     @property
-    def resolution(self) -> Tuple[int, int]:
+    def resolution(self) -> tuple[int, int]:
         return (self._width, self._height)
 
     @property
@@ -398,7 +398,7 @@ class MockFrameSource(FrameSource):
         return float(self._fps)
 
     @property
-    def source_info(self) -> Dict[str, Any]:
+    def source_info(self) -> dict[str, Any]:
         return {
             'type': 'mock',
             'resolution': self.resolution,

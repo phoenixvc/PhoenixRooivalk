@@ -7,9 +7,9 @@ Supports hot-swapping between console, webhook, file logging, or combinations.
 
 import json
 import time
-from typing import List, Dict, Any, Optional
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 from .interfaces import AlertHandler, Detection, FrameData
@@ -55,7 +55,7 @@ class ConsoleAlertHandler(AlertHandler):
         pass
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {
             'type': 'console',
             'prefix': self._prefix,
@@ -88,7 +88,7 @@ class WebhookAlertHandler(AlertHandler):
         self._last_alert_time = 0.0
         self._alert_count = 0
         self._failed_count = 0
-        self._pending_batch: List[dict] = []
+        self._pending_batch: list[dict] = []
 
     def send_alert(self, detection: Detection, frame_data: FrameData) -> bool:
         # Cooldown check
@@ -114,8 +114,8 @@ class WebhookAlertHandler(AlertHandler):
 
     def _send_single(self, alert_data: dict) -> bool:
         try:
-            import urllib.request
             import urllib.error
+            import urllib.request
 
             data = json.dumps(alert_data).encode('utf-8')
 
@@ -140,8 +140,8 @@ class WebhookAlertHandler(AlertHandler):
             return True
 
         try:
-            import urllib.request
             import urllib.error
+            import urllib.request
 
             batch_data = {
                 'event': 'drone_alerts_batch',
@@ -174,7 +174,7 @@ class WebhookAlertHandler(AlertHandler):
             self._send_batch()
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {
             'type': 'webhook',
             'url': self._webhook_url,
@@ -197,16 +197,16 @@ class FileAlertHandler(AlertHandler):
         self._file_path = Path(file_path)
         self._append = append
         self._buffer_size = buffer_size
-        self._buffer: List[dict] = []
+        self._buffer: list[dict] = []
         self._alert_count = 0
 
         # Load existing if appending
-        self._existing_data: List[dict] = []
+        self._existing_data: list[dict] = []
         if self._append and self._file_path.exists():
             try:
-                with open(self._file_path, 'r') as f:
+                with open(self._file_path) as f:
                     self._existing_data = json.load(f)
-            except (json.JSONDecodeError, IOError):
+            except (OSError, json.JSONDecodeError):
                 self._existing_data = []
 
     def send_alert(self, detection: Detection, frame_data: FrameData) -> bool:
@@ -237,14 +237,14 @@ class FileAlertHandler(AlertHandler):
             self._existing_data = all_data
             self._buffer = []
 
-        except IOError as e:
+        except OSError as e:
             print(f"File write error: {e}")
 
     def flush(self) -> None:
         self._write_buffer()
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {
             'type': 'file',
             'file_path': str(self._file_path),
@@ -256,7 +256,7 @@ class FileAlertHandler(AlertHandler):
 class CompositeAlertHandler(AlertHandler):
     """Combine multiple alert handlers."""
 
-    def __init__(self, handlers: List[AlertHandler]):
+    def __init__(self, handlers: list[AlertHandler]):
         self._handlers = handlers
 
     def add_handler(self, handler: AlertHandler) -> None:
@@ -274,7 +274,7 @@ class CompositeAlertHandler(AlertHandler):
             handler.flush()
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {
             'type': 'composite',
             'handler_count': len(self._handlers),
@@ -298,7 +298,7 @@ class ThrottledAlertHandler(AlertHandler):
         self._inner = inner_handler
         self._cooldown_per_track = cooldown_per_track
         self._global_cooldown = global_cooldown
-        self._last_alert_per_track: Dict[int, float] = {}
+        self._last_alert_per_track: dict[int, float] = {}
         self._last_global_alert = 0.0
         self._throttled_count = 0
 
@@ -343,7 +343,7 @@ class ThrottledAlertHandler(AlertHandler):
         self._inner.flush()
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {
             'type': 'throttled',
             'cooldown_per_track': self._cooldown_per_track,
@@ -363,7 +363,7 @@ class NullAlertHandler(AlertHandler):
         pass
 
     @property
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         return {'type': 'null'}
 
 

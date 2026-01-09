@@ -24,29 +24,27 @@ Usage:
     pipeline.stop()
 """
 
-from .interfaces import (
-    FrameSource,
-    InferenceEngine,
-    ObjectTracker,
-    AlertHandler,
-    FrameRenderer,
-    Detection,
-    BoundingBox,
-    TrackedObject,
-    InferenceResult,
-    FrameData,
-    HardwareProfile,
-    PipelineConfig,
-)
-
 from .factory import (
-    create_pipeline,
+    DetectionPipeline,
     create_demo_pipeline,
     create_minimal_pipeline,
-    DetectionPipeline,
+    create_pipeline,
 )
-
 from .hardware import detect_hardware, print_hardware_report
+from .interfaces import (
+    AlertHandler,
+    BoundingBox,
+    Detection,
+    FrameData,
+    FrameRenderer,
+    FrameSource,
+    HardwareProfile,
+    InferenceEngine,
+    InferenceResult,
+    ObjectTracker,
+    PipelineConfig,
+    TrackedObject,
+)
 
 __version__ = '2.0.0'
 __all__ = [

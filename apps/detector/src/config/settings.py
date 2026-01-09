@@ -10,16 +10,20 @@ Settings can be loaded from:
 """
 
 from enum import Enum
-from pathlib import Path
-from typing import Optional, List, Tuple, Any, Dict
+from typing import Any, Optional
 
 try:
-    from pydantic import BaseModel, Field, validator, root_validator
+    from pydantic import BaseModel, Field, root_validator, validator  # noqa: F401 - v1 compat
     from pydantic import BaseSettings as PydanticBaseSettings
     PYDANTIC_V2 = False
 except ImportError:
     try:
-        from pydantic import BaseModel, Field, field_validator, model_validator
+        from pydantic import (  # noqa: F401 - v2 compat
+            BaseModel,
+            Field,
+            field_validator,
+            model_validator,
+        )
         from pydantic_settings import BaseSettings as PydanticBaseSettings
         PYDANTIC_V2 = True
     except ImportError:
@@ -278,7 +282,7 @@ if PydanticBaseSettings is not object:
                 data = json.load(f)
             return cls(**data)
 
-        def _get_dict(self) -> Dict[str, Any]:
+        def _get_dict(self) -> dict[str, Any]:
             """Get dictionary representation (Pydantic v1/v2 compatible)."""
             if hasattr(self, 'model_dump'):
                 return self.model_dump()  # Pydantic v2
@@ -296,7 +300,7 @@ if PydanticBaseSettings is not object:
             with open(path, 'w') as f:
                 json.dump(self._get_dict(), f, indent=indent)
 
-        def to_dict(self) -> Dict[str, Any]:
+        def to_dict(self) -> dict[str, Any]:
             """Convert to dictionary."""
             return self._get_dict()
 

@@ -8,13 +8,13 @@ Provides:
 - Performance metrics logging
 """
 
+import json
 import logging
 import logging.handlers
 import sys
-import json
 from datetime import datetime
-from typing import Optional, Dict, Any
 from pathlib import Path
+from typing import Any, Optional
 
 
 class JSONFormatter(logging.Formatter):
@@ -255,7 +255,7 @@ def get_logger(name: str = "drone_detector") -> logging.Logger:
     return logging.getLogger(name)
 
 
-def log_hardware_info(logger: logging.Logger, hardware_info: Dict[str, Any]) -> None:
+def log_hardware_info(logger: logging.Logger, hardware_info: dict[str, Any]) -> None:
     """Log hardware detection results."""
     logger.info(
         f"Hardware: {hardware_info.get('platform', 'unknown')} | "
@@ -266,7 +266,7 @@ def log_hardware_info(logger: logging.Logger, hardware_info: Dict[str, Any]) -> 
     )
 
 
-def log_config(logger: logging.Logger, config: Dict[str, Any]) -> None:
+def log_config(logger: logging.Logger, config: dict[str, Any]) -> None:
     """Log configuration summary."""
     logger.info(
         f"Config: {config.get('capture', {}).get('width', 0)}x"

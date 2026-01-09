@@ -7,10 +7,10 @@ Optimized for Raspberry Pi 4/5 with optional Coral USB Accelerator support.
 """
 
 import time
-import numpy as np
-from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Tuple
+from pathlib import Path
+
+import numpy as np
 
 # Try to import TFLite runtime (Pi-optimized) first, fall back to full TF
 try:
@@ -27,7 +27,7 @@ class Detection:
     class_id: int
     class_name: str
     confidence: float
-    bbox: Tuple[int, int, int, int]  # x1, y1, x2, y2
+    bbox: tuple[int, int, int, int]  # x1, y1, x2, y2
     drone_score: float  # 0-1, higher = more likely drone
 
     @property
@@ -111,7 +111,7 @@ class DroneDetector:
         print(f"  Quantized: {self.is_quantized}")
         print(f"  TFLite runtime: {USING_TFLITE_RUNTIME}")
 
-    def preprocess(self, frame: np.ndarray) -> Tuple[np.ndarray, float, float]:
+    def preprocess(self, frame: np.ndarray) -> tuple[np.ndarray, float, float]:
         """
         Preprocess frame for inference.
 
@@ -144,7 +144,7 @@ class DroneDetector:
         outputs: np.ndarray,
         x_scale: float,
         y_scale: float,
-    ) -> List[Detection]:
+    ) -> list[Detection]:
         """
         Post-process model outputs to detection results.
 
@@ -203,7 +203,7 @@ class DroneDetector:
         self,
         class_id: int,
         confidence: float,
-        bbox: Tuple[int, int, int, int],
+        bbox: tuple[int, int, int, int],
     ) -> float:
         """
         Calculate drone likelihood score using model output + heuristics.
@@ -238,7 +238,7 @@ class DroneDetector:
         # Clamp to [0, 1]
         return max(0.0, min(1.0, score))
 
-    def _nms(self, detections: List[Detection]) -> List[Detection]:
+    def _nms(self, detections: list[Detection]) -> list[Detection]:
         """Apply non-maximum suppression."""
         if len(detections) == 0:
             return []
@@ -258,7 +258,7 @@ class DroneDetector:
 
         return keep
 
-    def _iou(self, box1: Tuple, box2: Tuple) -> float:
+    def _iou(self, box1: tuple, box2: tuple) -> float:
         """Calculate intersection over union."""
         x1 = max(box1[0], box2[0])
         y1 = max(box1[1], box2[1])
@@ -274,7 +274,7 @@ class DroneDetector:
 
         return intersection / union if union > 0 else 0
 
-    def detect(self, frame: np.ndarray) -> Tuple[List[Detection], float]:
+    def detect(self, frame: np.ndarray) -> tuple[list[Detection], float]:
         """
         Run detection on a frame.
 
@@ -306,7 +306,7 @@ class DroneDetector:
 
 def draw_detections(
     frame: np.ndarray,
-    detections: List[Detection],
+    detections: list[Detection],
     inference_time: float = None,
 ) -> np.ndarray:
     """Draw detections on frame."""

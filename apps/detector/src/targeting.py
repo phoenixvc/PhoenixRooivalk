@@ -11,20 +11,20 @@ Ensure proper safety measures are in place before enabling.
 """
 
 import logging
-import time
 import math
-from enum import Enum
+import time
 from dataclasses import dataclass, field
-from typing import Optional, List, Tuple, Dict, Any
+from enum import Enum
+from typing import Any, Optional
 
-from .interfaces import Detection, BoundingBox, TrackedObject
-from .config.settings import TargetingSettings
 from .config.constants import (
-    DRONE_SIZE_DEFAULT,
     DEFAULT_FOCAL_LENGTH_MM,
     DEFAULT_SENSOR_WIDTH_MM,
+    DRONE_SIZE_DEFAULT,
     FIRE_NET_PULSE_DURATION,
 )
+from .config.settings import TargetingSettings
+from .interfaces import BoundingBox, Detection, TrackedObject
 
 logger = logging.getLogger("drone_detector.targeting")
 
@@ -62,9 +62,9 @@ class TargetLock:
     detection: Detection
     lock_time: float
     estimated_distance_m: float
-    estimated_velocity_ms: Tuple[float, float] = (0.0, 0.0)
-    confidence_history: List[float] = field(default_factory=list)
-    position_history: List[Tuple[int, int]] = field(default_factory=list)
+    estimated_velocity_ms: tuple[float, float] = (0.0, 0.0)
+    confidence_history: list[float] = field(default_factory=list)
+    position_history: list[tuple[int, int]] = field(default_factory=list)
 
     @property
     def average_confidence(self) -> float:
@@ -83,7 +83,7 @@ class TargetLock:
         """Number of frames with this lock."""
         return len(self.confidence_history)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for logging."""
         return {
             'track_id': self.track_id,
@@ -162,7 +162,7 @@ class DistanceEstimator:
 
     def estimate_from_tuple(
         self,
-        bbox: Tuple[int, int, int, int],
+        bbox: tuple[int, int, int, int],
         frame_width: int,
     ) -> float:
         """
@@ -235,7 +235,7 @@ class TargetingSystem:
 
     def update(
         self,
-        tracked_objects: List[TrackedObject],
+        tracked_objects: list[TrackedObject],
         frame_width: int,
     ) -> Optional[TargetLock]:
         """
@@ -267,9 +267,9 @@ class TargetingSystem:
 
     def _select_best_target(
         self,
-        tracked_objects: List[TrackedObject],
+        tracked_objects: list[TrackedObject],
         frame_width: int,
-    ) -> Optional[Tuple[TrackedObject, float]]:
+    ) -> Optional[tuple[TrackedObject, float]]:
         """Select best target based on confidence, distance, and track quality."""
         candidates = []
 
@@ -374,7 +374,7 @@ class TargetingSystem:
         """Check if current target can be engaged."""
         return self._state == TargetState.LOCKED and self._current_lock is not None
 
-    def get_lead_point(self) -> Optional[Tuple[int, int]]:
+    def get_lead_point(self) -> Optional[tuple[int, int]]:
         """
         Calculate lead point for interception.
 
@@ -402,7 +402,7 @@ class TargetingSystem:
         self._current_lock = None
         self._set_state(TargetState.SEARCHING)
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """Get targeting system status for display/logging."""
         return {
             'state': self._state.value,
@@ -502,7 +502,7 @@ class FireNetController:
         self,
         track: TrackedObject,
         estimated_distance: float,
-    ) -> Tuple[bool, EngagementResult]:
+    ) -> tuple[bool, EngagementResult]:
         """
         Check if all conditions are met for firing.
 
@@ -628,7 +628,7 @@ class FireNetController:
             self._gpio_initialized = False
             self._gpio = None
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """Get fire net status for display/logging."""
         return {
             'enabled': self.is_enabled,
@@ -675,10 +675,10 @@ class EngagementSystem:
 
     def update(
         self,
-        tracked_objects: List[TrackedObject],
+        tracked_objects: list[TrackedObject],
         frame_width: int,
         auto_engage: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Update engagement system.
 

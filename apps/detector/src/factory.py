@@ -9,31 +9,29 @@ This is the main entry point for assembling the system based on:
 """
 
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any, Optional
 
+from .alert_handlers import CompositeAlertHandler, ConsoleAlertHandler, create_alert_handler
+from .frame_sources import create_frame_source
+from .hardware import detect_hardware, print_hardware_report
+from .inference_engines import create_inference_engine
 from .interfaces import (
-    FrameSource,
-    InferenceEngine,
-    ObjectTracker,
     AlertHandler,
     FrameRenderer,
+    FrameSource,
     HardwareProfile,
+    InferenceEngine,
+    ObjectTracker,
     PipelineConfig,
 )
-from .hardware import detect_hardware, print_hardware_report
-from .frame_sources import create_frame_source
-from .inference_engines import create_inference_engine
-from .trackers import create_tracker
-from .alert_handlers import create_alert_handler, CompositeAlertHandler, ConsoleAlertHandler
 from .renderers import create_renderer
+from .trackers import create_tracker
 
 # Optional streaming imports
 try:
     from .streaming import (
-        StreamingRenderer,
-        StreamingManager,
-        create_streaming_renderer,
         create_streaming_manager,
+        create_streaming_renderer,
     )
     STREAMING_AVAILABLE = True
 except ImportError:

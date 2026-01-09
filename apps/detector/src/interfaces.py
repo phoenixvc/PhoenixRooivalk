@@ -9,10 +9,10 @@ based on available hardware on demo day.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Tuple, Optional, Dict, Any, Protocol
 from enum import Enum
-import numpy as np
+from typing import Any, Optional
 
+import numpy as np
 
 # ============================================================================
 # Data Classes
@@ -46,7 +46,7 @@ class BoundingBox:
         return self.y2 - self.y1
 
     @property
-    def center(self) -> Tuple[int, int]:
+    def center(self) -> tuple[int, int]:
         return ((self.x1 + self.x2) // 2, (self.y1 + self.y2) // 2)
 
     @property
@@ -57,7 +57,7 @@ class BoundingBox:
     def aspect_ratio(self) -> float:
         return self.width / self.height if self.height > 0 else 0
 
-    def to_tuple(self) -> Tuple[int, int, int, int]:
+    def to_tuple(self) -> tuple[int, int, int, int]:
         return (self.x1, self.y1, self.x2, self.y2)
 
 
@@ -70,7 +70,7 @@ class Detection:
     bbox: BoundingBox
     drone_score: float = 0.0
     track_id: Optional[int] = None  # Assigned by tracker
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def is_drone(self) -> bool:
@@ -95,17 +95,17 @@ class TrackedObject:
     detection: Detection
     frames_tracked: int = 1
     frames_since_seen: int = 0
-    velocity: Tuple[float, float] = (0.0, 0.0)  # pixels per frame
-    predicted_position: Optional[Tuple[int, int]] = None
+    velocity: tuple[float, float] = (0.0, 0.0)  # pixels per frame
+    predicted_position: Optional[tuple[int, int]] = None
 
 
 @dataclass
 class InferenceResult:
     """Result from running inference."""
-    detections: List[Detection]
+    detections: list[Detection]
     inference_time_ms: float
     model_name: str = "unknown"
-    input_shape: Tuple[int, ...] = (1, 320, 320, 3)
+    input_shape: tuple[int, ...] = (1, 320, 320, 3)
 
 
 # ============================================================================
@@ -131,16 +131,16 @@ class HardwareProfile:
     # Camera
     camera_type: str = "unknown"  # "picam_v2", "picam_v3", "usb", "file"
     camera_max_fps: int = 30
-    camera_max_resolution: Tuple[int, int] = (640, 480)
+    camera_max_resolution: tuple[int, int] = (640, 480)
 
     # Accelerator
     accelerator: AcceleratorType = AcceleratorType.NONE
     accelerator_available: bool = False
 
     # Recommended settings based on hardware
-    recommended_capture_resolution: Tuple[int, int] = (640, 480)
+    recommended_capture_resolution: tuple[int, int] = (640, 480)
     recommended_capture_fps: int = 30
-    recommended_model_input: Tuple[int, int] = (320, 320)
+    recommended_model_input: tuple[int, int] = (320, 320)
     recommended_inference_threads: int = 4
 
     def to_dict(self) -> dict:
@@ -193,7 +193,7 @@ class FrameSource(ABC):
 
     @property
     @abstractmethod
-    def resolution(self) -> Tuple[int, int]:
+    def resolution(self) -> tuple[int, int]:
         """Current resolution (width, height)."""
         pass
 
@@ -205,7 +205,7 @@ class FrameSource(ABC):
 
     @property
     @abstractmethod
-    def source_info(self) -> Dict[str, Any]:
+    def source_info(self) -> dict[str, Any]:
         """Information about the source for debugging."""
         pass
 
@@ -233,19 +233,19 @@ class InferenceEngine(ABC):
 
     @property
     @abstractmethod
-    def input_shape(self) -> Tuple[int, ...]:
+    def input_shape(self) -> tuple[int, ...]:
         """Expected input shape (batch, height, width, channels)."""
         pass
 
     @property
     @abstractmethod
-    def class_names(self) -> List[str]:
+    def class_names(self) -> list[str]:
         """List of class names the model can detect."""
         pass
 
     @property
     @abstractmethod
-    def engine_info(self) -> Dict[str, Any]:
+    def engine_info(self) -> dict[str, Any]:
         """Information about the engine for debugging."""
         pass
 
@@ -272,7 +272,7 @@ class ObjectTracker(ABC):
     """
 
     @abstractmethod
-    def update(self, detections: List[Detection], frame: Optional[np.ndarray] = None) -> List[TrackedObject]:
+    def update(self, detections: list[Detection], frame: Optional[np.ndarray] = None) -> list[TrackedObject]:
         """
         Update tracker with new detections.
 
@@ -292,13 +292,13 @@ class ObjectTracker(ABC):
 
     @property
     @abstractmethod
-    def active_tracks(self) -> List[TrackedObject]:
+    def active_tracks(self) -> list[TrackedObject]:
         """Currently active tracked objects."""
         pass
 
     @property
     @abstractmethod
-    def tracker_info(self) -> Dict[str, Any]:
+    def tracker_info(self) -> dict[str, Any]:
         """Information about the tracker for debugging."""
         pass
 
@@ -330,7 +330,7 @@ class AlertHandler(ABC):
 
     @property
     @abstractmethod
-    def handler_info(self) -> Dict[str, Any]:
+    def handler_info(self) -> dict[str, Any]:
         """Information about the handler for debugging."""
         pass
 
@@ -349,8 +349,8 @@ class FrameRenderer(ABC):
     def render(
         self,
         frame_data: FrameData,
-        detections: List[Detection],
-        tracked_objects: List[TrackedObject],
+        detections: list[Detection],
+        tracked_objects: list[TrackedObject],
         inference_time_ms: float,
     ) -> Optional[np.ndarray]:
         """
@@ -376,7 +376,7 @@ class FrameRenderer(ABC):
 
     @property
     @abstractmethod
-    def renderer_info(self) -> Dict[str, Any]:
+    def renderer_info(self) -> dict[str, Any]:
         """Information about the renderer for debugging."""
         pass
 

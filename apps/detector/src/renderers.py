@@ -5,11 +5,11 @@ Frame renderer implementations for visualization.
 Supports display via OpenCV, headless operation, or future web streaming.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import FrameRenderer, FrameData, Detection, TrackedObject
+from .interfaces import Detection, FrameData, FrameRenderer, TrackedObject
 
 
 class OpenCVRenderer(FrameRenderer):
@@ -21,9 +21,9 @@ class OpenCVRenderer(FrameRenderer):
         show_fps: bool = True,
         show_drone_score: bool = True,
         show_track_id: bool = True,
-        drone_color: Tuple[int, int, int] = (0, 0, 255),  # Red (BGR)
-        non_drone_color: Tuple[int, int, int] = (0, 255, 0),  # Green
-        prediction_color: Tuple[int, int, int] = (255, 165, 0),  # Orange
+        drone_color: tuple[int, int, int] = (0, 0, 255),  # Red (BGR)
+        non_drone_color: tuple[int, int, int] = (0, 255, 0),  # Green
+        prediction_color: tuple[int, int, int] = (255, 165, 0),  # Orange
     ):
         self._window_name = window_name
         self._show_fps = show_fps
@@ -37,8 +37,8 @@ class OpenCVRenderer(FrameRenderer):
     def render(
         self,
         frame_data: FrameData,
-        detections: List[Detection],
-        tracked_objects: List[TrackedObject],
+        detections: list[Detection],
+        tracked_objects: list[TrackedObject],
         inference_time_ms: float,
     ) -> Optional[np.ndarray]:
         import cv2
@@ -141,7 +141,7 @@ class OpenCVRenderer(FrameRenderer):
         self._window_created = False
 
     @property
-    def renderer_info(self) -> Dict[str, Any]:
+    def renderer_info(self) -> dict[str, Any]:
         return {
             'type': 'opencv',
             'window_name': self._window_name,
@@ -161,13 +161,13 @@ class HeadlessRenderer(FrameRenderer):
         self._log_interval = log_interval
         self._verbose = verbose
         self._frame_count = 0
-        self._fps_history: List[float] = []
+        self._fps_history: list[float] = []
 
     def render(
         self,
         frame_data: FrameData,
-        detections: List[Detection],
-        tracked_objects: List[TrackedObject],
+        detections: list[Detection],
+        tracked_objects: list[TrackedObject],
         inference_time_ms: float,
     ) -> Optional[np.ndarray]:
         self._frame_count += 1
@@ -198,7 +198,7 @@ class HeadlessRenderer(FrameRenderer):
         pass
 
     @property
-    def renderer_info(self) -> Dict[str, Any]:
+    def renderer_info(self) -> dict[str, Any]:
         return {
             'type': 'headless',
             'log_interval': self._log_interval,
@@ -231,9 +231,12 @@ def create_renderer(
     if renderer_type in ("auto", "opencv"):
         # Check if display is available
         try:
-            import cv2
-            # Try to check for display
+            import importlib.util
             import os
+
+            # Check if cv2 is available
+            if importlib.util.find_spec("cv2") is None:
+                raise ImportError("cv2 not available")
             if os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY'):
                 return OpenCVRenderer(
                     window_name=kwargs.get('window_name', 'Drone Detection'),

@@ -4,8 +4,7 @@ Geometric utilities for bounding boxes, IoU, and NMS.
 Centralized geometry operations to avoid code duplication.
 """
 
-from typing import List, Tuple, TypeVar, Callable, Optional, Protocol
-from dataclasses import dataclass
+from typing import Callable, Optional, Protocol, TypeVar
 
 # Type variable for generic detection objects
 T = TypeVar('T')
@@ -24,7 +23,7 @@ class HasBBox(Protocol):
 
 class BoundingBoxLike(Protocol):
     """Protocol for bounding box objects."""
-    def to_tuple(self) -> Tuple[int, int, int, int]:
+    def to_tuple(self) -> tuple[int, int, int, int]:
         ...
 
 
@@ -33,8 +32,8 @@ class BoundingBoxLike(Protocol):
 # =============================================================================
 
 def calculate_iou(
-    box1: Tuple[int, int, int, int],
-    box2: Tuple[int, int, int, int],
+    box1: tuple[int, int, int, int],
+    box2: tuple[int, int, int, int],
 ) -> float:
     """
     Calculate Intersection over Union (IoU) for two bounding boxes.
@@ -66,11 +65,11 @@ def calculate_iou(
 
 
 def non_max_suppression(
-    detections: List[T],
+    detections: list[T],
     iou_threshold: float = 0.45,
     confidence_key: Optional[Callable[[T], float]] = None,
-    bbox_key: Optional[Callable[[T], Tuple[int, int, int, int]]] = None,
-) -> List[T]:
+    bbox_key: Optional[Callable[[T], tuple[int, int, int, int]]] = None,
+) -> list[T]:
     """
     Apply Non-Maximum Suppression to a list of detections.
 
@@ -88,9 +87,11 @@ def non_max_suppression(
 
     # Default key functions for Detection-like objects
     if confidence_key is None:
-        confidence_key = lambda d: d.confidence
+        def confidence_key(d):
+            return d.confidence
     if bbox_key is None:
-        bbox_key = lambda d: d.bbox.to_tuple() if hasattr(d.bbox, 'to_tuple') else d.bbox
+        def bbox_key(d):
+            return d.bbox.to_tuple() if hasattr(d.bbox, 'to_tuple') else d.bbox
 
     # Sort by confidence (descending)
     sorted_dets = sorted(detections, key=confidence_key, reverse=True)
@@ -112,13 +113,13 @@ def non_max_suppression(
 
 
 def scale_bbox(
-    bbox: Tuple[float, float, float, float],
+    bbox: tuple[float, float, float, float],
     x_scale: float,
     y_scale: float,
     clamp_min: int = 0,
     clamp_max_x: Optional[int] = None,
     clamp_max_y: Optional[int] = None,
-) -> Tuple[int, int, int, int]:
+) -> tuple[int, int, int, int]:
     """
     Scale a bounding box and convert to integer coordinates.
 
@@ -155,7 +156,7 @@ def center_to_corners(
     y_center: float,
     width: float,
     height: float,
-) -> Tuple[float, float, float, float]:
+) -> tuple[float, float, float, float]:
     """
     Convert center format (x_center, y_center, w, h) to corner format (x1, y1, x2, y2).
 
@@ -180,7 +181,7 @@ def corners_to_center(
     y1: float,
     x2: float,
     y2: float,
-) -> Tuple[float, float, float, float]:
+) -> tuple[float, float, float, float]:
     """
     Convert corner format (x1, y1, x2, y2) to center format (x_center, y_center, w, h).
 
@@ -199,7 +200,7 @@ def corners_to_center(
 
 
 def calculate_aspect_ratio(
-    bbox: Tuple[int, int, int, int],
+    bbox: tuple[int, int, int, int],
 ) -> float:
     """
     Calculate aspect ratio (width / height) of a bounding box.
@@ -216,7 +217,7 @@ def calculate_aspect_ratio(
 
 
 def calculate_area(
-    bbox: Tuple[int, int, int, int],
+    bbox: tuple[int, int, int, int],
 ) -> int:
     """
     Calculate area of a bounding box.
@@ -233,8 +234,8 @@ def calculate_area(
 
 
 def calculate_center(
-    bbox: Tuple[int, int, int, int],
-) -> Tuple[int, int]:
+    bbox: tuple[int, int, int, int],
+) -> tuple[int, int]:
     """
     Calculate center point of a bounding box.
 
@@ -250,8 +251,8 @@ def calculate_center(
 
 
 def calculate_distance(
-    point1: Tuple[float, float],
-    point2: Tuple[float, float],
+    point1: tuple[float, float],
+    point2: tuple[float, float],
 ) -> float:
     """
     Calculate Euclidean distance between two points.
@@ -270,10 +271,10 @@ def calculate_distance(
 
 
 def expand_bbox(
-    bbox: Tuple[int, int, int, int],
+    bbox: tuple[int, int, int, int],
     factor: float = 1.0,
     padding: int = 0,
-) -> Tuple[int, int, int, int]:
+) -> tuple[int, int, int, int]:
     """
     Expand a bounding box by a factor and/or padding.
 
@@ -307,10 +308,10 @@ def expand_bbox(
 
 
 def clip_bbox(
-    bbox: Tuple[int, int, int, int],
+    bbox: tuple[int, int, int, int],
     width: int,
     height: int,
-) -> Tuple[int, int, int, int]:
+) -> tuple[int, int, int, int]:
     """
     Clip a bounding box to image boundaries.
 

@@ -12,16 +12,15 @@ Endpoints:
 """
 
 import asyncio
-import time
-import threading
 import logging
-from typing import Dict, Any, Optional, List
-from dataclasses import dataclass, field
-from queue import Queue, Empty
+import threading
+import time
+from dataclasses import dataclass
+from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import FrameRenderer, FrameData, Detection, TrackedObject
+from .interfaces import Detection, FrameData, FrameRenderer, TrackedObject
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,7 @@ class FrameBuffer:
         self._buffer: Optional[StreamFrame] = None
         self._lock = threading.Lock()
         self._new_frame = threading.Event()
-        self._subscribers: List[asyncio.Queue] = []
+        self._subscribers: list[asyncio.Queue] = []
         self._subscribers_lock = threading.Lock()
 
     def put(self, frame: StreamFrame) -> None:
@@ -132,8 +131,8 @@ class StreamingRenderer(FrameRenderer):
     def render(
         self,
         frame_data: FrameData,
-        detections: List[Detection],
-        tracked_objects: List[TrackedObject],
+        detections: list[Detection],
+        tracked_objects: list[TrackedObject],
         inference_time_ms: float,
     ) -> Optional[np.ndarray]:
         # Call base renderer if available
@@ -204,7 +203,7 @@ class StreamingRenderer(FrameRenderer):
             self._base_renderer.close()
 
     @property
-    def renderer_info(self) -> Dict[str, Any]:
+    def renderer_info(self) -> dict[str, Any]:
         base_info = {}
         if self._base_renderer:
             base_info = self._base_renderer.renderer_info
@@ -259,9 +258,9 @@ class MJPEGStreamServer:
         self._total_requests = 0
 
         # System status (updated externally)
-        self._system_status: Dict[str, Any] = {}
+        self._system_status: dict[str, Any] = {}
 
-    def set_system_status(self, status: Dict[str, Any]) -> None:
+    def set_system_status(self, status: dict[str, Any]) -> None:
         """Update system status for /status endpoint."""
         self._system_status = status
 
@@ -598,7 +597,7 @@ class StreamingManager:
             self._thread.join(timeout=5.0)
             self._thread = None
 
-    def set_system_status(self, status: Dict[str, Any]) -> None:
+    def set_system_status(self, status: dict[str, Any]) -> None:
         """Update system status for /status endpoint."""
         if self._server:
             self._server.set_system_status(status)

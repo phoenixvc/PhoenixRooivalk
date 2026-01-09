@@ -7,17 +7,17 @@ based on what's available on demo day.
 """
 
 import time
-from typing import List, Dict, Any, Tuple, Optional
 from pathlib import Path
+from typing import Any, Optional
 
 import numpy as np
 
 from .interfaces import (
+    BoundingBox,
+    Detection,
+    DroneScorer,
     InferenceEngine,
     InferenceResult,
-    Detection,
-    BoundingBox,
-    DroneScorer,
 )
 
 
@@ -77,7 +77,7 @@ class BaseInferenceEngine(InferenceEngine):
         confidence_threshold: float = 0.5,
         nms_threshold: float = 0.45,
         num_threads: int = 4,
-        class_names: List[str] = None,
+        class_names: list[str] = None,
         scorer: DroneScorer = None,
     ):
         self._confidence_threshold = confidence_threshold
@@ -86,7 +86,7 @@ class BaseInferenceEngine(InferenceEngine):
         self._class_names = class_names or self.DEFAULT_CLASS_NAMES
         self._scorer = scorer or AspectRatioDroneScorer()
         self._model_path: Optional[str] = None
-        self._input_shape: Tuple[int, ...] = (1, 320, 320, 3)
+        self._input_shape: tuple[int, ...] = (1, 320, 320, 3)
         self._is_quantized = False
 
     def set_confidence_threshold(self, threshold: float) -> None:
@@ -96,14 +96,14 @@ class BaseInferenceEngine(InferenceEngine):
         self._nms_threshold = threshold
 
     @property
-    def input_shape(self) -> Tuple[int, ...]:
+    def input_shape(self) -> tuple[int, ...]:
         return self._input_shape
 
     @property
-    def class_names(self) -> List[str]:
+    def class_names(self) -> list[str]:
         return self._class_names
 
-    def _preprocess(self, frame: np.ndarray) -> Tuple[np.ndarray, float, float]:
+    def _preprocess(self, frame: np.ndarray) -> tuple[np.ndarray, float, float]:
         """Preprocess frame for inference."""
         import cv2
 
@@ -132,7 +132,7 @@ class BaseInferenceEngine(InferenceEngine):
         outputs: np.ndarray,
         x_scale: float,
         y_scale: float,
-    ) -> List[Detection]:
+    ) -> list[Detection]:
         """Post-process YOLO outputs to detections."""
         detections = []
 
@@ -185,7 +185,7 @@ class BaseInferenceEngine(InferenceEngine):
         # Apply NMS
         return self._nms(detections)
 
-    def _nms(self, detections: List[Detection]) -> List[Detection]:
+    def _nms(self, detections: list[Detection]) -> list[Detection]:
         """Apply non-maximum suppression."""
         if len(detections) == 0:
             return []
@@ -286,7 +286,7 @@ class TFLiteEngine(BaseInferenceEngine):
         )
 
     @property
-    def engine_info(self) -> Dict[str, Any]:
+    def engine_info(self) -> dict[str, Any]:
         return {
             'type': 'tflite',
             'model_path': self._model_path,
@@ -356,7 +356,7 @@ class CoralEngine(BaseInferenceEngine):
         )
 
     @property
-    def engine_info(self) -> Dict[str, Any]:
+    def engine_info(self) -> dict[str, Any]:
         return {
             'type': 'coral',
             'model_path': self._model_path,
@@ -457,7 +457,7 @@ class ONNXEngine(BaseInferenceEngine):
         )
 
     @property
-    def engine_info(self) -> Dict[str, Any]:
+    def engine_info(self) -> dict[str, Any]:
         return {
             'type': 'onnx',
             'model_path': self._model_path,
@@ -519,7 +519,7 @@ class MockInferenceEngine(BaseInferenceEngine):
         )
 
     @property
-    def engine_info(self) -> Dict[str, Any]:
+    def engine_info(self) -> dict[str, Any]:
         return {
             'type': 'mock',
             'simulate_latency_ms': self._simulate_latency_ms,

@@ -5,7 +5,6 @@ These values should never be configured at runtime.
 For configurable values, use settings.py instead.
 """
 
-from typing import Dict, Tuple, Set
 
 # =============================================================================
 # Version & Identity
@@ -19,15 +18,15 @@ APP_DESCRIPTION = "Real-time drone detection for Raspberry Pi"
 # Supported Formats
 # =============================================================================
 
-SUPPORTED_MODEL_EXTENSIONS: Set[str] = {'.tflite', '.onnx'}
-SUPPORTED_VIDEO_EXTENSIONS: Set[str] = {'.mp4', '.avi', '.mkv', '.mov', '.webm'}
-SUPPORTED_IMAGE_EXTENSIONS: Set[str] = {'.jpg', '.jpeg', '.png', '.bmp', '.webp'}
+SUPPORTED_MODEL_EXTENSIONS: set[str] = {'.tflite', '.onnx'}
+SUPPORTED_VIDEO_EXTENSIONS: set[str] = {'.mp4', '.avi', '.mkv', '.mov', '.webm'}
+SUPPORTED_IMAGE_EXTENSIONS: set[str] = {'.jpg', '.jpeg', '.png', '.bmp', '.webp'}
 
 # =============================================================================
 # Camera Sensors
 # =============================================================================
 
-PI_CAMERA_SENSORS: Dict[str, Dict] = {
+PI_CAMERA_SENSORS: dict[str, dict] = {
     'imx219': {
         'name': 'Pi Camera Module v2',
         'max_resolution': (3280, 2464),
@@ -78,7 +77,7 @@ DEFAULT_SENSOR_WIDTH_MM = 3.68
 # Platform Identifiers
 # =============================================================================
 
-PI_SOC_MODELS: Dict[str, str] = {
+PI_SOC_MODELS: dict[str, str] = {
     'bcm2711': 'pi4',
     'bcm2712': 'pi5',
     'bcm2837': 'pi3',
@@ -180,7 +179,7 @@ DRONE_SPEED_MAX = 50.0  # ~180 km/h - racing drones
 # Colors (BGR format for OpenCV)
 # =============================================================================
 
-COLORS: Dict[str, Tuple[int, int, int]] = {
+COLORS: dict[str, tuple[int, int, int]] = {
     # Detection states
     'drone': (0, 0, 255),           # Red
     'drone_locked': (0, 255, 255),  # Yellow
