@@ -1,0 +1,240 @@
+---
+id: hardware-signoff-runbook
+title: "Hardware Signoff Runbook: Pieter ↔ Jurie Workflow"
+sidebar_label: Hardware Signoff
+difficulty: beginner
+timeEstimate: 10
+xpReward: 25
+phase: ["seed", "series-a"]
+tags:
+  - playbook
+  - hardware
+  - signoff
+  - workflow
+---
+
+# Hardware Signoff Runbook
+
+**Standard workflow for hardware/software signoff between Pieter (Hardware) and
+Jurie (Software).**
+
+> **Note:** Pieter is in Cape Town, Jurie is in Bela Bela - all collaboration is
+> remote via WhatsApp, video calls, and cloud storage.
+
+---
+
+## Roles & Responsibilities
+
+| Role              | Person           | Location  | Focus Areas                                                 |
+| ----------------- | ---------------- | --------- | ----------------------------------------------------------- |
+| **Hardware Lead** | Pieter La Grange | Cape Town | Mechanical assembly, electronics, testing, drone operations |
+| **Software Lead** | Jurie Smit       | Bela Bela | Edge AI, training pipeline, documentation, integration      |
+
+---
+
+## Signoff Workflow
+
+### 1. Hardware Milestone Completion
+
+When Pieter completes a hardware milestone:
+
+- [ ] Take photos of completed work (multiple angles)
+- [ ] Document any deviations from spec
+- [ ] Note any issues discovered during assembly/testing
+- [ ] Send via WhatsApp with brief description
+
+### 2. Software Integration Check
+
+When Jurie receives hardware update:
+
+- [ ] Review photos and notes
+- [ ] Update documentation (week report, specs)
+- [ ] Flag any software integration concerns
+- [ ] Confirm milestone in weekly report
+
+### 3. Joint Signoff Required
+
+For major milestones, both must approve:
+
+- [ ] Prototype assembly milestones (40%, 60%, 80%, 100%)
+- [ ] Test flight results
+- [ ] Production readiness decisions
+- [ ] BOM changes over 10%
+
+---
+
+## Hardware Status Tracking
+
+### Current Hardware Inventory
+
+| Item                   | Status           | Location | Owner  |
+| ---------------------- | ---------------- | -------- | ------ |
+| Pi 4 (2GB)             | Active demo      | Pieter   | Pieter |
+| Small quads (2x)       | Training targets | Pieter   | Pieter |
+| Hexacopter             | In development   | Workshop | Pieter |
+| PVC launcher prototype | Testing          | Pieter   | Pieter |
+
+### Drone Fleet for Training Data
+
+| Drone              | Type             | Size Class     | Status      |
+| ------------------ | ---------------- | -------------- | ----------- |
+| Black carbon quad  | Racing/freestyle | Small (~250mm) | Available   |
+| Orange/yellow quad | Micro            | Tiny (~100mm)  | Available   |
+| Hexacopter         | Professional     | Large (~600mm) | In progress |
+
+---
+
+## Photo Documentation Standards
+
+### Required Shots
+
+For each hardware milestone:
+
+1. **Overview shot** - Full assembly from 1-2m distance
+2. **Detail shots** - Key components, connections, modifications
+3. **Scale reference** - Include ruler/known object for size
+4. **Issue documentation** - Photo any problems found
+
+### File Naming Convention
+
+```
+YYYY-MM-DD_component_description.jpg
+```
+
+Example: `2026-01-08_hexacopter_wiring.jpg`
+
+### Storage & Sharing
+
+1. **WhatsApp**: Quick photo shares for review
+2. **Google Drive / OneDrive**: High-res photos for documentation
+3. **Repo**: Final approved photos go to `/apps/docs/static/img/hardware/`
+
+Pieter sends photos via WhatsApp → Jurie downloads and adds to repo.
+
+---
+
+## Communication Protocol (Remote)
+
+### Daily (as needed)
+
+| Method         | Use Case                        |
+| -------------- | ------------------------------- |
+| WhatsApp text  | Quick updates, questions        |
+| WhatsApp photo | Hardware progress, issue photos |
+| Voice notes    | Complex explanations            |
+
+### Weekly
+
+- Video call if needed (Google Meet / WhatsApp)
+- Summary of hardware progress for weekly report
+- List of blockers or parts needed
+- Updated timeline if changed
+
+### For Complex Issues
+
+1. WhatsApp call for quick discussion
+2. Video call with screen share if showing software
+3. Pieter can share phone camera for live hardware view
+
+### Escalation
+
+If blocked >24 hours:
+
+1. WhatsApp message with details
+2. If no response in 4 hours, call
+3. Document blocker in weekly report
+
+---
+
+## Hardware Milestone Checklist
+
+### Launcher Prototype
+
+- [x] PVC tube assembly
+- [x] Solenoid valve integration
+- [ ] Trigger mechanism wiring
+- [ ] Pressure testing
+- [ ] Net deployment test
+- [ ] Range validation (50m target)
+
+### Detection System (Demo)
+
+- [x] Pi 4 setup
+- [x] Camera module integration
+- [ ] Enclosure design
+- [ ] Power management
+- [ ] Field testing
+
+### Training Targets
+
+- [x] Small quads acquired (2x)
+- [x] Hexacopter in progress
+- [ ] Flight testing all drones
+- [ ] Capture training footage (~600 images)
+
+---
+
+## Signoff Template
+
+Use this format when signing off milestones:
+
+```markdown
+## [Milestone Name] Signoff
+
+**Date:** YYYY-MM-DD **Hardware Lead:** Pieter La Grange **Software Lead:**
+Jurie Smit
+
+### Deliverables
+
+- [ ] Item 1
+- [ ] Item 2
+
+### Hardware Signoff
+
+- [ ] Assembly complete
+- [ ] Tested and functional
+- [ ] Photos documented
+- [ ] Pieter approved: \***\*\_\_\_\*\***
+
+### Software Signoff
+
+- [ ] Documentation updated
+- [ ] Integration verified (if applicable)
+- [ ] Jurie approved: \***\*\_\_\_\*\***
+
+### Notes
+
+[Any deviations, issues, or follow-ups]
+```
+
+---
+
+## Current Week Status
+
+### Week 1 (Dec 19, 2025 - Jan 8, 2026)
+
+**Hardware Updates from Pieter:**
+
+1. **Training Drones Ready**
+   - 2x small quadcopters available for training data capture
+   - Hexacopter in development for larger target class
+
+2. **Launcher Prototype**
+   - PVC tube assembly complete
+   - Solenoid valve mounted
+   - Awaiting trigger wiring and pressure testing
+
+3. **Detection Demo**
+   - Pi 4 (2GB) confirmed as demo hardware
+   - 12-18 FPS achieved with YOLOv8n
+   - Camera: 30fps @ 1080p capable
+
+**Next Hardware Priorities:**
+
+- Complete hexacopter assembly
+- Capture training footage (target: 200+ images per drone type)
+- Pressure test launcher prototype
+
+---
+
+_Last Updated: January 8, 2026_

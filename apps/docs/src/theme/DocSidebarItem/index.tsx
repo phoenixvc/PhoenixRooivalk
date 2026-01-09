@@ -6,11 +6,22 @@
  * will be hidden from the sidebar.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, type JSX } from "react";
 import DocSidebarItemOriginal from "@theme-original/DocSidebarItem";
 import type { Props } from "@theme/DocSidebarItem";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import { usePhaseFilterSafe, Phase } from "../../contexts/PhaseFilterContext";
+
+// Extend sidebar item type to include doc type which exists in raw config
+// Use string for type to allow runtime checking for "doc" type that Docusaurus
+// uses in raw config but transforms to "link" in processed sidebar
+interface ExtendedSidebarItem {
+  type: string;
+  docId?: string;
+  id?: string;
+  href?: string;
+  items?: Props["item"][];
+}
 
 // Type for the plugin's global data
 interface PhasePluginData {
@@ -36,28 +47,24 @@ function usePhaseMap(): Record<string, Phase[]> {
  * Get the docId from a sidebar item, handling various formats
  */
 function getDocId(item: Props["item"]): string | null {
-  if (item.type !== "doc") {
+  const extItem = item as ExtendedSidebarItem;
+
+  // Check for doc type (raw config) or link type (processed)
+  if (extItem.type !== "doc" && extItem.type !== "link") {
     return null;
   }
 
-  // Try different properties that might hold the doc ID
-  const docItem = item as {
-    docId?: string;
-    id?: string;
-    href?: string;
-  };
-
-  if (docItem.docId) {
-    return docItem.docId;
+  if (extItem.docId) {
+    return extItem.docId;
   }
 
-  if (docItem.id) {
-    return docItem.id;
+  if (extItem.id) {
+    return extItem.id;
   }
 
   // Extract from href if available
-  if (docItem.href) {
-    const match = docItem.href.match(/\/docs\/(.+?)(?:\/?$)/);
+  if (extItem.href) {
+    const match = extItem.href.match(/\/docs\/(.+?)(?:\/?$)/);
     if (match) {
       return match[1];
     }
@@ -80,8 +87,9 @@ function shouldShowItem(
     return true;
   }
 
-  // For doc items, check their phase metadata
-  if (item.type === "doc") {
+  // For doc/link items, check their phase metadata
+  const extItem = item as ExtendedSidebarItem;
+  if (extItem.type === "doc" || extItem.type === "link") {
     const docId = getDocId(item);
 
     if (docId) {

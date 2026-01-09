@@ -7,6 +7,7 @@ import {
   WaveManager,
   calculateDifficultyScaling,
   generateWaveConfig,
+  type SpawnEvent,
 } from "../components/utils/waveManager";
 
 describe("calculateDifficultyScaling", () => {
@@ -138,15 +139,15 @@ describe("generateWaveConfig", () => {
 
 describe("WaveManager", () => {
   let manager: WaveManager;
-  let onSpawnThreat: ReturnType<typeof vi.fn>;
-  let onWaveComplete: ReturnType<typeof vi.fn>;
-  let onGameComplete: ReturnType<typeof vi.fn>;
+  let onSpawnThreat: ReturnType<typeof vi.fn<(event: SpawnEvent) => void>>;
+  let onWaveComplete: ReturnType<typeof vi.fn<(waveNumber: number) => void>>;
+  let onGameComplete: ReturnType<typeof vi.fn<() => void>>;
 
   beforeEach(() => {
     vi.useFakeTimers();
-    onSpawnThreat = vi.fn();
-    onWaveComplete = vi.fn();
-    onGameComplete = vi.fn();
+    onSpawnThreat = vi.fn<(event: SpawnEvent) => void>();
+    onWaveComplete = vi.fn<(waveNumber: number) => void>();
+    onGameComplete = vi.fn<() => void>();
     manager = new WaveManager(onSpawnThreat, onWaveComplete, onGameComplete);
   });
 

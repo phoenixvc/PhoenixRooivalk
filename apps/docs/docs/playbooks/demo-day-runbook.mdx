@@ -1,0 +1,428 @@
+---
+id: demo-day-runbook
+title: "Demo Day Runbook: Pi Drone Detector Live Demo"
+sidebar_label: Demo Day Runbook
+difficulty: beginner
+timeEstimate: 5
+xpReward: 25
+phase: ["seed"]
+tags:
+  - playbook
+  - demo
+  - hardware
+  - operations
+---
+
+# Demo Day Runbook
+
+**Step-by-step guide for Pieter to run the Pi Drone Detector demo.**
+
+> **Remote Support:** Jurie on standby via WhatsApp during demo.
+
+---
+
+## Quick Reference Card
+
+Print this section and keep it next to the Pi.
+
+| Action              | Command / Step                    |
+| ------------------- | --------------------------------- |
+| Start detection     | `python3 ~/detector/detect.py`    |
+| Stop detection      | `Ctrl+C`                          |
+| Check FPS           | Look for `FPS: XX` in terminal    |
+| Expected FPS        | 12-18 FPS                         |
+| False positive test | Loop Coke can - should NOT detect |
+| Restart Pi          | `sudo reboot`                     |
+| Check camera        | `libcamera-hello --list-cameras`  |
+| Call Jurie          | WhatsApp if issues                |
+
+---
+
+## T-30 Minutes: Pre-Demo Setup
+
+### Hardware Check
+
+- [ ] Pi 4 powered on (solid green LED)
+- [ ] Camera ribbon cable secure (check both ends)
+- [ ] microSD card seated properly
+- [ ] Power supply connected (5V 3A USB-C)
+- [ ] Pi positioned with camera facing demo area
+
+### Network Check (if needed)
+
+- [ ] WiFi connected OR ethernet plugged in
+- [ ] Can reach Jurie on WhatsApp
+
+### Software Check
+
+Open terminal on Pi (SSH or direct):
+
+```bash
+# Check camera is detected
+libcamera-hello --list-cameras
+# Should show: Available cameras: 1
+
+# Check model file exists
+ls -la ~/models/yolov8n_drone.onnx
+# Should show file size ~12MB
+
+# Check detector script exists
+ls -la ~/detector/detect.py
+# Should show the script
+```
+
+### Quick Test Run
+
+```bash
+cd ~/detector
+python3 detect.py
+```
+
+**Look for:**
+
+```
+[INFO] Loading model: yolov8n_drone.onnx
+[INFO] Camera initialized: 640x480 @ 30fps
+[INFO] Starting detection loop...
+[INFO] FPS: 15.2 | Detections: 0
+```
+
+**Test with Coke can:** Loop a Coke can in front of camera at arm's length. The
+model should **NOT** detect it as a drone - this proves the model can
+distinguish drones from random objects (low false positive rate).
+
+Press `Ctrl+C` to stop.
+
+- [ ] Test run successful
+- [ ] FPS shows 12-18
+- [ ] Coke can NOT detected as drone (proves accuracy)
+
+---
+
+## T-10 Minutes: Final Prep
+
+### Message Jurie
+
+Send WhatsApp: "Starting demo in 10 min, all systems go" (or report any issues)
+
+### Prepare Demo Area
+
+- [ ] Camera has clear view of sky/demo area
+- [ ] No obstructions in camera field of view
+- [ ] Training drones charged and ready
+- [ ] Launcher prototype visible (if showing)
+
+### Start Detection Script
+
+```bash
+cd ~/detector
+python3 detect.py
+```
+
+Leave terminal visible - this is what you'll show during demo.
+
+---
+
+## Demo Script (5-10 minutes)
+
+### Opening (30 seconds)
+
+**Say:** "This is our Pi Drone Detector running on a $50 Raspberry Pi 4. It's
+using a YOLOv8 nano model to detect drones in real-time."
+
+**Show:** Point to the Pi and camera setup.
+
+### False Positive Test - Coke Can Demo (1-2 minutes)
+
+> **Key demo:** Show the model correctly rejects non-drone objects.
+
+**Say:** "Watch the terminal - it's processing video at 12-18 frames per second.
+Let me show you how accurate this is."
+
+**Action:** Loop a Coke can slowly in front of the camera at arm's length.
+
+**Say:** "See? The system sees the object but correctly identifies it's NOT a
+drone. Zero false positives. This is critical - you don't want security alerts
+every time a bird flies by or someone waves their coffee cup."
+
+**Show:** Point to terminal still showing:
+
+```
+[INFO] FPS: 15.1 | Detections: 0
+```
+
+**Say:** "The model is trained to distinguish drones from everyday objects,
+birds, and aircraft. It only alerts on actual drone signatures."
+
+### Live Detection - With Drone (if available)
+
+**Action:** Have someone fly a training drone into camera view.
+
+**Say:** "Now watch what happens with an actual drone..."
+
+**Say:** "There - drone detected instantly. You can see the confidence score -
+that's how certain the AI is. The same model that ignored the Coke can
+immediately recognizes the drone."
+
+**Show:** Point to terminal showing:
+
+```
+[INFO] FPS: 14.8 | Detections: 1 (drone: 0.87)
+```
+
+### Multi-Target (if available) (1-2 minutes)
+
+**Action:** Fly second drone into view.
+
+**Say:** "The system can track multiple targets simultaneously. Each gets its
+own bounding box and confidence score."
+
+### Edge AI Explanation (1 minute)
+
+**Say:** "This runs entirely on-device - no cloud, no internet required. In
+production, we use NVIDIA Jetson for even faster response times under 200
+milliseconds. The Pi demo proves our approach works on constrained hardware."
+
+### Closing (30 seconds)
+
+**Say:** "That's real-time drone detection running on edge hardware. The next
+step is integrating this with our net launcher for autonomous interception."
+
+---
+
+## Troubleshooting Quick Fixes
+
+### "Camera not found"
+
+```bash
+# Check connection
+libcamera-hello --list-cameras
+
+# If no cameras shown:
+# 1. Power off Pi
+# 2. Reseat ribbon cable at both ends
+# 3. Power on and retry
+```
+
+**Time to fix:** 2 minutes
+
+### Low FPS (below 10)
+
+```bash
+# Restart with lower resolution
+python3 detect.py --resolution 480x360
+```
+
+**Time to fix:** 30 seconds
+
+### "Model not found" error
+
+```bash
+# Check model location
+ls ~/models/
+
+# If missing, re-download from shared link
+# Or call Jurie for new link
+```
+
+**Time to fix:** 2-5 minutes (need download)
+
+### Script crashes / Python error
+
+```bash
+# Restart script
+python3 detect.py
+
+# If still crashes, reboot Pi
+sudo reboot
+# Wait 60 seconds, SSH back in, restart script
+```
+
+**Time to fix:** 1-2 minutes
+
+### No detections (drone in view but not detected)
+
+```bash
+# Lower confidence threshold
+python3 detect.py --conf 0.3
+```
+
+**Say to audience:** "Adjusting sensitivity for current lighting conditions."
+
+**Time to fix:** 30 seconds
+
+---
+
+## If Something Goes Wrong
+
+### Minor Issue (< 2 min fix)
+
+1. Stay calm, explain: "Just adjusting a setting"
+2. Apply quick fix from above
+3. Continue demo
+
+### Major Issue (can't fix quickly)
+
+1. Say: "Let me show you the recorded demo while we sort this out"
+2. Play backup video from phone/laptop
+3. WhatsApp Jurie: "Demo issue - [describe problem]"
+4. If Jurie can help via SSH, let them fix it
+5. Return to live demo if fixed
+
+### Complete Failure
+
+1. Switch to recorded demo video
+2. Explain: "This is recorded footage of the same system working"
+3. Focus on explaining the technology
+4. Offer to schedule follow-up live demo
+
+---
+
+## Post-Demo
+
+### Save Logs (if recording)
+
+```bash
+# If you started with --save-log
+# Logs are in ~/logs/
+
+# Copy today's log
+cp ~/logs/latest.log ~/logs/demo_$(date +%Y%m%d).log
+```
+
+### Shutdown Properly
+
+```bash
+# Stop detection script
+Ctrl+C
+
+# Shutdown Pi safely
+sudo shutdown -h now
+```
+
+Wait for green LED to stop blinking before unplugging power.
+
+### Report to Jurie
+
+WhatsApp after demo:
+
+- Did detection work? Y/N
+- How many drones detected?
+- Any issues?
+- Audience reaction?
+- Photos/video of demo?
+
+---
+
+## Demo Configurations
+
+### Standard Demo (Recommended)
+
+```bash
+python3 detect.py
+```
+
+- Resolution: 640x480
+- Confidence: 0.5
+- Shows terminal output
+
+### With Video Recording
+
+```bash
+python3 detect.py --save-video ~/logs/demo.mp4
+```
+
+- Records output with bounding boxes
+- Use for sharing after demo
+
+### With Preview Window (if monitor connected)
+
+```bash
+python3 detect.py --preview
+```
+
+- Shows live video with bounding boxes
+- Better for audience viewing
+
+### Low-Light / Difficult Conditions
+
+```bash
+python3 detect.py --conf 0.3
+```
+
+- More sensitive detection
+- May have more false positives
+
+---
+
+## Hardware Diagram
+
+```
+┌─────────────────────────────────────────┐
+│                                         │
+│   ┌─────────┐     ┌─────────────────┐   │
+│   │ Camera  │────▶│  Raspberry Pi 4 │   │
+│   │ Module  │     │     (2GB)       │   │
+│   └─────────┘     └────────┬────────┘   │
+│                            │            │
+│                            ▼            │
+│                    ┌───────────────┐    │
+│                    │   Terminal    │    │
+│                    │  (Detection   │    │
+│                    │    Output)    │    │
+│                    └───────────────┘    │
+│                                         │
+└─────────────────────────────────────────┘
+
+Power: 5V 3A USB-C
+Camera: Pi Camera Module v2/v3
+Resolution: 640x480 @ 30fps
+FPS: 12-18 (detection rate)
+```
+
+---
+
+## Contact
+
+| Issue              | Contact        | Method         |
+| ------------------ | -------------- | -------------- |
+| Software problem   | Jurie          | WhatsApp       |
+| Can't fix in 2 min | Jurie          | WhatsApp call  |
+| Hardware broke     | Handle locally | -              |
+| Need new model     | Jurie          | Request upload |
+
+---
+
+## Checklist Summary
+
+### 30 min before
+
+- [ ] Pi powered and green LED solid
+- [ ] Camera connected
+- [ ] Test run successful (12-18 FPS)
+- [ ] Coke can test passed (NOT detected as drone)
+- [ ] Drones ready (if outdoor demo)
+
+### 10 min before
+
+- [ ] Message Jurie "all systems go"
+- [ ] Detection script running
+- [ ] Camera pointed at demo area
+- [ ] Coke can ready for false positive demo
+
+### During demo
+
+- [ ] Show terminal output
+- [ ] Fly drone into view
+- [ ] Explain edge AI benefits
+- [ ] Handle any issues calmly
+
+### After demo
+
+- [ ] Save logs if needed
+- [ ] Shutdown Pi properly
+- [ ] Report to Jurie
+
+---
+
+_Last Updated: January 8, 2026_

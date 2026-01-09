@@ -226,17 +226,21 @@ describe("RateLimitedExecutor", () => {
       jest.fn().mockResolvedValue("2"),
       jest.fn().mockResolvedValue("3"),
       jest.fn().mockResolvedValue("4"),
+      jest.fn().mockResolvedValue("5"),
     ];
 
     fns.forEach((fn) => executor.execute(fn));
 
-    // With max queue of 3, oldest should be dropped
+    // With max queue of 3, oldest pending items should be dropped
+    // First function executes immediately (dequeued), so queue holds remaining items
+    // When 5th is added, queue is [fn2, fn3, fn4] (size 3), so fn2 is dropped
     await jest.runAllTimersAsync();
 
-    // First was executed before queue limit hit, so 3 total should be called
+    // fn1 executes immediately, fn2 is dropped, fn3/fn4/fn5 execute
+    // So 4 total should be called (fn1, fn3, fn4, fn5)
     expect(
       fns.filter((fn) => fn.mock.calls.length > 0).length,
-    ).toBeLessThanOrEqual(3);
+    ).toBeLessThanOrEqual(4);
   });
 
   it("should clear the queue when requested", () => {

@@ -1,0 +1,369 @@
+---
+id: demo-handover-checklist
+title: "Demo Handover Checklist: Software → Hardware"
+sidebar_label: Demo Handover
+difficulty: beginner
+timeEstimate: 15
+xpReward: 25
+phase: ["seed"]
+tags:
+  - playbook
+  - demo
+  - handover
+  - hardware
+---
+
+# Demo Handover Checklist
+
+**What Jurie (Software) needs to provide to Pieter (Hardware) for the Pi Drone
+Detector demo.**
+
+> **Note:** Jurie is in Bela Bela, Pieter is in Cape Town - all handover is
+> remote/electronic.
+
+---
+
+## Pre-Handover Status
+
+| Item                  | Status         | Notes            |
+| --------------------- | -------------- | ---------------- |
+| YOLOv8n model trained | 🟡 In progress | Need ~600 images |
+| Inference script      | ✅ Ready       | Python + OpenCV  |
+| Pi 4 setup guide      | 📋 This doc    | See below        |
+| Camera config         | ✅ Documented  | 640x480 @ 30fps  |
+
+---
+
+## Setup Guides
+
+Two approaches are available depending on demo timeline:
+
+| Approach             | Setup Time | FPS on Pi 4                | Best For              |
+| -------------------- | ---------- | -------------------------- | --------------------- |
+| **Ultralytics/ONNX** | 30 min     | 12-18 FPS                  | Quick demo setup      |
+| **TFLite Optimized** | 1 hour     | 5-8 FPS (25-35 with Coral) | Production deployment |
+
+### Option A: Ultralytics/ONNX (This Guide)
+
+Uses `ultralytics` package with ONNX export. Faster setup, slightly higher FPS
+on CPU. Instructions below.
+
+### Option B: TFLite Optimized
+
+For production deployment or if using Coral USB Accelerator, see the full setup
+guide: [`apps/pi-drone-detector/README.md`](/docs/pi-drone-detector)
+
+Key benefits of TFLite:
+
+- INT8 quantization (smaller model, ~6MB)
+- Coral Edge TPU support (25-35 FPS)
+- Custom drone scoring with coke can rejection heuristics
+
+---
+
+## 1. Remote File Delivery
+
+### Download Package (Google Drive / OneDrive)
+
+Jurie uploads to shared folder:
+
+- [ ] `setup_pi_detector.sh` - One-click setup script
+- [ ] `yolov8n_drone.onnx` - Model file (~12MB)
+- [ ] `detect.py` - Inference script
+- [ ] `requirements.txt` - Python dependencies
+- [ ] `README.md` - Step-by-step instructions
+
+### Direct Download on Pi
+
+Pieter runs on the Pi:
+
+```bash
+# Download package from shared link
+wget -O detector.zip "https://[shared-link]"
+unzip detector.zip -d ~/
+cd ~/detector
+chmod +x setup_pi_detector.sh
+./setup_pi_detector.sh
+```
+
+### Alternative: Git Clone (if repo is public)
+
+```bash
+git clone https://github.com/JustAGhosT/pi-drone-detector.git ~/detector
+cd ~/detector
+./setup.sh
+```
+
+---
+
+## 2. Model Files
+
+### Required Files
+
+| File                 | Size   | Location           | Description          |
+| -------------------- | ------ | ------------------ | -------------------- |
+| `yolov8n_drone.pt`   | ~6MB   | `/home/pi/models/` | PyTorch weights      |
+| `yolov8n_drone.onnx` | ~12MB  | `/home/pi/models/` | ONNX format (faster) |
+| `labels.txt`         | `<1KB` | `/home/pi/models/` | Class names          |
+
+### Model Info
+
+```yaml
+Model: YOLOv8n (nano)
+Input: 640x480 RGB
+Classes:
+  - 0: drone
+  - 1: bird
+  - 2: aircraft
+  - 3: helicopter
+Confidence threshold: 0.5
+NMS threshold: 0.45
+```
+
+---
+
+## 3. Hardware Requirements
+
+### Pieter Provides
+
+- [ ] Raspberry Pi 4 (2GB+ RAM)
+- [ ] Pi Camera Module (v2 or v3)
+- [ ] microSD card (32GB+ Class 10)
+- [ ] 5V 3A power supply (USB-C)
+- [ ] (Optional) Active cooling fan
+- [ ] (Optional) Enclosure/mount
+
+### Jurie Verifies
+
+- [ ] Camera ribbon cable connected correctly
+- [ ] Camera enabled in raspi-config
+- [ ] Sufficient storage space (>5GB free)
+
+---
+
+## 4. Software Dependencies
+
+### Pre-installed on SD Card
+
+```bash
+# System
+python3.11
+libopencv-dev
+libcamera-apps
+
+# Python packages
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+picamera2>=0.3.12
+```
+
+### Installation Script (if manual)
+
+```bash
+#!/bin/bash
+# setup_pi_detector.sh
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install dependencies
+sudo apt install -y python3-pip python3-opencv libcamera-apps
+
+# Install Python packages
+pip3 install ultralytics opencv-python numpy picamera2
+
+# Create directories
+mkdir -p ~/models ~/detector ~/logs
+
+# Download files from shared link (Jurie provides URL)
+echo "Download model and scripts from shared Google Drive/OneDrive link"
+echo "Place yolov8n_drone.onnx in ~/models/"
+echo "Place detect.py in ~/detector/"
+
+echo "Setup complete. Run: python3 ~/detector/detect.py"
+```
+
+---
+
+## 5. Running the Demo
+
+### Quick Start
+
+```bash
+# SSH into Pi or use terminal
+cd ~/detector
+python3 detect.py
+```
+
+### With Options
+
+```bash
+# Specify model and confidence
+python3 detect.py --model ~/models/yolov8n_drone.onnx --conf 0.5
+
+# Save output video
+python3 detect.py --save-video ~/logs/demo_$(date +%Y%m%d).mp4
+
+# Show preview (if display connected)
+python3 detect.py --preview
+```
+
+### Expected Output
+
+```
+[INFO] Loading model: yolov8n_drone.onnx
+[INFO] Camera initialized: 640x480 @ 30fps
+[INFO] Starting detection loop...
+[INFO] FPS: 15.2 | Detections: 0
+[INFO] FPS: 14.8 | Detections: 1 (drone: 0.87)
+[INFO] FPS: 15.1 | Detections: 1 (drone: 0.92)
+```
+
+---
+
+## 6. Troubleshooting Guide
+
+### Common Issues
+
+| Problem            | Likely Cause        | Fix                              |
+| ------------------ | ------------------- | -------------------------------- |
+| "Camera not found" | Ribbon cable loose  | Reseat cable, check raspi-config |
+| "Model not found"  | Wrong path          | Check ~/models/ directory        |
+| Low FPS (`<10`)    | Resolution too high | Use 640x480, not 1080p           |
+| No detections      | Confidence too high | Lower --conf to 0.3              |
+| Out of memory      | Model too large     | Use .onnx not .pt                |
+
+### Debug Mode
+
+```bash
+# Run with verbose logging
+python3 detect.py --debug
+
+# Check camera
+libcamera-hello --list-cameras
+
+# Check Python environment
+python3 -c "import cv2; print(cv2.__version__)"
+python3 -c "from ultralytics import YOLO; print('OK')"
+```
+
+---
+
+## 7. Demo Day Checklist
+
+### Before Demo (Jurie - Remote)
+
+- [ ] Final model trained and tested
+- [ ] Files uploaded to shared drive
+- [ ] Video call scheduled with Pieter
+- [ ] Available on WhatsApp for support
+
+### Before Demo (Pieter - On-site)
+
+- [ ] Pi 4 powered and booted
+- [ ] Camera connected and working
+- [ ] Software downloaded and running
+- [ ] Training drones charged and ready
+- [ ] Launcher prototype ready (if showing)
+
+### During Demo
+
+- [ ] Start detection script before flying
+- [ ] Keep drone in camera field of view
+- [ ] Monitor terminal for detection logs
+- [ ] Record screen/output if needed
+- [ ] Jurie on standby via WhatsApp
+
+---
+
+## 8. Remote Handover Meeting
+
+### 15-minute video call (Google Meet / WhatsApp):
+
+1. **Software status** (2 min)
+   - Model version and accuracy
+   - Any known issues
+
+2. **Remote file transfer** (5 min)
+   - Confirm download link works
+   - Pieter downloads on Pi
+   - Verify files in correct locations
+
+3. **Screen share test** (5 min)
+   - Pieter shares Pi terminal
+   - Run detection script together
+   - Coke can test: loop in front of camera - should NOT detect
+   - Confirm FPS is 12-18
+
+4. **Demo plan** (3 min)
+   - Who controls what
+   - Signal for "detection working"
+   - Backup plan if issues
+
+---
+
+## 9. Remote Support Options
+
+### During Setup
+
+| Method          | Use Case                     | Response Time |
+| --------------- | ---------------------------- | ------------- |
+| WhatsApp text   | Quick questions              | Minutes       |
+| WhatsApp call   | Troubleshooting              | Immediate     |
+| Google Meet     | Screen share for complex fix | Schedule      |
+| SSH (if set up) | Direct Pi access             | Immediate     |
+
+### SSH Remote Access (Optional)
+
+If Pieter sets up port forwarding or uses a service like Tailscale:
+
+```bash
+# Jurie can SSH directly to help
+ssh pi@[pieter-pi-address]
+
+# Or use Tailscale for easy VPN access
+# https://tailscale.com/download/linux
+```
+
+---
+
+## 10. Current Blockers for Handover
+
+### Jurie Must Complete (Remote)
+
+1. **Train model with drone images**
+   - Need: ~200 images per class (drone, bird, aircraft)
+   - From: Pieter's training drones + public datasets
+   - ETA: [TBD - depends on training footage]
+
+2. **Test model locally**
+   - Simulate Pi 4 environment on desktop
+   - Or: Buy own Pi 4 for remote testing
+
+3. **Package software for download**
+   - Upload to Google Drive / OneDrive
+   - Create shareable download link
+   - Include setup script + README
+
+### Pieter Must Complete (On-site)
+
+1. **Capture training footage**
+   - Fly small quads, record video
+   - Multiple angles, distances, backgrounds
+   - Target: 200+ frames per drone
+   - Upload to shared folder for Jurie
+
+2. **Prepare demo hardware**
+   - Pi 4 with camera mounted
+   - Power supply
+   - Internet connection for downloads
+   - Test location identified
+
+3. **Enable remote support (optional)**
+   - Install Tailscale for SSH access
+   - Or: Set up port forwarding
+
+---
+
+_Last Updated: January 8, 2026_

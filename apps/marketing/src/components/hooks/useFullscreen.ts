@@ -40,7 +40,7 @@ export const useFullscreen = ({
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
-      if (!!document.fullscreenElement) {
+      if (document.fullscreenElement) {
         setShowFullscreenPrompt(false);
       }
     };
