@@ -1,8 +1,8 @@
 ---
 sidebar_position: 5
 title: Countermeasure Options
-description: Complete guide to drone countermeasure systems from DIY to commercial
-keywords: [countermeasures, net launcher, SkyWall, commercial, DIY, NetSentry, SkyWatch, detection]
+description: Complete guide to drone countermeasure and detection systems from DIY to commercial, including deployment, legal considerations, and multi-tier product lines
+keywords: [countermeasures, net launcher, SkyWall, commercial, DIY, NetSentry, SkyWatch, detection, thermal, maritime, enterprise, legal, GDPR]
 ---
 
 # Drone Countermeasure Options
@@ -29,6 +29,11 @@ The detector provides a 100ms GPIO pulse when engagement conditions are met. Thi
 | **Detection + Counter** | NetSentry Pro | $800-2,000 | 200-500m | 25-50m | Security professionals |
 | **Commercial** | SkyWall 100 | $30,000-70,000 | 500m+ | 100m+ | Military, law enforcement |
 | **Commercial** | Fortem DroneHunter | $50,000+ | 3km+ | 1km+ | Critical infrastructure |
+| **Mobile** | SkyWatch Mobile | $200-500 | 100-300m | None | Patrols, temporary sites |
+| **Multi-Node** | SkyWatch Mesh | $500-2,000/node | 500m-2km (network) | None | Perimeter coverage |
+| **Enterprise** | SkyWatch Enterprise | $5,000-20,000 | 1-5km | Optional | Campus, facilities |
+| **Thermal** | SkyWatch Thermal | $400-1,500 | 100-500m (24/7) | None | Night operations |
+| **Maritime** | SkyWatch Marine | $600-2,000 | 200-800m | None | Vessels, coastal |
 
 ---
 
@@ -279,6 +284,528 @@ Detection range depends on:
 - **Lighting conditions**: Daylight optimal, low-light reduces range by 30-50%
 - **Model accuracy**: Trained models improve detection at longer ranges
 - **Hardware acceleration**: Coral TPU enables higher resolution processing
+
+---
+
+### SkyWatch Mobile - $200-500
+
+**Target users:** Security patrols, temporary deployments, event staff
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (2GB) | $45 | Pi supplier |
+| Pi Camera Module v3 | $35 | Pi supplier |
+| Coral USB Accelerator | $60 | Coral.ai |
+| 7" touchscreen display | $60 | Pi supplier |
+| Battery pack (20000mAh) | $40 | Amazon |
+| Rugged carry case | $30 | Pelican/Amazon |
+| **Total** | **$270** | |
+
+**Specifications:**
+- Detection range: 100-300m
+- Battery life: 3-5 hours continuous
+- Form factor: Handheld tablet-style
+- Processing: 15-25 FPS
+- Display: Real-time detection view
+- Alerts: Vibration, audio, visual overlay
+
+**Use Cases:**
+- Security guard patrols
+- Event perimeter walks
+- Temporary site surveys
+- Vehicle-mounted surveillance
+- Training exercises
+
+**Configuration (mobile.yaml):**
+```yaml
+display:
+  headless: false
+  show_battery: true
+  fullscreen: true
+
+power:
+  battery_monitoring: true
+  low_power_threshold: 20
+  auto_sleep_minutes: 5
+
+alert:
+  vibration_enabled: true
+  audio_enabled: true
+  volume: 80
+```
+
+---
+
+### SkyWatch Mesh (Multi-Node Network) - $500-2,000/node
+
+**Target users:** Large perimeters, farms, industrial sites, event venues
+
+**Architecture:**
+```
+                         ┌─────────────────┐
+                         │  Central Server │
+                         │  (Aggregation)  │
+                         └────────┬────────┘
+                                  │
+           ┌──────────────────────┼──────────────────────┐
+           │                      │                      │
+    ┌──────┴──────┐        ┌──────┴──────┐       ┌──────┴──────┐
+    │   Node 1    │        │   Node 2    │       │   Node 3    │
+    │ (North Gate)│        │(East Fence) │       │ (Warehouse) │
+    └─────────────┘        └─────────────┘       └─────────────┘
+           ▼                      ▼                      ▼
+       Coverage               Coverage               Coverage
+        Area 1                Area 2                 Area 3
+```
+
+**Per-Node Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (2GB) | $45 | Pi supplier |
+| Pi Camera Module v3 | $35 | Pi supplier |
+| PoE HAT | $20 | Pi supplier |
+| Weatherproof enclosure | $40 | Amazon |
+| Mounting hardware | $20 | Hardware store |
+| **Per Node Total** | **$160** | |
+
+**Central Server:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 5 (8GB) or PC | $80-500 | Various |
+| PoE switch (8-port) | $100-200 | Ubiquiti/TP-Link |
+| UPS backup | $80 | APC |
+| **Central Total** | **$260-780** | |
+
+**Specifications:**
+- Nodes: 3-20+ depending on coverage needs
+- Per-node range: 100-200m
+- Network range: 500m-2km (combined coverage)
+- Latency: <100ms to central alert
+- Communication: Ethernet (PoE) or WiFi mesh
+- Redundancy: Continues operating if nodes fail
+
+**Detection Fusion:**
+```
+Node 1 detects at 70% confidence ─┐
+Node 2 detects at 65% confidence ─┼─► Fusion Engine ─► 95% combined confidence
+Node 3 detects at 40% confidence ─┘
+                                         │
+                                    Triangulation
+                                         │
+                                    3D Position
+```
+
+**Network Configuration (mesh-central.yaml):**
+```yaml
+mesh:
+  mode: central
+  nodes:
+    - id: node-north
+      address: 192.168.1.101
+      location: "North Gate"
+      fov_direction: 180  # degrees
+    - id: node-east
+      address: 192.168.1.102
+      location: "East Fence"
+      fov_direction: 90
+    - id: node-warehouse
+      address: 192.168.1.103
+      location: "Warehouse"
+      fov_direction: 270
+
+  fusion:
+    min_nodes_for_alert: 1
+    triangulation_enabled: true
+    combined_confidence_boost: 0.15
+
+  health:
+    heartbeat_interval: 10
+    node_timeout: 30
+```
+
+**Deployment Calculator:**
+| Area Size | Recommended Nodes | Total Cost |
+|-----------|-------------------|------------|
+| 1 acre | 2-3 | $500-700 |
+| 5 acres | 4-6 | $900-1,200 |
+| 20 acres | 8-12 | $1,600-2,400 |
+| 100 acres | 15-25 | $3,000-5,000 |
+
+---
+
+### SkyWatch Enterprise - $5,000-20,000
+
+**Target users:** Corporate campuses, critical facilities, airports, military
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Server rack (1U) | $500 | Dell/HP |
+| Detection nodes (×10) | $2,000 | SkyWatch Mesh |
+| PTZ cameras (×4) | $2,000 | Hikvision/Axis |
+| Radar unit (optional) | $3,000-8,000 | Echodyne/Oculii |
+| RF detection array | $1,000 | Custom RTL-SDR |
+| Central software license | $1,000-5,000 | Commercial |
+| Installation | $1,000-3,000 | Professional |
+| **Total** | **$10,500-20,500** | |
+
+**Specifications:**
+- Detection range: 1-5km (multi-sensor)
+- 24/7 operation with redundancy
+- SOC integration (SIEM, monitoring)
+- Multi-user dashboard
+- Compliance logging (audit trails)
+- API integration for existing security systems
+
+**Integration Points:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  Enterprise Security Center                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐     │
+│  │ SIEM    │   │ Access  │   │ Video   │   │ Alarm   │     │
+│  │ (Splunk)│   │ Control │   │ (NVR)   │   │ Panel   │     │
+│  └────┬────┘   └────┬────┘   └────┬────┘   └────┬────┘     │
+│       │             │             │             │           │
+│       └─────────────┴──────┬──────┴─────────────┘           │
+│                            │                                 │
+│                   ┌────────┴────────┐                       │
+│                   │   SkyWatch API  │                       │
+│                   └─────────────────┘                       │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**API Example:**
+```python
+# SkyWatch Enterprise API integration
+import requests
+
+SKYWATCH_API = "https://skywatch.local/api/v1"
+
+# Subscribe to alerts
+def on_drone_detected(alert):
+    # Forward to SIEM
+    siem_client.send_event({
+        "type": "drone_intrusion",
+        "confidence": alert["confidence"],
+        "location": alert["location"],
+        "track_id": alert["track_id"],
+        "timestamp": alert["timestamp"]
+    })
+
+    # Trigger PTZ camera to track
+    ptz_camera.track_coordinates(
+        alert["position"]["lat"],
+        alert["position"]["lon"]
+    )
+
+    # Alert security team
+    dispatch_system.notify_guards(alert["location"])
+```
+
+---
+
+### SkyWatch Thermal - $400-1,500
+
+**Target users:** Night operations, 24/7 monitoring, wildlife areas
+
+**Components (Budget):**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (4GB) | $55 | Pi supplier |
+| FLIR Lepton 3.5 (160×120) | $200 | GroupGets/SparkFun |
+| Lepton breakout board | $50 | GroupGets |
+| Visible camera (optional) | $35 | Pi supplier |
+| Weatherproof enclosure | $40 | Amazon |
+| **Total Budget** | **$380** | |
+
+**Components (Professional):**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 5 (8GB) | $80 | Pi supplier |
+| FLIR Boson 320 (320×256) | $800 | FLIR |
+| Boson interface board | $100 | FLIR |
+| HQ visible camera | $75 | Pi supplier |
+| Coral TPU | $60 | Coral.ai |
+| Weatherproof enclosure | $80 | Industrial |
+| **Total Pro** | **$1,195** | |
+
+**Thermal Detection Advantages:**
+| Condition | Visible Camera | Thermal Camera |
+|-----------|----------------|----------------|
+| Daylight, clear | Excellent | Good |
+| Night, no moon | None | Excellent |
+| Fog/haze | Poor | Good |
+| Rain | Poor | Moderate |
+| Drone vs bird | ML required | Heat signature helps |
+| Background clutter | High | Low |
+
+**Detection Pipeline:**
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Thermal   │     │   Visible   │     │   Fusion    │
+│   Sensor    │────►│   Sensor    │────►│   Engine    │
+│ (heat blob) │     │ (visual ID) │     │ (combined)  │
+└─────────────┘     └─────────────┘     └──────┬──────┘
+                                               │
+                    ┌──────────────────────────┘
+                    ▼
+            ┌───────────────┐
+            │ Classification │
+            │   - Drone      │
+            │   - Bird       │
+            │   - Aircraft   │
+            │   - Unknown    │
+            └───────────────┘
+```
+
+**Thermal Configuration (thermal.yaml):**
+```yaml
+sensors:
+  thermal:
+    enabled: true
+    device: /dev/spidev0.0
+    resolution: "160x120"  # Lepton 3.5
+    temperature_range: [-10, 140]  # Celsius
+    colormap: "ironbow"
+
+  visible:
+    enabled: true
+    device: /dev/video0
+
+fusion:
+  mode: overlay
+  thermal_weight: 0.6
+  visible_weight: 0.4
+  hot_spot_threshold: 35  # Celsius - drone motors run hot
+
+inference:
+  model_path: "models/drone_thermal.tflite"
+  input_channels: 4  # RGBT (RGB + Thermal)
+```
+
+---
+
+### SkyWatch Marine - $600-2,000
+
+**Target users:** Vessel operators, marinas, coastal facilities, offshore platforms
+
+**Challenges at Sea:**
+- Salt spray and corrosion
+- Constant motion (gyro stabilization needed)
+- Limited power
+- Marine communication integration
+- Reflection off water surface
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (4GB) | $55 | Pi supplier |
+| Pi Camera HQ + wide lens | $90 | Pi supplier |
+| Coral USB Accelerator | $60 | Coral.ai |
+| Marine-grade enclosure (IP67) | $120 | Polycase |
+| Gyro stabilization mount | $150-300 | Marine supplier |
+| 12V-5V marine converter | $30 | West Marine |
+| Marine antenna/WiFi | $80 | Ubiquiti |
+| **Total** | **$585-735** | |
+
+**Marine-Specific Features:**
+- **Gyro stabilization**: Compensates for vessel motion
+- **Salt-resistant enclosure**: IP67 rated, marine-grade
+- **12V DC input**: Integrates with vessel power
+- **NMEA integration**: Sends alerts to chart plotter
+- **AIS correlation**: Cross-references with AIS targets
+
+**NMEA 2000 Integration:**
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Vessel Network                        │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐            │
+│  │  Chart   │   │   AIS    │   │  Radar   │            │
+│  │ Plotter  │   │Transpond.│   │          │            │
+│  └────┬─────┘   └────┬─────┘   └────┬─────┘            │
+│       │              │              │                   │
+│       └──────────────┴──────┬───────┘                   │
+│                             │                           │
+│                      NMEA 2000 Bus                      │
+│                             │                           │
+│                    ┌────────┴────────┐                  │
+│                    │ SkyWatch Marine │                  │
+│                    │  (Gateway Node) │                  │
+│                    └─────────────────┘                  │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Marine Configuration (marine.yaml):**
+```yaml
+environment: marine
+
+enclosure:
+  ip_rating: IP67
+  operating_temp: [-20, 60]
+  humidity_rating: 100  # percent
+
+power:
+  input_voltage: 12  # Vessel DC
+  brownout_protection: true
+  voltage_range: [10, 16]
+
+motion:
+  stabilization: gyro
+  max_roll_compensation: 30  # degrees
+  max_pitch_compensation: 20  # degrees
+
+integration:
+  nmea_enabled: true
+  nmea_port: /dev/ttyUSB0
+  nmea_baud: 38400
+  ais_correlation: true
+
+alerts:
+  vhf_announcement: false  # Legal restrictions
+  chart_plotter_overlay: true
+  bridge_alarm: true
+```
+
+---
+
+## Additional Detection Methods
+
+### Thermal/FLIR Detection
+
+**How it works:** Drone motors and batteries generate heat (40-80°C), creating a distinct thermal signature against cooler backgrounds.
+
+**Advantages:**
+- Works in complete darkness
+- Effective in fog/haze
+- Low false positives (birds are cooler)
+- No lighting required
+
+**Hardware Options:**
+| Sensor | Resolution | FPS | Interface | Cost |
+|--------|------------|-----|-----------|------|
+| FLIR Lepton 2.5 | 80×60 | 9 | SPI | $150 |
+| FLIR Lepton 3.5 | 160×120 | 9 | SPI | $200 |
+| FLIR Boson 320 | 320×256 | 60 | USB | $800 |
+| Seek Thermal | 206×156 | 15 | USB | $250 |
+| InfiRay T2-Pro | 256×192 | 25 | USB | $400 |
+
+**Detection Characteristics:**
+```
+Drone Thermal Signature:
+┌──────────────────────────────────┐
+│                                   │
+│     ██  Motors (60-80°C)         │
+│   ██████                         │
+│   ██████  Battery (40-60°C)      │
+│     ██    Props (ambient)        │
+│                                   │
+│   Background: 15-25°C            │
+└──────────────────────────────────┘
+```
+
+---
+
+### LIDAR Detection
+
+**How it works:** Laser ranging detects objects by time-of-flight. Effective for precise 3D positioning and works regardless of lighting.
+
+**Advantages:**
+- Precise distance measurement
+- Works day/night
+- 3D spatial mapping
+- Velocity from doppler shift
+
+**Hardware Options:**
+| Sensor | Range | Points/sec | FOV | Cost |
+|--------|-------|------------|-----|------|
+| RPLidar A1 | 12m | 8,000 | 360° | $100 |
+| RPLidar A3 | 25m | 16,000 | 360° | $600 |
+| Livox Mid-40 | 260m | 100,000 | 38° | $600 |
+| Intel RealSense L515 | 9m | 23M | 70° | $350 |
+| Ouster OS0-32 | 50m | 655,000 | 90° | $3,500 |
+
+**LIDAR Detection Pipeline:**
+```
+LIDAR Scan → Point Cloud → Clustering → Object Detection → Classification
+     │              │            │              │              │
+     │              │            │              │         Is it a drone?
+     │              │            │         Size/shape/motion
+     │              │       Group nearby points
+     │         3D coordinates
+     └── Distance measurements
+```
+
+**Limitations:**
+- Expensive for long range
+- Weather affects performance (rain, dust)
+- Small drones harder to detect
+- Processing intensive
+
+---
+
+### WiFi Probe Detection
+
+**How it works:** Consumer drones (DJI, etc.) emit WiFi probe requests and maintain connections with controllers. These can be passively detected.
+
+**Advantages:**
+- Passive (no emissions from detector)
+- Can identify drone make/model
+- Works through visual occlusion
+- Detects controller AND drone
+
+**Hardware:**
+| Item | Cost |
+|------|------|
+| Alfa AWUS036ACH (dual-band WiFi adapter) | $50 |
+| High-gain antenna | $20-50 |
+| Raspberry Pi 4 | $55 |
+| **Total** | **$125-155** |
+
+**Known Drone WiFi Signatures:**
+| Manufacturer | SSID Pattern | MAC OUI |
+|--------------|--------------|---------|
+| DJI | `DJI-*`, `Phantom-*`, `Mavic-*` | `60:60:1F`, `34:D2:62` |
+| Parrot | `Parrot-*`, `Anafi-*` | `90:03:B7`, `A0:14:3D` |
+| Skydio | `Skydio-*` | Various |
+| Autel | `Autel-*` | `FC:0F:E6` |
+
+**Detection Script:**
+```bash
+# Monitor for drone WiFi signatures
+sudo airodump-ng wlan0mon --manufacturer --band abg | \
+  grep -E "(DJI|Parrot|Mavic|Phantom|Anafi|Skydio)"
+```
+
+**WiFi Configuration (wifi-detect.yaml):**
+```yaml
+wifi_detection:
+  enabled: true
+  interface: wlan1  # Dedicated monitor interface
+  channels: [1, 6, 11, 36, 40, 44, 48]
+  hop_interval: 0.5  # seconds
+
+  signatures:
+    dji:
+      ssid_pattern: "^(DJI|Phantom|Mavic|Spark|Mini)"
+      mac_oui: ["60:60:1F", "34:D2:62", "48:01:C5"]
+    parrot:
+      ssid_pattern: "^(Parrot|Anafi|Bebop)"
+      mac_oui: ["90:03:B7", "A0:14:3D"]
+
+  alert_on:
+    - new_drone_detected
+    - drone_approaching  # Signal strength increasing
+    - multiple_drones    # Swarm detection
+```
+
+---
 
 ### NetSentry Lite (Budget Entry Point) - $150-400
 
@@ -916,7 +1443,460 @@ Before deploying ANY countermeasure:
 
 ---
 
-## 7. Legal Disclaimer
+## 7. Additional Commercial Systems
+
+### Robin Radar Systems (Netherlands)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| ELVIRA | 3D FMCW Radar | 5km+ | $50,000-100,000 |
+| IRIS | 360° Radar | 3km | $80,000-150,000 |
+| MAX | Long-range Radar | 10km+ | $200,000+ |
+
+**Features:**
+- Military-grade radar technology
+- Track hundreds of targets simultaneously
+- Bird/drone classification AI
+- Integrates with effector systems
+- Used at airports worldwide
+
+**Best for:** Airports, critical infrastructure, military installations
+
+**Website:** [robinradar.com](https://robinradar.com)
+
+---
+
+### CACI SkyTracker (USA)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| SkyTracker | RF detection | 5km+ | $75,000-150,000 |
+| SkyTracker-M | Mobile variant | 3km | $100,000-200,000 |
+
+**Features:**
+- Passive RF detection (no emissions)
+- Identifies drone AND controller location
+- Tracks multiple drones simultaneously
+- Geolocation of pilot
+- Integration with defeat systems
+
+**Best for:** Government, law enforcement, military
+
+**Website:** [caci.com](https://caci.com)
+
+---
+
+### Liteye Systems (USA)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| AUDS | Integrated C-UAS | 10km | $500,000+ |
+| C-AUDS | Compact version | 3km | $150,000-300,000 |
+
+**Features:**
+- Radar + EO/IR + RF defeat
+- Full detect-track-defeat chain
+- Military proven (DOD contracts)
+- Vehicle and fixed mount options
+- Training included
+
+**Best for:** Military, high-security facilities
+
+**Website:** [liteye.com](https://liteye.com)
+
+---
+
+### Dedrone (Germany/USA)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| DroneTracker | RF sensors | 1-5km | $20,000-50,000 |
+| City | Multi-site platform | Unlimited | $100,000+/year |
+
+**Features:**
+- RF + visual + radar sensor fusion
+- Cloud-based analytics platform
+- Multi-site management dashboard
+- Drone library with 300+ models
+- API for custom integrations
+
+**Best for:** Corporate campuses, prisons, stadiums
+
+**Website:** [dedrone.com](https://dedrone.com)
+
+---
+
+### Sentrycs (Israel)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| Horizon | Protocol takeover | 2km | $100,000+ |
+| Horizon-M | Mobile unit | 1km | $75,000+ |
+
+**Features:**
+- Takes over drone communication
+- Forces safe landing at designated location
+- Does not jam (legal in more jurisdictions)
+- Works on DJI and commercial drones
+- Forensic data extraction
+
+**Best for:** Law enforcement, VIP protection
+
+**Website:** [sentrycs.com](https://sentrycs.com)
+
+---
+
+### Commercial System Comparison Matrix
+
+| Vendor | Detection | Tracking | Defeat | Minimum Budget | Primary Market |
+|--------|-----------|----------|--------|----------------|----------------|
+| SkyWall | Visual | Manual | Net | $30,000 | Law enforcement |
+| Fortem | Radar | Auto | Drone-on-drone | $50,000 | Critical infra |
+| DroneShield | RF | Manual | Jammer | $20,000 | Military |
+| Robin Radar | Radar | Auto | Integration | $50,000 | Airports |
+| CACI | RF | Auto | Integration | $75,000 | Government |
+| Liteye | Multi | Auto | Jammer | $150,000 | Military |
+| Dedrone | Multi | Auto | Integration | $20,000 | Corporate |
+| Sentrycs | RF | Auto | Takeover | $75,000 | VIP protection |
+
+---
+
+## 8. Deployment Guide
+
+### Power Options
+
+| Power Source | Watts Available | Runtime | Best For | Cost |
+|--------------|-----------------|---------|----------|------|
+| **USB Power Bank** | 10-15W | 4-8 hours | Mobile, testing | $30-60 |
+| **PoE (802.3af)** | 15W | Continuous | Fixed nodes | $0 (switch) |
+| **PoE+ (802.3at)** | 30W | Continuous | High-power nodes | $0 (switch) |
+| **Solar + Battery** | 20-50W | 24/7 | Remote sites | $200-500 |
+| **12V DC (vehicle)** | 100W+ | Continuous | Mobile patrols | $30 adapter |
+| **Mains (AC)** | Unlimited | Continuous | Fixed install | $10-20 PSU |
+
+**Power Consumption by Tier:**
+| Tier | Idle | Active | Peak |
+|------|------|--------|------|
+| SkyWatch Nano | 2W | 3W | 4W |
+| SkyWatch Standard | 4W | 6W | 10W |
+| SkyWatch Pro | 8W | 12W | 18W |
+| NetSentry Lite | 5W | 8W | 15W |
+| NetSentry Standard | 8W | 12W | 25W |
+| NetSentry Pro | 12W | 18W | 35W |
+
+**Solar Sizing Calculator:**
+```
+Required panel size = (Daily Wh) / (Sun hours × 0.8)
+Battery capacity = (Daily Wh × Days autonomy) / 0.5
+
+Example for SkyWatch Standard (24/7):
+- Daily consumption: 6W × 24h = 144Wh
+- Panel (5 sun hours): 144 / (5 × 0.8) = 36W → Use 50W panel
+- Battery (2 days): 144 × 2 / 0.5 = 576Wh → Use 600Wh (50Ah @ 12V)
+```
+
+---
+
+### Mounting Options
+
+#### Pole Mount (Most Common)
+```
+Height recommendation: 3-5m for typical coverage
+
+     ┌─────────────┐
+     │  Detector   │
+     │   Housing   │
+     └──────┬──────┘
+            │
+     ┌──────┴──────┐
+     │  Pan-Tilt   │  (optional)
+     │   Mount     │
+     └──────┬──────┘
+            │
+    ════════╪════════  Mounting bracket
+            │
+            │  Pole (aluminum/steel)
+            │
+     ───────┴───────   Ground/roof
+```
+
+**Recommended heights:**
+| Application | Height | Field of View |
+|-------------|--------|---------------|
+| Garden/yard | 2-3m | 50-100m |
+| Property perimeter | 3-4m | 100-200m |
+| Industrial/farm | 4-6m | 200-400m |
+| Elevated (tower) | 10-20m | 500m+ |
+
+#### Roof Mount
+- Use non-penetrating roof mount (weighted base)
+- Ensure lightning protection
+- Consider wind loads
+- Provide cable conduit to interior
+
+#### Vehicle Mount
+- Magnetic base for temporary
+- Suction cup with safety tether
+- Permanent roof rack mount
+- Consider vibration dampening
+
+---
+
+### Weather Ratings
+
+**IP Rating Guide:**
+| Rating | Protection | Suitable For |
+|--------|------------|--------------|
+| IP54 | Dust protected, splashing water | Covered outdoor |
+| IP65 | Dust tight, water jets | Outdoor exposed |
+| IP66 | Dust tight, powerful jets | Coastal, industrial |
+| IP67 | Dust tight, 1m immersion | Marine, harsh |
+
+**Operating Temperature Ranges:**
+| Environment | Range | Notes |
+|-------------|-------|-------|
+| Standard | 0°C to 40°C | Most enclosures |
+| Extended | -20°C to 60°C | Industrial rated |
+| Cold climate | -40°C to 50°C | Heated enclosure required |
+| Hot climate | 0°C to 70°C | Active cooling required |
+
+**Weather Protection Checklist:**
+- [ ] Appropriate IP-rated enclosure
+- [ ] Silica gel desiccant packs (humidity)
+- [ ] Vent with GORE membrane (pressure equalization)
+- [ ] Sunshade for camera lens
+- [ ] Cable glands (not holes with sealant)
+- [ ] Drip loops on cables
+- [ ] Lightning arrestor on PoE
+
+---
+
+### Maintenance Schedule
+
+#### Weekly
+- [ ] Check detection logs for anomalies
+- [ ] Verify alert delivery (test notification)
+- [ ] Review storage space
+- [ ] Check uptime/connectivity
+
+#### Monthly
+- [ ] Clean camera lens (soft cloth, no chemicals)
+- [ ] Check enclosure seals (visual inspection)
+- [ ] Review detection accuracy (false positive rate)
+- [ ] Update threat database (if applicable)
+- [ ] Test GPIO output (with relay LED indicator)
+
+#### Quarterly
+- [ ] Firmware/software updates
+- [ ] Check mounting hardware (tighten if needed)
+- [ ] Inspect cables for UV damage
+- [ ] Clean air vents/filters
+- [ ] Calibrate pan-tilt (if equipped)
+- [ ] Test full countermeasure chain (safe direction)
+
+#### Annually
+- [ ] Full system test (detection → tracking → alert)
+- [ ] Replace desiccant packs
+- [ ] Check/replace weatherseals
+- [ ] Verify IR calibration (thermal systems)
+- [ ] Review and update detection model
+- [ ] Recertify net launcher (if applicable)
+
+**Maintenance Log Template:**
+```yaml
+# maintenance-log.yaml
+system_id: "skywatch-north-01"
+location: "North Gate"
+install_date: 2024-01-15
+
+maintenance_records:
+  - date: 2024-04-15
+    type: quarterly
+    technician: "J. Smith"
+    tasks:
+      - firmware_update: "v2.3.1 → v2.4.0"
+      - lens_cleaned: true
+      - mount_tightened: true
+      - gpio_test: passed
+    notes: "Minor condensation inside enclosure, added extra desiccant"
+
+  - date: 2024-03-01
+    type: monthly
+    technician: "J. Smith"
+    tasks:
+      - lens_cleaned: true
+      - logs_reviewed: true
+    notes: "All normal"
+```
+
+---
+
+## 9. Legal and Regulatory Guide
+
+### Country-Specific Regulations
+
+#### United States
+
+**Detection:** Generally legal for passive detection on your property.
+
+**Countermeasures:**
+| Action | Legal Status | Authority |
+|--------|--------------|-----------|
+| Visual detection | Legal | None required |
+| RF detection (passive) | Legal | None required |
+| RF jamming | **Illegal** | FCC (47 U.S.C. § 333) |
+| GPS jamming | **Illegal** | FCC |
+| Net capture | Gray area | State dependent |
+| Shooting down | **Illegal** | 18 U.S.C. § 32 |
+
+**Authorized entities:** Only DHS, DOJ, DOE, DOD can legally defeat drones under 6 U.S.C. § 124n.
+
+**FAA Guidance:**
+- Cannot interfere with aircraft in flight
+- Drones are legally "aircraft"
+- Even on your property, shooting/jamming prohibited
+
+---
+
+#### United Kingdom
+
+**Detection:** Legal with no restrictions.
+
+**Countermeasures:**
+| Action | Legal Status | Authority |
+|--------|--------------|-----------|
+| Visual detection | Legal | None |
+| RF detection | Legal | None |
+| RF jamming | **Illegal** | Wireless Telegraphy Act 2006 |
+| Net capture | **Restricted** | Police/authorized only |
+| Protocol takeover | **Restricted** | RIPA authorization |
+
+**Authorized entities:** Police, Prison Service (under specific authority).
+
+**CAA Guidance:** Contact [caa.co.uk](https://www.caa.co.uk/drones) for drone-related incidents.
+
+---
+
+#### European Union (GDPR Considerations)
+
+**Privacy Requirements:**
+- Drone detection cameras may capture personal data
+- GDPR applies if individuals identifiable
+- Legitimate interest assessment required
+
+**GDPR Compliance Checklist:**
+- [ ] Privacy impact assessment completed
+- [ ] Signage indicating surveillance in area
+- [ ] Data retention policy (delete after X days)
+- [ ] Access request procedure documented
+- [ ] No facial recognition without consent
+- [ ] Data processing agreement with cloud providers
+
+**Example Privacy Notice:**
+```
+DRONE DETECTION SYSTEM IN OPERATION
+This area is monitored by an automated drone detection
+system. Images may be captured for security purposes.
+Data retained for 30 days. Contact: privacy@example.com
+```
+
+---
+
+#### Australia
+
+**Detection:** Legal for private property monitoring.
+
+**Countermeasures:**
+| Action | Legal Status | Authority |
+|--------|--------------|-----------|
+| Visual detection | Legal | None |
+| RF detection | Legal | None |
+| RF jamming | **Illegal** | Radiocommunications Act 1992 |
+| Physical capture | **Restricted** | State law varies |
+
+**CASA Guidance:** Report unsafe drone operations to [casa.gov.au](https://www.casa.gov.au).
+
+---
+
+#### South Africa
+
+**Detection:** Legal with no restrictions.
+
+**Countermeasures:**
+| Action | Legal Status | Notes |
+|--------|--------------|-------|
+| Visual detection | Legal | SACAA has no restrictions |
+| RF detection | Legal | ICASA allows passive monitoring |
+| RF jamming | **Illegal** | ECA Section 34 |
+| Net capture | Gray area | Private property defense possible |
+
+**SACAA Guidance:** Contact [caa.co.za](https://www.caa.co.za) for commercial drone incidents.
+
+**ICASA:** Radio frequency jamming requires special authorization, rarely granted.
+
+---
+
+### Insurance Considerations
+
+**Liability Coverage:**
+| Scenario | Typical Coverage | Notes |
+|----------|------------------|-------|
+| Property damage (your property) | Homeowner's policy | Check drone exclusions |
+| Property damage (drone captured) | May not cover | Intentional act exclusion |
+| Personal injury | General liability | If net injures bystander |
+| Drone operator lawsuit | Legal defense | Consider umbrella policy |
+
+**Recommended Coverage:**
+- General liability: $1M minimum
+- Umbrella policy: $2-5M for countermeasure systems
+- Professional liability: If providing detection services
+
+**Documentation Requirements:**
+- Maintain system logs (proof of threat)
+- Record all deployments
+- Keep maintenance records
+- Document training/certification
+
+---
+
+### Authorized Use Cases
+
+| Use Case | Detection Legal | Counter Legal | Notes |
+|----------|-----------------|---------------|-------|
+| Home property | Yes | Varies by country | Check local laws |
+| Commercial property | Yes | Varies | Liability concerns |
+| Event security | Yes | Often no | Requires authorization |
+| Prison/detention | Yes | Yes (authorized) | Government only |
+| Critical infrastructure | Yes | Yes (authorized) | Special permits |
+| Military | Yes | Yes | Rules of engagement |
+
+---
+
+### Reporting Drone Incidents
+
+**When to report:**
+- Drone flying over restricted airspace
+- Drone involved in criminal activity
+- Dangerous/reckless drone operation
+- Near-miss with manned aircraft
+
+**Who to contact:**
+| Country | Authority | Contact |
+|---------|-----------|---------|
+| USA | FAA | 1-866-835-5322 |
+| UK | CAA/Police | 101 or caa.co.uk |
+| Australia | CASA | casa.gov.au |
+| EU | Local aviation authority | Varies |
+| South Africa | SACAA | caa.co.za |
+
+---
+
+## 10. Legal Disclaimer
 
 This documentation is for educational and authorized security purposes only.
 
@@ -925,5 +1905,74 @@ Before implementing any countermeasure system:
 2. Verify property rights and permissions
 3. Consider liability implications
 4. Follow all applicable regulations
+5. Obtain appropriate insurance coverage
+6. Document all detections and deployments
+7. Seek legal counsel for specific situations
 
-The authors assume no liability for use or misuse of this information.
+**The authors and contributors assume no liability for use or misuse of this information. Users are solely responsible for ensuring compliance with all applicable laws and regulations in their jurisdiction.**
+
+---
+
+## Appendix A: Glossary
+
+| Term | Definition |
+|------|------------|
+| C-UAS | Counter-Unmanned Aircraft System |
+| RF | Radio Frequency |
+| EO/IR | Electro-Optical/Infrared |
+| FMCW | Frequency-Modulated Continuous Wave (radar type) |
+| ADS-B | Automatic Dependent Surveillance-Broadcast |
+| PoE | Power over Ethernet |
+| GPIO | General Purpose Input/Output |
+| FLIR | Forward-Looking Infrared |
+| PTZ | Pan-Tilt-Zoom |
+| SIEM | Security Information and Event Management |
+| NVR | Network Video Recorder |
+| OUI | Organizationally Unique Identifier (MAC prefix) |
+| GDPR | General Data Protection Regulation (EU) |
+| SACAA | South African Civil Aviation Authority |
+| ICASA | Independent Communications Authority of South Africa |
+
+---
+
+## Appendix B: Quick Reference
+
+### Tier Selection Guide
+
+```
+What's your budget?
+├── < $100 → SkyWatch Nano
+├── $100-$300 → SkyWatch Standard
+├── $300-$600 → SkyWatch Pro
+├── $150-$400 → NetSentry Lite (with countermeasure)
+├── $400-$800 → NetSentry Standard
+├── $800-$2,000 → NetSentry Pro
+└── $5,000+ → Enterprise / Commercial
+
+Do you need countermeasures?
+├── No → SkyWatch line
+└── Yes → NetSentry line (check legal status first)
+
+Special requirements?
+├── Mobile/portable → SkyWatch Mobile
+├── Large area → SkyWatch Mesh
+├── Night/thermal → SkyWatch Thermal
+├── Maritime → SkyWatch Marine
+└── Enterprise → SkyWatch Enterprise
+```
+
+### Detection Method Selection
+
+```
+What conditions?
+├── Daylight only → Camera (cheapest)
+├── Day + night → Camera + Thermal
+├── Any weather → RF + Radar
+└── Maximum coverage → Multi-sensor fusion
+
+What range?
+├── < 100m → Camera sufficient
+├── 100-500m → Camera + RF
+├── 500m-2km → RF + Radar
+└── > 2km → Radar required
+```
