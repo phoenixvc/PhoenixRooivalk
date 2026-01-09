@@ -86,9 +86,13 @@ class ColoredFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         if self._use_colors:
             color = self.COLORS.get(record.levelname, '')
-            record.levelname = f"{color}{record.levelname}{self.RESET}"
+            # Create a copy to avoid affecting other handlers
+            original_levelname = record.levelname
+            record.levelname = f"{color}{original_levelname}{self.RESET}"
+            result = super().format(record)
+            record.levelname = original_levelname
+            return result
         return super().format(record)
-
 
 class MetricsLogger:
     """
