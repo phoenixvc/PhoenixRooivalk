@@ -228,21 +228,57 @@ import {
 
 <SlideSection
   number={6}
-  title="Hardware Progress"
-  duration={30}
-  icon="🔧"
+  title="Training Drones"
+  duration={20}
+  icon="🚁"
+  layout="image-right"
+  image="/img/training-drones.jpeg"
+  imageCaption="Two quadcopters ready for training data capture"
   keyPoints={[
-    "**Training drones**: Two quadcopters ready for data capture",
-    "**Hexacopter**: Large drone in development for enterprise testing",
-    "**Launcher prototype**: PVC-based net launcher for testing",
-    "**Pi 4 demo unit**: Working detection demo ready for field trials",
+    "**Carbon fiber quad**: ~250mm racing drone with prop guards",
+    "**Micro quad**: ~100mm for close-range detection testing",
+    "**Training footage**: Capturing varied flight patterns and angles",
   ]}
-  speakerNotes="Show the actual hardware photos - this is tangible progress."
-  script="On the hardware side, Pieter has two training quadcopters ready for capturing training footage. We have a hexacopter in development for enterprise-class detection testing. The launcher prototype uses PVC tubes with a solenoid valve, targeting 50-meter deployment range. Our Pi 4 demo unit is working and ready for field testing."
+  speakerNotes="Show the actual training drones - this is tangible progress."
+  script="Pieter has two training quadcopters ready for capturing training footage. The carbon fiber racing quad is about 250mm with prop guards, and we have a smaller micro quad for close-range detection testing. These give us varied sizes for training the model."
 />
 
 <SlideSection
   number={7}
+  title="Hexacopter Development"
+  duration={20}
+  icon="🔧"
+  layout="image-right"
+  image="/img/hexacopter-workshop.jpeg"
+  imageCaption="Professional hexacopter (~600mm) in development"
+  keyPoints={[
+    "**Enterprise-class**: ~600mm hexacopter with camera gimbal",
+    "**Target detection**: Larger drone class for model training",
+    "**In progress**: Wiring and test flight preparation",
+  ]}
+  speakerNotes="Show the hexacopter - represents enterprise-class drones."
+  script="We have a professional hexacopter in development, about 600mm with a camera gimbal. This represents larger enterprise-class drones that our detection system needs to identify. Currently in progress with wiring and test flight preparation."
+/>
+
+<SlideSection
+  number={8}
+  title="Launcher Prototype"
+  duration={20}
+  icon="🎯"
+  layout="image-right"
+  image="/img/launcher-prototype.jpeg"
+  imageCaption="PVC launcher prototype awaiting final assembly"
+  keyPoints={[
+    "**PVC tube design**: Pneumatic launcher with solenoid valve",
+    "**Target range**: 50m net deployment capability",
+    "**Status**: Awaiting trigger wiring and pressure testing",
+  ]}
+  speakerNotes="Show the launcher prototype - demonstrates countermeasure capability."
+  script="Our launcher prototype uses PVC tubes with a solenoid valve for pneumatic net deployment. We're targeting 50-meter deployment range. Currently awaiting trigger wiring and pressure testing before field trials."
+/>
+
+<SlideSection
+  number={9}
   title="Next Priorities"
   duration={20}
   icon="📅"
