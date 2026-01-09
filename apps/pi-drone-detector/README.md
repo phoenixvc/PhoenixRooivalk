@@ -1,9 +1,18 @@
-# Raspberry Pi Drone Detector
+# Raspberry Pi Drone Detector v2.0
 
-Real-time drone detection system for Raspberry Pi, distinguishing drones
-from common objects like coke cans.
+Real-time drone detection system for Raspberry Pi with modular, interface-based
+architecture. Supports hot-swapping of cameras, inference engines, and trackers.
 
 Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
+
+## Features
+
+- **Modular Architecture**: Swap cameras, inference engines, and trackers at runtime
+- **Multiple Inference Backends**: TFLite, ONNX, Coral Edge TPU
+- **Object Tracking**: Centroid and Kalman filter trackers
+- **Web Streaming**: MJPEG stream with status dashboard
+- **Targeting System**: Distance estimation and engagement control
+- **Auto-Configuration**: Automatic hardware detection and optimization
 
 ## Quick Start
 
@@ -19,8 +28,11 @@ cd PhoenixRooivalk/apps/pi-drone-detector
 python3 -m venv venv
 source venv/bin/activate
 
-# Install dependencies
-pip install -r requirements-pi.txt
+# Install dependencies (choose your platform)
+pip install -e ".[pi]"           # Raspberry Pi with TFLite
+pip install -e ".[pi,coral]"     # Pi + Coral Edge TPU
+pip install -e ".[pi,streaming]" # Pi + Web streaming
+pip install -e ".[dev]"          # Development with all tools
 
 # Enable camera (if using Pi Camera)
 sudo raspi-config  # Interface Options > Camera > Enable
@@ -59,29 +71,156 @@ python src/main.py --model models/drone-detector_int8.tflite --headless
 # With Coral USB Accelerator (10x faster)
 python src/main.py --model models/drone-detector_int8.tflite --coral
 
+# With web streaming
+python src/main.py --model models/drone-detector_int8.tflite --stream --stream-port 8080
+
+# With object tracking
+python src/main.py --model models/drone-detector_int8.tflite --tracker centroid
+
 # Save detections to file
 python src/main.py --model models/drone-detector_int8.tflite --save-detections detections.json
+
+# Full example with all features
+python src/main.py --model models/drone-detector_int8.tflite \
+  --tracker kalman \
+  --stream --stream-port 8080 \
+  --alert-webhook https://api.example.com/detections \
+  --save-detections detections.json
 ```
+
+### 4. Web Streaming
+
+When streaming is enabled, access the following endpoints:
+
+- `http://<pi-ip>:8080/` - Live viewer dashboard
+- `http://<pi-ip>:8080/stream` - MJPEG video stream
+- `http://<pi-ip>:8080/snapshot` - Single JPEG frame
+- `http://<pi-ip>:8080/status` - JSON system status
+- `http://<pi-ip>:8080/health` - Health check endpoint
 
 ## Project Structure
 
 ```text
 pi-drone-detector/
-├── azure-ml/              # Azure ML training infrastructure
-│   ├── train.py           # Training script
-│   ├── job.yaml           # Azure ML job definition
-│   ├── conda.yaml         # Training environment
-│   └── setup-azure.sh     # One-click Azure setup
-├── scripts/
-│   └── download_datasets.py  # Dataset preparation
 ├── src/
-│   ├── detector.py        # TFLite inference engine
-│   └── main.py            # Real-time detection app
-├── models/                # Trained models (add your .tflite here)
-├── data/                  # Training data
-├── requirements-pi.txt    # Pi inference dependencies
-├── requirements-training.txt  # Training dependencies
+│   ├── interfaces.py       # Abstract base classes (Protocols)
+│   ├── frame_sources.py    # Camera implementations (Pi, USB, Video, Mock)
+│   ├── inference_engines.py # Inference backends (TFLite, ONNX, Coral)
+│   ├── trackers.py         # Object trackers (Centroid, Kalman)
+│   ├── renderers.py        # Frame visualization
+│   ├── streaming.py        # MJPEG web streaming server
+│   ├── alert_handlers.py   # Alert handlers (Console, Webhook, File)
+│   ├── targeting.py        # Distance estimation & fire net control
+│   ├── hardware.py         # Hardware auto-detection
+│   ├── factory.py          # Component wiring and pipeline creation
+│   ├── main.py             # CLI entry point
+│   ├── config/
+│   │   ├── settings.py     # Pydantic configuration models
+│   │   └── constants.py    # Immutable configuration values
+│   └── utils/
+│       ├── geometry.py     # IoU, NMS, bbox utilities
+│       └── logging_config.py # Structured logging
+├── tests/
+│   ├── conftest.py         # Shared pytest fixtures
+│   └── unit/               # Unit tests
+├── azure-ml/               # Azure ML training infrastructure
+│   ├── train.py            # Training script
+│   ├── job.yaml            # Azure ML job definition
+│   └── setup-azure.sh      # One-click Azure setup
+├── docs/                   # Documentation
+├── models/                 # Trained models (.tflite, .onnx)
+├── pyproject.toml          # Project configuration & dependencies
+├── requirements.txt        # Core runtime dependencies
+├── requirements-dev.txt    # Development dependencies
 └── README.md
+```
+
+## Architecture
+
+The system uses a modular, interface-based architecture that allows swapping components:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                      DetectionPipeline                       │
+├─────────────────────────────────────────────────────────────┤
+│  ┌────────────┐    ┌────────────────┐    ┌──────────────┐  │
+│  │FrameSource │───>│InferenceEngine │───>│ObjectTracker │  │
+│  └────────────┘    └────────────────┘    └──────────────┘  │
+│        ▲                   │                     │          │
+│        │                   ▼                     ▼          │
+│  ┌────────────┐    ┌────────────────┐    ┌──────────────┐  │
+│  │  Hardware  │    │   DroneScorer  │    │AlertHandler  │  │
+│  │  Detection │    └────────────────┘    └──────────────┘  │
+│  └────────────┘                                │          │
+│        │                                       ▼          │
+│        │           ┌────────────────┐    ┌──────────────┐  │
+│        └──────────>│   Renderer     │───>│  Streaming   │  │
+│                    └────────────────┘    │   Server     │  │
+│                                          └──────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Swappable Components
+
+| Component | Implementations |
+|-----------|-----------------|
+| FrameSource | PiCameraSource, USBCameraSource, VideoFileSource, MockFrameSource |
+| InferenceEngine | TFLiteEngine, ONNXEngine, CoralEngine, MockInferenceEngine |
+| ObjectTracker | NoOpTracker, CentroidTracker, KalmanTracker |
+| AlertHandler | ConsoleAlertHandler, WebhookAlertHandler, FileAlertHandler |
+| FrameRenderer | OpenCVRenderer, HeadlessRenderer, StreamingRenderer |
+
+## Configuration
+
+### YAML Configuration File
+
+Create a `config.yaml` file to customize all settings:
+
+```yaml
+camera_type: auto  # auto, picamera, usb, video, mock
+engine_type: auto  # auto, tflite, onnx, coral, mock
+tracker_type: centroid  # none, centroid, kalman
+
+capture:
+  width: 640
+  height: 480
+  fps: 30
+
+inference:
+  model_path: "models/drone-detector_int8.tflite"
+  confidence_threshold: 0.5
+  nms_threshold: 0.45
+  num_threads: 4
+
+targeting:
+  max_targeting_distance_m: 100.0
+  fire_net_enabled: false
+  fire_net_min_confidence: 0.85
+  fire_net_min_track_frames: 10
+  fire_net_arm_required: true
+
+streaming:
+  enabled: false
+  port: 8080
+  quality: 80
+  max_fps: 15
+
+display:
+  headless: false
+  show_fps: true
+  show_drone_score: true
+```
+
+### Environment Variables
+
+All settings can be overridden via environment variables:
+
+```bash
+export CAPTURE_WIDTH=1280
+export CAPTURE_HEIGHT=720
+export INFERENCE_CONFIDENCE_THRESHOLD=0.6
+export STREAM_ENABLED=true
+export STREAM_PORT=8080
 ```
 
 ## Training on Azure ML
@@ -204,6 +343,85 @@ ls -la /dev/video*
 # Install Pi-optimized TFLite runtime
 pip install tflite-runtime
 ```
+
+## Targeting System
+
+The targeting module provides distance estimation and engagement control:
+
+### Distance Estimation
+
+Uses pinhole camera model to estimate target distance:
+
+```python
+distance = (assumed_drone_size * focal_length_px) / bbox_size_px
+```
+
+Configure in `config.yaml`:
+```yaml
+targeting:
+  assumed_drone_size_m: 0.30  # Assumed drone size (30cm)
+  max_targeting_distance_m: 100.0  # Max tracking distance
+```
+
+### Fire Net Controller
+
+Safety interlocks before engagement:
+1. System must be armed
+2. Minimum confidence threshold (0.85)
+3. Minimum track frames (10)
+4. Distance envelope (5m - 50m)
+5. Velocity threshold (< 30 m/s)
+6. Cooldown period between triggers
+
+## Development
+
+### Setup Development Environment
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+
+# Run specific test file
+pytest tests/unit/test_targeting.py -v
+```
+
+### Code Quality
+
+```bash
+# Format code
+black src tests
+isort src tests
+
+# Lint
+ruff check src tests
+
+# Type check
+mypy src
+```
+
+### CI/CD
+
+The project uses GitHub Actions for continuous integration:
+- **Lint**: ruff, black, isort, mypy
+- **Test**: pytest on Python 3.9-3.11
+- **Security**: pip-audit, bandit
+
+## API Reference
+
+See [docs/](docs/) for detailed API documentation.
 
 ## License
 
