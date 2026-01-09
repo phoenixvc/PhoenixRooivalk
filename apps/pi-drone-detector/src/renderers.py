@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Optional, Tuple
 
 import numpy as np
 
-from interfaces import FrameRenderer, FrameData, Detection, TrackedObject
+from .interfaces import FrameRenderer, FrameData, Detection, TrackedObject
 
 
 class OpenCVRenderer(FrameRenderer):
