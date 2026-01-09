@@ -66,7 +66,7 @@ class TargetLock:
     detection: Detection
     lock_time: float
     estimated_distance_m: float
-    estimated_velocity_ms: tuple[float, float] = (0.0, 0.0)
+    velocity_px_frame: tuple[float, float] = (0.0, 0.0)  # Velocity in pixels/frame
     confidence_history: list[float] = field(default_factory=list)
     position_history: list[tuple[int, int]] = field(default_factory=list)
 
@@ -95,7 +95,7 @@ class TargetLock:
             "frames_locked": self.frames_locked,
             "estimated_distance_m": self.estimated_distance_m,
             "average_confidence": self.average_confidence,
-            "velocity_ms": self.estimated_velocity_ms,
+            "velocity_px_frame": self.velocity_px_frame,
         }
 
 
@@ -329,7 +329,7 @@ class TargetingSystem:
         """Update existing target lock with new data."""
         self._current_lock.detection = track.detection
         self._current_lock.estimated_distance_m = distance
-        self._current_lock.estimated_velocity_ms = track.velocity
+        self._current_lock.velocity_px_frame = track.velocity
         self._current_lock.confidence_history.append(track.detection.confidence)
         self._current_lock.position_history.append(track.detection.bbox.center)
 
@@ -360,7 +360,7 @@ class TargetingSystem:
             detection=track.detection,
             lock_time=time.time(),
             estimated_distance_m=distance,
-            estimated_velocity_ms=track.velocity,
+            velocity_px_frame=track.velocity,
             confidence_history=[track.detection.confidence],
             position_history=[track.detection.bbox.center],
         )
@@ -393,9 +393,9 @@ class TargetingSystem:
 
         det = self._current_lock.detection
         cx, cy = det.bbox.center
-        vx, vy = self._current_lock.estimated_velocity_ms
+        vx, vy = self._current_lock.velocity_px_frame
 
-        # Apply lead factor
+        # Apply lead factor (velocity is in pixels/frame)
         lead_x = int(cx + vx * self._settings.tracking_lead_factor)
         lead_y = int(cy + vy * self._settings.tracking_lead_factor)
 
@@ -507,13 +507,17 @@ class FireNetController:
         self,
         track: TrackedObject,
         estimated_distance: float,
+        frame_width: int = 640,
+        fps: float = 30.0,
     ) -> tuple[bool, EngagementResult]:
         """
         Check if all conditions are met for firing.
 
         Args:
-            track: Target track
-            estimated_distance: Estimated distance to target
+            track: Target track with velocity in pixels/frame
+            estimated_distance: Estimated distance to target in meters
+            frame_width: Frame width in pixels (for velocity conversion)
+            fps: Frames per second (for velocity conversion)
 
         Returns:
             (can_fire, reason)
@@ -546,9 +550,16 @@ class FireNetController:
         if estimated_distance < self._settings.fire_net_min_distance_m:
             return (False, EngagementResult.FAILED_OUT_OF_RANGE)
 
-        # Velocity check - don't fire at very fast targets
-        velocity = math.sqrt(track.velocity[0] ** 2 + track.velocity[1] ** 2)
-        if velocity > self._settings.fire_net_velocity_threshold_ms:
+        # Velocity check - convert pixels/frame to m/s
+        # Using pinhole camera model: meters_per_pixel ≈ distance / focal_length_px
+        # Pi Camera v2 focal length: 3.04mm, sensor width: 3.68mm
+        focal_length_px = (DEFAULT_FOCAL_LENGTH_MM / DEFAULT_SENSOR_WIDTH_MM) * frame_width
+        meters_per_pixel = estimated_distance / focal_length_px if focal_length_px > 0 else 0
+
+        velocity_px = math.sqrt(track.velocity[0] ** 2 + track.velocity[1] ** 2)
+        velocity_ms = velocity_px * meters_per_pixel * fps
+
+        if velocity_ms > self._settings.fire_net_velocity_threshold_ms:
             return (False, EngagementResult.FAILED_TOO_FAST)
 
         return (True, EngagementResult.SUCCESS)
@@ -709,9 +720,10 @@ class EngagementSystem:
                     track_id=lock.track_id,
                     detection=lock.detection,
                     frames_tracked=lock.frames_locked,
-                    velocity=lock.estimated_velocity_ms,
+                    velocity=lock.velocity_px_frame,
                 ),
                 lock.estimated_distance_m,
+                frame_width=frame_width,
             )
 
             if can_fire:
@@ -720,7 +732,7 @@ class EngagementSystem:
                         track_id=lock.track_id,
                         detection=lock.detection,
                         frames_tracked=lock.frames_locked,
-                        velocity=lock.estimated_velocity_ms,
+                        velocity=lock.velocity_px_frame,
                     ),
                     lock.estimated_distance_m,
                 )

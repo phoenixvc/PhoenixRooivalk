@@ -314,7 +314,7 @@ class TestFireNetController:
             track_id=1,
             detection=Detection(0, 'drone', 0.9, BoundingBox(200, 200, 300, 300), 0.95),
             frames_tracked=15,
-            velocity=(5.0, 5.0),  # ~7 m/s, below threshold
+            velocity=(5.0, 5.0),  # pixels/frame, converts to ~10 m/s at 25m distance
         )
 
     def test_initial_state_not_armed(self, fire_net):
@@ -393,7 +393,8 @@ class TestFireNetController:
         """Should not fire at fast-moving targets."""
         fire_net.arm()
 
-        valid_target.velocity = (50.0, 50.0)  # ~70 m/s, above threshold
+        # High pixel velocity converts to ~100 m/s at 25m distance (above 30 m/s threshold)
+        valid_target.velocity = (50.0, 50.0)
 
         can_fire, result = fire_net.check_engagement(valid_target, 25.0)
 

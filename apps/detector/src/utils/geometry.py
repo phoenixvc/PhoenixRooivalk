@@ -291,7 +291,8 @@ def expand_bbox(
     """
     x1, y1, x2, y2 = bbox
     cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
-    w, h = x2 - x1, y2 - y1
+    w: float = float(x2 - x1)
+    h: float = float(y2 - y1)
 
     # Apply factor
     w *= factor
@@ -302,12 +303,12 @@ def expand_bbox(
     h += 2 * padding
 
     # Convert back to corners
-    x1 = int(cx - w / 2)
-    y1 = int(cy - h / 2)
-    x2 = int(cx + w / 2)
-    y2 = int(cy + h / 2)
+    new_x1 = int(cx - w / 2)
+    new_y1 = int(cy - h / 2)
+    new_x2 = int(cx + w / 2)
+    new_y2 = int(cy + h / 2)
 
-    return (x1, y1, x2, y2)
+    return (new_x1, new_y1, new_x2, new_y2)
 
 
 def clip_bbox(

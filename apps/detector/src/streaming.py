@@ -20,6 +20,12 @@ from typing import Any, Optional
 
 import numpy as np
 
+# Import cv2 at module level for patchability in tests
+try:
+    import cv2
+except ImportError:
+    cv2 = None  # type: ignore[assignment]
+
 from .interfaces import Detection, FrameData, FrameRenderer, TrackedObject
 
 logger = logging.getLogger(__name__)
@@ -174,9 +180,11 @@ class StreamingRenderer(FrameRenderer):
         inference_time_ms: float,
     ) -> None:
         """Encode frame to JPEG and put in buffer."""
-        try:
-            import cv2
+        if cv2 is None:
+            logger.warning("cv2 not available, cannot encode frame")
+            return
 
+        try:
             # Encode to JPEG
             encode_params = [cv2.IMWRITE_JPEG_QUALITY, self._quality]
             success, jpeg_data = cv2.imencode(".jpg", frame, encode_params)

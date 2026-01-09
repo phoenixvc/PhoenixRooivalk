@@ -76,6 +76,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pytest-cov pytest-asyncio
           pip install pydantic pydantic-settings PyYAML numpy
+          # Install the detector package in editable mode
+          pip install -e .
 
       - name: Run unit tests
         run: |
@@ -117,6 +119,8 @@ jobs:
           pip install pydantic pydantic-settings PyYAML numpy
           # Install opencv headless for integration tests
           pip install opencv-python-headless
+          # Install the detector package in editable mode
+          pip install -e .
 
       - name: Run integration tests
         run: |
