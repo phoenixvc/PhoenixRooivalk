@@ -16,7 +16,7 @@ mod token_store;
 mod video_stream;
 mod weapon_panel;
 
-pub use detection_panel::{DetectionData, DetectionIndicator, DetectionPanel, DetectorConnectionStatus};
+pub use detection_panel::{DetectionData, DetectionPanel, DetectorConnectionStatus};
 pub use drone_deployment::DroneDeploymentPanel;
 pub use energy_management::EnergyManagement;
 pub use event_feed::{create_feed_item, EventFeed, FeedItem, FeedSeverity};
@@ -28,7 +28,7 @@ pub use research_panel::ResearchPanel;
 pub use stats_panel::StatsPanel;
 pub use synergy_system::SynergySystem;
 pub use token_store::TokenStore;
-pub use video_stream::{StreamMode, StreamStatus, VideoPreview, VideoStream};
+pub use video_stream::{StreamMode, VideoStream};
 pub use weapon_panel::WeaponPanel;
 
 use crate::game::{GameStateManager, WeaponType};
@@ -524,7 +524,7 @@ pub fn App() -> impl IntoView {
                                 ));
                             });
                         })
-                        on_test=Some(Callback::new(move |_| {
+                        on_test=Callback::new(move |_| {
                             // Add a test detection
                             let now = js_sys::Date::new_0();
                             let timestamp = format!(
@@ -553,7 +553,7 @@ pub fn App() -> impl IntoView {
                                     FeedSeverity::Info,
                                 ));
                             });
-                        }))
+                        })
                     />
                 </div>
             </Show>
