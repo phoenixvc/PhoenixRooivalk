@@ -1,0 +1,125 @@
+# Fire Net Enabled Configuration Example
+# =======================================
+#
+# WARNING: This configuration enables the fire net system.
+# Only use in controlled environments with proper safety measures.
+#
+# Before enabling:
+# 1. Read docs/FIRE_NET_HARDWARE.md for wiring and safety
+# 2. Test GPIO output without actuator connected
+# 3. Verify all safety interlocks are working
+# 4. Ensure launcher is pointed in a safe direction
+#
+# Usage:
+#   python -m detector --config configs/fire-net-example.yaml
+
+# Camera and capture settings
+camera_type: auto
+capture:
+  width: 640
+  height: 480
+  fps: 30
+  buffer_size: 1
+
+# Inference settings
+engine_type: auto
+inference:
+  model_path: "models/drone_detector.tflite"
+  input_size: 320
+  confidence_threshold: 0.5
+  nms_threshold: 0.45
+  num_threads: 4
+  use_coral: false
+
+# Drone scoring - tighter thresholds for fire net
+drone_score:
+  drone_class_id: 0
+  model_weight: 0.7
+  drone_threshold: 0.6 # Higher threshold for fire net mode
+
+# Tracker settings
+tracker_type: kalman # Use Kalman for better velocity estimation
+tracker:
+  max_disappeared: 30
+  max_distance: 100.0
+  process_noise: 1.0
+  measurement_noise: 1.0
+
+# Targeting and Fire Net Configuration
+# ====================================
+targeting:
+  # Distance estimation
+  max_targeting_distance_m: 50.0
+  assumed_drone_size_m: 0.3 # Typical consumer drone
+
+  # Target lock requirements
+  min_confidence_for_lock: 0.7
+  lock_timeout_seconds: 5.0
+  tracking_lead_factor: 1.2 # Lead factor for interception
+
+  # ============================================
+  # FIRE NET SETTINGS - REVIEW CAREFULLY
+  # ============================================
+
+  # Enable/disable the fire net system
+  fire_net_enabled: true
+
+  # Minimum drone_score to fire (0.0-1.0)
+  # Higher = more conservative, fewer false positives
+  fire_net_min_confidence: 0.85
+
+  # Minimum frames tracked before fire allowed
+  # Higher = more stable tracking required
+  fire_net_min_track_frames: 10
+
+  # Distance envelope (meters)
+  # fire_net_max_distance_m: Maximum effective range of your launcher
+  # fire_net_min_distance_m: Safety buffer (don't fire at very close targets)
+  fire_net_max_distance_m: 50.0
+  fire_net_min_distance_m: 5.0
+
+  # Maximum target velocity (m/s) - don't fire at very fast targets
+  fire_net_velocity_threshold_ms: 30.0
+
+  # Cooldown between fires (seconds)
+  fire_net_cooldown_seconds: 10.0
+
+  # Require explicit arming before fire is possible
+  # STRONGLY RECOMMENDED: Keep this true
+  fire_net_arm_required: true
+
+  # GPIO pin for fire trigger (BCM numbering)
+  # Default: GPIO 17 (physical pin 11)
+  # Valid range: 2-27
+  fire_net_gpio_pin: 17
+
+# Alert settings
+alert:
+  webhook_url: null # Optional: set for remote alerts
+  cooldown_per_track: 5.0
+  global_cooldown: 1.0
+  save_detections_path: "detections.json" # Log all detections
+
+# Streaming (optional - useful for monitoring)
+streaming:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  quality: 80
+  max_fps: 15
+  auth_enabled: false
+
+# Logging
+logging:
+  level: INFO
+  json_format: false
+  log_file: "fire_net.log"
+
+# Display
+display:
+  headless: false # Set true for production
+  show_fps: true
+  show_drone_score: true
+  show_track_id: true
+  show_distance: true
+  show_targeting_overlay: true

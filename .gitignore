@@ -85,3 +85,4 @@ package-lock.json
 pitch-deck/*.pptx
 pitch-deck/*.pdf
 pitch-deck/*.html
+*.egg-info/

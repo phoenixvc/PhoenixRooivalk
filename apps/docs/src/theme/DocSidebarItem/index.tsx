@@ -80,7 +80,7 @@ function shouldShowItem(
   item: Props["item"],
   currentPhase: string,
   phaseMap: Record<string, Phase[]>,
-  isPhaseMatch: (_phases: Phase[] | undefined) => boolean,
+  isPhaseMatch: (phases: Phase[] | undefined) => boolean,
 ): boolean {
   // Always show if filter is "all"
   if (currentPhase === "all") {

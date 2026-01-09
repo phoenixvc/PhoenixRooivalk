@@ -1,0 +1,27 @@
+# Pi Drone Detector - Core Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core
+numpy>=1.24.0
+opencv-python-headless>=4.8.1.78  # CVE-2023-4863 fix (libwebp vulnerability)
+
+# ML Runtime (choose one based on platform)
+# For Raspberry Pi:
+# tflite-runtime>=2.14.0
+
+# For desktop/development:
+# tensorflow>=2.13.0
+
+# Configuration
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+PyYAML>=6.0.1
+
+# Optional: ONNX support
+# onnxruntime>=1.15.0
+
+# Optional: Coral TPU support (requires separate installation)
+# pycoral>=2.0.0
+
+# Logging
+python-json-logger>=2.0.7
