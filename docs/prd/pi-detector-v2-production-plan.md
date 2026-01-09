@@ -3,6 +3,7 @@
 ## Overview
 
 This plan addresses production readiness improvements including:
+
 - Configuration management
 - Code quality (SOLID, DRY, Python best practices)
 - Testing infrastructure
@@ -30,6 +31,7 @@ apps/pi-drone-detector/
 ```
 
 **settings.py - Centralized Configuration:**
+
 ```python
 from pydantic import BaseSettings, Field, validator
 from typing import Tuple, Optional
@@ -164,6 +166,7 @@ class Settings(BaseSettings):
 ```
 
 **constants.py - Immutable Values:**
+
 ```python
 """Immutable constants that should never be configured."""
 
@@ -236,6 +239,7 @@ apps/pi-drone-detector/src/
 ```
 
 **geometry.py:**
+
 ```python
 """Geometric utilities for bounding boxes and NMS."""
 from typing import List, Tuple
@@ -281,9 +285,11 @@ def non_max_suppression(
 
 **Fix SOLID Violations:**
 
-1. **Remove duplicate Detection class** - Delete from detector.py, use interfaces.Detection everywhere
+1. **Remove duplicate Detection class** - Delete from detector.py, use
+   interfaces.Detection everywhere
 2. **Extract preprocessing** - Move to utils/image.py
-3. **Extract scoring** - Already in inference_engines.py, make configurable via settings
+3. **Extract scoring** - Already in inference_engines.py, make configurable via
+   settings
 4. **Remove draw_detections from detector.py** - Use renderers module only
 
 ---
@@ -291,6 +297,7 @@ def non_max_suppression(
 ### 1.3 Logging Infrastructure
 
 **Create `logging_config.py`:**
+
 ```python
 """Structured logging configuration."""
 import logging
@@ -459,6 +466,7 @@ def mock_filesystem(tmp_path):
 ### 2.3 Unit Test Examples
 
 **test_geometry.py:**
+
 ```python
 """Tests for geometry utilities."""
 import pytest
@@ -500,6 +508,7 @@ class TestNMS:
 ```
 
 **test_targeting.py:**
+
 ```python
 """Tests for targeting and fire net logic."""
 import pytest
@@ -581,6 +590,7 @@ class TestFireNetController:
 ### 3.1 GitHub Actions Workflow
 
 **.github/workflows/ci.yml:**
+
 ```yaml
 name: CI
 
@@ -588,11 +598,11 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'apps/pi-drone-detector/**'
+      - "apps/pi-drone-detector/**"
   pull_request:
     branches: [main]
     paths:
-      - 'apps/pi-drone-detector/**'
+      - "apps/pi-drone-detector/**"
 
 jobs:
   lint:
@@ -603,7 +613,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -627,7 +637,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11']
+        python-version: ["3.9", "3.10", "3.11"]
 
     steps:
       - uses: actions/checkout@v4
@@ -663,7 +673,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -684,7 +694,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Build package
         run: |
@@ -708,7 +718,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Build docs
         run: |
@@ -725,6 +735,7 @@ jobs:
 ### 3.2 Pre-commit Hooks
 
 **.pre-commit-config.yaml:**
+
 ```yaml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -742,7 +753,7 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
-        args: ['--maxkb=1000']
+        args: ["--maxkb=1000"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0
@@ -778,6 +789,7 @@ repos:
 ### 4.2 Streaming Module
 
 **streaming.py:**
+
 ```python
 """MJPEG streaming server for web clients."""
 import asyncio
@@ -1038,6 +1050,7 @@ class MJPEGStreamServer:
 ### 5.1 Targeting Module
 
 **targeting.py:**
+
 ```python
 """
 Targeting and engagement system for drone interception.
@@ -1481,6 +1494,7 @@ apps/pi-drone-detector/
 ### 6.2 MkDocs Configuration
 
 **mkdocs.yml:**
+
 ```yaml
 site_name: Pi Drone Detector
 site_description: Real-time drone detection for Raspberry Pi
@@ -1510,19 +1524,19 @@ nav:
   - Configuration: configuration.md
   - Architecture: architecture.md
   - API Reference:
-    - Interfaces: api/interfaces.md
-    - Frame Sources: api/frame-sources.md
-    - Inference: api/inference.md
-    - Trackers: api/trackers.md
-    - Targeting: api/targeting.md
-    - Streaming: api/streaming.md
+      - Interfaces: api/interfaces.md
+      - Frame Sources: api/frame-sources.md
+      - Inference: api/inference.md
+      - Trackers: api/trackers.md
+      - Targeting: api/targeting.md
+      - Streaming: api/streaming.md
   - Guides:
-    - Custom Components: guides/custom-components.md
-    - Deployment: guides/deployment.md
-    - Performance: guides/performance.md
-    - Troubleshooting: guides/troubleshooting.md
+      - Custom Components: guides/custom-components.md
+      - Deployment: guides/deployment.md
+      - Performance: guides/performance.md
+      - Troubleshooting: guides/troubleshooting.md
   - Safety:
-    - Targeting Safety: safety/targeting-safety.md
+      - Targeting Safety: safety/targeting-safety.md
 
 markdown_extensions:
   - admonition
@@ -1535,16 +1549,16 @@ markdown_extensions:
 
 ## Implementation Priority
 
-| Phase | Priority | Estimated Effort | Dependencies |
-|-------|----------|------------------|--------------|
-| 1.1 Configuration | HIGH | 2 days | None |
-| 1.2 Code Quality | HIGH | 3 days | 1.1 |
-| 1.3 Logging | HIGH | 1 day | 1.1 |
-| 2.1-2.3 Testing | HIGH | 4 days | 1.1, 1.2 |
-| 3.1-3.2 CI/CD | MEDIUM | 2 days | 2.x |
-| 4.1-4.2 Streaming | MEDIUM | 3 days | 1.x |
-| 5.1 Targeting | MEDIUM | 4 days | 1.x, 2.x |
-| 6.1-6.2 Docs | LOW | 3 days | All |
+| Phase             | Priority | Estimated Effort | Dependencies |
+| ----------------- | -------- | ---------------- | ------------ |
+| 1.1 Configuration | HIGH     | 2 days           | None         |
+| 1.2 Code Quality  | HIGH     | 3 days           | 1.1          |
+| 1.3 Logging       | HIGH     | 1 day            | 1.1          |
+| 2.1-2.3 Testing   | HIGH     | 4 days           | 1.1, 1.2     |
+| 3.1-3.2 CI/CD     | MEDIUM   | 2 days           | 2.x          |
+| 4.1-4.2 Streaming | MEDIUM   | 3 days           | 1.x          |
+| 5.1 Targeting     | MEDIUM   | 4 days           | 1.x, 2.x     |
+| 6.1-6.2 Docs      | LOW      | 3 days           | All          |
 
 **Total: ~22 days of focused development**
 

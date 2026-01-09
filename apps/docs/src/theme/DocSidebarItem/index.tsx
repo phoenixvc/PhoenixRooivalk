@@ -22,9 +22,9 @@ interface PhasePluginData {
  */
 function usePhaseMap(): Record<string, Phase[]> {
   try {
-    const pluginData = usePluginData(
-      "sidebar-phase-enricher"
-    ) as PhasePluginData | undefined;
+    const pluginData = usePluginData("sidebar-phase-enricher") as
+      | PhasePluginData
+      | undefined;
     return pluginData?.phaseMap || {};
   } catch {
     // Plugin not loaded - return empty map
@@ -73,7 +73,7 @@ function shouldShowItem(
   item: Props["item"],
   currentPhase: string,
   phaseMap: Record<string, Phase[]>,
-  isPhaseMatch: (phases: Phase[] | undefined) => boolean
+  isPhaseMatch: (phases: Phase[] | undefined) => boolean,
 ): boolean {
   // Always show if filter is "all"
   if (currentPhase === "all") {
@@ -93,11 +93,7 @@ function shouldShowItem(
       }
 
       // Also try variations of the docId (with/without leading path)
-      const variations = [
-        docId,
-        docId.replace(/^\//, ""),
-        `docs/${docId}`,
-      ];
+      const variations = [docId, docId.replace(/^\//, ""), `docs/${docId}`];
 
       for (const variant of variations) {
         const variantPhases = phaseMap[variant];
@@ -117,7 +113,7 @@ function shouldShowItem(
     if (items && items.length > 0) {
       // Category is visible if at least one child is visible
       return items.some((childItem) =>
-        shouldShowItem(childItem, currentPhase, phaseMap, isPhaseMatch)
+        shouldShowItem(childItem, currentPhase, phaseMap, isPhaseMatch),
       );
     }
     return true;
@@ -146,7 +142,7 @@ export default function DocSidebarItem(props: Props): JSX.Element | null {
       item,
       phaseFilter.currentPhase,
       phaseMap,
-      phaseFilter.isPhaseMatch
+      phaseFilter.isPhaseMatch,
     );
   }, [item, phaseFilter, phaseMap]);
 

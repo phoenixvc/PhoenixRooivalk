@@ -1,6 +1,7 @@
 # PhoenixRooivalk Product Catalog
 
-Complete specifications, bill of materials, and build guides for all drone detection and countermeasure products.
+Complete specifications, bill of materials, and build guides for all drone
+detection and countermeasure products.
 
 ---
 
@@ -28,51 +29,52 @@ Complete specifications, bill of materials, and build guides for all drone detec
 
 ## SkyWatch Nano
 
-**SKU:** SW-NANO-001
-**Target Market:** Hobbyists, makers, educational
-**Price Range:** $50-100
+**SKU:** SW-NANO-001 **Target Market:** Hobbyists, makers, educational **Price
+Range:** $50-100
 
 ### Overview
 
-Entry-level drone detection for backyard awareness and learning. Minimal hardware, easy setup, daylight operation only.
+Entry-level drone detection for backyard awareness and learning. Minimal
+hardware, easy setup, daylight operation only.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 30-50m (daylight) |
-| Processing Speed | 5-10 FPS |
-| Power Consumption | 2-4W |
-| Operating Temp | 0°C to 40°C |
-| Dimensions | 85 × 56 × 30mm (Pi Zero case) |
-| Weight | ~150g assembled |
-| Connectivity | WiFi 2.4/5GHz |
-| Storage | 32GB microSD |
+| Specification     | Value                         |
+| ----------------- | ----------------------------- |
+| Detection Range   | 30-50m (daylight)             |
+| Processing Speed  | 5-10 FPS                      |
+| Power Consumption | 2-4W                          |
+| Operating Temp    | 0°C to 40°C                   |
+| Dimensions        | 85 × 56 × 30mm (Pi Zero case) |
+| Weight            | ~150g assembled               |
+| Connectivity      | WiFi 2.4/5GHz                 |
+| Storage           | 32GB microSD                  |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi Zero 2 W | 512MB RAM, WiFi | 1 | $15.00 | $15.00 | Raspberry Pi, Adafruit |
-| Pi Camera Module v2 | 8MP, Sony IMX219 | 1 | $25.00 | $25.00 | Raspberry Pi, SparkFun |
-| MicroSD Card | 32GB, Class 10, A1 | 1 | $8.00 | $8.00 | SanDisk, Samsung |
-| USB Power Supply | 5V 2.5A, micro-USB | 1 | $10.00 | $10.00 | CanaKit, Amazon |
-| Pi Zero Camera Cable | 15cm ribbon | 1 | $3.00 | $3.00 | Adafruit, Amazon |
-| 3D Printed Case | PETG/ABS | 1 | $5.00 | $5.00 | DIY/Etsy |
-| **TOTAL** | | | | **$66.00** | |
+| Item                  | Specification      | Qty | Unit Cost | Total      | Supplier               |
+| --------------------- | ------------------ | --- | --------- | ---------- | ---------------------- |
+| Raspberry Pi Zero 2 W | 512MB RAM, WiFi    | 1   | $15.00    | $15.00     | Raspberry Pi, Adafruit |
+| Pi Camera Module v2   | 8MP, Sony IMX219   | 1   | $25.00    | $25.00     | Raspberry Pi, SparkFun |
+| MicroSD Card          | 32GB, Class 10, A1 | 1   | $8.00     | $8.00      | SanDisk, Samsung       |
+| USB Power Supply      | 5V 2.5A, micro-USB | 1   | $10.00    | $10.00     | CanaKit, Amazon        |
+| Pi Zero Camera Cable  | 15cm ribbon        | 1   | $3.00     | $3.00      | Adafruit, Amazon       |
+| 3D Printed Case       | PETG/ABS           | 1   | $5.00     | $5.00      | DIY/Etsy               |
+| **TOTAL**             |                    |     |           | **$66.00** |                        |
 
 ### Optional Accessories
 
-| Item | Purpose | Cost |
-|------|---------|------|
-| Piezo buzzer | Audio alert | $2 |
-| GPIO LED | Visual alert | $1 |
-| Heat sinks | Thermal management | $3 |
+| Item              | Purpose            | Cost   |
+| ----------------- | ------------------ | ------ |
+| Piezo buzzer      | Audio alert        | $2     |
+| GPIO LED          | Visual alert       | $1     |
+| Heat sinks        | Thermal management | $3     |
 | Outdoor enclosure | Weather protection | $20-40 |
 
 ### Configuration
 
 **Minimum Configuration (nano-minimal.yaml):**
+
 ```yaml
 # SkyWatch Nano - Minimal Configuration
 camera_type: picamera
@@ -115,17 +117,19 @@ logging:
 ```
 
 **With Buzzer Alert (nano-buzzer.yaml):**
+
 ```yaml
 # Additional settings for buzzer
 alert:
   gpio_buzzer_pin: 18
   buzzer_duration: 0.5
-  buzzer_pattern: "beep"  # beep, continuous, sos
+  buzzer_pattern: "beep" # beep, continuous, sos
 ```
 
 ### Assembly Instructions
 
 1. **Flash SD Card**
+
    ```bash
    # Download Raspberry Pi Imager
    # Select: Raspberry Pi OS Lite (64-bit)
@@ -137,6 +141,7 @@ alert:
    - Ensure blue side faces board
 
 3. **Install Software**
+
    ```bash
    ssh pi@skywatch-nano.local
    curl -sSL https://phoenixrooivalk.io/install.sh | bash
@@ -150,12 +155,12 @@ alert:
 
 ### Performance Benchmarks
 
-| Metric | Value |
-|--------|-------|
-| Inference Time | 180-220ms |
-| End-to-End Latency | 250-350ms |
-| Memory Usage | ~180MB |
-| CPU Usage | 70-90% |
+| Metric             | Value             |
+| ------------------ | ----------------- |
+| Inference Time     | 180-220ms         |
+| End-to-End Latency | 250-350ms         |
+| Memory Usage       | ~180MB            |
+| CPU Usage          | 70-90%            |
 | Detection Accuracy | 75-85% (daylight) |
 
 ### Limitations
@@ -168,63 +173,64 @@ alert:
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Ring Drone Detection (rumored) | TBD | Consumer-focused, cloud-dependent |
-| DIY ESP32-CAM | $10-20 | Lower resolution, less processing |
+| Product                        | Price  | Comparison                        |
+| ------------------------------ | ------ | --------------------------------- |
+| Ring Drone Detection (rumored) | TBD    | Consumer-focused, cloud-dependent |
+| DIY ESP32-CAM                  | $10-20 | Lower resolution, less processing |
 
 ---
 
 ## SkyWatch Standard
 
-**SKU:** SW-STD-001
-**Target Market:** Homeowners, small property
-**Price Range:** $100-250
+**SKU:** SW-STD-001 **Target Market:** Homeowners, small property **Price
+Range:** $100-250
 
 ### Overview
 
-Balanced detection system for residential use. Hardware acceleration via Coral TPU, low-light capability, multi-channel alerts.
+Balanced detection system for residential use. Hardware acceleration via Coral
+TPU, low-light capability, multi-channel alerts.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 50-150m |
-| Processing Speed | 15-30 FPS |
-| Power Consumption | 4-10W |
-| Operating Temp | -10°C to 50°C |
-| Dimensions | 150 × 100 × 80mm |
-| Weight | ~400g assembled |
-| Connectivity | WiFi, Ethernet (PoE optional) |
-| Storage | 64GB microSD |
+| Specification     | Value                         |
+| ----------------- | ----------------------------- |
+| Detection Range   | 50-150m                       |
+| Processing Speed  | 15-30 FPS                     |
+| Power Consumption | 4-10W                         |
+| Operating Temp    | -10°C to 50°C                 |
+| Dimensions        | 150 × 100 × 80mm              |
+| Weight            | ~400g assembled               |
+| Connectivity      | WiFi, Ethernet (PoE optional) |
+| Storage           | 64GB microSD                  |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 Model B | 2GB RAM | 1 | $45.00 | $45.00 | Raspberry Pi |
-| Pi Camera Module v3 | 12MP, HDR, low-light | 1 | $35.00 | $35.00 | Raspberry Pi |
-| Coral USB Accelerator | Edge TPU, USB 3.0 | 1 | $59.99 | $59.99 | Coral.ai |
-| MicroSD Card | 64GB, A2, V30 | 1 | $12.00 | $12.00 | SanDisk Extreme |
-| PoE HAT | 802.3af, isolated | 1 | $20.00 | $20.00 | Raspberry Pi |
-| Weatherproof Enclosure | IP65, ventilated | 1 | $25.00 | $25.00 | Polycase, Amazon |
-| Camera Mount | Adjustable angle | 1 | $8.00 | $8.00 | Amazon |
-| Silica Gel Packs | 10g × 5 | 1 | $5.00 | $5.00 | Amazon |
-| **TOTAL** | | | | **$209.99** | |
+| Item                   | Specification        | Qty | Unit Cost | Total       | Supplier         |
+| ---------------------- | -------------------- | --- | --------- | ----------- | ---------------- |
+| Raspberry Pi 4 Model B | 2GB RAM              | 1   | $45.00    | $45.00      | Raspberry Pi     |
+| Pi Camera Module v3    | 12MP, HDR, low-light | 1   | $35.00    | $35.00      | Raspberry Pi     |
+| Coral USB Accelerator  | Edge TPU, USB 3.0    | 1   | $59.99    | $59.99      | Coral.ai         |
+| MicroSD Card           | 64GB, A2, V30        | 1   | $12.00    | $12.00      | SanDisk Extreme  |
+| PoE HAT                | 802.3af, isolated    | 1   | $20.00    | $20.00      | Raspberry Pi     |
+| Weatherproof Enclosure | IP65, ventilated     | 1   | $25.00    | $25.00      | Polycase, Amazon |
+| Camera Mount           | Adjustable angle     | 1   | $8.00     | $8.00       | Amazon           |
+| Silica Gel Packs       | 10g × 5              | 1   | $5.00     | $5.00       | Amazon           |
+| **TOTAL**              |                      |     |           | **$209.99** |                  |
 
 ### Optional Accessories
 
-| Item | Purpose | Cost |
-|------|---------|------|
-| 12V siren | Outdoor audio alert | $15-30 |
-| Strobe light | Visual deterrent | $20-40 |
-| External antenna | Extended WiFi range | $15 |
-| Active cooling fan | High ambient temps | $10 |
-| IR illuminator | Enhanced night vision | $30-50 |
+| Item               | Purpose               | Cost   |
+| ------------------ | --------------------- | ------ |
+| 12V siren          | Outdoor audio alert   | $15-30 |
+| Strobe light       | Visual deterrent      | $20-40 |
+| External antenna   | Extended WiFi range   | $15    |
+| Active cooling fan | High ambient temps    | $10    |
+| IR illuminator     | Enhanced night vision | $30-50 |
 
 ### Configuration
 
 **Standard Configuration (standard.yaml):**
+
 ```yaml
 # SkyWatch Standard - Recommended Configuration
 camera_type: picamera
@@ -286,6 +292,7 @@ logging:
 ```
 
 **Multi-Alert Configuration (standard-alerts.yaml):**
+
 ```yaml
 alert:
   # Webhook
@@ -302,7 +309,7 @@ alert:
   gpio_siren_pin: 18
   gpio_strobe_pin: 23
   siren_duration: 3.0
-  strobe_flash_rate: 2.0  # Hz
+  strobe_flash_rate: 2.0 # Hz
 
   # Recording
   save_detections_path: "/media/usb/detections/"
@@ -323,6 +330,7 @@ alert:
    - Add ventilation (with mesh filter)
 
 2. **Install Components**
+
    ```
    ┌─────────────────────────────────┐
    │         Enclosure Top           │
@@ -348,6 +356,7 @@ alert:
    - Ethernet cable to PoE switch
 
 4. **Install Software**
+
    ```bash
    ssh pi@skywatch-standard.local
 
@@ -381,80 +390,81 @@ alert:
 
 ### Performance Benchmarks
 
-| Metric | Value |
-|--------|-------|
-| Inference Time | 25-40ms (Coral) |
-| End-to-End Latency | 50-80ms |
-| Memory Usage | ~350MB |
-| CPU Usage | 30-50% |
-| Detection Accuracy | 85-92% |
-| Night Detection | 70-80% (v3 camera) |
+| Metric             | Value              |
+| ------------------ | ------------------ |
+| Inference Time     | 25-40ms (Coral)    |
+| End-to-End Latency | 50-80ms            |
+| Memory Usage       | ~350MB             |
+| CPU Usage          | 30-50%             |
+| Detection Accuracy | 85-92%             |
+| Night Detection    | 70-80% (v3 camera) |
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Dedrone DroneTracker Mini | $5,000+ | More features, commercial support |
-| Dronesentry DIY Kit | $500+ | Similar concept, different software |
-| Custom NVR + AI | $300-500 | Requires more integration work |
+| Product                   | Price    | Comparison                          |
+| ------------------------- | -------- | ----------------------------------- |
+| Dedrone DroneTracker Mini | $5,000+  | More features, commercial support   |
+| Dronesentry DIY Kit       | $500+    | Similar concept, different software |
+| Custom NVR + AI           | $300-500 | Requires more integration work      |
 
 ---
 
 ## SkyWatch Pro
 
-**SKU:** SW-PRO-001
-**Target Market:** Farms, estates, commercial property
+**SKU:** SW-PRO-001 **Target Market:** Farms, estates, commercial property
 **Price Range:** $250-600
 
 ### Overview
 
-Multi-sensor detection platform with visual, RF, and audio detection. Pan-tilt tracking, long-range telephoto lens, professional-grade reliability.
+Multi-sensor detection platform with visual, RF, and audio detection. Pan-tilt
+tracking, long-range telephoto lens, professional-grade reliability.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 150-500m (visual), 500m-2km (RF) |
-| Processing Speed | 30+ FPS |
-| Power Consumption | 8-18W |
-| Operating Temp | -20°C to 60°C |
-| Dimensions | 200 × 150 × 120mm |
-| Weight | ~1.2kg assembled |
-| Connectivity | WiFi, Ethernet, PoE+ |
-| Storage | 128GB+ SSD recommended |
+| Specification     | Value                            |
+| ----------------- | -------------------------------- |
+| Detection Range   | 150-500m (visual), 500m-2km (RF) |
+| Processing Speed  | 30+ FPS                          |
+| Power Consumption | 8-18W                            |
+| Operating Temp    | -20°C to 60°C                    |
+| Dimensions        | 200 × 150 × 120mm                |
+| Weight            | ~1.2kg assembled                 |
+| Connectivity      | WiFi, Ethernet, PoE+             |
+| Storage           | 128GB+ SSD recommended           |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 5 | 4GB RAM | 1 | $60.00 | $60.00 | Raspberry Pi |
-| Pi Camera HQ | 12.3MP, C/CS mount | 1 | $50.00 | $50.00 | Raspberry Pi |
-| 16mm Telephoto Lens | C-mount, f/1.4 | 1 | $50.00 | $50.00 | Arducam |
-| Coral M.2 Accelerator | Dual Edge TPU | 1 | $35.00 | $35.00 | Coral.ai |
-| M.2 HAT for Pi 5 | PCIe to M.2 | 1 | $15.00 | $15.00 | Raspberry Pi |
-| RTL-SDR v3 | R820T2 tuner | 1 | $30.00 | $30.00 | RTL-SDR.com |
-| 2.4/5.8GHz Antenna | SMA, 5dBi | 1 | $15.00 | $15.00 | Amazon |
-| USB Microphone | Omnidirectional | 1 | $20.00 | $20.00 | Amazon |
-| PoE+ HAT | 802.3at, 30W | 1 | $25.00 | $25.00 | Raspberry Pi |
-| Pan-Tilt Kit | 2× servo, bracket | 1 | $80.00 | $80.00 | Lynxmotion, ServoCity |
-| Industrial Enclosure | IP66, aluminum | 1 | $60.00 | $60.00 | Polycase |
-| SSD | 128GB NVMe | 1 | $25.00 | $25.00 | Samsung, WD |
-| Misc (cables, mounts) | Various | 1 | $30.00 | $30.00 | Various |
-| **TOTAL** | | | | **$495.00** | |
+| Item                  | Specification      | Qty | Unit Cost | Total       | Supplier              |
+| --------------------- | ------------------ | --- | --------- | ----------- | --------------------- |
+| Raspberry Pi 5        | 4GB RAM            | 1   | $60.00    | $60.00      | Raspberry Pi          |
+| Pi Camera HQ          | 12.3MP, C/CS mount | 1   | $50.00    | $50.00      | Raspberry Pi          |
+| 16mm Telephoto Lens   | C-mount, f/1.4     | 1   | $50.00    | $50.00      | Arducam               |
+| Coral M.2 Accelerator | Dual Edge TPU      | 1   | $35.00    | $35.00      | Coral.ai              |
+| M.2 HAT for Pi 5      | PCIe to M.2        | 1   | $15.00    | $15.00      | Raspberry Pi          |
+| RTL-SDR v3            | R820T2 tuner       | 1   | $30.00    | $30.00      | RTL-SDR.com           |
+| 2.4/5.8GHz Antenna    | SMA, 5dBi          | 1   | $15.00    | $15.00      | Amazon                |
+| USB Microphone        | Omnidirectional    | 1   | $20.00    | $20.00      | Amazon                |
+| PoE+ HAT              | 802.3at, 30W       | 1   | $25.00    | $25.00      | Raspberry Pi          |
+| Pan-Tilt Kit          | 2× servo, bracket  | 1   | $80.00    | $80.00      | Lynxmotion, ServoCity |
+| Industrial Enclosure  | IP66, aluminum     | 1   | $60.00    | $60.00      | Polycase              |
+| SSD                   | 128GB NVMe         | 1   | $25.00    | $25.00      | Samsung, WD           |
+| Misc (cables, mounts) | Various            | 1   | $30.00    | $30.00      | Various               |
+| **TOTAL**             |                    |     |           | **$495.00** |                       |
 
 ### Optional Accessories
 
-| Item | Purpose | Cost |
-|------|---------|------|
-| Second camera (wide) | Dual FOV coverage | $35 |
-| Radar module | All-weather detection | $200-500 |
-| LTE modem | Remote connectivity | $50-100 |
-| GPS module | Geolocation/timestamps | $15 |
-| UPS battery | Power backup | $80 |
+| Item                 | Purpose                | Cost     |
+| -------------------- | ---------------------- | -------- |
+| Second camera (wide) | Dual FOV coverage      | $35      |
+| Radar module         | All-weather detection  | $200-500 |
+| LTE modem            | Remote connectivity    | $50-100  |
+| GPS module           | Geolocation/timestamps | $15      |
+| UPS battery          | Power backup           | $80      |
 
 ### Configuration
 
 **Pro Configuration (pro.yaml):**
+
 ```yaml
 # SkyWatch Pro - Multi-Sensor Configuration
 camera_type: picamera_hq
@@ -538,6 +548,7 @@ logging:
 ```
 
 **RF Detection Configuration:**
+
 ```yaml
 # RF detection for drone control signals
 rf_detection:
@@ -579,6 +590,7 @@ rf_detection:
 ### Assembly Instructions
 
 1. **Prepare Enclosure**
+
    ```
    ┌────────────────────────────────────────┐
    │              Front Panel               │
@@ -599,6 +611,7 @@ rf_detection:
    - Connect servo cables (shielded recommended)
 
 3. **Internal Layout**
+
    ```
    ┌────────────────────────────────────────┐
    │  ┌──────────┐   ┌──────────────────┐  │
@@ -622,79 +635,80 @@ rf_detection:
 
 ### Performance Benchmarks
 
-| Metric | Value |
-|--------|-------|
-| Inference Time | 15-25ms (Coral M.2) |
-| End-to-End Latency | 40-60ms |
-| Memory Usage | ~600MB |
-| CPU Usage | 40-60% |
-| Visual Detection Accuracy | 90-95% |
-| RF Detection Range | 500m-2km |
-| Audio Detection Range | 50-200m |
+| Metric                    | Value               |
+| ------------------------- | ------------------- |
+| Inference Time            | 15-25ms (Coral M.2) |
+| End-to-End Latency        | 40-60ms             |
+| Memory Usage              | ~600MB              |
+| CPU Usage                 | 40-60%              |
+| Visual Detection Accuracy | 90-95%              |
+| RF Detection Range        | 500m-2km            |
+| Audio Detection Range     | 50-200m             |
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Dedrone DroneTracker | $20,000+ | Enterprise features, support |
-| DroneShield RfOne | $15,000+ | RF-only, longer range |
-| Robin Radar ELVIRA | $50,000+ | 3D radar, bird/drone classification |
+| Product              | Price    | Comparison                          |
+| -------------------- | -------- | ----------------------------------- |
+| Dedrone DroneTracker | $20,000+ | Enterprise features, support        |
+| DroneShield RfOne    | $15,000+ | RF-only, longer range               |
+| Robin Radar ELVIRA   | $50,000+ | 3D radar, bird/drone classification |
 
 ---
 
 ## SkyWatch Mobile
 
-**SKU:** SW-MOB-001
-**Target Market:** Security patrols, event staff
-**Price Range:** $200-500
+**SKU:** SW-MOB-001 **Target Market:** Security patrols, event staff **Price
+Range:** $200-500
 
 ### Overview
 
-Portable detection unit for mobile operations. Battery-powered with touchscreen interface, designed for handheld or vehicle-mounted use.
+Portable detection unit for mobile operations. Battery-powered with touchscreen
+interface, designed for handheld or vehicle-mounted use.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 100-300m |
-| Processing Speed | 15-25 FPS |
-| Power Consumption | 6-12W |
-| Battery Life | 3-5 hours |
-| Operating Temp | -10°C to 50°C |
-| Dimensions | 220 × 150 × 40mm |
-| Weight | ~800g with battery |
-| Connectivity | WiFi, Bluetooth, optional LTE |
+| Specification     | Value                         |
+| ----------------- | ----------------------------- |
+| Detection Range   | 100-300m                      |
+| Processing Speed  | 15-25 FPS                     |
+| Power Consumption | 6-12W                         |
+| Battery Life      | 3-5 hours                     |
+| Operating Temp    | -10°C to 50°C                 |
+| Dimensions        | 220 × 150 × 40mm              |
+| Weight            | ~800g with battery            |
+| Connectivity      | WiFi, Bluetooth, optional LTE |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 2GB RAM | 1 | $45.00 | $45.00 | Raspberry Pi |
-| Pi Camera Module v3 | 12MP, autofocus | 1 | $35.00 | $35.00 | Raspberry Pi |
-| Coral USB Accelerator | Edge TPU | 1 | $59.99 | $59.99 | Coral.ai |
-| Official 7" Touchscreen | 800×480, capacitive | 1 | $60.00 | $60.00 | Raspberry Pi |
-| PiJuice HAT | Battery management | 1 | $50.00 | $50.00 | PiSupply |
-| LiPo Battery | 12000mAh, 3.7V | 1 | $30.00 | $30.00 | Various |
-| Rugged Case | Pelican 1150 or similar | 1 | $40.00 | $40.00 | Pelican |
-| Foam Insert | Custom cut | 1 | $10.00 | $10.00 | DIY |
-| Shoulder Strap | Quick-release | 1 | $15.00 | $15.00 | Amazon |
-| USB-C PD Charger | 45W | 1 | $25.00 | $25.00 | Anker |
-| **TOTAL** | | | | **$370.99** | |
+| Item                    | Specification           | Qty | Unit Cost | Total       | Supplier     |
+| ----------------------- | ----------------------- | --- | --------- | ----------- | ------------ |
+| Raspberry Pi 4          | 2GB RAM                 | 1   | $45.00    | $45.00      | Raspberry Pi |
+| Pi Camera Module v3     | 12MP, autofocus         | 1   | $35.00    | $35.00      | Raspberry Pi |
+| Coral USB Accelerator   | Edge TPU                | 1   | $59.99    | $59.99      | Coral.ai     |
+| Official 7" Touchscreen | 800×480, capacitive     | 1   | $60.00    | $60.00      | Raspberry Pi |
+| PiJuice HAT             | Battery management      | 1   | $50.00    | $50.00      | PiSupply     |
+| LiPo Battery            | 12000mAh, 3.7V          | 1   | $30.00    | $30.00      | Various      |
+| Rugged Case             | Pelican 1150 or similar | 1   | $40.00    | $40.00      | Pelican      |
+| Foam Insert             | Custom cut              | 1   | $10.00    | $10.00      | DIY          |
+| Shoulder Strap          | Quick-release           | 1   | $15.00    | $15.00      | Amazon       |
+| USB-C PD Charger        | 45W                     | 1   | $25.00    | $25.00      | Anker        |
+| **TOTAL**               |                         |     |           | **$370.99** |              |
 
 ### Optional Accessories
 
-| Item | Purpose | Cost |
-|------|---------|------|
-| GPS module | Location logging | $15 |
-| LTE USB modem | Remote connectivity | $50-100 |
-| Vibration motor | Haptic alerts | $5 |
-| External speaker | Audio alerts | $15 |
-| Vehicle mount | Dashboard/windshield | $30 |
-| Chest harness | Hands-free carrying | $40 |
+| Item             | Purpose              | Cost    |
+| ---------------- | -------------------- | ------- |
+| GPS module       | Location logging     | $15     |
+| LTE USB modem    | Remote connectivity  | $50-100 |
+| Vibration motor  | Haptic alerts        | $5      |
+| External speaker | Audio alerts         | $15     |
+| Vehicle mount    | Dashboard/windshield | $30     |
+| Chest harness    | Hands-free carrying  | $40     |
 
 ### Configuration
 
 **Mobile Configuration (mobile.yaml):**
+
 ```yaml
 # SkyWatch Mobile - Portable Configuration
 camera_type: picamera
@@ -734,13 +748,13 @@ display:
   show_track_id: true
   show_battery: true
   touch_enabled: true
-  ui_scale: 1.2  # Larger for outdoor visibility
+  ui_scale: 1.2 # Larger for outdoor visibility
 
 # Alerts
 alert:
   vibration_enabled: true
   vibration_pin: 18
-  vibration_pattern: [100, 50, 100]  # on, off, on (ms)
+  vibration_pattern: [100, 50, 100] # on, off, on (ms)
   audio_enabled: true
   audio_volume: 80
   alert_sound: "alert.wav"
@@ -749,11 +763,11 @@ alert:
 gps:
   enabled: true
   device: /dev/ttyUSB0
-  log_interval: 5  # seconds
+  log_interval: 5 # seconds
 
 # Power management
 power:
-  performance_mode: balanced  # low, balanced, high
+  performance_mode: balanced # low, balanced, high
   reduce_fps_on_battery: true
   battery_fps: 15
   disable_streaming_on_battery: true
@@ -771,6 +785,7 @@ logging:
    - Add ventilation slots
 
 2. **Display Assembly**
+
    ```
    ┌────────────────────────────────────┐
    │         7" Touchscreen             │
@@ -807,6 +822,7 @@ logging:
 ### User Interface
 
 **Main Screen:**
+
 ```
 ┌─────────────────────────────────────────┐
 │ SkyWatch Mobile          🔋 78%   📡 OK │
@@ -830,66 +846,67 @@ logging:
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| DroneShield DroneOpt | $10,000+ | Handheld RF detector |
-| Dedrone Portable | $8,000+ | Briefcase form factor |
-| Smartphone apps | $0-50 | Limited capability, visual only |
+| Product              | Price    | Comparison                      |
+| -------------------- | -------- | ------------------------------- |
+| DroneShield DroneOpt | $10,000+ | Handheld RF detector            |
+| Dedrone Portable     | $8,000+  | Briefcase form factor           |
+| Smartphone apps      | $0-50    | Limited capability, visual only |
 
 ---
 
 ## SkyWatch Thermal
 
-**SKU:** SW-THM-001
-**Target Market:** 24/7 operations, night security
-**Price Range:** $400-1,500
+**SKU:** SW-THM-001 **Target Market:** 24/7 operations, night security **Price
+Range:** $400-1,500
 
 ### Overview
 
-Thermal imaging drone detector for all-light conditions. Combines visible and thermal cameras for day/night detection with sensor fusion.
+Thermal imaging drone detector for all-light conditions. Combines visible and
+thermal cameras for day/night detection with sensor fusion.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 100-500m (thermal), 50-300m (visible) |
-| Processing Speed | 15-30 FPS |
-| Power Consumption | 8-15W |
-| Operating Temp | -20°C to 60°C |
-| Thermal Resolution | 160×120 (budget) to 320×256 (pro) |
-| Thermal Sensitivity | <50mK NETD |
+| Specification       | Value                                 |
+| ------------------- | ------------------------------------- |
+| Detection Range     | 100-500m (thermal), 50-300m (visible) |
+| Processing Speed    | 15-30 FPS                             |
+| Power Consumption   | 8-15W                                 |
+| Operating Temp      | -20°C to 60°C                         |
+| Thermal Resolution  | 160×120 (budget) to 320×256 (pro)     |
+| Thermal Sensitivity | <50mK NETD                            |
 
 ### Bill of Materials (Budget Tier)
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 4GB RAM | 1 | $55.00 | $55.00 | Raspberry Pi |
-| FLIR Lepton 3.5 | 160×120, 8.7Hz | 1 | $199.00 | $199.00 | GroupGets |
-| Lepton Breakout Board | PureThermal 2 | 1 | $49.00 | $49.00 | GroupGets |
-| Pi Camera v3 | Visible, low-light | 1 | $35.00 | $35.00 | Raspberry Pi |
-| Coral USB Accelerator | Edge TPU | 1 | $59.99 | $59.99 | Coral.ai |
-| Weatherproof Enclosure | IP65, ventilated | 1 | $40.00 | $40.00 | Polycase |
-| Germanium Window | 25mm, AR coated | 1 | $30.00 | $30.00 | Thorlabs |
-| **TOTAL (Budget)** | | | | **$467.99** | |
+| Item                   | Specification      | Qty | Unit Cost | Total       | Supplier     |
+| ---------------------- | ------------------ | --- | --------- | ----------- | ------------ |
+| Raspberry Pi 4         | 4GB RAM            | 1   | $55.00    | $55.00      | Raspberry Pi |
+| FLIR Lepton 3.5        | 160×120, 8.7Hz     | 1   | $199.00   | $199.00     | GroupGets    |
+| Lepton Breakout Board  | PureThermal 2      | 1   | $49.00    | $49.00      | GroupGets    |
+| Pi Camera v3           | Visible, low-light | 1   | $35.00    | $35.00      | Raspberry Pi |
+| Coral USB Accelerator  | Edge TPU           | 1   | $59.99    | $59.99      | Coral.ai     |
+| Weatherproof Enclosure | IP65, ventilated   | 1   | $40.00    | $40.00      | Polycase     |
+| Germanium Window       | 25mm, AR coated    | 1   | $30.00    | $30.00      | Thorlabs     |
+| **TOTAL (Budget)**     |                    |     |           | **$467.99** |              |
 
 ### Bill of Materials (Professional Tier)
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 5 | 8GB RAM | 1 | $80.00 | $80.00 | Raspberry Pi |
-| FLIR Boson 320 | 320×256, 60Hz | 1 | $800.00 | $800.00 | FLIR |
-| Boson Interface Board | USB-C | 1 | $100.00 | $100.00 | FLIR |
-| Pi Camera HQ | 12.3MP | 1 | $50.00 | $50.00 | Raspberry Pi |
-| 16mm Lens | C-mount | 1 | $50.00 | $50.00 | Arducam |
-| Coral M.2 Accelerator | Dual TPU | 1 | $35.00 | $35.00 | Coral.ai |
-| M.2 HAT | PCIe adapter | 1 | $15.00 | $15.00 | Raspberry Pi |
-| Industrial Enclosure | IP66 | 1 | $80.00 | $80.00 | Polycase |
-| Germanium Window | 50mm, AR coated | 1 | $80.00 | $80.00 | Thorlabs |
-| **TOTAL (Pro)** | | | | **$1,370.00** | |
+| Item                  | Specification   | Qty | Unit Cost | Total         | Supplier     |
+| --------------------- | --------------- | --- | --------- | ------------- | ------------ |
+| Raspberry Pi 5        | 8GB RAM         | 1   | $80.00    | $80.00        | Raspberry Pi |
+| FLIR Boson 320        | 320×256, 60Hz   | 1   | $800.00   | $800.00       | FLIR         |
+| Boson Interface Board | USB-C           | 1   | $100.00   | $100.00       | FLIR         |
+| Pi Camera HQ          | 12.3MP          | 1   | $50.00    | $50.00        | Raspberry Pi |
+| 16mm Lens             | C-mount         | 1   | $50.00    | $50.00        | Arducam      |
+| Coral M.2 Accelerator | Dual TPU        | 1   | $35.00    | $35.00        | Coral.ai     |
+| M.2 HAT               | PCIe adapter    | 1   | $15.00    | $15.00        | Raspberry Pi |
+| Industrial Enclosure  | IP66            | 1   | $80.00    | $80.00        | Polycase     |
+| Germanium Window      | 50mm, AR coated | 1   | $80.00    | $80.00        | Thorlabs     |
+| **TOTAL (Pro)**       |                 |     |           | **$1,370.00** |              |
 
 ### Configuration
 
 **Thermal Configuration (thermal.yaml):**
+
 ```yaml
 # SkyWatch Thermal - Dual Sensor Configuration
 camera_type: dual_sensor
@@ -898,13 +915,13 @@ engine_type: coral
 # Thermal sensor settings
 thermal:
   enabled: true
-  device: /dev/video1  # PureThermal
+  device: /dev/video1 # PureThermal
   resolution: [160, 120]
   fps: 9
   temperature_range: [-10, 140]
   colormap: "ironbow"
-  auto_ffc: true  # Flat-field correction
-  ffc_interval: 300  # seconds
+  auto_ffc: true # Flat-field correction
+  ffc_interval: 300 # seconds
 
 # Visible sensor settings
 visible:
@@ -916,24 +933,24 @@ visible:
 # Sensor fusion
 fusion:
   enabled: true
-  mode: weighted  # weighted, thermal_priority, visible_priority
+  mode: weighted # weighted, thermal_priority, visible_priority
   thermal_weight: 0.6
   visible_weight: 0.4
-  alignment: auto  # auto, manual
+  alignment: auto # auto, manual
   output_resolution: [640, 480]
 
 # Thermal-specific inference
 inference:
   model_path: "models/drone_thermal_rgbt.tflite"
   input_size: 320
-  input_channels: 4  # RGBT
+  input_channels: 4 # RGBT
   confidence_threshold: 0.45
   use_coral: true
 
 # Thermal detection enhancements
 thermal_detection:
-  hot_spot_threshold: 35  # Celsius
-  hot_spot_min_area: 50   # pixels
+  hot_spot_threshold: 35 # Celsius
+  hot_spot_min_area: 50 # pixels
   temperature_anomaly: true
   background_subtraction: true
 
@@ -988,58 +1005,60 @@ logging:
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| FLIR Scout TK | $600 | Handheld thermal, no AI |
-| DJI Mavic 3T | $4,800 | Drone-mounted thermal |
-| AXIS Q1961-TE | $5,000+ | Fixed thermal camera, no AI |
-| Dedrone Thermal | $10,000+ | Integrated C-UAS solution |
+| Product         | Price    | Comparison                  |
+| --------------- | -------- | --------------------------- |
+| FLIR Scout TK   | $600     | Handheld thermal, no AI     |
+| DJI Mavic 3T    | $4,800   | Drone-mounted thermal       |
+| AXIS Q1961-TE   | $5,000+  | Fixed thermal camera, no AI |
+| Dedrone Thermal | $10,000+ | Integrated C-UAS solution   |
 
 ---
 
 ## SkyWatch Marine
 
-**SKU:** SW-MAR-001
-**Target Market:** Vessels, marinas, coastal facilities
+**SKU:** SW-MAR-001 **Target Market:** Vessels, marinas, coastal facilities
 **Price Range:** $600-2,000
 
 ### Overview
 
-Ruggedized detection system for maritime environments. Features gyro stabilization, salt-resistant enclosure, and NMEA integration for chart plotters.
+Ruggedized detection system for maritime environments. Features gyro
+stabilization, salt-resistant enclosure, and NMEA integration for chart
+plotters.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 200-800m |
-| Processing Speed | 20-30 FPS |
-| Power Input | 12V DC (10-16V range) |
-| Power Consumption | 8-15W |
-| Operating Temp | -20°C to 60°C |
-| IP Rating | IP67 |
-| Stabilization | 2-axis gyro, ±30° roll, ±20° pitch |
-| NMEA Output | NMEA 0183, NMEA 2000 (optional) |
+| Specification     | Value                              |
+| ----------------- | ---------------------------------- |
+| Detection Range   | 200-800m                           |
+| Processing Speed  | 20-30 FPS                          |
+| Power Input       | 12V DC (10-16V range)              |
+| Power Consumption | 8-15W                              |
+| Operating Temp    | -20°C to 60°C                      |
+| IP Rating         | IP67                               |
+| Stabilization     | 2-axis gyro, ±30° roll, ±20° pitch |
+| NMEA Output       | NMEA 0183, NMEA 2000 (optional)    |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 4GB RAM | 1 | $55.00 | $55.00 | Raspberry Pi |
-| Pi Camera HQ | 12.3MP, C-mount | 1 | $50.00 | $50.00 | Raspberry Pi |
-| Wide Angle Lens | 6mm, f/1.2 | 1 | $40.00 | $40.00 | Arducam |
-| Coral USB Accelerator | Edge TPU | 1 | $59.99 | $59.99 | Coral.ai |
-| Gyro Stabilizer | 2-axis, brushless | 1 | $150.00 | $150.00 | BaseCam, SimpleBGC |
-| Marine Enclosure | IP67, aluminum | 1 | $120.00 | $120.00 | Polycase |
-| DC-DC Converter | 12V→5V, 5A, isolated | 1 | $30.00 | $30.00 | Pololu |
-| NMEA Interface | USB-RS422 | 1 | $40.00 | $40.00 | Actisense |
-| Marine Antenna | WiFi, N-type | 1 | $50.00 | $50.00 | Ubiquiti |
-| Cable Glands | M20, IP68 | 5 | $5.00 | $25.00 | Various |
-| Conformal Coating | PCB protection | 1 | $20.00 | $20.00 | MG Chemicals |
-| **TOTAL** | | | | **$639.99** | |
+| Item                  | Specification        | Qty | Unit Cost | Total       | Supplier           |
+| --------------------- | -------------------- | --- | --------- | ----------- | ------------------ |
+| Raspberry Pi 4        | 4GB RAM              | 1   | $55.00    | $55.00      | Raspberry Pi       |
+| Pi Camera HQ          | 12.3MP, C-mount      | 1   | $50.00    | $50.00      | Raspberry Pi       |
+| Wide Angle Lens       | 6mm, f/1.2           | 1   | $40.00    | $40.00      | Arducam            |
+| Coral USB Accelerator | Edge TPU             | 1   | $59.99    | $59.99      | Coral.ai           |
+| Gyro Stabilizer       | 2-axis, brushless    | 1   | $150.00   | $150.00     | BaseCam, SimpleBGC |
+| Marine Enclosure      | IP67, aluminum       | 1   | $120.00   | $120.00     | Polycase           |
+| DC-DC Converter       | 12V→5V, 5A, isolated | 1   | $30.00    | $30.00      | Pololu             |
+| NMEA Interface        | USB-RS422            | 1   | $40.00    | $40.00      | Actisense          |
+| Marine Antenna        | WiFi, N-type         | 1   | $50.00    | $50.00      | Ubiquiti           |
+| Cable Glands          | M20, IP68            | 5   | $5.00     | $25.00      | Various            |
+| Conformal Coating     | PCB protection       | 1   | $20.00    | $20.00      | MG Chemicals       |
+| **TOTAL**             |                      |     |           | **$639.99** |                    |
 
 ### Configuration
 
 **Marine Configuration (marine.yaml):**
+
 ```yaml
 # SkyWatch Marine - Maritime Configuration
 camera_type: picamera_hq
@@ -1078,9 +1097,9 @@ nmea:
   output_port: /dev/ttyUSB1
   baud_rate: 38400
   sentences:
-    - type: "$PDRN"  # Custom drone detection
+    - type: "$PDRN" # Custom drone detection
       fields: [time, lat, lon, distance, bearing, confidence]
-    - type: "$PSTS"  # System status
+    - type: "$PSTS" # System status
       fields: [status, detections, battery]
 
 # AIS correlation
@@ -1088,7 +1107,7 @@ ais:
   enabled: true
   input_port: /dev/ttyUSB2
   correlate_targets: true
-  ignore_ais_altitudes: [0, 500]  # Ignore targets 0-500ft
+  ignore_ais_altitudes: [0, 500] # Ignore targets 0-500ft
 
 # Power management
 power:
@@ -1113,6 +1132,7 @@ alert:
 ### NMEA Sentence Format
 
 **Custom Drone Detection ($PDRN):**
+
 ```
 $PDRN,HHMMSS,DDMM.MMM,N,DDDMM.MMM,W,DDD.D,BBB.B,CC*XX
 
@@ -1166,80 +1186,81 @@ $PDRN,143052,3744.123,N,12223.456,W,245.5,087.3,85*7A
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Raymarine Quantum 2 | $2,500+ | Radar only, no drone detection |
-| FLIR MD-324 | $5,000+ | Thermal camera, no AI |
-| Sea Machines AI | $50,000+ | Full autonomous system |
+| Product             | Price    | Comparison                     |
+| ------------------- | -------- | ------------------------------ |
+| Raymarine Quantum 2 | $2,500+  | Radar only, no drone detection |
+| FLIR MD-324         | $5,000+  | Thermal camera, no AI          |
+| Sea Machines AI     | $50,000+ | Full autonomous system         |
 
 ---
 
 ## SkyWatch Mesh
 
-**SKU:** SW-MESH-001
-**Target Market:** Large perimeters, farms, industrial sites
-**Price Range:** $500-2,000/node + central
+**SKU:** SW-MESH-001 **Target Market:** Large perimeters, farms, industrial
+sites **Price Range:** $500-2,000/node + central
 
 ### Overview
 
-Distributed detection network with multiple nodes and central aggregation. Provides wide-area coverage with sensor fusion across nodes.
+Distributed detection network with multiple nodes and central aggregation.
+Provides wide-area coverage with sensor fusion across nodes.
 
 ### Specifications (Per Node)
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 100-200m per node |
-| Processing Speed | 15-25 FPS |
-| Power | PoE (802.3af) or 12V DC |
-| Power Consumption | 5-10W |
-| Communication | Ethernet, WiFi mesh |
-| Node-to-Central Latency | <100ms |
+| Specification           | Value                   |
+| ----------------------- | ----------------------- |
+| Detection Range         | 100-200m per node       |
+| Processing Speed        | 15-25 FPS               |
+| Power                   | PoE (802.3af) or 12V DC |
+| Power Consumption       | 5-10W                   |
+| Communication           | Ethernet, WiFi mesh     |
+| Node-to-Central Latency | <100ms                  |
 
 ### Bill of Materials (Per Node)
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 2GB RAM | 1 | $45.00 | $45.00 | Raspberry Pi |
-| Pi Camera v3 | 12MP | 1 | $35.00 | $35.00 | Raspberry Pi |
-| PoE HAT | 802.3af | 1 | $20.00 | $20.00 | Raspberry Pi |
-| Weatherproof Enclosure | IP65 | 1 | $40.00 | $40.00 | Polycase |
-| Mounting Bracket | Pole mount | 1 | $15.00 | $15.00 | Amazon |
-| Silica Gel | 10g × 3 | 1 | $3.00 | $3.00 | Amazon |
-| **NODE TOTAL** | | | | **$158.00** | |
+| Item                   | Specification | Qty | Unit Cost | Total       | Supplier     |
+| ---------------------- | ------------- | --- | --------- | ----------- | ------------ |
+| Raspberry Pi 4         | 2GB RAM       | 1   | $45.00    | $45.00      | Raspberry Pi |
+| Pi Camera v3           | 12MP          | 1   | $35.00    | $35.00      | Raspberry Pi |
+| PoE HAT                | 802.3af       | 1   | $20.00    | $20.00      | Raspberry Pi |
+| Weatherproof Enclosure | IP65          | 1   | $40.00    | $40.00      | Polycase     |
+| Mounting Bracket       | Pole mount    | 1   | $15.00    | $15.00      | Amazon       |
+| Silica Gel             | 10g × 3       | 1   | $3.00     | $3.00       | Amazon       |
+| **NODE TOTAL**         |               |     |           | **$158.00** |              |
 
 ### Bill of Materials (Central Server)
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 5 | 8GB RAM | 1 | $80.00 | $80.00 | Raspberry Pi |
-| NVMe SSD | 256GB | 1 | $40.00 | $40.00 | Samsung |
-| PoE Switch | 8-port, 802.3af | 1 | $120.00 | $120.00 | Ubiquiti |
-| UPS | 450VA | 1 | $80.00 | $80.00 | APC |
-| Rack/Enclosure | Wall mount | 1 | $50.00 | $50.00 | Various |
-| **CENTRAL TOTAL** | | | | **$370.00** | |
+| Item              | Specification   | Qty | Unit Cost | Total       | Supplier     |
+| ----------------- | --------------- | --- | --------- | ----------- | ------------ |
+| Raspberry Pi 5    | 8GB RAM         | 1   | $80.00    | $80.00      | Raspberry Pi |
+| NVMe SSD          | 256GB           | 1   | $40.00    | $40.00      | Samsung      |
+| PoE Switch        | 8-port, 802.3af | 1   | $120.00   | $120.00     | Ubiquiti     |
+| UPS               | 450VA           | 1   | $80.00    | $80.00      | APC          |
+| Rack/Enclosure    | Wall mount      | 1   | $50.00    | $50.00      | Various      |
+| **CENTRAL TOTAL** |                 |     |           | **$370.00** |              |
 
 ### System Costs by Coverage
 
-| Coverage | Nodes | Node Cost | Central | Total |
-|----------|-------|-----------|---------|-------|
-| 1 acre | 2-3 | $316-474 | $370 | **$686-844** |
-| 5 acres | 4-6 | $632-948 | $370 | **$1,002-1,318** |
-| 20 acres | 8-12 | $1,264-1,896 | $370 | **$1,634-2,266** |
-| 100 acres | 15-25 | $2,370-3,950 | $370 | **$2,740-4,320** |
+| Coverage  | Nodes | Node Cost    | Central | Total            |
+| --------- | ----- | ------------ | ------- | ---------------- |
+| 1 acre    | 2-3   | $316-474     | $370    | **$686-844**     |
+| 5 acres   | 4-6   | $632-948     | $370    | **$1,002-1,318** |
+| 20 acres  | 8-12  | $1,264-1,896 | $370    | **$1,634-2,266** |
+| 100 acres | 15-25 | $2,370-3,950 | $370    | **$2,740-4,320** |
 
 ### Configuration
 
 **Node Configuration (mesh-node.yaml):**
+
 ```yaml
 # SkyWatch Mesh - Node Configuration
 node:
   id: "node-north-01"
   location: "North Gate"
   coordinates: [34.0522, -118.2437]
-  fov_direction: 180  # degrees from north
+  fov_direction: 180 # degrees from north
 
 camera_type: picamera
-engine_type: tflite  # Local inference for low latency
+engine_type: tflite # Local inference for low latency
 
 capture:
   width: 640
@@ -1262,16 +1283,17 @@ central:
 # What to send to central
 reporting:
   send_detections: true
-  send_frames: false  # Bandwidth optimization
-  send_crops: true    # Send cropped detection images
+  send_frames: false # Bandwidth optimization
+  send_crops: true # Send cropped detection images
   crop_size: [128, 128]
-  detection_debounce: 0.5  # seconds
+  detection_debounce: 0.5 # seconds
 
 logging:
   level: INFO
 ```
 
 **Central Server Configuration (mesh-central.yaml):**
+
 ```yaml
 # SkyWatch Mesh - Central Server Configuration
 central:
@@ -1304,7 +1326,7 @@ fusion:
   min_nodes_for_confirm: 2
   confidence_boost_per_node: 0.1
   triangulation: true
-  max_position_error: 50  # meters
+  max_position_error: 50 # meters
 
 # Health monitoring
 health:
@@ -1317,7 +1339,7 @@ health:
 alert:
   webhook_url: "https://api.example.com/mesh-alert"
   aggregate_alerts: true
-  aggregation_window: 5  # seconds
+  aggregation_window: 5 # seconds
 
 # Dashboard
 dashboard:
@@ -1375,55 +1397,56 @@ logging:
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Dedrone City | $100,000+/year | Cloud-based, enterprise |
-| Hikvision + AI | $500/node | Generic detection, no fusion |
-| Axis Camera Station | $1,000+ | VMS only, add-on AI needed |
+| Product             | Price          | Comparison                   |
+| ------------------- | -------------- | ---------------------------- |
+| Dedrone City        | $100,000+/year | Cloud-based, enterprise      |
+| Hikvision + AI      | $500/node      | Generic detection, no fusion |
+| Axis Camera Station | $1,000+        | VMS only, add-on AI needed   |
 
 ---
 
 ## SkyWatch Enterprise
 
-**SKU:** SW-ENT-001
-**Target Market:** Corporate campuses, critical infrastructure
-**Price Range:** $5,000-20,000
+**SKU:** SW-ENT-001 **Target Market:** Corporate campuses, critical
+infrastructure **Price Range:** $5,000-20,000
 
 ### Overview
 
-Full-scale enterprise deployment with multi-sensor integration, SOC connectivity, compliance logging, and professional management dashboard.
+Full-scale enterprise deployment with multi-sensor integration, SOC
+connectivity, compliance logging, and professional management dashboard.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 1-5km (multi-sensor) |
-| Sensors | Visual, Thermal, RF, Radar (optional) |
-| Uptime SLA | 99.9% |
-| Data Retention | 90 days (configurable) |
-| Users | Unlimited |
-| API | REST, WebSocket, MQTT |
-| Integrations | SIEM, VMS, Access Control |
+| Specification   | Value                                 |
+| --------------- | ------------------------------------- |
+| Detection Range | 1-5km (multi-sensor)                  |
+| Sensors         | Visual, Thermal, RF, Radar (optional) |
+| Uptime SLA      | 99.9%                                 |
+| Data Retention  | 90 days (configurable)                |
+| Users           | Unlimited                             |
+| API             | REST, WebSocket, MQTT                 |
+| Integrations    | SIEM, VMS, Access Control             |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Server | 1U rackmount, 32GB | 1 | $800.00 | $800.00 | Dell/HP |
-| Detection Nodes | SkyWatch Standard | 10 | $200.00 | $2,000.00 | Internal |
-| PTZ Cameras | 30× zoom, PoE | 4 | $500.00 | $2,000.00 | Hikvision/Axis |
-| RF Detection Array | RTL-SDR × 4 | 1 | $200.00 | $200.00 | RTL-SDR.com |
-| Directional Antennas | Yagi, 2.4/5.8GHz | 4 | $100.00 | $400.00 | L-Com |
-| Radar Unit (optional) | Echodyne EchoGuard | 1 | $5,000.00 | $5,000.00 | Echodyne |
-| PoE Switch | 24-port, managed | 1 | $400.00 | $400.00 | Ubiquiti |
-| UPS | 1500VA, rack | 1 | $500.00 | $500.00 | APC |
-| Installation | Professional | 1 | $2,000.00 | $2,000.00 | Contractor |
-| **TOTAL (w/o Radar)** | | | | **$8,300.00** | |
-| **TOTAL (with Radar)** | | | | **$13,300.00** | |
+| Item                   | Specification      | Qty | Unit Cost | Total          | Supplier       |
+| ---------------------- | ------------------ | --- | --------- | -------------- | -------------- |
+| Server                 | 1U rackmount, 32GB | 1   | $800.00   | $800.00        | Dell/HP        |
+| Detection Nodes        | SkyWatch Standard  | 10  | $200.00   | $2,000.00      | Internal       |
+| PTZ Cameras            | 30× zoom, PoE      | 4   | $500.00   | $2,000.00      | Hikvision/Axis |
+| RF Detection Array     | RTL-SDR × 4        | 1   | $200.00   | $200.00        | RTL-SDR.com    |
+| Directional Antennas   | Yagi, 2.4/5.8GHz   | 4   | $100.00   | $400.00        | L-Com          |
+| Radar Unit (optional)  | Echodyne EchoGuard | 1   | $5,000.00 | $5,000.00      | Echodyne       |
+| PoE Switch             | 24-port, managed   | 1   | $400.00   | $400.00        | Ubiquiti       |
+| UPS                    | 1500VA, rack       | 1   | $500.00   | $500.00        | APC            |
+| Installation           | Professional       | 1   | $2,000.00 | $2,000.00      | Contractor     |
+| **TOTAL (w/o Radar)**  |                    |     |           | **$8,300.00**  |                |
+| **TOTAL (with Radar)** |                    |     |           | **$13,300.00** |                |
 
 ### Configuration
 
 **Enterprise Configuration (enterprise.yaml):**
+
 ```yaml
 # SkyWatch Enterprise - Full Configuration
 enterprise:
@@ -1451,15 +1474,15 @@ sensors:
   radar:
     enabled: true
     type: "echodyne_echoguard"
-    range: 3000  # meters
+    range: 3000 # meters
     elevation: [-10, 60]
 
 # Fusion engine
 fusion:
   algorithm: "bayesian"
   confidence_threshold: 0.7
-  track_correlation_distance: 100  # meters
-  track_timeout: 30  # seconds
+  track_correlation_distance: 100 # meters
+  track_timeout: 30 # seconds
 
 # Enterprise integrations
 integrations:
@@ -1528,7 +1551,7 @@ dashboard:
 api:
   enabled: true
   port: 8443
-  rate_limit: 1000  # requests/minute
+  rate_limit: 1000 # requests/minute
 
   webhooks:
     - name: "soc_alert"
@@ -1577,12 +1600,12 @@ api:
 
 ### Commercial Alternatives
 
-| Product | Price | Comparison |
-|---------|-------|------------|
-| Dedrone DedroneTracker | $50,000+ | Similar features, established |
-| DroneShield DroneSentry | $100,000+ | Military-grade |
-| Fortem SkyDome | $500,000+ | Includes defeat capability |
-| Robin Radar IRIS | $150,000+ | 3D radar focused |
+| Product                 | Price     | Comparison                    |
+| ----------------------- | --------- | ----------------------------- |
+| Dedrone DedroneTracker  | $50,000+  | Similar features, established |
+| DroneShield DroneSentry | $100,000+ | Military-grade                |
+| Fortem SkyDome          | $500,000+ | Includes defeat capability    |
+| Robin Radar IRIS        | $150,000+ | 3D radar focused              |
 
 ---
 
@@ -1590,40 +1613,40 @@ api:
 
 ## NetSentry Lite
 
-**SKU:** NS-LITE-001
-**Target Market:** Makers, hobbyists, testing
-**Price Range:** $150-400
+**SKU:** NS-LITE-001 **Target Market:** Makers, hobbyists, testing **Price
+Range:** $150-400
 
 ### Overview
 
-Entry-level countermeasure system with spring-loaded net launcher. Designed for testing and proof-of-concept deployments.
+Entry-level countermeasure system with spring-loaded net launcher. Designed for
+testing and proof-of-concept deployments.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 50-100m |
-| Launch Range | 5-15m |
-| Response Time | 200-500ms |
-| Reload | Manual |
-| Net Size | 1.5m weighted |
+| Specification   | Value         |
+| --------------- | ------------- |
+| Detection Range | 50-100m       |
+| Launch Range    | 5-15m         |
+| Response Time   | 200-500ms     |
+| Reload          | Manual        |
+| Net Size        | 1.5m weighted |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 2GB RAM | 1 | $45.00 | $45.00 | Raspberry Pi |
-| Pi Camera v2 | 8MP | 1 | $25.00 | $25.00 | Raspberry Pi |
-| Spring Mechanism | Custom, 50lb | 1 | $35.00 | $35.00 | Hardware store |
-| Nichrome Wire | 28AWG, 1m | 1 | $5.00 | $5.00 | Amazon |
-| MOSFET Module | IRLZ44N | 1 | $5.00 | $5.00 | Amazon |
-| Retaining Cord | Nylon, 2mm | 10m | $5.00 | $5.00 | Amazon |
-| Net | 1.5m, weighted corners | 1 | $30.00 | $30.00 | Fishing supply |
-| PVC Barrel | 3" × 18" | 1 | $15.00 | $15.00 | Hardware store |
-| 12V Relay Module | Opto-isolated | 1 | $5.00 | $5.00 | Amazon |
-| 12V Power Supply | 2A | 1 | $15.00 | $15.00 | Amazon |
-| Enclosure | Weatherproof | 1 | $25.00 | $25.00 | Amazon |
-| **TOTAL** | | | | **$210.00** | |
+| Item             | Specification          | Qty | Unit Cost | Total       | Supplier       |
+| ---------------- | ---------------------- | --- | --------- | ----------- | -------------- |
+| Raspberry Pi 4   | 2GB RAM                | 1   | $45.00    | $45.00      | Raspberry Pi   |
+| Pi Camera v2     | 8MP                    | 1   | $25.00    | $25.00      | Raspberry Pi   |
+| Spring Mechanism | Custom, 50lb           | 1   | $35.00    | $35.00      | Hardware store |
+| Nichrome Wire    | 28AWG, 1m              | 1   | $5.00     | $5.00       | Amazon         |
+| MOSFET Module    | IRLZ44N                | 1   | $5.00     | $5.00       | Amazon         |
+| Retaining Cord   | Nylon, 2mm             | 10m | $5.00     | $5.00       | Amazon         |
+| Net              | 1.5m, weighted corners | 1   | $30.00    | $30.00      | Fishing supply |
+| PVC Barrel       | 3" × 18"               | 1   | $15.00    | $15.00      | Hardware store |
+| 12V Relay Module | Opto-isolated          | 1   | $5.00     | $5.00       | Amazon         |
+| 12V Power Supply | 2A                     | 1   | $15.00    | $15.00      | Amazon         |
+| Enclosure        | Weatherproof           | 1   | $25.00    | $25.00      | Amazon         |
+| **TOTAL**        |                        |     |           | **$210.00** |                |
 
 ### Configuration
 
@@ -1653,42 +1676,42 @@ targeting:
 
 ## NetSentry Standard
 
-**SKU:** NS-STD-001
-**Target Market:** Property protection
-**Price Range:** $400-800
+**SKU:** NS-STD-001 **Target Market:** Property protection **Price Range:**
+$400-800
 
 ### Overview
 
-CO2-powered net launcher with faster response and longer range. Includes Coral TPU for improved detection.
+CO2-powered net launcher with faster response and longer range. Includes Coral
+TPU for improved detection.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 100-200m |
-| Launch Range | 15-30m |
-| Response Time | 50ms |
-| Reload | CO2 cartridge replacement |
-| Net Size | 2m weighted |
-| Cost per Shot | $1-2 |
+| Specification   | Value                     |
+| --------------- | ------------------------- |
+| Detection Range | 100-200m                  |
+| Launch Range    | 15-30m                    |
+| Response Time   | 50ms                      |
+| Reload          | CO2 cartridge replacement |
+| Net Size        | 2m weighted               |
+| Cost per Shot   | $1-2                      |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 4 | 4GB RAM | 1 | $55.00 | $55.00 | Raspberry Pi |
-| Pi Camera HQ | 12.3MP | 1 | $50.00 | $50.00 | Raspberry Pi |
-| 8mm Lens | C-mount | 1 | $25.00 | $25.00 | Arducam |
-| Coral USB Accelerator | Edge TPU | 1 | $59.99 | $59.99 | Coral.ai |
-| CO2 Puncture Assembly | 16g cartridge | 1 | $60.00 | $60.00 | Palmer Pursuit |
-| Solenoid Valve | 12V, NC | 1 | $30.00 | $30.00 | Amazon |
-| Expansion Chamber | Aluminum | 1 | $40.00 | $40.00 | Custom/3D print |
-| Net | 2m, weighted | 1 | $50.00 | $50.00 | Safety supply |
-| Barrel Assembly | Aluminum, 4" | 1 | $40.00 | $40.00 | Custom |
-| Relay Module | Opto-isolated | 1 | $10.00 | $10.00 | Amazon |
-| 12V Power Supply | 5A | 1 | $20.00 | $20.00 | Amazon |
-| Weatherproof Enclosure | IP65 | 1 | $60.00 | $60.00 | Polycase |
-| **TOTAL** | | | | **$500.00** | |
+| Item                   | Specification | Qty | Unit Cost | Total       | Supplier        |
+| ---------------------- | ------------- | --- | --------- | ----------- | --------------- |
+| Raspberry Pi 4         | 4GB RAM       | 1   | $55.00    | $55.00      | Raspberry Pi    |
+| Pi Camera HQ           | 12.3MP        | 1   | $50.00    | $50.00      | Raspberry Pi    |
+| 8mm Lens               | C-mount       | 1   | $25.00    | $25.00      | Arducam         |
+| Coral USB Accelerator  | Edge TPU      | 1   | $59.99    | $59.99      | Coral.ai        |
+| CO2 Puncture Assembly  | 16g cartridge | 1   | $60.00    | $60.00      | Palmer Pursuit  |
+| Solenoid Valve         | 12V, NC       | 1   | $30.00    | $30.00      | Amazon          |
+| Expansion Chamber      | Aluminum      | 1   | $40.00    | $40.00      | Custom/3D print |
+| Net                    | 2m, weighted  | 1   | $50.00    | $50.00      | Safety supply   |
+| Barrel Assembly        | Aluminum, 4"  | 1   | $40.00    | $40.00      | Custom          |
+| Relay Module           | Opto-isolated | 1   | $10.00    | $10.00      | Amazon          |
+| 12V Power Supply       | 5A            | 1   | $20.00    | $20.00      | Amazon          |
+| Weatherproof Enclosure | IP65          | 1   | $60.00    | $60.00      | Polycase        |
+| **TOTAL**              |               |     |           | **$500.00** |                 |
 
 ### Configuration
 
@@ -1725,45 +1748,45 @@ targeting:
 
 ## NetSentry Pro
 
-**SKU:** NS-PRO-001
-**Target Market:** Security professionals
-**Price Range:** $800-2,000
+**SKU:** NS-PRO-001 **Target Market:** Security professionals **Price Range:**
+$800-2,000
 
 ### Overview
 
-Professional pneumatic net launcher with pan-tilt tracking, global shutter camera, and extended range.
+Professional pneumatic net launcher with pan-tilt tracking, global shutter
+camera, and extended range.
 
 ### Specifications
 
-| Specification | Value |
-|---------------|-------|
-| Detection Range | 200-500m |
-| Launch Range | 25-50m |
-| Response Time | 50ms |
-| Reload | Air tank refill (free) |
-| Net Size | 3m auto-deploy |
-| Tracking | Pan-tilt motorized |
+| Specification   | Value                  |
+| --------------- | ---------------------- |
+| Detection Range | 200-500m               |
+| Launch Range    | 25-50m                 |
+| Response Time   | 50ms                   |
+| Reload          | Air tank refill (free) |
+| Net Size        | 3m auto-deploy         |
+| Tracking        | Pan-tilt motorized     |
 
 ### Bill of Materials
 
-| Item | Specification | Qty | Unit Cost | Total | Supplier |
-|------|---------------|-----|-----------|-------|----------|
-| Raspberry Pi 5 | 8GB RAM | 1 | $80.00 | $80.00 | Raspberry Pi |
-| Global Shutter Camera | IMX296 | 1 | $50.00 | $50.00 | Raspberry Pi |
-| Telephoto Lens | 12mm, CS | 1 | $80.00 | $80.00 | Arducam |
-| Coral M.2 Accelerator | Dual TPU | 1 | $35.00 | $35.00 | Coral.ai |
-| M.2 HAT | PCIe | 1 | $15.00 | $15.00 | Raspberry Pi |
-| Air Tank | 48ci, 3000psi | 1 | $100.00 | $100.00 | Paintball |
-| Regulator | Adjustable output | 1 | $80.00 | $80.00 | Ninja |
-| Solenoid Valve | MAC 35A | 1 | $50.00 | $50.00 | MAC Valves |
-| Barrel Assembly | Aluminum | 1 | $60.00 | $60.00 | Custom |
-| Net System | 3m, auto-deploy | 1 | $120.00 | $120.00 | Custom |
-| Pan-Tilt Mount | Heavy duty | 1 | $150.00 | $150.00 | ServoCity |
-| Relay Module | 4-channel | 1 | $15.00 | $15.00 | Amazon |
-| Industrial Enclosure | IP66 | 1 | $100.00 | $100.00 | Polycase |
-| UPS Battery | 12V 7Ah | 1 | $30.00 | $30.00 | Amazon |
-| Misc (cables, fittings) | Various | 1 | $50.00 | $50.00 | Various |
-| **TOTAL** | | | | **$1,015.00** | |
+| Item                    | Specification     | Qty | Unit Cost | Total         | Supplier     |
+| ----------------------- | ----------------- | --- | --------- | ------------- | ------------ |
+| Raspberry Pi 5          | 8GB RAM           | 1   | $80.00    | $80.00        | Raspberry Pi |
+| Global Shutter Camera   | IMX296            | 1   | $50.00    | $50.00        | Raspberry Pi |
+| Telephoto Lens          | 12mm, CS          | 1   | $80.00    | $80.00        | Arducam      |
+| Coral M.2 Accelerator   | Dual TPU          | 1   | $35.00    | $35.00        | Coral.ai     |
+| M.2 HAT                 | PCIe              | 1   | $15.00    | $15.00        | Raspberry Pi |
+| Air Tank                | 48ci, 3000psi     | 1   | $100.00   | $100.00       | Paintball    |
+| Regulator               | Adjustable output | 1   | $80.00    | $80.00        | Ninja        |
+| Solenoid Valve          | MAC 35A           | 1   | $50.00    | $50.00        | MAC Valves   |
+| Barrel Assembly         | Aluminum          | 1   | $60.00    | $60.00        | Custom       |
+| Net System              | 3m, auto-deploy   | 1   | $120.00   | $120.00       | Custom       |
+| Pan-Tilt Mount          | Heavy duty        | 1   | $150.00   | $150.00       | ServoCity    |
+| Relay Module            | 4-channel         | 1   | $15.00    | $15.00        | Amazon       |
+| Industrial Enclosure    | IP66              | 1   | $100.00   | $100.00       | Polycase     |
+| UPS Battery             | 12V 7Ah           | 1   | $30.00    | $30.00        | Amazon       |
+| Misc (cables, fittings) | Various           | 1   | $50.00    | $50.00        | Various      |
+| **TOTAL**               |                   |     |           | **$1,015.00** |              |
 
 ### Configuration
 
@@ -1778,7 +1801,7 @@ capture:
   fps: 60
   buffer_size: 3
   exposure_mode: auto
-  shutter_speed_us: 5000  # Fast shutter for tracking
+  shutter_speed_us: 5000 # Fast shutter for tracking
 
 inference:
   model_path: "models/drone_detector_large.tflite"
@@ -1800,10 +1823,10 @@ pan_tilt:
   tilt_servo_pin: 13
   pan_range: [-135, 135]
   tilt_range: [-45, 75]
-  max_speed: 180  # degrees/second
+  max_speed: 180 # degrees/second
   acceleration: 360
   prediction_enabled: true
-  prediction_time: 0.5  # seconds ahead
+  prediction_time: 0.5 # seconds ahead
 
 targeting:
   max_targeting_distance_m: 100.0
@@ -1834,23 +1857,23 @@ alert:
 
 ## Detection-Only Systems
 
-| Product | Manufacturer | Price | Features | Website |
-|---------|--------------|-------|----------|---------|
-| DroneTracker | Dedrone | $20,000+ | RF + visual, cloud | dedrone.com |
-| RfOne | DroneShield | $15,000+ | RF detection | droneshield.com |
-| AeroScope | DJI | $15,000+ | DJI drones only | dji.com |
-| ELVIRA | Robin Radar | $50,000+ | 3D radar | robinradar.com |
-| SkyTracker | CACI | $75,000+ | RF geolocation | caci.com |
+| Product      | Manufacturer | Price    | Features           | Website         |
+| ------------ | ------------ | -------- | ------------------ | --------------- |
+| DroneTracker | Dedrone      | $20,000+ | RF + visual, cloud | dedrone.com     |
+| RfOne        | DroneShield  | $15,000+ | RF detection       | droneshield.com |
+| AeroScope    | DJI          | $15,000+ | DJI drones only    | dji.com         |
+| ELVIRA       | Robin Radar  | $50,000+ | 3D radar           | robinradar.com  |
+| SkyTracker   | CACI         | $75,000+ | RF geolocation     | caci.com        |
 
 ## Detection + Countermeasure Systems
 
-| Product | Manufacturer | Price | Features | Website |
-|---------|--------------|-------|----------|---------|
-| SkyWall 100 | OpenWorks | $30,000+ | Net launcher | openworksengineering.com |
-| DroneHunter | Fortem | $50,000+ | Interceptor drone | fortemtech.com |
-| DroneGun | DroneShield | $30,000+ | RF jammer | droneshield.com |
-| Horizon | Sentrycs | $100,000+ | Protocol takeover | sentrycs.com |
-| AUDS | Liteye | $500,000+ | Full C-UAS | liteye.com |
+| Product     | Manufacturer | Price     | Features          | Website                  |
+| ----------- | ------------ | --------- | ----------------- | ------------------------ |
+| SkyWall 100 | OpenWorks    | $30,000+  | Net launcher      | openworksengineering.com |
+| DroneHunter | Fortem       | $50,000+  | Interceptor drone | fortemtech.com           |
+| DroneGun    | DroneShield  | $30,000+  | RF jammer         | droneshield.com          |
+| Horizon     | Sentrycs     | $100,000+ | Protocol takeover | sentrycs.com             |
+| AUDS        | Liteye       | $500,000+ | Full C-UAS        | liteye.com               |
 
 ---
 
@@ -1858,50 +1881,48 @@ alert:
 
 ## Compute Hardware
 
-| Supplier | Products | Website |
-|----------|----------|---------|
-| Raspberry Pi | Pi boards, cameras | raspberrypi.com |
-| Coral | Edge TPU accelerators | coral.ai |
-| Adafruit | Pi accessories | adafruit.com |
-| SparkFun | Sensors, breakouts | sparkfun.com |
+| Supplier     | Products              | Website         |
+| ------------ | --------------------- | --------------- |
+| Raspberry Pi | Pi boards, cameras    | raspberrypi.com |
+| Coral        | Edge TPU accelerators | coral.ai        |
+| Adafruit     | Pi accessories        | adafruit.com    |
+| SparkFun     | Sensors, breakouts    | sparkfun.com    |
 
 ## Cameras & Optics
 
-| Supplier | Products | Website |
-|----------|----------|---------|
-| Arducam | Lenses, camera modules | arducam.com |
-| FLIR | Thermal cameras | flir.com |
-| GroupGets | Lepton modules | groupgets.com |
-| Thorlabs | Optical components | thorlabs.com |
+| Supplier  | Products               | Website       |
+| --------- | ---------------------- | ------------- |
+| Arducam   | Lenses, camera modules | arducam.com   |
+| FLIR      | Thermal cameras        | flir.com      |
+| GroupGets | Lepton modules         | groupgets.com |
+| Thorlabs  | Optical components     | thorlabs.com  |
 
 ## RF & SDR
 
-| Supplier | Products | Website |
-|----------|----------|---------|
-| RTL-SDR.com | SDR dongles | rtl-sdr.com |
-| NooElec | SDR, antennas | nooelec.com |
-| L-Com | Antennas, cables | l-com.com |
+| Supplier    | Products         | Website     |
+| ----------- | ---------------- | ----------- |
+| RTL-SDR.com | SDR dongles      | rtl-sdr.com |
+| NooElec     | SDR, antennas    | nooelec.com |
+| L-Com       | Antennas, cables | l-com.com   |
 
 ## Mechanical & Pneumatic
 
-| Supplier | Products | Website |
-|----------|----------|---------|
-| ServoCity | Pan-tilt mounts | servocity.com |
-| McMaster-Carr | Hardware, fittings | mcmaster.com |
-| Polycase | Enclosures | polycase.com |
-| Palmer Pursuit | CO2 valves | palmerpursuit.com |
+| Supplier       | Products           | Website           |
+| -------------- | ------------------ | ----------------- |
+| ServoCity      | Pan-tilt mounts    | servocity.com     |
+| McMaster-Carr  | Hardware, fittings | mcmaster.com      |
+| Polycase       | Enclosures         | polycase.com      |
+| Palmer Pursuit | CO2 valves         | palmerpursuit.com |
 
 ## Power & Electronics
 
-| Supplier | Products | Website |
-|----------|----------|---------|
-| Pololu | DC-DC converters | pololu.com |
-| PiSupply | Battery HATs | pisupp.ly |
+| Supplier | Products              | Website     |
+| -------- | --------------------- | ----------- |
+| Pololu   | DC-DC converters      | pololu.com  |
+| PiSupply | Battery HATs          | pisupp.ly   |
 | Digi-Key | Electronic components | digikey.com |
-| Mouser | Electronic components | mouser.com |
+| Mouser   | Electronic components | mouser.com  |
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: 2026-01-09*
-*PhoenixRooivalk Project*
+_Document Version: 1.0_ _Last Updated: 2026-01-09_ _PhoenixRooivalk Project_

@@ -35,10 +35,10 @@ inference:
 drone_score:
   drone_class_id: 0
   model_weight: 0.7
-  drone_threshold: 0.6  # Higher threshold for fire net mode
+  drone_threshold: 0.6 # Higher threshold for fire net mode
 
 # Tracker settings
-tracker_type: kalman  # Use Kalman for better velocity estimation
+tracker_type: kalman # Use Kalman for better velocity estimation
 tracker:
   max_disappeared: 30
   max_distance: 100.0
@@ -50,12 +50,12 @@ tracker:
 targeting:
   # Distance estimation
   max_targeting_distance_m: 50.0
-  assumed_drone_size_m: 0.3  # Typical consumer drone
+  assumed_drone_size_m: 0.3 # Typical consumer drone
 
   # Target lock requirements
   min_confidence_for_lock: 0.7
   lock_timeout_seconds: 5.0
-  tracking_lead_factor: 1.2  # Lead factor for interception
+  tracking_lead_factor: 1.2 # Lead factor for interception
 
   # ============================================
   # FIRE NET SETTINGS - REVIEW CAREFULLY
@@ -95,10 +95,10 @@ targeting:
 
 # Alert settings
 alert:
-  webhook_url: null  # Optional: set for remote alerts
+  webhook_url: null # Optional: set for remote alerts
   cooldown_per_track: 5.0
   global_cooldown: 1.0
-  save_detections_path: "detections.json"  # Log all detections
+  save_detections_path: "detections.json" # Log all detections
 
 # Streaming (optional - useful for monitoring)
 streaming:
@@ -117,7 +117,7 @@ logging:
 
 # Display
 display:
-  headless: false  # Set true for production
+  headless: false # Set true for production
   show_fps: true
   show_drone_score: true
   show_track_id: true

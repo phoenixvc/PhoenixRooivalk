@@ -9,16 +9,18 @@ keywords: [detector, architecture, raspberry pi, components]
 
 ## Overview
 
-The Pi Drone Detector v2.0 uses a modular, interface-based architecture that allows
-hot-swapping of components based on available hardware. This design follows SOLID
-principles and enables easy testing, extension, and customization.
+The Pi Drone Detector v2.0 uses a modular, interface-based architecture that
+allows hot-swapping of components based on available hardware. This design
+follows SOLID principles and enables easy testing, extension, and customization.
 
 ## Core Design Principles
 
-1. **Interface Segregation**: Each component type has a dedicated abstract interface
+1. **Interface Segregation**: Each component type has a dedicated abstract
+   interface
 2. **Dependency Injection**: Components are wired together through the factory
 3. **Single Responsibility**: Each module handles one aspect of the system
-4. **Open/Closed**: Easy to extend with new implementations without modifying existing code
+4. **Open/Closed**: Easy to extend with new implementations without modifying
+   existing code
 
 ## Component Architecture
 
@@ -84,6 +86,7 @@ class FrameSource(ABC):
 ```
 
 Implementations:
+
 - `PiCameraSource`: Raspberry Pi camera via libcamera/picamera2
 - `USBCameraSource`: USB webcam via OpenCV
 - `VideoFileSource`: Video file playback
@@ -106,6 +109,7 @@ class InferenceEngine(ABC):
 ```
 
 Implementations:
+
 - `TFLiteEngine`: TensorFlow Lite (optimized for Pi)
 - `ONNXEngine`: ONNX Runtime
 - `CoralEngine`: Google Coral Edge TPU
@@ -125,6 +129,7 @@ class ObjectTracker(ABC):
 ```
 
 Implementations:
+
 - `NoOpTracker`: Pass-through, no tracking
 - `CentroidTracker`: Simple centroid-based matching
 - `KalmanTracker`: Kalman filter with motion prediction
@@ -143,6 +148,7 @@ class AlertHandler(ABC):
 ```
 
 Implementations:
+
 - `ConsoleAlertHandler`: Prints to stdout
 - `WebhookAlertHandler`: HTTP POST to endpoint
 - `FileAlertHandler`: Appends to JSON file
@@ -162,6 +168,7 @@ class FrameRenderer(ABC):
 ```
 
 Implementations:
+
 - `OpenCVRenderer`: Display with cv2.imshow
 - `HeadlessRenderer`: Periodic logging, no display
 - `StreamingRenderer`: Wraps another renderer for MJPEG streaming
@@ -195,6 +202,7 @@ Settings (root)
 ```
 
 Configuration sources (in order of precedence):
+
 1. CLI arguments
 2. Environment variables
 3. YAML configuration file
@@ -222,6 +230,7 @@ if pipeline.start():
 ## Hardware Detection
 
 The `hardware.py` module auto-detects:
+
 - Platform (Pi 4, Pi 5, Desktop)
 - Camera type and capabilities
 - Accelerators (Coral USB/PCIe)
@@ -234,13 +243,17 @@ This information configures optimal settings automatically.
 The targeting module provides:
 
 ### Distance Estimation
+
 Uses pinhole camera model:
+
 ```
 distance = (assumed_size * focal_length) / bbox_size
 ```
 
 ### Fire Net Controller
+
 Safety interlocks:
+
 1. Armed flag required
 2. Minimum confidence (0.85)
 3. Minimum track frames (10)
@@ -266,6 +279,7 @@ MJPEG streaming uses a producer/consumer pattern:
 ```
 
 Endpoints:
+
 - `/` - HTML viewer with live status
 - `/stream` - MJPEG video stream
 - `/snapshot` - Single JPEG frame
@@ -275,16 +289,19 @@ Endpoints:
 ## Testing Strategy
 
 ### Unit Tests
+
 - Component-level tests with mocks
 - Shared fixtures in `conftest.py`
 - No hardware dependencies
 
 ### Integration Tests
+
 - Multi-component tests
 - Mock hardware when needed
 - Marker: `@pytest.mark.integration`
 
 ### Hardware Tests
+
 - Real hardware required
 - Marker: `@pytest.mark.hardware`
 - Run manually on target device
