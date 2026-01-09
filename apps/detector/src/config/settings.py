@@ -187,7 +187,7 @@ class StreamingSettings(BaseModel):
     """Web streaming configuration."""
 
     enabled: bool = Field(False, description="Enable MJPEG streaming server")
-    host: str = Field("0.0.0.0", description="Streaming server host")
+    host: str = Field("0.0.0.0", description="Streaming server host")  # nosec B104 - intentional for LAN access
     port: int = Field(8080, ge=1024, le=65535, description="Streaming server port")
     quality: int = Field(80, ge=10, le=100, description="JPEG quality (10-100)")
     max_fps: int = Field(15, ge=1, le=60, description="Maximum stream FPS")

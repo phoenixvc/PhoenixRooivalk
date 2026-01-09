@@ -236,7 +236,7 @@ class MJPEGStreamServer:
     def __init__(
         self,
         frame_buffer: FrameBuffer,
-        host: str = "0.0.0.0",
+        host: str = "0.0.0.0",  # nosec B104 - intentional for LAN access
         port: int = 8080,
         auth_enabled: bool = False,
         auth_token: Optional[str] = None,
@@ -533,7 +533,7 @@ class StreamingManager:
     def __init__(
         self,
         frame_buffer: FrameBuffer,
-        host: str = "0.0.0.0",
+        host: str = "0.0.0.0",  # nosec B104 - intentional for LAN access
         port: int = 8080,
         auth_enabled: bool = False,
         auth_token: Optional[str] = None,
@@ -657,13 +657,13 @@ def create_streaming_manager(
     Returns:
         Configured StreamingManager
     """
-    host = "0.0.0.0"
+    host = "0.0.0.0"  # nosec B104 - intentional for LAN access
     port = 8080
     auth_enabled = False
     auth_token = None
 
     if streaming_settings:
-        host = getattr(streaming_settings, 'host', "0.0.0.0")
+        host = getattr(streaming_settings, 'host', "0.0.0.0")  # nosec B104
         port = getattr(streaming_settings, 'port', 8080)
         auth_enabled = getattr(streaming_settings, 'auth_enabled', False)
         auth_token = getattr(streaming_settings, 'auth_token', None)

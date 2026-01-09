@@ -124,7 +124,7 @@ class WebhookAlertHandler(AlertHandler):
                 data=data,
                 headers={'Content-Type': 'application/json'},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)
+            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310 - URL scheme validated in __init__
 
             self._alert_count += 1
             self._last_alert_time = time.time()
@@ -156,7 +156,7 @@ class WebhookAlertHandler(AlertHandler):
                 data=data,
                 headers={'Content-Type': 'application/json'},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)
+            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310 - URL scheme validated in __init__
 
             self._alert_count += len(self._pending_batch)
             self._pending_batch = []

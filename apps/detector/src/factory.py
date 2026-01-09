@@ -111,7 +111,7 @@ def create_pipeline(
     headless: bool = False,
     # Streaming options
     stream_enabled: bool = False,
-    stream_host: str = "0.0.0.0",
+    stream_host: str = "0.0.0.0",  # nosec B104 - intentional for LAN access
     stream_port: int = 8080,
     stream_quality: int = 80,
     stream_max_fps: int = 15,
