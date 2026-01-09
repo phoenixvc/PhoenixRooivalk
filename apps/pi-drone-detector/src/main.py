@@ -30,7 +30,7 @@ import sys
 import signal
 from typing import Optional
 
-from factory import create_pipeline, create_demo_pipeline, DetectionPipeline
+from .factory import create_pipeline, create_demo_pipeline, DetectionPipeline
 
 
 def parse_args():
