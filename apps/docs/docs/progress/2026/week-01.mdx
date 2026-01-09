@@ -86,7 +86,8 @@ import {
 - **YOLO Training Audit**: Complete audit and fixes for ML training infrastructure (PR #476)
 - **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during testing (PR #475)
 - **Codacy Compliance**: Resolved static analysis issues across Python, JavaScript, and Rust
-- **Security Hardening**: GitHub Actions SHA pinning, workflow security improvements
+- **Security Hardening**: GitHub Actions SHA pinning, Semgrep nosec fixes, workflow improvements
+- **UI/UX Fixes**: Document filters, category UI, authentication context errors resolved
 
 ### 6. Known Issues Resolved
 
@@ -98,6 +99,9 @@ import {
 | Documentation gaps      | ✅ Resolved | Technical docs updated with new API specs |
 | Codacy static analysis  | ✅ Resolved | Fixed issues in Python, JS, and Rust code |
 | Auth bypass security    | ✅ Resolved | Production safeguards for DISABLE_LOGIN   |
+| Document filters UI     | ✅ Resolved | Category and filter issues fixed (PR #470)|
+| Auth context errors     | ✅ Resolved | Initialization debugging complete (#469)  |
+| Semgrep warnings        | ✅ Resolved | Nosemgrep inline comments fixed (#471)    |
 
 ---
 
@@ -502,20 +506,24 @@ significant technical milestones achieved.
 
 #### Feature Pull Requests Merged (Dec 19 - Jan 9)
 
-| PR   | Title                                        | Category      |
-| ---- | -------------------------------------------- | ------------- |
-| #476 | Complete YOLO training infrastructure audit  | ML/Security   |
-| #475 | Add DISABLE_LOGIN flag with prod safeguards  | Auth/Security |
-| #474 | Fix remaining Codacy static analysis issues  | Code Quality  |
-| #473 | Evaluate system improvements                 | Refactoring   |
-| #467 | Pi Drone Detector MVP complete               | Edge AI       |
-| #466 | Azure ML training pipeline                   | MLOps         |
-| #465 | YOLOv8 INT8 quantization                     | Performance   |
-| #464 | MLflow experiment tracking                   | MLOps         |
-| #463 | Rust clippy fixes                            | Code Quality  |
-| #462 | Python type hints and ruff                   | Code Quality  |
-| #461 | ESLint and Prettier updates                  | Code Quality  |
-| #460 | Cross-platform ARM64 builds                  | CI/CD         |
+| PR   | Title                                            | Category      |
+| ---- | ------------------------------------------------ | ------------- |
+| #476 | Complete YOLO training infrastructure audit      | ML/Security   |
+| #475 | Add DISABLE_LOGIN flag with prod safeguards      | Auth/Security |
+| #474 | Fix build, lint, and CI/CD errors                | DevOps        |
+| #473 | Evaluate system performance and functionality    | Refactoring   |
+| #472 | Add Week 1 2026 progress report and pitch deck   | Documentation |
+| #471 | Fix nosemgrep inline comments for Semgrep        | Security      |
+| #470 | Fix document filters and category UI issues      | UI/UX         |
+| #469 | Debug authentication context initialization      | Bug Fix       |
+| #467 | Plan drone detection system for Raspberry Pi     | Edge AI       |
+| #466 | Azure ML training pipeline                       | MLOps         |
+| #465 | YOLOv8 INT8 quantization                         | Performance   |
+| #464 | MLflow experiment tracking                       | MLOps         |
+| #463 | Rust clippy fixes                                | Code Quality  |
+| #462 | Python type hints and ruff                       | Code Quality  |
+| #461 | ESLint and Prettier updates                      | Code Quality  |
+| #460 | Cross-platform ARM64 builds                      | CI/CD         |
 
 #### Dependency Updates
 
