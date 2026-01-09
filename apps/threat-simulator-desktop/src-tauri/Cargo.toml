@@ -20,6 +20,9 @@ chrono = { version = "0.4", features = ["serde"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
 # Evidence integration
 phoenix-evidence = { path = "../../../crates/evidence" }
 phoenix-common = { path = "../../../crates/phoenix-common" }

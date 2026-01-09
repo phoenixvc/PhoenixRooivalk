@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 mod cooldown_meter;
+mod detection_panel;
 mod drone_deployment;
 mod energy_management;
 mod event_feed;
@@ -12,8 +13,10 @@ mod research_panel;
 mod stats_panel;
 mod synergy_system;
 mod token_store;
+mod video_stream;
 mod weapon_panel;
 
+pub use detection_panel::{DetectionData, DetectionPanel, DetectorConnectionStatus};
 pub use drone_deployment::DroneDeploymentPanel;
 pub use energy_management::EnergyManagement;
 pub use event_feed::{create_feed_item, EventFeed, FeedItem, FeedSeverity};
@@ -25,6 +28,7 @@ pub use research_panel::ResearchPanel;
 pub use stats_panel::StatsPanel;
 pub use synergy_system::SynergySystem;
 pub use token_store::TokenStore;
+pub use video_stream::{StreamMode, VideoStream};
 pub use weapon_panel::WeaponPanel;
 
 use crate::game::{GameStateManager, WeaponType};
@@ -54,6 +58,14 @@ pub fn App() -> impl IntoView {
     // Loading state
     let (is_loading, set_is_loading) = signal(true);
     let (loading_progress, set_loading_progress) = signal(0u8);
+
+    // Detection system state
+    let (show_detection_panel, set_show_detection_panel) = signal(false);
+    let (show_video_stream, set_show_video_stream) = signal(false);
+    let (detections, set_detections) = signal(Vec::<DetectionData>::new());
+    let (detector_status, set_detector_status) = signal(DetectorConnectionStatus::Disconnected);
+    let (is_detector_running, set_is_detector_running) = signal(false);
+    let (stream_url, set_stream_url) = signal(None::<String>);
 
     // Watch for critical events - low health
     {
@@ -190,6 +202,8 @@ pub fn App() -> impl IntoView {
                 "t" | "T" => set_show_token_store.update(|t| *t = !*t),
                 "f" | "F" => set_show_research.update(|r| *r = !*r),
                 "g" | "G" => set_show_synergies.update(|s| *s = !*s),
+                "v" | "V" => set_show_video_stream.update(|v| *v = !*v),
+                "b" | "B" => set_show_detection_panel.update(|d| *d = !*d),
                 "x" | "X" => game_state_inner.auto_targeting_enabled.update(|a| *a = !*a),
                 "r" | "R" => {
                     game_state_inner.reset();
@@ -478,6 +492,84 @@ pub fn App() -> impl IntoView {
                 show=show_synergies
             />
 
+            // Detection Panel
+            <Show when=move || show_detection_panel.get() fallback=|| view! { <div></div> }>
+                <div class="side-panel left-upper detection-panel-container">
+                    <DetectionPanel
+                        detections=detections
+                        connection_status=detector_status
+                        is_detector_running=is_detector_running
+                        on_start=Callback::new(move |_| {
+                            set_detector_status.set(DetectorConnectionStatus::Connecting);
+                            set_is_detector_running.set(true);
+                            // In Tauri context, this would call the start_detector command
+                            // For now, simulate connection
+                            set_stream_url.set(Some("http://127.0.0.1:8080/stream".to_string()));
+                            set_detector_status.set(DetectorConnectionStatus::Connected);
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "Detector started".to_string(),
+                                    FeedSeverity::Success,
+                                ));
+                            });
+                        })
+                        on_stop=Callback::new(move |_| {
+                            set_is_detector_running.set(false);
+                            set_detector_status.set(DetectorConnectionStatus::Disconnected);
+                            set_stream_url.set(None);
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "Detector stopped".to_string(),
+                                    FeedSeverity::Warning,
+                                ));
+                            });
+                        })
+                        on_test=Callback::new(move |_| {
+                            // Add a test detection
+                            let now = js_sys::Date::new_0();
+                            let timestamp = format!(
+                                "{:02}:{:02}:{:02}",
+                                now.get_hours(),
+                                now.get_minutes(),
+                                now.get_seconds()
+                            );
+                            set_detections.update(|dets| {
+                                dets.insert(0, DetectionData {
+                                    class_name: "drone".to_string(),
+                                    confidence: 0.92,
+                                    drone_score: 0.88,
+                                    track_id: Some(dets.len() as i32 + 1),
+                                    timestamp,
+                                    frame_number: 100 + dets.len() as i32,
+                                });
+                                // Keep only last 20 detections
+                                if dets.len() > 20 {
+                                    dets.pop();
+                                }
+                            });
+                            set_event_feed.update(|feed| {
+                                feed.push(create_feed_item(
+                                    "Test detection triggered".to_string(),
+                                    FeedSeverity::Info,
+                                ));
+                            });
+                        })
+                    />
+                </div>
+            </Show>
+
+            // Video Stream Panel
+            <Show when=move || show_video_stream.get() fallback=|| view! { <div></div> }>
+                <div class="video-stream-panel">
+                    <VideoStream
+                        stream_url=stream_url
+                        is_active=is_detector_running
+                        mode=StreamMode::Live
+                        show_controls=true
+                    />
+                </div>
+            </Show>
+
             <div class="controls-footer">
                 <div class="control-section">
                     <button
@@ -626,6 +718,38 @@ pub fn App() -> impl IntoView {
                     </button>
 
                     <button
+                        class=move || {
+                            if is_detector_running.get() {
+                                "control-button active"
+                            } else {
+                                "control-button"
+                            }
+                        }
+                        on:click=move |_| {
+                            set_show_detection_panel.update(|d| *d = !*d);
+                        }
+                    >
+
+                        "📡 DETECT"
+                    </button>
+
+                    <button
+                        class=move || {
+                            if show_video_stream.get() {
+                                "control-button active"
+                            } else {
+                                "control-button"
+                            }
+                        }
+                        on:click=move |_| {
+                            set_show_video_stream.update(|v| *v = !*v);
+                        }
+                    >
+
+                        "📹 VIDEO"
+                    </button>
+
+                    <button
                         class="control-button"
                         on:click=move |_| {
                             set_show_help.update(|h| *h = !*h);
@@ -715,6 +839,14 @@ pub fn App() -> impl IntoView {
                                 <li>
                                     <kbd>"G"</kbd>
                                     " - Toggle synergy indicator"
+                                </li>
+                                <li>
+                                    <kbd>"V"</kbd>
+                                    " - Toggle video stream"
+                                </li>
+                                <li>
+                                    <kbd>"B"</kbd>
+                                    " - Toggle detection panel"
                                 </li>
                                 <li>
                                     <kbd>"X"</kbd>
