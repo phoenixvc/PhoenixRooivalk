@@ -31,11 +31,20 @@ describe("Comment Service - Sanitization", () => {
       expect(result).not.toContain("</script>");
     });
 
-    it("should escape HTML entities", () => {
+    it("should strip HTML-like tags and escape remaining special characters", () => {
+      // HTML-like tags are stripped, not escaped
       const input = 'Hello <World> & "Friends"';
       const result = sanitizeContent(input);
-      expect(result).toContain("&lt;");
-      expect(result).toContain("&gt;");
+      // <World> is stripped as an HTML tag
+      expect(result).not.toContain("<World>");
+      // Remaining special characters are escaped
+      expect(result).toContain("&amp;");
+      expect(result).toContain("&quot;");
+    });
+
+    it("should escape ampersand and quote characters", () => {
+      const input = 'Test & "quoted"';
+      const result = sanitizeContent(input);
       expect(result).toContain("&amp;");
       expect(result).toContain("&quot;");
     });
