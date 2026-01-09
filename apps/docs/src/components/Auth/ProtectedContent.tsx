@@ -7,9 +7,8 @@
  * When DISABLE_LOGIN=true, all content is shown without authentication.
  */
 
-import React, { useEffect } from "react";
-
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import React, { useEffect } from "react";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics";
