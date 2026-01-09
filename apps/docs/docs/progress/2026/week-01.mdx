@@ -74,12 +74,13 @@ import {
 - **Model versioning**: MLflow integration for experiment tracking
 - **Scalable architecture**: Ready for production model iteration
 
-### 4. SkySnare Product Roadmap
+### 4. Product Catalog Defined
 
-- **BOM estimate**: $75-200 per unit depending on configuration
-- **Manufacturing readiness**: Component sourcing validated
-- **Design alignment**: Hardware designs match software capabilities
-- **Q2 2026 launch target**: On track for consumer market entry
+- **SkyWatch Line**: 8 detection-only products ($50 Nano to $20K Enterprise)
+- **NetSentry Line**: 3 countermeasure systems ($150 Lite to $2K Pro)
+- **11 products total**: Complete BOMs, specifications, and configs documented
+- **Market coverage**: Hobbyist, consumer, professional, and enterprise tiers
+- **Q2 2026 target**: Consumer products on track for market entry
 
 ### 5. Code Quality & Security Improvements
 
@@ -205,17 +206,24 @@ import {
 
 <SlideSection
   number={5}
-  title="SkySnare Alignment"
-  duration={25}
-  icon="🎮"
+  title="Product Lines"
+  duration={30}
+  icon="📦"
   keyPoints={[
-    "**BOM estimate**: $75-200 per unit validated",
-    "**Component sourcing**: Key parts identified and priced",
-    "**Hardware-software fit**: Designs aligned with AI capabilities",
-    "**Q2 2026 target**: Consumer launch on track",
+    "**SkyWatch Line**: 8 detection products ($50 - $20K)",
+    "**NetSentry Line**: 3 countermeasure systems ($150 - $2K)",
+    {
+      text: "**Market tiers**:",
+      subPoints: [
+        "Consumer: Nano, Standard, Mobile ($50-500)",
+        "Professional: Pro, Thermal, Marine ($250-2K)",
+        "Enterprise: Mesh, Enterprise ($500-20K)",
+      ],
+    },
+    "**Full catalog**: 11 products with complete BOMs validated",
   ]}
-  speakerNotes="SkySnare roadmap aligned with edge AI progress."
-  script="SkySnare product roadmap is aligned with our edge AI progress. BOM estimate of 75-200 dollars per unit depending on configuration. Component sourcing validated. Hardware designs match our software capabilities. On track for Q2 2026 consumer launch."
+  speakerNotes="Two distinct product lines covering detection and countermeasures across all market segments."
+  script="We've defined two complete product lines. SkyWatch covers detection-only products with 8 variants from the 50 dollar Nano for hobbyists up to the 20 thousand dollar Enterprise system for critical infrastructure. NetSentry adds net countermeasures with 3 tiers from the 150 dollar Lite for makers up to the 2000 dollar Pro for security professionals. All 11 products have validated BOMs and complete specifications documented."
 />
 
 <SlideSection
@@ -389,31 +397,51 @@ Multi-stack code quality and security improvements across the codebase.
 
 ---
 
-### 4. SkySnare Product Alignment
+### 4. Product Catalog
 
-Hardware and software roadmap alignment for consumer product launch.
+Complete product catalog defined with two product lines covering all market segments.
 
-#### Bill of Materials Estimate
+#### SkyWatch Line (Detection-Only)
 
-| Component          | Budget Option | Standard Option | Premium Option |
-| ------------------ | ------------- | --------------- | -------------- |
-| Launcher mechanism | $25           | $40             | $60            |
-| Net cartridge      | $15           | $20             | $30            |
-| Electronics/PCB    | $20           | $35             | $55            |
-| Enclosure          | $10           | $20             | $35            |
-| Assembly/packaging | $5            | $10             | $20            |
-| **Total BOM**      | **$75**       | **$125**        | **$200**       |
+| Product             | SKU         | Target Market                | Price Range   | Detection Range        |
+| ------------------- | ----------- | ---------------------------- | ------------- | ---------------------- |
+| SkyWatch Nano       | SW-NANO-001 | Hobbyists, makers            | $50-100       | 30-50m (daylight)      |
+| SkyWatch Standard   | SW-STD-001  | Homeowners, small property   | $100-250      | 50-150m                |
+| SkyWatch Pro        | SW-PRO-001  | Farms, estates, commercial   | $250-600      | 150-500m visual, 2km RF|
+| SkyWatch Mobile     | SW-MOB-001  | Security patrols, events     | $200-500      | 100-300m               |
+| SkyWatch Thermal    | SW-THM-001  | 24/7 operations, night       | $400-1,500    | 100-500m thermal       |
+| SkyWatch Marine     | SW-MAR-001  | Vessels, marinas, coastal    | $600-2,000    | 200-800m               |
+| SkyWatch Mesh       | SW-MESH-001 | Large perimeters, industrial | $500-2K/node  | 100-200m per node      |
+| SkyWatch Enterprise | SW-ENT-001  | Corporate, critical infra    | $5,000-20,000 | 1-5km (multi-sensor)   |
+
+#### NetSentry Line (Detection + Countermeasures)
+
+| Product          | SKU         | Target Market        | Price Range | Launch Range           |
+| ---------------- | ----------- | -------------------- | ----------- | ---------------------- |
+| NetSentry Lite   | NS-LITE-001 | Makers, hobbyists    | $150-400    | 5-15m (spring-loaded)  |
+| NetSentry Standard | NS-STD-001 | Property protection  | $400-800    | 15-30m (CO2-powered)   |
+| NetSentry Pro    | NS-PRO-001  | Security professionals | $800-2,000 | 25-50m (pneumatic)     |
+
+#### Sample BOMs
+
+| Product           | Key Components                                    | Total BOM  |
+| ----------------- | ------------------------------------------------- | ---------- |
+| SkyWatch Nano     | Pi Zero, Pi Camera v2, MicroSD, case              | ~$66       |
+| SkyWatch Standard | Pi 4, Pi Camera v3, Coral USB, PoE HAT, enclosure | ~$210      |
+| NetSentry Standard| Detection unit + CO2 launcher + net cartridges    | ~$500      |
 
 #### Roadmap Status
 
 | Milestone               | Target Date | Status      |
 | ----------------------- | ----------- | ----------- |
-| CAD designs finalized   | Complete    | ✅ Done     |
+| Product catalog defined | Complete    | ✅ Done     |
+| BOMs validated          | Jan 2026    | ✅ Complete |
 | Prototype 40% assembled | Complete    | ✅ Done     |
-| BOM validation          | Jan 2026    | ✅ Complete |
 | CPSC/ASTM certification | Mar 2026    | 🟡 Planned  |
 | Manufacturing setup     | Apr 2026    | 🟡 Planned  |
-| D2C launch              | Q2 2026     | 🟡 On track |
+| Consumer launch         | Q2 2026     | 🟡 On track |
+
+See [Product Catalog](/docs/technical/detector/product-catalog) for complete specifications.
 
 ---
 
