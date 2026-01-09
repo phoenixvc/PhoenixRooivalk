@@ -3,9 +3,13 @@
  *
  * Wraps documentation content to enforce authentication.
  * Shows teaser content for non-authenticated users with CTA to sign in.
+ *
+ * When DISABLE_LOGIN=true, all content is shown without authentication.
  */
 
 import React, { useEffect } from "react";
+
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics";
@@ -35,12 +39,19 @@ export function ProtectedContent({
   pageUrl,
   isFreeContent = false,
 }: ProtectedContentProps): React.ReactElement {
+  const { siteConfig } = useDocusaurusContext();
   const { user, loading, isConfigured, signInGoogle, signInGithub } = useAuth();
+
+  // Check if login is disabled site-wide via DISABLE_LOGIN environment variable
+  const disableLogin = siteConfig.customFields?.disableLogin === true;
 
   const currentUrl =
     pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
+  // When login is disabled, treat all pages as free (bypass authentication)
   const isFreePage =
-    isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
+    disableLogin ||
+    isFreeContent ||
+    FREE_PAGES.some((p) => currentUrl.startsWith(p));
 
   // Debug logging on component load
   useEffect(() => {
@@ -51,6 +62,7 @@ export function ProtectedContent({
         loading,
         isFreePage,
         isFreeContent,
+        disableLogin,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +76,10 @@ export function ProtectedContent({
         isConfigured,
         hasUser: !!user,
         isFreePage,
+        disableLogin,
       });
     }
-  }, [loading, isConfigured, user, isFreePage]);
+  }, [loading, isConfigured, user, isFreePage, disableLogin]);
 
   // Track teaser view for non-authenticated users
   useEffect(() => {
