@@ -14,11 +14,255 @@ The detector provides a 100ms GPIO pulse when engagement conditions are met. Thi
 
 | Tier | Name | Total Cost | Detection Range | Launch Range | Best For |
 |------|------|------------|-----------------|--------------|----------|
-| **DIY Budget** | NetSentry Lite | $150-400 | 50-100m | 10-25m | Hobbyists, testing, learning |
-| **DIY Standard** | NetSentry | $400-800 | 100-200m | 15-40m | Property protection, farms |
-| **DIY Advanced** | NetSentry Pro | $800-2,000 | 200-500m | 25-50m | Security professionals |
-| **Commercial** | SkyWall 100 | $30,000-70,000 | 500m+ (SmartScope) | 100m+ | Military, law enforcement |
-| **Commercial** | Fortem DroneHunter | $50,000+ | 3km+ (TrueView radar) | 1km+ | Critical infrastructure |
+| **Detection Only** | SkyWatch Nano | $50-100 | 30-50m | None | Hobbyists, awareness |
+| **Detection Only** | SkyWatch | $100-250 | 50-150m | None | Home/property monitoring |
+| **Detection Only** | SkyWatch Pro | $250-600 | 150-500m | None | Farms, estates, events |
+| **Detection + Counter** | NetSentry Lite | $150-400 | 50-100m | 10-25m | Hobbyists, testing |
+| **Detection + Counter** | NetSentry | $400-800 | 100-200m | 15-40m | Property protection |
+| **Detection + Counter** | NetSentry Pro | $800-2,000 | 200-500m | 25-50m | Security professionals |
+| **Commercial** | SkyWall 100 | $30,000-70,000 | 500m+ | 100m+ | Military, law enforcement |
+| **Commercial** | Fortem DroneHunter | $50,000+ | 3km+ | 1km+ | Critical infrastructure |
+
+---
+
+## Detection-Only Systems (SkyWatch Line)
+
+For users who want **awareness without countermeasures** - legally simpler, lower cost, and often sufficient for most use cases.
+
+### Why Detection-Only?
+
+- **Legal simplicity**: No permits required for passive detection
+- **Lower cost**: No launcher hardware needed
+- **Lower risk**: No projectiles, no liability concerns
+- **Sufficient for most**: Alert + record is enough for evidence/awareness
+- **Upgrade path**: Add countermeasures later if needed
+
+### SkyWatch Nano - $50-100
+
+**Target users:** Hobbyists, backyard awareness, learning
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi Zero 2 W | $15 | Pi supplier |
+| Pi Camera Module v2 | $25 | Pi supplier |
+| MicroSD card (32GB) | $8 | Amazon |
+| USB power supply | $10 | Amazon |
+| 3D printed case | $5 | DIY/Etsy |
+| **Total** | **$63** | |
+
+**Detection Methods:**
+- Visual (camera): 30-50m range
+- Alert: Local buzzer, webhook, email
+
+**Specifications:**
+- Detection range: 30-50m (daylight)
+- Processing: 5-10 FPS on Pi Zero 2
+- Power: 5W continuous
+- Alerts: Webhook, GPIO buzzer, email
+
+**Limitations:**
+- Daylight only (no IR)
+- Short range
+- Slower processing
+- No tracking/recording
+
+---
+
+### SkyWatch Standard - $100-250
+
+**Target users:** Homeowners, small property monitoring
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (2GB) | $45 | Pi supplier |
+| Pi Camera Module v3 | $35 | Pi supplier |
+| Coral USB Accelerator | $60 | Coral.ai |
+| PoE HAT (optional) | $20 | Pi supplier |
+| Weatherproof enclosure | $25 | Amazon |
+| MicroSD card (64GB) | $12 | Amazon |
+| **Total** | **$197** | |
+
+**Detection Methods:**
+- Visual (camera): 50-150m range
+- Audio (optional): Detect drone motor sounds
+- Alert: Multi-channel (webhook, SMS, siren, lights)
+
+**Specifications:**
+- Detection range: 50-150m
+- Processing: 15-30 FPS with Coral
+- Night mode: Low-light capable (v3 camera)
+- Recording: Local storage with motion clips
+- Alerts: Webhook, Telegram, email, GPIO (siren/lights)
+
+**Alert Options:**
+```yaml
+alert:
+  webhook_url: "https://your-server.com/drone-alert"
+  telegram_bot_token: "your-bot-token"
+  telegram_chat_id: "your-chat-id"
+  gpio_siren_pin: 18          # 12V siren via relay
+  gpio_light_pin: 23          # Warning light
+  save_detections_path: "/var/log/detections/"
+  record_clips: true
+  clip_duration_seconds: 30
+```
+
+---
+
+### SkyWatch Pro - $250-600
+
+**Target users:** Farms, estates, event venues, commercial property
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 5 (4GB) | $60 | Pi supplier |
+| Pi Camera HQ + 16mm lens | $100 | Pi supplier |
+| Coral M.2 Accelerator | $35 | Coral.ai |
+| M.2 HAT for Pi 5 | $15 | Pi supplier |
+| RTL-SDR dongle (RF detect) | $30 | Amazon |
+| USB microphone (audio) | $20 | Amazon |
+| PoE+ HAT | $25 | Pi supplier |
+| Weatherproof enclosure | $40 | Amazon |
+| Pan-tilt mount | $100 | Servo supplier |
+| **Total** | **$425** | |
+
+**Detection Methods:**
+| Method | Range | Conditions | Hardware |
+|--------|-------|------------|----------|
+| Visual (telephoto) | 150-500m | Daylight | HQ Camera + 16mm lens |
+| Visual (wide) | 50-100m | Day/low-light | Camera Module v3 |
+| RF detection | 500m-2km | Any | RTL-SDR + antenna |
+| Audio signature | 50-200m | Low noise | USB microphone |
+
+**Multi-Sensor Fusion:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SkyWatch Pro                              │
+│                                                              │
+│   ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌─────────┐  │
+│   │ Camera   │   │ RF/SDR   │   │ Audio    │   │ Optional│  │
+│   │ (Visual) │   │ Scanner  │   │ Analysis │   │ Radar   │  │
+│   └────┬─────┘   └────┬─────┘   └────┬─────┘   └────┬────┘  │
+│        │              │              │              │        │
+│        └──────────────┴──────────────┴──────────────┘        │
+│                           │                                  │
+│                    ┌──────┴──────┐                          │
+│                    │   Fusion    │                          │
+│                    │   Engine    │                          │
+│                    └──────┬──────┘                          │
+│                           │                                  │
+│              ┌────────────┼────────────┐                    │
+│              ▼            ▼            ▼                    │
+│         ┌────────┐  ┌──────────┐  ┌─────────┐              │
+│         │ Alert  │  │ Record   │  │ Track   │              │
+│         │ System │  │ & Store  │  │ & Log   │              │
+│         └────────┘  └──────────┘  └─────────┘              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Specifications:**
+- Detection range: 150-500m (visual), 500m-2km (RF)
+- Processing: 30+ FPS with Coral M.2
+- Auto-tracking: Pan-tilt follows detected drone
+- Recording: Continuous or motion-triggered
+- Multi-sensor: Fuses visual + RF + audio for confidence
+
+---
+
+### Detection Method Comparison
+
+| Method | Range | Day/Night | Weather | Cost | False Positives |
+|--------|-------|-----------|---------|------|-----------------|
+| **Visual (camera)** | 50-500m | Day (night w/IR) | Rain affects | $25-100 | Low with ML |
+| **RF scanning** | 500m-2km | Both | Unaffected | $30-100 | Medium (WiFi, etc.) |
+| **Audio signature** | 50-200m | Both | Wind affects | $20-50 | Medium |
+| **Radar (doppler)** | 100m-1km | Both | Mostly unaffected | $200-500 | Low |
+| **ADS-B receiver** | 50km+ | Both | Unaffected | $30 | Very low (compliant only) |
+
+### RF Detection Details (RTL-SDR)
+
+Many consumer drones operate on known frequencies:
+
+| Drone Type | Control Freq | Video Freq | Protocol |
+|------------|--------------|------------|----------|
+| DJI (most) | 2.4 GHz | 5.8 GHz | OcuSync/Lightbridge |
+| FPV racing | 2.4 GHz | 5.8 GHz | Various |
+| Cheap toys | 2.4 GHz | None | Simple RC |
+| Commercial | 900 MHz / 2.4 GHz | 5.8 GHz | Various |
+
+**RTL-SDR Setup:**
+```bash
+# Install RTL-SDR tools
+sudo apt install rtl-sdr librtlsdr-dev
+
+# Scan for drone frequencies
+rtl_power -f 2400M:2500M:1M -g 50 -i 1 scan.csv
+
+# Or use dedicated drone detector software
+# (integrates with SkyWatch detection pipeline)
+```
+
+### Audio Signature Detection
+
+Drone motors have distinctive acoustic signatures:
+
+| Drone Size | Frequency Range | Characteristics |
+|------------|-----------------|-----------------|
+| Mini (<250g) | 8-12 kHz | High-pitched whine |
+| Medium (1-2kg) | 4-8 kHz | Mid-range buzz |
+| Large (>2kg) | 2-4 kHz | Lower rumble, more bass |
+
+**Audio Detection Pipeline:**
+```
+Microphone → FFT → Frequency Analysis → ML Classifier → Alert
+                         ↓
+              Match against known drone signatures
+```
+
+---
+
+### Alert Integration Options
+
+| Alert Type | Latency | Cost | Best For |
+|------------|---------|------|----------|
+| **Local buzzer** | <100ms | $2 | Immediate awareness |
+| **GPIO relay → siren** | <100ms | $20 | Outdoor warning |
+| **Webhook** | 200-500ms | $0 | Home automation, logging |
+| **Telegram bot** | 500ms-2s | $0 | Mobile notification |
+| **SMS (via Twilio)** | 1-3s | $0.01/msg | Reliable mobile |
+| **Email** | 5-30s | $0 | Non-urgent, records |
+| **Smart home (MQTT)** | <200ms | $0 | Home Assistant, etc. |
+| **Strobe light** | <100ms | $30 | Visual deterrent |
+
+**Example Alert Configuration:**
+```yaml
+# Multi-channel alert setup
+alert:
+  # Immediate local alert
+  gpio_siren_pin: 18
+  gpio_strobe_pin: 23
+
+  # Push notification
+  telegram_enabled: true
+  telegram_bot_token: "123456:ABC..."
+  telegram_chat_id: "-100123456789"
+
+  # Webhook for logging/automation
+  webhook_url: "http://homeassistant.local:8123/api/webhook/drone-detected"
+
+  # Record evidence
+  save_detections_path: "/media/usb/drone_detections/"
+  record_clips: true
+  clip_pre_buffer_seconds: 5
+  clip_post_buffer_seconds: 30
+
+  # Throttling
+  cooldown_per_track: 60  # Don't re-alert same drone for 60s
+  global_cooldown: 5      # Min 5s between any alerts
+```
 
 ### Detection Range Factors
 
