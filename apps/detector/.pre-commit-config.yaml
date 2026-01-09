@@ -5,31 +5,31 @@
 repos:
   # Ruff - Fast Python linter and formatter
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.9
+    rev: v0.4.0
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
       - id: ruff-format
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
 
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: trailing-whitespace
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
       - id: end-of-file-fixer
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
       - id: check-yaml
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
       - id: check-json
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
       - id: check-added-large-files
         args: ['--maxkb=1000']
       - id: check-merge-conflict
       - id: debug-statements
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
 
   # isort - Import sorting
   - repo: https://github.com/pycqa/isort
@@ -37,26 +37,26 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black"]
-        files: ^apps/pi-drone-detector/
+        files: ^apps/detector/
 
   # mypy - Type checking (optional, can be slow)
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.10.0
     hooks:
       - id: mypy
-        files: ^apps/pi-drone-detector/src/
+        files: ^apps/detector/src/
         additional_dependencies:
           - pydantic>=2.0
           - numpy>=1.24
           - types-PyYAML
         args: [--ignore-missing-imports, --no-error-summary]
         pass_filenames: false
-        entry: mypy apps/pi-drone-detector/src/
+        entry: mypy apps/detector/src/
 
   # Bandit - Security checks
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.7
+    rev: 1.7.8
     hooks:
       - id: bandit
         args: ["-ll", "-ii", "-x", "tests/"]
-        files: ^apps/pi-drone-detector/src/
+        files: ^apps/detector/src/

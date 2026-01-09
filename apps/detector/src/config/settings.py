@@ -278,21 +278,27 @@ if PydanticBaseSettings is not object:
                 data = json.load(f)
             return cls(**data)
 
+        def _get_dict(self) -> Dict[str, Any]:
+            """Get dictionary representation (Pydantic v1/v2 compatible)."""
+            if hasattr(self, 'model_dump'):
+                return self.model_dump()  # Pydantic v2
+            return self.dict()  # Pydantic v1
+
         def to_yaml(self, path: str) -> None:
             """Save settings to YAML file."""
             import yaml
             with open(path, 'w') as f:
-                yaml.dump(self.dict(), f, default_flow_style=False, sort_keys=False)
+                yaml.dump(self._get_dict(), f, default_flow_style=False, sort_keys=False)
 
         def to_json(self, path: str, indent: int = 2) -> None:
             """Save settings to JSON file."""
             import json
             with open(path, 'w') as f:
-                json.dump(self.dict(), f, indent=indent)
+                json.dump(self._get_dict(), f, indent=indent)
 
         def to_dict(self) -> Dict[str, Any]:
             """Convert to dictionary."""
-            return self.dict()
+            return self._get_dict()
 
         def merge_cli_args(self, args) -> "Settings":
             """
@@ -346,7 +352,7 @@ if PydanticBaseSettings is not object:
                 updates.setdefault('streaming', {})['port'] = args.stream_port
 
             # Create new settings with updates
-            current = self.dict()
+            current = self._get_dict()
             for key, value in updates.items():
                 if isinstance(value, dict) and key in current:
                     current[key].update(value)
