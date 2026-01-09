@@ -22,7 +22,7 @@ Usage:
     pipeline.stop()
 """
 
-from interfaces import (
+from .interfaces import (
     FrameSource,
     InferenceEngine,
     ObjectTracker,
@@ -37,14 +37,14 @@ from interfaces import (
     PipelineConfig,
 )
 
-from factory import (
+from .factory import (
     create_pipeline,
     create_demo_pipeline,
     create_minimal_pipeline,
     DetectionPipeline,
 )
 
-from hardware import detect_hardware, print_hardware_report
+from .hardware import detect_hardware, print_hardware_report
 
 __version__ = '2.0.0'
 __all__ = [
