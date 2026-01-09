@@ -233,7 +233,7 @@ MAX_TRACKS = 50
 # =============================================================================
 
 DEFAULT_STREAM_PORT = 8080
-DEFAULT_STREAM_HOST = "0.0.0.0"
+DEFAULT_STREAM_HOST = "0.0.0.0"  # nosec B104 - default for LAN access on Pi
 MJPEG_BOUNDARY = b"--frame"
 
 # =============================================================================
