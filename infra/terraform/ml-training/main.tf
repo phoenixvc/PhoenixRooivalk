@@ -152,9 +152,18 @@ resource "azurerm_key_vault" "ml" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
 
-  # Security settings
+  # Security settings (environment-controlled via variables)
   soft_delete_retention_days = 7
-  purge_protection_enabled   = false # Set to true for production
+  purge_protection_enabled   = var.enable_purge_protection
+
+  # Network access control (restrict in production)
+  public_network_access_enabled = var.enable_public_network_access
+
+  network_acls {
+    default_action = var.enable_public_network_access ? "Allow" : "Deny"
+    bypass         = "AzureServices"
+    # In production, add virtual_network_subnet_ids and ip_rules as needed
+  }
 
   # Allow Azure ML to access secrets
   access_policy {
@@ -204,7 +213,10 @@ resource "azurerm_container_registry" "ml" {
   location            = azurerm_resource_group.ml.location
   resource_group_name = azurerm_resource_group.ml.name
   sku                 = "Basic"
-  admin_enabled       = true
+
+  # Admin access disabled by default - use managed identity + RBAC instead
+  # Set var.acr_admin_enabled = true only if required for specific integrations
+  admin_enabled = var.acr_admin_enabled
 
   tags = local.tags
 }
@@ -228,8 +240,9 @@ resource "azurerm_machine_learning_workspace" "ml" {
     type = "SystemAssigned"
   }
 
-  # Public network access (set to Disabled for production)
-  public_network_access_enabled = true
+  # Public network access (environment-controlled via variable)
+  # Set var.enable_public_network_access = false in prod.tfvars
+  public_network_access_enabled = var.enable_public_network_access
 
   # Friendly name and description
   friendly_name = "Phoenix Rooivalk ML Workspace (${var.environment})"

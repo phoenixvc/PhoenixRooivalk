@@ -32,6 +32,63 @@ from datetime import datetime
 from pathlib import Path
 
 
+def _import_yaml():
+    """Import pyyaml with helpful error message if missing."""
+    try:
+        import yaml
+        return yaml
+    except ImportError:
+        print("ERROR: pyyaml not installed.")
+        print("       Install with: pip install pyyaml")
+        print("       Or add to your requirements.txt")
+        sys.exit(1)
+
+
+def validate_gpu_device(device: str) -> str:
+    """Validate GPU device availability and return appropriate device string.
+
+    Args:
+        device: Requested device ('0', '1', 'cpu', 'auto')
+
+    Returns:
+        Validated device string (may be 'cpu' if GPU unavailable)
+    """
+    if device == 'cpu':
+        return 'cpu'
+
+    try:
+        import torch
+        if not torch.cuda.is_available():
+            print("WARNING: CUDA not available. Falling back to CPU.")
+            print("         Training will be slower without GPU acceleration.")
+            return 'cpu'
+
+        device_count = torch.cuda.device_count()
+        if device == 'auto':
+            print(f"Auto-detected {device_count} GPU(s). Using device 0.")
+            return '0'
+
+        # Check if requested device index exists
+        try:
+            device_idx = int(device)
+            if device_idx >= device_count:
+                print(f"WARNING: GPU device {device} not found (only {device_count} GPU(s) available).")
+                print(f"         Using device 0 instead.")
+                return '0'
+            gpu_name = torch.cuda.get_device_name(device_idx)
+            print(f"Using GPU {device_idx}: {gpu_name}")
+            return device
+        except ValueError:
+            # Device might be a string like '0,1' for multi-GPU
+            print(f"Using device specification: {device}")
+            return device
+
+    except ImportError:
+        print("WARNING: PyTorch not found for GPU validation.")
+        print("         Proceeding with specified device: {device}")
+        return device
+
+
 # Supported model architectures with ultralytics
 SUPPORTED_MODELS = {
     # YOLOv8 variants (recommended)
@@ -77,8 +134,10 @@ def validate_dataset(data_path: str) -> Path:
     if not data_file.exists():
         raise FileNotFoundError(f"Dataset config not found: {data_file}")
 
+    # Import yaml with helpful error message
+    yaml = _import_yaml()
+
     # Basic YAML validation
-    import yaml
     with open(data_file) as f:
         config = yaml.safe_load(f)
 
@@ -268,6 +327,7 @@ Supported Models:
     # Validate inputs
     args.model = validate_model(args.model)
     data_path = validate_dataset(args.data)
+    args.device = validate_gpu_device(args.device)
 
     # Import here to allow --help without ultralytics installed
     try:

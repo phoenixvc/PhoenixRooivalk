@@ -131,6 +131,28 @@ variable "create_cpu_cluster" {
 }
 
 # =============================================================================
+# Security Settings (Environment-Controlled)
+# =============================================================================
+
+variable "enable_public_network_access" {
+  description = "Enable public network access (true for dev, false for prod)"
+  type        = bool
+  default     = true # Override to false in prod.tfvars
+}
+
+variable "enable_purge_protection" {
+  description = "Enable Key Vault purge protection (false for dev, true for prod)"
+  type        = bool
+  default     = false # Override to true in prod.tfvars
+}
+
+variable "acr_admin_enabled" {
+  description = "Enable ACR admin account (false recommended, use managed identity instead)"
+  type        = bool
+  default     = false
+}
+
+# =============================================================================
 # Tags
 # =============================================================================
 
