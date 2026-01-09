@@ -34,9 +34,13 @@ except ImportError:
         PYDANTIC_V2 = True
     except ImportError:
         # Fallback for environments without pydantic
-        PydanticBaseSettings = object
-        BaseModel = object
+        PydanticBaseSettings = object  # type: ignore[misc,assignment]
+        BaseModel = object  # type: ignore[misc,assignment]
         PYDANTIC_V2 = None
+
+        def Field(default=None, **kwargs):  # noqa: N802
+            """Fallback Field that just returns the default value."""
+            return default
 
 
 # =============================================================================

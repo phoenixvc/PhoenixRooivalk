@@ -241,3 +241,14 @@ DEFAULT_FIRE_NET_GPIO = 17
 
 # Trigger pulse duration (seconds)
 FIRE_NET_PULSE_DURATION = 0.1
+
+# =============================================================================
+# Backwards Compatibility Aliases
+# =============================================================================
+
+# Alias for extended class names (use FULL_CLASS_NAMES for 27-class, STANDARD for 10-class)
+EXTENDED_CLASS_NAMES = FULL_CLASS_NAMES
+
+# Timing aliases with consistent naming
+HEALTH_CHECK_INTERVAL_SECONDS = HEALTH_CHECK_INTERVAL
+MAX_WEBHOOK_TIMEOUT_SECONDS = WEBHOOK_TIMEOUT_MAX

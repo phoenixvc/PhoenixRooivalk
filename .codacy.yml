@@ -1,0 +1,41 @@
+# Codacy configuration
+# See: https://docs.codacy.com/repositories-configure/codacy-configuration-file/
+
+---
+engines:
+  # Python linting
+  pylint:
+    enabled: true
+  bandit:
+    enabled: true
+  prospector:
+    enabled: false  # Using ruff instead
+
+exclude_paths:
+  - "tests/**"
+  - "**/tests/**"
+  - "**/__pycache__/**"
+  - "**/migrations/**"
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/*.min.js"
+  - "**/vendor/**"
+
+# Patterns to ignore (treat as warnings, not errors)
+# These are intentional patterns in our codebase
+languages:
+  python:
+    # Version-specific settings
+    version: "3.9"
+
+# Disable specific patterns that are false positives in our codebase
+disable_patterns:
+  # Class redefinition is intentional for Pydantic v1/v2 compatibility
+  - "W0621"  # Redefining name from outer scope
+  - "R0801"  # Similar lines in files (expected for fallback classes)
+  # Subprocess with static commands is safe
+  - "B603"   # subprocess without shell
+  - "B607"   # partial executable path
+  # Hardcoded 0.0.0.0 is intentional for LAN access on Pi
+  - "B104"   # Possible binding to all interfaces
