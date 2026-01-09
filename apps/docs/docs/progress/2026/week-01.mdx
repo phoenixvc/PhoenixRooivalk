@@ -85,6 +85,8 @@ import {
 
 - **YOLO Training Audit**: Complete audit and fixes for ML training infrastructure (PR #476)
 - **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during testing (PR #475)
+- **OAuth/CORS Fixes**: Major authentication overhaul - COOP blocking, CORS config, Azure Functions auth (PRs #417-#443)
+- **Production Deployment**: Azure config injection, offline mode support, auto-login removal
 - **Codacy Compliance**: Resolved static analysis issues across Python, JavaScript, and Rust
 - **Security Hardening**: GitHub Actions SHA pinning, Semgrep nosec fixes, workflow improvements
 - **UI/UX Fixes**: Document filters, category UI, authentication context errors resolved
@@ -96,10 +98,16 @@ import {
 | Model inference latency | ✅ Resolved | Optimized with TensorRT and quantization  |
 | Azure ML authentication | ✅ Resolved | Managed identity configuration fixed      |
 | Cross-platform builds   | ✅ Resolved | CI/CD pipeline updates for ARM64          |
-| Documentation gaps      | ✅ Resolved | Technical docs updated with new API specs |
+| OAuth COOP blocking     | ✅ Resolved | Fixed cross-origin policy (#439-#443)     |
+| CORS configuration      | ✅ Resolved | Azure Functions CORS headers fixed        |
+| Azure Functions auth    | ✅ Resolved | Error response property mismatch (#431)   |
+| Production config       | ✅ Resolved | Azure config via Root.tsx (#424)          |
+| Auto-login issues       | ✅ Resolved | Removed automatic login on startup (#420) |
+| Offline mode API calls  | ✅ Resolved | Skip known-emails in offline mode (#417)  |
+| AI assistant auth       | ✅ Resolved | Authentication and debugging added (#419) |
 | Codacy static analysis  | ✅ Resolved | Fixed issues in Python, JS, and Rust code |
 | Auth bypass security    | ✅ Resolved | Production safeguards for DISABLE_LOGIN   |
-| Document filters UI     | ✅ Resolved | Category and filter issues fixed (PR #470)|
+| Document filters UI     | ✅ Resolved | Category and filter issues fixed (#470)   |
 | Auth context errors     | ✅ Resolved | Initialization debugging complete (#469)  |
 | Semgrep warnings        | ✅ Resolved | Nosemgrep inline comments fixed (#471)    |
 
@@ -506,24 +514,31 @@ significant technical milestones achieved.
 
 #### Feature Pull Requests Merged (Dec 19 - Jan 9)
 
-| PR   | Title                                            | Category      |
-| ---- | ------------------------------------------------ | ------------- |
-| #476 | Complete YOLO training infrastructure audit      | ML/Security   |
-| #475 | Add DISABLE_LOGIN flag with prod safeguards      | Auth/Security |
-| #474 | Fix build, lint, and CI/CD errors                | DevOps        |
-| #473 | Evaluate system performance and functionality    | Refactoring   |
-| #472 | Add Week 1 2026 progress report and pitch deck   | Documentation |
-| #471 | Fix nosemgrep inline comments for Semgrep        | Security      |
-| #470 | Fix document filters and category UI issues      | UI/UX         |
-| #469 | Debug authentication context initialization      | Bug Fix       |
-| #467 | Plan drone detection system for Raspberry Pi     | Edge AI       |
-| #466 | Azure ML training pipeline                       | MLOps         |
-| #465 | YOLOv8 INT8 quantization                         | Performance   |
-| #464 | MLflow experiment tracking                       | MLOps         |
-| #463 | Rust clippy fixes                                | Code Quality  |
-| #462 | Python type hints and ruff                       | Code Quality  |
-| #461 | ESLint and Prettier updates                      | Code Quality  |
-| #460 | Cross-platform ARM64 builds                      | CI/CD         |
+| PR   | Title                                            | Category       |
+| ---- | ------------------------------------------------ | -------------- |
+| #476 | Complete YOLO training infrastructure audit      | ML/Security    |
+| #475 | Add DISABLE_LOGIN flag with prod safeguards      | Auth/Security  |
+| #474 | Fix build, lint, and CI/CD errors                | DevOps         |
+| #473 | Evaluate system performance and functionality    | Refactoring    |
+| #472 | Add Week 1 2026 progress report and pitch deck   | Documentation  |
+| #471 | Fix nosemgrep inline comments for Semgrep        | Security       |
+| #470 | Fix document filters and category UI issues      | UI/UX          |
+| #469 | Debug authentication context initialization      | Bug Fix        |
+| #467 | Plan drone detection system for Raspberry Pi     | Edge AI        |
+| #466 | Azure ML training pipeline                       | MLOps          |
+| #465 | YOLOv8 INT8 quantization                         | Performance    |
+| #464 | MLflow experiment tracking                       | MLOps          |
+| #463 | Rust clippy fixes                                | Code Quality   |
+| #462 | Python type hints and ruff                       | Code Quality   |
+| #461 | ESLint and Prettier updates                      | Code Quality   |
+| #460 | Cross-platform ARM64 builds                      | CI/CD          |
+| #443 | Diagnostic tools for COOP and Cosmos DB errors   | DevOps         |
+| #439 | Fix OAuth login COOP blocking and CORS config    | Auth/Security  |
+| #431 | Fix auth error response in Azure Functions       | Auth/Security  |
+| #424 | Inject Azure config via Root.tsx for prod builds | Infrastructure |
+| #420 | Remove automatic user login on startup           | Auth/Security  |
+| #419 | AI assistant authentication and debugging        | AI/Auth        |
+| #417 | Skip known-emails API call in offline mode       | Offline Mode   |
 
 #### Dependency Updates
 
