@@ -4,7 +4,202 @@ This document covers countermeasure options that can be triggered by the Pi Dron
 
 ## Overview
 
-The detector provides a 100ms GPIO pulse when engagement conditions are met. This pulse can trigger various countermeasure systems. This document covers the full range of options from simple to advanced.
+The detector provides a 100ms GPIO pulse when engagement conditions are met. This pulse can trigger various countermeasure systems. This document covers the full range of options from budget DIY builds to commercial systems.
+
+---
+
+## Product Tiers
+
+### Tier Comparison
+
+| Tier | Name | Total Cost | Range | Best For |
+|------|------|------------|-------|----------|
+| **DIY Budget** | NetSentry Lite | $150-400 | 10-25m | Hobbyists, testing, learning |
+| **DIY Standard** | NetSentry | $400-800 | 15-40m | Property protection, farms |
+| **DIY Advanced** | NetSentry Pro | $800-2,000 | 25-50m | Security professionals |
+| **Commercial** | SkyWall 100 | $30,000-70,000 | 100m+ | Military, law enforcement |
+| **Commercial** | Fortem DroneHunter | $50,000+ | 1km+ | Critical infrastructure |
+
+### NetSentry Lite (Budget Entry Point) - $150-400
+
+**Target users:** Makers, hobbyists, proof-of-concept testing
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (2GB) | $45 | Pi supplier |
+| Pi Camera Module v2 | $25 | Pi supplier |
+| TFLite model (provided) | $0 | This project |
+| Spring launcher (DIY) | $30-50 | Hardware store |
+| Burn wire release | $10 | Amazon |
+| Net (1.5m weighted) | $20-40 | Fishing supply |
+| 12V relay module | $5 | Amazon |
+| 12V power supply | $15 | Amazon |
+| PVC pipe housing | $20 | Hardware store |
+| **Total** | **$170-210** | |
+
+**Specifications:**
+- Detection range: 50-100m (camera dependent)
+- Net launch range: 5-15m
+- Response time: 200-500ms (burn wire)
+- Reloads: Manual (re-cock spring, replace cord)
+
+**Limitations:**
+- Short range, slow response
+- Basic accuracy (no tracking optics)
+- Single shot per reload
+
+---
+
+### NetSentry Standard - $400-800
+
+**Target users:** Property owners, farmers, small businesses
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 4 (4GB) | $55 | Pi supplier |
+| Pi Camera HQ + lens | $75 | Pi supplier |
+| Coral USB Accelerator | $60 | Coral.ai |
+| TFLite model (provided) | $0 | This project |
+| CO2 launcher system | $150-250 | See build guide |
+| Net (2m weighted) | $40-60 | Fishing/safety supply |
+| Relay module + wiring | $20 | Amazon |
+| Weatherproof enclosure | $50-80 | Amazon |
+| Mounting hardware | $30 | Hardware store |
+| **Total** | **$480-650** | |
+
+**Specifications:**
+- Detection range: 100-200m
+- Net launch range: 15-30m
+- Response time: 50ms
+- Reloads: Replace CO2 cartridge ($1-2/shot)
+
+---
+
+### NetSentry Pro - $800-2,000
+
+**Target users:** Security professionals, critical sites
+
+**Components:**
+| Item | Cost | Source |
+|------|------|--------|
+| Raspberry Pi 5 (8GB) | $80 | Pi supplier |
+| Global Shutter Camera | $50 | Pi supplier |
+| Telephoto lens (6-12mm) | $100 | Camera supplier |
+| Coral TPU (M.2 or USB) | $60-100 | Coral.ai |
+| Pneumatic launcher | $300-500 | Custom build |
+| Air tank + regulator | $150-200 | Paintball supplier |
+| Net system (3m, auto-deploy) | $100-150 | Custom |
+| Pan-tilt mount | $100-200 | Servo supplier |
+| Weatherproof enclosure | $100 | Industrial |
+| UPS battery backup | $80 | Amazon |
+| **Total** | **$1,120-1,460** | |
+
+**Specifications:**
+- Detection range: 200-500m
+- Net launch range: 25-50m
+- Response time: 50ms
+- Reloads: Refill air tank (free)
+- Auto-tracking: Optional pan-tilt
+
+---
+
+## Commercial Systems
+
+### SkyWall (OpenWorks Engineering, UK)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| SkyWall 100 | Shoulder-launched | 100m | $30,000-50,000 |
+| SkyWall Patrol | Handheld | 100m | $40,000-60,000 |
+| SkyWall 300 | Autonomous turret | 150m+ | $100,000+ |
+
+**Features:**
+- Compressed gas launcher (reusable)
+- SmartScope targeting with drone detection
+- Parachute-deployed net (controlled descent)
+- Cartridge cost: ~$500-1,000 each
+
+**Best for:** Law enforcement, event security, VIP protection
+
+**Website:** [openworksengineering.com](https://openworksengineering.com)
+
+---
+
+### Fortem Technologies (USA)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| DroneHunter F700 | Interceptor drone | 1km+ | $50,000-100,000 |
+| SkyDome System | Integrated C-UAS | 3km+ | $500,000+ |
+
+**Features:**
+- Autonomous drone-on-drone intercept
+- AI-powered tracking (TrueView radar)
+- Can defeat drone swarms
+- Only system authorized for US airspace intercepts
+
+**Best for:** Military, airports, critical infrastructure
+
+**Website:** [fortemtech.com](https://fortemtech.com)
+
+---
+
+### DroneShield (Australia)
+
+**Products:**
+| Model | Type | Range | Price (Est.) |
+|-------|------|-------|--------------|
+| DroneGun Tactical | RF jammer (handheld) | 2km | $30,000-50,000 |
+| DroneGun MkIII | RF jammer (rifle) | 1km | $20,000-35,000 |
+| DroneSentry | Fixed detection | 5km | $100,000+ |
+
+**Features:**
+- RF/GPS jamming (not physical capture)
+- Forces drone to land or return home
+- Detection + defeat integrated
+
+**Note:** RF jamming is **illegal for civilians** in most jurisdictions.
+
+**Website:** [droneshield.com](https://droneshield.com)
+
+---
+
+### Other Commercial Options
+
+| Company | Product | Type | Region |
+|---------|---------|------|--------|
+| Dedrone | DroneTracker | Detection only | USA/EU |
+| Anduril | Anvil Interceptor | Kinetic intercept | USA (DoD) |
+| DroneDefence | Paladyne E1000 | Net gun | UK |
+| Theiss UAV | Excipio | Net cannon | USA |
+| Battelle | DroneDefender | RF jammer | USA (Gov only) |
+
+---
+
+## DIY vs Commercial: Decision Matrix
+
+| Factor | DIY (NetSentry) | Commercial (SkyWall) |
+|--------|-----------------|----------------------|
+| **Cost** | $150-2,000 | $30,000-100,000+ |
+| **Range** | 5-50m | 100-150m |
+| **Accuracy** | Moderate | High (SmartScope) |
+| **Reliability** | Good (with testing) | Excellent |
+| **Support** | Community/self | Manufacturer |
+| **Legal status** | Same restrictions | Same restrictions |
+| **Training** | Self-taught | Included |
+| **Warranty** | None | Yes |
+| **Certifications** | None | Various |
+| **Lead time** | Build yourself | Weeks/months |
+
+**Recommendation:**
+- **Testing/Learning:** NetSentry Lite ($150-400)
+- **Property protection:** NetSentry Standard ($400-800)
+- **Professional use:** NetSentry Pro or evaluate commercial
+- **Critical infrastructure:** Commercial only
 
 ---
 
@@ -330,13 +525,36 @@ Commercial systems exist (Fortem DroneHunter, Anduril Interceptor).
 
 ## 3. Propulsion Comparison Table
 
-| Method | Range | Response | Cost/Shot | Reusable | Permits |
-|--------|-------|----------|-----------|----------|---------|
-| Pneumatic | 10-50m | 50ms | ~$0 | Yes | No |
-| CO2 Cartridge | 15-35m | 50ms | $1-2 | No | No |
-| Pyrotechnic | 25-75m | 20ms | $5-20 | No | Maybe |
-| Spring (burn wire) | 5-20m | 200ms | $0.10 | Yes | No |
-| Hybrid (Spring+CO2) | 20-45m | 50ms | $1-2 | Partial | No |
+| Method | Range | Response | Build Cost | Cost/Shot | Reusable | Permits |
+|--------|-------|----------|------------|-----------|----------|---------|
+| Pneumatic | 10-50m | 50ms | $300-500 | ~$0 | Yes | No |
+| CO2 Cartridge | 15-35m | 50ms | $100-200 | $1-2 | No | No |
+| Pyrotechnic | 25-75m | 20ms | $150-300 | $5-20 | No | Maybe |
+| Spring (burn wire) | 5-20m | 200ms | $50-100 | $0.10 | Yes | No |
+| Hybrid (Spring+CO2) | 20-45m | 50ms | $150-250 | $1-2 | Partial | No |
+
+### Build Cost Breakdown
+
+| Method | Launcher | Trigger | Barrel/Housing | Misc | Total |
+|--------|----------|---------|----------------|------|-------|
+| **Pneumatic** | Tank $80-150, Regulator $50-80 | Solenoid $30-50, Relay $10 | PVC/Aluminum $50-80 | Fittings $30 | **$300-500** |
+| **CO2 Cartridge** | Puncture valve $40-60 | Solenoid $30, Relay $10 | PVC tube $20-30 | Chamber $20-40 | **$100-200** |
+| **Pyrotechnic** | Gas generator $50-100 | E-match $5-10, MOSFET $5 | Steel barrel $50-80 | Safety $30-50 | **$150-300** |
+| **Spring** | Spring+piston $30-50 | Nichrome $5, MOSFET $5 | PVC housing $20 | Cord $5 | **$50-100** |
+| **Hybrid** | Spring $30 + CO2 valve $50 | Dual trigger $40 | Combined housing $40 | Misc $20 | **$150-250** |
+
+### Cost Per 100 Shots (Amortized)
+
+| Method | Build ÷ 100 | Consumables × 100 | Total/100 shots | Per Shot |
+|--------|-------------|-------------------|-----------------|----------|
+| Pneumatic | $4.00 | $0 (refill air) | $4.00 | **$0.04** |
+| CO2 | $1.50 | $150 (cartridges) | $151.50 | **$1.52** |
+| Pyrotechnic | $2.25 | $1,000 (charges) | $1,002.25 | **$10.02** |
+| Spring | $0.75 | $10 (cord) | $10.75 | **$0.11** |
+| Hybrid | $2.00 | $150 (CO2) | $152.00 | **$1.52** |
+
+**Winner for high-volume use:** Pneumatic (lowest long-term cost)
+**Winner for occasional use:** Spring with burn wire (lowest build cost)
 
 ---
 
