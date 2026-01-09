@@ -41,6 +41,8 @@ jobs:
           HAS_FUNCTIONS_BASE_URL:
             ${{ vars.AZURE_FUNCTIONS_BASE_URL != '' ||
             secrets.AZURE_FUNCTIONS_BASE_URL != '' }}
+          # Login configuration
+          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "🔍 Checking Azure Infrastructure Prerequisites"
@@ -128,6 +130,19 @@ jobs:
             echo "✅ All required secrets are configured"
           fi
 
+          # Show login configuration status
+          echo ""
+          if [ "$DISABLE_LOGIN" == "true" ]; then
+            echo "⚠️  Login is DISABLED (DISABLE_LOGIN=true)"
+            echo "   All documentation will be publicly accessible without authentication"
+            # Production safeguard: emit GitHub Actions warning for production deployments
+            if [ "$IS_MAIN_BRANCH" == "true" ]; then
+              echo "::warning::🔓 SECURITY: Login is disabled for PRODUCTION deployment! All documentation will be publicly accessible. If unintentional, remove DISABLE_LOGIN variable and re-run workflow."
+            fi
+          else
+            echo "🔐 Login is ENABLED (authentication required for protected content)"
+          fi
+
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
@@ -165,6 +180,11 @@ jobs:
         env:
           # Cloud provider configuration
           CLOUD_PROVIDER: ${{ secrets.CLOUD_PROVIDER || 'azure' }}
+
+          # Login configuration
+          # Set DISABLE_LOGIN=true to temporarily disable authentication site-wide
+          # Useful for maintenance, demos, or public preview deployments
+          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
 
           # Azure Entra ID configuration
           AZURE_ENTRA_TENANT_ID: ${{ secrets.AZURE_ENTRA_TENANT_ID }}

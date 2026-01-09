@@ -3,8 +3,11 @@
  *
  * Wraps documentation content to enforce authentication.
  * Shows teaser content for non-authenticated users with CTA to sign in.
+ *
+ * When DISABLE_LOGIN=true, all content is shown without authentication.
  */
 
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import React, { useEffect } from "react";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -35,12 +38,37 @@ export function ProtectedContent({
   pageUrl,
   isFreeContent = false,
 }: ProtectedContentProps): React.ReactElement {
+  const { siteConfig } = useDocusaurusContext();
   const { user, loading, isConfigured, signInGoogle, signInGithub } = useAuth();
+
+  // Check if login is disabled site-wide via DISABLE_LOGIN environment variable
+  const disableLogin = siteConfig.customFields?.disableLogin === true;
+
+  // Production safeguard: warn if login is disabled in production environment
+  useEffect(() => {
+    if (disableLogin && typeof window !== "undefined") {
+      const isProduction =
+        window.location.hostname !== "localhost" &&
+        !window.location.hostname.includes("preview") &&
+        !window.location.hostname.includes("staging");
+
+      if (isProduction) {
+        console.warn(
+          "[ProtectedContent] ⚠️ SECURITY WARNING: Login is disabled (DISABLE_LOGIN=true) in what appears to be a production environment. " +
+            "All documentation is publicly accessible without authentication. " +
+            "If this is unintentional, remove the DISABLE_LOGIN variable and redeploy.",
+        );
+      }
+    }
+  }, [disableLogin]);
 
   const currentUrl =
     pageUrl || (typeof window !== "undefined" ? window.location.pathname : "");
+  // When login is disabled, treat all pages as free (bypass authentication)
   const isFreePage =
-    isFreeContent || FREE_PAGES.some((p) => currentUrl.startsWith(p));
+    disableLogin ||
+    isFreeContent ||
+    FREE_PAGES.some((p) => currentUrl.startsWith(p));
 
   // Debug logging on component load
   useEffect(() => {
@@ -51,6 +79,7 @@ export function ProtectedContent({
         loading,
         isFreePage,
         isFreeContent,
+        disableLogin,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +93,10 @@ export function ProtectedContent({
         isConfigured,
         hasUser: !!user,
         isFreePage,
+        disableLogin,
       });
     }
-  }, [loading, isConfigured, user, isFreePage]);
+  }, [loading, isConfigured, user, isFreePage, disableLogin]);
 
   // Track teaser view for non-authenticated users
   useEffect(() => {

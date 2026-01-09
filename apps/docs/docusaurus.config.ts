@@ -61,6 +61,10 @@ const azureConfig = {
 // Cloud provider selection: 'azure' | 'offline'
 const cloudProvider = process.env.CLOUD_PROVIDER || "azure";
 
+// Login configuration - temporarily disable login site-wide
+// When true: hides login button, bypasses authentication, shows all content as public
+const disableLogin = process.env.DISABLE_LOGIN === "true";
+
 // Onboarding configuration
 const onboardingConfig = {
   enableSkipSignup: process.env.ENABLE_SKIP_SIGNUP !== "false", // Default: true
@@ -84,6 +88,7 @@ const config: Config = {
   customFields: {
     azureConfig,
     cloudProvider,
+    disableLogin,
     onboardingConfig,
   },
   onBrokenLinks: onBrokenLinksConfig,
@@ -330,14 +335,18 @@ const config: Config = {
           className: "navbar__link--support",
           "aria-label": "Get help and support",
         },
-        // Login link
-        {
-          to: "/login",
-          label: "Login",
-          position: "right",
-          className: "navbar__link--login",
-          "aria-label": "Sign in to your account",
-        },
+        // Login link (hidden when DISABLE_LOGIN=true)
+        ...(!disableLogin
+          ? [
+              {
+                to: "/login",
+                label: "Login",
+                position: "right",
+                className: "navbar__link--login",
+                "aria-label": "Sign in to your account",
+              } as const,
+            ]
+          : []),
         // Environment badge (only show in non-production)
         ...(envBadge && envName !== "production"
           ? [
