@@ -165,8 +165,11 @@ class PiCameraSource(FrameSource):
             self._picam2.start()
             self._using_libcamera = True
             return True
-        except (ImportError, Exception):
-            pass
+        except ImportError:
+            pass  # Picamera2 not installed
+        except Exception as e:
+            import logging
+            logging.debug(f"Picamera2 initialization failed: {e}")
 
         # Fall back to OpenCV with libcamera pipeline
         try:
