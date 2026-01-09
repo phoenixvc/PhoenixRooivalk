@@ -217,6 +217,29 @@ class TargetingSettings(BaseModel):
     fire_net_arm_required: bool = Field(True, description="Require explicit arming")
     fire_net_gpio_pin: int = Field(17, ge=2, le=27, description="GPIO pin for fire trigger (BCM)")
 
+    if PYDANTIC_V2:
+        @model_validator(mode="after")
+        def validate_distance_envelope(self) -> "TargetingSettings":
+            """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
+            if self.fire_net_min_distance_m >= self.fire_net_max_distance_m:
+                raise ValueError(
+                    f"fire_net_min_distance_m ({self.fire_net_min_distance_m}) must be less than "
+                    f"fire_net_max_distance_m ({self.fire_net_max_distance_m})"
+                )
+            return self
+    elif PYDANTIC_V2 is False:
+        @root_validator
+        def validate_distance_envelope(cls, values):
+            """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
+            min_dist = values.get("fire_net_min_distance_m", 5.0)
+            max_dist = values.get("fire_net_max_distance_m", 50.0)
+            if min_dist >= max_dist:
+                raise ValueError(
+                    f"fire_net_min_distance_m ({min_dist}) must be less than "
+                    f"fire_net_max_distance_m ({max_dist})"
+                )
+            return values
+
     class Config:
         env_prefix = "TARGETING_"
 

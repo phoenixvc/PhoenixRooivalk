@@ -17,14 +17,14 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Optional
 
-from .config.constants import (
+from config.constants import (
     DEFAULT_FOCAL_LENGTH_MM,
     DEFAULT_SENSOR_WIDTH_MM,
     DRONE_SIZE_DEFAULT,
     FIRE_NET_PULSE_DURATION,
 )
-from .config.settings import TargetingSettings
-from .interfaces import BoundingBox, Detection, TrackedObject
+from config.settings import TargetingSettings
+from interfaces import BoundingBox, Detection, TrackedObject
 
 logger = logging.getLogger("drone_detector.targeting")
 

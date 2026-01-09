@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import (
+from interfaces import (
     Detection,
     ObjectTracker,
     TrackedObject,

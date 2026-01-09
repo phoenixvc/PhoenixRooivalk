@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from .interfaces import AlertHandler, Detection, FrameData
+from interfaces import AlertHandler, Detection, FrameData
 
 
 class ConsoleAlertHandler(AlertHandler):

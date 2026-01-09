@@ -26,7 +26,7 @@ try:
 except ImportError:
     cv2 = None  # type: ignore[assignment]
 
-from .interfaces import Detection, FrameData, FrameRenderer, TrackedObject
+from interfaces import Detection, FrameData, FrameRenderer, TrackedObject
 
 logger = logging.getLogger(__name__)
 

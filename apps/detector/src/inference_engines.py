@@ -12,13 +12,14 @@ from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import (
+from interfaces import (
     BoundingBox,
     Detection,
     DroneScorer,
     InferenceEngine,
     InferenceResult,
 )
+from utils.geometry import calculate_iou, non_max_suppression
 
 
 class AspectRatioDroneScorer(DroneScorer):
@@ -186,34 +187,17 @@ class BaseInferenceEngine(InferenceEngine):
         return self._nms(detections)
 
     def _nms(self, detections: list[Detection]) -> list[Detection]:
-        """Apply non-maximum suppression."""
-        if len(detections) == 0:
-            return []
-
-        detections = sorted(detections, key=lambda x: x.confidence, reverse=True)
-
-        keep = []
-        while detections:
-            best = detections.pop(0)
-            keep.append(best)
-
-            detections = [
-                d for d in detections if self._iou(best.bbox, d.bbox) < self._nms_threshold
-            ]
-
-        return keep
+        """Apply non-maximum suppression using centralized geometry module."""
+        return non_max_suppression(
+            detections,
+            iou_threshold=self._nms_threshold,
+            confidence_key=lambda d: d.confidence,
+            bbox_key=lambda d: d.bbox.to_tuple(),
+        )
 
     def _iou(self, box1: BoundingBox, box2: BoundingBox) -> float:
-        """Calculate intersection over union."""
-        x1 = max(box1.x1, box2.x1)
-        y1 = max(box1.y1, box2.y1)
-        x2 = min(box1.x2, box2.x2)
-        y2 = min(box1.y2, box2.y2)
-
-        intersection = max(0, x2 - x1) * max(0, y2 - y1)
-        union = box1.area + box2.area - intersection
-
-        return intersection / union if union > 0 else 0
+        """Calculate intersection over union using centralized geometry module."""
+        return calculate_iou(box1.to_tuple(), box2.to_tuple())
 
 
 class TFLiteEngine(BaseInferenceEngine):

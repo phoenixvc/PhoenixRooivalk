@@ -40,3 +40,4 @@ detections*.json
 # Temp
 *.tmp
 .cache/
+apps/detector/src/phoenixrooivalk_detector.egg-info/

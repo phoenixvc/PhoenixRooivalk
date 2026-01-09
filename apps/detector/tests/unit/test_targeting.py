@@ -10,8 +10,9 @@ import sys
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Add src to path for imports
+src_path = Path(__file__).parent.parent.parent / "src"
+sys.path.insert(0, str(src_path))
 
 from targeting import (
     DistanceEstimator,
@@ -47,8 +48,10 @@ class TestDistanceEstimator:
         bbox = BoundingBox(300, 200, 320, 220)  # 20x20 pixels
         distance = estimator.estimate(bbox, frame_width=640)
 
-        # Small box = far away
-        assert distance > 50.0
+        # Small box = farther than close object
+        # With default camera (3.04mm focal, 3.68mm sensor) and 0.3m drone:
+        # 20px bbox at 640 width ≈ 8 meters
+        assert distance > 5.0
 
     def test_large_bbox_is_close(self, estimator):
         """Large bounding box should indicate close distance."""

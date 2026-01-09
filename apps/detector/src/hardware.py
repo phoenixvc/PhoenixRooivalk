@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 from typing import Optional
 
-from .interfaces import AcceleratorType, HardwareProfile, PipelineConfig
+from interfaces import AcceleratorType, HardwareProfile, PipelineConfig
 
 
 def detect_hardware() -> HardwareProfile:

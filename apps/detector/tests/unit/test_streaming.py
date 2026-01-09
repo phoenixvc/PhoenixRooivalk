@@ -11,8 +11,9 @@ import threading
 from pathlib import Path
 from unittest.mock import Mock, MagicMock, patch
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+# Add src to path for imports
+src_path = Path(__file__).parent.parent.parent / "src"
+sys.path.insert(0, str(src_path))
 
 import numpy as np
 

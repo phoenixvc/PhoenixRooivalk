@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import numpy as np
 
-from .interfaces import FrameData, FrameSource
+from interfaces import FrameData, FrameSource
 
 
 class OpenCVFrameSource(FrameSource):
