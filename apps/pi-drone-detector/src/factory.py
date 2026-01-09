@@ -9,7 +9,7 @@ This is the main entry point for assembling the system based on:
 """
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Any
 
 from interfaces import (
     FrameSource,
@@ -27,6 +27,18 @@ from trackers import create_tracker
 from alert_handlers import create_alert_handler, CompositeAlertHandler, ConsoleAlertHandler
 from renderers import create_renderer
 
+# Optional streaming imports
+try:
+    from streaming import (
+        StreamingRenderer,
+        StreamingManager,
+        create_streaming_renderer,
+        create_streaming_manager,
+    )
+    STREAMING_AVAILABLE = True
+except ImportError:
+    STREAMING_AVAILABLE = False
+
 
 @dataclass
 class DetectionPipeline:
@@ -38,6 +50,7 @@ class DetectionPipeline:
     renderer: FrameRenderer
     config: PipelineConfig
     hardware: HardwareProfile
+    streaming_manager: Optional[Any] = None  # Optional StreamingManager
 
     def start(self) -> bool:
         """Initialize and start all components."""
@@ -53,14 +66,28 @@ class DetectionPipeline:
         print(f"  Tracker: {self.tracker.tracker_info['type']}")
         print(f"  Renderer: {self.renderer.renderer_info['type']}")
 
+        # Start streaming server if configured
+        if self.streaming_manager is not None:
+            self.streaming_manager.start()
+            print(f"  Streaming: {self.streaming_manager.url}")
+
         return True
 
     def stop(self) -> None:
         """Stop and clean up all components."""
+        # Stop streaming first
+        if self.streaming_manager is not None:
+            self.streaming_manager.stop()
+
         self.alert_handler.flush()
         self.frame_source.close()
         self.renderer.close()
         print("\nPipeline stopped")
+
+    def update_streaming_status(self, status: dict) -> None:
+        """Update system status for streaming server."""
+        if self.streaming_manager is not None:
+            self.streaming_manager.set_system_status(status)
 
 
 def create_pipeline(
@@ -84,6 +111,14 @@ def create_pipeline(
     save_detections: Optional[str] = None,
     # Display options
     headless: bool = False,
+    # Streaming options
+    stream_enabled: bool = False,
+    stream_host: str = "0.0.0.0",
+    stream_port: int = 8080,
+    stream_quality: int = 80,
+    stream_max_fps: int = 15,
+    stream_auth_enabled: bool = False,
+    stream_auth_token: Optional[str] = None,
     # Hardware options
     auto_configure: bool = True,
     print_hardware: bool = True,
@@ -109,6 +144,13 @@ def create_pipeline(
         alert_webhook: Webhook URL for alerts (optional)
         save_detections: JSON file path for logging (optional)
         headless: Run without display
+        stream_enabled: Enable MJPEG streaming server
+        stream_host: Streaming server bind host
+        stream_port: Streaming server port
+        stream_quality: JPEG quality (10-100)
+        stream_max_fps: Maximum stream FPS
+        stream_auth_enabled: Enable token authentication
+        stream_auth_token: Bearer token for authentication
         auto_configure: Use hardware detection for settings
         print_hardware: Print hardware report on startup
 
@@ -205,12 +247,40 @@ def create_pipeline(
         alert_handler = CompositeAlertHandler(handlers)
 
     # Create renderer
-    renderer = create_renderer(
+    base_renderer = create_renderer(
         headless=headless,
         show_fps=True,
         show_drone_score=True,
         show_track_id=config.enable_tracking,
     )
+
+    # Wrap with streaming renderer if enabled
+    streaming_manager = None
+    if stream_enabled and STREAMING_AVAILABLE:
+        streaming_renderer = create_streaming_renderer(
+            base_renderer=base_renderer,
+            streaming_settings=None,  # Use direct params below
+        )
+        streaming_renderer._quality = stream_quality
+        streaming_renderer._max_fps = stream_max_fps
+        streaming_renderer._min_frame_interval = 1.0 / stream_max_fps
+
+        streaming_manager = create_streaming_manager(
+            streaming_renderer=streaming_renderer,
+            streaming_settings=None,  # Use direct params below
+        )
+        streaming_manager._host = stream_host
+        streaming_manager._port = stream_port
+        streaming_manager._auth_enabled = stream_auth_enabled
+        streaming_manager._auth_token = stream_auth_token
+
+        renderer = streaming_renderer
+    elif stream_enabled and not STREAMING_AVAILABLE:
+        print("WARNING: Streaming requested but aiohttp not available")
+        print("         Install with: pip install aiohttp")
+        renderer = base_renderer
+    else:
+        renderer = base_renderer
 
     return DetectionPipeline(
         frame_source=frame_source,
@@ -220,6 +290,7 @@ def create_pipeline(
         renderer=renderer,
         config=config,
         hardware=hardware,
+        streaming_manager=streaming_manager,
     )
 
 
