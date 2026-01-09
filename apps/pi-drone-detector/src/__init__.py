@@ -1,0 +1,73 @@
+"""
+Pi Drone Detector - Modular drone detection system for Raspberry Pi.
+
+Components can be hot-swapped based on available hardware:
+- Frame sources: Pi Camera, USB webcam, video files, mock
+- Inference engines: TFLite, ONNX, Coral TPU, mock
+- Trackers: NoOp, Centroid, Kalman
+- Alert handlers: Console, Webhook, File, Composite
+- Renderers: OpenCV display, Headless
+
+Usage:
+    from factory import create_pipeline
+
+    pipeline = create_pipeline(
+        model_path='models/drone-detector.tflite',
+        tracker_type='kalman',
+        headless=True,
+    )
+
+    pipeline.start()
+    # ... run detection loop
+    pipeline.stop()
+"""
+
+from interfaces import (
+    FrameSource,
+    InferenceEngine,
+    ObjectTracker,
+    AlertHandler,
+    FrameRenderer,
+    Detection,
+    BoundingBox,
+    TrackedObject,
+    InferenceResult,
+    FrameData,
+    HardwareProfile,
+    PipelineConfig,
+)
+
+from factory import (
+    create_pipeline,
+    create_demo_pipeline,
+    create_minimal_pipeline,
+    DetectionPipeline,
+)
+
+from hardware import detect_hardware, print_hardware_report
+
+__version__ = '2.0.0'
+__all__ = [
+    # Interfaces
+    'FrameSource',
+    'InferenceEngine',
+    'ObjectTracker',
+    'AlertHandler',
+    'FrameRenderer',
+    # Data classes
+    'Detection',
+    'BoundingBox',
+    'TrackedObject',
+    'InferenceResult',
+    'FrameData',
+    'HardwareProfile',
+    'PipelineConfig',
+    # Factory
+    'create_pipeline',
+    'create_demo_pipeline',
+    'create_minimal_pipeline',
+    'DetectionPipeline',
+    # Hardware
+    'detect_hardware',
+    'print_hardware_report',
+]
