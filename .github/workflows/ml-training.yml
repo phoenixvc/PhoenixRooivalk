@@ -83,12 +83,17 @@ jobs:
 
       - name: Validate dataset configuration
         id: validate-dataset
+        env:
+          DATASET_CONFIG: ${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }}
         run: |
-          python -c "
+          python << 'SCRIPT'
+          import os
           import yaml
           import sys
 
-          config_file = '${{ env.DETECTOR_DIR }}/configs/${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }}'
+          detector_dir = os.environ.get('DETECTOR_DIR', 'apps/detector')
+          dataset_config = os.environ.get('DATASET_CONFIG', 'dataset-mvp.yaml')
+          config_file = os.path.join(detector_dir, 'configs', dataset_config)
 
           try:
               with open(config_file) as f:
@@ -101,13 +106,13 @@ jobs:
                   print(f'ERROR: Missing required fields: {missing}')
                   sys.exit(1)
 
-              print(f'Dataset config valid: {config[\"nc\"]} classes')
-              print(f'Classes: {list(config[\"names\"].values())}')
+              print(f'Dataset config valid: {config["nc"]} classes')
+              print(f'Classes: {list(config["names"].values())}')
 
           except Exception as e:
               print(f'ERROR: {e}')
               sys.exit(1)
-          "
+          SCRIPT
           echo "valid=true" >> $GITHUB_OUTPUT
 
       - name: Validate model selection
@@ -151,12 +156,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        # v3.1.2 - pinned for security
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         with:
           terraform_version: "1.6.0"
 
       - name: Azure Login
-        uses: azure/login@v1
+        # v2.2.0 - pinned for security
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -199,7 +206,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Azure Login
-        uses: azure/login@v1
+        # v2.2.0 - pinned for security
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -250,7 +258,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Azure Login
-        uses: azure/login@v1
+        # v2.2.0 - pinned for security
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -312,7 +321,8 @@ jobs:
           cache: 'pip'
 
       - name: Azure Login
-        uses: azure/login@v1
+        # v2.2.0 - pinned for security
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -430,7 +440,8 @@ jobs:
 
     steps:
       - name: Azure Login
-        uses: azure/login@v1
+        # v2.2.0 - pinned for security
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 

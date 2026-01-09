@@ -241,7 +241,7 @@ def download_roboflow_dataset(
 
         # Download in YOLOv8 format
         dataset_dir = output_dir / 'roboflow' / name
-        dataset = version.download('yolov8', location=str(dataset_dir))
+        version.download('yolov8', location=str(dataset_dir))
 
         print(f"  Downloaded to: {dataset_dir}")
         return dataset_dir
