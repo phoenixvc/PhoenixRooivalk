@@ -443,7 +443,7 @@ else:
     class StreamingSettings:
         def __init__(self):
             self.enabled = False
-            self.host = "0.0.0.0"
+            self.host = "0.0.0.0"  # nosec B104 - intentional for LAN access
             self.port = 8080
             self.quality = 80
             self.max_fps = 15
