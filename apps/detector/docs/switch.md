@@ -1,4 +1,4 @@
-# Fire Net Hardware Guide
+# Switch Guide
 
 This document describes the physical hardware options and wiring for the Pi
 Drone Detector's fire net deployment system.
