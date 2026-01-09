@@ -183,6 +183,28 @@ import {
 
 <SlideSection
   number={4}
+  title="Auth & Infrastructure"
+  duration={30}
+  icon="🔐"
+  keyPoints={[
+    "**OAuth/CORS fixes**: Major authentication overhaul (PRs #417-#443)",
+    "**Production deployment**: Azure config injection, offline mode",
+    {
+      text: "**Issues resolved**:",
+      subPoints: [
+        "COOP blocking and cross-origin policies",
+        "Azure Functions auth error responses",
+        "Auto-login removal and config injection",
+      ],
+    },
+    "**15+ issues fixed**: Auth context, Codacy, Semgrep warnings",
+  ]}
+  speakerNotes="Critical production readiness work - auth is now solid."
+  script="Major authentication and infrastructure work this period. We fixed OAuth COOP blocking issues, CORS configuration problems, and Azure Functions auth error responses. Production deployment now uses proper config injection through Root.tsx instead of hardcoded values. We resolved over 15 issues including auth context errors, Codacy static analysis, and Semgrep security warnings."
+/>
+
+<SlideSection
+  number={5}
   title="SkySnare Alignment"
   duration={25}
   icon="🎮"
@@ -197,7 +219,7 @@ import {
 />
 
 <SlideSection
-  number={5}
+  number={6}
   title="Hardware Progress"
   duration={30}
   icon="🔧"
@@ -212,7 +234,7 @@ import {
 />
 
 <SlideSection
-  number={6}
+  number={7}
   title="Next Priorities"
   duration={20}
   icon="📅"
