@@ -432,33 +432,10 @@ if PydanticBaseSettings is not object:
 
 else:
     # Fallback for environments without pydantic
-    class Settings:
-        """Fallback settings class without pydantic validation."""
+    # Use different names to avoid static analysis "class redefinition" warnings
+    # These simple classes are only used when pydantic is not installed
 
-        def __init__(self, **kwargs):
-            self.capture = CaptureSettings() if "capture" not in kwargs else kwargs["capture"]
-            self.inference = (
-                InferenceSettings() if "inference" not in kwargs else kwargs["inference"]
-            )
-            self.drone_score = (
-                DroneScoreSettings() if "drone_score" not in kwargs else kwargs["drone_score"]
-            )
-            self.tracker = TrackerSettings() if "tracker" not in kwargs else kwargs["tracker"]
-            self.targeting = (
-                TargetingSettings() if "targeting" not in kwargs else kwargs["targeting"]
-            )
-            self.alert = AlertSettings() if "alert" not in kwargs else kwargs["alert"]
-            self.streaming = (
-                StreamingSettings() if "streaming" not in kwargs else kwargs["streaming"]
-            )
-            self.logging = LoggingSettings() if "logging" not in kwargs else kwargs["logging"]
-            self.display = DisplaySettings() if "display" not in kwargs else kwargs["display"]
-            self.camera_type = kwargs.get("camera_type", CameraType.AUTO)
-            self.engine_type = kwargs.get("engine_type", EngineType.AUTO)
-            self.tracker_type = kwargs.get("tracker_type", TrackerType.CENTROID)
-
-    # Simple dataclass fallbacks
-    class CaptureSettings:
+    class _SimpleCaptureSettings:
         def __init__(self):
             self.width = 640
             self.height = 480
@@ -468,7 +445,7 @@ else:
             self.video_path = None
             self.video_loop = True
 
-    class InferenceSettings:
+    class _SimpleInferenceSettings:
         def __init__(self):
             self.model_path = ""
             self.input_size = 320
@@ -477,7 +454,7 @@ else:
             self.num_threads = 4
             self.use_coral = False
 
-    class DroneScoreSettings:
+    class _SimpleDroneScoreSettings:
         def __init__(self):
             self.drone_class_id = 0
             self.model_weight = 0.7
@@ -488,14 +465,14 @@ else:
             self.tall_object_ratio = 0.6
             self.tall_penalty = 0.2
 
-    class TrackerSettings:
+    class _SimpleTrackerSettings:
         def __init__(self):
             self.max_disappeared = 30
             self.max_distance = 100.0
             self.process_noise = 1.0
             self.measurement_noise = 1.0
 
-    class TargetingSettings:
+    class _SimpleTargetingSettings:
         def __init__(self):
             self.max_targeting_distance_m = 100.0
             self.assumed_drone_size_m = 0.3
@@ -512,7 +489,7 @@ else:
             self.fire_net_arm_required = True
             self.fire_net_gpio_pin = 17
 
-    class AlertSettings:
+    class _SimpleAlertSettings:
         def __init__(self):
             self.webhook_url = None
             self.webhook_timeout = 5.0
@@ -522,7 +499,7 @@ else:
             self.save_detections_path = None
             self.save_buffer_size = 10
 
-    class StreamingSettings:
+    class _SimpleStreamingSettings:
         def __init__(self):
             self.enabled = False
             self.host = "0.0.0.0"  # nosec B104 - intentional for LAN access
@@ -532,7 +509,7 @@ else:
             self.auth_enabled = False
             self.auth_token = None
 
-    class LoggingSettings:
+    class _SimpleLoggingSettings:
         def __init__(self):
             self.level = LogLevel.INFO
             self.json_format = False
@@ -540,7 +517,7 @@ else:
             self.max_bytes = 10_000_000
             self.backup_count = 5
 
-    class DisplaySettings:
+    class _SimpleDisplaySettings:
         def __init__(self):
             self.headless = False
             self.window_name = "Drone Detection"
@@ -550,6 +527,52 @@ else:
             self.show_distance = True
             self.show_targeting_overlay = True
             self.log_interval_frames = 30
+
+    # Override the pydantic classes with simple fallbacks
+    CaptureSettings = _SimpleCaptureSettings  # noqa: F811
+    InferenceSettings = _SimpleInferenceSettings  # noqa: F811
+    DroneScoreSettings = _SimpleDroneScoreSettings  # noqa: F811
+    TrackerSettings = _SimpleTrackerSettings  # noqa: F811
+    TargetingSettings = _SimpleTargetingSettings  # noqa: F811
+    AlertSettings = _SimpleAlertSettings  # noqa: F811
+    StreamingSettings = _SimpleStreamingSettings  # noqa: F811
+    LoggingSettings = _SimpleLoggingSettings  # noqa: F811
+    DisplaySettings = _SimpleDisplaySettings  # noqa: F811
+
+    class Settings:  # noqa: F811
+        """Fallback settings class without pydantic validation."""
+
+        def __init__(self, **kwargs):
+            self.capture = (
+                _SimpleCaptureSettings() if "capture" not in kwargs else kwargs["capture"]
+            )
+            self.inference = (
+                _SimpleInferenceSettings() if "inference" not in kwargs else kwargs["inference"]
+            )
+            self.drone_score = (
+                _SimpleDroneScoreSettings()
+                if "drone_score" not in kwargs
+                else kwargs["drone_score"]
+            )
+            self.tracker = (
+                _SimpleTrackerSettings() if "tracker" not in kwargs else kwargs["tracker"]
+            )
+            self.targeting = (
+                _SimpleTargetingSettings() if "targeting" not in kwargs else kwargs["targeting"]
+            )
+            self.alert = _SimpleAlertSettings() if "alert" not in kwargs else kwargs["alert"]
+            self.streaming = (
+                _SimpleStreamingSettings() if "streaming" not in kwargs else kwargs["streaming"]
+            )
+            self.logging = (
+                _SimpleLoggingSettings() if "logging" not in kwargs else kwargs["logging"]
+            )
+            self.display = (
+                _SimpleDisplaySettings() if "display" not in kwargs else kwargs["display"]
+            )
+            self.camera_type = kwargs.get("camera_type", CameraType.AUTO)
+            self.engine_type = kwargs.get("engine_type", EngineType.AUTO)
+            self.tracker_type = kwargs.get("tracker_type", TrackerType.CENTROID)
 
 
 # =============================================================================

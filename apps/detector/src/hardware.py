@@ -119,7 +119,7 @@ def _detect_camera() -> str:
     """Detect available camera type."""
     # Check for Pi Camera via libcamera
     try:
-        result = subprocess.run(
+        result = subprocess.run(  # nosec B603, B607 - static command for camera detection
             ["libcamera-hello", "--list-cameras"],
             capture_output=True,
             text=True,
@@ -197,7 +197,7 @@ def _detect_accelerator() -> AcceleratorType:
     # Check for Coral USB
     try:
         # Look for Coral device
-        result = subprocess.run(
+        result = subprocess.run(  # nosec B603, B607 - static command for USB detection
             ["lsusb"],
             capture_output=True,
             text=True,
