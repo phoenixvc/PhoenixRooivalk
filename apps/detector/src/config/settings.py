@@ -12,7 +12,6 @@ Settings can be loaded from:
 from enum import Enum
 from pathlib import Path
 from typing import Optional, List, Tuple, Any, Dict
-from dataclasses import field
 
 try:
     from pydantic import BaseModel, Field, validator, root_validator
