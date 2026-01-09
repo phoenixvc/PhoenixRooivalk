@@ -6,11 +6,22 @@
  * will be hidden from the sidebar.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, type JSX } from "react";
 import DocSidebarItemOriginal from "@theme-original/DocSidebarItem";
 import type { Props } from "@theme/DocSidebarItem";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import { usePhaseFilterSafe, Phase } from "../../contexts/PhaseFilterContext";
+
+// Extend sidebar item type to include doc type which exists in raw config
+// Use string for type to allow runtime checking for "doc" type that Docusaurus
+// uses in raw config but transforms to "link" in processed sidebar
+interface ExtendedSidebarItem {
+  type: string;
+  docId?: string;
+  id?: string;
+  href?: string;
+  items?: Props["item"][];
+}
 
 // Type for the plugin's global data
 interface PhasePluginData {
@@ -22,9 +33,9 @@ interface PhasePluginData {
  */
 function usePhaseMap(): Record<string, Phase[]> {
   try {
-    const pluginData = usePluginData(
-      "sidebar-phase-enricher"
-    ) as PhasePluginData | undefined;
+    const pluginData = usePluginData("sidebar-phase-enricher") as
+      | PhasePluginData
+      | undefined;
     return pluginData?.phaseMap || {};
   } catch {
     // Plugin not loaded - return empty map
@@ -36,28 +47,24 @@ function usePhaseMap(): Record<string, Phase[]> {
  * Get the docId from a sidebar item, handling various formats
  */
 function getDocId(item: Props["item"]): string | null {
-  if (item.type !== "doc") {
+  const extItem = item as ExtendedSidebarItem;
+
+  // Check for doc type (raw config) or link type (processed)
+  if (extItem.type !== "doc" && extItem.type !== "link") {
     return null;
   }
 
-  // Try different properties that might hold the doc ID
-  const docItem = item as {
-    docId?: string;
-    id?: string;
-    href?: string;
-  };
-
-  if (docItem.docId) {
-    return docItem.docId;
+  if (extItem.docId) {
+    return extItem.docId;
   }
 
-  if (docItem.id) {
-    return docItem.id;
+  if (extItem.id) {
+    return extItem.id;
   }
 
   // Extract from href if available
-  if (docItem.href) {
-    const match = docItem.href.match(/\/docs\/(.+?)(?:\/?$)/);
+  if (extItem.href) {
+    const match = extItem.href.match(/\/docs\/(.+?)(?:\/?$)/);
     if (match) {
       return match[1];
     }
@@ -73,15 +80,16 @@ function shouldShowItem(
   item: Props["item"],
   currentPhase: string,
   phaseMap: Record<string, Phase[]>,
-  isPhaseMatch: (phases: Phase[] | undefined) => boolean
+  isPhaseMatch: (_phases: Phase[] | undefined) => boolean,
 ): boolean {
   // Always show if filter is "all"
   if (currentPhase === "all") {
     return true;
   }
 
-  // For doc items, check their phase metadata
-  if (item.type === "doc") {
+  // For doc/link items, check their phase metadata
+  const extItem = item as ExtendedSidebarItem;
+  if (extItem.type === "doc" || extItem.type === "link") {
     const docId = getDocId(item);
 
     if (docId) {
@@ -93,11 +101,7 @@ function shouldShowItem(
       }
 
       // Also try variations of the docId (with/without leading path)
-      const variations = [
-        docId,
-        docId.replace(/^\//, ""),
-        `docs/${docId}`,
-      ];
+      const variations = [docId, docId.replace(/^\//, ""), `docs/${docId}`];
 
       for (const variant of variations) {
         const variantPhases = phaseMap[variant];
@@ -117,7 +121,7 @@ function shouldShowItem(
     if (items && items.length > 0) {
       // Category is visible if at least one child is visible
       return items.some((childItem) =>
-        shouldShowItem(childItem, currentPhase, phaseMap, isPhaseMatch)
+        shouldShowItem(childItem, currentPhase, phaseMap, isPhaseMatch),
       );
     }
     return true;
@@ -146,7 +150,7 @@ export default function DocSidebarItem(props: Props): JSX.Element | null {
       item,
       phaseFilter.currentPhase,
       phaseMap,
-      phaseFilter.isPhaseMatch
+      phaseFilter.isPhaseMatch,
     );
   }, [item, phaseFilter, phaseMap]);
 

@@ -1,25 +1,11 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import js from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactPlugin from "eslint-plugin-react";
+import hooksPlugin from "eslint-plugin-react-hooks";
+import tseslint from "typescript-eslint";
 import security from "eslint-plugin-security";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  security.configs.recommended,
-  {
-    settings: {
-      "import/resolver": {
-        typescript: {},
-      },
-    },
-  },
+export default [
   {
     ignores: [
       "node_modules/**",
@@ -31,9 +17,37 @@ const eslintConfig = [
       "scripts/**",
     ],
   },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  // Node.js config files need CommonJS globals
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["*.config.js", "*.config.mjs"],
+    languageOptions: {
+      globals: {
+        module: "readonly",
+        require: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        exports: "readonly",
+        process: "readonly",
+      },
+    },
+  },
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    plugins: {
+      react: reactPlugin,
+      "react-hooks": hooksPlugin,
+      "@next/next": nextPlugin,
+      security,
+    },
     rules: {
+      ...reactPlugin.configs.recommended.rules,
+      ...reactPlugin.configs["jsx-runtime"].rules,
+      ...hooksPlugin.configs.recommended.rules,
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
+      ...security.configs.recommended.rules,
       // Relax rules for marketing app to keep CI green
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
@@ -44,12 +58,17 @@ const eslintConfig = [
       "@typescript-eslint/no-require-imports": "warn",
       "@next/next/no-img-element": "warn",
       "react-hooks/exhaustive-deps": "warn",
-      // Relax strict React hooks rules for common patterns
-      "react-hooks/set-state-in-effect": "warn",
-      "react-hooks/purity": "warn",
-      "react-hooks/immutability": "warn",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      // Allow styled-jsx 'jsx' and 'global' props
+      "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
       // TODO: Address these security warnings in a separate task
       "security/detect-object-injection": "off",
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
   },
   {
@@ -60,5 +79,3 @@ const eslintConfig = [
     },
   },
 ];
-
-export default eslintConfig;

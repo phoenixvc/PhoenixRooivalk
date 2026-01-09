@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { API_BASE_URL } from "../../../config/constants";
 import styles from "./confirm.module.css";
 
@@ -137,10 +138,13 @@ function ProfileConfirmContent() {
         <form onSubmit={handleSubmit} className={styles.form}>
           {profileData.profilePicture && (
             <div className={styles.pictureContainer}>
-              <img
+              <Image
                 src={profileData.profilePicture}
                 alt="Profile"
+                width={96}
+                height={96}
                 className={styles.picture}
+                unoptimized
               />
             </div>
           )}

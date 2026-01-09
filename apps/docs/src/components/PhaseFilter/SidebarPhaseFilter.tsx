@@ -40,16 +40,18 @@ function collapseAllCategories(): void {
   // Find all expanded category buttons and click them to collapse
   const expandedCategories = document.querySelectorAll(
     ".menu__list-item--collapsed:not(.menu__list-item--collapsed) > .menu__link--sublist-caret," +
-    ".menu__caret"
+      ".menu__caret",
   );
 
   // Find all category containers that are NOT collapsed
   const categoryItems = document.querySelectorAll(
-    ".menu__list-item:has(> .menu__link--sublist-caret):not(.menu__list-item--collapsed)"
+    ".menu__list-item:has(> .menu__link--sublist-caret):not(.menu__list-item--collapsed)",
   );
 
   categoryItems.forEach((item) => {
-    const button = item.querySelector(".menu__link--sublist-caret, .menu__caret");
+    const button = item.querySelector(
+      ".menu__link--sublist-caret, .menu__caret",
+    );
     if (button instanceof HTMLElement) {
       button.click();
     }
@@ -67,11 +69,13 @@ function expandAllCategories(): void {
 
   // Find all collapsed category items and expand them
   const collapsedItems = document.querySelectorAll(
-    ".menu__list-item--collapsed"
+    ".menu__list-item--collapsed",
   );
 
   collapsedItems.forEach((item) => {
-    const button = item.querySelector(".menu__link--sublist-caret, .menu__caret");
+    const button = item.querySelector(
+      ".menu__link--sublist-caret, .menu__caret",
+    );
     if (button instanceof HTMLElement) {
       button.click();
     }
@@ -88,10 +92,10 @@ function areCategoriesCollapsed(): boolean {
   if (typeof document === "undefined") return false;
 
   const total = document.querySelectorAll(
-    ".menu__list-item:has(> .menu__link--sublist-caret)"
+    ".menu__list-item:has(> .menu__link--sublist-caret)",
   ).length;
   const collapsed = document.querySelectorAll(
-    ".menu__list-item--collapsed"
+    ".menu__list-item--collapsed",
   ).length;
 
   return collapsed > total / 2;
@@ -266,8 +270,16 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
           type="button"
           className="sidebar-action-btn"
           onClick={handleToggleCategories}
-          title={categoriesCollapsed ? "Expand all categories" : "Collapse all categories"}
-          aria-label={categoriesCollapsed ? "Expand all categories" : "Collapse all categories"}
+          title={
+            categoriesCollapsed
+              ? "Expand all categories"
+              : "Collapse all categories"
+          }
+          aria-label={
+            categoriesCollapsed
+              ? "Expand all categories"
+              : "Collapse all categories"
+          }
           aria-expanded={!categoriesCollapsed}
         >
           <span className="sidebar-action-icon" aria-hidden="true">
@@ -290,7 +302,9 @@ export function SidebarPhaseFilter(): React.ReactElement | null {
             title="Clear all filters"
             aria-label="Clear all filters"
           >
-            <span className="sidebar-action-icon" aria-hidden="true">✕</span>
+            <span className="sidebar-action-icon" aria-hidden="true">
+              ✕
+            </span>
             <span className="sidebar-action-text">Clear</span>
           </button>
         )}

@@ -21,9 +21,7 @@ interface DocPhaseMap {
 /**
  * Extract frontmatter from markdown/mdx content
  */
-function extractFrontmatter(
-  content: string
-): Record<string, unknown> | null {
+function extractFrontmatter(content: string): Record<string, unknown> | null {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
   if (!frontmatterMatch) {
     return null;
@@ -43,7 +41,12 @@ function extractFrontmatter(
 
     // Check for array item
     if (trimmed.startsWith("- ") && isInArray) {
-      arrayValues.push(trimmed.slice(2).trim().replace(/^["']|["']$/g, ""));
+      arrayValues.push(
+        trimmed
+          .slice(2)
+          .trim()
+          .replace(/^["']|["']$/g, ""),
+      );
       continue;
     }
 
@@ -136,7 +139,7 @@ function buildPhaseMap(docsDir: string): DocPhaseMap {
 export default function sidebarPhaseEnricherPlugin(
   context: LoadContext,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _options: PluginOptions
+  _options: PluginOptions,
 ): Plugin {
   return {
     name: "sidebar-phase-enricher",

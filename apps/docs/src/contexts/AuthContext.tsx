@@ -371,7 +371,10 @@ export function AuthProvider({
           // Save merged progress back to cloud (don't await - fire and forget)
           // This prevents blocking auth flow if cloud save fails
           saveUserProgress(authUser.uid, merged).catch((error) => {
-            console.error("[AuthContext] Failed to save progress to cloud:", error);
+            console.error(
+              "[AuthContext] Failed to save progress to cloud:",
+              error,
+            );
           });
 
           // Track signup/signin events
@@ -385,9 +388,11 @@ export function AuthProvider({
 
             if (isNewUser) {
               // First time signup - track as new conversion
-              analytics.trackSignupCompleted(authUser.uid, authMethod).catch(() => {
-                // Ignore analytics errors
-              });
+              analytics
+                .trackSignupCompleted(authUser.uid, authMethod)
+                .catch(() => {
+                  // Ignore analytics errors
+                });
             }
             // Could also track returning user sign-ins separately if needed
           }
