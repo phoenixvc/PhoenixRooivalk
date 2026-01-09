@@ -218,6 +218,7 @@ class TargetingSettings(BaseModel):
     fire_net_gpio_pin: int = Field(17, ge=2, le=27, description="GPIO pin for fire trigger (BCM)")
 
     if PYDANTIC_V2:
+
         @model_validator(mode="after")
         def validate_distance_envelope(self) -> "TargetingSettings":
             """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
@@ -227,7 +228,9 @@ class TargetingSettings(BaseModel):
                     f"fire_net_max_distance_m ({self.fire_net_max_distance_m})"
                 )
             return self
+
     elif PYDANTIC_V2 is False:
+
         @root_validator
         def validate_distance_envelope(cls, values):
             """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
