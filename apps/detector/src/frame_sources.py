@@ -12,7 +12,7 @@ from pathlib import Path
 
 import numpy as np
 
-from interfaces import FrameSource, FrameData
+from .interfaces import FrameSource, FrameData
 
 
 class OpenCVFrameSource(FrameSource):

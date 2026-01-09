@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 from urllib.parse import urlparse
 
-from interfaces import AlertHandler, Detection, FrameData
+from .interfaces import AlertHandler, Detection, FrameData
 
 
 class ConsoleAlertHandler(AlertHandler):
@@ -302,8 +302,20 @@ class ThrottledAlertHandler(AlertHandler):
         self._last_global_alert = 0.0
         self._throttled_count = 0
 
+    def _prune_stale_entries(self, now: float) -> None:
+        """Remove stale track entries to prevent memory leak."""
+        # Prune entries older than 10x the cooldown period
+        stale_threshold = now - (self._cooldown_per_track * 10)
+        self._last_alert_per_track = {
+            k: v for k, v in self._last_alert_per_track.items()
+            if v > stale_threshold
+        }
+
     def send_alert(self, detection: Detection, frame_data: FrameData) -> bool:
         now = time.time()
+
+        # Periodically prune stale entries to prevent unbounded growth
+        self._prune_stale_entries(now)
 
         # Global cooldown
         if now - self._last_global_alert < self._global_cooldown:

@@ -1,18 +1,20 @@
 """
-Pi Drone Detector - Modular drone detection system for Raspberry Pi.
+Detector - Modular detection system for edge devices.
+
+Platform-agnostic design supporting Raspberry Pi, Jetson, and desktop.
 
 Components can be hot-swapped based on available hardware:
 - Frame sources: Pi Camera, USB webcam, video files, mock
 - Inference engines: TFLite, ONNX, Coral TPU, mock
 - Trackers: NoOp, Centroid, Kalman
 - Alert handlers: Console, Webhook, File, Composite
-- Renderers: OpenCV display, Headless
+- Renderers: OpenCV display, Headless, Streaming
 
 Usage:
-    from factory import create_pipeline
+    from detector.src import create_pipeline
 
     pipeline = create_pipeline(
-        model_path='models/drone-detector.tflite',
+        model_path='models/detector.tflite',
         tracker_type='kalman',
         headless=True,
     )

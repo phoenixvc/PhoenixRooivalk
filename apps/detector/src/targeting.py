@@ -17,9 +17,9 @@ from enum import Enum
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple, Dict, Any
 
-from interfaces import Detection, BoundingBox, TrackedObject
-from config.settings import TargetingSettings
-from config.constants import (
+from .interfaces import Detection, BoundingBox, TrackedObject
+from .config.settings import TargetingSettings
+from .config.constants import (
     DRONE_SIZE_DEFAULT,
     DEFAULT_FOCAL_LENGTH_MM,
     DEFAULT_SENSOR_WIDTH_MM,

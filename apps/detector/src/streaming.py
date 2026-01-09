@@ -21,7 +21,7 @@ from queue import Queue, Empty
 
 import numpy as np
 
-from interfaces import FrameRenderer, FrameData, Detection, TrackedObject
+from .interfaces import FrameRenderer, FrameData, Detection, TrackedObject
 
 logger = logging.getLogger(__name__)
 

@@ -28,9 +28,18 @@ Usage:
 import argparse
 import sys
 import signal
+from pathlib import Path
 from typing import Optional
 
-from .factory import create_pipeline, create_demo_pipeline, DetectionPipeline
+# Support running as both script and module
+try:
+    from .factory import create_pipeline, create_demo_pipeline, DetectionPipeline
+except ImportError:
+    # Running as script - add src to path
+    src_dir = Path(__file__).parent
+    if str(src_dir) not in sys.path:
+        sys.path.insert(0, str(src_dir))
+    from factory import create_pipeline, create_demo_pipeline, DetectionPipeline
 
 
 def parse_args():

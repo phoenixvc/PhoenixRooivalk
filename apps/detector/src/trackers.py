@@ -12,7 +12,7 @@ import math
 
 import numpy as np
 
-from interfaces import (
+from .interfaces import (
     ObjectTracker,
     TrackedObject,
     Detection,

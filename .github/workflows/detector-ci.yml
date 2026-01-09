@@ -1,19 +1,19 @@
-name: Pi Drone Detector CI
+name: Detector CI
 
 on:
   push:
     branches: [main, develop]
     paths:
-      - 'apps/pi-drone-detector/**'
-      - '.github/workflows/pi-drone-detector-ci.yml'
+      - 'apps/detector/**'
+      - '.github/workflows/detector-ci.yml'
   pull_request:
     branches: [main]
     paths:
-      - 'apps/pi-drone-detector/**'
+      - 'apps/detector/**'
 
 defaults:
   run:
-    working-directory: apps/pi-drone-detector
+    working-directory: apps/detector
 
 jobs:
   lint:
@@ -87,7 +87,7 @@ jobs:
         if: matrix.python-version == '3.11'
         uses: codecov/codecov-action@v4
         with:
-          files: apps/pi-drone-detector/coverage.xml
+          files: apps/detector/coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -149,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: apps/pi-drone-detector/dist/
+          path: apps/detector/dist/
           if-no-files-found: ignore
 
   security-scan:

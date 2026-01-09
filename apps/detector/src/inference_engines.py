@@ -12,7 +12,7 @@ from pathlib import Path
 
 import numpy as np
 
-from interfaces import (
+from .interfaces import (
     InferenceEngine,
     InferenceResult,
     Detection,

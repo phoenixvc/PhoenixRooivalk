@@ -11,7 +11,7 @@ This is the main entry point for assembling the system based on:
 from dataclasses import dataclass
 from typing import Optional, Any
 
-from interfaces import (
+from .interfaces import (
     FrameSource,
     InferenceEngine,
     ObjectTracker,
@@ -20,16 +20,16 @@ from interfaces import (
     HardwareProfile,
     PipelineConfig,
 )
-from hardware import detect_hardware, print_hardware_report
-from frame_sources import create_frame_source
-from inference_engines import create_inference_engine
-from trackers import create_tracker
-from alert_handlers import create_alert_handler, CompositeAlertHandler, ConsoleAlertHandler
-from renderers import create_renderer
+from .hardware import detect_hardware, print_hardware_report
+from .frame_sources import create_frame_source
+from .inference_engines import create_inference_engine
+from .trackers import create_tracker
+from .alert_handlers import create_alert_handler, CompositeAlertHandler, ConsoleAlertHandler
+from .renderers import create_renderer
 
 # Optional streaming imports
 try:
-    from streaming import (
+    from .streaming import (
         StreamingRenderer,
         StreamingManager,
         create_streaming_renderer,

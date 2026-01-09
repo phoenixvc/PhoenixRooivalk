@@ -1,12 +1,13 @@
-# Raspberry Pi Drone Detector v2.0
+# Detector v2.0
 
-Real-time drone detection system for Raspberry Pi with modular, interface-based
-architecture. Supports hot-swapping of cameras, inference engines, and trackers.
+Modular, platform-agnostic detection system for edge devices.
+Supports Raspberry Pi, NVIDIA Jetson, and desktop development.
 
 Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
 ## Features
 
+- **Platform Agnostic**: Works on Raspberry Pi, Jetson, desktop, or any Linux system
 - **Modular Architecture**: Swap cameras, inference engines, and trackers at runtime
 - **Multiple Inference Backends**: TFLite, ONNX, Coral Edge TPU
 - **Object Tracking**: Centroid and Kalman filter trackers
@@ -16,13 +17,13 @@ Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
 ## Quick Start
 
-### 1. Setup Raspberry Pi
+### 1. Setup Environment
 
 ```bash
 # Clone repo (or copy this folder)
 cd ~/
 git clone https://github.com/JustAGhosT/PhoenixRooivalk.git
-cd PhoenixRooivalk/apps/pi-drone-detector
+cd PhoenixRooivalk/apps/detector
 
 # Create virtual environment
 python3 -m venv venv
@@ -31,10 +32,11 @@ source venv/bin/activate
 # Install dependencies (choose your platform)
 pip install -e ".[pi]"           # Raspberry Pi with TFLite
 pip install -e ".[pi,coral]"     # Pi + Coral Edge TPU
-pip install -e ".[pi,streaming]" # Pi + Web streaming
+pip install -e ".[jetson]"       # NVIDIA Jetson
+pip install -e ".[streaming]"    # Web streaming support
 pip install -e ".[dev]"          # Development with all tools
 
-# Enable camera (if using Pi Camera)
+# Enable camera (if using Pi Camera on Raspberry Pi)
 sudo raspi-config  # Interface Options > Camera > Enable
 ```
 
