@@ -18,7 +18,7 @@ military systems.
 
 ### Existing Marketing Structure
 
-```
+```text
 apps/marketing/
 ├── src/app/                    # Next.js pages
 │   ├── page.tsx               # Landing page (B2B focused)
