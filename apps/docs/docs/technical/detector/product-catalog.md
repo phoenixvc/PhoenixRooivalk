@@ -419,6 +419,7 @@ alert:
    ```
 
 5. **Create Service**
+
    ```bash
    sudo cp systemd/skywatch.service /etc/systemd/system/
    sudo systemctl enable skywatch
@@ -840,6 +841,7 @@ logging:
    ```
 
 3. **Internal Layout**
+
    ```
    ┌────────────────────────────────────┐
    │  Camera ○                          │
