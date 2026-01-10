@@ -15,6 +15,7 @@ export type ProductCategory =
   | "military";
 export type ProductLine =
   | "skysnare"
+  | "netsnare"
   | "skywatch"
   | "netsentry"
   | "aeronet"
@@ -90,12 +91,12 @@ export interface Product {
 export const phases: Record<ProductPhase, ProductPhaseInfo> = {
   seed: {
     id: "seed",
-    name: "Seed: SkySnare Launch",
+    name: "Seed: Consumer Launch",
     shortName: "Seed",
-    timeline: "Q1 2026 - Q3 2026 • Delivery Aug 2026",
+    timeline: "Q1 2026 - Q3 2026 • Delivery Jul-Oct 2026",
     funding: "$1.5M",
     color: "#22c55e", // green
-    description: "Consumer product launch and core prototype validation",
+    description: "Consumer product launch with SkySnare, NetSnare, and NetSentry Lite",
   },
   "series-a": {
     id: "series-a",
@@ -153,7 +154,7 @@ export const products: Product[] = [
       "Direct-to-consumer drone capture device. Simple point-and-shoot operation for personal property protection.",
     category: "consumer",
     phase: "seed",
-    phaseTimeline: "Q3 2026 Launch • Delivery Aug 2026",
+    phaseTimeline: "Q2 2026 Launch • Delivery Jul 2026",
     available: false,
     comingSoon: true,
 
@@ -195,6 +196,161 @@ export const products: Product[] = [
     catalogUrl: "/docs/technical/detector/product-catalog#skysnare",
     buyUrl: "/shop/skysnare",
     demoUrl: "/interactive-demo",
+  },
+
+  // -------------------------------------------------------------------------
+  // NETSNARE - Ground-Mounted Launcher Line (pairs with SkyWatch detection)
+  // -------------------------------------------------------------------------
+  {
+    id: "netsnare-lite",
+    sku: "NSN-LITE-001",
+    name: "NetSnare Lite",
+    line: "netsnare",
+    tagline: "Ground-Mounted Net Launcher",
+    description:
+      "Spring-powered ground-mounted net launcher. Pairs with any SkyWatch detector for automated drone capture.",
+    category: "diy-maker",
+    phase: "seed",
+    phaseTimeline: "Q2 2026 • Delivery Jul 2026",
+    available: false,
+    comingSoon: true,
+
+    priceRange: { min: 200, max: 400 },
+    priceFormatted: "$200-400",
+
+    cogs: 125,
+    margin: 0.38,
+    assemblyHours: 1.5,
+    laborCost: 14,
+
+    targetMarket: ["DIY enthusiasts", "Makers", "Property owners"],
+    marketSegment: "Ground-mounted launcher for SkyWatch users",
+
+    specs: {
+      range: "10-20m launch",
+      trigger: "App/API trigger",
+      reload: "Manual, 30 seconds",
+      net: "2m weighted",
+      mount: "Ground stake or surface mount",
+    },
+
+    features: [
+      "Spring-powered launcher",
+      "SkyWatch API integration",
+      "Mobile app trigger",
+      "Manual reload",
+      "Weather resistant",
+    ],
+
+    useCases: [
+      "Property protection",
+      "Garden/backyard defense",
+      "Paired with SkyWatch Standard",
+      "Outdoor events",
+    ],
+
+    catalogUrl: "/docs/technical/detector/product-catalog#netsnare-lite",
+  },
+  {
+    id: "netsnare-standard",
+    sku: "NSN-STD-001",
+    name: "NetSnare Standard",
+    line: "netsnare",
+    tagline: "CO2 Ground Launcher",
+    description:
+      "CO2-powered ground-mounted launcher with faster response and longer range. Integrates with SkyWatch for automated targeting.",
+    category: "prosumer",
+    phase: "series-a",
+    phaseTimeline: "Q4 2026 • Delivery Jan 2027",
+    available: false,
+    comingSoon: true,
+
+    priceRange: { min: 500, max: 800 },
+    priceFormatted: "$500-800",
+
+    cogs: 285,
+    margin: 0.44,
+    assemblyHours: 3.5,
+    laborCost: 39,
+
+    targetMarket: ["Property owners", "Small businesses", "Farms"],
+    marketSegment: "Automated ground defense for properties",
+
+    specs: {
+      range: "20-35m launch",
+      trigger: "Auto from SkyWatch",
+      response: "100ms",
+      reload: "CO2 cartridge swap",
+      costPerShot: "$1-2",
+    },
+
+    features: [
+      "CO2 powered launcher",
+      "Auto-trigger from SkyWatch",
+      "Multiple mount options",
+      "Quick CO2 reload",
+      "IP65 weatherproof",
+    ],
+
+    useCases: [
+      "Farm protection",
+      "Vineyard/orchard defense",
+      "Small facility perimeter",
+      "Event security",
+    ],
+
+    catalogUrl: "/docs/technical/detector/product-catalog#netsnare-standard",
+  },
+  {
+    id: "netsnare-pro",
+    sku: "NSN-PRO-001",
+    name: "NetSnare Pro",
+    line: "netsnare",
+    tagline: "Tracking Ground Platform",
+    description:
+      "Pneumatic ground launcher with pan-tilt tracking. Full autonomous operation when paired with SkyWatch Pro or Enterprise.",
+    category: "commercial",
+    phase: "series-a",
+    phaseTimeline: "Q2 2027 • Delivery Jul 2027",
+    available: false,
+    comingSoon: true,
+
+    priceRange: { min: 1200, max: 2000 },
+    priceFormatted: "$1,200-2,000",
+
+    cogs: 680,
+    margin: 0.44,
+    assemblyHours: 8,
+    laborCost: 133,
+
+    targetMarket: ["Commercial facilities", "Critical infrastructure", "Security firms"],
+    marketSegment: "Automated perimeter defense",
+
+    specs: {
+      range: "30-50m launch",
+      tracking: "Pan-tilt motorized",
+      response: "50ms",
+      reload: "Air tank refillable",
+      coverage: "180° arc",
+    },
+
+    features: [
+      "Pneumatic launcher",
+      "Pan-tilt tracking",
+      "Predictive targeting",
+      "Multi-shot capability",
+      "Remote monitoring",
+      "Air tank refillable",
+    ],
+
+    useCases: [
+      "Perimeter defense",
+      "Commercial facilities",
+      "Prison security",
+      "Airport perimeters",
+    ],
+
+    catalogUrl: "/docs/technical/detector/product-catalog#netsnare-pro",
   },
 
   // -------------------------------------------------------------------------
@@ -602,7 +758,7 @@ export const products: Product[] = [
       "Entry-level countermeasure system with spring-loaded net launcher for testing and proof-of-concept.",
     category: "diy-maker",
     phase: "seed",
-    phaseTimeline: "Q4 2026 • Delivery Jan 2027",
+    phaseTimeline: "Q3 2026 • Delivery Oct 2026",
     available: false,
     comingSoon: true,
 
@@ -615,7 +771,7 @@ export const products: Product[] = [
     laborCost: 24,
 
     targetMarket: ["Makers", "Hobbyists", "Testers"],
-    marketSegment: "DIY/Testing",
+    marketSegment: "DIY/Testing (validates full detect+intercept stack)",
 
     specs: {
       range: "5-15m launch",

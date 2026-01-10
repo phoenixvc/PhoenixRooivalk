@@ -42,18 +42,22 @@ detection and countermeasure products.
    - [NetSentry Pro](#netsentry-pro)
 3. [Consumer Products (SkySnare Line)](#consumer-products-skysnare-line)
    - [SkySnare](#skysnare)
-4. [Enterprise Platforms (AeroNet)](#enterprise-platforms-aeronet)
+4. [Ground Launchers (NetSnare Line)](#ground-launchers-netsnare-line)
+   - [NetSnare Lite](#netsnare-lite)
+   - [NetSnare Standard](#netsnare-standard)
+   - [NetSnare Pro](#netsnare-pro)
+5. [Enterprise Platforms (AeroNet)](#enterprise-platforms-aeronet)
    - [AeroNet Enterprise](#aeronet-enterprise)
-5. [Aerial Intercept Systems (RKV Line)](#aerial-intercept-systems-rkv-line)
+6. [Aerial Intercept Systems (RKV Line)](#aerial-intercept-systems-rkv-line)
    - [RKV-M Mothership](#rkv-m-mothership)
    - [RKV-I Interceptor](#rkv-i-interceptor)
    - [RKV-G Ground Station](#rkv-g-ground-station)
-6. [Manufacturing & Pricing Data](#manufacturing--pricing-data)
+7. [Manufacturing & Pricing Data](#manufacturing--pricing-data)
    - [Assembly Time Estimates](#assembly-time-estimates)
    - [Category Markups](#category-markups)
    - [Labor Tariffs](#labor-tariffs)
-7. [Commercial Alternatives](#commercial-alternatives)
-8. [Appendix: Supplier Directory](#appendix-supplier-directory)
+8. [Commercial Alternatives](#commercial-alternatives)
+9. [Appendix: Supplier Directory](#appendix-supplier-directory)
 
 ---
 
@@ -1646,7 +1650,7 @@ api:
 ## NetSentry Lite
 
 **SKU:** NS-LITE-001 **Target Market:** Makers, hobbyists, testing **Price
-Range:** $150-400 **Phase:** Seed (Q4 2026 • Delivery Jan 2027)
+Range:** $150-400 **Phase:** Seed (Q3 2026 • Delivery Oct 2026)
 
 ### Overview
 
@@ -1889,7 +1893,7 @@ alert:
 
 ## SkySnare
 
-**SKU:** SS-001 **Target Market:** Consumer/D2C, outdoor enthusiasts, property owners **Price:** $349 MSRP **Phase:** Seed (Q3 2026 • Delivery Aug 2026)
+**SKU:** SS-001 **Target Market:** Consumer/D2C, outdoor enthusiasts, property owners **Price:** $349 MSRP **Phase:** Seed (Q2 2026 • Delivery Jul 2026)
 
 ### Overview
 
@@ -1969,6 +1973,153 @@ Direct-to-consumer drone capture device. Handheld net launcher designed for pers
 | SkyWall Patrol    | $30,000+  | Professional, much larger     |
 | Drone Defender    | $15,000+  | RF jammer, legal restrictions |
 | DIY net launcher  | $50-200   | Unreliable, no support        |
+
+---
+
+# Ground Launchers (NetSnare Line)
+
+Ground-mounted net launchers that pair with SkyWatch detection systems for automated drone capture. Unlike NetSentry (integrated detection + launcher), NetSnare is a standalone launcher that receives targeting commands from external detection systems.
+
+## NetSnare Lite
+
+**SKU:** NSN-LITE-001 **Target Market:** DIY enthusiasts, property owners **Price Range:** $200-400 **Phase:** Seed (Q2 2026 • Delivery Jul 2026)
+
+### Overview
+
+Spring-powered ground-mounted net launcher. Pairs with any SkyWatch detector via API for semi-automated drone capture. Perfect for backyard defense when combined with SkyWatch Standard.
+
+### Specifications
+
+| Specification     | Value                      |
+| ----------------- | -------------------------- |
+| Launch Range      | 10-20m effective           |
+| Net Size          | 2m × 2m weighted           |
+| Trigger           | API/App trigger            |
+| Reload Time       | 30 seconds manual          |
+| Mount Options     | Ground stake, surface bolt |
+| Power             | 12V DC or battery          |
+| Weather Rating    | IP54                       |
+
+### Bill of Materials
+
+| Item                  | Specification        | Qty | Unit Cost | Total       | Supplier        |
+| --------------------- | -------------------- | --- | --------- | ----------- | --------------- |
+| Spring Mechanism      | 50lb rated           | 1   | $35.00    | $35.00      | Hardware store  |
+| Ground Mount Base     | Aluminum, stake      | 1   | $25.00    | $25.00      | Custom          |
+| Net Assembly          | 2m, weighted corners | 1   | $30.00    | $30.00      | In-house        |
+| Microcontroller       | ESP32                | 1   | $8.00     | $8.00       | Various         |
+| Relay Module          | 12V                  | 1   | $5.00     | $5.00       | Amazon          |
+| Enclosure             | IP54 rated           | 1   | $15.00    | $15.00      | Amazon          |
+| Misc (wiring, etc)    | Various              | 1   | $7.00     | $7.00       | Various         |
+| **TOTAL**             |                      |     |           | **$125.00** |                 |
+
+### Features
+
+- SkyWatch API integration for automated targeting
+- Mobile app manual trigger
+- Weather resistant enclosure
+- Multiple mounting options
+- Low maintenance spring mechanism
+
+---
+
+## NetSnare Standard
+
+**SKU:** NSN-STD-001 **Target Market:** Property owners, farms, small businesses **Price Range:** $500-800 **Phase:** Series A (Q4 2026 • Delivery Jan 2027)
+
+### Overview
+
+CO2-powered ground launcher with faster response and longer range. Full SkyWatch integration for automated targeting when paired with SkyWatch Standard or Pro.
+
+### Specifications
+
+| Specification     | Value                      |
+| ----------------- | -------------------------- |
+| Launch Range      | 20-35m effective           |
+| Response Time     | 100ms from trigger         |
+| Net Size          | 2.5m × 2.5m weighted       |
+| Trigger           | Auto from SkyWatch         |
+| Reload            | CO2 cartridge swap         |
+| Cost per Shot     | $1-2                       |
+| Weather Rating    | IP65                       |
+
+### Bill of Materials
+
+| Item                  | Specification        | Qty | Unit Cost | Total       | Supplier        |
+| --------------------- | -------------------- | --- | --------- | ----------- | --------------- |
+| CO2 Puncture Assembly | 16g cartridge        | 1   | $60.00    | $60.00      | Palmer Pursuit  |
+| Barrel Assembly       | Aluminum, 4"         | 1   | $40.00    | $40.00      | Custom          |
+| Ground Mount Platform | Heavy duty, 360°     | 1   | $45.00    | $45.00      | Custom          |
+| Net Assembly          | 2.5m, auto-deploy    | 1   | $50.00    | $50.00      | In-house        |
+| Controller Board      | ESP32 + relay        | 1   | $25.00    | $25.00      | Custom PCB      |
+| Solenoid Valve        | 12V NC               | 1   | $30.00    | $30.00      | Amazon          |
+| Enclosure             | IP65                 | 1   | $25.00    | $25.00      | Polycase        |
+| Misc                  | Various              | 1   | $10.00    | $10.00      | Various         |
+| **TOTAL**             |                      |     |           | **$285.00** |                 |
+
+### Features
+
+- CO2 powered for faster response
+- Full SkyWatch API integration
+- Auto-trigger on detection
+- IP65 weatherproof
+- Quick CO2 reload
+
+---
+
+## NetSnare Pro
+
+**SKU:** NSN-PRO-001 **Target Market:** Commercial facilities, critical infrastructure **Price Range:** $1,200-2,000 **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
+
+### Overview
+
+Pneumatic ground launcher with pan-tilt tracking for predictive targeting. Full autonomous operation when paired with SkyWatch Pro or Enterprise. Multi-shot capability with air tank.
+
+### Specifications
+
+| Specification     | Value                      |
+| ----------------- | -------------------------- |
+| Launch Range      | 30-50m effective           |
+| Response Time     | 50ms from trigger          |
+| Tracking          | Pan-tilt motorized         |
+| Coverage Arc      | 180° horizontal            |
+| Net Size          | 3m auto-deploy             |
+| Reload            | Air tank refillable        |
+| Shots per Fill    | 10-15                      |
+| Weather Rating    | IP66                       |
+
+### Bill of Materials
+
+| Item                    | Specification        | Qty | Unit Cost | Total       | Supplier        |
+| ----------------------- | -------------------- | --- | --------- | ----------- | --------------- |
+| Air Tank                | 48ci, 3000psi        | 1   | $100.00   | $100.00     | Paintball       |
+| Regulator               | Adjustable output    | 1   | $80.00    | $80.00      | Ninja           |
+| Solenoid Valve          | MAC 35A              | 1   | $50.00    | $50.00      | MAC Valves      |
+| Barrel Assembly         | Aluminum, multi-shot | 1   | $80.00    | $80.00      | Custom          |
+| Pan-Tilt Mount          | Heavy duty           | 1   | $120.00   | $120.00     | ServoCity       |
+| Net System              | 3m, auto-deploy × 3  | 3   | $40.00    | $120.00     | In-house        |
+| Controller              | Pi Zero + custom     | 1   | $45.00    | $45.00      | Custom          |
+| Ground Platform         | Concrete anchor      | 1   | $35.00    | $35.00      | Custom          |
+| Enclosure               | IP66 industrial      | 1   | $40.00    | $40.00      | Polycase        |
+| Misc                    | Various              | 1   | $10.00    | $10.00      | Various         |
+| **TOTAL**               |                      |     |           | **$680.00** |                 |
+
+### Features
+
+- Pneumatic launcher with pan-tilt tracking
+- Predictive targeting algorithms
+- Multi-shot magazine (3 nets)
+- Air tank refillable (free shots)
+- Remote monitoring dashboard
+- 180° coverage arc
+
+### Commercial Alternatives
+
+| Product           | Price     | Comparison                    |
+| ----------------- | --------- | ----------------------------- |
+| SkyWall 100       | $25,000+  | Similar concept, military     |
+| DroneGun MKIII    | $30,000+  | RF jammer, different approach |
+| Drone Catcher     | $15,000+  | Drone-mounted net system      |
 
 ---
 

@@ -266,13 +266,17 @@ Example: SkyWatch Marine (Series A Q2 2027)
 
 | Product | Phase | Phase Completion | Est. Delivery |
 |---------|-------|------------------|---------------|
-| SkySnare | Seed | Q3 2026 | Aug 2026 |
+| SkySnare | Seed | Q2 2026 | Jul 2026 |
+| NetSnare Lite | Seed | Q2 2026 | Jul 2026 |
+| NetSentry Lite | Seed | Q3 2026 | Oct 2026 |
 | SkyWatch Mobile | Series A | Q4 2026 | Jan 2027 |
+| NetSnare Standard | Series A | Q4 2026 | Jan 2027 |
 | SkyWatch Thermal | Series A | Q1 2027 | Apr 2027 |
 | NetSentry Standard | Series A | Q1 2027 | Apr 2027 |
 | SkyWatch Marine | Series A | Q2 2027 | Jul 2027 |
 | SkyWatch Mesh | Series A | Q2 2027 | Jul 2027 |
 | NetSentry Pro | Series A | Q2 2027 | Jul 2027 |
+| NetSnare Pro | Series A | Q2 2027 | Jul 2027 |
 | AeroNet Enterprise | Series A | Q2 2027 | Jul 2027 |
 | SkyWatch Enterprise | Series A | Q3 2027 | Aug 2027 |
 | RKV-G Ground Station | Series B | Q2 2028 | Aug 2028 |
