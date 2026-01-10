@@ -1226,6 +1226,12 @@ export const productLines: Record<ProductLine, { name: string; tagline: string; 
     description: "Direct-to-consumer drone capture for personal property protection",
     icon: "🎯",
   },
+  netsnare: {
+    name: "NetSnare",
+    tagline: "Ground Launchers",
+    description: "Ground-mounted net launchers that pair with SkyWatch detection systems",
+    icon: "🪤",
+  },
   skywatch: {
     name: "SkyWatch",
     tagline: "Detection Systems",
