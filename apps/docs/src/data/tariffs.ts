@@ -5,7 +5,6 @@
  * Single source of truth for all cost calculations.
  */
 
-import type { RangeValue } from "./types";
 
 /** Exchange rate for conversions */
 export const exchangeRate = {
