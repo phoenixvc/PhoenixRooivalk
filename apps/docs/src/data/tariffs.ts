@@ -5,7 +5,6 @@
  * Single source of truth for all cost calculations.
  */
 
-
 /** Exchange rate for conversions */
 export const exchangeRate = {
   usdToZar: 18,
@@ -477,7 +476,7 @@ export const manufacturingTimes: ManufacturingTime[] = [
     amortizedSetupHours: 0.15,
     totalAmortizedHours: 3.65,
     estimatedLaborCostZar: 693,
-    estimatedLaborCostUsd: 38.50,
+    estimatedLaborCostUsd: 38.5,
     notes: "CO2 system assembly, pressure testing, SkyWatch integration",
   },
   {
@@ -493,7 +492,7 @@ export const manufacturingTimes: ManufacturingTime[] = [
     amortizedSetupHours: 0.4,
     totalAmortizedHours: 8.4,
     estimatedLaborCostZar: 2394,
-    estimatedLaborCostUsd: 133.00,
+    estimatedLaborCostUsd: 133.0,
     notes: "Pneumatic system, pan-tilt tracking, multi-shot magazine",
   },
 
@@ -998,12 +997,16 @@ export function getLaborRate(role: string): LaborRate | undefined {
 }
 
 /** Get markup for category */
-export function getCategoryMarkup(category: string): CategoryMarkup | undefined {
+export function getCategoryMarkup(
+  category: string,
+): CategoryMarkup | undefined {
   return categoryMarkups[category];
 }
 
 /** Get manufacturing time for product */
-export function getManufacturingTime(sku: string): ManufacturingTime | undefined {
+export function getManufacturingTime(
+  sku: string,
+): ManufacturingTime | undefined {
   return manufacturingTimes.find((m) => m.sku === sku);
 }
 

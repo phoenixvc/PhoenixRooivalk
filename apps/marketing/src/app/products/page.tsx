@@ -61,7 +61,7 @@ function ProductCard({ product }: { product: Product }) {
               <span className={styles.specLabel}>{key}:</span>
               <span className={styles.specValue}>{value}</span>
             </div>
-          ) : null
+          ) : null,
         )}
       </div>
 
@@ -135,7 +135,11 @@ export default function ProductsPage(): React.ReactElement {
             {productLineOrder.map((lineId) => {
               const line = productLines[lineId];
               return (
-                <a key={lineId} href={`#${lineId}`} className={styles.quickNavItem}>
+                <a
+                  key={lineId}
+                  href={`#${lineId}`}
+                  className={styles.quickNavItem}
+                >
                   <span className={styles.quickNavIcon}>{line.icon}</span>
                   <span className={styles.quickNavLabel}>{line.name}</span>
                 </a>
@@ -159,7 +163,9 @@ export default function ProductsPage(): React.ReactElement {
                 <div className={styles.phaseInfo}>
                   <h3 className={styles.phaseName}>{phase.shortName}</h3>
                   <p className={styles.phaseTimeline}>{phase.timeline}</p>
-                  <p className={styles.phaseFunding}>Funding: {phase.funding}</p>
+                  <p className={styles.phaseFunding}>
+                    Funding: {phase.funding}
+                  </p>
                 </div>
               </div>
             ))}

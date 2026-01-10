@@ -84,13 +84,20 @@ import {
 
 ### 5. Code Quality & Security Improvements
 
-- **YOLO Training Audit**: Complete audit and fixes for ML training infrastructure (PR #476)
-- **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during testing (PR #475)
-- **OAuth/CORS Fixes**: Major authentication overhaul - COOP blocking, CORS config, Azure Functions auth (PRs #417-#443)
-- **Production Deployment**: Azure config injection, offline mode support, auto-login removal
-- **Codacy Compliance**: Resolved static analysis issues across Python, JavaScript, and Rust
-- **Security Hardening**: GitHub Actions SHA pinning, Semgrep nosec fixes, workflow improvements
-- **UI/UX Fixes**: Document filters, category UI, authentication context errors resolved
+- **YOLO Training Audit**: Complete audit and fixes for ML training
+  infrastructure (PR #476)
+- **DISABLE_LOGIN Flag**: Production safeguards for authentication bypass during
+  testing (PR #475)
+- **OAuth/CORS Fixes**: Major authentication overhaul - COOP blocking, CORS
+  config, Azure Functions auth (PRs #417-#443)
+- **Production Deployment**: Azure config injection, offline mode support,
+  auto-login removal
+- **Codacy Compliance**: Resolved static analysis issues across Python,
+  JavaScript, and Rust
+- **Security Hardening**: GitHub Actions SHA pinning, Semgrep nosec fixes,
+  workflow improvements
+- **UI/UX Fixes**: Document filters, category UI, authentication context errors
+  resolved
 
 ### 6. Known Issues Resolved
 
@@ -303,7 +310,8 @@ Two small quadcopters ready for training data capture:
 
 ![Training drones - small quads](/img/training-drones.jpeg)
 
-_Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad (~100mm) with orange props. Both available for capturing training footage._
+_Left: Carbon fiber racing quad (~250mm) with prop guards. Right: Micro quad
+(~100mm) with orange props. Both available for capturing training footage._
 
 ### Hexacopter Development
 
@@ -311,7 +319,8 @@ Large hexacopter in development for enterprise-class detection testing:
 
 ![Hexacopter in workshop](/img/hexacopter-workshop.jpeg)
 
-_Professional hexacopter (~600mm) with camera gimbal. In progress - represents larger drone class for detection model training._
+_Professional hexacopter (~600mm) with camera gimbal. In progress - represents
+larger drone class for detection model training._
 
 ### Launcher Prototype
 
@@ -319,7 +328,8 @@ PVC-based launcher prototype for net deployment testing:
 
 ![Launcher prototype](/img/launcher-prototype.jpeg)
 
-_PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure testing. Target: 50m deployment range._
+_PVC tube launcher with solenoid valve. Awaiting trigger wiring and pressure
+testing. Target: 50m deployment range._
 
 ---
 
@@ -435,36 +445,37 @@ Multi-stack code quality and security improvements across the codebase.
 
 ### 4. Product Catalog
 
-Complete product catalog defined with two product lines covering all market segments.
+Complete product catalog defined with two product lines covering all market
+segments.
 
 #### SkyWatch Line (Detection-Only)
 
-| Product             | SKU         | Target Market                | Price Range   | Detection Range        |
-| ------------------- | ----------- | ---------------------------- | ------------- | ---------------------- |
-| SkyWatch Nano       | SW-NANO-001 | Hobbyists, makers            | $50-100       | 30-50m (daylight)      |
-| SkyWatch Standard   | SW-STD-001  | Homeowners, small property   | $100-250      | 50-150m                |
-| SkyWatch Pro        | SW-PRO-001  | Farms, estates, commercial   | $250-600      | 150-500m visual, 2km RF|
-| SkyWatch Mobile     | SW-MOB-001  | Security patrols, events     | $200-500      | 100-300m               |
-| SkyWatch Thermal    | SW-THM-001  | 24/7 operations, night       | $400-1,500    | 100-500m thermal       |
-| SkyWatch Marine     | SW-MAR-001  | Vessels, marinas, coastal    | $600-2,000    | 200-800m               |
-| SkyWatch Mesh       | SW-MESH-001 | Large perimeters, industrial | $500-2K/node  | 100-200m per node      |
-| SkyWatch Enterprise | SW-ENT-001  | Corporate, critical infra    | $5,000-20,000 | 1-5km (multi-sensor)   |
+| Product             | SKU         | Target Market                | Price Range   | Detection Range         |
+| ------------------- | ----------- | ---------------------------- | ------------- | ----------------------- |
+| SkyWatch Nano       | SW-NANO-001 | Hobbyists, makers            | $50-100       | 30-50m (daylight)       |
+| SkyWatch Standard   | SW-STD-001  | Homeowners, small property   | $100-250      | 50-150m                 |
+| SkyWatch Pro        | SW-PRO-001  | Farms, estates, commercial   | $250-600      | 150-500m visual, 2km RF |
+| SkyWatch Mobile     | SW-MOB-001  | Security patrols, events     | $200-500      | 100-300m                |
+| SkyWatch Thermal    | SW-THM-001  | 24/7 operations, night       | $400-1,500    | 100-500m thermal        |
+| SkyWatch Marine     | SW-MAR-001  | Vessels, marinas, coastal    | $600-2,000    | 200-800m                |
+| SkyWatch Mesh       | SW-MESH-001 | Large perimeters, industrial | $500-2K/node  | 100-200m per node       |
+| SkyWatch Enterprise | SW-ENT-001  | Corporate, critical infra    | $5,000-20,000 | 1-5km (multi-sensor)    |
 
 #### NetSentry Line (Detection + Countermeasures)
 
-| Product          | SKU         | Target Market        | Price Range | Launch Range           |
-| ---------------- | ----------- | -------------------- | ----------- | ---------------------- |
-| NetSentry Lite   | NS-LITE-001 | Makers, hobbyists    | $150-400    | 5-15m (spring-loaded)  |
-| NetSentry Standard | NS-STD-001 | Property protection  | $400-800    | 15-30m (CO2-powered)   |
-| NetSentry Pro    | NS-PRO-001  | Security professionals | $800-2,000 | 25-50m (pneumatic)     |
+| Product            | SKU         | Target Market          | Price Range | Launch Range          |
+| ------------------ | ----------- | ---------------------- | ----------- | --------------------- |
+| NetSentry Lite     | NS-LITE-001 | Makers, hobbyists      | $150-400    | 5-15m (spring-loaded) |
+| NetSentry Standard | NS-STD-001  | Property protection    | $400-800    | 15-30m (CO2-powered)  |
+| NetSentry Pro      | NS-PRO-001  | Security professionals | $800-2,000  | 25-50m (pneumatic)    |
 
 #### Sample BOMs
 
-| Product           | Key Components                                    | Total BOM  |
-| ----------------- | ------------------------------------------------- | ---------- |
-| SkyWatch Nano     | Pi Zero, Pi Camera v2, MicroSD, case              | ~$66       |
-| SkyWatch Standard | Pi 4, Pi Camera v3, Coral USB, PoE HAT, enclosure | ~$210      |
-| NetSentry Standard| Detection unit + CO2 launcher + net cartridges    | ~$500      |
+| Product            | Key Components                                    | Total BOM |
+| ------------------ | ------------------------------------------------- | --------- |
+| SkyWatch Nano      | Pi Zero, Pi Camera v2, MicroSD, case              | ~$66      |
+| SkyWatch Standard  | Pi 4, Pi Camera v3, Coral USB, PoE HAT, enclosure | ~$210     |
+| NetSentry Standard | Detection unit + CO2 launcher + net cartridges    | ~$500     |
 
 #### Roadmap Status
 
@@ -477,7 +488,8 @@ Complete product catalog defined with two product lines covering all market segm
 | Manufacturing setup     | Apr 2026    | 🟡 Planned  |
 | Consumer launch         | Q2 2026     | 🟡 On track |
 
-See [Product Catalog](/docs/technical/detector/product-catalog) for complete specifications.
+See [Product Catalog](/docs/technical/detector/product-catalog) for complete
+specifications.
 
 ---
 

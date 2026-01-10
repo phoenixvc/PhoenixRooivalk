@@ -404,8 +404,9 @@ export const InteractiveElementsSection: React.FC = () => {
           <div className={styles.ctaSection}>
             <h3 className={styles.ctaTitle}>Ready to Secure Your Airspace?</h3>
             <p className={styles.ctaSubtitle}>
-              Browse our product lineup from consumer drone capture to enterprise
-              defense platforms. Preorder now with no deposit required.
+              Browse our product lineup from consumer drone capture to
+              enterprise defense platforms. Preorder now with no deposit
+              required.
             </p>
             <div className={styles.ctaButtons}>
               <Button href="/products" size="lg" variant="primary">

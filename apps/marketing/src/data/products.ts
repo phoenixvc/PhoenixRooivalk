@@ -5,7 +5,12 @@
  * Aligned with product-catalog.md and tariffs.ts
  */
 
-export type ProductPhase = "seed" | "series-a" | "series-b" | "series-c" | "scale";
+export type ProductPhase =
+  | "seed"
+  | "series-a"
+  | "series-b"
+  | "series-c"
+  | "scale";
 export type ProductCategory =
   | "consumer"
   | "diy-maker"
@@ -96,7 +101,8 @@ export const phases: Record<ProductPhase, ProductPhaseInfo> = {
     timeline: "Q1 2026 - Q3 2026 • Delivery Jul-Oct 2026",
     funding: "$1.5M",
     color: "#22c55e", // green
-    description: "Consumer product launch with SkySnare, NetSnare, and NetSentry Lite",
+    description:
+      "Consumer product launch with SkySnare, NetSnare, and NetSentry Lite",
   },
   "series-a": {
     id: "series-a",
@@ -167,7 +173,11 @@ export const products: Product[] = [
     assemblyHours: 1.04,
     laborCost: 10,
 
-    targetMarket: ["Property owners", "Outdoor enthusiasts", "Privacy advocates"],
+    targetMarket: [
+      "Property owners",
+      "Outdoor enthusiasts",
+      "Privacy advocates",
+    ],
     marketSegment: "$3.22B outdoor sports market",
 
     specs: {
@@ -323,7 +333,11 @@ export const products: Product[] = [
     assemblyHours: 8,
     laborCost: 133,
 
-    targetMarket: ["Commercial facilities", "Critical infrastructure", "Security firms"],
+    targetMarket: [
+      "Commercial facilities",
+      "Critical infrastructure",
+      "Security firms",
+    ],
     marketSegment: "Automated perimeter defense",
 
     specs: {
@@ -536,7 +550,7 @@ export const products: Product[] = [
     },
 
     features: [
-      "7\" touchscreen",
+      '7" touchscreen',
       "3-5 hour battery",
       "Haptic alerts",
       "GPS logging",
@@ -921,7 +935,12 @@ export const products: Product[] = [
     assemblyHours: 216,
     laborCost: 7200,
 
-    targetMarket: ["Critical infrastructure", "Airports", "Prisons", "Military bases"],
+    targetMarket: [
+      "Critical infrastructure",
+      "Airports",
+      "Prisons",
+      "Military bases",
+    ],
     marketSegment: "$4.2B enterprise C-UAS market",
 
     specs: {
@@ -976,7 +995,11 @@ export const products: Product[] = [
     assemblyHours: 40, // Software deployment/config
     laborCost: 2400,
 
-    targetMarket: ["Enterprise security teams", "Multi-site operators", "SOC teams"],
+    targetMarket: [
+      "Enterprise security teams",
+      "Multi-site operators",
+      "SOC teams",
+    ],
     marketSegment: "C2/Software for AeroNet deployments",
 
     specs: {
@@ -1194,14 +1217,20 @@ export function getComingSoonProducts(): Product[] {
 /** Get consumer-friendly products (for main marketing site) */
 export function getConsumerProducts(): Product[] {
   return products.filter(
-    (p) => p.category === "consumer" || p.category === "diy-maker" || p.category === "prosumer"
+    (p) =>
+      p.category === "consumer" ||
+      p.category === "diy-maker" ||
+      p.category === "prosumer",
   );
 }
 
 /** Get enterprise products */
 export function getEnterpriseProducts(): Product[] {
   return products.filter(
-    (p) => p.category === "commercial" || p.category === "enterprise" || p.category === "military"
+    (p) =>
+      p.category === "commercial" ||
+      p.category === "enterprise" ||
+      p.category === "military",
   );
 }
 
@@ -1219,17 +1248,22 @@ export function getProductBySku(sku: string): Product | undefined {
 // PRODUCT LINE METADATA
 // =============================================================================
 
-export const productLines: Record<ProductLine, { name: string; tagline: string; description: string; icon: string }> = {
+export const productLines: Record<
+  ProductLine,
+  { name: string; tagline: string; description: string; icon: string }
+> = {
   skysnare: {
     name: "SkySnare",
     tagline: "Consumer Drone Defense",
-    description: "Direct-to-consumer drone capture for personal property protection",
+    description:
+      "Direct-to-consumer drone capture for personal property protection",
     icon: "🎯",
   },
   netsnare: {
     name: "NetSnare",
     tagline: "Ground Launchers",
-    description: "Ground-mounted net launchers that pair with SkyWatch detection systems",
+    description:
+      "Ground-mounted net launchers that pair with SkyWatch detection systems",
     icon: "🪤",
   },
   skywatch: {

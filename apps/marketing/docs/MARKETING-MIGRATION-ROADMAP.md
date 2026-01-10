@@ -1,14 +1,16 @@
 # Marketing Frontend Migration Roadmap
 
-**Version:** 1.0
-**Date:** 2026-01-10
-**Status:** Planning
+**Version:** 1.0 **Date:** 2026-01-10 **Status:** Planning
 
 ---
 
 ## Executive Summary
 
-This roadmap outlines the migration plan to align the marketing frontend with the complete product catalog, making it more consumer-friendly while maintaining enterprise appeal. The goal is to create a unified product presentation that scales from SkySnare consumer products to AeroNet enterprise solutions and RKV military systems.
+This roadmap outlines the migration plan to align the marketing frontend with
+the complete product catalog, making it more consumer-friendly while maintaining
+enterprise appeal. The goal is to create a unified product presentation that
+scales from SkySnare consumer products to AeroNet enterprise solutions and RKV
+military systems.
 
 ---
 
@@ -34,17 +36,17 @@ apps/marketing/
 
 ### Gap Analysis
 
-| Area | Current State | Needed | Priority |
-|------|---------------|--------|----------|
-| Product Pages | None | Individual product pages | HIGH |
-| Consumer Focus | B2B only | B2C + B2B | HIGH |
-| Product Data | Scattered | Unified `products.ts` | DONE |
-| Pricing Display | ROI calculator only | Product pricing pages | HIGH |
-| Phase Timeline | Hidden | Visual roadmap | MEDIUM |
-| Shop Integration | None | E-commerce for SkySnare | HIGH |
-| Product Compare | None | Side-by-side comparison | MEDIUM |
-| **Preorder System** | **None** | **All products preorderable** | **HIGH** |
-| **Bulk Orders** | **None** | **Volume pricing & quotes** | **HIGH** |
+| Area                | Current State       | Needed                        | Priority |
+| ------------------- | ------------------- | ----------------------------- | -------- |
+| Product Pages       | None                | Individual product pages      | HIGH     |
+| Consumer Focus      | B2B only            | B2C + B2B                     | HIGH     |
+| Product Data        | Scattered           | Unified `products.ts`         | DONE     |
+| Pricing Display     | ROI calculator only | Product pricing pages         | HIGH     |
+| Phase Timeline      | Hidden              | Visual roadmap                | MEDIUM   |
+| Shop Integration    | None                | E-commerce for SkySnare       | HIGH     |
+| Product Compare     | None                | Side-by-side comparison       | MEDIUM   |
+| **Preorder System** | **None**            | **All products preorderable** | **HIGH** |
+| **Bulk Orders**     | **None**            | **Volume pricing & quotes**   | **HIGH** |
 
 ---
 
@@ -53,12 +55,14 @@ apps/marketing/
 ### Phase 1: Data Alignment (Week 1) ✅ COMPLETED
 
 **Deliverables:**
+
 - [x] Create unified `products.ts` data file
 - [x] Add phases to all products in catalog
 - [x] Create `tariffs.ts` with pricing/labor data
 - [x] Add missing products (SkySnare, AeroNet, RKV)
 
 **Files Created:**
+
 - `apps/marketing/src/data/products.ts`
 - `apps/docs/src/data/tariffs.ts`
 
@@ -83,24 +87,20 @@ apps/marketing/
 #### 2.2 Component Updates
 
 **Hero Section Redesign:**
+
 ```tsx
 // Current: B2B-focused hero
 // New: Dual-track hero with consumer/enterprise paths
 
 <HeroSection>
-  <ConsumerPath>
-    "Protect Your Privacy"
-    → Shop SkySnare ($349)
-  </ConsumerPath>
+  <ConsumerPath>"Protect Your Privacy" → Shop SkySnare ($349)</ConsumerPath>
 
-  <EnterprisePath>
-    "Defend Your Infrastructure"
-    → Schedule Demo
-  </EnterprisePath>
+  <EnterprisePath>"Defend Your Infrastructure" → Schedule Demo</EnterprisePath>
 </HeroSection>
 ```
 
 **New Components Needed:**
+
 - `ProductCard.tsx` - Product display card
 - `ProductGrid.tsx` - Grid of products
 - `ProductHero.tsx` - Product page hero
@@ -165,13 +165,13 @@ export async function generateStaticParams() {
 
 #### 3.3 Consumer vs Enterprise Styling
 
-| Element | Consumer (SkySnare) | Enterprise (AeroNet) |
-|---------|---------------------|----------------------|
-| Tone | Friendly, casual | Professional, formal |
-| CTA | "Buy Now", "Add to Cart" | "Schedule Demo", "Contact Sales" |
-| Pricing | Direct display | "Contact for Quote" |
-| Colors | Bright, energetic | Subdued, trustworthy |
-| Images | Lifestyle, outdoor | Industrial, professional |
+| Element | Consumer (SkySnare)      | Enterprise (AeroNet)             |
+| ------- | ------------------------ | -------------------------------- |
+| Tone    | Friendly, casual         | Professional, formal             |
+| CTA     | "Buy Now", "Add to Cart" | "Schedule Demo", "Contact Sales" |
+| Pricing | Direct display           | "Contact for Quote"              |
+| Colors  | Bright, energetic        | Subdued, trustworthy             |
+| Images  | Lifestyle, outdoor       | Industrial, professional         |
 
 ---
 
@@ -191,11 +191,11 @@ export async function generateStaticParams() {
 
 #### 4.2 Integration Options
 
-| Option | Pros | Cons | Recommendation |
-|--------|------|------|----------------|
-| Shopify Buy Button | Quick setup, hosted checkout | Limited customization | Phase 1 |
-| Stripe Checkout | Full control, lower fees | More dev work | Phase 2 |
-| Self-hosted | Maximum control | Complex, compliance | Future |
+| Option             | Pros                         | Cons                  | Recommendation |
+| ------------------ | ---------------------------- | --------------------- | -------------- |
+| Shopify Buy Button | Quick setup, hosted checkout | Limited customization | Phase 1        |
+| Stripe Checkout    | Full control, lower fees     | More dev work         | Phase 2        |
+| Self-hosted        | Maximum control              | Complex, compliance   | Future         |
 
 #### 4.3 Implementation Steps
 
@@ -217,7 +217,9 @@ export async function generateStaticParams() {
 
 #### 4B.1 Preorder Overview
 
-All products (not just available ones) will be preorderable. This allows customers to reserve products scheduled for future phases with clear delivery expectations and payment terms.
+All products (not just available ones) will be preorderable. This allows
+customers to reserve products scheduled for future phases with clear delivery
+expectations and payment terms.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -243,12 +245,12 @@ All products (not just available ones) will be preorderable. This allows custome
 
 #### 4B.2 Payment Terms
 
-| Stage | Timing | Amount | Notes |
-|-------|--------|--------|-------|
-| **Preorder Placement** | At order | $0 | No deposit required |
-| **Payment 1** | Launch date confirmed | 50% | Invoice sent when product line launch date announced |
-| **Payment 1 Due** | 1 month before shipping | 50% | Must be paid to hold reservation |
-| **Payment 2 / Final** | Before shipping | Remaining 50% | Full payment required before dispatch |
+| Stage                  | Timing                  | Amount        | Notes                                                |
+| ---------------------- | ----------------------- | ------------- | ---------------------------------------------------- |
+| **Preorder Placement** | At order                | $0            | No deposit required                                  |
+| **Payment 1**          | Launch date confirmed   | 50%           | Invoice sent when product line launch date announced |
+| **Payment 1 Due**      | 1 month before shipping | 50%           | Must be paid to hold reservation                     |
+| **Payment 2 / Final**  | Before shipping         | Remaining 50% | Full payment required before dispatch                |
 
 #### 4B.3 Delivery Timeline
 
@@ -264,25 +266,25 @@ Example: SkyWatch Marine (Series A Q2 2027)
 
 **Product Delivery Estimates:**
 
-| Product | Phase | Phase Completion | Est. Delivery |
-|---------|-------|------------------|---------------|
-| SkySnare | Seed | Q2 2026 | Jul 2026 |
-| NetSnare Lite | Seed | Q2 2026 | Jul 2026 |
-| NetSentry Lite | Seed | Q3 2026 | Oct 2026 |
-| SkyWatch Mobile | Series A | Q4 2026 | Jan 2027 |
-| NetSnare Standard | Series A | Q4 2026 | Jan 2027 |
-| SkyWatch Thermal | Series A | Q1 2027 | Apr 2027 |
-| NetSentry Standard | Series A | Q1 2027 | Apr 2027 |
-| AeroNet Command | Series A | Q1 2027 | Apr 2027 |
-| SkyWatch Marine | Series A | Q2 2027 | Jul 2027 |
-| SkyWatch Mesh | Series A | Q2 2027 | Jul 2027 |
-| NetSentry Pro | Series A | Q2 2027 | Jul 2027 |
-| NetSnare Pro | Series A | Q2 2027 | Jul 2027 |
-| AeroNet Enterprise | Series A | Q2 2027 | Jul 2027 |
-| SkyWatch Enterprise | Series A | Q3 2027 | Aug 2027 |
-| RKV-G Ground Station | Series B | Q2 2028 | Aug 2028 |
-| RKV-M Mothership | Series C | Q2 2029 | Aug 2029 |
-| RKV-I Interceptor | Series C | Q2 2029 | Aug 2029 |
+| Product              | Phase    | Phase Completion | Est. Delivery |
+| -------------------- | -------- | ---------------- | ------------- |
+| SkySnare             | Seed     | Q2 2026          | Jul 2026      |
+| NetSnare Lite        | Seed     | Q2 2026          | Jul 2026      |
+| NetSentry Lite       | Seed     | Q3 2026          | Oct 2026      |
+| SkyWatch Mobile      | Series A | Q4 2026          | Jan 2027      |
+| NetSnare Standard    | Series A | Q4 2026          | Jan 2027      |
+| SkyWatch Thermal     | Series A | Q1 2027          | Apr 2027      |
+| NetSentry Standard   | Series A | Q1 2027          | Apr 2027      |
+| AeroNet Command      | Series A | Q1 2027          | Apr 2027      |
+| SkyWatch Marine      | Series A | Q2 2027          | Jul 2027      |
+| SkyWatch Mesh        | Series A | Q2 2027          | Jul 2027      |
+| NetSentry Pro        | Series A | Q2 2027          | Jul 2027      |
+| NetSnare Pro         | Series A | Q2 2027          | Jul 2027      |
+| AeroNet Enterprise   | Series A | Q2 2027          | Jul 2027      |
+| SkyWatch Enterprise  | Series A | Q3 2027          | Aug 2027      |
+| RKV-G Ground Station | Series B | Q2 2028          | Aug 2028      |
+| RKV-M Mothership     | Series C | Q2 2029          | Aug 2029      |
+| RKV-I Interceptor    | Series C | Q2 2029          | Aug 2029      |
 
 #### 4B.4 Preorder Routes
 
@@ -299,15 +301,16 @@ Example: SkyWatch Marine (Series A Q2 2027)
 
 **Bulk Order Tiers:**
 
-| Quantity | Discount | Process |
-|----------|----------|---------|
-| 1-4 units | Standard pricing | Self-service checkout |
-| 5-9 units | 5% discount | Self-service with auto-discount |
-| 10-24 units | 10% discount | Self-service or quote request |
-| 25-49 units | 15% discount | Quote required |
-| 50+ units | Custom pricing | Sales contact required |
+| Quantity    | Discount         | Process                         |
+| ----------- | ---------------- | ------------------------------- |
+| 1-4 units   | Standard pricing | Self-service checkout           |
+| 5-9 units   | 5% discount      | Self-service with auto-discount |
+| 10-24 units | 10% discount     | Self-service or quote request   |
+| 25-49 units | 15% discount     | Quote required                  |
+| 50+ units   | Custom pricing   | Sales contact required          |
 
 **Bulk Order Features:**
+
 - Volume discount calculator on product pages
 - Quick quote request form
 - Dedicated account manager for 25+ units
@@ -356,14 +359,14 @@ Example: SkyWatch Marine (Series A Q2 2027)
 
 **Preorder Email Sequence:**
 
-| Trigger | Email | Content |
-|---------|-------|---------|
-| Preorder placed | Confirmation | Order details, timeline, $0 charged |
+| Trigger               | Email           | Content                             |
+| --------------------- | --------------- | ----------------------------------- |
+| Preorder placed       | Confirmation    | Order details, timeline, $0 charged |
 | Launch date announced | Payment Request | 50% invoice, due date, payment link |
-| 2 weeks before due | Reminder | Payment reminder, deadline |
-| Payment received | Receipt | Confirmation, updated timeline |
-| 1 week before ship | Final Payment | Remaining balance due |
-| Shipped | Tracking | Tracking info, delivery ETA |
+| 2 weeks before due    | Reminder        | Payment reminder, deadline          |
+| Payment received      | Receipt         | Confirmation, updated timeline      |
+| 1 week before ship    | Final Payment   | Remaining balance due               |
+| Shipped               | Tracking        | Tracking info, delivery ETA         |
 
 #### 4B.8 Preorder Data Model
 
@@ -378,15 +381,15 @@ interface Preorder {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  discount: number;         // Bulk discount applied
+  discount: number; // Bulk discount applied
 
   // Status
-  status: PreorderStatus;   // 'reserved' | 'payment_pending' | 'partial_paid' | 'paid' | 'shipped' | 'delivered' | 'cancelled'
+  status: PreorderStatus; // 'reserved' | 'payment_pending' | 'partial_paid' | 'paid' | 'shipped' | 'delivered' | 'cancelled'
 
   // Payment tracking
-  depositPaid: number;      // Always 0 initially
-  payment1Paid: number;     // 50% when launch confirmed
-  payment2Paid: number;     // Remaining 50%
+  depositPaid: number; // Always 0 initially
+  payment1Paid: number; // 50% when launch confirmed
+  payment2Paid: number; // Remaining 50%
   totalPaid: number;
 
   // Dates
@@ -403,13 +406,13 @@ interface Preorder {
 }
 
 type PreorderStatus =
-  | 'reserved'          // Preorder placed, no payment yet
-  | 'payment_pending'   // Launch confirmed, awaiting 50%
-  | 'partial_paid'      // 50% received, awaiting final
-  | 'paid'              // Fully paid, awaiting shipping
-  | 'shipped'           // In transit
-  | 'delivered'         // Complete
-  | 'cancelled';        // Cancelled by customer/admin
+  | "reserved" // Preorder placed, no payment yet
+  | "payment_pending" // Launch confirmed, awaiting 50%
+  | "partial_paid" // 50% received, awaiting final
+  | "paid" // Fully paid, awaiting shipping
+  | "shipped" // In transit
+  | "delivered" // Complete
+  | "cancelled"; // Cancelled by customer/admin
 ```
 
 #### 4B.9 Preorder Page Messaging
@@ -475,35 +478,37 @@ type PreorderStatus =
 ```tsx
 // Product Line Colors
 const productColors = {
-  skysnare: "#22c55e",   // Green - Consumer friendly
-  skywatch: "#3b82f6",   // Blue - Trust/reliability
-  netsentry: "#f59e0b",  // Amber - Action/alert
-  aeronet: "#8b5cf6",    // Purple - Premium/enterprise
-  rkv: "#ef4444",        // Red - Military/defense
+  skysnare: "#22c55e", // Green - Consumer friendly
+  skywatch: "#3b82f6", // Blue - Trust/reliability
+  netsentry: "#f59e0b", // Amber - Action/alert
+  aeronet: "#8b5cf6", // Purple - Premium/enterprise
+  rkv: "#ef4444", // Red - Military/defense
 };
 ```
 
 #### 6.2 Asset Requirements
 
-| Asset Type | SkySnare | SkyWatch | NetSentry | AeroNet | RKV |
-|------------|----------|----------|-----------|---------|-----|
-| Hero Image | ✅ Needed | ✅ Needed | ✅ Needed | ✅ Needed | ✅ Needed |
-| Product Photos | 5+ | 3+ per | 3+ per | 5+ | Renders |
-| Lifestyle | 3+ | 2+ | 2+ | 2+ | - |
-| Video | Demo | Overview | Demo | Full | - |
-| Icons | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Asset Type     | SkySnare  | SkyWatch  | NetSentry | AeroNet   | RKV       |
+| -------------- | --------- | --------- | --------- | --------- | --------- |
+| Hero Image     | ✅ Needed | ✅ Needed | ✅ Needed | ✅ Needed | ✅ Needed |
+| Product Photos | 5+        | 3+ per    | 3+ per    | 5+        | Renders   |
+| Lifestyle      | 3+        | 2+        | 2+        | 2+        | -         |
+| Video          | Demo      | Overview  | Demo      | Full      | -         |
+| Icons          | ✅        | ✅        | ✅        | ✅        | ✅        |
 
 ---
 
 ## Implementation Checklist
 
 ### Phase 1: Data ✅
+
 - [x] Create `products.ts`
 - [x] Add phases to catalog
 - [x] Create `tariffs.ts`
 - [x] Add SkySnare, AeroNet, RKV products
 
 ### Phase 2: Consumer Landing
+
 - [ ] Create `/shop` route
 - [ ] Create `/shop/skysnare` page
 - [ ] Update hero section
@@ -512,6 +517,7 @@ const productColors = {
 - [ ] Create `AvailabilityBadge` component
 
 ### Phase 3: Product Pages
+
 - [ ] Create `/products/[slug]` dynamic route
 - [ ] Build product page template
 - [ ] Add product gallery component
@@ -520,6 +526,7 @@ const productColors = {
 - [ ] Build comparison page `/compare`
 
 ### Phase 4: E-commerce
+
 - [ ] Set up Shopify store
 - [ ] Integrate Buy Button
 - [ ] Create cart component
@@ -527,6 +534,7 @@ const productColors = {
 - [ ] Add order confirmation
 
 ### Phase 4B: Preorder System
+
 - [ ] Create `/preorder` routes
 - [ ] Build `PreorderButton` component
 - [ ] Create `PreorderTimeline` component
@@ -540,6 +548,7 @@ const productColors = {
 - [ ] Create preorder management dashboard
 
 ### Phase 5: Enterprise
+
 - [ ] Create `/enterprise` section
 - [ ] Build AeroNet dedicated page
 - [ ] Enhance demo scheduling
@@ -547,6 +556,7 @@ const productColors = {
 - [ ] Implement lead scoring
 
 ### Phase 6: Polish
+
 - [ ] Update color system
 - [ ] Create/source product images
 - [ ] Add product videos
@@ -645,28 +655,28 @@ apps/marketing/src/
 
 ## Success Metrics
 
-| Metric | Current | Target | Timeline |
-|--------|---------|--------|----------|
-| Consumer conversion | N/A | 2% | 3 months |
-| Time on product pages | N/A | >3 min | 2 months |
-| Demo requests | ~5/week | 15/week | 3 months |
-| Cart abandonment | N/A | <70% | 3 months |
-| Mobile traffic | 30% | 50% | 2 months |
-| **Preorder conversion** | **N/A** | **5%** | **3 months** |
+| Metric                   | Current | Target       | Timeline     |
+| ------------------------ | ------- | ------------ | ------------ |
+| Consumer conversion      | N/A     | 2%           | 3 months     |
+| Time on product pages    | N/A     | >3 min       | 2 months     |
+| Demo requests            | ~5/week | 15/week      | 3 months     |
+| Cart abandonment         | N/A     | <70%         | 3 months     |
+| Mobile traffic           | 30%     | 50%          | 2 months     |
+| **Preorder conversion**  | **N/A** | **5%**       | **3 months** |
 | **Bulk order inquiries** | **N/A** | **10/month** | **3 months** |
-| **Preorder→Payment** | **N/A** | **>80%** | **6 months** |
+| **Preorder→Payment**     | **N/A** | **>80%**     | **6 months** |
 
 ---
 
 ## Risk Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Consumer/B2B confusion | HIGH | Clear visual separation, distinct CTAs |
-| Price sensitivity | MEDIUM | Value proposition messaging, testimonials |
-| Product availability | HIGH | Clear "Coming Soon" badges, waitlist |
-| Technical complexity | MEDIUM | Simplified consumer messaging |
-| Mobile experience | HIGH | Mobile-first design approach |
+| Risk                   | Impact | Mitigation                                |
+| ---------------------- | ------ | ----------------------------------------- |
+| Consumer/B2B confusion | HIGH   | Clear visual separation, distinct CTAs    |
+| Price sensitivity      | MEDIUM | Value proposition messaging, testimonials |
+| Product availability   | HIGH   | Clear "Coming Soon" badges, waitlist      |
+| Technical complexity   | MEDIUM | Simplified consumer messaging             |
+| Mobile experience      | HIGH   | Mobile-first design approach              |
 
 ---
 
@@ -685,15 +695,15 @@ Week 9-10:  Visual Polish & Launch
 
 ### Preorder System Timeline
 
-| Week | Preorder Deliverable |
-|------|---------------------|
-| 5 | Preorder routes, PreorderButton, DeliveryEstimate |
-| 5 | PaymentTermsCard, PreorderTimeline |
-| 6 | BulkOrderCalculator, VolumeDiscountTable |
-| 6 | Email automation setup |
-| 6 | Preorder status tracking |
-| 7 | Bulk order quote system |
-| 7 | Preorder management dashboard |
+| Week | Preorder Deliverable                              |
+| ---- | ------------------------------------------------- |
+| 5    | Preorder routes, PreorderButton, DeliveryEstimate |
+| 5    | PaymentTermsCard, PreorderTimeline                |
+| 6    | BulkOrderCalculator, VolumeDiscountTable          |
+| 6    | Email automation setup                            |
+| 6    | Preorder status tracking                          |
+| 7    | Bulk order quote system                           |
+| 7    | Preorder management dashboard                     |
 
 ---
 
@@ -720,5 +730,4 @@ Week 9-10:  Visual Polish & Launch
 
 ---
 
-*Document maintained by: Engineering Team*
-*Last updated: 2026-01-10*
+_Document maintained by: Engineering Team_ _Last updated: 2026-01-10_
