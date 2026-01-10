@@ -92,7 +92,7 @@ export const phases: Record<ProductPhase, ProductPhaseInfo> = {
     id: "seed",
     name: "Seed: SkySnare Launch",
     shortName: "Seed",
-    timeline: "Nov 2025 - Oct 2026",
+    timeline: "Q1 2026 - Q3 2026 • Delivery Aug 2026",
     funding: "$1.5M",
     color: "#22c55e", // green
     description: "Consumer product launch and core prototype validation",
@@ -101,7 +101,7 @@ export const phases: Record<ProductPhase, ProductPhaseInfo> = {
     id: "series-a",
     name: "Series A: AeroNet & DoD",
     shortName: "Series A",
-    timeline: "Nov 2026 - 2027",
+    timeline: "Q4 2026 - Q3 2027 • Delivery Apr-Aug 2027",
     funding: "$8-12M",
     color: "#3b82f6", // blue
     description: "Enterprise platform launch and DoD validation",
@@ -110,7 +110,7 @@ export const phases: Record<ProductPhase, ProductPhaseInfo> = {
     id: "series-b",
     name: "Series B: Ground Systems",
     shortName: "Series B",
-    timeline: "2028",
+    timeline: "Q1-Q2 2028 • Delivery Aug 2028",
     funding: "$15-20M",
     color: "#8b5cf6", // purple
     description: "Ground control systems and production scaling",
@@ -119,7 +119,7 @@ export const phases: Record<ProductPhase, ProductPhaseInfo> = {
     id: "series-c",
     name: "Series C: Aerial Platform",
     shortName: "Series C",
-    timeline: "2029",
+    timeline: "Q1-Q2 2029 • Delivery Aug 2029",
     funding: "$25M+",
     color: "#f59e0b", // amber
     description: "Full aerial platform and interceptor systems",
@@ -153,7 +153,7 @@ export const products: Product[] = [
       "Direct-to-consumer drone capture device. Simple point-and-shoot operation for personal property protection.",
     category: "consumer",
     phase: "seed",
-    phaseTimeline: "Q1 2026 Launch",
+    phaseTimeline: "Q3 2026 Launch • Delivery Aug 2026",
     available: false,
     comingSoon: true,
 
@@ -223,7 +223,7 @@ export const products: Product[] = [
     laborCost: 10,
 
     targetMarket: ["Hobbyists", "Makers", "Educational"],
-    marketSegment: "DIY/Maker community",
+    marketSegment: "DIY/Maker community (preorder for kits)",
 
     specs: {
       range: "30-50m",
@@ -357,7 +357,7 @@ export const products: Product[] = [
       "Portable detection unit for mobile operations. Battery-powered with touchscreen interface.",
     category: "prosumer",
     phase: "series-a",
-    phaseTimeline: "Q2 2026",
+    phaseTimeline: "Q4 2026 • Delivery Jan 2027",
     available: false,
     comingSoon: true,
 
@@ -406,7 +406,7 @@ export const products: Product[] = [
       "Thermal imaging drone detector for all-light conditions. Day/night detection with sensor fusion.",
     category: "commercial",
     phase: "series-a",
-    phaseTimeline: "Q3 2026",
+    phaseTimeline: "Q1 2027 • Delivery Apr 2027",
     available: false,
     comingSoon: true,
 
@@ -453,7 +453,7 @@ export const products: Product[] = [
       "Ruggedized detection system for maritime environments. Gyro stabilization and NMEA integration.",
     category: "commercial",
     phase: "series-a",
-    phaseTimeline: "Q4 2026",
+    phaseTimeline: "Q2 2027 • Delivery Jul 2027",
     available: false,
     comingSoon: true,
 
@@ -501,7 +501,7 @@ export const products: Product[] = [
       "Distributed detection network with multiple nodes and central aggregation for wide-area coverage.",
     category: "commercial",
     phase: "series-a",
-    phaseTimeline: "Q4 2026",
+    phaseTimeline: "Q2 2027 • Delivery Jul 2027",
     available: false,
     comingSoon: true,
 
@@ -549,7 +549,7 @@ export const products: Product[] = [
       "Full-scale enterprise deployment with multi-sensor integration, SOC connectivity, and compliance logging.",
     category: "enterprise",
     phase: "series-a",
-    phaseTimeline: "2027",
+    phaseTimeline: "Q3 2027 • Delivery Aug 2027",
     available: false,
     comingSoon: true,
 
@@ -602,7 +602,7 @@ export const products: Product[] = [
       "Entry-level countermeasure system with spring-loaded net launcher for testing and proof-of-concept.",
     category: "diy-maker",
     phase: "seed",
-    phaseTimeline: "Q2 2026",
+    phaseTimeline: "Q4 2026 • Delivery Jan 2027",
     available: false,
     comingSoon: true,
 
@@ -650,7 +650,7 @@ export const products: Product[] = [
       "CO2-powered net launcher with faster response and longer range. Includes Coral TPU for detection.",
     category: "prosumer",
     phase: "series-a",
-    phaseTimeline: "Q3 2026",
+    phaseTimeline: "Q1 2027 • Delivery Apr 2027",
     available: false,
     comingSoon: true,
 
@@ -698,7 +698,7 @@ export const products: Product[] = [
       "Professional pneumatic net launcher with pan-tilt tracking and global shutter camera.",
     category: "commercial",
     phase: "series-a",
-    phaseTimeline: "Q4 2026",
+    phaseTimeline: "Q2 2027 • Delivery Jul 2027",
     available: false,
     comingSoon: true,
 
@@ -751,7 +751,7 @@ export const products: Product[] = [
       "Full-scale enterprise drone detection and response platform with multi-sensor integration and 24/7 operations.",
     category: "enterprise",
     phase: "series-a",
-    phaseTimeline: "Q4 2026",
+    phaseTimeline: "Q2 2027 • Delivery Jul 2027",
     available: false,
     comingSoon: true,
 
@@ -810,7 +810,7 @@ export const products: Product[] = [
       "Aerial VTOL platform serving as picket, relay, and interceptor launch platform with ducted fan design.",
     category: "military",
     phase: "series-c",
-    phaseTimeline: "2029",
+    phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
     comingSoon: false,
 
@@ -860,7 +860,7 @@ export const products: Product[] = [
       "Expendable/recoverable mini interceptor drone launched from RKV-M or ground station.",
     category: "military",
     phase: "series-c",
-    phaseTimeline: "2029",
+    phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
     comingSoon: false,
 
@@ -908,7 +908,7 @@ export const products: Product[] = [
       "Mobile ground control station and rover platform for RKV-M and RKV-I command and control.",
     category: "military",
     phase: "series-b",
-    phaseTimeline: "2028",
+    phaseTimeline: "Q2 2028 • Delivery Aug 2028",
     available: false,
     comingSoon: false,
 

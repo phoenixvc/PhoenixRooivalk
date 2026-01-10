@@ -690,7 +690,7 @@ rf_detection:
 ## SkyWatch Mobile
 
 **SKU:** SW-MOB-001 **Target Market:** Security patrols, event staff **Price
-Range:** $200-500 **Phase:** Series A (Q2 2026)
+Range:** $200-500 **Phase:** Series A (Q4 2026 • Delivery Jan 2027)
 
 ### Overview
 
@@ -889,7 +889,7 @@ logging:
 ## SkyWatch Thermal
 
 **SKU:** SW-THM-001 **Target Market:** 24/7 operations, night security **Price
-Range:** $400-1,500 **Phase:** Series A (Q3 2026)
+Range:** $400-1,500 **Phase:** Series A (Q1 2027 • Delivery Apr 2027)
 
 ### Overview
 
@@ -1049,7 +1049,7 @@ logging:
 ## SkyWatch Marine
 
 **SKU:** SW-MAR-001 **Target Market:** Vessels, marinas, coastal facilities
-**Price Range:** $600-2,000 **Phase:** Series A (Q4 2026)
+**Price Range:** $600-2,000 **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -1229,7 +1229,7 @@ $PDRN,143052,3744.123,N,12223.456,W,245.5,087.3,85*7A
 ## SkyWatch Mesh
 
 **SKU:** SW-MESH-001 **Target Market:** Large perimeters, farms, industrial
-sites **Price Range:** $500-2,000/node + central **Phase:** Series A (Q4 2026)
+sites **Price Range:** $500-2,000/node + central **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -1440,7 +1440,7 @@ logging:
 ## SkyWatch Enterprise
 
 **SKU:** SW-ENT-001 **Target Market:** Corporate campuses, critical
-infrastructure **Price Range:** $5,000-20,000 **Phase:** Series A (2027)
+infrastructure **Price Range:** $5,000-20,000 **Phase:** Series A (Q4 2027 • Delivery Jan 2028)
 
 ### Overview
 
@@ -1646,7 +1646,7 @@ api:
 ## NetSentry Lite
 
 **SKU:** NS-LITE-001 **Target Market:** Makers, hobbyists, testing **Price
-Range:** $150-400 **Phase:** Seed (Q2 2026)
+Range:** $150-400 **Phase:** Seed (Q4 2026 • Delivery Jan 2027)
 
 ### Overview
 
@@ -1709,7 +1709,7 @@ targeting:
 ## NetSentry Standard
 
 **SKU:** NS-STD-001 **Target Market:** Property protection **Price Range:**
-$400-800 **Phase:** Series A (Q3 2026)
+$400-800 **Phase:** Series A (Q1 2027 • Delivery Apr 2027)
 
 ### Overview
 
@@ -1781,7 +1781,7 @@ targeting:
 ## NetSentry Pro
 
 **SKU:** NS-PRO-001 **Target Market:** Security professionals **Price Range:**
-$800-2,000 **Phase:** Series A (Q4 2026)
+$800-2,000 **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -1889,7 +1889,7 @@ alert:
 
 ## SkySnare
 
-**SKU:** SS-001 **Target Market:** Consumer/D2C, outdoor enthusiasts, property owners **Price:** $349 MSRP **Phase:** Seed (Q1 2026 Launch)
+**SKU:** SS-001 **Target Market:** Consumer/D2C, outdoor enthusiasts, property owners **Price:** $349 MSRP **Phase:** Seed (Q3 2026 • Delivery Aug 2026)
 
 ### Overview
 
@@ -1976,7 +1976,7 @@ Direct-to-consumer drone capture device. Handheld net launcher designed for pers
 
 ## AeroNet Enterprise
 
-**SKU:** AN-ENT-001 **Target Market:** Critical infrastructure, airports, prisons, military bases **Price:** $150K setup + $25K/month **Phase:** Series A (Q4 2026)
+**SKU:** AN-ENT-001 **Target Market:** Critical infrastructure, airports, prisons, military bases **Price:** $150K setup + $25K/month **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -2052,7 +2052,7 @@ Full-scale enterprise drone detection and response platform. Multi-sensor integr
 
 ## RKV-M Mothership
 
-**SKU:** RKV-M-001 **Target Market:** Military, critical infrastructure **Price Range:** $65,000-85,000 **Phase:** Series C (2029)
+**SKU:** RKV-M-001 **Target Market:** Military, critical infrastructure **Price Range:** $65,000-85,000 **Phase:** Series C (Q2 2029 • Delivery Aug 2029)
 
 ### Overview
 
@@ -2108,7 +2108,7 @@ Aerial VTOL platform serving as picket, relay, and interceptor launch platform. 
 
 ## RKV-I Interceptor
 
-**SKU:** RKV-I-001 **Target Market:** Military, paired with RKV-M **Price Range:** $8,000-12,000 **Phase:** Series C (2029)
+**SKU:** RKV-I-001 **Target Market:** Military, paired with RKV-M **Price Range:** $8,000-12,000 **Phase:** Series C (Q2 2029 • Delivery Aug 2029)
 
 ### Overview
 
@@ -2160,7 +2160,7 @@ Expendable/recoverable mini interceptor drone. Launched from RKV-M mothership or
 
 ## RKV-G Ground Station
 
-**SKU:** RKV-G-001 **Target Market:** Military, mobile operations **Price Range:** $100,000-150,000 **Phase:** Series B (2028)
+**SKU:** RKV-G-001 **Target Market:** Military, mobile operations **Price Range:** $100,000-150,000 **Phase:** Series B (Q2 2028 • Delivery Aug 2028)
 
 ### Overview
 

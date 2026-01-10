@@ -255,29 +255,29 @@ All products (not just available ones) will be preorderable. This allows custome
 ```
 Phase Completion + 1 Month = Estimated Delivery
 
-Example: SkyWatch Marine (Series A Q4 2026)
-├── Phase completion: December 2026
-├── Estimated delivery: January 2027
-└── Launch confirmation: ~3 months before (September 2026)
-    └── 50% payment due: December 2026 (1 month before shipping)
+Example: SkyWatch Marine (Series A Q2 2027)
+├── Phase completion: June 2027
+├── Estimated delivery: July 2027
+└── Launch confirmation: ~3 months before (March 2027)
+    └── 50% payment due: June 2027 (1 month before shipping)
 ```
 
 **Product Delivery Estimates:**
 
 | Product | Phase | Phase Completion | Est. Delivery |
 |---------|-------|------------------|---------------|
-| SkySnare | Seed | Q1 2026 | Feb 2026 |
-| SkyWatch Mobile | Series A | Q2 2026 | Jul 2026 |
-| SkyWatch Thermal | Series A | Q3 2026 | Oct 2026 |
-| NetSentry Standard | Series A | Q3 2026 | Oct 2026 |
-| SkyWatch Marine | Series A | Q4 2026 | Jan 2027 |
-| SkyWatch Mesh | Series A | Q4 2026 | Jan 2027 |
-| NetSentry Pro | Series A | Q4 2026 | Jan 2027 |
-| AeroNet Enterprise | Series A | Q4 2026 | Jan 2027 |
-| SkyWatch Enterprise | Series A | 2027 | Feb 2027 |
-| RKV-G Ground Station | Series B | 2028 | Feb 2028 |
-| RKV-M Mothership | Series C | 2029 | Feb 2029 |
-| RKV-I Interceptor | Series C | 2029 | Feb 2029 |
+| SkySnare | Seed | Q3 2026 | Aug 2026 |
+| SkyWatch Mobile | Series A | Q4 2026 | Jan 2027 |
+| SkyWatch Thermal | Series A | Q1 2027 | Apr 2027 |
+| NetSentry Standard | Series A | Q1 2027 | Apr 2027 |
+| SkyWatch Marine | Series A | Q2 2027 | Jul 2027 |
+| SkyWatch Mesh | Series A | Q2 2027 | Jul 2027 |
+| NetSentry Pro | Series A | Q2 2027 | Jul 2027 |
+| AeroNet Enterprise | Series A | Q2 2027 | Jul 2027 |
+| SkyWatch Enterprise | Series A | Q3 2027 | Aug 2027 |
+| RKV-G Ground Station | Series B | Q2 2028 | Aug 2028 |
+| RKV-M Mothership | Series C | Q2 2029 | Aug 2029 |
+| RKV-I Interceptor | Series C | Q2 2029 | Aug 2029 |
 
 #### 4B.4 Preorder Routes
 
@@ -337,13 +337,13 @@ Example: SkyWatch Marine (Series A Q4 2026)
 // Coming soon product
 <PreorderButton variant="preorder">
   Preorder Now - $349
-  <small>No deposit • Est. delivery: Jul 2026</small>
+  <small>No deposit • Est. delivery: Aug 2026</small>
 </PreorderButton>
 
 // Future phase product
 <PreorderButton variant="reserve">
   Reserve Now - $65,000
-  <small>No deposit • Est. delivery: Feb 2029</small>
+  <small>No deposit • Est. delivery: Aug 2029</small>
 </PreorderButton>
 ```
 
@@ -416,8 +416,8 @@ type PreorderStatus =
 │  🎯 PREORDER: SkyWatch Thermal                                  │
 │                                                                  │
 │  Price: $400 - $1,500                                           │
-│  Phase: Series A (Q3 2026)                                      │
-│  Estimated Delivery: October 2026                               │
+│  Phase: Series A (Q1 2027)                                      │
+│  Estimated Delivery: April 2027                                 │
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │  💳 PAYMENT TERMS                                        │   │
