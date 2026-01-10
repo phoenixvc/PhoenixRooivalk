@@ -77,24 +77,24 @@ export const HeroSection: React.FC = () => {
         <div className={styles.ctaSection}>
           <div className={styles.ctaButtons}>
             <Button
-              href="/interactive-demo"
+              href="/products"
               size="lg"
               variant="primary"
-              trackingEvent="Demo Clicked"
+              trackingEvent="Products Clicked"
               trackingProps={{ location: "hero", type: "primary" }}
-              aria-label="Try the interactive threat simulator demo"
+              aria-label="Browse our product catalog"
             >
-              Try the Simulation (Concept UI)
+              Browse Products
             </Button>
             <Button
-              href="/contact"
+              href="/preorder"
               variant="secondary"
               size="lg"
-              trackingEvent="Contact Clicked"
-              trackingProps={{ location: "hero", type: "early-access" }}
-              aria-label="Join early access program"
+              trackingEvent="Preorder Clicked"
+              trackingProps={{ location: "hero", type: "preorder" }}
+              aria-label="Preorder products with no deposit"
             >
-              Join Early Access
+              Preorder Now - No Deposit
             </Button>
           </div>
           <div className={styles.secondaryLinks}>
@@ -109,24 +109,24 @@ export const HeroSection: React.FC = () => {
               Technical Specifications →
             </Button>
             <Button
-              href="/financial"
+              href="/timeline"
               variant="ghost"
               size="sm"
-              trackingEvent="ROI Calculator Viewed"
+              trackingEvent="Timeline Viewed"
               trackingProps={{ location: "hero" }}
-              aria-label="Calculate return on investment"
+              aria-label="View development timeline"
             >
-              ROI Calculator →
+              Development Timeline →
             </Button>
             <Button
-              href="/compliance"
+              href="/contact"
               variant="ghost"
               size="sm"
-              trackingEvent="Compliance Viewed"
+              trackingEvent="Contact Viewed"
               trackingProps={{ location: "hero" }}
-              aria-label="View compliance and certifications"
+              aria-label="Contact us for partnerships"
             >
-              Compliance & Certifications →
+              Contact & Partnerships →
             </Button>
           </div>
         </div>

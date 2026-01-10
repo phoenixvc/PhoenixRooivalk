@@ -48,6 +48,7 @@ detection and countermeasure products.
    - [NetSnare Pro](#netsnare-pro)
 5. [Enterprise Platforms (AeroNet)](#enterprise-platforms-aeronet)
    - [AeroNet Enterprise](#aeronet-enterprise)
+   - [AeroNet Command](#aeronet-command)
 6. [Aerial Intercept Systems (RKV Line)](#aerial-intercept-systems-rkv-line)
    - [RKV-M Mothership](#rkv-m-mothership)
    - [RKV-I Interceptor](#rkv-i-interceptor)
@@ -2196,6 +2197,53 @@ Full-scale enterprise drone detection and response platform. Multi-sensor integr
 | Dedrone City       | $100K+/year  | Similar scope, cloud-based    |
 | DroneShield        | $200K+       | RF-focused, less integration  |
 | Fortem SkyDome     | $500K+       | Includes defeat capability    |
+
+---
+
+## AeroNet Command
+
+**SKU:** AN-CMD-001 **Target Market:** Enterprise security teams, SOC operators **Price:** $25K-50K license + $2.5K/month **Phase:** Series A (Q1 2027 • Delivery Apr 2027)
+
+### Overview
+
+Centralized command and control software for multi-site drone defense coordination. Includes real-time threat visualization, incident response playbooks, and operator training simulator.
+
+### Specifications
+
+| Specification       | Value                      |
+| ------------------- | -------------------------- |
+| Deployment          | Cloud or on-premise        |
+| Sites per License   | Unlimited                  |
+| Operators           | Unlimited                  |
+| API                 | REST, WebSocket, MQTT      |
+| Uptime SLA          | 99.9%                      |
+| Data Retention      | 90 days (configurable)     |
+| Mobile App          | iOS, Android               |
+
+### Features
+
+- **Multi-Site Dashboard**: Real-time monitoring of all AeroNet deployments
+- **Threat Visualization**: 3D map with live drone tracks and threat corridors
+- **Operator Training Simulator**: Built-in threat simulation for training
+- **Incident Response Playbooks**: Automated response workflows
+- **Compliance Reporting**: SIEM-compatible audit logs
+- **Mobile Command**: iOS/Android app for on-the-go monitoring
+
+### Pricing Tiers
+
+| Tier       | Sites | License    | Monthly | Features              |
+| ---------- | ----- | ---------- | ------- | --------------------- |
+| Standard   | 1-5   | $25,000    | $2,500  | Core C2 features      |
+| Pro        | 6-20  | $40,000    | $4,000  | + Training simulator  |
+| Enterprise | 20+   | $50,000    | Custom  | + Custom integrations |
+
+### Commercial Alternatives
+
+| Product            | Price        | Comparison                    |
+| ------------------ | ------------ | ----------------------------- |
+| Dedrone C2         | $50K+/year   | Similar features, cloud-only  |
+| DroneTracker       | $30K+/year   | Detection-focused             |
+| Custom SIEM        | Varies       | Requires integration work     |
 
 ---
 

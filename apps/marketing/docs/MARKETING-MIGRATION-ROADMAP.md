@@ -273,6 +273,7 @@ Example: SkyWatch Marine (Series A Q2 2027)
 | NetSnare Standard | Series A | Q4 2026 | Jan 2027 |
 | SkyWatch Thermal | Series A | Q1 2027 | Apr 2027 |
 | NetSentry Standard | Series A | Q1 2027 | Apr 2027 |
+| AeroNet Command | Series A | Q1 2027 | Apr 2027 |
 | SkyWatch Marine | Series A | Q2 2027 | Jul 2027 |
 | SkyWatch Mesh | Series A | Q2 2027 | Jul 2027 |
 | NetSentry Pro | Series A | Q2 2027 | Jul 2027 |

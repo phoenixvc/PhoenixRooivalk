@@ -952,6 +952,62 @@ export const products: Product[] = [
     catalogUrl: "/docs/technical/detector/product-catalog#aeronet-enterprise",
     demoUrl: "/schedule",
   },
+  {
+    id: "aeronet-command",
+    sku: "AN-CMD-001",
+    name: "AeroNet Command",
+    line: "aeronet",
+    tagline: "Command & Control Software",
+    description:
+      "Centralized command and control software for multi-site drone defense coordination. Includes threat simulator for operator training.",
+    category: "enterprise",
+    phase: "series-a",
+    phaseTimeline: "Q1 2027 • Delivery Apr 2027",
+    available: false,
+    comingSoon: true,
+
+    priceRange: { min: 25000, max: 50000 },
+    priceFormatted: "$25K-50K license",
+    msrp: 35000,
+    monthlyFee: 2500,
+
+    cogs: 8500,
+    margin: 0.65,
+    assemblyHours: 40, // Software deployment/config
+    laborCost: 2400,
+
+    targetMarket: ["Enterprise security teams", "Multi-site operators", "SOC teams"],
+    marketSegment: "C2/Software for AeroNet deployments",
+
+    specs: {
+      deployment: "Cloud or on-premise",
+      sites: "Unlimited sites per license",
+      users: "Unlimited operators",
+      api: "REST, WebSocket, MQTT",
+      uptime: "99.9% SLA",
+    },
+
+    features: [
+      "Multi-site dashboard",
+      "Real-time threat visualization",
+      "Operator training simulator",
+      "Incident response playbooks",
+      "Compliance reporting",
+      "SIEM/VMS integration",
+      "Mobile command app",
+    ],
+
+    useCases: [
+      "Multi-site coordination",
+      "SOC integration",
+      "Operator training",
+      "Incident response",
+      "Compliance auditing",
+    ],
+
+    catalogUrl: "/docs/technical/detector/product-catalog#aeronet-command",
+    demoUrl: "/interactive-demo",
+  },
 
   // -------------------------------------------------------------------------
   // RKV - Military Systems

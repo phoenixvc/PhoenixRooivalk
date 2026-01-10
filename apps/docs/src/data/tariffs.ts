@@ -515,6 +515,22 @@ export const manufacturingTimes: ManufacturingTime[] = [
     estimatedLaborCostUsd: 7200.0,
     notes: "Full enterprise deployment, multi-sensor integration",
   },
+  {
+    product: "AeroNet Command (software)",
+    sku: "AN-CMD-001",
+    category: "enterprise",
+    assemblyHours: 20.0, // Deployment and configuration
+    testingHours: 10.0,
+    integrationHours: 10.0,
+    totalHours: 40.0,
+    batchSize: 10, // Software licenses
+    setupTimeHours: 4.0,
+    amortizedSetupHours: 0.4,
+    totalAmortizedHours: 40.4,
+    estimatedLaborCostZar: 43200,
+    estimatedLaborCostUsd: 2400.0,
+    notes: "C2 software deployment, SIEM integration, training simulator setup",
+  },
 
   // RKV System Components
   {

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import styles from "./InteractiveElementsSection.module.css";
 import { AdaptationCard } from "./components/AdaptationCard";
-import { ThreatSimulatorSection } from "./components/ThreatSimulatorSection";
 import { formatCurrency } from "@/utils/formatter";
 import { adaptationCardsData } from "./data/adaptationData";
 import {
@@ -301,9 +300,6 @@ export const InteractiveElementsSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Demo CTA */}
-          <ThreatSimulatorSection />
-
           {/* Key Performance Metrics */}
           <div className={styles.performanceSection}>
             <div className={styles.performanceCard}>
@@ -406,18 +402,17 @@ export const InteractiveElementsSection: React.FC = () => {
 
           {/* CTA */}
           <div className={styles.ctaSection}>
-            <h3 className={styles.ctaTitle}>Interested in the Technology?</h3>
+            <h3 className={styles.ctaTitle}>Ready to Secure Your Airspace?</h3>
             <p className={styles.ctaSubtitle}>
-              Learn more about Phoenix Rooivalk&apos;s innovative approach to
-              autonomous counter-drone defense and explore partnership
-              opportunities.
+              Browse our product lineup from consumer drone capture to enterprise
+              defense platforms. Preorder now with no deposit required.
             </p>
             <div className={styles.ctaButtons}>
-              <Button href="/contact" size="lg" variant="primary">
-                Join Development Program
+              <Button href="/products" size="lg" variant="primary">
+                View Products
               </Button>
-              <Button href="/technical" variant="secondary" size="lg">
-                View Technical Concept
+              <Button href="/contact" variant="secondary" size="lg">
+                Contact Sales
               </Button>
             </div>
           </div>
