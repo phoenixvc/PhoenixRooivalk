@@ -101,6 +101,63 @@ export default function PreorderPage(): React.ReactElement {
             required. Be among the first to receive our revolutionary
             technology.
           </p>
+
+          {/* Payment Terms Banner */}
+          <div className={styles.paymentTermsBanner}>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              <div>
+                <strong>No Deposit Required</strong>
+                <p>Reserve now, pay closer to delivery</p>
+              </div>
+            </div>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              <div>
+                <strong>Guaranteed Delivery Dates</strong>
+                <p>See timeline for each product</p>
+              </div>
+            </div>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <div>
+                <strong>Bulk Orders Available</strong>
+                <p>Contact us for volume pricing (5+ units)</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Main Content */}
@@ -133,6 +190,11 @@ export default function PreorderPage(): React.ReactElement {
                       <p className={styles.productPhase}>
                         {product.phaseTimeline}
                       </p>
+                      {product.comingSoon && !product.available && (
+                        <div className={styles.deliveryBadge}>
+                          📦 Preorder • No Deposit Required
+                        </div>
+                      )}
                       <div>
                         <div className={styles.productPrice}>
                           {product.priceFormatted}
@@ -443,7 +505,7 @@ export default function PreorderPage(): React.ReactElement {
 
               <div className={styles.formGroup}>
                 <label htmlFor="notes" className={styles.label}>
-                  Additional Notes
+                  Special Requirements / Customizations
                 </label>
                 <textarea
                   id="notes"
@@ -451,7 +513,7 @@ export default function PreorderPage(): React.ReactElement {
                   className={`${styles.input} ${styles.textarea}`}
                   value={formData.notes}
                   onChange={handleFormChange}
-                  placeholder="Any special requirements or questions?"
+                  placeholder="Any special requirements, customizations, delivery preferences, or questions? For bulk orders (5+ units), please provide details here and we'll contact you with volume pricing."
                 />
               </div>
 
