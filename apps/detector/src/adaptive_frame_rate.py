@@ -17,7 +17,7 @@ import time
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum
-from typing import Deque, Optional, Callable
+from typing import Callable, Optional
 
 logger = logging.getLogger("drone_detector.adaptive_fps")
 
@@ -118,9 +118,9 @@ class AdaptiveFrameRateController:
         self._adjustment_thread: Optional[threading.Thread] = None
 
         # Metrics history (for smoothing)
-        self._latency_history: Deque[float] = deque(maxlen=30)
-        self._queue_depth_history: Deque[int] = deque(maxlen=10)
-        self._fps_history: Deque[float] = deque(maxlen=30)
+        self._latency_history: deque[float] = deque(maxlen=30)
+        self._queue_depth_history: deque[int] = deque(maxlen=10)
+        self._fps_history: deque[float] = deque(maxlen=30)
 
         # External metrics (set by caller)
         self._current_queue_depth = 0

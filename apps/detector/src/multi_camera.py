@@ -21,11 +21,11 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 
-from interfaces import BoundingBox, Detection, FrameData, TrackedObject
+from interfaces import Detection, FrameData, TrackedObject
 
 logger = logging.getLogger("drone_detector.multi_camera")
 
@@ -45,11 +45,11 @@ class CameraConfig:
 
     camera_id: str
     source_type: str  # "picamera", "usb", etc.
-    source_config: Dict[str, Any] = field(default_factory=dict)
+    source_config: dict[str, Any] = field(default_factory=dict)
 
     # Geometric calibration
-    position_meters: Tuple[float, float, float] = (0.0, 0.0, 0.0)  # x, y, z
-    rotation_degrees: Tuple[float, float, float] = (0.0, 0.0, 0.0)  # yaw, pitch, roll
+    position_meters: tuple[float, float, float] = (0.0, 0.0, 0.0)  # x, y, z
+    rotation_degrees: tuple[float, float, float] = (0.0, 0.0, 0.0)  # yaw, pitch, roll
     fov_horizontal_degrees: float = 70.0
     fov_vertical_degrees: float = 50.0
 
@@ -59,8 +59,8 @@ class CameraConfig:
     distortion_coeffs: Optional[np.ndarray] = None  # k1, k2, p1, p2, k3
 
     # Coverage zone (world coordinates)
-    coverage_min_xy: Tuple[float, float] = (-100.0, -100.0)
-    coverage_max_xy: Tuple[float, float] = (100.0, 100.0)
+    coverage_min_xy: tuple[float, float] = (-100.0, -100.0)
+    coverage_max_xy: tuple[float, float] = (100.0, 100.0)
 
 
 @dataclass
@@ -81,8 +81,8 @@ class CameraCalibration:
     baseline_meters: float = 0.0
 
     # Overlap region in each camera's image space
-    overlap_a: Optional[Tuple[int, int, int, int]] = None  # x1, y1, x2, y2
-    overlap_b: Optional[Tuple[int, int, int, int]] = None
+    overlap_a: Optional[tuple[int, int, int, int]] = None  # x1, y1, x2, y2
+    overlap_b: Optional[tuple[int, int, int, int]] = None
 
 
 @dataclass
@@ -91,10 +91,10 @@ class FusedDetection:
 
     fused_id: int
     confidence: float  # Combined confidence
-    position_3d: Optional[Tuple[float, float, float]] = None  # x, y, z in meters
-    velocity_3d: Optional[Tuple[float, float, float]] = None  # m/s
-    contributing_cameras: List[str] = field(default_factory=list)
-    detections: Dict[str, Detection] = field(default_factory=dict)  # camera_id → Detection
+    position_3d: Optional[tuple[float, float, float]] = None  # x, y, z in meters
+    velocity_3d: Optional[tuple[float, float, float]] = None  # m/s
+    contributing_cameras: list[str] = field(default_factory=list)
+    detections: dict[str, Detection] = field(default_factory=dict)  # camera_id → Detection
     drone_score: float = 0.0
     first_seen_camera: str = ""
     last_seen_time: float = 0.0
@@ -108,8 +108,8 @@ class CameraState:
     is_active: bool = False
     last_frame_time: float = 0.0
     frame_count: int = 0
-    current_detections: List[Detection] = field(default_factory=list)
-    current_tracks: List[TrackedObject] = field(default_factory=list)
+    current_detections: list[Detection] = field(default_factory=list)
+    current_tracks: list[TrackedObject] = field(default_factory=list)
     fps_actual: float = 0.0
 
 
@@ -127,8 +127,8 @@ class CameraFusionManager:
 
     def __init__(
         self,
-        cameras: List[CameraConfig],
-        calibrations: Optional[List[CameraCalibration]] = None,
+        cameras: list[CameraConfig],
+        calibrations: Optional[list[CameraCalibration]] = None,
         fusion_distance_threshold: float = 50.0,  # pixels
         handoff_timeout_seconds: float = 2.0,
         min_overlap_iou: float = 0.3,
@@ -150,21 +150,21 @@ class CameraFusionManager:
         self._min_overlap_iou = min_overlap_iou
 
         # Build calibration lookup
-        self._calibration_map: Dict[Tuple[str, str], CameraCalibration] = {}
+        self._calibration_map: dict[tuple[str, str], CameraCalibration] = {}
         for cal in self._calibrations:
             self._calibration_map[(cal.camera_a, cal.camera_b)] = cal
             self._calibration_map[(cal.camera_b, cal.camera_a)] = cal
 
         # Runtime state
-        self._camera_states: Dict[str, CameraState] = {
+        self._camera_states: dict[str, CameraState] = {
             cid: CameraState(camera_id=cid) for cid in self._cameras
         }
-        self._fused_tracks: Dict[int, FusedDetection] = {}
+        self._fused_tracks: dict[int, FusedDetection] = {}
         self._next_fused_id = 1
         self._lock = threading.Lock()
 
         # Track handoff buffer (camera_id → list of recently lost tracks)
-        self._handoff_buffer: Dict[str, List[Tuple[float, TrackedObject]]] = {
+        self._handoff_buffer: dict[str, list[tuple[float, TrackedObject]]] = {
             cid: [] for cid in self._cameras
         }
 
@@ -174,7 +174,7 @@ class CameraFusionManager:
         return len(self._cameras)
 
     @property
-    def active_cameras(self) -> List[str]:
+    def active_cameras(self) -> list[str]:
         """List of currently active camera IDs."""
         return [
             cid for cid, state in self._camera_states.items() if state.is_active
@@ -183,10 +183,10 @@ class CameraFusionManager:
     def update_camera(
         self,
         camera_id: str,
-        detections: List[Detection],
-        tracks: List[TrackedObject],
+        detections: list[Detection],
+        tracks: list[TrackedObject],
         frame_data: FrameData,
-    ) -> List[FusedDetection]:
+    ) -> list[FusedDetection]:
         """
         Update fusion state with data from a single camera.
 
@@ -223,7 +223,7 @@ class CameraFusionManager:
 
             return list(self._fused_tracks.values())
 
-    def _fuse_detections(self, camera_id: str, detections: List[Detection]) -> None:
+    def _fuse_detections(self, camera_id: str, detections: list[Detection]) -> None:
         """Fuse detections from this camera with existing fused tracks."""
         camera_config = self._cameras.get(camera_id)
         if camera_config is None:
@@ -232,7 +232,7 @@ class CameraFusionManager:
         for det in detections:
             # Check if detection matches any existing fused track
             matched = False
-            for fused_id, fused in self._fused_tracks.items():
+            for _fused_id, fused in self._fused_tracks.items():
                 if self._should_fuse(camera_id, det, fused):
                     self._merge_detection(camera_id, det, fused)
                     matched = True
@@ -309,7 +309,7 @@ class CameraFusionManager:
 
         # Check if detection is near expected position based on velocity
         if fused.velocity_3d and fused.position_3d:
-            predicted_pos = (
+            (
                 fused.position_3d[0] + fused.velocity_3d[0] * age,
                 fused.position_3d[1] + fused.velocity_3d[1] * age,
                 fused.position_3d[2] + fused.velocity_3d[2] * age,
@@ -356,10 +356,9 @@ class CameraFusionManager:
             last_seen_time=time.time(),
         )
 
-    def _update_tracks(self, camera_id: str, tracks: List[TrackedObject]) -> None:
+    def _update_tracks(self, camera_id: str, tracks: list[TrackedObject]) -> None:
         """Update fused tracks with tracker information."""
         for track in tracks:
-            det = track.detection
             for fused in self._fused_tracks.values():
                 if camera_id in fused.detections:
                     cam_det = fused.detections[camera_id]
@@ -368,7 +367,7 @@ class CameraFusionManager:
                         if fused.velocity_3d is None:
                             fused.velocity_3d = (track.velocity[0], track.velocity[1], 0.0)
 
-    def _handle_handoffs(self, camera_id: str, tracks: List[TrackedObject]) -> None:
+    def _handle_handoffs(self, camera_id: str, tracks: list[TrackedObject]) -> None:
         """Handle track handoffs between cameras."""
         now = time.time()
 
@@ -420,7 +419,7 @@ class CameraFusionManager:
         det_a: Detection,
         det_b: Detection,
         cal: CameraCalibration,
-    ) -> Optional[Tuple[float, float, float]]:
+    ) -> Optional[tuple[float, float, float]]:
         """
         Triangulate 3D position from stereo detections.
 
@@ -477,7 +476,7 @@ class CameraFusionManager:
         for fid in stale_ids:
             del self._fused_tracks[fid]
 
-    def get_unified_tracks(self) -> List[FusedDetection]:
+    def get_unified_tracks(self) -> list[FusedDetection]:
         """Get all current fused tracks."""
         with self._lock:
             return list(self._fused_tracks.values())
@@ -486,7 +485,7 @@ class CameraFusionManager:
         """Get state for a specific camera."""
         return self._camera_states.get(camera_id)
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get fusion statistics."""
         with self._lock:
             return {
@@ -511,7 +510,7 @@ def create_stereo_calibration(
     camera_a: str,
     camera_b: str,
     baseline_meters: float,
-    image_size: Tuple[int, int] = (640, 480),
+    image_size: tuple[int, int] = (640, 480),
 ) -> CameraCalibration:
     """
     Create a simple stereo calibration for two horizontally aligned cameras.
@@ -537,8 +536,8 @@ def create_overlap_calibration(
     camera_a: str,
     camera_b: str,
     homography: np.ndarray,
-    overlap_a: Tuple[int, int, int, int],
-    overlap_b: Tuple[int, int, int, int],
+    overlap_a: tuple[int, int, int, int],
+    overlap_b: tuple[int, int, int, int],
 ) -> CameraCalibration:
     """
     Create calibration for two overlapping cameras.

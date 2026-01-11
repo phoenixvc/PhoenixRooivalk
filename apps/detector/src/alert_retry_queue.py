@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from queue import Empty, Queue
+from queue import Queue
 from typing import Any, Callable, Optional
 
 logger = logging.getLogger("drone_detector.alert_retry")

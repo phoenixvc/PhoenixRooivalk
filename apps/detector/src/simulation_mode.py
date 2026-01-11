@@ -24,11 +24,11 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 import numpy as np
 
-from interfaces import BoundingBox, Detection, FrameData
+from interfaces import BoundingBox, Detection
 
 logger = logging.getLogger("drone_detector.simulation")
 
@@ -68,8 +68,8 @@ class SimulatedDrone:
     flight_pattern: FlightPattern
 
     # Position in world coordinates (meters)
-    position: Tuple[float, float, float] = (0.0, 0.0, 50.0)  # x, y, z
-    velocity: Tuple[float, float, float] = (0.0, 0.0, 0.0)  # m/s
+    position: tuple[float, float, float] = (0.0, 0.0, 50.0)  # x, y, z
+    velocity: tuple[float, float, float] = (0.0, 0.0, 0.0)  # m/s
     rotation: float = 0.0  # degrees
 
     # Size parameters
@@ -82,7 +82,7 @@ class SimulatedDrone:
     occlusion: float = 0.0  # Partial occlusion (0-1)
 
     # Flight pattern parameters
-    pattern_params: Dict[str, Any] = field(default_factory=dict)
+    pattern_params: dict[str, Any] = field(default_factory=dict)
 
     # State
     is_active: bool = True
@@ -97,7 +97,7 @@ class SimulationScenario:
     name: str
     description: str
     duration_seconds: float
-    drones: List[SimulatedDrone] = field(default_factory=list)
+    drones: list[SimulatedDrone] = field(default_factory=list)
 
     # Environment
     time_of_day: str = "day"  # "day", "dusk", "night"
@@ -105,8 +105,8 @@ class SimulationScenario:
     wind_speed_ms: float = 0.0
 
     # Camera
-    camera_position: Tuple[float, float, float] = (0.0, 0.0, 0.0)
-    camera_rotation: Tuple[float, float, float] = (0.0, 0.0, 0.0)  # yaw, pitch, roll
+    camera_position: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    camera_rotation: tuple[float, float, float] = (0.0, 0.0, 0.0)  # yaw, pitch, roll
 
     # Ground truth
     expected_detections: int = 0
@@ -119,9 +119,9 @@ class GroundTruth:
 
     frame_number: int
     timestamp: float
-    drones: List[Dict[str, Any]] = field(default_factory=list)
+    drones: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "frame_number": self.frame_number,
@@ -163,7 +163,7 @@ class DroneRenderer:
         """
         self._sprite_path = Path(sprite_path) if sprite_path else None
         self._use_3d = use_3d_rendering
-        self._sprites: Dict[DroneAppearance, np.ndarray] = {}
+        self._sprites: dict[DroneAppearance, np.ndarray] = {}
 
         self._load_sprites()
 
@@ -183,7 +183,7 @@ class DroneRenderer:
 
     def _create_placeholder_sprite(
         self,
-        size: Tuple[int, int],
+        size: tuple[int, int],
         appearance: DroneAppearance,
     ) -> np.ndarray:
         """Create a placeholder drone sprite."""
@@ -202,7 +202,7 @@ class DroneRenderer:
                 rad = math.radians(angle)
                 arm_len = min(w, h) // 2 - 5
                 end_x = int(center[0] + arm_len * math.cos(rad))
-                end_y = int(center[1] + arm_len * math.sin(rad))
+                int(center[1] + arm_len * math.sin(rad))
                 # Draw arm (simplified)
                 sprite[center[1]-1:center[1]+2, min(center[0], end_x):max(center[0], end_x)+1] = [50, 50, 50, 255]
 
@@ -229,8 +229,8 @@ class DroneRenderer:
         self,
         frame: np.ndarray,
         drone: SimulatedDrone,
-        camera_params: Dict[str, Any],
-    ) -> Tuple[np.ndarray, Optional[BoundingBox]]:
+        camera_params: dict[str, Any],
+    ) -> tuple[np.ndarray, Optional[BoundingBox]]:
         """
         Render a drone onto a frame.
 
@@ -272,7 +272,7 @@ class DroneRenderer:
     def _project_to_image(
         self,
         drone: SimulatedDrone,
-        camera_params: Dict[str, Any],
+        camera_params: dict[str, Any],
     ) -> Optional[BoundingBox]:
         """Project drone position to image coordinates."""
         # Simple pinhole camera projection
@@ -320,14 +320,13 @@ class DroneRenderer:
     def _calculate_scale(
         self,
         drone: SimulatedDrone,
-        camera_params: Dict[str, Any],
+        camera_params: dict[str, Any],
     ) -> float:
         """Calculate sprite scale based on distance."""
         z = drone.position[2]
         focal_length = camera_params.get("focal_length_px", 500)
 
         # Scale based on distance
-        reference_distance = 30.0  # meters
         scale = (focal_length * drone.size_m / z) / 50  # 50px reference
 
         return max(0.1, min(3.0, scale))
@@ -355,7 +354,7 @@ class DroneRenderer:
     def _apply_motion_blur(
         self,
         sprite: np.ndarray,
-        velocity: Tuple[float, float, float],
+        velocity: tuple[float, float, float],
         blur_amount: float,
     ) -> np.ndarray:
         """Apply motion blur effect."""
@@ -551,7 +550,7 @@ class SimulationManager:
 
     def __init__(
         self,
-        camera_params: Optional[Dict[str, Any]] = None,
+        camera_params: Optional[dict[str, Any]] = None,
         sprite_path: Optional[str] = None,
     ):
         """
@@ -572,8 +571,8 @@ class SimulationManager:
         self._renderer = DroneRenderer(sprite_path)
         self._flight_sim = FlightSimulator()
 
-        self._drones: Dict[int, SimulatedDrone] = {}
-        self._ground_truth: List[GroundTruth] = []
+        self._drones: dict[int, SimulatedDrone] = {}
+        self._ground_truth: list[GroundTruth] = []
         self._scenario: Optional[SimulationScenario] = None
         self._start_time = 0.0
         self._frame_count = 0
@@ -599,7 +598,7 @@ class SimulationManager:
         self,
         appearance: DroneAppearance = DroneAppearance.QUADCOPTER_MEDIUM,
         flight_pattern: FlightPattern = FlightPattern.HOVER,
-        position: Tuple[float, float, float] = (0, 0, 30),
+        position: tuple[float, float, float] = (0, 0, 30),
         **kwargs,
     ) -> int:
         """
@@ -638,7 +637,7 @@ class SimulationManager:
         self,
         frame: np.ndarray,
         timestamp: float,
-    ) -> Tuple[np.ndarray, GroundTruth]:
+    ) -> tuple[np.ndarray, GroundTruth]:
         """
         Process a frame, injecting simulated drones.
 
@@ -690,8 +689,8 @@ class SimulationManager:
 
     def get_accuracy_report(
         self,
-        detections_by_frame: Dict[int, List[Detection]],
-    ) -> Dict[str, Any]:
+        detections_by_frame: dict[int, list[Detection]],
+    ) -> dict[str, Any]:
         """
         Compare detections against ground truth.
 
@@ -775,7 +774,7 @@ class SimulationManager:
 
         return intersection / union if union > 0 else 0.0
 
-    def get_ground_truth(self) -> List[GroundTruth]:
+    def get_ground_truth(self) -> list[GroundTruth]:
         """Get all collected ground truth."""
         return self._ground_truth.copy()
 

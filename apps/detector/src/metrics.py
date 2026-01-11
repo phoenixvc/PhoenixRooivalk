@@ -17,8 +17,8 @@ import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from typing import Any, Deque, Dict, Optional
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any, Optional
 
 logger = logging.getLogger("drone_detector.metrics")
 
@@ -35,7 +35,7 @@ class Counter:
     name: str
     help: str
     value: float = 0.0
-    labels: Dict[str, str] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def inc(self, amount: float = 1.0) -> None:
@@ -64,7 +64,7 @@ class Gauge:
     name: str
     help: str
     value: float = 0.0
-    labels: Dict[str, str] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def set(self, value: float) -> None:
@@ -107,8 +107,8 @@ class Histogram:
     name: str
     help: str
     buckets: tuple = (0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0)
-    labels: Dict[str, str] = field(default_factory=dict)
-    _counts: Dict[float, int] = field(default_factory=dict)
+    labels: dict[str, str] = field(default_factory=dict)
+    _counts: dict[float, int] = field(default_factory=dict)
     _sum: float = 0.0
     _count: int = 0
     _lock: threading.Lock = field(default_factory=threading.Lock)
@@ -165,8 +165,8 @@ class Summary:
     help: str
     max_age_seconds: float = 60.0
     window_size: int = 1000
-    labels: Dict[str, str] = field(default_factory=dict)
-    _observations: Deque = field(default_factory=lambda: deque(maxlen=1000))
+    labels: dict[str, str] = field(default_factory=dict)
+    _observations: deque = field(default_factory=lambda: deque(maxlen=1000))
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def observe(self, value: float) -> None:
@@ -242,7 +242,7 @@ class MetricsRegistry:
             return
 
         self._initialized = True
-        self._metrics: Dict[str, Any] = {}
+        self._metrics: dict[str, Any] = {}
         self._start_time = time.time()
 
         # Initialize standard metrics
@@ -344,7 +344,7 @@ class MetricsRegistry:
             "Detector uptime in seconds",
         )
 
-    def counter(self, name: str, help: str, labels: Optional[Dict] = None) -> Counter:
+    def counter(self, name: str, help: str, labels: Optional[dict] = None) -> Counter:
         """Create or get a counter."""
         if name in self._metrics:
             return self._metrics[name]
@@ -352,7 +352,7 @@ class MetricsRegistry:
         self._metrics[name] = counter
         return counter
 
-    def gauge(self, name: str, help: str, labels: Optional[Dict] = None) -> Gauge:
+    def gauge(self, name: str, help: str, labels: Optional[dict] = None) -> Gauge:
         """Create or get a gauge."""
         if name in self._metrics:
             return self._metrics[name]
@@ -365,7 +365,7 @@ class MetricsRegistry:
         name: str,
         help: str,
         buckets: Optional[tuple] = None,
-        labels: Optional[Dict] = None,
+        labels: Optional[dict] = None,
     ) -> Histogram:
         """Create or get a histogram."""
         if name in self._metrics:
@@ -384,7 +384,7 @@ class MetricsRegistry:
         name: str,
         help: str,
         max_age_seconds: float = 60.0,
-        labels: Optional[Dict] = None,
+        labels: Optional[dict] = None,
     ) -> Summary:
         """Create or get a summary."""
         if name in self._metrics:
@@ -415,7 +415,6 @@ class MetricsRegistry:
 
             # Memory usage
             try:
-                import os
                 import resource
 
                 usage = resource.getrusage(resource.RUSAGE_SELF)
@@ -449,7 +448,7 @@ class MetricsRegistry:
 
         return "\n".join(lines) + "\n"
 
-    def get_all_values(self) -> Dict[str, Any]:
+    def get_all_values(self) -> dict[str, Any]:
         """Get all metric values as a dictionary."""
         result = {}
         for name, metric in self._metrics.items():

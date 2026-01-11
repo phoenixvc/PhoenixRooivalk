@@ -16,9 +16,9 @@ Taxonomy Hierarchy:
 import logging
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
-from interfaces import BoundingBox, Detection
+from interfaces import Detection
 
 logger = logging.getLogger("drone_detector.threat")
 
@@ -93,10 +93,10 @@ class ThreatAssessment:
     escalation_required: bool = False
 
     # Supporting evidence
-    classification_reasons: List[str] = field(default_factory=list)
-    raw_class_scores: Dict[str, float] = field(default_factory=dict)
+    classification_reasons: list[str] = field(default_factory=list)
+    raw_class_scores: dict[str, float] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "category": self.category.value,
@@ -202,9 +202,9 @@ class ThreatClassifier:
 
     def __init__(
         self,
-        class_mapping: Dict = None,
-        asset_position: Optional[Tuple[float, float, float]] = None,
-        restricted_zones: Optional[List[Tuple[float, float, float, float]]] = None,
+        class_mapping: dict = None,
+        asset_position: Optional[tuple[float, float, float]] = None,
+        restricted_zones: Optional[list[tuple[float, float, float, float]]] = None,
     ):
         """
         Initialize threat classifier.
@@ -219,15 +219,15 @@ class ThreatClassifier:
         self._restricted_zones = restricted_zones or []
 
         # Swarm tracking
-        self._active_drones: Dict[int, Detection] = {}
-        self._swarm_groups: Dict[int, List[int]] = {}  # swarm_id → track_ids
+        self._active_drones: dict[int, Detection] = {}
+        self._swarm_groups: dict[int, list[int]] = {}  # swarm_id → track_ids
         self._next_swarm_id = 1
 
     def classify(
         self,
         detection: Detection,
-        position_3d: Optional[Tuple[float, float, float]] = None,
-        velocity_3d: Optional[Tuple[float, float, float]] = None,
+        position_3d: Optional[tuple[float, float, float]] = None,
+        velocity_3d: Optional[tuple[float, float, float]] = None,
         track_id: Optional[int] = None,
     ) -> ThreatAssessment:
         """
@@ -343,7 +343,7 @@ class ThreatClassifier:
             raw_class_scores={class_name: detection.confidence},
         )
 
-    def _calculate_distance(self, position: Tuple[float, float, float]) -> float:
+    def _calculate_distance(self, position: tuple[float, float, float]) -> float:
         """Calculate distance from position to protected asset."""
         dx = position[0] - self._asset_position[0]
         dy = position[1] - self._asset_position[1]
@@ -352,8 +352,8 @@ class ThreatClassifier:
 
     def _check_heading_toward(
         self,
-        position: Tuple[float, float, float],
-        velocity: Tuple[float, float, float],
+        position: tuple[float, float, float],
+        velocity: tuple[float, float, float],
     ) -> bool:
         """Check if object is heading toward protected asset."""
         # Vector from position to asset
@@ -369,7 +369,7 @@ class ThreatClassifier:
         # Heading toward if dot product is positive
         return dot > 0
 
-    def _check_restricted(self, position: Tuple[float, float, float]) -> bool:
+    def _check_restricted(self, position: tuple[float, float, float]) -> bool:
         """Check if position is in restricted airspace."""
         for x1, y1, x2, y2 in self._restricted_zones:
             if x1 <= position[0] <= x2 and y1 <= position[1] <= y2:
@@ -380,8 +380,8 @@ class ThreatClassifier:
         self,
         track_id: int,
         detection: Detection,
-        position: Optional[Tuple[float, float, float]],
-    ) -> Tuple[bool, Optional[int]]:
+        position: Optional[tuple[float, float, float]],
+    ) -> tuple[bool, Optional[int]]:
         """Check if this drone is part of a swarm."""
         # Update active drones
         self._active_drones[track_id] = detection
@@ -464,7 +464,7 @@ class ThreatClassifier:
         self,
         threat_level: ThreatLevel,
         category: ThreatCategory,
-    ) -> Tuple[str, bool]:
+    ) -> tuple[str, bool]:
         """Get response recommendation based on threat assessment."""
         if category == ThreatCategory.MANNED_AIRCRAFT:
             return "DO NOT ENGAGE - Manned aircraft", True
@@ -483,11 +483,11 @@ class ThreatClassifier:
 
         return "NO ACTION REQUIRED", False
 
-    def set_asset_position(self, position: Tuple[float, float, float]) -> None:
+    def set_asset_position(self, position: tuple[float, float, float]) -> None:
         """Update protected asset position."""
         self._asset_position = position
 
-    def set_restricted_zones(self, zones: List[Tuple[float, float, float, float]]) -> None:
+    def set_restricted_zones(self, zones: list[tuple[float, float, float, float]]) -> None:
         """Update restricted zones."""
         self._restricted_zones = zones
 
