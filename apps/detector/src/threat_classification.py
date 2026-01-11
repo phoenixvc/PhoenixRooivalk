@@ -14,6 +14,7 @@ Taxonomy Hierarchy:
 """
 
 import logging
+import time
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import Any, Optional
@@ -200,6 +201,11 @@ class ThreatClassifier:
     - Airspace restrictions
     """
 
+    # Maximum age in seconds before a track is considered stale
+    TRACK_STALE_TIMEOUT = 5.0
+    # Maximum number of tracks to keep before forcing cleanup
+    MAX_ACTIVE_TRACKS = 1000
+
     def __init__(
         self,
         class_mapping: dict = None,
@@ -218,10 +224,44 @@ class ThreatClassifier:
         self._asset_position = asset_position or (0.0, 0.0, 0.0)
         self._restricted_zones = restricted_zones or []
 
-        # Swarm tracking
-        self._active_drones: dict[int, Detection] = {}
+        # Swarm tracking with timestamps for cleanup
+        self._active_drones: dict[int, tuple[Detection, float]] = {}  # track_id → (detection, timestamp)
         self._swarm_groups: dict[int, list[int]] = {}  # swarm_id → track_ids
         self._next_swarm_id = 1
+        self._last_cleanup_time = time.time()
+
+    def _cleanup_stale_tracks(self) -> None:
+        """Remove stale tracks and empty swarm groups."""
+        now = time.time()
+
+        # Only run cleanup periodically or when we have too many tracks
+        if (now - self._last_cleanup_time < 1.0 and
+                len(self._active_drones) < self.MAX_ACTIVE_TRACKS):
+            return
+
+        self._last_cleanup_time = now
+
+        # Remove stale drones
+        stale_track_ids = [
+            track_id
+            for track_id, (_, timestamp) in self._active_drones.items()
+            if now - timestamp > self.TRACK_STALE_TIMEOUT
+        ]
+        for track_id in stale_track_ids:
+            del self._active_drones[track_id]
+
+        # Remove stale track IDs from swarm groups and delete empty groups
+        stale_track_set = set(stale_track_ids)
+        empty_swarm_ids = []
+        for swarm_id, members in self._swarm_groups.items():
+            self._swarm_groups[swarm_id] = [
+                tid for tid in members if tid not in stale_track_set
+            ]
+            if not self._swarm_groups[swarm_id]:
+                empty_swarm_ids.append(swarm_id)
+
+        for swarm_id in empty_swarm_ids:
+            del self._swarm_groups[swarm_id]
 
     def classify(
         self,
@@ -382,21 +422,25 @@ class ThreatClassifier:
         detection: Detection,
         position: Optional[tuple[float, float, float]],
     ) -> tuple[bool, Optional[int]]:
-        """Check if this drone is part of a swarm."""
-        # Update active drones
-        self._active_drones[track_id] = detection
+        """Check if this drone is part of a swarm.
 
-        # Count nearby drones
-        if position is None:
-            return False, None
+        Uses pixel-based proximity as a heuristic when 3D positions
+        are not available for all drones.
+        """
+        # Cleanup stale tracks periodically
+        self._cleanup_stale_tracks()
 
+        # Update active drones with timestamp
+        self._active_drones[track_id] = (detection, time.time())
+
+        # Count nearby drones using pixel-based proximity heuristic
+        # This works regardless of whether 3D position is available
         nearby = []
-        for tid, det in self._active_drones.items():
+        for tid, (det, _) in self._active_drones.items():
             if tid == track_id:
                 continue
-            # Would need 3D positions of other drones
-            # For now, use simple heuristic based on bounding box proximity
-            # in image space as approximation
+            # Use bounding box proximity in image space as approximation
+            # for spatial proximity (works without 3D positions)
             distance_px = (
                 (detection.bbox.center[0] - det.bbox.center[0]) ** 2
                 + (detection.bbox.center[1] - det.bbox.center[1]) ** 2
