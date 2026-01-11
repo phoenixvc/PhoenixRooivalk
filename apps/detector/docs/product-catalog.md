@@ -774,7 +774,7 @@ power:
 
 logging:
   level: INFO
-  log_file: "/home/pi/detections/mobile.log"
+  log_file: "/home/pi/detections/detector.log"
 ```
 
 ### Assembly Instructions
