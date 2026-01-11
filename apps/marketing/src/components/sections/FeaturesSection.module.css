@@ -1,5 +1,5 @@
 .section {
-  padding: 6rem 1.5rem;
+  padding: 5rem 1.5rem;
   background: linear-gradient(180deg, #090a0f 0%, #1b2735 50%, #090a0f 100%);
   position: relative;
 }
@@ -57,16 +57,17 @@
 .featureCard {
   display: flex;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 2.5rem;
   background: linear-gradient(
     135deg,
     rgba(30, 41, 59, 0.6),
     rgba(15, 23, 42, 0.8)
   );
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   border-radius: 1rem;
   transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .featureCard::after {
@@ -93,8 +94,8 @@
     rgba(15, 23, 42, 0.9)
   );
   border-color: rgba(59, 130, 246, 0.3);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25);
 }
 
 .featureCard:hover::after {
@@ -132,10 +133,11 @@
 }
 
 .featureTitle {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .brandBadge {
@@ -168,7 +170,7 @@
 .featureDescription {
   font-size: 1rem;
   color: rgb(148, 163, 184);
-  line-height: 1.6;
+  line-height: 1.75;
   margin: 0;
 }
 
@@ -204,15 +206,18 @@
 .useCaseCard {
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.1);
   border-radius: 0.75rem;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .useCaseCard:hover {
   background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .useCaseBadge {
@@ -234,8 +239,9 @@
 }
 
 .useCaseDescription {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: rgb(148, 163, 184);
+  line-height: 1.6;
   margin: 0;
 }
 
