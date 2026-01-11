@@ -201,7 +201,9 @@ def parse_args():
 def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     """Convert Settings object to create_pipeline() keyword arguments."""
     # Get model path from settings or CLI args (CLI takes precedence)
-    model_path = args.model if args.model else (getattr(settings.inference, "model_path", None) or None)
+    model_path = (
+        args.model if args.model else (getattr(settings.inference, "model_path", None) or None)
+    )
     if not model_path and not args.mock:
         model_path = "mock"  # Fallback for mock mode
 
@@ -231,21 +233,45 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     kwargs = {
         "model_path": model_path,
         "camera_source": camera_type,
-        "camera_index": args.camera_index if args.camera_index is not None else getattr(settings.capture, "camera_index", 0),
+        "camera_index": (
+            args.camera_index
+            if args.camera_index is not None
+            else getattr(settings.capture, "camera_index", 0)
+        ),
         "video_file": video_file,
         "width": args.width if args.width is not None else getattr(settings.capture, "width", None),
-        "height": args.height if args.height is not None else getattr(settings.capture, "height", None),
+        "height": (
+            args.height if args.height is not None else getattr(settings.capture, "height", None)
+        ),
         "fps": args.fps if args.fps is not None else getattr(settings.capture, "fps", None),
         "engine_type": engine_type,
         "use_coral": args.coral if args.coral else getattr(settings.inference, "use_coral", False),
-        "confidence_threshold": args.confidence if args.confidence is not None else getattr(settings.inference, "confidence_threshold", 0.5),
-        "nms_threshold": args.nms if args.nms is not None else getattr(settings.inference, "nms_threshold", 0.45),
+        "confidence_threshold": (
+            args.confidence
+            if args.confidence is not None
+            else getattr(settings.inference, "confidence_threshold", 0.5)
+        ),
+        "nms_threshold": (
+            args.nms if args.nms is not None else getattr(settings.inference, "nms_threshold", 0.45)
+        ),
         "tracker_type": tracker_type,
-        "alert_webhook": args.alert_webhook if args.alert_webhook else getattr(settings.alert, "webhook_url", None),
-        "save_detections": args.save_detections if args.save_detections else getattr(settings.alert, "save_detections_path", None),
-        "headless": args.headless if args.headless else getattr(settings.display, "headless", False),
+        "alert_webhook": (
+            args.alert_webhook
+            if args.alert_webhook
+            else getattr(settings.alert, "webhook_url", None)
+        ),
+        "save_detections": (
+            args.save_detections
+            if args.save_detections
+            else getattr(settings.alert, "save_detections_path", None)
+        ),
+        "headless": (
+            args.headless if args.headless else getattr(settings.display, "headless", False)
+        ),
         "stream_enabled": getattr(settings.streaming, "enabled", False),
-        "stream_host": getattr(settings.streaming, "host", "0.0.0.0"),
+        "stream_host": getattr(
+            settings.streaming, "host", "0.0.0.0"
+        ),  # nosec B104 - intentional for LAN access
         "stream_port": getattr(settings.streaming, "port", 8080),
         "stream_quality": getattr(settings.streaming, "quality", 80),
         "stream_max_fps": getattr(settings.streaming, "max_fps", 15),
@@ -320,7 +346,10 @@ def main():
             sys.exit(0)
         except Exception as e:
             print(f"ERROR: Failed to create config file: {e}", file=sys.stderr)
-            print("\nTip: Ensure the directory exists and you have write permissions.", file=sys.stderr)
+            print(
+                "\nTip: Ensure the directory exists and you have write permissions.",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
     # Load settings from config file if provided
@@ -362,11 +391,16 @@ def main():
                 else:
                     model_path_from_config = None
             if not model_path_from_config:
-                print("ERROR: --model is required (or use --mock to test without a model)", file=sys.stderr)
+                print(
+                    "ERROR: --model is required (or use --mock to test without a model)",
+                    file=sys.stderr,
+                )
                 print("\nTips:", file=sys.stderr)
                 print("  - Use --model <path> to specify a model file", file=sys.stderr)
                 print("  - Use --mock to test without a model or camera", file=sys.stderr)
-                print("  - Use --config <file> to load model path from config file", file=sys.stderr)
+                print(
+                    "  - Use --config <file> to load model path from config file", file=sys.stderr
+                )
                 print("  - Use --help for full usage information", file=sys.stderr)
                 sys.exit(1)
 
@@ -417,12 +451,17 @@ def main():
             print("\nCommon issues:", file=sys.stderr)
             print("  - Camera not found: Check camera is connected and enabled", file=sys.stderr)
             print("  - Model file not found: Verify model path is correct", file=sys.stderr)
-            print("  - Missing dependencies: Check installation with pip install -e '.[pi]'", file=sys.stderr)
+            print(
+                "  - Missing dependencies: Check installation with pip install -e '.[pi]'",
+                file=sys.stderr,
+            )
             print("  - Use --mock to test without hardware", file=sys.stderr)
             sys.exit(1)
     except Exception as e:
         print(f"ERROR: Pipeline startup failed: {e}", file=sys.stderr)
-        print("\nTip: Use --mock to test without hardware, or check configuration.", file=sys.stderr)
+        print(
+            "\nTip: Use --mock to test without hardware, or check configuration.", file=sys.stderr
+        )
         sys.exit(1)
 
     try:
