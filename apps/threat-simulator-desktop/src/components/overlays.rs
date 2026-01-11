@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+// Note: All props in this module are used via Leptos view! macro, compiler doesn't detect this
+#[allow(dead_code)]
 #[component]
 pub fn SimulationWarning<F>(show: ReadSignal<bool>, on_close: F) -> impl IntoView
 where
@@ -71,6 +73,7 @@ where
     }
 }
 
+#[allow(dead_code)]
 #[component]
 pub fn GameOverOverlay<F>(
     show: ReadSignal<bool>,
@@ -114,6 +117,7 @@ where
     }
 }
 
+#[allow(dead_code)]
 #[component]
 pub fn FullscreenPrompt<F1, F2>(show: ReadSignal<bool>, on_enter: F1, on_skip: F2) -> impl IntoView
 where
