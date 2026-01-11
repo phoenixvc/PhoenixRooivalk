@@ -58,10 +58,10 @@
 }
 
 .statusBadges {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.25rem;
   justify-content: center;
   align-items: center;
 }
@@ -178,20 +178,27 @@
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .metricsGrid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
+    gap: 2rem;
   }
 }
 
 .metric {
   text-align: center;
-  padding: 1.25rem;
+  padding: 1rem;
   position: relative;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.metric:hover {
+  background: rgba(var(--primary), 0.05);
+  transform: translateY(-2px);
 }
 
 .metricValue {
