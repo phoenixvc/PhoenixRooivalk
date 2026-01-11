@@ -10,7 +10,9 @@ const featuredProductIds = ["skysnare", "skywatch-standard", "netsnare-lite"];
 const CURRENT_DATE = new Date("2026-01-11");
 
 // Parse launch date from phaseTimeline string
-// Launch dates are adjusted by +1 quarter from the stated timeline
+// Timeline states when development is complete (end of quarter)
+// Launch happens 1 month after development completion
+// e.g., "Q2 2026" = dev complete June 2026, launch July 2026
 function parseLaunchDate(phaseTimeline: string): Date | null {
   if (phaseTimeline.toLowerCase().includes("available now")) {
     return null; // Already available
@@ -21,12 +23,13 @@ function parseLaunchDate(phaseTimeline: string): Date | null {
   if (quarterMatch) {
     const quarter = parseInt(quarterMatch[1], 10);
     const year = parseInt(quarterMatch[2], 10);
-    // Q1 = Jan, Q2 = Apr, Q3 = Jul, Q4 = Oct
-    // Add 1 quarter (3 months) to adjust launch dates
-    const month = (quarter - 1) * 3 + 3;
+    // Quarter end month: Q1=Mar, Q2=Jun, Q3=Sep, Q4=Dec
+    // Then add 1 month for launch after development
+    const quarterEndMonth = quarter * 3 - 1; // Q1=2(Mar), Q2=5(Jun), Q3=8(Sep), Q4=11(Dec)
+    const launchMonth = quarterEndMonth + 1; // +1 month after dev complete
     // Handle year rollover if month >= 12
-    const adjustedYear = month >= 12 ? year + 1 : year;
-    const adjustedMonth = month >= 12 ? month - 12 : month;
+    const adjustedYear = launchMonth >= 12 ? year + 1 : year;
+    const adjustedMonth = launchMonth >= 12 ? launchMonth - 12 : launchMonth;
     return new Date(adjustedYear, adjustedMonth, 1);
   }
 

@@ -429,9 +429,9 @@ export const products: Product[] = [
       "Balanced detection system for residential use with Coral TPU acceleration and low-light capability.",
     category: "prosumer",
     phase: "seed",
-    phaseTimeline: "Available Now",
-    available: true,
-    comingSoon: false,
+    phaseTimeline: "Q2 2026 • Delivery Jul 2026",
+    available: false,
+    comingSoon: true,
 
     priceRange: { min: 100, max: 250 },
     priceFormatted: "$100-250",
