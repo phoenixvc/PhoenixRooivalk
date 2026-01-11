@@ -323,16 +323,33 @@ def create_minimal_pipeline(
 def create_demo_pipeline(
     model_path: str,
     use_mock: bool = False,
+    camera_source: str = "auto",
 ) -> DetectionPipeline:
     """
     Create a pipeline optimized for demo/presentation.
 
     Good visuals, tracking enabled, balanced performance.
+
+    Args:
+        model_path: Path to model file, or "mock" for mock inference
+        use_mock: If True, use mock camera and inference
+        camera_source: Camera source type ("auto", "usb", "picamera", "mock")
     """
+    # If model_path is "mock", treat as mock inference
+    if model_path == "mock" or use_mock:
+        engine_type = "mock"
+        if use_mock:
+            # --mock flag overrides camera_source
+            camera_source = "mock"
+        # Otherwise use the provided camera_source (e.g., "usb")
+    else:
+        engine_type = "auto"
+        # Use provided camera_source (defaults to "auto")
+
     return create_pipeline(
         model_path=model_path,
-        camera_source="mock" if use_mock else "auto",
-        engine_type="mock" if use_mock else "auto",
+        camera_source=camera_source,
+        engine_type=engine_type,
         tracker_type="centroid",
         headless=False,
         auto_configure=True,

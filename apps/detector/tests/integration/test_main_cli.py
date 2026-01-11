@@ -4,11 +4,12 @@ Integration tests for main.py CLI interface.
 Tests command-line flags, argument parsing, and CLI workflows.
 """
 
-import pytest
 import sys
-import yaml
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+import pytest
+import yaml
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
@@ -185,12 +186,62 @@ class TestCLIArgumentParsing:
         assert args.generate_config == "output.yaml"
 
 
+class TestCLIMockEngineHandling:
+    """Tests for CLI mock engine handling without config file."""
+
+    @patch("main.create_pipeline")
+    @patch("main.run_detection_loop")
+    @patch("main.signal.signal")
+    def test_main_with_engine_mock_flag_no_model(self, mock_signal, mock_run_loop, mock_create_pipeline):
+        """Should use mock model path when --engine mock is used without --model."""
+        mock_pipeline = MagicMock()
+        mock_pipeline.start.return_value = True
+        mock_create_pipeline.return_value = mock_pipeline
+
+        # Simulate CLI args: --engine mock (no --model, no --config, no --demo)
+        with patch("sys.argv", ["main.py", "--engine", "mock", "--quiet"]):
+            from main import main
+            try:
+                main()
+            except SystemExit:
+                pass  # Expected when run_detection_loop exits
+
+        # Verify create_pipeline was called with mock model_path
+        mock_create_pipeline.assert_called_once()
+        call_kwargs = mock_create_pipeline.call_args[1]
+        assert call_kwargs["model_path"] == "mock"
+        assert call_kwargs["engine_type"] == "mock"
+
+    @patch("main.create_pipeline")
+    @patch("main.run_detection_loop")
+    @patch("main.signal.signal")
+    def test_main_with_mock_flag_no_model(self, mock_signal, mock_run_loop, mock_create_pipeline):
+        """Should use mock model path when --mock is used."""
+        mock_pipeline = MagicMock()
+        mock_pipeline.start.return_value = True
+        mock_create_pipeline.return_value = mock_pipeline
+
+        # Simulate CLI args: --mock (no --model, no --config, no --demo)
+        with patch("sys.argv", ["main.py", "--mock", "--quiet"]):
+            from main import main
+            try:
+                main()
+            except SystemExit:
+                pass  # Expected when run_detection_loop exits
+
+        # Verify create_pipeline was called with mock model_path
+        mock_create_pipeline.assert_called_once()
+        call_kwargs = mock_create_pipeline.call_args[1]
+        assert call_kwargs["model_path"] == "mock"
+        assert call_kwargs["camera_source"] == "mock"
+
+
 class TestCLIIntegration:
     """Integration tests for CLI workflows."""
 
     def test_generate_then_use_config(self, tmp_path):
         """Should be able to generate config and then load it."""
-        from config.settings import create_default_config, Settings
+        from config.settings import Settings, create_default_config
         
         config_file = tmp_path / "generated_config.yaml"
         

@@ -531,6 +531,13 @@ def create_inference_engine(
 
     # Determine engine type from model extension if auto
     if engine_type == "auto":
+        # Special case: "mock" as model path means mock inference
+        if model_path == "mock":
+            engine_type = "mock"
+            engine = MockInferenceEngine(**kwargs)
+            engine.load_model(model_path)
+            return engine
+
         model_ext = Path(model_path).suffix.lower()
 
         if use_coral or "_edgetpu" in model_path.lower():

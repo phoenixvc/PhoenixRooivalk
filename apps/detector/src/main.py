@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Real-time Drone Detection on Raspberry Pi
+Real-time Drone Detection on Raspberry Pi.
 
 Modular architecture supporting hot-swappable components:
 - Frame sources: Pi Camera, USB, video files, mock
@@ -25,10 +25,17 @@ Usage:
     python main.py --model models/drone-detector.tflite --headless
 
     # With tracking and webhook alerts
-    python main.py --model models/drone-detector.tflite --tracker kalman --alert-webhook http://...
+    python main.py --model models/drone-detector.tflite \
+      --tracker kalman --alert-webhook http://...
 
     # Demo mode with mock data (no camera/model needed)
     python main.py --demo --mock
+
+    # Real webcam with mock inference (test camera without model)
+    python main.py --camera usb --engine mock
+
+    # Mock camera with real model (test inference without camera)
+    python main.py --camera mock --model models/drone-detector.tflite
 """
 
 import argparse
@@ -207,7 +214,8 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     if not model_path and not args.mock:
         model_path = "mock"  # Fallback for mock mode
 
-    # Get camera type (CLI takes precedence, string enums compare directly to strings)
+    # Get camera type (CLI takes precedence,
+    # string enums compare directly to strings)
     if args.mock:
         camera_type = "mock"
     elif args.camera and args.camera != "auto":
@@ -239,13 +247,17 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
             else getattr(settings.capture, "camera_index", 0)
         ),
         "video_file": video_file,
-        "width": args.width if args.width is not None else getattr(settings.capture, "width", None),
+        "width": (
+            args.width if args.width is not None else getattr(settings.capture, "width", None)
+        ),
         "height": (
             args.height if args.height is not None else getattr(settings.capture, "height", None)
         ),
-        "fps": args.fps if args.fps is not None else getattr(settings.capture, "fps", None),
+        "fps": (args.fps if args.fps is not None else getattr(settings.capture, "fps", None)),
         "engine_type": engine_type,
-        "use_coral": args.coral if args.coral else getattr(settings.inference, "use_coral", False),
+        "use_coral": (
+            args.coral if args.coral else getattr(settings.inference, "use_coral", False)
+        ),
         "confidence_threshold": (
             args.confidence
             if args.confidence is not None
@@ -285,7 +297,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
 
 def run_detection_loop(pipeline: DetectionPipeline) -> None:
     """
-    Main detection loop.
+    Run main detection loop.
 
     Reads frames, runs inference, updates tracker, handles alerts, renders.
     """
@@ -323,16 +335,15 @@ def run_detection_loop(pipeline: DetectionPipeline) -> None:
             )
 
             # Show (returns False if user wants to quit)
-            if rendered is not None:
-                if not pipeline.renderer.show(rendered):
-                    break
+            if rendered is not None and not pipeline.renderer.show(rendered):
+                break
 
     except KeyboardInterrupt:
         print("\nInterrupted by user")
 
 
 def main():
-    """Main entry point."""
+    """Run main entry point."""
     args = parse_args()
 
     # Handle --generate-config flag (exit early if used)
@@ -340,14 +351,17 @@ def main():
         try:
             config_path = Path(args.generate_config)
             create_default_config(str(config_path))
-            print(f"Default configuration file created: {config_path.absolute()}")
+            print(f"Default configuration file created: " f"{config_path.absolute()}")
             print(f"\nYou can now edit {config_path} and run with:")
             print(f"  python src/main.py --config {config_path}")
             sys.exit(0)
         except Exception as e:
-            print(f"ERROR: Failed to create config file: {e}", file=sys.stderr)
             print(
-                "\nTip: Ensure the directory exists and you have write permissions.",
+                f"ERROR: Failed to create config file: {e}",
+                file=sys.stderr,
+            )
+            print(
+                "\nTip: Ensure the directory exists " "and you have write permissions.",
                 file=sys.stderr,
             )
             sys.exit(1)
@@ -357,31 +371,54 @@ def main():
     if args.config:
         config_path = Path(args.config)
         if not config_path.exists():
-            print(f"ERROR: Configuration file not found: {config_path.absolute()}", file=sys.stderr)
-            print("\nTip: Generate a default config file with:", file=sys.stderr)
-            print(f"  python src/main.py --generate-config {config_path}", file=sys.stderr)
+            print(
+                f"ERROR: Configuration file not found: " f"{config_path.absolute()}",
+                file=sys.stderr,
+            )
+            print(
+                "\nTip: Generate a default config file with:",
+                file=sys.stderr,
+            )
+            print(
+                f"  python src/main.py --generate-config {config_path}",
+                file=sys.stderr,
+            )
             sys.exit(1)
         try:
             settings = Settings.from_yaml(str(config_path))
         except Exception as e:
-            print(f"ERROR: Failed to load configuration file: {e}", file=sys.stderr)
-            print(f"\nTip: Check that {config_path} is valid YAML format.", file=sys.stderr)
+            print(
+                f"ERROR: Failed to load configuration file: {e}",
+                file=sys.stderr,
+            )
+            print(
+                f"\nTip: Check that {config_path} is valid YAML format.",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
     # Handle demo mode
     if args.demo:
         if not args.model and not args.mock:
-            print("ERROR: --model is required for demo mode unless using --mock", file=sys.stderr)
-            print("\nTip: Use --mock to test without a model or camera", file=sys.stderr)
+            print(
+                "ERROR: --model is required for demo mode unless using --mock",
+                file=sys.stderr,
+            )
+            print(
+                "\nTip: Use --mock to test without a model or camera",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
         pipeline = create_demo_pipeline(
             model_path=args.model or "mock",
             use_mock=args.mock,
+            camera_source=(args.camera if args.camera != "auto" else "auto"),
         )
     else:
-        # Validate model path (unless using mock mode)
-        if not args.model and not args.mock:
+        # Validate model path (unless using mock mode or mock engine)
+        using_mock_engine = args.mock or args.engine == "mock"
+        if not args.model and not using_mock_engine:
             model_path_from_config = None
             if settings:
                 model_path_from_config = getattr(settings.inference, "model_path", None)
@@ -392,38 +429,63 @@ def main():
                     model_path_from_config = None
             if not model_path_from_config:
                 print(
-                    "ERROR: --model is required (or use --mock to test without a model)",
+                    "ERROR: --model is required " "(or use --mock to test without a model)",
                     file=sys.stderr,
                 )
                 print("\nTips:", file=sys.stderr)
-                print("  - Use --model <path> to specify a model file", file=sys.stderr)
-                print("  - Use --mock to test without a model or camera", file=sys.stderr)
                 print(
-                    "  - Use --config <file> to load model path from config file", file=sys.stderr
+                    "  - Use --model <path> to specify a model file",
+                    file=sys.stderr,
                 )
-                print("  - Use --help for full usage information", file=sys.stderr)
+                print(
+                    "  - Use --mock to test without a model or camera",
+                    file=sys.stderr,
+                )
+                print(
+                    "  - Use --config <file> to load model path " "from config file",
+                    file=sys.stderr,
+                )
+                print(
+                    "  - Use --help for full usage information",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
         # Create pipeline with settings from config file or CLI args
         if settings:
             kwargs = settings_to_pipeline_kwargs(settings, args)
+            # If using mock engine without model, set model_path to "mock"
+            if kwargs.get("engine_type") == "mock" and not kwargs.get("model_path"):
+                kwargs["model_path"] = "mock"
             try:
                 pipeline = create_pipeline(**kwargs)
             except Exception as e:
-                print(f"ERROR: Failed to create pipeline: {e}", file=sys.stderr)
-                print("\nTip: Check your configuration file and model path.", file=sys.stderr)
+                print(
+                    f"ERROR: Failed to create pipeline: {e}",
+                    file=sys.stderr,
+                )
+                print(
+                    "\nTip: Check your configuration file and model path.",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
         else:
             # Use CLI args directly (existing behavior)
+            # Determine model path - use mock if engine is mock
+            # and no model provided
+            model_path = args.model
+            if not model_path and (args.mock or args.engine == "mock"):
+                model_path = "mock"
+
             pipeline = create_pipeline(
-                model_path=args.model or "mock",
+                model_path=model_path or "mock",
                 camera_source="mock" if args.mock else args.camera,
                 camera_index=args.camera_index,
                 video_file=args.video,
                 width=args.width,
                 height=args.height,
                 fps=args.fps,
-                engine_type="mock" if args.mock else args.engine,
+                engine_type=("mock" if args.mock else args.engine),
                 use_coral=args.coral,
                 confidence_threshold=args.confidence,
                 nms_threshold=args.nms,
@@ -431,7 +493,7 @@ def main():
                 alert_webhook=args.alert_webhook,
                 save_detections=args.save_detections,
                 headless=args.headless,
-                auto_configure=not args.no_auto_configure,
+                auto_configure=(not args.no_auto_configure),
                 print_hardware=not args.quiet,
             )
 
@@ -449,10 +511,16 @@ def main():
         if not pipeline.start():
             print("ERROR: Failed to start pipeline", file=sys.stderr)
             print("\nCommon issues:", file=sys.stderr)
-            print("  - Camera not found: Check camera is connected and enabled", file=sys.stderr)
-            print("  - Model file not found: Verify model path is correct", file=sys.stderr)
             print(
-                "  - Missing dependencies: Check installation with pip install -e '.[pi]'",
+                "  - Camera not found: Check camera is connected and enabled",
+                file=sys.stderr,
+            )
+            print(
+                "  - Model file not found: Verify model path is correct",
+                file=sys.stderr,
+            )
+            print(
+                "  - Missing dependencies: " "Check installation with pip install -e '.[pi]'",
                 file=sys.stderr,
             )
             print("  - Use --mock to test without hardware", file=sys.stderr)
@@ -460,7 +528,8 @@ def main():
     except Exception as e:
         print(f"ERROR: Pipeline startup failed: {e}", file=sys.stderr)
         print(
-            "\nTip: Use --mock to test without hardware, or check configuration.", file=sys.stderr
+            "\nTip: Use --mock to test without hardware, " "or check configuration.",
+            file=sys.stderr,
         )
         sys.exit(1)
 

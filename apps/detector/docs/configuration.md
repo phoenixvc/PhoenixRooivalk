@@ -56,7 +56,14 @@ python src/main.py --config config.yaml
 override config file values with CLI flags:
 
 ```bash
+# Override model and confidence from config
 python src/main.py --config config.yaml --model models/custom-model.tflite --confidence 0.7
+
+# Override camera type
+python src/main.py --config config.yaml --camera usb
+
+# Override inference engine
+python src/main.py --config config.yaml --engine onnx
 ```
 
 ---
@@ -71,23 +78,27 @@ python src/main.py --config config.yaml --model models/custom-model.tflite --con
 
 ### camera_type
 
-| Value      | Description                       |
-| ---------- | --------------------------------- |
-| `auto`     | Auto-detect best available camera |
-| `picamera` | Raspberry Pi camera (libcamera)   |
-| `usb`      | USB webcam via OpenCV             |
-| `video`    | Video file playback               |
-| `mock`     | Synthetic frames for testing      |
+| Value      | Description                                                         |
+| ---------- | ------------------------------------------------------------------- |
+| `auto`     | Auto-detect best available camera (tries Pi Camera first, then USB) |
+| `picamera` | Raspberry Pi camera (libcamera)                                     |
+| `usb`      | USB webcam via OpenCV                                               |
+| `video`    | Video file playback (requires `capture.video_path`)                 |
+| `mock`     | Synthetic frames for testing                                        |
+
+**Note:** You can also control this via CLI with `--camera` flag, or use `--video` for video files.
 
 ### engine_type
 
-| Value    | Description                        |
-| -------- | ---------------------------------- |
-| `auto`   | Auto-select based on hardware      |
-| `tflite` | TensorFlow Lite (optimized for Pi) |
-| `onnx`   | ONNX Runtime                       |
-| `coral`  | Google Coral Edge TPU              |
-| `mock`   | Synthetic detections for testing   |
+| Value    | Description                                                                    |
+| -------- | ------------------------------------------------------------------------------ |
+| `auto`   | Auto-select based on model file extension (`.tflite` → TFLite, `.onnx` → ONNX) |
+| `tflite` | TensorFlow Lite (optimized for Pi)                                             |
+| `onnx`   | ONNX Runtime                                                                   |
+| `coral`  | Google Coral Edge TPU (requires Edge TPU model)                                |
+| `mock`   | Synthetic detections for testing (no model file needed)                        |
+
+**Note:** You can also control this via CLI with `--engine` flag. The `--mock` CLI flag sets both `camera_type` and `engine_type` to `mock`.
 
 ### tracker_type
 
@@ -457,10 +468,35 @@ python src/main.py --model model.tflite --headless \
 python src/main.py \
   --model models/drone-detector.tflite \
   --camera usb \
+  --camera-index 0 \
   --engine tflite \
   --tracker kalman \
   --width 1280 --height 720 --fps 30 \
   --confidence 0.6 \
-  --stream --stream-port 8080 \
   --save-detections detections.json
+
+# Video file playback
+python src/main.py \
+  --model models/drone-detector.tflite \
+  --video test_video.mp4
+
+# Demo mode with custom camera
+python src/main.py \
+  --demo \
+  --model models/drone-detector.tflite \
+  --camera usb
+
+# Headless with quiet mode
+python src/main.py \
+  --model models/drone-detector.tflite \
+  --headless \
+  --quiet
+
+# Disable auto-configuration
+python src/main.py \
+  --model models/drone-detector.tflite \
+  --no-auto-configure \
+  --width 640 --height 480
 ```
+
+**Note:** Streaming is configured via environment variables or config file, not CLI flags. See [Streaming Settings](#streaming-settings) for details.

@@ -2,16 +2,22 @@
 Unit tests for factory.py - pipeline creation and component wiring.
 """
 
-import pytest
 import sys
 from pathlib import Path
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from factory import DetectionPipeline, create_pipeline, create_minimal_pipeline, create_demo_pipeline
-from interfaces import HardwareProfile, PipelineConfig, AcceleratorType
+from factory import (
+    DetectionPipeline,
+    create_demo_pipeline,
+    create_minimal_pipeline,
+    create_pipeline,
+)
+from interfaces import AcceleratorType, HardwareProfile, PipelineConfig
 
 
 @pytest.fixture
@@ -453,4 +459,19 @@ class TestCreateDemoPipeline:
         assert call_kwargs["model_path"] == "test.tflite"
         assert call_kwargs["camera_source"] == "auto"
         assert call_kwargs["engine_type"] == "auto"
+        assert result == mock_pipeline
+
+    @patch("factory.create_pipeline")
+    def test_create_demo_pipeline_with_mock_model_path(self, mock_create_pipeline):
+        """Should create demo pipeline with mock engine when model_path is 'mock'."""
+        mock_pipeline = MagicMock()
+        mock_create_pipeline.return_value = mock_pipeline
+
+        result = create_demo_pipeline("mock", use_mock=False, camera_source="usb")
+
+        mock_create_pipeline.assert_called_once()
+        call_kwargs = mock_create_pipeline.call_args[1]
+        assert call_kwargs["model_path"] == "mock"
+        assert call_kwargs["camera_source"] == "usb"  # Should use provided camera_source
+        assert call_kwargs["engine_type"] == "mock"  # Should be mock when model_path is "mock"
         assert result == mock_pipeline
