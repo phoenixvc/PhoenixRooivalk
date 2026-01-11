@@ -1118,3 +1118,193 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==========================================================================
+   Wave 4: Performance Optimization (Phase 8)
+   ========================================================================== */
+
+/* Image Loading Optimization */
+img {
+  /* Use native lazy loading */
+  loading: lazy;
+  /* Prevent layout shift */
+  height: auto;
+  /* Optimize rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Critical images should load immediately */
+img[loading="eager"] {
+  loading: eager;
+}
+
+/* Optimize background images */
+.bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Use will-change for animated backgrounds */
+  will-change: transform;
+}
+
+/* Content visibility for off-screen content */
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px;
+}
+
+/* Reduce paint for fixed elements */
+.fixed-optimized {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Font loading optimization */
+@font-face {
+  font-family: "System";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap; /* Use swap for better perceived performance */
+}
+
+/* Skeleton loader for content */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(51, 65, 85, 0.5) 25%,
+    rgba(71, 85, 105, 0.5) 50%,
+    rgba(51, 65, 85, 0.5) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Optimize shadows for performance */
+.shadow-optimized {
+  /* Use pseudo-element for complex shadows */
+  position: relative;
+}
+
+.shadow-optimized::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.shadow-optimized:hover::after {
+  opacity: 1;
+}
+
+/* GPU acceleration hints */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Critical CSS utilities */
+.critical-content {
+  /* Ensure critical content renders first */
+  contain: layout style paint;
+}
+
+/* Defer non-critical styles */
+.defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* Performance monitoring helper */
+.perf-mark {
+  /* Add performance mark for debugging */
+  --perf-start: initial;
+}
+
+/* Bundle size optimization hints */
+/* These classes help identify opportunities for code splitting */
+.component-heavy {
+  /* Mark components that should be lazy-loaded */
+  /* Indicates potential code-split boundary */
+}
+
+.feature-optional {
+  /* Mark optional features that can be conditionally loaded */
+  /* Consider dynamic imports for these */
+}
+
+/* Print optimization */
+@media print {
+  /* Hide non-essential elements */
+  nav,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Optimize for print */
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  /* Show URLs for links */
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  /* Optimize images for print */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Page break optimization */
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+}
