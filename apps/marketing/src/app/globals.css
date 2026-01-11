@@ -1097,7 +1097,6 @@ iframe {
   max-width: 100%;
 }
 
-img,
 video {
   height: auto;
 }
@@ -1129,8 +1128,8 @@ video {
 img {
   /* Prevent layout shift */
   height: auto;
-  /* Optimize rendering */
-  image-rendering: -webkit-optimize-contrast;
+  /* Optimize rendering - use standard values for cross-browser compatibility */
+  image-rendering: auto;
   image-rendering: crisp-edges;
 }
 
