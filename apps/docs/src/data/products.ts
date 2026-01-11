@@ -2495,3 +2495,354 @@ export const platformSelectionGuide = {
     "Power efficiency critical (<5W)",
   ],
 };
+
+// =============================================================================
+// COMPUTE TIER CONFIGURATOR (For Pre-orders)
+// =============================================================================
+
+/** Compute tier definition for product configuration */
+export interface ComputeTier {
+  id: string;
+  name: string;
+  shortName: string;
+  platform: string;
+  accelerator: string;
+  computeCost: number;
+  fps: number;
+  latency: string;
+  power: string;
+  recommended?: boolean;
+  badge?: string;
+  description: string;
+}
+
+/** Available compute tiers */
+export const computeTiers: Record<string, ComputeTier> = {
+  // Pi-based tiers
+  pi4_coral: {
+    id: "pi4_coral",
+    name: "Standard (Pi 4 + Coral)",
+    shortName: "Standard",
+    platform: "Raspberry Pi 4 (2GB)",
+    accelerator: "Coral USB Accelerator",
+    computeCost: 105,
+    fps: 25,
+    latency: "40ms",
+    power: "6-10W",
+    description: "Reliable baseline for residential use",
+  },
+  pi5_hailo8l: {
+    id: "pi5_hailo8l",
+    name: "Enhanced (Pi 5 + Hailo-8L)",
+    shortName: "Enhanced",
+    platform: "Raspberry Pi 5 (4GB)",
+    accelerator: "Raspberry Pi AI Kit (Hailo-8L)",
+    computeCost: 130,
+    fps: 45,
+    latency: "22ms",
+    power: "7-14W",
+    recommended: true,
+    badge: "Best Value",
+    description: "Recommended for commercial properties",
+  },
+  pi5_hailo8: {
+    id: "pi5_hailo8",
+    name: "Pro (Pi 5 + Hailo-8)",
+    shortName: "Pro",
+    platform: "Raspberry Pi 5 (8GB)",
+    accelerator: "Hailo-8 M.2",
+    computeCost: 229,
+    fps: 55,
+    latency: "18ms",
+    power: "10-20W",
+    badge: "Max Pi Performance",
+    description: "Maximum performance on Pi platform",
+  },
+  // Jetson-based tiers
+  jetson_nano: {
+    id: "jetson_nano",
+    name: "Multi-Stream (Jetson Orin Nano)",
+    shortName: "Multi-Stream",
+    platform: "Jetson Orin Nano (8GB)",
+    accelerator: "Integrated GPU (40 TOPS)",
+    computeCost: 499,
+    fps: 60,
+    latency: "17ms",
+    power: "7-15W",
+    description: "Multiple cameras, CUDA support",
+  },
+  jetson_nx: {
+    id: "jetson_nx",
+    name: "Enterprise (Jetson Orin NX)",
+    shortName: "Enterprise",
+    platform: "Jetson Orin NX (16GB)",
+    accelerator: "Integrated GPU (100 TOPS)",
+    computeCost: 599,
+    fps: 120,
+    latency: "8ms",
+    power: "10-25W",
+    badge: "Enterprise",
+    description: "Multi-sensor fusion, 3+ camera streams",
+  },
+  jetson_agx: {
+    id: "jetson_agx",
+    name: "Military/Defense (Jetson AGX Orin)",
+    shortName: "Military",
+    platform: "Jetson AGX Orin (64GB)",
+    accelerator: "Integrated GPU (275 TOPS)",
+    computeCost: 1999,
+    fps: 275, // TOPS as proxy
+    latency: "5ms",
+    power: "15-60W",
+    badge: "Maximum Performance",
+    description: "Ruggedized, 6+ streams, 4K capable",
+  },
+};
+
+/** Product-specific compute tier configuration */
+export interface ProductComputeConfig {
+  sku: string;
+  productName: string;
+  baseTier: string;
+  baseComputeCost: number;
+  availableTiers: string[];
+  tierPricing: Record<string, { delta: number; newBomTotal: number }>;
+  notes?: string;
+}
+
+/** Compute tier availability and pricing by product */
+export const productComputeConfigs: ProductComputeConfig[] = [
+  // SkyWatch Nano - No upgrades (fixed Pi Zero config)
+  {
+    sku: "SW-NANO-001",
+    productName: "SkyWatch Nano",
+    baseTier: "none",
+    baseComputeCost: 15,
+    availableTiers: [], // Fixed config, no upgrades
+    tierPricing: {},
+    notes: "Entry-level fixed configuration",
+  },
+  // SkyWatch Standard
+  {
+    sku: "SW-STD-001",
+    productName: "SkyWatch Standard",
+    baseTier: "pi4_coral",
+    baseComputeCost: 105, // Pi 4 2GB ($45) + Coral USB ($60)
+    availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8", "jetson_nano"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 210 },
+      pi5_hailo8l: { delta: 25, newBomTotal: 235 },
+      pi5_hailo8: { delta: 124, newBomTotal: 334 },
+      jetson_nano: { delta: 394, newBomTotal: 604 },
+    },
+  },
+  // SkyWatch Pro
+  {
+    sku: "SW-PRO-001",
+    productName: "SkyWatch Pro",
+    baseTier: "pi5_hailo8l",
+    baseComputeCost: 130, // Pi 5 4GB ($60) + Hailo-8L ($70)
+    availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
+    tierPricing: {
+      pi5_hailo8l: { delta: 0, newBomTotal: 495 },
+      pi5_hailo8: { delta: 99, newBomTotal: 594 },
+      jetson_nano: { delta: 369, newBomTotal: 864 },
+      jetson_nx: { delta: 469, newBomTotal: 964 },
+    },
+  },
+  // SkyWatch Mobile
+  {
+    sku: "SW-MOB-001",
+    productName: "SkyWatch Mobile",
+    baseTier: "pi4_coral",
+    baseComputeCost: 105,
+    availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 371 },
+      pi5_hailo8l: { delta: 25, newBomTotal: 396 },
+      pi5_hailo8: { delta: 124, newBomTotal: 495 },
+    },
+    notes: "Jetson not available due to form factor/power constraints",
+  },
+  // SkyWatch Thermal Budget
+  {
+    sku: "SW-THM-001-B",
+    productName: "SkyWatch Thermal (Budget)",
+    baseTier: "pi4_coral",
+    baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
+    availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 468 },
+      pi5_hailo8l: { delta: 15, newBomTotal: 483 },
+      pi5_hailo8: { delta: 114, newBomTotal: 582 },
+    },
+  },
+  // SkyWatch Thermal Pro
+  {
+    sku: "SW-THM-001-P",
+    productName: "SkyWatch Thermal (Pro)",
+    baseTier: "pi5_hailo8l",
+    baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
+    availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
+    tierPricing: {
+      pi5_hailo8l: { delta: 0, newBomTotal: 1370 },
+      pi5_hailo8: { delta: 79, newBomTotal: 1449 },
+      jetson_nano: { delta: 349, newBomTotal: 1719 },
+      jetson_nx: { delta: 449, newBomTotal: 1819 },
+    },
+  },
+  // SkyWatch Marine
+  {
+    sku: "SW-MAR-001",
+    productName: "SkyWatch Marine",
+    baseTier: "pi4_coral",
+    baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
+    availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8", "jetson_nano"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 640 },
+      pi5_hailo8l: { delta: 15, newBomTotal: 655 },
+      pi5_hailo8: { delta: 114, newBomTotal: 754 },
+      jetson_nano: { delta: 384, newBomTotal: 1024 },
+    },
+  },
+  // SkyWatch Mesh Node
+  {
+    sku: "SW-MESH-001-N",
+    productName: "SkyWatch Mesh (Node)",
+    baseTier: "pi4_coral",
+    baseComputeCost: 45, // Pi 4 2GB only (no accelerator on nodes)
+    availableTiers: ["pi4_coral", "pi5_hailo8l"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 158 },
+      pi5_hailo8l: { delta: 85, newBomTotal: 243 },
+    },
+    notes: "Nodes typically don't need Jetson (processing at Central)",
+  },
+  // SkyWatch Mesh Central
+  {
+    sku: "SW-MESH-001-C",
+    productName: "SkyWatch Mesh (Central)",
+    baseTier: "pi5_hailo8l",
+    baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
+    availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx", "jetson_agx"],
+    tierPricing: {
+      pi5_hailo8l: { delta: 0, newBomTotal: 370 },
+      pi5_hailo8: { delta: 79, newBomTotal: 449 },
+      jetson_nano: { delta: 349, newBomTotal: 719 },
+      jetson_nx: { delta: 449, newBomTotal: 819 },
+      jetson_agx: { delta: 1849, newBomTotal: 2219 },
+    },
+  },
+  // SkyWatch Enterprise
+  {
+    sku: "SW-ENT-001",
+    productName: "SkyWatch Enterprise",
+    baseTier: "jetson_nx",
+    baseComputeCost: 599,
+    availableTiers: ["jetson_nx", "jetson_agx"],
+    tierPricing: {
+      jetson_nx: { delta: 0, newBomTotal: 8300 },
+      jetson_agx: { delta: 1400, newBomTotal: 9700 },
+    },
+    notes: "Enterprise requires Jetson minimum",
+  },
+  // NetSentry Lite
+  {
+    sku: "NS-LITE-001",
+    productName: "NetSentry Lite",
+    baseTier: "pi4_coral",
+    baseComputeCost: 45, // Pi 4 2GB only (no accelerator)
+    availableTiers: ["pi4_coral", "pi5_hailo8l"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 210 },
+      pi5_hailo8l: { delta: 85, newBomTotal: 295 },
+    },
+  },
+  // NetSentry Standard
+  {
+    sku: "NS-STD-001",
+    productName: "NetSentry Standard",
+    baseTier: "pi4_coral",
+    baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
+    availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
+    tierPricing: {
+      pi4_coral: { delta: 0, newBomTotal: 500 },
+      pi5_hailo8l: { delta: 15, newBomTotal: 515 },
+      pi5_hailo8: { delta: 114, newBomTotal: 614 },
+    },
+  },
+  // NetSentry Pro
+  {
+    sku: "NS-PRO-001",
+    productName: "NetSentry Pro",
+    baseTier: "pi5_hailo8l",
+    baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
+    availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
+    tierPricing: {
+      pi5_hailo8l: { delta: 0, newBomTotal: 1015 },
+      pi5_hailo8: { delta: 79, newBomTotal: 1094 },
+      jetson_nano: { delta: 349, newBomTotal: 1364 },
+      jetson_nx: { delta: 449, newBomTotal: 1464 },
+    },
+  },
+];
+
+/** Get compute config for a product by SKU */
+export function getProductComputeConfig(sku: string): ProductComputeConfig | undefined {
+  return productComputeConfigs.find((c) => c.sku === sku);
+}
+
+/** Get available tiers for a product */
+export function getAvailableTiers(sku: string): ComputeTier[] {
+  const config = getProductComputeConfig(sku);
+  if (!config) return [];
+  return config.availableTiers.map((tierId) => computeTiers[tierId]).filter(Boolean);
+}
+
+/** Calculate price delta for a tier upgrade */
+export function getTierPriceDelta(sku: string, tierId: string): number {
+  const config = getProductComputeConfig(sku);
+  if (!config || !config.tierPricing[tierId]) return 0;
+  return config.tierPricing[tierId].delta;
+}
+
+/** Pre-order summary type for checkout */
+export interface PreOrderSummary {
+  product: string;
+  sku: string;
+  baseBomCost: number;
+  selectedTier: ComputeTier;
+  tierDelta: number;
+  finalBomCost: number;
+  estimatedRetailMin: number;
+  estimatedRetailMax: number;
+}
+
+/** Generate pre-order summary */
+export function generatePreOrderSummary(
+  sku: string,
+  tierId: string
+): PreOrderSummary | null {
+  const product = getProductBySku(sku);
+  const config = getProductComputeConfig(sku);
+  const tier = computeTiers[tierId];
+
+  if (!product || !config || !tier) return null;
+
+  const tierPricing = config.tierPricing[tierId];
+  if (!tierPricing) return null;
+
+  // Apply standard markup (1.58x for consumer)
+  const markup = 1.58;
+
+  return {
+    product: product.name,
+    sku: product.sku,
+    baseBomCost: product.bomTotal,
+    selectedTier: tier,
+    tierDelta: tierPricing.delta,
+    finalBomCost: tierPricing.newBomTotal,
+    estimatedRetailMin: Math.round(tierPricing.newBomTotal * markup),
+    estimatedRetailMax: Math.round(tierPricing.newBomTotal * markup * 1.2),
+  };
+}
