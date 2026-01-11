@@ -2951,3 +2951,1260 @@ export function generatePreOrderSummary(
     estimatedRetailMax: Math.round(tierPricing.newBomTotal * markup * 1.2),
   };
 }
+
+// =============================================================================
+// CAMERA TIER CONFIGURATOR
+// =============================================================================
+
+/** Camera tier definition */
+export interface CameraTier {
+  id: string;
+  name: string;
+  shortName: string;
+  sensor: string;
+  resolution: string;
+  features: string[];
+  price: number;
+  mount?: string;
+  recommended?: boolean;
+  badge?: string;
+  description: string;
+}
+
+/** Available camera tiers */
+export const cameraTiers: Record<string, CameraTier> = {
+  // Standard cameras
+  pi_v2: {
+    id: "pi_v2",
+    name: "Basic (Pi Camera v2)",
+    shortName: "Basic",
+    sensor: "Sony IMX219",
+    resolution: "8MP",
+    features: ["Fixed focus", "1080p30 video", "Low-light limited"],
+    price: 25,
+    description: "Entry-level, daylight detection",
+  },
+  pi_v3: {
+    id: "pi_v3",
+    name: "Standard (Pi Camera v3)",
+    shortName: "Standard",
+    sensor: "Sony IMX708",
+    resolution: "12MP",
+    features: ["Autofocus", "HDR", "Low-light enhanced", "1080p50 video"],
+    price: 35,
+    recommended: true,
+    badge: "Recommended",
+    description: "Best all-around for most deployments",
+  },
+  pi_v3_wide: {
+    id: "pi_v3_wide",
+    name: "Wide Angle (Pi Camera v3 Wide)",
+    shortName: "Wide",
+    sensor: "Sony IMX708",
+    resolution: "12MP",
+    features: ["120° FOV", "Autofocus", "HDR", "Area coverage"],
+    price: 35,
+    description: "Wide area monitoring, reduced range",
+  },
+  pi_hq: {
+    id: "pi_hq",
+    name: "High Quality (Pi Camera HQ)",
+    shortName: "HQ",
+    sensor: "Sony IMX477",
+    resolution: "12.3MP",
+    features: ["C/CS mount", "Interchangeable lens", "Large sensor"],
+    price: 50,
+    mount: "C/CS",
+    description: "Professional, requires separate lens",
+  },
+  pi_gs: {
+    id: "pi_gs",
+    name: "Global Shutter (Pi GS Camera)",
+    shortName: "Global Shutter",
+    sensor: "Sony IMX296",
+    resolution: "1.6MP",
+    features: ["No rolling shutter", "High-speed capture", "Motion tracking"],
+    price: 50,
+    mount: "CS",
+    badge: "Fast Targets",
+    description: "Best for fast-moving drone tracking",
+  },
+  // Thermal cameras
+  lepton_3_5: {
+    id: "lepton_3_5",
+    name: "Thermal (FLIR Lepton 3.5)",
+    shortName: "Thermal Basic",
+    sensor: "FLIR Lepton 3.5",
+    resolution: "160×120",
+    features: ["Thermal imaging", "8.7Hz", "<50mK sensitivity"],
+    price: 250, // Includes breakout board
+    description: "Budget thermal, 24/7 detection",
+  },
+  boson_320: {
+    id: "boson_320",
+    name: "Thermal Pro (FLIR Boson 320)",
+    shortName: "Thermal Pro",
+    sensor: "FLIR Boson 320",
+    resolution: "320×256",
+    features: ["60Hz thermal", "Professional grade", "Long range"],
+    price: 900, // Includes interface board
+    badge: "Professional",
+    description: "Professional thermal detection",
+  },
+};
+
+/** Product camera configuration */
+export interface ProductCameraConfig {
+  sku: string;
+  productName: string;
+  baseCameraId: string;
+  baseCameraPrice: number;
+  availableCameras: string[];
+  cameraPricing: Record<string, { delta: number }>;
+  lensRequired?: boolean;
+  notes?: string;
+}
+
+/** Camera tier availability by product */
+export const productCameraConfigs: ProductCameraConfig[] = [
+  // SkyWatch Nano
+  {
+    sku: "SW-NANO-001",
+    productName: "SkyWatch Nano",
+    baseCameraId: "pi_v2",
+    baseCameraPrice: 25,
+    availableCameras: ["pi_v2", "pi_v3"],
+    cameraPricing: {
+      pi_v2: { delta: 0 },
+      pi_v3: { delta: 10 },
+    },
+    notes: "Limited by Pi Zero compute",
+  },
+  // SkyWatch Standard
+  {
+    sku: "SW-STD-001",
+    productName: "SkyWatch Standard",
+    baseCameraId: "pi_v3",
+    baseCameraPrice: 35,
+    availableCameras: ["pi_v2", "pi_v3", "pi_v3_wide", "pi_hq"],
+    cameraPricing: {
+      pi_v2: { delta: -10 },
+      pi_v3: { delta: 0 },
+      pi_v3_wide: { delta: 0 },
+      pi_hq: { delta: 15 },
+    },
+  },
+  // SkyWatch Pro
+  {
+    sku: "SW-PRO-001",
+    productName: "SkyWatch Pro",
+    baseCameraId: "pi_hq",
+    baseCameraPrice: 50,
+    availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
+    cameraPricing: {
+      pi_v3: { delta: -15 },
+      pi_hq: { delta: 0 },
+      pi_gs: { delta: 0 },
+    },
+    lensRequired: true,
+    notes: "Lens sold separately for HQ/GS",
+  },
+  // SkyWatch Mobile
+  {
+    sku: "SW-MOB-001",
+    productName: "SkyWatch Mobile",
+    baseCameraId: "pi_v3",
+    baseCameraPrice: 35,
+    availableCameras: ["pi_v3", "pi_v3_wide"],
+    cameraPricing: {
+      pi_v3: { delta: 0 },
+      pi_v3_wide: { delta: 0 },
+    },
+    notes: "Compact form factor limits options",
+  },
+  // SkyWatch Thermal Budget
+  {
+    sku: "SW-THM-001-B",
+    productName: "SkyWatch Thermal (Budget)",
+    baseCameraId: "lepton_3_5",
+    baseCameraPrice: 250,
+    availableCameras: ["lepton_3_5"],
+    cameraPricing: {
+      lepton_3_5: { delta: 0 },
+    },
+    notes: "Thermal sensor fixed, visible camera configurable separately",
+  },
+  // SkyWatch Thermal Pro
+  {
+    sku: "SW-THM-001-P",
+    productName: "SkyWatch Thermal (Pro)",
+    baseCameraId: "boson_320",
+    baseCameraPrice: 900,
+    availableCameras: ["lepton_3_5", "boson_320"],
+    cameraPricing: {
+      lepton_3_5: { delta: -650 },
+      boson_320: { delta: 0 },
+    },
+    notes: "Includes visible camera (Pi HQ)",
+  },
+  // SkyWatch Marine
+  {
+    sku: "SW-MAR-001",
+    productName: "SkyWatch Marine",
+    baseCameraId: "pi_hq",
+    baseCameraPrice: 50,
+    availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
+    cameraPricing: {
+      pi_v3: { delta: -15 },
+      pi_hq: { delta: 0 },
+      pi_gs: { delta: 0 },
+    },
+    lensRequired: true,
+  },
+  // SkyWatch Mesh Node
+  {
+    sku: "SW-MESH-001-N",
+    productName: "SkyWatch Mesh (Node)",
+    baseCameraId: "pi_v3",
+    baseCameraPrice: 35,
+    availableCameras: ["pi_v2", "pi_v3", "pi_v3_wide"],
+    cameraPricing: {
+      pi_v2: { delta: -10 },
+      pi_v3: { delta: 0 },
+      pi_v3_wide: { delta: 0 },
+    },
+  },
+  // SkyWatch Mesh Central - no camera
+  {
+    sku: "SW-MESH-001-C",
+    productName: "SkyWatch Mesh (Central)",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Aggregation server, no camera",
+  },
+  // SkyWatch Enterprise - multiple cameras included
+  {
+    sku: "SW-ENT-001",
+    productName: "SkyWatch Enterprise",
+    baseCameraId: "mixed",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Includes 10 nodes + 4 PTZ cameras, configured separately",
+  },
+  // NetSentry Lite
+  {
+    sku: "NS-LITE-001",
+    productName: "NetSentry Lite",
+    baseCameraId: "pi_v2",
+    baseCameraPrice: 25,
+    availableCameras: ["pi_v2", "pi_v3"],
+    cameraPricing: {
+      pi_v2: { delta: 0 },
+      pi_v3: { delta: 10 },
+    },
+  },
+  // NetSentry Standard
+  {
+    sku: "NS-STD-001",
+    productName: "NetSentry Standard",
+    baseCameraId: "pi_hq",
+    baseCameraPrice: 50,
+    availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
+    cameraPricing: {
+      pi_v3: { delta: -15 },
+      pi_hq: { delta: 0 },
+      pi_gs: { delta: 0 },
+    },
+    lensRequired: true,
+  },
+  // NetSentry Pro
+  {
+    sku: "NS-PRO-001",
+    productName: "NetSentry Pro",
+    baseCameraId: "pi_gs",
+    baseCameraPrice: 50,
+    availableCameras: ["pi_hq", "pi_gs"],
+    cameraPricing: {
+      pi_hq: { delta: 0 },
+      pi_gs: { delta: 0 },
+    },
+    lensRequired: true,
+    notes: "Global shutter recommended for intercept timing",
+  },
+  // SkySnare - no camera
+  {
+    sku: "SS-001",
+    productName: "SkySnare",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Handheld launcher, no camera",
+  },
+  // NetSnare - no cameras (use paired SkyWatch)
+  {
+    sku: "NSN-LITE-001",
+    productName: "NetSnare Lite",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Ground launcher, uses paired SkyWatch",
+  },
+  {
+    sku: "NSN-STD-001",
+    productName: "NetSnare Standard",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Ground launcher, uses paired SkyWatch",
+  },
+  {
+    sku: "NSN-PRO-001",
+    productName: "NetSnare Pro",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Ground launcher, uses paired SkyWatch",
+  },
+  // AeroNet - enterprise config
+  {
+    sku: "AN-ENT-001",
+    productName: "AeroNet Enterprise",
+    baseCameraId: "enterprise",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Multi-sensor suite configured per-site",
+  },
+  {
+    sku: "AN-CMD-001",
+    productName: "AeroNet Command",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Software only",
+  },
+  // RKV - fixed camera configs
+  {
+    sku: "RKV-M-001",
+    productName: "RKV-M Mothership",
+    baseCameraId: "fixed",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Integrated EO/IR gimbal, not configurable",
+  },
+  {
+    sku: "RKV-I-001",
+    productName: "RKV-I Interceptor",
+    baseCameraId: "fixed",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Fixed forward camera for homing",
+  },
+  {
+    sku: "RKV-G-001",
+    productName: "RKV-G Ground Station",
+    baseCameraId: "fixed",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Mast-mounted sensor suite, configured per-order",
+  },
+];
+
+/** Get camera config for a product */
+export function getProductCameraConfig(sku: string): ProductCameraConfig | undefined {
+  return productCameraConfigs.find((c) => c.sku === sku);
+}
+
+/** Get available cameras for a product */
+export function getAvailableCameras(sku: string): CameraTier[] {
+  const config = getProductCameraConfig(sku);
+  if (!config) return [];
+  return config.availableCameras.map((camId) => cameraTiers[camId]).filter(Boolean);
+}
+
+// =============================================================================
+// CONNECTIVITY TIER CONFIGURATOR
+// =============================================================================
+
+/** Connectivity tier definition */
+export interface ConnectivityTier {
+  id: string;
+  name: string;
+  shortName: string;
+  type: string;
+  speed: string;
+  features: string[];
+  price: number;
+  powerDraw?: string;
+  recommended?: boolean;
+  badge?: string;
+  description: string;
+}
+
+/** Available connectivity tiers */
+export const connectivityTiers: Record<string, ConnectivityTier> = {
+  wifi: {
+    id: "wifi",
+    name: "WiFi Only",
+    shortName: "WiFi",
+    type: "Wireless",
+    speed: "Up to 150Mbps",
+    features: ["2.4/5GHz dual-band", "Easy setup", "No cabling"],
+    price: 0, // Included
+    powerDraw: "Included",
+    description: "Basic wireless, requires WiFi coverage",
+  },
+  ethernet: {
+    id: "ethernet",
+    name: "Ethernet",
+    shortName: "Ethernet",
+    type: "Wired",
+    speed: "1Gbps",
+    features: ["Reliable", "Low latency", "Requires cable run"],
+    price: 0, // Included on Pi 4/5
+    powerDraw: "Separate power needed",
+    description: "Reliable wired connection",
+  },
+  poe: {
+    id: "poe",
+    name: "PoE (802.3af)",
+    shortName: "PoE",
+    type: "Wired + Power",
+    speed: "1Gbps",
+    features: ["Power over Ethernet", "15W max", "Single cable"],
+    price: 20,
+    powerDraw: "15W via PoE",
+    recommended: true,
+    badge: "Recommended",
+    description: "Power + data over single cable",
+  },
+  poe_plus: {
+    id: "poe_plus",
+    name: "PoE+ (802.3at)",
+    shortName: "PoE+",
+    type: "Wired + Power",
+    speed: "1Gbps",
+    features: ["High power PoE", "30W max", "Jetson compatible"],
+    price: 25,
+    powerDraw: "30W via PoE+",
+    description: "Higher power for Jetson/accessories",
+  },
+  lte: {
+    id: "lte",
+    name: "LTE Cellular",
+    shortName: "LTE",
+    type: "Cellular",
+    speed: "Up to 100Mbps",
+    features: ["Remote locations", "SIM required", "Carrier costs"],
+    price: 75,
+    powerDraw: "+2W",
+    badge: "Remote",
+    description: "Cellular for remote deployments",
+  },
+  lte_poe: {
+    id: "lte_poe",
+    name: "LTE + PoE Dual",
+    shortName: "LTE+PoE",
+    type: "Hybrid",
+    speed: "1Gbps + LTE failover",
+    features: ["Primary PoE", "LTE backup", "High availability"],
+    price: 95,
+    powerDraw: "PoE + 2W LTE",
+    badge: "Enterprise",
+    description: "PoE primary with LTE failover",
+  },
+};
+
+/** Product connectivity configuration */
+export interface ProductConnectivityConfig {
+  sku: string;
+  productName: string;
+  baseConnectivityId: string;
+  baseConnectivityPrice: number;
+  availableConnectivity: string[];
+  connectivityPricing: Record<string, { delta: number }>;
+  notes?: string;
+}
+
+/** Connectivity tier availability by product */
+export const productConnectivityConfigs: ProductConnectivityConfig[] = [
+  // SkyWatch Nano
+  {
+    sku: "SW-NANO-001",
+    productName: "SkyWatch Nano",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi"], // Pi Zero WiFi only
+    connectivityPricing: {
+      wifi: { delta: 0 },
+    },
+    notes: "Pi Zero 2W - WiFi only",
+  },
+  // SkyWatch Standard
+  {
+    sku: "SW-STD-001",
+    productName: "SkyWatch Standard",
+    baseConnectivityId: "poe",
+    baseConnectivityPrice: 20,
+    availableConnectivity: ["wifi", "ethernet", "poe", "lte"],
+    connectivityPricing: {
+      wifi: { delta: -20 },
+      ethernet: { delta: -20 },
+      poe: { delta: 0 },
+      lte: { delta: 55 },
+    },
+  },
+  // SkyWatch Pro
+  {
+    sku: "SW-PRO-001",
+    productName: "SkyWatch Pro",
+    baseConnectivityId: "poe_plus",
+    baseConnectivityPrice: 25,
+    availableConnectivity: ["poe", "poe_plus", "lte", "lte_poe"],
+    connectivityPricing: {
+      poe: { delta: -5 },
+      poe_plus: { delta: 0 },
+      lte: { delta: 50 },
+      lte_poe: { delta: 70 },
+    },
+  },
+  // SkyWatch Mobile
+  {
+    sku: "SW-MOB-001",
+    productName: "SkyWatch Mobile",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi", "lte"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+      lte: { delta: 75 },
+    },
+    notes: "Battery powered - no PoE",
+  },
+  // SkyWatch Thermal Budget
+  {
+    sku: "SW-THM-001-B",
+    productName: "SkyWatch Thermal (Budget)",
+    baseConnectivityId: "poe",
+    baseConnectivityPrice: 20,
+    availableConnectivity: ["wifi", "ethernet", "poe", "lte"],
+    connectivityPricing: {
+      wifi: { delta: -20 },
+      ethernet: { delta: -20 },
+      poe: { delta: 0 },
+      lte: { delta: 55 },
+    },
+  },
+  // SkyWatch Thermal Pro
+  {
+    sku: "SW-THM-001-P",
+    productName: "SkyWatch Thermal (Pro)",
+    baseConnectivityId: "poe_plus",
+    baseConnectivityPrice: 25,
+    availableConnectivity: ["poe", "poe_plus", "lte_poe"],
+    connectivityPricing: {
+      poe: { delta: -5 },
+      poe_plus: { delta: 0 },
+      lte_poe: { delta: 70 },
+    },
+  },
+  // SkyWatch Marine
+  {
+    sku: "SW-MAR-001",
+    productName: "SkyWatch Marine",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi", "ethernet", "lte"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+      ethernet: { delta: 0 },
+      lte: { delta: 75 },
+    },
+    notes: "12V DC marine power, no PoE",
+  },
+  // SkyWatch Mesh Node
+  {
+    sku: "SW-MESH-001-N",
+    productName: "SkyWatch Mesh (Node)",
+    baseConnectivityId: "poe",
+    baseConnectivityPrice: 20,
+    availableConnectivity: ["poe"], // Mesh nodes require PoE
+    connectivityPricing: {
+      poe: { delta: 0 },
+    },
+    notes: "PoE required for mesh deployment",
+  },
+  // SkyWatch Mesh Central
+  {
+    sku: "SW-MESH-001-C",
+    productName: "SkyWatch Mesh (Central)",
+    baseConnectivityId: "ethernet",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["ethernet", "lte_poe"],
+    connectivityPricing: {
+      ethernet: { delta: 0 },
+      lte_poe: { delta: 95 },
+    },
+    notes: "PoE switch included, uplink configurable",
+  },
+  // SkyWatch Enterprise
+  {
+    sku: "SW-ENT-001",
+    productName: "SkyWatch Enterprise",
+    baseConnectivityId: "enterprise",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Managed switch included, configured per-site",
+  },
+  // NetSentry Lite
+  {
+    sku: "NS-LITE-001",
+    productName: "NetSentry Lite",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi", "ethernet"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+      ethernet: { delta: 0 },
+    },
+  },
+  // NetSentry Standard
+  {
+    sku: "NS-STD-001",
+    productName: "NetSentry Standard",
+    baseConnectivityId: "poe",
+    baseConnectivityPrice: 20,
+    availableConnectivity: ["wifi", "ethernet", "poe"],
+    connectivityPricing: {
+      wifi: { delta: -20 },
+      ethernet: { delta: -20 },
+      poe: { delta: 0 },
+    },
+  },
+  // NetSentry Pro
+  {
+    sku: "NS-PRO-001",
+    productName: "NetSentry Pro",
+    baseConnectivityId: "poe_plus",
+    baseConnectivityPrice: 25,
+    availableConnectivity: ["poe", "poe_plus", "lte_poe"],
+    connectivityPricing: {
+      poe: { delta: -5 },
+      poe_plus: { delta: 0 },
+      lte_poe: { delta: 70 },
+    },
+  },
+  // SkySnare
+  {
+    sku: "SS-001",
+    productName: "SkySnare",
+    baseConnectivityId: "none",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Handheld, no connectivity",
+  },
+  // NetSnare - triggered via SkyWatch
+  {
+    sku: "NSN-LITE-001",
+    productName: "NetSnare Lite",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+    },
+    notes: "WiFi for trigger from SkyWatch",
+  },
+  {
+    sku: "NSN-STD-001",
+    productName: "NetSnare Standard",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi", "ethernet"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+      ethernet: { delta: 0 },
+    },
+  },
+  {
+    sku: "NSN-PRO-001",
+    productName: "NetSnare Pro",
+    baseConnectivityId: "ethernet",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi", "ethernet", "poe"],
+    connectivityPricing: {
+      wifi: { delta: 0 },
+      ethernet: { delta: 0 },
+      poe: { delta: 20 },
+    },
+  },
+  // AeroNet
+  {
+    sku: "AN-ENT-001",
+    productName: "AeroNet Enterprise",
+    baseConnectivityId: "enterprise",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "10GbE backbone, configured per-site",
+  },
+  {
+    sku: "AN-CMD-001",
+    productName: "AeroNet Command",
+    baseConnectivityId: "cloud",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Cloud or on-premise, network provided",
+  },
+  // RKV
+  {
+    sku: "RKV-M-001",
+    productName: "RKV-M Mothership",
+    baseConnectivityId: "mesh_radio",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Integrated mesh radio, not configurable",
+  },
+  {
+    sku: "RKV-I-001",
+    productName: "RKV-I Interceptor",
+    baseConnectivityId: "mesh_radio",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Short-range datalink to mothership",
+  },
+  {
+    sku: "RKV-G-001",
+    productName: "RKV-G Ground Station",
+    baseConnectivityId: "enterprise",
+    baseConnectivityPrice: 0,
+    availableConnectivity: [],
+    connectivityPricing: {},
+    notes: "Satellite + mesh radio, configured per-order",
+  },
+];
+
+/** Get connectivity config for a product */
+export function getProductConnectivityConfig(sku: string): ProductConnectivityConfig | undefined {
+  return productConnectivityConfigs.find((c) => c.sku === sku);
+}
+
+/** Get available connectivity options for a product */
+export function getAvailableConnectivity(sku: string): ConnectivityTier[] {
+  const config = getProductConnectivityConfig(sku);
+  if (!config) return [];
+  return config.availableConnectivity.map((connId) => connectivityTiers[connId]).filter(Boolean);
+}
+
+// =============================================================================
+// STORAGE TIER CONFIGURATOR
+// =============================================================================
+
+/** Storage tier definition */
+export interface StorageTier {
+  id: string;
+  name: string;
+  shortName: string;
+  type: string;
+  capacity: string;
+  speed: string;
+  features: string[];
+  price: number;
+  retention?: string;
+  recommended?: boolean;
+  badge?: string;
+  description: string;
+}
+
+/** Available storage tiers */
+export const storageTiers: Record<string, StorageTier> = {
+  sd_32: {
+    id: "sd_32",
+    name: "Basic (32GB microSD)",
+    shortName: "32GB SD",
+    type: "microSD",
+    capacity: "32GB",
+    speed: "100MB/s",
+    features: ["Class 10", "Basic logging"],
+    price: 8,
+    retention: "24-48 hours events",
+    description: "Minimum viable, alerts only",
+  },
+  sd_64_he: {
+    id: "sd_64_he",
+    name: "Standard (64GB High Endurance)",
+    shortName: "64GB HE",
+    type: "microSD",
+    capacity: "64GB",
+    speed: "100MB/s",
+    features: ["High Endurance", "Continuous write", "A1 rated"],
+    price: 15,
+    retention: "3-7 days events",
+    recommended: true,
+    badge: "Recommended",
+    description: "Best for continuous event recording",
+  },
+  sd_128_he: {
+    id: "sd_128_he",
+    name: "Extended (128GB High Endurance)",
+    shortName: "128GB HE",
+    type: "microSD",
+    capacity: "128GB",
+    speed: "160MB/s",
+    features: ["High Endurance", "A2 rated", "Extended retention"],
+    price: 25,
+    retention: "7-14 days events",
+    description: "Extended local storage",
+  },
+  nvme_128: {
+    id: "nvme_128",
+    name: "Fast (128GB NVMe SSD)",
+    shortName: "128GB NVMe",
+    type: "NVMe M.2",
+    capacity: "128GB",
+    speed: "2000MB/s",
+    features: ["PCIe 3.0", "High write endurance", "Pi 5/Jetson"],
+    price: 25,
+    retention: "7-14 days continuous",
+    description: "Fast storage for continuous recording",
+  },
+  nvme_256: {
+    id: "nvme_256",
+    name: "Pro (256GB NVMe SSD)",
+    shortName: "256GB NVMe",
+    type: "NVMe M.2",
+    capacity: "256GB",
+    speed: "2500MB/s",
+    features: ["PCIe 3.0", "Professional grade"],
+    price: 40,
+    retention: "14-30 days continuous",
+    badge: "Pro",
+    description: "Professional continuous recording",
+  },
+  nvme_512: {
+    id: "nvme_512",
+    name: "Enterprise (512GB NVMe SSD)",
+    shortName: "512GB NVMe",
+    type: "NVMe M.2",
+    capacity: "512GB",
+    speed: "3500MB/s",
+    features: ["PCIe 3.0/4.0", "Enterprise grade"],
+    price: 60,
+    retention: "30-60 days continuous",
+    badge: "Enterprise",
+    description: "Extended retention for compliance",
+  },
+  nvme_1tb: {
+    id: "nvme_1tb",
+    name: "Archive (1TB NVMe SSD)",
+    shortName: "1TB NVMe",
+    type: "NVMe M.2",
+    capacity: "1TB",
+    speed: "3500MB/s",
+    features: ["PCIe 4.0", "Maximum local storage"],
+    price: 100,
+    retention: "60-90 days continuous",
+    description: "Maximum local evidence buffer",
+  },
+};
+
+/** Product storage configuration */
+export interface ProductStorageConfig {
+  sku: string;
+  productName: string;
+  baseStorageId: string;
+  baseStoragePrice: number;
+  availableStorage: string[];
+  storagePricing: Record<string, { delta: number }>;
+  nvmeSupported: boolean;
+  notes?: string;
+}
+
+/** Storage tier availability by product */
+export const productStorageConfigs: ProductStorageConfig[] = [
+  // SkyWatch Nano
+  {
+    sku: "SW-NANO-001",
+    productName: "SkyWatch Nano",
+    baseStorageId: "sd_32",
+    baseStoragePrice: 8,
+    availableStorage: ["sd_32", "sd_64_he"],
+    storagePricing: {
+      sd_32: { delta: 0 },
+      sd_64_he: { delta: 7 },
+    },
+    nvmeSupported: false,
+    notes: "Pi Zero - SD only",
+  },
+  // SkyWatch Standard
+  {
+    sku: "SW-STD-001",
+    productName: "SkyWatch Standard",
+    baseStorageId: "sd_64_he",
+    baseStoragePrice: 15,
+    availableStorage: ["sd_32", "sd_64_he", "sd_128_he"],
+    storagePricing: {
+      sd_32: { delta: -7 },
+      sd_64_he: { delta: 0 },
+      sd_128_he: { delta: 10 },
+    },
+    nvmeSupported: false,
+    notes: "Pi 4 - SD only (upgrade to Pro for NVMe)",
+  },
+  // SkyWatch Pro
+  {
+    sku: "SW-PRO-001",
+    productName: "SkyWatch Pro",
+    baseStorageId: "nvme_128",
+    baseStoragePrice: 25,
+    availableStorage: ["sd_128_he", "nvme_128", "nvme_256", "nvme_512"],
+    storagePricing: {
+      sd_128_he: { delta: 0 },
+      nvme_128: { delta: 0 },
+      nvme_256: { delta: 15 },
+      nvme_512: { delta: 35 },
+    },
+    nvmeSupported: true,
+  },
+  // SkyWatch Mobile
+  {
+    sku: "SW-MOB-001",
+    productName: "SkyWatch Mobile",
+    baseStorageId: "sd_64_he",
+    baseStoragePrice: 15,
+    availableStorage: ["sd_64_he", "sd_128_he"],
+    storagePricing: {
+      sd_64_he: { delta: 0 },
+      sd_128_he: { delta: 10 },
+    },
+    nvmeSupported: false,
+    notes: "Portable form factor",
+  },
+  // SkyWatch Thermal Budget
+  {
+    sku: "SW-THM-001-B",
+    productName: "SkyWatch Thermal (Budget)",
+    baseStorageId: "sd_64_he",
+    baseStoragePrice: 15,
+    availableStorage: ["sd_64_he", "sd_128_he"],
+    storagePricing: {
+      sd_64_he: { delta: 0 },
+      sd_128_he: { delta: 10 },
+    },
+    nvmeSupported: false,
+  },
+  // SkyWatch Thermal Pro
+  {
+    sku: "SW-THM-001-P",
+    productName: "SkyWatch Thermal (Pro)",
+    baseStorageId: "nvme_256",
+    baseStoragePrice: 40,
+    availableStorage: ["nvme_128", "nvme_256", "nvme_512", "nvme_1tb"],
+    storagePricing: {
+      nvme_128: { delta: -15 },
+      nvme_256: { delta: 0 },
+      nvme_512: { delta: 20 },
+      nvme_1tb: { delta: 60 },
+    },
+    nvmeSupported: true,
+  },
+  // SkyWatch Marine
+  {
+    sku: "SW-MAR-001",
+    productName: "SkyWatch Marine",
+    baseStorageId: "sd_128_he",
+    baseStoragePrice: 25,
+    availableStorage: ["sd_64_he", "sd_128_he"],
+    storagePricing: {
+      sd_64_he: { delta: -10 },
+      sd_128_he: { delta: 0 },
+    },
+    nvmeSupported: false,
+    notes: "SD for marine environment reliability",
+  },
+  // SkyWatch Mesh Node
+  {
+    sku: "SW-MESH-001-N",
+    productName: "SkyWatch Mesh (Node)",
+    baseStorageId: "sd_64_he",
+    baseStoragePrice: 15,
+    availableStorage: ["sd_32", "sd_64_he"],
+    storagePricing: {
+      sd_32: { delta: -7 },
+      sd_64_he: { delta: 0 },
+    },
+    nvmeSupported: false,
+    notes: "Nodes sync to Central",
+  },
+  // SkyWatch Mesh Central
+  {
+    sku: "SW-MESH-001-C",
+    productName: "SkyWatch Mesh (Central)",
+    baseStorageId: "nvme_256",
+    baseStoragePrice: 40,
+    availableStorage: ["nvme_256", "nvme_512", "nvme_1tb"],
+    storagePricing: {
+      nvme_256: { delta: 0 },
+      nvme_512: { delta: 20 },
+      nvme_1tb: { delta: 60 },
+    },
+    nvmeSupported: true,
+    notes: "Central aggregation storage",
+  },
+  // SkyWatch Enterprise
+  {
+    sku: "SW-ENT-001",
+    productName: "SkyWatch Enterprise",
+    baseStorageId: "enterprise",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: true,
+    notes: "NAS/SAN configured per-site",
+  },
+  // NetSentry Lite
+  {
+    sku: "NS-LITE-001",
+    productName: "NetSentry Lite",
+    baseStorageId: "sd_32",
+    baseStoragePrice: 8,
+    availableStorage: ["sd_32", "sd_64_he"],
+    storagePricing: {
+      sd_32: { delta: 0 },
+      sd_64_he: { delta: 7 },
+    },
+    nvmeSupported: false,
+  },
+  // NetSentry Standard
+  {
+    sku: "NS-STD-001",
+    productName: "NetSentry Standard",
+    baseStorageId: "sd_64_he",
+    baseStoragePrice: 15,
+    availableStorage: ["sd_64_he", "sd_128_he"],
+    storagePricing: {
+      sd_64_he: { delta: 0 },
+      sd_128_he: { delta: 10 },
+    },
+    nvmeSupported: false,
+  },
+  // NetSentry Pro
+  {
+    sku: "NS-PRO-001",
+    productName: "NetSentry Pro",
+    baseStorageId: "nvme_128",
+    baseStoragePrice: 25,
+    availableStorage: ["sd_128_he", "nvme_128", "nvme_256"],
+    storagePricing: {
+      sd_128_he: { delta: 0 },
+      nvme_128: { delta: 0 },
+      nvme_256: { delta: 15 },
+    },
+    nvmeSupported: true,
+  },
+  // SkySnare
+  {
+    sku: "SS-001",
+    productName: "SkySnare",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Handheld, no storage",
+  },
+  // NetSnare - minimal storage
+  {
+    sku: "NSN-LITE-001",
+    productName: "NetSnare Lite",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Trigger only, no local storage",
+  },
+  {
+    sku: "NSN-STD-001",
+    productName: "NetSnare Standard",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Trigger only, no local storage",
+  },
+  {
+    sku: "NSN-PRO-001",
+    productName: "NetSnare Pro",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Trigger only, no local storage",
+  },
+  // AeroNet
+  {
+    sku: "AN-ENT-001",
+    productName: "AeroNet Enterprise",
+    baseStorageId: "enterprise",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: true,
+    notes: "SAN/NAS per-site, compliance storage",
+  },
+  {
+    sku: "AN-CMD-001",
+    productName: "AeroNet Command",
+    baseStorageId: "cloud",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Cloud or on-premise database",
+  },
+  // RKV
+  {
+    sku: "RKV-M-001",
+    productName: "RKV-M Mothership",
+    baseStorageId: "fixed",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: true,
+    notes: "Integrated mission storage",
+  },
+  {
+    sku: "RKV-I-001",
+    productName: "RKV-I Interceptor",
+    baseStorageId: "fixed",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Minimal flight recorder",
+  },
+  {
+    sku: "RKV-G-001",
+    productName: "RKV-G Ground Station",
+    baseStorageId: "enterprise",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: true,
+    notes: "Raid array, configured per-order",
+  },
+];
+
+/** Get storage config for a product */
+export function getProductStorageConfig(sku: string): ProductStorageConfig | undefined {
+  return productStorageConfigs.find((c) => c.sku === sku);
+}
+
+/** Get available storage options for a product */
+export function getAvailableStorage(sku: string): StorageTier[] {
+  const config = getProductStorageConfig(sku);
+  if (!config) return [];
+  return config.availableStorage.map((storageId) => storageTiers[storageId]).filter(Boolean);
+}
+
+// =============================================================================
+// UNIFIED PRE-ORDER CONFIGURATION
+// =============================================================================
+
+/** Full product configuration for pre-order */
+export interface ProductConfiguration {
+  sku: string;
+  productName: string;
+  compute?: { tier: ComputeTier; delta: number };
+  camera?: { tier: CameraTier; delta: number };
+  connectivity?: { tier: ConnectivityTier; delta: number };
+  storage?: { tier: StorageTier; delta: number };
+  totalDelta: number;
+  baseBomCost: number;
+  configuredBomCost: number;
+}
+
+/** Generate full product configuration summary */
+export function generateProductConfiguration(
+  sku: string,
+  computeTierId?: string,
+  cameraTierId?: string,
+  connectivityTierId?: string,
+  storageTierId?: string
+): ProductConfiguration | null {
+  const product = getProductBySku(sku);
+  if (!product) return null;
+
+  let totalDelta = 0;
+  const config: ProductConfiguration = {
+    sku,
+    productName: product.name,
+    totalDelta: 0,
+    baseBomCost: product.bomTotal,
+    configuredBomCost: product.bomTotal,
+  };
+
+  // Compute tier
+  if (computeTierId) {
+    const computeConfig = getProductComputeConfig(sku);
+    if (computeConfig?.tierPricing[computeTierId]) {
+      const delta = computeConfig.tierPricing[computeTierId].delta;
+      config.compute = { tier: computeTiers[computeTierId], delta };
+      totalDelta += delta;
+    }
+  }
+
+  // Camera tier
+  if (cameraTierId) {
+    const cameraConfig = getProductCameraConfig(sku);
+    if (cameraConfig?.cameraPricing[cameraTierId]) {
+      const delta = cameraConfig.cameraPricing[cameraTierId].delta;
+      config.camera = { tier: cameraTiers[cameraTierId], delta };
+      totalDelta += delta;
+    }
+  }
+
+  // Connectivity tier
+  if (connectivityTierId) {
+    const connConfig = getProductConnectivityConfig(sku);
+    if (connConfig?.connectivityPricing[connectivityTierId]) {
+      const delta = connConfig.connectivityPricing[connectivityTierId].delta;
+      config.connectivity = { tier: connectivityTiers[connectivityTierId], delta };
+      totalDelta += delta;
+    }
+  }
+
+  // Storage tier
+  if (storageTierId) {
+    const storageConfig = getProductStorageConfig(sku);
+    if (storageConfig?.storagePricing[storageTierId]) {
+      const delta = storageConfig.storagePricing[storageTierId].delta;
+      config.storage = { tier: storageTiers[storageTierId], delta };
+      totalDelta += delta;
+    }
+  }
+
+  config.totalDelta = totalDelta;
+  config.configuredBomCost = product.bomTotal + totalDelta;
+
+  return config;
+}
