@@ -38,7 +38,7 @@ function loadCartFromStorage(): CartItem[] {
     if (stored) {
       return JSON.parse(stored);
     }
-  } catch (error) {
+  } catch {
     // Silent fail - return empty cart if storage is unavailable
     // This handles cases like private browsing or storage quota exceeded
   }
@@ -53,7 +53,7 @@ function saveCartToStorage(items: CartItem[]): void {
 
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  } catch (error) {
+  } catch {
     // Silent fail - cart will work in memory only if storage is unavailable
     // This handles cases like private browsing or storage quota exceeded
   }
@@ -66,7 +66,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     const storedItems = loadCartFromStorage();
-    setItems(storedItems);
+    if (storedItems.length > 0) {
+      setItems(storedItems);
+    }
     setIsInitialized(true);
   }, []);
 

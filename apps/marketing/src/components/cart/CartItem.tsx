@@ -29,7 +29,12 @@ export function CartItem({ item }: CartItemProps): React.ReactElement {
   return (
     <div className={styles.cartItem}>
       <div className={styles.itemImage} aria-hidden="true">
-        {item.image ? <img src={item.image} alt="" /> : <span>No Image</span>}
+        {item.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.image} alt="" />
+        ) : (
+          <span>No Image</span>
+        )}
       </div>
 
       <div className={styles.itemDetails}>

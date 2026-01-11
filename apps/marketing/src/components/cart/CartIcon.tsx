@@ -11,17 +11,18 @@ interface CartIconProps {
 export function CartIcon({ onClick }: CartIconProps): React.ReactElement {
   const { itemCount } = useCart();
   const [animate, setAnimate] = useState(false);
-  const [prevCount, setPrevCount] = useState(0);
+  const prevCountRef = React.useRef(0);
 
-  // Trigger animation when item count changes
+  // Trigger animation when item count increases
   useEffect(() => {
-    if (itemCount > prevCount) {
+    if (itemCount > prevCountRef.current) {
       setAnimate(true);
       const timer = setTimeout(() => setAnimate(false), 300);
+      prevCountRef.current = itemCount;
       return () => clearTimeout(timer);
     }
-    setPrevCount(itemCount);
-  }, [itemCount, prevCount]);
+    prevCountRef.current = itemCount;
+  }, [itemCount]);
 
   return (
     <button
