@@ -2785,6 +2785,111 @@ export const productComputeConfigs: ProductComputeConfig[] = [
       jetson_nx: { delta: 449, newBomTotal: 1464 },
     },
   },
+
+  // =========================================================================
+  // SKYSNARE - Consumer Line (Handheld, no compute - manual trigger)
+  // =========================================================================
+  {
+    sku: "SS-001",
+    productName: "SkySnare",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [], // Handheld, manual trigger - no compute
+    tierPricing: {},
+    notes: "Consumer handheld launcher - manual point-and-shoot, no compute",
+  },
+
+  // =========================================================================
+  // NETSNARE - Ground Launcher Line (pairs with SkyWatch detection)
+  // =========================================================================
+  {
+    sku: "NSN-LITE-001",
+    productName: "NetSnare Lite",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [], // Spring-powered, triggered via SkyWatch API
+    tierPricing: {},
+    notes: "Ground launcher only - uses paired SkyWatch for detection",
+  },
+  {
+    sku: "NSN-STD-001",
+    productName: "NetSnare Standard",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [], // CO2-powered, triggered via SkyWatch API
+    tierPricing: {},
+    notes: "Ground launcher only - uses paired SkyWatch for detection",
+  },
+  {
+    sku: "NSN-PRO-001",
+    productName: "NetSnare Pro",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [], // Pneumatic with pan-tilt, triggered via SkyWatch API
+    tierPricing: {},
+    notes: "Ground launcher with tracking - uses paired SkyWatch for detection",
+  },
+
+  // =========================================================================
+  // AERONET - Enterprise Platform
+  // =========================================================================
+  {
+    sku: "AN-ENT-001",
+    productName: "AeroNet Enterprise",
+    baseTier: "jetson_agx",
+    baseComputeCost: 1999,
+    availableTiers: ["jetson_agx"], // Enterprise requires AGX minimum
+    tierPricing: {
+      jetson_agx: { delta: 0, newBomTotal: 59200 },
+    },
+    notes: "Full C-UAS platform - Jetson AGX Orin required for multi-sensor fusion",
+  },
+  {
+    sku: "AN-CMD-001",
+    productName: "AeroNet Command",
+    baseTier: "server",
+    baseComputeCost: 0, // Software license
+    availableTiers: [], // Software-only, runs on customer infrastructure
+    tierPricing: {},
+    notes: "C2 software license - cloud or on-premise deployment",
+  },
+
+  // =========================================================================
+  // RKV - Military Systems
+  // =========================================================================
+  {
+    sku: "RKV-M-001",
+    productName: "RKV-M Mothership",
+    baseTier: "jetson_agx",
+    baseComputeCost: 1999,
+    availableTiers: ["jetson_agx"], // Aerial platform requires AGX
+    tierPricing: {
+      jetson_agx: { delta: 0, newBomTotal: 29736 },
+    },
+    notes: "VTOL aerial platform - Jetson AGX Orin for autonomous flight + intercept",
+  },
+  {
+    sku: "RKV-I-001",
+    productName: "RKV-I Interceptor",
+    baseTier: "jetson_nano",
+    baseComputeCost: 499,
+    availableTiers: ["jetson_nano"], // Expendable - cost-optimized
+    tierPricing: {
+      jetson_nano: { delta: 0, newBomTotal: 4338 },
+    },
+    notes: "Expendable interceptor - Jetson Orin Nano for visual+RF homing",
+  },
+  {
+    sku: "RKV-G-001",
+    productName: "RKV-G Ground Station",
+    baseTier: "jetson_agx",
+    baseComputeCost: 1999,
+    availableTiers: ["jetson_agx"], // Mobile C2 requires full compute
+    tierPricing: {
+      jetson_agx: { delta: 0, newBomTotal: 52478 },
+    },
+    notes: "Mobile command - Jetson AGX Orin for multi-target coordination",
+  },
 ];
 
 /** Get compute config for a product by SKU */
