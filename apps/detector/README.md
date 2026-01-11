@@ -73,24 +73,68 @@ python src/main.py --model models/drone-detector_int8.tflite --headless
 # With Coral USB Accelerator (10x faster)
 python src/main.py --model models/drone-detector_int8.tflite --coral
 
-# With web streaming
-python src/main.py --model models/drone-detector_int8.tflite --stream --stream-port 8080
-
 # With object tracking
 python src/main.py --model models/drone-detector_int8.tflite --tracker centroid
 
 # Save detections to file
 python src/main.py --model models/drone-detector_int8.tflite --save-detections detections.json
 
-# Full example with all features
+# With webhook alerts
 python src/main.py --model models/drone-detector_int8.tflite \
   --tracker kalman \
-  --stream --stream-port 8080 \
   --alert-webhook https://api.example.com/detections \
   --save-detections detections.json
 ```
 
 ### 4. Web Streaming
+
+**Note:** Streaming is configured via environment variables or configuration files, not CLI flags.
+
+**Option 1: Environment Variables (Recommended for quick setup)**
+
+```bash
+# Enable streaming via environment variables
+export STREAM_ENABLED=true
+export STREAM_PORT=8080
+python src/main.py --model models/drone-detector_int8.tflite
+```
+
+**Option 2: Configuration File (Recommended for production)**
+
+Create a `config.yaml` file:
+
+```yaml
+camera_type: auto
+engine_type: auto
+tracker_type: kalman
+
+inference:
+  model_path: "models/drone-detector_int8.tflite"
+  confidence_threshold: 0.5
+
+streaming:
+  enabled: true
+  port: 8080
+  quality: 80
+  max_fps: 15
+
+alert:
+  webhook_url: "https://api.example.com/detections"
+  save_detections_path: "detections.json"
+```
+
+**Note:** Use `--generate-config <path>` to create a default config file,
+then edit it and run with `--config <path>`.
+
+**Available Environment Variables:**
+
+```bash
+export STREAM_ENABLED=true      # Enable streaming server
+export STREAM_PORT=8080         # Server port (default: 8080)
+export STREAM_HOST=0.0.0.0      # Bind host (default: 0.0.0.0)
+export STREAM_QUALITY=80        # JPEG quality 10-100 (default: 80)
+export STREAM_MAX_FPS=15        # Max stream FPS (default: 15)
+```
 
 When streaming is enabled, access the following endpoints:
 
@@ -174,6 +218,13 @@ The system uses a modular, interface-based architecture that allows swapping com
 
 ## Configuration
 
+Settings can be configured via:
+1. **Environment Variables** (highest priority) - Quick setup, good for deployment
+2. **YAML Configuration File** - Recommended for production, comprehensive settings
+3. **Programmatic defaults** - Built-in defaults
+
+**Note:** Command-line arguments only support a subset of options (model, camera, tracker, etc.). Advanced features like streaming must be configured via environment variables or config files.
+
 ### YAML Configuration File
 
 Create a `config.yaml` file to customize all settings:
@@ -215,14 +266,58 @@ display:
 
 ### Environment Variables
 
-All settings can be overridden via environment variables:
+All settings can be overridden via environment variables. Use nested delimiter `__` for nested settings:
 
 ```bash
-export CAPTURE_WIDTH=1280
-export CAPTURE_HEIGHT=720
-export INFERENCE_CONFIDENCE_THRESHOLD=0.6
+# Capture settings
+export CAPTURE__WIDTH=1280
+export CAPTURE__HEIGHT=720
+export CAPTURE__FPS=30
+
+# Inference settings
+export INFERENCE__CONFIDENCE_THRESHOLD=0.6
+export INFERENCE__NMS_THRESHOLD=0.45
+
+# Streaming settings (most commonly used)
 export STREAM_ENABLED=true
 export STREAM_PORT=8080
+export STREAM_QUALITY=80
+export STREAM_MAX_FPS=15
+
+# Alert settings
+export ALERT__WEBHOOK_URL=https://api.example.com/detections
+export ALERT__SAVE_DETECTIONS_PATH=detections.json
+```
+
+**Using Configuration Files:**
+
+Generate and use a configuration file:
+
+```bash
+# Generate default config file
+python src/main.py --generate-config config.yaml
+
+# Edit config.yaml as needed, then run
+python src/main.py --config config.yaml
+
+# CLI arguments override config file values
+python src/main.py --config config.yaml --confidence 0.7 --headless
+```
+
+**Programmatic Loading (for custom scripts):**
+
+```python
+from src.config.settings import Settings
+
+# Load from YAML file
+settings = Settings.from_yaml("config.yaml")
+
+# Or load from environment variables
+settings = Settings()
+
+# Access settings
+if settings.streaming.enabled:
+    print(f"Streaming on port {settings.streaming.port}")
 ```
 
 ## Training on Azure ML
