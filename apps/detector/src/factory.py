@@ -329,7 +329,7 @@ def create_demo_pipeline(
     Create a pipeline optimized for demo/presentation.
 
     Good visuals, tracking enabled, balanced performance.
-    
+
     Args:
         model_path: Path to model file, or "mock" for mock inference
         use_mock: If True, use mock camera and inference
@@ -345,7 +345,7 @@ def create_demo_pipeline(
     else:
         engine_type = "auto"
         # Use provided camera_source (defaults to "auto")
-    
+
     return create_pipeline(
         model_path=model_path,
         camera_source=camera_source,

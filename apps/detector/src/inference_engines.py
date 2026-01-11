@@ -537,7 +537,7 @@ def create_inference_engine(
             engine = MockInferenceEngine(**kwargs)
             engine.load_model(model_path)
             return engine
-        
+
         model_ext = Path(model_path).suffix.lower()
 
         if use_coral or "_edgetpu" in model_path.lower():

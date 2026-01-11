@@ -29,10 +29,10 @@ Usage:
 
     # Demo mode with mock data (no camera/model needed)
     python main.py --demo --mock
-    
+
     # Real webcam with mock inference (test camera without model)
     python main.py --camera usb --engine mock
-    
+
     # Mock camera with real model (test inference without camera)
     python main.py --camera mock --model models/drone-detector.tflite
 """
@@ -430,7 +430,7 @@ def main():
             model_path = args.model
             if not model_path and (args.mock or args.engine == "mock"):
                 model_path = "mock"
-            
+
             pipeline = create_pipeline(
                 model_path=model_path or "mock",
                 camera_source="mock" if args.mock else args.camera,
