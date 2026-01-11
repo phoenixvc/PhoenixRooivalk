@@ -25,169 +25,45 @@ Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
 ## Quick Start
 
-### 1. Setup Environment
+This quickstart assumes **Raspberry Pi 4** with **Pi Camera v2.1**.
+For other platforms or configurations, see [Advanced Setup](docs/ADVANCED_SETUP.md).
+
+### 1. Install
 
 ```bash
-# Clone repo (or copy this folder)
-cd ~/
 git clone https://github.com/JustAGhosT/PhoenixRooivalk.git
 cd PhoenixRooivalk/apps/detector
 
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
+pip install -e ".[pi]"
 
-# Install dependencies (choose your platform)
-pip install -e ".[pi]"           # Raspberry Pi with TFLite
-pip install -e ".[pi,coral]"     # Pi + Coral Edge TPU
-pip install -e ".[jetson]"       # NVIDIA Jetson
-pip install -e ".[streaming]"    # Web streaming support
-pip install -e ".[dev]"          # Development with all tools
-
-# For Raspberry Pi: Enable camera and install system dependencies
+# Enable camera
 sudo raspi-config  # Interface Options > Camera > Enable
-sudo apt update
-sudo apt install -y python3-pip python3-venv libcamera-apps
-
-# Optional: For Pi Camera (Picamera2 library, usually pre-installed on Pi OS)
-# If not installed: sudo apt install -y python3-picamera2
-
-# Optional: For Coral USB Accelerator
-# Install Coral runtime (if using Coral TPU)
-# echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | \
-#   sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
-# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-# sudo apt update && sudo apt install -y libedgetpu1-std
+sudo apt install -y libcamera-apps
 ```
 
-### 2. Get a Model
-
-#### Option A: Use pre-trained YOLOv5n (quick start, less accurate)
+### 2. Get Model
 
 ```bash
-# Download YOLOv5n and convert to TFLite
 pip install ultralytics
 python -c "from ultralytics import YOLO; \
   YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
-cp yolov5n_int8.tflite models/
+mv yolov5n_int8.tflite models/
 ```
 
-#### Option B: Train custom model on Azure (recommended)
+### 3. Run
 
 ```bash
-# See azure-ml/ folder for training scripts
-cd azure-ml
-./setup-azure.sh
-# Follow instructions to upload dataset and train
+python src/main.py --config configs/quickstart.yaml
 ```
 
-### 3. Run Detection
+That's it. You should see a live video feed with detections.
 
-```bash
-# With display (auto-detects camera and inference engine)
-python src/main.py --model models/drone-detector_int8.tflite
+**Next steps:**
 
-# Explicitly use USB webcam
-python src/main.py --model models/drone-detector_int8.tflite --camera usb
-
-# Headless (no monitor)
-python src/main.py --model models/drone-detector_int8.tflite --headless
-
-# With Coral USB Accelerator (10x faster)
-python src/main.py --model models/drone-detector_int8.tflite --coral
-
-# With object tracking
-python src/main.py --model models/drone-detector_int8.tflite --tracker centroid
-
-# Save detections to file
-python src/main.py --model models/drone-detector_int8.tflite --save-detections detections.json
-
-# With webhook alerts
-python src/main.py --model models/drone-detector_int8.tflite \
-  --tracker kalman \
-  --alert-webhook https://api.example.com/detections \
-  --save-detections detections.json
-
-# Testing without a model (mock inference with real camera)
-python src/main.py --camera usb --engine mock
-
-# Testing without hardware (mock camera and inference)
-python src/main.py --mock
-
-# Use video file instead of camera
-python src/main.py --model models/drone-detector_int8.tflite --video test_video.mp4
-
-# Specify USB camera index (if multiple cameras)
-python src/main.py --model models/drone-detector_int8.tflite \
-  --camera usb --camera-index 1
-
-# Demo mode (optimized settings for presentations)
-python src/main.py --demo --model models/drone-detector_int8.tflite
-
-# Suppress hardware report output
-python src/main.py --model models/drone-detector_int8.tflite --quiet
-
-# Disable auto-configuration (use defaults instead of hardware detection)
-python src/main.py --model models/drone-detector_int8.tflite --no-auto-configure
-```
-
-### 4. Web Streaming
-
-**Note:** Streaming is configured via environment variables or configuration files, not CLI flags.
-
-**Option 1: Environment Variables (Recommended for quick setup)**
-
-```bash
-# Enable streaming via environment variables
-export STREAM_ENABLED=true
-export STREAM_PORT=8080
-python src/main.py --model models/drone-detector_int8.tflite
-```
-
-**Option 2: Configuration File (Recommended for production)**
-
-Create a `config.yaml` file:
-
-```yaml
-camera_type: auto
-engine_type: auto
-tracker_type: kalman
-
-inference:
-  model_path: "models/drone-detector_int8.tflite"
-  confidence_threshold: 0.5
-
-streaming:
-  enabled: true
-  port: 8080
-  quality: 80
-  max_fps: 15
-
-alert:
-  webhook_url: "https://api.example.com/detections"
-  save_detections_path: "detections.json"
-```
-
-**Note:** Use `--generate-config <path>` to create a default config file,
-then edit it and run with `--config <path>`.
-
-**Available Environment Variables:**
-
-```bash
-export STREAM_ENABLED=true      # Enable streaming server
-export STREAM_PORT=8080         # Server port (default: 8080)
-export STREAM_HOST=0.0.0.0      # Bind host (default: 0.0.0.0)
-export STREAM_QUALITY=80        # JPEG quality 10-100 (default: 80)
-export STREAM_MAX_FPS=15        # Max stream FPS (default: 15)
-```
-
-When streaming is enabled, access the following endpoints:
-
-- `http://<pi-ip>:8080/` - Live viewer dashboard
-- `http://<pi-ip>:8080/stream` - MJPEG video stream
-- `http://<pi-ip>:8080/snapshot` - Single JPEG frame
-- `http://<pi-ip>:8080/status` - JSON system status
-- `http://<pi-ip>:8080/health` - Health check endpoint
+- [Advanced Setup](docs/ADVANCED_SETUP.md) - Other platforms, cameras, Coral TPU
+- [Configuration Reference](docs/configuration.md) - All available settings
+- [Train Custom Model](#training-on-azure-ml) - Better accuracy for drone detection
 
 ## Project Structure
 
@@ -375,75 +251,17 @@ if settings.streaming.enabled:
 
 ## Testing and Development
 
-### Camera and Inference Options
-
-The detector supports mixing real and mock components for testing:
-
-**Camera Options:**
-
-- `--camera auto` - Auto-detect best available camera (default)
-- `--camera usb` - Use USB webcam explicitly
-- `--camera picamera` - Use Raspberry Pi camera
-- `--camera mock` - Use synthetic frames (for testing without hardware)
-- `--camera-index <n>` - USB camera device index (default: 0, use 1, 2,
-  etc. for multiple cameras)
-- `--video <path>` - Use video file instead of camera
-
-**Inference Engine Options:**
-
-- `--engine auto` - Auto-select based on model file (default)
-- `--engine tflite` - Use TensorFlow Lite
-- `--engine onnx` - Use ONNX Runtime
-- `--engine coral` - Use Coral Edge TPU
-- `--engine mock` - Use synthetic detections (for testing without model)
-
-**Display Options:**
-
-- `--headless` - Run without display (no video window)
-- `--quiet` - Suppress hardware detection report on startup
-
-**Demo/Testing Options:**
-
-- `--demo` - Run in demo mode with optimized settings (good visuals,
-  tracking enabled)
-- `--mock` - Use mock camera and inference (no hardware needed,
-  equivalent to `--camera mock --engine mock`)
-- `--no-auto-configure` - Disable automatic hardware-based configuration
-  (use defaults)
-
-**The `--mock` Flag:**
-
-The `--mock` flag is a convenience option that sets **both** camera and
-inference to mock mode:
+### Testing Without Hardware
 
 ```bash
-# This is equivalent to: --camera mock --engine mock
+# Mock everything (no camera, no model needed)
 python src/main.py --mock
-```
 
-**The `--demo` Flag:**
-
-The `--demo` flag optimizes settings for presentations:
-
-- Enables visual overlays (FPS, tracking, scores)
-- Uses centroid tracking
-- Auto-configures for best performance
-- Can be combined with `--camera usb` or other options
-
-**Combining Options:**
-
-You can mix real and mock components independently:
-
-```bash
-# Real webcam with mock inference (test camera without model)
+# Real camera with mock inference (test camera setup)
 python src/main.py --camera usb --engine mock
-
-# Mock camera with real model (test inference without camera)
-python src/main.py --camera mock --engine tflite --model models/drone-detector.tflite
-
-# Real camera with real model (production use)
-python src/main.py --camera usb --engine auto --model models/drone-detector.tflite
 ```
+
+For all camera/inference options, see [Advanced Setup](docs/ADVANCED_SETUP.md#testing-without-hardware).
 
 ## Training on Azure ML
 
