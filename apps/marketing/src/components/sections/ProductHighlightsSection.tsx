@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Button } from "../ui/button";
-import { products, phases, type Product } from "../../data/products";
+import {
+  products,
+  phases,
+  type Product,
+  type ProductPhaseInfo,
+} from "../../data/products";
 import styles from "./ProductHighlightsSection.module.css";
 
 // Featured products for landing page - Phase 1 highlights
@@ -9,6 +14,22 @@ const featuredProductIds = ["skysnare", "skywatch-standard", "netsnare-lite"];
 // Current date for preorder calculations
 // Uses actual current date in production
 const CURRENT_DATE = new Date();
+
+// Default phase info for fallback
+const DEFAULT_PHASE: ProductPhaseInfo = {
+  id: "seed",
+  name: "Coming Soon",
+  shortName: "Soon",
+  timeline: "TBD",
+  funding: "TBD",
+  color: "#6b7280",
+  description: "Product information coming soon",
+};
+
+// Type guard for Product
+function isProduct(value: Product | undefined): value is Product {
+  return value !== undefined && value !== null;
+}
 
 // Parse launch date from phaseTimeline string
 // Timeline states when development is complete (end of quarter)
@@ -20,10 +41,16 @@ function parseLaunchDate(phaseTimeline: string): Date | null {
   }
 
   // Match patterns like "Q2 2026", "Q4 2026", etc.
-  const quarterMatch = phaseTimeline.match(/Q(\d)\s+(\d{4})/);
+  const quarterMatch = phaseTimeline.match(/Q([1-4])\s+(\d{4})/);
   if (quarterMatch) {
     const quarter = parseInt(quarterMatch[1], 10);
     const year = parseInt(quarterMatch[2], 10);
+
+    // Validate quarter is 1-4
+    if (quarter < 1 || quarter > 4) {
+      return null;
+    }
+
     // Quarter end month: Q1=Mar, Q2=Jun, Q3=Sep, Q4=Dec
     // Then add 1 month for launch after development
     const quarterEndMonth = quarter * 3 - 1; // Q1=2(Mar), Q2=5(Jun), Q3=8(Sep), Q4=11(Dec)
@@ -31,7 +58,7 @@ function parseLaunchDate(phaseTimeline: string): Date | null {
     // Handle year rollover if month >= 12
     const adjustedYear = launchMonth >= 12 ? year + 1 : year;
     const adjustedMonth = launchMonth >= 12 ? launchMonth - 12 : launchMonth;
-    return new Date(adjustedYear, adjustedMonth, 1);
+    return new Date(Date.UTC(adjustedYear, adjustedMonth, 1));
   }
 
   return null;
@@ -40,13 +67,17 @@ function parseLaunchDate(phaseTimeline: string): Date | null {
 // Calculate preorder opens date (6 months before launch)
 function getPreorderOpensDate(launchDate: Date): Date {
   const preorderDate = new Date(launchDate);
-  preorderDate.setMonth(preorderDate.getMonth() - 6);
+  preorderDate.setUTCMonth(preorderDate.getUTCMonth() - 6);
   return preorderDate;
 }
 
-// Format date for display
+// Format date for display (timezone-stable using UTC)
 function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 // Get preorder status for a product
@@ -102,10 +133,15 @@ function getPreorderStatus(product: Product): {
   };
 }
 
+// Get phase info safely with fallback
+function getPhaseInfo(product: Product): ProductPhaseInfo {
+  return phases[product.phase] ?? DEFAULT_PHASE;
+}
+
 export const ProductHighlightsSection: React.FC = () => {
   const featuredProducts = featuredProductIds
     .map((id) => products.find((p) => p.id === id))
-    .filter(Boolean) as Product[];
+    .filter(isProduct);
 
   return (
     <section className={styles.section} id="products">
@@ -120,7 +156,7 @@ export const ProductHighlightsSection: React.FC = () => {
 
         <div className={styles.productsGrid}>
           {featuredProducts.map((product) => {
-            const phase = phases[product.phase];
+            const phase = getPhaseInfo(product);
             const status = getPreorderStatus(product);
 
             return (
