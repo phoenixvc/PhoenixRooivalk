@@ -16,10 +16,14 @@ export function CartIcon({ onClick }: CartIconProps): React.ReactElement {
   // Trigger animation when item count increases
   useEffect(() => {
     if (itemCount > prevCountRef.current) {
-      setAnimate(true);
-      const timer = setTimeout(() => setAnimate(false), 300);
+      // Schedule state updates asynchronously to avoid cascading renders
+      const animateTimer = setTimeout(() => setAnimate(true), 0);
+      const resetTimer = setTimeout(() => setAnimate(false), 300);
       prevCountRef.current = itemCount;
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(animateTimer);
+        clearTimeout(resetTimer);
+      };
     }
     prevCountRef.current = itemCount;
   }, [itemCount]);
