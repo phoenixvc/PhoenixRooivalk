@@ -26,7 +26,9 @@ on:
   workflow_dispatch:
 
 env:
-  APP_LOCATION: "apps/marketing"
+  # Note: Using MARKETING_APP_DIR instead of APP_LOCATION to avoid conflict
+  # with Azure Static Web Apps action which reads APP_LOCATION env var directly
+  MARKETING_APP_DIR: "apps/marketing"
   OUTPUT_LOCATION: "out"
 
 jobs:
@@ -131,7 +133,7 @@ jobs:
           trunk build --release
 
       - name: Build (marketing)
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MARKETING_APP_DIR }}
         env:
           # Build environment
           NODE_ENV: production
@@ -142,7 +144,7 @@ jobs:
         run: pnpm run build
 
       - name: Verify build output
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MARKETING_APP_DIR }}
         run: |
           echo "=== Checking build output ==="
           if [ -f "out/index.html" ]; then
@@ -169,7 +171,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           # When skip_app_build is true, app_location should point to the built output
-          app_location: ${{ env.APP_LOCATION }}/out
+          app_location: ${{ env.MARKETING_APP_DIR }}/out
           skip_app_build: true
           skip_api_build: true
           # Production deploys go to production slot, PR deploys create preview environments
