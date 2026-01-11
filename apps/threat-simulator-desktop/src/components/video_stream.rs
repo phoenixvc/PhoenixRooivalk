@@ -7,6 +7,7 @@ use leptos::prelude::*;
 
 /// Stream display mode
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[allow(dead_code)] // All variants used in match expressions via view! macro
 pub enum StreamMode {
     /// Live MJPEG stream
     #[default]
@@ -227,6 +228,7 @@ pub fn VideoStream(
 }
 
 /// Compact video preview for sidebar/overlay use
+#[allow(dead_code)] // Props used via Leptos view! macro
 #[component]
 pub fn VideoPreview(
     /// URL for the stream
