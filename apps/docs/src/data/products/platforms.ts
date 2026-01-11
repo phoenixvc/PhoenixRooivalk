@@ -22,7 +22,7 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
   {
     name: "Raspberry Pi 4 Model B",
     variant: "2GB",
-    price: 45,
+    price: 35,
     ram: "2GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "4-8W",
@@ -32,7 +32,7 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
   {
     name: "Raspberry Pi 4 Model B",
     variant: "4GB",
-    price: 55,
+    price: 60,
     ram: "4GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "4-8W",
@@ -42,7 +42,7 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
   {
     name: "Raspberry Pi 4 Model B",
     variant: "8GB",
-    price: 75,
+    price: 85,
     ram: "8GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "5-10W",
@@ -52,7 +52,7 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
   {
     name: "Raspberry Pi 5",
     variant: "4GB",
-    price: 60,
+    price: 70,
     ram: "4GB",
     cpu: "Quad Cortex-A76 @ 2.4GHz",
     power: "5-12W",
@@ -62,7 +62,7 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
   {
     name: "Raspberry Pi 5",
     variant: "8GB",
-    price: 80,
+    price: 95,
     ram: "8GB",
     cpu: "Quad Cortex-A76 @ 2.4GHz",
     power: "5-15W",
@@ -105,7 +105,7 @@ export const jetsonPlatforms: ComputePlatform[] = [
     cpu: "6-core Cortex-A78AE @ 2.0GHz",
     power: "10-25W",
     formFactor: "69.6×45mm (module)",
-    notes: "70 TOPS, professional tier",
+    notes: "67 TOPS, professional tier",
   },
   {
     name: "Jetson Orin NX",
@@ -115,7 +115,7 @@ export const jetsonPlatforms: ComputePlatform[] = [
     cpu: "8-core Cortex-A78AE @ 2.0GHz",
     power: "10-25W",
     formFactor: "69.6×45mm (module)",
-    notes: "100 TOPS, multi-stream capable",
+    notes: "117 TOPS, multi-stream capable",
   },
   {
     name: "Jetson AGX Orin",
@@ -135,7 +135,7 @@ export const jetsonPlatforms: ComputePlatform[] = [
     cpu: "12-core Cortex-A78AE @ 2.2GHz",
     power: "15-60W",
     formFactor: "100×87mm (module)",
-    notes: "275 TOPS, maximum performance, dev kit ~$2499",
+    notes: "275 TOPS, maximum performance (module price, dev kit $2499)",
   },
 ];
 
@@ -166,12 +166,12 @@ export const aiAccelerators: AIAccelerator[] = [
   },
   {
     name: "Coral M.2 Accelerator (Dual TPU)",
-    price: 35,
+    price: 90,
     tops: 8,
     interface: "M.2 B+M",
     power: "4W",
     compatibility: ["Pi 5 (with HAT)", "Jetson", "x86"],
-    notes: "Dual Edge TPU, double throughput",
+    notes: "Dual Edge TPU, double throughput (retail $65-110)",
   },
   {
     name: "Coral Dev Board Mini",
@@ -185,7 +185,7 @@ export const aiAccelerators: AIAccelerator[] = [
   // Hailo
   {
     name: "Hailo-8L M.2",
-    price: 70,
+    price: 99,
     tops: 13,
     interface: "M.2 M-key",
     power: "2.5W",
@@ -194,12 +194,12 @@ export const aiAccelerators: AIAccelerator[] = [
   },
   {
     name: "Hailo-8 M.2",
-    price: 149,
+    price: 225,
     tops: 26,
     interface: "M.2 M-key",
     power: "5W",
     compatibility: ["Pi 5 (with AI Kit)", "Jetson", "x86"],
-    notes: "Full Hailo performance, best-in-class edge AI",
+    notes: "Full Hailo performance, best-in-class edge AI (retail $200-250)",
   },
   {
     name: "Raspberry Pi AI Kit (Hailo-8L)",
@@ -218,7 +218,7 @@ export const aiAccelerators: AIAccelerator[] = [
     interface: "USB 3.0",
     power: "1.5W",
     compatibility: ["Pi 4", "Pi 5", "Jetson", "x86"],
-    notes: "Discontinued but available, OpenVINO only",
+    notes: "EOL - no longer available, OpenVINO only",
   },
 ];
 
@@ -345,7 +345,7 @@ export const fpsBenchmarks: FPSBenchmark[] = [
   },
   {
     platform: "Jetson Orin NX (16GB)",
-    accelerator: "Integrated GPU (100 TOPS)",
+    accelerator: "Integrated GPU (117 TOPS)",
     modelSize: "large",
     resolution: "1920×1080",
     fps: 120,

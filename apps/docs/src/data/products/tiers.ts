@@ -70,7 +70,7 @@ export const computeTiers: Record<string, ComputeTier> = {
     id: "jetson_nx",
     name: "Enterprise (Jetson Orin NX)",
     platform: "Jetson Orin NX (16GB)",
-    accelerator: "Integrated GPU (100 TOPS)",
+    accelerator: "Integrated GPU (117 TOPS)",
     price: 599,
     fps: "120",
     power: "10-25W",
@@ -202,7 +202,13 @@ export const productComputeConfigs: ProductComputeConfig[] = [
     productName: "SkyWatch Mesh (Central)",
     baseTier: "pi5_hailo8l",
     baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
-    availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx", "jetson_agx"],
+    availableTiers: [
+      "pi5_hailo8l",
+      "pi5_hailo8",
+      "jetson_nano",
+      "jetson_nx",
+      "jetson_agx",
+    ],
     tierPricing: {
       pi5_hailo8l: { delta: 0, newBomTotal: 370 },
       pi5_hailo8: { delta: 79, newBomTotal: 449 },
@@ -311,7 +317,8 @@ export const productComputeConfigs: ProductComputeConfig[] = [
     tierPricing: {
       jetson_agx: { delta: 0, newBomTotal: 59200 },
     },
-    notes: "Full C-UAS platform - Jetson AGX Orin required for multi-sensor fusion",
+    notes:
+      "Full C-UAS platform - Jetson AGX Orin required for multi-sensor fusion",
   },
   {
     sku: "AN-CMD-001",
@@ -332,7 +339,8 @@ export const productComputeConfigs: ProductComputeConfig[] = [
     tierPricing: {
       jetson_agx: { delta: 0, newBomTotal: 29736 },
     },
-    notes: "VTOL aerial platform - Jetson AGX Orin for autonomous flight + intercept",
+    notes:
+      "VTOL aerial platform - Jetson AGX Orin for autonomous flight + intercept",
   },
   {
     sku: "RKV-I-001",
@@ -1373,7 +1381,9 @@ export const productStorageConfigs: ProductStorageConfig[] = [
 // =============================================================================
 
 /** Get compute config for a product by SKU */
-export function getProductComputeConfig(sku: string): ProductComputeConfig | undefined {
+export function getProductComputeConfig(
+  sku: string,
+): ProductComputeConfig | undefined {
   return productComputeConfigs.find((c) => c.sku === sku);
 }
 
@@ -1381,7 +1391,9 @@ export function getProductComputeConfig(sku: string): ProductComputeConfig | und
 export function getAvailableTiers(sku: string): ComputeTier[] {
   const config = getProductComputeConfig(sku);
   if (!config) return [];
-  return config.availableTiers.map((tierId) => computeTiers[tierId]).filter(Boolean);
+  return config.availableTiers
+    .map((tierId) => computeTiers[tierId])
+    .filter(Boolean);
 }
 
 /** Calculate price delta for a tier upgrade */
@@ -1392,7 +1404,9 @@ export function getTierPriceDelta(sku: string, tierId: string): number {
 }
 
 /** Get camera config for a product */
-export function getProductCameraConfig(sku: string): ProductCameraConfig | undefined {
+export function getProductCameraConfig(
+  sku: string,
+): ProductCameraConfig | undefined {
   return productCameraConfigs.find((c) => c.sku === sku);
 }
 
@@ -1400,11 +1414,15 @@ export function getProductCameraConfig(sku: string): ProductCameraConfig | undef
 export function getAvailableCameras(sku: string): CameraTier[] {
   const config = getProductCameraConfig(sku);
   if (!config) return [];
-  return config.availableCameras.map((camId) => cameraTiers[camId]).filter(Boolean);
+  return config.availableCameras
+    .map((camId) => cameraTiers[camId])
+    .filter(Boolean);
 }
 
 /** Get connectivity config for a product */
-export function getProductConnectivityConfig(sku: string): ProductConnectivityConfig | undefined {
+export function getProductConnectivityConfig(
+  sku: string,
+): ProductConnectivityConfig | undefined {
   return productConnectivityConfigs.find((c) => c.sku === sku);
 }
 
@@ -1412,11 +1430,15 @@ export function getProductConnectivityConfig(sku: string): ProductConnectivityCo
 export function getAvailableConnectivity(sku: string): ConnectivityTier[] {
   const config = getProductConnectivityConfig(sku);
   if (!config) return [];
-  return config.availableConnectivity.map((connId) => connectivityTiers[connId]).filter(Boolean);
+  return config.availableConnectivity
+    .map((connId) => connectivityTiers[connId])
+    .filter(Boolean);
 }
 
 /** Get storage config for a product */
-export function getProductStorageConfig(sku: string): ProductStorageConfig | undefined {
+export function getProductStorageConfig(
+  sku: string,
+): ProductStorageConfig | undefined {
   return productStorageConfigs.find((c) => c.sku === sku);
 }
 
@@ -1424,7 +1446,9 @@ export function getProductStorageConfig(sku: string): ProductStorageConfig | und
 export function getAvailableStorage(sku: string): StorageTier[] {
   const config = getProductStorageConfig(sku);
   if (!config) return [];
-  return config.availableStorage.map((storageId) => storageTiers[storageId]).filter(Boolean);
+  return config.availableStorage
+    .map((storageId) => storageTiers[storageId])
+    .filter(Boolean);
 }
 
 // =============================================================================
@@ -1437,7 +1461,7 @@ export function generateProductConfiguration(
   computeTierId?: string,
   cameraTierId?: string,
   connectivityTierId?: string,
-  storageTierId?: string
+  storageTierId?: string,
 ): ProductConfiguration | null {
   const product = productBySku[sku];
   if (!product) return null;
@@ -1454,9 +1478,10 @@ export function generateProductConfiguration(
   // Compute tier
   if (computeTierId) {
     const computeConfig = getProductComputeConfig(sku);
-    if (computeConfig?.tierPricing[computeTierId]) {
+    const tier = computeTiers[computeTierId];
+    if (computeConfig?.tierPricing[computeTierId] && tier) {
       const delta = computeConfig.tierPricing[computeTierId].delta;
-      config.compute = { tier: computeTiers[computeTierId], delta };
+      config.compute = { tier, delta };
       totalDelta += delta;
     }
   }
@@ -1464,9 +1489,10 @@ export function generateProductConfiguration(
   // Camera tier
   if (cameraTierId) {
     const cameraConfig = getProductCameraConfig(sku);
-    if (cameraConfig?.cameraPricing[cameraTierId]) {
+    const tier = cameraTiers[cameraTierId];
+    if (cameraConfig?.cameraPricing[cameraTierId] && tier) {
       const delta = cameraConfig.cameraPricing[cameraTierId].delta;
-      config.camera = { tier: cameraTiers[cameraTierId], delta };
+      config.camera = { tier, delta };
       totalDelta += delta;
     }
   }
@@ -1474,9 +1500,10 @@ export function generateProductConfiguration(
   // Connectivity tier
   if (connectivityTierId) {
     const connConfig = getProductConnectivityConfig(sku);
-    if (connConfig?.connectivityPricing[connectivityTierId]) {
+    const tier = connectivityTiers[connectivityTierId];
+    if (connConfig?.connectivityPricing[connectivityTierId] && tier) {
       const delta = connConfig.connectivityPricing[connectivityTierId].delta;
-      config.connectivity = { tier: connectivityTiers[connectivityTierId], delta };
+      config.connectivity = { tier, delta };
       totalDelta += delta;
     }
   }
@@ -1484,9 +1511,10 @@ export function generateProductConfiguration(
   // Storage tier
   if (storageTierId) {
     const storageConfig = getProductStorageConfig(sku);
-    if (storageConfig?.storagePricing[storageTierId]) {
+    const tier = storageTiers[storageTierId];
+    if (storageConfig?.storagePricing[storageTierId] && tier) {
       const delta = storageConfig.storagePricing[storageTierId].delta;
-      config.storage = { tier: storageTiers[storageTierId], delta };
+      config.storage = { tier, delta };
       totalDelta += delta;
     }
   }
