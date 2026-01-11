@@ -12,6 +12,12 @@ Usage:
     # Auto-detect hardware and configure optimally
     python main.py --model models/drone-detector.tflite
 
+    # With configuration file
+    python main.py --config config.yaml
+
+    # Generate default config file
+    python main.py --generate-config config.yaml
+
     # With Coral TPU
     python main.py --model models/drone-detector_edgetpu.tflite --coral
 
@@ -32,12 +38,14 @@ from pathlib import Path
 
 # Support running as both script and module
 try:
+    from .config.settings import Settings, create_default_config
     from .factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 except ImportError:
     # Running as script - add src to path
     src_dir = Path(__file__).parent
     if str(src_dir) not in sys.path:
         sys.path.insert(0, str(src_dir))
+    from config.settings import Settings, create_default_config
     from factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 
 
@@ -47,6 +55,20 @@ def parse_args():
         description="Real-time drone detection with swappable components",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
+    )
+
+    # Configuration
+    config_group = parser.add_argument_group("Configuration")
+    config_group.add_argument(
+        "--config",
+        type=str,
+        help="Path to YAML configuration file",
+    )
+    config_group.add_argument(
+        "--generate-config",
+        type=str,
+        metavar="PATH",
+        help="Generate default configuration file at PATH (e.g., config.yaml)",
     )
 
     # Model
@@ -176,6 +198,65 @@ def parse_args():
     return parser.parse_args()
 
 
+def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
+    """Convert Settings object to create_pipeline() keyword arguments."""
+    # Get model path from settings or CLI args (CLI takes precedence)
+    model_path = args.model if args.model else (getattr(settings.inference, "model_path", None) or None)
+    if not model_path and not args.mock:
+        model_path = "mock"  # Fallback for mock mode
+
+    # Get camera type (CLI takes precedence, string enums compare directly to strings)
+    if args.mock:
+        camera_type = "mock"
+    elif args.camera and args.camera != "auto":
+        camera_type = args.camera
+    else:
+        camera_type = str(settings.camera_type)
+
+    # Get video file from settings or args
+    video_file = args.video if args.video else getattr(settings.capture, "video_path", None)
+
+    # Get engine type (CLI takes precedence)
+    if args.mock:
+        engine_type = "mock"
+    elif args.engine and args.engine != "auto":
+        engine_type = args.engine
+    else:
+        engine_type = str(settings.engine_type)
+
+    # Get tracker type (CLI takes precedence)
+    tracker_type = args.tracker if args.tracker else str(settings.tracker_type)
+
+    # Build kwargs with safe attribute access
+    kwargs = {
+        "model_path": model_path,
+        "camera_source": camera_type,
+        "camera_index": args.camera_index if args.camera_index is not None else getattr(settings.capture, "camera_index", 0),
+        "video_file": video_file,
+        "width": args.width if args.width is not None else getattr(settings.capture, "width", None),
+        "height": args.height if args.height is not None else getattr(settings.capture, "height", None),
+        "fps": args.fps if args.fps is not None else getattr(settings.capture, "fps", None),
+        "engine_type": engine_type,
+        "use_coral": args.coral if args.coral else getattr(settings.inference, "use_coral", False),
+        "confidence_threshold": args.confidence if args.confidence is not None else getattr(settings.inference, "confidence_threshold", 0.5),
+        "nms_threshold": args.nms if args.nms is not None else getattr(settings.inference, "nms_threshold", 0.45),
+        "tracker_type": tracker_type,
+        "alert_webhook": args.alert_webhook if args.alert_webhook else getattr(settings.alert, "webhook_url", None),
+        "save_detections": args.save_detections if args.save_detections else getattr(settings.alert, "save_detections_path", None),
+        "headless": args.headless if args.headless else getattr(settings.display, "headless", False),
+        "stream_enabled": getattr(settings.streaming, "enabled", False),
+        "stream_host": getattr(settings.streaming, "host", "0.0.0.0"),
+        "stream_port": getattr(settings.streaming, "port", 8080),
+        "stream_quality": getattr(settings.streaming, "quality", 80),
+        "stream_max_fps": getattr(settings.streaming, "max_fps", 15),
+        "stream_auth_enabled": getattr(settings.streaming, "auth_enabled", False),
+        "stream_auth_token": getattr(settings.streaming, "auth_token", None),
+        "auto_configure": not args.no_auto_configure,
+        "print_hardware": not args.quiet,
+    }
+    return kwargs
+
+
 def run_detection_loop(pipeline: DetectionPipeline) -> None:
     """
     Main detection loop.
@@ -228,10 +309,41 @@ def main():
     """Main entry point."""
     args = parse_args()
 
+    # Handle --generate-config flag (exit early if used)
+    if args.generate_config:
+        try:
+            config_path = Path(args.generate_config)
+            create_default_config(str(config_path))
+            print(f"Default configuration file created: {config_path.absolute()}")
+            print(f"\nYou can now edit {config_path} and run with:")
+            print(f"  python src/main.py --config {config_path}")
+            sys.exit(0)
+        except Exception as e:
+            print(f"ERROR: Failed to create config file: {e}", file=sys.stderr)
+            print(f"\nTip: Ensure the directory exists and you have write permissions.", file=sys.stderr)
+            sys.exit(1)
+
+    # Load settings from config file if provided
+    settings = None
+    if args.config:
+        config_path = Path(args.config)
+        if not config_path.exists():
+            print(f"ERROR: Configuration file not found: {config_path.absolute()}", file=sys.stderr)
+            print(f"\nTip: Generate a default config file with:", file=sys.stderr)
+            print(f"  python src/main.py --generate-config {config_path}", file=sys.stderr)
+            sys.exit(1)
+        try:
+            settings = Settings.from_yaml(str(config_path))
+        except Exception as e:
+            print(f"ERROR: Failed to load configuration file: {e}", file=sys.stderr)
+            print(f"\nTip: Check that {config_path} is valid YAML format.", file=sys.stderr)
+            sys.exit(1)
+
     # Handle demo mode
     if args.demo:
         if not args.model and not args.mock:
-            print("ERROR: --model required unless using --mock")
+            print("ERROR: --model is required for demo mode unless using --mock", file=sys.stderr)
+            print("\nTip: Use --mock to test without a model or camera", file=sys.stderr)
             sys.exit(1)
 
         pipeline = create_demo_pipeline(
@@ -239,32 +351,55 @@ def main():
             use_mock=args.mock,
         )
     else:
-        # Validate model path
+        # Validate model path (unless using mock mode)
         if not args.model and not args.mock:
-            print("ERROR: --model is required")
-            print("Use --help for usage information")
-            sys.exit(1)
+            model_path_from_config = None
+            if settings:
+                model_path_from_config = getattr(settings.inference, "model_path", None)
+                if model_path_from_config and model_path_from_config.strip():
+                    # Model path from config file is valid
+                    pass
+                else:
+                    model_path_from_config = None
+            if not model_path_from_config:
+                print("ERROR: --model is required (or use --mock to test without a model)", file=sys.stderr)
+                print("\nTips:", file=sys.stderr)
+                print("  - Use --model <path> to specify a model file", file=sys.stderr)
+                print("  - Use --mock to test without a model or camera", file=sys.stderr)
+                print("  - Use --config <file> to load model path from config file", file=sys.stderr)
+                print("  - Use --help for full usage information", file=sys.stderr)
+                sys.exit(1)
 
-        # Create pipeline with specified options
-        pipeline = create_pipeline(
-            model_path=args.model or "mock",
-            camera_source="mock" if args.mock else args.camera,
-            camera_index=args.camera_index,
-            video_file=args.video,
-            width=args.width,
-            height=args.height,
-            fps=args.fps,
-            engine_type="mock" if args.mock else args.engine,
-            use_coral=args.coral,
-            confidence_threshold=args.confidence,
-            nms_threshold=args.nms,
-            tracker_type=args.tracker,
-            alert_webhook=args.alert_webhook,
-            save_detections=args.save_detections,
-            headless=args.headless,
-            auto_configure=not args.no_auto_configure,
-            print_hardware=not args.quiet,
-        )
+        # Create pipeline with settings from config file or CLI args
+        if settings:
+            kwargs = settings_to_pipeline_kwargs(settings, args)
+            try:
+                pipeline = create_pipeline(**kwargs)
+            except Exception as e:
+                print(f"ERROR: Failed to create pipeline: {e}", file=sys.stderr)
+                print(f"\nTip: Check your configuration file and model path.", file=sys.stderr)
+                sys.exit(1)
+        else:
+            # Use CLI args directly (existing behavior)
+            pipeline = create_pipeline(
+                model_path=args.model or "mock",
+                camera_source="mock" if args.mock else args.camera,
+                camera_index=args.camera_index,
+                video_file=args.video,
+                width=args.width,
+                height=args.height,
+                fps=args.fps,
+                engine_type="mock" if args.mock else args.engine,
+                use_coral=args.coral,
+                confidence_threshold=args.confidence,
+                nms_threshold=args.nms,
+                tracker_type=args.tracker,
+                alert_webhook=args.alert_webhook,
+                save_detections=args.save_detections,
+                headless=args.headless,
+                auto_configure=not args.no_auto_configure,
+                print_hardware=not args.quiet,
+            )
 
     # Setup signal handler for clean shutdown
     def signal_handler(sig, frame):
@@ -275,9 +410,19 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    # Start pipeline
-    if not pipeline.start():
-        print("ERROR: Failed to start pipeline")
+    # Start pipeline with better error handling
+    try:
+        if not pipeline.start():
+            print("ERROR: Failed to start pipeline", file=sys.stderr)
+            print("\nCommon issues:", file=sys.stderr)
+            print("  - Camera not found: Check camera is connected and enabled", file=sys.stderr)
+            print("  - Model file not found: Verify model path is correct", file=sys.stderr)
+            print("  - Missing dependencies: Check installation with pip install -e '.[pi]'", file=sys.stderr)
+            print("  - Use --mock to test without hardware", file=sys.stderr)
+            sys.exit(1)
+    except Exception as e:
+        print(f"ERROR: Pipeline startup failed: {e}", file=sys.stderr)
+        print("\nTip: Use --mock to test without hardware, or check configuration.", file=sys.stderr)
         sys.exit(1)
 
     try:

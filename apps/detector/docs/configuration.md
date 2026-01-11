@@ -6,12 +6,24 @@ Complete reference for all configurable settings in Pi Drone Detector.
 
 Settings can be provided from multiple sources (in order of precedence):
 
-1. **CLI Arguments** - Highest priority
+1. **CLI Arguments** - Highest priority (overrides config file and env vars)
 2. **Environment Variables** - Prefixed by section name
 3. **YAML Configuration File** - Via `--config` flag
 4. **Default Values** - Built-in defaults
 
 ## Quick Start
+
+### Option 1: Generate Default Config File (Recommended)
+
+```bash
+# Generate a default config.yaml file
+python src/main.py --generate-config config.yaml
+
+# Edit config.yaml as needed, then run
+python src/main.py --config config.yaml
+```
+
+### Option 2: Create Config File Manually
 
 Create a `config.yaml` file:
 
@@ -38,6 +50,11 @@ Run with config:
 
 ```bash
 python src/main.py --config config.yaml
+```
+
+**Note:** CLI arguments take precedence over config file settings. You can override config file values with CLI flags:
+```bash
+python src/main.py --config config.yaml --model models/custom-model.tflite --confidence 0.7
 ```
 
 ---
