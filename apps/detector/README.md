@@ -89,6 +89,15 @@ The hardware auto-detection found a USB camera. Either:
 python src/main.py --config configs/quickstart.yaml --camera usb
 ```
 
+**NumPy version conflicts:**
+
+NumPy 2.x can cause issues with TensorFlow/TFLite. If you see errors like
+`module 'numpy' has no attribute` or `A]` array errors:
+
+```bash
+pip install "numpy<2"
+```
+
 ## Project Structure
 
 ```text
