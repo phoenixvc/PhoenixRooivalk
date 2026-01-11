@@ -402,7 +402,7 @@ def main():
     # Setup logging from config or defaults
     if settings and settings.logging:
         setup_logging(
-            level=settings.logging.level,
+            level=settings.logging.level.value,
             log_file=settings.logging.log_file,
             json_format=settings.logging.json_format,
         )
