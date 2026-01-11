@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useCart } from "../../contexts/CartContext";
 import styles from "./CartIcon.module.css";
 
@@ -11,7 +11,7 @@ interface CartIconProps {
 export function CartIcon({ onClick }: CartIconProps): React.ReactElement {
   const { itemCount } = useCart();
   const [animate, setAnimate] = useState(false);
-  const prevCountRef = React.useRef(0);
+  const prevCountRef = useRef(0);
 
   // Trigger animation when item count increases
   useEffect(() => {
