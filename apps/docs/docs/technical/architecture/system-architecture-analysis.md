@@ -18,7 +18,9 @@ prerequisites:
 
 # System Architecture Analysis
 
-This document provides a deep analysis of the PhoenixRooivalk system architecture, answering five fundamental questions about why the system exists in its current form.
+This document provides a deep analysis of the PhoenixRooivalk system
+architecture, answering five fundamental questions about why the system exists
+in its current form.
 
 ## Table of Contents
 
@@ -34,9 +36,12 @@ This document provides a deep analysis of the PhoenixRooivalk system architectur
 
 ### Design Philosophy: Hardware-Agnostic Edge Processing
 
-The system architecture emerged from a fundamental requirement: **demo day uncertainty**. The detector must work reliably across vastly different hardware configurations without manual intervention.
+The system architecture emerged from a fundamental requirement: **demo day
+uncertainty**. The detector must work reliably across vastly different hardware
+configurations without manual intervention.
 
-The core principle is **auto-detection and adaptation**: detect hardware at startup, adapt configuration, and swap implementations as needed.
+The core principle is **auto-detection and adaptation**: detect hardware at
+startup, adapt configuration, and swap implementations as needed.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -59,18 +64,21 @@ The system must operate on:
 - Pi Camera v2/v3 or USB webcams
 - With or without Coral TPU accelerator
 
-Rather than requiring manual configuration for each deployment scenario, the factory pattern (`apps/detector/src/factory.py`) examines available hardware and instantiates appropriate implementations automatically.
+Rather than requiring manual configuration for each deployment scenario, the
+factory pattern (`apps/detector/src/factory.py`) examines available hardware and
+instantiates appropriate implementations automatically.
 
 ### Hardware Profile Detection
 
-The hardware detection module (`apps/detector/src/hardware.py`) probes the system and makes recommendations:
+The hardware detection module (`apps/detector/src/hardware.py`) probes the
+system and makes recommendations:
 
-| Detected Property | Source | Impact |
-|------------------|--------|--------|
-| Platform (Pi3/Pi4/Pi5/x86) | `/proc/cpuinfo`, platform module | Threading, resolution defaults |
-| RAM | `/proc/meminfo` | Feature availability (streaming) |
-| Camera type | libcamera probe, device enumeration | Frame source selection |
-| Accelerators | `lsusb` for Coral USB/PCIe | Inference engine selection |
+| Detected Property          | Source                              | Impact                           |
+| -------------------------- | ----------------------------------- | -------------------------------- |
+| Platform (Pi3/Pi4/Pi5/x86) | `/proc/cpuinfo`, platform module    | Threading, resolution defaults   |
+| RAM                        | `/proc/meminfo`                     | Feature availability (streaming) |
+| Camera type                | libcamera probe, device enumeration | Frame source selection           |
+| Accelerators               | `lsusb` for Coral USB/PCIe          | Inference engine selection       |
 
 This detection translates to concrete recommendations:
 
@@ -81,13 +89,14 @@ This detection translates to concrete recommendations:
 
 Three inference engines support different hardware realities:
 
-| Engine | Use Case | Trade-off |
-|--------|----------|-----------|
-| TFLite | Default for Pi (fast, quantized) | Low memory, slightly reduced accuracy |
-| ONNX | Desktop/laptop | Raw floating-point accuracy, more memory |
-| Coral TPU | Optional accelerator | 10x faster inference, requires specific hardware |
+| Engine    | Use Case                         | Trade-off                                        |
+| --------- | -------------------------------- | ------------------------------------------------ |
+| TFLite    | Default for Pi (fast, quantized) | Low memory, slightly reduced accuracy            |
+| ONNX      | Desktop/laptop                   | Raw floating-point accuracy, more memory         |
+| Coral TPU | Optional accelerator             | 10x faster inference, requires specific hardware |
 
-Each implements the same `InferenceEngine` interface, enabling the factory to swap implementations without affecting the pipeline.
+Each implements the same `InferenceEngine` interface, enabling the factory to
+swap implementations without affecting the pipeline.
 
 ### Layered Architecture Rationale
 
@@ -109,13 +118,20 @@ Layer 1: Edge Detection (Python)
 
 **Why this separation?**
 
-1. **Edge (Python)**: Maximizes hardware compatibility. Python's ecosystem for ML inference (TFLite, ONNX) is unmatched. Performance-critical paths use NumPy for vectorization.
+1. **Edge (Python)**: Maximizes hardware compatibility. Python's ecosystem for
+   ML inference (TFLite, ONNX) is unmatched. Performance-critical paths use
+   NumPy for vectorization.
 
-2. **Backend (Rust)**: Safety-critical evidence handling requires memory safety guarantees. Rust's ownership model prevents the data races that could corrupt evidence chains.
+2. **Backend (Rust)**: Safety-critical evidence handling requires memory safety
+   guarantees. Rust's ownership model prevents the data races that could corrupt
+   evidence chains.
 
-3. **Cloud (TypeScript)**: Azure Functions with TypeScript provides rapid iteration for non-critical services (caching, documentation).
+3. **Cloud (TypeScript)**: Azure Functions with TypeScript provides rapid
+   iteration for non-critical services (caching, documentation).
 
-4. **Blockchain (Rust)**: Anchoring evidence to immutable ledgers requires deterministic behavior. Rust's predictability is essential for cryptographic operations.
+4. **Blockchain (Rust)**: Anchoring evidence to immutable ledgers requires
+   deterministic behavior. Rust's predictability is essential for cryptographic
+   operations.
 
 ---
 
@@ -123,7 +139,8 @@ Layer 1: Edge Detection (Python)
 
 ### Layer 1: Edge State (Python Detector)
 
-State at the edge is intentionally **ephemeral and frame-scoped**. The system prioritizes responsiveness over persistence.
+State at the edge is intentionally **ephemeral and frame-scoped**. The system
+prioritizes responsiveness over persistence.
 
 #### Frame-Level State
 
@@ -137,7 +154,8 @@ class FrameData:
     source_id: str              # Camera identifier
 ```
 
-Frames are **not buffered** by default (buffer size = 1). Old frames are discarded to maintain freshness.
+Frames are **not buffered** by default (buffer size = 1). Old frames are
+discarded to maintain freshness.
 
 #### Detection State
 
@@ -151,7 +169,8 @@ class Detection:
     metadata: dict              # Custom data
 ```
 
-Detections exist only for the duration of pipeline processing. They are not persisted unless explicitly sent to an alert handler.
+Detections exist only for the duration of pipeline processing. They are not
+persisted unless explicitly sent to an alert handler.
 
 #### Tracking State
 
@@ -167,13 +186,16 @@ class TrackedObject:
     predicted_position: (int, int)
 ```
 
-**State lifetime**: Tracks are pruned after `max_disappeared` frames (default: 30). A track that disappears for 1 second at 30fps is permanently lost.
+**State lifetime**: Tracks are pruned after `max_disappeared` frames (default:
+30). A track that disappears for 1 second at 30fps is permanently lost.
 
-**State location**: In-memory `OrderedDict` within the tracker instance. No persistence across restarts.
+**State location**: In-memory `OrderedDict` within the tracker instance. No
+persistence across restarts.
 
 #### Targeting State
 
-The targeting system (`apps/detector/src/targeting.py`) maintains engagement state:
+The targeting system (`apps/detector/src/targeting.py`) maintains engagement
+state:
 
 ```python
 @dataclass
@@ -188,15 +210,18 @@ class TargetLock:
 ```
 
 **State machine**:
+
 ```
 SEARCHING → TRACKING → LOCKED → ENGAGING → COOLDOWN
 ```
 
-GPIO control state (pin 17) is **volatile**. A system restart resets the fire net to safe (disarmed) state.
+GPIO control state (pin 17) is **volatile**. A system restart resets the fire
+net to safe (disarmed) state.
 
 ### Layer 2: Backend State (Rust API)
 
-The API layer uses **transient request-scoped state**. Each request is independent.
+The API layer uses **transient request-scoped state**. Each request is
+independent.
 
 Evidence records are immediately persisted to the blockchain outbox:
 
@@ -213,20 +238,22 @@ pub struct EvidenceRecord {
 }
 ```
 
-**Outbox pattern**: Evidence is written to SQLite immediately, then asynchronously anchored to blockchain. This ensures evidence is never lost even if blockchain is temporarily unavailable.
+**Outbox pattern**: Evidence is written to SQLite immediately, then
+asynchronously anchored to blockchain. This ensures evidence is never lost even
+if blockchain is temporarily unavailable.
 
 ### Layer 3: Cloud State (Azure Cosmos DB)
 
 Cosmos DB provides **durable state** with configurable TTLs:
 
-| Container | Purpose | TTL |
-|-----------|---------|-----|
-| `cache_embeddings` | AI embeddings | 7 days |
-| `cache_queries` | Query results | 1 hour |
-| `cache_suggestions` | Per-page suggestions | 24 hours |
-| `configuration` | User settings | Permanent |
-| `news` | Ingested articles | Permanent |
-| `support` | Support tickets | Permanent |
+| Container           | Purpose              | TTL       |
+| ------------------- | -------------------- | --------- |
+| `cache_embeddings`  | AI embeddings        | 7 days    |
+| `cache_queries`     | Query results        | 1 hour    |
+| `cache_suggestions` | Per-page suggestions | 24 hours  |
+| `configuration`     | User settings        | Permanent |
+| `news`              | Ingested articles    | Permanent |
+| `support`           | Support tickets      | Permanent |
 
 **Connection state**: Singleton pattern with connection pooling:
 
@@ -241,7 +268,8 @@ function getCosmosClient(): CosmosClient {
 }
 ```
 
-Warm connections persist across function invocations. Cold starts require new client initialization.
+Warm connections persist across function invocations. Cold starts require new
+client initialization.
 
 ### Layer 4: Blockchain State (Immutable)
 
@@ -261,17 +289,17 @@ pub struct ChainTxRef {
 
 ### State Summary Matrix
 
-| State Type | Location | Lifetime | Persistence |
-|------------|----------|----------|-------------|
-| Frame pixels | Edge RAM | Single frame | None |
-| Detections | Edge RAM | Single frame | None (unless alerted) |
-| Tracks | Edge RAM | Until max_disappeared | None |
-| Target lock | Edge RAM | Until disengage | None |
-| GPIO state | Hardware | Until power loss | None |
-| Evidence outbox | SQLite | Until anchored | Local file |
-| Cloud cache | Cosmos DB | TTL-based | Durable |
-| Configuration | Cosmos DB | Permanent | Durable |
-| Blockchain anchor | Chain | Permanent | Immutable |
+| State Type        | Location  | Lifetime              | Persistence           |
+| ----------------- | --------- | --------------------- | --------------------- |
+| Frame pixels      | Edge RAM  | Single frame          | None                  |
+| Detections        | Edge RAM  | Single frame          | None (unless alerted) |
+| Tracks            | Edge RAM  | Until max_disappeared | None                  |
+| Target lock       | Edge RAM  | Until disengage       | None                  |
+| GPIO state        | Hardware  | Until power loss      | None                  |
+| Evidence outbox   | SQLite    | Until anchored        | Local file            |
+| Cloud cache       | Cosmos DB | TTL-based             | Durable               |
+| Configuration     | Cosmos DB | Permanent             | Durable               |
+| Blockchain anchor | Chain     | Permanent             | Immutable             |
 
 ---
 
@@ -279,7 +307,8 @@ pub struct ChainTxRef {
 
 ### Edge Pipeline Failure Modes
 
-The main detection loop (`apps/detector/src/main.py:179-286`) handles failures with **graceful degradation**:
+The main detection loop (`apps/detector/src/main.py:179-286`) handles failures
+with **graceful degradation**:
 
 ```python
 while True:
@@ -303,15 +332,15 @@ while True:
 
 #### Failure Mode Table
 
-| Failure | Behavior | Impact | Recovery |
-|---------|----------|--------|----------|
-| Camera fails to open | `start()` returns False | Process exits with code 1 | Manual restart required |
-| Model fails to load | Exception thrown | Process crashes | Fix model path, restart |
-| Frame read fails | Logs error, continues | Single frame lost | Automatic (next frame) |
-| Inference timeout | Returns empty detections | No alerts for frame | Automatic (safe fail) |
-| Webhook timeout | Catches URLError, logs | Alert lost | Manual review of logs |
-| Display closed | `show()` returns False | Clean shutdown | Intentional |
-| Ctrl+C / SIGTERM | Signal handler fires | Clean shutdown | Intentional |
+| Failure              | Behavior                 | Impact                    | Recovery                |
+| -------------------- | ------------------------ | ------------------------- | ----------------------- |
+| Camera fails to open | `start()` returns False  | Process exits with code 1 | Manual restart required |
+| Model fails to load  | Exception thrown         | Process crashes           | Fix model path, restart |
+| Frame read fails     | Logs error, continues    | Single frame lost         | Automatic (next frame)  |
+| Inference timeout    | Returns empty detections | No alerts for frame       | Automatic (safe fail)   |
+| Webhook timeout      | Catches URLError, logs   | Alert lost                | Manual review of logs   |
+| Display closed       | `show()` returns False   | Clean shutdown            | Intentional             |
+| Ctrl+C / SIGTERM     | Signal handler fires     | Clean shutdown            | Intentional             |
 
 #### Alert Throttling
 
@@ -325,7 +354,8 @@ if now - self._last_alert_time < self._cooldown:
 
 #### Targeting System Safety Interlocks
 
-The fire net has **multiple fail-safe layers** (`apps/detector/src/targeting.py`):
+The fire net has **multiple fail-safe layers**
+(`apps/detector/src/targeting.py`):
 
 ```python
 if not self.fire_net_armed:
@@ -354,7 +384,8 @@ match TcpListener::bind(addr).await {
 }
 ```
 
-The API **fails fast** on startup errors. A partial startup is worse than no startup.
+The API **fails fast** on startup errors. A partial startup is worse than no
+startup.
 
 #### Keeper Job Processing
 
@@ -372,7 +403,8 @@ tokio::select! {
 }
 ```
 
-Failed jobs **remain in queue** for retry. The outbox pattern ensures no evidence is lost.
+Failed jobs **remain in queue** for retry. The outbox pattern ensures no
+evidence is lost.
 
 ### Cloud Function Failure Propagation
 
@@ -380,29 +412,31 @@ Failed jobs **remain in queue** for retry. The outbox pattern ensures no evidenc
 
 ```typescript
 try {
-    const container = getContainer("configuration");
-    await container.items.query("SELECT TOP 1 * FROM c").fetchAll();
-    checks.cosmos = "ok";
+  const container = getContainer("configuration");
+  await container.items.query("SELECT TOP 1 * FROM c").fetchAll();
+  checks.cosmos = "ok";
 } catch (error) {
-    checks.cosmos = "error";
-    errors.push(`Cosmos DB: ${error.message}`);
+  checks.cosmos = "error";
+  errors.push(`Cosmos DB: ${error.message}`);
 }
 
 // Return 503 if critical service fails
-status: checks.cosmos === "error" ? 503 : 200
+status: checks.cosmos === "error" ? 503 : 200;
 ```
 
-Health endpoints expose failures to load balancers. Unhealthy instances are removed from rotation.
+Health endpoints expose failures to load balancers. Unhealthy instances are
+removed from rotation.
 
 #### Cache Failures Are Non-Fatal
 
 ```typescript
 container.items.upsert(updatedEntry).catch(() => {
-    /* ignore update errors */
+  /* ignore update errors */
 });
 ```
 
-Cache misses result in slower responses, not failures. The system degrades gracefully.
+Cache misses result in slower responses, not failures. The system degrades
+gracefully.
 
 ### Failure Propagation Summary
 
@@ -441,11 +475,11 @@ self._cap.set(cv2.CAP_PROP_BUFFERSIZE, self._buffer_size)
 
 Default buffer size: **1 frame**
 
-| Scenario | Buffer Size | Behavior |
-|----------|-------------|----------|
-| Normal | 1 | Minimal latency, frames dropped under load |
-| High load | 1 | Older frames discarded, processing newest |
-| Streaming backpressure | 1 | Clients get freshest frame, older dropped |
+| Scenario               | Buffer Size | Behavior                                   |
+| ---------------------- | ----------- | ------------------------------------------ |
+| Normal                 | 1           | Minimal latency, frames dropped under load |
+| High load              | 1           | Older frames discarded, processing newest  |
+| Streaming backpressure | 1           | Clients get freshest frame, older dropped  |
 
 **Streaming frame buffer** (`apps/detector/src/streaming.py`):
 
@@ -459,18 +493,19 @@ def put(self, frame: StreamFrame) -> None:
     queue.put_nowait(frame)
 ```
 
-MJPEG streaming **drops frames under backpressure**. Slow clients receive newest available frame, not queued stale frames.
+MJPEG streaming **drops frames under backpressure**. Slow clients receive newest
+available frame, not queued stale frames.
 
 ### Inference Latency Scaling
 
 Resolution auto-tuning based on hardware capability:
 
-| Platform | Resolution | Inference Time | Accuracy Trade-off |
-|----------|------------|----------------|-------------------|
-| Pi 3 | 320x240 | ~100ms | Lower accuracy |
-| Pi 4 | 480x360 | ~50ms | Medium accuracy |
-| Pi 5 | 640x480 | ~25ms | Higher accuracy |
-| Pi 5 + Coral | 640x480 | ~8ms | Highest accuracy |
+| Platform     | Resolution | Inference Time | Accuracy Trade-off |
+| ------------ | ---------- | -------------- | ------------------ |
+| Pi 3         | 320x240    | ~100ms         | Lower accuracy     |
+| Pi 4         | 480x360    | ~50ms          | Medium accuracy    |
+| Pi 5         | 640x480    | ~25ms          | Higher accuracy    |
+| Pi 5 + Coral | 640x480    | ~8ms           | Highest accuracy   |
 
 Threading model adapts to available cores:
 
@@ -493,13 +528,14 @@ if distances[row, col] > self._max_distance:
 Impact at different frame rates:
 
 | Drone Speed | FPS | Motion/Frame | Track Status |
-|-------------|-----|--------------|--------------|
-| 10 m/s | 30 | 33px | Maintained |
-| 20 m/s | 30 | 67px | Maintained |
-| 30 m/s | 30 | 100px | **Lost** |
-| 30 m/s | 15 | 200px | **Lost** |
+| ----------- | --- | ------------ | ------------ |
+| 10 m/s      | 30  | 33px         | Maintained   |
+| 20 m/s      | 30  | 67px         | Maintained   |
+| 30 m/s      | 30  | 100px        | **Lost**     |
+| 30 m/s      | 15  | 200px        | **Lost**     |
 
-**Graceful degradation**: Lost tracks get new IDs. Confidence history resets. The system continues operating but loses track continuity.
+**Graceful degradation**: Lost tracks get new IDs. Confidence history resets.
+The system continues operating but loses track continuity.
 
 ### Webhook Latency Impact
 
@@ -520,18 +556,19 @@ Under high latency:
 3. Alert is lost (no retry queue)
 4. Cooldown timer prevents immediate retry
 
-**Design decision**: Alert loss is preferable to pipeline blocking. Real-time detection takes priority over guaranteed alert delivery.
+**Design decision**: Alert loss is preferable to pipeline blocking. Real-time
+detection takes priority over guaranteed alert delivery.
 
 ### Cosmos DB Throughput Behavior
 
 RU (Request Unit) consumption under load:
 
-| Operation | Approximate RU | Impact Under Load |
-|-----------|---------------|-------------------|
-| Point read | 1 RU | Scales well |
-| Query (simple) | 2-5 RU | Moderate scaling |
-| Query (complex) | 10-50 RU | May throttle |
-| Write | 5-10 RU | May throttle |
+| Operation       | Approximate RU | Impact Under Load |
+| --------------- | -------------- | ----------------- |
+| Point read      | 1 RU           | Scales well       |
+| Query (simple)  | 2-5 RU         | Moderate scaling  |
+| Query (complex) | 10-50 RU       | May throttle      |
+| Write           | 5-10 RU        | May throttle      |
 
 **Cache TTLs reduce load**:
 
@@ -568,15 +605,15 @@ Under network congestion:
 
 ### Load Impact Summary
 
-| Component | Under Load | Behavior |
-|-----------|-----------|----------|
-| Frame buffer | Full | Drop oldest frames |
-| Inference | Slow | Reduced FPS |
-| Tracking | Fast motion | Lost tracks, new IDs |
-| Webhooks | Timeout | Alerts lost |
-| Streaming | Backpressure | Drop frames |
-| Cosmos DB | RU throttle | 429 responses, retry |
-| Blockchain | Congestion | Delayed confirmation |
+| Component    | Under Load   | Behavior             |
+| ------------ | ------------ | -------------------- |
+| Frame buffer | Full         | Drop oldest frames   |
+| Inference    | Slow         | Reduced FPS          |
+| Tracking     | Fast motion  | Lost tracks, new IDs |
+| Webhooks     | Timeout      | Alerts lost          |
+| Streaming    | Backpressure | Drop frames          |
+| Cosmos DB    | RU throttle  | 429 responses, retry |
+| Blockchain   | Congestion   | Delayed confirmation |
 
 ---
 
@@ -614,11 +651,11 @@ Setting `CAP_PROP_FPS` to 120 doesn't make a 30fps camera faster.
 
 **Real capabilities**:
 
-| Camera | Max FPS | Max Resolution |
-|--------|---------|----------------|
-| Pi Camera v2 | 60 | 3280x2464 |
-| Pi Camera v3 | 120 | 4608x2592 |
-| USB (typical) | 30 | 1920x1080 |
+| Camera        | Max FPS | Max Resolution |
+| ------------- | ------- | -------------- |
+| Pi Camera v2  | 60      | 3280x2464      |
+| Pi Camera v3  | 120     | 4608x2592      |
+| USB (typical) | 30      | 1920x1080      |
 
 #### Inference Quantization Trade-off
 
@@ -637,9 +674,11 @@ This is a **physics constraint**: fewer bits = less precision.
 
 **Constraint**: Centroid tracker assumes small inter-frame motion.
 
-At 15fps with 100px max_distance, a drone moving >100px/frame (>30m/s at typical resolution) will lose track.
+At 15fps with 100px max_distance, a drone moving >100px/frame (>30m/s at typical
+resolution) will lose track.
 
-**Not software-fixable**: Kalman prediction helps but cannot overcome fundamental frame rate limits.
+**Not software-fixable**: Kalman prediction helps but cannot overcome
+fundamental frame rate limits.
 
 #### Fire Net Hardware Safety
 
@@ -651,7 +690,8 @@ At 15fps with 100px max_distance, a drone moving >100px/frame (>30m/s at typical
 fire_net_arm_required = True  # Cannot be disabled
 ```
 
-**Physical constraint**: Wrong wiring = no fire. Right wiring + wrong software = no fire (safe default).
+**Physical constraint**: Wrong wiring = no fire. Right wiring + wrong software =
+no fire (safe default).
 
 #### Cosmos DB Partition Key
 
@@ -659,7 +699,8 @@ fire_net_arm_required = True  # Cannot be disabled
 
 **Evidence**: Azure enforces at write time. Duplicate ID = conflict error.
 
-**Not optional**: Cosmos DB architecture requires partition key selection at container creation.
+**Not optional**: Cosmos DB architecture requires partition key selection at
+container creation.
 
 #### RPC Rate Limits
 
@@ -673,13 +714,15 @@ fire_net_arm_required = True  # Cannot be disabled
 
 #### "Must Use Coral TPU for Speed"
 
-**Reality**: TFLite on Pi 5 achieves 25-30ms inference without TPU. Coral reduces to 8-10ms.
+**Reality**: TFLite on Pi 5 achieves 25-30ms inference without TPU. Coral
+reduces to 8-10ms.
 
 **Both work**. Coral is an optimization, not a requirement.
 
 #### "Tracking Requires Kalman Filter"
 
-**Reality**: Centroid tracker handles typical drone speeds adequately. Kalman adds complexity for marginal benefit in most scenarios.
+**Reality**: Centroid tracker handles typical drone speeds adequately. Kalman
+adds complexity for marginal benefit in most scenarios.
 
 **Config allows**:
 
@@ -691,7 +734,8 @@ tracker_type: kalman   # Complex, predictive
 
 #### "Evidence Must Go to Blockchain Immediately"
 
-**Reality**: System uses 5-second batch processing. Latency is acceptable for post-hoc audit trails.
+**Reality**: System uses 5-second batch processing. Latency is acceptable for
+post-hoc audit trails.
 
 **Not real-time critical**: Evidence anchoring is forensic, not operational.
 
@@ -708,7 +752,8 @@ else:
 
 #### "Cannot Run Without a Model File"
 
-**Reality**: `--mock` mode uses synthetic detections. Demo possible without ML model:
+**Reality**: `--mock` mode uses synthetic detections. Demo possible without ML
+model:
 
 ```bash
 python -m src.main --mock
@@ -716,20 +761,20 @@ python -m src.main --mock
 
 ### Constraint Classification Matrix
 
-| Constraint | Type | Mitigation |
-|------------|------|------------|
-| Pi 3 memory limit | **REAL** (hardware) | Feature fallback |
-| Camera FPS limit | **REAL** (hardware) | Accept limitation |
-| Quantization accuracy loss | **REAL** (physics) | Accept trade-off |
-| Tracking motion limit | **REAL** (math) | Increase FPS or max_distance |
-| GPIO wiring | **REAL** (hardware) | Correct installation |
-| Partition key requirement | **REAL** (Azure) | Design around it |
-| RPC rate limits | **REAL** (cost) | Batching, paid plans |
-| Coral TPU required | **IMAGINED** | TFLite works fine |
-| Kalman required | **IMAGINED** | Centroid sufficient |
-| Immediate blockchain | **IMAGINED** | Batch acceptable |
-| Streaming required | **IMAGINED** | Headless works |
-| Model file required | **IMAGINED** | Mock mode available |
+| Constraint                 | Type                | Mitigation                   |
+| -------------------------- | ------------------- | ---------------------------- |
+| Pi 3 memory limit          | **REAL** (hardware) | Feature fallback             |
+| Camera FPS limit           | **REAL** (hardware) | Accept limitation            |
+| Quantization accuracy loss | **REAL** (physics)  | Accept trade-off             |
+| Tracking motion limit      | **REAL** (math)     | Increase FPS or max_distance |
+| GPIO wiring                | **REAL** (hardware) | Correct installation         |
+| Partition key requirement  | **REAL** (Azure)    | Design around it             |
+| RPC rate limits            | **REAL** (cost)     | Batching, paid plans         |
+| Coral TPU required         | **IMAGINED**        | TFLite works fine            |
+| Kalman required            | **IMAGINED**        | Centroid sufficient          |
+| Immediate blockchain       | **IMAGINED**        | Batch acceptable             |
+| Streaming required         | **IMAGINED**        | Headless works               |
+| Model file required        | **IMAGINED**        | Mock mode available          |
 
 ---
 
@@ -760,21 +805,21 @@ COSMOS_DB_DATABASE=phoenix-docs
 
 ### Hard-Coded Constraints
 
-| Constraint | Value | Source | Modifiable |
-|------------|-------|--------|------------|
-| Max track disappear frames | 30 | `trackers.py` | Yes (config) |
-| Centroid max distance | 100px | Settings default | Yes (config) |
-| Drone score threshold | 0.5 | `interfaces.py` | Yes (config) |
-| Fire net min confidence | 0.85 | Settings | Yes (config) |
-| Fire net min track frames | 10 | Settings | Yes (config) |
-| Fire net cooldown | 10s | Settings | Yes (config) |
-| Fire net distance envelope | 5-50m | Settings | Yes (config) |
-| Fire net arm required | True | Hard-coded | **No** (safety) |
-| Webhook timeout | 5s | Alert handler | Yes (config) |
-| Cache TTL (embeddings) | 7 days | `cache.ts` | Yes (code) |
-| Cache TTL (queries) | 1 hour | `cache.ts` | Yes (code) |
-| Keeper poll interval | 5s | Default | Yes (env) |
-| Confirmation interval | 30s | Default | Yes (env) |
+| Constraint                 | Value  | Source           | Modifiable      |
+| -------------------------- | ------ | ---------------- | --------------- |
+| Max track disappear frames | 30     | `trackers.py`    | Yes (config)    |
+| Centroid max distance      | 100px  | Settings default | Yes (config)    |
+| Drone score threshold      | 0.5    | `interfaces.py`  | Yes (config)    |
+| Fire net min confidence    | 0.85   | Settings         | Yes (config)    |
+| Fire net min track frames  | 10     | Settings         | Yes (config)    |
+| Fire net cooldown          | 10s    | Settings         | Yes (config)    |
+| Fire net distance envelope | 5-50m  | Settings         | Yes (config)    |
+| Fire net arm required      | True   | Hard-coded       | **No** (safety) |
+| Webhook timeout            | 5s     | Alert handler    | Yes (config)    |
+| Cache TTL (embeddings)     | 7 days | `cache.ts`       | Yes (code)      |
+| Cache TTL (queries)        | 1 hour | `cache.ts`       | Yes (code)      |
+| Keeper poll interval       | 5s     | Default          | Yes (env)       |
+| Confirmation interval      | 30s    | Default          | Yes (env)       |
 
 ---
 
@@ -787,9 +832,11 @@ The PhoenixRooivalk architecture succeeds because it **embraces uncertainty**:
 3. **Offering multiple implementations** handles diverse environments
 4. **Failing safely** when constraints are violated protects users and hardware
 
-The system distinguishes between **real constraints** (hardware limits, physics, cost) and **imagined constraints** (perceived requirements that are actually optional). Understanding this distinction enables informed trade-offs during deployment and optimization.
+The system distinguishes between **real constraints** (hardware limits, physics,
+cost) and **imagined constraints** (perceived requirements that are actually
+optional). Understanding this distinction enables informed trade-offs during
+deployment and optimization.
 
 ---
 
-*Document version: 1.0*
-*Last updated: 2026-01-11*
+_Document version: 1.0_ _Last updated: 2026-01-11_
