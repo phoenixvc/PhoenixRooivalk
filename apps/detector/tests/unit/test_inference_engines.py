@@ -2,22 +2,18 @@
 Unit tests for inference_engines.py - inference engine creation and operations.
 """
 
-import pytest
 import sys
-import numpy as np
 from pathlib import Path
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, mock_open, patch
+
+import numpy as np
+import pytest
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from inference_engines import (
-    create_inference_engine,
-    MockInferenceEngine,
-    TFLiteEngine,
-    ONNXEngine,
-)
-from interfaces import Detection, BoundingBox, InferenceResult
+from inference_engines import MockInferenceEngine, ONNXEngine, TFLiteEngine, create_inference_engine
+from interfaces import BoundingBox, Detection, InferenceResult
 
 
 class TestMockInferenceEngine:
@@ -113,3 +109,11 @@ class TestCreateInferenceEngine:
             create_inference_engine(
                 engine_type="invalid", model_path="test.model", use_coral=False
             )
+
+    def test_create_auto_engine_with_mock_model_path(self):
+        """Should create mock engine when model_path is 'mock' and engine_type is 'auto'."""
+        engine = create_inference_engine(
+            engine_type="auto", model_path="mock", use_coral=False
+        )
+
+        assert isinstance(engine, MockInferenceEngine)
