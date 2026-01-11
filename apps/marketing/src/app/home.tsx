@@ -4,8 +4,8 @@ import * as React from "react";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
 import { ContactSection } from "../components/sections/ContactSection";
+import { FeaturesSection } from "../components/sections/FeaturesSection";
 import { HeroSection } from "../components/sections/HeroSection";
-import { CaseStudiesSection } from "../components/sections/CaseStudiesSection";
 import { usePerformanceOptimizations } from "../hooks/usePerformanceOptimizations";
 import styles from "./home.module.css";
 
@@ -27,7 +27,7 @@ export default function HomePage(): React.ReactElement {
 
       {/* Main Content Sections */}
       <HeroSection />
-      <CaseStudiesSection />
+      <FeaturesSection />
       <ContactSection />
 
       {/* Footer */}

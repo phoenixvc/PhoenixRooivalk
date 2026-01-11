@@ -10,56 +10,52 @@ export const ContactSection: React.FC = () => {
     <section className={styles.section} id="contact">
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>
-            Ready to Deploy SAE Level 4 Autonomous Defense?
-          </h2>
+          <h2 className={styles.title}>Partner With Us</h2>
           <p className={styles.subtitle}>
-            Join the next generation of counter-drone defense. Request
-            capability demonstration or download technical whitepaper.
+            We&apos;re seeking early partners and investors to bring pneumatic
+            drone interception to market. Join us in Phase 1.
           </p>
         </div>
 
         <div className={styles.grid}>
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>
-              Request Capability Demonstration
-            </h3>
+            <h3 className={styles.cardTitle}>Early Partner Program</h3>
             <p className={styles.cardDescription}>
-              See Phoenix Rooivalk&apos;s SAE Level 4 autonomous architecture in
-              action. Demonstrate &lt;2ms response time, RF-silent drone
-              detection, and swarm defense capabilities.
+              Be among the first to deploy our pneumatic net launcher
+              technology. We&apos;re looking for pilot partners in drone
+              racing, event security, and critical infrastructure.
             </p>
             <div className={styles.buttonGroup}>
               <Button
-                href="mailto:demo@phoenixrooivalk.com"
-                size="lg"
-                className="w-full"
-                trackingEvent="Demo Requested"
-                trackingProps={{ location: "contact-section", type: "email" }}
-                aria-label="Email us to schedule a technical demonstration"
-              >
-                Schedule Technical Demo
-              </Button>
-              <Button
-                href="mailto:partnerships@phoenixrooivalk.com"
-                variant="ghost"
+                href="mailto:partners@phoenixrooivalk.com"
                 size="lg"
                 className="w-full"
                 trackingEvent="Partnership Inquiry"
                 trackingProps={{ location: "contact-section", type: "email" }}
                 aria-label="Email us for partnership inquiries"
               >
-                Partnership Inquiries
+                Become an Early Partner
+              </Button>
+              <Button
+                href="mailto:info@phoenixrooivalk.com"
+                variant="ghost"
+                size="lg"
+                className="w-full"
+                trackingEvent="General Inquiry"
+                trackingProps={{ location: "contact-section", type: "email" }}
+                aria-label="Email us for general inquiries"
+              >
+                General Inquiries
               </Button>
             </div>
           </div>
 
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Technical Resources</h3>
+            <h3 className={styles.cardTitle}>Resources & Documentation</h3>
             <p className={styles.cardDescription}>
-              Download comprehensive technical documentation and market
-              analysis. Learn about SAE Level 4 architecture, market
-              opportunity, and competitive positioning.
+              Learn more about our dual-brand strategy, market opportunity, and
+              technical approach. Download our whitepaper or explore detailed
+              specifications.
             </p>
             <div className={styles.buttonGroup}>
               <Button
@@ -74,7 +70,7 @@ export const ContactSection: React.FC = () => {
                 trackingProps={{ location: "contact-section", type: "button" }}
                 aria-label="Download technical whitepaper PDF"
               >
-                Download Technical Whitepaper
+                Download Whitepaper
               </Button>
               <Button
                 href="/technical"
@@ -85,7 +81,7 @@ export const ContactSection: React.FC = () => {
                 trackingProps={{ location: "contact-section", source: "cta" }}
                 aria-label="View detailed technical specifications"
               >
-                View Technical Specifications
+                Technical Specifications
               </Button>
             </div>
           </div>
@@ -93,17 +89,14 @@ export const ContactSection: React.FC = () => {
 
         <div className={styles.sbirSection}>
           <div className={styles.sbirCard}>
-            <h3 className={styles.sbirTitle}>
-              SBIR & Government Opportunities
-            </h3>
+            <h3 className={styles.sbirTitle}>Investors & Government</h3>
             <p className={styles.sbirDescription}>
-              Phoenix Rooivalk is actively pursuing Air Force SBIR Phase I
-              ($350K) and seeking partnerships with defense contractors for
-              market entry. Contact us for SBIR collaboration or government
-              contracting opportunities.
+              We&apos;re raising our Seed round and pursuing SBIR opportunities.
+              Contact us if you&apos;re interested in the counter-drone market
+              or government contracting partnerships.
             </p>
-            <Button href="mailto:government@phoenixrooivalk.com" size="lg">
-              Government Contracting Inquiries
+            <Button href="mailto:investors@phoenixrooivalk.com" size="lg">
+              Investment Inquiries
             </Button>
           </div>
         </div>
