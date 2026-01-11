@@ -45,7 +45,7 @@ sudo apt install -y libcamera-apps
 ### 2. Get Model
 
 ```bash
-pip install ultralytics
+pip install ultralytics tensorflow
 python -c "from ultralytics import YOLO; \
   YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
 mv yolov5n_int8.tflite models/
