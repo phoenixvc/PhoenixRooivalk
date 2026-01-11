@@ -262,14 +262,18 @@ jobs:
             *) LOCATION_SHORT="${LOCATION:0:4}" ;;
           esac
 
-          # Resource naming convention matching Bicep: [org]-[env]-[project]-[type]-[region]
+          # Resource naming - use existing resource group, Bicep handles internal resource naming
           # org=nl (NeuralLiquid), project=rooivalk
           ORG="nl"
           PROJECT="rooivalk"
+
+          # Resource group uses existing pattern to avoid conflicts with existing resources
+          RESOURCE_GROUP="${ENV_SHORT}-${LOCATION_SHORT}-rg-rooivalk"
+
+          # Bicep naming convention: [org]-[env]-[project]-[type]-[region]
           BASE_NAME="${ORG}-${ENV_SHORT}-${PROJECT}"
 
-          # Resource names (matching Bicep naming convention)
-          RESOURCE_GROUP="${BASE_NAME}-rg-${LOCATION_SHORT}"
+          # Resource names (matching Bicep naming convention in main.bicep)
           KEY_VAULT_NAME="${BASE_NAME}-kv-${LOCATION_SHORT}"
           STORAGE_NAME="${ORG}${ENV_SHORT}${PROJECT}st${LOCATION_SHORT}"
           APPI_NAME="${BASE_NAME}-appi-${LOCATION_SHORT}"
