@@ -59,7 +59,7 @@ Located in `apps/marketing/public/img/`:
 
 #### Action Items
 
-**Option 1: Manual Optimization**
+##### Option 1: Manual Optimization
 
 ```bash
 # Install image optimization tools
@@ -76,7 +76,7 @@ for file in apps/marketing/public/img/*.png; do
 done
 ```
 
-**Option 2: Next.js Image Optimization (Recommended)**
+##### Option 2: Next.js Image Optimization (Recommended)
 
 Update components to use Next.js `<Image>` component:
 
