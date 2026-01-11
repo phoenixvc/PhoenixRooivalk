@@ -1,15 +1,102 @@
 import * as React from "react";
 import { Button } from "../ui/button";
-import { products, phases } from "../../data/products";
+import { products, phases, type Product } from "../../data/products";
 import styles from "./ProductHighlightsSection.module.css";
 
 // Featured products for landing page - Phase 1 highlights
 const featuredProductIds = ["skysnare", "skywatch-standard", "netsnare-lite"];
 
+// Current date for preorder calculations
+const CURRENT_DATE = new Date("2026-01-11");
+
+// Parse launch date from phaseTimeline string
+function parseLaunchDate(phaseTimeline: string): Date | null {
+  if (phaseTimeline.toLowerCase().includes("available now")) {
+    return null; // Already available
+  }
+
+  // Match patterns like "Q2 2026", "Q4 2026", etc.
+  const quarterMatch = phaseTimeline.match(/Q(\d)\s+(\d{4})/);
+  if (quarterMatch) {
+    const quarter = parseInt(quarterMatch[1], 10);
+    const year = parseInt(quarterMatch[2], 10);
+    // Q1 = Jan, Q2 = Apr, Q3 = Jul, Q4 = Oct
+    const month = (quarter - 1) * 3;
+    return new Date(year, month, 1);
+  }
+
+  return null;
+}
+
+// Calculate preorder opens date (6 months before launch)
+function getPreorderOpensDate(launchDate: Date): Date {
+  const preorderDate = new Date(launchDate);
+  preorderDate.setMonth(preorderDate.getMonth() - 6);
+  return preorderDate;
+}
+
+// Format date for display
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
+
+// Get preorder status for a product
+function getPreorderStatus(product: Product): {
+  canPreorder: boolean;
+  canBuy: boolean;
+  preorderOpensDate: Date | null;
+  launchDate: Date | null;
+  statusText: string;
+} {
+  // Already available for purchase
+  if (product.available) {
+    return {
+      canPreorder: false,
+      canBuy: true,
+      preorderOpensDate: null,
+      launchDate: null,
+      statusText: "Available Now",
+    };
+  }
+
+  const launchDate = parseLaunchDate(product.phaseTimeline);
+
+  if (!launchDate) {
+    return {
+      canPreorder: false,
+      canBuy: false,
+      preorderOpensDate: null,
+      launchDate: null,
+      statusText: "Coming Soon",
+    };
+  }
+
+  const preorderOpensDate = getPreorderOpensDate(launchDate);
+  const canPreorder = CURRENT_DATE >= preorderOpensDate;
+
+  if (canPreorder) {
+    return {
+      canPreorder: true,
+      canBuy: false,
+      preorderOpensDate,
+      launchDate,
+      statusText: `Delivery ${formatDate(launchDate)}`,
+    };
+  }
+
+  return {
+    canPreorder: false,
+    canBuy: false,
+    preorderOpensDate,
+    launchDate,
+    statusText: `Preorder opens ${formatDate(preorderOpensDate)}`,
+  };
+}
+
 export const ProductHighlightsSection: React.FC = () => {
   const featuredProducts = featuredProductIds
     .map((id) => products.find((p) => p.id === id))
-    .filter(Boolean);
+    .filter(Boolean) as Product[];
 
   return (
     <section className={styles.section} id="products">
@@ -24,8 +111,8 @@ export const ProductHighlightsSection: React.FC = () => {
 
         <div className={styles.productsGrid}>
           {featuredProducts.map((product) => {
-            if (!product) return null;
             const phase = phases[product.phase];
+            const status = getPreorderStatus(product);
 
             return (
               <div key={product.id} className={styles.productCard}>
@@ -39,12 +126,17 @@ export const ProductHighlightsSection: React.FC = () => {
                     >
                       {phase.shortName}
                     </span>
-                    {product.available && (
+                    {status.canBuy && (
                       <span className={styles.availableBadge}>
                         Available Now
                       </span>
                     )}
-                    {product.comingSoon && !product.available && (
+                    {status.canPreorder && (
+                      <span className={styles.preorderBadge}>
+                        Preorder Open
+                      </span>
+                    )}
+                    {!status.canBuy && !status.canPreorder && (
                       <span className={styles.comingSoonBadge}>Coming Soon</span>
                     )}
                   </div>
@@ -75,26 +167,54 @@ export const ProductHighlightsSection: React.FC = () => {
 
                 <div className={styles.productFooter}>
                   <div className={styles.priceSection}>
-                    <span className={styles.price}>{product.priceFormatted}</span>
-                    {product.monthlyFee && (
-                      <span className={styles.monthlyFee}>
-                        + ${(product.monthlyFee / 1000).toFixed(0)}K/mo
-                      </span>
-                    )}
+                    <span className={styles.price}>
+                      {product.priceFormatted}
+                    </span>
+                    <span className={styles.statusText}>{status.statusText}</span>
                   </div>
                   <div className={styles.productActions}>
-                    <Button
-                      href="/preorder"
-                      size="md"
-                      variant="primary"
-                      trackingEvent="Preorder Clicked"
-                      trackingProps={{
-                        location: "product-highlights",
-                        product: product.id,
-                      }}
-                    >
-                      {product.available ? "Buy Now" : "Preorder"}
-                    </Button>
+                    {status.canBuy && (
+                      <Button
+                        href="/preorder"
+                        size="md"
+                        variant="primary"
+                        trackingEvent="Buy Clicked"
+                        trackingProps={{
+                          location: "product-highlights",
+                          product: product.id,
+                        }}
+                      >
+                        Buy Now
+                      </Button>
+                    )}
+                    {status.canPreorder && (
+                      <Button
+                        href="/preorder"
+                        size="md"
+                        variant="primary"
+                        trackingEvent="Preorder Clicked"
+                        trackingProps={{
+                          location: "product-highlights",
+                          product: product.id,
+                        }}
+                      >
+                        Preorder Now
+                      </Button>
+                    )}
+                    {!status.canBuy && !status.canPreorder && (
+                      <Button
+                        href={`/products#${product.id}`}
+                        size="md"
+                        variant="secondary"
+                        trackingEvent="Product Notify Clicked"
+                        trackingProps={{
+                          location: "product-highlights",
+                          product: product.id,
+                        }}
+                      >
+                        Notify Me
+                      </Button>
+                    )}
                     <Button
                       href={`/products#${product.id}`}
                       size="md"

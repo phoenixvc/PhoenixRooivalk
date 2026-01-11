@@ -117,6 +117,17 @@
   text-transform: uppercase;
 }
 
+.preorderBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(59, 130, 246, 0.15);
+  color: rgb(59, 130, 246);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
 .productLine {
   font-size: 0.75rem;
   color: rgb(100, 116, 139);
@@ -184,14 +195,20 @@
 
 .priceSection {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .price {
   font-size: 1.5rem;
   font-weight: 800;
   color: #ffffff;
+}
+
+.statusText {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  font-weight: 500;
 }
 
 .monthlyFee {
