@@ -546,7 +546,8 @@ class RetryingWebhookHandler:
                 data=data,
                 headers={"Content-Type": "application/json"},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)
+            # URL scheme validated in __init__ to be http/https only
+            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310
             return True
         except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
             raise RuntimeError(f"Webhook failed: {e}") from e

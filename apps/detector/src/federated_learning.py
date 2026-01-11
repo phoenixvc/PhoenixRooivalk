@@ -235,9 +235,10 @@ class LocalDataCollector:
         """Mark examples as used in gradient computation."""
         with self._lock:
             with sqlite3.connect(self._db_path) as conn:
+                # Placeholders are only "?" characters - values passed separately as parameters
                 placeholders = ",".join("?" * len(example_ids))
                 conn.execute(
-                    f"UPDATE examples SET used_in_gradient = 1 WHERE example_id IN ({placeholders})",
+                    f"UPDATE examples SET used_in_gradient = 1 WHERE example_id IN ({placeholders})",  # nosec B608
                     example_ids,
                 )
                 conn.commit()
@@ -432,9 +433,17 @@ class GradientUploader:
 
     def __init__(self, config: FederatedConfig):
         """Initialize uploader."""
+        from urllib.parse import urlparse
+
         self._config = config
         self._pending_uploads: List[GradientPackage] = []
         self._lock = threading.Lock()
+
+        # Validate server URL scheme if configured
+        if config.server_url:
+            parsed = urlparse(config.server_url)
+            if parsed.scheme not in ("http", "https"):
+                raise ValueError(f"Invalid server URL scheme: {parsed.scheme}")
 
     def queue_upload(self, package: GradientPackage) -> None:
         """Queue a gradient package for upload."""
@@ -492,7 +501,8 @@ class GradientUploader:
                     "X-Checksum": package.checksum,
                 },
             )
-            urllib.request.urlopen(
+            # URL scheme validated in __init__ to be http/https only
+            urllib.request.urlopen(  # nosec B310
                 req, timeout=self._config.upload_timeout_seconds
             )
 
