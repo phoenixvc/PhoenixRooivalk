@@ -89,6 +89,27 @@ The hardware auto-detection found a USB camera. Either:
 python src/main.py --config configs/quickstart.yaml --camera usb
 ```
 
+**Pi Camera capture fails (picamera2 not found):**
+
+```bash
+sudo apt install -y python3-picamera2
+```
+
+**Missing aiohttp (streaming):**
+
+```bash
+pip install aiohttp
+```
+
+**NumPy version conflicts:**
+
+NumPy 2.x can cause issues with TensorFlow/TFLite. If you see errors like
+`module 'numpy' has no attribute` or `A]` array errors:
+
+```bash
+pip install "numpy<2"
+```
+
 ## Project Structure
 
 ```text
