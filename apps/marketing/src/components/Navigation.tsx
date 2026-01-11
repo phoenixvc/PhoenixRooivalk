@@ -32,6 +32,7 @@ export const Navigation: React.FC = () => {
 
   // Helper to check if a path is active
   const isPathActive = (href: string) => {
+    if (!pathname) return false;
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
