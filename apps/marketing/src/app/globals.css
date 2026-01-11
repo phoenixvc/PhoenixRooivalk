@@ -283,7 +283,8 @@ h6 {
 .btn--primary:hover {
   background: rgb(var(--accent));
   border-color: rgb(var(--accent));
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(var(--primary), 0.4);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .btn--primary:focus-visible {
@@ -302,11 +303,11 @@ h6 {
 }
 
 .btn--secondary:hover {
-  background: rgba(51, 65, 85, 0.9);
+  background: rgba(51, 65, 85, 0.95);
   color: rgb(var(--text-primary));
   border-color: rgb(100, 116, 139);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
 }
 
 .btn--secondary:focus-visible {
@@ -324,10 +325,11 @@ h6 {
 }
 
 .btn--ghost:hover {
-  background: rgb(var(--bg-surface));
+  background: rgba(var(--bg-surface), 0.8);
   color: rgb(var(--text-secondary));
-  border-color: rgb(var(--border));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 .btn--ghost:focus-visible {
@@ -414,9 +416,11 @@ h6 {
 }
 
 .card:hover {
-  border-color: rgba(var(--primary), 0.5);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow:
+    0 8px 28px rgba(59, 130, 246, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
 }
 
 .card--elevated {
@@ -425,8 +429,10 @@ h6 {
 }
 
 .card--elevated:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  transform: translateY(-3px);
+  box-shadow:
+    0 12px 36px rgba(59, 130, 246, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) scale(1.01);
 }
 
 /* Container System */
@@ -522,6 +528,71 @@ section:first-of-type {
   color: rgb(var(--text-muted));
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* Link Styles - Enhanced */
+a {
+  color: rgb(var(--text-accent));
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+a:hover {
+  color: rgb(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* List Improvements */
+ul,
+ol {
+  margin-bottom: 1.5rem;
+}
+
+li {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* Improved Accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+  transition: outline-offset 0.2s ease;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.8);
+  outline-offset: 4px;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: rgb(var(--primary));
+  color: white;
+  padding: 1rem 2rem;
+  z-index: 10000;
+  border-radius: 0 0 8px 0;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 0;
 }
 
 /* Animation Classes */
