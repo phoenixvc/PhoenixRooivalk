@@ -58,6 +58,8 @@ __pycache__/
 .venv/
 .coverage
 coverage/
+coverage.json
+TEST_COVERAGE_SUMMARY.md
 
 # Rust
 target/
