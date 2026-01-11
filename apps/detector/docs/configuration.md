@@ -52,7 +52,9 @@ Run with config:
 python src/main.py --config config.yaml
 ```
 
-**Note:** CLI arguments take precedence over config file settings. You can override config file values with CLI flags:
+**Note:** CLI arguments take precedence over config file settings. You can
+override config file values with CLI flags:
+
 ```bash
 # Override model and confidence from config
 python src/main.py --config config.yaml --model models/custom-model.tflite --confidence 0.7

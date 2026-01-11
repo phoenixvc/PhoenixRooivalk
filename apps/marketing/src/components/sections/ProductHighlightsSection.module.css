@@ -1,0 +1,260 @@
+.section {
+  padding: 5rem 1.5rem;
+  background: linear-gradient(180deg, #090a0f 0%, #0f1419 100%);
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.375rem 0.875rem;
+  background: rgba(var(--primary), 0.15);
+  color: rgb(var(--primary));
+  border: 1px solid rgba(var(--primary), 0.3);
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: rgb(148, 163, 184);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.productsGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.productCard:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(var(--primary), 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.productBadges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.phaseBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--phase-color);
+  border: 1px solid var(--phase-color);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.availableBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(34, 197, 94);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.comingSoonBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(251, 191, 36, 0.15);
+  color: rgb(251, 191, 36);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.preorderBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: rgba(59, 130, 246, 0.15);
+  color: rgb(59, 130, 246);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.productLine {
+  font-size: 0.75rem;
+  color: rgb(100, 116, 139);
+  font-weight: 500;
+}
+
+.productName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
+}
+
+.productTagline {
+  font-size: 0.875rem;
+  color: rgb(var(--primary));
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.productDescription {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.productSpecs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.spec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.specLabel {
+  font-size: 0.625rem;
+  color: rgb(100, 116, 139);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.specValue {
+  font-size: 0.75rem;
+  color: rgb(203, 213, 225);
+  font-weight: 600;
+}
+
+.productFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: auto;
+}
+
+.priceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.statusText {
+  font-size: 0.75rem;
+  color: rgb(148, 163, 184);
+  font-weight: 500;
+}
+
+.monthlyFee {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+}
+
+.productActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.productActions > * {
+  flex: 1;
+}
+
+.ctaSection {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ctaText {
+  font-size: 1rem;
+  color: rgb(148, 163, 184);
+  margin-bottom: 1.5rem;
+}
+
+.ctaButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .productsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .productActions {
+    flex-direction: column;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+}

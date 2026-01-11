@@ -26,7 +26,9 @@ on:
   workflow_dispatch:
 
 env:
-  APP_LOCATION: "apps/marketing"
+  # Note: Using MARKETING_APP_DIR instead of APP_LOCATION to avoid conflict
+  # with Azure Static Web Apps action which reads APP_LOCATION env var directly
+  MARKETING_APP_DIR: "apps/marketing"
   OUTPUT_LOCATION: "out"
 
 jobs:
@@ -77,8 +79,8 @@ jobs:
   build-and-deploy:
     needs: check-secrets
     if:
-      github.event_name == 'push' || (github.event_name == 'pull_request' &&
-      github.event.action != 'closed')
+      github.event_name == 'workflow_dispatch' || github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
@@ -131,7 +133,7 @@ jobs:
           trunk build --release
 
       - name: Build (marketing)
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MARKETING_APP_DIR }}
         env:
           # Build environment
           NODE_ENV: production
@@ -142,7 +144,7 @@ jobs:
         run: pnpm run build
 
       - name: Verify build output
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MARKETING_APP_DIR }}
         run: |
           echo "=== Checking build output ==="
           if [ -f "out/index.html" ]; then
@@ -164,12 +166,12 @@ jobs:
         if: needs.check-secrets.outputs.has-swa-token == 'true'
         uses: Azure/static-web-apps-deploy@v1
         with:
-          deployment_token:
+          azure_static_web_apps_api_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: ${{ env.APP_LOCATION }}
-          output_location: ${{ env.OUTPUT_LOCATION }}
+          # When skip_app_build is true, app_location should point to the built output
+          app_location: ${{ env.MARKETING_APP_DIR }}/out
           skip_app_build: true
           skip_api_build: true
           # Production deploys go to production slot, PR deploys create preview environments
@@ -211,6 +213,6 @@ jobs:
         if: needs.check-secrets.outputs.has-swa-token == 'true'
         uses: Azure/static-web-apps-deploy@v1
         with:
-          deployment_token:
+          azure_static_web_apps_api_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
           action: "close"

@@ -8,26 +8,24 @@ export const HeroSection: React.FC = () => {
       <div className={styles.container}>
         {/* Development status indicators */}
         <div className={styles.statusBadges}>
-          <span className="pill pill--concept">
-            Phase 1: Pneumatic Net Launcher
-          </span>
+          <span className="pill pill--concept">Now Taking Preorders</span>
           <span className="pill pill--partners">
-            SkySnare™ Consumer | AeroNet™ Enterprise
+            Safe &amp; Non-Destructive Technology
           </span>
           <span className="pill pill--sbir">Seeking Early Partners</span>
         </div>
 
         {/* Vision-focused headline */}
         <h1 className={styles.headline}>
-          Dual-Brand{" "}
-          <span className={styles.headlineOrange}>Counter-Drone</span> Platform
+          Smart <span className={styles.headlineOrange}>Drone Capture</span>{" "}
+          Systems
           <span className={styles.headlineSubtext}>
-            SkySnare™ Consumer Sports | AeroNet™ Enterprise Security
+            From Training to Security — Solutions for Every Need
           </span>
         </h1>
         <p className={styles.description}>
-          Pneumatic interception technology designed for two markets: consumer
-          sports training and enterprise infrastructure protection.
+          Pneumatic net launchers that safely capture drones without damage.
+          Perfect for training, sports, and professional security applications.
         </p>
 
         {/* Mission Statement */}
@@ -47,28 +45,28 @@ export const HeroSection: React.FC = () => {
             </svg>
           </div>
           <p className={styles.missionText}>
-            <strong>Our Strategy:</strong> Build consumer brand (SkySnare™) to
-            demonstrate safety and reliability, then scale proven technology to
-            enterprise markets (AeroNet™).
+            <strong>Our Approach:</strong> Safe, reliable drone capture
+            technology — starting with consumer training systems and scaling to
+            enterprise-grade security solutions.
           </p>
         </div>
         <div className={styles.metricsCard}>
           <div className={styles.metricsGrid}>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>Phase 1</div>
-              <div className={styles.metricLabel}>Pneumatic Net Launcher</div>
+              <div className={styles.metricValue}>Net Launcher</div>
+              <div className={styles.metricLabel}>Pneumatic Technology</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>2026-2027</div>
-              <div className={styles.metricLabel}>Launch + Testing</div>
+              <div className={styles.metricValue}>Jul 2026</div>
+              <div className={styles.metricLabel}>First Deliveries</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>2 Brands</div>
-              <div className={styles.metricLabel}>SkySnare™ + AeroNet™</div>
+              <div className={styles.metricValue}>100% Safe</div>
+              <div className={styles.metricLabel}>Non-Destructive Capture</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>Future Phases</div>
-              <div className={styles.metricLabel}>Advanced Detection</div>
+              <div className={styles.metricValue}>3 Product Lines</div>
+              <div className={styles.metricLabel}>Training to Enterprise</div>
             </div>
           </div>
         </div>
@@ -136,7 +134,7 @@ export const HeroSection: React.FC = () => {
           <div className="card card--elevated">
             <div className={styles.conceptTitle}>
               <h3 className={styles.conceptTitleText}>
-                Our Development Path (2025-2030)
+                Our Development Path (2026-2030)
               </h3>
               <p className={styles.conceptDescription}>
                 Starting with proven pneumatic technology, expanding to advanced
@@ -168,7 +166,7 @@ export const HeroSection: React.FC = () => {
 
             <div className={styles.disclaimer}>
               <p className={styles.disclaimerText}>
-                💡 Phased approach reduces risk and validates technology at each
+                Phased approach reduces risk and validates technology at each
                 stage
               </p>
             </div>
