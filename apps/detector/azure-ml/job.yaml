@@ -29,16 +29,10 @@ code: .
 # Training command
 # Note: Each argument on same line to avoid YAML parsing issues
 command: >-
-  python train.py
-  --data ${{inputs.dataset}}/dataset.yaml
-  --epochs ${{inputs.epochs}}
-  --imgsz ${{inputs.imgsz}}
-  --batch ${{inputs.batch}}
-  --model ${{inputs.model}}
-  --output ${{outputs.model}}
-  --device 0
-  --patience ${{inputs.patience}}
-  --workers ${{inputs.workers}}
+  python train.py --data ${{inputs.dataset}}/dataset.yaml --epochs
+  ${{inputs.epochs}} --imgsz ${{inputs.imgsz}} --batch ${{inputs.batch}} --model
+  ${{inputs.model}} --output ${{outputs.model}} --device 0 --patience
+  ${{inputs.patience}} --workers ${{inputs.workers}}
 
 # Input parameters
 inputs:
@@ -46,7 +40,8 @@ inputs:
   dataset:
     type: uri_folder
     path: azureml://datastores/workspaceblobstore/paths/drone-dataset
-    description: "Path to dataset folder containing dataset.yaml and images/labels"
+    description:
+      "Path to dataset folder containing dataset.yaml and images/labels"
 
   # Training hyperparameters
   epochs:
@@ -67,7 +62,9 @@ inputs:
   model:
     type: string
     default: "yolov8n.pt"
-    description: "Base model: yolov8n.pt (fast), yolov8s.pt (balanced), yolov8m.pt (accurate)"
+    description:
+      "Base model: yolov8n.pt (fast), yolov8s.pt (balanced), yolov8m.pt
+      (accurate)"
 
   patience:
     type: integer
@@ -100,7 +97,7 @@ resources:
 
 # Job limits
 limits:
-  timeout: 14400  # 4 hours max
+  timeout: 14400 # 4 hours max
 
 # Tags for organization
 tags:

@@ -26,45 +26,45 @@ path: ./data/combined
 
 train: images/train
 val: images/val
-test: images/test  # Optional, for final evaluation
+test: images/test # Optional, for final evaluation
 
 # Number of classes
 nc: 10
 
 # Class names with descriptions
 names:
-  0: drone           # All drones (multirotor, fixed-wing, racing, toy, commercial)
-  1: bird_small      # Small birds (<40cm wingspan) - sparrows, finches, starlings
-  2: bird_large      # Large birds + flocks (>40cm wingspan) - eagles, geese, flocks
-  3: aircraft        # All manned aircraft (planes, helis, gliders, balloons)
-  4: recreational    # Kites, party balloons, weather balloons, RC planes, lanterns
-  5: sports          # Balls, frisbees, projectiles in flight
-  6: debris          # Plastic bags, paper, leaves, seeds, feathers
-  7: insect          # Flying insects close to camera (common false positive)
-  8: atmospheric     # Weather (rain/snow), lens artifacts, reflections
-  9: background      # Sky, clouds, nothing detected (negative class)
+  0: drone # All drones (multirotor, fixed-wing, racing, toy, commercial)
+  1: bird_small # Small birds (<40cm wingspan) - sparrows, finches, starlings
+  2: bird_large # Large birds + flocks (>40cm wingspan) - eagles, geese, flocks
+  3: aircraft # All manned aircraft (planes, helis, gliders, balloons)
+  4: recreational # Kites, party balloons, weather balloons, RC planes, lanterns
+  5: sports # Balls, frisbees, projectiles in flight
+  6: debris # Plastic bags, paper, leaves, seeds, feathers
+  7: insect # Flying insects close to camera (common false positive)
+  8: atmospheric # Weather (rain/snow), lens artifacts, reflections
+  9: background # Sky, clouds, nothing detected (negative class)
 
 # Mapping from MVP classes to full 27-class taxonomy (for future upgrade)
 # This enables seamless transition when more training data is available
 full_taxonomy_mapping:
-  0: [0, 1, 2, 3, 4]           # drone -> drone_multirotor, drone_fixedwing, drone_vtol, drone_racing, drone_toy
-  1: [5, 6]                    # bird_small -> bird_tiny, bird_small
-  2: [7, 8, 9]                 # bird_large -> bird_medium, bird_large, bird_flock
-  3: [10, 11, 12, 13]          # aircraft -> aircraft_fixed, aircraft_rotary, aircraft_glider, aircraft_balloon
-  4: [14, 15, 16, 17, 18]      # recreational -> kite, balloon_party, balloon_weather, lantern, rc_plane
-  5: [19, 20]                  # sports -> ball, projectile
-  6: [21, 22]                  # debris -> debris_light, debris_organic
-  7: [23]                      # insect -> insect
-  8: [24, 25]                  # atmospheric -> weather, artifact
-  9: [26]                      # background -> background
+  0: [0, 1, 2, 3, 4] # drone -> drone_multirotor, drone_fixedwing, drone_vtol, drone_racing, drone_toy
+  1: [5, 6] # bird_small -> bird_tiny, bird_small
+  2: [7, 8, 9] # bird_large -> bird_medium, bird_large, bird_flock
+  3: [10, 11, 12, 13] # aircraft -> aircraft_fixed, aircraft_rotary, aircraft_glider, aircraft_balloon
+  4: [14, 15, 16, 17, 18] # recreational -> kite, balloon_party, balloon_weather, lantern, rc_plane
+  5: [19, 20] # sports -> ball, projectile
+  6: [21, 22] # debris -> debris_light, debris_organic
+  7: [23] # insect -> insect
+  8: [24, 25] # atmospheric -> weather, artifact
+  9: [26] # background -> background
 
 # Alert configuration
 # Classes that trigger security alerts
-alert_classes: [0]  # Only drones trigger alerts
+alert_classes: [0] # Only drones trigger alerts
 
 # Critical non-alert classes
 # These must NOT be misclassified as drones (safety critical)
-critical_non_alert: [3]  # Manned aircraft - misclassification could cause incidents
+critical_non_alert: [3] # Manned aircraft - misclassification could cause incidents
 
 # Class weights for imbalanced datasets (optional)
 # Increase weight for underrepresented classes

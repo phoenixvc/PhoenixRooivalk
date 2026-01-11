@@ -48,7 +48,7 @@ dependencies:
       # Model export formats
       - onnx>=1.14.0,<2.0.0
       - onnxruntime>=1.15.0,<2.0.0
-      - onnxsim>=0.4.0  # ONNX simplifier
+      - onnxsim>=0.4.0 # ONNX simplifier
 
       # TensorFlow for TFLite export
       # Version >= 2.13.1 required for CVE-2024-3660 fix

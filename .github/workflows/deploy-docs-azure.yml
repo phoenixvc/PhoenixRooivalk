@@ -42,7 +42,8 @@ jobs:
             ${{ vars.AZURE_FUNCTIONS_BASE_URL != '' ||
             secrets.AZURE_FUNCTIONS_BASE_URL != '' }}
           # Login configuration
-          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
+          DISABLE_LOGIN:
+            ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "🔍 Checking Azure Infrastructure Prerequisites"
@@ -184,7 +185,8 @@ jobs:
           # Login configuration
           # Set DISABLE_LOGIN=true to temporarily disable authentication site-wide
           # Useful for maintenance, demos, or public preview deployments
-          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
+          DISABLE_LOGIN:
+            ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
 
           # Azure Entra ID configuration
           AZURE_ENTRA_TENANT_ID: ${{ secrets.AZURE_ENTRA_TENANT_ID }}
