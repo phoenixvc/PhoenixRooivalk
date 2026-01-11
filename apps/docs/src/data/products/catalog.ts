@@ -471,7 +471,7 @@ export const skyWatchMobile: Product = {
       supplier: "Coral.ai",
     },
     {
-      item: "Official 7\" Touchscreen",
+      item: 'Official 7" Touchscreen',
       specification: "800×480, capacitive",
       quantity: 1,
       unitCost: 60.0,
@@ -1185,7 +1185,7 @@ export const netSentryLite: Product = {
     },
     {
       item: "PVC Barrel",
-      specification: "3\" × 18\"",
+      specification: '3" × 18"',
       quantity: 1,
       unitCost: 15.0,
       totalCost: 15.0,
@@ -1306,7 +1306,7 @@ export const netSentryStandard: Product = {
     },
     {
       item: "Barrel Assembly",
-      specification: "Aluminum, 4\"",
+      specification: 'Aluminum, 4"',
       quantity: 1,
       unitCost: 40.0,
       totalCost: 40.0,
@@ -1494,7 +1494,7 @@ export const netSentryPro: Product = {
 export const skySnare: Product = {
   sku: "SS-001",
   name: "SkySnare",
-  line: "SkyWatch", // Using SkyWatch as closest match for type
+  line: "SkySnare",
   category: "countermeasure",
   targetMarket: "Property owners, outdoor enthusiasts, privacy advocates",
   priceRange: "$349",
@@ -1525,7 +1525,7 @@ export const skySnare: Product = {
     },
     {
       item: "Barrel Assembly",
-      specification: "Aluminum, 3\"",
+      specification: 'Aluminum, 3"',
       quantity: 1,
       unitCost: 30.0,
       totalCost: 30.0,
@@ -1569,7 +1569,7 @@ export const skySnare: Product = {
 export const netSnareLite: Product = {
   sku: "NSN-LITE-001",
   name: "NetSnare Lite",
-  line: "NetSentry", // Using NetSentry as closest match for type
+  line: "NetSnare",
   category: "countermeasure",
   targetMarket: "DIY enthusiasts, Makers, Property owners",
   priceRange: "$200-400",
@@ -1640,7 +1640,7 @@ export const netSnareLite: Product = {
 export const netSnareStandard: Product = {
   sku: "NSN-STD-001",
   name: "NetSnare Standard",
-  line: "NetSentry",
+  line: "NetSnare",
   category: "countermeasure",
   targetMarket: "Property owners, Small businesses, Farms",
   priceRange: "$500-800",
@@ -1679,7 +1679,7 @@ export const netSnareStandard: Product = {
     },
     {
       item: "Barrel Assembly",
-      specification: "Aluminum, 4\"",
+      specification: 'Aluminum, 4"',
       quantity: 1,
       unitCost: 45.0,
       totalCost: 45.0,
@@ -1727,9 +1727,10 @@ export const netSnareStandard: Product = {
 export const netSnarePro: Product = {
   sku: "NSN-PRO-001",
   name: "NetSnare Pro",
-  line: "NetSentry",
+  line: "NetSnare",
   category: "countermeasure",
-  targetMarket: "Commercial facilities, Critical infrastructure, Security firms",
+  targetMarket:
+    "Commercial facilities, Critical infrastructure, Security firms",
   priceRange: "$1,200-2,000",
   priceMin: 1200,
   priceMax: 2000,
@@ -1774,7 +1775,7 @@ export const netSnarePro: Product = {
     },
     {
       item: "Barrel Assembly",
-      specification: "Aluminum, 5\"",
+      specification: 'Aluminum, 5"',
       quantity: 1,
       unitCost: 60.0,
       totalCost: 60.0,
@@ -1818,7 +1819,7 @@ export const netSnarePro: Product = {
 export const aeroNetEnterprise: Product = {
   sku: "AN-ENT-001",
   name: "AeroNet Enterprise",
-  line: "SkyWatch", // Enterprise detection platform
+  line: "AeroNet",
   category: "detection",
   targetMarket: "Critical infrastructure, Airports, Prisons, Military bases",
   priceRange: "$150,000 setup + $25,000/month",
@@ -1897,7 +1898,7 @@ export const aeroNetEnterprise: Product = {
 export const aeroNetCommand: Product = {
   sku: "AN-CMD-001",
   name: "AeroNet Command",
-  line: "SkyWatch",
+  line: "AeroNet",
   category: "detection",
   targetMarket: "Enterprise security teams, Multi-site operators, SOC teams",
   priceRange: "$25,000-50,000 license + $2,500/month",
@@ -1930,7 +1931,7 @@ export const aeroNetCommand: Product = {
 export const rkvMothership: Product = {
   sku: "RKV-M-001",
   name: "RKV-M Mothership",
-  line: "SkyWatch", // Detection/intercept platform
+  line: "RKV",
   category: "countermeasure",
   targetMarket: "Military, Critical infrastructure",
   priceRange: "$65,000-85,000",
@@ -2025,7 +2026,7 @@ export const rkvMothership: Product = {
 export const rkvInterceptor: Product = {
   sku: "RKV-I-001",
   name: "RKV-I Interceptor",
-  line: "NetSentry", // Countermeasure
+  line: "RKV",
   category: "countermeasure",
   targetMarket: "Military, Paired with RKV-M",
   priceRange: "$8,000-12,000",
@@ -2127,7 +2128,7 @@ export const rkvInterceptor: Product = {
 export const rkvGroundStation: Product = {
   sku: "RKV-G-001",
   name: "RKV-G Ground Station",
-  line: "SkyWatch",
+  line: "RKV",
   category: "detection",
   targetMarket: "Military, Mobile operations",
   priceRange: "$100,000-150,000",
@@ -2339,7 +2340,7 @@ export function getTotalWithAccessories(product: Product): number {
   const accessoriesTotal =
     product.optionalAccessories?.reduce(
       (sum, item) => sum + item.totalCost,
-      0
+      0,
     ) ?? 0;
   return product.bomTotal + accessoriesTotal;
 }
@@ -2351,14 +2352,14 @@ export function formatProductPriceRange(product: Product): string {
 
 /** Get products by line */
 export function getProductsByLine(
-  line: "SkyWatch" | "NetSentry"
+  line: "SkyWatch" | "NetSentry" | "SkySnare" | "NetSnare" | "AeroNet" | "RKV",
 ): Product[] {
   return allProducts.filter((p) => p.line === line);
 }
 
 /** Get products by category */
 export function getProductsByCategory(
-  category: "detection" | "countermeasure"
+  category: "detection" | "countermeasure",
 ): Product[] {
   return allProducts.filter((p) => p.category === category);
 }
@@ -2366,10 +2367,10 @@ export function getProductsByCategory(
 /** Get products by price range */
 export function getProductsByPriceRange(
   minPrice: number,
-  maxPrice: number
+  maxPrice: number,
 ): Product[] {
   return allProducts.filter(
-    (p) => p.priceMin >= minPrice && p.priceMax <= maxPrice
+    (p) => p.priceMin >= minPrice && p.priceMax <= maxPrice,
   );
 }
 
@@ -2391,10 +2392,30 @@ export const productCatalogSummary = {
 
 /** Mesh system pricing by coverage area */
 export const meshSystemPricing = {
-  "1_acre": { nodes: "2-3", nodeCost: "$316-474", central: "$370", total: "$686-844" },
-  "5_acres": { nodes: "4-6", nodeCost: "$632-948", central: "$370", total: "$1,002-1,318" },
-  "20_acres": { nodes: "8-12", nodeCost: "$1,264-1,896", central: "$370", total: "$1,634-2,266" },
-  "100_acres": { nodes: "15-25", nodeCost: "$2,370-3,950", central: "$370", total: "$2,740-4,320" },
+  "1_acre": {
+    nodes: "2-3",
+    nodeCost: "$316-474",
+    central: "$370",
+    total: "$686-844",
+  },
+  "5_acres": {
+    nodes: "4-6",
+    nodeCost: "$632-948",
+    central: "$370",
+    total: "$1,002-1,318",
+  },
+  "20_acres": {
+    nodes: "8-12",
+    nodeCost: "$1,264-1,896",
+    central: "$370",
+    total: "$1,634-2,266",
+  },
+  "100_acres": {
+    nodes: "15-25",
+    nodeCost: "$2,370-3,950",
+    central: "$370",
+    total: "$2,740-4,320",
+  },
 };
 
 /** Enterprise system pricing options */
