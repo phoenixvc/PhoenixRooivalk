@@ -113,7 +113,7 @@ streaming:
 logging:
   level: INFO
   json_format: false
-  log_file: "fire_net.log"
+  log_file: "detector.log"
 
 # Display
 display:
