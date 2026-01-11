@@ -431,7 +431,9 @@ The `--demo` flag optimizes settings for presentations:
 - Can be combined with `--camera usb` or other options
 
 **Combining Options:**
+
 You can mix real and mock components independently:
+
 ```bash
 # Real webcam with mock inference (test camera without model)
 python src/main.py --camera usb --engine mock
@@ -630,6 +632,7 @@ sudo nano /etc/systemd/system/drone-detector.service
 ```
 
 Add the following (adjust paths as needed):
+
 ```ini
 [Unit]
 Description=PhoenixRooivalk Drone Detector
@@ -684,7 +687,7 @@ The detector supports structured logging to files. Logging is disabled by defaul
 
 ### Enable Logging
 
-**Option 1: Configuration File (Recommended)**
+#### Option 1: Configuration File (Recommended)
 
 Add to your `config.yaml`:
 
@@ -702,7 +705,7 @@ Then run:
 python src/main.py --config config.yaml --model models/drone-detector.tflite
 ```
 
-**Option 2: Environment Variables**
+#### Option 2: Environment Variables
 
 ```bash
 export LOG_LEVEL=INFO
@@ -715,6 +718,7 @@ python src/main.py --model models/drone-detector.tflite
 ### Log File Location
 
 Log files are written to the path specified in `log_file`:
+
 - Default if not specified: **No log file** (console only)
 - Example: `detector.log` → current directory
 - Example: `/var/log/detector.log` → system log directory
@@ -723,6 +727,7 @@ Log files are written to the path specified in `log_file`:
 ### Log File Rotation
 
 Log files automatically rotate when they reach `max_bytes` (default: 10MB):
+
 - `detector.log` - current log
 - `detector.log.1` - previous log
 - `detector.log.2` - older log
@@ -731,7 +736,8 @@ Log files automatically rotate when they reach `max_bytes` (default: 10MB):
 ### Log Format
 
 **Console Output (default):**
-```
+
+```text
 2026-01-07 12:00:00 [INFO] drone_detector: Pipeline started
 2026-01-07 12:00:01 [WARNING] drone_detector: DRONE DETECTED: conf=0.87 score=0.92
 ```
@@ -750,11 +756,13 @@ Log files automatically rotate when they reach `max_bytes` (default: 10MB):
 ### Saving Detection Data
 
 **Save detections to JSON file:**
+
 ```bash
 python src/main.py --model models/drone-detector.tflite --save-detections detections.json
 ```
 
 This creates a JSON file with all detection events:
+
 ```json
 [
   {
@@ -822,7 +830,9 @@ python src/main.py --camera auto --engine mock
    - No errors about camera not found
 
 **If Camera is NOT Working:**
-- You'll see: `ERROR: Failed to open frame source` or `ERROR: Failed to start pipeline`
+
+- You'll see: `ERROR: Failed to open frame source` or
+  `ERROR: Failed to start pipeline`
 - No video window appears
 - Frame source shows as "mock" instead of actual camera type
 - Console shows "Failed to read frame" repeatedly
