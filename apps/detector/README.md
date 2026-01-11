@@ -95,6 +95,12 @@ python src/main.py --config configs/quickstart.yaml --camera usb
 sudo apt install -y python3-picamera2
 ```
 
+**Missing aiohttp (streaming):**
+
+```bash
+pip install aiohttp
+```
+
 **NumPy version conflicts:**
 
 NumPy 2.x can cause issues with TensorFlow/TFLite. If you see errors like
