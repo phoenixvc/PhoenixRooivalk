@@ -2,6 +2,8 @@
 
 Complete reference for all configurable settings in Pi Drone Detector.
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Configuration Sources
 
 Settings can be provided from multiple sources (in order of precedence):

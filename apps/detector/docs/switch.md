@@ -3,6 +3,8 @@
 This document describes the physical hardware options and wiring for the Pi
 Drone Detector's fire net deployment system.
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Overview
 
 The fire net system uses a Raspberry Pi GPIO pin to trigger a physical

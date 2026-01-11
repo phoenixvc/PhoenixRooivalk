@@ -3,6 +3,8 @@
 This document covers countermeasure options that can be triggered by the Pi
 Drone Detector's GPIO output system.
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Overview
 
 The detector provides a 100ms GPIO pulse when engagement conditions are met.
@@ -401,7 +403,7 @@ alert:
 
 **Detection Fusion:**
 
-``` txt
+```
 Node 1 detects at 70% confidence ─┐
 Node 2 detects at 65% confidence ─┼─► Fusion Engine ─► 95% combined confidence
 Node 3 detects at 40% confidence ─┘

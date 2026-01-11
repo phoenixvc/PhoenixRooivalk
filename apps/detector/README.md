@@ -970,6 +970,18 @@ The project uses GitHub Actions for continuous integration:
 - **Test**: pytest on Python 3.9-3.11
 - **Security**: pip-audit, bandit
 
+## Documentation
+
+Comprehensive documentation is available in the [`docs/`](docs/) directory:
+
+- **[Configuration Reference](docs/configuration.md)** - Complete guide to all configurable settings, YAML files, and environment variables
+- **[Countermeasure Options](docs/countermeasure-options.md)** - Guide to countermeasure systems that can be triggered by the detector's GPIO output
+- **[Product Catalog](docs/product-catalog.md)** - Complete specifications, bill of materials, and build guides for all products
+- **[Architecture](docs/architecture.md)** - System architecture and component design
+- **[Classification Taxonomy](docs/classification-taxonomy.md)** - Object classification system and class definitions
+- **[Training Cost Estimate](docs/training-cost-estimate.md)** - Cost analysis for model training on Azure ML
+- **[Switch Guide](docs/switch.md)** - Guide to switching between different components
+
 ## API Reference
 
 See [docs/](docs/) for detailed API documentation.

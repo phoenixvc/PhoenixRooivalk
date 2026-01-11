@@ -63,7 +63,7 @@ shared packages.
 
 Structure:
 
-- `apps/`
+- `apps/` — All applications and services (see [apps/README.md](apps/README.md) for detailed overview)
   - `docs/` — Docusaurus site (published under `/docs`).
     - Comprehensive technical documentation with executive, business, technical, legal, and operations sections.
   - `marketing/` — Next.js 14 static marketing site (exports to `out/`).
