@@ -21,7 +21,26 @@ use sha2::{Digest, Sha256};
 use sqlx::{Pool, Row, Sqlite};
 use std::sync::Arc;
 use std::time::Duration;
+use thiserror::Error;
 use tokio::sync::Mutex;
+
+/// Errors that can occur during Merkle tree operations
+#[derive(Debug, Error)]
+pub enum MerkleError {
+    #[error("Invalid hex encoding: {0}")]
+    HexDecode(#[from] hex::FromHexError),
+    #[error("JSON serialization error: {0}")]
+    Json(#[from] serde_json::Error),
+}
+
+/// Errors that can occur during batch anchoring operations
+#[derive(Debug, Error)]
+pub enum BatchError {
+    #[error("Database error: {0}")]
+    Database(#[from] sqlx::Error),
+    #[error("Merkle tree error: {0}")]
+    Merkle(#[from] MerkleError),
+}
 
 /// Configuration for batch anchoring
 #[derive(Debug, Clone)]
@@ -67,12 +86,14 @@ pub struct MerkleProofSibling {
 }
 
 impl MerkleProof {
-    /// Verify this proof against a given root hash
-    pub fn verify(&self, expected_root: &str) -> bool {
-        let mut current_hash = hex::decode(&self.leaf_hash).unwrap_or_default();
+    /// Verify this proof against a given root hash.
+    ///
+    /// Returns an error if any hex string in the proof is malformed.
+    pub fn verify(&self, expected_root: &str) -> Result<bool, MerkleError> {
+        let mut current_hash = hex::decode(&self.leaf_hash)?;
 
         for sibling in &self.siblings {
-            let sibling_hash = hex::decode(&sibling.hash).unwrap_or_default();
+            let sibling_hash = hex::decode(&sibling.hash)?;
 
             let mut hasher = Sha256::new();
             if sibling.is_left {
@@ -85,7 +106,7 @@ impl MerkleProof {
             current_hash = hasher.finalize().to_vec();
         }
 
-        hex::encode(current_hash) == expected_root
+        Ok(hex::encode(current_hash) == expected_root)
     }
 }
 
@@ -114,12 +135,14 @@ pub struct MerkleTree {
 }
 
 impl MerkleTree {
-    /// Build a Merkle tree from leaf hashes
-    pub fn from_leaves(leaf_hashes: Vec<String>) -> Self {
+    /// Build a Merkle tree from leaf hashes.
+    ///
+    /// Returns an error if any input hash is not valid hex.
+    pub fn from_leaves(leaf_hashes: Vec<String>) -> Result<Self, MerkleError> {
         let leaves: Vec<Vec<u8>> = leaf_hashes
             .iter()
-            .map(|h| hex::decode(h).unwrap_or_default())
-            .collect();
+            .map(|h| hex::decode(h))
+            .collect::<Result<Vec<_>, _>>()?;
 
         let mut levels = vec![leaves.clone()];
         let mut current_level = leaves.clone();
@@ -144,7 +167,7 @@ impl MerkleTree {
             current_level = next_level;
         }
 
-        Self { leaves, levels }
+        Ok(Self { leaves, levels })
     }
 
     /// Get the Merkle root hash
@@ -271,7 +294,7 @@ impl BatchAnchor {
     }
 
     /// Add an evidence item to the current batch
-    pub async fn add_to_batch(&self, job_id: &str, payload_sha256: &str) -> Result<(), sqlx::Error> {
+    pub async fn add_to_batch(&self, job_id: &str, payload_sha256: &str) -> Result<(), BatchError> {
         let mut batch = self.current_batch.lock().await;
 
         if batch.is_none() {
@@ -290,6 +313,8 @@ impl BatchAnchor {
             // Check if batch is full
             if b.items.len() >= self.config.max_batch_size {
                 let items = std::mem::take(&mut b.items);
+                // Reset batch to None to clear stale created_at timestamp
+                *batch = None;
                 drop(batch);
                 self.anchor_batch(items).await?;
             }
@@ -299,7 +324,7 @@ impl BatchAnchor {
     }
 
     /// Check if batch should be flushed due to timeout
-    pub async fn check_timeout(&self) -> Result<bool, sqlx::Error> {
+    pub async fn check_timeout(&self) -> Result<bool, BatchError> {
         let mut batch = self.current_batch.lock().await;
 
         if let Some(ref b) = *batch {
@@ -321,7 +346,7 @@ impl BatchAnchor {
     }
 
     /// Flush the current batch immediately
-    pub async fn flush(&self) -> Result<(), sqlx::Error> {
+    pub async fn flush(&self) -> Result<(), BatchError> {
         let mut batch = self.current_batch.lock().await;
 
         if let Some(ref b) = *batch {
@@ -337,14 +362,14 @@ impl BatchAnchor {
     }
 
     /// Anchor a batch of evidence items
-    async fn anchor_batch(&self, items: Vec<BatchItem>) -> Result<(), sqlx::Error> {
+    async fn anchor_batch(&self, items: Vec<BatchItem>) -> Result<(), BatchError> {
         if items.is_empty() {
             return Ok(());
         }
 
         // Build Merkle tree
         let leaf_hashes: Vec<String> = items.iter().map(|i| i.payload_sha256.clone()).collect();
-        let tree = MerkleTree::from_leaves(leaf_hashes);
+        let tree = MerkleTree::from_leaves(leaf_hashes)?;
         let merkle_root = tree.root();
 
         // Generate batch ID
@@ -365,7 +390,8 @@ impl BatchAnchor {
         // Store individual proofs
         for (index, item) in items.iter().enumerate() {
             if let Some(proof) = tree.proof(index) {
-                let proof_json = serde_json::to_string(&proof).unwrap_or_default();
+                let proof_json = serde_json::to_string(&proof)
+                    .map_err(MerkleError::from)?;
                 sqlx::query(
                     "INSERT INTO merkle_proofs (job_id, batch_id, leaf_index, proof_json) VALUES (?1, ?2, ?3, ?4)",
                 )
@@ -444,7 +470,7 @@ impl BatchAnchor {
     }
 
     /// Get proof for a specific job
-    pub async fn get_proof(&self, job_id: &str) -> Result<Option<(MerkleProof, ChainTxRef)>, sqlx::Error> {
+    pub async fn get_proof(&self, job_id: &str) -> Result<Option<(MerkleProof, ChainTxRef)>, BatchError> {
         let row = sqlx::query(
             r#"
             SELECT p.proof_json, b.tx_network, b.tx_chain, b.tx_id, b.tx_confirmed
@@ -464,7 +490,8 @@ impl BatchAnchor {
             let tx_id: Option<String> = row.get("tx_id");
             let tx_confirmed: i32 = row.get("tx_confirmed");
 
-            let proof: MerkleProof = serde_json::from_str(&proof_json).unwrap();
+            let proof: MerkleProof = serde_json::from_str(&proof_json)
+                .map_err(MerkleError::from)?;
 
             if let (Some(network), Some(chain), Some(tx_id)) = (tx_network, tx_chain, tx_id) {
                 return Ok(Some((
@@ -533,39 +560,66 @@ mod tests {
 
     #[test]
     fn test_merkle_tree_single_leaf() {
-        let tree = MerkleTree::from_leaves(vec!["abc123".to_string()]);
+        // Use valid hex strings for testing
+        let tree = MerkleTree::from_leaves(vec!["abc123".to_string()]).unwrap();
         assert!(!tree.root().is_empty());
     }
 
     #[test]
     fn test_merkle_tree_multiple_leaves() {
+        // Use valid hex strings for testing
         let leaves = vec![
-            "hash1".to_string(),
-            "hash2".to_string(),
-            "hash3".to_string(),
-            "hash4".to_string(),
+            "abcd".to_string(),
+            "1234".to_string(),
+            "5678".to_string(),
+            "9abc".to_string(),
         ];
-        let tree = MerkleTree::from_leaves(leaves);
+        let tree = MerkleTree::from_leaves(leaves).unwrap();
 
         // Verify each proof
         for i in 0..4 {
             let proof = tree.proof(i).unwrap();
-            assert!(proof.verify(&tree.root()));
+            assert!(proof.verify(&tree.root()).unwrap());
         }
     }
 
     #[test]
     fn test_merkle_proof_verification() {
-        let leaves = vec!["a".to_string(), "b".to_string()];
-        let tree = MerkleTree::from_leaves(leaves);
+        // Use valid hex strings for testing
+        let leaves = vec!["aa".to_string(), "bb".to_string()];
+        let tree = MerkleTree::from_leaves(leaves).unwrap();
 
         let proof0 = tree.proof(0).unwrap();
         let proof1 = tree.proof(1).unwrap();
 
-        assert!(proof0.verify(&tree.root()));
-        assert!(proof1.verify(&tree.root()));
+        assert!(proof0.verify(&tree.root()).unwrap());
+        assert!(proof1.verify(&tree.root()).unwrap());
 
-        // Wrong root should fail
-        assert!(!proof0.verify("wrongroot"));
+        // Wrong root should fail (but return Ok(false), not an error for valid hex)
+        assert!(!proof0.verify(&tree.root().replace("a", "b")).unwrap());
+    }
+
+    #[test]
+    fn test_merkle_tree_invalid_hex() {
+        // Invalid hex should return an error
+        let result = MerkleTree::from_leaves(vec!["not_valid_hex!".to_string()]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_merkle_proof_verify_invalid_hex() {
+        let leaves = vec!["aa".to_string(), "bb".to_string()];
+        let tree = MerkleTree::from_leaves(leaves).unwrap();
+        let proof = tree.proof(0).unwrap();
+
+        // Invalid hex in expected_root should return an error
+        // Note: The expected_root is compared as hex string, so this tests
+        // that invalid sibling hashes would be caught
+        let mut bad_proof = proof.clone();
+        bad_proof.siblings = vec![MerkleProofSibling {
+            hash: "not_valid_hex!".to_string(),
+            is_left: false,
+        }];
+        assert!(bad_proof.verify(&tree.root()).is_err());
     }
 }

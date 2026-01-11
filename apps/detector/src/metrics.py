@@ -96,17 +96,22 @@ class Gauge:
         return f"{self.name}{label_str} {self.value}"
 
 
+# Default buckets for histograms (exposed as module constant for default fallback)
+DEFAULT_HISTOGRAM_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0)
+
+
 @dataclass
 class Histogram:
     """
     Histogram for latency/duration measurements.
 
-    Uses exponential buckets by default.
+    Uses exponential buckets by default. Implements Prometheus-style cumulative
+    bucket counting where each bucket contains the count of observations <= bucket value.
     """
 
     name: str
     help: str
-    buckets: tuple = (0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0)
+    buckets: tuple = DEFAULT_HISTOGRAM_BUCKETS
     labels: dict[str, str] = field(default_factory=dict)
     _counts: dict[float, int] = field(default_factory=dict)
     _sum: float = 0.0
@@ -114,23 +119,33 @@ class Histogram:
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def __post_init__(self):
-        # Initialize bucket counts
+        # Initialize bucket counts (non-cumulative storage)
         for bucket in self.buckets:
             self._counts[bucket] = 0
         self._counts[float("inf")] = 0
 
     def observe(self, value: float) -> None:
-        """Record an observation."""
+        """Record an observation.
+
+        Stores non-cumulative counts per bucket. The cumulative values
+        are computed at export time in to_prometheus().
+        """
         with self._lock:
             self._sum += value
             self._count += 1
+            # Find the first bucket that value fits in
+            placed = False
             for bucket in self.buckets:
                 if value <= bucket:
                     self._counts[bucket] += 1
-            self._counts[float("inf")] += 1
+                    placed = True
+                    break
+            # If value doesn't fit in any bucket, count in +Inf only
+            if not placed:
+                self._counts[float("inf")] += 1
 
     def to_prometheus(self) -> str:
-        """Format as Prometheus text."""
+        """Format as Prometheus text with cumulative bucket counts."""
         lines = []
         label_str = ""
         if self.labels:
@@ -138,10 +153,12 @@ class Histogram:
             label_str = ",".join(pairs) + ","
 
         with self._lock:
+            # Compute cumulative counts from non-cumulative storage
             cumulative = 0
             for bucket in self.buckets:
-                cumulative += self._counts.get(bucket, 0) - cumulative
+                cumulative += self._counts.get(bucket, 0)
                 lines.append(f'{self.name}_bucket{{{label_str}le="{bucket}"}} {cumulative}')
+            # +Inf bucket includes all observations
             lines.append(f'{self.name}_bucket{{{label_str}le="+Inf"}} {self._count}')
             lines.append(f"{self.name}_sum {self._sum}")
             lines.append(f"{self.name}_count {self._count}")
@@ -367,7 +384,7 @@ class MetricsRegistry:
         histogram = Histogram(
             name=name,
             help=help,
-            buckets=buckets or Histogram.buckets,
+            buckets=buckets or DEFAULT_HISTOGRAM_BUCKETS,
             labels=labels or {},
         )
         self._metrics[name] = histogram
