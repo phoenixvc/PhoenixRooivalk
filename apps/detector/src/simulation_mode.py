@@ -204,15 +204,17 @@ class DroneRenderer:
                 end_x = int(center[0] + arm_len * math.cos(rad))
                 int(center[1] + arm_len * math.sin(rad))
                 # Draw arm (simplified)
-                sprite[center[1]-1:center[1]+2, min(center[0], end_x):max(center[0], end_x)+1] = [50, 50, 50, 255]
+                sprite[
+                    center[1] - 1 : center[1] + 2, min(center[0], end_x) : max(center[0], end_x) + 1
+                ] = [50, 50, 50, 255]
 
             # Center body
-            sprite[center[1]-3:center[1]+4, center[0]-3:center[0]+4] = [80, 80, 80, 255]
+            sprite[center[1] - 3 : center[1] + 4, center[0] - 3 : center[0] + 4] = [80, 80, 80, 255]
 
         elif appearance == DroneAppearance.FIXED_WING:
             # Wing shape
-            sprite[h//2-2:h//2+3, 5:w-5] = [60, 60, 60, 255]  # Wing
-            sprite[h//2-5:h//2+6, w//2-3:w//2+4] = [50, 50, 50, 255]  # Body
+            sprite[h // 2 - 2 : h // 2 + 3, 5 : w - 5] = [60, 60, 60, 255]  # Wing
+            sprite[h // 2 - 5 : h // 2 + 6, w // 2 - 3 : w // 2 + 4] = [50, 50, 50, 255]  # Body
 
         else:
             # Generic circle
@@ -220,7 +222,7 @@ class DroneRenderer:
             radius = min(w, h) // 3
             for y in range(h):
                 for x in range(w):
-                    if (x - center[0])**2 + (y - center[1])**2 <= radius**2:
+                    if (x - center[0]) ** 2 + (y - center[1]) ** 2 <= radius**2:
                         sprite[y, x] = [70, 70, 70, 255]
 
         return sprite
@@ -399,12 +401,12 @@ class DroneRenderer:
         if sprite.shape[2] == 4:  # RGBA
             alpha = sprite[:, :, 3:4] / 255.0
             for c in range(3):
-                frame[y1:y1+sprite_h, x1:x1+sprite_w, c] = (
-                    alpha[:, :, 0] * sprite[:sprite_h, :sprite_w, c] +
-                    (1 - alpha[:, :, 0]) * frame[y1:y1+sprite_h, x1:x1+sprite_w, c]
+                frame[y1 : y1 + sprite_h, x1 : x1 + sprite_w, c] = (
+                    alpha[:, :, 0] * sprite[:sprite_h, :sprite_w, c]
+                    + (1 - alpha[:, :, 0]) * frame[y1 : y1 + sprite_h, x1 : x1 + sprite_w, c]
                 ).astype(np.uint8)
         else:
-            frame[y1:y1+sprite_h, x1:x1+sprite_w] = sprite[:sprite_h, :sprite_w]
+            frame[y1 : y1 + sprite_h, x1 : x1 + sprite_w] = sprite[:sprite_h, :sprite_w]
 
         return frame
 
@@ -663,20 +665,20 @@ class SimulationManager:
                 if not drone.is_active:
                     continue
 
-                frame, bbox = self._renderer.render(
-                    frame, drone, self._camera_params
-                )
+                frame, bbox = self._renderer.render(frame, drone, self._camera_params)
 
                 if bbox is not None:
-                    gt_drones.append({
-                        "drone_id": drone.drone_id,
-                        "appearance": drone.appearance.value,
-                        "flight_pattern": drone.flight_pattern.value,
-                        "position_3d": drone.position,
-                        "velocity_3d": drone.velocity,
-                        "bbox": bbox.to_tuple(),
-                        "is_visible": True,
-                    })
+                    gt_drones.append(
+                        {
+                            "drone_id": drone.drone_id,
+                            "appearance": drone.appearance.value,
+                            "flight_pattern": drone.flight_pattern.value,
+                            "position_3d": drone.position,
+                            "velocity_3d": drone.velocity,
+                            "bbox": bbox.to_tuple(),
+                            "is_visible": True,
+                        }
+                    )
 
             ground_truth = GroundTruth(
                 frame_number=self._frame_count,
@@ -741,8 +743,16 @@ class SimulationManager:
 
             false_negatives += len(gt_drones) - len(matched_gt)
 
-        precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0
-        recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0
+        precision = (
+            true_positives / (true_positives + false_positives)
+            if (true_positives + false_positives) > 0
+            else 0
+        )
+        recall = (
+            true_positives / (true_positives + false_negatives)
+            if (true_positives + false_negatives) > 0
+            else 0
+        )
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
 
         return {

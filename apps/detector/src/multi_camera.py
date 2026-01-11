@@ -176,9 +176,7 @@ class CameraFusionManager:
     @property
     def active_cameras(self) -> list[str]:
         """List of currently active camera IDs."""
-        return [
-            cid for cid, state in self._camera_states.items() if state.is_active
-        ]
+        return [cid for cid, state in self._camera_states.items() if state.is_active]
 
     def update_camera(
         self,
@@ -211,9 +209,7 @@ class CameraFusionManager:
             state.frame_count = frame_data.frame_number
             state.current_detections = detections
             state.current_tracks = tracks
-            state.fps_actual = 1.0 / max(
-                0.001, frame_data.timestamp - state.last_frame_time
-            )
+            state.fps_actual = 1.0 / max(0.001, frame_data.timestamp - state.last_frame_time)
 
             # Perform fusion
             self._fuse_detections(camera_id, detections)
@@ -242,9 +238,7 @@ class CameraFusionManager:
                 # Create new fused track
                 self._create_fused_track(camera_id, det)
 
-    def _should_fuse(
-        self, camera_id: str, det: Detection, fused: FusedDetection
-    ) -> bool:
+    def _should_fuse(self, camera_id: str, det: Detection, fused: FusedDetection) -> bool:
         """Determine if a detection should be fused with an existing track."""
         # Check if cameras have spatial relationship
         for other_cam in fused.contributing_cameras:
@@ -288,15 +282,11 @@ class CameraFusionManager:
 
         # Check distance to detection B center
         center_b = det_b.bbox.center
-        distance = math.sqrt(
-            (projected[0] - center_b[0]) ** 2 + (projected[1] - center_b[1]) ** 2
-        )
+        distance = math.sqrt((projected[0] - center_b[0]) ** 2 + (projected[1] - center_b[1]) ** 2)
 
         return distance < self._fusion_threshold
 
-    def _check_handoff_match(
-        self, camera_id: str, det: Detection, fused: FusedDetection
-    ) -> bool:
+    def _check_handoff_match(self, camera_id: str, det: Detection, fused: FusedDetection) -> bool:
         """Check if detection matches a track being handed off."""
         # Check if detection is near the edge of the camera's FOV
         # and matches timing/velocity of a recently lost track from another camera
@@ -320,9 +310,7 @@ class CameraFusionManager:
 
         return False
 
-    def _merge_detection(
-        self, camera_id: str, det: Detection, fused: FusedDetection
-    ) -> None:
+    def _merge_detection(self, camera_id: str, det: Detection, fused: FusedDetection) -> None:
         """Merge a detection into an existing fused track."""
         fused.detections[camera_id] = det
         if camera_id not in fused.contributing_cameras:
@@ -374,9 +362,7 @@ class CameraFusionManager:
         # Clean up old handoff candidates
         for cam, buffer in self._handoff_buffer.items():
             self._handoff_buffer[cam] = [
-                (t, track)
-                for t, track in buffer
-                if now - t < self._handoff_timeout
+                (t, track) for t, track in buffer if now - t < self._handoff_timeout
             ]
 
         # Check for tracks that disappeared from this camera

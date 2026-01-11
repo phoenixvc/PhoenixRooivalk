@@ -141,12 +141,8 @@ class Histogram:
             cumulative = 0
             for bucket in self.buckets:
                 cumulative += self._counts.get(bucket, 0) - cumulative
-                lines.append(
-                    f'{self.name}_bucket{{{label_str}le="{bucket}"}} {cumulative}'
-                )
-            lines.append(
-                f'{self.name}_bucket{{{label_str}le="+Inf"}} {self._count}'
-            )
+                lines.append(f'{self.name}_bucket{{{label_str}le="{bucket}"}} {cumulative}')
+            lines.append(f'{self.name}_bucket{{{label_str}le="+Inf"}} {self._count}')
             lines.append(f"{self.name}_sum {self._sum}")
             lines.append(f"{self.name}_count {self._count}")
 
@@ -206,9 +202,7 @@ class Summary:
             for quantile in [0.5, 0.9, 0.95, 0.99]:
                 idx = int(count * quantile)
                 value = sorted_values[min(idx, count - 1)]
-                lines.append(
-                    f'{self.name}{{{label_str}quantile="{quantile}"}} {value}'
-                )
+                lines.append(f'{self.name}{{{label_str}quantile="{quantile}"}} {value}')
             lines.append(f"{self.name}_sum {sum(values)}")
             lines.append(f"{self.name}_count {count}")
 

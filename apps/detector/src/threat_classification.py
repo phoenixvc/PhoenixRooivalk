@@ -280,7 +280,7 @@ class ThreatClassifier:
 
         # Velocity modifier
         if velocity_3d:
-            velocity_ms = (velocity_3d[0]**2 + velocity_3d[1]**2 + velocity_3d[2]**2) ** 0.5
+            velocity_ms = (velocity_3d[0] ** 2 + velocity_3d[1] ** 2 + velocity_3d[2] ** 2) ** 0.5
             if velocity_ms > 20:
                 threat_level = max(threat_level, ThreatLevel.HIGH)
                 reasons.append(f"High velocity: {velocity_ms:.1f}m/s")
@@ -398,8 +398,8 @@ class ThreatClassifier:
             # For now, use simple heuristic based on bounding box proximity
             # in image space as approximation
             distance_px = (
-                (detection.bbox.center[0] - det.bbox.center[0])**2 +
-                (detection.bbox.center[1] - det.bbox.center[1])**2
+                (detection.bbox.center[0] - det.bbox.center[0]) ** 2
+                + (detection.bbox.center[1] - det.bbox.center[1]) ** 2
             ) ** 0.5
             if distance_px < 200:  # Within 200 pixels
                 nearby.append(tid)
