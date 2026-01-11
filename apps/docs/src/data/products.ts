@@ -1606,7 +1606,10 @@ export const productBySku: Record<string, Product> = {
 
 /** Get product by SKU */
 export function getProductBySku(sku: string): Product | undefined {
-  return productBySku[sku];
+  if (Object.hasOwn(productBySku, sku)) {
+    return productBySku[sku as keyof typeof productBySku];
+  }
+  return undefined;
 }
 
 /** Calculate total BOM cost with optional accessories */
@@ -1619,8 +1622,8 @@ export function getTotalWithAccessories(product: Product): number {
   return product.bomTotal + accessoriesTotal;
 }
 
-/** Format price range */
-export function formatPriceRange(product: Product): string {
+/** Format product price range (renamed to avoid conflict with pricing.ts) */
+export function formatProductPriceRange(product: Product): string {
   return product.priceRange;
 }
 
