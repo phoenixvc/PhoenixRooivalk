@@ -2139,6 +2139,754 @@ export const netSentryPro: Product = {
 };
 
 // =============================================================================
+// SKYSNARE LINE - CONSUMER (1 Product)
+// =============================================================================
+
+/** SkySnare - Consumer handheld launcher */
+export const skySnare: Product = {
+  sku: "SS-001",
+  name: "SkySnare",
+  line: "SkyWatch", // Using SkyWatch as closest match for type
+  category: "countermeasure",
+  targetMarket: "Property owners, outdoor enthusiasts, privacy advocates",
+  priceRange: "$349",
+  priceMin: 349,
+  priceMax: 349,
+  specs: {
+    launchRange: "15-30m",
+    netSize: "2m × 2m",
+    reload: "30 seconds",
+    weight: "~1.2kg",
+  },
+  bom: [
+    {
+      item: "CO2 Puncture Assembly",
+      specification: "12g cartridge",
+      quantity: 1,
+      unitCost: 45.0,
+      totalCost: 45.0,
+      supplier: "Palmer Pursuit",
+    },
+    {
+      item: "Trigger Mechanism",
+      specification: "Dual safety",
+      quantity: 1,
+      unitCost: 25.0,
+      totalCost: 25.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Barrel Assembly",
+      specification: "Aluminum, 3\"",
+      quantity: 1,
+      unitCost: 30.0,
+      totalCost: 30.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Net",
+      specification: "2m weighted",
+      quantity: 1,
+      unitCost: 25.0,
+      totalCost: 25.0,
+      supplier: "Safety supply",
+    },
+    {
+      item: "Handle/Grip",
+      specification: "Ergonomic",
+      quantity: 1,
+      unitCost: 15.0,
+      totalCost: 15.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Packaging",
+      specification: "Carry case",
+      quantity: 1,
+      unitCost: 8.0,
+      totalCost: 8.0,
+      supplier: "Various",
+    },
+  ],
+  bomTotal: 148.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+// =============================================================================
+// NETSNARE LINE - GROUND LAUNCHERS (3 Products)
+// =============================================================================
+
+/** NetSnare Lite - Spring-powered ground launcher */
+export const netSnareLite: Product = {
+  sku: "NSN-LITE-001",
+  name: "NetSnare Lite",
+  line: "NetSentry", // Using NetSentry as closest match for type
+  category: "countermeasure",
+  targetMarket: "DIY enthusiasts, Makers, Property owners",
+  priceRange: "$200-400",
+  priceMin: 200,
+  priceMax: 400,
+  specs: {
+    launchRange: "10-20m",
+    responseTime: "200ms",
+    reload: "Manual, 30 seconds",
+    netSize: "2m weighted",
+  },
+  bom: [
+    {
+      item: "Spring Mechanism",
+      specification: "Custom, 75lb",
+      quantity: 1,
+      unitCost: 40.0,
+      totalCost: 40.0,
+      supplier: "Hardware store",
+    },
+    {
+      item: "WiFi Trigger Module",
+      specification: "ESP32-based",
+      quantity: 1,
+      unitCost: 15.0,
+      totalCost: 15.0,
+      supplier: "Various",
+    },
+    {
+      item: "Nichrome Release",
+      specification: "28AWG",
+      quantity: 1,
+      unitCost: 5.0,
+      totalCost: 5.0,
+      supplier: "Amazon",
+    },
+    {
+      item: "Net",
+      specification: "2m weighted",
+      quantity: 1,
+      unitCost: 25.0,
+      totalCost: 25.0,
+      supplier: "Safety supply",
+    },
+    {
+      item: "Ground Mount",
+      specification: "Stake or surface",
+      quantity: 1,
+      unitCost: 20.0,
+      totalCost: 20.0,
+      supplier: "Hardware store",
+    },
+    {
+      item: "Enclosure",
+      specification: "Weather resistant",
+      quantity: 1,
+      unitCost: 20.0,
+      totalCost: 20.0,
+      supplier: "Polycase",
+    },
+  ],
+  bomTotal: 125.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+/** NetSnare Standard - CO2-powered ground launcher */
+export const netSnareStandard: Product = {
+  sku: "NSN-STD-001",
+  name: "NetSnare Standard",
+  line: "NetSentry",
+  category: "countermeasure",
+  targetMarket: "Property owners, Small businesses, Farms",
+  priceRange: "$500-800",
+  priceMin: 500,
+  priceMax: 800,
+  specs: {
+    launchRange: "20-35m",
+    responseTime: "100ms",
+    reload: "CO2 cartridge swap",
+    costPerShot: "$1-2",
+  },
+  bom: [
+    {
+      item: "CO2 Puncture Assembly",
+      specification: "16g cartridge",
+      quantity: 1,
+      unitCost: 60.0,
+      totalCost: 60.0,
+      supplier: "Palmer Pursuit",
+    },
+    {
+      item: "Solenoid Valve",
+      specification: "12V, NC",
+      quantity: 1,
+      unitCost: 30.0,
+      totalCost: 30.0,
+      supplier: "Amazon",
+    },
+    {
+      item: "WiFi/Ethernet Controller",
+      specification: "ESP32 + W5500",
+      quantity: 1,
+      unitCost: 25.0,
+      totalCost: 25.0,
+      supplier: "Various",
+    },
+    {
+      item: "Barrel Assembly",
+      specification: "Aluminum, 4\"",
+      quantity: 1,
+      unitCost: 45.0,
+      totalCost: 45.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Net",
+      specification: "2.5m weighted",
+      quantity: 1,
+      unitCost: 35.0,
+      totalCost: 35.0,
+      supplier: "Safety supply",
+    },
+    {
+      item: "Ground Mount",
+      specification: "Heavy duty",
+      quantity: 1,
+      unitCost: 30.0,
+      totalCost: 30.0,
+      supplier: "Hardware store",
+    },
+    {
+      item: "Weatherproof Enclosure",
+      specification: "IP65",
+      quantity: 1,
+      unitCost: 40.0,
+      totalCost: 40.0,
+      supplier: "Polycase",
+    },
+    {
+      item: "12V Power Supply",
+      specification: "2A outdoor",
+      quantity: 1,
+      unitCost: 20.0,
+      totalCost: 20.0,
+      supplier: "Amazon",
+    },
+  ],
+  bomTotal: 285.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+/** NetSnare Pro - Pneumatic ground launcher with tracking */
+export const netSnarePro: Product = {
+  sku: "NSN-PRO-001",
+  name: "NetSnare Pro",
+  line: "NetSentry",
+  category: "countermeasure",
+  targetMarket: "Commercial facilities, Critical infrastructure, Security firms",
+  priceRange: "$1,200-2,000",
+  priceMin: 1200,
+  priceMax: 2000,
+  specs: {
+    launchRange: "30-50m",
+    responseTime: "50ms",
+    reload: "Air tank refillable",
+    netSize: "3m weighted",
+  },
+  bom: [
+    {
+      item: "Pneumatic Valve Assembly",
+      specification: "Quick-exhaust",
+      quantity: 1,
+      unitCost: 120.0,
+      totalCost: 120.0,
+      supplier: "SMC",
+    },
+    {
+      item: "Air Tank",
+      specification: "1L, 3000 PSI",
+      quantity: 1,
+      unitCost: 80.0,
+      totalCost: 80.0,
+      supplier: "Ninja Paintball",
+    },
+    {
+      item: "Pan-Tilt Assembly",
+      specification: "Motorized, 180° arc",
+      quantity: 1,
+      unitCost: 150.0,
+      totalCost: 150.0,
+      supplier: "ServoCity",
+    },
+    {
+      item: "Controller",
+      specification: "Pi 4 + PoE HAT",
+      quantity: 1,
+      unitCost: 85.0,
+      totalCost: 85.0,
+      supplier: "Raspberry Pi",
+    },
+    {
+      item: "Barrel Assembly",
+      specification: "Aluminum, 5\"",
+      quantity: 1,
+      unitCost: 60.0,
+      totalCost: 60.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Net",
+      specification: "3m weighted",
+      quantity: 1,
+      unitCost: 45.0,
+      totalCost: 45.0,
+      supplier: "Safety supply",
+    },
+    {
+      item: "Ground Platform",
+      specification: "Rotating base",
+      quantity: 1,
+      unitCost: 80.0,
+      totalCost: 80.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Industrial Enclosure",
+      specification: "IP66",
+      quantity: 1,
+      unitCost: 60.0,
+      totalCost: 60.0,
+      supplier: "Polycase",
+    },
+  ],
+  bomTotal: 680.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+// =============================================================================
+// AERONET LINE - ENTERPRISE PLATFORM (2 Products)
+// =============================================================================
+
+/** AeroNet Enterprise - Full C-UAS platform */
+export const aeroNetEnterprise: Product = {
+  sku: "AN-ENT-001",
+  name: "AeroNet Enterprise",
+  line: "SkyWatch", // Enterprise detection platform
+  category: "detection",
+  targetMarket: "Critical infrastructure, Airports, Prisons, Military bases",
+  priceRange: "$150,000 setup + $25,000/month",
+  priceMin: 150000,
+  priceMax: 150000,
+  specs: {
+    detectionRange: "2-5km multi-sensor",
+    processingSpeed: "30+ FPS per sensor",
+    powerConsumption: "500W-1kW system",
+    operatingTemp: "-40°C to 60°C",
+  },
+  bom: [
+    {
+      item: "Radar Unit",
+      specification: "Echodyne EchoGuard or equiv",
+      quantity: 1,
+      unitCost: 15000.0,
+      totalCost: 15000.0,
+      supplier: "Echodyne",
+    },
+    {
+      item: "EO/IR Gimbal",
+      specification: "Multi-sensor PTZ",
+      quantity: 2,
+      unitCost: 8000.0,
+      totalCost: 16000.0,
+      supplier: "FLIR/DRS",
+    },
+    {
+      item: "RF Detection Array",
+      specification: "Direction finding",
+      quantity: 1,
+      unitCost: 5000.0,
+      totalCost: 5000.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Server Cluster",
+      specification: "Jetson AGX + GPU server",
+      quantity: 1,
+      unitCost: 8000.0,
+      totalCost: 8000.0,
+      supplier: "NVIDIA/Dell",
+    },
+    {
+      item: "Network Infrastructure",
+      specification: "10GbE backbone",
+      quantity: 1,
+      unitCost: 5000.0,
+      totalCost: 5000.0,
+      supplier: "Cisco/Ubiquiti",
+    },
+    {
+      item: "UPS System",
+      specification: "Rack mount, 1hr backup",
+      quantity: 1,
+      unitCost: 3000.0,
+      totalCost: 3000.0,
+      supplier: "APC/Eaton",
+    },
+    {
+      item: "Installation & Training",
+      specification: "Professional",
+      quantity: 1,
+      unitCost: 7200.0,
+      totalCost: 7200.0,
+      supplier: "Internal",
+    },
+  ],
+  bomTotal: 59200.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+/** AeroNet Command - C2 Software Platform */
+export const aeroNetCommand: Product = {
+  sku: "AN-CMD-001",
+  name: "AeroNet Command",
+  line: "SkyWatch",
+  category: "detection",
+  targetMarket: "Enterprise security teams, Multi-site operators, SOC teams",
+  priceRange: "$25,000-50,000 license + $2,500/month",
+  priceMin: 25000,
+  priceMax: 50000,
+  specs: {
+    connectivity: "Cloud or on-premise",
+    processingSpeed: "Real-time, <100ms latency",
+  },
+  bom: [
+    {
+      item: "Software License",
+      specification: "Perpetual or subscription",
+      quantity: 1,
+      unitCost: 8500.0,
+      totalCost: 8500.0,
+      supplier: "Internal",
+    },
+  ],
+  bomTotal: 8500.0, // Software development cost allocation
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+// =============================================================================
+// RKV LINE - MILITARY SYSTEMS (3 Products)
+// =============================================================================
+
+/** RKV-M Mothership - VTOL Aerial Platform */
+export const rkvMothership: Product = {
+  sku: "RKV-M-001",
+  name: "RKV-M Mothership",
+  line: "SkyWatch", // Detection/intercept platform
+  category: "countermeasure",
+  targetMarket: "Military, Critical infrastructure",
+  priceRange: "$65,000-85,000",
+  priceMin: 65000,
+  priceMax: 85000,
+  specs: {
+    detectionRange: "500m-2km",
+    processingSpeed: "60+ FPS",
+    powerConsumption: "500W hover",
+    operatingTemp: "-20°C to 50°C",
+  },
+  bom: [
+    {
+      item: "Airframe",
+      specification: "Carbon fiber, ducted fans",
+      quantity: 1,
+      unitCost: 8000.0,
+      totalCost: 8000.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Propulsion System",
+      specification: "8× motors + ESCs",
+      quantity: 1,
+      unitCost: 4000.0,
+      totalCost: 4000.0,
+      supplier: "T-Motor",
+    },
+    {
+      item: "Flight Controller",
+      specification: "Pixhawk 6X + custom",
+      quantity: 1,
+      unitCost: 1500.0,
+      totalCost: 1500.0,
+      supplier: "Holybro",
+    },
+    {
+      item: "Compute Module",
+      specification: "Jetson AGX Orin 64GB",
+      quantity: 1,
+      unitCost: 2000.0,
+      totalCost: 2000.0,
+      supplier: "NVIDIA",
+    },
+    {
+      item: "EO/IR Gimbal",
+      specification: "3-axis stabilized",
+      quantity: 1,
+      unitCost: 5000.0,
+      totalCost: 5000.0,
+      supplier: "FLIR",
+    },
+    {
+      item: "Net Launcher Pods",
+      specification: "4× integrated",
+      quantity: 4,
+      unitCost: 800.0,
+      totalCost: 3200.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Battery System",
+      specification: "High-density LiPo",
+      quantity: 1,
+      unitCost: 2500.0,
+      totalCost: 2500.0,
+      supplier: "Tattu",
+    },
+    {
+      item: "Mesh Radio",
+      specification: "Encrypted datalink",
+      quantity: 1,
+      unitCost: 1500.0,
+      totalCost: 1500.0,
+      supplier: "Silvus",
+    },
+    {
+      item: "Assembly & Test",
+      specification: "Professional",
+      quantity: 1,
+      unitCost: 2036.0,
+      totalCost: 2036.0,
+      supplier: "Internal",
+    },
+  ],
+  bomTotal: 29736.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+/** RKV-I Interceptor - Expendable Mini Interceptor */
+export const rkvInterceptor: Product = {
+  sku: "RKV-I-001",
+  name: "RKV-I Interceptor",
+  line: "NetSentry", // Countermeasure
+  category: "countermeasure",
+  targetMarket: "Military, Paired with RKV-M",
+  priceRange: "$8,000-12,000",
+  priceMin: 8000,
+  priceMax: 12000,
+  specs: {
+    launchRange: "500m from launcher",
+    responseTime: "Instant",
+    netSize: "3m × 3m",
+  },
+  bom: [
+    {
+      item: "Airframe",
+      specification: "Compact, high-speed",
+      quantity: 1,
+      unitCost: 800.0,
+      totalCost: 800.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Propulsion",
+      specification: "EDF system",
+      quantity: 1,
+      unitCost: 600.0,
+      totalCost: 600.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Compute Module",
+      specification: "Jetson Orin Nano",
+      quantity: 1,
+      unitCost: 499.0,
+      totalCost: 499.0,
+      supplier: "NVIDIA",
+    },
+    {
+      item: "Camera",
+      specification: "Wide-angle tracking",
+      quantity: 1,
+      unitCost: 150.0,
+      totalCost: 150.0,
+      supplier: "Various",
+    },
+    {
+      item: "RF Receiver",
+      specification: "Drone signal homing",
+      quantity: 1,
+      unitCost: 200.0,
+      totalCost: 200.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Net Deployment",
+      specification: "Integrated launcher",
+      quantity: 1,
+      unitCost: 400.0,
+      totalCost: 400.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Parachute Recovery",
+      specification: "With locator beacon",
+      quantity: 1,
+      unitCost: 300.0,
+      totalCost: 300.0,
+      supplier: "Fruity Chutes",
+    },
+    {
+      item: "Battery",
+      specification: "High-discharge",
+      quantity: 1,
+      unitCost: 250.0,
+      totalCost: 250.0,
+      supplier: "Tattu",
+    },
+    {
+      item: "Datalink",
+      specification: "Mesh radio module",
+      quantity: 1,
+      unitCost: 500.0,
+      totalCost: 500.0,
+      supplier: "Silvus",
+    },
+    {
+      item: "Assembly",
+      specification: "Professional",
+      quantity: 1,
+      unitCost: 639.0,
+      totalCost: 639.0,
+      supplier: "Internal",
+    },
+  ],
+  bomTotal: 4338.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+/** RKV-G Ground Station - Mobile Command & Control */
+export const rkvGroundStation: Product = {
+  sku: "RKV-G-001",
+  name: "RKV-G Ground Station",
+  line: "SkyWatch",
+  category: "detection",
+  targetMarket: "Military, Mobile operations",
+  priceRange: "$100,000-150,000",
+  priceMin: 100000,
+  priceMax: 150000,
+  specs: {
+    detectionRange: "5-10km",
+    processingSpeed: "Multi-stream real-time",
+    powerConsumption: "2-5kW system",
+    operatingTemp: "-40°C to 55°C",
+  },
+  bom: [
+    {
+      item: "Vehicle/Trailer Platform",
+      specification: "4×4 or trailer",
+      quantity: 1,
+      unitCost: 15000.0,
+      totalCost: 15000.0,
+      supplier: "Various",
+    },
+    {
+      item: "Telescoping Mast",
+      specification: "10-15m pneumatic",
+      quantity: 1,
+      unitCost: 8000.0,
+      totalCost: 8000.0,
+      supplier: "Will-Burt",
+    },
+    {
+      item: "Radar Unit",
+      specification: "X-band or similar",
+      quantity: 1,
+      unitCost: 12000.0,
+      totalCost: 12000.0,
+      supplier: "Various",
+    },
+    {
+      item: "EO/IR Gimbal",
+      specification: "Long-range",
+      quantity: 1,
+      unitCost: 6000.0,
+      totalCost: 6000.0,
+      supplier: "FLIR",
+    },
+    {
+      item: "RF Detection Suite",
+      specification: "Direction finding",
+      quantity: 1,
+      unitCost: 4000.0,
+      totalCost: 4000.0,
+      supplier: "Custom",
+    },
+    {
+      item: "Compute Rack",
+      specification: "Jetson AGX cluster",
+      quantity: 1,
+      unitCost: 5000.0,
+      totalCost: 5000.0,
+      supplier: "NVIDIA",
+    },
+    {
+      item: "Generator",
+      specification: "5kW diesel",
+      quantity: 1,
+      unitCost: 3000.0,
+      totalCost: 3000.0,
+      supplier: "Honda",
+    },
+    {
+      item: "Battery Backup",
+      specification: "4hr runtime",
+      quantity: 1,
+      unitCost: 2000.0,
+      totalCost: 2000.0,
+      supplier: "Various",
+    },
+    {
+      item: "Operator Stations",
+      specification: "2× ruggedized",
+      quantity: 2,
+      unitCost: 3000.0,
+      totalCost: 6000.0,
+      supplier: "Getac",
+    },
+    {
+      item: "Satellite Uplink",
+      specification: "BGAN or Starlink",
+      quantity: 1,
+      unitCost: 2500.0,
+      totalCost: 2500.0,
+      supplier: "Various",
+    },
+    {
+      item: "Integration & Testing",
+      specification: "Professional",
+      quantity: 1,
+      unitCost: 4978.0,
+      totalCost: 4978.0,
+      supplier: "Internal",
+    },
+  ],
+  bomTotal: 52478.0,
+  confidence: "verified",
+  lastUpdated: "2026-01-11",
+};
+
+// =============================================================================
 // PRODUCT COLLECTIONS
 // =============================================================================
 
@@ -2163,10 +2911,34 @@ export const netSentryProducts: Product[] = [
   netSentryPro,
 ];
 
+/** All SkySnare products */
+export const skySnareProducts: Product[] = [skySnare];
+
+/** All NetSnare products */
+export const netSnareProducts: Product[] = [
+  netSnareLite,
+  netSnareStandard,
+  netSnarePro,
+];
+
+/** All AeroNet products */
+export const aeroNetProducts: Product[] = [aeroNetEnterprise, aeroNetCommand];
+
+/** All RKV products */
+export const rkvProducts: Product[] = [
+  rkvMothership,
+  rkvInterceptor,
+  rkvGroundStation,
+];
+
 /** All products combined */
 export const allProducts: Product[] = [
   ...skyWatchProducts,
   ...netSentryProducts,
+  ...skySnareProducts,
+  ...netSnareProducts,
+  ...aeroNetProducts,
+  ...rkvProducts,
 ];
 
 // =============================================================================
@@ -2175,6 +2947,7 @@ export const allProducts: Product[] = [
 
 /** Map of SKU to product for easy lookup */
 export const productBySku: Record<string, Product> = {
+  // SkyWatch
   "SW-NANO-001": skyWatchNano,
   "SW-STD-001": skyWatchStandard,
   "SW-PRO-001": skyWatchPro,
@@ -2185,9 +2958,23 @@ export const productBySku: Record<string, Product> = {
   "SW-MESH-001-N": skyWatchMeshNode,
   "SW-MESH-001-C": skyWatchMeshCentral,
   "SW-ENT-001": skyWatchEnterprise,
+  // NetSentry
   "NS-LITE-001": netSentryLite,
   "NS-STD-001": netSentryStandard,
   "NS-PRO-001": netSentryPro,
+  // SkySnare
+  "SS-001": skySnare,
+  // NetSnare
+  "NSN-LITE-001": netSnareLite,
+  "NSN-STD-001": netSnareStandard,
+  "NSN-PRO-001": netSnarePro,
+  // AeroNet
+  "AN-ENT-001": aeroNetEnterprise,
+  "AN-CMD-001": aeroNetCommand,
+  // RKV
+  "RKV-M-001": rkvMothership,
+  "RKV-I-001": rkvInterceptor,
+  "RKV-G-001": rkvGroundStation,
 };
 
 // =============================================================================
