@@ -173,7 +173,6 @@ export const FeaturesSection: React.FC = () => {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

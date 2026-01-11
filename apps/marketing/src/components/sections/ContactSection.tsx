@@ -22,8 +22,8 @@ export const ContactSection: React.FC = () => {
             <h3 className={styles.cardTitle}>Early Partner Program</h3>
             <p className={styles.cardDescription}>
               Be among the first to deploy our pneumatic net launcher
-              technology. We&apos;re looking for pilot partners in drone
-              racing, event security, and critical infrastructure.
+              technology. We&apos;re looking for pilot partners in drone racing,
+              event security, and critical infrastructure.
             </p>
             <div className={styles.buttonGroup}>
               <Button

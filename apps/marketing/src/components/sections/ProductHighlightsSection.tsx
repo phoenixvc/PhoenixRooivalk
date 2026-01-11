@@ -146,7 +146,9 @@ export const ProductHighlightsSection: React.FC = () => {
                       </span>
                     )}
                     {!status.canBuy && !status.canPreorder && (
-                      <span className={styles.comingSoonBadge}>Coming Soon</span>
+                      <span className={styles.comingSoonBadge}>
+                        Coming Soon
+                      </span>
                     )}
                   </div>
                   <span className={styles.productLine}>
@@ -179,7 +181,9 @@ export const ProductHighlightsSection: React.FC = () => {
                     <span className={styles.price}>
                       {product.priceFormatted}
                     </span>
-                    <span className={styles.statusText}>{status.statusText}</span>
+                    <span className={styles.statusText}>
+                      {status.statusText}
+                    </span>
                   </div>
                   <div className={styles.productActions}>
                     {status.canBuy && (
