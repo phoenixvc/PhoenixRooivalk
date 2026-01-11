@@ -361,11 +361,11 @@ h6 {
 .pill--partners {
   background: linear-gradient(
     135deg,
-    rgba(var(--secondary), 0.2),
-    rgba(var(--secondary), 0.2)
+    rgba(var(--tactical-gray), 0.2),
+    rgba(var(--tactical-silver), 0.15)
   );
-  border-color: rgba(var(--secondary), 0.5);
-  color: rgb(var(--secondary));
+  border-color: rgba(var(--tactical-silver), 0.4);
+  color: rgb(var(--tactical-silver));
 }
 
 .pill--sbir {

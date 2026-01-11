@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import styles from "./Navigation.module.css";
@@ -26,7 +27,19 @@ type NavigationItem = LinkItem | DropdownItem;
 
 export const Navigation: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+  // Helper to check if a path is active
+  const isPathActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
+  // Helper to check if any dropdown item is active
+  const isDropdownActive = (items: Array<{ href: string }>) => {
+    return items.some((item) => isPathActive(item.href));
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -62,7 +75,7 @@ export const Navigation: React.FC = () => {
           description: "Enterprise platform",
         },
         {
-          href: "/preorder",
+          href: "/contact",
           label: "Preorder",
           description: "Reserve yours - no deposit",
         },
@@ -162,7 +175,9 @@ export const Navigation: React.FC = () => {
                 >
                   {item.type === "dropdown" ? (
                     <>
-                      <button className={styles.navButton}>
+                      <button
+                        className={`${styles.navButton} ${isDropdownActive(item.items) ? styles.navButtonActive : ""}`}
+                      >
                         {item.label}
                         <svg
                           className={styles.chevron}
@@ -199,7 +214,10 @@ export const Navigation: React.FC = () => {
                       </div>
                     </>
                   ) : item.type === "link" ? (
-                    <Link href={item.href} className={styles.navLink}>
+                    <Link
+                      href={item.href}
+                      className={`${styles.navLink} ${isPathActive(item.href) ? styles.navLinkActive : ""}`}
+                    >
                       {item.label}
                     </Link>
                   ) : null}
@@ -432,8 +450,8 @@ export const Navigation: React.FC = () => {
           <Link href="/login" className={styles.loginButton}>
             Login
           </Link>
-          <Link href="/preorder" className={styles.ctaButton}>
-            Preorder Now
+          <Link href="/contact" className={styles.ctaButton}>
+            Get Started
           </Link>
         </div>
       </div>

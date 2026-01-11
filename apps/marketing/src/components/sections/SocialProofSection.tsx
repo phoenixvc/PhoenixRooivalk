@@ -105,13 +105,10 @@ export const SocialProofSection: React.FC = () => {
         <div className={styles.innerContainer}>
           {/* Section Header */}
           <div className={styles.header}>
-            <h2 className={styles.title}>
-              Dual-Brand Innovation: Consumer to Enterprise
-            </h2>
+            <h2 className={styles.title}>Building Trust Through Innovation</h2>
             <p className={styles.subtitle}>
-              PhoenixRooivalk builds market trust through consumer safety
-              (SkySnare™), then scales to enterprise infrastructure security
-              (AeroNet™).
+              From consumer training products to enterprise security solutions —
+              proven technology that scales with your needs.
             </p>
           </div>
 
@@ -245,12 +242,10 @@ export const SocialProofSection: React.FC = () => {
 
           {/* CTA Section */}
           <div className={styles.ctaSection}>
-            <h3 className={styles.ctaTitle}>
-              Ready to Join the Dual-Brand Revolution?
-            </h3>
+            <h3 className={styles.ctaTitle}>Ready to Get Started?</h3>
             <p className={styles.ctaSubtitle}>
-              Invest in proven consumer safety scaling to enterprise
-              infrastructure security. Target: $50M revenue by FY30.
+              Join us in building the future of safe, effective drone capture
+              technology. From training to enterprise security.
             </p>
             <div className={styles.ctaButtons}>
               <Button
