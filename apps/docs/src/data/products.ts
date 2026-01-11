@@ -1619,8 +1619,8 @@ export function getTotalWithAccessories(product: Product): number {
   return product.bomTotal + accessoriesTotal;
 }
 
-/** Format price range */
-export function formatPriceRange(product: Product): string {
+/** Format product price range */
+export function formatProductPriceRange(product: Product): string {
   return product.priceRange;
 }
 
