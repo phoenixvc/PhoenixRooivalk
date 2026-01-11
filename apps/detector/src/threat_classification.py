@@ -225,7 +225,9 @@ class ThreatClassifier:
         self._restricted_zones = restricted_zones or []
 
         # Swarm tracking with timestamps for cleanup
-        self._active_drones: dict[int, tuple[Detection, float]] = {}  # track_id → (detection, timestamp)
+        self._active_drones: dict[int, tuple[Detection, float]] = (
+            {}
+        )  # track_id → (detection, timestamp)
         self._swarm_groups: dict[int, list[int]] = {}  # swarm_id → track_ids
         self._next_swarm_id = 1
         self._last_cleanup_time = time.time()
@@ -235,8 +237,10 @@ class ThreatClassifier:
         now = time.time()
 
         # Only run cleanup periodically or when we have too many tracks
-        if (now - self._last_cleanup_time < 1.0 and
-                len(self._active_drones) < self.MAX_ACTIVE_TRACKS):
+        if (
+            now - self._last_cleanup_time < 1.0
+            and len(self._active_drones) < self.MAX_ACTIVE_TRACKS
+        ):
             return
 
         self._last_cleanup_time = now
@@ -254,9 +258,7 @@ class ThreatClassifier:
         stale_track_set = set(stale_track_ids)
         empty_swarm_ids = []
         for swarm_id, members in self._swarm_groups.items():
-            self._swarm_groups[swarm_id] = [
-                tid for tid in members if tid not in stale_track_set
-            ]
+            self._swarm_groups[swarm_id] = [tid for tid in members if tid not in stale_track_set]
             if not self._swarm_groups[swarm_id]:
                 empty_swarm_ids.append(swarm_id)
 
