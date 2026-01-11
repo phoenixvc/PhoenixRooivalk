@@ -29,6 +29,7 @@ export * from "./blockchain";
 export * from "./team";
 export * from "./roadmap";
 export * from "./competitors";
+export * from "./products";
 
 // Simple value exports for MDX
 export * from "./values";
