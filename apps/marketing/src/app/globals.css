@@ -1090,8 +1090,10 @@ a:focus-visible {
   }
 }
 
-/* Improve horizontal scrolling prevention */
-* {
+/* Improve horizontal scrolling prevention on media elements */
+img,
+video,
+iframe {
   max-width: 100%;
 }
 
@@ -1125,8 +1127,6 @@ video {
 
 /* Image Loading Optimization */
 img {
-  /* Use native lazy loading */
-  loading: lazy;
   /* Prevent layout shift */
   height: auto;
   /* Optimize rendering */
@@ -1134,10 +1134,8 @@ img {
   image-rendering: crisp-edges;
 }
 
-/* Critical images should load immediately */
-img[loading="eager"] {
-  loading: eager;
-}
+/* Note: Use loading="lazy" attribute in HTML/JSX for lazy loading */
+/* Example: <img src="..." loading="lazy" alt="..." /> */
 
 /* Optimize background images */
 .bg-image {
@@ -1252,17 +1250,9 @@ img[loading="eager"] {
   --perf-start: initial;
 }
 
-/* Bundle size optimization hints */
-/* These classes help identify opportunities for code splitting */
-.component-heavy {
-  /* Mark components that should be lazy-loaded */
-  /* Indicates potential code-split boundary */
-}
-
-.feature-optional {
-  /* Mark optional features that can be conditionally loaded */
-  /* Consider dynamic imports for these */
-}
+/* Note: Use TypeScript interfaces or code comments to mark */
+/* components for code splitting rather than CSS classes */
+/* Example: // @code-split - heavy component, consider lazy loading */
 
 /* Print optimization */
 @media print {

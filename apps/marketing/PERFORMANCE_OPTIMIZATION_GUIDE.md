@@ -396,6 +396,6 @@ Performance optimization is ongoing. After Wave 4:
 
 ---
 
-**Last Updated:** 2026-01-11 **Status:** Wave 4 CSS optimizations complete,
+**Last Updated:** 2025-01-11 **Status:** Wave 4 CSS optimizations complete,
 image/code splitting pending **Next Steps:** Implement image optimization and
 code splitting
