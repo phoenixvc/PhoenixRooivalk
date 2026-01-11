@@ -68,10 +68,15 @@ Structure:
     - Comprehensive technical documentation with executive, business, technical, legal, and operations sections.
   - `marketing/` — Next.js 14 static marketing site (exports to `out/`).
     - Includes threat simulator, ROI calculator, and interactive demos.
+  - `detector/` — Python drone detection system for edge devices.
+    - Modular architecture supporting Raspberry Pi, NVIDIA Jetson, and desktop.
+    - See [apps/detector/README.md](apps/detector/README.md) for user guide.
+  - `threat-simulator-desktop/` — Tauri desktop application (Rust + Leptos/WASM).
+    - Desktop version of the threat simulator with blockchain evidence recording.
+    - See [apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md) for user guide.
   - `api/` — Rust (Axum) API server.
   - `keeper/` — Rust blockchain keeper service.
   - `evidence-cli/` — Rust CLI for evidence management.
-  - `scripts/` — Application-specific scripts.
 - `packages/`
   - `types/` — Shared TypeScript type definitions.
   - `ui/` — Shared React UI components and hooks.
@@ -277,6 +282,34 @@ All project documentation is hosted on the live Docusaurus site (deployed to Azu
 
 ## Operational tasks
 
+### Python Detector
+
+Real-time drone detection system for edge devices. See [apps/detector/README.md](apps/detector/README.md) for complete documentation.
+
+**Quick Start:**
+```bash
+cd apps/detector
+
+# Setup environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -e ".[pi]"    # For Raspberry Pi, or [desktop] for development
+
+# Run detection
+python src/main.py --model models/drone-detector_int8.tflite
+
+# Headless mode (no display)
+python src/main.py --model models/drone-detector_int8.tflite --headless
+
+# With Coral USB Accelerator (faster)
+python src/main.py --model models/drone-detector_int8.tflite --coral
+
+# With object tracking and webhook alerts
+python src/main.py --model models/drone-detector_int8.tflite \
+  --tracker kalman \
+  --alert-webhook https://api.example.com/detections
+```
+
 ### Evidence management (CLI)
 
 - Rust CLI: `cargo run --bin evidence-cli -- <command>`
@@ -291,6 +324,19 @@ cargo run --bin keeper -- --interval 5 --batch-limit 25
 ```
 
 For runbook-style metrics capture, see the Operations Log template in the documentation portal.
+
+### Threat Simulator Desktop
+
+Desktop application for simulating counter-drone defense scenarios. See [apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md) for complete documentation.
+
+**Quick Start:**
+```bash
+# From repository root
+pnpm sim:dev              # Frontend dev server (fastest)
+pnpm sim:dev:tauri        # Full desktop app
+pnpm sim:test             # Run tests
+pnpm sim:build:tauri      # Build production installers
+```
 
 ## Access request (partners)
 
