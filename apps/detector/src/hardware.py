@@ -117,26 +117,27 @@ def _detect_ram_mb() -> int:
 
 def _detect_camera() -> str:
     """Detect available camera type."""
-    # Check for Pi Camera via libcamera
-    try:
-        result = subprocess.run(  # nosec B603, B607 - static command for camera detection
-            ["libcamera-hello", "--list-cameras"],
-            capture_output=True,
-            text=True,
-            timeout=5,
-        )
-        output = result.stdout.lower() + result.stderr.lower()
+    # Check for Pi Camera via rpicam-hello or libcamera-hello
+    for cmd in ["rpicam-hello", "libcamera-hello"]:
+        try:
+            result = subprocess.run(  # nosec B603, B607 - static command for camera detection
+                [cmd, "--list-cameras"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            output = result.stdout.lower() + result.stderr.lower()
 
-        if "imx708" in output:
-            return "picam_v3"
-        elif "imx219" in output:
-            return "picam_v2"
-        elif "imx477" in output:
-            return "picam_hq"
-        elif "available cameras" in output and "0 :" in output:
-            return "picam_unknown"
-    except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
-        pass
+            if "imx708" in output:
+                return "picam_v3"
+            elif "imx219" in output:
+                return "picam_v2"
+            elif "imx477" in output:
+                return "picam_hq"
+            elif "available cameras" in output and "0 :" in output:
+                return "picam_unknown"
+        except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+            continue
 
     # Check for Picamera2
     picam = None

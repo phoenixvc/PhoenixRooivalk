@@ -37,18 +37,17 @@ cd PhoenixRooivalk/apps/detector
 python3 -m venv venv && source venv/bin/activate
 pip install -e ".[pi]"
 
-# Enable camera
+# Enable camera (if not already)
 sudo raspi-config  # Interface Options > Camera > Enable
-sudo apt install -y libcamera-apps
 ```
 
 ### 2. Get Model
 
 ```bash
-pip install ultralytics tensorflow
+pip install ultralytics tensorflow "flatbuffers==24.3.25"
 python -c "from ultralytics import YOLO; \
   YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
-mv yolov5n_int8.tflite models/
+mv yolov5nu_saved_model/yolov5nu_int8.tflite models/yolov5n_int8.tflite
 ```
 
 ### 3. Run
@@ -64,6 +63,31 @@ That's it. You should see a live video feed with detections.
 - [Advanced Setup](docs/ADVANCED_SETUP.md) - Other platforms, cameras, Coral TPU
 - [Configuration Reference](docs/configuration.md) - All available settings
 - [Train Custom Model](#training-on-azure-ml) - Better accuracy for drone detection
+
+### Troubleshooting
+
+**Pi Camera not detected:**
+
+```bash
+# Check if Pi Camera is detected
+rpicam-hello --list-cameras
+
+# If not detected, enable it
+sudo raspi-config  # Interface Options > Camera > Enable
+sudo reboot
+```
+
+**USB camera detected instead of Pi Camera:**
+
+The hardware auto-detection found a USB camera. Either:
+- Use it: change `camera_type: usb` in config, or
+- Fix Pi Camera detection (see above)
+
+**Override camera from CLI:**
+
+```bash
+python src/main.py --config configs/quickstart.yaml --camera usb
+```
 
 ## Project Structure
 
