@@ -286,18 +286,14 @@ class TrackPersistence:
             # Version check
             version = data.get("version", 0)
             if version != self.VERSION:
-                logger.warning(
-                    f"State version mismatch: {version} != {self.VERSION}, ignoring"
-                )
+                logger.warning(f"State version mismatch: {version} != {self.VERSION}, ignoring")
                 return [], 0
 
             # Age check
             saved_at = data.get("saved_at", 0)
             age = time.time() - saved_at
             if age > self._max_age:
-                logger.info(
-                    f"Track state too old ({age:.1f}s > {self._max_age}s), ignoring"
-                )
+                logger.info(f"Track state too old ({age:.1f}s > {self._max_age}s), ignoring")
                 return [], 0
 
             # Deserialize tracks
@@ -342,8 +338,7 @@ class TrackPersistence:
             next_id = data.get("next_track_id", 0)
 
             logger.info(
-                f"Restored {len(tracks)} tracks from state "
-                f"({age:.1f}s old, next_id={next_id})"
+                f"Restored {len(tracks)} tracks from state " f"({age:.1f}s old, next_id={next_id})"
             )
 
             return tracks, next_id

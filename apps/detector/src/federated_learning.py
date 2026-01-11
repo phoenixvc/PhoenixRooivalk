@@ -119,7 +119,8 @@ class LocalDataCollector:
     def _init_db(self) -> None:
         """Initialize SQLite database."""
         with sqlite3.connect(self._db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 CREATE TABLE IF NOT EXISTS examples (
                     example_id TEXT PRIMARY KEY,
                     image_hash TEXT NOT NULL,
@@ -130,15 +131,20 @@ class LocalDataCollector:
                     metadata TEXT,
                     used_in_gradient INTEGER DEFAULT 0
                 )
-            """)
-            conn.execute("""
+            """
+            )
+            conn.execute(
+                """
                 CREATE INDEX IF NOT EXISTS idx_examples_timestamp
                 ON examples(timestamp)
-            """)
-            conn.execute("""
+            """
+            )
+            conn.execute(
+                """
                 CREATE INDEX IF NOT EXISTS idx_examples_used
                 ON examples(used_in_gradient)
-            """)
+            """
+            )
             conn.commit()
 
     def add_example(
@@ -348,10 +354,7 @@ class GradientComputer:
             # 4. Backward pass to get gradients
 
             # Placeholder gradients (random for simulation)
-            layer_names = [
-                "conv1", "conv2", "conv3",
-                "dense1", "dense2", "output"
-            ]
+            layer_names = ["conv1", "conv2", "conv3", "dense1", "dense2", "output"]
             gradients = {}
 
             for layer in layer_names:
@@ -367,9 +370,7 @@ class GradientComputer:
                 gradients[layer] = gradient
 
             # Apply gradient clipping
-            total_norm = np.sqrt(
-                sum(np.sum(g ** 2) for g in gradients.values())
-            )
+            total_norm = np.sqrt(sum(np.sum(g**2) for g in gradients.values()))
             if total_norm > self._config.gradient_clip_norm:
                 scale = self._config.gradient_clip_norm / total_norm
                 gradients = {k: v * scale for k, v in gradients.items()}
@@ -400,10 +401,7 @@ class GradientComputer:
             # Compute checksum
             package.checksum = self._compute_checksum(package)
 
-            logger.info(
-                f"Computed gradients: {len(examples)} examples, "
-                f"DP epsilon={epsilon}"
-            )
+            logger.info(f"Computed gradients: {len(examples)} examples, " f"DP epsilon={epsilon}")
             return package
 
         except Exception as e:
@@ -608,9 +606,7 @@ class FederatedLearningClient:
         metadata: Optional[dict] = None,
     ) -> str:
         """Add a training example."""
-        return self._collector.add_example(
-            image, detections, is_positive, confidence, metadata
-        )
+        return self._collector.add_example(image, detections, is_positive, confidence, metadata)
 
     def _run_loop(self) -> None:
         """Main federated learning loop."""
@@ -641,9 +637,7 @@ class FederatedLearningClient:
 
     def _process_batch(self) -> None:
         """Process a batch of examples into gradients."""
-        examples = self._collector.get_unused_examples(
-            self._config.max_examples_per_batch
-        )
+        examples = self._collector.get_unused_examples(self._config.max_examples_per_batch)
 
         if len(examples) < self._config.min_examples_per_batch:
             return

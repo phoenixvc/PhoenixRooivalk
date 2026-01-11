@@ -225,11 +225,7 @@ class AdaptiveFrameRateController:
                 if self._latency_history
                 else 0.0
             )
-            avg_fps = (
-                sum(self._fps_history) / len(self._fps_history)
-                if self._fps_history
-                else 0.0
-            )
+            avg_fps = sum(self._fps_history) / len(self._fps_history) if self._fps_history else 0.0
 
             return PerformanceMetrics(
                 inference_latency_ms=avg_latency,
@@ -295,9 +291,7 @@ class AdaptiveFrameRateController:
             else 0
         )
         avg_latency = (
-            sum(self._latency_history) / len(self._latency_history)
-            if self._latency_history
-            else 0
+            sum(self._latency_history) / len(self._latency_history) if self._latency_history else 0
         )
 
         return {

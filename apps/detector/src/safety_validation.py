@@ -486,9 +486,7 @@ def validate_settings(settings) -> list[ValidationResult]:
 
     # Check for critical failures
     critical_failures = [
-        r
-        for r in results
-        if not r.passed and r.severity == ValidationSeverity.CRITICAL
+        r for r in results if not r.passed and r.severity == ValidationSeverity.CRITICAL
     ]
 
     if critical_failures:
@@ -512,6 +510,7 @@ def validate_settings_dict(settings_dict: dict) -> list[ValidationResult]:
     Raises:
         SafetyValidationError: If any CRITICAL validation fails
     """
+
     # Create simple namespace for attribute access
     class SettingsProxy:
         def __init__(self, d: dict):
@@ -553,9 +552,7 @@ def run_startup_validation(settings, strict: bool = True) -> bool:
         warnings = sum(
             1 for r in results if not r.passed and r.severity == ValidationSeverity.WARNING
         )
-        errors = sum(
-            1 for r in results if not r.passed and r.severity == ValidationSeverity.ERROR
-        )
+        errors = sum(1 for r in results if not r.passed and r.severity == ValidationSeverity.ERROR)
 
         if warnings > 0:
             logger.warning(f"Safety validation completed with {warnings} warning(s)")
@@ -600,19 +597,13 @@ def get_validation_summary(results: list[ValidationResult]) -> dict:
         "by_severity": {
             "info": sum(1 for r in results if r.severity == ValidationSeverity.INFO),
             "warning": sum(
-                1
-                for r in results
-                if r.severity == ValidationSeverity.WARNING and not r.passed
+                1 for r in results if r.severity == ValidationSeverity.WARNING and not r.passed
             ),
             "error": sum(
-                1
-                for r in results
-                if r.severity == ValidationSeverity.ERROR and not r.passed
+                1 for r in results if r.severity == ValidationSeverity.ERROR and not r.passed
             ),
             "critical": sum(
-                1
-                for r in results
-                if r.severity == ValidationSeverity.CRITICAL and not r.passed
+                1 for r in results if r.severity == ValidationSeverity.CRITICAL and not r.passed
             ),
         },
         "results": [r.to_dict() for r in results],
