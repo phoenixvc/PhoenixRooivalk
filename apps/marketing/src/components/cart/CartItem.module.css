@@ -1,0 +1,143 @@
+.cartItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary, #09090f);
+  border: 1px solid rgba(249, 115, 22, 0.1);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.cartItem:hover {
+  border-color: rgba(249, 115, 22, 0.3);
+  background: rgba(249, 115, 22, 0.05);
+}
+
+.itemImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 0.375rem;
+  background: var(--bg-primary, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.itemDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.itemName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+  margin: 0;
+}
+
+.itemPhase {
+  font-size: 0.875rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.itemPrice {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--accent, #fbbf24);
+  font-family: "Courier New", monospace;
+}
+
+.monthlyFee {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #cbd5e1);
+  margin-top: 0.25rem;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.quantitySelector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-primary, #0f172a);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 0.375rem;
+  padding: 0.25rem;
+}
+
+.quantityButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary, #fff);
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.quantityButton:hover {
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--primary, #f97316);
+}
+
+.quantityButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.quantityValue {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+  font-family: "Courier New", monospace;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+.removeButton:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .cartItem {
+    flex-direction: column;
+  }
+
+  .itemActions {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
