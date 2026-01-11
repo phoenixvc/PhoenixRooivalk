@@ -118,7 +118,8 @@ python src/main.py --mock
 python src/main.py --model models/drone-detector_int8.tflite --video test_video.mp4
 
 # Specify USB camera index (if multiple cameras)
-python src/main.py --model models/drone-detector_int8.tflite --camera usb --camera-index 1
+python src/main.py --model models/drone-detector_int8.tflite \
+  --camera usb --camera-index 1
 
 # Demo mode (optimized settings for presentations)
 python src/main.py --demo --model models/drone-detector_int8.tflite
@@ -252,13 +253,18 @@ The system uses a modular, interface-based architecture that allows swapping com
 
 ### Swappable Components
 
-| Component       | Implementations                                                   |
-| --------------- | ----------------------------------------------------------------- |
-| FrameSource     | PiCameraSource, USBCameraSource, VideoFileSource, MockFrameSource |
-| InferenceEngine | TFLiteEngine, ONNXEngine, CoralEngine, MockInferenceEngine        |
-| ObjectTracker   | NoOpTracker, CentroidTracker, KalmanTracker                       |
-| AlertHandler    | ConsoleAlertHandler, WebhookAlertHandler, FileAlertHandler        |
-| FrameRenderer   | OpenCVRenderer, HeadlessRenderer, StreamingRenderer               |
+| Component       | Implementations                           |
+| --------------- | ----------------------------------------- |
+| FrameSource     | PiCameraSource, USBCameraSource,          |
+|                 | VideoFileSource, MockFrameSource          |
+| InferenceEngine | TFLiteEngine, ONNXEngine, CoralEngine,    |
+|                 | MockInferenceEngine                       |
+| ObjectTracker   | NoOpTracker, CentroidTracker,             |
+|                 | KalmanTracker                             |
+| AlertHandler    | ConsoleAlertHandler, WebhookAlertHandler, |
+|                 | FileAlertHandler                          |
+| FrameRenderer   | OpenCVRenderer, HeadlessRenderer,         |
+|                 | StreamingRenderer                         |
 
 ## Configuration
 
@@ -374,14 +380,17 @@ if settings.streaming.enabled:
 The detector supports mixing real and mock components for testing:
 
 **Camera Options:**
+
 - `--camera auto` - Auto-detect best available camera (default)
 - `--camera usb` - Use USB webcam explicitly
 - `--camera picamera` - Use Raspberry Pi camera
 - `--camera mock` - Use synthetic frames (for testing without hardware)
-- `--camera-index <n>` - USB camera device index (default: 0, use 1, 2, etc. for multiple cameras)
+- `--camera-index <n>` - USB camera device index (default: 0, use 1, 2,
+  etc. for multiple cameras)
 - `--video <path>` - Use video file instead of camera
 
 **Inference Engine Options:**
+
 - `--engine auto` - Auto-select based on model file (default)
 - `--engine tflite` - Use TensorFlow Lite
 - `--engine onnx` - Use ONNX Runtime
@@ -389,23 +398,33 @@ The detector supports mixing real and mock components for testing:
 - `--engine mock` - Use synthetic detections (for testing without model)
 
 **Display Options:**
+
 - `--headless` - Run without display (no video window)
 - `--quiet` - Suppress hardware detection report on startup
 
 **Demo/Testing Options:**
-- `--demo` - Run in demo mode with optimized settings (good visuals, tracking enabled)
-- `--mock` - Use mock camera and inference (no hardware needed, equivalent to `--camera mock --engine mock`)
-- `--no-auto-configure` - Disable automatic hardware-based configuration (use defaults)
+
+- `--demo` - Run in demo mode with optimized settings (good visuals,
+  tracking enabled)
+- `--mock` - Use mock camera and inference (no hardware needed,
+  equivalent to `--camera mock --engine mock`)
+- `--no-auto-configure` - Disable automatic hardware-based configuration
+  (use defaults)
 
 **The `--mock` Flag:**
-The `--mock` flag is a convenience option that sets **both** camera and inference to mock mode:
+
+The `--mock` flag is a convenience option that sets **both** camera and
+inference to mock mode:
+
 ```bash
 # This is equivalent to: --camera mock --engine mock
 python src/main.py --mock
 ```
 
 **The `--demo` Flag:**
+
 The `--demo` flag optimizes settings for presentations:
+
 - Enables visual overlays (FPS, tracking, scores)
 - Uses centroid tracking
 - Auto-configures for best performance
@@ -446,7 +465,8 @@ terraform apply -var-file="environments/dev.tfvars"
 cd apps/detector
 python scripts/download_public_datasets.py --output ./data --all
 # Or with Roboflow API key for more datasets:
-ROBOFLOW_API_KEY=xxx python scripts/download_public_datasets.py --output ./data --roboflow
+ROBOFLOW_API_KEY=xxx \
+  python scripts/download_public_datasets.py --output ./data --roboflow
 
 # 3. Upload dataset to Azure ML
 RG=$(cd ../../../infra/terraform/ml-training && terraform output -raw resource_group_name)
@@ -502,18 +522,26 @@ The model supports multiple classification configurations. See `configs/` for op
 
 ### MVP Configuration (10 classes)
 
-| Class ID | Name         | Examples                                                 |
-| -------- | ------------ | -------------------------------------------------------- |
-| 0        | drone        | Quadcopters, multirotors, fixed-wing UAVs, racing drones |
-| 1        | bird_small   | Sparrows, finches (<40cm wingspan)                       |
-| 2        | bird_large   | Eagles, hawks, flocks (>40cm wingspan)                   |
-| 3        | aircraft     | Planes, helicopters, gliders, hot air balloons           |
-| 4        | recreational | Kites, party balloons, weather balloons, RC planes       |
-| 5        | sports       | Balls, frisbees, projectiles                             |
-| 6        | debris       | Plastic bags, paper, leaves, feathers                    |
-| 7        | insect       | Flies, bees, dragonflies (close to camera)               |
-| 8        | atmospheric  | Rain, snow, lens flare, artifacts                        |
-| 9        | background   | Sky, clouds, nothing detected                            |
+| Class ID | Name         | Examples                       |
+| -------- | ------------ | ------------------------------ |
+| 0        | drone        | Quadcopters, multirotors,      |
+|          |              | fixed-wing UAVs, racing drones |
+| 1        | bird_small   | Sparrows, finches              |
+|          |              | (<40cm wingspan)               |
+| 2        | bird_large   | Eagles, hawks, flocks          |
+|          |              | (>40cm wingspan)               |
+| 3        | aircraft     | Planes, helicopters, gliders,  |
+|          |              | hot air balloons               |
+| 4        | recreational | Kites, party balloons,         |
+|          |              | weather balloons, RC planes    |
+| 5        | sports       | Balls, frisbees, projectiles   |
+| 6        | debris       | Plastic bags, paper, leaves,   |
+|          |              | feathers                       |
+| 7        | insect       | Flies, bees, dragonflies       |
+|          |              | (close to camera)              |
+| 8        | atmospheric  | Rain, snow, lens flare,        |
+|          |              | artifacts                      |
+| 9        | background   | Sky, clouds, nothing detected  |
 
 ### Binary Configuration (2 classes)
 
@@ -709,9 +737,14 @@ Log files automatically rotate when they reach `max_bytes` (default: 10MB):
 ```
 
 **File Output (JSON format):**
+
 ```json
-{"timestamp": "2026-01-07T12:00:00Z", "level": "INFO", "logger": "drone_detector", "message": "Pipeline started", "module": "main", "function": "main", "line": 432}
-{"timestamp": "2026-01-07T12:00:01Z", "level": "WARNING", "logger": "drone_detector", "message": "DRONE DETECTED: conf=0.87 score=0.92", "frame_number": 150, "confidence": 0.87, "drone_score": 0.92}
+{"timestamp": "2026-01-07T12:00:00Z", "level": "INFO",
+  "logger": "drone_detector", "message": "Pipeline started",
+  "module": "main", "function": "main", "line": 432}
+{"timestamp": "2026-01-07T12:00:01Z", "level": "WARNING",
+  "logger": "drone_detector", "message": "DRONE DETECTED: conf=0.87 score=0.92",
+  "frame_number": 150, "confidence": 0.87, "drone_score": 0.92}
 ```
 
 ### Saving Detection Data
@@ -802,7 +835,11 @@ libcamera-hello --timeout 5000  # Should show preview window
 libcamera-vid -t 5000 -o test.h264  # Records 5 seconds
 
 # For USB webcam (OpenCV test)
-python3 -c "import cv2; cap = cv2.VideoCapture(0); print('Camera opened:', cap.isOpened()); ret, frame = cap.read(); print('Frame read:', ret, 'Shape:', frame.shape if ret else 'N/A'); cap.release()"
+python3 -c "import cv2; cap = cv2.VideoCapture(0); \
+  print('Camera opened:', cap.isOpened()); \
+  ret, frame = cap.read(); \
+  print('Frame read:', ret, 'Shape:', \
+  frame.shape if ret else 'N/A'); cap.release()"
 
 # Check video devices
 ls -la /dev/video*  # Should list video devices
