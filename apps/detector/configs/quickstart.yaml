@@ -1,0 +1,24 @@
+# Quickstart Configuration
+# Raspberry Pi 4 + Pi Camera v2.1 + YOLOv5n
+#
+# Usage:
+#   python src/main.py --config configs/quickstart.yaml
+
+camera_type: picamera
+engine_type: tflite
+tracker_type: centroid
+
+capture:
+  width: 640
+  height: 480
+  fps: 30
+
+inference:
+  model_path: "models/yolov5n_int8.tflite"
+  input_size: 320
+  confidence_threshold: 0.5
+
+display:
+  headless: false
+  show_fps: true
+  show_drone_score: true
