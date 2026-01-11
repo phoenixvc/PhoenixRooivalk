@@ -221,7 +221,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     elif args.camera and args.camera != "auto":
         camera_type = args.camera
     else:
-        camera_type = str(settings.camera_type)
+        camera_type = settings.camera_type.value
 
     # Get video file from settings or args
     video_file = args.video if args.video else getattr(settings.capture, "video_path", None)
@@ -232,10 +232,10 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     elif args.engine and args.engine != "auto":
         engine_type = args.engine
     else:
-        engine_type = str(settings.engine_type)
+        engine_type = settings.engine_type.value
 
     # Get tracker type (CLI takes precedence)
-    tracker_type = args.tracker if args.tracker else str(settings.tracker_type)
+    tracker_type = args.tracker if args.tracker else settings.tracker_type.value
 
     # Build kwargs with safe attribute access
     kwargs = {

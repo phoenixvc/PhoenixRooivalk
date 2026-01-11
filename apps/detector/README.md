@@ -65,6 +65,31 @@ That's it. You should see a live video feed with detections.
 - [Configuration Reference](docs/configuration.md) - All available settings
 - [Train Custom Model](#training-on-azure-ml) - Better accuracy for drone detection
 
+### Troubleshooting
+
+**Pi Camera not detected:**
+
+```bash
+# Check if Pi Camera is detected
+libcamera-hello --list-cameras
+
+# If not detected, enable it
+sudo raspi-config  # Interface Options > Camera > Enable
+sudo reboot
+```
+
+**USB camera detected instead of Pi Camera:**
+
+The hardware auto-detection found a USB camera. Either:
+- Use it: change `camera_type: usb` in config, or
+- Fix Pi Camera detection (see above)
+
+**Override camera from CLI:**
+
+```bash
+python src/main.py --config configs/quickstart.yaml --camera usb
+```
+
 ## Project Structure
 
 ```text
