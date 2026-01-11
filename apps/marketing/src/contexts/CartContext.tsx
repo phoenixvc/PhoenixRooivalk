@@ -39,7 +39,8 @@ function loadCartFromStorage(): CartItem[] {
       return JSON.parse(stored);
     }
   } catch (error) {
-    console.error("Failed to load cart from storage:", error);
+    // Silent fail - return empty cart if storage is unavailable
+    // This handles cases like private browsing or storage quota exceeded
   }
   return [];
 }
@@ -53,7 +54,8 @@ function saveCartToStorage(items: CartItem[]): void {
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
-    console.error("Failed to save cart to storage:", error);
+    // Silent fail - cart will work in memory only if storage is unavailable
+    // This handles cases like private browsing or storage quota exceeded
   }
 }
 

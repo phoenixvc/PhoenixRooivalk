@@ -64,7 +64,7 @@ export default function PreorderPage(): React.ReactElement {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the order to your backend
-    console.log("Order submitted:", { cart: items, customer: formData });
+    // TODO: Implement backend API call for order submission
     alert(
       "Thank you for your preorder! We'll contact you shortly to confirm details.",
     );
