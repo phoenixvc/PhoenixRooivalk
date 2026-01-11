@@ -14,6 +14,7 @@ Privacy features:
 - Secure aggregation prevents server from seeing individual gradients
 """
 
+import base64
 import hashlib
 import json
 import logging
@@ -22,11 +23,9 @@ import sqlite3
 import threading
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
-import base64
+from typing import Any, Callable, Optional
 
 import numpy as np
 
@@ -49,11 +48,11 @@ class LocalExample:
 
     example_id: str
     image_hash: str  # SHA256 of image (image itself not stored)
-    detections: List[Dict]  # Ground truth or corrections
+    detections: list[dict]  # Ground truth or corrections
     is_positive: bool  # Contains drone
     confidence: float  # Detection confidence
     timestamp: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -64,7 +63,7 @@ class GradientPackage:
     node_id: str
     model_version: str
     num_examples: int
-    gradients: Dict[str, np.ndarray]  # layer_name → gradient array
+    gradients: dict[str, np.ndarray]  # layer_name → gradient array
     created_at: float
     differential_privacy_epsilon: Optional[float] = None
     checksum: str = ""
@@ -145,10 +144,10 @@ class LocalDataCollector:
     def add_example(
         self,
         image: np.ndarray,
-        detections: List[Dict],
+        detections: list[dict],
         is_positive: bool,
         confidence: float,
-        metadata: Optional[Dict] = None,
+        metadata: Optional[dict] = None,
     ) -> str:
         """
         Add a training example.
@@ -202,7 +201,7 @@ class LocalDataCollector:
 
         return example_id
 
-    def get_unused_examples(self, limit: int = 500) -> List[LocalExample]:
+    def get_unused_examples(self, limit: int = 500) -> list[LocalExample]:
         """Get examples not yet used in gradient computation."""
         with self._lock:
             with sqlite3.connect(self._db_path) as conn:
@@ -231,13 +230,14 @@ class LocalDataCollector:
             for row in rows
         ]
 
-    def mark_used(self, example_ids: List[str]) -> None:
+    def mark_used(self, example_ids: list[str]) -> None:
         """Mark examples as used in gradient computation."""
         with self._lock:
             with sqlite3.connect(self._db_path) as conn:
+                # Placeholders are only "?" characters - values passed separately as parameters
                 placeholders = ",".join("?" * len(example_ids))
                 conn.execute(
-                    f"UPDATE examples SET used_in_gradient = 1 WHERE example_id IN ({placeholders})",
+                    f"UPDATE examples SET used_in_gradient = 1 WHERE example_id IN ({placeholders})",  # nosec B608
                     example_ids,
                 )
                 conn.commit()
@@ -262,7 +262,7 @@ class LocalDataCollector:
 
         return count
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get collection statistics."""
         with sqlite3.connect(self._db_path) as conn:
             total = conn.execute("SELECT COUNT(*) FROM examples").fetchone()[0]
@@ -323,7 +323,7 @@ class GradientComputer:
 
     def compute_gradients(
         self,
-        examples: List[LocalExample],
+        examples: list[LocalExample],
         add_noise: bool = True,
     ) -> Optional[GradientPackage]:
         """
@@ -432,9 +432,17 @@ class GradientUploader:
 
     def __init__(self, config: FederatedConfig):
         """Initialize uploader."""
+        from urllib.parse import urlparse
+
         self._config = config
-        self._pending_uploads: List[GradientPackage] = []
+        self._pending_uploads: list[GradientPackage] = []
         self._lock = threading.Lock()
+
+        # Validate server URL scheme if configured
+        if config.server_url:
+            parsed = urlparse(config.server_url)
+            if parsed.scheme not in ("http", "https"):
+                raise ValueError(f"Invalid server URL scheme: {parsed.scheme}")
 
     def queue_upload(self, package: GradientPackage) -> None:
         """Queue a gradient package for upload."""
@@ -442,7 +450,7 @@ class GradientUploader:
             self._pending_uploads.append(package)
             logger.info(f"Queued gradient package {package.package_id}")
 
-    def upload_pending(self) -> Tuple[int, int]:
+    def upload_pending(self) -> tuple[int, int]:
         """
         Upload all pending gradient packages.
 
@@ -478,8 +486,8 @@ class GradientUploader:
             serialized = self._serialize_package(package)
 
             # Upload to server
-            import urllib.request
             import urllib.error
+            import urllib.request
 
             req = urllib.request.Request(
                 f"{self._config.server_url}/api/federated/gradients",
@@ -492,7 +500,8 @@ class GradientUploader:
                     "X-Checksum": package.checksum,
                 },
             )
-            urllib.request.urlopen(
+            # URL scheme validated in __init__ to be http/https only
+            urllib.request.urlopen(  # nosec B310 # nosemgrep
                 req, timeout=self._config.upload_timeout_seconds
             )
 
@@ -593,10 +602,10 @@ class FederatedLearningClient:
     def add_example(
         self,
         image: np.ndarray,
-        detections: List[Dict],
+        detections: list[dict],
         is_positive: bool,
         confidence: float,
-        metadata: Optional[Dict] = None,
+        metadata: Optional[dict] = None,
     ) -> str:
         """Add a training example."""
         return self._collector.add_example(
@@ -644,7 +653,7 @@ class FederatedLearningClient:
             self._uploader.queue_upload(package)
             self._collector.mark_used([e.example_id for e in examples])
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get federated learning statistics."""
         return {
             "node_id": self._config.node_id,

@@ -40,8 +40,25 @@ detection and countermeasure products.
    - [NetSentry Lite](#netsentry-lite)
    - [NetSentry Standard](#netsentry-standard)
    - [NetSentry Pro](#netsentry-pro)
-3. [Commercial Alternatives](#commercial-alternatives)
-4. [Appendix: Supplier Directory](#appendix-supplier-directory)
+3. [Consumer Products (SkySnare Line)](#consumer-products-skysnare-line)
+   - [SkySnare](#skysnare)
+4. [Ground Launchers (NetSnare Line)](#ground-launchers-netsnare-line)
+   - [NetSnare Lite](#netsnare-lite)
+   - [NetSnare Standard](#netsnare-standard)
+   - [NetSnare Pro](#netsnare-pro)
+5. [Enterprise Platforms (AeroNet)](#enterprise-platforms-aeronet)
+   - [AeroNet Enterprise](#aeronet-enterprise)
+   - [AeroNet Command](#aeronet-command)
+6. [Aerial Intercept Systems (RKV Line)](#aerial-intercept-systems-rkv-line)
+   - [RKV-M Mothership](#rkv-m-mothership)
+   - [RKV-I Interceptor](#rkv-i-interceptor)
+   - [RKV-G Ground Station](#rkv-g-ground-station)
+7. [Manufacturing & Pricing Data](#manufacturing--pricing-data)
+   - [Assembly Time Estimates](#assembly-time-estimates)
+   - [Category Markups](#category-markups)
+   - [Labor Tariffs](#labor-tariffs)
+8. [Commercial Alternatives](#commercial-alternatives)
+9. [Appendix: Supplier Directory](#appendix-supplier-directory)
 
 ---
 
@@ -50,7 +67,7 @@ detection and countermeasure products.
 ## SkyWatch Nano
 
 **SKU:** SW-NANO-001 **Target Market:** Hobbyists, makers, educational **Price
-Range:** $50-100
+Range:** $50-100 **Phase:** Seed (Available Now)
 
 ### Overview
 
@@ -203,7 +220,7 @@ alert:
 ## SkyWatch Standard
 
 **SKU:** SW-STD-001 **Target Market:** Homeowners, small property **Price
-Range:** $100-250
+Range:** $100-250 **Phase:** Seed (Available Now)
 
 ### Overview
 
@@ -402,6 +419,7 @@ alert:
    ```
 
 5. **Create Service**
+
    ```bash
    sudo cp systemd/skywatch.service /etc/systemd/system/
    sudo systemctl enable skywatch
@@ -432,7 +450,7 @@ alert:
 ## SkyWatch Pro
 
 **SKU:** SW-PRO-001 **Target Market:** Farms, estates, commercial property
-**Price Range:** $250-600
+**Price Range:** $250-600 **Phase:** Seed (Available Now)
 
 ### Overview
 
@@ -678,7 +696,7 @@ rf_detection:
 ## SkyWatch Mobile
 
 **SKU:** SW-MOB-001 **Target Market:** Security patrols, event staff **Price
-Range:** $200-500
+Range:** $200-500 **Phase:** Series A (Q4 2026 • Delivery Jan 2027)
 
 ### Overview
 
@@ -823,6 +841,7 @@ logging:
    ```
 
 3. **Internal Layout**
+
    ```
    ┌────────────────────────────────────┐
    │  Camera ○                          │
@@ -877,7 +896,7 @@ logging:
 ## SkyWatch Thermal
 
 **SKU:** SW-THM-001 **Target Market:** 24/7 operations, night security **Price
-Range:** $400-1,500
+Range:** $400-1,500 **Phase:** Series A (Q1 2027 • Delivery Apr 2027)
 
 ### Overview
 
@@ -1037,7 +1056,7 @@ logging:
 ## SkyWatch Marine
 
 **SKU:** SW-MAR-001 **Target Market:** Vessels, marinas, coastal facilities
-**Price Range:** $600-2,000
+**Price Range:** $600-2,000 **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -1217,7 +1236,8 @@ $PDRN,143052,3744.123,N,12223.456,W,245.5,087.3,85*7A
 ## SkyWatch Mesh
 
 **SKU:** SW-MESH-001 **Target Market:** Large perimeters, farms, industrial
-sites **Price Range:** $500-2,000/node + central
+sites **Price Range:** $500-2,000/node + central **Phase:** Series A (Q2 2027 •
+Delivery Jul 2027)
 
 ### Overview
 
@@ -1428,7 +1448,8 @@ logging:
 ## SkyWatch Enterprise
 
 **SKU:** SW-ENT-001 **Target Market:** Corporate campuses, critical
-infrastructure **Price Range:** $5,000-20,000
+infrastructure **Price Range:** $5,000-20,000 **Phase:** Series A (Q4 2027 •
+Delivery Jan 2028)
 
 ### Overview
 
@@ -1634,7 +1655,7 @@ api:
 ## NetSentry Lite
 
 **SKU:** NS-LITE-001 **Target Market:** Makers, hobbyists, testing **Price
-Range:** $150-400
+Range:** $150-400 **Phase:** Seed (Q3 2026 • Delivery Oct 2026)
 
 ### Overview
 
@@ -1697,7 +1718,7 @@ targeting:
 ## NetSentry Standard
 
 **SKU:** NS-STD-001 **Target Market:** Property protection **Price Range:**
-$400-800
+$400-800 **Phase:** Series A (Q1 2027 • Delivery Apr 2027)
 
 ### Overview
 
@@ -1769,7 +1790,7 @@ targeting:
 ## NetSentry Pro
 
 **SKU:** NS-PRO-001 **Target Market:** Security professionals **Price Range:**
-$800-2,000
+$800-2,000 **Phase:** Series A (Q2 2027 • Delivery Jul 2027)
 
 ### Overview
 
@@ -1870,6 +1891,611 @@ alert:
   log_all_fires: true
   video_clip_on_fire: true
 ```
+
+---
+
+# Consumer Products (SkySnare Line)
+
+## SkySnare
+
+**SKU:** SS-001 **Target Market:** Consumer/D2C, outdoor enthusiasts, property
+owners **Price:** $349 MSRP **Phase:** Seed (Q2 2026 • Delivery Jul 2026)
+
+### Overview
+
+Direct-to-consumer drone capture device. Handheld net launcher designed for
+personal property protection. Simple point-and-shoot operation with no technical
+knowledge required.
+
+### Specifications
+
+| Specification   | Value            |
+| --------------- | ---------------- |
+| Launch Range    | 15-30m effective |
+| Net Size        | 2m × 2m (4 m²)   |
+| Net Material    | HDPE/Nylon blend |
+| Mesh Size       | 40mm × 40mm      |
+| Net Weight      | 85g              |
+| Reload Time     | 30 seconds       |
+| Launcher Weight | ~1.2kg           |
+| Power           | CO2 cartridge    |
+| Operating Temp  | -10°C to 50°C    |
+
+### Bill of Materials
+
+| Item                  | Specification        | Qty | Unit Cost | Total       | Supplier       |
+| --------------------- | -------------------- | --- | --------- | ----------- | -------------- |
+| Launcher Body         | Injection molded ABS | 1   | $25.00    | $25.00      | Contract mfg   |
+| CO2 Mechanism         | 12g cartridge system | 1   | $35.00    | $35.00      | Palmer Pursuit |
+| Net Assembly          | HDPE/Nylon, weighted | 1   | $20.00    | $20.00      | In-house       |
+| Trigger Assembly      | Mechanical           | 1   | $15.00    | $15.00      | Contract mfg   |
+| Safety Mechanism      | Dual-stage           | 1   | $10.00    | $10.00      | Contract mfg   |
+| Barrel Assembly       | Aluminum, anodized   | 1   | $18.00    | $18.00      | CNC supplier   |
+| Packaging             | Retail box, manual   | 1   | $8.00     | $8.00       | Print supplier |
+| CO2 Cartridges (3-pk) | 12g, included        | 1   | $4.00     | $4.00       | Various        |
+| **TOTAL BOM**         |                      |     |           | **$135.00** |                |
+
+### Manufacturing & Pricing
+
+| Cost Component | Value       |
+| -------------- | ----------- |
+| BOM Cost       | $135.00     |
+| Labor Cost     | $9.72       |
+| Machine Cost   | $3.00       |
+| **Total COGS** | **$147.72** |
+| Markup         | 158%        |
+| **MSRP**       | **$349.00** |
+| Gross Margin   | 58%         |
+| Assembly Time  | 1.04 hours  |
+
+### Market Data
+
+| Metric               | Value              |
+| -------------------- | ------------------ |
+| Target Market        | $3.22B outdoor toy |
+| TAM                  | $1.68B             |
+| Year 1 Unit Target   | 5,000 units        |
+| Customer Acquisition | $80-100            |
+| Expected Return Rate | 8-10%              |
+
+### Included Accessories
+
+- SkySnare launcher unit
+- 3× CO2 cartridges
+- 2× capture nets
+- Quick-start guide
+- Safety manual
+- Carrying strap
+
+### Safety Features
+
+1. **Dual-stage trigger** - Prevents accidental discharge
+2. **Muzzle guard** - Physical barrier until ready to fire
+3. **Pressure indicator** - Shows CO2 status
+4. **Training mode** - Dry-fire practice capability
+
+### Commercial Alternatives
+
+| Product          | Price    | Comparison                    |
+| ---------------- | -------- | ----------------------------- |
+| SkyWall Patrol   | $30,000+ | Professional, much larger     |
+| Drone Defender   | $15,000+ | RF jammer, legal restrictions |
+| DIY net launcher | $50-200  | Unreliable, no support        |
+
+---
+
+# Ground Launchers (NetSnare Line)
+
+Ground-mounted net launchers that pair with SkyWatch detection systems for
+automated drone capture. Unlike NetSentry (integrated detection + launcher),
+NetSnare is a standalone launcher that receives targeting commands from external
+detection systems.
+
+## NetSnare Lite
+
+**SKU:** NSN-LITE-001 **Target Market:** DIY enthusiasts, property owners
+**Price Range:** $200-400 **Phase:** Seed (Q2 2026 • Delivery Jul 2026)
+
+### Overview
+
+Spring-powered ground-mounted net launcher. Pairs with any SkyWatch detector via
+API for semi-automated drone capture. Perfect for backyard defense when combined
+with SkyWatch Standard.
+
+### Specifications
+
+| Specification  | Value                      |
+| -------------- | -------------------------- |
+| Launch Range   | 10-20m effective           |
+| Net Size       | 2m × 2m weighted           |
+| Trigger        | API/App trigger            |
+| Reload Time    | 30 seconds manual          |
+| Mount Options  | Ground stake, surface bolt |
+| Power          | 12V DC or battery          |
+| Weather Rating | IP54                       |
+
+### Bill of Materials
+
+| Item               | Specification        | Qty | Unit Cost | Total       | Supplier       |
+| ------------------ | -------------------- | --- | --------- | ----------- | -------------- |
+| Spring Mechanism   | 50lb rated           | 1   | $35.00    | $35.00      | Hardware store |
+| Ground Mount Base  | Aluminum, stake      | 1   | $25.00    | $25.00      | Custom         |
+| Net Assembly       | 2m, weighted corners | 1   | $30.00    | $30.00      | In-house       |
+| Microcontroller    | ESP32                | 1   | $8.00     | $8.00       | Various        |
+| Relay Module       | 12V                  | 1   | $5.00     | $5.00       | Amazon         |
+| Enclosure          | IP54 rated           | 1   | $15.00    | $15.00      | Amazon         |
+| Misc (wiring, etc) | Various              | 1   | $7.00     | $7.00       | Various        |
+| **TOTAL**          |                      |     |           | **$125.00** |                |
+
+### Features
+
+- SkyWatch API integration for automated targeting
+- Mobile app manual trigger
+- Weather resistant enclosure
+- Multiple mounting options
+- Low maintenance spring mechanism
+
+---
+
+## NetSnare Standard
+
+**SKU:** NSN-STD-001 **Target Market:** Property owners, farms, small businesses
+**Price Range:** $500-800 **Phase:** Series A (Q4 2026 • Delivery Jan 2027)
+
+### Overview
+
+CO2-powered ground launcher with faster response and longer range. Full SkyWatch
+integration for automated targeting when paired with SkyWatch Standard or Pro.
+
+### Specifications
+
+| Specification  | Value                |
+| -------------- | -------------------- |
+| Launch Range   | 20-35m effective     |
+| Response Time  | 100ms from trigger   |
+| Net Size       | 2.5m × 2.5m weighted |
+| Trigger        | Auto from SkyWatch   |
+| Reload         | CO2 cartridge swap   |
+| Cost per Shot  | $1-2                 |
+| Weather Rating | IP65                 |
+
+### Bill of Materials
+
+| Item                  | Specification     | Qty | Unit Cost | Total       | Supplier       |
+| --------------------- | ----------------- | --- | --------- | ----------- | -------------- |
+| CO2 Puncture Assembly | 16g cartridge     | 1   | $60.00    | $60.00      | Palmer Pursuit |
+| Barrel Assembly       | Aluminum, 4"      | 1   | $40.00    | $40.00      | Custom         |
+| Ground Mount Platform | Heavy duty, 360°  | 1   | $45.00    | $45.00      | Custom         |
+| Net Assembly          | 2.5m, auto-deploy | 1   | $50.00    | $50.00      | In-house       |
+| Controller Board      | ESP32 + relay     | 1   | $25.00    | $25.00      | Custom PCB     |
+| Solenoid Valve        | 12V NC            | 1   | $30.00    | $30.00      | Amazon         |
+| Enclosure             | IP65              | 1   | $25.00    | $25.00      | Polycase       |
+| Misc                  | Various           | 1   | $10.00    | $10.00      | Various        |
+| **TOTAL**             |                   |     |           | **$285.00** |                |
+
+### Features
+
+- CO2 powered for faster response
+- Full SkyWatch API integration
+- Auto-trigger on detection
+- IP65 weatherproof
+- Quick CO2 reload
+
+---
+
+## NetSnare Pro
+
+**SKU:** NSN-PRO-001 **Target Market:** Commercial facilities, critical
+infrastructure **Price Range:** $1,200-2,000 **Phase:** Series A (Q2 2027 •
+Delivery Jul 2027)
+
+### Overview
+
+Pneumatic ground launcher with pan-tilt tracking for predictive targeting. Full
+autonomous operation when paired with SkyWatch Pro or Enterprise. Multi-shot
+capability with air tank.
+
+### Specifications
+
+| Specification  | Value               |
+| -------------- | ------------------- |
+| Launch Range   | 30-50m effective    |
+| Response Time  | 50ms from trigger   |
+| Tracking       | Pan-tilt motorized  |
+| Coverage Arc   | 180° horizontal     |
+| Net Size       | 3m auto-deploy      |
+| Reload         | Air tank refillable |
+| Shots per Fill | 10-15               |
+| Weather Rating | IP66                |
+
+### Bill of Materials
+
+| Item            | Specification        | Qty | Unit Cost | Total       | Supplier   |
+| --------------- | -------------------- | --- | --------- | ----------- | ---------- |
+| Air Tank        | 48ci, 3000psi        | 1   | $100.00   | $100.00     | Paintball  |
+| Regulator       | Adjustable output    | 1   | $80.00    | $80.00      | Ninja      |
+| Solenoid Valve  | MAC 35A              | 1   | $50.00    | $50.00      | MAC Valves |
+| Barrel Assembly | Aluminum, multi-shot | 1   | $80.00    | $80.00      | Custom     |
+| Pan-Tilt Mount  | Heavy duty           | 1   | $120.00   | $120.00     | ServoCity  |
+| Net System      | 3m, auto-deploy × 3  | 3   | $40.00    | $120.00     | In-house   |
+| Controller      | Pi Zero + custom     | 1   | $45.00    | $45.00      | Custom     |
+| Ground Platform | Concrete anchor      | 1   | $35.00    | $35.00      | Custom     |
+| Enclosure       | IP66 industrial      | 1   | $40.00    | $40.00      | Polycase   |
+| Misc            | Various              | 1   | $10.00    | $10.00      | Various    |
+| **TOTAL**       |                      |     |           | **$680.00** |            |
+
+### Features
+
+- Pneumatic launcher with pan-tilt tracking
+- Predictive targeting algorithms
+- Multi-shot magazine (3 nets)
+- Air tank refillable (free shots)
+- Remote monitoring dashboard
+- 180° coverage arc
+
+### Commercial Alternatives
+
+| Product        | Price    | Comparison                    |
+| -------------- | -------- | ----------------------------- |
+| SkyWall 100    | $25,000+ | Similar concept, military     |
+| DroneGun MKIII | $30,000+ | RF jammer, different approach |
+| Drone Catcher  | $15,000+ | Drone-mounted net system      |
+
+---
+
+# Enterprise Platforms (AeroNet)
+
+## AeroNet Enterprise
+
+**SKU:** AN-ENT-001 **Target Market:** Critical infrastructure, airports,
+prisons, military bases **Price:** $150K setup + $25K/month **Phase:** Series A
+(Q2 2027 • Delivery Jul 2027)
+
+### Overview
+
+Full-scale enterprise drone detection and response platform. Multi-sensor
+integration with centralized command and control. Designed for 24/7 operations
+with SOC integration.
+
+### Specifications
+
+| Specification       | Value                                |
+| ------------------- | ------------------------------------ |
+| Detection Range     | 2-5 km (multi-sensor fusion)         |
+| Coverage Area       | Up to 10 km² per installation        |
+| Sensor Types        | Visual, Thermal, RF, Radar, Acoustic |
+| Response Time       | <120ms detection to alert            |
+| Accuracy            | 99.5%                                |
+| False Positive Rate | <0.3%                                |
+| Concurrent Targets  | 50+                                  |
+| Uptime SLA          | 99.9%                                |
+| API                 | REST, WebSocket, MQTT                |
+
+### System Components
+
+| Component               | Quantity | Unit Cost | Total        |
+| ----------------------- | -------- | --------- | ------------ |
+| Detection Nodes         | 10-20    | $1,500    | $15,000-30K  |
+| Central Server          | 1-2      | $5,000    | $5,000-10K   |
+| PTZ Cameras             | 4-8      | $2,500    | $10,000-20K  |
+| RF Detection Array      | 1        | $8,000    | $8,000       |
+| Radar Unit (optional)   | 1        | $15,000   | $15,000      |
+| Networking Equipment    | 1        | $5,000    | $5,000       |
+| Installation & Training | 1        | $20,000   | $20,000      |
+| **Typical Total**       |          |           | **$80-120K** |
+
+### Manufacturing & Pricing
+
+| Cost Component    | Value        |
+| ----------------- | ------------ |
+| Hardware BOM      | $50,000      |
+| Labor (200 hours) | $7,200       |
+| Machine/Equipment | $2,000       |
+| **Total COGS**    | **$59,200**  |
+| Markup            | 200%         |
+| **Setup Fee**     | **$150,000** |
+| **Monthly SaaS**  | **$25,000**  |
+| Target Margin     | 60%          |
+| Assembly Time     | 216 hours    |
+
+### Subscription Tiers
+
+| Tier         | Monthly | Features                                 |
+| ------------ | ------- | ---------------------------------------- |
+| Standard     | $15K    | Detection, alerts, basic analytics       |
+| Professional | $25K    | + Response coordination, API access      |
+| Enterprise   | $40K    | + Custom integrations, dedicated support |
+
+### Integrations
+
+- **SIEM:** Splunk, QRadar, Sentinel
+- **VMS:** Milestone, Genetec, Avigilon
+- **Access Control:** Lenel, CCURE, Genetec
+- **C2 Systems:** Custom military integrations
+
+### Commercial Alternatives
+
+| Product        | Price       | Comparison                   |
+| -------------- | ----------- | ---------------------------- |
+| Dedrone City   | $100K+/year | Similar scope, cloud-based   |
+| DroneShield    | $200K+      | RF-focused, less integration |
+| Fortem SkyDome | $500K+      | Includes defeat capability   |
+
+---
+
+## AeroNet Command
+
+**SKU:** AN-CMD-001 **Target Market:** Enterprise security teams, SOC operators
+**Price:** $25K-50K license + $2.5K/month **Phase:** Series A (Q1 2027 •
+Delivery Apr 2027)
+
+### Overview
+
+Centralized command and control software for multi-site drone defense
+coordination. Includes real-time threat visualization, incident response
+playbooks, and operator training simulator.
+
+### Specifications
+
+| Specification     | Value                  |
+| ----------------- | ---------------------- |
+| Deployment        | Cloud or on-premise    |
+| Sites per License | Unlimited              |
+| Operators         | Unlimited              |
+| API               | REST, WebSocket, MQTT  |
+| Uptime SLA        | 99.9%                  |
+| Data Retention    | 90 days (configurable) |
+| Mobile App        | iOS, Android           |
+
+### Features
+
+- **Multi-Site Dashboard**: Real-time monitoring of all AeroNet deployments
+- **Threat Visualization**: 3D map with live drone tracks and threat corridors
+- **Operator Training Simulator**: Built-in threat simulation for training
+- **Incident Response Playbooks**: Automated response workflows
+- **Compliance Reporting**: SIEM-compatible audit logs
+- **Mobile Command**: iOS/Android app for on-the-go monitoring
+
+### Pricing Tiers
+
+| Tier       | Sites | License | Monthly | Features              |
+| ---------- | ----- | ------- | ------- | --------------------- |
+| Standard   | 1-5   | $25,000 | $2,500  | Core C2 features      |
+| Pro        | 6-20  | $40,000 | $4,000  | + Training simulator  |
+| Enterprise | 20+   | $50,000 | Custom  | + Custom integrations |
+
+### Commercial Alternatives
+
+| Product      | Price      | Comparison                   |
+| ------------ | ---------- | ---------------------------- |
+| Dedrone C2   | $50K+/year | Similar features, cloud-only |
+| DroneTracker | $30K+/year | Detection-focused            |
+| Custom SIEM  | Varies     | Requires integration work    |
+
+---
+
+# Aerial Intercept Systems (RKV Line)
+
+## RKV-M Mothership
+
+**SKU:** RKV-M-001 **Target Market:** Military, critical infrastructure **Price
+Range:** $65,000-85,000 **Phase:** Series C (Q2 2029 • Delivery Aug 2029)
+
+### Overview
+
+Aerial VTOL platform serving as picket, relay, and interceptor launch platform.
+Ducted fan design for safe urban operations. Carries multiple net launcher pods.
+
+### Specifications
+
+| Specification      | Value             |
+| ------------------ | ----------------- |
+| Max Speed          | >150 km/h         |
+| Hover Endurance    | 8-12 minutes      |
+| Cruise Endurance   | 15-20 minutes     |
+| Operating Altitude | 0-500m AGL        |
+| Max Altitude       | 1,000m AGL        |
+| Time to Launch     | <3 seconds        |
+| Intercept Range    | 500m from station |
+| Closure Rate       | >200 km/h         |
+| Yaw Rate           | ±60°/s            |
+| Duct Diameter      | 600mm             |
+| Payload Capacity   | 4× net pods       |
+| TRL                | 7                 |
+
+### Bill of Materials (Estimated)
+
+| Item                  | Specification        | Qty | Unit Cost | Total       |
+| --------------------- | -------------------- | --- | --------- | ----------- |
+| Carbon Fiber Airframe | Custom layup         | 1   | $5,000    | $5,000      |
+| Ducted Fan Assembly   | 600mm, 3-blade       | 1   | $3,500    | $3,500      |
+| Motor System          | 16-20S HV outrunner  | 1   | $2,000    | $2,000      |
+| Flight Controller     | Pixhawk 6X + sensors | 1   | $1,500    | $1,500      |
+| Avionics Package      | GPS, altimeter, IMU  | 1   | $2,500    | $2,500      |
+| Communication System  | Mesh radio, video TX | 1   | $3,000    | $3,000      |
+| Net Pod Launchers     | Pneumatic, 4-pack    | 4   | $800      | $3,200      |
+| Battery System        | 16S 22000mAh         | 2   | $1,200    | $2,400      |
+| Targeting System      | Camera, processor    | 1   | $1,500    | $1,500      |
+| Misc (wiring, mounts) | Various              | 1   | $400      | $400        |
+| **TOTAL BOM**         |                      |     |           | **$25,000** |
+
+### Manufacturing & Pricing
+
+| Cost Component   | Value       |
+| ---------------- | ----------- |
+| BOM Cost         | $25,000     |
+| Labor (83 hours) | $3,236      |
+| Machine Cost     | $1,500      |
+| **Total COGS**   | **$29,736** |
+| Markup           | 220%        |
+| **Est. Price**   | **$65,418** |
+| Target Margin    | 65%         |
+| Assembly Time    | 83.2 hours  |
+
+---
+
+## RKV-I Interceptor
+
+**SKU:** RKV-I-001 **Target Market:** Military, paired with RKV-M **Price
+Range:** $8,000-12,000 **Phase:** Series C (Q2 2029 • Delivery Aug 2029)
+
+### Overview
+
+Expendable/recoverable mini interceptor drone. Launched from RKV-M mothership or
+ground station. Carries single net payload for drone capture.
+
+### Specifications
+
+| Specification   | Value               |
+| --------------- | ------------------- |
+| Max Speed       | >180 km/h           |
+| Endurance       | 3-5 minutes         |
+| Operating Range | 500m from launcher  |
+| Net Payload     | 3m × 3m capture net |
+| Guidance        | Visual + RF homing  |
+| Recovery        | Parachute + locator |
+| Weight          | ~2 kg               |
+| Wingspan        | 400mm               |
+| Reusability     | 5-10 missions       |
+
+### Bill of Materials (Estimated)
+
+| Item                  | Specification      | Qty | Unit Cost | Total      |
+| --------------------- | ------------------ | --- | --------- | ---------- |
+| Airframe              | Carbon/foam hybrid | 1   | $800      | $800       |
+| Motor/ESC             | Brushless system   | 1   | $400      | $400       |
+| Flight Controller     | F7 + GPS           | 1   | $300      | $300       |
+| Targeting Camera      | Wide-angle HD      | 1   | $200      | $200       |
+| Net Deployment System | Spring-loaded      | 1   | $500      | $500       |
+| Net Assembly          | 3m Kevlar          | 1   | $400      | $400       |
+| Battery               | 4S 2200mAh         | 1   | $100      | $100       |
+| Recovery System       | Parachute + beacon | 1   | $300      | $300       |
+| Communication         | Video TX, control  | 1   | $500      | $500       |
+| **TOTAL BOM**         |                    |     |           | **$3,500** |
+
+### Manufacturing & Pricing
+
+| Cost Component   | Value      |
+| ---------------- | ---------- |
+| BOM Cost         | $3,500     |
+| Labor (16 hours) | $638       |
+| Machine Cost     | $200       |
+| **Total COGS**   | **$4,338** |
+| Markup           | 220%       |
+| **Est. Price**   | **$9,543** |
+| Target Margin    | 65%        |
+| Assembly Time    | 16.4 hours |
+
+---
+
+## RKV-G Ground Station
+
+**SKU:** RKV-G-001 **Target Market:** Military, mobile operations **Price
+Range:** $100,000-150,000 **Phase:** Series B (Q2 2028 • Delivery Aug 2028)
+
+### Overview
+
+Mobile ground control station and rover platform. Provides command and control
+for RKV-M and RKV-I systems. Includes mast-mounted sensors and logistics
+support.
+
+### Specifications
+
+| Specification      | Value                      |
+| ------------------ | -------------------------- |
+| Platform           | 4×4 vehicle or trailer     |
+| Mast Height        | 10-15m telescoping         |
+| Sensor Suite       | Radar, EO/IR, RF           |
+| Detection Range    | 5-10 km                    |
+| Control Range      | 2 km (RKV-M), 500m (RKV-I) |
+| Power              | Generator + battery backup |
+| Crew               | 2-3 operators              |
+| Setup Time         | <30 minutes                |
+| Operating Duration | 24+ hours                  |
+
+### Bill of Materials (Estimated)
+
+| Item                 | Specification         | Qty | Unit Cost | Total       |
+| -------------------- | --------------------- | --- | --------- | ----------- |
+| Vehicle/Trailer Base | Ruggedized            | 1   | $15,000   | $15,000     |
+| Mast System          | 15m telescoping       | 1   | $8,000    | $8,000      |
+| Radar Unit           | Compact surveillance  | 1   | $12,000   | $12,000     |
+| EO/IR Camera System  | Thermal + visible     | 1   | $6,000    | $6,000      |
+| RF Detection Array   | Wideband              | 1   | $4,000    | $4,000      |
+| Control Workstations | Ruggedized laptops ×2 | 2   | $3,000    | $6,000      |
+| Communication System | Mesh + satellite      | 1   | $5,000    | $5,000      |
+| Generator            | 5kW diesel            | 1   | $4,000    | $4,000      |
+| Battery System       | 10kWh backup          | 1   | $6,000    | $6,000      |
+| Climate Control      | HVAC unit             | 1   | $3,000    | $3,000      |
+| Installation/Fitout  | Custom integration    | 1   | $10,000   | $10,000     |
+| **TOTAL BOM**        |                       |     |           | **$79,000** |
+
+### Manufacturing & Pricing
+
+| Cost Component    | Value        |
+| ----------------- | ------------ |
+| BOM Cost          | $45,000      |
+| Labor (128 hours) | $4,978       |
+| Machine Cost      | $2,500       |
+| **Total COGS**    | **$52,478**  |
+| Markup            | 220%         |
+| **Est. Price**    | **$115,451** |
+| Target Margin     | 65%          |
+| Assembly Time     | 128 hours    |
+
+---
+
+# Manufacturing & Pricing Data
+
+## Assembly Time Estimates
+
+| Product              | SKU         | Assembly | Testing | Integration | Total Hours | Labor Cost |
+| -------------------- | ----------- | -------- | ------- | ----------- | ----------- | ---------- |
+| SkyWatch Nano        | SW-NANO-001 | 0.5h     | 0.25h   | 0.25h       | 1.04h       | $10        |
+| SkyWatch Standard    | SW-STD-001  | 1.5h     | 0.5h    | 0.5h        | 2.62h       | $29        |
+| SkyWatch Pro         | SW-PRO-001  | 3.0h     | 1.0h    | 1.5h        | 5.9h        | $92        |
+| SkyWatch Mobile      | SW-MOB-001  | 2.0h     | 0.75h   | 0.75h       | 3.65h       | $41        |
+| SkyWatch Thermal     | SW-THM-001  | 4.0h     | 1.5h    | 2.0h        | 8.0h        | $133       |
+| SkyWatch Marine      | SW-MAR-001  | 5.0h     | 2.0h    | 2.0h        | 9.8h        | $163       |
+| SkyWatch Mesh (node) | SW-MESH-001 | 1.0h     | 0.5h    | 0.5h        | 2.12h       | $24        |
+| SkyWatch Enterprise  | SW-ENT-001  | 40h      | 16h     | 24h         | 88h         | $2,933     |
+| NetSentry Lite       | NS-LITE-001 | 1.5h     | 0.5h    | 0.5h        | 2.62h       | $24        |
+| NetSentry Standard   | NS-STD-001  | 3.0h     | 1.0h    | 1.0h        | 5.27h       | $59        |
+| NetSentry Pro        | NS-PRO-001  | 6.0h     | 2.0h    | 2.0h        | 11h         | $183       |
+| SkySnare             | SS-001      | 0.75h    | 0.25h   | 0h          | 1.04h       | $10        |
+| AeroNet Enterprise   | AN-ENT-001  | 80h      | 40h     | 80h         | 216h        | $7,200     |
+| RKV-M Mothership     | RKV-M-001   | 40h      | 20h     | 20h         | 83.2h       | $3,236     |
+| RKV-I Interceptor    | RKV-I-001   | 8h       | 4h      | 4h          | 16.4h       | $638       |
+| RKV-G Ground Station | RKV-G-001   | 60h      | 20h     | 40h         | 128h        | $4,978     |
+
+## Category Markups
+
+| Category   | BOM Markup | Target Margin | Products                                        |
+| ---------- | ---------- | ------------- | ----------------------------------------------- |
+| Consumer   | 158%       | 59%           | SkySnare                                        |
+| DIY/Maker  | 140%       | 35%           | SkyWatch Nano, NetSentry Lite                   |
+| Prosumer   | 160%       | 45%           | SkyWatch Standard/Mobile, NetSentry Std         |
+| Commercial | 180%       | 55%           | SkyWatch Pro/Thermal/Marine/Mesh, NetSentry Pro |
+| Enterprise | 200%       | 60%           | SkyWatch Enterprise, AeroNet                    |
+| Military   | 220%       | 65%           | RKV-M, RKV-I, RKV-G                             |
+| Services   | 250%       | 70%           | Training, custom dev, support                   |
+
+## Labor Tariffs
+
+| Role                 | Hourly (ZAR) | Effective Rate | Description                   |
+| -------------------- | ------------ | -------------- | ----------------------------- |
+| Assembly Technician  | R120         | R168           | Basic assembly, wiring        |
+| Senior Assembly Tech | R200         | R280           | Complex assembly, calibration |
+| Electronics Engineer | R450         | R675           | PCB work, diagnostics         |
+| Mechanical Engineer  | R400         | R600           | Mechanical, CNC setup         |
+| Software Engineer    | R550         | R715           | Integration, configuration    |
+| Systems Integrator   | R600         | R900           | Full system commissioning     |
+| Field Technician     | R300         | R480           | On-site installation          |
+| QA Inspector         | R250         | R350           | Quality control, testing      |
+| Test Engineer        | R400         | R600           | Performance validation        |
+
+_Note: Effective rate includes 30-60% overhead for benefits, workspace, and
+tools._
 
 ---
 

@@ -44,9 +44,9 @@ Each weekly report follows a consistent format:
 
 ### January 2026
 
-| Week                      | Dates           | Highlights                                                                                                                                                          |
-| ------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Week 1](./2026/week-01)  | Dec 19 - Jan 9  | **137+ commits**: Pi Drone Detector demo validated, Azure ML training infrastructure, YOLO training audit, DISABLE_LOGIN safeguards, Edge AI 12-18 FPS on Pi 4     |
+| Week                     | Dates          | Highlights                                                                                                                                                     |
+| ------------------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Week 1](./2026/week-01) | Dec 19 - Jan 9 | **137+ commits**: Pi Drone Detector demo validated, Azure ML training infrastructure, YOLO training audit, DISABLE_LOGIN safeguards, Edge AI 12-18 FPS on Pi 4 |
 
 ## 2025 Reports
 

@@ -9,7 +9,7 @@ the system starts. Prevents dangerous configurations from being deployed.
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Optional
+from typing import Any
 
 logger = logging.getLogger("drone_detector.safety")
 
@@ -574,7 +574,7 @@ def run_startup_validation(settings, strict: bool = True) -> bool:
     except SafetyValidationError as e:
         logger.critical(str(e))
         if strict:
-            raise SystemExit(1)
+            raise SystemExit(1) from e
         return False
 
 

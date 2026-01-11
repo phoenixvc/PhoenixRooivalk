@@ -699,6 +699,114 @@ export const RKV_SYSTEM = {
   RKV_C2_PHASE: "series-a",
 };
 
+/** Product Line Values - Simple exports for MDX */
+export const PRODUCTS = {
+  // SkyWatch Line (Detection-Only)
+  SKYWATCH: {
+    NANO: {
+      sku: "SW-NANO-001",
+      name: "SkyWatch Nano",
+      bom: "$66",
+      price: "$50-100",
+      range: "30-50m",
+    },
+    STANDARD: {
+      sku: "SW-STD-001",
+      name: "SkyWatch Standard",
+      bom: "$210",
+      price: "$100-250",
+      range: "50-150m",
+    },
+    PRO: {
+      sku: "SW-PRO-001",
+      name: "SkyWatch Pro",
+      bom: "$495",
+      price: "$250-600",
+      range: "150-500m",
+    },
+    MOBILE: {
+      sku: "SW-MOB-001",
+      name: "SkyWatch Mobile",
+      bom: "$371",
+      price: "$200-500",
+      range: "100-300m",
+    },
+    THERMAL_BUDGET: {
+      sku: "SW-THM-001-B",
+      name: "SkyWatch Thermal (Budget)",
+      bom: "$468",
+      price: "$400-800",
+      range: "100-500m",
+    },
+    THERMAL_PRO: {
+      sku: "SW-THM-001-P",
+      name: "SkyWatch Thermal (Pro)",
+      bom: "$1,370",
+      price: "$1,000-1,500",
+      range: "100-500m",
+    },
+    MARINE: {
+      sku: "SW-MAR-001",
+      name: "SkyWatch Marine",
+      bom: "$640",
+      price: "$600-2,000",
+      range: "200-800m",
+    },
+    MESH_NODE: {
+      sku: "SW-MESH-001-N",
+      name: "SkyWatch Mesh (Node)",
+      bom: "$158",
+      price: "$150-200",
+      range: "100-200m",
+    },
+    MESH_CENTRAL: {
+      sku: "SW-MESH-001-C",
+      name: "SkyWatch Mesh (Central)",
+      bom: "$370",
+      price: "$350-400",
+      range: "N/A",
+    },
+    ENTERPRISE: {
+      sku: "SW-ENT-001",
+      name: "SkyWatch Enterprise",
+      bom: "$8,300",
+      price: "$5,000-20,000",
+      range: "1-5km",
+    },
+  },
+  // NetSentry Line (Countermeasures)
+  NETSENTRY: {
+    LITE: {
+      sku: "NS-LITE-001",
+      name: "NetSentry Lite",
+      bom: "$210",
+      price: "$150-400",
+      range: "5-15m",
+    },
+    STANDARD: {
+      sku: "NS-STD-001",
+      name: "NetSentry Standard",
+      bom: "$500",
+      price: "$400-800",
+      range: "15-30m",
+    },
+    PRO: {
+      sku: "NS-PRO-001",
+      name: "NetSentry Pro",
+      bom: "$1,015",
+      price: "$800-2,000",
+      range: "25-50m",
+    },
+  },
+  // Summary stats
+  TOTAL_PRODUCTS: 13,
+  SKYWATCH_COUNT: 10,
+  NETSENTRY_COUNT: 3,
+  BOM_RANGE: "$66 - $8,300",
+  PRICE_RANGE: "$50 - $20,000",
+  LAST_UPDATED: "2026-01-09",
+};
+
 /** All values combined for easy import */
 export const ALL_VALUES = {
   MARKET,
@@ -721,4 +829,5 @@ export const ALL_VALUES = {
   CAPITAL,
   PHASES,
   RKV_SYSTEM,
+  PRODUCTS,
 };

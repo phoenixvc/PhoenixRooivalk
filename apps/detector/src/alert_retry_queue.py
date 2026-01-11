@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from queue import Empty, Queue
+from queue import Queue
 from typing import Any, Callable, Optional
 
 logger = logging.getLogger("drone_detector.alert_retry")
@@ -546,7 +546,8 @@ class RetryingWebhookHandler:
                 data=data,
                 headers={"Content-Type": "application/json"},
             )
-            urllib.request.urlopen(req, timeout=self._timeout)
+            # URL scheme validated in __init__ to be http/https only
+            urllib.request.urlopen(req, timeout=self._timeout)  # nosec B310 # nosemgrep
             return True
         except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
             raise RuntimeError(f"Webhook failed: {e}") from e

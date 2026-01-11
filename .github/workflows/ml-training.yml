@@ -5,17 +5,17 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment (dev/prod)'
+        description: "Environment (dev/prod)"
         required: true
-        default: 'dev'
+        default: "dev"
         type: choice
         options:
           - dev
           - prod
       model:
-        description: 'Base model'
+        description: "Base model"
         required: true
-        default: 'yolov8n.pt'
+        default: "yolov8n.pt"
         type: choice
         options:
           - yolov8n.pt
@@ -23,20 +23,20 @@ on:
           - yolov8m.pt
           - yolov5nu.pt
       epochs:
-        description: 'Training epochs'
+        description: "Training epochs"
         required: true
-        default: '100'
+        default: "100"
         type: string
       dataset_config:
-        description: 'Dataset configuration'
+        description: "Dataset configuration"
         required: true
-        default: 'dataset-mvp.yaml'
+        default: "dataset-mvp.yaml"
         type: choice
         options:
           - dataset-mvp.yaml
           - dataset-full.yaml
       skip_infrastructure:
-        description: 'Skip infrastructure deployment'
+        description: "Skip infrastructure deployment"
         required: false
         default: false
         type: boolean
@@ -49,8 +49,10 @@ on:
   #     - 'apps/detector/azure-ml/**'
 
 env:
-  AZURE_RESOURCE_GROUP: rg-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk-ml-eus
-  AZURE_ML_WORKSPACE: mlw-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk
+  AZURE_RESOURCE_GROUP:
+    rg-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk-ml-eus
+  AZURE_ML_WORKSPACE:
+    mlw-nl-${{ github.event.inputs.environment || 'dev' }}-rooivalk
   AZURE_LOCATION: eastus
   TERRAFORM_DIR: infra/terraform/ml-training
   DETECTOR_DIR: apps/detector
@@ -76,8 +78,8 @@ jobs:
         # v5.6.0 - pinned for security
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Install validation dependencies
         run: |
@@ -86,7 +88,8 @@ jobs:
       - name: Validate dataset configuration
         id: validate-dataset
         env:
-          DATASET_CONFIG: ${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }}
+          DATASET_CONFIG:
+            ${{ github.event.inputs.dataset_config || 'dataset-mvp.yaml' }}
         run: |
           python << 'SCRIPT'
           import os
@@ -330,8 +333,8 @@ jobs:
         # v5.6.0 - pinned for security
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Azure Login
         # v2.2.0 - pinned for security

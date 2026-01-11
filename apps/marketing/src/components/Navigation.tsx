@@ -39,13 +39,39 @@ export const Navigation: React.FC = () => {
   const navigationItems: NavigationItem[] = [
     {
       type: "dropdown",
-      label: "Technology",
+      label: "Products",
       items: [
         {
-          href: "/interactive-demo",
-          label: "Interactive Demo",
-          description: "Try the threat simulator",
+          href: "/products",
+          label: "All Products",
+          description: "Browse our product catalog",
         },
+        {
+          href: "/products#skysnare",
+          label: "SkySnare™",
+          description: "Consumer drone capture",
+        },
+        {
+          href: "/products#netsnare",
+          label: "NetSnare™",
+          description: "Ground launchers",
+        },
+        {
+          href: "/products#aeronet",
+          label: "AeroNet™",
+          description: "Enterprise platform",
+        },
+        {
+          href: "/preorder",
+          label: "Preorder",
+          description: "Reserve yours - no deposit",
+        },
+      ],
+    },
+    {
+      type: "dropdown",
+      label: "Technology",
+      items: [
         {
           href: "/technical",
           label: "Technical Specs",
@@ -61,6 +87,11 @@ export const Navigation: React.FC = () => {
           label: "Defense Methods",
           description: "Counter-drone strategies",
         },
+        {
+          href: "/timeline",
+          label: "Development Timeline",
+          description: "Project roadmap",
+        },
       ],
     },
     {
@@ -71,11 +102,6 @@ export const Navigation: React.FC = () => {
           href: "/roi-calculator",
           label: "ROI Calculator",
           description: "Calculate your savings",
-        },
-        {
-          href: "/timeline",
-          label: "Development Timeline",
-          description: "Project roadmap",
         },
         {
           href: "/schedule",
@@ -406,8 +432,8 @@ export const Navigation: React.FC = () => {
           <Link href="/login" className={styles.loginButton}>
             Login
           </Link>
-          <Link href="/contact" className={styles.ctaButton}>
-            Join Early Access
+          <Link href="/preorder" className={styles.ctaButton}>
+            Preorder Now
           </Link>
         </div>
       </div>

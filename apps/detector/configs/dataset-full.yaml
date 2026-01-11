@@ -20,45 +20,45 @@ nc: 27
 # Detailed class taxonomy
 names:
   # === DRONES (TARGET CLASSES) - IDs 0-4 ===
-  0: drone_multirotor   # DJI, Autel, custom quads/hex/octo - most common
-  1: drone_fixedwing    # Fixed-wing UAVs, eBee, Disco, military style
-  2: drone_vtol         # Hybrid VTOL drones (tiltrotor, tailsitter)
-  3: drone_racing       # FPV racing drones, TinyWhoop, high speed
-  4: drone_toy          # Cheap toy drones, Holy Stone, Syma, < $100
+  0: drone_multirotor # DJI, Autel, custom quads/hex/octo - most common
+  1: drone_fixedwing # Fixed-wing UAVs, eBee, Disco, military style
+  2: drone_vtol # Hybrid VTOL drones (tiltrotor, tailsitter)
+  3: drone_racing # FPV racing drones, TinyWhoop, high speed
+  4: drone_toy # Cheap toy drones, Holy Stone, Syma, < $100
 
   # === BIRDS - IDs 5-9 ===
-  5: bird_tiny          # Hummingbird, sparrow, finch (<15cm wingspan)
-  6: bird_small         # Pigeon, crow, starling (15-40cm wingspan)
-  7: bird_medium        # Seagull, duck, owl (40-80cm wingspan)
-  8: bird_large         # Eagle, hawk, vulture, goose (>80cm wingspan)
-  9: bird_flock         # Multiple birds, murmurations, V-formations
+  5: bird_tiny # Hummingbird, sparrow, finch (<15cm wingspan)
+  6: bird_small # Pigeon, crow, starling (15-40cm wingspan)
+  7: bird_medium # Seagull, duck, owl (40-80cm wingspan)
+  8: bird_large # Eagle, hawk, vulture, goose (>80cm wingspan)
+  9: bird_flock # Multiple birds, murmurations, V-formations
 
   # === MANNED AIRCRAFT - IDs 10-13 ===
-  10: aircraft_fixed    # Fixed-wing planes (Cessna to 747, all sizes)
-  11: aircraft_rotary   # Helicopters (news, police, medical, military)
-  12: aircraft_glider   # Hang glider, paraglider, sailplane, parachute
-  13: aircraft_balloon  # Hot air balloon, blimp, aerostat, tethered
+  10: aircraft_fixed # Fixed-wing planes (Cessna to 747, all sizes)
+  11: aircraft_rotary # Helicopters (news, police, medical, military)
+  12: aircraft_glider # Hang glider, paraglider, sailplane, parachute
+  13: aircraft_balloon # Hot air balloon, blimp, aerostat, tethered
 
   # === RECREATIONAL - IDs 14-18 ===
-  14: kite              # All kite types (stunt, power, traditional)
-  15: balloon_party     # Helium party balloons (often escape)
-  16: balloon_weather   # Weather/research balloons (large, high altitude)
-  17: lantern           # Sky lanterns, Chinese lanterns (fire risk)
-  18: rc_plane          # RC planes, RC helicopters (non-FPV, traditional)
+  14: kite # All kite types (stunt, power, traditional)
+  15: balloon_party # Helium party balloons (often escape)
+  16: balloon_weather # Weather/research balloons (large, high altitude)
+  17: lantern # Sky lanterns, Chinese lanterns (fire risk)
+  18: rc_plane # RC planes, RC helicopters (non-FPV, traditional)
 
   # === SPORTS/THROWN - IDs 19-20 ===
-  19: ball              # All sports balls in flight (golf, baseball, football)
-  20: projectile        # Frisbee, arrow, javelin, clay pigeon, fireworks
+  19: ball # All sports balls in flight (golf, baseball, football)
+  20: projectile # Frisbee, arrow, javelin, clay pigeon, fireworks
 
   # === DEBRIS/ENVIRONMENTAL - IDs 21-23 ===
-  21: debris_light      # Plastic bag, paper, wrapper, leaf (wind-blown)
-  22: debris_organic    # Seeds, feathers, pollen, dandelion (seasonal)
-  23: insect            # Flying insects close to camera (blur, silhouette)
+  21: debris_light # Plastic bag, paper, wrapper, leaf (wind-blown)
+  22: debris_organic # Seeds, feathers, pollen, dandelion (seasonal)
+  23: insect # Flying insects close to camera (blur, silhouette)
 
   # === ATMOSPHERIC/ARTIFACTS - IDs 24-26 ===
-  24: weather           # Rain, snow, hail, dust, smoke particles
-  25: artifact          # Lens flare, reflection, spider web, water droplet
-  26: background        # Sky, clouds, nothing detected (negative class)
+  24: weather # Rain, snow, hail, dust, smoke particles
+  25: artifact # Lens flare, reflection, spider web, water droplet
+  26: background # Sky, clouds, nothing detected (negative class)
 
 # Class groupings for hierarchical evaluation and reporting
 groups:
@@ -72,66 +72,66 @@ groups:
 
 # Group-level evaluation (for dashboard reporting)
 group_names:
-  0: Drone          # Alert: YES
-  1: Bird           # Alert: NO
-  2: Aircraft       # Alert: NO (but critical)
-  3: Recreational   # Alert: NO
-  4: Sports         # Alert: NO
-  5: Debris         # Alert: NO
-  6: Atmospheric    # Alert: NO
+  0: Drone # Alert: YES
+  1: Bird # Alert: NO
+  2: Aircraft # Alert: NO (but critical)
+  3: Recreational # Alert: NO
+  4: Sports # Alert: NO
+  5: Debris # Alert: NO
+  6: Atmospheric # Alert: NO
 
 # Alert classes (these trigger security alerts)
-alert_classes: [0, 1, 2, 3, 4]  # All drone types
+alert_classes: [0, 1, 2, 3, 4] # All drone types
 
 # Critical non-alert classes (must not be mistaken for drones)
 # Safety critical - misclassification could cause serious incidents
-critical_non_alert: [10, 11, 12, 13]  # All manned aircraft
+critical_non_alert: [10, 11, 12, 13] # All manned aircraft
 
 # Class difficulty ratings (for training focus)
 # Higher = more training data needed
 class_difficulty:
-  drone_toy: high       # Often confused with birds
-  drone_racing: high    # Small, fast, unusual shapes
-  bird_flock: high      # Complex patterns
+  drone_toy: high # Often confused with birds
+  drone_racing: high # Small, fast, unusual shapes
+  bird_flock: high # Complex patterns
   aircraft_glider: high # Similar silhouette to fixed-wing drone
-  debris_light: medium  # Variable appearance
-  insect: medium        # Motion blur common
+  debris_light: medium # Variable appearance
+  insect: medium # Motion blur common
 
 # Minimum samples recommended per class
 min_samples:
-  train: 500   # Minimum training images per class
-  val: 100     # Minimum validation images per class
+  train: 500 # Minimum training images per class
+  val: 100 # Minimum validation images per class
 
 # Class weights for loss function (combat imbalance)
 # Values > 1.0 increase importance of rare classes
 class_weights:
-  0: 1.0    # drone_multirotor - well represented
-  1: 1.5    # drone_fixedwing - less common
-  2: 2.0    # drone_vtol - rare
-  3: 1.5    # drone_racing - moderate
-  4: 1.2    # drone_toy - common
-  5: 1.0    # bird_tiny
-  6: 1.0    # bird_small
-  7: 1.2    # bird_medium
-  8: 1.5    # bird_large - important confuser
-  9: 1.5    # bird_flock - important confuser
-  10: 2.0   # aircraft_fixed - critical
-  11: 2.0   # aircraft_rotary - critical
-  12: 2.0   # aircraft_glider - critical
-  13: 2.0   # aircraft_balloon - critical
-  14: 1.0   # kite
-  15: 1.0   # balloon_party
-  16: 1.5   # balloon_weather
-  17: 1.2   # lantern
-  18: 1.2   # rc_plane
-  19: 0.8   # ball
-  20: 0.8   # projectile
-  21: 0.8   # debris_light
-  22: 0.8   # debris_organic
-  23: 0.6   # insect - usually overrepresented
-  24: 0.6   # weather
-  25: 0.6   # artifact
-  26: 0.4   # background - most overrepresented
+  0: 1.0 # drone_multirotor - well represented
+  1: 1.5 # drone_fixedwing - less common
+  2: 2.0 # drone_vtol - rare
+  3: 1.5 # drone_racing - moderate
+  4: 1.2 # drone_toy - common
+  5: 1.0 # bird_tiny
+  6: 1.0 # bird_small
+  7: 1.2 # bird_medium
+  8: 1.5 # bird_large - important confuser
+  9: 1.5 # bird_flock - important confuser
+  10: 2.0 # aircraft_fixed - critical
+  11: 2.0 # aircraft_rotary - critical
+  12: 2.0 # aircraft_glider - critical
+  13: 2.0 # aircraft_balloon - critical
+  14: 1.0 # kite
+  15: 1.0 # balloon_party
+  16: 1.5 # balloon_weather
+  17: 1.2 # lantern
+  18: 1.2 # rc_plane
+  19: 0.8 # ball
+  20: 0.8 # projectile
+  21: 0.8 # debris_light
+  22: 0.8 # debris_organic
+  23: 0.6 # insect - usually overrepresented
+  24: 0.6 # weather
+  25: 0.6 # artifact
+  26: 0.4 # background - most overrepresented
 
 # Augmentation settings for production training
 augmentation:
@@ -148,4 +148,4 @@ augmentation:
 evaluation:
   conf_threshold: 0.25
   iou_threshold: 0.45
-  max_det: 300  # More detections for complex scenes
+  max_det: 300 # More detections for complex scenes

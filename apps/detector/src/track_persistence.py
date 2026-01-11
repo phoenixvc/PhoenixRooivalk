@@ -15,15 +15,12 @@ Use cases:
 
 import json
 import logging
-import os
 import signal
 import threading
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
+from typing import Any, Optional
 
 from interfaces import BoundingBox, Detection, TrackedObject
 
@@ -39,14 +36,14 @@ class PersistedTrack:
     class_name: str
     confidence: float
     drone_score: float
-    bbox: Tuple[int, int, int, int]  # x1, y1, x2, y2
+    bbox: tuple[int, int, int, int]  # x1, y1, x2, y2
     frames_tracked: int
     frames_since_seen: int
-    velocity: Tuple[float, float]
-    predicted_position: Optional[Tuple[int, int]]
+    velocity: tuple[float, float]
+    predicted_position: Optional[tuple[int, int]]
     first_seen_time: float
     last_seen_time: float
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 
 @dataclass
@@ -56,8 +53,8 @@ class PersistenceState:
     version: int = 1
     saved_at: float = 0.0
     next_track_id: int = 0
-    tracks: List[PersistedTrack] = None
-    metadata: Dict[str, Any] = None
+    tracks: list[PersistedTrack] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.tracks is None:
@@ -103,15 +100,15 @@ class TrackPersistence:
         self._max_age = max_state_age
         self._auto_save = auto_save_on_shutdown
 
-        self._current_tracks: Dict[int, TrackedObject] = {}
+        self._current_tracks: dict[int, TrackedObject] = {}
         self._next_track_id = 0
-        self._first_seen_times: Dict[int, float] = {}
+        self._first_seen_times: dict[int, float] = {}
         self._last_save_time = 0.0
         self._lock = threading.Lock()
 
         self._running = False
         self._save_thread: Optional[threading.Thread] = None
-        self._original_handlers: Dict[int, Any] = {}
+        self._original_handlers: dict[int, Any] = {}
 
         if self._auto_save:
             self._register_signal_handlers()
@@ -172,7 +169,7 @@ class TrackPersistence:
 
     def update(
         self,
-        tracks: List[TrackedObject],
+        tracks: list[TrackedObject],
         next_id: int,
     ) -> None:
         """
@@ -271,7 +268,7 @@ class TrackPersistence:
             logger.error(f"Failed to save track state: {e}")
             return False
 
-    def load(self) -> Tuple[List[TrackedObject], int]:
+    def load(self) -> tuple[list[TrackedObject], int]:
         """
         Load tracks from disk.
 

@@ -5,27 +5,28 @@ import styles from "./Footer.module.css";
 export const Footer: React.FC = () => {
   const footerSections = [
     {
-      title: "Platform",
+      title: "Products",
       links: [
-        { href: "/technical", label: "Technical Specs" },
-        { href: "/interactive-demo", label: "Interactive Demo" },
-        { href: "/financial", label: "ROI Calculator" },
+        { href: "/products", label: "All Products" },
+        { href: "/preorder", label: "Preorder" },
+        { href: "/timeline", label: "Development Timeline" },
+        { href: "/roi-calculator", label: "ROI Calculator" },
       ],
     },
     {
-      title: "Compliance",
+      title: "Technology",
       links: [
-        { href: "/compliance/itar", label: "ITAR Compliance" },
-        { href: "/compliance/iso-27001", label: "ISO 27001" },
-        { href: "/compliance/security-clearance", label: "Security Clearance" },
+        { href: "/technical", label: "Technical Specs" },
+        { href: "/capabilities", label: "Capabilities" },
+        { href: "/methods", label: "Defense Methods" },
       ],
     },
     {
       title: "Company",
       links: [
         { href: "/contact", label: "Contact Us" },
-        { href: "/contact#partnerships", label: "Partnerships" },
-        { href: "/contact#careers", label: "Careers" },
+        { href: "/partnerships", label: "Partnerships" },
+        { href: "/about", label: "About Us" },
       ],
     },
   ];
