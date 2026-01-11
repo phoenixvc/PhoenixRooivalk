@@ -1,0 +1,72 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: auto
+        threshold: 5%
+        # Allow patch coverage to be lower for formatting/refactoring changes
+        informational: true
+
+# Define flags for each module/app
+flags:
+  detector:
+    paths:
+      - apps/detector/src/
+    carryforward: true
+  api:
+    paths:
+      - apps/api/
+    carryforward: true
+  keeper:
+    paths:
+      - apps/keeper/
+    carryforward: true
+  evidence-cli:
+    paths:
+      - apps/evidence-cli/
+    carryforward: true
+  threat-simulator:
+    paths:
+      - apps/threat-simulator-desktop/
+    carryforward: true
+
+# Component coverage for summary view
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+  individual_components:
+    - component_id: detector
+      name: Detector App
+      paths:
+        - apps/detector/src/**
+    - component_id: api
+      name: API App
+      paths:
+        - apps/api/**
+    - component_id: keeper
+      name: Keeper App
+      paths:
+        - apps/keeper/**
+    - component_id: evidence_cli
+      name: Evidence CLI
+      paths:
+        - apps/evidence-cli/**
+    - component_id: threat_simulator
+      name: Threat Simulator
+      paths:
+        - apps/threat-simulator-desktop/**
+
+# PR comment configuration - comprehensive summary
+comment:
+  layout: "header,diff,flags,components,files"
+  behavior: default
+  require_changes: true
+  require_base: false
+  require_head: true
+  hide_project_coverage: false
