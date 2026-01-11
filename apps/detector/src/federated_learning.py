@@ -501,7 +501,7 @@ class GradientUploader:
                 },
             )
             # URL scheme validated in __init__ to be http/https only
-            # codacy:disable-next-line
+            # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected
             urllib.request.urlopen(  # nosec B310
                 req, timeout=self._config.upload_timeout_seconds
             )
