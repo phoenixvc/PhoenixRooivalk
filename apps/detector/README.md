@@ -48,7 +48,7 @@ sudo apt install -y libcamera-apps
 pip install ultralytics tensorflow "flatbuffers==24.3.25"
 python -c "from ultralytics import YOLO; \
   YOLO('yolov5n.pt').export(format='tflite', imgsz=320, int8=True)"
-mv yolov5n_saved_model/yolov5n_full_integer_quant.tflite models/yolov5n_int8.tflite
+mv yolov5nu_saved_model/yolov5nu_int8.tflite models/yolov5n_int8.tflite
 ```
 
 ### 3. Run
