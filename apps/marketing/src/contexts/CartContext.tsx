@@ -66,10 +66,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     const storedItems = loadCartFromStorage();
-    if (storedItems.length > 0) {
-      setItems(storedItems);
-    }
-    setIsInitialized(true);
+    // Schedule state updates asynchronously to avoid cascading renders
+    const timer = setTimeout(() => {
+      if (storedItems.length > 0) {
+        setItems(storedItems);
+      }
+      setIsInitialized(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Save cart to localStorage whenever it changes
