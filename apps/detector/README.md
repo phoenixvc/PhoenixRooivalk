@@ -573,6 +573,7 @@ For simpler use cases, use `configs/dataset-binary.yaml`:
 ### Quick Deployment
 
 1. **SSH into your Pi:**
+
    ```bash
    ssh pi@raspberrypi.local  # or use IP address
    ```
@@ -779,7 +780,8 @@ This creates a JSON file with all detection events:
 ]
 ```
 
-**Note:** Log files (`*.log`) and detection files (`detections*.json`) are automatically ignored by Git (see `.gitignore`).
+**Note:** Log files (`*.log`) and detection files (`detections*.json`) are
+automatically ignored by Git (see `.gitignore`).
 
 ## Troubleshooting
 
@@ -803,7 +805,8 @@ python src/main.py --camera auto --engine mock
 **What to Look For (Camera is Working):**
 
 1. **Startup Output:**
-   ```
+
+   ```text
    Pipeline started:
      Frame source: picamera  # or "usb" or "opencv" (not "mock"!)
      Resolution: (640, 480)   # Actual camera resolution
