@@ -103,12 +103,14 @@ pip install aiohttp
 
 **NumPy version conflicts:**
 
-NumPy 2.x can cause issues with TensorFlow/TFLite. If you see errors like
-`module 'numpy' has no attribute` or `A]` array errors:
+`tflite-runtime` does not support NumPy 2.x. If you see errors like
+`module compiled using NumPy 1.x cannot run in NumPy 2.x`:
 
 ```bash
 pip install "numpy<2"
 ```
+
+Note: TFLite is transitioning to [LiteRT](https://ai.google.dev/edge/litert) which supports NumPy 2.
 
 ## Project Structure
 
