@@ -168,8 +168,8 @@ jobs:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: ${{ env.APP_LOCATION }}
-          output_location: ${{ env.OUTPUT_LOCATION }}
+          # When skip_app_build is true, app_location should point to the built output
+          app_location: ${{ env.APP_LOCATION }}/out
           skip_app_build: true
           skip_api_build: true
           # Production deploys go to production slot, PR deploys create preview environments
