@@ -8,7 +8,7 @@ based on what's available on demo day.
 
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import numpy as np
 
@@ -24,7 +24,7 @@ class OpenCVFrameSource(FrameSource):
 
     def __init__(
         self,
-        source: int | str = 0,
+        source: Union[int, str] = 0,
         width: int = 640,
         height: int = 480,
         fps: int = 30,
