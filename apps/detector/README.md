@@ -89,6 +89,12 @@ The hardware auto-detection found a USB camera. Either:
 python src/main.py --config configs/quickstart.yaml --camera usb
 ```
 
+**Pi Camera capture fails (picamera2 not found):**
+
+```bash
+sudo apt install -y python3-picamera2
+```
+
 **NumPy version conflicts:**
 
 NumPy 2.x can cause issues with TensorFlow/TFLite. If you see errors like

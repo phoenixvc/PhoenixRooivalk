@@ -47,6 +47,7 @@ from pathlib import Path
 try:
     from .config.settings import Settings, create_default_config
     from .factory import DetectionPipeline, create_demo_pipeline, create_pipeline
+    from .utils.logging_config import setup_logging
 except ImportError:
     # Running as script - add src to path
     src_dir = Path(__file__).parent
@@ -54,6 +55,7 @@ except ImportError:
         sys.path.insert(0, str(src_dir))
     from config.settings import Settings, create_default_config
     from factory import DetectionPipeline, create_demo_pipeline, create_pipeline
+    from utils.logging_config import setup_logging
 
 
 def parse_args():
@@ -396,6 +398,16 @@ def main():
                 file=sys.stderr,
             )
             sys.exit(1)
+
+    # Setup logging from config or defaults
+    if settings and settings.logging:
+        setup_logging(
+            level=settings.logging.level,
+            log_file=settings.logging.log_file,
+            json_format=settings.logging.json_format,
+        )
+    else:
+        setup_logging(level="INFO")
 
     # Handle demo mode
     if args.demo:
