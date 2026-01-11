@@ -103,15 +103,14 @@ pip install aiohttp
 
 **NumPy version conflicts:**
 
-`tflite-runtime` may not support NumPy 2.x yet. If you see errors like
-`module 'numpy' has no attribute` or array dtype errors:
+If you see errors like `module 'numpy' has no attribute` or array dtype errors:
 
 ```bash
-# Option 1: Downgrade NumPy
-pip install "numpy<2"
-
-# Option 2: Upgrade tflite-runtime (if available)
+# Upgrade tflite-runtime (supports NumPy 2 as of Jan 2025)
 pip install --upgrade tflite-runtime
+
+# Fallback for older systems: downgrade NumPy
+pip install "numpy<2"
 ```
 
 ## Project Structure
