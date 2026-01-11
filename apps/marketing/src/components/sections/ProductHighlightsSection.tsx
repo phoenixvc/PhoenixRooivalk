@@ -7,7 +7,8 @@ import styles from "./ProductHighlightsSection.module.css";
 const featuredProductIds = ["skysnare", "skywatch-standard", "netsnare-lite"];
 
 // Current date for preorder calculations
-const CURRENT_DATE = new Date("2026-01-11");
+// Uses actual current date in production
+const CURRENT_DATE = new Date();
 
 // Parse launch date from phaseTimeline string
 // Timeline states when development is complete (end of quarter)
@@ -113,7 +114,7 @@ export const ProductHighlightsSection: React.FC = () => {
           <span className={styles.badge}>Phase 1 Products</span>
           <h2 className={styles.title}>Ready to Deploy</h2>
           <p className={styles.subtitle}>
-            Preorder now with no deposit required. Delivery starts Q2 2026.
+            Preorder now with no deposit required. Delivery starts Jul 2026.
           </p>
         </div>
 

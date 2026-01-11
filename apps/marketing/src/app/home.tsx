@@ -72,7 +72,7 @@ export default function HomePage(): React.ReactElement {
                 name: "How does certification build competitive advantage?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (May 2026) and FAA waiver for AeroNet™ enterprise operations (June 2026). This safety-first approach builds trust and market credibility.",
+                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (Q2 2026) and FAA waiver for AeroNet™ enterprise operations (Q3 2026). This safety-first approach builds trust and market credibility.",
                 },
               },
               {

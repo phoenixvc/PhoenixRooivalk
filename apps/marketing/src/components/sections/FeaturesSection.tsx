@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "../ui/button";
 import styles from "./FeaturesSection.module.css";
 
 const features = [
@@ -175,26 +174,6 @@ export const FeaturesSection: React.FC = () => {
           </div>
         </div>
 
-        <div className={styles.ctaSection}>
-          <Button
-            href="/products"
-            size="lg"
-            variant="primary"
-            trackingEvent="Products Clicked"
-            trackingProps={{ location: "features", type: "primary" }}
-          >
-            View Products
-          </Button>
-          <Button
-            href="/technical"
-            size="lg"
-            variant="secondary"
-            trackingEvent="Technical Specs Viewed"
-            trackingProps={{ location: "features", type: "secondary" }}
-          >
-            Technical Specifications
-          </Button>
-        </div>
       </div>
     </section>
   );
