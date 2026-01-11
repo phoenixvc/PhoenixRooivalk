@@ -29,11 +29,7 @@ export function CartItem({ item }: CartItemProps): React.ReactElement {
   return (
     <div className={styles.cartItem}>
       <div className={styles.itemImage} aria-hidden="true">
-        {item.image ? (
-          <img src={item.image} alt="" />
-        ) : (
-          <span>No Image</span>
-        )}
+        {item.image ? <img src={item.image} alt="" /> : <span>No Image</span>}
       </div>
 
       <div className={styles.itemDetails}>
@@ -52,7 +48,11 @@ export function CartItem({ item }: CartItemProps): React.ReactElement {
       </div>
 
       <div className={styles.itemActions}>
-        <div className={styles.quantitySelector} role="group" aria-label="Quantity">
+        <div
+          className={styles.quantitySelector}
+          role="group"
+          aria-label="Quantity"
+        >
           <button
             className={styles.quantityButton}
             onClick={handleDecrement}

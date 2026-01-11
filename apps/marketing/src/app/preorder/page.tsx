@@ -30,9 +30,7 @@ export default function PreorderPage(): React.ReactElement {
   });
 
   // Filter to show only available products or coming soon
-  const availableProducts = products.filter(
-    (p) => p.available || p.comingSoon,
-  );
+  const availableProducts = products.filter((p) => p.available || p.comingSoon);
 
   const getQuantity = (productId: string) => quantities[productId] || 1;
 
