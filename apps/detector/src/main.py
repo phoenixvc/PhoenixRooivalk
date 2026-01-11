@@ -320,7 +320,7 @@ def main():
             sys.exit(0)
         except Exception as e:
             print(f"ERROR: Failed to create config file: {e}", file=sys.stderr)
-            print(f"\nTip: Ensure the directory exists and you have write permissions.", file=sys.stderr)
+            print("\nTip: Ensure the directory exists and you have write permissions.", file=sys.stderr)
             sys.exit(1)
 
     # Load settings from config file if provided
@@ -329,7 +329,7 @@ def main():
         config_path = Path(args.config)
         if not config_path.exists():
             print(f"ERROR: Configuration file not found: {config_path.absolute()}", file=sys.stderr)
-            print(f"\nTip: Generate a default config file with:", file=sys.stderr)
+            print("\nTip: Generate a default config file with:", file=sys.stderr)
             print(f"  python src/main.py --generate-config {config_path}", file=sys.stderr)
             sys.exit(1)
         try:
@@ -377,7 +377,7 @@ def main():
                 pipeline = create_pipeline(**kwargs)
             except Exception as e:
                 print(f"ERROR: Failed to create pipeline: {e}", file=sys.stderr)
-                print(f"\nTip: Check your configuration file and model path.", file=sys.stderr)
+                print("\nTip: Check your configuration file and model path.", file=sys.stderr)
                 sys.exit(1)
         else:
             # Use CLI args directly (existing behavior)
