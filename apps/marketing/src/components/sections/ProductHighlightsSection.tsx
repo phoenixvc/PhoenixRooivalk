@@ -11,10 +11,6 @@ import styles from "./ProductHighlightsSection.module.css";
 // Featured products for landing page - Phase 1 highlights
 const featuredProductIds = ["skysnare", "skywatch-standard", "netsnare-lite"];
 
-// Current date for preorder calculations
-// Uses actual current date in production
-const CURRENT_DATE = new Date();
-
 // Default phase info for fallback
 const DEFAULT_PHASE: ProductPhaseInfo = {
   id: "seed",
@@ -26,20 +22,49 @@ const DEFAULT_PHASE: ProductPhaseInfo = {
   description: "Product information coming soon",
 };
 
+// Month name to number mapping
+const MONTH_MAP: Record<string, number> = {
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11,
+};
+
 // Type guard for Product
 function isProduct(value: Product | undefined): value is Product {
   return value !== undefined && value !== null;
 }
 
 // Parse launch date from phaseTimeline string
-// Timeline states when development is complete (end of quarter)
-// Launch happens 1 month after development completion
-// e.g., "Q2 2026" = dev complete June 2026, launch July 2026
+// First tries to parse explicit "Delivery MMM YYYY" format
+// Falls back to calculating from quarter if not found
 function parseLaunchDate(phaseTimeline: string): Date | null {
   if (phaseTimeline.toLowerCase().includes("available now")) {
     return null; // Already available
   }
 
+  // Try to match explicit delivery date like "Delivery Jul 2026" or "Delivery Aug 2027"
+  const deliveryMatch = phaseTimeline.match(
+    /Delivery\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i,
+  );
+  if (deliveryMatch) {
+    const monthStr = deliveryMatch[1].toLowerCase();
+    const year = parseInt(deliveryMatch[2], 10);
+    const month = MONTH_MAP[monthStr];
+    if (month !== undefined) {
+      return new Date(Date.UTC(year, month, 1));
+    }
+  }
+
+  // Fallback: calculate from quarter
   // Match patterns like "Q2 2026", "Q4 2026", etc.
   const quarterMatch = phaseTimeline.match(/Q([1-4])\s+(\d{4})/);
   if (quarterMatch) {
@@ -51,9 +76,9 @@ function parseLaunchDate(phaseTimeline: string): Date | null {
       return null;
     }
 
-    // Quarter end month: Q1=Mar, Q2=Jun, Q3=Sep, Q4=Dec
+    // Quarter end month (0-indexed): Q1=2 (Mar), Q2=5 (Jun), Q3=8 (Sep), Q4=11 (Dec)
     // Then add 1 month for launch after development
-    const quarterEndMonth = quarter * 3 - 1; // Q1=2(Mar), Q2=5(Jun), Q3=8(Sep), Q4=11(Dec)
+    const quarterEndMonth = quarter * 3 - 1;
     const launchMonth = quarterEndMonth + 1; // +1 month after dev complete
     // Handle year rollover if month >= 12
     const adjustedYear = launchMonth >= 12 ? year + 1 : year;
@@ -81,7 +106,11 @@ function formatDate(date: Date): string {
 }
 
 // Get preorder status for a product
-function getPreorderStatus(product: Product): {
+// Takes currentDate as parameter to avoid stale date in SSR/SSG builds
+function getPreorderStatus(
+  product: Product,
+  currentDate: Date,
+): {
   canPreorder: boolean;
   canBuy: boolean;
   preorderOpensDate: Date | null;
@@ -112,7 +141,7 @@ function getPreorderStatus(product: Product): {
   }
 
   const preorderOpensDate = getPreorderOpensDate(launchDate);
-  const canPreorder = CURRENT_DATE >= preorderOpensDate;
+  const canPreorder = currentDate >= preorderOpensDate;
 
   if (canPreorder) {
     return {
@@ -138,15 +167,33 @@ function getPhaseInfo(product: Product): ProductPhaseInfo {
   return phases[product.phase] ?? DEFAULT_PHASE;
 }
 
+// Get earliest delivery date from featured products
+function getEarliestDeliveryDate(productList: Product[]): string {
+  const launchDates = productList
+    .map((p) => parseLaunchDate(p.phaseTimeline))
+    .filter((d): d is Date => d !== null)
+    .sort((a, b) => a.getTime() - b.getTime());
+
+  if (launchDates.length > 0) {
+    return formatDate(launchDates[0]);
+  }
+  return "2026";
+}
+
 /**
  * Renders a section showcasing Phase 1 highlighted products with availability status,
  * pricing, and preorder capabilities. Displays product cards with dynamic status badges
  * and action buttons based on launch timeline.
  */
 export const ProductHighlightsSection: React.FC = () => {
+  // Compute current date at render time to avoid stale SSR/SSG builds
+  const currentDate = new Date();
+
   const featuredProducts = featuredProductIds
     .map((id) => products.find((p) => p.id === id))
     .filter(isProduct);
+
+  const earliestDelivery = getEarliestDeliveryDate(featuredProducts);
 
   return (
     <section className={styles.section} id="products">
@@ -155,14 +202,15 @@ export const ProductHighlightsSection: React.FC = () => {
           <span className={styles.badge}>Phase 1 Products</span>
           <h2 className={styles.title}>Ready to Deploy</h2>
           <p className={styles.subtitle}>
-            Preorder now with no deposit required. Delivery starts Jul 2026.
+            Preorder now with no deposit required. Delivery starts{" "}
+            {earliestDelivery}.
           </p>
         </div>
 
         <div className={styles.productsGrid}>
           {featuredProducts.map((product) => {
             const phase = getPhaseInfo(product);
-            const status = getPreorderStatus(product);
+            const status = getPreorderStatus(product, currentDate);
 
             return (
               <div key={product.id} className={styles.productCard}>
