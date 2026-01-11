@@ -29,6 +29,12 @@ Usage:
 
     # Demo mode with mock data (no camera/model needed)
     python main.py --demo --mock
+    
+    # Real webcam with mock inference (test camera without model)
+    python main.py --camera usb --engine mock
+    
+    # Mock camera with real model (test inference without camera)
+    python main.py --camera mock --model models/drone-detector.tflite
 """
 
 import argparse
@@ -349,10 +355,12 @@ def main():
         pipeline = create_demo_pipeline(
             model_path=args.model or "mock",
             use_mock=args.mock,
+            camera_source=args.camera if args.camera != "auto" else "auto",
         )
     else:
-        # Validate model path (unless using mock mode)
-        if not args.model and not args.mock:
+        # Validate model path (unless using mock mode or mock engine)
+        using_mock_engine = args.mock or args.engine == "mock"
+        if not args.model and not using_mock_engine:
             model_path_from_config = None
             if settings:
                 model_path_from_config = getattr(settings.inference, "model_path", None)
@@ -362,10 +370,11 @@ def main():
                 else:
                     model_path_from_config = None
             if not model_path_from_config:
-                print("ERROR: --model is required (or use --mock to test without a model)", file=sys.stderr)
+                print("ERROR: --model is required (or use --mock/--engine mock to test without a model)", file=sys.stderr)
                 print("\nTips:", file=sys.stderr)
                 print("  - Use --model <path> to specify a model file", file=sys.stderr)
                 print("  - Use --mock to test without a model or camera", file=sys.stderr)
+                print("  - Use --engine mock to test with real camera but mock inference", file=sys.stderr)
                 print("  - Use --config <file> to load model path from config file", file=sys.stderr)
                 print("  - Use --help for full usage information", file=sys.stderr)
                 sys.exit(1)
@@ -373,6 +382,9 @@ def main():
         # Create pipeline with settings from config file or CLI args
         if settings:
             kwargs = settings_to_pipeline_kwargs(settings, args)
+            # If using mock engine without model, set model_path to "mock"
+            if kwargs.get("engine_type") == "mock" and not kwargs.get("model_path"):
+                kwargs["model_path"] = "mock"
             try:
                 pipeline = create_pipeline(**kwargs)
             except Exception as e:
@@ -381,8 +393,13 @@ def main():
                 sys.exit(1)
         else:
             # Use CLI args directly (existing behavior)
+            # Determine model path - use mock if engine is mock and no model provided
+            model_path = args.model
+            if not model_path and (args.mock or args.engine == "mock"):
+                model_path = "mock"
+            
             pipeline = create_pipeline(
-                model_path=args.model or "mock",
+                model_path=model_path or "mock",
                 camera_source="mock" if args.mock else args.camera,
                 camera_index=args.camera_index,
                 video_file=args.video,

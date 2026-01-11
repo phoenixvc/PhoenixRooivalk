@@ -15,6 +15,14 @@ Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 - **Targeting System**: Distance estimation and engagement control
 - **Auto-Configuration**: Automatic hardware detection and optimization
 
+## Prerequisites
+
+- **Raspberry Pi 4 or 5** (recommended) or Pi 3B+
+- **Raspberry Pi OS** (64-bit recommended) or Ubuntu 22.04+
+- **Python 3.9+** (usually pre-installed)
+- **Camera**: Pi Camera v2/v3 or USB webcam
+- **Optional**: Coral USB Accelerator for 10x speedup
+
 ## Quick Start
 
 ### 1. Setup Environment
@@ -36,8 +44,20 @@ pip install -e ".[jetson]"       # NVIDIA Jetson
 pip install -e ".[streaming]"    # Web streaming support
 pip install -e ".[dev]"          # Development with all tools
 
-# Enable camera (if using Pi Camera on Raspberry Pi)
+# For Raspberry Pi: Enable camera and install system dependencies
 sudo raspi-config  # Interface Options > Camera > Enable
+sudo apt update
+sudo apt install -y python3-pip python3-venv libcamera-apps
+
+# Optional: For Pi Camera (Picamera2 library, usually pre-installed on Pi OS)
+# If not installed: sudo apt install -y python3-picamera2
+
+# Optional: For Coral USB Accelerator
+# Install Coral runtime (if using Coral TPU)
+# echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | \
+#   sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+# sudo apt update && sudo apt install -y libedgetpu1-std
 ```
 
 ### 2. Get a Model
@@ -64,8 +84,11 @@ cd azure-ml
 ### 3. Run Detection
 
 ```bash
-# With display
+# With display (auto-detects camera and inference engine)
 python src/main.py --model models/drone-detector_int8.tflite
+
+# Explicitly use USB webcam
+python src/main.py --model models/drone-detector_int8.tflite --camera usb
 
 # Headless (no monitor)
 python src/main.py --model models/drone-detector_int8.tflite --headless
@@ -84,6 +107,27 @@ python src/main.py --model models/drone-detector_int8.tflite \
   --tracker kalman \
   --alert-webhook https://api.example.com/detections \
   --save-detections detections.json
+
+# Testing without a model (mock inference with real camera)
+python src/main.py --camera usb --engine mock
+
+# Testing without hardware (mock camera and inference)
+python src/main.py --mock
+
+# Use video file instead of camera
+python src/main.py --model models/drone-detector_int8.tflite --video test_video.mp4
+
+# Specify USB camera index (if multiple cameras)
+python src/main.py --model models/drone-detector_int8.tflite --camera usb --camera-index 1
+
+# Demo mode (optimized settings for presentations)
+python src/main.py --demo --model models/drone-detector_int8.tflite
+
+# Suppress hardware report output
+python src/main.py --model models/drone-detector_int8.tflite --quiet
+
+# Disable auto-configuration (use defaults instead of hardware detection)
+python src/main.py --model models/drone-detector_int8.tflite --no-auto-configure
 ```
 
 ### 4. Web Streaming
@@ -208,13 +252,13 @@ The system uses a modular, interface-based architecture that allows swapping com
 
 ### Swappable Components
 
-| Component | Implementations |
-|-----------|-----------------|
-| FrameSource | PiCameraSource, USBCameraSource, VideoFileSource, MockFrameSource |
-| InferenceEngine | TFLiteEngine, ONNXEngine, CoralEngine, MockInferenceEngine |
-| ObjectTracker | NoOpTracker, CentroidTracker, KalmanTracker |
-| AlertHandler | ConsoleAlertHandler, WebhookAlertHandler, FileAlertHandler |
-| FrameRenderer | OpenCVRenderer, HeadlessRenderer, StreamingRenderer |
+| Component       | Implementations                                                   |
+| --------------- | ----------------------------------------------------------------- |
+| FrameSource     | PiCameraSource, USBCameraSource, VideoFileSource, MockFrameSource |
+| InferenceEngine | TFLiteEngine, ONNXEngine, CoralEngine, MockInferenceEngine        |
+| ObjectTracker   | NoOpTracker, CentroidTracker, KalmanTracker                       |
+| AlertHandler    | ConsoleAlertHandler, WebhookAlertHandler, FileAlertHandler        |
+| FrameRenderer   | OpenCVRenderer, HeadlessRenderer, StreamingRenderer               |
 
 ## Configuration
 
@@ -260,7 +304,7 @@ streaming:
 
 display:
   headless: false
-  show_fps: true
+  show_fps: true      # Show FPS counter on video feed
   show_drone_score: true
 ```
 
@@ -302,6 +346,9 @@ python src/main.py --config config.yaml
 
 # CLI arguments override config file values
 python src/main.py --config config.yaml --confidence 0.7 --headless
+
+# Override camera type from config file
+python src/main.py --config config.yaml --camera usb
 ```
 
 **Programmatic Loading (for custom scripts):**
@@ -318,6 +365,63 @@ settings = Settings()
 # Access settings
 if settings.streaming.enabled:
     print(f"Streaming on port {settings.streaming.port}")
+```
+
+## Testing and Development
+
+### Camera and Inference Options
+
+The detector supports mixing real and mock components for testing:
+
+**Camera Options:**
+- `--camera auto` - Auto-detect best available camera (default)
+- `--camera usb` - Use USB webcam explicitly
+- `--camera picamera` - Use Raspberry Pi camera
+- `--camera mock` - Use synthetic frames (for testing without hardware)
+- `--camera-index <n>` - USB camera device index (default: 0, use 1, 2, etc. for multiple cameras)
+- `--video <path>` - Use video file instead of camera
+
+**Inference Engine Options:**
+- `--engine auto` - Auto-select based on model file (default)
+- `--engine tflite` - Use TensorFlow Lite
+- `--engine onnx` - Use ONNX Runtime
+- `--engine coral` - Use Coral Edge TPU
+- `--engine mock` - Use synthetic detections (for testing without model)
+
+**Display Options:**
+- `--headless` - Run without display (no video window)
+- `--quiet` - Suppress hardware detection report on startup
+
+**Demo/Testing Options:**
+- `--demo` - Run in demo mode with optimized settings (good visuals, tracking enabled)
+- `--mock` - Use mock camera and inference (no hardware needed, equivalent to `--camera mock --engine mock`)
+- `--no-auto-configure` - Disable automatic hardware-based configuration (use defaults)
+
+**The `--mock` Flag:**
+The `--mock` flag is a convenience option that sets **both** camera and inference to mock mode:
+```bash
+# This is equivalent to: --camera mock --engine mock
+python src/main.py --mock
+```
+
+**The `--demo` Flag:**
+The `--demo` flag optimizes settings for presentations:
+- Enables visual overlays (FPS, tracking, scores)
+- Uses centroid tracking
+- Auto-configures for best performance
+- Can be combined with `--camera usb` or other options
+
+**Combining Options:**
+You can mix real and mock components independently:
+```bash
+# Real webcam with mock inference (test camera without model)
+python src/main.py --camera usb --engine mock
+
+# Mock camera with real model (test inference without camera)
+python src/main.py --camera mock --engine tflite --model models/drone-detector.tflite
+
+# Real camera with real model (production use)
+python src/main.py --camera usb --engine auto --model models/drone-detector.tflite
 ```
 
 ## Training on Azure ML
@@ -368,28 +472,28 @@ scp outputs/model/exports/drone-detector_int8.tflite pi@raspberrypi:~/models/
 
 ### Training Parameters
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `model` | yolov8n.pt | Base model (yolov8n/s/m) |
-| `epochs` | 100 | Training epochs |
-| `imgsz` | 320 | Image size |
-| `batch` | 16 | Batch size |
+| Parameter | Default    | Description              |
+| --------- | ---------- | ------------------------ |
+| `model`   | yolov8n.pt | Base model (yolov8n/s/m) |
+| `epochs`  | 100        | Training epochs          |
+| `imgsz`   | 320        | Image size               |
+| `batch`   | 16         | Batch size               |
 
 ### Cost Estimates
 
-| Configuration | GPU | Time | Cost |
-|---------------|-----|------|------|
-| MVP (10 classes) | T4 | 6-10 hrs | $3-5 |
-| Full (27 classes) | T4 | 20-30 hrs | $10-15 |
-| Full (27 classes) | V100 | 5-8 hrs | $15-25 |
+| Configuration     | GPU  | Time      | Cost   |
+| ----------------- | ---- | --------- | ------ |
+| MVP (10 classes)  | T4   | 6-10 hrs  | $3-5   |
+| Full (27 classes) | T4   | 20-30 hrs | $10-15 |
+| Full (27 classes) | V100 | 5-8 hrs   | $15-25 |
 
 ## Performance
 
-| Configuration | FPS | Notes |
-|--------------|-----|-------|
-| Pi 4 + TFLite | 5-8 | Baseline |
-| Pi 5 + TFLite | 12-18 | 2x faster |
-| Pi 4 + Coral USB | 25-35 | 10x speedup |
+| Configuration    | FPS   | Notes            |
+| ---------------- | ----- | ---------------- |
+| Pi 4 + TFLite    | 5-8   | Baseline         |
+| Pi 5 + TFLite    | 12-18 | 2x faster        |
+| Pi 4 + Coral USB | 25-35 | 10x speedup      |
 | Pi 5 + Coral USB | 40-50 | Best performance |
 
 ## Classes
@@ -398,27 +502,27 @@ The model supports multiple classification configurations. See `configs/` for op
 
 ### MVP Configuration (10 classes)
 
-| Class ID | Name | Examples |
-|----------|------|----------|
-| 0 | drone | Quadcopters, multirotors, fixed-wing UAVs, racing drones |
-| 1 | bird_small | Sparrows, finches (<40cm wingspan) |
-| 2 | bird_large | Eagles, hawks, flocks (>40cm wingspan) |
-| 3 | aircraft | Planes, helicopters, gliders, hot air balloons |
-| 4 | recreational | Kites, party balloons, weather balloons, RC planes |
-| 5 | sports | Balls, frisbees, projectiles |
-| 6 | debris | Plastic bags, paper, leaves, feathers |
-| 7 | insect | Flies, bees, dragonflies (close to camera) |
-| 8 | atmospheric | Rain, snow, lens flare, artifacts |
-| 9 | background | Sky, clouds, nothing detected |
+| Class ID | Name         | Examples                                                 |
+| -------- | ------------ | -------------------------------------------------------- |
+| 0        | drone        | Quadcopters, multirotors, fixed-wing UAVs, racing drones |
+| 1        | bird_small   | Sparrows, finches (<40cm wingspan)                       |
+| 2        | bird_large   | Eagles, hawks, flocks (>40cm wingspan)                   |
+| 3        | aircraft     | Planes, helicopters, gliders, hot air balloons           |
+| 4        | recreational | Kites, party balloons, weather balloons, RC planes       |
+| 5        | sports       | Balls, frisbees, projectiles                             |
+| 6        | debris       | Plastic bags, paper, leaves, feathers                    |
+| 7        | insect       | Flies, bees, dragonflies (close to camera)               |
+| 8        | atmospheric  | Rain, snow, lens flare, artifacts                        |
+| 9        | background   | Sky, clouds, nothing detected                            |
 
 ### Binary Configuration (2 classes)
 
 For simpler use cases, use `configs/dataset-binary.yaml`:
 
-| Class ID | Name | Examples |
-|----------|------|----------|
-| 0 | drone | All UAVs/drones |
-| 1 | not_drone | Everything else |
+| Class ID | Name      | Examples        |
+| -------- | --------- | --------------- |
+| 0        | drone     | All UAVs/drones |
+| 1        | not_drone | Everything else |
 
 ## Detection Output
 
@@ -434,6 +538,103 @@ For simpler use cases, use `configs/dataset-binary.yaml`:
 }
 ```
 
+## Deployment on Raspberry Pi
+
+### Quick Deployment
+
+1. **SSH into your Pi:**
+   ```bash
+   ssh pi@raspberrypi.local  # or use IP address
+   ```
+
+2. **Clone and setup:**
+   ```bash
+   cd ~
+   git clone https://github.com/JustAGhosT/PhoenixRooivalk.git
+   cd PhoenixRooivalk/apps/detector
+   
+   # Create virtual environment
+   python3 -m venv venv
+   source venv/bin/activate
+   
+   # Install dependencies
+   pip install -e ".[pi]"
+   
+   # Enable camera
+   sudo raspi-config  # Interface Options > Camera > Enable
+   sudo reboot
+   ```
+
+3. **Download or transfer model:**
+   ```bash
+   # Create models directory
+   mkdir -p models/
+   
+   # Transfer model from development machine
+   # On your dev machine:
+   scp models/drone-detector_int8.tflite pi@raspberrypi.local:~/PhoenixRooivalk/apps/detector/models/
+   ```
+
+4. **Create config file (optional but recommended):**
+   ```bash
+   python src/main.py --generate-config config.yaml
+   # Edit config.yaml as needed
+   ```
+
+5. **Test camera:**
+   ```bash
+   python src/main.py --camera auto --engine mock
+   # Should open video window showing live feed
+   ```
+
+6. **Run detection:**
+   ```bash
+   python src/main.py --model models/drone-detector_int8.tflite --camera auto
+   ```
+
+### Running as a Service (Systemd)
+
+Create a systemd service for automatic startup:
+
+```bash
+# Create service file
+sudo nano /etc/systemd/system/drone-detector.service
+```
+
+Add the following (adjust paths as needed):
+```ini
+[Unit]
+Description=PhoenixRooivalk Drone Detector
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/PhoenixRooivalk/apps/detector
+Environment="PATH=/home/pi/PhoenixRooivalk/apps/detector/venv/bin"
+ExecStart=/home/pi/PhoenixRooivalk/apps/detector/venv/bin/python src/main.py \
+  --config /home/pi/PhoenixRooivalk/apps/detector/config.yaml \
+  --headless
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable drone-detector.service
+sudo systemctl start drone-detector.service
+
+# Check status
+sudo systemctl status drone-detector.service
+
+# View logs
+journalctl -u drone-detector.service -f
+```
+
 ## Integration with PhoenixRooivalk
 
 Send detections to the main platform:
@@ -443,19 +644,191 @@ python src/main.py --model models/drone-detector_int8.tflite \
   --alert-webhook https://your-phoenixrooivalk-api/api/detections
 ```
 
+Or configure in `config.yaml`:
+```yaml
+alert:
+  webhook_url: "https://your-phoenixrooivalk-api/api/detections"
+```
+
+## Logging
+
+The detector supports structured logging to files. Logging is disabled by default.
+
+### Enable Logging
+
+**Option 1: Configuration File (Recommended)**
+
+Add to your `config.yaml`:
+
+```yaml
+logging:
+  level: INFO              # DEBUG, INFO, WARNING, ERROR
+  log_file: "detector.log" # Path to log file
+  json_format: false       # Use JSON format for easy parsing
+  max_bytes: 10000000      # Rotate at 10MB
+  backup_count: 5          # Keep 5 backup files
+```
+
+Then run:
+```bash
+python src/main.py --config config.yaml --model models/drone-detector.tflite
+```
+
+**Option 2: Environment Variables**
+
+```bash
+export LOG_LEVEL=INFO
+export LOG_LOG_FILE=detector.log
+export LOG_JSON_FORMAT=false
+
+python src/main.py --model models/drone-detector.tflite
+```
+
+### Log File Location
+
+Log files are written to the path specified in `log_file`:
+- Default if not specified: **No log file** (console only)
+- Example: `detector.log` → current directory
+- Example: `/var/log/detector.log` → system log directory
+- Example: `logs/detector.log` → `logs/` directory (created automatically)
+
+### Log File Rotation
+
+Log files automatically rotate when they reach `max_bytes` (default: 10MB):
+- `detector.log` - current log
+- `detector.log.1` - previous log
+- `detector.log.2` - older log
+- ... up to `backup_count` files
+
+### Log Format
+
+**Console Output (default):**
+```
+2026-01-07 12:00:00 [INFO] drone_detector: Pipeline started
+2026-01-07 12:00:01 [WARNING] drone_detector: DRONE DETECTED: conf=0.87 score=0.92
+```
+
+**File Output (JSON format):**
+```json
+{"timestamp": "2026-01-07T12:00:00Z", "level": "INFO", "logger": "drone_detector", "message": "Pipeline started", "module": "main", "function": "main", "line": 432}
+{"timestamp": "2026-01-07T12:00:01Z", "level": "WARNING", "logger": "drone_detector", "message": "DRONE DETECTED: conf=0.87 score=0.92", "frame_number": 150, "confidence": 0.87, "drone_score": 0.92}
+```
+
+### Saving Detection Data
+
+**Save detections to JSON file:**
+```bash
+python src/main.py --model models/drone-detector.tflite --save-detections detections.json
+```
+
+This creates a JSON file with all detection events:
+```json
+[
+  {
+    "timestamp": "2026-01-07T12:00:01",
+    "frame_number": 150,
+    "source_id": "picamera",
+    "class_id": 0,
+    "class_name": "drone",
+    "confidence": 0.87,
+    "bbox": [120, 80, 280, 200],
+    "drone_score": 0.92,
+    "is_drone": true
+  }
+]
+```
+
+**Note:** Log files (`*.log`) and detection files (`detections*.json`) are automatically ignored by Git (see `.gitignore`).
+
 ## Troubleshooting
+
+### Testing Camera Before Running Detection
+
+**Quick Camera Test with Detector (Recommended):**
+
+The easiest way to verify your camera works is to run the detector with mock inference:
+
+```bash
+# Test USB webcam with mock inference (no model needed)
+python src/main.py --camera usb --engine mock
+
+# Test Pi Camera with mock inference
+python src/main.py --camera picamera --engine mock
+
+# Auto-detect camera with mock inference
+python src/main.py --camera auto --engine mock
+```
+
+**What to Look For (Camera is Working):**
+
+1. **Startup Output:**
+   ```
+   Pipeline started:
+     Frame source: picamera  # or "usb" or "opencv" (not "mock"!)
+     Resolution: (640, 480)   # Actual camera resolution
+     Inference: mock
+   ```
+
+2. **Video Window:**
+   - A window opens showing live camera feed
+   - You should see what the camera sees in real-time
+   - Mock detections appear as colored boxes (for testing)
+
+3. **FPS Counter:**
+   - Top-left corner shows: `FPS: XX.X (XX.Xms)`
+   - FPS should be > 0 (typically 15-30 FPS)
+   - Counter updates smoothly
+
+4. **Frame Counter:**
+   - Bottom of window shows: `Frame: XXX | Detections: X | Tracks: X`
+   - Frame number increases continuously
+   - No "Failed to read frame" errors in console
+
+5. **Console Output:**
+   - Should see periodic `[DRONE DETECTED]` messages (from mock inference)
+   - No errors about camera not found
+
+**If Camera is NOT Working:**
+- You'll see: `ERROR: Failed to open frame source` or `ERROR: Failed to start pipeline`
+- No video window appears
+- Frame source shows as "mock" instead of actual camera type
+- Console shows "Failed to read frame" repeatedly
+
+**System-Level Camera Tests (Troubleshooting):**
+
+```bash
+# For Pi Camera (libcamera)
+libcamera-hello --timeout 5000  # Should show preview window
+libcamera-vid -t 5000 -o test.h264  # Records 5 seconds
+
+# For USB webcam (OpenCV test)
+python3 -c "import cv2; cap = cv2.VideoCapture(0); print('Camera opened:', cap.isOpened()); ret, frame = cap.read(); print('Frame read:', ret, 'Shape:', frame.shape if ret else 'N/A'); cap.release()"
+
+# Check video devices
+ls -la /dev/video*  # Should list video devices
+v4l2-ctl --list-devices  # List all video devices with details
+
+# Check USB devices
+lsusb | grep -i camera  # List USB cameras
+```
 
 ### Camera not found
 
 ```bash
-# Enable legacy camera support
-sudo raspi-config  # Interface Options > Legacy Camera > Enable
+# Enable camera in raspi-config
+sudo raspi-config  # Interface Options > Camera > Enable
+# Reboot after enabling
 
-# Or use libcamera
+# For Pi Camera - test libcamera
 libcamera-hello --timeout 5000
 
-# Check video devices
-ls -la /dev/video*
+# For USB webcam - check if detected
+lsusb | grep -i camera
+v4l2-ctl --list-devices
+
+# Check permissions
+groups $USER  # Should include 'video' group
+# If not: sudo usermod -aG video $USER (then logout/login)
 ```
 
 ### Low FPS
