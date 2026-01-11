@@ -37,9 +37,8 @@ cd PhoenixRooivalk/apps/detector
 python3 -m venv venv && source venv/bin/activate
 pip install -e ".[pi]"
 
-# Enable camera
+# Enable camera (if not already)
 sudo raspi-config  # Interface Options > Camera > Enable
-sudo apt install -y libcamera-apps
 ```
 
 ### 2. Get Model
@@ -71,7 +70,7 @@ That's it. You should see a live video feed with detections.
 
 ```bash
 # Check if Pi Camera is detected
-libcamera-hello --list-cameras
+rpicam-hello --list-cameras
 
 # If not detected, enable it
 sudo raspi-config  # Interface Options > Camera > Enable
