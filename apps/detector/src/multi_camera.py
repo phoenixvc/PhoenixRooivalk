@@ -205,11 +205,14 @@ class CameraFusionManager:
                 return []
 
             state.is_active = True
+            # Calculate FPS before updating last_frame_time
+            if state.last_frame_time > 0:
+                time_delta = frame_data.timestamp - state.last_frame_time
+                state.fps_actual = 1.0 / max(0.001, time_delta)
             state.last_frame_time = frame_data.timestamp
             state.frame_count = frame_data.frame_number
             state.current_detections = detections
             state.current_tracks = tracks
-            state.fps_actual = 1.0 / max(0.001, frame_data.timestamp - state.last_frame_time)
 
             # Perform fusion
             self._fuse_detections(camera_id, detections)
@@ -299,14 +302,16 @@ class CameraFusionManager:
 
         # Check if detection is near expected position based on velocity
         if fused.velocity_3d and fused.position_3d:
-            (
+            predicted_position = (
                 fused.position_3d[0] + fused.velocity_3d[0] * age,
                 fused.position_3d[1] + fused.velocity_3d[1] * age,
                 fused.position_3d[2] + fused.velocity_3d[2] * age,
             )
-            # Project to this camera and check distance
-            # (Simplified - actual implementation would use full projection)
-            return True  # Placeholder
+            # TODO: Project predicted_position to this camera's image space
+            # and check distance to detection center. For now, accept any
+            # detection within the handoff window when velocity data exists.
+            _ = predicted_position  # Acknowledge the variable is computed for future use
+            return True
 
         return False
 

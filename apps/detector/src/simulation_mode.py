@@ -420,7 +420,19 @@ class FlightSimulator:
 
     def __init__(self):
         """Initialize flight simulator."""
-        self._time = 0.0
+        self._frame_time = 0.0
+        self._last_update_time: float = 0.0
+
+    def advance_time(self, dt: float) -> None:
+        """
+        Advance simulation time for the current frame.
+
+        Call this once per frame before updating any drones.
+
+        Args:
+            dt: Time delta in seconds since last frame
+        """
+        self._frame_time += dt
 
     def update(self, drone: SimulatedDrone, dt: float) -> None:
         """
@@ -428,9 +440,10 @@ class FlightSimulator:
 
         Args:
             drone: Drone to update
-            dt: Time delta in seconds
+            dt: Time delta in seconds (used for position integration)
         """
-        self._time += dt
+        # Use frame time for time-dependent patterns (shared across all drones)
+        simulation_time = self._frame_time
 
         pattern = drone.flight_pattern
         params = drone.pattern_params
@@ -485,7 +498,7 @@ class FlightSimulator:
             radius = params.get("radius", 20.0)
             angular_speed = params.get("angular_speed", 0.5)  # rad/s
 
-            angle = self._time * angular_speed
+            angle = simulation_time * angular_speed
             drone.position = (
                 center[0] + radius * math.cos(angle),
                 center[1] + radius * math.sin(angle),
@@ -502,7 +515,8 @@ class FlightSimulator:
             base_speed = params.get("speed", 15.0)
             change_interval = params.get("change_interval", 0.5)
 
-            if int(self._time / change_interval) != int((self._time - dt) / change_interval):
+            prev_time = simulation_time - dt
+            if int(simulation_time / change_interval) != int(prev_time / change_interval):
                 # Change direction
                 drone.velocity = (
                     random.uniform(-base_speed, base_speed),
