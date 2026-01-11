@@ -533,7 +533,7 @@ export const skyWatchMobile: Product = {
       supplier: "Coral.ai",
     },
     {
-      item: "Official 7\" Touchscreen",
+      item: 'Official 7" Touchscreen',
       specification: "800×480, capacitive",
       quantity: 1,
       unitCost: 60.0,
@@ -1247,7 +1247,7 @@ export const netSentryLite: Product = {
     },
     {
       item: "PVC Barrel",
-      specification: "3\" × 18\"",
+      specification: '3" × 18"',
       quantity: 1,
       unitCost: 15.0,
       totalCost: 15.0,
@@ -1368,7 +1368,7 @@ export const netSentryStandard: Product = {
     },
     {
       item: "Barrel Assembly",
-      specification: "Aluminum, 4\"",
+      specification: 'Aluminum, 4"',
       quantity: 1,
       unitCost: 40.0,
       totalCost: 40.0,
@@ -1617,7 +1617,7 @@ export function getTotalWithAccessories(product: Product): number {
   const accessoriesTotal =
     product.optionalAccessories?.reduce(
       (sum, item) => sum + item.totalCost,
-      0
+      0,
     ) ?? 0;
   return product.bomTotal + accessoriesTotal;
 }
@@ -1628,15 +1628,13 @@ export function formatProductPriceRange(product: Product): string {
 }
 
 /** Get products by line */
-export function getProductsByLine(
-  line: "SkyWatch" | "NetSentry"
-): Product[] {
+export function getProductsByLine(line: "SkyWatch" | "NetSentry"): Product[] {
   return allProducts.filter((p) => p.line === line);
 }
 
 /** Get products by category */
 export function getProductsByCategory(
-  category: "detection" | "countermeasure"
+  category: "detection" | "countermeasure",
 ): Product[] {
   return allProducts.filter((p) => p.category === category);
 }
@@ -1644,10 +1642,10 @@ export function getProductsByCategory(
 /** Get products by price range */
 export function getProductsByPriceRange(
   minPrice: number,
-  maxPrice: number
+  maxPrice: number,
 ): Product[] {
   return allProducts.filter(
-    (p) => p.priceMin >= minPrice && p.priceMax <= maxPrice
+    (p) => p.priceMin >= minPrice && p.priceMax <= maxPrice,
   );
 }
 
@@ -1669,10 +1667,30 @@ export const productCatalogSummary = {
 
 /** Mesh system pricing by coverage area */
 export const meshSystemPricing = {
-  "1_acre": { nodes: "2-3", nodeCost: "$316-474", central: "$370", total: "$686-844" },
-  "5_acres": { nodes: "4-6", nodeCost: "$632-948", central: "$370", total: "$1,002-1,318" },
-  "20_acres": { nodes: "8-12", nodeCost: "$1,264-1,896", central: "$370", total: "$1,634-2,266" },
-  "100_acres": { nodes: "15-25", nodeCost: "$2,370-3,950", central: "$370", total: "$2,740-4,320" },
+  "1_acre": {
+    nodes: "2-3",
+    nodeCost: "$316-474",
+    central: "$370",
+    total: "$686-844",
+  },
+  "5_acres": {
+    nodes: "4-6",
+    nodeCost: "$632-948",
+    central: "$370",
+    total: "$1,002-1,318",
+  },
+  "20_acres": {
+    nodes: "8-12",
+    nodeCost: "$1,264-1,896",
+    central: "$370",
+    total: "$1,634-2,266",
+  },
+  "100_acres": {
+    nodes: "15-25",
+    nodeCost: "$2,370-3,950",
+    central: "$370",
+    total: "$2,740-4,320",
+  },
 };
 
 /** Enterprise system pricing options */

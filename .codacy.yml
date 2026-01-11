@@ -10,6 +10,15 @@ engines:
     enabled: true
   prospector:
     enabled: false # Using ruff instead
+  # Markdown linting - disable line length for tables
+  remark-lint:
+    enabled: true
+    patterns:
+      - "**/*.md"
+    exclude_patterns:
+      - "**/node_modules/**"
+    options:
+      maximum-line-length: false
 
 exclude_paths:
   - "tests/**"
@@ -39,3 +48,5 @@ disable_patterns:
   - "B607" # partial executable path
   # Hardcoded 0.0.0.0 is intentional for LAN access on Pi
   - "B104" # Possible binding to all interfaces
+  # Dynamic URLs with urllib are validated for http/https scheme in __init__
+  - "B310" # urllib urlopen with dynamic URL
