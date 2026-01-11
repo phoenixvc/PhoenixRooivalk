@@ -138,6 +138,11 @@ function getPhaseInfo(product: Product): ProductPhaseInfo {
   return phases[product.phase] ?? DEFAULT_PHASE;
 }
 
+/**
+ * Renders a section showcasing Phase 1 highlighted products with availability status,
+ * pricing, and preorder capabilities. Displays product cards with dynamic status badges
+ * and action buttons based on launch timeline.
+ */
 export const ProductHighlightsSection: React.FC = () => {
   const featuredProducts = featuredProductIds
     .map((id) => products.find((p) => p.id === id))
