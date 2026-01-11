@@ -59,8 +59,8 @@ export const HeroSection: React.FC = () => {
               <div className={styles.metricLabel}>Pneumatic Net Launcher</div>
             </div>
             <div className={styles.metric}>
-              <div className={styles.metricValue}>2026-2027</div>
-              <div className={styles.metricLabel}>Launch + Testing</div>
+              <div className={styles.metricValue}>Jul 2026</div>
+              <div className={styles.metricLabel}>First Delivery</div>
             </div>
             <div className={styles.metric}>
               <div className={styles.metricValue}>2 Brands</div>
@@ -136,7 +136,7 @@ export const HeroSection: React.FC = () => {
           <div className="card card--elevated">
             <div className={styles.conceptTitle}>
               <h3 className={styles.conceptTitleText}>
-                Our Development Path (2025-2030)
+                Our Development Path (2026-2030)
               </h3>
               <p className={styles.conceptDescription}>
                 Starting with proven pneumatic technology, expanding to advanced
@@ -168,7 +168,7 @@ export const HeroSection: React.FC = () => {
 
             <div className={styles.disclaimer}>
               <p className={styles.disclaimerText}>
-                💡 Phased approach reduces risk and validates technology at each
+                Phased approach reduces risk and validates technology at each
                 stage
               </p>
             </div>

@@ -1,0 +1,233 @@
+.section {
+  padding: 5rem 1.5rem;
+  background: linear-gradient(180deg, #090a0f 0%, #1b2735 50%, #090a0f 100%);
+  position: relative;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: rgb(148, 163, 184);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.featuresGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.featureCard {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(var(--primary), 0.3);
+  transform: translateY(-2px);
+}
+
+.featureIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--primary), 0.2),
+    rgba(var(--accent), 0.2)
+  );
+  border-radius: 0.75rem;
+  color: rgb(var(--primary));
+}
+
+.featureContent {
+  flex: 1;
+}
+
+.featureHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.featureTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.brandBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.brandConsumer {
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(34, 197, 94);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.brandEnterprise {
+  background: rgba(59, 130, 246, 0.15);
+  color: rgb(59, 130, 246);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.brandBoth {
+  background: rgba(var(--primary), 0.15);
+  color: rgb(var(--primary));
+  border: 1px solid rgba(var(--primary), 0.3);
+}
+
+.featureDescription {
+  font-size: 1rem;
+  color: rgb(148, 163, 184);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.useCasesSection {
+  margin-bottom: 3rem;
+}
+
+.useCasesTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.useCasesGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .useCasesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .useCasesGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.useCaseCard {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.useCaseCard:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.useCaseBadge {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.useCaseTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+
+.useCaseDescription {
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  margin: 0;
+}
+
+.ctaSection {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .featureCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .featureIcon {
+    margin: 0 auto;
+  }
+
+  .featureHeader {
+    justify-content: center;
+  }
+
+  .ctaSection {
+    flex-direction: column;
+    align-items: center;
+  }
+}

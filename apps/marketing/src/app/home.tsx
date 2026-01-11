@@ -4,9 +4,9 @@ import * as React from "react";
 import { Footer } from "../components/Footer";
 import { Navigation } from "../components/Navigation";
 import { ContactSection } from "../components/sections/ContactSection";
+import { FeaturesSection } from "../components/sections/FeaturesSection";
 import { HeroSection } from "../components/sections/HeroSection";
-import { InteractiveElementsSection } from "../components/sections/InteractiveElementsSection";
-import { CaseStudiesSection } from "../components/sections/CaseStudiesSection";
+import { ProductHighlightsSection } from "../components/sections/ProductHighlightsSection";
 import { usePerformanceOptimizations } from "../hooks/usePerformanceOptimizations";
 import styles from "./home.module.css";
 
@@ -28,8 +28,8 @@ export default function HomePage(): React.ReactElement {
 
       {/* Main Content Sections */}
       <HeroSection />
-      <InteractiveElementsSection />
-      <CaseStudiesSection />
+      <FeaturesSection />
+      <ProductHighlightsSection />
       <ContactSection />
 
       {/* Footer */}
@@ -72,7 +72,7 @@ export default function HomePage(): React.ReactElement {
                 name: "How does certification build competitive advantage?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (May 2026) and FAA waiver for AeroNet™ enterprise operations (June 2026). This safety-first approach builds trust and market credibility.",
+                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (Q2 2026) and FAA waiver for AeroNet™ enterprise operations (Q3 2026). This safety-first approach builds trust and market credibility.",
                 },
               },
               {

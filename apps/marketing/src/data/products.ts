@@ -380,9 +380,9 @@ export const products: Product[] = [
       "Entry-level drone detection for backyard awareness and learning. Perfect for makers and hobbyists.",
     category: "diy-maker",
     phase: "seed",
-    phaseTimeline: "Available Now",
-    available: true,
-    comingSoon: false,
+    phaseTimeline: "Q1 2026 • Delivery Apr 2026",
+    available: false,
+    comingSoon: true,
 
     priceRange: { min: 50, max: 100 },
     priceFormatted: "$50-100",
@@ -393,7 +393,7 @@ export const products: Product[] = [
     laborCost: 10,
 
     targetMarket: ["Hobbyists", "Makers", "Educational"],
-    marketSegment: "DIY/Maker community (preorder for kits)",
+    marketSegment: "DIY/Maker community",
 
     specs: {
       range: "30-50m",
@@ -429,9 +429,9 @@ export const products: Product[] = [
       "Balanced detection system for residential use with Coral TPU acceleration and low-light capability.",
     category: "prosumer",
     phase: "seed",
-    phaseTimeline: "Available Now",
-    available: true,
-    comingSoon: false,
+    phaseTimeline: "Q2 2026 • Delivery Jul 2026",
+    available: false,
+    comingSoon: true,
 
     priceRange: { min: 100, max: 250 },
     priceFormatted: "$100-250",
@@ -478,9 +478,9 @@ export const products: Product[] = [
       "Multi-sensor detection platform with visual, RF, and audio detection. Pan-tilt tracking for professional use.",
     category: "commercial",
     phase: "seed",
-    phaseTimeline: "Available Now",
-    available: true,
-    comingSoon: false,
+    phaseTimeline: "Q2 2026 • Delivery Jul 2026",
+    available: false,
+    comingSoon: true,
 
     priceRange: { min: 250, max: 600 },
     priceFormatted: "$250-600",
