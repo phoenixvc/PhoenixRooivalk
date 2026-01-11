@@ -5,8 +5,9 @@
 **Test Coverage: ~15%** (174 tests total, all passing)
 
 ### Coverage by Module
+
 - ✅ `config/constants.py` - 100% coverage
-- ✅ `utils/geometry.py` - 96% coverage  
+- ✅ `utils/geometry.py` - 96% coverage
 - ✅ `interfaces.py` - 84% coverage
 - ✅ `targeting.py` - 82% coverage
 - ⚠️ `config/settings.py` - 46% coverage
@@ -27,6 +28,7 @@
 **Status:** ✅ Completed
 
 **Tests Added:**
+
 - ✅ `tests/unit/test_factory.py` - 12 tests
   - DetectionPipeline class (start, stop, initialization)
   - create_pipeline() with various configurations
@@ -43,9 +45,10 @@
 **Estimated Tests:** 15-20 tests
 
 **Test Areas:**
+
 1. **Environment Variable Loading**
-   - Test env prefix handling (CAPTURE_, INFERENCE_, etc.)
-   - Test nested delimiter handling (__)
+   - Test env prefix handling (CAPTURE*, INFERENCE*, etc.)
+   - Test nested delimiter handling (\_\_)
    - Test .env file loading
 
 2. **Validation Edge Cases**
@@ -80,6 +83,7 @@
 **Estimated Tests:** 20-25 tests
 
 **Test Areas:**
+
 1. **MockFrameSource**
    - Frame generation
    - Timestamp handling
@@ -108,6 +112,7 @@
 **Test File:** `tests/unit/test_frame_sources.py`
 
 **Challenges:**
+
 - Requires mocking OpenCV (cv2)
 - Requires mocking picamera2
 - Need to mock file I/O
@@ -121,6 +126,7 @@
 **Estimated Tests:** 25-30 tests
 
 **Test Areas:**
+
 1. **MockInferenceEngine**
    - Mock detection generation
    - Confidence threshold application
@@ -145,6 +151,7 @@
 **Test File:** `tests/unit/test_inference_engines.py`
 
 **Challenges:**
+
 - Requires mocking ML libraries
 - Model file handling
 - Hardware dependencies (Coral TPU)
@@ -158,6 +165,7 @@
 **Estimated Tests:** 20-25 tests
 
 **Test Areas:**
+
 1. **ConsoleAlertHandler**
    - Alert formatting
    - Output verification
@@ -190,6 +198,7 @@
 **Test File:** `tests/unit/test_alert_handlers.py`
 
 **Challenges:**
+
 - Requires mocking HTTP requests
 - File I/O testing
 - Async behavior (if applicable)
@@ -203,6 +212,7 @@
 **Estimated Tests:** 15-20 tests
 
 **Test Areas:**
+
 1. **OpenCVRenderer**
    - Frame rendering
    - Overlay drawing
@@ -220,6 +230,7 @@
 **Test File:** `tests/unit/test_renderers.py`
 
 **Challenges:**
+
 - Requires mocking OpenCV display
 - Window management mocking
 
@@ -232,6 +243,7 @@
 **Estimated Tests:** 20-25 tests
 
 **Test Areas:**
+
 1. **NoOpTracker**
    - Pass-through behavior
    - Interface compliance
@@ -254,6 +266,7 @@
 **Test File:** `tests/unit/test_trackers.py`
 
 **Challenges:**
+
 - Kalman filter algorithm testing
 - Track ID management
 - State persistence
@@ -267,6 +280,7 @@
 **Estimated Tests:** 15-20 tests
 
 **Test Areas:**
+
 1. **Platform Detection**
    - Linux detection
    - Raspberry Pi detection
@@ -285,6 +299,7 @@
 **Test File:** `tests/unit/test_hardware.py`
 
 **Challenges:**
+
 - Requires mocking system calls
 - Platform-specific behavior
 - Hardware dependency mocking
@@ -298,6 +313,7 @@
 **Estimated Tests:** 10-15 tests
 
 **Test Areas:**
+
 1. **Full Pipeline Workflows**
    - Mock pipeline → inference → tracking → alert
    - Config file → pipeline creation
@@ -316,6 +332,7 @@
 **Test File:** `tests/integration/test_workflows.py`
 
 **Challenges:**
+
 - Requires full system mocking
 - Complex setup/teardown
 - Timing-sensitive operations
@@ -329,6 +346,7 @@
 **Estimated Tests:** 15-20 tests
 
 **Test Areas:**
+
 1. **Argument Parsing**
    - All flag combinations
    - Invalid arguments
@@ -354,17 +372,20 @@
 ## Implementation Order & Priority
 
 ### High Priority (Core Functionality)
+
 1. ✅ **Phase 1: Factory & Pipeline** - COMPLETE
 2. **Phase 2: Settings Edge Cases** - Next
 3. **Phase 4: Inference Engines** - Critical for ML
 4. **Phase 3: Frame Sources** - Critical for input
 
 ### Medium Priority (Supporting Systems)
+
 5. **Phase 5: Alert Handlers** - Important for output
 6. **Phase 6: Renderers** - Display functionality
 7. **Phase 7: Trackers** - Core algorithm
 
 ### Lower Priority (System Integration)
+
 8. **Phase 8: Hardware Detection** - Platform-specific
 9. **Phase 9: Integration Workflows** - End-to-end
 10. **Phase 10: Main Entry Point** - Already partially covered
@@ -374,12 +395,14 @@
 ## Success Metrics
 
 ### Coverage Goals
+
 - **Phase 1-3:** 30% overall coverage
 - **Phase 1-5:** 50% overall coverage
 - **Phase 1-7:** 65% overall coverage
 - **Phase 1-10:** 75%+ overall coverage
 
 ### Test Quality Goals
+
 - All tests pass consistently
 - Tests are isolated (no interdependencies)
 - Tests use appropriate mocking
