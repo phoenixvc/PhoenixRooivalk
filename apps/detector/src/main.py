@@ -46,22 +46,14 @@ from pathlib import Path
 # Support running as both script and module
 try:
     from .config.settings import Settings, create_default_config
-    from .factory import (
-        DetectionPipeline,
-        create_demo_pipeline,
-        create_pipeline,
-    )
+    from .factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 except ImportError:
     # Running as script - add src to path
     src_dir = Path(__file__).parent
     if str(src_dir) not in sys.path:
         sys.path.insert(0, str(src_dir))
     from config.settings import Settings, create_default_config
-    from factory import (
-        DetectionPipeline,
-        create_demo_pipeline,
-        create_pipeline,
-    )
+    from factory import DetectionPipeline, create_demo_pipeline, create_pipeline
 
 
 def parse_args():
