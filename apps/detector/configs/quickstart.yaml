@@ -22,3 +22,7 @@ display:
   headless: false
   show_fps: true
   show_drone_score: true
+
+logging:
+  level: INFO
+  log_file: "detector.log"
