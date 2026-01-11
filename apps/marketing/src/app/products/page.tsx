@@ -192,7 +192,7 @@ export default function ProductsPage(): React.ReactElement {
           </p>
           <div className={styles.ctaButtons}>
             <Button href="/contact" size="lg" variant="primary">
-              Preorder Now - No Deposit
+              Get Started
             </Button>
             <Button href="/contact" variant="secondary" size="lg">
               Contact Sales
