@@ -193,17 +193,17 @@
 
 .statusGenerating {
   background: rgba(var(--color-blue-deep), 0.15);
-  color: rgb(37, 99, 235);
+  color: rgb(var(--color-blue));
 }
 
 .statusCompleted {
   background: rgba(var(--color-teal-deep), 0.15);
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal));
 }
 
 .statusFailed {
   background: rgba(var(--color-red), 0.15);
-  color: rgb(185, 28, 28);
+  color: rgb(var(--color-red-dark));
 }
 
 .reportBody h3 {
@@ -389,7 +389,7 @@
   background: rgba(var(--color-red), 0.1);
   border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 6px;
-  color: rgb(185, 28, 28);
+  color: rgb(var(--color-red-dark));
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
@@ -503,7 +503,7 @@
   border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 6px;
   font-size: 0.875rem;
-  color: rgb(185, 28, 28);
+  color: rgb(var(--color-red-dark));
 }
 
 /* Actions */
@@ -548,7 +548,7 @@
 }
 
 .exportBtn:hover:not(:disabled) {
-  background: rgb(37, 99, 235);
+  background: rgb(var(--color-blue));
 }
 
 .regenerateBtn {
@@ -557,7 +557,7 @@
 }
 
 .regenerateBtn:hover:not(:disabled) {
-  background: rgb(147, 51, 234);
+  background: rgb(var(--color-purple));
 }
 
 .deleteBtn {
@@ -575,16 +575,16 @@
 }
 
 .viewBtn:hover:not(:disabled) {
-  background: rgb(22, 163, 74);
+  background: rgb(var(--color-teal));
 }
 
 .mdxBtn {
-  background: rgb(139, 92, 246);
+  background: rgb(var(--color-violet));
   color: rgb(var(--text-primary));
 }
 
 .mdxBtn:hover:not(:disabled) {
-  background: rgb(109, 40, 217);
+  background: rgb(var(--color-violet-dark));
 }
 
 /* Date range picker */

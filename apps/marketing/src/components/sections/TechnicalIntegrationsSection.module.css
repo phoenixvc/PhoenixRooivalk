@@ -82,17 +82,17 @@
 .cardPurple {
   background: linear-gradient(
     to bottom right,
-    rgba(139, 92, 246, 0.2),
-    rgba(124, 58, 237, 0.2)
+    rgba(var(--color-purple), 0.2),
+    rgba(var(--color-purple-dark), 0.2)
   );
-  border-color: rgba(168, 85, 247, 0.3);
+  border-color: rgba(var(--color-purple-light), 0.3);
 }
 
 .cardGreen {
   background: linear-gradient(
     to bottom right,
     rgba(var(--color-teal-deep), 0.2),
-    rgba(16, 185, 129, 0.2)
+    rgba(var(--color-teal-deep), 0.2)
   );
   border-color: rgba(var(--color-teal-deep), 0.3);
 }
@@ -100,17 +100,17 @@
 .cardTeal {
   background: linear-gradient(
     to bottom right,
-    rgba(20, 184, 166, 0.2),
-    rgba(6, 182, 212, 0.2)
+    rgba(var(--color-teal), 0.2),
+    rgba(var(--color-cyan), 0.2)
   );
-  border-color: rgba(20, 184, 166, 0.3);
+  border-color: rgba(var(--color-teal), 0.3);
 }
 
 .cardOrange {
   background: linear-gradient(
     to bottom right,
     rgba(var(--primary), 0.2),
-    rgba(239, 68, 68, 0.2)
+    rgba(var(--color-red), 0.2)
   );
   border-color: rgba(var(--primary), 0.3);
 }
@@ -136,12 +136,12 @@
 }
 
 .badgeBeta {
-  background-color: rgba(234, 179, 8, 0.2);
+  background-color: rgba(var(--color-yellow), 0.2);
   color: rgb(var(--sensor-amber));
 }
 
 .badgePlanned {
-  background-color: rgba(107, 114, 128, 0.2);
+  background-color: rgba(var(--color-gray-500), 0.2);
   color: rgb(var(--text-muted));
 }
 
@@ -411,8 +411,8 @@
 .valueCardGreen {
   background: linear-gradient(
     to bottom right,
-    rgba(6, 78, 59, 0.2),
-    rgba(5, 46, 22, 0.2)
+    rgba(var(--color-green-darker), 0.2),
+    rgba(var(--color-green-darkest), 0.2)
   );
   border-color: rgba(var(--color-teal-deep), 0.3);
 }
@@ -420,17 +420,17 @@
 .valueCardPurple {
   background: linear-gradient(
     to bottom right,
-    rgba(76, 29, 149, 0.2),
-    rgba(88, 28, 135, 0.2)
+    rgba(var(--color-purple-darker), 0.2),
+    rgba(var(--color-purple-darkest), 0.2)
   );
-  border-color: rgba(168, 85, 247, 0.3);
+  border-color: rgba(var(--color-purple-light), 0.3);
 }
 
 .valueCardOrange {
   background: linear-gradient(
     to bottom right,
-    rgba(124, 45, 18, 0.2),
-    rgba(153, 27, 27, 0.2)
+    rgba(var(--color-orange-darker), 0.2),
+    rgba(var(--color-red-darker), 0.2)
   );
   border-color: rgba(var(--primary), 0.3);
 }

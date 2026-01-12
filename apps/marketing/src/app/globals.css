@@ -123,23 +123,31 @@
   --color-green-bright: 132, 204, 22; /* #84cc16 - lime-500 */
   --color-green-dark: 22, 163, 74; /* #16a34a - green-600 */
   --color-green-darker: 21, 128, 61; /* #15803d - green-700 */
+  --color-green-darkest: 5, 46, 22; /* #052e16 - green-950 */
 
   /* Purples - for synergy/ECM effects */
   --color-purple: 139, 92, 246; /* #8b5cf6 - violet-500 */
   --color-purple-light: 167, 139, 250; /* #a78bfa - violet-400 */
   --color-purple-deep: 168, 85, 247; /* #a855f7 - purple-500 */
+  --color-purple-dark: 124, 58, 237; /* #7c3aed - violet-600 */
+  --color-purple-darker: 76, 29, 149; /* #4c1d95 - purple-800 */
+  --color-purple-darkest: 88, 28, 135; /* #581c87 - purple-900 */
+  --color-violet: 139, 92, 246; /* #8b5cf6 - violet-500 (alias) */
+  --color-violet-dark: 109, 40, 217; /* #6d28d9 - violet-700 */
 
   /* Reds - extended danger palette */
   --color-red-light: 248, 113, 113; /* #f87171 - red-400 */
   --color-red: 239, 68, 68; /* #ef4444 - red-500 */
   --color-red-dark: 220, 38, 38; /* #dc2626 - red-600 */
   --color-red-deep: 185, 28, 28; /* #b91c1c - red-700 */
+  --color-red-darker: 153, 27, 27; /* #991b1b - red-800 */
   --color-red-bright: 255, 93, 93; /* #ff5d5d - custom bright red */
 
   /* Oranges - extended primary palette */
   --color-orange: 249, 115, 22; /* #f97316 - orange-500 */
   --color-orange-light: 251, 146, 60; /* #fb923c - orange-400 */
   --color-orange-dark: 234, 88, 12; /* #ea580c - orange-600 */
+  --color-orange-darker: 124, 45, 18; /* #7c2d12 - orange-800 */
 
   /* Yellows/Ambers - extended warning palette */
   --color-yellow: 250, 204, 21; /* #facc15 - yellow-400 */
