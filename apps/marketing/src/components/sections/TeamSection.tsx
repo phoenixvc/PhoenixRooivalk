@@ -6,11 +6,12 @@ export const TeamSection: React.FC = () => {
   const team = [
     {
       name: "Jurie Smit",
-      role: "CIO",
-      title: "Chief Information Officer",
+      role: "Founder/CEO/CIO",
+      title: "Founder, Chief Executive Officer & Chief Information Officer",
       description: "Technology strategy and information systems",
       linkedin: "https://www.linkedin.com/in/juriesmit/",
       icon: "💻",
+      eliminated: false,
     },
     {
       name: "Chanelle Fellinger",
@@ -19,6 +20,7 @@ export const TeamSection: React.FC = () => {
       description: "Brand strategy and market positioning",
       linkedin: "https://www.linkedin.com/in/chanelle-fellinger/",
       icon: "📢",
+      eliminated: false,
     },
     {
       name: "Martyn",
@@ -27,6 +29,7 @@ export const TeamSection: React.FC = () => {
       description: "Operations and business execution",
       linkedin: null,
       icon: "⚙️",
+      eliminated: true,
     },
     {
       name: "Pieter",
@@ -35,6 +38,7 @@ export const TeamSection: React.FC = () => {
       description: "Product development and engineering",
       linkedin: null,
       icon: "🔧",
+      eliminated: false,
     },
     {
       name: "Eben",
@@ -43,6 +47,7 @@ export const TeamSection: React.FC = () => {
       description: "Financial strategy and planning",
       linkedin: null,
       icon: "💰",
+      eliminated: false,
     },
   ];
 
@@ -60,7 +65,15 @@ export const TeamSection: React.FC = () => {
         <div className={styles.teamGrid}>
           {team.map((member, index) => (
             <RevealSection key={index}>
-              <div className={styles.memberCard}>
+              <div className={`${styles.memberCard} ${member.eliminated ? styles.eliminatedCard : ''}`}>
+                {member.eliminated && (
+                  <div className={styles.eliminatedOverlay}>
+                    <div className={styles.crossLine1}></div>
+                    <div className={styles.crossLine2}></div>
+                    <div className={styles.eliminatedText}>ELIMINATED</div>
+                    <div className={styles.eliminatedSubtext}>hy is 'n poes</div>
+                  </div>
+                )}
                 <div className={styles.memberIcon}>{member.icon}</div>
                 <div className={styles.memberInfo}>
                   <h3 className={styles.memberName}>{member.name}</h3>

@@ -62,6 +62,87 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.eliminatedCard {
+  border-color: rgba(220, 38, 38, 0.5);
+  opacity: 0.85;
+}
+
+.eliminatedCard:hover {
+  border-color: rgba(220, 38, 38, 0.8);
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.3);
+}
+
+.eliminatedOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.crossLine1,
+.crossLine2 {
+  position: absolute;
+  background: #dc2626;
+  width: 140%;
+  height: 12px;
+  left: -20%;
+  top: 50%;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
+}
+
+.crossLine1 {
+  transform: rotate(45deg);
+}
+
+.crossLine2 {
+  transform: rotate(-45deg);
+}
+
+.eliminatedText {
+  position: relative;
+  z-index: 11;
+  color: #dc2626;
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 20px rgba(220, 38, 38, 0.8);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.eliminatedSubtext {
+  position: relative;
+  z-index: 11;
+  color: #dc2626;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  text-shadow:
+    1px 1px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
 }
 
 .memberCard:hover {
