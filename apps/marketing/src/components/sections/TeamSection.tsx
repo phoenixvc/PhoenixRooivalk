@@ -75,7 +75,7 @@ export const TeamSection: React.FC = () => {
                     <div className={styles.crossLine2}></div>
                     <div className={styles.eliminatedText}>ELIMINATED</div>
                     <div className={styles.eliminatedSubtext}>
-                      hy is &apos;n poes
+                      No longer with the team
                     </div>
                   </div>
                 )}
