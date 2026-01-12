@@ -51,6 +51,64 @@
   margin-top: 3rem;
 }
 
+.foundersGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.advisorsHeader {
+  text-align: center;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.advisorsTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(var(--text-secondary));
+  position: relative;
+  display: inline-block;
+}
+
+.advisorsTitle::before,
+.advisorsTitle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--primary), 0.5)
+  );
+}
+
+.advisorsTitle::before {
+  right: 100%;
+  margin-right: 1rem;
+}
+
+.advisorsTitle::after {
+  left: 100%;
+  margin-left: 1rem;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary), 0.5),
+    transparent
+  );
+}
+
+.advisorsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .memberCard {
   background: rgba(var(--bg-secondary), 0.5);
   border: 1px solid rgba(var(--primary), 0.2);
@@ -224,6 +282,13 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .foundersGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .section {
     padding: 4rem 1.5rem;
@@ -240,6 +305,25 @@
   .teamGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  .foundersGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .advisorsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .advisorsTitle {
+    font-size: 1.5rem;
+  }
+
+  .advisorsTitle::before,
+  .advisorsTitle::after {
+    width: 30px;
   }
 
   .memberCard {
