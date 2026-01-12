@@ -150,6 +150,32 @@ export const TeamSection: React.FC = () => {
             </RevealSection>
           ))}
         </div>
+
+        <RevealSection className={styles.backedByHeader}>
+          <h3 className={styles.backedByTitle}>Backed By</h3>
+        </RevealSection>
+
+        <RevealSection>
+          <div className={styles.backedByGrid}>
+            <a
+              href="https://soonami.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.backedByCard}
+            >
+              <div className={styles.backedByLogo}>
+                <span className={styles.soonamiText}>soonami</span>
+              </div>
+              <div className={styles.backedByInfo}>
+                <div className={styles.backedByName}>Soonami</div>
+                <div className={styles.backedByCohort}>Cohort 8</div>
+                <p className={styles.backedByDescription}>
+                  Web3 &amp; AI Accelerator
+                </p>
+              </div>
+            </a>
+          </div>
+        </RevealSection>
       </div>
     </section>
   );
