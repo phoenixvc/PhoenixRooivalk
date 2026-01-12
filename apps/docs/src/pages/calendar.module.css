@@ -935,22 +935,22 @@ textarea.formInput {
 }
 
 .statCard.statHigh {
-  border-color: rgb(234, 179, 8);
+  border-color: rgb(var(--sensor-amber));
   border-width: 2px;
 }
 
 .statCard.statHigh .statNumber {
-  color: rgb(202, 138, 4);
+  color: rgb(var(--sensor-amber));
 }
 
 .statCard.statOverdue {
-  border-color: rgb(220, 38, 38);
+  border-color: rgb(var(--color-red));
   border-width: 2px;
   background: rgba(var(--color-red), 0.05);
 }
 
 .statCard.statOverdue .statNumber {
-  color: rgb(220, 38, 38);
+  color: rgb(var(--color-red));
 }
 
 /* ============================================
@@ -1117,7 +1117,7 @@ textarea.formInput {
 }
 
 .statCard.statCompletion .statNumber {
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal-deep));
 }
 
 .progressBar {
@@ -1131,7 +1131,7 @@ textarea.formInput {
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--color-teal-deep)), rgb(22, 163, 74));
+  background: linear-gradient(90deg, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -1189,7 +1189,7 @@ textarea.formInput {
   border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal-deep));
   text-transform: uppercase;
   letter-spacing: 0.03em;
   text-decoration: none !important;

@@ -67,7 +67,7 @@
   border-radius: 1rem;
   transition: all 0.3s ease;
   position: relative;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
 }
 
 .featureCard::after {
@@ -205,16 +205,16 @@
 
 .useCaseCard {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--text-primary), 0.02);
   border: 1px solid rgba(59, 130, 246, 0.1);
   border-radius: 0.75rem;
   text-align: center;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(var(--tactical-black), 0.05);
 }
 
 .useCaseCard:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(var(--text-primary), 0.04);
   border-color: rgba(59, 130, 246, 0.2);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);

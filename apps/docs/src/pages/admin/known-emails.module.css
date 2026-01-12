@@ -501,5 +501,5 @@
 
 [data-theme="dark"] .deactivateBtn {
   background: rgba(245, 158, 11, 0.2);
-  color: rgb(251, 191, 36);
+  color: rgb(var(--sensor-amber));
 }

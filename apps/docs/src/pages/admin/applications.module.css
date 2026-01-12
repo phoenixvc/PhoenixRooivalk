@@ -128,7 +128,7 @@
 .filterBtn.active {
   background: var(--ifm-color-primary);
   border-color: var(--ifm-color-primary);
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 /* Applications list */
@@ -369,7 +369,7 @@
 
 .approveBtn {
   background: rgb(var(--color-teal-deep));
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .approveBtn:hover:not(:disabled) {
@@ -378,7 +378,7 @@
 
 .rejectBtn {
   background: rgb(var(--color-red));
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .rejectBtn:hover:not(:disabled) {

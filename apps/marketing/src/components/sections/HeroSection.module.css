@@ -86,7 +86,7 @@
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   animation: fadeInUp 1s ease both;
   margin-bottom: 1.75rem;
 }
@@ -362,7 +362,7 @@
   height: 3rem;
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   border-radius: 50%;
-  color: white;
+  color: rgb(var(--text-primary));
   box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
