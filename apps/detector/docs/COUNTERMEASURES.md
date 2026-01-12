@@ -59,6 +59,7 @@ lower cost, and often sufficient for most use cases.
 | MicroSD card (32GB)   | $8   | Amazon      |
 | USB power supply      | $10  | Amazon      |
 | 3D printed case       | $5   | DIY/Etsy    |
+
 **Detection Methods:**
 
 - Visual (camera): 30-50m range
@@ -94,6 +95,7 @@ lower cost, and often sufficient for most use cases.
 | PoE HAT (optional)     | $20  | Pi supplier |
 | Weatherproof enclosure | $25  | Amazon      |
 | MicroSD card (64GB)    | $12  | Amazon      |
+
 **Detection Methods:**
 
 - Visual (camera): 50-150m range
@@ -141,6 +143,7 @@ alert:
 | PoE+ HAT                   | $25  | Pi supplier    |
 | Weatherproof enclosure     | $40  | Amazon         |
 | Pan-tilt mount             | $100 | Servo supplier |
+
 **Detection Methods:**
 
 | Method             | Range    | Conditions    | Hardware              |
@@ -149,6 +152,7 @@ alert:
 | Visual (wide)      | 50-100m  | Day/low-light | Camera Module v3      |
 | RF detection       | 500m-2km | Any           | RTL-SDR + antenna     |
 | Audio signature    | 50-200m  | Low noise     | USB microphone        |
+
 **Multi-Sensor Fusion:**
 
 ```
@@ -302,7 +306,7 @@ Detection range depends on:
 **Components:**
 
 | Item                  | Cost | Source                  |
-| --------------------- | ---- | ----------------------- |
+| --------------------- | ---- | ----------------------- | -------- | ---------------------- | --- | ----------------- | --- |
 | Raspberry Pi          |
 | 4 (2GB)               | $45  | Pi supplier             |          | Pi Camera Module v3    | $35 | Pi supplier       |     |
 | Coral USB Accelerator | $60  | Coral.ai                |          | 7" touchscreen display | $60 | Pi                |
@@ -401,7 +405,7 @@ alert:
 
 **Detection Fusion:**
 
-``` txt
+```txt
 Node 1 detects at 70% confidence ─┐
 Node 2 detects at 65% confidence ─┼─► Fusion Engine ─► 95% combined confidence
 Node 3 detects at 40% confidence ─┘
@@ -440,10 +444,10 @@ mesh:
     node_timeout: 30
 ```
 
-| **Deployment Calculator:** | Area Size | Recommended Nodes | Total Cost |
-| -------------------------- | --------- | ----------------- || 1 acre | 2-3 | $500-700 | | 5
-acres | 4-6 | $900-1,200 | | 20 acres | 8-12 | $1,600-2,400 | | 100 acres |
-15-25 | $3,000-5,000 |
+| **Deployment Calculator:** | Area Size | Recommended Nodes | Total Cost | |
+-------------------------- | --------- | ----------------- || 1 acre | 2-3 |
+$500-700 | | 5 acres | 4-6 | $900-1,200 | | 20 acres | 8-12 | $1,600-2,400 | |
+100 acres | 15-25 | $3,000-5,000 |
 
 ---
 
@@ -454,9 +458,9 @@ acres | 4-6 | $900-1,200 | | 20 acres | 8-12 | $1,600-2,400 | | 100 acres |
 **Components:**
 
 | Item             | Cost         | Source             |
-| ---------------- | ------------ | ------------------ |
+| ---------------- | ------------ | ------------------ | ------------------ | --------------------- | ------------ | ------------- | --- | --- |
 | Server rack      |
-| (1U)             | $500         | Dell/HP            |                    | Detection nodes (×10) | $2,000       | SkyWatch Mesh |  | PTZ |
+| (1U)             | $500         | Dell/HP            |                    | Detection nodes (×10) | $2,000       | SkyWatch Mesh |     | PTZ |
 | cameras (×4)     | $2,000       | Hikvision/Axis     |                    | Radar unit (optional) | $3,000-8,000 |
 | Echodyne/Oculii  |              | RF detection array | $1,000             | Custom RTL-SDR        |              | Central       |
 | software license | $1,000-5,000 | Commercial         |                    | Installation          | $1,000-3,000 |
@@ -552,10 +556,10 @@ def on_drone_detected(alert):
 
 **Thermal Detection Advantages:**
 
-| Condition | Visible Camera | Thermal Camera
-| |-----------|----------------|----------------| | Daylight, clear | Excellent
-| Good | | Night, no moon | None | Excellent | | Fog/haze | Poor | Good | | Rain
-| Poor | Moderate | | Drone vs bird | ML required | Heat signature helps | |
+| Condition | Visible Camera | Thermal Camera |
+|-----------|----------------|----------------| | Daylight, clear | Excellent |
+Good | | Night, no moon | None | Excellent | | Fog/haze | Poor | Good | | Rain |
+Poor | Moderate | | Drone vs bird | ML required | Heat signature helps | |
 Background clutter | High | Low |
 
 **Detection Pipeline:**
@@ -622,9 +626,9 @@ platforms
 **Components:**
 
 | Item                  | Cost         | Source                   |
-| --------------------- | ------------ | ------------------------ |
+| --------------------- | ------------ | ------------------------ | -------- | ----------------------------- | ---- | ----------- | --- |
 | Raspberry Pi          |
-| 4 (4GB)               | $55          | Pi supplier              |          | Pi Camera HQ + wide lens      | $90  | Pi supplier |  |
+| 4 (4GB)               | $55          | Pi supplier              |          | Pi Camera HQ + wide lens      | $90  | Pi supplier |     |
 | Coral USB Accelerator | $60          | Coral.ai                 |          | Marine-grade enclosure (IP67) | $120 |
 | Polycase              |              | Gyro stabilization mount | $150-300 | Marine supplier               |      | 12V-5V      |
 | marine converter      | $30          | West Marine              |          | Marine antenna/WiFi           | $80  | Ubiquiti    |
@@ -710,11 +714,11 @@ distinct thermal signature against cooler backgrounds.
 - Low false positives (birds are cooler)
 - No lighting required
 
-| **Hardware Options:** | Sensor | Resolution | FPS | Interface | Cost |
-| --------------------- | ------ | ---------- | --- | --------- || FLIR Lepton 2.5 | 80×60 | 9 |
-SPI | $150 | | FLIR Lepton 3.5 | 160×120 | 9 | SPI | $200 | | FLIR Boson 320 |
-320×256 | 60 | USB | $800 | | Seek Thermal | 206×156 | 15 | USB | $250 | |
-InfiRay T2-Pro | 256×192 | 25 | USB | $400 |
+| **Hardware Options:** | Sensor | Resolution | FPS | Interface | Cost | |
+--------------------- | ------ | ---------- | --- | --------- || FLIR Lepton 2.5
+| 80×60 | 9 | SPI | $150 | | FLIR Lepton 3.5 | 160×120 | 9 | SPI | $200 | | FLIR
+Boson 320 | 320×256 | 60 | USB | $800 | | Seek Thermal | 206×156 | 15 | USB |
+$250 | | InfiRay T2-Pro | 256×192 | 25 | USB | $400 |
 
 **Detection Characteristics:**
 
@@ -745,11 +749,11 @@ precise 3D positioning and works regardless of lighting.
 - 3D spatial mapping
 - Velocity from doppler shift
 
-| **Hardware Options:** | Sensor | Range | Points/sec | FOV | Cost |
-| --------------------- | ------ | ----- | ---------- | --- || RPLidar A1 | 12m | 8,000 | 360° |
-$100 | | RPLidar A3 | 25m | 16,000 | 360° | $600 | | Livox Mid-40 | 260m |
-100,000 | 38° | $600 | | Intel RealSense L515 | 9m | 23M | 70° | $350 | | Ouster
-OS0-32 | 50m | 655,000 | 90° | $3,500 |
+| **Hardware Options:** | Sensor | Range | Points/sec | FOV | Cost | |
+--------------------- | ------ | ----- | ---------- | --- || RPLidar A1 | 12m |
+8,000 | 360° | $100 | | RPLidar A3 | 25m | 16,000 | 360° | $600 | | Livox Mid-40
+| 260m | 100,000 | 38° | $600 | | Intel RealSense L515 | 9m | 23M | 70° | $350 |
+| Ouster OS0-32 | 50m | 655,000 | 90° | $3,500 |
 
 **LIDAR Detection Pipeline:**
 
@@ -994,11 +998,11 @@ maintain connections with controllers. These can be passively detected.
 | Raspberry Pi 4                           | $55          |
 | **Total**                                | **$125-155** |
 
-| **Known Drone WiFi Signatures:** | Manufacturer | SSID Pattern | MAC OUI |
-| -------------------------------- | ------------ | ------------ || DJI | `DJI-*`, `Phantom-*`,
-`Mavic-*` | `60:60:1F`, `34:D2:62` | | Parrot | `Parrot-*`, `Anafi-*` |
-`90:03:B7`, `A0:14:3D` | | Skydio | `Skydio-*` | Various | | Autel | `Autel-*` |
-`FC:0F:E6` |
+| **Known Drone WiFi Signatures:** | Manufacturer | SSID Pattern | MAC OUI | |
+-------------------------------- | ------------ | ------------ || DJI | `DJI-*`,
+`Phantom-*`, `Mavic-*` | `60:60:1F`, `34:D2:62` | | Parrot | `Parrot-*`,
+`Anafi-*` | `90:03:B7`, `A0:14:3D` | | Skydio | `Skydio-*` | Various | | Autel |
+`Autel-*` | `FC:0F:E6` |
 
 **Detection Script:**
 
@@ -1102,7 +1106,7 @@ wifi_detection:
 **Components:**
 
 | Item                    | Cost                   | Source             |
-| ----------------------- | ---------------------- | ------------------ |
+| ----------------------- | ---------------------- | ------------------ | ------------------ | ---------------------- | ------------------ | -------------- | --- |
 | Raspberry Pi            |
 | 5 (8GB)                 | $80                    | Pi supplier        |                    | Global Shutter Camera  | $50                | Pi supplier    |     |
 | Telephoto lens (6-12mm) | $100                   | Camera supplier    |                    | Coral TPU (M.2 or USB) |
@@ -1126,10 +1130,10 @@ wifi_detection:
 
 ### SkyWall (OpenWorks Engineering, UK)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || SkyWall 100 | Shoulder-launched | 100m
-| $30,000-50,000 | | SkyWall Patrol | Handheld | 100m | $40,000-60,000 | |
-SkyWall 300 | Autonomous turret | 150m+ | $100,000+ |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || SkyWall 100 | Shoulder-launched | 100m | $30,000-50,000 | |
+SkyWall Patrol | Handheld | 100m | $40,000-60,000 | | SkyWall 300 | Autonomous
+turret | 150m+ | $100,000+ |
 
 **Features:**
 
@@ -1146,10 +1150,9 @@ SkyWall 300 | Autonomous turret | 150m+ | $100,000+ |
 
 ### Fortem Technologies (USA)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || DroneHunter F700 | Interceptor drone |
-1km+ | $50,000-100,000 | | SkyDome System | Integrated C-UAS | 3km+ | $500,000+
-|
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || DroneHunter F700 | Interceptor drone | 1km+ | $50,000-100,000
+| | SkyDome System | Integrated C-UAS | 3km+ | $500,000+ |
 
 **Features:**
 
@@ -1166,10 +1169,10 @@ SkyWall 300 | Autonomous turret | 150m+ | $100,000+ |
 
 ### DroneShield (Australia)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || DroneGun Tactical | RF jammer
-(handheld) | 2km | $30,000-50,000 | | DroneGun MkIII | RF jammer (rifle) | 1km |
-$20,000-35,000 | | DroneSentry | Fixed detection | 5km | $100,000+ |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || DroneGun Tactical | RF jammer (handheld) | 2km |
+$30,000-50,000 | | DroneGun MkIII | RF jammer (rifle) | 1km | $20,000-35,000 | |
+DroneSentry | Fixed detection | 5km | $100,000+ |
 
 **Features:**
 
@@ -1611,9 +1614,9 @@ occasional use:** Spring with burn wire (lowest build cost)
 - Non-flammable, non-toxic
 - Temperature sensitive: P = f(T)
 
-| **Pressure vs Temperature:** | Temp °F | Pressure (PSI) |
-| ---------------------------- | ------- || 32°F (0°C) | 490 | | 70°F (21°C) | 850 | | 90°F
-(32°C) | 1050 |
+| **Pressure vs Temperature:** | Temp °F | Pressure (PSI) | |
+---------------------------- | ------- || 32°F (0°C) | 490 | | 70°F (21°C) | 850
+| | 90°F (32°C) | 1050 |
 
 **Calculation:** For a 12g cartridge launching a 200g net:
 
@@ -1706,10 +1709,10 @@ Before deploying ANY countermeasure:
 
 ### Robin Radar Systems (Netherlands)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || ELVIRA | 3D FMCW Radar | 5km+ |
-$50,000-100,000 | | IRIS | 360° Radar | 3km | $80,000-150,000 | | MAX |
-Long-range Radar | 10km+ | $200,000+ |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || ELVIRA | 3D FMCW Radar | 5km+ | $50,000-100,000 | | IRIS |
+360° Radar | 3km | $80,000-150,000 | | MAX | Long-range Radar | 10km+ |
+$200,000+ |
 
 **Features:**
 
@@ -1727,9 +1730,9 @@ Long-range Radar | 10km+ | $200,000+ |
 
 ### CACI SkyTracker (USA)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || SkyTracker | RF detection | 5km+ |
-$75,000-150,000 | | SkyTracker-M | Mobile variant | 3km | $100,000-200,000 |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || SkyTracker | RF detection | 5km+ | $75,000-150,000 | |
+SkyTracker-M | Mobile variant | 3km | $100,000-200,000 |
 
 **Features:**
 
@@ -1747,9 +1750,9 @@ $75,000-150,000 | | SkyTracker-M | Mobile variant | 3km | $100,000-200,000 |
 
 ### Liteye Systems (USA)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || AUDS | Integrated C-UAS | 10km |
-$500,000+ | | C-AUDS | Compact version | 3km | $150,000-300,000 |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || AUDS | Integrated C-UAS | 10km | $500,000+ | | C-AUDS |
+Compact version | 3km | $150,000-300,000 |
 
 **Features:**
 
@@ -1767,9 +1770,9 @@ $500,000+ | | C-AUDS | Compact version | 3km | $150,000-300,000 |
 
 ### Dedrone (Germany/USA)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || DroneTracker | RF sensors | 1-5km |
-$20,000-50,000 | | City | Multi-site platform | Unlimited | $100,000+/year |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || DroneTracker | RF sensors | 1-5km | $20,000-50,000 | | City |
+Multi-site platform | Unlimited | $100,000+/year |
 
 **Features:**
 
@@ -1787,9 +1790,9 @@ $20,000-50,000 | | City | Multi-site platform | Unlimited | $100,000+/year |
 
 ### Sentrycs (Israel)
 
-| **Products:** | Model | Type | Range | Price (Est.) |
-| ------------- | ----- | ---- | ----- || Horizon | Protocol takeover | 2km |
-$100,000+ | | Horizon-M | Mobile unit | 1km | $75,000+ |
+| **Products:** | Model | Type | Range | Price (Est.) | | ------------- | -----
+| ---- | ----- || Horizon | Protocol takeover | 2km | $100,000+ | | Horizon-M |
+Mobile unit | 1km | $75,000+ |
 
 **Features:**
 
@@ -1833,11 +1836,11 @@ $100,000+ | | Horizon-M | Mobile unit | 1km | $75,000+ |
 | **12V DC (vehicle)** | 100W+           | Continuous | Mobile patrols   | $30 adapter |
 | **Mains (AC)**       | Unlimited       | Continuous | Fixed install    | $10-20 PSU  |
 
-| **Power Consumption by Tier:** | Tier | Idle | Active | Peak |
-| ------------------------------ | ---- | ---- | ------ || SkyWatch Nano | 2W | 3W | 4W | | SkyWatch
-Standard | 4W | 6W | 10W | | SkyWatch Pro | 8W | 12W | 18W | | NetSentry Lite |
-5W | 8W | 15W | | NetSentry Standard | 8W | 12W | 25W | | NetSentry Pro | 12W |
-18W | 35W |
+| **Power Consumption by Tier:** | Tier | Idle | Active | Peak | |
+------------------------------ | ---- | ---- | ------ || SkyWatch Nano | 2W | 3W
+| 4W | | SkyWatch Standard | 4W | 6W | 10W | | SkyWatch Pro | 8W | 12W | 18W | |
+NetSentry Lite | 5W | 8W | 15W | | NetSentry Standard | 8W | 12W | 25W | |
+NetSentry Pro | 12W | 18W | 35W |
 
 **Solar Sizing Calculator:**
 
@@ -1877,10 +1880,10 @@ Height recommendation: 3-5m for typical coverage
      ───────┴───────   Ground/roof
 ```
 
-| **Recommended heights:** | Application | Height | Field of View |
-| ------------------------ | ----------- | ------ || Garden/yard | 2-3m | 50-100m | |
-Property perimeter | 3-4m | 100-200m | | Industrial/farm | 4-6m | 200-400m | |
-Elevated (tower) | 10-20m | 500m+ |
+| **Recommended heights:** | Application | Height | Field of View | |
+------------------------ | ----------- | ------ || Garden/yard | 2-3m | 50-100m
+| | Property perimeter | 3-4m | 100-200m | | Industrial/farm | 4-6m | 200-400m |
+| Elevated (tower) | 10-20m | 500m+ |
 
 #### Roof Mount
 
@@ -1900,17 +1903,17 @@ Elevated (tower) | 10-20m | 500m+ |
 
 ### Weather Ratings
 
-| **IP Rating Guide:** | Rating | Protection | Suitable For |
-| -------------------- | ------ | ---------- || IP54 | Dust protected, splashing water
-| Covered outdoor | | IP65 | Dust tight, water jets | Outdoor exposed | | IP66 |
-Dust tight, powerful jets | Coastal, industrial | | IP67 | Dust tight, 1m
+| **IP Rating Guide:** | Rating | Protection | Suitable For | |
+-------------------- | ------ | ---------- || IP54 | Dust protected, splashing
+water | Covered outdoor | | IP65 | Dust tight, water jets | Outdoor exposed | |
+IP66 | Dust tight, powerful jets | Coastal, industrial | | IP67 | Dust tight, 1m
 immersion | Marine, harsh |
 
-| **Operating Temperature Ranges:** | Environment | Range | Notes |
-| --------------------------------- | ----------- | ----- || Standard | 0°C to 40°C | Most enclosures | |
-Extended | -20°C to 60°C | Industrial rated | | Cold climate | -40°C to 50°C |
-Heated enclosure required | | Hot climate | 0°C to 70°C | Active cooling
-required |
+| **Operating Temperature Ranges:** | Environment | Range | Notes | |
+--------------------------------- | ----------- | ----- || Standard | 0°C to
+40°C | Most enclosures | | Extended | -20°C to 60°C | Industrial rated | | Cold
+climate | -40°C to 50°C | Heated enclosure required | | Hot climate | 0°C to
+70°C | Active cooling required |
 
 **Weather Protection Checklist:**
 
@@ -1999,11 +2002,11 @@ maintenance_records:
 
 **Countermeasures:**
 
-| Action | Legal Status | Authority |
-| ------ | ------------ | --------- || Visual detection | Legal | None required
-| | RF detection (passive) | Legal | None required | | RF jamming | **Illegal**
-| FCC (47 U.S.C. § 333) | | GPS jamming | **Illegal** | FCC | | Net capture |
-Gray area | State dependent | | Shooting down | **Illegal** | 18 U.S.C. § 32 |
+| Action | Legal Status | Authority | | ------ | ------------ | --------- ||
+Visual detection | Legal | None required | | RF detection (passive) | Legal |
+None required | | RF jamming | **Illegal** | FCC (47 U.S.C. § 333) | | GPS
+jamming | **Illegal** | FCC | | Net capture | Gray area | State dependent | |
+Shooting down | **Illegal** | 18 U.S.C. § 32 |
 
 **Authorized entities:** Only DHS, DOJ, DOE, DOD can legally defeat drones under
 6 U.S.C. § 124n.
@@ -2022,11 +2025,11 @@ Gray area | State dependent | | Shooting down | **Illegal** | 18 U.S.C. § 32 |
 
 **Countermeasures:**
 
-| Action | Legal Status | Authority |
-| ------ | ------------ | --------- || Visual detection | Legal | None | | RF
-detection | Legal | None | | RF jamming | **Illegal** | Wireless Telegraphy Act
-2006 | | Net capture | **Restricted** | Police/authorized only | | Protocol
-takeover | **Restricted** | RIPA authorization |
+| Action | Legal Status | Authority | | ------ | ------------ | --------- ||
+Visual detection | Legal | None | | RF detection | Legal | None | | RF jamming |
+**Illegal** | Wireless Telegraphy Act 2006 | | Net capture | **Restricted** |
+Police/authorized only | | Protocol takeover | **Restricted** | RIPA
+authorization |
 
 **Authorized entities:** Police, Prison Service (under specific authority).
 
@@ -2069,10 +2072,10 @@ Data retained for 30 days. Contact: privacy@example.com
 
 **Countermeasures:**
 
-| Action | Legal Status | Authority |
-| ------ | ------------ | --------- || Visual detection | Legal | None | | RF
-detection | Legal | None | | RF jamming | **Illegal** | Radiocommunications Act
-1992 | | Physical capture | **Restricted** | State law varies |
+| Action | Legal Status | Authority | | ------ | ------------ | --------- ||
+Visual detection | Legal | None | | RF detection | Legal | None | | RF jamming |
+**Illegal** | Radiocommunications Act 1992 | | Physical capture | **Restricted**
+| State law varies |
 
 **CASA Guidance:** Report unsafe drone operations to
 [casa.gov.au](https://www.casa.gov.au).
@@ -2085,11 +2088,10 @@ detection | Legal | None | | RF jamming | **Illegal** | Radiocommunications Act
 
 **Countermeasures:**
 
-| Action | Legal Status | Notes |
-| ------ | ------------ | ----- || Visual detection | Legal | SACAA has no
-restrictions | | RF detection | Legal | ICASA allows passive monitoring | | RF
-jamming | **Illegal** | ECA Section 34 | | Net capture | Gray area | Private
-property defense possible |
+| Action | Legal Status | Notes | | ------ | ------------ | ----- || Visual
+detection | Legal | SACAA has no restrictions | | RF detection | Legal | ICASA
+allows passive monitoring | | RF jamming | **Illegal** | ECA Section 34 | | Net
+capture | Gray area | Private property defense possible |
 
 **SACAA Guidance:** Contact [caa.co.za](https://www.caa.co.za) for commercial
 drone incidents.
@@ -2101,12 +2103,12 @@ granted.
 
 ### Insurance Considerations
 
-| **Liability Coverage:** | Scenario | Typical Coverage | Notes |
-| ----------------------- | -------- | ---------------- || Property damage (your property) |
-Homeowner's policy | Check drone exclusions | | Property damage (drone captured)
-| May not cover | Intentional act exclusion | | Personal injury | General
-liability | If net injures bystander | | Drone operator lawsuit | Legal defense
-| Consider umbrella policy |
+| **Liability Coverage:** | Scenario | Typical Coverage | Notes | |
+----------------------- | -------- | ---------------- || Property damage (your
+property) | Homeowner's policy | Check drone exclusions | | Property damage
+(drone captured) | May not cover | Intentional act exclusion | | Personal injury
+| General liability | If net injures bystander | | Drone operator lawsuit |
+Legal defense | Consider umbrella policy |
 
 **Recommended Coverage:**
 
@@ -2145,10 +2147,10 @@ liability | If net injures bystander | | Drone operator lawsuit | Legal defense
 - Dangerous/reckless drone operation
 - Near-miss with manned aircraft
 
-| **Who to contact:** | Country | Authority | Contact |
-| ------------------- | ------- | --------- || USA | FAA | 1-866-835-5322 | | UK |
-CAA/Police | 101 or caa.co.uk | | Australia | CASA | casa.gov.au | | EU | Local
-aviation authority | Varies | | South Africa | SACAA | caa.co.za |
+| **Who to contact:** | Country | Authority | Contact | | ------------------- |
+------- | --------- || USA | FAA | 1-866-835-5322 | | UK | CAA/Police | 101 or
+caa.co.uk | | Australia | CASA | casa.gov.au | | EU | Local aviation authority |
+Varies | | South Africa | SACAA | caa.co.za |
 
 ---
 
