@@ -800,7 +800,7 @@ textarea.formInput {
   min-width: 28px;
   height: 20px;
   padding: 0 0.375rem;
-  background: var(--assignee-color, #6b7280);
+  background: var(--assignee-color, rgb(var(--color-gray-500)));
   color: white;
   border-radius: 4px;
   font-size: 0.625rem;

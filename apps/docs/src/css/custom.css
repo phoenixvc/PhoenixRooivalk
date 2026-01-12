@@ -140,9 +140,31 @@
   --color-amber-darker: 146, 64, 14; /* #92400e - amber-800 */
   --color-amber-darkest: 120, 53, 15; /* #78350f - amber-900 */
 
-  /* Purples - for AI features */
+  /* Purples/Indigo - for AI features */
   --color-purple: 102, 126, 234; /* #667eea - indigo/purple */
   --color-purple-dark: 118, 75, 162; /* #764ba2 - purple */
+  --color-indigo: 99, 102, 241; /* #6366f1 - indigo-500 */
+  --color-indigo-dark: 79, 70, 229; /* #4f46e5 - indigo-600 */
+  --color-violet: 139, 92, 246; /* #8b5cf6 - violet-500 */
+  --color-violet-dark: 124, 58, 237; /* #7c3aed - violet-600 */
+  --color-purple-deep: 91, 33, 182; /* #5b21b6 - violet-800 */
+
+  /* Teals/Emeralds - for success states */
+  --color-teal-deep: 16, 185, 129; /* #10b981 - emerald-500 */
+  --color-teal-dark: 5, 150, 105; /* #059669 - emerald-600 */
+
+  /* Phoenix White */
+  --phoenix-white: 255, 255, 255; /* #ffffff */
+
+  /* GitHub brand colors */
+  --color-github: 36, 41, 47; /* #24292f - GitHub dark */
+  --color-github-dark: 27, 31, 35; /* #1b1f23 - GitHub darker */
+
+  /* Additional semantic colors for toast/alerts */
+  --color-orange-dark: 234, 88, 12; /* #ea580c - orange-600 */
+
+  /* Sensor/Indicator colors */
+  --sensor-amber: 245, 158, 11; /* #f59e0b - amber for warnings */
 
   /* Status Colors */
   --pr-status-success: #22c55e;

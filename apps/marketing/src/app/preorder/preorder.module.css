@@ -51,7 +51,7 @@
   font-weight: 700;
   color: var(--text-primary, #fff);
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, rgb(var(--text-primary)), #cbd5e1);
+  background: linear-gradient(135deg, rgb(var(--text-primary)), rgb(var(--text-secondary)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

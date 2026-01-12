@@ -40,8 +40,8 @@
   padding: 0 6px;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: rgb(var(--white));
+  background: linear-gradient(135deg, rgb(var(--color-orange)), rgb(var(--color-orange-light)));
   border-radius: 10px;
   border: 2px solid var(--bg-primary, #0f172a);
   box-shadow: 0 2px 8px rgba(var(--primary), 0.3);

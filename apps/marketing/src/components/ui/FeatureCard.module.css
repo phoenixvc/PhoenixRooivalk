@@ -34,6 +34,6 @@
 
 .featureDescription {
   font-size: 0.875rem;
-  color: rgb(var(--gray, #8892b0));
+  color: rgb(var(--text-muted));
   line-height: 1.5;
 }

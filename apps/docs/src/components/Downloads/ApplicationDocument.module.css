@@ -90,21 +90,21 @@
 }
 
 .statusBadge[data-status="draft"] {
-  background: #fbbf24;
-  color: #1a1a1a;
-  border: 1px solid #f59e0b;
+  background: var(--pr-brand-gold);
+  color: var(--pr-bg-base);
+  border: 1px solid var(--pr-brand-amber);
 }
 
 .statusBadge[data-status="final"] {
   background: rgb(var(--color-teal-deep));
-  color: #ffffff;
-  border: 1px solid #16a34a;
+  color: rgb(var(--phoenix-white));
+  border: 1px solid rgb(var(--color-green-dark));
 }
 
 .statusBadge[data-status="submitted"] {
   background: rgb(var(--color-blue-deep));
-  color: #ffffff;
-  border: 1px solid #2563eb;
+  color: rgb(var(--phoenix-white));
+  border: 1px solid rgb(var(--color-blue-dark));
 }
 
 /* Version Dropdown */
@@ -218,14 +218,14 @@
 }
 
 .deadlineIndicator[data-urgency="urgent"] {
-  background: #fef3c7;
-  color: #92400e;
+  background: rgba(var(--color-amber-lighter), 1);
+  color: rgb(var(--color-amber-darker));
   animation: pulse 2s infinite;
 }
 
 .deadlineIndicator[data-urgency="critical"] {
-  background: #fee2e2;
-  color: #dc2626;
+  background: rgba(var(--color-red-light), 1);
+  color: rgb(var(--color-red-dark));
   animation: pulse 1s infinite;
 }
 
@@ -302,7 +302,7 @@
 
 .progressText {
   font-size: 0.75rem;
-  color: #1e293b;
+  color: var(--pr-fg-base);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -333,11 +333,11 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .iconButton:hover {
-  background: #ffffff;
+  background: rgb(var(--phoenix-white));
   border-color: var(--ifm-color-primary);
   color: var(--ifm-color-primary);
 }
@@ -376,7 +376,7 @@
 .downloadButtonSecondary {
   background: rgba(var(--text-primary), 0.95);
   border: 2px solid var(--ifm-color-primary);
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .downloadButtonSecondary:hover {
@@ -385,11 +385,11 @@
 }
 
 .downloadButtonSecondary .buttonLabel {
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .downloadButtonSecondary .buttonMeta {
-  color: #475569;
+  color: var(--pr-fg-muted);
   opacity: 1;
 }
 

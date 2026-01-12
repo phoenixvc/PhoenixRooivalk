@@ -10,23 +10,23 @@
 
 /* Variant styles */
 .variantDefault {
-  background: rgb(var(--primary, #00ff88));
+  background: rgb(var(--primary));
   color: rgb(var(--tactical-black));
 }
 
 .variantGradient {
   background: linear-gradient(
     to right,
-    var(--primary, #00ff88),
-    var(--secondary, #0088ff)
+    rgb(var(--primary)),
+    rgb(var(--secondary))
   );
   color: rgb(var(--tactical-black));
 }
 
 .variantOutlined {
   background: transparent;
-  border: 2px solid var(--primary, #00ff88);
-  color: rgb(var(--primary, #00ff88));
+  border: 2px solid rgb(var(--primary));
+  color: rgb(var(--primary));
 }
 
 .variantStatus {

@@ -51,12 +51,12 @@
 }
 
 .droneItem:not(.disabled):hover {
-  background: #1b2632;
-  border-color: #3a475a;
+  background: rgba(var(--sim-panel-bg), 0.8);
+  border-color: rgb(var(--sim-border));
 }
 
 .droneItem.selected {
-  background: #1e293b;
+  background: rgb(var(--color-slate-700));
   border-color: rgb(var(--sim-accent));
   box-shadow: 0 0 8px rgba(var(--sim-accent), 0.5);
 }
@@ -68,8 +68,8 @@
     45deg,
     var(--sim-elev),
     var(--sim-elev) 5px,
-    #1c2430 5px,
-    #1c2430 10px
+    rgb(var(--sim-panel-bg)) 5px,
+    rgb(var(--sim-panel-bg)) 10px
   );
 }
 
