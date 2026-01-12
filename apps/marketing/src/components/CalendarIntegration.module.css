@@ -29,7 +29,7 @@
 
 .schedulingSection {
   background: rgb(var(--bg-secondary));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--text-primary), 0.1);
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -60,7 +60,7 @@
 .calWidget {
   width: 100%;
   min-height: 600px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--text-primary), 0.1);
   border-radius: 0.5rem;
   background: rgb(var(--darker));
 }
@@ -74,7 +74,7 @@
   padding: 3rem;
   text-align: center;
   background: rgb(var(--darker));
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(var(--text-primary), 0.2);
   border-radius: 0.5rem;
 }
 
@@ -127,7 +127,7 @@
 
 .eventType {
   background: rgb(var(--darker));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--text-primary), 0.1);
   border-radius: 0.75rem;
   padding: 1.5rem;
   transition: all 0.3s ease;

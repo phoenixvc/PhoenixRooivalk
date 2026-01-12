@@ -20,8 +20,8 @@
 .backgroundGradient {
   background: linear-gradient(
     180deg,
-    rgba(0, 255, 136, 0.05),
-    rgba(0, 136, 255, 0.05)
+    rgba(var(--secondary), 0.05),
+    rgba(var(--color-blue), 0.05)
   );
 }
 

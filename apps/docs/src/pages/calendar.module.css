@@ -88,7 +88,7 @@
 .criticalAlert {
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-left: 4px solid rgb(239, 68, 68);
+  border-left: 4px solid rgb(var(--color-red));
   border-radius: 12px;
   padding: 1.25rem;
   margin-bottom: 2rem;
@@ -99,7 +99,7 @@
   margin: 0 0 1rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
 }
 
 .criticalList {
@@ -140,7 +140,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.375rem 0.75rem;
-  background: rgb(239, 68, 68);
+  background: rgb(var(--color-red));
   color: white;
   border-radius: 6px;
 }
@@ -230,7 +230,7 @@
 }
 
 .timelineItem.soon .countdown {
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
   font-weight: 600;
 }
 
@@ -715,19 +715,19 @@ textarea.formInput {
 .deleteEventButton {
   margin-left: 0.5rem;
   padding: 0 0.375rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 4px;
   font-size: 1rem;
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
   cursor: pointer;
   transition: all 0.2s ease;
   line-height: 1;
 }
 
 .deleteEventButton:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgb(239, 68, 68);
+  background: rgba(var(--color-red), 0.2);
+  border-color: rgb(var(--color-red));
 }
 
 .customBadge {
@@ -926,12 +926,12 @@ textarea.formInput {
 }
 
 .statCard.statCritical {
-  border-color: rgb(239, 68, 68);
+  border-color: rgb(var(--color-red));
   border-width: 2px;
 }
 
 .statCard.statCritical .statNumber {
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
 }
 
 .statCard.statHigh {
@@ -946,7 +946,7 @@ textarea.formInput {
 .statCard.statOverdue {
   border-color: rgb(220, 38, 38);
   border-width: 2px;
-  background: rgba(239, 68, 68, 0.05);
+  background: rgba(var(--color-red), 0.05);
 }
 
 .statCard.statOverdue .statNumber {
@@ -1011,7 +1011,7 @@ textarea.formInput {
 }
 
 .clearSearch:hover {
-  background: rgb(239, 68, 68);
+  background: rgb(var(--color-red));
   color: white;
 }
 
@@ -1111,7 +1111,7 @@ textarea.formInput {
    Completion & Progress Tracking
    ============================================ */
 .statCard.statCompletion {
-  border-color: rgb(34, 197, 94);
+  border-color: rgb(var(--color-teal-deep));
   border-width: 2px;
   position: relative;
 }
@@ -1131,7 +1131,7 @@ textarea.formInput {
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(34, 197, 94), rgb(22, 163, 74));
+  background: linear-gradient(90deg, rgb(var(--color-teal-deep)), rgb(22, 163, 74));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -1157,8 +1157,8 @@ textarea.formInput {
 }
 
 .completionCheckbox.checked {
-  background: rgb(34, 197, 94);
-  border-color: rgb(34, 197, 94);
+  background: rgb(var(--color-teal-deep));
+  border-color: rgb(var(--color-teal-deep));
   color: white;
   font-size: 0.875rem;
   font-weight: 700;
@@ -1184,8 +1184,8 @@ textarea.formInput {
   align-items: center;
   margin-left: 0.5rem;
   padding: 0.125rem 0.5rem;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  background: rgba(var(--color-teal-deep), 0.15);
+  border: 1px solid rgba(var(--color-teal-deep), 0.4);
   border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 600;
@@ -1299,13 +1299,13 @@ textarea.formInput {
 }
 
 .roadmapCheckbox:hover {
-  border-color: rgb(34, 197, 94);
-  background: rgba(34, 197, 94, 0.1);
+  border-color: rgb(var(--color-teal-deep));
+  background: rgba(var(--color-teal-deep), 0.1);
 }
 
 .roadmapItem.roadmapCompleted .roadmapCheckbox {
-  background: rgb(34, 197, 94);
-  border-color: rgb(34, 197, 94);
+  background: rgb(var(--color-teal-deep));
+  border-color: rgb(var(--color-teal-deep));
   color: white;
   font-size: 0.75rem;
 }
