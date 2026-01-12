@@ -66,14 +66,18 @@ export const TeamSection: React.FC = () => {
         <div className={styles.foundersGrid}>
           {founders.map((member, index) => (
             <RevealSection key={index}>
-              <div className={`${styles.memberCard} ${member.eliminated ? styles.eliminatedCard : ''}`}>
+              <div
+                className={`${styles.memberCard} ${member.eliminated ? styles.eliminatedCard : ""}`}
+              >
                 {member.eliminated && (
                   <div className={styles.eliminatedOverlay}>
                     <div className={styles.crossLine1}></div>
                     <div className={styles.crossLine2}></div>
                     <div className={styles.eliminatedText}>ELIMINATED</div>
+                    <div className={styles.eliminatedSubtext}>
+                      hy is &apos;n poes
+                    </div>
                   </div>
-                )}
                 )}
                 <div className={styles.memberIcon}>{member.icon}</div>
                 <div className={styles.memberInfo}>

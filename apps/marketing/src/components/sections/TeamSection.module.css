@@ -74,16 +74,12 @@
 
 .advisorsTitle::before,
 .advisorsTitle::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: 60px;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--primary), 0.5)
-  );
+  background: linear-gradient(90deg, transparent, rgba(var(--primary), 0.5));
 }
 
 .advisorsTitle::before {
@@ -94,11 +90,7 @@
 .advisorsTitle::after {
   left: 100%;
   margin-left: 1rem;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--primary), 0.5),
-    transparent
-  );
+  background: linear-gradient(90deg, rgba(var(--primary), 0.5), transparent);
 }
 
 .advisorsGrid {
@@ -298,16 +290,12 @@
 
 .backedByTitle::before,
 .backedByTitle::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: 60px;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(var(--accent), 0.5)
-  );
+  background: linear-gradient(90deg, transparent, rgba(var(--accent), 0.5));
 }
 
 .backedByTitle::before {
@@ -318,11 +306,7 @@
 .backedByTitle::after {
   left: 100%;
   margin-left: 1rem;
-  background: linear-gradient(
-    90deg,
-    rgba(var(--accent), 0.5),
-    transparent
-  );
+  background: linear-gradient(90deg, rgba(var(--accent), 0.5), transparent);
 }
 
 .backedByGrid {
