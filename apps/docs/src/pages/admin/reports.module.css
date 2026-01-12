@@ -162,12 +162,12 @@
 
 .reportCard:hover {
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.1);
 }
 
 .reportCard.selected {
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 0 0 2px rgba(var(--primary), 0.2);
 }
 
 .reportHeader {
@@ -242,7 +242,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(var(--tactical-black), 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -257,7 +257,7 @@
   max-width: 550px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 40px rgba(var(--tactical-black), 0.2);
 }
 
 .modalHeader {
@@ -316,7 +316,7 @@
 .formGroup input[type="text"]:focus {
   outline: none;
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 .repoList {
@@ -404,7 +404,7 @@
   max-width: 100%;
   background: var(--ifm-background-color);
   border-left: 1px solid var(--ifm-color-emphasis-200);
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  box-shadow: -4px 0 12px rgba(var(--tactical-black), 0.1);
   overflow-y: auto;
   z-index: 100;
 }
@@ -630,7 +630,7 @@
 .dateRange input[type="date"]:focus {
   outline: none;
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 /* Full report modal */
@@ -772,16 +772,16 @@
 
 /* Dark mode adjustments */
 [data-theme="dark"] .reportCard {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-color: rgb(51, 65, 85);
 }
 
 [data-theme="dark"] .reportCard:hover {
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
 }
 
 [data-theme="dark"] .modal {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
 }
 
 [data-theme="dark"] .modalHeader {
@@ -789,27 +789,27 @@
 }
 
 [data-theme="dark"] .detailPanel {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   border-color: rgb(51, 65, 85);
 }
 
 [data-theme="dark"] .detailHeader {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   border-color: rgb(51, 65, 85);
 }
 
 [data-theme="dark"] .summaryText,
 [data-theme="dark"] .sectionPreview {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
 }
 
 [data-theme="dark"] .repoTag {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
 }
 
 [data-theme="dark"] .formGroup textarea,
 [data-theme="dark"] .formGroup input[type="text"] {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-color: rgb(51, 65, 85);
 }
 

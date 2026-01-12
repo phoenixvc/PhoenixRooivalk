@@ -58,13 +58,13 @@ export const RadarSystem: React.FC<RadarSystemProps> = ({
   const getThreatColor = (type: ThreatType): string => {
     switch (type) {
       case "hostile":
-        return "#ef4444"; // Red
+        return "rgb(var(--sim-hostile, 255, 93, 93))"; // Red
       case "unknown":
-        return "#f59e0b"; // Amber
+        return "rgb(var(--sim-warning, 255, 209, 102))"; // Amber
       case "friendly":
-        return "#10b981"; // Green
+        return "rgb(var(--sim-friendly, 74, 222, 128))"; // Green
       default:
-        return "#6b7280"; // Gray
+        return "rgb(var(--color-gray-500, 100, 116, 139))"; // Gray
     }
   };
 
@@ -99,15 +99,15 @@ export const RadarSystem: React.FC<RadarSystemProps> = ({
   const getStatusColor = (status: string): string => {
     switch (status) {
       case "active":
-        return "#10b981";
+        return "rgb(var(--sim-friendly, 74, 222, 128))";
       case "idle":
-        return "#6b7280";
+        return "rgb(var(--color-gray-500, 100, 116, 139))";
       case "returning":
-        return "#f59e0b";
+        return "rgb(var(--sim-warning, 255, 209, 102))";
       case "disabled":
-        return "#ef4444";
+        return "rgb(var(--sim-hostile, 255, 93, 93))";
       default:
-        return "#6b7280";
+        return "rgb(var(--color-gray-500, 100, 116, 139))";
     }
   };
 

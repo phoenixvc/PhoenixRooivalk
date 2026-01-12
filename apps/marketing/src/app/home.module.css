@@ -1,7 +1,7 @@
 .main {
   position: relative;
   overflow: hidden;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
   color: white;
   max-width: 100%;
   margin: 0 auto;
@@ -11,15 +11,15 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
 }
 
 .backgroundGrid {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(249, 115, 22, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(249, 115, 22, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(var(--primary), 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--primary), 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: gridMove 20s linear infinite;
 }

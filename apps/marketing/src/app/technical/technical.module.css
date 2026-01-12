@@ -237,8 +237,8 @@
   height: 384px;
   background: linear-gradient(
     to bottom right,
-    rgb(51, 65, 85),
-    rgb(30, 41, 59)
+    rgb(var(--color-gray-700)),
+    rgb(var(--color-gray-800))
   );
   border-radius: 0.5rem;
   overflow: hidden;
@@ -255,8 +255,8 @@
   height: 100%;
   background: linear-gradient(
     to bottom right,
-    rgb(20, 83, 45),
-    rgb(22, 101, 52)
+    rgb(var(--color-green-darker)),
+    rgb(var(--color-green-dark))
   );
 }
 
@@ -277,7 +277,7 @@
   right: 3rem;
   width: 4rem;
   height: 4rem;
-  background: rgb(37, 99, 235);
+  background: rgb(var(--color-blue-deep));
   border-radius: 9999px;
   opacity: 0.4;
 }
@@ -335,7 +335,7 @@
   position: absolute;
   width: 12rem;
   height: 12rem;
-  border: 2px solid rgb(248, 113, 113);
+  border: 2px solid rgb(var(--color-red-light));
   border-radius: 9999px;
   opacity: 0.6;
 }
@@ -346,7 +346,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.75rem;
-  color: rgb(248, 113, 113);
+  color: rgb(var(--color-red-light));
   font-weight: 600;
 }
 
@@ -373,7 +373,7 @@
   position: absolute;
   width: 0.75rem;
   height: 0.75rem;
-  background: rgb(239, 68, 68);
+  background: rgb(var(--color-red));
   border-radius: 9999px;
   animation: bounce 1s infinite;
 }
@@ -400,7 +400,7 @@
   top: -1rem;
   left: -0.5rem;
   font-size: 0.75rem;
-  color: rgb(248, 113, 113);
+  color: rgb(var(--color-red-light));
 }
 
 .unknown {
@@ -409,7 +409,7 @@
   right: 4rem;
   width: 0.75rem;
   height: 0.75rem;
-  background: rgb(234, 179, 8);
+  background: rgb(var(--sensor-amber));
   border-radius: 9999px;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -419,7 +419,7 @@
   bottom: -1rem;
   left: -0.5rem;
   font-size: 0.75rem;
-  color: rgb(250, 204, 21);
+  color: rgb(var(--sim-gold));
 }
 
 .coverageStats {
@@ -443,11 +443,11 @@
 }
 
 .coverageStatsItemActive {
-  color: rgb(34, 197, 94);
+  color: rgb(var(--color-green));
 }
 
 .coverageStatsItemTracking {
-  color: rgb(250, 204, 21);
+  color: rgb(var(--sim-gold));
 }
 
 .coverageCaption {

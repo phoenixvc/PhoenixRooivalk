@@ -115,7 +115,7 @@
 
 .placeholderLink:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 6px 12px rgba(var(--primary), 0.3);
 }
 
 .eventTypes {
@@ -135,7 +135,7 @@
 
 .eventType:hover {
   border-color: rgb(var(--primary));
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.2);
   transform: translateY(-2px);
 }
 
@@ -150,7 +150,7 @@
   width: 2rem;
   height: 2rem;
   padding: 0.5rem;
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(var(--primary), 0.1);
   border-radius: 0.5rem;
   color: rgb(var(--primary));
 }

@@ -84,9 +84,13 @@
   --sim-danger: 255, 93, 93; /* maps to hostile red/orange */
   --sim-accent-hover: 230, 52, 0; /* slightly darker accent variant */
   --sim-bg: 14, 18, 23;
+  --sim-bg-deep: 10, 14, 26; /* #0a0e1a - deepest sim background */
+  --sim-bg-darker: 10, 13, 17; /* #0a0d11 - very dark sim background */
   --sim-panel: 18, 24, 33;
+  --sim-panel-alt: 26, 31, 46; /* #1a1f2e - alternative panel */
   --sim-elev: 23, 31, 42;
   --sim-border: 41, 51, 68;
+  --sim-border-light: 58, 71, 90; /* #3a475a - lighter border */
   --sim-text: 228, 233, 239;
   --sim-muted: 159, 176, 194;
   --sim-accent: 255, 59, 0; /* primary action */
@@ -97,6 +101,71 @@
   --sim-hostile: 255, 93, 93; /* red/orange */
   --sim-unknown: 255, 209, 102; /* amber */
   --sim-friendly: 74, 222, 128; /* green */
+
+  /* Extended Color Palette (RGB triplets) */
+  /* Blues - for info, links, accents */
+  --color-blue-light: 186, 230, 253; /* #bae6fd - sky-200 */
+  --color-blue: 56, 189, 248; /* #38bdf8 - sky-400 */
+  --color-blue-bright: 125, 211, 252; /* #7dd3fc - sky-300 */
+  --color-blue-deep: 59, 130, 246; /* #3b82f6 - blue-500 */
+  --color-blue-accent: 112, 161, 255; /* #70a1ff - custom accent blue */
+  --color-blue-muted: 143, 179, 225; /* #8fb3e1 - muted blue */
+
+  /* Teals/Cyans - for success variants */
+  --color-teal: 94, 234, 212; /* #5eead4 - teal-300 */
+  --color-teal-deep: 16, 185, 129; /* #10b981 - emerald-500 */
+  --color-cyan: 34, 211, 238; /* #22d3ee - cyan-400 */
+
+  /* Greens - extended success palette */
+  --color-green-light: 134, 239, 172; /* #86efac - green-300 */
+  --color-green: 34, 197, 94; /* #22c55e - green-500 */
+  --color-green-bright: 132, 204, 22; /* #84cc16 - lime-500 */
+  --color-green-dark: 22, 163, 74; /* #16a34a - green-600 */
+  --color-green-darker: 21, 128, 61; /* #15803d - green-700 */
+
+  /* Purples - for synergy/ECM effects */
+  --color-purple: 139, 92, 246; /* #8b5cf6 - violet-500 */
+  --color-purple-light: 167, 139, 250; /* #a78bfa - violet-400 */
+
+  /* Reds - extended danger palette */
+  --color-red-light: 248, 113, 113; /* #f87171 - red-400 */
+  --color-red: 239, 68, 68; /* #ef4444 - red-500 */
+  --color-red-bright: 255, 93, 93; /* #ff5d5d - custom bright red */
+
+  /* Grays - extended neutral palette */
+  --color-gray-50: 248, 250, 252; /* #f8fafc - slate-50 */
+  --color-gray-100: 241, 245, 249; /* #f1f5f9 - slate-100 */
+  --color-gray-200: 226, 232, 240; /* #e2e8f0 - slate-200 */
+  --color-gray-300: 203, 213, 225; /* #cbd5e1 - slate-300 */
+  --color-gray-400: 148, 163, 184; /* #94a3b8 - slate-400 */
+  --color-gray-500: 100, 116, 139; /* #64748b - slate-500 */
+  --color-gray-600: 71, 85, 105; /* #475569 - slate-600 */
+  --color-gray-700: 51, 65, 85; /* #334155 - slate-700 */
+  --color-gray-800: 30, 41, 59; /* #1e293b - slate-800 */
+  --color-gray-900: 15, 23, 42; /* #0f172a - slate-900 */
+  --color-gray-950: 2, 6, 23; /* #020617 - slate-950 */
+
+  /* Additional grays (neutral scale) */
+  --color-neutral-400: 156, 163, 175; /* #9ca3af - gray-400 */
+  --color-neutral-300: 209, 213, 219; /* #d1d5db - gray-300 */
+  --color-neutral-700: 55, 65, 81; /* #374151 - gray-700 */
+  --color-neutral-800: 17, 24, 39; /* #111827 - gray-800 */
+
+  /* Page backgrounds - gradient colors */
+  --gradient-dark-start: 27, 39, 53; /* #1b2735 */
+  --gradient-dark-end: 9, 10, 15; /* #090a0f */
+
+  /* Overlay colors (with alpha) */
+  --overlay-black-05: 0, 0, 0; /* use with rgba(..., 0.05) */
+  --overlay-black-10: 0, 0, 0; /* use with rgba(..., 0.1) */
+  --overlay-black-20: 0, 0, 0; /* use with rgba(..., 0.2) */
+  --overlay-black-40: 0, 0, 0; /* use with rgba(..., 0.4) */
+  --overlay-black-50: 0, 0, 0; /* use with rgba(..., 0.5) */
+
+  /* Evidence Explorer specific */
+  --evidence-bg-deep: 5, 10, 20; /* #050a14 - deepest background */
+  --evidence-bg-dark: 11, 26, 43; /* #0b1a2b - dark card bg */
+  --evidence-border: 203, 213, 245; /* #cbd5f5 - light border */
 
   /* 8-pt Spacing Scale */
   --space-1: 0.25rem; /* 4px */
@@ -270,19 +339,19 @@ h6 {
 }
 
 .btn--secondary {
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(var(--color-gray-800), 0.8);
   color: rgb(var(--text-secondary));
-  border-color: rgb(71, 85, 105);
+  border-color: rgb(var(--color-gray-600));
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 .btn--secondary:hover {
-  background: rgba(51, 65, 85, 0.9);
+  background: rgba(var(--color-gray-700), 0.9);
   color: rgb(var(--text-primary));
-  border-color: rgb(100, 116, 139);
+  border-color: rgb(var(--color-gray-500));
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(var(--tactical-black), 0.2);
 }
 
 .btn--secondary:focus-visible {
@@ -592,15 +661,15 @@ section:first-of-type {
       rgba(var(--secondary), 0.06),
       transparent 50%
     ),
-    linear-gradient(180deg, #0f172a, #1e293b);
+    linear-gradient(180deg, rgb(var(--color-gray-900)), rgb(var(--color-gray-800)));
 }
 
 .section-gradient-2 {
   background: linear-gradient(
     135deg,
-    rgba(15, 23, 42, 1) 0%,
-    rgba(30, 41, 59, 1) 50%,
-    rgba(15, 23, 42, 1) 100%
+    rgb(var(--color-gray-900)) 0%,
+    rgb(var(--color-gray-800)) 50%,
+    rgb(var(--color-gray-900)) 100%
   );
 }
 

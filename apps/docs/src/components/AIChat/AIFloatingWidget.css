@@ -40,7 +40,7 @@
 
 .ai-widget__toggle--active {
   background: rgb(51, 65, 85);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.3);
 }
 
 .ai-widget__toggle-icon {
@@ -72,7 +72,7 @@
   background: rgb(30, 41, 59);
   border: 1px solid rgb(51, 65, 85);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(var(--tactical-black), 0.3);
   animation: slideUp 0.2s ease-out;
 }
 

@@ -109,10 +109,10 @@
 .cardOrange {
   background: linear-gradient(
     to bottom right,
-    rgba(249, 115, 22, 0.2),
+    rgba(var(--primary), 0.2),
     rgba(239, 68, 68, 0.2)
   );
-  border-color: rgba(249, 115, 22, 0.3);
+  border-color: rgba(var(--primary), 0.3);
 }
 
 .badges {
@@ -156,7 +156,7 @@
 }
 
 .badgeStrategic {
-  background-color: rgba(249, 115, 22, 0.2);
+  background-color: rgba(var(--primary), 0.2);
   color: #fb923c;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .iconOrange {
-  background: linear-gradient(to bottom right, #f97316, #ef4444);
+  background: linear-gradient(to bottom right, rgb(var(--primary)), #ef4444);
 }
 
 .cardTitle {
@@ -240,7 +240,7 @@
 }
 
 .featureBulletOrange {
-  background: linear-gradient(to right, #f97316, #ef4444);
+  background: linear-gradient(to right, rgb(var(--primary)), #ef4444);
 }
 
 .architectureDiagram {
@@ -309,7 +309,7 @@
 }
 
 .architectureIconOrange {
-  background: linear-gradient(to bottom right, #f97316, #ef4444);
+  background: linear-gradient(to bottom right, rgb(var(--primary)), #ef4444);
 }
 
 .architectureItemTitle {
@@ -343,7 +343,7 @@
 }
 
 .architectureItemBadgeStrategic {
-  background-color: rgba(249, 115, 22, 0.2);
+  background-color: rgba(var(--primary), 0.2);
   color: #fb923c;
 }
 
@@ -432,7 +432,7 @@
     rgba(124, 45, 18, 0.2),
     rgba(153, 27, 27, 0.2)
   );
-  border-color: rgba(249, 115, 22, 0.3);
+  border-color: rgba(var(--primary), 0.3);
 }
 
 .valueCardTitle {

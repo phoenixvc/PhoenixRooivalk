@@ -6,7 +6,7 @@
   margin-top: 0;
   position: relative;
   min-height: 100vh;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
   overflow: hidden;
 }
 
@@ -29,7 +29,7 @@
   background: radial-gradient(
     circle at center,
     transparent 0%,
-    rgba(9, 10, 15, 0.4) 100%
+    rgba(var(--gradient-dark-end), 0.4) 100%
   );
   z-index: 0;
   pointer-events: none;
@@ -152,7 +152,7 @@
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 8px 32px rgba(var(--tactical-black), 0.3),
     0 0 0 1px rgba(var(--primary), 0.1) inset;
   position: relative;
   overflow: hidden;
@@ -338,7 +338,7 @@
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.2),
+    0 4px 24px rgba(var(--tactical-black), 0.2),
     0 0 0 1px rgba(var(--primary), 0.1) inset;
   animation: fadeInUp 1s ease both;
   animation-delay: 300ms;

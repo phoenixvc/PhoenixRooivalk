@@ -2,7 +2,7 @@
 
 .contactMain {
   min-height: calc(100vh - 60px);
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   padding: 3rem 1.5rem;
 }
 
@@ -20,7 +20,7 @@
   font-size: 2.5rem !important;
   font-weight: 800 !important;
   margin-bottom: 1rem !important;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -53,7 +53,7 @@
 }
 
 .inquiryCard {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border: 2px solid rgb(51, 65, 85);
   border-radius: 12px;
   padding: 1.5rem;
@@ -67,14 +67,14 @@
 }
 
 .inquiryCard:hover {
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.2);
 }
 
 .inquiryCardSelected {
-  border-color: rgb(249, 115, 22);
-  background: rgba(249, 115, 22, 0.1);
+  border-color: rgb(var(--primary));
+  background: rgba(var(--primary), 0.1);
 }
 
 .inquiryIcon {
@@ -98,7 +98,7 @@
 .inquiryAction {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-radius: 12px;
   text-align: center;
 }
@@ -110,8 +110,8 @@
 
 .mailtoButton {
   display: inline-block;
-  background: rgb(249, 115, 22) !important;
-  color: rgb(15, 23, 42) !important;
+  background: rgb(var(--primary)) !important;
+  color: rgb(var(--color-gray-900)) !important;
   padding: 0.875rem 2rem;
   border-radius: 8px;
   font-weight: 600;
@@ -123,7 +123,7 @@
 .mailtoButton:hover {
   background: rgb(234, 88, 12) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
 .clearButton {
@@ -166,7 +166,7 @@
 
 /* Form Section */
 .formSection {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border: 1px solid rgb(51, 65, 85);
   border-radius: 16px;
   padding: 2rem;
@@ -215,7 +215,7 @@
 .formGroupFull textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   border: 1px solid rgb(51, 65, 85);
   border-radius: 8px;
   color: rgb(242, 244, 246);
@@ -228,8 +228,8 @@
 .formGroup select:focus,
 .formGroupFull textarea:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
 }
 
 .formGroup input::placeholder,
@@ -255,8 +255,8 @@
 }
 
 .submitButton {
-  background: rgb(249, 115, 22);
-  color: rgb(15, 23, 42);
+  background: rgb(var(--primary));
+  color: rgb(var(--color-gray-900));
   border: none;
   padding: 0.875rem 2.5rem;
   border-radius: 8px;
@@ -269,7 +269,7 @@
 .submitButton:hover {
   background: rgb(234, 88, 12);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
 /* Booking Section */
@@ -310,7 +310,7 @@
 }
 
 .contactCard {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border: 1px solid rgb(51, 65, 85);
   border-radius: 12px;
   padding: 1.5rem;
@@ -333,7 +333,7 @@
 }
 
 .contactCard a {
-  color: rgb(249, 115, 22) !important;
+  color: rgb(var(--primary)) !important;
   font-weight: 500;
   text-decoration: none !important;
 }
@@ -380,6 +380,6 @@
 .mailtoButton:focus-visible,
 .clearButton:focus-visible,
 .submitButton:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 2px;
 }

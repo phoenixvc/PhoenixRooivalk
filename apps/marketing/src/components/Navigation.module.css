@@ -2,14 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(var(--color-gray-900), 0.95);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+  border-bottom: 1px solid rgba(var(--primary), 0.2);
   padding: 1.25rem 1.5rem;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.4),
-    0 2px 12px rgba(249, 115, 22, 0.08);
+    0 4px 24px rgba(var(--tactical-black), 0.4),
+    0 2px 12px rgba(var(--primary), 0.08);
   transition: all 0.3s ease;
 }
 
@@ -188,14 +188,14 @@
   left: 0;
   margin-top: 0.5rem;
   width: 16rem;
-  background: rgba(15, 23, 42, 0.98);
+  background: rgba(var(--color-gray-900), 0.98);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  border: 1px solid rgba(var(--primary), 0.2);
   border-radius: 0.75rem;
   box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(249, 115, 22, 0.1) inset;
+    0 10px 40px rgba(var(--tactical-black), 0.3),
+    0 0 0 1px rgba(var(--primary), 0.1) inset;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -227,8 +227,8 @@
 }
 
 .dropdownLink:hover {
-  background: rgba(249, 115, 22, 0.1);
-  color: rgb(249, 115, 22);
+  background: rgba(var(--primary), 0.1);
+  color: rgb(var(--primary));
   transform: translateX(4px);
 }
 
@@ -327,14 +327,14 @@
   right: 0;
   margin-top: 0.5rem;
   width: 14rem;
-  background: rgba(15, 23, 42, 0.98);
+  background: rgba(var(--color-gray-900), 0.98);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  border: 1px solid rgba(var(--primary), 0.2);
   border-radius: 0.75rem;
   box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(249, 115, 22, 0.1) inset;
+    0 10px 40px rgba(var(--tactical-black), 0.3),
+    0 0 0 1px rgba(var(--primary), 0.1) inset;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -365,8 +365,8 @@
 }
 
 .githubDropdownLink:hover {
-  background: rgba(249, 115, 22, 0.1);
-  color: rgb(249, 115, 22);
+  background: rgba(var(--primary), 0.1);
+  color: rgb(var(--primary));
   transform: translateX(4px);
 }
 
@@ -481,7 +481,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.98);
+  background: rgba(var(--color-gray-900), 0.98);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   z-index: 999;
@@ -511,7 +511,7 @@
 }
 
 .mobileMenuItem {
-  border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+  border-bottom: 1px solid rgba(var(--primary), 0.1);
   padding-bottom: 1rem;
 }
 
@@ -541,14 +541,14 @@
   padding: 0.75rem 1rem;
   color: rgb(var(--text-primary));
   text-decoration: none;
-  background: rgba(249, 115, 22, 0.05);
+  background: rgba(var(--primary), 0.05);
   border-radius: 0.5rem;
   border-left: 3px solid transparent;
   transition: all 0.2s ease;
 }
 
 .mobileMenuLink:hover {
-  background: rgba(249, 115, 22, 0.15);
+  background: rgba(var(--primary), 0.15);
   border-left-color: rgb(var(--primary));
   transform: translateX(4px);
 }

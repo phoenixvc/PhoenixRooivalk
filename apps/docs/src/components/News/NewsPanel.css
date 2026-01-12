@@ -64,7 +64,7 @@
 }
 
 .news-tab.active {
-  background: var(--ifm-color-primary, rgb(249, 115, 22));
+  background: var(--ifm-color-primary, rgb(var(--primary)));
   color: white;
 }
 
@@ -93,13 +93,13 @@
 
 .news-search-input:focus {
   outline: none;
-  border-color: var(--ifm-color-primary, rgb(249, 115, 22));
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  border-color: var(--ifm-color-primary, rgb(var(--primary)));
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
 }
 
 .news-search-btn {
   padding: 0.75rem 1rem;
-  background: var(--ifm-color-primary, rgb(249, 115, 22));
+  background: var(--ifm-color-primary, rgb(var(--primary)));
   color: white;
   border: none;
   border-radius: 8px;
@@ -138,7 +138,7 @@
 }
 
 .news-category-btn:hover {
-  border-color: var(--ifm-color-primary, rgb(249, 115, 22));
+  border-color: var(--ifm-color-primary, rgb(var(--primary)));
 }
 
 .news-category-btn.active {
@@ -151,7 +151,7 @@
   border: none;
   cursor: pointer;
   font-size: 0.75rem;
-  color: var(--ifm-color-primary, rgb(249, 115, 22));
+  color: var(--ifm-color-primary, rgb(var(--primary)));
   text-decoration: underline;
 }
 
@@ -179,7 +179,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid var(--ifm-color-emphasis-200, #e5e7eb);
-  border-top-color: var(--ifm-color-primary, rgb(249, 115, 22));
+  border-top-color: var(--ifm-color-primary, rgb(var(--primary)));
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -354,7 +354,7 @@
 
 .news-empty-action {
   padding: 0.5rem 1rem;
-  background: var(--ifm-color-primary, rgb(249, 115, 22));
+  background: var(--ifm-color-primary, rgb(var(--primary)));
   color: white;
   border: none;
   border-radius: 6px;

@@ -14,7 +14,7 @@
 
 .news-card-compact:hover {
   border-color: var(--ifm-color-primary, #3b82f6);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.1);
 }
 
 .news-card-read {
@@ -138,7 +138,7 @@
   border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
   border-radius: 6px;
   padding: 0.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.15);
   z-index: 100;
   display: flex;
   flex-direction: column;

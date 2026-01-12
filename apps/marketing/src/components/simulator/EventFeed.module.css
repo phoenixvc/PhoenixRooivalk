@@ -87,7 +87,7 @@
 }
 
 .feedItemSuccess {
-  border-left-color: #4ade80;
+  border-left-color: rgb(var(--sim-friendly));
 }
 
 .feedItemWarning {

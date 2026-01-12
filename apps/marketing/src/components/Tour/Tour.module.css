@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(var(--tactical-black), 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(var(--tactical-black), 0.5);
   position: relative;
 }
 
@@ -138,12 +138,12 @@
     rgb(var(--accent)) 100%
   );
   color: white;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.2);
 }
 
 .nextButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 6px 20px rgba(var(--primary), 0.3);
 }
 
 .previousButton {

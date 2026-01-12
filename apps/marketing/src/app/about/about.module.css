@@ -11,7 +11,7 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
 }
 
 .gridPattern {
