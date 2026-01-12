@@ -114,8 +114,10 @@
 
   /* Teals/Cyans - for success variants */
   --color-teal: 94, 234, 212; /* #5eead4 - teal-300 */
+  --color-teal-600: 15, 118, 110; /* #0f766e - teal-600 */
   --color-teal-deep: 16, 185, 129; /* #10b981 - emerald-500 */
   --color-cyan: 34, 211, 238; /* #22d3ee - cyan-400 */
+  --color-cyan-950: 8, 47, 73; /* #082f49 - cyan-950 */
 
   /* Greens - extended success palette */
   --color-green-light: 134, 239, 172; /* #86efac - green-300 */

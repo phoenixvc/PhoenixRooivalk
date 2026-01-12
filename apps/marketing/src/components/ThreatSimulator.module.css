@@ -170,9 +170,9 @@
 }
 
 .switch--on {
-  border-color: #8fb3e1;
-  box-shadow: inset 0 0 0 1px rgba(143, 179, 225, 0.25);
-  background: rgba(143, 179, 225, 0.1);
+  border-color: rgb(var(--color-blue-muted));
+  box-shadow: inset 0 0 0 1px rgba(var(--color-blue-muted), 0.25);
+  background: rgba(var(--color-blue-muted), 0.1);
 }
 
 /* Feed */
@@ -208,7 +208,7 @@
 /* Buttons (scoped to simulator to avoid conflicts with global styles) */
 .sim-btn {
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 8px 14px;
@@ -268,9 +268,9 @@
   border-color: rgb(var(--sim-border-light));
 }
 .weapon-item.selected {
-  background: #1e293b; /* A slightly different color for selection */
+  background: rgb(var(--tactical-charcoal)); /* A slightly different color for selection */
   border-color: rgb(var(--sim-accent));
-  box-shadow: 0 0 8px rgba(255, 59, 0, 0.5);
+  box-shadow: 0 0 8px rgba(var(--sim-accent), 0.5);
 }
 .weapon-icon {
   font-size: 1.5rem;
@@ -293,7 +293,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background-color: rgba(255, 59, 0, 0.2);
+  background-color: rgba(var(--sim-accent), 0.2);
 }
 .cooldown-progress {
   height: 100%;
@@ -401,9 +401,9 @@
   border-color: rgb(var(--sim-border-light));
 }
 .drone-item.selected {
-  background: #1e293b;
+  background: rgb(var(--tactical-charcoal));
   border-color: rgb(var(--sim-accent));
-  box-shadow: 0 0 8px rgba(255, 59, 0, 0.5);
+  box-shadow: 0 0 8px rgba(var(--sim-accent), 0.5);
 }
 .drone-item.disabled {
   opacity: 0.5;
@@ -412,8 +412,8 @@
     45deg,
     var(--sim-elev),
     var(--sim-elev) 5px,
-    #1c2430 5px,
-    #1c2430 10px
+    rgb(var(--sim-panel-alt)) 5px,
+    rgb(var(--sim-panel-alt)) 10px
   );
 }
 .drone-icon {
@@ -630,7 +630,7 @@
 
 .category-button.active {
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border-color: transparent;
 }
 
@@ -722,7 +722,7 @@
 
 .unlock-button {
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border-color: transparent;
 }
 
@@ -740,7 +740,7 @@
   padding: 16px;
   background: rgb(var(--sim-panel));
   border-radius: 8px;
-  border-left: 4px solid #70a1ff;
+  border-left: 4px solid rgb(var(--color-blue-accent));
 }
 
 .research-help h4 {
@@ -900,7 +900,7 @@
 .purchase-button {
   padding: 8px 16px;
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -959,7 +959,7 @@
   padding: 16px;
   background: rgb(var(--sim-panel));
   border-radius: 8px;
-  border-left: 4px solid #ffa502;
+  border-left: 4px solid rgb(var(--color-amber));
 }
 
 .store-help h4 {
@@ -1139,7 +1139,7 @@
 
 .filter-chip-count {
   background: rgb(var(--chip-color, var(--sim-accent)));
-  color: white;
+  color: rgb(var(--phoenix-white));
   font-size: 10px;
   padding: 1px 4px;
   border-radius: 8px;
@@ -1447,7 +1447,7 @@
   width: 100%;
   padding: 8px 12px;
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border: none;
   border-radius: 4px;
   font-size: 12px;
@@ -1676,7 +1676,7 @@
 
 .info-button {
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border: none;
   padding: 4px 8px;
   border-radius: 4px;
@@ -1785,7 +1785,7 @@
 
 .weapon-info-button:hover {
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border-color: rgb(var(--sim-accent));
 }
 
@@ -2020,7 +2020,7 @@
   text-transform: uppercase;
   letter-spacing: 0.3px;
   background: rgb(var(--sim-success));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .energy-status.energy-overloaded {
@@ -2239,7 +2239,7 @@
 
 .deployment-count-btn:hover:not(:disabled) {
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border-color: rgb(var(--sim-accent));
 }
 
@@ -2274,7 +2274,7 @@
 
 .deployment-info-btn:hover {
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border-color: rgb(var(--sim-accent));
 }
 
@@ -2534,7 +2534,7 @@
   padding: 4px 8px;
   border: 1px solid;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--phoenix-white), 0.1);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
@@ -2552,7 +2552,7 @@
 .roe-icon {
   font-size: 12px;
   font-weight: 600;
-  color: white;
+  color: rgb(var(--phoenix-white));
   text-shadow: 0 1px 2px rgba(var(--tactical-black), 0.5);
 }
 
@@ -2567,7 +2567,7 @@
 .roe-level {
   font-size: 10px;
   font-weight: 700;
-  color: white;
+  color: rgb(var(--phoenix-white));
   text-shadow: 0 1px 2px rgba(var(--tactical-black), 0.5);
   letter-spacing: 0.5px;
 }
@@ -2673,7 +2673,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--phoenix-white), 0.1);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   cursor: help;
@@ -2682,7 +2682,7 @@
 .roe-level-text {
   font-size: 8px;
   font-weight: 700;
-  color: white;
+  color: rgb(var(--phoenix-white));
   text-shadow: 0 1px 2px rgba(var(--tactical-black), 0.5);
 }
 
@@ -2895,32 +2895,32 @@
 
 .legend-symbol.hostile {
   background: rgb(var(--sim-hostile));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-symbol.unknown {
-  background: #f59e0b;
-  color: white;
+  background: rgb(var(--color-amber));
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-symbol.friendly {
   background: rgb(var(--sim-friendly));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-symbol.active {
   background: rgb(var(--sim-friendly));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-symbol.idle {
-  background: #6b7280;
-  color: white;
+  background: rgb(var(--tactical-gray));
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-symbol.returning {
-  background: #f59e0b;
-  color: white;
+  background: rgb(var(--color-amber));
+  color: rgb(var(--phoenix-white));
 }
 
 .legend-label {
@@ -3210,7 +3210,7 @@
 
 .info-btn:hover {
   background: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
   border-color: rgb(var(--sim-accent));
 }
 
@@ -3235,7 +3235,7 @@
 .effector-select-btn.selected {
   background: rgb(var(--sim-success));
   border-color: rgb(var(--sim-success));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .effector-select-btn:disabled {
@@ -3297,7 +3297,7 @@
   background: rgb(var(--sim-danger));
   border: 1px solid var(--sim-danger);
   border-radius: 4px;
-  color: white;
+  color: rgb(var(--phoenix-white));
   font-size: 9px;
   font-weight: 600;
   cursor: pointer;
@@ -3326,7 +3326,7 @@
   background: rgb(var(--sim-accent));
   border: 1px solid var(--sim-accent);
   border-radius: 6px;
-  color: white;
+  color: rgb(var(--phoenix-white));
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -3402,7 +3402,7 @@
 .mode-btn.active {
   background: rgb(var(--sim-accent));
   border-color: rgb(var(--sim-accent));
-  color: white;
+  color: rgb(var(--phoenix-white));
 }
 
 .demo-content {
@@ -3517,7 +3517,7 @@
   background: rgb(var(--sim-accent));
   border: 1px solid var(--sim-accent);
   border-radius: 4px;
-  color: white;
+  color: rgb(var(--phoenix-white));
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
