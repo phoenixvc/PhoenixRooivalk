@@ -1,5 +1,3 @@
-import type { MouseEvent } from "react";
-
 export const downloadWhitepaper = (customUrl?: string): void => {
   if (typeof window === "undefined") return; // SSR guard
 
