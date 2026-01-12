@@ -2,8 +2,8 @@
   padding: 3rem 1.5rem;
   background: linear-gradient(
     180deg,
-    rgba(0, 136, 255, 0.05),
-    rgba(0, 255, 136, 0.05)
+    rgba(var(--color-blue), 0.05),
+    rgba(var(--secondary), 0.05)
   );
 }
 
@@ -68,7 +68,7 @@
 }
 
 .card {
-  background: rgba(17, 24, 39, 0.5);
+  background: rgba(var(--color-gray-900), 0.5);
   border: 1px solid rgba(55, 65, 81, 0.5);
   border-radius: 0.5rem;
   padding: 1.5rem;
@@ -98,7 +98,7 @@
 }
 
 .advisoryCard {
-  background: rgba(17, 24, 39, 0.3);
+  background: rgba(var(--color-gray-900), 0.3);
   border: 1px solid rgba(55, 65, 81, 0.5);
   border-radius: 0.5rem;
   padding: 1.5rem;
