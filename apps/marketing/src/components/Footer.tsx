@@ -82,6 +82,20 @@ export const Footer: React.FC = () => {
             ))}
           </div>
 
+          {/* Backed By Section */}
+          <div className={styles.backedBy}>
+            <span className={styles.backedByLabel}>Backed by</span>
+            <a
+              href="https://soonami.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.backedByBadge}
+            >
+              <span className={styles.soonamiLogo}>soonami</span>
+              <span className={styles.cohortBadge}>Cohort 8</span>
+            </a>
+          </div>
+
           {/* Bottom Section */}
           <div className={styles.bottom}>
             <div className={styles.bottomContent}>

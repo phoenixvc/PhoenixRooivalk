@@ -1,6 +1,6 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(180deg, #090a0f 0%, #0f1419 100%);
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-alt);
   position: relative;
 }
 
@@ -31,7 +31,7 @@
 .title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 

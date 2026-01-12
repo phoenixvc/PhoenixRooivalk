@@ -13,6 +13,15 @@ export const HeroSection: React.FC = () => {
             Safe &amp; Non-Destructive Technology
           </span>
           <span className="pill pill--sbir">Seeking Early Partners</span>
+          <a
+            href="https://soonami.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.soonamiBadge}
+          >
+            <span className={styles.soonamiText}>soonami</span>
+            <span className={styles.soonamiCohort}>Cohort 8</span>
+          </a>
         </div>
 
         {/* Vision-focused headline */}

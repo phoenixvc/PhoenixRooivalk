@@ -11,15 +11,15 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: var(--section-bg-hero);
 }
 
 .gridPattern {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(var(--primary), 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--primary), 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: gridMove 20s linear infinite;
 }
@@ -38,7 +38,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(10, 14, 26, 0.95);
+  background: rgba(var(--bg-primary), 0.95);
   backdrop-filter: blur(10px);
   padding: 1rem 1.5rem;
 }
@@ -188,8 +188,8 @@
 
 .card {
   border-radius: 0.75rem;
-  border: 1px solid rgba(0, 255, 136, 0.2);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
 }
@@ -225,8 +225,8 @@
 /* Coverage Map */
 .coverageMapContainer {
   border-radius: 0.75rem;
-  border: 1px solid rgba(0, 255, 136, 0.2);
-  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -481,7 +481,7 @@
   padding: 2rem 5%;
   text-align: center;
   color: rgb(var(--gray));
-  border-top: 1px solid rgba(0, 255, 136, 0.2);
+  border-top: 1px solid rgba(var(--primary), 0.2);
 }
 
 .footerContainer {
@@ -538,7 +538,7 @@
 
 /* Partnership Cards */
 .partnershipCard {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(var(--bg-primary), 0.8);
   border: 1px solid rgba(var(--primary), 0.2);
   border-radius: 1rem;
   padding: 1.5rem;
@@ -657,7 +657,7 @@
 }
 
 .programCard {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(var(--bg-primary), 0.8);
   border: 1px solid rgba(var(--primary), 0.2);
   border-radius: 1rem;
   padding: 1.5rem;

@@ -1,10 +1,6 @@
 .section {
-  padding: 3rem 1.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 136, 255, 0.05),
-    rgba(0, 255, 136, 0.05)
-  );
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-accent);
 }
 
 @media (min-width: 768px) {
@@ -34,7 +30,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -57,7 +53,7 @@
 .subsectionTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -97,13 +93,13 @@
 .metricLabel {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
 .metricDescription {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
 }
 
 .competitorsGrid {
@@ -127,7 +123,7 @@
 .competitorName {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
@@ -139,13 +135,13 @@
 
 .competitorCapability {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--steel));
   margin-bottom: 0.75rem;
 }
 
 .competitorLimitation {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
 }
 
 .advantageSection {
@@ -167,7 +163,7 @@
 .advantageTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -195,5 +191,5 @@
 
 .advantageItemDescription {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--steel));
 }

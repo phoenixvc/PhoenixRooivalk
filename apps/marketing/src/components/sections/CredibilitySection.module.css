@@ -1,10 +1,6 @@
 .section {
-  padding: 3rem 1.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 136, 255, 0.05),
-    rgba(0, 255, 136, 0.05)
-  );
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-accent);
 }
 
 @media (min-width: 768px) {
@@ -34,7 +30,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -83,13 +79,13 @@
 .cardTitle {
   font-size: 1.125rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
 .cardDescription {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
 }
 
 .advisorySection {
@@ -109,16 +105,16 @@
 .advisoryTitle {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
 .advisoryText {
-  color: #d1d5db;
+  color: rgb(var(--steel));
   margin-bottom: 1rem;
 }
 
 .advisoryFooter {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
 }

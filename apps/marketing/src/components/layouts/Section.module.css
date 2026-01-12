@@ -18,15 +18,11 @@
 
 /* Background variants */
 .backgroundGradient {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 255, 136, 0.05),
-    rgba(0, 136, 255, 0.05)
-  );
+  background: var(--section-bg-accent);
 }
 
 .backgroundPrimary {
-  background: rgb(var(--bg-primary, #0a0e1a));
+  background: rgb(var(--bg-primary));
 }
 
 .backgroundNone {

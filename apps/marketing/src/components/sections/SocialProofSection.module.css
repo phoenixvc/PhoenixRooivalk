@@ -1,6 +1,6 @@
 /* SocialProofSection.module.css */
 .section {
-  padding: 5rem 1.5rem;
+  padding: var(--section-padding-y) var(--section-padding-x);
   background: linear-gradient(
     to bottom right,
     rgb(var(--tactical-black)),

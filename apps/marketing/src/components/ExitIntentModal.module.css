@@ -11,8 +11,8 @@
 
 .dialog {
   position: relative;
-  background-color: #111827;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background-color: rgb(var(--bg-primary));
+  border: 1px solid rgba(var(--status-active), 0.3);
   border-radius: 0.75rem;
   padding: 2rem;
   max-width: 28rem;
@@ -24,7 +24,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
   font-size: 1.5rem;
   line-height: 1;
   background: none;
@@ -33,7 +33,7 @@
 }
 
 .closeButton:hover {
-  color: #fff;
+  color: rgb(var(--text-primary));
 }
 
 .header {
@@ -49,25 +49,25 @@
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #4ade80;
+  color: rgb(var(--status-active));
   margin-bottom: 0.5rem;
 }
 
 .description {
-  color: #d1d5db;
+  color: rgb(var(--steel));
   font-size: 0.875rem;
 }
 
 .preview {
-  background-color: rgba(31, 41, 55, 0.5);
+  background-color: rgba(var(--bg-primary), 0.5);
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(var(--status-active), 0.2);
 }
 
 .previewTitle {
-  color: #4ade80;
+  color: rgb(var(--status-active));
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
@@ -75,7 +75,7 @@
 
 .previewList {
   font-size: 0.75rem;
-  color: #d1d5db;
+  color: rgb(var(--steel));
   list-style: none;
   padding: 0;
   margin: 0;
@@ -93,14 +93,14 @@
 
 .primaryButton {
   width: 100%;
-  background-color: #16a34a;
+  background-color: rgb(var(--status-active));
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: 600;
 }
 
 .primaryButton:hover {
-  background-color: #15803d;
+  filter: brightness(0.9);
 }
 
 .secondaryActions {
@@ -116,13 +116,13 @@
 .footer {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #374151;
+  border-top: 1px solid rgba(var(--gray), 0.3);
   text-align: center;
 }
 
 .footerText {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: rgb(var(--gray));
   margin-bottom: 0.5rem;
 }
 
@@ -134,10 +134,10 @@
 }
 
 .footerLink {
-  color: #4ade80;
+  color: rgb(var(--status-active));
   text-decoration: none;
 }
 
 .footerLink:hover {
-  color: #86efac;
+  filter: brightness(1.2);
 }

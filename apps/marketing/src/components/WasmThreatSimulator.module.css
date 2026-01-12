@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 100%;
   position: relative;
-  background-color: #0a0e1a;
+  background-color: rgb(var(--bg-primary));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -66,8 +66,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 14, 26, 0.95);
-  color: #00ff00;
+  background: rgba(var(--bg-primary), 0.95);
+  color: rgb(var(--status-active));
   font-family: monospace;
   z-index: 100;
   pointer-events: none;
@@ -82,7 +82,7 @@
 
 .loadingSubtext {
   font-size: 14px;
-  color: #0f0;
+  color: rgb(var(--status-active));
   text-align: center;
 }
 
@@ -95,8 +95,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 14, 26, 0.95);
-  color: #ff0000;
+  background: rgba(var(--bg-primary), 0.95);
+  color: rgb(var(--status-danger));
   font-family: monospace;
   max-width: 100%;
   padding: 2rem;
@@ -116,13 +116,13 @@
 
 .errorMessage {
   font-size: 14px;
-  color: #faa;
+  color: rgba(var(--status-danger), 0.7);
   text-align: center;
 }
 
 .errorHint {
   font-size: 12px;
-  color: #888;
+  color: rgb(var(--gray));
   margin-top: 10px;
   text-align: center;
 }
