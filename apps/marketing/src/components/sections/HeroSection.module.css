@@ -81,6 +81,50 @@
   animation-delay: 0.3s;
 }
 
+.statusBadges > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* Soonami Badge */
+.soonamiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.2) 0%, rgba(0, 204, 255, 0.2) 100%);
+  border: 1px solid rgba(0, 153, 255, 0.4);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.soonamiBadge:hover {
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.3) 0%, rgba(0, 204, 255, 0.3) 100%);
+  border-color: rgba(0, 153, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.soonamiText {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: lowercase;
+}
+
+.soonamiCohort {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #00ccff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  background: rgba(0, 204, 255, 0.2);
+  border-radius: 0.25rem;
+}
+
 .headline {
   font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
   font-weight: 900;
