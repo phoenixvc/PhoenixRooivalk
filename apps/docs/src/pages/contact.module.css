@@ -83,7 +83,7 @@
 
 .inquiryCard h3 {
   font-size: 1rem !important;
-  color: rgb(242, 244, 246) !important;
+  color: rgb(var(--color-gray-100)) !important;
   margin: 0 !important;
   border-bottom: none !important;
 }
@@ -175,7 +175,7 @@
 
 .formSection h2 {
   font-size: 1.25rem !important;
-  color: rgb(242, 244, 246) !important;
+  color: rgb(var(--color-gray-100)) !important;
   margin-bottom: 1.5rem !important;
   border-bottom: none !important;
 }
@@ -218,7 +218,7 @@
   background: rgb(var(--color-gray-900));
   border: 1px solid rgb(var(--color-gray-700));
   border-radius: 8px;
-  color: rgb(242, 244, 246);
+  color: rgb(var(--color-gray-100));
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s ease;

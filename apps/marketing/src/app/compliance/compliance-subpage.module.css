@@ -448,7 +448,7 @@
 
 /* Process Card */
 .processCard {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(var(--color-slate-900), 0.8);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
   border-radius: 0.75rem;

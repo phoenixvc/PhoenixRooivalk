@@ -66,7 +66,7 @@
 }
 
 .tabBadge {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--text-primary), 0.2);
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
   font-size: 0.75rem;
@@ -172,10 +172,10 @@
 .aiEnhancementPreview {
   background: linear-gradient(
     135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
+    rgba(var(--color-purple), 0.1) 0%,
+    rgba(var(--color-purple-dark), 0.1) 100%
   );
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(var(--color-purple), 0.3);
   border-radius: 6px;
   padding: 0.75rem;
   margin-bottom: 0.75rem;
@@ -184,7 +184,7 @@
 
 .aiLabel {
   font-weight: 600;
-  color: #667eea;
+  color: rgb(var(--color-purple));
 }
 
 .aiEnhancementPreview p {
@@ -218,43 +218,43 @@
 }
 
 .badgePending {
-  background: #fef3c7;
-  color: #92400e;
+  background: rgb(var(--color-amber-lighter));
+  color: rgb(var(--color-amber-darker));
 }
 
 [data-theme="dark"] .badgePending {
-  background: #78350f;
-  color: #fef3c7;
+  background: rgb(var(--color-amber-darkest));
+  color: rgb(var(--color-amber-lighter));
 }
 
 .badgeApproved {
-  background: #d1fae5;
-  color: #065f46;
+  background: rgb(var(--color-green-light));
+  color: rgb(var(--color-green-darker));
 }
 
 [data-theme="dark"] .badgeApproved {
-  background: #064e3b;
-  color: #d1fae5;
+  background: rgb(var(--color-green-darker));
+  color: rgb(var(--color-green-light));
 }
 
 .badgeRejected {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgb(var(--color-red-light));
+  color: rgb(var(--color-red-deep));
 }
 
 [data-theme="dark"] .badgeRejected {
-  background: #7f1d1d;
-  color: #fee2e2;
+  background: rgb(var(--color-red-darker));
+  color: rgb(var(--color-red-light));
 }
 
 .badgeImplemented {
-  background: #dbeafe;
-  color: #1e40af;
+  background: rgb(var(--color-blue-light));
+  color: rgb(var(--color-blue-dark));
 }
 
 [data-theme="dark"] .badgeImplemented {
-  background: #1e3a8a;
-  color: #dbeafe;
+  background: rgb(var(--color-blue-darker));
+  color: rgb(var(--color-blue-light));
 }
 
 /* Table */
@@ -370,30 +370,30 @@
 }
 
 .btnSuccess {
-  background: #10b981;
+  background: rgb(var(--color-green));
   color: white;
 }
 
 .btnSuccess:hover:not(:disabled) {
-  background: #059669;
+  background: rgb(var(--color-green-dark));
 }
 
 .btnDanger {
-  background: #ef4444;
+  background: rgb(var(--color-red));
   color: white;
 }
 
 .btnDanger:hover:not(:disabled) {
-  background: #dc2626;
+  background: rgb(var(--color-red-dark));
 }
 
 .btnInfo {
-  background: #3b82f6;
+  background: rgb(var(--color-blue-deep));
   color: white;
 }
 
 .btnInfo:hover:not(:disabled) {
-  background: #2563eb;
+  background: rgb(var(--color-blue-dark));
 }
 
 .btn:disabled {

@@ -488,7 +488,7 @@
 }
 
 .loginNotice {
-  background: linear-gradient(135deg, rgba(var(--phoenix-amber), 0.15), rgba(249, 115, 22, 0.1));
+  background: linear-gradient(135deg, rgba(var(--phoenix-amber), 0.15), rgba(var(--primary), 0.1));
   border: 1px solid rgba(var(--phoenix-amber), 0.4);
   border-radius: 0.75rem;
   padding: 2rem;

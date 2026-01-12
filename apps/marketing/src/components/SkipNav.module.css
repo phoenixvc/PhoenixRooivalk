@@ -26,8 +26,8 @@
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-  outline: 3px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 24px rgba(var(--tactical-black), 0.5);
+  outline: 3px solid rgba(var(--text-primary), 0.5);
   outline-offset: 2px;
   transition: all 0.2s ease;
 }

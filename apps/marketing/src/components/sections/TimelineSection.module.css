@@ -177,12 +177,12 @@
 }
 
 .statusPlanned {
-  background: rgba(234, 179, 8, 0.2);
+  background: rgba(var(--sensor-amber), 0.2);
   color: rgb(var(--sensor-amber));
 }
 
 .statusFuture {
-  background: rgba(107, 114, 128, 0.2);
+  background: rgba(var(--color-neutral-500), 0.2);
   color: rgb(var(--text-muted));
 }
 

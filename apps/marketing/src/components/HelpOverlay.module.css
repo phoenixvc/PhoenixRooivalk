@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(14, 18, 23, 0.9);
+  background-color: rgba(var(--sim-bg), 0.9);
   color: rgb(var(--sim-text, 228, 233, 239));
   padding: 2rem;
   z-index: 1000;

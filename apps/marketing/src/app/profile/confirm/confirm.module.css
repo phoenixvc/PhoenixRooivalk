@@ -110,7 +110,7 @@
   outline: none;
   border-color: rgb(var(--primary));
   background: rgba(var(--text-primary), 0.08);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
 }
 
 .input:disabled {
@@ -154,7 +154,7 @@
 
 .confirmButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 8px 24px rgba(var(--primary), 0.3);
 }
 
 .confirmButton:active:not(:disabled) {

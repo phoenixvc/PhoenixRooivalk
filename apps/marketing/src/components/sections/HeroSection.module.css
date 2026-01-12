@@ -15,8 +15,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(var(--color-slate-400), 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--color-slate-400), 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   opacity: 1;
   z-index: 0;

@@ -98,7 +98,7 @@
   min-width: 20px;
   height: 20px;
   padding: 0 6px;
-  background: #ef4444;
+  background: rgb(var(--color-red));
   color: white;
   border-radius: 10px;
   font-size: 0.75rem;
@@ -398,17 +398,17 @@
 .highlightedText {
   margin: 0 0 0.75rem 0;
   padding: 0.5rem 0.75rem;
-  background: #fef3c7;
-  border-left: 3px solid #f59e0b;
+  background: rgb(var(--color-amber-lighter));
+  border-left: 3px solid rgb(var(--color-amber-light));
   font-size: 0.8125rem;
   font-style: italic;
-  color: #92400e;
+  color: rgb(var(--color-amber-darker));
   border-radius: 0 0.25rem 0.25rem 0;
 }
 
 [data-theme="dark"] .highlightedText {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
+  background: rgba(var(--color-amber-light), 0.15);
+  color: rgb(var(--color-amber-light));
 }
 
 .commentContent {
@@ -448,9 +448,9 @@
 }
 
 .deleteBtn:hover {
-  background: #fee2e2;
-  border-color: #fca5a5;
-  color: #dc2626;
+  background: rgb(var(--color-red-light));
+  border-color: rgba(var(--color-red), 0.5);
+  color: rgb(var(--color-red-dark));
 }
 
 .resolvedBadge {
@@ -459,13 +459,13 @@
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  background: #dcfce7;
-  color: #16a34a;
+  background: rgb(var(--color-green-light));
+  color: rgb(var(--color-green-dark));
   border-radius: 0.25rem;
 }
 
 [data-theme="dark"] .resolvedBadge {
-  background: rgba(22, 163, 74, 0.2);
+  background: rgba(var(--color-green-dark), 0.2);
 }
 
 /* ============================================
