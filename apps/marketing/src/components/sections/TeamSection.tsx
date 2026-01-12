@@ -72,8 +72,8 @@ export const TeamSection: React.FC = () => {
                     <div className={styles.crossLine1}></div>
                     <div className={styles.crossLine2}></div>
                     <div className={styles.eliminatedText}>ELIMINATED</div>
-                    <div className={styles.eliminatedSubtext}>hy is 'n poes</div>
                   </div>
+                )}
                 )}
                 <div className={styles.memberIcon}>{member.icon}</div>
                 <div className={styles.memberInfo}>
