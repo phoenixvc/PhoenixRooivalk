@@ -226,7 +226,7 @@ jobs:
       cosmos_endpoint: ${{ steps.deploy.outputs.cosmos_endpoint }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
 
       - name: Azure Login (Service Principal)
         if: needs.validate-prerequisites.outputs.has_service_principal == 'true'
@@ -410,7 +410,7 @@ jobs:
       needs.validate-prerequisites.outputs.has_gh_pat == 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
 
       - name: Azure Login (Service Principal)
         if: needs.validate-prerequisites.outputs.has_service_principal == 'true'

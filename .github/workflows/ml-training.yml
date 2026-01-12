@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Checkout code
         # v4.2.2 - pinned for security
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Set up Python
         # v5.6.0 - pinned for security
@@ -160,7 +160,7 @@ jobs:
     steps:
       - name: Checkout code
         # v4.2.2 - pinned for security
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Setup Terraform
         # v3.1.2 - pinned for security
@@ -211,7 +211,7 @@ jobs:
     steps:
       - name: Checkout code
         # v4.2.2 - pinned for security
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Azure Login
         # v2.2.0 - pinned for security
@@ -264,7 +264,7 @@ jobs:
     steps:
       - name: Checkout code
         # v4.2.2 - pinned for security
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Azure Login
         # v2.2.0 - pinned for security
@@ -327,7 +327,7 @@ jobs:
     steps:
       - name: Checkout code
         # v4.2.2 - pinned for security
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
       - name: Set up Python
         # v5.6.0 - pinned for security
