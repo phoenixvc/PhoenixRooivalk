@@ -158,8 +158,8 @@
 }
 
 .statusBadge.inactiveBadge {
-  background: rgba(156, 163, 175, 0.15);
-  color: rgb(107, 114, 128);
+  background: rgba(var(--color-neutral-400), 0.15);
+  color: rgb(var(--color-neutral-500));
 }
 
 .emailBody .displayName {
@@ -272,7 +272,7 @@
   background: rgba(var(--color-red), 0.1);
   border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 6px;
-  color: rgb(185, 28, 28);
+  color: rgb(var(--color-red-deep));
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
@@ -456,7 +456,7 @@
 
 /* Dark mode adjustments */
 [data-theme="dark"] .emailCard {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-color: rgb(var(--color-gray-700));
 }
 
@@ -465,17 +465,17 @@
 }
 
 [data-theme="dark"] .detailPanel {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .detailHeader {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .modal {
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
 }
 
 [data-theme="dark"] .modalHeader {
@@ -483,14 +483,14 @@
 }
 
 [data-theme="dark"] .notesText {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
 }
 
 [data-theme="dark"] .formGroup input,
 [data-theme="dark"] .formGroup select,
 [data-theme="dark"] .formGroup textarea,
 [data-theme="dark"] .searchInput {
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-color: rgb(var(--color-gray-700));
 }
 
