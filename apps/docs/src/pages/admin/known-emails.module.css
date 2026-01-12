@@ -397,12 +397,12 @@
 }
 
 .deactivateBtn {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(var(--color-amber), 0.15);
   color: rgb(var(--sensor-amber));
 }
 
 .deactivateBtn:hover:not(:disabled) {
-  background: rgba(245, 158, 11, 0.25);
+  background: rgba(var(--color-amber), 0.25);
 }
 
 .activateBtn {
@@ -500,6 +500,6 @@
 }
 
 [data-theme="dark"] .deactivateBtn {
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(var(--color-amber), 0.2);
   color: rgb(var(--sensor-amber));
 }

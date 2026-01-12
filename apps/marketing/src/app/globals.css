@@ -127,11 +127,24 @@
   /* Purples - for synergy/ECM effects */
   --color-purple: 139, 92, 246; /* #8b5cf6 - violet-500 */
   --color-purple-light: 167, 139, 250; /* #a78bfa - violet-400 */
+  --color-purple-deep: 168, 85, 247; /* #a855f7 - purple-500 */
 
   /* Reds - extended danger palette */
   --color-red-light: 248, 113, 113; /* #f87171 - red-400 */
   --color-red: 239, 68, 68; /* #ef4444 - red-500 */
+  --color-red-dark: 220, 38, 38; /* #dc2626 - red-600 */
+  --color-red-deep: 185, 28, 28; /* #b91c1c - red-700 */
   --color-red-bright: 255, 93, 93; /* #ff5d5d - custom bright red */
+
+  /* Oranges - extended primary palette */
+  --color-orange: 249, 115, 22; /* #f97316 - orange-500 */
+  --color-orange-light: 251, 146, 60; /* #fb923c - orange-400 */
+  --color-orange-dark: 234, 88, 12; /* #ea580c - orange-600 */
+
+  /* Yellows/Ambers - extended warning palette */
+  --color-yellow: 250, 204, 21; /* #facc15 - yellow-400 */
+  --color-amber: 245, 158, 11; /* #f59e0b - amber-500 */
+  --color-amber-dark: 180, 116, 8; /* #b47408 - amber-600 */
 
   /* Grays - extended neutral palette */
   --color-gray-50: 248, 250, 252; /* #f8fafc - slate-50 */

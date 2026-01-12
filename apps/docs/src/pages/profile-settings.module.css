@@ -579,14 +579,14 @@
 }
 
 .dialogActions .button--warning {
-  background: rgb(245, 158, 11);
-  border-color: rgb(245, 158, 11);
+  background: rgb(var(--color-amber));
+  border-color: rgb(var(--color-amber));
   color: rgb(var(--text-primary));
 }
 
 .dialogActions .button--warning:hover {
-  background: rgb(217, 119, 6);
-  border-color: rgb(217, 119, 6);
+  background: rgb(var(--color-amber-dark));
+  border-color: rgb(var(--color-amber-dark));
 }
 
 .dialogActions .button--danger {
@@ -596,8 +596,8 @@
 }
 
 .dialogActions .button--danger:hover {
-  background: rgb(220, 38, 38);
-  border-color: rgb(220, 38, 38);
+  background: rgb(var(--color-red-dark));
+  border-color: rgb(var(--color-red-dark));
 }
 
 @media (max-width: 768px) {

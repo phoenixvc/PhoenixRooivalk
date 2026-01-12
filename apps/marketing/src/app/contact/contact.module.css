@@ -515,7 +515,7 @@
 }
 
 .loginLink:hover {
-  background: linear-gradient(135deg, rgb(234, 88, 12), rgb(var(--primary)));
+  background: linear-gradient(135deg, rgb(var(--color-orange-dark)), rgb(var(--primary)));
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(var(--primary), 0.4);
 }
