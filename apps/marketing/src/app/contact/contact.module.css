@@ -307,7 +307,7 @@
 
 .quickLinksSection {
   padding: 5rem 5%;
-  background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.05));
+  background: linear-gradient(180deg, transparent, rgba(var(--color-blue-deep), 0.05));
 }
 
 .quickLinksTitle {
@@ -344,8 +344,8 @@
 
 .quickLinkCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.25);
-  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(var(--color-blue-deep), 0.25);
+  border-color: rgba(var(--color-blue-deep), 0.4);
 }
 
 .quickLinkTitle {

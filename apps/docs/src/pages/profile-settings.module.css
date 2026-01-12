@@ -16,7 +16,7 @@
 
 .heroDescription {
   font-size: 1.25rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   max-width: 600px;
   margin: 0 auto;
 }
@@ -24,7 +24,7 @@
 .loading {
   text-align: center;
   padding: 4rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 1.25rem;
 }
 
@@ -35,7 +35,7 @@
 
 .card {
   background: rgba(var(--color-gray-800), 0.8);
-  border: 1px solid rgb(51, 65, 85);
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 16px;
   padding: 1.5rem;
 }
@@ -69,7 +69,7 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--sensor-amber)));
-  color: white;
+  color: rgb(var(--text-primary));
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -89,7 +89,7 @@
 
 .userEmail {
   font-size: 0.875rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   margin: 0 0 0.5rem 0;
 }
 
@@ -105,9 +105,9 @@
 
 .profileDescription {
   padding: 1rem;
-  background: rgba(51, 65, 85, 0.5);
+  background: rgba(var(--color-gray-700), 0.5);
   border-radius: 8px;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.875rem;
   font-style: italic;
 }
@@ -116,7 +116,7 @@
 .recommendationStats {
   margin-top: 1rem;
   padding: 1rem;
-  background: rgba(51, 65, 85, 0.3);
+  background: rgba(var(--color-gray-700), 0.3);
   border-radius: 8px;
 }
 
@@ -135,12 +135,12 @@
 
 .statsValue {
   font-size: 0.8125rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
 }
 
 .progressBar {
   height: 8px;
-  background: rgba(51, 65, 85, 0.8);
+  background: rgba(var(--color-gray-700), 0.8);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -168,7 +168,7 @@
 }
 
 .sectionDescription {
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
 }
@@ -185,8 +185,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(51, 65, 85, 0.5);
-  border: 1px solid rgb(71, 85, 105);
+  background: rgba(var(--color-gray-700), 0.5);
+  border: 1px solid rgb(var(--color-gray-600));
   border-radius: 9999px;
   color: rgb(226, 230, 234);
   font-size: 0.875rem;
@@ -195,8 +195,8 @@
 }
 
 .roleChip:hover {
-  background: rgba(71, 85, 105, 0.8);
-  border-color: rgb(100, 116, 139);
+  background: rgba(var(--color-gray-600), 0.8);
+  border-color: rgb(var(--color-gray-500));
 }
 
 .roleChipSelected {
@@ -262,7 +262,7 @@
   gap: 0.5rem;
   padding: 1.5rem 2rem;
   background: rgba(var(--color-gray-800), 0.8);
-  border: 1px solid rgb(51, 65, 85);
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 12px;
   color: rgb(226, 230, 234) !important;
   text-decoration: none !important;
@@ -294,7 +294,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(51, 65, 85, 0.3);
+  background: rgba(var(--color-gray-700), 0.3);
   border-radius: 8px;
 }
 
@@ -308,7 +308,7 @@
 
 .accountActionDesc {
   font-size: 0.8125rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   margin: 0;
 }
 
@@ -324,7 +324,7 @@
 /* Toggle Button for Dark Mode */
 .toggleContainer {
   display: flex;
-  background: rgba(51, 65, 85, 0.5);
+  background: rgba(var(--color-gray-700), 0.5);
   border-radius: 8px;
   padding: 4px;
   gap: 4px;
@@ -335,7 +335,7 @@
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -355,7 +355,7 @@
 .preferencesSection {
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  border-bottom: 1px solid rgba(var(--color-gray-700), 0.5);
 }
 
 .preferencesSection:last-of-type {
@@ -373,7 +373,7 @@
 
 .preferencesHint {
   font-size: 0.8125rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   margin: 0 0 1rem 0;
 }
 
@@ -389,8 +389,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 0.875rem;
-  background: rgba(51, 65, 85, 0.5);
-  border: 1px solid rgb(71, 85, 105);
+  background: rgba(var(--color-gray-700), 0.5);
+  border: 1px solid rgb(var(--color-gray-600));
   border-radius: 8px;
   color: rgb(226, 230, 234);
   font-size: 0.8125rem;
@@ -399,8 +399,8 @@
 }
 
 .categoryChip:hover {
-  background: rgba(71, 85, 105, 0.8);
-  border-color: rgb(100, 116, 139);
+  background: rgba(var(--color-gray-600), 0.8);
+  border-color: rgb(var(--color-gray-500));
 }
 
 .categoryPreferred {
@@ -415,7 +415,7 @@
 .categoryHidden {
   background: rgba(var(--color-red), 0.1);
   border-color: rgba(var(--color-red), 0.5);
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   text-decoration: line-through;
 }
 
@@ -447,8 +447,8 @@
 .keywordField {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  background: rgba(51, 65, 85, 0.5);
-  border: 1px solid rgb(71, 85, 105);
+  background: rgba(var(--color-gray-700), 0.5);
+  border: 1px solid rgb(var(--color-gray-600));
   border-radius: 6px;
   color: rgb(226, 230, 234);
   font-size: 0.875rem;
@@ -460,7 +460,7 @@
 }
 
 .keywordField::placeholder {
-  color: rgb(100, 116, 139);
+  color: rgb(var(--color-gray-500));
 }
 
 .keywordList {
@@ -508,17 +508,17 @@
 
 .digestOption {
   padding: 0.5rem 1rem;
-  background: rgba(51, 65, 85, 0.5);
-  border: 1px solid rgb(71, 85, 105);
+  background: rgba(var(--color-gray-700), 0.5);
+  border: 1px solid rgb(var(--color-gray-600));
   border-radius: 6px;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .digestOption:hover {
-  background: rgba(71, 85, 105, 0.8);
+  background: rgba(var(--color-gray-600), 0.8);
   color: rgb(226, 230, 234);
 }
 
@@ -550,7 +550,7 @@
 
 .dialogContent {
   background: rgb(var(--color-gray-800));
-  border: 1px solid rgba(100, 116, 139, 0.3);
+  border: 1px solid rgba(var(--color-gray-500), 0.3);
   border-radius: 12px;
   padding: 1.5rem;
   max-width: 400px;
@@ -567,7 +567,7 @@
 
 .dialogMessage {
   margin: 0 0 1.5rem 0;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.9375rem;
   line-height: 1.5;
 }
@@ -581,7 +581,7 @@
 .dialogActions .button--warning {
   background: rgb(245, 158, 11);
   border-color: rgb(245, 158, 11);
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .dialogActions .button--warning:hover {
@@ -592,7 +592,7 @@
 .dialogActions .button--danger {
   background: rgb(var(--color-red));
   border-color: rgb(var(--color-red));
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .dialogActions .button--danger:hover {

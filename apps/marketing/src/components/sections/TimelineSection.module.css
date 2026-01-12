@@ -111,7 +111,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
 }
 
 .timelineItem::before {

@@ -64,15 +64,15 @@
   padding: 1.25rem;
   border-radius: 12px;
   text-align: center;
-  background: rgba(249, 115, 22, 0.1);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: rgba(var(--primary), 0.1);
+  border: 1px solid rgba(var(--primary), 0.3);
 }
 
 .statValue {
   display: block;
   font-size: 2rem;
   font-weight: 700;
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
 }
 
 .statLabel {
@@ -100,7 +100,7 @@
 .searchInput:focus {
   outline: none;
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 /* Emails list */
@@ -125,7 +125,7 @@
 
 .emailCard.selected {
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 0 0 2px rgba(var(--primary), 0.2);
 }
 
 .emailCard.inactive {
@@ -154,7 +154,7 @@
 
 .statusBadge.active {
   background: rgba(var(--color-teal-deep), 0.15);
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal-deep));
 }
 
 .statusBadge.inactiveBadge {
@@ -257,7 +257,7 @@
 .formGroup textarea:focus {
   outline: none;
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 .formActions {
@@ -398,7 +398,7 @@
 
 .deactivateBtn {
   background: rgba(245, 158, 11, 0.15);
-  color: rgb(180, 116, 8);
+  color: rgb(var(--sensor-amber));
 }
 
 .deactivateBtn:hover:not(:disabled) {
@@ -411,7 +411,7 @@
 }
 
 .activateBtn:hover:not(:disabled) {
-  background: rgb(22, 163, 74);
+  background: rgb(var(--color-teal-deep));
 }
 
 .deleteBtn {
@@ -420,7 +420,7 @@
 }
 
 .deleteBtn:hover:not(:disabled) {
-  background: rgb(220, 38, 38);
+  background: rgb(var(--color-red));
 }
 
 /* Navigation */
@@ -457,21 +457,21 @@
 /* Dark mode adjustments */
 [data-theme="dark"] .emailCard {
   background: rgb(30, 41, 59);
-  border-color: rgb(51, 65, 85);
+  border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .emailCard:hover {
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
 }
 
 [data-theme="dark"] .detailPanel {
   background: rgb(15, 23, 42);
-  border-color: rgb(51, 65, 85);
+  border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .detailHeader {
   background: rgb(15, 23, 42);
-  border-color: rgb(51, 65, 85);
+  border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .modal {
@@ -479,7 +479,7 @@
 }
 
 [data-theme="dark"] .modalHeader {
-  border-color: rgb(51, 65, 85);
+  border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .notesText {
@@ -491,7 +491,7 @@
 [data-theme="dark"] .formGroup textarea,
 [data-theme="dark"] .searchInput {
   background: rgb(30, 41, 59);
-  border-color: rgb(51, 65, 85);
+  border-color: rgb(var(--color-gray-700));
 }
 
 [data-theme="dark"] .statusBadge.active {
