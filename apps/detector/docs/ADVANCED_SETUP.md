@@ -1,7 +1,8 @@
 # Advanced Setup Guide
 
-This guide covers advanced installation options, platform-specific configurations,
-and alternative setups beyond the [Quick Start](../README.md#quick-start).
+This guide covers advanced installation options, platform-specific
+configurations, and alternative setups beyond the
+[Quick Start](../README.md#quick-start).
 
 ## Table of Contents
 
@@ -94,11 +95,13 @@ cd azure-ml
 # Follow instructions to upload dataset and train
 ```
 
-See [Training on Azure ML](../README.md#training-on-azure-ml) for detailed instructions.
+See [Training on Azure ML](../README.md#training-on-azure-ml) for detailed
+instructions.
 
 ### Option C: Use Pre-trained Drone Model
 
-Download a pre-trained drone detection model from the releases page or train your own.
+Download a pre-trained drone detection model from the releases page or train
+your own.
 
 ---
 
@@ -219,7 +222,8 @@ python src/main.py --model models/drone-detector_int8.tflite --no-auto-configure
 
 ## Web Streaming
 
-Streaming is configured via environment variables or config files (not CLI flags).
+Streaming is configured via environment variables or config files (not CLI
+flags).
 
 ### Via Environment Variables
 

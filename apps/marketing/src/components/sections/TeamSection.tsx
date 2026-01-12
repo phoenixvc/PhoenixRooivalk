@@ -77,7 +77,6 @@ export const TeamSection: React.FC = () => {
                     <div className={styles.eliminatedSubtext}>
                       hy is &apos;n poes
                     </div>
-                    <div className={styles.eliminatedText}>ELIMINATED</div>
                   </div>
                 )}
                 <div className={styles.memberIcon}>{member.icon}</div>
