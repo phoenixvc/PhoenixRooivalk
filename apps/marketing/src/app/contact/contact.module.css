@@ -37,7 +37,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(10, 14, 26, 0.95);
+  background: rgba(var(--sim-bg-deep), 0.95);
   backdrop-filter: blur(10px);
   padding: 1rem 1.5rem;
 }
@@ -274,24 +274,24 @@
 .warningBox {
   margin-top: 1.5rem;
   padding: 1.25rem 1.5rem;
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(var(--phoenix-amber), 0.1);
+  border: 1px solid rgba(var(--phoenix-amber), 0.3);
   border-radius: 0.5rem;
 }
 
 .warningText {
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: rgb(251, 191, 36);
+  color: rgb(var(--phoenix-amber));
   text-align: center;
   font-weight: 500;
 }
 
 .complianceBox {
   padding: 1.25rem 1.5rem;
-  background: rgba(34, 197, 94, 0.1);
+  background: rgba(var(--color-teal-deep), 0.1);
   border-radius: 0.5rem;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  border: 1px solid rgba(var(--color-teal-deep), 0.3);
   margin-top: 0.5rem;
 }
 
@@ -302,7 +302,7 @@
 }
 
 .complianceText strong {
-  color: rgb(34, 197, 94);
+  color: rgb(var(--color-teal-deep));
 }
 
 .quickLinksSection {
@@ -473,8 +473,8 @@
 /* Authentication-aware career application styles */
 
 .teamMemberNotice {
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(var(--sim-friendly), 0.1);
+  border: 1px solid rgba(var(--sim-friendly), 0.3);
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -482,14 +482,14 @@
 }
 
 .teamMemberNotice p {
-  color: rgba(74, 222, 128, 0.9);
+  color: rgba(var(--sim-friendly), 0.9);
   font-size: 1rem;
   margin: 0;
 }
 
 .loginNotice {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(249, 115, 22, 0.1));
-  border: 1px solid rgba(251, 191, 36, 0.4);
+  background: linear-gradient(135deg, rgba(var(--phoenix-amber), 0.15), rgba(249, 115, 22, 0.1));
+  border: 1px solid rgba(var(--phoenix-amber), 0.4);
   border-radius: 0.75rem;
   padding: 2rem;
   margin-bottom: 2.5rem;
@@ -497,7 +497,7 @@
 }
 
 .loginNotice p {
-  color: rgb(251, 191, 36);
+  color: rgb(var(--phoenix-amber));
   font-size: 1.125rem;
   margin: 0 0 1.5rem 0;
   font-weight: 500;
@@ -505,7 +505,7 @@
 
 .loginLink {
   display: inline-block;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(251, 146, 60));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   color: rgb(var(--text-primary));
   text-decoration: none;
   font-weight: 600;
@@ -573,20 +573,20 @@
 
 .errorMessage {
   padding: 0.875rem 1rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 0.5rem;
-  color: rgb(252, 165, 165);
+  color: rgb(var(--color-red-light));
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 .successMessage {
   padding: 0.875rem 1rem;
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(var(--sim-friendly), 0.1);
+  border: 1px solid rgba(var(--sim-friendly), 0.3);
   border-radius: 0.5rem;
-  color: rgb(134, 239, 172);
+  color: rgb(var(--color-green-light));
   font-size: 0.875rem;
   font-weight: 500;
 }

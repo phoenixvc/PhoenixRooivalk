@@ -82,7 +82,7 @@
 .userName {
   font-size: 1.5rem;
   font-weight: 700;
-  color: rgb(242, 244, 246);
+  color: rgb(var(--color-gray-100));
   margin: 0 0 0.25rem 0;
   border-bottom: none;
 }
@@ -130,7 +130,7 @@
 .statsLabel {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
 }
 
 .statsValue {
@@ -162,7 +162,7 @@
 .sectionTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: rgb(242, 244, 246);
+  color: rgb(var(--color-gray-100));
   margin-bottom: 0.5rem;
   border-bottom: none;
 }
@@ -188,7 +188,7 @@
   background: rgba(var(--color-gray-700), 0.5);
   border: 1px solid rgb(var(--color-gray-600));
   border-radius: 9999px;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -264,7 +264,7 @@
   background: rgba(var(--color-gray-800), 0.8);
   border: 1px solid rgb(var(--color-gray-700));
   border-radius: 12px;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
   text-decoration: none !important;
   transition: all 0.2s ease;
   min-width: 140px;
@@ -301,7 +301,7 @@
 .accountActionTitle {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   margin: 0 0 0.25rem 0;
   border-bottom: none;
 }
@@ -343,7 +343,7 @@
 }
 
 .toggleButton:hover {
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
 }
 
 .toggleActive {
@@ -366,7 +366,7 @@
 .preferencesSubtitle {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   margin: 0 0 0.25rem 0;
   border-bottom: none;
 }
@@ -392,7 +392,7 @@
   background: rgba(var(--color-gray-700), 0.5);
   border: 1px solid rgb(var(--color-gray-600));
   border-radius: 8px;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   font-size: 0.8125rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -450,7 +450,7 @@
   background: rgba(var(--color-gray-700), 0.5);
   border: 1px solid rgb(var(--color-gray-600));
   border-radius: 6px;
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   font-size: 0.875rem;
 }
 
@@ -519,7 +519,7 @@
 
 .digestOption:hover {
   background: rgba(var(--color-gray-600), 0.8);
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
 }
 
 .digestActive {
@@ -562,7 +562,7 @@
   margin: 0 0 0.75rem 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: rgb(241, 245, 249);
+  color: rgb(var(--color-gray-100));
 }
 
 .dialogMessage {

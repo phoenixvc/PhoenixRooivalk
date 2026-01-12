@@ -73,7 +73,7 @@
 }
 
 .loginButton--google:hover {
-  background: rgb(241, 245, 249);
+  background: rgb(var(--color-gray-100));
   border-color: rgb(var(--text-secondary));
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.15);
@@ -204,7 +204,7 @@
 .userName {
   font-size: 1.25rem;
   font-weight: 700;
-  color: rgb(242, 244, 246) !important;
+  color: rgb(var(--color-gray-100)) !important;
   margin: 0 0 0.25rem 0;
 }
 
@@ -240,13 +240,13 @@
 }
 
 .loginActions .button--primary:hover {
-  background: rgb(234, 88, 12) !important;
+  background: rgb(var(--color-orange-dark)) !important;
   transform: translateY(-2px);
 }
 
 .loginActions .button--secondary {
   background: rgb(var(--color-gray-700)) !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
   border: 1px solid rgb(var(--color-gray-600));
 }
 
@@ -262,7 +262,7 @@
 
 .loginActions .button--outline:hover {
   background: rgb(var(--color-gray-700)) !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
 }
 
 /* Loading state */
@@ -391,7 +391,7 @@
 .setupStepComplete {
   background: rgba(var(--color-teal-deep), 0.1);
   border-color: rgba(var(--color-teal-deep), 0.3);
-  color: rgb(74, 222, 128);
+  color: rgb(var(--sim-friendly));
 }
 
 .setupStepIcon {
@@ -409,7 +409,7 @@
 
 .setupStepComplete .setupStepIcon {
   background: rgba(var(--color-teal-deep), 0.2);
-  color: rgb(74, 222, 128);
+  color: rgb(var(--sim-friendly));
 }
 
 .setupStepConnector {
@@ -434,7 +434,7 @@
 }
 
 .setupStatus .button--primary:hover {
-  background: rgb(234, 88, 12) !important;
+  background: rgb(var(--color-orange-dark)) !important;
   transform: translateY(-2px);
 }
 
@@ -453,7 +453,7 @@
 
 .signOutSecondary:hover {
   background: rgb(var(--color-gray-700)) !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
 }
 
 /* Responsive adjustments for setup status */
