@@ -47,8 +47,8 @@
 **Test Areas:**
 
 1. **Environment Variable Loading**
-   - Test env prefix handling (CAPTURE_*, INFERENCE_*, etc.)
-   - Test nested delimiter handling (\_\_)
+   - Test env prefix handling (`CAPTURE_*`, `INFERENCE_*`, etc.)
+   - Test nested delimiter handling (`__`)
    - Test .env file loading
 
 2. **Validation Edge Cases**
