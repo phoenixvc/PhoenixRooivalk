@@ -597,6 +597,20 @@
   color: rgb(var(--text-muted));
 }
 
+/* Cart Icon Wrapper */
+.cartWrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .cartWrapper {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .mobileMenuOverlay {
     display: none;

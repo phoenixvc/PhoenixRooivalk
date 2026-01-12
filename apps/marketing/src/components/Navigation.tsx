@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 import { useTheme } from "../contexts/ThemeContext";
+import { CartIcon } from "./cart/CartIcon";
+import { CartPanel } from "./cart/CartPanel";
 import styles from "./Navigation.module.css";
 
 // Type definitions for discriminated union
@@ -29,6 +31,7 @@ export const Navigation: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isCartOpen, setIsCartOpen] = React.useState(false);
 
   // Helper to check if a path is active
   const isPathActive = (href: string) => {
@@ -226,6 +229,11 @@ export const Navigation: React.FC = () => {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Cart Icon */}
+        <div className={styles.cartWrapper}>
+          <CartIcon onClick={() => setIsCartOpen(true)} />
         </div>
 
         {/* Mobile navigation */}
@@ -456,6 +464,9 @@ export const Navigation: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Cart Panel */}
+      <CartPanel isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   );
 };
