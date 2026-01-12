@@ -2,11 +2,11 @@
 .section {
   display: flex;
   align-items: center;
-  padding: 0 1.5rem 3rem;
+  padding: 0 var(--section-padding-x) 3rem;
   margin-top: 0;
   position: relative;
   min-height: 100vh;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: var(--section-bg-hero);
   overflow: hidden;
 }
 
@@ -15,8 +15,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(var(--gray), 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--gray), 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   opacity: 1;
   z-index: 0;
@@ -29,7 +29,7 @@
   background: radial-gradient(
     circle at center,
     transparent 0%,
-    rgba(9, 10, 15, 0.4) 100%
+    rgba(var(--darker), 0.4) 100%
   );
   z-index: 0;
   pointer-events: none;
@@ -138,7 +138,7 @@
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   animation: fadeInUp 1s ease both;
   margin-bottom: 1.75rem;
 }
@@ -257,7 +257,7 @@
 
 .metricLabel {
   font-size: 0.875rem;
-  color: rgb(203, 213, 225);
+  color: rgb(var(--steel));
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;

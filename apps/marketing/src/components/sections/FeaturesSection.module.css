@@ -1,6 +1,6 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(180deg, #090a0f 0%, #1b2735 50%, #090a0f 100%);
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-primary);
   position: relative;
 }
 
@@ -9,8 +9,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(var(--gray), 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--gray), 0.04) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
 }
@@ -30,13 +30,13 @@
 .title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
 .subtitle {
   font-size: 1.25rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--steel));
   max-width: 600px;
   margin: 0 auto;
 }
@@ -100,7 +100,7 @@
 .featureTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin: 0;
 }
 
@@ -133,7 +133,7 @@
 
 .featureDescription {
   font-size: 1rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--steel));
   line-height: 1.6;
   margin: 0;
 }
@@ -145,7 +145,7 @@
 .useCasesTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -195,13 +195,13 @@
 .useCaseTitle {
   font-size: 1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin: 0 0 0.5rem 0;
 }
 
 .useCaseDescription {
   font-size: 0.875rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--steel));
   margin: 0;
 }
 
