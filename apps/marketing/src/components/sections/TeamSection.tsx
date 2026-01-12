@@ -77,10 +77,10 @@ export const TeamSection: React.FC = () => {
                     <div className={styles.eliminatedSubtext}>
                       hy is &apos;n poes
                     </div>
-                   <div className={styles.eliminatedText}>ELIMINATED</div>
-                   </div>
-                 )}
-                 <div className={styles.memberIcon}>{member.icon}</div>
+                    <div className={styles.eliminatedText}>ELIMINATED</div>
+                  </div>
+                )}
+                <div className={styles.memberIcon}>{member.icon}</div>
                 <div className={styles.memberInfo}>
                   <h3 className={styles.memberName}>{member.name}</h3>
                   <div className={styles.memberRole}>{member.role}</div>
