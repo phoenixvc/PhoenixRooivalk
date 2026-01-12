@@ -4,7 +4,7 @@
   position: relative;
   overflow: hidden;
   background: rgb(var(--darker));
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .backgroundWrapper {
@@ -100,7 +100,7 @@
 .pageTitle {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(to bottom right, white, rgb(var(--primary)));
+  background: linear-gradient(to bottom right, rgb(var(--text-primary)), rgb(var(--primary)));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -434,7 +434,7 @@
 .applyButton {
   width: 100%;
   background: rgb(var(--primary));
-  color: black;
+  color: rgb(var(--tactical-black));
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -506,7 +506,7 @@
 .loginLink {
   display: inline-block;
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(251, 146, 60));
-  color: white;
+  color: rgb(var(--text-primary));
   text-decoration: none;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -547,7 +547,7 @@
   border: 1px solid rgba(var(--primary), 0.25);
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: white;
+  color: rgb(var(--text-primary));
   transition: all 0.2s ease;
   box-sizing: border-box;
 }

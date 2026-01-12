@@ -63,7 +63,7 @@
     rgba(30, 41, 59, 0.6),
     rgba(15, 23, 42, 0.8)
   );
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(var(--color-blue-deep), 0.2);
   border-radius: 1rem;
   transition: all 0.3s ease;
   position: relative;
@@ -80,7 +80,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(34, 197, 94, 0.4),
+    rgba(var(--color-teal-deep), 0.4),
     transparent
   );
   opacity: 0;
@@ -93,9 +93,9 @@
     rgba(30, 41, 59, 0.8),
     rgba(15, 23, 42, 0.9)
   );
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: rgba(var(--color-blue-deep), 0.3);
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 12px 32px rgba(var(--color-blue-deep), 0.25);
 }
 
 .featureCard:hover::after {
@@ -111,12 +111,12 @@
   height: 3.5rem;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.25),
-    rgba(34, 197, 94, 0.25)
+    rgba(var(--color-blue-deep), 0.25),
+    rgba(var(--color-teal-deep), 0.25)
   );
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(var(--color-blue-deep), 0.3);
   border-radius: 0.875rem;
-  color: rgb(59, 130, 246);
+  color: rgb(var(--color-blue-deep));
   font-size: 1.5rem;
 }
 
@@ -150,15 +150,15 @@
 }
 
 .brandConsumer {
-  background: rgba(34, 197, 94, 0.15);
-  color: rgb(34, 197, 94);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(var(--color-teal-deep), 0.15);
+  color: rgb(var(--color-teal-deep));
+  border: 1px solid rgba(var(--color-teal-deep), 0.3);
 }
 
 .brandEnterprise {
-  background: rgba(59, 130, 246, 0.15);
-  color: rgb(59, 130, 246);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(var(--color-blue-deep), 0.15);
+  color: rgb(var(--color-blue-deep));
+  border: 1px solid rgba(var(--color-blue-deep), 0.3);
 }
 
 .brandBoth {
@@ -206,7 +206,7 @@
 .useCaseCard {
   padding: 1.5rem;
   background: rgba(var(--text-primary), 0.02);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(var(--color-blue-deep), 0.1);
   border-radius: 0.75rem;
   text-align: center;
   transition: all 0.3s ease;
@@ -215,9 +215,9 @@
 
 .useCaseCard:hover {
   background: rgba(var(--text-primary), 0.04);
-  border-color: rgba(59, 130, 246, 0.2);
+  border-color: rgba(var(--color-blue-deep), 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--color-blue-deep), 0.15);
 }
 
 .useCaseBadge {
