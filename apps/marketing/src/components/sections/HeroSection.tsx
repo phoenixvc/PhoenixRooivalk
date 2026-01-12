@@ -85,14 +85,14 @@ export const HeroSection: React.FC = () => {
               Browse Products
             </Button>
             <Button
-              href="/preorder"
+              href="/contact"
               variant="secondary"
               size="lg"
               trackingEvent="Preorder Clicked"
               trackingProps={{ location: "hero", type: "preorder" }}
-              aria-label="Preorder products with no deposit"
+              aria-label="Contact us to preorder"
             >
-              Preorder Now - No Deposit
+              Get in Touch
             </Button>
           </div>
           <div className={styles.secondaryLinks}>

@@ -1,0 +1,67 @@
+.cartIcon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: var(--text-primary, #fff);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.cartIcon:hover {
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--primary, #f97316);
+}
+
+.cartIcon:focus-visible {
+  outline: 2px solid var(--primary, #f97316);
+  outline-offset: 2px;
+}
+
+.iconWrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  border-radius: 10px;
+  border: 2px solid var(--bg-primary, #0f172a);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+}
+
+.badge:empty {
+  display: none;
+}
+
+/* Pulse animation for new items */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.badge.animate {
+  animation: pulse 0.3s ease-in-out;
+}

@@ -277,7 +277,7 @@ export const ProductHighlightsSection: React.FC = () => {
                   <div className={styles.productActions}>
                     {status.canBuy && (
                       <Button
-                        href="/preorder"
+                        href="/contact"
                         size="md"
                         variant="primary"
                         trackingEvent="Buy Clicked"
@@ -291,7 +291,7 @@ export const ProductHighlightsSection: React.FC = () => {
                     )}
                     {status.canPreorder && (
                       <Button
-                        href="/preorder"
+                        href="/contact"
                         size="md"
                         variant="primary"
                         trackingEvent="Preorder Clicked"
@@ -351,7 +351,7 @@ export const ProductHighlightsSection: React.FC = () => {
               View All Products
             </Button>
             <Button
-              href="/preorder"
+              href="/contact"
               size="lg"
               variant="primary"
               trackingEvent="Preorder Clicked"

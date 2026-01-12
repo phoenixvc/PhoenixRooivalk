@@ -3,6 +3,7 @@ import * as React from "react";
 import { Analytics } from "../components/Analytics";
 import { SkipNav } from "../components/SkipNav";
 import { ThemeProvider } from "../contexts/ThemeContext";
+import { CartProvider } from "../contexts/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -84,7 +85,9 @@ export default function RootLayout({
       <body>
         <Analytics />
         <SkipNav />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <CartProvider>{children}</CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
