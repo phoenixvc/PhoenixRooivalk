@@ -6,13 +6,13 @@
   max-width: 480px;
   height: 100vh;
   background: var(--bg-primary, #0f172a);
-  border-left: 1px solid rgba(249, 115, 22, 0.2);
+  border-left: 1px solid rgba(var(--primary), 0.2);
   transform: translateX(100%);
   transition: transform 0.3s ease;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+  box-shadow: -4px 0 24px rgba(var(--tactical-black), 0.4);
 }
 
 .cartPanel.open {
@@ -25,7 +25,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(var(--tactical-black), 0.6);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+  border-bottom: 1px solid rgba(var(--primary), 0.2);
 }
 
 .title {
@@ -60,7 +60,7 @@
   width: 40px;
   height: 40px;
   background: transparent;
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  border: 1px solid rgba(var(--primary), 0.2);
   color: var(--text-primary, #fff);
   cursor: pointer;
   border-radius: 0.5rem;
@@ -68,7 +68,7 @@
 }
 
 .closeButton:hover {
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(var(--primary), 0.1);
   border-color: var(--primary, #f97316);
   color: var(--primary, #f97316);
 }
@@ -121,7 +121,7 @@
 
 .footer {
   padding: 1.5rem;
-  border-top: 1px solid rgba(249, 115, 22, 0.2);
+  border-top: 1px solid rgba(var(--primary), 0.2);
   background: var(--bg-secondary, #09090f);
 }
 
@@ -152,7 +152,7 @@
 
 .totalRow {
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(249, 115, 22, 0.2);
+  border-top: 1px solid rgba(var(--primary), 0.2);
 }
 
 .totalLabel {
@@ -173,18 +173,18 @@
   padding: 1rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: rgb(var(--text-primary));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.3);
 }
 
 .checkoutButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 6px 16px rgba(var(--primary), 0.4);
 }
 
 .checkoutButton:active {
@@ -203,7 +203,7 @@
   font-weight: 500;
   color: var(--text-primary, #fff);
   background: transparent;
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  border: 1px solid rgba(var(--primary), 0.3);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -211,7 +211,7 @@
 }
 
 .continueButton:hover {
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(var(--primary), 0.1);
   border-color: var(--primary, #f97316);
 }
 

@@ -1,6 +1,6 @@
 .section {
   padding: 4rem 1.5rem;
-  background: linear-gradient(to bottom right, #111827, #000);
+  background: linear-gradient(to bottom right, rgb(var(--color-gray-900)), #000);
 }
 
 @media (min-width: 768px) {
@@ -31,7 +31,7 @@
   font-size: 1.875rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, #fff, #d1d5db);
+  background: linear-gradient(to right, rgb(var(--text-primary)), rgb(var(--text-secondary)));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -45,7 +45,7 @@
 
 .description {
   font-size: 1.125rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
   max-width: 48rem;
   margin: 0 auto;
 }
@@ -132,32 +132,32 @@
 
 .badgeLive {
   background-color: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  color: rgb(var(--sim-friendly));
 }
 
 .badgeBeta {
   background-color: rgba(234, 179, 8, 0.2);
-  color: #facc15;
+  color: rgb(var(--sensor-amber));
 }
 
 .badgePlanned {
   background-color: rgba(107, 114, 128, 0.2);
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
 }
 
 .badgeCore {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  color: rgb(var(--color-blue));
 }
 
 .badgeEnhanced {
   background-color: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  color: rgb(var(--sim-friendly));
 }
 
 .badgeStrategic {
   background-color: rgba(var(--primary), 0.2);
-  color: #fb923c;
+  color: rgb(var(--color-orange-light));
 }
 
 .cardContent {
@@ -178,30 +178,30 @@
 }
 
 .iconPurple {
-  background: linear-gradient(to bottom right, #a855f7, #7c3aed);
+  background: linear-gradient(to bottom right, rgb(var(--color-purple)), rgb(var(--color-purple)));
 }
 
 .iconGreen {
-  background: linear-gradient(to bottom right, #22c55e, #10b981);
+  background: linear-gradient(to bottom right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
 }
 
 .iconTeal {
-  background: linear-gradient(to bottom right, #14b8a6, #06b6d4);
+  background: linear-gradient(to bottom right, rgb(var(--color-teal)), rgb(var(--color-teal)));
 }
 
 .iconOrange {
-  background: linear-gradient(to bottom right, rgb(var(--primary)), #ef4444);
+  background: linear-gradient(to bottom right, rgb(var(--primary)), rgb(var(--color-red)));
 }
 
 .cardTitle {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
 }
 
 .cardDescription {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
 }
 
 .featureList {
@@ -218,7 +218,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }
 
 .featureBullet {
@@ -228,19 +228,19 @@
 }
 
 .featureBulletPurple {
-  background: linear-gradient(to right, #a855f7, #7c3aed);
+  background: linear-gradient(to right, rgb(var(--color-purple)), rgb(var(--color-purple)));
 }
 
 .featureBulletGreen {
-  background: linear-gradient(to right, #22c55e, #10b981);
+  background: linear-gradient(to right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
 }
 
 .featureBulletTeal {
-  background: linear-gradient(to right, #14b8a6, #06b6d4);
+  background: linear-gradient(to right, rgb(var(--color-teal)), rgb(var(--color-teal)));
 }
 
 .featureBulletOrange {
-  background: linear-gradient(to right, rgb(var(--primary)), #ef4444);
+  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--color-red)));
 }
 
 .architectureDiagram {
@@ -252,13 +252,13 @@
     rgba(17, 24, 39, 0.5)
   );
   border-radius: 0.75rem;
-  border: 1px solid #374151;
+  border: 1px solid rgb(var(--color-gray-700));
 }
 
 .architectureTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -297,31 +297,31 @@
 }
 
 .architectureIconBlue {
-  background: linear-gradient(to bottom right, #3b82f6, #06b6d4);
+  background: linear-gradient(to bottom right, rgb(var(--color-blue-deep)), rgb(var(--color-teal)));
 }
 
 .architectureIconGreen {
-  background: linear-gradient(to bottom right, #22c55e, #10b981);
+  background: linear-gradient(to bottom right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
 }
 
 .architectureIconPurple {
-  background: linear-gradient(to bottom right, #a855f7, #7c3aed);
+  background: linear-gradient(to bottom right, rgb(var(--color-purple)), rgb(var(--color-purple)));
 }
 
 .architectureIconOrange {
-  background: linear-gradient(to bottom right, rgb(var(--primary)), #ef4444);
+  background: linear-gradient(to bottom right, rgb(var(--primary)), rgb(var(--color-red)));
 }
 
 .architectureItemTitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.25rem;
 }
 
 .architectureItemSubtitle {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
 }
 
 .architectureItemBadge {
@@ -334,17 +334,17 @@
 
 .architectureItemBadgeCore {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  color: rgb(var(--color-blue));
 }
 
 .architectureItemBadgeEnhanced {
   background-color: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  color: rgb(var(--sim-friendly));
 }
 
 .architectureItemBadgeStrategic {
   background-color: rgba(var(--primary), 0.2);
-  color: #fb923c;
+  color: rgb(var(--color-orange-light));
 }
 
 .architectureFooter {
@@ -354,7 +354,7 @@
 
 .architectureFooterText {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
   margin-bottom: 1rem;
 }
 
@@ -363,7 +363,7 @@
   grid-template-columns: 1fr;
   gap: 1rem;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: rgb(var(--color-gray-500));
 }
 
 @media (min-width: 768px) {
@@ -380,7 +380,7 @@
 
 .architectureFooterCardTitle {
   font-weight: 600;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.25rem;
 }
 
@@ -438,7 +438,7 @@
 .valueCardTitle {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -460,5 +460,5 @@
 
 .valueCardListItem {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }

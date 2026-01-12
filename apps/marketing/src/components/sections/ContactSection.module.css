@@ -104,7 +104,7 @@
 }
 
 .cardDescription {
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
   margin-bottom: 2rem;
   line-height: 1.75;
 }
@@ -178,7 +178,7 @@
 }
 
 .sbirDescription {
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
   margin-bottom: 2rem;
   line-height: 1.75;
   font-size: 1.125rem;

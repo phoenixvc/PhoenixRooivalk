@@ -1,6 +1,6 @@
 .section {
   padding: 5rem 1.5rem;
-  background: linear-gradient(180deg, rgb(var(--gradient-dark-end)) 0%, #0f1419 100%);
+  background: linear-gradient(180deg, rgb(var(--gradient-dark-end)) 0%, rgb(var(--color-gray-900)) 100%);
   position: relative;
 }
 
@@ -31,7 +31,7 @@
 .title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -163,7 +163,7 @@
 .productName {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
   margin: 0 0 0.25rem 0;
   letter-spacing: -0.01em;
 }
@@ -229,7 +229,7 @@
 .price {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #ffffff;
+  color: rgb(var(--text-primary));
 }
 
 .statusText {

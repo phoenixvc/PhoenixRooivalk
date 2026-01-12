@@ -34,7 +34,7 @@
 .badge {
   display: inline-block;
   background: rgb(var(--primary));
-  color: #000;
+  color: rgb(var(--tactical-black));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -45,7 +45,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -82,7 +82,7 @@
 .columnTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1.5rem;
 }
 

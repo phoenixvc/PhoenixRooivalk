@@ -13,7 +13,7 @@
 }
 
 .cartIcon:hover {
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(var(--primary), 0.1);
   color: var(--primary, #f97316);
 }
 
@@ -44,7 +44,7 @@
   background: linear-gradient(135deg, #f97316, #fb923c);
   border-radius: 10px;
   border: 2px solid var(--bg-primary, #0f172a);
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 2px 8px rgba(var(--primary), 0.3);
 }
 
 .badge:empty {

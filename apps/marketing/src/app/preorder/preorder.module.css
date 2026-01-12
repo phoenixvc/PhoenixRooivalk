@@ -51,7 +51,7 @@
   font-weight: 700;
   color: var(--text-primary, #fff);
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #fff, #cbd5e1);
+  background: linear-gradient(135deg, rgb(var(--text-primary)), #cbd5e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -262,8 +262,9 @@
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: rgb(var(--text-primary));
+  /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -356,8 +357,9 @@
   padding: 1.125rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: rgb(var(--text-primary));
+  /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -382,7 +384,7 @@
   padding: 0.875rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #ef4444;
+  color: rgb(var(--color-red));
   background: transparent;
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 0.5rem;
@@ -392,7 +394,7 @@
 
 .clearButton:hover {
   background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
+  border-color: rgb(var(--color-red));
 }
 
 .checkoutSection {
@@ -422,7 +424,7 @@
 }
 
 .required {
-  color: #ef4444;
+  color: rgb(var(--color-red));
 }
 
 .input {
@@ -456,8 +458,9 @@
   padding: 1.25rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: rgb(var(--text-primary));
+  /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;

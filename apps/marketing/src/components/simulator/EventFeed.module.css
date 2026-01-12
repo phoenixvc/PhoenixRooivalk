@@ -83,7 +83,7 @@
 
 /* Severity-based styling */
 .feedItemInfo {
-  border-left-color: #60a5fa;
+  border-left-color: rgb(var(--color-blue));
 }
 
 .feedItemSuccess {
@@ -91,14 +91,14 @@
 }
 
 .feedItemWarning {
-  border-left-color: #fbbf24;
+  border-left-color: rgb(var(--sensor-amber));
 }
 
 .feedItemCritical {
-  border-left-color: #ef4444;
-  background: rgba(239, 68, 68, 0.05);
+  border-left-color: rgb(var(--color-red));
+  background: rgba(var(--color-red), 0.05);
 }
 
 .feedItemCritical:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(var(--color-red), 0.1);
 }

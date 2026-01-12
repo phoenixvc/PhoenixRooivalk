@@ -33,8 +33,8 @@
 
 .urgentBadge {
   display: inline-block;
-  background: #ef4444;
-  color: #fff;
+  background: rgb(var(--color-red));
+  color: rgb(var(--text-primary));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -45,7 +45,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -82,7 +82,7 @@
 .columnTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -103,18 +103,18 @@
 }
 
 .problemIcon {
-  color: #f87171;
+  color: rgb(var(--color-red-light));
   font-size: 1.5rem;
 }
 
 .problemTitle {
   font-weight: bold;
-  color: #f87171;
+  color: rgb(var(--color-red-light));
 }
 
 .problemDescription {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }
 
 .solutionCard {
@@ -139,7 +139,7 @@
 
 .solutionDescription {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }
 
 .stakesSection {
@@ -159,7 +159,7 @@
 .stakesTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 

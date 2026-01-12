@@ -34,7 +34,7 @@
 
 .indicator:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.3);
 }
 
 .indicatorAcknowledged {
@@ -76,7 +76,7 @@
   background: rgb(var(--sim-panel-alt));
   border: 1px solid rgb(var(--color-gray-700));
   border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(var(--tactical-black), 0.5);
 }
 
 .detailsHeader {
@@ -135,17 +135,17 @@
 }
 
 .riskLevelLow {
-  background: rgba(72, 187, 120, 0.2);
+  background: rgba(var(--color-teal-deep), 0.2);
   color: rgb(var(--color-green));
 }
 
 .riskLevelMedium {
-  background: rgba(237, 137, 54, 0.2);
+  background: rgba(var(--sensor-amber), 0.2);
   color: rgb(var(--sensor-amber));
 }
 
 .riskLevelHigh {
-  background: rgba(245, 101, 101, 0.2);
+  background: rgba(var(--color-red), 0.2);
   color: rgb(var(--color-red));
 }
 
@@ -168,7 +168,7 @@
   padding: 4px 0;
   padding-left: 16px;
   font-size: 13px;
-  color: #cbd5e0;
+  color: rgb(var(--text-secondary));
   line-height: 1.5;
   position: relative;
 }
@@ -182,7 +182,7 @@
 
 .note {
   padding: 12px;
-  background: rgba(66, 153, 225, 0.1);
+  background: rgba(var(--color-blue-deep), 0.1);
   border-radius: 6px;
   border-left: 3px solid rgb(var(--color-blue-deep));
 }
@@ -190,7 +190,7 @@
 .note p {
   margin: 0;
   font-size: 12px;
-  color: #cbd5e0;
+  color: rgb(var(--text-secondary));
   line-height: 1.5;
 }
 

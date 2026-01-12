@@ -34,7 +34,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -83,13 +83,13 @@
 .cardTitle {
   font-size: 1.125rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
 .cardDescription {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
 }
 
 .advisorySection {
@@ -109,16 +109,16 @@
 .advisoryTitle {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
 .advisoryText {
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
   margin-bottom: 1rem;
 }
 
 .advisoryFooter {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(var(--text-muted));
 }
