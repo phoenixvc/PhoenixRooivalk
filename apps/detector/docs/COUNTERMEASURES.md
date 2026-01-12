@@ -305,13 +305,15 @@ Detection range depends on:
 
 **Components:**
 
-| Item                  | Cost | Source                  |
-| --------------------- | ---- | ----------------------- | -------- | ---------------------- | --- | ----------------- | --- |
-| Raspberry Pi          |
-| 4 (2GB)               | $45  | Pi supplier             |          | Pi Camera Module v3    | $35 | Pi supplier       |     |
-| Coral USB Accelerator | $60  | Coral.ai                |          | 7" touchscreen display | $60 | Pi                |
-| supplier              |      | Battery pack (20000mAh) | $40      | Amazon                 |     | Rugged carry case | $30 |
-| Pelican/Amazon        |      | **Total**               | **$270** |                        |
+| Item                    | Cost     | Source         |
+| ----------------------- | -------- | -------------- |
+| Raspberry Pi 4 (2GB)    | $45      | Pi supplier    |
+| Pi Camera Module v3     | $35      | Pi supplier    |
+| Coral USB Accelerator   | $60      | Coral.ai       |
+| 7" touchscreen display  | $60      | Pi supplier    |
+| Battery pack (20000mAh) | $40      | Amazon         |
+| Rugged carry case       | $30      | Pelican/Amazon |
+| **Total**               | **$270** |                |
 
 **Specifications:**
 
