@@ -14,32 +14,44 @@
 
 ## 🚁 **PhoenixRooivalk: Dual-Brand Counter-Drone Platform**
 
-PhoenixRooivalk transforms proven pneumatic platform technology into two world-leading brands:
+PhoenixRooivalk transforms proven pneumatic platform technology into two
+world-leading brands:
 
 ### **SkySnare™ Consumer**
-Premium sports and training equipment for the consumer market. Safety-certified, reliability-proven devices that demonstrate our core technology at scale.
+
+Premium sports and training equipment for the consumer market.
+Safety-certified, reliability-proven devices that demonstrate our core
+technology at scale.
 
 ### **AeroNet™ Enterprise**
-AI-enabled infrastructure security for regulated enterprise markets. Compliance-focused, automated counter-drone systems with measurable risk reduction.
 
-**Strategic Vision:**
-Prove reliability and safety at consumer scale (SkySnare™), then apply that track record to high-value enterprise markets (AeroNet™) that demand compliance, automation, and accountability.
+AI-enabled infrastructure security for regulated enterprise markets.
+Compliance-focused, automated counter-drone systems with measurable risk
+reduction.
+
+**Strategic Vision:** Prove reliability and safety at consumer scale
+(SkySnare™), then apply that track record to high-value enterprise markets
+(AeroNet™) that demand compliance, automation, and accountability.
 
 **Key Features:**
-• **Dual Certification Path**: Consumer safety (CPSC) + Enterprise compliance (FAA)
+
+• **Dual Certification Path**: Consumer safety (CPSC) + Enterprise compliance
+  (FAA)
 • **AI Edge Processing**: On-device intelligence for privacy and low latency
 • **Safety First**: Sub-200ms response times with human oversight
 • **Compliance Logging**: Automated regulatory and insurance audit trails
 • **Data Asset Creation**: Proprietary training data from deployments
 
 **Technology Stack:**
+
 • Rust-based blockchain evidence management
 • Solana and EtherLink dual-chain anchoring
 • Edge AI processing (NVIDIA Jetson AGX Orin)
 • Real-time sensor fusion and tracking
 • Multi-site coordination and cloud learning
 
-**Market Opportunity**: $5.9B combined TAM (Consumer: $1.68B @ 8.2% CAGR | Enterprise: $4.2B @ 47% CAGR)
+**Market Opportunity**: $5.9B combined TAM (Consumer: $1.68B @ 8.2% CAGR |
+Enterprise: $4.2B @ 47% CAGR)
 
 **Corporate Status**: Nexamesh Technologies (Delaware C-Corp in progress)
 
@@ -51,10 +63,13 @@ Modular Counter‑UAS System (restricted partner access)
 
 The project is deployed to Azure Static Web Apps via GitHub Actions:
 
-- **Marketing Website** - Interactive demo, capabilities overview, and contact information
-- **Documentation Site** - Technical specifications, architecture, and implementation guides
+- **Marketing Website** - Interactive demo, capabilities overview, and
+  contact information
+- **Documentation Site** - Technical specifications, architecture, and
+  implementation guides
 
-See [Deployment](#deployment) section below for details on Azure infrastructure and CI/CD workflows.
+See [Deployment](#deployment) section below for details on Azure
+infrastructure and CI/CD workflows.
 
 ## Monorepo overview
 
@@ -63,17 +78,24 @@ shared packages.
 
 Structure:
 
-- `apps/`
+- `apps/` — All applications and services (see
+  [apps/README.md](apps/README.md) for detailed overview)
   - `docs/` — Docusaurus site (published under `/docs`).
-    - Comprehensive technical documentation with executive, business, technical, legal, and operations sections.
+    - Comprehensive technical documentation with executive, business,
+      technical, legal, and operations sections.
   - `marketing/` — Next.js 14 static marketing site (exports to `out/`).
     - Includes threat simulator, ROI calculator, and interactive demos.
   - `detector/` — Python drone detection system for edge devices.
-    - Modular architecture supporting Raspberry Pi, NVIDIA Jetson, and desktop.
+    - Modular architecture supporting Raspberry Pi, NVIDIA Jetson, and
+      desktop.
     - See [apps/detector/README.md](apps/detector/README.md) for user guide.
-  - `threat-simulator-desktop/` — Tauri desktop application (Rust + Leptos/WASM).
-    - Desktop version of the threat simulator with blockchain evidence recording.
-    - See [apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md) for user guide.
+  - `threat-simulator-desktop/` — Tauri desktop application (Rust +
+    Leptos/WASM).
+    - Desktop version of the threat simulator with blockchain evidence
+      recording.
+    - See
+      [apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md)
+      for user guide.
   - `api/` — Rust (Axum) API server.
   - `keeper/` — Rust blockchain keeper service.
   - `evidence-cli/` — Rust CLI for evidence management.
@@ -136,14 +158,18 @@ pnpm --filter docs build       # outputs to apps/docs/build/
 cargo run --manifest-path apps/api/Cargo.toml
 
 # run Rust services
-cargo run --manifest-path apps/keeper/Cargo.toml    # Blockchain keeper
-cargo run --manifest-path apps/evidence-cli/Cargo.toml -- <command>  # Evidence CLI
+# Blockchain keeper
+cargo run --manifest-path apps/keeper/Cargo.toml
+# Evidence CLI
+cargo run --manifest-path apps/evidence-cli/Cargo.toml -- <command>
 
 # run utility scripts
 ./scripts/deploy.sh                    # Deployment script
-./scripts/Invoke-Tests.ps1            # PowerShell test runner
-./scripts/Invoke-OutboxWorker.ps1     # Blockchain outbox worker
-./scripts/validate-env.sh <app>        # Validate environment variables (docs, marketing, api, keeper)
+./scripts/Invoke-Tests.ps1             # PowerShell test runner
+# Blockchain outbox worker
+./scripts/Invoke-OutboxWorker.ps1
+# Validate environment variables (docs, marketing, api, keeper)
+./scripts/validate-env.sh <app>
 
 # linting and formatting
 pnpm lint                              # Run ESLint on all packages
@@ -159,12 +185,13 @@ cargo test                             # Run Rust tests
 
 ### Deployment
 
-**🚀 Automated Infrastructure-First Deployment**
+#### Automated Infrastructure-First Deployment
 
 PhoenixRooivalk uses a three-phase deployment approach:
 
 1. **Infrastructure** (`.github/workflows/deploy-infrastructure.yml`):
-   - Deploy all Azure resources (Static Web Apps, Functions, Cosmos DB, Key Vault)
+   - Deploy all Azure resources (Static Web Apps, Functions, Cosmos DB, Key
+     Vault)
    - Automatically configure GitHub secrets
    - Run via GitHub Actions UI or CLI
    - See [Quick Reference](.github/QUICK_REFERENCE.md)
@@ -175,53 +202,64 @@ PhoenixRooivalk uses a three-phase deployment approach:
    - Manual fallback instructions provided
 
 3. **Applications** (Triggered on push or manual):
-   - **Docs**: `.github/workflows/deploy-docs-azure.yml` → Azure Static Web Apps
-   - **Marketing**: `.github/workflows/deploy-marketing-azure.yml` → Azure Static Web Apps
-   - **Functions**: `.github/workflows/deploy-azure-functions.yml` → Azure Functions
+   - **Docs**: `.github/workflows/deploy-docs-azure.yml` → Azure Static Web
+     Apps
+   - **Marketing**: `.github/workflows/deploy-marketing-azure.yml` → Azure
+     Static Web Apps
+   - **Functions**: `.github/workflows/deploy-azure-functions.yml` → Azure
+     Functions
 
 **Quick Start:**
+
 ```bash
 # One-time: Configure Azure credentials
 gh secret set AZURE_SUBSCRIPTION_ID --body "<subscription-id>"
 gh secret set AZURE_CREDENTIALS --body '<service-principal-json>'
 
-# Deploy infrastructure via UI: Actions → Deploy Azure Infrastructure → Run workflow
+# Deploy infrastructure via UI: Actions → Deploy Azure Infrastructure
+# → Run workflow
 # Or via CLI:
-gh workflow run deploy-infrastructure.yml -f environment=dev -f location=eastus2
+gh workflow run deploy-infrastructure.yml -f environment=dev \
+  -f location=eastus2
 
 # Deploy applications (automatic on push to main)
 git push origin main
 ```
 
 **Documentation:**
-- 📖 [Deployment Workflow Guide](.github/DEPLOYMENT_WORKFLOW_GUIDE.md) - Complete guide
+
+- 📖
+  [Deployment Workflow Guide](.github/DEPLOYMENT_WORKFLOW_GUIDE.md) -
+  Complete guide
 - 🚀 [Quick Reference](.github/QUICK_REFERENCE.md) - Cheat sheet
 - 📋 [Deployment Sequence](.github/DEPLOYMENT_SEQUENCE.md) - Detailed steps
 - 🔧 [Azure Setup](.github/AZURE_SETUP.md) - Secrets configuration
 
-
-
 Additional workflows:
 
-- **CI/CD**: `.github/workflows/ci-marketing.yml`, `.github/workflows/ci-rust.yml`
+- **CI/CD**: `.github/workflows/ci-marketing.yml`,
+  `.github/workflows/ci-rust.yml`
 - **Security**: `.github/workflows/codeql.yml` for vulnerability scanning
-- **Link Checking**: `.github/workflows/docs-link-checker.yml` for documentation links
+- **Link Checking**: `.github/workflows/docs-link-checker.yml` for
+  documentation links
 
 See `.github/AZURE_SETUP.md` for Azure infrastructure setup and configuration.
 
 ### Cross‑site links (env)
 
-- Docs site can link back to marketing via `MARKETING_URL` (build‑time env for
-  `apps/docs`).
-- Marketing site can link to docs via `NEXT_PUBLIC_DOCS_URL` (public runtime env
-  for `apps/marketing`).
+- Docs site can link back to marketing via `MARKETING_URL` (build‑time env
+  for `apps/docs`).
+- Marketing site can link to docs via `NEXT_PUBLIC_DOCS_URL` (public runtime
+  env for `apps/marketing`).
 
-Set these as GitHub repository variables or Azure Static Web App environment variables
-if you want absolute cross‑links.
+Set these as GitHub repository variables or Azure Static Web App environment
+variables if you want absolute cross‑links.
 
 ### Redirects
 
-Azure Static Web Apps handles routing via `staticwebapp.config.json` files in each app. Update these files if you need to configure custom redirects or routing rules.
+Azure Static Web Apps handles routing via `staticwebapp.config.json` files in
+each app. Update these files if you need to configure custom redirects or
+routing rules.
 
 > Notice: This repository contains restricted content intended for approved
 > defense partners. Redistribution or public disclosure is prohibited. See
@@ -229,32 +267,35 @@ Azure Static Web Apps handles routing via `staticwebapp.config.json` files in ea
 
 ## Overview
 
-PhoenixRooivalk delivers a layered, modular counter‑UAS capability for contested
-EM environments. The public materials in this repository provide a high‑level
-overview and governance. Partner‑only details (specifications, simulations,
-integration guides) are shared upon approval.
+PhoenixRooivalk delivers a layered, modular counter‑UAS capability for
+contested EM environments. The public materials in this repository provide a
+high‑level overview and governance. Partner‑only details (specifications,
+simulations, integration guides) are shared upon approval.
 
 ## Mission
 
 Transform proven pneumatic platform technology into two world-leading brands:
+
 - **SkySnare™** for consumer sports and training markets
 - **AeroNet™** for regulated, AI-enabled infrastructure security
 
-We aim to prove reliability and safety at consumer scale, then apply that track record to high-value enterprise markets that demand compliance, automation, and measurable risk reduction.
+We aim to prove reliability and safety at consumer scale, then apply that
+track record to high-value enterprise markets that demand compliance,
+automation, and measurable risk reduction.
 
 ## System overview (abstract)
 
 - RKV‑M: Aerial VTOL mothership for picket, relay, and mini launch; resilient
   comms and survivability provisions.
-- RKV‑I: Deployable minis (interceptor, decoy, ISR). Control via RF or optional
-  fiber for jam‑resistant teleoperation. Non‑kinetic baseline.
+- RKV‑I: Deployable minis (interceptor, decoy, ISR). Control via RF or
+  optional fiber for jam‑resistant teleoperation. Non‑kinetic baseline.
 - RKV‑G: Ground support rover acting as mobile GCS, mast, and logistics node;
   can bear fiber spools for engagements.
 - RKV‑C2: Command, control, and data plane with strict QoS, eventing, and
   observability; weapon‑agnostic integration patterns.
 
-For detailed specifications and planning baselines, see [`index.md`](./index.md)
-(restricted).
+For detailed specifications and planning baselines, see
+[`index.md`](./index.md) (restricted).
 
 ## Operating modes
 
@@ -265,7 +306,8 @@ For detailed specifications and planning baselines, see [`index.md`](./index.md)
 
 ## Documentation
 
-All project documentation is hosted on the live Docusaurus site (deployed to Azure Static Web Apps):
+All project documentation is hosted on the live Docusaurus site (deployed to
+Azure Static Web Apps):
 
 - **📚 Documentation Portal**:
   - Executive Summaries & Pitch Materials
@@ -275,34 +317,42 @@ All project documentation is hosted on the live Docusaurus site (deployed to Azu
   - Legal & Compliance Frameworks
   - Funding Opportunities & Resources
 
-- **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment and configuration
-- **Azure Infrastructure**: [infra/azure/README.md](./infra/azure/README.md) - Azure deployment setup
+- **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production
+  deployment and configuration
+- **Azure Infrastructure**: [infra/azure/README.md](./infra/azure/README.md) -
+  Azure deployment setup
 
-> **Note**: Documentation source files are in `apps/docs/`. Run `pnpm --filter docs start` to view locally.
+> **Note**: Documentation source files are in `apps/docs/`. Run
+> `pnpm --filter docs start` to view locally.
 
 ## Operational tasks
 
 ### Python Detector
 
-Real-time drone detection system for edge devices. See [apps/detector/README.md](apps/detector/README.md) for complete documentation.
+Real-time drone detection system for edge devices. See
+[apps/detector/README.md](apps/detector/README.md) for complete documentation.
 
 **Quick Start:**
+
 ```bash
 cd apps/detector
 
 # Setup environment
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -e ".[pi]"    # For Raspberry Pi, or [desktop] for development
+# For Raspberry Pi, or [desktop] for development
+pip install -e ".[pi]"
 
 # Run detection
 python src/main.py --model models/drone-detector_int8.tflite
 
 # Headless mode (no display)
-python src/main.py --model models/drone-detector_int8.tflite --headless
+python src/main.py --model models/drone-detector_int8.tflite \
+  --headless
 
 # With Coral USB Accelerator (faster)
-python src/main.py --model models/drone-detector_int8.tflite --coral
+python src/main.py --model models/drone-detector_int8.tflite \
+  --coral
 
 # With object tracking and webhook alerts
 python src/main.py --model models/drone-detector_int8.tflite \
@@ -315,21 +365,26 @@ python src/main.py --model models/drone-detector_int8.tflite \
 - Rust CLI: `cargo run --bin evidence-cli -- <command>`
 - Examples:
 
-```powershell
-# Record evidence
-cargo run --bin evidence-cli -- record engagement_summary '{"missionId":"M-123","result":"success"}'
+  ```powershell
+  # Record evidence
+  cargo run --bin evidence-cli -- record engagement_summary \
+    '{"missionId":"M-123","result":"success"}'
 
-# Process anchoring jobs
-cargo run --bin keeper -- --interval 5 --batch-limit 25
-```
+  # Process anchoring jobs
+  cargo run --bin keeper -- --interval 5 --batch-limit 25
+  ```
 
-For runbook-style metrics capture, see the Operations Log template in the documentation portal.
+For runbook-style metrics capture, see the Operations Log template in the
+documentation portal.
 
 ### Threat Simulator Desktop
 
-Desktop application for simulating counter-drone defense scenarios. See [apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md) for complete documentation.
+Desktop application for simulating counter-drone defense scenarios. See
+[apps/threat-simulator-desktop/README.md](apps/threat-simulator-desktop/README.md)
+for complete documentation.
 
 **Quick Start:**
+
 ```bash
 # From repository root
 pnpm sim:dev              # Frontend dev server (fastest)
@@ -352,12 +407,17 @@ occurs only under applicable law and export controls. See
 
 ## Site Deployment
 
-Both sites are automatically deployed to Azure Static Web Apps via GitHub Actions:
+Both sites are automatically deployed to Azure Static Web Apps via GitHub
+Actions:
 
-- **Marketing Site**: Built with Next.js 14 (static export from `apps/marketing/out/`)
-- **Documentation Site**: Built with Docusaurus (static site from `apps/docs/build/`)
+- **Marketing Site**: Built with Next.js 14 (static export from
+  `apps/marketing/out/`)
+- **Documentation Site**: Built with Docusaurus (static site from
+  `apps/docs/build/`)
 
-Deployment is triggered automatically on push to `main` branch. See the [Deployment](#deployment) section and `.github/workflows/` for workflow details.
+Deployment is triggered automatically on push to `main` branch. See the
+[Deployment](#deployment) section and `.github/workflows/` for workflow
+details.
 
 ## Contributing
 
