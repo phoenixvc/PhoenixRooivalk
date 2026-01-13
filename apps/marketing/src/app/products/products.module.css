@@ -2,7 +2,7 @@
 
 .main {
   position: relative;
-  background: rgb(var(--bg-primary));
+  background: transparent;
   color: rgb(var(--text-primary));
   min-height: 100vh;
 }

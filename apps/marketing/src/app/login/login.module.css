@@ -4,11 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--darker), 0.95) 0%,
-    rgba(var(--color-gray-900), 0.95) 100%
-  );
+  background: transparent;
   box-sizing: border-box;
 }
 

@@ -1,7 +1,7 @@
 /* Home page - clean, no visual noise */
 .main {
   position: relative;
-  background: rgb(var(--bg-primary));
+  background: transparent;
   color: rgb(var(--text-primary));
   max-width: 100%;
   margin: 0 auto;

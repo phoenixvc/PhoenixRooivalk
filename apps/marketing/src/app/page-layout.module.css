@@ -3,7 +3,7 @@
 .pageContainer {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--darker));
+  background: transparent;
   color: white;
 }
 
@@ -11,7 +11,7 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: rgb(var(--bg-primary));
+  background: transparent;
 }
 
 .contentWrapper {

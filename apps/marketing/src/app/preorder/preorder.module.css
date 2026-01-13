@@ -1,6 +1,6 @@
 .main {
   min-height: 100vh;
-  background: rgb(var(--bg-primary));
+  background: transparent;
   position: relative;
 }
 
