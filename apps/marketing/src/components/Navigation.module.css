@@ -14,7 +14,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -533,7 +533,7 @@
 
 .mobileMenuContent {
   padding: 2rem 1.5rem;
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 

@@ -35,7 +35,7 @@ export default function HomePage(): React.ReactElement {
       {/* Footer */}
       <Footer />
 
-      {/* FAQ Schema Markup */}
+      {/* FAQ Schema Markup - buyer focused */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -45,42 +45,34 @@ export default function HomePage(): React.ReactElement {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "What is PhoenixRooivalk's dual-brand strategy?",
+                name: "How does the drone capture system work?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "PhoenixRooivalk operates two brands: SkySnare™ for consumer sports/training markets ($1.68B TAM @ 8.2% CAGR) and AeroNet™ for enterprise infrastructure security ($4.2B TAM @ 47% CAGR). We prove reliability at consumer scale, then leverage that track record for enterprise markets.",
+                  text: "Our pneumatic net launcher uses compressed air to deploy a capture net that safely intercepts drones without damage. No explosives, no RF jamming, no legal complications.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What is the 5-year revenue trajectory?",
+                name: "Who uses these systems?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "PhoenixRooivalk targets growth from $1.825M (FY26) to $50M (FY30) revenue with 30% EBITDA margin. Year 1: prototype + 4,500 SkySnare™ units. Year 5: 75K consumer units + 35 AeroNet™ enterprise sites.",
+                  text: "Training facilities, drone racing leagues, event security teams, and facility managers. SkySnare for consumer/training, AeroNet for enterprise security.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What is the combined market opportunity?",
+                name: "When can I get one?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "PhoenixRooivalk addresses a $5.9B combined TAM: $1.68B consumer sports/training market growing at 8.2% CAGR plus $4.2B counter-drone security market growing at 47% CAGR. Dual-brand strategy minimizes channel conflict.",
+                  text: "Preorders open now with no deposit required. First deliveries Q3 2026.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How does certification build competitive advantage?",
+                name: "Is it legal to use?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Dual certification creates a regulatory moat: CPSC for SkySnare™ consumer safety (Q2 2026) and FAA waiver for AeroNet™ enterprise operations (Q3 2026). This safety-first approach builds trust and market credibility.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What is the capital strategy?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "PhoenixRooivalk requires $41.5M across 4 funding rounds: Seed ($1.5M, 2025-26), Series A ($5M, 2027), Series B ($15M, 2028), Growth ($20M, 2029). Target exit: $250-400M valuation by 2030, delivering 8-30× returns to early investors.",
+                  text: "Yes. Pneumatic net capture only - no RF jamming, no GPS spoofing, no signal interference. FCC compliant.",
                 },
               },
             ],

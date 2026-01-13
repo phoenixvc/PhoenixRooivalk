@@ -1,6 +1,5 @@
 "use client";
 
-import { downloadWhitepaper } from "@phoenix-rooivalk/utils";
 import React from "react";
 import { Button } from "../ui/button";
 import styles from "./ContactSection.module.css";
@@ -10,95 +9,85 @@ export const ContactSection: React.FC = () => {
     <section className={styles.section} id="contact">
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Partner With Us</h2>
+          <h2 className={styles.title}>Ready to Order?</h2>
           <p className={styles.subtitle}>
-            We&apos;re seeking early partners and investors to bring pneumatic
-            drone interception to market. Join us in Phase 1.
+            Preorder now with no deposit required. Questions? We&apos;re here to
+            help.
           </p>
         </div>
 
         <div className={styles.grid}>
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Early Partner Program</h3>
+            <h3 className={styles.cardTitle}>Preorder & Sales</h3>
             <p className={styles.cardDescription}>
-              Be among the first to deploy our pneumatic net launcher
-              technology. We&apos;re looking for pilot partners in drone racing,
-              event security, and critical infrastructure.
+              Training facilities, event organizers, and security teams —
+              preorder your system today. No deposit, delivery Q3 2026.
             </p>
             <div className={styles.buttonGroup}>
               <Button
-                href="mailto:partners@phoenixrooivalk.com"
+                href="/preorder"
                 size="lg"
                 className="w-full"
-                trackingEvent="Partnership Inquiry"
-                trackingProps={{ location: "contact-section", type: "email" }}
-                aria-label="Email us for partnership inquiries"
+                trackingEvent="Preorder Clicked"
+                trackingProps={{ location: "contact-section", type: "primary" }}
+                aria-label="Go to preorder page"
               >
-                Become an Early Partner
+                Preorder Now
               </Button>
               <Button
-                href="mailto:info@phoenixrooivalk.com"
+                href="mailto:sales@phoenixrooivalk.com"
                 variant="ghost"
                 size="lg"
                 className="w-full"
-                trackingEvent="General Inquiry"
+                trackingEvent="Sales Inquiry"
                 trackingProps={{ location: "contact-section", type: "email" }}
-                aria-label="Email us for general inquiries"
+                aria-label="Email sales team"
               >
-                General Inquiries
+                Contact Sales
               </Button>
             </div>
           </div>
 
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Resources & Documentation</h3>
+            <h3 className={styles.cardTitle}>Support & Questions</h3>
             <p className={styles.cardDescription}>
-              Learn more about our dual-brand strategy, market opportunity, and
-              technical approach. Download our whitepaper or explore detailed
-              specifications.
+              Have questions about product specs, compatibility, or deployment?
+              Our team is ready to help you find the right solution.
             </p>
             <div className={styles.buttonGroup}>
               <Button
-                onClick={(e: React.MouseEvent) => {
-                  e.preventDefault();
-                  downloadWhitepaper();
-                }}
+                href="/products"
                 size="lg"
                 className="w-full"
-                type="button"
-                trackingEvent="Whitepaper Downloaded"
-                trackingProps={{ location: "contact-section", type: "button" }}
-                aria-label="Download technical whitepaper PDF"
+                trackingEvent="Products Viewed"
+                trackingProps={{ location: "contact-section", type: "link" }}
+                aria-label="View all products"
               >
-                Download Whitepaper
+                View Products
               </Button>
               <Button
-                href="/technical"
+                href="mailto:support@phoenixrooivalk.com"
                 variant="ghost"
                 size="lg"
                 className="w-full"
-                trackingEvent="Technical Specs Viewed"
-                trackingProps={{ location: "contact-section", source: "cta" }}
-                aria-label="View detailed technical specifications"
+                trackingEvent="Support Inquiry"
+                trackingProps={{ location: "contact-section", type: "email" }}
+                aria-label="Email support team"
               >
-                Technical Specifications
+                Get Support
               </Button>
             </div>
           </div>
         </div>
 
-        <div className={styles.sbirSection}>
-          <div className={styles.sbirCard}>
-            <h3 className={styles.sbirTitle}>Investors & Government</h3>
-            <p className={styles.sbirDescription}>
-              We&apos;re raising our Seed round and pursuing SBIR opportunities.
-              Contact us if you&apos;re interested in the counter-drone market
-              or government contracting partnerships.
-            </p>
-            <Button href="mailto:investors@phoenixrooivalk.com" size="lg">
-              Investment Inquiries
-            </Button>
-          </div>
+        {/* Secondary: Partners/Investors - demoted below buyer content */}
+        <div className={styles.secondarySection}>
+          <p className={styles.secondaryText}>
+            Looking for partnership or investment opportunities?{" "}
+            <a href="/contact" className={styles.secondaryLink}>
+              Contact our team
+            </a>
+          </p>
         </div>
       </div>
     </section>

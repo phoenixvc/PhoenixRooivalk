@@ -1,12 +1,19 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(180deg, rgb(var(--gradient-dark-end)) 0%, rgb(var(--color-gray-900)) 100%);
+  padding: var(--space-16) var(--space-4);
+  background: rgb(var(--bg-primary));
   position: relative;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
 }
 
 .header {

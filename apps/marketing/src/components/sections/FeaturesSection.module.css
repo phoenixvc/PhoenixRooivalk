@@ -1,25 +1,19 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(180deg, rgb(var(--gradient-dark-end)) 0%, rgb(var(--gradient-dark-start)) 50%, rgb(var(--gradient-dark-end)) 100%);
+  padding: var(--space-16) var(--space-4);
+  background: rgb(var(--bg-primary));
   position: relative;
-}
-
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--text-muted), 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--text-muted), 0.04) 1px, transparent 1px);
-  background-size: 50px 50px;
-  pointer-events: none;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
+  padding: 0 var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
 }
 
 .header {
