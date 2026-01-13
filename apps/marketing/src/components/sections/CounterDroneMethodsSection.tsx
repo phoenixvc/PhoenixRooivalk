@@ -1,45 +1,8 @@
 "use client";
 import * as React from "react";
 import { RevealSection } from "../RevealSection";
+import { Card } from "../ui/Card";
 import styles from "./CounterDroneMethodsSection.module.css";
-
-interface MethodCardProps {
-  icon: string;
-  title: string;
-  description: string;
-  effectiveness: string;
-  responseTime: string;
-  range: string;
-}
-
-const MethodCard: React.FC<MethodCardProps> = ({
-  icon,
-  title,
-  description,
-  effectiveness,
-  responseTime,
-  range,
-}) => (
-  <div className={styles.card}>
-    <div className={styles.cardIcon}>{icon}</div>
-    <h3 className={styles.cardTitle}>{title}</h3>
-    <p className={styles.cardDescription}>{description}</p>
-    <div className={styles.metricsGrid}>
-      <div className={styles.metricBox}>
-        <div className={styles.metricValue}>{effectiveness}</div>
-        <div className={styles.metricLabel}>Effectiveness</div>
-      </div>
-      <div className={styles.metricBox}>
-        <div className={styles.metricValue}>{responseTime}</div>
-        <div className={styles.metricLabel}>Response</div>
-      </div>
-      <div className={styles.metricBox}>
-        <div className={styles.metricValue}>{range}</div>
-        <div className={styles.metricLabel}>Range</div>
-      </div>
-    </div>
-  </div>
-);
 
 export const CounterDroneMethodsSection: React.FC = () => {
   const methods = [
@@ -47,49 +10,61 @@ export const CounterDroneMethodsSection: React.FC = () => {
       icon: "📡",
       title: "RF Jamming",
       description: "Disrupts drone communication and control signals",
-      effectiveness: "85%",
-      responseTime: "50-200ms",
-      range: "1-5km",
+      metrics: [
+        { value: "85%", label: "Effectiveness" },
+        { value: "50-200ms", label: "Response" },
+        { value: "1-5km", label: "Range" },
+      ],
     },
     {
       icon: "🎯",
       title: "GPS Spoofing",
       description: "Misleads drone navigation with false positioning",
-      effectiveness: "70%",
-      responseTime: "100-500ms",
-      range: "500m-2km",
+      metrics: [
+        { value: "70%", label: "Effectiveness" },
+        { value: "100-500ms", label: "Response" },
+        { value: "500m-2km", label: "Range" },
+      ],
     },
     {
       icon: "⚡",
       title: "Electronic Warfare",
       description: "Targets drone electronics with electromagnetic attacks",
-      effectiveness: "95%",
-      responseTime: "20-100ms",
-      range: "2-10km",
+      metrics: [
+        { value: "95%", label: "Effectiveness" },
+        { value: "20-100ms", label: "Response" },
+        { value: "2-10km", label: "Range" },
+      ],
     },
     {
       icon: "🔍",
       title: "Kinetic Intercept",
       description: "Physical neutralization using nets or projectiles",
-      effectiveness: "90%",
-      responseTime: "200-1000ms",
-      range: "100m-2km",
+      metrics: [
+        { value: "90%", label: "Effectiveness" },
+        { value: "200-1000ms", label: "Response" },
+        { value: "100m-2km", label: "Range" },
+      ],
     },
     {
       icon: "🌐",
       title: "Cyber Takeover",
       description: "Hacks into drone systems to gain remote control",
-      effectiveness: "60%",
-      responseTime: "1-5s",
-      range: "Unlimited",
+      metrics: [
+        { value: "60%", label: "Effectiveness" },
+        { value: "1-5s", label: "Response" },
+        { value: "Unlimited", label: "Range" },
+      ],
     },
     {
       icon: "🛡️",
       title: "Directed Energy",
       description: "Disables drones with high-energy laser or microwave",
-      effectiveness: "80%",
-      responseTime: "100-300ms",
-      range: "500m-3km",
+      metrics: [
+        { value: "80%", label: "Effectiveness" },
+        { value: "100-300ms", label: "Response" },
+        { value: "500m-3km", label: "Range" },
+      ],
     },
   ];
 
@@ -108,34 +83,21 @@ export const CounterDroneMethodsSection: React.FC = () => {
 
             <div className={styles.grid}>
               {methods.map((method, index) => (
-                <MethodCard key={index} {...method} />
+                <Card key={index} centered {...method} />
               ))}
             </div>
 
             <div className={styles.integrationSection}>
-              <div className={styles.integrationCard}>
-                <h3 className={styles.integrationTitle}>
-                  Integrated Defense Strategy
-                </h3>
-                <p className={styles.integrationDescription}>
-                  Automatically selects the optimal defense method based on
-                  threat type and conditions.
-                </p>
-                <div className={styles.statsGrid}>
-                  <div className={styles.statBox}>
-                    <div className={styles.statValue}>95%</div>
-                    <div className={styles.statLabel}>Combined Effectiveness</div>
-                  </div>
-                  <div className={styles.statBox}>
-                    <div className={styles.statValue}>&lt;200ms</div>
-                    <div className={styles.statLabel}>Avg Response</div>
-                  </div>
-                  <div className={styles.statBox}>
-                    <div className={styles.statValue}>6</div>
-                    <div className={styles.statLabel}>Methods</div>
-                  </div>
-                </div>
-              </div>
+              <Card
+                title="Integrated Defense Strategy"
+                description="Automatically selects the optimal defense method based on threat type and conditions."
+                metrics={[
+                  { value: "95%", label: "Combined Effectiveness" },
+                  { value: "<200ms", label: "Avg Response" },
+                  { value: "6", label: "Methods" },
+                ]}
+                centered
+              />
             </div>
           </div>
         </div>

@@ -13,13 +13,6 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .section {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-}
-
 .container {
   position: relative;
   z-index: 10;
@@ -67,112 +60,9 @@
   }
 }
 
-.card {
-  background: rgba(var(--bg-secondary), 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--primary), 0.2);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  border-color: rgba(var(--primary), 0.4);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(var(--primary), 0.2);
-}
-
-.cardIcon {
-  font-size: 2.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.cardTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: rgb(var(--text-primary));
-  margin-bottom: 0.5rem;
-}
-
-.cardDescription {
-  color: rgb(var(--text-muted));
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-}
-
-.metricsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-}
-
-.metricBox {
-  text-align: center;
-  padding: 0.5rem 0.25rem;
-}
-
-.metricValue {
-  font-size: 1rem;
-  font-weight: 700;
-  color: rgb(var(--accent));
-  margin-bottom: 0.125rem;
-}
-
-.metricLabel {
-  font-size: 0.75rem;
-  color: rgb(var(--text-muted));
-}
-
 .integrationSection {
   margin-top: 3rem;
-  text-align: center;
-}
-
-.integrationCard {
-  background: rgba(var(--bg-secondary), 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--primary), 0.2);
-  border-radius: 1rem;
-  padding: 2rem;
-}
-
-.integrationTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: rgb(var(--text-secondary));
-  margin-bottom: 0.5rem;
-}
-
-.integrationDescription {
-  color: rgb(var(--text-muted));
-  margin-bottom: 1.5rem;
   max-width: 36rem;
   margin-left: auto;
   margin-right: auto;
-}
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  max-width: 32rem;
-  margin: 0 auto;
-}
-
-.statBox {
-  text-align: center;
-}
-
-.statValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgb(var(--accent));
-  margin-bottom: 0.25rem;
-}
-
-.statLabel {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
 }

@@ -79,3 +79,33 @@
   border-color: rgba(var(--sensor-amber), 0.6);
   background: rgba(var(--sensor-amber), 0.1);
 }
+
+/* Centered variant */
+.cardCentered {
+  text-align: center;
+}
+
+/* Metrics grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.metricBox {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+}
+
+.metricValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(var(--accent));
+  margin-bottom: 0.125rem;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: rgb(var(--text-muted));
+}
