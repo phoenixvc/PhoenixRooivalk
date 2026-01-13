@@ -228,59 +228,29 @@
   color: rgb(var(--text-muted));
 }
 
-.featureList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
+/* Metrics grid for integration cards */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-.featureItem {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: rgb(var(--text-secondary));
+.metricBox {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
 }
 
-.featureBullet {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 9999px;
+.metricValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(var(--accent));
+  margin-bottom: 0.125rem;
 }
 
-.featureBulletPurple {
-  background: linear-gradient(
-    to right,
-    rgb(var(--color-purple)),
-    rgb(var(--color-purple))
-  );
-}
-
-.featureBulletGreen {
-  background: linear-gradient(
-    to right,
-    rgb(var(--color-teal-deep)),
-    rgb(var(--color-teal-deep))
-  );
-}
-
-.featureBulletTeal {
-  background: linear-gradient(
-    to right,
-    rgb(var(--color-teal)),
-    rgb(var(--color-teal))
-  );
-}
-
-.featureBulletOrange {
-  background: linear-gradient(
-    to right,
-    rgb(var(--primary)),
-    rgb(var(--color-red))
-  );
+.metricLabel {
+  font-size: 0.75rem;
+  color: rgb(var(--text-muted));
 }
 
 .architectureDiagram {
@@ -458,63 +428,4 @@
   }
 }
 
-.valueCard {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid;
-}
-
-.valueCardGreen {
-  background: linear-gradient(
-    to bottom right,
-    rgba(var(--color-green-darker), 0.2),
-    rgba(var(--color-green-darkest), 0.2)
-  );
-  border-color: rgba(var(--color-teal-deep), 0.3);
-}
-
-.valueCardPurple {
-  background: linear-gradient(
-    to bottom right,
-    rgba(var(--color-purple-darker), 0.2),
-    rgba(var(--color-purple-darkest), 0.2)
-  );
-  border-color: rgba(var(--color-purple-light), 0.3);
-}
-
-.valueCardOrange {
-  background: linear-gradient(
-    to bottom right,
-    rgba(var(--color-orange-darker), 0.2),
-    rgba(var(--color-red-darker), 0.2)
-  );
-  border-color: rgba(var(--primary), 0.3);
-}
-
-.valueCardTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: rgb(var(--text-primary));
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.valueCardIcon {
-  font-size: 1.5rem;
-}
-
-.valueCardList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.valueCardListItem {
-  font-size: 0.875rem;
-  color: rgb(var(--text-secondary));
-}
+/* Value cards now use shared Card component */

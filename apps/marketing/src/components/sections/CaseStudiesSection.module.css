@@ -62,8 +62,30 @@
   margin-bottom: 1.5rem;
 }
 
-.details p {
-  margin-bottom: 1rem;
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.metricBox {
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  background: rgba(var(--text-primary), 0.03);
+  border-radius: 0.5rem;
+}
+
+.metricValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(var(--accent));
+  margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.75rem;
+  color: rgb(var(--text-muted));
 }
 
 .disclaimer {

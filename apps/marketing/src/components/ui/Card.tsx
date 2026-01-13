@@ -37,7 +37,9 @@ export const Card: React.FC<CardProps> = ({
   const centeredClass = centered ? styles.cardCentered : "";
 
   return (
-    <div className={`${styles.card} ${colorClass} ${centeredClass} ${className}`}>
+    <div
+      className={`${styles.card} ${colorClass} ${centeredClass} ${className}`}
+    >
       {icon && <div className={styles.cardIcon}>{icon}</div>}
       <h3 className={styles.cardTitle}>{title}</h3>
       <p className={styles.cardDescription}>{description}</p>
