@@ -53,6 +53,7 @@ export const Navigation: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Buyer-first navigation - simple and focused
   const navigationItems: NavigationItem[] = [
     {
       type: "dropdown",
@@ -66,76 +67,24 @@ export const Navigation: React.FC = () => {
         {
           href: "/products#skysnare",
           label: "SkySnare™",
-          description: "Consumer drone capture",
-        },
-        {
-          href: "/products#netsnare",
-          label: "NetSnare™",
-          description: "Ground launchers",
+          description: "Training & consumer",
         },
         {
           href: "/products#aeronet",
           label: "AeroNet™",
-          description: "Enterprise platform",
+          description: "Enterprise security",
         },
         {
-          href: "/contact",
+          href: "/preorder",
           label: "Preorder",
-          description: "Reserve yours - no deposit",
+          description: "Reserve now - no deposit",
         },
       ],
     },
     {
-      type: "dropdown",
-      label: "Technology",
-      items: [
-        {
-          href: "/technical",
-          label: "Technical Specs",
-          description: "Detailed specifications",
-        },
-        {
-          href: "/capabilities",
-          label: "Capabilities",
-          description: "Core system features",
-        },
-        {
-          href: "/methods",
-          label: "Defense Methods",
-          description: "Counter-drone strategies",
-        },
-        {
-          href: "/timeline",
-          label: "Development Timeline",
-          description: "Project roadmap",
-        },
-      ],
-    },
-    {
-      type: "dropdown",
-      label: "Business",
-      items: [
-        {
-          href: "/roi-calculator",
-          label: "ROI Calculator",
-          description: "Calculate your savings",
-        },
-        {
-          href: "/schedule",
-          label: "Schedule Meeting",
-          description: "Book a demo or consultation",
-        },
-        {
-          href: "/partnerships",
-          label: "Partnerships",
-          description: "Collaboration opportunities",
-        },
-        {
-          href: "/sbir",
-          label: "SBIR Program",
-          description: "Government funding",
-        },
-      ],
+      type: "link",
+      href: "/technical",
+      label: "Specs",
     },
     {
       type: "link",
