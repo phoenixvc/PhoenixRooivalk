@@ -12,11 +12,6 @@ export default function MethodsPage(): React.ReactElement {
 
   return (
     <main className={styles.main}>
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.gridPattern} />
-      </div>
-
       {/* Navigation */}
       <Navigation />
 

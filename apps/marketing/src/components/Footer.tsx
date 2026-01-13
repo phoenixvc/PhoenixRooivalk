@@ -33,11 +33,6 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className={styles.footer}>
-      {/* Background pattern */}
-      <div className={styles.backgroundPattern}>
-        <div className={styles.patternGrid}></div>
-      </div>
-
       <div className={styles.content}>
         <div className={styles.container}>
           {/* Main Footer Content */}

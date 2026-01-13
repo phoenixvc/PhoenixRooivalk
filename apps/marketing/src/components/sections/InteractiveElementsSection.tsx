@@ -27,9 +27,6 @@ export const InteractiveElementsSection: React.FC = () => {
 
   return (
     <section className={styles.section}>
-      {/* Background pattern */}
-      <div className={styles.backgroundPattern} />
-
       <div className={styles.container}>
         <div className={styles.innerContainer}>
           {/* Section Header */}

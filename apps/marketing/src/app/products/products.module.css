@@ -7,14 +7,6 @@
   min-height: 100vh;
 }
 
-.background {
-  display: none;
-}
-
-.gridPattern {
-  display: none;
-}
-
 .container {
   max-width: var(--container-max-width);
   margin: 0 auto;

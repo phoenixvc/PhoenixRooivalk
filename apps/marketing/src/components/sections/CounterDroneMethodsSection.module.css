@@ -20,22 +20,6 @@
   }
 }
 
-.backgroundPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-}
-
-.backgroundPattern::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-
 .container {
   position: relative;
   z-index: 10;
