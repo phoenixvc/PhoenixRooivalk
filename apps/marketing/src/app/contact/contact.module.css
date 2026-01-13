@@ -227,9 +227,11 @@
   line-height: 1.75;
 }
 
+/* Handle both ul.listItem and .listItem ul cases */
+ul.listItem,
 .listItem ul {
-  list-style: none;
-  padding: 0;
+  list-style: disc;
+  padding-left: 1.25rem;
   margin: 0;
 }
 
