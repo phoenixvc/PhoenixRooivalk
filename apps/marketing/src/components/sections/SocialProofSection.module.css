@@ -1,7 +1,7 @@
 /* SocialProofSection.module.css */
 .section {
   padding: var(--section-padding-y) var(--section-padding-x);
-  background: rgb(var(--bg-primary));
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
@@ -188,6 +188,7 @@
 }
 
 .developmentSection {
+  margin-top: 2rem;
   margin-bottom: 3rem;
 }
 
@@ -269,6 +270,7 @@
 }
 
 .complianceSection {
+  margin-top: 2.5rem;
   margin-bottom: 3rem;
 }
 
@@ -342,6 +344,7 @@
 }
 
 .mediaSection {
+  margin-top: 2rem;
   margin-bottom: 4rem;
 }
 
