@@ -1,8 +1,6 @@
 import React from "react";
 import { RevealSection } from "../RevealSection";
-import { Button } from "../ui/button";
-import { Card } from "../ui/Card";
-import { FeatureCard } from "../ui/FeatureCard";
+import { Badge, Button, Card, FeatureCard } from "../ui";
 import styles from "./AIBenefitsSection.module.css";
 
 export const AIBenefitsSection: React.FC = () => {
@@ -49,7 +47,7 @@ export const AIBenefitsSection: React.FC = () => {
     <section className={styles.section} id="ai-benefits">
       <div className={styles.container}>
         <RevealSection className={styles.header}>
-          <div className={styles.badge}>AI + BLOCKCHAIN REVOLUTION</div>
+          <Badge>AI + BLOCKCHAIN REVOLUTION</Badge>
           <h2 className={styles.title}>
             Revolutionary AI + Blockchain Performance
           </h2>

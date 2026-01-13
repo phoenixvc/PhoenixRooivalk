@@ -1,7 +1,26 @@
+"use client";
+
 import * as React from "react";
-import Image from "next/image";
+import dynamic from "next/dynamic";
 import { Button } from "../../ui/button";
 import styles from "./ThreatSimulatorSection.module.css";
+
+// Dynamically import WASM simulator to avoid SSR issues
+const WasmThreatSimulator = dynamic(
+  () =>
+    import("../../WasmThreatSimulator").then((mod) => mod.WasmThreatSimulator),
+  {
+    ssr: false,
+    loading: () => (
+      <div className={styles.simulatorPlaceholder}>
+        <div className={styles.placeholderContent}>
+          <span className={styles.placeholderIcon}>🎮</span>
+          <span className={styles.placeholderText}>Loading Simulator...</span>
+        </div>
+      </div>
+    ),
+  },
+);
 
 export const ThreatSimulatorSection: React.FC = () => {
   return (
@@ -15,51 +34,33 @@ export const ThreatSimulatorSection: React.FC = () => {
         </p>
       </div>
 
-      <div className={styles.demoCtaContainer}>
-        <div className={styles.demoCta}>
-          <div className={styles.demoCtaContent}>
-            <div className={styles.demoCtaIcon}>🎮</div>
-            <h4 className={styles.demoCtaTitle}>Interactive Simulator Demo</h4>
-            <p className={styles.demoCtaDescription}>
-              Launch the full-featured threat simulator built with Rust and
-              WebAssembly. Control weapons, deploy drones, and neutralize aerial
-              threats in real-time.
-            </p>
-            <ul className={styles.demoFeatureList}>
-              <li>✓ Real-time threat detection and tracking</li>
-              <li>✓ Multiple weapon systems and deployments</li>
-              <li>✓ Advanced radar visualization</li>
-              <li>✓ Energy management and synergy systems</li>
-            </ul>
-          </div>
-          <div className={styles.demoScreenshots}>
-            <Image
-              src="/assets/simulator-1.png"
-              alt="Threat Simulator Screenshot 1"
-              width={400}
-              height={300}
-              className={styles.screenshot}
-            />
-            <Image
-              src="/assets/simulator-2.png"
-              alt="Threat Simulator Screenshot 2"
-              width={400}
-              height={300}
-              className={styles.screenshot}
-            />
-            <Image
-              src="/assets/simulator-3.png"
-              alt="Threat Simulator Screenshot 3"
-              width={400}
-              height={300}
-              className={styles.screenshot}
-            />
-          </div>
-          <div className={styles.demoButtonWrapper}>
-            <Button href="/interactive-demo" variant="primary" size="lg">
-              🚀 Launch Interactive Demo
-            </Button>
-          </div>
+      <div className={styles.simulatorContainer}>
+        <WasmThreatSimulator isTeaser />
+        <div className={styles.simulatorOverlay}>
+          <Button href="/interactive-demo" variant="primary" size="lg">
+            🚀 Launch Fullscreen Demo
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.demoFeatures}>
+        <div className={styles.featureItem}>
+          <span className={styles.featureIcon}>🎯</span>
+          <span className={styles.featureText}>Real-time threat detection</span>
+        </div>
+        <div className={styles.featureItem}>
+          <span className={styles.featureIcon}>🔫</span>
+          <span className={styles.featureText}>Multiple weapon systems</span>
+        </div>
+        <div className={styles.featureItem}>
+          <span className={styles.featureIcon}>📡</span>
+          <span className={styles.featureText}>
+            Advanced radar visualization
+          </span>
+        </div>
+        <div className={styles.featureItem}>
+          <span className={styles.featureIcon}>⚡</span>
+          <span className={styles.featureText}>Energy management</span>
         </div>
       </div>
     </div>

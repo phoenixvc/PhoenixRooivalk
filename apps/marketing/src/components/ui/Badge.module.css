@@ -8,6 +8,24 @@
   white-space: nowrap;
 }
 
+/* Size variants */
+.sizeDefault {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.sizeSmall {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.sizeXSmall {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 /* Variant styles */
 .variantDefault {
   background: rgb(var(--primary));

@@ -24,14 +24,8 @@
   margin-bottom: var(--space-12);
 }
 
-.badge {
-  display: inline-block;
-  background: rgb(var(--primary));
-  color: rgb(var(--tactical-black));
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: bold;
+/* Badge margin handled via header layout */
+.header > :first-child {
   margin-bottom: 1rem;
 }
 

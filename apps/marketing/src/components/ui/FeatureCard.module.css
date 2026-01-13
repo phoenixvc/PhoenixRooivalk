@@ -37,3 +37,103 @@
   color: rgb(var(--text-muted));
   line-height: 1.5;
 }
+
+.featureProof {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgb(var(--primary));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+}
+
+/* Color variants */
+.variantGreen {
+  background: rgba(var(--color-teal-deep), 0.1);
+  border-color: rgba(var(--color-teal-deep), 0.3);
+}
+
+.variantGreen:hover {
+  background: rgba(var(--color-teal-deep), 0.15);
+  border-color: rgba(var(--color-teal-deep), 0.5);
+}
+
+.variantGreen .featureTitle {
+  color: rgb(var(--color-teal-deep));
+}
+
+.variantGreen .featureProof {
+  color: rgb(var(--color-teal-deep));
+}
+
+.variantBlue {
+  background: rgba(var(--color-blue-deep), 0.1);
+  border-color: rgba(var(--color-blue-deep), 0.3);
+}
+
+.variantBlue:hover {
+  background: rgba(var(--color-blue-deep), 0.15);
+  border-color: rgba(var(--color-blue-deep), 0.5);
+}
+
+.variantBlue .featureTitle {
+  color: rgb(var(--color-blue));
+}
+
+.variantBlue .featureProof {
+  color: rgb(var(--color-blue));
+}
+
+.variantPurple {
+  background: rgba(var(--color-purple), 0.1);
+  border-color: rgba(var(--color-purple), 0.3);
+}
+
+.variantPurple:hover {
+  background: rgba(var(--color-purple), 0.15);
+  border-color: rgba(var(--color-purple), 0.5);
+}
+
+.variantPurple .featureTitle {
+  color: rgb(var(--color-purple-light));
+}
+
+.variantPurple .featureProof {
+  color: rgb(var(--color-purple-light));
+}
+
+.variantYellow {
+  background: rgba(var(--sim-unknown), 0.1);
+  border-color: rgba(var(--sim-unknown), 0.3);
+}
+
+.variantYellow:hover {
+  background: rgba(var(--sim-unknown), 0.15);
+  border-color: rgba(var(--sim-unknown), 0.5);
+}
+
+.variantYellow .featureTitle {
+  color: rgb(var(--sim-unknown));
+}
+
+.variantYellow .featureProof {
+  color: rgb(var(--sim-unknown));
+}
+
+.variantOrange {
+  background: rgba(var(--primary), 0.1);
+  border-color: rgba(var(--primary), 0.3);
+}
+
+.variantOrange:hover {
+  background: rgba(var(--primary), 0.15);
+  border-color: rgba(var(--primary), 0.5);
+}
+
+.variantOrange .featureTitle {
+  color: rgb(var(--primary));
+}
+
+.variantOrange .featureProof {
+  color: rgb(var(--primary));
+}
