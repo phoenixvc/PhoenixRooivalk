@@ -589,7 +589,6 @@ export class ResponseProtocolEngine {
       (h) => h.success,
     ).length;
     protocol.successRate = successfulExecutions / protocolExecutions.length;
-
   }
 
   // Get protocol statistics
