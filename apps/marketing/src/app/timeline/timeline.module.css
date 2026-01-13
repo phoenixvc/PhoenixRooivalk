@@ -1,0 +1,21 @@
+/* Timeline Page Styles */
+
+.main {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--bg-primary));
+  color: rgb(var(--text-primary));
+  min-height: 100vh;
+}
+
+.contentWrapper {
+  padding-top: var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .contentWrapper {
+    padding-top: var(--space-12);
+  }
+}

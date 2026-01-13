@@ -2,21 +2,22 @@
 import * as React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
+import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
 import styles from "./sbir.module.css";
 
 export default function SBIRPage(): React.ReactElement {
-  // Apply performance optimizations
   usePerformanceOptimizations();
 
   return (
     <main className={styles.main}>
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.gridPattern} />
-      </div>
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.1)"
+        bendStrength={20}
+        bendRadius={100}
+      />
 
-      {/* Navigation */}
       <Navigation />
 
       {/* Main Content */}

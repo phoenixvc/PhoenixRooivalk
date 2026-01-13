@@ -3,28 +3,28 @@ import * as React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
 import { CapabilitiesSection } from "../../components/sections/CapabilitiesSection";
+import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
+import styles from "./capabilities.module.css";
 
 export default function CapabilitiesPage(): React.ReactElement {
-  // Apply performance optimizations
   usePerformanceOptimizations();
 
   return (
-    <main className="relative overflow-hidden bg-[rgb(var(--darker))] text-white">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,_#1b2735_0%,_#090a0f_100%)]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,136,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(0,255,136,0.03)_1px,_transparent_1px)] bg-[length:50px_50px] animate-gridMove" />
-      </div>
+    <main className={styles.main}>
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.1)"
+        bendStrength={20}
+        bendRadius={100}
+      />
 
-      {/* Navigation */}
       <Navigation />
 
-      {/* Main Content */}
-      <div className="pt-20">
+      <div className={styles.contentWrapper}>
         <CapabilitiesSection />
       </div>
 
-      {/* Footer */}
       <Footer />
     </main>
   );

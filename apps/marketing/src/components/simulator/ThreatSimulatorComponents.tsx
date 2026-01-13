@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { GameState } from "../../types/game";
+import styles from "./ThreatSimulatorComponents.module.css";
 
 interface ThreatSimulatorComponentsProps {
   gameState: GameState;
@@ -34,21 +35,21 @@ export const ThreatSimulatorComponents: React.FC<
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className={styles.container}>
       {/* Enhanced Central Radar */}
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80">
+      <div className={styles.radarContainer}>
         {/* Outer detection ring */}
-        <div className="absolute inset-0 border-2 border-blue-400/15 rounded-full animate-pulse" />
+        <div className={styles.radarOuterRing} />
         {/* Middle detection ring */}
-        <div className="absolute inset-8 border border-blue-300/25 rounded-full" />
+        <div className={styles.radarMiddleRing} />
         {/* Inner detection ring */}
-        <div className="absolute inset-16 border border-blue-400/35 rounded-full" />
+        <div className={styles.radarInnerRing} />
         {/* Range markers */}
-        <div className="absolute inset-0">
+        <div className={styles.rangeMarkers}>
           {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
             <div
               key={angle}
-              className="absolute top-1/2 left-1/2 w-0.5 h-8 bg-blue-400/20 transform -translate-x-1/2 -translate-y-1/2"
+              className={styles.rangeMarker}
               style={{
                 transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-40px)`,
               }}
@@ -56,41 +57,41 @@ export const ThreatSimulatorComponents: React.FC<
           ))}
         </div>
         {/* Sweep line */}
-        <div className="absolute top-1/2 left-1/2 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent animate-spin origin-left opacity-70" />
+        <div className={styles.sweepLine} />
         {/* Center dot */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-blue-400 rounded-full animate-ping shadow-lg" />
+        <div className={styles.centerDot} />
         {/* Range labels */}
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-xs text-blue-400 font-mono">
+        <div className={`${styles.rangeLabel} ${styles.rangeLabelTop}`}>
           RANGE
         </div>
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-blue-400 font-mono">
+        <div className={`${styles.rangeLabel} ${styles.rangeLabelBottom}`}>
           {Math.round(gameState.mothership.x)}m
         </div>
       </div>
       {/* Enhanced Mothership */}
       <div
-        className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
+        className={styles.mothershipContainer}
         style={{
           left: `${gameState.mothership.x}px`,
           top: `${gameState.mothership.y}px`,
         }}
       >
         {/* Mothership body */}
-        <div className="w-16 h-16 bg-gradient-to-br from-slate-600 to-slate-800 rounded-lg flex items-center justify-center text-2xl shadow-2xl border-2 border-slate-400 relative">
+        <div className={styles.mothershipBody}>
           🚁
           {/* Energy shield indicator */}
           {gameState.energy > gameState.maxEnergy * 0.7 && (
-            <div className="absolute inset-0 rounded-lg border-2 border-blue-400/50 animate-pulse" />
+            <div className={styles.energyShield} />
           )}
           {/* Low energy warning */}
           {gameState.energy < gameState.maxEnergy * 0.2 && (
-            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-red-400 text-xs animate-bounce font-mono">
+            <div className={styles.lowEnergyWarning}>
               LOW ENERGY
             </div>
           )}
         </div>
         {/* Mothership label */}
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white bg-black/50 px-2 py-1 rounded font-mono">
+        <div className={styles.mothershipLabel}>
           MOTHERSHIP
         </div>
       </div>
@@ -115,21 +116,31 @@ export const ThreatSimulatorComponents: React.FC<
             fadeOpacity = 1 - fadeProgress;
           }
         }
+
+        const threatClasses = [
+          styles.threatContainer,
+          isSelected && styles.threatSelected,
+          isHovered && !isSelected && styles.threatHovered,
+          isNeutralized && styles.threatNeutralized,
+        ].filter(Boolean).join(" ");
+
+        const iconClasses = [
+          styles.threatIcon,
+          isCrater && styles.threatIconCrater,
+          !isCrater && isNeutralized && styles.threatIconNeutralized,
+          isSelected && styles.threatIconSelected,
+          isHovered && !isSelected && styles.threatIconHovered,
+        ].filter(Boolean).join(" ");
+
         return (
           <div
             key={threat.id}
-            className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
-              isSelected
-                ? "scale-125 z-30"
-                : isHovered
-                  ? "scale-110 z-20"
-                  : "z-20"
-            } ${isNeutralized ? "opacity-50" : ""}`}
+            className={threatClasses}
             style={{
               left: `${threat.x}px`,
               top: `${threat.y}px`,
               opacity: isNeutralized ? fadeOpacity : 1,
-              pointerEvents: "auto", // Enable pointer events for this element
+              backgroundColor: !isCrater && !isNeutralized ? appearance.color : undefined,
             }}
             onClick={(e) =>
               !isNeutralized && !isCrater && onThreatClick(e, threat.id)
@@ -164,23 +175,10 @@ export const ThreatSimulatorComponents: React.FC<
           >
             {/* Threat icon with enhanced styling */}
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-2xl border-2 ${
-                isCrater
-                  ? "bg-gray-600/30 border-gray-500/50"
-                  : isNeutralized
-                    ? "bg-red-500/20 border-red-500/50"
-                    : appearance.color
-              } ${
-                isSelected
-                  ? "ring-4 ring-blue-400 ring-opacity-75 border-blue-300"
-                  : isHovered
-                    ? "ring-2 ring-white/50"
-                    : isCrater
-                      ? "border-gray-500/50"
-                      : isNeutralized
-                        ? "border-red-500/50"
-                        : "border-white/20"
-              } relative`}
+              className={iconClasses}
+              style={{
+                backgroundColor: !isCrater && !isNeutralized ? appearance.color : undefined,
+              }}
             >
               {isCrater ? "🕳️" : isNeutralized ? "💥" : appearance.emoji}
             </div>
@@ -190,16 +188,15 @@ export const ThreatSimulatorComponents: React.FC<
               threat.trail &&
               threat.trail.length > 1 && (
                 <svg
-                  className="absolute top-0 left-0 w-full h-full pointer-events-none"
+                  className={styles.threatTrail}
                   style={{
                     transform: `translate(-${threat.x}px, -${threat.y}px)`,
-                    width: "800px" /* Match game area */,
+                    width: "800px",
                     height: "600px",
                   }}
                 >
                   <polyline
                     points={threat.trail.map((p) => `${p.x},${p.y}`).join(" ")}
-                    className="threat-trail"
                     fill="none"
                     stroke="rgba(255, 255, 255, 0.2)"
                     strokeWidth="2"
@@ -210,21 +207,21 @@ export const ThreatSimulatorComponents: React.FC<
             {/* Priority indicator */}
             {priority !== "low" && (
               <div
-                className={`absolute -top-2 -right-2 w-4 h-4 rounded-full border-2 border-white ${
+                className={`${styles.priorityIndicator} ${
                   priority === "high"
-                    ? "bg-red-500"
+                    ? styles.priorityHigh
                     : priority === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
+                      ? styles.priorityMedium
+                      : styles.priorityLow
                 }`}
               />
             )}
             {/* Threat label */}
             {(isSelected || isHovered || priority !== "low") && (
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded font-mono whitespace-nowrap">
+              <div className={styles.threatLabel}>
                 {threat.type.toUpperCase()}
                 {priority !== "low" && (
-                  <span className="ml-1 text-xs">
+                  <span className={styles.priorityEmoji}>
                     {priority === "high"
                       ? "🔴"
                       : priority === "medium"
@@ -236,9 +233,9 @@ export const ThreatSimulatorComponents: React.FC<
             )}
             {/* Health bar */}
             {threat.health && (
-              <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gray-600 rounded-full overflow-hidden">
+              <div className={styles.healthBar}>
                 <div
-                  className="h-full bg-red-500 transition-all duration-300"
+                  className={styles.healthBarFill}
                   style={{
                     width: `${Math.min((threat.health / 100) * 100, 100)}%`,
                   }}
@@ -252,25 +249,25 @@ export const ThreatSimulatorComponents: React.FC<
       {gameState.drones.map((drone) => (
         <div
           key={drone.id}
-          className="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
+          className={styles.droneContainer}
           style={{
             left: `${drone.x}px`,
             top: `${drone.y}px`,
           }}
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-sm shadow-xl border-2 border-blue-300 relative">
+          <div className={styles.droneBody}>
             🚁
             {/* Drone status indicator */}
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-white animate-pulse" />
+            <div className={styles.droneStatus} />
           </div>
           {/* Drone trail */}
-          <div className="absolute inset-0 rounded-full border border-blue-400/30 animate-ping" />
+          <div className={styles.droneTrail} />
         </div>
       ))}
       {/* Selection Box */}
       {gameState.selectionBox && gameState.selectionBox.isActive && (
         <div
-          className="absolute border-2 border-blue-400 bg-blue-400/10 pointer-events-none"
+          className={styles.selectionBox}
           style={{
             left: `${Math.min(
               gameState.selectionBox.startX,
@@ -294,22 +291,22 @@ export const ThreatSimulatorComponents: React.FC<
         gameState.deploymentBays.map((bay) => (
           <div
             key={bay.id}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2"
+            className={styles.deploymentBayContainer}
             style={{
               left: `${bay.x}px`,
               top: `${bay.y}px`,
             }}
           >
             <div
-              className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center text-lg ${
+              className={`${styles.deploymentBay} ${
                 bay.currentDrones > 0
-                  ? "border-green-400 bg-green-400/20"
-                  : "border-gray-600 bg-gray-600/20"
+                  ? styles.deploymentBayActive
+                  : styles.deploymentBayEmpty
               }`}
             >
               {bay.currentDrones > 0 ? "✅" : "⭕"}
             </div>
-            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-white bg-black/50 px-1 rounded">
+            <div className={styles.deploymentBayLabel}>
               {bay.currentDrones}/{bay.capacity}
             </div>
           </div>

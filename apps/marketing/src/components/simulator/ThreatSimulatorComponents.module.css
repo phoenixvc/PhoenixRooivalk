@@ -1,0 +1,395 @@
+/* ThreatSimulatorComponents Styles */
+
+.container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Central Radar */
+.radarContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20rem;
+  height: 20rem;
+}
+
+.radarOuterRing {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(96, 165, 250, 0.15);
+  border-radius: 9999px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.radarMiddleRing {
+  position: absolute;
+  inset: 2rem;
+  border: 1px solid rgba(147, 197, 253, 0.25);
+  border-radius: 9999px;
+}
+
+.radarInnerRing {
+  position: absolute;
+  inset: 4rem;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 9999px;
+}
+
+.rangeMarkers {
+  position: absolute;
+  inset: 0;
+}
+
+.rangeMarker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.125rem;
+  height: 2rem;
+  background: rgba(96, 165, 250, 0.2);
+}
+
+.sweepLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 0.125rem;
+  background: linear-gradient(to right, transparent, rgb(96, 165, 250), transparent);
+  animation: spin 4s linear infinite;
+  transform-origin: left center;
+  opacity: 0.7;
+}
+
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.centerDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.75rem;
+  height: 0.75rem;
+  background: rgb(96, 165, 250);
+  border-radius: 9999px;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.rangeLabel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: rgb(96, 165, 250);
+  font-family: monospace;
+}
+
+.rangeLabelTop {
+  top: 0.5rem;
+}
+
+.rangeLabelBottom {
+  bottom: 0.5rem;
+}
+
+/* Mothership */
+.mothershipContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+}
+
+.mothershipBody {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(to bottom right, rgb(71, 85, 105), rgb(30, 41, 59));
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgb(148, 163, 184);
+  position: relative;
+}
+
+.energyShield {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  border: 2px solid rgba(96, 165, 250, 0.5);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.lowEnergyWarning {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(248, 113, 113);
+  font-size: 0.75rem;
+  animation: bounce 1s infinite;
+  font-family: monospace;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.mothershipLabel {
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+
+/* Threats */
+.threatContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.threatSelected {
+  transform: translate(-50%, -50%) scale(1.25);
+  z-index: 30;
+}
+
+.threatHovered {
+  transform: translate(-50%, -50%) scale(1.1);
+  z-index: 20;
+}
+
+.threatNeutralized {
+  opacity: 0.5;
+}
+
+.threatIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.threatIconCrater {
+  background: rgba(75, 85, 99, 0.3);
+  border-color: rgba(107, 114, 128, 0.5);
+}
+
+.threatIconNeutralized {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.threatIconSelected {
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.75);
+  border-color: rgb(147, 197, 253);
+}
+
+.threatIconHovered {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.threatTrail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.priorityIndicator {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  border: 2px solid white;
+}
+
+.priorityHigh {
+  background: rgb(239, 68, 68);
+}
+
+.priorityMedium {
+  background: rgb(234, 179, 8);
+}
+
+.priorityLow {
+  background: rgb(34, 197, 94);
+}
+
+.threatLabel {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.priorityEmoji {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.healthBar {
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3rem;
+  height: 0.25rem;
+  background: rgb(75, 85, 99);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.healthBarFill {
+  height: 100%;
+  background: rgb(239, 68, 68);
+  transition: all 0.3s;
+}
+
+/* Drones */
+.droneContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+}
+
+.droneBody {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(to bottom right, rgb(59, 130, 246), rgb(29, 78, 216));
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgb(147, 197, 253);
+  position: relative;
+}
+
+.droneStatus {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: rgb(34, 197, 94);
+  border-radius: 9999px;
+  border: 1px solid white;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.droneTrail {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Selection Box */
+.selectionBox {
+  position: absolute;
+  border: 2px solid rgb(96, 165, 250);
+  background: rgba(96, 165, 250, 0.1);
+  pointer-events: none;
+}
+
+/* Deployment Bays */
+.deploymentBayContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.deploymentBay {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+
+.deploymentBayActive {
+  border-color: rgb(74, 222, 128);
+  background: rgba(74, 222, 128, 0.2);
+}
+
+.deploymentBayEmpty {
+  border-color: rgb(75, 85, 99);
+  background: rgba(75, 85, 99, 0.2);
+}
+
+.deploymentBayLabel {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
