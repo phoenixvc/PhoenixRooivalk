@@ -33,18 +33,7 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
   const handleIframeLoad = () => {
     // Hide the loading overlay immediately when iframe loads
     // The WASM app has its own loading indicator
-    console.log("Iframe onLoad fired - hiding React loading overlay");
     setIsLoading(false);
-    // Check if iframe loaded successfully
-    try {
-      if (iframeRef.current?.contentWindow) {
-        console.log("WASM iframe loaded successfully");
-      }
-    } catch {
-      console.warn(
-        "Cannot access iframe content (expected due to same-origin policy)",
-      );
-    }
   };
 
   const handleIframeError = () => {
@@ -57,7 +46,6 @@ export const WasmThreatSimulator: React.FC<WasmThreatSimulatorProps> = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (isLoading) {
-        console.log("Loading timeout reached - forcing loading state to false");
         setIsLoading(false);
       }
     }, 10000); // 10 second timeout

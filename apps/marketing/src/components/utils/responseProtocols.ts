@@ -568,7 +568,7 @@ export class ResponseProtocolEngine {
   executeResponse(
     response: ThreatResponse,
     success: boolean,
-    executionDetails?: Record<string, unknown>,
+    _executionDetails?: Record<string, unknown>,
   ): void {
     const protocol = this.protocols.get(response.protocolId);
     if (!protocol) return;
@@ -590,15 +590,6 @@ export class ResponseProtocolEngine {
     ).length;
     protocol.successRate = successfulExecutions / protocolExecutions.length;
 
-    // Log execution details
-
-    console.log(`Response executed: ${response.actionType}`, {
-      protocol: protocol.name,
-      success,
-      estimatedSuccess: response.estimatedSuccess,
-      actualSuccess: success,
-      details: executionDetails,
-    });
   }
 
   // Get protocol statistics

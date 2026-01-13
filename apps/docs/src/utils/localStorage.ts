@@ -31,8 +31,8 @@ export function clearOnboardingData(): void {
     }
   });
 
-  console.log(
-    "Onboarding localStorage data cleared. User will see onboarding flow on next page load.",
+  console.debug(
+    "[localStorage] Onboarding data cleared. User will see onboarding flow on next page load.",
   );
 }
 
@@ -46,8 +46,8 @@ export function clearAllLocalStorage(): void {
 
   try {
     localStorage.clear();
-    console.log(
-      "All localStorage data cleared. Page will reload to reset state.",
+    console.debug(
+      "[localStorage] All data cleared. Page will reload to reset state.",
     );
   } catch (error) {
     console.error("Failed to clear localStorage:", error);
