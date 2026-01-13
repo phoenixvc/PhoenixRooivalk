@@ -234,6 +234,32 @@
   --dur-2: 180ms;
   --radius: 14px;
 
+  /* Standardized Section Backgrounds */
+  --section-bg-primary: linear-gradient(
+    180deg,
+    rgb(var(--bg-primary)) 0%,
+    rgb(var(--darker)) 100%
+  );
+  --section-bg-hero: radial-gradient(
+    ellipse at bottom,
+    rgb(27, 39, 53) 0%,
+    rgb(9, 10, 15) 100%
+  );
+  --section-bg-alt: linear-gradient(
+    180deg,
+    rgb(9, 10, 15) 0%,
+    rgb(15, 20, 25) 100%
+  );
+  --section-bg-accent: linear-gradient(
+    180deg,
+    rgba(0, 136, 255, 0.03) 0%,
+    rgba(0, 255, 136, 0.03) 100%
+  );
+
+  /* Standardized Section Padding */
+  --section-padding-y: clamp(4rem, 8vw, 6rem);
+  --section-padding-x: clamp(1rem, 3vw, 2rem);
+
   /* Focus & Accessibility */
   --focus: 0 0 0 2px rgba(var(--primary), 0.5);
 

@@ -1,5 +1,7 @@
 # Pi Drone Detector Architecture
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Overview
 
 The Pi Drone Detector v2.0 uses a modular, interface-based architecture that

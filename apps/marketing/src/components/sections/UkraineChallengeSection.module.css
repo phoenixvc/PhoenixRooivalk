@@ -1,8 +1,8 @@
 .section {
-  padding: 3rem 1.5rem;
+  padding: var(--space-16) var(--space-4);
   background: linear-gradient(
     180deg,
-    rgba(var(--color-red), 0.05),
+    rgba(var(--action-danger), 0.05),
     rgba(var(--primary), 0.05)
   );
 }
@@ -33,7 +33,7 @@
 
 .urgentBadge {
   display: inline-block;
-  background: rgb(var(--color-red));
+  background: rgb(var(--action-danger));
   color: rgb(var(--text-primary));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
@@ -103,13 +103,13 @@
 }
 
 .problemIcon {
-  color: rgb(var(--color-red-light));
+  color: rgb(var(--action-danger));
   font-size: 1.5rem;
 }
 
 .problemTitle {
   font-weight: bold;
-  color: rgb(var(--color-red-light));
+  color: rgb(var(--action-danger));
 }
 
 .problemDescription {

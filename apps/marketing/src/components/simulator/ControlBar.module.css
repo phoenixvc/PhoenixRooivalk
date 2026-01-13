@@ -244,15 +244,14 @@
 }
 
 .btnDanger {
-  background: rgba(var(--color-red), 0.1);
-  border-color: rgb(var(--color-red));
-  color: rgb(var(--color-red));
+  background: rgba(var(--action-danger), 0.1);
+  border-color: rgb(var(--action-danger));
+  color: rgb(var(--action-danger));
 }
 
 .btnDanger:hover {
-  background: rgba(var(--color-red), 0.2);
-  border-color: rgb(var(--color-red-deep));
-  color: rgb(var(--color-red-deep));
+  background: rgba(var(--action-danger), 0.2);
+  filter: brightness(0.9);
 }
 
 /* Responsive adjustments */

@@ -11,17 +11,11 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
+  background: rgb(var(--bg-primary));
 }
 
 .gridPattern {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(var(--secondary), 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--secondary), 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
+  display: none;
 }
 
 @keyframes gridMove {
@@ -37,7 +31,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(var(--sim-bg-deep), 0.95);
+  background: rgba(var(--bg-primary), 0.95);
   backdrop-filter: blur(10px);
   padding: 1rem 1.5rem;
 }
@@ -136,11 +130,11 @@
 
 .card {
   border-radius: 0.75rem;
-  border: 1px solid rgba(var(--color-blue-deep), 0.2);
-  background: rgba(var(--color-gray-900), 0.8);
+  border: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
   padding: 2.5rem;
-  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .cardTitle {
@@ -295,9 +289,9 @@
 
 .complianceBox {
   padding: 1.25rem 1.5rem;
-  background: rgba(var(--color-teal-deep), 0.1);
+  background: rgba(var(--action-success), 0.1);
   border-radius: 0.5rem;
-  border: 1px solid rgba(var(--color-teal-deep), 0.3);
+  border: 1px solid rgba(var(--action-success), 0.3);
   margin-top: 0.5rem;
 }
 
@@ -312,8 +306,8 @@
 }
 
 .quickLinksSection {
-  padding: 5rem 5%;
-  background: linear-gradient(180deg, transparent, rgba(var(--color-blue-deep), 0.05));
+  padding: var(--space-16) 5%;
+  background: linear-gradient(180deg, transparent, rgba(var(--accent), 0.05));
 }
 
 .quickLinksTitle {
@@ -340,12 +334,12 @@
 .quickLinkCard {
   display: block;
   border-radius: 0.75rem;
-  border: 1px solid rgba(var(--color-blue-deep), 0.2);
-  background: rgba(var(--color-gray-900), 0.8);
+  border: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
   padding: 2rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .quickLinkCard:hover {
@@ -394,11 +388,11 @@
 
 .careerCard {
   border-radius: 0.75rem;
-  border: 1px solid rgba(var(--color-blue-deep), 0.2);
-  background: rgba(var(--color-gray-900), 0.8);
+  border: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
   padding: 2.5rem;
-  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .careerCardTitle {
@@ -454,8 +448,8 @@
 .footer {
   padding: 2rem 5%;
   text-align: center;
-  color: rgb(var(--gray));
-  border-top: 1px solid rgba(var(--secondary), 0.2);
+  color: rgb(var(--text-muted));
+  border-top: 1px solid rgba(var(--border), 0.2);
 }
 
 .footerContainer {
@@ -549,7 +543,7 @@
 .formTextarea {
   width: 100%;
   padding: 0.75rem;
-  background: rgba(var(--color-gray-900), 0.6);
+  background: rgba(var(--bg-primary), 0.6);
   border: 1px solid rgba(var(--primary), 0.25);
   border-radius: 0.5rem;
   font-size: 0.875rem;

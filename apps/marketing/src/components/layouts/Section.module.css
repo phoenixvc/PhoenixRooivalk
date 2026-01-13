@@ -20,13 +20,13 @@
 .backgroundGradient {
   background: linear-gradient(
     180deg,
-    rgba(var(--secondary), 0.05),
-    rgba(var(--color-blue), 0.05)
+    rgba(var(--primary), 0.05),
+    rgba(var(--accent), 0.05)
   );
 }
 
 .backgroundPrimary {
-  background: rgb(var(--bg-primary, var(--sim-bg-deep)));
+  background: rgb(var(--bg-primary));
 }
 
 .backgroundNone {

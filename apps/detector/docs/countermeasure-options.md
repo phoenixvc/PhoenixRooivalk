@@ -3,6 +3,8 @@
 This document covers countermeasure options that can be triggered by the Pi
 Drone Detector's GPIO output system.
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Overview
 
 The detector provides a 100ms GPIO pulse when engagement conditions are met.
@@ -407,7 +409,7 @@ alert:
 
 **Detection Fusion:**
 
-```txt
+```
 Node 1 detects at 70% confidence ─┐
 Node 2 detects at 65% confidence ─┼─► Fusion Engine ─► 95% combined confidence
 Node 3 detects at 40% confidence ─┘
@@ -459,14 +461,16 @@ $500-700 | | 5 acres | 4-6 | $900-1,200 | | 20 acres | 8-12 | $1,600-2,400 | |
 
 **Components:**
 
-| Item             | Cost         | Source             |
-| ---------------- | ------------ | ------------------ | ------------------ | --------------------- | ------------ | ------------- | --- | --- |
-| Server rack      |
-| (1U)             | $500         | Dell/HP            |                    | Detection nodes (×10) | $2,000       | SkyWatch Mesh |     | PTZ |
-| cameras (×4)     | $2,000       | Hikvision/Axis     |                    | Radar unit (optional) | $3,000-8,000 |
-| Echodyne/Oculii  |              | RF detection array | $1,000             | Custom RTL-SDR        |              | Central       |
-| software license | $1,000-5,000 | Commercial         |                    | Installation          | $1,000-3,000 |
-| Professional     |              | **Total**          | **$10,500-20,500** |                       |
+| Item                     | Cost               | Source          |
+| ------------------------ | ------------------ | --------------- |
+| Server rack (1U)         | $500               | Dell/HP         |
+| Detection nodes (×10)    | $2,000             | SkyWatch Mesh   |
+| PTZ cameras (×4)         | $2,000             | Hikvision/Axis  |
+| Radar unit (optional)    | $3,000-8,000       | Echodyne/Oculii |
+| RF detection array       | $1,000             | Custom RTL-SDR  |
+| Central software license | $1,000-5,000       | Commercial      |
+| Installation             | $1,000-3,000       | Professional    |
+| **Total**                | **$10,500-20,500** |                 |
 
 **Specifications:**
 
@@ -627,14 +631,16 @@ platforms
 
 **Components:**
 
-| Item                  | Cost         | Source                   |
-| --------------------- | ------------ | ------------------------ | -------- | ----------------------------- | ---- | ----------- | --- |
-| Raspberry Pi          |
-| 4 (4GB)               | $55          | Pi supplier              |          | Pi Camera HQ + wide lens      | $90  | Pi supplier |     |
-| Coral USB Accelerator | $60          | Coral.ai                 |          | Marine-grade enclosure (IP67) | $120 |
-| Polycase              |              | Gyro stabilization mount | $150-300 | Marine supplier               |      | 12V-5V      |
-| marine converter      | $30          | West Marine              |          | Marine antenna/WiFi           | $80  | Ubiquiti    |
-| **Total**             | **$585-735** |                          |
+| Item                          | Cost         | Source          |
+| ----------------------------- | ------------ | --------------- |
+| Raspberry Pi 4 (4GB)          | $55          | Pi supplier     |
+| Pi Camera HQ + wide lens      | $90          | Pi supplier     |
+| Coral USB Accelerator         | $60          | Coral.ai        |
+| Marine-grade enclosure (IP67) | $120         | Polycase        |
+| Gyro stabilization mount      | $150-300     | Marine supplier |
+| 12V-5V marine converter       | $30          | West Marine     |
+| Marine antenna/WiFi           | $80          | Ubiquiti        |
+| **Total**                     | **$585-735** |                 |
 
 **Marine-Specific Features:**
 
@@ -1107,16 +1113,19 @@ wifi_detection:
 
 **Components:**
 
-| Item                    | Cost                   | Source             |
-| ----------------------- | ---------------------- | ------------------ | ------------------ | ---------------------- | ------------------ | -------------- | --- |
-| Raspberry Pi            |
-| 5 (8GB)                 | $80                    | Pi supplier        |                    | Global Shutter Camera  | $50                | Pi supplier    |     |
-| Telephoto lens (6-12mm) | $100                   | Camera supplier    |                    | Coral TPU (M.2 or USB) |
-| $60-100                 | Coral.ai               |                    | Pneumatic launcher | $300-500               | Custom build       |                | Air |
-| tank + regulator        | $150-200               | Paintball supplier |                    | Net system (3m,        |
-| auto-deploy)            | $100-150               | Custom             |                    | Pan-tilt mount         | $100-200           | Servo supplier |
-|                         | Weatherproof enclosure | $100               | Industrial         |                        | UPS battery backup | $80            |
-| Amazon                  |                        | **Total**          | **$1,120-1,460**   |                        |
+| Item                         | Cost             | Source             |
+| ---------------------------- | ---------------- | ------------------ |
+| Raspberry Pi 5 (8GB)         | $80              | Pi supplier        |
+| Global Shutter Camera        | $50              | Pi supplier        |
+| Telephoto lens (6-12mm)      | $100             | Camera supplier    |
+| Coral TPU (M.2 or USB)       | $60-100          | Coral.ai           |
+| Pneumatic launcher           | $300-500         | Custom build       |
+| Air tank + regulator         | $150-200         | Paintball supplier |
+| Net system (3m, auto-deploy) | $100-150         | Custom             |
+| Pan-tilt mount               | $100-200         | Servo supplier     |
+| Weatherproof enclosure       | $100             | Industrial         |
+| UPS battery backup           | $80              | Amazon             |
+| **Total**                    | **$1,120-1,460** |                    |
 
 **Specifications:**
 

@@ -11,20 +11,20 @@
 
 .dialog {
   position: relative;
-  background-color: rgb(var(--color-neutral-800));
-  border: 1px solid rgba(var(--color-green), 0.3);
+  background-color: rgb(var(--bg-primary));
+  border: 1px solid rgba(var(--action-success), 0.3);
   border-radius: 0.75rem;
   padding: 2rem;
   max-width: 28rem;
   margin: 0 1rem;
-  box-shadow: 0 25px 50px -12px rgba(var(--tactical-black), 0.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 .closeButton {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: rgb(var(--color-neutral-400));
+  color: rgb(var(--text-muted));
   font-size: 1.5rem;
   line-height: 1;
   background: none;
@@ -33,7 +33,7 @@
 }
 
 .closeButton:hover {
-  color: rgb(var(--phoenix-white));
+  color: rgb(var(--text-primary));
 }
 
 .header {
@@ -49,25 +49,25 @@
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: rgb(var(--sim-friendly));
+  color: rgb(var(--action-success));
   margin-bottom: 0.5rem;
 }
 
 .description {
-  color: rgb(var(--color-neutral-300));
+  color: rgb(var(--text-secondary));
   font-size: 0.875rem;
 }
 
 .preview {
-  background-color: rgba(var(--color-neutral-700), 0.5);
+  background-color: rgba(var(--bg-secondary), 0.5);
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(var(--color-green), 0.2);
+  border: 1px solid rgba(var(--action-success), 0.2);
 }
 
 .previewTitle {
-  color: rgb(var(--sim-friendly));
+  color: rgb(var(--action-success));
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
@@ -75,7 +75,7 @@
 
 .previewList {
   font-size: 0.75rem;
-  color: rgb(var(--color-neutral-300));
+  color: rgb(var(--text-secondary));
   list-style: none;
   padding: 0;
   margin: 0;
@@ -93,14 +93,14 @@
 
 .primaryButton {
   width: 100%;
-  background-color: rgb(var(--color-green-dark));
+  background-color: rgb(var(--action-success));
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: 600;
 }
 
 .primaryButton:hover {
-  background-color: rgb(var(--color-green-darker));
+  filter: brightness(0.9);
 }
 
 .secondaryActions {
@@ -116,13 +116,13 @@
 .footer {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid rgb(var(--color-neutral-700));
+  border-top: 1px solid rgba(var(--border), 0.3);
   text-align: center;
 }
 
 .footerText {
   font-size: 0.75rem;
-  color: rgb(var(--color-neutral-400));
+  color: rgb(var(--text-muted));
   margin-bottom: 0.5rem;
 }
 
@@ -134,10 +134,10 @@
 }
 
 .footerLink {
-  color: rgb(var(--sim-friendly));
+  color: rgb(var(--action-success));
   text-decoration: none;
 }
 
 .footerLink:hover {
-  color: rgb(var(--color-green-light));
+  filter: brightness(1.2);
 }

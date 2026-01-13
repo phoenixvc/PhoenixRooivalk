@@ -1,10 +1,6 @@
 .section {
-  padding: 3rem 1.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(var(--color-blue), 0.05),
-    rgba(var(--secondary), 0.05)
-  );
+  padding: var(--space-16) var(--space-4);
+  background: rgb(var(--bg-primary));
 }
 
 @media (min-width: 768px) {

@@ -1,5 +1,7 @@
 # Training Cost Estimate
 
+> **Back to**: [Detector README](../README.md) | [All Documentation](.)
+
 ## Azure ML GPU Pricing (East US, Jan 2025)
 
 | VM Size         | GPU     | VRAM | $/hour | Best For                       |

@@ -1,10 +1,6 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--bg-primary)),
-    rgb(var(--darker))
-  );
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-primary);
   position: relative;
   overflow: hidden;
 }
@@ -167,22 +163,22 @@
 }
 
 .statusCompleted {
-  background: rgba(var(--color-teal-deep), 0.2);
-  color: rgb(var(--sim-friendly));
+  background: rgba(var(--action-success), 0.2);
+  color: rgb(var(--action-success));
 }
 
 .statusActive {
-  background: rgba(var(--color-blue-deep), 0.2);
-  color: rgb(var(--color-blue));
+  background: rgba(var(--primary), 0.2);
+  color: rgb(var(--primary));
 }
 
 .statusPlanned {
-  background: rgba(var(--sensor-amber), 0.2);
-  color: rgb(var(--sensor-amber));
+  background: rgba(var(--accent), 0.2);
+  color: rgb(var(--accent));
 }
 
 .statusFuture {
-  background: rgba(var(--color-neutral-500), 0.2);
+  background: rgba(var(--text-muted), 0.2);
   color: rgb(var(--text-muted));
 }
 
