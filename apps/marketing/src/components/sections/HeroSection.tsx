@@ -65,9 +65,7 @@ export const HeroSection: React.FC = () => {
         {/* Trust signals - subtle credibility indicators */}
         <div className={styles.trustSignals}>
           <span className={styles.trustSignal}>Patent Pending</span>
-          <span className={styles.trustDivider}>·</span>
           <span className={styles.trustSignal}>No deposit required</span>
-          <span className={styles.trustDivider}>·</span>
           <span className={styles.trustSignal}>FCC Compliant</span>
         </div>
       </div>

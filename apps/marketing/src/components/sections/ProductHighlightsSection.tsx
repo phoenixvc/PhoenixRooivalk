@@ -291,7 +291,7 @@ export const ProductHighlightsSection: React.FC = () => {
                     )}
                     {status.canPreorder && (
                       <Button
-                        href="/contact"
+                        href="/preorder"
                         size="md"
                         variant="primary"
                         trackingEvent="Preorder Clicked"
@@ -351,7 +351,7 @@ export const ProductHighlightsSection: React.FC = () => {
               View All Products
             </Button>
             <Button
-              href="/contact"
+              href="/preorder"
               size="lg"
               variant="primary"
               trackingEvent="Preorder Clicked"

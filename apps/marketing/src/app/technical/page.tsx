@@ -2,11 +2,19 @@
 import React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
+import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import styles from "./technical.module.css";
 
 export default function TechnicalPage(): React.ReactElement {
   return (
     <main className={styles.main}>
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.1)"
+        bendStrength={20}
+        bendRadius={100}
+      />
+
       {/* Navigation */}
       <Navigation />
 

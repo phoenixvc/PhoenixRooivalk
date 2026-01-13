@@ -3,7 +3,7 @@
 .main {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--darker));
+  background: transparent;
   color: white;
 }
 
@@ -506,4 +506,119 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-top: 0.25rem;
+}
+
+/* Grid 3 Columns */
+.grid3Cols {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid3Cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid3Cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Status Card */
+.statusCard {
+  background: rgba(var(--bg-secondary), 0.95);
+  border: 1px solid rgba(var(--primary), 0.25);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+}
+
+.statusCardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(var(--primary));
+  margin-bottom: 1rem;
+}
+
+.statusCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.statusItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(var(--text-primary), 0.1);
+}
+
+.statusItem:last-child {
+  border-bottom: none;
+}
+
+.statusLabel {
+  color: rgb(var(--text-secondary));
+  font-size: 0.875rem;
+}
+
+.statusBadgePlanned {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(var(--status-warning), 0.2);
+  color: rgb(var(--status-warning));
+}
+
+/* Requirement Card */
+.requirementCard {
+  background: rgba(var(--bg-secondary), 0.95);
+  border: 1px solid rgba(var(--primary), 0.25);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.requirementCard:hover {
+  border-color: rgba(var(--primary), 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.requirementDescription {
+  color: rgb(var(--text-secondary));
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.requirementMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var(--text-primary), 0.1);
+}
+
+.requirementLabel {
+  color: rgb(var(--text-muted));
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.requirementValue {
+  color: rgb(var(--primary));
+  font-size: 0.875rem;
+  font-weight: 600;
 }

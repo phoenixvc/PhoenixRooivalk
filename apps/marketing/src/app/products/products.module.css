@@ -2,7 +2,7 @@
 
 .main {
   position: relative;
-  background: rgb(var(--bg-primary));
+  background: transparent;
   color: rgb(var(--text-primary));
   min-height: 100vh;
 }
@@ -26,21 +26,15 @@
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: var(--text-3xl);
   font-weight: 700;
   color: rgb(var(--text-primary));
   margin-bottom: var(--space-4);
 }
 
-@media (min-width: 768px) {
-  .title {
-    font-size: 3.5rem;
-  }
-}
-
 .subtitle {
   color: rgb(var(--text-secondary));
-  font-size: 1.125rem;
+  font-size: var(--text-base);
   max-width: 700px;
   margin: 0 auto 2rem;
   line-height: 1.75;
@@ -90,7 +84,7 @@
 }
 
 .sectionTitle {
-  font-size: 2rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: rgb(var(--primary));
   text-align: center;
@@ -140,20 +134,20 @@
 }
 
 .phaseName {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   color: white;
   margin-bottom: 0.25rem;
 }
 
 .phaseTimeline {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: rgb(var(--text-secondary));
   line-height: 1.6;
 }
 
 .phaseFunding {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: rgb(var(--primary));
   margin-top: 0.25rem;
 }
@@ -182,21 +176,23 @@
 }
 
 .lineName {
-  font-size: 1.75rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   color: white;
 }
 
 .lineTagline {
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: rgb(var(--primary));
   font-weight: 500;
 }
 
 .lineDescription {
-  color: rgb(var(--gray));
+  font-size: var(--text-sm);
+  color: rgb(var(--text-secondary));
   margin-bottom: 2rem;
   max-width: 700px;
+  line-height: 1.6;
 }
 
 /* Products Grid */

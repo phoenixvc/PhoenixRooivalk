@@ -3,7 +3,7 @@
 .main {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--bg-primary));
+  background: transparent;
   color: rgb(var(--text-primary));
   min-height: 100vh;
 }

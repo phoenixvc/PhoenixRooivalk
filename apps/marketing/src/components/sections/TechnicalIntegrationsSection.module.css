@@ -1,10 +1,6 @@
 .section {
   padding: 4rem 1.5rem;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--color-gray-900)),
-    rgb(var(--tactical-black))
-  );
+  background: transparent;
 }
 
 @media (min-width: 768px) {
