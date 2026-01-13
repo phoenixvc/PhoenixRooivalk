@@ -267,6 +267,24 @@ export const Navigation: React.FC = () => {
                   </div>
                 ))}
               </nav>
+
+              {/* Mobile Menu Actions */}
+              <div className={styles.mobileMenuActions}>
+                <Link
+                  href="/login"
+                  className={styles.mobileLoginButton}
+                  onClick={closeMobileMenu}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/contact"
+                  className={styles.mobileCtaButton}
+                  onClick={closeMobileMenu}
+                >
+                  Get Started
+                </Link>
+              </div>
             </div>
           </div>
         )}
