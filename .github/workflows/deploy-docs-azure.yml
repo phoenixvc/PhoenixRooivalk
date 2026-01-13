@@ -159,7 +159,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
         with:
           submodules: true
           lfs: false
@@ -326,7 +326,7 @@ jobs:
       id-token: write # Required for OIDC auth with Azure
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
