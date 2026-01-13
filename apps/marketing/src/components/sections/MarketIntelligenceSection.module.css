@@ -1,6 +1,6 @@
 .section {
-  padding: var(--section-padding-y) var(--section-padding-x);
-  background: var(--section-bg-accent);
+  padding: var(--space-16) var(--space-4);
+  background: rgb(var(--bg-primary));
 }
 
 @media (min-width: 768px) {
@@ -18,7 +18,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -76,8 +76,8 @@
 }
 
 .metricCard {
-  background: rgba(17, 24, 39, 0.5);
-  border: 1px solid rgba(55, 65, 81, 0.5);
+  background: rgba(var(--color-gray-900), 0.5);
+  border: 1px solid rgba(var(--color-neutral-700), 0.5);
   border-radius: 0.5rem;
   padding: 1.5rem;
   text-align: center;
@@ -99,7 +99,7 @@
 
 .metricDescription {
   font-size: 0.875rem;
-  color: rgb(var(--gray));
+  color: rgb(var(--text-muted));
 }
 
 .competitorsGrid {
@@ -114,8 +114,8 @@
 }
 
 .competitorCard {
-  background: rgba(17, 24, 39, 0.3);
-  border: 1px solid rgba(55, 65, 81, 0.5);
+  background: rgba(var(--color-gray-900), 0.3);
+  border: 1px solid rgba(var(--color-neutral-700), 0.5);
   border-radius: 0.5rem;
   padding: 1.5rem;
 }
@@ -135,13 +135,13 @@
 
 .competitorCapability {
   font-size: 0.875rem;
-  color: rgb(var(--steel));
+  color: rgb(var(--text-secondary));
   margin-bottom: 0.75rem;
 }
 
 .competitorLimitation {
   font-size: 0.875rem;
-  color: rgb(var(--gray));
+  color: rgb(var(--text-muted));
 }
 
 .advantageSection {
@@ -191,5 +191,5 @@
 
 .advantageItemDescription {
   font-size: 0.875rem;
-  color: rgb(var(--steel));
+  color: rgb(var(--text-secondary));
 }

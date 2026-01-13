@@ -84,7 +84,7 @@
 .chip:hover {
   transform: translateY(-1px);
   border-color: rgba(var(--sim-accent), 0.5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(var(--tactical-black), 0.2);
 }
 
 .chip:active {
@@ -128,7 +128,7 @@
 
 .environmentSelect:hover {
   border-color: rgba(var(--sim-accent), 0.5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(var(--tactical-black), 0.2);
 }
 
 .environmentSelect:focus {
@@ -157,7 +157,7 @@
 
 .switch:hover {
   border-color: rgba(var(--sim-accent), 0.5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(var(--tactical-black), 0.2);
 }
 
 .switch:focus {
@@ -203,7 +203,7 @@
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(var(--tactical-black), 0.2);
 }
 
 .btn:active {
@@ -244,14 +244,15 @@
 }
 
 .btnDanger {
-  background: rgba(var(--status-danger), 0.1);
-  border-color: rgb(var(--status-danger));
-  color: rgb(var(--status-danger));
+  background: rgba(var(--color-red), 0.15);
+  border-color: rgb(var(--color-red-deep));
+  color: rgb(var(--color-red-deep));
 }
 
 .btnDanger:hover {
-  background: rgba(var(--status-danger), 0.2);
-  filter: brightness(0.9);
+  background: rgba(var(--color-red), 0.25);
+  border-color: rgb(var(--color-red-deep));
+  color: rgb(var(--color-red-deep));
 }
 
 /* Responsive adjustments */

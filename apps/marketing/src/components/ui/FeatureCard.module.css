@@ -3,15 +3,15 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--text-primary), 0.03);
+  border: 1px solid rgba(var(--text-primary), 0.1);
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
 .featureCard:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--text-primary), 0.05);
+  border-color: rgba(var(--text-primary), 0.2);
   transform: translateX(4px);
 }
 
@@ -28,12 +28,12 @@
 .featureTitle {
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
 .featureDescription {
   font-size: 0.875rem;
-  color: rgb(var(--gray, #8892b0));
+  color: rgb(var(--text-muted));
   line-height: 1.5;
 }

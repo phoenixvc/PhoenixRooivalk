@@ -17,7 +17,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -29,7 +29,7 @@
 .badge {
   display: inline-block;
   background: rgb(var(--primary));
-  color: #000;
+  color: rgb(var(--tactical-black));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -40,7 +40,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -75,15 +75,15 @@
 
 .card {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--text-primary), 0.05);
+  border: 1px solid rgba(var(--text-primary), 0.1);
   border-radius: 0.75rem;
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--text-primary), 0.08);
   border-color: rgb(var(--primary));
 }
 
@@ -95,7 +95,7 @@
 .cardTitle {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.75rem;
 }
 

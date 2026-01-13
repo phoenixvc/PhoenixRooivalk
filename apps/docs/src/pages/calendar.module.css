@@ -51,7 +51,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
   color: white;
   border: none;
   border-radius: 10px;
@@ -59,12 +59,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25);
+  box-shadow: 0 2px 6px rgba(var(--primary), 0.25);
 }
 
 .exportButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 6px 16px rgba(var(--primary), 0.4);
 }
 
 .detailsLink {
@@ -79,8 +79,8 @@
 }
 
 .detailsLink:hover {
-  color: rgb(249, 115, 22);
-  border-color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
+  border-color: rgb(var(--primary));
   text-decoration: none;
 }
 
@@ -88,18 +88,18 @@
 .criticalAlert {
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-left: 4px solid rgb(239, 68, 68);
+  border-left: 4px solid rgb(var(--color-red));
   border-radius: 12px;
   padding: 1.25rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.06);
 }
 
 .criticalAlert h3 {
   margin: 0 0 1rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
 }
 
 .criticalList {
@@ -140,7 +140,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.375rem 0.75rem;
-  background: rgb(239, 68, 68);
+  background: rgb(var(--color-red));
   color: white;
   border-radius: 6px;
 }
@@ -225,12 +225,12 @@
 }
 
 .timelineItem.today .timelineContent {
-  border-color: rgb(249, 115, 22);
-  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 2px rgba(var(--primary), 0.2);
 }
 
 .timelineItem.soon .countdown {
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
   font-weight: 600;
 }
 
@@ -285,7 +285,7 @@
 
 .timelineContent:hover {
   border-color: var(--category-color, var(--ifm-color-emphasis-300));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.1);
 }
 
 .eventHeader {
@@ -315,14 +315,8 @@
 }
 
 .eventTitle a:hover {
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
   text-decoration: underline;
-}
-
-.eventDescription {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--ifm-color-content-secondary);
 }
 
 /* Empty State */
@@ -438,7 +432,7 @@
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 16px;
   padding: 1.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.08);
 }
 
 .actionCardHeader {
@@ -488,10 +482,10 @@
 }
 
 .integrationButton:hover {
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
   background: var(--ifm-color-emphasis-200);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(var(--tactical-black), 0.12);
 }
 
 .integrationIcon {
@@ -502,7 +496,7 @@
   justify-content: center;
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
   color: white;
   border-radius: 10px;
   flex-shrink: 0;
@@ -532,14 +526,14 @@
   padding: 0.875rem 1rem;
   background: var(--ifm-color-emphasis-100);
   border: 1px solid var(--ifm-color-emphasis-200);
-  border-left: 3px solid rgb(249, 115, 22);
+  border-left: 3px solid rgb(var(--primary));
   border-radius: 0 8px 8px 0;
   font-size: 0.8125rem;
   color: var(--ifm-color-content-secondary);
 }
 
 .subscribeHint strong {
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
 }
 
 /* Responsive - Action Cards */
@@ -565,7 +559,7 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(var(--tactical-black), 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -582,7 +576,7 @@
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(var(--tactical-black), 0.4);
 }
 
 .modalHeader {
@@ -648,7 +642,7 @@
 
 .formInput:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
 }
 
 .formInput::placeholder {
@@ -702,7 +696,7 @@ textarea.formInput {
 .modalSubmit {
   flex: 1;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -714,38 +708,38 @@ textarea.formInput {
 
 .modalSubmit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
 /* Custom Event Badge & Delete Button */
 .deleteEventButton {
   margin-left: 0.5rem;
   padding: 0 0.375rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 4px;
   font-size: 1rem;
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
   cursor: pointer;
   transition: all 0.2s ease;
   line-height: 1;
 }
 
 .deleteEventButton:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgb(239, 68, 68);
+  background: rgba(var(--color-red), 0.2);
+  border-color: rgb(var(--color-red));
 }
 
 .customBadge {
   display: inline-block;
   margin-left: 0.5rem;
   padding: 0.125rem 0.5rem;
-  background: rgba(249, 115, 22, 0.15);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: rgba(var(--primary), 0.15);
+  border: 1px solid rgba(var(--primary), 0.3);
   border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -796,7 +790,7 @@ textarea.formInput {
 
 .assigneeSelect:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
 }
 
 .assigneeBadge {
@@ -806,7 +800,7 @@ textarea.formInput {
   min-width: 28px;
   height: 20px;
   padding: 0 0.375rem;
-  background: var(--assignee-color, #6b7280);
+  background: var(--assignee-color, rgb(var(--color-gray-500)));
   color: white;
   border-radius: 4px;
   font-size: 0.625rem;
@@ -840,11 +834,11 @@ textarea.formInput {
 .statsDashboard {
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-left: 4px solid rgb(249, 115, 22);
+  border-left: 4px solid rgb(var(--primary));
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.06);
 }
 
 .statsHeader {
@@ -875,12 +869,12 @@ textarea.formInput {
   font-size: 0.8rem;
   font-weight: 700;
   color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--tactical-black), 0.15);
 }
 
 .exportPersonalBtn {
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 88, 12));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
   border: none;
   border-radius: 8px;
   font-size: 0.8125rem;
@@ -892,7 +886,7 @@ textarea.formInput {
 
 .exportPersonalBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.35);
 }
 
 .statsGrid {
@@ -912,7 +906,7 @@ textarea.formInput {
 
 .statCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.08);
 }
 
 .statNumber {
@@ -932,31 +926,31 @@ textarea.formInput {
 }
 
 .statCard.statCritical {
-  border-color: rgb(239, 68, 68);
+  border-color: rgb(var(--color-red));
   border-width: 2px;
 }
 
 .statCard.statCritical .statNumber {
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
 }
 
 .statCard.statHigh {
-  border-color: rgb(234, 179, 8);
+  border-color: rgb(var(--sensor-amber));
   border-width: 2px;
 }
 
 .statCard.statHigh .statNumber {
-  color: rgb(202, 138, 4);
+  color: rgb(var(--sensor-amber));
 }
 
 .statCard.statOverdue {
-  border-color: rgb(220, 38, 38);
+  border-color: rgb(var(--color-red));
   border-width: 2px;
-  background: rgba(239, 68, 68, 0.05);
+  background: rgba(var(--color-red), 0.05);
 }
 
 .statCard.statOverdue .statNumber {
-  color: rgb(220, 38, 38);
+  color: rgb(var(--color-red));
 }
 
 /* ============================================
@@ -989,8 +983,8 @@ textarea.formInput {
 
 .searchInput:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 .searchInput::placeholder {
@@ -1017,7 +1011,7 @@ textarea.formInput {
 }
 
 .clearSearch:hover {
-  background: rgb(239, 68, 68);
+  background: rgb(var(--color-red));
   color: white;
 }
 
@@ -1055,7 +1049,7 @@ textarea.formInput {
 
 .filterSelect:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
 }
 
 .filterSelect:hover {
@@ -1065,10 +1059,10 @@ textarea.formInput {
 .resultsCount {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
   padding: 0.5rem 1rem;
-  background: rgba(249, 115, 22, 0.1);
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  background: rgba(var(--primary), 0.1);
+  border: 1px solid rgba(var(--primary), 0.2);
   border-radius: 8px;
   margin-left: auto;
 }
@@ -1117,13 +1111,13 @@ textarea.formInput {
    Completion & Progress Tracking
    ============================================ */
 .statCard.statCompletion {
-  border-color: rgb(34, 197, 94);
+  border-color: rgb(var(--color-teal-deep));
   border-width: 2px;
   position: relative;
 }
 
 .statCard.statCompletion .statNumber {
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal-deep));
 }
 
 .progressBar {
@@ -1137,7 +1131,7 @@ textarea.formInput {
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(34, 197, 94), rgb(22, 163, 74));
+  background: linear-gradient(90deg, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -1163,8 +1157,8 @@ textarea.formInput {
 }
 
 .completionCheckbox.checked {
-  background: rgb(34, 197, 94);
-  border-color: rgb(34, 197, 94);
+  background: rgb(var(--color-teal-deep));
+  border-color: rgb(var(--color-teal-deep));
   color: white;
   font-size: 0.875rem;
   font-weight: 700;
@@ -1190,12 +1184,12 @@ textarea.formInput {
   align-items: center;
   margin-left: 0.5rem;
   padding: 0.125rem 0.5rem;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  background: rgba(var(--color-teal-deep), 0.15);
+  border: 1px solid rgba(var(--color-teal-deep), 0.4);
   border-radius: 4px;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: rgb(22, 163, 74);
+  color: rgb(var(--color-teal-deep));
   text-transform: uppercase;
   letter-spacing: 0.03em;
   text-decoration: none !important;
@@ -1206,12 +1200,12 @@ textarea.formInput {
   display: inline-flex;
   align-items: center;
   padding: 0.125rem 0.5rem;
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.4);
+  background: rgba(var(--color-purple-deep), 0.15);
+  border: 1px solid rgba(var(--color-purple-deep), 0.4);
   border-radius: 4px;
   font-size: 0.625rem;
   font-weight: 600;
-  color: rgb(168, 85, 247);
+  color: rgb(var(--color-purple-deep));
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -1250,7 +1244,7 @@ textarea.formInput {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
@@ -1275,7 +1269,7 @@ textarea.formInput {
 
 .roadmapItem:hover {
   border-color: var(--ifm-color-emphasis-300);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(var(--tactical-black), 0.06);
 }
 
 .roadmapItem.roadmapCompleted {
@@ -1305,13 +1299,13 @@ textarea.formInput {
 }
 
 .roadmapCheckbox:hover {
-  border-color: rgb(34, 197, 94);
-  background: rgba(34, 197, 94, 0.1);
+  border-color: rgb(var(--color-teal-deep));
+  background: rgba(var(--color-teal-deep), 0.1);
 }
 
 .roadmapItem.roadmapCompleted .roadmapCheckbox {
-  background: rgb(34, 197, 94);
-  border-color: rgb(34, 197, 94);
+  background: rgb(var(--color-teal-deep));
+  border-color: rgb(var(--color-teal-deep));
   color: white;
   font-size: 0.75rem;
 }
@@ -1355,7 +1349,7 @@ textarea.formInput {
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.06);
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
@@ -1387,7 +1381,7 @@ textarea.formInput {
 }
 
 .overviewStat strong {
-  color: rgb(249, 115, 22);
+  color: rgb(var(--primary));
   font-weight: 700;
 }
 

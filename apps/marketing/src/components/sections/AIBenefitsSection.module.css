@@ -2,8 +2,8 @@
   padding: 3rem 1.5rem;
   background: linear-gradient(
     180deg,
-    rgba(0, 255, 136, 0.05),
-    rgba(0, 136, 255, 0.05)
+    rgba(var(--secondary), 0.05),
+    rgba(var(--color-blue), 0.05)
   );
 }
 
@@ -22,7 +22,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -34,7 +34,7 @@
 .badge {
   display: inline-block;
   background: rgb(var(--primary));
-  color: #000;
+  color: rgb(var(--tactical-black));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -45,7 +45,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -82,7 +82,7 @@
 .columnTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1.5rem;
 }
 
@@ -104,7 +104,7 @@
 }
 
 .ctaCard {
-  background-color: rgba(0, 255, 136, 0.1);
+  background-color: rgba(var(--secondary), 0.1);
   border: 1px solid rgba(var(--primary), 0.3);
   border-radius: 0.75rem;
   padding: 1.5rem;
@@ -144,7 +144,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background-color: rgba(0, 255, 136, 0.1);
+  background-color: rgba(var(--secondary), 0.1);
   border: 1px solid rgba(var(--primary), 0.3);
   border-radius: 0.5rem;
 }
@@ -176,13 +176,13 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background-color: rgba(0, 136, 255, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background-color: rgba(var(--color-blue), 0.1);
+  border: 1px solid rgba(var(--color-blue), 0.3);
   border-radius: 0.5rem;
 }
 
 .featureIcon {
-  color: rgb(59, 130, 246);
+  color: rgb(var(--color-blue));
   font-size: 1.5rem;
   flex-shrink: 0;
 }
@@ -194,7 +194,7 @@
 
 .featureTitle {
   font-weight: 700;
-  color: rgb(59, 130, 246);
+  color: rgb(var(--color-blue));
 }
 
 .featureDescription {

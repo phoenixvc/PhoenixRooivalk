@@ -11,7 +11,7 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: var(--section-bg-hero);
+  background: rgb(var(--bg-primary));
 }
 
 .gridPattern {

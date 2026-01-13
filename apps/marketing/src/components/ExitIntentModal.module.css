@@ -5,14 +5,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(var(--tactical-black), 0.8);
   backdrop-filter: blur(4px);
 }
 
 .dialog {
   position: relative;
   background-color: rgb(var(--bg-primary));
-  border: 1px solid rgba(var(--status-active), 0.3);
+  border: 1px solid rgba(var(--action-success), 0.3);
   border-radius: 0.75rem;
   padding: 2rem;
   max-width: 28rem;
@@ -24,7 +24,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: rgb(var(--gray));
+  color: rgb(var(--text-muted));
   font-size: 1.5rem;
   line-height: 1;
   background: none;
@@ -49,25 +49,25 @@
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: rgb(var(--status-active));
+  color: rgb(var(--action-success));
   margin-bottom: 0.5rem;
 }
 
 .description {
-  color: rgb(var(--steel));
+  color: rgb(var(--text-secondary));
   font-size: 0.875rem;
 }
 
 .preview {
-  background-color: rgba(var(--bg-primary), 0.5);
+  background-color: rgba(var(--bg-secondary), 0.5);
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(var(--status-active), 0.2);
+  border: 1px solid rgba(var(--action-success), 0.2);
 }
 
 .previewTitle {
-  color: rgb(var(--status-active));
+  color: rgb(var(--action-success));
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
@@ -75,7 +75,7 @@
 
 .previewList {
   font-size: 0.75rem;
-  color: rgb(var(--steel));
+  color: rgb(var(--text-secondary));
   list-style: none;
   padding: 0;
   margin: 0;
@@ -93,7 +93,7 @@
 
 .primaryButton {
   width: 100%;
-  background-color: rgb(var(--status-active));
+  background-color: rgb(var(--action-success));
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: 600;
@@ -116,13 +116,13 @@
 .footer {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(var(--gray), 0.3);
+  border-top: 1px solid rgba(var(--border), 0.3);
   text-align: center;
 }
 
 .footerText {
   font-size: 0.75rem;
-  color: rgb(var(--gray));
+  color: rgb(var(--text-muted));
   margin-bottom: 0.5rem;
 }
 
@@ -134,7 +134,7 @@
 }
 
 .footerLink {
-  color: rgb(var(--status-active));
+  color: rgb(var(--action-success));
   text-decoration: none;
 }
 

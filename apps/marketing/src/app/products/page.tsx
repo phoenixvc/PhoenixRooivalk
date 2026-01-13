@@ -76,7 +76,7 @@ function ProductCard({ product }: { product: Product }) {
 
       <div className={styles.productFooter}>
         <span className={styles.deliveryInfo}>{product.phaseTimeline}</span>
-        <Link href="/preorder" className={styles.preorderLink}>
+        <Link href="/contact" className={styles.preorderLink}>
           Preorder Now
         </Link>
       </div>
@@ -191,8 +191,8 @@ export default function ProductsPage(): React.ReactElement {
             our revolutionary counter-drone technology.
           </p>
           <div className={styles.ctaButtons}>
-            <Button href="/preorder" size="lg" variant="primary">
-              Preorder Now - No Deposit
+            <Button href="/contact" size="lg" variant="primary">
+              Get Started
             </Button>
             <Button href="/contact" variant="secondary" size="lg">
               Contact Sales

@@ -40,13 +40,13 @@
 }
 
 .send-email__badge--warning {
-  background: rgba(251, 191, 36, 0.15);
-  color: #b45309;
+  background: rgba(var(--color-amber-light), 0.15);
+  color: rgb(var(--color-amber-dark));
 }
 
 [data-theme="dark"] .send-email__badge--warning {
-  background: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
+  background: rgba(var(--color-amber-light), 0.2);
+  color: var(--pr-brand-gold);
 }
 
 /* Form Fields */
@@ -97,7 +97,7 @@
   outline: 2px solid transparent;
   outline-offset: 2px;
   border-color: var(--pr-brand-orange, var(--ifm-color-primary));
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 .send-email__field input:focus-visible,
@@ -139,7 +139,7 @@
 }
 
 .send-email__link:hover {
-  background: rgba(249, 115, 22, 0.1);
+  background: rgba(var(--primary), 0.1);
 }
 
 /* Error Message */
@@ -148,10 +148,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 8px;
-  color: rgb(239, 68, 68);
+  color: rgb(var(--color-red));
   font-size: 0.875rem;
 }
 
@@ -232,23 +232,23 @@
 .send-email__btn--github {
   display: inline-flex;
   align-items: center;
-  background: #24292e;
+  background: rgb(var(--color-github));
   color: white;
   padding: 0.5rem 0.875rem;
   font-size: 0.875rem;
 }
 
 .send-email__btn--github:hover:not(:disabled) {
-  background: #2f363d;
+  background: rgb(var(--color-github-dark));
 }
 
 [data-theme="dark"] .send-email__btn--github {
-  background: #333;
-  border: 1px solid #444;
+  background: var(--pr-bg-emphasis);
+  border: 1px solid var(--pr-border-emphasis);
 }
 
 [data-theme="dark"] .send-email__btn--github:hover:not(:disabled) {
-  background: #444;
+  background: var(--pr-border-emphasis);
 }
 
 /* Spinner */
@@ -287,9 +287,9 @@
   width: 64px;
   height: 64px;
   margin: 0 auto 1rem;
-  background: rgba(34, 197, 94, 0.15);
+  background: rgba(var(--color-green), 0.15);
   border-radius: 50%;
-  color: rgb(34, 197, 94);
+  color: rgb(var(--color-green));
   font-size: 2rem;
   font-weight: bold;
 }
@@ -297,7 +297,7 @@
 .send-email__success h4 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: rgb(34, 197, 94);
+  color: rgb(var(--color-green));
   margin: 0 0 0.5rem 0;
 }
 
@@ -314,26 +314,26 @@
 
 [data-theme="dark"] .send-email__field input,
 [data-theme="dark"] .send-email__field textarea {
-  background: rgb(15, 23, 42);
-  border-color: var(--pr-border-muted, rgb(51, 65, 85));
+  background: var(--pr-bg-subtle);
+  border-color: var(--pr-border-muted);
 }
 
 [data-theme="dark"] .send-email__btn--secondary {
-  background: rgb(51, 65, 85);
-  color: rgb(226, 232, 240);
+  background: var(--pr-bg-emphasis);
+  color: var(--pr-fg-base);
 }
 
 [data-theme="dark"] .send-email__btn--secondary:hover:not(:disabled) {
-  background: rgb(71, 85, 105);
+  background: var(--pr-border-emphasis);
 }
 
 [data-theme="dark"] .send-email__btn--icon {
-  color: rgb(148, 163, 184);
+  color: var(--pr-fg-muted);
 }
 
 [data-theme="dark"] .send-email__btn--icon:hover {
-  background: rgb(51, 65, 85);
-  color: rgb(226, 232, 240);
+  background: var(--pr-bg-emphasis);
+  color: var(--pr-fg-base);
 }
 
 /* Responsive */

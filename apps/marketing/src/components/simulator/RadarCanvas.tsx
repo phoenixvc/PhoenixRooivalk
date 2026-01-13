@@ -37,9 +37,10 @@ const RadarCanvas: React.FC<RadarCanvasProps> = ({
     >
       <svg viewBox="0 0 600 600" className="radar" aria-hidden="true">
         <defs>
+          {/* Gradient colors use CSS variables with fallbacks for SVG compatibility */}
           <radialGradient id="radar-bg" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#0e1217" />
-            <stop offset="100%" stopColor="#0a0d11" />
+            <stop offset="0%" stopColor="rgb(var(--sim-bg, 14, 18, 23))" />
+            <stop offset="100%" stopColor="rgb(var(--sim-bg-darker, 10, 13, 17))" />
           </radialGradient>
         </defs>
         <rect width="600" height="600" fill="url(#radar-bg)" />
@@ -109,7 +110,7 @@ const RadarCanvas: React.FC<RadarCanvasProps> = ({
                   onClick={handleThreatClick}
                   onKeyDown={handleKeyDown}
                   aria-label={`Friendly unit ${threat.id}`}
-                  style={{ cursor: "pointer", fill: "#4ade80" }}
+                  style={{ cursor: "pointer", fill: "rgb(var(--sim-friendly, 74, 222, 128))" }}
                 />
               );
             } else if (isHostile) {
@@ -126,7 +127,7 @@ const RadarCanvas: React.FC<RadarCanvasProps> = ({
                   onClick={handleThreatClick}
                   onKeyDown={handleKeyDown}
                   aria-label={`Hostile threat ${threat.id}`}
-                  style={{ cursor: "pointer", fill: "#ff5d5d" }}
+                  style={{ cursor: "pointer", fill: "rgb(var(--sim-hostile, 255, 93, 93))" }}
                 />
               );
             } else {
@@ -146,7 +147,7 @@ const RadarCanvas: React.FC<RadarCanvasProps> = ({
                   style={{
                     cursor: "pointer",
                     fill: "none",
-                    stroke: "#ffd166",
+                    stroke: "rgb(var(--sim-warning, 255, 209, 102))",
                     strokeWidth: 2,
                   }}
                 />

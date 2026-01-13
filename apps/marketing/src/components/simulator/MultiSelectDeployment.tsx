@@ -127,17 +127,17 @@ export const MultiSelectDeployment: React.FC<MultiSelectDeploymentProps> = ({
 
   const getRoleColor = (role: string): string => {
     const roleColors = {
-      guard: "#10b981",
-      recon: "#3b82f6",
-      ecm: "#8b5cf6",
-      support: "#f59e0b",
-      deception: "#70A1FF",
-      capture: "#10b981",
-      sensor: "#3b82f6",
-      logistics: "#6b7280",
-      directed: "#FFA502",
+      guard: "rgb(var(--sim-friendly, 74, 222, 128))",
+      recon: "rgb(var(--color-blue-deep, 59, 130, 246))",
+      ecm: "rgb(var(--color-purple, 139, 92, 246))",
+      support: "rgb(var(--sensor-amber, 245, 158, 11))",
+      deception: "rgb(var(--color-blue-accent, 112, 161, 255))",
+      capture: "rgb(var(--sim-friendly, 74, 222, 128))",
+      sensor: "rgb(var(--color-blue-deep, 59, 130, 246))",
+      logistics: "rgb(var(--color-gray-500, 100, 116, 139))",
+      directed: "rgb(var(--sim-gold, 255, 209, 102))",
     };
-    return roleColors[role as keyof typeof roleColors] || "#6b7280";
+    return roleColors[role as keyof typeof roleColors] || "rgb(var(--color-gray-500, 100, 116, 139))";
   };
 
   return (

@@ -490,8 +490,8 @@
   /* Admonitions/callouts */
   body.printing-application [class*="admonition"],
   body.printing-application .alert {
-    border-left: 4pt solid #f59e0b !important;
-    background: #fffbeb !important;
+    border-left: 4pt solid rgb(245, 158, 11) !important; /* amber-500 for print */
+    background: rgb(255, 251, 235) !important; /* amber-50 for print */
     padding: 10pt 12pt !important;
     margin: 12pt 0 !important;
     border-radius: 0 4pt 4pt 0 !important;

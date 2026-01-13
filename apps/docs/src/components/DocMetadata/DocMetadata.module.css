@@ -40,7 +40,7 @@
 }
 
 .points {
-  background: var(--ifm-color-warning, #f59e0b);
+  background: var(--ifm-color-warning, rgb(var(--sensor-amber)));
 }
 
 .tagsContainer {

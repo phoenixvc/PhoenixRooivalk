@@ -18,7 +18,11 @@
 
 /* Background variants */
 .backgroundGradient {
-  background: var(--section-bg-accent);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--primary), 0.05),
+    rgba(var(--accent), 0.05)
+  );
 }
 
 .backgroundPrimary {
@@ -40,7 +44,7 @@
 }
 
 .maxWidthNarrow {
-  max-width: 1200px;
+  max-width: var(--container-max-width-narrow, 960px);
 }
 
 .centered {

@@ -67,9 +67,9 @@ html[data-theme="dark"] .reading-rec-compact {
 
 .reading-rec-error {
   font-size: 0.8rem;
-  color: #dc2626;
+  color: rgb(var(--color-red-dark));
   padding: 8px;
-  background: rgba(220, 38, 38, 0.1);
+  background: rgba(var(--color-red-dark), 0.1);
   border-radius: 6px;
 }
 
@@ -161,7 +161,7 @@ html[data-theme="dark"] .reading-rec-link {
 
 .reading-rec-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: linear-gradient(90deg, rgb(var(--color-indigo)), rgb(var(--color-violet)));
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -260,7 +260,7 @@ html[data-theme="dark"] .reading-rec-card {
 .reading-rec-card:hover {
   border-color: var(--ifm-color-primary, #6366f1);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--color-indigo), 0.15);
 }
 
 .reading-rec-card-header {
@@ -298,8 +298,8 @@ html[data-theme="dark"] .reading-rec-card {
   padding: 12px;
   background: linear-gradient(
     135deg,
-    rgba(99, 102, 241, 0.1),
-    rgba(139, 92, 246, 0.1)
+    rgba(var(--color-indigo), 0.1),
+    rgba(var(--color-violet), 0.1)
   );
   border-radius: 8px;
   font-size: 0.85rem;

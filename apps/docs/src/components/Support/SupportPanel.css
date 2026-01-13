@@ -22,7 +22,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 2rem;
   font-weight: 700;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
 }
 
 .support-icon {
@@ -32,7 +32,7 @@
 .support-subtitle {
   margin: 0;
   font-size: 1.1rem;
-  color: var(--ifm-color-emphasis-600, #4b5563);
+  color: var(--ifm-color-emphasis-600, rgb(var(--color-gray-600)));
 }
 
 /* Sections */
@@ -44,7 +44,7 @@
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
 }
 
 /* Quick Links Grid */
@@ -59,16 +59,16 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem;
-  background: var(--ifm-card-background-color, #fff);
-  border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
+  background: var(--ifm-card-background-color, rgb(var(--phoenix-white)));
+  border: 1px solid var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
   border-radius: 12px;
   text-decoration: none;
   transition: all 0.2s;
 }
 
 .support-link-card:hover {
-  border-color: var(--ifm-color-primary, #3b82f6);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.1);
   transform: translateY(-2px);
 }
 
@@ -85,7 +85,7 @@
   margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
 }
 
 .external-icon {
@@ -97,7 +97,7 @@
 .support-link-description {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-600, #4b5563);
+  color: var(--ifm-color-emphasis-600, rgb(var(--color-gray-600)));
 }
 
 /* FAQ Section */
@@ -111,21 +111,21 @@
 .faq-filter-btn {
   padding: 0.5rem 1rem;
   background: var(--ifm-color-emphasis-100, #f3f4f6);
-  border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
+  border: 1px solid var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-600, #4b5563);
+  color: var(--ifm-color-emphasis-600, rgb(var(--color-gray-600)));
   transition: all 0.2s;
 }
 
 .faq-filter-btn:hover {
-  background: var(--ifm-color-emphasis-200, #e5e7eb);
+  background: var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
 }
 
 .faq-filter-btn.active {
-  background: var(--ifm-color-primary, #3b82f6);
-  border-color: var(--ifm-color-primary, #3b82f6);
+  background: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
+  border-color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
   color: white;
 }
 
@@ -136,14 +136,14 @@
 }
 
 .faq-item {
-  border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
+  border: 1px solid var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
   border-radius: 8px;
   overflow: hidden;
 }
 
 /* Use [open] attribute for expanded state with details element */
 .faq-item[open] {
-  border-color: var(--ifm-color-primary, #3b82f6);
+  border-color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
 }
 
 .faq-question {
@@ -152,13 +152,13 @@
   align-items: center;
   width: 100%;
   padding: 1rem 1.25rem;
-  background: var(--ifm-card-background-color, #fff);
+  background: var(--ifm-card-background-color, rgb(var(--phoenix-white)));
   border: none;
   cursor: pointer;
   text-align: left;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
   transition: background 0.2s;
   list-style: none; /* Remove default marker for summary element */
 }
@@ -185,7 +185,7 @@
 .faq-toggle {
   font-size: 1.5rem;
   font-weight: 300;
-  color: var(--ifm-color-primary, #3b82f6);
+  color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
 }
 
 .faq-answer {
@@ -211,8 +211,8 @@
 
 /* Contact Form */
 .contact-form {
-  background: var(--ifm-card-background-color, #fff);
-  border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
+  background: var(--ifm-card-background-color, rgb(var(--phoenix-white)));
+  border: 1px solid var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -243,7 +243,7 @@
 .contact-form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
 }
 
 .contact-form-group input,
@@ -253,8 +253,8 @@
   border: 1px solid var(--ifm-color-emphasis-300, #d1d5db);
   border-radius: 6px;
   font-size: 0.9rem;
-  background: var(--ifm-background-color, #fff);
-  color: var(--ifm-font-color-base, #1f2937);
+  background: var(--ifm-background-color, rgb(var(--phoenix-white)));
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
   transition: border-color 0.2s;
 }
 
@@ -262,8 +262,8 @@
 .contact-form-group select:focus,
 .contact-form-group textarea:focus {
   outline: none;
-  border-color: var(--ifm-color-primary, #3b82f6);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
+  box-shadow: 0 0 0 3px rgba(var(--color-blue-deep), 0.1);
 }
 
 .contact-form-group textarea {
@@ -273,10 +273,10 @@
 
 .contact-error {
   padding: 0.75rem;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: rgba(var(--color-red), 0.05);
+  border: 1px solid rgba(var(--color-red), 0.2);
   border-radius: 6px;
-  color: #dc2626;
+  color: rgb(var(--color-red-dark));
   font-size: 0.875rem;
   margin-bottom: 1rem;
 }
@@ -284,7 +284,7 @@
 .contact-submit-btn {
   width: 100%;
   padding: 0.875rem;
-  background: var(--ifm-color-primary, #3b82f6);
+  background: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
   color: white;
   border: none;
   border-radius: 8px;
@@ -307,8 +307,8 @@
 .contact-success {
   text-align: center;
   padding: 3rem 2rem;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: rgba(var(--color-green), 0.05);
+  border: 1px solid rgba(var(--color-green), 0.3);
   border-radius: 12px;
 }
 
@@ -318,7 +318,7 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: #22c55e;
+  background: rgb(var(--color-green));
   color: white;
   font-size: 2rem;
   border-radius: 50%;
@@ -328,17 +328,17 @@
 .contact-success h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
-  color: #166534;
+  color: rgb(var(--color-green-dark));
 }
 
 .contact-success p {
   margin: 0 0 1.5rem 0;
-  color: #166534;
+  color: rgb(var(--color-green-dark));
 }
 
 .contact-reset-btn {
   padding: 0.75rem 1.5rem;
-  background: #22c55e;
+  background: rgb(var(--color-green));
   color: white;
   border: none;
   border-radius: 6px;
@@ -348,7 +348,7 @@
 }
 
 .contact-reset-btn:hover {
-  background: #16a34a;
+  background: rgb(var(--color-green-dark));
 }
 
 /* Support Contacts */
@@ -360,8 +360,8 @@
 
 .support-contact-card {
   padding: 1.5rem;
-  background: var(--ifm-card-background-color, #fff);
-  border: 1px solid var(--ifm-color-emphasis-200, #e5e7eb);
+  background: var(--ifm-card-background-color, rgb(var(--phoenix-white)));
+  border: 1px solid var(--ifm-color-emphasis-200, rgb(var(--color-gray-200)));
   border-radius: 12px;
   text-align: center;
 }
@@ -376,17 +376,17 @@
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--ifm-font-color-base, #1f2937);
+  color: var(--ifm-font-color-base, rgb(var(--color-gray-800)));
 }
 
 .support-contact-card p {
   margin: 0 0 0.75rem 0;
   font-size: 0.875rem;
-  color: var(--ifm-color-emphasis-600, #4b5563);
+  color: var(--ifm-color-emphasis-600, rgb(var(--color-gray-600)));
 }
 
 .support-contact-card a {
-  color: var(--ifm-color-primary, #3b82f6);
+  color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
   font-weight: 500;
   text-decoration: none;
 }
@@ -407,7 +407,7 @@
 [data-theme="dark"] .faq-question,
 [data-theme="dark"] .contact-form,
 [data-theme="dark"] .support-contact-card {
-  background: var(--ifm-card-background-color, #1f2937);
+  background: var(--ifm-card-background-color, rgb(var(--color-gray-800)));
 }
 
 [data-theme="dark"] .faq-answer {
@@ -418,21 +418,21 @@
 [data-theme="dark"] .contact-form-group select,
 [data-theme="dark"] .contact-form-group textarea {
   background: var(--ifm-background-color, #111827);
-  border-color: var(--ifm-color-emphasis-400, #4b5563);
+  border-color: var(--ifm-color-emphasis-400, rgb(var(--color-gray-600)));
 }
 
 [data-theme="dark"] .contact-error {
-  background: #450a0a;
-  border-color: #7f1d1d;
-  color: #fca5a5;
+  background: rgba(var(--color-red), 0.15);
+  border-color: rgba(var(--color-red), 0.3);
+  color: rgba(var(--color-red-light), 1);
 }
 
 [data-theme="dark"] .contact-success {
-  background: #052e16;
-  border-color: #166534;
+  background: rgba(var(--color-green), 0.15);
+  border-color: rgb(var(--color-green-dark));
 }
 
 [data-theme="dark"] .contact-success h3,
 [data-theme="dark"] .contact-success p {
-  color: #bbf7d0;
+  color: rgba(var(--color-green), 0.9);
 }

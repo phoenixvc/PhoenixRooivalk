@@ -1,72 +1,62 @@
+/* FeaturesSection - consistent spacing scale */
 .section {
-  padding: var(--section-padding-y) var(--section-padding-x);
-  background: var(--section-bg-primary);
+  padding: var(--space-16) var(--space-4);
+  background: rgb(var(--bg-primary));
   position: relative;
-}
-
-.section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--gray), 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--gray), 0.04) 1px, transparent 1px);
-  background-size: 50px 50px;
-  pointer-events: none;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
+  padding: 0 var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
 }
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: var(--space-12);
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
   color: rgb(var(--text-primary));
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .subtitle {
-  font-size: 1.25rem;
-  color: rgb(var(--steel));
-  max-width: 600px;
+  font-size: var(--text-lg);
+  color: rgb(var(--text-secondary));
+  max-width: 540px;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 .featuresGrid {
   display: grid;
-  gap: 1.5rem;
-  margin-bottom: 4rem;
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
 }
 
 @media (min-width: 768px) {
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
   }
 }
 
 .featureCard {
   display: flex;
-  gap: 1.25rem;
-  padding: 1.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  transition: all 0.3s ease;
-}
-
-.featureCard:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(var(--primary), 0.3);
-  transform: translateY(-2px);
+  gap: var(--space-6);
+  padding: var(--space-8);
+  background: rgba(var(--bg-secondary), 0.5);
+  border: 1px solid rgba(var(--border), 0.5);
+  border-radius: 0.75rem;
 }
 
 .featureIcon {
@@ -76,12 +66,9 @@
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--primary), 0.2),
-    rgba(var(--accent), 0.2)
-  );
-  border-radius: 0.75rem;
+  background: rgba(var(--primary), 0.1);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 0.5rem;
   color: rgb(var(--primary));
 }
 
@@ -92,67 +79,67 @@
 .featureHeader {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
   flex-wrap: wrap;
 }
 
 .featureTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: var(--text-xl);
+  font-weight: 600;
   color: rgb(var(--text-primary));
   margin: 0;
 }
 
 .brandBadge {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  padding: 0.25rem 0.625rem;
+  padding: 0.125rem 0.5rem;
   border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.02em;
 }
 
 .brandConsumer {
-  background: rgba(34, 197, 94, 0.15);
-  color: rgb(34, 197, 94);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(var(--action-success), 0.1);
+  color: rgb(var(--action-success));
+  border: 1px solid rgba(var(--action-success), 0.2);
 }
 
 .brandEnterprise {
-  background: rgba(59, 130, 246, 0.15);
-  color: rgb(59, 130, 246);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(var(--color-blue-deep), 0.1);
+  color: rgb(var(--color-blue-deep));
+  border: 1px solid rgba(var(--color-blue-deep), 0.2);
 }
 
 .brandBoth {
-  background: rgba(var(--primary), 0.15);
+  background: rgba(var(--primary), 0.1);
   color: rgb(var(--primary));
-  border: 1px solid rgba(var(--primary), 0.3);
+  border: 1px solid rgba(var(--primary), 0.2);
 }
 
 .featureDescription {
-  font-size: 1rem;
-  color: rgb(var(--steel));
+  font-size: var(--text-base);
+  color: rgb(var(--text-secondary));
   line-height: 1.6;
   margin: 0;
 }
 
 .useCasesSection {
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-12);
 }
 
 .useCasesTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: var(--text-xl);
+  font-weight: 600;
   color: rgb(var(--text-primary));
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
 }
 
 .useCasesGrid {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 @media (min-width: 640px) {
@@ -168,47 +155,42 @@
 }
 
 .useCaseCard {
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0.75rem;
+  padding: var(--space-6);
+  background: rgba(var(--bg-secondary), 0.3);
+  border: 1px solid rgba(var(--border), 0.3);
+  border-radius: 0.5rem;
   text-align: center;
-  transition: all 0.3s ease;
-}
-
-.useCaseCard:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .useCaseBadge {
   display: inline-block;
   font-size: 0.625rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
   border-radius: 9999px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.03em;
+  margin-bottom: var(--space-3);
 }
 
 .useCaseTitle {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   color: rgb(var(--text-primary));
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--space-2) 0;
 }
 
 .useCaseDescription {
-  font-size: 0.875rem;
-  color: rgb(var(--steel));
+  font-size: var(--text-sm);
+  color: rgb(var(--text-muted));
+  line-height: 1.5;
   margin: 0;
 }
 
 .ctaSection {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 

@@ -2,7 +2,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(var(--tactical-black), 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(var(--tactical-black), 0.3);
 }
 
 .header {
@@ -130,7 +130,7 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--sim-accent)), #2ed573);
+  background: linear-gradient(90deg, rgb(var(--sim-accent)), rgb(var(--sim-friendly)));
   transition: width 0.3s ease;
 }
 
@@ -166,7 +166,7 @@
 
 .categoryButton.active {
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border-color: transparent;
 }
 
@@ -316,12 +316,12 @@
 
 .unlockButton {
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border-color: transparent;
 }
 
 .unlockButton:hover:not(:disabled) {
-  background: #2ed573;
+  background: rgb(var(--sim-friendly));
 }
 
 .unlockButton:disabled {

@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import { useTheme } from "../contexts/ThemeContext";
+import { CartIcon } from "./cart/CartIcon";
+import { CartPanel } from "./cart/CartPanel";
 import styles from "./Navigation.module.css";
 
 // Type definitions for discriminated union
@@ -26,7 +29,21 @@ type NavigationItem = LinkItem | DropdownItem;
 
 export const Navigation: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isCartOpen, setIsCartOpen] = React.useState(false);
+
+  // Helper to check if a path is active
+  const isPathActive = (href: string) => {
+    if (!pathname) return false;
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
+  // Helper to check if any dropdown item is active
+  const isDropdownActive = (items: Array<{ href: string }>) => {
+    return items.some((item) => isPathActive(item.href));
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -36,6 +53,7 @@ export const Navigation: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Buyer-first navigation - simple and focused
   const navigationItems: NavigationItem[] = [
     {
       type: "dropdown",
@@ -49,76 +67,24 @@ export const Navigation: React.FC = () => {
         {
           href: "/products#skysnare",
           label: "SkySnare™",
-          description: "Consumer drone capture",
-        },
-        {
-          href: "/products#netsnare",
-          label: "NetSnare™",
-          description: "Ground launchers",
+          description: "Training & consumer",
         },
         {
           href: "/products#aeronet",
           label: "AeroNet™",
-          description: "Enterprise platform",
+          description: "Enterprise security",
         },
         {
           href: "/preorder",
           label: "Preorder",
-          description: "Reserve yours - no deposit",
+          description: "Reserve now - no deposit",
         },
       ],
     },
     {
-      type: "dropdown",
-      label: "Technology",
-      items: [
-        {
-          href: "/technical",
-          label: "Technical Specs",
-          description: "Detailed specifications",
-        },
-        {
-          href: "/capabilities",
-          label: "Capabilities",
-          description: "Core system features",
-        },
-        {
-          href: "/methods",
-          label: "Defense Methods",
-          description: "Counter-drone strategies",
-        },
-        {
-          href: "/timeline",
-          label: "Development Timeline",
-          description: "Project roadmap",
-        },
-      ],
-    },
-    {
-      type: "dropdown",
-      label: "Business",
-      items: [
-        {
-          href: "/roi-calculator",
-          label: "ROI Calculator",
-          description: "Calculate your savings",
-        },
-        {
-          href: "/schedule",
-          label: "Schedule Meeting",
-          description: "Book a demo or consultation",
-        },
-        {
-          href: "/partnerships",
-          label: "Partnerships",
-          description: "Collaboration opportunities",
-        },
-        {
-          href: "/sbir",
-          label: "SBIR Program",
-          description: "Government funding",
-        },
-      ],
+      type: "link",
+      href: "/technical",
+      label: "Specs",
     },
     {
       type: "link",
@@ -162,7 +128,9 @@ export const Navigation: React.FC = () => {
                 >
                   {item.type === "dropdown" ? (
                     <>
-                      <button className={styles.navButton}>
+                      <button
+                        className={`${styles.navButton} ${isDropdownActive(item.items) ? styles.navButtonActive : ""}`}
+                      >
                         {item.label}
                         <svg
                           className={styles.chevron}
@@ -199,7 +167,10 @@ export const Navigation: React.FC = () => {
                       </div>
                     </>
                   ) : item.type === "link" ? (
-                    <Link href={item.href} className={styles.navLink}>
+                    <Link
+                      href={item.href}
+                      className={`${styles.navLink} ${isPathActive(item.href) ? styles.navLinkActive : ""}`}
+                    >
                       {item.label}
                     </Link>
                   ) : null}
@@ -207,6 +178,11 @@ export const Navigation: React.FC = () => {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Cart Icon */}
+        <div className={styles.cartWrapper}>
+          <CartIcon onClick={() => setIsCartOpen(true)} />
         </div>
 
         {/* Mobile navigation */}
@@ -432,11 +408,14 @@ export const Navigation: React.FC = () => {
           <Link href="/login" className={styles.loginButton}>
             Login
           </Link>
-          <Link href="/preorder" className={styles.ctaButton}>
-            Preorder Now
+          <Link href="/contact" className={styles.ctaButton}>
+            Get Started
           </Link>
         </div>
       </div>
+
+      {/* Cart Panel */}
+      <CartPanel isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   );
 };

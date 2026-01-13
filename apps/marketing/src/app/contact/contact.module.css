@@ -4,24 +4,18 @@
   position: relative;
   overflow: hidden;
   background: rgb(var(--darker));
-  color: white;
+  color: rgb(var(--text-primary));
 }
 
 .backgroundWrapper {
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: var(--section-bg-hero);
+  background: rgb(var(--bg-primary));
 }
 
 .gridPattern {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(var(--primary), 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
+  display: none;
 }
 
 @keyframes gridMove {
@@ -43,7 +37,7 @@
 }
 
 .navContainer {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -84,22 +78,23 @@
 }
 
 .section {
-  padding: 4rem 5%;
+  padding: 3rem 5%;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
 .headerContainer {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 .pageTitle {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(to bottom right, white, rgb(var(--primary)));
+  background: linear-gradient(to bottom right, rgb(var(--text-primary)), rgb(var(--primary)));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -112,8 +107,10 @@
 }
 
 .pageSubtitle {
-  color: rgb(var(--gray));
+  color: rgb(var(--text-secondary));
   margin-top: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.75;
   max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
@@ -121,12 +118,13 @@
 
 .grid {
   display: grid;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 }
 
@@ -135,29 +133,35 @@
   border: 1px solid rgba(var(--primary), 0.2);
   background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
-  padding: 2rem;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .cardTitle {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: rgb(var(--primary));
+  letter-spacing: -0.02em;
 }
 
 .contentGroup {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .subsectionTitle {
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: rgb(var(--text-primary));
 }
 
 .subsectionText {
-  color: rgb(var(--gray));
+  color: rgb(var(--text-secondary));
+  font-size: 1rem;
+  line-height: 1.75;
 }
 
 .emailButton {
@@ -226,80 +230,104 @@
 }
 
 .listItem {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
+  font-size: 1rem;
+  color: rgb(var(--text-secondary));
+  line-height: 1.75;
+}
+
+.listItem ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem li {
+  margin-bottom: 0.5rem;
 }
 
 .listItemTitle {
+  font-size: 1.0625rem;
   font-weight: 600;
-  color: rgb(var(--action-primary));
-  margin-bottom: 0.25rem;
+  color: rgb(var(--primary));
+  margin-bottom: 0.75rem;
 }
 
 .applicationsGrid {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 @media (min-width: 768px) {
   .applicationsGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
 }
 
 .applicationCategory {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.25rem;
 }
 
 .warningBox {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: rgba(var(--action-warning), 0.1);
-  border: 1px solid rgba(var(--action-warning), 0.2);
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(var(--phoenix-amber), 0.1);
+  border: 1px solid rgba(var(--phoenix-amber), 0.3);
   border-radius: 0.5rem;
 }
 
 .warningText {
-  font-size: 0.75rem;
-  color: rgb(var(--action-warning));
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgb(var(--phoenix-amber));
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .complianceBox {
-  padding: 1rem;
-  background: rgba(var(--primary), 0.1);
+  padding: 1.25rem 1.5rem;
+  background: rgba(var(--action-success), 0.1);
   border-radius: 0.5rem;
-  border: 1px solid rgba(var(--primary), 0.3);
+  border: 1px solid rgba(var(--action-success), 0.3);
+  margin-top: 0.5rem;
 }
 
 .complianceText {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgb(var(--text-secondary));
+}
+
+.complianceText strong {
+  color: rgb(var(--color-teal-deep));
 }
 
 .quickLinksSection {
-  padding: 4rem 5%;
+  padding: var(--space-16) 5%;
   background: linear-gradient(180deg, transparent, rgba(var(--accent), 0.05));
 }
 
 .quickLinksTitle {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: center;
   color: rgb(var(--primary));
+  letter-spacing: -0.02em;
 }
 
 .quickLinksGrid {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
   .quickLinksGrid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
   }
 }
 
@@ -309,36 +337,41 @@
   border: 1px solid rgba(var(--primary), 0.2);
   background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  transition: transform 0.2s;
+  padding: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .quickLinkCard:hover {
   transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(var(--color-blue-deep), 0.25);
+  border-color: rgba(var(--color-blue-deep), 0.4);
 }
 
 .quickLinkTitle {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: rgb(var(--primary));
 }
 
 .quickLinkText {
-  color: rgb(var(--gray));
-  font-size: 0.875rem;
+  color: rgb(var(--text-secondary));
+  font-size: 1rem;
+  line-height: 1.75;
 }
 
 .careersSection {
-  padding: 4rem 5%;
+  padding: 5rem 5%;
 }
 
 .careersTitle {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: center;
   color: rgb(var(--primary));
+  letter-spacing: -0.02em;
 }
 
 .careersGrid {
@@ -349,6 +382,7 @@
 @media (min-width: 768px) {
   .careersGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
   }
 }
 
@@ -357,26 +391,30 @@
   border: 1px solid rgba(var(--primary), 0.2);
   background: rgba(var(--bg-primary), 0.8);
   backdrop-filter: blur(10px);
-  padding: 2rem;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .careerCardTitle {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   color: rgb(var(--primary));
+  letter-spacing: -0.01em;
 }
 
 .jobTitle {
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: rgb(var(--text-primary));
 }
 
 .jobDescription {
-  color: rgb(var(--gray));
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+  color: rgb(var(--text-secondary));
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
 }
 
 .tagContainer {
@@ -396,7 +434,7 @@
 .applyButton {
   width: 100%;
   background: rgb(var(--primary));
-  color: black;
+  color: rgb(var(--tactical-black));
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -410,12 +448,12 @@
 .footer {
   padding: 2rem 5%;
   text-align: center;
-  color: rgb(var(--gray));
-  border-top: 1px solid rgba(var(--primary), 0.2);
+  color: rgb(var(--text-muted));
+  border-top: 1px solid rgba(var(--border), 0.2);
 }
 
 .footerContainer {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -435,8 +473,8 @@
 /* Authentication-aware career application styles */
 
 .teamMemberNotice {
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(var(--sim-friendly), 0.1);
+  border: 1px solid rgba(var(--sim-friendly), 0.3);
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -444,30 +482,31 @@
 }
 
 .teamMemberNotice p {
-  color: rgba(74, 222, 128, 0.9);
+  color: rgba(var(--sim-friendly), 0.9);
   font-size: 1rem;
   margin: 0;
 }
 
 .loginNotice {
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: linear-gradient(135deg, rgba(var(--phoenix-amber), 0.15), rgba(var(--primary), 0.1));
+  border: 1px solid rgba(var(--phoenix-amber), 0.4);
   border-radius: 0.75rem;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
   text-align: center;
 }
 
 .loginNotice p {
-  color: rgba(251, 191, 36, 0.9);
-  font-size: 1rem;
-  margin: 0 0 1rem 0;
+  color: rgb(var(--phoenix-amber));
+  font-size: 1.125rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 500;
 }
 
 .loginLink {
   display: inline-block;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
-  color: white;
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
+  color: rgb(var(--text-primary));
   text-decoration: none;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -476,9 +515,9 @@
 }
 
 .loginLink:hover {
-  background: linear-gradient(135deg, rgb(234, 88, 12), rgb(249, 115, 22));
+  background: linear-gradient(135deg, rgb(var(--color-orange-dark)), rgb(var(--primary)));
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(var(--primary), 0.4);
 }
 
 .applicationForm {
@@ -505,10 +544,10 @@
   width: 100%;
   padding: 0.75rem;
   background: rgba(var(--bg-primary), 0.6);
-  border: 1px solid rgba(249, 115, 22, 0.25);
+  border: 1px solid rgba(var(--primary), 0.25);
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  color: white;
+  color: rgb(var(--text-primary));
   transition: all 0.2s ease;
   box-sizing: border-box;
 }
@@ -516,8 +555,8 @@
 .formSelect:focus,
 .formTextarea:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
 }
 
 .formSelect:disabled,
@@ -534,20 +573,20 @@
 
 .errorMessage {
   padding: 0.875rem 1rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 0.5rem;
-  color: rgb(252, 165, 165);
+  color: rgb(var(--color-red-light));
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 .successMessage {
   padding: 0.875rem 1rem;
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(var(--sim-friendly), 0.1);
+  border: 1px solid rgba(var(--sim-friendly), 0.3);
   border-radius: 0.5rem;
-  color: rgb(134, 239, 172);
+  color: rgb(var(--color-green-light));
   font-size: 0.875rem;
   font-weight: 500;
 }

@@ -2,7 +2,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(var(--tactical-black), 0.7);
   backdrop-filter: blur(4px);
   z-index: 100;
   display: flex;
@@ -18,7 +18,7 @@
   width: 90%;
   max-width: 600px;
   position: relative;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 16px 40px rgba(var(--tactical-black), 0.45);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
