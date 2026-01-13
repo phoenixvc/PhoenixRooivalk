@@ -51,7 +51,11 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-dark))
+  );
   color: white;
   border: none;
   border-radius: 10px;
@@ -496,7 +500,11 @@
   justify-content: center;
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-dark))
+  );
   color: white;
   border-radius: 10px;
   flex-shrink: 0;
@@ -696,7 +704,11 @@ textarea.formInput {
 .modalSubmit {
   flex: 1;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-dark))
+  );
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -874,7 +886,11 @@ textarea.formInput {
 
 .exportPersonalBtn {
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-dark)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-dark))
+  );
   border: none;
   border-radius: 8px;
   font-size: 0.8125rem;
@@ -1131,7 +1147,11 @@ textarea.formInput {
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-teal-deep)),
+    rgb(var(--color-teal-deep))
+  );
   border-radius: 3px;
   transition: width 0.3s ease;
 }

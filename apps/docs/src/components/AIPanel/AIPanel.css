@@ -10,7 +10,11 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgb(var(--color-indigo)) 0%, rgb(var(--color-violet)) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-indigo)) 0%,
+    rgb(var(--color-violet)) 100%
+  );
   color: white;
   border: none;
   cursor: pointer;
@@ -68,7 +72,11 @@ html[data-theme="dark"] .ai-panel {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: linear-gradient(135deg, rgb(var(--color-indigo)) 0%, rgb(var(--color-violet)) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-indigo)) 0%,
+    rgb(var(--color-violet)) 100%
+  );
   color: white;
 }
 
@@ -322,7 +330,11 @@ html[data-theme="dark"] .ai-select {
 .ai-submit-btn {
   width: 100%;
   padding: 12px 20px;
-  background: linear-gradient(135deg, rgb(var(--color-indigo)) 0%, rgb(var(--color-violet)) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-indigo)) 0%,
+    rgb(var(--color-violet)) 100%
+  );
   color: white;
   border: none;
   border-radius: 10px;

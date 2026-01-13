@@ -824,7 +824,11 @@ a:focus-visible {
       rgba(var(--secondary), 0.06),
       transparent 50%
     ),
-    linear-gradient(180deg, rgb(var(--color-gray-900)), rgb(var(--color-gray-800)));
+    linear-gradient(
+      180deg,
+      rgb(var(--color-gray-900)),
+      rgb(var(--color-gray-800))
+    );
 }
 
 .section-gradient-2 {

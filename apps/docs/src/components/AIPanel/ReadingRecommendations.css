@@ -161,7 +161,11 @@ html[data-theme="dark"] .reading-rec-link {
 
 .reading-rec-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--color-indigo)), rgb(var(--color-violet)));
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-indigo)),
+    rgb(var(--color-violet))
+  );
   border-radius: 2px;
   transition: width 0.3s ease;
 }

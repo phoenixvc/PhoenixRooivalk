@@ -366,7 +366,11 @@
 .news-auth-prompt {
   text-align: center;
   padding: 3rem;
-  background: linear-gradient(135deg, rgba(var(--color-violet), 0.05) 0%, rgba(var(--color-violet), 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-violet), 0.05) 0%,
+    rgba(var(--color-violet), 0.1) 100%
+  );
   border: 1px solid rgba(var(--color-violet), 0.3);
   border-radius: 12px;
   color: rgb(var(--color-purple-deep));
@@ -439,7 +443,11 @@
 }
 
 [data-theme="dark"] .news-auth-prompt {
-  background: linear-gradient(135deg, rgba(var(--color-indigo), 0.2) 0%, rgba(var(--color-indigo), 0.3) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-indigo), 0.2) 0%,
+    rgba(var(--color-indigo), 0.3) 100%
+  );
   border-color: rgb(var(--color-indigo));
   color: rgba(var(--color-violet), 0.9);
 }

@@ -245,7 +245,11 @@
   font-weight: 600;
   color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-light))
+  );
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -340,7 +344,11 @@
   font-weight: 600;
   color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-light))
+  );
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -441,7 +449,11 @@
   font-weight: 600;
   color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--color-orange-light))
+  );
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;

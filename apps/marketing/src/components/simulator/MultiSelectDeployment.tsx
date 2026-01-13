@@ -137,7 +137,10 @@ export const MultiSelectDeployment: React.FC<MultiSelectDeploymentProps> = ({
       logistics: "rgb(var(--color-gray-500, 100, 116, 139))",
       directed: "rgb(var(--sim-gold, 255, 209, 102))",
     };
-    return roleColors[role as keyof typeof roleColors] || "rgb(var(--color-gray-500, 100, 116, 139))";
+    return (
+      roleColors[role as keyof typeof roleColors] ||
+      "rgb(var(--color-gray-500, 100, 116, 139))"
+    );
   };
 
   return (

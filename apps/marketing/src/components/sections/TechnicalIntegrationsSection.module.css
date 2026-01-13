@@ -1,6 +1,10 @@
 .section {
   padding: 4rem 1.5rem;
-  background: linear-gradient(to bottom right, rgb(var(--color-gray-900)), rgb(var(--tactical-black)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-gray-900)),
+    rgb(var(--tactical-black))
+  );
 }
 
 @media (min-width: 768px) {
@@ -31,7 +35,11 @@
   font-size: 1.875rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, rgb(var(--text-primary)), rgb(var(--text-secondary)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--text-primary)),
+    rgb(var(--text-secondary))
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -178,19 +186,35 @@
 }
 
 .iconPurple {
-  background: linear-gradient(to bottom right, rgb(var(--color-purple)), rgb(var(--color-purple)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-purple)),
+    rgb(var(--color-purple))
+  );
 }
 
 .iconGreen {
-  background: linear-gradient(to bottom right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-teal-deep)),
+    rgb(var(--color-teal-deep))
+  );
 }
 
 .iconTeal {
-  background: linear-gradient(to bottom right, rgb(var(--color-teal)), rgb(var(--color-teal)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-teal)),
+    rgb(var(--color-teal))
+  );
 }
 
 .iconOrange {
-  background: linear-gradient(to bottom right, rgb(var(--primary)), rgb(var(--color-red)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--primary)),
+    rgb(var(--color-red))
+  );
 }
 
 .cardTitle {
@@ -228,19 +252,35 @@
 }
 
 .featureBulletPurple {
-  background: linear-gradient(to right, rgb(var(--color-purple)), rgb(var(--color-purple)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--color-purple)),
+    rgb(var(--color-purple))
+  );
 }
 
 .featureBulletGreen {
-  background: linear-gradient(to right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--color-teal-deep)),
+    rgb(var(--color-teal-deep))
+  );
 }
 
 .featureBulletTeal {
-  background: linear-gradient(to right, rgb(var(--color-teal)), rgb(var(--color-teal)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--color-teal)),
+    rgb(var(--color-teal))
+  );
 }
 
 .featureBulletOrange {
-  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--color-red)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary)),
+    rgb(var(--color-red))
+  );
 }
 
 .architectureDiagram {
@@ -297,19 +337,35 @@
 }
 
 .architectureIconBlue {
-  background: linear-gradient(to bottom right, rgb(var(--color-blue-deep)), rgb(var(--color-teal)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-blue-deep)),
+    rgb(var(--color-teal))
+  );
 }
 
 .architectureIconGreen {
-  background: linear-gradient(to bottom right, rgb(var(--color-teal-deep)), rgb(var(--color-teal-deep)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-teal-deep)),
+    rgb(var(--color-teal-deep))
+  );
 }
 
 .architectureIconPurple {
-  background: linear-gradient(to bottom right, rgb(var(--color-purple)), rgb(var(--color-purple)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--color-purple)),
+    rgb(var(--color-purple))
+  );
 }
 
 .architectureIconOrange {
-  background: linear-gradient(to bottom right, rgb(var(--primary)), rgb(var(--color-red)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--primary)),
+    rgb(var(--color-red))
+  );
 }
 
 .architectureItemTitle {

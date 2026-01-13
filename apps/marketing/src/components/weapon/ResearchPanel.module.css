@@ -130,7 +130,11 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--sim-accent)), rgb(var(--sim-friendly)));
+  background: linear-gradient(
+    90deg,
+    rgb(var(--sim-accent)),
+    rgb(var(--sim-friendly))
+  );
   transition: width 0.3s ease;
 }
 
