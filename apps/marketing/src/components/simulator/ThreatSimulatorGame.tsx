@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../ThreatSimulator.module.css";
+import styles from "../ThreatSimulator.module.css";
 import { useEventFeed } from "../hooks/useEventFeed";
 import { useGameState } from "../hooks/useGameState";
 import { WeaponStatus } from "../weapon/WeaponStatus";
@@ -119,7 +119,7 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
   const getThreatAppearance = mapThreatAppearance;
 
   return (
-    <section className={`threatsim card flex flex-col h-full ${className}`}>
+    <section className={`${styles.simulatorContainer} ${className}`}>
       <HUDBar
         score={gameState.score}
         threats={gameState.threats.length}
@@ -131,7 +131,7 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
         }}
       />
 
-      <div className="flex flex-row flex-grow overflow-hidden">
+      <div className={styles.mainContent}>
         <WeaponStatus
           weapons={gameState.weapons}
           selectedWeapon={gameState.selectedWeapon}
@@ -142,7 +142,7 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
 
         {/* Game Area Container */}
         <div
-          className="relative flex-grow"
+          className={styles.gameArea}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -171,7 +171,7 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
         </div>
 
         {/* Side Panel */}
-        <div className="flex flex-col w-80 p-4 space-y-4 bg-gray-800">
+        <div className={styles.sidePanel}>
           <DroneDeployment
             drones={gameState.drones}
             deploymentBays={gameState.deploymentBays}

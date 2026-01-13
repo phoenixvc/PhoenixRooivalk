@@ -20,6 +20,7 @@ import { useThreatSimulatorEvents } from "./hooks/useThreatSimulatorEvents";
 import { useThreatSimulatorGame } from "./hooks/useThreatSimulatorGame";
 import type { PowerUp as GamePowerUp } from "../types/game";
 import { getThreatAppearance as mapThreatAppearance } from "./utils/threatUtils";
+import styles from "./ThreatSimulator.module.css";
 
 interface ThreatSimulatorProps {
   isTeaser?: boolean;
@@ -307,24 +308,24 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   // Demo mode - show component showcase
   if (demoMode) {
     return (
-      <div className="threat-simulator-demo">
-        <div className="demo-controls">
+      <div className={styles.demoContainer}>
+        <div className={styles.demoControls}>
           <h1>Phoenix Rooivalk - Threat Simulator Demo</h1>
-          <div className="demo-mode-selector">
+          <div className={styles.demoModeSelector}>
             <button
-              className={demoViewMode === "full" ? "active" : ""}
+              className={demoViewMode === "full" ? styles.active : ""}
               onClick={() => setDemoViewMode("full")}
             >
               Full Simulator
             </button>
             <button
-              className={demoViewMode === "components" ? "active" : ""}
+              className={demoViewMode === "components" ? styles.active : ""}
               onClick={() => setDemoViewMode("components")}
             >
               Component Showcase
             </button>
             <button
-              className={demoViewMode === "systems" ? "active" : ""}
+              className={demoViewMode === "systems" ? styles.active : ""}
               onClick={() => setDemoViewMode("systems")}
             >
               System Architecture
@@ -332,47 +333,47 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
           </div>
         </div>
 
-        <div className="demo-content">
+        <div className={styles.demoContent}>
           {!isClient ? (
-            <div className="loading">Loading demo...</div>
+            <div className={styles.loading}>Loading demo...</div>
           ) : (
             <>
               {demoViewMode === "full" && (
-                <div className="demo-simulator">
+                <div className={styles.demoSimulator}>
                   <ThreatSimulatorGame />
                 </div>
               )}
               {demoViewMode === "components" && (
-                <div className="component-showcase">
-                  <div className="showcase-header">
+                <div className={styles.componentShowcase}>
+                  <div className={styles.showcaseHeader}>
                     <h1>Enhanced Threat Simulator Components</h1>
                     <p>
                       Explore the individual components that make up the Phoenix
                       Rooivalk threat simulation system.
                     </p>
                   </div>
-                  <div className="component-grid">
-                    <div className="component-card">
+                  <div className={styles.componentGrid}>
+                    <div className={styles.componentCard}>
                       <h3>Radar System</h3>
                       <p>
                         Advanced threat detection and tracking with real-time
                         visualization.
                       </p>
                     </div>
-                    <div className="component-card">
+                    <div className={styles.componentCard}>
                       <h3>Drone Deployment</h3>
                       <p>
                         Intelligent drone deployment system with energy
                         management.
                       </p>
                     </div>
-                    <div className="component-card">
+                    <div className={styles.componentCard}>
                       <h3>Weapon Systems</h3>
                       <p>
                         Multi-spectrum weapon systems for threat neutralization.
                       </p>
                     </div>
-                    <div className="component-card">
+                    <div className={styles.componentCard}>
                       <h3>Research Panel</h3>
                       <p>Technology research and development interface.</p>
                     </div>
@@ -380,24 +381,24 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
                 </div>
               )}
               {demoViewMode === "systems" && (
-                <div className="system-architecture">
-                  <div className="architecture-header">
+                <div className={styles.systemArchitecture}>
+                  <div className={styles.architectureHeader}>
                     <h1>System Architecture</h1>
                     <p>
                       Comprehensive overview of the Phoenix Rooivalk system
                       architecture.
                     </p>
                   </div>
-                  <div className="architecture-diagram">
-                    <div className="system-layer">
+                  <div className={styles.architectureDiagram}>
+                    <div className={styles.systemLayer}>
                       <h3>Presentation Layer</h3>
                       <p>React components, UI/UX, visualization</p>
                     </div>
-                    <div className="system-layer">
+                    <div className={styles.systemLayer}>
                       <h3>Application Layer</h3>
                       <p>Game logic, state management, event handling</p>
                     </div>
-                    <div className="system-layer">
+                    <div className={styles.systemLayer}>
                       <h3>Data Layer</h3>
                       <p>Game state, persistence, configuration</p>
                     </div>
@@ -414,9 +415,8 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
   return (
     <section
       ref={gameRef}
-      className="threatsim card flex flex-col h-full"
+      className={styles.simulatorContainer}
       aria-labelledby="sim-title"
-      style={{ minHeight: "800px" }} // Ensure the container has a height
     >
       {showHelp && <HelpOverlay onClose={() => setShowHelp(false)} />}
       {showDetailedStats && (
@@ -434,7 +434,7 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
         onToggleResearch={() => setShowResearch(true)}
       />
 
-      <div className="flex flex-row flex-grow overflow-hidden">
+      <div className={styles.mainContent}>
         <WeaponStatus
           weapons={gameState.weapons}
           selectedWeapon={gameState.selectedWeapon}
@@ -442,7 +442,7 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
         />
         {/* Game Area Container */}
         <div
-          className="relative flex-grow"
+          className={styles.gameArea}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}

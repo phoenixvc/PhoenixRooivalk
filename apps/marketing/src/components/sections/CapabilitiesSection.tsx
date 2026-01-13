@@ -78,11 +78,11 @@ export const CapabilitiesSection: React.FC = () => {
         <RevealSection className={styles.header}>
           <h2 className={styles.title}>Three-Tier Defense Architecture</h2>
           <p className={styles.description}>
-            <strong className="text-white">Tier 1 (Core):</strong> Autonomous
+            <strong className={styles.tierLabel}>Tier 1 (Core):</strong> Autonomous
             edge operation with sub-second response.
-            <strong className="text-white"> Tier 2 (Enhanced):</strong> AI and
+            <strong className={styles.tierLabel}> Tier 2 (Enhanced):</strong> AI and
             intelligence when network available.
-            <strong className="text-white"> Tier 3 (Strategic):</strong>{" "}
+            <strong className={styles.tierLabel}> Tier 3 (Strategic):</strong>{" "}
             Analytics and compliance reporting.
           </p>
         </RevealSection>

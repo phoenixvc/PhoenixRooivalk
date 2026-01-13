@@ -3603,3 +3603,179 @@
   margin-bottom: 4px;
   line-height: 1.4;
 }
+
+/* Layout utilities for ThreatSimulator components */
+.simulatorContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 800px;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.gameArea {
+  position: relative;
+  flex-grow: 1;
+}
+
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  padding: 1rem;
+  gap: 1rem;
+  background: rgb(var(--color-gray-800));
+}
+
+/* Demo mode styles */
+.demoContainer {
+  padding: 2rem;
+}
+
+.demoControls {
+  margin-bottom: 2rem;
+}
+
+.demoControls h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--text-primary));
+  margin-bottom: 1rem;
+}
+
+.demoModeSelector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.demoModeSelector button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(var(--border), 0.5);
+  background: rgba(var(--bg-surface), 0.8);
+  color: rgb(var(--text-secondary));
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.demoModeSelector button:hover {
+  background: rgba(var(--primary), 0.1);
+}
+
+.demoModeSelector button.active {
+  background: rgb(var(--primary));
+  color: rgb(var(--tactical-black));
+  border-color: rgb(var(--primary));
+}
+
+.demoContent {
+  margin-top: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: rgb(var(--text-muted));
+}
+
+.demoSimulator {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.componentShowcase {
+  padding: 1rem;
+}
+
+.showcaseHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.showcaseHeader h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--text-primary));
+  margin-bottom: 0.5rem;
+}
+
+.showcaseHeader p {
+  color: rgb(var(--text-muted));
+}
+
+.componentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.componentCard {
+  background: rgba(var(--bg-surface), 0.8);
+  border: 1px solid rgba(var(--border), 0.5);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.componentCard h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary));
+  margin-bottom: 0.5rem;
+}
+
+.componentCard p {
+  color: rgb(var(--text-muted));
+  font-size: 0.875rem;
+}
+
+.systemArchitecture {
+  padding: 1rem;
+}
+
+.architectureHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.architectureHeader h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--text-primary));
+  margin-bottom: 0.5rem;
+}
+
+.architectureHeader p {
+  color: rgb(var(--text-muted));
+}
+
+.architectureDiagram {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.systemLayer {
+  background: rgba(var(--bg-surface), 0.8);
+  border: 1px solid rgba(var(--border), 0.5);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.systemLayer h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--primary));
+  margin-bottom: 0.5rem;
+}
+
+.systemLayer p {
+  color: rgb(var(--text-muted));
+  font-size: 0.875rem;
+}

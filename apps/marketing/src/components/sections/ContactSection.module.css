@@ -76,6 +76,10 @@
   gap: var(--space-3);
 }
 
+.fullWidthButton {
+  width: 100%;
+}
+
 /* Secondary section - demoted investor/partner content */
 .secondarySection {
   text-align: center;
