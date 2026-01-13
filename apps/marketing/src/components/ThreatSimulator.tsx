@@ -252,24 +252,21 @@ export const ThreatSimulator: React.FC<ThreatSimulatorProps> = ({
       // This would typically clear any active timeouts in the game
     },
     particleSystem: {
-      createExplosion: (x: number, y: number, intensity: number) => {
+      createExplosion: (_x: number, _y: number, _intensity: number) => {
         // Implementation for creating explosions
         // This would typically trigger visual effects
-        console.log(`Explosion at (${x},${y}) with intensity ${intensity}`);
       },
     },
   });
 
   // Handle threat hover events
-  const handleThreatHover = (threatId: string | null) => {
+  const handleThreatHover = (_threatId: string | null) => {
     // Implementation for threat hover
-    console.log("Threat hover:", threatId);
   };
 
   // Define the handler functions separately since they're not returned from the hook
-  const _handleDroneClick = (e: React.MouseEvent, droneId: string) => {
+  const _handleDroneClick = (_e: React.MouseEvent, _droneId: string) => {
     // Implementation for handling drone clicks
-    console.log("Drone clicked:", droneId);
   };
 
   const handleWeaponActivate = (weaponId: string | null) => {

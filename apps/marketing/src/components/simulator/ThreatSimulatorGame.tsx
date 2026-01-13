@@ -97,11 +97,10 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("Context menu");
   };
 
   const handleWheel = (_e: React.WheelEvent) => {
-    console.log("Wheel event");
+    // Zoom functionality placeholder
   };
 
   // Fullscreen handlers
@@ -127,7 +126,6 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
         level={gameState.level}
         onToggleResearch={() => {
           // Research functionality not implemented in this component
-          console.log("Research toggle requested");
         }}
       />
 
@@ -176,8 +174,8 @@ const ThreatSimulatorGame: React.FC<ThreatSimulatorGameProps> = ({
             drones={gameState.drones}
             deploymentBays={gameState.deploymentBays}
             selectedDroneType={gameState.selectedDroneType}
-            onSelectDroneType={(type) => {
-              console.log("Select drone type:", type);
+            onSelectDroneType={(_type) => {
+              // Drone type selection placeholder
             }}
             energy={gameState.energy}
           />
