@@ -1,12 +1,19 @@
 .section {
   position: relative;
-  padding: 6rem 2rem;
+  padding: var(--space-16) var(--space-4);
   background: linear-gradient(
     180deg,
     rgb(var(--bg-primary)) 0%,
     rgb(var(--darker)) 100%
   );
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
 
 .container {
@@ -18,7 +25,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--space-12);
 }
 
 .title {
@@ -40,15 +47,15 @@
 .teamGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
 }
 
 .foundersGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
   align-items: stretch;
 }
 
@@ -58,8 +65,8 @@
 
 .advisorsHeader {
   text-align: center;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
 }
 
 .advisorsTitle {
@@ -71,7 +78,7 @@
 .advisorsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: var(--space-8);
   max-width: 800px;
   margin: 0 auto;
 }
@@ -222,8 +229,8 @@
 /* Backed By Section */
 .backedByHeader {
   text-align: center;
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
 }
 
 .backedByTitle {
@@ -235,7 +242,7 @@
 .backedByGrid {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: var(--space-8);
 }
 
 .backedByCard {
