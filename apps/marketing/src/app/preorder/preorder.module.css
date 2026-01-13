@@ -243,7 +243,7 @@
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: rgb(var(--text-primary));
+  color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;
@@ -338,7 +338,7 @@
   padding: 1.125rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: rgb(var(--text-primary));
+  color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;
@@ -439,7 +439,7 @@
   padding: 1.25rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: rgb(var(--text-primary));
+  color: rgb(var(--tactical-black));
   /* gradient uses --primary (orange-500) and --color-orange-light (orange-400) */
   background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--color-orange-light)));
   border: none;

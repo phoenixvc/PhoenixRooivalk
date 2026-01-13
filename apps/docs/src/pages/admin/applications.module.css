@@ -369,20 +369,22 @@
 
 .approveBtn {
   background: rgb(var(--color-teal-deep));
-  color: rgb(var(--text-primary));
+  color: #ffffff;
 }
 
 .approveBtn:hover:not(:disabled) {
   background: rgb(var(--color-green-dark));
+  color: #ffffff;
 }
 
 .rejectBtn {
   background: rgb(var(--color-red));
-  color: rgb(var(--text-primary));
+  color: #ffffff;
 }
 
 .rejectBtn:hover:not(:disabled) {
   background: rgb(var(--color-red-dark));
+  color: #ffffff;
 }
 
 /* Responsive */

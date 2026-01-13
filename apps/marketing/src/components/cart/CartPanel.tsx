@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useCart } from "../../contexts/CartContext";
 import { CartItem } from "./CartItem";
 import styles from "./CartPanel.module.css";
@@ -14,6 +15,7 @@ export function CartPanel({
   isOpen,
   onClose,
 }: CartPanelProps): React.ReactElement {
+  const router = useRouter();
   const { items, total, itemCount } = useCart();
 
   // Close on Escape key
@@ -42,8 +44,8 @@ export function CartPanel({
   }, [isOpen]);
 
   const handleCheckout = () => {
-    // Navigate to preorder page
-    window.location.href = "/preorder";
+    // Navigate to preorder page using Next.js router for SPA navigation
+    router.push("/preorder");
   };
 
   return (

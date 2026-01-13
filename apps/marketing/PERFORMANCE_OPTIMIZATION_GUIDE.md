@@ -86,7 +86,30 @@ import Image from "next/image";
 // Before
 <img src="/img/drone_over_treetops.png" alt="Drone" />
 
-// After
+// After - Option A: Static import for blur placeholder (recommended)
+import droneImg from "@/public/img/drone_over_treetops.png";
+
+<Image
+  src={droneImg}
+  alt="Drone"
+  width={800}
+  height={600}
+  quality={80}
+  loading="lazy"
+  placeholder="blur"
+/>
+
+// After - Option B: Remote/dynamic images without blur
+<Image
+  src="/img/drone_over_treetops.png"
+  alt="Drone"
+  width={800}
+  height={600}
+  quality={80}
+  loading="lazy"
+/>
+
+// After - Option C: Remote images with explicit blurDataURL
 <Image
   src="/img/drone_over_treetops.png"
   alt="Drone"
@@ -95,8 +118,14 @@ import Image from "next/image";
   quality={80}
   loading="lazy"
   placeholder="blur"
+  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
 />
 ```
+
+> **Note:** When using `placeholder="blur"`, you must either:
+> 1. Use a static import (Option A) - Next.js auto-generates blur data
+> 2. Provide an explicit `blurDataURL` prop (Option C)
+> 3. Omit `placeholder="blur"` for dynamic images (Option B)
 
 ### 2. Code Splitting (Medium Priority)
 
@@ -131,6 +160,24 @@ Run bundle analyzer:
 cd apps/marketing
 ANALYZE=true pnpm build
 ```
+
+> **Required Setup:** To enable bundle analysis, install and configure `@next/bundle-analyzer`:
+>
+> ```bash
+> pnpm add -D @next/bundle-analyzer
+> ```
+>
+> Then update `next.config.js`:
+>
+> ```js
+> const withBundleAnalyzer = require("@next/bundle-analyzer")({
+>   enabled: process.env.ANALYZE === "true",
+> });
+>
+> module.exports = withBundleAnalyzer({
+>   // ... existing config
+> });
+> ```
 
 #### Optimization Strategies
 
@@ -186,18 +233,26 @@ ANALYZE=true pnpm build
 
 2. **Intersection Observer for sections**
 
+   Install the `react-intersection-observer` library:
+
+   ```bash
+   pnpm add react-intersection-observer
+   ```
+
+   Then use `useInView` hook:
+
    ```tsx
-   import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+   import { useInView } from "react-intersection-observer";
 
    function LazySection({ children }) {
-     const [ref, isVisible] = useIntersectionObserver({
+     const { ref, inView } = useInView({
        threshold: 0.1,
        triggerOnce: true,
      });
 
      return (
-       <div ref={ref} className={isVisible ? "visible" : ""}>
-         {isVisible ? children : <SectionSkeleton />}
+       <div ref={ref} className={inView ? "visible" : ""}>
+         {inView ? children : <SectionSkeleton />}
        </div>
      );
    }
@@ -205,15 +260,20 @@ ANALYZE=true pnpm build
 
 ### 5. Service Worker Setup (Low Priority)
 
-#### Workbox Integration
+> **⚠️ Static Export Limitation:** This project uses `output: "export"` for static
+> site generation. The `next-pwa` package is **not compatible** with static exports
+> as it requires server-side functionality. Choose one of the options below:
+
+#### Option A: Switch to Runtime Deployment (if deploying to Vercel/Node.js)
+
+If you can switch away from static export:
 
 ```bash
-cd apps/marketing
-pnpm add workbox-webpack-plugin
+pnpm add next-pwa
 ```
 
 ```js
-// next.config.js
+// next.config.js - Remove output: "export" first
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -222,8 +282,42 @@ const withPWA = require("next-pwa")({
 });
 
 module.exports = withPWA({
-  // ... existing config
+  // ... existing config (without output: "export")
 });
+```
+
+#### Option B: Manual Service Worker for Static Export (Recommended)
+
+For static exports, create a manual service worker:
+
+1. Create `public/sw.js`:
+
+```js
+const CACHE_NAME = "phoenix-rooivalk-v1";
+const urlsToCache = ["/", "/products", "/contact"];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)),
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    }),
+  );
+});
+```
+
+2. Register in your app layout:
+
+```tsx
+// In a client component or useEffect
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 ```
 
 ### 6. Performance Monitoring (Ongoing)
