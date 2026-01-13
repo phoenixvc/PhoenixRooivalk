@@ -7,20 +7,4 @@
   margin: 0 auto;
 }
 
-/* Subtle gradient only - no grid, no animation */
-.background {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  background: radial-gradient(
-    ellipse at 50% 100%,
-    rgba(var(--primary), 0.02) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-}
-
-/* Remove grid pattern entirely */
-.backgroundGrid {
-  display: none;
-}
+/* Background handled by InteractiveMesh component */

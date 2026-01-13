@@ -7,6 +7,7 @@ import { ContactSection } from "../components/sections/ContactSection";
 import { FeaturesSection } from "../components/sections/FeaturesSection";
 import { HeroSection } from "../components/sections/HeroSection";
 import { ProductHighlightsSection } from "../components/sections/ProductHighlightsSection";
+import { InteractiveMesh } from "../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../hooks/usePerformanceOptimizations";
 import styles from "./home.module.css";
 
@@ -16,10 +17,13 @@ export default function HomePage(): React.ReactElement {
 
   return (
     <main className={styles.main} id="main-content">
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.backgroundGrid} />
-      </div>
+      {/* Background mesh effect */}
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.12)"
+        bendStrength={25}
+        bendRadius={120}
+      />
 
       {/* Global Components */}
 
