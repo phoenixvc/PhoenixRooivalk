@@ -3,28 +3,9 @@
 .pageContainer {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--darker));
-  color: rgb(var(--text-primary));
-}
-
-.backgroundWrapper {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
   background: rgb(var(--bg-primary));
-}
-
-.gridPattern {
-  display: none;
-}
-
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
+  color: rgb(var(--text-primary));
+  min-height: 100vh;
 }
 
 .nav {
@@ -127,7 +108,14 @@
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
   }
 }

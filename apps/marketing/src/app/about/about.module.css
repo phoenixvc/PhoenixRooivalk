@@ -3,30 +3,20 @@
 .main {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--darker));
-  color: white;
-}
-
-.background {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
   background: rgb(var(--bg-primary));
-}
-
-.gridPattern {
-  display: none;
-}
-
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
+  color: rgb(var(--text-primary));
+  min-height: 100vh;
 }
 
 .contentWrapper {
-  padding-top: 3rem;
+  padding-top: var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive spacing */
+@media (min-width: 768px) {
+  .contentWrapper {
+    padding-top: var(--space-12);
+  }
 }

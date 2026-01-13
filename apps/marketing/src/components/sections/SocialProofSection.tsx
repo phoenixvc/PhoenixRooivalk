@@ -249,17 +249,20 @@ export const SocialProofSection: React.FC = () => {
             </p>
             <div className={styles.ctaButtons}>
               <Button
-                href="#contact"
+                href="/contact"
                 size="lg"
-                className="bg-gradient-to-r from-[rgb(var(--primary))] to-[rgb(var(--accent))] hover:from-[rgb(var(--accent))] hover:to-[rgb(var(--primary))] shadow-xl"
+                variant="primary"
+                trackingEvent="Pilot Program Request"
+                trackingProps={{ location: "social-proof" }}
               >
                 Request Pilot Program
               </Button>
               <Button
                 href="/compliance"
-                variant="ghost"
+                variant="secondary"
                 size="lg"
-                className="border-[rgb(var(--primary))] text-[rgb(var(--primary))] hover:bg-[rgba(var(--primary),0.1)]"
+                trackingEvent="View Certifications"
+                trackingProps={{ location: "social-proof" }}
               >
                 View Certifications
               </Button>
