@@ -19,7 +19,7 @@
 .radarOuterRing {
   position: absolute;
   inset: 0;
-  border: 2px solid rgba(96, 165, 250, 0.15);
+  border: 2px solid rgba(var(--sim-ring), 0.15);
   border-radius: 9999px;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -27,14 +27,14 @@
 .radarMiddleRing {
   position: absolute;
   inset: 2rem;
-  border: 1px solid rgba(147, 197, 253, 0.25);
+  border: 1px solid rgba(var(--sim-ring), 0.25);
   border-radius: 9999px;
 }
 
 .radarInnerRing {
   position: absolute;
   inset: 4rem;
-  border: 1px solid rgba(96, 165, 250, 0.35);
+  border: 1px solid rgba(var(--sim-ring), 0.35);
   border-radius: 9999px;
 }
 
@@ -49,7 +49,7 @@
   left: 50%;
   width: 0.125rem;
   height: 2rem;
-  background: rgba(96, 165, 250, 0.2);
+  background: rgba(var(--sim-ring), 0.2);
 }
 
 .sweepLine {
@@ -58,7 +58,12 @@
   left: 50%;
   width: 100%;
   height: 0.125rem;
-  background: linear-gradient(to right, transparent, rgb(96, 165, 250), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(var(--sim-friendly)),
+    transparent
+  );
   animation: spin 4s linear infinite;
   transform-origin: left center;
   opacity: 0.7;
@@ -80,16 +85,56 @@
   transform: translate(-50%, -50%);
   width: 0.75rem;
   height: 0.75rem;
-  background: rgb(96, 165, 250);
+  background: rgb(var(--sim-friendly));
   border-radius: 9999px;
   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes ping {
-  75%, 100% {
+  75%,
+  100% {
     transform: translate(-50%, -50%) scale(2);
     opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .radarOuterRing,
+  .centerDot,
+  .sweepLine,
+  .energyShield,
+  .droneStatus,
+  .droneTrail,
+  .lowEnergyWarning {
+    animation: none;
+  }
+
+  .sweepLine {
+    opacity: 0.3;
   }
 }
 
@@ -98,7 +143,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.75rem;
-  color: rgb(96, 165, 250);
+  color: rgb(var(--sim-friendly));
   font-family: monospace;
 }
 
@@ -120,14 +165,18 @@
 .mothershipBody {
   width: 4rem;
   height: 4rem;
-  background: linear-gradient(to bottom right, rgb(71, 85, 105), rgb(30, 41, 59));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--sim-panel)),
+    rgb(var(--sim-bg))
+  );
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 2px solid rgb(148, 163, 184);
+  border: 2px solid rgb(var(--sim-border-light));
   position: relative;
 }
 
@@ -135,17 +184,8 @@
   position: absolute;
   inset: 0;
   border-radius: 0.5rem;
-  border: 2px solid rgba(96, 165, 250, 0.5);
+  border: 2px solid rgba(var(--sim-friendly), 0.5);
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
 }
 
 .lowEnergyWarning {
@@ -153,21 +193,10 @@
   top: -1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  color: rgb(248, 113, 113);
+  color: rgb(var(--sim-hostile));
   font-size: 0.75rem;
   animation: bounce 1s infinite;
   font-family: monospace;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-  }
-  50% {
-    transform: translateX(-50%) translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
 }
 
 .mothershipLabel {
@@ -176,7 +205,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.75rem;
-  color: white;
+  color: rgb(var(--sim-text));
   background: rgba(0, 0, 0, 0.5);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
@@ -220,18 +249,18 @@
 }
 
 .threatIconCrater {
-  background: rgba(75, 85, 99, 0.3);
-  border-color: rgba(107, 114, 128, 0.5);
+  background: rgba(var(--sim-muted), 0.3);
+  border-color: rgba(var(--sim-muted), 0.5);
 }
 
 .threatIconNeutralized {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(var(--sim-hostile), 0.2);
+  border-color: rgba(var(--sim-hostile), 0.5);
 }
 
 .threatIconSelected {
-  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.75);
-  border-color: rgb(147, 197, 253);
+  box-shadow: 0 0 0 4px rgba(var(--sim-friendly), 0.75);
+  border-color: rgb(var(--sim-ring));
 }
 
 .threatIconHovered {
@@ -258,15 +287,15 @@
 }
 
 .priorityHigh {
-  background: rgb(239, 68, 68);
+  background: rgb(var(--sim-hostile));
 }
 
 .priorityMedium {
-  background: rgb(234, 179, 8);
+  background: rgb(var(--sim-gold));
 }
 
 .priorityLow {
-  background: rgb(34, 197, 94);
+  background: rgb(var(--action-success));
 }
 
 .threatLabel {
@@ -275,7 +304,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.8);
-  color: white;
+  color: rgb(var(--sim-text));
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
@@ -295,14 +324,14 @@
   transform: translateX(-50%);
   width: 3rem;
   height: 0.25rem;
-  background: rgb(75, 85, 99);
+  background: rgb(var(--sim-muted));
   border-radius: 9999px;
   overflow: hidden;
 }
 
 .healthBarFill {
   height: 100%;
-  background: rgb(239, 68, 68);
+  background: rgb(var(--sim-hostile));
   transition: all 0.3s;
 }
 
@@ -316,14 +345,18 @@
 .droneBody {
   width: 2rem;
   height: 2rem;
-  background: linear-gradient(to bottom right, rgb(59, 130, 246), rgb(29, 78, 216));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--sim-friendly)),
+    rgb(var(--color-blue-muted))
+  );
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.875rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  border: 2px solid rgb(147, 197, 253);
+  border: 2px solid rgb(var(--sim-ring));
   position: relative;
 }
 
@@ -333,7 +366,7 @@
   right: -0.25rem;
   width: 0.75rem;
   height: 0.75rem;
-  background: rgb(34, 197, 94);
+  background: rgb(var(--action-success));
   border-radius: 9999px;
   border: 1px solid white;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -343,15 +376,15 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  border: 1px solid rgba(96, 165, 250, 0.3);
+  border: 1px solid rgba(var(--sim-friendly), 0.3);
   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 /* Selection Box */
 .selectionBox {
   position: absolute;
-  border: 2px solid rgb(96, 165, 250);
-  background: rgba(96, 165, 250, 0.1);
+  border: 2px solid rgb(var(--sim-friendly));
+  background: rgba(var(--sim-friendly), 0.1);
   pointer-events: none;
 }
 
@@ -373,13 +406,13 @@
 }
 
 .deploymentBayActive {
-  border-color: rgb(74, 222, 128);
-  background: rgba(74, 222, 128, 0.2);
+  border-color: rgb(var(--action-success));
+  background: rgba(var(--action-success), 0.2);
 }
 
 .deploymentBayEmpty {
-  border-color: rgb(75, 85, 99);
-  background: rgba(75, 85, 99, 0.2);
+  border-color: rgb(var(--sim-muted));
+  background: rgba(var(--sim-muted), 0.2);
 }
 
 .deploymentBayLabel {
@@ -388,7 +421,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.75rem;
-  color: white;
+  color: rgb(var(--sim-text));
   background: rgba(0, 0, 0, 0.5);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
