@@ -53,7 +53,6 @@ export const Navigation: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
-  // Buyer-first navigation - simple and focused
   const navigationItems: NavigationItem[] = [
     {
       type: "dropdown",
@@ -82,9 +81,51 @@ export const Navigation: React.FC = () => {
       ],
     },
     {
-      type: "link",
-      href: "/technical",
-      label: "Specs",
+      type: "dropdown",
+      label: "Technology",
+      items: [
+        {
+          href: "/technical",
+          label: "Technical Specs",
+          description: "Detailed specifications",
+        },
+        {
+          href: "/capabilities",
+          label: "Capabilities",
+          description: "Core system features",
+        },
+        {
+          href: "/methods",
+          label: "Defense Methods",
+          description: "Counter-drone strategies",
+        },
+        {
+          href: "/timeline",
+          label: "Development Timeline",
+          description: "Project roadmap",
+        },
+      ],
+    },
+    {
+      type: "dropdown",
+      label: "Business",
+      items: [
+        {
+          href: "/roi-calculator",
+          label: "ROI Calculator",
+          description: "Calculate your savings",
+        },
+        {
+          href: "/schedule",
+          label: "Schedule Meeting",
+          description: "Book a demo or consultation",
+        },
+        {
+          href: "/partnerships",
+          label: "Partnerships",
+          description: "Collaboration opportunities",
+        },
+      ],
     },
     {
       type: "link",

@@ -5,6 +5,7 @@ import { Navigation } from "../../components/Navigation";
 import { SocialProofSection } from "../../components/sections/SocialProofSection";
 import { TeamSection } from "../../components/sections/TeamSection";
 import { TechnicalIntegrationsSection } from "../../components/sections/TechnicalIntegrationsSection";
+import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
 import styles from "./about.module.css";
 
@@ -14,10 +15,13 @@ export default function AboutPage(): React.ReactElement {
 
   return (
     <main className={styles.main}>
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.gridPattern} />
-      </div>
+      {/* Background mesh effect */}
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.1)"
+        bendStrength={20}
+        bendRadius={100}
+      />
 
       {/* Navigation */}
       <Navigation />

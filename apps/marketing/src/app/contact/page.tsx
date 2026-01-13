@@ -4,6 +4,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
+import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { API_BASE_URL } from "../../config/constants";
 import styles from "./contact.module.css";
 
@@ -133,10 +134,13 @@ export default function ContactPage(): React.ReactElement {
 
   return (
     <main className={styles.pageContainer}>
-      {/* Background */}
-      <div className={styles.backgroundWrapper}>
-        <div className={styles.gridPattern} />
-      </div>
+      {/* Background mesh effect */}
+      <InteractiveMesh
+        gridSize={50}
+        color="rgba(234, 124, 28, 0.1)"
+        bendStrength={20}
+        bendRadius={100}
+      />
 
       {/* Navigation */}
       <Navigation />
