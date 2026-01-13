@@ -37,9 +37,7 @@ export const ThreatSimulatorOverlays: React.FC<
                 <span className={styles.warningIconEmoji}>⚠️</span>
               </div>
               <div>
-                <div className={styles.warningTitle}>
-                  SIMULATION MODULE
-                </div>
+                <div className={styles.warningTitle}>SIMULATION MODULE</div>
                 <div className={styles.warningDescription}>
                   This interactive module is designed to visualize concepts. It
                   does not represent real-world sensor performance, detection
@@ -75,9 +73,7 @@ export const ThreatSimulatorOverlays: React.FC<
                 />
               </svg>
             </div>
-            <h3 className={styles.fullscreenTitle}>
-              Fullscreen Mode
-            </h3>
+            <h3 className={styles.fullscreenTitle}>Fullscreen Mode</h3>
             <p className={styles.fullscreenDescription}>
               Experience the threat simulation in fullscreen for optimal
               tactical visualization and precise control.

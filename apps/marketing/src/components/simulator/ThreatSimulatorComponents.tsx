@@ -85,15 +85,11 @@ export const ThreatSimulatorComponents: React.FC<
           )}
           {/* Low energy warning */}
           {gameState.energy < gameState.maxEnergy * 0.2 && (
-            <div className={styles.lowEnergyWarning}>
-              LOW ENERGY
-            </div>
+            <div className={styles.lowEnergyWarning}>LOW ENERGY</div>
           )}
         </div>
         {/* Mothership label */}
-        <div className={styles.mothershipLabel}>
-          MOTHERSHIP
-        </div>
+        <div className={styles.mothershipLabel}>MOTHERSHIP</div>
       </div>
       {/* Enhanced Threats */}
       {gameState.threats.map((threat) => {
@@ -122,7 +118,9 @@ export const ThreatSimulatorComponents: React.FC<
           isSelected && styles.threatSelected,
           isHovered && !isSelected && styles.threatHovered,
           isNeutralized && styles.threatNeutralized,
-        ].filter(Boolean).join(" ");
+        ]
+          .filter(Boolean)
+          .join(" ");
 
         const iconClasses = [
           styles.threatIcon,
@@ -130,7 +128,9 @@ export const ThreatSimulatorComponents: React.FC<
           !isCrater && isNeutralized && styles.threatIconNeutralized,
           isSelected && styles.threatIconSelected,
           isHovered && !isSelected && styles.threatIconHovered,
-        ].filter(Boolean).join(" ");
+        ]
+          .filter(Boolean)
+          .join(" ");
 
         return (
           <div
@@ -140,7 +140,8 @@ export const ThreatSimulatorComponents: React.FC<
               left: `${threat.x}px`,
               top: `${threat.y}px`,
               opacity: isNeutralized ? fadeOpacity : 1,
-              backgroundColor: !isCrater && !isNeutralized ? appearance.color : undefined,
+              backgroundColor:
+                !isCrater && !isNeutralized ? appearance.color : undefined,
             }}
             onClick={(e) =>
               !isNeutralized && !isCrater && onThreatClick(e, threat.id)
@@ -177,7 +178,8 @@ export const ThreatSimulatorComponents: React.FC<
             <div
               className={iconClasses}
               style={{
-                backgroundColor: !isCrater && !isNeutralized ? appearance.color : undefined,
+                backgroundColor:
+                  !isCrater && !isNeutralized ? appearance.color : undefined,
               }}
             >
               {isCrater ? "🕳️" : isNeutralized ? "💥" : appearance.emoji}

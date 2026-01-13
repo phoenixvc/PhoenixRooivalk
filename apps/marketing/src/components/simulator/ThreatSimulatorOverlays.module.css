@@ -99,7 +99,11 @@
 .fullscreenIconContainer {
   width: 5rem;
   height: 5rem;
-  background: linear-gradient(to bottom right, rgb(var(--primary)), rgb(var(--accent)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--primary)),
+    rgb(var(--accent))
+  );
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -136,7 +140,11 @@
 }
 
 .fullscreenEnterBtn {
-  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary)),
+    rgb(var(--accent))
+  );
   color: rgb(var(--sim-text));
   font-weight: 600;
   padding: 1rem 2rem;
