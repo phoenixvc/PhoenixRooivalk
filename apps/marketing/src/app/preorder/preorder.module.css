@@ -409,8 +409,9 @@
 }
 
 .input {
+  min-height: 48px;
   padding: 0.875rem;
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--text-primary, #fff);
   background: var(--bg-primary, #0f172a);
   border: 1px solid rgba(var(--primary), 0.2);
@@ -421,7 +422,12 @@
 .input:focus {
   outline: none;
   border-color: var(--primary, #f97316);
-  box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.15);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--primary, #f97316);
+  outline-offset: 2px;
 }
 
 .textarea {

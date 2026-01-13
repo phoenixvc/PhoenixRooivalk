@@ -704,15 +704,30 @@ li:last-child {
 
 /* Improved Accessibility */
 *:focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.8);
-  outline-offset: 4px;
+  outline: 2px solid rgba(var(--primary), 0.8);
+  outline-offset: 3px;
   transition: outline-offset 0.2s ease;
 }
 
 button:focus-visible,
-a:focus-visible {
-  outline: 3px solid rgba(59, 130, 246, 0.8);
-  outline-offset: 4px;
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgb(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Skip to content link */
