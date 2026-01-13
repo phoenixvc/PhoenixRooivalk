@@ -170,10 +170,24 @@
   --color-gray-950: 2, 6, 23; /* #020617 - slate-950 */
 
   /* Additional grays (neutral scale) */
-  --color-neutral-400: 156, 163, 175; /* #9ca3af - gray-400 */
   --color-neutral-300: 209, 213, 219; /* #d1d5db - gray-300 */
+  --color-neutral-400: 156, 163, 175; /* #9ca3af - gray-400 */
+  --color-neutral-500: 107, 114, 128; /* #6b7280 - gray-500 */
   --color-neutral-700: 55, 65, 81; /* #374151 - gray-700 */
   --color-neutral-800: 17, 24, 39; /* #111827 - gray-800 */
+
+  /* Slate scale (for backward compatibility) */
+  --color-slate-400: 148, 163, 184; /* #94a3b8 - slate-400 */
+  --color-slate-700: 51, 65, 85; /* #334155 - slate-700 */
+  --color-slate-800: 30, 41, 59; /* #1e293b - slate-800 */
+  --color-slate-900: 15, 23, 42; /* #0f172a - slate-900 */
+
+  /* Additional aliases */
+  --white: 255, 255, 255;
+  --error: 239, 68, 68; /* #ef4444 - same as color-red */
+  --sim-panel-bg: 18, 24, 33; /* same as sim-panel */
+  --sim-primary: 255, 59, 0; /* same as sim-accent */
+  --sim-secondary: 100, 116, 139; /* muted secondary */
 
   /* Page backgrounds - gradient colors */
   --gradient-dark-start: 27, 39, 53; /* #1b2735 */
