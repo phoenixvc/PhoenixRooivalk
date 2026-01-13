@@ -268,7 +268,9 @@
   border-color: rgb(var(--sim-border-light));
 }
 .weapon-item.selected {
-  background: rgb(var(--tactical-charcoal)); /* A slightly different color for selection */
+  background: rgb(
+    var(--tactical-charcoal)
+  ); /* A slightly different color for selection */
   border-color: rgb(var(--sim-accent));
   box-shadow: 0 0 8px rgba(var(--sim-accent), 0.5);
 }
@@ -594,7 +596,11 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--sim-accent)), rgb(var(--sim-friendly)));
+  background: linear-gradient(
+    90deg,
+    rgb(var(--sim-accent)),
+    rgb(var(--sim-friendly))
+  );
   transition: width 0.3s ease;
 }
 

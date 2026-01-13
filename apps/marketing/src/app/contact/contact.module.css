@@ -94,7 +94,11 @@
 .pageTitle {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(to bottom right, rgb(var(--text-primary)), rgb(var(--primary)));
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--text-primary)),
+    rgb(var(--primary))
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -488,7 +492,11 @@
 }
 
 .loginNotice {
-  background: linear-gradient(135deg, rgba(var(--phoenix-amber), 0.15), rgba(var(--primary), 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(var(--phoenix-amber), 0.15),
+    rgba(var(--primary), 0.1)
+  );
   border: 1px solid rgba(var(--phoenix-amber), 0.4);
   border-radius: 0.75rem;
   padding: 2rem;
@@ -515,7 +523,11 @@
 }
 
 .loginLink:hover {
-  background: linear-gradient(135deg, rgb(var(--color-orange-dark)), rgb(var(--primary)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-orange-dark)),
+    rgb(var(--primary))
+  );
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(var(--primary), 0.4);
 }

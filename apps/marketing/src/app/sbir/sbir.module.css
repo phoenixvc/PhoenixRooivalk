@@ -96,7 +96,11 @@
 }
 
 .sectionGradient2 {
-  background: linear-gradient(180deg, rgba(var(--color-blue-deep), 0.05), transparent);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--color-blue-deep), 0.05),
+    transparent
+  );
 }
 
 .container {

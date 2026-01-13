@@ -7,7 +7,11 @@
 }
 
 .dark {
-  background: radial-gradient(circle at top, rgb(var(--evidence-bg-dark)), rgb(var(--evidence-bg-deep)) 60%);
+  background: radial-gradient(
+    circle at top,
+    rgb(var(--evidence-bg-dark)),
+    rgb(var(--evidence-bg-deep)) 60%
+  );
   color: rgb(var(--color-gray-200));
 }
 

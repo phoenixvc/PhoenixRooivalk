@@ -6,7 +6,11 @@
 .heroTitle {
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--sensor-amber)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--sensor-amber))
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -68,7 +72,11 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--sensor-amber)));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)),
+    rgb(var(--sensor-amber))
+  );
   color: rgb(var(--text-primary));
   font-size: 1.5rem;
   font-weight: 700;
@@ -148,7 +156,11 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--primary)), rgb(var(--sensor-amber)));
+  background: linear-gradient(
+    90deg,
+    rgb(var(--primary)),
+    rgb(var(--sensor-amber))
+  );
   border-radius: 4px;
   transition: width 0.3s ease;
 }

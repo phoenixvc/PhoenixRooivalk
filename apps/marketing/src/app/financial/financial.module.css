@@ -11,7 +11,11 @@
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: radial-gradient(ellipse at bottom, rgb(var(--gradient-dark-start)) 0%, rgb(var(--gradient-dark-end)) 100%);
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(var(--gradient-dark-start)) 0%,
+    rgb(var(--gradient-dark-end)) 100%
+  );
 }
 
 .gridPattern {
@@ -102,7 +106,11 @@
 }
 
 .sectionGradient2 {
-  background: linear-gradient(180deg, rgba(var(--secondary), 0.05), transparent);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--secondary), 0.05),
+    transparent
+  );
 }
 
 .container {

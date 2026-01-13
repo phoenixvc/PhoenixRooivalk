@@ -123,6 +123,7 @@ import droneImg from "@/public/img/drone_over_treetops.png";
 ```
 
 > **Note:** When using `placeholder="blur"`, you must either:
+>
 > 1. Use a static import (Option A) - Next.js auto-generates blur data
 > 2. Provide an explicit `blurDataURL` prop (Option C)
 > 3. Omit `placeholder="blur"` for dynamic images (Option B)
@@ -161,7 +162,8 @@ cd apps/marketing
 ANALYZE=true pnpm build
 ```
 
-> **Required Setup:** To enable bundle analysis, install and configure `@next/bundle-analyzer`:
+> **Required Setup:** To enable bundle analysis, install and configure
+> `@next/bundle-analyzer`:
 >
 > ```bash
 > pnpm add -D @next/bundle-analyzer
@@ -260,9 +262,10 @@ ANALYZE=true pnpm build
 
 ### 5. Service Worker Setup (Low Priority)
 
-> **⚠️ Static Export Limitation:** This project uses `output: "export"` for static
-> site generation. The `next-pwa` package is **not compatible** with static exports
-> as it requires server-side functionality. Choose one of the options below:
+> **⚠️ Static Export Limitation:** This project uses `output: "export"` for
+> static site generation. The `next-pwa` package is **not compatible** with
+> static exports as it requires server-side functionality. Choose one of the
+> options below:
 
 #### Option A: Switch to Runtime Deployment (if deploying to Vercel/Node.js)
 
