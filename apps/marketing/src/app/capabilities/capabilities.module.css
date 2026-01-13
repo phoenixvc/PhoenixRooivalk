@@ -1,4 +1,4 @@
-/* About Page Styles */
+/* Capabilities Page Styles */
 
 .main {
   position: relative;
@@ -14,7 +14,6 @@
   z-index: 1;
 }
 
-/* Responsive spacing */
 @media (min-width: 768px) {
   .contentWrapper {
     padding-top: var(--space-12);

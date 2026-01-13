@@ -796,9 +796,32 @@
   margin-top: 0.5rem;
 }
 
-.buttonActive {
-  background-color: var(--phoenix-amber);
-  color: var(--tactical-black);
+.sensitivityBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  border: 1px solid rgba(var(--border), 0.5);
+  background: rgba(var(--bg-surface), 0.8);
+  color: rgb(var(--text-secondary));
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sensitivityBtn:hover {
+  background: rgba(var(--primary), 0.1);
+  border-color: rgba(var(--primary), 0.3);
+}
+
+.sensitivityBtnActive {
+  background: rgb(var(--primary));
+  color: rgb(var(--tactical-black));
+  border-color: rgb(var(--primary));
+}
+
+.flexShrink0 {
+  flex-shrink: 0;
 }
 
 .inputWithNumber {

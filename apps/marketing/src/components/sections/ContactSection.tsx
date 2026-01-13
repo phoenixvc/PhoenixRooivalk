@@ -27,7 +27,7 @@ export const ContactSection: React.FC = () => {
               <Button
                 href="/preorder"
                 size="lg"
-                className="w-full"
+                className={styles.fullWidthButton}
                 trackingEvent="Preorder Clicked"
                 trackingProps={{ location: "contact-section", type: "primary" }}
                 aria-label="Go to preorder page"
@@ -38,7 +38,7 @@ export const ContactSection: React.FC = () => {
                 href="mailto:sales@phoenixrooivalk.com"
                 variant="ghost"
                 size="lg"
-                className="w-full"
+                className={styles.fullWidthButton}
                 trackingEvent="Sales Inquiry"
                 trackingProps={{ location: "contact-section", type: "email" }}
                 aria-label="Email sales team"
@@ -58,7 +58,7 @@ export const ContactSection: React.FC = () => {
               <Button
                 href="/products"
                 size="lg"
-                className="w-full"
+                className={styles.fullWidthButton}
                 trackingEvent="Products Viewed"
                 trackingProps={{ location: "contact-section", type: "link" }}
                 aria-label="View all products"
@@ -69,7 +69,7 @@ export const ContactSection: React.FC = () => {
                 href="mailto:support@phoenixrooivalk.com"
                 variant="ghost"
                 size="lg"
-                className="w-full"
+                className={styles.fullWidthButton}
                 trackingEvent="Support Inquiry"
                 trackingProps={{ location: "contact-section", type: "email" }}
                 aria-label="Email support team"
