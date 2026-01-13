@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
+import { useEffect, useRef } from "react";
 import styles from "./InteractiveMesh.module.css";
 
 interface Point {
@@ -46,12 +47,13 @@ export const InteractiveMesh: React.FC<InteractiveMeshProps> = ({
       const points: Point[][] = [];
 
       for (let row = 0; row < rows; row++) {
-        points[row] = [];
+        const rowPoints: Point[] = [];
         for (let col = 0; col < cols; col++) {
           const x = col * gridSize;
           const y = row * gridSize;
-          points[row][col] = { x, y, baseX: x, baseY: y };
+          rowPoints.push({ x, y, baseX: x, baseY: y });
         }
+        points.push(rowPoints);
       }
 
       pointsRef.current = points;
@@ -69,9 +71,8 @@ export const InteractiveMesh: React.FC<InteractiveMeshProps> = ({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Update points based on mouse position
-      for (let row = 0; row < points.length; row++) {
-        for (let col = 0; col < points[row].length; col++) {
-          const point = points[row][col];
+      for (const rowPoints of points) {
+        for (const point of rowPoints) {
           const dx = mouse.x - point.baseX;
           const dy = mouse.y - point.baseY;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -96,38 +97,41 @@ export const InteractiveMesh: React.FC<InteractiveMeshProps> = ({
       ctx.globalAlpha = config.opacity;
 
       // Horizontal lines
-      for (let row = 0; row < points.length; row++) {
+      for (const rowPoints of points) {
         ctx.beginPath();
-        for (let col = 0; col < points[row].length; col++) {
-          const point = points[row][col];
+        rowPoints.forEach((point, col) => {
           if (col === 0) {
             ctx.moveTo(point.x, point.y);
           } else {
             ctx.lineTo(point.x, point.y);
           }
-        }
+        });
         ctx.stroke();
       }
 
       // Vertical lines
-      for (let col = 0; col < points[0]?.length; col++) {
-        ctx.beginPath();
-        for (let row = 0; row < points.length; row++) {
-          const point = points[row][col];
-          if (row === 0) {
-            ctx.moveTo(point.x, point.y);
-          } else {
-            ctx.lineTo(point.x, point.y);
-          }
+      const firstRow = points[0];
+      if (firstRow) {
+        for (let col = 0; col < firstRow.length; col++) {
+          ctx.beginPath();
+          points.forEach((rowPoints, row) => {
+            const point = rowPoints[col];
+            if (point) {
+              if (row === 0) {
+                ctx.moveTo(point.x, point.y);
+              } else {
+                ctx.lineTo(point.x, point.y);
+              }
+            }
+          });
+          ctx.stroke();
         }
-        ctx.stroke();
       }
 
       // Draw dots at intersections
       ctx.fillStyle = config.color;
-      for (let row = 0; row < points.length; row++) {
-        for (let col = 0; col < points[row].length; col++) {
-          const point = points[row][col];
+      for (const rowPoints of points) {
+        for (const point of rowPoints) {
           ctx.beginPath();
           ctx.arc(point.x, point.y, 1.5, 0, Math.PI * 2);
           ctx.fill();
