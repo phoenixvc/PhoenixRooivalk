@@ -44,7 +44,7 @@
 }
 
 .maxWidthNarrow {
-  max-width: var(--container-max-width);
+  max-width: var(--container-max-width-narrow, 960px);
 }
 
 .centered {

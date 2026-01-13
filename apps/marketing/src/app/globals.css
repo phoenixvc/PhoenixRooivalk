@@ -78,6 +78,11 @@
   /* Logo Background (4 components for rgba support) */
   --logo-bg: 249, 115, 22, 0.1;
 
+  /* Container Layout */
+  --container-max-width: 1160px;
+  --container-max-width-wide: 1400px;
+  --container-max-width-narrow: 960px;
+
   /* Threat Simulator tokens (RGB triplets) */
   --sim-hover: 26, 35, 50; /* subtle surface highlight */
   --sim-success: 74, 222, 128; /* maps to friendly green */
@@ -953,25 +958,6 @@ a:focus-visible {
   font-size: 1.125rem;
 }
 
-.security-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.2),
-    rgba(99, 102, 241, 0.2)
-  );
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: rgb(147, 197, 253);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 /* Enhanced Gradient Overlays for Safety Feel */
 .gradient-safety {
   background: linear-gradient(
@@ -1260,9 +1246,8 @@ video {
 img {
   /* Prevent layout shift */
   height: auto;
-  /* Optimize rendering - use standard values for cross-browser compatibility */
+  /* Optimize rendering - default auto for smooth scaling */
   image-rendering: auto;
-  image-rendering: crisp-edges;
 }
 
 /* Note: Use loading="lazy" attribute in HTML/JSX for lazy loading */
