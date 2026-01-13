@@ -1,10 +1,6 @@
 .footer {
   position: relative;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--tactical-obsidian)),
-    rgb(var(--tactical-black))
-  );
+  background: rgb(var(--bg-primary));
   border-top: 1px solid rgba(var(--primary), 0.2);
 }
 

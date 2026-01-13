@@ -56,6 +56,11 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   margin-top: 3rem;
+  align-items: stretch;
+}
+
+.foundersGrid > * {
+  height: 100%;
 }
 
 .advisorsHeader {
@@ -114,6 +119,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  height: 100%;
 }
 
 .eliminatedCard {

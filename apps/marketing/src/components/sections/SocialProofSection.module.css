@@ -1,11 +1,7 @@
 /* SocialProofSection.module.css */
 .section {
   padding: var(--section-padding-y) var(--section-padding-x);
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--tactical-black)),
-    rgb(var(--tactical-obsidian))
-  );
+  background: rgb(var(--bg-primary));
   position: relative;
   overflow: hidden;
 }
