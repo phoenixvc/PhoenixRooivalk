@@ -6,13 +6,17 @@ This is the marketing website for Phoenix Rooivalk, built with Next.js 14.
 
 ### Overview
 
-The site now includes a user authentication system that integrates with the backend API for career applications.
+The site now includes a user authentication system that integrates with the
+backend API for career applications.
 
 ### Features
 
-1. **Email-based Authentication**: Users can sign in with just their email address
-2. **Name Auto-population**: Names are automatically extracted from email addresses when possible (e.g., `john.doe@example.com` → John Doe)
-3. **Team Member Detection**: The system automatically identifies team members and prevents them from applying for positions
+1. **Email-based Authentication**: Users can sign in with just their email
+   address
+2. **Name Auto-population**: Names are automatically extracted from email
+   addresses when possible (e.g., `john.doe@example.com` → John Doe)
+3. **Team Member Detection**: The system automatically identifies team members
+   and prevents them from applying for positions
 4. **Session Management**: User sessions are stored and managed securely
 
 ### Flow
@@ -25,17 +29,20 @@ The site now includes a user authentication system that integrates with the back
 
 2. **Career Application** (`/contact#careers`):
    - **Not logged in**: Shows "Sign In to Apply" button
-   - **Logged in (non-team member)**: Shows application form with auto-populated user info
+   - **Logged in (non-team member)**: Shows application form with auto-populated
+     user info
    - **Logged in (team member)**: Shows welcome message, no application form
 
 ### Setup
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
 
 2. Update `NEXT_PUBLIC_API_URL` if needed:
+
    ```
    NEXT_PUBLIC_API_URL=http://localhost:8080
    ```
@@ -57,6 +64,7 @@ The site now includes a user authentication system that integrates with the back
 ### Team Members
 
 Team members are seeded from the backend with the following data:
+
 - Jurie Smit (CIO) - `smit.jurie@gmail.com`
 - Chanelle Fellinger (CMO) - `chanelle.fellinger@gmail.com`
 - Martyn (COO) - `martyn@phoenixrooivalk.com`
@@ -85,17 +93,20 @@ pnpm build
 ## Testing the Authentication Flow
 
 1. Start the API server:
+
    ```bash
    cd apps/api
    cargo run
    ```
 
 2. Seed team members (one-time setup):
+
    ```bash
    curl -X POST http://localhost:8080/admin/seed-team-members
    ```
 
 3. Start the marketing site:
+
    ```bash
    cd apps/marketing
    pnpm dev

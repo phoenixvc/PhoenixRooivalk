@@ -1,10 +1,50 @@
 import React from "react";
 import { RevealSection } from "../RevealSection";
 import { Button } from "../ui/button";
+import { Card } from "../ui/Card";
 import { FeatureCard } from "../ui/FeatureCard";
 import styles from "./AIBenefitsSection.module.css";
 
 export const AIBenefitsSection: React.FC = () => {
+  const performanceMetrics = [
+    {
+      icon: "🎯",
+      title: "AI Detection",
+      description: "99.7% accuracy vs 60-70% industry standard",
+      metrics: [
+        { value: "99.7%", label: "Accuracy" },
+        { value: "+40%", label: "vs Industry" },
+      ],
+    },
+    {
+      icon: "🔐",
+      title: "Data Integrity",
+      description: "99.3% protection vs 85% traditional systems",
+      metrics: [
+        { value: "99.3%", label: "Protected" },
+        { value: "+14%", label: "vs Traditional" },
+      ],
+    },
+    {
+      icon: "⚡",
+      title: "Response Time",
+      description: "<200ms vs 1-3s industry standard",
+      metrics: [
+        { value: "<200ms", label: "Response" },
+        { value: "15x", label: "Faster" },
+      ],
+    },
+    {
+      icon: "🔑",
+      title: "Auth Latency",
+      description: "<2ms vs 50-100ms traditional",
+      metrics: [
+        { value: "<2ms", label: "Latency" },
+        { value: "50x", label: "Faster" },
+      ],
+    },
+  ];
+
   return (
     <section className={styles.section} id="ai-benefits">
       <div className={styles.container}>
@@ -15,8 +55,7 @@ export const AIBenefitsSection: React.FC = () => {
           </h2>
           <p className={styles.subtitle}>
             PhoenixRooivalk combines cutting-edge AI with military-grade
-            blockchain technology to deliver unprecedented performance: 99.7%
-            accuracy with 99.3% data integrity protection.
+            blockchain technology to deliver unprecedented performance.
           </p>
         </RevealSection>
 
@@ -24,26 +63,15 @@ export const AIBenefitsSection: React.FC = () => {
           <div className={styles.column}>
             <h3 className={styles.columnTitle}>AI + Blockchain Performance</h3>
             <div className={styles.metricsContainer}>
-              <MetricCard
-                title="AI Detection Accuracy"
-                value="99.7%"
-                comparison="vs 60-70% industry standard"
-              />
-              <MetricCard
-                title="Data Integrity"
-                value="99.3%"
-                comparison="vs 85% traditional systems"
-              />
-              <MetricCard
-                title="Response Time"
-                value="< 200ms"
-                comparison="vs 1-3 seconds industry standard"
-              />
-              <MetricCard
-                title="Authentication Latency"
-                value="< 2ms"
-                comparison="vs 50-100ms traditional"
-              />
+              {performanceMetrics.map((metric, index) => (
+                <Card
+                  key={index}
+                  icon={metric.icon}
+                  title={metric.title}
+                  description={metric.description}
+                  metrics={metric.metrics}
+                />
+              ))}
             </div>
           </div>
 
@@ -109,17 +137,3 @@ export const AIBenefitsSection: React.FC = () => {
     </section>
   );
 };
-
-const MetricCard: React.FC<{
-  title: string;
-  value: string;
-  comparison: string;
-}> = ({ title, value, comparison }) => (
-  <div className={styles.metricCard}>
-    <div className={styles.metricInfo}>
-      <div className={styles.metricTitle}>{title}</div>
-      <div className={styles.metricComparison}>{comparison}</div>
-    </div>
-    <div className={styles.metricValue}>{value}</div>
-  </div>
-);
