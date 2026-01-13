@@ -479,11 +479,11 @@ h6 {
 .pill--partners {
   background: linear-gradient(
     135deg,
-    rgba(var(--tactical-gray), 0.2),
-    rgba(var(--tactical-silver), 0.15)
+    rgba(var(--action-success), 0.15),
+    rgba(var(--secondary), 0.1)
   );
-  border-color: rgba(var(--tactical-silver), 0.4);
-  color: rgb(var(--tactical-silver));
+  border-color: rgba(var(--action-success), 0.4);
+  color: rgb(var(--action-success));
 }
 
 .pill--sbir {
