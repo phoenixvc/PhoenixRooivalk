@@ -21,10 +21,10 @@
   --section-padding-lg: 5rem 5%;
   --section-padding-x: 5%;
 
-  /* Container */
-  --container-max-width: 1400px;
-  --container-max-width-wide: 1600px;
-  --container-max-width-narrow: 1200px;
+  /* Container - unified layout system */
+  --container-max-width: 1160px;
+  --container-max-width-wide: 1400px;
+  --container-max-width-narrow: 960px;
 
   /* Grid Gaps */
   --grid-gap-sm: 1rem;

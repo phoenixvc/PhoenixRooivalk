@@ -45,7 +45,7 @@
 
 .navContainer {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -106,7 +106,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -485,7 +485,7 @@
 }
 
 .footerContainer {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
