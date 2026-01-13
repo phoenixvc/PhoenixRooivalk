@@ -51,7 +51,8 @@
 
 .warningDescription {
   font-size: 0.75rem;
-  color: rgba(var(--action-danger), 0.8);
+  color: rgb(var(--text-primary));
+  opacity: 0.9;
 }
 
 .warningClose {
