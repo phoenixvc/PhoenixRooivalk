@@ -19,13 +19,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .logoWrapper {
@@ -120,11 +123,14 @@
 
 .navMenu {
   display: none;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
 @media (min-width: 1024px) {
   .navMenu {
-    display: block;
+    display: flex;
   }
 }
 
@@ -305,7 +311,8 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .githubDropdown {
@@ -467,16 +474,24 @@
 }
 
 .loginButton {
+  display: none;
   background: transparent;
   color: rgb(var(--primary));
   font-weight: 600;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.2s ease;
   border: 1px solid rgb(var(--primary));
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .loginButton {
+    display: inline-flex;
+  }
 }
 
 .loginButton:hover {
@@ -486,6 +501,7 @@
 }
 
 .ctaButton {
+  display: none;
   background: linear-gradient(
     to bottom right,
     rgb(var(--primary)),
@@ -493,13 +509,20 @@
   );
   color: rgb(var(--bg-primary));
   font-weight: 600;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.2s ease;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .ctaButton {
+    display: inline-flex;
+  }
 }
 
 .ctaButton:hover {
@@ -599,15 +622,13 @@
 
 /* Cart Icon Wrapper */
 .cartWrapper {
-  display: flex;
+  display: none;
   align-items: center;
-  margin-left: 1rem;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 768px) {
   .cartWrapper {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    display: flex;
   }
 }
 

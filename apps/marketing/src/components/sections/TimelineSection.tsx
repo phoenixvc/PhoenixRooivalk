@@ -140,10 +140,6 @@ export const TimelineSection: React.FC = () => {
 
   return (
     <section className={styles.section}>
-      <div className={styles.backgroundPattern}>
-        <div className={styles.backgroundGrid}></div>
-      </div>
-
       <div className={styles.content}>
         <div className={styles.container}>
           <RevealSection className={styles.header}>

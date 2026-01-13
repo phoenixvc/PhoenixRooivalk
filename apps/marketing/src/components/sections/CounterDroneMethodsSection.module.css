@@ -1,6 +1,6 @@
 /* CounterDroneMethodsSection.module.css */
 .section {
-  padding: 3rem 1.5rem;
+  padding: var(--section-padding-y) var(--section-padding-x);
   background: rgb(var(--bg-primary));
   position: relative;
   overflow: hidden;
@@ -11,29 +11,6 @@
     padding-left: 5%;
     padding-right: 5%;
   }
-}
-
-@media (min-width: 1024px) {
-  .section {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-}
-
-.backgroundPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-}
-
-.backgroundPattern::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
 }
 
 .container {
@@ -48,262 +25,44 @@
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
 }
 
 .title {
-  font-size: 2.25rem;
+  font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 700;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--text-primary)),
-    rgb(var(--primary))
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  margin-bottom: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .title {
-    font-size: 3rem;
-  }
+  color: rgb(var(--text-primary));
+  margin-bottom: 1rem;
 }
 
 .subtitle {
   font-size: 1.25rem;
-  color: rgb(var(--gray));
+  color: rgb(var(--text-secondary));
   max-width: 48rem;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 .grid {
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .grid {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.card {
-  background: rgba(var(--bg-surface), 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--primary), 0.2);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  border-color: rgba(var(--primary), 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(var(--primary), 0.2);
-}
-
-.cardHeader {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.cardIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.cardTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgb(var(--action-primary));
-  margin-bottom: 0.5rem;
-}
-
-.cardDescription {
-  color: rgb(var(--text-muted));
-}
-
-.metricsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.metricBox {
-  text-align: center;
-  padding: 0.75rem;
-  background: rgba(var(--primary), 0.1);
-  border-radius: 0.5rem;
-  border: 1px solid rgba(var(--primary), 0.2);
-}
-
-.metricLabel {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
-  margin-bottom: 0.25rem;
-}
-
-.metricValue {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: rgb(var(--action-success));
-}
-
-.metricValuePrimary {
-  color: rgb(var(--action-primary));
-}
-
-.metricValueAccent {
-  color: rgb(var(--accent));
-}
-
-.prosConsGrid {
-  display: grid;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .prosConsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.prosSection,
-.consSection {
-  margin-bottom: 1rem;
-}
-
-.prosTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: rgb(var(--action-success));
-  margin-bottom: 0.5rem;
-}
-
-.consTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: rgb(var(--action-warning));
-  margin-bottom: 0.5rem;
-}
-
-.list {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.listItem {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 0.25rem;
-}
-
-.listBullet {
-  margin-right: 0.5rem;
-}
-
-.listBulletSuccess {
-  color: rgb(var(--action-success));
-}
-
-.listBulletWarning {
-  color: rgb(var(--action-warning));
-}
-
-.useCaseBox {
-  padding: 1rem;
-  background: rgba(var(--bg-secondary), 0.6);
-  border-radius: 0.5rem;
-  border: 1px solid rgba(var(--primary), 0.2);
-}
-
-.useCaseTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: rgb(var(--text-primary));
-  margin-bottom: 0.5rem;
-}
-
-.useCaseText {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
 }
 
 .integrationSection {
-  margin-top: 4rem;
-  text-align: center;
-}
-
-.integrationCard {
-  background: rgba(var(--bg-surface), 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--primary), 0.2);
-  border-radius: 1rem;
-  padding: 2rem;
-}
-
-.integrationTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgb(var(--primary));
-  margin-bottom: 1rem;
-}
-
-.integrationDescription {
-  color: rgb(var(--text-muted));
-  margin-bottom: 1.5rem;
-  max-width: 48rem;
+  margin-top: 3rem;
+  max-width: 36rem;
   margin-left: auto;
   margin-right: auto;
-}
-
-.statsGrid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .statsGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.statBox {
-  text-align: center;
-}
-
-.statValue {
-  font-size: 1.875rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.statValueSuccess {
-  color: rgb(var(--action-success));
-}
-
-.statValuePrimary {
-  color: rgb(var(--action-primary));
-}
-
-.statValueAccent {
-  color: rgb(var(--accent));
-}
-
-.statLabel {
-  font-size: 0.875rem;
-  color: rgb(var(--text-muted));
 }

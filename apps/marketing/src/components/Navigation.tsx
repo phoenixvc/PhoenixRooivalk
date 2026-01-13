@@ -221,11 +221,6 @@ export const Navigation: React.FC = () => {
           </div>
         </div>
 
-        {/* Cart Icon */}
-        <div className={styles.cartWrapper}>
-          <CartIcon onClick={() => setIsCartOpen(true)} />
-        </div>
-
         {/* Mobile navigation */}
         <div className={styles.mobileNav}>
           <button
@@ -332,6 +327,11 @@ export const Navigation: React.FC = () => {
 
         {/* Theme Toggle & Links */}
         <div className={styles.actions}>
+          {/* Cart Icon */}
+          <div className={styles.cartWrapper}>
+            <CartIcon onClick={() => setIsCartOpen(true)} />
+          </div>
+
           {/* GitHub Dropdown */}
           <div className={styles.githubDropdown}>
             <div className={styles.githubDropdownWrapper}>

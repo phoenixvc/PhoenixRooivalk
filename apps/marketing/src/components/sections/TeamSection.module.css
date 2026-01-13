@@ -1,12 +1,19 @@
 .section {
   position: relative;
-  padding: 6rem 2rem;
+  padding: var(--space-16) var(--space-4);
   background: linear-gradient(
     180deg,
     rgb(var(--bg-primary)) 0%,
     rgb(var(--darker)) 100%
   );
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
 
 .container {
@@ -18,20 +25,13 @@
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: var(--space-12);
 }
 
 .title {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--primary)) 0%,
-    rgb(var(--accent)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
   line-height: 1.2;
 }
@@ -47,56 +47,38 @@
 .teamGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
 }
 
 .foundersGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+  align-items: stretch;
+}
+
+.foundersGrid > * {
+  height: 100%;
 }
 
 .advisorsHeader {
   text-align: center;
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
 }
 
 .advisorsTitle {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: rgb(var(--text-secondary));
-  position: relative;
-  display: inline-block;
-}
-
-.advisorsTitle::before,
-.advisorsTitle::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(var(--primary), 0.5));
-}
-
-.advisorsTitle::before {
-  right: 100%;
-  margin-right: 1rem;
-}
-
-.advisorsTitle::after {
-  left: 100%;
-  margin-left: 1rem;
-  background: linear-gradient(90deg, rgba(var(--primary), 0.5), transparent);
 }
 
 .advisorsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: var(--space-8);
   max-width: 800px;
   margin: 0 auto;
 }
@@ -114,6 +96,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  height: 100%;
 }
 
 .eliminatedCard {
@@ -246,43 +229,20 @@
 /* Backed By Section */
 .backedByHeader {
   text-align: center;
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
 }
 
 .backedByTitle {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: rgb(var(--text-secondary));
-  position: relative;
-  display: inline-block;
-}
-
-.backedByTitle::before,
-.backedByTitle::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(var(--accent), 0.5));
-}
-
-.backedByTitle::before {
-  right: 100%;
-  margin-right: 1rem;
-}
-
-.backedByTitle::after {
-  left: 100%;
-  margin-left: 1rem;
-  background: linear-gradient(90deg, rgba(var(--accent), 0.5), transparent);
 }
 
 .backedByGrid {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: var(--space-8);
 }
 
 .backedByCard {
@@ -387,12 +347,7 @@
   }
 
   .advisorsTitle {
-    font-size: 1.5rem;
-  }
-
-  .advisorsTitle::before,
-  .advisorsTitle::after {
-    width: 30px;
+    font-size: 1.125rem;
   }
 
   .memberCard {
@@ -410,12 +365,7 @@
   }
 
   .backedByTitle {
-    font-size: 1.5rem;
-  }
-
-  .backedByTitle::before,
-  .backedByTitle::after {
-    width: 30px;
+    font-size: 1.125rem;
   }
 
   .backedByCard {

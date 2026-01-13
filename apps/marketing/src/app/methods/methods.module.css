@@ -6,33 +6,3 @@
   background: rgb(var(--darker));
   color: white;
 }
-
-.background {
-  position: absolute;
-  inset: 0;
-  z-index: -10;
-  background: radial-gradient(
-    ellipse at bottom,
-    rgb(var(--gradient-dark-start)) 0%,
-    rgb(var(--gradient-dark-end)) 100%
-  );
-}
-
-.gridPattern {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(var(--sensor-green), 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--sensor-green), 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}

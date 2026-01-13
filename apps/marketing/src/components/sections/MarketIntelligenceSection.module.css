@@ -118,6 +118,7 @@
   border: 1px solid rgba(var(--color-neutral-700), 0.5);
   border-radius: 0.5rem;
   padding: 1.5rem;
+  text-align: center;
 }
 
 .competitorName {
@@ -127,20 +128,31 @@
   margin-bottom: 0.5rem;
 }
 
-.competitorStatus {
+.competitorDescription {
   font-size: 0.875rem;
-  color: rgb(var(--primary));
-  margin-bottom: 0.75rem;
+  color: rgb(var(--text-muted));
+  margin-bottom: 1rem;
 }
 
-.competitorCapability {
-  font-size: 0.875rem;
-  color: rgb(var(--text-secondary));
-  margin-bottom: 0.75rem;
+.competitorMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 
-.competitorLimitation {
-  font-size: 0.875rem;
+.competitorMetric {
+  padding: 0.5rem;
+}
+
+.competitorMetricValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(var(--accent));
+  margin-bottom: 0.125rem;
+}
+
+.competitorMetricLabel {
+  font-size: 0.75rem;
   color: rgb(var(--text-muted));
 }
 
@@ -148,48 +160,19 @@
   margin-top: 3rem;
 }
 
-.advantageCard {
-  background: linear-gradient(
-    to right,
-    rgba(var(--primary-rgb, 0, 255, 136), 0.1),
-    rgba(var(--secondary-rgb, 0, 136, 255), 0.1)
-  );
-  border: 1px solid rgba(var(--primary-rgb, 0, 255, 136), 0.3);
-  border-radius: 0.5rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.advantageTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: rgb(var(--text-primary));
-  margin-bottom: 1rem;
-}
-
 .advantageGrid {
   display: grid;
   gap: 1.5rem;
-  text-align: left;
 }
 
 @media (min-width: 768px) {
   .advantageGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.advantageItem {
-}
-
-.advantageItemTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: rgb(var(--primary));
-  margin-bottom: 0.5rem;
-}
-
-.advantageItemDescription {
-  font-size: 0.875rem;
-  color: rgb(var(--text-secondary));
+@media (min-width: 1024px) {
+  .advantageGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

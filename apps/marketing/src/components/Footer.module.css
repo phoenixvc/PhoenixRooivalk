@@ -1,26 +1,7 @@
 .footer {
   position: relative;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--tactical-obsidian)),
-    rgb(var(--tactical-black))
-  );
+  background: rgb(var(--bg-primary));
   border-top: 1px solid rgba(var(--primary), 0.2);
-}
-
-.backgroundPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-}
-
-.patternGrid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
 }
 
 .content {

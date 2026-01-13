@@ -21,8 +21,8 @@ interface User {
 export default function ContactPage(): React.ReactElement {
   // Obfuscate email at render time to prevent scraping
   const [email] = useState(() => {
-    const user = "smit.jurie";
-    const domain = "gmail.com";
+    const user = "contact";
+    const domain = "phoenixrooivalk.com";
     return `${user}@${domain}`;
   });
 
@@ -167,12 +167,8 @@ export default function ContactPage(): React.ReactElement {
               <h2 className={styles.cardTitle}>Get in Touch</h2>
               <div className={styles.contentGroup}>
                 <div>
-                  <h3 className={styles.subsectionTitle}>Primary Contact</h3>
+                  <h3 className={styles.subsectionTitle}>Email Us</h3>
                   <p className={styles.subsectionText}>
-                    <strong>Jurie Smit</strong>
-                    <br />
-                    PhoenixVC
-                    <br />
                     <button
                       onClick={() => handleEmailClick()}
                       className={styles.emailButton}
@@ -238,10 +234,10 @@ export default function ContactPage(): React.ReactElement {
                           Civilian Applications
                         </div>
                         <ul>
-                          <li>• Airport security & perimeter protection</li>
-                          <li>• Critical infrastructure monitoring</li>
-                          <li>• Event security & crowd safety</li>
-                          <li>• Border security applications</li>
+                          <li>Airport security & perimeter protection</li>
+                          <li>Critical infrastructure monitoring</li>
+                          <li>Event security & crowd safety</li>
+                          <li>Border security applications</li>
                         </ul>
                       </div>
                       <div className={styles.listItem}>
@@ -249,10 +245,10 @@ export default function ContactPage(): React.ReactElement {
                           Commercial Security
                         </div>
                         <ul>
-                          <li>• Corporate campus protection</li>
-                          <li>• Data center security</li>
-                          <li>• Port & shipping terminal security</li>
-                          <li>• VIP protection services</li>
+                          <li>Corporate campus protection</li>
+                          <li>Data center security</li>
+                          <li>Port & shipping terminal security</li>
+                          <li>VIP protection services</li>
                         </ul>
                       </div>
                     </div>
@@ -262,10 +258,10 @@ export default function ContactPage(): React.ReactElement {
                           Research Partnerships
                         </div>
                         <ul>
-                          <li>• University research collaboration</li>
-                          <li>• Government laboratory partnerships</li>
-                          <li>• International cooperation (NATO)</li>
-                          <li>• Technology transfer programs</li>
+                          <li>University research collaboration</li>
+                          <li>Government laboratory partnerships</li>
+                          <li>International cooperation (NATO)</li>
+                          <li>Technology transfer programs</li>
                         </ul>
                       </div>
                       <div className={styles.listItem}>
@@ -273,10 +269,10 @@ export default function ContactPage(): React.ReactElement {
                           Technology Licensing
                         </div>
                         <ul>
-                          <li>• Sensor fusion algorithms</li>
-                          <li>• Edge processing capabilities</li>
-                          <li>• Blockchain evidence systems</li>
-                          <li>• Countermeasure technologies</li>
+                          <li>Sensor fusion algorithms</li>
+                          <li>Edge processing capabilities</li>
+                          <li>Blockchain evidence systems</li>
+                          <li>Countermeasure technologies</li>
                         </ul>
                       </div>
                     </div>
@@ -309,10 +305,10 @@ export default function ContactPage(): React.ReactElement {
                 <div>
                   <h3 className={styles.subsectionTitle}>Who Can Apply</h3>
                   <ul className={styles.listItem}>
-                    <li>• Government agencies with lawful mandates</li>
-                    <li>• Defense integrators and contractors</li>
-                    <li>• Vetted industrial partners</li>
-                    <li>• Critical infrastructure operators</li>
+                    <li>Government agencies with lawful mandates</li>
+                    <li>Defense integrators and contractors</li>
+                    <li>Vetted industrial partners</li>
+                    <li>Critical infrastructure operators</li>
                   </ul>
                 </div>
                 <div>
@@ -320,10 +316,10 @@ export default function ContactPage(): React.ReactElement {
                     Required Information
                   </h3>
                   <ul className={styles.listItem}>
-                    <li>• Organization name and jurisdiction</li>
-                    <li>• Intended evaluation scope and end use</li>
-                    <li>• Points of contact and security lead</li>
-                    <li>• Export control considerations</li>
+                    <li>Organization name and jurisdiction</li>
+                    <li>Intended evaluation scope and end use</li>
+                    <li>Points of contact and security lead</li>
+                    <li>Export control considerations</li>
                   </ul>
                 </div>
                 <div className={styles.complianceBox}>
@@ -436,10 +432,10 @@ export default function ContactPage(): React.ReactElement {
                 <div>
                   <h4 className={styles.jobTitle}>Requirements</h4>
                   <ul className={styles.listItem}>
-                    <li>• Security clearance eligibility</li>
-                    <li>• Relevant technical background</li>
-                    <li>• Defense industry experience preferred</li>
-                    <li>• Strong problem-solving skills</li>
+                    <li>Security clearance eligibility</li>
+                    <li>Relevant technical background</li>
+                    <li>Defense industry experience preferred</li>
+                    <li>Strong problem-solving skills</li>
                   </ul>
                 </div>
 

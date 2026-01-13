@@ -2,8 +2,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Card } from "../ui/Card";
 import styles from "./InteractiveElementsSection.module.css";
-import { AdaptationCard } from "./components/AdaptationCard";
 import { formatCurrency } from "@/utils/formatter";
 import { adaptationCardsData } from "./data/adaptationData";
 import {
@@ -27,9 +27,6 @@ export const InteractiveElementsSection: React.FC = () => {
 
   return (
     <section className={styles.section}>
-      {/* Background pattern */}
-      <div className={styles.backgroundPattern} />
-
       <div className={styles.container}>
         <div className={styles.innerContainer}>
           {/* Section Header */}
@@ -387,7 +384,14 @@ export const InteractiveElementsSection: React.FC = () => {
 
             <div className={styles.adaptationGrid}>
               {adaptationCardsData.map((card, index) => (
-                <AdaptationCard key={index} {...card} />
+                <Card
+                  key={index}
+                  icon={card.icon}
+                  title={card.title}
+                  description={card.description}
+                  metrics={card.metrics}
+                  centered
+                />
               ))}
             </div>
 

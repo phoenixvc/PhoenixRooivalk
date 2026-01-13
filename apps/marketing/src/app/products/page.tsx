@@ -113,11 +113,6 @@ function ProductLineSection({ lineId }: { lineId: ProductLine }) {
 export default function ProductsPage(): React.ReactElement {
   return (
     <main className={styles.main}>
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.gridPattern} />
-      </div>
-
       {/* Navigation */}
       <Navigation />
 

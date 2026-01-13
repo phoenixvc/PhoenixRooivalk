@@ -17,10 +17,10 @@ export default function HomePage(): React.ReactElement {
 
   return (
     <main className={styles.main} id="main-content">
-      {/* Background mesh effect */}
+      {/* Background mesh effect - subtle with mouse interaction */}
       <InteractiveMesh
         gridSize={50}
-        color="rgba(234, 124, 28, 0.12)"
+        color="rgba(234, 124, 28, 0.07)"
         bendStrength={25}
         bendRadius={120}
       />

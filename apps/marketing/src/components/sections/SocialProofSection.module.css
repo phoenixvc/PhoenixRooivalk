@@ -1,11 +1,7 @@
 /* SocialProofSection.module.css */
 .section {
   padding: var(--section-padding-y) var(--section-padding-x);
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--tactical-black)),
-    rgb(var(--tactical-obsidian))
-  );
+  background: rgb(var(--bg-primary));
   position: relative;
   overflow: hidden;
 }
@@ -24,22 +20,6 @@
   }
 }
 
-.backgroundPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-}
-
-.backgroundPattern::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-
 .container {
   position: relative;
   z-index: 10;
@@ -52,27 +32,14 @@
 
 .header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .title {
-  font-size: 2.25rem;
+  font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 700;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--phoenix-white)),
-    rgb(var(--primary))
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .title {
-    font-size: 3rem;
-  }
 }
 
 .subtitle {
@@ -83,14 +50,14 @@
 }
 
 .testimonialSection {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgb(var(--primary));
-  margin-bottom: 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(var(--text-secondary));
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
@@ -167,7 +134,7 @@
 }
 
 .partnershipsSection {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
 
 .partnershipsGrid {
@@ -221,13 +188,13 @@
 }
 
 .developmentSection {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
 
 .developmentSubtitle {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: rgb(var(--accent));
+  color: rgb(var(--text-muted));
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -269,9 +236,9 @@
 }
 
 .statusTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: rgb(var(--primary));
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary));
   margin-bottom: 0.5rem;
 }
 
@@ -302,7 +269,7 @@
 }
 
 .complianceSection {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
 
 .complianceGrid {

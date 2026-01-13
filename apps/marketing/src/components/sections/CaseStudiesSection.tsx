@@ -33,16 +33,13 @@ export const CaseStudiesSection: React.FC = () => {
               <div className={styles.content}>
                 <h3 className={styles.studyTitle}>{study.title}</h3>
                 <p className={styles.summary}>{study.summary}</p>
-                <div className={styles.details}>
-                  <p>
-                    <strong>Problem:</strong> {study.problem}
-                  </p>
-                  <p>
-                    <strong>Solution:</strong> {study.solution}
-                  </p>
-                  <p>
-                    <strong>Results:</strong> {study.results}
-                  </p>
+                <div className={styles.metricsGrid}>
+                  {study.metrics.map((metric, metricIndex) => (
+                    <div key={metricIndex} className={styles.metricBox}>
+                      <div className={styles.metricValue}>{metric.value}</div>
+                      <div className={styles.metricLabel}>{metric.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

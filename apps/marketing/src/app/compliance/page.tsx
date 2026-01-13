@@ -7,11 +7,6 @@ import styles from "./compliance.module.css";
 export default function CompliancePage(): React.ReactElement {
   return (
     <main className={styles.main}>
-      {/* Background */}
-      <div className={styles.background}>
-        <div className={styles.gridPattern} />
-      </div>
-
       {/* Navigation */}
       <Navigation />
 
