@@ -240,9 +240,6 @@
   outline-offset: 2px;
 }
 
-.input:focus-visible {
-  outline: none;
-}
 
 .link:focus-visible {
   outline: 2px solid rgb(var(--primary));
