@@ -275,6 +275,28 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
+  // SLIDE 8: QUESTIONS
+  // ==========================================
+  {
+    number: 8,
+    title: "Questions?",
+    duration: 0,
+    icon: "❓",
+    layout: "title-only",
+    keyPoints: [
+      "**Phoenix Rooivalk**",
+      "*Capture Drones Safely. No Damage.*",
+      "",
+      "jurie@phoenixrooivalk.com",
+      "phoenixrooivalk.com",
+    ],
+    speakerNotes:
+      "Open for questions. Have backup slides ready for common investor questions.",
+    script:
+      "Thank you. I'm happy to answer any questions. We have additional slides on technical architecture, competitive landscape, IP strategy, and more if you'd like to dive deeper.",
+  },
+
+  // ==========================================
   // BACKUP SLIDES - After Questions
   // ==========================================
 
@@ -282,7 +304,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 1: BLOCKCHAIN EVIDENCE
   // ==========================================
   {
-    number: 8,
+    number: 9,
     title: "Blockchain Evidence Chain",
     duration: 60,
     icon: "🔗",
@@ -314,7 +336,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 2: TECHNICAL ARCHITECTURE
   // ==========================================
   {
-    number: 9,
+    number: 10,
     title: "Technical Architecture",
     duration: 60,
     icon: "🏗️",
@@ -346,7 +368,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 3: COMPETITIVE LANDSCAPE
   // ==========================================
   {
-    number: 10,
+    number: 11,
     title: "Competitive Landscape",
     duration: 60,
     icon: "⚔️",
@@ -378,7 +400,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 4: IP/PATENTS STRATEGY
   // ==========================================
   {
-    number: 11,
+    number: 12,
     title: "IP & Defensibility",
     duration: 45,
     icon: "🛡️",
@@ -410,7 +432,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 5: REGULATORY PATH
   // ==========================================
   {
-    number: 12,
+    number: 13,
     title: "Regulatory Compliance",
     duration: 45,
     icon: "📋",
@@ -442,7 +464,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 6: OMNIPOST
   // ==========================================
   {
-    number: 13,
+    number: 14,
     title: "OmniPost: Content Distribution",
     duration: 45,
     icon: "📢",
@@ -474,7 +496,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 7: COGNITIVE MESH
   // ==========================================
   {
-    number: 14,
+    number: 15,
     title: "Cognitive Mesh: Distributed AI",
     duration: 45,
     icon: "🧠",
@@ -506,7 +528,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 8: TECH STACK - C2 SOFTWARE
   // ==========================================
   {
-    number: 15,
+    number: 16,
     title: "Tech Stack: Modern Rust Architecture",
     duration: 60,
     icon: "⚙️",
@@ -538,7 +560,7 @@ export const lightningPitchSlides: Slide[] = [
   // BACKUP 9: X402 PROTOCOL (LAST)
   // ==========================================
   {
-    number: 16,
+    number: 17,
     title: "x402: AI Payment Protocol",
     duration: 60,
     icon: "💳",
@@ -584,16 +606,17 @@ export const lightningPitchMeta = {
  * Slide 5: Team - 15s
  * Slide 6: Financials (Eben) - 30s
  * Slide 7: Market/Why Now - 20s
+ * Slide 8: Questions - 0s (Q&A time)
  * TOTAL: 155s (~2.6 minutes)
  *
  * Backup Slides (After Questions):
- * Slide 8: Blockchain Evidence - 60s
- * Slide 9: Technical Architecture - 60s
- * Slide 10: Competitive Landscape - 60s
- * Slide 11: IP & Defensibility - 45s
- * Slide 12: Regulatory Compliance - 45s
- * Slide 13: OmniPost - 45s
- * Slide 14: Cognitive Mesh - 45s
- * Slide 15: Tech Stack (Rust/Tauri) - 60s
- * Slide 16: x402 Protocol - 60s
+ * Slide 9: Blockchain Evidence - 60s
+ * Slide 10: Technical Architecture - 60s
+ * Slide 11: Competitive Landscape - 60s
+ * Slide 12: IP & Defensibility - 45s
+ * Slide 13: Regulatory Compliance - 45s
+ * Slide 14: OmniPost - 45s
+ * Slide 15: Cognitive Mesh - 45s
+ * Slide 16: Tech Stack (Rust/Tauri) - 60s
+ * Slide 17: x402 Protocol - 60s
  */
