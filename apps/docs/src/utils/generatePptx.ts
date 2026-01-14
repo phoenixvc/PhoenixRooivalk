@@ -13,6 +13,55 @@ const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
 const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
+// SVG logo as string for conversion to PNG
+const LOGO_SVG = `<svg width="128" height="128" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="phoenix-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="20" cy="20" r="18" fill="url(#phoenix-gradient)" stroke="#0f172a" stroke-width="2"/>
+  <path d="M20 8 L24 16 L28 12 L26 20 L32 18 L28 24 L30 28 L24 26 L20 32 L16 26 L10 28 L12 24 L8 18 L14 20 L12 12 L16 16 L20 8 Z"
+        fill="#0f172a" stroke="#f97316" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20 6 L26 10 L24 16 L20 20 L16 16 L14 10 L20 6 Z"
+        fill="none" stroke="#f97316" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="20" cy="20" r="3" fill="#0f172a"/>
+</svg>`;
+
+/**
+ * Convert SVG string to PNG data URL using canvas
+ */
+async function svgToPngDataUrl(svgString: string, width = 128, height = 128): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/png"));
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load SVG"));
+    };
+
+    img.src = url;
+  });
+}
+
 /**
  * Sanitize video path to prevent path traversal attacks
  * Only allows paths starting with / or relative paths without ..
@@ -266,27 +315,44 @@ export async function generatePptx(
     align: "center",
   });
 
-  // Logo - phoenix icon (emoji doesn't work in pptx, so use styled text)
-  titleSlide.addShape("ellipse" as PptxShape, {
-    x: 4.25,
-    y: 2.0,
-    w: 1.5,
-    h: 1.5,
-    fill: { color: colors.primary },
-    line: { color: colors.darker, width: 2 },
-  });
+  // Logo - convert SVG to PNG and embed
+  let logoPngDataUrl: string | null = null;
+  try {
+    logoPngDataUrl = await svgToPngDataUrl(LOGO_SVG, 128, 128);
+  } catch {
+    // Fallback to shape if conversion fails
+    logoPngDataUrl = null;
+  }
 
-  // "PR" text inside the logo circle
-  titleSlide.addText("PR", {
-    x: 4.25,
-    y: 2.3,
-    w: 1.5,
-    h: 0.9,
-    fontSize: 32,
-    bold: true,
-    color: colors.darker,
-    align: "center",
-  });
+  if (logoPngDataUrl) {
+    titleSlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 1.95,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    // Fallback: shape-based logo
+    titleSlide.addShape("ellipse" as PptxShape, {
+      x: 4.25,
+      y: 2.0,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+      line: { color: colors.darker, width: 2 },
+    });
+    titleSlide.addText("PR", {
+      x: 4.25,
+      y: 2.3,
+      w: 1.5,
+      h: 0.9,
+      fontSize: 32,
+      bold: true,
+      color: colors.darker,
+      align: "center",
+    });
+  }
 
   // Presentation subtitle
   titleSlide.addText("DEFENCE DRONE - Pitch Presentation", {
@@ -1103,15 +1169,15 @@ export async function generatePptx(
         );
       }
     } else if (layout === "products" && slide.productCards) {
-      // Product cards grid layout - 3 cards side by side
+      // Product cards grid layout - 3 cards side by side, compact
       const cards = slide.productCards;
       const cardCount = cards.length;
-      const cardWidth = 3.0;
-      const cardHeight = 4.2;
-      const cardGap = 0.2;
+      const cardWidth = 2.9;
+      const cardHeight = 3.4;
+      const cardGap = 0.15;
       const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
       const startX = (10 - totalWidth) / 2;
-      const startY = 1.8;
+      const startY = 1.75;
 
       cards.forEach((product, cardIndex) => {
         const x = startX + cardIndex * (cardWidth + cardGap);
@@ -1161,65 +1227,65 @@ export async function generatePptx(
 
         // Product name
         contentSlide.addText(product.name, {
-          x: x + 0.15,
+          x: x + 0.1,
           y: badgeY,
-          w: cardWidth - 0.3,
-          h: 0.35,
-          fontSize: 14,
+          w: cardWidth - 0.2,
+          h: 0.28,
+          fontSize: 12,
           bold: true,
           color: colors.text,
         });
 
         // Tagline
         contentSlide.addText(product.tagline, {
-          x: x + 0.15,
-          y: badgeY + 0.35,
-          w: cardWidth - 0.3,
-          h: 0.25,
-          fontSize: 9,
+          x: x + 0.1,
+          y: badgeY + 0.28,
+          w: cardWidth - 0.2,
+          h: 0.2,
+          fontSize: 8,
           bold: true,
           color: productColor,
         });
 
         // Description
         contentSlide.addText(product.description, {
-          x: x + 0.15,
-          y: badgeY + 0.65,
-          w: cardWidth - 0.3,
-          h: 0.7,
-          fontSize: 8,
+          x: x + 0.1,
+          y: badgeY + 0.5,
+          w: cardWidth - 0.2,
+          h: 0.55,
+          fontSize: 7,
           color: colors.textSecondary,
           valign: "top",
         });
 
         // Specs
         if (product.specs && product.specs.length > 0) {
-          let specY = badgeY + 1.4;
+          let specY = badgeY + 1.1;
           const specsPerRow = 2;
-          const specColWidth = (cardWidth - 0.3) / specsPerRow;
+          const specColWidth = (cardWidth - 0.2) / specsPerRow;
 
           product.specs.forEach((spec, specIndex) => {
             const specCol = specIndex % specsPerRow;
             const specRow = Math.floor(specIndex / specsPerRow);
-            const specX = x + 0.15 + specCol * specColWidth;
-            const specYPos = specY + specRow * 0.4;
+            const specX = x + 0.1 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.32;
 
             // Label
             contentSlide.addText(spec.label.toUpperCase(), {
               x: specX,
               y: specYPos,
               w: specColWidth,
-              h: 0.15,
-              fontSize: 6,
+              h: 0.12,
+              fontSize: 5,
               color: colors.textMuted,
             });
             // Value
             contentSlide.addText(spec.value, {
               x: specX,
-              y: specYPos + 0.12,
+              y: specYPos + 0.1,
               w: specColWidth,
-              h: 0.2,
-              fontSize: 8,
+              h: 0.18,
+              fontSize: 7,
               bold: true,
               color: colors.text,
             });
@@ -1228,11 +1294,11 @@ export async function generatePptx(
 
         // Price (at bottom of card)
         contentSlide.addText(product.price, {
-          x: x + 0.15,
-          y: y + cardHeight - 0.8,
-          w: cardWidth - 0.3,
-          h: 0.4,
-          fontSize: 18,
+          x: x + 0.1,
+          y: y + cardHeight - 0.6,
+          w: cardWidth - 0.2,
+          h: 0.32,
+          fontSize: 14,
           bold: true,
           color: colors.text,
         });
@@ -1240,11 +1306,11 @@ export async function generatePptx(
         // Delivery
         if (product.delivery) {
           contentSlide.addText(product.delivery, {
-            x: x + 0.15,
-            y: y + cardHeight - 0.45,
-            w: cardWidth - 0.3,
-            h: 0.25,
-            fontSize: 8,
+            x: x + 0.1,
+            y: y + cardHeight - 0.32,
+            w: cardWidth - 0.2,
+            h: 0.2,
+            fontSize: 7,
             color: colors.textMuted,
           });
         }
@@ -1364,26 +1430,35 @@ export async function generatePptx(
     fill: { color: colors.primary },
   });
 
-  // Brand logo circle with initials (centered, larger)
-  summarySlide.addShape("ellipse" as any, {
-    x: 4.25,
-    y: 0.5,
-    w: 1.5,
-    h: 1.5,
-    fill: { color: colors.primary },
-  });
-
-  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
-    x: 4.25,
-    y: 0.75,
-    w: 1.5,
-    h: 1.0,
-    fontSize: 32,
-    bold: true,
-    color: "FFFFFF",
-    align: "center",
-    valign: "middle",
-  });
+  // Brand logo (use PNG if available, fallback to shape)
+  if (logoPngDataUrl) {
+    summarySlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    summarySlide.addShape("ellipse" as any, {
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+    });
+    summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
+      x: 4.25,
+      y: 0.75,
+      w: 1.5,
+      h: 1.0,
+      fontSize: 32,
+      bold: true,
+      color: "FFFFFF",
+      align: "center",
+      valign: "middle",
+    });
+  }
 
   // Title - moved up
   summarySlide.addText("Thank You", {
