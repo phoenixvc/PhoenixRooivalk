@@ -253,10 +253,10 @@ export const lightningPitchSlides: Slide[] = [
 ];
 
 export const lightningPitchMeta = {
-  title: "Phoenix Rooivalk: Lightning Pitch (2.5 min)",
+  title: "Phoenix Rooivalk: Lightning Pitch",
   duration: 2.5,
-  audience: "Investors, Pitch Competitions",
-  date: "January 2026",
+  audience: "Investors",
+  date: "January 14, 2026",
   colorTheme: "investor" as const,
 };
 
