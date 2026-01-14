@@ -17,18 +17,18 @@ export const qaAppendixSlides: Slide[] = [
     duration: 15,
     icon: "🎬",
     layout: "video",
-    video: "/videos/netlauncher-demo-10s.mp4",
+    video: "/videos/netlauncher-poc-short.mp4",
     videoCaption: "SkySnare prototype - CO2 pneumatic net launcher",
     keyPoints: [
       "**CO2 pneumatic propulsion** - completely safe",
-      "**Net deploys in <200ms** - watch the speed",
       "**Captures target intact** - no damage",
       "**Reusable** - just reload the net",
+      "**No permits required** - civilian-legal",
     ],
     speakerNotes:
-      "Play the 10s demo. Let it speak for itself. Point out the speed and clean capture.",
+      "Play the demo. Let it speak for itself. Point out the clean capture and safety.",
     script:
-      "Here's our net launcher in action. Watch the deployment speed - under 200 milliseconds. CO2 pneumatic propulsion, completely safe. The net captures the target intact. And it's reusable - just reload. This is our SkySnare consumer prototype.",
+      "Here's our net launcher in action. CO2 pneumatic propulsion, completely safe. The net captures the target intact. And it's reusable - just reload. This is our SkySnare consumer prototype.",
   },
 
   // ==========================================

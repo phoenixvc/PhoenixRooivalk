@@ -104,6 +104,8 @@ export interface Slide {
   videoCaption?: string;
   /** Whether video should autoplay in presentation mode */
   videoAutoplay?: boolean;
+  /** Presenter name for this slide (e.g., "Pieter", "Eben") */
+  presenter?: string;
 }
 
 interface PptxGeneratorProps {

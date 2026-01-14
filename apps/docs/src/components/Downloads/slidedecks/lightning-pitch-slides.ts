@@ -23,7 +23,7 @@ export const lightningPitchSlides: Slide[] = [
     duration: 40,
     icon: "🚨",
     layout: "default",
-    video: "/videos/fpv-kills-10s.mp4",
+    video: "/videos/fpv-kills-short.mp4",
     videoCaption: "FPV drone attacks - Ukraine 2025 (UN documented)",
     keyPoints: [
       "**[10s VIDEO: FPV drone kills - Ukraine footage]**",
@@ -84,6 +84,7 @@ export const lightningPitchSlides: Slide[] = [
     duration: 30,
     icon: "🔧",
     layout: "default",
+    presenter: "Pieter",
     keyPoints: [
       {
         text: "**Consumer (Seed Phase - Q3 2026):**",
@@ -170,6 +171,7 @@ export const lightningPitchSlides: Slide[] = [
     duration: 30,
     icon: "💰",
     layout: "default",
+    presenter: "Eben",
     keyPoints: [
       "**$960K Seed** on SAFE | **$3.5M pre-money cap**",
       "",
