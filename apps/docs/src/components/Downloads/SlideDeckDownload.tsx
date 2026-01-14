@@ -824,6 +824,7 @@ export default function SlideDeckDownload({
                               muted={slide.videoAutoplay}
                               className="w-full h-full object-contain"
                               poster={slide.image}
+                              aria-label={slide.videoCaption || slide.title || "Video content"}
                             >
                               {slide.videoCaptions && (
                                 <track

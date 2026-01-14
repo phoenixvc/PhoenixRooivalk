@@ -10,6 +10,38 @@ import type {
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials
 
 /**
+ * Sanitize video path to prevent path traversal attacks
+ * Only allows paths starting with / or relative paths without ..
+ */
+function sanitizeVideoPath(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  // Remove any path traversal attempts
+  const sanitized = path
+    .replace(/\.\./g, "") // Remove ..
+    .replace(/\/\//g, "/") // Remove double slashes
+    .trim();
+  // Only allow paths starting with / or alphanumeric
+  if (!/^[\/a-zA-Z0-9]/.test(sanitized)) return undefined;
+  return sanitized;
+}
+
+/**
+ * Sanitize text content for speaker notes to prevent injection
+ */
+function sanitizeTextContent(text: string | undefined): string {
+  if (!text) return "";
+  return text
+    .replace(/[\x00-\x1F\x7F]/g, "") // Remove control characters
+    .trim();
+}
+
+/**
+ * pptxgenjs shape type - using string literal type for better type safety
+ * Note: pptxgenjs types are incomplete, so we use this type alias
+ */
+type PptxShape = "rect" | "ellipse" | "triangle" | "line" | "arc";
+
+/**
  * Color theme presets
  */
 const COLOR_THEMES: Record<ColorTheme, ColorPalette> = {
@@ -868,8 +900,13 @@ export async function generatePptx(
       // Note: pptxgenjs supports video embedding via addMedia()
       // Add prominent video placeholder with play instructions
 
+      // Sanitize video path and caption to prevent injection
+      const sanitizedVideoPath = sanitizeVideoPath(slide.video);
+      const sanitizedCaption = sanitizeTextContent(slide.videoCaption);
+
       // Video container background
-      contentSlide.addShape("rect" as any, {
+      const rectShape: PptxShape = "rect";
+      contentSlide.addShape(rectShape, {
         x: 1.5,
         y: 1.9,
         w: 7.0,
@@ -879,7 +916,8 @@ export async function generatePptx(
       });
 
       // Play button triangle
-      contentSlide.addShape("triangle" as any, {
+      const triangleShape: PptxShape = "triangle";
+      contentSlide.addShape(triangleShape, {
         x: 4.0,
         y: 2.8,
         w: 1.5,
@@ -900,35 +938,37 @@ export async function generatePptx(
         align: "center",
       });
 
-      // Try to embed the video if path is accessible
-      try {
-        // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
-        contentSlide.addMedia({
-          path: slide.video,
-          x: 1.5,
-          y: 1.9,
-          w: 7.0,
-          h: 3.5,
-          type: "video",
-        });
-      } catch {
-        // If video embedding fails, the placeholder is already there
-        // Add instruction text
-        contentSlide.addText("Click to play embedded video", {
-          x: 1.5,
-          y: 5.0,
-          w: 7.0,
-          h: 0.3,
-          fontSize: 11,
-          color: colors.textMuted,
-          align: "center",
-          italic: true,
-        });
+      // Try to embed the video if path is accessible and valid
+      if (sanitizedVideoPath) {
+        try {
+          // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
+          contentSlide.addMedia({
+            path: sanitizedVideoPath,
+            x: 1.5,
+            y: 1.9,
+            w: 7.0,
+            h: 3.5,
+            type: "video",
+          });
+        } catch {
+          // If video embedding fails, the placeholder is already there
+          // Add instruction text
+          contentSlide.addText("Click to play embedded video", {
+            x: 1.5,
+            y: 5.0,
+            w: 7.0,
+            h: 0.3,
+            fontSize: 11,
+            color: colors.textMuted,
+            align: "center",
+            italic: true,
+          });
+        }
       }
 
-      // Video caption
-      if (slide.videoCaption) {
-        contentSlide.addText(slide.videoCaption, {
+      // Video caption (sanitized)
+      if (sanitizedCaption) {
+        contentSlide.addText(sanitizedCaption, {
           x: 0.5,
           y: 5.5,
           w: 9.0,
@@ -964,9 +1004,11 @@ export async function generatePptx(
         });
       }
 
-      // Add video path to speaker notes if not already present
-      if (!slide.script) {
-        contentSlide.addNotes(`[PLAY VIDEO: ${slide.video}]`);
+      // Add video path to speaker notes if not already present (sanitized)
+      if (!slide.script && sanitizedVideoPath) {
+        contentSlide.addNotes(
+          `[PLAY VIDEO: ${sanitizeTextContent(sanitizedVideoPath)}]`,
+        );
       }
     } else {
       // Default layout with key points
