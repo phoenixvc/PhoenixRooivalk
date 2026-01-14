@@ -55,10 +55,10 @@ export const lightningPitchSlides: Slide[] = [
     video: "/videos/netlauncher-poc-short.mp4",
     videoCaption: "SkySnare prototype - CO₂ pneumatic net launcher",
     keyPoints: [
-      "**Phoenix Rooivalk**",
-      "CO₂ net launchers that **capture drones intact**",
-      "**Safe** - No permits needed",
-      "**Legal** - Non-destructive, civilian-safe",
+      "**Sub-second response** vs 5-30s military systems",
+      "**No training required** - point and shoot",
+      "**Works day or night** - no radar, no jamming",
+      "**Portable** - single operator, reusable nets",
       "**Affordable** - Starting at **$349**",
     ],
     speakerNotes:

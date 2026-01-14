@@ -888,13 +888,13 @@ export async function generatePptx(
         (m) => !m.title.toLowerCase().includes("founder"),
       );
 
-      // Founders row - larger cards
-      const founderCardW = 2.8;
-      const founderCardH = 2.2;
-      const founderGap = 0.3;
+      // Founders row - compact cards
+      const founderCardW = 2.6;
+      const founderCardH = 1.9;
+      const founderGap = 0.25;
       const founderStartX =
         (10 - founders.length * founderCardW - (founders.length - 1) * founderGap) / 2;
-      const founderY = 1.8;
+      const founderY = 1.75;
 
       founders.forEach((member, idx) => {
         const x = founderStartX + idx * (founderCardW + founderGap);
@@ -912,20 +912,20 @@ export async function generatePptx(
 
         // Avatar circle
         contentSlide.addShape("ellipse" as any, {
-          x: x + founderCardW / 2 - 0.4,
-          y: founderY + 0.15,
-          w: 0.8,
-          h: 0.8,
+          x: x + founderCardW / 2 - 0.35,
+          y: founderY + 0.12,
+          w: 0.7,
+          h: 0.7,
           fill: { color: memberColor },
         });
 
         // Initials
         contentSlide.addText(member.initials, {
-          x: x + founderCardW / 2 - 0.4,
-          y: founderY + 0.28,
-          w: 0.8,
-          h: 0.55,
-          fontSize: 16,
+          x: x + founderCardW / 2 - 0.35,
+          y: founderY + 0.22,
+          w: 0.7,
+          h: 0.5,
+          fontSize: 14,
           bold: true,
           color: "FFFFFF",
           align: "center",
@@ -935,10 +935,10 @@ export async function generatePptx(
         // Name
         contentSlide.addText(member.name, {
           x,
-          y: founderY + 1.0,
+          y: founderY + 0.85,
           w: founderCardW,
-          h: 0.3,
-          fontSize: 12,
+          h: 0.25,
+          fontSize: 11,
           bold: true,
           color: colors.text,
           align: "center",
@@ -947,10 +947,10 @@ export async function generatePptx(
         // Title
         contentSlide.addText(member.title, {
           x,
-          y: founderY + 1.28,
+          y: founderY + 1.1,
           w: founderCardW,
-          h: 0.25,
-          fontSize: 9,
+          h: 0.2,
+          fontSize: 8,
           color: memberColor,
           align: "center",
         });
@@ -958,24 +958,24 @@ export async function generatePptx(
         // Highlights
         const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
-          x: x + 0.1,
-          y: founderY + 1.55,
-          w: founderCardW - 0.2,
-          h: 0.6,
-          fontSize: 8,
+          x: x + 0.08,
+          y: founderY + 1.32,
+          w: founderCardW - 0.16,
+          h: 0.55,
+          fontSize: 7,
           color: colors.textMuted,
           valign: "top",
-          lineSpacing: 11,
+          lineSpacing: 10,
         });
       });
 
       // Advisors row - smaller cards
-      const advisorCardW = 1.6;
-      const advisorCardH = 1.5;
-      const advisorGap = 0.2;
+      const advisorCardW = 1.5;
+      const advisorCardH = 1.25;
+      const advisorGap = 0.15;
       const advisorStartX =
         (10 - advisors.length * advisorCardW - (advisors.length - 1) * advisorGap) / 2;
-      const advisorY = founderY + founderCardH + 0.25;
+      const advisorY = founderY + founderCardH + 0.2;
 
       advisors.forEach((member, idx) => {
         const x = advisorStartX + idx * (advisorCardW + advisorGap);
@@ -993,20 +993,20 @@ export async function generatePptx(
 
         // Avatar circle (smaller)
         contentSlide.addShape("ellipse" as any, {
-          x: x + advisorCardW / 2 - 0.25,
-          y: advisorY + 0.1,
-          w: 0.5,
-          h: 0.5,
+          x: x + advisorCardW / 2 - 0.22,
+          y: advisorY + 0.08,
+          w: 0.44,
+          h: 0.44,
           fill: { color: memberColor },
         });
 
         // Initials
         contentSlide.addText(member.initials, {
-          x: x + advisorCardW / 2 - 0.25,
-          y: advisorY + 0.18,
-          w: 0.5,
-          h: 0.35,
-          fontSize: 10,
+          x: x + advisorCardW / 2 - 0.22,
+          y: advisorY + 0.14,
+          w: 0.44,
+          h: 0.32,
+          fontSize: 9,
           bold: true,
           color: "FFFFFF",
           align: "center",
@@ -1016,10 +1016,10 @@ export async function generatePptx(
         // Name
         contentSlide.addText(member.name, {
           x,
-          y: advisorY + 0.65,
+          y: advisorY + 0.55,
           w: advisorCardW,
-          h: 0.25,
-          fontSize: 9,
+          h: 0.22,
+          fontSize: 8,
           bold: true,
           color: colors.text,
           align: "center",
@@ -1028,10 +1028,10 @@ export async function generatePptx(
         // Title
         contentSlide.addText(member.title, {
           x,
-          y: advisorY + 0.88,
+          y: advisorY + 0.76,
           w: advisorCardW,
-          h: 0.2,
-          fontSize: 7,
+          h: 0.18,
+          fontSize: 6,
           color: colors.textMuted,
           align: "center",
         });
@@ -1039,14 +1039,14 @@ export async function generatePptx(
         // Highlights (compact)
         const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
-          x: x + 0.05,
-          y: advisorY + 1.08,
-          w: advisorCardW - 0.1,
-          h: 0.4,
-          fontSize: 6,
+          x: x + 0.04,
+          y: advisorY + 0.94,
+          w: advisorCardW - 0.08,
+          h: 0.3,
+          fontSize: 5,
           color: colors.textMuted,
           valign: "top",
-          lineSpacing: 9,
+          lineSpacing: 8,
         });
       });
     } else if (layout === "video" || slide.video) {
@@ -1169,15 +1169,15 @@ export async function generatePptx(
         );
       }
     } else if (layout === "products" && slide.productCards) {
-      // Product cards grid layout - 3 cards side by side, compact
+      // Product cards grid layout - 3 cards side by side, readable
       const cards = slide.productCards;
       const cardCount = cards.length;
-      const cardWidth = 2.9;
-      const cardHeight = 3.4;
-      const cardGap = 0.15;
+      const cardWidth = 3.0;
+      const cardHeight = 3.6;
+      const cardGap = 0.12;
       const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
       const startX = (10 - totalWidth) / 2;
-      const startY = 1.75;
+      const startY = 1.7;
 
       cards.forEach((product, cardIndex) => {
         const x = startX + cardIndex * (cardWidth + cardGap);
@@ -1191,126 +1191,127 @@ export async function generatePptx(
           w: cardWidth,
           h: cardHeight,
           fill: { color: colors.darker },
-          line: { color: productColor, width: 1.5 },
+          line: { color: productColor, width: 2 },
         });
 
-        // Badges
-        let badgeY = y + 0.15;
+        // Badges - larger and more readable
+        let badgeY = y + 0.12;
         if (product.badges && product.badges.length > 0) {
-          let badgeX = x + 0.15;
+          let badgeX = x + 0.12;
           product.badges.forEach((badge, badgeIndex) => {
             const badgeColor = badgeIndex === 0 ? "22C55E" : "F97316";
+            const badgeW = badge.length * 0.085 + 0.22;
             contentSlide.addShape("rect" as any, {
               x: badgeX,
               y: badgeY,
-              w: badge.length * 0.08 + 0.2,
-              h: 0.22,
+              w: badgeW,
+              h: 0.24,
               fill: { color: badgeColor },
             });
             contentSlide.addText(badge, {
               x: badgeX,
               y: badgeY,
-              w: badge.length * 0.08 + 0.2,
-              h: 0.22,
-              fontSize: 7,
+              w: badgeW,
+              h: 0.24,
+              fontSize: 8,
               bold: true,
               color: "FFFFFF",
               align: "center",
               valign: "middle",
             });
-            badgeX += badge.length * 0.08 + 0.3;
+            badgeX += badgeW + 0.08;
           });
-          badgeY += 0.35;
+          badgeY += 0.36;
         } else {
-          badgeY += 0.1;
+          badgeY += 0.08;
         }
 
-        // Product name
+        // Product name - larger
         contentSlide.addText(product.name, {
-          x: x + 0.1,
+          x: x + 0.12,
           y: badgeY,
-          w: cardWidth - 0.2,
-          h: 0.28,
-          fontSize: 12,
-          bold: true,
-          color: colors.text,
-        });
-
-        // Tagline
-        contentSlide.addText(product.tagline, {
-          x: x + 0.1,
-          y: badgeY + 0.28,
-          w: cardWidth - 0.2,
-          h: 0.2,
-          fontSize: 8,
-          bold: true,
-          color: productColor,
-        });
-
-        // Description
-        contentSlide.addText(product.description, {
-          x: x + 0.1,
-          y: badgeY + 0.5,
-          w: cardWidth - 0.2,
-          h: 0.55,
-          fontSize: 7,
-          color: colors.textSecondary,
-          valign: "top",
-        });
-
-        // Specs
-        if (product.specs && product.specs.length > 0) {
-          let specY = badgeY + 1.1;
-          const specsPerRow = 2;
-          const specColWidth = (cardWidth - 0.2) / specsPerRow;
-
-          product.specs.forEach((spec, specIndex) => {
-            const specCol = specIndex % specsPerRow;
-            const specRow = Math.floor(specIndex / specsPerRow);
-            const specX = x + 0.1 + specCol * specColWidth;
-            const specYPos = specY + specRow * 0.32;
-
-            // Label
-            contentSlide.addText(spec.label.toUpperCase(), {
-              x: specX,
-              y: specYPos,
-              w: specColWidth,
-              h: 0.12,
-              fontSize: 5,
-              color: colors.textMuted,
-            });
-            // Value
-            contentSlide.addText(spec.value, {
-              x: specX,
-              y: specYPos + 0.1,
-              w: specColWidth,
-              h: 0.18,
-              fontSize: 7,
-              bold: true,
-              color: colors.text,
-            });
-          });
-        }
-
-        // Price (at bottom of card)
-        contentSlide.addText(product.price, {
-          x: x + 0.1,
-          y: y + cardHeight - 0.6,
-          w: cardWidth - 0.2,
+          w: cardWidth - 0.24,
           h: 0.32,
           fontSize: 14,
           bold: true,
           color: colors.text,
         });
 
-        // Delivery
+        // Tagline - larger
+        contentSlide.addText(product.tagline, {
+          x: x + 0.12,
+          y: badgeY + 0.32,
+          w: cardWidth - 0.24,
+          h: 0.24,
+          fontSize: 10,
+          bold: true,
+          color: productColor,
+        });
+
+        // Description - larger, more space
+        contentSlide.addText(product.description, {
+          x: x + 0.12,
+          y: badgeY + 0.58,
+          w: cardWidth - 0.24,
+          h: 0.65,
+          fontSize: 9,
+          color: colors.textSecondary,
+          valign: "top",
+        });
+
+        // Specs - larger fonts
+        if (product.specs && product.specs.length > 0) {
+          let specY = badgeY + 1.28;
+          const specsPerRow = 2;
+          const specColWidth = (cardWidth - 0.24) / specsPerRow;
+
+          product.specs.forEach((spec, specIndex) => {
+            const specCol = specIndex % specsPerRow;
+            const specRow = Math.floor(specIndex / specsPerRow);
+            const specX = x + 0.12 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.38;
+
+            // Label
+            contentSlide.addText(spec.label.toUpperCase(), {
+              x: specX,
+              y: specYPos,
+              w: specColWidth,
+              h: 0.14,
+              fontSize: 7,
+              color: colors.textMuted,
+            });
+            // Value
+            contentSlide.addText(spec.value, {
+              x: specX,
+              y: specYPos + 0.14,
+              w: specColWidth,
+              h: 0.2,
+              fontSize: 10,
+              bold: true,
+              color: colors.text,
+            });
+          });
+        }
+
+        // Price (at bottom of card) - larger
+        contentSlide.addText(product.price, {
+          x: x + 0.12,
+          y: y + cardHeight - 0.65,
+          w: cardWidth - 0.24,
+          h: 0.36,
+          fontSize: 16,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Delivery - slightly larger
         if (product.delivery) {
           contentSlide.addText(product.delivery, {
-            x: x + 0.1,
+            x: x + 0.12,
             y: y + cardHeight - 0.32,
-            w: cardWidth - 0.2,
-            h: 0.2,
-            fontSize: 7,
+            w: cardWidth - 0.24,
+            h: 0.22,
+            fontSize: 9,
             color: colors.textMuted,
           });
         }
