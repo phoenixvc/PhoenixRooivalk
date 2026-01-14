@@ -168,7 +168,7 @@ export const lightningPitchSlides: Slide[] = [
         initials: "PL",
         name: "Pieter La Grange",
         title: "Co-Founder",
-        highlights: ["Electronic Eng", "🚀 Flight Club world record"],
+        highlights: ["Electronic Eng", "🚀 Flight Club 637km/h"],
         color: "#ea580c",
         image: "/img/team/pieter.jpeg",
       },
