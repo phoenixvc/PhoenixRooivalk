@@ -4,6 +4,7 @@ import type {
   ColorTheme,
   ColorPalette,
   TeamMember,
+  ProductCard,
 } from "../components/Downloads/SlideDeckDownload";
 
 /** Branded text for slide decks - Phoenix Rooivalk */
@@ -782,13 +783,25 @@ export async function generatePptx(
       const cols = Math.min(memberCount, 4);
       const cardWidth = 2.1;
       const cardHeight = 2.6;
-      const startX = (10 - cols * cardWidth - (cols - 1) * 0.15) / 2;
+      const cardGap = 0.15;
+      const totalRows = Math.ceil(memberCount / cols);
+      const baseStartX = (10 - cols * cardWidth - (cols - 1) * cardGap) / 2;
       const startY = 1.9;
 
       members.forEach((member, memberIndex) => {
-        const col = memberIndex % cols;
         const row = Math.floor(memberIndex / cols);
-        const x = startX + col * (cardWidth + 0.15);
+        const col = memberIndex % cols;
+
+        // Calculate how many cards are in this row
+        const cardsInThisRow =
+          row < totalRows - 1 ? cols : memberCount - (totalRows - 1) * cols;
+
+        // Center the row if it has fewer cards than max cols
+        const rowStartX =
+          (10 - cardsInThisRow * cardWidth - (cardsInThisRow - 1) * cardGap) /
+          2;
+
+        const x = rowStartX + col * (cardWidth + cardGap);
         const y = startY + row * (cardHeight + 0.2);
         const memberColor = member.color?.replace("#", "") || "1E40AF";
 
@@ -896,43 +909,48 @@ export async function generatePptx(
         });
       }
     } else if (layout === "video" || slide.video) {
-      // Video layout OR any slide with a video property
+      // Video layout - split view: video left, key points right
       // Note: pptxgenjs supports video embedding via addMedia()
-      // Add prominent video placeholder with play instructions
 
       // Sanitize video path and caption to prevent injection
       const sanitizedVideoPath = sanitizeVideoPath(slide.video);
       const sanitizedCaption = sanitizeTextContent(slide.videoCaption);
 
+      // Video container on the LEFT (50% width)
+      const videoX = 0.5;
+      const videoY = 1.9;
+      const videoW = 4.5;
+      const videoH = 3.2;
+
       // Video container background
       const rectShape: PptxShape = "rect";
       contentSlide.addShape(rectShape, {
-        x: 1.5,
-        y: 1.9,
-        w: 7.0,
-        h: 3.5,
+        x: videoX,
+        y: videoY,
+        w: videoW,
+        h: videoH,
         fill: { color: "000000" },
         line: { color: colors.primary, width: 2 },
       });
 
-      // Play button triangle
+      // Play button triangle (centered in video area)
       const triangleShape: PptxShape = "triangle";
       contentSlide.addShape(triangleShape, {
-        x: 4.0,
-        y: 2.8,
-        w: 1.5,
-        h: 1.5,
+        x: videoX + videoW / 2 - 0.5,
+        y: videoY + videoH / 2 - 0.5,
+        w: 1.0,
+        h: 1.0,
         fill: { color: colors.primary },
         rotate: 90,
       });
 
-      // Video label
+      // Video label below video
       contentSlide.addText("VIDEO", {
-        x: 1.5,
-        y: 4.5,
-        w: 7.0,
-        h: 0.4,
-        fontSize: 14,
+        x: videoX,
+        y: videoY + videoH + 0.1,
+        w: videoW,
+        h: 0.3,
+        fontSize: 11,
         bold: true,
         color: colors.primary,
         align: "center",
@@ -944,21 +962,20 @@ export async function generatePptx(
           // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
           contentSlide.addMedia({
             path: sanitizedVideoPath,
-            x: 1.5,
-            y: 1.9,
-            w: 7.0,
-            h: 3.5,
+            x: videoX,
+            y: videoY,
+            w: videoW,
+            h: videoH,
             type: "video",
           });
         } catch {
           // If video embedding fails, the placeholder is already there
-          // Add instruction text
-          contentSlide.addText("Click to play embedded video", {
-            x: 1.5,
-            y: 5.0,
-            w: 7.0,
+          contentSlide.addText("Click to play", {
+            x: videoX,
+            y: videoY + videoH - 0.4,
+            w: videoW,
             h: 0.3,
-            fontSize: 11,
+            fontSize: 10,
             color: colors.textMuted,
             align: "center",
             italic: true,
@@ -966,40 +983,40 @@ export async function generatePptx(
         }
       }
 
-      // Video caption (sanitized)
+      // Video caption below video label
       if (sanitizedCaption) {
         contentSlide.addText(sanitizedCaption, {
-          x: 0.5,
-          y: 5.5,
-          w: 9.0,
+          x: videoX,
+          y: videoY + videoH + 0.4,
+          w: videoW,
           h: 0.4,
-          fontSize: 14,
+          fontSize: 10,
           color: colors.textMuted,
           align: "center",
           italic: true,
         });
       }
 
-      // Key points below video if any
+      // Key points on the RIGHT (50% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
           text: getKeyPointText(point),
           options: {
             bullet: { type: "number" as const, code: "2022" },
             color: colors.text,
-            fontSize: 13,
-            paraSpaceBefore: 3,
-            paraSpaceAfter: 3,
+            fontSize: 14,
+            paraSpaceBefore: 5,
+            paraSpaceAfter: 5,
           },
         }));
 
         contentSlide.addText(bulletPoints, {
-          x: 0.7,
-          y: 5.9,
-          w: 8.6,
-          h: 1.0,
+          x: 5.2,
+          y: 1.9,
+          w: 4.3,
+          h: 4.5,
           color: colors.text,
-          fontSize: 13,
+          fontSize: 14,
           valign: "top",
         });
       }
@@ -1010,6 +1027,153 @@ export async function generatePptx(
           `[PLAY VIDEO: ${sanitizeTextContent(sanitizedVideoPath)}]`,
         );
       }
+    } else if (layout === "products" && slide.productCards) {
+      // Product cards grid layout - 3 cards side by side
+      const cards = slide.productCards;
+      const cardCount = cards.length;
+      const cardWidth = 3.0;
+      const cardHeight = 4.2;
+      const cardGap = 0.2;
+      const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
+      const startX = (10 - totalWidth) / 2;
+      const startY = 1.8;
+
+      cards.forEach((product, cardIndex) => {
+        const x = startX + cardIndex * (cardWidth + cardGap);
+        const y = startY;
+        const productColor = product.color?.replace("#", "") || "F97316";
+
+        // Card background
+        contentSlide.addShape("rect" as any, {
+          x,
+          y,
+          w: cardWidth,
+          h: cardHeight,
+          fill: { color: colors.darker },
+          line: { color: productColor, width: 1.5 },
+        });
+
+        // Badges
+        let badgeY = y + 0.15;
+        if (product.badges && product.badges.length > 0) {
+          let badgeX = x + 0.15;
+          product.badges.forEach((badge, badgeIndex) => {
+            const badgeColor = badgeIndex === 0 ? "22C55E" : "F97316";
+            contentSlide.addShape("rect" as any, {
+              x: badgeX,
+              y: badgeY,
+              w: badge.length * 0.08 + 0.2,
+              h: 0.22,
+              fill: { color: badgeColor },
+            });
+            contentSlide.addText(badge, {
+              x: badgeX,
+              y: badgeY,
+              w: badge.length * 0.08 + 0.2,
+              h: 0.22,
+              fontSize: 7,
+              bold: true,
+              color: "FFFFFF",
+              align: "center",
+              valign: "middle",
+            });
+            badgeX += badge.length * 0.08 + 0.3;
+          });
+          badgeY += 0.35;
+        } else {
+          badgeY += 0.1;
+        }
+
+        // Product name
+        contentSlide.addText(product.name, {
+          x: x + 0.15,
+          y: badgeY,
+          w: cardWidth - 0.3,
+          h: 0.35,
+          fontSize: 14,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Tagline
+        contentSlide.addText(product.tagline, {
+          x: x + 0.15,
+          y: badgeY + 0.35,
+          w: cardWidth - 0.3,
+          h: 0.25,
+          fontSize: 9,
+          bold: true,
+          color: productColor,
+        });
+
+        // Description
+        contentSlide.addText(product.description, {
+          x: x + 0.15,
+          y: badgeY + 0.65,
+          w: cardWidth - 0.3,
+          h: 0.7,
+          fontSize: 8,
+          color: colors.textSecondary,
+          valign: "top",
+        });
+
+        // Specs
+        if (product.specs && product.specs.length > 0) {
+          let specY = badgeY + 1.4;
+          const specsPerRow = 2;
+          const specColWidth = (cardWidth - 0.3) / specsPerRow;
+
+          product.specs.forEach((spec, specIndex) => {
+            const specCol = specIndex % specsPerRow;
+            const specRow = Math.floor(specIndex / specsPerRow);
+            const specX = x + 0.15 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.4;
+
+            // Label
+            contentSlide.addText(spec.label.toUpperCase(), {
+              x: specX,
+              y: specYPos,
+              w: specColWidth,
+              h: 0.15,
+              fontSize: 6,
+              color: colors.textMuted,
+            });
+            // Value
+            contentSlide.addText(spec.value, {
+              x: specX,
+              y: specYPos + 0.12,
+              w: specColWidth,
+              h: 0.2,
+              fontSize: 8,
+              bold: true,
+              color: colors.text,
+            });
+          });
+        }
+
+        // Price (at bottom of card)
+        contentSlide.addText(product.price, {
+          x: x + 0.15,
+          y: y + cardHeight - 0.8,
+          w: cardWidth - 0.3,
+          h: 0.4,
+          fontSize: 18,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Delivery
+        if (product.delivery) {
+          contentSlide.addText(product.delivery, {
+            x: x + 0.15,
+            y: y + cardHeight - 0.45,
+            w: cardWidth - 0.3,
+            h: 0.25,
+            fontSize: 8,
+            color: colors.textMuted,
+          });
+        }
+      });
     } else {
       // Default layout with key points
       // Add key points header
@@ -1078,47 +1242,14 @@ export async function generatePptx(
         x: 0.7,
         y: 2.3,
         w: 8.6,
-        h: 2.8,
+        h: 4.5,
         color: colors.text,
         fontSize: 16,
         valign: "top",
       });
 
-      // Add script section if available (visible on slide)
-      if (slide.script) {
-        // Script background box
-        contentSlide.addShape("rect" as any, {
-          x: 0.5,
-          y: 5.3,
-          w: 9.0,
-          h: 1.7,
-          fill: { color: colors.darker },
-          line: { color: colors.primary, width: 1 },
-        });
-
-        // Script header
-        contentSlide.addText("Script", {
-          x: 0.7,
-          y: 5.4,
-          w: 8.6,
-          h: 0.25,
-          fontSize: 12,
-          bold: true,
-          color: colors.textSecondary,
-        });
-
-        // Script content
-        contentSlide.addText(`"${slide.script}"`, {
-          x: 0.7,
-          y: 5.75,
-          w: 8.6,
-          h: 1.15,
-          fontSize: 13,
-          color: colors.textSecondary,
-          italic: true,
-          valign: "top",
-        });
-      }
+      // Note: Script is added to speaker notes only (see line ~379)
+      // Not displayed visually on the slide to keep slides clean
     }
 
     // Add footer with PhoenixRooivalk branding
@@ -1149,46 +1280,85 @@ export async function generatePptx(
   summarySlide.background = { color: colors.dark };
   summarySlide.transition = { type: "fade", speed: "fast" };
 
-  // Small Brand Icon in top left corner
-  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
-    x: 0.3,
-    y: 0.2,
-    w: 0.5,
-    h: 0.4,
-    fontSize: 14,
-    color: colors.textMuted,
+  // Decorative top bar
+  summarySlide.addShape("rect" as any, {
+    x: 0,
+    y: 0,
+    w: 10.0,
+    h: 0.08,
+    fill: { color: colors.primary },
   });
 
-  summarySlide.addText("Summary", {
+  // Brand logo circle with initials (centered, larger)
+  summarySlide.addShape("ellipse" as any, {
+    x: 4.25,
+    y: 0.5,
+    w: 1.5,
+    h: 1.5,
+    fill: { color: colors.primary },
+  });
+
+  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
+    x: 4.25,
+    y: 0.75,
+    w: 1.5,
+    h: 1.0,
+    fontSize: 32,
+    bold: true,
+    color: "FFFFFF",
+    align: "center",
+    valign: "middle",
+  });
+
+  // Title
+  summarySlide.addText("Thank You", {
     x: 0.5,
-    y: 0.8,
+    y: 2.2,
     w: 9.0,
     h: 0.8,
-    fontSize: 36,
+    fontSize: 44,
     bold: true,
     color: colors.text,
     align: "center",
   });
 
+  // Decorative line under title
+  summarySlide.addShape("rect" as any, {
+    x: 3.5,
+    y: 3.1,
+    w: 3.0,
+    h: 0.03,
+    fill: { color: colors.primary },
+  });
+
+  // Summary stats
   const summaryText = [
-    `Total Slides: ${slides.length}`,
-    `Total Duration: ${totalSeconds} seconds (${metadata.duration} minutes)`,
-    "",
-    "Questions?",
+    `${slides.length} Slides  •  ${metadata.duration} Minutes`,
   ].join("\n");
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 1.6,
+    y: 3.3,
     w: 9.0,
-    h: 1.8,
-    fontSize: 20,
+    h: 0.5,
+    fontSize: 16,
     color: colors.textSecondary,
     align: "center",
   });
 
+  // Questions text
+  summarySlide.addText("Questions?", {
+    x: 0.5,
+    y: 3.9,
+    w: 9.0,
+    h: 0.6,
+    fontSize: 28,
+    bold: true,
+    color: colors.text,
+    align: "center",
+  });
+
   // Add QR code if contact URL is provided
-  // Note: 16:9 slides are 10" x 5.625", so we need to fit within that height
   if (metadata.contactUrl || metadata.contactEmail) {
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
     const qrUrl = getQrCodeUrl(qrData, 120);
@@ -1196,28 +1366,28 @@ export async function generatePptx(
     // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 3.6,
+      y: 4.6,
       w: 3.0,
       h: 0.3,
-      fontSize: 12,
+      fontSize: 11,
       color: colors.textMuted,
       align: "center",
     });
 
-    // Add QR code image (positioned to fit within 16:9 slide)
+    // Add QR code image
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.25,
-        y: 3.9,
-        w: 1.2,
-        h: 1.2,
+        x: 4.4,
+        y: 4.85,
+        w: 1.0,
+        h: 1.0,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 4.0,
+        y: 5.0,
         w: 5.0,
         h: 0.3,
         fontSize: 12,
@@ -1230,7 +1400,7 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 5.2,
+        y: 5.9,
         w: 9.0,
         h: 0.25,
         fontSize: 11,
@@ -1238,6 +1408,17 @@ export async function generatePptx(
         align: "center",
       });
     }
+  } else {
+    // No contact info - add company name footer
+    summarySlide.addText("Phoenix Rooivalk", {
+      x: 0.5,
+      y: 5.5,
+      w: 9.0,
+      h: 0.4,
+      fontSize: 14,
+      color: colors.textMuted,
+      align: "center",
+    });
   }
 
   // Generate filename

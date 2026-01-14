@@ -525,11 +525,11 @@ export default function PresentationMode({
               </div>
             ) : slide.layout === "team" && slide.teamMembers ? (
               <div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="flex flex-wrap justify-center gap-4 mb-6">
                   {slide.teamMembers.map((member, memberIndex) => (
                     <div
                       key={memberIndex}
-                      className="text-center p-4 rounded-lg"
+                      className="text-center p-4 rounded-lg w-[calc(25%-0.75rem)] min-w-[140px] max-w-[180px]"
                       style={{
                         background: `linear-gradient(180deg, ${member.color || "#1e40af"}20 0%, ${member.color || "#1e40af"}10 100%)`,
                         border: `1px solid ${member.color || "#1e40af"}40`,
@@ -579,6 +579,162 @@ export default function PresentationMode({
                     ))}
                   </ul>
                 )}
+              </div>
+            ) : slide.layout === "video" || slide.video ? (
+              // Video layout - split view: video left, key points right
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Video on the left */}
+                <div className="flex flex-col">
+                  {slide.video && (
+                    <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
+                      <video
+                        src={slide.video}
+                        controls
+                        autoPlay={slide.videoAutoplay}
+                        muted={slide.videoAutoplay}
+                        className="w-full h-full object-contain"
+                        poster={slide.image}
+                        aria-label={
+                          slide.videoCaption || slide.title || "Video content"
+                        }
+                      >
+                        {slide.videoCaptions && (
+                          <track
+                            kind="captions"
+                            src={slide.videoCaptions}
+                            srcLang={slide.videoCaptionsLang || "en"}
+                            label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                            default
+                          />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                      {/* Fullscreen button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          const video = e.currentTarget
+                            .previousElementSibling as HTMLVideoElement;
+                          if (video?.requestFullscreen) {
+                            video.requestFullscreen();
+                          }
+                        }}
+                        className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Fullscreen"
+                      >
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  {slide.videoCaption && (
+                    <p className="text-sm text-gray-400 italic mt-2 text-center">
+                      {slide.videoCaption}
+                    </p>
+                  )}
+                </div>
+                {/* Key points on the right */}
+                <ul className="space-y-3">
+                  {slide.keyPoints.map((point, i) => (
+                    <li
+                      key={i}
+                      className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
+                        animationMode && i >= revealedBullets
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
+                    >
+                      <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                      <span>{parseRichText(getKeyPointText(point))}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : slide.layout === "products" && slide.productCards ? (
+              // Product cards grid layout
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {slide.productCards.map((product, productIndex) => (
+                  <div
+                    key={productIndex}
+                    className="rounded-lg p-4 flex flex-col"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
+                      border: `1px solid ${product.color || "#f97316"}50`,
+                    }}
+                  >
+                    {/* Badges */}
+                    {product.badges && product.badges.length > 0 && (
+                      <div className="flex gap-2 mb-3">
+                        {product.badges.map((badge, badgeIndex) => (
+                          <span
+                            key={badgeIndex}
+                            className="text-xs px-2 py-0.5 rounded font-medium"
+                            style={{
+                              backgroundColor:
+                                badgeIndex === 0 ? "#22c55e" : "#f97316",
+                              color: "#fff",
+                            }}
+                          >
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Name */}
+                    <h4 className="text-xl font-bold text-white mb-1">
+                      {product.name}
+                    </h4>
+                    {/* Tagline */}
+                    <p
+                      className="text-sm font-medium mb-2"
+                      style={{ color: product.color || "#f97316" }}
+                    >
+                      {product.tagline}
+                    </p>
+                    {/* Description */}
+                    <p className="text-sm text-gray-400 mb-4 flex-grow">
+                      {product.description}
+                    </p>
+                    {/* Specs */}
+                    {product.specs && product.specs.length > 0 && (
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-sm">
+                        {product.specs.map((spec, specIndex) => (
+                          <div key={specIndex}>
+                            <span className="text-gray-500 uppercase text-xs">
+                              {spec.label}
+                            </span>
+                            <div className="text-white font-medium">
+                              {spec.value}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* Price */}
+                    <div className="mt-auto">
+                      <p className="text-3xl font-bold text-white">
+                        {product.price}
+                      </p>
+                      {product.delivery && (
+                        <p className="text-sm text-gray-400">
+                          {product.delivery}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               // Default layout

@@ -21,7 +21,30 @@ export type SlideLayout =
   | "quote" // Quote/testimonial layout
   | "code" // Code block layout for technical content
   | "team" // Team members grid layout
-  | "video"; // Video-focused layout with optional caption
+  | "video" // Video-focused layout with optional caption
+  | "products"; // Product cards grid layout
+
+/**
+ * Product card for products layout slides
+ */
+export interface ProductCard {
+  /** Product name */
+  name: string;
+  /** Product tagline */
+  tagline: string;
+  /** Short description */
+  description: string;
+  /** Price (e.g., "$349" or "$100-250") */
+  price: string;
+  /** Delivery date */
+  delivery?: string;
+  /** Key specs as label-value pairs */
+  specs?: Array<{ label: string; value: string }>;
+  /** Optional badge text (e.g., "SEED", "PREORDER OPEN") */
+  badges?: string[];
+  /** Card accent color (hex) */
+  color?: string;
+}
 
 /**
  * Team member for team layout slides
@@ -96,6 +119,8 @@ export interface Slide {
   rightColumnTitle?: string;
   /** Team members (for team layout) */
   teamMembers?: TeamMember[];
+  /** Product cards (for products layout) */
+  productCards?: ProductCard[];
   /** Speaker notes (for presenter view) */
   speakerNotes?: string;
   /** Video URL for video layout (relative to /static or absolute) */
@@ -429,9 +454,8 @@ export default function SlideDeckDownload({
               type="button"
               onClick={async () => {
                 try {
-                  const { generatePptx } = await import(
-                    "../../utils/generatePptx"
-                  );
+                  const { generatePptx } =
+                    await import("../../utils/generatePptx");
                   await generatePptx(numberedSlides, {
                     title,
                     duration,
@@ -786,11 +810,11 @@ export default function SlideDeckDownload({
                     ) : slide.layout === "team" && slide.teamMembers ? (
                       // Team members grid layout
                       <div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div className="flex flex-wrap justify-center gap-4 mb-6">
                           {slide.teamMembers.map((member, memberIndex) => (
                             <div
                               key={memberIndex}
-                              className="text-center p-4 rounded-lg"
+                              className="text-center p-4 rounded-lg w-[calc(25%-0.75rem)] min-w-[140px] max-w-[200px]"
                               style={{
                                 background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
                                 border: `1px solid ${member.color || "#1e40af"}30`,
@@ -840,44 +864,158 @@ export default function SlideDeckDownload({
                         )}
                       </div>
                     ) : slide.layout === "video" || slide.video ? (
-                      // Video layout OR any slide with a video property
-                      <div className="flex flex-col items-center gap-4">
-                        {slide.video && (
-                          <div className="relative w-full max-w-2xl aspect-video bg-black rounded-lg shadow-lg overflow-hidden">
-                            <video
-                              src={slide.video}
-                              controls
-                              autoPlay={slide.videoAutoplay}
-                              muted={slide.videoAutoplay}
-                              className="w-full h-full object-contain"
-                              poster={slide.image}
-                              aria-label={slide.videoCaption || slide.title || "Video content"}
-                            >
-                              {slide.videoCaptions && (
-                                <track
-                                  kind="captions"
-                                  src={slide.videoCaptions}
-                                  srcLang={slide.videoCaptionsLang || "en"}
-                                  label={`Captions (${slide.videoCaptionsLang || "en"})`}
-                                  default
-                                />
+                      // Video layout - split view: video left, key points right
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Video on the left */}
+                        <div className="flex flex-col">
+                          {slide.video && (
+                            <div className="relative aspect-video bg-black rounded-lg shadow-lg overflow-hidden group">
+                              <video
+                                src={slide.video}
+                                controls
+                                autoPlay={slide.videoAutoplay}
+                                muted={slide.videoAutoplay}
+                                className="w-full h-full object-contain"
+                                poster={slide.image}
+                                aria-label={
+                                  slide.videoCaption ||
+                                  slide.title ||
+                                  "Video content"
+                                }
+                              >
+                                {slide.videoCaptions && (
+                                  <track
+                                    kind="captions"
+                                    src={slide.videoCaptions}
+                                    srcLang={slide.videoCaptionsLang || "en"}
+                                    label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                                    default
+                                  />
+                                )}
+                                Your browser does not support the video tag.
+                              </video>
+                              {/* Fullscreen button */}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  const video = e.currentTarget
+                                    .previousElementSibling as HTMLVideoElement;
+                                  if (video?.requestFullscreen) {
+                                    video.requestFullscreen();
+                                  }
+                                }}
+                                className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                aria-label="Fullscreen"
+                              >
+                                <svg
+                                  className="w-5 h-5 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          )}
+                          {slide.videoCaption && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 italic mt-2 text-center">
+                              {slide.videoCaption}
+                            </p>
+                          )}
+                        </div>
+                        {/* Key points on the right */}
+                        {slide.keyPoints.length > 0 && (
+                          <div>
+                            <ul className="space-y-2">
+                              {slide.keyPoints.map((point, i) =>
+                                renderKeyPoint(point, i),
                               )}
-                              Your browser does not support the video tag.
-                            </video>
+                            </ul>
                           </div>
                         )}
-                        {slide.videoCaption && (
-                          <p className="text-sm text-gray-500 dark:text-gray-400 italic text-center">
-                            {slide.videoCaption}
-                          </p>
-                        )}
-                        {slide.keyPoints.length > 0 && (
-                          <ul className="space-y-2 mt-4 w-full">
-                            {slide.keyPoints.map((point, i) =>
-                              renderKeyPoint(point, i),
+                      </div>
+                    ) : slide.layout === "products" && slide.productCards ? (
+                      // Product cards grid layout
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {slide.productCards.map((product, productIndex) => (
+                          <div
+                            key={productIndex}
+                            className="rounded-lg p-4 flex flex-col"
+                            style={{
+                              background:
+                                "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
+                              border: `1px solid ${product.color || "#f97316"}30`,
+                            }}
+                          >
+                            {/* Badges */}
+                            {product.badges && product.badges.length > 0 && (
+                              <div className="flex gap-2 mb-3">
+                                {product.badges.map((badge, badgeIndex) => (
+                                  <span
+                                    key={badgeIndex}
+                                    className="text-xs px-2 py-0.5 rounded font-medium"
+                                    style={{
+                                      backgroundColor:
+                                        badgeIndex === 0
+                                          ? "#22c55e"
+                                          : "#f97316",
+                                      color: "#fff",
+                                    }}
+                                  >
+                                    {badge}
+                                  </span>
+                                ))}
+                              </div>
                             )}
-                          </ul>
-                        )}
+                            {/* Name */}
+                            <h4 className="text-lg font-bold text-white mb-1">
+                              {product.name}
+                            </h4>
+                            {/* Tagline */}
+                            <p
+                              className="text-sm font-medium mb-2"
+                              style={{ color: product.color || "#f97316" }}
+                            >
+                              {product.tagline}
+                            </p>
+                            {/* Description */}
+                            <p className="text-xs text-gray-400 mb-3 flex-grow">
+                              {product.description}
+                            </p>
+                            {/* Specs */}
+                            {product.specs && product.specs.length > 0 && (
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 mb-3 text-xs">
+                                {product.specs.map((spec, specIndex) => (
+                                  <div key={specIndex}>
+                                    <span className="text-gray-500 uppercase">
+                                      {spec.label}
+                                    </span>
+                                    <div className="text-white font-medium">
+                                      {spec.value}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {/* Price */}
+                            <div className="mt-auto">
+                              <p className="text-2xl font-bold text-white">
+                                {product.price}
+                              </p>
+                              {product.delivery && (
+                                <p className="text-xs text-gray-400">
+                                  {product.delivery}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       // Default layout with key points

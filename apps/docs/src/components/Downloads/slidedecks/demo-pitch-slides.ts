@@ -45,7 +45,8 @@ export const demoPitchSlides: Slide[] = [
     icon: "🚨",
     layout: "video",
     video: "/videos/fpv-kills-short.mp4",
-    videoCaption: "FPV drone attacks demonstrate the threat (source: combat footage)",
+    videoCaption:
+      "FPV drone attacks demonstrate the threat (source: combat footage)",
     keyPoints: [
       {
         text: "**The threat is proven in combat:**",

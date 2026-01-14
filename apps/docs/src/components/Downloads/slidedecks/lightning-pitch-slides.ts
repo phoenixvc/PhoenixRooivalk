@@ -249,25 +249,56 @@ export const lightningPitchSlides: Slide[] = [
     title: "Protect Your Home",
     duration: 25,
     icon: "🎯",
-    layout: "title-only",
-    keyPoints: [
-      "**Net capture is proven** - Ukraine, US Army",
-      "**We made it safe** - CO2/pneumatic, no permits",
-      "**We made it affordable** - $349 to $150K",
-      "",
-      "**$14B+ in government funding** - market is ready",
-      "**6 product lines** - consumer to military",
-      "**Q3 2026 delivery** - preorders open",
-      "",
-      "**$960K seed** → Certified product → $500K ARR → Series A",
-      "",
-      "*Capture drones safely. No damage.*",
-      "**Questions?**",
+    layout: "products",
+    keyPoints: [],
+    productCards: [
+      {
+        name: "SkySnare",
+        tagline: "Point & Shoot Protection",
+        description:
+          "Handheld drone capture device. Aim, fire, catch. No training required.",
+        price: "$349",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "15-30m" },
+          { label: "Net", value: "2m × 2m" },
+        ],
+      },
+      {
+        name: "SkyWatch Nano",
+        tagline: "See Threats Coming",
+        description:
+          "AI camera that spots drones and alerts your phone. Easy backyard setup.",
+        price: "$99",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "30-50m" },
+          { label: "Alerts", value: "App + Audio" },
+        ],
+      },
+      {
+        name: "NetSnare Lite",
+        tagline: "Automated Defense",
+        description:
+          "Ground-mounted launcher. Pairs with SkyWatch for hands-free capture.",
+        price: "$200-400",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "10-20m" },
+          { label: "Trigger", value: "App/Auto" },
+        ],
+      },
     ],
     speakerNotes:
-      "Summarize the 3 key points: proven, safe, affordable. End with the tagline and open for questions.",
+      "Show the 3 entry-level products. SkySnare handheld, SkyWatch Nano camera, NetSnare auto-launcher. Emphasize simplicity and price points.",
     script:
-      "Net capture is proven on the frontlines. We made it safe with pneumatic propellant. We made it affordable starting at $349. $14 billion in government funding proves the market is ready. We have 6 product lines covering consumer to military. First deliveries Q3 2026 - preorders are open now. $960K gets us to certified product and $500K ARR, then Series A. Capture drones safely. No damage. Questions?",
+      "Three products to protect your home. SkySnare - point and shoot, $349. SkyWatch Nano - AI detection camera, $99. NetSnare Lite - automated ground launcher, from $200. All shipping July 2026. Preorders open now. Questions?",
   },
 ];
 
