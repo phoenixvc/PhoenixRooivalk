@@ -14,7 +14,7 @@ const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
 /**
- * Convert relative image path to full URL for PPTX embedding
+ * Convert relative image path to full URL
  */
 function resolveImageUrl(path: string | undefined): string | undefined {
   if (!path) return undefined;
@@ -22,6 +22,49 @@ function resolveImageUrl(path: string | undefined): string | undefined {
   // Remove leading slash and append to base URL
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return `${SLIDE_DECK_URL}${cleanPath}`;
+}
+
+/**
+ * Fetch image and convert to base64 data URL for embedding in PPTX
+ * Returns undefined if fetch fails (will fall back to initials)
+ */
+async function fetchImageAsBase64(url: string | undefined): Promise<string | undefined> {
+  if (!url) return undefined;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return undefined;
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(undefined);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Cache for fetched images to avoid duplicate requests
+ */
+const imageCache = new Map<string, string | undefined>();
+
+/**
+ * Fetch image with caching
+ */
+async function fetchImageCached(path: string | undefined): Promise<string | undefined> {
+  if (!path) return undefined;
+  const url = resolveImageUrl(path);
+  if (!url) return undefined;
+
+  if (imageCache.has(url)) {
+    return imageCache.get(url);
+  }
+
+  const data = await fetchImageAsBase64(url);
+  imageCache.set(url, data);
+  return data;
 }
 
 // SVG logo as string for conversion to PNG
@@ -296,6 +339,21 @@ export async function generatePptx(
   const totalSlides = slides.length;
   const totalSeconds = slides.reduce((acc, s) => acc + s.duration, 0);
   const targetPerSlide = totalSeconds / totalSlides;
+
+  // Clear image cache for fresh generation
+  imageCache.clear();
+
+  // Prefetch all images in parallel for embedding
+  const imagePaths: string[] = [];
+  for (const slide of slides) {
+    if (slide.image) imagePaths.push(slide.image);
+    if (slide.teamMembers) {
+      for (const member of slide.teamMembers) {
+        if (member.image) imagePaths.push(member.image);
+      }
+    }
+  }
+  await Promise.all(imagePaths.map((path) => fetchImageCached(path)));
 
   // ==========================================
   // TITLE SLIDE
@@ -592,18 +650,18 @@ export async function generatePptx(
         });
       }
     } else if (layout === "image" && slide.image) {
-      // Image-focused layout
-      const slideImageUrl = resolveImageUrl(slide.image);
-      try {
+      // Image-focused layout - use embedded base64 data
+      const slideImageData = imageCache.get(resolveImageUrl(slide.image) || "");
+      if (slideImageData) {
         contentSlide.addImage({
-          path: slideImageUrl,
+          data: slideImageData,
           x: 2.0,
           y: 1.9,
           w: 6.0,
           h: 3.0,
         });
-      } catch {
-        // If image fails, add placeholder text
+      } else {
+        // If image not available, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 2.0,
           y: 2.5,
@@ -653,7 +711,7 @@ export async function generatePptx(
       }
     } else if (layout === "image-right" && slide.image) {
       // Split layout: key points left, image right
-      const imageRightUrl = resolveImageUrl(slide.image);
+      const imageRightData = imageCache.get(resolveImageUrl(slide.image) || "");
       // Key points on the left (55% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
@@ -678,17 +736,17 @@ export async function generatePptx(
         });
       }
 
-      // Image on the right (45% width)
-      try {
+      // Image on the right (45% width) - use embedded base64 data
+      if (imageRightData) {
         contentSlide.addImage({
-          path: imageRightUrl,
+          data: imageRightData,
           x: 5.7,
           y: 1.9,
           w: 3.8,
           h: 3.5,
         });
-      } catch {
-        // If image fails, add placeholder text
+      } else {
+        // If image not available, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 5.7,
           y: 2.8,
@@ -923,41 +981,19 @@ export async function generatePptx(
           line: { color: memberColor, width: 2 },
         });
 
-        // Avatar - use image if available, otherwise circle with initials
-        const founderImageUrl = resolveImageUrl(member.image);
-        if (founderImageUrl) {
-          try {
-            contentSlide.addImage({
-              path: founderImageUrl,
-              x: x + founderCardW / 2 - 0.35,
-              y: founderY + 0.12,
-              w: 0.7,
-              h: 0.7,
-              rounding: true,
-            });
-          } catch {
-            // Fallback to initials circle
-            contentSlide.addShape("ellipse" as any, {
-              x: x + founderCardW / 2 - 0.35,
-              y: founderY + 0.12,
-              w: 0.7,
-              h: 0.7,
-              fill: { color: memberColor },
-            });
-            contentSlide.addText(member.initials, {
-              x: x + founderCardW / 2 - 0.35,
-              y: founderY + 0.22,
-              w: 0.7,
-              h: 0.5,
-              fontSize: 14,
-              bold: true,
-              color: "FFFFFF",
-              align: "center",
-              valign: "middle",
-            });
-          }
-        } else {
-          // Avatar circle
+        // Avatar - use embedded image if available, otherwise circle with initials
+        const founderImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        if (founderImageData) {
+          contentSlide.addImage({
+            data: founderImageData,
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            rounding: true,
+          });
+        } else if (member.image) {
+          // Image path provided but not loaded - show initials as fallback
           contentSlide.addShape("ellipse" as any, {
             x: x + founderCardW / 2 - 0.35,
             y: founderY + 0.12,
@@ -965,8 +1001,26 @@ export async function generatePptx(
             h: 0.7,
             fill: { color: memberColor },
           });
-
-          // Initials
+          contentSlide.addText(member.initials, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.22,
+            w: 0.7,
+            h: 0.5,
+            fontSize: 14,
+            bold: true,
+            color: "FFFFFF",
+            align: "center",
+            valign: "middle",
+          });
+        } else {
+          // No image - show avatar circle with initials
+          contentSlide.addShape("ellipse" as any, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            fill: { color: memberColor },
+          });
           contentSlide.addText(member.initials, {
             x: x + founderCardW / 2 - 0.35,
             y: founderY + 0.22,
@@ -1039,41 +1093,19 @@ export async function generatePptx(
           line: { color: memberColor, width: 1 },
         });
 
-        // Avatar - use image if available, otherwise circle with initials
-        const advisorImageUrl = resolveImageUrl(member.image);
-        if (advisorImageUrl) {
-          try {
-            contentSlide.addImage({
-              path: advisorImageUrl,
-              x: x + advisorCardW / 2 - 0.22,
-              y: advisorY + 0.08,
-              w: 0.44,
-              h: 0.44,
-              rounding: true,
-            });
-          } catch {
-            // Fallback to initials circle
-            contentSlide.addShape("ellipse" as any, {
-              x: x + advisorCardW / 2 - 0.22,
-              y: advisorY + 0.08,
-              w: 0.44,
-              h: 0.44,
-              fill: { color: memberColor },
-            });
-            contentSlide.addText(member.initials, {
-              x: x + advisorCardW / 2 - 0.22,
-              y: advisorY + 0.14,
-              w: 0.44,
-              h: 0.32,
-              fontSize: 9,
-              bold: true,
-              color: "FFFFFF",
-              align: "center",
-              valign: "middle",
-            });
-          }
+        // Avatar - use embedded image if available, otherwise circle with initials
+        const advisorImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        if (advisorImageData) {
+          contentSlide.addImage({
+            data: advisorImageData,
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            rounding: true,
+          });
         } else {
-          // Avatar circle (smaller)
+          // No image or failed to load - show avatar circle with initials
           contentSlide.addShape("ellipse" as any, {
             x: x + advisorCardW / 2 - 0.22,
             y: advisorY + 0.08,
@@ -1081,8 +1113,6 @@ export async function generatePptx(
             h: 0.44,
             fill: { color: memberColor },
           });
-
-          // Initials
           contentSlide.addText(member.initials, {
             x: x + advisorCardW / 2 - 0.22,
             y: advisorY + 0.14,
