@@ -117,7 +117,7 @@ export const lightningPitchSlides: Slide[] = [
         description:
           "AI camera that spots drones and alerts your phone. Easy setup.",
         price: "$99",
-        delivery: "Jul 2026",
+        delivery: "Sep 2026",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
@@ -131,7 +131,7 @@ export const lightningPitchSlides: Slide[] = [
         description:
           "Ground-mounted launcher. Pairs with SkyWatch for auto-capture.",
         price: "$200-400",
-        delivery: "Jul 2026",
+        delivery: "Jan 2027",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
@@ -141,9 +141,9 @@ export const lightningPitchSlides: Slide[] = [
       },
     ],
     speakerNotes:
-      "PIETER DELIVERS THIS SLIDE. Show the 3 consumer products. SkySnare handheld, SkyWatch Nano camera, NetSnare auto-launcher. Emphasize simplicity and price points.",
+      "PIETER DELIVERS THIS SLIDE. Show the 3 consumer products. SkySnare handheld, SkyWatch Nano camera, NetSnare auto-launcher. Emphasize staggered release - first product July.",
     script:
-      "Three products to protect your home. SkySnare - point and shoot, $349. SkyWatch Nano - AI detection camera, just $99. NetSnare Lite - automated ground launcher, from $200. All shipping July 2026. Preorders open now.",
+      "Three products to protect your home. SkySnare - point and shoot, $349, shipping July. SkyWatch Nano - AI detection camera, $99, September. NetSnare Lite - automated ground launcher, from $200, January 2027. Preorders open now.",
   },
 
   // ==========================================
@@ -230,9 +230,9 @@ export const lightningPitchSlides: Slide[] = [
     ],
     rightColumnTitle: "Milestones",
     rightColumn: [
-      "**Q2 2026** — Certified product in market",
-      "**Q4 2026** — $500K+ ARR",
-      "**Q2 2027** — Series A ready",
+      "**Q3'26–Q1'27** — Staggered certified product releases",
+      "**Q3 2027** — $500K+ ARR",
+      "**Q4 2027** — Series A ready",
       "**18-month runway** to profitability",
     ],
     keyPoints: [
@@ -241,7 +241,7 @@ export const lightningPitchSlides: Slide[] = [
     speakerNotes:
       "EBEN DELIVERS THIS SLIDE. Clear terms, clear use of funds, clear milestones. No ambiguity.",
     script:
-      "We're raising $960K on a SAFE at $3.5 million pre-money cap. 40% to engineering, 25% to hardware, 15% to D2C sales launch, 20% to ops and certifications. Milestones: certified product Q2 2026, $500K ARR by Q4, Series A ready in 18 months.",
+      "We're raising $960K on a SAFE at $3.5 million pre-money cap. 40% to engineering, 25% to hardware, 15% to D2C sales launch, 20% to ops. Milestones: staggered product releases Q3 2026 through Q1 2027, $500K ARR by Q3 2027, Series A ready Q4 2027. 18-month runway to profitability.",
   },
 
   // ==========================================
