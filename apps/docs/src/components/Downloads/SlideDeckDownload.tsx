@@ -477,7 +477,7 @@ export default function SlideDeckDownload({
           aria-labelledby="slidedeck-title"
         >
           <div
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8 overflow-hidden"
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
