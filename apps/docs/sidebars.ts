@@ -93,8 +93,7 @@ const sidebars: SidebarsConfig = {
           label: "Presentations",
           collapsed: true,
           items: [
-            "executive/phoenix-rooivalk-demo-pitch",
-            "executive/presentation-materials",
+            "executive/phoenix-rooivalk-pitch-deck",
             "executive/key-questions-cheatsheet",
             "executive/team-status",
           ],
