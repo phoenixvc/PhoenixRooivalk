@@ -747,31 +747,48 @@ export default function SlideDeckDownload({
                         </div>
                       </div>
                     ) : slide.layout === "two-column" ? (
-                      // Two-column comparison layout
-                      <div className="grid grid-cols-2 gap-8">
-                        <div>
-                          {slide.leftColumnTitle && (
-                            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                              {slide.leftColumnTitle}
-                            </h4>
-                          )}
-                          <ul className="space-y-2">
-                            {(slide.leftColumn || []).map((point, i) =>
-                              renderKeyPoint(point, i),
+                      // Two-column comparison layout with optional header
+                      <div>
+                        {/* Key points above columns (e.g., main ask) */}
+                        {slide.keyPoints.length > 0 && (
+                          <div className="text-center mb-4">
+                            {slide.keyPoints.map((point, i) => (
+                              <p
+                                key={i}
+                                className="text-xl font-bold text-orange-500 dark:text-orange-400"
+                              >
+                                {parseRichText(
+                                  typeof point === "string" ? point : point.text,
+                                )}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                        <div className="grid grid-cols-2 gap-6">
+                          <div>
+                            {slide.leftColumnTitle && (
+                              <h4 className="text-base font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                                {slide.leftColumnTitle}
+                              </h4>
                             )}
-                          </ul>
-                        </div>
-                        <div>
-                          {slide.rightColumnTitle && (
-                            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                              {slide.rightColumnTitle}
-                            </h4>
-                          )}
-                          <ul className="space-y-2">
-                            {(slide.rightColumn || []).map((point, i) =>
-                              renderKeyPoint(point, i),
+                            <ul className="space-y-1">
+                              {(slide.leftColumn || []).map((point, i) =>
+                                renderKeyPoint(point, i),
+                              )}
+                            </ul>
+                          </div>
+                          <div>
+                            {slide.rightColumnTitle && (
+                              <h4 className="text-base font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                                {slide.rightColumnTitle}
+                              </h4>
                             )}
-                          </ul>
+                            <ul className="space-y-1">
+                              {(slide.rightColumn || []).map((point, i) =>
+                                renderKeyPoint(point, i),
+                              )}
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     ) : slide.layout === "quote" ? (

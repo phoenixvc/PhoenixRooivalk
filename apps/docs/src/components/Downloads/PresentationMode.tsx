@@ -490,50 +490,65 @@ export default function PresentationMode({
                 </pre>
               </div>
             ) : slide.layout === "two-column" ? (
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  {slide.leftColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.leftColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.leftColumn || []).map((point, i) => (
-                      <li
+              <div>
+                {/* Key points above columns (e.g., main ask) */}
+                {slide.keyPoints.length > 0 && (
+                  <div className="text-center mb-6">
+                    {slide.keyPoints.map((point, i) => (
+                      <p
                         key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
+                        className="text-2xl font-bold text-orange-400"
                       >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                        {parseRichText(getKeyPointText(point))}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    {slide.leftColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.leftColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.leftColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    {slide.rightColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.rightColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.rightColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
                         <span>{parseRichText(getKeyPointText(point))}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div>
-                  {slide.rightColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.rightColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.rightColumn || []).map((point, i) => (
-                      <li
-                        key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             ) : slide.layout === "team" && slide.teamMembers ? (
