@@ -144,6 +144,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Founder",
         highlights: ["Industrial Eng", "18 yrs software"],
         color: "#f97316",
+        image: "/img/team/jurie.png",
       },
       {
         initials: "PL",
@@ -151,6 +152,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Co-Founder",
         highlights: ["Drones since 2000s", "🚀 World record team"],
         color: "#ea580c",
+        image: "/img/team/pieter.png",
       },
       {
         initials: "MR",
@@ -158,6 +160,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Supplier/Advisor",
         highlights: ["Electrical Eng", "🚀 Plastics mfg"],
         color: "#fb923c",
+        image: "/img/team/martyn.png",
       },
       {
         initials: "EM",
@@ -165,6 +168,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["Head Quant", "Previous exit"],
         color: "#fbbf24",
+        image: "/img/team/eben.png",
       },
       {
         initials: "CF",
@@ -172,6 +176,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["EU expansion", "UK exit (family)"],
         color: "#a855f7",
+        image: "/img/team/chanelle.png",
       },
       {
         initials: "AK",
@@ -179,6 +184,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["Drone exit", "Defense"],
         color: "#06b6d4",
+        image: "/img/team/alistair.png",
       },
     ],
     keyPoints: [],

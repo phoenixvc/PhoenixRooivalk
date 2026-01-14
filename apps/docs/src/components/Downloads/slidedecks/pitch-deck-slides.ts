@@ -447,6 +447,7 @@ export const pitchDeckSlides: Slide[] = [
           "B.Eng Industrial-Electronic (Stellenbosch)",
         ],
         color: "#1e40af",
+        image: "/img/team/jurie.png",
       },
       {
         initials: "PL",
@@ -458,6 +459,7 @@ export const pitchDeckSlides: Slide[] = [
           "B.Eng Electrical (Stellenbosch)",
         ],
         color: "#059669",
+        image: "/img/team/pieter.png",
       },
       {
         initials: "MR",
@@ -469,6 +471,7 @@ export const pitchDeckSlides: Slide[] = [
           "R500M+ portfolio management",
         ],
         color: "#7c3aed",
+        image: "/img/team/martyn.png",
       },
       {
         initials: "EM",
@@ -480,6 +483,7 @@ export const pitchDeckSlides: Slide[] = [
           "Phoenix VC founder",
         ],
         color: "#fbbf24",
+        image: "/img/team/eben.png",
       },
       {
         initials: "CF",
@@ -491,6 +495,7 @@ export const pitchDeckSlides: Slide[] = [
           "B2B growth expert",
         ],
         color: "#a855f7",
+        image: "/img/team/chanelle.png",
       },
       {
         initials: "AK",
@@ -502,6 +507,7 @@ export const pitchDeckSlides: Slide[] = [
           "International markets",
         ],
         color: "#dc2626",
+        image: "/img/team/alistair.png",
       },
     ],
     keyPoints: [

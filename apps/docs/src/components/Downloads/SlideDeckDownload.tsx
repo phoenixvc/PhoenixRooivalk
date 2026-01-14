@@ -50,7 +50,7 @@ export interface ProductCard {
  * Team member for team layout slides
  */
 export interface TeamMember {
-  /** Initials for avatar */
+  /** Initials for avatar (fallback when no image) */
   initials: string;
   /** Full name */
   name: string;
@@ -62,6 +62,8 @@ export interface TeamMember {
   color?: string;
   /** Optional LinkedIn URL */
   linkedin?: string;
+  /** Optional profile image path (e.g., "/img/team/jurie.png") */
+  image?: string;
 }
 
 /**
@@ -849,14 +851,25 @@ export default function SlideDeckDownload({
                                       border: `2px solid ${member.color || "#1e40af"}50`,
                                     }}
                                   >
-                                    <div
-                                      className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg"
-                                      style={{
-                                        background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
-                                      }}
-                                    >
-                                      {member.initials}
-                                    </div>
+                                    {member.image ? (
+                                      <img
+                                        src={member.image}
+                                        alt={member.name}
+                                        className="w-14 h-14 rounded-full mx-auto mb-2 object-cover"
+                                        style={{
+                                          border: `3px solid ${member.color || "#1e40af"}`,
+                                        }}
+                                      />
+                                    ) : (
+                                      <div
+                                        className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg"
+                                        style={{
+                                          background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                                        }}
+                                      >
+                                        {member.initials}
+                                      </div>
+                                    )}
                                     <h4 className="font-bold text-gray-900 dark:text-white text-sm">
                                       {member.name}
                                     </h4>
@@ -885,14 +898,25 @@ export default function SlideDeckDownload({
                                       border: `1px solid ${member.color || "#1e40af"}25`,
                                     }}
                                   >
-                                    <div
-                                      className="w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-bold text-xs"
-                                      style={{
-                                        background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
-                                      }}
-                                    >
-                                      {member.initials}
-                                    </div>
+                                    {member.image ? (
+                                      <img
+                                        src={member.image}
+                                        alt={member.name}
+                                        className="w-8 h-8 rounded-full mx-auto mb-1 object-cover"
+                                        style={{
+                                          border: `2px solid ${member.color || "#1e40af"}`,
+                                        }}
+                                      />
+                                    ) : (
+                                      <div
+                                        className="w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-bold text-xs"
+                                        style={{
+                                          background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                                        }}
+                                      >
+                                        {member.initials}
+                                      </div>
+                                    )}
                                     <h4 className="font-bold text-gray-900 dark:text-white text-xs">
                                       {member.name}
                                     </h4>

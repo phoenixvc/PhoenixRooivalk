@@ -306,6 +306,7 @@ export const demoPitchSlides: Slide[] = [
           "Previously: enterprise SaaS exits",
         ],
         color: "#f97316", // Phoenix Orange
+        image: "/img/team/jurie.png",
       },
       {
         initials: "PL",
@@ -317,6 +318,7 @@ export const demoPitchSlides: Slide[] = [
           "Mass manufacturing experience",
         ],
         color: "#ea580c", // Dark Orange
+        image: "/img/team/pieter.png",
       },
       {
         initials: "MR",
@@ -328,6 +330,7 @@ export const demoPitchSlides: Slide[] = [
           "R500M+ portfolio management",
         ],
         color: "#fb923c", // Light Orange
+        image: "/img/team/martyn.png",
       },
       {
         initials: "EM",
@@ -339,6 +342,7 @@ export const demoPitchSlides: Slide[] = [
           "Phoenix VC founding partner",
         ],
         color: "#fbbf24", // Amber
+        image: "/img/team/eben.png",
       },
       {
         initials: "CF",
@@ -350,6 +354,7 @@ export const demoPitchSlides: Slide[] = [
           "B2B growth expert",
         ],
         color: "#a855f7", // Purple
+        image: "/img/team/chanelle.png",
       },
       {
         initials: "AK",
@@ -361,6 +366,7 @@ export const demoPitchSlides: Slide[] = [
           "International markets",
         ],
         color: "#06b6d4", // Cyan
+        image: "/img/team/alistair.png",
       },
     ],
     keyPoints: [
