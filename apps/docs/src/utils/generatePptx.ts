@@ -709,12 +709,12 @@ export async function generatePptx(
         });
       }
 
-      // Vertical divider
+      // Vertical divider - shorter to match content
       contentSlide.addShape("rect" as any, {
         x: 4.9,
         y: 1.9,
         w: 0.02,
-        h: 4.0,
+        h: 2.5,
         fill: { color: colors.primary },
       });
     } else if (layout === "quote") {
@@ -814,60 +814,52 @@ export async function generatePptx(
         });
       }
     } else if (layout === "team" && slide.teamMembers) {
-      // Team members grid layout
-      const members = slide.teamMembers;
-      const memberCount = members.length;
-      const cols = Math.min(memberCount, 4);
-      const cardWidth = 2.1;
-      const cardHeight = 2.6;
-      const cardGap = 0.15;
-      const totalRows = Math.ceil(memberCount / cols);
-      const baseStartX = (10 - cols * cardWidth - (cols - 1) * cardGap) / 2;
-      const startY = 1.9;
+      // Team layout: Founders (larger, top row) + Advisors (smaller, bottom row)
+      const founders = slide.teamMembers.filter((m) =>
+        m.title.toLowerCase().includes("founder"),
+      );
+      const advisors = slide.teamMembers.filter(
+        (m) => !m.title.toLowerCase().includes("founder"),
+      );
 
-      members.forEach((member, memberIndex) => {
-        const row = Math.floor(memberIndex / cols);
-        const col = memberIndex % cols;
+      // Founders row - larger cards
+      const founderCardW = 2.8;
+      const founderCardH = 2.2;
+      const founderGap = 0.3;
+      const founderStartX =
+        (10 - founders.length * founderCardW - (founders.length - 1) * founderGap) / 2;
+      const founderY = 1.8;
 
-        // Calculate how many cards are in this row
-        const cardsInThisRow =
-          row < totalRows - 1 ? cols : memberCount - (totalRows - 1) * cols;
-
-        // Center the row if it has fewer cards than max cols
-        const rowStartX =
-          (10 - cardsInThisRow * cardWidth - (cardsInThisRow - 1) * cardGap) /
-          2;
-
-        const x = rowStartX + col * (cardWidth + cardGap);
-        const y = startY + row * (cardHeight + 0.2);
-        const memberColor = member.color?.replace("#", "") || "1E40AF";
+      founders.forEach((member, idx) => {
+        const x = founderStartX + idx * (founderCardW + founderGap);
+        const memberColor = member.color?.replace("#", "") || "F97316";
 
         // Card background
         contentSlide.addShape("rect" as any, {
           x,
-          y,
-          w: cardWidth,
-          h: cardHeight,
+          y: founderY,
+          w: founderCardW,
+          h: founderCardH,
           fill: { color: colors.darker },
-          line: { color: memberColor, width: 1 },
+          line: { color: memberColor, width: 2 },
         });
 
         // Avatar circle
         contentSlide.addShape("ellipse" as any, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.15,
-          w: 0.7,
-          h: 0.7,
+          x: x + founderCardW / 2 - 0.4,
+          y: founderY + 0.15,
+          w: 0.8,
+          h: 0.8,
           fill: { color: memberColor },
         });
 
         // Initials
         contentSlide.addText(member.initials, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.25,
-          w: 0.7,
-          h: 0.5,
-          fontSize: 14,
+          x: x + founderCardW / 2 - 0.4,
+          y: founderY + 0.28,
+          w: 0.8,
+          h: 0.55,
+          fontSize: 16,
           bold: true,
           color: "FFFFFF",
           align: "center",
@@ -877,10 +869,10 @@ export async function generatePptx(
         // Name
         contentSlide.addText(member.name, {
           x,
-          y: y + 0.95,
-          w: cardWidth,
+          y: founderY + 1.0,
+          w: founderCardW,
           h: 0.3,
-          fontSize: 11,
+          fontSize: 12,
           bold: true,
           color: colors.text,
           align: "center",
@@ -889,11 +881,11 @@ export async function generatePptx(
         // Title
         contentSlide.addText(member.title, {
           x,
-          y: y + 1.2,
-          w: cardWidth,
+          y: founderY + 1.28,
+          w: founderCardW,
           h: 0.25,
-          fontSize: 8,
-          color: colors.textSecondary,
+          fontSize: 9,
+          color: memberColor,
           align: "center",
         });
 
@@ -901,50 +893,96 @@ export async function generatePptx(
         const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
           x: x + 0.1,
-          y: y + 1.5,
-          w: cardWidth - 0.2,
-          h: 1.0,
-          fontSize: 7,
+          y: founderY + 1.55,
+          w: founderCardW - 0.2,
+          h: 0.6,
+          fontSize: 8,
           color: colors.textMuted,
           valign: "top",
-          lineSpacing: 10,
+          lineSpacing: 11,
         });
       });
 
-      // Key points below team cards
-      if (slide.keyPoints.length > 0) {
-        const keyPointsY =
-          startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
+      // Advisors row - smaller cards
+      const advisorCardW = 1.6;
+      const advisorCardH = 1.5;
+      const advisorGap = 0.2;
+      const advisorStartX =
+        (10 - advisors.length * advisorCardW - (advisors.length - 1) * advisorGap) / 2;
+      const advisorY = founderY + founderCardH + 0.25;
 
-        contentSlide.addText("Key Points", {
-          x: 0.5,
-          y: keyPointsY,
-          w: 9.0,
-          h: 0.3,
-          fontSize: 12,
+      advisors.forEach((member, idx) => {
+        const x = advisorStartX + idx * (advisorCardW + advisorGap);
+        const memberColor = member.color?.replace("#", "") || "1E40AF";
+
+        // Card background (subtle)
+        contentSlide.addShape("rect" as any, {
+          x,
+          y: advisorY,
+          w: advisorCardW,
+          h: advisorCardH,
+          fill: { color: colors.darker },
+          line: { color: memberColor, width: 1 },
+        });
+
+        // Avatar circle (smaller)
+        contentSlide.addShape("ellipse" as any, {
+          x: x + advisorCardW / 2 - 0.25,
+          y: advisorY + 0.1,
+          w: 0.5,
+          h: 0.5,
+          fill: { color: memberColor },
+        });
+
+        // Initials
+        contentSlide.addText(member.initials, {
+          x: x + advisorCardW / 2 - 0.25,
+          y: advisorY + 0.18,
+          w: 0.5,
+          h: 0.35,
+          fontSize: 10,
           bold: true,
-          color: colors.textSecondary,
+          color: "FFFFFF",
+          align: "center",
+          valign: "middle",
         });
 
-        const bulletPoints = slide.keyPoints.map((point) => ({
-          text: getKeyPointText(point),
-          options: {
-            bullet: { type: "number" as const, code: "2022" },
-            color: colors.text,
-            fontSize: 12,
-            paraSpaceBefore: 3,
-            paraSpaceAfter: 3,
-          },
-        }));
+        // Name
+        contentSlide.addText(member.name, {
+          x,
+          y: advisorY + 0.65,
+          w: advisorCardW,
+          h: 0.25,
+          fontSize: 9,
+          bold: true,
+          color: colors.text,
+          align: "center",
+        });
 
-        contentSlide.addText(bulletPoints, {
-          x: 0.7,
-          y: keyPointsY + 0.35,
-          w: 8.6,
-          h: 1.5,
+        // Title
+        contentSlide.addText(member.title, {
+          x,
+          y: advisorY + 0.88,
+          w: advisorCardW,
+          h: 0.2,
+          fontSize: 7,
+          color: colors.textMuted,
+          align: "center",
+        });
+
+        // Highlights (compact)
+        const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
+        contentSlide.addText(highlightText, {
+          x: x + 0.05,
+          y: advisorY + 1.08,
+          w: advisorCardW - 0.1,
+          h: 0.4,
+          fontSize: 6,
+          color: colors.textMuted,
           valign: "top",
+          lineSpacing: 9,
         });
-      }
+      });
     } else if (layout === "video" || slide.video) {
       // Video layout - split view: video left, key points right
       // Note: pptxgenjs supports video embedding via addMedia()
@@ -1347,13 +1385,13 @@ export async function generatePptx(
     valign: "middle",
   });
 
-  // Title
+  // Title - moved up
   summarySlide.addText("Thank You", {
     x: 0.5,
-    y: 2.2,
+    y: 1.8,
     w: 9.0,
-    h: 0.8,
-    fontSize: 44,
+    h: 0.7,
+    fontSize: 40,
     bold: true,
     color: colors.text,
     align: "center",
@@ -1362,7 +1400,7 @@ export async function generatePptx(
   // Decorative line under title
   summarySlide.addShape("rect" as any, {
     x: 3.5,
-    y: 3.1,
+    y: 2.55,
     w: 3.0,
     h: 0.03,
     fill: { color: colors.primary },
@@ -1375,10 +1413,10 @@ export async function generatePptx(
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 3.3,
+    y: 2.7,
     w: 9.0,
-    h: 0.5,
-    fontSize: 16,
+    h: 0.4,
+    fontSize: 14,
     color: colors.textSecondary,
     align: "center",
   });
@@ -1386,10 +1424,10 @@ export async function generatePptx(
   // Questions text
   summarySlide.addText("Questions?", {
     x: 0.5,
-    y: 3.9,
+    y: 3.2,
     w: 9.0,
-    h: 0.6,
-    fontSize: 28,
+    h: 0.5,
+    fontSize: 24,
     bold: true,
     color: colors.text,
     align: "center",
@@ -1403,31 +1441,31 @@ export async function generatePptx(
     // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 4.6,
+      y: 3.75,
       w: 3.0,
-      h: 0.3,
-      fontSize: 11,
+      h: 0.25,
+      fontSize: 10,
       color: colors.textMuted,
       align: "center",
     });
 
-    // Add QR code image
+    // Add QR code image - smaller and higher
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.4,
-        y: 4.85,
-        w: 1.0,
-        h: 1.0,
+        x: 4.5,
+        y: 4.0,
+        w: 0.9,
+        h: 0.9,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 5.0,
+        y: 4.2,
         w: 5.0,
         h: 0.3,
-        fontSize: 12,
+        fontSize: 11,
         color: colors.primary,
         align: "center",
       });
@@ -1437,10 +1475,10 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 5.9,
+        y: 4.95,
         w: 9.0,
         h: 0.25,
-        fontSize: 11,
+        fontSize: 10,
         color: colors.textMuted,
         align: "center",
       });
