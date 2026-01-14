@@ -460,6 +460,17 @@ export const pitchDeckSlides: Slide[] = [
         color: "#059669",
       },
       {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: [
+          "Operations & Supply Chain",
+          "20+ years defense/energy",
+          "R500M+ portfolio management",
+        ],
+        color: "#7c3aed",
+      },
+      {
         initials: "EM",
         name: "Eben Maré",
         title: "Advisor",
@@ -468,18 +479,18 @@ export const pitchDeckSlides: Slide[] = [
           "Former Head Quant at Deloitte",
           "Phoenix VC founder",
         ],
-        color: "#7c3aed",
+        color: "#fbbf24",
       },
       {
         initials: "CF",
         name: "Chanelle Fellinger",
         title: "Advisor",
         highlights: [
-          "Strategy & Operations",
-          "Business Development",
-          "Startup ecosystem expert",
+          "Marketing & Sales",
+          "Go-to-market strategy",
+          "B2B growth expert",
         ],
-        color: "#fbbf24",
+        color: "#a855f7",
       },
       {
         initials: "AK",
@@ -498,8 +509,9 @@ export const pitchDeckSlides: Slide[] = [
       {
         text: "**Strategic advisors:**",
         subPoints: [
+          "Operations & supply chain",
           "Finance & investment banking",
-          "Strategy & business development",
+          "Marketing & sales",
           "Defense sector & government relations",
         ],
       },
@@ -508,7 +520,7 @@ export const pitchDeckSlides: Slide[] = [
     speakerNotes:
       "Team credibility is critical. Two founders with complementary skills, backed by experienced advisors. Emphasize the full-time commitment and advisor expertise.",
     script:
-      "Our founding team brings deep expertise. Jurie leads technology with 15+ years in fintech and AI systems. Pieter heads hardware with 15 years in embedded systems and medical device production. We're backed by strategic advisors including Eben with extensive investment banking experience, Chanelle on strategy and operations, and Alistair with defense sector expertise. Both founders are full-time committed with skin in the game.",
+      "Our founding team brings deep expertise. Jurie leads technology with 15+ years in fintech and AI systems. Pieter heads hardware with 15 years in embedded systems and medical device production. We're backed by strategic advisors including Martyn on operations, Eben on finance, Chanelle on marketing and sales, and Alistair with defense sector expertise. Both founders are full-time committed with skin in the game.",
   },
   {
     number: 14,

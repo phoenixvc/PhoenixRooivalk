@@ -45,30 +45,28 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 2: SOLUTION (20s)
+  // SLIDE 2: SOLUTION + DEMO VIDEO (20s)
   // ==========================================
   {
     number: 2,
     title: "Capture Drones Safely. No Damage.",
     duration: 20,
     icon: "🛡️",
-    layout: "title-only",
+    layout: "video",
+    video: "/videos/netlauncher-poc-short.mp4",
+    videoCaption: "SkySnare prototype - CO2 pneumatic net launcher",
     keyPoints: [
       "**Phoenix Rooivalk**",
-      "",
       "Pneumatic net launchers that **capture drones intact**",
       "",
       "**Safe** - CO2/pneumatic, no permits needed",
       "**Legal** - Non-destructive, civilian-safe",
       "**Affordable** - Starting at **$349**",
-      "",
-      "**Net capture is proven** - Ukraine, US Army use it daily",
-      "*We made it safe and affordable for YOU*",
     ],
     speakerNotes:
-      "Quick pivot from fear to hope. Emphasize: safe, legal, affordable. Net capture is PROVEN - we just made it accessible.",
+      "Play demo video while talking. Quick pivot from fear to hope. Emphasize: safe, legal, affordable.",
     script:
-      "Phoenix Rooivalk. We capture drones safely with no damage. Pneumatic net launchers - safe CO2 propellant, no permits needed. Legal and non-destructive. Starting at just $349. Net capture is already proven - Ukraine and US Army use it daily. We made it safe and affordable for everyone.",
+      "[PLAY DEMO] Phoenix Rooivalk. We capture drones safely with no damage. Pneumatic net launchers - safe CO2 propellant, no permits needed. Legal and non-destructive. Starting at just $349.",
   },
 
   // ==========================================
@@ -135,25 +133,32 @@ export const lightningPitchSlides: Slide[] = [
         color: "#ea580c",
       },
       {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: ["Operations", "Defense/Energy"],
+        color: "#fb923c",
+      },
+      {
         initials: "EM",
         name: "Eben Maré",
         title: "Advisor",
         highlights: ["IB & PE", "Head Quant"],
-        color: "#fb923c",
+        color: "#fbbf24",
       },
       {
         initials: "CF",
         name: "Chanelle Fellinger",
         title: "Advisor",
-        highlights: ["Strategy", "Business Development"],
-        color: "#fbbf24",
+        highlights: ["Marketing", "Sales"],
+        color: "#a855f7",
       },
       {
         initials: "AK",
         name: "Alistair Kim",
         title: "Advisor",
         highlights: ["Defense", "Government Relations"],
-        color: "#a855f7",
+        color: "#06b6d4",
       },
     ],
     keyPoints: [

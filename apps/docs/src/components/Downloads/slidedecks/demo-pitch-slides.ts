@@ -318,6 +318,17 @@ export const demoPitchSlides: Slide[] = [
         color: "#ea580c", // Dark Orange
       },
       {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: [
+          "Operations & Supply Chain",
+          "20+ years defense/energy",
+          "R500M+ portfolio management",
+        ],
+        color: "#fb923c", // Light Orange
+      },
+      {
         initials: "EM",
         name: "Eben Maré",
         title: "Advisor",
@@ -326,18 +337,18 @@ export const demoPitchSlides: Slide[] = [
           "Head Quant (Deloitte)",
           "Phoenix VC founding partner",
         ],
-        color: "#fb923c", // Light Orange
+        color: "#fbbf24", // Amber
       },
       {
         initials: "CF",
         name: "Chanelle Fellinger",
         title: "Advisor",
         highlights: [
-          "Strategy & Operations",
-          "Business Development",
-          "Startup ecosystem expert",
+          "Marketing & Sales",
+          "Go-to-market strategy",
+          "B2B growth expert",
         ],
-        color: "#fbbf24", // Amber
+        color: "#a855f7", // Purple
       },
       {
         initials: "AK",
@@ -348,18 +359,17 @@ export const demoPitchSlides: Slide[] = [
           "Government relations",
           "International markets",
         ],
-        color: "#a855f7", // Purple
+        color: "#06b6d4", // Cyan
       },
     ],
     keyPoints: [
       "**Founders full-time** with personal capital committed",
-      "**Strategic advisors** with defense, finance, and business expertise",
-      "**Hiring Q1:** VP Sales (defense background), Head of Ops",
+      "**Strategic advisors** with operations, finance, marketing, and defense expertise",
     ],
     speakerNotes:
       "30 seconds max. Hit the founders first, mention advisors briefly. Investors want to know you can execute.",
     script:
-      "Our team: Jurie on tech with edge AI and SaaS exits. Pieter on hardware with medical device mass manufacturing. Strategic advisors include Eben with investment banking, Chanelle on strategy, and Alistair with defense sector expertise. Founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
+      "Our team: Jurie on tech with edge AI and SaaS exits. Pieter on hardware with medical device mass manufacturing. Strategic advisors include Martyn on operations, Eben on finance, Chanelle on marketing and sales, and Alistair with defense sector expertise. Founders full-time with personal capital committed.",
   },
 
   // ==========================================
