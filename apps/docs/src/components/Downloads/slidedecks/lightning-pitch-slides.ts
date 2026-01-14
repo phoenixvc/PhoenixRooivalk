@@ -162,7 +162,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Founder",
         highlights: ["Industrial-Electronic Eng", "18 yrs software"],
         color: "#f97316",
-        image: "/img/team/jurie.jpeg",
+        image: "/team/jurie.jpeg",
       },
       {
         initials: "PL",
@@ -170,7 +170,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Co-Founder",
         highlights: ["Electronic Eng", "🚀 Flight Club 637km/h WR"],
         color: "#ea580c",
-        image: "/img/team/pieter.jpeg",
+        image: "/team/pieter.jpeg",
       },
       {
         initials: "MR",
@@ -178,7 +178,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Supplier/Advisor",
         highlights: ["Electrical Eng", "🚀 Plastics mfg"],
         color: "#fb923c",
-        image: "/img/team/martyn.png",
+        image: "/team/martyn.png",
       },
       {
         initials: "EM",
@@ -186,7 +186,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["Head Quant", "Previous exit"],
         color: "#fbbf24",
-        image: "/img/team/eben.jpeg",
+        image: "/team/eben.jpeg",
       },
       {
         initials: "CF",
@@ -194,7 +194,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["EU expansion", "UK exit (family)"],
         color: "#a855f7",
-        image: "/img/team/chanelle.png",
+        image: "/team/chanelle.png",
       },
       {
         initials: "AK",
