@@ -447,7 +447,7 @@ export const pitchDeckSlides: Slide[] = [
           "B.Eng Industrial-Electronic (Stellenbosch)",
         ],
         color: "#1e40af",
-        image: "/img/team/jurie.png",
+        image: "/img/team/jurie.jpeg",
       },
       {
         initials: "PL",
@@ -459,7 +459,7 @@ export const pitchDeckSlides: Slide[] = [
           "B.Eng Electrical (Stellenbosch)",
         ],
         color: "#059669",
-        image: "/img/team/pieter.png",
+        image: "/img/team/pieter.jpeg",
       },
       {
         initials: "MR",
@@ -483,7 +483,7 @@ export const pitchDeckSlides: Slide[] = [
           "Phoenix VC founder",
         ],
         color: "#fbbf24",
-        image: "/img/team/eben.png",
+        image: "/img/team/eben.jpeg",
       },
       {
         initials: "CF",
@@ -507,7 +507,6 @@ export const pitchDeckSlides: Slide[] = [
           "International markets",
         ],
         color: "#dc2626",
-        image: "/img/team/alistair.png",
       },
     ],
     keyPoints: [

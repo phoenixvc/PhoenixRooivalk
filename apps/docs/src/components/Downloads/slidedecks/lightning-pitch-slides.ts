@@ -68,10 +68,28 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 3: CONSUMER PRODUCTS - PIETER (25s)
+  // SLIDE 2b: PROOF - CAUGHT DRONE (5s)
   // ==========================================
   {
     number: 3,
+    title: "It Works.",
+    duration: 5,
+    icon: "✅",
+    layout: "image",
+    image: "/img/drone-caught.jpeg",
+    imageCaption: "Drone captured safely - no damage, ready for evidence",
+    keyPoints: [],
+    speakerNotes:
+      "Let the image speak. 5 seconds of silence while they process. This is the proof.",
+    script:
+      "[PAUSE - let image sink in] This is what success looks like. Captured safely. Evidence preserved.",
+  },
+
+  // ==========================================
+  // SLIDE 4: CONSUMER PRODUCTS - PIETER (25s)
+  // ==========================================
+  {
+    number: 4,
     title: "Protect Your Home",
     duration: 25,
     icon: "🏠",
@@ -129,10 +147,10 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 4: TEAM (15s)
+  // SLIDE 5: TEAM (15s)
   // ==========================================
   {
-    number: 4,
+    number: 5,
     title: "The Team",
     duration: 15,
     icon: "👥",
@@ -144,7 +162,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Founder",
         highlights: ["Industrial Eng", "18 yrs software"],
         color: "#f97316",
-        image: "/img/team/jurie.png",
+        image: "/img/team/jurie.jpeg",
       },
       {
         initials: "PL",
@@ -152,7 +170,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Co-Founder",
         highlights: ["Drones since 2000s", "🚀 World record team"],
         color: "#ea580c",
-        image: "/img/team/pieter.png",
+        image: "/img/team/pieter.jpeg",
       },
       {
         initials: "MR",
@@ -168,7 +186,7 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["Head Quant", "Previous exit"],
         color: "#fbbf24",
-        image: "/img/team/eben.png",
+        image: "/img/team/eben.jpeg",
       },
       {
         initials: "CF",
@@ -184,7 +202,6 @@ export const lightningPitchSlides: Slide[] = [
         title: "Advisor",
         highlights: ["Drone exit", "Defense"],
         color: "#06b6d4",
-        image: "/img/team/alistair.png",
       },
     ],
     keyPoints: [],
@@ -195,10 +212,10 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 5: FINANCIALS - EBEN (30s)
+  // SLIDE 6: FINANCIALS - EBEN (30s)
   // ==========================================
   {
-    number: 5,
+    number: 6,
     title: "The Ask: $960K Seed",
     duration: 30,
     icon: "💰",
@@ -228,10 +245,10 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 6: MARKET / WHY NOW (20s)
+  // SLIDE 7: MARKET / WHY NOW (20s)
   // ==========================================
   {
-    number: 6,
+    number: 7,
     title: "Why Now: $14B+ in 2025",
     duration: 20,
     icon: "📈",
@@ -260,7 +277,7 @@ export const lightningPitchSlides: Slide[] = [
 
 export const lightningPitchMeta = {
   title: "Phoenix Rooivalk: Lightning Pitch",
-  duration: 2.5,
+  duration: 2.6,
   audience: "Investors",
   date: "January 14, 2026",
   colorTheme: "investor" as const,
@@ -269,10 +286,11 @@ export const lightningPitchMeta = {
 /**
  * Timing breakdown:
  * Slide 1: Problem + FPV clip - 40s
- * Slide 2: Solution - 20s
- * Slide 3: Consumer Products (Pieter) - 25s
- * Slide 4: Team - 15s
- * Slide 5: Financials (Eben) - 30s
- * Slide 6: Market/Why Now - 20s
- * TOTAL: 150s (2.5 minutes)
+ * Slide 2: Solution + Demo video - 20s
+ * Slide 3: Proof (drone-caught) - 5s
+ * Slide 4: Consumer Products (Pieter) - 25s
+ * Slide 5: Team - 15s
+ * Slide 6: Financials (Eben) - 30s
+ * Slide 7: Market/Why Now - 20s
+ * TOTAL: 155s (~2.6 minutes)
  */
