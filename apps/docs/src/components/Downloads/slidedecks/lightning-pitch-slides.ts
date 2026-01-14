@@ -29,7 +29,7 @@ export const lightningPitchSlides: Slide[] = [
       {
         text: "**The threat is real and coming home:**",
         subPoints: [
-          "FPV drones killed **thousands** of civilians in Ukraine",
+          "FPV drones killed **577 Ukrainian civilians in 2025 alone** - up 120% (UN data)",
           "**77% of Europeans** believe war with Russia is imminent",
           "Brussels Airport closed **twice in one night** (Nov 2025)",
         ],
@@ -43,7 +43,7 @@ export const lightningPitchSlides: Slide[] = [
     speakerNotes:
       "START WITH 10s FPV KILL FOOTAGE - let it sink in. Then hit the stats. End with 'nothing affordable to protect your home' - pause for effect.",
     script:
-      "[PLAY 10s FPV VIDEO] This is happening right now. FPV drones are killing thousands of civilians in Ukraine. 77% of Europeans believe war with Russia is imminent. Brussels Airport closed twice in one night last November. 64% of critical facilities have zero drone protection. Current military systems cost $800,000 and take 5 to 30 seconds to respond. There's nothing affordable to protect your home. Until now.",
+      "[PLAY 10s FPV VIDEO] This is happening right now. FPV drones killed 577 Ukrainian civilians in 2025 alone - that's up 120% from last year according to the UN. 77% of Europeans believe war with Russia is imminent. Brussels Airport closed twice in one night last November. 64% of critical facilities have zero drone protection. Current military systems cost $800,000 and take 5 to 30 seconds to respond. There's nothing affordable to protect your home. Until now.",
   },
 
   // ==========================================

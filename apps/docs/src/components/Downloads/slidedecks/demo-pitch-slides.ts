@@ -41,10 +41,19 @@ export const demoPitchSlides: Slide[] = [
   {
     number: 2,
     title: "The Problem: 64% of Facilities Are Unprotected",
-    duration: 60,
+    duration: 70,
     icon: "🚨",
     layout: "default",
     keyPoints: [
+      "**[10s VIDEO: FPV drone kills - Ukraine footage]**",
+      "",
+      {
+        text: "**The threat is real and deadly:**",
+        subPoints: [
+          "FPV drones killed **577 Ukrainian civilians in 2025 alone** - up 120% (UN data)",
+          "**77% of Europeans** believe war with Russia is imminent",
+        ],
+      },
       {
         text: "**November 2025: Brussels Airport closed twice in one night**",
         subPoints: [
@@ -71,9 +80,9 @@ export const demoPitchSlides: Slide[] = [
       },
     ],
     speakerNotes:
-      "Lead with Brussels - it's recent, relatable, and proves this isn't hypothetical. Gatwick shows the cost and the evidence problem. Keep it punchy - 60 seconds max.",
+      "START WITH 10s FPV KILL FOOTAGE - let it sink in. Then hit the UN stat. Lead with Brussels - it's recent, relatable, and proves this isn't hypothetical. Gatwick shows the cost and the evidence problem. Keep it punchy - 70 seconds max.",
     script:
-      "Last month, Brussels Airport was closed twice in one night. 54 flights cancelled. The Royal Air Force deployed specialists. European drone incidents are up 4x year over year. And the perpetrators? Still at large. Remember Gatwick in 2018? £60 million in damages, 140,000 passengers stranded. And the perpetrators were never caught. Why? No evidence chain. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail in denied environments. And without admissible evidence, there's no prosecution and no deterrent. 64% of critical facilities have zero protection today.",
+      "[PLAY 10s FPV VIDEO] This is happening right now. FPV drones killed 577 Ukrainian civilians in 2025 alone - that's up 120% from last year according to the UN. 77% of Europeans believe war with Russia is imminent. Last month, Brussels Airport was closed twice in one night. 54 flights cancelled. The Royal Air Force deployed specialists. European drone incidents are up 4x year over year. And the perpetrators? Still at large. Remember Gatwick in 2018? £60 million in damages, 140,000 passengers stranded. And the perpetrators were never caught. Why? No evidence chain. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail in denied environments. And without admissible evidence, there's no prosecution and no deterrent. 64% of critical facilities have zero protection today.",
   },
 
   // ==========================================
