@@ -378,17 +378,30 @@ export default function PresentationMode({
         )}
 
         {/* Slide Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
+        <div className="flex-1 flex flex-col items-center justify-center p-4">
           {/* Slide Content */}
-          <div className="max-w-4xl w-full bg-gray-800 rounded-xl p-12 shadow-2xl">
+          <div
+            className={`w-full bg-gray-800 rounded-xl shadow-2xl ${
+              slide.layout === "products"
+                ? "max-w-6xl p-6"
+                : "max-w-4xl p-12"
+            }`}
+          >
             {/* Slide Header */}
-            <div className="flex items-center gap-4 mb-8">
+            <div
+              className={`flex items-center gap-4 ${slide.layout === "products" ? "mb-4" : "mb-8"}`}
+            >
               {slide.icon && (
-                <span className="text-4xl" aria-hidden="true">
+                <span
+                  className={slide.layout === "products" ? "text-3xl" : "text-4xl"}
+                  aria-hidden="true"
+                >
                   {slide.icon}
                 </span>
               )}
-              <h2 className="text-4xl font-bold">
+              <h2
+                className={`font-bold ${slide.layout === "products" ? "text-3xl" : "text-4xl"}`}
+              >
                 {parseRichText(slide.title)}
               </h2>
             </div>
@@ -663,7 +676,7 @@ export default function PresentationMode({
               </div>
             ) : slide.layout === "products" && slide.productCards ? (
               // Product cards grid layout
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 {slide.productCards.map((product, productIndex) => (
                   <div
                     key={productIndex}
@@ -676,7 +689,7 @@ export default function PresentationMode({
                   >
                     {/* Badges */}
                     {product.badges && product.badges.length > 0 && (
-                      <div className="flex gap-2 mb-3">
+                      <div className="flex gap-2 mb-2">
                         {product.badges.map((badge, badgeIndex) => (
                           <span
                             key={badgeIndex}
@@ -693,23 +706,23 @@ export default function PresentationMode({
                       </div>
                     )}
                     {/* Name */}
-                    <h4 className="text-xl font-bold text-white mb-1">
+                    <h4 className="text-lg font-bold text-white mb-0.5">
                       {product.name}
                     </h4>
                     {/* Tagline */}
                     <p
-                      className="text-sm font-medium mb-2"
+                      className="text-sm font-medium mb-1"
                       style={{ color: product.color || "#f97316" }}
                     >
                       {product.tagline}
                     </p>
                     {/* Description */}
-                    <p className="text-sm text-gray-400 mb-4 flex-grow">
+                    <p className="text-xs text-gray-400 mb-3 flex-grow">
                       {product.description}
                     </p>
                     {/* Specs */}
                     {product.specs && product.specs.length > 0 && (
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-sm">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 mb-3 text-xs">
                         {product.specs.map((spec, specIndex) => (
                           <div key={specIndex}>
                             <span className="text-gray-500 uppercase text-xs">
@@ -724,11 +737,11 @@ export default function PresentationMode({
                     )}
                     {/* Price */}
                     <div className="mt-auto">
-                      <p className="text-3xl font-bold text-white">
+                      <p className="text-2xl font-bold text-white">
                         {product.price}
                       </p>
                       {product.delivery && (
-                        <p className="text-sm text-gray-400">
+                        <p className="text-xs text-gray-400">
                           {product.delivery}
                         </p>
                       )}
