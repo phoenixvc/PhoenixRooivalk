@@ -232,9 +232,9 @@ export const lightningPitchSlides: Slide[] = [
     layout: "two-column",
     leftColumnTitle: "Government C-UAS Funding",
     leftColumn: [
-      "🇺🇸 **$7.5B** US DoD + $500M FEMA",
-      "🇬🇧 **$600M+** UK DragonFire + MOD",
-      "🇪🇺 **€500M** France + NATO initiatives",
+      "**US:** **$7.5B** DoD + $500M FEMA",
+      "**UK:** **$600M+** DragonFire + MOD",
+      "**EU:** **€500M** France + NATO initiatives",
       "*Governments finally got serious*",
     ],
     rightColumnTitle: "Market Opportunity",
