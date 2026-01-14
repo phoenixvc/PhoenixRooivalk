@@ -190,7 +190,7 @@ export default function SlideDeck({
           <button
             type="button"
             onClick={handlePrint}
-            className={`${styles.downloadDeckButton} ${styles.downloadDeckButtonSecondary}`}
+            className={styles.downloadDeckButton}
             aria-label={`Download ${title} script as PDF`}
           >
             <span aria-hidden="true">{"\uD83D\uDCE5"}</span>

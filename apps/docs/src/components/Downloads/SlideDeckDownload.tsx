@@ -442,7 +442,7 @@ export default function SlideDeckDownload({
           label="Download Script"
           type="slidedeck"
           onDownload={handleDownloadScript}
-          variant={variant}
+          variant="primary"
         />
         <button
           type="button"
