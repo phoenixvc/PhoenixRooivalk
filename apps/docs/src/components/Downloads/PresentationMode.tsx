@@ -395,11 +395,24 @@ export default function PresentationMode({
 
             {/* Slide Body */}
             {slide.layout === "title-only" ? (
-              <div className="text-center py-8">
-                <p className="text-2xl text-gray-300">
-                  {slide.keyPoints[0] &&
-                    parseRichText(getKeyPointText(slide.keyPoints[0]))}
-                </p>
+              <div className="text-center py-8 space-y-2">
+                {slide.keyPoints.map((point, i) => {
+                  const text = getKeyPointText(point);
+                  // Empty strings create visual spacing
+                  if (!text) return <div key={i} className="h-4" />;
+                  return (
+                    <p
+                      key={i}
+                      className={`text-xl text-gray-300 transition-opacity duration-300 ${
+                        animationMode && i >= revealedBullets
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
+                    >
+                      {parseRichText(text)}
+                    </p>
+                  );
+                })}
               </div>
             ) : slide.layout === "quote" ? (
               <div className="text-center py-8">
