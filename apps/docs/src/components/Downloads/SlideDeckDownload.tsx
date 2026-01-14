@@ -422,28 +422,48 @@ export default function SlideDeckDownload({
 
   return (
     <>
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-2 flex-wrap">
         <BrowserOnly fallback={<div>Loading...</div>}>
           {() => (
-            <PptxGenerator
-              slides={numberedSlides}
-              title={title}
-              duration={duration}
-              audience={audience}
-              date={date}
-              theme={theme}
-              customColors={customColors}
-              contactUrl={contactUrl}
-              contactEmail={contactEmail}
-            />
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const { generatePptx } = await import(
+                    "../../utils/generatePptx"
+                  );
+                  await generatePptx(numberedSlides, {
+                    title,
+                    duration,
+                    audience,
+                    date,
+                    theme,
+                    customColors,
+                    contactUrl,
+                    contactEmail,
+                  });
+                } catch (error) {
+                  console.error("Failed to generate PPTX:", error);
+                  alert(
+                    "Failed to generate PowerPoint file. Please try again.",
+                  );
+                }
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium text-sm"
+            >
+              <span>{"\u{1F4CA}"}</span>
+              Download PowerPoint
+            </button>
           )}
         </BrowserOnly>
-        <DownloadButton
-          label="Download Script"
-          type="slidedeck"
-          onDownload={handleDownloadScript}
-          variant="primary"
-        />
+        <button
+          type="button"
+          onClick={handleDownloadScript}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium text-sm"
+        >
+          <span>{"\u{1F4CA}"}</span>
+          Download Script
+        </button>
         <button
           type="button"
           onClick={handleStartPresentation}
@@ -470,14 +490,15 @@ export default function SlideDeckDownload({
 
       {isPreviewOpen && (
         <div
-          className="fixed inset-0 z-50 overflow-auto bg-black/50 flex items-start justify-center p-4"
+          id="slidedeck-print-modal"
+          className="slidedeck-modal fixed inset-0 z-50 overflow-auto bg-black/50 flex items-start justify-center p-4"
           onClick={handleClose}
           role="dialog"
           aria-modal="true"
           aria-labelledby="slidedeck-title"
         >
           <div
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8"
+            className="slidedeck-modal-content bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

@@ -45,30 +45,28 @@ export const lightningPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 2: SOLUTION (20s)
+  // SLIDE 2: SOLUTION + DEMO VIDEO (20s)
   // ==========================================
   {
     number: 2,
     title: "Capture Drones Safely. No Damage.",
     duration: 20,
     icon: "🛡️",
-    layout: "title-only",
+    layout: "video",
+    video: "/videos/netlauncher-poc-short.mp4",
+    videoCaption: "SkySnare prototype - CO2 pneumatic net launcher",
     keyPoints: [
       "**Phoenix Rooivalk**",
-      "",
       "Pneumatic net launchers that **capture drones intact**",
       "",
       "**Safe** - CO2/pneumatic, no permits needed",
       "**Legal** - Non-destructive, civilian-safe",
       "**Affordable** - Starting at **$349**",
-      "",
-      "**Net capture is proven** - Ukraine, US Army use it daily",
-      "*We made it safe and affordable for YOU*",
     ],
     speakerNotes:
-      "Quick pivot from fear to hope. Emphasize: safe, legal, affordable. Net capture is PROVEN - we just made it accessible.",
+      "Play demo video while talking. Quick pivot from fear to hope. Emphasize: safe, legal, affordable.",
     script:
-      "Phoenix Rooivalk. We capture drones safely with no damage. Pneumatic net launchers - safe CO2 propellant, no permits needed. Legal and non-destructive. Starting at just $349. Net capture is already proven - Ukraine and US Army use it daily. We made it safe and affordable for everyone.",
+      "[PLAY DEMO] Phoenix Rooivalk. We capture drones safely with no damage. Pneumatic net launchers - safe CO2 propellant, no permits needed. Legal and non-destructive. Starting at just $349.",
   },
 
   // ==========================================
@@ -123,39 +121,54 @@ export const lightningPitchSlides: Slide[] = [
       {
         initials: "JS",
         name: "Jurie Smit",
-        title: "CTO",
+        title: "Founder",
         highlights: ["Edge AI/ML", "15+ yrs fintech"],
         color: "#f97316",
       },
       {
-        initials: "MR",
-        name: "Martyn Redelinghuys",
-        title: "CEO",
-        highlights: ["Defense/Energy", "R500M+ portfolio"],
+        initials: "PL",
+        name: "Pieter La Grange",
+        title: "Co-Founder",
+        highlights: ["Embedded systems", "Medical devices"],
         color: "#ea580c",
       },
       {
-        initials: "PL",
-        name: "Pieter La Grange",
-        title: "Hardware",
-        highlights: ["Embedded systems", "Medical devices"],
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: ["Operations", "Defense/Energy"],
         color: "#fb923c",
       },
       {
         initials: "EM",
         name: "Eben Maré",
-        title: "CFO",
+        title: "Advisor",
         highlights: ["IB & PE", "Head Quant"],
         color: "#fbbf24",
       },
+      {
+        initials: "CF",
+        name: "Chanelle Fellinger",
+        title: "Advisor",
+        highlights: ["Marketing", "Sales"],
+        color: "#a855f7",
+      },
+      {
+        initials: "AK",
+        name: "Alistair Kim",
+        title: "Advisor",
+        highlights: ["Defense", "Government Relations"],
+        color: "#06b6d4",
+      },
     ],
     keyPoints: [
-      "**All founders full-time** with personal capital committed",
+      "**Founders full-time** with personal capital committed",
+      "**Strategic advisors** with defense and finance expertise",
     ],
     speakerNotes:
-      "15 seconds max. Just hit the names and key expertise. Emphasize full-time commitment.",
+      "15 seconds max. Hit the founders first, then advisors briefly.",
     script:
-      "Four co-founders, 60+ years combined. Jurie on AI and tech. Martyn on business with defense relationships. Pieter on hardware with medical device manufacturing. Eben on finance with investment banking. All full-time, personal capital committed.",
+      "Two founders, supported by experienced advisors. Jurie on AI and tech, Pieter on hardware with medical device manufacturing. Our advisors bring investment banking, strategy, and defense expertise. All committed, personal capital invested.",
   },
 
   // ==========================================

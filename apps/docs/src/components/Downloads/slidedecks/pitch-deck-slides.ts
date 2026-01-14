@@ -440,7 +440,7 @@ export const pitchDeckSlides: Slide[] = [
       {
         initials: "JS",
         name: "Jurie Smit",
-        title: "Co-Founder & CTO",
+        title: "Founder",
         highlights: [
           "15+ years fintech & SaaS platforms",
           "Edge AI/ML & system architecture",
@@ -449,20 +449,9 @@ export const pitchDeckSlides: Slide[] = [
         color: "#1e40af",
       },
       {
-        initials: "MR",
-        name: "Martyn Redelinghuys",
-        title: "Co-Founder & CEO",
-        highlights: [
-          "20+ years energy, mining, defense",
-          "R500M+ portfolio management",
-          "MBA (GIBS), B.Eng (Stellenbosch)",
-        ],
-        color: "#7c3aed",
-      },
-      {
         initials: "PL",
         name: "Pieter La Grange",
-        title: "Co-Founder & Hardware Lead",
+        title: "Co-Founder",
         highlights: [
           "15+ years embedded systems",
           "Medical device production (Snuza)",
@@ -471,34 +460,67 @@ export const pitchDeckSlides: Slide[] = [
         color: "#059669",
       },
       {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: [
+          "Operations & Supply Chain",
+          "20+ years defense/energy",
+          "R500M+ portfolio management",
+        ],
+        color: "#7c3aed",
+      },
+      {
         initials: "EM",
         name: "Eben Maré",
-        title: "Co-Founder & CFO",
+        title: "Advisor",
         highlights: [
           "15+ years investment banking & PE",
           "Former Head Quant at Deloitte",
           "Phoenix VC founder",
         ],
+        color: "#fbbf24",
+      },
+      {
+        initials: "CF",
+        name: "Chanelle Fellinger",
+        title: "Advisor",
+        highlights: [
+          "Marketing & Sales",
+          "Go-to-market strategy",
+          "B2B growth expert",
+        ],
+        color: "#a855f7",
+      },
+      {
+        initials: "AK",
+        name: "Alistair Kim",
+        title: "Advisor",
+        highlights: [
+          "Defense sector expertise",
+          "Government relations",
+          "International markets",
+        ],
         color: "#dc2626",
       },
     ],
     keyPoints: [
-      "**4 co-founders** with complementary expertise across tech, business, hardware, and finance",
+      "**2 founders** with complementary expertise in tech and hardware",
       {
-        text: "**Core competencies:**",
+        text: "**Strategic advisors:**",
         subPoints: [
-          "Edge AI & embedded systems",
-          "Large-scale project management",
-          "Blockchain & cryptographic protocols",
-          "Hardware design & manufacturing",
+          "Operations & supply chain",
+          "Finance & investment banking",
+          "Marketing & sales",
+          "Defense sector & government relations",
         ],
       },
-      "All founders **full-time committed** with significant personal investment",
+      "Founders **full-time committed** with significant personal investment",
     ],
     speakerNotes:
-      "Team credibility is critical. Each founder brings unique expertise. Emphasize the complementary skills and full-time commitment. The combined 60+ years of experience spans all domains needed for success.",
+      "Team credibility is critical. Two founders with complementary skills, backed by experienced advisors. Emphasize the full-time commitment and advisor expertise.",
     script:
-      "Our founding team brings over 60 years of combined experience. Jurie leads technology with 15+ years in fintech and AI systems. Martyn drives business development with 20+ years managing R500M+ portfolios in energy and defense. Pieter heads hardware with 15 years in embedded systems and medical device production. Eben handles finance with extensive investment banking and private equity experience. All four founders are full-time committed with skin in the game.",
+      "Our founding team brings deep expertise. Jurie leads technology with 15+ years in fintech and AI systems. Pieter heads hardware with 15 years in embedded systems and medical device production. We're backed by strategic advisors including Martyn on operations, Eben on finance, Chanelle on marketing and sales, and Alistair with defense sector expertise. Both founders are full-time committed with skin in the game.",
   },
   {
     number: 14,
