@@ -910,27 +910,61 @@ export async function generatePptx(
           line: { color: memberColor, width: 2 },
         });
 
-        // Avatar circle
-        contentSlide.addShape("ellipse" as any, {
-          x: x + founderCardW / 2 - 0.35,
-          y: founderY + 0.12,
-          w: 0.7,
-          h: 0.7,
-          fill: { color: memberColor },
-        });
+        // Avatar - use image if available, otherwise circle with initials
+        if (member.image) {
+          try {
+            contentSlide.addImage({
+              path: member.image,
+              x: x + founderCardW / 2 - 0.35,
+              y: founderY + 0.12,
+              w: 0.7,
+              h: 0.7,
+              rounding: true,
+            });
+          } catch {
+            // Fallback to initials circle
+            contentSlide.addShape("ellipse" as any, {
+              x: x + founderCardW / 2 - 0.35,
+              y: founderY + 0.12,
+              w: 0.7,
+              h: 0.7,
+              fill: { color: memberColor },
+            });
+            contentSlide.addText(member.initials, {
+              x: x + founderCardW / 2 - 0.35,
+              y: founderY + 0.22,
+              w: 0.7,
+              h: 0.5,
+              fontSize: 14,
+              bold: true,
+              color: "FFFFFF",
+              align: "center",
+              valign: "middle",
+            });
+          }
+        } else {
+          // Avatar circle
+          contentSlide.addShape("ellipse" as any, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            fill: { color: memberColor },
+          });
 
-        // Initials
-        contentSlide.addText(member.initials, {
-          x: x + founderCardW / 2 - 0.35,
-          y: founderY + 0.22,
-          w: 0.7,
-          h: 0.5,
-          fontSize: 14,
-          bold: true,
-          color: "FFFFFF",
-          align: "center",
-          valign: "middle",
-        });
+          // Initials
+          contentSlide.addText(member.initials, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.22,
+            w: 0.7,
+            h: 0.5,
+            fontSize: 14,
+            bold: true,
+            color: "FFFFFF",
+            align: "center",
+            valign: "middle",
+          });
+        }
 
         // Name
         contentSlide.addText(member.name, {
@@ -991,27 +1025,61 @@ export async function generatePptx(
           line: { color: memberColor, width: 1 },
         });
 
-        // Avatar circle (smaller)
-        contentSlide.addShape("ellipse" as any, {
-          x: x + advisorCardW / 2 - 0.22,
-          y: advisorY + 0.08,
-          w: 0.44,
-          h: 0.44,
-          fill: { color: memberColor },
-        });
+        // Avatar - use image if available, otherwise circle with initials
+        if (member.image) {
+          try {
+            contentSlide.addImage({
+              path: member.image,
+              x: x + advisorCardW / 2 - 0.22,
+              y: advisorY + 0.08,
+              w: 0.44,
+              h: 0.44,
+              rounding: true,
+            });
+          } catch {
+            // Fallback to initials circle
+            contentSlide.addShape("ellipse" as any, {
+              x: x + advisorCardW / 2 - 0.22,
+              y: advisorY + 0.08,
+              w: 0.44,
+              h: 0.44,
+              fill: { color: memberColor },
+            });
+            contentSlide.addText(member.initials, {
+              x: x + advisorCardW / 2 - 0.22,
+              y: advisorY + 0.14,
+              w: 0.44,
+              h: 0.32,
+              fontSize: 9,
+              bold: true,
+              color: "FFFFFF",
+              align: "center",
+              valign: "middle",
+            });
+          }
+        } else {
+          // Avatar circle (smaller)
+          contentSlide.addShape("ellipse" as any, {
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            fill: { color: memberColor },
+          });
 
-        // Initials
-        contentSlide.addText(member.initials, {
-          x: x + advisorCardW / 2 - 0.22,
-          y: advisorY + 0.14,
-          w: 0.44,
-          h: 0.32,
-          fontSize: 9,
-          bold: true,
-          color: "FFFFFF",
-          align: "center",
-          valign: "middle",
-        });
+          // Initials
+          contentSlide.addText(member.initials, {
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.14,
+            w: 0.44,
+            h: 0.32,
+            fontSize: 9,
+            bold: true,
+            color: "FFFFFF",
+            align: "center",
+            valign: "middle",
+          });
+        }
 
         // Name
         contentSlide.addText(member.name, {
