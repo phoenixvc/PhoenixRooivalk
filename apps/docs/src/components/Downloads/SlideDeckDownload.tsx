@@ -641,15 +641,21 @@ export default function SlideDeckDownload({
                     {/* Render based on layout type */}
                     {slide.layout === "title-only" ? (
                       // Title-only layout (section divider)
-                      <div className="text-center py-12">
-                        <p className="text-xl text-gray-600 dark:text-gray-400">
-                          {slide.keyPoints[0] &&
-                            parseRichText(
-                              typeof slide.keyPoints[0] === "string"
-                                ? slide.keyPoints[0]
-                                : slide.keyPoints[0].text,
-                            )}
-                        </p>
+                      <div className="text-center py-12 space-y-2">
+                        {slide.keyPoints.map((point, i) => {
+                          const text =
+                            typeof point === "string" ? point : point.text;
+                          // Empty strings create visual spacing
+                          if (!text) return <div key={i} className="h-4" />;
+                          return (
+                            <p
+                              key={i}
+                              className="text-xl text-gray-600 dark:text-gray-400"
+                            >
+                              {parseRichText(text)}
+                            </p>
+                          );
+                        })}
                       </div>
                     ) : slide.layout === "image" && slide.image ? (
                       // Image-focused layout
