@@ -908,43 +908,48 @@ export async function generatePptx(
         });
       }
     } else if (layout === "video" || slide.video) {
-      // Video layout OR any slide with a video property
+      // Video layout - split view: video left, key points right
       // Note: pptxgenjs supports video embedding via addMedia()
-      // Add prominent video placeholder with play instructions
 
       // Sanitize video path and caption to prevent injection
       const sanitizedVideoPath = sanitizeVideoPath(slide.video);
       const sanitizedCaption = sanitizeTextContent(slide.videoCaption);
 
+      // Video container on the LEFT (50% width)
+      const videoX = 0.5;
+      const videoY = 1.9;
+      const videoW = 4.5;
+      const videoH = 3.2;
+
       // Video container background
       const rectShape: PptxShape = "rect";
       contentSlide.addShape(rectShape, {
-        x: 1.5,
-        y: 1.9,
-        w: 7.0,
-        h: 3.5,
+        x: videoX,
+        y: videoY,
+        w: videoW,
+        h: videoH,
         fill: { color: "000000" },
         line: { color: colors.primary, width: 2 },
       });
 
-      // Play button triangle
+      // Play button triangle (centered in video area)
       const triangleShape: PptxShape = "triangle";
       contentSlide.addShape(triangleShape, {
-        x: 4.0,
-        y: 2.8,
-        w: 1.5,
-        h: 1.5,
+        x: videoX + videoW / 2 - 0.5,
+        y: videoY + videoH / 2 - 0.5,
+        w: 1.0,
+        h: 1.0,
         fill: { color: colors.primary },
         rotate: 90,
       });
 
-      // Video label
+      // Video label below video
       contentSlide.addText("VIDEO", {
-        x: 1.5,
-        y: 4.5,
-        w: 7.0,
-        h: 0.4,
-        fontSize: 14,
+        x: videoX,
+        y: videoY + videoH + 0.1,
+        w: videoW,
+        h: 0.3,
+        fontSize: 11,
         bold: true,
         color: colors.primary,
         align: "center",
@@ -956,21 +961,20 @@ export async function generatePptx(
           // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
           contentSlide.addMedia({
             path: sanitizedVideoPath,
-            x: 1.5,
-            y: 1.9,
-            w: 7.0,
-            h: 3.5,
+            x: videoX,
+            y: videoY,
+            w: videoW,
+            h: videoH,
             type: "video",
           });
         } catch {
           // If video embedding fails, the placeholder is already there
-          // Add instruction text
-          contentSlide.addText("Click to play embedded video", {
-            x: 1.5,
-            y: 5.0,
-            w: 7.0,
+          contentSlide.addText("Click to play", {
+            x: videoX,
+            y: videoY + videoH - 0.4,
+            w: videoW,
             h: 0.3,
-            fontSize: 11,
+            fontSize: 10,
             color: colors.textMuted,
             align: "center",
             italic: true,
@@ -978,40 +982,40 @@ export async function generatePptx(
         }
       }
 
-      // Video caption (sanitized)
+      // Video caption below video label
       if (sanitizedCaption) {
         contentSlide.addText(sanitizedCaption, {
-          x: 0.5,
-          y: 5.5,
-          w: 9.0,
+          x: videoX,
+          y: videoY + videoH + 0.4,
+          w: videoW,
           h: 0.4,
-          fontSize: 14,
+          fontSize: 10,
           color: colors.textMuted,
           align: "center",
           italic: true,
         });
       }
 
-      // Key points below video if any
+      // Key points on the RIGHT (50% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
           text: getKeyPointText(point),
           options: {
             bullet: { type: "number" as const, code: "2022" },
             color: colors.text,
-            fontSize: 13,
-            paraSpaceBefore: 3,
-            paraSpaceAfter: 3,
+            fontSize: 14,
+            paraSpaceBefore: 5,
+            paraSpaceAfter: 5,
           },
         }));
 
         contentSlide.addText(bulletPoints, {
-          x: 0.7,
-          y: 5.9,
-          w: 8.6,
-          h: 1.0,
+          x: 5.2,
+          y: 1.9,
+          w: 4.3,
+          h: 4.5,
           color: colors.text,
-          fontSize: 13,
+          fontSize: 14,
           valign: "top",
         });
       }

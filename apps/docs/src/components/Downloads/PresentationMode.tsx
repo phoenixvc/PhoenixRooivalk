@@ -580,6 +580,87 @@ export default function PresentationMode({
                   </ul>
                 )}
               </div>
+            ) : slide.layout === "video" || slide.video ? (
+              // Video layout - split view: video left, key points right
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Video on the left */}
+                <div className="flex flex-col">
+                  {slide.video && (
+                    <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
+                      <video
+                        src={slide.video}
+                        controls
+                        autoPlay={slide.videoAutoplay}
+                        muted={slide.videoAutoplay}
+                        className="w-full h-full object-contain"
+                        poster={slide.image}
+                        aria-label={
+                          slide.videoCaption || slide.title || "Video content"
+                        }
+                      >
+                        {slide.videoCaptions && (
+                          <track
+                            kind="captions"
+                            src={slide.videoCaptions}
+                            srcLang={slide.videoCaptionsLang || "en"}
+                            label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                            default
+                          />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                      {/* Fullscreen button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          const video = e.currentTarget
+                            .previousElementSibling as HTMLVideoElement;
+                          if (video?.requestFullscreen) {
+                            video.requestFullscreen();
+                          }
+                        }}
+                        className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Fullscreen"
+                      >
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  {slide.videoCaption && (
+                    <p className="text-sm text-gray-400 italic mt-2 text-center">
+                      {slide.videoCaption}
+                    </p>
+                  )}
+                </div>
+                {/* Key points on the right */}
+                <ul className="space-y-3">
+                  {slide.keyPoints.map((point, i) => (
+                    <li
+                      key={i}
+                      className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
+                        animationMode && i >= revealedBullets
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
+                    >
+                      <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                      <span>{parseRichText(getKeyPointText(point))}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ) : (
               // Default layout
               <ul className="space-y-4">
