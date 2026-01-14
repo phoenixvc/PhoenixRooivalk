@@ -1,12 +1,12 @@
 ---
 id: phoenix-rooivalk-pitch-deck
-title: "Phoenix Rooivalk: Investor Pitch Deck"
-sidebar_label: "Pitch Deck"
+title: "Phoenix Rooivalk: Pitch Decks"
+sidebar_label: "Pitch Decks"
 description:
-  Seed round pitch deck for Phoenix Rooivalk dual-brand counter-drone platform
-keywords: [investor, pitch deck, counter-uas, SkySnare, AeroNet, seed round]
+  All pitch deck variants for Phoenix Rooivalk - full investor pitch, demo, lightning, and Q&A appendix
+keywords: [investor, pitch deck, counter-uas, SkySnare, AeroNet, seed round, demo, lightning]
 difficulty: intermediate
-timeEstimate: 12
+timeEstimate: 15
 xpReward: 100
 phase: ["seed", "series-a"]
 ---
@@ -15,23 +15,31 @@ import {
   SlideDeckDownload,
   pitchDeckSlides,
   pitchDeckMeta,
+  demoPitchSlides,
+  demoPitchMeta,
   lightningPitchSlides,
   lightningPitchMeta,
   qaAppendixSlides,
   qaAppendixMeta,
 } from "@site/src/components/Downloads";
-import {
-  MARKET,
-  PERFORMANCE,
-  BLOCKCHAIN,
-  CAPITAL,
-  SKYSNARE,
-  AERONET,
-} from "@site/src/data/values";
+import { CAPITAL } from "@site/src/data/values";
 
-# Phoenix Rooivalk: Seed Round Pitch Deck
+# Phoenix Rooivalk: Pitch Decks
 
-## Full Investor Pitch (10-12 minutes)
+All pitch deck variants in one place. Choose based on your audience and time.
+
+| Deck | Slides | Duration | Best For |
+|------|--------|----------|----------|
+| [Full Investor Pitch](#full-investor-pitch) | 12 | ~12 min | Investor meetings, deep dives |
+| [Demo Pitch](#demo-pitch) | 10 | ~10 min | First meetings, demos, trade shows |
+| [Lightning Pitch](#lightning-pitch) | 7 | 3 min | Pitch competitions, elevator pitches |
+| [Q&A Appendix](#qa-appendix) | 13 | - | Backup slides for investor questions |
+
+---
+
+## Full Investor Pitch
+
+**12 slides, ~12 minutes** - Complete investor presentation with full technical depth, market analysis, and financials.
 
 <SlideDeckDownload
   slides={pitchDeckSlides}
@@ -46,9 +54,26 @@ import {
 
 ---
 
-## Lightning Pitch (3 minutes)
+## Demo Pitch
 
-For quick investor intros, demo days, and pitch competitions.
+**10 slides, ~10 minutes** - First meeting deck focused on problem/solution with threat landscape context.
+
+<SlideDeckDownload
+  slides={demoPitchSlides}
+  title={demoPitchMeta.title}
+  duration={demoPitchMeta.duration}
+  audience={demoPitchMeta.audience}
+  date={demoPitchMeta.date}
+  theme={demoPitchMeta.colorTheme}
+  contactUrl="https://phoenixrooivalk.com"
+  contactEmail="contact@phoenixrooivalk.com"
+/>
+
+---
+
+## Lightning Pitch
+
+**7 slides, 3 minutes** - Speed pitch for competitions and quick intros. Presenter assignments: Pieter (Product), Eben (Financials).
 
 <SlideDeckDownload
   slides={lightningPitchSlides}
@@ -63,9 +88,9 @@ For quick investor intros, demo days, and pitch competitions.
 
 ---
 
-## Q&A Appendix Slides
+## Q&A Appendix
 
-Backup slides for common investor questions. Pull up the relevant slide when asked.
+**13 backup slides** - Pull up relevant slides when investors ask questions. Includes demo video slot.
 
 <SlideDeckDownload
   slides={qaAppendixSlides}
@@ -84,7 +109,7 @@ Backup slides for common investor questions. Pull up the relevant slide when ask
 
 ### Market Catalysts
 
-- **FCC bans DJI drones (Dec 23, 2025)** - Chinese drones added to Covered List
+- **FCC bans DJI drones (Dec 23, 2025)** - Chinese drones on Covered List, new models banned
 - **$14B+ global C-UAS funding** announced in 2025
 - **Brussels Airport closed twice** in one night (Nov 2025)
 
@@ -96,7 +121,7 @@ Backup slides for common investor questions. Pull up the relevant slide when ask
 | **SkyWall (UK)** | Pneumatic | $30-50K+ | 10kg, military/LE only |
 | **Phoenix Rooivalk** | CO2/Pneumatic | $150-$2K | Safe, civilian-legal, no permits |
 
-### Product Portfolio
+### Product Portfolio (6 Lines)
 
 | Segment | Products | Price Range |
 |---------|----------|-------------|
@@ -106,27 +131,37 @@ Backup slides for common investor questions. Pull up the relevant slide when ask
 
 ---
 
-## Use of Funds ({CAPITAL.SEED_ROUND})
+## Presentation Tips
 
-| Allocation | Percentage | Purpose |
-|------------|------------|---------|
-| Engineering | 40% | AI/ML, edge processing |
-| Hardware | 25% | Prototypes, tooling |
-| Sales | 15% | D2C launch |
-| Operations | 20% | Patents, certifications |
+### Opening Strong
+
+Start with video footage, then hit the DJI ban:
+
+> _"This is happening right now. The FCC just banned DJI drones in December citing national security. Brussels Airport was closed twice in one night. And there's nothing affordable to protect your home. Until now."_
+
+### Key Differentiators
+
+Lead with what makes us unique:
+- **10-150x faster** than competitors (sub-200ms vs 5-30 seconds)
+- **Only** C-UAS with blockchain evidence chain
+- **Only** consumer product in the market ($349)
+- **Safe propellant** - no permits required
+
+### The Ask
+
+> _"$960K seed on a SAFE at $3.5M pre-money cap. 18-month runway to Series A with $500K+ ARR."_
 
 ---
 
-## Contact
+## Video Assets Needed
 
-| Channel | Details |
-|---------|---------|
-| **Investment Inquiries** | contact@phoenixrooivalk.com |
-| **Consumer** | www.skysnare.com |
-| **Enterprise** | www.aeronet-security.com |
+| Video | Location | Purpose |
+|-------|----------|---------|
+| `fpv-kills-short.mp4` | `/static/videos/` | Problem slide - FPV drone footage |
+| `netlauncher-poc-short.mp4` | `/static/videos/` | Q&A demo - Net launcher in action |
 
 ---
 
-_Last Updated: January 2026 | Seed Round Pitch Deck_
+_Last Updated: January 2026_
 
 _This document contains confidential business information. © 2026 Phoenix Rooivalk._
