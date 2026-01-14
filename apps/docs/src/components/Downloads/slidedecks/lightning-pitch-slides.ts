@@ -249,25 +249,59 @@ export const lightningPitchSlides: Slide[] = [
     title: "Protect Your Home",
     duration: 25,
     icon: "🎯",
-    layout: "title-only",
-    keyPoints: [
-      "**Net capture is proven** - Ukraine, US Army",
-      "**We made it safe** - CO2/pneumatic, no permits",
-      "**We made it affordable** - $349 to $150K",
-      "",
-      "**$14B+ in government funding** - market is ready",
-      "**6 product lines** - consumer to military",
-      "**Q3 2026 delivery** - preorders open",
-      "",
-      "**$960K seed** → Certified product → $500K ARR → Series A",
-      "",
-      "*Capture drones safely. No damage.*",
-      "**Questions?**",
+    layout: "products",
+    keyPoints: [],
+    productCards: [
+      {
+        name: "SkySnare",
+        tagline: "Protect Your Airspace",
+        description:
+          "Direct-to-consumer drone capture device. Simple point-and-shoot operation for personal property protection.",
+        price: "$349",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "15-30m" },
+          { label: "Net Size", value: "2m × 2m" },
+          { label: "Reload", value: "30 seconds" },
+        ],
+      },
+      {
+        name: "SkyWatch Standard",
+        tagline: "Reliable Home Protection",
+        description:
+          "Balanced detection system for residential use with Coral TPU acceleration and low-light capability.",
+        price: "$100-250",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "50-150m" },
+          { label: "Speed", value: "15-30 FPS" },
+          { label: "Power", value: "4-10W" },
+        ],
+      },
+      {
+        name: "NetSnare Lite",
+        tagline: "Ground-Mounted Net Launcher",
+        description:
+          "Spring-powered ground-mounted net launcher. Pairs with any SkyWatch detector for automated drone capture.",
+        price: "$200-400",
+        delivery: "Delivery Jul 2026",
+        badges: ["SEED", "PREORDER OPEN"],
+        color: "#f97316",
+        specs: [
+          { label: "Range", value: "10-20m launch" },
+          { label: "Trigger", value: "App/API" },
+          { label: "Reload", value: "Manual, 30s" },
+        ],
+      },
     ],
     speakerNotes:
-      "Summarize the 3 key points: proven, safe, affordable. End with the tagline and open for questions.",
+      "Show the 3 entry-level products. Emphasize the price points and delivery dates.",
     script:
-      "Net capture is proven on the frontlines. We made it safe with pneumatic propellant. We made it affordable starting at $349. $14 billion in government funding proves the market is ready. We have 6 product lines covering consumer to military. First deliveries Q3 2026 - preorders are open now. $960K gets us to certified product and $500K ARR, then Series A. Capture drones safely. No damage. Questions?",
+      "Here are our entry products. SkySnare at $349 - point and shoot for homeowners. SkyWatch detection system starting at $100. NetSnare ground launcher from $200. All delivering July 2026. Preorders are open. Questions?",
   },
 ];
 

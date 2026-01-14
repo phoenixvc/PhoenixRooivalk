@@ -21,7 +21,30 @@ export type SlideLayout =
   | "quote" // Quote/testimonial layout
   | "code" // Code block layout for technical content
   | "team" // Team members grid layout
-  | "video"; // Video-focused layout with optional caption
+  | "video" // Video-focused layout with optional caption
+  | "products"; // Product cards grid layout
+
+/**
+ * Product card for products layout slides
+ */
+export interface ProductCard {
+  /** Product name */
+  name: string;
+  /** Product tagline */
+  tagline: string;
+  /** Short description */
+  description: string;
+  /** Price (e.g., "$349" or "$100-250") */
+  price: string;
+  /** Delivery date */
+  delivery?: string;
+  /** Key specs as label-value pairs */
+  specs?: Array<{ label: string; value: string }>;
+  /** Optional badge text (e.g., "SEED", "PREORDER OPEN") */
+  badges?: string[];
+  /** Card accent color (hex) */
+  color?: string;
+}
 
 /**
  * Team member for team layout slides
@@ -96,6 +119,8 @@ export interface Slide {
   rightColumnTitle?: string;
   /** Team members (for team layout) */
   teamMembers?: TeamMember[];
+  /** Product cards (for products layout) */
+  productCards?: ProductCard[];
   /** Speaker notes (for presenter view) */
   speakerNotes?: string;
   /** Video URL for video layout (relative to /static or absolute) */
@@ -914,6 +939,83 @@ export default function SlideDeckDownload({
                             </ul>
                           </div>
                         )}
+                      </div>
+                    ) : slide.layout === "products" && slide.productCards ? (
+                      // Product cards grid layout
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {slide.productCards.map((product, productIndex) => (
+                          <div
+                            key={productIndex}
+                            className="rounded-lg p-4 flex flex-col"
+                            style={{
+                              background:
+                                "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
+                              border: `1px solid ${product.color || "#f97316"}30`,
+                            }}
+                          >
+                            {/* Badges */}
+                            {product.badges && product.badges.length > 0 && (
+                              <div className="flex gap-2 mb-3">
+                                {product.badges.map((badge, badgeIndex) => (
+                                  <span
+                                    key={badgeIndex}
+                                    className="text-xs px-2 py-0.5 rounded font-medium"
+                                    style={{
+                                      backgroundColor:
+                                        badgeIndex === 0
+                                          ? "#22c55e"
+                                          : "#f97316",
+                                      color: "#fff",
+                                    }}
+                                  >
+                                    {badge}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            {/* Name */}
+                            <h4 className="text-lg font-bold text-white mb-1">
+                              {product.name}
+                            </h4>
+                            {/* Tagline */}
+                            <p
+                              className="text-sm font-medium mb-2"
+                              style={{ color: product.color || "#f97316" }}
+                            >
+                              {product.tagline}
+                            </p>
+                            {/* Description */}
+                            <p className="text-xs text-gray-400 mb-3 flex-grow">
+                              {product.description}
+                            </p>
+                            {/* Specs */}
+                            {product.specs && product.specs.length > 0 && (
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 mb-3 text-xs">
+                                {product.specs.map((spec, specIndex) => (
+                                  <div key={specIndex}>
+                                    <span className="text-gray-500 uppercase">
+                                      {spec.label}
+                                    </span>
+                                    <div className="text-white font-medium">
+                                      {spec.value}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            {/* Price */}
+                            <div className="mt-auto">
+                              <p className="text-2xl font-bold text-white">
+                                {product.price}
+                              </p>
+                              {product.delivery && (
+                                <p className="text-xs text-gray-400">
+                                  {product.delivery}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       // Default layout with key points

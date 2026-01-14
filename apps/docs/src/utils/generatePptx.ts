@@ -4,6 +4,7 @@ import type {
   ColorTheme,
   ColorPalette,
   TeamMember,
+  ProductCard,
 } from "../components/Downloads/SlideDeckDownload";
 
 /** Branded text for slide decks - Phoenix Rooivalk */
@@ -1026,6 +1027,153 @@ export async function generatePptx(
           `[PLAY VIDEO: ${sanitizeTextContent(sanitizedVideoPath)}]`,
         );
       }
+    } else if (layout === "products" && slide.productCards) {
+      // Product cards grid layout - 3 cards side by side
+      const cards = slide.productCards;
+      const cardCount = cards.length;
+      const cardWidth = 3.0;
+      const cardHeight = 4.2;
+      const cardGap = 0.2;
+      const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
+      const startX = (10 - totalWidth) / 2;
+      const startY = 1.8;
+
+      cards.forEach((product, cardIndex) => {
+        const x = startX + cardIndex * (cardWidth + cardGap);
+        const y = startY;
+        const productColor = product.color?.replace("#", "") || "F97316";
+
+        // Card background
+        contentSlide.addShape("rect" as any, {
+          x,
+          y,
+          w: cardWidth,
+          h: cardHeight,
+          fill: { color: colors.darker },
+          line: { color: productColor, width: 1.5 },
+        });
+
+        // Badges
+        let badgeY = y + 0.15;
+        if (product.badges && product.badges.length > 0) {
+          let badgeX = x + 0.15;
+          product.badges.forEach((badge, badgeIndex) => {
+            const badgeColor = badgeIndex === 0 ? "22C55E" : "F97316";
+            contentSlide.addShape("rect" as any, {
+              x: badgeX,
+              y: badgeY,
+              w: badge.length * 0.08 + 0.2,
+              h: 0.22,
+              fill: { color: badgeColor },
+            });
+            contentSlide.addText(badge, {
+              x: badgeX,
+              y: badgeY,
+              w: badge.length * 0.08 + 0.2,
+              h: 0.22,
+              fontSize: 7,
+              bold: true,
+              color: "FFFFFF",
+              align: "center",
+              valign: "middle",
+            });
+            badgeX += badge.length * 0.08 + 0.3;
+          });
+          badgeY += 0.35;
+        } else {
+          badgeY += 0.1;
+        }
+
+        // Product name
+        contentSlide.addText(product.name, {
+          x: x + 0.15,
+          y: badgeY,
+          w: cardWidth - 0.3,
+          h: 0.35,
+          fontSize: 14,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Tagline
+        contentSlide.addText(product.tagline, {
+          x: x + 0.15,
+          y: badgeY + 0.35,
+          w: cardWidth - 0.3,
+          h: 0.25,
+          fontSize: 9,
+          bold: true,
+          color: productColor,
+        });
+
+        // Description
+        contentSlide.addText(product.description, {
+          x: x + 0.15,
+          y: badgeY + 0.65,
+          w: cardWidth - 0.3,
+          h: 0.7,
+          fontSize: 8,
+          color: colors.textSecondary,
+          valign: "top",
+        });
+
+        // Specs
+        if (product.specs && product.specs.length > 0) {
+          let specY = badgeY + 1.4;
+          const specsPerRow = 2;
+          const specColWidth = (cardWidth - 0.3) / specsPerRow;
+
+          product.specs.forEach((spec, specIndex) => {
+            const specCol = specIndex % specsPerRow;
+            const specRow = Math.floor(specIndex / specsPerRow);
+            const specX = x + 0.15 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.4;
+
+            // Label
+            contentSlide.addText(spec.label.toUpperCase(), {
+              x: specX,
+              y: specYPos,
+              w: specColWidth,
+              h: 0.15,
+              fontSize: 6,
+              color: colors.textMuted,
+            });
+            // Value
+            contentSlide.addText(spec.value, {
+              x: specX,
+              y: specYPos + 0.12,
+              w: specColWidth,
+              h: 0.2,
+              fontSize: 8,
+              bold: true,
+              color: colors.text,
+            });
+          });
+        }
+
+        // Price (at bottom of card)
+        contentSlide.addText(product.price, {
+          x: x + 0.15,
+          y: y + cardHeight - 0.8,
+          w: cardWidth - 0.3,
+          h: 0.4,
+          fontSize: 18,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Delivery
+        if (product.delivery) {
+          contentSlide.addText(product.delivery, {
+            x: x + 0.15,
+            y: y + cardHeight - 0.45,
+            w: cardWidth - 0.3,
+            h: 0.25,
+            fontSize: 8,
+            color: colors.textMuted,
+          });
+        }
+      });
     } else {
       // Default layout with key points
       // Add key points header

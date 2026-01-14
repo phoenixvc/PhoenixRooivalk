@@ -661,6 +661,81 @@ export default function PresentationMode({
                   ))}
                 </ul>
               </div>
+            ) : slide.layout === "products" && slide.productCards ? (
+              // Product cards grid layout
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {slide.productCards.map((product, productIndex) => (
+                  <div
+                    key={productIndex}
+                    className="rounded-lg p-4 flex flex-col"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
+                      border: `1px solid ${product.color || "#f97316"}50`,
+                    }}
+                  >
+                    {/* Badges */}
+                    {product.badges && product.badges.length > 0 && (
+                      <div className="flex gap-2 mb-3">
+                        {product.badges.map((badge, badgeIndex) => (
+                          <span
+                            key={badgeIndex}
+                            className="text-xs px-2 py-0.5 rounded font-medium"
+                            style={{
+                              backgroundColor:
+                                badgeIndex === 0 ? "#22c55e" : "#f97316",
+                              color: "#fff",
+                            }}
+                          >
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Name */}
+                    <h4 className="text-xl font-bold text-white mb-1">
+                      {product.name}
+                    </h4>
+                    {/* Tagline */}
+                    <p
+                      className="text-sm font-medium mb-2"
+                      style={{ color: product.color || "#f97316" }}
+                    >
+                      {product.tagline}
+                    </p>
+                    {/* Description */}
+                    <p className="text-sm text-gray-400 mb-4 flex-grow">
+                      {product.description}
+                    </p>
+                    {/* Specs */}
+                    {product.specs && product.specs.length > 0 && (
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-sm">
+                        {product.specs.map((spec, specIndex) => (
+                          <div key={specIndex}>
+                            <span className="text-gray-500 uppercase text-xs">
+                              {spec.label}
+                            </span>
+                            <div className="text-white font-medium">
+                              {spec.value}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* Price */}
+                    <div className="mt-auto">
+                      <p className="text-3xl font-bold text-white">
+                        {product.price}
+                      </p>
+                      {product.delivery && (
+                        <p className="text-sm text-gray-400">
+                          {product.delivery}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
               // Default layout
               <ul className="space-y-4">
