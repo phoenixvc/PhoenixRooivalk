@@ -747,31 +747,48 @@ export default function SlideDeckDownload({
                         </div>
                       </div>
                     ) : slide.layout === "two-column" ? (
-                      // Two-column comparison layout
-                      <div className="grid grid-cols-2 gap-8">
-                        <div>
-                          {slide.leftColumnTitle && (
-                            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                              {slide.leftColumnTitle}
-                            </h4>
-                          )}
-                          <ul className="space-y-2">
-                            {(slide.leftColumn || []).map((point, i) =>
-                              renderKeyPoint(point, i),
+                      // Two-column comparison layout with optional header
+                      <div>
+                        {/* Key points above columns (e.g., main ask) */}
+                        {slide.keyPoints.length > 0 && (
+                          <div className="text-center mb-4">
+                            {slide.keyPoints.map((point, i) => (
+                              <p
+                                key={i}
+                                className="text-xl font-bold text-orange-500 dark:text-orange-400"
+                              >
+                                {parseRichText(
+                                  typeof point === "string" ? point : point.text,
+                                )}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                        <div className="grid grid-cols-2 gap-6">
+                          <div>
+                            {slide.leftColumnTitle && (
+                              <h4 className="text-base font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                                {slide.leftColumnTitle}
+                              </h4>
                             )}
-                          </ul>
-                        </div>
-                        <div>
-                          {slide.rightColumnTitle && (
-                            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                              {slide.rightColumnTitle}
-                            </h4>
-                          )}
-                          <ul className="space-y-2">
-                            {(slide.rightColumn || []).map((point, i) =>
-                              renderKeyPoint(point, i),
+                            <ul className="space-y-1">
+                              {(slide.leftColumn || []).map((point, i) =>
+                                renderKeyPoint(point, i),
+                              )}
+                            </ul>
+                          </div>
+                          <div>
+                            {slide.rightColumnTitle && (
+                              <h4 className="text-base font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                                {slide.rightColumnTitle}
+                              </h4>
                             )}
-                          </ul>
+                            <ul className="space-y-1">
+                              {(slide.rightColumn || []).map((point, i) =>
+                                renderKeyPoint(point, i),
+                              )}
+                            </ul>
+                          </div>
                         </div>
                       </div>
                     ) : slide.layout === "quote" ? (
@@ -808,60 +825,88 @@ export default function SlideDeckDownload({
                         )}
                       </div>
                     ) : slide.layout === "team" && slide.teamMembers ? (
-                      // Team members grid layout
+                      // Team members grid layout - founders larger, advisors smaller
                       <div>
-                        <div className="flex flex-wrap justify-center gap-4 mb-6">
-                          {slide.teamMembers.map((member, memberIndex) => (
-                            <div
-                              key={memberIndex}
-                              className="text-center p-4 rounded-lg w-[calc(25%-0.75rem)] min-w-[140px] max-w-[200px]"
-                              style={{
-                                background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
-                                border: `1px solid ${member.color || "#1e40af"}30`,
-                              }}
-                            >
-                              <div
-                                className="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl"
-                                style={{
-                                  background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
-                                }}
-                              >
-                                {member.initials}
-                              </div>
-                              <h4 className="font-bold text-gray-900 dark:text-white text-sm">
-                                {member.name}
-                              </h4>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                                {member.title}
-                              </p>
-                              <ul className="text-xs text-gray-500 dark:text-gray-500 space-y-1 text-left">
-                                {member.highlights.map((highlight, hIndex) => (
-                                  <li
-                                    key={hIndex}
-                                    className="flex items-start gap-1"
+                        {(() => {
+                          const founders = slide.teamMembers.filter(
+                            (m) =>
+                              m.title.toLowerCase().includes("founder") &&
+                              !m.title.toLowerCase().includes("advisor"),
+                          );
+                          const advisors = slide.teamMembers.filter(
+                            (m) =>
+                              m.title.toLowerCase().includes("advisor") ||
+                              !m.title.toLowerCase().includes("founder"),
+                          );
+                          return (
+                            <>
+                              {/* Founders row */}
+                              <div className="flex justify-center gap-6 mb-4">
+                                {founders.map((member, memberIndex) => (
+                                  <div
+                                    key={memberIndex}
+                                    className="text-center p-4 rounded-lg w-[180px]"
+                                    style={{
+                                      background: `linear-gradient(180deg, ${member.color || "#1e40af"}20 0%, ${member.color || "#1e40af"}08 100%)`,
+                                      border: `2px solid ${member.color || "#1e40af"}50`,
+                                    }}
                                   >
-                                    <span className="text-gray-400 mt-0.5">
-                                      {"\u2022"}
-                                    </span>
-                                    <span>{highlight}</span>
-                                  </li>
+                                    <div
+                                      className="w-14 h-14 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-lg"
+                                      style={{
+                                        background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                                      }}
+                                    >
+                                      {member.initials}
+                                    </div>
+                                    <h4 className="font-bold text-gray-900 dark:text-white text-sm">
+                                      {member.name}
+                                    </h4>
+                                    <p
+                                      className="text-xs font-medium mb-1"
+                                      style={{ color: member.color || "#f97316" }}
+                                    >
+                                      {member.title}
+                                    </p>
+                                    <ul className="text-xs text-gray-500 space-y-0.5">
+                                      {member.highlights.map((highlight, hIndex) => (
+                                        <li key={hIndex}>{highlight}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
                                 ))}
-                              </ul>
-                            </div>
-                          ))}
-                        </div>
-                        {slide.keyPoints.length > 0 && (
-                          <div>
-                            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
-                              Key Points
-                            </h3>
-                            <ul className="space-y-2">
-                              {slide.keyPoints.map((point, i) =>
-                                renderKeyPoint(point, i),
-                              )}
-                            </ul>
-                          </div>
-                        )}
+                              </div>
+                              {/* Advisors row */}
+                              <div className="flex justify-center gap-3 flex-wrap">
+                                {advisors.map((member, memberIndex) => (
+                                  <div
+                                    key={memberIndex}
+                                    className="text-center p-2 rounded-lg w-[120px]"
+                                    style={{
+                                      background: `linear-gradient(180deg, ${member.color || "#1e40af"}12 0%, ${member.color || "#1e40af"}04 100%)`,
+                                      border: `1px solid ${member.color || "#1e40af"}25`,
+                                    }}
+                                  >
+                                    <div
+                                      className="w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-bold text-xs"
+                                      style={{
+                                        background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                                      }}
+                                    >
+                                      {member.initials}
+                                    </div>
+                                    <h4 className="font-bold text-gray-900 dark:text-white text-xs">
+                                      {member.name}
+                                    </h4>
+                                    <p className="text-xs text-gray-500">
+                                      {member.title}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          );
+                        })()}
                       </div>
                     ) : slide.layout === "video" || slide.video ? (
                       // Video layout - split view: video left, key points right

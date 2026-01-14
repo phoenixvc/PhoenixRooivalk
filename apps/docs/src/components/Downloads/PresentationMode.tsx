@@ -378,17 +378,30 @@ export default function PresentationMode({
         )}
 
         {/* Slide Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
+        <div className="flex-1 flex flex-col items-center justify-center p-4">
           {/* Slide Content */}
-          <div className="max-w-4xl w-full bg-gray-800 rounded-xl p-12 shadow-2xl">
+          <div
+            className={`w-full bg-gray-800 rounded-xl shadow-2xl ${
+              slide.layout === "products"
+                ? "max-w-6xl p-6"
+                : "max-w-4xl p-12"
+            }`}
+          >
             {/* Slide Header */}
-            <div className="flex items-center gap-4 mb-8">
+            <div
+              className={`flex items-center gap-4 ${slide.layout === "products" ? "mb-4" : "mb-8"}`}
+            >
               {slide.icon && (
-                <span className="text-4xl" aria-hidden="true">
+                <span
+                  className={slide.layout === "products" ? "text-3xl" : "text-4xl"}
+                  aria-hidden="true"
+                >
                   {slide.icon}
                 </span>
               )}
-              <h2 className="text-4xl font-bold">
+              <h2
+                className={`font-bold ${slide.layout === "products" ? "text-3xl" : "text-4xl"}`}
+              >
                 {parseRichText(slide.title)}
               </h2>
             </div>
@@ -477,108 +490,150 @@ export default function PresentationMode({
                 </pre>
               </div>
             ) : slide.layout === "two-column" ? (
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  {slide.leftColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.leftColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.leftColumn || []).map((point, i) => (
-                      <li
+              <div>
+                {/* Key points above columns (e.g., main ask) */}
+                {slide.keyPoints.length > 0 && (
+                  <div className="text-center mb-6">
+                    {slide.keyPoints.map((point, i) => (
+                      <p
                         key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
+                        className="text-2xl font-bold text-orange-400"
                       >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                        {parseRichText(getKeyPointText(point))}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    {slide.leftColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.leftColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.leftColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    {slide.rightColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.rightColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.rightColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
                         <span>{parseRichText(getKeyPointText(point))}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div>
-                  {slide.rightColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.rightColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.rightColumn || []).map((point, i) => (
-                      <li
-                        key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             ) : slide.layout === "team" && slide.teamMembers ? (
               <div>
-                <div className="flex flex-wrap justify-center gap-4 mb-6">
-                  {slide.teamMembers.map((member, memberIndex) => (
-                    <div
-                      key={memberIndex}
-                      className="text-center p-4 rounded-lg w-[calc(25%-0.75rem)] min-w-[140px] max-w-[180px]"
-                      style={{
-                        background: `linear-gradient(180deg, ${member.color || "#1e40af"}20 0%, ${member.color || "#1e40af"}10 100%)`,
-                        border: `1px solid ${member.color || "#1e40af"}40`,
-                      }}
-                    >
-                      <div
-                        className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg"
-                        style={{
-                          background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
-                        }}
-                      >
-                        {member.initials}
-                      </div>
-                      <h4 className="font-bold text-white text-sm">
-                        {member.name}
-                      </h4>
-                      <p className="text-xs text-gray-400 mb-2">
-                        {member.title}
-                      </p>
-                      <ul className="text-xs text-gray-500 space-y-1 text-left">
-                        {member.highlights.map((highlight, hIndex) => (
-                          <li key={hIndex} className="flex items-start gap-1">
-                            <span className="text-gray-500 mt-0.5">
-                              {"\u2022"}
-                            </span>
-                            <span>{highlight}</span>
-                          </li>
+                {/* Founders - larger cards */}
+                {(() => {
+                  const founders = slide.teamMembers.filter(
+                    (m) =>
+                      m.title.toLowerCase().includes("founder") &&
+                      !m.title.toLowerCase().includes("advisor"),
+                  );
+                  const advisors = slide.teamMembers.filter(
+                    (m) =>
+                      m.title.toLowerCase().includes("advisor") ||
+                      !m.title.toLowerCase().includes("founder"),
+                  );
+                  return (
+                    <>
+                      {/* Founders row */}
+                      <div className="flex justify-center gap-6 mb-4">
+                        {founders.map((member, memberIndex) => (
+                          <div
+                            key={memberIndex}
+                            className="text-center p-4 rounded-lg w-[200px]"
+                            style={{
+                              background: `linear-gradient(180deg, ${member.color || "#1e40af"}25 0%, ${member.color || "#1e40af"}10 100%)`,
+                              border: `2px solid ${member.color || "#1e40af"}60`,
+                            }}
+                          >
+                            <div
+                              className="w-16 h-16 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-xl"
+                              style={{
+                                background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                              }}
+                            >
+                              {member.initials}
+                            </div>
+                            <h4 className="font-bold text-white text-base">
+                              {member.name}
+                            </h4>
+                            <p
+                              className="text-sm font-medium mb-1"
+                              style={{ color: member.color || "#f97316" }}
+                            >
+                              {member.title}
+                            </p>
+                            <ul className="text-xs text-gray-400 space-y-0.5">
+                              {member.highlights.map((highlight, hIndex) => (
+                                <li key={hIndex}>{highlight}</li>
+                              ))}
+                            </ul>
+                          </div>
                         ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-                {slide.keyPoints.length > 0 && (
-                  <ul className="space-y-3 mt-4">
-                    {slide.keyPoints.map((point, i) => (
-                      <li
-                        key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                      </div>
+                      {/* Advisors row */}
+                      <div className="flex justify-center gap-3">
+                        {advisors.map((member, memberIndex) => (
+                          <div
+                            key={memberIndex}
+                            className="text-center p-2 rounded-lg w-[140px]"
+                            style={{
+                              background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
+                              border: `1px solid ${member.color || "#1e40af"}30`,
+                            }}
+                          >
+                            <div
+                              className="w-10 h-10 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-bold text-sm"
+                              style={{
+                                background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                              }}
+                            >
+                              {member.initials}
+                            </div>
+                            <h4 className="font-bold text-white text-xs">
+                              {member.name}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              {member.title}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             ) : slide.layout === "video" || slide.video ? (
               // Video layout - split view: video left, key points right
@@ -663,7 +718,7 @@ export default function PresentationMode({
               </div>
             ) : slide.layout === "products" && slide.productCards ? (
               // Product cards grid layout
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 {slide.productCards.map((product, productIndex) => (
                   <div
                     key={productIndex}
@@ -676,7 +731,7 @@ export default function PresentationMode({
                   >
                     {/* Badges */}
                     {product.badges && product.badges.length > 0 && (
-                      <div className="flex gap-2 mb-3">
+                      <div className="flex gap-2 mb-2">
                         {product.badges.map((badge, badgeIndex) => (
                           <span
                             key={badgeIndex}
@@ -693,23 +748,23 @@ export default function PresentationMode({
                       </div>
                     )}
                     {/* Name */}
-                    <h4 className="text-xl font-bold text-white mb-1">
+                    <h4 className="text-lg font-bold text-white mb-0.5">
                       {product.name}
                     </h4>
                     {/* Tagline */}
                     <p
-                      className="text-sm font-medium mb-2"
+                      className="text-sm font-medium mb-1"
                       style={{ color: product.color || "#f97316" }}
                     >
                       {product.tagline}
                     </p>
                     {/* Description */}
-                    <p className="text-sm text-gray-400 mb-4 flex-grow">
+                    <p className="text-xs text-gray-400 mb-3 flex-grow">
                       {product.description}
                     </p>
                     {/* Specs */}
                     {product.specs && product.specs.length > 0 && (
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-sm">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 mb-3 text-xs">
                         {product.specs.map((spec, specIndex) => (
                           <div key={specIndex}>
                             <span className="text-gray-500 uppercase text-xs">
@@ -724,11 +779,11 @@ export default function PresentationMode({
                     )}
                     {/* Price */}
                     <div className="mt-auto">
-                      <p className="text-3xl font-bold text-white">
+                      <p className="text-2xl font-bold text-white">
                         {product.price}
                       </p>
                       {product.delivery && (
-                        <p className="text-sm text-gray-400">
+                        <p className="text-xs text-gray-400">
                           {product.delivery}
                         </p>
                       )}

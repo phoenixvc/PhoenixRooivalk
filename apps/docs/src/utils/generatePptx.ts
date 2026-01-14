@@ -8,7 +8,10 @@ import type {
 } from "../components/Downloads/SlideDeckDownload";
 
 /** Branded text for slide decks - Phoenix Rooivalk */
-const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials
+const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
+const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
+const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
+const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
 /**
  * Sanitize video path to prevent path traversal attacks
@@ -240,36 +243,58 @@ export async function generatePptx(
   const titleSlide = pptx.addSlide();
   titleSlide.background = { color: colors.dark };
 
-  // Large Brand Icon on title slide
-  titleSlide.addText(SLIDE_DECK_BRAND_TEXT, {
+  // Brand name at top
+  titleSlide.addText(SLIDE_DECK_BRAND_NAME, {
     x: 0.5,
-    y: 1.0,
+    y: 0.6,
     w: 9.0,
-    h: 0.8,
-    fontSize: 48,
-    color: colors.textMuted,
-    align: "center",
-  });
-
-  // Title
-  titleSlide.addText(metadata.title, {
-    x: 0.5,
-    y: 2.0,
-    w: 9.0,
-    h: 1.5,
-    fontSize: 44,
+    h: 0.7,
+    fontSize: 40,
     bold: true,
     color: colors.text,
     align: "center",
   });
 
-  // Subtitle
-  titleSlide.addText(`${metadata.duration}-Minute Presentation`, {
+  // Tagline
+  titleSlide.addText(SLIDE_DECK_TAGLINE, {
     x: 0.5,
-    y: 3.7,
+    y: 1.3,
+    w: 9.0,
+    h: 0.6,
+    fontSize: 14,
+    color: colors.textMuted,
+    align: "center",
+  });
+
+  // Logo placeholder (orange rectangle with phoenix shape suggestion)
+  titleSlide.addShape("rect" as PptxShape, {
+    x: 3.75,
+    y: 2.0,
+    w: 2.5,
+    h: 1.2,
+    fill: { color: colors.dark },
+    line: { color: colors.primary, width: 2 },
+  });
+
+  // Phoenix icon text (🦅 as placeholder)
+  titleSlide.addText("🦅", {
+    x: 3.75,
+    y: 2.1,
+    w: 2.5,
+    h: 1.0,
+    fontSize: 48,
+    color: colors.primary,
+    align: "center",
+  });
+
+  // Presentation subtitle
+  titleSlide.addText("DEFENCE DRONE - Pitch Presentation", {
+    x: 0.5,
+    y: 3.4,
     w: 9.0,
     h: 0.5,
     fontSize: 24,
+    bold: true,
     color: colors.textSecondary,
     align: "center",
   });
@@ -278,10 +303,10 @@ export async function generatePptx(
   if (metadata.audience) {
     titleSlide.addText(metadata.audience, {
       x: 0.5,
-      y: 4.3,
+      y: 4.1,
       w: 9.0,
       h: 0.4,
-      fontSize: 18,
+      fontSize: 16,
       color: colors.textMuted,
       align: "center",
     });
@@ -291,14 +316,25 @@ export async function generatePptx(
   if (metadata.date) {
     titleSlide.addText(metadata.date, {
       x: 0.5,
-      y: 5.0,
+      y: 4.6,
       w: 9.0,
       h: 0.3,
-      fontSize: 14,
+      fontSize: 12,
       color: colors.textMuted,
       align: "center",
     });
   }
+
+  // Website URL at bottom
+  titleSlide.addText(SLIDE_DECK_URL, {
+    x: 0.5,
+    y: 5.0,
+    w: 9.0,
+    h: 0.3,
+    fontSize: 11,
+    color: colors.textMuted,
+    align: "center",
+  });
 
   // ==========================================
   // TABLE OF CONTENTS / AGENDA SLIDE
