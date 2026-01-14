@@ -370,7 +370,7 @@ export const INTERNAL_USER_PROFILES: Record<string, UserProfile> = {
         reason: "Industry contacts and networking",
       },
       {
-        docId: "/docs/executive/presentation-materials",
+        docId: "/docs/executive/phoenix-rooivalk-pitch-deck",
         title: "Presentation Materials",
         priority: 4,
         reason: "Additional presentation resources",
