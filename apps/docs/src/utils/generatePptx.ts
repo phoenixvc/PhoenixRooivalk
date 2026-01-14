@@ -12,8 +12,6 @@ const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
 const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
-// Logo embedded as base64 data URL to avoid CORS issues on preview/staging environments
-const SLIDE_DECK_LOGO_URL = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGhvZW5peC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmOTczMTY7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZiOTIzYztzdG9wLW9wYWNpdHk6MSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIAogIDwhLS0gQmFja2dyb3VuZCBjaXJjbGUgLS0+CiAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9InVybCgjcGhvZW5peC1ncmFkaWVudCkiIHN0cm9rZT0iIzBmMTcyYSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgCiAgPCEtLSBQaG9lbml4IGJpcmQgc2lsaG91ZXR0ZSAtLT4KICA8cGF0aCBkPSJNMjAgOCBMMjQgMTYgTDI4IDEyIEwyNiAyMCBMMzIgMTggTDI4IDI0IEwzMCAyOCBMMjQgMjYgTDIwIDMyIEwxNiAyNiBMMTAgMjggTDEyIDI0IEw4IDE4IEwxNCAyMCBMMTIgMTIgTDE2IDE2IEwyMCA4IFoiIAogICAgICAgIGZpbGw9IiMwZjE3MmEiIAogICAgICAgIHN0cm9rZT0iI2Y5NzMxNiIgCiAgICAgICAgc3Ryb2tlLXdpZHRoPSIxLjUiIAogICAgICAgIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICAKICA8IS0tIERlZmVuc2Ugc2hpZWxkIG92ZXJsYXkgLS0+CiAgPHBhdGggZD0iTTIwIDYgTDI2IDEwIEwyNCAxNiBMMjAgMjAgTDE2IDE2IEwxNCAxMCBMMjAgNiBaIiAKICAgICAgICBmaWxsPSJub25lIiAKICAgICAgICBzdHJva2U9IiNmOTczMTYiIAogICAgICAgIHN0cm9rZS13aWR0aD0iMiIgCiAgICAgICAgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIAogIDwhLS0gQ2VudHJhbCBkb3QgLS0+CiAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMyIgZmlsbD0iIzBmMTcyYSIvPgo8L3N2Zz4K";
 
 /**
  * Sanitize video path to prevent path traversal attacks
@@ -268,37 +266,27 @@ export async function generatePptx(
     align: "center",
   });
 
-  // Logo image with white background box
-  titleSlide.addShape("rect" as PptxShape, {
-    x: 3.9,
-    y: 1.95,
-    w: 2.2,
-    h: 1.3,
-    fill: { color: "FFFFFF" },
-    line: { color: "FFFFFF", width: 0 },
+  // Logo - phoenix icon (emoji doesn't work in pptx, so use styled text)
+  titleSlide.addShape("ellipse" as PptxShape, {
+    x: 4.25,
+    y: 2.0,
+    w: 1.5,
+    h: 1.5,
+    fill: { color: colors.primary },
+    line: { color: colors.darker, width: 2 },
   });
 
-  // Try to add logo image from URL
-  try {
-    titleSlide.addImage({
-      path: SLIDE_DECK_LOGO_URL,
-      x: 4.1,
-      y: 2.05,
-      w: 1.8,
-      h: 1.1,
-    });
-  } catch {
-    // Fallback: Phoenix icon text if image fails
-    titleSlide.addText("🦅", {
-      x: 3.9,
-      y: 2.0,
-      w: 2.2,
-      h: 1.2,
-      fontSize: 48,
-      color: colors.primary,
-      align: "center",
-    });
-  }
+  // "PR" text inside the logo circle
+  titleSlide.addText("PR", {
+    x: 4.25,
+    y: 2.3,
+    w: 1.5,
+    h: 0.9,
+    fontSize: 32,
+    bold: true,
+    color: colors.darker,
+    align: "center",
+  });
 
   // Presentation subtitle
   titleSlide.addText("DEFENCE DRONE - Pitch Presentation", {
