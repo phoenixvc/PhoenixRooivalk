@@ -149,14 +149,14 @@ export const lightningPitchSlides: Slide[] = [
         initials: "PL",
         name: "Pieter La Grange",
         title: "Co-Founder",
-        highlights: ["Drones since 2000s", "World record team"],
+        highlights: ["Drones since 2000s", "🚀 World record team"],
         color: "#ea580c",
       },
       {
         initials: "MR",
         name: "Martyn Redelinghuys",
         title: "Supplier/Advisor",
-        highlights: ["Electrical Eng", "Plastics mfg"],
+        highlights: ["Electrical Eng", "🚀 Plastics mfg"],
         color: "#fb923c",
       },
       {
