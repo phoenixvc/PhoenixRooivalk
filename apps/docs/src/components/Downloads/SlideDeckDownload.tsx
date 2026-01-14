@@ -470,14 +470,15 @@ export default function SlideDeckDownload({
 
       {isPreviewOpen && (
         <div
-          className="fixed inset-0 z-50 overflow-auto bg-black/50 flex items-start justify-center p-4"
+          id="slidedeck-print-modal"
+          className="slidedeck-modal fixed inset-0 z-50 overflow-auto bg-black/50 flex items-start justify-center p-4"
           onClick={handleClose}
           role="dialog"
           aria-modal="true"
           aria-labelledby="slidedeck-title"
         >
           <div
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8"
+            className="slidedeck-modal-content bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full my-8"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

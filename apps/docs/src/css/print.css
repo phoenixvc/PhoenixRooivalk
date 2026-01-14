@@ -312,42 +312,65 @@
     break-after: auto !important;
   }
 
-  /* Slide deck print mode - hide EVERYTHING except the slide content */
-  body.printing-slidedeck > *:not([class*="fixed"]) {
+  /* =====================================================
+     SLIDE DECK PRINT MODE
+     When body has .printing-slidedeck, hide everything
+     except the slide deck modal content
+     ===================================================== */
+
+  /* Hide the entire page content */
+  body.printing-slidedeck #__docusaurus,
+  body.printing-slidedeck .navbar,
+  body.printing-slidedeck .footer,
+  body.printing-slidedeck .main-wrapper,
+  body.printing-slidedeck [class*="docPage"],
+  body.printing-slidedeck [class*="docMainContainer"],
+  body.printing-slidedeck [class*="docItemContainer"] {
     display: none !important;
   }
 
-  body.printing-slidedeck .fixed {
+  /* But show the modal */
+  body.printing-slidedeck .slidedeck-modal {
+    display: block !important;
     position: static !important;
-    background: transparent !important;
+    background: white !important;
     overflow: visible !important;
     padding: 0 !important;
     inset: auto !important;
   }
 
-  /* Hide the modal backdrop overlay */
-  body.printing-slidedeck .fixed > .bg-black\/50,
-  body.printing-slidedeck .fixed > [class*="bg-black"] {
-    background: transparent !important;
-  }
-
-  /* Make the modal content fill the page */
-  body.printing-slidedeck .fixed > div {
+  /* Make modal content fill the page */
+  body.printing-slidedeck .slidedeck-modal-content {
     margin: 0 !important;
     max-width: none !important;
     width: 100% !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    background: white !important;
   }
 
   body.printing-slidedeck .slidedeck-print-content {
     box-shadow: none !important;
     padding: 0.5in !important;
+    background: white !important;
+    color: black !important;
   }
 
-  /* Hide the modal header (Print button, close button) when printing */
-  body.printing-slidedeck .print\\:hidden {
+  /* Hide modal header when printing */
+  body.printing-slidedeck .print\\:hidden,
+  body.printing-slidedeck [class*="print:hidden"] {
     display: none !important;
+  }
+
+  /* Force light mode colors for print */
+  body.printing-slidedeck .slidedeck-print-content * {
+    color: #1a1a1a !important;
+  }
+
+  body.printing-slidedeck .slidedeck-print-content h1,
+  body.printing-slidedeck .slidedeck-print-content h2,
+  body.printing-slidedeck .slidedeck-print-content h3 {
+    color: #000 !important;
   }
 
   /* Dark mode reset for print */
