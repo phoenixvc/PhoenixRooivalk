@@ -13,6 +13,17 @@ const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
 const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
+/**
+ * Convert relative image path to full URL for PPTX embedding
+ */
+function resolveImageUrl(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith("http")) return path;
+  // Remove leading slash and append to base URL
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+  return `${SLIDE_DECK_URL}${cleanPath}`;
+}
+
 // SVG logo as string for conversion to PNG
 const LOGO_SVG = `<svg width="128" height="128" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -582,9 +593,10 @@ export async function generatePptx(
       }
     } else if (layout === "image" && slide.image) {
       // Image-focused layout
+      const slideImageUrl = resolveImageUrl(slide.image);
       try {
         contentSlide.addImage({
-          path: slide.image,
+          path: slideImageUrl,
           x: 2.0,
           y: 1.9,
           w: 6.0,
@@ -641,6 +653,7 @@ export async function generatePptx(
       }
     } else if (layout === "image-right" && slide.image) {
       // Split layout: key points left, image right
+      const imageRightUrl = resolveImageUrl(slide.image);
       // Key points on the left (55% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
@@ -668,7 +681,7 @@ export async function generatePptx(
       // Image on the right (45% width)
       try {
         contentSlide.addImage({
-          path: slide.image,
+          path: imageRightUrl,
           x: 5.7,
           y: 1.9,
           w: 3.8,
@@ -911,10 +924,11 @@ export async function generatePptx(
         });
 
         // Avatar - use image if available, otherwise circle with initials
-        if (member.image) {
+        const founderImageUrl = resolveImageUrl(member.image);
+        if (founderImageUrl) {
           try {
             contentSlide.addImage({
-              path: member.image,
+              path: founderImageUrl,
               x: x + founderCardW / 2 - 0.35,
               y: founderY + 0.12,
               w: 0.7,
@@ -1026,10 +1040,11 @@ export async function generatePptx(
         });
 
         // Avatar - use image if available, otherwise circle with initials
-        if (member.image) {
+        const advisorImageUrl = resolveImageUrl(member.image);
+        if (advisorImageUrl) {
           try {
             contentSlide.addImage({
-              path: member.image,
+              path: advisorImageUrl,
               x: x + advisorCardW / 2 - 0.22,
               y: advisorY + 0.08,
               w: 0.44,
