@@ -271,12 +271,12 @@ export const lightningPitchSlides: Slide[] = [
         tagline: "See Threats Coming",
         description:
           "AI camera that spots drones and alerts your phone. Easy backyard setup.",
-        price: "$50-100",
+        price: "$99",
         delivery: "Delivery Jul 2026",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
-          { label: "Range", value: "50-100m" },
+          { label: "Range", value: "30-50m" },
           { label: "Alerts", value: "App + Audio" },
         ],
       },
@@ -298,7 +298,7 @@ export const lightningPitchSlides: Slide[] = [
     speakerNotes:
       "Show the 3 entry-level products. SkySnare handheld, SkyWatch Nano camera, NetSnare auto-launcher. Emphasize simplicity and price points.",
     script:
-      "Three products to protect your home. SkySnare - point and shoot, $349. SkyWatch Nano - AI camera alerts your phone, starts at $50. NetSnare Lite - automated ground launcher, $200. All shipping July 2026. Preorders open now. Questions?",
+      "Three products to protect your home. SkySnare - point and shoot, $349. SkyWatch Nano - AI detection camera, $99. NetSnare Lite - automated ground launcher, from $200. All shipping July 2026. Preorders open now. Questions?",
   },
 ];
 
