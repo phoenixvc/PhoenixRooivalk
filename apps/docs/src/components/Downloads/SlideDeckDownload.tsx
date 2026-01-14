@@ -828,15 +828,13 @@ export default function SlideDeckDownload({
                       // Team members grid layout - founders larger, advisors smaller
                       <div>
                         {(() => {
-                          const founders = slide.teamMembers.filter(
-                            (m) =>
-                              m.title.toLowerCase().includes("founder") &&
-                              !m.title.toLowerCase().includes("advisor"),
+                          // Founders: has "founder" in title
+                          const founders = slide.teamMembers.filter((m) =>
+                            m.title.toLowerCase().includes("founder"),
                           );
+                          // Advisors: everyone else
                           const advisors = slide.teamMembers.filter(
-                            (m) =>
-                              m.title.toLowerCase().includes("advisor") ||
-                              !m.title.toLowerCase().includes("founder"),
+                            (m) => !m.title.toLowerCase().includes("founder"),
                           );
                           return (
                             <>

@@ -553,26 +553,24 @@ export default function PresentationMode({
               </div>
             ) : slide.layout === "team" && slide.teamMembers ? (
               <div>
-                {/* Founders - larger cards */}
+                {/* Founders (larger) and Advisors (smaller) */}
                 {(() => {
-                  const founders = slide.teamMembers.filter(
-                    (m) =>
-                      m.title.toLowerCase().includes("founder") &&
-                      !m.title.toLowerCase().includes("advisor"),
+                  // Founders: has "founder" in title (Founder, Co-Founder)
+                  const founders = slide.teamMembers.filter((m) =>
+                    m.title.toLowerCase().includes("founder"),
                   );
+                  // Advisors: everyone else (Advisor, Supplier/Advisor, etc.)
                   const advisors = slide.teamMembers.filter(
-                    (m) =>
-                      m.title.toLowerCase().includes("advisor") ||
-                      !m.title.toLowerCase().includes("founder"),
+                    (m) => !m.title.toLowerCase().includes("founder"),
                   );
                   return (
                     <>
-                      {/* Founders row */}
+                      {/* Founders row - larger cards */}
                       <div className="flex justify-center gap-6 mb-4">
                         {founders.map((member, memberIndex) => (
                           <div
                             key={memberIndex}
-                            className="text-center p-4 rounded-lg w-[200px]"
+                            className="text-center p-4 rounded-lg w-[220px]"
                             style={{
                               background: `linear-gradient(180deg, ${member.color || "#1e40af"}25 0%, ${member.color || "#1e40af"}10 100%)`,
                               border: `2px solid ${member.color || "#1e40af"}60`,
@@ -699,30 +697,56 @@ export default function PresentationMode({
                     </p>
                   )}
                 </div>
-                {/* Key points on the right */}
-                <ul className="space-y-3">
-                  {slide.keyPoints.map((point, i) => (
-                    <li
-                      key={i}
-                      className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                        animationMode && i >= revealedBullets
-                          ? "opacity-0"
-                          : "opacity-100"
-                      }`}
-                    >
-                      <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                      <span>{parseRichText(getKeyPointText(point))}</span>
-                    </li>
-                  ))}
+                {/* Key points on the right - with sub-bullets support */}
+                <ul className="space-y-2">
+                  {slide.keyPoints.map((point, i) => {
+                    const hasSubPoints =
+                      typeof point === "object" &&
+                      point.subPoints &&
+                      point.subPoints.length > 0;
+                    return (
+                      <li
+                        key={i}
+                        className={`transition-opacity duration-300 ${
+                          animationMode && i >= revealedBullets
+                            ? "opacity-0"
+                            : "opacity-100"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3 text-base">
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </div>
+                        {/* Sub-bullets */}
+                        {hasSubPoints && (
+                          <ul className="ml-6 mt-1 space-y-1">
+                            {(point as { subPoints: string[] }).subPoints.map(
+                              (subPoint, j) => (
+                                <li
+                                  key={j}
+                                  className="flex items-start gap-2 text-sm text-gray-300"
+                                >
+                                  <span className="text-gray-500 mt-0.5">
+                                    {"◦"}
+                                  </span>
+                                  <span>{parseRichText(subPoint)}</span>
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ) : slide.layout === "products" && slide.productCards ? (
-              // Product cards grid layout
-              <div className="grid grid-cols-3 gap-4">
+              // Product cards grid layout - compact to fit
+              <div className="grid grid-cols-3 gap-3">
                 {slide.productCards.map((product, productIndex) => (
                   <div
                     key={productIndex}
-                    className="rounded-lg p-4 flex flex-col"
+                    className="rounded-lg p-3 flex flex-col"
                     style={{
                       background:
                         "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
@@ -731,11 +755,11 @@ export default function PresentationMode({
                   >
                     {/* Badges */}
                     {product.badges && product.badges.length > 0 && (
-                      <div className="flex gap-2 mb-2">
+                      <div className="flex gap-1.5 mb-1.5">
                         {product.badges.map((badge, badgeIndex) => (
                           <span
                             key={badgeIndex}
-                            className="text-xs px-2 py-0.5 rounded font-medium"
+                            className="text-[10px] px-1.5 py-0.5 rounded font-medium"
                             style={{
                               backgroundColor:
                                 badgeIndex === 0 ? "#22c55e" : "#f97316",
@@ -748,29 +772,29 @@ export default function PresentationMode({
                       </div>
                     )}
                     {/* Name */}
-                    <h4 className="text-lg font-bold text-white mb-0.5">
+                    <h4 className="text-base font-bold text-white mb-0.5">
                       {product.name}
                     </h4>
                     {/* Tagline */}
                     <p
-                      className="text-sm font-medium mb-1"
+                      className="text-xs font-medium mb-0.5"
                       style={{ color: product.color || "#f97316" }}
                     >
                       {product.tagline}
                     </p>
                     {/* Description */}
-                    <p className="text-xs text-gray-400 mb-3 flex-grow">
+                    <p className="text-[11px] text-gray-400 mb-2 flex-grow leading-tight">
                       {product.description}
                     </p>
                     {/* Specs */}
                     {product.specs && product.specs.length > 0 && (
-                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 mb-3 text-xs">
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 mb-2 text-[10px]">
                         {product.specs.map((spec, specIndex) => (
                           <div key={specIndex}>
-                            <span className="text-gray-500 uppercase text-xs">
+                            <span className="text-gray-500 uppercase">
                               {spec.label}
                             </span>
-                            <div className="text-white font-medium">
+                            <div className="text-white font-medium text-xs">
                               {spec.value}
                             </div>
                           </div>
@@ -778,12 +802,12 @@ export default function PresentationMode({
                       </div>
                     )}
                     {/* Price */}
-                    <div className="mt-auto">
-                      <p className="text-2xl font-bold text-white">
+                    <div className="mt-auto pt-1 border-t border-gray-700/50">
+                      <p className="text-xl font-bold text-white">
                         {product.price}
                       </p>
                       {product.delivery && (
-                        <p className="text-xs text-gray-400">
+                        <p className="text-[10px] text-gray-400">
                           {product.delivery}
                         </p>
                       )}
