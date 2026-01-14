@@ -1161,9 +1161,9 @@ export async function generatePptx(
 
   summarySlide.addText("Summary", {
     x: 0.5,
-    y: 1.5,
+    y: 0.8,
     w: 9.0,
-    h: 1.0,
+    h: 0.8,
     fontSize: 36,
     bold: true,
     color: colors.text,
@@ -1179,23 +1179,24 @@ export async function generatePptx(
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 2.8,
+    y: 1.6,
     w: 9.0,
-    h: 2.0,
+    h: 1.8,
     fontSize: 20,
     color: colors.textSecondary,
     align: "center",
   });
 
   // Add QR code if contact URL is provided
+  // Note: 16:9 slides are 10" x 5.625", so we need to fit within that height
   if (metadata.contactUrl || metadata.contactEmail) {
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
     const qrUrl = getQrCodeUrl(qrData, 120);
 
-    // QR code placeholder text (actual QR code would need to be fetched)
+    // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 5.0,
+      y: 3.6,
       w: 3.0,
       h: 0.3,
       fontSize: 12,
@@ -1203,20 +1204,20 @@ export async function generatePptx(
       align: "center",
     });
 
-    // Add QR code image
+    // Add QR code image (positioned to fit within 16:9 slide)
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.0,
-        y: 5.4,
-        w: 1.5,
-        h: 1.5,
+        x: 4.25,
+        y: 3.9,
+        w: 1.2,
+        h: 1.2,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 5.5,
+        y: 4.0,
         w: 5.0,
         h: 0.3,
         fontSize: 12,
@@ -1229,7 +1230,7 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 7.0,
+        y: 5.2,
         w: 9.0,
         h: 0.25,
         fontSize: 11,
