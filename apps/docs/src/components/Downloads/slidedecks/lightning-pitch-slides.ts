@@ -57,9 +57,8 @@ export const lightningPitchSlides: Slide[] = [
     videoCaption: "SkySnare prototype - CO2 pneumatic net launcher",
     keyPoints: [
       "**Phoenix Rooivalk**",
-      "Pneumatic net launchers that **capture drones intact**",
-      "",
-      "**Safe** - CO2/pneumatic, no permits needed",
+      "CO₂ net launchers that **capture drones intact**",
+      "**Safe** - No permits needed",
       "**Legal** - Non-destructive, civilian-safe",
       "**Affordable** - Starting at **$349**",
     ],
@@ -113,7 +112,7 @@ export const lightningPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 4,
-    title: "60+ Years Combined Experience",
+    title: "The Team",
     duration: 15,
     icon: "👥",
     layout: "team" as const,
