@@ -15,13 +15,15 @@ const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
 /**
  * Convert relative image path to full URL
+ * Uses current origin to work in both dev and production
  */
 function resolveImageUrl(path: string | undefined): string | undefined {
   if (!path) return undefined;
   if (path.startsWith("http")) return path;
-  // Remove leading slash and append to base URL
+  // Use current origin (works in dev and production)
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : SLIDE_DECK_URL;
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${SLIDE_DECK_URL}${cleanPath}`;
+  return `${baseUrl}/${cleanPath}`;
 }
 
 /**
@@ -650,11 +652,21 @@ export async function generatePptx(
         });
       }
     } else if (layout === "image" && slide.image) {
-      // Image-focused layout - use embedded base64 data
+      // Image-focused layout - try base64 first, then URL path
       const slideImageData = imageCache.get(resolveImageUrl(slide.image) || "");
+      const slideImageUrl = resolveImageUrl(slide.image);
       if (slideImageData) {
         contentSlide.addImage({
           data: slideImageData,
+          x: 2.0,
+          y: 1.9,
+          w: 6.0,
+          h: 3.0,
+        });
+      } else if (slideImageUrl) {
+        // Fallback to URL path - let pptxgenjs fetch it
+        contentSlide.addImage({
+          path: slideImageUrl,
           x: 2.0,
           y: 1.9,
           w: 6.0,
@@ -712,6 +724,7 @@ export async function generatePptx(
     } else if (layout === "image-right" && slide.image) {
       // Split layout: key points left, image right
       const imageRightData = imageCache.get(resolveImageUrl(slide.image) || "");
+      const imageRightUrl = resolveImageUrl(slide.image);
       // Key points on the left (55% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
@@ -736,10 +749,19 @@ export async function generatePptx(
         });
       }
 
-      // Image on the right (45% width) - use embedded base64 data
+      // Image on the right (45% width) - try base64 first, then URL
       if (imageRightData) {
         contentSlide.addImage({
           data: imageRightData,
+          x: 5.7,
+          y: 1.9,
+          w: 3.8,
+          h: 3.5,
+        });
+      } else if (imageRightUrl) {
+        // Fallback to URL path
+        contentSlide.addImage({
+          path: imageRightUrl,
           x: 5.7,
           y: 1.9,
           w: 3.8,
@@ -981,8 +1003,9 @@ export async function generatePptx(
           line: { color: memberColor, width: 2 },
         });
 
-        // Avatar - use embedded image if available, otherwise circle with initials
+        // Avatar - use embedded image if available, then URL, otherwise circle with initials
         const founderImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        const founderImageUrl = resolveImageUrl(member.image);
         if (founderImageData) {
           contentSlide.addImage({
             data: founderImageData,
@@ -992,25 +1015,15 @@ export async function generatePptx(
             h: 0.7,
             rounding: true,
           });
-        } else if (member.image) {
-          // Image path provided but not loaded - show initials as fallback
-          contentSlide.addShape("ellipse" as any, {
+        } else if (founderImageUrl) {
+          // Try URL path fallback
+          contentSlide.addImage({
+            path: founderImageUrl,
             x: x + founderCardW / 2 - 0.35,
             y: founderY + 0.12,
             w: 0.7,
             h: 0.7,
-            fill: { color: memberColor },
-          });
-          contentSlide.addText(member.initials, {
-            x: x + founderCardW / 2 - 0.35,
-            y: founderY + 0.22,
-            w: 0.7,
-            h: 0.5,
-            fontSize: 14,
-            bold: true,
-            color: "FFFFFF",
-            align: "center",
-            valign: "middle",
+            rounding: true,
           });
         } else {
           // No image - show avatar circle with initials
@@ -1093,8 +1106,9 @@ export async function generatePptx(
           line: { color: memberColor, width: 1 },
         });
 
-        // Avatar - use embedded image if available, otherwise circle with initials
+        // Avatar - use embedded image if available, then URL, otherwise circle with initials
         const advisorImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        const advisorImageUrl = resolveImageUrl(member.image);
         if (advisorImageData) {
           contentSlide.addImage({
             data: advisorImageData,
@@ -1104,8 +1118,18 @@ export async function generatePptx(
             h: 0.44,
             rounding: true,
           });
+        } else if (advisorImageUrl) {
+          // Try URL path fallback
+          contentSlide.addImage({
+            path: advisorImageUrl,
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            rounding: true,
+          });
         } else {
-          // No image or failed to load - show avatar circle with initials
+          // No image - show avatar circle with initials
           contentSlide.addShape("ellipse" as any, {
             x: x + advisorCardW / 2 - 0.22,
             y: advisorY + 0.08,
