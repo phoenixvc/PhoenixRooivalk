@@ -254,54 +254,51 @@ export const lightningPitchSlides: Slide[] = [
     productCards: [
       {
         name: "SkySnare",
-        tagline: "Protect Your Airspace",
+        tagline: "Point & Shoot Protection",
         description:
-          "Direct-to-consumer drone capture device. Simple point-and-shoot operation for personal property protection.",
+          "Handheld drone capture device. Aim, fire, catch. No training required.",
         price: "$349",
         delivery: "Delivery Jul 2026",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
           { label: "Range", value: "15-30m" },
-          { label: "Net Size", value: "2m × 2m" },
-          { label: "Reload", value: "30 seconds" },
+          { label: "Net", value: "2m × 2m" },
         ],
       },
       {
-        name: "SkyWatch Standard",
-        tagline: "Reliable Home Protection",
+        name: "SkyWatch Nano",
+        tagline: "See Threats Coming",
         description:
-          "Balanced detection system for residential use with Coral TPU acceleration and low-light capability.",
-        price: "$100-250",
+          "AI camera that spots drones and alerts your phone. Easy backyard setup.",
+        price: "$50-100",
         delivery: "Delivery Jul 2026",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
-          { label: "Range", value: "50-150m" },
-          { label: "Speed", value: "15-30 FPS" },
-          { label: "Power", value: "4-10W" },
+          { label: "Range", value: "50-100m" },
+          { label: "Alerts", value: "App + Audio" },
         ],
       },
       {
         name: "NetSnare Lite",
-        tagline: "Ground-Mounted Net Launcher",
+        tagline: "Automated Defense",
         description:
-          "Spring-powered ground-mounted net launcher. Pairs with any SkyWatch detector for automated drone capture.",
+          "Ground-mounted launcher. Pairs with SkyWatch for hands-free capture.",
         price: "$200-400",
         delivery: "Delivery Jul 2026",
         badges: ["SEED", "PREORDER OPEN"],
         color: "#f97316",
         specs: [
-          { label: "Range", value: "10-20m launch" },
-          { label: "Trigger", value: "App/API" },
-          { label: "Reload", value: "Manual, 30s" },
+          { label: "Range", value: "10-20m" },
+          { label: "Trigger", value: "App/Auto" },
         ],
       },
     ],
     speakerNotes:
-      "Show the 3 entry-level products. Emphasize the price points and delivery dates.",
+      "Show the 3 entry-level products. SkySnare handheld, SkyWatch Nano camera, NetSnare auto-launcher. Emphasize simplicity and price points.",
     script:
-      "Here are our entry products. SkySnare at $349 - point and shoot for homeowners. SkyWatch detection system starting at $100. NetSnare ground launcher from $200. All delivering July 2026. Preorders are open. Questions?",
+      "Three products to protect your home. SkySnare - point and shoot, $349. SkyWatch Nano - AI camera alerts your phone, starts at $50. NetSnare Lite - automated ground launcher, $200. All shipping July 2026. Preorders open now. Questions?",
   },
 ];
 
