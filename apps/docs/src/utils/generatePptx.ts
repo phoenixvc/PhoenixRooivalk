@@ -12,8 +12,55 @@ const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
 const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
-// Logo embedded as base64 data URL to avoid CORS issues on preview/staging environments
-const SLIDE_DECK_LOGO_URL = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGhvZW5peC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmOTczMTY7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZiOTIzYztzdG9wLW9wYWNpdHk6MSIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIAogIDwhLS0gQmFja2dyb3VuZCBjaXJjbGUgLS0+CiAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTgiIGZpbGw9InVybCgjcGhvZW5peC1ncmFkaWVudCkiIHN0cm9rZT0iIzBmMTcyYSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgCiAgPCEtLSBQaG9lbml4IGJpcmQgc2lsaG91ZXR0ZSAtLT4KICA8cGF0aCBkPSJNMjAgOCBMMjQgMTYgTDI4IDEyIEwyNiAyMCBMMzIgMTggTDI4IDI0IEwzMCAyOCBMMjQgMjYgTDIwIDMyIEwxNiAyNiBMMTAgMjggTDEyIDI0IEw4IDE4IEwxNCAyMCBMMTIgMTIgTDE2IDE2IEwyMCA4IFoiIAogICAgICAgIGZpbGw9IiMwZjE3MmEiIAogICAgICAgIHN0cm9rZT0iI2Y5NzMxNiIgCiAgICAgICAgc3Ryb2tlLXdpZHRoPSIxLjUiIAogICAgICAgIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICAKICA8IS0tIERlZmVuc2Ugc2hpZWxkIG92ZXJsYXkgLS0+CiAgPHBhdGggZD0iTTIwIDYgTDI2IDEwIEwyNCAxNiBMMjAgMjAgTDE2IDE2IEwxNCAxMCBMMjAgNiBaIiAKICAgICAgICBmaWxsPSJub25lIiAKICAgICAgICBzdHJva2U9IiNmOTczMTYiIAogICAgICAgIHN0cm9rZS13aWR0aD0iMiIgCiAgICAgICAgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIAogIDwhLS0gQ2VudHJhbCBkb3QgLS0+CiAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMyIgZmlsbD0iIzBmMTcyYSIvPgo8L3N2Zz4K";
+
+// SVG logo as string for conversion to PNG
+const LOGO_SVG = `<svg width="128" height="128" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="phoenix-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="20" cy="20" r="18" fill="url(#phoenix-gradient)" stroke="#0f172a" stroke-width="2"/>
+  <path d="M20 8 L24 16 L28 12 L26 20 L32 18 L28 24 L30 28 L24 26 L20 32 L16 26 L10 28 L12 24 L8 18 L14 20 L12 12 L16 16 L20 8 Z"
+        fill="#0f172a" stroke="#f97316" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20 6 L26 10 L24 16 L20 20 L16 16 L14 10 L20 6 Z"
+        fill="none" stroke="#f97316" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="20" cy="20" r="3" fill="#0f172a"/>
+</svg>`;
+
+/**
+ * Convert SVG string to PNG data URL using canvas
+ */
+async function svgToPngDataUrl(svgString: string, width = 128, height = 128): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/png"));
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load SVG"));
+    };
+
+    img.src = url;
+  });
+}
 
 /**
  * Sanitize video path to prevent path traversal attacks
@@ -268,34 +315,41 @@ export async function generatePptx(
     align: "center",
   });
 
-  // Logo image with white background box
-  titleSlide.addShape("rect" as PptxShape, {
-    x: 3.9,
-    y: 1.95,
-    w: 2.2,
-    h: 1.3,
-    fill: { color: "FFFFFF" },
-    line: { color: "FFFFFF", width: 0 },
-  });
-
-  // Try to add logo image from URL
+  // Logo - convert SVG to PNG and embed
+  let logoPngDataUrl: string | null = null;
   try {
-    titleSlide.addImage({
-      path: SLIDE_DECK_LOGO_URL,
-      x: 4.1,
-      y: 2.05,
-      w: 1.8,
-      h: 1.1,
-    });
+    logoPngDataUrl = await svgToPngDataUrl(LOGO_SVG, 128, 128);
   } catch {
-    // Fallback: Phoenix icon text if image fails
-    titleSlide.addText("🦅", {
-      x: 3.9,
+    // Fallback to shape if conversion fails
+    logoPngDataUrl = null;
+  }
+
+  if (logoPngDataUrl) {
+    titleSlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 1.95,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    // Fallback: shape-based logo
+    titleSlide.addShape("ellipse" as PptxShape, {
+      x: 4.25,
       y: 2.0,
-      w: 2.2,
-      h: 1.2,
-      fontSize: 48,
-      color: colors.primary,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+      line: { color: colors.darker, width: 2 },
+    });
+    titleSlide.addText("PR", {
+      x: 4.25,
+      y: 2.3,
+      w: 1.5,
+      h: 0.9,
+      fontSize: 32,
+      bold: true,
+      color: colors.darker,
       align: "center",
     });
   }
@@ -721,12 +775,12 @@ export async function generatePptx(
         });
       }
 
-      // Vertical divider
+      // Vertical divider - shorter to match content
       contentSlide.addShape("rect" as any, {
         x: 4.9,
         y: 1.9,
         w: 0.02,
-        h: 4.0,
+        h: 2.5,
         fill: { color: colors.primary },
       });
     } else if (layout === "quote") {
@@ -826,60 +880,52 @@ export async function generatePptx(
         });
       }
     } else if (layout === "team" && slide.teamMembers) {
-      // Team members grid layout
-      const members = slide.teamMembers;
-      const memberCount = members.length;
-      const cols = Math.min(memberCount, 4);
-      const cardWidth = 2.1;
-      const cardHeight = 2.6;
-      const cardGap = 0.15;
-      const totalRows = Math.ceil(memberCount / cols);
-      const baseStartX = (10 - cols * cardWidth - (cols - 1) * cardGap) / 2;
-      const startY = 1.9;
+      // Team layout: Founders (larger, top row) + Advisors (smaller, bottom row)
+      const founders = slide.teamMembers.filter((m) =>
+        m.title.toLowerCase().includes("founder"),
+      );
+      const advisors = slide.teamMembers.filter(
+        (m) => !m.title.toLowerCase().includes("founder"),
+      );
 
-      members.forEach((member, memberIndex) => {
-        const row = Math.floor(memberIndex / cols);
-        const col = memberIndex % cols;
+      // Founders row - larger cards
+      const founderCardW = 2.8;
+      const founderCardH = 2.2;
+      const founderGap = 0.3;
+      const founderStartX =
+        (10 - founders.length * founderCardW - (founders.length - 1) * founderGap) / 2;
+      const founderY = 1.8;
 
-        // Calculate how many cards are in this row
-        const cardsInThisRow =
-          row < totalRows - 1 ? cols : memberCount - (totalRows - 1) * cols;
-
-        // Center the row if it has fewer cards than max cols
-        const rowStartX =
-          (10 - cardsInThisRow * cardWidth - (cardsInThisRow - 1) * cardGap) /
-          2;
-
-        const x = rowStartX + col * (cardWidth + cardGap);
-        const y = startY + row * (cardHeight + 0.2);
-        const memberColor = member.color?.replace("#", "") || "1E40AF";
+      founders.forEach((member, idx) => {
+        const x = founderStartX + idx * (founderCardW + founderGap);
+        const memberColor = member.color?.replace("#", "") || "F97316";
 
         // Card background
         contentSlide.addShape("rect" as any, {
           x,
-          y,
-          w: cardWidth,
-          h: cardHeight,
+          y: founderY,
+          w: founderCardW,
+          h: founderCardH,
           fill: { color: colors.darker },
-          line: { color: memberColor, width: 1 },
+          line: { color: memberColor, width: 2 },
         });
 
         // Avatar circle
         contentSlide.addShape("ellipse" as any, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.15,
-          w: 0.7,
-          h: 0.7,
+          x: x + founderCardW / 2 - 0.4,
+          y: founderY + 0.15,
+          w: 0.8,
+          h: 0.8,
           fill: { color: memberColor },
         });
 
         // Initials
         contentSlide.addText(member.initials, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.25,
-          w: 0.7,
-          h: 0.5,
-          fontSize: 14,
+          x: x + founderCardW / 2 - 0.4,
+          y: founderY + 0.28,
+          w: 0.8,
+          h: 0.55,
+          fontSize: 16,
           bold: true,
           color: "FFFFFF",
           align: "center",
@@ -889,10 +935,10 @@ export async function generatePptx(
         // Name
         contentSlide.addText(member.name, {
           x,
-          y: y + 0.95,
-          w: cardWidth,
+          y: founderY + 1.0,
+          w: founderCardW,
           h: 0.3,
-          fontSize: 11,
+          fontSize: 12,
           bold: true,
           color: colors.text,
           align: "center",
@@ -901,11 +947,11 @@ export async function generatePptx(
         // Title
         contentSlide.addText(member.title, {
           x,
-          y: y + 1.2,
-          w: cardWidth,
+          y: founderY + 1.28,
+          w: founderCardW,
           h: 0.25,
-          fontSize: 8,
-          color: colors.textSecondary,
+          fontSize: 9,
+          color: memberColor,
           align: "center",
         });
 
@@ -913,50 +959,96 @@ export async function generatePptx(
         const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
           x: x + 0.1,
-          y: y + 1.5,
-          w: cardWidth - 0.2,
-          h: 1.0,
-          fontSize: 7,
+          y: founderY + 1.55,
+          w: founderCardW - 0.2,
+          h: 0.6,
+          fontSize: 8,
           color: colors.textMuted,
           valign: "top",
-          lineSpacing: 10,
+          lineSpacing: 11,
         });
       });
 
-      // Key points below team cards
-      if (slide.keyPoints.length > 0) {
-        const keyPointsY =
-          startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
+      // Advisors row - smaller cards
+      const advisorCardW = 1.6;
+      const advisorCardH = 1.5;
+      const advisorGap = 0.2;
+      const advisorStartX =
+        (10 - advisors.length * advisorCardW - (advisors.length - 1) * advisorGap) / 2;
+      const advisorY = founderY + founderCardH + 0.25;
 
-        contentSlide.addText("Key Points", {
-          x: 0.5,
-          y: keyPointsY,
-          w: 9.0,
-          h: 0.3,
-          fontSize: 12,
+      advisors.forEach((member, idx) => {
+        const x = advisorStartX + idx * (advisorCardW + advisorGap);
+        const memberColor = member.color?.replace("#", "") || "1E40AF";
+
+        // Card background (subtle)
+        contentSlide.addShape("rect" as any, {
+          x,
+          y: advisorY,
+          w: advisorCardW,
+          h: advisorCardH,
+          fill: { color: colors.darker },
+          line: { color: memberColor, width: 1 },
+        });
+
+        // Avatar circle (smaller)
+        contentSlide.addShape("ellipse" as any, {
+          x: x + advisorCardW / 2 - 0.25,
+          y: advisorY + 0.1,
+          w: 0.5,
+          h: 0.5,
+          fill: { color: memberColor },
+        });
+
+        // Initials
+        contentSlide.addText(member.initials, {
+          x: x + advisorCardW / 2 - 0.25,
+          y: advisorY + 0.18,
+          w: 0.5,
+          h: 0.35,
+          fontSize: 10,
           bold: true,
-          color: colors.textSecondary,
+          color: "FFFFFF",
+          align: "center",
+          valign: "middle",
         });
 
-        const bulletPoints = slide.keyPoints.map((point) => ({
-          text: getKeyPointText(point),
-          options: {
-            bullet: { type: "number" as const, code: "2022" },
-            color: colors.text,
-            fontSize: 12,
-            paraSpaceBefore: 3,
-            paraSpaceAfter: 3,
-          },
-        }));
+        // Name
+        contentSlide.addText(member.name, {
+          x,
+          y: advisorY + 0.65,
+          w: advisorCardW,
+          h: 0.25,
+          fontSize: 9,
+          bold: true,
+          color: colors.text,
+          align: "center",
+        });
 
-        contentSlide.addText(bulletPoints, {
-          x: 0.7,
-          y: keyPointsY + 0.35,
-          w: 8.6,
-          h: 1.5,
+        // Title
+        contentSlide.addText(member.title, {
+          x,
+          y: advisorY + 0.88,
+          w: advisorCardW,
+          h: 0.2,
+          fontSize: 7,
+          color: colors.textMuted,
+          align: "center",
+        });
+
+        // Highlights (compact)
+        const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
+        contentSlide.addText(highlightText, {
+          x: x + 0.05,
+          y: advisorY + 1.08,
+          w: advisorCardW - 0.1,
+          h: 0.4,
+          fontSize: 6,
+          color: colors.textMuted,
           valign: "top",
+          lineSpacing: 9,
         });
-      }
+      });
     } else if (layout === "video" || slide.video) {
       // Video layout - split view: video left, key points right
       // Note: pptxgenjs supports video embedding via addMedia()
@@ -1077,15 +1169,15 @@ export async function generatePptx(
         );
       }
     } else if (layout === "products" && slide.productCards) {
-      // Product cards grid layout - 3 cards side by side
+      // Product cards grid layout - 3 cards side by side, compact
       const cards = slide.productCards;
       const cardCount = cards.length;
-      const cardWidth = 3.0;
-      const cardHeight = 4.2;
-      const cardGap = 0.2;
+      const cardWidth = 2.9;
+      const cardHeight = 3.4;
+      const cardGap = 0.15;
       const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
       const startX = (10 - totalWidth) / 2;
-      const startY = 1.8;
+      const startY = 1.75;
 
       cards.forEach((product, cardIndex) => {
         const x = startX + cardIndex * (cardWidth + cardGap);
@@ -1135,65 +1227,65 @@ export async function generatePptx(
 
         // Product name
         contentSlide.addText(product.name, {
-          x: x + 0.15,
+          x: x + 0.1,
           y: badgeY,
-          w: cardWidth - 0.3,
-          h: 0.35,
-          fontSize: 14,
+          w: cardWidth - 0.2,
+          h: 0.28,
+          fontSize: 12,
           bold: true,
           color: colors.text,
         });
 
         // Tagline
         contentSlide.addText(product.tagline, {
-          x: x + 0.15,
-          y: badgeY + 0.35,
-          w: cardWidth - 0.3,
-          h: 0.25,
-          fontSize: 9,
+          x: x + 0.1,
+          y: badgeY + 0.28,
+          w: cardWidth - 0.2,
+          h: 0.2,
+          fontSize: 8,
           bold: true,
           color: productColor,
         });
 
         // Description
         contentSlide.addText(product.description, {
-          x: x + 0.15,
-          y: badgeY + 0.65,
-          w: cardWidth - 0.3,
-          h: 0.7,
-          fontSize: 8,
+          x: x + 0.1,
+          y: badgeY + 0.5,
+          w: cardWidth - 0.2,
+          h: 0.55,
+          fontSize: 7,
           color: colors.textSecondary,
           valign: "top",
         });
 
         // Specs
         if (product.specs && product.specs.length > 0) {
-          let specY = badgeY + 1.4;
+          let specY = badgeY + 1.1;
           const specsPerRow = 2;
-          const specColWidth = (cardWidth - 0.3) / specsPerRow;
+          const specColWidth = (cardWidth - 0.2) / specsPerRow;
 
           product.specs.forEach((spec, specIndex) => {
             const specCol = specIndex % specsPerRow;
             const specRow = Math.floor(specIndex / specsPerRow);
-            const specX = x + 0.15 + specCol * specColWidth;
-            const specYPos = specY + specRow * 0.4;
+            const specX = x + 0.1 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.32;
 
             // Label
             contentSlide.addText(spec.label.toUpperCase(), {
               x: specX,
               y: specYPos,
               w: specColWidth,
-              h: 0.15,
-              fontSize: 6,
+              h: 0.12,
+              fontSize: 5,
               color: colors.textMuted,
             });
             // Value
             contentSlide.addText(spec.value, {
               x: specX,
-              y: specYPos + 0.12,
+              y: specYPos + 0.1,
               w: specColWidth,
-              h: 0.2,
-              fontSize: 8,
+              h: 0.18,
+              fontSize: 7,
               bold: true,
               color: colors.text,
             });
@@ -1202,11 +1294,11 @@ export async function generatePptx(
 
         // Price (at bottom of card)
         contentSlide.addText(product.price, {
-          x: x + 0.15,
-          y: y + cardHeight - 0.8,
-          w: cardWidth - 0.3,
-          h: 0.4,
-          fontSize: 18,
+          x: x + 0.1,
+          y: y + cardHeight - 0.6,
+          w: cardWidth - 0.2,
+          h: 0.32,
+          fontSize: 14,
           bold: true,
           color: colors.text,
         });
@@ -1214,11 +1306,11 @@ export async function generatePptx(
         // Delivery
         if (product.delivery) {
           contentSlide.addText(product.delivery, {
-            x: x + 0.15,
-            y: y + cardHeight - 0.45,
-            w: cardWidth - 0.3,
-            h: 0.25,
-            fontSize: 8,
+            x: x + 0.1,
+            y: y + cardHeight - 0.32,
+            w: cardWidth - 0.2,
+            h: 0.2,
+            fontSize: 7,
             color: colors.textMuted,
           });
         }
@@ -1338,34 +1430,43 @@ export async function generatePptx(
     fill: { color: colors.primary },
   });
 
-  // Brand logo circle with initials (centered, larger)
-  summarySlide.addShape("ellipse" as any, {
-    x: 4.25,
-    y: 0.5,
-    w: 1.5,
-    h: 1.5,
-    fill: { color: colors.primary },
-  });
+  // Brand logo (use PNG if available, fallback to shape)
+  if (logoPngDataUrl) {
+    summarySlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    summarySlide.addShape("ellipse" as any, {
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+    });
+    summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
+      x: 4.25,
+      y: 0.75,
+      w: 1.5,
+      h: 1.0,
+      fontSize: 32,
+      bold: true,
+      color: "FFFFFF",
+      align: "center",
+      valign: "middle",
+    });
+  }
 
-  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
-    x: 4.25,
-    y: 0.75,
-    w: 1.5,
-    h: 1.0,
-    fontSize: 32,
-    bold: true,
-    color: "FFFFFF",
-    align: "center",
-    valign: "middle",
-  });
-
-  // Title
+  // Title - moved up
   summarySlide.addText("Thank You", {
     x: 0.5,
-    y: 2.2,
+    y: 1.8,
     w: 9.0,
-    h: 0.8,
-    fontSize: 44,
+    h: 0.7,
+    fontSize: 40,
     bold: true,
     color: colors.text,
     align: "center",
@@ -1374,7 +1475,7 @@ export async function generatePptx(
   // Decorative line under title
   summarySlide.addShape("rect" as any, {
     x: 3.5,
-    y: 3.1,
+    y: 2.55,
     w: 3.0,
     h: 0.03,
     fill: { color: colors.primary },
@@ -1387,10 +1488,10 @@ export async function generatePptx(
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 3.3,
+    y: 2.7,
     w: 9.0,
-    h: 0.5,
-    fontSize: 16,
+    h: 0.4,
+    fontSize: 14,
     color: colors.textSecondary,
     align: "center",
   });
@@ -1398,10 +1499,10 @@ export async function generatePptx(
   // Questions text
   summarySlide.addText("Questions?", {
     x: 0.5,
-    y: 3.9,
+    y: 3.2,
     w: 9.0,
-    h: 0.6,
-    fontSize: 28,
+    h: 0.5,
+    fontSize: 24,
     bold: true,
     color: colors.text,
     align: "center",
@@ -1415,31 +1516,31 @@ export async function generatePptx(
     // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 4.6,
+      y: 3.75,
       w: 3.0,
-      h: 0.3,
-      fontSize: 11,
+      h: 0.25,
+      fontSize: 10,
       color: colors.textMuted,
       align: "center",
     });
 
-    // Add QR code image
+    // Add QR code image - smaller and higher
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.4,
-        y: 4.85,
-        w: 1.0,
-        h: 1.0,
+        x: 4.5,
+        y: 4.0,
+        w: 0.9,
+        h: 0.9,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 5.0,
+        y: 4.2,
         w: 5.0,
         h: 0.3,
-        fontSize: 12,
+        fontSize: 11,
         color: colors.primary,
         align: "center",
       });
@@ -1449,10 +1550,10 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 5.9,
+        y: 4.95,
         w: 9.0,
         h: 0.25,
-        fontSize: 11,
+        fontSize: 10,
         color: colors.textMuted,
         align: "center",
       });
