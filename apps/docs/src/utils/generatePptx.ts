@@ -12,6 +12,7 @@ const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
 const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
+const SLIDE_DECK_LOGO_URL = "https://docs.phoenixrooivalk.com/img/logo.svg";
 
 /**
  * Sanitize video path to prevent path traversal attacks
@@ -266,26 +267,37 @@ export async function generatePptx(
     align: "center",
   });
 
-  // Logo placeholder (orange rectangle with phoenix shape suggestion)
+  // Logo image with white background box
   titleSlide.addShape("rect" as PptxShape, {
-    x: 3.75,
-    y: 2.0,
-    w: 2.5,
-    h: 1.2,
-    fill: { color: colors.dark },
-    line: { color: colors.primary, width: 2 },
+    x: 3.9,
+    y: 1.95,
+    w: 2.2,
+    h: 1.3,
+    fill: { color: "FFFFFF" },
+    line: { color: "FFFFFF", width: 0 },
   });
 
-  // Phoenix icon text (🦅 as placeholder)
-  titleSlide.addText("🦅", {
-    x: 3.75,
-    y: 2.1,
-    w: 2.5,
-    h: 1.0,
-    fontSize: 48,
-    color: colors.primary,
-    align: "center",
-  });
+  // Try to add logo image from URL
+  try {
+    titleSlide.addImage({
+      path: SLIDE_DECK_LOGO_URL,
+      x: 4.1,
+      y: 2.05,
+      w: 1.8,
+      h: 1.1,
+    });
+  } catch {
+    // Fallback: Phoenix icon text if image fails
+    titleSlide.addText("🦅", {
+      x: 3.9,
+      y: 2.0,
+      w: 2.2,
+      h: 1.2,
+      fontSize: 48,
+      color: colors.primary,
+      align: "center",
+    });
+  }
 
   // Presentation subtitle
   titleSlide.addText("DEFENCE DRONE - Pitch Presentation", {
