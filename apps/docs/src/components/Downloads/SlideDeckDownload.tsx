@@ -429,9 +429,8 @@ export default function SlideDeckDownload({
               type="button"
               onClick={async () => {
                 try {
-                  const { generatePptx } = await import(
-                    "../../utils/generatePptx"
-                  );
+                  const { generatePptx } =
+                    await import("../../utils/generatePptx");
                   await generatePptx(numberedSlides, {
                     title,
                     duration,
@@ -786,11 +785,11 @@ export default function SlideDeckDownload({
                     ) : slide.layout === "team" && slide.teamMembers ? (
                       // Team members grid layout
                       <div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div className="flex flex-wrap justify-center gap-4 mb-6">
                           {slide.teamMembers.map((member, memberIndex) => (
                             <div
                               key={memberIndex}
-                              className="text-center p-4 rounded-lg"
+                              className="text-center p-4 rounded-lg w-[calc(25%-0.75rem)] min-w-[140px] max-w-[200px]"
                               style={{
                                 background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
                                 border: `1px solid ${member.color || "#1e40af"}30`,
@@ -851,7 +850,11 @@ export default function SlideDeckDownload({
                               muted={slide.videoAutoplay}
                               className="w-full h-full object-contain"
                               poster={slide.image}
-                              aria-label={slide.videoCaption || slide.title || "Video content"}
+                              aria-label={
+                                slide.videoCaption ||
+                                slide.title ||
+                                "Video content"
+                              }
                             >
                               {slide.videoCaptions && (
                                 <track

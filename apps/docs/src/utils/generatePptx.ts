@@ -782,13 +782,25 @@ export async function generatePptx(
       const cols = Math.min(memberCount, 4);
       const cardWidth = 2.1;
       const cardHeight = 2.6;
-      const startX = (10 - cols * cardWidth - (cols - 1) * 0.15) / 2;
+      const cardGap = 0.15;
+      const totalRows = Math.ceil(memberCount / cols);
+      const baseStartX = (10 - cols * cardWidth - (cols - 1) * cardGap) / 2;
       const startY = 1.9;
 
       members.forEach((member, memberIndex) => {
-        const col = memberIndex % cols;
         const row = Math.floor(memberIndex / cols);
-        const x = startX + col * (cardWidth + 0.15);
+        const col = memberIndex % cols;
+
+        // Calculate how many cards are in this row
+        const cardsInThisRow =
+          row < totalRows - 1 ? cols : memberCount - (totalRows - 1) * cols;
+
+        // Center the row if it has fewer cards than max cols
+        const rowStartX =
+          (10 - cardsInThisRow * cardWidth - (cardsInThisRow - 1) * cardGap) /
+          2;
+
+        const x = rowStartX + col * (cardWidth + cardGap);
         const y = startY + row * (cardHeight + 0.2);
         const memberColor = member.color?.replace("#", "") || "1E40AF";
 
@@ -1078,47 +1090,14 @@ export async function generatePptx(
         x: 0.7,
         y: 2.3,
         w: 8.6,
-        h: 2.8,
+        h: 4.5,
         color: colors.text,
         fontSize: 16,
         valign: "top",
       });
 
-      // Add script section if available (visible on slide)
-      if (slide.script) {
-        // Script background box
-        contentSlide.addShape("rect" as any, {
-          x: 0.5,
-          y: 5.3,
-          w: 9.0,
-          h: 1.7,
-          fill: { color: colors.darker },
-          line: { color: colors.primary, width: 1 },
-        });
-
-        // Script header
-        contentSlide.addText("Script", {
-          x: 0.7,
-          y: 5.4,
-          w: 8.6,
-          h: 0.25,
-          fontSize: 12,
-          bold: true,
-          color: colors.textSecondary,
-        });
-
-        // Script content
-        contentSlide.addText(`"${slide.script}"`, {
-          x: 0.7,
-          y: 5.75,
-          w: 8.6,
-          h: 1.15,
-          fontSize: 13,
-          color: colors.textSecondary,
-          italic: true,
-          valign: "top",
-        });
-      }
+      // Note: Script is added to speaker notes only (see line ~379)
+      // Not displayed visually on the slide to keep slides clean
     }
 
     // Add footer with PhoenixRooivalk branding
@@ -1149,46 +1128,85 @@ export async function generatePptx(
   summarySlide.background = { color: colors.dark };
   summarySlide.transition = { type: "fade", speed: "fast" };
 
-  // Small Brand Icon in top left corner
-  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
-    x: 0.3,
-    y: 0.2,
-    w: 0.5,
-    h: 0.4,
-    fontSize: 14,
-    color: colors.textMuted,
+  // Decorative top bar
+  summarySlide.addShape("rect" as any, {
+    x: 0,
+    y: 0,
+    w: 10.0,
+    h: 0.08,
+    fill: { color: colors.primary },
   });
 
-  summarySlide.addText("Summary", {
+  // Brand logo circle with initials (centered, larger)
+  summarySlide.addShape("ellipse" as any, {
+    x: 4.25,
+    y: 0.5,
+    w: 1.5,
+    h: 1.5,
+    fill: { color: colors.primary },
+  });
+
+  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
+    x: 4.25,
+    y: 0.75,
+    w: 1.5,
+    h: 1.0,
+    fontSize: 32,
+    bold: true,
+    color: "FFFFFF",
+    align: "center",
+    valign: "middle",
+  });
+
+  // Title
+  summarySlide.addText("Thank You", {
     x: 0.5,
-    y: 0.8,
+    y: 2.2,
     w: 9.0,
     h: 0.8,
-    fontSize: 36,
+    fontSize: 44,
     bold: true,
     color: colors.text,
     align: "center",
   });
 
+  // Decorative line under title
+  summarySlide.addShape("rect" as any, {
+    x: 3.5,
+    y: 3.1,
+    w: 3.0,
+    h: 0.03,
+    fill: { color: colors.primary },
+  });
+
+  // Summary stats
   const summaryText = [
-    `Total Slides: ${slides.length}`,
-    `Total Duration: ${totalSeconds} seconds (${metadata.duration} minutes)`,
-    "",
-    "Questions?",
+    `${slides.length} Slides  •  ${metadata.duration} Minutes`,
   ].join("\n");
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 1.6,
+    y: 3.3,
     w: 9.0,
-    h: 1.8,
-    fontSize: 20,
+    h: 0.5,
+    fontSize: 16,
     color: colors.textSecondary,
     align: "center",
   });
 
+  // Questions text
+  summarySlide.addText("Questions?", {
+    x: 0.5,
+    y: 3.9,
+    w: 9.0,
+    h: 0.6,
+    fontSize: 28,
+    bold: true,
+    color: colors.text,
+    align: "center",
+  });
+
   // Add QR code if contact URL is provided
-  // Note: 16:9 slides are 10" x 5.625", so we need to fit within that height
   if (metadata.contactUrl || metadata.contactEmail) {
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
     const qrUrl = getQrCodeUrl(qrData, 120);
@@ -1196,28 +1214,28 @@ export async function generatePptx(
     // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 3.6,
+      y: 4.6,
       w: 3.0,
       h: 0.3,
-      fontSize: 12,
+      fontSize: 11,
       color: colors.textMuted,
       align: "center",
     });
 
-    // Add QR code image (positioned to fit within 16:9 slide)
+    // Add QR code image
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.25,
-        y: 3.9,
-        w: 1.2,
-        h: 1.2,
+        x: 4.4,
+        y: 4.85,
+        w: 1.0,
+        h: 1.0,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 4.0,
+        y: 5.0,
         w: 5.0,
         h: 0.3,
         fontSize: 12,
@@ -1230,7 +1248,7 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 5.2,
+        y: 5.9,
         w: 9.0,
         h: 0.25,
         fontSize: 11,
@@ -1238,6 +1256,17 @@ export async function generatePptx(
         align: "center",
       });
     }
+  } else {
+    // No contact info - add company name footer
+    summarySlide.addText("Phoenix Rooivalk", {
+      x: 0.5,
+      y: 5.5,
+      w: 9.0,
+      h: 0.4,
+      fontSize: 14,
+      color: colors.textMuted,
+      align: "center",
+    });
   }
 
   // Generate filename
