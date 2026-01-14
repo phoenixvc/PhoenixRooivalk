@@ -176,7 +176,7 @@ export const pitchDeckSlides: Slide[] = [
         subPoints: [
           "**MITLA**: Pyrotechnic - *may detonate drone warhead*, $90 disposable",
           "**SkyWall**: $30-50K+, 10kg, military/LE only",
-          "**Us**: CO2/Pneumatic, $349-$2K, safe, reusable, no permits",
+          "**Us**: CO2/Pneumatic, $150-$2K, safe, reusable, no permits",
         ],
       },
       {
@@ -192,7 +192,7 @@ export const pitchDeckSlides: Slide[] = [
     speakerNotes:
       "Net capture is proven - this isn't experimental. Our advantage: safe propellant for civilian use at 1/100th the cost.",
     script:
-      "Net capture isn't theoretical - it's proven in combat. Ukraine's MITLA is on the frontlines. US Army adopted SkyWall. Fortem DroneHunter works in Ukraine. Our advantage: safe propellant for civilian markets. MITLA uses pyrotechnic that can detonate warheads. SkyWall costs $30,000+ and is military only. We use CO2 and pneumatic - safe, no permits, starting at $349. We're 10x cheaper, integrate AI detection, and we're the only ones with blockchain evidence chain.",
+      "Net capture isn't theoretical - it's proven in combat. Ukraine's MITLA is on the frontlines. US Army adopted SkyWall. Fortem DroneHunter works in Ukraine. Our advantage: safe propellant for civilian markets. MITLA uses pyrotechnic that can detonate warheads. SkyWall costs $30,000+ and is military only. We use CO2 and pneumatic - safe, no permits, starting at $150. We're 10x cheaper, integrate AI detection, and we're the only ones with blockchain evidence chain.",
   },
   {
     number: 6,

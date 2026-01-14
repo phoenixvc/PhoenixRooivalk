@@ -863,10 +863,10 @@ export async function generatePptx(
           valign: "top",
         });
       }
-    } else if (layout === "video" && slide.video) {
-      // Video-focused layout
+    } else if (layout === "video" || slide.video) {
+      // Video layout OR any slide with a video property
       // Note: pptxgenjs supports video embedding via addMedia()
-      // For now, we add a prominent video placeholder with play instructions
+      // Add prominent video placeholder with play instructions
 
       // Video container background
       contentSlide.addShape("rect" as any, {

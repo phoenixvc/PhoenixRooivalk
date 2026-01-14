@@ -22,30 +22,26 @@ export const lightningPitchSlides: Slide[] = [
     title: "This Is Happening Right Now",
     duration: 40,
     icon: "🚨",
-    layout: "default",
+    layout: "video",
     video: "/videos/fpv-kills-short.mp4",
-    videoCaption: "FPV drone attacks - Ukraine 2025 (UN documented)",
+    videoCaption: "FPV drone combat footage (Ukraine)",
     keyPoints: [
-      "**[10s VIDEO: FPV drone kills - Ukraine footage]**",
-      "",
       {
-        text: "**The threat is real and coming home:**",
+        text: "**The threat is proven and coming home:**",
         subPoints: [
-          "FPV drones killed **577 Ukrainian civilians in 2025 alone** - up 120% (UN data)",
-          "**77% of Europeans** believe war with Russia is imminent",
+          "FPV drones causing **mass casualties** in Ukraine daily",
+          "**FCC bans DJI drones Dec 2025** (national security) [WaPo]",
           "Brussels Airport closed **twice in one night** (Nov 2025)",
         ],
       },
-      "",
       "**64% of facilities have ZERO protection**",
       "Current systems: **$800K+** and **5-30 second** response",
-      "",
       "*There's nothing affordable to protect your home.*",
     ],
     speakerNotes:
-      "START WITH 10s FPV KILL FOOTAGE - let it sink in. Then hit the stats. End with 'nothing affordable to protect your home' - pause for effect.",
+      "Play video first - let it sink in. Then hit DJI ban (verified), Brussels incident. End with 'nothing affordable' - pause for effect.",
     script:
-      "[PLAY 10s FPV VIDEO] This is happening right now. FPV drones killed 577 Ukrainian civilians in 2025 alone - that's up 120% from last year according to the UN. 77% of Europeans believe war with Russia is imminent. Brussels Airport closed twice in one night last November. 64% of critical facilities have zero drone protection. Current military systems cost $800,000 and take 5 to 30 seconds to respond. There's nothing affordable to protect your home. Until now.",
+      "[PLAY VIDEO] This is happening right now. FPV drones are causing mass casualties in Ukraine daily. The FCC just banned DJI drones in December citing national security. Brussels Airport closed twice in one night last November. 64% of critical facilities have zero drone protection. Current military systems cost $800,000 and take 5 to 30 seconds to respond. There's nothing affordable to protect your home. Until now.",
   },
 
   // ==========================================

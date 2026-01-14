@@ -104,6 +104,10 @@ export interface Slide {
   videoCaption?: string;
   /** Whether video should autoplay in presentation mode */
   videoAutoplay?: boolean;
+  /** VTT captions URL for accessibility (WCAG compliance) */
+  videoCaptions?: string;
+  /** Language code for video captions (default: "en") */
+  videoCaptionsLang?: string;
   /** Presenter name for this slide (e.g., "Pieter", "Eben") */
   presenter?: string;
 }
@@ -808,21 +812,32 @@ export default function SlideDeckDownload({
                           </div>
                         )}
                       </div>
-                    ) : slide.layout === "video" && slide.video ? (
-                      // Video-focused layout
+                    ) : slide.layout === "video" || slide.video ? (
+                      // Video layout OR any slide with a video property
                       <div className="flex flex-col items-center gap-4">
-                        <div className="relative w-full max-w-2xl aspect-video bg-black rounded-lg shadow-lg overflow-hidden">
-                          <video
-                            src={slide.video}
-                            controls
-                            autoPlay={slide.videoAutoplay}
-                            muted={slide.videoAutoplay}
-                            className="w-full h-full object-contain"
-                            poster={slide.image}
-                          >
-                            Your browser does not support the video tag.
-                          </video>
-                        </div>
+                        {slide.video && (
+                          <div className="relative w-full max-w-2xl aspect-video bg-black rounded-lg shadow-lg overflow-hidden">
+                            <video
+                              src={slide.video}
+                              controls
+                              autoPlay={slide.videoAutoplay}
+                              muted={slide.videoAutoplay}
+                              className="w-full h-full object-contain"
+                              poster={slide.image}
+                            >
+                              {slide.videoCaptions && (
+                                <track
+                                  kind="captions"
+                                  src={slide.videoCaptions}
+                                  srcLang={slide.videoCaptionsLang || "en"}
+                                  label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                                  default
+                                />
+                              )}
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
+                        )}
                         {slide.videoCaption && (
                           <p className="text-sm text-gray-500 dark:text-gray-400 italic text-center">
                             {slide.videoCaption}

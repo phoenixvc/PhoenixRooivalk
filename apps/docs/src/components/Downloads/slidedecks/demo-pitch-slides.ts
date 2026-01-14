@@ -43,17 +43,23 @@ export const demoPitchSlides: Slide[] = [
     title: "The Problem: 64% of Facilities Are Unprotected",
     duration: 70,
     icon: "🚨",
-    layout: "default",
+    layout: "video",
     video: "/videos/fpv-kills-short.mp4",
-    videoCaption: "FPV drone attacks - Ukraine 2025 (UN documented)",
+    videoCaption: "FPV drone attacks demonstrate the threat (source: combat footage)",
     keyPoints: [
-      "**[10s VIDEO: FPV drone kills - Ukraine footage]**",
-      "",
       {
-        text: "**The threat is real and deadly:**",
+        text: "**The threat is proven in combat:**",
         subPoints: [
-          "FPV drones killed **577 Ukrainian civilians in 2025 alone** - up 120% (UN data)",
-          "**77% of Europeans** believe war with Russia is imminent",
+          "FPV drones causing **mass casualties** in Ukraine daily",
+          "Civilian infrastructure increasingly targeted",
+        ],
+      },
+      {
+        text: "**FCC bans DJI drones (Dec 2025)** - [washingtonpost.com]",
+        subPoints: [
+          "Chinese drones added to FCC 'Covered List' Dec 23, 2025",
+          "New models **banned from US import/sale** (national security)",
+          "Creates **massive market gap** for domestic alternatives",
         ],
       },
       {
@@ -61,15 +67,6 @@ export const demoPitchSlides: Slide[] = [
         subPoints: [
           "54 flights cancelled, RAF specialists deployed",
           "European drone incidents up **4x year-over-year**",
-          "Perpetrators: *still at large*",
-        ],
-      },
-      {
-        text: "**The Gatwick precedent** (Dec 2018):",
-        subPoints: [
-          "**£60M+ in damages**, 140,000 passengers stranded",
-          "Investigation cost: millions more",
-          "Perpetrators: **never caught** - *no evidence chain*",
         ],
       },
       {
@@ -82,9 +79,9 @@ export const demoPitchSlides: Slide[] = [
       },
     ],
     speakerNotes:
-      "START WITH 10s FPV KILL FOOTAGE - let it sink in. Then hit the UN stat. Lead with Brussels - it's recent, relatable, and proves this isn't hypothetical. Gatwick shows the cost and the evidence problem. Keep it punchy - 70 seconds max.",
+      "Play video first - let it sink in. Then hit the DJI ban (verified: FCC Dec 2025). Brussels Airport incident is verified. Keep it punchy - 70 seconds max.",
     script:
-      "[PLAY 10s FPV VIDEO] This is happening right now. FPV drones killed 577 Ukrainian civilians in 2025 alone - that's up 120% from last year according to the UN. 77% of Europeans believe war with Russia is imminent. Last month, Brussels Airport was closed twice in one night. 54 flights cancelled. The Royal Air Force deployed specialists. European drone incidents are up 4x year over year. And the perpetrators? Still at large. Remember Gatwick in 2018? £60 million in damages, 140,000 passengers stranded. And the perpetrators were never caught. Why? No evidence chain. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail in denied environments. And without admissible evidence, there's no prosecution and no deterrent. 64% of critical facilities have zero protection today.",
+      "[PLAY VIDEO] This is happening right now. FPV drones are causing mass casualties in Ukraine daily. And the threat is coming home. The FCC just banned DJI drones in December 2025 citing national security - that's the Washington Post, you can verify it. This creates a massive market gap. Brussels Airport was closed twice in one night last November. 54 flights cancelled. European drone incidents are up 4x year over year. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. 64% of critical facilities have zero protection today.",
   },
 
   // ==========================================
