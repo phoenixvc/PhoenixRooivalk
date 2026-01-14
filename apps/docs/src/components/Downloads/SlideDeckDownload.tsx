@@ -20,7 +20,8 @@ export type SlideLayout =
   | "two-column" // Side-by-side comparison
   | "quote" // Quote/testimonial layout
   | "code" // Code block layout for technical content
-  | "team"; // Team members grid layout
+  | "team" // Team members grid layout
+  | "video"; // Video-focused layout with optional caption
 
 /**
  * Team member for team layout slides
@@ -97,6 +98,18 @@ export interface Slide {
   teamMembers?: TeamMember[];
   /** Speaker notes (for presenter view) */
   speakerNotes?: string;
+  /** Video URL for video layout (relative to /static or absolute) */
+  video?: string;
+  /** Video caption */
+  videoCaption?: string;
+  /** Whether video should autoplay in presentation mode */
+  videoAutoplay?: boolean;
+  /** VTT captions URL for accessibility (WCAG compliance) */
+  videoCaptions?: string;
+  /** Language code for video captions (default: "en") */
+  videoCaptionsLang?: string;
+  /** Presenter name for this slide (e.g., "Pieter", "Eben") */
+  presenter?: string;
 }
 
 interface PptxGeneratorProps {
@@ -797,6 +810,46 @@ export default function SlideDeckDownload({
                               )}
                             </ul>
                           </div>
+                        )}
+                      </div>
+                    ) : slide.layout === "video" || slide.video ? (
+                      // Video layout OR any slide with a video property
+                      <div className="flex flex-col items-center gap-4">
+                        {slide.video && (
+                          <div className="relative w-full max-w-2xl aspect-video bg-black rounded-lg shadow-lg overflow-hidden">
+                            <video
+                              src={slide.video}
+                              controls
+                              autoPlay={slide.videoAutoplay}
+                              muted={slide.videoAutoplay}
+                              className="w-full h-full object-contain"
+                              poster={slide.image}
+                              aria-label={slide.videoCaption || slide.title || "Video content"}
+                            >
+                              {slide.videoCaptions && (
+                                <track
+                                  kind="captions"
+                                  src={slide.videoCaptions}
+                                  srcLang={slide.videoCaptionsLang || "en"}
+                                  label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                                  default
+                                />
+                              )}
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
+                        )}
+                        {slide.videoCaption && (
+                          <p className="text-sm text-gray-500 dark:text-gray-400 italic text-center">
+                            {slide.videoCaption}
+                          </p>
+                        )}
+                        {slide.keyPoints.length > 0 && (
+                          <ul className="space-y-2 mt-4 w-full">
+                            {slide.keyPoints.map((point, i) =>
+                              renderKeyPoint(point, i),
+                            )}
+                          </ul>
                         )}
                       </div>
                     ) : (

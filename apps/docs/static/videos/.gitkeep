@@ -1,0 +1,22 @@
+# Videos Directory
+
+Place video files here for embedding in slide decks.
+
+## Expected files:
+- fpv-kills-short.mp4 - FPV drone footage for Problem slide
+- netlauncher-poc-short.mp4 - Net launcher proof-of-concept demo for Q&A
+
+## Requirements:
+- Format: MP4 (H.264 codec recommended for best compatibility)
+- Resolution: 1920x1080 or 1280x720 recommended
+- File size: Keep under 20MB per video for reasonable PPTX size
+
+## Usage in slides:
+```typescript
+{
+  layout: "video",
+  video: "/videos/fpv-kills-short.mp4",
+  videoCaption: "FPV drone attacks - Ukraine 2025",
+  // ...
+}
+```

@@ -21,18 +21,18 @@ export const demoPitchSlides: Slide[] = [
     icon: "🛡️",
     layout: "title-only",
     keyPoints: [
-      "**Autonomous Counter-Drone Defense**",
-      "*Seed Round 2025*",
+      "**Capture Drones Safely. No Damage.**",
+      "*Seed Round 2026*",
       "",
-      "**10-150x faster** than any competitor",
-      "Protecting **$20B+** in critical infrastructure",
+      "Pneumatic net launchers for training, events, and facility security",
+      "**Legal. Non-destructive. Deployable today.**",
       "",
-      "**When seconds matter, we respond in milliseconds**",
+      "**6 product lines** | **$349 - $150K** | **Q3 2026 delivery**",
     ],
     speakerNotes:
-      "Open with confidence. Lead with '10-150x faster' - it's concrete and memorable. Pause on the tagline. The $20B figure anchors the opportunity.",
+      "Open with the new value prop - safe capture, no damage. Emphasize legal and non-destructive. The 6 product lines shows breadth.",
     script:
-      "Welcome to Phoenix Rooivalk. We're building autonomous counter-drone defense that's 10 to 150 times faster than anything else on the market. Sub-200 millisecond response time. True offline capability for denied environments. Blockchain-anchored evidence for legal accountability. We're protecting over $20 billion in critical infrastructure globally. When seconds matter, we respond in milliseconds.",
+      "Welcome to Phoenix Rooivalk. We capture drones safely with no damage. Pneumatic net launchers for training, events, and facility security. Legal, non-destructive, and deployable today. We offer 6 product lines from $349 consumer devices to $150K enterprise platforms. First deliveries Q3 2026. Preorders are open now.",
   },
 
   // ==========================================
@@ -41,24 +41,32 @@ export const demoPitchSlides: Slide[] = [
   {
     number: 2,
     title: "The Problem: 64% of Facilities Are Unprotected",
-    duration: 60,
+    duration: 70,
     icon: "🚨",
-    layout: "default",
+    layout: "video",
+    video: "/videos/fpv-kills-short.mp4",
+    videoCaption: "FPV drone attacks demonstrate the threat (source: combat footage)",
     keyPoints: [
+      {
+        text: "**The threat is proven in combat:**",
+        subPoints: [
+          "FPV drones causing **mass casualties** in Ukraine daily",
+          "Civilian infrastructure increasingly targeted",
+        ],
+      },
+      {
+        text: "**FCC bans DJI drones (Dec 2025)** - [washingtonpost.com]",
+        subPoints: [
+          "Chinese drones added to FCC 'Covered List' Dec 23, 2025",
+          "New models **banned from US import/sale** (national security)",
+          "Creates **massive market gap** for domestic alternatives",
+        ],
+      },
       {
         text: "**November 2025: Brussels Airport closed twice in one night**",
         subPoints: [
           "54 flights cancelled, RAF specialists deployed",
           "European drone incidents up **4x year-over-year**",
-          "Perpetrators: *still at large*",
-        ],
-      },
-      {
-        text: "**The Gatwick precedent** (Dec 2018):",
-        subPoints: [
-          "**£60M+ in damages**, 140,000 passengers stranded",
-          "Investigation cost: millions more",
-          "Perpetrators: **never caught** - *no evidence chain*",
         ],
       },
       {
@@ -71,9 +79,9 @@ export const demoPitchSlides: Slide[] = [
       },
     ],
     speakerNotes:
-      "Lead with Brussels - it's recent, relatable, and proves this isn't hypothetical. Gatwick shows the cost and the evidence problem. Keep it punchy - 60 seconds max.",
+      "Play video first - let it sink in. Then hit the DJI ban (verified: FCC Dec 2025). Brussels Airport incident is verified. Keep it punchy - 70 seconds max.",
     script:
-      "Last month, Brussels Airport was closed twice in one night. 54 flights cancelled. The Royal Air Force deployed specialists. European drone incidents are up 4x year over year. And the perpetrators? Still at large. Remember Gatwick in 2018? £60 million in damages, 140,000 passengers stranded. And the perpetrators were never caught. Why? No evidence chain. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. They're cloud-dependent and fail in denied environments. And without admissible evidence, there's no prosecution and no deterrent. 64% of critical facilities have zero protection today.",
+      "[PLAY VIDEO] This is happening right now. FPV drones are causing mass casualties in Ukraine daily. And the threat is coming home. The FCC just banned DJI drones in December 2025 citing national security - that's the Washington Post, you can verify it. This creates a massive market gap. Brussels Airport was closed twice in one night last November. 54 flights cancelled. European drone incidents are up 4x year over year. Current solutions take 5 to 30 seconds to respond - a drone travels 500 meters in that time. 64% of critical facilities have zero protection today.",
   },
 
   // ==========================================
@@ -149,37 +157,45 @@ export const demoPitchSlides: Slide[] = [
   },
 
   // ==========================================
-  // SLIDE 5: COMPETITIVE ADVANTAGE
+  // SLIDE 5: COMPETITIVE ADVANTAGE - NET LAUNCHERS
   // ==========================================
   {
     number: 5,
-    title: "Why We Win: The Comparison",
-    duration: 45,
+    title: "Net Capture: Frontline-Proven, Civilian-Safe",
+    duration: 60,
     icon: "⚡",
-    layout: "two-column",
-    leftColumnTitle: "Phoenix Rooivalk",
-    leftColumn: [
-      "**50-195ms** response",
-      "✅ True offline capability",
-      "✅ Blockchain evidence chain",
-      "✅ Open architecture",
-      "✅ **$25K-$100K** systems",
-      "✅ Deploy in **days**",
+    keyPoints: [
+      {
+        text: "**Net capture proven in combat** (Ukraine, US Army):",
+        subPoints: [
+          "MITLA (Ukraine) - deployed on frontlines against FPV drones",
+          "SkyWall (UK) - adopted by US Army, 100m range",
+          "Fortem DroneHunter - used successfully in Ukraine",
+        ],
+      },
+      {
+        text: "**Our differentiation:** Safe propellant for civilian markets",
+        subPoints: [
+          "**MITLA**: Pyrotechnic (7.62mm) - *may detonate drone warhead*",
+          "**SkyWall**: Compressed air - $30-50K+, 10kg weight",
+          "**Phoenix Rooivalk**: CO2/Pneumatic - $349-$2K, safe, reusable",
+        ],
+      },
+      {
+        text: "**Why we win:**",
+        subPoints: [
+          "✅ No permits required (vs pyrotechnic)",
+          "✅ 10x cheaper than SkyWall ($349 vs $30K+)",
+          "✅ Reusable ($1-2/shot vs $90 disposable)",
+          "✅ Integrated AI detection (competitors: detection separate)",
+          "✅ Blockchain evidence chain (no one else has this)",
+        ],
+      },
     ],
-    rightColumnTitle: "Competitors",
-    rightColumn: [
-      "**5,000-30,000ms** response",
-      "❌ Requires cloud connectivity",
-      "❌ No evidence trail",
-      "❌ Vendor lock-in",
-      "❌ **$800K-$1.5M+** systems",
-      "❌ Deploy in **months**",
-    ],
-    keyPoints: [],
     speakerNotes:
-      "Let the comparison speak for itself. Point to each row. The deployment time is new - emphasize we can protect a facility in days, not months of integration work.",
+      "Key message: same proven technology (nets), safer propellant for civilian use, 10x cheaper. MITLA warns nets can detonate drone warheads - our pneumatic is safer.",
     script:
-      "Let's compare directly. Response time: we're at 50 to 195 milliseconds, competitors take 5 to 30 seconds. Offline: we work completely offline, they require cloud. Evidence: we generate blockchain evidence for prosecution, they have nothing. Architecture: we're open, they lock you in. Cost: $25K to $100K versus $800K to over $1.5 million. And deployment: we protect a facility in days, not months of integration work. Six advantages, all decisive.",
+      "Net capture isn't theoretical - it's proven in combat. Ukraine's MITLA is deployed on frontlines. The US Army adopted SkyWall. Fortem DroneHunter was used successfully in Ukraine. Our differentiation: safe propellant for civilian markets. MITLA uses pyrotechnic cartridges that can detonate drone warheads. SkyWall costs $30,000+ and weighs 10 kilograms. We use CO2 and pneumatic - safe, no permits, starting at $349. We're 10x cheaper than SkyWall, reusable at $1-2 per shot versus $90 disposable, and we integrate AI detection where competitors sell detection separately. Plus blockchain evidence chain - no one else has that.",
   },
 
   // ==========================================
@@ -187,7 +203,7 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 6,
-    title: "Market Opportunity: Why Now",
+    title: "2025: The Year Governments Got Serious",
     duration: 60,
     icon: "📊",
     layout: "image-right",
@@ -195,33 +211,34 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "Drone Defense Market TAM/SAM/SOM",
     keyPoints: [
       {
-        text: "**Why NOW is the moment:**",
+        text: "**$14+ BILLION** in C-UAS funding announced in 2025:",
         subPoints: [
-          "Brussels, Gatwick incidents driving **regulatory urgency**",
-          "EU mandating airport protection by **2027**",
-          "US FAA BVLOS rules enabling **new drone threats**",
+          "🇺🇸 **$7.5B** US DoD FY2026 C-UAS budget",
+          "🇺🇸 **$640M** Marine Corps contract (Anduril, Mar 2025)",
+          "🇺🇸 **$500M** FEMA grants for FIFA World Cup 2026",
+          "🇬🇧 **$600M+** UK DragonFire laser + MOD investment",
+          "🇪🇺 **€500M** France drone budget + NATO contracts",
         ],
       },
       {
-        text: "**Market:** $6.64B → **$20.3B** (2030) at **25% CAGR**",
+        text: "**Market:** $6.64B → **$20.31B** (2030) at **25.1% CAGR**",
         subPoints: [
-          "Counter-drone segment: **47% CAGR** - fastest growing",
+          "Net capture **proven on frontlines** (Ukraine, US Army)",
           "64% of facilities unprotected = **massive whitespace**",
         ],
       },
       {
-        text: "**Revenue model:** Hardware + Recurring",
+        text: "**6 Product Lines:** Consumer to Military",
         subPoints: [
-          "Hardware: **60%** ($25K-$100K systems)",
-          "SaaS + Services: **40%** (80%+ gross margin)",
-          "Target: **6:1 CLV:CAC**",
+          "**SkySnare** ($349) → **RKV Systems** ($150K)",
+          "Hardware + SaaS recurring revenue model",
         ],
       },
     ],
     speakerNotes:
-      "Lead with WHY NOW - regulatory tailwinds are real. Brussels and Gatwick created political will. EU mandates are coming. Then show the market size and our model.",
+      "Lead with the $14B+ in announced funding - this is new data from 2025. Shows governments are serious. Market is massive and we cover the full spectrum.",
     script:
-      "Why is now the moment? Brussels and Gatwick created regulatory urgency. The EU is mandating airport counter-drone protection by 2027. In the US, new FAA BVLOS rules are enabling more drones in the sky - which means more threats. The market is $6.64 billion today, growing to over $20 billion by 2030. The counter-drone segment is the fastest growing at 47% CAGR. And 64% of facilities are still unprotected - massive whitespace for us. Our model: 60% hardware revenue from $25K to $100K systems, 40% recurring from SaaS and services with 80%+ gross margins. Target CLV to CAC of 6 to 1.",
+      "2025 was the year governments got serious about counter-drone. Over $14 billion in funding announced globally. The US alone committed $7.5 billion in the DoD budget, $640 million to Anduril for Marine Corps, and $500 million in FEMA grants for FIFA World Cup 2026 security. The UK invested over $600 million in DragonFire laser and MOD programs. France and NATO added €500 million more. The market is $6.64 billion today growing to $20.31 billion by 2030 at 25% CAGR. Net capture is proven on the frontlines in Ukraine. 64% of facilities are still unprotected. We offer 6 product lines from $349 consumer to $150K military.",
   },
 
   // ==========================================
@@ -237,35 +254,35 @@ export const demoPitchSlides: Slide[] = [
     imageCaption: "18-month runway to Series A",
     keyPoints: [
       {
-        text: "**Already completed** (6 months, $0 raised):",
+        text: "**Platform maturity** (built with $0 raised):",
+        subPoints: [
+          "**215 documentation pages** with RAG AI search",
+          "**51 Architecture Decision Records** published",
+          "**WASM threat simulator** live in browser",
+          "**x402 payment protocol** in production",
+        ],
+      },
+      {
+        text: "**Hardware status:**",
         subPoints: [
           "Full system CAD designs **complete**",
-          "Prototype **in assembly** - Q1 2026 completion",
-          "Kevlar net tested successfully",
-          "**2 LOIs** from EU facilities (pending seed close)",
+          "Prototype **40% assembled** - Q1 2026 completion",
+          "Kevlar nets tested, **patent filing Q1 2026**",
         ],
       },
       {
-        text: "**Go-to-market strategy:**",
+        text: "**Phased product delivery:**",
         subPoints: [
-          "**Consumer first** (SkySnare) - proves tech, builds brand",
-          "**Enterprise second** (AeroNet) - higher margins, longer sales",
-          "Consumer revenue funds enterprise sales cycle",
-        ],
-      },
-      {
-        text: "**Key milestones:**",
-        subPoints: [
-          "**Q2 2026**: CPSC/ASTM cert, D2C launch, first EU pilot",
-          "**Q4 2026**: 5K consumer, 3-5 enterprise, **$500K+ ARR**",
-          "**Hiring**: VP Sales (Q1), Head of Ops (Q2)",
+          "**Seed (Q1-Q3 2026)**: SkySnare, SkyWatch, NetSnare, NetSentry",
+          "**Series A (Q4 2026-Q3 2027)**: AeroNet Enterprise platform",
+          "**Series B+ (2028+)**: RKV military interceptors",
         ],
       },
     ],
     speakerNotes:
-      "Lead with traction - we're not starting from zero. LOIs show enterprise interest. Explain the consumer-first strategy before investors ask. Hiring shows we're thinking about scale.",
+      "Lead with platform maturity - 51 ADRs is exceptional for seed stage. Hardware status shows execution. Phased delivery shows we understand sequencing.",
     script:
-      "We're not starting from zero. Six months of founder R&D with zero capital raised. Full CAD designs complete. Prototype in final assembly for Q1 completion. Kevlar nets tested and validated. And we have 2 LOIs from EU facilities pending our seed close. Our strategy: consumer first with SkySnare, then enterprise with AeroNet. Why? Consumer proves the technology, builds the brand, and generates revenue to fund the longer enterprise sales cycle. Higher enterprise margins follow. Key milestones: Q2 we get certifications, launch D2C, deploy our first EU pilot. Q4 we hit 5,000 consumer units, 3 to 5 enterprise installations, and over $500K in ARR. We're also hiring: VP Sales in Q1, Head of Ops in Q2.",
+      "We've built significant platform infrastructure with zero capital raised. 215 documentation pages with AI-powered search. 51 architecture decision records published - that's enterprise-grade documentation. A working WASM threat simulator you can try in the browser. And our x402 blockchain payment protocol is live in production. On hardware: CAD designs complete, prototype 40% assembled for Q1 completion, Kevlar nets tested, patent filing in Q1. Our product delivery is phased: SkySnare and detection products in the seed phase, AeroNet enterprise platform in Series A, and RKV military interceptors in Series B and beyond.",
   },
 
   // ==========================================
@@ -339,7 +356,7 @@ export const demoPitchSlides: Slide[] = [
   // ==========================================
   {
     number: 9,
-    title: "The Ask: $960K at $3.5M Pre-Money",
+    title: "The Ask: $960K Seed Round",
     duration: 75,
     icon: "💰",
     layout: "image-right",
@@ -351,8 +368,8 @@ export const demoPitchSlides: Slide[] = [
         subPoints: [
           "**40%** Engineering ($384K) - AI/ML, edge processing",
           "**25%** Hardware ($240K) - prototypes, tooling",
-          "**15%** Sales ($144K) - D2C launch, trade shows",
-          "**20%** Ops + Cert ($192K) - legal, IP, CPSC/ASTM/CE",
+          "**15%** Sales ($144K) - D2C launch, OmniPost marketing",
+          "**20%** Ops + Cert ($192K) - legal, patent, CPSC/ASTM/CE",
         ],
       },
       {
@@ -364,14 +381,17 @@ export const demoPitchSlides: Slide[] = [
         ],
       },
       {
-        text: "**Round status:** $350K committed (36%)",
-        subPoints: ["Lead investor confirmed", "Closing by **end of Q4 2025**"],
+        text: "**Internal tools already built:**",
+        subPoints: [
+          "**OmniPost** - AI multi-platform publishing (D2C ready)",
+          "**Cognitive Mesh** - Enterprise AI architecture (in dev)",
+        ],
       },
     ],
     speakerNotes:
-      "State terms upfront - no ambiguity. Show round momentum with committed capital. The 36% creates urgency. End with demo CTA verbally.",
+      "State terms upfront - no ambiguity. Mention internal tools to show platform maturity. End with demo CTA verbally.",
     script:
-      "We're raising $960K on a SAFE at $3.5 million pre-money cap. Use of funds: 40% to engineering for AI and edge processing. 25% to hardware for prototypes and tooling. 15% to sales for D2C launch. 20% to operations and certification including CPSC, ASTM, and CE marking. What do you get? Certified product in market by Q2 2026. Over $500K ARR by Q4. Series A ready with proven traction. Round status: we have $350K committed - 36% of the round - with our lead investor confirmed. We're closing by end of Q4 2025. Let's schedule a live demo so you can see sub-200 millisecond response for yourself.",
+      "We're raising $960K on a SAFE at $3.5 million pre-money cap. Use of funds: 40% to engineering for AI and edge processing. 25% to hardware for prototypes and tooling. 15% to sales including D2C launch powered by our OmniPost AI publishing platform. 20% to operations including patent filing and certifications. What do you get? Certified product in market by Q2 2026. Over $500K ARR by Q4. Series A ready with proven traction. We've also built internal tools: OmniPost for AI-powered multi-platform marketing, and Cognitive Mesh enterprise AI architecture in development. Let's schedule a live demo so you can see sub-200 millisecond response for yourself.",
   },
 
   // ==========================================
@@ -419,6 +439,6 @@ export const demoPitchMeta = {
   title: "Phoenix Rooivalk: Demo Pitch Deck",
   duration: 10,
   audience: "Investors, Strategic Partners, Demo Attendees",
-  date: "December 2025",
+  date: "January 2026",
   colorTheme: "investor" as const,
 };

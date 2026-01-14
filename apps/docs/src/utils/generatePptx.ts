@@ -10,6 +10,38 @@ import type {
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials
 
 /**
+ * Sanitize video path to prevent path traversal attacks
+ * Only allows paths starting with / or relative paths without ..
+ */
+function sanitizeVideoPath(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  // Remove any path traversal attempts
+  const sanitized = path
+    .replace(/\.\./g, "") // Remove ..
+    .replace(/\/\//g, "/") // Remove double slashes
+    .trim();
+  // Only allow paths starting with / or alphanumeric
+  if (!/^[\/a-zA-Z0-9]/.test(sanitized)) return undefined;
+  return sanitized;
+}
+
+/**
+ * Sanitize text content for speaker notes to prevent injection
+ */
+function sanitizeTextContent(text: string | undefined): string {
+  if (!text) return "";
+  return text
+    .replace(/[\x00-\x1F\x7F]/g, "") // Remove control characters
+    .trim();
+}
+
+/**
+ * pptxgenjs shape type - using string literal type for better type safety
+ * Note: pptxgenjs types are incomplete, so we use this type alias
+ */
+type PptxShape = "rect" | "ellipse" | "triangle" | "line" | "arc";
+
+/**
  * Color theme presets
  */
 const COLOR_THEMES: Record<ColorTheme, ColorPalette> = {
@@ -862,6 +894,121 @@ export async function generatePptx(
           h: 1.5,
           valign: "top",
         });
+      }
+    } else if (layout === "video" || slide.video) {
+      // Video layout OR any slide with a video property
+      // Note: pptxgenjs supports video embedding via addMedia()
+      // Add prominent video placeholder with play instructions
+
+      // Sanitize video path and caption to prevent injection
+      const sanitizedVideoPath = sanitizeVideoPath(slide.video);
+      const sanitizedCaption = sanitizeTextContent(slide.videoCaption);
+
+      // Video container background
+      const rectShape: PptxShape = "rect";
+      contentSlide.addShape(rectShape, {
+        x: 1.5,
+        y: 1.9,
+        w: 7.0,
+        h: 3.5,
+        fill: { color: "000000" },
+        line: { color: colors.primary, width: 2 },
+      });
+
+      // Play button triangle
+      const triangleShape: PptxShape = "triangle";
+      contentSlide.addShape(triangleShape, {
+        x: 4.0,
+        y: 2.8,
+        w: 1.5,
+        h: 1.5,
+        fill: { color: colors.primary },
+        rotate: 90,
+      });
+
+      // Video label
+      contentSlide.addText("VIDEO", {
+        x: 1.5,
+        y: 4.5,
+        w: 7.0,
+        h: 0.4,
+        fontSize: 14,
+        bold: true,
+        color: colors.primary,
+        align: "center",
+      });
+
+      // Try to embed the video if path is accessible and valid
+      if (sanitizedVideoPath) {
+        try {
+          // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
+          contentSlide.addMedia({
+            path: sanitizedVideoPath,
+            x: 1.5,
+            y: 1.9,
+            w: 7.0,
+            h: 3.5,
+            type: "video",
+          });
+        } catch {
+          // If video embedding fails, the placeholder is already there
+          // Add instruction text
+          contentSlide.addText("Click to play embedded video", {
+            x: 1.5,
+            y: 5.0,
+            w: 7.0,
+            h: 0.3,
+            fontSize: 11,
+            color: colors.textMuted,
+            align: "center",
+            italic: true,
+          });
+        }
+      }
+
+      // Video caption (sanitized)
+      if (sanitizedCaption) {
+        contentSlide.addText(sanitizedCaption, {
+          x: 0.5,
+          y: 5.5,
+          w: 9.0,
+          h: 0.4,
+          fontSize: 14,
+          color: colors.textMuted,
+          align: "center",
+          italic: true,
+        });
+      }
+
+      // Key points below video if any
+      if (slide.keyPoints.length > 0) {
+        const bulletPoints = slide.keyPoints.map((point) => ({
+          text: getKeyPointText(point),
+          options: {
+            bullet: { type: "number" as const, code: "2022" },
+            color: colors.text,
+            fontSize: 13,
+            paraSpaceBefore: 3,
+            paraSpaceAfter: 3,
+          },
+        }));
+
+        contentSlide.addText(bulletPoints, {
+          x: 0.7,
+          y: 5.9,
+          w: 8.6,
+          h: 1.0,
+          color: colors.text,
+          fontSize: 13,
+          valign: "top",
+        });
+      }
+
+      // Add video path to speaker notes if not already present (sanitized)
+      if (!slide.script && sanitizedVideoPath) {
+        contentSlide.addNotes(
+          `[PLAY VIDEO: ${sanitizeTextContent(sanitizedVideoPath)}]`,
+        );
       }
     } else {
       // Default layout with key points
