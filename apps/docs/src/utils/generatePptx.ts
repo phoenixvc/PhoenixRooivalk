@@ -863,6 +863,111 @@ export async function generatePptx(
           valign: "top",
         });
       }
+    } else if (layout === "video" && slide.video) {
+      // Video-focused layout
+      // Note: pptxgenjs supports video embedding via addMedia()
+      // For now, we add a prominent video placeholder with play instructions
+
+      // Video container background
+      contentSlide.addShape("rect" as any, {
+        x: 1.5,
+        y: 1.9,
+        w: 7.0,
+        h: 3.5,
+        fill: { color: "000000" },
+        line: { color: colors.primary, width: 2 },
+      });
+
+      // Play button triangle
+      contentSlide.addShape("triangle" as any, {
+        x: 4.0,
+        y: 2.8,
+        w: 1.5,
+        h: 1.5,
+        fill: { color: colors.primary },
+        rotate: 90,
+      });
+
+      // Video label
+      contentSlide.addText("VIDEO", {
+        x: 1.5,
+        y: 4.5,
+        w: 7.0,
+        h: 0.4,
+        fontSize: 14,
+        bold: true,
+        color: colors.primary,
+        align: "center",
+      });
+
+      // Try to embed the video if path is accessible
+      try {
+        // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
+        contentSlide.addMedia({
+          path: slide.video,
+          x: 1.5,
+          y: 1.9,
+          w: 7.0,
+          h: 3.5,
+          type: "video",
+        });
+      } catch {
+        // If video embedding fails, the placeholder is already there
+        // Add instruction text
+        contentSlide.addText("Click to play embedded video", {
+          x: 1.5,
+          y: 5.0,
+          w: 7.0,
+          h: 0.3,
+          fontSize: 11,
+          color: colors.textMuted,
+          align: "center",
+          italic: true,
+        });
+      }
+
+      // Video caption
+      if (slide.videoCaption) {
+        contentSlide.addText(slide.videoCaption, {
+          x: 0.5,
+          y: 5.5,
+          w: 9.0,
+          h: 0.4,
+          fontSize: 14,
+          color: colors.textMuted,
+          align: "center",
+          italic: true,
+        });
+      }
+
+      // Key points below video if any
+      if (slide.keyPoints.length > 0) {
+        const bulletPoints = slide.keyPoints.map((point) => ({
+          text: getKeyPointText(point),
+          options: {
+            bullet: { type: "number" as const, code: "2022" },
+            color: colors.text,
+            fontSize: 13,
+            paraSpaceBefore: 3,
+            paraSpaceAfter: 3,
+          },
+        }));
+
+        contentSlide.addText(bulletPoints, {
+          x: 0.7,
+          y: 5.9,
+          w: 8.6,
+          h: 1.0,
+          color: colors.text,
+          fontSize: 13,
+          valign: "top",
+        });
+      }
+
+      // Add video path to speaker notes if not already present
+      if (!slide.script) {
+        contentSlide.addNotes(`[PLAY VIDEO: ${slide.video}]`);
+      }
     } else {
       // Default layout with key points
       // Add key points header

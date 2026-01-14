@@ -1,0 +1,23 @@
+# Videos Directory
+
+Place video files here for embedding in slide decks.
+
+## Expected files:
+- fpv-kills-10s.mp4 - 10s FPV drone footage for Problem slide
+- netlauncher-demo-10s.mp4 - 10s net launcher demo for Q&A
+
+## Requirements:
+- Format: MP4 (H.264 codec recommended for best compatibility)
+- Max duration: 30 seconds (to keep PPTX file size manageable)
+- Resolution: 1920x1080 or 1280x720 recommended
+- File size: Keep under 20MB per video
+
+## Usage in slides:
+```typescript
+{
+  layout: "video",
+  video: "/videos/fpv-kills-10s.mp4",
+  videoCaption: "FPV drone attacks - Ukraine 2025",
+  // ...
+}
+```

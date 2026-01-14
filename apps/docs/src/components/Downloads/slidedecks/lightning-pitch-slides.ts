@@ -23,6 +23,8 @@ export const lightningPitchSlides: Slide[] = [
     duration: 40,
     icon: "🚨",
     layout: "default",
+    video: "/videos/fpv-kills-10s.mp4",
+    videoCaption: "FPV drone attacks - Ukraine 2025 (UN documented)",
     keyPoints: [
       "**[10s VIDEO: FPV drone kills - Ukraine footage]**",
       "",
