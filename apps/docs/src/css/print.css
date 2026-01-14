@@ -312,15 +312,42 @@
     break-after: auto !important;
   }
 
-  /* Modal styling for print */
+  /* Slide deck print mode - hide EVERYTHING except the slide content */
+  body.printing-slidedeck > *:not([class*="fixed"]) {
+    display: none !important;
+  }
+
   body.printing-slidedeck .fixed {
-    position: relative !important;
+    position: static !important;
     background: transparent !important;
     overflow: visible !important;
+    padding: 0 !important;
+    inset: auto !important;
+  }
+
+  /* Hide the modal backdrop overlay */
+  body.printing-slidedeck .fixed > .bg-black\/50,
+  body.printing-slidedeck .fixed > [class*="bg-black"] {
+    background: transparent !important;
+  }
+
+  /* Make the modal content fill the page */
+  body.printing-slidedeck .fixed > div {
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   body.printing-slidedeck .slidedeck-print-content {
     box-shadow: none !important;
+    padding: 0.5in !important;
+  }
+
+  /* Hide the modal header (Print button, close button) when printing */
+  body.printing-slidedeck .print\\:hidden {
+    display: none !important;
   }
 
   /* Dark mode reset for print */
