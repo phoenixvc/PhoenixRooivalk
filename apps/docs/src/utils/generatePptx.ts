@@ -15,13 +15,15 @@ const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
 /**
  * Convert relative image path to full URL
+ * Uses current origin to work in both dev and production
  */
 function resolveImageUrl(path: string | undefined): string | undefined {
   if (!path) return undefined;
   if (path.startsWith("http")) return path;
-  // Remove leading slash and append to base URL
+  // Use current origin (works in dev and production)
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : SLIDE_DECK_URL;
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${SLIDE_DECK_URL}${cleanPath}`;
+  return `${baseUrl}/${cleanPath}`;
 }
 
 /**
