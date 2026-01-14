@@ -298,7 +298,7 @@ export const demoPitchSlides: Slide[] = [
       {
         initials: "JS",
         name: "Jurie Smit",
-        title: "Co-Founder & CTO",
+        title: "Founder",
         highlights: [
           "15+ years fintech & SaaS",
           "Edge AI/ML systems",
@@ -307,48 +307,59 @@ export const demoPitchSlides: Slide[] = [
         color: "#f97316", // Phoenix Orange
       },
       {
-        initials: "MR",
-        name: "Martyn Redelinghuys",
-        title: "Co-Founder & CEO",
-        highlights: [
-          "20+ years energy/defense",
-          "R500M+ portfolio mgmt",
-          "Defense contractor relationships",
-        ],
-        color: "#ea580c", // Dark Orange
-      },
-      {
         initials: "PL",
         name: "Pieter La Grange",
-        title: "Hardware Lead",
+        title: "Co-Founder",
         highlights: [
           "15+ years embedded systems",
           "Medical device production (Snuza)",
           "Mass manufacturing experience",
         ],
-        color: "#fb923c", // Light Orange
+        color: "#ea580c", // Dark Orange
       },
       {
         initials: "EM",
         name: "Eben Maré",
-        title: "Co-Founder & CFO",
+        title: "Advisor",
         highlights: [
           "15+ years IB & PE",
           "Head Quant (Deloitte)",
           "Phoenix VC founding partner",
         ],
+        color: "#fb923c", // Light Orange
+      },
+      {
+        initials: "CF",
+        name: "Chanelle Fellinger",
+        title: "Advisor",
+        highlights: [
+          "Strategy & Operations",
+          "Business Development",
+          "Startup ecosystem expert",
+        ],
         color: "#fbbf24", // Amber
+      },
+      {
+        initials: "AK",
+        name: "Alistair Kim",
+        title: "Advisor",
+        highlights: [
+          "Defense sector expertise",
+          "Government relations",
+          "International markets",
+        ],
+        color: "#a855f7", // Purple
       },
     ],
     keyPoints: [
-      "**Advisors:** Available upon request",
-      "**All founders full-time** with personal capital committed",
+      "**Founders full-time** with personal capital committed",
+      "**Strategic advisors** with defense, finance, and business expertise",
       "**Hiring Q1:** VP Sales (defense background), Head of Ops",
     ],
     speakerNotes:
-      "30 seconds max. Hit the highlights, emphasize full-time commitment and hiring plans. Investors want to know you can execute, then move to the ask.",
+      "30 seconds max. Hit the founders first, mention advisors briefly. Investors want to know you can execute.",
     script:
-      "Our team: Jurie on tech with edge AI and SaaS exits. Martyn on business with 20 years in energy and defense, including contractor relationships. Pieter on hardware with medical device mass manufacturing. Eben on finance with investment banking and VC experience. All founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
+      "Our team: Jurie on tech with edge AI and SaaS exits. Pieter on hardware with medical device mass manufacturing. Strategic advisors include Eben with investment banking, Chanelle on strategy, and Alistair with defense sector expertise. Founders full-time with personal capital committed. Hiring VP Sales with defense background in Q1.",
   },
 
   // ==========================================

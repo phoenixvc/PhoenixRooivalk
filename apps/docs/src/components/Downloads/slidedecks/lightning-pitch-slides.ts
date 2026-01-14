@@ -123,39 +123,47 @@ export const lightningPitchSlides: Slide[] = [
       {
         initials: "JS",
         name: "Jurie Smit",
-        title: "CTO",
+        title: "Founder",
         highlights: ["Edge AI/ML", "15+ yrs fintech"],
         color: "#f97316",
       },
       {
-        initials: "MR",
-        name: "Martyn Redelinghuys",
-        title: "CEO",
-        highlights: ["Defense/Energy", "R500M+ portfolio"],
-        color: "#ea580c",
-      },
-      {
         initials: "PL",
         name: "Pieter La Grange",
-        title: "Hardware",
+        title: "Co-Founder",
         highlights: ["Embedded systems", "Medical devices"],
-        color: "#fb923c",
+        color: "#ea580c",
       },
       {
         initials: "EM",
         name: "Eben Maré",
-        title: "CFO",
+        title: "Advisor",
         highlights: ["IB & PE", "Head Quant"],
+        color: "#fb923c",
+      },
+      {
+        initials: "CF",
+        name: "Chanelle Fellinger",
+        title: "Advisor",
+        highlights: ["Strategy", "Business Development"],
         color: "#fbbf24",
+      },
+      {
+        initials: "AK",
+        name: "Alistair Kim",
+        title: "Advisor",
+        highlights: ["Defense", "Government Relations"],
+        color: "#a855f7",
       },
     ],
     keyPoints: [
-      "**All founders full-time** with personal capital committed",
+      "**Founders full-time** with personal capital committed",
+      "**Strategic advisors** with defense and finance expertise",
     ],
     speakerNotes:
-      "15 seconds max. Just hit the names and key expertise. Emphasize full-time commitment.",
+      "15 seconds max. Hit the founders first, then advisors briefly.",
     script:
-      "Four co-founders, 60+ years combined. Jurie on AI and tech. Martyn on business with defense relationships. Pieter on hardware with medical device manufacturing. Eben on finance with investment banking. All full-time, personal capital committed.",
+      "Two founders, supported by experienced advisors. Jurie on AI and tech, Pieter on hardware with medical device manufacturing. Our advisors bring investment banking, strategy, and defense expertise. All committed, personal capital invested.",
   },
 
   // ==========================================

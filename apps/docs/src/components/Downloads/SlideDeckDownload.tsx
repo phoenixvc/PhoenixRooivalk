@@ -422,28 +422,46 @@ export default function SlideDeckDownload({
 
   return (
     <>
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex items-center gap-2 flex-wrap">
         <BrowserOnly fallback={<div>Loading...</div>}>
           {() => (
-            <PptxGenerator
-              slides={numberedSlides}
-              title={title}
-              duration={duration}
-              audience={audience}
-              date={date}
-              theme={theme}
-              customColors={customColors}
-              contactUrl={contactUrl}
-              contactEmail={contactEmail}
-            />
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const { generatePptx } = await import(
+                    "../../utils/generatePptx"
+                  );
+                  await generatePptx(numberedSlides, {
+                    title,
+                    duration,
+                    audience,
+                    date,
+                    theme,
+                    customColors,
+                    contactUrl,
+                    contactEmail,
+                  });
+                } catch (error) {
+                  console.error("Failed to generate PPTX:", error);
+                  alert("Failed to generate PowerPoint file. Please try again.");
+                }
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium text-sm"
+            >
+              <span>{"\u{1F4CA}"}</span>
+              Download PowerPoint
+            </button>
           )}
         </BrowserOnly>
-        <DownloadButton
-          label="Download Script"
-          type="slidedeck"
-          onDownload={handleDownloadScript}
-          variant="primary"
-        />
+        <button
+          type="button"
+          onClick={handleDownloadScript}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium text-sm"
+        >
+          <span>{"\u{1F4CA}"}</span>
+          Download Script
+        </button>
         <button
           type="button"
           onClick={handleStartPresentation}
