@@ -473,7 +473,7 @@ jobs:
           ls -la .azurefunctions/
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: azure-functions-build
           path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/deploy-package

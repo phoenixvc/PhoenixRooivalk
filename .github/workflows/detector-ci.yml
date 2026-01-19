@@ -150,7 +150,7 @@ jobs:
         run: python -m build --sdist
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: dist
           path: apps/detector/dist/
