@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@azure/cosmos": "^4.9.0",
-    "@azure/msal-browser": "^4.27.0",
+    "@azure/msal-browser": "^5.0.2",
     "@docusaurus/core": "^3.9.2",
     "@docusaurus/plugin-content-docs": "^3.9.2",
     "@docusaurus/plugin-content-pages": "^3.9.2",
