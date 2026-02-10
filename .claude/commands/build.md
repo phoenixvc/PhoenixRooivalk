@@ -7,10 +7,14 @@ If no argument is provided, build everything:
 2. `cargo build` — Rust workspace
 
 If an argument is provided, scope the build:
-- `marketing` → `pnpm --filter marketing build`
+- `marketing` → `pnpm --filter marketing build` (includes sync:wasm)
 - `docs` → `pnpm --filter docs build`
-- `rust` → `cargo build`
-- `sim` → `pnpm sim:build:tauri`
+- `rust` → `cargo build` (all Rust workspace crates)
+- `api` → `cargo build -p phoenix-api`
+- `keeper` → `cargo build -p phoenix-keeper`
+- `evidence-cli` → `cargo build -p record-evidence`
+- `sim` → `pnpm sim:build:tauri` (Tauri desktop installer)
+- `wasm` → `trunk build --release` (in apps/threat-simulator-desktop/)
 - Any other value → try `pnpm --filter $ARGUMENTS build`
 
 Report any build errors and offer to fix them.

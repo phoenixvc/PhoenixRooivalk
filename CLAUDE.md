@@ -19,7 +19,7 @@ anchoring, edge AI processing, and a threat simulation engine.
 | Database | SQLite via SQLx (API + Keeper), Azure Cosmos DB (Docs) |
 | Package Manager | pnpm 9.6.0 (enforced via corepack) |
 | Monorepo | Turborepo 2.7 |
-| Testing | Vitest (JS/TS), cargo test (Rust), pytest (Python) |
+| Testing | Vitest (marketing), Jest (docs, ui), cargo test (Rust), pytest (Python) |
 | JS Linting | ESLint 8, Prettier 3.7 |
 | Rust Linting | Clippy, cargo fmt |
 | Python Linting | Ruff, Black, isort, mypy, bandit |
@@ -75,9 +75,10 @@ pnpm sim:dev                      # Threat simulator (trunk serve on :8080)
 pnpm sim:dev:tauri                # Full desktop app with Tauri backend
 
 # Test
-pnpm test                         # JS/TS tests (Vitest)
+pnpm test                         # JS/TS tests (Vitest for marketing, Jest for docs/ui)
 pnpm test:coverage                # With coverage
 pnpm --filter ui test             # UI package tests (Jest)
+pnpm --filter docs test           # Docs tests (Jest)
 cargo test                        # All Rust workspace tests
 cargo test --lib -p threat-simulator-desktop  # Specific crate
 pytest apps/detector              # Python tests
