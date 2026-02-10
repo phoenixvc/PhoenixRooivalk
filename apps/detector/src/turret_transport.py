@@ -7,6 +7,7 @@ software and the pan/tilt hardware. Implementations:
 - SimulatedTransport: Logs commands, updates virtual state (no hardware)
 - SerialTransport: Sends commands over USB/UART serial
 - WifiUdpTransport: Sends commands over UDP (ESP32 Wi-Fi, etc.)
+- AudioPwmTransport: Generates servo PWM via audio output
 
 The transport layer is intentionally kept separate from the control
 logic so that hardware changes never require rewriting the AI pipeline.
@@ -18,11 +19,14 @@ NOTE: This module controls pan/tilt positioning only.
 import json
 import logging
 import socket
+import threading
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Optional
+
+import numpy as np
 
 logger = logging.getLogger("drone_detector.turret_transport")
 
@@ -69,6 +73,15 @@ class TransportHealth(Enum):
     ERROR = "error"
 
 
+class TransportType(Enum):
+    """Available transport backend types."""
+
+    SIMULATED = "simulated"
+    SERIAL = "serial"
+    WIFI_UDP = "wifi_udp"
+    AUDIO_PWM = "audio_pwm"
+
+
 @dataclass
 class TransportStatus:
     """Current status of the transport link."""
@@ -84,6 +97,7 @@ class TransportStatus:
         return {
             "health": self.health.value,
             "last_send_time": self.last_send_time,
+            "last_ack_time": self.last_ack_time,
             "commands_sent": self.commands_sent,
             "errors": self.errors,
             "latency_ms": round(self.latency_ms, 2),
@@ -347,6 +361,9 @@ class WifiUdpTransport(ActuatorTransport):
     Sends JSON commands to an ESP32/similar over UDP.
     No connection state — UDP is fire-and-forget.
     The microcontroller must implement its own TTL watchdog.
+
+    Security note: UDP is unencrypted and unauthenticated.
+    Only use on isolated networks or for development.
     """
 
     def __init__(
@@ -459,7 +476,6 @@ class AudioPwmTransport(ActuatorTransport):
     # Pulse width in samples (at 48kHz)
     # 1000μs = 48 samples, 1500μs = 72 samples, 2000μs = 96 samples
     MIN_PULSE_SAMPLES = int(SAMPLE_RATE * 0.001)  # 1000μs = 48
-    MID_PULSE_SAMPLES = int(SAMPLE_RATE * 0.0015)  # 1500μs = 72
     MAX_PULSE_SAMPLES = int(SAMPLE_RATE * 0.002)  # 2000μs = 96
 
     def __init__(
@@ -480,18 +496,21 @@ class AudioPwmTransport(ActuatorTransport):
         self._connected = False
         self._status = TransportStatus()
 
-        # Current servo positions (normalized -1 to +1)
-        self._yaw_position: float = 0.0  # 0 = center
+        # Thread-safe position state: lock protects both values so
+        # the audio callback reads a consistent yaw/pitch pair.
+        self._lock = threading.Lock()
+        self._yaw_position: float = 0.0  # -1 to +1, 0 = center
         self._pitch_position: float = 0.0
 
         # Phase tracking for continuous waveform
         self._phase: int = 0
 
+        # Pre-computed period index array (reused across callbacks)
+        self._period_indices = np.arange(buffer_size, dtype=np.int32)
+
     def connect(self) -> bool:
         try:
             import sounddevice as sd
-
-            self._sd = sd
 
             # Open output stream (stereo: L=yaw, R=pitch)
             self._stream = sd.OutputStream(
@@ -541,20 +560,18 @@ class AudioPwmTransport(ActuatorTransport):
         if not self._connected:
             return False
 
-        # Convert rate (-1..1) to position (-1..1)
-        # For audio PWM, we map rate directly to servo position
-        # since the audio stream runs continuously
-        self._yaw_position = max(-1.0, min(1.0, output.yaw_rate))
-        self._pitch_position = max(-1.0, min(1.0, output.pitch_rate))
+        # Thread-safe update: lock ensures the audio callback
+        # reads a consistent yaw/pitch pair.
+        with self._lock:
+            self._yaw_position = max(-1.0, min(1.0, output.yaw_rate))
+            self._pitch_position = max(-1.0, min(1.0, output.pitch_rate))
 
         self._status.last_send_time = time.time()
         self._status.commands_sent += 1
         return True
 
     def send_neutral(self) -> bool:
-        self._yaw_position = 0.0
-        self._pitch_position = 0.0
-        return True
+        return self.send(ControlOutput(yaw_rate=0.0, pitch_rate=0.0))
 
     def _rate_to_pulse_samples(self, rate: float) -> int:
         """
@@ -564,7 +581,6 @@ class AudioPwmTransport(ActuatorTransport):
          0.0 -> 1500μs (72 samples)  = center
         +1.0 -> 2000μs (96 samples)  = full right/up
         """
-        # Map -1..1 to MIN..MAX pulse samples
         normalized = (rate + 1.0) / 2.0  # 0..1
         pulse_samples = int(
             self.MIN_PULSE_SAMPLES
@@ -576,29 +592,30 @@ class AudioPwmTransport(ActuatorTransport):
         """
         Called by sounddevice to fill the audio buffer.
 
-        Generates a 50Hz PWM waveform for each channel.
+        Generates a 50Hz PWM waveform for each channel using numpy
+        vectorized operations for realtime-safe performance.
+
         The signal is INVERTED because the transistor circuit inverts:
         - During pulse: output -1.0 (transistor ON, collector LOW)
         - During gap:   output +1.0 (transistor OFF, collector HIGH via pull-up)
         After transistor inversion, servo sees correct positive pulse.
         """
-        yaw_pulse = self._rate_to_pulse_samples(self._yaw_position)
-        pitch_pulse = self._rate_to_pulse_samples(self._pitch_position)
+        if status:
+            logger.warning(f"Audio stream status: {status}")
+            self._status.health = TransportHealth.DEGRADED
 
-        for i in range(frames):
-            pos_in_period = (self._phase + i) % self.SAMPLES_PER_PERIOD
+        # Snapshot positions under lock for consistency
+        with self._lock:
+            yaw_pulse = self._rate_to_pulse_samples(self._yaw_position)
+            pitch_pulse = self._rate_to_pulse_samples(self._pitch_position)
 
-            # Yaw (left channel) — inverted for transistor
-            if pos_in_period < yaw_pulse:
-                outdata[i, 0] = -1.0  # Pulse active (transistor ON)
-            else:
-                outdata[i, 0] = 1.0  # Gap (transistor OFF)
+        # Compute position within the 50Hz period for each sample
+        indices = np.arange(frames, dtype=np.int32)
+        pos_in_period = (self._phase + indices) % self.SAMPLES_PER_PERIOD
 
-            # Pitch (right channel) — inverted for transistor
-            if pos_in_period < pitch_pulse:
-                outdata[i, 1] = -1.0
-            else:
-                outdata[i, 1] = 1.0
+        # Vectorized waveform generation: -1.0 during pulse, +1.0 during gap
+        outdata[:, 0] = np.where(pos_in_period < yaw_pulse, -1.0, 1.0)
+        outdata[:, 1] = np.where(pos_in_period < pitch_pulse, -1.0, 1.0)
 
         self._phase = (self._phase + frames) % self.SAMPLES_PER_PERIOD
 
@@ -608,14 +625,17 @@ class AudioPwmTransport(ActuatorTransport):
 
     @property
     def transport_info(self) -> dict[str, Any]:
+        with self._lock:
+            yaw = self._yaw_position
+            pitch = self._pitch_position
         return {
             "type": "audio_pwm",
             "device": self._device or "default",
             "buffer_size": self._buffer_size,
             "sample_rate": self.SAMPLE_RATE,
             "connected": self._connected,
-            "yaw_position": round(self._yaw_position, 4),
-            "pitch_position": round(self._pitch_position, 4),
+            "yaw_position": round(yaw, 4),
+            "pitch_position": round(pitch, 4),
         }
 
 
@@ -637,7 +657,19 @@ def create_transport(
 
     Returns:
         Configured ActuatorTransport instance
+
+    Raises:
+        ValueError: If transport_type is not recognized
     """
+    # Validate via enum (catches typos at creation time)
+    try:
+        TransportType(transport_type)
+    except ValueError:
+        valid = [t.value for t in TransportType]
+        raise ValueError(
+            f"Unknown transport type: '{transport_type}'. Valid types: {valid}"
+        )
+
     if transport_type == "simulated":
         return SimulatedTransport(
             log_commands=kwargs.get("log_commands", True),

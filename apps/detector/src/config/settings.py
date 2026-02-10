@@ -279,7 +279,7 @@ class TurretControlSettings(BaseModel):
     max_yaw_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max yaw rate (normalized)")
     max_pitch_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max pitch rate (normalized)")
     max_slew_rate: float = Field(
-        0.1, ge=0.01, le=1.0, description="Max rate change per update (smoothing)"
+        2.0, ge=0.1, le=10.0, description="Max rate change per second (smoothing)"
     )
     watchdog_timeout_ms: int = Field(
         500, ge=100, le=5000, description="Failsafe if no command within this time"
@@ -590,7 +590,7 @@ else:
             self.pitch_kd = 0.10
             self.max_yaw_rate = 1.0
             self.max_pitch_rate = 1.0
-            self.max_slew_rate = 0.1
+            self.max_slew_rate = 2.0
             self.watchdog_timeout_ms = 500
             self.override_latch_seconds = 3.0
             self.command_ttl_ms = 200
@@ -758,7 +758,7 @@ turret_control:
   # Safety
   max_yaw_rate: 1.0
   max_pitch_rate: 1.0
-  max_slew_rate: 0.1
+  max_slew_rate: 2.0  # per second
   watchdog_timeout_ms: 500
   override_latch_seconds: 3.0
   command_ttl_ms: 200

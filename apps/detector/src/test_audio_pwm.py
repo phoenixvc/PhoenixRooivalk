@@ -37,6 +37,7 @@ is loud and unpleasant at high volume. Start at ~20% volume.
 """
 
 import argparse
+import logging
 import math
 import sys
 import time
@@ -248,7 +249,7 @@ def run_interactive_test(device=None, buffer_size=512):
         print("Done.")
 
 
-def run_tracking_test(device=None, buffer_size=512):
+def run_tracking_test(device=None, buffer_size=512, camera_index=0):
     """
     Test with webcam: tracks the largest moving object and
     outputs audio PWM to center on it.
@@ -297,7 +298,7 @@ def run_tracking_test(device=None, buffer_size=512):
     controller.set_mode(AuthorityMode.AUTO_TRACK)
 
     # Open webcam
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(camera_index)
     if not cap.isOpened():
         print("ERROR: Cannot open webcam")
         controller.stop()
@@ -361,7 +362,7 @@ def run_tracking_test(device=None, buffer_size=512):
 
             # Draw status
             status = controller.get_status()
-            mode = status["authority"]["authority"]["mode"]
+            mode = status["authority"]["state"]["mode"]
             cv2.putText(
                 frame,
                 f"Mode: {mode} | Yaw: {output.yaw_rate:+.2f} | Pitch: {output.pitch_rate:+.2f}",
@@ -452,12 +453,24 @@ def main():
         action="store_true",
         help="Webcam tracking mode (motion detection -> servo control)",
     )
+    parser.add_argument(
+        "--camera",
+        type=int,
+        default=0,
+        help="Camera device index for tracking mode (default: 0)",
+    )
 
     args = parser.parse_args()
 
     if args.list_devices:
         list_audio_devices()
         return
+
+    # Configure logging for turret modules
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(name)s %(levelname)s: %(message)s",
+    )
 
     print()
     print("  WARNING: Turn volume to ~20% before continuing!")
@@ -467,7 +480,11 @@ def main():
     if args.sweep:
         run_sweep_test(device=args.device, buffer_size=args.buffer_size)
     elif args.track:
-        run_tracking_test(device=args.device, buffer_size=args.buffer_size)
+        run_tracking_test(
+            device=args.device,
+            buffer_size=args.buffer_size,
+            camera_index=args.camera,
+        )
     else:
         run_interactive_test(device=args.device, buffer_size=args.buffer_size)
 

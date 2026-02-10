@@ -22,7 +22,7 @@ NOTE: This module controls pan/tilt positioning only.
 """
 
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 from targeting import TargetingSystem
 from turret_controller import (
@@ -31,9 +31,16 @@ from turret_controller import (
     PIDController,
     TurretController,
 )
-from turret_transport import ActuatorTransport, create_transport
+from turret_transport import create_transport
 
 logger = logging.getLogger("drone_detector.turret_factory")
+
+# Map config string -> AuthorityMode
+_MODE_MAP = {
+    "manual": AuthorityMode.MANUAL,
+    "assisted": AuthorityMode.ASSISTED,
+    "auto_track": AuthorityMode.AUTO_TRACK,
+}
 
 
 def create_turret_controller(settings) -> TurretController:
@@ -41,13 +48,16 @@ def create_turret_controller(settings) -> TurretController:
     Create a TurretController from TurretControlSettings.
 
     Args:
-        settings: TurretControlSettings instance (pydantic or simple)
+        settings: TurretControlSettings instance (pydantic or simple).
+                  All attributes have defaults, so getattr fallbacks
+                  are used for compatibility with both pydantic and
+                  plain-object settings.
 
     Returns:
         Configured TurretController ready to start()
     """
     # Create transport
-    transport_kwargs = {}
+    transport_kwargs: dict[str, Any] = {}
     transport_type = getattr(settings, "transport_type", "simulated")
 
     if transport_type == "serial":
@@ -78,7 +88,7 @@ def create_turret_controller(settings) -> TurretController:
     supervisor = AuthoritySupervisor(
         max_yaw_rate=getattr(settings, "max_yaw_rate", 1.0),
         max_pitch_rate=getattr(settings, "max_pitch_rate", 1.0),
-        max_slew_rate=getattr(settings, "max_slew_rate", 0.1),
+        max_slew_rate=getattr(settings, "max_slew_rate", 2.0),
         watchdog_timeout_ms=getattr(settings, "watchdog_timeout_ms", 500),
         override_latch_seconds=getattr(settings, "override_latch_seconds", 3.0),
     )
@@ -92,15 +102,15 @@ def create_turret_controller(settings) -> TurretController:
         command_ttl_ms=getattr(settings, "command_ttl_ms", 200),
     )
 
-    # Set initial mode
+    # Set initial mode (warn on invalid)
     initial_mode = getattr(settings, "initial_mode", "manual")
-    mode_map = {
-        "manual": AuthorityMode.MANUAL,
-        "assisted": AuthorityMode.ASSISTED,
-        "auto_track": AuthorityMode.AUTO_TRACK,
-    }
-    if initial_mode in mode_map:
-        controller.set_mode(mode_map[initial_mode])
+    if initial_mode in _MODE_MAP:
+        controller.set_mode(_MODE_MAP[initial_mode])
+    else:
+        logger.warning(
+            f"Unknown initial_mode '{initial_mode}', defaulting to MANUAL. "
+            f"Valid modes: {list(_MODE_MAP.keys())}"
+        )
 
     logger.info(
         f"Turret controller created: transport={transport_type}, "
@@ -115,7 +125,7 @@ def turret_update(
     frame_width: int,
     frame_height: int,
     use_lead_point: bool = True,
-) -> dict:
+) -> dict[str, Any]:
     """
     Single-call integration: feed targeting state into turret controller.
 
@@ -129,16 +139,17 @@ def turret_update(
         use_lead_point: Use predicted lead point instead of current position
 
     Returns:
-        Combined status dict (targeting + turret)
+        Combined status dict with keys: targeting, turret, last_output
     """
     target_point: Optional[tuple[int, int]] = None
 
-    if targeting.current_lock is not None:
+    lock = targeting.current_lock
+    if lock is not None:
         if use_lead_point:
             target_point = targeting.get_lead_point()
         if target_point is None:
             # Fall back to direct position
-            target_point = targeting.current_lock.detection.bbox.center
+            target_point = lock.detection.bbox.center
 
     output = controller.update_from_target_lock(
         target_center=target_point,

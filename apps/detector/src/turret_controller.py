@@ -97,7 +97,7 @@ class AuthoritySupervisor:
         self,
         max_yaw_rate: float = 1.0,
         max_pitch_rate: float = 1.0,
-        max_slew_rate: float = 0.1,  # Max rate change per update
+        max_slew_rate: float = 2.0,  # Max rate change per second
         watchdog_timeout_ms: int = 500,
         override_latch_seconds: float = 3.0,
     ):
@@ -110,6 +110,7 @@ class AuthoritySupervisor:
         self._state = AuthorityState()
         self._last_command_time: float = time.time()
         self._last_output = ControlOutput()
+        self._last_safety_time: float = 0.0
 
     @property
     def mode(self) -> AuthorityMode:
@@ -165,6 +166,16 @@ class AuthoritySupervisor:
             f"MANUAL OVERRIDE: latched for {self._override_latch_seconds}s"
         )
 
+    def feed_watchdog(self) -> None:
+        """
+        Feed the watchdog timer.
+
+        Call this when a genuine tracking command arrives (i.e., when
+        there IS a target). Do NOT call on every frame — that defeats
+        the watchdog's purpose.
+        """
+        self._last_command_time = time.time()
+
     def trigger_failsafe(self, reason: str) -> None:
         """Enter FAILSAFE state."""
         self._state.failsafe_reason = reason
@@ -177,45 +188,54 @@ class AuthoritySupervisor:
 
         Enforces:
         - Rate clamping
-        - Slew rate limiting (smooth transitions)
-        - Watchdog timeout check
+        - Slew rate limiting (smooth transitions, time-aware)
+        - Watchdog timeout check (AUTO_TRACK and ASSISTED only)
         - Neutral output in FAILSAFE/MANUAL mode
 
         Returns a new (safe) ControlOutput.
+
+        NOTE: The watchdog is only *checked* here, not fed.
+        Call feed_watchdog() when a genuine tracking command arrives.
         """
         now = time.time()
 
-        # Watchdog: if no command recently, go to failsafe
-        elapsed_ms = (now - self._last_command_time) * 1000
-        if elapsed_ms > self._watchdog_timeout_ms and self._state.mode == AuthorityMode.AUTO_TRACK:
-            self.trigger_failsafe(
-                f"Watchdog timeout: {elapsed_ms:.0f}ms > {self._watchdog_timeout_ms}ms"
-            )
-
-        self._last_command_time = now
+        # Watchdog: if no command recently in autonomous modes, go to failsafe
+        if self._state.mode in (AuthorityMode.AUTO_TRACK, AuthorityMode.ASSISTED):
+            elapsed_ms = (now - self._last_command_time) * 1000
+            if elapsed_ms > self._watchdog_timeout_ms:
+                self.trigger_failsafe(
+                    f"Watchdog timeout: {elapsed_ms:.0f}ms > {self._watchdog_timeout_ms}ms"
+                )
 
         # FAILSAFE -> neutral
         if self._state.mode == AuthorityMode.FAILSAFE:
-            return ControlOutput(yaw_rate=0.0, pitch_rate=0.0, ttl_ms=output.ttl_ms)
+            self._last_output = ControlOutput(yaw_rate=0.0, pitch_rate=0.0, ttl_ms=output.ttl_ms)
+            return self._last_output
 
-        # MANUAL -> pass through (operator has direct control)
+        # MANUAL -> neutral (AI output suppressed, operator drives via separate input)
         if self._state.mode == AuthorityMode.MANUAL:
-            return ControlOutput(yaw_rate=0.0, pitch_rate=0.0, ttl_ms=output.ttl_ms)
+            self._last_output = ControlOutput(yaw_rate=0.0, pitch_rate=0.0, ttl_ms=output.ttl_ms)
+            return self._last_output
 
         # Clamp rates
         yaw = max(-self._max_yaw_rate, min(self._max_yaw_rate, output.yaw_rate))
         pitch = max(-self._max_pitch_rate, min(self._max_pitch_rate, output.pitch_rate))
 
-        # Slew rate limiting (prevent sudden jumps)
+        # Time-aware slew rate limiting (prevent sudden jumps)
+        dt = now - self._last_safety_time if self._last_safety_time > 0 else 0.033
+        dt = min(dt, 0.5)  # Cap to prevent huge jumps after pause
+        self._last_safety_time = now
+
+        max_delta = self._max_slew_rate * dt
         yaw_delta = yaw - self._last_output.yaw_rate
         pitch_delta = pitch - self._last_output.pitch_rate
 
-        if abs(yaw_delta) > self._max_slew_rate:
-            yaw = self._last_output.yaw_rate + self._max_slew_rate * (
+        if abs(yaw_delta) > max_delta:
+            yaw = self._last_output.yaw_rate + max_delta * (
                 1.0 if yaw_delta > 0 else -1.0
             )
-        if abs(pitch_delta) > self._max_slew_rate:
-            pitch = self._last_output.pitch_rate + self._max_slew_rate * (
+        if abs(pitch_delta) > max_delta:
+            pitch = self._last_output.pitch_rate + max_delta * (
                 1.0 if pitch_delta > 0 else -1.0
             )
 
@@ -238,7 +258,7 @@ class AuthoritySupervisor:
 
     def get_status(self) -> dict[str, Any]:
         return {
-            "authority": self._state.to_dict(),
+            "state": self._state.to_dict(),
             "watchdog_timeout_ms": self._watchdog_timeout_ms,
             "max_yaw_rate": self._max_yaw_rate,
             "max_pitch_rate": self._max_pitch_rate,
@@ -410,7 +430,7 @@ class TurretController:
         if not self._running:
             return
 
-        self._transport.send_neutral()
+        # disconnect() sends neutral internally before closing
         self._transport.disconnect()
         self._running = False
         logger.info("Turret controller stopped")
@@ -439,15 +459,24 @@ class TurretController:
             return ControlOutput()
 
         if target_center is None:
-            # No target: gradually return to neutral
-            self._yaw_pid.reset()
-            self._pitch_pid.reset()
+            # No target: send neutral but do NOT reset PID —
+            # preserving state avoids a snap if target reappears quickly.
+            raw_output = ControlOutput(
+                yaw_rate=0.0,
+                pitch_rate=0.0,
+                ttl_ms=self._command_ttl_ms,
+            )
+        elif frame_width <= 0 or frame_height <= 0:
+            logger.warning(f"Invalid frame dimensions: {frame_width}x{frame_height}")
             raw_output = ControlOutput(
                 yaw_rate=0.0,
                 pitch_rate=0.0,
                 ttl_ms=self._command_ttl_ms,
             )
         else:
+            # Feed watchdog: a genuine tracking command is being processed
+            self._supervisor.feed_watchdog()
+
             # Compute normalized error
             # Positive dx = target is right of center -> yaw right
             # Positive dy = target is below center -> pitch down
