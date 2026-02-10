@@ -56,6 +56,9 @@ def create_turret_controller(settings) -> TurretController:
     elif transport_type == "wifi_udp":
         transport_kwargs["host"] = getattr(settings, "wifi_host", "192.168.4.1")
         transport_kwargs["port"] = getattr(settings, "wifi_port", 4210)
+    elif transport_type == "audio_pwm":
+        transport_kwargs["device"] = getattr(settings, "audio_device", None)
+        transport_kwargs["buffer_size"] = getattr(settings, "audio_buffer_size", 512)
 
     transport = create_transport(transport_type, **transport_kwargs)
 

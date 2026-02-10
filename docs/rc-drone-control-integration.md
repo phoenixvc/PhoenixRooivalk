@@ -89,6 +89,46 @@ Detection Pipeline (existing)
 | `simulated` | None | Development, PID tuning |
 | `serial` | USB/UART to MCU | Direct wired control |
 | `wifi_udp` | ESP32/similar over WiFi | Wireless control |
+| `audio_pwm` | Headphone jack or BT speaker + transistor circuit | Zero-MCU control |
+
+### Audio PWM Transport (Zero Microcontroller Option)
+
+Uses the laptop's audio output (headphone jack, USB sound card, or
+Bluetooth speaker) to generate 50Hz servo PWM waveforms.
+
+**Signal chain:**
+```
+Laptop audio out --> Transistor circuit --> Servo signal wire
+(Left channel = yaw, Right channel = pitch)
+```
+
+**Transistor circuit (per servo channel):**
+```
+Audio SPK+ ─── 10kΩ ─── Base ┐
+                              │ NPN transistor
+                 GND ── Emitter ┘    (BC547 / 2N2222 / S8050)
+
+                 +5V ── 4.7kΩ ── Collector ─── Servo signal wire
+```
+
+**Required components (total for 2 servos):**
+- 2x NPN transistors (salvage from any amplifier board, radio, BT speaker)
+- 2x 10kΩ resistors (base current limit — any 4.7kΩ to 47kΩ works)
+- 2x 4.7kΩ resistors (collector pull-up — any 1kΩ to 10kΩ works)
+- Common GND between audio source, circuit, and servo power
+- 5V power for servos (from RC battery/BEC, NOT from audio source)
+
+**Wired mode** (headphone jack): ~5ms latency
+**Wireless mode** (Bluetooth speaker board): ~100-200ms latency
+
+**How a BT speaker becomes a wireless servo controller:**
+1. Open BT speaker, desolder wires going to speaker cones
+2. Those wires (SPK+/SPK-) become your audio signal output
+3. Connect to transistor circuit above
+4. Laptop pairs with speaker over Bluetooth
+5. Audio PWM transport sends waveforms as "music"
+6. BT speaker board receives and amplifies them
+7. Transistor circuit converts to servo-compatible 0-5V pulses
 
 ### Integration Example
 ```python

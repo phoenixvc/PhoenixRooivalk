@@ -417,6 +417,209 @@ class WifiUdpTransport(ActuatorTransport):
 
 
 # =============================================================================
+# Audio PWM Transport (Sound Card / Bluetooth Speaker)
+# =============================================================================
+
+
+class AudioPwmTransport(ActuatorTransport):
+    """
+    Audio-based servo PWM transport.
+
+    Generates 50Hz servo PWM waveforms as audio output.
+    Left channel = yaw, right channel = pitch.
+
+    Works with:
+    - Laptop headphone jack (wired, ~5ms latency)
+    - USB sound card (wired, ~5-10ms latency)
+    - Bluetooth speaker board (wireless, ~100-200ms latency)
+
+    The audio output must be fed through a simple transistor circuit
+    to convert to servo-compatible 0-5V digital pulses. See
+    docs/rc-drone-control-integration.md for the circuit diagram.
+
+    Per-channel circuit:
+        Audio SPK+ -> 10kΩ -> NPN base
+        NPN emitter -> GND
+        NPN collector -> 4.7kΩ -> +5V (servo power)
+        NPN collector -> servo signal wire
+
+    Requires: pip install sounddevice numpy
+
+    NOTE: The transistor inverts the signal (HIGH when audio is LOW).
+    This is accounted for in the waveform generation — we output the
+    pulse as NEGATIVE and the gap as POSITIVE, so after inversion
+    the servo sees a correct positive-going pulse.
+    """
+
+    # Servo PWM constants
+    SAMPLE_RATE = 48000
+    SERVO_FREQ_HZ = 50  # 50Hz = 20ms period
+    SAMPLES_PER_PERIOD = SAMPLE_RATE // SERVO_FREQ_HZ  # 960 samples
+
+    # Pulse width in samples (at 48kHz)
+    # 1000μs = 48 samples, 1500μs = 72 samples, 2000μs = 96 samples
+    MIN_PULSE_SAMPLES = int(SAMPLE_RATE * 0.001)  # 1000μs = 48
+    MID_PULSE_SAMPLES = int(SAMPLE_RATE * 0.0015)  # 1500μs = 72
+    MAX_PULSE_SAMPLES = int(SAMPLE_RATE * 0.002)  # 2000μs = 96
+
+    def __init__(
+        self,
+        device: Optional[int] = None,
+        buffer_size: int = 512,
+    ):
+        """
+        Args:
+            device: Audio output device index (None = system default).
+                    Use `python -m sounddevice` to list devices.
+            buffer_size: Audio buffer size. Smaller = less latency but
+                        more CPU. 256-1024 is reasonable.
+        """
+        self._device = device
+        self._buffer_size = buffer_size
+        self._stream = None
+        self._connected = False
+        self._status = TransportStatus()
+
+        # Current servo positions (normalized -1 to +1)
+        self._yaw_position: float = 0.0  # 0 = center
+        self._pitch_position: float = 0.0
+
+        # Phase tracking for continuous waveform
+        self._phase: int = 0
+
+    def connect(self) -> bool:
+        try:
+            import sounddevice as sd
+
+            self._sd = sd
+
+            # Open output stream (stereo: L=yaw, R=pitch)
+            self._stream = sd.OutputStream(
+                samplerate=self.SAMPLE_RATE,
+                channels=2,
+                dtype="float32",
+                blocksize=self._buffer_size,
+                device=self._device,
+                callback=self._audio_callback,
+            )
+            self._stream.start()
+            self._connected = True
+            self._status.health = TransportHealth.OK
+
+            device_info = sd.query_devices(self._device or sd.default.device[1])
+            logger.info(
+                f"Audio PWM transport connected: {device_info['name']} "
+                f"@ {self.SAMPLE_RATE}Hz, buffer={self._buffer_size}"
+            )
+            return True
+
+        except ImportError:
+            logger.error(
+                "sounddevice not installed: pip install sounddevice"
+            )
+            self._status.health = TransportHealth.ERROR
+            return False
+        except Exception as e:
+            logger.error(f"Audio output failed: {e}")
+            self._status.health = TransportHealth.ERROR
+            return False
+
+    def disconnect(self) -> None:
+        self.send_neutral()
+        if self._stream is not None:
+            try:
+                self._stream.stop()
+                self._stream.close()
+            except Exception:
+                pass
+        self._stream = None
+        self._connected = False
+        self._status.health = TransportHealth.DISCONNECTED
+        logger.info("Audio PWM transport disconnected")
+
+    def send(self, output: ControlOutput) -> bool:
+        if not self._connected:
+            return False
+
+        # Convert rate (-1..1) to position (-1..1)
+        # For audio PWM, we map rate directly to servo position
+        # since the audio stream runs continuously
+        self._yaw_position = max(-1.0, min(1.0, output.yaw_rate))
+        self._pitch_position = max(-1.0, min(1.0, output.pitch_rate))
+
+        self._status.last_send_time = time.time()
+        self._status.commands_sent += 1
+        return True
+
+    def send_neutral(self) -> bool:
+        self._yaw_position = 0.0
+        self._pitch_position = 0.0
+        return True
+
+    def _rate_to_pulse_samples(self, rate: float) -> int:
+        """
+        Convert normalized position (-1..1) to pulse width in samples.
+
+        -1.0 -> 1000μs (48 samples)  = full left/down
+         0.0 -> 1500μs (72 samples)  = center
+        +1.0 -> 2000μs (96 samples)  = full right/up
+        """
+        # Map -1..1 to MIN..MAX pulse samples
+        normalized = (rate + 1.0) / 2.0  # 0..1
+        pulse_samples = int(
+            self.MIN_PULSE_SAMPLES
+            + normalized * (self.MAX_PULSE_SAMPLES - self.MIN_PULSE_SAMPLES)
+        )
+        return max(self.MIN_PULSE_SAMPLES, min(self.MAX_PULSE_SAMPLES, pulse_samples))
+
+    def _audio_callback(self, outdata, frames, time_info, status):
+        """
+        Called by sounddevice to fill the audio buffer.
+
+        Generates a 50Hz PWM waveform for each channel.
+        The signal is INVERTED because the transistor circuit inverts:
+        - During pulse: output -1.0 (transistor ON, collector LOW)
+        - During gap:   output +1.0 (transistor OFF, collector HIGH via pull-up)
+        After transistor inversion, servo sees correct positive pulse.
+        """
+        yaw_pulse = self._rate_to_pulse_samples(self._yaw_position)
+        pitch_pulse = self._rate_to_pulse_samples(self._pitch_position)
+
+        for i in range(frames):
+            pos_in_period = (self._phase + i) % self.SAMPLES_PER_PERIOD
+
+            # Yaw (left channel) — inverted for transistor
+            if pos_in_period < yaw_pulse:
+                outdata[i, 0] = -1.0  # Pulse active (transistor ON)
+            else:
+                outdata[i, 0] = 1.0  # Gap (transistor OFF)
+
+            # Pitch (right channel) — inverted for transistor
+            if pos_in_period < pitch_pulse:
+                outdata[i, 1] = -1.0
+            else:
+                outdata[i, 1] = 1.0
+
+        self._phase = (self._phase + frames) % self.SAMPLES_PER_PERIOD
+
+    @property
+    def status(self) -> TransportStatus:
+        return self._status
+
+    @property
+    def transport_info(self) -> dict[str, Any]:
+        return {
+            "type": "audio_pwm",
+            "device": self._device or "default",
+            "buffer_size": self._buffer_size,
+            "sample_rate": self.SAMPLE_RATE,
+            "connected": self._connected,
+            "yaw_position": round(self._yaw_position, 4),
+            "pitch_position": round(self._pitch_position, 4),
+        }
+
+
+# =============================================================================
 # Factory
 # =============================================================================
 
@@ -429,7 +632,7 @@ def create_transport(
     Factory function to create a transport backend.
 
     Args:
-        transport_type: "simulated", "serial", "wifi_udp"
+        transport_type: "simulated", "serial", "wifi_udp", "audio_pwm"
         **kwargs: Passed to the transport constructor
 
     Returns:
@@ -451,6 +654,12 @@ def create_transport(
         return WifiUdpTransport(
             host=kwargs.get("host", "192.168.4.1"),
             port=kwargs.get("port", 4210),
+        )
+
+    if transport_type == "audio_pwm":
+        return AudioPwmTransport(
+            device=kwargs.get("device", None),
+            buffer_size=kwargs.get("buffer_size", 512),
         )
 
     raise ValueError(f"Unknown transport type: {transport_type}")

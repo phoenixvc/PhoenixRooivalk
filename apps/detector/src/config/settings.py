@@ -252,12 +252,18 @@ class TurretControlSettings(BaseModel):
 
     # Transport
     transport_type: str = Field(
-        "simulated", description="Transport backend: simulated, serial, wifi_udp"
+        "simulated", description="Transport backend: simulated, serial, wifi_udp, audio_pwm"
     )
     serial_port: str = Field("/dev/ttyUSB0", description="Serial port for serial transport")
     serial_baudrate: int = Field(115200, ge=9600, le=921600, description="Serial baud rate")
     wifi_host: str = Field("192.168.4.1", description="UDP target host for wifi transport")
     wifi_port: int = Field(4210, ge=1024, le=65535, description="UDP target port for wifi transport")
+    audio_device: Optional[int] = Field(
+        None, description="Audio output device index (None=default). Use `python -m sounddevice`"
+    )
+    audio_buffer_size: int = Field(
+        512, ge=128, le=2048, description="Audio buffer size (smaller=less latency, more CPU)"
+    )
 
     # PID gains - yaw axis
     yaw_kp: float = Field(0.8, ge=0.0, le=5.0, description="Yaw proportional gain")
@@ -574,6 +580,8 @@ else:
             self.serial_baudrate = 115200
             self.wifi_host = "192.168.4.1"
             self.wifi_port = 4210
+            self.audio_device = None
+            self.audio_buffer_size = 512
             self.yaw_kp = 0.8
             self.yaw_ki = 0.05
             self.yaw_kd = 0.15
@@ -733,11 +741,13 @@ targeting:
   fire_net_gpio_pin: 17
 
 turret_control:
-  transport_type: simulated  # simulated, serial, wifi_udp
+  transport_type: simulated  # simulated, serial, wifi_udp, audio_pwm
   serial_port: "/dev/ttyUSB0"
   serial_baudrate: 115200
   wifi_host: "192.168.4.1"
   wifi_port: 4210
+  audio_device: null  # null=default output. Run `python -m sounddevice` to list
+  audio_buffer_size: 512  # 256=low latency, 1024=stable
   # PID gains (tune in simulation first)
   yaw_kp: 0.8
   yaw_ki: 0.05
