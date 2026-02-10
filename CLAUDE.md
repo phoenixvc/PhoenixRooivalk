@@ -13,41 +13,46 @@ anchoring, edge AI processing, and a threat simulation engine.
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js 14, React 19, Docusaurus, Leptos/WASM, Tauri |
-| Backend | Rust (Axum), Python (detector) |
-| Blockchain | Solana SDK, EtherLink |
+| Frontend | Next.js 16, React 19, Docusaurus 3, Leptos/WASM, Tauri 2 |
+| Backend | Rust (Axum 0.8), Python 3.9+ (detector) |
+| Blockchain | Solana SDK, EtherLink, x402 payment protocol |
+| Database | SQLite via SQLx (API + Keeper), Azure Cosmos DB (Docs) |
 | Package Manager | pnpm 9.6.0 (enforced via corepack) |
-| Monorepo | Turborepo |
+| Monorepo | Turborepo 2.7 |
 | Testing | Vitest (JS/TS), cargo test (Rust), pytest (Python) |
-| Linting | ESLint, Prettier, Clippy, cargo fmt |
+| JS Linting | ESLint 8, Prettier 3.7 |
+| Rust Linting | Clippy, cargo fmt |
+| Python Linting | Ruff, Black, isort, mypy, bandit |
 | CI/CD | GitHub Actions, Azure Static Web Apps |
 | Styling | Tailwind CSS 4.1, CSS Modules |
+| Infrastructure | Azure Bicep, Terraform (ML training) |
 
 ## Repository Structure
 
 ```
 apps/
-  marketing/       # Next.js 14 marketing website (threat simulator, ROI calc)
-  docs/            # Docusaurus technical documentation portal
-  api/             # Rust Axum REST API server
-  keeper/          # Rust blockchain keeper service
-  evidence-cli/    # Rust CLI for evidence management
-  detector/        # Python drone detection (RPi, Jetson, Desktop)
-  threat-simulator-desktop/  # Tauri + Leptos WASM desktop app
+  marketing/       # Next.js 16 marketing website (threat sim, ROI calc, careers)
+  docs/            # Docusaurus 3 documentation portal + Azure Functions backend
+  api/             # Rust Axum REST API (evidence, auth, x402 payments)
+  keeper/          # Rust blockchain keeper (outbox pattern, EtherLink anchoring)
+  evidence-cli/    # Rust CLI for evidence hashing and submission
+  detector/        # Python drone detection (RPi, Jetson, Desktop, Coral TPU)
+  threat-simulator-desktop/  # Tauri 2 + Leptos WASM desktop app (Rapier2D physics)
 crates/
-  evidence/        # Core evidence logging
-  anchor-solana/   # Solana blockchain anchoring
-  anchor-etherlink/# EtherLink blockchain anchoring
-  address-validation/ # Blockchain address validation
-  phoenix-common/  # Shared Rust utilities
-  x402/            # Specialized module
+  evidence/        # Core evidence logging and SHA-256 hashing
+  anchor-solana/   # Solana blockchain anchoring provider
+  anchor-etherlink/# EtherLink blockchain anchoring provider
+  address-validation/ # Blockchain address validation (SHA3, base58)
+  phoenix-common/  # Shared Rust DB utilities and schema management
+  x402/            # HTTP 402 payment protocol (micropayments via Solana)
 packages/
-  types/           # Shared TypeScript type definitions
-  ui/              # Shared React UI components and hooks
-  utils/           # Shared utility functions
-config/            # Tooling configs (eslint, prettier, clippy, etc.)
-scripts/           # Deployment and utility scripts
-infra/             # Infrastructure as Code (Bicep templates)
+  types/           # Shared TypeScript types (ThreatDetection, EvidenceRecord, etc.)
+  ui/              # Shared React components (Button, Card, StickyHeader, etc.)
+  utils/           # Shared utilities (downloadWhitepaper, formatCurrency)
+config/            # Tooling configs (eslint, prettier, clippy, cspell, etc.)
+scripts/           # Deployment and utility scripts (bash, PowerShell, JS)
+infra/             # IaC: infra/azure/ (Bicep), infra/terraform/ml-training/
+tools/             # pdf_generator (Python CLI for document generation)
 ```
 
 ## Key Commands
@@ -57,36 +62,148 @@ infra/             # Infrastructure as Code (Bicep templates)
 pnpm install
 
 # Build
-pnpm build                        # All apps via turbo
-pnpm --filter marketing build     # Single app
+pnpm build                        # All JS/TS apps via Turborepo
+pnpm --filter marketing build     # Single app (runs sync:wasm first)
+pnpm --filter docs build          # Docs site
 cargo build                       # Rust workspace
 
-# Dev
+# Dev servers
 pnpm dev                          # All apps
-pnpm --filter marketing dev       # Single app
+pnpm --filter marketing dev       # Marketing on :3000
+pnpm --filter docs start          # Docs on :3000
+pnpm sim:dev                      # Threat simulator (trunk serve on :8080)
+pnpm sim:dev:tauri                # Full desktop app with Tauri backend
 
 # Test
 pnpm test                         # JS/TS tests (Vitest)
 pnpm test:coverage                # With coverage
-cargo test                        # Rust tests
+pnpm --filter ui test             # UI package tests (Jest)
+cargo test                        # All Rust workspace tests
+cargo test --lib -p threat-simulator-desktop  # Specific crate
 pytest apps/detector              # Python tests
+pytest apps/detector -m "not slow and not hardware"  # Skip slow/hardware
 
 # Lint & Format
-pnpm lint                         # ESLint across all packages
+pnpm lint                         # ESLint across all JS/TS packages
 pnpm typecheck                    # TypeScript type checking
 pnpm format                       # Prettier write
-pnpm format:check                 # Prettier check only
-cargo clippy                      # Rust linting
+pnpm format:check                 # Prettier check
+cargo clippy -- -D warnings       # Rust linting (deny warnings)
 cargo fmt --all                   # Rust formatting
 cargo fmt --all -- --check        # Rust format check
+pnpm fx                           # Combined: format + lint
 
-# Combined quality check
-pnpm fx                           # format + lint
+# Python linting (in apps/detector/)
+ruff check src/                   # Fast Python linter
+black --check src/                # Format check
+isort --check-only src/           # Import order check
+mypy src/                         # Type checking
 
-# Threat Simulator Desktop
-pnpm sim:dev                      # Dev mode
-pnpm sim:build:tauri              # Build Tauri app
+# Desktop threat simulator
+pnpm sim:build:tauri              # Build release (platform-specific installer)
+pnpm sim:test                     # Run simulator tests
+pnpm sim:lint                     # Clippy on simulator
 ```
+
+## App-Specific Details
+
+### API (`apps/api/`) — Rust Axum on port 8080
+
+Key routes:
+- `GET/POST /evidence` — Evidence job management
+- `GET /evidence/{id}` — Individual evidence lookup
+- `GET/POST /countermeasures` — Counter-drone deployments
+- `GET/POST /signal-disruptions` — RF disruption tracking
+- `GET/POST /jamming-operations` — EW operations
+- `POST /auth/login`, `GET /auth/me`, `PUT /auth/profile` — Auth
+- `POST /career/apply` — Career applications
+- `POST /admin/seed-team-members` — Seed fixture data
+- `GET /health` — Health check
+- `POST /api/v1/evidence/verify-premium` — x402 premium verification
+- `GET /api/v1/x402/status` — Payment protocol status
+
+Database: SQLite with automatic migrations on startup. Foreign keys enforced.
+Pagination: Default 10 items/page, max 100.
+
+### Keeper (`apps/keeper/`) — Rust background service on port 8081
+
+Processes blockchain anchoring jobs from an outbox database. Dual-loop:
+job processing + transaction confirmation polling.
+
+Environment variables:
+- `KEEPER_USE_STUB=false` — true for dev (stub provider), false for real blockchain
+- `KEEPER_DB_URL=sqlite://blockchain_outbox.sqlite3`
+- `KEEPER_POLL_MS=5000` — Job polling interval
+- `ETHERLINK_ENDPOINT`, `ETHERLINK_NETWORK`, `ETHERLINK_PRIVATE_KEY`
+
+### Marketing (`apps/marketing/`) — Next.js 16 on port 3000
+
+- Build requires WASM sync: `pnpm sync:wasm` runs automatically before `next build`
+- Email-based auth (no passwords), session via localStorage
+- Team member detection prevents self-applications
+- Env: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_ENABLE_TOUR_SKIP`, `NEXT_PUBLIC_TOUR_AUTO_START`
+
+### Docs (`apps/docs/`) — Docusaurus 3
+
+- Has its own Azure Functions backend in `azure-functions/` (Node 20, Jest tests)
+- Azure Entra ID (B2C) authentication
+- Comment system backed by Azure Cosmos DB
+- PWA offline support, Mermaid diagrams, local search
+- Env: `CLOUD_PROVIDER`, `AZURE_ENTRA_CLIENT_ID`, `AZURE_ENTRA_TENANT_ID`, plus more in `.env.example`
+
+### Detector (`apps/detector/`) — Python 3.9+
+
+Platform-specific installation:
+```bash
+pip install -e ".[pi]"       # Raspberry Pi (TFLite)
+pip install -e ".[jetson]"   # NVIDIA Jetson (ONNX + TensorRT)
+pip install -e ".[desktop]"  # Desktop (TensorFlow)
+pip install -e ".[coral]"    # Coral Edge TPU
+pip install -e ".[dev]"      # Development tools
+```
+
+Modular architecture: pluggable cameras, inference engines, trackers via Factory
+pattern. Hardware auto-detection selects appropriate backend. Run with
+`drone-detector` CLI or `python -m main`.
+
+### Threat Simulator Desktop (`apps/threat-simulator-desktop/`)
+
+Two development modes:
+- **Frontend only**: `trunk serve --port 8080` (fastest iteration, WASM only)
+- **Full desktop**: `cargo tauri dev` (includes Tauri native backend)
+
+Requires: Rust, `wasm32-unknown-unknown` target, Trunk, Tauri CLI.
+Linux build deps: `libwebkit2gtk-4.1-dev`, `build-essential`, `libssl-dev`,
+`libayatana-appindicator3-dev`.
+
+### Evidence CLI (`apps/evidence-cli/`)
+
+```bash
+# Hash a payload locally
+cargo run -p record-evidence -- --payload '{"event":"test"}'
+
+# Hash and submit to API
+cargo run -p record-evidence -- --payload @file.json --submit --api-url http://localhost:8080
+```
+
+## Workspace Gotchas
+
+- **All Rust crates use `rustls`** instead of native OpenSSL (RUSTSEC-2025-0004).
+  Never add `native-tls` features to reqwest or other HTTP clients.
+- **Unsafe code is forbidden** workspace-wide in Cargo.toml.
+- **Marketing build depends on WASM**: `sync:wasm` copies compiled WASM from the
+  threat simulator. If the simulator hasn't been built, marketing build will use
+  a fallback.
+- **pnpm workspace includes nested apps**: `apps/*/*` pattern covers
+  `apps/docs/azure-functions/` and `apps/threat-simulator-desktop/src-tauri/`.
+- **`getrandom` crate** requires `js` feature for WASM targets (configured in
+  workspace Cargo.toml).
+- **Config files are symlinks**: Edit files in `config/`, not the root symlinks.
+- **Tauri desktop app has conditional compilation**: WASM-only vs native
+  dependencies are gated with `#[cfg(target_arch = "wasm32")]`.
+- **Rust CI builds require Linux GUI deps** for Tauri (GTK, webkit, appindicator).
+- **Cargo audit is currently skipped** in CI (CVSS 4.0 support pending).
+- **Python mypy has known type errors** — CI runs with `continue-on-error`.
 
 ## Coding Standards
 
@@ -94,20 +211,25 @@ pnpm sim:build:tauri              # Build Tauri app
 - Strict mode TypeScript, avoid `any`
 - Functional components with hooks (no class components)
 - Named exports preferred over default exports
-- CSS Modules for component styling
+- CSS Modules for component styling (dark tactical theme by default)
 - WCAG AA+ accessibility: ARIA labels, keyboard nav, 4.5:1 contrast
+- ESLint security plugin enabled (detect-unsafe-regex, detect-eval, etc.)
 
 ### Rust
 - snake_case functions, PascalCase types
 - `Result<T, E>` with `?` operator, avoid panics
 - Doc comments on public APIs
-- All clippy warnings must be resolved
+- All clippy warnings must be resolved (deny warnings in CI)
 - Unsafe code is forbidden (workspace setting)
+- Use `rustls` for all HTTP/TLS operations
 
 ### Python (detector app)
-- Type hints with pydantic
-- pytest for testing
+- Type hints with pydantic v2
+- Ruff for linting (E/W/F/I/B/C4/UP rules), Black for formatting (line-length 100)
+- isort for import ordering (black profile)
+- pytest markers: `slow`, `integration`, `hardware`
 - bandit for security scanning
+- 50% coverage threshold
 
 ## Commit Conventions
 
@@ -132,14 +254,24 @@ Numbering: 0001-0099 (Core), 0100-0199 (Security), 0200-0299 (Blockchain),
 
 ## Workspace Dependencies
 
-Cross-package imports use workspace protocol: `"@phoenix/ui": "workspace:*"`
+Cross-package imports use workspace protocol: `"@phoenix-rooivalk/types": "workspace:*"`
+
+Shared Rust crates are referenced as path dependencies in workspace Cargo.toml.
 
 ## Environment Variables
 
-- Marketing: `NEXT_PUBLIC_DOCS_URL` (public runtime)
-- Docs: `MARKETING_URL` (build-time)
-- See `.env.example` files in each app for specifics
-- Never commit `.env` files
+See `.env.example` in each app for full details. Key variables:
+
+| App | Variable | Purpose |
+|---|---|---|
+| Marketing | `NEXT_PUBLIC_API_URL` | Backend API URL |
+| Docs | `CLOUD_PROVIDER` | `azure` or `offline` |
+| Docs | `AZURE_ENTRA_CLIENT_ID` | Azure AD B2C client |
+| Keeper | `KEEPER_USE_STUB` | `true` for dev, `false` for prod |
+| Keeper | `KEEPER_DB_URL` | SQLite connection string |
+| API | `RUST_LOG` | Log level (info, debug, trace) |
+
+Never commit `.env` files.
 
 ## Config Files
 
@@ -149,3 +281,12 @@ Tooling configs live in `config/` and are symlinked to the root:
 - `.markdownlint.json` -> `config/markdownlint.json`
 - `clippy.toml` -> `config/clippy.toml`
 - `cspell.json` -> `config/cspell.json`
+
+## Infrastructure
+
+- **Azure Bicep** (`infra/azure/`): Static Web Apps, Cosmos DB, Functions, Key
+  Vault, App Insights, Notification Hubs. Environments: dev/stg/prd.
+- **Terraform** (`infra/terraform/ml-training/`): Azure ML workspace with GPU
+  compute for YOLO drone detection model training.
+- **Deployment scripts** in `scripts/`: Azure setup, Cosmos container creation,
+  deployment validation, diagnostics.
