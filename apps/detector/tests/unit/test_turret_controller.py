@@ -7,7 +7,7 @@ Tests PID controller, authority supervisor, and turret controller.
 import sys
 import time
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -404,3 +404,108 @@ class TestTurretController:
         status = controller.get_status()
         assert status["commands_sent"] == 5
         controller.stop()
+
+    def test_context_manager(self, transport):
+        with TurretController(transport=transport) as ctrl:
+            assert ctrl.is_running is True
+        assert ctrl.is_running is False
+
+
+# =============================================================================
+# Watchdog on Mode Switch (BUG 1 fix)
+# =============================================================================
+
+
+class TestWatchdogModeSwitch:
+    """Verify watchdog doesn't fire immediately when switching to AUTO_TRACK."""
+
+    def test_no_immediate_failsafe_on_auto_track(self):
+        """BUG 1: watchdog used to fire from stale __init__ timestamp."""
+        sup = AuthoritySupervisor(watchdog_timeout_ms=200)
+
+        # Simulate delay between creation and mode switch
+        time.sleep(0.3)
+
+        sup.request_mode(AuthorityMode.AUTO_TRACK)
+
+        # Should NOT be in failsafe — request_mode feeds the watchdog
+        safe = sup.apply_safety(ControlOutput(yaw_rate=0.5))
+        assert sup.mode == AuthorityMode.AUTO_TRACK
+        assert safe.yaw_rate != 0.0
+
+    def test_no_immediate_failsafe_on_assisted(self):
+        sup = AuthoritySupervisor(watchdog_timeout_ms=200)
+        time.sleep(0.3)
+
+        sup.request_mode(AuthorityMode.ASSISTED)
+        sup.apply_safety(ControlOutput(yaw_rate=0.5))
+        assert sup.mode == AuthorityMode.ASSISTED
+
+
+# =============================================================================
+# ASSISTED Mode Tests (I1)
+# =============================================================================
+
+
+class TestAssistedMode:
+    def test_assisted_scales_output(self):
+        """ASSISTED mode should scale AI output to 50%."""
+        sup = AuthoritySupervisor(max_slew_rate=100.0, watchdog_timeout_ms=5000)
+        sup.request_mode(AuthorityMode.ASSISTED)
+        sup.feed_watchdog()
+
+        safe = sup.apply_safety(ControlOutput(yaw_rate=1.0, pitch_rate=-1.0))
+
+        # Should be scaled to ~0.5 (not full 1.0)
+        assert 0.4 <= safe.yaw_rate <= 0.6
+        assert -0.6 <= safe.pitch_rate <= -0.4
+
+    def test_assisted_differs_from_auto_track(self):
+        """ASSISTED output should be less than AUTO_TRACK for same input."""
+        sup_assisted = AuthoritySupervisor(max_slew_rate=100.0, watchdog_timeout_ms=5000)
+        sup_auto = AuthoritySupervisor(max_slew_rate=100.0, watchdog_timeout_ms=5000)
+
+        sup_assisted.request_mode(AuthorityMode.ASSISTED)
+        sup_auto.request_mode(AuthorityMode.AUTO_TRACK)
+        sup_assisted.feed_watchdog()
+        sup_auto.feed_watchdog()
+
+        cmd = ControlOutput(yaw_rate=0.8)
+        safe_assisted = sup_assisted.apply_safety(cmd)
+        safe_auto = sup_auto.apply_safety(cmd)
+
+        assert abs(safe_assisted.yaw_rate) < abs(safe_auto.yaw_rate)
+
+
+# =============================================================================
+# PID Dead Zone Tests (O3)
+# =============================================================================
+
+
+class TestPIDDeadZone:
+    def test_dead_zone_outputs_zero_when_error_below_threshold(self):
+        pid = PIDController(kp=1.0, dead_zone=0.05)
+        output = pid.update(0.03)  # Below dead zone
+        assert output == 0.0
+
+    def test_dead_zone_outputs_nonzero_when_error_above_threshold(self):
+        pid = PIDController(kp=1.0, dead_zone=0.05)
+        output = pid.update(0.1)  # Above dead zone
+        assert output != 0.0
+
+    def test_dead_zone_zero_means_no_dead_zone(self):
+        pid = PIDController(kp=1.0, dead_zone=0.0)
+        output = pid.update(0.001)
+        assert output != 0.0  # Even tiny error produces output
+
+    def test_dead_zone_decays_integral(self):
+        pid = PIDController(kp=0.0, ki=1.0, dead_zone=0.05)
+        # Accumulate integral
+        for _ in range(10):
+            pid.update(0.5)
+            time.sleep(0.01)
+        # Enter dead zone — integral should decay
+        pid.update(0.01)
+        pid.update(0.01)
+        pid.update(0.01)
+        # Integral is decaying at 0.9 per call

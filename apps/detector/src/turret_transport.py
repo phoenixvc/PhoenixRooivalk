@@ -118,7 +118,20 @@ class ActuatorTransport(ABC):
     - send() for control commands
     - health reporting
     - neutral fallback on disconnect/error
+
+    Supports context manager for reliable cleanup:
+        with create_transport("simulated") as t:
+            t.connect()
+            t.send(output)
+        # auto-disconnect on exit
     """
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
+        return False
 
     @abstractmethod
     def connect(self) -> bool:
@@ -140,6 +153,11 @@ class ActuatorTransport(ABC):
     @abstractmethod
     def send_neutral(self) -> bool:
         """Send a neutral (zero movement) command."""
+
+    def reconnect(self) -> bool:
+        """Disconnect and reconnect. Returns True on success."""
+        self.disconnect()
+        return self.connect()
 
     @property
     @abstractmethod
@@ -325,6 +343,22 @@ class SerialTransport(ActuatorTransport):
 
             self._status.last_send_time = time.time()
             self._status.commands_sent += 1
+
+            # Non-blocking ack check: read any available response bytes.
+            # MCU can optionally send "OK\n" or "ACK\n" after each command.
+            if self._serial.in_waiting > 0:
+                try:
+                    response = self._serial.readline().decode("ascii", errors="ignore").strip()
+                    if response:
+                        self._status.last_ack_time = time.time()
+                        self._status.latency_ms = (
+                            self._status.last_ack_time - self._status.last_send_time
+                        ) * 1000
+                        if self._status.health == TransportHealth.DEGRADED:
+                            self._status.health = TransportHealth.OK
+                except Exception:
+                    pass  # Non-critical: ack is optional
+
             return True
         except Exception as e:
             logger.error(f"Serial send failed: {e}")
@@ -505,9 +539,6 @@ class AudioPwmTransport(ActuatorTransport):
         # Phase tracking for continuous waveform
         self._phase: int = 0
 
-        # Pre-computed period index array (reused across callbacks)
-        self._period_indices = np.arange(buffer_size, dtype=np.int32)
-
     def connect(self) -> bool:
         try:
             import sounddevice as sd
@@ -525,7 +556,8 @@ class AudioPwmTransport(ActuatorTransport):
             self._connected = True
             self._status.health = TransportHealth.OK
 
-            device_info = sd.query_devices(self._device or sd.default.device[1])
+            device_idx = self._device if self._device is not None else sd.default.device[1]
+            device_info = sd.query_devices(device_idx)
             logger.info(
                 f"Audio PWM transport connected: {device_info['name']} "
                 f"@ {self.SAMPLE_RATE}Hz, buffer={self._buffer_size}"

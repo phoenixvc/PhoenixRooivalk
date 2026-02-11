@@ -291,10 +291,49 @@ class TurretControlSettings(BaseModel):
         200, ge=50, le=2000, description="Command time-to-live for hardware watchdog"
     )
 
+    # PID dead zone
+    dead_zone: float = Field(
+        0.02, ge=0.0, le=0.2, description="Error threshold below which PID outputs zero (0-1 normalized)"
+    )
+
     # Initial mode
     initial_mode: str = Field(
         "manual", description="Starting authority mode: manual, assisted, auto_track"
     )
+
+    if PYDANTIC_V2:
+        from pydantic import model_validator
+
+        @model_validator(mode="after")
+        def _validate_ttl_vs_watchdog(self):
+            if self.command_ttl_ms >= self.watchdog_timeout_ms:
+                import warnings
+                warnings.warn(
+                    f"command_ttl_ms ({self.command_ttl_ms}) >= watchdog_timeout_ms "
+                    f"({self.watchdog_timeout_ms}). Hardware TTL will expire before "
+                    f"the software watchdog fires. Consider reducing command_ttl_ms.",
+                    stacklevel=2,
+                )
+            return self
+    else:
+        # Pydantic v1 validator
+        try:
+            from pydantic import validator as _validator
+
+            @_validator("command_ttl_ms")
+            @classmethod
+            def _validate_ttl_vs_watchdog_v1(cls, v, values):
+                watchdog = values.get("watchdog_timeout_ms", 500)
+                if v >= watchdog:
+                    import warnings
+                    warnings.warn(
+                        f"command_ttl_ms ({v}) >= watchdog_timeout_ms ({watchdog}). "
+                        f"Hardware TTL will expire before the software watchdog fires.",
+                        stacklevel=2,
+                    )
+                return v
+        except ImportError:
+            pass
 
     class Config:
         env_prefix = "TURRET_"
@@ -594,6 +633,7 @@ else:
             self.watchdog_timeout_ms = 500
             self.override_latch_seconds = 3.0
             self.command_ttl_ms = 200
+            self.dead_zone = 0.02
             self.initial_mode = "manual"
 
     class _SimpleAlertSettings:
@@ -762,6 +802,7 @@ turret_control:
   watchdog_timeout_ms: 500
   override_latch_seconds: 3.0
   command_ttl_ms: 200
+  dead_zone: 0.02  # error below this → output zero (prevents hunting)
   initial_mode: manual  # manual, assisted, auto_track
 
 alert:

@@ -73,15 +73,18 @@ def create_turret_controller(settings) -> TurretController:
     transport = create_transport(transport_type, **transport_kwargs)
 
     # Create PID controllers
+    dead_zone = getattr(settings, "dead_zone", 0.02)
     yaw_pid = PIDController(
         kp=getattr(settings, "yaw_kp", 0.8),
         ki=getattr(settings, "yaw_ki", 0.05),
         kd=getattr(settings, "yaw_kd", 0.15),
+        dead_zone=dead_zone,
     )
     pitch_pid = PIDController(
         kp=getattr(settings, "pitch_kp", 0.6),
         ki=getattr(settings, "pitch_ki", 0.03),
         kd=getattr(settings, "pitch_kd", 0.10),
+        dead_zone=dead_zone,
     )
 
     # Create authority supervisor

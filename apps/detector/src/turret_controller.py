@@ -151,6 +151,10 @@ class AuthoritySupervisor:
             return False
 
         self._set_mode(mode)
+        # Feed watchdog when entering autonomous modes so it doesn't
+        # fire immediately from a stale __init__ timestamp.
+        if mode in (AuthorityMode.AUTO_TRACK, AuthorityMode.ASSISTED):
+            self.feed_watchdog()
         return True
 
     def trigger_manual_override(self) -> None:
@@ -216,6 +220,15 @@ class AuthoritySupervisor:
         if self._state.mode == AuthorityMode.MANUAL:
             self._last_output = ControlOutput(yaw_rate=0.0, pitch_rate=0.0, ttl_ms=output.ttl_ms)
             return self._last_output
+
+        # ASSISTED -> scale AI output to 50% (suggestion, not full authority)
+        # Operator sees the turret nudging toward target, can override at any time
+        if self._state.mode == AuthorityMode.ASSISTED:
+            output = ControlOutput(
+                yaw_rate=output.yaw_rate * 0.5,
+                pitch_rate=output.pitch_rate * 0.5,
+                ttl_ms=output.ttl_ms,
+            )
 
         # Clamp rates
         yaw = max(-self._max_yaw_rate, min(self._max_yaw_rate, output.yaw_rate))
@@ -285,12 +298,14 @@ class PIDController:
         kd: float = 0.1,
         output_limit: float = 1.0,
         integral_limit: float = 0.5,
+        dead_zone: float = 0.0,
     ):
         self._kp = kp
         self._ki = ki
         self._kd = kd
         self._output_limit = output_limit
         self._integral_limit = integral_limit
+        self._dead_zone = dead_zone
 
         self._integral: float = 0.0
         self._prev_error: float = 0.0
@@ -318,6 +333,13 @@ class PIDController:
 
         # Prevent huge dt from corrupting integral
         dt = min(dt, 0.5)
+
+        # Dead zone: if error is within threshold, output zero
+        # and let the integral decay. Prevents hunting near center.
+        if abs(error) < self._dead_zone:
+            self._integral *= 0.9  # Gentle decay
+            self._prev_error = error
+            return 0.0
 
         # Proportional
         p = self._kp * error
@@ -397,6 +419,14 @@ class TurretController:
         self._running = False
         self._last_error: tuple[float, float] = (0.0, 0.0)
         self._commands_sent: int = 0
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
+        return False
 
     @property
     def supervisor(self) -> AuthoritySupervisor:

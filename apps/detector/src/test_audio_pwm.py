@@ -416,7 +416,10 @@ def _position_bar(value: float, width: int = 21) -> str:
 
     bar = ["-"] * width
     bar[center] = "|"
-    bar[pos] = "#"
+    if pos == center:
+        bar[pos] = "+"  # Centered: show both markers merged
+    else:
+        bar[pos] = "#"
     return "[" + "".join(bar) + "]"
 
 

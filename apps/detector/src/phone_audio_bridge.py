@@ -36,8 +36,6 @@ import socket
 import struct
 import sys
 import threading
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-from pathlib import Path
 
 logger = logging.getLogger("drone_detector.phone_bridge")
 
@@ -230,15 +228,52 @@ updateDisplay();
 
 
 def get_local_ip() -> str:
-    """Get this machine's local IP address."""
+    """
+    Get this machine's local IP address.
+
+    Tries multiple methods to work on air-gapped networks
+    (e.g., laptop hotspot with no internet).
+    """
+    # Method 1: Connect to external host (works when internet available)
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.settimeout(0.5)
         s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
         s.close()
-        return ip
+        if ip and ip != "0.0.0.0":
+            return ip
     except Exception:
-        return "127.0.0.1"
+        pass
+
+    # Method 2: Scan local interfaces (works on hotspot / no internet)
+    try:
+        import subprocess
+        result = subprocess.run(
+            ["hostname", "-I"],
+            capture_output=True, text=True, timeout=2,
+        )
+        if result.returncode == 0:
+            ips = result.stdout.strip().split()
+            for ip in ips:
+                if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172."):
+                    return ip
+            if ips:
+                return ips[0]
+    except Exception:
+        pass
+
+    # Method 3: Use socket.getaddrinfo on hostname
+    try:
+        hostname = socket.gethostname()
+        for info in socket.getaddrinfo(hostname, None, socket.AF_INET):
+            ip = info[4][0]
+            if ip != "127.0.0.1":
+                return ip
+    except Exception:
+        pass
+
+    return "127.0.0.1"
 
 
 async def websocket_handler(reader, writer):
@@ -353,10 +388,24 @@ def udp_listener(port: int):
             break
 
 
+def _print_qr_code(url: str) -> None:
+    """Print a QR code to the terminal if qrcode is installed."""
+    try:
+        import qrcode  # type: ignore[import-untyped]
+
+        qr = qrcode.QRCode(border=1)
+        qr.add_data(url)
+        qr.make(fit=True)
+        qr.print_ascii(invert=True)
+    except ImportError:
+        print(f"  (Install 'qrcode' for a scannable QR code: pip install qrcode)")
+
+
 async def run_server(host: str, port: int):
     """Run the WebSocket/HTTP server."""
     server = await asyncio.start_server(websocket_handler, host, port)
     local_ip = get_local_ip()
+    url = f"http://{local_ip}:{port}"
 
     print()
     print("=" * 60)
@@ -365,7 +414,9 @@ async def run_server(host: str, port: int):
     print()
     print(f"  Open this URL on the phone's browser:")
     print()
-    print(f"    http://{local_ip}:{port}")
+    print(f"    {url}")
+    print()
+    _print_qr_code(url)
     print()
     print(f"  Then tap 'Start Audio' and plug in the headphone cable.")
     print()

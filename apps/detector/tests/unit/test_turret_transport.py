@@ -180,3 +180,54 @@ class TestCreateTransport:
     def test_typo_gives_helpful_error(self):
         with pytest.raises(ValueError, match="Valid types"):
             create_transport("seria")  # Typo
+
+
+# =============================================================================
+# Context Manager Tests (O1)
+# =============================================================================
+
+
+class TestContextManager:
+    def test_simulated_context_manager(self):
+        with SimulatedTransport() as t:
+            t.connect()
+            assert t.status.health == TransportHealth.OK
+        assert t.status.health == TransportHealth.DISCONNECTED
+
+    def test_factory_context_manager(self):
+        with create_transport("simulated") as t:
+            t.connect()
+            assert t.send(ControlOutput(yaw_rate=0.5)) is True
+        assert t.status.health == TransportHealth.DISCONNECTED
+
+
+# =============================================================================
+# Reconnect Tests (O7)
+# =============================================================================
+
+
+class TestReconnect:
+    def test_reconnect_simulated(self):
+        t = SimulatedTransport()
+        t.connect()
+        assert t.status.health == TransportHealth.OK
+
+        result = t.reconnect()
+        assert result is True
+        assert t.status.health == TransportHealth.OK
+        t.disconnect()
+
+    def test_reconnect_sends_neutral_then_reconnects(self):
+        t = SimulatedTransport(log_commands=False)
+        t.connect()
+        t.send(ControlOutput(yaw_rate=1.0))
+        import time
+        time.sleep(0.05)
+        t.send(ControlOutput(yaw_rate=1.0))
+
+        assert t.virtual_yaw > 0.0
+
+        # Reconnect resets connection (disconnect sends neutral)
+        t.reconnect()
+        assert t.status.health == TransportHealth.OK
+        t.disconnect()

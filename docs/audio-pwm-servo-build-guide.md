@@ -358,15 +358,22 @@ controller.
    - Left channel = yaw, Right channel = pitch
 
 5. **Test from the laptop**
-   ```bash
-   python test_audio_pwm.py --sweep --device phone
-   ```
-   Or configure in `config.yaml`:
+
+   With Path C, the phone generates the audio — so on the laptop side
+   you use `wifi_udp` transport pointing at the phone bridge:
+
    ```yaml
+   # config.yaml
    turret_control:
      transport_type: wifi_udp
-     wifi_host: "<phone IP>"
+     wifi_host: "<phone bridge IP>"  # printed by phone_audio_bridge.py
      wifi_port: 8765
+   ```
+
+   Or test directly with the sweep tool on the laptop's own audio
+   (useful for verifying the bridge receives commands):
+   ```bash
+   python test_audio_pwm.py --sweep
    ```
 
 ### Latency Comparison

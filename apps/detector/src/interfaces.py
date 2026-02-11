@@ -434,6 +434,36 @@ class DroneScorer(ABC):
 
 
 @dataclass
+class ActuatorTransport(ABC):
+    """
+    Abstract interface for sending control commands to turret hardware.
+
+    Defined here for consistency with other swappable component ABCs
+    (FrameSource, InferenceEngine, ObjectTracker, etc.).
+    Full implementation with data contracts is in turret_transport.py.
+
+    NOTE: This is a re-export. Import from turret_transport for the
+    full API (ControlOutput, TransportStatus, create_transport, etc.).
+    """
+
+    @abstractmethod
+    def connect(self) -> bool:
+        """Establish connection. Returns True on success."""
+
+    @abstractmethod
+    def disconnect(self) -> None:
+        """Close connection and send neutral command."""
+
+    @abstractmethod
+    def send(self, output: Any) -> bool:
+        """Send a control command. Returns True if sent successfully."""
+
+    @abstractmethod
+    def send_neutral(self) -> bool:
+        """Send a neutral (zero movement) command."""
+
+
+@dataclass
 class PipelineConfig:
     """Configuration for the detection pipeline."""
 
