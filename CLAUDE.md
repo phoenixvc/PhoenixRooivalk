@@ -16,10 +16,12 @@ anchoring, edge AI processing, and a threat simulation engine.
 | Frontend | Next.js 16, React 19, Docusaurus 3, Leptos/WASM, Tauri 2 |
 | Backend | Rust (Axum 0.8), Python 3.9+ (detector) |
 | Blockchain | Solana SDK, EtherLink, x402 payment protocol |
-| Database | SQLite via SQLx (API + Keeper), Azure Cosmos DB (Docs) |
-| Package Manager | pnpm 9.6.0 (enforced via corepack) |
+| Database | SQLite via SQLx, Azure Cosmos DB (Docs) |
+| Package Mgr | pnpm 9.6.0 (enforced via corepack) |
 | Monorepo | Turborepo 2.7 |
-| Testing | Vitest (marketing), Jest (docs, ui), cargo test (Rust), pytest (Python) |
+| JS Testing | Vitest (marketing), Jest (docs, ui) |
+| Rust Testing | cargo test |
+| Python Testing | pytest |
 | JS Linting | ESLint 8, Prettier 3.7 |
 | Rust Linting | Clippy, cargo fmt |
 | Python Linting | Ruff, Black, isort, mypy, bandit |
@@ -29,30 +31,30 @@ anchoring, edge AI processing, and a threat simulation engine.
 
 ## Repository Structure
 
-```
+```text
 apps/
-  marketing/       # Next.js 16 marketing website (threat sim, ROI calc, careers)
-  docs/            # Docusaurus 3 documentation portal + Azure Functions backend
-  api/             # Rust Axum REST API (evidence, auth, x402 payments)
-  keeper/          # Rust blockchain keeper (outbox pattern, EtherLink anchoring)
-  evidence-cli/    # Rust CLI for evidence hashing and submission
-  detector/        # Python drone detection (RPi, Jetson, Desktop, Coral TPU)
-  threat-simulator-desktop/  # Tauri 2 + Leptos WASM desktop app (Rapier2D physics)
+  marketing/       # Next.js 16 marketing website
+  docs/            # Docusaurus 3 docs + Azure Functions
+  api/             # Rust Axum REST API
+  keeper/          # Rust blockchain keeper service
+  evidence-cli/    # Rust CLI for evidence hashing
+  detector/        # Python drone detection
+  threat-simulator-desktop/  # Tauri 2 + Leptos WASM
 crates/
-  evidence/        # Core evidence logging and SHA-256 hashing
-  anchor-solana/   # Solana blockchain anchoring provider
-  anchor-etherlink/# EtherLink blockchain anchoring provider
-  address-validation/ # Blockchain address validation (SHA3, base58)
-  phoenix-common/  # Shared Rust DB utilities and schema management
-  x402/            # HTTP 402 payment protocol (micropayments via Solana)
+  evidence/        # Core evidence logging, SHA-256
+  anchor-solana/   # Solana blockchain anchoring
+  anchor-etherlink/# EtherLink blockchain anchoring
+  address-validation/ # Blockchain address validation
+  phoenix-common/  # Shared Rust DB utilities
+  x402/            # HTTP 402 payment protocol
 packages/
-  types/           # Shared TypeScript types (ThreatDetection, EvidenceRecord, etc.)
-  ui/              # Shared React components (Button, Card, StickyHeader, etc.)
-  utils/           # Shared utilities (downloadWhitepaper, formatCurrency)
-config/            # Tooling configs (eslint, prettier, clippy, cspell, etc.)
-scripts/           # Deployment and utility scripts (bash, PowerShell, JS)
-infra/             # IaC: infra/azure/ (Bicep), infra/terraform/ml-training/
-tools/             # pdf_generator (Python CLI for document generation)
+  types/           # Shared TypeScript types
+  ui/              # Shared React components
+  utils/           # Shared utility functions
+config/            # Tooling configs (symlinked to root)
+scripts/           # Deployment and utility scripts
+infra/             # IaC: azure/ (Bicep), terraform/
+tools/             # pdf_generator (Python CLI)
 ```
 
 ## Key Commands
@@ -71,26 +73,26 @@ cargo build                       # Rust workspace
 pnpm dev                          # All apps
 pnpm --filter marketing dev       # Marketing on :3000
 pnpm --filter docs start          # Docs on :3000
-pnpm sim:dev                      # Threat simulator (trunk serve on :8080)
-pnpm sim:dev:tauri                # Full desktop app with Tauri backend
+pnpm sim:dev                      # Threat simulator on :8080
+pnpm sim:dev:tauri                # Full desktop app
 
 # Test
-pnpm test                         # JS/TS tests (Vitest for marketing, Jest for docs/ui)
+pnpm test                         # JS/TS tests
 pnpm test:coverage                # With coverage
 pnpm --filter ui test             # UI package tests (Jest)
 pnpm --filter docs test           # Docs tests (Jest)
-cargo test                        # All Rust workspace tests
-cargo test --lib -p threat-simulator-desktop  # Specific crate
+cargo test                        # All Rust tests
+cargo test --lib -p threat-simulator-desktop
 pytest apps/detector              # Python tests
-pytest apps/detector -m "not slow and not hardware"  # Skip slow/hardware
+pytest apps/detector -m "not slow and not hardware"
 
 # Lint & Format
-pnpm lint                         # ESLint across all JS/TS packages
-pnpm typecheck                    # TypeScript type checking
+pnpm lint                         # ESLint
+pnpm typecheck                    # TypeScript
 pnpm format                       # Prettier write
 pnpm format:check                 # Prettier check
-cargo clippy -- -D warnings       # Rust linting (deny warnings)
-cargo fmt --all                   # Rust formatting
+cargo clippy -- -D warnings       # Rust lint
+cargo fmt --all                   # Rust format
 cargo fmt --all -- --check        # Rust format check
 pnpm fx                           # Combined: format + lint
 
@@ -101,7 +103,7 @@ isort --check-only src/           # Import order check
 mypy src/                         # Type checking
 
 # Desktop threat simulator
-pnpm sim:build:tauri              # Build release (platform-specific installer)
+pnpm sim:build:tauri              # Build release
 pnpm sim:test                     # Run simulator tests
 pnpm sim:lint                     # Clippy on simulator
 ```
@@ -111,72 +113,86 @@ pnpm sim:lint                     # Clippy on simulator
 ### API (`apps/api/`) — Rust Axum on port 8080
 
 Key routes:
+
 - `GET/POST /evidence` — Evidence job management
 - `GET /evidence/{id}` — Individual evidence lookup
 - `GET/POST /countermeasures` — Counter-drone deployments
 - `GET/POST /signal-disruptions` — RF disruption tracking
 - `GET/POST /jamming-operations` — EW operations
-- `POST /auth/login`, `GET /auth/me`, `PUT /auth/profile` — Auth
+- `POST /auth/login`, `GET /auth/me`, `PUT /auth/profile`
 - `POST /career/apply` — Career applications
 - `POST /admin/seed-team-members` — Seed fixture data
 - `GET /health` — Health check
-- `POST /api/v1/evidence/verify-premium` — x402 premium verification
+- `POST /api/v1/evidence/verify-premium` — x402 premium
 - `GET /api/v1/x402/status` — Payment protocol status
 
-Database: SQLite with automatic migrations on startup. Foreign keys enforced.
+Database: SQLite with automatic migrations on startup.
+Foreign keys enforced.
 DB URL priority: `API_DB_URL` > `KEEPER_DB_URL` > hardcoded default.
 Pagination: Default 10 items/page, max 100.
-x402 payment protocol: disabled by default, set `X402_ENABLED=true` to enable.
+x402 payment protocol: disabled by default, set
+`X402_ENABLED=true` to enable.
 
 ### Keeper (`apps/keeper/`) — Rust background service on port 8081
 
-Processes blockchain anchoring jobs from an outbox database. Dual-loop:
-job processing + transaction confirmation polling.
+Processes blockchain anchoring jobs from an outbox database.
+Dual-loop: job processing + transaction confirmation polling.
 
 Environment variables:
-- `KEEPER_USE_STUB=false` — true for dev (stub provider), false for real blockchain
+
+- `KEEPER_USE_STUB=false` — true for dev, false for real
 - `KEEPER_DB_URL=sqlite://blockchain_outbox.sqlite3`
 - `KEEPER_POLL_MS=5000` — Job polling interval
-- `ETHERLINK_ENDPOINT`, `ETHERLINK_NETWORK`, `ETHERLINK_PRIVATE_KEY`
+- `ETHERLINK_ENDPOINT`, `ETHERLINK_NETWORK`,
+  `ETHERLINK_PRIVATE_KEY`
 
 ### Marketing (`apps/marketing/`) — Next.js 16 on port 3000
 
-- Build requires WASM sync: `pnpm sync:wasm` runs automatically before `next build`
+- Build requires WASM sync: `pnpm sync:wasm` runs
+  automatically before `next build`
 - Email-based auth (no passwords), session via localStorage
 - Team member detection prevents self-applications
-- Env: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_ENABLE_TOUR_SKIP`, `NEXT_PUBLIC_TOUR_AUTO_START`
+- Env: `NEXT_PUBLIC_API_URL`,
+  `NEXT_PUBLIC_ENABLE_TOUR_SKIP`,
+  `NEXT_PUBLIC_TOUR_AUTO_START`
 
 ### Docs (`apps/docs/`) — Docusaurus 3
 
-- Has its own Azure Functions backend in `azure-functions/` (Node 20, Jest tests)
+- Has its own Azure Functions backend in `azure-functions/`
+  (Node 20, Jest tests)
 - Azure Entra ID (B2C) authentication
 - Comment system backed by Azure Cosmos DB
 - PWA offline support, Mermaid diagrams, local search
-- Env: `CLOUD_PROVIDER`, `AZURE_ENTRA_CLIENT_ID`, `AZURE_ENTRA_TENANT_ID`, plus more in `.env.example`
+- Env: `CLOUD_PROVIDER`, `AZURE_ENTRA_CLIENT_ID`,
+  `AZURE_ENTRA_TENANT_ID`, plus more in `.env.example`
 
 ### Detector (`apps/detector/`) — Python 3.9+
 
 Platform-specific installation:
+
 ```bash
 pip install -e ".[pi]"       # Raspberry Pi (TFLite)
-pip install -e ".[jetson]"   # NVIDIA Jetson (ONNX + TensorRT)
+pip install -e ".[jetson]"   # NVIDIA Jetson (ONNX)
 pip install -e ".[desktop]"  # Desktop (TensorFlow)
 pip install -e ".[coral]"    # Coral Edge TPU
 pip install -e ".[dev]"      # Development tools
 ```
 
-Modular architecture: pluggable cameras, inference engines, trackers via Factory
-pattern. Hardware auto-detection selects appropriate backend. Run with
-`drone-detector` CLI or `python -m main`.
+Modular architecture: pluggable cameras, inference engines,
+trackers via Factory pattern. Hardware auto-detection selects
+appropriate backend. Run with `drone-detector` CLI or
+`python -m main`.
 
 ### Threat Simulator Desktop (`apps/threat-simulator-desktop/`)
 
 Two development modes:
-- **Frontend only**: `trunk serve --port 8080` (fastest iteration, WASM only)
-- **Full desktop**: `cargo tauri dev` (includes Tauri native backend)
 
-Requires: Rust, `wasm32-unknown-unknown` target, Trunk, Tauri CLI.
-Linux build deps: `libwebkit2gtk-4.1-dev`, `build-essential`, `libssl-dev`,
+- **Frontend only**: `trunk serve --port 8080` (WASM only)
+- **Full desktop**: `cargo tauri dev` (includes Tauri backend)
+
+Requires: Rust, `wasm32-unknown-unknown` target, Trunk,
+Tauri CLI. Linux build deps: `libwebkit2gtk-4.1-dev`,
+`build-essential`, `libssl-dev`,
 `libayatana-appindicator3-dev`.
 
 ### Evidence CLI (`apps/evidence-cli/`)
@@ -186,39 +202,49 @@ Linux build deps: `libwebkit2gtk-4.1-dev`, `build-essential`, `libssl-dev`,
 cargo run -p evidence-cli -- --payload '{"event":"test"}'
 
 # Hash and submit to API
-cargo run -p evidence-cli -- --payload @file.json --submit --api-url http://localhost:8080
+cargo run -p evidence-cli -- \
+  --payload @file.json --submit \
+  --api-url http://localhost:8080
 ```
 
 ## Workspace Gotchas
 
-- **All Rust crates use `rustls`** instead of native OpenSSL (RUSTSEC-2025-0004).
-  Never add `native-tls` features to reqwest or other HTTP clients.
+- **All Rust crates use `rustls`** instead of native OpenSSL
+  (RUSTSEC-2025-0004). Never add `native-tls` features to
+  reqwest or other HTTP clients.
 - **Unsafe code is forbidden** workspace-wide in Cargo.toml.
-- **Marketing build depends on WASM**: `sync:wasm` copies compiled WASM from the
-  threat simulator. If the simulator hasn't been built, marketing build will use
-  a fallback.
-- **pnpm workspace includes nested apps**: `apps/*/*` pattern covers
-  `apps/docs/azure-functions/` and `apps/threat-simulator-desktop/src-tauri/`.
-- **`getrandom` crate** requires `js` feature for WASM targets (configured in
-  workspace Cargo.toml).
-- **Config files are symlinks**: Edit files in `config/`, not the root symlinks.
-- **Tauri desktop app has conditional compilation**: WASM-only vs native
-  dependencies are gated with `#[cfg(target_arch = "wasm32")]`.
-- **Rust CI builds require Linux GUI deps** for Tauri (GTK, webkit, appindicator).
-- **Cargo audit is currently skipped** in CI (CVSS 4.0 support pending).
-- **Python mypy has known type errors** — CI runs with `continue-on-error`.
+- **Marketing build depends on WASM**: `sync:wasm` copies
+  compiled WASM from the threat simulator. If the simulator
+  hasn't been built, marketing build will use a fallback.
+- **pnpm workspace includes nested apps**: `apps/*/*` covers
+  `apps/docs/azure-functions/` and
+  `apps/threat-simulator-desktop/src-tauri/`.
+- **`getrandom` crate** requires `js` feature for WASM
+  targets (configured in workspace Cargo.toml).
+- **Config files are symlinks**: Edit files in `config/`,
+  not the root symlinks.
+- **Tauri desktop app has conditional compilation**: WASM-only
+  vs native deps gated with `#[cfg(target_arch = "wasm32")]`.
+- **Rust CI builds require Linux GUI deps** for Tauri
+  (GTK, webkit, appindicator).
+- **Cargo audit is currently skipped** in CI
+  (CVSS 4.0 support pending).
+- **Python mypy has known type errors** — CI runs with
+  `continue-on-error`.
 
 ## Coding Standards
 
 ### TypeScript/JavaScript
+
 - Strict mode TypeScript, avoid `any`
 - Functional components with hooks (no class components)
 - Named exports preferred over default exports
-- CSS Modules for component styling (dark tactical theme by default)
-- WCAG AA+ accessibility: ARIA labels, keyboard nav, 4.5:1 contrast
-- ESLint security plugin enabled (detect-unsafe-regex, detect-eval, etc.)
+- CSS Modules for component styling (dark tactical theme)
+- WCAG AA+ accessibility: ARIA labels, keyboard nav, 4.5:1
+- ESLint security plugin enabled
 
 ### Rust
+
 - snake_case functions, PascalCase types
 - `Result<T, E>` with `?` operator, avoid panics
 - Doc comments on public APIs
@@ -227,8 +253,10 @@ cargo run -p evidence-cli -- --payload @file.json --submit --api-url http://loca
 - Use `rustls` for all HTTP/TLS operations
 
 ### Python (detector app)
+
 - Type hints with pydantic v2
-- Ruff for linting (E/W/F/I/B/C4/UP rules), Black for formatting (line-length 100)
+- Ruff for linting (E/W/F/I/B/C4/UP rules),
+  Black for formatting (line-length 100)
 - isort for import ordering (black profile)
 - pytest markers: `slow`, `integration`, `hardware`
 - bandit for security scanning
@@ -237,7 +265,8 @@ cargo run -p evidence-cli -- --payload @file.json --submit --api-url http://loca
 ## Commit Conventions
 
 Use conventional commits:
-```
+
+```text
 feat: Add tactical grid overlay
 fix: Resolve header gap spacing
 docs: Update README with installation steps
@@ -252,37 +281,42 @@ chore: Update dependencies
 When creating ADRs, reference the template at:
 `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
 
-Numbering: 0001-0099 (Core), 0100-0199 (Security), 0200-0299 (Blockchain),
-0300-0399 (AI/ML), D001-D999 (Dev Decisions).
+Numbering: 0001-0099 (Core), 0100-0199 (Security),
+0200-0299 (Blockchain), 0300-0399 (AI/ML),
+D001-D999 (Dev Decisions).
 
 ## Workspace Dependencies
 
-Cross-package imports use workspace protocol: `"@phoenix-rooivalk/types": "workspace:*"`
+Cross-package imports use workspace protocol:
+`"@phoenix-rooivalk/types": "workspace:*"`
 
-Shared Rust crates are referenced as path dependencies in workspace Cargo.toml.
+Shared Rust crates are referenced as path dependencies in
+workspace Cargo.toml.
 
 ## Environment Variables
 
-See `.env.example` in each app for full details. Key variables:
+See `.env.example` in each app for full details.
+Key variables:
 
 | App | Variable | Purpose |
 |---|---|---|
 | Marketing | `NEXT_PUBLIC_API_URL` | Backend API URL |
 | Docs | `CLOUD_PROVIDER` | `azure` or `offline` |
 | Docs | `AZURE_ENTRA_CLIENT_ID` | Azure AD B2C client |
-| Docs | `AZURE_FUNCTIONS_BASE_URL` | Functions URL (NO `/api` suffix) |
-| Keeper | `KEEPER_USE_STUB` | `true` for dev, `false` for prod |
-| Keeper | `KEEPER_DB_URL` | SQLite connection string |
-| API | `RUST_LOG` | Log level (info, debug, trace) |
-| API | `API_DB_URL` | SQLite URL (overrides KEEPER_DB_URL) |
-| API | `X402_ENABLED` | `true` to enable payment protocol |
-| API | `X402_WALLET_ADDRESS` | Solana wallet (required if x402 on) |
+| Docs | `AZURE_FUNCTIONS_BASE_URL` | Functions URL |
+| Keeper | `KEEPER_USE_STUB` | `true` for dev |
+| Keeper | `KEEPER_DB_URL` | SQLite connection |
+| API | `RUST_LOG` | Log level |
+| API | `API_DB_URL` | SQLite URL |
+| API | `X402_ENABLED` | Enable payment protocol |
+| API | `X402_WALLET_ADDRESS` | Solana wallet |
 
 Never commit `.env` files.
 
 ## Config Files
 
-Tooling configs live in `config/` and are symlinked to the root:
+Tooling configs live in `config/` and are symlinked to root:
+
 - `.eslintrc.js` -> `config/eslintrc.js`
 - `.prettierrc` -> `config/prettierrc`
 - `.markdownlint.json` -> `config/markdownlint.json`
@@ -291,20 +325,29 @@ Tooling configs live in `config/` and are symlinked to the root:
 
 ## Infrastructure
 
-- **Azure Bicep** (`infra/azure/`): Static Web Apps, Cosmos DB, Functions, Key
-  Vault, App Insights, Notification Hubs. Environments: dev/stg/prd.
-- **Terraform** (`infra/terraform/ml-training/`): Azure ML workspace with GPU
-  compute for YOLO drone detection model training.
-- **Deployment scripts** in `scripts/`: Azure setup, Cosmos container creation,
-  deployment validation, diagnostics.
+- **Azure Bicep** (`infra/azure/`): Static Web Apps,
+  Cosmos DB, Functions, Key Vault, App Insights,
+  Notification Hubs. Environments: dev/stg/prd.
+- **Terraform** (`infra/terraform/ml-training/`): Azure ML
+  workspace with GPU compute for YOLO drone detection
+  model training.
+- **Deployment scripts** in `scripts/`: Azure setup,
+  Cosmos container creation, deployment validation,
+  diagnostics.
 
 ## Per-App Instructions
 
-Each app has its own `CLAUDE.md` with app-specific gotchas, commands, and
-architecture details. These are loaded automatically when working in that
-directory:
-- `apps/docs/CLAUDE.md` — Docusaurus, Azure Functions, build-time env vars
-- `apps/marketing/CLAUDE.md` — Next.js static export, WASM sync, dual game engines
-- `apps/api/CLAUDE.md` — Routes, DB priority, x402 payment protocol, migrations
-- `apps/detector/CLAUDE.md` — Python config system, hardware platforms, linting
-- `apps/threat-simulator-desktop/CLAUDE.md` — WASM/native compilation, Trunk, Tauri
+Each app has its own `CLAUDE.md` with app-specific gotchas,
+commands, and architecture details. These are loaded
+automatically when working in that directory:
+
+- `apps/docs/CLAUDE.md` — Docusaurus, Azure Functions,
+  build-time env vars
+- `apps/marketing/CLAUDE.md` — Next.js static export,
+  WASM sync, dual game engines
+- `apps/api/CLAUDE.md` — Routes, DB priority,
+  x402 payment protocol, migrations
+- `apps/detector/CLAUDE.md` — Python config system,
+  hardware platforms, linting
+- `apps/threat-simulator-desktop/CLAUDE.md` — WASM/native
+  compilation, Trunk, Tauri

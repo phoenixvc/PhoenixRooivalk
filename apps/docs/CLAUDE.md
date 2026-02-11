@@ -31,15 +31,17 @@ pnpm --filter docs typecheck   # TypeScript check
 Separate Node 20 project with its own package.json and Jest tests.
 
 Key functions:
-- `askDocumentation` — RAG Q&A with cosine similarity + Azure OpenAI
+
+- `askDocumentation` — RAG Q&A with cosine similarity
 - `analyzeCompetitors` — AI competitive analysis
 - `searchDocs` — Hybrid search (keyword + semantic)
 - `cosmos-proxy` — Cosmos DB CRUD for comments
-- `health` + `health/ready` — Liveness/readiness (anonymous)
+- `health` + `health/ready` — Liveness/readiness
 - `news`, `news-ingestion` — RSS-based news feed
-- `send-email`, `weekly-reports`, `scheduled` — Background tasks
+- `send-email`, `weekly-reports`, `scheduled` — Background
 
-Protected endpoints use `requireAuthAsync()` + `checkRateLimitAsync()`.
+Protected endpoints use `requireAuthAsync()`
+and `checkRateLimitAsync()`.
 
 ```bash
 cd apps/docs/azure-functions
@@ -77,6 +79,7 @@ prerequisites: ["doc-id"]   # docIds that should be read first
 ## Cloud Provider Pattern
 
 All services have Azure and offline implementations:
+
 - `src/services/cloud/interfaces/` — Abstract interfaces
 - `src/services/cloud/azure/` — Azure implementations
 - `src/services/cloud/provider.ts` — Switches on `CLOUD_PROVIDER`

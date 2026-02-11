@@ -25,15 +25,20 @@ Config files: YAML or JSON. Load with `Settings.from_yaml(path)` or
 
 ## Key Configuration Sections (`src/config/settings.py`)
 
-| Section | Notable Settings |
-|---|---|
-| `CaptureSettings` | width (160-4096), height (120-3072), fps (1-120), camera_index |
-| `InferenceSettings` | model_path, input_size (128-640), confidence_threshold, nms_threshold |
-| `TargetingSettings` | fire_net safety envelope: min 5m, max 50m, confidence 0.85, track 10 frames, cooldown 10s, GPIO pin 17 |
-| `TrackerSettings` | max_disappeared (30 frames), Kalman filter noise params |
-| `AlertSettings` | webhook_url, per-track cooldown (5s), global cooldown (1s) |
-| `StreamingSettings` | MJPEG host:port, quality, max_fps, optional bearer token |
-| `DisplaySettings` | headless mode, overlay toggles |
+- **CaptureSettings** — width: 160–4096, height: 120–3072,
+  fps: 1–120, camera_index
+- **InferenceSettings** — model_path, input_size: 128–640,
+  confidence_threshold, nms_threshold
+- **TargetingSettings** — fire_net safety envelope:
+  min 5m, max 50m, confidence 0.85,
+  track 10 frames, cooldown 10s, GPIO pin 17
+- **TrackerSettings** — max_disappeared: 30 frames,
+  Kalman filter noise params
+- **AlertSettings** — webhook_url,
+  per-track cooldown 5s, global cooldown 1s
+- **StreamingSettings** — MJPEG host:port, quality,
+  max_fps, optional bearer token
+- **DisplaySettings** — headless mode, overlay toggles
 
 ## Pydantic Compatibility
 

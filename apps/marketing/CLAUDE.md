@@ -30,10 +30,12 @@ pnpm --filter marketing typecheck  # TypeScript check
 ## Dual Game Engines
 
 Two threat simulator implementations exist side by side:
-- `src/components/ThreatSimulator.tsx` — JavaScript/React implementation
-- `src/components/WasmThreatSimulator.tsx` — Leptos WASM wrapper
 
-The WASM version loads from `public/wasm/` (synced from threat-simulator-desktop).
+- `src/components/ThreatSimulator.tsx` — JS/React
+- `src/components/WasmThreatSimulator.tsx` — Leptos WASM
+
+The WASM version loads from `public/wasm/`
+(synced from threat-simulator-desktop).
 
 ## Authentication
 
@@ -86,7 +88,7 @@ Vitest with jsdom. Coverage via v8 provider. Setup in `src/__tests__/setup.ts`.
 
 ## Environment Variables
 
-```
+```text
 NEXT_PUBLIC_API_URL=http://localhost:8080
 NEXT_PUBLIC_ENABLE_TOUR_SKIP=true
 NEXT_PUBLIC_TOUR_AUTO_START=true
