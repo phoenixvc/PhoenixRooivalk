@@ -124,7 +124,9 @@ Key routes:
 - `GET /api/v1/x402/status` — Payment protocol status
 
 Database: SQLite with automatic migrations on startup. Foreign keys enforced.
+DB URL priority: `API_DB_URL` > `KEEPER_DB_URL` > hardcoded default.
 Pagination: Default 10 items/page, max 100.
+x402 payment protocol: disabled by default, set `X402_ENABLED=true` to enable.
 
 ### Keeper (`apps/keeper/`) — Rust background service on port 8081
 
@@ -268,9 +270,13 @@ See `.env.example` in each app for full details. Key variables:
 | Marketing | `NEXT_PUBLIC_API_URL` | Backend API URL |
 | Docs | `CLOUD_PROVIDER` | `azure` or `offline` |
 | Docs | `AZURE_ENTRA_CLIENT_ID` | Azure AD B2C client |
+| Docs | `AZURE_FUNCTIONS_BASE_URL` | Functions URL (NO `/api` suffix) |
 | Keeper | `KEEPER_USE_STUB` | `true` for dev, `false` for prod |
 | Keeper | `KEEPER_DB_URL` | SQLite connection string |
 | API | `RUST_LOG` | Log level (info, debug, trace) |
+| API | `API_DB_URL` | SQLite URL (overrides KEEPER_DB_URL) |
+| API | `X402_ENABLED` | `true` to enable payment protocol |
+| API | `X402_WALLET_ADDRESS` | Solana wallet (required if x402 on) |
 
 Never commit `.env` files.
 
@@ -291,3 +297,14 @@ Tooling configs live in `config/` and are symlinked to the root:
   compute for YOLO drone detection model training.
 - **Deployment scripts** in `scripts/`: Azure setup, Cosmos container creation,
   deployment validation, diagnostics.
+
+## Per-App Instructions
+
+Each app has its own `CLAUDE.md` with app-specific gotchas, commands, and
+architecture details. These are loaded automatically when working in that
+directory:
+- `apps/docs/CLAUDE.md` — Docusaurus, Azure Functions, build-time env vars
+- `apps/marketing/CLAUDE.md` — Next.js static export, WASM sync, dual game engines
+- `apps/api/CLAUDE.md` — Routes, DB priority, x402 payment protocol, migrations
+- `apps/detector/CLAUDE.md` — Python config system, hardware platforms, linting
+- `apps/threat-simulator-desktop/CLAUDE.md` — WASM/native compilation, Trunk, Tauri
