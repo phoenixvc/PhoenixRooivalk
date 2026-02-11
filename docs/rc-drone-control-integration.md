@@ -21,21 +21,24 @@ a viable path for this system.
 ### Hardware Bridge Options (For Physical Control)
 
 **Option A — Bypass Receiver (Recommended for AI Control)**
-```
+
+```text
 PC -> USB -> Microcontroller -> PWM -> Servos
 ```
 Disconnect receiver. Microcontroller generates servo PWM directly.
 Manual override via keyboard/gamepad in software.
 
 **Option B — Analog Injection (Keep RC Manual Backup)**
-```
+
+```text
 PC -> USB -> Microcontroller -> DAC/PWM -> Transmitter stick inputs -> RF -> Receiver -> Servos
 ```
 Spoof the analog potentiometer signals inside the transmitter.
 Physical switch toggles between real pot (manual) and injected signal (AI).
 
 **Option C — Dual Authority Hardware Switch**
-```
+
+```text
 Receiver PWM ─┐
                ├─> PWM Selector Switch -> Servos
 MCU PWM ──────┘
@@ -55,7 +58,8 @@ writing — just USB from laptop to board to servos.
 ## Software Architecture
 
 ### Module Overview
-```
+
+```text
 apps/detector/src/
   ├── targeting.py           # Existing: target lock, distance estimation
   ├── trackers.py            # Existing: centroid + Kalman trackers
@@ -65,7 +69,8 @@ apps/detector/src/
 ```
 
 ### Control Flow
-```
+
+```text
 Detection Pipeline (existing)
   └── TargetingSystem.update(tracked_objects)
         └── TargetLock (target center, velocity, confidence)
@@ -98,13 +103,15 @@ Uses the laptop's audio output (headphone jack, USB sound card, or
 Bluetooth speaker) to generate 50Hz servo PWM waveforms.
 
 **Signal chain:**
-```
+
+```text
 Laptop audio out --> Transistor circuit --> Servo signal wire
 (Left channel = yaw, Right channel = pitch)
 ```
 
 **Transistor circuit (per servo channel):**
-```
+
+```text
 Audio SPK+ ─── 10kΩ ─── Base ┐
                               │ NPN transistor
                  GND ── Emitter ┘    (BC547 / 2N2222 / S8050)
@@ -133,6 +140,7 @@ Audio SPK+ ─── 10kΩ ─── Base ┐
 
 ### Integration Example
 ```python
+from turret_controller import AuthorityMode
 from turret_factory import create_turret_controller, turret_update
 
 # Create from config
@@ -162,7 +170,7 @@ controller.stop()
 ### Configuration (YAML)
 ```yaml
 turret_control:
-  transport_type: simulated  # simulated, serial, wifi_udp
+  transport_type: simulated  # simulated, serial, wifi_udp, audio_pwm
   serial_port: "/dev/ttyUSB0"
   serial_baudrate: 115200
   wifi_host: "192.168.4.1"

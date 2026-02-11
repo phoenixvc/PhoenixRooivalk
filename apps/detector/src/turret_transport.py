@@ -696,11 +696,11 @@ def create_transport(
     # Validate via enum (catches typos at creation time)
     try:
         TransportType(transport_type)
-    except ValueError:
+    except ValueError as e:
         valid = [t.value for t in TransportType]
         raise ValueError(
             f"Unknown transport type: '{transport_type}'. Valid types: {valid}"
-        )
+        ) from e
 
     if transport_type == "simulated":
         return SimulatedTransport(

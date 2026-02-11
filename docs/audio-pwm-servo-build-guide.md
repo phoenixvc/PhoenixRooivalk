@@ -15,12 +15,14 @@ Share this with whoever is building the hardware side.
 ## How It Works (The Big Picture)
 
 Normal servo control:
-```
+
+```text
 Microcontroller --> PWM signal (50Hz, 1000-2000μs pulse) --> Servo
 ```
 
 What we do instead:
-```
+
+```text
 Laptop --> Audio output (50Hz square wave) --> Transistor circuit --> Servo
 ```
 
@@ -48,7 +50,7 @@ digital pulses that servos expect.
 Look for small black plastic components with 3 legs in a half-circle
 shape (TO-92 package). They're typically marked with a code:
 
-```
+```text
 Common NPN markings:
   BC547, BC548, BC549 (European, very common)
   2N2222, 2N3904 (American, very common)
@@ -65,13 +67,15 @@ If you can't read the marking, test it:
 ### Identifying Resistors
 
 **Through-hole (with color bands):**
-```
+
+```text
 10kΩ = Brown Black Orange Gold
 4.7kΩ = Yellow Violet Red Gold
 ```
 
 **SMD (surface mount, tiny rectangles):**
-```
+
+```text
 10kΩ = marked "103" or "1002"
 4.7kΩ = marked "472" or "4701"
 ```
@@ -107,7 +111,7 @@ The audio output provides signal only, not power.**
 - 3.5mm audio cable (or cut an old pair of headphones)
 - The 3.5mm plug has 3 or 4 contacts:
 
-```
+```text
 3.5mm TRS plug (stereo):
   Tip    = Left channel  (yaw servo)
   Ring   = Right channel (pitch servo)
@@ -121,7 +125,7 @@ The audio output provides signal only, not power.**
 
 ### Wiring Diagram
 
-```
+```text
                             +5V (from servo battery/BEC)
                              │
                             4.7kΩ
@@ -184,7 +188,7 @@ The audio output provides signal only, not power.**
 
 ### NPN Transistor Pinout Reference
 
-```
+```text
 Most common TO-92 pinout (flat side facing you):
 
         ┌───┐
@@ -246,7 +250,7 @@ Most common TO-92 pinout (flat side facing you):
 
 ### Wiring Diagram
 
-```
+```text
 BT Speaker PCB
   ┌─────────────────────┐
   │                     │
@@ -312,7 +316,7 @@ BT Speaker PCB
 
 ### How It Works
 
-```
+```text
 Laptop (WiFi) ─── UDP commands ──> Old Phone (WiFi)
                                       │
                               Web Audio API generates

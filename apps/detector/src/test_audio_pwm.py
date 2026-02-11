@@ -179,8 +179,8 @@ def run_interactive_test(device=None, buffer_size=512):
 
     # Platform-specific key reading
     try:
-        import tty
         import termios
+        import tty
 
         def get_key():
             fd = sys.stdin.fileno()
@@ -316,11 +316,20 @@ def run_tracking_test(device=None, buffer_size=512, camera_index=0):
     print(f"  Audio: {transport.transport_info}")
     print()
 
+    failure_count = 0
+    max_failures = 30  # ~1 second at 30fps before giving up
+
     try:
         while True:
             ret, frame = cap.read()
             if not ret:
+                failure_count += 1
+                if failure_count >= max_failures:
+                    print(f"\nERROR: Camera read failed {max_failures} times in a row. Exiting.")
+                    break
+                time.sleep(0.03)  # Avoid CPU spin on repeated failures
                 continue
+            failure_count = 0  # Reset on successful read
 
             # Motion detection
             fg_mask = bg_sub.apply(frame)

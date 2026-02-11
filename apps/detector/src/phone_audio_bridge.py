@@ -34,7 +34,6 @@ import json
 import logging
 import socket
 import struct
-import sys
 import threading
 
 logger = logging.getLogger("drone_detector.phone_bridge")
@@ -236,13 +235,12 @@ def get_local_ip() -> str:
     """
     # Method 1: Connect to external host (works when internet available)
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.settimeout(0.5)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        s.close()
-        if ip and ip != "0.0.0.0":
-            return ip
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.settimeout(0.5)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            if ip and ip != "0.0.0.0":
+                return ip
     except Exception:
         pass
 
@@ -412,13 +410,13 @@ async def run_server(host: str, port: int):
     print("  PHONE AUDIO PWM BRIDGE")
     print("=" * 60)
     print()
-    print(f"  Open this URL on the phone's browser:")
+    print("  Open this URL on the phone's browser:")
     print()
     print(f"    {url}")
     print()
     _print_qr_code(url)
     print()
-    print(f"  Then tap 'Start Audio' and plug in the headphone cable.")
+    print("  Then tap 'Start Audio' and plug in the headphone cable.")
     print()
     print(f"  UDP listener on port {port} (for wifi_udp transport)")
     print(f"  WebSocket on ws://{local_ip}:{port}/ws")
