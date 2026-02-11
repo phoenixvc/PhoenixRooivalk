@@ -1,4 +1,4 @@
-# Test
+# Run the test suite
 
 Run the test suite for the project. Accepts an optional argument to scope tests.
 
