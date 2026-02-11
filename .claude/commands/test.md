@@ -1,3 +1,5 @@
+# Test
+
 Run the test suite for the project. Accepts an optional argument to scope tests.
 
 Arguments: $ARGUMENTS

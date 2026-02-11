@@ -324,10 +324,11 @@ Each app has its own `CLAUDE.md` with app-specific gotchas, commands, and
 architecture details. These are loaded automatically when working in that
 directory:
 
+- `apps/api/CLAUDE.md` — Routes, DB priority, x402 payment protocol, migrations
+- `apps/keeper/CLAUDE.md` — Dual-loop anchoring, providers, batch Merkle trees
 - `apps/docs/CLAUDE.md` — Docusaurus, Azure Functions, build-time env vars
 - `apps/marketing/CLAUDE.md` — Next.js static export, WASM sync, dual game
   engines
-- `apps/api/CLAUDE.md` — Routes, DB priority, x402 payment protocol, migrations
 - `apps/detector/CLAUDE.md` — Python config system, hardware platforms, linting
 - `apps/threat-simulator-desktop/CLAUDE.md` — WASM/native compilation, Trunk,
   Tauri
