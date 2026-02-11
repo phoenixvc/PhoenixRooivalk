@@ -14,7 +14,7 @@ If an argument is provided, scope the build:
 - `keeper` → `cargo build -p phoenix-keeper`
 - `evidence-cli` → `cargo build -p evidence-cli`
 - `sim` → `pnpm sim:build:tauri` (Tauri desktop installer)
-- `wasm` → `trunk build --release` (in apps/threat-simulator-desktop/)
+- `wasm` → `cd apps/threat-simulator-desktop && trunk build --release`
 - Any other value → try `pnpm --filter $ARGUMENTS build`
 
 Report any build errors and offer to fix them.
