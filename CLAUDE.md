@@ -77,10 +77,9 @@ pnpm sim:dev                      # Threat simulator on :8080
 pnpm sim:dev:tauri                # Full desktop app
 
 # Test
-pnpm test                         # JS/TS tests
-pnpm test:coverage                # With coverage
-pnpm --filter ui test             # UI package tests (Jest)
+pnpm --filter marketing test      # Marketing tests (Vitest)
 pnpm --filter docs test           # Docs tests (Jest)
+pnpm --filter ui test             # UI package tests (Jest)
 cargo test                        # All Rust tests
 cargo test --lib -p threat-simulator-desktop
 pytest apps/detector              # Python tests
@@ -145,8 +144,8 @@ Environment variables:
 
 ### Marketing (`apps/marketing/`) — Next.js 16 on port 3000
 
-- Build requires WASM sync: `pnpm sync:wasm` runs automatically before
-  `next build`
+- Build requires WASM sync: `pnpm --filter marketing sync:wasm` runs
+  automatically before `next build`
 - Email-based auth (no passwords), session via localStorage
 - Team member detection prevents self-applications
 - Env: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_ENABLE_TOUR_SKIP`,

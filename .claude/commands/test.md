@@ -4,7 +4,7 @@ Arguments: $ARGUMENTS
 
 If no argument is provided, run all test suites:
 
-1. `pnpm test` — JS/TS tests (Vitest/Jest) across all packages
+1. `pnpm --filter marketing test && pnpm --filter docs test && pnpm --filter ui test` — JS/TS tests
 2. `cargo test` — Rust workspace tests
 3. `pytest apps/detector` — Python detector tests
 
