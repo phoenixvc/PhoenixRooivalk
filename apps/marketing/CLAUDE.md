@@ -34,12 +34,13 @@ Two threat simulator implementations exist side by side:
 - `src/components/ThreatSimulator.tsx` — JS/React
 - `src/components/WasmThreatSimulator.tsx` — Leptos WASM
 
-The WASM version loads from `public/wasm/`
-(synced from threat-simulator-desktop).
+The WASM version loads from `public/wasm/` (synced from
+threat-simulator-desktop).
 
 ## Authentication
 
 Email-only (no passwords):
+
 - `POST /auth/login` creates or finds user by email
 - Session stored in localStorage: `session_id`, `user` (JSON)
 - After login, redirects to `/contact#careers`
@@ -47,9 +48,9 @@ Email-only (no passwords):
 
 ## Theme System (`src/contexts/ThemeContext.tsx`)
 
-Three themes: "phoenix" (default orange), "blue", "green".
-Stored in localStorage key `phoenix-theme`.
-Sets CSS custom properties on `document.documentElement`.
+Three themes: "phoenix" (default orange), "blue", "green". Stored in
+localStorage key `phoenix-theme`. Sets CSS custom properties on
+`document.documentElement`.
 
 ## Shopping Cart (`src/contexts/CartContext.tsx`)
 
@@ -57,15 +58,15 @@ localStorage key: `phoenix-rooivalk-cart`. Silent failure on storage errors.
 
 ## Component Organization
 
-| Directory | Purpose |
-|---|---|
-| `src/components/sections/` | Page sections (Hero, Features, Team, etc.) |
-| `src/components/simulator/` | Game engine components |
-| `src/components/ui/` | Shared UI (Button, Card, Badge) |
-| `src/components/cart/` | Shopping cart |
-| `src/components/weapon/` | Weapon/research panels |
-| `src/components/hooks/` | Simulator-specific hooks |
-| `src/components/utils/` | Game utilities (engine, particles, collision) |
+| Directory                   | Purpose                                       |
+| --------------------------- | --------------------------------------------- |
+| `src/components/sections/`  | Page sections (Hero, Features, Team, etc.)    |
+| `src/components/simulator/` | Game engine components                        |
+| `src/components/ui/`        | Shared UI (Button, Card, Badge)               |
+| `src/components/cart/`      | Shopping cart                                 |
+| `src/components/weapon/`    | Weapon/research panels                        |
+| `src/components/hooks/`     | Simulator-specific hooks                      |
+| `src/components/utils/`     | Game utilities (engine, particles, collision) |
 
 ## Routes
 

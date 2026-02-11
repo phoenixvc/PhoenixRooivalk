@@ -21,6 +21,7 @@ Available subcommands:
 - `security` → `cd apps/detector && bandit -r src/ -ll -ii`
 - `install` → `cd apps/detector && pip install -e ".[dev]"`
 
-If no argument is provided, run the full quality check: lint, typecheck, then test.
+If no argument is provided, run the full quality check: lint, typecheck, then
+test.
 
 Report results in detail, including any failures.

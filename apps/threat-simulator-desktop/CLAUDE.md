@@ -55,7 +55,8 @@ for both targets (enables native testing).
 
 ## Build Requirements
 
-- Rust + `wasm32-unknown-unknown` target (`rustup target add wasm32-unknown-unknown`)
+- Rust + `wasm32-unknown-unknown` target
+  (`rustup target add wasm32-unknown-unknown`)
 - Trunk (`cargo install trunk`)
 - Tauri CLI (`cargo install tauri-cli --version "^2.0"`)
 - Linux: `libwebkit2gtk-4.1-dev`, `build-essential`, `libssl-dev`,

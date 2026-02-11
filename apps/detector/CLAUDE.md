@@ -25,19 +25,16 @@ Config files: YAML or JSON. Load with `Settings.from_yaml(path)` or
 
 ## Key Configuration Sections (`src/config/settings.py`)
 
-- **CaptureSettings** — width: 160–4096, height: 120–3072,
-  fps: 1–120, camera_index
-- **InferenceSettings** — model_path, input_size: 128–640,
-  confidence_threshold, nms_threshold
-- **TargetingSettings** — fire_net safety envelope:
-  min 5m, max 50m, confidence 0.85,
-  track 10 frames, cooldown 10s, GPIO pin 17
-- **TrackerSettings** — max_disappeared: 30 frames,
-  Kalman filter noise params
-- **AlertSettings** — webhook_url,
-  per-track cooldown 5s, global cooldown 1s
-- **StreamingSettings** — MJPEG host:port, quality,
-  max_fps, optional bearer token
+- **CaptureSettings** — width: 160–4096, height: 120–3072, fps: 1–120,
+  camera_index
+- **InferenceSettings** — model_path, input_size: 128–640, confidence_threshold,
+  nms_threshold
+- **TargetingSettings** — fire_net safety envelope: min 5m, max 50m, confidence
+  0.85, track 10 frames, cooldown 10s, GPIO pin 17
+- **TrackerSettings** — max_disappeared: 30 frames, Kalman filter noise params
+- **AlertSettings** — webhook_url, per-track cooldown 5s, global cooldown 1s
+- **StreamingSettings** — MJPEG host:port, quality, max_fps, optional bearer
+  token
 - **DisplaySettings** — headless mode, overlay toggles
 
 ## Pydantic Compatibility
@@ -75,11 +72,11 @@ bandit -r src/ -ll -ii -x tests/  # Security scan
 
 ## Pre-commit Hooks (`.pre-commit-config.yaml`)
 
-All hooks scoped to `^apps/detector/`:
-ruff (with auto-fix), ruff-format, standard hooks (trailing whitespace, YAML,
-JSON, large files <1MB, merge conflicts, debug statements), isort, mypy, bandit.
+All hooks scoped to `^apps/detector/`: ruff (with auto-fix), ruff-format,
+standard hooks (trailing whitespace, YAML, JSON, large files <1MB, merge
+conflicts, debug statements), isort, mypy, bandit.
 
 ## Entry Point
 
-CLI: `drone-detector` (defined in pyproject.toml as `main:main`)
-Or: `python -m main`
+CLI: `drone-detector` (defined in pyproject.toml as `main:main`) Or:
+`python -m main`

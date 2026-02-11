@@ -5,11 +5,13 @@ Perform a comprehensive code review of the specified files or area.
 Arguments: $ARGUMENTS
 
 If an argument is provided, scope the review to that path, app, or feature area.
-If no argument is provided, review the most recently changed files (use `git diff --name-only HEAD~1`).
+If no argument is provided, review the most recently changed files (use
+`git diff --name-only HEAD~1`).
 
 ## Review Checklist
 
-Work through each category below. For every finding, cite the file path and line number.
+Work through each category below. For every finding, cite the file path and line
+number.
 
 ### 1. Bugs and Correctness
 

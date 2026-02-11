@@ -40,8 +40,7 @@ Key functions:
 - `news`, `news-ingestion` — RSS-based news feed
 - `send-email`, `weekly-reports`, `scheduled` — Background
 
-Protected endpoints use `requireAuthAsync()`
-and `checkRateLimitAsync()`.
+Protected endpoints use `requireAuthAsync()` and `checkRateLimitAsync()`.
 
 ```bash
 cd apps/docs/azure-functions
@@ -70,10 +69,10 @@ npm test                        # Jest tests
 
 ```yaml
 difficulty: beginner | intermediate | advanced | expert
-estimated_reading_time: 5   # minutes
-points: 10                  # non-negative
+estimated_reading_time: 5 # minutes
+points: 10 # non-negative
 tags: ["business", "counter-uas"]
-prerequisites: ["doc-id"]   # docIds that should be read first
+prerequisites: ["doc-id"] # docIds that should be read first
 ```
 
 ## Cloud Provider Pattern
@@ -88,15 +87,15 @@ All services have Azure and offline implementations:
 
 See `.env.example` for full list. Key ones:
 
-| Variable | Required | Notes |
-|---|---|---|
-| `CLOUD_PROVIDER` | Yes | `azure` or `offline` |
-| `AZURE_ENTRA_CLIENT_ID` | For auth | B2C client ID |
-| `AZURE_ENTRA_TENANT_ID` | For auth | B2C tenant ID |
-| `AZURE_ENTRA_AUTHORITY` | For auth | B2C authority URL |
-| `AZURE_FUNCTIONS_BASE_URL` | For AI | NO `/api` suffix |
-| `AZURE_APP_INSIGHTS_CONNECTION_STRING` | Optional | Analytics |
-| `DISABLE_LOGIN` | Optional | `true` to hide login |
+| Variable                               | Required | Notes                |
+| -------------------------------------- | -------- | -------------------- |
+| `CLOUD_PROVIDER`                       | Yes      | `azure` or `offline` |
+| `AZURE_ENTRA_CLIENT_ID`                | For auth | B2C client ID        |
+| `AZURE_ENTRA_TENANT_ID`                | For auth | B2C tenant ID        |
+| `AZURE_ENTRA_AUTHORITY`                | For auth | B2C authority URL    |
+| `AZURE_FUNCTIONS_BASE_URL`             | For AI   | NO `/api` suffix     |
+| `AZURE_APP_INSIGHTS_CONNECTION_STRING` | Optional | Analytics            |
+| `DISABLE_LOGIN`                        | Optional | `true` to hide login |
 
 ## Sidebar Structure (`sidebars.ts`)
 

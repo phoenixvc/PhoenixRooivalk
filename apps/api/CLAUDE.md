@@ -46,23 +46,23 @@ Pagination: Default 10/page, max 100.
 
 Environment variables (all optional — disabled by default):
 
-| Variable | Default | Notes |
-|---|---|---|
-| `X402_ENABLED` | `false` | `true` or `1` to enable |
-| `X402_WALLET_ADDRESS` | — | Required if x402 on |
-| `X402_FACILITATOR_URL` | see below | Payment verifier |
-| `SOLANA_RPC_URL` | see below | Solana endpoint |
-| `SOLANA_NETWORK` | `devnet` | `devnet` or `mainnet-beta` |
-| `X402_MIN_PAYMENT` | `0.001` | Minimum USDC |
+| Variable               | Default   | Notes                      |
+| ---------------------- | --------- | -------------------------- |
+| `X402_ENABLED`         | `false`   | `true` or `1` to enable    |
+| `X402_WALLET_ADDRESS`  | —         | Required if x402 on        |
+| `X402_FACILITATOR_URL` | see below | Payment verifier           |
+| `SOLANA_RPC_URL`       | see below | Solana endpoint            |
+| `SOLANA_NETWORK`       | `devnet`  | `devnet` or `mainnet-beta` |
+| `X402_MIN_PAYMENT`     | `0.001`   | Minimum USDC               |
 
-Defaults: facilitator `https://x402.org/facilitator`,
-RPC `https://api.devnet.solana.com`.
+Defaults: facilitator `https://x402.org/facilitator`, RPC
+`https://api.devnet.solana.com`.
 
-Price tiers: Basic ($0.01), MultiChain ($0.05),
-LegalAttestation ($1.00), Bulk ($0.005/record for 100+).
+Price tiers: Basic ($0.01), MultiChain ($0.05), LegalAttestation ($1.00), Bulk
+($0.005/record for 100+).
 
-x402 endpoint is M2M-only (requires Bearer token, rejects
-browser cookies). Payment proof passed via `X-PAYMENT` header.
+x402 endpoint is M2M-only (requires Bearer token, rejects browser cookies).
+Payment proof passed via `X-PAYMENT` header.
 
 Devnet mode simulates verification (always valid if amount >= min).
 
@@ -79,8 +79,8 @@ Automatic on startup. Version-tracked in `migrations.rs`:
 
 ## Feature Flags
 
-- `cosmos` feature — Enables Azure Cosmos DB support (optional,
-  adds `azure_data_cosmos` + `azure_identity` dependencies)
+- `cosmos` feature — Enables Azure Cosmos DB support (optional, adds
+  `azure_data_cosmos` + `azure_identity` dependencies)
 
 ## Testing
 
@@ -88,6 +88,5 @@ Automatic on startup. Version-tracked in `migrations.rs`:
 cargo test -p phoenix-api          # All API tests
 ```
 
-9 test files in `tests/`: app_setup, evidence_creation,
-evidence_retrieval, x402, pagination, doc_tests, foreign_keys,
-http_evidence, common/.
+9 test files in `tests/`: app_setup, evidence_creation, evidence_retrieval,
+x402, pagination, doc_tests, foreign_keys, http_evidence, common/.

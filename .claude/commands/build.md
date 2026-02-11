@@ -1,12 +1,16 @@
+# Build
+
 Build the project. Accepts an optional argument to scope the build.
 
 Arguments: $ARGUMENTS
 
 If no argument is provided, build everything:
+
 1. `pnpm build` — All JS/TS apps via Turborepo
 2. `cargo build` — Rust workspace
 
 If an argument is provided, scope the build:
+
 - `marketing` → `pnpm --filter marketing build` (includes sync:wasm)
 - `docs` → `pnpm --filter docs build`
 - `rust` → `cargo build` (all Rust workspace crates)
