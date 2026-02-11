@@ -90,6 +90,7 @@ Detection Pipeline (existing)
 | `serial` | USB/UART to MCU | Direct wired control |
 | `wifi_udp` | ESP32/similar over WiFi | Wireless control |
 | `audio_pwm` | Headphone jack or BT speaker + transistor circuit | Zero-MCU control |
+| `wifi_udp` + phone bridge | Old phone over WiFi + headphone jack + transistor circuit | Wireless zero-MCU control (~30-50ms) |
 
 ### Audio PWM Transport (Zero Microcontroller Option)
 
@@ -174,7 +175,7 @@ turret_control:
   pitch_kd: 0.10
   max_yaw_rate: 1.0
   max_pitch_rate: 1.0
-  max_slew_rate: 0.1
+  max_slew_rate: 2.0  # per second
   watchdog_timeout_ms: 500
   override_latch_seconds: 3.0
   command_ttl_ms: 200
@@ -188,6 +189,14 @@ turret_control:
 - Tune PID in simulation
 - Build manual override UI
 - All logging and visualization
+
+### Phase 1.5 — Audio PWM (No MCU Needed)
+- Build transistor circuit (2x NPN + 4 resistors)
+- Wired: laptop headphone jack → circuit → servos (Path A)
+- Wireless: WiFi → old phone → headphone jack → circuit (Path C)
+- Or: Bluetooth speaker board → circuit (Path B)
+- Run `phone_audio_bridge.py` for Path C
+- See `docs/audio-pwm-servo-build-guide.md`
 
 ### Phase 2 — Hardware Bridge (When MCU Available)
 - Connect ESP32/Arduino via USB

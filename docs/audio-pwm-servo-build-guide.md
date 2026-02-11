@@ -3,9 +3,10 @@
 Complete hardware build instructions for controlling 2 hobby servos
 using a laptop's audio output — no microcontroller needed.
 
-**Two paths covered:**
+**Three paths covered:**
 - **Path A**: Wired via headphone jack (~5ms latency)
 - **Path B**: Wireless via Bluetooth speaker board (~100-200ms latency)
+- **Path C**: Wireless via WiFi + old phone as bridge (~30-50ms latency)
 
 Share this with whoever is building the hardware side.
 
@@ -291,6 +292,114 @@ BT Speaker PCB
 4. Run: `python test_audio_pwm.py --list-devices`
 5. Find the BT speaker device number
 6. Test: `python test_audio_pwm.py --sweep --device <number>`
+
+---
+
+## Path C: Wireless (WiFi + Old Phone)
+
+### Advantages
+- Wireless: no cable to the laptop
+- Lower latency than Bluetooth: ~30-50ms (WiFi UDP, no audio codec)
+- Longer range: 20-50 meters (WiFi vs BT's 5-10m)
+- Self-powered: phone has its own battery
+- No app to install: runs in the phone's browser (Web Audio API)
+- Everyone has an old phone in a drawer
+
+### Disadvantages
+- Requires phone with headphone jack (or USB-C audio adapter)
+- Phone must stay awake and screen on (browser tab active)
+- Slightly more setup than Path A
+
+### How It Works
+
+```
+Laptop (WiFi) ─── UDP commands ──> Old Phone (WiFi)
+                                      │
+                              Web Audio API generates
+                              50Hz PWM through
+                              phone's headphone jack
+                                      │
+                                      v
+                            Transistor circuit ──> Servos
+```
+
+The laptop serves a small web page. The phone opens it in its browser.
+The page receives servo commands over WebSocket and generates audio PWM
+through the Web Audio API — the phone's headphone jack becomes a servo
+controller.
+
+### What You Need (Additional)
+- An old phone with:
+  - WiFi
+  - 3.5mm headphone jack (or USB-C to 3.5mm adapter)
+  - A web browser (Chrome, Firefox, Safari all work)
+- Both devices on the same WiFi network (or phone connected to laptop's hotspot)
+
+### Setup
+
+1. **Connect phone to same WiFi as laptop**
+   - OR create a hotspot on the laptop, connect phone to it
+   - OR create a hotspot on the phone, connect laptop to it
+
+2. **Start the bridge server on the laptop**
+   ```bash
+   cd apps/detector/src
+   python phone_audio_bridge.py
+   ```
+   This starts a web server on port 8765.
+
+3. **Open the bridge page on the phone**
+   - The script prints a URL like `http://192.168.1.x:8765`
+   - Open this URL in the phone's browser
+   - Tap "Start Audio" (browsers require a user gesture for audio)
+
+4. **Plug the headphone cable into the phone**
+   - Same transistor circuit as Path A
+   - Left channel = yaw, Right channel = pitch
+
+5. **Test from the laptop**
+   ```bash
+   python test_audio_pwm.py --sweep --device phone
+   ```
+   Or configure in `config.yaml`:
+   ```yaml
+   turret_control:
+     transport_type: wifi_udp
+     wifi_host: "<phone IP>"
+     wifi_port: 8765
+   ```
+
+### Latency Comparison
+
+| Path | Latency | Range | Hardware |
+|------|---------|-------|----------|
+| A: Headphone jack | ~5ms | Cable length | 3.5mm cable |
+| B: BT speaker | ~100-200ms | ~5-10m | BT speaker board |
+| C: WiFi + phone | ~30-50ms | ~20-50m | Old phone |
+
+---
+
+## Scaling: 4+ Servo Channels
+
+Each stereo audio output gives 2 servo channels (left = ch1, right = ch2).
+To control more than 2 servos, add more audio outputs:
+
+| Setup | Channels | How |
+|-------|----------|-----|
+| Laptop headphone jack | 2 | Built-in (Path A) |
+| + USB sound card | 4 | Plug in a USB sound card or old USB headset |
+| + Phone bridge | 4 | WiFi to phone (Path C), phone uses its own jack |
+| + BT speaker | 4 | Laptop BT to speaker (Path B) |
+| Multiple phones | 6+ | Each phone = 2 more channels |
+
+**USB sound cards** are cheap ($1-3) or salvageable from old USB headsets.
+They show up as a separate audio device. Use `--list-devices` to find them,
+then run a second `AudioPwmTransport` instance targeting that device index.
+
+**When would you need 4+ channels?**
+- Pan + Tilt + Trigger mechanism + Gripper
+- Dual turret (2 axes each)
+- Pan + Tilt + Camera gimbal stabilization
 
 ---
 
