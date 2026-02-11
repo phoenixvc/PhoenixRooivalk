@@ -12,7 +12,7 @@ If an argument is provided, scope the build:
 - `rust` → `cargo build` (all Rust workspace crates)
 - `api` → `cargo build -p phoenix-api`
 - `keeper` → `cargo build -p phoenix-keeper`
-- `evidence-cli` → `cargo build -p record-evidence`
+- `evidence-cli` → `cargo build -p evidence-cli`
 - `sim` → `pnpm sim:build:tauri` (Tauri desktop installer)
 - `wasm` → `trunk build --release` (in apps/threat-simulator-desktop/)
 - Any other value → try `pnpm --filter $ARGUMENTS build`

@@ -183,10 +183,10 @@ Linux build deps: `libwebkit2gtk-4.1-dev`, `build-essential`, `libssl-dev`,
 
 ```bash
 # Hash a payload locally
-cargo run -p record-evidence -- --payload '{"event":"test"}'
+cargo run -p evidence-cli -- --payload '{"event":"test"}'
 
 # Hash and submit to API
-cargo run -p record-evidence -- --payload @file.json --submit --api-url http://localhost:8080
+cargo run -p evidence-cli -- --payload @file.json --submit --api-url http://localhost:8080
 ```
 
 ## Workspace Gotchas
