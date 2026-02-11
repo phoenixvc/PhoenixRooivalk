@@ -1,4 +1,4 @@
-# Start a development server for a specific app
+# Dev
 
 Arguments: $ARGUMENTS
 
