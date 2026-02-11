@@ -105,19 +105,21 @@ def create_turret_controller(settings) -> TurretController:
         command_ttl_ms=getattr(settings, "command_ttl_ms", 200),
     )
 
-    # Set initial mode (warn on invalid)
+    # Set initial mode (warn on invalid, default to manual)
     initial_mode = getattr(settings, "initial_mode", "manual")
     if initial_mode in _MODE_MAP:
-        controller.set_mode(_MODE_MAP[initial_mode])
+        resolved_mode = initial_mode
     else:
         logger.warning(
             f"Unknown initial_mode '{initial_mode}', defaulting to MANUAL. "
             f"Valid modes: {list(_MODE_MAP.keys())}"
         )
+        resolved_mode = "manual"
+    controller.set_mode(_MODE_MAP[resolved_mode])
 
     logger.info(
         f"Turret controller created: transport={transport_type}, "
-        f"mode={initial_mode}"
+        f"mode={resolved_mode}"
     )
     return controller
 

@@ -499,13 +499,25 @@ class TestPIDDeadZone:
         assert output != 0.0  # Even tiny error produces output
 
     def test_dead_zone_decays_integral(self):
-        pid = PIDController(kp=0.0, ki=1.0, dead_zone=0.05)
-        # Accumulate integral
+        # kp=0, kd=0 isolates the integral term for this test
+        pid = PIDController(kp=0.0, ki=1.0, kd=0.0, dead_zone=0.05)
+        # Accumulate integral with large error
         for _ in range(10):
             pid.update(0.5)
             time.sleep(0.01)
-        # Enter dead zone — integral should decay
+        # Capture output just before entering dead zone (purely integral)
+        last_output_before_deadzone = pid.update(0.5)
+        assert last_output_before_deadzone != 0.0, "Should have accumulated integral"
+        # Enter dead zone — integral should decay at 0.9x per call
         pid.update(0.01)
         pid.update(0.01)
-        pid.update(0.01)
-        # Integral is decaying at 0.9 per call
+        output_after_decay = pid.update(0.01)
+        assert output_after_decay == 0.0, "Dead zone should output zero"
+        # Exit dead zone and check that integral has decayed
+        # (same error as before, but integral is smaller due to 0.9^3 decay)
+        time.sleep(0.01)  # Ensure non-zero dt for integral accumulation
+        output_after_exit = pid.update(0.5)
+        assert abs(output_after_exit) < abs(last_output_before_deadzone), (
+            f"Integral should have decayed: {output_after_exit} should be "
+            f"less than {last_output_before_deadzone}"
+        )

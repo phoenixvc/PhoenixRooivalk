@@ -662,7 +662,7 @@ class AudioPwmTransport(ActuatorTransport):
             pitch = self._pitch_position
         return {
             "type": "audio_pwm",
-            "device": self._device or "default",
+            "device": self._device if self._device is not None else "default",
             "buffer_size": self._buffer_size,
             "sample_rate": self.SAMPLE_RATE,
             "connected": self._connected,

@@ -30,6 +30,7 @@ NOTE: This module controls pan/tilt positioning only.
 
 import argparse
 import asyncio
+import ipaddress
 import json
 import logging
 import socket
@@ -254,8 +255,11 @@ def get_local_ip() -> str:
         if result.returncode == 0:
             ips = result.stdout.strip().split()
             for ip in ips:
-                if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172."):
-                    return ip
+                try:
+                    if ipaddress.ip_address(ip).is_private and ip != "127.0.0.1":
+                        return ip
+                except ValueError:
+                    continue
             if ips:
                 return ips[0]
     except Exception:
@@ -274,15 +278,24 @@ def get_local_ip() -> str:
     return "127.0.0.1"
 
 
+MAX_HEADER_BYTES = 16384  # 16 KiB — reject oversized/malformed requests
+
+
 async def websocket_handler(reader, writer):
     """Handle a WebSocket connection from a phone browser."""
-    # Read the HTTP upgrade request
+    # Read the HTTP upgrade request (bounded to prevent resource exhaustion)
     request = b""
     while True:
         line = await reader.readline()
         request += line
         if line == b"\r\n":
             break
+        if len(request) > MAX_HEADER_BYTES:
+            logger.warning("Rejecting request: headers exceed %d bytes", MAX_HEADER_BYTES)
+            writer.write(b"HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n")
+            await writer.drain()
+            writer.close()
+            return
 
     # Extract WebSocket key
     ws_key = None
@@ -381,9 +394,8 @@ def udp_listener(port: int):
             continue
         except json.JSONDecodeError:
             logger.warning(f"Invalid JSON from {addr}")
-        except Exception as e:
-            logger.error(f"UDP error: {e}")
-            break
+        except Exception:
+            logger.exception("UDP listener error (continuing)")
 
 
 def _print_qr_code(url: str) -> None:
