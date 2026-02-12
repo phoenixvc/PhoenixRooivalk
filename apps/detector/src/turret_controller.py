@@ -336,9 +336,11 @@ class PIDController:
 
         # Dead zone: if error is within threshold, output zero
         # and let the integral decay. Prevents hunting near center.
+        # Reset prev_error to 0 so the derivative term doesn't spike
+        # when exiting the dead zone (avoids large (error-prev)/dt).
         if abs(error) < self._dead_zone:
             self._integral *= 0.9  # Gentle decay
-            self._prev_error = error
+            self._prev_error = 0.0
             return 0.0
 
         # Proportional

@@ -30,6 +30,8 @@ NOTE: This module controls pan/tilt positioning only.
 
 import argparse
 import asyncio
+import base64
+import hashlib
 import ipaddress
 import json
 import logging
@@ -157,13 +159,70 @@ function updateDisplay() {
   document.getElementById('pitchPulse').textContent = Math.round(1500 + pitch * 500);
 }
 
-function startAudio() {
+// AudioWorklet processor code (inline, registered as a blob URL)
+const WORKLET_CODE = `
+class PwmProcessor extends AudioWorkletProcessor {
+  constructor() {
+    super();
+    this.phase = 0;
+    this.yawPulse = 72;
+    this.pitchPulse = 72;
+    this.port.onmessage = (e) => {
+      this.yawPulse = e.data.yawPulse;
+      this.pitchPulse = e.data.pitchPulse;
+    };
+  }
+  static get parameterDescriptors() { return []; }
+  process(inputs, outputs) {
+    const out = outputs[0];
+    const outL = out[0], outR = out[1];
+    const spp = ${SAMPLES_PER_PERIOD};
+    for (let i = 0; i < outL.length; i++) {
+      const p = (this.phase + i) % spp;
+      outL[i] = p < this.yawPulse ? -1.0 : 1.0;
+      outR[i] = p < this.pitchPulse ? -1.0 : 1.0;
+    }
+    this.phase = (this.phase + outL.length) % spp;
+    return true;
+  }
+}
+registerProcessor('pwm-processor', PwmProcessor);
+`;
+
+let workletNode = null;
+
+async function startAudio() {
   if (audioRunning) return;
   const btn = document.getElementById('startBtn');
 
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SAMPLE_RATE });
 
-  // ScriptProcessor for PWM generation (widely supported)
+  // Prefer AudioWorklet (modern API), fall back to ScriptProcessor (deprecated but universal)
+  if (audioCtx.audioWorklet) {
+    try {
+      const blob = new Blob([WORKLET_CODE], { type: 'application/javascript' });
+      const url = URL.createObjectURL(blob);
+      await audioCtx.audioWorklet.addModule(url);
+      URL.revokeObjectURL(url);
+      workletNode = new AudioWorkletNode(audioCtx, 'pwm-processor', { outputChannelCount: [2] });
+      workletNode.connect(audioCtx.destination);
+      console.log('Using AudioWorklet');
+    } catch(e) {
+      console.warn('AudioWorklet failed, falling back to ScriptProcessor:', e);
+      _startScriptProcessor();
+    }
+  } else {
+    _startScriptProcessor();
+  }
+
+  audioRunning = true;
+  btn.textContent = 'Audio Active';
+  btn.classList.add('active');
+  btn.disabled = true;
+}
+
+function _startScriptProcessor() {
+  // Fallback: ScriptProcessor (deprecated but still works everywhere)
   const bufSize = 1024;
   const processor = audioCtx.createScriptProcessor(bufSize, 0, 2);
   let phase = 0;
@@ -176,7 +235,6 @@ function startAudio() {
 
     for (let i = 0; i < bufSize; i++) {
       const posInPeriod = (phase + i) % SAMPLES_PER_PERIOD;
-      // Inverted: -1 during pulse, +1 during gap (transistor inverts)
       outL[i] = posInPeriod < yawPulse ? -1.0 : 1.0;
       outR[i] = posInPeriod < pitchPulse ? -1.0 : 1.0;
     }
@@ -184,10 +242,7 @@ function startAudio() {
   };
 
   processor.connect(audioCtx.destination);
-  audioRunning = true;
-  btn.textContent = 'Audio Active';
-  btn.classList.add('active');
-  btn.disabled = true;
+  console.log('Using ScriptProcessor (fallback)');
 }
 
 function connectWS() {
@@ -206,6 +261,13 @@ function connectWS() {
       if (data.yaw_rate !== undefined) yaw = Math.max(-1, Math.min(1, data.yaw_rate));
       if (data.pitch_rate !== undefined) pitch = Math.max(-1, Math.min(1, data.pitch_rate));
       updateDisplay();
+      // Update AudioWorklet node if active
+      if (workletNode) {
+        workletNode.port.postMessage({
+          yawPulse: rateToPulseSamples(yaw),
+          pitchPulse: rateToPulseSamples(pitch),
+        });
+      }
     } catch(e) {}
   };
 
@@ -287,6 +349,10 @@ async def websocket_handler(reader, writer):
     request = b""
     while True:
         line = await reader.readline()
+        if not line:
+            # EOF — client disconnected mid-headers
+            writer.close()
+            return
         request += line
         if line == b"\r\n":
             break
@@ -322,10 +388,8 @@ async def websocket_handler(reader, writer):
         return
 
     # Complete WebSocket handshake
-    import hashlib
-    import base64
     accept = base64.b64encode(
-        hashlib.sha1(
+        hashlib.sha1(  # noqa: S324 — required by RFC 6455
             (ws_key + "258EAFA5-E914-47DA-95CA-5AB9E3F14388").encode()
         ).digest()
     ).decode()
@@ -345,6 +409,11 @@ async def websocket_handler(reader, writer):
 
     try:
         while True:
+            # Detect client disconnection before attempting to write.
+            # at_eof() is set by the transport when the TCP connection closes.
+            if reader.at_eof():
+                break
+
             # Send current position as JSON
             with _lock:
                 data = json.dumps({"yaw_rate": _yaw, "pitch_rate": _pitch})

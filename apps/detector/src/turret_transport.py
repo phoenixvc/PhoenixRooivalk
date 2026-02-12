@@ -214,7 +214,8 @@ class SimulatedTransport(ActuatorTransport):
         return True
 
     def disconnect(self) -> None:
-        self.send_neutral()
+        if self._connected:
+            self.send_neutral()
         self._connected = False
         self._status.health = TransportHealth.DISCONNECTED
         logger.info("Simulated transport disconnected")
@@ -319,7 +320,8 @@ class SerialTransport(ActuatorTransport):
             return False
 
     def disconnect(self) -> None:
-        self.send_neutral()
+        if self._connected:
+            self.send_neutral()
         if self._serial and self._serial.is_open:
             self._serial.close()
         self._connected = False
@@ -425,7 +427,8 @@ class WifiUdpTransport(ActuatorTransport):
             return False
 
     def disconnect(self) -> None:
-        self.send_neutral()
+        if self._connected:
+            self.send_neutral()
         if self._sock:
             self._sock.close()
         self._sock = None
@@ -576,7 +579,8 @@ class AudioPwmTransport(ActuatorTransport):
             return False
 
     def disconnect(self) -> None:
-        self.send_neutral()
+        if self._connected:
+            self.send_neutral()
         if self._stream is not None:
             try:
                 self._stream.stop()

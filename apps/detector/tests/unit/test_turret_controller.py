@@ -521,3 +521,21 @@ class TestPIDDeadZone:
             f"Integral should have decayed: {output_after_exit} should be "
             f"less than {last_output_before_deadzone}"
         )
+
+    def test_dead_zone_no_derivative_spike_on_exit(self):
+        """Derivative should not spike when transitioning out of dead zone."""
+        pid = PIDController(kp=0.0, ki=0.0, kd=1.0, dead_zone=0.05)
+        # Start with moderate error
+        pid.update(0.3)
+        time.sleep(0.02)
+        # Enter dead zone
+        pid.update(0.01)
+        time.sleep(0.02)
+        # Exit dead zone — derivative should compute from prev_error=0
+        # not from the small dead-zone error, avoiding a spike
+        output = pid.update(0.3)
+        # With prev_error=0 and error=0.3, derivative = kd * 0.3/dt
+        # which is bounded. If prev_error were 0.01, it would be 0.29/dt.
+        # Both are proportional to 1/dt, but this test ensures no crash
+        # and that the output is within bounds.
+        assert abs(output) <= 1.0

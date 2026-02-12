@@ -4,13 +4,14 @@ Unit tests for phone_audio_bridge module.
 Tests UDP parsing, IP detection, and HTML serving logic.
 """
 
+import asyncio
 import json
 import socket
 import sys
 import threading
 import time
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -187,3 +188,93 @@ class TestQrCode:
         output = capsys.readouterr().out
         # May or may not print (depends on import handling)
         # Key thing: no exception
+
+
+# =============================================================================
+# WebSocket Handler Tests
+# =============================================================================
+
+
+def _make_reader(lines: list[bytes]):
+    """Create an AsyncMock StreamReader that yields the given lines."""
+    reader = AsyncMock()
+    line_iter = iter(lines)
+
+    async def _readline():
+        try:
+            return next(line_iter)
+        except StopIteration:
+            return b""  # EOF
+
+    reader.readline = _readline
+    reader.at_eof.return_value = False
+    return reader
+
+
+def _make_writer():
+    """Create an AsyncMock StreamWriter."""
+    writer = AsyncMock()
+    writer.write = MagicMock()
+    writer.close = MagicMock()
+    writer.is_closing = MagicMock(return_value=False)
+    return writer
+
+
+class TestWebsocketHandler:
+    def test_eof_during_header_read(self):
+        """Client disconnects mid-headers — handler should close cleanly."""
+        reader = _make_reader([b"GET / HTTP/1.1\r\n"])  # No CRLF terminator, then EOF
+        writer = _make_writer()
+
+        asyncio.run(bridge.websocket_handler(reader, writer))
+
+        writer.close.assert_called_once()
+        # Should NOT have written any response (just closed)
+        writer.write.assert_not_called()
+
+    def test_oversized_headers_rejected(self):
+        """Headers exceeding MAX_HEADER_BYTES should get a 400 response."""
+        # Create a header block that exceeds 16384 bytes
+        big_header = b"X-Junk: " + b"A" * 20000 + b"\r\n"
+        reader = _make_reader([b"GET / HTTP/1.1\r\n", big_header])
+        writer = _make_writer()
+
+        asyncio.run(bridge.websocket_handler(reader, writer))
+
+        # Should have sent HTTP 400
+        writer.write.assert_called()
+        response = writer.write.call_args_list[0][0][0]
+        assert b"400 Bad Request" in response
+        writer.close.assert_called()
+
+    def test_html_page_served_on_get(self):
+        """GET / should serve the bridge HTML page."""
+        reader = _make_reader([
+            b"GET / HTTP/1.1\r\n",
+            b"Host: 192.168.1.1:8765\r\n",
+            b"\r\n",
+        ])
+        writer = _make_writer()
+
+        asyncio.run(bridge.websocket_handler(reader, writer))
+
+        writer.write.assert_called()
+        response = writer.write.call_args_list[0][0][0]
+        assert b"200 OK" in response
+        assert b"Servo PWM Bridge" in response
+        writer.close.assert_called()
+
+    def test_404_on_unknown_path(self):
+        """GET /unknown should get a 404 response."""
+        reader = _make_reader([
+            b"GET /unknown HTTP/1.1\r\n",
+            b"Host: 192.168.1.1:8765\r\n",
+            b"\r\n",
+        ])
+        writer = _make_writer()
+
+        asyncio.run(bridge.websocket_handler(reader, writer))
+
+        writer.write.assert_called()
+        response = writer.write.call_args_list[0][0][0]
+        assert b"404 Not Found" in response
