@@ -247,6 +247,107 @@ class TargetingSettings(BaseModel):
         env_prefix = "TARGETING_"
 
 
+class TurretControlSettings(BaseModel):
+    """Turret pan/tilt control configuration."""
+
+    # Transport
+    transport_type: str = Field(
+        "simulated", description="Transport backend: simulated, serial, wifi_udp, audio_pwm"
+    )
+    serial_port: str = Field("/dev/ttyUSB0", description="Serial port for serial transport")
+    serial_baudrate: int = Field(115200, ge=9600, le=921600, description="Serial baud rate")
+    wifi_host: str = Field("192.168.4.1", description="UDP target host for wifi transport")
+    wifi_port: int = Field(
+        4210, ge=1024, le=65535, description="UDP target port for wifi transport"
+    )
+    audio_device: Optional[int] = Field(
+        None, description="Audio output device index (None=default). Use `python -m sounddevice`"
+    )
+    audio_buffer_size: int = Field(
+        512, ge=128, le=2048, description="Audio buffer size (smaller=less latency, more CPU)"
+    )
+
+    # PID gains - yaw axis
+    yaw_kp: float = Field(0.8, ge=0.0, le=5.0, description="Yaw proportional gain")
+    yaw_ki: float = Field(0.05, ge=0.0, le=2.0, description="Yaw integral gain")
+    yaw_kd: float = Field(0.15, ge=0.0, le=2.0, description="Yaw derivative gain")
+
+    # PID gains - pitch axis
+    pitch_kp: float = Field(0.6, ge=0.0, le=5.0, description="Pitch proportional gain")
+    pitch_ki: float = Field(0.03, ge=0.0, le=2.0, description="Pitch integral gain")
+    pitch_kd: float = Field(0.10, ge=0.0, le=2.0, description="Pitch derivative gain")
+
+    # Safety limits
+    max_yaw_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max yaw rate (normalized)")
+    max_pitch_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max pitch rate (normalized)")
+    max_slew_rate: float = Field(
+        2.0, ge=0.1, le=10.0, description="Max rate change per second (smoothing)"
+    )
+    watchdog_timeout_ms: int = Field(
+        500, ge=100, le=5000, description="Failsafe if no command within this time"
+    )
+    override_latch_seconds: float = Field(
+        3.0, ge=1.0, le=30.0, description="Manual override latch duration"
+    )
+    command_ttl_ms: int = Field(
+        200, ge=50, le=2000, description="Command time-to-live for hardware watchdog"
+    )
+
+    # PID dead zone
+    dead_zone: float = Field(
+        0.02,
+        ge=0.0,
+        le=0.2,
+        description="Error threshold below which PID outputs zero (0-1 normalized)",
+    )
+
+    # Initial mode
+    initial_mode: str = Field(
+        "manual", description="Starting authority mode: manual, assisted, auto_track"
+    )
+
+    if PYDANTIC_V2:
+        from pydantic import model_validator
+
+        @model_validator(mode="after")
+        def _validate_ttl_vs_watchdog(self):
+            if self.command_ttl_ms >= self.watchdog_timeout_ms:
+                import warnings
+
+                warnings.warn(
+                    f"command_ttl_ms ({self.command_ttl_ms}) >= watchdog_timeout_ms "
+                    f"({self.watchdog_timeout_ms}). Hardware TTL will expire before "
+                    f"the software watchdog fires. Consider reducing command_ttl_ms.",
+                    stacklevel=2,
+                )
+            return self
+
+    else:
+        # Pydantic v1 validator
+        try:
+            from pydantic import validator as _validator
+
+            @_validator("command_ttl_ms")
+            @classmethod
+            def _validate_ttl_vs_watchdog_v1(cls, v, values):
+                watchdog = values.get("watchdog_timeout_ms", 500)
+                if v >= watchdog:
+                    import warnings
+
+                    warnings.warn(
+                        f"command_ttl_ms ({v}) >= watchdog_timeout_ms ({watchdog}). "
+                        f"Hardware TTL will expire before the software watchdog fires.",
+                        stacklevel=2,
+                    )
+                return v
+
+        except ImportError:
+            pass
+
+    class Config:
+        env_prefix = "TURRET_"
+
+
 class AlertSettings(BaseModel):
     """Alert and notification configuration."""
 
@@ -342,6 +443,7 @@ if PydanticBaseSettings is not object:
         drone_score: DroneScoreSettings = Field(default_factory=DroneScoreSettings)
         tracker: TrackerSettings = Field(default_factory=TrackerSettings)
         targeting: TargetingSettings = Field(default_factory=TargetingSettings)
+        turret_control: TurretControlSettings = Field(default_factory=TurretControlSettings)
         alert: AlertSettings = Field(default_factory=AlertSettings)
         streaming: StreamingSettings = Field(default_factory=StreamingSettings)
         logging: LoggingSettings = Field(default_factory=LoggingSettings)
@@ -519,6 +621,30 @@ else:
             self.fire_net_arm_required = True
             self.fire_net_gpio_pin = 17
 
+    class _SimpleTurretControlSettings:
+        def __init__(self):
+            self.transport_type = "simulated"
+            self.serial_port = "/dev/ttyUSB0"
+            self.serial_baudrate = 115200
+            self.wifi_host = "192.168.4.1"
+            self.wifi_port = 4210
+            self.audio_device = None
+            self.audio_buffer_size = 512
+            self.yaw_kp = 0.8
+            self.yaw_ki = 0.05
+            self.yaw_kd = 0.15
+            self.pitch_kp = 0.6
+            self.pitch_ki = 0.03
+            self.pitch_kd = 0.10
+            self.max_yaw_rate = 1.0
+            self.max_pitch_rate = 1.0
+            self.max_slew_rate = 2.0
+            self.watchdog_timeout_ms = 500
+            self.override_latch_seconds = 3.0
+            self.command_ttl_ms = 200
+            self.dead_zone = 0.02
+            self.initial_mode = "manual"
+
     class _SimpleAlertSettings:
         def __init__(self):
             self.webhook_url = None
@@ -564,6 +690,7 @@ else:
     DroneScoreSettings = _SimpleDroneScoreSettings  # noqa: F811
     TrackerSettings = _SimpleTrackerSettings  # noqa: F811
     TargetingSettings = _SimpleTargetingSettings  # noqa: F811
+    TurretControlSettings = _SimpleTurretControlSettings  # noqa: F811
     AlertSettings = _SimpleAlertSettings  # noqa: F811
     StreamingSettings = _SimpleStreamingSettings  # noqa: F811
     LoggingSettings = _SimpleLoggingSettings  # noqa: F811
@@ -589,6 +716,11 @@ else:
             )
             self.targeting = (
                 _SimpleTargetingSettings() if "targeting" not in kwargs else kwargs["targeting"]
+            )
+            self.turret_control = (
+                _SimpleTurretControlSettings()
+                if "turret_control" not in kwargs
+                else kwargs["turret_control"]
             )
             self.alert = _SimpleAlertSettings() if "alert" not in kwargs else kwargs["alert"]
             self.streaming = (
@@ -656,6 +788,31 @@ targeting:
   fire_net_cooldown_seconds: 10.0
   fire_net_arm_required: true
   fire_net_gpio_pin: 17
+
+turret_control:
+  transport_type: simulated  # simulated, serial, wifi_udp, audio_pwm
+  serial_port: "/dev/ttyUSB0"
+  serial_baudrate: 115200
+  wifi_host: "192.168.4.1"
+  wifi_port: 4210
+  audio_device: null  # null=default output. Run `python -m sounddevice` to list
+  audio_buffer_size: 512  # 256=low latency, 1024=stable
+  # PID gains (tune in simulation first)
+  yaw_kp: 0.8
+  yaw_ki: 0.05
+  yaw_kd: 0.15
+  pitch_kp: 0.6
+  pitch_ki: 0.03
+  pitch_kd: 0.10
+  # Safety
+  max_yaw_rate: 1.0
+  max_pitch_rate: 1.0
+  max_slew_rate: 2.0  # per second
+  watchdog_timeout_ms: 500
+  override_latch_seconds: 3.0
+  command_ttl_ms: 200
+  dead_zone: 0.02  # error below this → output zero (prevents hunting)
+  initial_mode: manual  # manual, assisted, auto_track
 
 alert:
   webhook_url: null
