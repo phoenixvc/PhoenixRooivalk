@@ -257,6 +257,7 @@ function connectWS() {
 
   wsConn.onmessage = function(evt) {
     try {
+      if (typeof evt.data !== 'string') return;
       const data = JSON.parse(evt.data);
       if (data.yaw_rate !== undefined) yaw = Math.max(-1, Math.min(1, data.yaw_rate));
       if (data.pitch_rate !== undefined) pitch = Math.max(-1, Math.min(1, data.pitch_rate));
@@ -268,7 +269,9 @@ function connectWS() {
           pitchPulse: rateToPulseSamples(pitch),
         });
       }
-    } catch(e) {}
+    } catch(e) {
+      console.warn('WS message error:', e, evt.data);
+    }
   };
 
   wsConn.onclose = function() {
@@ -352,6 +355,7 @@ async def websocket_handler(reader, writer):
         if not line:
             # EOF — client disconnected mid-headers
             writer.close()
+            await writer.wait_closed()
             return
         request += line
         if line == b"\r\n":
@@ -361,6 +365,7 @@ async def websocket_handler(reader, writer):
             writer.write(b"HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n")
             await writer.drain()
             writer.close()
+            await writer.wait_closed()
             return
 
     # Extract WebSocket key
@@ -385,6 +390,7 @@ async def websocket_handler(reader, writer):
         writer.write(response)
         await writer.drain()
         writer.close()
+        await writer.wait_closed()
         return
 
     # Complete WebSocket handshake
@@ -433,6 +439,7 @@ async def websocket_handler(reader, writer):
     finally:
         _ws_clients.discard(writer)
         writer.close()
+        await writer.wait_closed()
         logger.info(f"Phone disconnected (client {client_id})")
 
 
