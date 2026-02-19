@@ -305,7 +305,7 @@ def get_local_ip() -> str:
             s.settimeout(0.5)
             s.connect(("8.8.8.8", 80))
             ip = s.getsockname()[0]
-            if ip and ip != "0.0.0.0":
+            if ip and ip != "0.0.0.0":  # nosec B104 — comparison, not bind
                 return ip
     except Exception:
         pass
@@ -395,7 +395,7 @@ async def websocket_handler(reader, writer):
 
     # Complete WebSocket handshake
     accept = base64.b64encode(
-        hashlib.sha1(  # noqa: S324 — required by RFC 6455
+        hashlib.sha1(  # noqa: S324  # nosec B324 — required by RFC 6455
             (ws_key + "258EAFA5-E914-47DA-95CA-5AB9E3F14388").encode()
         ).digest()
     ).decode()
