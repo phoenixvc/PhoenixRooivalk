@@ -439,7 +439,7 @@ class DroneScorer(ABC):
 #
 # Dependency direction: interfaces.py -> turret_transport.py (never reverse).
 # turret_transport.py must NOT import from interfaces.py to avoid circular imports.
-from turret_transport import ActuatorTransport  # noqa: F401
+from turret_transport import ActuatorTransport  # noqa: F401, E402
 
 
 @dataclass

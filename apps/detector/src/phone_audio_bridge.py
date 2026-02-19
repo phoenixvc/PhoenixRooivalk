@@ -384,7 +384,7 @@ async def websocket_handler(reader, writer):
                 f"Content-Length: {len(body)}\r\n"
                 f"Connection: close\r\n"
                 f"\r\n"
-            ).encode("utf-8") + body
+            ).encode() + body
         else:
             response = b"HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n"
         writer.write(response)
@@ -484,7 +484,7 @@ def _print_qr_code(url: str) -> None:
         qr.make(fit=True)
         qr.print_ascii(invert=True)
     except ImportError:
-        print(f"  (Install 'qrcode' for a scannable QR code: pip install qrcode)")
+        print("  (Install 'qrcode' for a scannable QR code: pip install qrcode)")
 
 
 async def run_server(host: str, port: int):
