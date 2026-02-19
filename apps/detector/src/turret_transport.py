@@ -335,11 +335,7 @@ class SerialTransport(ActuatorTransport):
 
         try:
             # Simple text protocol — easy to parse on microcontroller
-            cmd = (
-                f"Y:{output.yaw_rate:+.4f} "
-                f"P:{output.pitch_rate:+.4f} "
-                f"T:{output.ttl_ms}\n"
-            )
+            cmd = f"Y:{output.yaw_rate:+.4f} " f"P:{output.pitch_rate:+.4f} " f"T:{output.ttl_ms}\n"
             self._serial.write(cmd.encode("ascii"))
             self._serial.flush()
 
@@ -568,9 +564,7 @@ class AudioPwmTransport(ActuatorTransport):
             return True
 
         except ImportError:
-            logger.error(
-                "sounddevice not installed: pip install sounddevice"
-            )
+            logger.error("sounddevice not installed: pip install sounddevice")
             self._status.health = TransportHealth.ERROR
             return False
         except Exception as e:
@@ -619,8 +613,7 @@ class AudioPwmTransport(ActuatorTransport):
         """
         normalized = (rate + 1.0) / 2.0  # 0..1
         pulse_samples = int(
-            self.MIN_PULSE_SAMPLES
-            + normalized * (self.MAX_PULSE_SAMPLES - self.MIN_PULSE_SAMPLES)
+            self.MIN_PULSE_SAMPLES + normalized * (self.MAX_PULSE_SAMPLES - self.MIN_PULSE_SAMPLES)
         )
         return max(self.MIN_PULSE_SAMPLES, min(self.MAX_PULSE_SAMPLES, pulse_samples))
 
@@ -702,9 +695,7 @@ def create_transport(
         TransportType(transport_type)
     except ValueError as e:
         valid = [t.value for t in TransportType]
-        raise ValueError(
-            f"Unknown transport type: '{transport_type}'. Valid types: {valid}"
-        ) from e
+        raise ValueError(f"Unknown transport type: '{transport_type}'. Valid types: {valid}") from e
 
     if transport_type == "simulated":
         return SimulatedTransport(

@@ -166,9 +166,7 @@ class AuthoritySupervisor:
         now = time.time()
         self._state.override_until = now + self._override_latch_seconds
         self._set_mode(AuthorityMode.MANUAL)
-        logger.info(
-            f"MANUAL OVERRIDE: latched for {self._override_latch_seconds}s"
-        )
+        logger.info(f"MANUAL OVERRIDE: latched for {self._override_latch_seconds}s")
 
     def feed_watchdog(self) -> None:
         """
@@ -244,13 +242,9 @@ class AuthoritySupervisor:
         pitch_delta = pitch - self._last_output.pitch_rate
 
         if abs(yaw_delta) > max_delta:
-            yaw = self._last_output.yaw_rate + max_delta * (
-                1.0 if yaw_delta > 0 else -1.0
-            )
+            yaw = self._last_output.yaw_rate + max_delta * (1.0 if yaw_delta > 0 else -1.0)
         if abs(pitch_delta) > max_delta:
-            pitch = self._last_output.pitch_rate + max_delta * (
-                1.0 if pitch_delta > 0 else -1.0
-            )
+            pitch = self._last_output.pitch_rate + max_delta * (1.0 if pitch_delta > 0 else -1.0)
 
         safe_output = ControlOutput(
             yaw_rate=yaw,

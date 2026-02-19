@@ -117,10 +117,7 @@ def create_turret_controller(settings) -> TurretController:
         resolved_mode = "manual"
     controller.set_mode(_MODE_MAP[resolved_mode])
 
-    logger.info(
-        f"Turret controller created: transport={transport_type}, "
-        f"mode={resolved_mode}"
-    )
+    logger.info(f"Turret controller created: transport={transport_type}, " f"mode={resolved_mode}")
     return controller
 
 

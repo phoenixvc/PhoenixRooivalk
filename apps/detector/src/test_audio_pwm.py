@@ -119,10 +119,12 @@ def run_sweep_test(device=None, buffer_size=512):
             yaw_pos = position
             pitch_pos = math.sin(2 * math.pi * (elapsed + 1.0) / sweep_period)
 
-            transport.send(ControlOutput(
-                yaw_rate=yaw_pos,
-                pitch_rate=pitch_pos,
-            ))
+            transport.send(
+                ControlOutput(
+                    yaw_rate=yaw_pos,
+                    pitch_rate=pitch_pos,
+                )
+            )
 
             # Status display
             yaw_bar = _position_bar(yaw_pos)
@@ -305,9 +307,7 @@ def run_tracking_test(device=None, buffer_size=512, camera_index=0):
         sys.exit(1)
 
     # Background subtractor for motion detection
-    bg_sub = cv2.createBackgroundSubtractorMOG2(
-        history=100, varThreshold=50, detectShadows=False
-    )
+    bg_sub = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=50, detectShadows=False)
 
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -333,17 +333,11 @@ def run_tracking_test(device=None, buffer_size=512, camera_index=0):
 
             # Motion detection
             fg_mask = bg_sub.apply(frame)
-            fg_mask = cv2.morphologyEx(
-                fg_mask, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8)
-            )
-            fg_mask = cv2.morphologyEx(
-                fg_mask, cv2.MORPH_DILATE, np.ones((15, 15), np.uint8)
-            )
+            fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+            fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_DILATE, np.ones((15, 15), np.uint8))
 
             # Find largest contour
-            contours, _ = cv2.findContours(
-                fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
-            )
+            contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             target_center = None
             if contours:

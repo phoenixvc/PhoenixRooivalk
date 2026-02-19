@@ -313,9 +313,12 @@ def get_local_ip() -> str:
     # Method 2: Scan local interfaces (works on hotspot / no internet)
     try:
         import subprocess
+
         result = subprocess.run(
             ["hostname", "-I"],
-            capture_output=True, text=True, timeout=2,
+            capture_output=True,
+            text=True,
+            timeout=2,
         )
         if result.returncode == 0:
             ips = result.stdout.strip().split()

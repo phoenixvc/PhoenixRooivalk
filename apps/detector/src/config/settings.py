@@ -257,7 +257,9 @@ class TurretControlSettings(BaseModel):
     serial_port: str = Field("/dev/ttyUSB0", description="Serial port for serial transport")
     serial_baudrate: int = Field(115200, ge=9600, le=921600, description="Serial baud rate")
     wifi_host: str = Field("192.168.4.1", description="UDP target host for wifi transport")
-    wifi_port: int = Field(4210, ge=1024, le=65535, description="UDP target port for wifi transport")
+    wifi_port: int = Field(
+        4210, ge=1024, le=65535, description="UDP target port for wifi transport"
+    )
     audio_device: Optional[int] = Field(
         None, description="Audio output device index (None=default). Use `python -m sounddevice`"
     )
@@ -293,7 +295,10 @@ class TurretControlSettings(BaseModel):
 
     # PID dead zone
     dead_zone: float = Field(
-        0.02, ge=0.0, le=0.2, description="Error threshold below which PID outputs zero (0-1 normalized)"
+        0.02,
+        ge=0.0,
+        le=0.2,
+        description="Error threshold below which PID outputs zero (0-1 normalized)",
     )
 
     # Initial mode
@@ -308,6 +313,7 @@ class TurretControlSettings(BaseModel):
         def _validate_ttl_vs_watchdog(self):
             if self.command_ttl_ms >= self.watchdog_timeout_ms:
                 import warnings
+
                 warnings.warn(
                     f"command_ttl_ms ({self.command_ttl_ms}) >= watchdog_timeout_ms "
                     f"({self.watchdog_timeout_ms}). Hardware TTL will expire before "
@@ -315,6 +321,7 @@ class TurretControlSettings(BaseModel):
                     stacklevel=2,
                 )
             return self
+
     else:
         # Pydantic v1 validator
         try:
@@ -326,12 +333,14 @@ class TurretControlSettings(BaseModel):
                 watchdog = values.get("watchdog_timeout_ms", 500)
                 if v >= watchdog:
                     import warnings
+
                     warnings.warn(
                         f"command_ttl_ms ({v}) >= watchdog_timeout_ms ({watchdog}). "
                         f"Hardware TTL will expire before the software watchdog fires.",
                         stacklevel=2,
                     )
                 return v
+
         except ImportError:
             pass
 
