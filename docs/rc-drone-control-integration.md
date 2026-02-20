@@ -3,20 +3,23 @@
 ## Hardware Assessment
 
 ### Current RC Controller
+
 - **Type**: FlySky FS-GT3B style 2.4GHz pistol-grip transmitter (3-channel)
 - **Protocol**: AFHDS (Automatic Frequency Hopping Digital System) — proprietary
 - **Receiver**: FlySky 2.4G receiver with CH1/CH2/CH3 outputs
 - **Actuators**: 2 standard PWM hobby servos (pan/tilt)
 
 ### Why RF Emulation Is Not An Option
+
 The FlySky AFHDS protocol uses frequency hopping across the 2.4GHz band.
 Emulating it requires:
+
 - Proper 2.4GHz transceiver hardware (not Wi-Fi, not Bluetooth)
 - Protocol timing accuracy
 - Binding sequence implementation
 
-This is an RF engineering project, not a software project. It is not
-a viable path for this system.
+This is an RF engineering project, not a software project. It is not a viable
+path for this system.
 
 ### Hardware Bridge Options (For Physical Control)
 
@@ -25,16 +28,18 @@ a viable path for this system.
 ```text
 PC -> USB -> Microcontroller -> PWM -> Servos
 ```
-Disconnect receiver. Microcontroller generates servo PWM directly.
-Manual override via keyboard/gamepad in software.
+
+Disconnect receiver. Microcontroller generates servo PWM directly. Manual
+override via keyboard/gamepad in software.
 
 **Option B — Analog Injection (Keep RC Manual Backup)**
 
 ```text
 PC -> USB -> Microcontroller -> DAC/PWM -> Transmitter stick inputs -> RF -> Receiver -> Servos
 ```
-Spoof the analog potentiometer signals inside the transmitter.
-Physical switch toggles between real pot (manual) and injected signal (AI).
+
+Spoof the analog potentiometer signals inside the transmitter. Physical switch
+toggles between real pot (manual) and injected signal (AI).
 
 **Option C — Dual Authority Hardware Switch**
 
@@ -43,10 +48,13 @@ Receiver PWM ─┐
                ├─> PWM Selector Switch -> Servos
 MCU PWM ──────┘
 ```
+
 Hardware switch selects signal source. Clean isolation, no signal mixing.
 
 ### Minimum Hardware Required
+
 Any of these microcontrollers will work for servo PWM generation:
+
 - ESP32 (preferred: has WiFi for wireless transport)
 - Arduino Nano / Uno
 - STM32 Blue Pill
@@ -81,26 +89,28 @@ Detection Pipeline (existing)
 ```
 
 ### Authority Modes
-| Mode | Description | Who Drives |
-|------|-------------|------------|
-| MANUAL | Operator has full control | Keyboard/gamepad |
-| ASSISTED | AI shows suggestions, operator drives | Operator + AI overlay |
-| AUTO_TRACK | AI drives pan/tilt to center target | PID controller |
-| FAILSAFE | Error state, neutral output | System (auto) |
+
+| Mode       | Description                           | Who Drives            |
+| ---------- | ------------------------------------- | --------------------- |
+| MANUAL     | Operator has full control             | Keyboard/gamepad      |
+| ASSISTED   | AI shows suggestions, operator drives | Operator + AI overlay |
+| AUTO_TRACK | AI drives pan/tilt to center target   | PID controller        |
+| FAILSAFE   | Error state, neutral output           | System (auto)         |
 
 ### Transport Backends
-| Backend | Hardware | Use Case |
-|---------|----------|----------|
-| `simulated` | None | Development, PID tuning |
-| `serial` | USB/UART to MCU | Direct wired control |
-| `wifi_udp` | ESP32/similar over WiFi | Wireless control |
-| `audio_pwm` | Headphone jack or BT speaker + transistor circuit | Zero-MCU control |
+
+| Backend                   | Hardware                                                  | Use Case                             |
+| ------------------------- | --------------------------------------------------------- | ------------------------------------ |
+| `simulated`               | None                                                      | Development, PID tuning              |
+| `serial`                  | USB/UART to MCU                                           | Direct wired control                 |
+| `wifi_udp`                | ESP32/similar over WiFi                                   | Wireless control                     |
+| `audio_pwm`               | Headphone jack or BT speaker + transistor circuit         | Zero-MCU control                     |
 | `wifi_udp` + phone bridge | Old phone over WiFi + headphone jack + transistor circuit | Wireless zero-MCU control (~30-50ms) |
 
 ### Audio PWM Transport (Zero Microcontroller Option)
 
-Uses the laptop's audio output (headphone jack, USB sound card, or
-Bluetooth speaker) to generate 50Hz servo PWM waveforms.
+Uses the laptop's audio output (headphone jack, USB sound card, or Bluetooth
+speaker) to generate 50Hz servo PWM waveforms.
 
 **Signal chain:**
 
@@ -120,16 +130,18 @@ Audio SPK+ ─── 10kΩ ─── Base ┐
 ```
 
 **Required components (total for 2 servos):**
+
 - 2x NPN transistors (salvage from any amplifier board, radio, BT speaker)
 - 2x 10kΩ resistors (base current limit — any 4.7kΩ to 47kΩ works)
 - 2x 4.7kΩ resistors (collector pull-up — any 1kΩ to 10kΩ works)
 - Common GND between audio source, circuit, and servo power
 - 5V power for servos (from RC battery/BEC, NOT from audio source)
 
-**Wired mode** (headphone jack): ~5ms latency
-**Wireless mode** (Bluetooth speaker board): ~100-200ms latency
+**Wired mode** (headphone jack): ~5ms latency **Wireless mode** (Bluetooth
+speaker board): ~100-200ms latency
 
 **How a BT speaker becomes a wireless servo controller:**
+
 1. Open BT speaker, desolder wires going to speaker cones
 2. Those wires (SPK+/SPK-) become your audio signal output
 3. Connect to transistor circuit above
@@ -139,6 +151,7 @@ Audio SPK+ ─── 10kΩ ─── Base ┐
 7. Transistor circuit converts to servo-compatible 0-5V pulses
 
 ### Integration Example
+
 ```python
 from turret_controller import AuthorityMode
 from turret_factory import create_turret_controller, turret_update
@@ -161,6 +174,7 @@ controller.stop()
 ```
 
 ### Safety Guarantees
+
 1. **Manual override always wins** — latched for configurable duration
 2. **Watchdog timeout** — no command within TTL -> FAILSAFE -> neutral
 3. **Rate clamping** — max yaw/pitch rates enforced in supervisor
@@ -168,9 +182,10 @@ controller.stop()
 5. **FAILSAFE exit** — can only return to MANUAL, not directly to AUTO
 
 ### Configuration (YAML)
+
 ```yaml
 turret_control:
-  transport_type: simulated  # simulated, serial, wifi_udp, audio_pwm
+  transport_type: simulated # simulated, serial, wifi_udp, audio_pwm
   serial_port: "/dev/ttyUSB0"
   serial_baudrate: 115200
   wifi_host: "192.168.4.1"
@@ -183,7 +198,7 @@ turret_control:
   pitch_kd: 0.10
   max_yaw_rate: 1.0
   max_pitch_rate: 1.0
-  max_slew_rate: 2.0  # per second
+  max_slew_rate: 2.0 # per second
   watchdog_timeout_ms: 500
   override_latch_seconds: 3.0
   command_ttl_ms: 200
@@ -193,12 +208,14 @@ turret_control:
 ## POC Phases
 
 ### Phase 1 — Software Only (Now)
+
 - Webcam -> detection -> tracking -> PID -> simulated transport
 - Tune PID in simulation
 - Build manual override UI
 - All logging and visualization
 
 ### Phase 1.5 — Audio PWM (No MCU Needed)
+
 - Build transistor circuit (2x NPN + 4 resistors)
 - Wired: laptop headphone jack → circuit → servos (Path A)
 - Wireless: WiFi → old phone → headphone jack → circuit (Path C)
@@ -207,17 +224,20 @@ turret_control:
 - See `docs/audio-pwm-servo-build-guide.md`
 
 ### Phase 2 — Hardware Bridge (When MCU Available)
+
 - Connect ESP32/Arduino via USB
 - Switch transport to `serial`
 - Test with real servos
 - Validate safety watchdog
 
 ### Phase 3 — Wireless (Optional)
+
 - ESP32 with WiFi
 - Switch transport to `wifi_udp`
 - Same control logic, different backend
 
 ### Phase 4 — Edge Deployment
+
 - Move vision to Jetson/Pi
 - Add MAVLink transport for flight controller integration
 - Multi-sensor fusion
