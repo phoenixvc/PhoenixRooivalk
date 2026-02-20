@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Check if CodeQL is enabled
         id: codeql-check
@@ -79,7 +79,7 @@ jobs:
         if:
           ${{ steps.codeql-check.outputs.enabled == 'true' && matrix.language ==
           'rust' }}
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+        uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1
         with:
           toolchain: stable
           components: rustfmt, clippy
@@ -94,7 +94,7 @@ jobs:
 
       - name: Setup pnpm
         if: matrix.language == 'javascript-typescript'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
 
       - name: Generate lockfile if missing
         if: matrix.language == 'javascript-typescript'
@@ -106,7 +106,7 @@ jobs:
 
       - name: Setup Node.js
         if: matrix.language == 'javascript-typescript'
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: "20"
           package-manager-cache: false
@@ -119,7 +119,7 @@ jobs:
 
       - name: Initialize CodeQL
         if: steps.codeql-check.outputs.enabled == 'true'
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@89a39a4e59826350b863aa6b6252a07ad50cf83e # v4
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
@@ -151,7 +151,7 @@ jobs:
 
       - name: Perform CodeQL Analysis
         if: steps.codeql-check.outputs.enabled == 'true'
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@89a39a4e59826350b863aa6b6252a07ad50cf83e # v4
         with:
           category: "/language:${{matrix.language}}"
           upload: false
@@ -160,7 +160,7 @@ jobs:
       - name: Upload SARIF results (non-fatal)
         if: steps.codeql-check.outputs.enabled == 'true'
         continue-on-error: true
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e # v4
         with:
           sarif_file: codeql-results.sarif
           checkout_path: ${{ github.workspace }}
