@@ -131,11 +131,16 @@ export class AzureAuthService implements IAuthService {
         this.msalInstance.setActiveAccount(response.account);
         this.handleAuthResponse(response);
       } else {
-        // Check for existing session
-        const accounts = this.msalInstance.getAllAccounts();
-        if (accounts.length > 0) {
-          this.msalInstance.setActiveAccount(accounts[0]);
-          this.setUserFromAccount(accounts[0]);
+        // Restore session: prefer the persisted active account
+        const existingActive = this.msalInstance.getActiveAccount();
+        if (existingActive) {
+          this.setUserFromAccount(existingActive);
+        } else {
+          const accounts = this.msalInstance.getAllAccounts();
+          if (accounts.length > 0) {
+            this.msalInstance.setActiveAccount(accounts[0]);
+            this.setUserFromAccount(accounts[0]);
+          }
         }
       }
 
@@ -314,6 +319,30 @@ export class AzureAuthService implements IAuthService {
   }
 
   private setUserFromAccount(account: AccountInfo): void {
+    if (!account.idTokenClaims) {
+      // Account loaded from cache without a live id_token (e.g. after page refresh).
+      // Fall back to top-level AccountInfo properties which are always populated.
+      const email = account.username || null;
+      this.currentUser = {
+        uid: account.localAccountId,
+        email,
+        displayName: account.name || null,
+        photoURL: null,
+        emailVerified: Boolean(email),
+        providerData: [
+          {
+            providerId: "microsoft",
+            uid: account.localAccountId,
+            displayName: account.name || null,
+            email,
+            photoURL: null,
+          },
+        ],
+      };
+      this.notifyAuthStateChange(this.currentUser);
+      return;
+    }
+
     const claims = account.idTokenClaims as AzureTokenClaims;
 
     // Build display name from available claims
