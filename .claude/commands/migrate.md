@@ -52,6 +52,7 @@ Migrations are provider-agnostic via the `DataProvider` trait
 - `CosmosProvider` — No-op migrations (schema-less)
 
 When adding a new migration:
+
 1. Add the migration step to `migrations.rs`
 2. Increment the version number
 3. Add a test in the `#[cfg(test)]` block for idempotency

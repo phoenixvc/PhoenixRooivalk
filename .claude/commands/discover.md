@@ -18,12 +18,13 @@ Run each check and collect results:
 
 **2. TODO/FIXME/HACK Comments:**
 
-Search for `TODO`, `FIXME`, `HACK`, `XXX`, `STUB` across all source files.
-Group by app/crate and count per category.
+Search for `TODO`, `FIXME`, `HACK`, `XXX`, `STUB` across all source files. Group
+by app/crate and count per category.
 
 **3. Test Coverage Gaps:**
 
 Identify source files without corresponding test files:
+
 - `src/**/*.ts` without `__tests__/**/*.test.ts`
 - `src/**/*.rs` without `tests/` or inline `#[cfg(test)]`
 - `src/**/*.py` without `tests/`

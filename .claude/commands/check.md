@@ -20,5 +20,5 @@ sequentially and report results:
 2. `cd apps/detector && black --check src/` — Python format check
 3. `cd apps/detector && isort --check-only src/` — Import order check
 
-If any step fails, report the specific errors and offer to fix them.
-At the end, provide a summary table showing pass/fail for each step.
+If any step fails, report the specific errors and offer to fix them. At the end,
+provide a summary table showing pass/fail for each step.

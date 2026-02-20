@@ -760,7 +760,9 @@ export default function SlideDeckDownload({
                                 className="text-xl font-bold text-orange-500 dark:text-orange-400"
                               >
                                 {parseRichText(
-                                  typeof point === "string" ? point : point.text,
+                                  typeof point === "string"
+                                    ? point
+                                    : point.text,
                                 )}
                               </p>
                             ))}
@@ -875,14 +877,18 @@ export default function SlideDeckDownload({
                                     </h4>
                                     <p
                                       className="text-xs font-medium mb-1"
-                                      style={{ color: member.color || "#f97316" }}
+                                      style={{
+                                        color: member.color || "#f97316",
+                                      }}
                                     >
                                       {member.title}
                                     </p>
                                     <ul className="text-xs text-gray-500 space-y-0.5">
-                                      {member.highlights.map((highlight, hIndex) => (
-                                        <li key={hIndex}>{highlight}</li>
-                                      ))}
+                                      {member.highlights.map(
+                                        (highlight, hIndex) => (
+                                          <li key={hIndex}>{highlight}</li>
+                                        ),
+                                      )}
                                     </ul>
                                   </div>
                                 ))}

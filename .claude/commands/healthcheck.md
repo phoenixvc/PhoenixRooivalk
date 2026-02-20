@@ -4,8 +4,8 @@ Pre-flight validation before committing, deploying, or shipping.
 
 Arguments: $ARGUMENTS
 
-If an argument is provided, scope to that app. If no argument is provided,
-run all gates.
+If an argument is provided, scope to that app. If no argument is provided, run
+all gates.
 
 ## Validation Gates
 

@@ -1,6 +1,7 @@
 ---
 name: coverage-tracker
-description: Aggregates test coverage across all stacks and enforces quality gates
+description:
+  Aggregates test coverage across all stacks and enforces quality gates
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---
@@ -29,12 +30,14 @@ Coverage tools per stack:
   - Threshold: 50% (defined in pyproject.toml)
 
 CI integration status:
+
 - Only `detector-ci.yml` uploads to Codecov (`codecov/codecov-action@v5.5.2`)
 - `ci-marketing.yml` runs tests but does not collect coverage
 - `ci-rust.yml` runs tests but does not collect coverage
 - No aggregate coverage dashboard exists
 
 When tracking coverage:
+
 1. Run all test suites with coverage flags
 2. Collect per-app coverage percentages
 3. Compare against thresholds (50% Python, propose 60% JS, 70% Rust)

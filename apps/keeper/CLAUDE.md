@@ -14,8 +14,9 @@ Dual-loop design running concurrently via `tokio::select!`:
    transaction references
 2. **Confirmation loop** — Polls blockchain until transactions are confirmed
 
-Exponential backoff for transient failures: `(5s * 2^attempts).min(5min) +
-rand(0..1s)`. Permanent failures are marked failed with no retry.
+Exponential backoff for transient failures:
+`(5s * 2^attempts).min(5min) + rand(0..1s)`. Permanent failures are marked
+failed with no retry.
 
 ## Key Traits
 
@@ -46,19 +47,19 @@ Created automatically on startup via `ensure_schema()`:
 
 ## Environment Variables
 
-| Variable              | Default                           | Notes                       |
-| --------------------- | --------------------------------- | --------------------------- |
-| `KEEPER_USE_STUB`     | `false`                           | Stub provider for dev       |
-| `KEEPER_DB_URL`       | `sqlite://blockchain_outbox.sqlite3` | SQLite connection        |
-| `KEEPER_POLL_MS`      | `5000`                            | Job polling interval (ms)   |
-| `KEEPER_HTTP_PORT`    | `8081`                            | Health check port           |
-| `KEEPER_PROVIDER`     | `stub`                            | stub/etherlink/solana/multi |
-| `ETHERLINK_ENDPOINT`  | `https://node.etherlink.com`      | EtherLink node URL          |
-| `ETHERLINK_NETWORK`   | `mainnet`                         | EtherLink network           |
-| `ETHERLINK_PRIVATE_KEY` | —                               | Signing key (required)      |
-| `SOLANA_ENDPOINT`     | `https://api.devnet.solana.com`   | Solana RPC endpoint         |
-| `SOLANA_NETWORK`      | `devnet`                          | Solana network              |
-| `RUST_LOG`            | `info`                            | Log level                   |
+| Variable                | Default                              | Notes                       |
+| ----------------------- | ------------------------------------ | --------------------------- |
+| `KEEPER_USE_STUB`       | `false`                              | Stub provider for dev       |
+| `KEEPER_DB_URL`         | `sqlite://blockchain_outbox.sqlite3` | SQLite connection           |
+| `KEEPER_POLL_MS`        | `5000`                               | Job polling interval (ms)   |
+| `KEEPER_HTTP_PORT`      | `8081`                               | Health check port           |
+| `KEEPER_PROVIDER`       | `stub`                               | stub/etherlink/solana/multi |
+| `ETHERLINK_ENDPOINT`    | `https://node.etherlink.com`         | EtherLink node URL          |
+| `ETHERLINK_NETWORK`     | `mainnet`                            | EtherLink network           |
+| `ETHERLINK_PRIVATE_KEY` | —                                    | Signing key (required)      |
+| `SOLANA_ENDPOINT`       | `https://api.devnet.solana.com`      | Solana RPC endpoint         |
+| `SOLANA_NETWORK`        | `devnet`                             | Solana network              |
+| `RUST_LOG`              | `info`                               | Log level                   |
 
 ## Provider Types
 
@@ -87,5 +88,5 @@ database isolation.
 
 ## Dependencies
 
-Uses `phoenix-evidence`, `anchor-etherlink`, and `phoenix-common` crates.
-All HTTP via `rustls` (no native-tls).
+Uses `phoenix-evidence`, `anchor-etherlink`, and `phoenix-common` crates. All
+HTTP via `rustls` (no native-tls).

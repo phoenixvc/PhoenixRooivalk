@@ -5,6 +5,7 @@ Master coordinator for autonomous multi-team development.
 Arguments: $ARGUMENTS
 
 Supported arguments:
+
 - `--phase N` — Run only phase N (1-4)
 - `--team NAME` — Run only the named team (backend, frontend, python, devops,
   product, design, marketing, finance, docs, quality)
@@ -38,6 +39,7 @@ Update `current_metrics` in state.
 ### Step 3: Assess Team Health
 
 Grade each team A-F based on:
+
 - **A**: No stubs, no TODOs, tests pass, lint clean
 - **B**: Minor TODOs, tests pass, lint clean
 - **C**: Some stubs or failing tests
@@ -50,6 +52,7 @@ prioritize the lowest-graded teams.
 ### Step 4: Healthcheck
 
 Run `/project:healthcheck` to verify prerequisites:
+
 - Build must pass before any changes
 - No merge conflicts
 - Branch is clean or changes are committed
@@ -58,15 +61,16 @@ If healthcheck fails, fix blockers before proceeding.
 
 ### Step 5: Dispatch Teams
 
-Based on the current phase, dispatch teams in parallel where possible.
-Reference `AGENT_TEAMS.md` for team scopes and outstanding work.
+Based on the current phase, dispatch teams in parallel where possible. Reference
+`AGENT_TEAMS.md` for team scopes and outstanding work.
 
-**Phase 1** (Foundation): Teams 1 (Backend), 3 (Python), 4 (DevOps)
-**Phase 2** (Frontend): Teams 2 (Frontend), 5 (Product), 8 (Finance)
-**Phase 3** (Quality): Teams 6 (Design), 7 (Marketing), 9 (Docs), 10 (Quality)
-**Phase 4** (Sweep): Teams 4 (DevOps), 9 (Docs), 10 (Quality)
+**Phase 1** (Foundation): Teams 1 (Backend), 3 (Python), 4 (DevOps) **Phase 2**
+(Frontend): Teams 2 (Frontend), 5 (Product), 8 (Finance) **Phase 3** (Quality):
+Teams 6 (Design), 7 (Marketing), 9 (Docs), 10 (Quality) **Phase 4** (Sweep):
+Teams 4 (DevOps), 9 (Docs), 10 (Quality)
 
 For each team:
+
 1. Read the team's scope from `AGENT_TEAMS.md`
 2. Read outstanding items from `AGENT_BACKLOG.md`
 3. Execute the highest-priority items for that team
@@ -75,6 +79,7 @@ For each team:
 ### Step 6: Collect Results
 
 After team execution:
+
 1. Re-run discovery scan
 2. Compare before/after metrics
 3. Record delta in `phase_history`
@@ -82,6 +87,7 @@ After team execution:
 ### Step 7: Sync Backlog
 
 Update `AGENT_BACKLOG.md`:
+
 - Mark completed items (change ID to ~~strikethrough~~)
 - Add newly discovered items
 - Update file:line references if code shifted
@@ -89,8 +95,7 @@ Update `AGENT_BACKLOG.md`:
 
 ### Step 8: Persist State
 
-Write updated metrics, grades, and history to
-`.claude/state/orchestrator.json`.
+Write updated metrics, grades, and history to `.claude/state/orchestrator.json`.
 
 ### Step 9: Report
 

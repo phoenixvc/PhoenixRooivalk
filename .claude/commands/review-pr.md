@@ -4,8 +4,8 @@ Review a GitHub pull request.
 
 Arguments: $ARGUMENTS
 
-If an argument is provided, use it as the PR number or URL.
-If no argument is provided, detect the current branch's open PR using
+If an argument is provided, use it as the PR number or URL. If no argument is
+provided, detect the current branch's open PR using
 `gh pr view --json number,title,baseRefName,headRefName,url`.
 
 ## Steps
@@ -13,14 +13,12 @@ If no argument is provided, detect the current branch's open PR using
 1. **Fetch PR metadata:**
    `gh pr view <PR> --json number,title,body,baseRefName,headRefName,files,additions,deletions,url`
 
-2. **Get the full diff:**
-   `gh pr diff <PR>`
+2. **Get the full diff:** `gh pr diff <PR>`
 
 3. **List PR comments and review comments:**
    `gh pr view <PR> --json comments,reviews`
 
-4. **Check CI status:**
-   `gh pr checks <PR>`
+4. **Check CI status:** `gh pr checks <PR>`
 
 ## Review Checklist
 

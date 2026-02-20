@@ -11,6 +11,7 @@ You are a senior Python engineer specializing in the drone detector system:
 - **PDF generator** (`tools/pdf_generator/`) — document generation CLI
 
 Key constraints:
+
 - Python 3.9+ with pydantic v2 (also supports v1 and zero-dependency fallback)
 - Ruff for linting (E/W/F/I/B/C4/UP rules), Black for formatting (line 100)
 - isort for imports (black profile), mypy for type checking
@@ -22,6 +23,7 @@ Key constraints:
 - Config priority: CLI args > env vars > config file > defaults
 
 When analyzing code, always check:
+
 1. Pydantic v2 compatibility (avoid v1-only patterns)
 2. Platform portability (TFLite vs ONNX vs TensorFlow vs Coral)
 3. Memory usage on edge devices (RPi has ~1GB RAM)

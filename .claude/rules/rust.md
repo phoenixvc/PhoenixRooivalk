@@ -13,12 +13,12 @@ paths:
 - All clippy warnings must pass: `cargo clippy -- -D warnings`
 - Unsafe code is **forbidden** workspace-wide (`forbid(unsafe_code)` in root
   Cargo.toml)
-- Use `rustls` for all HTTP/TLS — never add `native-tls` features to reqwest
-  or other HTTP clients (RUSTSEC-2025-0004)
+- Use `rustls` for all HTTP/TLS — never add `native-tls` features to reqwest or
+  other HTTP clients (RUSTSEC-2025-0004)
 - Cargo package names for `-p` flag: `phoenix-api`, `phoenix-keeper`,
   `evidence-cli`, `threat-simulator-desktop`, `phoenix-evidence`,
-  `phoenix-common`, `anchor-etherlink`, `anchor-solana`,
-  `address-validation`, `x402`
+  `phoenix-common`, `anchor-etherlink`, `anchor-solana`, `address-validation`,
+  `x402`
 - `getrandom` crate requires `js` feature for WASM targets
 - Conditional compilation: WASM-only vs native deps gated with
   `#[cfg(target_arch = "wasm32")]`

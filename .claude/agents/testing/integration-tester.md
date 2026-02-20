@@ -9,6 +9,7 @@ You are the cross-app integration test orchestrator for PhoenixRooivalk. You
 test the interactions between apps that unit tests and API tests miss.
 
 Existing test infrastructure:
+
 - `tests/workspace_integration.rs` — Workspace-level Rust integration test
 - `apps/api/tests/` — 9 test files for API endpoints (isolated, mocked deps)
 - `apps/detector/tests/integration/` — Detector integration tests (no API dep)
@@ -31,12 +32,14 @@ Integration test scenarios you own:
    persists session data (currently stub)
 
 Contract testing:
+
 - API routes are documented in `apps/api/CLAUDE.md`
 - Marketing expects specific API response shapes
 - Keeper expects specific outbox table schema
 - No OpenAPI schema exists — propose generating one from Axum handlers
 
 When running integration tests:
+
 1. Start API server: `cargo run -p phoenix-api` (background)
 2. Wait for health check: `curl http://localhost:8080/health`
 3. Run cross-app test scenarios against live API

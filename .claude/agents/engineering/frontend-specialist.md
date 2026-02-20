@@ -14,6 +14,7 @@ stack:
 - **Shared packages**: `@phoenix-rooivalk/types`, `ui`, `utils`
 
 Key constraints:
+
 - Marketing is `output: "export"` — no SSR, no API routes, no server components
 - Docusaurus reads env vars at **build time** only (embedded in static bundles)
 - WASM sync: marketing build depends on compiled WASM from threat simulator
@@ -24,6 +25,7 @@ Key constraints:
 - Path aliases: `@/*` -> `./src/*` (must match in tsconfig AND vitest.config)
 
 When analyzing code, always check:
+
 1. Client-side only patterns (no `window`/`document` at module scope)
 2. Hydration safety (`suppressHydrationWarning` where needed)
 3. Accessibility (ARIA, keyboard, contrast)

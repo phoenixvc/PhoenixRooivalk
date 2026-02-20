@@ -382,9 +382,7 @@ export default function PresentationMode({
           {/* Slide Content */}
           <div
             className={`w-full bg-gray-800 rounded-xl shadow-2xl ${
-              slide.layout === "products"
-                ? "max-w-6xl p-6"
-                : "max-w-4xl p-12"
+              slide.layout === "products" ? "max-w-6xl p-6" : "max-w-4xl p-12"
             }`}
           >
             {/* Slide Header */}
@@ -393,7 +391,9 @@ export default function PresentationMode({
             >
               {slide.icon && (
                 <span
-                  className={slide.layout === "products" ? "text-3xl" : "text-4xl"}
+                  className={
+                    slide.layout === "products" ? "text-3xl" : "text-4xl"
+                  }
                   aria-hidden="true"
                 >
                   {slide.icon}
@@ -495,10 +495,7 @@ export default function PresentationMode({
                 {slide.keyPoints.length > 0 && (
                   <div className="text-center mb-6">
                     {slide.keyPoints.map((point, i) => (
-                      <p
-                        key={i}
-                        className="text-2xl font-bold text-orange-400"
-                      >
+                      <p key={i} className="text-2xl font-bold text-orange-400">
                         {parseRichText(getKeyPointText(point))}
                       </p>
                     ))}
@@ -544,10 +541,10 @@ export default function PresentationMode({
                           }`}
                         >
                           <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
-                    ))}
-                  </ul>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
