@@ -394,7 +394,7 @@ jobs:
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -473,7 +473,7 @@ jobs:
           ls -la .azurefunctions/
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: azure-functions-build
           path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/deploy-package
@@ -589,7 +589,7 @@ jobs:
           fi
 
       - name: Checkout for seeding
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           sparse-checkout: scripts
 
@@ -639,7 +639,7 @@ jobs:
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
