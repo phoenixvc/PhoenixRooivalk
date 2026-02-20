@@ -35,7 +35,7 @@
     "@docusaurus/theme-mermaid": "^3.9.2",
     "@easyops-cn/docusaurus-search-local": "^0.52.2",
     "@microsoft/applicationinsights-web": "^3.3.11",
-    "ajv": "^8.17.1",
+    "ajv": "^8.18.0",
     "clsx": "^2.1.1",
     "dompurify": "^3.3.1",
     "pptxgenjs": "^4.0.1",
