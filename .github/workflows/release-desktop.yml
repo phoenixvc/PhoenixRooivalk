@@ -19,13 +19,12 @@ env:
   APP_PATH: "apps/threat-simulator-desktop"
 
 jobs:
-  # Create GitHub release
-  create-release:
+  # Extract version for downstream jobs
+  prepare:
     runs-on: ubuntu-latest
     outputs:
-      release_id: ${{ steps.create_release.outputs.id }}
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
       version: ${{ steps.extract_version.outputs.version }}
+      tag_name: ${{ steps.extract_version.outputs.tag_name }}
     steps:
       - name: Extract version
         id: extract_version
@@ -35,62 +34,14 @@ jobs:
           else
             VERSION="${GITHUB_REF#refs/tags/desktop-v}"
           fi
+          TAG_NAME="${{ github.ref_name || format('desktop-v{0}', github.event.inputs.version) }}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
-
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name:
-            ${{ github.ref_name || format('desktop-v{0}',
-            github.event.inputs.version) }}
-          release_name:
-            Desktop App v${{ steps.extract_version.outputs.version }}
-          body: |
-            # Phoenix Rooivalk Threat Simulator v${{ steps.extract_version.outputs.version }}
-
-            ## Downloads
-
-            Choose the appropriate file for your platform:
-            - **Windows**: `.msi` installer
-            - **macOS**: `.dmg` disk image
-            - **Linux**: `.AppImage` (portable) or `.deb` (Debian/Ubuntu)
-
-            ## What's New
-
-            See [CHANGELOG.md](https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/apps/threat-simulator-desktop/CHANGELOG.md) for details.
-
-            ## Features
-
-            - Counter-drone defense simulation with realistic physics
-            - Blockchain-based evidence recording
-            - Training scenario customization
-            - Performance analytics and scoring
-
-            ## System Requirements
-
-            - **Windows**: Windows 10/11 (64-bit)
-            - **macOS**: macOS 11+ (Big Sur or later)
-            - **Linux**: Ubuntu 20.04+ or equivalent
-
-            ## Installation
-
-            1. Download the appropriate installer for your platform
-            2. Run the installer and follow the prompts
-            3. Launch "Phoenix Rooivalk Threat Simulator" from your applications menu
-
-            ---
-
-            Built with [Tauri](https://tauri.app) + [Leptos](https://leptos.dev)
-          draft: false
-          prerelease: false
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION, Tag: $TAG_NAME"
 
   # Build for Windows
   build-windows:
-    needs: create-release
+    needs: prepare
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -123,39 +74,16 @@ jobs:
         working-directory: ${{ env.APP_PATH }}
         run: cargo tauri build
 
-      - name: Upload MSI installer
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Windows assets to release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH }}/src-tauri/target/release/bundle/msi/Phoenix
-            Rooivalk Threat Simulator_${{ needs.create-release.outputs.version
-            }}_x64_en-US.msi
-          asset_name:
-            phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_x64.msi
-          asset_content_type: application/x-msi
-
-      - name: Upload MSI installer (setup)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH }}/src-tauri/target/release/bundle/msi/Phoenix
-            Rooivalk Threat Simulator_${{ needs.create-release.outputs.version
-            }}_x64_en-US.msi
-          asset_name:
-            phoenix-rooivalk-threat-simulator-setup_${{
-            needs.create-release.outputs.version }}_x64.msi
-          asset_content_type: application/x-msi
+          tag_name: ${{ needs.prepare.outputs.tag_name }}
+          files: |
+            ${{ env.APP_PATH }}/src-tauri/target/release/bundle/msi/Phoenix Rooivalk Threat Simulator_${{ needs.prepare.outputs.version }}_x64_en-US.msi
 
   # Build for macOS (Intel)
   build-macos-intel:
-    needs: create-release
+    needs: prepare
     runs-on: macos-13
     steps:
       - name: Checkout
@@ -188,25 +116,16 @@ jobs:
         working-directory: ${{ env.APP_PATH }}
         run: cargo tauri build --target x86_64-apple-darwin
 
-      - name: Upload DMG (Intel)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload macOS Intel assets to release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH
-            }}/src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/Phoenix
-            Rooivalk Threat Simulator_${{ needs.create-release.outputs.version
-            }}_x64.dmg
-          asset_name:
-            phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_x64-intel.dmg
-          asset_content_type: application/x-apple-diskimage
+          tag_name: ${{ needs.prepare.outputs.tag_name }}
+          files: |
+            ${{ env.APP_PATH }}/src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/Phoenix Rooivalk Threat Simulator_${{ needs.prepare.outputs.version }}_x64.dmg
 
   # Build for macOS (Apple Silicon)
   build-macos-arm:
-    needs: create-release
+    needs: prepare
     runs-on: macos-14
     steps:
       - name: Checkout
@@ -239,25 +158,16 @@ jobs:
         working-directory: ${{ env.APP_PATH }}
         run: cargo tauri build --target aarch64-apple-darwin
 
-      - name: Upload DMG (Apple Silicon)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload macOS ARM assets to release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH
-            }}/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Phoenix
-            Rooivalk Threat Simulator_${{ needs.create-release.outputs.version
-            }}_aarch64.dmg
-          asset_name:
-            phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_arm64.dmg
-          asset_content_type: application/x-apple-diskimage
+          tag_name: ${{ needs.prepare.outputs.tag_name }}
+          files: |
+            ${{ env.APP_PATH }}/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Phoenix Rooivalk Threat Simulator_${{ needs.prepare.outputs.version }}_aarch64.dmg
 
   # Build for Linux
   build-linux:
-    needs: create-release
+    needs: prepare
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -306,41 +216,19 @@ jobs:
         working-directory: ${{ env.APP_PATH }}
         run: cargo tauri build
 
-      - name: Upload AppImage
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Linux assets to release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH
-            }}/src-tauri/target/release/bundle/appimage/phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_amd64.AppImage
-          asset_name:
-            phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_amd64.AppImage
-          asset_content_type: application/x-executable
+          tag_name: ${{ needs.prepare.outputs.tag_name }}
+          files: |
+            ${{ env.APP_PATH }}/src-tauri/target/release/bundle/appimage/phoenix-rooivalk-threat-simulator_${{ needs.prepare.outputs.version }}_amd64.AppImage
+            ${{ env.APP_PATH }}/src-tauri/target/release/bundle/deb/phoenix-rooivalk-threat-simulator_${{ needs.prepare.outputs.version }}_amd64.deb
 
-      - name: Upload DEB package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path:
-            ${{ env.APP_PATH
-            }}/src-tauri/target/release/bundle/deb/phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_amd64.deb
-          asset_name:
-            phoenix-rooivalk-threat-simulator_${{
-            needs.create-release.outputs.version }}_amd64.deb
-          asset_content_type: application/vnd.debian.binary-package
-
-  # Post-release verification
-  verify-release:
+  # Finalize release with body text (runs after all builds)
+  finalize-release:
     needs:
       [
-        create-release,
+        prepare,
         build-windows,
         build-macos-intel,
         build-macos-arm,
@@ -348,11 +236,53 @@ jobs:
       ]
     runs-on: ubuntu-latest
     steps:
+      - name: Finalize release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag_name }}
+          name: Desktop App v${{ needs.prepare.outputs.version }}
+          body: |
+            # Phoenix Rooivalk Threat Simulator v${{ needs.prepare.outputs.version }}
+
+            ## Downloads
+
+            Choose the appropriate file for your platform:
+            - **Windows**: `.msi` installer
+            - **macOS**: `.dmg` disk image
+            - **Linux**: `.AppImage` (portable) or `.deb` (Debian/Ubuntu)
+
+            ## What's New
+
+            See [CHANGELOG.md](https://github.com/JustAGhosT/PhoenixRooivalk/blob/main/apps/threat-simulator-desktop/CHANGELOG.md) for details.
+
+            ## Features
+
+            - Counter-drone defense simulation with realistic physics
+            - Blockchain-based evidence recording
+            - Training scenario customization
+            - Performance analytics and scoring
+
+            ## System Requirements
+
+            - **Windows**: Windows 10/11 (64-bit)
+            - **macOS**: macOS 11+ (Big Sur or later)
+            - **Linux**: Ubuntu 20.04+ or equivalent
+
+            ## Installation
+
+            1. Download the appropriate installer for your platform
+            2. Run the installer and follow the prompts
+            3. Launch "Phoenix Rooivalk Threat Simulator" from your applications menu
+
+            ---
+
+            Built with [Tauri](https://tauri.app) + [Leptos](https://leptos.dev)
+
       - name: Verify release assets
         run: |
-          echo "✅ Release v${{ needs.create-release.outputs.version }} created successfully"
+          echo "Release v${{ needs.prepare.outputs.version }} created successfully"
           echo ""
-          echo "Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+          echo "Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare.outputs.tag_name }}"
           echo ""
           echo "Built artifacts:"
           echo "  - Windows MSI installer"

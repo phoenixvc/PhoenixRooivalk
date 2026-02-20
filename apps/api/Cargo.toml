@@ -12,7 +12,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
-sqlx = { version = "0.8", features = ["runtime-tokio-native-tls", "sqlite", "macros"], default-features = false }
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "sqlite", "macros"], default-features = false }
 phoenix-common = { path = "../../crates/phoenix-common" }
 phoenix-x402 = { path = "../../crates/x402" }
 anyhow = "1.0"
@@ -27,12 +27,16 @@ hex = "0.4"
 # Async trait support for database providers
 async-trait = "0.1"
 # Azure Cosmos DB support (optional feature)
-azure_data_cosmos = { version = "0.30", optional = true }
-azure_identity = { version = "0.31", optional = true }
-azure_core = { version = "0.31", optional = true }
+# Disable default-features to avoid pulling native-tls (RUSTSEC-2025-0004);
+# azure_core defaults include reqwest_native_tls which we replace with rustls.
+azure_data_cosmos = { version = "0.30", optional = true, default-features = false, features = ["hmac_rust"] }
+azure_identity = { version = "0.31", optional = true, default-features = false }
+azure_core = { version = "0.31", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
+# Provide rustls TLS backend for azure crates' transitive reqwest 0.12 dep
+reqwest_compat = { package = "reqwest", version = "0.12", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
 
 [features]
-cosmos = ["azure_data_cosmos", "azure_identity", "azure_core"]
+cosmos = ["azure_data_cosmos", "azure_identity", "azure_core", "reqwest_compat"]
 
 [dev-dependencies]
 # Use rustls to avoid native OpenSSL vulnerabilities (RUSTSEC-2025-0004)

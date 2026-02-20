@@ -71,12 +71,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        # v4.2.2 - pinned for security
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        uses: actions/checkout@v6.0.2
 
       - name: Set up Python
-        # v5.6.0 - pinned for security
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: "3.11"
           cache: "pip"
@@ -159,18 +157,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        # v4.2.2 - pinned for security
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        uses: actions/checkout@v6.0.2
 
       - name: Setup Terraform
-        # v3.1.2 - pinned for security
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.6.0"
 
       - name: Azure Login
-        # v2.2.0 - pinned for security
-        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -210,12 +205,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        # v4.2.2 - pinned for security
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        uses: actions/checkout@v6.0.2
 
       - name: Azure Login
-        # v2.2.0 - pinned for security
-        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -263,12 +256,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        # v4.2.2 - pinned for security
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        uses: actions/checkout@v6.0.2
 
       - name: Azure Login
-        # v2.2.0 - pinned for security
-        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -326,19 +317,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        # v4.2.2 - pinned for security
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        uses: actions/checkout@v6.0.2
 
       - name: Set up Python
-        # v5.6.0 - pinned for security
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: "3.11"
           cache: "pip"
 
       - name: Azure Login
-        # v2.2.0 - pinned for security
-        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -425,8 +413,7 @@ jobs:
           fi
 
       - name: Upload model artifacts
-        # v4.6.2 - pinned for security
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: trained-model-${{ needs.train.outputs.job_name }}
           path: ./outputs/model/exports/
@@ -457,8 +444,7 @@ jobs:
 
     steps:
       - name: Azure Login
-        # v2.2.0 - pinned for security
-        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 

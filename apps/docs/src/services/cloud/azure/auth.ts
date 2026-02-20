@@ -104,11 +104,9 @@ export class AzureAuthService implements IAuthService {
           postLogoutRedirectUri:
             this.config.postLogoutRedirectUri || window.location.origin,
           knownAuthorities,
-          navigateToLoginRequestUrl: true,
         },
         cache: {
-          cacheLocation: "localStorage",
-          storeAuthStateInCookie: false,
+          cacheLocation: "localStorage" as const,
         },
         system: {
           loggerOptions: {
@@ -120,14 +118,18 @@ export class AzureAuthService implements IAuthService {
       this.msalInstance = new msal.PublicClientApplication(msalConfig);
       await this.msalInstance.initialize();
 
-      // Handle redirect response
-      const response = await this.msalInstance.handleRedirectPromise();
+      // Handle redirect response (MSAL v5: navigateToLoginRequestUrl moved here)
+      const response = await this.msalInstance.handleRedirectPromise({
+        navigateToLoginRequestUrl: true,
+      });
       if (response) {
+        this.msalInstance.setActiveAccount(response.account);
         this.handleAuthResponse(response);
       } else {
         // Check for existing session
         const accounts = this.msalInstance.getAllAccounts();
         if (accounts.length > 0) {
+          this.msalInstance.setActiveAccount(accounts[0]);
           this.setUserFromAccount(accounts[0]);
         }
       }
@@ -170,6 +172,10 @@ export class AzureAuthService implements IAuthService {
 
       // Use popup for cross-origin providers
       const response = await this.msalInstance.loginPopup(loginRequest);
+      // MSAL v5: set active account for subsequent silent token acquisition
+      if (response?.account) {
+        this.msalInstance.setActiveAccount(response.account);
+      }
       this.handleAuthResponse(response);
       return this.currentUser;
     } catch (error) {
