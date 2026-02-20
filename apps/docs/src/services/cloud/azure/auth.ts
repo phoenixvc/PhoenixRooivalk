@@ -7,6 +7,7 @@
  * npm install @azure/msal-browser
  */
 
+import type { IPublicClientApplication } from "@azure/msal-browser";
 import {
   IAuthService,
   checkIsAdmin,
@@ -50,7 +51,7 @@ interface AzureTokenClaims {
  * Supports Microsoft identity provider with single-tenant or multi-tenant configuration.
  */
 export class AzureAuthService implements IAuthService {
-  private msalInstance: any = null; // PublicClientApplication
+  private msalInstance: IPublicClientApplication | null = null;
   private currentUser: CloudUser | null = null;
   private authStateCallbacks: Set<(user: CloudUser | null) => void> = new Set();
   private config: AzureAuthConfig | null = null;
@@ -104,6 +105,7 @@ export class AzureAuthService implements IAuthService {
           postLogoutRedirectUri:
             this.config.postLogoutRedirectUri || window.location.origin,
           knownAuthorities,
+          navigateToLoginRequestUrl: true,
         },
         cache: {
           cacheLocation: "localStorage" as const,
@@ -118,11 +120,9 @@ export class AzureAuthService implements IAuthService {
       this.msalInstance = new msal.PublicClientApplication(msalConfig);
       await this.msalInstance.initialize();
 
-      // Handle redirect response (MSAL v5: navigateToLoginRequestUrl moved here)
-      const response = await this.msalInstance.handleRedirectPromise({
-        navigateToLoginRequestUrl: true,
-      });
-      if (response) {
+      // Handle redirect response
+      const response = await this.msalInstance.handleRedirectPromise();
+      if (response && response.account) {
         this.msalInstance.setActiveAccount(response.account);
         this.handleAuthResponse(response);
       } else {
@@ -235,15 +235,15 @@ export class AzureAuthService implements IAuthService {
   async getIdToken(forceRefresh = false): Promise<string | null> {
     if (!this.msalInstance) return null;
 
-    const accounts = this.msalInstance.getAllAccounts();
-    if (accounts.length === 0) return null;
+    const activeAccount = this.msalInstance.getActiveAccount();
+    if (!activeAccount) return null;
 
     const scopes = this.parseScopes();
 
     try {
       const response = await this.msalInstance.acquireTokenSilent({
         scopes,
-        account: accounts[0],
+        account: activeAccount,
         forceRefresh,
       });
       return response.idToken;

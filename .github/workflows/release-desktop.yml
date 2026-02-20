@@ -31,13 +31,21 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VERSION="${{ github.event.inputs.version }}"
+            TAG_NAME="desktop-v${VERSION}"
           else
             VERSION="${GITHUB_REF#refs/tags/desktop-v}"
+            TAG_NAME="${{ github.ref_name }}"
           fi
-          TAG_NAME="${{ github.ref_name || format('desktop-v{0}', github.event.inputs.version) }}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "Version: $VERSION, Tag: $TAG_NAME"
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.extract_version.outputs.tag_name }}
+          name: Desktop App v${{ steps.extract_version.outputs.version }}
+          draft: true
 
   # Build for Windows
   build-windows:
@@ -84,7 +92,7 @@ jobs:
   # Build for macOS (Intel)
   build-macos-intel:
     needs: prepare
-    runs-on: macos-13
+    runs-on: macos-15-intel
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
@@ -227,13 +235,7 @@ jobs:
   # Finalize release with body text (runs after all builds)
   finalize-release:
     needs:
-      [
-        prepare,
-        build-windows,
-        build-macos-intel,
-        build-macos-arm,
-        build-linux,
-      ]
+      [prepare, build-windows, build-macos-intel, build-macos-arm, build-linux]
     runs-on: ubuntu-latest
     steps:
       - name: Finalize release
@@ -241,6 +243,7 @@ jobs:
         with:
           tag_name: ${{ needs.prepare.outputs.tag_name }}
           name: Desktop App v${{ needs.prepare.outputs.version }}
+          draft: false
           body: |
             # Phoenix Rooivalk Threat Simulator v${{ needs.prepare.outputs.version }}
 
