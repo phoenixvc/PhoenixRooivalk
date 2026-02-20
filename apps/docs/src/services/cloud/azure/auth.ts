@@ -7,7 +7,12 @@
  * npm install @azure/msal-browser
  */
 
-import type { IPublicClientApplication } from "@azure/msal-browser";
+import type {
+  AccountInfo,
+  AuthenticationResult,
+  IPublicClientApplication,
+} from "@azure/msal-browser";
+
 import {
   IAuthService,
   checkIsAdmin,
@@ -302,13 +307,13 @@ export class AzureAuthService implements IAuthService {
     }
   }
 
-  private handleAuthResponse(response: any): void {
+  private handleAuthResponse(response: AuthenticationResult): void {
     if (response?.account) {
       this.setUserFromAccount(response.account);
     }
   }
 
-  private setUserFromAccount(account: any): void {
+  private setUserFromAccount(account: AccountInfo): void {
     const claims = account.idTokenClaims as AzureTokenClaims;
 
     // Build display name from available claims
