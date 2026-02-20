@@ -48,6 +48,8 @@
       "Bash(isort *)",
       "Bash(mypy *)",
       "Bash(bandit *)",
+      "Bash(drone-detector*)",
+      "Bash(corepack *)",
       "Bash(npx prettier*)",
       "Bash(npx eslint*)",
       "Bash(npx markdownlint*)",
@@ -144,7 +146,9 @@
       "Bash(az staticwebapp delete*)",
       "Bash(az functionapp delete*)",
       "Bash(az cosmosdb delete*)",
-      "Bash(az keyvault delete*)"
+      "Bash(az keyvault delete*)",
+      "Bash(pnpm publish*)",
+      "Bash(npm publish*)"
     ]
   },
   "hooks": {

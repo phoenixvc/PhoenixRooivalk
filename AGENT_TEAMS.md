@@ -2,7 +2,7 @@
 
 ## Overview
 
-21 specialist agents organized into 10 code teams and 5 workflow agents.
+22 specialist agents organized into 10 code teams and 5 workflow agents.
 Teams execute in 4 phases respecting the dependency direction:
 Backend -> Frontend -> Product -> Quality.
 
@@ -13,6 +13,7 @@ Backend -> Frontend -> Product -> Quality.
 | Agent | Role |
 |-------|------|
 | `engineering/rust-specialist` | Axum API, SQLx, blockchain crates |
+| `engineering/evidence-specialist` | Evidence hashing, anchoring, chain-of-custody |
 
 **Scope**: `apps/api/`, `apps/keeper/`, `apps/evidence-cli/`, `crates/`
 
@@ -174,6 +175,7 @@ ADRs, `.github/*.md`
 | W3 | Review | `/project:review` | Code review |
 | W4 | Review PR | `/project:review-pr` | GitHub PR review |
 | W5 | Security Audit | `/project:security-audit` | Full security scan |
+| W6 | Migrate | `/project:migrate` | Database migration management |
 
 ## Execution Phases
 

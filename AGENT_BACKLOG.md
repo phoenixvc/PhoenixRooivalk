@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-20
 
-Summary: 8 P0, 15 P1, 12 P2, 10 P3 = **45 items**
+Summary: 8 P0, 16 P1, 12 P2, 10 P3 = **46 items**
 
 ## P0-CRITICAL — Must fix
 
@@ -28,6 +28,7 @@ Summary: 8 P0, 15 P1, 12 P2, 10 P3 = **45 items**
 | X402-001 | 1 | `crates/x402/` | No dedicated test files — only inline tests |
 | ADDR-001 | 1 | `crates/address-validation/` | No dedicated test files |
 | CLI-001 | 1 | `apps/evidence-cli/` | Zero test coverage — no test directory |
+| SOL-001 | 1 | `crates/anchor-solana/` | No tests — no `#[cfg(test)]`, no `tests/` dir, orphan `provider_tests.rs` at crate root |
 | SIM-003 | 2 | `apps/marketing/` | ~11 tests for 164 source files — major gap |
 | DOC-001 | 9 | `apps/docs/azure-functions/src/functions/scheduled.ts:80` | SendGrid TODO — email queue has no email service |
 | DOC-002 | 9 | `apps/docs/docs/technical/architecture/adr-0015-prompt-management.md:515` | Legacy system removal TODO |
