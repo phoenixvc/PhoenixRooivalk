@@ -1,9 +1,10 @@
 # Audio PWM Servo Build Guide
 
-Complete hardware build instructions for controlling 2 hobby servos
-using a laptop's audio output — no microcontroller needed.
+Complete hardware build instructions for controlling 2 hobby servos using a
+laptop's audio output — no microcontroller needed.
 
 **Three paths covered:**
+
 - **Path A**: Wired via headphone jack (~5ms latency)
 - **Path B**: Wireless via Bluetooth speaker board (~100-200ms latency)
 - **Path C**: Wireless via WiFi + old phone as bridge (~30-50ms latency)
@@ -26,10 +27,10 @@ What we do instead:
 Laptop --> Audio output (50Hz square wave) --> Transistor circuit --> Servo
 ```
 
-The software generates a precise 50Hz waveform through the audio output.
-Left channel controls yaw servo, right channel controls pitch servo.
-A simple transistor circuit converts the audio voltage into the 0-5V
-digital pulses that servos expect.
+The software generates a precise 50Hz waveform through the audio output. Left
+channel controls yaw servo, right channel controls pitch servo. A simple
+transistor circuit converts the audio voltage into the 0-5V digital pulses that
+servos expect.
 
 ---
 
@@ -37,18 +38,18 @@ digital pulses that servos expect.
 
 ### Electronic Components (salvage from ANY junk electronics)
 
-| Qty | Component | Where To Find It | Acceptable Range |
-|-----|-----------|-------------------|------------------|
-| 2 | NPN transistor | Amplifier boards, radios, BT speakers, TV remotes, charger boards | BC547, BC548, 2N2222, S8050, C1815 — any small-signal NPN works |
-| 2 | 10kΩ resistor | Any PCB | 4.7kΩ to 47kΩ all work. Just limits base current. |
-| 2 | 4.7kΩ resistor | Any PCB | 1kΩ to 10kΩ all work. Pull-up to 5V. |
-| - | Wire | Headphone cables, USB cables, any stranded wire | Short runs, doesn't need to be thick |
-| - | Solder + iron | - | Hot glue + wire wrapping works for testing |
+| Qty | Component      | Where To Find It                                                  | Acceptable Range                                                |
+| --- | -------------- | ----------------------------------------------------------------- | --------------------------------------------------------------- |
+| 2   | NPN transistor | Amplifier boards, radios, BT speakers, TV remotes, charger boards | BC547, BC548, 2N2222, S8050, C1815 — any small-signal NPN works |
+| 2   | 10kΩ resistor  | Any PCB                                                           | 4.7kΩ to 47kΩ all work. Just limits base current.               |
+| 2   | 4.7kΩ resistor | Any PCB                                                           | 1kΩ to 10kΩ all work. Pull-up to 5V.                            |
+| -   | Wire           | Headphone cables, USB cables, any stranded wire                   | Short runs, doesn't need to be thick                            |
+| -   | Solder + iron  | -                                                                 | Hot glue + wire wrapping works for testing                      |
 
 ### Identifying NPN Transistors On Salvaged Boards
 
-Look for small black plastic components with 3 legs in a half-circle
-shape (TO-92 package). They're typically marked with a code:
+Look for small black plastic components with 3 legs in a half-circle shape
+(TO-92 package). They're typically marked with a code:
 
 ```text
 Common NPN markings:
@@ -59,6 +60,7 @@ Common NPN markings:
 ```
 
 If you can't read the marking, test it:
+
 - Set multimeter to diode mode
 - Base-to-Emitter: should read ~0.6V one way, OL the other
 - Base-to-Collector: should read ~0.6V one way, OL the other
@@ -80,34 +82,37 @@ If you can't read the marking, test it:
 4.7kΩ = marked "472" or "4701"
 ```
 
-SMD resistors work fine — just harder to solder wires to.
-Use a blob of solder to tack a wire onto each end.
+SMD resistors work fine — just harder to solder wires to. Use a blob of solder
+to tack a wire onto each end.
 
 ### Power
 
-| What | Source |
-|------|--------|
-| Servo power (5V) | RC battery + BEC, USB charger (cut cable), 4xAA batteries |
-| Laptop | Own battery/charger |
-| BT speaker (Path B) | Its own internal battery |
+| What                | Source                                                    |
+| ------------------- | --------------------------------------------------------- |
+| Servo power (5V)    | RC battery + BEC, USB charger (cut cable), 4xAA batteries |
+| Laptop              | Own battery/charger                                       |
+| BT speaker (Path B) | Its own internal battery                                  |
 
-**IMPORTANT: Do NOT power servos from the headphone jack.
-The audio output provides signal only, not power.**
+**IMPORTANT: Do NOT power servos from the headphone jack. The audio output
+provides signal only, not power.**
 
 ---
 
 ## Path A: Wired (Headphone Jack)
 
 ### Advantages
+
 - Simple: just a 3.5mm cable + 2 transistors + 4 resistors
 - Low latency: ~5ms
 - Reliable: no Bluetooth pairing issues
 
 ### Disadvantages
+
 - Wired to laptop (limited range)
 - Uses your headphone jack (no other audio while running)
 
 ### What You Need (Additional)
+
 - 3.5mm audio cable (or cut an old pair of headphones)
 - The 3.5mm plug has 3 or 4 contacts:
 
@@ -179,8 +184,8 @@ The audio output provides signal only, not power.**
    - Connect to pitch servo signal wire
 
 4. **Connect grounds**
-   - Audio cable ground, transistor emitters, servo grounds,
-     and battery negative all connect together
+   - Audio cable ground, transistor emitters, servo grounds, and battery
+     negative all connect together
 
 5. **Connect servo power**
    - Servo red wires go to +5V battery/BEC
@@ -210,17 +215,20 @@ Most common TO-92 pinout (flat side facing you):
 ## Path B: Wireless (Bluetooth Speaker)
 
 ### Advantages
+
 - Wireless: no cable to the laptop
 - Range: 5-10 meters typical Bluetooth range
 - Self-powered: BT speaker has its own battery
 
 ### Disadvantages
+
 - Higher latency: ~100-200ms (SBC codec)
 - Must pair and stay connected
 - Audio compression may slightly affect signal quality
 - More complex disassembly
 
 ### What You Need (Additional)
+
 - A Bluetooth speaker (any cheap one works)
 - The speaker must be stereo (2 speaker cones) for 2 servo channels
   - If mono (1 speaker), you only get 1 servo channel
@@ -302,6 +310,7 @@ BT Speaker PCB
 ## Path C: Wireless (WiFi + Old Phone)
 
 ### Advantages
+
 - Wireless: no cable to the laptop
 - Lower latency than Bluetooth: ~30-50ms (WiFi UDP, no audio codec)
 - Longer range: 20-50 meters (WiFi vs BT's 5-10m)
@@ -310,6 +319,7 @@ BT Speaker PCB
 - Everyone has an old phone in a drawer
 
 ### Disadvantages
+
 - Requires phone with headphone jack (or USB-C audio adapter)
 - Phone must stay awake and screen on (browser tab active)
 - Slightly more setup than Path A
@@ -327,12 +337,12 @@ Laptop (WiFi) ─── UDP commands ──> Old Phone (WiFi)
                             Transistor circuit ──> Servos
 ```
 
-The laptop serves a small web page. The phone opens it in its browser.
-The page receives servo commands over WebSocket and generates audio PWM
-through the Web Audio API — the phone's headphone jack becomes a servo
-controller.
+The laptop serves a small web page. The phone opens it in its browser. The page
+receives servo commands over WebSocket and generates audio PWM through the Web
+Audio API — the phone's headphone jack becomes a servo controller.
 
 ### What You Need (Additional)
+
 - An old phone with:
   - WiFi
   - 3.5mm headphone jack (or USB-C to 3.5mm adapter)
@@ -346,10 +356,12 @@ controller.
    - OR create a hotspot on the phone, connect laptop to it
 
 2. **Start the bridge server on the laptop**
+
    ```bash
    cd apps/detector/src
    python phone_audio_bridge.py
    ```
+
    This starts a web server on port 8765.
 
 3. **Open the bridge page on the phone**
@@ -363,51 +375,53 @@ controller.
 
 5. **Test from the laptop**
 
-   With Path C, the phone generates the audio — so on the laptop side
-   you use `wifi_udp` transport pointing at the phone bridge:
+   With Path C, the phone generates the audio — so on the laptop side you use
+   `wifi_udp` transport pointing at the phone bridge:
 
    ```yaml
    # config.yaml
    turret_control:
      transport_type: wifi_udp
-     wifi_host: "<phone bridge IP>"  # printed by phone_audio_bridge.py
+     wifi_host: "<phone bridge IP>" # printed by phone_audio_bridge.py
      wifi_port: 8765
    ```
 
-   Or test directly with the sweep tool on the laptop's own audio
-   (useful for verifying the bridge receives commands):
+   Or test directly with the sweep tool on the laptop's own audio (useful for
+   verifying the bridge receives commands):
+
    ```bash
    python test_audio_pwm.py --sweep
    ```
 
 ### Latency Comparison
 
-| Path | Latency | Range | Hardware |
-|------|---------|-------|----------|
-| A: Headphone jack | ~5ms | Cable length | 3.5mm cable |
-| B: BT speaker | ~100-200ms | ~5-10m | BT speaker board |
-| C: WiFi + phone | ~30-50ms | ~20-50m | Old phone |
+| Path              | Latency    | Range        | Hardware         |
+| ----------------- | ---------- | ------------ | ---------------- |
+| A: Headphone jack | ~5ms       | Cable length | 3.5mm cable      |
+| B: BT speaker     | ~100-200ms | ~5-10m       | BT speaker board |
+| C: WiFi + phone   | ~30-50ms   | ~20-50m      | Old phone        |
 
 ---
 
 ## Scaling: 4+ Servo Channels
 
-Each stereo audio output gives 2 servo channels (left = ch1, right = ch2).
-To control more than 2 servos, add more audio outputs:
+Each stereo audio output gives 2 servo channels (left = ch1, right = ch2). To
+control more than 2 servos, add more audio outputs:
 
-| Setup | Channels | How |
-|-------|----------|-----|
-| Laptop headphone jack | 2 | Built-in (Path A) |
-| + USB sound card | 4 | Plug in a USB sound card or old USB headset |
-| + Phone bridge | 4 | WiFi to phone (Path C), phone uses its own jack |
-| + BT speaker | 4 | Laptop BT to speaker (Path B) |
-| Multiple phones | 6+ | Each phone = 2 more channels |
+| Setup                 | Channels | How                                             |
+| --------------------- | -------- | ----------------------------------------------- |
+| Laptop headphone jack | 2        | Built-in (Path A)                               |
+| + USB sound card      | 4        | Plug in a USB sound card or old USB headset     |
+| + Phone bridge        | 4        | WiFi to phone (Path C), phone uses its own jack |
+| + BT speaker          | 4        | Laptop BT to speaker (Path B)                   |
+| Multiple phones       | 6+       | Each phone = 2 more channels                    |
 
-**USB sound cards** are cheap ($1-3) or salvageable from old USB headsets.
-They show up as a separate audio device. Use `--list-devices` to find them,
-then run a second `AudioPwmTransport` instance targeting that device index.
+**USB sound cards** are cheap ($1-3) or salvageable from old USB headsets. They
+show up as a separate audio device. Use `--list-devices` to find them, then run
+a second `AudioPwmTransport` instance targeting that device index.
 
 **When would you need 4+ channels?**
+
 - Pan + Tilt + Trigger mechanism + Gripper
 - Dual turret (2 axes each)
 - Pan + Tilt + Camera gimbal stabilization
@@ -419,42 +433,50 @@ then run a second `AudioPwmTransport` instance targeting that device index.
 Before building any circuit, verify the software works:
 
 ### Step 1: Install dependency
+
 ```bash
 pip install sounddevice
 ```
 
 ### Step 2: List audio devices
+
 ```bash
 cd apps/detector/src
 python test_audio_pwm.py --list-devices
 ```
 
 ### Step 3: Test with headphones
+
 ```bash
 # TURN VOLUME TO 20% FIRST
 python test_audio_pwm.py --sweep
 ```
 
-You'll hear a low 50Hz buzz that changes slightly as the servo
-position sweeps. Left ear = yaw, right ear = pitch.
+You'll hear a low 50Hz buzz that changes slightly as the servo position sweeps.
+Left ear = yaw, right ear = pitch.
 
 ### Step 4: Test with multimeter (optional but recommended)
+
 - Set multimeter to AC voltage mode
 - Touch probes to headphone jack tip + sleeve
 - Run sweep test
 - You should see voltage changing as position sweeps (~0.3-1.0V AC)
 
 ### Step 5: Test interactive control
+
 ```bash
 python test_audio_pwm.py
 ```
+
 Use WASD keys to move servo positions.
 
 ### Step 6: Test with webcam tracking
+
 ```bash
 pip install opencv-python
 python test_audio_pwm.py --track
 ```
+
 Move an object in front of the camera. The audio output will track it.
 
 ---
@@ -464,11 +486,12 @@ Move an object in front of the camera. The audio output will track it.
 Once the circuit is built and servos are moving:
 
 Edit `config.yaml`:
+
 ```yaml
 turret_control:
   # For headphone jack:
   transport_type: audio_pwm
-  audio_device: null  # or specific device number
+  audio_device: null # or specific device number
 
   # PID tuning (adjust these while testing)
   yaw_kp: 0.8
@@ -483,15 +506,15 @@ turret_control:
 
 ## Troubleshooting
 
-| Problem | Cause | Fix |
-|---------|-------|-----|
-| No sound at all | Wrong audio device selected | Run `--list-devices`, try different device numbers |
-| Servo jitters wildly | Audio volume too high | Turn volume down to 30-50% |
-| Servo doesn't move | Audio volume too low | Turn volume up. Transistor needs enough signal to switch |
-| Servo stuck at one end | Wrong transistor pinout | Check E-B-C pin order for your specific transistor |
-| One channel works, other doesn't | Wiring error on one channel | Check connections with multimeter continuity mode |
-| BT speaker cuts out | Speaker sleep/power saving | Some speakers sleep after silence. The 50Hz signal should prevent this |
-| Servo moves opposite direction | Left/right channels swapped | Swap yaw_kp to negative, or swap audio wires |
+| Problem                          | Cause                       | Fix                                                                    |
+| -------------------------------- | --------------------------- | ---------------------------------------------------------------------- |
+| No sound at all                  | Wrong audio device selected | Run `--list-devices`, try different device numbers                     |
+| Servo jitters wildly             | Audio volume too high       | Turn volume down to 30-50%                                             |
+| Servo doesn't move               | Audio volume too low        | Turn volume up. Transistor needs enough signal to switch               |
+| Servo stuck at one end           | Wrong transistor pinout     | Check E-B-C pin order for your specific transistor                     |
+| One channel works, other doesn't | Wiring error on one channel | Check connections with multimeter continuity mode                      |
+| BT speaker cuts out              | Speaker sleep/power saving  | Some speakers sleep after silence. The 50Hz signal should prevent this |
+| Servo moves opposite direction   | Left/right channels swapped | Swap yaw_kp to negative, or swap audio wires                           |
 
 ### Finding The Sweet Spot (Volume Calibration)
 
@@ -511,13 +534,13 @@ Optimal is usually 40-70% volume depending on the audio output.
 
 **Minimum for 2 servos (both paths):**
 
-| Part | Qty | Size | Found In |
-|------|-----|------|----------|
-| NPN transistor (any small-signal) | 2 | TO-92 (3 pins) | Amplifier boards, radios, speakers, chargers |
-| Resistor ~10kΩ | 2 | Through-hole or SMD | Any PCB |
-| Resistor ~4.7kΩ | 2 | Through-hole or SMD | Any PCB |
-| Wire | ~30cm | Any gauge | Headphone cables, USB cables |
-| 5V power source | 1 | - | RC battery+BEC, USB charger, 4xAA |
+| Part                              | Qty   | Size                | Found In                                     |
+| --------------------------------- | ----- | ------------------- | -------------------------------------------- |
+| NPN transistor (any small-signal) | 2     | TO-92 (3 pins)      | Amplifier boards, radios, speakers, chargers |
+| Resistor ~10kΩ                    | 2     | Through-hole or SMD | Any PCB                                      |
+| Resistor ~4.7kΩ                   | 2     | Through-hole or SMD | Any PCB                                      |
+| Wire                              | ~30cm | Any gauge           | Headphone cables, USB cables                 |
+| 5V power source                   | 1     | -                   | RC battery+BEC, USB charger, 4xAA            |
 
-**Path A additional:** 3.5mm audio cable or old headphones
-**Path B additional:** Bluetooth speaker (stereo)
+**Path A additional:** 3.5mm audio cable or old headphones **Path B
+additional:** Bluetooth speaker (stereo)

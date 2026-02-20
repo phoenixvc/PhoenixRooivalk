@@ -235,9 +235,7 @@ export const lightningPitchSlides: Slide[] = [
       "**Q4 2027** — Series A ready",
       "**18-month runway** to profitability",
     ],
-    keyPoints: [
-      "**$960K Seed** on SAFE | **$3.5M pre-money cap**",
-    ],
+    keyPoints: ["**$960K Seed** on SAFE | **$3.5M pre-money cap**"],
     speakerNotes:
       "EBEN DELIVERS THIS SLIDE. Clear terms, clear use of funds, clear milestones. No ambiguity.",
     script:
@@ -355,9 +353,7 @@ export const lightningPitchSlides: Slide[] = [
       "**RF** — frequency scanning",
       "**Multi-modal** confirmation reduces false positives",
     ],
-    keyPoints: [
-      "**Edge-first architecture** — faster, private, resilient",
-    ],
+    keyPoints: ["**Edge-first architecture** — faster, private, resilient"],
     speakerNotes:
       "BACKUP SLIDE. Use for technical investors. Emphasize edge processing and offline capability.",
     script:
@@ -387,9 +383,7 @@ export const lightningPitchSlides: Slide[] = [
       "**SMB:** $3K-$50K range",
       "*Nobody serving this $6B segment*",
     ],
-    keyPoints: [
-      "**Blue ocean:** Consumer/prosumer C-UAS is uncontested",
-    ],
+    keyPoints: ["**Blue ocean:** Consumer/prosumer C-UAS is uncontested"],
     speakerNotes:
       "BACKUP SLIDE. Use if asked about competition. Key point: we're not competing with DroneShield - different market entirely.",
     script:
@@ -515,9 +509,7 @@ export const lightningPitchSlides: Slide[] = [
       "**Enterprise** — facility-wide protection",
       "**Future:** municipal-scale networks",
     ],
-    keyPoints: [
-      "**Network effect:** Each device makes the mesh smarter",
-    ],
+    keyPoints: ["**Network effect:** Each device makes the mesh smarter"],
     speakerNotes:
       "BACKUP SLIDE. Use for technical investors or enterprise questions. This is our path to large-scale deployments.",
     script:

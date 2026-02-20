@@ -88,3 +88,6 @@ pitch-deck/*.pptx
 pitch-deck/*.pdf
 pitch-deck/*.html
 *.egg-info/
+
+# Claude Code runtime state (template is tracked, runtime state is not)
+.claude/state/orchestrator.json

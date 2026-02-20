@@ -1,0 +1,199 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install*)",
+      "Bash(pnpm build*)",
+      "Bash(pnpm dev*)",
+      "Bash(pnpm start*)",
+      "Bash(pnpm test*)",
+      "Bash(pnpm lint*)",
+      "Bash(pnpm typecheck*)",
+      "Bash(pnpm format*)",
+      "Bash(pnpm fx*)",
+      "Bash(pnpm --filter *)",
+      "Bash(pnpm -C *)",
+      "Bash(pnpm sim:*)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm sync:wasm*)",
+      "Bash(turbo *)",
+      "Bash(cargo build*)",
+      "Bash(cargo test*)",
+      "Bash(cargo clippy*)",
+      "Bash(cargo fmt*)",
+      "Bash(cargo check*)",
+      "Bash(cargo run -p phoenix-api*)",
+      "Bash(cargo run -p phoenix-keeper*)",
+      "Bash(cargo run -p evidence-cli*)",
+      "Bash(cargo run -p threat-simulator*)",
+      "Bash(cargo watch*)",
+      "Bash(cargo audit*)",
+      "Bash(cargo tauri*)",
+      "Bash(cargo metadata*)",
+      "Bash(trunk serve*)",
+      "Bash(trunk build*)",
+      "Bash(trunk clean*)",
+      "Bash(rustup target*)",
+      "Bash(rustup show*)",
+      "Bash(pytest *)",
+      "Bash(python -m pytest*)",
+      "Bash(python -m main*)",
+      "Bash(python3 -m pytest*)",
+      "Bash(python3 -m main*)",
+      "Bash(pip install -e *)",
+      "Bash(pip3 install -e *)",
+      "Bash(pip install -r *)",
+      "Bash(pip3 install -r *)",
+      "Bash(ruff *)",
+      "Bash(black *)",
+      "Bash(isort *)",
+      "Bash(mypy *)",
+      "Bash(bandit *)",
+      "Bash(drone-detector*)",
+      "Bash(corepack *)",
+      "Bash(npx prettier*)",
+      "Bash(npx eslint*)",
+      "Bash(npx markdownlint*)",
+      "Bash(npx jest*)",
+      "Bash(npx vitest*)",
+      "Bash(npx tsc*)",
+      "Bash(npx docusaurus*)",
+      "Bash(node scripts/*)",
+      "Bash(jest *)",
+      "Bash(markdownlint *)",
+      "Bash(docusaurus *)",
+      "Bash(npm install*)",
+      "Bash(npm run *)",
+      "Bash(npm test*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr diff*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr comment*)",
+      "Bash(gh issue view*)",
+      "Bash(gh issue list*)",
+      "Bash(gh issue create*)",
+      "Bash(gh api *)",
+      "Bash(gh status*)",
+      "Bash(gh auth status*)",
+      "Bash(gh repo view*)",
+      "Bash(gh run list*)",
+      "Bash(gh run view*)",
+      "Bash(gh release list*)",
+      "Bash(gh release view*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git add *)",
+      "Bash(git commit*)",
+      "Bash(git push*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git merge*)",
+      "Bash(git stash*)",
+      "Bash(git rebase*)",
+      "Bash(git remote*)",
+      "Bash(git show*)",
+      "Bash(git tag*)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(az account *)",
+      "Bash(az group show*)",
+      "Bash(az group list*)",
+      "Bash(az staticwebapp show*)",
+      "Bash(az staticwebapp list*)",
+      "Bash(az functionapp show*)",
+      "Bash(az functionapp list*)",
+      "Bash(az cosmosdb show*)",
+      "Bash(az cosmosdb list*)",
+      "Bash(az keyvault show*)",
+      "Bash(az keyvault list*)",
+      "Bash(az deployment *)",
+      "Bash(az bicep *)",
+      "Bash(terraform init*)",
+      "Bash(terraform plan*)",
+      "Bash(terraform validate*)",
+      "Bash(terraform fmt*)",
+      "Bash(terraform show*)",
+      "Bash(terraform output*)",
+      "Bash(terraform state list*)",
+      "Bash(terraform state show*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git checkout -- .)",
+      "Bash(git restore .)",
+      "Bash(rm -rf *)",
+      "Bash(rm -f *)",
+      "Bash(cargo install*)",
+      "Bash(gh repo delete*)",
+      "Bash(gh pr close*)",
+      "Bash(gh issue close*)",
+      "Bash(gh release delete*)",
+      "Bash(gh secret *)",
+      "Bash(terraform destroy*)",
+      "Bash(terraform apply*)",
+      "Bash(az group delete*)",
+      "Bash(az resource delete*)",
+      "Bash(az staticwebapp delete*)",
+      "Bash(az functionapp delete*)",
+      "Bash(az cosmosdb delete*)",
+      "Bash(az keyvault delete*)",
+      "Bash(pnpm publish*)",
+      "Bash(npm publish*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm install --frozen-lockfile"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-sensitive.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/warn-uncommitted.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-uncommitted.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

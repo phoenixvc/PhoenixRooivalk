@@ -10,7 +10,8 @@ import type {
 /** Branded text for slide decks - Phoenix Rooivalk */
 const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
 const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
-const SLIDE_DECK_TAGLINE = "Advanced counter drone defence systems\nfor military and civilian";
+const SLIDE_DECK_TAGLINE =
+  "Advanced counter drone defence systems\nfor military and civilian";
 const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
 
 /**
@@ -21,7 +22,8 @@ function resolveImageUrl(path: string | undefined): string | undefined {
   if (!path) return undefined;
   if (path.startsWith("http")) return path;
   // Use current origin (works in dev and production)
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : SLIDE_DECK_URL;
+  const baseUrl =
+    typeof window !== "undefined" ? window.location.origin : SLIDE_DECK_URL;
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return `${baseUrl}/${cleanPath}`;
 }
@@ -30,7 +32,9 @@ function resolveImageUrl(path: string | undefined): string | undefined {
  * Fetch image and convert to base64 data URL for embedding in PPTX
  * Returns undefined if fetch fails (will fall back to initials)
  */
-async function fetchImageAsBase64(url: string | undefined): Promise<string | undefined> {
+async function fetchImageAsBase64(
+  url: string | undefined,
+): Promise<string | undefined> {
   if (!url) return undefined;
   try {
     const response = await fetch(url);
@@ -55,7 +59,9 @@ const imageCache = new Map<string, string | undefined>();
 /**
  * Fetch image with caching
  */
-async function fetchImageCached(path: string | undefined): Promise<string | undefined> {
+async function fetchImageCached(
+  path: string | undefined,
+): Promise<string | undefined> {
   if (!path) return undefined;
   const url = resolveImageUrl(path);
   if (!url) return undefined;
@@ -88,10 +94,16 @@ const LOGO_SVG = `<svg width="128" height="128" viewBox="0 0 40 40" fill="none" 
 /**
  * Convert SVG string to PNG data URL using canvas
  */
-async function svgToPngDataUrl(svgString: string, width = 128, height = 128): Promise<string> {
+async function svgToPngDataUrl(
+  svgString: string,
+  width = 128,
+  height = 128,
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const svgBlob = new Blob([svgString], {
+      type: "image/svg+xml;charset=utf-8",
+    });
     const url = URL.createObjectURL(svgBlob);
 
     img.onload = () => {
@@ -986,7 +998,10 @@ export async function generatePptx(
       const founderCardH = 1.9;
       const founderGap = 0.25;
       const founderStartX =
-        (10 - founders.length * founderCardW - (founders.length - 1) * founderGap) / 2;
+        (10 -
+          founders.length * founderCardW -
+          (founders.length - 1) * founderGap) /
+        2;
       const founderY = 1.75;
 
       founders.forEach((member, idx) => {
@@ -1004,7 +1019,9 @@ export async function generatePptx(
         });
 
         // Avatar - use embedded image if available, then URL, otherwise circle with initials
-        const founderImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        const founderImageData = imageCache.get(
+          resolveImageUrl(member.image) || "",
+        );
         const founderImageUrl = resolveImageUrl(member.image);
         if (founderImageData) {
           contentSlide.addImage({
@@ -1089,7 +1106,10 @@ export async function generatePptx(
       const advisorCardH = 1.25;
       const advisorGap = 0.15;
       const advisorStartX =
-        (10 - advisors.length * advisorCardW - (advisors.length - 1) * advisorGap) / 2;
+        (10 -
+          advisors.length * advisorCardW -
+          (advisors.length - 1) * advisorGap) /
+        2;
       const advisorY = founderY + founderCardH + 0.2;
 
       advisors.forEach((member, idx) => {
@@ -1107,7 +1127,9 @@ export async function generatePptx(
         });
 
         // Avatar - use embedded image if available, then URL, otherwise circle with initials
-        const advisorImageData = imageCache.get(resolveImageUrl(member.image) || "");
+        const advisorImageData = imageCache.get(
+          resolveImageUrl(member.image) || "",
+        );
         const advisorImageUrl = resolveImageUrl(member.image);
         if (advisorImageData) {
           contentSlide.addImage({
