@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-20
 
-Summary: 8 P0, 20 P1, 16 P2, 12 P3 = **56 items**
+Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 
 ## P0-CRITICAL — Must fix
 
@@ -79,6 +79,11 @@ Summary: 8 P0, 20 P1, 16 P2, 12 P3 = **56 items**
 | PRD-001 | 5 | `apps/marketing/src/data/products.ts` | Pricing consistency audit needed (ROI calc vs catalog) |
 | PRD-002 | 5 | `apps/marketing/` | Phase tracking verification for all products |
 | PRD-003 | 8 | `crates/x402/` | x402 legal attestation tier not implemented |
+| PRD-004 | 5 | `products.ts` vs `pricing.ts` | Pricing drift — products.ts per-SKU prices may not match pricing.ts segment prices |
+| PRD-005 | 8 | `apps/marketing/src/app/roi-calculator/page.tsx` | ROI calculator page is stub (wrapper only, no projections content) |
+| PRD-006 | 8 | `apps/docs/src/data/pricing.ts` | Unit economics page missing — CAC/LTV/payback data exists but no UI |
+| PRD-007 | 8 | `apps/marketing/src/contexts/CartContext.tsx` | Cart doesn't distinguish one-time vs recurring (monthlyFee) purchases |
+| FIN-001 | 8 | `apps/docs/src/data/competitors.ts` | No competitor pricing comparison page — data exists, no frontend |
 
 ### Content and SEO
 
@@ -111,6 +116,9 @@ Summary: 8 P0, 20 P1, 16 P2, 12 P3 = **56 items**
 | DX-010 | 8 | `apps/marketing/` | Preorder form validation and error handling |
 | DX-011 | 4 | `scripts/validate-env.sh` | Env validation only runs for marketing in CI — expand to all apps |
 | DX-012 | 10 | CHANGELOG.md | No automated changelog generation from conventional commits |
+| FIN-002 | 8 | `apps/docs/src/data/values.ts` | Revenue projections hardcoded — no interactive calculator |
+| FIN-003 | 5 | `apps/marketing/src/data/products.ts` | BOM data is aggregate COGS only — no component-level breakdown |
+| PRD-008 | 5 | `apps/marketing/src/app/sbir/page.tsx` | SBIR page placeholder — CMMC/ITAR compliance all "Planned", no tracking |
 
 ## Quick Wins (< 30 minutes each)
 

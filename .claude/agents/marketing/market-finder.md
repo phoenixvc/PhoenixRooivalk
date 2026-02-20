@@ -19,6 +19,18 @@ Market infrastructure in the codebase:
 - **Case studies** (`apps/marketing/src/components/sections/data/`)
 - **Product catalog** (`apps/marketing/src/data/products.ts`)
 
+Canonical market and competitor data (docs-side):
+- `apps/docs/src/data/market.ts` — TAM $15B (2030), SAM $5B, SOM $1B by
+  2032, segment splits (Military 50%, Infrastructure 25%, Commercial 15%,
+  International 10%), regional phasing (EU/Canada → SA → ME/APAC)
+- `apps/docs/src/data/competitors.ts` — 6 competitors (DroneShield, Dedrone,
+  Anduril, Rafael, Fortem, Raytheon) with pricing, response times, strengths,
+  weaknesses, market share data
+- `apps/docs/src/data/values.ts` — Pentagon Replicator ($500M), Raytheon
+  Coyote ($5.04B contract), Ukraine drone losses (10K+/month)
+- Business docs: `apps/docs/docs/business/competitive-analysis.mdx` (529
+  lines), `market-analysis.mdx`, `business-model.mdx`
+
 Market segments:
 1. **Consumer sports/training** (SkySnare) — Drone racing, hobby events
 2. **Critical infrastructure** (AeroNet) — Airports, power plants, prisons

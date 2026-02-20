@@ -82,13 +82,17 @@ Backend -> Frontend -> Product -> Quality.
 | `product/product-pricer` | Pricing, BOMs, margins |
 | `product/roadmap-tracker` | Milestones, phase transitions |
 
-**Scope**: `apps/marketing/src/data/products.ts`, timeline/schedule/sbir pages,
-CHANGELOG.md, ADRs
+**Scope**: `apps/marketing/src/data/products.ts`, `apps/docs/src/data/`
+(values.ts, pricing.ts, market.ts, competitors.ts), timeline/schedule/sbir
+pages, CHANGELOG.md, ADRs
 
 **Outstanding work**:
-- Pricing consistency audit (ROI calculator vs products.ts vs x402 tiers)
-- Phase tracking: verify all products have accurate phase assignments
+- Pricing consistency audit across 3 sources (products.ts vs pricing.ts vs x402)
+- Phase tracking: verify all 24 products have accurate phase assignments
 - Missing ADRs for recent architectural decisions
+- Pricing drift: products.ts per-SKU prices vs pricing.ts segment prices (PRD-004)
+- BOM data is aggregate COGS — no component-level breakdown (FIN-003)
+- SBIR page placeholder — compliance tracking not functional (PRD-008)
 
 ### Team 6: DESIGN
 
@@ -129,11 +133,17 @@ case studies, competitive analysis
 | `operations/finance-tracker` | Cart, ROI, x402 payments |
 | `operations/finance-builder` | Financial page development |
 
-**Scope**: Financial page, ROI calculator, preorder, cart, x402 crate
+**Scope**: Financial page, ROI calculator, preorder, cart, x402 crate,
+`apps/docs/src/data/` (pricing.ts, values.ts for revenue projections)
 
 **Outstanding work**:
 - Preorder backend integration (TODO at page.tsx:67)
 - x402 legal attestation tier (not yet available)
+- ROI calculator page is stub — wrapper only, no content (PRD-005)
+- Unit economics page missing — CAC/LTV data exists but no UI (PRD-006)
+- Cart doesn't handle recurring vs one-time purchases (PRD-007)
+- Competitor pricing comparison page — data exists, no frontend (FIN-001)
+- Revenue projection calculator — numbers hardcoded in values.ts (FIN-002)
 - ROI calculator assumption validation
 - Cart edge case testing
 
