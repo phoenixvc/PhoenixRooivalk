@@ -15,7 +15,7 @@ Market infrastructure in the codebase:
 - **Compliance pages** (`apps/marketing/src/app/compliance/`) — ISO 27001,
   ITAR, security clearance
 - **Competitive analysis** Azure Function (`apps/docs/azure-functions/src/
-  functions/analyzeCompetitors/`)
+  functions/analyzeCompetitors.ts`)
 - **Case studies** (`apps/marketing/src/components/sections/data/`)
 - **Product catalog** (`apps/marketing/src/data/products.ts`)
 

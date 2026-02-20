@@ -1,6 +1,6 @@
 # Agent Backlog — PhoenixRooivalk
 
-Last scanned: 2026-02-19
+Last scanned: 2026-02-20
 
 Summary: 8 P0, 15 P1, 12 P2, 10 P3 = **45 items**
 
