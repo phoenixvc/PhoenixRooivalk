@@ -243,8 +243,8 @@ jobs:
         if: >-
           needs.build-windows.result != 'success' ||
           needs.build-macos-intel.result != 'success' ||
-          needs.build-macos-arm.result != 'success' ||
-          needs.build-linux.result != 'success'
+          needs.build-macos-arm.result != 'success' || needs.build-linux.result
+          != 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
