@@ -29,3 +29,6 @@ When analyzing infrastructure, always check:
 2. Environment parity (dev/stg/prd configuration drift)
 3. CI cache efficiency (pnpm store, cargo registry, pip cache)
 4. Deployment dependencies and ordering
+5. Post-deployment smoke tests (health check endpoints after deploy)
+6. Deployment rollback readiness (can we revert quickly?)
+7. CI quality gates (coverage, lint, security must all pass before merge)

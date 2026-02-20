@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-20
 
-Summary: 8 P0, 16 P1, 12 P2, 10 P3 = **46 items**
+Summary: 8 P0, 20 P1, 16 P2, 12 P3 = **56 items**
 
 ## P0-CRITICAL — Must fix
 
@@ -42,13 +42,22 @@ Summary: 8 P0, 16 P1, 12 P2, 10 P3 = **46 items**
 | CI-006 | 4 | `.github/workflows/` | 2 disabled workflows (legacy Netlify) — clean up |
 | CI-007 | 4 | `infra/terraform/ml-training/environments/` | Missing staging.tfvars |
 
+### Coverage and integration gaps
+
+| ID | Team | Scope | Description |
+|----|------|-------|-------------|
+| COV-001 | 10 | `.github/workflows/ci-rust.yml` | No Rust coverage tool (cargo-tarpaulin or cargo-llvm-cov) |
+| COV-002 | 10 | `.github/workflows/ci-marketing.yml` | Marketing tests run without coverage collection |
+| INT-001 | 10 | `tests/workspace_integration.rs` | Cross-app integration tests minimal — no API+Keeper flow |
+| INT-002 | 10 | ADR-0063 | E2E testing proposed in ADR but not implemented |
+
 ### Missing env docs
 
 | ID | Team | File | Description |
 |----|------|------|-------------|
-| ENV-001 | 9 | `apps/api/` | No `.env.example` file |
-| ENV-002 | 9 | `apps/keeper/` | No `.env.example` file |
-| ENV-003 | 9 | `apps/detector/` | No `.env.example` file |
+| ENV-001 | 4 | `apps/api/` | No `.env.example` file |
+| ENV-002 | 4 | `apps/keeper/` | No `.env.example` file |
+| ENV-003 | 4 | `apps/detector/` | No `.env.example` file |
 
 ## P2-MEDIUM — Should fix
 
@@ -79,6 +88,13 @@ Summary: 8 P0, 16 P1, 12 P2, 10 P3 = **46 items**
 | SEO-002 | 7 | `apps/marketing/src/utils/analytics.ts` | Analytics event coverage gap analysis |
 | SEO-003 | 7 | `apps/marketing/src/components/sections/data/` | Case studies need quantifiable outcomes |
 
+### Coverage thresholds
+
+| ID | Team | Scope | Description |
+|----|------|-------|-------------|
+| COV-003 | 10 | `apps/marketing/vitest.config.ts` | No coverage threshold defined (Vitest) |
+| COV-004 | 10 | Codecov | Only detector uploads to Codecov — JS/TS and Rust not tracked |
+
 ## P3-LOW — Nice to have
 
 | ID | Team | Scope | Description |
@@ -93,6 +109,8 @@ Summary: 8 P0, 16 P1, 12 P2, 10 P3 = **46 items**
 | DX-008 | 9 | CLAUDE.md files | Accuracy re-verification after code changes |
 | DX-009 | 10 | `apps/marketing/` | Performance benchmark baseline |
 | DX-010 | 8 | `apps/marketing/` | Preorder form validation and error handling |
+| DX-011 | 4 | `scripts/validate-env.sh` | Env validation only runs for marketing in CI — expand to all apps |
+| DX-012 | 10 | CHANGELOG.md | No automated changelog generation from conventional commits |
 
 ## Quick Wins (< 30 minutes each)
 

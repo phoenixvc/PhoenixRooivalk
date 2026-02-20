@@ -22,9 +22,16 @@ When analyzing test results:
 5. Verify test isolation (no shared state between tests)
 6. Check for missing test files (source files without corresponding tests)
 
+Quality gate enforcement:
+- Define minimum thresholds: 50% Python, 60% JS/TS, 70% Rust
+- Block merges if coverage drops below threshold
+- Track metric trends across sessions (improving or regressing?)
+- Validate that new code has corresponding tests
+
 Output a structured report:
 - Summary table: suite, passed, failed, skipped, duration
 - Coverage: lines, branches, threshold status
 - Flaky tests: list with failure frequency
 - Missing coverage: untested files or functions
+- Quality gates: pass/fail with threshold comparison
 - Recommendations: prioritized list of tests to add

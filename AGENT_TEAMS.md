@@ -2,7 +2,7 @@
 
 ## Overview
 
-22 specialist agents organized into 10 code teams and 5 workflow agents.
+27 specialist agents organized into 10 code teams and 6 workflow agents.
 Teams execute in 4 phases respecting the dependency direction:
 Backend -> Frontend -> Product -> Quality.
 
@@ -59,8 +59,11 @@ Backend -> Frontend -> Product -> Quality.
 | Agent | Role |
 |-------|------|
 | `engineering/devops` | GitHub Actions, Azure, Terraform |
+| `operations/dependency-watcher` | Dependabot triage, cargo audit, SBOM |
+| `operations/environment-manager` | .env.example files, env validation |
 
-**Scope**: `.github/workflows/`, `infra/`, `scripts/`, `config/`
+**Scope**: `.github/workflows/`, `infra/`, `scripts/`, `config/`,
+`.github/dependabot.yml`, `.env.example` files
 
 **Outstanding work**:
 - `.github/workflows/ci-rust.yml:32` — Cargo audit disabled (TODO)
@@ -68,6 +71,8 @@ Backend -> Frontend -> Product -> Quality.
 - 2 disabled workflows (legacy Netlify deployments)
 - No Rust/JS coverage reporting in CI
 - Missing staging environment for Terraform ML training
+- Missing `.env.example` for api, keeper, detector (ENV-001/002/003)
+- 15 Dependabot vulnerability alerts unresolved
 
 ### Team 5: PRODUCT
 
@@ -153,18 +158,27 @@ ADRs, `.github/*.md`
 | Agent | Role |
 |-------|------|
 | `testing/api-tester` | API endpoint testing |
-| `testing/test-analyzer` | Cross-stack test analysis |
-| `operations/security-auditor` | OWASP, ITAR, dependency scanning |
-| `project-management/project-shipper` | Releases, CI/CD orchestration |
+| `testing/test-analyzer` | Cross-stack test analysis, quality gates |
+| `testing/coverage-tracker` | Coverage aggregation, threshold enforcement |
+| `testing/integration-tester` | Cross-app E2E and contract testing |
+| `operations/security-auditor` | OWASP, ITAR, compliance, dependency scanning |
+| `project-management/project-shipper` | CI/CD orchestration |
+| `project-management/release-manager` | Versioning, changelogs, release notes |
 
-**Scope**: All test suites, security scanning, release management
+**Scope**: All test suites, coverage metrics, security scanning, release
+management, cross-app integration
 
 **Outstanding work**:
 - evidence-cli: zero test coverage
+- anchor-solana: no tests, orphan provider_tests.rs (SOL-001)
 - x402 crate: no dedicated test files
 - address-validation crate: no dedicated test files
 - Career application endpoint: minimal test coverage
 - Cargo audit re-enablement (blocked on CVSS 4.0 support)
+- No cross-app integration tests (API+Keeper, API+Marketing)
+- No Rust coverage collection in CI
+- Only detector uploads to Codecov (JS/TS coverage not tracked)
+- No automated changelog generation or version bumping
 
 ## Workflow Agents
 

@@ -32,4 +32,11 @@ When auditing, always check:
 5. CORS configuration and CSP headers
 6. Infrastructure access controls and network segmentation
 
+Compliance automation:
+- OWASP Top 10: verify each category has mitigations in code
+- ITAR: ensure export-controlled data has access controls
+- License compliance: no GPL dependencies (check with `cargo license`, `pnpm licenses`)
+- Audit trail: verify deployment events are logged
+- Supply chain attestation: validate Cargo.lock and pnpm-lock.yaml integrity
+
 Output findings using: `[SEVERITY] file_path:line_number — description`
