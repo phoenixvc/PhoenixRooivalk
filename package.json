@@ -29,15 +29,15 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-security": "^3.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "markdownlint-cli2": "^0.20.0",
-    "prettier": "^3.7.4",
-    "turbo": "^2.7.4",
+    "prettier": "^3.8.1",
+    "turbo": "^2.8.9",
     "typescript": "^5.9.3"
   },
   "lint-staged": {
@@ -57,7 +57,7 @@
     }
   },
   "dependencies": {
-    "@types/node": "^25.0.6",
+    "@types/node": "^25.2.3",
     "pptxgenjs": "^4.0.1"
   }
 }
