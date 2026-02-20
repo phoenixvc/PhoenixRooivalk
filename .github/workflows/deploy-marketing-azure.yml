@@ -88,13 +88,13 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: true
           lfs: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
 
       - name: Setup Rust (for threat-simulator-desktop WASM dependencies)
         uses: dtolnay/rust-toolchain@stable
@@ -102,12 +102,12 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install Trunk (for WASM builds)
-        uses: jetli/trunk-action@v0.5.1
+        uses: jetli/trunk-action@1346cc09eace4beb84e403e199a471346d4684c9 # v0.5.1
         with:
           version: "latest"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: "20"
 
@@ -164,7 +164,7 @@ jobs:
       - name: Deploy to Azure Static Web Apps
         id: deploy
         if: needs.check-secrets.outputs.has-swa-token == 'true'
-        uses: Azure/static-web-apps-deploy@v1
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
         with:
           azure_static_web_apps_api_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}
@@ -181,7 +181,7 @@ jobs:
 
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v8
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           script: |
             const prNumber = context.issue.number;
@@ -211,7 +211,7 @@ jobs:
     steps:
       - name: Close Pull Request
         if: needs.check-secrets.outputs.has-swa-token == 'true'
-        uses: Azure/static-web-apps-deploy@v1
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
         with:
           azure_static_web_apps_api_token:
             ${{ secrets.AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN }}

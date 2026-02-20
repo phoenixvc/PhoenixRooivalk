@@ -394,15 +394,15 @@ jobs:
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
         with:
           version: 9.6.0
 
@@ -473,7 +473,7 @@ jobs:
           ls -la .azurefunctions/
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: azure-functions-build
           path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/deploy-package
@@ -499,13 +499,13 @@ jobs:
       url: https://${{ vars.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v7.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: azure-functions-build
           path: deploy-package
 
       - name: Azure Login
-        uses: azure/login@v2
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -550,7 +550,7 @@ jobs:
 
       - name: Set Environment Variables
         if: vars.CONFIGURE_APP_SETTINGS == 'true'
-        uses: azure/appservice-settings@v1
+        uses: azure/appservice-settings@1808c4fbba4b8723107948a295d396a5c0e33dcd # v1
         with:
           app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
           app-settings-json: |
@@ -589,7 +589,7 @@ jobs:
           fi
 
       - name: Checkout for seeding
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           sparse-checkout: scripts
 
@@ -639,15 +639,15 @@ jobs:
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
         with:
           version: 9.6.0
 
