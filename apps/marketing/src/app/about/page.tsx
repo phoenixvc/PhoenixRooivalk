@@ -1,40 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { SocialProofSection } from "../../components/sections/SocialProofSection";
-import { TeamSection } from "../../components/sections/TeamSection";
-import { TechnicalIntegrationsSection } from "../../components/sections/TechnicalIntegrationsSection";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
-import styles from "./about.module.css";
+import type { Metadata } from "next";
+import AboutPageClient from "./AboutPageClient";
 
-export default function AboutPage(): React.ReactElement {
-  // Apply performance optimizations
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "About - Phoenix Rooivalk",
+  description:
+    "Meet the Phoenix Rooivalk team and our partners. Learn about the people behind the SAE Level 4 autonomous counter-drone defense platform for SkySnare and AeroNet.",
+  openGraph: {
+    title: "About - Phoenix Rooivalk",
+    description:
+      "Meet the Phoenix Rooivalk team. Learn about the people building SAE Level 4 autonomous counter-drone defense for SkySnare and AeroNet.",
+  },
+};
 
-  return (
-    <main className={styles.main}>
-      {/* Background mesh effect */}
-      <InteractiveMesh
-        gridSize={50}
-        color="rgba(234, 124, 28, 0.1)"
-        bendStrength={20}
-        bendRadius={100}
-      />
-
-      {/* Navigation */}
-      <Navigation />
-
-      {/* Main Content Sections */}
-      <div className={styles.contentWrapper}>
-        <SocialProofSection />
-        <TeamSection />
-        <TechnicalIntegrationsSection />
-      </div>
-
-      {/* Footer */}
-      <Footer />
-    </main>
-  );
-}
+export default AboutPageClient;

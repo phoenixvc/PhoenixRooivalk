@@ -27,10 +27,10 @@ completeness, standardized figures reference, and recent updates.
 
 | Metric                    | Value         |
 | ------------------------- | ------------- |
-| **Documentation Version** | 2.0.0         |
-| **Last Updated**          | November 2025 |
-| **Overall Completion**    | 100%          |
-| **Total Documents**       | 70+           |
+| **Documentation Version** | 3.0.0          |
+| **Last Updated**          | February 2026  |
+| **Overall Completion**    | 100%           |
+| **Total Documents**       | 90+            |
 
 ---
 
@@ -38,14 +38,15 @@ completeness, standardized figures reference, and recent updates.
 
 | Section                   | Status   | Documents | Last Updated |
 | ------------------------- | -------- | --------- | ------------ |
-| Executive Documentation   | Complete | 12        | Nov 2025     |
-| Technical - Software & AI | Complete | 18        | Nov 2025     |
+| Executive Documentation   | Complete | 12        | Feb 2026     |
+| Technical - Software & AI | Complete | 25+       | Feb 2026     |
+| Technical - Architecture  | Complete | 50+ ADRs  | Feb 2026     |
 | Technical - Hardware      | Complete | 8         | Nov 2025     |
-| Business Documentation    | Complete | 16        | Nov 2025     |
+| Business Documentation    | Complete | 16        | Feb 2026     |
 | Legal Documentation       | Complete | 2         | Nov 2025     |
 | Operations Documentation  | Complete | 10        | Nov 2025     |
 | Research Documentation    | Complete | 14        | Nov 2025     |
-| Resources                 | Complete | 6         | Nov 2025     |
+| Resources                 | Complete | 8         | Feb 2026     |
 
 ---
 
@@ -314,9 +315,19 @@ import { MarketOverviewCard, PerformanceCard, InvestmentCard } from '@site/src/c
 
 ## Recent Updates
 
+### February 2026
+
+- 9 new Architecture Decision Records created (ADR-0034, 0101, 0102, 0200,
+  0201, 0401, plus 4 medium-priority ADRs)
+- ADR numbering scheme consolidated (template-and-guide as canonical)
+- API documentation rewritten with actual routes and models
+- Market segment bundles added (LEO, NATO Allied, Corrections, Mid-market)
+- Design token system consolidated across marketing and shared packages
+- Documentation status updated (this page)
+
 ### November 2025
 
-- Documentation site launched on Netlify
+- Documentation site launched on Azure Static Web Apps
 - All core documentation sections completed
 - Standard figures reference established
 - Reading progress tracking implemented
@@ -336,7 +347,7 @@ import { MarketOverviewCard, PerformanceCard, InvestmentCard } from '@site/src/c
 
 To contribute to the documentation:
 
-1. Visit the [GitHub Repository](https://github.com/JustAGhosT/PhoenixRooivalk)
+1. Visit the [GitHub Repository](https://github.com/phoenixvc/PhoenixRooivalk)
 2. Navigate to `apps/docs/docs/`
 3. Reference this page for standard figures
 4. Edit or create markdown files following the established patterns
@@ -352,9 +363,9 @@ For documentation guidelines, see the
 If you find issues or have suggestions for improving the documentation, please:
 
 - Open an issue on
-  [GitHub](https://github.com/JustAGhosT/PhoenixRooivalk/issues)
+  [GitHub](https://github.com/phoenixvc/PhoenixRooivalk/issues)
 - Contact the team at [jurie@phoenixvc.tech](mailto:jurie@phoenixvc.tech)
 
 ---
 
-_Last updated: November 2025_
+_Last updated: February 2026_

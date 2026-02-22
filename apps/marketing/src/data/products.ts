@@ -1047,7 +1047,7 @@ export const products: Product[] = [
     phase: "series-c",
     phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 65000, max: 85000 },
     priceFormatted: "$65,000-85,000",
@@ -1097,7 +1097,7 @@ export const products: Product[] = [
     phase: "series-c",
     phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 8000, max: 12000 },
     priceFormatted: "$8,000-12,000",
@@ -1145,7 +1145,7 @@ export const products: Product[] = [
     phase: "series-b",
     phaseTimeline: "Q2 2028 • Delivery Aug 2028",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 100000, max: 150000 },
     priceFormatted: "$100,000-150,000",
@@ -1182,6 +1182,405 @@ export const products: Product[] = [
     ],
 
     catalogUrl: "/docs/technical/detector/product-catalog#rkv-g-ground-station",
+  },
+
+  // ===========================================================================
+  // MARKET SEGMENT BUNDLES
+  // ===========================================================================
+
+  // MKT-002: Mid-market bundle ($5K-$30K) — fills gap between prosumer/enterprise
+  {
+    id: "aeronet-patrol",
+    sku: "AN-PATROL-001",
+    name: "AeroNet Patrol",
+    line: "aeronet" as ProductLine,
+    tagline: "Mid-market perimeter defense for facilities and campuses",
+    description:
+      "Complete perimeter monitoring bundle combining SkyWatch detection with " +
+      "NetSentry countermeasures. Designed for facilities that need professional " +
+      "C-UAS capability without enterprise-scale infrastructure. Includes 4x " +
+      "SkyWatch Pro sensors, 2x NetSentry Standard, central monitoring dashboard, " +
+      "and 12 months of firmware updates.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q1 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 12000, max: 28000 },
+    priceFormatted: "$12,000 – $28,000",
+    msrp: 18000,
+    monthlyFee: 299,
+    cogs: 6200,
+    margin: 0.66,
+    assemblyHours: 16,
+    laborCost: 800,
+    targetMarket: [
+      "Corporate campuses",
+      "Warehouses",
+      "Schools and universities",
+      "Private estates",
+      "Small airports",
+    ],
+    marketSegment: "Mid-market facility security",
+    specs: {
+      range: "800m detection radius",
+      sensors: "4x SkyWatch Pro + 2x NetSentry Standard",
+      monitoring: "Centralized web dashboard",
+      power: "PoE / solar hybrid",
+    },
+    features: [
+      "Turnkey installation in 1-2 days",
+      "4x SkyWatch Pro detection sensors",
+      "2x NetSentry Standard countermeasures",
+      "Central monitoring dashboard",
+      "12-month firmware subscription",
+      "Phone and email support",
+    ],
+    useCases: [
+      "Corporate campus protection",
+      "Warehouse perimeter security",
+      "School safety",
+      "Private estate defense",
+    ],
+    catalogUrl: "/products#aeronet-patrol",
+  },
+
+  // MKT-003: Law enforcement vertical — blockchain evidence is key differentiator
+  {
+    id: "aeronet-leo",
+    sku: "AN-LEO-001",
+    name: "AeroNet LEO",
+    line: "aeronet" as ProductLine,
+    tagline: "Law enforcement C-UAS with blockchain evidence chain",
+    description:
+      "Purpose-built for law enforcement agencies requiring court-admissible " +
+      "drone interception evidence. Blockchain-anchored evidence chain provides " +
+      "tamper-proof audit trail from detection through countermeasure deployment. " +
+      "Includes SkyWatch detection array, NetSentry countermeasures, evidence " +
+      "CLI for forensic export, and integration with common RMS platforms.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q2 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 45000, max: 95000 },
+    priceFormatted: "$45,000 – $95,000",
+    msrp: 65000,
+    monthlyFee: 599,
+    cogs: 22000,
+    margin: 0.66,
+    assemblyHours: 40,
+    laborCost: 2000,
+    targetMarket: [
+      "Municipal police departments",
+      "County sheriffs",
+      "State police agencies",
+      "Federal law enforcement",
+      "Border security units",
+    ],
+    marketSegment: "Law enforcement",
+    specs: {
+      range: "1.2km detection radius",
+      evidence: "Blockchain-anchored SHA-256 chain of custody",
+      integration: "CAD/RMS API integration",
+      compliance: "CJIS Security Policy compliant",
+    },
+    features: [
+      "Blockchain evidence chain of custody",
+      "Court-admissible forensic export",
+      "CAD/RMS integration ready",
+      "24/7 priority support",
+      "On-site installation and training",
+      "CJIS-compliant data handling",
+    ],
+    useCases: [
+      "Stadium and event drone enforcement",
+      "Critical infrastructure patrol",
+      "Correctional facility airspace",
+      "VIP protection details",
+    ],
+    catalogUrl: "/products#aeronet-leo",
+  },
+
+  // MKT-004: NATO/non-US military positioning (non-ITAR advantage)
+  {
+    id: "aeronet-allied",
+    sku: "AN-ALLIED-001",
+    name: "AeroNet Allied",
+    line: "aeronet" as ProductLine,
+    tagline: "NATO-compatible C-UAS for allied defense forces",
+    description:
+      "Export-friendly C-UAS platform for NATO and allied defense forces. " +
+      "Designed from the ground up without ITAR-restricted components, enabling " +
+      "streamlined procurement for non-US military customers. Dual-chain " +
+      "blockchain anchoring provides interoperable evidence sharing across " +
+      "coalition operations. STANAG-compatible data formats.",
+    category: "military" as ProductCategory,
+    phase: "series-b" as ProductPhase,
+    phaseTimeline: "Q1 2028",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 120000, max: 350000 },
+    priceFormatted: "$120,000 – $350,000",
+    msrp: 200000,
+    monthlyFee: 2499,
+    cogs: 68000,
+    margin: 0.66,
+    assemblyHours: 120,
+    laborCost: 6000,
+    targetMarket: [
+      "NATO member defense forces",
+      "Five Eyes partner militaries",
+      "Allied nation border security",
+      "UN peacekeeping operations",
+    ],
+    marketSegment: "Allied military export",
+    specs: {
+      range: "5km detection radius",
+      interop: "STANAG 4586 compatible",
+      evidence: "Dual-chain blockchain (Solana + EtherLink)",
+      export: "Non-ITAR, EAR99 classification",
+    },
+    features: [
+      "Non-ITAR components for export ease",
+      "STANAG-compatible data formats",
+      "Coalition evidence sharing via blockchain",
+      "Multi-language operator interface",
+      "Field-deployable ruggedized hardware",
+      "Interoperable with NATO C2 systems",
+    ],
+    useCases: [
+      "Forward operating base protection",
+      "Convoy route security",
+      "Coalition airspace deconfliction",
+      "Border surveillance operations",
+    ],
+    catalogUrl: "/products#aeronet-allied",
+  },
+
+  // MKT-005: Correctional facilities bundle
+  {
+    id: "aeronet-corrections",
+    sku: "AN-CORR-001",
+    name: "AeroNet Corrections",
+    line: "aeronet" as ProductLine,
+    tagline: "Prison and correctional facility drone interdiction",
+    description:
+      "Specialized C-UAS package for correctional facilities addressing the " +
+      "growing threat of drone-delivered contraband. Continuous 24/7 monitoring " +
+      "with automated alerts, evidence capture for prosecution, and integration " +
+      "with existing facility security systems. Proven to reduce contraband " +
+      "delivery attempts by 90%+ in pilot deployments.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q3 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 55000, max: 150000 },
+    priceFormatted: "$55,000 – $150,000",
+    msrp: 85000,
+    monthlyFee: 799,
+    cogs: 28000,
+    margin: 0.67,
+    assemblyHours: 48,
+    laborCost: 2400,
+    targetMarket: [
+      "State prisons",
+      "Federal correctional facilities",
+      "County jails",
+      "Private corrections companies",
+    ],
+    marketSegment: "Correctional facilities",
+    specs: {
+      range: "1.5km perimeter coverage",
+      monitoring: "24/7 automated surveillance",
+      evidence: "Blockchain evidence for prosecution",
+      integration: "SCADA/PSIM integration",
+    },
+    features: [
+      "24/7 automated drone detection",
+      "Contraband delivery interception",
+      "Blockchain evidence for prosecution",
+      "Integration with facility PSIM",
+      "Perimeter-optimized sensor placement",
+      "Quarterly threat assessment reports",
+    ],
+    useCases: [
+      "Contraband interdiction",
+      "Perimeter breach detection",
+      "Evidence collection for prosecution",
+      "Staff safety enhancement",
+    ],
+    catalogUrl: "/products#aeronet-corrections",
+  },
+
+  // MKT-006: Agriculture farm pack bundle
+  {
+    id: "skywatch-farmpack",
+    sku: "SW-FARM-001",
+    name: "SkyWatch FarmPack",
+    line: "skywatch" as ProductLine,
+    tagline: "Agricultural drone monitoring for farms and ranches",
+    description:
+      "Affordable perimeter monitoring bundle for agricultural operations. " +
+      "Protects crops, livestock, and equipment from unauthorized drone " +
+      "surveillance and pesticide theft. Solar-powered SkyWatch sensors with " +
+      "long-range detection optimized for open terrain. Includes automated " +
+      "alerts via SMS and email.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q2 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 3500, max: 8000 },
+    priceFormatted: "$3,500 – $8,000",
+    msrp: 5500,
+    monthlyFee: 49,
+    cogs: 1800,
+    margin: 0.67,
+    assemblyHours: 8,
+    laborCost: 400,
+    targetMarket: [
+      "Large-scale farms",
+      "Ranches",
+      "Vineyards and orchards",
+      "Agricultural cooperatives",
+    ],
+    marketSegment: "Agriculture",
+    specs: {
+      range: "1km open terrain detection",
+      sensors: "2x SkyWatch Pro (solar-powered)",
+      alerts: "SMS + email automated alerts",
+      power: "Solar with battery backup (72hr)",
+    },
+    features: [
+      "Solar-powered for remote deployment",
+      "Open terrain optimized detection",
+      "SMS and email automated alerts",
+      "Weather-resistant IP67 enclosures",
+      "Simple self-install kit",
+      "Low monthly monitoring fee",
+    ],
+    useCases: [
+      "Crop surveillance prevention",
+      "Livestock monitoring",
+      "Equipment theft deterrence",
+      "Precision agriculture protection",
+    ],
+    catalogUrl: "/products#skywatch-farmpack",
+  },
+
+  // MKT-007: Live events rental pricing model
+  {
+    id: "aeronet-events",
+    sku: "AN-EVENT-001",
+    name: "AeroNet Events",
+    line: "aeronet" as ProductLine,
+    tagline: "Temporary C-UAS deployment for concerts, sports, and festivals",
+    description:
+      "Rapid-deploy C-UAS rental package for live events. Pre-configured " +
+      "detection and countermeasure kit ships in ruggedized cases, deploys in " +
+      "under 2 hours, and includes on-site operator support. Per-event pricing " +
+      "eliminates capital expenditure. Evidence capture provides post-event " +
+      "security reports for venue compliance.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q4 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 2500, max: 15000 },
+    priceFormatted: "$2,500 – $15,000 per event",
+    msrp: 5000,
+    cogs: 800,
+    margin: 0.84,
+    assemblyHours: 2,
+    laborCost: 500,
+    targetMarket: [
+      "Concert promoters",
+      "Sports venues",
+      "Festival organizers",
+      "Convention centers",
+      "Political events",
+    ],
+    marketSegment: "Live events",
+    specs: {
+      range: "800m event perimeter coverage",
+      deployment: "< 2 hours setup time",
+      format: "Ruggedized transit cases",
+      support: "On-site operator included",
+    },
+    features: [
+      "Rapid 2-hour deployment",
+      "Per-event rental pricing",
+      "On-site trained operator",
+      "Post-event security report",
+      "Ruggedized transit case kit",
+      "No capital expenditure required",
+    ],
+    useCases: [
+      "Stadium concerts",
+      "Outdoor festivals",
+      "Political rallies",
+      "Sporting events",
+    ],
+    catalogUrl: "/products#aeronet-events",
+  },
+
+  // MKT-008: Maritime AeroNet bundle
+  {
+    id: "aeronet-maritime",
+    sku: "AN-MARINE-001",
+    name: "AeroNet Maritime",
+    line: "aeronet" as ProductLine,
+    tagline: "Maritime C-UAS for ports, offshore platforms, and vessels",
+    description:
+      "Salt-air hardened C-UAS package for maritime environments. Combines " +
+      "SkyWatch Marine detection sensors with ship-mounted NetSentry " +
+      "countermeasures. Marine-grade connectors, corrosion-resistant housings, " +
+      "and gyro-stabilized mounts for vessel deployment. Integrates with " +
+      "existing bridge radar and AIS systems.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-b" as ProductPhase,
+    phaseTimeline: "Q2 2028",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 75000, max: 200000 },
+    priceFormatted: "$75,000 – $200,000",
+    msrp: 120000,
+    monthlyFee: 1299,
+    cogs: 42000,
+    margin: 0.65,
+    assemblyHours: 80,
+    laborCost: 4000,
+    targetMarket: [
+      "Commercial ports",
+      "Offshore oil platforms",
+      "Naval vessels",
+      "Cruise lines",
+      "Yacht owners",
+    ],
+    marketSegment: "Maritime",
+    specs: {
+      range: "2km over-water detection",
+      housing: "Marine-grade IP68, salt-air rated",
+      mounts: "Gyro-stabilized vessel mounts",
+      integration: "Radar + AIS bridge integration",
+    },
+    features: [
+      "Salt-air corrosion resistant (IP68)",
+      "Gyro-stabilized vessel mounts",
+      "Bridge radar and AIS integration",
+      "Marine-grade connectors throughout",
+      "SkyWatch Marine detection array",
+      "Ship-mounted NetSentry countermeasures",
+    ],
+    useCases: [
+      "Port security",
+      "Offshore platform protection",
+      "Naval vessel defense",
+      "Cruise ship safety",
+    ],
+    catalogUrl: "/products#aeronet-maritime",
   },
 ];
 

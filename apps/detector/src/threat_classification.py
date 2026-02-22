@@ -17,9 +17,16 @@ import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from interfaces import Detection
+
+# Type aliases for class mapping entries
+ClassMappingEntry = Union[
+    tuple[str, "ThreatCategory", "ThreatLevel"],
+    tuple[str, "ThreatCategory", "ThreatLevel", Optional["DroneType"]],
+]
+ClassMapping = dict[int, ClassMappingEntry]
 
 logger = logging.getLogger("drone_detector.threat")
 
@@ -125,7 +132,7 @@ class ThreatAssessment:
 
 
 # Standard 10-class model mapping
-STANDARD_CLASS_MAPPING = {
+STANDARD_CLASS_MAPPING: ClassMapping = {
     0: ("drone", ThreatCategory.DRONE, ThreatLevel.MEDIUM),
     1: ("bird_small", ThreatCategory.BIRD, ThreatLevel.INFORMATIONAL),
     2: ("bird_large", ThreatCategory.BIRD, ThreatLevel.LOW),
@@ -140,7 +147,7 @@ STANDARD_CLASS_MAPPING = {
 
 
 # Full 27-class model mapping
-FULL_CLASS_MAPPING = {
+FULL_CLASS_MAPPING: ClassMapping = {
     # Drones (0-4) - Alert classes
     0: ("drone_multirotor", ThreatCategory.DRONE, ThreatLevel.MEDIUM, DroneType.MULTIROTOR),
     1: ("drone_fixedwing", ThreatCategory.DRONE, ThreatLevel.MEDIUM, DroneType.FIXED_WING),
@@ -208,7 +215,7 @@ class ThreatClassifier:
 
     def __init__(
         self,
-        class_mapping: dict = None,
+        class_mapping: Optional[ClassMapping] = None,
         asset_position: Optional[tuple[float, float, float]] = None,
         restricted_zones: Optional[list[tuple[float, float, float, float]]] = None,
     ):
@@ -300,7 +307,8 @@ class ThreatClassifier:
         class_name = mapping[0]
         category = mapping[1]
         base_threat_level = mapping[2]
-        drone_type = mapping[3] if len(mapping) > 3 else None
+        mapping_seq = mapping  # type: ignore[assignment]
+        drone_type: Optional[DroneType] = mapping_seq[3] if len(mapping_seq) > 3 else None
 
         # Calculate modifiers
         reasons = [f"Base classification: {class_name}"]
@@ -390,7 +398,7 @@ class ThreatClassifier:
         dx = position[0] - self._asset_position[0]
         dy = position[1] - self._asset_position[1]
         dz = position[2] - self._asset_position[2]
-        return (dx**2 + dy**2 + dz**2) ** 0.5
+        return float((dx**2 + dy**2 + dz**2) ** 0.5)
 
     def _check_heading_toward(
         self,
@@ -563,7 +571,7 @@ def create_threat_classifier(
         Configured ThreatClassifier
     """
     if model_type == "binary":
-        mapping = {
+        mapping: ClassMapping = {
             0: ("drone", ThreatCategory.DRONE, ThreatLevel.MEDIUM),
             1: ("not_drone", ThreatCategory.UNKNOWN, ThreatLevel.INFORMATIONAL),
         }

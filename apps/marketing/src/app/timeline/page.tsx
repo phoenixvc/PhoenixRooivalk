@@ -1,31 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { TimelineSection } from "../../components/sections/TimelineSection";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
-import styles from "./timeline.module.css";
+import type { Metadata } from "next";
+import TimelinePageClient from "./TimelinePageClient";
 
-export default function TimelinePage(): React.ReactElement {
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "Development Timeline - Phoenix Rooivalk",
+  description:
+    "Phoenix Rooivalk's five-phase development roadmap from SBIR Phase I through full production. Track milestones for SkySnare, AeroNet, and the broader counter-UAS platform.",
+  openGraph: {
+    title: "Development Timeline - Phoenix Rooivalk",
+    description:
+      "Five-phase development roadmap from SBIR Phase I to full production. SkySnare, AeroNet, and counter-UAS platform milestones.",
+  },
+};
 
-  return (
-    <main className={styles.main}>
-      <InteractiveMesh
-        gridSize={50}
-        color="rgba(234, 124, 28, 0.1)"
-        bendStrength={20}
-        bendRadius={100}
-      />
-
-      <Navigation />
-
-      <div className={styles.contentWrapper}>
-        <TimelineSection />
-      </div>
-
-      <Footer />
-    </main>
-  );
-}
+export default TimelinePageClient;

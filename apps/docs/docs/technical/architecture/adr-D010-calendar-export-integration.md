@@ -1,7 +1,7 @@
 ---
-id: adr-D001-calendar-export-integration
-title: "ADR D001: Calendar Export and Integration"
-sidebar_label: "ADR D001: Calendar Export"
+id: adr-D010-calendar-export-integration
+title: "ADR D010: Calendar Export and Integration"
+sidebar_label: "ADR D010: Calendar Export"
 difficulty: intermediate
 estimated_reading_time: 7
 points: 25
@@ -14,7 +14,7 @@ tags:
 prerequisites: []
 ---
 
-# ADR D001: Calendar Export and Integration
+# ADR D010: Calendar Export and Integration
 
 **Date**: 2025-12-09 **Status**: Accepted
 

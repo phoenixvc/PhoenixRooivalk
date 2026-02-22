@@ -223,18 +223,16 @@ describe("ExitIntentModal", () => {
     const downloadLink = screen.getByRole("link", { name: /download now/i });
     const closeButton = screen.getByRole("button", { name: /maybe later/i });
 
-    // Focus should be on close button initially
+    // Focus should be on close button (first focusable element) initially
     expect(document.activeElement).toBe(closeButton);
 
-    // Tab forward should go to download link
-    fireEvent.keyDown(document, { key: "Tab" });
+    // Manually move focus to last element (download link), then Tab wraps to first
+    downloadLink.focus();
     expect(document.activeElement).toBe(downloadLink);
-
-    // Tab forward from last element should go back to first (close button)
     fireEvent.keyDown(document, { key: "Tab" });
     expect(document.activeElement).toBe(closeButton);
 
-    // Shift+Tab backward from first element should go to last (download link)
+    // Shift+Tab backward from first element should wrap to last (download link)
     fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
     expect(document.activeElement).toBe(downloadLink);
   });

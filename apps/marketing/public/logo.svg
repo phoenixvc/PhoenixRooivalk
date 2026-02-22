@@ -18,7 +18,7 @@
       <stop offset="20%" style="stop-color:#ffff66;stop-opacity:1"/>
       <stop offset="28%" style="stop-color:#ffd700;stop-opacity:1"/>
       <stop offset="38%" style="stop-color:#ffa500;stop-opacity:1"/>
-      <stop offset="50%" style="stop-color:#ff6b00;stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:#f97316;stop-opacity:1"/>
       <stop offset="65%" style="stop-color:#ff2200;stop-opacity:1"/>
       <stop offset="80%" style="stop-color:#cc0000;stop-opacity:1"/>
       <stop offset="100%" style="stop-color:#8b0000;stop-opacity:1"/>
@@ -31,7 +31,7 @@
       <stop offset="30%" style="stop-color:#8b0000;stop-opacity:1"/>
       <stop offset="45%" style="stop-color:#cc0000;stop-opacity:0.95"/>
       <stop offset="60%" style="stop-color:#ff2200;stop-opacity:0.9"/>
-      <stop offset="75%" style="stop-color:#ff6b00;stop-opacity:0.8"/>
+      <stop offset="75%" style="stop-color:#f97316;stop-opacity:0.8"/>
       <stop offset="88%" style="stop-color:#ffa500;stop-opacity:0.7"/>
       <stop offset="96%" style="stop-color:#ffd700;stop-opacity:0.6"/>
       <stop offset="100%" style="stop-color:#ffffaa;stop-opacity:0.4"/>
@@ -43,7 +43,7 @@
       <stop offset="30%" style="stop-color:#8b0000;stop-opacity:1"/>
       <stop offset="45%" style="stop-color:#cc0000;stop-opacity:0.95"/>
       <stop offset="60%" style="stop-color:#ff2200;stop-opacity:0.9"/>
-      <stop offset="75%" style="stop-color:#ff6b00;stop-opacity:0.8"/>
+      <stop offset="75%" style="stop-color:#f97316;stop-opacity:0.8"/>
       <stop offset="88%" style="stop-color:#ffa500;stop-opacity:0.7"/>
       <stop offset="96%" style="stop-color:#ffd700;stop-opacity:0.6"/>
       <stop offset="100%" style="stop-color:#ffffaa;stop-opacity:0.4"/>
@@ -105,7 +105,7 @@
   <rect width="400" height="400" fill="url(#tacticalVignette)"/>
   
   <!-- Tactical reference dot -->
-  <circle cx="20" cy="20" r="3" fill="#ff6b00" opacity="0.9"/>
+  <circle cx="20" cy="20" r="3" fill="#f97316" opacity="0.9"/>
   
   <!-- Background tactical grid -->
   <g opacity="0.15">
@@ -294,14 +294,14 @@
       <path d="M -12 -32 L -15 -36 L -16 -37 L -14 -35 L -12 -32 Z" fill="#ffffaa" opacity="0.7"/>
       <path d="M -18 -42 L -22 -47 L -23 -48 L -21 -46 L -18 -42 Z" fill="#ffd700" opacity="0.75"/>
       <path d="M -24 -52 L -28 -58 L -29 -59 L -27 -57 L -24 -52 Z" fill="#ffa500" opacity="0.8"/>
-      <path d="M -30 -62 L -34 -69 L -35 -70 L -33 -68 L -30 -62 Z" fill="#ff6b00" opacity="0.8"/>
+      <path d="M -30 -62 L -34 -69 L -35 -70 L -33 -68 L -30 -62 Z" fill="#f97316" opacity="0.8"/>
       <path d="M -36 -72 L -40 -80 L -41 -81 L -39 -79 L -36 -72 Z" fill="#ff2200" opacity="0.8"/>
       
       <!-- Right tactical feathers -->
       <path d="M 12 -32 L 15 -36 L 16 -37 L 14 -35 L 12 -32 Z" fill="#ffffaa" opacity="0.7"/>
       <path d="M 18 -42 L 22 -47 L 23 -48 L 21 -46 L 18 -42 Z" fill="#ffd700" opacity="0.75"/>
       <path d="M 24 -52 L 28 -58 L 29 -59 L 27 -57 L 24 -52 Z" fill="#ffa500" opacity="0.8"/>
-      <path d="M 30 -62 L 34 -69 L 35 -70 L 33 -68 L 30 -62 Z" fill="#ff6b00" opacity="0.8"/>
+      <path d="M 30 -62 L 34 -69 L 35 -70 L 33 -68 L 30 -62 Z" fill="#f97316" opacity="0.8"/>
       <path d="M 36 -72 L 40 -80 L 41 -81 L 39 -79 L 36 -72 Z" fill="#ff2200" opacity="0.8"/>
     </g>
     
@@ -421,7 +421,7 @@
       <circle cx="-100" cy="-95" r="0.8" fill="#ffa500">
         <animate attributeName="cy" values="-95;-103;-95" dur="4.2s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="-125" cy="-115" r="0.6" fill="#ff6b00">
+      <circle cx="-125" cy="-115" r="0.6" fill="#f97316">
         <animate attributeName="cy" values="-115;-123;-115" dur="4.8s" repeatCount="indefinite"/>
       </circle>
       
@@ -434,7 +434,7 @@
       <circle cx="100" cy="-95" r="0.8" fill="#ffa500">
         <animate attributeName="cy" values="-95;-103;-95" dur="4.2s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="125" cy="-115" r="0.6" fill="#ff6b00">
+      <circle cx="125" cy="-115" r="0.6" fill="#f97316">
         <animate attributeName="cy" values="-115;-123;-115" dur="4.8s" repeatCount="indefinite"/>
       </circle>
     </g>
@@ -447,7 +447,7 @@
       PHOENIX
     </text>
     <text x="200" y="368" font-family="'Bebas Neue', Impact, Arial Black, sans-serif" font-size="44" font-weight="900" 
-          text-anchor="middle" fill="#ff6b00" letter-spacing="5" stroke="#4a0000" stroke-width="0.8">
+          text-anchor="middle" fill="#f97316" letter-spacing="5" stroke="#4a0000" stroke-width="0.8">
       ROOIVALK
     </text>
   </g>

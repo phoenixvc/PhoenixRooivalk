@@ -3423,7 +3423,7 @@
 
 /* Component Showcase Styles */
 .component-showcase {
-  max-width: 1400px;
+  max-width: var(--container-max-width-wide);
   margin: 0 auto;
 }
 

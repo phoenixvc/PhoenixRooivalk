@@ -77,7 +77,7 @@ describe("QuickActionsWidget", () => {
   it("applies correct styling classes", () => {
     render(<QuickActionsWidget actions={mockActions} />);
 
-    const container = screen.getByText("Quick Actions").closest("div");
+    const container = screen.getByText("Quick Actions").closest(".fixed");
     expect(container).toHaveClass("fixed", "bottom-6", "right-6", "z-50");
   });
 

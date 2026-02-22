@@ -119,7 +119,7 @@ Each calendar event includes:
 ### Architecture
 
 See
-[ADR-D001: Calendar Export and Integration](../docs/docs/technical/architecture/adr-D001-calendar-export-integration.md)
+[ADR-D010: Calendar Export and Integration](../docs/docs/technical/architecture/adr-D010-calendar-export-integration.md)
 for detailed architecture decisions.
 
 ### Key Components

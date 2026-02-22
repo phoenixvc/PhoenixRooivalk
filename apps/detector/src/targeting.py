@@ -163,7 +163,7 @@ class DistanceEstimator:
         # Distance estimation using pinhole model
         distance_m = (self._assumed_size_m * focal_length_px) / bbox_size_px
 
-        return distance_m
+        return float(distance_m)
 
     def estimate_from_tuple(
         self,
@@ -327,6 +327,7 @@ class TargetingSystem:
 
     def _update_existing_lock(self, track: TrackedObject, distance: float) -> None:
         """Update existing target lock with new data."""
+        assert self._current_lock is not None  # Caller ensures this
         self._current_lock.detection = track.detection
         self._current_lock.estimated_distance_m = distance
         self._current_lock.velocity_px_frame = track.velocity
@@ -459,20 +460,20 @@ class FireNetController:
     @property
     def is_enabled(self) -> bool:
         """Whether fire net is enabled in settings."""
-        return self._settings.fire_net_enabled
+        return bool(self._settings.fire_net_enabled)
 
     @property
     def in_cooldown(self) -> bool:
         """Whether system is in post-fire cooldown."""
         elapsed = time.time() - self._last_fire_time
-        return elapsed < self._settings.fire_net_cooldown_seconds
+        return bool(elapsed < self._settings.fire_net_cooldown_seconds)
 
     @property
     def cooldown_remaining(self) -> float:
         """Seconds remaining in cooldown."""
         elapsed = time.time() - self._last_fire_time
         remaining = self._settings.fire_net_cooldown_seconds - elapsed
-        return max(0.0, remaining)
+        return float(max(0.0, remaining))
 
     @property
     def fire_count(self) -> int:

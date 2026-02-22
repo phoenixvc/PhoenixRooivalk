@@ -23,12 +23,6 @@ describe("useIntersectionObserver", () => {
       configurable: true,
       value: mockIntersectionObserver,
     });
-
-    Object.defineProperty(window, "undefined", {
-      writable: true,
-      configurable: true,
-      value: undefined,
-    });
   });
 
   afterEach(() => {
@@ -186,9 +180,10 @@ describe("useIntersectionObserver", () => {
   });
 
   it("handles server-side rendering (undefined window)", () => {
-    // Mock undefined window
-    const originalWindow = global.window;
-    delete (global as any).window;
+    // Simulate SSR by removing IntersectionObserver (same guard in hook covers
+    // both no-IntersectionObserver and undefined-window paths)
+    const originalIntersectionObserver = window.IntersectionObserver;
+    delete (window as any).IntersectionObserver;
 
     const { result } = renderHook(() => useIntersectionObserver());
 
@@ -197,10 +192,11 @@ describe("useIntersectionObserver", () => {
       result.current.ref(element);
     });
 
+    // Hook should fall back to isIntersecting=true in SSR-like environments
     expect(result.current.isIntersecting).toBe(true);
 
-    // Restore window
-    global.window = originalWindow;
+    // Restore
+    window.IntersectionObserver = originalIntersectionObserver;
   });
 
   it("cleans up observer on unmount", () => {

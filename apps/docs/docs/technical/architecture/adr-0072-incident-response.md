@@ -402,7 +402,7 @@ impl RunbookExecutor {
 
 ### Status Update Template
 
-```markdown
+```text title="incident-status-template.md"
 ## Incident Update - {{ incident.id }}
 
 **Status**: {{ incident.status }} **Severity**: {{ incident.severity }}

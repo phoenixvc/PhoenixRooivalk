@@ -718,3 +718,132 @@ pub async fn seed_team_members(pool: &Pool<Sqlite>) -> Result<(), sqlx::Error> {
 
     Ok(())
 }
+
+// Preorder functions
+
+/// Create a new preorder with its line items in a single transaction
+pub async fn create_preorder(
+    pool: &Pool<Sqlite>,
+    preorder: &crate::models::PreorderIn,
+) -> Result<crate::models::PreorderOut, sqlx::Error> {
+    let id = Uuid::new_v4().to_string();
+    let current_timestamp_ms = Utc::now().timestamp_millis();
+
+    // Calculate totals from items
+    let total_amount: f64 = preorder
+        .items
+        .iter()
+        .map(|item| item.unit_price * f64::from(item.quantity))
+        .sum();
+    let item_count: i32 = preorder.items.iter().map(|item| item.quantity).sum();
+
+    let mut tx = pool.begin().await?;
+
+    sqlx::query(
+        "INSERT INTO preorders (id, name, email, phone, company, address, city, state, zip, country, notes, status, total_amount, created_ms, updated_ms) \
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 'pending', ?12, ?13, ?14)"
+    )
+    .bind(&id)
+    .bind(&preorder.name)
+    .bind(&preorder.email)
+    .bind(&preorder.phone)
+    .bind(&preorder.company)
+    .bind(&preorder.address)
+    .bind(&preorder.city)
+    .bind(&preorder.state)
+    .bind(&preorder.zip)
+    .bind(&preorder.country)
+    .bind(&preorder.notes)
+    .bind(total_amount)
+    .bind(current_timestamp_ms)
+    .bind(current_timestamp_ms)
+    .execute(&mut *tx)
+    .await?;
+
+    for item in &preorder.items {
+        let item_id = Uuid::new_v4().to_string();
+        sqlx::query(
+            "INSERT INTO preorder_items (id, preorder_id, sku, name, quantity, unit_price, created_ms) \
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)"
+        )
+        .bind(&item_id)
+        .bind(&id)
+        .bind(&item.sku)
+        .bind(&item.name)
+        .bind(item.quantity)
+        .bind(item.unit_price)
+        .bind(current_timestamp_ms)
+        .execute(&mut *tx)
+        .await?;
+    }
+
+    tx.commit().await?;
+
+    Ok(crate::models::PreorderOut {
+        id,
+        status: "pending".to_string(),
+        total: total_amount,
+        item_count,
+        created_ms: current_timestamp_ms,
+    })
+}
+
+/// List preorders with pagination
+pub async fn list_preorders(
+    pool: &Pool<Sqlite>,
+    limit: i64,
+    offset: i64,
+) -> Result<(Vec<crate::models::PreorderListItemOut>, i64), sqlx::Error> {
+    let count_row = sqlx::query("SELECT COUNT(*) FROM preorders")
+        .fetch_one(pool)
+        .await?;
+    let total_count: i64 = count_row.get(0);
+
+    let rows = sqlx::query(
+        "SELECT id, name, email, status, total_amount, created_ms, updated_ms \
+         FROM preorders ORDER BY created_ms DESC LIMIT ?1 OFFSET ?2"
+    )
+    .bind(limit)
+    .bind(offset)
+    .fetch_all(pool)
+    .await?;
+
+    let preorders = rows
+        .into_iter()
+        .map(|row| crate::models::PreorderListItemOut {
+            id: row.get::<String, _>(0),
+            name: row.get::<String, _>(1),
+            email: row.get::<String, _>(2),
+            status: row.get::<String, _>(3),
+            total_amount: row.get::<f64, _>(4),
+            created_ms: row.get::<i64, _>(5),
+            updated_ms: row.get::<i64, _>(6),
+        })
+        .collect();
+
+    Ok((preorders, total_count))
+}
+
+/// Get a single preorder by ID
+pub async fn get_preorder_by_id(
+    pool: &Pool<Sqlite>,
+    id: &str,
+) -> Result<Option<crate::models::PreorderListItemOut>, sqlx::Error> {
+    let row = sqlx::query(
+        "SELECT id, name, email, status, total_amount, created_ms, updated_ms \
+         FROM preorders WHERE id = ?1"
+    )
+    .bind(id)
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(row.map(|row| crate::models::PreorderListItemOut {
+        id: row.get::<String, _>(0),
+        name: row.get::<String, _>(1),
+        email: row.get::<String, _>(2),
+        status: row.get::<String, _>(3),
+        total_amount: row.get::<f64, _>(4),
+        created_ms: row.get::<i64, _>(5),
+        updated_ms: row.get::<i64, _>(6),
+    }))
+}

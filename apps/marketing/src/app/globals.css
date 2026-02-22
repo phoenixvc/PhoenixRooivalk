@@ -1,3 +1,6 @@
+/* Import shared design tokens from packages/ui */
+@import "../../../../packages/ui/src/tokens/index.css" layer(tokens);
+
 :root {
   /* Improved Color System - High Contrast */
 
@@ -78,9 +81,9 @@
   /* Logo Background (4 components for rgba support) */
   --logo-bg: 249, 115, 22, 0.1;
 
-  /* Container Layout */
-  --container-max-width: 1160px;
-  --container-max-width-wide: 1400px;
+  /* Container Layout (sourced from shared tokens) */
+  --container-max-width: var(--pr-container-6xl, 1152px);
+  --container-max-width-wide: var(--pr-container-max, 1440px);
   --container-max-width-narrow: 960px;
 
   /* Threat Simulator tokens (RGB triplets) */
@@ -220,21 +223,26 @@
   --space-12: 3rem; /* 48px */
   --space-16: 4rem; /* 64px */
 
-  /* Typography Scale - Fluid & Standardized */
-  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
-  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* Minimum 1rem */
-  --text-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
-  --text-xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.75rem); /* h4 */
-  --text-2xl: clamp(2rem, 1.8rem + 1vw, 2.25rem); /* h3 */
-  --text-3xl: clamp(2.5rem, 2.2rem + 1.5vw, 3rem); /* h2 */
-  --text-4xl: clamp(3rem, 2.6rem + 2vw, 3.75rem); /* h1 */
+  /* Typography Scale - Fluid & Standardized
+     Marketing scale uses larger clamp ranges than --pr-text-* (shared tokens)
+     for hero/display text. Body sizes (xs-lg) align with shared tokens.
+     See packages/ui/src/tokens/index.css for the shared --pr-text-* scale. */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
+  --text-sm: clamp(0.8125rem, 0.775rem + 0.1875vw, 0.875rem);
+  --text-base: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+  --text-lg: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+  --text-xl: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-2xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-3xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+  --text-4xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem); /* h1 */
+  --text-5xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem); /* Hero display */
+  --text-6xl: clamp(2.75rem, 2rem + 3.75vw, 3.75rem); /* Hero XL */
 
   /* Motion & Accessibility */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --duration-fast: 150ms;
-  --duration-normal: 180ms;
-  --duration-slow: 300ms;
+  --duration-fast: 100ms; /* Aligned with --pr-duration-fast */
+  --duration-normal: 150ms; /* Aligned with --pr-duration-normal */
+  --duration-slow: 200ms; /* Aligned with --pr-duration-slow */
   --dur-1: 120ms;
   --dur-2: 180ms;
   --radius: 14px;
@@ -574,7 +582,7 @@ h6 {
 
 /* Container System */
 .container {
-  max-width: 1160px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 var(--space-4);
 }
@@ -738,7 +746,7 @@ textarea:focus-visible {
   background: rgb(var(--primary));
   color: white;
   padding: 1rem 2rem;
-  z-index: 10000;
+  z-index: var(--pr-z-tour);
   border-radius: 0 0 8px 0;
   transition: top 0.3s;
 }

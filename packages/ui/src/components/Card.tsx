@@ -9,6 +9,7 @@ export interface CardProps {
   className?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   as?: "div" | "article" | "section";
+  ariaLabel?: string;
 }
 
 export interface CardHeaderProps {
@@ -44,6 +45,7 @@ export const Card: React.FC<CardProps> = ({
   className = "",
   onClick,
   as: Component = "div",
+  ariaLabel,
 }) => {
   // Base styles using design tokens with fallbacks
   const baseClasses =
@@ -74,7 +76,8 @@ export const Card: React.FC<CardProps> = ({
     variant === "interactive"
       ? {
           tabIndex: 0,
-          role: "button",
+          role: "button" as const,
+          "aria-label": ariaLabel,
           onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();

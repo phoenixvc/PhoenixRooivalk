@@ -793,10 +793,13 @@ TARGETING_FIRE_NET_ENABLED=false
 ALERT_WEBHOOK_URL=https://webhook.example.com
 
 # Rust Keeper
-ETHERLINK_ENDPOINT=https://node.etherlink.com
-ETHERLINK_NETWORK=mainnet
+KEEPER_PROVIDER=stub              # Options: stub, etherlink, solana, multi
+KEEPER_DB_URL=sqlite://blockchain_outbox.sqlite3
 KEEPER_POLL_MS=5000
-KEEPER_USE_STUB=false
+KEEPER_CONFIRM_POLL_MS=30000
+KEEPER_HTTP_PORT=8081
+ETHERLINK_ENDPOINT=https://node.ghostnet.etherlink.com  # Testnet default
+ETHERLINK_NETWORK=ghostnet
 
 # Azure Functions
 COSMOS_DB_CONNECTION_STRING=AccountEndpoint=...

@@ -451,6 +451,13 @@ performance requirements.
 The following ADRs document technical implementation decisions for the
 development infrastructure and tooling.
 
+> **Note**: ADRs D001–D009 below are inline stubs documenting the original
+> decision rationale. They lack the full options analysis, consequences, and
+> implementation sections required by the
+> [ADR-0000 template](./adr-0000-template-and-guide.md). These should be
+> expanded into standalone ADR files as capacity allows. See the
+> [AGENT_BACKLOG.md](../../../../AGENT_BACKLOG.md) Wave 6 backlog for tracking.
+
 ---
 
 ### ADR-D001: Monorepo Structure with Turborepo
@@ -569,14 +576,15 @@ Need modern, performant marketing website with SEO optimization.
 
 #### Decision
 
-Use Next.js 14 with static export for the marketing website.
+Use Next.js with static export for the marketing website. (Originally Next.js 14;
+upgraded to Next.js 16 in Q1 2026.)
 
 #### Rationale
 
 - **SEO**: Server-side rendering and static generation for search engines
 - **Performance**: Automatic code splitting and optimization
 - **Developer Experience**: Hot reload, TypeScript support, file-based routing
-- **Deployment**: Static export works with any hosting (Netlify, Vercel, S3)
+- **Deployment**: Static export deployed to Azure Static Web Apps
 
 ---
 
@@ -701,9 +709,12 @@ Embed WASM simulator via iframe for true DOM isolation.
 
 ---
 
-### ADR-D001: Calendar Export and Integration
+### ADR-D010: Calendar Export and Integration
 
 **Date**: 2025-12-09 **Status**: Accepted
+
+> Renumbered from D001 to D010 to resolve collision with ADR-D001 (Monorepo
+> Structure with Turborepo).
 
 #### Context
 
@@ -725,7 +736,7 @@ Cal.com scheduling widget.
 - **Scheduling Integration**: Cal.com widget enables demo/meeting booking
 
 For detailed analysis and implementation plan, see
-[ADR-D001: Calendar Export and Integration](./adr-D001-calendar-export-integration.md).
+[ADR-D010: Calendar Export and Integration](./adr-D010-calendar-export-integration.md).
 
 ---
 

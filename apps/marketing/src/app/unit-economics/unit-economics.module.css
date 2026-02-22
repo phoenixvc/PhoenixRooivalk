@@ -1,0 +1,562 @@
+.main {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  color: white;
+}
+
+.contentWrapper {
+  padding: 4rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .contentWrapper {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.headerSection {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  background: linear-gradient(to bottom right, white, rgb(var(--primary)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: var(--text-base);
+  color: rgb(var(--text-secondary));
+  margin-top: 1rem;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* KPI Cards */
+.kpiGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .kpiGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kpiCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.25);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.kpiLabel {
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.kpiValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+.kpiNote {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+}
+
+/* Section titles */
+.sectionTitle {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: rgb(var(--primary));
+}
+
+/* COGS Section */
+.cogsSection {
+  margin-bottom: 3rem;
+}
+
+.cogsGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .cogsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cogsCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.cogsCardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.cogsAmount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: rgb(var(--primary));
+  margin-bottom: 0.25rem;
+}
+
+.cogsAmountSub {
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+}
+
+.cogsSavings {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(var(--status-active), 0.1);
+  border: 1px solid rgba(var(--status-active), 0.3);
+  border-radius: 0.75rem;
+}
+
+.cogsSavingsValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--status-active));
+}
+
+.cogsSavingsNote {
+  font-size: 0.8rem;
+  color: rgb(var(--gray));
+  margin-top: 0.25rem;
+}
+
+/* BOM Breakdown */
+.bomSection {
+  margin-bottom: 3rem;
+}
+
+.bomGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .bomGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.bomCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.bomCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(var(--primary), 0.15);
+}
+
+.bomProductName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.bomTotalCogs {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgb(var(--primary));
+}
+
+.bomList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bomItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bomItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bomItemName {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+}
+
+.bomItemCost {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(var(--gray));
+}
+
+.bomItemBar {
+  height: 4px;
+  background: rgba(var(--tactical-gray), 0.4);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bomItemBarFill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+}
+
+/* Margins */
+.marginsSection {
+  margin-bottom: 3rem;
+}
+
+.marginsGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .marginsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.marginCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.marginTitle {
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.marginValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(var(--status-active));
+  margin-bottom: 0.25rem;
+}
+
+.marginNote {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+}
+
+.marginBar {
+  height: 0.5rem;
+  background: rgba(var(--tactical-gray), 0.5);
+  border-radius: 0.25rem;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.marginBarFill {
+  height: 100%;
+  border-radius: 0.25rem;
+  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+}
+
+/* Revenue Projections */
+.revenueSection {
+  margin-bottom: 3rem;
+}
+
+.revenueSubtitle {
+  font-size: 0.875rem;
+  color: rgb(var(--text-secondary));
+  margin-bottom: 1.5rem;
+}
+
+/* Sliders */
+.sliderGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+}
+
+@media (min-width: 768px) {
+  .sliderGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sliderLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+}
+
+.sliderValue {
+  font-weight: 700;
+  color: rgb(var(--primary));
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(var(--tactical-gray), 0.5);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgb(var(--primary));
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgb(var(--primary));
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.slider:focus-visible {
+  outline: 2px solid rgb(var(--primary));
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+.revenueTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.revenueTable th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  color: rgb(var(--primary));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(var(--primary), 0.2);
+  background: rgba(var(--tactical-black), 0.4);
+}
+
+.revenueTable td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(var(--primary), 0.1);
+  font-size: 0.9375rem;
+}
+
+.revenueTable tr:last-child td {
+  border-bottom: none;
+}
+
+.revenueAmount {
+  font-weight: 700;
+  color: rgb(var(--primary));
+}
+
+.revenueSystems {
+  color: rgb(var(--gray));
+}
+
+.revenueNote {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+}
+
+/* Funding */
+.fundingSection {
+  margin-bottom: 3rem;
+}
+
+.fundingGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .fundingGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fundingCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.fundingStage {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(var(--accent));
+  margin-bottom: 0.5rem;
+}
+
+.fundingAmount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.fundingDetail {
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+  margin-bottom: 0.25rem;
+}
+
+.fundingMilestones {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0 0;
+}
+
+.fundingMilestone {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+  padding: 0.25rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.fundingMilestone::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: rgb(var(--status-active));
+  font-weight: 600;
+}
+
+/* Allocation bar */
+.allocationBar {
+  display: flex;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  margin-top: 0.75rem;
+  gap: 2px;
+}
+
+.allocationSegment {
+  height: 100%;
+}
+
+.allocationLegend {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.allocationLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: rgb(var(--gray));
+}
+
+.allocationDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+/* Disclaimer */
+.disclaimer {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: rgba(var(--tactical-charcoal), 0.5);
+  border: 1px solid rgba(var(--status-warning), 0.3);
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  color: rgb(var(--gray));
+  line-height: 1.6;
+}
+
+/* Responsive table */
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

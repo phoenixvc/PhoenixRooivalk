@@ -1,0 +1,648 @@
+"use client";
+
+import React, { useState } from "react";
+import { Navigation } from "../../components/Navigation";
+import { Footer } from "../../components/Footer";
+import { CartItem } from "../../components/cart/CartItem";
+import { useCart } from "../../contexts/CartContext";
+import { products, type Product } from "../../data/products";
+import styles from "./preorder.module.css";
+
+interface ProductQuantity {
+  [productId: string]: number;
+}
+
+interface OrderConfirmation {
+  id: string;
+  status: string;
+  total: number;
+  item_count: number;
+  created_ms: number;
+}
+
+export default function PreorderPage(): React.ReactElement {
+  const { items, total, addItem, clearCart } = useCart();
+  const [quantities, setQuantities] = useState<ProductQuantity>({});
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [orderConfirmation, setOrderConfirmation] =
+    useState<OrderConfirmation | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+    notes: "",
+  });
+
+  // Filter to show only available products or coming soon
+  const availableProducts = products.filter((p) => p.available || p.comingSoon);
+
+  const getQuantity = (productId: string) => quantities[productId] || 1;
+
+  const handleQuantityChange = (productId: string, delta: number) => {
+    const current = getQuantity(productId);
+    const newQuantity = Math.max(1, current + delta);
+    setQuantities({ ...quantities, [productId]: newQuantity });
+  };
+
+  const handleAddToCart = (product: Product) => {
+    const quantity = getQuantity(product.id);
+    addItem(
+      {
+        id: product.id,
+        sku: product.sku,
+        name: product.name,
+        price: product.priceRange.min,
+        phaseTimeline: product.phaseTimeline,
+        monthlyFee: product.monthlyFee,
+      },
+      quantity,
+    );
+  };
+
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const response = await fetch(`${apiUrl}/preorders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          company: formData.company || undefined,
+          notes: formData.notes || undefined,
+          items: items.map((item) => ({
+            sku: item.sku,
+            name: item.name,
+            quantity: item.quantity,
+            unit_price: item.price,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        let errMessage = `Request failed with status ${response.status}`;
+        try {
+          const errBody = await response.json();
+          if (typeof errBody?.error === "string") {
+            errMessage = errBody.error;
+          }
+        } catch {
+          // ignore parse errors — keep the status-based message
+        }
+        throw new Error(errMessage);
+      }
+
+      const result: OrderConfirmation = await response.json();
+      setOrderConfirmation(result);
+      clearCart();
+      setShowCheckout(false);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to submit preorder",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleProceedToCheckout = () => {
+    setShowCheckout(true);
+    // Scroll to checkout section
+    setTimeout(() => {
+      document
+        .getElementById("checkout-section")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
+  return (
+    <main className={styles.main}>
+      {/* Navigation */}
+      <Navigation />
+
+      <div className={styles.container}>
+        {/* Order Confirmation Banner */}
+        {orderConfirmation && (
+          <div className={styles.confirmationBanner} role="status">
+            <svg
+              className={styles.confirmationIcon}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <div className={styles.confirmationContent}>
+              <strong>Preorder submitted successfully!</strong>
+              <p>
+                Order reference: <code>{orderConfirmation.id}</code>
+                <br />
+                {orderConfirmation.item_count} item
+                {orderConfirmation.item_count !== 1 ? "s" : ""} &mdash; Total: $
+                {orderConfirmation.total.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+              <p>We will contact you shortly to confirm your order details.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Header */}
+        <div className={styles.header}>
+          <h1 className={styles.title}>Preorder Products</h1>
+          <p className={styles.subtitle}>
+            Reserve your counter-drone defense systems today. No deposit
+            required. Be among the first to receive our revolutionary
+            technology.
+          </p>
+
+          {/* Payment Terms Banner */}
+          <div className={styles.paymentTermsBanner}>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              <div>
+                <strong>No Deposit Required</strong>
+                <p>Reserve now, pay closer to delivery</p>
+              </div>
+            </div>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              <div>
+                <strong>Guaranteed Delivery Dates</strong>
+                <p>See timeline for each product</p>
+              </div>
+            </div>
+            <div className={styles.paymentTermsItem}>
+              <svg
+                className={styles.paymentTermsIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <div>
+                <strong>Bulk Orders Available</strong>
+                <p>Contact us for volume pricing (5+ units)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className={styles.content}>
+          {/* Products Section */}
+          <div className={styles.productsSection}>
+            <h2 className={styles.sectionTitle}>
+              <svg
+                className={styles.sectionIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+              Available Products
+            </h2>
+
+            <div className={styles.productsGrid}>
+              {availableProducts.map((product) => (
+                <div key={product.id} className={styles.productCard}>
+                  <div className={styles.productHeader}>
+                    <div className={styles.productInfo}>
+                      <h3 className={styles.productName}>{product.name}</h3>
+                      <p className={styles.productPhase}>
+                        {product.phaseTimeline}
+                      </p>
+                      {product.comingSoon && !product.available && (
+                        <div className={styles.deliveryBadge}>
+                          📦 Preorder &bull; No Deposit Required
+                        </div>
+                      )}
+                      <div>
+                        <div className={styles.productPrice}>
+                          {product.priceFormatted}
+                        </div>
+                        {product.monthlyFee && (
+                          <div className={styles.monthlyFee}>
+                            + ${product.monthlyFee}/mo subscription
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className={styles.productDescription}>
+                    {product.description}
+                  </p>
+
+                  <div className={styles.productActions}>
+                    <div
+                      className={styles.quantityControls}
+                      role="group"
+                      aria-label="Quantity"
+                    >
+                      <button
+                        className={styles.quantityButton}
+                        onClick={() => handleQuantityChange(product.id, -1)}
+                        aria-label="Decrease quantity"
+                        type="button"
+                        disabled={getQuantity(product.id) <= 1}
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          aria-hidden="true"
+                        >
+                          <line x1="4" y1="8" x2="12" y2="8" />
+                        </svg>
+                      </button>
+                      <span className={styles.quantityValue}>
+                        {getQuantity(product.id)}
+                      </span>
+                      <button
+                        className={styles.quantityButton}
+                        onClick={() => handleQuantityChange(product.id, 1)}
+                        aria-label="Increase quantity"
+                        type="button"
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          aria-hidden="true"
+                        >
+                          <line x1="8" y1="4" x2="8" y2="12" />
+                          <line x1="4" y1="8" x2="12" y2="8" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <button
+                      className={styles.addButton}
+                      onClick={() => handleAddToCart(product)}
+                      disabled={product.comingSoon && !product.available}
+                      type="button"
+                    >
+                      {product.comingSoon && !product.available
+                        ? "Coming Soon"
+                        : "Add to Cart"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Cart Summary Sidebar */}
+          <aside className={styles.sidebar}>
+            <div className={styles.cartSummary}>
+              <h2 className={styles.sectionTitle}>
+                <svg
+                  className={styles.sectionIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                Your Cart ({items.length})
+              </h2>
+
+              {items.length === 0 ? (
+                <div className={styles.emptyCart}>
+                  <svg
+                    className={styles.emptyCartIcon}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                  </svg>
+                  <p className={styles.emptyCartText}>Your cart is empty</p>
+                </div>
+              ) : (
+                <>
+                  <div className={styles.cartItems}>
+                    {items.map((item) => (
+                      <CartItem key={item.id} item={item} />
+                    ))}
+                  </div>
+
+                  <div className={styles.summaryTotal}>
+                    <div className={styles.totalRow}>
+                      <span className={styles.totalLabel}>Total</span>
+                      <span className={styles.totalValue}>
+                        ${total.toLocaleString("en-US")}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    className={styles.checkoutButton}
+                    onClick={handleProceedToCheckout}
+                    type="button"
+                  >
+                    Proceed to Checkout
+                  </button>
+
+                  <button
+                    className={styles.clearButton}
+                    onClick={clearCart}
+                    type="button"
+                  >
+                    Clear Cart
+                  </button>
+                </>
+              )}
+            </div>
+          </aside>
+        </div>
+
+        {/* Checkout Section */}
+        {showCheckout && items.length > 0 && (
+          <div id="checkout-section" className={styles.checkoutSection}>
+            <h2 className={styles.sectionTitle}>Customer Information</h2>
+
+            {/* Error Banner */}
+            {error && (
+              <div className={styles.errorBanner} role="alert">
+                <svg
+                  className={styles.errorIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="name" className={styles.label}>
+                    Full Name <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className={styles.input}
+                    value={formData.name}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.label}>
+                    Email <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className={styles.input}
+                    value={formData.email}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="phone" className={styles.label}>
+                    Phone <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    className={styles.input}
+                    value={formData.phone}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="company" className={styles.label}>
+                    Company / Organization
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    className={styles.input}
+                    value={formData.company}
+                    onChange={handleFormChange}
+                    disabled={submitting}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="address" className={styles.label}>
+                  Address <span className={styles.required}>*</span>
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  className={styles.input}
+                  value={formData.address}
+                  onChange={handleFormChange}
+                  required
+                  disabled={submitting}
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="city" className={styles.label}>
+                    City <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    className={styles.input}
+                    value={formData.city}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="state" className={styles.label}>
+                    State / Province <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    className={styles.input}
+                    value={formData.state}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="zip" className={styles.label}>
+                    ZIP / Postal Code <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="zip"
+                    name="zip"
+                    className={styles.input}
+                    value={formData.zip}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="country" className={styles.label}>
+                    Country <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    className={styles.input}
+                    value={formData.country}
+                    onChange={handleFormChange}
+                    required
+                    disabled={submitting}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="notes" className={styles.label}>
+                  Special Requirements / Customizations
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  className={`${styles.input} ${styles.textarea}`}
+                  value={formData.notes}
+                  onChange={handleFormChange}
+                  disabled={submitting}
+                  placeholder="Any special requirements, customizations, delivery preferences, or questions? For bulk orders (5+ units), please provide details here and we'll contact you with volume pricing."
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={submitting}
+                aria-busy={submitting}
+              >
+                {submitting ? "Submitting..." : "Complete Preorder"}
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <Footer />
+    </main>
+  );
+}

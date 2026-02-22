@@ -55,43 +55,53 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     // Apply theme to CSS custom properties
     const root = document.documentElement;
 
-    if (theme === "phoenix") {
-      // Phoenix Rooivalk Fire Theme (Default - Orange/Red)
-      root.style.setProperty("--primary", "249, 115, 22"); // Phoenix Orange
-      root.style.setProperty("--secondary", "51, 65, 85"); // Tactical Gray Dark
-      root.style.setProperty("--accent", "251, 146, 60"); // Phoenix Amber
-      root.style.setProperty("--orange", "249, 115, 22"); // Phoenix Orange
-      root.style.setProperty("--action-primary", "249, 115, 22"); // Phoenix Orange
-      root.style.setProperty("--brand-primary", "249, 115, 22");
-      root.style.setProperty("--brand-accent", "251, 146, 60");
-      root.style.setProperty("--red-glow", "rgba(249, 115, 22, 0.2)");
-      root.style.setProperty("--orange-glow", "rgba(249, 115, 22, 0.15)");
-      root.style.setProperty("--amber-glow", "rgba(251, 146, 60, 0.15)");
-    } else if (theme === "blue") {
-      // Blue Tactical Theme
-      root.style.setProperty("--primary", "59, 130, 246"); // Blue 500
-      root.style.setProperty("--secondary", "51, 65, 85"); // Tactical Gray Dark
-      root.style.setProperty("--accent", "96, 165, 250"); // Blue 400
-      root.style.setProperty("--orange", "59, 130, 246"); // Use blue instead of orange
-      root.style.setProperty("--action-primary", "59, 130, 246"); // Blue
-      root.style.setProperty("--brand-primary", "59, 130, 246");
-      root.style.setProperty("--brand-accent", "96, 165, 250");
-      root.style.setProperty("--red-glow", "rgba(59, 130, 246, 0.2)");
-      root.style.setProperty("--orange-glow", "rgba(59, 130, 246, 0.15)");
-      root.style.setProperty("--amber-glow", "rgba(96, 165, 250, 0.15)");
-    } else {
-      // Green Tactical Theme
-      root.style.setProperty("--primary", "34, 197, 94"); // Green 500
-      root.style.setProperty("--secondary", "51, 65, 85"); // Tactical Gray Dark
-      root.style.setProperty("--accent", "74, 222, 128"); // Green 400
-      root.style.setProperty("--orange", "34, 197, 94"); // Use green instead of orange
-      root.style.setProperty("--action-primary", "34, 197, 94"); // Green
-      root.style.setProperty("--brand-primary", "34, 197, 94");
-      root.style.setProperty("--brand-accent", "74, 222, 128");
-      root.style.setProperty("--red-glow", "rgba(34, 197, 94, 0.2)");
-      root.style.setProperty("--orange-glow", "rgba(34, 197, 94, 0.15)");
-      root.style.setProperty("--amber-glow", "rgba(74, 222, 128, 0.15)");
-    }
+    // Theme color definitions: legacy RGB triplets + shared --pr-* design tokens
+    const themes = {
+      phoenix: {
+        primary: "249, 115, 22",
+        accent: "251, 146, 60",
+        accentBase: "#f97316",
+        accentHover: "#fb923c",
+        accentActive: "#ea580c",
+        accentSubtle: "rgba(249, 115, 22, 0.15)",
+      },
+      blue: {
+        primary: "59, 130, 246",
+        accent: "96, 165, 250",
+        accentBase: "#3b82f6",
+        accentHover: "#60a5fa",
+        accentActive: "#1e40af",
+        accentSubtle: "rgba(59, 130, 246, 0.15)",
+      },
+      green: {
+        primary: "34, 197, 94",
+        accent: "74, 222, 128",
+        accentBase: "#22c55e",
+        accentHover: "#4ade80",
+        accentActive: "#15803d",
+        accentSubtle: "rgba(34, 197, 94, 0.15)",
+      },
+    };
+
+    const t = themes[theme];
+
+    // Legacy RGB-triplet vars (consumed via `rgb(var(--primary))`)
+    root.style.setProperty("--primary", t.primary);
+    root.style.setProperty("--secondary", "51, 65, 85");
+    root.style.setProperty("--accent", t.accent);
+    root.style.setProperty("--orange", t.primary);
+    root.style.setProperty("--action-primary", t.primary);
+    root.style.setProperty("--brand-primary", t.primary);
+    root.style.setProperty("--brand-accent", t.accent);
+    root.style.setProperty("--red-glow", `rgba(${t.primary}, 0.2)`);
+    root.style.setProperty("--orange-glow", `rgba(${t.primary}, 0.15)`);
+    root.style.setProperty("--amber-glow", `rgba(${t.accent}, 0.15)`);
+
+    // Shared --pr-* design tokens (from packages/ui/src/tokens/)
+    root.style.setProperty("--pr-accent-base", t.accentBase);
+    root.style.setProperty("--pr-accent-hover", t.accentHover);
+    root.style.setProperty("--pr-accent-active", t.accentActive);
+    root.style.setProperty("--pr-accent-subtle", t.accentSubtle);
   }, [theme, mounted]);
 
   const toggleTheme = () => {
