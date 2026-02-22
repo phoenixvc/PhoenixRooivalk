@@ -36,12 +36,12 @@ export const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => {
   const baseClasses =
-    "inline-block rounded font-bold transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2";
+    "inline-block rounded font-bold transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pr-brand-orange,#f97316)]";
 
   const variantClasses = {
     primary:
       "bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-[var(--dark)]",
-    secondary: "bg-[var(--secondary)] text-white",
+    secondary: "bg-[var(--secondary,#f97316)] text-white",
     outline:
       "border-2 border-[var(--primary)] text-[var(--primary)] bg-transparent",
   };

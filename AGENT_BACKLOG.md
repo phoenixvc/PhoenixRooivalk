@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (44 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (49 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -114,11 +114,11 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (44 completed this session)
 | DX-008  | 9    | CLAUDE.md files                        | Accuracy re-verification after code changes                             |
 | DX-009  | 10   | `apps/marketing/`                      | Performance benchmark baseline                                          |
 | ~~DX-010~~  | 8    | `apps/marketing/`                      | ~~Preorder form validation and error handling~~ (completed: backend validates email/items, frontend shows errors + loading state)                             |
-| DX-011  | 4    | `scripts/validate-env.sh`              | Env validation only runs for marketing in CI — expand to all apps       |
-| DX-012  | 10   | CHANGELOG.md                           | No automated changelog generation from conventional commits             |
-| FIN-002 | 8    | `apps/docs/src/data/values.ts`         | Revenue projections hardcoded — no interactive calculator               |
-| FIN-003 | 5    | `apps/marketing/src/data/products.ts`  | BOM data is aggregate COGS only — no component-level breakdown          |
-| PRD-008 | 5    | `apps/marketing/src/app/sbir/page.tsx` | SBIR page placeholder — CMMC/ITAR compliance all "Planned", no tracking |
+| ~~DX-011~~  | 4    | `scripts/validate-env.sh`              | ~~Env validation only runs for marketing in CI — expand to all apps~~ (completed: docs, api, keeper, detector support + CI integration) |
+| ~~DX-012~~  | 10   | CHANGELOG.md                           | ~~No automated changelog generation from conventional commits~~ (completed: release.yml + cliff.toml for git-cliff) |
+| ~~FIN-002~~ | 8    | `apps/marketing/src/app/unit-economics/` | ~~Revenue projections hardcoded — no interactive calculator~~ (completed: interactive sliders for systems, avg revenue, growth rate) |
+| ~~FIN-003~~ | 5    | `apps/marketing/src/app/unit-economics/` | ~~BOM data is aggregate COGS only — no component-level breakdown~~ (completed: BOM breakdown for SkySnare, SkyWatch Pro, AeroNet Enterprise) |
+| ~~PRD-008~~ | 5    | `apps/marketing/src/app/sbir/page.tsx` | ~~SBIR page placeholder — CMMC/ITAR compliance all "Planned", no tracking~~ (completed: specific dates, ITAR Q2 2026, classification, facility clearance Q1 2027) |
 
 ## Quick Wins (< 30 minutes each)
 
@@ -167,3 +167,8 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (44 completed this session)
 43. ~~**SEO-002**: Analytics event coverage verified~~ (Done 2026-02-22)
 44. ~~**SEO-003**: Case studies quantifiable outcomes~~ (Done 2026-02-22)
 45. ~~**COV-004**: Codecov aggregation for Rust + marketing~~ (Done 2026-02-22)
+46. ~~**DX-011**: Env validation expanded to docs, api, keeper, detector + CI steps~~ (Done 2026-02-22)
+47. ~~**DX-012**: Changelog generation via git-cliff + release.yml workflow~~ (Done 2026-02-22)
+48. ~~**PRD-008**: SBIR compliance roadmap with specific dates and classifications~~ (Done 2026-02-22)
+49. ~~**FIN-002**: Interactive revenue projections with adjustable sliders~~ (Done 2026-02-22)
+50. ~~**FIN-003**: BOM component breakdown for SkySnare, SkyWatch Pro, AeroNet Enterprise~~ (Done 2026-02-22)

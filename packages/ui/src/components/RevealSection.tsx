@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { useIntersectionObserver } from "../hooks/useIntersectionObserver";
 
@@ -22,11 +22,25 @@ export function RevealSection({
     triggerOnce,
   });
 
+  // Respect prefers-reduced-motion: skip animation entirely so content is
+  // never hidden behind opacity-0 for users who disable motion.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const shouldAnimate = !prefersReducedMotion;
+  const visible = !shouldAnimate || isIntersecting;
+
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ${
-        isIntersecting ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      className={`${shouldAnimate ? "transition-all duration-700" : ""} ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${className}`}
     >
       {children}

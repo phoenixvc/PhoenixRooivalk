@@ -162,6 +162,96 @@
   margin-top: 0.25rem;
 }
 
+/* BOM Breakdown */
+.bomSection {
+  margin-bottom: 3rem;
+}
+
+.bomGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .bomGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.bomCard {
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.bomCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(var(--primary), 0.15);
+}
+
+.bomProductName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.bomTotalCogs {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgb(var(--primary));
+}
+
+.bomList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bomItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bomItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bomItemName {
+  font-size: 0.8rem;
+  color: rgb(var(--text-secondary));
+}
+
+.bomItemCost {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(var(--gray));
+}
+
+.bomItemBar {
+  height: 4px;
+  background: rgba(var(--tactical-gray), 0.4);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bomItemBarFill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+}
+
 /* Margins */
 .marginsSection {
   margin-bottom: 3rem;
@@ -223,6 +313,86 @@
 /* Revenue Projections */
 .revenueSection {
   margin-bottom: 3rem;
+}
+
+.revenueSubtitle {
+  font-size: 0.875rem;
+  color: rgb(var(--text-secondary));
+  margin-bottom: 1.5rem;
+}
+
+/* Sliders */
+.sliderGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(var(--tactical-charcoal), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--primary), 0.2);
+  border-radius: 1rem;
+}
+
+@media (min-width: 768px) {
+  .sliderGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sliderLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: rgb(var(--gray));
+}
+
+.sliderValue {
+  font-weight: 700;
+  color: rgb(var(--primary));
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(var(--tactical-gray), 0.5);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgb(var(--primary));
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgb(var(--primary));
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.slider:focus-visible {
+  outline: 2px solid rgb(var(--primary));
+  outline-offset: 4px;
+  border-radius: 3px;
 }
 
 .revenueTable {

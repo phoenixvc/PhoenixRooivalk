@@ -29,12 +29,86 @@ const margins = {
   ebitda: { value: 25, note: "Target by Year 3" },
 };
 
-const revenueProjections = [
-  { year: "Year 1", amount: "R25M", systems: 25, note: "Initial installations" },
-  { year: "Year 2", amount: "R75M", systems: 75, note: "Including services revenue" },
-  { year: "Year 3", amount: "R150M", systems: 150, note: "Including recurring revenue" },
-  { year: "Year 4", amount: "R300M", systems: 300, note: "International expansion" },
-  { year: "Year 5", amount: "R500M", systems: 500, note: "Market leadership" },
+// Revenue projection defaults (adjustable via sliders)
+const DEFAULT_YEAR1_SYSTEMS = 25;
+const DEFAULT_AVG_REVENUE_PER_SYSTEM = 1_000_000; // R1M per system (hardware+services)
+const DEFAULT_GROWTH_RATE = 80; // 80% YoY growth
+
+function buildRevenueProjections(
+  year1Systems: number,
+  avgRevenue: number,
+  growthPct: number,
+) {
+  const notes = [
+    "Initial installations",
+    "Including services revenue",
+    "Including recurring revenue",
+    "International expansion",
+    "Market leadership",
+  ];
+  const rows = [];
+  let systems = year1Systems;
+  for (let y = 1; y <= 5; y++) {
+    const amount = systems * avgRevenue;
+    rows.push({
+      year: `Year ${y}`,
+      amount,
+      amountFormatted: `R${(amount / 1_000_000).toFixed(0)}M`,
+      systems: Math.round(systems),
+      note: notes[y - 1],
+    });
+    systems = systems * (1 + growthPct / 100);
+  }
+  return rows;
+}
+
+function formatSliderValue(value: number, suffix: string): string {
+  if (value >= 1_000_000) return `R${(value / 1_000_000).toFixed(1)}M${suffix}`;
+  if (value >= 1_000) return `R${(value / 1_000).toFixed(0)}K${suffix}`;
+  return `R${value}${suffix}`;
+}
+
+// BOM component breakdowns for representative products (FIN-003)
+const bomBreakdowns = [
+  {
+    product: "SkySnare (SS-001)",
+    totalCogs: 148,
+    components: [
+      { name: "CO2 launcher mechanism", cost: 42, pct: 28 },
+      { name: "Kevlar net (2m\u00d72m)", cost: 35, pct: 24 },
+      { name: "Housing & ergonomics", cost: 28, pct: 19 },
+      { name: "Safety interlock system", cost: 18, pct: 12 },
+      { name: "Electronics & trigger", cost: 15, pct: 10 },
+      { name: "Packaging & QC", cost: 10, pct: 7 },
+    ],
+  },
+  {
+    product: "SkyWatch Pro (SW-PRO-001)",
+    totalCogs: 612,
+    components: [
+      { name: "Camera module (4K)", cost: 145, pct: 24 },
+      { name: "Jetson / Coral compute", cost: 132, pct: 22 },
+      { name: "RF detection board", cost: 98, pct: 16 },
+      { name: "Pan-tilt gimbal", cost: 87, pct: 14 },
+      { name: "Weatherproof enclosure", cost: 58, pct: 9 },
+      { name: "Audio sensor + DSP", cost: 42, pct: 7 },
+      { name: "PoE / power supply", cost: 28, pct: 5 },
+      { name: "Assembly & test labor", cost: 22, pct: 3 },
+    ],
+  },
+  {
+    product: "AeroNet Enterprise (AN-ENT-001)",
+    totalCogs: 59200,
+    components: [
+      { name: "Multi-sensor array (radar, EO/IR, RF)", cost: 18500, pct: 31 },
+      { name: "Edge compute cluster (GPU)", cost: 12400, pct: 21 },
+      { name: "Countermeasure launchers (\u00d74)", cost: 8200, pct: 14 },
+      { name: "Command software license", cost: 6800, pct: 11 },
+      { name: "Integration & installation labor", cost: 7200, pct: 12 },
+      { name: "Cabling, mounts, infrastructure", cost: 3800, pct: 6 },
+      { name: "Certification & compliance", cost: 2300, pct: 4 },
+    ],
+  },
 ];
 
 const funding = {
@@ -64,6 +138,15 @@ const funding = {
 };
 
 export default function UnitEconomicsPageClient(): React.ReactElement {
+  const [year1Systems, setYear1Systems] = React.useState(DEFAULT_YEAR1_SYSTEMS);
+  const [avgRevenue, setAvgRevenue] = React.useState(DEFAULT_AVG_REVENUE_PER_SYSTEM);
+  const [growthRate, setGrowthRate] = React.useState(DEFAULT_GROWTH_RATE);
+
+  const revenueProjections = React.useMemo(
+    () => buildRevenueProjections(year1Systems, avgRevenue, growthRate),
+    [year1Systems, avgRevenue, growthRate],
+  );
+
   return (
     <main className={styles.main}>
       <Navigation />
@@ -126,6 +209,41 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
             </div>
           </section>
 
+          {/* BOM Breakdown (FIN-003) */}
+          <section className={styles.bomSection}>
+            <h2 className={styles.sectionTitle}>Bill of Materials Breakdown</h2>
+            <div className={styles.bomGrid}>
+              {bomBreakdowns.map((bom) => (
+                <div key={bom.product} className={styles.bomCard}>
+                  <div className={styles.bomCardHeader}>
+                    <span className={styles.bomProductName}>{bom.product}</span>
+                    <span className={styles.bomTotalCogs}>
+                      ${bom.totalCogs.toLocaleString()} COGS
+                    </span>
+                  </div>
+                  <ul className={styles.bomList}>
+                    {bom.components.map((c) => (
+                      <li key={c.name} className={styles.bomItem}>
+                        <div className={styles.bomItemHeader}>
+                          <span className={styles.bomItemName}>{c.name}</span>
+                          <span className={styles.bomItemCost}>
+                            ${c.cost.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className={styles.bomItemBar}>
+                          <div
+                            className={styles.bomItemBarFill}
+                            style={{ width: `${c.pct}%` }}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* Margins */}
           <section className={styles.marginsSection}>
             <h2 className={styles.sectionTitle}>Target Margins</h2>
@@ -155,9 +273,69 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
             </div>
           </section>
 
-          {/* Revenue Projections */}
+          {/* Revenue Projections — Interactive */}
           <section className={styles.revenueSection}>
             <h2 className={styles.sectionTitle}>Revenue Projections (ZAR)</h2>
+            <p className={styles.revenueSubtitle}>
+              Adjust the sliders to model different growth scenarios.
+            </p>
+
+            {/* Sliders */}
+            <div className={styles.sliderGrid}>
+              <div className={styles.sliderGroup}>
+                <label htmlFor="year1-systems" className={styles.sliderLabel}>
+                  Year 1 Systems
+                  <span className={styles.sliderValue}>{year1Systems}</span>
+                </label>
+                <input
+                  id="year1-systems"
+                  type="range"
+                  min={5}
+                  max={100}
+                  step={5}
+                  value={year1Systems}
+                  onChange={(e) => setYear1Systems(Number(e.target.value))}
+                  className={styles.slider}
+                />
+              </div>
+
+              <div className={styles.sliderGroup}>
+                <label htmlFor="avg-revenue" className={styles.sliderLabel}>
+                  Avg Revenue / System
+                  <span className={styles.sliderValue}>
+                    {formatSliderValue(avgRevenue, "")}
+                  </span>
+                </label>
+                <input
+                  id="avg-revenue"
+                  type="range"
+                  min={500_000}
+                  max={3_000_000}
+                  step={100_000}
+                  value={avgRevenue}
+                  onChange={(e) => setAvgRevenue(Number(e.target.value))}
+                  className={styles.slider}
+                />
+              </div>
+
+              <div className={styles.sliderGroup}>
+                <label htmlFor="growth-rate" className={styles.sliderLabel}>
+                  YoY Growth
+                  <span className={styles.sliderValue}>{growthRate}%</span>
+                </label>
+                <input
+                  id="growth-rate"
+                  type="range"
+                  min={20}
+                  max={150}
+                  step={5}
+                  value={growthRate}
+                  onChange={(e) => setGrowthRate(Number(e.target.value))}
+                  className={styles.slider}
+                />
+              </div>
+            </div>
+
             <div className={styles.tableWrapper}>
               <table className={styles.revenueTable}>
                 <thead>
@@ -172,7 +350,7 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
                   {revenueProjections.map((row) => (
                     <tr key={row.year}>
                       <td>{row.year}</td>
-                      <td className={styles.revenueAmount}>{row.amount}</td>
+                      <td className={styles.revenueAmount}>{row.amountFormatted}</td>
                       <td className={styles.revenueSystems}>{row.systems}</td>
                       <td className={styles.revenueNote}>{row.note}</td>
                     </tr>
