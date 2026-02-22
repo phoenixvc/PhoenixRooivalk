@@ -20,7 +20,7 @@ getrandom = { workspace = true }
 # feature for Cargo feature unification so the WASM backend compiles.
 getrandom_03 = { package = "getrandom", version = "0.3", features = ["wasm_js"] }
 leptos = { version = "0.8", features = ["csr"] }
-leptos_meta = { version = "0.6", features = ["csr"] }
+leptos_meta = { version = "0.8", features = ["csr"] }
 leptos_router = { version = "0.6", features = ["csr"] }
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
