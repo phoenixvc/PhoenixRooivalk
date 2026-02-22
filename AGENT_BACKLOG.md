@@ -178,6 +178,20 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 52. ~~**DX-008**: CLAUDE.md accuracy verified against codebase~~ (Done 2026-02-22)
 53. ~~**DX-007**: Stale content fixes — cargo audit gotcha, mypy gotcha, keeper EtherLink defaults, progress frontmatter~~ (Done 2026-02-22)
 54. ~~**DX-006**: ADR backlog assessment — 45 standalone + 19 inline ADRs inventoried, 5 defects + 10 missing ADRs catalogued~~ (Done 2026-02-22)
+55. ~~**TOK-003**: Shared token import added to marketing globals.css~~ (Done 2026-02-22)
+56. ~~**TOK-004**: Typography scale aligned with shared --pr-text-* tokens~~ (Done 2026-02-22)
+57. ~~**TOK-005**: Duration tokens aligned (100ms/150ms/200ms)~~ (Done 2026-02-22)
+58. ~~**MKT-006**: SkyWatch FarmPack agriculture bundle ($3.5K-$8K)~~ (Done 2026-02-22)
+59. ~~**MKT-007**: AeroNet Events rental pricing ($2.5K-$15K)~~ (Done 2026-02-22)
+60. ~~**MKT-008**: AeroNet Maritime bundle ($75K-$200K)~~ (Done 2026-02-22)
+61. ~~**DOC-005**: ADR-D004 Next.js 14 → Next.js 16~~ (Done 2026-02-22)
+62. ~~**DOC-006**: system-architecture-analysis.md EtherLink defaults corrected~~ (Done 2026-02-22)
+63. ~~**DOC-007**: documentation-status.md updated to Feb 2026~~ (Done 2026-02-22)
+64. ~~**ADR-004**: Mechanical ADRs renamed M-0001 through M-0005~~ (Done 2026-02-22)
+65. ~~**ADR-012**: ADR-0301 Python detector factory pattern~~ (Done 2026-02-22)
+66. ~~**ADR-013**: ADR-0402 Frontend framework selection~~ (Done 2026-02-22)
+67. ~~**ADR-014**: ADR-0103 Marketing passwordless auth~~ (Done 2026-02-22)
+68. ~~**ADR-015**: ADR-0403 Tauri desktop packaging~~ (Done 2026-02-22)
 
 ## Wave 6 Backlog — Agent-Discovered Items
 
@@ -187,9 +201,9 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | -------- | -------- | -------------------------------------------------------------------------- |
 | ~~TOK-001~~  | P0       | ~~ThemeContext.tsx only sets 7 vars — extend to set `--pr-*` accent tokens~~ (completed: ThemeContext now sets --pr-accent-base/hover/active/subtle for all 3 themes)   |
 | ~~TOK-002~~  | P1       | ~~Logo SVGs use `#FF6B00` but token system uses `#f97316` — reconcile~~ (completed: logo.svg, logo-banner.svg, brand-guardian.md, slide-deck-guide.mdx all updated to #f97316)       |
-| TOK-003  | P2       | Marketing app doesn't import `packages/ui/src/tokens/index.css`            |
-| TOK-004  | P2       | Typography scale diverges across 3 apps (different clamp values)           |
-| TOK-005  | P2       | Duration tokens: marketing `--duration-fast` 150ms vs shared 100ms        |
+| ~~TOK-003~~  | P2       | ~~Marketing app doesn't import `packages/ui/src/tokens/index.css`~~ (completed: `@import` of shared tokens added to globals.css via CSS layer)            |
+| ~~TOK-004~~  | P2       | ~~Typography scale diverges across 3 apps (different clamp values)~~ (completed: marketing typography aligned with shared --pr-text-* tokens)           |
+| ~~TOK-005~~  | P2       | ~~Duration tokens: marketing `--duration-fast` 150ms vs shared 100ms~~ (completed: aligned to 100ms/150ms/200ms matching shared tokens)        |
 | TOK-006  | P3       | Z-index: 30+ raw integer literals in marketing CSS modules                 |
 | TOK-007  | P3       | Hardcoded colors in Footer, preorder, gamification, docs-landing CSS      |
 | TOK-008  | P3       | No SkySnare/AeroNet sub-brand tokens defined                              |
@@ -203,9 +217,9 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | ~~MKT-003~~  | P1       | ~~Law enforcement vertical missing~~ (completed: AeroNet LEO bundle $45K-$95K with blockchain evidence chain)  |
 | ~~MKT-004~~  | P1       | ~~NATO non-US military positioning~~ (completed: AeroNet Allied bundle $120K-$350K, non-ITAR, STANAG-compatible)  |
 | ~~MKT-005~~  | P1       | ~~Correctional facilities bundle~~ (completed: AeroNet Corrections bundle $55K-$150K with contraband interdiction)  |
-| MKT-006  | P2       | Agriculture farm pack bundle (existing hardware)                           |
-| MKT-007  | P2       | Live events rental pricing model                                           |
-| MKT-008  | P2       | Maritime AeroNet bundle (SkyWatch Marine + countermeasure)                 |
+| ~~MKT-006~~  | P2       | ~~Agriculture farm pack bundle (existing hardware)~~ (completed: SkyWatch FarmPack $3.5K-$8K added to products.ts)                           |
+| ~~MKT-007~~  | P2       | ~~Live events rental pricing model~~ (completed: AeroNet Events $2.5K-$15K per event rental model added)                                           |
+| ~~MKT-008~~  | P2       | ~~Maritime AeroNet bundle (SkyWatch Marine + countermeasure)~~ (completed: AeroNet Maritime $75K-$200K added to products.ts)                 |
 
 ### Stale Content (from DX-007 audit)
 
@@ -213,9 +227,9 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | -------- | -------- | -------------------------------------------------------------------------- |
 | ~~DOC-003~~  | P0       | ~~API documentation page is fictional — all routes/auth/SDKs are invented~~ (completed: rewritten with real routes from apps/api/src/lib.rs, real models, real auth flow)   |
 | ~~DOC-004~~  | P1       | ~~ADR-0035 references `apps/tauri` (wrong) and monolithic `ci.yml` (wrong)~~ (completed: apps/tauri→apps/threat-simulator-desktop, implementation note added about per-technology workflow split)  |
-| DOC-005  | P2       | ADR-D004 documents Next.js 14; actual is 16.1.6                           |
-| DOC-006  | P2       | system-architecture-analysis.md has wrong EtherLink defaults              |
-| DOC-007  | P2       | documentation-status.md is 3 months stale (Nov 2025, Netlify reference)   |
+| ~~DOC-005~~  | P2       | ~~ADR-D004 documents Next.js 14; actual is 16.1.6~~ (completed: updated to Next.js 16 in architecture-decision-records.md)                           |
+| ~~DOC-006~~  | P2       | ~~system-architecture-analysis.md has wrong EtherLink defaults~~ (completed: KEEPER_PROVIDER=stub, KEEPER_DB_URL, KEEPER_CONFIRM_POLL_MS, KEEPER_HTTP_PORT corrected)              |
+| ~~DOC-007~~  | P2       | ~~documentation-status.md is 3 months stale (Nov 2025, Netlify reference)~~ (completed: updated to Feb 2026, 90+ docs, Azure SWA, added February 2026 updates section)   |
 
 ### ADR Structural Defects (from DX-006 backlog assessment)
 
@@ -224,7 +238,7 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | ~~ADR-001~~  | P0       | ~~D001 number collision — standalone calendar export vs inline monorepo decision~~ (completed: calendar export renumbered to D010, all cross-references updated) |
 | ~~ADR-002~~  | P0       | ~~Dual `adr-0000-*` files with conflicting numbering schemes~~ (completed: adr-management.md updated to reference template-and-guide.md as canonical) |
 | ~~ADR-003~~  | P1       | ~~ADRs 0001-0010 are stubs in inline file~~ (completed: expansion note added to architecture-decision-records.md with link to backlog)  |
-| ADR-004  | P2       | Mechanical ADRs reuse 0001-0005 namespace — rename to M001-M005           |
+| ~~ADR-004~~  | P2       | ~~Mechanical ADRs reuse 0001-0005 namespace — rename to M001-M005~~ (completed: M- prefix added, headings renamed M-0001 through M-0005)           |
 | ADR-005  | P3       | Build bug in ADR-0072 — unrendered template variable                      |
 
 ### Missing ADRs — High Priority (from DX-006 backlog assessment)
@@ -242,7 +256,7 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 
 | ID       | Priority | Description                                                                |
 | -------- | -------- | -------------------------------------------------------------------------- |
-| ADR-012  | P2       | Python detector factory pattern (FrameSource, InferenceEngine, Tracker)   |
-| ADR-013  | P2       | Frontend framework selection (Next.js + Docusaurus, static export)        |
-| ADR-014  | P2       | Marketing passwordless auth via localStorage (security implications)      |
-| ADR-015  | P2       | Tauri 2 for desktop packaging (vs Electron, memory/bundle trade-offs)     |
+| ~~ADR-012~~  | P2       | ~~Python detector factory pattern (FrameSource, InferenceEngine, Tracker)~~ (completed: ADR-0301 created)   |
+| ~~ADR-013~~  | P2       | ~~Frontend framework selection (Next.js + Docusaurus, static export)~~ (completed: ADR-0402 created)        |
+| ~~ADR-014~~  | P2       | ~~Marketing passwordless auth via localStorage (security implications)~~ (completed: ADR-0103 created)      |
+| ~~ADR-015~~  | P2       | ~~Tauri 2 for desktop packaging (vs Electron, memory/bundle trade-offs)~~ (completed: ADR-0403 created)     |

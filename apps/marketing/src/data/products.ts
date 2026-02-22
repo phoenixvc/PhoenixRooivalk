@@ -1413,6 +1413,175 @@ export const products: Product[] = [
     ],
     catalogUrl: "/products#aeronet-corrections",
   },
+
+  // MKT-006: Agriculture farm pack bundle
+  {
+    id: "skywatch-farmpack",
+    sku: "SW-FARM-001",
+    name: "SkyWatch FarmPack",
+    line: "skywatch" as ProductLine,
+    tagline: "Agricultural drone monitoring for farms and ranches",
+    description:
+      "Affordable perimeter monitoring bundle for agricultural operations. " +
+      "Protects crops, livestock, and equipment from unauthorized drone " +
+      "surveillance and pesticide theft. Solar-powered SkyWatch sensors with " +
+      "long-range detection optimized for open terrain. Includes automated " +
+      "alerts via SMS and email.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q2 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 3500, max: 8000 },
+    priceFormatted: "$3,500 – $8,000",
+    msrp: 5500,
+    monthlyFee: 49,
+    cogs: 1800,
+    margin: 0.67,
+    assemblyHours: 8,
+    laborCost: 400,
+    targetMarket: [
+      "Large-scale farms",
+      "Ranches",
+      "Vineyards and orchards",
+      "Agricultural cooperatives",
+    ],
+    marketSegment: "Agriculture",
+    specs: {
+      range: "1km open terrain detection",
+      sensors: "2x SkyWatch Pro (solar-powered)",
+      alerts: "SMS + email automated alerts",
+      power: "Solar with battery backup (72hr)",
+    },
+    features: [
+      "Solar-powered for remote deployment",
+      "Open terrain optimized detection",
+      "SMS and email automated alerts",
+      "Weather-resistant IP67 enclosures",
+      "Simple self-install kit",
+      "Low monthly monitoring fee",
+    ],
+    useCases: [
+      "Crop surveillance prevention",
+      "Livestock monitoring",
+      "Equipment theft deterrence",
+      "Precision agriculture protection",
+    ],
+    catalogUrl: "/products#skywatch-farmpack",
+  },
+
+  // MKT-007: Live events rental pricing model
+  {
+    id: "aeronet-events",
+    sku: "AN-EVENT-001",
+    name: "AeroNet Events",
+    line: "aeronet" as ProductLine,
+    tagline: "Temporary C-UAS deployment for concerts, sports, and festivals",
+    description:
+      "Rapid-deploy C-UAS rental package for live events. Pre-configured " +
+      "detection and countermeasure kit ships in ruggedized cases, deploys in " +
+      "under 2 hours, and includes on-site operator support. Per-event pricing " +
+      "eliminates capital expenditure. Evidence capture provides post-event " +
+      "security reports for venue compliance.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q4 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 2500, max: 15000 },
+    priceFormatted: "$2,500 – $15,000 per event",
+    msrp: 5000,
+    cogs: 800,
+    margin: 0.84,
+    assemblyHours: 2,
+    laborCost: 500,
+    targetMarket: [
+      "Concert promoters",
+      "Sports venues",
+      "Festival organizers",
+      "Convention centers",
+      "Political events",
+    ],
+    marketSegment: "Live events",
+    specs: {
+      range: "800m event perimeter coverage",
+      deployment: "< 2 hours setup time",
+      format: "Ruggedized transit cases",
+      support: "On-site operator included",
+    },
+    features: [
+      "Rapid 2-hour deployment",
+      "Per-event rental pricing",
+      "On-site trained operator",
+      "Post-event security report",
+      "Ruggedized transit case kit",
+      "No capital expenditure required",
+    ],
+    useCases: [
+      "Stadium concerts",
+      "Outdoor festivals",
+      "Political rallies",
+      "Sporting events",
+    ],
+    catalogUrl: "/products#aeronet-events",
+  },
+
+  // MKT-008: Maritime AeroNet bundle
+  {
+    id: "aeronet-maritime",
+    sku: "AN-MARINE-001",
+    name: "AeroNet Maritime",
+    line: "aeronet" as ProductLine,
+    tagline: "Maritime C-UAS for ports, offshore platforms, and vessels",
+    description:
+      "Salt-air hardened C-UAS package for maritime environments. Combines " +
+      "SkyWatch Marine detection sensors with ship-mounted NetSentry " +
+      "countermeasures. Marine-grade connectors, corrosion-resistant housings, " +
+      "and gyro-stabilized mounts for vessel deployment. Integrates with " +
+      "existing bridge radar and AIS systems.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-b" as ProductPhase,
+    phaseTimeline: "Q2 2028",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 75000, max: 200000 },
+    priceFormatted: "$75,000 – $200,000",
+    msrp: 120000,
+    monthlyFee: 1299,
+    cogs: 42000,
+    margin: 0.65,
+    assemblyHours: 80,
+    laborCost: 4000,
+    targetMarket: [
+      "Commercial ports",
+      "Offshore oil platforms",
+      "Naval vessels",
+      "Cruise lines",
+      "Yacht owners",
+    ],
+    marketSegment: "Maritime",
+    specs: {
+      range: "2km over-water detection",
+      housing: "Marine-grade IP68, salt-air rated",
+      mounts: "Gyro-stabilized vessel mounts",
+      integration: "Radar + AIS bridge integration",
+    },
+    features: [
+      "Salt-air corrosion resistant (IP68)",
+      "Gyro-stabilized vessel mounts",
+      "Bridge radar and AIS integration",
+      "Marine-grade connectors throughout",
+      "SkyWatch Marine detection array",
+      "Ship-mounted NetSentry countermeasures",
+    ],
+    useCases: [
+      "Port security",
+      "Offshore platform protection",
+      "Naval vessel defense",
+      "Cruise ship safety",
+    ],
+    catalogUrl: "/products#aeronet-maritime",
+  },
 ];
 
 // =============================================================================

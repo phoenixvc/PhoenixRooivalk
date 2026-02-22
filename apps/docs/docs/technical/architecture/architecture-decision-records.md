@@ -576,14 +576,15 @@ Need modern, performant marketing website with SEO optimization.
 
 #### Decision
 
-Use Next.js 14 with static export for the marketing website.
+Use Next.js with static export for the marketing website. (Originally Next.js 14;
+upgraded to Next.js 16 in Q1 2026.)
 
 #### Rationale
 
 - **SEO**: Server-side rendering and static generation for search engines
 - **Performance**: Automatic code splitting and optimization
 - **Developer Experience**: Hot reload, TypeScript support, file-based routing
-- **Deployment**: Static export works with any hosting (Netlify, Vercel, S3)
+- **Deployment**: Static export deployed to Azure Static Web Apps
 
 ---
 
