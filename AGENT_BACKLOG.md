@@ -1,8 +1,8 @@
 # Agent Backlog — PhoenixRooivalk
 
-Last scanned: 2026-02-20
+Last scanned: 2026-02-22
 
-Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
+Summary: 8 P0, 16 P1, 24 P2, 13 P3 = **61 items** (6 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -23,13 +23,13 @@ Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 
 | ID       | Team | File:Line                                                                 | Description                                                                             |
 | -------- | ---- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| KPR-001  | 1    | `apps/keeper/src/batch_anchor.rs`                                         | Batch anchor module not exported from `lib.rs`                                          |
+| ~~KPR-001~~  | 1    | `apps/keeper/src/batch_anchor.rs`                                         | ~~Batch anchor module not exported from `lib.rs`~~ (verified: already exported)                                          |
 | KPR-002  | 1    | `apps/keeper/`                                                            | Batch anchoring has no integration tests                                                |
 | X402-001 | 1    | `crates/x402/`                                                            | No dedicated test files — only inline tests                                             |
 | ADDR-001 | 1    | `crates/address-validation/`                                              | No dedicated test files                                                                 |
-| CLI-001  | 1    | `apps/evidence-cli/`                                                      | Zero test coverage — no test directory                                                  |
+| ~~CLI-001~~  | 1    | `apps/evidence-cli/`                                                      | ~~Zero test coverage~~ (completed: 13 inline tests added, all passing)                                                  |
 | SOL-001  | 1    | `crates/anchor-solana/`                                                   | No tests — no `#[cfg(test)]`, no `tests/` dir, orphan `provider_tests.rs` at crate root |
-| SIM-003  | 2    | `apps/marketing/`                                                         | ~11 tests for 164 source files — major gap                                              |
+| SIM-003  | 2    | `apps/marketing/`                                                         | 278 tests passing but coverage gap remains for 164 source files                                              |
 | DOC-001  | 9    | `apps/docs/azure-functions/src/functions/scheduled.ts:80`                 | SendGrid TODO — email queue has no email service                                        |
 | DOC-002  | 9    | `apps/docs/docs/technical/architecture/adr-0015-prompt-management.md:515` | Legacy system removal TODO                                                              |
 
@@ -39,7 +39,7 @@ Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 | ------ | ---- | ------------------------------------------- | ------------------------------------------------ |
 | CI-004 | 4    | `.github/workflows/`                        | No Rust coverage reporting in CI                 |
 | CI-005 | 4    | `.github/workflows/`                        | No JS/TS coverage aggregation                    |
-| CI-006 | 4    | `.github/workflows/`                        | 2 disabled workflows (legacy Netlify) — clean up |
+| ~~CI-006~~ | 4    | `.github/workflows/`                        | ~~2 disabled workflows (legacy Netlify) — clean up~~ (completed: deleted) |
 | CI-007 | 4    | `infra/terraform/ml-training/environments/` | Missing staging.tfvars                           |
 
 ### Coverage and integration gaps
@@ -55,9 +55,9 @@ Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 
 | ID      | Team | File             | Description            |
 | ------- | ---- | ---------------- | ---------------------- |
-| ENV-001 | 4    | `apps/api/`      | No `.env.example` file |
-| ENV-002 | 4    | `apps/keeper/`   | No `.env.example` file |
-| ENV-003 | 4    | `apps/detector/` | No `.env.example` file |
+| ~~ENV-001~~ | 4    | `apps/api/`      | ~~No `.env.example` file~~ (completed: created) |
+| ~~ENV-002~~ | 4    | `apps/keeper/`   | ~~No `.env.example` file~~ (completed: created) |
+| ~~ENV-003~~ | 4    | `apps/detector/` | ~~No `.env.example` file~~ (completed: created) |
 
 ## P2-MEDIUM — Should fix
 
@@ -104,7 +104,7 @@ Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 
 | ID      | Team | Scope                                  | Description                                                             |
 | ------- | ---- | -------------------------------------- | ----------------------------------------------------------------------- |
-| DX-001  | 4    | `.github/`                             | Clean up deprecated `WORKFLOW_IMPROVEMENTS.md`                          |
+| ~~DX-001~~  | 4    | `.github/`                             | ~~Clean up deprecated `WORKFLOW_IMPROVEMENTS.md`~~ (completed: deleted)                          |
 | DX-002  | 6    | `packages/ui/`                         | Accessibility audit — ARIA labels and keyboard nav                      |
 | DX-003  | 6    | `apps/marketing/`                      | Theme consistency across all 3 theme variants                           |
 | DX-004  | 6    | `packages/ui/`                         | Verify all components use design tokens (no magic numbers)              |
@@ -122,8 +122,8 @@ Summary: 8 P0, 20 P1, 24 P2, 15 P3 = **67 items**
 
 ## Quick Wins (< 30 minutes each)
 
-1. **ENV-001/002/003**: Add `.env.example` files to api, keeper, detector
-2. **CI-006**: Delete 2 disabled Netlify workflow files
-3. **DX-001**: Mark `WORKFLOW_IMPROVEMENTS.md` as superseded
-4. **CLI-001**: Create `apps/evidence-cli/tests/` with basic CLI test
-5. **KPR-001**: Add `pub mod batch_anchor;` to keeper `lib.rs`
+1. ~~**ENV-001/002/003**: Add `.env.example` files to api, keeper, detector~~ (Done 2026-02-22)
+2. ~~**CI-006**: Delete 2 disabled Netlify workflow files~~ (Done 2026-02-22)
+3. ~~**DX-001**: Mark `WORKFLOW_IMPROVEMENTS.md` as superseded~~ (Done 2026-02-22 — deleted)
+4. ~~**CLI-001**: Create `apps/evidence-cli/tests/` with basic CLI test~~ (Done 2026-02-22 — 13 inline tests)
+5. ~~**KPR-001**: Add `pub mod batch_anchor;` to keeper `lib.rs`~~ (Verified 2026-02-22 — already exported)
