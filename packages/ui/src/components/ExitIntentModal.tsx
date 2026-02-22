@@ -117,8 +117,8 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
   if (!mounted || !isVisible) return null;
 
   return createPortal(
-    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
+      role="presentation"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
       onClick={handleBackdropClick}
     >
@@ -147,7 +147,7 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
             ref={closeButtonRef}
             type="button"
             onClick={handleClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             Maybe later
           </button>
@@ -155,7 +155,8 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
             href={docsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            aria-label="Download technical whitepaper (opens in new tab)"
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
           >
             Download now
           </a>

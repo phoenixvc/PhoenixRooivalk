@@ -40,10 +40,10 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses = {
     primary:
-      "bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-[var(--dark)]",
-    secondary: "bg-[var(--secondary,#f97316)] text-white",
+      "bg-gradient-to-br from-[var(--primary,#f97316)] to-[var(--secondary,#ea7c1c)] text-[var(--dark,#020617)]",
+    secondary: "bg-[var(--secondary,#334155)] text-white",
     outline:
-      "border-2 border-[var(--primary)] text-[var(--primary)] bg-transparent",
+      "border-2 border-[var(--primary,#f97316)] text-[var(--primary,#f97316)] bg-transparent",
   };
 
   const sizeClasses = {
@@ -52,7 +52,9 @@ export const Button: React.FC<ButtonProps> = ({
     lg: "px-8 py-4 text-lg",
   };
 
-  const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
+  const disabledClasses = disabled
+    ? "opacity-50 cursor-not-allowed pointer-events-none"
+    : "";
 
   const classes = [
     baseClasses,

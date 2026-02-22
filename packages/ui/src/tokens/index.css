@@ -165,7 +165,7 @@
   /* Foreground (text) */
   --pr-fg-base: #f1f5f9; /* Primary text */
   --pr-fg-muted: #94a3b8; /* Secondary text */
-  --pr-fg-subtle: #64748b; /* Tertiary text */
+  --pr-fg-subtle: #94a3b8; /* Tertiary text — bumped from #64748b for AA on dark surfaces */
   --pr-fg-inverse: #0f172a; /* Inverse text */
   --pr-fg-on-accent: #ffffff; /* Text on accent bg */
 
