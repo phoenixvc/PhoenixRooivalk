@@ -158,7 +158,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm install --frozen-lockfile"
+            "command": "pnpm install --frozen-lockfile && uv pip install --python /root/.local/share/uv/tools/pytest/bin/python -e \"$CLAUDE_PROJECT_DIR/apps/detector[dev]\" --quiet"
           }
         ]
       }
