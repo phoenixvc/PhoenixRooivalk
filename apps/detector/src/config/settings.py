@@ -12,6 +12,8 @@ Settings can be loaded from:
 from enum import Enum
 from typing import Any, Optional
 
+PYDANTIC_V2: Optional[bool]
+
 try:
     # fmt: off
     # isort: off
@@ -38,9 +40,11 @@ except ImportError:
         BaseModel = object  # type: ignore[misc,assignment]
         PYDANTIC_V2 = None
 
-        def Field(default=None, **kwargs):  # noqa: N802
+        def _fallback_field(default=None, **kwargs):  # noqa: N802
             """Fallback Field that just returns the default value."""
             return default
+
+        Field = _fallback_field  # type: ignore[misc,assignment]  # noqa: F811
 
 
 # =============================================================================
@@ -231,7 +235,7 @@ class TargetingSettings(BaseModel):
 
     elif PYDANTIC_V2 is False:
 
-        @root_validator
+        @root_validator(pre=False, skip_on_failure=True)  # type: ignore[arg-type]
         def validate_distance_envelope(cls, values):
             """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
             min_dist = values.get("fire_net_min_distance_m", 5.0)
@@ -307,9 +311,7 @@ class TurretControlSettings(BaseModel):
     )
 
     if PYDANTIC_V2:
-        from pydantic import model_validator
-
-        @model_validator(mode="after")
+        @model_validator(mode="after")  # type: ignore[misc]
         def _validate_ttl_vs_watchdog(self):
             if self.command_ttl_ms >= self.watchdog_timeout_ms:
                 import warnings
@@ -325,9 +327,9 @@ class TurretControlSettings(BaseModel):
     else:
         # Pydantic v1 validator
         try:
-            from pydantic import validator as _validator
+            from pydantic import validator as _validator  # type: ignore[assignment,misc]
 
-            @_validator("command_ttl_ms")
+            @_validator("command_ttl_ms")  # type: ignore[misc]
             @classmethod
             def _validate_ttl_vs_watchdog_v1(cls, v, values):
                 watchdog = values.get("watchdog_timeout_ms", 500)
@@ -426,7 +428,7 @@ class DisplaySettings(BaseModel):
 
 if PydanticBaseSettings is not object:
 
-    class Settings(PydanticBaseSettings):
+    class Settings(PydanticBaseSettings):  # type: ignore[misc,valid-type]
         """
         Root configuration aggregating all settings.
 
@@ -438,16 +440,16 @@ if PydanticBaseSettings is not object:
         """
 
         # Component settings
-        capture: CaptureSettings = Field(default_factory=CaptureSettings)
-        inference: InferenceSettings = Field(default_factory=InferenceSettings)
-        drone_score: DroneScoreSettings = Field(default_factory=DroneScoreSettings)
-        tracker: TrackerSettings = Field(default_factory=TrackerSettings)
-        targeting: TargetingSettings = Field(default_factory=TargetingSettings)
-        turret_control: TurretControlSettings = Field(default_factory=TurretControlSettings)
-        alert: AlertSettings = Field(default_factory=AlertSettings)
-        streaming: StreamingSettings = Field(default_factory=StreamingSettings)
-        logging: LoggingSettings = Field(default_factory=LoggingSettings)
-        display: DisplaySettings = Field(default_factory=DisplaySettings)
+        capture: CaptureSettings = Field(default_factory=CaptureSettings)  # type: ignore[arg-type]
+        inference: InferenceSettings = Field(default_factory=InferenceSettings)  # type: ignore[arg-type]
+        drone_score: DroneScoreSettings = Field(default_factory=DroneScoreSettings)  # type: ignore[arg-type]
+        tracker: TrackerSettings = Field(default_factory=TrackerSettings)  # type: ignore[arg-type]
+        targeting: TargetingSettings = Field(default_factory=TargetingSettings)  # type: ignore[arg-type]
+        turret_control: TurretControlSettings = Field(default_factory=TurretControlSettings)  # type: ignore[arg-type]
+        alert: AlertSettings = Field(default_factory=AlertSettings)  # type: ignore[arg-type]
+        streaming: StreamingSettings = Field(default_factory=StreamingSettings)  # type: ignore[arg-type]
+        logging: LoggingSettings = Field(default_factory=LoggingSettings)  # type: ignore[arg-type]
+        display: DisplaySettings = Field(default_factory=DisplaySettings)  # type: ignore[arg-type]
 
         # Top-level settings
         camera_type: CameraType = Field(CameraType.AUTO, description="Camera source type")
@@ -462,10 +464,10 @@ if PydanticBaseSettings is not object:
         @classmethod
         def from_yaml(cls, path: str) -> "Settings":
             """Load settings from YAML file."""
-            import yaml
+            import yaml  # type: ignore[import-untyped]
 
             with open(path) as f:
-                data = yaml.safe_load(f) or {}
+                data: dict[str, Any] = yaml.safe_load(f) or {}
             return cls(**data)
 
         @classmethod
@@ -474,18 +476,18 @@ if PydanticBaseSettings is not object:
             import json
 
             with open(path) as f:
-                data = json.load(f)
+                data: dict[str, Any] = json.load(f)
             return cls(**data)
 
         def _get_dict(self) -> dict[str, Any]:
             """Get dictionary representation (Pydantic v1/v2 compatible)."""
             if hasattr(self, "model_dump"):
-                return self.model_dump()  # Pydantic v2
-            return self.dict()  # Pydantic v1
+                return dict(self.model_dump())  # Pydantic v2
+            return dict(self.dict())  # Pydantic v1
 
         def to_yaml(self, path: str) -> None:
             """Save settings to YAML file."""
-            import yaml
+            import yaml  # type: ignore[import-untyped]
 
             with open(path, "w") as f:
                 yaml.dump(self._get_dict(), f, default_flow_style=False, sort_keys=False)
@@ -507,7 +509,7 @@ if PydanticBaseSettings is not object:
 
             CLI args take precedence over file/env settings.
             """
-            updates = {}
+            updates: dict[str, Any] = {}
 
             # Map CLI args to nested settings
             if hasattr(args, "model") and args.model:
@@ -685,18 +687,18 @@ else:
             self.log_interval_frames = 30
 
     # Override the pydantic classes with simple fallbacks
-    CaptureSettings = _SimpleCaptureSettings  # noqa: F811
-    InferenceSettings = _SimpleInferenceSettings  # noqa: F811
-    DroneScoreSettings = _SimpleDroneScoreSettings  # noqa: F811
-    TrackerSettings = _SimpleTrackerSettings  # noqa: F811
-    TargetingSettings = _SimpleTargetingSettings  # noqa: F811
-    TurretControlSettings = _SimpleTurretControlSettings  # noqa: F811
-    AlertSettings = _SimpleAlertSettings  # noqa: F811
-    StreamingSettings = _SimpleStreamingSettings  # noqa: F811
-    LoggingSettings = _SimpleLoggingSettings  # noqa: F811
-    DisplaySettings = _SimpleDisplaySettings  # noqa: F811
+    CaptureSettings = _SimpleCaptureSettings  # type: ignore[misc,assignment]  # noqa: F811
+    InferenceSettings = _SimpleInferenceSettings  # type: ignore[misc,assignment]  # noqa: F811
+    DroneScoreSettings = _SimpleDroneScoreSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TrackerSettings = _SimpleTrackerSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TargetingSettings = _SimpleTargetingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TurretControlSettings = _SimpleTurretControlSettings  # type: ignore[misc,assignment]  # noqa: F811
+    AlertSettings = _SimpleAlertSettings  # type: ignore[misc,assignment]  # noqa: F811
+    StreamingSettings = _SimpleStreamingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    LoggingSettings = _SimpleLoggingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    DisplaySettings = _SimpleDisplaySettings  # type: ignore[misc,assignment]  # noqa: F811
 
-    class Settings:  # noqa: F811
+    class Settings:  # type: ignore[no-redef]  # noqa: F811
         """Fallback settings class without pydantic validation."""
 
         def __init__(self, **kwargs):

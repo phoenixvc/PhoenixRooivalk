@@ -47,9 +47,6 @@ jobs:
 
       - name: Run mypy (type checking)
         run: mypy src/ --ignore-missing-imports --no-error-summary
-        # TODO: Remove continue-on-error once type errors are fixed
-        # Track progress: https://github.com/JustAGhosT/PhoenixRooivalk/issues
-        continue-on-error: true
 
   test:
     name: Test (Python ${{ matrix.python-version }})

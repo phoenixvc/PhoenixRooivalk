@@ -250,7 +250,7 @@ class TrackPersistence:
                 "version": state.version,
                 "saved_at": state.saved_at,
                 "next_track_id": state.next_track_id,
-                "tracks": [asdict(t) for t in state.tracks],
+                "tracks": [asdict(t) for t in (state.tracks or [])],
                 "metadata": state.metadata,
             }
 
