@@ -213,3 +213,241 @@ impl AnchorProvider for SolanaProvider {
         Ok(confirmed_tx)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Utc;
+    use phoenix_evidence::model::{DigestAlgo, EvidenceDigest};
+    use serde_json::json;
+
+    // ------------------------------------------------------------------
+    // Helper: build a minimal EvidenceRecord for use in multiple tests.
+    // ------------------------------------------------------------------
+    fn make_evidence(hex: &str) -> EvidenceRecord {
+        EvidenceRecord {
+            id: "unit-test-id".to_string(),
+            created_at: Utc::now(),
+            digest: EvidenceDigest {
+                algo: DigestAlgo::Sha256,
+                hex: hex.to_string(),
+            },
+            payload_mime: Some("application/json".to_string()),
+            metadata: json!({"source": "unit-test"}),
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // 1. SolanaProviderStub::anchor — correct network/chain/tx_id format
+    // ------------------------------------------------------------------
+    #[tokio::test]
+    async fn stub_anchor_returns_correct_network_chain_and_tx_id_format() {
+        let stub = SolanaProviderStub;
+        let evidence = make_evidence("cafe0011deadbeef");
+
+        let result = stub.anchor(&evidence).await;
+        assert!(result.is_ok(), "stub anchor must not fail");
+
+        let tx = result.unwrap();
+        assert_eq!(tx.network, "solana");
+        assert_eq!(tx.chain, "devnet");
+        // tx_id must be "fake:" followed by the digest hex verbatim
+        assert_eq!(tx.tx_id, format!("fake:{}", evidence.digest.hex));
+        // newly anchored tx starts as unconfirmed
+        assert!(!tx.confirmed);
+        // timestamp must be populated
+        assert!(tx.timestamp.is_some());
+    }
+
+    // ------------------------------------------------------------------
+    // 2. SolanaProviderStub::confirm — flips `confirmed` to true
+    // ------------------------------------------------------------------
+    #[tokio::test]
+    async fn stub_confirm_flips_confirmed_flag() {
+        let stub = SolanaProviderStub;
+
+        let unconfirmed = ChainTxRef {
+            network: "solana".to_string(),
+            chain: "devnet".to_string(),
+            tx_id: "fake:cafe0011deadbeef".to_string(),
+            confirmed: false,
+            timestamp: Some(Utc::now()),
+        };
+
+        let result = stub.confirm(&unconfirmed).await;
+        assert!(result.is_ok(), "stub confirm must not fail");
+
+        let confirmed = result.unwrap();
+        // The flag must have flipped
+        assert!(confirmed.confirmed);
+        // All other fields must be preserved unchanged
+        assert_eq!(confirmed.network, unconfirmed.network);
+        assert_eq!(confirmed.chain, unconfirmed.chain);
+        assert_eq!(confirmed.tx_id, unconfirmed.tx_id);
+        assert_eq!(confirmed.timestamp, unconfirmed.timestamp);
+    }
+
+    // ------------------------------------------------------------------
+    // 3. SolanaProvider::new — sets endpoint and network fields correctly
+    // ------------------------------------------------------------------
+    #[test]
+    fn provider_new_sets_endpoint_and_network() {
+        let endpoint = "https://api.devnet.solana.com".to_string();
+        let network = "devnet".to_string();
+
+        let provider = SolanaProvider::new(endpoint.clone(), network.clone());
+
+        assert_eq!(provider.endpoint, endpoint);
+        assert_eq!(provider.network, network);
+    }
+
+    #[test]
+    fn provider_new_accepts_mainnet_beta() {
+        let provider = SolanaProvider::new(
+            "https://api.mainnet-beta.solana.com".to_string(),
+            "mainnet-beta".to_string(),
+        );
+
+        assert_eq!(provider.network, "mainnet-beta");
+        assert_eq!(provider.endpoint, "https://api.mainnet-beta.solana.com");
+    }
+
+    // ------------------------------------------------------------------
+    // 4. SolanaRpcRequest serialization — verify JSON output structure
+    // ------------------------------------------------------------------
+    #[test]
+    fn rpc_request_serializes_all_fields() {
+        let request = SolanaRpcRequest {
+            jsonrpc: "2.0".to_string(),
+            id: 42,
+            method: "getTransaction".to_string(),
+            params: json!(["some-signature", {"encoding": "json"}]),
+        };
+
+        let serialized = serde_json::to_string(&request).expect("serialization must succeed");
+        let parsed: Value = serde_json::from_str(&serialized).expect("must parse back to JSON");
+
+        assert_eq!(parsed["jsonrpc"], "2.0");
+        assert_eq!(parsed["id"], 42);
+        assert_eq!(parsed["method"], "getTransaction");
+        assert!(parsed["params"].is_array());
+        assert_eq!(parsed["params"][1]["encoding"], "json");
+    }
+
+    #[test]
+    fn rpc_request_serializes_null_params() {
+        let request = SolanaRpcRequest {
+            jsonrpc: "2.0".to_string(),
+            id: 1,
+            method: "getHealth".to_string(),
+            params: Value::Null,
+        };
+
+        let serialized = serde_json::to_string(&request).expect("serialization must succeed");
+        let parsed: Value = serde_json::from_str(&serialized).expect("must parse back to JSON");
+
+        assert_eq!(parsed["method"], "getHealth");
+        assert!(parsed["params"].is_null());
+    }
+
+    // ------------------------------------------------------------------
+    // 5. SolanaRpcResponse deserialization — result variant and error variant
+    // ------------------------------------------------------------------
+    #[test]
+    fn rpc_response_deserializes_result_variant() {
+        let json_str = r#"{
+            "jsonrpc": "2.0",
+            "id": 7,
+            "result": {"slot": 1234, "confirmations": 10}
+        }"#;
+
+        let response: SolanaRpcResponse =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert_eq!(response.jsonrpc, "2.0");
+        assert_eq!(response.id, 7);
+        assert!(response.result.is_some());
+        assert!(response.error.is_none());
+
+        let result = response.result.unwrap();
+        assert_eq!(result["slot"], 1234);
+        assert_eq!(result["confirmations"], 10);
+    }
+
+    #[test]
+    fn rpc_response_deserializes_error_variant() {
+        let json_str = r#"{
+            "jsonrpc": "2.0",
+            "id": 3,
+            "error": {
+                "code": -32602,
+                "message": "Invalid params",
+                "data": null
+            }
+        }"#;
+
+        let response: SolanaRpcResponse =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert_eq!(response.id, 3);
+        assert!(response.result.is_none());
+        assert!(response.error.is_some());
+
+        let err = response.error.unwrap();
+        assert_eq!(err.code, -32602);
+        assert_eq!(err.message, "Invalid params");
+    }
+
+    #[test]
+    fn rpc_response_result_and_error_can_both_be_absent() {
+        // Some JSON-RPC implementations omit both fields on certain error paths.
+        let json_str = r#"{"jsonrpc": "2.0", "id": 0}"#;
+
+        let response: SolanaRpcResponse =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert!(response.result.is_none());
+        assert!(response.error.is_none());
+    }
+
+    // ------------------------------------------------------------------
+    // 6. SolanaRpcError deserialization — error code and message
+    // ------------------------------------------------------------------
+    #[test]
+    fn rpc_error_deserializes_code_and_message() {
+        let json_str = r#"{"code": -32601, "message": "Method not found"}"#;
+
+        let error: SolanaRpcError =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert_eq!(error.code, -32601);
+        assert_eq!(error.message, "Method not found");
+        assert!(error.data.is_none());
+    }
+
+    #[test]
+    fn rpc_error_deserializes_with_data_field() {
+        let json_str =
+            r#"{"code": -32000, "message": "Server error", "data": {"logs": ["error log"]}}"#;
+
+        let error: SolanaRpcError =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert_eq!(error.code, -32000);
+        assert_eq!(error.message, "Server error");
+        assert!(error.data.is_some());
+        assert_eq!(error.data.unwrap()["logs"][0], "error log");
+    }
+
+    #[test]
+    fn rpc_error_accepts_positive_codes() {
+        // Non-standard positive error codes should also deserialize correctly.
+        let json_str = r#"{"code": 429, "message": "Too Many Requests"}"#;
+
+        let error: SolanaRpcError =
+            serde_json::from_str(json_str).expect("deserialization must succeed");
+
+        assert_eq!(error.code, 429);
+        assert_eq!(error.message, "Too Many Requests");
+    }
+}

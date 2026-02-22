@@ -525,7 +525,7 @@ class AudioPwmTransport(ActuatorTransport):
         """
         self._device = device
         self._buffer_size = buffer_size
-        self._stream = None
+        self._stream: Optional[Any] = None
         self._connected = False
         self._status = TransportStatus()
 

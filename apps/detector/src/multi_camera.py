@@ -307,11 +307,34 @@ class CameraFusionManager:
                 fused.position_3d[1] + fused.velocity_3d[1] * age,
                 fused.position_3d[2] + fused.velocity_3d[2] * age,
             )
-            # TODO: Project predicted_position to this camera's image space
-            # and check distance to detection center. For now, accept any
-            # detection within the handoff window when velocity data exists.
-            _ = predicted_position  # Acknowledge the variable is computed for future use
-            return True
+            # Project predicted_position (3D world coords) to this camera's 2D image space.
+            cam_cfg = self._cameras.get(camera_id)
+            if cam_cfg is None:
+                return False
+
+            # Compute position relative to the camera's mounting point.
+            relative_x = predicted_position[0] - cam_cfg.position_meters[0]
+            relative_y = predicted_position[1] - cam_cfg.position_meters[1]
+            relative_z = predicted_position[2] - cam_cfg.position_meters[2]
+
+            # Target must be in front of the camera (positive z depth).
+            if relative_z <= 0:
+                return False
+
+            # Focal length in pixels — guard against degenerate sensor config.
+            if cam_cfg.sensor_width_mm <= 0:
+                return False
+            focal_px = (cam_cfg.focal_length_mm / cam_cfg.sensor_width_mm) * 640
+
+            # Pinhole projection onto 640×480 image plane (centre = 320, 240).
+            u = focal_px * (relative_x / relative_z) + 320
+            v = focal_px * (relative_y / relative_z) + 240
+
+            # Euclidean distance from projected point to detection centre.
+            det_cx, det_cy = det.bbox.center
+            distance = math.sqrt((u - det_cx) ** 2 + (v - det_cy) ** 2)
+
+            return distance < self._fusion_threshold
 
         return False
 

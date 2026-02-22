@@ -24,7 +24,7 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 import numpy as np
 
@@ -225,7 +225,7 @@ class DroneRenderer:
                     if (x - center[0]) ** 2 + (y - center[1]) ** 2 <= radius**2:
                         sprite[y, x] = [70, 70, 70, 255]
 
-        return sprite
+        return cast(np.ndarray, sprite)
 
     def render(
         self,
@@ -331,7 +331,7 @@ class DroneRenderer:
         # Scale based on distance
         scale = (focal_length * drone.size_m / z) / 50  # 50px reference
 
-        return max(0.1, min(3.0, scale))
+        return float(max(0.1, min(3.0, scale)))
 
     def _scale_sprite(self, sprite: np.ndarray, scale: float) -> np.ndarray:
         """Scale sprite by given factor."""
@@ -351,7 +351,7 @@ class DroneRenderer:
                 if src_x < w and src_y < h:
                     scaled[y, x] = sprite[src_y, src_x]
 
-        return scaled
+        return cast(np.ndarray, scaled)
 
     def _apply_motion_blur(
         self,
@@ -735,7 +735,7 @@ class SimulationManager:
                 det_bbox = det.bbox
 
                 # Find best matching GT
-                best_iou = 0
+                best_iou = 0.0
                 best_gt_idx = -1
 
                 for idx, gt_drone in enumerate(gt_drones):

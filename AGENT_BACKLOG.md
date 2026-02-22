@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -12,10 +12,10 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
 | ~~SIM-001~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:98`  | ~~Evidence integration TODO — `save_session_to_persistence()` is stub~~ (completed: SHA-256 hashing via phoenix-evidence) |
 | ~~SIM-002~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:233` | ~~Evidence saving returns hardcoded `"evidence-id-placeholder"`~~ (completed: real digest-based evidence IDs)       |
 | ~~MKT-001~~ | 2    | `apps/marketing/src/app/preorder/page.tsx:67`             | ~~Preorder form TODO — no backend API call, shows alert only~~ (completed: POST /preorders API + frontend integration)          |
-| DET-001 | 3    | `apps/detector/src/multi_camera.py:310`                   | Camera fusion handoff TODO — accepts any detection as placeholder   |
-| CI-001  | 4    | `.github/workflows/ci-rust.yml:32`                        | Cargo audit disabled (`CARGO_AUDIT_SKIP=true`)                      |
-| CI-002  | 4    | `.github/workflows/detector-ci.yml:50`                    | mypy `continue-on-error: true` — type errors don't fail CI          |
-| CI-003  | 4    | `.github/workflows/detector-ci.yml:128`                   | Integration tests `continue-on-error: true`                         |
+| ~~DET-001~~ | 3    | `apps/detector/src/multi_camera.py:310`                   | ~~Camera fusion handoff TODO — accepts any detection as placeholder~~ (completed: 3D→2D pinhole projection with distance check) |
+| ~~CI-001~~  | 4    | `.github/workflows/ci-rust.yml:32`                        | ~~Cargo audit disabled (`CARGO_AUDIT_SKIP=true`)~~ (completed: CARGO_AUDIT_SKIP removed, audit always runs) |
+| ~~CI-002~~  | 4    | `.github/workflows/detector-ci.yml:50`                    | ~~mypy `continue-on-error: true` — type errors don't fail CI~~ (completed: type errors fixed, continue-on-error removed) |
+| ~~CI-003~~  | 4    | `.github/workflows/detector-ci.yml:128`                   | ~~Integration tests `continue-on-error: true`~~ (completed: `-m "not hardware"` marker filtering, continue-on-error removed) |
 
 ## P1-HIGH — Should fix soon
 
@@ -24,11 +24,11 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
 | ID       | Team | File:Line                                                                 | Description                                                                             |
 | -------- | ---- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | ~~KPR-001~~  | 1    | `apps/keeper/src/batch_anchor.rs`                                         | ~~Batch anchor module not exported from `lib.rs`~~ (verified: already exported)                                          |
-| KPR-002  | 1    | `apps/keeper/`                                                            | Batch anchoring has no integration tests                                                |
-| X402-001 | 1    | `crates/x402/`                                                            | No dedicated test files — only inline tests                                             |
-| ADDR-001 | 1    | `crates/address-validation/`                                              | No dedicated test files                                                                 |
+| ~~KPR-002~~  | 1    | `apps/keeper/`                                                            | ~~Batch anchoring has no integration tests~~ (completed: 8 integration tests in tests/batch_anchor_integration.rs) |
+| ~~X402-001~~ | 1    | `crates/x402/`                                                            | ~~No dedicated test files — only inline tests~~ (completed: tests/x402_integration.rs added) |
+| ~~ADDR-001~~ | 1    | `crates/address-validation/`                                              | ~~No dedicated test files~~ (completed: tests/validation_tests.rs added) |
 | ~~CLI-001~~  | 1    | `apps/evidence-cli/`                                                      | ~~Zero test coverage~~ (completed: 13 inline tests added, all passing)                                                  |
-| SOL-001  | 1    | `crates/anchor-solana/`                                                   | No tests — no `#[cfg(test)]`, no `tests/` dir, orphan `provider_tests.rs` at crate root |
+| ~~SOL-001~~  | 1    | `crates/anchor-solana/`                                                   | ~~No tests — no `#[cfg(test)]`, no `tests/` dir, orphan `provider_tests.rs` at crate root~~ (completed: 12 inline tests added + existing tests/provider_tests.rs verified) |
 | SIM-003  | 2    | `apps/marketing/`                                                         | 278 tests passing but coverage gap remains for 164 source files                                              |
 | DOC-001  | 9    | `apps/docs/azure-functions/src/functions/scheduled.ts:80`                 | SendGrid TODO — email queue has no email service                                        |
 | DOC-002  | 9    | `apps/docs/docs/technical/architecture/adr-0015-prompt-management.md:515` | Legacy system removal TODO                                                              |
@@ -40,7 +40,7 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
 | CI-004 | 4    | `.github/workflows/`                        | No Rust coverage reporting in CI                 |
 | CI-005 | 4    | `.github/workflows/`                        | No JS/TS coverage aggregation                    |
 | ~~CI-006~~ | 4    | `.github/workflows/`                        | ~~2 disabled workflows (legacy Netlify) — clean up~~ (completed: deleted) |
-| CI-007 | 4    | `infra/terraform/ml-training/environments/` | Missing staging.tfvars                           |
+| ~~CI-007~~ | 4    | `infra/terraform/ml-training/environments/` | ~~Missing staging.tfvars~~ (completed: staging.tfvars created with T4 GPU, spot instances, 2 max nodes) |
 
 ### Coverage and integration gaps
 
@@ -132,3 +132,12 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
 8. ~~**MKT-001**: Preorder backend API + frontend integration~~ (Done 2026-02-22)
 9. ~~**SIM-001/002**: Evidence integration with phoenix-evidence SHA-256 hashing~~ (Done 2026-02-22)
 10. ~~**DX-010**: Preorder form validation and error handling~~ (Done 2026-02-22)
+11. ~~**DET-001**: Camera fusion handoff — 3D→2D pinhole projection~~ (Done 2026-02-22)
+12. ~~**CI-001**: Cargo audit re-enabled — CARGO_AUDIT_SKIP removed~~ (Done 2026-02-22)
+13. ~~**CI-002**: mypy type errors fixed across detector source~~ (Done 2026-02-22)
+14. ~~**CI-003**: Integration tests use `-m "not hardware"` marker filtering~~ (Done 2026-02-22)
+15. ~~**CI-007**: staging.tfvars created~~ (Done 2026-02-22)
+16. ~~**KPR-002**: Keeper batch_anchor integration tests~~ (Done 2026-02-22)
+17. ~~**X402-001**: x402 integration tests~~ (Done 2026-02-22)
+18. ~~**ADDR-001**: Address validation integration tests~~ (Done 2026-02-22)
+19. ~~**SOL-001**: Anchor-solana inline tests + verified existing integration tests~~ (Done 2026-02-22)

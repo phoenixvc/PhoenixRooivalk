@@ -334,7 +334,7 @@ class ThrottledAlertHandler(AlertHandler):
             return False
 
         # Send alert
-        result = self._inner.send_alert(detection, frame_data)
+        result = bool(self._inner.send_alert(detection, frame_data))
 
         if result:
             self._last_global_alert = now

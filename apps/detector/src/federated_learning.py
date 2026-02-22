@@ -252,7 +252,7 @@ class LocalDataCollector:
                     "SELECT COUNT(*) FROM examples WHERE timestamp < ?",
                     (cutoff,),
                 )
-                count = cursor.fetchone()[0]
+                count = int(cursor.fetchone()[0])
 
                 conn.execute(
                     "DELETE FROM examples WHERE timestamp < ?",
@@ -353,6 +353,7 @@ class GradientComputer:
 
             for layer in layer_names:
                 # Simulate gradient shape
+                shape: tuple[int, ...]
                 if layer.startswith("conv"):
                     shape = (3, 3, 64, 64)  # Typical conv layer
                 elif layer == "output":

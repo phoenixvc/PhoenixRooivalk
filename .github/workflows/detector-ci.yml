@@ -124,8 +124,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          python -m pytest tests/integration/ -v --tb=short
-        continue-on-error: true # Integration tests may need real hardware
+          python -m pytest tests/integration/ -v --tb=short -m "not hardware"
 
   build:
     name: Build Package
