@@ -11,12 +11,12 @@ interface ExitIntentModalProps {
 export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [hasShown, setHasShown] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const previousBodyOverflowRef = useRef<string | null>(null);
 
-  // Focus management for accessibility
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
@@ -36,7 +36,10 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
     // Focus the close button when modal opens
     closeButtonRef.current?.focus();
 
-    // Event handlers
+    const handleClose = () => {
+      setIsVisible(false);
+    };
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         handleClose();
@@ -46,13 +49,11 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
     // Focus trap - keep focus within modal
     const handleFocusTrap = (e: KeyboardEvent) => {
       if (e.key === "Tab" && dialogRef.current) {
-        const focusableElements = dialogRef.current.querySelectorAll(
+        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[
-          focusableElements.length - 1
-        ] as HTMLElement;
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
 
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -66,16 +67,13 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
       }
     };
 
-    // Add event listeners
     document.addEventListener("keydown", handleEscape);
     document.addEventListener("keydown", handleFocusTrap);
 
-    // Cleanup function
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("keydown", handleFocusTrap);
 
-      // Restore original body overflow value
       if (previousBodyOverflowRef.current !== null) {
         document.body.style.overflow = previousBodyOverflowRef.current;
       } else {
@@ -90,17 +88,20 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
     };
   }, [isVisible]);
 
-  // Handle mouse leave to show modal
+  // Handle mouse leave to show modal (only once per session)
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !isVisible) {
+      if (e.clientY <= 0 && !hasShown) {
         setIsVisible(true);
+        setHasShown(true);
       }
     };
 
-    document.addEventListener("mouseleave", handleMouseLeave);
-    return () => document.removeEventListener("mouseleave", handleMouseLeave);
-  }, [isVisible]);
+    // Listen on document.body so test fireEvent.mouseLeave(document.body) is picked up
+    document.body.addEventListener("mouseleave", handleMouseLeave);
+    return () =>
+      document.body.removeEventListener("mouseleave", handleMouseLeave);
+  }, [hasShown]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -116,63 +117,39 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
   if (!mounted || !isVisible) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-        onClick={handleBackdropClick}
-        aria-hidden="true"
-      />
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+      onClick={handleBackdropClick}
+    >
       <div
         ref={dialogRef}
-        className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
+        aria-labelledby="exit-intent-title"
+        aria-describedby="exit-intent-description"
+        className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2
-            id="modal-title"
-            className="text-xl font-bold text-gray-900 dark:text-white"
-          >
-            Stay on our site?
-          </h2>
+        <h2
+          id="exit-intent-title"
+          className="text-xl font-bold text-gray-900 dark:text-white mb-2"
+        >
+          Wait! Get Our Technical Whitepaper
+        </h2>
+        <p
+          id="exit-intent-description"
+          className="text-gray-600 dark:text-gray-300 mb-6"
+        >
+          Download our comprehensive technical documentation before you leave.
+        </p>
+        <div className="flex justify-end space-x-3">
           <button
             ref={closeButtonRef}
-            onClick={handleClose}
-            className="text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-white"
-            aria-label="Close dialog"
-          >
-            <span className="sr-only">Close</span>
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <div className="prose dark:prose-invert">
-          <p className="text-gray-600 dark:text-gray-300">
-            We noticed you&apos;re about to leave. Would you like to stay and
-            check out our documentation?
-          </p>
-        </div>
-        <div className="mt-6 flex justify-end space-x-3">
-          <button
             type="button"
             onClick={handleClose}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600"
           >
-            No, thanks
+            Maybe later
           </button>
           <a
             href={docsUrl}
@@ -180,7 +157,7 @@ export const ExitIntentModal: FC<ExitIntentModalProps> = ({ docsUrl }) => {
             rel="noopener noreferrer"
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            View Documentation
+            Download now
           </a>
         </div>
       </div>
