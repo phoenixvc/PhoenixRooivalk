@@ -18,13 +18,13 @@ evidence anchoring, edge AI processing, and a threat simulation engine.
 | Blockchain     | Solana SDK, EtherLink, x402 payment protocol             |
 | Database       | SQLite via SQLx, Azure Cosmos DB (Docs)                  |
 | Package Mgr    | pnpm 9.6.0 (enforced via corepack)                       |
-| Monorepo       | Turborepo 2.7                                            |
+| Monorepo       | Turborepo 2.8                                            |
 | JS Testing     | Vitest (marketing), Jest (docs, ui)                      |
 | Rust Testing   | cargo test                                               |
 | Python Testing | pytest                                                   |
-| JS Linting     | ESLint 8, Prettier 3.7                                   |
+| JS Linting     | ESLint 9, Prettier 3.8                                   |
 | Rust Linting   | Clippy, cargo fmt                                        |
-| Python Linting | Ruff, Black, isort, mypy, bandit                         |
+| Python Linting | Ruff, Black, isort, mypy, bandit (pre-commit)             |
 | CI/CD          | GitHub Actions, Azure Static Web Apps                    |
 | Styling        | Tailwind CSS 4.1, CSS Modules                            |
 | Infrastructure | Azure Bicep, Terraform (ML training)                     |
@@ -55,6 +55,7 @@ config/            # Tooling configs (symlinked to root)
 scripts/           # Deployment and utility scripts
 infra/             # IaC: azure/ (Bicep), terraform/
 tools/             # pdf_generator (Python CLI)
+e2e/               # Playwright end-to-end tests
 ```
 
 ## Key Commands
@@ -81,7 +82,7 @@ pnpm --filter marketing test      # Marketing tests (Vitest)
 pnpm --filter docs test           # Docs tests (Jest)
 pnpm --filter ui test             # UI package tests (Jest)
 cargo test                        # All Rust tests
-cargo test --lib -p threat-simulator-desktop
+pnpm sim:test                     # Threat simulator tests
 pytest apps/detector              # Python tests
 pytest apps/detector -m "not slow and not hardware"
 
@@ -124,6 +125,8 @@ Key routes:
 - `GET /health` — Health check
 - `POST /api/v1/evidence/verify-premium` — x402 premium
 - `GET /api/v1/x402/status` — Payment protocol status
+- `GET/POST /preorders` — Preorder management
+- `GET /preorders/{id}` — Individual preorder lookup
 
 Database: SQLite with automatic migrations on startup. Foreign keys enforced. DB
 URL priority: `API_DB_URL` > `KEEPER_DB_URL` > hardcoded default. Pagination:
@@ -137,9 +140,12 @@ processing + transaction confirmation polling.
 
 Environment variables:
 
-- `KEEPER_USE_STUB=false` — true for dev, false for real
+- `KEEPER_PROVIDER=stub` — Provider selection: `stub`/`etherlink`/`solana`/`multi`
 - `KEEPER_DB_URL=sqlite://blockchain_outbox.sqlite3`
 - `KEEPER_POLL_MS=5000` — Job polling interval
+- `KEEPER_CONFIRM_POLL_MS=30000` — Confirmation polling interval
+- `KEEPER_HTTP_PORT=8081` — HTTP health check port
+- `KEEPER_USE_STUB=false` — Legacy; prefer `KEEPER_PROVIDER`
 - `ETHERLINK_ENDPOINT`, `ETHERLINK_NETWORK`, `ETHERLINK_PRIVATE_KEY`
 
 ### Marketing (`apps/marketing/`) — Next.js 16 on port 3000
@@ -210,9 +216,9 @@ cargo run -p evidence-cli -- \
   threat simulator. If the simulator hasn't been built, marketing build will use
   a fallback.
 - **pnpm workspace includes nested apps**: `apps/*/*` covers
-  `apps/docs/azure-functions/` and `apps/threat-simulator-desktop/src-tauri/`.
-- **`getrandom` crate** requires `js` feature for WASM targets (configured in
-  workspace Cargo.toml).
+  `apps/docs/azure-functions/` (src-tauri has no package.json, not a pnpm member).
+- **`getrandom` crate** requires `wasm_js` feature for WASM targets (configured
+  in workspace Cargo.toml).
 - **Config files are symlinks**: Edit files in `config/`, not the root symlinks.
 - **Tauri desktop app has conditional compilation**: WASM-only vs native deps
   gated with `#[cfg(target_arch = "wasm32")]`.
@@ -249,7 +255,7 @@ cargo run -p evidence-cli -- \
 - isort for import ordering (black profile)
 - pytest markers: `slow`, `integration`, `hardware`
 - bandit for security scanning
-- 50% coverage threshold
+- 50% coverage target (not yet enforced in CI)
 
 ## Commit Conventions
 
@@ -290,7 +296,7 @@ See `.env.example` in each app for full details. Key variables:
 | Docs      | `CLOUD_PROVIDER`           | `azure` or `offline`    |
 | Docs      | `AZURE_ENTRA_CLIENT_ID`    | Azure AD B2C client     |
 | Docs      | `AZURE_FUNCTIONS_BASE_URL` | Functions URL           |
-| Keeper    | `KEEPER_USE_STUB`          | `true` for dev          |
+| Keeper    | `KEEPER_PROVIDER`          | `stub` for dev          |
 | Keeper    | `KEEPER_DB_URL`            | SQLite connection       |
 | API       | `RUST_LOG`                 | Log level               |
 | API       | `API_DB_URL`               | SQLite URL              |
@@ -305,6 +311,8 @@ Tooling configs live in `config/` and are symlinked to root:
 
 - `.eslintrc.js` -> `config/eslintrc.js`
 - `.prettierrc` -> `config/prettierrc`
+- `.prettierignore` -> `config/prettierignore`
+- `.editorconfig` -> `config/editorconfig`
 - `.markdownlint.json` -> `config/markdownlint.json`
 - `clippy.toml` -> `config/clippy.toml`
 - `cspell.json` -> `config/cspell.json`
@@ -312,7 +320,7 @@ Tooling configs live in `config/` and are symlinked to root:
 ## Infrastructure
 
 - **Azure Bicep** (`infra/azure/`): Static Web Apps, Cosmos DB, Functions, Key
-  Vault, App Insights, Notification Hubs. Environments: dev/stg/prd.
+  Vault, App Insights, Notification Hubs. Environments: dev/prod.
 - **Terraform** (`infra/terraform/ml-training/`): Azure ML workspace with GPU
   compute for YOLO drone detection model training.
 - **Deployment scripts** in `scripts/`: Azure setup, Cosmos container creation,
