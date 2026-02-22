@@ -79,5 +79,16 @@ jobs:
           cd apps/threat-simulator-desktop
           trunk build --release
 
+      - name: Test with coverage
+        run: pnpm --filter marketing test -- --coverage --reporter=default --reporter=json
+        env:
+          CI: true
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: marketing-coverage
+          path: apps/marketing/coverage/
+
       - name: Build
         run: pnpm build

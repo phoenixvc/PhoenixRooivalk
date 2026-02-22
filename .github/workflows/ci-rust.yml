@@ -47,7 +47,7 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
+          components: clippy, rustfmt, llvm-tools-preview
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2
@@ -92,6 +92,22 @@ jobs:
         run:
           cargo test --workspace --all-features --all-targets --exclude
           threat-simulator-tauri
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Coverage report
+        run: >
+          cargo llvm-cov
+          --workspace --all-features --all-targets
+          --exclude threat-simulator-tauri
+          --lcov --output-path lcov.info
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rust-coverage
+          path: lcov.info
 
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked --version "$CARGO_AUDIT_VERSION"

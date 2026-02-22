@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (26 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -37,8 +37,8 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 
 | ID     | Team | File                                        | Description                                      |
 | ------ | ---- | ------------------------------------------- | ------------------------------------------------ |
-| CI-004 | 4    | `.github/workflows/`                        | No Rust coverage reporting in CI                 |
-| CI-005 | 4    | `.github/workflows/`                        | No JS/TS coverage aggregation                    |
+| ~~CI-004~~ | 4    | `.github/workflows/`                        | ~~No Rust coverage reporting in CI~~ (completed: cargo-llvm-cov + LCOV upload in ci-rust.yml) |
+| ~~CI-005~~ | 4    | `.github/workflows/`                        | ~~No JS/TS coverage aggregation~~ (completed: vitest --coverage in ci-marketing.yml + artifact upload) |
 | ~~CI-006~~ | 4    | `.github/workflows/`                        | ~~2 disabled workflows (legacy Netlify) — clean up~~ (completed: deleted) |
 | ~~CI-007~~ | 4    | `infra/terraform/ml-training/environments/` | ~~Missing staging.tfvars~~ (completed: staging.tfvars created with T4 GPU, spot instances, 2 max nodes) |
 
@@ -46,8 +46,8 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 
 | ID      | Team | Scope                                | Description                                               |
 | ------- | ---- | ------------------------------------ | --------------------------------------------------------- |
-| COV-001 | 10   | `.github/workflows/ci-rust.yml`      | No Rust coverage tool (cargo-tarpaulin or cargo-llvm-cov) |
-| COV-002 | 10   | `.github/workflows/ci-marketing.yml` | Marketing tests run without coverage collection           |
+| ~~COV-001~~ | 10   | `.github/workflows/ci-rust.yml`      | ~~No Rust coverage tool (cargo-tarpaulin or cargo-llvm-cov)~~ (completed: cargo-llvm-cov with LCOV output) |
+| ~~COV-002~~ | 10   | `.github/workflows/ci-marketing.yml` | ~~Marketing tests run without coverage collection~~ (completed: vitest --coverage + artifact upload) |
 | INT-001 | 10   | `tests/workspace_integration.rs`     | Cross-app integration tests minimal — no API+Keeper flow  |
 | INT-002 | 10   | ADR-0063                             | E2E testing proposed in ADR but not implemented           |
 
@@ -65,8 +65,8 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 
 | ID      | Team | Scope             | Description                                          |
 | ------- | ---- | ----------------- | ---------------------------------------------------- |
-| TST-001 | 10   | `apps/api/`       | Career application endpoint — minimal tests          |
-| TST-002 | 10   | `apps/api/`       | Profile update edge cases untested                   |
+| ~~TST-001~~ | 10   | `apps/api/`       | ~~Career application endpoint — minimal tests~~ (completed: 5 tests — happy path, no cover letter, missing/invalid session, team member rejection) |
+| ~~TST-002~~ | 10   | `apps/api/`       | ~~Profile update edge cases untested~~ (completed: 7 tests — full/partial update, null fields, auth, timestamp, team status preservation) |
 | TST-003 | 10   | `apps/marketing/` | Cart components lack edge case tests                 |
 | TST-004 | 10   | `apps/marketing/` | Auth flow needs integration tests                    |
 | TST-005 | 10   | `apps/marketing/` | Page components (about, capabilities, etc.) untested |
@@ -97,7 +97,7 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 
 | ID      | Team | Scope                             | Description                                                   |
 | ------- | ---- | --------------------------------- | ------------------------------------------------------------- |
-| COV-003 | 10   | `apps/marketing/vitest.config.ts` | No coverage threshold defined (Vitest)                        |
+| ~~COV-003~~ | 10   | `apps/marketing/vitest.config.ts` | ~~No coverage threshold defined (Vitest)~~ (completed: 30% stmt/branch/lines, 25% functions thresholds) |
 | COV-004 | 10   | Codecov                           | Only detector uploads to Codecov — JS/TS and Rust not tracked |
 
 ## P3-LOW — Nice to have
@@ -141,3 +141,10 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (21 completed this session)
 17. ~~**X402-001**: x402 integration tests~~ (Done 2026-02-22)
 18. ~~**ADDR-001**: Address validation integration tests~~ (Done 2026-02-22)
 19. ~~**SOL-001**: Anchor-solana inline tests + verified existing integration tests~~ (Done 2026-02-22)
+20. ~~**COV-001**: Rust coverage via cargo-llvm-cov in CI~~ (Done 2026-02-22)
+21. ~~**COV-002**: Marketing test coverage collection in CI~~ (Done 2026-02-22)
+22. ~~**COV-003**: Marketing vitest coverage thresholds (30/30/25/30)~~ (Done 2026-02-22)
+23. ~~**CI-004**: Rust coverage reporting in CI~~ (Done 2026-02-22)
+24. ~~**CI-005**: JS/TS coverage aggregation in CI~~ (Done 2026-02-22)
+25. ~~**TST-001**: Career application endpoint tests (5 tests)~~ (Done 2026-02-22)
+26. ~~**TST-002**: Profile update edge case tests (7 tests)~~ (Done 2026-02-22)

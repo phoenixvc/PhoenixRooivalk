@@ -11,12 +11,18 @@ export default defineConfig({
     include: ["src/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "html"],
+      reporter: ["text", "html", "json"],
       exclude: [
         "node_modules/",
         "src/__tests__/setup.ts",
         "src/__tests__/__mocks__/",
       ],
+      thresholds: {
+        statements: 30,
+        branches: 30,
+        functions: 25,
+        lines: 30,
+      },
     },
   },
   resolve: {
