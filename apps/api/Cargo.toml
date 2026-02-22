@@ -33,7 +33,7 @@ azure_data_cosmos = { version = "0.30", optional = true, default-features = fals
 azure_identity = { version = "0.31", optional = true, default-features = false }
 azure_core = { version = "0.31", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
 # Provide rustls TLS backend for azure crates' transitive reqwest 0.12 dep
-reqwest_compat = { package = "reqwest", version = "0.12", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
+reqwest_compat = { package = "reqwest", version = "0.13", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
 
 [features]
 cosmos = ["azure_data_cosmos", "azure_identity", "azure_core", "reqwest_compat"]
