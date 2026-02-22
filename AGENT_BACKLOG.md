@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (49 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 audited/deferred)
 
 ## P0-CRITICAL — Must fix
 
@@ -105,14 +105,14 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (49 completed this session)
 | ID      | Team | Scope                                  | Description                                                             |
 | ------- | ---- | -------------------------------------- | ----------------------------------------------------------------------- |
 | ~~DX-001~~  | 4    | `.github/`                             | ~~Clean up deprecated `WORKFLOW_IMPROVEMENTS.md`~~ (completed: deleted)                          |
-| DX-002  | 6    | `packages/ui/`                         | Accessibility audit — ARIA labels and keyboard nav                      |
-| DX-003  | 6    | `apps/marketing/`                      | Theme consistency across all 3 theme variants                           |
-| DX-004  | 6    | `packages/ui/`                         | Verify all components use design tokens (no magic numbers)              |
-| DX-005  | 7    | `apps/marketing/`                      | Market segment gap analysis                                             |
-| DX-006  | 9    | `apps/docs/`                           | ADR backlog — file ADRs for undocumented decisions                      |
-| DX-007  | 9    | `apps/docs/`                           | Stale content audit (docs vs actual code)                               |
-| DX-008  | 9    | CLAUDE.md files                        | Accuracy re-verification after code changes                             |
-| DX-009  | 10   | `apps/marketing/`                      | Performance benchmark baseline                                          |
+| ~~DX-002~~  | 6    | `packages/ui/`                         | ~~Accessibility audit~~ (completed: focus-visible outlines, nav landmarks, aria-hidden, prefers-reduced-motion, CSS variable fallbacks) |
+| DX-003  | 6    | `apps/marketing/`                      | Theme consistency across all 3 theme variants (audited: token system comprehensive in packages/ui/src/tokens/, marketing uses separate vars) |
+| DX-004  | 6    | `packages/ui/`                         | Verify all components use design tokens (audited: Card uses --pr-* tokens, Button/StickyHeader/QuickActions use marketing vars with fallbacks added) |
+| DX-005  | 7    | `apps/marketing/`                      | Market segment gap analysis (audited: 6 product lines cover consumer→military, gap identified in mid-market law enforcement/events) |
+| DX-006  | 9    | `apps/docs/`                           | ADR backlog — file ADRs for undocumented decisions (audited: 15+ existing ADRs, gaps identified for SQLite, WASM strategy, auth) |
+| DX-007  | 9    | `apps/docs/`                           | Stale content audit (audited: progress tracking pages need updates post-wave-5) |
+| ~~DX-008~~  | 9    | CLAUDE.md files                        | ~~Accuracy re-verification~~ (completed: verified tech stack versions, directory structure, commands, routes, env vars) |
+| DX-009  | 10   | `apps/marketing/`                      | Performance benchmark baseline (deferred: usePerformanceOptimizations exists, Web Vitals integration recommended for next sprint) |
 | ~~DX-010~~  | 8    | `apps/marketing/`                      | ~~Preorder form validation and error handling~~ (completed: backend validates email/items, frontend shows errors + loading state)                             |
 | ~~DX-011~~  | 4    | `scripts/validate-env.sh`              | ~~Env validation only runs for marketing in CI — expand to all apps~~ (completed: docs, api, keeper, detector support + CI integration) |
 | ~~DX-012~~  | 10   | CHANGELOG.md                           | ~~No automated changelog generation from conventional commits~~ (completed: release.yml + cliff.toml for git-cliff) |
@@ -172,3 +172,5 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (49 completed this session)
 48. ~~**PRD-008**: SBIR compliance roadmap with specific dates and classifications~~ (Done 2026-02-22)
 49. ~~**FIN-002**: Interactive revenue projections with adjustable sliders~~ (Done 2026-02-22)
 50. ~~**FIN-003**: BOM component breakdown for SkySnare, SkyWatch Pro, AeroNet Enterprise~~ (Done 2026-02-22)
+51. ~~**DX-002**: Accessibility fixes — focus outlines, nav landmarks, aria-hidden, prefers-reduced-motion~~ (Done 2026-02-22)
+52. ~~**DX-008**: CLAUDE.md accuracy verified against codebase~~ (Done 2026-02-22)
