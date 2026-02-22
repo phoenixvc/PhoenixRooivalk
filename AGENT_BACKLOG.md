@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (35 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (44 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -77,28 +77,28 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (35 completed this session)
 | ID      | Team | Scope                                            | Description                                                                        |
 | ------- | ---- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
 | ~~PRD-001~~ | 5    | `apps/marketing/src/data/products.ts`            | ~~Pricing consistency audit needed (ROI calc vs catalog)~~ (completed: deploymentCost defaults aligned to $150K AeroNet Enterprise)                             |
-| PRD-002 | 5    | `apps/marketing/`                                | Phase tracking verification for all products                                       |
-| PRD-003 | 8    | `crates/x402/`                                   | x402 legal attestation tier not implemented                                        |
+| ~~PRD-002~~ | 5    | `apps/marketing/`                                | ~~Phase tracking verification for all products~~ (completed: 3 RKV products fixed to comingSoon: true for series-b/c) |
+| ~~PRD-003~~ | 8    | `crates/x402/`                                   | ~~x402 legal attestation tier not implemented~~ (completed: resolved by API-001 Ed25519 attestation)                   |
 | ~~PRD-004~~ | 5    | `products.ts` vs `pricing.ts`                    | ~~Pricing drift — products.ts per-SKU prices may not match pricing.ts segment prices~~ (completed: pricing.ts + values.ts reconciled as deployment packages) |
 | ~~PRD-005~~ | 8    | `apps/marketing/src/app/roi-calculator/page.tsx` | ~~ROI calculator page is stub~~ (completed: deployment packages, payback projections, financial disclaimer)                 |
-| PRD-006 | 8    | `apps/docs/src/data/pricing.ts`                  | Unit economics page missing — CAC/LTV/payback data exists but no UI                |
-| PRD-007 | 8    | `apps/marketing/src/contexts/CartContext.tsx`    | Cart doesn't distinguish one-time vs recurring (monthlyFee) purchases              |
-| FIN-001 | 8    | `apps/docs/src/data/competitors.ts`              | No competitor pricing comparison page — data exists, no frontend                   |
+| ~~PRD-006~~ | 8    | `apps/docs/src/data/pricing.ts`                  | ~~Unit economics page missing~~ (completed: /unit-economics page with CAC, LTV, payback, COGS, margins, revenue projections, funding roadmap) |
+| ~~PRD-007~~ | 8    | `apps/marketing/src/contexts/CartContext.tsx`    | ~~Cart doesn't distinguish one-time vs recurring~~ (completed: oneTimeTotal/recurringTotal in CartState + CartPanel display) |
+| ~~FIN-001~~ | 8    | `apps/docs/src/data/competitors.ts`              | ~~No competitor pricing comparison page~~ (completed: /competitors page with comparison table, profiles, advantages, market positioning) |
 
 ### Content and SEO
 
 | ID      | Team | Scope                                          | Description                             |
 | ------- | ---- | ---------------------------------------------- | --------------------------------------- |
-| SEO-001 | 7    | `apps/marketing/`                              | OG metadata audit across all 16+ pages  |
-| SEO-002 | 7    | `apps/marketing/src/utils/analytics.ts`        | Analytics event coverage gap analysis   |
-| SEO-003 | 7    | `apps/marketing/src/components/sections/data/` | Case studies need quantifiable outcomes |
+| ~~SEO-001~~ | 7    | `apps/marketing/`                              | ~~OG metadata audit across all 16+ pages~~ (completed: OG metadata on all pages via server/client component split) |
+| ~~SEO-002~~ | 7    | `apps/marketing/src/utils/analytics.ts`        | ~~Analytics event coverage gap analysis~~ (completed: events well-defined, analytics instrumented in button component) |
+| ~~SEO-003~~ | 7    | `apps/marketing/src/components/sections/data/` | ~~Case studies need quantifiable outcomes~~ (completed: outcomes array with dollar values and percentages added) |
 
 ### Coverage thresholds
 
 | ID      | Team | Scope                             | Description                                                   |
 | ------- | ---- | --------------------------------- | ------------------------------------------------------------- |
 | ~~COV-003~~ | 10   | `apps/marketing/vitest.config.ts` | ~~No coverage threshold defined (Vitest)~~ (completed: 30% stmt/branch/lines, 25% functions thresholds) |
-| COV-004 | 10   | Codecov                           | Only detector uploads to Codecov — JS/TS and Rust not tracked |
+| ~~COV-004~~ | 10   | Codecov                           | ~~Only detector uploads to Codecov~~ (completed: Codecov upload in ci-rust.yml + ci-marketing.yml, codecov.yml flags + components) |
 
 ## P3-LOW — Nice to have
 
@@ -148,3 +148,22 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (35 completed this session)
 24. ~~**CI-005**: JS/TS coverage aggregation in CI~~ (Done 2026-02-22)
 25. ~~**TST-001**: Career application endpoint tests (5 tests)~~ (Done 2026-02-22)
 26. ~~**TST-002**: Profile update edge case tests (7 tests)~~ (Done 2026-02-22)
+27. ~~**API-001**: Ed25519 attestation signing for x402 legal tier~~ (Done 2026-02-22)
+28. ~~**DOC-001**: SendGrid TODO misleading comment removed~~ (Done 2026-02-22)
+29. ~~**DOC-002**: ADR-0015 legacy system removal TODO resolved~~ (Done 2026-02-22)
+30. ~~**SIM-003**: Marketing test coverage expanded (452 tests)~~ (Done 2026-02-22)
+31. ~~**INT-001**: Cross-app integration tests for API+Keeper~~ (Done 2026-02-22)
+32. ~~**INT-002**: Playwright E2E testing setup~~ (Done 2026-02-22)
+33. ~~**TST-003**: Cart component edge case tests (19 tests)~~ (Done 2026-02-22)
+34. ~~**TST-004**: Auth flow integration tests (15 tests)~~ (Done 2026-02-22)
+35. ~~**TST-005**: Page component tests (21 tests)~~ (Done 2026-02-22)
+36. ~~**TST-006**: Hardware skip fixtures in detector conftest.py~~ (Done 2026-02-22)
+37. ~~**PRD-002**: RKV product comingSoon flags fixed~~ (Done 2026-02-22)
+38. ~~**PRD-003**: x402 attestation resolved by API-001~~ (Done 2026-02-22)
+39. ~~**PRD-006**: Unit economics page at /unit-economics~~ (Done 2026-02-22)
+40. ~~**PRD-007**: Cart one-time vs recurring pricing~~ (Done 2026-02-22)
+41. ~~**FIN-001**: Competitor pricing comparison page at /competitors~~ (Done 2026-02-22)
+42. ~~**SEO-001**: OG metadata on all marketing pages~~ (Done 2026-02-22)
+43. ~~**SEO-002**: Analytics event coverage verified~~ (Done 2026-02-22)
+44. ~~**SEO-003**: Case studies quantifiable outcomes~~ (Done 2026-02-22)
+45. ~~**COV-004**: Codecov aggregation for Rust + marketing~~ (Done 2026-02-22)
