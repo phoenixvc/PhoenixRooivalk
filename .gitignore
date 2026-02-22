@@ -63,6 +63,7 @@ TEST_COVERAGE_SUMMARY.md
 
 # Rust
 target/
+rust_out
 apps/marketing/next-env.d.ts
 
 # TypeScript build info
