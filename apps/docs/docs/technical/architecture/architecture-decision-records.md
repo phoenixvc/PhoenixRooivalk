@@ -451,6 +451,13 @@ performance requirements.
 The following ADRs document technical implementation decisions for the
 development infrastructure and tooling.
 
+> **Note**: ADRs D001–D009 below are inline stubs documenting the original
+> decision rationale. They lack the full options analysis, consequences, and
+> implementation sections required by the
+> [ADR-0000 template](./adr-0000-template-and-guide.md). These should be
+> expanded into standalone ADR files as capacity allows. See the
+> [AGENT_BACKLOG.md](../../../../AGENT_BACKLOG.md) Wave 6 backlog for tracking.
+
 ---
 
 ### ADR-D001: Monorepo Structure with Turborepo

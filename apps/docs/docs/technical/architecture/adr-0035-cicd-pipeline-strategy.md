@@ -42,7 +42,7 @@ Phoenix Rooivalk uses a Turborepo monorepo with:
 
 - **apps/docs**: Docusaurus documentation site → Azure SWA
 - **apps/marketing**: Next.js marketing site → Azure SWA
-- **apps/tauri**: Desktop application → GitHub Releases
+- **apps/threat-simulator-desktop**: Tauri 2 desktop application → GitHub Releases
 - **packages/\***: Shared libraries
 
 ### Requirements
@@ -97,10 +97,17 @@ Adopt **GitHub Actions** with the following architecture:
 
 ## Workflow Implementation
 
+> **Implementation note**: The conceptual workflows below (`ci.yml`,
+> `deploy.yml`, `preview.yml`, `rollback.yml`) were split into per-technology
+> workflows during implementation: `ci-rust.yml`, `ci-marketing.yml`,
+> `detector-ci.yml`, `deploy-docs-azure.yml`, `deploy-marketing-azure.yml`,
+> `deploy-azure-functions.yml`, `release-desktop.yml`, and others. The
+> architecture remains the same; only the file granularity changed.
+
 ### Build & Test Workflow
 
 ```yaml
-# .github/workflows/ci.yml
+# .github/workflows/ci.yml (conceptual — split into ci-rust.yml, ci-marketing.yml, detector-ci.yml)
 name: CI
 
 on:

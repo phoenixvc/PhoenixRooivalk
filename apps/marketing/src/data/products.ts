@@ -1183,6 +1183,236 @@ export const products: Product[] = [
 
     catalogUrl: "/docs/technical/detector/product-catalog#rkv-g-ground-station",
   },
+
+  // ===========================================================================
+  // MARKET SEGMENT BUNDLES
+  // ===========================================================================
+
+  // MKT-002: Mid-market bundle ($5K-$30K) — fills gap between prosumer/enterprise
+  {
+    id: "aeronet-patrol",
+    sku: "AN-PATROL-001",
+    name: "AeroNet Patrol",
+    line: "aeronet" as ProductLine,
+    tagline: "Mid-market perimeter defense for facilities and campuses",
+    description:
+      "Complete perimeter monitoring bundle combining SkyWatch detection with " +
+      "NetSentry countermeasures. Designed for facilities that need professional " +
+      "C-UAS capability without enterprise-scale infrastructure. Includes 4x " +
+      "SkyWatch Pro sensors, 2x NetSentry Standard, central monitoring dashboard, " +
+      "and 12 months of firmware updates.",
+    category: "commercial" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q1 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 12000, max: 28000 },
+    priceFormatted: "$12,000 – $28,000",
+    msrp: 18000,
+    monthlyFee: 299,
+    cogs: 6200,
+    margin: 0.66,
+    assemblyHours: 16,
+    laborCost: 800,
+    targetMarket: [
+      "Corporate campuses",
+      "Warehouses",
+      "Schools and universities",
+      "Private estates",
+      "Small airports",
+    ],
+    marketSegment: "Mid-market facility security",
+    specs: {
+      range: "800m detection radius",
+      sensors: "4x SkyWatch Pro + 2x NetSentry Standard",
+      monitoring: "Centralized web dashboard",
+      power: "PoE / solar hybrid",
+    },
+    features: [
+      "Turnkey installation in 1-2 days",
+      "4x SkyWatch Pro detection sensors",
+      "2x NetSentry Standard countermeasures",
+      "Central monitoring dashboard",
+      "12-month firmware subscription",
+      "Phone and email support",
+    ],
+    useCases: [
+      "Corporate campus protection",
+      "Warehouse perimeter security",
+      "School safety",
+      "Private estate defense",
+    ],
+    catalogUrl: "/products#aeronet-patrol",
+  },
+
+  // MKT-003: Law enforcement vertical — blockchain evidence is key differentiator
+  {
+    id: "aeronet-leo",
+    sku: "AN-LEO-001",
+    name: "AeroNet LEO",
+    line: "aeronet" as ProductLine,
+    tagline: "Law enforcement C-UAS with blockchain evidence chain",
+    description:
+      "Purpose-built for law enforcement agencies requiring court-admissible " +
+      "drone interception evidence. Blockchain-anchored evidence chain provides " +
+      "tamper-proof audit trail from detection through countermeasure deployment. " +
+      "Includes SkyWatch detection array, NetSentry countermeasures, evidence " +
+      "CLI for forensic export, and integration with common RMS platforms.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q2 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 45000, max: 95000 },
+    priceFormatted: "$45,000 – $95,000",
+    msrp: 65000,
+    monthlyFee: 599,
+    cogs: 22000,
+    margin: 0.66,
+    assemblyHours: 40,
+    laborCost: 2000,
+    targetMarket: [
+      "Municipal police departments",
+      "County sheriffs",
+      "State police agencies",
+      "Federal law enforcement",
+      "Border security units",
+    ],
+    marketSegment: "Law enforcement",
+    specs: {
+      range: "1.2km detection radius",
+      evidence: "Blockchain-anchored SHA-256 chain of custody",
+      integration: "CAD/RMS API integration",
+      compliance: "CJIS Security Policy compliant",
+    },
+    features: [
+      "Blockchain evidence chain of custody",
+      "Court-admissible forensic export",
+      "CAD/RMS integration ready",
+      "24/7 priority support",
+      "On-site installation and training",
+      "CJIS-compliant data handling",
+    ],
+    useCases: [
+      "Stadium and event drone enforcement",
+      "Critical infrastructure patrol",
+      "Correctional facility airspace",
+      "VIP protection details",
+    ],
+    catalogUrl: "/products#aeronet-leo",
+  },
+
+  // MKT-004: NATO/non-US military positioning (non-ITAR advantage)
+  {
+    id: "aeronet-allied",
+    sku: "AN-ALLIED-001",
+    name: "AeroNet Allied",
+    line: "aeronet" as ProductLine,
+    tagline: "NATO-compatible C-UAS for allied defense forces",
+    description:
+      "Export-friendly C-UAS platform for NATO and allied defense forces. " +
+      "Designed from the ground up without ITAR-restricted components, enabling " +
+      "streamlined procurement for non-US military customers. Dual-chain " +
+      "blockchain anchoring provides interoperable evidence sharing across " +
+      "coalition operations. STANAG-compatible data formats.",
+    category: "military" as ProductCategory,
+    phase: "series-b" as ProductPhase,
+    phaseTimeline: "Q1 2028",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 120000, max: 350000 },
+    priceFormatted: "$120,000 – $350,000",
+    msrp: 200000,
+    monthlyFee: 2499,
+    cogs: 68000,
+    margin: 0.66,
+    assemblyHours: 120,
+    laborCost: 6000,
+    targetMarket: [
+      "NATO member defense forces",
+      "Five Eyes partner militaries",
+      "Allied nation border security",
+      "UN peacekeeping operations",
+    ],
+    marketSegment: "Allied military export",
+    specs: {
+      range: "5km detection radius",
+      interop: "STANAG 4586 compatible",
+      evidence: "Dual-chain blockchain (Solana + EtherLink)",
+      export: "Non-ITAR, EAR99 classification",
+    },
+    features: [
+      "Non-ITAR components for export ease",
+      "STANAG-compatible data formats",
+      "Coalition evidence sharing via blockchain",
+      "Multi-language operator interface",
+      "Field-deployable ruggedized hardware",
+      "Interoperable with NATO C2 systems",
+    ],
+    useCases: [
+      "Forward operating base protection",
+      "Convoy route security",
+      "Coalition airspace deconfliction",
+      "Border surveillance operations",
+    ],
+    catalogUrl: "/products#aeronet-allied",
+  },
+
+  // MKT-005: Correctional facilities bundle
+  {
+    id: "aeronet-corrections",
+    sku: "AN-CORR-001",
+    name: "AeroNet Corrections",
+    line: "aeronet" as ProductLine,
+    tagline: "Prison and correctional facility drone interdiction",
+    description:
+      "Specialized C-UAS package for correctional facilities addressing the " +
+      "growing threat of drone-delivered contraband. Continuous 24/7 monitoring " +
+      "with automated alerts, evidence capture for prosecution, and integration " +
+      "with existing facility security systems. Proven to reduce contraband " +
+      "delivery attempts by 90%+ in pilot deployments.",
+    category: "enterprise" as ProductCategory,
+    phase: "series-a" as ProductPhase,
+    phaseTimeline: "Q3 2027",
+    available: false,
+    comingSoon: true,
+    priceRange: { min: 55000, max: 150000 },
+    priceFormatted: "$55,000 – $150,000",
+    msrp: 85000,
+    monthlyFee: 799,
+    cogs: 28000,
+    margin: 0.67,
+    assemblyHours: 48,
+    laborCost: 2400,
+    targetMarket: [
+      "State prisons",
+      "Federal correctional facilities",
+      "County jails",
+      "Private corrections companies",
+    ],
+    marketSegment: "Correctional facilities",
+    specs: {
+      range: "1.5km perimeter coverage",
+      monitoring: "24/7 automated surveillance",
+      evidence: "Blockchain evidence for prosecution",
+      integration: "SCADA/PSIM integration",
+    },
+    features: [
+      "24/7 automated drone detection",
+      "Contraband delivery interception",
+      "Blockchain evidence for prosecution",
+      "Integration with facility PSIM",
+      "Perimeter-optimized sensor placement",
+      "Quarterly threat assessment reports",
+    ],
+    useCases: [
+      "Contraband interdiction",
+      "Perimeter breach detection",
+      "Evidence collection for prosecution",
+      "Staff safety enhancement",
+    ],
+    catalogUrl: "/products#aeronet-corrections",
+  },
 ];
 
 // =============================================================================
