@@ -2,7 +2,9 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 audited/deferred)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (54/54 completed or audited this session)
+
+Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-medium = **36 items** discovered by 6 parallel agents
 
 ## P0-CRITICAL — Must fix
 
@@ -109,7 +111,7 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 
 | DX-003  | 6    | `apps/marketing/`                      | Theme consistency across all 3 theme variants (audited: token system comprehensive in packages/ui/src/tokens/, marketing uses separate vars) |
 | DX-004  | 6    | `packages/ui/`                         | Verify all components use design tokens (audited: Card uses --pr-* tokens, Button/StickyHeader/QuickActions use marketing vars with fallbacks added) |
 | DX-005  | 7    | `apps/marketing/`                      | Market segment gap analysis (audited: 6 product lines cover consumer→military, gap identified in mid-market law enforcement/events) |
-| DX-006  | 9    | `apps/docs/`                           | ADR backlog — file ADRs for undocumented decisions (audited: 15+ existing ADRs, gaps identified for SQLite, WASM strategy, auth) |
+| ~~DX-006~~  | 9    | `apps/docs/`                           | ~~ADR backlog assessment~~ (completed: 45 standalone + 19 inline ADRs inventoried, 5 structural defects + 10 missing ADRs catalogued in Wave 6 backlog) |
 | DX-007  | 9    | `apps/docs/`                           | Stale content audit (audited: progress tracking pages need updates post-wave-5) |
 | ~~DX-008~~  | 9    | CLAUDE.md files                        | ~~Accuracy re-verification~~ (completed: verified tech stack versions, directory structure, commands, routes, env vars) |
 | DX-009  | 10   | `apps/marketing/`                      | Performance benchmark baseline (deferred: usePerformanceOptimizations exists, Web Vitals integration recommended for next sprint) |
@@ -175,6 +177,7 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 
 51. ~~**DX-002**: Accessibility fixes — focus outlines, nav landmarks, aria-hidden, prefers-reduced-motion~~ (Done 2026-02-22)
 52. ~~**DX-008**: CLAUDE.md accuracy verified against codebase~~ (Done 2026-02-22)
 53. ~~**DX-007**: Stale content fixes — cargo audit gotcha, mypy gotcha, keeper EtherLink defaults, progress frontmatter~~ (Done 2026-02-22)
+54. ~~**DX-006**: ADR backlog assessment — 45 standalone + 19 inline ADRs inventoried, 5 defects + 10 missing ADRs catalogued~~ (Done 2026-02-22)
 
 ## Wave 6 Backlog — Agent-Discovered Items (Not Started)
 
@@ -213,3 +216,33 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 
 | DOC-005  | P2       | ADR-D004 documents Next.js 14; actual is 16.1.6                           |
 | DOC-006  | P2       | system-architecture-analysis.md has wrong EtherLink defaults              |
 | DOC-007  | P2       | documentation-status.md is 3 months stale (Nov 2025, Netlify reference)   |
+
+### ADR Structural Defects (from DX-006 backlog assessment)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| ADR-001  | P0       | D001 number collision — standalone calendar export vs inline monorepo decision |
+| ADR-002  | P0       | Dual `adr-0000-*` files with conflicting numbering schemes (template vs management) |
+| ADR-003  | P1       | ADRs 0001-0010 are stubs in inline file — no standalone files for core system decisions |
+| ADR-004  | P2       | Mechanical ADRs reuse 0001-0005 namespace — rename to M001-M005           |
+| ADR-005  | P3       | Build bug in ADR-0072 — unrendered template variable                      |
+
+### Missing ADRs — High Priority (from DX-006 backlog assessment)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| ADR-006  | P0       | Rust workspace structure + `rustls`-only TLS policy (RUSTSEC-2025-0004)   |
+| ADR-007  | P0       | SQLite as operational database (URL priority chain, PRAGMAs, migrations)  |
+| ADR-008  | P0       | WASM integration strategy (3 targets, getrandom, sync:wasm pre-build)    |
+| ADR-009  | P1       | Keeper dual-loop design (tokio::select!, backoff, JobProvider trait)      |
+| ADR-010  | P1       | Dual-chain evidence anchoring (AnchorProvider, keeper routing, Merkle)    |
+| ADR-011  | P1       | Evidence hashing algorithm selection (SHA-256, legal implications)        |
+
+### Missing ADRs — Medium Priority (from DX-006 backlog assessment)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| ADR-012  | P2       | Python detector factory pattern (FrameSource, InferenceEngine, Tracker)   |
+| ADR-013  | P2       | Frontend framework selection (Next.js + Docusaurus, static export)        |
+| ADR-014  | P2       | Marketing passwordless auth via localStorage (security implications)      |
+| ADR-015  | P2       | Tauri 2 for desktop packaging (vs Electron, memory/bundle trade-offs)     |
