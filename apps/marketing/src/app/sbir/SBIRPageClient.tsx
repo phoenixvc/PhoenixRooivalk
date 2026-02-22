@@ -141,7 +141,7 @@ export default function SBIRPage(): React.ReactElement {
 
                   <div className={styles.programCard}>
                     <h3 className={styles.programTitle}>
-                      Government Contracting
+                      Compliance Roadmap
                     </h3>
                     <div className={styles.programDetails}>
                       <div className={styles.detailRow}>
@@ -151,27 +151,37 @@ export default function SBIRPage(): React.ReactElement {
                         <span
                           className={`${styles.detailValue} ${styles.detailValueWarning}`}
                         >
-                          Planned
+                          Q4 2026
                         </span>
                       </div>
                       <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>
-                          ITAR Compliance:
+                          ITAR Registration:
                         </span>
                         <span
                           className={`${styles.detailValue} ${styles.detailValueWarning}`}
                         >
-                          Planned
+                          Q2 2026
                         </span>
                       </div>
                       <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>
-                          Security Clearance:
+                          Export Classification:
+                        </span>
+                        <span
+                          className={`${styles.detailValue} ${styles.detailValuePrimary}`}
+                        >
+                          Non-ITAR (SA origin)
+                        </span>
+                      </div>
+                      <div className={styles.detailRow}>
+                        <span className={styles.detailLabel}>
+                          Facility Clearance:
                         </span>
                         <span
                           className={`${styles.detailValue} ${styles.detailValueWarning}`}
                         >
-                          Planned
+                          Q1 2027
                         </span>
                       </div>
                     </div>

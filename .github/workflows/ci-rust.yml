@@ -75,6 +75,14 @@ jobs:
           cd apps/threat-simulator-desktop
           cargo build --release --package threat-simulator-tauri
 
+      - name: Validate API environment variables
+        run: ./scripts/validate-env.sh api
+        continue-on-error: true
+
+      - name: Validate Keeper environment variables
+        run: ./scripts/validate-env.sh keeper
+        continue-on-error: true
+
       - name: Format check
         run: cargo fmt --all -- --check
 

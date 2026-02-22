@@ -176,6 +176,17 @@ jobs:
         working-directory: ${{ env.APP_LOCATION }}
         run: pnpm install --no-frozen-lockfile
 
+      - name: Validate environment variables
+        run: ./scripts/validate-env.sh docs
+        env:
+          CLOUD_PROVIDER: ${{ secrets.CLOUD_PROVIDER || 'azure' }}
+          AZURE_ENTRA_CLIENT_ID: ${{ secrets.AZURE_ENTRA_CLIENT_ID }}
+          AZURE_ENTRA_TENANT_ID: ${{ secrets.AZURE_ENTRA_TENANT_ID }}
+          AZURE_ENTRA_AUTHORITY: ${{ secrets.AZURE_ENTRA_AUTHORITY }}
+          AZURE_FUNCTIONS_BASE_URL: ${{ vars.AZURE_FUNCTIONS_BASE_URL || '' }}
+          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
+        continue-on-error: true
+
       - name: Build
         working-directory: ${{ env.APP_LOCATION }}
         env:

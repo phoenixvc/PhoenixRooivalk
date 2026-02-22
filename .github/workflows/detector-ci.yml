@@ -36,6 +36,12 @@ jobs:
           pip install ruff black isort mypy
           pip install pydantic pydantic-settings PyYAML numpy
 
+      - name: Validate environment variables
+        run: ../../scripts/validate-env.sh detector
+        env:
+          ENGINE_TYPE: mock
+        continue-on-error: true
+
       - name: Run ruff (linting)
         run: ruff check src/ --output-format=github
 
