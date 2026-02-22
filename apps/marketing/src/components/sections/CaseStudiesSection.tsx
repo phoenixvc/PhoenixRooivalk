@@ -41,6 +41,18 @@ export const CaseStudiesSection: React.FC = () => {
                     </div>
                   ))}
                 </div>
+                {study.outcomes && study.outcomes.length > 0 && (
+                  <div className={styles.outcomes}>
+                    <h4 className={styles.outcomesTitle}>Key Outcomes</h4>
+                    <ul className={styles.outcomesList}>
+                      {study.outcomes.map((outcome, outcomeIndex) => (
+                        <li key={outcomeIndex} className={styles.outcomeItem}>
+                          {outcome}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           ))}

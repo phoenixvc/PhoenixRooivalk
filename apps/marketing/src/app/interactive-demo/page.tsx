@@ -1,15 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import InteractiveDemoPageClient from "./InteractiveDemoPageClient";
 
-import { WasmThreatSimulator } from "../../components/WasmThreatSimulator";
-import { WasmErrorBoundary } from "../../components/WasmErrorBoundary";
-import styles from "./interactive-demo.module.css";
+export const metadata: Metadata = {
+  title: "Interactive Threat Simulator - Phoenix Rooivalk",
+  description:
+    "Try the Phoenix Rooivalk interactive threat simulator. Experience real-time counter-drone detection and neutralization scenarios powered by WebAssembly in your browser.",
+  openGraph: {
+    title: "Interactive Threat Simulator - Phoenix Rooivalk",
+    description:
+      "Experience real-time counter-drone detection and neutralization scenarios in the Phoenix Rooivalk WebAssembly threat simulator.",
+  },
+};
 
-export default function InteractiveDemoPage() {
-  return (
-    <div className={styles.container}>
-      <WasmErrorBoundary>
-        <WasmThreatSimulator />
-      </WasmErrorBoundary>
-    </div>
-  );
-}
+export default InteractiveDemoPageClient;

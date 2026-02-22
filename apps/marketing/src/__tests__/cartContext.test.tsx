@@ -207,6 +207,26 @@ describe("useCart", () => {
 
       expect(result.current.total).toBe(350); // 100*2 + 50*3
       expect(result.current.itemCount).toBe(5); // 2 + 3
+      expect(result.current.oneTimeTotal).toBe(350);
+      expect(result.current.recurringTotal).toBe(0);
+    });
+
+    it("should separate one-time and recurring totals", () => {
+      const { result } = renderHook(() => useCart(), { wrapper });
+
+      act(() => {
+        result.current.addItem(
+          makeItem({ id: "a", price: 1000, monthlyFee: 50 }),
+          2,
+        );
+        result.current.addItem(
+          makeItem({ id: "b", price: 500 }),
+          1,
+        );
+      });
+
+      expect(result.current.oneTimeTotal).toBe(2500); // 1000*2 + 500*1
+      expect(result.current.recurringTotal).toBe(100); // 50*2 + 0*1
     });
 
     it("should update totals after removal", () => {

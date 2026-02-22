@@ -1047,7 +1047,7 @@ export const products: Product[] = [
     phase: "series-c",
     phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 65000, max: 85000 },
     priceFormatted: "$65,000-85,000",
@@ -1097,7 +1097,7 @@ export const products: Product[] = [
     phase: "series-c",
     phaseTimeline: "Q2 2029 • Delivery Aug 2029",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 8000, max: 12000 },
     priceFormatted: "$8,000-12,000",
@@ -1145,7 +1145,7 @@ export const products: Product[] = [
     phase: "series-b",
     phaseTimeline: "Q2 2028 • Delivery Aug 2028",
     available: false,
-    comingSoon: false,
+    comingSoon: true,
 
     priceRange: { min: 100000, max: 150000 },
     priceFormatted: "$100,000-150,000",

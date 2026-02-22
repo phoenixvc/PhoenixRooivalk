@@ -109,6 +109,15 @@ jobs:
           name: rust-coverage
           path: lcov.info
 
+      - name: Upload to Codecov
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          files: lcov.info
+          flags: api,keeper,evidence-cli
+          name: rust-coverage
+          fail_ci_if_error: false
+
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked --version "$CARGO_AUDIT_VERSION"
 

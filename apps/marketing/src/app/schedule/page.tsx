@@ -1,31 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { CalendarIntegration } from "../../components/CalendarIntegration";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
-import styles from "./schedule.module.css";
+import type { Metadata } from "next";
+import SchedulePageClient from "./SchedulePageClient";
 
-export default function SchedulePage(): React.ReactElement {
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "Schedule a Demo - Phoenix Rooivalk",
+  description:
+    "Schedule a technical demo or introductory call with the Phoenix Rooivalk team. Book time to explore SkySnare consumer and AeroNet enterprise counter-drone solutions.",
+  openGraph: {
+    title: "Schedule a Demo - Phoenix Rooivalk",
+    description:
+      "Book a technical demo or introductory call with Phoenix Rooivalk to explore SkySnare and AeroNet counter-drone solutions.",
+  },
+};
 
-  return (
-    <main className={styles.main}>
-      <InteractiveMesh
-        gridSize={50}
-        color="rgba(234, 124, 28, 0.1)"
-        bendStrength={20}
-        bendRadius={100}
-      />
-
-      <Navigation />
-
-      <div className={styles.contentWrapper}>
-        <CalendarIntegration showEventTypes={true} />
-      </div>
-
-      <Footer />
-    </main>
-  );
-}
+export default SchedulePageClient;
