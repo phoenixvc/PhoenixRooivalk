@@ -30,8 +30,8 @@ async-trait = "0.1"
 # Disable default-features to avoid pulling native-tls (RUSTSEC-2025-0004);
 # azure_core defaults include reqwest_native_tls which we replace with rustls.
 azure_data_cosmos = { version = "0.30", optional = true, default-features = false, features = ["hmac_rust"] }
-azure_identity = { version = "0.31", optional = true, default-features = false }
-azure_core = { version = "0.31", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
+azure_identity = { version = "0.32", optional = true, default-features = false }
+azure_core = { version = "0.32", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
 # Provide rustls TLS backend for azure crates' transitive reqwest 0.12 dep
 reqwest_compat = { package = "reqwest", version = "0.12", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
 
