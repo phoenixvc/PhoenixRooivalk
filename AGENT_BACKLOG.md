@@ -2,16 +2,16 @@
 
 Last scanned: 2026-02-22
 
-Summary: 8 P0, 16 P1, 24 P2, 13 P3 = **61 items** (6 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (13 completed this session)
 
 ## P0-CRITICAL — Must fix
 
 | ID      | Team | File:Line                                                 | Description                                                         |
 | ------- | ---- | --------------------------------------------------------- | ------------------------------------------------------------------- |
 | API-001 | 1    | `apps/api/src/handlers_x402.rs:360`                       | HSM-backed attestation TODO — legal tier returns placeholder        |
-| SIM-001 | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:98`  | Evidence integration TODO — `save_session_to_persistence()` is stub |
-| SIM-002 | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:233` | Evidence saving returns hardcoded `"evidence-id-placeholder"`       |
-| MKT-001 | 2    | `apps/marketing/src/app/preorder/page.tsx:67`             | Preorder form TODO — no backend API call, shows alert only          |
+| ~~SIM-001~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:98`  | ~~Evidence integration TODO — `save_session_to_persistence()` is stub~~ (completed: SHA-256 hashing via phoenix-evidence) |
+| ~~SIM-002~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:233` | ~~Evidence saving returns hardcoded `"evidence-id-placeholder"`~~ (completed: real digest-based evidence IDs)       |
+| ~~MKT-001~~ | 2    | `apps/marketing/src/app/preorder/page.tsx:67`             | ~~Preorder form TODO — no backend API call, shows alert only~~ (completed: POST /preorders API + frontend integration)          |
 | DET-001 | 3    | `apps/detector/src/multi_camera.py:310`                   | Camera fusion handoff TODO — accepts any detection as placeholder   |
 | CI-001  | 4    | `.github/workflows/ci-rust.yml:32`                        | Cargo audit disabled (`CARGO_AUDIT_SKIP=true`)                      |
 | CI-002  | 4    | `.github/workflows/detector-ci.yml:50`                    | mypy `continue-on-error: true` — type errors don't fail CI          |
@@ -76,11 +76,11 @@ Summary: 8 P0, 16 P1, 24 P2, 13 P3 = **61 items** (6 completed this session)
 
 | ID      | Team | Scope                                            | Description                                                                        |
 | ------- | ---- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| PRD-001 | 5    | `apps/marketing/src/data/products.ts`            | Pricing consistency audit needed (ROI calc vs catalog)                             |
+| ~~PRD-001~~ | 5    | `apps/marketing/src/data/products.ts`            | ~~Pricing consistency audit needed (ROI calc vs catalog)~~ (completed: deploymentCost defaults aligned to $150K AeroNet Enterprise)                             |
 | PRD-002 | 5    | `apps/marketing/`                                | Phase tracking verification for all products                                       |
 | PRD-003 | 8    | `crates/x402/`                                   | x402 legal attestation tier not implemented                                        |
-| PRD-004 | 5    | `products.ts` vs `pricing.ts`                    | Pricing drift — products.ts per-SKU prices may not match pricing.ts segment prices |
-| PRD-005 | 8    | `apps/marketing/src/app/roi-calculator/page.tsx` | ROI calculator page is stub (wrapper only, no projections content)                 |
+| ~~PRD-004~~ | 5    | `products.ts` vs `pricing.ts`                    | ~~Pricing drift — products.ts per-SKU prices may not match pricing.ts segment prices~~ (completed: pricing.ts + values.ts reconciled as deployment packages) |
+| ~~PRD-005~~ | 8    | `apps/marketing/src/app/roi-calculator/page.tsx` | ~~ROI calculator page is stub~~ (completed: deployment packages, payback projections, financial disclaimer)                 |
 | PRD-006 | 8    | `apps/docs/src/data/pricing.ts`                  | Unit economics page missing — CAC/LTV/payback data exists but no UI                |
 | PRD-007 | 8    | `apps/marketing/src/contexts/CartContext.tsx`    | Cart doesn't distinguish one-time vs recurring (monthlyFee) purchases              |
 | FIN-001 | 8    | `apps/docs/src/data/competitors.ts`              | No competitor pricing comparison page — data exists, no frontend                   |
@@ -113,7 +113,7 @@ Summary: 8 P0, 16 P1, 24 P2, 13 P3 = **61 items** (6 completed this session)
 | DX-007  | 9    | `apps/docs/`                           | Stale content audit (docs vs actual code)                               |
 | DX-008  | 9    | CLAUDE.md files                        | Accuracy re-verification after code changes                             |
 | DX-009  | 10   | `apps/marketing/`                      | Performance benchmark baseline                                          |
-| DX-010  | 8    | `apps/marketing/`                      | Preorder form validation and error handling                             |
+| ~~DX-010~~  | 8    | `apps/marketing/`                      | ~~Preorder form validation and error handling~~ (completed: backend validates email/items, frontend shows errors + loading state)                             |
 | DX-011  | 4    | `scripts/validate-env.sh`              | Env validation only runs for marketing in CI — expand to all apps       |
 | DX-012  | 10   | CHANGELOG.md                           | No automated changelog generation from conventional commits             |
 | FIN-002 | 8    | `apps/docs/src/data/values.ts`         | Revenue projections hardcoded — no interactive calculator               |
@@ -127,3 +127,8 @@ Summary: 8 P0, 16 P1, 24 P2, 13 P3 = **61 items** (6 completed this session)
 3. ~~**DX-001**: Mark `WORKFLOW_IMPROVEMENTS.md` as superseded~~ (Done 2026-02-22 — deleted)
 4. ~~**CLI-001**: Create `apps/evidence-cli/tests/` with basic CLI test~~ (Done 2026-02-22 — 13 inline tests)
 5. ~~**KPR-001**: Add `pub mod batch_anchor;` to keeper `lib.rs`~~ (Verified 2026-02-22 — already exported)
+6. ~~**PRD-001/004**: Pricing consistency audit — pricing.ts + values.ts reconciled~~ (Done 2026-02-22)
+7. ~~**PRD-005**: ROI calculator with deployment packages + payback projections~~ (Done 2026-02-22)
+8. ~~**MKT-001**: Preorder backend API + frontend integration~~ (Done 2026-02-22)
+9. ~~**SIM-001/002**: Evidence integration with phoenix-evidence SHA-256 hashing~~ (Done 2026-02-22)
+10. ~~**DX-010**: Preorder form validation and error handling~~ (Done 2026-02-22)
