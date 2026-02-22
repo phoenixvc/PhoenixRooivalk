@@ -10,7 +10,7 @@
   width: 1px;
   height: 1px;
   overflow: hidden;
-  z-index: 9999;
+  z-index: var(--pr-z-skip-nav);
 }
 
 .skipNav:focus {

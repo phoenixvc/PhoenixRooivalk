@@ -183,7 +183,7 @@
 .soonamiLogo {
   font-size: 0.9rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%);
+  background: linear-gradient(135deg, var(--pr-brand-soonami) 0%, var(--pr-brand-soonami-light) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -193,7 +193,7 @@
 .cohortBadge {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #00ccff;
+  color: var(--pr-brand-soonami-light);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.15rem 0.5rem;

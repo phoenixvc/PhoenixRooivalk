@@ -530,7 +530,7 @@
 .confirmationIcon {
   width: 28px;
   height: 28px;
-  color: #22c55e;
+  color: var(--pr-status-success);
   flex-shrink: 0;
   margin-top: 0.125rem;
 }
@@ -538,7 +538,7 @@
 .confirmationContent strong {
   display: block;
   font-size: 1.0625rem;
-  color: #22c55e;
+  color: var(--pr-status-success);
   margin-bottom: 0.5rem;
 }
 

@@ -21,9 +21,9 @@
   --section-padding-lg: 5rem 5%;
   --section-padding-x: 5%;
 
-  /* Container - unified layout system */
-  --container-max-width: 1160px;
-  --container-max-width-wide: 1400px;
+  /* Container - unified layout system (sourced from shared tokens) */
+  --container-max-width: var(--pr-container-6xl, 1152px); /* ~1160px content */
+  --container-max-width-wide: var(--pr-container-max, 1440px);
   --container-max-width-narrow: 960px;
 
   /* Grid Gaps */

@@ -81,9 +81,9 @@
   /* Logo Background (4 components for rgba support) */
   --logo-bg: 249, 115, 22, 0.1;
 
-  /* Container Layout */
-  --container-max-width: 1160px;
-  --container-max-width-wide: 1400px;
+  /* Container Layout (sourced from shared tokens) */
+  --container-max-width: var(--pr-container-6xl, 1152px);
+  --container-max-width-wide: var(--pr-container-max, 1440px);
   --container-max-width-narrow: 960px;
 
   /* Threat Simulator tokens (RGB triplets) */
@@ -582,7 +582,7 @@ h6 {
 
 /* Container System */
 .container {
-  max-width: 1160px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 var(--space-4);
 }
@@ -746,7 +746,7 @@ textarea:focus-visible {
   background: rgb(var(--primary));
   color: white;
   padding: 1rem 2rem;
-  z-index: 10000;
+  z-index: var(--pr-z-tour);
   border-radius: 0 0 8px 0;
   transition: top 0.3s;
 }

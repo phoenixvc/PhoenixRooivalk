@@ -192,6 +192,11 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 66. ~~**ADR-013**: ADR-0402 Frontend framework selection~~ (Done 2026-02-22)
 67. ~~**ADR-014**: ADR-0103 Marketing passwordless auth~~ (Done 2026-02-22)
 68. ~~**ADR-015**: ADR-0403 Tauri desktop packaging~~ (Done 2026-02-22)
+69. ~~**TOK-006**: Z-index tokens (--pr-z-nav/skip-nav/tour) + key file updates~~ (Done 2026-02-22)
+70. ~~**TOK-007**: Hardcoded colors replaced with Soonami + status-success tokens~~ (Done 2026-02-22)
+71. ~~**TOK-008**: SkySnare/AeroNet/Soonami sub-brand tokens defined~~ (Done 2026-02-22)
+72. ~~**TOK-009**: Container width fragmentation resolved via shared token references~~ (Done 2026-02-22)
+73. ~~**ADR-005**: ADR-0072 template variable code fence fix~~ (Done 2026-02-22)
 
 ## Wave 6 Backlog — Agent-Discovered Items
 
@@ -204,10 +209,10 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | ~~TOK-003~~  | P2       | ~~Marketing app doesn't import `packages/ui/src/tokens/index.css`~~ (completed: `@import` of shared tokens added to globals.css via CSS layer)            |
 | ~~TOK-004~~  | P2       | ~~Typography scale diverges across 3 apps (different clamp values)~~ (completed: marketing typography aligned with shared --pr-text-* tokens)           |
 | ~~TOK-005~~  | P2       | ~~Duration tokens: marketing `--duration-fast` 150ms vs shared 100ms~~ (completed: aligned to 100ms/150ms/200ms matching shared tokens)        |
-| TOK-006  | P3       | Z-index: 30+ raw integer literals in marketing CSS modules                 |
-| TOK-007  | P3       | Hardcoded colors in Footer, preorder, gamification, docs-landing CSS      |
-| TOK-008  | P3       | No SkySnare/AeroNet sub-brand tokens defined                              |
-| TOK-009  | P3       | Container width fragmentation (1160px vs 1400px vs 1440px)                |
+| ~~TOK-006~~  | P3       | ~~Z-index: 30+ raw integer literals in marketing CSS modules~~ (completed: --pr-z-nav/skip-nav/tour tokens defined, Nav/SkipNav/Tour/globals updated)                 |
+| ~~TOK-007~~  | P3       | ~~Hardcoded colors in Footer, preorder, gamification, docs-landing CSS~~ (completed: Soonami brand tokens + status-success tokens replace raw hex)      |
+| ~~TOK-008~~  | P3       | ~~No SkySnare/AeroNet sub-brand tokens defined~~ (completed: --pr-brand-skysnare-*/--pr-brand-aeronet-*/--pr-brand-soonami-* added to shared tokens)                              |
+| ~~TOK-009~~  | P3       | ~~Container width fragmentation (1160px vs 1400px vs 1440px)~~ (completed: all widths reference --pr-container-* tokens via --container-max-width vars)                |
 
 ### Market Segment Gaps (from DX-005 gap analysis)
 
@@ -239,7 +244,7 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 | ~~ADR-002~~  | P0       | ~~Dual `adr-0000-*` files with conflicting numbering schemes~~ (completed: adr-management.md updated to reference template-and-guide.md as canonical) |
 | ~~ADR-003~~  | P1       | ~~ADRs 0001-0010 are stubs in inline file~~ (completed: expansion note added to architecture-decision-records.md with link to backlog)  |
 | ~~ADR-004~~  | P2       | ~~Mechanical ADRs reuse 0001-0005 namespace — rename to M001-M005~~ (completed: M- prefix added, headings renamed M-0001 through M-0005)           |
-| ADR-005  | P3       | Build bug in ADR-0072 — unrendered template variable                      |
+| ~~ADR-005~~  | P3       | ~~Build bug in ADR-0072 — unrendered template variable~~ (completed: code fence language changed from `markdown` to `text` with title, preventing MDX parser confusion)                      |
 
 ### Missing ADRs — High Priority (from DX-006 backlog assessment)
 
