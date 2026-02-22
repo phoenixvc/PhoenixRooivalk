@@ -1,0 +1,127 @@
+name: E2E Tests
+# ADR-0063: End-to-end testing with Playwright
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/marketing/**"
+      - "apps/api/**"
+      - "e2e/**"
+  push:
+    branches: [main]
+    paths:
+      - "apps/marketing/**"
+      - "apps/api/**"
+      - "e2e/**"
+  workflow_dispatch:
+
+jobs:
+  e2e-marketing:
+    name: Marketing E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright:v1.50.0-jammy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build marketing site
+        run: pnpm --filter marketing build
+
+      - name: Start marketing server
+        run: |
+          pnpm --filter marketing start &
+          npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run E2E tests (marketing pages)
+        working-directory: e2e
+        run: npx playwright test tests/marketing-pages.spec.ts --project=chromium
+        env:
+          BASE_URL: http://localhost:3000
+          HOME: /root
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-marketing-report
+          path: e2e/playwright-report/
+          retention-days: 30
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-marketing-screenshots
+          path: e2e/test-results/
+          retention-days: 30
+
+  e2e-api:
+    name: API E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build API
+        run: cargo build -p phoenix-api --release
+
+      - name: Start API server
+        run: |
+          ./target/release/phoenix-api &
+          sleep 3
+        env:
+          RUST_LOG: info
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.6.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install E2E deps
+        working-directory: e2e
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        working-directory: e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: Run API E2E tests
+        working-directory: e2e
+        run: npx playwright test tests/api-health.spec.ts --project=chromium
+        env:
+          API_URL: http://localhost:8080
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-api-report
+          path: e2e/playwright-report/
+          retention-days: 30

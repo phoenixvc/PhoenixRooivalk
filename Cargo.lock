@@ -4113,6 +4113,7 @@ name = "phoenix-api"
 version = "0.1.0"
 dependencies = [
  "anchor-etherlink",
+ "anchor-solana",
  "anyhow",
  "async-trait",
  "axum",
@@ -4124,6 +4125,7 @@ dependencies = [
  "hex",
  "once_cell",
  "phoenix-common",
+ "phoenix-evidence",
  "phoenix-keeper",
  "phoenix-x402",
  "reqwest 0.12.28",

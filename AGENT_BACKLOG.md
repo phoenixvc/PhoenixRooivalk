@@ -2,13 +2,13 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (26 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (31 completed this session)
 
 ## P0-CRITICAL — Must fix
 
 | ID      | Team | File:Line                                                 | Description                                                         |
 | ------- | ---- | --------------------------------------------------------- | ------------------------------------------------------------------- |
-| API-001 | 1    | `apps/api/src/handlers_x402.rs:360`                       | HSM-backed attestation TODO — legal tier returns placeholder        |
+| ~~API-001~~ | 1    | `apps/api/src/handlers_x402.rs:360`                       | ~~HSM-backed attestation TODO — legal tier returns placeholder~~ (completed: Ed25519 attestation via ed25519-dalek) |
 | ~~SIM-001~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:98`  | ~~Evidence integration TODO — `save_session_to_persistence()` is stub~~ (completed: SHA-256 hashing via phoenix-evidence) |
 | ~~SIM-002~~ | 2    | `apps/threat-simulator-desktop/src-tauri/src/main.rs:233` | ~~Evidence saving returns hardcoded `"evidence-id-placeholder"`~~ (completed: real digest-based evidence IDs)       |
 | ~~MKT-001~~ | 2    | `apps/marketing/src/app/preorder/page.tsx:67`             | ~~Preorder form TODO — no backend API call, shows alert only~~ (completed: POST /preorders API + frontend integration)          |
@@ -29,9 +29,9 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (26 completed this session)
 | ~~ADDR-001~~ | 1    | `crates/address-validation/`                                              | ~~No dedicated test files~~ (completed: tests/validation_tests.rs added) |
 | ~~CLI-001~~  | 1    | `apps/evidence-cli/`                                                      | ~~Zero test coverage~~ (completed: 13 inline tests added, all passing)                                                  |
 | ~~SOL-001~~  | 1    | `crates/anchor-solana/`                                                   | ~~No tests — no `#[cfg(test)]`, no `tests/` dir, orphan `provider_tests.rs` at crate root~~ (completed: 12 inline tests added + existing tests/provider_tests.rs verified) |
-| SIM-003  | 2    | `apps/marketing/`                                                         | 278 tests passing but coverage gap remains for 164 source files                                              |
-| DOC-001  | 9    | `apps/docs/azure-functions/src/functions/scheduled.ts:80`                 | SendGrid TODO — email queue has no email service                                        |
-| DOC-002  | 9    | `apps/docs/docs/technical/architecture/adr-0015-prompt-management.md:515` | Legacy system removal TODO                                                              |
+| ~~SIM-003~~  | 2    | `apps/marketing/`                                                         | ~~278 tests passing but coverage gap remains for 164 source files~~ (completed: 396 tests — added eventSystem, stateMachine, objectPool, performanceMonitor, formatter tests) |
+| ~~DOC-001~~  | 9    | `apps/docs/azure-functions/src/functions/scheduled.ts:80`                 | ~~SendGrid TODO — email queue has no email service~~ (completed: misleading TODO removed, email system functional) |
+| ~~DOC-002~~  | 9    | `apps/docs/docs/technical/architecture/adr-0015-prompt-management.md:515` | ~~Legacy system removal TODO~~ (completed: ADR updated, legacy system removed) |
 
 ### CI/CD gaps
 
@@ -48,8 +48,8 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (26 completed this session)
 | ------- | ---- | ------------------------------------ | --------------------------------------------------------- |
 | ~~COV-001~~ | 10   | `.github/workflows/ci-rust.yml`      | ~~No Rust coverage tool (cargo-tarpaulin or cargo-llvm-cov)~~ (completed: cargo-llvm-cov with LCOV output) |
 | ~~COV-002~~ | 10   | `.github/workflows/ci-marketing.yml` | ~~Marketing tests run without coverage collection~~ (completed: vitest --coverage + artifact upload) |
-| INT-001 | 10   | `tests/workspace_integration.rs`     | Cross-app integration tests minimal — no API+Keeper flow  |
-| INT-002 | 10   | ADR-0063                             | E2E testing proposed in ADR but not implemented           |
+| ~~INT-001~~ | 10   | `tests/workspace_integration.rs`     | ~~Cross-app integration tests minimal — no API+Keeper flow~~ (completed: 2 cross-app tests in apps/api/tests/workspace_integration_tests.rs) |
+| ~~INT-002~~ | 10   | ADR-0063                             | ~~E2E testing proposed in ADR but not implemented~~ (completed: Playwright config + marketing page tests + API health tests + CI workflow) |
 
 ### Missing env docs
 

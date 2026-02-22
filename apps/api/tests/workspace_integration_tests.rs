@@ -19,7 +19,7 @@ use phoenix_api::{
     repository::{EvidenceRepository, RepositoryError},
     models::{EvidenceIn, EvidenceOut},
 };
-use sqlx::sqlite::SqlitePoolOptions;
+use sqlx::{sqlite::SqlitePoolOptions, Row};
 use tempfile::NamedTempFile;
 use std::time::Duration;
 use chrono::Utc;
@@ -577,14 +577,13 @@ async fn test_api_to_keeper_cross_app_flow() {
     assert_eq!(tx_count, 1);
 
     // Verify tx details
-    let (tx_network, tx_chain): (String, String) = sqlx::query_as(
-        "SELECT network, chain FROM outbox_tx_refs WHERE job_id = ?1",
-    )
-    .fetch_one(&pool)
-    .await
-    .unwrap();
-    assert_eq!(tx_network, "etherlink");
-    assert_eq!(tx_chain, "testnet");
+    let row = sqlx::query("SELECT network, chain FROM outbox_tx_refs WHERE job_id = ?1")
+        .bind(&job_id)
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(row.get::<String, _>("network"), "etherlink");
+    assert_eq!(row.get::<String, _>("chain"), "testnet");
 }
 
 /// Test API→Keeper flow with failure and retry
