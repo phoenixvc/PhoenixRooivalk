@@ -11,7 +11,7 @@ export default function FinancialPage(): React.ReactElement {
   const [inputs, setInputs] = useState({
     threatFrequency: 5,
     averageResponseTime: 3000,
-    deploymentCost: 250000,
+    deploymentCost: 150000, // AeroNet Enterprise setup ($150K, products.ts AN-ENT-001); adjust slider for your tier
     personnelCost: 150000,
     downtimeCost: 500000,
   });

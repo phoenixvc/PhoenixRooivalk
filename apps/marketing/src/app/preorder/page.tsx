@@ -12,10 +12,22 @@ interface ProductQuantity {
   [productId: string]: number;
 }
 
+interface OrderConfirmation {
+  id: string;
+  status: string;
+  total: number;
+  item_count: number;
+  created_ms: number;
+}
+
 export default function PreorderPage(): React.ReactElement {
   const { items, total, addItem, clearCart } = useCart();
   const [quantities, setQuantities] = useState<ProductQuantity>({});
   const [showCheckout, setShowCheckout] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [orderConfirmation, setOrderConfirmation] =
+    useState<OrderConfirmation | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -61,15 +73,54 @@ export default function PreorderPage(): React.ReactElement {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the order to your backend
-    // TODO: Implement backend API call for order submission
-    alert(
-      "Thank you for your preorder! We'll contact you shortly to confirm details.",
-    );
-    clearCart();
-    setShowCheckout(false);
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+      const response = await fetch(`${apiUrl}/preorders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          company: formData.company || undefined,
+          notes: formData.notes || undefined,
+          items: items.map((item) => ({
+            sku: item.sku,
+            name: item.name,
+            quantity: item.quantity,
+            unit_price: item.price,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        let errMessage = `Request failed with status ${response.status}`;
+        try {
+          const errBody = await response.json();
+          if (typeof errBody?.error === "string") {
+            errMessage = errBody.error;
+          }
+        } catch {
+          // ignore parse errors — keep the status-based message
+        }
+        throw new Error(errMessage);
+      }
+
+      const result: OrderConfirmation = await response.json();
+      setOrderConfirmation(result);
+      clearCart();
+      setShowCheckout(false);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to submit preorder",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleProceedToCheckout = () => {
@@ -88,6 +139,39 @@ export default function PreorderPage(): React.ReactElement {
       <Navigation />
 
       <div className={styles.container}>
+        {/* Order Confirmation Banner */}
+        {orderConfirmation && (
+          <div className={styles.confirmationBanner} role="status">
+            <svg
+              className={styles.confirmationIcon}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <div className={styles.confirmationContent}>
+              <strong>Preorder submitted successfully!</strong>
+              <p>
+                Order reference: <code>{orderConfirmation.id}</code>
+                <br />
+                {orderConfirmation.item_count} item
+                {orderConfirmation.item_count !== 1 ? "s" : ""} &mdash; Total: $
+                {orderConfirmation.total.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </p>
+              <p>We will contact you shortly to confirm your order details.</p>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className={styles.header}>
           <h1 className={styles.title}>Preorder Products</h1>
@@ -187,7 +271,7 @@ export default function PreorderPage(): React.ReactElement {
                       </p>
                       {product.comingSoon && !product.available && (
                         <div className={styles.deliveryBadge}>
-                          📦 Preorder • No Deposit Required
+                          📦 Preorder &bull; No Deposit Required
                         </div>
                       )}
                       <div>
@@ -355,6 +439,28 @@ export default function PreorderPage(): React.ReactElement {
         {showCheckout && items.length > 0 && (
           <div id="checkout-section" className={styles.checkoutSection}>
             <h2 className={styles.sectionTitle}>Customer Information</h2>
+
+            {/* Error Banner */}
+            {error && (
+              <div className={styles.errorBanner} role="alert">
+                <svg
+                  className={styles.errorIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
@@ -369,6 +475,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.name}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
 
@@ -384,6 +491,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.email}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
               </div>
@@ -401,6 +509,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.phone}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
 
@@ -415,6 +524,7 @@ export default function PreorderPage(): React.ReactElement {
                     className={styles.input}
                     value={formData.company}
                     onChange={handleFormChange}
+                    disabled={submitting}
                   />
                 </div>
               </div>
@@ -431,6 +541,7 @@ export default function PreorderPage(): React.ReactElement {
                   value={formData.address}
                   onChange={handleFormChange}
                   required
+                  disabled={submitting}
                 />
               </div>
 
@@ -447,6 +558,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.city}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
 
@@ -462,6 +574,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.state}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
               </div>
@@ -479,6 +592,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.zip}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
 
@@ -494,6 +608,7 @@ export default function PreorderPage(): React.ReactElement {
                     value={formData.country}
                     onChange={handleFormChange}
                     required
+                    disabled={submitting}
                   />
                 </div>
               </div>
@@ -508,12 +623,18 @@ export default function PreorderPage(): React.ReactElement {
                   className={`${styles.input} ${styles.textarea}`}
                   value={formData.notes}
                   onChange={handleFormChange}
+                  disabled={submitting}
                   placeholder="Any special requirements, customizations, delivery preferences, or questions? For bulk orders (5+ units), please provide details here and we'll contact you with volume pricing."
                 />
               </div>
 
-              <button type="submit" className={styles.submitButton}>
-                Complete Preorder
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={submitting}
+                aria-busy={submitting}
+              >
+                {submitting ? "Submitting..." : "Complete Preorder"}
               </button>
             </form>
           </div>
