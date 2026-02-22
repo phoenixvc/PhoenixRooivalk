@@ -701,9 +701,12 @@ Embed WASM simulator via iframe for true DOM isolation.
 
 ---
 
-### ADR-D001: Calendar Export and Integration
+### ADR-D010: Calendar Export and Integration
 
 **Date**: 2025-12-09 **Status**: Accepted
+
+> Renumbered from D001 to D010 to resolve collision with ADR-D001 (Monorepo
+> Structure with Turborepo).
 
 #### Context
 
@@ -725,7 +728,7 @@ Cal.com scheduling widget.
 - **Scheduling Integration**: Cal.com widget enables demo/meeting booking
 
 For detailed analysis and implementation plan, see
-[ADR-D001: Calendar Export and Integration](./adr-D001-calendar-export-integration.md).
+[ADR-D010: Calendar Export and Integration](./adr-D010-calendar-export-integration.md).
 
 ---
 

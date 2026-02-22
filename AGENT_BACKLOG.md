@@ -179,13 +179,13 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 53. ~~**DX-007**: Stale content fixes — cargo audit gotcha, mypy gotcha, keeper EtherLink defaults, progress frontmatter~~ (Done 2026-02-22)
 54. ~~**DX-006**: ADR backlog assessment — 45 standalone + 19 inline ADRs inventoried, 5 defects + 10 missing ADRs catalogued~~ (Done 2026-02-22)
 
-## Wave 6 Backlog — Agent-Discovered Items (Not Started)
+## Wave 6 Backlog — Agent-Discovered Items
 
 ### Design Token Consolidation (from DX-003/004 brand audit)
 
 | ID       | Priority | Description                                                                |
 | -------- | -------- | -------------------------------------------------------------------------- |
-| TOK-001  | P0       | ThemeContext.tsx only sets 7 vars — extend to set `--pr-*` accent tokens   |
+| ~~TOK-001~~  | P0       | ~~ThemeContext.tsx only sets 7 vars — extend to set `--pr-*` accent tokens~~ (completed: ThemeContext now sets --pr-accent-base/hover/active/subtle for all 3 themes)   |
 | TOK-002  | P1       | Logo SVGs use `#FF6B00` but token system uses `#f97316` — reconcile       |
 | TOK-003  | P2       | Marketing app doesn't import `packages/ui/src/tokens/index.css`            |
 | TOK-004  | P2       | Typography scale diverges across 3 apps (different clamp values)           |
@@ -211,7 +211,7 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 
 | ID       | Priority | Description                                                                |
 | -------- | -------- | -------------------------------------------------------------------------- |
-| DOC-003  | P0       | API documentation page is fictional — all routes/auth/SDKs are invented   |
+| ~~DOC-003~~  | P0       | ~~API documentation page is fictional — all routes/auth/SDKs are invented~~ (completed: rewritten with real routes from apps/api/src/lib.rs, real models, real auth flow)   |
 | DOC-004  | P1       | ADR-0035 references `apps/tauri` (wrong) and monolithic `ci.yml` (wrong)  |
 | DOC-005  | P2       | ADR-D004 documents Next.js 14; actual is 16.1.6                           |
 | DOC-006  | P2       | system-architecture-analysis.md has wrong EtherLink defaults              |
@@ -221,8 +221,8 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 
 | ID       | Priority | Description                                                                |
 | -------- | -------- | -------------------------------------------------------------------------- |
-| ADR-001  | P0       | D001 number collision — standalone calendar export vs inline monorepo decision |
-| ADR-002  | P0       | Dual `adr-0000-*` files with conflicting numbering schemes (template vs management) |
+| ~~ADR-001~~  | P0       | ~~D001 number collision — standalone calendar export vs inline monorepo decision~~ (completed: calendar export renumbered to D010, all cross-references updated) |
+| ~~ADR-002~~  | P0       | ~~Dual `adr-0000-*` files with conflicting numbering schemes~~ (completed: adr-management.md updated to reference template-and-guide.md as canonical) |
 | ADR-003  | P1       | ADRs 0001-0010 are stubs in inline file — no standalone files for core system decisions |
 | ADR-004  | P2       | Mechanical ADRs reuse 0001-0005 namespace — rename to M001-M005           |
 | ADR-005  | P3       | Build bug in ADR-0072 — unrendered template variable                      |
@@ -231,9 +231,9 @@ Wave 6 backlog: 9 TOK + 7 MKT + 5 DOC + 5 ADR-structural + 6 ADR-high + 4 ADR-me
 
 | ID       | Priority | Description                                                                |
 | -------- | -------- | -------------------------------------------------------------------------- |
-| ADR-006  | P0       | Rust workspace structure + `rustls`-only TLS policy (RUSTSEC-2025-0004)   |
-| ADR-007  | P0       | SQLite as operational database (URL priority chain, PRAGMAs, migrations)  |
-| ADR-008  | P0       | WASM integration strategy (3 targets, getrandom, sync:wasm pre-build)    |
+| ~~ADR-006~~  | P0       | ~~Rust workspace structure + `rustls`-only TLS policy (RUSTSEC-2025-0004)~~ (completed: ADR-0101 created)   |
+| ~~ADR-007~~  | P0       | ~~SQLite as operational database (URL priority chain, PRAGMAs, migrations)~~ (completed: ADR-0102 created)  |
+| ~~ADR-008~~  | P0       | ~~WASM integration strategy (3 targets, getrandom, sync:wasm pre-build)~~ (completed: ADR-0401 created)    |
 | ADR-009  | P1       | Keeper dual-loop design (tokio::select!, backoff, JobProvider trait)      |
 | ADR-010  | P1       | Dual-chain evidence anchoring (AnchorProvider, keeper routing, Merkle)    |
 | ADR-011  | P1       | Evidence hashing algorithm selection (SHA-256, legal implications)        |
