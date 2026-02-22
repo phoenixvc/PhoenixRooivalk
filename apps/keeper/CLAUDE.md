@@ -54,8 +54,8 @@ Created automatically on startup via `ensure_schema()`:
 | `KEEPER_POLL_MS`        | `5000`                               | Job polling interval (ms)   |
 | `KEEPER_HTTP_PORT`      | `8081`                               | Health check port           |
 | `KEEPER_PROVIDER`       | `stub`                               | stub/etherlink/solana/multi |
-| `ETHERLINK_ENDPOINT`    | `https://node.etherlink.com`         | EtherLink node URL          |
-| `ETHERLINK_NETWORK`     | `mainnet`                            | EtherLink network           |
+| `ETHERLINK_ENDPOINT`    | `https://node.ghostnet.etherlink.com`| EtherLink node URL          |
+| `ETHERLINK_NETWORK`     | `ghostnet`                           | EtherLink network           |
 | `ETHERLINK_PRIVATE_KEY` | —                                    | Signing key (required)      |
 | `SOLANA_ENDPOINT`       | `https://api.devnet.solana.com`      | Solana RPC endpoint         |
 | `SOLANA_NETWORK`        | `devnet`                             | Solana network              |

@@ -224,8 +224,10 @@ cargo run -p evidence-cli -- \
   gated with `#[cfg(target_arch = "wasm32")]`.
 - **Rust CI builds require Linux GUI deps** for Tauri (GTK, webkit,
   appindicator).
-- **Cargo audit is currently skipped** in CI (CVSS 4.0 support pending).
-- **Python mypy has known type errors** — CI runs with `continue-on-error`.
+- **Cargo audit** runs in CI with `--ignore RUSTSEC-2023-0071` (pending
+  investigation).
+- **Python mypy** type errors are resolved — CI enforces mypy (no
+  `continue-on-error`).
 
 ## Coding Standards
 

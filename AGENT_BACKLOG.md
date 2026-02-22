@@ -174,3 +174,42 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (51 completed this session, 3 
 50. ~~**FIN-003**: BOM component breakdown for SkySnare, SkyWatch Pro, AeroNet Enterprise~~ (Done 2026-02-22)
 51. ~~**DX-002**: Accessibility fixes — focus outlines, nav landmarks, aria-hidden, prefers-reduced-motion~~ (Done 2026-02-22)
 52. ~~**DX-008**: CLAUDE.md accuracy verified against codebase~~ (Done 2026-02-22)
+53. ~~**DX-007**: Stale content fixes — cargo audit gotcha, mypy gotcha, keeper EtherLink defaults, progress frontmatter~~ (Done 2026-02-22)
+
+## Wave 6 Backlog — Agent-Discovered Items (Not Started)
+
+### Design Token Consolidation (from DX-003/004 brand audit)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| TOK-001  | P0       | ThemeContext.tsx only sets 7 vars — extend to set `--pr-*` accent tokens   |
+| TOK-002  | P1       | Logo SVGs use `#FF6B00` but token system uses `#f97316` — reconcile       |
+| TOK-003  | P2       | Marketing app doesn't import `packages/ui/src/tokens/index.css`            |
+| TOK-004  | P2       | Typography scale diverges across 3 apps (different clamp values)           |
+| TOK-005  | P2       | Duration tokens: marketing `--duration-fast` 150ms vs shared 100ms        |
+| TOK-006  | P3       | Z-index: 30+ raw integer literals in marketing CSS modules                 |
+| TOK-007  | P3       | Hardcoded colors in Footer, preorder, gamification, docs-landing CSS      |
+| TOK-008  | P3       | No SkySnare/AeroNet sub-brand tokens defined                              |
+| TOK-009  | P3       | Container width fragmentation (1160px vs 1400px vs 1440px)                |
+
+### Market Segment Gaps (from DX-005 gap analysis)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| MKT-002  | P1       | No mid-market bundle ($5K-$30K) — gap between prosumer and enterprise     |
+| MKT-003  | P1       | Law enforcement vertical missing — blockchain evidence is key differentiator|
+| MKT-004  | P1       | NATO non-US military positioning not activated (non-ITAR advantage)        |
+| MKT-005  | P1       | Correctional facilities bundle and case study needed                       |
+| MKT-006  | P2       | Agriculture farm pack bundle (existing hardware)                           |
+| MKT-007  | P2       | Live events rental pricing model                                           |
+| MKT-008  | P2       | Maritime AeroNet bundle (SkyWatch Marine + countermeasure)                 |
+
+### Stale Content (from DX-007 audit)
+
+| ID       | Priority | Description                                                                |
+| -------- | -------- | -------------------------------------------------------------------------- |
+| DOC-003  | P0       | API documentation page is fictional — all routes/auth/SDKs are invented   |
+| DOC-004  | P1       | ADR-0035 references `apps/tauri` (wrong) and monolithic `ci.yml` (wrong)  |
+| DOC-005  | P2       | ADR-D004 documents Next.js 14; actual is 16.1.6                           |
+| DOC-006  | P2       | system-architecture-analysis.md has wrong EtherLink defaults              |
+| DOC-007  | P2       | documentation-status.md is 3 months stale (Nov 2025, Netlify reference)   |
