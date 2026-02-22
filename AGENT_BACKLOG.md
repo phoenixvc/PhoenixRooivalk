@@ -2,7 +2,7 @@
 
 Last scanned: 2026-02-22
 
-Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (31 completed this session)
+Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (35 completed this session)
 
 ## P0-CRITICAL — Must fix
 
@@ -67,10 +67,10 @@ Summary: 5 P0, 16 P1, 21 P2, 12 P3 = **54 items** (31 completed this session)
 | ------- | ---- | ----------------- | ---------------------------------------------------- |
 | ~~TST-001~~ | 10   | `apps/api/`       | ~~Career application endpoint — minimal tests~~ (completed: 5 tests — happy path, no cover letter, missing/invalid session, team member rejection) |
 | ~~TST-002~~ | 10   | `apps/api/`       | ~~Profile update edge cases untested~~ (completed: 7 tests — full/partial update, null fields, auth, timestamp, team status preservation) |
-| TST-003 | 10   | `apps/marketing/` | Cart components lack edge case tests                 |
-| TST-004 | 10   | `apps/marketing/` | Auth flow needs integration tests                    |
-| TST-005 | 10   | `apps/marketing/` | Page components (about, capabilities, etc.) untested |
-| TST-006 | 3    | `apps/detector/`  | Hardware-dependent tests conditionally skipped       |
+| ~~TST-003~~ | 10   | `apps/marketing/` | ~~Cart components lack edge case tests~~ (completed: 19 tests — add/remove/update/clear, quantity edge cases, localStorage persistence) |
+| ~~TST-004~~ | 10   | `apps/marketing/` | ~~Auth flow needs integration tests~~ (completed: 15 tests — login/logout, session, team member, API interactions, profile confirmation) |
+| ~~TST-005~~ | 10   | `apps/marketing/` | ~~Page components (about, capabilities, etc.) untested~~ (completed: 21 tests — product data validation, pricing, categories, phases, smoke tests) |
+| ~~TST-006~~ | 3    | `apps/detector/`  | ~~Hardware-dependent tests conditionally skipped~~ (completed: skip fixtures added to conftest.py, CI already uses `-m "not hardware"`) |
 
 ### Product and pricing
 
