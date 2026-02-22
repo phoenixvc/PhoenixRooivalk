@@ -404,3 +404,97 @@ pub async fn post_seed_team_members(State(state): State<AppState>) -> impl IntoR
         Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
     }
 }
+
+// Preorder handlers
+
+/// Basic email format validation — checks for exactly one '@' with non-empty
+/// local and domain parts. Not RFC 5321 complete; good enough as a first gate
+/// before the data hits the DB.
+fn is_valid_email(email: &str) -> bool {
+    let parts: Vec<&str> = email.splitn(2, '@').collect();
+    if parts.len() != 2 {
+        return false;
+    }
+    !parts[0].is_empty() && parts[1].contains('.')
+}
+
+pub async fn post_preorder(
+    State(state): State<AppState>,
+    Json(body): Json<crate::models::PreorderIn>,
+) -> impl IntoResponse {
+    // Input validation
+    let required_fields = [
+        ("name", body.name.trim()),
+        ("email", body.email.trim()),
+        ("phone", body.phone.trim()),
+        ("address", body.address.trim()),
+        ("city", body.city.trim()),
+        ("state", body.state.trim()),
+        ("zip", body.zip.trim()),
+        ("country", body.country.trim()),
+    ];
+    for (field, value) in required_fields {
+        if value.is_empty() {
+            return error_response(
+                StatusCode::UNPROCESSABLE_ENTITY,
+                format!("Field '{field}' must not be blank"),
+            );
+        }
+    }
+
+    if !is_valid_email(body.email.trim()) {
+        return error_response(
+            StatusCode::UNPROCESSABLE_ENTITY,
+            "Invalid email address",
+        );
+    }
+
+    if body.items.is_empty() {
+        return error_response(
+            StatusCode::UNPROCESSABLE_ENTITY,
+            "Order must contain at least one item",
+        );
+    }
+
+    for item in &body.items {
+        if item.quantity <= 0 {
+            return error_response(
+                StatusCode::UNPROCESSABLE_ENTITY,
+                "Item quantity must be greater than zero",
+            );
+        }
+        if item.unit_price < 0.0 {
+            return error_response(
+                StatusCode::UNPROCESSABLE_ENTITY,
+                "Item unit_price must not be negative",
+            );
+        }
+    }
+
+    match crate::db::create_preorder(&state.pool, &body).await {
+        Ok(preorder) => (StatusCode::CREATED, Json(serde_json::json!(preorder))).into_response(),
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
+    }
+}
+
+pub async fn list_preorders(
+    State(state): State<AppState>,
+    Query(pagination): Query<Pagination>,
+) -> impl IntoResponse {
+    let (page, items_per_page, offset) = parse_pagination(pagination);
+
+    match crate::db::list_preorders(&state.pool, items_per_page, offset).await {
+        Ok((preorders, total_count)) => {
+            create_paginated_response(preorders, page, items_per_page, total_count)
+        }
+        Err(db_error) => error_response(StatusCode::INTERNAL_SERVER_ERROR, db_error),
+    }
+}
+
+pub async fn get_preorder(
+    State(state): State<AppState>,
+    Path(id): Path<String>,
+) -> impl IntoResponse {
+    let result = crate::db::get_preorder_by_id(&state.pool, &id).await;
+    handle_get_by_id_response(result, id)
+}

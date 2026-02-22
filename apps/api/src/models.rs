@@ -161,3 +161,47 @@ pub struct CareerApplicationOut {
     pub created_ms: i64,
     pub updated_ms: i64,
 }
+
+// Preorder models
+#[derive(Debug, Deserialize)]
+pub struct PreorderItemIn {
+    pub sku: String,
+    pub name: String,
+    pub quantity: i32,
+    pub unit_price: f64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PreorderIn {
+    pub name: String,
+    pub email: String,
+    pub phone: String,
+    pub company: Option<String>,
+    pub address: String,
+    pub city: String,
+    pub state: String,
+    pub zip: String,
+    pub country: String,
+    pub notes: Option<String>,
+    pub items: Vec<PreorderItemIn>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct PreorderOut {
+    pub id: String,
+    pub status: String,
+    pub total: f64,
+    pub item_count: i32,
+    pub created_ms: i64,
+}
+
+#[derive(Debug, Serialize)]
+pub struct PreorderListItemOut {
+    pub id: String,
+    pub name: String,
+    pub email: String,
+    pub status: String,
+    pub total_amount: f64,
+    pub created_ms: i64,
+    pub updated_ms: i64,
+}

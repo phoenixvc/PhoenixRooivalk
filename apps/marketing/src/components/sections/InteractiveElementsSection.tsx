@@ -16,7 +16,7 @@ export const InteractiveElementsSection: React.FC = () => {
   const [roiInputs, setRoiInputs] = useState<ROIInputs>({
     threatFrequency: 5, // threats per month
     averageResponseTime: 3000, // milliseconds
-    deploymentCost: 250000, // USD
+    deploymentCost: 150000, // USD — AeroNet Enterprise setup ($150K, products.ts AN-ENT-001); adjust slider for your tier
     personnelCost: 150000, // USD per year
   });
 

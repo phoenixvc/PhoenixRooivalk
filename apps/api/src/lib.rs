@@ -117,6 +117,12 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
             "/admin/seed-team-members",
             post(handlers::post_seed_team_members),
         )
+        // Preorders
+        .route(
+            "/preorders",
+            post(handlers::post_preorder).get(handlers::list_preorders),
+        )
+        .route("/preorders/{id}", get(handlers::get_preorder))
         // x402 Premium Evidence Verification
         .route(
             "/api/v1/evidence/verify-premium",
