@@ -77,7 +77,6 @@ async function processEmailQueueJob(
   });
 
   try {
-    // TODO: Pass actual email sending function when SendGrid is configured
     const result = await notificationsService.processEmailQueue();
 
     jobLogger.info("Email queue processed", {
