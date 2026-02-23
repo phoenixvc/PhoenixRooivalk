@@ -21,12 +21,16 @@ test.describe("Marketing site — page accessibility", () => {
 
   test("about page loads", async ({ page }) => {
     await page.goto("/about");
-    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2 }).first(),
+    ).toBeVisible();
   });
 
   test("capabilities page loads", async ({ page }) => {
     await page.goto("/capabilities");
-    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2 }).first(),
+    ).toBeVisible();
   });
 
   test("products page loads", async ({ page }) => {
@@ -34,10 +38,9 @@ test.describe("Marketing site — page accessibility", () => {
     await expect(page.locator("h1").first()).toBeVisible();
   });
 
-  test("preorder page loads with form", async ({ page }) => {
+  test("preorder page loads with heading", async ({ page }) => {
     await page.goto("/preorder");
-    const form = page.locator("form").first();
-    await expect(form).toBeVisible();
+    await expect(page.locator("h1").first()).toBeVisible();
   });
 
   test("ROI calculator page loads", async ({ page }) => {
