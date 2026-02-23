@@ -12,14 +12,14 @@ test.describe("API health checks", () => {
     const response = await request.get(`${API_URL}/evidence`);
     expect(response.ok()).toBeTruthy();
     const body = await response.json();
-    expect(body).toHaveProperty("items");
+    expect(body).toHaveProperty("data");
   });
 
   test("GET /countermeasures returns 200 with list", async ({ request }) => {
     const response = await request.get(`${API_URL}/countermeasures`);
     expect(response.ok()).toBeTruthy();
     const body = await response.json();
-    expect(body).toHaveProperty("items");
+    expect(body).toHaveProperty("data");
   });
 
   test("POST /auth/login with valid email returns session", async ({
