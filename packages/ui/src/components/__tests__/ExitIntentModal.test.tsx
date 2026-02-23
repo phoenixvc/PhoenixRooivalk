@@ -69,7 +69,7 @@ describe("ExitIntentModal", () => {
     fireEvent.mouseLeave(document.body, { clientY: -1 });
 
     await waitFor(() => {
-      const downloadLink = screen.getByRole("link", { name: /download now/i });
+      const downloadLink = screen.getByRole("link", { name: /download technical whitepaper/i });
       expect(downloadLink).toBeInTheDocument();
       expect(downloadLink).toHaveAttribute("href", mockDocsUrl);
     });
@@ -220,7 +220,7 @@ describe("ExitIntentModal", () => {
       expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
-    const downloadLink = screen.getByRole("link", { name: /download now/i });
+    const downloadLink = screen.getByRole("link", { name: /download technical whitepaper/i });
     const closeButton = screen.getByRole("button", { name: /maybe later/i });
 
     // Focus should be on close button (first focusable element) initially
