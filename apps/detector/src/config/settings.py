@@ -311,6 +311,7 @@ class TurretControlSettings(BaseModel):
     )
 
     if PYDANTIC_V2:
+
         @model_validator(mode="after")  # type: ignore[misc]
         def _validate_ttl_vs_watchdog(self):
             if self.command_ttl_ms >= self.watchdog_timeout_ms:
