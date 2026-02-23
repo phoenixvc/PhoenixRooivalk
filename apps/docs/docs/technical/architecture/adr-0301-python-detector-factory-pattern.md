@@ -52,15 +52,15 @@ checks would be unmaintainable.
 
 ## Options Considered
 
-| Criteria | Factory Pattern (Selected) | Strategy + Explicit Selection | Monolithic Conditionals | Plugin System (Dynamic Loading) |
-| --- | --- | --- | --- | --- |
-| Single CLI | Yes | Yes | Yes | Yes |
-| Auto-detection | Yes | No (manual flag) | N/A | Yes |
-| Code separation | High | High | Low | High |
-| Testing isolation | High | High | Low | High |
-| Debugging complexity | Medium | Low | Low | High |
-| Third-party extensibility | No | No | No | Yes |
-| Implementation complexity | Medium | Low | Low | High |
+| Criteria                  | Factory Pattern (Selected) | Strategy + Explicit Selection | Monolithic Conditionals | Plugin System (Dynamic Loading) |
+| ------------------------- | -------------------------- | ----------------------------- | ----------------------- | ------------------------------- |
+| Single CLI                | Yes                        | Yes                           | Yes                     | Yes                             |
+| Auto-detection            | Yes                        | No (manual flag)              | N/A                     | Yes                             |
+| Code separation           | High                       | High                          | Low                     | High                            |
+| Testing isolation         | High                       | High                          | Low                     | High                            |
+| Debugging complexity      | Medium                     | Low                           | Low                     | High                            |
+| Third-party extensibility | No                         | No                            | No                      | Yes                             |
+| Implementation complexity | Medium                     | Low                           | Low                     | High                            |
 
 ### Option 1: Factory Pattern ✅ Selected
 
@@ -69,8 +69,8 @@ with concrete implementations per platform. Auto-detect hardware at startup and
 instantiate appropriate factories.
 
 **Pros**: Single entry point, clean separation of platform code, easy testing
-with mocks.
-**Cons**: Indirection overhead, requires discipline to keep interfaces stable.
+with mocks. **Cons**: Indirection overhead, requires discipline to keep
+interfaces stable.
 
 ### Option 2: Strategy Pattern with Explicit Selection ❌ Rejected
 
@@ -86,17 +86,17 @@ binary" goal.
 Use `if platform == "pi"` checks throughout the codebase with all platform code
 in the same modules.
 
-**Pros**: No abstraction overhead, straightforward control flow.
-**Cons**: Unmaintainable at scale, tight coupling, difficult testing, violates
-separation of concerns.
+**Pros**: No abstraction overhead, straightforward control flow. **Cons**:
+Unmaintainable at scale, tight coupling, difficult testing, violates separation
+of concerns.
 
 ### Option 4: Plugin System with Dynamic Loading ❌ Rejected
 
-Load platform-specific modules dynamically at runtime via importlib/entry points.
+Load platform-specific modules dynamically at runtime via importlib/entry
+points.
 
-**Pros**: Maximum flexibility, third-party extensions possible.
-**Cons**: Complex error handling, harder to package, discovery mechanism
-overhead.
+**Pros**: Maximum flexibility, third-party extensions possible. **Cons**:
+Complex error handling, harder to package, discovery mechanism overhead.
 
 ---
 

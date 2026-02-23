@@ -22,15 +22,23 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: The threat simulator needs a desktop distribution that provides
-   native file system access (evidence persistence), system tray integration,
-   and offline operation — while reusing the same Leptos/WASM UI.
-2. **Decision**: Use Tauri 2 for desktop packaging. Tauri wraps the system's
-   native webview (WebKit on Linux, WebView2 on Windows, WKWebView on macOS)
-   with a Rust backend for IPC, producing ~10MB binaries.
-3. **Trade-off**: Tauri requires platform-specific build dependencies (GTK/
-   webkit on Linux) and the webview rendering may differ slightly across
-   platforms, but bundle size is 15x smaller than Electron.
+### Problem
+
+The threat simulator needs a desktop distribution that provides native file
+system access (evidence persistence), system tray integration, and offline
+operation — while reusing the same Leptos/WASM UI.
+
+### Decision
+
+Use Tauri 2 for desktop packaging. Tauri wraps the system's native webview
+(WebKit on Linux, WebView2 on Windows, WKWebView on macOS) with a Rust backend
+for IPC, producing ~10MB binaries.
+
+### Trade-off
+
+Tauri requires platform-specific build dependencies (GTK/webkit on Linux) and
+the webview rendering may differ slightly across platforms, but bundle size is
+15x smaller than Electron.
 
 ---
 
@@ -42,6 +50,9 @@ The threat simulator desktop app must:
 - Run offline without a web server
 - Integrate with the OS (system tray, file associations)
 - Reuse the same Leptos UI that runs in the browser
+
+_This ADR follows the canonical template described in
+`./adr-0000-template-and-guide.md`._
 
 ---
 

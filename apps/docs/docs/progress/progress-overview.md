@@ -9,6 +9,10 @@ keywords: [progress, weekly reports, updates, development]
 difficulty: beginner
 estimated_reading_time: 2
 points: 25
+tags:
+  - progress
+  - reports
+prerequisites: []
 ---
 
 # Weekly Progress Reports

@@ -25,12 +25,19 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: System failures, security incidents, and operational issues
-   require standardized response procedures to minimize impact and ensure
-   consistent handling
-2. **Decision**: Implement structured incident response framework with severity
-   classification, escalation paths, and automated runbooks
-3. **Trade-off**: Process overhead vs. response consistency and speed
+### Problem
+
+System failures, security incidents, and operational issues require standardized
+response procedures to minimize impact and ensure consistent handling.
+
+### Decision
+
+Implement a structured incident response framework with severity classification,
+escalation paths, and automated runbooks.
+
+### Trade-off
+
+Process overhead vs. response consistency and speed.
 
 ---
 
@@ -61,13 +68,13 @@ _This ADR follows the canonical template described in
 
 ## Options Considered
 
-| Criteria | Structured Framework (Selected) | Ad-Hoc Response | Third-Party ITSM | Fully Automated |
-| --- | --- | --- | --- | --- |
-| Response consistency | High | Low | High | High |
-| Setup cost | Medium | None | High | Very High |
-| Customizability | High | N/A | Low | Medium |
-| Automation potential | Medium–High | None | Medium | Full |
-| Team learning | High (RCA driven) | Low | Medium | Low |
+| Criteria             | Structured Framework (Selected) | Ad-Hoc Response | Third-Party ITSM | Fully Automated |
+| -------------------- | ------------------------------- | --------------- | ---------------- | --------------- |
+| Response consistency | High                            | Low             | High             | High            |
+| Setup cost           | Medium                          | None            | High             | Very High       |
+| Customizability      | High                            | N/A             | Low              | Medium          |
+| Automation potential | Medium–High                     | None            | Medium           | Full            |
+| Team learning        | High (RCA driven)               | Low             | Medium           | Low             |
 
 ### Option 1: Structured Incident Response Framework ✅ Selected
 
@@ -81,15 +88,15 @@ review.
 
 Handle incidents as they arise without predefined procedures.
 
-**Pros**: No upfront cost, flexible.
-**Cons**: Inconsistent response, knowledge loss, longer MTTR, no learning loop.
+**Pros**: No upfront cost, flexible. **Cons**: Inconsistent response, knowledge
+loss, longer MTTR, no learning loop.
 
 ### Option 3: Third-Party ITSM Platform ❌ Rejected
 
 Adopt an ITSM tool (PagerDuty, ServiceNow) to manage all incident workflows.
 
-**Pros**: Battle-tested workflows, built-in reporting, integrations.
-**Cons**: Expensive, vendor lock-in, over-engineered for current team size.
+**Pros**: Battle-tested workflows, built-in reporting, integrations. **Cons**:
+Expensive, vendor lock-in, over-engineered for current team size.
 
 ---
 

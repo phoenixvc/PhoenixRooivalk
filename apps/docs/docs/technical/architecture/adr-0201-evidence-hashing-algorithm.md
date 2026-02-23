@@ -54,13 +54,13 @@ deployment would invalidate all existing evidence records.
 
 ## Options Considered
 
-| Criteria | SHA-256 (Selected) | BLAKE3 | SHA-3 (Keccak-256) |
-| --- | --- | --- | --- |
-| FIPS / Legal Acceptance | High (FIPS 180-4, courts) | Low (not FIPS) | Medium (FIPS 202) |
-| Blockchain Alignment | Native (Solana, EtherLink) | Non-native | Ethereum-only |
-| Performance | Moderate (~500 MB/s) | High (~1.5 GB/s) | Low–Moderate |
-| Complexity | Low | Medium | Medium |
-| Audit Familiarity | High | Low | Medium |
+| Criteria                | SHA-256 (Selected)         | BLAKE3           | SHA-3 (Keccak-256) |
+| ----------------------- | -------------------------- | ---------------- | ------------------ |
+| FIPS / Legal Acceptance | High (FIPS 180-4, courts)  | Low (not FIPS)   | Medium (FIPS 202)  |
+| Blockchain Alignment    | Native (Solana, EtherLink) | Non-native       | Ethereum-only      |
+| Performance             | Moderate (~500 MB/s)       | High (~1.5 GB/s) | Low–Moderate       |
+| Complexity              | Low                        | Medium           | Medium             |
+| Audit Familiarity       | High                       | Low              | Medium             |
 
 ### Option 1: SHA-256 ✅ Selected
 

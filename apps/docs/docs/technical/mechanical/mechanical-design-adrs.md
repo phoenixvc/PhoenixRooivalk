@@ -14,13 +14,22 @@ tags:
 
 ## Executive Summary
 
-This document consolidates all Architecture Decision Records (ADRs) for the
-Phoenix Rooivalk mechanical design, covering critical design decisions for the
-RKV-M tilt-quad system. The ADRs document the rationale behind key mechanical
-design choices, trade-offs, and implementation strategies.
+### Problem
 
-**Design Philosophy**: Modular, mission-adaptable mechanical architecture with
-emphasis on survivability, performance, and operational flexibility.
+The RKV-M tilt-quad system requires numerous interrelated mechanical design
+decisions — rotor configuration, blade count, powerplant class, and variant
+strategy — that must be documented with clear rationale and trade-offs.
+
+### Decision
+
+Consolidate all mechanical ADRs into a single document using the M-prefix
+namespace (M-0001 through M-0005), covering ducted vs. open props, single vs.
+coaxial rotors, blade count, powerplant classes, and variant strategy.
+
+### Trade-off
+
+Modular, mission-adaptable architecture with emphasis on survivability and
+performance vs. increased mechanical complexity and logistics for mission kits.
 
 ---
 

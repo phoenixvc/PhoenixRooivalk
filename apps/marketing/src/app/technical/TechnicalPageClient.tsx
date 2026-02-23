@@ -1,11 +1,20 @@
 "use client";
+import dynamic from "next/dynamic";
 import React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import styles from "./technical.module.css";
 
-export default function TechnicalPage(): React.ReactElement {
+const InteractiveMesh = dynamic(
+  () =>
+    import("../../components/ui/InteractiveMesh").then(
+      (mod) => mod.InteractiveMesh,
+    ),
+  { ssr: false },
+);
+
+/** Technical specifications marketing page — AI + blockchain capabilities. */
+export function TechnicalPage(): React.ReactElement {
   return (
     <main className={styles.main}>
       <InteractiveMesh
@@ -38,7 +47,7 @@ export default function TechnicalPage(): React.ReactElement {
       <section className={`${styles.section} ${styles.sectionGradient}`}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>AI + Blockchain Capabilities</h2>
-          <div className={`${styles.grid} mb-12`}>
+          <div className={`${styles.grid} ${styles.gridSpaced}`}>
             <div className={styles.card}>
               <h3 className={styles.cardTitle}>AI Performance</h3>
               <ul className={styles.cardList}>
@@ -176,10 +185,7 @@ export default function TechnicalPage(): React.ReactElement {
             ].map((config) => (
               <div key={config.title} className={styles.card}>
                 <h3 className={styles.cardTitle}>{config.title}</h3>
-                <p
-                  className={styles.subtitle}
-                  style={{ marginBottom: "1rem", fontSize: "0.875rem" }}
-                >
+                <p className={`${styles.subtitle} ${styles.configDescription}`}>
                   {config.description}
                 </p>
                 <ul className={styles.cardList}>
@@ -324,3 +330,5 @@ export default function TechnicalPage(): React.ReactElement {
     </main>
   );
 }
+
+export default TechnicalPage;

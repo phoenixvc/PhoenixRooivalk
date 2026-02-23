@@ -153,7 +153,8 @@ const funding = {
   },
 };
 
-export default function UnitEconomicsPageClient(): React.ReactElement {
+/** Unit economics marketing page — CAC, LTV, BOM, margins, and projections. */
+export function UnitEconomicsPageClient(): React.ReactElement {
   const [year1Systems, setYear1Systems] = React.useState(DEFAULT_YEAR1_SYSTEMS);
   const [avgRevenue, setAvgRevenue] = React.useState(
     DEFAULT_AVG_REVENUE_PER_SYSTEM,
@@ -516,3 +517,5 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
     </main>
   );
 }
+
+export default UnitEconomicsPageClient;

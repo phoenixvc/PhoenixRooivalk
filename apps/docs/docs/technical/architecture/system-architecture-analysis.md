@@ -842,4 +842,4 @@ deployment and optimization.
 
 ---
 
-_Document version: 1.0_ _Last updated: 2026-01-11_
+_Document version: 1.1_ _Last updated: 2026-02-23_

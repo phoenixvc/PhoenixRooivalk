@@ -23,17 +23,25 @@ prerequisites:
 
 ## Executive Summary
 
-1. **Problem**: Evidence integrity claims require blockchain anchoring, but no
-   single chain meets all requirements — Solana offers speed and low cost while
-   EtherLink offers EVM compatibility and broader tooling. Chain-specific
-   failures must not prevent evidence recording.
-2. **Decision**: Define an `AnchorProvider` trait implemented by Solana,
-   EtherLink, and stub providers. The keeper routes jobs via the
-   `KEEPER_PROVIDER` environment variable (`stub`, `solana`, `etherlink`,
-   `multi`). Batch anchoring via Merkle trees reduces per-item cost by ~100x.
-3. **Trade-off**: Multi-chain adds operational complexity and double the
-   transaction costs, but eliminates single-chain dependency risk and enables
-   cross-chain evidence verification.
+### Problem
+
+Evidence integrity claims require blockchain anchoring, but no single chain
+meets all requirements — Solana offers speed and low cost while EtherLink offers
+EVM compatibility and broader tooling. Chain-specific failures must not prevent
+evidence recording.
+
+### Decision
+
+Define an `AnchorProvider` trait implemented by Solana, EtherLink, and stub
+providers. The keeper routes jobs via the `KEEPER_PROVIDER` environment variable
+(`stub`, `solana`, `etherlink`, `multi`). Batch anchoring via Merkle trees
+reduces per-item cost by ~100x.
+
+### Trade-off
+
+Multi-chain adds operational complexity and double the transaction costs, but
+eliminates single-chain dependency risk and enables cross-chain evidence
+verification.
 
 ---
 
@@ -57,9 +65,20 @@ The system must support:
 - Dual-chain deployments (maximum evidence durability)
 - Batch anchoring to reduce per-evidence transaction costs
 
+_This ADR follows the canonical template described in
+`./adr-0000-template-and-guide.md`._
+
 ---
 
 ## Options Considered
+
+| Criteria            | Trait Abstraction (Selected)     | Compile-Time Selection      | External SaaS          |
+| ------------------- | -------------------------------- | --------------------------- | ---------------------- |
+| Runtime flexibility | High — switch chains via env var | None — recompile required   | High                   |
+| Multi-chain support | Native (multi mode)              | Separate binary             | Built-in               |
+| Edge deployment     | Yes — no external deps           | Yes                         | No — requires internet |
+| New chain effort    | Implement 1 trait (2 methods)    | Add feature flags + rebuild | Vendor support         |
+| Testing             | Stub provider, no infra needed   | Feature gating              | Mock HTTP              |
 
 ### Option 1: Trait-Based Provider Abstraction ✅ Selected
 
