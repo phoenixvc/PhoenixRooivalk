@@ -234,7 +234,7 @@ To activate Cal.com integration:
 
 For issues or questions:
 
-- **Documentation**: See ADR-D001 for detailed implementation
+- **Documentation**: See ADR-D010 for detailed implementation
 - **Tests**: Review `calendar.test.ts` for usage examples
 - **Contact**: Visit `/contact` for support
 

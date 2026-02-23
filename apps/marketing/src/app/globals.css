@@ -746,7 +746,7 @@ textarea:focus-visible {
   background: rgb(var(--primary));
   color: white;
   padding: 1rem 2rem;
-  z-index: var(--pr-z-tour);
+  z-index: var(--pr-z-skip-nav);
   border-radius: 0 0 8px 0;
   transition: top 0.3s;
 }

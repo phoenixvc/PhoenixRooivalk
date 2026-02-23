@@ -50,6 +50,56 @@ checks would be unmaintainable.
 
 ---
 
+## Options Considered
+
+| Criteria | Factory Pattern (Selected) | Strategy + Explicit Selection | Monolithic Conditionals | Plugin System (Dynamic Loading) |
+| --- | --- | --- | --- | --- |
+| Single CLI | Yes | Yes | Yes | Yes |
+| Auto-detection | Yes | No (manual flag) | N/A | Yes |
+| Code separation | High | High | Low | High |
+| Testing isolation | High | High | Low | High |
+| Debugging complexity | Medium | Low | Low | High |
+| Third-party extensibility | No | No | No | Yes |
+| Implementation complexity | Medium | Low | Low | High |
+
+### Option 1: Factory Pattern ✅ Selected
+
+Define abstract interfaces (`FrameSource`, `InferenceEngine`, `ObjectTracker`)
+with concrete implementations per platform. Auto-detect hardware at startup and
+instantiate appropriate factories.
+
+**Pros**: Single entry point, clean separation of platform code, easy testing
+with mocks.
+**Cons**: Indirection overhead, requires discipline to keep interfaces stable.
+
+### Option 2: Strategy Pattern with Explicit Selection ❌ Rejected
+
+Similar interfaces but require explicit runtime configuration (e.g.,
+`--platform=pi`) instead of auto-detection.
+
+**Pros**: No auto-detection logic, explicit control, simpler debugging.
+**Cons**: User must know platform, error-prone deployment, breaks "single
+binary" goal.
+
+### Option 3: Monolithic Conditional Logic ❌ Rejected
+
+Use `if platform == "pi"` checks throughout the codebase with all platform code
+in the same modules.
+
+**Pros**: No abstraction overhead, straightforward control flow.
+**Cons**: Unmaintainable at scale, tight coupling, difficult testing, violates
+separation of concerns.
+
+### Option 4: Plugin System with Dynamic Loading ❌ Rejected
+
+Load platform-specific modules dynamically at runtime via importlib/entry points.
+
+**Pros**: Maximum flexibility, third-party extensions possible.
+**Cons**: Complex error handling, harder to package, discovery mechanism
+overhead.
+
+---
+
 ## Decision
 
 ### Pluggable Interfaces

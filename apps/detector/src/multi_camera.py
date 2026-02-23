@@ -313,9 +313,31 @@ class CameraFusionManager:
                 return False
 
             # Compute position relative to the camera's mounting point.
-            relative_x = predicted_position[0] - cam_cfg.position_meters[0]
-            relative_y = predicted_position[1] - cam_cfg.position_meters[1]
-            relative_z = predicted_position[2] - cam_cfg.position_meters[2]
+            rel_x = predicted_position[0] - cam_cfg.position_meters[0]
+            rel_y = predicted_position[1] - cam_cfg.position_meters[1]
+            rel_z = predicted_position[2] - cam_cfg.position_meters[2]
+
+            # Rotate into camera coordinates (inverse of camera rotation).
+            yaw, pitch, roll = (
+                math.radians(cam_cfg.rotation_degrees[0]),
+                math.radians(cam_cfg.rotation_degrees[1]),
+                math.radians(cam_cfg.rotation_degrees[2]),
+            )
+            cy, sy = math.cos(yaw), math.sin(yaw)
+            cp, sp = math.cos(pitch), math.sin(pitch)
+            cr, sr = math.cos(roll), math.sin(roll)
+            # ZYX rotation matrix (yaw-pitch-roll), transposed for inverse
+            rot = np.array(
+                [
+                    [cy * cp, cy * sp * sr - sy * cr, cy * sp * cr + sy * sr],
+                    [sy * cp, sy * sp * sr + cy * cr, sy * sp * cr - cy * sr],
+                    [-sp, cp * sr, cp * cr],
+                ]
+            )
+            cam_coords = rot.T @ np.array([rel_x, rel_y, rel_z])
+            relative_x = float(cam_coords[0])
+            relative_y = float(cam_coords[1])
+            relative_z = float(cam_coords[2])
 
             # Target must be in front of the camera (positive z depth).
             if relative_z <= 0:

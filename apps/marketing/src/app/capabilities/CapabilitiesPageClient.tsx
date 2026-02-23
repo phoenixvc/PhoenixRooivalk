@@ -1,13 +1,22 @@
 "use client";
+import dynamic from "next/dynamic";
 import * as React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
 import { CapabilitiesSection } from "../../components/sections/CapabilitiesSection";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
 import styles from "./capabilities.module.css";
 
-export default function CapabilitiesPage(): React.ReactElement {
+const InteractiveMesh = dynamic(
+  () =>
+    import("../../components/ui/InteractiveMesh").then(
+      (mod) => mod.InteractiveMesh,
+    ),
+  { ssr: false },
+);
+
+/** Capabilities marketing page client component. */
+export function CapabilitiesPage(): React.ReactElement {
   usePerformanceOptimizations();
 
   return (
@@ -29,3 +38,5 @@ export default function CapabilitiesPage(): React.ReactElement {
     </main>
   );
 }
+
+export default CapabilitiesPage;

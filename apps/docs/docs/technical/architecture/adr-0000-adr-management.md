@@ -20,10 +20,14 @@ tags:
 
 ## Executive Summary
 
-This document establishes the governance, organization, and lifecycle management
-for Architecture Decision Records (ADRs) within Phoenix Rooivalk. It serves as
-the meta-ADR that guides how all other ADRs are created, maintained, and
-retired.
+1. **Problem**: Architecture decisions were being made without consistent
+   documentation, making it difficult for new team members to understand the
+   rationale behind key choices and risking re-litigation of settled topics.
+2. **Decision**: Establish a structured ADR system with canonical numbering,
+   lifecycle management, templates, and review processes to document all
+   significant architectural decisions.
+3. **Trade-off**: Teams must invest time upfront to document decisions, but this
+   cost is offset by reduced onboarding time and prevented decision churn.
 
 ---
 

@@ -20,6 +20,9 @@ prerequisites:
 **Date**: 2025-11-27 **Status**: Accepted (Centralized Template System with
 Versioning)
 
+_This ADR follows the canonical template described in
+`./adr-0000-template-and-guide.md`._
+
 ---
 
 ## Executive Summary

@@ -42,11 +42,19 @@ const DEFAULT_YEAR1_SYSTEMS = 25;
 const DEFAULT_AVG_REVENUE_PER_SYSTEM = 1_000_000; // R1M per system (hardware+services)
 const DEFAULT_GROWTH_RATE = 80; // 80% YoY growth
 
+type RevenueProjectionRow = {
+  year: string;
+  amount: number;
+  amountFormatted: string;
+  systems: number;
+  note: string;
+};
+
 function buildRevenueProjections(
   year1Systems: number,
   avgRevenue: number,
   growthPct: number,
-) {
+): RevenueProjectionRow[] {
   const notes = [
     "Initial installations",
     "Including services revenue",
@@ -54,7 +62,7 @@ function buildRevenueProjections(
     "International expansion",
     "Market leadership",
   ];
-  const rows = [];
+  const rows: RevenueProjectionRow[] = [];
   let systems = year1Systems;
   for (let y = 1; y <= 5; y++) {
     const amount = systems * avgRevenue;

@@ -74,17 +74,12 @@ async fn main() -> Result<()> {
     let canonical_json = serde_json::to_string(&payload)?;
     let digest = sha256_hex(canonical_json.as_bytes());
 
-    // Create evidence record
-    let evidence_record = json!({
-        "event_type": event_type,
-        "digest": digest,
-        "payload": payload,
-        "timestamp": chrono::Utc::now().to_rfc3339()
-    });
-
     if submit {
         // Submit to API
-        let client = Client::new();
+        let client = Client::builder()
+            .timeout(std::time::Duration::from_secs(30))
+            .build()
+            .context("Failed to build HTTP client")?;
         let submit_payload = json!({
             "digest_hex": digest,
             "payload_mime": "application/json",
@@ -127,6 +122,13 @@ async fn main() -> Result<()> {
         }
     } else {
         // Local processing only
+        let evidence_record = json!({
+            "event_type": event_type,
+            "digest": digest,
+            "payload": payload,
+            "timestamp": chrono::Utc::now().to_rfc3339()
+        });
+
         match output_format.as_str() {
             "digest-only" => println!("{}", digest),
             "json" => {

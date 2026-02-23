@@ -201,25 +201,25 @@ class TargetingSettings(BaseModel):
     # Fire net trigger
     fire_net_enabled: bool = Field(False, description="Enable fire net system")
     fire_net_min_confidence: float = Field(
-        0.85, ge=0.5, le=1.0, description="Minimum confidence to fire"
+        0.85, ge=0.85, le=1.0, description="Minimum confidence to fire"
     )
     fire_net_min_track_frames: int = Field(
-        10, ge=3, le=60, description="Minimum frames tracked before fire"
+        10, ge=10, le=60, description="Minimum frames tracked before fire"
     )
     fire_net_max_distance_m: float = Field(
-        50.0, ge=5.0, le=200.0, description="Maximum fire distance"
+        50.0, ge=5.0, le=50.0, description="Maximum fire distance"
     )
     fire_net_min_distance_m: float = Field(
-        5.0, ge=1.0, le=50.0, description="Minimum fire distance (safety)"
+        5.0, ge=5.0, le=50.0, description="Minimum fire distance (safety)"
     )
     fire_net_velocity_threshold_ms: float = Field(
         30.0, ge=0.0, le=100.0, description="Max target velocity for fire"
     )
     fire_net_cooldown_seconds: float = Field(
-        10.0, ge=1.0, le=60.0, description="Cooldown between fires"
+        10.0, ge=10.0, le=60.0, description="Cooldown between fires"
     )
     fire_net_arm_required: bool = Field(True, description="Require explicit arming")
-    fire_net_gpio_pin: int = Field(17, ge=2, le=27, description="GPIO pin for fire trigger (BCM)")
+    fire_net_gpio_pin: int = Field(17, ge=17, le=17, description="GPIO pin for fire trigger (BCM)")
 
     if PYDANTIC_V2:
 

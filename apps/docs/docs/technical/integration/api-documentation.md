@@ -8,6 +8,7 @@ points: 25
 tags:
   - technical
   - integration
+prerequisites: []
 ---
 
 # Phoenix Rooivalk API Documentation
@@ -393,7 +394,7 @@ These endpoints reject browser cookie-based authentication (M2M only).
 
 Submit evidence for premium blockchain verification with payment.
 
-**Headers**: `X-402-Payment: <solana-transaction-signature>`
+**Headers**: `X-PAYMENT: <solana-transaction-signature>`
 
 **Response** `200 OK`: `PaymentReceiptOut` object with transaction details.
 **Response** `402 Payment Required`: Valid payment signature required.
