@@ -54,7 +54,11 @@ except ImportError:
     if str(src_dir) not in sys.path:
         sys.path.insert(0, str(src_dir))
     from config.settings import Settings, create_default_config  # type: ignore[no-redef]
-    from factory import DetectionPipeline, create_demo_pipeline, create_pipeline  # type: ignore[no-redef]
+    from factory import (  # type: ignore[no-redef]
+        DetectionPipeline,
+        create_demo_pipeline,
+        create_pipeline,
+    )
     from utils.logging_config import setup_logging  # type: ignore[no-redef]
 
 
