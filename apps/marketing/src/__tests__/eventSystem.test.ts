@@ -18,9 +18,7 @@ describe("EventSystem", () => {
       });
 
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "unit-test",
         data: { value: 42 },
         priority: 0,
@@ -50,9 +48,7 @@ describe("EventSystem", () => {
       });
 
       eventSystem.emit({
-        id: "1",
         type: "type-b",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -71,9 +67,7 @@ describe("EventSystem", () => {
       });
 
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -84,9 +78,7 @@ describe("EventSystem", () => {
       eventSystem.unsubscribe("test", handlerId);
 
       eventSystem.emit({
-        id: "2",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -113,9 +105,7 @@ describe("EventSystem", () => {
       eventSystem.subscribe("test", () => order.push(5), { priority: 5 });
 
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -133,9 +123,7 @@ describe("EventSystem", () => {
 
       for (let i = 0; i < 3; i++) {
         eventSystem.emit({
-          id: `${i}`,
           type: "test",
-          timestamp: Date.now(),
           source: "test",
           data: {},
           priority: 0,
@@ -150,9 +138,7 @@ describe("EventSystem", () => {
   describe("event history", () => {
     it("should record events in history", () => {
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -166,9 +152,7 @@ describe("EventSystem", () => {
 
     it("should clear history", () => {
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -183,9 +167,7 @@ describe("EventSystem", () => {
 
       for (let i = 0; i < 10; i++) {
         eventSystem.emit({
-          id: `${i}`,
           type: "test",
-          timestamp: Date.now(),
           source: "test",
           data: {},
           priority: 0,
@@ -200,17 +182,13 @@ describe("EventSystem", () => {
   describe("event filtering", () => {
     it("should filter events by type", () => {
       eventSystem.emit({
-        id: "1",
         type: "alpha",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
       });
       eventSystem.emit({
-        id: "2",
         type: "beta",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -224,17 +202,13 @@ describe("EventSystem", () => {
 
     it("should filter events by source", () => {
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "source-a",
         data: {},
         priority: 0,
       });
       eventSystem.emit({
-        id: "2",
         type: "test",
-        timestamp: Date.now(),
         source: "source-b",
         data: {},
         priority: 0,
@@ -249,9 +223,7 @@ describe("EventSystem", () => {
   describe("queue management", () => {
     it("should report queue size", () => {
       eventSystem.emit({
-        id: "1",
         type: "test",
-        timestamp: Date.now(),
         source: "test",
         data: {},
         priority: 0,
@@ -279,7 +251,7 @@ describe("createGameEventSystem", () => {
       received.push(event.data);
     });
 
-    eventFactory.emitGameStarted();
+    eventFactory.emitGameStarted(1, "patrol");
     eventSystem.processEvents();
 
     expect(received).toHaveLength(1);

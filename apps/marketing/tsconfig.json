@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "types": ["vitest/globals"],
     "paths": {
       "@phoenix-rooivalk/types": ["../../packages/types/src/index.ts"],
       "@phoenix-rooivalk/utils": ["../../packages/utils/src/index.ts"],

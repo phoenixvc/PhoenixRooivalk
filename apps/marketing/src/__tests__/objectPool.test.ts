@@ -2,6 +2,7 @@ import {
   ObjectPool,
   Poolable,
   PoolManager,
+  ThreatPoolObject,
   createThreatPool,
   createDronePool,
   createProjectilePool,
@@ -347,7 +348,7 @@ describe("PoolManager", () => {
 
   it("should validate all pools", () => {
     // Acquire and invalidate
-    const threatPool = manager.getPool("threats")!;
+    const threatPool = manager.getPool<ThreatPoolObject>("threats")!;
     const t = threatPool.acquire();
     if (t) t.health = 0;
 
