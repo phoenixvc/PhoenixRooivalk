@@ -252,6 +252,7 @@
 
 .bomItemBarFill {
   height: 100%;
+  width: var(--bar-width, 0%);
   border-radius: 2px;
   background: linear-gradient(
     to right,
@@ -314,6 +315,7 @@
 
 .marginBarFill {
   height: 100%;
+  width: var(--bar-width, 0%);
   border-radius: 0.25rem;
   background: linear-gradient(
     to right,
@@ -532,6 +534,8 @@
 
 .allocationSegment {
   height: 100%;
+  width: var(--bar-width, 0%);
+  background: var(--bar-color);
 }
 
 .allocationLegend {
@@ -553,6 +557,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
+  background: var(--bar-color);
 }
 
 /* Disclaimer */

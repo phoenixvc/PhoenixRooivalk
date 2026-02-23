@@ -281,7 +281,8 @@ When creating ADRs, reference the template at:
 `apps/docs/docs/technical/architecture/adr-0000-template-and-guide.md`
 
 Numbering: 0001-0099 (Core), 0100-0199 (Security), 0200-0299 (Blockchain),
-0300-0399 (AI/ML), D001-D999 (Dev Decisions).
+0300-0399 (AI/ML), 0400-0499 (Infrastructure & DevOps), D001-D999 (Dev
+Decisions).
 
 ## Workspace Dependencies
 

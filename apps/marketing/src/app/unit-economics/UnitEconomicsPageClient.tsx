@@ -262,7 +262,11 @@ export function UnitEconomicsPageClient(): React.ReactElement {
                         <div className={styles.bomItemBar}>
                           <div
                             className={styles.bomItemBarFill}
-                            style={{ width: `${c.pct}%` }}
+                            style={
+                              {
+                                "--bar-width": `${c.pct}%`,
+                              } as React.CSSProperties
+                            }
                           />
                         </div>
                       </li>
@@ -284,7 +288,11 @@ export function UnitEconomicsPageClient(): React.ReactElement {
                 <div className={styles.marginBar}>
                   <div
                     className={styles.marginBarFill}
-                    style={{ width: `${margins.gross.value}%` }}
+                    style={
+                      {
+                        "--bar-width": `${margins.gross.value}%`,
+                      } as React.CSSProperties
+                    }
                   />
                 </div>
               </div>
@@ -297,7 +305,11 @@ export function UnitEconomicsPageClient(): React.ReactElement {
                 <div className={styles.marginBar}>
                   <div
                     className={styles.marginBarFill}
-                    style={{ width: `${margins.ebitda.value}%` }}
+                    style={
+                      {
+                        "--bar-width": `${margins.ebitda.value}%`,
+                      } as React.CSSProperties
+                    }
                   />
                 </div>
               </div>
@@ -410,45 +422,63 @@ export function UnitEconomicsPageClient(): React.ReactElement {
                 <div className={styles.allocationBar}>
                   <div
                     className={styles.allocationSegment}
-                    style={{
-                      width: `${funding.seed.allocation.hardware}%`,
-                      background: "rgb(var(--primary))",
-                    }}
+                    style={
+                      {
+                        "--bar-width": `${funding.seed.allocation.hardware}%`,
+                        "--bar-color": "rgb(var(--primary))",
+                      } as React.CSSProperties
+                    }
                   />
                   <div
                     className={styles.allocationSegment}
-                    style={{
-                      width: `${funding.seed.allocation.market}%`,
-                      background: "rgb(var(--accent))",
-                    }}
+                    style={
+                      {
+                        "--bar-width": `${funding.seed.allocation.market}%`,
+                        "--bar-color": "rgb(var(--accent))",
+                      } as React.CSSProperties
+                    }
                   />
                   <div
                     className={styles.allocationSegment}
-                    style={{
-                      width: `${funding.seed.allocation.team}%`,
-                      background: "rgb(var(--secondary))",
-                    }}
+                    style={
+                      {
+                        "--bar-width": `${funding.seed.allocation.team}%`,
+                        "--bar-color": "rgb(var(--secondary))",
+                      } as React.CSSProperties
+                    }
                   />
                 </div>
                 <div className={styles.allocationLegend}>
                   <span className={styles.allocationLegendItem}>
                     <span
                       className={styles.allocationDot}
-                      style={{ background: "rgb(var(--primary))" }}
+                      style={
+                        {
+                          "--bar-color": "rgb(var(--primary))",
+                        } as React.CSSProperties
+                      }
                     />
                     Hardware 30%
                   </span>
                   <span className={styles.allocationLegendItem}>
                     <span
                       className={styles.allocationDot}
-                      style={{ background: "rgb(var(--accent))" }}
+                      style={
+                        {
+                          "--bar-color": "rgb(var(--accent))",
+                        } as React.CSSProperties
+                      }
                     />
                     Market 40%
                   </span>
                   <span className={styles.allocationLegendItem}>
                     <span
                       className={styles.allocationDot}
-                      style={{ background: "rgb(var(--secondary))" }}
+                      style={
+                        {
+                          "--bar-color": "rgb(var(--secondary))",
+                        } as React.CSSProperties
+                      }
                     />
                     Team 30%
                   </span>

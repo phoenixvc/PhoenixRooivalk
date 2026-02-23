@@ -1,15 +1,24 @@
 "use client";
+import dynamic from "next/dynamic";
 import * as React from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
 import { SocialProofSection } from "../../components/sections/SocialProofSection";
 import { TeamSection } from "../../components/sections/TeamSection";
 import { TechnicalIntegrationsSection } from "../../components/sections/TechnicalIntegrationsSection";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
 import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
 import styles from "./about.module.css";
 
-export default function AboutPage(): React.ReactElement {
+const InteractiveMesh = dynamic(
+  () =>
+    import("../../components/ui/InteractiveMesh").then(
+      (mod) => mod.InteractiveMesh,
+    ),
+  { ssr: false },
+);
+
+/** About page — team, social proof, and technical integrations. */
+export function AboutPage(): React.ReactElement {
   // Apply performance optimizations
   usePerformanceOptimizations();
 
@@ -38,3 +47,5 @@ export default function AboutPage(): React.ReactElement {
     </main>
   );
 }
+
+export default AboutPage;

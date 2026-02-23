@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Footer } from "../../components/Footer";
 import { Navigation } from "../../components/Navigation";
 import { ROICalculatorInputs } from "./components/ROICalculatorInputs";
@@ -7,7 +7,8 @@ import { ROIResults } from "./components/ROIResults";
 import { ROICallToAction } from "./components/ROICallToAction";
 import styles from "./financial.module.css";
 
-export default function FinancialPage(): React.ReactElement {
+/** ROI calculator and financial analysis page. */
+export function FinancialPage(): React.ReactElement {
   const [inputs, setInputs] = useState({
     threatFrequency: 5,
     averageResponseTime: 3000,
@@ -16,7 +17,7 @@ export default function FinancialPage(): React.ReactElement {
     downtimeCost: 500000,
   });
 
-  const calculateROI = () => {
+  const roi = useMemo(() => {
     const {
       threatFrequency,
       averageResponseTime,
@@ -56,7 +57,10 @@ export default function FinancialPage(): React.ReactElement {
         savings: phoenixSavings,
         roi: phoenixROI,
         successRate: phoenixSuccessRate,
-        paybackPeriod: (deploymentCost + personnelCost) / phoenixSavings,
+        paybackPeriod:
+          phoenixSavings > 0
+            ? (deploymentCost + personnelCost) / phoenixSavings
+            : Infinity,
       },
       traditional: {
         prevented: traditionalPrevented,
@@ -64,12 +68,12 @@ export default function FinancialPage(): React.ReactElement {
         roi: traditionalROI,
         successRate: traditionalSuccessRate,
         paybackPeriod:
-          (deploymentCost * 2 + personnelCost) / traditionalSavings,
+          traditionalSavings > 0
+            ? (deploymentCost * 2 + personnelCost) / traditionalSavings
+            : Infinity,
       },
     };
-  };
-
-  const roi = calculateROI();
+  }, [inputs]);
 
   return (
     <main className={styles.main}>
@@ -108,3 +112,5 @@ export default function FinancialPage(): React.ReactElement {
     </main>
   );
 }
+
+export default FinancialPage;
