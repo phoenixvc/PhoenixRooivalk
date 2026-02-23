@@ -53,8 +53,8 @@ class PersistenceState:
     version: int = 1
     saved_at: float = 0.0
     next_track_id: int = 0
-    tracks: list[PersistedTrack] = None
-    metadata: dict[str, Any] = None
+    tracks: Optional[list[PersistedTrack]] = None
+    metadata: Optional[dict[str, Any]] = None
 
     def __post_init__(self):
         if self.tracks is None:
@@ -250,7 +250,7 @@ class TrackPersistence:
                 "version": state.version,
                 "saved_at": state.saved_at,
                 "next_track_id": state.next_track_id,
-                "tracks": [asdict(t) for t in state.tracks],
+                "tracks": [asdict(t) for t in (state.tracks or [])],
                 "metadata": state.metadata,
             }
 

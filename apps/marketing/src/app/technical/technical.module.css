@@ -484,3 +484,13 @@
 .footerLink:hover {
   text-decoration: underline;
 }
+
+/* Utility classes */
+.gridSpaced {
+  margin-bottom: 3rem;
+}
+
+.configDescription {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}

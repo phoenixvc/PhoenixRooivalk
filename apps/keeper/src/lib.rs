@@ -5,6 +5,7 @@ use phoenix_evidence::model::{ChainTxRef, DigestAlgo, EvidenceDigest, EvidenceRe
 use rand::Rng;
 use sqlx::{Pool, Row, Sqlite};
 
+pub mod batch_anchor;
 pub mod config;
 
 /// Initialize database schema for the keeper

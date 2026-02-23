@@ -16,7 +16,7 @@ export function CartPanel({
   onClose,
 }: CartPanelProps): React.ReactElement {
   const router = useRouter();
-  const { items, total, itemCount } = useCart();
+  const { items, total, itemCount, oneTimeTotal, recurringTotal } = useCart();
 
   // Close on Escape key
   useEffect(() => {
@@ -135,11 +135,19 @@ export function CartPanel({
           <div className={styles.footer}>
             <div className={styles.summary}>
               <div className={styles.summaryRow}>
-                <span className={styles.summaryLabel}>Subtotal</span>
+                <span className={styles.summaryLabel}>One-time</span>
                 <span className={styles.summaryValue}>
-                  ${total.toLocaleString("en-US")}
+                  ${oneTimeTotal.toLocaleString("en-US")}
                 </span>
               </div>
+              {recurringTotal > 0 && (
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>Monthly</span>
+                  <span className={styles.summaryValue}>
+                    ${recurringTotal.toLocaleString("en-US")}/mo
+                  </span>
+                </div>
+              )}
               <div className={`${styles.summaryRow} ${styles.totalRow}`}>
                 <span className={styles.totalLabel}>Total</span>
                 <span className={styles.totalValue}>

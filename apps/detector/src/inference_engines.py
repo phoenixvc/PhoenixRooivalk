@@ -78,8 +78,8 @@ class BaseInferenceEngine(InferenceEngine):
         confidence_threshold: float = 0.5,
         nms_threshold: float = 0.45,
         num_threads: int = 4,
-        class_names: list[str] = None,
-        scorer: DroneScorer = None,
+        class_names: Optional[list[str]] = None,
+        scorer: Optional[DroneScorer] = None,
     ):
         self._confidence_threshold = confidence_threshold
         self._nms_threshold = nms_threshold
@@ -188,16 +188,17 @@ class BaseInferenceEngine(InferenceEngine):
 
     def _nms(self, detections: list[Detection]) -> list[Detection]:
         """Apply non-maximum suppression using centralized geometry module."""
-        return non_max_suppression(
+        result = non_max_suppression(
             detections,
             iou_threshold=self._nms_threshold,
             confidence_key=lambda d: d.confidence,
             bbox_key=lambda d: d.bbox.to_tuple(),
         )
+        return list(result)
 
     def _iou(self, box1: BoundingBox, box2: BoundingBox) -> float:
         """Calculate intersection over union using centralized geometry module."""
-        return calculate_iou(box1.to_tuple(), box2.to_tuple())
+        return float(calculate_iou(box1.to_tuple(), box2.to_tuple()))
 
 
 class TFLiteEngine(BaseInferenceEngine):

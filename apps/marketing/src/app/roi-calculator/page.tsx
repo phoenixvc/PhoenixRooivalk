@@ -1,31 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { InteractiveElementsSection } from "../../components/sections/InteractiveElementsSection";
-import { InteractiveMesh } from "../../components/ui/InteractiveMesh";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
-import styles from "./roi-calculator.module.css";
+import type { Metadata } from "next";
+import ROICalculatorPageClient from "./ROICalculatorPageClient";
 
-export default function ROICalculatorPage(): React.ReactElement {
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "ROI Calculator - Phoenix Rooivalk",
+  description:
+    "Model the financial return of Phoenix Rooivalk counter-UAS deployment. Input your threat frequency, response time, and deployment cost to calculate projected savings and payback period.",
+  openGraph: {
+    title: "ROI Calculator - Phoenix Rooivalk",
+    description:
+      "Model the financial return of Phoenix Rooivalk counter-UAS deployment. Calculate projected savings, payback period, and ROI for your facility.",
+  },
+};
 
-  return (
-    <main className={styles.main}>
-      <InteractiveMesh
-        gridSize={50}
-        color="rgba(234, 124, 28, 0.1)"
-        bendStrength={20}
-        bendRadius={100}
-      />
-
-      <Navigation />
-
-      <div className={styles.contentWrapper}>
-        <InteractiveElementsSection />
-      </div>
-
-      <Footer />
-    </main>
-  );
-}
+export default ROICalculatorPageClient;

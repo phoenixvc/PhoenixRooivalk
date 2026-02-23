@@ -28,6 +28,23 @@ function calculateItemCount(items: CartItem[]): number {
 }
 
 /**
+ * Calculate total of one-time purchase prices
+ */
+function calculateOneTimeTotal(items: CartItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+/**
+ * Calculate total of recurring monthly fees
+ */
+function calculateRecurringTotal(items: CartItem[]): number {
+  return items.reduce(
+    (sum, item) => sum + (item.monthlyFee ?? 0) * item.quantity,
+    0,
+  );
+}
+
+/**
  * Load cart from localStorage
  */
 function loadCartFromStorage(): CartItem[] {
@@ -139,6 +156,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     items,
     total: calculateTotal(items),
     itemCount: calculateItemCount(items),
+    oneTimeTotal: calculateOneTimeTotal(items),
+    recurringTotal: calculateRecurringTotal(items),
     addItem,
     removeItem,
     updateQuantity,

@@ -25,7 +25,7 @@
 
 /* Use site-wide container width */
 .container {
-  max-width: 1160px;
+  max-width: var(--container-max-width);
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--space-6);

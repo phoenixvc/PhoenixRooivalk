@@ -5,7 +5,7 @@ Frame renderer implementations for visualization.
 Supports display via OpenCV, headless operation, or future web streaming.
 """
 
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 import numpy as np
 
@@ -120,7 +120,7 @@ class OpenCVRenderer(FrameRenderer):
             1,
         )
 
-        return frame
+        return cast(np.ndarray, frame)
 
     def show(self, rendered_frame: np.ndarray) -> bool:
         import cv2

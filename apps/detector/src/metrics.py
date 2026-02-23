@@ -18,7 +18,7 @@ import time
 from collections import deque
 from dataclasses import dataclass, field
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 logger = logging.getLogger("drone_detector.metrics")
 
@@ -179,7 +179,7 @@ class Summary:
     max_age_seconds: float = 60.0
     window_size: int = 1000
     labels: dict[str, str] = field(default_factory=dict)
-    _observations: deque = field(default_factory=lambda: deque(maxlen=1000))
+    _observations: deque[tuple[float, float]] = field(default_factory=lambda: deque(maxlen=1000))
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     def observe(self, value: float) -> None:
@@ -358,7 +358,7 @@ class MetricsRegistry:
     def counter(self, name: str, help: str, labels: Optional[dict] = None) -> Counter:
         """Create or get a counter."""
         if name in self._metrics:
-            return self._metrics[name]
+            return cast(Counter, self._metrics[name])
         counter = Counter(name=name, help=help, labels=labels or {})
         self._metrics[name] = counter
         return counter
@@ -366,7 +366,7 @@ class MetricsRegistry:
     def gauge(self, name: str, help: str, labels: Optional[dict] = None) -> Gauge:
         """Create or get a gauge."""
         if name in self._metrics:
-            return self._metrics[name]
+            return cast(Gauge, self._metrics[name])
         gauge = Gauge(name=name, help=help, labels=labels or {})
         self._metrics[name] = gauge
         return gauge
@@ -380,7 +380,7 @@ class MetricsRegistry:
     ) -> Histogram:
         """Create or get a histogram."""
         if name in self._metrics:
-            return self._metrics[name]
+            return cast(Histogram, self._metrics[name])
         histogram = Histogram(
             name=name,
             help=help,
@@ -399,7 +399,7 @@ class MetricsRegistry:
     ) -> Summary:
         """Create or get a summary."""
         if name in self._metrics:
-            return self._metrics[name]
+            return cast(Summary, self._metrics[name])
         summary = Summary(
             name=name,
             help=help,

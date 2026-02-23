@@ -7,8 +7,12 @@ description:
   business activities
 keywords: [progress, weekly reports, updates, development]
 difficulty: beginner
-timeEstimate: 2
-xpReward: 25
+estimated_reading_time: 2
+points: 25
+tags:
+  - progress
+  - reports
+prerequisites: []
 ---
 
 # Weekly Progress Reports

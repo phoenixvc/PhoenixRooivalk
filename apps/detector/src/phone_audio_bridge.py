@@ -304,7 +304,7 @@ def get_local_ip() -> str:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.settimeout(0.5)
             s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
+            ip = str(s.getsockname()[0])
             if ip and ip != "0.0.0.0":  # nosec B104 — comparison, not bind
                 return ip
     except Exception:
@@ -337,7 +337,7 @@ def get_local_ip() -> str:
     try:
         hostname = socket.gethostname()
         for info in socket.getaddrinfo(hostname, None, socket.AF_INET):
-            ip = info[4][0]
+            ip = str(info[4][0])
             if ip != "127.0.0.1":
                 return ip
     except Exception:

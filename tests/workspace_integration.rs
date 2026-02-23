@@ -492,6 +492,145 @@ async fn test_error_conversion() {
     }
 }
 
+/// Test the complete cross-app flow: API creates evidence → Keeper processes → anchors
+#[tokio::test]
+async fn test_api_to_keeper_cross_app_flow() {
+    // Shared database between API and Keeper (simulates production SQLite file)
+    let temp_db = NamedTempFile::new().unwrap();
+    let db_path = temp_db.path().to_str().unwrap();
+    let db_url = DatabaseUrlBuilder::sqlite(db_path);
+
+    let pool = SqlitePoolOptions::new()
+        .max_connections(2)
+        .connect(&db_url)
+        .await
+        .unwrap();
+
+    // Initialize both API and Keeper schemas
+    let migration_manager = MigrationManager::new(pool.clone());
+    migration_manager.migrate().await.unwrap();
+    ensure_schema(&pool).await.unwrap();
+
+    // === API side: submit evidence ===
+    let repo = EvidenceRepository::new(pool.clone());
+    let evidence_in = EvidenceIn {
+        id: Some("cross-app-e2e-001".to_string()),
+        digest_hex: "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90".to_string(),
+        payload_mime: Some("application/json".to_string()),
+        metadata: Some(json!({ "source": "cross-app-test" })),
+    };
+    let job_id = repo.create_evidence_job(&evidence_in).await.unwrap();
+    assert_eq!(job_id, "cross-app-e2e-001");
+
+    // Verify queued via API repo
+    let queued_job = repo.get_evidence_by_id(&job_id).await.unwrap().unwrap();
+    assert_eq!(queued_job.status, "queued");
+    assert_eq!(queued_job.attempts, 0);
+
+    // === Keeper side: fetch and process ===
+    let mut job_provider = SqliteJobProvider::new(pool.clone());
+    let keeper_job = job_provider.fetch_next().await.unwrap().unwrap();
+    assert_eq!(keeper_job.id, "cross-app-e2e-001");
+    assert_eq!(
+        keeper_job.payload_sha256,
+        "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90"
+    );
+
+    // Verify the API sees in_progress
+    let in_progress = repo.get_evidence_by_id(&job_id).await.unwrap().unwrap();
+    assert_eq!(in_progress.status, "in_progress");
+    assert_eq!(in_progress.attempts, 1);
+
+    // Anchor via stub provider
+    let anchor = EtherlinkProviderStub;
+    let evidence_record = EvidenceRecord {
+        id: keeper_job.id.clone(),
+        created_at: Utc::now(),
+        digest: EvidenceDigest {
+            algo: DigestAlgo::Sha256,
+            hex: keeper_job.payload_sha256.clone(),
+        },
+        payload_mime: None,
+        metadata: json!({}),
+    };
+    let tx_ref = anchor.anchor(&evidence_record).await.unwrap();
+    assert_eq!(tx_ref.network, "etherlink");
+    assert!(!tx_ref.confirmed);
+
+    // Mark done with tx ref (full Keeper flow)
+    job_provider
+        .mark_tx_and_done(&keeper_job.id, &tx_ref)
+        .await
+        .unwrap();
+
+    // === Verify final state from API perspective ===
+    let done_job = repo.get_evidence_by_id(&job_id).await.unwrap().unwrap();
+    assert_eq!(done_job.status, "done");
+
+    // Verify tx reference stored
+    let tx_count: i64 =
+        sqlx::query_scalar("SELECT COUNT(*) FROM outbox_tx_refs WHERE job_id = ?1")
+            .bind(&job_id)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(tx_count, 1);
+
+    // Verify tx details
+    let (tx_network, tx_chain): (String, String) = sqlx::query_as(
+        "SELECT network, chain FROM outbox_tx_refs WHERE job_id = ?1",
+    )
+    .fetch_one(&pool)
+    .await
+    .unwrap();
+    assert_eq!(tx_network, "etherlink");
+    assert_eq!(tx_chain, "testnet");
+}
+
+/// Test API→Keeper flow with failure and retry
+#[tokio::test]
+async fn test_api_to_keeper_failure_and_retry() {
+    let temp_db = NamedTempFile::new().unwrap();
+    let db_path = temp_db.path().to_str().unwrap();
+    let db_url = DatabaseUrlBuilder::sqlite(db_path);
+
+    let pool = SqlitePoolOptions::new()
+        .max_connections(2)
+        .connect(&db_url)
+        .await
+        .unwrap();
+
+    let migration_manager = MigrationManager::new(pool.clone());
+    migration_manager.migrate().await.unwrap();
+    ensure_schema(&pool).await.unwrap();
+
+    // API creates evidence job
+    let repo = EvidenceRepository::new(pool.clone());
+    let evidence_in = EvidenceIn {
+        id: Some("retry-test-001".to_string()),
+        digest_hex: "retry-hash-001".to_string(),
+        payload_mime: None,
+        metadata: None,
+    };
+    repo.create_evidence_job(&evidence_in).await.unwrap();
+
+    // Keeper picks it up
+    let mut job_provider = SqliteJobProvider::new(pool.clone());
+    let job = job_provider.fetch_next().await.unwrap().unwrap();
+    assert_eq!(job.id, "retry-test-001");
+
+    // Simulate a temporary failure
+    job_provider
+        .mark_failed_or_backoff(&job.id, "network timeout", true)
+        .await
+        .unwrap();
+
+    // Job should be back to queued with incremented attempts
+    let failed_job = repo.get_evidence_by_id("retry-test-001").await.unwrap().unwrap();
+    assert_eq!(failed_job.status, "queued");
+    assert!(failed_job.last_error.as_deref() == Some("network timeout"));
+}
+
 /// Test serialization and deserialization
 #[tokio::test]
 async fn test_serialization() {

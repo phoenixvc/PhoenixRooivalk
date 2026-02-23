@@ -108,7 +108,7 @@ def _detect_ram_mb() -> int:
     try:
         import psutil
 
-        return psutil.virtual_memory().total // (1024 * 1024)
+        return int(psutil.virtual_memory().total) // (1024 * 1024)
     except ImportError:
         pass
 

@@ -33,6 +33,18 @@ flags:
     paths:
       - apps/threat-simulator-desktop/
     carryforward: true
+  marketing:
+    paths:
+      - apps/marketing/src/
+    carryforward: true
+  x402:
+    paths:
+      - crates/x402/
+    carryforward: true
+  evidence:
+    paths:
+      - crates/evidence/
+    carryforward: true
 
 # Component coverage for summary view
 component_management:
@@ -61,6 +73,18 @@ component_management:
       name: Threat Simulator
       paths:
         - apps/threat-simulator-desktop/**
+    - component_id: marketing
+      name: Marketing App
+      paths:
+        - apps/marketing/src/**
+    - component_id: x402
+      name: x402 Payment Protocol
+      paths:
+        - crates/x402/**
+    - component_id: evidence
+      name: Evidence Crate
+      paths:
+        - crates/evidence/**
 
 # PR comment configuration - comprehensive summary
 comment:

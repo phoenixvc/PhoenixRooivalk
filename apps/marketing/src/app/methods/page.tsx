@@ -1,25 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { CounterDroneMethodsSection } from "../../components/sections/CounterDroneMethodsSection";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
-import styles from "./methods.module.css";
+import type { Metadata } from "next";
+import MethodsPageClient from "./MethodsPageClient";
 
-export default function MethodsPage(): React.ReactElement {
-  // Apply performance optimizations
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "Counter-Drone Methods - Phoenix Rooivalk",
+  description:
+    "Phoenix Rooivalk's counter-UAS methods: RF jamming, GPS spoofing, net entanglement, kinetic interceptors, directed energy, and autonomous swarm coordination techniques.",
+  openGraph: {
+    title: "Counter-Drone Methods - Phoenix Rooivalk",
+    description:
+      "RF jamming, GPS spoofing, net entanglement, kinetic interceptors, directed energy, and autonomous swarm coordination for counter-UAS defense.",
+  },
+};
 
-  return (
-    <main className={styles.main}>
-      {/* Navigation */}
-      <Navigation />
-
-      {/* Main Content */}
-      <CounterDroneMethodsSection />
-
-      {/* Footer */}
-      <Footer />
-    </main>
-  );
-}
+export default MethodsPageClient;

@@ -118,14 +118,43 @@ validate_env() {
             log_info "ENV_NAME: ${ENV_NAME:-local} (optional, defaults to 'local')"
             log_info "DEPLOY_CONTEXT: ${DEPLOY_CONTEXT:-} (optional)"
             log_info "CONTEXT: ${CONTEXT:-} (optional)"
-            
+
             # Optional: BRANCH, GITHUB_HEAD_REF, GITHUB_REF_NAME
             log_info "BRANCH: ${BRANCH:-} (optional)"
             log_info "GITHUB_HEAD_REF: ${GITHUB_HEAD_REF:-} (optional)"
             log_info "GITHUB_REF_NAME: ${GITHUB_REF_NAME:-} (optional)"
-            
+
             # MARKETING_URL is optional but must be valid if set
             validate_url "MARKETING_URL" "${MARKETING_URL}" "false" || true
+
+            # CLOUD_PROVIDER controls whether Azure services are used
+            if [ -z "${CLOUD_PROVIDER:-}" ]; then
+                log_warning "CLOUD_PROVIDER not set (defaults to 'offline' — Azure features disabled)"
+            elif [[ ! "${CLOUD_PROVIDER}" =~ ^(azure|offline)$ ]]; then
+                log_error "CLOUD_PROVIDER='${CLOUD_PROVIDER}' is invalid (must be 'azure' or 'offline')"
+            else
+                log_success "CLOUD_PROVIDER=${CLOUD_PROVIDER}"
+            fi
+
+            # Azure Entra ID — required only when CLOUD_PROVIDER=azure
+            if [ "${CLOUD_PROVIDER:-offline}" = "azure" ]; then
+                if [ -z "${AZURE_ENTRA_CLIENT_ID:-}" ]; then
+                    log_error "AZURE_ENTRA_CLIENT_ID is required when CLOUD_PROVIDER=azure"
+                else
+                    log_success "AZURE_ENTRA_CLIENT_ID is set"
+                fi
+                if [ -z "${AZURE_ENTRA_TENANT_ID:-}" ]; then
+                    log_error "AZURE_ENTRA_TENANT_ID is required when CLOUD_PROVIDER=azure"
+                else
+                    log_success "AZURE_ENTRA_TENANT_ID is set"
+                fi
+                validate_url "AZURE_ENTRA_AUTHORITY" "${AZURE_ENTRA_AUTHORITY}" "false" || true
+                validate_url "AZURE_FUNCTIONS_BASE_URL" "${AZURE_FUNCTIONS_BASE_URL}" "false" || true
+            else
+                log_info "CLOUD_PROVIDER=offline — Azure Entra and Functions vars not required"
+            fi
+
+            log_info "DISABLE_LOGIN: ${DISABLE_LOGIN:-false} (optional)"
             ;;
             
         marketing)
@@ -147,6 +176,13 @@ validate_env() {
             else
                 log_info "NEXT_PUBLIC_GA_MEASUREMENT_ID not set (optional, analytics disabled)"
             fi
+
+            # NEXT_PUBLIC_API_URL is used for all backend calls
+            validate_url "NEXT_PUBLIC_API_URL" "${NEXT_PUBLIC_API_URL}" "false" || true
+
+            # Tour flags (optional booleans)
+            log_info "NEXT_PUBLIC_ENABLE_TOUR_SKIP: ${NEXT_PUBLIC_ENABLE_TOUR_SKIP:-true} (optional)"
+            log_info "NEXT_PUBLIC_TOUR_AUTO_START: ${NEXT_PUBLIC_TOUR_AUTO_START:-true} (optional)"
             ;;
             
         api)
@@ -165,6 +201,19 @@ validate_env() {
             # Optional: PORT, RUST_LOG
             log_info "PORT: ${PORT:-8080} (optional, defaults to 8080)"
             log_info "RUST_LOG: ${RUST_LOG:-info} (optional, defaults to 'info')"
+
+            # x402 payment protocol (optional feature block)
+            log_info "X402_ENABLED: ${X402_ENABLED:-false} (optional, defaults to false)"
+            if [ "${X402_ENABLED:-false}" = "true" ] || [ "${X402_ENABLED:-false}" = "1" ]; then
+                if [ -z "${X402_WALLET_ADDRESS:-}" ]; then
+                    log_error "X402_WALLET_ADDRESS is required when X402_ENABLED=true"
+                else
+                    log_success "X402_WALLET_ADDRESS is set"
+                fi
+                validate_url "X402_FACILITATOR_URL" "${X402_FACILITATOR_URL}" "false" || true
+                validate_url "SOLANA_RPC_URL" "${SOLANA_RPC_URL}" "false" || true
+                log_info "SOLANA_NETWORK: ${SOLANA_NETWORK:-devnet} (optional)"
+            fi
             ;;
             
         keeper)
@@ -182,6 +231,11 @@ validate_env() {
             
             # Provider configuration (optional, defaults to stub)
             log_info "KEEPER_PROVIDER: ${KEEPER_PROVIDER:-stub} (optional, defaults to 'stub')"
+            log_info "KEEPER_HTTP_PORT: ${KEEPER_HTTP_PORT:-8081} (optional)"
+            log_info "KEEPER_POLL_MS: ${KEEPER_POLL_MS:-5000} (optional)"
+            log_info "KEEPER_CONFIRM_POLL_MS: ${KEEPER_CONFIRM_POLL_MS:-30000} (optional)"
+            log_info "KEEPER_USE_STUB: ${KEEPER_USE_STUB:-false} (optional)"
+            log_info "RUST_LOG: ${RUST_LOG:-info} (optional)"
             
             if [ "${KEEPER_PROVIDER:-}" = "etherlink" ]; then
                 validate_url "ETHERLINK_ENDPOINT" "${ETHERLINK_ENDPOINT}" "false" || true
@@ -202,9 +256,43 @@ validate_env() {
             fi
             ;;
             
+        detector)
+            # Detector app environment variables (from config.py)
+            log_info "Checking detector app environment variables..."
+
+            log_info "ENGINE_TYPE: ${ENGINE_TYPE:-auto} (optional, defaults to 'auto')"
+            log_info "CAMERA_TYPE: ${CAMERA_TYPE:-auto} (optional, defaults to 'auto')"
+            log_info "TRACKER_TYPE: ${TRACKER_TYPE:-centroid} (optional, defaults to 'centroid')"
+
+            # INFERENCE_MODEL_PATH is required unless ENGINE_TYPE=mock
+            if [ "${ENGINE_TYPE:-auto}" != "mock" ]; then
+                if [ -z "${INFERENCE_MODEL_PATH:-}" ]; then
+                    log_warning "INFERENCE_MODEL_PATH is not set (required unless ENGINE_TYPE=mock)"
+                else
+                    log_success "INFERENCE_MODEL_PATH is set: ${INFERENCE_MODEL_PATH}"
+                fi
+            else
+                log_info "INFERENCE_MODEL_PATH not required (ENGINE_TYPE=mock)"
+            fi
+
+            # STREAM_AUTH_TOKEN is required when STREAM_AUTH_ENABLED=true
+            if [ "${STREAM_AUTH_ENABLED:-false}" = "true" ]; then
+                if [ -z "${STREAM_AUTH_TOKEN:-}" ]; then
+                    log_error "STREAM_AUTH_TOKEN is required when STREAM_AUTH_ENABLED=true"
+                else
+                    log_success "STREAM_AUTH_TOKEN is set"
+                fi
+            else
+                log_info "STREAM_AUTH_ENABLED=false, STREAM_AUTH_TOKEN not required"
+            fi
+
+            # Optional alert webhook
+            validate_url "ALERT_WEBHOOK_URL" "${ALERT_WEBHOOK_URL}" "false" || true
+            ;;
+
         *)
             log_error "Unknown app: $app"
-            log_info "Valid apps: docs, marketing, api, keeper"
+            log_info "Valid apps: docs, marketing, api, keeper, detector"
             exit 1
             ;;
     esac
@@ -239,13 +327,14 @@ show_usage() {
     echo "Validate environment variables for a specific app"
     echo ""
     echo "Arguments:"
-    echo "  app        The app to validate (docs, marketing, api, keeper)"
+    echo "  app        The app to validate (docs, marketing, api, keeper, detector)"
     echo ""
     echo "Examples:"
     echo "  $0 docs"
     echo "  $0 marketing"
     echo "  $0 api"
     echo "  $0 keeper"
+    echo "  $0 detector"
     echo ""
     exit 1
 }

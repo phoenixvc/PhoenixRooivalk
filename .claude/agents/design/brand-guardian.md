@@ -22,7 +22,7 @@ Design system infrastructure:
 Brand rules:
 
 1. Dark tactical theme is primary — light backgrounds only for contrast sections
-2. Phoenix orange (`#FF6B00` family) is the hero accent color
+2. Phoenix orange (`#f97316` family) is the hero accent color
 3. Military-grade typography: clean, high-contrast, no decorative fonts
 4. All UI components must work in all 3 theme variants
 5. `suppressHydrationWarning` on `<html>` for theme hydration

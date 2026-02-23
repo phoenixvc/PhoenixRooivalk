@@ -302,7 +302,7 @@ class AlertRetryQueue:
     def _process_single_alert(self, alert: QueuedAlert) -> None:
         """Process a single alert."""
         try:
-            if self._send_func(alert.payload):
+            if self._send_func is not None and self._send_func(alert.payload):
                 # Success - remove from queue
                 self._mark_delivered(alert.id)
                 self._alerts_delivered += 1
@@ -471,7 +471,7 @@ class AlertRetryQueue:
         """Clear all pending alerts. Returns count of cleared alerts."""
         with sqlite3.connect(self._db_path) as conn:
             cursor = conn.execute("SELECT COUNT(*) FROM alert_queue")
-            count = cursor.fetchone()[0]
+            count = int(cursor.fetchone()[0])
             conn.execute("DELETE FROM alert_queue")
             conn.commit()
 
@@ -481,7 +481,7 @@ class AlertRetryQueue:
         """Clear dead letter queue. Returns count of cleared alerts."""
         with sqlite3.connect(self._db_path) as conn:
             cursor = conn.execute("SELECT COUNT(*) FROM dead_letter_queue")
-            count = cursor.fetchone()[0]
+            count = int(cursor.fetchone()[0])
             conn.execute("DELETE FROM dead_letter_queue")
             conn.commit()
 
