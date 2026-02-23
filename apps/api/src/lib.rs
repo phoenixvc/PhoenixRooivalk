@@ -2,7 +2,10 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
+use sqlx::{
+    sqlite::{SqliteConnectOptions, SqlitePoolOptions},
+    Pool, Sqlite,
+};
 
 pub mod connection;
 pub mod db;
@@ -33,6 +36,9 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
         .ok()
         .or_else(|| std::env::var("KEEPER_DB_URL").ok())
         .unwrap_or_else(|| "sqlite://blockchain_outbox.sqlite3".to_string());
+    let connect_opts = db_url
+        .parse::<SqliteConnectOptions>()?
+        .create_if_missing(true);
     let pool = SqlitePoolOptions::new()
         .max_connections(5)
         .after_connect(|conn, _meta| {
@@ -50,7 +56,7 @@ pub async fn build_app() -> anyhow::Result<(Router, Pool<Sqlite>)> {
                 Ok(())
             })
         })
-        .connect(&db_url)
+        .connect_with(connect_opts)
         .await?;
 
     // Run full migrations (includes outbox + countermeasures + audits + jamming)
