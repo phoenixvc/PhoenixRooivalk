@@ -183,8 +183,7 @@ async fn test_profile_update_preserves_email_and_team_status() {
         let (server, _) = common::spawn_test_server(app, listener).await;
         let client = Client::new();
 
-        let session_id =
-            create_test_session(&client, port, "stable@example.com").await;
+        let session_id = create_test_session(&client, port, "stable@example.com").await;
 
         // Promote user to team member via direct DB update
         sqlx::query("UPDATE users SET is_team_member = 1 WHERE email = ?")
@@ -213,7 +212,7 @@ async fn test_profile_update_preserves_email_and_team_status() {
 
         // Email and team membership should be unchanged
         assert_eq!(user["email"].as_str().unwrap(), "stable@example.com");
-        assert_eq!(user["is_team_member"].as_bool().unwrap(), true);
+        assert!(user["is_team_member"].as_bool().unwrap());
         assert_eq!(user["first_name"].as_str().unwrap(), "Stable");
 
         server.abort();
@@ -285,8 +284,7 @@ async fn test_profile_update_updates_timestamp() {
         let (server, _) = common::spawn_test_server(app, listener).await;
         let client = Client::new();
 
-        let session_id =
-            create_test_session(&client, port, "timestamp@example.com").await;
+        let session_id = create_test_session(&client, port, "timestamp@example.com").await;
 
         // Get initial updated_ms
         let row = sqlx::query("SELECT updated_ms FROM users WHERE email = ?")

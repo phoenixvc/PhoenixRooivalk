@@ -97,11 +97,7 @@ fn price_tier_all_have_descriptions() {
 
     for tier in tiers {
         let desc = tier.description();
-        assert!(
-            !desc.is_empty(),
-            "{:?} has an empty description",
-            tier
-        );
+        assert!(!desc.is_empty(), "{:?} has an empty description", tier);
     }
 }
 
@@ -266,12 +262,7 @@ fn payment_proof_roundtrip_large_payload() {
 
 #[test]
 fn payment_proof_from_header_invalid_base64_returns_err() {
-    let bad_inputs = [
-        "!!!not-base64!!!",
-        "====",
-        " ",
-        "\x00\x01\x02",
-    ];
+    let bad_inputs = ["!!!not-base64!!!", "====", " ", "\x00\x01\x02"];
 
     for input in bad_inputs {
         let result = PaymentProof::from_header(input);

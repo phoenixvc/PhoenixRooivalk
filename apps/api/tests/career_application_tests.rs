@@ -94,12 +94,11 @@ async fn test_career_apply_without_cover_letter() {
 
         // cover_letter should be NULL in DB
         let app_id = body["id"].as_str().unwrap();
-        let row =
-            sqlx::query("SELECT cover_letter FROM career_applications WHERE id = ?")
-                .bind(app_id)
-                .fetch_one(&pool)
-                .await
-                .unwrap();
+        let row = sqlx::query("SELECT cover_letter FROM career_applications WHERE id = ?")
+            .bind(app_id)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
 
         assert!(row.get::<Option<String>, _>("cover_letter").is_none());
 
@@ -171,8 +170,7 @@ async fn test_career_apply_team_member_rejected() {
         let client = Client::new();
 
         // Create a team member user directly in the DB
-        let session_id =
-            create_test_session(&client, port, "team@phoenixrooivalk.com").await;
+        let session_id = create_test_session(&client, port, "team@phoenixrooivalk.com").await;
 
         // Promote user to team member
         sqlx::query("UPDATE users SET is_team_member = 1 WHERE email = ?")

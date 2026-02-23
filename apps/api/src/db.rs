@@ -801,7 +801,7 @@ pub async fn list_preorders(
 
     let rows = sqlx::query(
         "SELECT id, name, email, status, total_amount, created_ms, updated_ms \
-         FROM preorders ORDER BY created_ms DESC LIMIT ?1 OFFSET ?2"
+         FROM preorders ORDER BY created_ms DESC LIMIT ?1 OFFSET ?2",
     )
     .bind(limit)
     .bind(offset)
@@ -831,7 +831,7 @@ pub async fn get_preorder_by_id(
 ) -> Result<Option<crate::models::PreorderListItemOut>, sqlx::Error> {
     let row = sqlx::query(
         "SELECT id, name, email, status, total_amount, created_ms, updated_ms \
-         FROM preorders WHERE id = ?1"
+         FROM preorders WHERE id = ?1",
     )
     .bind(id)
     .fetch_optional(pool)

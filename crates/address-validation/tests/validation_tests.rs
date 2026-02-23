@@ -37,9 +37,7 @@ fn evm_valid_lowercase_address_without_checksum() {
 #[test]
 fn evm_valid_uppercase_hex_digits_without_checksum() {
     // All-uppercase hex chars — structurally valid, checksum not enforced.
-    assert!(
-        validate_evm_address("0xABCDEF1234567890ABCDEF1234567890ABCDEF12", false).is_ok()
-    );
+    assert!(validate_evm_address("0xABCDEF1234567890ABCDEF1234567890ABCDEF12", false).is_ok());
 }
 
 // ---------------------------------------------------------------------------
@@ -49,7 +47,10 @@ fn evm_valid_uppercase_hex_digits_without_checksum() {
 #[test]
 fn evm_zero_address_passes_basic_validation() {
     let zero = "0x0000000000000000000000000000000000000000";
-    assert!(validate_evm_address(zero, false).is_ok(), "zero address must be structurally valid");
+    assert!(
+        validate_evm_address(zero, false).is_ok(),
+        "zero address must be structurally valid"
+    );
 }
 
 #[test]
@@ -70,7 +71,10 @@ fn evm_zero_address_checksum_is_itself() {
 fn evm_max_address_passes_basic_validation() {
     // 0xFFFF...FFFF — 40 hex chars after 0x prefix, structurally valid.
     let max = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
-    assert!(validate_evm_address(max, false).is_ok(), "max address must be structurally valid");
+    assert!(
+        validate_evm_address(max, false).is_ok(),
+        "max address must be structurally valid"
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -340,10 +344,14 @@ fn evm_address_info_valid_checksummed() {
         info.checksum_valid,
         "correctly-checksummed address must report checksum_valid=true"
     );
-    assert_eq!(info.normalized_address, addr,
-        "normalized form of a correctly-checksummed address must equal the input");
-    assert!(info.validation_reason.is_empty(),
-        "valid address must have an empty validation_reason");
+    assert_eq!(
+        info.normalized_address, addr,
+        "normalized form of a correctly-checksummed address must equal the input"
+    );
+    assert!(
+        info.validation_reason.is_empty(),
+        "valid address must have an empty validation_reason"
+    );
 }
 
 #[test]
@@ -360,8 +368,7 @@ fn evm_address_info_valid_lowercase_reports_checksum_invalid() {
     );
     // The normalized address should be the properly checksummed form.
     assert_eq!(
-        info.normalized_address,
-        "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+        info.normalized_address, "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
         "normalized address must be the EIP-55 checksummed form"
     );
 }

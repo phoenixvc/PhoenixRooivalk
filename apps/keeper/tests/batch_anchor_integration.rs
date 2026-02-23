@@ -85,9 +85,7 @@ struct FailingAnchor;
 #[async_trait]
 impl AnchorProvider for FailingAnchor {
     async fn anchor(&self, _evidence: &EvidenceRecord) -> Result<ChainTxRef, AnchorError> {
-        Err(AnchorError::Network(
-            "simulated anchor failure".to_string(),
-        ))
+        Err(AnchorError::Network("simulated anchor failure".to_string()))
     }
 
     async fn confirm(&self, tx: &ChainTxRef) -> Result<ChainTxRef, AnchorError> {
@@ -139,15 +137,14 @@ async fn test_schema_creation() {
     setup_schema(&pool).await;
 
     // Verify that the expected tables exist by querying the SQLite master table.
-    let tables: Vec<String> = sqlx::query(
-        "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name",
-    )
-    .fetch_all(&pool)
-    .await
-    .unwrap()
-    .into_iter()
-    .map(|row| row.get::<String, _>("name"))
-    .collect();
+    let tables: Vec<String> =
+        sqlx::query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+            .fetch_all(&pool)
+            .await
+            .unwrap()
+            .into_iter()
+            .map(|row| row.get::<String, _>("name"))
+            .collect();
 
     assert!(
         tables.contains(&"merkle_batches".to_string()),
@@ -211,10 +208,7 @@ async fn test_add_to_batch_and_flush() {
 
     // After flush the proof must exist.
     let after = ba.get_proof(job_id).await.unwrap();
-    assert!(
-        after.is_some(),
-        "proof should exist after flush"
-    );
+    assert!(after.is_some(), "proof should exist after flush");
 }
 
 /// Adding three items and flushing anchors all of them in one batch.
@@ -325,7 +319,10 @@ async fn test_proof_retrieval_returns_merkle_proof_and_chain_tx_ref() {
     ba.flush().await.unwrap();
 
     let result = ba.get_proof(job_id).await.unwrap();
-    assert!(result.is_some(), "get_proof must return Some after anchoring");
+    assert!(
+        result.is_some(),
+        "get_proof must return Some after anchoring"
+    );
 
     let (merkle_proof, tx_ref) = result.unwrap();
 
@@ -346,14 +343,8 @@ async fn test_proof_retrieval_returns_merkle_proof_and_chain_tx_ref() {
     // ChainTxRef fields (MockAnchor returns network="test", chain="mock")
     assert_eq!(tx_ref.network, "test");
     assert_eq!(tx_ref.chain, "mock");
-    assert!(
-        !tx_ref.tx_id.is_empty(),
-        "tx_id must be non-empty"
-    );
-    assert!(
-        tx_ref.confirmed,
-        "MockAnchor always returns confirmed=true"
-    );
+    assert!(!tx_ref.tx_id.is_empty(), "tx_id must be non-empty");
+    assert!(tx_ref.confirmed, "MockAnchor always returns confirmed=true");
 }
 
 /// For a multi-item batch the leaf_index stored in the proof matches the
@@ -417,7 +408,10 @@ async fn test_proof_verification_single_item() {
 
     let (proof, _) = ba.get_proof(job_id).await.unwrap().unwrap();
     let valid = proof.verify(&proof.root).unwrap();
-    assert!(valid, "single-item MerkleProof must verify against its root");
+    assert!(
+        valid,
+        "single-item MerkleProof must verify against its root"
+    );
 }
 
 /// Proofs from a multi-item batch all verify correctly.
@@ -611,11 +605,10 @@ async fn test_flush_empty_batch_is_noop() {
     ba.flush().await.unwrap();
 
     // No batch rows must have been inserted.
-    let count: i64 =
-        sqlx::query_scalar("SELECT COUNT(*) FROM merkle_batches")
-            .fetch_one(&pool)
-            .await
-            .unwrap();
+    let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM merkle_batches")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
     assert_eq!(count, 0, "no batch rows for an empty flush");
 
     let stats: BatchStats = ba.get_stats().await.unwrap();
@@ -673,7 +666,10 @@ async fn test_check_timeout_triggers_flush_when_age_zero_threshold() {
     // At this point the batch's `created_at` was just set to `Utc::now()`.
     // The age in whole seconds is 0, which satisfies `age >= 0`.
     let triggered = ba.check_timeout().await.unwrap();
-    assert!(triggered, "check_timeout must return true when threshold is 0");
+    assert!(
+        triggered,
+        "check_timeout must return true when threshold is 0"
+    );
 
     // The item must have been anchored.
     let proof = ba.get_proof(job_id).await.unwrap();
@@ -771,11 +767,10 @@ async fn test_flush_with_failing_anchor_survives_gracefully() {
     ba.flush().await.unwrap();
 
     // The batch row must exist (inserted before the failed anchor call).
-    let batch_count: i64 =
-        sqlx::query_scalar("SELECT COUNT(*) FROM merkle_batches")
-            .fetch_one(&pool)
-            .await
-            .unwrap();
+    let batch_count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM merkle_batches")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
     assert_eq!(
         batch_count, 1,
         "batch row must be present for retry even after anchor failure"
@@ -818,5 +813,8 @@ async fn test_get_proof_returns_none_for_unknown_job() {
     let ba = BatchAnchor::new(pool.clone(), anchor, config);
 
     let result = ba.get_proof("nonexistent-job-id").await.unwrap();
-    assert!(result.is_none(), "get_proof must return None for unknown job");
+    assert!(
+        result.is_none(),
+        "get_proof must return None for unknown job"
+    );
 }

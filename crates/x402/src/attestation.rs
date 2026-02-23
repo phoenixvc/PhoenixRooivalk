@@ -126,7 +126,9 @@ pub fn verify_attestation(
     let signature = ed25519_dalek::Signature::from_bytes(&sig_arr);
 
     let payload = format!("{evidence_id}:{digest_hex}:{timestamp_unix}");
-    verifying_key.verify_strict(payload.as_bytes(), &signature).is_ok()
+    verifying_key
+        .verify_strict(payload.as_bytes(), &signature)
+        .is_ok()
 }
 
 #[cfg(test)]

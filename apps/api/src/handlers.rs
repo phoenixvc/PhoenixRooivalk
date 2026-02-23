@@ -443,10 +443,7 @@ pub async fn post_preorder(
     }
 
     if !is_valid_email(body.email.trim()) {
-        return error_response(
-            StatusCode::UNPROCESSABLE_ENTITY,
-            "Invalid email address",
-        );
+        return error_response(StatusCode::UNPROCESSABLE_ENTITY, "Invalid email address");
     }
 
     if body.items.is_empty() {

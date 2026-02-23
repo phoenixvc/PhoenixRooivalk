@@ -302,7 +302,10 @@ async fn perform_premium_verification(
     payment: PaymentVerification,
 ) -> Response {
     // Resolve the attestation signer for legal tier
-    let attestation_signer = state.x402.as_ref().and_then(|x| x.attestation_signer.as_ref());
+    let attestation_signer = state
+        .x402
+        .as_ref()
+        .and_then(|x| x.attestation_signer.as_ref());
 
     if req.tier == PriceTier::LegalAttestation && attestation_signer.is_none() {
         return (

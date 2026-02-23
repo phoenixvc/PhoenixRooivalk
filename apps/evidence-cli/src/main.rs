@@ -159,7 +159,10 @@ mod tests {
     fn test_cli_requires_event_type_and_payload() {
         // Missing both positional args — should fail to parse
         let result = build_cli().try_get_matches_from(["record-evidence"]);
-        assert!(result.is_err(), "expected parse error when args are missing");
+        assert!(
+            result.is_err(),
+            "expected parse error when args are missing"
+        );
     }
 
     #[test]
@@ -172,10 +175,7 @@ mod tests {
             m.get_one::<String>("event_type").unwrap(),
             "engagement_summary"
         );
-        assert_eq!(
-            m.get_one::<String>("payload").unwrap(),
-            r#"{"a":1}"#
-        );
+        assert_eq!(m.get_one::<String>("payload").unwrap(), r#"{"a":1}"#);
         // Defaults
         assert_eq!(
             m.get_one::<String>("api-url").unwrap(),
@@ -205,10 +205,7 @@ mod tests {
             m.get_one::<String>("api-url").unwrap(),
             "http://api.example.com"
         );
-        assert_eq!(
-            m.get_one::<String>("output-format").unwrap(),
-            "digest-only"
-        );
+        assert_eq!(m.get_one::<String>("output-format").unwrap(), "digest-only");
     }
 
     // ---------------------------------------------------------------------------
@@ -266,7 +263,10 @@ mod tests {
 
         let path_arg = format!("@{}", tmp.path().display());
         let result = resolve_payload(&path_arg);
-        assert!(result.is_err(), "invalid JSON in file should return an error");
+        assert!(
+            result.is_err(),
+            "invalid JSON in file should return an error"
+        );
     }
 
     // ---------------------------------------------------------------------------
