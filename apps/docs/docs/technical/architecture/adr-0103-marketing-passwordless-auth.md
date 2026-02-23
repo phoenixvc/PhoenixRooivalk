@@ -23,9 +23,9 @@ prerequisites: []
 1. **Problem**: The marketing site needs user identification for preorders,
    career applications, and profile management — but a full auth system with
    passwords, MFA, and account recovery is excessive for a pre-launch product.
-2. **Decision**: Email-only authentication where `POST /auth/login` with just
-   an email address creates a session. Session ID stored in `localStorage`.
-   No passwords, no OAuth, no external auth providers.
+2. **Decision**: Email-only authentication where `POST /auth/login` with just an
+   email address creates a session. Session ID stored in `localStorage`. No
+   passwords, no OAuth, no external auth providers.
 3. **Trade-off**: Lower security than password-based auth (vulnerable to XSS
    session theft), but zero user friction and no password infrastructure to
    maintain.
@@ -69,13 +69,13 @@ Sessions are stored in `localStorage` (not cookies) because:
 
 ### Security Implications
 
-| Risk              | Mitigation                                         |
-| ----------------- | -------------------------------------------------- |
-| XSS session theft | CSP headers, React's built-in XSS protection       |
-| Session fixation  | Server generates unique session IDs                |
-| No rate limiting  | API-level rate limiting on `/auth/login`            |
-| No email verify   | Team member detection prevents impersonation        |
-| Session expiry    | `expires_at` timestamp enforced server-side         |
+| Risk              | Mitigation                                   |
+| ----------------- | -------------------------------------------- |
+| XSS session theft | CSP headers, React's built-in XSS protection |
+| Session fixation  | Server generates unique session IDs          |
+| No rate limiting  | API-level rate limiting on `/auth/login`     |
+| No email verify   | Team member detection prevents impersonation |
+| Session expiry    | `expires_at` timestamp enforced server-side  |
 
 ### Team Member Detection
 

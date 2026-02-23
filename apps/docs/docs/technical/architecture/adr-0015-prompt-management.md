@@ -513,8 +513,8 @@ describe("Prompt Templates", () => {
 
 - ~~Legacy `PROMPTS` object maintained for backwards compatibility~~ (removed)
 - Some Azure Functions still use inline prompt definitions instead of the
-  centralized template system in `src/prompts/`. These should be migrated
-  to use `buildUserPrompt()` and the registered templates.
+  centralized template system in `src/prompts/`. These should be migrated to use
+  `buildUserPrompt()` and the registered templates.
 
 ---
 

@@ -49,31 +49,31 @@ The threat simulator desktop app must:
 
 ### Option 1: Tauri 2 ✅ Selected
 
-| Metric         | Value                                      |
-| -------------- | ------------------------------------------ |
-| Bundle size    | ~10MB                                      |
-| Memory usage   | ~50-80MB (uses system webview)             |
-| Backend        | Rust (shared with evidence/blockchain crates)|
-| IPC            | Typed Rust ↔ JS/WASM commands              |
-| Linux deps     | libwebkit2gtk-4.1-dev, libayatana-appindicator3-dev |
+| Metric       | Value                                               |
+| ------------ | --------------------------------------------------- |
+| Bundle size  | ~10MB                                               |
+| Memory usage | ~50-80MB (uses system webview)                      |
+| Backend      | Rust (shared with evidence/blockchain crates)       |
+| IPC          | Typed Rust ↔ JS/WASM commands                       |
+| Linux deps   | libwebkit2gtk-4.1-dev, libayatana-appindicator3-dev |
 
 ### Option 2: Electron ❌ Rejected
 
-| Metric         | Value                                      |
-| -------------- | ------------------------------------------ |
-| Bundle size    | ~150MB+ (bundles Chromium)                 |
-| Memory usage   | ~200-400MB                                 |
-| Backend        | Node.js (would need separate Rust bridge)  |
-| IPC            | contextBridge, preload scripts             |
+| Metric       | Value                                     |
+| ------------ | ----------------------------------------- |
+| Bundle size  | ~150MB+ (bundles Chromium)                |
+| Memory usage | ~200-400MB                                |
+| Backend      | Node.js (would need separate Rust bridge) |
+| IPC          | contextBridge, preload scripts            |
 
 ### Option 3: WASM-Only (No Desktop) ❌ Rejected
 
-| Metric         | Value                                      |
-| -------------- | ------------------------------------------ |
-| Bundle size    | 0 (web only)                               |
-| File system    | No native access (only downloads)          |
-| Offline        | Requires PWA service worker                |
-| Evidence       | Cannot persist to local filesystem         |
+| Metric      | Value                              |
+| ----------- | ---------------------------------- |
+| Bundle size | 0 (web only)                       |
+| File system | No native access (only downloads)  |
+| Offline     | Requires PWA service worker        |
+| Evidence    | Cannot persist to local filesystem |
 
 ---
 
@@ -81,19 +81,19 @@ The threat simulator desktop app must:
 
 Tauri 2 is used with:
 
-- **Rust backend** (`src-tauri/src/main.rs`): Handles evidence persistence,
-  file system operations, and Tauri commands
+- **Rust backend** (`src-tauri/src/main.rs`): Handles evidence persistence, file
+  system operations, and Tauri commands
 - **Leptos frontend** (`src/`): Same components as WASM-in-browser mode
 - **Conditional compilation**: `#[cfg(not(target_arch = "wasm32"))]` gates
   native-only code (Tauri API calls)
 
 ### Build Modes
 
-| Command              | Mode         | Output              |
-| -------------------- | ------------ | -------------------- |
-| `pnpm sim:dev`       | WASM only    | Browser on :8080     |
-| `pnpm sim:dev:tauri` | Full desktop | Native window        |
-| `pnpm sim:build:tauri`| Release     | Platform installer   |
+| Command                | Mode         | Output             |
+| ---------------------- | ------------ | ------------------ |
+| `pnpm sim:dev`         | WASM only    | Browser on :8080   |
+| `pnpm sim:dev:tauri`   | Full desktop | Native window      |
+| `pnpm sim:build:tauri` | Release      | Platform installer |
 
 ### Linux CI Dependencies
 

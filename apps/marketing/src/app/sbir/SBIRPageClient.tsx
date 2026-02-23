@@ -140,9 +140,7 @@ export default function SBIRPage(): React.ReactElement {
                   </div>
 
                   <div className={styles.programCard}>
-                    <h3 className={styles.programTitle}>
-                      Compliance Roadmap
-                    </h3>
+                    <h3 className={styles.programTitle}>Compliance Roadmap</h3>
                     <div className={styles.programDetails}>
                       <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>

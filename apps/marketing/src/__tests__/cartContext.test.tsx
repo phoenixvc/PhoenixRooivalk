@@ -219,10 +219,7 @@ describe("useCart", () => {
           makeItem({ id: "a", price: 1000, monthlyFee: 50 }),
           2,
         );
-        result.current.addItem(
-          makeItem({ id: "b", price: 500 }),
-          1,
-        );
+        result.current.addItem(makeItem({ id: "b", price: 500 }), 1);
       });
 
       expect(result.current.oneTimeTotal).toBe(2500); // 1000*2 + 500*1

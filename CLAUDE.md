@@ -24,7 +24,7 @@ evidence anchoring, edge AI processing, and a threat simulation engine.
 | Python Testing | pytest                                                   |
 | JS Linting     | ESLint 9, Prettier 3.8                                   |
 | Rust Linting   | Clippy, cargo fmt                                        |
-| Python Linting | Ruff, Black, isort, mypy, bandit (pre-commit)             |
+| Python Linting | Ruff, Black, isort, mypy, bandit (pre-commit)            |
 | CI/CD          | GitHub Actions, Azure Static Web Apps                    |
 | Styling        | Tailwind CSS 4.1, CSS Modules                            |
 | Infrastructure | Azure Bicep, Terraform (ML training)                     |
@@ -140,7 +140,8 @@ processing + transaction confirmation polling.
 
 Environment variables:
 
-- `KEEPER_PROVIDER=stub` — Provider selection: `stub`/`etherlink`/`solana`/`multi`
+- `KEEPER_PROVIDER=stub` — Provider selection:
+  `stub`/`etherlink`/`solana`/`multi`
 - `KEEPER_DB_URL=sqlite://blockchain_outbox.sqlite3`
 - `KEEPER_POLL_MS=5000` — Job polling interval
 - `KEEPER_CONFIRM_POLL_MS=30000` — Confirmation polling interval
@@ -216,7 +217,8 @@ cargo run -p evidence-cli -- \
   threat simulator. If the simulator hasn't been built, marketing build will use
   a fallback.
 - **pnpm workspace includes nested apps**: `apps/*/*` covers
-  `apps/docs/azure-functions/` (src-tauri has no package.json, not a pnpm member).
+  `apps/docs/azure-functions/` (src-tauri has no package.json, not a pnpm
+  member).
 - **`getrandom` crate** requires `wasm_js` feature for WASM targets (configured
   in workspace Cargo.toml).
 - **Config files are symlinks**: Edit files in `config/`, not the root symlinks.

@@ -164,7 +164,9 @@ describe("PerformanceMonitor", () => {
       monitor.updateEntityMetrics(250, 0, 0);
       const report = monitor.generateReport();
       expect(
-        report.recommendations.some((r) => r.includes("entity") || r.includes("spawn")),
+        report.recommendations.some(
+          (r) => r.includes("entity") || r.includes("spawn"),
+        ),
       ).toBe(true);
     });
   });
@@ -261,7 +263,9 @@ describe("PerformanceUtils", () => {
 
   describe("measureAsyncExecution", () => {
     it("should return the async function result", async () => {
-      const result = await PerformanceUtils.measureAsyncExecution(async () => 42);
+      const result = await PerformanceUtils.measureAsyncExecution(
+        async () => 42,
+      );
       expect(result).toBe(42);
     });
   });
@@ -271,13 +275,18 @@ describe("PerformanceUtils", () => {
       const results = PerformanceUtils.benchmark(
         [
           { name: "fast", fn: () => 1 + 1 },
-          { name: "slower", fn: () => Array.from({ length: 100 }, (_, i) => i) },
+          {
+            name: "slower",
+            fn: () => Array.from({ length: 100 }, (_, i) => i),
+          },
         ],
         100,
       );
 
       expect(results).toHaveLength(2);
-      expect(results[0].averageTime).toBeLessThanOrEqual(results[1].averageTime);
+      expect(results[0].averageTime).toBeLessThanOrEqual(
+        results[1].averageTime,
+      );
       expect(results[0].totalTime).toBeGreaterThan(0);
     });
   });

@@ -184,7 +184,8 @@ jobs:
           AZURE_ENTRA_TENANT_ID: ${{ secrets.AZURE_ENTRA_TENANT_ID }}
           AZURE_ENTRA_AUTHORITY: ${{ secrets.AZURE_ENTRA_AUTHORITY }}
           AZURE_FUNCTIONS_BASE_URL: ${{ vars.AZURE_FUNCTIONS_BASE_URL || '' }}
-          DISABLE_LOGIN: ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
+          DISABLE_LOGIN:
+            ${{ vars.DISABLE_LOGIN || secrets.DISABLE_LOGIN || 'false' }}
         continue-on-error: true
 
       - name: Build

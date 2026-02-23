@@ -70,14 +70,26 @@ describe("SimpleStateMachineEngine", () => {
 
     it("should call onEnter for the initial state", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
       expect(ctx.log).toContain("enter:idle");
     });
 
     it("should not call onEnter if initial state has no hook", () => {
       const states: SimpleState<TestContext>[] = [{ name: "plain" }];
       const ctx: TestContext = { value: 0, log: [] };
-      const machine = engine.createStateMachine("test", "plain", states, [], ctx);
+      const machine = engine.createStateMachine(
+        "test",
+        "plain",
+        states,
+        [],
+        ctx,
+      );
       expect(machine.currentState).toBe("plain");
       expect(ctx.log).toHaveLength(0);
     });
@@ -86,7 +98,13 @@ describe("SimpleStateMachineEngine", () => {
   describe("update", () => {
     it("should call onUpdate for the current state", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
       ctx.log = []; // Clear enter log
 
       engine.update(16);
@@ -130,7 +148,13 @@ describe("SimpleStateMachineEngine", () => {
 
     it("should skip paused machines", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
       ctx.log = [];
 
       engine.setRunning("test", false);
@@ -181,7 +205,13 @@ describe("SimpleStateMachineEngine", () => {
   describe("getStateMachine", () => {
     it("should return a machine by ID", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
 
       const machine = engine.getStateMachine<TestContext>("test");
       expect(machine).not.toBeNull();
@@ -196,7 +226,13 @@ describe("SimpleStateMachineEngine", () => {
   describe("setRunning", () => {
     it("should pause and resume a machine", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
 
       engine.setRunning("test", false);
       const machine = engine.getStateMachine<TestContext>("test");
@@ -214,7 +250,13 @@ describe("SimpleStateMachineEngine", () => {
   describe("removeStateMachine", () => {
     it("should remove a machine by ID", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("test", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "test",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
 
       engine.removeStateMachine("test");
       expect(engine.getStateMachine("test")).toBeNull();
@@ -224,8 +266,20 @@ describe("SimpleStateMachineEngine", () => {
   describe("getAllStateMachines", () => {
     it("should return all machines", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("a", "idle", makeStates(), makeTransitions(), ctx);
-      engine.createStateMachine("b", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "a",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
+      engine.createStateMachine(
+        "b",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
 
       const all = engine.getAllStateMachines();
       expect(all.size).toBe(2);
@@ -235,7 +289,13 @@ describe("SimpleStateMachineEngine", () => {
 
     it("should return a copy, not the internal map", () => {
       const ctx: TestContext = { value: 0, log: [] };
-      engine.createStateMachine("a", "idle", makeStates(), makeTransitions(), ctx);
+      engine.createStateMachine(
+        "a",
+        "idle",
+        makeStates(),
+        makeTransitions(),
+        ctx,
+      );
 
       const map = engine.getAllStateMachines();
       map.delete("a");
@@ -265,8 +325,12 @@ describe("SimpleStateMachineEngine", () => {
 
 describe("createGameStateMachines", () => {
   it("should create an engine with factory functions", () => {
-    const { engine, createThreatMachine, createDroneMachine, createWeaponMachine } =
-      createGameStateMachines();
+    const {
+      engine,
+      createThreatMachine,
+      createDroneMachine,
+      createWeaponMachine,
+    } = createGameStateMachines();
     expect(engine).toBeInstanceOf(SimpleStateMachineEngine);
     expect(typeof createThreatMachine).toBe("function");
     expect(typeof createDroneMachine).toBe("function");

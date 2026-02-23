@@ -136,15 +136,15 @@ export const PERFORMANCE = {
 export const PRICING = {
   // Deployment-package hardware ranges by market segment
   // (NOT individual SKU prices — see products.ts for per-SKU pricing)
-  SYSTEM_RANGE: "$2K-$235K",          // Full span: commercial node through military system
-  MILITARY_RANGE: "$165K-$235K",      // RKV-G + RKV-M minimum deployable unit
-  INFRASTRUCTURE_RANGE: "$30K-$70K",  // SkyWatch Enterprise + AeroNet Command per facility
-  COMMERCIAL_RANGE: "$2K-$5K",        // SkyWatch Pro + NetSnare Pro per site node
+  SYSTEM_RANGE: "$2K-$235K", // Full span: commercial node through military system
+  MILITARY_RANGE: "$165K-$235K", // RKV-G + RKV-M minimum deployable unit
+  INFRASTRUCTURE_RANGE: "$30K-$70K", // SkyWatch Enterprise + AeroNet Command per facility
+  COMMERCIAL_RANGE: "$2K-$5K", // SkyWatch Pro + NetSnare Pro per site node
 
   // Cost savings
   COST_SAVINGS: "60%",
   INHOUSE_COST_ZAR: "R850,000",
-  INHOUSE_COST_USD: "$56,000",        // Proxy; nearest SKU: AeroNet Enterprise COGS $59,200 (5.7% variance)
+  INHOUSE_COST_USD: "$56,000", // Proxy; nearest SKU: AeroNet Enterprise COGS $59,200 (5.7% variance)
 
   // Margins
   GROSS_MARGIN: "65%",

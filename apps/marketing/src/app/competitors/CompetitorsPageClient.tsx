@@ -269,7 +269,9 @@ export default function CompetitorsPageClient(): React.ReactElement {
                     <tr key={row.feature}>
                       <td className={styles.featureCell}>{row.feature}</td>
                       <td className={styles.phoenixCell}>{row.phoenix}</td>
-                      <td className={cellClass(row.droneShield)}>{row.droneShield}</td>
+                      <td className={cellClass(row.droneShield)}>
+                        {row.droneShield}
+                      </td>
                       <td className={cellClass(row.dedrone)}>{row.dedrone}</td>
                       <td className={cellClass(row.anduril)}>{row.anduril}</td>
                       <td className={cellClass(row.rafael)}>{row.rafael}</td>
@@ -305,19 +307,25 @@ export default function CompetitorsPageClient(): React.ReactElement {
                   <div className={styles.competitorPricing}>{comp.pricing}</div>
                   <div className={styles.competitorProducts}>
                     {comp.products.map((p) => (
-                      <span key={p} className={styles.productTag}>{p}</span>
+                      <span key={p} className={styles.productTag}>
+                        {p}
+                      </span>
                     ))}
                   </div>
                   <div className={styles.listTitle}>Strengths</div>
                   <ul className={styles.strengthsList}>
                     {comp.strengths.map((s) => (
-                      <li key={s} className={styles.strengthItem}>{s}</li>
+                      <li key={s} className={styles.strengthItem}>
+                        {s}
+                      </li>
                     ))}
                   </ul>
                   <div className={styles.listTitle}>Weaknesses</div>
                   <ul className={styles.weaknessesList}>
                     {comp.weaknesses.map((w) => (
-                      <li key={w} className={styles.weaknessItem}>{w}</li>
+                      <li key={w} className={styles.weaknessItem}>
+                        {w}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -332,26 +340,38 @@ export default function CompetitorsPageClient(): React.ReactElement {
               <div className={styles.positioningNiche}>{positioning.niche}</div>
               <div className={styles.positioningColumns}>
                 <div>
-                  <div className={styles.positioningColumnTitle}>Differentiators</div>
+                  <div className={styles.positioningColumnTitle}>
+                    Differentiators
+                  </div>
                   <ul className={styles.positioningList}>
                     {positioning.differentiators.map((d) => (
-                      <li key={d} className={styles.positioningItem}>{d}</li>
+                      <li key={d} className={styles.positioningItem}>
+                        {d}
+                      </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <div className={styles.positioningColumnTitle}>Target Markets</div>
+                  <div className={styles.positioningColumnTitle}>
+                    Target Markets
+                  </div>
                   <ul className={styles.positioningList}>
                     {positioning.targets.map((t) => (
-                      <li key={t} className={styles.positioningItem}>{t}</li>
+                      <li key={t} className={styles.positioningItem}>
+                        {t}
+                      </li>
                     ))}
                   </ul>
                 </div>
                 <div>
-                  <div className={styles.positioningColumnTitle}>Avoid Competing</div>
+                  <div className={styles.positioningColumnTitle}>
+                    Avoid Competing
+                  </div>
                   <ul className={styles.positioningList}>
                     {positioning.avoid.map((a) => (
-                      <li key={a} className={styles.positioningItem}>{a}</li>
+                      <li key={a} className={styles.positioningItem}>
+                        {a}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -363,9 +383,9 @@ export default function CompetitorsPageClient(): React.ReactElement {
           <div className={styles.disclaimer}>
             Competitor information is based on publicly available data as of
             February 2026. Pricing figures are approximate and may vary by
-            contract scope, geography, and customization level. Phoenix
-            Rooivalk pricing represents deployment-package estimates, not
-            individual SKU prices.
+            contract scope, geography, and customization level. Phoenix Rooivalk
+            pricing represents deployment-package estimates, not individual SKU
+            prices.
           </div>
         </div>
       </div>

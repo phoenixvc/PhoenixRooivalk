@@ -27,10 +27,10 @@ completeness, standardized figures reference, and recent updates.
 
 | Metric                    | Value         |
 | ------------------------- | ------------- |
-| **Documentation Version** | 3.0.0          |
-| **Last Updated**          | February 2026  |
-| **Overall Completion**    | 100%           |
-| **Total Documents**       | 90+            |
+| **Documentation Version** | 3.0.0         |
+| **Last Updated**          | February 2026 |
+| **Overall Completion**    | 100%          |
+| **Total Documents**       | 90+           |
 
 ---
 
@@ -317,8 +317,8 @@ import { MarketOverviewCard, PerformanceCard, InvestmentCard } from '@site/src/c
 
 ### February 2026
 
-- 9 new Architecture Decision Records created (ADR-0034, 0101, 0102, 0200,
-  0201, 0401, plus 4 medium-priority ADRs)
+- 9 new Architecture Decision Records created (ADR-0034, 0101, 0102, 0200, 0201,
+  0401, plus 4 medium-priority ADRs)
 - ADR numbering scheme consolidated (template-and-guide as canonical)
 - API documentation rewritten with actual routes and models
 - Market segment bundles added (LEO, NATO Allied, Corrections, Mid-market)
@@ -362,8 +362,7 @@ For documentation guidelines, see the
 
 If you find issues or have suggestions for improving the documentation, please:
 
-- Open an issue on
-  [GitHub](https://github.com/phoenixvc/PhoenixRooivalk/issues)
+- Open an issue on [GitHub](https://github.com/phoenixvc/PhoenixRooivalk/issues)
 - Contact the team at [jurie@phoenixvc.tech](mailto:jurie@phoenixvc.tech)
 
 ---

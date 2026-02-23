@@ -12,10 +12,7 @@ interface QuickActionsWidgetProps {
 
 export function QuickActionsWidget({ actions }: QuickActionsWidgetProps) {
   return (
-    <nav
-      className="fixed bottom-6 right-6 z-50"
-      aria-label="Quick actions"
-    >
+    <nav className="fixed bottom-6 right-6 z-50" aria-label="Quick actions">
       <div className="bg-[var(--darker,#020617)] border border-[var(--primary,#f97316)] rounded-lg p-3 shadow-2xl max-w-xs">
         <div className="text-[var(--primary,#f97316)] font-bold mb-2 text-sm">
           Quick Actions

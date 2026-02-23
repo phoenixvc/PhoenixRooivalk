@@ -38,8 +38,8 @@ prerequisites: []
 
 Phoenix Rooivalk's Rust codebase consists of 15 workspace members:
 
-- **Applications**: `api`, `keeper`, `evidence-cli`,
-  `threat-simulator-desktop` (lib + src-tauri)
+- **Applications**: `api`, `keeper`, `evidence-cli`, `threat-simulator-desktop`
+  (lib + src-tauri)
 - **Libraries**: `evidence`, `anchor-solana`, `anchor-etherlink`,
   `address-validation`, `phoenix-common`, `x402`
 
@@ -61,7 +61,8 @@ for browser-compatible random number generation.
 ### Option 1: rustls-Only with Workspace Enforcement ✅ Selected
 
 **Description**: Configure the workspace `Cargo.toml` to use `rustls` features
-for all HTTP/TLS crates. Forbid `unsafe` code workspace-wide via `[workspace.lints.rust]`.
+for all HTTP/TLS crates. Forbid `unsafe` code workspace-wide via
+`[workspace.lints.rust]`.
 
 **Pros**:
 
@@ -125,9 +126,9 @@ reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"
 sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "sqlite"] }
 ```
 
-Every crate that needs HTTP or TLS must use the workspace dependency (which
-has `rustls` features pre-selected). Adding `native-tls` features to any
-dependency is a CI-blocking violation.
+Every crate that needs HTTP or TLS must use the workspace dependency (which has
+`rustls` features pre-selected). Adding `native-tls` features to any dependency
+is a CI-blocking violation.
 
 ### Unsafe Code Prohibition
 
@@ -139,8 +140,8 @@ in CI.
 
 The workspace pins `getrandom = { version = "0.4.1", features = ["wasm_js"] }`
 so that WASM targets use the JavaScript-based entropy source. The threat
-simulator additionally pulls `getrandom 0.3` (transitively via Leptos/rand)
-with the same `wasm_js` feature for Cargo feature unification.
+simulator additionally pulls `getrandom 0.3` (transitively via Leptos/rand) with
+the same `wasm_js` feature for Cargo feature unification.
 
 ---
 
@@ -160,8 +161,8 @@ with the same `wasm_js` feature for Cargo feature unification.
 
 1. **Certificate edge cases**: Some government/enterprise CAs may need manual
    `webpki-roots` configuration
-2. **Contributor friction**: Contributors must remember to never add `native-tls`
-   features when adding dependencies
+2. **Contributor friction**: Contributors must remember to never add
+   `native-tls` features when adding dependencies
 
 ### Neutral
 

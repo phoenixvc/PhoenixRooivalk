@@ -25,11 +25,11 @@ prerequisites: []
    database that works on edge devices (Raspberry Pi, Jetson), cloud VMs, and
    developer laptops without external infrastructure.
 2. **Decision**: Use SQLite via SQLx with enforced PRAGMAs (foreign keys,
-   extended result codes), a priority-based connection URL chain, and
-   idempotent versioned migrations that run automatically on startup.
+   extended result codes), a priority-based connection URL chain, and idempotent
+   versioned migrations that run automatically on startup.
 3. **Trade-off**: SQLite limits concurrent write throughput and lacks built-in
-   replication, but eliminates operational complexity for single-node
-   edge deployments.
+   replication, but eliminates operational complexity for single-node edge
+   deployments.
 
 ---
 
@@ -41,10 +41,10 @@ Phoenix Rooivalk deploys to diverse environments:
 - **Cloud VMs**: Azure Virtual Machines
 - **Developer machines**: macOS, Linux, Windows (WSL)
 
-The system processes evidence jobs, countermeasure deployments, signal disruption
-audits, and jamming operations. The keeper service additionally maintains a
-blockchain outbox for asynchronous anchoring. Both services can share the same
-SQLite database file.
+The system processes evidence jobs, countermeasure deployments, signal
+disruption audits, and jamming operations. The keeper service additionally
+maintains a blockchain outbox for asynchronous anchoring. Both services can
+share the same SQLite database file.
 
 Requirements:
 

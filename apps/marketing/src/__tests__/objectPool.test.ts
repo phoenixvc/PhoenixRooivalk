@@ -210,14 +210,16 @@ describe("ObjectPool", () => {
         initialSize: 3,
         maxSize: 10,
         createFn: () => ({ id: "", isActive: false, lastUsed: 0, value: 0 }),
-        resetFn: (obj) => { obj.value = 0; },
+        resetFn: (obj) => {
+          obj.value = 0;
+        },
         validateFn: (obj) => obj.value > 0,
       });
 
       const a = pool.acquire()!;
       const b = pool.acquire()!;
       a.value = 10; // valid
-      b.value = 0;  // invalid
+      b.value = 0; // invalid
 
       pool.validateActive();
       expect(pool.getStats().activeObjects).toBe(1);

@@ -26,10 +26,10 @@ prerequisites:
 1. **Problem**: Blockchain anchoring is inherently asynchronous — submitting a
    transaction and confirming it are separate operations with different timing
    requirements, and transient failures must not lose evidence jobs.
-2. **Decision**: Run two concurrent `tokio::spawn` loops inside `tokio::select!`:
-   a job processing loop (polls for new evidence, anchors to blockchain) and a
-   confirmation loop (polls for unconfirmed transactions). Use exponential
-   backoff with jitter for transient failures.
+2. **Decision**: Run two concurrent `tokio::spawn` loops inside
+   `tokio::select!`: a job processing loop (polls for new evidence, anchors to
+   blockchain) and a confirmation loop (polls for unconfirmed transactions). Use
+   exponential backoff with jitter for transient failures.
 3. **Trade-off**: Two loops add operational complexity but decouple submission
    latency from confirmation latency, preventing slow confirmations from
    blocking new job processing.
@@ -48,10 +48,10 @@ blockchain networks (Solana, EtherLink). Evidence jobs are submitted to the
 
 Blockchain confirmation times vary dramatically:
 
-| Chain     | Typical Confirmation | Worst Case   |
-| --------- | -------------------- | ------------ |
+| Chain     | Typical Confirmation | Worst Case        |
+| --------- | -------------------- | ----------------- |
 | Solana    | 400ms–2s             | 30s+ (congestion) |
-| EtherLink | 5–15s                | 60s+ (reorg) |
+| EtherLink | 5–15s                | 60s+ (reorg)      |
 
 A single-loop design would block new job processing while waiting for slow
 confirmations. This is unacceptable when evidence jobs arrive continuously
@@ -175,12 +175,12 @@ marked as `failed` without backoff.
 
 ### Configuration
 
-| Variable                | Default | Description                 |
-| ----------------------- | ------- | --------------------------- |
-| `KEEPER_POLL_MS`        | 5000    | Job loop polling interval   |
-| `KEEPER_CONFIRM_POLL_MS`| 30000   | Confirmation polling interval|
-| `KEEPER_PROVIDER`       | `stub`  | Provider: stub/etherlink/solana/multi |
-| `KEEPER_HTTP_PORT`      | 8081    | Health check HTTP port      |
+| Variable                 | Default | Description                           |
+| ------------------------ | ------- | ------------------------------------- |
+| `KEEPER_POLL_MS`         | 5000    | Job loop polling interval             |
+| `KEEPER_CONFIRM_POLL_MS` | 30000   | Confirmation polling interval         |
+| `KEEPER_PROVIDER`        | `stub`  | Provider: stub/etherlink/solana/multi |
+| `KEEPER_HTTP_PORT`       | 8081    | Health check HTTP port                |
 
 ---
 

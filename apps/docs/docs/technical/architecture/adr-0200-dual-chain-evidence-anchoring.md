@@ -43,12 +43,12 @@ Phoenix Rooivalk's evidence pipeline must provide tamper-proof audit trails for
 counter-drone operations. Customers in different sectors have different
 blockchain preferences:
 
-| Sector           | Preferred Chain | Reason                          |
-| ---------------- | --------------- | ------------------------------- |
-| Enterprise       | EtherLink       | EVM ecosystem, Tezos governance |
-| Government/DoD   | Solana          | US-based, high throughput       |
-| Law enforcement  | Either          | Courts accept both              |
-| Consumer         | Stub (dev)      | No blockchain cost in freemium  |
+| Sector          | Preferred Chain | Reason                          |
+| --------------- | --------------- | ------------------------------- |
+| Enterprise      | EtherLink       | EVM ecosystem, Tezos governance |
+| Government/DoD  | Solana          | US-based, high throughput       |
+| Law enforcement | Either          | Courts accept both              |
+| Consumer        | Stub (dev)      | No blockchain cost in freemium  |
 
 The system must support:
 
@@ -128,23 +128,23 @@ pub trait AnchorProvider: Send + Sync {
 
 ### Provider Implementations
 
-| Crate              | Provider            | Description                          |
-| ------------------ | ------------------- | ------------------------------------ |
-| `anchor-solana`    | `SolanaProvider`     | Solana memo transactions via RPC     |
-| `anchor-solana`    | `SolanaProviderStub` | Returns `"fake:{digest}"` for tests  |
-| `anchor-etherlink` | `EtherlinkProvider`  | EtherLink transactions via JSON-RPC  |
+| Crate              | Provider                | Description                         |
+| ------------------ | ----------------------- | ----------------------------------- |
+| `anchor-solana`    | `SolanaProvider`        | Solana memo transactions via RPC    |
+| `anchor-solana`    | `SolanaProviderStub`    | Returns `"fake:{digest}"` for tests |
+| `anchor-etherlink` | `EtherlinkProvider`     | EtherLink transactions via JSON-RPC |
 | `anchor-etherlink` | `EtherlinkProviderStub` | Returns `"fake:{digest}"` for tests |
 
 ### Provider Selection
 
 The keeper's `KEEPER_PROVIDER` env var controls routing:
 
-| Value       | Behavior                                      |
-| ----------- | --------------------------------------------- |
-| `stub`      | No blockchain — returns fake tx IDs            |
-| `solana`    | Anchor to Solana only                          |
-| `etherlink` | Anchor to EtherLink only                       |
-| `multi`     | Anchor to both Solana and EtherLink             |
+| Value       | Behavior                            |
+| ----------- | ----------------------------------- |
+| `stub`      | No blockchain — returns fake tx IDs |
+| `solana`    | Anchor to Solana only               |
+| `etherlink` | Anchor to EtherLink only            |
+| `multi`     | Anchor to both Solana and EtherLink |
 
 ### Batch Anchoring via Merkle Trees
 
@@ -168,8 +168,8 @@ This reduces blockchain costs by ~100x for high-volume deployments.
    ev_001  ev_002    ev_003  ev_004
 ```
 
-Each evidence item gets a `MerkleProof` containing the sibling hashes needed
-to reconstruct the path from leaf to root. Verification:
+Each evidence item gets a `MerkleProof` containing the sibling hashes needed to
+reconstruct the path from leaf to root. Verification:
 
 ```rust
 impl MerkleProof {

@@ -28,7 +28,8 @@ emphasis on survivability, performance, and operational flexibility.
 > design namespace, separate from the software ADRs in
 > `docs/technical/architecture/`. These should be read as **M-0001** through
 > **M-0005** to avoid confusion with core system architecture ADRs 0001–0010.
-> See [ADR-0000: Template & Guide](../architecture/adr-0000-template-and-guide.md)
+> See
+> [ADR-0000: Template & Guide](../architecture/adr-0000-template-and-guide.md)
 > for the software ADR numbering convention.
 
 ## M-0001: Ducted vs Open Props for Tilt Pods (RKV-M-TQ)

@@ -42,7 +42,8 @@ Phoenix Rooivalk uses a Turborepo monorepo with:
 
 - **apps/docs**: Docusaurus documentation site → Azure SWA
 - **apps/marketing**: Next.js marketing site → Azure SWA
-- **apps/threat-simulator-desktop**: Tauri 2 desktop application → GitHub Releases
+- **apps/threat-simulator-desktop**: Tauri 2 desktop application → GitHub
+  Releases
 - **packages/\***: Shared libraries
 
 ### Requirements

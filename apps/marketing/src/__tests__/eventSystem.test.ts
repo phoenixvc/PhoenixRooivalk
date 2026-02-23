@@ -1,4 +1,7 @@
-import { EventSystem, createGameEventSystem } from "../components/utils/eventSystem";
+import {
+  EventSystem,
+  createGameEventSystem,
+} from "../components/utils/eventSystem";
 
 describe("EventSystem", () => {
   let eventSystem: EventSystem;

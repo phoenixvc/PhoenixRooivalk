@@ -48,15 +48,15 @@ with their context, rationale, and consequences. They serve to:
 The canonical numbering convention is defined in
 [ADR-0000: Template & Guide](./adr-0000-template-and-guide.md):
 
-| Range         | Category                 | Description                                            |
-| ------------- | ------------------------ | ------------------------------------------------------ |
-| **0000**      | Template & Meta          | This document, template, governance                    |
-| **0001-0099** | Core System Architecture | Chain selection, autonomy level, sensor integration    |
-| **0100-0199** | Security & Compliance    | Zero-trust, ITAR, authentication, TLS policy           |
-| **0200-0299** | Blockchain & Evidence    | Chain anchoring, evidence model, multi-chain           |
-| **0300-0399** | AI/ML Architecture       | Edge AI, model selection, inference                    |
-| **0400-0499** | Infrastructure & DevOps  | Monorepo, CI/CD, deployment, WASM                      |
-| **D001-D999** | Development Decisions    | Tooling, frameworks, patterns                          |
+| Range         | Category                 | Description                                         |
+| ------------- | ------------------------ | --------------------------------------------------- |
+| **0000**      | Template & Meta          | This document, template, governance                 |
+| **0001-0099** | Core System Architecture | Chain selection, autonomy level, sensor integration |
+| **0100-0199** | Security & Compliance    | Zero-trust, ITAR, authentication, TLS policy        |
+| **0200-0299** | Blockchain & Evidence    | Chain anchoring, evidence model, multi-chain        |
+| **0300-0399** | AI/ML Architecture       | Edge AI, model selection, inference                 |
+| **0400-0499** | Infrastructure & DevOps  | Monorepo, CI/CD, deployment, WASM                   |
+| **D001-D999** | Development Decisions    | Tooling, frameworks, patterns                       |
 
 **Note**: ADRs 0011-0023 predate this scheme and retain their original numbers
 for stability. New ADRs should follow the ranges above.

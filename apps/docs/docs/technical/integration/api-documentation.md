@@ -44,10 +44,10 @@ machine-to-machine Solana wallet verification instead.
 
 List endpoints accept optional query parameters:
 
-| Parameter  | Default | Max | Description              |
-| ---------- | ------- | --- | ------------------------ |
-| `page`     | 1       | —   | Page number (1-indexed)  |
-| `per_page` | 10      | 100 | Items per page           |
+| Parameter  | Default | Max | Description             |
+| ---------- | ------- | --- | ----------------------- |
+| `page`     | 1       | —   | Page number (1-indexed) |
+| `per_page` | 10      | 100 | Items per page          |
 
 ---
 
@@ -86,12 +86,12 @@ Create a new evidence job.
 }
 ```
 
-| Field          | Type   | Required | Description                        |
-| -------------- | ------ | -------- | ---------------------------------- |
+| Field          | Type   | Required | Description                           |
+| -------------- | ------ | -------- | ------------------------------------- |
 | `id`           | string | No       | Custom ID (auto-generated if omitted) |
-| `digest_hex`   | string | Yes      | SHA-256 hex digest of the evidence |
-| `payload_mime` | string | No       | MIME type of the original payload  |
-| `metadata`     | object | No       | Arbitrary JSON metadata            |
+| `digest_hex`   | string | Yes      | SHA-256 hex digest of the evidence    |
+| `payload_mime` | string | No       | MIME type of the original payload     |
+| `metadata`     | object | No       | Arbitrary JSON metadata               |
 
 **Response** `201 Created`:
 
@@ -119,8 +119,8 @@ List evidence jobs (paginated).
 
 Get a single evidence job by ID.
 
-**Response** `200 OK`: Single `EvidenceOut` object.
-**Response** `404 Not Found`: Evidence job not found.
+**Response** `200 OK`: Single `EvidenceOut` object. **Response**
+`404 Not Found`: Evidence job not found.
 
 ---
 
@@ -144,13 +144,13 @@ Record a countermeasure deployment.
 }
 ```
 
-| Field                 | Type   | Required | Description                          |
-| --------------------- | ------ | -------- | ------------------------------------ |
-| `job_id`              | string | Yes      | Associated evidence job ID           |
-| `deployed_by`         | string | Yes      | Operator identifier                  |
-| `countermeasure_type` | string | Yes      | Type (e.g., rf_jammer, net_capture)  |
+| Field                 | Type   | Required | Description                         |
+| --------------------- | ------ | -------- | ----------------------------------- |
+| `job_id`              | string | Yes      | Associated evidence job ID          |
+| `deployed_by`         | string | Yes      | Operator identifier                 |
+| `countermeasure_type` | string | Yes      | Type (e.g., rf_jammer, net_capture) |
 | `effectiveness_score` | float  | No       | 0.0–1.0 effectiveness rating        |
-| `notes`               | string | No       | Operator notes                       |
+| `notes`               | string | No       | Operator notes                      |
 
 **Response** `201 Created`: `CountermeasureDeploymentOut` object.
 
@@ -226,13 +226,13 @@ Record a jamming operation.
 }
 ```
 
-| Field                    | Type   | Required | Description                      |
-| ------------------------ | ------ | -------- | -------------------------------- |
-| `operation_id`           | string | Yes      | Unique operation identifier      |
-| `job_id`                 | string | Yes      | Associated evidence job ID       |
-| `target_frequency_range` | string | Yes      | Targeted RF frequency band       |
-| `power_level`            | float  | Yes      | Transmission power level (dBm)   |
-| `success_metric`         | float  | No       | 0.0–1.0 success rating          |
+| Field                    | Type   | Required | Description                    |
+| ------------------------ | ------ | -------- | ------------------------------ |
+| `operation_id`           | string | Yes      | Unique operation identifier    |
+| `job_id`                 | string | Yes      | Associated evidence job ID     |
+| `target_frequency_range` | string | Yes      | Targeted RF frequency band     |
+| `power_level`            | float  | Yes      | Transmission power level (dBm) |
+| `success_metric`         | float  | No       | 0.0–1.0 success rating         |
 
 **Response** `201 Created`: `JammingOperationOut` object.
 
@@ -284,8 +284,8 @@ Get the current authenticated user.
 
 **Headers**: `Authorization: Bearer <session_id>` or session cookie
 
-**Response** `200 OK`: `UserOut` object.
-**Response** `401 Unauthorized`: No valid session.
+**Response** `200 OK`: `UserOut` object. **Response** `401 Unauthorized`: No
+valid session.
 
 ### `PUT /auth/profile`
 
@@ -322,9 +322,9 @@ cannot apply (returns `409 Conflict`).
 }
 ```
 
-**Response** `201 Created`: `CareerApplicationOut` object.
-**Response** `401 Unauthorized`: No valid session.
-**Response** `409 Conflict`: User is already a team member.
+**Response** `201 Created`: `CareerApplicationOut` object. **Response**
+`401 Unauthorized`: No valid session. **Response** `409 Conflict`: User is
+already a team member.
 
 ---
 
@@ -437,19 +437,19 @@ All error responses follow this format:
 
 ### Common Status Codes
 
-| Code | Meaning                                        |
-| ---- | ---------------------------------------------- |
-| 200  | Success                                        |
-| 201  | Created                                        |
-| 400  | Bad request — invalid input                    |
-| 401  | Unauthorized — missing or invalid session      |
-| 402  | Payment required — x402 payment needed         |
-| 404  | Not found                                      |
-| 409  | Conflict — e.g., team member applying to role  |
-| 422  | Unprocessable entity — validation failure      |
-| 429  | Rate limited                                   |
-| 500  | Internal server error                          |
-| 503  | Service unavailable — e.g., x402 not enabled   |
+| Code | Meaning                                       |
+| ---- | --------------------------------------------- |
+| 200  | Success                                       |
+| 201  | Created                                       |
+| 400  | Bad request — invalid input                   |
+| 401  | Unauthorized — missing or invalid session     |
+| 402  | Payment required — x402 payment needed        |
+| 404  | Not found                                     |
+| 409  | Conflict — e.g., team member applying to role |
+| 422  | Unprocessable entity — validation failure     |
+| 429  | Rate limited                                  |
+| 500  | Internal server error                         |
+| 503  | Service unavailable — e.g., x402 not enabled  |
 
 ---
 
@@ -467,13 +467,13 @@ The API uses SQLite with automatic migrations on startup. Key configuration:
 
 ## Environment Variables
 
-| Variable              | Default                               | Description                    |
-| --------------------- | ------------------------------------- | ------------------------------ |
-| `API_DB_URL`          | —                                     | SQLite connection URL          |
-| `KEEPER_DB_URL`       | —                                     | Fallback DB URL (shared)       |
-| `RUST_LOG`            | `info`                                | Log level filter               |
-| `X402_ENABLED`        | `false`                               | Enable x402 payment protocol   |
-| `X402_WALLET_ADDRESS` | —                                     | Solana wallet for x402         |
+| Variable              | Default | Description                  |
+| --------------------- | ------- | ---------------------------- |
+| `API_DB_URL`          | —       | SQLite connection URL        |
+| `KEEPER_DB_URL`       | —       | Fallback DB URL (shared)     |
+| `RUST_LOG`            | `info`  | Log level filter             |
+| `X402_ENABLED`        | `false` | Enable x402 payment protocol |
+| `X402_WALLET_ADDRESS` | —       | Solana wallet for x402       |
 
 ---
 
@@ -514,16 +514,16 @@ curl http://localhost:8080/auth/me \
 
 ## Related Services
 
-| Service           | Port | Description                              |
-| ----------------- | ---- | ---------------------------------------- |
-| **API**           | 8080 | This REST API                            |
-| **Keeper**        | 8081 | Blockchain anchoring background service  |
-| **Marketing**     | 3000 | Next.js frontend                         |
-| **Docs**          | 3000 | Docusaurus documentation site            |
-| **Detector**      | —    | Python drone detection (separate process)|
+| Service       | Port | Description                               |
+| ------------- | ---- | ----------------------------------------- |
+| **API**       | 8080 | This REST API                             |
+| **Keeper**    | 8081 | Blockchain anchoring background service   |
+| **Marketing** | 3000 | Next.js frontend                          |
+| **Docs**      | 3000 | Docusaurus documentation site             |
+| **Detector**  | —    | Python drone detection (separate process) |
 
 ---
 
 _This document reflects the actual API implementation in `apps/api/`. For the
-Rust source code, see `apps/api/src/lib.rs` and `apps/api/src/models.rs`.
-© 2025 Phoenix Rooivalk. All rights reserved._
+Rust source code, see `apps/api/src/lib.rs` and `apps/api/src/models.rs`. © 2025
+Phoenix Rooivalk. All rights reserved._

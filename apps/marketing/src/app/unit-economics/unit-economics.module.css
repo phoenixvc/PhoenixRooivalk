@@ -79,7 +79,11 @@
 .kpiValue {
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary)),
+    rgb(var(--accent))
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -249,7 +253,11 @@
 .bomItemBarFill {
   height: 100%;
   border-radius: 2px;
-  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary)),
+    rgb(var(--accent))
+  );
 }
 
 /* Margins */
@@ -307,7 +315,11 @@
 .marginBarFill {
   height: 100%;
   border-radius: 0.25rem;
-  background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+  background: linear-gradient(
+    to right,
+    rgb(var(--primary)),
+    rgb(var(--accent))
+  );
 }
 
 /* Revenue Projections */

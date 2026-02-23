@@ -27,9 +27,9 @@ prerequisites: []
 2. **Decision**: Use Next.js 16 with static export for the marketing site and
    Docusaurus 3 for the documentation portal. Each is a separate app in the
    monorepo with shared packages.
-3. **Trade-off**: Two separate frontend frameworks increase build complexity
-   but let each site optimize for its primary use case (marketing conversion
-   vs. documentation readability).
+3. **Trade-off**: Two separate frontend frameworks increase build complexity but
+   let each site optimize for its primary use case (marketing conversion vs.
+   documentation readability).
 
 ---
 
@@ -37,14 +37,14 @@ prerequisites: []
 
 Phoenix Rooivalk needs two distinct web experiences:
 
-| Requirement          | Marketing Site          | Docs Portal             |
-| -------------------- | ----------------------- | ----------------------- |
-| Primary goal         | Conversion, SEO         | Onboarding, reference   |
-| Content type         | Dynamic pages, products | Markdown docs, ADRs     |
-| Authentication       | Email/localStorage      | Azure Entra ID (B2C)    |
-| Deployment           | Azure Static Web Apps   | Azure Static Web Apps   |
-| Search               | N/A                     | Local + Algolia ready   |
-| Gamification         | N/A                     | Reading progress, points|
+| Requirement    | Marketing Site          | Docs Portal              |
+| -------------- | ----------------------- | ------------------------ |
+| Primary goal   | Conversion, SEO         | Onboarding, reference    |
+| Content type   | Dynamic pages, products | Markdown docs, ADRs      |
+| Authentication | Email/localStorage      | Azure Entra ID (B2C)     |
+| Deployment     | Azure Static Web Apps   | Azure Static Web Apps    |
+| Search         | N/A                     | Local + Algolia ready    |
+| Gamification   | N/A                     | Reading progress, points |
 
 ---
 

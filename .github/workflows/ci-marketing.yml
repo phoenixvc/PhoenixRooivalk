@@ -80,7 +80,9 @@ jobs:
           trunk build --release
 
       - name: Test with coverage
-        run: pnpm --filter marketing test -- --coverage --reporter=default --reporter=json
+        run:
+          pnpm --filter marketing test -- --coverage --reporter=default
+          --reporter=json
         env:
           CI: true
 

@@ -30,9 +30,9 @@ prerequisites:
 2. **Decision**: Use SHA-256 exclusively via the `sha2` Rust crate. The
    `EvidenceDigest` model enforces `DigestAlgo::Sha256` as the only variant.
    Digests are stored and transmitted as lowercase hex strings.
-3. **Trade-off**: SHA-256 is not the fastest hash (BLAKE3 is ~3x faster) but
-   has the broadest legal acceptance and is the standard for blockchain
-   transactions on both Solana and EtherLink.
+3. **Trade-off**: SHA-256 is not the fastest hash (BLAKE3 is ~3x faster) but has
+   the broadest legal acceptance and is the standard for blockchain transactions
+   on both Solana and EtherLink.
 
 ---
 
@@ -56,8 +56,8 @@ deployment would invalidate all existing evidence records.
 
 ### Option 1: SHA-256 ✅ Selected
 
-**Description**: NIST-standard SHA-2 family, 256-bit output, via the `sha2`
-Rust crate.
+**Description**: NIST-standard SHA-2 family, 256-bit output, via the `sha2` Rust
+crate.
 
 **Pros**:
 
@@ -156,13 +156,13 @@ silent addition.
 
 ### Consistency Across Components
 
-| Component          | Hash Source                   | Format           |
-| ------------------ | ----------------------------- | ---------------- |
-| API                | `crates/evidence::hash`       | 64-char hex      |
-| Evidence CLI       | `crates/evidence::hash`       | 64-char hex      |
-| Threat Simulator   | `crates/evidence::hash` (WASM)| 64-char hex      |
-| Keeper             | Reads `digest_hex` from DB    | 64-char hex      |
-| Merkle Tree        | `sha2::Sha256` directly       | Binary → hex     |
+| Component        | Hash Source                    | Format       |
+| ---------------- | ------------------------------ | ------------ |
+| API              | `crates/evidence::hash`        | 64-char hex  |
+| Evidence CLI     | `crates/evidence::hash`        | 64-char hex  |
+| Threat Simulator | `crates/evidence::hash` (WASM) | 64-char hex  |
+| Keeper           | Reads `digest_hex` from DB     | 64-char hex  |
+| Merkle Tree      | `sha2::Sha256` directly        | Binary → hex |
 
 All components use the same `sha2` crate version (workspace dependency) to
 ensure identical output for identical input.

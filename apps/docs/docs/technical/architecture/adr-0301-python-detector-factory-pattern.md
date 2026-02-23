@@ -37,16 +37,16 @@ prerequisites: []
 
 Phoenix Rooivalk's edge detector runs on diverse hardware:
 
-| Platform        | Inference Backend   | Camera API        | Install Extra |
-| --------------- | ------------------- | ----------------- | ------------- |
-| Raspberry Pi    | TensorFlow Lite     | PiCamera2, V4L2   | `pip install -e ".[pi]"` |
-| NVIDIA Jetson   | ONNX Runtime (CUDA) | GStreamer, V4L2    | `pip install -e ".[jetson]"` |
-| Desktop         | TensorFlow (GPU/CPU)| OpenCV VideoCapture| `pip install -e ".[desktop]"` |
-| Coral Edge TPU  | PyCoral             | USB camera         | `pip install -e ".[coral]"` |
+| Platform       | Inference Backend    | Camera API          | Install Extra                 |
+| -------------- | -------------------- | ------------------- | ----------------------------- |
+| Raspberry Pi   | TensorFlow Lite      | PiCamera2, V4L2     | `pip install -e ".[pi]"`      |
+| NVIDIA Jetson  | ONNX Runtime (CUDA)  | GStreamer, V4L2     | `pip install -e ".[jetson]"`  |
+| Desktop        | TensorFlow (GPU/CPU) | OpenCV VideoCapture | `pip install -e ".[desktop]"` |
+| Coral Edge TPU | PyCoral              | USB camera          | `pip install -e ".[coral]"`   |
 
 Each platform combination requires different library imports, initialization
-sequences, and performance tuning. A monolithic detector with `if/else`
-platform checks would be unmaintainable.
+sequences, and performance tuning. A monolithic detector with `if/else` platform
+checks would be unmaintainable.
 
 ---
 
@@ -56,8 +56,8 @@ platform checks would be unmaintainable.
 
 Three abstract base classes define the detector's extension points:
 
-- **`FrameSource`**: Captures frames from cameras (PiCamera2, GStreamer,
-  OpenCV, USB)
+- **`FrameSource`**: Captures frames from cameras (PiCamera2, GStreamer, OpenCV,
+  USB)
 - **`InferenceEngine`**: Runs drone detection models (TFLite, ONNX, TensorFlow,
   PyCoral)
 - **`ObjectTracker`**: Tracks detections across frames (DeepSORT, centroid,

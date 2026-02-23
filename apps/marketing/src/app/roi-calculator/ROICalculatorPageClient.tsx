@@ -195,10 +195,15 @@ export default function ROICalculatorPage(): React.ReactElement {
                     <p className={styles.tierAudience}>{tier.audience}</p>
                   </div>
 
-                  <ul className={styles.tierProducts} aria-label="Included products">
+                  <ul
+                    className={styles.tierProducts}
+                    aria-label="Included products"
+                  >
                     {resolvedProducts.map((rp) => (
                       <li key={rp.id} className={styles.tierProductItem}>
-                        <span className={styles.tierProductRole}>{rp.role}</span>
+                        <span className={styles.tierProductRole}>
+                          {rp.role}
+                        </span>
                         <span className={styles.tierProductName}>
                           {rp.product?.name ?? rp.id}
                         </span>
@@ -267,76 +272,73 @@ export default function ROICalculatorPage(): React.ReactElement {
 
           <div className={styles.paybackGrid} role="list">
             {/* Conservative scenario */}
-            {(["conservative", "median", "aggressive"] as SensitivityLevel[]).map(
-              (level) => {
-                const scenarioRoi = calculateROI(roiInputs, level);
-                const months = derivePaybackMonths(scenarioRoi, roiInputs);
-                const annualSavings = scenarioRoi.phoenix.savings;
-                const levelRoi = scenarioRoi.phoenix.roi;
+            {(
+              ["conservative", "median", "aggressive"] as SensitivityLevel[]
+            ).map((level) => {
+              const scenarioRoi = calculateROI(roiInputs, level);
+              const months = derivePaybackMonths(scenarioRoi, roiInputs);
+              const annualSavings = scenarioRoi.phoenix.savings;
+              const levelRoi = scenarioRoi.phoenix.roi;
 
-                const labelMap: Record<SensitivityLevel, string> = {
-                  conservative: "Conservative",
-                  median: "Median",
-                  aggressive: "Aggressive",
-                };
-                const descMap: Record<SensitivityLevel, string> = {
-                  conservative:
-                    "Lower success rates, lower incident costs. Realistic floor.",
-                  median:
-                    "Mid-range assumptions reflecting typical deployments.",
-                  aggressive:
-                    "Higher success rates, higher incident cost avoidance.",
-                };
+              const labelMap: Record<SensitivityLevel, string> = {
+                conservative: "Conservative",
+                median: "Median",
+                aggressive: "Aggressive",
+              };
+              const descMap: Record<SensitivityLevel, string> = {
+                conservative:
+                  "Lower success rates, lower incident costs. Realistic floor.",
+                median: "Mid-range assumptions reflecting typical deployments.",
+                aggressive:
+                  "Higher success rates, higher incident cost avoidance.",
+              };
 
-                return (
-                  <article
-                    key={level}
-                    className={styles.paybackCard}
-                    role="listitem"
-                    aria-label={`${labelMap[level]} scenario payback projection`}
-                  >
-                    <div className={styles.paybackCardHeader}>
-                      <span
-                        className={`${styles.paybackScenarioLabel} ${styles[`paybackScenario_${level}`]}`}
+              return (
+                <article
+                  key={level}
+                  className={styles.paybackCard}
+                  role="listitem"
+                  aria-label={`${labelMap[level]} scenario payback projection`}
+                >
+                  <div className={styles.paybackCardHeader}>
+                    <span
+                      className={`${styles.paybackScenarioLabel} ${styles[`paybackScenario_${level}`]}`}
+                    >
+                      {labelMap[level]}
+                    </span>
+                  </div>
+                  <p className={styles.paybackDesc}>{descMap[level]}</p>
+                  <dl className={styles.paybackStats}>
+                    <div className={styles.paybackStat}>
+                      <dt className={styles.paybackStatLabel}>
+                        Payback period
+                      </dt>
+                      <dd
+                        className={`${styles.paybackStatValue} ${styles.paybackStatValueAccent}`}
                       >
-                        {labelMap[level]}
-                      </span>
+                        {formatPayback(months)}
+                      </dd>
                     </div>
-                    <p className={styles.paybackDesc}>{descMap[level]}</p>
-                    <dl className={styles.paybackStats}>
-                      <div className={styles.paybackStat}>
-                        <dt className={styles.paybackStatLabel}>
-                          Payback period
-                        </dt>
-                        <dd
-                          className={`${styles.paybackStatValue} ${styles.paybackStatValueAccent}`}
-                        >
-                          {formatPayback(months)}
-                        </dd>
-                      </div>
-                      <div className={styles.paybackStat}>
-                        <dt className={styles.paybackStatLabel}>
-                          Annual savings
-                        </dt>
-                        <dd className={styles.paybackStatValue}>
-                          {formatCurrency(annualSavings)}
-                        </dd>
-                      </div>
-                      <div className={styles.paybackStat}>
-                        <dt className={styles.paybackStatLabel}>
-                          Projected ROI
-                        </dt>
-                        <dd
-                          className={`${styles.paybackStatValue} ${levelRoi >= 0 ? styles.paybackStatValuePositive : styles.paybackStatValueNegative}`}
-                        >
-                          {levelRoi.toFixed(0)}%
-                        </dd>
-                      </div>
-                    </dl>
-                  </article>
-                );
-              },
-            )}
+                    <div className={styles.paybackStat}>
+                      <dt className={styles.paybackStatLabel}>
+                        Annual savings
+                      </dt>
+                      <dd className={styles.paybackStatValue}>
+                        {formatCurrency(annualSavings)}
+                      </dd>
+                    </div>
+                    <div className={styles.paybackStat}>
+                      <dt className={styles.paybackStatLabel}>Projected ROI</dt>
+                      <dd
+                        className={`${styles.paybackStatValue} ${levelRoi >= 0 ? styles.paybackStatValuePositive : styles.paybackStatValueNegative}`}
+                      >
+                        {levelRoi.toFixed(0)}%
+                      </dd>
+                    </div>
+                  </dl>
+                </article>
+              );
+            })}
           </div>
 
           {/* Financial disclaimer */}

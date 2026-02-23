@@ -12,14 +12,22 @@ import styles from "./unit-economics.module.css";
 
 const unitEconomics = {
   cac: { value: "R50,000", usd: "~$2,780", note: "Customer Acquisition Cost" },
-  ltv: { value: "R1,200,000", usd: "~$66,700", note: "Customer Lifetime Value" },
+  ltv: {
+    value: "R1,200,000",
+    usd: "~$66,700",
+    note: "Customer Lifetime Value",
+  },
   payback: { value: "12 mo", note: "Average payback period" },
   ltvCacRatio: "24:1",
 };
 
 const cogs = {
   inHouse: { usd: "$56,000", zar: "R850,000", label: "In-House Manufacturing" },
-  outsourced: { usd: "$93,000", zar: "R1,400,000", label: "Outsourced Manufacturing" },
+  outsourced: {
+    usd: "$93,000",
+    zar: "R1,400,000",
+    label: "Outsourced Manufacturing",
+  },
   savings: "60%",
   savingsNote: "Cost reduction through in-house Kevlar manufacturing",
 };
@@ -139,7 +147,9 @@ const funding = {
 
 export default function UnitEconomicsPageClient(): React.ReactElement {
   const [year1Systems, setYear1Systems] = React.useState(DEFAULT_YEAR1_SYSTEMS);
-  const [avgRevenue, setAvgRevenue] = React.useState(DEFAULT_AVG_REVENUE_PER_SYSTEM);
+  const [avgRevenue, setAvgRevenue] = React.useState(
+    DEFAULT_AVG_REVENUE_PER_SYSTEM,
+  );
   const [growthRate, setGrowthRate] = React.useState(DEFAULT_GROWTH_RATE);
 
   const revenueProjections = React.useMemo(
@@ -181,7 +191,9 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
             </div>
             <div className={styles.kpiCard}>
               <div className={styles.kpiLabel}>Payback Period</div>
-              <div className={styles.kpiValue}>{unitEconomics.payback.value}</div>
+              <div className={styles.kpiValue}>
+                {unitEconomics.payback.value}
+              </div>
               <div className={styles.kpiNote}>
                 LTV:CAC ratio {unitEconomics.ltvCacRatio}
               </div>
@@ -195,16 +207,24 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
               <div className={styles.cogsCard}>
                 <div className={styles.cogsCardTitle}>{cogs.inHouse.label}</div>
                 <div className={styles.cogsAmount}>{cogs.inHouse.usd}</div>
-                <div className={styles.cogsAmountSub}>{cogs.inHouse.zar} per enterprise unit</div>
+                <div className={styles.cogsAmountSub}>
+                  {cogs.inHouse.zar} per enterprise unit
+                </div>
               </div>
               <div className={styles.cogsCard}>
-                <div className={styles.cogsCardTitle}>{cogs.outsourced.label}</div>
+                <div className={styles.cogsCardTitle}>
+                  {cogs.outsourced.label}
+                </div>
                 <div className={styles.cogsAmount}>{cogs.outsourced.usd}</div>
-                <div className={styles.cogsAmountSub}>{cogs.outsourced.zar} per enterprise unit</div>
+                <div className={styles.cogsAmountSub}>
+                  {cogs.outsourced.zar} per enterprise unit
+                </div>
               </div>
             </div>
             <div className={styles.cogsSavings}>
-              <div className={styles.cogsSavingsValue}>{cogs.savings} cost savings</div>
+              <div className={styles.cogsSavingsValue}>
+                {cogs.savings} cost savings
+              </div>
               <div className={styles.cogsSavingsNote}>{cogs.savingsNote}</div>
             </div>
           </section>
@@ -261,7 +281,9 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
               </div>
               <div className={styles.marginCard}>
                 <div className={styles.marginTitle}>EBITDA Margin</div>
-                <div className={styles.marginValue}>{margins.ebitda.value}%</div>
+                <div className={styles.marginValue}>
+                  {margins.ebitda.value}%
+                </div>
                 <div className={styles.marginNote}>{margins.ebitda.note}</div>
                 <div className={styles.marginBar}>
                   <div
@@ -350,7 +372,9 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
                   {revenueProjections.map((row) => (
                     <tr key={row.year}>
                       <td>{row.year}</td>
-                      <td className={styles.revenueAmount}>{row.amountFormatted}</td>
+                      <td className={styles.revenueAmount}>
+                        {row.amountFormatted}
+                      </td>
                       <td className={styles.revenueSystems}>{row.systems}</td>
                       <td className={styles.revenueNote}>{row.note}</td>
                     </tr>
@@ -367,8 +391,12 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
               {/* Seed */}
               <div className={styles.fundingCard}>
                 <div className={styles.fundingStage}>{funding.seed.stage}</div>
-                <div className={styles.fundingAmount}>{funding.seed.amount}</div>
-                <div className={styles.fundingDetail}>Runway: {funding.seed.runway}</div>
+                <div className={styles.fundingAmount}>
+                  {funding.seed.amount}
+                </div>
+                <div className={styles.fundingDetail}>
+                  Runway: {funding.seed.runway}
+                </div>
                 {/* Allocation bar */}
                 <div className={styles.allocationBar}>
                   <div
@@ -395,33 +423,52 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
                 </div>
                 <div className={styles.allocationLegend}>
                   <span className={styles.allocationLegendItem}>
-                    <span className={styles.allocationDot} style={{ background: "rgb(var(--primary))" }} />
+                    <span
+                      className={styles.allocationDot}
+                      style={{ background: "rgb(var(--primary))" }}
+                    />
                     Hardware 30%
                   </span>
                   <span className={styles.allocationLegendItem}>
-                    <span className={styles.allocationDot} style={{ background: "rgb(var(--accent))" }} />
+                    <span
+                      className={styles.allocationDot}
+                      style={{ background: "rgb(var(--accent))" }}
+                    />
                     Market 40%
                   </span>
                   <span className={styles.allocationLegendItem}>
-                    <span className={styles.allocationDot} style={{ background: "rgb(var(--secondary))" }} />
+                    <span
+                      className={styles.allocationDot}
+                      style={{ background: "rgb(var(--secondary))" }}
+                    />
                     Team 30%
                   </span>
                 </div>
                 <ul className={styles.fundingMilestones}>
                   {funding.seed.milestones.map((m) => (
-                    <li key={m} className={styles.fundingMilestone}>{m}</li>
+                    <li key={m} className={styles.fundingMilestone}>
+                      {m}
+                    </li>
                   ))}
                 </ul>
               </div>
 
               {/* Series A */}
               <div className={styles.fundingCard}>
-                <div className={styles.fundingStage}>{funding.seriesA.stage}</div>
-                <div className={styles.fundingAmount}>{funding.seriesA.amount}</div>
-                <div className={styles.fundingDetail}>Timeline: {funding.seriesA.timeline}</div>
+                <div className={styles.fundingStage}>
+                  {funding.seriesA.stage}
+                </div>
+                <div className={styles.fundingAmount}>
+                  {funding.seriesA.amount}
+                </div>
+                <div className={styles.fundingDetail}>
+                  Timeline: {funding.seriesA.timeline}
+                </div>
                 <ul className={styles.fundingMilestones}>
                   {funding.seriesA.milestones.map((m) => (
-                    <li key={m} className={styles.fundingMilestone}>{m}</li>
+                    <li key={m} className={styles.fundingMilestone}>
+                      {m}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -429,11 +476,17 @@ export default function UnitEconomicsPageClient(): React.ReactElement {
               {/* Exit */}
               <div className={styles.fundingCard}>
                 <div className={styles.fundingStage}>{funding.exit.stage}</div>
-                <div className={styles.fundingAmount}>{funding.exit.amount}</div>
-                <div className={styles.fundingDetail}>Timeline: {funding.exit.timeline}</div>
+                <div className={styles.fundingAmount}>
+                  {funding.exit.amount}
+                </div>
+                <div className={styles.fundingDetail}>
+                  Timeline: {funding.exit.timeline}
+                </div>
                 <ul className={styles.fundingMilestones}>
                   {funding.exit.milestones.map((m) => (
-                    <li key={m} className={styles.fundingMilestone}>{m}</li>
+                    <li key={m} className={styles.fundingMilestone}>
+                      {m}
+                    </li>
                   ))}
                 </ul>
               </div>

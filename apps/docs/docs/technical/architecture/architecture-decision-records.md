@@ -576,8 +576,8 @@ Need modern, performant marketing website with SEO optimization.
 
 #### Decision
 
-Use Next.js with static export for the marketing website. (Originally Next.js 14;
-upgraded to Next.js 16 in Q1 2026.)
+Use Next.js with static export for the marketing website. (Originally Next.js
+14; upgraded to Next.js 16 in Q1 2026.)
 
 #### Rationale
 
