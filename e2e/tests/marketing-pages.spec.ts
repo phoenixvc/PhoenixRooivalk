@@ -21,16 +21,12 @@ test.describe("Marketing site — page accessibility", () => {
 
   test("about page loads", async ({ page }) => {
     await page.goto("/about");
-    await expect(
-      page.getByRole("heading", { level: 2 }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
   });
 
   test("capabilities page loads", async ({ page }) => {
     await page.goto("/capabilities");
-    await expect(
-      page.getByRole("heading", { level: 2 }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
   });
 
   test("products page loads", async ({ page }) => {

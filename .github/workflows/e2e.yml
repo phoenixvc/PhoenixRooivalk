@@ -90,8 +90,18 @@ jobs:
 
       - name: Start API server
         run: |
-          ./target/release/phoenix-api &
-          sleep 3
+          nohup ./target/release/phoenix-api > api.log 2>&1 &
+          echo "Waiting for API server..."
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8080/health > /dev/null 2>&1; then
+              echo "API server ready (attempt $i)"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "API server failed to start within 30s"
+          cat api.log
+          exit 1
         env:
           RUST_LOG: info
 
