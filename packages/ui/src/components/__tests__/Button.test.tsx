@@ -26,7 +26,9 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveClass("bg-gradient-to-br");
 
     rerender(<Button {...defaultProps} variant="secondary" />);
-    expect(screen.getByRole("button")).toHaveClass("bg-[var(--secondary,#334155)]");
+    expect(screen.getByRole("button")).toHaveClass(
+      "bg-[var(--secondary,#334155)]",
+    );
 
     rerender(<Button {...defaultProps} variant="outline" />);
     expect(screen.getByRole("button")).toHaveClass(
