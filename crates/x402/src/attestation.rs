@@ -51,8 +51,7 @@ impl AttestationSigner {
 
     /// Create a signer with an ephemeral key for development/testing.
     pub fn ephemeral() -> Self {
-        let mut rng = rand::thread_rng();
-        let signing_key = SigningKey::generate(&mut rng);
+        let signing_key = SigningKey::generate(&mut rand_core::OsRng);
         Self {
             signing_key,
             authority: "PhoenixRooivalk Evidence Authority (DEV)".to_string(),
