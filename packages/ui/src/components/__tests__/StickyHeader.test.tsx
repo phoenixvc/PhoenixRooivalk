@@ -103,7 +103,7 @@ describe("StickyHeader", () => {
 
     const brandText = screen.getByText("Phoenix Rooivalk");
     expect(brandText).toHaveClass(
-      "text-[var(--primary)]",
+      "text-[var(--primary,#f97316)]",
       "font-bold",
       "text-base",
     );
@@ -119,9 +119,9 @@ describe("StickyHeader", () => {
     const ctaButton = screen.getByRole("link", { name: /schedule demo/i });
     expect(ctaButton).toHaveClass(
       "bg-gradient-to-br",
-      "from-[var(--primary)]",
-      "to-[var(--secondary)]",
-      "text-[var(--dark)]",
+      "from-[var(--primary,#f97316)]",
+      "to-[var(--secondary,#ea7c1c)]",
+      "text-[var(--dark,#020617)]",
       "px-5",
       "py-2.5",
       "rounded-md",

@@ -99,7 +99,7 @@ describe("Auth flow — login logic", () => {
     localStorage.setItem("session_id", "valid-session");
     localStorage.setItem("user", "not-valid-json");
 
-    let user = null;
+    let user;
     try {
       user = JSON.parse(localStorage.getItem("user")!);
     } catch {

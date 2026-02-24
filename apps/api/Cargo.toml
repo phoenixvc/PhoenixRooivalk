@@ -32,7 +32,9 @@ async-trait = "0.1"
 azure_data_cosmos = { version = "0.30", optional = true, default-features = false, features = ["hmac_rust"] }
 azure_identity = { version = "0.31", optional = true, default-features = false }
 azure_core = { version = "0.31", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
-# Provide rustls TLS backend for azure crates' transitive reqwest 0.12 dep
+# Provide rustls TLS backend for azure crates' transitive reqwest 0.12 dep.
+# Aliased to avoid "multiple times with different names" conflict with the
+# reqwest 0.13 in dev-dependencies (different semver => different crates).
 reqwest_compat = { package = "reqwest", version = "0.12", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
 
 [features]
