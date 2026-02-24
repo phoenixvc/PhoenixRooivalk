@@ -1,7 +1,7 @@
 // Wave management system for progressive difficulty and threat spawning
 
 use super::types::{Threat, ThreatType, Vector2};
-use rand::Rng;
+use rand::RngExt;
 
 #[derive(Debug, Clone)]
 pub struct WaveConfig {
