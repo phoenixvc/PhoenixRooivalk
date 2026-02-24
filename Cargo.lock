@@ -365,7 +365,7 @@ checksum = "dfe45c6bd7ce3a592327ee4e35b5bd16681714c4443c8a9884abb5731cc4d833"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core_macros",
+ "azure_core_macros 0.5.0",
  "bytes",
  "futures",
  "hmac",
@@ -375,8 +375,28 @@ dependencies = [
  "serde_json",
  "sha2",
  "tracing",
- "typespec",
- "typespec_client_core",
+ "typespec 0.11.0",
+ "typespec_client_core 0.10.0",
+]
+
+[[package]]
+name = "azure_core"
+version = "0.32.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39d6a5261cefb8d793df91fac2ca2d6b43301b84f4fddd576f94cd4f36fe67a1"
+dependencies = [
+ "async-lock",
+ "async-trait",
+ "azure_core_macros 0.6.0",
+ "bytes",
+ "futures",
+ "pin-project",
+ "rustc_version",
+ "serde",
+ "serde_json",
+ "tracing",
+ "typespec 0.12.0",
+ "typespec_client_core 0.11.0",
 ]
 
 [[package]]
@@ -392,6 +412,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "azure_core_macros"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "574c1d5ef13ec181f8e686d67e167b79085221debebe01f9df360aae65733327"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.117",
+ "tracing",
+]
+
+[[package]]
 name = "azure_data_cosmos"
 version = "0.30.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -399,7 +431,7 @@ checksum = "196ab882f9a566826713e52ab6bd3a744c4942699f20970565194a81a268ce93"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core",
+ "azure_core 0.31.0",
  "futures",
  "serde",
  "serde_json",
@@ -415,7 +447,7 @@ checksum = "c7c0c8cb8886f2bdabb3501476fa53f87fa9efea9d457ff991c5ce80052c4774"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core",
+ "azure_core 0.31.0",
  "futures",
  "pin-project",
  "serde",
@@ -3808,7 +3840,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "axum",
- "azure_core",
+ "azure_core 0.32.0",
  "azure_data_cosmos",
  "azure_identity",
  "chrono",
@@ -4546,7 +4578,6 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "futures-core",
- "futures-util",
  "http",
  "http-body",
  "http-body-util",
@@ -4567,14 +4598,12 @@ dependencies = [
  "sync_wrapper",
  "tokio",
  "tokio-rustls",
- "tokio-util",
  "tower",
  "tower-http",
  "tower-service",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.4.2",
  "web-sys",
 ]
 
@@ -4614,7 +4643,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.5.0",
+ "wasm-streams",
  "web-sys",
 ]
 
@@ -5180,7 +5209,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.5.0",
+ "wasm-streams",
  "web-sys",
  "xxhash-rust",
 ]
@@ -6691,6 +6720,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "typespec"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "970ab7587a808af0594c3ad83471cd422fe5baa9991b0f2bdd56a85691c3ced9"
+dependencies = [
+ "base64 0.22.1",
+ "bytes",
+ "futures",
+ "serde",
+ "serde_json",
+ "url",
+]
+
+[[package]]
 name = "typespec_client_core"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6703,14 +6746,38 @@ dependencies = [
  "getrandom 0.3.4",
  "pin-project",
  "rand 0.9.2",
- "reqwest 0.12.28",
  "serde",
  "serde_json",
  "time",
  "tokio",
  "tracing",
- "typespec",
- "typespec_macros",
+ "typespec 0.11.0",
+ "typespec_macros 0.10.0",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "typespec_client_core"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96fb9eef3cc12d6a9a2f9711c8f7c3b87c84eb50a9b7ac78b38647be7a7efae0"
+dependencies = [
+ "async-trait",
+ "base64 0.22.1",
+ "dyn-clone",
+ "futures",
+ "getrandom 0.3.4",
+ "pin-project",
+ "rand 0.9.2",
+ "reqwest 0.13.2",
+ "serde",
+ "serde_json",
+ "time",
+ "tokio",
+ "tracing",
+ "typespec 0.12.0",
+ "typespec_macros 0.11.0",
  "url",
  "uuid",
 ]
@@ -6720,6 +6787,18 @@ name = "typespec_macros"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7048df3b053daa72e8ea91894ebcb2f0511ba52737379834524d82074a94a458"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "rustc_version",
+ "syn 2.0.117",
+]
+
+[[package]]
+name = "typespec_macros"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38a3604ddfa94cf776cd7e9123451d9efb06d5e2323c9f3aa02fa94d33ad96db"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -7052,19 +7131,6 @@ dependencies = [
  "indexmap 2.13.0",
  "wasm-encoder",
  "wasmparser",
-]
-
-[[package]]
-name = "wasm-streams"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15053d8d85c7eccdbefef60f06769760a563c7f0a9d6902a13d35c7800b0ad65"
-dependencies = [
- "futures-util",
- "js-sys",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
 ]
 
 [[package]]
