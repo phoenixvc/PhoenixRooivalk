@@ -7,20 +7,14 @@ can survive process restarts, and respects staleness and version constraints.
 
 import json
 import signal
-import sys
 import time
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-# Add src to path for imports
-src_path = Path(__file__).parent.parent.parent / "src"
-if str(src_path) not in sys.path:
-    sys.path.insert(0, str(src_path))
-
-from interfaces import BoundingBox, Detection, TrackedObject  # noqa: E402
-from track_persistence import TrackPersistence  # noqa: E402
+# src path is added by tests/unit/conftest.py
+from interfaces import BoundingBox, Detection, TrackedObject
+from track_persistence import TrackPersistence
 
 
 @pytest.fixture
@@ -94,6 +88,7 @@ def sample_tracks():
     return [track1, track2]
 
 
+@pytest.mark.unit
 def test_save_sync_creates_file(persistence, temp_state_file, sample_tracks):
     """Test that save_sync creates a JSON file with correct data."""
     # Update state
@@ -240,28 +235,19 @@ def test_background_save_loop(persistence, temp_state_file, sample_tracks):
     """
     persistence.update(sample_tracks, next_id=3)
 
-    # We want to patch time.sleep in the module where it's used
-    with patch("track_persistence.time.sleep") as mock_sleep:
-        # We need sleep to do nothing so the loop runs instantly
-        # But we need it to run exactly once and then stop
+    def stop_after_one_iteration(*_args, **_kwargs):
+        """Stop the background loop after one sleep (i.e. one save iteration)."""
+        persistence._running = False
 
-        def mock_save_sync():
-            # This runs after sleep inside the loop. Let's write a dummy file
-            # and stop the loop so it only runs once.
-            persistence._running = False
-            with open(temp_state_file, "w") as f:
-                f.write("saved")
-            return True
+    # Let real save_sync run; only patch sleep to stop the loop after one cycle
+    with patch("track_persistence.time.sleep", side_effect=stop_after_one_iteration) as mock_sleep:
+        persistence.start()
 
-        with patch.object(persistence, "save_sync", side_effect=mock_save_sync) as mock_save:
-            persistence.start()
+        if persistence._save_thread:
+            persistence._save_thread.join(timeout=2.0)
 
-            if persistence._save_thread:
-                persistence._save_thread.join(timeout=2.0)
-
-            assert mock_sleep.called
-            assert mock_save.called
-            assert temp_state_file.exists()
+        assert mock_sleep.called
+        assert temp_state_file.exists()
 
 
 def test_stop_performs_final_save(persistence, temp_state_file, sample_tracks):

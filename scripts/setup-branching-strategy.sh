@@ -118,28 +118,56 @@ Consolidation of all open PRs and branches into a single merge to main.
 PRBODY
 )"
 
-gh pr create \
+PR_URL=$(gh pr create \
   --repo "$REPO" \
   --base main \
   --head "$CONSOLIDATION_BRANCH" \
   --title "chore: consolidate all open PRs and branches into main" \
-  --body "$PR_BODY"
+  --body "$PR_BODY" 2>&1) || true
 
 echo ""
-echo "  PR created. Review and merge it, then continue with Phase 1D."
-echo "  Press Enter to continue after merging the PR..."
-read -r
+echo "  PR created: $PR_URL"
+echo "  Review and merge it, then continue with Phase 1D."
+
+# ─── Wait for PR to be merged before deleting the branch ─────────────
+
+echo ""
+echo "  Waiting for the consolidation PR to be merged..."
+while true; do
+  PR_STATE=$(gh pr view "$CONSOLIDATION_BRANCH" --repo "$REPO" --json state,mergedAt --jq '.state' 2>/dev/null || echo "UNKNOWN")
+  if [ "$PR_STATE" = "MERGED" ]; then
+    echo "  PR has been merged."
+    break
+  elif [ "$PR_STATE" = "CLOSED" ]; then
+    echo "  WARNING: PR was closed without merging."
+    read -rp "  Continue with branch deletion anyway? (y/N): " confirm
+    if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+      echo "  Aborting branch deletion. Re-run the script after resolving."
+      exit 1
+    fi
+    break
+  else
+    echo "  PR state: ${PR_STATE} — not yet merged."
+    read -rp "  Press Enter to check again, or type 'abort' to skip deletion: " input
+    if [ "$input" = "abort" ]; then
+      echo "  Skipping branch deletion. Re-run Phase 1D manually after merge."
+      break
+    fi
+  fi
+done
 
 # ─── Phase 1D: Clean up consolidation branch ─────────────────────────
 
-echo ""
-echo "--- Phase 1D: Cleaning up consolidation branch ---"
+if [ "$PR_STATE" = "MERGED" ] || [ "${confirm:-}" = "y" ] || [ "${confirm:-}" = "Y" ]; then
+  echo ""
+  echo "--- Phase 1D: Cleaning up consolidation branch ---"
 
-git push origin --delete "$CONSOLIDATION_BRANCH" 2>/dev/null || true
-# Also clean up the other claude/ branch if it exists
-git push origin --delete "claude/git-branching-strategy-ZOwoO" 2>/dev/null || true
+  git push origin --delete "$CONSOLIDATION_BRANCH" 2>/dev/null || true
+  # Also clean up the other claude/ branch if it exists
+  git push origin --delete "claude/git-branching-strategy-ZOwoO" 2>/dev/null || true
 
-echo "  Consolidation branch deleted."
+  echo "  Consolidation branch deleted."
+fi
 
 # ─── Phase 2A: Create dev branch from main ───────────────────────────
 
@@ -147,23 +175,39 @@ echo ""
 echo "--- Phase 2A: Creating dev branch from main ---"
 
 git fetch origin main
-git checkout main
-git pull origin main
-git checkout -b dev
-git push -u origin dev
 
-echo "  dev branch created from main."
+if git rev-parse --verify dev >/dev/null 2>&1; then
+  echo "  Local 'dev' branch already exists, checking it out."
+  git checkout dev
+else
+  git checkout main
+  git pull origin main
+  git checkout -b dev
+fi
+
+# Set upstream if not already configured
+if ! git rev-parse --abbrev-ref dev@{u} >/dev/null 2>&1; then
+  git push -u origin dev
+else
+  echo "  Upstream already set for 'dev' branch."
+fi
+
+echo "  dev branch ready."
 
 # ─── Phase 2B: Set up branch protection for main ─────────────────────
 
 echo ""
 echo "--- Phase 2B: Setting up branch protection for main ---"
 
-# Create a repository ruleset for main branch protection
-# Using GitHub API via gh for maximum control
-gh api repos/$REPO/rulesets \
-  --method POST \
-  --input - << 'RULESET'
+# Check if a ruleset with this name already exists
+MAIN_RULESET_NAME="Protect main branch"
+EXISTING_MAIN_RULESET_ID=$(gh api "repos/$REPO/rulesets" --jq \
+  ".[] | select(.name == \"$MAIN_RULESET_NAME\") | .id" 2>/dev/null || true)
+
+# bypass_actors actor_id 5 = the built-in "Admin" RepositoryRole.
+# GitHub assigns fixed IDs to default repository roles:
+#   1=Read, 2=Triage, 3=Write, 4=Maintain, 5=Admin.
+MAIN_RULESET_JSON=$(cat <<'RULESET'
 {
   "name": "Protect main branch",
   "target": "branch",
@@ -184,13 +228,6 @@ gh api repos/$REPO/rulesets \
         "require_last_push_approval": false,
         "required_review_thread_resolution": false
       }
-    },
-    {
-      "type": "required_status_checks",
-      "parameters": {
-        "strict_required_status_checks_policy": true,
-        "required_status_checks": []
-      }
     }
   ],
   "bypass_actors": [
@@ -202,17 +239,31 @@ gh api repos/$REPO/rulesets \
   ]
 }
 RULESET
+)
 
-echo "  Branch protection ruleset created for main."
+if [ -n "$EXISTING_MAIN_RULESET_ID" ]; then
+  echo "  Ruleset '$MAIN_RULESET_NAME' already exists (id: $EXISTING_MAIN_RULESET_ID), updating..."
+  echo "$MAIN_RULESET_JSON" | gh api "repos/$REPO/rulesets/$EXISTING_MAIN_RULESET_ID" \
+    --method PUT --input -
+else
+  echo "  Creating ruleset '$MAIN_RULESET_NAME'..."
+  echo "$MAIN_RULESET_JSON" | gh api "repos/$REPO/rulesets" \
+    --method POST --input -
+fi
+
+echo "  Branch protection ruleset configured for main."
 
 # ─── Phase 2C: Set up branch protection for dev ──────────────────────
 
 echo ""
 echo "--- Phase 2C: Setting up branch protection for dev ---"
 
-gh api repos/$REPO/rulesets \
-  --method POST \
-  --input - << 'RULESET'
+DEV_RULESET_NAME="Protect dev branch"
+EXISTING_DEV_RULESET_ID=$(gh api "repos/$REPO/rulesets" --jq \
+  ".[] | select(.name == \"$DEV_RULESET_NAME\") | .id" 2>/dev/null || true)
+
+# bypass_actors actor_id 5 = the built-in "Admin" RepositoryRole (see note above).
+DEV_RULESET_JSON=$(cat <<'RULESET'
 {
   "name": "Protect dev branch",
   "target": "branch",
@@ -244,8 +295,19 @@ gh api repos/$REPO/rulesets \
   ]
 }
 RULESET
+)
 
-echo "  Branch protection ruleset created for dev."
+if [ -n "$EXISTING_DEV_RULESET_ID" ]; then
+  echo "  Ruleset '$DEV_RULESET_NAME' already exists (id: $EXISTING_DEV_RULESET_ID), updating..."
+  echo "$DEV_RULESET_JSON" | gh api "repos/$REPO/rulesets/$EXISTING_DEV_RULESET_ID" \
+    --method PUT --input -
+else
+  echo "  Creating ruleset '$DEV_RULESET_NAME'..."
+  echo "$DEV_RULESET_JSON" | gh api "repos/$REPO/rulesets" \
+    --method POST --input -
+fi
+
+echo "  Branch protection ruleset configured for dev."
 
 echo ""
 echo "=========================================="
@@ -254,5 +316,5 @@ echo ""
 echo "Workflow going forward:"
 echo "  feature/* --> PR --> dev --> PR --> main"
 echo ""
-echo "See docs/contributing/branching-strategy.md"
+echo "See docs/branching-strategy.md"
 echo "=========================================="
