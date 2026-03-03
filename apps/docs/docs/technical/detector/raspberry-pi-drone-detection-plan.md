@@ -1,3 +1,22 @@
+---
+id: raspberry-pi-drone-detection-plan
+title: Raspberry Pi Drone Detection - One Week Implementation Plan
+sidebar_label: Pi Detection MVP Plan
+description: A minimal viable drone detection system implementation plan for Raspberry Pi, distinguishing drones from common objects using YOLOv5n/YOLOv8n and TFLite within one week.
+difficulty: intermediate
+estimated_reading_time: 20
+points: 25
+tags:
+  - technical
+  - detector
+  - raspberry-pi
+  - yolo
+  - tflite
+  - ai
+prerequisites:
+  - overview
+---
+
 # Raspberry Pi Drone Detection System - One Week Implementation Plan
 
 ## Executive Summary
@@ -661,8 +680,3 @@ The detection events from the Pi can be formatted as:
 - [Coral USB Accelerator](https://coral.ai/products/accelerator)
 - [OpenCV on Raspberry Pi](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
 - [Drone Detection Datasets](https://paperswithcode.com/task/drone-detection)
-
----
-
-_Document created: 2026-01-07_ _Project: PhoenixRooivalk - Raspberry Pi Drone
-Detection MVP_
