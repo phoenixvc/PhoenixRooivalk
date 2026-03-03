@@ -112,12 +112,66 @@ export interface StorageOption {
 }
 
 // =============================================================================
+// TIER ID TYPES
+// =============================================================================
+
+/** IDs for concrete compute tiers */
+export type ComputeTierId =
+  | "pi4_coral"
+  | "pi5_hailo8l"
+  | "pi5_hailo8"
+  | "jetson_nano"
+  | "jetson_nx"
+  | "jetson_agx";
+
+/** Sentinel/base IDs used when no selectable compute tier applies */
+export type ComputeBaseTierId = "none" | "server";
+
+/** IDs for concrete camera tiers */
+export type CameraTierId =
+  | "pi_v2"
+  | "pi_v3"
+  | "pi_v3_wide"
+  | "pi_hq"
+  | "pi_gs"
+  | "lepton_3_5"
+  | "boson_320";
+
+/** Sentinel/base IDs used when no selectable camera tier applies */
+export type CameraBaseId = "none" | "mixed" | "enterprise" | "fixed";
+
+/** IDs for concrete connectivity tiers */
+export type ConnectivityTierId =
+  | "wifi"
+  | "ethernet"
+  | "poe"
+  | "poe_plus"
+  | "lte"
+  | "lte_poe";
+
+/** Sentinel/base IDs used when no selectable connectivity tier applies */
+export type ConnectivityBaseId = "none" | "enterprise" | "cloud" | "mesh_radio";
+
+/** IDs for concrete storage tiers */
+export type StorageTierId =
+  | "sd_32"
+  | "sd_64_he"
+  | "sd_128_he"
+  | "nvme_128"
+  | "nvme_256"
+  | "nvme_512"
+  | "nvme_1tb";
+
+/** Sentinel/base IDs used when no selectable storage tier applies */
+export type StorageBaseId = "none" | "enterprise" | "cloud" | "fixed";
+
+// =============================================================================
 // TIER CONFIGURATION TYPES
 // =============================================================================
 
 /** Compute tier definition */
 export interface ComputeTier {
-  id: string;
+  id: ComputeTierId;
   name: string;
   platform: string;
   accelerator: string;
@@ -129,7 +183,7 @@ export interface ComputeTier {
 
 /** Camera tier definition */
 export interface CameraTier {
-  id: string;
+  id: CameraTierId;
   name: string;
   resolution: string;
   sensor: string;
@@ -140,7 +194,7 @@ export interface CameraTier {
 
 /** Connectivity tier definition */
 export interface ConnectivityTier {
-  id: string;
+  id: ConnectivityTierId;
   name: string;
   type: string;
   speed: string;
@@ -151,7 +205,7 @@ export interface ConnectivityTier {
 
 /** Storage tier definition */
 export interface StorageTier {
-  id: string;
+  id: StorageTierId;
   name: string;
   type: string;
   capacity: string;
@@ -165,10 +219,10 @@ export interface StorageTier {
 export interface ProductComputeConfig {
   sku: string;
   productName: string;
-  baseTier: string;
+  baseTier: ComputeTierId | ComputeBaseTierId;
   baseComputeCost: number;
-  availableTiers: string[];
-  tierPricing: Record<string, { delta: number; newBomTotal?: number }>;
+  availableTiers: ComputeTierId[];
+  tierPricing: Partial<Record<ComputeTierId, { delta: number; newBomTotal?: number }>>;
   notes?: string;
 }
 
@@ -176,10 +230,10 @@ export interface ProductComputeConfig {
 export interface ProductCameraConfig {
   sku: string;
   productName: string;
-  baseCameraId: string;
+  baseCameraId: CameraTierId | CameraBaseId;
   baseCameraPrice: number;
-  availableCameras: string[];
-  cameraPricing: Record<string, { delta: number }>;
+  availableCameras: CameraTierId[];
+  cameraPricing: Partial<Record<CameraTierId, { delta: number }>>;
   lensRequired?: boolean;
   notes?: string;
 }
@@ -188,10 +242,10 @@ export interface ProductCameraConfig {
 export interface ProductConnectivityConfig {
   sku: string;
   productName: string;
-  baseConnectivityId: string;
+  baseConnectivityId: ConnectivityTierId | ConnectivityBaseId;
   baseConnectivityPrice: number;
-  availableConnectivity: string[];
-  connectivityPricing: Record<string, { delta: number }>;
+  availableConnectivity: ConnectivityTierId[];
+  connectivityPricing: Partial<Record<ConnectivityTierId, { delta: number }>>;
   notes?: string;
 }
 
@@ -199,10 +253,10 @@ export interface ProductConnectivityConfig {
 export interface ProductStorageConfig {
   sku: string;
   productName: string;
-  baseStorageId: string;
+  baseStorageId: StorageTierId | StorageBaseId;
   baseStoragePrice: number;
-  availableStorage: string[];
-  storagePricing: Record<string, { delta: number }>;
+  availableStorage: StorageTierId[];
+  storagePricing: Partial<Record<StorageTierId, { delta: number }>>;
   nvmeSupported: boolean;
   notes?: string;
 }

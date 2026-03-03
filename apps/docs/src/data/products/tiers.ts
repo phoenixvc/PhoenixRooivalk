@@ -6,6 +6,10 @@
  */
 
 import type {
+  ComputeTierId,
+  CameraTierId,
+  ConnectivityTierId,
+  StorageTierId,
   ComputeTier,
   CameraTier,
   ConnectivityTier,
@@ -23,7 +27,7 @@ import { productBySku } from "./catalog";
 // =============================================================================
 
 /** Available compute tiers */
-export const computeTiers: Record<string, ComputeTier> = {
+export const computeTiers: Record<ComputeTierId, ComputeTier> = {
   // Pi-based tiers
   pi4_coral: {
     id: "pi4_coral",
@@ -371,7 +375,7 @@ export const productComputeConfigs: ProductComputeConfig[] = [
 // =============================================================================
 
 /** Available camera tiers */
-export const cameraTiers: Record<string, CameraTier> = {
+export const cameraTiers: Record<CameraTierId, CameraTier> = {
   // Standard cameras
   pi_v2: {
     id: "pi_v2",
@@ -700,7 +704,7 @@ export const productCameraConfigs: ProductCameraConfig[] = [
 // =============================================================================
 
 /** Available connectivity tiers */
-export const connectivityTiers: Record<string, ConnectivityTier> = {
+export const connectivityTiers: Record<ConnectivityTierId, ConnectivityTier> = {
   wifi: {
     id: "wifi",
     name: "WiFi Only",
@@ -1025,7 +1029,7 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
 // =============================================================================
 
 /** Available storage tiers */
-export const storageTiers: Record<string, StorageTier> = {
+export const storageTiers: Record<StorageTierId, StorageTier> = {
   sd_32: {
     id: "sd_32",
     name: "Basic (32GB microSD)",
@@ -1397,7 +1401,7 @@ export function getAvailableTiers(sku: string): ComputeTier[] {
 }
 
 /** Calculate price delta for a tier upgrade */
-export function getTierPriceDelta(sku: string, tierId: string): number {
+export function getTierPriceDelta(sku: string, tierId: ComputeTierId): number {
   const config = getProductComputeConfig(sku);
   if (!config || !config.tierPricing[tierId]) return 0;
   return config.tierPricing[tierId].delta;
@@ -1458,10 +1462,10 @@ export function getAvailableStorage(sku: string): StorageTier[] {
 /** Generate full product configuration summary */
 export function generateProductConfiguration(
   sku: string,
-  computeTierId?: string,
-  cameraTierId?: string,
-  connectivityTierId?: string,
-  storageTierId?: string,
+  computeTierId?: ComputeTierId,
+  cameraTierId?: CameraTierId,
+  connectivityTierId?: ConnectivityTierId,
+  storageTierId?: StorageTierId,
 ): ProductConfiguration | null {
   const product = productBySku[sku];
   if (!product) return null;
