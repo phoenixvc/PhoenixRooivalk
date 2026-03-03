@@ -222,7 +222,9 @@ export interface ProductComputeConfig {
   baseTier: ComputeTierId | ComputeBaseTierId;
   baseComputeCost: number;
   availableTiers: ComputeTierId[];
-  tierPricing: Partial<Record<ComputeTierId, { delta: number; newBomTotal?: number }>>;
+  tierPricing: Partial<
+    Record<ComputeTierId, { delta: number; newBomTotal?: number }>
+  >;
   notes?: string;
 }
 
