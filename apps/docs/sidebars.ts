@@ -205,6 +205,20 @@ const sidebars: SidebarsConfig = {
             "technical/defense-technology-deep-dive",
             {
               type: "category",
+              label: "Phase 1 — ESP32 Demo Stack",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase1/phase1-hardware-overview",
+                "technical/hardware/phase1/phase1-skywatch-nano",
+                "technical/hardware/phase1/phase1-skywatch-standard",
+                "technical/hardware/phase1/phase1-turret-tracker",
+                "technical/hardware/phase1/phase1-trigger-node",
+                "technical/hardware/phase1/phase1-wiring-safety",
+                "technical/hardware/phase1/phase1-shared-parts",
+              ],
+            },
+            {
+              type: "category",
               label: "Platform Specifications",
               collapsed: true,
               items: [
