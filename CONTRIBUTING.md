@@ -39,30 +39,46 @@ If you would like to contribute code to the project, follow these steps:
    cd PhoenixRooivalk
    ```
 
-3. **Create a branch**: Create a new branch for your contribution.
+3. **Create a branch from `dev`**: Always branch from the `dev` branch.
 
    ```sh
-   git checkout -b my-feature-branch
+   git checkout dev
+   git pull origin dev
+   git checkout -b feature/my-new-feature
    ```
 
 4. **Make your changes**: Make your changes to the codebase.
 
-5. **Commit your changes**: Commit your changes with a descriptive commit
-   message.
+5. **Commit your changes**: Use
+   [conventional commits](https://www.conventionalcommits.org/).
 
    ```sh
    git add .
-   git commit -m "Add new feature"
+   git commit -m "feat: add new feature description"
    ```
 
 6. **Push your changes**: Push your changes to your forked repository.
 
    ```sh
-   git push origin my-feature-branch
+   git push origin feature/my-new-feature
    ```
 
-7. **Create a pull request**: Go to the original repository on GitHub and create
-   a pull request from your forked repository.
+7. **Create a pull request targeting `dev`**: Go to the original repository on
+   GitHub and create a pull request from your branch into `dev` (not `main`).
+
+### Branching Strategy
+
+We follow a `feature -> dev -> main` branching workflow:
+
+- **`main`**: Production-ready code. Protected with required reviews.
+- **`dev`**: Integration branch. All feature PRs target `dev`.
+- **Feature branches**: Short-lived branches for individual changes.
+
+**All PRs must target `dev`**, never `main` directly. Merges from `dev` to
+`main` happen when `dev` is stable and ready for release.
+
+For the full branching strategy, see
+[docs/branching-strategy.md](docs/branching-strategy.md).
 
 ### Code Style
 

@@ -2,7 +2,9 @@
 id: feat-new-1-tech-deep-dive
 title: "Feature PRD: Technology Deep Dive Page"
 sidebar_label: Tech Deep Dive Page
-description: Product requirements for a dedicated Technology Deep Dive page explaining core technical components to investors and partners.
+description:
+  Product requirements for a dedicated Technology Deep Dive page explaining core
+  technical components to investors and partners.
 difficulty: intermediate
 estimated_reading_time: 6
 points: 10
