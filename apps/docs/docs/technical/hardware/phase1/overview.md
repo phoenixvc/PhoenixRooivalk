@@ -105,8 +105,63 @@ acceptance criteria.
 Phase 1A  (now)      ESP32 demos — prove detect → decide → act
 Phase 1B  (next)     Pi / Jetson swap — real ML inference
 Phase 1C  (later)    Ruggedization, comms, field enclosures
-Phase 2+  (future)   Production BOM, custom PCB, certification
+Phase 2   (Series A) Multi-sensor fusion, fieldable prototypes
+Phase 3   (Series B) Field trials, certification, production tooling
+Phase 4   (Series C) Custom PCB, manufacturing scale-up
+Phase 5   (Scale)    Defense-grade deployment, coalition interop
 ```
+
+See the dedicated hardware phase documents for full specifications:
+
+- **[Phase 2 — Pi/Jetson ML Inference](../phase2/phase2-hardware-overview)** —
+  swap ESP32 for real edge AI compute
+- **[Phase 3 — Field-Ready Systems](../phase3/phase3-hardware-overview)** —
+  ruggedized enclosures, multi-sensor pods, long-range comms
+- **[Phase 4 — Production Hardware](../phase4/phase4-hardware-overview)** —
+  custom PCBs, manufacturing tooling, certification
+- **[Phase 5 — Defense-Grade Deployment](../phase5/phase5-hardware-overview)** —
+  MIL-STD compliance, coalition interop, RKV-M integration
+
+---
+
+## Phase 1B — Pi/Jetson Swap (Preview)
+
+Phase 1B replaces the ESP32-CAM with real ML-capable compute while keeping the
+same wiring harness and peripheral connections. The goal is YOLO-based drone
+classification, not just motion detection.
+
+| Upgrade | From (1A) | To (1B) |
+|---------|-----------|---------|
+| Compute | ESP32-CAM (blob detect) | Pi Zero 2W + Coral USB / Jetson Orin Nano |
+| Camera | OV2640 (2MP, fixed) | Pi HQ Camera (12MP) or ArduCam (wide angle) |
+| Inference | Frame differencing | YOLOv8-nano or YOLOv9-tiny at 15–30 FPS |
+| Alerts | Telegram webhook | MQTT broker → central dashboard |
+| Tracking | Proportional-only | PID with Kalman filter prediction |
+| Logging | Serial print | SQLite on-device + blockchain submission |
+
+**Key constraint:** Phase 1B reuses the same buck converters, servos, relay
+modules, and alarm hardware from Phase 1A. Only the compute module and camera
+change.
+
+---
+
+## Phase 1C — Ruggedization (Preview)
+
+Phase 1C takes the validated Phase 1B system and packages it for outdoor
+operation. No new detection capabilities — just survivability.
+
+| Upgrade | From (1B) | To (1C) |
+|---------|-----------|---------|
+| Enclosure | Open breadboard / project box | IP65 ABS enclosure with cable glands |
+| Power | Bench supply via barrel jack | PoE (802.3af) or 12V solar + battery |
+| Comms | WiFi (2.4GHz, ~30m) | LoRa (868/915MHz, 2–5km) or LTE Cat-M1 |
+| Mounting | Desk/tripod | Pole-mount bracket with quick-release |
+| Wiring | Dupont jumpers | JST-XH connectors + labeled harness |
+| Weather | None | Conformal coating on PCBs, drain holes |
+
+**Key constraint:** Phase 1C still uses COTS modules (no custom PCB). The goal
+is to prove outdoor survivability for 30+ days before committing to custom
+board design.
 
 ---
 
