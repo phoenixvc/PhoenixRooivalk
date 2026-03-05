@@ -112,6 +112,14 @@ const sidebarsStaging: SidebarsConfig = {
                 "technical/architecture/products/c2c-portal-architecture",
               ],
             },
+            {
+              type: "category",
+              label: "ADRs",
+              collapsed: true,
+              items: [
+                "technical/architecture/adr-0034-x402-data-marketplace",
+              ],
+            },
             "technical/architecture/subsystems/index",
           ],
         },
@@ -156,7 +164,18 @@ const sidebarsStaging: SidebarsConfig = {
             "business/portfolio/product-catalog-source",
           ],
         },
-        "business/prd/index",
+        {
+          type: "category",
+          label: "PRDs",
+          collapsed: true,
+          items: [
+            "business/prd/index",
+            "business/prd/depin-network-strategy",
+            "business/prd/data-marketplace-prd",
+            "business/prd/partnership-strategy",
+            "business/prd/depin-competitive-landscape",
+          ],
+        },
       ],
     },
     {
@@ -183,7 +202,17 @@ const sidebarsStaging: SidebarsConfig = {
       collapsed: true,
       items: [
         "legal/index",
-        "legal/compliance/index",
+        {
+          type: "category",
+          label: "Compliance",
+          collapsed: true,
+          items: [
+            "legal/compliance/index",
+            "legal/compliance/drone-data-privacy",
+            "legal/compliance/data-marketplace-legal",
+            "legal/compliance/operator-licensing",
+          ],
+        },
         "legal/policies/index",
       ],
     },
