@@ -1,0 +1,280 @@
+# Data Marketplace Legal Framework
+
+**Status**: Draft
+**Owner**: Legal
+**Last Updated**: 2026-03-05
+
+---
+
+## Overview
+
+Legal framework governing the Phoenix Rooivalk Data Marketplace, including terms of service, data licensing, liability, and regulatory compliance.
+
+---
+
+## Contractual Framework
+
+### Agreement Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Agreement Structure                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │           Master Services Agreement (MSA)            │    │
+│  │         (Enterprise/Government customers)            │    │
+│  └────────────────────────┬────────────────────────────┘    │
+│                           │                                  │
+│  ┌────────────────────────┼────────────────────────────┐    │
+│  │                        ▼                             │    │
+│  │  ┌─────────────────────────────────────────────┐    │    │
+│  │  │         Data Marketplace Terms of Use        │    │    │
+│  │  │           (All marketplace users)            │    │    │
+│  │  └──────────────────────┬──────────────────────┘    │    │
+│  │                         │                           │    │
+│  │  ┌──────────────────────┼──────────────────────┐   │    │
+│  │  │                      ▼                       │   │    │
+│  │  │  ┌─────────────┐  ┌─────────────┐          │   │    │
+│  │  │  │   Buyer     │  │   Seller    │          │   │    │
+│  │  │  │  Agreement  │  │  Agreement  │          │   │    │
+│  │  │  └─────────────┘  └─────────────┘          │   │    │
+│  │  │                                             │   │    │
+│  │  │  ┌─────────────────────────────────────┐   │   │    │
+│  │  │  │     Data Product License Terms      │   │   │    │
+│  │  │  │      (Per-product, per-purchase)    │   │   │    │
+│  │  │  └─────────────────────────────────────┘   │   │    │
+│  │  └─────────────────────────────────────────────┘   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Terms of Use - Key Provisions
+
+### Buyer Obligations
+
+| Obligation | Description | Consequence of Breach |
+|------------|-------------|----------------------|
+| **Authorized Use** | Use data only for stated purpose | Account termination, legal action |
+| **No Redistribution** | Cannot resell or share data | License revocation, damages |
+| **Compliance** | Follow all applicable laws | Indemnification required |
+| **Security** | Protect data from unauthorized access | Liability for breaches |
+| **Reporting** | Report misuse or security incidents | Account suspension |
+
+### Seller Obligations
+
+| Obligation | Description | Consequence of Breach |
+|------------|-------------|----------------------|
+| **Data Rights** | Must own or have rights to sell | Removal, revenue clawback |
+| **Accuracy** | Data must match description | Refunds, removal |
+| **Compliance** | No illegal or restricted data | Account termination, legal action |
+| **Support** | Respond to buyer inquiries | Rating impact, removal |
+| **Updates** | Maintain data quality | Delisting |
+
+---
+
+## Data Licensing Models
+
+### License Types
+
+| License | Rights Granted | Restrictions | Typical Use |
+|---------|---------------|--------------|-------------|
+| **Single-Use** | One-time access | No storage, no derivative works | Verification queries |
+| **Standard** | Limited use, internal only | No redistribution, attribution required | Analytics, research |
+| **Extended** | Broad internal use | No resale, limited derivatives | Product development |
+| **Enterprise** | Unlimited internal use | Custom negotiation | Large organizations |
+| **Reseller** | Redistribution rights | Revenue share, approval required | Partners |
+
+### License Terms Matrix
+
+| Term | Single-Use | Standard | Extended | Enterprise |
+|------|------------|----------|----------|------------|
+| **Duration** | Instant | 1 year | 1 year | Custom |
+| **Users** | 1 | 10 | Unlimited | Unlimited |
+| **Storage** | No | Yes | Yes | Yes |
+| **Derivatives** | No | Limited | Yes | Yes |
+| **Attribution** | N/A | Required | Optional | Waived |
+| **SLA** | None | 99% | 99.5% | 99.9% |
+
+---
+
+## Liability Framework
+
+### Platform Liability
+
+| Scenario | Phoenix Rooivalk Liability | Limitation |
+|----------|---------------------------|------------|
+| **Data Quality** | Limited to refund | Seller responsible for accuracy |
+| **Payment Failures** | Full responsibility | Payment processing SLA |
+| **Platform Downtime** | Pro-rata credit | Force majeure excluded |
+| **Security Breach** | Depends on fault | Capped at fees paid |
+| **Third-Party Claims** | Indemnification from sellers | Pass-through liability |
+
+### Limitation of Liability
+
+```
+Maximum Liability Cap:
+- For Buyers: Greater of (fees paid in last 12 months) or ($10,000)
+- For Sellers: Greater of (revenue earned in last 12 months) or ($10,000)
+- For Enterprise: As negotiated in MSA
+
+Excluded from Cap:
+- Intentional misconduct
+- Gross negligence
+- IP infringement (willful)
+- Data protection violations
+- Indemnification obligations
+```
+
+### Indemnification
+
+| Party | Indemnifies Against |
+|-------|---------------------|
+| **Buyer** | Misuse of data, violation of license terms, third-party claims from use |
+| **Seller** | IP infringement, inaccurate data, privacy violations, export control violations |
+| **Platform** | Platform IP infringement, gross negligence in operations |
+
+---
+
+## Dispute Resolution
+
+### Resolution Process
+
+```
+Step 1: Direct Resolution (5 business days)
+    │
+    ├── Resolved → Close
+    │
+    ▼
+Step 2: Platform Mediation (10 business days)
+    │
+    ├── Resolved → Close
+    │
+    ▼
+Step 3: Arbitration (AFSA Rules, Johannesburg)
+    │
+    └── Binding decision
+```
+
+### Jurisdiction & Governing Law
+
+| Aspect | Provision |
+|--------|-----------|
+| **Governing Law** | South African law |
+| **Arbitration Body** | Arbitration Foundation of Southern Africa (AFSA) |
+| **Venue** | Johannesburg, South Africa |
+| **Language** | English |
+| **Class Actions** | Waived (individual claims only) |
+
+---
+
+## Regulatory Compliance
+
+### Export Control
+
+| Regulation | Applicability | Compliance Measure |
+|------------|--------------|-------------------|
+| **NCACC** | Defense-related data | Export permit required |
+| **ITAR** | US defense technology | No export without license |
+| **EAR** | Dual-use technology | Classification review |
+| **EU Dual-Use** | EU customers | End-user screening |
+
+### Data Protection
+
+| Regulation | Trigger | Requirement |
+|------------|---------|-------------|
+| **POPIA** | SA data subjects | Consent, processing records |
+| **GDPR** | EU data subjects | DPA, SCCs for transfers |
+| **CCPA** | California residents | Disclosure, opt-out rights |
+
+### Financial Regulations
+
+| Regulation | Applicability | Compliance Measure |
+|------------|--------------|-------------------|
+| **FICA** | SA AML requirements | KYC for high-value transactions |
+| **FATF** | Crypto payments | Transaction monitoring |
+| **Tax** | Revenue recognition | Withholding where required |
+
+---
+
+## Intellectual Property
+
+### IP Ownership
+
+| Content | Owner | License to Platform |
+|---------|-------|---------------------|
+| **Seller Data** | Seller | Non-exclusive, display/distribute |
+| **Buyer Derivatives** | Buyer | None (unless shared) |
+| **Platform Software** | Phoenix Rooivalk | N/A |
+| **Aggregated Insights** | Phoenix Rooivalk | N/A |
+
+### IP Warranties
+
+| Party | Warranty |
+|-------|----------|
+| **Seller** | Has right to sell data, no infringement |
+| **Buyer** | Will not infringe platform IP |
+| **Platform** | Platform does not infringe third-party IP |
+
+---
+
+## Payment Terms
+
+### x402 Payment Legal Framework
+
+| Aspect | Treatment |
+|--------|-----------|
+| **Payment Finality** | Blockchain confirmation = payment complete |
+| **Refunds** | Platform credit only (no on-chain reversal) |
+| **Currency** | USDC (stablecoin) as primary |
+| **Tax** | Buyer responsible for local tax obligations |
+| **Chargebacks** | Not applicable (crypto payments) |
+
+### Revenue Recognition
+
+| Event | Recognition |
+|-------|-------------|
+| **Data Delivered** | Immediate recognition |
+| **Subscription** | Pro-rata over term |
+| **Failed Delivery** | Refund/credit |
+
+---
+
+## Compliance Checklist
+
+### For Launch
+
+- [ ] Terms of Use finalized and reviewed by counsel
+- [ ] Buyer Agreement template complete
+- [ ] Seller Agreement template complete
+- [ ] Data Product License terms drafted
+- [ ] Privacy Policy updated for marketplace
+- [ ] Cookie consent for marketplace pages
+- [ ] KYC integration for Verified tier
+- [ ] Export control screening implemented
+- [ ] Tax collection/reporting configured
+
+### Ongoing
+
+- [ ] Quarterly legal review of terms
+- [ ] Annual regulatory compliance audit
+- [ ] Dispute log review (monthly)
+- [ ] Seller compliance spot checks
+- [ ] Data classification audits
+
+---
+
+## Related Documents
+
+- [Drone Data Privacy & Compliance](./drone-data-privacy.mdx)
+- [Operator Licensing Requirements](./operator-licensing.mdx)
+- [Data Marketplace PRD](../../business/prd/data-marketplace-prd.mdx)
+- [ADR-0050: ITAR Compliance](/docs/technical/architecture/adr-0050-itar-compliance)
+- [ADR-0051: Export Control SA NCACC](/docs/technical/architecture/adr-0051-export-control-sa-ncacc)
+
+---
+
+*Draft document - requires legal review before finalization*
