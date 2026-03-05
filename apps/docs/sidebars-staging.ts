@@ -35,6 +35,7 @@ const sidebarsStaging: SidebarsConfig = {
           collapsed: true,
           items: [
             "engineering/phase1/index",
+            "engineering/phase1/buy-now-vs-later",
             "engineering/phase1/avoid-list",
             "engineering/phase1/safety-boundary",
             "engineering/phase1/platform-bom-v1",
@@ -84,6 +85,7 @@ const sidebarsStaging: SidebarsConfig = {
           collapsed: true,
           items: [
             "technical/architecture/index",
+            "technical/architecture/application-structure",
             {
               type: "category",
               label: "Diagrams",
@@ -101,6 +103,7 @@ const sidebarsStaging: SidebarsConfig = {
               items: [
                 "technical/architecture/interfaces/index",
                 "technical/architecture/interfaces/transport-abstraction",
+                "technical/architecture/interfaces/vision-to-actuator-contracts",
               ],
             },
             {
@@ -125,6 +128,7 @@ const sidebarsStaging: SidebarsConfig = {
             "technical/hardware/power-budgeting-and-rail-isolation",
             "technical/hardware/prototype-compute-tiers",
             "technical/hardware/servo-selection-and-calibration",
+            "technical/hardware/salvage-and-zero-budget-hardware",
           ],
         },
         {
@@ -135,6 +139,7 @@ const sidebarsStaging: SidebarsConfig = {
             "technical/control/index",
             "technical/control/tracking-control-loop",
             "technical/control/authority-and-safety-controller",
+            "technical/control/control-interface-options",
           ],
         },
         "technical/ml/index",
@@ -214,6 +219,19 @@ const sidebarsStaging: SidebarsConfig = {
             "internal/edr/index",
             "internal/edr/edr-template",
             "internal/edr/2025-03-04-transport-abstraction-baseline",
+          ],
+        },
+        {
+          type: "category",
+          label: "Decisions",
+          collapsed: true,
+          items: [
+            "internal/decisions/conversation-gap-analysis-control-turret",
+            "internal/decisions/conversation-gap-analysis-salvage-rc-control-architecture",
+            "internal/decisions/conversation-gap-analysis-phase1-bom-evolution",
+            "internal/decisions/conversation-gap-analysis-r2000-cart-rc-transport",
+            "internal/decisions/lessons-from-rc-drone-and-platform-bom",
+            "internal/decisions/catalog-refactor-llm-prompts",
           ],
         },
       ],

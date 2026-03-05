@@ -29,6 +29,22 @@ Receives detect/decision signal (e.g. MQTT); drives a safe output (relay or MOSF
 
 No launcher or harmful hardware. See [safety boundary](../safety-boundary.mdx).
 
+### Parts list (orderable)
+
+| Part | Qty | Notes (1a) |
+|------|-----|------------|
+| ESP32 dev board | 1 | Control + MQTT |
+| Relay module or MOSFET board | 1 | Safe switching |
+| LED or lamp (dummy load) | 1 | No launcher |
+| Arm/disarm switch | 1 | Physical safety |
+| Status LED | 1 | Optional |
+
+Search terms (examples): ESP32 dev board, 5V relay module, LED. See [platform BOM v1](../platform-bom-v1.mdx) and [safety boundary](../safety-boundary.mdx).
+
+## Leave for later
+
+- High-energy actuators; any hardware meant to launch or physically harm (out of scope for Phase 1).
+
 ## How-to
 
 Wiring, flash, config (MQTT topic, arm/disarm logic), test. Link to [common/actuator](../../common/actuator.mdx), [common/networking](../../common/networking.mdx).

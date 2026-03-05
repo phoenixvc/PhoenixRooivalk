@@ -5,7 +5,7 @@ sidebar_label: SkyWatch Standard
 
 # SkyWatch Standard
 
-Standard detection node for Phase-1 demos. Step-up from Nano; better compute/camera. Prefer OV2640; avoid OV7670. ZAR where useful with USD or local fallback.
+Standard detection node for Phase-1 demos. Step-up from Nano; better compute/camera. Can be run as **detection + alarm only** (no pan/tilt, no actuator) or with optional pan/tilt. Prefer OV2640; avoid OV7670. ZAR where useful with USD or local fallback.
 
 ## Comparison (1a / 1b / 1c)
 
@@ -18,6 +18,22 @@ Standard detection node for Phase-1 demos. Step-up from Nano; better compute/cam
 ## BOM (outline)
 
 Compute (e.g. Pi4), camera (OV2640 preferred), power, storage, optional Coral. See [common modules](../../common/index.mdx).
+
+### Parts list (orderable)
+
+| Part | Qty | Notes (1a) |
+|------|-----|------------|
+| Raspberry Pi 4 (2GB or 4GB) | 1 | Compute |
+| Pi Camera v3 or USB webcam | 1 | Prefer Pi Cam v3 |
+| 64GB microSD (high endurance) | 1 | Storage |
+| 5V 5A supply or buck from 12V | 1 | Power |
+| Mount/enclosure | 1 | As needed |
+
+Search terms (examples): Raspberry Pi 4 2GB, Pi Camera v3, microSD 64GB high endurance. See [platform BOM v1](../platform-bom-v1.mdx) for shared quantities.
+
+## Leave for later
+
+- Coral/Hailo acceleration; multi-sensor RF/SDR; long-range optics and stabilized mounts; LTE failover.
 
 ## How-to
 

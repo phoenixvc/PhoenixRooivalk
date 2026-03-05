@@ -55,6 +55,20 @@ Pan-tilt platform driven by ESP32 + PCA9685 + 180° servos. Receives target bear
 
 - Enclosure.
 
+### Parts list (orderable)
+
+| Part | Qty | Notes |
+|------|-----|-------|
+| ESP32 dev board | 1 | Actuator control |
+| PCA9685 | 1 | Servo driver (I2C) |
+| MG90S or MG996R (180° positional) | 2 | Pan/tilt; 1a MG90S, 1c MG996R |
+| FPV dual-axis gimbal or SG90 mount | 1 | 1a: R31 nylon; 1b/1c: R81 dual-axis |
+| MP1584EN buck | 1 | 5–6V servo rail |
+| Buzzer, LED | 1 each | Alarm |
+| Jumper wires, bracket | — | As needed |
+
+Search terms: ESP32 DevKitC, PCA9685 servo driver, MG90S metal gear, MP1584EN buck. See BOM per option above for ZAR/USD ranges and [platform BOM v1](../platform-bom-v1.mdx).
+
 ## Option summary (weighted matrix)
 
 | Option | Cost (approx.) | Tracking | Reliability | Effort | Choice summary |
@@ -76,6 +90,8 @@ Dimensions (example weights): cost 30%, tracking 40%, reliability 20%, effort 10
 - **Phase 0:** No turret camera; blind actuator.
 - **Phase 1:** Optional turret camera (ESP32-CAM or USB to Pi); this doc.
 - **Phase 2:** Dual camera, stiffer mechanics; out of scope here.
+
+**When to add a turret camera:** One camera (fixed detection cam) is enough for Phase 1 (detect → track → pan/tilt → alarm). Add a second (turret) camera when you need: closed-loop aiming (turret view refines aim), occlusion handling, zoom/narrow FOV on turret, or UI polish (turret POV in dashboard). Phase 1 = optional; Phase 2 = dual-camera architecture.
 
 ## How-to
 

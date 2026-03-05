@@ -10,12 +10,12 @@ import type { ComputePlatform, AIAccelerator, FPSBenchmark } from "./types";
 
 /** Raspberry Pi compute platforms */
 export const raspberryPiPlatforms: ComputePlatform[] = [
-  { id: "pi_zero_2w", name: "Raspberry Pi Zero 2 W", price: 15, ram: "512MB", cpu: "Quad Cortex-A53 @ 1GHz", power: "2-4W", formFactor: "65×30mm", notes: "Entry-level, WiFi only" },
-  { id: "pi4_2gb", name: "Raspberry Pi 4 Model B", variant: "2GB", price: 35, ram: "2GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "4-8W", formFactor: "85×56mm", notes: "Standard detection, PoE HAT compatible" },
-  { id: "pi4_4gb", name: "Raspberry Pi 4 Model B", variant: "4GB", price: 60, ram: "4GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "4-8W", formFactor: "85×56mm", notes: "Multi-sensor fusion capable" },
-  { id: "pi4_8gb", name: "Raspberry Pi 4 Model B", variant: "8GB", price: 85, ram: "8GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "5-10W", formFactor: "85×56mm", notes: "Heavy workloads, video recording" },
-  { id: "pi5_4gb", name: "Raspberry Pi 5", variant: "4GB", price: 70, ram: "4GB", cpu: "Quad Cortex-A76 @ 2.4GHz", power: "5-12W", formFactor: "85×56mm", notes: "PCIe support, M.2 HAT compatible" },
-  { id: "pi5_8gb", name: "Raspberry Pi 5", variant: "8GB", price: 95, ram: "8GB", cpu: "Quad Cortex-A76 @ 2.4GHz", power: "5-15W", formFactor: "85×56mm", notes: "Pro/Enterprise tier, NVMe support" },
+  { id: "pi_zero_2w", name: "Raspberry Pi Zero 2 W", price: 15, priceType: "msrp", ram: "512MB", cpu: "Quad Cortex-A53 @ 1GHz", power: "2-4W", formFactor: "65×30mm", notes: "Entry-level, WiFi only" },
+  { id: "pi4_2gb", name: "Raspberry Pi 4 Model B", variant: "2GB", price: 35, priceType: "msrp", ram: "2GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "4-8W", formFactor: "85×56mm", notes: "Standard detection, PoE HAT compatible" },
+  { id: "pi4_4gb", name: "Raspberry Pi 4 Model B", variant: "4GB", price: 60, priceType: "msrp", ram: "4GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "4-8W", formFactor: "85×56mm", notes: "Multi-sensor fusion capable" },
+  { id: "pi4_8gb", name: "Raspberry Pi 4 Model B", variant: "8GB", price: 85, priceType: "msrp", ram: "8GB", cpu: "Quad Cortex-A72 @ 1.8GHz", power: "5-10W", formFactor: "85×56mm", notes: "Heavy workloads, video recording" },
+  { id: "pi5_4gb", name: "Raspberry Pi 5", variant: "4GB", price: 70, priceType: "msrp", ram: "4GB", cpu: "Quad Cortex-A76 @ 2.4GHz", power: "5-12W", formFactor: "85×56mm", notes: "PCIe support, M.2 HAT compatible" },
+  { id: "pi5_8gb", name: "Raspberry Pi 5", variant: "8GB", price: 95, priceType: "msrp", ram: "8GB", cpu: "Quad Cortex-A76 @ 2.4GHz", power: "5-15W", formFactor: "85×56mm", notes: "Pro/Enterprise tier, NVMe support" },
 ];
 
 // =============================================================================
@@ -24,12 +24,12 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
 
 /** NVIDIA Jetson platforms */
 export const jetsonPlatforms: ComputePlatform[] = [
-  { id: "jetson_orin_nano_4gb", name: "Jetson Orin Nano", variant: "4GB", price: 199, ram: "4GB", cpu: "6-core Cortex-A78AE @ 1.5GHz", power: "7-15W", formFactor: "69.6×45mm (module)", notes: "20 TOPS, entry Jetson tier" },
-  { id: "jetson_orin_nano_8gb", name: "Jetson Orin Nano", variant: "8GB", price: 249, ram: "8GB", cpu: "6-core Cortex-A78AE @ 1.5GHz", power: "7-15W", formFactor: "69.6×45mm (module)", notes: "40 TOPS, dev kit ~$499" },
-  { id: "jetson_orin_nx_8gb", name: "Jetson Orin NX", variant: "8GB", price: 399, ram: "8GB", cpu: "6-core Cortex-A78AE @ 2.0GHz", power: "10-25W", formFactor: "69.6×45mm (module)", notes: "67 TOPS, professional tier" },
-  { id: "jetson_orin_nx_16gb", name: "Jetson Orin NX", variant: "16GB", price: 599, ram: "16GB", cpu: "8-core Cortex-A78AE @ 2.0GHz", power: "10-25W", formFactor: "69.6×45mm (module)", notes: "117 TOPS, multi-stream capable" },
-  { id: "jetson_agx_32gb", name: "Jetson AGX Orin", variant: "32GB", price: 999, ram: "32GB", cpu: "12-core Cortex-A78AE @ 2.2GHz", power: "15-40W", formFactor: "100×87mm (module)", notes: "200 TOPS, enterprise/military" },
-  { id: "jetson_agx_64gb", name: "Jetson AGX Orin", variant: "64GB", price: 1999, ram: "64GB", cpu: "12-core Cortex-A78AE @ 2.2GHz", power: "15-60W", formFactor: "100×87mm (module)", notes: "275 TOPS, maximum performance (module price, dev kit $2499)" },
+  { id: "jetson_orin_nano_4gb", name: "Jetson Orin Nano", variant: "4GB", price: 199, priceType: "msrp", ram: "4GB", cpu: "6-core Cortex-A78AE @ 1.5GHz", power: "7-15W", formFactor: "69.6×45mm (module)", notes: "20 TOPS, entry Jetson tier" },
+  { id: "jetson_orin_nano_8gb", name: "Jetson Orin Nano", variant: "8GB", price: 249, priceType: "msrp", ram: "8GB", cpu: "6-core Cortex-A78AE @ 1.5GHz", power: "7-15W", formFactor: "69.6×45mm (module)", notes: "40 TOPS, dev kit ~$499" },
+  { id: "jetson_orin_nx_8gb", name: "Jetson Orin NX", variant: "8GB", price: 399, priceType: "msrp", ram: "8GB", cpu: "6-core Cortex-A78AE @ 2.0GHz", power: "10-25W", formFactor: "69.6×45mm (module)", notes: "67 TOPS, professional tier" },
+  { id: "jetson_orin_nx_16gb", name: "Jetson Orin NX", variant: "16GB", price: 599, priceType: "msrp", ram: "16GB", cpu: "8-core Cortex-A78AE @ 2.0GHz", power: "10-25W", formFactor: "69.6×45mm (module)", notes: "117 TOPS, multi-stream capable" },
+  { id: "jetson_agx_32gb", name: "Jetson AGX Orin", variant: "32GB", price: 999, priceType: "msrp", ram: "32GB", cpu: "12-core Cortex-A78AE @ 2.2GHz", power: "15-40W", formFactor: "100×87mm (module)", notes: "200 TOPS, enterprise/military" },
+  { id: "jetson_agx_64gb", name: "Jetson AGX Orin", variant: "64GB", price: 1999, priceType: "msrp", ram: "64GB", cpu: "12-core Cortex-A78AE @ 2.2GHz", power: "15-60W", formFactor: "100×87mm (module)", notes: "275 TOPS, maximum performance (module price, dev kit $2499)" },
 ];
 
 // =============================================================================
@@ -38,6 +38,14 @@ export const jetsonPlatforms: ComputePlatform[] = [
 
 /** Available AI accelerators */
 export const aiAccelerators: AIAccelerator[] = [
+  // Sentinels / integrated (used by benchmarks and recommendations)
+  { id: "none", name: "None", price: 0, tops: 0, interface: "N/A", power: "0W", compatibility: ["Pi Zero 2W", "Pi 4", "Pi 5", "Jetson", "x86"], notes: "CPU-only" },
+  { id: "integrated_20", name: "Integrated GPU (20 TOPS)", price: 0, tops: 20, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson Orin Nano 4GB" },
+  { id: "integrated_40", name: "Integrated GPU (40 TOPS)", price: 0, tops: 40, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson Orin Nano 8GB" },
+  { id: "integrated_70", name: "Integrated GPU (70 TOPS)", price: 0, tops: 70, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson Orin NX 8GB" },
+  { id: "integrated_117", name: "Integrated GPU (117 TOPS)", price: 0, tops: 117, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson Orin NX 16GB" },
+  { id: "integrated_200", name: "Integrated GPU (200 TOPS)", price: 0, tops: 200, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson AGX Orin 32GB" },
+  { id: "integrated_275", name: "Integrated GPU (275 TOPS)", price: 0, tops: 275, interface: "Integrated", power: "Included", compatibility: ["Jetson"], notes: "Jetson AGX Orin 64GB" },
   { id: "coral_usb", name: "Coral USB Accelerator", price: 59.99, tops: 4, interface: "USB 3.0", power: "2W", compatibility: ["Pi Zero 2W", "Pi 4", "Pi 5", "Jetson", "x86"], notes: "Most versatile, plug-and-play" },
   { id: "coral_m2_ae", name: "Coral M.2 Accelerator (A+E key)", price: 25, tops: 4, interface: "M.2 A+E", power: "2W", compatibility: ["Pi 5 (with HAT)", "Jetson", "x86"], notes: "Compact, requires M.2 slot" },
   { id: "coral_m2_dual", name: "Coral M.2 Accelerator (Dual TPU)", price: 90, tops: 8, interface: "M.2 B+M", power: "4W", compatibility: ["Pi 5 (with HAT)", "Jetson", "x86"], notes: "Dual Edge TPU, double throughput (retail $65-110)" },

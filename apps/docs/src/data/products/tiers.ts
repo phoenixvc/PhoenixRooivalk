@@ -8,12 +8,16 @@
 import type {
   ComputeTier,
   ComputeTierId,
+  ComputeTierKey,
   CameraTier,
   CameraTierId,
+  CameraTierKey,
   ConnectivityTier,
   ConnectivityTierId,
+  ConnectivityTierKey,
   StorageTier,
   StorageTierId,
+  StorageTierKey,
   ProductComputeConfig,
   ProductCameraConfig,
   ProductConnectivityConfig,
@@ -21,13 +25,14 @@ import type {
   ProductConfiguration,
 } from "./types";
 import { productBySku } from "./catalog";
+import { buildConfiguredBom } from "./bom-engine";
 
 // =============================================================================
 // COMPUTE TIER CONFIGURATOR
 // =============================================================================
 
-/** Available compute tiers (sentinels "none" and "server" are not in this map) */
-export const computeTiers: Partial<Record<ComputeTierId, ComputeTier>> = {
+/** Available compute tiers (sentinels "none" and "server" are not in this map). */
+export const computeTiers = {
   pi4_coral: {
     id: "pi4_coral",
     name: "Standard (Pi 4 + Coral)",
@@ -89,7 +94,7 @@ export const computeTiers: Partial<Record<ComputeTierId, ComputeTier>> = {
     power: "15-60W",
     notes: "Ruggedized, 6+ streams, 4K capable",
   },
-};
+} satisfies Record<ComputeTierKey, ComputeTier>;
 
 /** Compute tier availability and pricing by product */
 export const productComputeConfigs: ProductComputeConfig[] = [
@@ -367,9 +372,8 @@ export const productComputeConfigs: ProductComputeConfig[] = [
 // CAMERA TIER CONFIGURATOR
 // =============================================================================
 
-/** Available camera tiers */
-/** Available camera tiers (sentinels none, mixed, enterprise, fixed are not in this map) */
-export const cameraTiers: Partial<Record<CameraTierId, CameraTier>> = {
+/** Available camera tiers (sentinels none, mixed, enterprise, fixed are not in this map). */
+export const cameraTiers = {
   pi_v2: {
     id: "pi_v2",
     name: "Basic (Pi Camera v2)",
@@ -434,7 +438,7 @@ export const cameraTiers: Partial<Record<CameraTierId, CameraTier>> = {
     features: ["60Hz thermal", "Professional grade", "Long range"],
     notes: "Professional thermal detection",
   },
-} as const;
+} satisfies Record<CameraTierKey, CameraTier>;
 
 /** Camera tier availability by product */
 export const productCameraConfigs: ProductCameraConfig[] = [
@@ -690,8 +694,8 @@ export const productCameraConfigs: ProductCameraConfig[] = [
 // CONNECTIVITY TIER CONFIGURATOR
 // =============================================================================
 
-/** Available connectivity tiers (sentinels none, enterprise, cloud, mesh_radio are not in this map) */
-export const connectivityTiers: Partial<Record<ConnectivityTierId, ConnectivityTier>> = {
+/** Available connectivity tiers (sentinels none, enterprise, cloud, mesh_radio are not in this map). */
+export const connectivityTiers = {
   wifi: {
     id: "wifi",
     name: "WiFi Only",
@@ -746,7 +750,7 @@ export const connectivityTiers: Partial<Record<ConnectivityTierId, ConnectivityT
     power: "PoE + 2W LTE",
     notes: "PoE primary with LTE failover",
   },
-};
+} satisfies Record<ConnectivityTierKey, ConnectivityTier>;
 
 /** Connectivity tier availability by product */
 export const productConnectivityConfigs: ProductConnectivityConfig[] = [
@@ -1009,8 +1013,8 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
 // STORAGE TIER CONFIGURATOR
 // =============================================================================
 
-/** Available storage tiers (sentinels none, fixed, enterprise, cloud are not in this map) */
-export const storageTiers: Partial<Record<StorageTierId, StorageTier>> = {
+/** Available storage tiers (sentinels none, fixed, enterprise, cloud are not in this map). */
+export const storageTiers = {
   sd_32: {
     id: "sd_32",
     name: "Basic (32GB microSD)",
@@ -1081,7 +1085,7 @@ export const storageTiers: Partial<Record<StorageTierId, StorageTier>> = {
     endurance: "Maximum",
     notes: "Maximum local evidence buffer",
   },
-};
+} satisfies Record<StorageTierKey, StorageTier>;
 
 /** Storage tier availability by product */
 export const productStorageConfigs: ProductStorageConfig[] = [
@@ -1372,16 +1376,14 @@ export function getProductComputeConfig(
 export function getAvailableTiers(sku: string): ComputeTier[] {
   const config = getProductComputeConfig(sku);
   if (!config) return [];
-  return config.availableTiers
-    .map((tierId) => computeTiers[tierId])
-    .filter(Boolean);
+  return config.availableTiers.map((tierId) => computeTiers[tierId]);
 }
 
 /** Calculate price delta for a tier upgrade */
-export function getTierPriceDelta(sku: string, tierId: string): number {
+export function getTierPriceDelta(sku: string, tierId: ComputeTierKey): number {
   const config = getProductComputeConfig(sku);
-  if (!config || !config.tierPricing[tierId]) return 0;
-  return config.tierPricing[tierId].delta;
+  if (!config) return 0;
+  return config.tierPricing[tierId]?.delta ?? 0;
 }
 
 /** Get camera config for a product */
@@ -1395,9 +1397,7 @@ export function getProductCameraConfig(
 export function getAvailableCameras(sku: string): CameraTier[] {
   const config = getProductCameraConfig(sku);
   if (!config) return [];
-  return config.availableCameras
-    .map((camId) => cameraTiers[camId])
-    .filter(Boolean);
+  return config.availableCameras.map((camId) => cameraTiers[camId]);
 }
 
 /** Get connectivity config for a product */
@@ -1411,9 +1411,7 @@ export function getProductConnectivityConfig(
 export function getAvailableConnectivity(sku: string): ConnectivityTier[] {
   const config = getProductConnectivityConfig(sku);
   if (!config) return [];
-  return config.availableConnectivity
-    .map((connId) => connectivityTiers[connId])
-    .filter(Boolean);
+  return config.availableConnectivity.map((connId) => connectivityTiers[connId]);
 }
 
 /** Get storage config for a product */
@@ -1427,9 +1425,7 @@ export function getProductStorageConfig(
 export function getAvailableStorage(sku: string): StorageTier[] {
   const config = getProductStorageConfig(sku);
   if (!config) return [];
-  return config.availableStorage
-    .map((storageId) => storageTiers[storageId])
-    .filter(Boolean);
+  return config.availableStorage.map((storageId) => storageTiers[storageId]);
 }
 
 // =============================================================================
@@ -1439,15 +1435,20 @@ export function getAvailableStorage(sku: string): StorageTier[] {
 /** Generate full product configuration summary */
 export function generateProductConfiguration(
   sku: string,
-  computeTierId?: string,
-  cameraTierId?: string,
-  connectivityTierId?: string,
-  storageTierId?: string,
+  computeTierId?: ComputeTierKey,
+  cameraTierId?: CameraTierKey,
+  connectivityTierId?: ConnectivityTierKey,
+  storageTierId?: StorageTierKey,
 ): ProductConfiguration | null {
   const product = productBySku[sku];
   if (!product) return null;
 
   let totalDelta = 0;
+  const computeConfig = getProductComputeConfig(sku);
+  const cameraConfig = getProductCameraConfig(sku);
+  const connConfig = getProductConnectivityConfig(sku);
+  const storageConfig = getProductStorageConfig(sku);
+
   const config: ProductConfiguration = {
     sku,
     totalDelta: 0,
@@ -1457,10 +1458,9 @@ export function generateProductConfiguration(
 
   // Compute tier
   if (computeTierId) {
-    const computeConfig = getProductComputeConfig(sku);
     const tier = computeTiers[computeTierId];
-    if (computeConfig?.tierPricing[computeTierId] && tier) {
-      const delta = computeConfig.tierPricing[computeTierId].delta;
+    const delta = computeConfig?.tierPricing[computeTierId]?.delta;
+    if (delta != null && tier) {
       config.compute = { tier, delta };
       totalDelta += delta;
     }
@@ -1468,10 +1468,9 @@ export function generateProductConfiguration(
 
   // Camera tier
   if (cameraTierId) {
-    const cameraConfig = getProductCameraConfig(sku);
     const tier = cameraTiers[cameraTierId];
-    if (cameraConfig?.cameraPricing[cameraTierId] && tier) {
-      const delta = cameraConfig.cameraPricing[cameraTierId].delta;
+    const delta = cameraConfig?.cameraPricing[cameraTierId]?.delta;
+    if (delta != null && tier) {
       config.camera = { tier, delta };
       totalDelta += delta;
     }
@@ -1479,10 +1478,9 @@ export function generateProductConfiguration(
 
   // Connectivity tier
   if (connectivityTierId) {
-    const connConfig = getProductConnectivityConfig(sku);
     const tier = connectivityTiers[connectivityTierId];
-    if (connConfig?.connectivityPricing[connectivityTierId] && tier) {
-      const delta = connConfig.connectivityPricing[connectivityTierId].delta;
+    const delta = connConfig?.connectivityPricing[connectivityTierId]?.delta;
+    if (delta != null && tier) {
       config.connectivity = { tier, delta };
       totalDelta += delta;
     }
@@ -1490,17 +1488,35 @@ export function generateProductConfiguration(
 
   // Storage tier
   if (storageTierId) {
-    const storageConfig = getProductStorageConfig(sku);
     const tier = storageTiers[storageTierId];
-    if (storageConfig?.storagePricing[storageTierId] && tier) {
-      const delta = storageConfig.storagePricing[storageTierId].delta;
+    const delta = storageConfig?.storagePricing[storageTierId]?.delta;
+    if (delta != null && tier) {
       config.storage = { tier, delta };
       totalDelta += delta;
     }
   }
 
   config.totalDelta = totalDelta;
-  config.configuredBomCost = product.bomTotal + totalDelta;
+
+  const bomResult = buildConfiguredBom({
+    product,
+    computeConfig: computeConfig,
+    cameraConfig: cameraConfig,
+    connectivityConfig: connConfig,
+    storageConfig: storageConfig,
+    computeTier: config.compute?.tier,
+    computeTierId,
+    cameraTier: config.camera?.tier,
+    cameraTierId,
+    connectivityTierId,
+    storageTierId,
+  });
+
+  config.configuredBom = bomResult.bom;
+  config.configuredBomCost = bomResult.bomTotal;
+  config.configuredBomCostModel = bomResult.reconciled
+    ? "bom_engine_with_reconcile"
+    : "bom_engine";
 
   return config;
 }
@@ -1517,33 +1533,85 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
   const computeBaseSentinels = ["none", "server"] as const;
   for (const c of productComputeConfigs) {
     if (!productBySku[c.sku]) errors.push(`Compute config SKU not in catalog: ${c.sku}`);
-    if (!computeBaseSentinels.includes(c.baseTier as (typeof computeBaseSentinels)[number]) && !computeTiers[c.baseTier]) errors.push(`Compute baseTier missing: ${c.baseTier} (${c.sku})`);
+    if (
+      !computeBaseSentinels.includes(
+        c.baseTier as (typeof computeBaseSentinels)[number],
+      ) &&
+      !(c.baseTier in computeTiers)
+    ) {
+      errors.push(`Compute baseTier missing: ${c.baseTier} (${c.sku})`);
+    }
     for (const t of c.availableTiers) {
-      if (!computeTiers[t]) errors.push(`Compute availableTier missing: ${t} (${c.sku})`);
+      if (!(t in computeTiers))
+        errors.push(`Compute availableTier missing: ${t} (${c.sku})`);
+    }
+    for (const k of Object.keys(c.tierPricing) as ComputeTierKey[]) {
+      if (!c.availableTiers.includes(k)) {
+        errors.push(`Compute tierPricing key not in availableTiers: ${k} (${c.sku})`);
+      }
     }
   }
   const cameraBaseSentinels = ["none", "mixed", "enterprise", "fixed"] as const;
   for (const c of productCameraConfigs) {
     if (!productBySku[c.sku]) errors.push(`Camera config SKU not in catalog: ${c.sku}`);
-    if (!cameraBaseSentinels.includes(c.baseCameraId as (typeof cameraBaseSentinels)[number]) && !cameraTiers[c.baseCameraId]) errors.push(`Camera baseCameraId missing: ${c.baseCameraId} (${c.sku})`);
+    if (
+      !cameraBaseSentinels.includes(
+        c.baseCameraId as (typeof cameraBaseSentinels)[number],
+      ) &&
+      !(c.baseCameraId in cameraTiers)
+    ) {
+      errors.push(`Camera baseCameraId missing: ${c.baseCameraId} (${c.sku})`);
+    }
     for (const t of c.availableCameras) {
-      if (!cameraTiers[t]) errors.push(`Camera availableCameras missing: ${t} (${c.sku})`);
+      if (!(t in cameraTiers))
+        errors.push(`Camera availableCameras missing: ${t} (${c.sku})`);
+    }
+    for (const k of Object.keys(c.cameraPricing) as CameraTierKey[]) {
+      if (!c.availableCameras.includes(k)) {
+        errors.push(`Camera cameraPricing key not in availableCameras: ${k} (${c.sku})`);
+      }
     }
   }
   const connectivityBaseSentinels = ["none", "enterprise", "cloud", "mesh_radio"] as const;
   for (const c of productConnectivityConfigs) {
     if (!productBySku[c.sku]) errors.push(`Connectivity config SKU not in catalog: ${c.sku}`);
-    if (!connectivityBaseSentinels.includes(c.baseConnectivityId as (typeof connectivityBaseSentinels)[number]) && !connectivityTiers[c.baseConnectivityId]) errors.push(`Connectivity baseConnectivityId missing: ${c.baseConnectivityId} (${c.sku})`);
+    if (
+      !connectivityBaseSentinels.includes(
+        c.baseConnectivityId as (typeof connectivityBaseSentinels)[number],
+      ) &&
+      !(c.baseConnectivityId in connectivityTiers)
+    ) {
+      errors.push(`Connectivity baseConnectivityId missing: ${c.baseConnectivityId} (${c.sku})`);
+    }
     for (const t of c.availableConnectivity) {
-      if (!connectivityTiers[t]) errors.push(`Connectivity availableConnectivity missing: ${t} (${c.sku})`);
+      if (!(t in connectivityTiers))
+        errors.push(`Connectivity availableConnectivity missing: ${t} (${c.sku})`);
+    }
+    for (const k of Object.keys(c.connectivityPricing) as ConnectivityTierKey[]) {
+      if (!c.availableConnectivity.includes(k)) {
+        errors.push(`Connectivity connectivityPricing key not in availableConnectivity: ${k} (${c.sku})`);
+      }
     }
   }
   const storageBaseSentinels = ["none", "fixed", "enterprise", "cloud"] as const;
   for (const c of productStorageConfigs) {
     if (!productBySku[c.sku]) errors.push(`Storage config SKU not in catalog: ${c.sku}`);
-    if (!storageBaseSentinels.includes(c.baseStorageId as (typeof storageBaseSentinels)[number]) && !storageTiers[c.baseStorageId]) errors.push(`Storage baseStorageId missing: ${c.baseStorageId} (${c.sku})`);
+    if (
+      !storageBaseSentinels.includes(
+        c.baseStorageId as (typeof storageBaseSentinels)[number],
+      ) &&
+      !(c.baseStorageId in storageTiers)
+    ) {
+      errors.push(`Storage baseStorageId missing: ${c.baseStorageId} (${c.sku})`);
+    }
     for (const t of c.availableStorage) {
-      if (!storageTiers[t]) errors.push(`Storage availableStorage missing: ${t} (${c.sku})`);
+      if (!(t in storageTiers))
+        errors.push(`Storage availableStorage missing: ${t} (${c.sku})`);
+    }
+    for (const k of Object.keys(c.storagePricing) as StorageTierKey[]) {
+      if (!c.availableStorage.includes(k)) {
+        errors.push(`Storage storagePricing key not in availableStorage: ${k} (${c.sku})`);
+      }
     }
   }
   return { valid: errors.length === 0, errors };

@@ -2,7 +2,7 @@
  * Storage Options and Recommendations
  */
 
-import type { StorageOption, StorageTierId } from "./types";
+import type { StorageOption, StorageTierId, UseCaseTierId } from "./types";
 
 // =============================================================================
 // LOCAL STORAGE OPTIONS
@@ -16,6 +16,10 @@ export const localStorageOptions: StorageOption[] = [
     interface: "SD",
     speed: "100MB/s read",
     price: "$8",
+    priceMin: 8,
+    priceMax: 8,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Nano/Standard tier",
     notes: "Minimum viable, limited write endurance",
   },
@@ -25,6 +29,10 @@ export const localStorageOptions: StorageOption[] = [
     interface: "SD",
     speed: "160MB/s read",
     price: "$15-25",
+    priceMin: 15,
+    priceMax: 25,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Standard/Pro tier",
     notes: "Recommended for continuous recording",
   },
@@ -34,6 +42,10 @@ export const localStorageOptions: StorageOption[] = [
     interface: "PCIe 3.0",
     speed: "2000MB/s read",
     price: "$25-60",
+    priceMin: 25,
+    priceMax: 60,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Pro/Enterprise tier",
     notes: "Pi 5 with M.2 HAT, Jetson native",
   },
@@ -43,6 +55,10 @@ export const localStorageOptions: StorageOption[] = [
     interface: "PCIe 3.0/4.0",
     speed: "3500MB/s read",
     price: "$80-150",
+    priceMin: 80,
+    priceMax: 150,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Enterprise, multi-day buffer",
     notes: "Local evidence cache before NAS sync",
   },
@@ -60,6 +76,10 @@ export const networkStorageOptions: StorageOption[] = [
     interface: "1GbE",
     speed: "110MB/s",
     price: "$200-350 + drives",
+    priceMin: 200,
+    priceMax: 350,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Small mesh systems",
     notes: "Synology DS223j, QNAP TS-233",
   },
@@ -69,6 +89,10 @@ export const networkStorageOptions: StorageOption[] = [
     interface: "2.5GbE",
     speed: "280MB/s",
     price: "$400-600 + drives",
+    priceMin: 400,
+    priceMax: 600,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Commercial installations",
     notes: "RAID5/6, Synology DS923+",
   },
@@ -78,6 +102,10 @@ export const networkStorageOptions: StorageOption[] = [
     interface: "10GbE",
     speed: "1000MB/s",
     price: "$2000-5000 + drives",
+    priceMin: 2000,
+    priceMax: 5000,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Enterprise, multi-site",
     notes: "QNAP/Synology rack mount",
   },
@@ -87,6 +115,10 @@ export const networkStorageOptions: StorageOption[] = [
     interface: "10-25GbE",
     speed: "2000-5000MB/s",
     price: "$10,000-50,000",
+    priceMin: 10000,
+    priceMax: 50000,
+    priceUnit: "one_time",
+    currency: "USD",
     useCase: "Large enterprise, critical infrastructure",
     notes: "Block storage, requires dedicated network, Dell/NetApp",
   },
@@ -96,6 +128,10 @@ export const networkStorageOptions: StorageOption[] = [
     interface: "Internet",
     speed: "Variable",
     price: "$0.02-0.05/GB/month",
+    priceMin: 0.02,
+    priceMax: 0.05,
+    priceUnit: "per_month_gb",
+    currency: "USD",
     useCase: "Offsite backup, compliance",
     notes: "AWS S3, Backblaze B2, Wasabi",
   },
@@ -125,7 +161,10 @@ export const storageTierSummary: Partial<Record<StorageTierId, { label: string; 
 // =============================================================================
 
 /** Storage recommendations by use-case tier (nano, standard, pro, mesh, enterprise) */
-export const storageRecommendations = {
+export const storageRecommendations: Record<
+  UseCaseTierId,
+  { local: string; network: string; retention: string; notes: string }
+> = {
   nano: {
     local: "32GB microSD",
     network: "None (WiFi upload to phone/cloud)",

@@ -74,6 +74,8 @@ export interface ComputePlatform {
   name: string;
   variant?: string;
   price: number;
+  /** Price interpretation for docs (board MSRP vs street price within BOMs). */
+  priceType?: "msrp" | "street";
   ram: string;
   cpu: string;
   power: string;
@@ -117,6 +119,11 @@ export interface StorageOption {
   interface: string;
   speed: string;
   price: string;
+  /** Optional structured pricing for calculators (keep `price` for display). */
+  priceMin?: number;
+  priceMax?: number;
+  priceUnit?: "one_time" | "per_month_gb";
+  currency?: "USD";
   useCase: string;
   notes?: string;
 }
@@ -136,6 +143,9 @@ export type ComputeTierId =
   | "jetson_nx"
   | "jetson_agx";
 
+/** Compute tier keys (excludes sentinels). */
+export type ComputeTierKey = Exclude<ComputeTierId, "none" | "server">;
+
 /** Camera tier IDs: sentinels (none, mixed, enterprise, fixed) + keys from cameraTiers */
 export type CameraTierId =
   | "none"
@@ -150,6 +160,12 @@ export type CameraTierId =
   | "lepton_3_5"
   | "boson_320";
 
+/** Camera tier keys (excludes sentinels). */
+export type CameraTierKey = Exclude<
+  CameraTierId,
+  "none" | "mixed" | "enterprise" | "fixed"
+>;
+
 /** Connectivity tier IDs: sentinels + keys from connectivityTiers */
 export type ConnectivityTierId =
   | "none"
@@ -162,6 +178,12 @@ export type ConnectivityTierId =
   | "enterprise"
   | "cloud"
   | "mesh_radio";
+
+/** Connectivity tier keys (excludes sentinels). */
+export type ConnectivityTierKey = Exclude<
+  ConnectivityTierId,
+  "none" | "enterprise" | "cloud" | "mesh_radio"
+>;
 
 /** Storage tier IDs: sentinels + keys from storageTiers */
 export type StorageTierId =
@@ -177,13 +199,19 @@ export type StorageTierId =
   | "enterprise"
   | "cloud";
 
+/** Storage tier keys (excludes sentinels). */
+export type StorageTierKey = Exclude<
+  StorageTierId,
+  "none" | "fixed" | "enterprise" | "cloud"
+>;
+
 // =============================================================================
 // TIER CONFIGURATION TYPES
 // =============================================================================
 
 /** Compute tier definition */
 export interface ComputeTier {
-  id: ComputeTierId;
+  id: ComputeTierKey;
   name: string;
   platform: string;
   accelerator: string;
@@ -195,7 +223,7 @@ export interface ComputeTier {
 
 /** Camera tier definition */
 export interface CameraTier {
-  id: CameraTierId;
+  id: CameraTierKey;
   name: string;
   resolution: string;
   sensor: string;
@@ -206,7 +234,7 @@ export interface CameraTier {
 
 /** Connectivity tier definition */
 export interface ConnectivityTier {
-  id: ConnectivityTierId;
+  id: ConnectivityTierKey;
   name: string;
   type: string;
   speed: string;
@@ -217,7 +245,7 @@ export interface ConnectivityTier {
 
 /** Storage tier definition */
 export interface StorageTier {
-  id: StorageTierId;
+  id: StorageTierKey;
   name: string;
   type: string;
   capacity: string;
@@ -238,8 +266,8 @@ export interface ProductComputeConfig {
   sku: string;
   baseTier: ComputeTierId;
   baseComputeCost: number;
-  availableTiers: ComputeTierId[];
-  tierPricing: Partial<Record<ComputeTierId, TierPriceDelta>>;
+  availableTiers: ComputeTierKey[];
+  tierPricing: Partial<Record<ComputeTierKey, TierPriceDelta>>;
   notes?: string;
 }
 
@@ -248,8 +276,8 @@ export interface ProductCameraConfig {
   sku: string;
   baseCameraId: CameraTierId;
   baseCameraPrice: number;
-  availableCameras: CameraTierId[];
-  cameraPricing: Partial<Record<CameraTierId, { delta: number }>>;
+  availableCameras: CameraTierKey[];
+  cameraPricing: Partial<Record<CameraTierKey, { delta: number }>>;
   lensRequired?: boolean;
   notes?: string;
 }
@@ -259,8 +287,8 @@ export interface ProductConnectivityConfig {
   sku: string;
   baseConnectivityId: ConnectivityTierId;
   baseConnectivityPrice: number;
-  availableConnectivity: ConnectivityTierId[];
-  connectivityPricing: Partial<Record<ConnectivityTierId, { delta: number }>>;
+  availableConnectivity: ConnectivityTierKey[];
+  connectivityPricing: Partial<Record<ConnectivityTierKey, { delta: number }>>;
   notes?: string;
 }
 
@@ -269,8 +297,8 @@ export interface ProductStorageConfig {
   sku: string;
   baseStorageId: StorageTierId;
   baseStoragePrice: number;
-  availableStorage: StorageTierId[];
-  storagePricing: Partial<Record<StorageTierId, { delta: number }>>;
+  availableStorage: StorageTierKey[];
+  storagePricing: Partial<Record<StorageTierKey, { delta: number }>>;
   nvmeSupported: boolean;
   notes?: string;
 }
@@ -285,4 +313,15 @@ export interface ProductConfiguration {
   totalDelta: number;
   baseBomCost: number;
   configuredBomCost: number;
+  /** Optional fully-materialized BOM after applying configurator selections. */
+  configuredBom?: BOMItem[];
+  /** Optional note describing how the configured BOM cost was derived. */
+  configuredBomCostModel?: "delta_only" | "bom_engine" | "bom_engine_with_reconcile";
 }
+
+// =============================================================================
+// USE-CASE TIER IDs (docs-only recommendations)
+// =============================================================================
+
+/** Use-case tier IDs used in recommendations tables (not SKU configurator tiers). */
+export type UseCaseTierId = "nano" | "standard" | "pro" | "mesh" | "enterprise";

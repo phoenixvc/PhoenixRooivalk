@@ -10,9 +10,23 @@ The authority and safety controller is the **single gate** through which all act
 ## Responsibilities
 
 - **Authority** — Only the designated controller (or its delegated session) may issue actuation commands; other sources (e.g. raw tracking output, debug tools) are blocked unless explicitly allowed under controlled conditions.
+- **Manual override always wins** — Operator manual input takes precedence over automatic tracking. When override is signaled (key, button, or physical switch), the controller must transition to MANUAL and ignore or clamp auto-generated commands until override is released. Override signaling must be documented per product (e.g. keyboard key, gamepad button, physical switch on hardware).
 - **Limits** — Enforce position, rate, and effort limits so that commands never exceed safe mechanical or operational bounds.
 - **Timeout and heartbeat** — If commands or heartbeats stop within a defined window, transition to safe state (e.g. hold, disable drive) as specified in the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
 - **Audit** — Log command decisions (accepted/rejected) and state transitions for compliance and debugging.
+
+## Authority state machine
+
+The supervisor operates in one of these states. Transitions are driven by operator input, valid auto intent, or fault/loss of command.
+
+| State        | Description |
+| ------------ | ----------- |
+| **MANUAL**   | Operator has full control; auto/tracking commands are ignored or clamped. Entered when manual override is signaled. |
+| **ASSISTED** | Operator and automation share control (e.g. operator can trim while tracking runs). Transition rules are product-specific. |
+| **AUTO_TRACK** | Automation drives pan/tilt from tracking intent; operator can still override. Entered when valid auto intent is active and override is not asserted. |
+| **FAILSAFE** | Fault, loss of command, or timeout; actuation is in safe state (e.g. neutral). Entered on timeout, heartbeat loss, or detected fault. |
+
+**Transitions (typical):** Manual override asserted → MANUAL. Valid auto intent and no override → AUTO_TRACK (or ASSISTED if product supports it). Timeout or fault → FAILSAFE. Recovery from FAILSAFE requires explicit operator action or cleared fault.
 
 ## Safe State
 
@@ -27,6 +41,7 @@ The authority and safety controller is the **single gate** through which all act
 ## Related
 
 - [Transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+- [Vision-to-actuator contracts](../architecture/interfaces/vision-to-actuator-contracts.mdx)
 - [Tracking control loop](./tracking-control-loop.mdx)
 - [Tracking–actuator bridge](../architecture/diagrams/tracking-actuator-bridge.mdx)
 - [Servo selection and calibration](../hardware/servo-selection-and-calibration.mdx)

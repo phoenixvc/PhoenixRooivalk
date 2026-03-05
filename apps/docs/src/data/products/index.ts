@@ -25,9 +25,13 @@ export type {
   FPSBenchmark,
   StorageOption,
   ComputeTierId,
+  ComputeTierKey,
   CameraTierId,
+  CameraTierKey,
   ConnectivityTierId,
+  ConnectivityTierKey,
   StorageTierId,
+  StorageTierKey,
   ComputeTier,
   CameraTier,
   ConnectivityTier,
@@ -38,7 +42,19 @@ export type {
   ProductConnectivityConfig,
   ProductStorageConfig,
   ProductConfiguration,
+  UseCaseTierId,
 } from "./types";
+
+// =============================================================================
+// BOM ENGINE EXPORTS
+// =============================================================================
+
+export {
+  buildConfiguredBom,
+  applyBomPatches,
+  bomLineKey,
+  sumBom,
+} from "./bom-engine";
 
 // =============================================================================
 // CATALOG EXPORTS - Products and Collections
