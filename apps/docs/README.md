@@ -143,6 +143,18 @@ pnpm run test:watch
 pnpm run test:coverage
 ```
 
+### Product catalog export
+
+Product list JSON/CSV are **generated** and not committed. From `apps/docs` run:
+
+```bash
+npx tsx scripts/export-products.ts
+```
+
+This writes `exports/products.json` and `exports/products.csv`. Set `EXPORT_SAMPLE_CONFIGURATION=1` to also write `exports/sample-configuration.json`. The `apps/docs/exports/` directory is in `.gitignore`.
+
+**Canonical source:** Product and tier data live in `src/data/products/` (use the barrel `src/data/products/index.ts` or the folder). The legacy file `src/data/products.ts` is deprecated; new code and scripts should import from `src/data/products/index` for the full catalog, BOM engine, and configurator APIs.
+
 ## Deployment and Access Control
 
 The documentation site is deployed to **Azure Static Web Apps** via GitHub Actions. See `.github/workflows/deploy-docs-azure.yml` for the deployment workflow.

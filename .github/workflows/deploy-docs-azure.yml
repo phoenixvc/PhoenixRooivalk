@@ -176,6 +176,10 @@ jobs:
         working-directory: ${{ env.APP_LOCATION }}
         run: pnpm install --no-frozen-lockfile
 
+      - name: Validate catalog
+        working-directory: ${{ env.APP_LOCATION }}
+        run: pnpm run validate-catalog
+
       - name: Build
         working-directory: ${{ env.APP_LOCATION }}
         env:

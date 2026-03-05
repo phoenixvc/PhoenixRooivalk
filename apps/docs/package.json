@@ -15,7 +15,8 @@
     "check-links": "../../scripts/check-docs-links.sh",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "validate-catalog": "tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
     "@azure/cosmos": "^4.9.0",
@@ -66,6 +67,7 @@
     "markdownlint-cli": "^0.47.0",
     "prettier": "^3.7.4",
     "ts-jest": "^29.4.6",
+    "tsx": "^4.19.0",
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0",
