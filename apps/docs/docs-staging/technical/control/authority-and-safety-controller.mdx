@@ -1,0 +1,32 @@
+---
+title: Authority and Safety Controller
+sidebar_label: Authority and Safety Controller
+---
+
+# Authority and Safety Controller
+
+The authority and safety controller is the **single gate** through which all actuation commands must pass. It enforces limits, timeouts, and policy so that only valid, authorized commands reach the physical actuators.
+
+## Responsibilities
+
+- **Authority** — Only the designated controller (or its delegated session) may issue actuation commands; other sources (e.g. raw tracking output, debug tools) are blocked unless explicitly allowed under controlled conditions.
+- **Limits** — Enforce position, rate, and effort limits so that commands never exceed safe mechanical or operational bounds.
+- **Timeout and heartbeat** — If commands or heartbeats stop within a defined window, transition to safe state (e.g. hold, disable drive) as specified in the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
+- **Audit** — Log command decisions (accepted/rejected) and state transitions for compliance and debugging.
+
+## Safe State
+
+- On fault, loss of command, or timeout: actuation must transition to a defined safe state (e.g. hold last position, move to neutral, or disable).
+- Safe state behavior is documented per product or integration so that operators and maintainers know what to expect.
+
+## Integration
+
+- Sits between the decision layer (NetSentry, AeroNet, or demo control logic) and the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx) that carries commands to actuators.
+- Consumes telemetry from actuators to validate state and detect faults; can command safe state on sensor fault.
+
+## Related
+
+- [Transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+- [Tracking control loop](./tracking-control-loop.mdx)
+- [Tracking–actuator bridge](../architecture/diagrams/tracking-actuator-bridge.mdx)
+- [Servo selection and calibration](../hardware/servo-selection-and-calibration.mdx)

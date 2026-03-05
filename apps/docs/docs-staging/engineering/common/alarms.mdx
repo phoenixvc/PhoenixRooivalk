@@ -1,0 +1,23 @@
+---
+title: Alarms
+sidebar_label: Alarms
+---
+
+# Alarms
+
+Local and remote alarm options for builds (e.g. Phase-1).
+
+## Local
+
+- **Buzzer:** Simple piezo or active buzzer on a GPIO (or via small driver).
+- **LED:** Status and alert indication; use current-limiting resistor.
+- **Strobe / siren:** Optional MOSFET or relay module for higher-power local alert (e.g. 12V siren). Ensure common GND and adequate PSU.
+
+Wiring and logic: drive from ESP32 or Pi GPIO; document polarity and pin in each product BOM.
+
+## Remote
+
+- **MQTT:** Publish alarm/alert events to a broker; subscribers can trigger notifications or logging.
+- **Telegram (or similar):** Optional bot or webhook for push notifications when an alert is raised.
+
+Product docs specify which local/remote options apply per build (1a/1b/1c).

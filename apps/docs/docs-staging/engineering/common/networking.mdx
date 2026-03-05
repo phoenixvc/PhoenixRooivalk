@@ -1,0 +1,12 @@
+---
+title: Networking
+sidebar_label: Networking
+---
+
+# Networking
+
+- **MQTT** is the event spine for detection events, tracking updates, alarms, and actuator commands. Use MQTT when you need: low-latency telemetry, many publishers/subscribers, constrained devices, or pub/sub semantics. Use **HTTP/REST** for request/response flows or **CoAP** for constrained networks where MQTT is not a fit. **Security (mandatory):** TLS 1.2+ (1.3 preferred), client authentication via mTLS or token-based auth, and minimum recommended cipher suites. **QoS:** Use QoS 0 for telemetry; QoS 1 for critical events/alarms; QoS 2 only when strict once-delivery is required. **Sessions:** Use persistent sessions to retain subscriptions; configure keepalive and reconnection/backoff so clients recover cleanly.
+- **HTTP** as fallback: use HTTP for configuration, health checks, or one-off commands when MQTT is not configured for that specific message type or channel (e.g., device telemetry topic, control/command topic, or deployment-stage signaling). Examples: use MQTT for high-frequency telemetry on topic `telemetry/*`; use HTTP for ad-hoc admin commands or when the MQTT broker is unavailable.
+- **Node identity:** Each node (detection, actuator, Response Relay) should have a stable identity (e.g. topic prefix or client ID) so subscribers and safety logic can attribute messages.
+
+This page is referenced by the product docs for [topic layout and connection details](../phase1/products/index.mdx). Authoritative topic layout and connection details are defined in this section and in each product doc (e.g. [NetSnare Lite Turret](../phase1/products/netsnare-lite-turret.mdx), [Response Relay](../phase1/products/response-relay-demo.mdx)).

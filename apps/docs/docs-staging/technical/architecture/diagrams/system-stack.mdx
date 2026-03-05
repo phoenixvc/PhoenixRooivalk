@@ -1,0 +1,45 @@
+---
+title: System Stack Overview
+sidebar_label: System Stack
+---
+
+# System Stack Overview
+
+High-level view of the PhoenixRooivalk platform stack: **Detection → Decision → Actuation**, with operator interface and advanced platform layers.
+
+## Stack Layers
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  Operator Interface   │  C2C Portal                      │
+├─────────────────────────────────────────────────────────┤
+│  Advanced Platform    │  RKV (multi-node ecosystem)      │
+├─────────────────────────────────────────────────────────┤
+│  Decision / Control   │  NetSentry, AeroNet             │
+├─────────────────────────────────────────────────────────┤
+│  Actuation            │  NetSnare, SkySnare (demo-safe)  │
+├─────────────────────────────────────────────────────────┤
+│  Detection            │  SkyWatch, SkyWatch Mesh         │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Flow
+
+- **Detection** — SkyWatch and SkyWatch Mesh produce tracks and classification.
+- **Decision** — NetSentry and AeroNet evaluate threats and select response; they issue commands through the [authority and safety controller](../../control/authority-and-safety-controller.mdx).
+- **Actuation** — NetSnare/SkySnare implement demo-safe response outputs; all actuation is governed and non-harmful.
+- **C2C Portal** — Operator dashboard for monitoring and mission workflows, not in the direct detection/actuation path.
+
+## Diagram Conventions
+
+- **System context** — `system-context-diagram` (actors, system boundary, external systems).
+- **Data flow** — `data-flow-diagram` (data between components).
+- **Deployment** — `deployment-topology` (nodes, networks, physical layout).
+
+Additional diagrams (e.g. AI tracking to actuator bridge) live in this folder; see [Architecture diagrams](./index.mdx).
+
+## Related
+
+- [Documentation catalog](../../../../index.mdx) (root)
+- [Authority and safety controller](../../control/authority-and-safety-controller.mdx)
+- [Tracking–actuator bridge](./tracking-actuator-bridge.mdx)

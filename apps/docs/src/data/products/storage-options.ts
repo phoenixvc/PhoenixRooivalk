@@ -2,7 +2,7 @@
  * Storage Options and Recommendations
  */
 
-import type { StorageOption } from "./types";
+import type { StorageOption, StorageTierId } from "./types";
 
 // =============================================================================
 // LOCAL STORAGE OPTIONS
@@ -102,10 +102,29 @@ export const networkStorageOptions: StorageOption[] = [
 ];
 
 // =============================================================================
+// STORAGE TIER SUMMARY (aligned with StorageTierId from tiers)
+// =============================================================================
+
+/** Optional structured summary by storage tier ID for catalog/UI alignment */
+export const storageTierSummary: Partial<Record<StorageTierId, { label: string; typicalPrice?: string }>> = {
+  sd_32: { label: "32GB microSD", typicalPrice: "$8" },
+  sd_64_he: { label: "64GB High Endurance microSD", typicalPrice: "$15" },
+  sd_128_he: { label: "128GB High Endurance microSD", typicalPrice: "$25" },
+  nvme_128: { label: "128GB NVMe SSD", typicalPrice: "$25" },
+  nvme_256: { label: "256GB NVMe SSD", typicalPrice: "$40" },
+  nvme_512: { label: "512GB NVMe SSD", typicalPrice: "$60" },
+  nvme_1tb: { label: "1TB NVMe SSD", typicalPrice: "$100" },
+  none: { label: "None" },
+  fixed: { label: "Fixed (per product)" },
+  enterprise: { label: "Enterprise (per-site)" },
+  cloud: { label: "Cloud" },
+};
+
+// =============================================================================
 // STORAGE RECOMMENDATIONS
 // =============================================================================
 
-/** Storage recommendations by tier */
+/** Storage recommendations by use-case tier (nano, standard, pro, mesh, enterprise) */
 export const storageRecommendations = {
   nano: {
     local: "32GB microSD",

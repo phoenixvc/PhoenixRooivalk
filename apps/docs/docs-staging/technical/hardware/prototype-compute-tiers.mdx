@@ -1,0 +1,30 @@
+---
+title: Prototype Compute Tiers
+sidebar_label: Prototype Compute Tiers
+---
+
+# Prototype Compute Tiers
+
+Overview of compute tiers used in PhoenixRooivalk prototypes: from low-cost MCU/single-board to higher-performance SoCs for detection, tracking, and control. Use this to choose the right tier for a given demo or integration.
+
+## Tiers (summary)
+
+| Tier   | Typical use              | Interfaces              | Notes                    |
+| ------ | ------------------------- | ----------------------- | ------------------------ |
+| MCU    | Safety/authority, simple I/O | PWM, UART, GPIO, CAN   | Deterministic, low latency |
+| SBC    | Perception, single-node   | USB, CSI, Ethernet      | Linux; good for camera/ML |
+| Edge   | Multi-sensor, fusion      | Multiple USB/CSI, network | Higher throughput, more power |
+
+Exact part numbers and specs should be maintained in product- or platform-specific docs.
+
+## Selection Criteria
+
+- **Latency** — Control and safety loops may require MCU or real-time OS; perception can tolerate SBC/edge.
+- **I/O** — Match to sensors (camera, IMU, radar) and to actuation (PWM, serial servos) as per [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
+- **Power and thermal** — Constrained in mobile or turret-mounted units; see [power budgeting](./power-budgeting-and-rail-isolation.mdx).
+
+## Related
+
+- [Board bring-up and flashing](./board-bringup-and-flashing.mdx)
+- [Transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+- [Authority and safety controller](../control/authority-and-safety-controller.mdx)

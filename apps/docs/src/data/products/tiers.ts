@@ -7,9 +7,13 @@
 
 import type {
   ComputeTier,
+  ComputeTierId,
   CameraTier,
+  CameraTierId,
   ConnectivityTier,
+  ConnectivityTierId,
   StorageTier,
+  StorageTierId,
   ProductComputeConfig,
   ProductCameraConfig,
   ProductConnectivityConfig,
@@ -22,9 +26,8 @@ import { productBySku } from "./catalog";
 // COMPUTE TIER CONFIGURATOR
 // =============================================================================
 
-/** Available compute tiers */
-export const computeTiers: Record<string, ComputeTier> = {
-  // Pi-based tiers
+/** Available compute tiers (sentinels "none" and "server" are not in this map) */
+export const computeTiers: Partial<Record<ComputeTierId, ComputeTier>> = {
   pi4_coral: {
     id: "pi4_coral",
     name: "Standard (Pi 4 + Coral)",
@@ -93,7 +96,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Nano - No upgrades (fixed Pi Zero config)
   {
     sku: "SW-NANO-001",
-    productName: "SkyWatch Nano",
     baseTier: "none",
     baseComputeCost: 15,
     availableTiers: [], // Fixed config, no upgrades
@@ -103,7 +105,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Standard
   {
     sku: "SW-STD-001",
-    productName: "SkyWatch Standard",
     baseTier: "pi4_coral",
     baseComputeCost: 105, // Pi 4 2GB ($45) + Coral USB ($60)
     availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8", "jetson_nano"],
@@ -117,7 +118,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Pro
   {
     sku: "SW-PRO-001",
-    productName: "SkyWatch Pro",
     baseTier: "pi5_hailo8l",
     baseComputeCost: 130, // Pi 5 4GB ($60) + Hailo-8L ($70)
     availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
@@ -131,7 +131,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Mobile
   {
     sku: "SW-MOB-001",
-    productName: "SkyWatch Mobile",
     baseTier: "pi4_coral",
     baseComputeCost: 105,
     availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
@@ -145,7 +144,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Thermal Budget
   {
     sku: "SW-THM-001-B",
-    productName: "SkyWatch Thermal (Budget)",
     baseTier: "pi4_coral",
     baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
     availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
@@ -158,7 +156,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Thermal Pro
   {
     sku: "SW-THM-001-P",
-    productName: "SkyWatch Thermal (Pro)",
     baseTier: "pi5_hailo8l",
     baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
     availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
@@ -172,7 +169,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Marine
   {
     sku: "SW-MAR-001",
-    productName: "SkyWatch Marine",
     baseTier: "pi4_coral",
     baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
     availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8", "jetson_nano"],
@@ -186,7 +182,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Mesh Node
   {
     sku: "SW-MESH-001-N",
-    productName: "SkyWatch Mesh (Node)",
     baseTier: "pi4_coral",
     baseComputeCost: 45, // Pi 4 2GB only (no accelerator on nodes)
     availableTiers: ["pi4_coral", "pi5_hailo8l"],
@@ -199,7 +194,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Mesh Central
   {
     sku: "SW-MESH-001-C",
-    productName: "SkyWatch Mesh (Central)",
     baseTier: "pi5_hailo8l",
     baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
     availableTiers: [
@@ -220,7 +214,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkyWatch Enterprise
   {
     sku: "SW-ENT-001",
-    productName: "SkyWatch Enterprise",
     baseTier: "jetson_nx",
     baseComputeCost: 599,
     availableTiers: ["jetson_nx", "jetson_agx"],
@@ -233,7 +226,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // NetSentry Lite
   {
     sku: "NS-LITE-001",
-    productName: "NetSentry Lite",
     baseTier: "pi4_coral",
     baseComputeCost: 45, // Pi 4 2GB only (no accelerator)
     availableTiers: ["pi4_coral", "pi5_hailo8l"],
@@ -245,7 +237,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // NetSentry Standard
   {
     sku: "NS-STD-001",
-    productName: "NetSentry Standard",
     baseTier: "pi4_coral",
     baseComputeCost: 115, // Pi 4 4GB ($55) + Coral USB ($60)
     availableTiers: ["pi4_coral", "pi5_hailo8l", "pi5_hailo8"],
@@ -258,7 +249,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // NetSentry Pro
   {
     sku: "NS-PRO-001",
-    productName: "NetSentry Pro",
     baseTier: "pi5_hailo8l",
     baseComputeCost: 150, // Pi 5 8GB ($80) + Hailo-8L ($70)
     availableTiers: ["pi5_hailo8l", "pi5_hailo8", "jetson_nano", "jetson_nx"],
@@ -272,7 +262,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // SkySnare - Consumer Line (Handheld, no compute - manual trigger)
   {
     sku: "SS-001",
-    productName: "SkySnare",
     baseTier: "none",
     baseComputeCost: 0,
     availableTiers: [], // Handheld, manual trigger - no compute
@@ -282,7 +271,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // NetSnare - Ground Launcher Line (pairs with SkyWatch detection)
   {
     sku: "NSN-LITE-001",
-    productName: "NetSnare Lite",
     baseTier: "none",
     baseComputeCost: 0,
     availableTiers: [], // Spring-powered, triggered via SkyWatch API
@@ -290,8 +278,23 @@ export const productComputeConfigs: ProductComputeConfig[] = [
     notes: "Ground launcher only - uses paired SkyWatch for detection",
   },
   {
+    sku: "NSN-LITE-001-TURRET",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [],
+    tierPricing: {},
+    notes: "Phase-1 turret demo: pan-tilt + alarm only",
+  },
+  {
+    sku: "RR-DEMO-001",
+    baseTier: "none",
+    baseComputeCost: 0,
+    availableTiers: [],
+    tierPricing: {},
+    notes: "Phase-1 relay/LED demo, no launcher",
+  },
+  {
     sku: "NSN-STD-001",
-    productName: "NetSnare Standard",
     baseTier: "none",
     baseComputeCost: 0,
     availableTiers: [], // CO2-powered, triggered via SkyWatch API
@@ -300,7 +303,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   },
   {
     sku: "NSN-PRO-001",
-    productName: "NetSnare Pro",
     baseTier: "none",
     baseComputeCost: 0,
     availableTiers: [], // Pneumatic with pan-tilt, triggered via SkyWatch API
@@ -310,7 +312,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // AeroNet - Enterprise Platform
   {
     sku: "AN-ENT-001",
-    productName: "AeroNet Enterprise",
     baseTier: "jetson_agx",
     baseComputeCost: 1999,
     availableTiers: ["jetson_agx"], // Enterprise requires AGX minimum
@@ -322,7 +323,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   },
   {
     sku: "AN-CMD-001",
-    productName: "AeroNet Command",
     baseTier: "server",
     baseComputeCost: 0, // Software license
     availableTiers: [], // Software-only, runs on customer infrastructure
@@ -332,7 +332,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   // RKV - Military Systems
   {
     sku: "RKV-M-001",
-    productName: "RKV-M Mothership",
     baseTier: "jetson_agx",
     baseComputeCost: 1999,
     availableTiers: ["jetson_agx"], // Aerial platform requires AGX
@@ -344,7 +343,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   },
   {
     sku: "RKV-I-001",
-    productName: "RKV-I Interceptor",
     baseTier: "jetson_nano",
     baseComputeCost: 499,
     availableTiers: ["jetson_nano"], // Expendable - cost-optimized
@@ -355,7 +353,6 @@ export const productComputeConfigs: ProductComputeConfig[] = [
   },
   {
     sku: "RKV-G-001",
-    productName: "RKV-G Ground Station",
     baseTier: "jetson_agx",
     baseComputeCost: 1999,
     availableTiers: ["jetson_agx"], // Mobile C2 requires full compute
@@ -371,8 +368,8 @@ export const productComputeConfigs: ProductComputeConfig[] = [
 // =============================================================================
 
 /** Available camera tiers */
-export const cameraTiers: Record<string, CameraTier> = {
-  // Standard cameras
+/** Available camera tiers (sentinels none, mixed, enterprise, fixed are not in this map) */
+export const cameraTiers: Partial<Record<CameraTierId, CameraTier>> = {
   pi_v2: {
     id: "pi_v2",
     name: "Basic (Pi Camera v2)",
@@ -437,14 +434,13 @@ export const cameraTiers: Record<string, CameraTier> = {
     features: ["60Hz thermal", "Professional grade", "Long range"],
     notes: "Professional thermal detection",
   },
-};
+} as const;
 
 /** Camera tier availability by product */
 export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Nano
   {
     sku: "SW-NANO-001",
-    productName: "SkyWatch Nano",
     baseCameraId: "pi_v2",
     baseCameraPrice: 25,
     availableCameras: ["pi_v2", "pi_v3"],
@@ -457,7 +453,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Standard
   {
     sku: "SW-STD-001",
-    productName: "SkyWatch Standard",
     baseCameraId: "pi_v3",
     baseCameraPrice: 35,
     availableCameras: ["pi_v2", "pi_v3", "pi_v3_wide", "pi_hq"],
@@ -471,7 +466,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Pro
   {
     sku: "SW-PRO-001",
-    productName: "SkyWatch Pro",
     baseCameraId: "pi_hq",
     baseCameraPrice: 50,
     availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
@@ -486,7 +480,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Mobile
   {
     sku: "SW-MOB-001",
-    productName: "SkyWatch Mobile",
     baseCameraId: "pi_v3",
     baseCameraPrice: 35,
     availableCameras: ["pi_v3", "pi_v3_wide"],
@@ -499,7 +492,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Thermal Budget
   {
     sku: "SW-THM-001-B",
-    productName: "SkyWatch Thermal (Budget)",
     baseCameraId: "lepton_3_5",
     baseCameraPrice: 250,
     availableCameras: ["lepton_3_5"],
@@ -511,7 +503,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Thermal Pro
   {
     sku: "SW-THM-001-P",
-    productName: "SkyWatch Thermal (Pro)",
     baseCameraId: "boson_320",
     baseCameraPrice: 900,
     availableCameras: ["lepton_3_5", "boson_320"],
@@ -524,7 +515,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Marine
   {
     sku: "SW-MAR-001",
-    productName: "SkyWatch Marine",
     baseCameraId: "pi_hq",
     baseCameraPrice: 50,
     availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
@@ -538,7 +528,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Mesh Node
   {
     sku: "SW-MESH-001-N",
-    productName: "SkyWatch Mesh (Node)",
     baseCameraId: "pi_v3",
     baseCameraPrice: 35,
     availableCameras: ["pi_v2", "pi_v3", "pi_v3_wide"],
@@ -551,7 +540,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Mesh Central - no camera
   {
     sku: "SW-MESH-001-C",
-    productName: "SkyWatch Mesh (Central)",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -561,7 +549,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkyWatch Enterprise - multiple cameras included
   {
     sku: "SW-ENT-001",
-    productName: "SkyWatch Enterprise",
     baseCameraId: "mixed",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -571,7 +558,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // NetSentry Lite
   {
     sku: "NS-LITE-001",
-    productName: "NetSentry Lite",
     baseCameraId: "pi_v2",
     baseCameraPrice: 25,
     availableCameras: ["pi_v2", "pi_v3"],
@@ -583,7 +569,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // NetSentry Standard
   {
     sku: "NS-STD-001",
-    productName: "NetSentry Standard",
     baseCameraId: "pi_hq",
     baseCameraPrice: 50,
     availableCameras: ["pi_v3", "pi_hq", "pi_gs"],
@@ -597,7 +582,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // NetSentry Pro
   {
     sku: "NS-PRO-001",
-    productName: "NetSentry Pro",
     baseCameraId: "pi_gs",
     baseCameraPrice: 50,
     availableCameras: ["pi_hq", "pi_gs"],
@@ -611,7 +595,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // SkySnare - no camera
   {
     sku: "SS-001",
-    productName: "SkySnare",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -621,7 +604,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // NetSnare - no cameras (use paired SkyWatch)
   {
     sku: "NSN-LITE-001",
-    productName: "NetSnare Lite",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -629,8 +611,23 @@ export const productCameraConfigs: ProductCameraConfig[] = [
     notes: "Ground launcher, uses paired SkyWatch",
   },
   {
+    sku: "NSN-LITE-001-TURRET",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Turret demo, optional onboard camera",
+  },
+  {
+    sku: "RR-DEMO-001",
+    baseCameraId: "none",
+    baseCameraPrice: 0,
+    availableCameras: [],
+    cameraPricing: {},
+    notes: "Relay/LED only, no camera",
+  },
+  {
     sku: "NSN-STD-001",
-    productName: "NetSnare Standard",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -639,7 +636,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   },
   {
     sku: "NSN-PRO-001",
-    productName: "NetSnare Pro",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -649,7 +645,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // AeroNet - enterprise config
   {
     sku: "AN-ENT-001",
-    productName: "AeroNet Enterprise",
     baseCameraId: "enterprise",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -658,7 +653,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   },
   {
     sku: "AN-CMD-001",
-    productName: "AeroNet Command",
     baseCameraId: "none",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -668,7 +662,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   // RKV - fixed camera configs
   {
     sku: "RKV-M-001",
-    productName: "RKV-M Mothership",
     baseCameraId: "fixed",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -677,7 +670,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   },
   {
     sku: "RKV-I-001",
-    productName: "RKV-I Interceptor",
     baseCameraId: "fixed",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -686,7 +678,6 @@ export const productCameraConfigs: ProductCameraConfig[] = [
   },
   {
     sku: "RKV-G-001",
-    productName: "RKV-G Ground Station",
     baseCameraId: "fixed",
     baseCameraPrice: 0,
     availableCameras: [],
@@ -699,8 +690,8 @@ export const productCameraConfigs: ProductCameraConfig[] = [
 // CONNECTIVITY TIER CONFIGURATOR
 // =============================================================================
 
-/** Available connectivity tiers */
-export const connectivityTiers: Record<string, ConnectivityTier> = {
+/** Available connectivity tiers (sentinels none, enterprise, cloud, mesh_radio are not in this map) */
+export const connectivityTiers: Partial<Record<ConnectivityTierId, ConnectivityTier>> = {
   wifi: {
     id: "wifi",
     name: "WiFi Only",
@@ -762,7 +753,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Nano
   {
     sku: "SW-NANO-001",
-    productName: "SkyWatch Nano",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi"], // Pi Zero WiFi only
@@ -774,7 +764,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Standard
   {
     sku: "SW-STD-001",
-    productName: "SkyWatch Standard",
     baseConnectivityId: "poe",
     baseConnectivityPrice: 20,
     availableConnectivity: ["wifi", "ethernet", "poe", "lte"],
@@ -788,7 +777,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Pro
   {
     sku: "SW-PRO-001",
-    productName: "SkyWatch Pro",
     baseConnectivityId: "poe_plus",
     baseConnectivityPrice: 25,
     availableConnectivity: ["poe", "poe_plus", "lte", "lte_poe"],
@@ -802,7 +790,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Mobile
   {
     sku: "SW-MOB-001",
-    productName: "SkyWatch Mobile",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi", "lte"],
@@ -815,7 +802,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Thermal Budget
   {
     sku: "SW-THM-001-B",
-    productName: "SkyWatch Thermal (Budget)",
     baseConnectivityId: "poe",
     baseConnectivityPrice: 20,
     availableConnectivity: ["wifi", "ethernet", "poe", "lte"],
@@ -829,7 +815,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Thermal Pro
   {
     sku: "SW-THM-001-P",
-    productName: "SkyWatch Thermal (Pro)",
     baseConnectivityId: "poe_plus",
     baseConnectivityPrice: 25,
     availableConnectivity: ["poe", "poe_plus", "lte_poe"],
@@ -842,7 +827,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Marine
   {
     sku: "SW-MAR-001",
-    productName: "SkyWatch Marine",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi", "ethernet", "lte"],
@@ -856,7 +840,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Mesh Node
   {
     sku: "SW-MESH-001-N",
-    productName: "SkyWatch Mesh (Node)",
     baseConnectivityId: "poe",
     baseConnectivityPrice: 20,
     availableConnectivity: ["poe"], // Mesh nodes require PoE
@@ -868,7 +851,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Mesh Central
   {
     sku: "SW-MESH-001-C",
-    productName: "SkyWatch Mesh (Central)",
     baseConnectivityId: "ethernet",
     baseConnectivityPrice: 0,
     availableConnectivity: ["ethernet", "lte_poe"],
@@ -881,7 +863,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkyWatch Enterprise
   {
     sku: "SW-ENT-001",
-    productName: "SkyWatch Enterprise",
     baseConnectivityId: "enterprise",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -891,7 +872,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // NetSentry Lite
   {
     sku: "NS-LITE-001",
-    productName: "NetSentry Lite",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi", "ethernet"],
@@ -903,7 +883,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // NetSentry Standard
   {
     sku: "NS-STD-001",
-    productName: "NetSentry Standard",
     baseConnectivityId: "poe",
     baseConnectivityPrice: 20,
     availableConnectivity: ["wifi", "ethernet", "poe"],
@@ -916,7 +895,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // NetSentry Pro
   {
     sku: "NS-PRO-001",
-    productName: "NetSentry Pro",
     baseConnectivityId: "poe_plus",
     baseConnectivityPrice: 25,
     availableConnectivity: ["poe", "poe_plus", "lte_poe"],
@@ -929,7 +907,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // SkySnare
   {
     sku: "SS-001",
-    productName: "SkySnare",
     baseConnectivityId: "none",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -939,7 +916,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // NetSnare - triggered via SkyWatch
   {
     sku: "NSN-LITE-001",
-    productName: "NetSnare Lite",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi"],
@@ -949,8 +925,23 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
     notes: "WiFi for trigger from SkyWatch",
   },
   {
+    sku: "NSN-LITE-001-TURRET",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi"],
+    connectivityPricing: { wifi: { delta: 0 } },
+    notes: "WiFi for MQTT/HTTP target bearing",
+  },
+  {
+    sku: "RR-DEMO-001",
+    baseConnectivityId: "wifi",
+    baseConnectivityPrice: 0,
+    availableConnectivity: ["wifi"],
+    connectivityPricing: { wifi: { delta: 0 } },
+    notes: "WiFi for MQTT arm/disarm and activation",
+  },
+  {
     sku: "NSN-STD-001",
-    productName: "NetSnare Standard",
     baseConnectivityId: "wifi",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi", "ethernet"],
@@ -961,7 +952,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   },
   {
     sku: "NSN-PRO-001",
-    productName: "NetSnare Pro",
     baseConnectivityId: "ethernet",
     baseConnectivityPrice: 0,
     availableConnectivity: ["wifi", "ethernet", "poe"],
@@ -974,7 +964,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // AeroNet
   {
     sku: "AN-ENT-001",
-    productName: "AeroNet Enterprise",
     baseConnectivityId: "enterprise",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -983,7 +972,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   },
   {
     sku: "AN-CMD-001",
-    productName: "AeroNet Command",
     baseConnectivityId: "cloud",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -993,7 +981,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   // RKV
   {
     sku: "RKV-M-001",
-    productName: "RKV-M Mothership",
     baseConnectivityId: "mesh_radio",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -1002,7 +989,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   },
   {
     sku: "RKV-I-001",
-    productName: "RKV-I Interceptor",
     baseConnectivityId: "mesh_radio",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -1011,7 +997,6 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
   },
   {
     sku: "RKV-G-001",
-    productName: "RKV-G Ground Station",
     baseConnectivityId: "enterprise",
     baseConnectivityPrice: 0,
     availableConnectivity: [],
@@ -1024,8 +1009,8 @@ export const productConnectivityConfigs: ProductConnectivityConfig[] = [
 // STORAGE TIER CONFIGURATOR
 // =============================================================================
 
-/** Available storage tiers */
-export const storageTiers: Record<string, StorageTier> = {
+/** Available storage tiers (sentinels none, fixed, enterprise, cloud are not in this map) */
+export const storageTiers: Partial<Record<StorageTierId, StorageTier>> = {
   sd_32: {
     id: "sd_32",
     name: "Basic (32GB microSD)",
@@ -1103,7 +1088,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Nano
   {
     sku: "SW-NANO-001",
-    productName: "SkyWatch Nano",
     baseStorageId: "sd_32",
     baseStoragePrice: 8,
     availableStorage: ["sd_32", "sd_64_he"],
@@ -1117,7 +1101,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Standard
   {
     sku: "SW-STD-001",
-    productName: "SkyWatch Standard",
     baseStorageId: "sd_64_he",
     baseStoragePrice: 15,
     availableStorage: ["sd_32", "sd_64_he", "sd_128_he"],
@@ -1132,7 +1115,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Pro
   {
     sku: "SW-PRO-001",
-    productName: "SkyWatch Pro",
     baseStorageId: "nvme_128",
     baseStoragePrice: 25,
     availableStorage: ["sd_128_he", "nvme_128", "nvme_256", "nvme_512"],
@@ -1147,7 +1129,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Mobile
   {
     sku: "SW-MOB-001",
-    productName: "SkyWatch Mobile",
     baseStorageId: "sd_64_he",
     baseStoragePrice: 15,
     availableStorage: ["sd_64_he", "sd_128_he"],
@@ -1161,7 +1142,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Thermal Budget
   {
     sku: "SW-THM-001-B",
-    productName: "SkyWatch Thermal (Budget)",
     baseStorageId: "sd_64_he",
     baseStoragePrice: 15,
     availableStorage: ["sd_64_he", "sd_128_he"],
@@ -1174,7 +1154,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Thermal Pro
   {
     sku: "SW-THM-001-P",
-    productName: "SkyWatch Thermal (Pro)",
     baseStorageId: "nvme_256",
     baseStoragePrice: 40,
     availableStorage: ["nvme_128", "nvme_256", "nvme_512", "nvme_1tb"],
@@ -1189,7 +1168,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Marine
   {
     sku: "SW-MAR-001",
-    productName: "SkyWatch Marine",
     baseStorageId: "sd_128_he",
     baseStoragePrice: 25,
     availableStorage: ["sd_64_he", "sd_128_he"],
@@ -1203,7 +1181,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Mesh Node
   {
     sku: "SW-MESH-001-N",
-    productName: "SkyWatch Mesh (Node)",
     baseStorageId: "sd_64_he",
     baseStoragePrice: 15,
     availableStorage: ["sd_32", "sd_64_he"],
@@ -1217,7 +1194,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Mesh Central
   {
     sku: "SW-MESH-001-C",
-    productName: "SkyWatch Mesh (Central)",
     baseStorageId: "nvme_256",
     baseStoragePrice: 40,
     availableStorage: ["nvme_256", "nvme_512", "nvme_1tb"],
@@ -1232,7 +1208,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkyWatch Enterprise
   {
     sku: "SW-ENT-001",
-    productName: "SkyWatch Enterprise",
     baseStorageId: "enterprise",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1243,7 +1218,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // NetSentry Lite
   {
     sku: "NS-LITE-001",
-    productName: "NetSentry Lite",
     baseStorageId: "sd_32",
     baseStoragePrice: 8,
     availableStorage: ["sd_32", "sd_64_he"],
@@ -1256,7 +1230,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // NetSentry Standard
   {
     sku: "NS-STD-001",
-    productName: "NetSentry Standard",
     baseStorageId: "sd_64_he",
     baseStoragePrice: 15,
     availableStorage: ["sd_64_he", "sd_128_he"],
@@ -1269,7 +1242,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // NetSentry Pro
   {
     sku: "NS-PRO-001",
-    productName: "NetSentry Pro",
     baseStorageId: "nvme_128",
     baseStoragePrice: 25,
     availableStorage: ["sd_128_he", "nvme_128", "nvme_256"],
@@ -1283,7 +1255,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // SkySnare
   {
     sku: "SS-001",
-    productName: "SkySnare",
     baseStorageId: "none",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1294,7 +1265,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // NetSnare - minimal storage
   {
     sku: "NSN-LITE-001",
-    productName: "NetSnare Lite",
     baseStorageId: "none",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1303,8 +1273,25 @@ export const productStorageConfigs: ProductStorageConfig[] = [
     notes: "Trigger only, no local storage",
   },
   {
+    sku: "NSN-LITE-001-TURRET",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Turret demo, no local storage",
+  },
+  {
+    sku: "RR-DEMO-001",
+    baseStorageId: "none",
+    baseStoragePrice: 0,
+    availableStorage: [],
+    storagePricing: {},
+    nvmeSupported: false,
+    notes: "Relay demo, no local storage",
+  },
+  {
     sku: "NSN-STD-001",
-    productName: "NetSnare Standard",
     baseStorageId: "none",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1314,7 +1301,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   },
   {
     sku: "NSN-PRO-001",
-    productName: "NetSnare Pro",
     baseStorageId: "none",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1325,7 +1311,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // AeroNet
   {
     sku: "AN-ENT-001",
-    productName: "AeroNet Enterprise",
     baseStorageId: "enterprise",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1335,7 +1320,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   },
   {
     sku: "AN-CMD-001",
-    productName: "AeroNet Command",
     baseStorageId: "cloud",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1346,7 +1330,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   // RKV
   {
     sku: "RKV-M-001",
-    productName: "RKV-M Mothership",
     baseStorageId: "fixed",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1356,7 +1339,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   },
   {
     sku: "RKV-I-001",
-    productName: "RKV-I Interceptor",
     baseStorageId: "fixed",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1366,7 +1348,6 @@ export const productStorageConfigs: ProductStorageConfig[] = [
   },
   {
     sku: "RKV-G-001",
-    productName: "RKV-G Ground Station",
     baseStorageId: "enterprise",
     baseStoragePrice: 0,
     availableStorage: [],
@@ -1469,7 +1450,6 @@ export function generateProductConfiguration(
   let totalDelta = 0;
   const config: ProductConfiguration = {
     sku,
-    productName: product.name,
     totalDelta: 0,
     baseBomCost: product.bomTotal,
     configuredBomCost: product.bomTotal,
@@ -1523,4 +1503,48 @@ export function generateProductConfiguration(
   config.configuredBomCost = product.bomTotal + totalDelta;
 
   return config;
+}
+
+/** Validation result for configurator data. */
+export interface ConfiguratorValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+/** Validates tier configs: every product config SKU exists in catalog; base/available tier IDs exist in tier maps. */
+export function validateConfiguratorData(): ConfiguratorValidationResult {
+  const errors: string[] = [];
+  const computeBaseSentinels = ["none", "server"] as const;
+  for (const c of productComputeConfigs) {
+    if (!productBySku[c.sku]) errors.push(`Compute config SKU not in catalog: ${c.sku}`);
+    if (!computeBaseSentinels.includes(c.baseTier as (typeof computeBaseSentinels)[number]) && !computeTiers[c.baseTier]) errors.push(`Compute baseTier missing: ${c.baseTier} (${c.sku})`);
+    for (const t of c.availableTiers) {
+      if (!computeTiers[t]) errors.push(`Compute availableTier missing: ${t} (${c.sku})`);
+    }
+  }
+  const cameraBaseSentinels = ["none", "mixed", "enterprise", "fixed"] as const;
+  for (const c of productCameraConfigs) {
+    if (!productBySku[c.sku]) errors.push(`Camera config SKU not in catalog: ${c.sku}`);
+    if (!cameraBaseSentinels.includes(c.baseCameraId as (typeof cameraBaseSentinels)[number]) && !cameraTiers[c.baseCameraId]) errors.push(`Camera baseCameraId missing: ${c.baseCameraId} (${c.sku})`);
+    for (const t of c.availableCameras) {
+      if (!cameraTiers[t]) errors.push(`Camera availableCameras missing: ${t} (${c.sku})`);
+    }
+  }
+  const connectivityBaseSentinels = ["none", "enterprise", "cloud", "mesh_radio"] as const;
+  for (const c of productConnectivityConfigs) {
+    if (!productBySku[c.sku]) errors.push(`Connectivity config SKU not in catalog: ${c.sku}`);
+    if (!connectivityBaseSentinels.includes(c.baseConnectivityId as (typeof connectivityBaseSentinels)[number]) && !connectivityTiers[c.baseConnectivityId]) errors.push(`Connectivity baseConnectivityId missing: ${c.baseConnectivityId} (${c.sku})`);
+    for (const t of c.availableConnectivity) {
+      if (!connectivityTiers[t]) errors.push(`Connectivity availableConnectivity missing: ${t} (${c.sku})`);
+    }
+  }
+  const storageBaseSentinels = ["none", "fixed", "enterprise", "cloud"] as const;
+  for (const c of productStorageConfigs) {
+    if (!productBySku[c.sku]) errors.push(`Storage config SKU not in catalog: ${c.sku}`);
+    if (!storageBaseSentinels.includes(c.baseStorageId as (typeof storageBaseSentinels)[number]) && !storageTiers[c.baseStorageId]) errors.push(`Storage baseStorageId missing: ${c.baseStorageId} (${c.sku})`);
+    for (const t of c.availableStorage) {
+      if (!storageTiers[t]) errors.push(`Storage availableStorage missing: ${t} (${c.sku})`);
+    }
+  }
+  return { valid: errors.length === 0, errors };
 }

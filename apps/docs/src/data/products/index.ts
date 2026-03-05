@@ -18,14 +18,21 @@ export type {
   BOMItem,
   ProductSpecs,
   Product,
+  PlatformId,
+  AcceleratorId,
   ComputePlatform,
   AIAccelerator,
   FPSBenchmark,
   StorageOption,
+  ComputeTierId,
+  CameraTierId,
+  ConnectivityTierId,
+  StorageTierId,
   ComputeTier,
   CameraTier,
   ConnectivityTier,
   StorageTier,
+  TierPriceDelta,
   ProductComputeConfig,
   ProductCameraConfig,
   ProductConnectivityConfig,
@@ -58,8 +65,10 @@ export {
   skySnare,
   // NetSnare line
   netSnareLite,
+  netSnareLiteTurret,
   netSnareStandard,
   netSnarePro,
+  responseRelayDemo,
   // AeroNet line
   aeroNetEnterprise,
   aeroNetCommand,
@@ -89,7 +98,12 @@ export {
   getProductsByLine,
   getProductsByCategory,
   getProductsByPriceRange,
+  getProductLines,
+  getProductListSummary,
+  validateCatalogInvariants,
 } from "./catalog";
+export type { ProductLineId } from "./catalog";
+export type { CatalogValidationResult } from "./catalog";
 
 // Catalog summary data
 export {
@@ -121,6 +135,7 @@ export {
 export {
   localStorageOptions,
   networkStorageOptions,
+  storageTierSummary,
   storageRecommendations,
 } from "./storage-options";
 
@@ -156,4 +171,6 @@ export {
   getProductStorageConfig,
   getAvailableStorage,
   generateProductConfiguration,
+  validateConfiguratorData,
 } from "./tiers";
+export type { ConfiguratorValidationResult } from "./tiers";

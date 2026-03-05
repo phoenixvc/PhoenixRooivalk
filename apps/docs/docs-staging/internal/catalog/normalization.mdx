@@ -1,0 +1,29 @@
+---
+title: Documentation Normalization
+sidebar_label: Normalization
+---
+
+# Documentation Normalization
+
+Guidelines for keeping documentation consistent in format, structure, and cross-references so that content is easy to maintain and to generate.
+
+## Format
+
+- **Format** — Prefer MDX for docs that need components or JSX; use Markdown where plain content is enough. Frontmatter: at least `title`; optional `sidebar_label`, `id`, tags.
+- **Headings** — Use ATX-style (`#`, `##`); one H1 per doc. Keep hierarchy logical (no skip from H2 to H4).
+
+## Structure
+
+- **Length** — Prefer one topic per doc; split long docs into subfolder + index that links to children.
+- **Links** — Use relative links between docs (e.g. `./other-doc.mdx`, `../sibling/index.mdx`) so that moves and renames are easier.
+
+## Naming and Placement
+
+- **Filenames** — Kebab-case; no spaces or underscores. Engineering Decision Record (EDR): `YYYY-MM-DD-short-title.mdx`.
+- **Placement** — Follow the [source of truth](./source-of-truth.mdx) and catalog; add new docs to the correct domain and subfolder, and update that folder’s `index.mdx`.
+
+## Related
+
+- [Source of truth](./source-of-truth.mdx)
+- [Tier model](./tier-model.mdx)
+- [Change log template](./changelog-template.mdx)

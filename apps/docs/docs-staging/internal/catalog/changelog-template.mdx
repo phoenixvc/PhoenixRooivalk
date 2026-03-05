@@ -1,0 +1,39 @@
+---
+title: Documentation Change Log Template
+sidebar_label: Change Log Template
+---
+
+# Documentation Change Log Template
+
+Use this template (or a similar structure) for documentation-specific change logs (e.g. when promoting staging to production or when making large structural changes).
+
+## Template
+
+```markdown
+## YYYY-MM-DD — [Brief title]
+
+### Added
+- [Domain/path] — New doc: `doc-name.mdx` (short description).
+
+### Changed
+- [Domain/path] — Updated `doc-name.mdx`: (what changed).
+
+### Moved / Restructured
+- [Old path] → [New path]: (reason).
+
+### Removed
+- [Path] — Removed or deprecated: (reason).
+```
+
+## When to Use
+
+- After promoting a batch of docs from `docs-staging/` to `docs/`.
+- When renaming or moving folders to match the catalog.
+- When retiring or consolidating docs.
+
+Keep a single changelog (e.g. in `internal/catalog/` or at repo root) and append entries; link from the [Documentation catalog](../../index.mdx) or README so contributors know where to look.
+
+## Related
+
+- [Source of truth](./source-of-truth.mdx)
+- [Normalization](./normalization.mdx)
