@@ -303,18 +303,6 @@ export function AuthProvider({
   const isConfigured = useMemo(() => isAuthConfigured(), []);
   const missingConfig = useMemo(() => getMissingAuthConfig(), []);
 
-  // Debug logging on mount
-  useEffect(() => {
-    if (DEBUG_AUTH) {
-      console.log("[AuthContext] Provider mounted", {
-        isConfigured,
-        hasMissingConfig: missingConfig.length > 0,
-        loading,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Initialize with local progress
   useEffect(() => {
     if (DEBUG_AUTH) {
