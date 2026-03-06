@@ -7,6 +7,7 @@
 
 import React from "react";
 import Head from "@docusaurus/Head";
+import { serializeJsonLd } from "@phoenix-rooivalk/utils";
 
 export interface ArticleMetaProps {
   title: string;
@@ -148,9 +149,10 @@ export function ArticleStructuredData({
 
   return (
     <Head>
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
+      />
     </Head>
   );
 }
