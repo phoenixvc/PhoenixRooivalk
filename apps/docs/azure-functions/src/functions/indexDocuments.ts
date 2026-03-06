@@ -271,11 +271,10 @@ async function deleteDocumentEmbeddings(
       })
       .fetchAll();
 
-    let deleted = 0;
-    for (const item of resources) {
-      await container.item(item.id, item.id).delete();
-      deleted++;
-    }
+    await Promise.all(
+      resources.map((item) => container.item(item.id, item.id).delete()),
+    );
+    const deleted = resources.length;
 
     return {
       status: 200,
