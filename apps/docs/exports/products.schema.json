@@ -6,12 +6,12 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["sku", "name", "line", "category"],
+    "required": ["sku", "name", "line", "category", "priceMin", "priceMax", "bomTotal", "confidence", "lastUpdated"],
     "properties": {
       "sku": {
         "type": "string",
         "pattern": "^[A-Z]{2,4}-[A-Z0-9-]+$",
-        "description": "Unique product SKU (e.g., SW-NANO-01)"
+        "description": "Unique product SKU (e.g., SW-NANO-001)"
       },
       "name": {
         "type": "string",
@@ -20,18 +20,17 @@
       },
       "line": {
         "type": "string",
-        "enum": ["SkyWatch", "NetSentry", "NetSnare", "SkySnare", "AeroNet", "C2C", "RKV", "Mesh"],
+        "enum": ["SkyWatch", "NetSentry", "SkySnare", "NetSnare", "AeroNet", "RKV"],
         "description": "Product line"
       },
       "category": {
         "type": "string",
-        "enum": ["detection", "response", "c2", "mesh", "integration", "accessory"],
+        "enum": ["detection", "countermeasure"],
         "description": "Product category"
       },
       "targetMarket": {
         "type": "string",
-        "enum": ["residential", "commercial", "enterprise", "military", "government"],
-        "description": "Primary target market"
+        "description": "Target market description"
       },
       "priceRange": {
         "type": "string",
@@ -65,17 +64,58 @@
       "specs": {
         "type": "object",
         "description": "Product-specific specifications",
-        "additionalProperties": true
+        "properties": {
+          "detectionRange": { "type": "string" },
+          "processingSpeed": { "type": "string" },
+          "powerConsumption": { "type": "string" },
+          "operatingTemp": { "type": "string" },
+          "dimensions": { "type": "string" },
+          "weight": { "type": "string" },
+          "connectivity": { "type": "string" },
+          "storage": { "type": "string" },
+          "launchRange": { "type": "string" },
+          "responseTime": { "type": "string" },
+          "reload": { "type": "string" },
+          "netSize": { "type": "string" },
+          "costPerShot": { "type": "string" },
+          "batteryLife": { "type": "string" },
+          "ipRating": { "type": "string" },
+          "stabilization": { "type": "string" },
+          "thermalResolution": { "type": "string" },
+          "thermalSensitivity": { "type": "string" }
+        },
+        "additionalProperties": false
       },
-      "features": {
+      "bom": {
         "type": "array",
-        "items": { "type": "string" },
-        "description": "List of product features"
+        "description": "Bill of materials items",
+        "items": {
+          "type": "object",
+          "required": ["item", "specification", "quantity", "unitCost", "totalCost", "supplier"],
+          "properties": {
+            "item": { "type": "string" },
+            "specification": { "type": "string" },
+            "quantity": { "type": "number", "minimum": 0 },
+            "unitCost": { "type": "number", "minimum": 0 },
+            "totalCost": { "type": "number", "minimum": 0 },
+            "supplier": { "type": "string" }
+          }
+        }
       },
-      "status": {
-        "type": "string",
-        "enum": ["concept", "prototype", "production", "deprecated"],
-        "description": "Product development status"
+      "optionalAccessories": {
+        "type": "array",
+        "description": "Optional accessory items",
+        "items": {
+          "type": "object",
+          "properties": {
+            "item": { "type": "string" },
+            "specification": { "type": "string" },
+            "quantity": { "type": "number" },
+            "unitCost": { "type": "number" },
+            "totalCost": { "type": "number" },
+            "supplier": { "type": "string" }
+          }
+        }
       }
     }
   }
