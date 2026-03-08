@@ -1,0 +1,15 @@
+---
+title: Wiring Safety
+sidebar_label: Wiring safety
+---
+
+# Wiring Safety
+
+- **Common GND:** Servo PSU GND must be tied to ESP32 (and Pi if used) GND.
+  Single ground reference.
+- **Set voltage before connecting:** Adjust buck output with no load before
+  connecting ESP32 or servos.
+- **Fuse / power switch:** On supply side where appropriate to isolate faults.
+- **Bulk capacitor (470–1000 µF)** on the servo rail, close to driver/servos.
+
+See [Power](./power.mdx) for rail and BEC notes.

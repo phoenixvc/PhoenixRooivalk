@@ -1,0 +1,32 @@
+---
+title: Export and Interop
+sidebar_label: Export and Interop
+---
+
+# Export and Interop
+
+Guidance for exporting documentation to other formats or integrating with
+external tools (e.g. static export, search index, or single-page bundles) while
+preserving structure and links.
+
+## Export
+
+- **Static** — Docusaurus build produces static HTML; use for archival or
+  offline distribution. Ensure relative links and assets resolve in the export
+  path.
+- **Single-page or PDF** — If generating PDF or combined output, preserve
+  heading hierarchy and cross-references; document any link-rewrite rules.
+
+## Interop
+
+- **Search** — Local or external search should index only intended tiers (e.g.
+  exclude internal tiers from public search) per [tier model](./tier-model.mdx).
+- **Versioning** — If multiple doc versions are published, keep URLs and
+  redirects consistent; document versioning strategy in the changelog or
+  catalog.
+
+## Related
+
+- [Tier model](./tier-model.mdx)
+- [Normalization](./normalization.mdx)
+- [Change log template](./changelog-template.mdx)

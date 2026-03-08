@@ -1,0 +1,91 @@
+---
+title: Phase-0 Survival Build
+sidebar_label: Phase-0 overview
+tags: ["phase-0", "survival", "zero-budget"]
+---
+
+# Phase-0 Survival Build
+
+Phase 0 is the **near-zero-cash survival build**. The goal is to prove the
+architecture and control loop with whatever hardware is available — borrowed,
+salvaged, or the cheapest possible new parts. Optimization target: **cost**.
+
+Phase 0 is not a separate product line; it is the starting point for any Phase-1
+product when budget is extremely limited. Once the pipeline works end-to-end,
+upgrading to Phase 1 means swapping in better hardware on the same software
+stack.
+
+## Purpose
+
+- Prove detection → tracking → alarm → (optional) inert actuation end-to-end.
+- Validate the software pipeline before spending money on hardware.
+- Establish the control loop (even with blind or simulated actuator).
+
+## What Phase 0 looks like
+
+| Capability       | Phase 0 implementation                                   |
+| ---------------- | -------------------------------------------------------- |
+| Vision/detection | Phone camera (IP webcam app) or borrowed Pi + USB camera |
+| Inference        | Laptop running TFLite/ONNX (no edge accelerator needed)  |
+| Event bus        | MQTT on laptop (Mosquitto) or local pub/sub              |
+| Alarm            | Buzzer + LED on ESP32, or just terminal/Telegram alert   |
+| Actuator         | Blind (no feedback), simulated, or single-servo demo     |
+| Turret camera    | None — Phase 0 runs without a turret camera              |
+| Enclosure        | None — breadboard or bare wiring                         |
+
+## Minimal hardware
+
+If buying anything at all, the absolute minimum for a working actuator demo:
+
+| Part                             | Approx cost | Notes                        |
+| -------------------------------- | ----------- | ---------------------------- |
+| ESP32 dev board                  | R80–R150    | NodeMCU-32S or similar       |
+| 1× MG90S servo                   | R30–R50     | Single-axis proof of concept |
+| MP1584EN buck converter          | R15–R25     | 12V→5V for ESP32             |
+| Jumper wires + breadboard        | R30–R50     | Prototyping                  |
+| 12V power supply or battery pack | R50–R100    | Bench supply or salvaged     |
+
+Total: under R300 for the actuator side. Detection can run on a phone + laptop
+with no additional hardware.
+
+## Software-first approach
+
+**Build the software pipeline first.** Use `SimulatedTransport` so the full
+detection → tracking → supervisor → transport → actuator chain runs without any
+physical hardware. When you add an ESP32 or USB servo driver, swap in
+`SerialTransport` or `WiFiTransport` — the rest of the pipeline stays the same.
+
+See [Virtual turret POC](../playbooks/virtual-turret-poc.mdx) for the
+hardware-free pipeline.
+
+## Salvage and zero-budget options
+
+Some hardware can be salvaged; most household devices cannot drive servos. See
+[Salvage and zero-budget hardware](../../technical/hardware/salvage-and-zero-budget-hardware.mdx)
+for what works and what doesn't.
+
+## Safety boundary
+
+Phase 0 follows the same safety boundary as Phase 1: **detection, tracking,
+alarm, and inert actuation only**. No weaponization. See
+[Phase-1 safety boundary](../phase1/safety-boundary.mdx).
+
+## Graduating to Phase 1
+
+Phase 0 → Phase 1 is not a rewrite; it is a hardware upgrade on the same
+software stack:
+
+- Replace phone camera with Pi Camera v3 on a Pi4.
+- Add Coral USB Accelerator for edge inference (no more laptop dependency).
+- Add PCA9685 for multi-servo pan/tilt.
+- Add proper power rails (buck converters, bulk caps).
+
+See [Phase-1 overview](../phase1/index.mdx) for full build docs.
+
+## Related
+
+- [Phase-1 overview](../phase1/index.mdx) — next phase up
+- [Common modules](../common/index.mdx) — shared across all phases
+- [Salvage and zero-budget hardware](../../technical/hardware/salvage-and-zero-budget-hardware.mdx)
+- [Virtual turret POC](../playbooks/virtual-turret-poc.mdx)
+- [Control interface options](../../technical/control/control-interface-options.mdx)

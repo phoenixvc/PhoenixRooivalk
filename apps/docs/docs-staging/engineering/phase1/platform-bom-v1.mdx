@@ -1,0 +1,68 @@
+---
+title: Phase-1 Platform BOM v1
+sidebar_label: Platform BOM v1
+---
+
+# Phase-1 Platform BOM v1
+
+**Architecture lock:** ESP32 + RP2040 modular robotics stack. PCA9685 for
+servos; TB6612/BTS7960 for motor control where applicable.
+
+**Platform layers:** (1) Compute + power telemetry — ESP32, RP2040 optional as
+real-time IO coprocessor, MP1584 bucks, INA219 per rail. (2) Actuation — PCA9685
+for servos; TB6612 (small DC), BTS7960 (high-current DC). (3) Sensors — one IMU
+family, ToF optional. (4) Camera — ESP32-CAM (OV2640) or Pi camera when using
+Pi. FTDI USB–serial adapter is optional for flashing ESP32-CAM (dev boards with
+USB don’t need it).
+
+## Buy now / buy soon / buy later
+
+- **Buy now:** Core compute (Pi or equivalent), one actuator stack (ESP32 +
+  PCA9685), minimal sensing, power (MP1584EN), jumper wires, buzzer, LED.
+- **Buy soon:** Spares, second actuator stack, better camera (OV2640),
+  enclosures.
+- **Buy later:** Mesh radio, extra storage, additional sensors.
+
+Quantities and exact part numbers are in each
+[product doc](./products/index.mdx). Use the product BOMs for 1a/1b/1c options.
+
+## Budget (e.g. ~R2000)
+
+Optional priority order if budget is limited: power + compute spares → actuation
+stack → motor drivers → sensing → camera.
+
+## Remove before checkout
+
+Do **not** add these to the cart for Phase 1 platform builds: L293D, OV7670 (use
+ESP32-CAM/OV2640 instead), XT60 PDB (drone part), 360° continuous-rotation
+servos for pan/tilt (use 180° positional, e.g. MG90S). Avoid duplicate IMU
+families (pick one: e.g. BMI160 or MPU9250). See [Avoid list](./avoid-list.mdx).
+
+## Pre-checkout / cart review
+
+Before checkout, confirm: (1) **Remove** — No L293D, OV7670, XT60 PDB, 360°
+servos for pan/tilt, duplicate IMUs, CAN/BMP280/Arduino if following the locked
+stack. (2) **Confirm** — Servos are 180° positional (not 360° continuous);
+camera is OV2640/ESP32-CAM (not OV7670). (3) **Don't forget (power)** — Bulk
+capacitor (470–1000 µF) on servo rail; if mobile/battery-powered: battery (e.g.
+2S Li-ion/18650) + 5V BEC or buck; fuse or power switch where appropriate. See
+[Power](../common/power.mdx) and [Wiring safety](../common/wiring-safety.mdx).
+
+## Quantities cheat sheet (one platform build + spares)
+
+| Item                    | Qty    | Notes                            |
+| ----------------------- | ------ | -------------------------------- |
+| ESP32 dev board         | 2      | One active, one spare            |
+| RP2040-Zero             | 2      | Optional; one active, one spare  |
+| PCA9685                 | 1      | Servo PWM driver                 |
+| MP1584EN buck           | 3      | Logic 5V, servo 5–6V, spare      |
+| INA219                  | 2      | Servo rail + motor rail          |
+| TB6612FNG               | 1–2    | Small DC motors                  |
+| BTS7960                 | 1      | High-current DC                  |
+| MG90S (180° positional) | 2–4    | Pan/tilt + spares                |
+| IMU (BMI160 or MPU9250) | 1–2    | Standardize on one family        |
+| VL53L0X ToF             | 1      | Optional                         |
+| ESP32-CAM               | 1      | Buy soon                         |
+| TCA9548A, MicroSD       | 1 each | Only when scaling I2C or storage |
+
+See each [product doc](./products/index.mdx) for 1a/1b/1c BOMs and part numbers.

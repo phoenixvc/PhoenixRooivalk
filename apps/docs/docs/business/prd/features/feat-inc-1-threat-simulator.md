@@ -2,7 +2,9 @@
 id: feat-inc-1-threat-simulator
 title: "Feature PRD: Interactive Threat Simulator"
 sidebar_label: Interactive Threat Simulator
-description: Product requirements for an interactive threat simulator demo section on the marketing site, improving context and increasing user engagement.
+description:
+  Product requirements for an interactive threat simulator demo section on the
+  marketing site, improving context and increasing user engagement.
 difficulty: beginner
 estimated_reading_time: 5
 points: 10

@@ -9,3 +9,6 @@ functions/lib/
 functions/.eslintrc.js
 azure-functions/dist/
 
+# Generated product catalog exports
+exports/
+

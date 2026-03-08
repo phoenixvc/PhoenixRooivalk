@@ -2,7 +2,9 @@
 id: feat-new-2-case-studies
 title: "Feature PRD: Case Studies Section"
 sidebar_label: Case Studies Section
-description: Product requirements for a Case Studies section on the marketing homepage showcasing real-world application scenarios for SkySnare™ and AeroNet™.
+description:
+  Product requirements for a Case Studies section on the marketing homepage
+  showcasing real-world application scenarios for SkySnare™ and AeroNet™.
 difficulty: beginner
 estimated_reading_time: 5
 points: 10

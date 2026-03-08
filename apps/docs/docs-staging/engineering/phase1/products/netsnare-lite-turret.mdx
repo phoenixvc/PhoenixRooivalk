@@ -1,0 +1,142 @@
+---
+title: NetSnare Lite (Turret)
+sidebar_label: NetSnare Lite Turret
+---
+
+# NetSnare Lite (Turret)
+
+Demo SKU: **NSN-LITE-001-TURRET** (turret variant of NetSnare Lite).
+
+Safe pan-tilt tracker platform: no firing. Demo goal: vision → aim → actuator
+control + alarms.
+
+## What it is
+
+Pan-tilt platform driven by ESP32 + PCA9685 + 180° servos. Receives target
+bearing/offset (MQTT/HTTP), converts to servo angles, drives alarm outputs.
+Phase 1 = pan/tilt + alarm only.
+
+## Option comparison (1a / 1b / 1c)
+
+| Option         | Cost   | Tracking quality | Reliability | Build effort | Best for            |
+| -------------- | ------ | ---------------- | ----------- | ------------ | ------------------- |
+| 1a ultra-cheap | Lowest | Basic            | Adequate    | Low          | First build, cost   |
+| 1b balanced    | Medium | Good             | Good        | Medium       | Default demo        |
+| 1c better      | Higher | Best             | Best        | Higher       | Demos with headroom |
+
+## BOM per option (summary)
+
+### Power
+
+- **MP1584EN (3A buck)** preferred over LM2596. Set voltage before connecting
+  ESP32; common GND; **bulk capacitor (470–1000 µF)** on servo rail. 5V/6V rail
+  for servos. See [common/power](../../common/power.mdx).
+
+### ESP32
+
+- Variants: ESP32-DevKitC / ESP32-WROOM-32, ESP32-WROVER, ESP32-S3, ESP32-CAM
+  (when camera on turret). When to use each: DevKitC for actuator-only; WROVER
+  for more RAM; S3 for newer; ESP32-CAM for onboard camera. **Example ZAR/USD
+  ranges (indicative):** DevKitC R150–250 (USD 8–15), WROOM R200–350 (USD
+  12–20), WROVER R280–450 (USD 16–26), S3 R350–550 (USD 20–32), ESP32-CAM
+  R180–300 (USD 10–18). Use local pricing as fallback.
+
+### Servo driver
+
+- **PCA9685 (16-channel I2C)**. Do not use L298N for servos. See
+  [avoid list](../avoid-list.mdx).
+
+### Servos
+
+- **180° positional only** — not 360° continuous rotation. **MG90S metal gear**
+  (light head; not SG90 plastic); **MG996R** for heavier head. Qty 2 typical.
+  **Example cost per option:** 1a MG90S×2 ~R80–120 (USD 5–8); 1b MG90S×2 or
+  MG996R×2 ~R120–200 (USD 8–12); 1c MG996R×2 ~R180–280 (USD 11–17). PCA9685
+  ~R60–100 (USD 4–6).
+
+### Gimbal
+
+- **R31 FPV nylon gimbal** for Phase 1a (cost). **R81 SG90 dual-axis mount** for
+  1b/1c (rigidity). **Weighted comparison (cost vs rigidity vs upgrade path):**
+  1a — lowest cost, adequate for demos; 1b — better rigidity, moderate cost; 1c
+  — best rigidity and upgrade path, higher cost.
+
+### Camera
+
+- **ESP32-CAM (OV2640) preferred.** Avoid OV7670 on ESP32. **UVC-to-Pi** as
+  alternative for turret view. See [common/compute](../../common/compute.mdx).
+
+### Alarm
+
+- Buzzer, LED, optional MOSFET/relay for siren.
+
+### Optional
+
+- Enclosure.
+
+### Parts list (orderable)
+
+| Part                               | Qty    | Notes                               |
+| ---------------------------------- | ------ | ----------------------------------- |
+| ESP32 dev board                    | 1      | Actuator control                    |
+| PCA9685                            | 1      | Servo driver (I2C)                  |
+| MG90S or MG996R (180° positional)  | 2      | Pan/tilt; 1a MG90S, 1c MG996R       |
+| FPV dual-axis gimbal or SG90 mount | 1      | 1a: R31 nylon; 1b/1c: R81 dual-axis |
+| MP1584EN buck                      | 1      | 5–6V servo rail                     |
+| Buzzer, LED                        | 1 each | Alarm                               |
+| Jumper wires, bracket              | —      | As needed                           |
+
+Search terms: ESP32 DevKitC, PCA9685 servo driver, MG90S metal gear, MP1584EN
+buck. See BOM per option above for ZAR/USD ranges and
+[platform BOM v1](../platform-bom-v1.mdx).
+
+## Option summary (weighted matrix)
+
+| Option | Cost (approx.) | Tracking | Reliability | Effort | Choice summary                                                |
+| ------ | -------------- | -------- | ----------- | ------ | ------------------------------------------------------------- |
+| **1a** | Lowest         | Basic    | Adequate    | Low    | Best for minimal cost and first build; acceptable tracking.   |
+| **1b** | Medium         | Good     | Good        | Medium | Best for default demo; good balance of cost and quality.      |
+| **1c** | Higher         | Best     | Best        | Higher | Best for demos with headroom and better tracking/reliability. |
+
+Dimensions (example weights): cost 30%, tracking 40%, reliability 20%, effort
+10%. Use the table above to pick an option; a full numeric weighted total can be
+added per deployment.
+
+## Alternatives
+
+- Plastic vs metal gear: MG90S over SG90.
+- Direct PWM vs PCA9685: PCA9685 recommended for multiple servos and stable
+  timing.
+- L298N not for servos — see [avoid list](../avoid-list.mdx).
+
+## Phase 0 vs 1 vs 2 (turret)
+
+- **Phase 0:** No turret camera; blind actuator.
+- **Phase 1:** Optional turret camera (ESP32-CAM or USB to Pi); this doc.
+- **Phase 2:** Dual camera, stiffer mechanics; out of scope here.
+
+**When to add a turret camera:** One camera (fixed detection cam) is enough for
+Phase 1 (detect → track → pan/tilt → alarm). Add a second (turret) camera when
+you need: closed-loop aiming (turret view refines aim), occlusion handling,
+zoom/narrow FOV on turret, or UI polish (turret POV in dashboard). Phase 1 =
+optional; Phase 2 = dual-camera architecture.
+
+## How-to
+
+1. Receive target bearing/offset via MQTT or HTTP.
+2. Convert to servo angles; apply rate limits and timeout to neutral.
+3. Safety: arm flag, limits, timeout. Alarm outputs per
+   [common/actuator](../../common/actuator.mdx).
+4. Software-only validation:
+   [Virtual turret POC](../../playbooks/virtual-turret-poc.mdx).
+
+## Scrapyard variant (optional)
+
+Salvaged pan-tilt or CCTV mount + same electronics (ESP32, PCA9685, servos,
+power, alarm).
+
+## Related
+
+- [Common actuator](../../common/actuator.mdx)
+- [Virtual turret POC](../../playbooks/virtual-turret-poc.mdx)
+- [Avoid list](../avoid-list.mdx)

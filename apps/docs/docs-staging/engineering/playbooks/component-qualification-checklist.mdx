@@ -1,0 +1,78 @@
+---
+title: Component Qualification Checklist
+sidebar_label: Component Qualification Checklist
+---
+
+# Component Qualification Checklist
+
+A practical checklist for evaluating and qualifying components (sensors,
+actuators, compute, cables) for PhoenixRooivalk prototypes. Use it to decide
+buy/skip, standardize choices (e.g. IMU, camera), and avoid common pitfalls.
+
+## Goals
+
+- **Buy/skip heuristics** — Clear criteria to accept or reject a part for
+  prototype use (performance, interface, availability, cost).
+- **Standardization** — Prefer a small set of qualified IMUs, cameras, and
+  interfaces to reduce integration and support burden.
+- **Pitfall list** — Document “skip list” patterns: known bad fits,
+  compatibility issues, or lifecycle concerns.
+
+## Sensor Categories
+
+### IMU
+
+- Interface (I2C, SPI, UART); bandwidth and noise; calibration and mounting
+  requirements.
+- Standardize on one or two qualified IMUs for control and navigation where
+  possible; document part numbers and firmware/driver expectations.
+
+### Camera
+
+- Resolution, frame rate, latency; interface (USB, CSI, MIPI); driver and SDK
+  support on chosen compute tier.
+- Common pitfalls: driver instability on embedded Linux; sync vs async; exposure
+  and lighting for detection/tracking.
+
+### Other Sensors
+
+- Radar, RF, or other detection sensors: interface, data format, and integration
+  with the detection pipeline. Add rows to the checklist as needed.
+
+## Actuators
+
+- Servos and drivers: see
+  [Servo selection and calibration](../../technical/hardware/servo-selection-and-calibration.mdx).
+  Document qualified parts and any “do not use” list (e.g. known failure modes
+  or incompatibility with safety limits).
+
+## Compute and Cables
+
+- Compute: see
+  [Prototype compute tiers](../../technical/hardware/prototype-compute-tiers.mdx).
+  Document which OS and toolchains are supported per tier.
+- Cables and connectors: power rating, signal integrity, and mechanical
+  robustness for field use.
+
+## Checklist Template
+
+For each component under evaluation:
+
+| Item            | Pass criteria                   | Notes / skip reason |
+| --------------- | ------------------------------- | ------------------- |
+| Interface       | Matches system transport/API    |                     |
+| Performance     | Meets spec for role             |                     |
+| Availability    | Sourcing and lifecycle OK       |                     |
+| Drivers/tooling | Supported on target OS/hardware |                     |
+| Safety/limits   | Compatible with authority layer | For actuators only  |
+
+Maintain a living “skip list” of parts or vendors that have failed qualification
+or are deprecated.
+
+## Related
+
+- [Servo selection and calibration](../../technical/hardware/servo-selection-and-calibration.mdx)
+- [Prototype compute tiers](../../technical/hardware/prototype-compute-tiers.mdx)
+- [Board bring-up and flashing](../../technical/hardware/board-bringup-and-flashing.mdx)
+- [Virtual turret POC](./virtual-turret-poc.mdx)
+- [Prototype test procedures](../../operations/runbooks/prototype-test-procedures.mdx)

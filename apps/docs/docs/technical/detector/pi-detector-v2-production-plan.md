@@ -2,7 +2,10 @@
 id: pi-detector-v2-production-plan
 title: Pi Drone Detector v2 - Production Readiness Plan
 sidebar_label: Pi Detector v2 Production Plan
-description: Production readiness plan for Pi Drone Detector v2 covering configuration management, code quality, testing infrastructure, CI/CD, web streaming, and targeting/engagement features.
+description:
+  Production readiness plan for Pi Drone Detector v2 covering configuration
+  management, code quality, testing infrastructure, CI/CD, web streaming, and
+  targeting/engagement features.
 difficulty: advanced
 estimated_reading_time: 30
 points: 40
@@ -17,7 +20,6 @@ prerequisites:
   - overview
   - raspberry-pi-drone-detection-plan
 ---
-
 
 ## Overview
 

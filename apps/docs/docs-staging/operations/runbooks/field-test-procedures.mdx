@@ -1,0 +1,50 @@
+---
+title: Field Test Procedures
+sidebar_label: Field Test Procedures
+---
+
+# Field Test Procedures
+
+Procedures for conducting field tests with PhoenixRooivalk prototypes (e.g.
+turret/servo demos, detection and tracking in real environments). Use after
+[prototype test procedures](./prototype-test-procedures.mdx) have been completed
+on the bench.
+
+## Purpose
+
+- Validate detection, tracking, and demo-safe actuation in realistic conditions.
+- Confirm safety boundaries, timeouts, and operator controls before any customer
+  or operational use.
+- Document environmental and configuration assumptions for repeatability.
+
+## Pre-Field
+
+- Complete [Prototype test procedures](./prototype-test-procedures.mdx) (bench
+  and integration).
+- Confirm
+  [pre-field checklist](./prototype-test-procedures.mdx#pre-field-checklist) and
+  that safe-state behavior is understood and tested.
+- Define test area, boundaries, and any required clearances or permits.
+
+## During Field Test
+
+- **Safety first** — No live actuation outside defined safe zones; operator must
+  be able to disable actuation or trigger safe state at any time.
+- **Logging** — Record telemetry, commands, and events for after-action review
+  and compliance.
+- **Incremental steps** — Start with tracking-only or limited motion; enable
+  full range only after validation at each step.
+
+## Post-Field
+
+- Review logs for faults, timeouts, and limit violations.
+- Update runbooks and
+  [component qualification](../../engineering/playbooks/component-qualification-checklist.mdx)
+  with any findings (e.g. environmental limits, cable or power issues).
+
+## Related
+
+- [Prototype test procedures](./prototype-test-procedures.mdx)
+- [Authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+- [Component qualification checklist](../../engineering/playbooks/component-qualification-checklist.mdx)
+- [Runbooks index](./index.mdx)

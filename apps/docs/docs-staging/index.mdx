@@ -1,0 +1,213 @@
+---
+title: PhoenixRooivalk Documentation Catalog
+tags: ["internal", "documentation", "catalog"]
+---
+
+# PhoenixRooivalk Documentation Catalog
+
+:::info Staging
+
+This is the **staging copy** of the catalog. The canonical location after
+promotion is `apps/docs/docs/`. Refine content here; the live site uses `docs/`
+until you promote.
+
+:::
+
+This document defines the **canonical documentation structure** for the
+PhoenixRooivalk platform and its associated product ecosystem. It serves as the
+master planning artifact for how documentation is organized, authored, and
+maintained across the repository.
+
+The catalog is intended primarily for **internal engineers, product teams, and
+approved partners** who maintain or contribute to the PhoenixRooivalk
+documentation portal. It establishes:
+
+- the documentation domain structure
+- repository locations for documents
+- navigation entry points (`index.mdx` files)
+- conventions for generating and maintaining documentation
+
+Repository location (after promotion): `apps/docs/docs/`. Staging:
+`apps/docs/docs-staging/`.
+
+---
+
+## Goals
+
+The documentation catalog ensures:
+
+- Consistent documentation across all product lines
+- Clear separation between business, technical, operational, and internal
+  material
+- Predictable document structure for AI‑assisted documentation generation
+- Alignment with the PhoenixRooivalk platform architecture and product stack
+
+---
+
+## Usage
+
+When creating or updating documentation:
+
+1. Store documents in the repository directories defined in this catalog
+2. Use the domain structure defined here
+3. Maintain consistent document outlines and naming
+4. Link documents through their domain `index.mdx` files
+
+---
+
+## PhoenixRooivalk Platform Stack Model
+
+PhoenixRooivalk systems follow a layered architecture separating sensing,
+decision logic, and **non‑harmful** physical response integrations.
+
+**Detection → Decision → Actuation**
+
+| Layer              | Systems                 | Role                                                  |
+| ------------------ | ----------------------- | ----------------------------------------------------- |
+| Detection          | SkyWatch, SkyWatch Mesh | Detect and track drones                               |
+| Decision / Control | NetSentry, AeroNet      | Threat evaluation and response control                |
+| Actuation          | NetSnare, SkySnare      | Integrate response outputs (demo-safe and governed)   |
+| Advanced Platform  | RKV                     | Integrated multi‑node ecosystem                       |
+| Operator Interface | C2C Portal              | Monitoring, incident response, and operator workflows |
+
+---
+
+## Platform Systems
+
+### SkyWatch
+
+Primary drone detection sensor platform deployed at fixed sites or mobile
+locations.
+
+### SkyWatch Mesh
+
+Distributed detection network connecting multiple SkyWatch nodes.
+
+### NetSentry
+
+Autonomous decision and response controller.
+
+### NetSnare
+
+Interception platform architecture (product-specific implementation).
+
+### SkySnare
+
+Consumer-oriented capture system based on the NetSnare architecture.
+
+### AeroNet
+
+Enterprise orchestration platform for distributed deployments.
+
+### RKV
+
+Advanced ecosystem platform integrating aerial and ground assets.
+
+### C2C Portal
+
+Operator dashboard used for monitoring and mission workflows.
+
+---
+
+## Documentation Domains
+
+The documentation system is organized into **six primary domains**, each with
+its own root `index.mdx` entry point.
+
+1. [Business](./business/) — portfolio, PRDs
+2. [Technical](./technical/) — architecture, ML, hardware, control
+3. [Engineering](./engineering/) — playbooks
+4. [Operations](./operations/) — runbooks
+5. [Legal & Compliance](./legal/) — compliance, policies
+6. [Internal](./internal/) — catalog governance, decisions, EDR
+
+---
+
+## Documentation Tree
+
+Staging path: `apps/docs/docs-staging/`. Each folder’s `index.mdx` lists the
+docs in that folder; the tree below shows structure (one `index.mdx` per
+folder).
+
+```
+business/
+  index.mdx
+  portfolio/
+    index.mdx
+  prd/
+    index.mdx
+
+technical/
+  index.mdx
+  architecture/
+    index.mdx
+    diagrams/
+      index.mdx
+    interfaces/
+      index.mdx
+    subsystems/
+      index.mdx
+    products/
+      index.mdx
+  ml/
+    index.mdx
+  hardware/
+    index.mdx
+  control/
+    index.mdx
+
+engineering/
+  index.mdx
+  common/
+    index.mdx
+  phase0/
+    index.mdx
+  phase1/
+    index.mdx
+    products/
+      index.mdx
+  phase2/
+    index.mdx
+  phase3/
+    index.mdx
+  playbooks/
+    index.mdx
+
+operations/
+  index.mdx
+  runbooks/
+    index.mdx
+
+legal/
+  index.mdx
+  compliance/
+    index.mdx
+  policies/
+    index.mdx
+
+internal/
+  index.mdx
+  catalog/
+    index.mdx
+  decisions/
+    index.mdx
+  edr/
+    index.mdx
+```
+
+---
+
+## Conventions
+
+- Every folder includes an `index.mdx` entry point.
+- Use kebab-case filenames.
+- EDR files use date-prefixed names: `YYYY-MM-DD-short-title.mdx`.
+
+---
+
+## Notes
+
+- Internal documentation may be hidden from public builds via docs configuration
+  rather than weakening the catalog structure.
+- Architecture and prototypes should document **demo-safe** response
+  integrations and safety controls; avoid harm‑enabling implementation details.

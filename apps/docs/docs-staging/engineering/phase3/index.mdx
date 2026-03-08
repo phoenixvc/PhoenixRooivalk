@@ -1,0 +1,130 @@
+---
+title: Phase-3 Production and Scaling
+sidebar_label: Phase-3 overview
+tags: ["phase-3", "production", "scaling", "early-draft"]
+---
+
+# Phase-3 Production and Scaling
+
+:::info Early draft
+
+This is a forward-looking outline. Phase 3 scope will be refined as Phase 1 and
+Phase 2 mature. Treat this as directional planning, not committed scope.
+
+:::
+
+Phase 3 moves from demo hardware to **production-grade systems**. Where Phase 2
+produces investor-grade demos, Phase 3 targets repeatable manufacturing,
+enterprise deployment, and multi-node orchestration. Optimization target:
+**scale and reliability**.
+
+## Purpose
+
+- Transition from one-off builds to repeatable, manufacturable units.
+- Enterprise-grade reliability: uptime, monitoring, remote management.
+- Multi-node orchestration: mesh detection, coordinated response, centralized
+  C2.
+- Compliance and certification readiness (ITAR awareness, export controls).
+
+## What Phase 3 adds over Phase 2
+
+| Capability       | Phase 2                              | Phase 3                                                   |
+| ---------------- | ------------------------------------ | --------------------------------------------------------- |
+| Build process    | Hand-built prototypes                | Documented assembly, PCB design, repeatable manufacturing |
+| Enclosure        | IP-rated off-the-shelf               | Custom injection-molded or machined enclosures            |
+| Compute          | Pi5/Jetson single-node               | Rack or edge compute; multi-node GPU inference            |
+| Networking       | PoE + optional LTE                   | Mesh radio, dedicated backhaul, redundant links           |
+| Orchestration    | Single operator dashboard            | AeroNet enterprise platform, multi-site C2                |
+| Evidence / audit | Local logging + blockchain anchoring | Full chain-of-custody, compliance-grade evidence pipeline |
+| Deployment       | Manual setup                         | Infrastructure-as-code, remote provisioning, OTA updates  |
+| Reliability      | Demo-grade                           | SLA-grade uptime, watchdogs, failover                     |
+
+## Product evolution
+
+### SkyWatch → enterprise detection nodes
+
+- Ruggedized enclosures with thermal management.
+- Multi-sensor fusion: visual + RF/SDR + acoustic.
+- Edge inference with model versioning and OTA updates.
+
+### NetSnare → production interception platform
+
+- Repeatable mechanical design (CNC or injection-molded).
+- Stepper or brushless gimbal with closed-loop control.
+- Integrated solenoid actuation with safety certification.
+
+### AeroNet orchestration
+
+- Multi-site deployment with centralized management.
+- Fleet health monitoring, automated alerting, and incident workflow.
+- Role-based access control and audit logging at scale.
+
+### C2C Portal → production operator interface
+
+- High-availability web application with real-time feeds from all nodes.
+- Mission planning, replay, and after-action review.
+- Integration with external C2 systems (STANAG, TAK, custom APIs).
+
+### RKV advanced platform
+
+- Multi-node ecosystem integrating aerial and ground assets.
+- Autonomous coordination with human-on-the-loop oversight.
+- Advanced decision logic (NetSentry) for threat prioritization.
+
+## Manufacturing and supply chain
+
+- **PCB design:** Custom boards replacing breadboard/dev-board prototypes.
+  Consolidate ESP32 + PCA9685 + power management onto a single board where
+  practical.
+- **Assembly documentation:** Step-by-step assembly guides with QC checkpoints.
+- **BOM management:** Component-based BOM engine (deferred from Phase 1/2)
+  becomes necessary for managing variants, substitutions, and costing at scale.
+- **Supply chain:** Sourcing strategy for key components; second-source for
+  critical parts (compute modules, accelerators).
+
+## Compliance and certification
+
+- **ITAR awareness:** Review all technical documentation for export control
+  classification. See [legal/compliance](../../legal/compliance/).
+- **CE / FCC:** Electromagnetic compliance for custom PCBs and enclosures.
+- **Safety certification:** Actuator safety for solenoid/stepper systems;
+  electrical safety for production power supplies.
+- **Evidence pipeline:** Chain-of-custody meets legal/regulatory requirements
+  for target markets.
+
+## Infrastructure
+
+- **IaC:** Terraform/Bicep for cloud infrastructure; Ansible or similar for edge
+  provisioning.
+- **CI/CD:** Automated build, test, and deployment for firmware and software.
+- **OTA updates:** Secure firmware update pipeline for deployed nodes.
+- **Monitoring:** Centralized telemetry, alerting, and fleet health dashboards.
+
+See [infrastructure](../../../infra/) and
+[ADR-0035 CI/CD pipeline strategy](../../technical/architecture/adr-0035-cicd-pipeline-strategy.md).
+
+## Prerequisites (from Phase 2)
+
+Before starting Phase 3:
+
+- Phase 2 investor-grade demo validated with external stakeholders.
+- Dual-camera architecture stable and tested in field conditions.
+- Business model and go-to-market validated (which products, which markets).
+- Funding secured for manufacturing tooling and compliance testing.
+
+## Open questions (to resolve as Phase 2 matures)
+
+- Custom PCB vs off-the-shelf modules: cost/benefit for initial production runs.
+- Which product lines to manufacture first (SkyWatch detection nodes are the
+  simplest; turret/interception platforms are more complex).
+- Target markets and associated compliance requirements.
+- Build vs partner for mechanical manufacturing.
+
+## Related
+
+- [Phase-2 overview](../phase2/index.mdx) — prerequisite phase
+- [Phase-0 overview](../phase0/index.mdx) — where it all started
+- [Common modules](../common/index.mdx) — shared across all phases
+- [Product catalog source](../../business/portfolio/product-catalog-source.mdx)
+- [System architecture analysis](../../technical/architecture/system-architecture-analysis.md)
+- [Future phases outline](../../internal/decisions/future-phases-outline.md)

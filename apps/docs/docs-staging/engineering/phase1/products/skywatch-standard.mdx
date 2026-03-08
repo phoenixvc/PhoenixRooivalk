@@ -1,0 +1,48 @@
+---
+title: SkyWatch Standard
+sidebar_label: SkyWatch Standard
+---
+
+# SkyWatch Standard
+
+Standard detection node for Phase-1 demos. Step-up from Nano; better
+compute/camera. Can be run as **detection + alarm only** (no pan/tilt, no
+actuator) or with optional pan/tilt. Prefer OV2640; avoid OV7670. ZAR where
+useful with USD or local fallback.
+
+## Comparison (1a / 1b / 1c)
+
+| Option | Cost   | Performance | Best for             |
+| ------ | ------ | ----------- | -------------------- |
+| 1a     | Lowest | Basic       | Budget build         |
+| 1b     | Medium | Good        | Default demo         |
+| 1c     | Higher | Best        | Higher-quality demos |
+
+## BOM (outline)
+
+Compute (Pi4 + Coral USB baseline), camera (OV2640 preferred), power, storage.
+See [common modules](../../common/index.mdx).
+
+### Parts list (orderable)
+
+| Part                          | Qty | Notes (1a)                    |
+| ----------------------------- | --- | ----------------------------- |
+| Raspberry Pi 4 (2GB or 4GB)   | 1   | Compute                       |
+| Coral USB Accelerator         | 1   | Edge TPU accelerator baseline |
+| Pi Camera v3 or USB webcam    | 1   | Prefer Pi Cam v3              |
+| 64GB microSD (high endurance) | 1   | Storage                       |
+| 5V 5A supply or buck from 12V | 1   | Power                         |
+| Mount/enclosure               | 1   | As needed                     |
+
+Search terms (examples): Raspberry Pi 4 2GB, Pi Camera v3, microSD 64GB high
+endurance. See [platform BOM v1](../platform-bom-v1.mdx) for shared quantities.
+
+## Leave for later
+
+- Hailo upgrade; multi-sensor RF/SDR; long-range optics and stabilized mounts;
+  LTE failover.
+
+## How-to
+
+Wiring, flash, config, test. Links to
+[common/compute](../../common/compute.mdx), [avoid list](../avoid-list.mdx).

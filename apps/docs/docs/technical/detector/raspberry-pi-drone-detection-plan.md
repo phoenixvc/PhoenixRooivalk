@@ -2,7 +2,10 @@
 id: raspberry-pi-drone-detection-plan
 title: Raspberry Pi Drone Detection - One Week Implementation Plan
 sidebar_label: Pi Detection MVP Plan
-description: A minimal viable drone detection system implementation plan for Raspberry Pi, distinguishing drones from common objects using YOLOv5n/YOLOv8n and TFLite within one week.
+description:
+  A minimal viable drone detection system implementation plan for Raspberry Pi,
+  distinguishing drones from common objects using YOLOv5n/YOLOv8n and TFLite
+  within one week.
 difficulty: intermediate
 estimated_reading_time: 20
 points: 25

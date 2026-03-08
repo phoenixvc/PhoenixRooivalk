@@ -1,0 +1,60 @@
+---
+title: SkyWatch Nano
+sidebar_label: SkyWatch Nano
+---
+
+# SkyWatch Nano
+
+Entry-level detection node for Phase-1 demos. Can be run as **detection + alarm
+only** (no pan/tilt, no actuator): camera → detection → local alarm
+(buzzer/strobe) + remote (MQTT/Telegram).
+
+## Description and demo goal
+
+Single-node detection; minimal cost; good for first build or proof-of-concept.
+Camera: prefer OV2640; avoid OV7670 on ESP32. ZAR pricing where useful with USD
+or local fallback.
+
+## Comparison (1a / 1b / 1c)
+
+| Option         | Cost   | Performance | Reliability | Best for              |
+| -------------- | ------ | ----------- | ----------- | --------------------- |
+| 1a ultra-cheap | Lowest | Basic       | Adequate    | First build, learning |
+| 1b balanced    | Medium | Good        | Good        | Default demo          |
+| 1c better      | Higher | Best        | Best        | Demos with headroom   |
+
+## BOM (outline)
+
+Per option: compute (e.g. Pi Zero 2 W or equivalent), camera (OV2640 preferred),
+power, storage, enclosure. See [common modules](../../common/index.mdx) for
+power, alarms, networking, compute.
+
+### Parts list (orderable)
+
+| Part                             | Qty | Notes (1a)                  |
+| -------------------------------- | --- | --------------------------- |
+| ESP32-CAM (OV2640) or USB webcam | 1   | Video source; prefer OV2640 |
+| microSD 32GB (optional)          | 1   | Local snapshots             |
+| 5V buck or phone charger + cable | 1   | Power                       |
+| Jumper wires, mount              | —   | As needed                   |
+
+Search terms (examples): ESP32-CAM OV2640, microSD 32GB, 5V buck converter. Use
+[platform BOM v1](../platform-bom-v1.mdx) quantities cheat sheet for
+multi-product builds.
+
+## Leave for later
+
+- Pi/Jetson + Coral/Hailo (true vision AI); weatherproof enclosure; PoE,
+  external antennas; SMS alert routing (keep remote to Telegram/HTTP webhook
+  first).
+
+## Weighted matrix and choice summary
+
+Dimensions: cost, performance, reliability, effort. Score per option and short
+summary in product BOM table when fully filled.
+
+## How-to
+
+Wiring, flash steps, config, test procedure, upgrade path. Link to
+[common/compute](../../common/compute.mdx),
+[common/power](../../common/power.mdx), [avoid list](../avoid-list.mdx).

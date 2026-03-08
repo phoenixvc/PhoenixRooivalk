@@ -1,0 +1,44 @@
+---
+title: C2C Portal Architecture
+sidebar_label: C2C Portal Architecture
+---
+
+# C2C Portal Architecture
+
+The C2C (Command and Control) Portal is the **operator dashboard** for
+PhoenixRooivalk: monitoring, incident response, and mission workflows. It is not
+part of the direct detection or actuation path; it provides visibility and
+control interfaces for human operators.
+
+## Role in the Stack
+
+- **Operator interface** — Primary UI for operators to view system status,
+  alerts, and mission context.
+- **Monitoring** — Consumes telemetry and events from detection, decision, and
+  actuation subsystems for display and alerting.
+- **Incident response** — Workflows for acknowledging threats, escalating, and
+  (where permitted) influencing response within policy.
+- **Audit and compliance** — Access to logs and audit trails for compliance and
+  after-action review.
+
+## Architecture (high level)
+
+- **Front-end** — Web application; authenticated access; real-time updates (e.g.
+  WebSocket or polling) for status and alerts.
+- **Back-end / APIs** — Services that aggregate data from NetSentry, AeroNet,
+  and other platform components; enforce RBAC and audit logging.
+- **Integration points** — Defined APIs or message contracts to NetSentry,
+  AeroNet, and C2 data sources; no direct connection to effectors.
+
+## Safety and Boundaries
+
+- The portal does **not** issue actuation commands directly to effectors; any
+  operator-initiated action that could affect actuation goes through the
+  decision/authority layer (e.g. NetSentry) and is logged.
+- Role-based access ensures only authorized operators can perform sensitive
+  actions.
+
+## Related
+
+- [System stack overview](../diagrams/system-stack.mdx)
+- [Documentation catalog](../../../index.mdx) — platform systems overview

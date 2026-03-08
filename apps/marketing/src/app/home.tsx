@@ -8,6 +8,8 @@ import { FeaturesSection } from "../components/sections/FeaturesSection";
 import { HeroSection } from "../components/sections/HeroSection";
 import { ProductHighlightsSection } from "../components/sections/ProductHighlightsSection";
 import { InteractiveMesh } from "../components/ui/InteractiveMesh";
+import { serializeJsonLd } from "@phoenix-rooivalk/utils";
+
 import { usePerformanceOptimizations } from "../hooks/usePerformanceOptimizations";
 import styles from "./home.module.css";
 
@@ -43,7 +45,7 @@ export default function HomePage(): React.ReactElement {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
