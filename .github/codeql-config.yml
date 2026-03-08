@@ -1,19 +1,13 @@
 name: "Phoenix Rooivalk CodeQL Configuration"
 
-# This configuration file specifies the queries to run for CodeQL analysis.
-# For more information, see: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning
-
-# Disable the default queries and use a selection of problem severity and security queries.
+# Use default queries plus the security-and-quality suite.
+# security-extended is removed — it overlaps heavily with security-and-quality
+# and doubles query evaluation time with minimal additional coverage.
 disable-default-queries: false
 
-# Specify the queries to run by their language and query name.
 queries:
-  # Use the default CodeQL queries for JavaScript/TypeScript and Rust
   - uses: security-and-quality
-  # Additional Rust-specific queries
-  - uses: security-extended
 
-# Specify the paths to exclude from analysis
 paths-ignore:
   - "**/node_modules/**"
   - "**/target/**"
@@ -25,8 +19,9 @@ paths-ignore:
   - "docs/**"
   - "**/apps/docs/build/**"
   - "**/apps/marketing/out/**"
+  # Tauri/Leptos desktop app — massive WASM dep tree, minimal security surface
+  - "apps/threat-simulator-desktop/**"
 
-# Specify the paths to include in analysis
 paths:
   - "apps/marketing/src/**"
   - "apps/docs/src/**"
