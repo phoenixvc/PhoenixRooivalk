@@ -5,37 +5,64 @@ sidebar_label: Prototype Test Procedures
 
 # Prototype Test Procedures
 
-Standard procedures for testing PhoenixRooivalk prototypes: bench checks, integration tests, and preparation for field testing. Ensures repeatability and safety before moving to field or customer demos.
+Standard procedures for testing PhoenixRooivalk prototypes: bench checks,
+integration tests, and preparation for field testing. Ensures repeatability and
+safety before moving to field or customer demos.
 
 ## Scope
 
-- **Bench** — Power-up, flash verification, self-tests, and basic control/actuation checks in a lab or bench environment.
-- **Integration** — Multi-component tests (e.g. detection → decision → control path) with or without physical actuation, including [virtual turret POC](../../engineering/playbooks/virtual-turret-poc.mdx) style flows.
-- **Pre-field** — Checklist before taking hardware to the field: configuration, logs, safe-state behavior, and rollback.
+- **Bench** — Power-up, flash verification, self-tests, and basic
+  control/actuation checks in a lab or bench environment.
+- **Integration** — Multi-component tests (e.g. detection → decision → control
+  path) with or without physical actuation, including
+  [virtual turret POC](../../engineering/playbooks/virtual-turret-poc.mdx) style
+  flows.
+- **Pre-field** — Checklist before taking hardware to the field: configuration,
+  logs, safe-state behavior, and rollback.
 
 ## Bench Procedure (outline)
 
-1. **Power and rails** — Verify voltages and polarity per [power budgeting](../../technical/hardware/power-budgeting-and-rail-isolation.mdx); check fusing and isolation where applicable.
-2. **Firmware** — Confirm correct image per [board bring-up and flashing](../../technical/hardware/board-bringup-and-flashing.mdx); run any built-in self-tests.
-3. **Sensors** — Sanity-check sensor outputs (IMU, camera, etc.) per [component qualification](../../engineering/playbooks/component-qualification-checklist.mdx).
-4. **Actuation** — If servos/actuators are connected: verify limits and safe state per [authority and safety controller](../../technical/control/authority-and-safety-controller.mdx) and [servo calibration](../../technical/hardware/servo-selection-and-calibration.mdx); do not exceed safe test ranges.
+1. **Power and rails** — Verify voltages and polarity per
+   [power budgeting](../../technical/hardware/power-budgeting-and-rail-isolation.mdx);
+   check fusing and isolation where applicable.
+2. **Firmware** — Confirm correct image per
+   [board bring-up and flashing](../../technical/hardware/board-bringup-and-flashing.mdx);
+   run any built-in self-tests.
+3. **Sensors** — Sanity-check sensor outputs (IMU, camera, etc.) per
+   [component qualification](../../engineering/playbooks/component-qualification-checklist.mdx).
+4. **Actuation** — If servos/actuators are connected: verify limits and safe
+   state per
+   [authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+   and
+   [servo calibration](../../technical/hardware/servo-selection-and-calibration.mdx);
+   do not exceed safe test ranges.
 
 ## Integration Procedure (outline)
 
-1. **Data flow** — Run detection → decision → control with synthetic or live targets; confirm setpoints and authority behavior.
-2. **Transport** — If using real transport (USB/serial/Wi-Fi), verify [transport abstraction](../../technical/architecture/interfaces/transport-abstraction.mdx) behavior: timeouts, heartbeat, and safe state on disconnect.
-3. **Logging** — Confirm audit and telemetry logs are written and reviewable for compliance and debugging.
+1. **Data flow** — Run detection → decision → control with synthetic or live
+   targets; confirm setpoints and authority behavior.
+2. **Transport** — If using real transport (USB/serial/Wi-Fi), verify
+   [transport abstraction](../../technical/architecture/interfaces/transport-abstraction.mdx)
+   behavior: timeouts, heartbeat, and safe state on disconnect.
+3. **Logging** — Confirm audit and telemetry logs are written and reviewable for
+   compliance and debugging.
 
 ## Pre-Field Checklist
 
-- [ ] Configuration and limits set for the deployment (e.g. max rate, safe zone).
+- [ ] Configuration and limits set for the deployment (e.g. max rate, safe
+      zone).
 - [ ] Safe-state and timeout behavior verified.
 - [ ] Logging and (if required) compliance/audit enabled.
-- [ ] Rollback or recovery procedure documented and tested (e.g. re-flash, safe mode).
+- [ ] Rollback or recovery procedure documented and tested (e.g. re-flash, safe
+      mode).
 
 ## Field Test Procedures
 
-Field test procedures (e.g. turret/servo demo in the field, environmental tests) should be authored as separate runbooks in this folder, referencing this document and the [component qualification checklist](../../engineering/playbooks/component-qualification-checklist.mdx) where applicable.
+Field test procedures (e.g. turret/servo demo in the field, environmental tests)
+should be authored as separate runbooks in this folder, referencing this
+document and the
+[component qualification checklist](../../engineering/playbooks/component-qualification-checklist.mdx)
+where applicable.
 
 ## Related
 

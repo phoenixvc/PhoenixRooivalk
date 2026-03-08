@@ -5,8 +5,17 @@ sidebar_label: Compute
 
 # Phase-1 Compute
 
-- **Default:** Pi4 + Coral for detection/inference. **Recommendation:** Standardize on Pi4+Coral as the default Phase-1 standalone compute (stable, good FPS, clear upgrade path). **Alternatives:** used Android phone = ultra-cheap fallback; Pi5+Hailo = Phase 2 upgrade. Per product doc for 1a/1b/1c.
-- **Camera:** **ESP32-CAM (OV2640) preferred.** **Avoid OV7670 on ESP32** (parallel interface, no JPEG, painful). Use OV2640 or equivalent for turret or detection nodes where ESP32-CAM is used.
-- **Turret view:** **UVC-to-Pi** is an alternative (USB camera to Pi) for turret view instead of ESP32-CAM on the turret. Choose per build (1a/1b/1c) and product doc.
+- **Default:** Pi4 + Coral for detection/inference. **Recommendation:**
+  Standardize on Pi4+Coral as the default Phase-1 standalone compute (stable,
+  good FPS, clear upgrade path). **Alternatives:** used Android phone =
+  ultra-cheap fallback; Pi5+Hailo = Phase 2 upgrade. Per product doc for
+  1a/1b/1c.
+- **Camera:** **ESP32-CAM (OV2640) preferred.** **Avoid OV7670 on ESP32**
+  (parallel interface, no JPEG, painful). Use OV2640 or equivalent for turret or
+  detection nodes where ESP32-CAM is used.
+- **Turret view:** **UVC-to-Pi** is an alternative (USB camera to Pi) for turret
+  view instead of ESP32-CAM on the turret. Choose per build (1a/1b/1c) and
+  product doc.
 
-See [Avoid list](../phase1/avoid-list.mdx) and [product BOMs](../phase1/products/index.mdx) for camera and compute choices.
+See [Avoid list](../phase1/avoid-list.mdx) and
+[product BOMs](../phase1/products/index.mdx) for camera and compute choices.

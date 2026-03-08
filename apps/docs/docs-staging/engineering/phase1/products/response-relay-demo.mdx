@@ -5,19 +5,22 @@ sidebar_label: Response Relay (Demo)
 
 # Response Relay (Demo)
 
-Safe response placeholder: relay/MOSFET to LED/lamp/dummy load only. No launcher or harmful hardware.
+Safe response placeholder: relay/MOSFET to LED/lamp/dummy load only. No launcher
+or harmful hardware.
 
 ## Description and demo goal
 
-Receives detect/decision signal (e.g. MQTT); drives a safe output (relay or MOSFET to LED, lamp, or dummy load). Arm/disarm and log activations. Used to validate the response path without any launcher.
+Receives detect/decision signal (e.g. MQTT); drives a safe output (relay or
+MOSFET to LED, lamp, or dummy load). Arm/disarm and log activations. Used to
+validate the response path without any launcher.
 
 ## Comparison (1a / 1b / 1c)
 
-| Option | Description | Cost | Reliability | Best for |
-|--------|-------------|------|-------------|----------|
-| **1a** | Basic relay module, minimal circuit; arm/disarm via GPIO. | Lowest | Adequate | Lab only |
-| **1b** | Relay or MOSFET with status LED; optional MQTT logging. | Medium | Good | Default demo |
-| **1c** | Relay + diagnostics (current sense, log to SD/cloud); mTLS or token auth. | Higher | Best | Logging and diagnostics |
+| Option | Description                                                               | Cost   | Reliability | Best for                |
+| ------ | ------------------------------------------------------------------------- | ------ | ----------- | ----------------------- |
+| **1a** | Basic relay module, minimal circuit; arm/disarm via GPIO.                 | Lowest | Adequate    | Lab only                |
+| **1b** | Relay or MOSFET with status LED; optional MQTT logging.                   | Medium | Good        | Default demo            |
+| **1c** | Relay + diagnostics (current sense, log to SD/cloud); mTLS or token auth. | Higher | Best        | Logging and diagnostics |
 
 ## BOM (outline)
 
@@ -31,20 +34,25 @@ No launcher or harmful hardware. See [safety boundary](../safety-boundary.mdx).
 
 ### Parts list (orderable)
 
-| Part | Qty | Notes (1a) |
-|------|-----|------------|
-| ESP32 dev board | 1 | Control + MQTT |
-| Relay module or MOSFET board | 1 | Safe switching |
-| LED or lamp (dummy load) | 1 | No launcher |
-| Arm/disarm switch | 1 | Physical safety |
-| Status LED | 1 | Optional |
+| Part                         | Qty | Notes (1a)      |
+| ---------------------------- | --- | --------------- |
+| ESP32 dev board              | 1   | Control + MQTT  |
+| Relay module or MOSFET board | 1   | Safe switching  |
+| LED or lamp (dummy load)     | 1   | No launcher     |
+| Arm/disarm switch            | 1   | Physical safety |
+| Status LED                   | 1   | Optional        |
 
-Search terms (examples): ESP32 dev board, 5V relay module, LED. See [platform BOM v1](../platform-bom-v1.mdx) and [safety boundary](../safety-boundary.mdx).
+Search terms (examples): ESP32 dev board, 5V relay module, LED. See
+[platform BOM v1](../platform-bom-v1.mdx) and
+[safety boundary](../safety-boundary.mdx).
 
 ## Leave for later
 
-- High-energy actuators; any hardware meant to launch or physically harm (out of scope for Phase 1).
+- High-energy actuators; any hardware meant to launch or physically harm (out of
+  scope for Phase 1).
 
 ## How-to
 
-Wiring, flash, config (MQTT topic, arm/disarm logic), test. Link to [common/actuator](../../common/actuator.mdx), [common/networking](../../common/networking.mdx).
+Wiring, flash, config (MQTT topic, arm/disarm logic), test. Link to
+[common/actuator](../../common/actuator.mdx),
+[common/networking](../../common/networking.mdx).

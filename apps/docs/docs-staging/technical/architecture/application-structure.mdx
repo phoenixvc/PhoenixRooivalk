@@ -5,64 +5,72 @@ sidebar_label: Application structure
 
 # Application Structure (Recommended)
 
-This document describes the **recommended** (target) repository layout for the control/tracking/actuator pipeline. The current repo does not yet match this layout; the mapping table and consolidation plan below show how existing apps and packages relate to the target and how to migrate incrementally.
+This document describes the **recommended** (target) repository layout for the
+control/tracking/actuator pipeline. The current repo does not yet match this
+layout; the mapping table and consolidation plan below show how existing apps
+and packages relate to the target and how to migrate incrementally.
 
 ## Recommended layout
 
 **High-level modules (apps or equivalent):**
 
 - **vision** — Cameras, inference (TFLite/ONNX/Coral), detection output.
-- **tracking** — Trackers (e.g. centroid, Kalman), targeting; consumes vision output.
+- **tracking** — Trackers (e.g. centroid, Kalman), targeting; consumes vision
+  output.
 - **supervisor** — Authority/safety/control loop; gates commands to actuators.
 - **pilot-ui** — Operator interface for manual/assisted control and monitoring.
-- **actuator** — Hardware/firmware (e.g. ESP32, PCA9685) that receives validated commands; often out-of-repo or in firmware repos.
+- **actuator** — Hardware/firmware (e.g. ESP32, PCA9685) that receives validated
+  commands; often out-of-repo or in firmware repos.
 
 **Shared packages:**
 
-- **contracts** — Data shapes for detection, tracking, intent, and control (DTOs).
-- **safety** — Authority state machine, validation rules (optional dedicated package).
-- **transport** — Serial/protocol abstraction and implementation (optional dedicated package).
+- **contracts** — Data shapes for detection, tracking, intent, and control
+  (DTOs).
+- **safety** — Authority state machine, validation rules (optional dedicated
+  package).
+- **transport** — Serial/protocol abstraction and implementation (optional
+  dedicated package).
 
 ## Mapping: recommended modules to existing (1:1, 1:many, many:1)
 
-| Recommended module | Existing app(s) / package(s) | Mapping | Notes |
-|--------------------|------------------------------|---------|--------|
-| **vision** | `apps/detector` | 1:1 | Detector: cameras, inference (TFLite/ONNX/Coral), detection output. |
-| **tracking** | `apps/detector` | many:1 | Tracking lives inside detector today (centroid/Kalman trackers, targeting). Target: separate `tracking` app or submodule. |
-| **supervisor** | `apps/api`, `apps/keeper` | many:1 | Authority/safety/control-loop logic may sit in api or keeper; no single "supervisor" app yet. |
-| **pilot-ui** | `apps/threat-simulator-desktop` (partial) | 1:many | Simulator has operator/game UI; dedicated "pilot" control UI could be split out or remain combined. `docs` is portal, not turret pilot. |
-| **actuator** | (none in repo) | — | Actuator is hardware/firmware (e.g. ESP32, PCA9685); documented in docs. No app in repo. |
-| **contracts** | `packages/types` | 1:1 | Shared types (ThreatDetection, etc.). Extend for detection/tracking/intent/control shapes. |
-| **safety** | (none) | — | No dedicated package; logic could live in api/keeper or new `packages/safety`. |
-| **transport** | (none) | — | No dedicated package; transport abstraction is doc-only; implementation could be in api or new package. |
+| Recommended module | Existing app(s) / package(s)              | Mapping | Notes                                                                                                                                   |
+| ------------------ | ----------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **vision**         | `apps/detector`                           | 1:1     | Detector: cameras, inference (TFLite/ONNX/Coral), detection output.                                                                     |
+| **tracking**       | `apps/detector`                           | many:1  | Tracking lives inside detector today (centroid/Kalman trackers, targeting). Target: separate `tracking` app or submodule.               |
+| **supervisor**     | `apps/api`, `apps/keeper`                 | many:1  | Authority/safety/control-loop logic may sit in api or keeper; no single "supervisor" app yet.                                           |
+| **pilot-ui**       | `apps/threat-simulator-desktop` (partial) | 1:many  | Simulator has operator/game UI; dedicated "pilot" control UI could be split out or remain combined. `docs` is portal, not turret pilot. |
+| **actuator**       | (none in repo)                            | —       | Actuator is hardware/firmware (e.g. ESP32, PCA9685); documented in docs. No app in repo.                                                |
+| **contracts**      | `packages/types`                          | 1:1     | Shared types (ThreatDetection, etc.). Extend for detection/tracking/intent/control shapes.                                              |
+| **safety**         | (none)                                    | —       | No dedicated package; logic could live in api/keeper or new `packages/safety`.                                                          |
+| **transport**      | (none)                                    | —       | No dedicated package; transport abstraction is doc-only; implementation could be in api or new package.                                 |
 
-So: 
-**vision + tracking** map to **detector** (1:many from recommended to existing). 
-**Supervisor** maps to **api + keeper** (many:1). 
-**contracts** maps to **types**. 
-**pilot-ui** partially maps to **threat-simulator-desktop**. 
+So: **vision + tracking** map to **detector** (1:many from recommended to
+existing). **Supervisor** maps to **api + keeper** (many:1). **contracts** maps
+to **types**. **pilot-ui** partially maps to **threat-simulator-desktop**.
 **actuator**, **safety**, **transport** have no direct repo counterpart today.
 
 ## Consolidation plan
 
 Ways to move from the current layout toward the recommended one:
 
-- **Vision / tracking:**
-    Option A — keep detector as one app but document logical separation (vision vs tracking) inside it.
-    **Option B (chosen)** — split into `apps/vision` and `apps/tracking` when boundaries are stable.
-- **Supervisor:**
-    Option A — designate one of `api` or `keeper` as the authority/safety host and document it.
-    **Option B (chosen)** — add `apps/supervisor` and migrate logic from api/keeper over time.
-- **Pilot-ui:**
-    **Option A (chosen)** — treat threat-simulator-desktop as the pilot/simulation UI.
-    Option B — add `apps/pilot-ui` for real turret control when needed.
-- **Contracts:** 
-    Extend `packages/types` (or add `packages/contracts`) with detection, tracking, intent, and control DTOs.
-- **Safety / transport:**
-    Add `packages/safety` and/or `packages/transport` when logic is ready; until then, document intended interfaces and where they will live.
+- **Vision / tracking:** Option A — keep detector as one app but document
+  logical separation (vision vs tracking) inside it. **Option B (chosen)** —
+  split into `apps/vision` and `apps/tracking` when boundaries are stable.
+- **Supervisor:** Option A — designate one of `api` or `keeper` as the
+  authority/safety host and document it. **Option B (chosen)** — add
+  `apps/supervisor` and migrate logic from api/keeper over time.
+- **Pilot-ui:** **Option A (chosen)** — treat threat-simulator-desktop as the
+  pilot/simulation UI. Option B — add `apps/pilot-ui` for real turret control
+  when needed.
+- **Contracts:** Extend `packages/types` (or add `packages/contracts`) with
+  detection, tracking, intent, and control DTOs.
+- **Safety / transport:** Add `packages/safety` and/or `packages/transport` when
+  logic is ready; until then, document intended interfaces and where they will
+  live.
 
 ## Related
 
-- [Tracking–Actuator Bridge](diagrams/tracking-actuator-bridge.mdx) — Data flow and roles aligned with this structure.
+- [Tracking–Actuator Bridge](diagrams/tracking-actuator-bridge.mdx) — Data flow
+  and roles aligned with this structure.
 - [Transport abstraction](interfaces/transport-abstraction.mdx)
 - [Authority and safety controller](../../control/authority-and-safety-controller.mdx)

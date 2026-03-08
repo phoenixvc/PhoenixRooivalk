@@ -3,20 +3,28 @@ title: Product List Summary
 sidebar_label: Product list
 ---
 
-import { getProductLines, getProductListSummary, getProductsByLine } from "@site/src/data/products";
+import {
+  getProductLines,
+  getProductListSummary,
+  getProductsByLine,
+} from "@site/src/data/products";
 
-const summary = getProductListSummary();
-const lines = getProductLines();
+const summary = getProductListSummary(); const lines = getProductLines();
 
 # Product List Summary
 
-Quick reference for all products in the PhoenixRooivalk catalog. Source of truth is the TypeScript catalog; see [Product catalog data source](./product-catalog-source.mdx) for location and export.
+Quick reference for all products in the PhoenixRooivalk catalog. Source of truth
+is the TypeScript catalog; see
+[Product catalog data source](./product-catalog-source.mdx) for location and
+export.
 
-**Totals:** {summary.totalProducts} products across {summary.lineCount} lines. `lastUpdated` in catalog: **{summary.lastUpdated}**.
+**Totals:** {summary.totalProducts} products across {summary.lineCount} lines.
+`lastUpdated` in catalog: **{summary.lastUpdated}**.
 
 ---
 
 {lines.map((line) => (
+
   <section key={line.id}>
     <h2>{line.id}{line.subtitle ? ` (${line.subtitle})` : ""} — {summary.countsByLine[line.id]}</h2>
 
@@ -40,10 +48,12 @@ Quick reference for all products in the PhoenixRooivalk catalog. Source of truth
     </table>
 
     <hr />
+
   </section>
 ))}
 
 ## Related
 
-- [Product catalog data source](./product-catalog-source.mdx) — Repo location, usage, and JSON/CSV export.
+- [Product catalog data source](./product-catalog-source.mdx) — Repo location,
+  usage, and JSON/CSV export.
 - [PRD index](../prd/index.mdx) — Product requirement documents.

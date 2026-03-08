@@ -186,11 +186,7 @@ const sidebarsStaging: SidebarsConfig = {
       type: "category",
       label: "Legal",
       collapsed: true,
-      items: [
-        "legal/index",
-        "legal/compliance/index",
-        "legal/policies/index",
-      ],
+      items: ["legal/index", "legal/compliance/index", "legal/policies/index"],
     },
     {
       type: "category",

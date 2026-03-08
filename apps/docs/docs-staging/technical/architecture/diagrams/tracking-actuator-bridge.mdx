@@ -5,14 +5,25 @@ sidebar_label: Tracking–Actuator Bridge
 
 # AI Tracking to Actuator Bridge Architecture
 
-This document describes the architecture that connects AI-based tracking (detection/decision) to the actuator layer: coordinate frames, control loop, and the safety boundary so that only authorized, validated commands drive physical motion.
+This document describes the architecture that connects AI-based tracking
+(detection/decision) to the actuator layer: coordinate frames, control loop, and
+the safety boundary so that only authorized, validated commands drive physical
+motion.
 
 ## Roles
 
-- **Tracking** — Produces target state (e.g. azimuth/elevation or Cartesian) in a defined frame; may run on perception/ML pipeline.
-- **Control loop** — Converts tracking output to setpoints and runs the [tracking control loop](../../control/tracking-control-loop.mdx) (e.g. PID or similar) with limits and rate constraints.
-- **Authority/safety** — The [authority and safety controller](../../control/authority-and-safety-controller.mdx) gates all commands to actuators; no direct path from tracking to actuation without going through this layer.
-- **Actuator** — Servos or other effectors receive only commands that have passed the safety layer and [transport abstraction](../interfaces/transport-abstraction.mdx).
+- **Tracking** — Produces target state (e.g. azimuth/elevation or Cartesian) in
+  a defined frame; may run on perception/ML pipeline.
+- **Control loop** — Converts tracking output to setpoints and runs the
+  [tracking control loop](../../control/tracking-control-loop.mdx) (e.g. PID or
+  similar) with limits and rate constraints.
+- **Authority/safety** — The
+  [authority and safety controller](../../control/authority-and-safety-controller.mdx)
+  gates all commands to actuators; no direct path from tracking to actuation
+  without going through this layer.
+- **Actuator** — Servos or other effectors receive only commands that have
+  passed the safety layer and
+  [transport abstraction](../interfaces/transport-abstraction.mdx).
 
 ## Data Flow (logical)
 
@@ -24,13 +35,18 @@ Tracking output → Control loop (setpoints, limits) → Authority/safety → Tr
 
 ## Safety Boundary
 
-- Actuation is **demo-safe** and governed; no implementation detail that enables harm.
-- All commands are validated (limits, rate, authority) before being sent over the transport.
-- Timeout and heartbeat semantics are as defined in [Transport abstraction](../interfaces/transport-abstraction.mdx).
+- Actuation is **demo-safe** and governed; no implementation detail that enables
+  harm.
+- All commands are validated (limits, rate, authority) before being sent over
+  the transport.
+- Timeout and heartbeat semantics are as defined in
+  [Transport abstraction](../interfaces/transport-abstraction.mdx).
 
 ## Related
 
-- [Application structure (recommended layout)](../application-structure.mdx) — Repo layout for vision, tracking, supervisor, pilot-ui, actuator and mapping to current apps.
+- [Application structure (recommended layout)](../application-structure.mdx) —
+  Repo layout for vision, tracking, supervisor, pilot-ui, actuator and mapping
+  to current apps.
 - [System stack](./system-stack.mdx)
 - [Transport abstraction](../interfaces/transport-abstraction.mdx)
 - [Authority and safety controller](../../control/authority-and-safety-controller.mdx)

@@ -5,39 +5,62 @@ sidebar_label: Transport Abstraction
 
 # Transport Abstraction
 
-This document defines the transport abstraction for control and telemetry between detection, decision, and actuation components. The abstraction allows swapping physical layers (e.g. USB, serial, Wi-Fi) while keeping a consistent command/telemetry contract and safety semantics.
+This document defines the transport abstraction for control and telemetry
+between detection, decision, and actuation components. The abstraction allows
+swapping physical layers (e.g. USB, serial, Wi-Fi) while keeping a consistent
+command/telemetry contract and safety semantics.
 
 ## Purpose
 
-- **Swappable comms** — Same logical protocol over USB, serial, or Wi-Fi today; other transports (e.g. CAN, Ethernet) can be added later. The communication layer is **pluggable**: choose USB, serial, or Wi-Fi for a given build; future options can include RF via a proper interface (e.g. MAVLink over a compatible link, or USB HID/trainer path for manual override). Proprietary RF emulation is out of scope.
-- **Consistent semantics** — Control commands and telemetry formats are defined once; transport only carries bytes and handles connection lifecycle.
-- **Safety** — Timeouts, heartbeat, and authority checks are part of the contract so that actuation never proceeds without valid, authorized commands.
+- **Swappable comms** — Same logical protocol over USB, serial, or Wi-Fi today;
+  other transports (e.g. CAN, Ethernet) can be added later. The communication
+  layer is **pluggable**: choose USB, serial, or Wi-Fi for a given build; future
+  options can include RF via a proper interface (e.g. MAVLink over a compatible
+  link, or USB HID/trainer path for manual override). Proprietary RF emulation
+  is out of scope.
+- **Consistent semantics** — Control commands and telemetry formats are defined
+  once; transport only carries bytes and handles connection lifecycle.
+- **Safety** — Timeouts, heartbeat, and authority checks are part of the
+  contract so that actuation never proceeds without valid, authorized commands.
 
 ## Logical Messages
 
 ### ControlCommand
 
-- Intended effect (e.g. pan/tilt setpoint, enable/disable actuation) and optional limits.
-- Must include or be bound to an authority/session so that only the safety controller can issue actuation commands.
-- **Concrete schema and serial format** — Control output shape (e.g. yaw_rate, pitch_rate, mode, ttl_ms) and the text serial line format (e.g. `Y:1500 P:1500 TTL:150`) are defined in [Vision-to-actuator contracts](./vision-to-actuator-contracts.mdx).
+- Intended effect (e.g. pan/tilt setpoint, enable/disable actuation) and
+  optional limits.
+- Must include or be bound to an authority/session so that only the safety
+  controller can issue actuation commands.
+- **Concrete schema and serial format** — Control output shape (e.g. yaw_rate,
+  pitch_rate, mode, ttl_ms) and the text serial line format (e.g.
+  `Y:1500 P:1500 TTL:150`) are defined in
+  [Vision-to-actuator contracts](./vision-to-actuator-contracts.mdx).
 
 ### Telemetry
 
 - State reported from sensors and actuators: positions, status flags, faults.
 - Used for tracking feedback, monitoring, and audit logging.
-- Rate and latency requirements should be stated (e.g. minimum rate for closed-loop tracking).
+- Rate and latency requirements should be stated (e.g. minimum rate for
+  closed-loop tracking).
 
 ## Transport Semantics
 
-- **Connection** — How connection is established and detected (e.g. plug-in, pairing); reconnection and backoff.
-- **Framing** — How messages are framed on the wire (length-prefix, delimiters, or protocol-specific).
-- **Ordering** — Whether ordering is guaranteed; if not, how out-of-order or stale commands are rejected.
+- **Connection** — How connection is established and detected (e.g. plug-in,
+  pairing); reconnection and backoff.
+- **Framing** — How messages are framed on the wire (length-prefix, delimiters,
+  or protocol-specific).
+- **Ordering** — Whether ordering is guaranteed; if not, how out-of-order or
+  stale commands are rejected.
 
 ## Safety Semantics
 
-- **Timeout** — If no valid command or heartbeat within T, actuation must transition to safe state (e.g. hold, disable).
-- **Authority** — Only the designated safety/authority controller can issue actuation commands; see [Authority and safety controller](../../control/authority-and-safety-controller.mdx).
-- **Audit** — Commands and critical state changes should be logged for compliance and debugging.
+- **Timeout** — If no valid command or heartbeat within T, actuation must
+  transition to safe state (e.g. hold, disable).
+- **Authority** — Only the designated safety/authority controller can issue
+  actuation commands; see
+  [Authority and safety controller](../../control/authority-and-safety-controller.mdx).
+- **Audit** — Commands and critical state changes should be logged for
+  compliance and debugging.
 
 ## Related
 

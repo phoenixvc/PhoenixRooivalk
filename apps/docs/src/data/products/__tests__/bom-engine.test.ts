@@ -159,7 +159,8 @@ describe("bom-engine", () => {
         if (result.reconciled) {
           const reconcileLine = result.bom.find(
             (l) =>
-              /reconcil/i.test(l.item) || /adjust to match/i.test(l.specification),
+              /reconcil/i.test(l.item) ||
+              /adjust to match/i.test(l.specification),
           );
           expect(reconcileLine).toBeDefined();
         }

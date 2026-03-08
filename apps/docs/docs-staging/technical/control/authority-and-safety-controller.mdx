@@ -5,38 +5,62 @@ sidebar_label: Authority and Safety Controller
 
 # Authority and Safety Controller
 
-The authority and safety controller is the **single gate** through which all actuation commands must pass. It enforces limits, timeouts, and policy so that only valid, authorized commands reach the physical actuators.
+The authority and safety controller is the **single gate** through which all
+actuation commands must pass. It enforces limits, timeouts, and policy so that
+only valid, authorized commands reach the physical actuators.
 
 ## Responsibilities
 
-- **Authority** — Only the designated controller (or its delegated session) may issue actuation commands; other sources (e.g. raw tracking output, debug tools) are blocked unless explicitly allowed under controlled conditions.
-- **Manual override always wins** — Operator manual input takes precedence over automatic tracking. When override is signaled (key, button, or physical switch), the controller must transition to MANUAL and ignore or clamp auto-generated commands until override is released. Override signaling must be documented per product (e.g. keyboard key, gamepad button, physical switch on hardware).
-- **Limits** — Enforce position, rate, and effort limits so that commands never exceed safe mechanical or operational bounds.
-- **Timeout and heartbeat** — If commands or heartbeats stop within a defined window, transition to safe state (e.g. hold, disable drive) as specified in the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
-- **Audit** — Log command decisions (accepted/rejected) and state transitions for compliance and debugging.
+- **Authority** — Only the designated controller (or its delegated session) may
+  issue actuation commands; other sources (e.g. raw tracking output, debug
+  tools) are blocked unless explicitly allowed under controlled conditions.
+- **Manual override always wins** — Operator manual input takes precedence over
+  automatic tracking. When override is signaled (key, button, or physical
+  switch), the controller must transition to MANUAL and ignore or clamp
+  auto-generated commands until override is released. Override signaling must be
+  documented per product (e.g. keyboard key, gamepad button, physical switch on
+  hardware).
+- **Limits** — Enforce position, rate, and effort limits so that commands never
+  exceed safe mechanical or operational bounds.
+- **Timeout and heartbeat** — If commands or heartbeats stop within a defined
+  window, transition to safe state (e.g. hold, disable drive) as specified in
+  the
+  [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
+- **Audit** — Log command decisions (accepted/rejected) and state transitions
+  for compliance and debugging.
 
 ## Authority state machine
 
-The supervisor operates in one of these states. Transitions are driven by operator input, valid auto intent, or fault/loss of command.
+The supervisor operates in one of these states. Transitions are driven by
+operator input, valid auto intent, or fault/loss of command.
 
-| State        | Description |
-| ------------ | ----------- |
-| **MANUAL**   | Operator has full control; auto/tracking commands are ignored or clamped. Entered when manual override is signaled. |
-| **ASSISTED** | Operator and automation share control (e.g. operator can trim while tracking runs). Transition rules are product-specific. |
+| State          | Description                                                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **MANUAL**     | Operator has full control; auto/tracking commands are ignored or clamped. Entered when manual override is signaled.                                  |
+| **ASSISTED**   | Operator and automation share control (e.g. operator can trim while tracking runs). Transition rules are product-specific.                           |
 | **AUTO_TRACK** | Automation drives pan/tilt from tracking intent; operator can still override. Entered when valid auto intent is active and override is not asserted. |
-| **FAILSAFE** | Fault, loss of command, or timeout; actuation is in safe state (e.g. neutral). Entered on timeout, heartbeat loss, or detected fault. |
+| **FAILSAFE**   | Fault, loss of command, or timeout; actuation is in safe state (e.g. neutral). Entered on timeout, heartbeat loss, or detected fault.                |
 
-**Transitions (typical):** Manual override asserted → MANUAL. Valid auto intent and no override → AUTO_TRACK (or ASSISTED if product supports it). Timeout or fault → FAILSAFE. Recovery from FAILSAFE requires explicit operator action or cleared fault.
+**Transitions (typical):** Manual override asserted → MANUAL. Valid auto intent
+and no override → AUTO_TRACK (or ASSISTED if product supports it). Timeout or
+fault → FAILSAFE. Recovery from FAILSAFE requires explicit operator action or
+cleared fault.
 
 ## Safe State
 
-- On fault, loss of command, or timeout: actuation must transition to a defined safe state (e.g. hold last position, move to neutral, or disable).
-- Safe state behavior is documented per product or integration so that operators and maintainers know what to expect.
+- On fault, loss of command, or timeout: actuation must transition to a defined
+  safe state (e.g. hold last position, move to neutral, or disable).
+- Safe state behavior is documented per product or integration so that operators
+  and maintainers know what to expect.
 
 ## Integration
 
-- Sits between the decision layer (NetSentry, AeroNet, or demo control logic) and the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx) that carries commands to actuators.
-- Consumes telemetry from actuators to validate state and detect faults; can command safe state on sensor fault.
+- Sits between the decision layer (NetSentry, AeroNet, or demo control logic)
+  and the
+  [transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+  that carries commands to actuators.
+- Consumes telemetry from actuators to validate state and detect faults; can
+  command safe state on sensor fault.
 
 ## Related
 

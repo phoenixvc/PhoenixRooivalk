@@ -1,24 +1,30 @@
 ---
 title: PhoenixRooivalk Documentation Catalog
-tags: ['internal', 'documentation', 'catalog']
+tags: ["internal", "documentation", "catalog"]
 ---
 
 # PhoenixRooivalk Documentation Catalog
 
-:::info Staging
-This is the **staging copy** of the catalog. The canonical location after promotion is `apps/docs/docs/`. Refine content here; the live site uses `docs/` until you promote.
-:::
+:::info Staging This is the **staging copy** of the catalog. The canonical
+location after promotion is `apps/docs/docs/`. Refine content here; the live
+site uses `docs/` until you promote. :::
 
-This document defines the **canonical documentation structure** for the PhoenixRooivalk platform and its associated product ecosystem. It serves as the master planning artifact for how documentation is organized, authored, and maintained across the repository.
+This document defines the **canonical documentation structure** for the
+PhoenixRooivalk platform and its associated product ecosystem. It serves as the
+master planning artifact for how documentation is organized, authored, and
+maintained across the repository.
 
-The catalog is intended primarily for **internal engineers, product teams, and approved partners** who maintain or contribute to the PhoenixRooivalk documentation portal. It establishes:
+The catalog is intended primarily for **internal engineers, product teams, and
+approved partners** who maintain or contribute to the PhoenixRooivalk
+documentation portal. It establishes:
 
 - the documentation domain structure
 - repository locations for documents
 - navigation entry points (`index.mdx` files)
 - conventions for generating and maintaining documentation
 
-Repository location (after promotion): `apps/docs/docs/`. Staging: `apps/docs/docs-staging/`.
+Repository location (after promotion): `apps/docs/docs/`. Staging:
+`apps/docs/docs-staging/`.
 
 ---
 
@@ -27,7 +33,8 @@ Repository location (after promotion): `apps/docs/docs/`. Staging: `apps/docs/do
 The documentation catalog ensures:
 
 - Consistent documentation across all product lines
-- Clear separation between business, technical, operational, and internal material
+- Clear separation between business, technical, operational, and internal
+  material
 - Predictable document structure for AI‑assisted documentation generation
 - Alignment with the PhoenixRooivalk platform architecture and product stack
 
@@ -46,51 +53,62 @@ When creating or updating documentation:
 
 ## PhoenixRooivalk Platform Stack Model
 
-PhoenixRooivalk systems follow a layered architecture separating sensing, decision logic, and **non‑harmful** physical response integrations.
+PhoenixRooivalk systems follow a layered architecture separating sensing,
+decision logic, and **non‑harmful** physical response integrations.
 
 **Detection → Decision → Actuation**
 
-| Layer | Systems | Role |
-|------|---------|------|
-| Detection | SkyWatch, SkyWatch Mesh | Detect and track drones |
-| Decision / Control | NetSentry, AeroNet | Threat evaluation and response control |
-| Actuation | NetSnare, SkySnare | Integrate response outputs (demo-safe and governed) |
-| Advanced Platform | RKV | Integrated multi‑node ecosystem |
-| Operator Interface | C2C Portal | Monitoring, incident response, and operator workflows |
+| Layer              | Systems                 | Role                                                  |
+| ------------------ | ----------------------- | ----------------------------------------------------- |
+| Detection          | SkyWatch, SkyWatch Mesh | Detect and track drones                               |
+| Decision / Control | NetSentry, AeroNet      | Threat evaluation and response control                |
+| Actuation          | NetSnare, SkySnare      | Integrate response outputs (demo-safe and governed)   |
+| Advanced Platform  | RKV                     | Integrated multi‑node ecosystem                       |
+| Operator Interface | C2C Portal              | Monitoring, incident response, and operator workflows |
 
 ---
 
 ## Platform Systems
 
 ### SkyWatch
-Primary drone detection sensor platform deployed at fixed sites or mobile locations.
+
+Primary drone detection sensor platform deployed at fixed sites or mobile
+locations.
 
 ### SkyWatch Mesh
+
 Distributed detection network connecting multiple SkyWatch nodes.
 
 ### NetSentry
+
 Autonomous decision and response controller.
 
 ### NetSnare
+
 Interception platform architecture (product-specific implementation).
 
 ### SkySnare
+
 Consumer-oriented capture system based on the NetSnare architecture.
 
 ### AeroNet
+
 Enterprise orchestration platform for distributed deployments.
 
 ### RKV
+
 Advanced ecosystem platform integrating aerial and ground assets.
 
 ### C2C Portal
+
 Operator dashboard used for monitoring and mission workflows.
 
 ---
 
 ## Documentation Domains
 
-The documentation system is organized into **six primary domains**, each with its own root `index.mdx` entry point.
+The documentation system is organized into **six primary domains**, each with
+its own root `index.mdx` entry point.
 
 1. [Business](./business/) — portfolio, PRDs
 2. [Technical](./technical/) — architecture, ML, hardware, control
@@ -103,7 +121,9 @@ The documentation system is organized into **six primary domains**, each with it
 
 ## Documentation Tree
 
-Staging path: `apps/docs/docs-staging/`. Each folder’s `index.mdx` lists the docs in that folder; the tree below shows structure (one `index.mdx` per folder).
+Staging path: `apps/docs/docs-staging/`. Each folder’s `index.mdx` lists the
+docs in that folder; the tree below shows structure (one `index.mdx` per
+folder).
 
 ```
 business/
@@ -169,5 +189,7 @@ internal/
 
 ## Notes
 
-- Internal documentation may be hidden from public builds via docs configuration rather than weakening the catalog structure.
-- Architecture and prototypes should document **demo-safe** response integrations and safety controls; avoid harm‑enabling implementation details.
+- Internal documentation may be hidden from public builds via docs configuration
+  rather than weakening the catalog structure.
+- Architecture and prototypes should document **demo-safe** response
+  integrations and safety controls; avoid harm‑enabling implementation details.

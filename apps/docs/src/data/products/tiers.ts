@@ -1411,7 +1411,9 @@ export function getProductConnectivityConfig(
 export function getAvailableConnectivity(sku: string): ConnectivityTier[] {
   const config = getProductConnectivityConfig(sku);
   if (!config) return [];
-  return config.availableConnectivity.map((connId) => connectivityTiers[connId]);
+  return config.availableConnectivity.map(
+    (connId) => connectivityTiers[connId],
+  );
 }
 
 /** Get storage config for a product */
@@ -1532,7 +1534,8 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
   const errors: string[] = [];
   const computeBaseSentinels = ["none", "server"] as const;
   for (const c of productComputeConfigs) {
-    if (!productBySku[c.sku]) errors.push(`Compute config SKU not in catalog: ${c.sku}`);
+    if (!productBySku[c.sku])
+      errors.push(`Compute config SKU not in catalog: ${c.sku}`);
     if (
       !computeBaseSentinels.includes(
         c.baseTier as (typeof computeBaseSentinels)[number],
@@ -1547,13 +1550,16 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
     }
     for (const k of Object.keys(c.tierPricing) as ComputeTierKey[]) {
       if (!c.availableTiers.includes(k)) {
-        errors.push(`Compute tierPricing key not in availableTiers: ${k} (${c.sku})`);
+        errors.push(
+          `Compute tierPricing key not in availableTiers: ${k} (${c.sku})`,
+        );
       }
     }
   }
   const cameraBaseSentinels = ["none", "mixed", "enterprise", "fixed"] as const;
   for (const c of productCameraConfigs) {
-    if (!productBySku[c.sku]) errors.push(`Camera config SKU not in catalog: ${c.sku}`);
+    if (!productBySku[c.sku])
+      errors.push(`Camera config SKU not in catalog: ${c.sku}`);
     if (
       !cameraBaseSentinels.includes(
         c.baseCameraId as (typeof cameraBaseSentinels)[number],
@@ -1568,41 +1574,65 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
     }
     for (const k of Object.keys(c.cameraPricing) as CameraTierKey[]) {
       if (!c.availableCameras.includes(k)) {
-        errors.push(`Camera cameraPricing key not in availableCameras: ${k} (${c.sku})`);
+        errors.push(
+          `Camera cameraPricing key not in availableCameras: ${k} (${c.sku})`,
+        );
       }
     }
   }
-  const connectivityBaseSentinels = ["none", "enterprise", "cloud", "mesh_radio"] as const;
+  const connectivityBaseSentinels = [
+    "none",
+    "enterprise",
+    "cloud",
+    "mesh_radio",
+  ] as const;
   for (const c of productConnectivityConfigs) {
-    if (!productBySku[c.sku]) errors.push(`Connectivity config SKU not in catalog: ${c.sku}`);
+    if (!productBySku[c.sku])
+      errors.push(`Connectivity config SKU not in catalog: ${c.sku}`);
     if (
       !connectivityBaseSentinels.includes(
         c.baseConnectivityId as (typeof connectivityBaseSentinels)[number],
       ) &&
       !(c.baseConnectivityId in connectivityTiers)
     ) {
-      errors.push(`Connectivity baseConnectivityId missing: ${c.baseConnectivityId} (${c.sku})`);
+      errors.push(
+        `Connectivity baseConnectivityId missing: ${c.baseConnectivityId} (${c.sku})`,
+      );
     }
     for (const t of c.availableConnectivity) {
       if (!(t in connectivityTiers))
-        errors.push(`Connectivity availableConnectivity missing: ${t} (${c.sku})`);
+        errors.push(
+          `Connectivity availableConnectivity missing: ${t} (${c.sku})`,
+        );
     }
-    for (const k of Object.keys(c.connectivityPricing) as ConnectivityTierKey[]) {
+    for (const k of Object.keys(
+      c.connectivityPricing,
+    ) as ConnectivityTierKey[]) {
       if (!c.availableConnectivity.includes(k)) {
-        errors.push(`Connectivity connectivityPricing key not in availableConnectivity: ${k} (${c.sku})`);
+        errors.push(
+          `Connectivity connectivityPricing key not in availableConnectivity: ${k} (${c.sku})`,
+        );
       }
     }
   }
-  const storageBaseSentinels = ["none", "fixed", "enterprise", "cloud"] as const;
+  const storageBaseSentinels = [
+    "none",
+    "fixed",
+    "enterprise",
+    "cloud",
+  ] as const;
   for (const c of productStorageConfigs) {
-    if (!productBySku[c.sku]) errors.push(`Storage config SKU not in catalog: ${c.sku}`);
+    if (!productBySku[c.sku])
+      errors.push(`Storage config SKU not in catalog: ${c.sku}`);
     if (
       !storageBaseSentinels.includes(
         c.baseStorageId as (typeof storageBaseSentinels)[number],
       ) &&
       !(c.baseStorageId in storageTiers)
     ) {
-      errors.push(`Storage baseStorageId missing: ${c.baseStorageId} (${c.sku})`);
+      errors.push(
+        `Storage baseStorageId missing: ${c.baseStorageId} (${c.sku})`,
+      );
     }
     for (const t of c.availableStorage) {
       if (!(t in storageTiers))
@@ -1610,7 +1640,9 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
     }
     for (const k of Object.keys(c.storagePricing) as StorageTierKey[]) {
       if (!c.availableStorage.includes(k)) {
-        errors.push(`Storage storagePricing key not in availableStorage: ${k} (${c.sku})`);
+        errors.push(
+          `Storage storagePricing key not in availableStorage: ${k} (${c.sku})`,
+        );
       }
     }
   }

@@ -7,20 +7,22 @@ sidebar_label: Avoid list
 
 Do **not** use the following for Phase 1 builds as specified:
 
-| Avoid | Use instead |
-|-------|-------------|
-| L298N for servos | PCA9685 |
-| OV7670 on ESP32 | OV2640 (e.g. ESP32-CAM) |
-| 360° continuous-rotation servos for pan/tilt | 180° positional servos (e.g. MG90S, MG996R) |
-| L293D for servos | PCA9685 |
-| TB6612 for servos (it's for DC motors) | PCA9685 for servos; TB6612/BTS7960 for DC motors only |
-| BTS7960 for servos | BTS7960 is for DC motors / high-current linear actuators; use PCA9685 for servos |
-| Brushless motors, ESCs, flight controller, XT60 PDB for turret | Servo-based pan/tilt only |
-| CAN Bus modules (Phase 1) | No distributed nodes yet; add when scaling |
-| BMP280 / barometer for turret | Not needed for static turret |
-| Arduino UNO/Nano/Pro Mini (adds toolchain sprawl) | Standardize on ESP32 + RP2040 only |
-| Duplicate IMU families; TCA9548A until needed | Per product BOM; pick one IMU family |
+| Avoid                                                          | Use instead                                                                      |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| L298N for servos                                               | PCA9685                                                                          |
+| OV7670 on ESP32                                                | OV2640 (e.g. ESP32-CAM)                                                          |
+| 360° continuous-rotation servos for pan/tilt                   | 180° positional servos (e.g. MG90S, MG996R)                                      |
+| L293D for servos                                               | PCA9685                                                                          |
+| TB6612 for servos (it's for DC motors)                         | PCA9685 for servos; TB6612/BTS7960 for DC motors only                            |
+| BTS7960 for servos                                             | BTS7960 is for DC motors / high-current linear actuators; use PCA9685 for servos |
+| Brushless motors, ESCs, flight controller, XT60 PDB for turret | Servo-based pan/tilt only                                                        |
+| CAN Bus modules (Phase 1)                                      | No distributed nodes yet; add when scaling                                       |
+| BMP280 / barometer for turret                                  | Not needed for static turret                                                     |
+| Arduino UNO/Nano/Pro Mini (adds toolchain sprawl)              | Standardize on ESP32 + RP2040 only                                               |
+| Duplicate IMU families; TCA9548A until needed                  | Per product BOM; pick one IMU family                                             |
 
-**Deferred to Phase 2 (not avoid):** Solenoids (for trigger), stepper motors/drivers — intentional later additions; Phase 1 = servo pan/tilt + alarm only.
+**Deferred to Phase 2 (not avoid):** Solenoids (for trigger), stepper
+motors/drivers — intentional later additions; Phase 1 = servo pan/tilt + alarm
+only.
 
 This list protects future purchasers from wrong-for-Phase-1 parts.

@@ -28,7 +28,10 @@ describe("tiers integration", () => {
       expect(config!.configuredBomCostModel).toBeDefined();
       expect(Array.isArray(config!.configuredBom)).toBe(true);
       if (config!.configuredBom!.length > 0) {
-        expect(sumBom(config!.configuredBom!)).toBeCloseTo(config!.configuredBomCost!, 2);
+        expect(sumBom(config!.configuredBom!)).toBeCloseTo(
+          config!.configuredBomCost!,
+          2,
+        );
       }
     });
 
@@ -50,7 +53,9 @@ describe("tiers integration", () => {
     it("sets configuredBomCostModel to bom_engine or bom_engine_with_reconcile", () => {
       const base = generateProductConfiguration(SKU_STANDARD);
       const withTier = generateProductConfiguration(SKU_STANDARD, "pi4_coral");
-      expect(["bom_engine", "bom_engine_with_reconcile"]).toContain(base!.configuredBomCostModel);
+      expect(["bom_engine", "bom_engine_with_reconcile"]).toContain(
+        base!.configuredBomCostModel,
+      );
       expect(["bom_engine", "bom_engine_with_reconcile"]).toContain(
         withTier!.configuredBomCostModel,
       );
@@ -66,9 +71,11 @@ describe("tiers integration", () => {
       const tiers = getAvailableTiers(SKU_STANDARD);
       expect(Array.isArray(tiers)).toBe(true);
       expect(tiers.length).toBeGreaterThan(0);
-      expect(tiers.every((t) => t && typeof t.id === "string" && typeof t.price === "number")).toBe(
-        true,
-      );
+      expect(
+        tiers.every(
+          (t) => t && typeof t.id === "string" && typeof t.price === "number",
+        ),
+      ).toBe(true);
     });
 
     it("getTierPriceDelta returns number or null", () => {

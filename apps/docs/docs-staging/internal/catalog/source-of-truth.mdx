@@ -5,18 +5,27 @@ sidebar_label: Source of Truth
 
 # Documentation Source of Truth
 
-The **source of truth** for PhoenixRooivalk documentation structure and placement is the [Documentation Catalog](../../index.mdx) (root `index.mdx` in the docs tree). All new and moved docs should align with the catalog’s domains and file map.
+The **source of truth** for PhoenixRooivalk documentation structure and
+placement is the [Documentation Catalog](../../index.mdx) (root `index.mdx` in
+the docs tree). All new and moved docs should align with the catalog’s domains
+and file map.
 
 ## Rules
 
-- **Location** — Place each document in the domain and subfolder defined in the catalog (e.g. runbooks under `operations/runbooks/`, not at operations root).
-- **Indexes** — Each folder has an `index.mdx` that lists or links to its direct children; keep indexes updated when adding or removing docs.
-- **Naming** — Use kebab-case filenames; EDRs use `YYYY-MM-DD-short-title.mdx` in `internal/edr/`.
+- **Location** — Place each document in the domain and subfolder defined in the
+  catalog (e.g. runbooks under `operations/runbooks/`, not at operations root).
+- **Indexes** — Each folder has an `index.mdx` that lists or links to its direct
+  children; keep indexes updated when adding or removing docs.
+- **Naming** — Use kebab-case filenames; EDRs use `YYYY-MM-DD-short-title.mdx`
+  in `internal/edr/`.
 
 ## Staging vs Production
 
-- **Staging** (`docs-staging/`) — Refine content here; structure mirrors the catalog. Not built by default.
-- **Production** (`docs/`) — Live site content. Promote from staging when ready; do not weaken the catalog structure to hide or omit internal material—use build config instead.
+- **Staging** (`docs-staging/`) — Refine content here; structure mirrors the
+  catalog. Not built by default.
+- **Production** (`docs/`) — Live site content. Promote from staging when ready;
+  do not weaken the catalog structure to hide or omit internal material—use
+  build config instead.
 
 ## Related
 

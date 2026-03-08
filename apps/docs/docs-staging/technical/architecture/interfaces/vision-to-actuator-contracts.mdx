@@ -5,7 +5,10 @@ sidebar_label: Vision-to-actuator contracts
 
 # Vision-to-Actuator Data Contracts
 
-This document defines the **data shapes** and **pipeline** from video input to actuator commands. The rule: **AI never drives actuators directly.** AI emits intent; the supervisor converts intent into bounded motion and is the only source of commands that may reach hardware.
+This document defines the **data shapes** and **pipeline** from video input to
+actuator commands. The rule: **AI never drives actuators directly.** AI emits
+intent; the supervisor converts intent into bounded motion and is the only
+source of commands that may reach hardware.
 
 ## Pipeline
 
@@ -15,61 +18,71 @@ Video In → Detector → Tracker → Intent Gen → Supervisor → Transport �
 
 - **Detector** — Consumes video; outputs detections (bbox, confidence).
 - **Tracker** — Maintains track IDs and state (center, velocity).
-- **Intent Gen** — Produces intent (e.g. TRACK_TARGET) with normalized error (dx, dy); no angles or PWM.
-- **Supervisor** — Authority, safety, PID, rate limits, watchdog; outputs only validated control (rates or setpoints, mode, ttl).
-- **Transport** — Carries control output to the actuator (serial, Wi-Fi, MAVLink, or simulated).
-- **Actuator** — Hardware (e.g. ESP32 + servos) that receives only supervisor output.
+- **Intent Gen** — Produces intent (e.g. TRACK_TARGET) with normalized error
+  (dx, dy); no angles or PWM.
+- **Supervisor** — Authority, safety, PID, rate limits, watchdog; outputs only
+  validated control (rates or setpoints, mode, ttl).
+- **Transport** — Carries control output to the actuator (serial, Wi-Fi,
+  MAVLink, or simulated).
+- **Actuator** — Hardware (e.g. ESP32 + servos) that receives only supervisor
+  output.
 
 ## Detection output
 
 Produced by the detector; consumed by the tracker.
 
-| Field      | Type   | Description                    |
-| ---------- | ------ | ------------------------------ |
-| frame_id   | number | Frame index                    |
-| timestamp  | number | Unix time or stream time       |
-| bbox       | object | x, y, w, h (pixels)            |
-| confidence | number | Detection confidence (0–1)     |
+| Field      | Type   | Description                |
+| ---------- | ------ | -------------------------- |
+| frame_id   | number | Frame index                |
+| timestamp  | number | Unix time or stream time   |
+| bbox       | object | x, y, w, h (pixels)        |
+| confidence | number | Detection confidence (0–1) |
 
-Example: `{ "frame_id": 1832, "timestamp": 1707581234.182, "bbox": { "x": 412, "y": 193, "w": 84, "h": 52 }, "confidence": 0.91 }`
+Example:
+`{ "frame_id": 1832, "timestamp": 1707581234.182, "bbox": { "x": 412, "y": 193, "w": 84, "h": 52 }, "confidence": 0.91 }`
 
 ## Tracking state
 
 Produced by the tracker; used for intent generation.
 
-| Field      | Type   | Description                |
-| ---------- | ------ | -------------------------- |
-| track_id   | string | Stable track identifier    |
-| center     | object | x, y (pixels)              |
+| Field      | Type   | Description                     |
+| ---------- | ------ | ------------------------------- |
+| track_id   | string | Stable track identifier         |
+| center     | object | x, y (pixels)                   |
 | velocity   | object | vx, vy (pixels/frame or unit/s) |
-| confidence | number | Tracking confidence (0–1)  |
+| confidence | number | Tracking confidence (0–1)       |
 
-Example: `{ "track_id": "T-7", "center": { "x": 454, "y": 219 }, "velocity": { "vx": -2.1, "vy": 0.8 }, "confidence": 0.88 }`
+Example:
+`{ "track_id": "T-7", "center": { "x": 454, "y": 219 }, "velocity": { "vx": -2.1, "vy": 0.8 }, "confidence": 0.88 }`
 
 ## Intent (AI → Supervisor)
 
-Produced by intent generation; **must not** contain angles, PWM, or raw actuation. Only normalized error and type.
+Produced by intent generation; **must not** contain angles, PWM, or raw
+actuation. Only normalized error and type.
 
-| Field      | Type   | Description                                      |
-| ---------- | ------ | ------------------------------------------------ |
-| type       | string | e.g. `TRACK_TARGET`                              |
+| Field      | Type   | Description                                            |
+| ---------- | ------ | ------------------------------------------------------ |
+| type       | string | e.g. `TRACK_TARGET`                                    |
 | error      | object | dx, dy normalized in image space (-1..1; 0 = centered) |
-| confidence | number | Confidence (0–1)                                 |
+| confidence | number | Confidence (0–1)                                       |
 
-Example: `{ "type": "TRACK_TARGET", "error": { "dx": -0.12, "dy": 0.08 }, "confidence": 0.88 }`
+Example:
+`{ "type": "TRACK_TARGET", "error": { "dx": -0.12, "dy": 0.08 }, "confidence": 0.88 }`
 
 ## Control output (Supervisor → Transport)
 
-**Only this shape** is allowed to reach the actuator. The supervisor gates all commands and enforces limits, timeout, and authority.
+**Only this shape** is allowed to reach the actuator. The supervisor gates all
+commands and enforces limits, timeout, and authority.
 
-| Field      | Type   | Description                          |
-| ---------- | ------ | ------------------------------------ |
-| yaw_rate   | number | Rate or setpoint (axis 1)            |
-| pitch_rate | number | Rate or setpoint (axis 2)            |
-| mode       | string | e.g. MANUAL, ASSISTED, AUTO_TRACK, FAILSAFE |
+| Field      | Type   | Description                                                                            |
+| ---------- | ------ | -------------------------------------------------------------------------------------- |
+| yaw_rate   | number | Rate or setpoint (axis 1)                                                              |
+| pitch_rate | number | Rate or setpoint (axis 2)                                                              |
+| mode       | string | e.g. MANUAL, ASSISTED, AUTO_TRACK, FAILSAFE                                            |
 | ttl_ms     | number | Time-to-live; actuator must see a fresh command within this window or go to safe state |
 
-Example (rates): `{ "yaw_rate": -0.35, "pitch_rate": 0.22, "mode": "AUTO_TRACK", "ttl_ms": 150 }`
+Example (rates):
+`{ "yaw_rate": -0.35, "pitch_rate": 0.22, "mode": "AUTO_TRACK", "ttl_ms": 150 }`
 
 ## Serial line format (reference)
 
@@ -77,12 +90,16 @@ For serial transport (e.g. ESP32), a common text format is:
 
 - **Line:** `Y:<yaw_us> P:<pitch_us> TTL:<ms>\n`
 - **Units:** Y and P in PWM microseconds (typically 1000–2000 µs for servos).
-- **TTL:** Milliseconds until the next command must arrive; if no valid command within that window, the actuator goes to **neutral** (safe state).
-- **Watchdog:** Recommended default timeout (e.g. 200 ms) when TTL is omitted or expired; behavior is neutral (center) servos.
+- **TTL:** Milliseconds until the next command must arrive; if no valid command
+  within that window, the actuator goes to **neutral** (safe state).
+- **Watchdog:** Recommended default timeout (e.g. 200 ms) when TTL is omitted or
+  expired; behavior is neutral (center) servos.
 
 Example: `Y:1500 P:1600 TTL:150`
 
-Concrete protocol details and firmware contract are documented in the control-turret and ESP32 gap analyses; see [Transport abstraction](./transport-abstraction.mdx) for transport semantics.
+Concrete protocol details and firmware contract are documented in the
+control-turret and ESP32 gap analyses; see
+[Transport abstraction](./transport-abstraction.mdx) for transport semantics.
 
 ## Related
 

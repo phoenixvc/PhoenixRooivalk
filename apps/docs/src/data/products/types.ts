@@ -316,7 +316,10 @@ export interface ProductConfiguration {
   /** Optional fully-materialized BOM after applying configurator selections. */
   configuredBom?: BOMItem[];
   /** Optional note describing how the configured BOM cost was derived. */
-  configuredBomCostModel?: "delta_only" | "bom_engine" | "bom_engine_with_reconcile";
+  configuredBomCostModel?:
+    | "delta_only"
+    | "bom_engine"
+    | "bom_engine_with_reconcile";
 }
 
 // =============================================================================

@@ -5,46 +5,58 @@ sidebar_label: Buy now vs later
 
 # Phase-1 Buy Now vs Later
 
-Summary of what to **buy now** (Phase 1a / cheapest demo) vs **leave for later** (1b/1c and Phase 2) for each Phase-1 product. Rationale is kept short; details and BOMs are in each [product doc](./products/index.mdx) and [Platform BOM v1](./platform-bom-v1.mdx).
+Summary of what to **buy now** (Phase 1a / cheapest demo) vs **leave for later**
+(1b/1c and Phase 2) for each Phase-1 product. Rationale is kept short; details
+and BOMs are in each [product doc](./products/index.mdx) and
+[Platform BOM v1](./platform-bom-v1.mdx).
 
-**Design principle:** Minimal now, refactor later. Shared baseline below; product-specific rows follow. For per-product build steps, wiring, and “why buy now vs later”, see each product doc and [Platform BOM v1](./platform-bom-v1.mdx) (including pre-checkout and remove-before-order).
+**Design principle:** Minimal now, refactor later. Shared baseline below;
+product-specific rows follow. For per-product build steps, wiring, and “why buy
+now vs later”, see each product doc and [Platform BOM v1](./platform-bom-v1.mdx)
+(including pre-checkout and remove-before-order).
 
 ---
 
 ## Shared baseline
 
-| Buy now (shared) | Leave for later (shared) | Why |
-|------------------|--------------------------|-----|
+| Buy now (shared)                                                         | Leave for later (shared)                              | Why                                                                                               |
+| ------------------------------------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | ESP32 dev board, buck (MP1584EN), jumper wires, buzzer, LED, basic mount | IP enclosure, cable glands, LTE/PoE, formal harnesses | Phase 1a needs a working demo; ruggedization and long-range add cost without improving core demo. |
 
 ---
 
 ## Per-product summary
 
-| Product | Buy now (1a) | Leave for later | Product doc |
-|---------|--------------|-----------------|-------------|
-| **SkyWatch Nano** | ESP32-CAM or phone, 5V power, buzzer/LED, optional microSD | Pi+Coral, weatherproof enclosure, PoE, SMS | [SkyWatch Nano](./products/skywatch-nano.mdx) |
-| **SkyWatch Standard** | Same as Nano or Pi4+Coral, Pi Cam v3, 64GB microSD, alarm | Global shutter cam, LTE, multi-sensor RF | [SkyWatch Standard](./products/skywatch-standard.mdx) |
-| **SkyWatch Mesh Demo** | 2× nodes (Pi4 or phone), 2× cameras, switch, Ethernet | Central as dedicated Pi/mini-PC, PoE, more nodes | [Mesh Demo](./products/mesh-demo.mdx) |
-| **NetSnare Lite (turret)** | ESP32, PCA9685, 2× MG90S (or MG996R), buck, gimbal (R31 or R81), buzzer/LED | Stepper pan/tilt, closed-loop servos, metal bracket | [NetSnare Lite Turret](./products/netsnare-lite-turret.mdx) |
-| **SkySnare handheld** | ESP32-CAM or phone, power bank, buzzer/LED | Dedicated UVC + display, LTE, rugged enclosure | [SkySnare Handheld](./products/skysnare-handheld-spotter.mdx) |
-| **Response Relay (Demo)** | ESP32, relay or MOSFET, dummy load (LED/lamp), arm switch, status LED | High-energy actuators; any launcher hardware (out of scope) | [Response Relay](./products/response-relay-demo.mdx) |
+| Product                    | Buy now (1a)                                                                | Leave for later                                             | Product doc                                                   |
+| -------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
+| **SkyWatch Nano**          | ESP32-CAM or phone, 5V power, buzzer/LED, optional microSD                  | Pi+Coral, weatherproof enclosure, PoE, SMS                  | [SkyWatch Nano](./products/skywatch-nano.mdx)                 |
+| **SkyWatch Standard**      | Same as Nano or Pi4+Coral, Pi Cam v3, 64GB microSD, alarm                   | Global shutter cam, LTE, multi-sensor RF                    | [SkyWatch Standard](./products/skywatch-standard.mdx)         |
+| **SkyWatch Mesh Demo**     | 2× nodes (Pi4 or phone), 2× cameras, switch, Ethernet                       | Central as dedicated Pi/mini-PC, PoE, more nodes            | [Mesh Demo](./products/mesh-demo.mdx)                         |
+| **NetSnare Lite (turret)** | ESP32, PCA9685, 2× MG90S (or MG996R), buck, gimbal (R31 or R81), buzzer/LED | Stepper pan/tilt, closed-loop servos, metal bracket         | [NetSnare Lite Turret](./products/netsnare-lite-turret.mdx)   |
+| **SkySnare handheld**      | ESP32-CAM or phone, power bank, buzzer/LED                                  | Dedicated UVC + display, LTE, rugged enclosure              | [SkySnare Handheld](./products/skysnare-handheld-spotter.mdx) |
+| **Response Relay (Demo)**  | ESP32, relay or MOSFET, dummy load (LED/lamp), arm switch, status LED       | High-energy actuators; any launcher hardware (out of scope) | [Response Relay](./products/response-relay-demo.mdx)          |
 
 ---
 
 ## Rationale (short)
 
-- **Nano / Standard:** Prove detect → alert loop first; add Pi+Coral when budget allows for standalone inference.
-- **Mesh:** Prove multi-node and central aggregation with minimal nodes; add PoE and dedicated central later.
-- **Turret:** Servo pan/tilt + alarm only; no solenoid/stepper in Phase 1. Add turret camera only if needed for closed-loop or UI polish.
+- **Nano / Standard:** Prove detect → alert loop first; add Pi+Coral when budget
+  allows for standalone inference.
+- **Mesh:** Prove multi-node and central aggregation with minimal nodes; add PoE
+  and dedicated central later.
+- **Turret:** Servo pan/tilt + alarm only; no solenoid/stepper in Phase 1. Add
+  turret camera only if needed for closed-loop or UI polish.
 - **Handheld:** Portable detection + alert; phone or ESP32-CAM for 1a.
-- **Response Relay:** Safe output only (relay/MOSFET to LED/lamp); no launcher or harmful hardware.
+- **Response Relay:** Safe output only (relay/MOSFET to LED/lamp); no launcher
+  or harmful hardware.
 
 ---
 
 ## Related
 
 - [Products](./products/index.mdx) — full BOMs and option tables per product
-- [Platform BOM v1](./platform-bom-v1.mdx) — quantities cheat sheet and remove-before-checkout
-- [Avoid list](./avoid-list.mdx) — what not to buy for Phase 1; deferred to Phase 2 (solenoids, steppers)
+- [Platform BOM v1](./platform-bom-v1.mdx) — quantities cheat sheet and
+  remove-before-checkout
+- [Avoid list](./avoid-list.mdx) — what not to buy for Phase 1; deferred to
+  Phase 2 (solenoids, steppers)
 - [Future phases outline](../../internal/decisions/future-phases-outline.md)

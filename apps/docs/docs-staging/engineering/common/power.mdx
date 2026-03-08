@@ -9,20 +9,29 @@ Common power practices for builds (e.g. Phase-1).
 
 ## Preferred parts
 
-- **Buck converter:** Prefer **MP1584EN (3A buck)** over LM2596 for servo and ESP32 rails. Set output voltage **before** connecting ESP32 or servos.
-- **Common GND:** Servo PSU GND must be tied to ESP32 GND. Use a single common ground reference.
-- **Bulk capacitor:** Place **470–1000 µF** on the servo rail (close to driver/servos) to absorb current spikes.
+- **Buck converter:** Prefer **MP1584EN (3A buck)** over LM2596 for servo and
+  ESP32 rails. Set output voltage **before** connecting ESP32 or servos.
+- **Common GND:** Servo PSU GND must be tied to ESP32 GND. Use a single common
+  ground reference.
+- **Bulk capacitor:** Place **470–1000 µF** on the servo rail (close to
+  driver/servos) to absorb current spikes.
 
 ## Rails
 
-- **5V / 6V:** For servos; check servo datasheet (many are 4.8–6V). Use a dedicated rail from the buck if driving multiple servos.
-- **5V:** For ESP32 and logic. Do not share the high-current servo rail with logic without adequate decoupling.
-- **12V:** Optional input to buck for 5V/6V output; size input capacitor per buck datasheet.
+- **5V / 6V:** For servos; check servo datasheet (many are 4.8–6V). Use a
+  dedicated rail from the buck if driving multiple servos.
+- **5V:** For ESP32 and logic. Do not share the high-current servo rail with
+  logic without adequate decoupling.
+- **12V:** Optional input to buck for 5V/6V output; size input capacitor per
+  buck datasheet.
 
 ## BEC sizing
 
-If using a BEC or buck for servos, ensure continuous current rating covers all servos (e.g. 2× MG90S ~1–2 A stall; MG996R higher). MP1584EN 3A is sufficient for typical Phase-1 pan/tilt.
+If using a BEC or buck for servos, ensure continuous current rating covers all
+servos (e.g. 2× MG90S ~1–2 A stall; MG996R higher). MP1584EN 3A is sufficient
+for typical Phase-1 pan/tilt.
 
 ## Wiring safety
 
-See [Wiring safety](./wiring-safety.mdx): common GND, set voltage before connect, fuse/power switch, bulk capacitor on servo rail.
+See [Wiring safety](./wiring-safety.mdx): common GND, set voltage before
+connect, fuse/power switch, bulk capacitor on servo rail.
