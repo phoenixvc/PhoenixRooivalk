@@ -1,10 +1,24 @@
 # Engineering
 
-Engineering playbooks and qualification.
+Engineering phases, playbooks, and qualification.
 
-## Subfolders
+## Phases
 
-- [Phase-1 demo builds](./phase1/) — overview, common modules, product build
-  docs and BOMs (1a/1b/1c).
+- [Phase-0 survival build](./phase0/) — near-zero budget; prove architecture
+  with phone/laptop + minimal hardware.
+- [Phase-1 demo builds](./phase1/) — demoable capability set; product build docs
+  and BOMs (1a/1b/1c).
+- [Phase-2 investor-grade demo](./phase2/) — polish; dual camera, stiffer
+  mechanics, solenoid/stepper capability.
+- [Phase-3 production and scaling](./phase3/) — manufacturing, enterprise
+  deployment, multi-node orchestration. (Early draft.)
+
+**Optimization order:** Phase 0 = cost, Phase 1 = speed/reliability, Phase 2 =
+polish, Phase 3 = scale and reliability.
+
+## Shared
+
+- [Common modules](./common/) — power, alarms, networking, actuator, compute;
+  shared across all phases.
 - [Playbooks](./playbooks/) — virtual-turret POC, component qualification
   checklist, etc.

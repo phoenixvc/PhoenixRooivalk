@@ -8,12 +8,17 @@ tracking, alarm, servo pan/tilt, and inert actuation only.
 
 ## Scope
 
+- **Phase 0:** Survival build (zero-budget). See
+  [Phase-0 overview](../../engineering/phase0/index.mdx).
 - **Phase 1:** Detection, tracking, alarm, servo pan/tilt, inert actuation only.
   No weaponization. See [Phase-1 overview](../../engineering/phase1/index.mdx)
   and [Safety boundary](../../engineering/phase1/safety-boundary.mdx).
-- **Phase 2+:** Intentional later additions (solenoids, steppers, dual camera,
-  stiffer mechanics, structural BOM). This outline lists them and what to
-  document when we start.
+- **Phase 2:** Investor-grade demo (dual camera, stiffer mechanics,
+  solenoid/stepper). See [Phase-2 overview](../../engineering/phase2/index.mdx).
+- **Phase 3:** Production and scaling (manufacturing, enterprise, multi-node).
+  See [Phase-3 overview](../../engineering/phase3/index.mdx).
+
+This outline lists what is deferred from Phase 1 and what to prepare now.
 
 ---
 
@@ -95,3 +100,12 @@ pipeline first; add hardware when available. See
   [conversation-gap-analysis-salvage-rc-control-architecture.md](./conversation-gap-analysis-salvage-rc-control-architecture.md).
 
 No code or Phase 1 scope change; this is planning and discoverability only.
+
+## Phase docs
+
+Each phase now has its own engineering directory:
+
+- [Phase-0 survival build](../../engineering/phase0/index.mdx)
+- [Phase-1 demo builds](../../engineering/phase1/index.mdx)
+- [Phase-2 investor-grade demo](../../engineering/phase2/index.mdx)
+- [Phase-3 production and scaling](../../engineering/phase3/index.mdx)
