@@ -205,6 +205,58 @@ const sidebars: SidebarsConfig = {
             "technical/defense-technology-deep-dive",
             {
               type: "category",
+              label: "Phase 1 — ESP32 Demo Stack",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase1/phase1-hardware-overview",
+                "technical/hardware/phase1/phase1-skywatch-nano",
+                "technical/hardware/phase1/phase1-skywatch-standard",
+                "technical/hardware/phase1/phase1-turret-tracker",
+                "technical/hardware/phase1/phase1-trigger-node",
+                "technical/hardware/phase1/phase1-wiring-safety",
+                "technical/hardware/phase1/phase1-shared-parts",
+              ],
+            },
+            {
+              type: "category",
+              label: "Phase 2 — Pi/Jetson ML Inference",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase2/phase2-hardware-overview",
+                "technical/hardware/phase2/phase2-skywatch-nano-v2",
+                "technical/hardware/phase2/phase2-turret-tracker-v2",
+                "technical/hardware/phase2/phase2-skywatch-hub",
+              ],
+            },
+            {
+              type: "category",
+              label: "Phase 3 — Field-Ready Systems",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase3/phase3-hardware-overview",
+                "technical/hardware/phase3/phase3-sensor-integration",
+              ],
+            },
+            {
+              type: "category",
+              label: "Phase 4 — Production & Custom PCB",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase4/phase4-hardware-overview",
+                "technical/hardware/phase4/phase4-custom-pcb-design",
+              ],
+            },
+            {
+              type: "category",
+              label: "Phase 5 — Defense-Grade Deployment",
+              collapsed: true,
+              items: [
+                "technical/hardware/phase5/phase5-hardware-overview",
+                "technical/hardware/phase5/phase5-rkv-m-integration",
+              ],
+            },
+            {
+              type: "category",
               label: "Platform Specifications",
               collapsed: true,
               items: [

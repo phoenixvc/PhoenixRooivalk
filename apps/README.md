@@ -5,9 +5,9 @@ PhoenixRooivalk platform.
 
 ## Overview
 
-The `apps/` directory is organized as a monorepo structure, containing
-multiple independent applications and services that work together to provide
-the complete counter-drone defense system.
+The `apps/` directory is organized as a monorepo structure, containing multiple
+independent applications and services that work together to provide the complete
+counter-drone defense system.
 
 ## Applications
 
@@ -46,9 +46,11 @@ the complete counter-drone defense system.
 #### `threat-simulator-desktop/` - Desktop Threat Simulator
 
 - **Type**: Tauri desktop application
-- **Purpose**: Desktop version of threat simulator with blockchain evidence recording
+- **Purpose**: Desktop version of threat simulator with blockchain evidence
+  recording
 - **Tech Stack**: Rust, Leptos/WASM, Tauri
-- **Documentation**: [apps/threat-simulator-desktop/README.md](threat-simulator-desktop/README.md)
+- **Documentation**:
+  [apps/threat-simulator-desktop/README.md](threat-simulator-desktop/README.md)
 - **Features**:
   - Desktop-native threat simulation
   - Blockchain evidence recording
@@ -79,8 +81,8 @@ the complete counter-drone defense system.
 - **Type**: Rust web server
 - **Purpose**: Backend API for platform services
 - **Tech Stack**: Rust, Axum
-- **Documentation**: See [apps/api/docs/](api/docs/) for deployment and
-  database patterns
+- **Documentation**: See [apps/api/docs/](api/docs/) for deployment and database
+  patterns
 - **Features**:
   - RESTful API endpoints
   - Database integration patterns
@@ -152,14 +154,14 @@ cargo test --manifest-path apps/keeper/Cargo.toml
 
 Each application has its own deployment configuration:
 
-- **Web Apps** (docs, marketing): Deployed to Azure Static Web Apps via
-  GitHub Actions
+- **Web Apps** (docs, marketing): Deployed to Azure Static Web Apps via GitHub
+  Actions
 - **API**: Deployed to Azure Functions or App Service
 - **Detector**: Deployed to edge devices (Raspberry Pi, NVIDIA Jetson)
 - **Desktop App**: Built as native installers for Windows, macOS, Linux
 
-See the root [README.md](../README.md) and [DEPLOYMENT.md](../DEPLOYMENT.md)
-for detailed deployment instructions.
+See the root [README.md](../README.md) and [DEPLOYMENT.md](../DEPLOYMENT.md) for
+detailed deployment instructions.
 
 ## Architecture
 

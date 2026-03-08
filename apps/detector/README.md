@@ -1,14 +1,16 @@
 # Detector v2.0
 
-Modular, platform-agnostic detection system for edge devices.
-Supports Raspberry Pi, NVIDIA Jetson, and desktop development.
+Modular, platform-agnostic detection system for edge devices. Supports Raspberry
+Pi, NVIDIA Jetson, and desktop development.
 
 Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
 ## Features
 
-- **Platform Agnostic**: Works on Raspberry Pi, Jetson, desktop, or any Linux system
-- **Modular Architecture**: Swap cameras, inference engines, and trackers at runtime
+- **Platform Agnostic**: Works on Raspberry Pi, Jetson, desktop, or any Linux
+  system
+- **Modular Architecture**: Swap cameras, inference engines, and trackers at
+  runtime
 - **Multiple Inference Backends**: TFLite, ONNX, Coral Edge TPU
 - **Object Tracking**: Centroid and Kalman filter trackers
 - **Web Streaming**: MJPEG stream with status dashboard
@@ -25,8 +27,8 @@ Part of the [PhoenixRooivalk](../../README.md) counter-UAS platform.
 
 ## Quick Start
 
-This quickstart assumes **Raspberry Pi 4** with **Pi Camera v2.1**.
-For other platforms or configurations, see [Advanced Setup](docs/ADVANCED_SETUP.md).
+This quickstart assumes **Raspberry Pi 4** with **Pi Camera v2.1**. For other
+platforms or configurations, see [Advanced Setup](docs/ADVANCED_SETUP.md).
 
 ### 1. Install
 
@@ -62,7 +64,8 @@ That's it. You should see a live video feed with detections.
 
 - [Advanced Setup](docs/ADVANCED_SETUP.md) - Other platforms, cameras, Coral TPU
 - [Configuration Reference](docs/configuration.md) - All available settings
-- [Train Custom Model](#training-on-azure-ml) - Better accuracy for drone detection
+- [Train Custom Model](#training-on-azure-ml) - Better accuracy for drone
+  detection
 
 ### Troubleshooting
 
@@ -80,6 +83,7 @@ sudo reboot
 **USB camera detected instead of Pi Camera:**
 
 The hardware auto-detection found a USB camera. Either:
+
 - Use it: change `camera_type: usb` in config, or
 - Fix Pi Camera detection (see above)
 
@@ -110,7 +114,8 @@ pip install aiohttp
 pip install "numpy<2"
 ```
 
-Note: TFLite is transitioning to [LiteRT](https://ai.google.dev/edge/litert) which supports NumPy 2.
+Note: TFLite is transitioning to [LiteRT](https://ai.google.dev/edge/litert)
+which supports NumPy 2.
 
 ## Project Structure
 
@@ -151,7 +156,8 @@ pi-drone-detector/
 
 ## Architecture
 
-The system uses a modular, interface-based architecture that allows swapping components:
+The system uses a modular, interface-based architecture that allows swapping
+components:
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
@@ -192,20 +198,25 @@ The system uses a modular, interface-based architecture that allows swapping com
 ## Configuration
 
 Settings can be configured via:
-1. **Environment Variables** (highest priority) - Quick setup, good for deployment
-2. **YAML Configuration File** - Recommended for production, comprehensive settings
+
+1. **Environment Variables** (highest priority) - Quick setup, good for
+   deployment
+2. **YAML Configuration File** - Recommended for production, comprehensive
+   settings
 3. **Programmatic defaults** - Built-in defaults
 
-**Note:** Command-line arguments only support a subset of options (model, camera, tracker, etc.). Advanced features like streaming must be configured via environment variables or config files.
+**Note:** Command-line arguments only support a subset of options (model,
+camera, tracker, etc.). Advanced features like streaming must be configured via
+environment variables or config files.
 
 ### YAML Configuration File
 
 Create a `config.yaml` file to customize all settings:
 
 ```yaml
-camera_type: auto  # auto, picamera, usb, video, mock
-engine_type: auto  # auto, tflite, onnx, coral, mock
-tracker_type: centroid  # none, centroid, kalman
+camera_type: auto # auto, picamera, usb, video, mock
+engine_type: auto # auto, tflite, onnx, coral, mock
+tracker_type: centroid # none, centroid, kalman
 
 capture:
   width: 640
@@ -233,13 +244,14 @@ streaming:
 
 display:
   headless: false
-  show_fps: true      # Show FPS counter on video feed
+  show_fps: true # Show FPS counter on video feed
   show_drone_score: true
 ```
 
 ### Environment Variables
 
-All settings can be overridden via environment variables. Use nested delimiter `__` for nested settings:
+All settings can be overridden via environment variables. Use nested delimiter
+`__` for nested settings:
 
 ```bash
 # Capture settings
@@ -308,7 +320,8 @@ python src/main.py --mock
 python src/main.py --camera usb --engine mock
 ```
 
-For all camera/inference options, see [Advanced Setup](docs/ADVANCED_SETUP.md#testing-without-hardware).
+For all camera/inference options, see
+[Advanced Setup](docs/ADVANCED_SETUP.md#testing-without-hardware).
 
 ## Training on Azure ML
 
@@ -385,7 +398,8 @@ scp outputs/model/exports/drone-detector_int8.tflite pi@raspberrypi:~/models/
 
 ## Classes
 
-The model supports multiple classification configurations. See `configs/` for options.
+The model supports multiple classification configurations. See `configs/` for
+options.
 
 ### MVP Configuration (10 classes)
 
@@ -444,40 +458,44 @@ For simpler use cases, use `configs/dataset-binary.yaml`:
    ```
 
 2. **Clone and setup:**
+
    ```bash
    cd ~
    git clone https://github.com/JustAGhosT/PhoenixRooivalk.git
    cd PhoenixRooivalk/apps/detector
-   
+
    # Create virtual environment
    python3 -m venv venv
    source venv/bin/activate
-   
+
    # Install dependencies
    pip install -e ".[pi]"
-   
+
    # Enable camera
    sudo raspi-config  # Interface Options > Camera > Enable
    sudo reboot
    ```
 
 3. **Download or transfer model:**
+
    ```bash
    # Create models directory
    mkdir -p models/
-   
+
    # Transfer model from development machine
    # On your dev machine:
    scp models/drone-detector_int8.tflite pi@raspberrypi.local:~/PhoenixRooivalk/apps/detector/models/
    ```
 
 4. **Create config file (optional but recommended):**
+
    ```bash
    python src/main.py --generate-config config.yaml
    # Edit config.yaml as needed
    ```
 
 5. **Test camera:**
+
    ```bash
    python src/main.py --camera auto --engine mock
    # Should open video window showing live feed
@@ -520,6 +538,7 @@ WantedBy=multi-user.target
 ```
 
 Enable and start the service:
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable drone-detector.service
@@ -542,6 +561,7 @@ python src/main.py --model models/drone-detector_int8.tflite \
 ```
 
 Or configure in `config.yaml`:
+
 ```yaml
 alert:
   webhook_url: "https://your-phoenixrooivalk-api/api/detections"
@@ -549,7 +569,8 @@ alert:
 
 ## Logging
 
-The detector supports structured logging to files. Logging is disabled by default.
+The detector supports structured logging to files. Logging is disabled by
+default.
 
 ### Enable Logging
 
@@ -559,14 +580,15 @@ Add to your `config.yaml`:
 
 ```yaml
 logging:
-  level: INFO              # DEBUG, INFO, WARNING, ERROR
+  level: INFO # DEBUG, INFO, WARNING, ERROR
   log_file: "detector.log" # Path to log file
-  json_format: false       # Use JSON format for easy parsing
-  max_bytes: 10000000      # Rotate at 10MB
-  backup_count: 5          # Keep 5 backup files
+  json_format: false # Use JSON format for easy parsing
+  max_bytes: 10000000 # Rotate at 10MB
+  backup_count: 5 # Keep 5 backup files
 ```
 
 Then run:
+
 ```bash
 python src/main.py --config config.yaml --model models/drone-detector.tflite
 ```
@@ -654,7 +676,8 @@ automatically ignored by Git (see `.gitignore`).
 
 **Quick Camera Test with Detector (Recommended):**
 
-The easiest way to verify your camera works is to run the detector with mock inference:
+The easiest way to verify your camera works is to run the detector with mock
+inference:
 
 ```bash
 # Test USB webcam with mock inference (no model needed)
@@ -773,15 +796,17 @@ distance = (assumed_drone_size * focal_length_px) / bbox_size_px
 ```
 
 Configure in `config.yaml`:
+
 ```yaml
 targeting:
-  assumed_drone_size_m: 0.30  # Assumed drone size (30cm)
-  max_targeting_distance_m: 100.0  # Max tracking distance
+  assumed_drone_size_m: 0.30 # Assumed drone size (30cm)
+  max_targeting_distance_m: 100.0 # Max tracking distance
 ```
 
 ### Fire Net Controller
 
 Safety interlocks before engagement:
+
 1. System must be armed
 2. Minimum confidence threshold (0.85)
 3. Minimum track frames (10)
@@ -831,6 +856,7 @@ mypy src
 ### CI/CD
 
 The project uses GitHub Actions for continuous integration:
+
 - **Lint**: ruff, black, isort, mypy
 - **Test**: pytest on Python 3.9-3.11
 - **Security**: pip-audit, bandit
@@ -839,13 +865,20 @@ The project uses GitHub Actions for continuous integration:
 
 Comprehensive documentation is available in the [`docs/`](docs/) directory:
 
-- **[Configuration Reference](docs/configuration.md)** - Complete guide to all configurable settings, YAML files, and environment variables
-- **[Countermeasure Options](docs/countermeasure-options.md)** - Guide to countermeasure systems that can be triggered by the detector's GPIO output
-- **[Product Catalog](docs/product-catalog.md)** - Complete specifications, bill of materials, and build guides for all products
-- **[Architecture](docs/architecture.md)** - System architecture and component design
-- **[Classification Taxonomy](docs/classification-taxonomy.md)** - Object classification system and class definitions
-- **[Training Cost Estimate](docs/training-cost-estimate.md)** - Cost analysis for model training on Azure ML
-- **[Switch Guide](docs/switch.md)** - Guide to switching between different components
+- **[Configuration Reference](docs/configuration.md)** - Complete guide to all
+  configurable settings, YAML files, and environment variables
+- **[Countermeasure Options](docs/countermeasure-options.md)** - Guide to
+  countermeasure systems that can be triggered by the detector's GPIO output
+- **[Product Catalog](docs/product-catalog.md)** - Complete specifications, bill
+  of materials, and build guides for all products
+- **[Architecture](docs/architecture.md)** - System architecture and component
+  design
+- **[Classification Taxonomy](docs/classification-taxonomy.md)** - Object
+  classification system and class definitions
+- **[Training Cost Estimate](docs/training-cost-estimate.md)** - Cost analysis
+  for model training on Azure ML
+- **[Switch Guide](docs/switch.md)** - Guide to switching between different
+  components
 
 ## API Reference
 

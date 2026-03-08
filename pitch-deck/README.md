@@ -3,19 +3,23 @@
 ## Quick Start
 
 ### Generate PowerPoint Presentation
+
 ```bash
 ./generate-ppt.sh v2.0
 ```
 
 This creates:
+
 - PowerPoint (.pptx)
-- PDF (.pdf)  
+- PDF (.pdf)
 - HTML (.html)
 
 ### Current Version
+
 **v2.0** - Dual-brand strategy (SkySnare™ + AeroNet™)
 
 **What's New in v2.0:**
+
 - ✅ Professional PPTX generation with locally installed Marp CLI
 - ✅ Visual charts for revenue growth, market size, and capital allocation
 - ✅ Specific traction dates and milestones (with exact dates)
@@ -24,6 +28,7 @@ This creates:
 - ✅ 12-slide format optimized for investor presentations
 
 ### Files
+
 - `PITCH_DECK_v2.0.md` - Main presentation (10 slides)
 - `generate-ppt.sh` - Automation script
 - `VERSION_CONTROL.md` - Version history and update guidelines
@@ -31,6 +36,7 @@ This creates:
 ## Installation
 
 ### Prerequisites
+
 ```bash
 # Marp CLI is now installed locally as a project dependency
 # No need for global installation
@@ -41,28 +47,33 @@ apt-get install pandoc  # Linux
 ```
 
 ### First Time Setup
+
 ```bash
 cd pitch-deck
 chmod +x generate-ppt.sh
 ./generate-ppt.sh v2.0
 ```
 
-**Note:** The script automatically uses the locally installed Marp CLI via npx. No global installation required!
+**Note:** The script automatically uses the locally installed Marp CLI via npx.
+No global installation required!
 
 ## Usage
 
 ### For Investor Meetings
+
 1. Open `PhoenixRooivalk_Pitch_Deck_v2.0.pptx`
 2. Review speaker notes (if included)
 3. Customize for specific audience if needed
 4. Present in full-screen mode
 
 ### For Email Distribution
+
 1. Use PDF version: `PhoenixRooivalk_Pitch_Deck_v2.0.pdf`
 2. Include NDA if required
 3. Track recipients in CRM
 
 ### For Quick Preview
+
 1. Open HTML version in browser
 2. Ctrl+P to print/save as PDF
 3. Navigate with scroll or arrow keys
@@ -70,6 +81,7 @@ chmod +x generate-ppt.sh
 ## Updating Content
 
 ### Quick Updates (same version)
+
 ```bash
 # Edit the markdown file
 nano PITCH_DECK_v2.0.md
@@ -79,6 +91,7 @@ nano PITCH_DECK_v2.0.md
 ```
 
 ### New Version (major changes)
+
 ```bash
 # Create new version
 cp PITCH_DECK_v2.0.md PITCH_DECK_v2.1.md
@@ -97,19 +110,24 @@ nano PITCH_DECK_v2.1.md
 ### For Different Audiences
 
 **Technical Investors:**
+
 - Emphasize Slide 4 (Product Demo)
 - Add appendix with architecture diagrams
 
 **Strategic Investors:**
+
 - Focus on Slides 5-6 (Financials & Market)
 - Add case studies
 
 **Government/Defense:**
+
 - Highlight AeroNet™ compliance features
 - Add regulatory certifications section
 
 ### Branding
+
 Edit these in markdown or post-process in PowerPoint:
+
 - Colors: Orange (#F97316), Amber (#FBBF24)
 - Fonts: Sans-serif for readability
 - Logo: Add to Slide 1 after generation
@@ -117,13 +135,18 @@ Edit these in markdown or post-process in PowerPoint:
 ## Troubleshooting
 
 ### "marp: command not found"
-**Solution:** The project now includes Marp CLI as a local dependency. Simply run:
+
+**Solution:** The project now includes Marp CLI as a local dependency. Simply
+run:
+
 ```bash
 npm install
 ```
+
 The script will automatically use the local installation via npx.
 
 ### "pandoc: command not found"
+
 ```bash
 # macOS
 brew install pandoc
@@ -136,11 +159,13 @@ choco install pandoc
 ```
 
 ### PowerPoint formatting issues
+
 - Use Marp instead of Pandoc for better formatting
 - Manually adjust in PowerPoint after generation
 - Check VERSION_CONTROL.md for design guidelines
 
 ### File too large
+
 - Compress images in source markdown
 - Remove unused slides
 - Export to PDF for smaller file size
@@ -148,6 +173,7 @@ choco install pandoc
 ## Best Practices
 
 ### Before Presenting
+
 - [ ] Update metrics to latest data
 - [ ] Check all hyperlinks work
 - [ ] Test on presentation computer
@@ -155,6 +181,7 @@ choco install pandoc
 - [ ] Print handouts if needed
 
 ### After Updates
+
 - [ ] Bump version number in markdown header
 - [ ] Update VERSION_CONTROL.md
 - [ ] Regenerate all formats
@@ -162,6 +189,7 @@ choco install pandoc
 - [ ] Commit to git with meaningful message
 
 ### Version Control
+
 - Commit after significant changes
 - Use meaningful commit messages
 - Tag releases (e.g., `git tag v2.0`)
@@ -170,14 +198,17 @@ choco install pandoc
 ## Support
 
 ### Documentation
+
 - `VERSION_CONTROL.md` - Version history
 - `../PITCH_DECK_README.md` - Detailed guide (v1.0)
 
 ### Contact
+
 - **Jurie Smit** - jurie@phoenixvc.tech
 - **Martyn Redelinghuys** - martyn@phoenixvc.tech
 
 ### Tools Documentation
+
 - Marp: https://marp.app/
 - Pandoc: https://pandoc.org/
 - Markdown Guide: https://www.markdownguide.org/

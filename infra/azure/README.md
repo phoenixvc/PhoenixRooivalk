@@ -2,14 +2,19 @@
 
 > **⚠️ IMPORTANT: Deploy This Infrastructure BEFORE Running CI/CD Workflows**
 >
-> The GitHub Actions workflows (`deploy-marketing-azure.yml` and `deploy-docs-azure.yml`) **will fail** until you:
+> The GitHub Actions workflows (`deploy-marketing-azure.yml` and
+> `deploy-docs-azure.yml`) **will fail** until you:
+>
 > 1. Deploy this Azure infrastructure
 > 2. Extract the deployment tokens
 > 3. Configure GitHub repository secrets
 >
-> **📖 See [../../.github/DEPLOYMENT_SEQUENCE.md](../../.github/DEPLOYMENT_SEQUENCE.md) for the complete deployment order.**
+> **📖 See
+> [../../.github/DEPLOYMENT_SEQUENCE.md](../../.github/DEPLOYMENT_SEQUENCE.md)
+> for the complete deployment order.**
 
-This directory contains the Azure infrastructure as code (Bicep) and deployment scripts for the Phoenix Rooivalk documentation platform.
+This directory contains the Azure infrastructure as code (Bicep) and deployment
+scripts for the Phoenix Rooivalk documentation platform.
 
 ## Architecture
 
@@ -43,19 +48,20 @@ This directory contains the Azure infrastructure as code (Bicep) and deployment 
 
 ## Services Deployed
 
-| Service | Purpose | Replaces |
-|---------|---------|----------|
-| Azure Static Web Apps | Documentation hosting | Netlify |
-| Azure Cosmos DB | NoSQL database | Firebase Firestore |
-| Azure Functions | Serverless compute | Firebase Cloud Functions |
-| Azure Entra ID | Authentication | Firebase Auth |
-| Azure Notification Hubs | Push notifications | Firebase Cloud Messaging |
-| Application Insights | Analytics & monitoring | Firebase Analytics |
-| Key Vault | Secrets management | Firebase config |
+| Service                 | Purpose                | Replaces                 |
+| ----------------------- | ---------------------- | ------------------------ |
+| Azure Static Web Apps   | Documentation hosting  | Netlify                  |
+| Azure Cosmos DB         | NoSQL database         | Firebase Firestore       |
+| Azure Functions         | Serverless compute     | Firebase Cloud Functions |
+| Azure Entra ID          | Authentication         | Firebase Auth            |
+| Azure Notification Hubs | Push notifications     | Firebase Cloud Messaging |
+| Application Insights    | Analytics & monitoring | Firebase Analytics       |
+| Key Vault               | Secrets management     | Firebase config          |
 
 ## Prerequisites
 
-1. **Azure CLI** - [Install Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
+1. **Azure CLI** -
+   [Install Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)
 2. **Bicep CLI** - Installed automatically with Azure CLI
 3. **Azure Subscription** - With permissions to create resources
 4. **OpenAI API Key** - For AI features
@@ -81,7 +87,9 @@ az account set --subscription "Your Subscription Name"
 
 ### 3. Set up Azure Entra ID (Authentication)
 
-See [QUICKSTART.md](./QUICKSTART.md) for detailed Entra ID setup instructions, including:
+See [QUICKSTART.md](./QUICKSTART.md) for detailed Entra ID setup instructions,
+including:
+
 - Creating app registration
 - Configuring redirect URIs
 - Setting API permissions
@@ -149,15 +157,15 @@ AZURE_COSMOS_ENDPOINT=https://your-cosmos.documents.azure.com
 
 Using free tier and serverless options:
 
-| Service | Tier | Estimated Cost |
-|---------|------|----------------|
-| Static Web Apps | Free | $0/month |
-| Cosmos DB | Serverless | ~$0-5/month (based on usage) |
-| Functions | Consumption | ~$0-2/month (first 1M free) |
-| Entra ID | Free tier | $0/month |
-| Notification Hubs | Free | $0/month |
-| Application Insights | First 5GB free | ~$0/month |
-| Key Vault | Standard | ~$0.03/10K operations |
+| Service              | Tier           | Estimated Cost               |
+| -------------------- | -------------- | ---------------------------- |
+| Static Web Apps      | Free           | $0/month                     |
+| Cosmos DB            | Serverless     | ~$0-5/month (based on usage) |
+| Functions            | Consumption    | ~$0-2/month (first 1M free)  |
+| Entra ID             | Free tier      | $0/month                     |
+| Notification Hubs    | Free           | $0/month                     |
+| Application Insights | First 5GB free | ~$0/month                    |
+| Key Vault            | Standard       | ~$0.03/10K operations        |
 
 **Estimated total: $0-10/month** for low-traffic sites
 

@@ -17,7 +17,7 @@ describe("serializeJsonLd", () => {
     expect(result).toContain("\\u003c/script\\u003e");
     expect(result).toContain("\\u003cscript\\u003e");
     expect(result).toBe(
-      '{"description":"This is a \\u003c/script\\u003e\\u003cscript\\u003ealert(\'XSS\')\\u003c/script\\u003e test"}'
+      '{"description":"This is a \\u003c/script\\u003e\\u003cscript\\u003ealert(\'XSS\')\\u003c/script\\u003e test"}',
     );
   });
 
