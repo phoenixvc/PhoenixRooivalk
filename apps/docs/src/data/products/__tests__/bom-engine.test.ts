@@ -2,7 +2,6 @@
  * BOM engine unit tests: sumBom, applyBomPatches, bomLineKey, buildConfiguredBom.
  */
 
-import type { BOMItem } from "../types";
 import {
   sumBom,
   applyBomPatches,
@@ -10,6 +9,7 @@ import {
   buildConfiguredBom,
   type BomPatch,
 } from "../bom-engine";
+import type { BOMItem } from "../types";
 import { productBySku } from "../catalog";
 import {
   getProductComputeConfig,

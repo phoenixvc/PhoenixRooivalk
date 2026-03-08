@@ -56,15 +56,16 @@ product docs.
 
 ## 4. RC / FlySky and "software control interface"
 
-| Conversation                                                                                          | Docs-staging                                                              | Gap                                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Options:** Replace receiver with MCU; hardware PWM switch (receiver vs MCU); analog stick injection | Not documented                                                            | **Missing:** Short doc or subsection on "how to get software control" when starting from RC: replace receiver, hardware switch, or inject into transmitter (no RF emulation). |
-| **Clarification:** Servos need 50 Hz PWM; laptop cannot drive servos; need MCU or USB servo board     | Actuator and hardware docs assume ESP32/PCA9685; no "why" or alternatives | **Optional:** One paragraph in actuator or a "Control interface options" note: why MCU/USB driver is needed; alternatives (USB servo board, flight controller).               |
+| Conversation                                                                                          | Docs-staging                                                                                                                                                                                 | Gap                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Options:** Replace receiver with MCU; hardware PWM switch (receiver vs MCU); analog stick injection | [Actuator](../../engineering/common/actuator.mdx) now has a "Control interface options" bullet linking to [Control interface options](../../technical/control/control-interface-options.mdx) | **Partial:** Control interface options (replace with MCU, hardware switch, analog injection) are now documented. Remaining: expand analog-injection safety guidance and add linked examples or warnings. |
+| **Clarification:** Servos need 50 Hz PWM; laptop cannot drive servos; need MCU or USB servo board     | Actuator and hardware docs assume ESP32/PCA9685; no "why" or alternatives                                                                                                                    | **Optional:** One paragraph in actuator or a "Control interface options" note: why MCU/USB driver is needed; alternatives (USB servo board, flight controller).                                          |
 
-**Recommendation:** Add a short **Control interface options** subsection under
-[Actuator](../../engineering/common/actuator.mdx) (or under hardware): replace
-receiver with MCU, hardware switch, or analog injection; no RF emulation.
-Improves discoverability for people with existing RC gear.
+**Status update:** A "Control interface options" subsection has been added to
+[Actuator](../../engineering/common/actuator.mdx) linking to
+[Control interface options](../../technical/control/control-interface-options.mdx)
+which covers replacement with MCU, hardware switch, and transmitter injection.
+Remaining: expand analog-injection safety details.
 
 ---
 

@@ -44,7 +44,7 @@ and packages relate to the target and how to migrate incrementally.
 | **safety**         | (none)                                    | —       | No dedicated package; logic could live in api/keeper or new `packages/safety`.                                                          |
 | **transport**      | (none)                                    | —       | No dedicated package; transport abstraction is doc-only; implementation could be in api or new package.                                 |
 
-So: **vision + tracking** map to **detector** (1:many from recommended to
+So: **vision + tracking** map to **detector** (many:1 from recommended to
 existing). **Supervisor** maps to **api + keeper** (many:1). **contracts** maps
 to **types**. **pilot-ui** partially maps to **threat-simulator-desktop**.
 **actuator**, **safety**, **transport** have no direct repo counterpart today.
@@ -73,4 +73,4 @@ Ways to move from the current layout toward the recommended one:
 - [Tracking–Actuator Bridge](diagrams/tracking-actuator-bridge.mdx) — Data flow
   and roles aligned with this structure.
 - [Transport abstraction](interfaces/transport-abstraction.mdx)
-- [Authority and safety controller](../../control/authority-and-safety-controller.mdx)
+- [Authority and safety controller](../control/authority-and-safety-controller.mdx)

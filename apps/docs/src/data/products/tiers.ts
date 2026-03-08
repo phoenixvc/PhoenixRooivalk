@@ -6,13 +6,9 @@
  */
 
 import type {
-  ComputeTierId,
   ComputeTierKey,
-  CameraTierId,
   CameraTierKey,
-  ConnectivityTierId,
   ConnectivityTierKey,
-  StorageTierId,
   StorageTierKey,
   ComputeTier,
   CameraTier,
@@ -1555,6 +1551,13 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
         );
       }
     }
+    for (const t of c.availableTiers) {
+      if (!(t in c.tierPricing)) {
+        errors.push(
+          `Compute availableTier missing pricing entry: ${t} (${c.sku})`,
+        );
+      }
+    }
   }
   const cameraBaseSentinels = ["none", "mixed", "enterprise", "fixed"] as const;
   for (const c of productCameraConfigs) {
@@ -1576,6 +1579,13 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
       if (!c.availableCameras.includes(k)) {
         errors.push(
           `Camera cameraPricing key not in availableCameras: ${k} (${c.sku})`,
+        );
+      }
+    }
+    for (const t of c.availableCameras) {
+      if (!(t in c.cameraPricing)) {
+        errors.push(
+          `Camera availableCamera missing pricing entry: ${t} (${c.sku})`,
         );
       }
     }
@@ -1614,6 +1624,13 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
         );
       }
     }
+    for (const t of c.availableConnectivity) {
+      if (!(t in c.connectivityPricing)) {
+        errors.push(
+          `Connectivity availableConnectivity missing pricing entry: ${t} (${c.sku})`,
+        );
+      }
+    }
   }
   const storageBaseSentinels = [
     "none",
@@ -1642,6 +1659,13 @@ export function validateConfiguratorData(): ConfiguratorValidationResult {
       if (!c.availableStorage.includes(k)) {
         errors.push(
           `Storage storagePricing key not in availableStorage: ${k} (${c.sku})`,
+        );
+      }
+    }
+    for (const t of c.availableStorage) {
+      if (!(t in c.storagePricing)) {
+        errors.push(
+          `Storage availableStorage missing pricing entry: ${t} (${c.sku})`,
         );
       }
     }

@@ -9,6 +9,7 @@ difficulty: intermediate
 estimated_reading_time: 8
 points: 15
 tags:
+  - business
   - prd
   - product
   - roadmap

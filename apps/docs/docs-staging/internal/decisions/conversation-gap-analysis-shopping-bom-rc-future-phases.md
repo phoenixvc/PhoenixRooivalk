@@ -29,19 +29,14 @@ Prior gap analyses are cross-referenced.
 | Conversation                                                                                                                                                                   | Docs-staging                                                                                                                                                                                                            | Gap                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | **DO NOT BUY:** L298N, L293D, OV7670 on ESP32, brushless motors, ESCs, flight controller, XT60 PDB, 360° servos for pan/tilt, duplicate IMU families, TCA9548A until needed    | [Avoid list](../../engineering/phase1/avoid-list.mdx) and [platform-bom-v1](../../engineering/phase1/platform-bom-v1.mdx) cover L298N, L293D, OV7670, brushless/ESC/XT60, 360° vs 180° servos, duplicate IMUs, TCA9548A | **OK** — Avoid list and [Actuator](../../engineering/common/actuator.mdx) state 180° positional not 360° for pan/tilt. |
-| **Cart review before checkout:** Remove L293D, OV7670, XT60 PDB, 360° servos; confirm MG90S 180° positional; drop duplicate IMUs (e.g. MPU9250 if using BMI160)                | No explicit "cart review" or "remove before checkout" checklist                                                                                                                                                         | **Missing:** Explicit cart-review or "remove before checkout" checklist in one place (platform BOM or playbook).       |
-| **Quantities cheat sheet:** ESP32×2, RP2040×2, PCA9685×1, MP1584EN×3, INA219×2, TB6612 1–2, BTS7960×1, MG90S 2–4, IMU 1–2, VL53L0X×1, ESP32-CAM×1 (optional TCA9548A, MicroSD) | [Platform BOM v1](../../engineering/phase1/platform-bom-v1.mdx) has buy now / buy soon / buy later; no quantities table                                                                                                 | **Missing:** Quantities cheat sheet in platform Bom v1 (or linked doc) for one platform build + spares.                |
+| **Cart review before checkout:** Remove L293D, OV7670, XT60 PDB, 360° servos; confirm MG90S 180° positional; drop duplicate IMUs (e.g. MPU9250 if using BMI160)                | [Platform BOM v1](../../engineering/phase1/platform-bom-v1.mdx) now has "Remove before checkout" and "Pre-checkout / cart review" sections                                                                              | **Closed:** See platform-bom-v1 "Remove before checkout" and "Pre-checkout / cart review."                             |
+| **Quantities cheat sheet:** ESP32×2, RP2040×2, PCA9685×1, MP1584EN×3, INA219×2, TB6612 1–2, BTS7960×1, MG90S 2–4, IMU 1–2, VL53L0X×1, ESP32-CAM×1 (optional TCA9548A, MicroSD) | [Platform BOM v1](../../engineering/phase1/platform-bom-v1.mdx) now has "Quantities cheat sheet (one platform build + spares)" table                                                                                    | **Closed:** See platform-bom-v1 "Quantities cheat sheet."                                                              |
 | **R2000 priority order:** Power + compute spares → actuation stack → motor drivers → sensing → camera                                                                          | Platform BOM has "Optional priority order if budget is limited" one line                                                                                                                                                | **Partial** — One line exists; conversation adds explicit order; can expand in platform BOM.                           |
 
-**Recommendation:** Add to
-[platform-bom-v1.mdx](../../engineering/phase1/platform-bom-v1.mdx): (1) short
-"Remove before checkout" list (L293D, OV7670, XT60 PDB, 360° servos for
-pan/tilt, duplicate IMUs); (2) "Quantities cheat sheet" table (e.g. ESP32×2,
-RP2040×2, PCA9685×1, MP1584EN×3, INA219×2, MG90S 2–4, TB6612, BTS7960, one IMU,
-VL53L0X, ESP32-CAM). Optionally add a "Purchase validation / cart review"
-checklist to
-[component-qualification-checklist.mdx](../../engineering/playbooks/component-qualification-checklist.mdx)
-or a short playbook linking to avoid list and platform BOM.
+**Status update:** Cart review, remove-before-checkout, and quantities cheat
+sheet have been added to
+[platform-bom-v1.mdx](../../engineering/phase1/platform-bom-v1.mdx). Only the
+priority-order expansion remains optional.
 
 ---
 

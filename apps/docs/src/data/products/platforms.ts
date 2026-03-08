@@ -123,7 +123,7 @@ export const jetsonPlatforms: ComputePlatform[] = [
     cpu: "6-core Cortex-A78AE @ 2.0GHz",
     power: "10-25W",
     formFactor: "69.6×45mm (module)",
-    notes: "67 TOPS, professional tier",
+    notes: "70 TOPS, professional tier",
   },
   {
     id: "jetson_orin_nx_16gb",
