@@ -51,7 +51,7 @@ packages/
   types/           # Shared TypeScript types
   ui/              # Shared React components
   utils/           # Shared utility functions
-config/            # Tooling configs (symlinked to root)
+config/            # Tooling configs (canonical here; some inlined at root for CI)
 scripts/           # Deployment and utility scripts
 infra/             # IaC: azure/ (Bicep), terraform/
 tools/             # pdf_generator (Python CLI)
@@ -221,7 +221,9 @@ cargo run -p evidence-cli -- \
   member).
 - **`getrandom` crate** requires `wasm_js` feature for WASM targets (configured
   in workspace Cargo.toml).
-- **Config files are symlinks**: Edit files in `config/`, not the root symlinks.
+- **Config files**: Canonical source is `config/`. Root `.prettierrc`,
+  `.markdownlint.json`, and `cspell.json` are inlined (not symlinked) for
+  CI/Windows; edit `config/` and sync to root when changing those.
 - **Tauri desktop app has conditional compilation**: WASM-only vs native deps
   gated with `#[cfg(target_arch = "wasm32")]`.
 - **Rust CI builds require Linux GUI deps** for Tauri (GTK, webkit,
@@ -312,15 +314,13 @@ Never commit `.env` files.
 
 ## Config Files
 
-Tooling configs live in `config/` and are symlinked to root:
+Tooling configs live in `config/`. Edit files in `config/`; root copies are for
+tool discovery.
 
-- `.eslintrc.js` -> `config/eslintrc.js`
-- `.prettierrc` -> `config/prettierrc`
-- `.prettierignore` -> `config/prettierignore`
-- `.editorconfig` -> `config/editorconfig`
-- `.markdownlint.json` -> `config/markdownlint.json`
-- `clippy.toml` -> `config/clippy.toml`
-- `cspell.json` -> `config/cspell.json`
+- **Symlinked from root**: `.eslintrc.js`, `.prettierignore`, `.editorconfig`,
+  `clippy.toml` (where supported).
+- **Inlined at root** (for CI/Windows): `.prettierrc`, `.markdownlint.json`,
+  `cspell.json`. Canonical source is `config/`; sync to root when changing.
 
 ## Infrastructure
 

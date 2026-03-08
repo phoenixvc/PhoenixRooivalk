@@ -104,7 +104,9 @@ Structure:
   - `anchor-etherlink/` — EtherLink blockchain anchoring.
   - `address-validation/` — Blockchain address validation.
 - `config/` — Tooling configuration files (ESLint, Prettier, Clippy, etc.).
-  - Configuration files are symlinked to root for tool compatibility.
+  - Canonical source is `config/`; some files (e.g. `.prettierrc`,
+    `.markdownlint.json`, `cspell.json`) are inlined at root for CI
+    compatibility.
 - `.ai/` — AI IDE assistant rules (Cursor, Continue, Windsurf).
 - `scripts/` — Root-level deployment and utility scripts.
 - Root configuration files:
