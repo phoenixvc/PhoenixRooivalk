@@ -140,6 +140,9 @@ importers:
       '@microsoft/applicationinsights-web':
         specifier: ^3.3.11
         version: 3.3.11(tslib@2.8.1)
+      '@phoenix-rooivalk/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       ajv:
         specifier: ^8.18.0
         version: 8.18.0
@@ -22923,7 +22926,6 @@ snapshots:
       get-tsconfig: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
-    optional: true
 
   turbo-darwin-64@2.8.10:
     optional: true
