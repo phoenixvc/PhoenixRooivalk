@@ -57,18 +57,18 @@ Common rules for all Phase 1 builds. Follow these before powering anything.
 
 ### Pins to Avoid
 
-| Pin | Why |
-|-----|-----|
-| GPIO 0 | Boot mode strapping — held LOW enters flash mode |
-| GPIO 2 | Boot mode strapping — may cause boot failure if pulled |
-| GPIO 15 | Boot log strapping — pulling LOW silences boot log |
-| GPIO 6–11 | Connected to onboard SPI flash — never use |
-| GPIO 34–39 | Input-only — cannot drive outputs |
+| Pin        | Why                                                    |
+| ---------- | ------------------------------------------------------ |
+| GPIO 0     | Boot mode strapping — held LOW enters flash mode       |
+| GPIO 2     | Boot mode strapping — may cause boot failure if pulled |
+| GPIO 15    | Boot log strapping — pulling LOW silences boot log     |
+| GPIO 6–11  | Connected to onboard SPI flash — never use             |
+| GPIO 34–39 | Input-only — cannot drive outputs                      |
 
 ### Safe Output Pins
 
-GPIO 12, 13, 14, 25, 26, 27, 32, 33 are generally safe for output on most
-ESP32 variants. Always verify against your specific board's pinout.
+GPIO 12, 13, 14, 25, 26, 27, 32, 33 are generally safe for output on most ESP32
+variants. Always verify against your specific board's pinout.
 
 ### Current Limits
 
@@ -98,11 +98,11 @@ ESP32 variants. Always verify against your specific board's pinout.
 
 ### Pulse Width Standard
 
-| Position | Pulse Width |
-|----------|-------------|
-| 0° | ~500µs |
-| 90° (center) | ~1500µs |
-| 180° | ~2500µs |
+| Position     | Pulse Width |
+| ------------ | ----------- |
+| 0°           | ~500µs      |
+| 90° (center) | ~1500µs     |
+| 180°         | ~2500µs     |
 
 These are typical values. Calibrate per servo — some units have narrower or
 wider ranges.
@@ -125,8 +125,8 @@ wider ranges.
 
 - Use **opto-isolated** modules when available — they protect the ESP32 from
   back-EMF and ground loops.
-- Relay coils are inductive. The module should have a flyback diode onboard (most
-  do). Verify before buying bare relays.
+- Relay coils are inductive. The module should have a flyback diode onboard
+  (most do). Verify before buying bare relays.
 - **Always assume the relay is energized** until you confirm the firmware is
   correct. Wire the dummy load first, not a real actuator.
 
@@ -134,14 +134,14 @@ wider ranges.
 
 ## General Wiring
 
-| Practice | Why |
-|----------|-----|
-| Color-code wires: red = power, black = ground, other = signal | Reduces wiring errors |
-| Use screw terminals for power connections | More secure than breadboard jumpers |
-| Heatshrink or tape on all solder joints | Prevents shorts |
-| Secure wires with zip ties or cable clips | Prevents snags and disconnections |
-| Label each wire at both ends | Debugging is faster |
-| Test with multimeter before powering on | Catches shorts and wrong voltages |
+| Practice                                                      | Why                                 |
+| ------------------------------------------------------------- | ----------------------------------- |
+| Color-code wires: red = power, black = ground, other = signal | Reduces wiring errors               |
+| Use screw terminals for power connections                     | More secure than breadboard jumpers |
+| Heatshrink or tape on all solder joints                       | Prevents shorts                     |
+| Secure wires with zip ties or cable clips                     | Prevents snags and disconnections   |
+| Label each wire at both ends                                  | Debugging is faster                 |
+| Test with multimeter before powering on                       | Catches shorts and wrong voltages   |
 
 ---
 

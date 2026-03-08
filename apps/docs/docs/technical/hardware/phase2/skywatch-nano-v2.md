@@ -39,18 +39,18 @@ overlaid on detected drones. False positives (birds, debris) are filtered.
 
 ## Bill of Materials
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | Raspberry Pi Zero 2W | Quad-core Cortex-A53, 512MB | $15 |
-| AI Accelerator | Google Coral USB | Edge TPU, 4 TOPS INT8 | $25–35 |
-| Camera | Pi Camera Module 3 | 12MP, autofocus, wide-angle option | $25 |
-| Power | MP1584EN buck | 7–12V → 5.1V, 3A | $1–2 |
-| Storage | 32GB microSD (A2) | Endurance-rated for continuous writes | $8–12 |
-| Alarm (audio) | Active buzzer | Reused from Phase 1A | $0 |
-| Alarm (visual) | High-bright LED | Reused from Phase 1A | $0 |
-| Control | Pushbutton | Reused from Phase 1A | $0 |
-| USB adapter | Micro-USB OTG | For Coral USB connection | $2 |
-| **Total** | | | **~$80–100** |
+| Component      | Part                 | Specification                         | Est. Cost    |
+| -------------- | -------------------- | ------------------------------------- | ------------ |
+| Compute        | Raspberry Pi Zero 2W | Quad-core Cortex-A53, 512MB           | $15          |
+| AI Accelerator | Google Coral USB     | Edge TPU, 4 TOPS INT8                 | $25–35       |
+| Camera         | Pi Camera Module 3   | 12MP, autofocus, wide-angle option    | $25          |
+| Power          | MP1584EN buck        | 7–12V → 5.1V, 3A                      | $1–2         |
+| Storage        | 32GB microSD (A2)    | Endurance-rated for continuous writes | $8–12        |
+| Alarm (audio)  | Active buzzer        | Reused from Phase 1A                  | $0           |
+| Alarm (visual) | High-bright LED      | Reused from Phase 1A                  | $0           |
+| Control        | Pushbutton           | Reused from Phase 1A                  | $0           |
+| USB adapter    | Micro-USB OTG        | For Coral USB connection              | $2           |
+| **Total**      |                      |                                       | **~$80–100** |
 
 ---
 
@@ -120,14 +120,14 @@ camera:
 
 inference:
   model: yolov8n_drone_320.tflite
-  delegate: edgetpu  # Coral USB
+  delegate: edgetpu # Coral USB
   confidence_threshold: 0.6
   nms_threshold: 0.45
   classes: [drone, bird, helicopter, airplane]
 
 mqtt:
   broker: hub.local
-  port: 8883  # TLS
+  port: 8883 # TLS
   topic_prefix: skywatch/nano-v2-001
 
 logging:
@@ -188,10 +188,10 @@ logging:
 
 ## Upgrade Path
 
-| From (Phase 2) | To (Phase 3) |
-|-----------------|--------------|
+| From (Phase 2)     | To (Phase 3)                   |
+| ------------------ | ------------------------------ |
 | Pi Zero 2W (512MB) | Pi 5 (8GB) or Jetson Orin Nano |
-| Coral USB (4 TOPS) | Hailo-8 M.2 (26 TOPS) |
-| WiFi connectivity | LoRa + LTE Cat-M1 |
-| Open breadboard | IP65 weatherproof enclosure |
-| Bench power | PoE HAT or solar + battery |
+| Coral USB (4 TOPS) | Hailo-8 M.2 (26 TOPS)          |
+| WiFi connectivity  | LoRa + LTE Cat-M1              |
+| Open breadboard    | IP65 weatherproof enclosure    |
+| Bench power        | PoE HAT or solar + battery     |

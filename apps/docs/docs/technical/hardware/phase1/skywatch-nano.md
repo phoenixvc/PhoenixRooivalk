@@ -30,40 +30,40 @@ viable standalone in the product line.
 
 > **Detection → Alert** loop on a single ESP32, with zero cloud dependency.
 
-A visitor sees a camera feed, hears a buzzer, and sees a beacon flash when motion
-is detected. That is the entire acceptance criteria for Phase 1A.
+A visitor sees a camera feed, hears a buzzer, and sees a beacon flash when
+motion is detected. That is the entire acceptance criteria for Phase 1A.
 
 ---
 
 ## Bill of Materials — Buy Now (Phase 1A)
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | ESP32-CAM (OV2640) | 2MP camera, WiFi, onboard SD slot | $6–10 |
-| Power | MP1584EN buck | 7–12V in → 5.1V out, 3A | $1–2 |
-| Alarm (audio) | Active buzzer | 5V, driven via NPN transistor | $1 |
-| Alarm (visual) | High-bright LED | 5mm white/red + 220Ω resistor | $0.50 |
-| Control | Pushbutton | Momentary, arm/disarm | $0.50 |
-| Wiring | Dupont jumpers, screw terminals | Assorted | $2–3 |
-| **Total** | | | **~$12–17** |
+| Component      | Part                            | Specification                     | Est. Cost   |
+| -------------- | ------------------------------- | --------------------------------- | ----------- |
+| Compute        | ESP32-CAM (OV2640)              | 2MP camera, WiFi, onboard SD slot | $6–10       |
+| Power          | MP1584EN buck                   | 7–12V in → 5.1V out, 3A           | $1–2        |
+| Alarm (audio)  | Active buzzer                   | 5V, driven via NPN transistor     | $1          |
+| Alarm (visual) | High-bright LED                 | 5mm white/red + 220Ω resistor     | $0.50       |
+| Control        | Pushbutton                      | Momentary, arm/disarm             | $0.50       |
+| Wiring         | Dupont jumpers, screw terminals | Assorted                          | $2–3        |
+| **Total**      |                                 |                                   | **~$12–17** |
 
 ### Optional (nice-to-have)
 
-| Component | Part | Why |
-|-----------|------|-----|
-| microSD card | 16–32GB Class 10 | Onboard recording (ESP32-CAM has slot) |
-| Power indicator LED | 3mm green + resistor | Visual "power on" confirmation |
+| Component           | Part                 | Why                                    |
+| ------------------- | -------------------- | -------------------------------------- |
+| microSD card        | 16–32GB Class 10     | Onboard recording (ESP32-CAM has slot) |
+| Power indicator LED | 3mm green + resistor | Visual "power on" confirmation         |
 
 ---
 
 ## Leave for Later
 
-| Item | Phase | Rationale |
-|------|-------|-----------|
-| Raspberry Pi + Coral / Hailo | 1B | True vision AI — not needed for alarm demo |
-| Weatherproof enclosure | 1C | Indoor demo first |
-| PoE / external antennas | 1C | WiFi is sufficient at bench range |
-| SMS / push notification | 1B | Keep remote alerts to Telegram/webhook initially |
+| Item                         | Phase | Rationale                                        |
+| ---------------------------- | ----- | ------------------------------------------------ |
+| Raspberry Pi + Coral / Hailo | 1B    | True vision AI — not needed for alarm demo       |
+| Weatherproof enclosure       | 1C    | Indoor demo first                                |
+| PoE / external antennas      | 1C    | WiFi is sufficient at bench range                |
+| SMS / push notification      | 1B    | Keep remote alerts to Telegram/webhook initially |
 
 ---
 
@@ -138,9 +138,9 @@ is detected. That is the entire acceptance criteria for Phase 1A.
 
 ## Upgrade Path
 
-| From (Phase 1A) | To (Phase 1B+) |
-|------------------|----------------|
+| From (Phase 1A)          | To (Phase 1B+)                                 |
+| ------------------------ | ---------------------------------------------- |
 | ESP32-CAM blob detection | Pi Zero 2W + Coral USB for real YOLO inference |
-| WiFi-only alerts | Telegram bot → push notifications → SMS |
-| Bench wiring | 3D-printed enclosure with cable routing |
-| Single camera | Multi-camera mesh (SkyWatch Mesh architecture) |
+| WiFi-only alerts         | Telegram bot → push notifications → SMS        |
+| Bench wiring             | 3D-printed enclosure with cable routing        |
+| Single camera            | Multi-camera mesh (SkyWatch Mesh architecture) |

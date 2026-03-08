@@ -31,9 +31,9 @@ just moving blobs.
 
 ## What It Proves
 
-> **AI-guided physical tracking** — YOLO detects and classifies the target,
-> a PID controller drives the servos to keep it centered, and the system
-> ignores non-threat objects.
+> **AI-guided physical tracking** — YOLO detects and classifies the target, a
+> PID controller drives the servos to keep it centered, and the system ignores
+> non-threat objects.
 
 A visitor releases a small drone; the turret locks on, ignoring a person walking
 across the frame.
@@ -42,20 +42,20 @@ across the frame.
 
 ## Bill of Materials
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | Jetson Orin Nano 8GB | 40 TOPS, 1024 CUDA cores | $250–300 |
-| Camera | ArduCam IMX477 (CSI-2) | 12.3MP, C/CS-mount | $30–45 |
-| Lens | 6mm CS-mount wide-angle | 63° FOV, IR-cut | $15–20 |
-| Servo driver | PCA9685 | Reused from Phase 1A | $0 |
-| Pan servo | MG996R (upgrade) | 11 kg·cm torque, metal gear | $5–8 |
-| Tilt servo | MG90S | Reused from Phase 1A | $0 |
-| Pan/tilt bracket | Aluminum upgrade | CNC or heavy-duty 3D print | $10–20 |
-| Power (logic) | MP1584EN buck | 12V → 5V for Jetson | $1–2 |
-| Power (servos) | MP1584EN buck | 12V → 6V for servos | $1–2 |
-| Power supply | 12V/5A DC adapter | Powers both rails | $8–12 |
-| Capacitor | 1000µF 10V electrolytic | Near PCA9685 V+ | $0.50 |
-| **Total** | | | **~$320–410** |
+| Component        | Part                    | Specification               | Est. Cost     |
+| ---------------- | ----------------------- | --------------------------- | ------------- |
+| Compute          | Jetson Orin Nano 8GB    | 40 TOPS, 1024 CUDA cores    | $250–300      |
+| Camera           | ArduCam IMX477 (CSI-2)  | 12.3MP, C/CS-mount          | $30–45        |
+| Lens             | 6mm CS-mount wide-angle | 63° FOV, IR-cut             | $15–20        |
+| Servo driver     | PCA9685                 | Reused from Phase 1A        | $0            |
+| Pan servo        | MG996R (upgrade)        | 11 kg·cm torque, metal gear | $5–8          |
+| Tilt servo       | MG90S                   | Reused from Phase 1A        | $0            |
+| Pan/tilt bracket | Aluminum upgrade        | CNC or heavy-duty 3D print  | $10–20        |
+| Power (logic)    | MP1584EN buck           | 12V → 5V for Jetson         | $1–2          |
+| Power (servos)   | MP1584EN buck           | 12V → 6V for servos         | $1–2          |
+| Power supply     | 12V/5A DC adapter       | Powers both rails           | $8–12         |
+| Capacitor        | 1000µF 10V electrolytic | Near PCA9685 V+             | $0.50         |
+| **Total**        |                         |                             | **~$320–410** |
 
 ---
 
@@ -113,14 +113,14 @@ Error calculation (target bbox center vs frame center)
 
 ## PID Controller Details
 
-| Parameter | Pan Axis | Tilt Axis |
-|-----------|----------|-----------|
-| P gain (Kp) | 0.15 | 0.12 |
-| I gain (Ki) | 0.01 | 0.008 |
-| D gain (Kd) | 0.05 | 0.04 |
-| Output range | 0–180° | 0–90° |
-| Update rate | 30 Hz | 30 Hz |
-| Dead zone | ±10 px | ±10 px |
+| Parameter    | Pan Axis | Tilt Axis |
+| ------------ | -------- | --------- |
+| P gain (Kp)  | 0.15     | 0.12      |
+| I gain (Ki)  | 0.01     | 0.008     |
+| D gain (Kd)  | 0.05     | 0.04      |
+| Output range | 0–180°   | 0–90°     |
+| Update rate  | 30 Hz    | 30 Hz     |
+| Dead zone    | ±10 px   | ±10 px    |
 
 Gains are starting values — tune on real hardware. The dead zone prevents
 micro-corrections that cause servo buzz.
@@ -129,16 +129,16 @@ micro-corrections that cause servo buzz.
 
 ## Servo Upgrade Notes
 
-The Phase 1A SG90/MG90S pan servo is undersized for continuous tracking with
-the heavier Jetson + camera payload. Phase 2 upgrades the pan servo:
+The Phase 1A SG90/MG90S pan servo is undersized for continuous tracking with the
+heavier Jetson + camera payload. Phase 2 upgrades the pan servo:
 
-| | MG90S (Phase 1A) | MG996R (Phase 2) |
-|-|------------------|------------------|
-| Torque | 2.2 kg·cm | 11 kg·cm |
-| Weight | 13.4g | 55g |
-| Gears | Metal | Metal |
-| Voltage | 4.8–6V | 4.8–7.2V |
-| Bracket | Plastic kit | Aluminum (machined or heavy 3D print) |
+|         | MG90S (Phase 1A) | MG996R (Phase 2)                      |
+| ------- | ---------------- | ------------------------------------- |
+| Torque  | 2.2 kg·cm        | 11 kg·cm                              |
+| Weight  | 13.4g            | 55g                                   |
+| Gears   | Metal            | Metal                                 |
+| Voltage | 4.8–6V           | 4.8–7.2V                              |
+| Bracket | Plastic kit      | Aluminum (machined or heavy 3D print) |
 
 The tilt servo (MG90S) is retained because the camera is light enough.
 
@@ -156,7 +156,8 @@ The tilt servo (MG90S) is retained because the camera is light enough.
 ### Step 2 — Model optimization
 
 1. Export YOLOv9-small to ONNX format.
-2. Convert to TensorRT engine: `trtexec --onnx=yolov9s.onnx --fp16 --saveEngine=yolov9s.engine`.
+2. Convert to TensorRT engine:
+   `trtexec --onnx=yolov9s.onnx --fp16 --saveEngine=yolov9s.engine`.
 3. Benchmark: target >=60 FPS at 640×640 FP16.
 
 ### Step 3 — Servo hardware
@@ -196,10 +197,10 @@ The tilt servo (MG90S) is retained because the camera is light enough.
 
 ## Upgrade Path
 
-| From (Phase 2) | To (Phase 3) |
-|-----------------|--------------|
-| Single camera | Dual camera (wide + telephoto) with handoff |
-| MG996R hobby servos | Industrial servos with encoders (closed-loop) |
-| Plastic/aluminum bracket | Weatherproof pan/tilt housing (IP65) |
-| PID tracking | Kalman filter + motion prediction |
-| WiFi/Ethernet | LoRa mesh for distributed turret coordination |
+| From (Phase 2)           | To (Phase 3)                                  |
+| ------------------------ | --------------------------------------------- |
+| Single camera            | Dual camera (wide + telephoto) with handoff   |
+| MG996R hobby servos      | Industrial servos with encoders (closed-loop) |
+| Plastic/aluminum bracket | Weatherproof pan/tilt housing (IP65)          |
+| PID tracking             | Kalman filter + motion prediction             |
+| WiFi/Ethernet            | LoRa mesh for distributed turret coordination |

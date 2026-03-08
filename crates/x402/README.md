@@ -1,10 +1,14 @@
 # phoenix-x402
 
-x402 Payment Protocol integration for Phoenix Rooivalk evidence verification API.
+x402 Payment Protocol integration for Phoenix Rooivalk evidence verification
+API.
 
 ## Overview
 
-This crate implements HTTP 402 "Payment Required" protocol support for monetizing the Phoenix Rooivalk evidence verification API. It enables instant micropayments via Solana without requiring account creation, OAuth flows, or subscription management.
+This crate implements HTTP 402 "Payment Required" protocol support for
+monetizing the Phoenix Rooivalk evidence verification API. It enables instant
+micropayments via Solana without requiring account creation, OAuth flows, or
+subscription management.
 
 ## Features
 
@@ -15,12 +19,12 @@ This crate implements HTTP 402 "Payment Required" protocol support for monetizin
 
 ## Price Tiers
 
-| Tier | Price (USDC) | Description |
-|------|--------------|-------------|
-| Basic | $0.01 | Single-chain evidence verification |
-| Multi-Chain | $0.05 | Cross-chain (Solana + EtherLink) verification |
-| Legal Attestation | $1.00 | Court-admissible certification |
-| Bulk | $0.005/ea | 100+ verifications |
+| Tier              | Price (USDC) | Description                                   |
+| ----------------- | ------------ | --------------------------------------------- |
+| Basic             | $0.01        | Single-chain evidence verification            |
+| Multi-Chain       | $0.05        | Cross-chain (Solana + EtherLink) verification |
+| Legal Attestation | $1.00        | Court-admissible certification                |
+| Bulk              | $0.005/ea    | 100+ verifications                            |
 
 ## Usage
 
@@ -39,6 +43,7 @@ SOLANA_NETWORK=devnet
 ### API Endpoints
 
 #### Get x402 Status
+
 ```
 GET /api/v1/x402/status
 ```
@@ -46,6 +51,7 @@ GET /api/v1/x402/status
 Returns current x402 configuration and pricing.
 
 #### Premium Evidence Verification
+
 ```
 POST /api/v1/evidence/verify-premium
 Content-Type: application/json
@@ -56,8 +62,8 @@ Content-Type: application/json
 }
 ```
 
-**Without Payment**: Returns 402 with payment details
-**With X-PAYMENT Header**: Returns verified evidence
+**Without Payment**: Returns 402 with payment details **With X-PAYMENT Header**:
+Returns verified evidence
 
 ## Protocol Flow
 

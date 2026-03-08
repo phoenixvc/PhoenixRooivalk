@@ -29,12 +29,12 @@ that is more accurate and harder to defeat than any sensor alone.
 
 ## Why Multi-Sensor?
 
-| Sensor | Detects | Blind Spots |
-|--------|---------|-------------|
-| EO/IR camera | Visual signature, shape, payload | Darkness (without IR), fog, occlusion |
-| PIR | Heat signature, movement | Cold targets, static hover, long range |
-| Acoustic | Propeller noise, motor harmonics | Windy conditions, ambient noise, range limit |
-| RF | Control link, telemetry, video downlink | Autonomous (no RF) drones, encrypted links |
+| Sensor       | Detects                                 | Blind Spots                                  |
+| ------------ | --------------------------------------- | -------------------------------------------- |
+| EO/IR camera | Visual signature, shape, payload        | Darkness (without IR), fog, occlusion        |
+| PIR          | Heat signature, movement                | Cold targets, static hover, long range       |
+| Acoustic     | Propeller noise, motor harmonics        | Windy conditions, ambient noise, range limit |
+| RF           | Control link, telemetry, video downlink | Autonomous (no RF) drones, encrypted links   |
 
 **No single sensor covers all scenarios.** Multi-sensor fusion ensures at least
 two modalities confirm a threat before triggering an alert.
@@ -70,33 +70,33 @@ combines them using a weighted Bayesian approach:
 
 ### Sensor Weights (Default)
 
-| Sensor | Weight | Rationale |
-|--------|--------|-----------|
-| EO/IR (YOLO) | 0.45 | Highest information content (visual class + bbox) |
-| RF detection | 0.25 | Protocol fingerprint is strong identity signal |
-| Acoustic | 0.20 | Good bearing estimation, moderate false positives |
-| PIR | 0.10 | Binary trigger only, high false positive rate |
+| Sensor       | Weight | Rationale                                         |
+| ------------ | ------ | ------------------------------------------------- |
+| EO/IR (YOLO) | 0.45   | Highest information content (visual class + bbox) |
+| RF detection | 0.25   | Protocol fingerprint is strong identity signal    |
+| Acoustic     | 0.20   | Good bearing estimation, moderate false positives |
+| PIR          | 0.10   | Binary trigger only, high false positive rate     |
 
 ### Fusion Rules
 
-| Combined Score | Action |
-|---------------|--------|
-| >= 0.85 | **Alert** — fire alarms, notify hub, publish track |
-| 0.60 – 0.84 | **Suspect** — camera stays active, log event, no alarm |
-| < 0.60 | **Dismiss** — return to idle after timeout |
+| Combined Score | Action                                                 |
+| -------------- | ------------------------------------------------------ |
+| >= 0.85        | **Alert** — fire alarms, notify hub, publish track     |
+| 0.60 – 0.84    | **Suspect** — camera stays active, log event, no alarm |
+| < 0.60         | **Dismiss** — return to idle after timeout             |
 
 ### Cross-Sensor Confirmation Matrix
 
 A detection is promoted from _suspect_ to _alert_ when confirmed by a second
 independent sensor within a 5-second window:
 
-| Primary Detection | Confirming Sensor | Result |
-|------------------|-------------------|--------|
-| Camera (drone class >=0.7) | Acoustic (drone signature) | Alert |
-| Camera (drone class >=0.7) | RF (known protocol) | Alert |
-| RF (DJI OcuSync) | Camera (any moving object) | Alert |
-| Acoustic (drone signature) | PIR (motion) + Camera (object) | Alert |
-| PIR only | — | Suspect (camera activated, wait for confirmation) |
+| Primary Detection          | Confirming Sensor              | Result                                            |
+| -------------------------- | ------------------------------ | ------------------------------------------------- |
+| Camera (drone class >=0.7) | Acoustic (drone signature)     | Alert                                             |
+| Camera (drone class >=0.7) | RF (known protocol)            | Alert                                             |
+| RF (DJI OcuSync)           | Camera (any moving object)     | Alert                                             |
+| Acoustic (drone signature) | PIR (motion) + Camera (object) | Alert                                             |
+| PIR only                   | —                              | Suspect (camera activated, wait for confirmation) |
 
 ---
 
@@ -179,17 +179,17 @@ Multi-sensor operation must be power-aware, especially on solar deployments:
 
 ### Power Budget
 
-| Sensor | Always-On | Active | Duty Cycle |
-|--------|-----------|--------|------------|
-| PIR array (×4) | 0.8mW | — | 100% |
-| Acoustic array | 0.5W | — | 100% |
-| RF detection | 1.5W | — | 100% |
-| EO/IR camera | 0W | 5W | On-demand (PIR triggered) |
-| YOLO inference | 0W | 8W | On-demand (camera active) |
-| Comms (LoRa) | 0.1W | 0.5W | ~5% duty cycle |
-| Compute (idle) | 3W | — | 100% |
-| **Total (idle)** | **~6W** | | |
-| **Total (active)** | | **~19W** | |
+| Sensor             | Always-On | Active   | Duty Cycle                |
+| ------------------ | --------- | -------- | ------------------------- |
+| PIR array (×4)     | 0.8mW     | —        | 100%                      |
+| Acoustic array     | 0.5W      | —        | 100%                      |
+| RF detection       | 1.5W      | —        | 100%                      |
+| EO/IR camera       | 0W        | 5W       | On-demand (PIR triggered) |
+| YOLO inference     | 0W        | 8W       | On-demand (camera active) |
+| Comms (LoRa)       | 0.1W      | 0.5W     | ~5% duty cycle            |
+| Compute (idle)     | 3W        | —        | 100%                      |
+| **Total (idle)**   | **~6W**   |          |                           |
+| **Total (active)** |           | **~19W** |                           |
 
 ### Power States
 
@@ -223,14 +223,14 @@ SLEEP (6W)
 
 Before field deployment, each multi-sensor node requires:
 
-| Calibration | Method | Frequency |
-|-------------|--------|-----------|
-| Camera intrinsics | Checkerboard calibration | Once (at assembly) |
-| Acoustic array geometry | Known-source test (clap at fixed positions) | Once (at assembly) |
-| PIR zone mapping | Walk-test each sector | At each installation |
-| RF sensitivity | Known transmitter at measured distance | Once (at assembly) |
-| Sensor time sync | NTP or PTP at boot, GPS PPS if available | Automatic |
-| Compass heading | Magnetic declination + mounting offset | At each installation |
+| Calibration             | Method                                      | Frequency            |
+| ----------------------- | ------------------------------------------- | -------------------- |
+| Camera intrinsics       | Checkerboard calibration                    | Once (at assembly)   |
+| Acoustic array geometry | Known-source test (clap at fixed positions) | Once (at assembly)   |
+| PIR zone mapping        | Walk-test each sector                       | At each installation |
+| RF sensitivity          | Known transmitter at measured distance      | Once (at assembly)   |
+| Sensor time sync        | NTP or PTP at boot, GPS PPS if available    | Automatic            |
+| Compass heading         | Magnetic declination + mounting offset      | At each installation |
 
 ---
 

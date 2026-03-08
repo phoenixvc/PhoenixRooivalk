@@ -40,15 +40,15 @@ zones, and sees a single continuous track that hands off between nodes.
 
 ## Bill of Materials
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | Jetson Orin Nano 8GB | Runs fusion + dashboard + MQTT broker | $250–300 |
-| Storage | 512GB NVMe M.2 SSD | 90-day event retention | $40–50 |
-| Network | 5-port unmanaged GbE switch | Wired backbone for nodes | $15–20 |
-| UPS | Mini 12V UPS module | 30-minute runtime on battery | $25–35 |
-| Enclosure | DIN-rail mount ABS case | Vented, indoor-rated | $15–20 |
-| Power | 12V/5A DC adapter | Powers Jetson + peripherals | $8–12 |
-| **Total** | | | **~$345–425** |
+| Component | Part                        | Specification                         | Est. Cost     |
+| --------- | --------------------------- | ------------------------------------- | ------------- |
+| Compute   | Jetson Orin Nano 8GB        | Runs fusion + dashboard + MQTT broker | $250–300      |
+| Storage   | 512GB NVMe M.2 SSD          | 90-day event retention                | $40–50        |
+| Network   | 5-port unmanaged GbE switch | Wired backbone for nodes              | $15–20        |
+| UPS       | Mini 12V UPS module         | 30-minute runtime on battery          | $25–35        |
+| Enclosure | DIN-rail mount ABS case     | Vented, indoor-rated                  | $15–20        |
+| Power     | 12V/5A DC adapter           | Powers Jetson + peripherals           | $8–12         |
+| **Total** |                             |                                       | **~$345–425** |
 
 ---
 
@@ -112,7 +112,7 @@ The fusion engine correlates detections from multiple nodes into unified tracks.
   "track_id": "TRK-001",
   "class": "drone",
   "confidence": 0.92,
-  "position": { "lat": 33.7490, "lon": -84.3880, "alt_m": 45 },
+  "position": { "lat": 33.749, "lon": -84.388, "alt_m": 45 },
   "velocity": { "vx": 5.2, "vy": -1.3, "vz": 0.8 },
   "contributing_nodes": ["nano-v2-001", "std-v2-001"],
   "first_seen": "2026-03-04T10:15:30Z",
@@ -173,10 +173,10 @@ Evidence CLI.
 
 ## Upgrade Path
 
-| From (Phase 2) | To (Phase 3) |
-|-----------------|--------------|
-| Local MQTT broker | Clustered MQTT with HA failover |
-| React dashboard on local network | Authenticated web dashboard with VPN |
-| Manual turret control | Automated rules engine for turret dispatch |
-| SHA-256 batch hashing | Merkle tree with per-event anchoring |
-| No authentication | mTLS + API key authentication |
+| From (Phase 2)                   | To (Phase 3)                               |
+| -------------------------------- | ------------------------------------------ |
+| Local MQTT broker                | Clustered MQTT with HA failover            |
+| React dashboard on local network | Authenticated web dashboard with VPN       |
+| Manual turret control            | Automated rules engine for turret dispatch |
+| SHA-256 batch hashing            | Merkle tree with per-event anchoring       |
+| No authentication                | mTLS + API key authentication              |

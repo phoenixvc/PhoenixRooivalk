@@ -1,7 +1,7 @@
 # Azure ML Training
 
-Training infrastructure for the Phoenix Rooivalk drone detection model
-using Azure Machine Learning.
+Training infrastructure for the Phoenix Rooivalk drone detection model using
+Azure Machine Learning.
 
 ## Quick Start
 
@@ -76,38 +76,38 @@ az ml job download --name <JOB_NAME> --resource-group $RG --workspace-name $WS \
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `train.py` | Training script with model export |
-| `job.yaml` | Azure ML job definition |
-| `conda.yaml` | Training environment dependencies |
+| File             | Purpose                                           |
+| ---------------- | ------------------------------------------------- |
+| `train.py`       | Training script with model export                 |
+| `job.yaml`       | Azure ML job definition                           |
+| `conda.yaml`     | Training environment dependencies                 |
 | `setup-azure.sh` | Manual Azure CLI setup (alternative to Terraform) |
 
 ## Training Parameters
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `epochs` | 100 | Training epochs |
-| `imgsz` | 320 | Image size (square) |
-| `batch` | 16 | Batch size |
-| `model` | yolov8n.pt | Base model |
-| `patience` | 20 | Early stopping patience |
+| Parameter  | Default    | Description             |
+| ---------- | ---------- | ----------------------- |
+| `epochs`   | 100        | Training epochs         |
+| `imgsz`    | 320        | Image size (square)     |
+| `batch`    | 16         | Batch size              |
+| `model`    | yolov8n.pt | Base model              |
+| `patience` | 20         | Early stopping patience |
 
 ## Supported Models
 
-| Model | Size | Speed | Accuracy | Best For |
-|-------|------|-------|----------|----------|
-| `yolov8n.pt` | 6MB | ⭐⭐⭐ | ⭐⭐ | Raspberry Pi |
-| `yolov8s.pt` | 22MB | ⭐⭐ | ⭐⭐⭐ | Jetson |
-| `yolov8m.pt` | 52MB | ⭐ | ⭐⭐⭐⭐ | Desktop |
+| Model        | Size | Speed  | Accuracy | Best For     |
+| ------------ | ---- | ------ | -------- | ------------ |
+| `yolov8n.pt` | 6MB  | ⭐⭐⭐ | ⭐⭐     | Raspberry Pi |
+| `yolov8s.pt` | 22MB | ⭐⭐   | ⭐⭐⭐   | Jetson       |
+| `yolov8m.pt` | 52MB | ⭐     | ⭐⭐⭐⭐ | Desktop      |
 
 ## Cost Estimates
 
-| Configuration | Time | Cost |
-|---------------|------|------|
-| MVP (T4, 100 epochs) | 6-10 hrs | $3-5 |
-| Full (T4, 150 epochs) | 20-30 hrs | $10-15 |
-| Full (V100, 100 epochs) | 5-8 hrs | $15-25 |
+| Configuration           | Time      | Cost   |
+| ----------------------- | --------- | ------ |
+| MVP (T4, 100 epochs)    | 6-10 hrs  | $3-5   |
+| Full (T4, 150 epochs)   | 20-30 hrs | $10-15 |
+| Full (V100, 100 epochs) | 5-8 hrs   | $15-25 |
 
 ## Outputs
 
@@ -122,7 +122,8 @@ Training produces:
 
 ### GPU Quota Error
 
-Request quota increase in Azure Portal: Subscriptions → Usage + quotas → Search "NC"
+Request quota increase in Azure Portal: Subscriptions → Usage + quotas → Search
+"NC"
 
 ### OOM Error
 

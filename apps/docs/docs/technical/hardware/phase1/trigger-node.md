@@ -40,37 +40,37 @@ actuator is intentionally inert.
 
 ## Bill of Materials — Buy Now (Phase 1A)
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | ESP32 dev board | DevKitC or NodeMCU-32S | $5–8 |
-| Relay | 1-ch relay module | Opto-isolated, 5V coil, 10A contacts | $1–2 |
-| Dummy load | LED strip segment | 12V, ~30cm (or a small 12V lamp) | $2–4 |
-| Safety switch | Toggle switch | SPST, panel-mount (arm/disarm) | $0.50 |
-| Status LED | 3mm red/green | Armed/safe indicators | $0.50 |
-| Power (logic) | MP1584EN buck | 7–12V → 5V for ESP32 | $1–2 |
-| Power (load) | Direct 12V pass-through | From input supply to relay NO contact | — |
-| Wiring | Dupont jumpers, screw terminals | Assorted | $2–3 |
-| **Total** | | | **~$13–20** |
+| Component     | Part                            | Specification                         | Est. Cost   |
+| ------------- | ------------------------------- | ------------------------------------- | ----------- |
+| Compute       | ESP32 dev board                 | DevKitC or NodeMCU-32S                | $5–8        |
+| Relay         | 1-ch relay module               | Opto-isolated, 5V coil, 10A contacts  | $1–2        |
+| Dummy load    | LED strip segment               | 12V, ~30cm (or a small 12V lamp)      | $2–4        |
+| Safety switch | Toggle switch                   | SPST, panel-mount (arm/disarm)        | $0.50       |
+| Status LED    | 3mm red/green                   | Armed/safe indicators                 | $0.50       |
+| Power (logic) | MP1584EN buck                   | 7–12V → 5V for ESP32                  | $1–2        |
+| Power (load)  | Direct 12V pass-through         | From input supply to relay NO contact | —           |
+| Wiring        | Dupont jumpers, screw terminals | Assorted                              | $2–3        |
+| **Total**     |                                 |                                       | **~$13–20** |
 
 ### Relay vs MOSFET
 
-| | Relay Module | Logic-Level MOSFET |
-|-|-------------|-------------------|
-| Isolation | Galvanic (opto + mechanical) | None (shared ground) |
-| Switching speed | ~10ms | <1µs |
-| Audible click | Yes (satisfying for demo) | Silent |
-| Voltage flexibility | Any (AC or DC load) | DC only |
-| Verdict | **Recommended for demo** (click = feedback) | Better for rapid switching |
+|                     | Relay Module                                | Logic-Level MOSFET         |
+| ------------------- | ------------------------------------------- | -------------------------- |
+| Isolation           | Galvanic (opto + mechanical)                | None (shared ground)       |
+| Switching speed     | ~10ms                                       | <1µs                       |
+| Audible click       | Yes (satisfying for demo)                   | Silent                     |
+| Voltage flexibility | Any (AC or DC load)                         | DC only                    |
+| Verdict             | **Recommended for demo** (click = feedback) | Better for rapid switching |
 
 ---
 
 ## Leave for Later (Intentionally)
 
-| Item | Why |
-|------|-----|
-| Any hardware that launches or projects | Phase 1 proves architecture, not force |
-| High-energy actuators (solenoids, pneumatics) | Safety and liability |
-| Multi-channel firing (salvo) | Single channel proves the concept |
+| Item                                          | Why                                    |
+| --------------------------------------------- | -------------------------------------- |
+| Any hardware that launches or projects        | Phase 1 proves architecture, not force |
+| High-energy actuators (solenoids, pneumatics) | Safety and liability                   |
+| Multi-channel firing (salvo)                  | Single channel proves the concept      |
 
 ---
 
@@ -104,10 +104,14 @@ trains good habits for later phases:
 
 1. **Physical arm switch** — toggle must be in ARMED position.
 2. **Software arm state** — firmware must be in armed mode (mirrors the switch).
-3. **Command authentication** — require a pre-shared token (e.g. `Authorization: Bearer <token>` or `X-PSK` header); optionally check source IP allowlist as defense-in-depth. Do not rely on IP allowlisting as the primary authentication method.
+3. **Command authentication** — require a pre-shared token (e.g.
+   `Authorization: Bearer <token>` or `X-PSK` header); optionally check source
+   IP allowlist as defense-in-depth. Do not rely on IP allowlisting as the
+   primary authentication method.
 4. **Pulse duration limit** — relay energizes for a fixed pulse (e.g., 500ms),
    then auto-disarms.
-5. **Activation logging** — every fire event is logged with timestamp and source.
+5. **Activation logging** — every fire event is logged with timestamp and
+   source.
 
 ---
 
@@ -141,7 +145,8 @@ trains good habits for later phases:
 1. ESP32 runs a simple HTTP server.
 2. `POST /fire` endpoint:
    - Check arm switch state.
-   - Validate pre-shared token (e.g. Bearer or X-PSK header) first; optionally check source IP against allowlist as defense-in-depth.
+   - Validate pre-shared token (e.g. Bearer or X-PSK header) first; optionally
+     check source IP against allowlist as defense-in-depth.
    - If armed and authorized: energize relay for 500ms, return `200 OK`.
    - If not armed: return `403 Forbidden`.
 3. Log every request (armed or not) with timestamp.
@@ -167,10 +172,10 @@ trains good habits for later phases:
 
 ## Upgrade Path
 
-| From (Phase 1A) | To (Phase 1B+) |
-|------------------|----------------|
-| HTTP POST fire command | MQTT with TLS for real-time pub/sub |
-| Single relay channel | Multi-channel (salvo / sequence modes) |
-| Token + optional IP allowlist | MQTT + TLS, token in payload |
-| LED strip dummy load | Application-specific actuator (project-dependent) |
-| Manual toggle arm | Remote arming via dashboard with 2FA |
+| From (Phase 1A)               | To (Phase 1B+)                                    |
+| ----------------------------- | ------------------------------------------------- |
+| HTTP POST fire command        | MQTT with TLS for real-time pub/sub               |
+| Single relay channel          | Multi-channel (salvo / sequence modes)            |
+| Token + optional IP allowlist | MQTT + TLS, token in payload                      |
+| LED strip dummy load          | Application-specific actuator (project-dependent) |
+| Manual toggle arm             | Remote arming via dashboard with 2FA              |

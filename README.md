@@ -19,9 +19,8 @@ world-leading brands:
 
 ### **SkySnare™ Consumer**
 
-Premium sports and training equipment for the consumer market.
-Safety-certified, reliability-proven devices that demonstrate our core
-technology at scale.
+Premium sports and training equipment for the consumer market. Safety-certified,
+reliability-proven devices that demonstrate our core technology at scale.
 
 ### **AeroNet™ Enterprise**
 
@@ -36,19 +35,16 @@ reduction.
 **Key Features:**
 
 • **Dual Certification Path**: Consumer safety (CPSC) + Enterprise compliance
-  (FAA)
-• **AI Edge Processing**: On-device intelligence for privacy and low latency
-• **Safety First**: Sub-200ms response times with human oversight
-• **Compliance Logging**: Automated regulatory and insurance audit trails
-• **Data Asset Creation**: Proprietary training data from deployments
+(FAA) • **AI Edge Processing**: On-device intelligence for privacy and low
+latency • **Safety First**: Sub-200ms response times with human oversight •
+**Compliance Logging**: Automated regulatory and insurance audit trails • **Data
+Asset Creation**: Proprietary training data from deployments
 
 **Technology Stack:**
 
-• Rust-based blockchain evidence management
-• Solana and EtherLink dual-chain anchoring
-• Edge AI processing (NVIDIA Jetson AGX Orin)
-• Real-time sensor fusion and tracking
-• Multi-site coordination and cloud learning
+• Rust-based blockchain evidence management • Solana and EtherLink dual-chain
+anchoring • Edge AI processing (NVIDIA Jetson AGX Orin) • Real-time sensor
+fusion and tracking • Multi-site coordination and cloud learning
 
 **Market Opportunity**: $5.9B combined TAM (Consumer: $1.68B @ 8.2% CAGR |
 Enterprise: $4.2B @ 47% CAGR)
@@ -63,13 +59,13 @@ Modular Counter‑UAS System (restricted partner access)
 
 The project is deployed to Azure Static Web Apps via GitHub Actions:
 
-- **Marketing Website** - Interactive demo, capabilities overview, and
-  contact information
+- **Marketing Website** - Interactive demo, capabilities overview, and contact
+  information
 - **Documentation Site** - Technical specifications, architecture, and
   implementation guides
 
-See [Deployment](#deployment) section below for details on Azure
-infrastructure and CI/CD workflows.
+See [Deployment](#deployment) section below for details on Azure infrastructure
+and CI/CD workflows.
 
 ## Monorepo overview
 
@@ -78,16 +74,15 @@ shared packages.
 
 Structure:
 
-- `apps/` — All applications and services (see
-  [apps/README.md](apps/README.md) for detailed overview)
+- `apps/` — All applications and services (see [apps/README.md](apps/README.md)
+  for detailed overview)
   - `docs/` — Docusaurus site (published under `/docs`).
-    - Comprehensive technical documentation with executive, business,
-      technical, legal, and operations sections.
+    - Comprehensive technical documentation with executive, business, technical,
+      legal, and operations sections.
   - `marketing/` — Next.js 14 static marketing site (exports to `out/`).
     - Includes threat simulator, ROI calculator, and interactive demos.
   - `detector/` — Python drone detection system for edge devices.
-    - Modular architecture supporting Raspberry Pi, NVIDIA Jetson, and
-      desktop.
+    - Modular architecture supporting Raspberry Pi, NVIDIA Jetson, and desktop.
     - See [apps/detector/README.md](apps/detector/README.md) for user guide.
   - `threat-simulator-desktop/` — Tauri desktop application (Rust +
     Leptos/WASM).
@@ -127,7 +122,8 @@ Tooling:
 - Formatting: `prettier` with consistent code style.
 - Pre-commit: `husky` and `lint-staged` for automated quality checks.
 - Spell checking: `cspell` for documentation and code comments.
-- Rust tooling: `clippy` for Rust code quality and `cargo` for dependency management.
+- Rust tooling: `clippy` for Rust code quality and `cargo` for dependency
+  management.
 - Configuration: `tsconfig.base.json` for shared TypeScript configuration.
 
 ### Development commands
@@ -202,8 +198,7 @@ PhoenixRooivalk uses a three-phase deployment approach:
    - Manual fallback instructions provided
 
 3. **Applications** (Triggered on push or manual):
-   - **Docs**: `.github/workflows/deploy-docs-azure.yml` → Azure Static Web
-     Apps
+   - **Docs**: `.github/workflows/deploy-docs-azure.yml` → Azure Static Web Apps
    - **Marketing**: `.github/workflows/deploy-marketing-azure.yml` → Azure
      Static Web Apps
    - **Functions**: `.github/workflows/deploy-azure-functions.yml` → Azure
@@ -228,8 +223,7 @@ git push origin main
 
 **Documentation:**
 
-- 📖
-  [Deployment Workflow Guide](.github/DEPLOYMENT_WORKFLOW_GUIDE.md) -
+- 📖 [Deployment Workflow Guide](.github/DEPLOYMENT_WORKFLOW_GUIDE.md) -
   Complete guide
 - 🚀 [Quick Reference](.github/QUICK_REFERENCE.md) - Cheat sheet
 - 📋 [Deployment Sequence](.github/DEPLOYMENT_SEQUENCE.md) - Detailed steps
@@ -240,17 +234,17 @@ Additional workflows:
 - **CI/CD**: `.github/workflows/ci-marketing.yml`,
   `.github/workflows/ci-rust.yml`
 - **Security**: `.github/workflows/codeql.yml` for vulnerability scanning
-- **Link Checking**: `.github/workflows/docs-link-checker.yml` for
-  documentation links
+- **Link Checking**: `.github/workflows/docs-link-checker.yml` for documentation
+  links
 
 See `.github/AZURE_SETUP.md` for Azure infrastructure setup and configuration.
 
 ### Cross‑site links (env)
 
-- Docs site can link back to marketing via `MARKETING_URL` (build‑time env
-  for `apps/docs`).
-- Marketing site can link to docs via `NEXT_PUBLIC_DOCS_URL` (public runtime
-  env for `apps/marketing`).
+- Docs site can link back to marketing via `MARKETING_URL` (build‑time env for
+  `apps/docs`).
+- Marketing site can link to docs via `NEXT_PUBLIC_DOCS_URL` (public runtime env
+  for `apps/marketing`).
 
 Set these as GitHub repository variables or Azure Static Web App environment
 variables if you want absolute cross‑links.
@@ -267,10 +261,10 @@ routing rules.
 
 ## Overview
 
-PhoenixRooivalk delivers a layered, modular counter‑UAS capability for
-contested EM environments. The public materials in this repository provide a
-high‑level overview and governance. Partner‑only details (specifications,
-simulations, integration guides) are shared upon approval.
+PhoenixRooivalk delivers a layered, modular counter‑UAS capability for contested
+EM environments. The public materials in this repository provide a high‑level
+overview and governance. Partner‑only details (specifications, simulations,
+integration guides) are shared upon approval.
 
 ## Mission
 
@@ -279,23 +273,23 @@ Transform proven pneumatic platform technology into two world-leading brands:
 - **SkySnare™** for consumer sports and training markets
 - **AeroNet™** for regulated, AI-enabled infrastructure security
 
-We aim to prove reliability and safety at consumer scale, then apply that
-track record to high-value enterprise markets that demand compliance,
-automation, and measurable risk reduction.
+We aim to prove reliability and safety at consumer scale, then apply that track
+record to high-value enterprise markets that demand compliance, automation, and
+measurable risk reduction.
 
 ## System overview (abstract)
 
 - RKV‑M: Aerial VTOL mothership for picket, relay, and mini launch; resilient
   comms and survivability provisions.
-- RKV‑I: Deployable minis (interceptor, decoy, ISR). Control via RF or
-  optional fiber for jam‑resistant teleoperation. Non‑kinetic baseline.
+- RKV‑I: Deployable minis (interceptor, decoy, ISR). Control via RF or optional
+  fiber for jam‑resistant teleoperation. Non‑kinetic baseline.
 - RKV‑G: Ground support rover acting as mobile GCS, mast, and logistics node;
   can bear fiber spools for engagements.
 - RKV‑C2: Command, control, and data plane with strict QoS, eventing, and
   observability; weapon‑agnostic integration patterns.
 
-For detailed specifications and planning baselines, see
-[`index.md`](./index.md) (restricted).
+For detailed specifications and planning baselines, see [`index.md`](./index.md)
+(restricted).
 
 ## Operating modes
 
@@ -317,14 +311,15 @@ Azure Static Web Apps):
   - Legal & Compliance Frameworks
   - Funding Opportunities & Resources
 
-- **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production
-  deployment and configuration
+- **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production deployment
+  and configuration
 - **Azure Infrastructure**: [infra/azure/README.md](./infra/azure/README.md) -
   Azure deployment setup
 
 > **Note**: Documentation source files are in `apps/docs/`. Run
 > `pnpm --filter docs start` to view locally. Doc backlog (hardware phase,
-> Hugging Face/MCP): [GitHub issues #674–#685](https://github.com/phoenixvc/PhoenixRooivalk/issues?q=is%3Aissue+674+675+676+677+678+679+680+681+682+683+684+685).
+> Hugging Face/MCP):
+> [GitHub issues #674–#685](https://github.com/phoenixvc/PhoenixRooivalk/issues?q=is%3Aissue+674+675+676+677+678+679+680+681+682+683+684+685).
 
 ## Operational tasks
 
@@ -417,8 +412,7 @@ Actions:
   `apps/docs/build/`)
 
 Deployment is triggered automatically on push to `main` branch. See the
-[Deployment](#deployment) section and `.github/workflows/` for workflow
-details.
+[Deployment](#deployment) section and `.github/workflows/` for workflow details.
 
 ## Contributing
 
@@ -435,4 +429,3 @@ for details.
 Jurie Smit  
 PhoenixVC  
 mailto:smit.jurie@gmail.com
-

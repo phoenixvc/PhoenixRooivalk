@@ -1,1 +1,1 @@
-config/eslint.config.mjs
+config / eslint.config.mjs;

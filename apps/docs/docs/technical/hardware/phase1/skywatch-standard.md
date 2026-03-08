@@ -39,36 +39,36 @@ alarm, and receives a Telegram notification on their phone — all within second
 
 ## Bill of Materials — Buy Now (Phase 1A)
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | ESP32-CAM (OV2640) | 2MP, WiFi, SD slot | $6–10 |
-| Motion sensor | HC-SR501 PIR | 3.3V logic, ~7m range, adjustable | $1–2 |
-| Power | MP1584EN buck | 7–12V in → 5.1V out | $1–2 |
-| Alarm (audio) | Active buzzer | 5V, via NPN transistor | $1 |
-| Alarm (visual) | High-bright LED | 5mm + 220Ω resistor | $0.50 |
-| Control | Pushbutton | Arm/disarm | $0.50 |
-| Status LEDs | 3mm red + green | Armed / disarmed indicators | $0.50 |
-| Wiring | Dupont jumpers, screw terminals | Assorted | $2–3 |
-| **Total** | | | **~$14–20** |
+| Component      | Part                            | Specification                     | Est. Cost   |
+| -------------- | ------------------------------- | --------------------------------- | ----------- |
+| Compute        | ESP32-CAM (OV2640)              | 2MP, WiFi, SD slot                | $6–10       |
+| Motion sensor  | HC-SR501 PIR                    | 3.3V logic, ~7m range, adjustable | $1–2        |
+| Power          | MP1584EN buck                   | 7–12V in → 5.1V out               | $1–2        |
+| Alarm (audio)  | Active buzzer                   | 5V, via NPN transistor            | $1          |
+| Alarm (visual) | High-bright LED                 | 5mm + 220Ω resistor               | $0.50       |
+| Control        | Pushbutton                      | Arm/disarm                        | $0.50       |
+| Status LEDs    | 3mm red + green                 | Armed / disarmed indicators       | $0.50       |
+| Wiring         | Dupont jumpers, screw terminals | Assorted                          | $2–3        |
+| **Total**      |                                 |                                   | **~$14–20** |
 
 ### Optional Additions
 
-| Component | Part | Why |
-|-----------|------|-----|
+| Component         | Part               | Why                                       |
+| ----------------- | ------------------ | ----------------------------------------- |
 | Microphone module | MAX9814 or INMP441 | Acoustic trigger demo (clap / prop noise) |
-| Small siren | 5V 90dB piezo | More convincing alarm (volume-controlled) |
-| microSD card | 32GB Class 10 | Event logging and image capture |
+| Small siren       | 5V 90dB piezo      | More convincing alarm (volume-controlled) |
+| microSD card      | 32GB Class 10      | Event logging and image capture           |
 
 ---
 
 ## Leave for Later
 
-| Item | Phase | Rationale |
-|------|-------|-----------|
-| Coral / Hailo AI accelerator | 1B | PIR + frame diff is sufficient for demo |
-| Multi-sensor RF / SDR | 1C+ | Far beyond demo scope |
-| Long-range optics, stabilized mounts | 1C+ | Overkill for bench range |
-| LTE failover | 1C | WiFi covers all demo scenarios |
+| Item                                 | Phase | Rationale                               |
+| ------------------------------------ | ----- | --------------------------------------- |
+| Coral / Hailo AI accelerator         | 1B    | PIR + frame diff is sufficient for demo |
+| Multi-sensor RF / SDR                | 1C+   | Far beyond demo scope                   |
+| Long-range optics, stabilized mounts | 1C+   | Overkill for bench range                |
+| LTE failover                         | 1C    | WiFi covers all demo scenarios          |
 
 ---
 
@@ -120,7 +120,8 @@ Same as [Nano build](./skywatch-nano.md#step-1--power-rail): MP1584EN set to
 
 ### Step 2 — PIR sensor
 
-1. Wire HC-SR501: VCC → 5V, GND → GND, OUT → ESP32 GPIO (e.g., GPIO 13, 14, or 27 — avoid GPIO 15 per wiring/safety guide).
+1. Wire HC-SR501: VCC → 5V, GND → GND, OUT → ESP32 GPIO (e.g., GPIO 13, 14, or
+   27 — avoid GPIO 15 per wiring/safety guide).
 2. Adjust sensitivity and delay pots on the PIR module to taste.
 3. Test: serial print when PIR goes HIGH.
 
@@ -160,9 +161,9 @@ Same as [Nano build](./skywatch-nano.md#step-1--power-rail): MP1584EN set to
 
 ## Upgrade Path
 
-| From (Phase 1A) | To (Phase 1B+) |
-|------------------|----------------|
-| PIR + frame diff | YOLO on Pi/Jetson (real object classification) |
-| Telegram webhook | MQTT → central dashboard → push notifications |
-| Single PIR zone | Multi-zone PIR array or radar module |
-| Pushbutton arming | App-based arming with geofence |
+| From (Phase 1A)   | To (Phase 1B+)                                 |
+| ----------------- | ---------------------------------------------- |
+| PIR + frame diff  | YOLO on Pi/Jetson (real object classification) |
+| Telegram webhook  | MQTT → central dashboard → push notifications  |
+| Single PIR zone   | Multi-zone PIR array or radar module           |
+| Pushbutton arming | App-based arming with geofence                 |

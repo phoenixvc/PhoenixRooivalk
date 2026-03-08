@@ -1,7 +1,7 @@
 # Azure ML Training Infrastructure
 
-Terraform configuration for provisioning Azure Machine Learning resources
-for the Phoenix Rooivalk drone detection model training.
+Terraform configuration for provisioning Azure Machine Learning resources for
+the Phoenix Rooivalk drone detection model training.
 
 ## Prerequisites
 
@@ -13,6 +13,7 @@ for the Phoenix Rooivalk drone detection model training.
    ```
 
 2. **Terraform** >= 1.5.0 installed:
+
    ```bash
    # macOS
    brew install terraform
@@ -45,16 +46,16 @@ terraform output cli_commands
 
 ## Resources Created
 
-| Resource | Purpose |
-|----------|---------|
-| Resource Group | Container for all ML resources |
-| Storage Account | Dataset and model storage |
-| Key Vault | Secrets management |
-| Application Insights | Training monitoring |
-| ML Workspace | Azure ML workspace |
-| GPU Compute Cluster | Training compute (T4/V100/A100) |
-| Container Registry | Custom environments (optional) |
-| CPU Cluster | Data preprocessing (optional) |
+| Resource             | Purpose                         |
+| -------------------- | ------------------------------- |
+| Resource Group       | Container for all ML resources  |
+| Storage Account      | Dataset and model storage       |
+| Key Vault            | Secrets management              |
+| Application Insights | Training monitoring             |
+| ML Workspace         | Azure ML workspace              |
+| GPU Compute Cluster  | Training compute (T4/V100/A100) |
+| Container Registry   | Custom environments (optional)  |
+| CPU Cluster          | Data preprocessing (optional)   |
 
 ## Environments
 
@@ -65,6 +66,7 @@ terraform output cli_commands
 - Minimal resources
 
 ### Production (`environments/prod.tfvars`)
+
 - V100 GPU (higher performance, ~$3.06/hr)
 - Multiple nodes for parallel experiments
 - Container registry for custom environments
@@ -129,24 +131,25 @@ az ml job download \
 
 ### GPU Options
 
-| VM Size | GPU | VRAM | Cost/hr | Best For |
-|---------|-----|------|---------|----------|
-| Standard_NC4as_T4_v3 | T4 | 16GB | ~$0.53 | MVP, cost-sensitive |
-| Standard_NC6s_v3 | V100 | 16GB | ~$3.06 | Production |
-| Standard_NC24ads_A100_v4 | A100 | 80GB | ~$3.67 | Large models |
+| VM Size                  | GPU  | VRAM | Cost/hr | Best For            |
+| ------------------------ | ---- | ---- | ------- | ------------------- |
+| Standard_NC4as_T4_v3     | T4   | 16GB | ~$0.53  | MVP, cost-sensitive |
+| Standard_NC6s_v3         | V100 | 16GB | ~$3.06  | Production          |
+| Standard_NC24ads_A100_v4 | A100 | 80GB | ~$3.67  | Large models        |
 
 ### Estimated Training Costs
 
-| Dataset | T4 GPU | V100 GPU |
-|---------|--------|----------|
-| MVP (10 classes) | $3-5 | $10-15 |
-| Full (27 classes) | $10-15 | $30-50 |
+| Dataset           | T4 GPU | V100 GPU |
+| ----------------- | ------ | -------- |
+| MVP (10 classes)  | $3-5   | $10-15   |
+| Full (27 classes) | $10-15 | $30-50   |
 
 ### Cost Saving Tips
 
 1. **Scale to zero**: Set `min_nodes = 0` (default)
 2. **Short idle timeout**: Use 15 min for dev, 30 min for prod
-3. **Spot instances**: Set `use_spot_instances = true` (up to 80% savings, may be preempted)
+3. **Spot instances**: Set `use_spot_instances = true` (up to 80% savings, may
+   be preempted)
 4. **T4 GPU**: Use Standard_NC4as_T4_v3 for MVP
 
 ## Cleanup
@@ -159,18 +162,23 @@ terraform destroy -var-file="environments/dev.tfvars"
 ## Troubleshooting
 
 ### "Quota exceeded"
+
 Request GPU quota increase in Azure portal:
+
 1. Go to Subscriptions > Your Sub > Usage + quotas
 2. Search for "NC" series
 3. Request increase
 
 ### "Region not available"
+
 Try different regions:
+
 - `eastus` (most availability)
 - `westus2`
 - `westeurope`
 
 ### "Compute cluster stuck"
+
 ```bash
 # Force delete compute cluster
 az ml compute delete \

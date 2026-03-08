@@ -38,40 +38,40 @@ A visitor moves across the room; the turret follows. That is the demo.
 
 ## Bill of Materials — Buy Now (Phase 1A)
 
-| Component | Part | Specification | Est. Cost |
-|-----------|------|---------------|-----------|
-| Compute | ESP32 dev board | DevKitC or NodeMCU-32S | $5–8 |
-| Servo driver | PCA9685 | 16-channel, I2C, 12-bit PWM | $2–4 |
-| Pan servo | SG90 _or_ MG90S | 180° micro servo | $1–3 ea. |
-| Tilt servo | SG90 _or_ MG90S | 180° micro servo | $1–3 ea. |
-| Pan/tilt bracket | SG90 kit mount | Dual-axis plastic bracket | $2–4 |
-| Camera | ESP32-CAM (OV2640) | Mounted on tilt platform | $6–10 |
-| Power (logic) | MP1584EN buck | 7–12V → 5V for ESP32 | $1–2 |
-| Power (servos) | MP1584EN buck | 7–12V → 5.5V for servos | $1–2 |
-| Capacitor | 470–1000µF 10V electrolytic | Bulk cap near PCA9685 | $0.50 |
-| Wiring | Dupont jumpers, headers | I2C + servo leads | $2–3 |
-| **Total** | | | **~$22–40** |
+| Component        | Part                        | Specification               | Est. Cost   |
+| ---------------- | --------------------------- | --------------------------- | ----------- |
+| Compute          | ESP32 dev board             | DevKitC or NodeMCU-32S      | $5–8        |
+| Servo driver     | PCA9685                     | 16-channel, I2C, 12-bit PWM | $2–4        |
+| Pan servo        | SG90 _or_ MG90S             | 180° micro servo            | $1–3 ea.    |
+| Tilt servo       | SG90 _or_ MG90S             | 180° micro servo            | $1–3 ea.    |
+| Pan/tilt bracket | SG90 kit mount              | Dual-axis plastic bracket   | $2–4        |
+| Camera           | ESP32-CAM (OV2640)          | Mounted on tilt platform    | $6–10       |
+| Power (logic)    | MP1584EN buck               | 7–12V → 5V for ESP32        | $1–2        |
+| Power (servos)   | MP1584EN buck               | 7–12V → 5.5V for servos     | $1–2        |
+| Capacitor        | 470–1000µF 10V electrolytic | Bulk cap near PCA9685       | $0.50       |
+| Wiring           | Dupont jumpers, headers     | I2C + servo leads           | $2–3        |
+| **Total**        |                             |                             | **~$22–40** |
 
 ### SG90 vs MG90S
 
-| | SG90 | MG90S |
-|-|------|-------|
-| Gears | Plastic | Metal |
-| Torque | 1.8 kg·cm | 2.2 kg·cm |
-| Lifespan | Short (demo OK) | Longer (recommended) |
-| Cost | ~$1 | ~$2–3 |
-| Verdict | Fine for first demo | **Recommended** if budget allows |
+|          | SG90                | MG90S                            |
+| -------- | ------------------- | -------------------------------- |
+| Gears    | Plastic             | Metal                            |
+| Torque   | 1.8 kg·cm           | 2.2 kg·cm                        |
+| Lifespan | Short (demo OK)     | Longer (recommended)             |
+| Cost     | ~$1                 | ~$2–3                            |
+| Verdict  | Fine for first demo | **Recommended** if budget allows |
 
 ---
 
 ## Leave for Later
 
-| Item | Phase | Rationale |
-|------|-------|-----------|
-| Stepper motors + belt drive | 2+ | Precision tracking, much higher cost |
-| Closed-loop servos / encoders | 2+ | Position feedback not needed for demo |
-| 3D-printed metal bracket | 1C | Plastic kit bracket is adequate |
-| Second camera (stereo) | 2+ | Depth estimation is a future feature |
+| Item                          | Phase | Rationale                             |
+| ----------------------------- | ----- | ------------------------------------- |
+| Stepper motors + belt drive   | 2+    | Precision tracking, much higher cost  |
+| Closed-loop servos / encoders | 2+    | Position feedback not needed for demo |
+| 3D-printed metal bracket      | 1C    | Plastic kit bracket is adequate       |
+| Second camera (stereo)        | 2+    | Depth estimation is a future feature  |
 
 ---
 
@@ -113,7 +113,11 @@ The PCA9685 is a $3 insurance policy against three common problems:
    load. The PCA9685 generates hardware PWM independently.
 2. **Scalability** — 16 channels means adding more servos later costs zero
    additional wiring complexity.
-3. **Precision** — PCA9685 provides fixed 12-bit hardware PWM (4096 steps), stable and independent of CPU/WiFi jitter. ESP32 LEDC resolution is configurable per timer (not fixed) and can reach up to ~13-bit at practical servo frequencies, but is software-driven and subject to jitter; see [Shared Parts](./shared-parts.md) and ESP-IDF LEDC behavior.
+3. **Precision** — PCA9685 provides fixed 12-bit hardware PWM (4096 steps),
+   stable and independent of CPU/WiFi jitter. ESP32 LEDC resolution is
+   configurable per timer (not fixed) and can reach up to ~13-bit at practical
+   servo frequencies, but is software-driven and subject to jitter; see
+   [Shared Parts](./shared-parts.md) and ESP-IDF LEDC behavior.
 
 ---
 
@@ -173,10 +177,10 @@ The PCA9685 is a $3 insurance policy against three common problems:
 
 ## Upgrade Path
 
-| From (Phase 1A) | To (Phase 1B+) |
-|------------------|----------------|
-| SG90 / MG90S micro servos | High-torque digital servos or steppers |
-| Plastic bracket kit | 3D-printed or machined aluminum mount |
-| Blob centroid tracking | YOLO bounding-box tracking on Pi/Jetson |
-| Proportional control | Full PID with acceleration limiting |
-| ESP32-CAM (2MP) | Pi HQ Camera (12MP) or thermal (FLIR Lepton) |
+| From (Phase 1A)           | To (Phase 1B+)                               |
+| ------------------------- | -------------------------------------------- |
+| SG90 / MG90S micro servos | High-torque digital servos or steppers       |
+| Plastic bracket kit       | 3D-printed or machined aluminum mount        |
+| Blob centroid tracking    | YOLO bounding-box tracking on Pi/Jetson      |
+| Proportional control      | Full PID with acceleration limiting          |
+| ESP32-CAM (2MP)           | Pi HQ Camera (12MP) or thermal (FLIR Lepton) |
