@@ -1,7 +1,7 @@
 // Particle effects system for explosions, trails, and visual feedback
 
 use super::types::Vector2;
-use rand::Rng;
+use rand::RngExt;
 
 #[derive(Debug, Clone)]
 pub struct Particle {

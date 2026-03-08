@@ -1,0 +1,20 @@
+/* Interactive Demo Page Styles */
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  background: linear-gradient(
+    to bottom right,
+    rgb(var(--bg-primary)),
+    rgb(var(--darker)),
+    rgb(var(--bg-primary))
+  );
+}
+
+@media (max-width: 768px) {
+  .container {
+    min-height: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}

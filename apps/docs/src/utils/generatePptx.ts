@@ -4,10 +4,163 @@ import type {
   ColorTheme,
   ColorPalette,
   TeamMember,
+  ProductCard,
 } from "../components/Downloads/SlideDeckDownload";
 
 /** Branded text for slide decks - Phoenix Rooivalk */
-const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials
+const SLIDE_DECK_BRAND_NAME = "PhoenixRooivalk";
+const SLIDE_DECK_BRAND_TEXT = "PR"; // Phoenix Rooivalk initials for small areas
+const SLIDE_DECK_TAGLINE =
+  "Advanced counter drone defence systems\nfor military and civilian";
+const SLIDE_DECK_URL = "https://docs.phoenixrooivalk.com/";
+
+/**
+ * Convert relative image path to full URL
+ * Uses current origin to work in both dev and production
+ */
+function resolveImageUrl(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith("http")) return path;
+  // Use current origin (works in dev and production)
+  const baseUrl =
+    typeof window !== "undefined" ? window.location.origin : SLIDE_DECK_URL;
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+  return `${baseUrl}/${cleanPath}`;
+}
+
+/**
+ * Fetch image and convert to base64 data URL for embedding in PPTX
+ * Returns undefined if fetch fails (will fall back to initials)
+ */
+async function fetchImageAsBase64(
+  url: string | undefined,
+): Promise<string | undefined> {
+  if (!url) return undefined;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return undefined;
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => resolve(undefined);
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Cache for fetched images to avoid duplicate requests
+ */
+const imageCache = new Map<string, string | undefined>();
+
+/**
+ * Fetch image with caching
+ */
+async function fetchImageCached(
+  path: string | undefined,
+): Promise<string | undefined> {
+  if (!path) return undefined;
+  const url = resolveImageUrl(path);
+  if (!url) return undefined;
+
+  if (imageCache.has(url)) {
+    return imageCache.get(url);
+  }
+
+  const data = await fetchImageAsBase64(url);
+  imageCache.set(url, data);
+  return data;
+}
+
+// SVG logo as string for conversion to PNG
+const LOGO_SVG = `<svg width="128" height="128" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="phoenix-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="20" cy="20" r="18" fill="url(#phoenix-gradient)" stroke="#0f172a" stroke-width="2"/>
+  <path d="M20 8 L24 16 L28 12 L26 20 L32 18 L28 24 L30 28 L24 26 L20 32 L16 26 L10 28 L12 24 L8 18 L14 20 L12 12 L16 16 L20 8 Z"
+        fill="#0f172a" stroke="#f97316" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20 6 L26 10 L24 16 L20 20 L16 16 L14 10 L20 6 Z"
+        fill="none" stroke="#f97316" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="20" cy="20" r="3" fill="#0f172a"/>
+</svg>`;
+
+/**
+ * Convert SVG string to PNG data URL using canvas
+ */
+async function svgToPngDataUrl(
+  svgString: string,
+  width = 128,
+  height = 128,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const svgBlob = new Blob([svgString], {
+      type: "image/svg+xml;charset=utf-8",
+    });
+    const url = URL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/png"));
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load SVG"));
+    };
+
+    img.src = url;
+  });
+}
+
+/**
+ * Sanitize video path to prevent path traversal attacks
+ * Only allows paths starting with / or relative paths without ..
+ */
+function sanitizeVideoPath(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  // Remove any path traversal attempts
+  const sanitized = path
+    .replace(/\.\./g, "") // Remove ..
+    .replace(/\/\//g, "/") // Remove double slashes
+    .trim();
+  // Only allow paths starting with / or alphanumeric
+  if (!/^[\/a-zA-Z0-9]/.test(sanitized)) return undefined;
+  return sanitized;
+}
+
+/**
+ * Sanitize text content for speaker notes to prevent injection
+ */
+function sanitizeTextContent(text: string | undefined): string {
+  if (!text) return "";
+  return text
+    .replace(/[\x00-\x1F\x7F]/g, "") // Remove control characters
+    .trim();
+}
+
+/**
+ * pptxgenjs shape type - using string literal type for better type safety
+ * Note: pptxgenjs types are incomplete, so we use this type alias
+ */
+type PptxShape = "rect" | "ellipse" | "triangle" | "line" | "arc";
 
 /**
  * Color theme presets
@@ -201,42 +354,97 @@ export async function generatePptx(
   const totalSeconds = slides.reduce((acc, s) => acc + s.duration, 0);
   const targetPerSlide = totalSeconds / totalSlides;
 
+  // Clear image cache for fresh generation
+  imageCache.clear();
+
+  // Prefetch all images in parallel for embedding
+  const imagePaths: string[] = [];
+  for (const slide of slides) {
+    if (slide.image) imagePaths.push(slide.image);
+    if (slide.teamMembers) {
+      for (const member of slide.teamMembers) {
+        if (member.image) imagePaths.push(member.image);
+      }
+    }
+  }
+  await Promise.all(imagePaths.map((path) => fetchImageCached(path)));
+
   // ==========================================
   // TITLE SLIDE
   // ==========================================
   const titleSlide = pptx.addSlide();
   titleSlide.background = { color: colors.dark };
 
-  // Large Brand Icon on title slide
-  titleSlide.addText(SLIDE_DECK_BRAND_TEXT, {
+  // Brand name at top
+  titleSlide.addText(SLIDE_DECK_BRAND_NAME, {
     x: 0.5,
-    y: 1.0,
+    y: 0.6,
     w: 9.0,
-    h: 0.8,
-    fontSize: 48,
-    color: colors.textMuted,
-    align: "center",
-  });
-
-  // Title
-  titleSlide.addText(metadata.title, {
-    x: 0.5,
-    y: 2.0,
-    w: 9.0,
-    h: 1.5,
-    fontSize: 44,
+    h: 0.7,
+    fontSize: 40,
     bold: true,
     color: colors.text,
     align: "center",
   });
 
-  // Subtitle
-  titleSlide.addText(`${metadata.duration}-Minute Presentation`, {
+  // Tagline
+  titleSlide.addText(SLIDE_DECK_TAGLINE, {
     x: 0.5,
-    y: 3.7,
+    y: 1.3,
+    w: 9.0,
+    h: 0.6,
+    fontSize: 14,
+    color: colors.textMuted,
+    align: "center",
+  });
+
+  // Logo - convert SVG to PNG and embed
+  let logoPngDataUrl: string | null = null;
+  try {
+    logoPngDataUrl = await svgToPngDataUrl(LOGO_SVG, 128, 128);
+  } catch {
+    // Fallback to shape if conversion fails
+    logoPngDataUrl = null;
+  }
+
+  if (logoPngDataUrl) {
+    titleSlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 1.95,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    // Fallback: shape-based logo
+    titleSlide.addShape("ellipse" as PptxShape, {
+      x: 4.25,
+      y: 2.0,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+      line: { color: colors.darker, width: 2 },
+    });
+    titleSlide.addText("PR", {
+      x: 4.25,
+      y: 2.3,
+      w: 1.5,
+      h: 0.9,
+      fontSize: 32,
+      bold: true,
+      color: colors.darker,
+      align: "center",
+    });
+  }
+
+  // Presentation subtitle
+  titleSlide.addText("DEFENCE DRONE - Pitch Presentation", {
+    x: 0.5,
+    y: 3.4,
     w: 9.0,
     h: 0.5,
     fontSize: 24,
+    bold: true,
     color: colors.textSecondary,
     align: "center",
   });
@@ -245,10 +453,10 @@ export async function generatePptx(
   if (metadata.audience) {
     titleSlide.addText(metadata.audience, {
       x: 0.5,
-      y: 4.3,
+      y: 4.1,
       w: 9.0,
       h: 0.4,
-      fontSize: 18,
+      fontSize: 16,
       color: colors.textMuted,
       align: "center",
     });
@@ -258,14 +466,25 @@ export async function generatePptx(
   if (metadata.date) {
     titleSlide.addText(metadata.date, {
       x: 0.5,
-      y: 5.0,
+      y: 4.6,
       w: 9.0,
       h: 0.3,
-      fontSize: 14,
+      fontSize: 12,
       color: colors.textMuted,
       align: "center",
     });
   }
+
+  // Website URL at bottom
+  titleSlide.addText(SLIDE_DECK_URL, {
+    x: 0.5,
+    y: 5.0,
+    w: 9.0,
+    h: 0.3,
+    fontSize: 11,
+    color: colors.textMuted,
+    align: "center",
+  });
 
   // ==========================================
   // TABLE OF CONTENTS / AGENDA SLIDE
@@ -445,17 +664,28 @@ export async function generatePptx(
         });
       }
     } else if (layout === "image" && slide.image) {
-      // Image-focused layout
-      try {
+      // Image-focused layout - try base64 first, then URL path
+      const slideImageData = imageCache.get(resolveImageUrl(slide.image) || "");
+      const slideImageUrl = resolveImageUrl(slide.image);
+      if (slideImageData) {
         contentSlide.addImage({
-          path: slide.image,
+          data: slideImageData,
           x: 2.0,
           y: 1.9,
           w: 6.0,
           h: 3.0,
         });
-      } catch {
-        // If image fails, add placeholder text
+      } else if (slideImageUrl) {
+        // Fallback to URL path - let pptxgenjs fetch it
+        contentSlide.addImage({
+          path: slideImageUrl,
+          x: 2.0,
+          y: 1.9,
+          w: 6.0,
+          h: 3.0,
+        });
+      } else {
+        // If image not available, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 2.0,
           y: 2.5,
@@ -505,6 +735,8 @@ export async function generatePptx(
       }
     } else if (layout === "image-right" && slide.image) {
       // Split layout: key points left, image right
+      const imageRightData = imageCache.get(resolveImageUrl(slide.image) || "");
+      const imageRightUrl = resolveImageUrl(slide.image);
       // Key points on the left (55% width)
       if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
@@ -529,17 +761,26 @@ export async function generatePptx(
         });
       }
 
-      // Image on the right (45% width)
-      try {
+      // Image on the right (45% width) - try base64 first, then URL
+      if (imageRightData) {
         contentSlide.addImage({
-          path: slide.image,
+          data: imageRightData,
           x: 5.7,
           y: 1.9,
           w: 3.8,
           h: 3.5,
         });
-      } catch {
-        // If image fails, add placeholder text
+      } else if (imageRightUrl) {
+        // Fallback to URL path
+        contentSlide.addImage({
+          path: imageRightUrl,
+          x: 5.7,
+          y: 1.9,
+          w: 3.8,
+          h: 3.5,
+        });
+      } else {
+        // If image not available, add placeholder text
         contentSlide.addText("[Image: " + slide.image + "]", {
           x: 5.7,
           y: 2.8,
@@ -639,12 +880,12 @@ export async function generatePptx(
         });
       }
 
-      // Vertical divider
+      // Vertical divider - shorter to match content
       contentSlide.addShape("rect" as any, {
         x: 4.9,
         y: 1.9,
         w: 0.02,
-        h: 4.0,
+        h: 2.5,
         fill: { color: colors.primary },
       });
     } else if (layout === "quote") {
@@ -744,60 +985,91 @@ export async function generatePptx(
         });
       }
     } else if (layout === "team" && slide.teamMembers) {
-      // Team members grid layout
-      const members = slide.teamMembers;
-      const memberCount = members.length;
-      const cols = Math.min(memberCount, 4);
-      const cardWidth = 2.1;
-      const cardHeight = 2.6;
-      const startX = (10 - cols * cardWidth - (cols - 1) * 0.15) / 2;
-      const startY = 1.9;
+      // Team layout: Founders (larger, top row) + Advisors (smaller, bottom row)
+      const founders = slide.teamMembers.filter((m) =>
+        m.title.toLowerCase().includes("founder"),
+      );
+      const advisors = slide.teamMembers.filter(
+        (m) => !m.title.toLowerCase().includes("founder"),
+      );
 
-      members.forEach((member, memberIndex) => {
-        const col = memberIndex % cols;
-        const row = Math.floor(memberIndex / cols);
-        const x = startX + col * (cardWidth + 0.15);
-        const y = startY + row * (cardHeight + 0.2);
-        const memberColor = member.color?.replace("#", "") || "1E40AF";
+      // Founders row - compact cards
+      const founderCardW = 2.6;
+      const founderCardH = 1.9;
+      const founderGap = 0.25;
+      const founderStartX =
+        (10 -
+          founders.length * founderCardW -
+          (founders.length - 1) * founderGap) /
+        2;
+      const founderY = 1.75;
+
+      founders.forEach((member, idx) => {
+        const x = founderStartX + idx * (founderCardW + founderGap);
+        const memberColor = member.color?.replace("#", "") || "F97316";
 
         // Card background
         contentSlide.addShape("rect" as any, {
           x,
-          y,
-          w: cardWidth,
-          h: cardHeight,
+          y: founderY,
+          w: founderCardW,
+          h: founderCardH,
           fill: { color: colors.darker },
-          line: { color: memberColor, width: 1 },
+          line: { color: memberColor, width: 2 },
         });
 
-        // Avatar circle
-        contentSlide.addShape("ellipse" as any, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.15,
-          w: 0.7,
-          h: 0.7,
-          fill: { color: memberColor },
-        });
-
-        // Initials
-        contentSlide.addText(member.initials, {
-          x: x + cardWidth / 2 - 0.35,
-          y: y + 0.25,
-          w: 0.7,
-          h: 0.5,
-          fontSize: 14,
-          bold: true,
-          color: "FFFFFF",
-          align: "center",
-          valign: "middle",
-        });
+        // Avatar - use embedded image if available, then URL, otherwise circle with initials
+        const founderImageData = imageCache.get(
+          resolveImageUrl(member.image) || "",
+        );
+        const founderImageUrl = resolveImageUrl(member.image);
+        if (founderImageData) {
+          contentSlide.addImage({
+            data: founderImageData,
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            rounding: true,
+          });
+        } else if (founderImageUrl) {
+          // Try URL path fallback
+          contentSlide.addImage({
+            path: founderImageUrl,
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            rounding: true,
+          });
+        } else {
+          // No image - show avatar circle with initials
+          contentSlide.addShape("ellipse" as any, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.12,
+            w: 0.7,
+            h: 0.7,
+            fill: { color: memberColor },
+          });
+          contentSlide.addText(member.initials, {
+            x: x + founderCardW / 2 - 0.35,
+            y: founderY + 0.22,
+            w: 0.7,
+            h: 0.5,
+            fontSize: 14,
+            bold: true,
+            color: "FFFFFF",
+            align: "center",
+            valign: "middle",
+          });
+        }
 
         // Name
         contentSlide.addText(member.name, {
           x,
-          y: y + 0.95,
-          w: cardWidth,
-          h: 0.3,
+          y: founderY + 0.85,
+          w: founderCardW,
+          h: 0.25,
           fontSize: 11,
           bold: true,
           color: colors.text,
@@ -807,21 +1079,21 @@ export async function generatePptx(
         // Title
         contentSlide.addText(member.title, {
           x,
-          y: y + 1.2,
-          w: cardWidth,
-          h: 0.25,
+          y: founderY + 1.1,
+          w: founderCardW,
+          h: 0.2,
           fontSize: 8,
-          color: colors.textSecondary,
+          color: memberColor,
           align: "center",
         });
 
         // Highlights
         const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
         contentSlide.addText(highlightText, {
-          x: x + 0.1,
-          y: y + 1.5,
-          w: cardWidth - 0.2,
-          h: 1.0,
+          x: x + 0.08,
+          y: founderY + 1.32,
+          w: founderCardW - 0.16,
+          h: 0.55,
           fontSize: 7,
           color: colors.textMuted,
           valign: "top",
@@ -829,40 +1101,380 @@ export async function generatePptx(
         });
       });
 
-      // Key points below team cards
-      if (slide.keyPoints.length > 0) {
-        const keyPointsY =
-          startY + Math.ceil(memberCount / cols) * (cardHeight + 0.2) + 0.2;
+      // Advisors row - smaller cards
+      const advisorCardW = 1.5;
+      const advisorCardH = 1.25;
+      const advisorGap = 0.15;
+      const advisorStartX =
+        (10 -
+          advisors.length * advisorCardW -
+          (advisors.length - 1) * advisorGap) /
+        2;
+      const advisorY = founderY + founderCardH + 0.2;
 
-        contentSlide.addText("Key Points", {
-          x: 0.5,
-          y: keyPointsY,
-          w: 9.0,
-          h: 0.3,
-          fontSize: 12,
-          bold: true,
-          color: colors.textSecondary,
+      advisors.forEach((member, idx) => {
+        const x = advisorStartX + idx * (advisorCardW + advisorGap);
+        const memberColor = member.color?.replace("#", "") || "1E40AF";
+
+        // Card background (subtle)
+        contentSlide.addShape("rect" as any, {
+          x,
+          y: advisorY,
+          w: advisorCardW,
+          h: advisorCardH,
+          fill: { color: colors.darker },
+          line: { color: memberColor, width: 1 },
         });
 
+        // Avatar - use embedded image if available, then URL, otherwise circle with initials
+        const advisorImageData = imageCache.get(
+          resolveImageUrl(member.image) || "",
+        );
+        const advisorImageUrl = resolveImageUrl(member.image);
+        if (advisorImageData) {
+          contentSlide.addImage({
+            data: advisorImageData,
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            rounding: true,
+          });
+        } else if (advisorImageUrl) {
+          // Try URL path fallback
+          contentSlide.addImage({
+            path: advisorImageUrl,
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            rounding: true,
+          });
+        } else {
+          // No image - show avatar circle with initials
+          contentSlide.addShape("ellipse" as any, {
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.08,
+            w: 0.44,
+            h: 0.44,
+            fill: { color: memberColor },
+          });
+          contentSlide.addText(member.initials, {
+            x: x + advisorCardW / 2 - 0.22,
+            y: advisorY + 0.14,
+            w: 0.44,
+            h: 0.32,
+            fontSize: 9,
+            bold: true,
+            color: "FFFFFF",
+            align: "center",
+            valign: "middle",
+          });
+        }
+
+        // Name
+        contentSlide.addText(member.name, {
+          x,
+          y: advisorY + 0.55,
+          w: advisorCardW,
+          h: 0.22,
+          fontSize: 8,
+          bold: true,
+          color: colors.text,
+          align: "center",
+        });
+
+        // Title
+        contentSlide.addText(member.title, {
+          x,
+          y: advisorY + 0.76,
+          w: advisorCardW,
+          h: 0.18,
+          fontSize: 6,
+          color: colors.textMuted,
+          align: "center",
+        });
+
+        // Highlights (compact)
+        const highlightText = member.highlights.map((h) => `• ${h}`).join("\n");
+        contentSlide.addText(highlightText, {
+          x: x + 0.04,
+          y: advisorY + 0.94,
+          w: advisorCardW - 0.08,
+          h: 0.3,
+          fontSize: 5,
+          color: colors.textMuted,
+          valign: "top",
+          lineSpacing: 8,
+        });
+      });
+    } else if (layout === "video" || slide.video) {
+      // Video layout - split view: video left, key points right
+      // Note: pptxgenjs supports video embedding via addMedia()
+
+      // Sanitize video path and caption to prevent injection
+      const sanitizedVideoPath = sanitizeVideoPath(slide.video);
+      const sanitizedCaption = sanitizeTextContent(slide.videoCaption);
+
+      // Video container on the LEFT (50% width)
+      const videoX = 0.5;
+      const videoY = 1.9;
+      const videoW = 4.5;
+      const videoH = 3.2;
+
+      // Video container background
+      const rectShape: PptxShape = "rect";
+      contentSlide.addShape(rectShape, {
+        x: videoX,
+        y: videoY,
+        w: videoW,
+        h: videoH,
+        fill: { color: "000000" },
+        line: { color: colors.primary, width: 2 },
+      });
+
+      // Play button triangle (centered in video area)
+      const triangleShape: PptxShape = "triangle";
+      contentSlide.addShape(triangleShape, {
+        x: videoX + videoW / 2 - 0.5,
+        y: videoY + videoH / 2 - 0.5,
+        w: 1.0,
+        h: 1.0,
+        fill: { color: colors.primary },
+        rotate: 90,
+      });
+
+      // Video label below video
+      contentSlide.addText("VIDEO", {
+        x: videoX,
+        y: videoY + videoH + 0.1,
+        w: videoW,
+        h: 0.3,
+        fontSize: 11,
+        bold: true,
+        color: colors.primary,
+        align: "center",
+      });
+
+      // Try to embed the video if path is accessible and valid
+      if (sanitizedVideoPath) {
+        try {
+          // pptxgenjs addMedia supports: path (file path or URL), or data (base64)
+          contentSlide.addMedia({
+            path: sanitizedVideoPath,
+            x: videoX,
+            y: videoY,
+            w: videoW,
+            h: videoH,
+            type: "video",
+          });
+        } catch {
+          // If video embedding fails, the placeholder is already there
+          contentSlide.addText("Click to play", {
+            x: videoX,
+            y: videoY + videoH - 0.4,
+            w: videoW,
+            h: 0.3,
+            fontSize: 10,
+            color: colors.textMuted,
+            align: "center",
+            italic: true,
+          });
+        }
+      }
+
+      // Video caption below video label
+      if (sanitizedCaption) {
+        contentSlide.addText(sanitizedCaption, {
+          x: videoX,
+          y: videoY + videoH + 0.4,
+          w: videoW,
+          h: 0.4,
+          fontSize: 10,
+          color: colors.textMuted,
+          align: "center",
+          italic: true,
+        });
+      }
+
+      // Key points on the RIGHT (50% width)
+      if (slide.keyPoints.length > 0) {
         const bulletPoints = slide.keyPoints.map((point) => ({
           text: getKeyPointText(point),
           options: {
             bullet: { type: "number" as const, code: "2022" },
             color: colors.text,
-            fontSize: 12,
-            paraSpaceBefore: 3,
-            paraSpaceAfter: 3,
+            fontSize: 14,
+            paraSpaceBefore: 5,
+            paraSpaceAfter: 5,
           },
         }));
 
         contentSlide.addText(bulletPoints, {
-          x: 0.7,
-          y: keyPointsY + 0.35,
-          w: 8.6,
-          h: 1.5,
+          x: 5.2,
+          y: 1.9,
+          w: 4.3,
+          h: 4.5,
+          color: colors.text,
+          fontSize: 14,
           valign: "top",
         });
       }
+
+      // Add video path to speaker notes if not already present (sanitized)
+      if (!slide.script && sanitizedVideoPath) {
+        contentSlide.addNotes(
+          `[PLAY VIDEO: ${sanitizeTextContent(sanitizedVideoPath)}]`,
+        );
+      }
+    } else if (layout === "products" && slide.productCards) {
+      // Product cards grid layout - 3 cards side by side, readable
+      const cards = slide.productCards;
+      const cardCount = cards.length;
+      const cardWidth = 3.0;
+      const cardHeight = 3.6;
+      const cardGap = 0.12;
+      const totalWidth = cardCount * cardWidth + (cardCount - 1) * cardGap;
+      const startX = (10 - totalWidth) / 2;
+      const startY = 1.7;
+
+      cards.forEach((product, cardIndex) => {
+        const x = startX + cardIndex * (cardWidth + cardGap);
+        const y = startY;
+        const productColor = product.color?.replace("#", "") || "F97316";
+
+        // Card background
+        contentSlide.addShape("rect" as any, {
+          x,
+          y,
+          w: cardWidth,
+          h: cardHeight,
+          fill: { color: colors.darker },
+          line: { color: productColor, width: 2 },
+        });
+
+        // Badges - larger and more readable
+        let badgeY = y + 0.12;
+        if (product.badges && product.badges.length > 0) {
+          let badgeX = x + 0.12;
+          product.badges.forEach((badge, badgeIndex) => {
+            const badgeColor = badgeIndex === 0 ? "22C55E" : "F97316";
+            const badgeW = badge.length * 0.085 + 0.22;
+            contentSlide.addShape("rect" as any, {
+              x: badgeX,
+              y: badgeY,
+              w: badgeW,
+              h: 0.24,
+              fill: { color: badgeColor },
+            });
+            contentSlide.addText(badge, {
+              x: badgeX,
+              y: badgeY,
+              w: badgeW,
+              h: 0.24,
+              fontSize: 8,
+              bold: true,
+              color: "FFFFFF",
+              align: "center",
+              valign: "middle",
+            });
+            badgeX += badgeW + 0.08;
+          });
+          badgeY += 0.36;
+        } else {
+          badgeY += 0.08;
+        }
+
+        // Product name - larger
+        contentSlide.addText(product.name, {
+          x: x + 0.12,
+          y: badgeY,
+          w: cardWidth - 0.24,
+          h: 0.32,
+          fontSize: 14,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Tagline - larger
+        contentSlide.addText(product.tagline, {
+          x: x + 0.12,
+          y: badgeY + 0.32,
+          w: cardWidth - 0.24,
+          h: 0.24,
+          fontSize: 10,
+          bold: true,
+          color: productColor,
+        });
+
+        // Description - larger, more space
+        contentSlide.addText(product.description, {
+          x: x + 0.12,
+          y: badgeY + 0.58,
+          w: cardWidth - 0.24,
+          h: 0.65,
+          fontSize: 9,
+          color: colors.textSecondary,
+          valign: "top",
+        });
+
+        // Specs - larger fonts
+        if (product.specs && product.specs.length > 0) {
+          let specY = badgeY + 1.28;
+          const specsPerRow = 2;
+          const specColWidth = (cardWidth - 0.24) / specsPerRow;
+
+          product.specs.forEach((spec, specIndex) => {
+            const specCol = specIndex % specsPerRow;
+            const specRow = Math.floor(specIndex / specsPerRow);
+            const specX = x + 0.12 + specCol * specColWidth;
+            const specYPos = specY + specRow * 0.38;
+
+            // Label
+            contentSlide.addText(spec.label.toUpperCase(), {
+              x: specX,
+              y: specYPos,
+              w: specColWidth,
+              h: 0.14,
+              fontSize: 7,
+              color: colors.textMuted,
+            });
+            // Value
+            contentSlide.addText(spec.value, {
+              x: specX,
+              y: specYPos + 0.14,
+              w: specColWidth,
+              h: 0.2,
+              fontSize: 10,
+              bold: true,
+              color: colors.text,
+            });
+          });
+        }
+
+        // Price (at bottom of card) - larger
+        contentSlide.addText(product.price, {
+          x: x + 0.12,
+          y: y + cardHeight - 0.65,
+          w: cardWidth - 0.24,
+          h: 0.36,
+          fontSize: 16,
+          bold: true,
+          color: colors.text,
+        });
+
+        // Delivery - slightly larger
+        if (product.delivery) {
+          contentSlide.addText(product.delivery, {
+            x: x + 0.12,
+            y: y + cardHeight - 0.32,
+            w: cardWidth - 0.24,
+            h: 0.22,
+            fontSize: 9,
+            color: colors.textMuted,
+          });
+        }
+      });
     } else {
       // Default layout with key points
       // Add key points header
@@ -931,47 +1543,14 @@ export async function generatePptx(
         x: 0.7,
         y: 2.3,
         w: 8.6,
-        h: 2.8,
+        h: 4.5,
         color: colors.text,
         fontSize: 16,
         valign: "top",
       });
 
-      // Add script section if available (visible on slide)
-      if (slide.script) {
-        // Script background box
-        contentSlide.addShape("rect" as any, {
-          x: 0.5,
-          y: 5.3,
-          w: 9.0,
-          h: 1.7,
-          fill: { color: colors.darker },
-          line: { color: colors.primary, width: 1 },
-        });
-
-        // Script header
-        contentSlide.addText("Script", {
-          x: 0.7,
-          y: 5.4,
-          w: 8.6,
-          h: 0.25,
-          fontSize: 12,
-          bold: true,
-          color: colors.textSecondary,
-        });
-
-        // Script content
-        contentSlide.addText(`"${slide.script}"`, {
-          x: 0.7,
-          y: 5.75,
-          w: 8.6,
-          h: 1.15,
-          fontSize: 13,
-          color: colors.textSecondary,
-          italic: true,
-          valign: "top",
-        });
-      }
+      // Note: Script is added to speaker notes only (see line ~379)
+      // Not displayed visually on the slide to keep slides clean
     }
 
     // Add footer with PhoenixRooivalk branding
@@ -1002,41 +1581,90 @@ export async function generatePptx(
   summarySlide.background = { color: colors.dark };
   summarySlide.transition = { type: "fade", speed: "fast" };
 
-  // Small Brand Icon in top left corner
-  summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
-    x: 0.3,
-    y: 0.2,
-    w: 0.5,
-    h: 0.4,
-    fontSize: 14,
-    color: colors.textMuted,
+  // Decorative top bar
+  summarySlide.addShape("rect" as any, {
+    x: 0,
+    y: 0,
+    w: 10.0,
+    h: 0.08,
+    fill: { color: colors.primary },
   });
 
-  summarySlide.addText("Summary", {
+  // Brand logo (use PNG if available, fallback to shape)
+  if (logoPngDataUrl) {
+    summarySlide.addImage({
+      data: logoPngDataUrl,
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+    });
+  } else {
+    summarySlide.addShape("ellipse" as any, {
+      x: 4.25,
+      y: 0.5,
+      w: 1.5,
+      h: 1.5,
+      fill: { color: colors.primary },
+    });
+    summarySlide.addText(SLIDE_DECK_BRAND_TEXT, {
+      x: 4.25,
+      y: 0.75,
+      w: 1.5,
+      h: 1.0,
+      fontSize: 32,
+      bold: true,
+      color: "FFFFFF",
+      align: "center",
+      valign: "middle",
+    });
+  }
+
+  // Title - moved up
+  summarySlide.addText("Thank You", {
     x: 0.5,
-    y: 1.5,
+    y: 1.8,
     w: 9.0,
-    h: 1.0,
-    fontSize: 36,
+    h: 0.7,
+    fontSize: 40,
     bold: true,
     color: colors.text,
     align: "center",
   });
 
+  // Decorative line under title
+  summarySlide.addShape("rect" as any, {
+    x: 3.5,
+    y: 2.55,
+    w: 3.0,
+    h: 0.03,
+    fill: { color: colors.primary },
+  });
+
+  // Summary stats
   const summaryText = [
-    `Total Slides: ${slides.length}`,
-    `Total Duration: ${totalSeconds} seconds (${metadata.duration} minutes)`,
-    "",
-    "Questions?",
+    `${slides.length} Slides  •  ${metadata.duration} Minutes`,
   ].join("\n");
 
   summarySlide.addText(summaryText, {
     x: 0.5,
-    y: 2.8,
+    y: 2.7,
     w: 9.0,
-    h: 2.0,
-    fontSize: 20,
+    h: 0.4,
+    fontSize: 14,
     color: colors.textSecondary,
+    align: "center",
+  });
+
+  // Questions text
+  summarySlide.addText("Questions?", {
+    x: 0.5,
+    y: 3.2,
+    w: 9.0,
+    h: 0.5,
+    fontSize: 24,
+    bold: true,
+    color: colors.text,
     align: "center",
   });
 
@@ -1045,34 +1673,34 @@ export async function generatePptx(
     const qrData = metadata.contactUrl || `mailto:${metadata.contactEmail}`;
     const qrUrl = getQrCodeUrl(qrData, 120);
 
-    // QR code placeholder text (actual QR code would need to be fetched)
+    // QR code label
     summarySlide.addText("Scan to connect:", {
       x: 3.5,
-      y: 5.0,
+      y: 3.75,
       w: 3.0,
-      h: 0.3,
-      fontSize: 12,
+      h: 0.25,
+      fontSize: 10,
       color: colors.textMuted,
       align: "center",
     });
 
-    // Add QR code image
+    // Add QR code image - smaller and higher
     try {
       summarySlide.addImage({
         path: qrUrl,
-        x: 4.0,
-        y: 5.4,
-        w: 1.5,
-        h: 1.5,
+        x: 4.5,
+        y: 4.0,
+        w: 0.9,
+        h: 0.9,
       });
     } catch {
       // If QR code fails, show URL text instead
       summarySlide.addText(qrData, {
         x: 2.5,
-        y: 5.5,
+        y: 4.2,
         w: 5.0,
         h: 0.3,
-        fontSize: 12,
+        fontSize: 11,
         color: colors.primary,
         align: "center",
       });
@@ -1082,14 +1710,25 @@ export async function generatePptx(
     if (metadata.contactEmail) {
       summarySlide.addText(metadata.contactEmail, {
         x: 0.5,
-        y: 7.0,
+        y: 4.95,
         w: 9.0,
         h: 0.25,
-        fontSize: 11,
+        fontSize: 10,
         color: colors.textMuted,
         align: "center",
       });
     }
+  } else {
+    // No contact info - add company name footer
+    summarySlide.addText("Phoenix Rooivalk", {
+      x: 0.5,
+      y: 5.5,
+      w: 9.0,
+      h: 0.4,
+      fontSize: 14,
+      color: colors.textMuted,
+      align: "center",
+    });
   }
 
   // Generate filename

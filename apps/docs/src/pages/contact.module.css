@@ -2,7 +2,7 @@
 
 .contactMain {
   min-height: calc(100vh - 60px);
-  background: rgb(15, 23, 42);
+  background: rgb(var(--color-gray-900));
   padding: 3rem 1.5rem;
 }
 
@@ -20,7 +20,7 @@
   font-size: 2.5rem !important;
   font-weight: 800 !important;
   margin-bottom: 1rem !important;
-  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(251, 146, 60));
+  background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -28,7 +28,7 @@
 }
 
 .contactHeader p {
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 1.125rem;
   max-width: 600px;
   margin: 0 auto;
@@ -41,7 +41,7 @@
 
 .inquirySection h2 {
   font-size: 1.25rem !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
   margin-bottom: 1.5rem !important;
   border-bottom: none !important;
 }
@@ -53,8 +53,8 @@
 }
 
 .inquiryCard {
-  background: rgb(30, 41, 59);
-  border: 2px solid rgb(51, 65, 85);
+  background: rgb(var(--color-gray-800));
+  border: 2px solid rgb(var(--color-gray-700));
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
@@ -67,14 +67,14 @@
 }
 
 .inquiryCard:hover {
-  border-color: rgb(249, 115, 22);
+  border-color: rgb(var(--primary));
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.2);
 }
 
 .inquiryCardSelected {
-  border-color: rgb(249, 115, 22);
-  background: rgba(249, 115, 22, 0.1);
+  border-color: rgb(var(--primary));
+  background: rgba(var(--primary), 0.1);
 }
 
 .inquiryIcon {
@@ -83,14 +83,14 @@
 
 .inquiryCard h3 {
   font-size: 1rem !important;
-  color: rgb(242, 244, 246) !important;
+  color: rgb(var(--color-gray-100)) !important;
   margin: 0 !important;
   border-bottom: none !important;
 }
 
 .inquiryCard p {
   font-size: 0.8125rem;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   margin: 0;
   line-height: 1.4;
 }
@@ -98,20 +98,20 @@
 .inquiryAction {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: rgb(30, 41, 59);
+  background: rgb(var(--color-gray-800));
   border-radius: 12px;
   text-align: center;
 }
 
 .inquiryAction p {
-  color: rgb(203, 213, 225);
+  color: rgb(var(--text-secondary));
   margin-bottom: 1rem;
 }
 
 .mailtoButton {
   display: inline-block;
-  background: rgb(249, 115, 22) !important;
-  color: rgb(15, 23, 42) !important;
+  background: rgb(var(--primary)) !important;
+  color: rgb(var(--color-gray-900)) !important;
   padding: 0.875rem 2rem;
   border-radius: 8px;
   font-weight: 600;
@@ -121,9 +121,9 @@
 }
 
 .mailtoButton:hover {
-  background: rgb(234, 88, 12) !important;
+  background: rgb(var(--primary)) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
 .clearButton {
@@ -131,14 +131,14 @@
   margin: 1rem auto 0;
   background: transparent;
   border: none;
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 0.875rem;
   cursor: pointer;
   text-decoration: underline;
 }
 
 .clearButton:hover {
-  color: rgb(203, 213, 225);
+  color: rgb(var(--text-secondary));
 }
 
 /* Divider */
@@ -153,12 +153,12 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: rgb(51, 65, 85);
+  background: rgb(var(--color-gray-700));
 }
 
 .divider span {
   padding: 0 1rem;
-  color: rgb(100, 116, 139);
+  color: rgb(var(--color-gray-500));
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -166,8 +166,8 @@
 
 /* Form Section */
 .formSection {
-  background: rgb(30, 41, 59);
-  border: 1px solid rgb(51, 65, 85);
+  background: rgb(var(--color-gray-800));
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 3rem;
@@ -175,7 +175,7 @@
 
 .formSection h2 {
   font-size: 1.25rem !important;
-  color: rgb(242, 244, 246) !important;
+  color: rgb(var(--color-gray-100)) !important;
   margin-bottom: 1.5rem !important;
   border-bottom: none !important;
 }
@@ -205,7 +205,7 @@
 
 .formGroup label,
 .formGroupFull label {
-  color: rgb(226, 230, 234);
+  color: rgb(var(--color-gray-200));
   font-weight: 600;
   font-size: 0.875rem;
 }
@@ -215,10 +215,10 @@
 .formGroupFull textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: rgb(15, 23, 42);
-  border: 1px solid rgb(51, 65, 85);
+  background: rgb(var(--color-gray-900));
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 8px;
-  color: rgb(242, 244, 246);
+  color: rgb(var(--color-gray-100));
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -228,13 +228,13 @@
 .formGroup select:focus,
 .formGroupFull textarea:focus {
   outline: none;
-  border-color: rgb(249, 115, 22);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  border-color: rgb(var(--primary));
+  box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
 }
 
 .formGroup input::placeholder,
 .formGroupFull textarea::placeholder {
-  color: rgb(100, 116, 139);
+  color: rgb(var(--color-gray-500));
 }
 
 .formGroup select {
@@ -255,8 +255,8 @@
 }
 
 .submitButton {
-  background: rgb(249, 115, 22);
-  color: rgb(15, 23, 42);
+  background: rgb(var(--primary));
+  color: rgb(var(--color-gray-900));
   border: none;
   padding: 0.875rem 2.5rem;
   border-radius: 8px;
@@ -267,9 +267,9 @@
 }
 
 .submitButton:hover {
-  background: rgb(234, 88, 12);
+  background: rgb(var(--primary));
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }
 
 /* Booking Section */
@@ -280,13 +280,13 @@
 
 .bookingSection h2 {
   font-size: 1.25rem !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
   margin-bottom: 0.75rem !important;
   border-bottom: none !important;
 }
 
 .bookingSectionDescription {
-  color: rgb(148, 163, 184);
+  color: rgb(var(--text-muted));
   font-size: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -298,7 +298,7 @@
 
 .directContact h2 {
   font-size: 1.25rem !important;
-  color: rgb(226, 230, 234) !important;
+  color: rgb(var(--color-gray-200)) !important;
   margin-bottom: 1.5rem !important;
   border-bottom: none !important;
 }
@@ -310,8 +310,8 @@
 }
 
 .contactCard {
-  background: rgb(30, 41, 59);
-  border: 1px solid rgb(51, 65, 85);
+  background: rgb(var(--color-gray-800));
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
@@ -325,7 +325,7 @@
 
 .contactCard h3 {
   font-size: 0.875rem !important;
-  color: rgb(148, 163, 184) !important;
+  color: rgb(var(--text-muted)) !important;
   margin: 0 0 0.5rem 0 !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -333,7 +333,7 @@
 }
 
 .contactCard a {
-  color: rgb(249, 115, 22) !important;
+  color: rgb(var(--primary)) !important;
   font-weight: 500;
   text-decoration: none !important;
 }
@@ -380,6 +380,6 @@
 .mailtoButton:focus-visible,
 .clearButton:focus-visible,
 .submitButton:focus-visible {
-  outline: 3px solid rgb(249, 115, 22);
+  outline: 3px solid rgb(var(--primary));
   outline-offset: 2px;
 }

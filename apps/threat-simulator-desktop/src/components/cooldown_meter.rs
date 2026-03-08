@@ -1,7 +1,8 @@
+//! Cooldown meter components for weapon systems
+#![allow(dead_code)] // Props are used via Leptos view! macro, compiler doesn't detect this
+
 use leptos::prelude::*;
 
-// Note: Props are used via Leptos view! macro, compiler doesn't detect this
-#[allow(dead_code)]
 #[component]
 pub fn CooldownMeter(
     current: ReadSignal<f32>,
@@ -48,7 +49,6 @@ pub fn CooldownMeter(
     }
 }
 
-#[allow(dead_code)]
 #[component]
 pub fn WeaponCooldownGrid(weapons: ReadSignal<Vec<crate::game::Weapon>>) -> impl IntoView {
     view! {

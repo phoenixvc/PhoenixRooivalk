@@ -1,5 +1,6 @@
 import React from "react";
 import { RevealSection } from "../RevealSection";
+import { Card } from "../ui/Card";
 import styles from "./MarketIntelligenceSection.module.css";
 
 export const MarketIntelligenceSection: React.FC = () => {
@@ -29,22 +30,28 @@ export const MarketIntelligenceSection: React.FC = () => {
 
   const competitors = [
     {
-      name: "Consumer Sports Equipment",
-      status: "$1.68B market @ 8.2% CAGR",
-      capability: "Established brands, retail distribution",
-      limitation: "No counter-drone crossover, limited tech integration",
+      name: "Consumer Sports",
+      description: "Established brands with retail distribution",
+      metrics: [
+        { value: "$1.68B", label: "Market" },
+        { value: "8.2%", label: "CAGR" },
+      ],
     },
     {
-      name: "Counter-Drone Security",
-      status: "$4.2B market @ 47% CAGR",
-      capability: "Anduril, Fortem, DroneShield",
-      limitation: "No consumer validation, compliance-heavy entry barriers",
+      name: "Counter-Drone",
+      description: "Anduril, Fortem, DroneShield leading",
+      metrics: [
+        { value: "$4.2B", label: "Market" },
+        { value: "47%", label: "CAGR" },
+      ],
     },
     {
-      name: "Dual-Market Players",
-      status: "Minimal competition",
-      capability: "Gap opportunity: consumer + enterprise",
-      limitation: "Most players focus on single market segment",
+      name: "Dual-Market Gap",
+      description: "Phoenix opportunity: consumer + enterprise",
+      metrics: [
+        { value: "Minimal", label: "Competition" },
+        { value: "High", label: "Opportunity" },
+      ],
     },
   ];
 
@@ -82,14 +89,20 @@ export const MarketIntelligenceSection: React.FC = () => {
             {competitors.map((competitor, index) => (
               <div key={index} className={styles.competitorCard}>
                 <div className={styles.competitorName}>{competitor.name}</div>
-                <div className={styles.competitorStatus}>
-                  {competitor.status}
+                <div className={styles.competitorDescription}>
+                  {competitor.description}
                 </div>
-                <div className={styles.competitorCapability}>
-                  <strong>Strengths:</strong> {competitor.capability}
-                </div>
-                <div className={styles.competitorLimitation}>
-                  <strong>Limitations:</strong> {competitor.limitation}
+                <div className={styles.competitorMetrics}>
+                  {competitor.metrics.map((metric, metricIndex) => (
+                    <div key={metricIndex} className={styles.competitorMetric}>
+                      <div className={styles.competitorMetricValue}>
+                        {metric.value}
+                      </div>
+                      <div className={styles.competitorMetricLabel}>
+                        {metric.label}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -98,44 +111,32 @@ export const MarketIntelligenceSection: React.FC = () => {
 
         {/* Phoenix Advantage */}
         <RevealSection className={styles.advantageSection}>
-          <div className={styles.advantageCard}>
-            <h3 className={styles.advantageTitle}>
-              Key Competitive Advantages
-            </h3>
-            <div className={styles.advantageGrid}>
-              <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>
-                  Safety & Compliance
-                </div>
-                <div className={styles.advantageItemDescription}>
-                  Dual certification (CPSC + FAA) builds regulatory moat
-                </div>
-              </div>
-              <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>
-                  AI Edge Processing
-                </div>
-                <div className={styles.advantageItemDescription}>
-                  On-device intelligence ensures privacy and low latency
-                </div>
-              </div>
-              <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>
-                  Brand Separation
-                </div>
-                <div className={styles.advantageItemDescription}>
-                  Two brands—consumer & enterprise—avoid channel conflict
-                </div>
-              </div>
-              <div className={styles.advantageItem}>
-                <div className={styles.advantageItemTitle}>
-                  Data Asset Creation
-                </div>
-                <div className={styles.advantageItemDescription}>
-                  Proprietary training data from AeroNet™ deployments
-                </div>
-              </div>
-            </div>
+          <h3 className={styles.subsectionTitle}>Key Competitive Advantages</h3>
+          <div className={styles.advantageGrid}>
+            <Card
+              icon="🛡️"
+              title="Safety & Compliance"
+              description="Dual certification (CPSC + FAA) builds regulatory moat"
+              colorVariant="green"
+            />
+            <Card
+              icon="🧠"
+              title="AI Edge Processing"
+              description="On-device intelligence ensures privacy and low latency"
+              colorVariant="blue"
+            />
+            <Card
+              icon="🏷️"
+              title="Brand Separation"
+              description="Consumer & enterprise brands avoid channel conflict"
+              colorVariant="purple"
+            />
+            <Card
+              icon="📊"
+              title="Data Asset Creation"
+              description="Proprietary training data from AeroNet™ deployments"
+              colorVariant="yellow"
+            />
           </div>
         </RevealSection>
       </div>

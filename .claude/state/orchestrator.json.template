@@ -1,0 +1,39 @@
+{
+  "_comment": "Persistent orchestrator state. Copy to orchestrator.json on first run. Survives across Claude Code sessions. NOTE: This file is read/written by the orchestrator — it is NOT loaded into context automatically. The orchestrator must explicitly Read this file at step 1 and Write it at step 8. Keep phase_history trimmed to the last 10 entries to avoid bloating context when read.",
+  "last_updated": null,
+  "last_phase_completed": 0,
+  "last_phase_result": null,
+  "current_metrics": {
+    "js_build_errors": null,
+    "js_build_warnings": null,
+    "rust_build_errors": null,
+    "rust_build_warnings": null,
+    "test_passed": null,
+    "test_failed": null,
+    "test_skipped": null,
+    "todo_count": null,
+    "fixme_count": null,
+    "stub_count": null,
+    "lint_errors": null,
+    "type_errors": null,
+    "backlog_p0": null,
+    "backlog_p1": null,
+    "backlog_p2": null,
+    "backlog_p3": null
+  },
+  "phase_history": [],
+  "team_health": {
+    "backend": { "stubs": null, "todos": null, "tests": null, "grade": null },
+    "frontend": { "stubs": null, "todos": null, "tests": null, "grade": null },
+    "python": { "stubs": null, "todos": null, "tests": null, "grade": null },
+    "devops": { "workflows": null, "ci_passing": null, "grade": null },
+    "product": { "pricing_consistent": null, "phases_current": null, "grade": null },
+    "design": { "a11y_score": null, "theme_consistent": null, "grade": null },
+    "marketing": { "seo_coverage": null, "analytics_events": null, "grade": null },
+    "finance": { "roi_validated": null, "cart_tested": null, "grade": null },
+    "docs": { "stale_pages": null, "missing_envs": null, "grade": null },
+    "quality": { "coverage_pct": null, "security_findings": null, "grade": null }
+  },
+  "blockers": [],
+  "next_action": "Run /project:orchestrate or /project:discover to initialize state"
+}

@@ -42,16 +42,16 @@
 
 .admin-review-error {
   padding: 16px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: rgba(var(--color-red), 0.05);
+  border: 1px solid rgba(var(--color-red), 0.2);
   border-radius: 8px;
-  color: #dc2626;
+  color: rgb(var(--color-red-dark));
   margin-bottom: 20px;
 }
 
 html[data-theme="dark"] .admin-review-error {
-  background: rgba(220, 38, 38, 0.1);
-  border-color: rgba(220, 38, 38, 0.3);
+  background: rgba(var(--color-red-dark), 0.1);
+  border-color: rgba(var(--color-red-dark), 0.3);
 }
 
 .admin-review-loading {
@@ -103,7 +103,7 @@ html[data-theme="dark"] .admin-review-item {
 
 .admin-review-item.expanded {
   border-color: var(--ifm-color-primary, #6366f1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--color-indigo), 0.15);
 }
 
 .admin-review-item-header {
@@ -268,30 +268,30 @@ html[data-theme="dark"] .admin-review-notes textarea {
 }
 
 .admin-review-btn.approve {
-  background: #10b981;
+  background: rgb(var(--color-teal-deep));
   color: white;
 }
 
 .admin-review-btn.approve:hover:not(:disabled) {
-  background: #059669;
+  background: rgb(var(--color-teal-dark));
 }
 
 .admin-review-btn.implement {
-  background: #3b82f6;
+  background: rgb(var(--color-blue-deep));
   color: white;
 }
 
 .admin-review-btn.implement:hover:not(:disabled) {
-  background: #2563eb;
+  background: rgb(var(--color-blue-dark));
 }
 
 .admin-review-btn.reject {
-  background: #ef4444;
+  background: rgb(var(--color-red));
   color: white;
 }
 
 .admin-review-btn.reject:hover:not(:disabled) {
-  background: #dc2626;
+  background: rgb(var(--color-red-dark));
 }
 
 .admin-review-footer {

@@ -119,8 +119,7 @@ class LocalDataCollector:
     def _init_db(self) -> None:
         """Initialize SQLite database."""
         with sqlite3.connect(self._db_path) as conn:
-            conn.execute(
-                """
+            conn.execute("""
                 CREATE TABLE IF NOT EXISTS examples (
                     example_id TEXT PRIMARY KEY,
                     image_hash TEXT NOT NULL,
@@ -131,20 +130,15 @@ class LocalDataCollector:
                     metadata TEXT,
                     used_in_gradient INTEGER DEFAULT 0
                 )
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_examples_timestamp
                 ON examples(timestamp)
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_examples_used
                 ON examples(used_in_gradient)
-            """
-            )
+            """)
             conn.commit()
 
     def add_example(
@@ -258,7 +252,7 @@ class LocalDataCollector:
                     "SELECT COUNT(*) FROM examples WHERE timestamp < ?",
                     (cutoff,),
                 )
-                count = cursor.fetchone()[0]
+                count = int(cursor.fetchone()[0])
 
                 conn.execute(
                     "DELETE FROM examples WHERE timestamp < ?",
@@ -359,6 +353,7 @@ class GradientComputer:
 
             for layer in layer_names:
                 # Simulate gradient shape
+                shape: tuple[int, ...]
                 if layer.startswith("conv"):
                     shape = (3, 3, 64, 64)  # Typical conv layer
                 elif layer == "output":

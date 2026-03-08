@@ -22,12 +22,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.11"
+          python-version: "3.14"
           cache: "pip"
 
       - name: Install dependencies
@@ -35,6 +35,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff black isort mypy
           pip install pydantic pydantic-settings PyYAML numpy
+
+      - name: Validate environment variables
+        run: ../../scripts/validate-env.sh detector
+        env:
+          ENGINE_TYPE: mock
+        continue-on-error: true
 
       - name: Run ruff (linting)
         run: ruff check src/ --output-format=github
@@ -47,9 +53,6 @@ jobs:
 
       - name: Run mypy (type checking)
         run: mypy src/ --ignore-missing-imports --no-error-summary
-        # TODO: Remove continue-on-error once type errors are fixed
-        # Track progress: https://github.com/JustAGhosT/PhoenixRooivalk/issues
-        continue-on-error: true
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -63,10 +66,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
@@ -89,8 +92,8 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.11'
-        # Pinned to v4.6.0 commit SHA for security
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
+        # Pinned to v5.5.2 commit SHA for security
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           files: apps/detector/coverage.xml
           flags: unittests
@@ -104,12 +107,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.11"
+          python-version: "3.14"
           cache: "pip"
 
       - name: Install dependencies
@@ -124,8 +127,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          python -m pytest tests/integration/ -v --tb=short
-        continue-on-error: true # Integration tests may need real hardware
+          python -m pytest tests/integration/ -v --tb=short -m "not hardware"
 
   build:
     name: Build Package
@@ -134,12 +136,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.11"
+          python-version: "3.14"
 
       - name: Install build tools
         run: |
@@ -150,7 +152,7 @@ jobs:
         run: python -m build --sdist
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: dist
           path: apps/detector/dist/
@@ -162,12 +164,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.11"
+          python-version: "3.14"
 
       - name: Install bandit
         run: pip install bandit

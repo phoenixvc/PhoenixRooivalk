@@ -14,17 +14,34 @@ tags:
 
 ## Executive Summary
 
-This document consolidates all Architecture Decision Records (ADRs) for the
-Phoenix Rooivalk mechanical design, covering critical design decisions for the
-RKV-M tilt-quad system. The ADRs document the rationale behind key mechanical
-design choices, trade-offs, and implementation strategies.
+### Problem
 
-**Design Philosophy**: Modular, mission-adaptable mechanical architecture with
-emphasis on survivability, performance, and operational flexibility.
+The RKV-M tilt-quad system requires numerous interrelated mechanical design
+decisions — rotor configuration, blade count, powerplant class, and variant
+strategy — that must be documented with clear rationale and trade-offs.
+
+### Decision
+
+Consolidate all mechanical ADRs into a single document using the M-prefix
+namespace (M-0001 through M-0005), covering ducted vs. open props, single vs.
+coaxial rotors, blade count, powerplant classes, and variant strategy.
+
+### Trade-off
+
+Modular, mission-adaptable architecture with emphasis on survivability and
+performance vs. increased mechanical complexity and logistics for mission kits.
 
 ---
 
-## ADR-0001: Ducted vs Open Props for Tilt Pods (RKV-M-TQ)
+> **Namespace note**: The ADR numbers below (0001–0005) refer to the mechanical
+> design namespace, separate from the software ADRs in
+> `docs/technical/architecture/`. These should be read as **M-0001** through
+> **M-0005** to avoid confusion with core system architecture ADRs 0001–0010.
+> See
+> [ADR-0000: Template & Guide](../architecture/adr-0000-template-and-guide.md)
+> for the software ADR numbering convention.
+
+## M-0001: Ducted vs Open Props for Tilt Pods (RKV-M-TQ)
 
 **Status**: Accepted • **Date**: 2025-09-25 • **Owner**: J
 
@@ -69,7 +86,7 @@ reserved for the **QP tail pusher** variant only.
 
 ---
 
-## ADR-0002: Single vs Coaxial Rotor for Tilt Pods
+## M-0002: Single vs Coaxial Rotor for Tilt Pods
 
 **Status**: Accepted • **Date**: 2025-09-26 • **Owner**: J
 
@@ -105,7 +122,7 @@ as mission kit for extreme conditions.
 
 ---
 
-## ADR-0003: Blade Count Selection
+## M-0003: Blade Count Selection
 
 **Status**: Accepted • **Date**: 2025-09-27 • **Owner**: J
 
@@ -142,7 +159,7 @@ high-performance missions.
 
 ---
 
-## ADR-0004: Powerplant Classes
+## M-0004: Powerplant Classes
 
 **Status**: Accepted • **Date**: 2025-09-28 • **Owner**: J
 
@@ -178,7 +195,7 @@ requirements, efficiency, and mission flexibility.
 
 ---
 
-## ADR-0005: Variant Strategy
+## M-0005: Variant Strategy
 
 **Status**: Accepted • **Date**: 2025-09-29 • **Owner**: J
 

@@ -192,9 +192,6 @@ interface WeaponContext {
 export const THREAT_STATES: SimpleState<ThreatContext>[] = [
   {
     name: "patrol",
-    onEnter: (context) => {
-      console.log(`Threat ${context.id} entering patrol state`);
-    },
     onUpdate: (context, deltaTime) => {
       // Move in random direction
       const angle = Math.random() * Math.PI * 2;
@@ -205,9 +202,6 @@ export const THREAT_STATES: SimpleState<ThreatContext>[] = [
   },
   {
     name: "approach",
-    onEnter: (context) => {
-      console.log(`Threat ${context.id} entering approach state`);
-    },
     onUpdate: (context, deltaTime) => {
       // Move toward target
       const dx = context.target.x - context.position.x;
@@ -223,9 +217,6 @@ export const THREAT_STATES: SimpleState<ThreatContext>[] = [
   },
   {
     name: "attack",
-    onEnter: (context) => {
-      console.log(`Threat ${context.id} entering attack state`);
-    },
     onUpdate: (context, _deltaTime) => {
       // Attack behavior
       context.isAttacking = true;
@@ -233,9 +224,6 @@ export const THREAT_STATES: SimpleState<ThreatContext>[] = [
   },
   {
     name: "evade",
-    onEnter: (context) => {
-      console.log(`Threat ${context.id} entering evade state`);
-    },
     onUpdate: (context, deltaTime) => {
       // Move away from target
       const dx = context.target.x - context.position.x;
@@ -345,18 +333,12 @@ export const THREAT_TRANSITIONS: SimpleTransition<ThreatContext>[] = [
 export const DRONE_STATES: SimpleState<DroneContext>[] = [
   {
     name: "deployed",
-    onEnter: (context) => {
-      console.log(`Drone ${context.id} entering deployed state`);
-    },
     onUpdate: (context, _deltaTime) => {
       context.isActive = true;
     },
   },
   {
     name: "patrol",
-    onEnter: (context) => {
-      console.log(`Drone ${context.id} entering patrol state`);
-    },
     onUpdate: (context, deltaTime) => {
       context.isPatrolling = true;
       context.energy -= 1 * deltaTime; // Consume energy
@@ -364,9 +346,6 @@ export const DRONE_STATES: SimpleState<DroneContext>[] = [
   },
   {
     name: "intercept",
-    onEnter: (context) => {
-      console.log(`Drone ${context.id} entering intercept state`);
-    },
     onUpdate: (context, deltaTime) => {
       if (context.target) {
         // Move toward target
@@ -385,9 +364,6 @@ export const DRONE_STATES: SimpleState<DroneContext>[] = [
   },
   {
     name: "return",
-    onEnter: (context) => {
-      console.log(`Drone ${context.id} entering return state`);
-    },
     onUpdate: (context, deltaTime) => {
       // Move back to mothership
       const dx = context.mothership.x - context.position.x;
@@ -405,9 +381,6 @@ export const DRONE_STATES: SimpleState<DroneContext>[] = [
   },
   {
     name: "docked",
-    onEnter: (context) => {
-      console.log(`Drone ${context.id} entering docked state`);
-    },
     onUpdate: (context, deltaTime) => {
       // Recharge energy and repair
       context.energy = Math.min(
@@ -487,18 +460,12 @@ export const DRONE_TRANSITIONS: SimpleTransition<DroneContext>[] = [
 export const WEAPON_STATES: SimpleState<WeaponContext>[] = [
   {
     name: "ready",
-    onEnter: (context) => {
-      console.log(`Weapon ${context.id} entering ready state`);
-    },
     onUpdate: (context, _deltaTime) => {
       context.isReady = true;
     },
   },
   {
     name: "firing",
-    onEnter: (context) => {
-      console.log(`Weapon ${context.id} entering firing state`);
-    },
     onUpdate: (context, _deltaTime) => {
       context.isFiring = true;
       context.cooldown = context.maxCooldown;
@@ -508,9 +475,6 @@ export const WEAPON_STATES: SimpleState<WeaponContext>[] = [
   },
   {
     name: "cooldown",
-    onEnter: (context) => {
-      console.log(`Weapon ${context.id} entering cooldown state`);
-    },
     onUpdate: (context, deltaTime) => {
       context.cooldown = Math.max(0, context.cooldown - deltaTime * 1000);
       context.isFiring = false;
@@ -518,9 +482,6 @@ export const WEAPON_STATES: SimpleState<WeaponContext>[] = [
   },
   {
     name: "reloading",
-    onEnter: (context) => {
-      console.log(`Weapon ${context.id} entering reloading state`);
-    },
     onUpdate: (context, deltaTime) => {
       context.ammo = Math.min(context.maxAmmo, context.ammo + 10 * deltaTime);
       context.isReloading = true;
@@ -528,9 +489,6 @@ export const WEAPON_STATES: SimpleState<WeaponContext>[] = [
   },
   {
     name: "overheated",
-    onEnter: (context) => {
-      console.log(`Weapon ${context.id} entering overheated state`);
-    },
     onUpdate: (context, deltaTime) => {
       context.energy = Math.min(
         context.maxEnergy,

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RevealSection } from "../RevealSection";
+import { Card } from "../ui/Card";
 import styles from "./TechnicalIntegrationsSection.module.css";
 
 export const TechnicalIntegrationsSection: React.FC = () => {
@@ -8,11 +9,9 @@ export const TechnicalIntegrationsSection: React.FC = () => {
       name: "Solana Blockchain",
       description: "Immutable evidence trails and legal compliance",
       icon: "⛓️",
-      features: [
-        "400ms transaction confirmation",
-        "Tamper-proof evidence storage",
-        "Legal compliance records",
-        "Audit trail transparency",
+      metrics: [
+        { value: "400ms", label: "Confirmation" },
+        { value: "100%", label: "Tamper-proof" },
       ],
       colorClass: "purple",
       status: "Live",
@@ -22,11 +21,9 @@ export const TechnicalIntegrationsSection: React.FC = () => {
       name: "Morpheus AI",
       description: "Enhanced threat analysis when network available",
       icon: "🤖",
-      features: [
-        "97% classification accuracy",
-        "10-30s enhanced analysis",
-        "Distributed model inference",
-        "Optional cloud enhancement",
+      metrics: [
+        { value: "97%", label: "Accuracy" },
+        { value: "10-30s", label: "Analysis" },
       ],
       colorClass: "green",
       status: "Beta",
@@ -36,11 +33,9 @@ export const TechnicalIntegrationsSection: React.FC = () => {
       name: "Hivemapper Network",
       description: "Anti-spoofing protection and location validation",
       icon: "🗺️",
-      features: [
-        "Cross-node verification",
-        "Economic incentives",
-        "Anti-spoofing protection",
-        "Network resilience",
+      metrics: [
+        { value: "Multi-node", label: "Verification" },
+        { value: "Active", label: "Anti-spoof" },
       ],
       colorClass: "teal",
       status: "Planned",
@@ -50,11 +45,9 @@ export const TechnicalIntegrationsSection: React.FC = () => {
       name: "Pinax Analytics",
       description: "Historical pattern analysis and compliance reporting",
       icon: "📊",
-      features: [
-        "99.9% uptime SLA",
-        "Complex historical queries",
-        "Pattern recognition",
-        "Regulatory compliance",
+      metrics: [
+        { value: "99.9%", label: "Uptime SLA" },
+        { value: "Advanced", label: "Patterns" },
       ],
       colorClass: "orange",
       status: "Planned",
@@ -76,7 +69,7 @@ export const TechnicalIntegrationsSection: React.FC = () => {
           </div>
 
           <div className={styles.grid}>
-            {coreIntegrations.map((integration, _index) => (
+            {coreIntegrations.map((integration) => (
               <div
                 key={integration.name}
                 className={`${styles.card} ${styles[`card${integration.colorClass.charAt(0).toUpperCase() + integration.colorClass.slice(1)}`]}`}
@@ -119,16 +112,14 @@ export const TechnicalIntegrationsSection: React.FC = () => {
                   </div>
                 </div>
 
-                <ul className={styles.featureList}>
-                  {integration.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className={styles.featureItem}>
-                      <div
-                        className={`${styles.featureBullet} ${styles[`featureBullet${integration.colorClass.charAt(0).toUpperCase() + integration.colorClass.slice(1)}`]}`}
-                      ></div>
-                      {feature}
-                    </li>
+                <div className={styles.metricsGrid}>
+                  {integration.metrics.map((metric, metricIndex) => (
+                    <div key={metricIndex} className={styles.metricBox}>
+                      <div className={styles.metricValue}>{metric.value}</div>
+                      <div className={styles.metricLabel}>{metric.label}</div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
@@ -242,68 +233,39 @@ export const TechnicalIntegrationsSection: React.FC = () => {
 
           {/* Value Proposition */}
           <div className={styles.valueProposition}>
-            <div className={`${styles.valueCard} ${styles.valueCardGreen}`}>
-              <h4 className={styles.valueCardTitle}>
-                <span className={styles.valueCardIcon}>⚡</span>
-                Core Performance
-              </h4>
-              <ul className={styles.valueCardList}>
-                <li className={styles.valueCardListItem}>
-                  • Sub-second response times
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • 100% autonomous operation
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Zero network dependency
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Military-grade reliability
-                </li>
-              </ul>
-            </div>
-
-            <div className={`${styles.valueCard} ${styles.valueCardPurple}`}>
-              <h4 className={styles.valueCardTitle}>
-                <span className={styles.valueCardIcon}>🧠</span>
-                Enhanced Intelligence
-              </h4>
-              <ul className={styles.valueCardList}>
-                <li className={styles.valueCardListItem}>
-                  • 97% accuracy with AI enhancement
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Immutable evidence trails
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Historical pattern analysis
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Optional network features
-                </li>
-              </ul>
-            </div>
-
-            <div className={`${styles.valueCard} ${styles.valueCardOrange}`}>
-              <h4 className={styles.valueCardTitle}>
-                <span className={styles.valueCardIcon}>🎯</span>
-                Strategic Value
-              </h4>
-              <ul className={styles.valueCardList}>
-                <li className={styles.valueCardListItem}>
-                  • Future-proof architecture
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Scalable intelligence layer
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Compliance-ready design
-                </li>
-                <li className={styles.valueCardListItem}>
-                  • Investment protection
-                </li>
-              </ul>
-            </div>
+            <Card
+              icon="⚡"
+              title="Core Performance"
+              description="Sub-second response with zero network dependency"
+              colorVariant="green"
+              metrics={[
+                { value: "<1s", label: "Response" },
+                { value: "100%", label: "Autonomous" },
+                { value: "Military", label: "Grade" },
+              ]}
+            />
+            <Card
+              icon="🧠"
+              title="Enhanced Intelligence"
+              description="AI-powered analysis with immutable evidence trails"
+              colorVariant="purple"
+              metrics={[
+                { value: "97%", label: "AI Accuracy" },
+                { value: "Tamper-proof", label: "Evidence" },
+                { value: "Pattern", label: "Analysis" },
+              ]}
+            />
+            <Card
+              icon="🎯"
+              title="Strategic Value"
+              description="Future-proof architecture with compliance-ready design"
+              colorVariant="yellow"
+              metrics={[
+                { value: "Scalable", label: "Architecture" },
+                { value: "Compliant", label: "Design" },
+                { value: "Protected", label: "Investment" },
+              ]}
+            />
           </div>
         </RevealSection>
       </div>

@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import { fixupPluginRules } from "@eslint/compat";
 import nextPlugin from "@next/eslint-plugin-next";
 import reactPlugin from "eslint-plugin-react";
 import hooksPlugin from "eslint-plugin-react-hooks";
@@ -36,7 +37,7 @@ export default [
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      react: reactPlugin,
+      react: fixupPluginRules(reactPlugin),
       "react-hooks": hooksPlugin,
       "@next/next": nextPlugin,
       security,

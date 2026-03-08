@@ -6,18 +6,18 @@
  */
 
 import type {
-  ComputeTier,
   ComputeTierId,
   ComputeTierKey,
-  CameraTier,
   CameraTierId,
   CameraTierKey,
-  ConnectivityTier,
   ConnectivityTierId,
   ConnectivityTierKey,
-  StorageTier,
   StorageTierId,
   StorageTierKey,
+  ComputeTier,
+  CameraTier,
+  ConnectivityTier,
+  StorageTier,
   ProductComputeConfig,
   ProductCameraConfig,
   ProductConnectivityConfig,

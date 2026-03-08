@@ -205,7 +205,7 @@ class StreamingRenderer(FrameRenderer):
     def show(self, rendered_frame: np.ndarray) -> bool:
         """Delegate to base renderer if available."""
         if self._base_renderer and rendered_frame is not None:
-            return self._base_renderer.show(rendered_frame)
+            return bool(self._base_renderer.show(rendered_frame))
         return True
 
     def close(self) -> None:
@@ -259,9 +259,9 @@ class MJPEGStreamServer:
         self._auth_enabled = auth_enabled
         self._auth_token = auth_token
 
-        self._app = None
-        self._runner = None
-        self._site = None
+        self._app: Optional[Any] = None
+        self._runner: Optional[Any] = None
+        self._site: Optional[Any] = None
         self._is_running = False
 
         # Stats
@@ -281,14 +281,14 @@ class MJPEGStreamServer:
         if not self._auth_enabled:
             return True
 
-        auth_header = request.headers.get("Authorization", "")
+        auth_header = str(request.headers.get("Authorization", ""))
         if auth_header.startswith("Bearer "):
             token = auth_header[7:]
-            return token == self._auth_token
+            return bool(token == self._auth_token)
 
         # Check query param fallback
-        token = request.query.get("token", "")
-        return token == self._auth_token
+        token = str(request.query.get("token", ""))
+        return bool(token == self._auth_token)
 
     async def _handle_stream(self, request):
         """Handle MJPEG stream request."""

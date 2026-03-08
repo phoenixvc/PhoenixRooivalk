@@ -88,7 +88,8 @@ python src/main.py --config config.yaml --engine onnx
 | `video`    | Video file playback (requires `capture.video_path`)                 |
 | `mock`     | Synthetic frames for testing                                        |
 
-**Note:** You can also control this via CLI with `--camera` flag, or use `--video` for video files.
+**Note:** You can also control this via CLI with `--camera` flag, or use
+`--video` for video files.
 
 ### engine_type
 
@@ -100,7 +101,8 @@ python src/main.py --config config.yaml --engine onnx
 | `coral`  | Google Coral Edge TPU (requires Edge TPU model)                                |
 | `mock`   | Synthetic detections for testing (no model file needed)                        |
 
-**Note:** You can also control this via CLI with `--engine` flag. The `--mock` CLI flag sets both `camera_type` and `engine_type` to `mock`.
+**Note:** You can also control this via CLI with `--engine` flag. The `--mock`
+CLI flag sets both `camera_type` and `engine_type` to `mock`.
 
 ### tracker_type
 
@@ -501,4 +503,5 @@ python src/main.py \
   --width 640 --height 480
 ```
 
-**Note:** Streaming is configured via environment variables or config file, not CLI flags. See [Streaming Settings](#streaming-settings) for details.
+**Note:** Streaming is configured via environment variables or config file, not
+CLI flags. See [Streaming Settings](#streaming-settings) for details.

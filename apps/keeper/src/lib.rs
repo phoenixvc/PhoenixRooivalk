@@ -2,9 +2,10 @@ use async_trait::async_trait;
 use chrono::{TimeZone, Utc};
 use phoenix_evidence::anchor::{AnchorError, AnchorProvider};
 use phoenix_evidence::model::{ChainTxRef, DigestAlgo, EvidenceDigest, EvidenceRecord};
-use rand::Rng;
+use rand::RngExt;
 use sqlx::{Pool, Row, Sqlite};
 
+pub mod batch_anchor;
 pub mod config;
 
 /// Initialize database schema for the keeper

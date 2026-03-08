@@ -20,13 +20,13 @@
 .backgroundGradient {
   background: linear-gradient(
     180deg,
-    rgba(0, 255, 136, 0.05),
-    rgba(0, 136, 255, 0.05)
+    rgba(var(--primary), 0.05),
+    rgba(var(--accent), 0.05)
   );
 }
 
 .backgroundPrimary {
-  background: rgb(var(--bg-primary, #0a0e1a));
+  background: rgb(var(--bg-primary));
 }
 
 .backgroundNone {
@@ -44,7 +44,7 @@
 }
 
 .maxWidthNarrow {
-  max-width: 1200px;
+  max-width: var(--container-max-width-narrow, 960px);
 }
 
 .centered {

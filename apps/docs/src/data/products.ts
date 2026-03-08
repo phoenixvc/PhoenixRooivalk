@@ -1703,3 +1703,10 @@ export const enterprisePricing = {
   withRadar: 13300,
   radarCost: 5000,
 };
+
+// =============================================================================
+// TIER API EXPORTS
+// =============================================================================
+
+export type { ComputeTier } from "./products/types";
+export { generateProductConfiguration } from "./products/tiers";

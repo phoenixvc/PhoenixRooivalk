@@ -1,16 +1,20 @@
 # Applications Directory
 
-This directory contains all applications and services that make up the PhoenixRooivalk platform.
+This directory contains all applications and services that make up the
+PhoenixRooivalk platform.
 
 ## Overview
 
-The `apps/` directory is organized as a monorepo structure, containing multiple independent applications and services that work together to provide the complete counter-drone defense system.
+The `apps/` directory is organized as a monorepo structure, containing
+multiple independent applications and services that work together to provide
+the complete counter-drone defense system.
 
 ## Applications
 
 ### Web Applications
 
 #### `docs/` - Documentation Site
+
 - **Type**: Docusaurus static site
 - **Purpose**: Comprehensive technical documentation portal
 - **Tech Stack**: Docusaurus, React, TypeScript
@@ -24,6 +28,7 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
   - Legal and compliance frameworks
 
 #### `marketing/` - Marketing Website
+
 - **Type**: Next.js 14 static site
 - **Purpose**: Public-facing marketing site with interactive demos
 - **Tech Stack**: Next.js 14, React, TypeScript
@@ -39,6 +44,7 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
 ### Desktop Applications
 
 #### `threat-simulator-desktop/` - Desktop Threat Simulator
+
 - **Type**: Tauri desktop application
 - **Purpose**: Desktop version of threat simulator with blockchain evidence recording
 - **Tech Stack**: Rust, Leptos/WASM, Tauri
@@ -51,6 +57,7 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
 ### Edge/Embedded Applications
 
 #### `detector/` - Drone Detection System
+
 - **Type**: Python application
 - **Purpose**: Real-time drone detection for edge devices
 - **Tech Stack**: Python, TensorFlow Lite, OpenCV, Pydantic
@@ -68,16 +75,19 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
 ### Backend Services
 
 #### `api/` - API Server
+
 - **Type**: Rust web server
 - **Purpose**: Backend API for platform services
 - **Tech Stack**: Rust, Axum
-- **Documentation**: See [apps/api/docs/](api/docs/) for deployment and database patterns
+- **Documentation**: See [apps/api/docs/](api/docs/) for deployment and
+  database patterns
 - **Features**:
   - RESTful API endpoints
   - Database integration patterns
   - Deployment configurations
 
 #### `keeper/` - Blockchain Keeper Service
+
 - **Type**: Rust service
 - **Purpose**: Blockchain keeper service for evidence anchoring
 - **Tech Stack**: Rust
@@ -87,10 +97,12 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
   - Multi-chain support (Solana, EtherLink)
 
 #### `evidence-cli/` - Evidence Management CLI
+
 - **Type**: Rust CLI tool
 - **Purpose**: Command-line interface for evidence management
 - **Tech Stack**: Rust
 - **Usage**:
+
   ```bash
   cargo run --manifest-path apps/evidence-cli/Cargo.toml -- <command>
   ```
@@ -98,6 +110,7 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
 ### Utility Directories
 
 #### `scripts/` - Application Scripts
+
 - **Purpose**: Utility scripts specific to applications
 - **Note**: Root-level scripts are in the repository root `scripts/` directory
 
@@ -105,7 +118,8 @@ The `apps/` directory is organized as a monorepo structure, containing multiple 
 
 ### Running Applications Locally
 
-See the root [README.md](../README.md) for development commands and setup instructions.
+See the root [README.md](../README.md) for development commands and setup
+instructions.
 
 ### Building Applications
 
@@ -138,12 +152,14 @@ cargo test --manifest-path apps/keeper/Cargo.toml
 
 Each application has its own deployment configuration:
 
-- **Web Apps** (docs, marketing): Deployed to Azure Static Web Apps via GitHub Actions
+- **Web Apps** (docs, marketing): Deployed to Azure Static Web Apps via
+  GitHub Actions
 - **API**: Deployed to Azure Functions or App Service
 - **Detector**: Deployed to edge devices (Raspberry Pi, NVIDIA Jetson)
 - **Desktop App**: Built as native installers for Windows, macOS, Linux
 
-See the root [README.md](../README.md) and [DEPLOYMENT.md](../DEPLOYMENT.md) for detailed deployment instructions.
+See the root [README.md](../README.md) and [DEPLOYMENT.md](../DEPLOYMENT.md)
+for detailed deployment instructions.
 
 ## Architecture
 
@@ -155,6 +171,7 @@ The applications follow a modular architecture:
 - **Desktop**: Rust + Web technologies via Tauri
 
 All applications share common packages and crates from the monorepo root:
+
 - `packages/` - Shared TypeScript packages
 - `crates/` - Shared Rust crates
 

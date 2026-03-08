@@ -93,8 +93,7 @@ const sidebars: SidebarsConfig = {
           label: "Presentations",
           collapsed: true,
           items: [
-            "executive/phoenix-rooivalk-demo-pitch",
-            "executive/presentation-materials",
+            "executive/phoenix-rooivalk-pitch-deck",
             "executive/key-questions-cheatsheet",
             "executive/team-status",
           ],
@@ -155,6 +154,22 @@ const sidebars: SidebarsConfig = {
               items: [
                 "technical/ml-training/ml-training-plan",
                 "technical/ml-training/drone-training-data-sources",
+              ],
+            },
+            {
+              type: "category",
+              label: "🤖 Pi Drone Detector",
+              collapsed: true,
+              items: [
+                "technical/detector/overview",
+                "technical/detector/configuration",
+                "technical/detector/classification",
+                "technical/detector/countermeasures",
+                "technical/detector/fire-net-hardware",
+                "technical/detector/product-catalog",
+                "technical/detector/training-costs",
+                "technical/detector/raspberry-pi-drone-detection-plan",
+                "technical/detector/pi-detector-v2-production-plan",
               ],
             },
             {
@@ -276,6 +291,24 @@ const sidebars: SidebarsConfig = {
             "business/opportunities/soonami-cohort-8",
             "business/opportunities/cuas-sandbox-2026",
             "business/applications/cuas-sandbox-2026-application",
+          ],
+        },
+        {
+          type: "category",
+          label: "📋 Product Requirements (PRD)",
+          collapsed: true,
+          items: [
+            "business/prd/master-prd",
+            {
+              type: "category",
+              label: "Feature PRDs",
+              collapsed: true,
+              items: [
+                "business/prd/features/feat-new-1-tech-deep-dive",
+                "business/prd/features/feat-inc-1-threat-simulator",
+                "business/prd/features/feat-new-2-case-studies",
+              ],
+            },
           ],
         },
       ],

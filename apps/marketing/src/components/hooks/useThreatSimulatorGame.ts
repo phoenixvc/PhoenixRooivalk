@@ -102,8 +102,7 @@ export const useThreatSimulatorGame = ({
           threat.id = spawnEvent.id;
           addThreat(threat);
         },
-        (waveNumber) => {
-          console.log(`Wave ${waveNumber} completed!`);
+        (_waveNumber) => {
           // Award resources for wave completion
           resourceManager.awardPerformanceRewards(
             gameState.score,
@@ -112,7 +111,7 @@ export const useThreatSimulatorGame = ({
           );
         },
         () => {
-          console.log("Game completed!");
+          // Game completed callback
         },
       ),
   );

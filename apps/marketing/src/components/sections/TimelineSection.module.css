@@ -1,10 +1,6 @@
 .section {
-  padding: 5rem 1.5rem;
-  background: linear-gradient(
-    to bottom right,
-    rgb(var(--bg-primary)),
-    rgb(var(--darker))
-  );
+  padding: var(--section-padding-y) var(--section-padding-x);
+  background: var(--section-bg-primary);
   position: relative;
   overflow: hidden;
 }
@@ -23,28 +19,13 @@
   }
 }
 
-.backgroundPattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.05;
-}
-
-.backgroundGrid {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(rgba(var(--primary), 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--primary), 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-
 .content {
   position: relative;
   z-index: 10;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -83,6 +64,7 @@
 .timeline {
   display: grid;
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
@@ -93,25 +75,48 @@
 
 @media (min-width: 1024px) {
   .timeline {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
   }
 }
 
 .timelineItem {
-  background: rgba(17, 24, 39, 0.5);
-  border: 1px solid rgba(55, 65, 81, 0.5);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-neutral-800), 0.6),
+    rgba(var(--color-neutral-800), 0.4)
+  );
+  border: 1px solid rgba(var(--color-blue-deep), 0.2);
+  border-radius: 1rem;
+  padding: 2.5rem;
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(var(--tactical-black), 0.1);
+}
+
+.timelineItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--color-blue-deep), 0.5),
+    rgba(var(--color-teal-deep), 0.5)
+  );
 }
 
 .timelineItem:hover {
   transform: translateY(-4px);
-  border-color: rgb(var(--primary));
+  border-color: rgba(var(--color-blue-deep), 0.4);
+  box-shadow: 0 12px 40px rgba(var(--color-blue-deep), 0.25);
 }
 
 .phaseLabel {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   color: rgb(var(--primary));
   margin-bottom: 0.5rem;
@@ -120,51 +125,53 @@
 }
 
 .phaseTitle {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
-  margin-bottom: 0.5rem;
+  color: rgb(var(--text-primary));
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
 }
 
 .phaseDuration {
-  font-size: 0.875rem;
-  color: #9ca3af;
+  font-size: 1rem;
+  color: rgb(var(--text-secondary));
   margin-bottom: 0.75rem;
 }
 
 .phaseStatus {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.375rem 0.875rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
 
 .statusCompleted {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  background: rgba(var(--action-success), 0.2);
+  color: rgb(var(--action-success));
 }
 
 .statusActive {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background: rgba(var(--primary), 0.2);
+  color: rgb(var(--primary));
 }
 
 .statusPlanned {
-  background: rgba(234, 179, 8, 0.2);
-  color: #facc15;
+  background: rgba(var(--accent), 0.2);
+  color: rgb(var(--accent));
 }
 
 .statusFuture {
-  background: rgba(107, 114, 128, 0.2);
-  color: #9ca3af;
+  background: rgba(var(--text-muted), 0.2);
+  color: rgb(var(--text-muted));
 }
 
 .phaseDescription {
-  font-size: 0.875rem;
-  color: #d1d5db;
+  font-size: 1rem;
+  color: rgb(var(--text-secondary));
   margin-bottom: 1rem;
+  line-height: 1.75;
 }
 
 .milestones {
@@ -174,8 +181,8 @@
 }
 
 .milestone {
-  font-size: 0.75rem;
-  color: #9ca3af;
+  font-size: 0.9375rem;
+  color: rgb(var(--text-muted));
   margin-bottom: 0.5rem;
   padding-left: 1rem;
   position: relative;

@@ -1,0 +1,11 @@
+{
+  "label": "Product Requirements (PRD)",
+  "position": 10,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index",
+    "title": "Product Requirements Documents",
+    "description": "Product Requirements Documents (PRDs) capturing the vision, scope, and acceptance criteria for PhoenixRooivalk features and enhancements.",
+    "keywords": ["prd", "requirements", "product", "roadmap"]
+  }
+}

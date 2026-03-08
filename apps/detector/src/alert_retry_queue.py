@@ -126,8 +126,7 @@ class AlertRetryQueue:
     def _init_db(self) -> None:
         """Initialize SQLite database schema."""
         with sqlite3.connect(self._db_path) as conn:
-            conn.execute(
-                """
+            conn.execute("""
                 CREATE TABLE IF NOT EXISTS alert_queue (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     payload TEXT NOT NULL,
@@ -137,16 +136,12 @@ class AlertRetryQueue:
                     status TEXT DEFAULT 'pending',
                     last_error TEXT
                 )
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_status_retry
                 ON alert_queue(status, next_retry_at)
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
                 CREATE TABLE IF NOT EXISTS dead_letter_queue (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     original_id INTEGER,
@@ -156,8 +151,7 @@ class AlertRetryQueue:
                     retry_count INTEGER,
                     last_error TEXT
                 )
-            """
-            )
+            """)
             conn.commit()
 
     def set_send_func(self, send_func: Callable[[dict], bool]) -> None:
@@ -223,8 +217,7 @@ class AlertRetryQueue:
 
                     if count >= self._max_queue_size:
                         # Drop oldest alerts
-                        conn.execute(
-                            """
+                        conn.execute("""
                             DELETE FROM alert_queue
                             WHERE id IN (
                                 SELECT id FROM alert_queue
@@ -232,8 +225,7 @@ class AlertRetryQueue:
                                 ORDER BY created_at ASC
                                 LIMIT 10
                             )
-                        """
-                        )
+                        """)
                         logger.warning(
                             f"Alert queue full ({self._max_queue_size}), "
                             "dropped 10 oldest alerts"
@@ -310,7 +302,7 @@ class AlertRetryQueue:
     def _process_single_alert(self, alert: QueuedAlert) -> None:
         """Process a single alert."""
         try:
-            if self._send_func(alert.payload):
+            if self._send_func is not None and self._send_func(alert.payload):
                 # Success - remove from queue
                 self._mark_delivered(alert.id)
                 self._alerts_delivered += 1
@@ -479,7 +471,7 @@ class AlertRetryQueue:
         """Clear all pending alerts. Returns count of cleared alerts."""
         with sqlite3.connect(self._db_path) as conn:
             cursor = conn.execute("SELECT COUNT(*) FROM alert_queue")
-            count = cursor.fetchone()[0]
+            count = int(cursor.fetchone()[0])
             conn.execute("DELETE FROM alert_queue")
             conn.commit()
 
@@ -489,7 +481,7 @@ class AlertRetryQueue:
         """Clear dead letter queue. Returns count of cleared alerts."""
         with sqlite3.connect(self._db_path) as conn:
             cursor = conn.execute("SELECT COUNT(*) FROM dead_letter_queue")
-            count = cursor.fetchone()[0]
+            count = int(cursor.fetchone()[0])
             conn.execute("DELETE FROM dead_letter_queue")
             conn.commit()
 

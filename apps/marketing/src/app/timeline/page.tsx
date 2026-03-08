@@ -1,31 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { TimelineSection } from "../../components/sections/TimelineSection";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
+import type { Metadata } from "next";
+import TimelinePageClient from "./TimelinePageClient";
 
-export default function TimelinePage(): React.ReactElement {
-  // Apply performance optimizations
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "Development Timeline - Phoenix Rooivalk",
+  description:
+    "Phoenix Rooivalk's five-phase development roadmap from SBIR Phase I through full production. Track milestones for SkySnare, AeroNet, and the broader counter-UAS platform.",
+  openGraph: {
+    title: "Development Timeline - Phoenix Rooivalk",
+    description:
+      "Five-phase development roadmap from SBIR Phase I to full production. SkySnare, AeroNet, and counter-UAS platform milestones.",
+  },
+};
 
-  return (
-    <main className="relative overflow-hidden bg-[rgb(var(--darker))] text-white">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,_#1b2735_0%,_#090a0f_100%)]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,136,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(0,255,136,0.03)_1px,_transparent_1px)] bg-[length:50px_50px] animate-gridMove" />
-      </div>
-
-      {/* Navigation */}
-      <Navigation />
-
-      {/* Main Content */}
-      <div className="pt-20">
-        <TimelineSection />
-      </div>
-
-      {/* Footer */}
-      <Footer />
-    </main>
-  );
-}
+export default TimelinePageClient;

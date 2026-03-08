@@ -2,6 +2,7 @@
 //!
 //! Displays real-time detection events from the Python detector
 //! and provides controls for managing the detector process.
+#![allow(dead_code)] // Props are used via Leptos view! macro, compiler doesn't detect this
 
 use leptos::prelude::*;
 
@@ -18,7 +19,6 @@ pub struct DetectionData {
 
 /// Detector connection status
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
-#[allow(dead_code)] // All variants used in match expressions via view! macro
 pub enum DetectorConnectionStatus {
     #[default]
     Disconnected,
@@ -208,7 +208,6 @@ pub fn DetectionPanel(
 }
 
 /// Compact detection indicator for the HUD
-#[allow(dead_code)] // Props used via Leptos view! macro
 #[component]
 pub fn DetectionIndicator(
     /// Number of active detections

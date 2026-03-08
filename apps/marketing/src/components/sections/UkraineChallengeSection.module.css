@@ -1,9 +1,9 @@
 .section {
-  padding: 3rem 1.5rem;
+  padding: var(--space-16) var(--space-4);
   background: linear-gradient(
     180deg,
-    rgba(255, 0, 0, 0.05),
-    rgba(255, 136, 0, 0.05)
+    rgba(var(--action-danger), 0.05),
+    rgba(var(--primary), 0.05)
   );
 }
 
@@ -22,7 +22,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
@@ -33,8 +33,8 @@
 
 .urgentBadge {
   display: inline-block;
-  background: #ef4444;
-  color: #fff;
+  background: rgb(var(--action-danger));
+  color: rgb(var(--text-primary));
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -45,7 +45,7 @@
 .title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -82,7 +82,7 @@
 .columnTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 
@@ -97,24 +97,24 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(255, 0, 0, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(var(--color-red), 0.1);
+  border: 1px solid rgba(var(--color-red), 0.3);
   border-radius: 0.5rem;
 }
 
 .problemIcon {
-  color: #f87171;
+  color: rgb(var(--action-danger));
   font-size: 1.5rem;
 }
 
 .problemTitle {
   font-weight: bold;
-  color: #f87171;
+  color: rgb(var(--action-danger));
 }
 
 .problemDescription {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }
 
 .solutionCard {
@@ -122,8 +122,8 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(0, 255, 136, 0.1);
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  background: rgba(var(--secondary), 0.1);
+  border: 1px solid rgba(var(--secondary), 0.3);
   border-radius: 0.5rem;
 }
 
@@ -139,7 +139,7 @@
 
 .solutionDescription {
   font-size: 0.875rem;
-  color: #d1d5db;
+  color: rgb(var(--text-secondary));
 }
 
 .stakesSection {
@@ -148,8 +148,8 @@
 }
 
 .stakesCard {
-  background: rgba(0, 255, 136, 0.1);
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  background: rgba(var(--secondary), 0.1);
+  border: 1px solid rgba(var(--secondary), 0.3);
   border-radius: 0.75rem;
   padding: 1.5rem;
   max-width: 56rem;
@@ -159,7 +159,7 @@
 .stakesTitle {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: rgb(var(--text-primary));
   margin-bottom: 1rem;
 }
 

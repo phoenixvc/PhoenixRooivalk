@@ -150,28 +150,28 @@
 }
 
 .protected-content-btn--google {
-  background: #fff;
-  color: #1f2937;
-  border: 1px solid #e5e7eb;
+  background: rgb(var(--phoenix-white));
+  color: rgb(var(--color-gray-800));
+  border: 1px solid var(--ifm-color-emphasis-200);
 }
 
 .protected-content-btn--google:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-300);
 }
 
 [data-theme="dark"] .protected-content-btn--google {
-  background: #fff;
-  color: #1f2937;
+  background: rgb(var(--phoenix-white));
+  color: rgb(var(--color-gray-800));
 }
 
 .protected-content-btn--github {
-  background: #24292f;
-  color: #fff;
+  background: rgb(var(--color-github));
+  color: rgb(var(--phoenix-white));
 }
 
 .protected-content-btn--github:hover {
-  background: #1b1f23;
+  background: rgb(var(--color-github-dark));
 }
 
 .protected-content-cta-note {
@@ -226,7 +226,7 @@
   border: 2px solid var(--pr-status-error);
   border-radius: 16px;
   text-align: center;
-  box-shadow: 0 4px 24px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 4px 24px rgba(var(--color-red), 0.15);
 }
 
 .protected-content-blocked-icon {
@@ -266,8 +266,8 @@
 }
 
 .protected-content-blocked-details code {
-  background: rgba(249, 115, 22, 0.2);
-  color: rgb(249, 115, 22);
+  background: rgba(var(--primary), 0.2);
+  color: rgb(var(--primary));
   padding: 0.125rem 0.375rem;
   border-radius: 4px;
   font-size: 0.8125rem;
@@ -287,5 +287,5 @@
 .protected-content-blocked-link:hover {
   background: var(--pr-brand-orange-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(var(--primary), 0.4);
 }

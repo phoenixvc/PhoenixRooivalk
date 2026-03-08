@@ -66,6 +66,7 @@ TEST_COVERAGE_SUMMARY.md
 
 # Rust
 target/
+rust_out
 apps/marketing/next-env.d.ts
 
 # TypeScript build info
@@ -94,3 +95,6 @@ pitch-deck/*.html
 
 # Generated product catalog exports (run: cd apps/docs && npx tsx scripts/export-products.ts)
 apps/docs/exports/
+
+# Claude Code runtime state (template is tracked, runtime state is not)
+.claude/state/orchestrator.json

@@ -312,15 +312,65 @@
     break-after: auto !important;
   }
 
-  /* Modal styling for print */
-  body.printing-slidedeck .fixed {
-    position: relative !important;
-    background: transparent !important;
+  /* =====================================================
+     SLIDE DECK PRINT MODE
+     When body has .printing-slidedeck, hide everything
+     except the slide deck modal content
+     ===================================================== */
+
+  /* Hide the entire page content */
+  body.printing-slidedeck #__docusaurus,
+  body.printing-slidedeck .navbar,
+  body.printing-slidedeck .footer,
+  body.printing-slidedeck .main-wrapper,
+  body.printing-slidedeck [class*="docPage"],
+  body.printing-slidedeck [class*="docMainContainer"],
+  body.printing-slidedeck [class*="docItemContainer"] {
+    display: none !important;
+  }
+
+  /* But show the modal */
+  body.printing-slidedeck .slidedeck-modal {
+    display: block !important;
+    position: static !important;
+    background: white !important;
     overflow: visible !important;
+    padding: 0 !important;
+    inset: auto !important;
+  }
+
+  /* Make modal content fill the page */
+  body.printing-slidedeck .slidedeck-modal-content {
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
   }
 
   body.printing-slidedeck .slidedeck-print-content {
     box-shadow: none !important;
+    padding: 0.5in !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide modal header when printing */
+  body.printing-slidedeck .print\\:hidden,
+  body.printing-slidedeck [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* Force light mode colors for print */
+  body.printing-slidedeck .slidedeck-print-content * {
+    color: #1a1a1a !important;
+  }
+
+  body.printing-slidedeck .slidedeck-print-content h1,
+  body.printing-slidedeck .slidedeck-print-content h2,
+  body.printing-slidedeck .slidedeck-print-content h3 {
+    color: #000 !important;
   }
 
   /* Dark mode reset for print */
@@ -490,8 +540,8 @@
   /* Admonitions/callouts */
   body.printing-application [class*="admonition"],
   body.printing-application .alert {
-    border-left: 4pt solid #f59e0b !important;
-    background: #fffbeb !important;
+    border-left: 4pt solid rgb(245, 158, 11) !important; /* amber-500 for print */
+    background: rgb(255, 251, 235) !important; /* amber-50 for print */
     padding: 10pt 12pt !important;
     margin: 12pt 0 !important;
     border-radius: 0 4pt 4pt 0 !important;

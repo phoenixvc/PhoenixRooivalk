@@ -39,7 +39,7 @@ describe("StickyHeader", () => {
   it("applies visible classes when isVisible is true", () => {
     render(<StickyHeader isVisible={true} />);
 
-    const header = screen.getByText("Phoenix Rooivalk").closest("div");
+    const header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("translate-y-0");
     expect(header).not.toHaveClass("-translate-y-full");
   });
@@ -47,7 +47,7 @@ describe("StickyHeader", () => {
   it("applies hidden classes when isVisible is false", () => {
     render(<StickyHeader isVisible={false} />);
 
-    const header = screen.getByText("Phoenix Rooivalk").closest("div");
+    const header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("-translate-y-full");
     expect(header).not.toHaveClass("translate-y-0");
   });
@@ -63,7 +63,7 @@ describe("StickyHeader", () => {
   it("applies correct styling classes", () => {
     render(<StickyHeader isVisible={true} />);
 
-    const header = screen.getByText("Phoenix Rooivalk").closest("div");
+    const header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass(
       "fixed",
       "top-0",
@@ -103,7 +103,7 @@ describe("StickyHeader", () => {
 
     const brandText = screen.getByText("Phoenix Rooivalk");
     expect(brandText).toHaveClass(
-      "text-[var(--primary)]",
+      "text-[var(--primary,#f97316)]",
       "font-bold",
       "text-base",
     );
@@ -119,9 +119,9 @@ describe("StickyHeader", () => {
     const ctaButton = screen.getByRole("link", { name: /schedule demo/i });
     expect(ctaButton).toHaveClass(
       "bg-gradient-to-br",
-      "from-[var(--primary)]",
-      "to-[var(--secondary)]",
-      "text-[var(--dark)]",
+      "from-[var(--primary,#f97316)]",
+      "to-[var(--secondary,#ea7c1c)]",
+      "text-[var(--dark,#020617)]",
       "px-5",
       "py-2.5",
       "rounded-md",
@@ -136,12 +136,12 @@ describe("StickyHeader", () => {
   it("handles transition states correctly", () => {
     const { rerender } = render(<StickyHeader isVisible={false} />);
 
-    let header = screen.getByText("Phoenix Rooivalk").closest("div");
+    let header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("-translate-y-full");
 
     rerender(<StickyHeader isVisible={true} />);
 
-    header = screen.getByText("Phoenix Rooivalk").closest("div");
+    header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("translate-y-0");
   });
 
@@ -183,14 +183,14 @@ describe("StickyHeader", () => {
   it("applies backdrop blur effect", () => {
     render(<StickyHeader isVisible={true} />);
 
-    const header = screen.getByText("Phoenix Rooivalk").closest("div");
+    const header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("backdrop-blur-md");
   });
 
   it("has correct z-index for sticky positioning", () => {
     render(<StickyHeader isVisible={true} />);
 
-    const header = screen.getByText("Phoenix Rooivalk").closest("div");
+    const header = screen.getByText("Phoenix Rooivalk").closest(".fixed");
     expect(header).toHaveClass("z-50");
   });
 

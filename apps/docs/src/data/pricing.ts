@@ -1,7 +1,22 @@
 /**
  * Pricing & Financial Data
  *
- * Single source of truth for all pricing and financial figures.
+ * Segment-level and financial pricing for documentation pages.
+ *
+ * IMPORTANT — SOURCE OF TRUTH HIERARCHY:
+ *   Per-SKU prices (individual product prices, COGS, margins, assembly hours):
+ *     → apps/marketing/src/data/products.ts  (canonical per-SKU source)
+ *
+ *   Segment / deployment-package pricing and financial projections:
+ *     → this file  (pricing.ts)
+ *
+ * The `hardwarePricing.baseSystem` ranges below represent DEPLOYMENT SOLUTION
+ * PACKAGES — the cost of a complete site deployment that typically bundles
+ * multiple SKUs together with installation, cabling, and initial configuration.
+ * They are NOT the price of any single SKU.  For individual SKU prices, always
+ * reference products.ts.
+ *
+ * Last reconciled against products.ts: 2026-02-22 (PRD-004)
  */
 
 import type { CurrencyValue, RangeValue } from "./types";
@@ -14,57 +29,123 @@ export const exchangeRate = {
 
 /** Hardware pricing */
 export const hardwarePricing = {
-  /** Base system unit pricing by segment */
+  /**
+   * Deployment package pricing by market segment.
+   *
+   * Each entry represents the total hardware cost for a complete site
+   * deployment (multiple SKUs + installation), NOT the price of a single
+   * product.  The table below maps segments to the representative SKU bundles
+   * that drive these ranges (all individual prices from products.ts):
+   *
+   *  commercial    — SkyWatch Pro ($250-$600) + NetSnare Pro ($1,200-$2,000)
+   *                  per detection/intercept node.  A single-site commercial
+   *                  install of one detector + one launcher runs $1,450-$2,600;
+   *                  a two-node site with redundancy runs $2,900-$5,200.
+   *                  Representative range: $2K-$5K.
+   *
+   *  infrastructure — SkyWatch Enterprise ($5,000-$20,000) per sensor tower
+   *                   + AeroNet Command software license ($25,000-$50,000)
+   *                   covering unlimited sites.  A single-facility deployment
+   *                   combining one Enterprise sensor cluster with Command
+   *                   runs $30,000-$70,000.
+   *                   Representative range: $30K-$70K.
+   *
+   *  military      — RKV-G Ground Station ($100,000-$150,000) as the mobile
+   *                  C2 hub + at least one RKV-M Mothership ($65,000-$85,000)
+   *                  per forward element.  A minimum deployable unit (one GCS
+   *                  + one RKV-M) runs $165,000-$235,000.
+   *                  Representative range: $165K-$235K.
+   *
+   * Per-SKU canonical prices (individual units, no installation):
+   *   products.ts → SkyWatch Pro:        $250-$600
+   *   products.ts → NetSnare Pro:        $1,200-$2,000
+   *   products.ts → SkyWatch Enterprise: $5,000-$20,000
+   *   products.ts → AeroNet Enterprise:  $150,000 setup + $25K/month
+   *   products.ts → AeroNet Command:     $25,000-$50,000 license
+   *   products.ts → RKV-M Mothership:    $65,000-$85,000
+   *   products.ts → RKV-G Ground Station:$100,000-$150,000
+   */
   baseSystem: {
+    /**
+     * Military deployment package: RKV-G Ground Station + RKV-M Mothership.
+     * Minimum deployable unit for a mobile forward air-defense position.
+     * Individual SKU prices in products.ts: RKV-M $65K-$85K, RKV-G $100K-$150K.
+     */
     military: {
-      usd: 75_000,
-      zar: 1_350_000,
-      range: { min: 75_000, max: 100_000 },
+      usd: 200_000,
+      zar: 3_600_000,
+      range: { min: 165_000, max: 235_000 },
       confidence: "projected",
-      notes: "Military/Defense segment pricing",
+      notes:
+        "Military deployment package: RKV-G Ground Station + RKV-M Mothership (1 GCS + 1 aerial platform). See products.ts for individual SKU prices.",
     } as CurrencyValue & { range: { min: number; max: number } },
 
+    /**
+     * Infrastructure deployment package: SkyWatch Enterprise sensor cluster
+     * + AeroNet Command software license (unlimited sites).
+     * Individual SKU prices in products.ts: SW-ENT-001 $5K-$20K, AN-CMD-001 $25K-$50K.
+     */
     infrastructure: {
-      usd: 55_000,
-      zar: 990_000,
-      range: { min: 45_000, max: 65_000 },
+      usd: 50_000,
+      zar: 900_000,
+      range: { min: 30_000, max: 70_000 },
       confidence: "projected",
-      notes: "Critical infrastructure segment",
+      notes:
+        "Infrastructure deployment package: SkyWatch Enterprise + AeroNet Command license per facility. See products.ts for individual SKU prices.",
     } as CurrencyValue & { range: { min: number; max: number } },
 
+    /**
+     * Commercial deployment package: SkyWatch Pro + NetSnare Pro per site node.
+     * A two-node redundant commercial site runs ~$2,900-$5,200 hardware-only.
+     * Individual SKU prices in products.ts: SW-PRO-001 $250-$600, NSN-PRO-001 $1,200-$2,000.
+     */
     commercial: {
-      usd: 35_000,
-      zar: 630_000,
-      range: { min: 25_000, max: 45_000 },
+      usd: 3_500,
+      zar: 63_000,
+      range: { min: 2_000, max: 5_000 },
       confidence: "projected",
-      notes: "Commercial segment",
+      notes:
+        "Commercial deployment package: SkyWatch Pro + NetSnare Pro per site node (hardware only, no AeroNet Command license). See products.ts for individual SKU prices.",
     } as CurrencyValue & { range: { min: number; max: number } },
 
-    /** General range used in docs */
+    /**
+     * General range spanning all deployment package tiers.
+     * Commercial node ($2K) through military system ($235K).
+     */
     general: {
-      min: 25_000,
-      max: 100_000,
+      min: 2_000,
+      max: 235_000,
       unit: "USD",
       confidence: "projected",
-      notes: "Full range across all segments",
+      notes:
+        "Full deployment-package range across all segments: commercial node ($2K-$5K) through military system ($165K-$235K). See products.ts for individual SKU prices.",
     } as RangeValue,
-    formatted: "$25K-$100K",
+    formatted: "$2K-$235K",
   },
 
-  /** Cost of goods (internal) */
+  /**
+   * Cost of goods — aggregate BOM figures (no component-level breakdown yet).
+   *
+   * The inHouse figure ($56K) is the nearest published COGS proxy for a
+   * high-end enterprise-tier unit.  The closest matching SKU in products.ts
+   * is AeroNet Enterprise (AN-ENT-001) with COGS $59,200 — a 5.7% variance
+   * likely reflecting assembly-hour cost assumptions used at different points
+   * in time.  Use products.ts as the authoritative per-SKU COGS source.
+   */
   cogs: {
     inHouse: {
       usd: 56_000,
       zar: 850_000,
       confidence: "verified",
-      notes: "In-house manufacturing cost per unit",
+      notes:
+        "In-house manufacturing cost per enterprise-tier unit (proxy; nearest SKU match: AeroNet Enterprise at $59,200 COGS per products.ts — 5.7% variance).",
     } as CurrencyValue,
 
     outsourced: {
       usd: 93_000,
       zar: 1_400_000,
       confidence: "estimated",
-      notes: "Outsourced manufacturing cost",
+      notes: "Outsourced manufacturing cost per enterprise-tier unit.",
     } as CurrencyValue,
 
     savings: "60%",
@@ -276,10 +357,19 @@ export const fundingRounds = {
   },
 };
 
-/** Helper for pricing display */
+/**
+ * Helper for pricing display.
+ * Returns the deployment-package range string for a given segment.
+ * For individual SKU price strings, use products.ts → product.priceFormatted.
+ */
 export function formatPriceRange(
   segment: "military" | "infrastructure" | "commercial",
 ): string {
   const pricing = hardwarePricing.baseSystem[segment];
-  return `$${(pricing.range.min / 1000).toFixed(0)}K-$${(pricing.range.max / 1000).toFixed(0)}K`;
+  const minK = pricing.range.min / 1000;
+  const maxK = pricing.range.max / 1000;
+  // Use integer formatting for values >= 10K, one decimal for sub-10K values
+  const fmt = (k: number) =>
+    k >= 10 ? `$${k.toFixed(0)}K` : `$${k.toFixed(0)}K`;
+  return `${fmt(minK)}-${fmt(maxK)}`;
 }
