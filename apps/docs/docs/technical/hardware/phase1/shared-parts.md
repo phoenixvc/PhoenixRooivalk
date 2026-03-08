@@ -16,6 +16,7 @@ tags:
   - parts
   - sourcing
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # Phase 1 Shared Parts Reference
@@ -93,7 +94,7 @@ builds. One order covers the entire demo stack.
 
 **Why not direct ESP32 PWM?**
 
-- ESP32 LEDC PWM is 8-bit (256 steps) and software-managed.
+- ESP32 LEDC timer resolution is configurable (up to 20-bit duty resolution); resolution and frequency trade off. LEDC is software-driven and can be affected by WiFi/RTOS activity — unlike the PCA9685's fixed 12-bit hardware PWM, which is better for high-precision servo control.
 - WiFi stack interrupts cause servo jitter under network load.
 - PCA9685 is fire-and-forget: set angle via I2C, hardware holds it.
 

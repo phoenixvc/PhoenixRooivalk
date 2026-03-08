@@ -17,6 +17,7 @@ tags:
   - yolo
   - detection
 phase: ["seed"]
+prerequisites: ["phase1-skywatch-nano", "phase2-hardware-overview"]
 ---
 
 # SkyWatch Nano v2 (Pi + Coral)

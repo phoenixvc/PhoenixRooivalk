@@ -18,6 +18,7 @@ tags:
   - kinetic
   - c-uas
 phase: ["series-c", "scale"]
+prerequisites: ["phase5-hardware-overview"]
 ---
 
 # RKV-M Kinetic Interceptor Integration

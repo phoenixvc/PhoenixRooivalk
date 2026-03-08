@@ -18,6 +18,7 @@ tags:
   - pan-tilt
   - pid
 phase: ["seed"]
+prerequisites: ["phase1-turret-tracker", "phase2-hardware-overview"]
 ---
 
 # Turret Tracker v2 (Jetson YOLO Tracking)

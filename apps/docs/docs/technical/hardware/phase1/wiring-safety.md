@@ -15,6 +15,7 @@ tags:
   - safety
   - wiring
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # Phase 1 Wiring & Safety Guidelines

@@ -17,6 +17,7 @@ tags:
   - layout
   - electronics
 phase: ["series-b"]
+prerequisites: ["phase4-hardware-overview"]
 ---
 
 # SSB-1 Custom PCB Design Specification

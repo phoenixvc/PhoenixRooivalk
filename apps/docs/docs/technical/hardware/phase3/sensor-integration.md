@@ -16,6 +16,7 @@ tags:
   - multi-sensor
   - detection
 phase: ["series-a"]
+prerequisites: ["phase3-hardware-overview"]
 ---
 
 # Phase 3 Multi-Sensor Fusion Architecture

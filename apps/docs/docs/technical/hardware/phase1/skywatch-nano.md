@@ -16,6 +16,7 @@ tags:
   - skywatch
   - detection
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # SkyWatch Nano (Demo)

@@ -18,6 +18,7 @@ tags:
   - rkv-m
   - c-uas
 phase: ["series-c", "scale"]
+prerequisites: ["phase4-hardware-overview"]
 ---
 
 # Phase 5 Hardware: Defense-Grade Deployment

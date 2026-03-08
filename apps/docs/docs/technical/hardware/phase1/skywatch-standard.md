@@ -17,6 +17,7 @@ tags:
   - detection
   - alerts
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # SkyWatch Standard (Demo)
@@ -119,7 +120,7 @@ Same as [Nano build](phase1-skywatch-nano#step-1--power-rail): MP1584EN set to
 
 ### Step 2 — PIR sensor
 
-1. Wire HC-SR501: VCC → 5V, GND → GND, OUT → ESP32 GPIO (e.g., GPIO 15).
+1. Wire HC-SR501: VCC → 5V, GND → GND, OUT → ESP32 GPIO (e.g., GPIO 13, 14, or 27 — avoid GPIO 15 per wiring/safety guide).
 2. Adjust sensitivity and delay pots on the PIR module to taste.
 3. Test: serial print when PIR goes HIGH.
 

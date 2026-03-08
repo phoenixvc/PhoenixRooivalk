@@ -17,6 +17,7 @@ tags:
   - fusion
   - dashboard
 phase: ["seed"]
+prerequisites: ["phase2-hardware-overview"]
 ---
 
 # SkyWatch Hub (Central Coordination Node)
@@ -153,7 +154,7 @@ Evidence CLI.
 
 1. Every 60 seconds, collect all detection events since last batch.
 2. Compute SHA-256 hash of the batch (events sorted by timestamp).
-3. Submit hash via `evidence-cli --payload @batch.json --submit`.
+3. Submit hash via `record-evidence detection @batch.json --submit`.
 4. Store the returned evidence ID in local SQLite for audit trail.
 
 ---

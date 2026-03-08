@@ -17,6 +17,7 @@ tags:
   - lora
   - field-deployment
 phase: ["series-a"]
+prerequisites: ["phase2-hardware-overview"]
 ---
 
 # Phase 3 Hardware: Field-Ready Ruggedized Systems

@@ -17,6 +17,7 @@ tags:
   - relay
   - safety
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # Trigger Node (Demo)

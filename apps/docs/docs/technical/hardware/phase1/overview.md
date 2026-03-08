@@ -15,6 +15,7 @@ tags:
   - esp32
   - prototyping
 phase: ["seed"]
+prerequisites: []
 ---
 
 # Phase 1 Hardware: ESP32 Demo Stack

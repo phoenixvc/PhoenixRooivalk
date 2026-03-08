@@ -17,6 +17,7 @@ tags:
   - tracking
   - pan-tilt
 phase: ["seed"]
+prerequisites: ["phase1-hardware-overview"]
 ---
 
 # Turret Tracker (Demo)
