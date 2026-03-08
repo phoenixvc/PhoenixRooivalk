@@ -19,6 +19,7 @@
     "validate-catalog": "tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
+    "@phoenix-rooivalk/utils": "workspace:*",
     "@azure/cosmos": "^4.9.0",
     "@azure/msal-browser": "^5.2.0",
     "@docusaurus/core": "^3.9.2",
