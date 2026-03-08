@@ -111,7 +111,7 @@ T+0.4s   Acoustic array reports bearing 127° ± 15°
 T+0.5s   YOLO returns: drone, confidence 0.82, bbox [120,80,210,160]
 T+0.6s   RF module reports: DJI OcuSync v2 signal at 2.4GHz
 T+0.7s   Fusion engine: camera(0.82×0.45) + RF(0.90×0.25) +
-         acoustic(0.75×0.20) + PIR(1.0×0.10) = 0.844 → ALERT
+         acoustic(0.75×0.20) + PIR(1.0×0.10) = 0.86 → ALERT
 T+0.8s   Alarm triggered, MQTT published, track created
 T+1.0s   Hub receives event, dispatches to dashboard
 ```
@@ -200,7 +200,7 @@ SLEEP (6W)
   LoRa listening
       │
       ▼ [PIR trigger or acoustic/RF detection]
-WAKE (14W)
+WAKE (~19W)
   Camera on, ML inference active
   All sensors processing
   LoRa transmitting

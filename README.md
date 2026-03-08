@@ -323,7 +323,8 @@ Azure Static Web Apps):
   Azure deployment setup
 
 > **Note**: Documentation source files are in `apps/docs/`. Run
-> `pnpm --filter docs start` to view locally.
+> `pnpm --filter docs start` to view locally. Doc backlog (hardware phase,
+> Hugging Face/MCP): [GitHub issues #674–#685](https://github.com/phoenixvc/PhoenixRooivalk/issues?q=is%3Aissue+674+675+676+677+678+679+680+681+682+683+684+685).
 
 ## Operational tasks
 

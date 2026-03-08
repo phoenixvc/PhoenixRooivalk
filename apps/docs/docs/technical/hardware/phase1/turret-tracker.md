@@ -113,8 +113,7 @@ The PCA9685 is a $3 insurance policy against three common problems:
    load. The PCA9685 generates hardware PWM independently.
 2. **Scalability** — 16 channels means adding more servos later costs zero
    additional wiring complexity.
-3. **Precision** — 12-bit resolution (4096 steps) gives finer angle control than
-   the ESP32's 8-bit LEDC PWM.
+3. **Precision** — PCA9685 provides fixed 12-bit hardware PWM (4096 steps), stable and independent of CPU/WiFi jitter. ESP32 LEDC resolution is configurable per timer (not fixed) and can reach up to ~13-bit at practical servo frequencies, but is software-driven and subject to jitter; see [Shared Parts](./shared-parts.md) and ESP-IDF LEDC behavior.
 
 ---
 

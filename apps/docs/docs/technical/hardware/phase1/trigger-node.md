@@ -104,8 +104,7 @@ trains good habits for later phases:
 
 1. **Physical arm switch** — toggle must be in ARMED position.
 2. **Software arm state** — firmware must be in armed mode (mirrors the switch).
-3. **Command authentication** — only accept fire commands from known source IPs
-   (simple allowlist).
+3. **Command authentication** — require a pre-shared token (e.g. `Authorization: Bearer <token>` or `X-PSK` header); optionally check source IP allowlist as defense-in-depth. Do not rely on IP allowlisting as the primary authentication method.
 4. **Pulse duration limit** — relay energizes for a fixed pulse (e.g., 500ms),
    then auto-disarms.
 5. **Activation logging** — every fire event is logged with timestamp and source.
@@ -142,7 +141,7 @@ trains good habits for later phases:
 1. ESP32 runs a simple HTTP server.
 2. `POST /fire` endpoint:
    - Check arm switch state.
-   - Check source IP allowlist.
+   - Validate pre-shared token (e.g. Bearer or X-PSK header) first; optionally check source IP against allowlist as defense-in-depth.
    - If armed and authorized: energize relay for 500ms, return `200 OK`.
    - If not armed: return `403 Forbidden`.
 3. Log every request (armed or not) with timestamp.
@@ -172,6 +171,6 @@ trains good habits for later phases:
 |------------------|----------------|
 | HTTP POST fire command | MQTT with TLS for real-time pub/sub |
 | Single relay channel | Multi-channel (salvo / sequence modes) |
-| IP allowlist auth | Token-based authentication |
+| Token + optional IP allowlist | MQTT + TLS, token in payload |
 | LED strip dummy load | Application-specific actuator (project-dependent) |
 | Manual toggle arm | Remote arming via dashboard with 2FA |

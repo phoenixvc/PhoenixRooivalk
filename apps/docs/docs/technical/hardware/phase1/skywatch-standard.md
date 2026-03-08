@@ -115,7 +115,7 @@ reduces WiFi spam from false triggers.
 
 ### Step 1 — Power rail
 
-Same as [Nano build](phase1-skywatch-nano#step-1--power-rail): MP1584EN set to
+Same as [Nano build](./skywatch-nano.md#step-1--power-rail): MP1584EN set to
 5.1V, feeding the ESP32-CAM.
 
 ### Step 2 — PIR sensor

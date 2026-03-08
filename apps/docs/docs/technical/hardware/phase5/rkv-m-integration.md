@@ -84,7 +84,7 @@ to the RKV-M containing everything needed for autonomous intercept:
     },
     "velocity": {
       "speed_ms": 12.5,
-      "heading_deg": 045,
+      "heading_deg": 45,
       "climb_rate_ms": 0.0
     },
     "predicted_position_5s": {
@@ -111,8 +111,8 @@ After handoff, the command post streams track updates at 10 Hz:
 {
   "msg_type": "TRACK_UPDATE",
   "track_id": "TRK-00117",
-  "position": { "lat": ..., "lon": ..., "alt_msl_m": ... },
-  "velocity": { "speed_ms": ..., "heading_deg": ..., "climb_rate_ms": ... },
+  "position": { "lat": 34.052290, "lon": -118.243590, "alt_msl_m": 120 },
+  "velocity": { "speed_ms": 12.5, "heading_deg": 45, "climb_rate_ms": 0.0 },
   "confidence": 0.95,
   "sensor_sources": ["radar", "eo_ir"]
 }

@@ -244,8 +244,8 @@ For deployments requiring pan/tilt:
 | Power (Solar) | 50W panel + 20Ah LFP + MPPT | $150–200 |
 | Mounting | Pole clamps + bracket + hardware | $20–30 |
 | Wiring | JST-XH connectors, harness, heatshrink | $15–25 |
-| **Total (PoE)** | | **~$725–960** |
-| **Total (Solar)** | | **~$835–1,110** |
+| **Total (PoE)** | _(excludes optional thermal)_ | **~$725–960** |
+| **Total (Solar)** | _(excludes optional thermal)_ | **~$835–1,110** |
 
 ---
 

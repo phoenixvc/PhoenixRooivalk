@@ -85,6 +85,12 @@ sensor interfaces onto a single 120×80mm board.
 
 ## Power Subsystem
 
+**PoE power budget:** IEEE 802.3at (25.5W) may not support the 12V pass-through
+(12V @ 2A) — the 12V rail (IR illuminators, fan) is disabled when on PoE-only
+input and is only available with DC or solar input. Example budget on PoE:
+Jetson ~15W + sensors/comms ~5W + regulator losses ~3W ≈ 23W, leaving limited
+headroom; regulator losses and margin justify the limit.
+
 ### Input Stage
 
 | Parameter | Specification |
