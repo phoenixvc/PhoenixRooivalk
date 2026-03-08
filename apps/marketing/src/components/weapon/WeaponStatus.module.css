@@ -56,14 +56,14 @@
 }
 
 .item:hover {
-  background: #1b2632;
-  border-color: #3a475a;
+  background: rgb(var(--sim-panel));
+  border-color: rgb(var(--sim-border-light));
 }
 
 .item.selected {
-  background: #1e293b;
+  background: rgb(var(--sim-panel));
   border-color: rgb(var(--sim-accent));
-  box-shadow: 0 0 8px rgba(255, 59, 0, 0.5);
+  box-shadow: 0 0 8px rgba(var(--sim-accent), 0.5);
 }
 
 .item.disabled {
@@ -122,7 +122,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background-color: rgba(255, 59, 0, 0.2);
+  background-color: rgba(var(--sim-accent), 0.2);
 }
 
 .cooldownProgress {

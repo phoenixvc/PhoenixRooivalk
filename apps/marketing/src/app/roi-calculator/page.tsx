@@ -1,31 +1,15 @@
-"use client";
-import * as React from "react";
-import { Footer } from "../../components/Footer";
-import { Navigation } from "../../components/Navigation";
-import { InteractiveElementsSection } from "../../components/sections/InteractiveElementsSection";
-import { usePerformanceOptimizations } from "../../hooks/usePerformanceOptimizations";
+import type { Metadata } from "next";
+import ROICalculatorPageClient from "./ROICalculatorPageClient";
 
-export default function ROICalculatorPage(): React.ReactElement {
-  // Apply performance optimizations
-  usePerformanceOptimizations();
+export const metadata: Metadata = {
+  title: "ROI Calculator - Phoenix Rooivalk",
+  description:
+    "Model the financial return of Phoenix Rooivalk counter-UAS deployment. Input your threat frequency, response time, and deployment cost to calculate projected savings and payback period.",
+  openGraph: {
+    title: "ROI Calculator - Phoenix Rooivalk",
+    description:
+      "Model the financial return of Phoenix Rooivalk counter-UAS deployment. Calculate projected savings, payback period, and ROI for your facility.",
+  },
+};
 
-  return (
-    <main className="relative overflow-hidden bg-[rgb(var(--darker))] text-white">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,_#1b2735_0%,_#090a0f_100%)]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(249,115,22,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(249,115,22,0.03)_1px,_transparent_1px)] bg-[length:50px_50px] animate-gridMove" />
-      </div>
-
-      {/* Navigation */}
-      <Navigation />
-
-      {/* Main Content */}
-      <div className="pt-20">
-        <InteractiveElementsSection />
-      </div>
-
-      {/* Footer */}
-      <Footer />
-    </main>
-  );
-}
+export default ROICalculatorPageClient;

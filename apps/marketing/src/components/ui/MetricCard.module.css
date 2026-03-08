@@ -4,13 +4,13 @@
   text-align: center;
   padding: 1.5rem;
   border-radius: 0.75rem;
-  background-color: rgba(0, 255, 136, 0.05);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  background-color: rgba(var(--secondary), 0.05);
+  border: 1px solid rgba(var(--secondary), 0.2);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  border-color: rgba(0, 255, 136, 0.4);
+  border-color: rgba(var(--secondary), 0.4);
   transform: translateY(-4px);
 }
 

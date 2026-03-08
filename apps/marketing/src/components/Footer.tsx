@@ -33,11 +33,6 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className={styles.footer}>
-      {/* Background pattern */}
-      <div className={styles.backgroundPattern}>
-        <div className={styles.patternGrid}></div>
-      </div>
-
       <div className={styles.content}>
         <div className={styles.container}>
           {/* Main Footer Content */}
@@ -80,6 +75,20 @@ export const Footer: React.FC = () => {
                 </ul>
               </div>
             ))}
+          </div>
+
+          {/* Backed By Section */}
+          <div className={styles.backedBy}>
+            <span className={styles.backedByLabel}>Backed by</span>
+            <a
+              href="https://soonami.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.backedByBadge}
+            >
+              <span className={styles.soonamiLogo}>soonami</span>
+              <span className={styles.cohortBadge}>Cohort 8</span>
+            </a>
           </div>
 
           {/* Bottom Section */}

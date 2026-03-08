@@ -8,7 +8,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #1a1f2e;
+  background: rgb(var(--sim-panel-alt));
   border: 2px solid;
   border-radius: 8px;
   cursor: pointer;
@@ -18,23 +18,23 @@
 }
 
 .indicatorLow {
-  border-color: #48bb78;
-  color: #48bb78;
+  border-color: rgb(var(--color-green));
+  color: rgb(var(--color-green));
 }
 
 .indicatorMedium {
-  border-color: #ed8936;
-  color: #ed8936;
+  border-color: rgb(var(--sensor-amber));
+  color: rgb(var(--sensor-amber));
 }
 
 .indicatorHigh {
-  border-color: #f56565;
-  color: #f56565;
+  border-color: rgb(var(--color-red));
+  color: rgb(var(--color-red));
 }
 
 .indicator:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.3);
 }
 
 .indicatorAcknowledged {
@@ -73,10 +73,10 @@
   left: 0;
   z-index: 1000;
   min-width: 320px;
-  background: #1a1f2e;
-  border: 1px solid #2d3748;
+  background: rgb(var(--sim-panel-alt));
+  border: 1px solid rgb(var(--color-gray-700));
   border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px rgba(var(--tactical-black), 0.5);
 }
 
 .detailsHeader {
@@ -84,8 +84,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #2d3748;
-  background: #252d3d;
+  border-bottom: 1px solid rgb(var(--color-gray-700));
+  background: rgb(var(--sim-elev));
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
@@ -94,13 +94,13 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #e2e8f0;
+  color: rgb(var(--color-gray-200));
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: #a0aec0;
+  color: rgb(var(--color-gray-400));
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -114,7 +114,7 @@
 }
 
 .closeButton:hover {
-  color: #e2e8f0;
+  color: rgb(var(--color-gray-200));
 }
 
 .detailsContent {
@@ -135,25 +135,25 @@
 }
 
 .riskLevelLow {
-  background: rgba(72, 187, 120, 0.2);
-  color: #48bb78;
+  background: rgba(var(--color-teal-deep), 0.2);
+  color: rgb(var(--color-green));
 }
 
 .riskLevelMedium {
-  background: rgba(237, 137, 54, 0.2);
-  color: #ed8936;
+  background: rgba(var(--sensor-amber), 0.2);
+  color: rgb(var(--sensor-amber));
 }
 
 .riskLevelHigh {
-  background: rgba(245, 101, 101, 0.2);
-  color: #f56565;
+  background: rgba(var(--color-red), 0.2);
+  color: rgb(var(--color-red));
 }
 
 .requirements h5 {
   margin: 0 0 8px 0;
   font-size: 12px;
   font-weight: 600;
-  color: #a0aec0;
+  color: rgb(var(--color-gray-400));
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -168,7 +168,7 @@
   padding: 4px 0;
   padding-left: 16px;
   font-size: 13px;
-  color: #cbd5e0;
+  color: rgb(var(--text-secondary));
   line-height: 1.5;
   position: relative;
 }
@@ -177,27 +177,27 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: #63b3ed;
+  color: rgb(var(--color-blue));
 }
 
 .note {
   padding: 12px;
-  background: rgba(66, 153, 225, 0.1);
+  background: rgba(var(--color-blue-deep), 0.1);
   border-radius: 6px;
-  border-left: 3px solid #4299e1;
+  border-left: 3px solid rgb(var(--color-blue-deep));
 }
 
 .note p {
   margin: 0;
   font-size: 12px;
-  color: #cbd5e0;
+  color: rgb(var(--text-secondary));
   line-height: 1.5;
 }
 
 .actions {
   padding: 12px 16px;
-  border-top: 1px solid #2d3748;
-  background: #252d3d;
+  border-top: 1px solid rgb(var(--color-gray-700));
+  background: rgb(var(--sim-elev));
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -205,7 +205,7 @@
 .acknowledgeButton {
   width: 100%;
   padding: 10px 16px;
-  background: #4299e1;
+  background: rgb(var(--color-blue-deep));
   border: none;
   border-radius: 6px;
   color: white;
@@ -216,5 +216,5 @@
 }
 
 .acknowledgeButton:hover {
-  background: #3182ce;
+  background: rgb(var(--color-blue-deep));
 }

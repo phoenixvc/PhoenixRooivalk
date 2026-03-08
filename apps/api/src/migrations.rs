@@ -244,6 +244,42 @@ impl MigrationManager {
                 CREATE INDEX IF NOT EXISTS idx_career_applications_status ON career_applications(status);
                 "#,
             },
+            Migration {
+                version: 11,
+                name: "add_preorders_tables",
+                sql: r#"
+                CREATE TABLE IF NOT EXISTS preorders (
+                    id TEXT PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    email TEXT NOT NULL,
+                    phone TEXT NOT NULL,
+                    company TEXT,
+                    address TEXT NOT NULL,
+                    city TEXT NOT NULL,
+                    state TEXT NOT NULL,
+                    zip TEXT NOT NULL,
+                    country TEXT NOT NULL,
+                    notes TEXT,
+                    status TEXT NOT NULL DEFAULT 'pending',
+                    total_amount REAL NOT NULL DEFAULT 0,
+                    created_ms INTEGER NOT NULL,
+                    updated_ms INTEGER NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_preorders_email ON preorders(email);
+                CREATE INDEX IF NOT EXISTS idx_preorders_status ON preorders(status);
+                CREATE INDEX IF NOT EXISTS idx_preorders_created_ms ON preorders(created_ms);
+                CREATE TABLE IF NOT EXISTS preorder_items (
+                    id TEXT PRIMARY KEY,
+                    preorder_id TEXT NOT NULL REFERENCES preorders(id),
+                    sku TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    quantity INTEGER NOT NULL DEFAULT 1,
+                    unit_price REAL NOT NULL,
+                    created_ms INTEGER NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_preorder_items_preorder_id ON preorder_items(preorder_id);
+                "#,
+            },
         ]
     }
 
@@ -420,8 +456,8 @@ mod tests {
         // Check status
         let status = migration_manager.get_status().await.unwrap();
         assert!(status.is_up_to_date);
-        assert_eq!(status.current_version, 10);
-        assert_eq!(status.applied_migrations.len(), 10);
+        assert_eq!(status.current_version, 11);
+        assert_eq!(status.applied_migrations.len(), 11);
 
         // Verify tables exist
         let tables = sqlx::query("SELECT name FROM sqlite_master WHERE type='table'")

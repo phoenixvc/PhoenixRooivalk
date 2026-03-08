@@ -378,28 +378,54 @@ export default function PresentationMode({
         )}
 
         {/* Slide Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
+        <div className="flex-1 flex flex-col items-center justify-center p-4">
           {/* Slide Content */}
-          <div className="max-w-4xl w-full bg-gray-800 rounded-xl p-12 shadow-2xl">
+          <div
+            className={`w-full bg-gray-800 rounded-xl shadow-2xl ${
+              slide.layout === "products" ? "max-w-6xl p-6" : "max-w-4xl p-12"
+            }`}
+          >
             {/* Slide Header */}
-            <div className="flex items-center gap-4 mb-8">
+            <div
+              className={`flex items-center gap-4 ${slide.layout === "products" ? "mb-4" : "mb-8"}`}
+            >
               {slide.icon && (
-                <span className="text-4xl" aria-hidden="true">
+                <span
+                  className={
+                    slide.layout === "products" ? "text-3xl" : "text-4xl"
+                  }
+                  aria-hidden="true"
+                >
                   {slide.icon}
                 </span>
               )}
-              <h2 className="text-4xl font-bold">
+              <h2
+                className={`font-bold ${slide.layout === "products" ? "text-3xl" : "text-4xl"}`}
+              >
                 {parseRichText(slide.title)}
               </h2>
             </div>
 
             {/* Slide Body */}
             {slide.layout === "title-only" ? (
-              <div className="text-center py-8">
-                <p className="text-2xl text-gray-300">
-                  {slide.keyPoints[0] &&
-                    parseRichText(getKeyPointText(slide.keyPoints[0]))}
-                </p>
+              <div className="text-center py-8 space-y-2">
+                {slide.keyPoints.map((point, i) => {
+                  const text = getKeyPointText(point);
+                  // Empty strings create visual spacing
+                  if (!text) return <div key={i} className="h-4" />;
+                  return (
+                    <p
+                      key={i}
+                      className={`text-xl text-gray-300 transition-opacity duration-300 ${
+                        animationMode && i >= revealedBullets
+                          ? "opacity-0"
+                          : "opacity-100"
+                      }`}
+                    >
+                      {parseRichText(text)}
+                    </p>
+                  );
+                })}
               </div>
             ) : slide.layout === "quote" ? (
               <div className="text-center py-8">
@@ -464,108 +490,327 @@ export default function PresentationMode({
                 </pre>
               </div>
             ) : slide.layout === "two-column" ? (
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  {slide.leftColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.leftColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.leftColumn || []).map((point, i) => (
-                      <li
-                        key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
+              <div>
+                {/* Key points above columns (e.g., main ask) */}
+                {slide.keyPoints.length > 0 && (
+                  <div className="text-center mb-6">
+                    {slide.keyPoints.map((point, i) => (
+                      <p key={i} className="text-2xl font-bold text-orange-400">
+                        {parseRichText(getKeyPointText(point))}
+                      </p>
                     ))}
-                  </ul>
-                </div>
-                <div>
-                  {slide.rightColumnTitle && (
-                    <h4 className="text-xl font-semibold mb-4">
-                      {slide.rightColumnTitle}
-                    </h4>
-                  )}
-                  <ul className="space-y-3">
-                    {(slide.rightColumn || []).map((point, i) => (
-                      <li
-                        key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
-                          animationMode && i >= revealedBullets
-                            ? "opacity-0"
-                            : "opacity-100"
-                        }`}
-                      >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    {slide.leftColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.leftColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.leftColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    {slide.rightColumnTitle && (
+                      <h4 className="text-lg font-semibold mb-3 text-orange-400">
+                        {slide.rightColumnTitle}
+                      </h4>
+                    )}
+                    <ul className="space-y-2">
+                      {(slide.rightColumn || []).map((point, i) => (
+                        <li
+                          key={i}
+                          className={`flex items-start gap-2 text-base transition-opacity duration-300 ${
+                            animationMode && i >= revealedBullets
+                              ? "opacity-0"
+                              : "opacity-100"
+                          }`}
+                        >
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             ) : slide.layout === "team" && slide.teamMembers ? (
               <div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  {slide.teamMembers.map((member, memberIndex) => (
-                    <div
-                      key={memberIndex}
-                      className="text-center p-4 rounded-lg"
-                      style={{
-                        background: `linear-gradient(180deg, ${member.color || "#1e40af"}20 0%, ${member.color || "#1e40af"}10 100%)`,
-                        border: `1px solid ${member.color || "#1e40af"}40`,
-                      }}
-                    >
-                      <div
-                        className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-bold text-lg"
-                        style={{
-                          background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
-                        }}
-                      >
-                        {member.initials}
-                      </div>
-                      <h4 className="font-bold text-white text-sm">
-                        {member.name}
-                      </h4>
-                      <p className="text-xs text-gray-400 mb-2">
-                        {member.title}
-                      </p>
-                      <ul className="text-xs text-gray-500 space-y-1 text-left">
-                        {member.highlights.map((highlight, hIndex) => (
-                          <li key={hIndex} className="flex items-start gap-1">
-                            <span className="text-gray-500 mt-0.5">
-                              {"\u2022"}
-                            </span>
-                            <span>{highlight}</span>
-                          </li>
+                {/* Founders (larger) and Advisors (smaller) */}
+                {(() => {
+                  // Founders: has "founder" in title (Founder, Co-Founder)
+                  const founders = slide.teamMembers.filter((m) =>
+                    m.title.toLowerCase().includes("founder"),
+                  );
+                  // Advisors: everyone else (Advisor, Supplier/Advisor, etc.)
+                  const advisors = slide.teamMembers.filter(
+                    (m) => !m.title.toLowerCase().includes("founder"),
+                  );
+                  return (
+                    <>
+                      {/* Founders row - larger cards */}
+                      <div className="flex justify-center gap-6 mb-4">
+                        {founders.map((member, memberIndex) => (
+                          <div
+                            key={memberIndex}
+                            className="text-center p-4 rounded-lg w-[220px]"
+                            style={{
+                              background: `linear-gradient(180deg, ${member.color || "#1e40af"}25 0%, ${member.color || "#1e40af"}10 100%)`,
+                              border: `2px solid ${member.color || "#1e40af"}60`,
+                            }}
+                          >
+                            <div
+                              className="w-16 h-16 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold text-xl"
+                              style={{
+                                background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                              }}
+                            >
+                              {member.initials}
+                            </div>
+                            <h4 className="font-bold text-white text-base">
+                              {member.name}
+                            </h4>
+                            <p
+                              className="text-sm font-medium mb-1"
+                              style={{ color: member.color || "#f97316" }}
+                            >
+                              {member.title}
+                            </p>
+                            <ul className="text-xs text-gray-400 space-y-0.5">
+                              {member.highlights.map((highlight, hIndex) => (
+                                <li key={hIndex}>{highlight}</li>
+                              ))}
+                            </ul>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
+                      {/* Advisors row */}
+                      <div className="flex justify-center gap-3">
+                        {advisors.map((member, memberIndex) => (
+                          <div
+                            key={memberIndex}
+                            className="text-center p-2 rounded-lg w-[140px]"
+                            style={{
+                              background: `linear-gradient(180deg, ${member.color || "#1e40af"}15 0%, ${member.color || "#1e40af"}05 100%)`,
+                              border: `1px solid ${member.color || "#1e40af"}30`,
+                            }}
+                          >
+                            <div
+                              className="w-10 h-10 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-bold text-sm"
+                              style={{
+                                background: `linear-gradient(135deg, ${member.color || "#1e40af"} 0%, ${member.color || "#1e40af"}cc 100%)`,
+                              }}
+                            >
+                              {member.initials}
+                            </div>
+                            <h4 className="font-bold text-white text-xs">
+                              {member.name}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              {member.title}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            ) : slide.layout === "video" || slide.video ? (
+              // Video layout - split view: video left, key points right
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Video on the left */}
+                <div className="flex flex-col">
+                  {slide.video && (
+                    <div className="relative aspect-video bg-black rounded-lg overflow-hidden group">
+                      <video
+                        src={slide.video}
+                        controls
+                        autoPlay={slide.videoAutoplay}
+                        muted={slide.videoAutoplay}
+                        className="w-full h-full object-contain"
+                        poster={slide.image}
+                        aria-label={
+                          slide.videoCaption || slide.title || "Video content"
+                        }
+                      >
+                        {slide.videoCaptions && (
+                          <track
+                            kind="captions"
+                            src={slide.videoCaptions}
+                            srcLang={slide.videoCaptionsLang || "en"}
+                            label={`Captions (${slide.videoCaptionsLang || "en"})`}
+                            default
+                          />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                      {/* Fullscreen button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          const video = e.currentTarget
+                            .previousElementSibling as HTMLVideoElement;
+                          if (video?.requestFullscreen) {
+                            video.requestFullscreen();
+                          }
+                        }}
+                        className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Fullscreen"
+                      >
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                          />
+                        </svg>
+                      </button>
                     </div>
-                  ))}
+                  )}
+                  {slide.videoCaption && (
+                    <p className="text-sm text-gray-400 italic mt-2 text-center">
+                      {slide.videoCaption}
+                    </p>
+                  )}
                 </div>
-                {slide.keyPoints.length > 0 && (
-                  <ul className="space-y-3 mt-4">
-                    {slide.keyPoints.map((point, i) => (
+                {/* Key points on the right - with sub-bullets support */}
+                <ul className="space-y-2">
+                  {slide.keyPoints.map((point, i) => {
+                    const hasSubPoints =
+                      typeof point === "object" &&
+                      point.subPoints &&
+                      point.subPoints.length > 0;
+                    return (
                       <li
                         key={i}
-                        className={`flex items-start gap-3 text-lg transition-opacity duration-300 ${
+                        className={`transition-opacity duration-300 ${
                           animationMode && i >= revealedBullets
                             ? "opacity-0"
                             : "opacity-100"
                         }`}
                       >
-                        <span className="text-blue-400 mt-1">{"\u25CF"}</span>
-                        <span>{parseRichText(getKeyPointText(point))}</span>
+                        <div className="flex items-start gap-3 text-base">
+                          <span className="text-blue-400 mt-1">{"\u25CF"}</span>
+                          <span>{parseRichText(getKeyPointText(point))}</span>
+                        </div>
+                        {/* Sub-bullets */}
+                        {hasSubPoints && (
+                          <ul className="ml-6 mt-1 space-y-1">
+                            {(point as { subPoints: string[] }).subPoints.map(
+                              (subPoint, j) => (
+                                <li
+                                  key={j}
+                                  className="flex items-start gap-2 text-sm text-gray-300"
+                                >
+                                  <span className="text-gray-500 mt-0.5">
+                                    {"◦"}
+                                  </span>
+                                  <span>{parseRichText(subPoint)}</span>
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        )}
                       </li>
-                    ))}
-                  </ul>
-                )}
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : slide.layout === "products" && slide.productCards ? (
+              // Product cards grid layout - compact to fit
+              <div className="grid grid-cols-3 gap-3">
+                {slide.productCards.map((product, productIndex) => (
+                  <div
+                    key={productIndex}
+                    className="rounded-lg p-3 flex flex-col"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)",
+                      border: `1px solid ${product.color || "#f97316"}50`,
+                    }}
+                  >
+                    {/* Badges */}
+                    {product.badges && product.badges.length > 0 && (
+                      <div className="flex gap-1.5 mb-1.5">
+                        {product.badges.map((badge, badgeIndex) => (
+                          <span
+                            key={badgeIndex}
+                            className="text-[10px] px-1.5 py-0.5 rounded font-medium"
+                            style={{
+                              backgroundColor:
+                                badgeIndex === 0 ? "#22c55e" : "#f97316",
+                              color: "#fff",
+                            }}
+                          >
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Name */}
+                    <h4 className="text-base font-bold text-white mb-0.5">
+                      {product.name}
+                    </h4>
+                    {/* Tagline */}
+                    <p
+                      className="text-xs font-medium mb-0.5"
+                      style={{ color: product.color || "#f97316" }}
+                    >
+                      {product.tagline}
+                    </p>
+                    {/* Description */}
+                    <p className="text-[11px] text-gray-400 mb-2 flex-grow leading-tight">
+                      {product.description}
+                    </p>
+                    {/* Specs */}
+                    {product.specs && product.specs.length > 0 && (
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 mb-2 text-[10px]">
+                        {product.specs.map((spec, specIndex) => (
+                          <div key={specIndex}>
+                            <span className="text-gray-500 uppercase">
+                              {spec.label}
+                            </span>
+                            <div className="text-white font-medium text-xs">
+                              {spec.value}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* Price */}
+                    <div className="mt-auto pt-1 border-t border-gray-700/50">
+                      <p className="text-xl font-bold text-white">
+                        {product.price}
+                      </p>
+                      {product.delivery && (
+                        <p className="text-[10px] text-gray-400">
+                          {product.delivery}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               // Default layout

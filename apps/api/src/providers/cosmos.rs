@@ -19,11 +19,11 @@ use crate::entities::{CareerApplication, Evidence, Session, User};
 use async_trait::async_trait;
 
 #[cfg(feature = "cosmos")]
-use azure_core::credentials::TokenCredential;
-#[cfg(feature = "cosmos")]
 use azure_data_cosmos::{clients::CosmosClient, CosmosClientOptions};
+// Use azure_identity 0.31 (aliased) for azure_data_cosmos 0.30 compatibility.
+// azure_data_cosmos 0.30 expects azure_core 0.31's TokenCredential trait.
 #[cfg(feature = "cosmos")]
-use azure_identity::AzureCliCredential;
+use azure_identity_cosmos::AzureCliCredential;
 
 /// Azure Cosmos DB provider
 #[derive(Debug)]
@@ -37,10 +37,6 @@ pub struct CosmosProvider {
     #[cfg(not(feature = "cosmos"))]
     _phantom: std::marker::PhantomData<()>,
 }
-
-#[cfg(feature = "cosmos")]
-#[allow(dead_code)]
-fn _assert_token_credential_bounds<T: TokenCredential>() {}
 
 impl CosmosProvider {
     /// Create a new Cosmos DB provider from environment variables

@@ -18,12 +18,14 @@
 //! - AI agent-native (autonomous payments)
 //! - Settlement via Solana (400ms finality)
 
+pub mod attestation;
 pub mod config;
 pub mod error;
 pub mod facilitator;
 pub mod middleware;
 pub mod types;
 
+pub use attestation::AttestationSigner;
 pub use config::X402Config;
 pub use error::X402Error;
 pub use facilitator::X402Facilitator;

@@ -1,82 +1,45 @@
-import type { AdaptationItem } from "../components/AdaptationCard";
-
 export interface AdaptationCardData {
   icon: string;
   title: string;
-  items: AdaptationItem[];
+  description: string;
+  metrics: { value: string; label: string }[];
 }
 
 export const adaptationCardsData: AdaptationCardData[] = [
   {
     icon: "🏢",
     title: "Civilian Applications",
-    items: [
-      {
-        title: "Airport Security",
-        description: "Perimeter protection, runway monitoring",
-      },
-      {
-        title: "Critical Infrastructure",
-        description: "Power plants, water facilities, communication towers",
-      },
-      {
-        title: "Event Security",
-        description: "Stadiums, concerts, public gatherings",
-      },
+    description: "Airports, infrastructure, and public events",
+    metrics: [
+      { value: "24/7", label: "Coverage" },
+      { value: "<1s", label: "Alert Time" },
     ],
   },
   {
     icon: "🏭",
     title: "Commercial Security",
-    items: [
-      {
-        title: "Corporate Campus",
-        description: "Headquarters, R&D facilities",
-      },
-      {
-        title: "Data Center Security",
-        description: "Server farms, cloud infrastructure",
-      },
-      {
-        title: "Port Security",
-        description: "Shipping terminals, cargo facilities",
-      },
+    description: "Corporate campuses, data centers, and ports",
+    metrics: [
+      { value: "Multi-site", label: "Scale" },
+      { value: "99.9%", label: "Uptime" },
     ],
   },
   {
     icon: "🔬",
     title: "Research & Development",
-    items: [
-      {
-        title: "University Partnerships",
-        description: "Academic research collaboration",
-      },
-      {
-        title: "Government Labs",
-        description: "DARPA, NSF, national laboratories",
-      },
-      {
-        title: "International Cooperation",
-        description: "NATO, allied defense research",
-      },
+    description: "University, government, and allied partnerships",
+    metrics: [
+      { value: "Global", label: "Reach" },
+      { value: "Active", label: "Programs" },
     ],
   },
   {
     icon: "⚡",
     title: "Technology Licensing",
-    items: [
-      {
-        title: "Sensor Fusion",
-        description: "Core detection algorithms",
-      },
-      {
-        title: "Edge Processing",
-        description: "Autonomous decision-making",
-      },
-      {
-        title: "Blockchain Integration",
-        description: "Evidence management systems",
-      },
+    description: "Sensor fusion, edge AI, and blockchain systems",
+    metrics: [
+      { value: "Patented", label: "Tech" },
+      { value: "Open", label: "API" },
     ],
   },
 ];

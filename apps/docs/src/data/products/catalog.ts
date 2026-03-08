@@ -527,7 +527,7 @@ export const skyWatchMobile: Product = {
       supplier: "Anker",
     },
   ],
-  bomTotal: 369.99,
+  bomTotal: 370.99,
   optionalAccessories: [
     {
       item: "GPS module",
@@ -755,7 +755,7 @@ export const skyWatchThermalPro: Product = {
       supplier: "Thorlabs",
     },
   ],
-  bomTotal: 1290.0,
+  bomTotal: 1370.0,
   confidence: "verified",
   lastUpdated: "2026-01-11",
 };
@@ -1562,7 +1562,7 @@ export const skySnare: Product = {
 };
 
 // =============================================================================
-// NETSNARE LINE - GROUND LAUNCHERS (3 Products + Turret Demo + Response Relay Demo)
+// NETSNARE LINE - GROUND LAUNCHERS (3 Products)
 // =============================================================================
 
 /** NetSnare Lite - Spring-powered ground launcher */
@@ -1634,129 +1634,6 @@ export const netSnareLite: Product = {
   bomTotal: 125.0,
   confidence: "verified",
   lastUpdated: "2026-01-11",
-};
-
-/** NetSnare Lite (Turret) - Phase-1 demo: pan-tilt + alarm only, no firing. SKU NSN-LITE-001-TURRET. */
-export const netSnareLiteTurret: Product = {
-  sku: "NSN-LITE-001-TURRET",
-  name: "NetSnare Lite (Turret)",
-  line: "NetSnare",
-  category: "countermeasure",
-  targetMarket: "Demos, Makers, Phase-1 safe actuation",
-  priceRange: "$150-350",
-  priceMin: 150,
-  priceMax: 350,
-  specs: {
-    responseTime: "Pan-tilt + alarm",
-    connectivity: "WiFi, MQTT/HTTP",
-    operatingTemp: "0°C to 40°C",
-  },
-  bom: [
-    {
-      item: "ESP32 DevKit / WROOM",
-      specification: "WiFi, GPIO",
-      quantity: 1,
-      unitCost: 12.0,
-      totalCost: 12.0,
-      supplier: "Various",
-    },
-    {
-      item: "PCA9685 Servo Driver",
-      specification: "16-channel I2C",
-      quantity: 1,
-      unitCost: 8.0,
-      totalCost: 8.0,
-      supplier: "Adafruit, Amazon",
-    },
-    {
-      item: "MG90S / MG996R Servos",
-      specification: "180° positional, 2×",
-      quantity: 2,
-      unitCost: 12.0,
-      totalCost: 24.0,
-      supplier: "Various",
-    },
-    {
-      item: "Buck Regulator (MP1584EN)",
-      specification: "5V/6V servo rail",
-      quantity: 1,
-      unitCost: 4.0,
-      totalCost: 4.0,
-      supplier: "Amazon",
-    },
-    {
-      item: "Piezo / Alarm Output",
-      specification: "Alarm only, no launcher",
-      quantity: 1,
-      unitCost: 3.0,
-      totalCost: 3.0,
-      supplier: "Amazon",
-    },
-    {
-      item: "Enclosure & Mount",
-      specification: "Pan-tilt platform",
-      quantity: 1,
-      unitCost: 25.0,
-      totalCost: 25.0,
-      supplier: "DIY/Custom",
-    },
-  ],
-  bomTotal: 76.0,
-  confidence: "verified",
-  lastUpdated: "2026-03-04",
-};
-
-/** Response Relay (Demo) - Phase-1 safe response placeholder: relay/LED only. SKU RR-DEMO-001. */
-export const responseRelayDemo: Product = {
-  sku: "RR-DEMO-001",
-  name: "Response Relay (Demo)",
-  line: "NetSnare",
-  category: "countermeasure",
-  targetMarket: "Phase-1 demos, Lab validation",
-  priceRange: "$40-80",
-  priceMin: 40,
-  priceMax: 80,
-  specs: {
-    connectivity: "WiFi, MQTT",
-    responseTime: "Relay/LED output only",
-  },
-  bom: [
-    {
-      item: "ESP32 Module",
-      specification: "WiFi, MQTT",
-      quantity: 1,
-      unitCost: 12.0,
-      totalCost: 12.0,
-      supplier: "Various",
-    },
-    {
-      item: "Relay or MOSFET Module",
-      specification: "Safe switching",
-      quantity: 1,
-      unitCost: 5.0,
-      totalCost: 5.0,
-      supplier: "Amazon",
-    },
-    {
-      item: "Dummy Load (LED/lamp)",
-      specification: "No launcher",
-      quantity: 1,
-      unitCost: 3.0,
-      totalCost: 3.0,
-      supplier: "Various",
-    },
-    {
-      item: "Arm/Disarm Switch",
-      specification: "Safety",
-      quantity: 1,
-      unitCost: 2.0,
-      totalCost: 2.0,
-      supplier: "Various",
-    },
-  ],
-  bomTotal: 22.0,
-  confidence: "verified",
-  lastUpdated: "2026-03-04",
 };
 
 /** NetSnare Standard - CO2-powered ground launcher */
@@ -2386,13 +2263,11 @@ export const netSentryProducts: Product[] = [
 /** All SkySnare products */
 export const skySnareProducts: Product[] = [skySnare];
 
-/** All NetSnare products (includes Phase-1 turret and Response Relay demo) */
+/** All NetSnare products */
 export const netSnareProducts: Product[] = [
   netSnareLite,
-  netSnareLiteTurret,
   netSnareStandard,
   netSnarePro,
-  responseRelayDemo,
 ];
 
 /** All AeroNet products */
@@ -2440,10 +2315,8 @@ export const productBySku: Record<string, Product> = {
   "SS-001": skySnare,
   // NetSnare
   "NSN-LITE-001": netSnareLite,
-  "NSN-LITE-001-TURRET": netSnareLiteTurret,
   "NSN-STD-001": netSnareStandard,
   "NSN-PRO-001": netSnarePro,
-  "RR-DEMO-001": responseRelayDemo,
   // AeroNet
   "AN-ENT-001": aeroNetEnterprise,
   "AN-CMD-001": aeroNetCommand,
@@ -2501,117 +2374,20 @@ export function getProductsByPriceRange(
   );
 }
 
-/** Result of catalog invariant validation */
-export interface CatalogValidationResult {
-  valid: boolean;
-  errors: string[];
-}
-
-/** Validates catalog invariants: each product in allProducts is in productBySku; bomTotal matches sum(bom totalCost). */
-export function validateCatalogInvariants(): CatalogValidationResult {
-  const errors: string[] = [];
-  for (const product of allProducts) {
-    const bySku = productBySku[product.sku];
-    if (!bySku || bySku !== product) {
-      errors.push(`Product ${product.sku} missing or inconsistent in productBySku`);
-    }
-    const bomSum = product.bom.reduce((s, i) => s + i.totalCost, 0);
-    if (Math.abs(product.bomTotal - bomSum) > 0.01) {
-      errors.push(`Product ${product.sku}: bomTotal ${product.bomTotal} does not match sum(bom) ${bomSum.toFixed(2)}`);
-    }
-  }
-  const skuKeys = new Set(Object.keys(productBySku));
-  for (const p of allProducts) {
-    skuKeys.delete(p.sku);
-  }
-  if (skuKeys.size > 0) {
-    errors.push(`productBySku has extra SKUs not in allProducts: ${[...skuKeys].join(", ")}`);
-  }
-  return { valid: errors.length === 0, errors };
-}
-
 // =============================================================================
 // SUMMARY DATA FOR QUICK REFERENCE
 // =============================================================================
-
-/** Line keys used for product list summary (order for display). */
-const PRODUCT_LINES = [
-  "SkyWatch",
-  "NetSentry",
-  "SkySnare",
-  "NetSnare",
-  "AeroNet",
-  "RKV",
-] as const;
-
-export type ProductLineId = (typeof PRODUCT_LINES)[number];
-
-/** Optional subtitle for product list section headings (definitive source for MDX). */
-const LINE_SUBTITLES: Partial<Record<ProductLineId, string>> = {
-  SkyWatch: "Detection",
-  NetSentry: "Countermeasure",
-  SkySnare: "Countermeasure",
-  NetSnare: "Countermeasure",
-  AeroNet: "Detection / platform",
-};
-
-/**
- * Ordered product lines for docs/MDX: id plus optional section subtitle.
- * Single source for "which lines and in what order" — add a line here and in
- * collections; product-list.mdx will render it without MDX changes.
- */
-export function getProductLines(): { id: ProductLineId; subtitle?: string }[] {
-  return PRODUCT_LINES.map((id) => ({
-    id,
-    subtitle: LINE_SUBTITLES[id],
-  }));
-}
-
-/** Reusable summary for MDX/docs: total count, line count, per-line counts, lastUpdated from catalog. */
-export function getProductListSummary(): {
-  totalProducts: number;
-  lineCount: number;
-  countsByLine: Record<(typeof PRODUCT_LINES)[number], number>;
-  lastUpdated: string;
-} {
-  const countsByLine = {
-    SkyWatch: skyWatchProducts.length,
-    NetSentry: netSentryProducts.length,
-    SkySnare: skySnareProducts.length,
-    NetSnare: netSnareProducts.length,
-    AeroNet: aeroNetProducts.length,
-    RKV: rkvProducts.length,
-  };
-  const lastUpdated =
-    allProducts.length > 0
-      ? allProducts.reduce((max, p) => (p.lastUpdated > max ? p.lastUpdated : max), allProducts[0].lastUpdated)
-      : "";
-  return {
-    totalProducts: allProducts.length,
-    lineCount: PRODUCT_LINES.length,
-    countsByLine,
-    lastUpdated,
-  };
-}
 
 /** Product catalog summary */
 export const productCatalogSummary = {
   totalProducts: allProducts.length,
   skyWatchCount: skyWatchProducts.length,
   netSentryCount: netSentryProducts.length,
-  skySnareCount: skySnareProducts.length,
-  netSnareCount: netSnareProducts.length,
-  aeroNetCount: aeroNetProducts.length,
-  rkvCount: rkvProducts.length,
-  lineCount: PRODUCT_LINES.length,
   priceRangeMin: Math.min(...allProducts.map((p) => p.priceMin)),
   priceRangeMax: Math.max(...allProducts.map((p) => p.priceMax)),
   bomRangeMin: Math.min(...allProducts.map((p) => p.bomTotal)),
   bomRangeMax: Math.max(...allProducts.map((p) => p.bomTotal)),
-  lastUpdated:
-    allProducts.length > 0
-      ? allProducts.reduce((max, p) => (p.lastUpdated > max ? p.lastUpdated : max), allProducts[0].lastUpdated)
-      : "",
+  lastUpdated: "2026-01-11",
 };
 
 /** Mesh system pricing by coverage area */

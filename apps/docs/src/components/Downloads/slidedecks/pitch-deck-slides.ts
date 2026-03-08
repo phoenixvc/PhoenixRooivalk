@@ -86,32 +86,34 @@ export const pitchDeckSlides: Slide[] = [
   },
   {
     number: 3,
-    title: "Market Opportunity: $2.51B by 2030",
+    title: "Market: $14B+ Announced in 2025 Alone",
     duration: 50,
     icon: "📈",
     keyPoints: [
-      "**Current market:** $1.2-1.8B (2024)",
-      "**Projected:** $2.51B by 2030 at *23.5% CAGR*",
       {
-        text: "**Target segments:**",
+        text: "**$14+ BILLION** in C-UAS funding announced in 2025:",
         subPoints: [
-          "Military: **$1.2B** - largest segment",
-          "Critical Infrastructure: **$0.8B** - high security needs",
-          "Commercial: **$0.5B** - events, stadiums, airports",
+          "🇺🇸 $7.5B US DoD FY2026 + $640M Anduril + $500M FEMA",
+          "🇬🇧 $600M+ UK DragonFire + MOD investment",
+          "🇪🇺 €500M France + NATO contracts",
         ],
       },
+      "**Market:** $6.64B (2025) → **$20.31B** (2030) at **25.1% CAGR**",
       {
-        text: "**Geographic strategy:**",
+        text: "**6 Product Lines:** Full spectrum coverage",
         subPoints: [
-          "*EU & Canada* - immediate need (Phase 1)",
-          "South Africa - expansion market (Phase 2)",
+          "Consumer: **SkySnare** ($349)",
+          "Detection: **SkyWatch** ($50-$20K)",
+          "Commercial: **NetSnare/NetSentry** ($150-$2K)",
+          "Enterprise: **AeroNet** ($150K + $25K/mo)",
+          "Military: **RKV Systems** ($8K-$150K)",
         ],
       },
     ],
     speakerNotes:
-      "Market is large enough to build a unicorn. The CAGR shows strong growth trajectory.",
+      "Lead with the $14B+ - this is new 2025 data. Shows governments are serious. We cover the full spectrum from consumer to military.",
     script:
-      "The counter-drone market is $1.2 to $1.8 billion today and growing to $2.51 billion by 2030 at 23.5% annually. We're targeting military, critical infrastructure, and commercial segments. Our go-to-market strategy prioritizes EU and Canada where the threat is immediate, with South Africa as a Phase 2 expansion market.",
+      "2025 was the year governments got serious. Over $14 billion in C-UAS funding announced globally. The US alone committed $7.5 billion in DoD budget, $640 million to Anduril, and $500 million in FEMA grants for FIFA World Cup security. UK invested $600 million plus. The market is $6.64 billion today growing to $20.31 billion by 2030. We offer 6 product lines covering the full spectrum from $349 consumer devices to $150K military systems.",
   },
   {
     number: 4,
@@ -157,29 +159,40 @@ export const pitchDeckSlides: Slide[] = [
   },
   {
     number: 5,
-    title: "Competitive Advantage: 10-150x Faster",
+    title: "Net Capture: Frontline-Proven Technology",
     duration: 50,
     icon: "🏆",
-    layout: "two-column",
-    leftColumnTitle: "PhoenixRooivalk",
-    leftColumn: [
-      "**50-195ms** response",
-      "✅ True offline capability",
-      "✅ Blockchain evidence",
-      "✅ Open architecture",
+    keyPoints: [
+      {
+        text: "**Net capture proven in combat:**",
+        subPoints: [
+          "MITLA (Ukraine) - frontline deployment against FPV drones",
+          "SkyWall (UK) - US Army adopted, 100m range",
+          "Fortem DroneHunter - used successfully in Ukraine",
+        ],
+      },
+      {
+        text: "**Phoenix Rooivalk advantage:** Safe for civilian markets",
+        subPoints: [
+          "**MITLA**: Pyrotechnic - *may detonate drone warhead*, $90 disposable",
+          "**SkyWall**: $30-50K+, 10kg, military/LE only",
+          "**Us**: CO2/Pneumatic, $150-$2K, safe, reusable, no permits",
+        ],
+      },
+      {
+        text: "**Unique differentiators:**",
+        subPoints: [
+          "✅ 10x cheaper than SkyWall",
+          "✅ Integrated AI detection (others sell separately)",
+          "✅ Blockchain evidence chain (no one else)",
+          "✅ 6 product lines from consumer to military",
+        ],
+      },
     ],
-    rightColumnTitle: "Competitors",
-    rightColumn: [
-      "**5,000-30,000ms** response",
-      "❌ Requires connectivity",
-      "❌ No evidence trail",
-      "❌ Vendor lock-in",
-    ],
-    keyPoints: [],
     speakerNotes:
-      "Let the comparison speak for itself. This is visual proof of our advantage.",
+      "Net capture is proven - this isn't experimental. Our advantage: safe propellant for civilian use at 1/100th the cost.",
     script:
-      "We're 10 to 150 times faster than any competitor. While others need 5 to 30 seconds to respond, we react in under 200 milliseconds. We're the only solution that works completely offline and generates blockchain-based legal evidence. Unlike proprietary systems, our open architecture prevents vendor lock-in and enables customer customization.",
+      "Net capture isn't theoretical - it's proven in combat. Ukraine's MITLA is on the frontlines. US Army adopted SkyWall. Fortem DroneHunter works in Ukraine. Our advantage: safe propellant for civilian markets. MITLA uses pyrotechnic that can detonate warheads. SkyWall costs $30,000+ and is military only. We use CO2 and pneumatic - safe, no permits, starting at $150. We're 10x cheaper, integrate AI detection, and we're the only ones with blockchain evidence chain.",
   },
   {
     number: 6,
@@ -281,34 +294,39 @@ export const pitchDeckSlides: Slide[] = [
   },
   {
     number: 9,
-    title: "Engineering Velocity: Production-Ready",
+    title: "Platform Maturity: Enterprise-Ready Infrastructure",
     duration: 40,
     icon: "🚀",
     keyPoints: [
       {
-        text: "**Week 48 metrics:**",
+        text: "**Documentation & Architecture:**",
         subPoints: [
-          "370+ commits merged",
-          "40+ PRs completed",
-          "10+ ADRs published",
+          "**215 documentation pages** with RAG AI search",
+          "**51 Architecture Decision Records** published",
+          "**WASM threat simulator** live in browser",
         ],
       },
       {
-        text: "**Full platform deployed:**",
+        text: "**Internal Tools Built:**",
         subPoints: [
-          "RAG integration for documentation",
-          "Authentication & authorization",
-          "Gamification system",
-          "Monitoring & observability",
+          "**OmniPost** - AI multi-platform publishing (D2C ready)",
+          "**Cognitive Mesh** - Enterprise AI architecture (in dev)",
+          "**x402 protocol** - Blockchain micropayments (production)",
         ],
       },
-      "**Azure Functions + Cosmos DB** backend *fully operational*",
-      "Static site on Azure SWA with CI/CD pipelines",
+      {
+        text: "**Production Infrastructure:**",
+        subPoints: [
+          "Azure Functions + Cosmos DB backend",
+          "Azure SWA with full CI/CD",
+          "Gamification, auth, monitoring operational",
+        ],
+      },
     ],
     speakerNotes:
-      "Engineering velocity demonstrates execution capability. Each commit is reviewed and tested.",
+      "51 ADRs is exceptional for seed stage. OmniPost and Cognitive Mesh show platform thinking beyond hardware.",
     script:
-      "Our engineering velocity is exceptional. Week 48 alone saw 370+ commits, 40+ pull requests, and 10+ architecture decision records. The full platform is deployed with RAG integration, authentication, gamification, and monitoring. Azure Functions with Cosmos DB backend is operational. Static site runs on Azure SWA with complete CI/CD pipelines.",
+      "Our platform maturity is exceptional for seed stage. 215 documentation pages with AI-powered search. 51 architecture decision records - that's enterprise-grade. A working WASM threat simulator in the browser. We've built internal tools: OmniPost for AI-powered multi-platform marketing, and Cognitive Mesh enterprise AI architecture. The x402 blockchain protocol is live in production. Full Azure infrastructure with CI/CD, gamification, auth, and monitoring all operational.",
   },
   {
     number: 10,
@@ -422,65 +440,92 @@ export const pitchDeckSlides: Slide[] = [
       {
         initials: "JS",
         name: "Jurie Smit",
-        title: "Co-Founder & CTO",
+        title: "Founder",
         highlights: [
           "15+ years fintech & SaaS platforms",
           "Edge AI/ML & system architecture",
           "B.Eng Industrial-Electronic (Stellenbosch)",
         ],
         color: "#1e40af",
-      },
-      {
-        initials: "MR",
-        name: "Martyn Redelinghuys",
-        title: "Co-Founder & CEO",
-        highlights: [
-          "20+ years energy, mining, defense",
-          "R500M+ portfolio management",
-          "MBA (GIBS), B.Eng (Stellenbosch)",
-        ],
-        color: "#7c3aed",
+        image: "/team/jurie.jpeg",
       },
       {
         initials: "PL",
         name: "Pieter La Grange",
-        title: "Co-Founder & Hardware Lead",
+        title: "Co-Founder",
         highlights: [
           "15+ years embedded systems",
           "Medical device production (Snuza)",
           "B.Eng Electrical (Stellenbosch)",
         ],
         color: "#059669",
+        image: "/team/pieter.jpeg",
+      },
+      {
+        initials: "MR",
+        name: "Martyn Redelinghuys",
+        title: "Supplier/Advisor",
+        highlights: [
+          "Operations & Supply Chain",
+          "20+ years defense/energy",
+          "R500M+ portfolio management",
+        ],
+        color: "#7c3aed",
+        image: "/team/martyn.png",
       },
       {
         initials: "EM",
         name: "Eben Maré",
-        title: "Co-Founder & CFO",
+        title: "Advisor",
         highlights: [
           "15+ years investment banking & PE",
           "Former Head Quant at Deloitte",
           "Phoenix VC founder",
         ],
+        color: "#fbbf24",
+        image: "/team/eben.jpeg",
+      },
+      {
+        initials: "CF",
+        name: "Chanelle Fellinger",
+        title: "Advisor",
+        highlights: [
+          "Marketing & Sales",
+          "Go-to-market strategy",
+          "B2B growth expert",
+        ],
+        color: "#a855f7",
+        image: "/team/chanelle.png",
+      },
+      {
+        initials: "AK",
+        name: "Alistair Kim",
+        title: "Advisor",
+        highlights: [
+          "Defense sector expertise",
+          "Government relations",
+          "International markets",
+        ],
         color: "#dc2626",
       },
     ],
     keyPoints: [
-      "**4 co-founders** with complementary expertise across tech, business, hardware, and finance",
+      "**2 founders** with complementary expertise in tech and hardware",
       {
-        text: "**Core competencies:**",
+        text: "**Strategic advisors:**",
         subPoints: [
-          "Edge AI & embedded systems",
-          "Large-scale project management",
-          "Blockchain & cryptographic protocols",
-          "Hardware design & manufacturing",
+          "Operations & supply chain",
+          "Finance & investment banking",
+          "Marketing & sales",
+          "Defense sector & government relations",
         ],
       },
-      "All founders **full-time committed** with significant personal investment",
+      "Founders **full-time committed** with significant personal investment",
     ],
     speakerNotes:
-      "Team credibility is critical. Each founder brings unique expertise. Emphasize the complementary skills and full-time commitment. The combined 60+ years of experience spans all domains needed for success.",
+      "Team credibility is critical. Two founders with complementary skills, backed by experienced advisors. Emphasize the full-time commitment and advisor expertise.",
     script:
-      "Our founding team brings over 60 years of combined experience. Jurie leads technology with 15+ years in fintech and AI systems. Martyn drives business development with 20+ years managing R500M+ portfolios in energy and defense. Pieter heads hardware with 15 years in embedded systems and medical device production. Eben handles finance with extensive investment banking and private equity experience. All four founders are full-time committed with skin in the game.",
+      "Our founding team brings deep expertise. Jurie leads technology with 15+ years in fintech and AI systems. Pieter heads hardware with 15 years in embedded systems and medical device production. We're backed by strategic advisors including Martyn on operations, Eben on finance, Chanelle on marketing and sales, and Alistair with defense sector expertise. Both founders are full-time committed with skin in the game.",
   },
   {
     number: 14,
@@ -577,6 +622,6 @@ export const pitchDeckMeta = {
   title: "Phoenix Rooivalk: Investor Pitch Deck",
   duration: 12,
   audience: "Investors, Strategic Partners, Enterprise Customers",
-  date: "December 2025",
+  date: "January 2026",
   colorTheme: "investor" as const,
 };

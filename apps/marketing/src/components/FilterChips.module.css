@@ -61,7 +61,7 @@
 }
 
 .filterChipCount {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--text-primary), 0.1);
   padding: 0.125rem 0.5rem;
   border-radius: 9999px;
   font-size: 0.75rem;

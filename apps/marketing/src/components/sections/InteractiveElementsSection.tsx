@@ -2,8 +2,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { Card } from "../ui/Card";
 import styles from "./InteractiveElementsSection.module.css";
-import { AdaptationCard } from "./components/AdaptationCard";
 import { formatCurrency } from "@/utils/formatter";
 import { adaptationCardsData } from "./data/adaptationData";
 import {
@@ -16,7 +16,7 @@ export const InteractiveElementsSection: React.FC = () => {
   const [roiInputs, setRoiInputs] = useState<ROIInputs>({
     threatFrequency: 5, // threats per month
     averageResponseTime: 3000, // milliseconds
-    deploymentCost: 250000, // USD
+    deploymentCost: 150000, // USD — AeroNet Enterprise setup ($150K, products.ts AN-ENT-001); adjust slider for your tier
     personnelCost: 150000, // USD per year
   });
 
@@ -27,9 +27,6 @@ export const InteractiveElementsSection: React.FC = () => {
 
   return (
     <section className={styles.section}>
-      {/* Background pattern */}
-      <div className={styles.backgroundPattern} />
-
       <div className={styles.container}>
         <div className={styles.innerContainer}>
           {/* Section Header */}
@@ -67,11 +64,11 @@ export const InteractiveElementsSection: React.FC = () => {
                           <button
                             key={option}
                             onClick={() => setSensitivity(option)}
-                            className={`btn ${
+                            className={`${styles.sensitivityBtn} ${
                               sensitivity === option
-                                ? styles.buttonActive
-                                : "btn--secondary"
-                            } text-sm capitalize`}
+                                ? styles.sensitivityBtnActive
+                                : ""
+                            }`}
                             aria-pressed={sensitivity === option}
                           >
                             {option}
@@ -122,11 +119,11 @@ export const InteractiveElementsSection: React.FC = () => {
                     />
                   </div>
                   <div className={styles.rangeLabels}>
-                    <span className="flex-shrink-0">1</span>
+                    <span className={styles.flexShrink0}>1</span>
                     <span className={styles.rangeValue}>
                       {roiInputs.threatFrequency} threats/month
                     </span>
-                    <span className="flex-shrink-0">20</span>
+                    <span className={styles.flexShrink0}>20</span>
                   </div>
                 </div>
 
@@ -166,11 +163,11 @@ export const InteractiveElementsSection: React.FC = () => {
                     />
                   </div>
                   <div className={styles.rangeLabels}>
-                    <span className="flex-shrink-0">1s</span>
+                    <span className={styles.flexShrink0}>1s</span>
                     <span className={styles.rangeValue}>
                       {roiInputs.averageResponseTime}ms
                     </span>
-                    <span className="flex-shrink-0">10s</span>
+                    <span className={styles.flexShrink0}>10s</span>
                   </div>
                 </div>
 
@@ -210,11 +207,11 @@ export const InteractiveElementsSection: React.FC = () => {
                     />
                   </div>
                   <div className={styles.rangeLabels}>
-                    <span className="flex-shrink-0">$100K</span>
+                    <span className={styles.flexShrink0}>$100K</span>
                     <span className={styles.rangeValue}>
                       {formatCurrency(roiInputs.deploymentCost)}
                     </span>
-                    <span className="flex-shrink-0">$1M</span>
+                    <span className={styles.flexShrink0}>$1M</span>
                   </div>
                 </div>
               </div>
@@ -387,7 +384,14 @@ export const InteractiveElementsSection: React.FC = () => {
 
             <div className={styles.adaptationGrid}>
               {adaptationCardsData.map((card, index) => (
-                <AdaptationCard key={index} {...card} />
+                <Card
+                  key={index}
+                  icon={card.icon}
+                  title={card.title}
+                  description={card.description}
+                  metrics={card.metrics}
+                  centered
+                />
               ))}
             </div>
 

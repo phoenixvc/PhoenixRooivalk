@@ -33,7 +33,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       damage: 0.15, // +15% damage
     },
     visualEffect: "crosshair enhancement",
-    color: "#3b82f6",
+    color: "rgb(var(--color-blue-deep, 59, 130, 246))",
   },
   {
     id: "gnss_rf_combo",
@@ -46,7 +46,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       range: 0.2, // +20% effective range
     },
     visualEffect: "navigation confusion",
-    color: "#8b5cf6",
+    color: "rgb(var(--color-purple, 139, 92, 246))",
   },
   {
     id: "decoy_capture",
@@ -58,7 +58,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       range: 0.25, // +25% effective range
     },
     visualEffect: "attraction field",
-    color: "#70A1FF",
+    color: "rgb(var(--color-blue-accent, 112, 161, 255))",
   },
   {
     id: "ew_relay_boost",
@@ -71,7 +71,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       accuracy: 0.2, // +20% effectiveness
     },
     visualEffect: "signal amplification",
-    color: "#8b5cf6",
+    color: "rgb(var(--color-purple, 139, 92, 246))",
   },
   {
     id: "optical_dazzle_net",
@@ -84,7 +84,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       damage: 0.2, // +20% effectiveness
     },
     visualEffect: "blind capture",
-    color: "#f97316",
+    color: "rgb(var(--primary, 249, 115, 22))",
   },
   {
     id: "hpm_swarm_clear",
@@ -96,7 +96,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       accuracy: 0.25, // +25% hit chance
     },
     visualEffect: "swarm disruption",
-    color: "#FFA502",
+    color: "rgb(var(--sim-gold, 255, 209, 102))",
   },
   {
     id: "acoustic_gnss_chaos",
@@ -108,7 +108,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       range: 0.15, // +15% area of effect
     },
     visualEffect: "navigation chaos",
-    color: "#84cc16",
+    color: "rgb(var(--color-green-bright, 132, 204, 22))",
   },
   {
     id: "ai_deception_swarm",
@@ -121,7 +121,7 @@ const SYNERGY_DEFINITIONS: SynergyEffect[] = [
       damage: 0.2, // +20% damage to confused targets
     },
     visualEffect: "swarm confusion",
-    color: "#8b5cf6",
+    color: "rgb(var(--color-purple, 139, 92, 246))",
   },
 ];
 

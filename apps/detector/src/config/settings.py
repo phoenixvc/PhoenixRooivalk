@@ -12,6 +12,8 @@ Settings can be loaded from:
 from enum import Enum
 from typing import Any, Optional
 
+PYDANTIC_V2: Optional[bool]
+
 try:
     # fmt: off
     # isort: off
@@ -38,9 +40,11 @@ except ImportError:
         BaseModel = object  # type: ignore[misc,assignment]
         PYDANTIC_V2 = None
 
-        def Field(default=None, **kwargs):  # noqa: N802
+        def _fallback_field(default=None, **kwargs):  # noqa: N802
             """Fallback Field that just returns the default value."""
             return default
+
+        Field = _fallback_field  # type: ignore[misc,assignment]  # noqa: F811
 
 
 # =============================================================================
@@ -197,25 +201,25 @@ class TargetingSettings(BaseModel):
     # Fire net trigger
     fire_net_enabled: bool = Field(False, description="Enable fire net system")
     fire_net_min_confidence: float = Field(
-        0.85, ge=0.5, le=1.0, description="Minimum confidence to fire"
+        0.85, ge=0.85, le=1.0, description="Minimum confidence to fire"
     )
     fire_net_min_track_frames: int = Field(
-        10, ge=3, le=60, description="Minimum frames tracked before fire"
+        10, ge=10, le=60, description="Minimum frames tracked before fire"
     )
     fire_net_max_distance_m: float = Field(
-        50.0, ge=5.0, le=200.0, description="Maximum fire distance"
+        50.0, ge=5.0, le=50.0, description="Maximum fire distance"
     )
     fire_net_min_distance_m: float = Field(
-        5.0, ge=1.0, le=50.0, description="Minimum fire distance (safety)"
+        5.0, ge=5.0, le=50.0, description="Minimum fire distance (safety)"
     )
     fire_net_velocity_threshold_ms: float = Field(
         30.0, ge=0.0, le=100.0, description="Max target velocity for fire"
     )
     fire_net_cooldown_seconds: float = Field(
-        10.0, ge=1.0, le=60.0, description="Cooldown between fires"
+        10.0, ge=10.0, le=60.0, description="Cooldown between fires"
     )
     fire_net_arm_required: bool = Field(True, description="Require explicit arming")
-    fire_net_gpio_pin: int = Field(17, ge=2, le=27, description="GPIO pin for fire trigger (BCM)")
+    fire_net_gpio_pin: int = Field(17, ge=17, le=17, description="GPIO pin for fire trigger (BCM)")
 
     if PYDANTIC_V2:
 
@@ -231,7 +235,7 @@ class TargetingSettings(BaseModel):
 
     elif PYDANTIC_V2 is False:
 
-        @root_validator
+        @root_validator(pre=False, skip_on_failure=True)  # type: ignore[arg-type]
         def validate_distance_envelope(cls, values):
             """Ensure fire_net_min_distance_m < fire_net_max_distance_m."""
             min_dist = values.get("fire_net_min_distance_m", 5.0)
@@ -245,6 +249,106 @@ class TargetingSettings(BaseModel):
 
     class Config:
         env_prefix = "TARGETING_"
+
+
+class TurretControlSettings(BaseModel):
+    """Turret pan/tilt control configuration."""
+
+    # Transport
+    transport_type: str = Field(
+        "simulated", description="Transport backend: simulated, serial, wifi_udp, audio_pwm"
+    )
+    serial_port: str = Field("/dev/ttyUSB0", description="Serial port for serial transport")
+    serial_baudrate: int = Field(115200, ge=9600, le=921600, description="Serial baud rate")
+    wifi_host: str = Field("192.168.4.1", description="UDP target host for wifi transport")
+    wifi_port: int = Field(
+        4210, ge=1024, le=65535, description="UDP target port for wifi transport"
+    )
+    audio_device: Optional[int] = Field(
+        None, description="Audio output device index (None=default). Use `python -m sounddevice`"
+    )
+    audio_buffer_size: int = Field(
+        512, ge=128, le=2048, description="Audio buffer size (smaller=less latency, more CPU)"
+    )
+
+    # PID gains - yaw axis
+    yaw_kp: float = Field(0.8, ge=0.0, le=5.0, description="Yaw proportional gain")
+    yaw_ki: float = Field(0.05, ge=0.0, le=2.0, description="Yaw integral gain")
+    yaw_kd: float = Field(0.15, ge=0.0, le=2.0, description="Yaw derivative gain")
+
+    # PID gains - pitch axis
+    pitch_kp: float = Field(0.6, ge=0.0, le=5.0, description="Pitch proportional gain")
+    pitch_ki: float = Field(0.03, ge=0.0, le=2.0, description="Pitch integral gain")
+    pitch_kd: float = Field(0.10, ge=0.0, le=2.0, description="Pitch derivative gain")
+
+    # Safety limits
+    max_yaw_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max yaw rate (normalized)")
+    max_pitch_rate: float = Field(1.0, ge=0.1, le=1.0, description="Max pitch rate (normalized)")
+    max_slew_rate: float = Field(
+        2.0, ge=0.1, le=10.0, description="Max rate change per second (smoothing)"
+    )
+    watchdog_timeout_ms: int = Field(
+        500, ge=100, le=5000, description="Failsafe if no command within this time"
+    )
+    override_latch_seconds: float = Field(
+        3.0, ge=1.0, le=30.0, description="Manual override latch duration"
+    )
+    command_ttl_ms: int = Field(
+        200, ge=50, le=2000, description="Command time-to-live for hardware watchdog"
+    )
+
+    # PID dead zone
+    dead_zone: float = Field(
+        0.02,
+        ge=0.0,
+        le=0.2,
+        description="Error threshold below which PID outputs zero (0-1 normalized)",
+    )
+
+    # Initial mode
+    initial_mode: str = Field(
+        "manual", description="Starting authority mode: manual, assisted, auto_track"
+    )
+
+    if PYDANTIC_V2:
+
+        @model_validator(mode="after")  # type: ignore[misc]
+        def _validate_ttl_vs_watchdog(self):
+            if self.command_ttl_ms >= self.watchdog_timeout_ms:
+                import warnings
+
+                warnings.warn(
+                    f"command_ttl_ms ({self.command_ttl_ms}) >= watchdog_timeout_ms "
+                    f"({self.watchdog_timeout_ms}). Hardware TTL will expire before "
+                    f"the software watchdog fires. Consider reducing command_ttl_ms.",
+                    stacklevel=2,
+                )
+            return self
+
+    else:
+        # Pydantic v1 validator
+        try:
+            from pydantic import validator as _validator  # type: ignore[assignment,misc]
+
+            @_validator("command_ttl_ms")  # type: ignore[misc]
+            @classmethod
+            def _validate_ttl_vs_watchdog_v1(cls, v, values):
+                watchdog = values.get("watchdog_timeout_ms", 500)
+                if v >= watchdog:
+                    import warnings
+
+                    warnings.warn(
+                        f"command_ttl_ms ({v}) >= watchdog_timeout_ms ({watchdog}). "
+                        f"Hardware TTL will expire before the software watchdog fires.",
+                        stacklevel=2,
+                    )
+                return v
+
+        except ImportError:
+            pass
+
+    class Config:
+        env_prefix = "TURRET_"
 
 
 class AlertSettings(BaseModel):
@@ -325,7 +429,7 @@ class DisplaySettings(BaseModel):
 
 if PydanticBaseSettings is not object:
 
-    class Settings(PydanticBaseSettings):
+    class Settings(PydanticBaseSettings):  # type: ignore[misc,valid-type]
         """
         Root configuration aggregating all settings.
 
@@ -337,15 +441,16 @@ if PydanticBaseSettings is not object:
         """
 
         # Component settings
-        capture: CaptureSettings = Field(default_factory=CaptureSettings)
-        inference: InferenceSettings = Field(default_factory=InferenceSettings)
-        drone_score: DroneScoreSettings = Field(default_factory=DroneScoreSettings)
-        tracker: TrackerSettings = Field(default_factory=TrackerSettings)
-        targeting: TargetingSettings = Field(default_factory=TargetingSettings)
-        alert: AlertSettings = Field(default_factory=AlertSettings)
-        streaming: StreamingSettings = Field(default_factory=StreamingSettings)
-        logging: LoggingSettings = Field(default_factory=LoggingSettings)
-        display: DisplaySettings = Field(default_factory=DisplaySettings)
+        capture: CaptureSettings = Field(default_factory=CaptureSettings)  # type: ignore[arg-type]
+        inference: InferenceSettings = Field(default_factory=InferenceSettings)  # type: ignore[arg-type]
+        drone_score: DroneScoreSettings = Field(default_factory=DroneScoreSettings)  # type: ignore[arg-type]
+        tracker: TrackerSettings = Field(default_factory=TrackerSettings)  # type: ignore[arg-type]
+        targeting: TargetingSettings = Field(default_factory=TargetingSettings)  # type: ignore[arg-type]
+        turret_control: TurretControlSettings = Field(default_factory=TurretControlSettings)  # type: ignore[arg-type]
+        alert: AlertSettings = Field(default_factory=AlertSettings)  # type: ignore[arg-type]
+        streaming: StreamingSettings = Field(default_factory=StreamingSettings)  # type: ignore[arg-type]
+        logging: LoggingSettings = Field(default_factory=LoggingSettings)  # type: ignore[arg-type]
+        display: DisplaySettings = Field(default_factory=DisplaySettings)  # type: ignore[arg-type]
 
         # Top-level settings
         camera_type: CameraType = Field(CameraType.AUTO, description="Camera source type")
@@ -360,10 +465,10 @@ if PydanticBaseSettings is not object:
         @classmethod
         def from_yaml(cls, path: str) -> "Settings":
             """Load settings from YAML file."""
-            import yaml
+            import yaml  # type: ignore[import-untyped]
 
             with open(path) as f:
-                data = yaml.safe_load(f) or {}
+                data: dict[str, Any] = yaml.safe_load(f) or {}
             return cls(**data)
 
         @classmethod
@@ -372,18 +477,18 @@ if PydanticBaseSettings is not object:
             import json
 
             with open(path) as f:
-                data = json.load(f)
+                data: dict[str, Any] = json.load(f)
             return cls(**data)
 
         def _get_dict(self) -> dict[str, Any]:
             """Get dictionary representation (Pydantic v1/v2 compatible)."""
             if hasattr(self, "model_dump"):
-                return self.model_dump()  # Pydantic v2
-            return self.dict()  # Pydantic v1
+                return dict(self.model_dump())  # Pydantic v2
+            return dict(self.dict())  # Pydantic v1
 
         def to_yaml(self, path: str) -> None:
             """Save settings to YAML file."""
-            import yaml
+            import yaml  # type: ignore[import-untyped]
 
             with open(path, "w") as f:
                 yaml.dump(self._get_dict(), f, default_flow_style=False, sort_keys=False)
@@ -405,7 +510,7 @@ if PydanticBaseSettings is not object:
 
             CLI args take precedence over file/env settings.
             """
-            updates = {}
+            updates: dict[str, Any] = {}
 
             # Map CLI args to nested settings
             if hasattr(args, "model") and args.model:
@@ -519,6 +624,30 @@ else:
             self.fire_net_arm_required = True
             self.fire_net_gpio_pin = 17
 
+    class _SimpleTurretControlSettings:
+        def __init__(self):
+            self.transport_type = "simulated"
+            self.serial_port = "/dev/ttyUSB0"
+            self.serial_baudrate = 115200
+            self.wifi_host = "192.168.4.1"
+            self.wifi_port = 4210
+            self.audio_device = None
+            self.audio_buffer_size = 512
+            self.yaw_kp = 0.8
+            self.yaw_ki = 0.05
+            self.yaw_kd = 0.15
+            self.pitch_kp = 0.6
+            self.pitch_ki = 0.03
+            self.pitch_kd = 0.10
+            self.max_yaw_rate = 1.0
+            self.max_pitch_rate = 1.0
+            self.max_slew_rate = 2.0
+            self.watchdog_timeout_ms = 500
+            self.override_latch_seconds = 3.0
+            self.command_ttl_ms = 200
+            self.dead_zone = 0.02
+            self.initial_mode = "manual"
+
     class _SimpleAlertSettings:
         def __init__(self):
             self.webhook_url = None
@@ -559,17 +688,18 @@ else:
             self.log_interval_frames = 30
 
     # Override the pydantic classes with simple fallbacks
-    CaptureSettings = _SimpleCaptureSettings  # noqa: F811
-    InferenceSettings = _SimpleInferenceSettings  # noqa: F811
-    DroneScoreSettings = _SimpleDroneScoreSettings  # noqa: F811
-    TrackerSettings = _SimpleTrackerSettings  # noqa: F811
-    TargetingSettings = _SimpleTargetingSettings  # noqa: F811
-    AlertSettings = _SimpleAlertSettings  # noqa: F811
-    StreamingSettings = _SimpleStreamingSettings  # noqa: F811
-    LoggingSettings = _SimpleLoggingSettings  # noqa: F811
-    DisplaySettings = _SimpleDisplaySettings  # noqa: F811
+    CaptureSettings = _SimpleCaptureSettings  # type: ignore[misc,assignment]  # noqa: F811
+    InferenceSettings = _SimpleInferenceSettings  # type: ignore[misc,assignment]  # noqa: F811
+    DroneScoreSettings = _SimpleDroneScoreSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TrackerSettings = _SimpleTrackerSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TargetingSettings = _SimpleTargetingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    TurretControlSettings = _SimpleTurretControlSettings  # type: ignore[misc,assignment]  # noqa: F811
+    AlertSettings = _SimpleAlertSettings  # type: ignore[misc,assignment]  # noqa: F811
+    StreamingSettings = _SimpleStreamingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    LoggingSettings = _SimpleLoggingSettings  # type: ignore[misc,assignment]  # noqa: F811
+    DisplaySettings = _SimpleDisplaySettings  # type: ignore[misc,assignment]  # noqa: F811
 
-    class Settings:  # noqa: F811
+    class Settings:  # type: ignore[no-redef]  # noqa: F811
         """Fallback settings class without pydantic validation."""
 
         def __init__(self, **kwargs):
@@ -589,6 +719,11 @@ else:
             )
             self.targeting = (
                 _SimpleTargetingSettings() if "targeting" not in kwargs else kwargs["targeting"]
+            )
+            self.turret_control = (
+                _SimpleTurretControlSettings()
+                if "turret_control" not in kwargs
+                else kwargs["turret_control"]
             )
             self.alert = _SimpleAlertSettings() if "alert" not in kwargs else kwargs["alert"]
             self.streaming = (
@@ -656,6 +791,31 @@ targeting:
   fire_net_cooldown_seconds: 10.0
   fire_net_arm_required: true
   fire_net_gpio_pin: 17
+
+turret_control:
+  transport_type: simulated  # simulated, serial, wifi_udp, audio_pwm
+  serial_port: "/dev/ttyUSB0"
+  serial_baudrate: 115200
+  wifi_host: "192.168.4.1"
+  wifi_port: 4210
+  audio_device: null  # null=default output. Run `python -m sounddevice` to list
+  audio_buffer_size: 512  # 256=low latency, 1024=stable
+  # PID gains (tune in simulation first)
+  yaw_kp: 0.8
+  yaw_ki: 0.05
+  yaw_kd: 0.15
+  pitch_kp: 0.6
+  pitch_ki: 0.03
+  pitch_kd: 0.10
+  # Safety
+  max_yaw_rate: 1.0
+  max_pitch_rate: 1.0
+  max_slew_rate: 2.0  # per second
+  watchdog_timeout_ms: 500
+  override_latch_seconds: 3.0
+  command_ttl_ms: 200
+  dead_zone: 0.02  # error below this → output zero (prevents hunting)
+  initial_mode: manual  # manual, assisted, auto_track
 
 alert:
   webhook_url: null

@@ -16,7 +16,7 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(var(--tactical-black), 0.3);
   transform: translateY(100px);
   opacity: 0;
   transition: all 0.3s ease;
@@ -29,15 +29,15 @@
 }
 
 .toast[data-type="success"] {
-  background: #22c55e;
+  background: rgb(var(--color-teal-deep));
 }
 
 .toast[data-type="error"] {
-  background: #ef4444;
+  background: rgb(var(--color-red));
 }
 
 .toast[data-type="info"] {
-  background: #3b82f6;
+  background: rgb(var(--color-blue-deep));
 }
 
 .toastIcon {
@@ -90,21 +90,21 @@
 }
 
 .statusBadge[data-status="draft"] {
-  background: #fbbf24;
-  color: #1a1a1a;
-  border: 1px solid #f59e0b;
+  background: var(--pr-brand-gold);
+  color: var(--pr-bg-base);
+  border: 1px solid var(--pr-brand-amber);
 }
 
 .statusBadge[data-status="final"] {
-  background: #22c55e;
-  color: #ffffff;
-  border: 1px solid #16a34a;
+  background: rgb(var(--color-teal-deep));
+  color: rgb(var(--phoenix-white));
+  border: 1px solid rgb(var(--color-green-dark));
 }
 
 .statusBadge[data-status="submitted"] {
-  background: #3b82f6;
-  color: #ffffff;
-  border: 1px solid #2563eb;
+  background: rgb(var(--color-blue-deep));
+  color: rgb(var(--phoenix-white));
+  border: 1px solid rgb(var(--color-blue-dark));
 }
 
 /* Version Dropdown */
@@ -151,7 +151,7 @@
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 0.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(var(--tactical-black), 0.15);
   z-index: 100;
   overflow: hidden;
 }
@@ -218,14 +218,14 @@
 }
 
 .deadlineIndicator[data-urgency="urgent"] {
-  background: #fef3c7;
-  color: #92400e;
+  background: rgba(var(--color-amber-lighter), 1);
+  color: rgb(var(--color-amber-darker));
   animation: pulse 2s infinite;
 }
 
 .deadlineIndicator[data-urgency="critical"] {
-  background: #fee2e2;
-  color: #dc2626;
+  background: rgba(var(--color-red-light), 1);
+  color: rgb(var(--color-red-dark));
   animation: pulse 1s infinite;
 }
 
@@ -263,7 +263,7 @@
 .calendarExportWrapper button {
   font-size: 0.75rem !important;
   padding: 0.25rem 0.75rem !important;
-  background: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(var(--text-primary), 0.9) !important;
   border: 1px solid var(--ifm-color-primary) !important;
   color: var(--ifm-color-primary) !important;
   font-weight: 600 !important;
@@ -271,7 +271,7 @@
 }
 
 .calendarExportWrapper button:hover {
-  background: #ffffff !important;
+  background: rgb(var(--text-primary)) !important;
 }
 
 /* Progress Bar */
@@ -302,7 +302,7 @@
 
 .progressText {
   font-size: 0.75rem;
-  color: #1e293b;
+  color: var(--pr-fg-base);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -328,16 +328,16 @@
   width: 36px;
   height: 36px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(var(--text-primary), 0.9);
+  border: 1px solid rgba(var(--tactical-black), 0.15);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .iconButton:hover {
-  background: #ffffff;
+  background: rgb(var(--phoenix-white));
   border-color: var(--ifm-color-primary);
   color: var(--ifm-color-primary);
 }
@@ -370,26 +370,26 @@
 .downloadButtonPrimary:hover {
   background: var(--ifm-color-primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--tactical-black), 0.15);
 }
 
 .downloadButtonSecondary {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(var(--text-primary), 0.95);
   border: 2px solid var(--ifm-color-primary);
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .downloadButtonSecondary:hover {
-  background: #ffffff;
+  background: rgb(var(--text-primary));
   border-color: var(--ifm-color-primary-dark);
 }
 
 .downloadButtonSecondary .buttonLabel {
-  color: #1e293b;
+  color: var(--pr-fg-base);
 }
 
 .downloadButtonSecondary .buttonMeta {
-  color: #475569;
+  color: var(--pr-fg-muted);
   opacity: 1;
 }
 
@@ -435,7 +435,7 @@
   background: var(--ifm-color-primary-dark);
   color: white;
   border: none;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(var(--text-primary), 0.2);
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   cursor: pointer;
@@ -452,7 +452,7 @@
 .previewOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(var(--tactical-black), 0.7);
   display: flex;
   align-items: center;
   justify-content: center;

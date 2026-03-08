@@ -34,7 +34,7 @@
 }
 
 .news-notification-btn.subscribed:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(var(--color-blue-deep), 0.1);
 }
 
 .news-notification-icon {
@@ -50,7 +50,7 @@
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  background: #ef4444;
+  background: rgb(var(--color-red));
   color: white;
   font-size: 0.625rem;
   font-weight: 700;
@@ -114,10 +114,10 @@
 
 .news-notification-error {
   padding: 0.75rem 1rem;
-  background: #fef2f2;
-  color: #dc2626;
+  background: rgba(var(--color-red), 0.05);
+  color: rgb(var(--color-red-dark));
   font-size: 0.8rem;
-  border-bottom: 1px solid #fecaca;
+  border-bottom: 1px solid rgba(var(--color-red), 0.2);
 }
 
 .news-notification-content {
@@ -185,9 +185,9 @@
 }
 
 .news-notification-category.selected {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--ifm-color-primary, #3b82f6);
-  color: var(--ifm-color-primary, #3b82f6);
+  background: rgba(var(--color-blue-deep), 0.1);
+  border-color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
+  color: var(--ifm-color-primary, rgb(var(--color-blue-deep)));
 }
 
 .news-notification-category input {
@@ -227,7 +227,7 @@
 }
 
 .news-notification-subscribe.unsubscribe:hover {
-  background: #ef4444;
+  background: rgb(var(--color-red));
 }
 
 /* Dark mode */
@@ -251,9 +251,9 @@
 }
 
 [data-theme="dark"] .news-notification-error {
-  background: #450a0a;
-  border-color: #7f1d1d;
-  color: #fca5a5;
+  background: rgba(var(--color-red), 0.15);
+  border-color: rgba(var(--color-red), 0.3);
+  color: rgba(var(--color-red-light), 1);
 }
 
 [data-theme="dark"] .news-notification-category {

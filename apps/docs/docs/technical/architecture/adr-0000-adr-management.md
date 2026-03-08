@@ -20,10 +20,14 @@ tags:
 
 ## Executive Summary
 
-This document establishes the governance, organization, and lifecycle management
-for Architecture Decision Records (ADRs) within Phoenix Rooivalk. It serves as
-the meta-ADR that guides how all other ADRs are created, maintained, and
-retired.
+1. **Problem**: Architecture decisions were being made without consistent
+   documentation, making it difficult for new team members to understand the
+   rationale behind key choices and risking re-litigation of settled topics.
+2. **Decision**: Establish a structured ADR system with canonical numbering,
+   lifecycle management, templates, and review processes to document all
+   significant architectural decisions.
+3. **Trade-off**: Teams must invest time upfront to document decisions, but this
+   cost is offset by reduced onboarding time and prevented decision churn.
 
 ---
 
@@ -45,19 +49,21 @@ with their context, rationale, and consequences. They serve to:
 
 ### Numbering Scheme
 
-| Range     | Category       | Description                           |
-| --------- | -------------- | ------------------------------------- |
-| 0000-0009 | Meta           | ADR management, templates, governance |
-| 0010-0019 | Infrastructure | Databases, hosting, deployment        |
-| 0020-0029 | Security       | Auth, encryption, compliance          |
-| 0030-0039 | AI/ML          | LLM integration, RAG, agents          |
-| 0040-0049 | Frontend       | UI frameworks, state management       |
-| 0050-0059 | API            | Endpoints, protocols, contracts       |
-| 0060-0069 | Integration    | External services, partners           |
-| 0070-0099 | Reserved       | Future categories                     |
+The canonical numbering convention is defined in
+[ADR-0000: Template & Guide](./adr-0000-template-and-guide.md):
 
-**Note**: Current ADRs (0011-0023) predate this numbering scheme and remain in
-their original sequence for stability.
+| Range         | Category                 | Description                                         |
+| ------------- | ------------------------ | --------------------------------------------------- |
+| **0000**      | Template & Meta          | This document, template, governance                 |
+| **0001-0099** | Core System Architecture | Chain selection, autonomy level, sensor integration |
+| **0100-0199** | Security & Compliance    | Zero-trust, ITAR, authentication, TLS policy        |
+| **0200-0299** | Blockchain & Evidence    | Chain anchoring, evidence model, multi-chain        |
+| **0300-0399** | AI/ML Architecture       | Edge AI, model selection, inference                 |
+| **0400-0499** | Infrastructure & DevOps  | Monorepo, CI/CD, deployment, WASM                   |
+| **D001-D999** | Development Decisions    | Tooling, frameworks, patterns                       |
+
+**Note**: ADRs 0011-0023 predate this scheme and retain their original numbers
+for stability. New ADRs should follow the ranges above.
 
 ### Directory Structure
 

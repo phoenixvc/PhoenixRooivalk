@@ -311,7 +311,7 @@ impl FormationManager {
     }
 
     fn calculate_swarm_positions(&mut self, formation: &Formation, _count: usize) {
-        use rand::Rng;
+        use rand::RngExt;
         let mut rng = rand::rng();
 
         for drone_id in formation.drone_ids.iter() {

@@ -36,9 +36,6 @@ out/
 # Optional REPL history
 .node_repl_history
 
-# Local tooling (e.g. MCP config)
-.roo/
-
 # Environment Variables
 .env
 .env.local
@@ -66,6 +63,7 @@ TEST_COVERAGE_SUMMARY.md
 
 # Rust
 target/
+rust_out
 apps/marketing/next-env.d.ts
 
 # TypeScript build info
@@ -91,3 +89,6 @@ pitch-deck/*.pptx
 pitch-deck/*.pdf
 pitch-deck/*.html
 *.egg-info/
+
+# Claude Code runtime state (template is tracked, runtime state is not)
+.claude/state/orchestrator.json

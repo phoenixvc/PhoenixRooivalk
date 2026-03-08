@@ -47,13 +47,19 @@ from pathlib import Path
 try:
     from .config.settings import Settings, create_default_config
     from .factory import DetectionPipeline, create_demo_pipeline, create_pipeline
+    from .utils.logging_config import setup_logging
 except ImportError:
     # Running as script - add src to path
     src_dir = Path(__file__).parent
     if str(src_dir) not in sys.path:
         sys.path.insert(0, str(src_dir))
-    from config.settings import Settings, create_default_config
-    from factory import DetectionPipeline, create_demo_pipeline, create_pipeline
+    from config.settings import Settings, create_default_config  # type: ignore[no-redef]
+    from factory import (  # type: ignore[no-redef]
+        DetectionPipeline,
+        create_demo_pipeline,
+        create_pipeline,
+    )
+    from utils.logging_config import setup_logging  # type: ignore[no-redef]
 
 
 def parse_args():
@@ -209,9 +215,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     """Convert Settings object to create_pipeline() keyword arguments."""
     # Get model path from settings or CLI args (CLI takes precedence)
     model_path = (
-        args.model
-        if args.model
-        else (getattr(settings.inference, "model_path", None) or None)
+        args.model if args.model else (getattr(settings.inference, "model_path", None) or None)
     )
     if not model_path and not args.mock:
         model_path = "mock"  # Fallback for mock mode
@@ -223,14 +227,10 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     elif args.camera and args.camera != "auto":
         camera_type = args.camera
     else:
-        camera_type = str(settings.camera_type)
+        camera_type = settings.camera_type.value
 
     # Get video file from settings or args
-    video_file = (
-        args.video
-        if args.video
-        else getattr(settings.capture, "video_path", None)
-    )
+    video_file = args.video if args.video else getattr(settings.capture, "video_path", None)
 
     # Get engine type (CLI takes precedence)
     if args.mock:
@@ -238,10 +238,10 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
     elif args.engine and args.engine != "auto":
         engine_type = args.engine
     else:
-        engine_type = str(settings.engine_type)
+        engine_type = settings.engine_type.value
 
     # Get tracker type (CLI takes precedence)
-    tracker_type = args.tracker if args.tracker else str(settings.tracker_type)
+    tracker_type = args.tracker if args.tracker else settings.tracker_type.value
 
     # Build kwargs with safe attribute access
     kwargs = {
@@ -254,25 +254,15 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
         ),
         "video_file": video_file,
         "width": (
-            args.width
-            if args.width is not None
-            else getattr(settings.capture, "width", None)
+            args.width if args.width is not None else getattr(settings.capture, "width", None)
         ),
         "height": (
-            args.height
-            if args.height is not None
-            else getattr(settings.capture, "height", None)
+            args.height if args.height is not None else getattr(settings.capture, "height", None)
         ),
-        "fps": (
-            args.fps
-            if args.fps is not None
-            else getattr(settings.capture, "fps", None)
-        ),
+        "fps": (args.fps if args.fps is not None else getattr(settings.capture, "fps", None)),
         "engine_type": engine_type,
         "use_coral": (
-            args.coral
-            if args.coral
-            else getattr(settings.inference, "use_coral", False)
+            args.coral if args.coral else getattr(settings.inference, "use_coral", False)
         ),
         "confidence_threshold": (
             args.confidence
@@ -280,9 +270,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
             else getattr(settings.inference, "confidence_threshold", 0.5)
         ),
         "nms_threshold": (
-            args.nms
-            if args.nms is not None
-            else getattr(settings.inference, "nms_threshold", 0.45)
+            args.nms if args.nms is not None else getattr(settings.inference, "nms_threshold", 0.45)
         ),
         "tracker_type": tracker_type,
         "alert_webhook": (
@@ -296,9 +284,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
             else getattr(settings.alert, "save_detections_path", None)
         ),
         "headless": (
-            args.headless
-            if args.headless
-            else getattr(settings.display, "headless", False)
+            args.headless if args.headless else getattr(settings.display, "headless", False)
         ),
         "stream_enabled": getattr(settings.streaming, "enabled", False),
         "stream_host": getattr(
@@ -307,9 +293,7 @@ def settings_to_pipeline_kwargs(settings: Settings, args) -> dict:
         "stream_port": getattr(settings.streaming, "port", 8080),
         "stream_quality": getattr(settings.streaming, "quality", 80),
         "stream_max_fps": getattr(settings.streaming, "max_fps", 15),
-        "stream_auth_enabled": getattr(
-            settings.streaming, "auth_enabled", False
-        ),
+        "stream_auth_enabled": getattr(settings.streaming, "auth_enabled", False),
         "stream_auth_token": getattr(settings.streaming, "auth_token", None),
         "auto_configure": not args.no_auto_configure,
         "print_hardware": not args.quiet,
@@ -383,8 +367,7 @@ def main():
                 file=sys.stderr,
             )
             print(
-                "\nTip: Ensure the directory exists "
-                "and you have write permissions.",
+                "\nTip: Ensure the directory exists " "and you have write permissions.",
                 file=sys.stderr,
             )
             sys.exit(1)
@@ -395,8 +378,7 @@ def main():
         config_path = Path(args.config)
         if not config_path.exists():
             print(
-                f"ERROR: Configuration file not found: "
-                f"{config_path.absolute()}",
+                f"ERROR: Configuration file not found: " f"{config_path.absolute()}",
                 file=sys.stderr,
             )
             print(
@@ -420,6 +402,16 @@ def main():
                 file=sys.stderr,
             )
             sys.exit(1)
+
+    # Setup logging from config or defaults
+    if settings and settings.logging:
+        setup_logging(
+            level=settings.logging.level.value,
+            log_file=settings.logging.log_file,
+            json_format=settings.logging.json_format,
+        )
+    else:
+        setup_logging(level="INFO")
 
     # Handle demo mode
     if args.demo:
@@ -445,9 +437,7 @@ def main():
         if not args.model and not using_mock_engine:
             model_path_from_config = None
             if settings:
-                model_path_from_config = getattr(
-                    settings.inference, "model_path", None
-                )
+                model_path_from_config = getattr(settings.inference, "model_path", None)
                 if model_path_from_config and model_path_from_config.strip():
                     # Model path from config file is valid
                     pass
@@ -468,8 +458,7 @@ def main():
                     file=sys.stderr,
                 )
                 print(
-                    "  - Use --config <file> to load model path "
-                    "from config file",
+                    "  - Use --config <file> to load model path " "from config file",
                     file=sys.stderr,
                 )
                 print(
@@ -482,10 +471,7 @@ def main():
         if settings:
             kwargs = settings_to_pipeline_kwargs(settings, args)
             # If using mock engine without model, set model_path to "mock"
-            if (
-                kwargs.get("engine_type") == "mock"
-                and not kwargs.get("model_path")
-            ):
+            if kwargs.get("engine_type") == "mock" and not kwargs.get("model_path"):
                 kwargs["model_path"] = "mock"
             try:
                 pipeline = create_pipeline(**kwargs)
@@ -550,8 +536,7 @@ def main():
                 file=sys.stderr,
             )
             print(
-                "  - Missing dependencies: "
-                "Check installation with pip install -e '.[pi]'",
+                "  - Missing dependencies: " "Check installation with pip install -e '.[pi]'",
                 file=sys.stderr,
             )
             print("  - Use --mock to test without hardware", file=sys.stderr)
@@ -559,8 +544,7 @@ def main():
     except Exception as e:
         print(f"ERROR: Pipeline startup failed: {e}", file=sys.stderr)
         print(
-            "\nTip: Use --mock to test without hardware, "
-            "or check configuration.",
+            "\nTip: Use --mock to test without hardware, " "or check configuration.",
             file=sys.stderr,
         )
         sys.exit(1)

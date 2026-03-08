@@ -7,6 +7,12 @@
  * npm install @azure/msal-browser
  */
 
+import type {
+  AccountInfo,
+  AuthenticationResult,
+  IPublicClientApplication,
+} from "@azure/msal-browser";
+
 import {
   IAuthService,
   checkIsAdmin,
@@ -50,7 +56,7 @@ interface AzureTokenClaims {
  * Supports Microsoft identity provider with single-tenant or multi-tenant configuration.
  */
 export class AzureAuthService implements IAuthService {
-  private msalInstance: any = null; // PublicClientApplication
+  private msalInstance: IPublicClientApplication | null = null;
   private currentUser: CloudUser | null = null;
   private authStateCallbacks: Set<(user: CloudUser | null) => void> = new Set();
   private config: AzureAuthConfig | null = null;
@@ -107,8 +113,7 @@ export class AzureAuthService implements IAuthService {
           navigateToLoginRequestUrl: true,
         },
         cache: {
-          cacheLocation: "localStorage",
-          storeAuthStateInCookie: false,
+          cacheLocation: "localStorage" as const,
         },
         system: {
           loggerOptions: {
@@ -122,13 +127,20 @@ export class AzureAuthService implements IAuthService {
 
       // Handle redirect response
       const response = await this.msalInstance.handleRedirectPromise();
-      if (response) {
+      if (response && response.account) {
+        this.msalInstance.setActiveAccount(response.account);
         this.handleAuthResponse(response);
       } else {
-        // Check for existing session
-        const accounts = this.msalInstance.getAllAccounts();
-        if (accounts.length > 0) {
-          this.setUserFromAccount(accounts[0]);
+        // Restore session: prefer the persisted active account
+        const existingActive = this.msalInstance.getActiveAccount();
+        if (existingActive) {
+          this.setUserFromAccount(existingActive);
+        } else {
+          const accounts = this.msalInstance.getAllAccounts();
+          if (accounts.length > 0) {
+            this.msalInstance.setActiveAccount(accounts[0]);
+            this.setUserFromAccount(accounts[0]);
+          }
         }
       }
 
@@ -170,6 +182,10 @@ export class AzureAuthService implements IAuthService {
 
       // Use popup for cross-origin providers
       const response = await this.msalInstance.loginPopup(loginRequest);
+      // MSAL v5: set active account for subsequent silent token acquisition
+      if (response?.account) {
+        this.msalInstance.setActiveAccount(response.account);
+      }
       this.handleAuthResponse(response);
       return this.currentUser;
     } catch (error) {
@@ -229,15 +245,15 @@ export class AzureAuthService implements IAuthService {
   async getIdToken(forceRefresh = false): Promise<string | null> {
     if (!this.msalInstance) return null;
 
-    const accounts = this.msalInstance.getAllAccounts();
-    if (accounts.length === 0) return null;
+    const activeAccount = this.msalInstance.getActiveAccount();
+    if (!activeAccount) return null;
 
     const scopes = this.parseScopes();
 
     try {
       const response = await this.msalInstance.acquireTokenSilent({
         scopes,
-        account: accounts[0],
+        account: activeAccount,
         forceRefresh,
       });
       return response.idToken;
@@ -296,13 +312,37 @@ export class AzureAuthService implements IAuthService {
     }
   }
 
-  private handleAuthResponse(response: any): void {
+  private handleAuthResponse(response: AuthenticationResult): void {
     if (response?.account) {
       this.setUserFromAccount(response.account);
     }
   }
 
-  private setUserFromAccount(account: any): void {
+  private setUserFromAccount(account: AccountInfo): void {
+    if (!account.idTokenClaims) {
+      // Account loaded from cache without a live id_token (e.g. after page refresh).
+      // Fall back to top-level AccountInfo properties which are always populated.
+      const email = account.username || null;
+      this.currentUser = {
+        uid: account.localAccountId,
+        email,
+        displayName: account.name || null,
+        photoURL: null,
+        emailVerified: Boolean(email),
+        providerData: [
+          {
+            providerId: "microsoft",
+            uid: account.localAccountId,
+            displayName: account.name || null,
+            email,
+            photoURL: null,
+          },
+        ],
+      };
+      this.notifyAuthStateChange(this.currentUser);
+      return;
+    }
+
     const claims = account.idTokenClaims as AzureTokenClaims;
 
     // Build display name from available claims

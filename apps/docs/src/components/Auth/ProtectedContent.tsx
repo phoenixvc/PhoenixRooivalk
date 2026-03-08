@@ -15,10 +15,12 @@ import { analytics } from "../../services/analytics";
 
 import "./ProtectedContent.css";
 
-// Debug flag - defaults to true, can be disabled via environment variable
+// Debug flag - disabled by default, can be enabled via environment variable
+// During SSG/SSR (typeof window === 'undefined'), always disable to prevent build log spam
 const DEBUG_AUTH =
-  typeof process === "undefined" ||
-  process.env.NEXT_PUBLIC_DEBUG_AUTH !== "false";
+  typeof window !== "undefined" &&
+  typeof process !== "undefined" &&
+  process.env.NEXT_PUBLIC_DEBUG_AUTH === "true";
 
 interface ProtectedContentProps {
   children: React.ReactNode;

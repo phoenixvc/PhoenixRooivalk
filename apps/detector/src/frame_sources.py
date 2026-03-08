@@ -37,7 +37,7 @@ class OpenCVFrameSource(FrameSource):
         self._fps = fps
         self._buffer_size = buffer_size
         self._source_id = source_id
-        self._cap = None
+        self._cap: Optional[Any] = None
         self._frame_count = 0
         self._actual_width = width
         self._actual_height = height
@@ -148,9 +148,9 @@ class PiCameraSource(FrameSource):
         self._height = height
         self._fps = fps
         self._frame_count = 0
-        self._cap = None
+        self._cap: Optional[Any] = None
         self._using_libcamera = False
-        self._picam2 = None
+        self._picam2: Optional[Any] = None
 
     def open(self) -> bool:
         # Try Picamera2 first (modern Pi OS)

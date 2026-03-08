@@ -12,9 +12,8 @@
 //! 4. Store individual Merkle proofs in local database
 //! 5. Proof verification: evidence hash + Merkle proof → Merkle root → blockchain
 
-use async_trait::async_trait;
 use chrono::{DateTime, Utc};
-use phoenix_evidence::anchor::{AnchorError, AnchorProvider};
+use phoenix_evidence::anchor::AnchorProvider;
 use phoenix_evidence::model::{ChainTxRef, DigestAlgo, EvidenceDigest, EvidenceRecord};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -141,7 +140,7 @@ impl MerkleTree {
     pub fn from_leaves(leaf_hashes: Vec<String>) -> Result<Self, MerkleError> {
         let leaves: Vec<Vec<u8>> = leaf_hashes
             .iter()
-            .map(|h| hex::decode(h))
+            .map(hex::decode)
             .collect::<Result<Vec<_>, _>>()?;
 
         let mut levels = vec![leaves.clone()];
@@ -190,7 +189,7 @@ impl MerkleTree {
         let mut current_index = index;
 
         for level in &self.levels[..self.levels.len().saturating_sub(1)] {
-            let sibling_index = if current_index % 2 == 0 {
+            let sibling_index = if current_index.is_multiple_of(2) {
                 current_index + 1
             } else {
                 current_index - 1
@@ -328,11 +327,10 @@ impl BatchAnchor {
         let mut batch = self.current_batch.lock().await;
 
         if let Some(ref b) = *batch {
-            let age = Utc::now()
-                .signed_duration_since(b.created_at)
-                .num_seconds() as u64;
+            let age = Utc::now().signed_duration_since(b.created_at).num_seconds() as u64;
 
-            if age >= self.config.max_batch_age_seconds && b.items.len() >= self.config.min_batch_size
+            if age >= self.config.max_batch_age_seconds
+                && b.items.len() >= self.config.min_batch_size
             {
                 let items = b.items.clone();
                 *batch = None;
@@ -390,8 +388,7 @@ impl BatchAnchor {
         // Store individual proofs
         for (index, item) in items.iter().enumerate() {
             if let Some(proof) = tree.proof(index) {
-                let proof_json = serde_json::to_string(&proof)
-                    .map_err(MerkleError::from)?;
+                let proof_json = serde_json::to_string(&proof).map_err(MerkleError::from)?;
                 sqlx::query(
                     "INSERT INTO merkle_proofs (job_id, batch_id, leaf_index, proof_json) VALUES (?1, ?2, ?3, ?4)",
                 )
@@ -441,11 +438,13 @@ impl BatchAnchor {
 
                 // Update individual job statuses
                 for item in &items {
-                    sqlx::query("UPDATE outbox_jobs SET status = 'done', updated_ms = ?1 WHERE id = ?2")
-                        .bind(anchored_at)
-                        .bind(&item.job_id)
-                        .execute(&self.pool)
-                        .await?;
+                    sqlx::query(
+                        "UPDATE outbox_jobs SET status = 'done', updated_ms = ?1 WHERE id = ?2",
+                    )
+                    .bind(anchored_at)
+                    .bind(&item.job_id)
+                    .execute(&self.pool)
+                    .await?;
                 }
 
                 tracing::info!(
@@ -470,7 +469,10 @@ impl BatchAnchor {
     }
 
     /// Get proof for a specific job
-    pub async fn get_proof(&self, job_id: &str) -> Result<Option<(MerkleProof, ChainTxRef)>, BatchError> {
+    pub async fn get_proof(
+        &self,
+        job_id: &str,
+    ) -> Result<Option<(MerkleProof, ChainTxRef)>, BatchError> {
         let row = sqlx::query(
             r#"
             SELECT p.proof_json, b.tx_network, b.tx_chain, b.tx_id, b.tx_confirmed
@@ -490,8 +492,8 @@ impl BatchAnchor {
             let tx_id: Option<String> = row.get("tx_id");
             let tx_confirmed: i32 = row.get("tx_confirmed");
 
-            let proof: MerkleProof = serde_json::from_str(&proof_json)
-                .map_err(MerkleError::from)?;
+            let proof: MerkleProof =
+                serde_json::from_str(&proof_json).map_err(MerkleError::from)?;
 
             if let (Some(network), Some(chain), Some(tx_id)) = (tx_network, tx_chain, tx_id) {
                 return Ok(Some((
@@ -542,10 +544,7 @@ pub struct BatchStats {
 }
 
 /// Run the batch anchoring loop
-pub async fn run_batch_loop(
-    batch_anchor: Arc<BatchAnchor>,
-    poll_interval: Duration,
-) {
+pub async fn run_batch_loop(batch_anchor: Arc<BatchAnchor>, poll_interval: Duration) {
     loop {
         if let Err(e) = batch_anchor.check_timeout().await {
             tracing::error!(error = %e, "Batch timeout check failed");

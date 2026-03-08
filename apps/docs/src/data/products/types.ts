@@ -62,15 +62,8 @@ export interface Product {
 // COMPUTE PLATFORM TYPES
 // =============================================================================
 
-/** Stable ID for a compute platform (used in benchmarks and recommendations) */
-export type PlatformId = string;
-
-/** Stable ID for an AI accelerator (used in benchmarks and recommendations) */
-export type AcceleratorId = string;
-
 /** Compute platform specifications and pricing */
 export interface ComputePlatform {
-  id: PlatformId;
   name: string;
   variant?: string;
   price: number;
@@ -83,7 +76,6 @@ export interface ComputePlatform {
 
 /** AI accelerator specifications */
 export interface AIAccelerator {
-  id: AcceleratorId;
   name: string;
   price: number;
   tops: number;
@@ -93,10 +85,8 @@ export interface AIAccelerator {
   notes?: string;
 }
 
-/** Detection FPS benchmark by platform + accelerator (by stable ID) */
+/** Detection FPS benchmark by platform + accelerator */
 export interface FPSBenchmark {
-  platformId: PlatformId;
-  acceleratorId: AcceleratorId;
   platform: string;
   accelerator: string;
   modelSize: "nano" | "small" | "medium" | "large";
@@ -122,13 +112,11 @@ export interface StorageOption {
 }
 
 // =============================================================================
-// TIER ID UNIONS (single source of truth for configurator keys)
+// TIER ID TYPES
 // =============================================================================
 
-/** Compute tier IDs: sentinels (none, server) + tier keys from computeTiers */
+/** IDs for concrete compute tiers */
 export type ComputeTierId =
-  | "none"
-  | "server"
   | "pi4_coral"
   | "pi5_hailo8l"
   | "pi5_hailo8"
@@ -136,12 +124,11 @@ export type ComputeTierId =
   | "jetson_nx"
   | "jetson_agx";
 
-/** Camera tier IDs: sentinels (none, mixed, enterprise, fixed) + keys from cameraTiers */
+/** Sentinel/base IDs used when no selectable compute tier applies */
+export type ComputeBaseTierId = "none" | "server";
+
+/** IDs for concrete camera tiers */
 export type CameraTierId =
-  | "none"
-  | "mixed"
-  | "enterprise"
-  | "fixed"
   | "pi_v2"
   | "pi_v3"
   | "pi_v3_wide"
@@ -150,32 +137,33 @@ export type CameraTierId =
   | "lepton_3_5"
   | "boson_320";
 
-/** Connectivity tier IDs: sentinels + keys from connectivityTiers */
+/** Sentinel/base IDs used when no selectable camera tier applies */
+export type CameraBaseId = "none" | "mixed" | "enterprise" | "fixed";
+
+/** IDs for concrete connectivity tiers */
 export type ConnectivityTierId =
-  | "none"
   | "wifi"
   | "ethernet"
   | "poe"
   | "poe_plus"
   | "lte"
-  | "lte_poe"
-  | "enterprise"
-  | "cloud"
-  | "mesh_radio";
+  | "lte_poe";
 
-/** Storage tier IDs: sentinels + keys from storageTiers */
+/** Sentinel/base IDs used when no selectable connectivity tier applies */
+export type ConnectivityBaseId = "none" | "enterprise" | "cloud" | "mesh_radio";
+
+/** IDs for concrete storage tiers */
 export type StorageTierId =
-  | "none"
   | "sd_32"
   | "sd_64_he"
   | "sd_128_he"
   | "nvme_128"
   | "nvme_256"
   | "nvme_512"
-  | "nvme_1tb"
-  | "fixed"
-  | "enterprise"
-  | "cloud";
+  | "nvme_1tb";
+
+/** Sentinel/base IDs used when no selectable storage tier applies */
+export type StorageBaseId = "none" | "enterprise" | "cloud" | "fixed";
 
 // =============================================================================
 // TIER CONFIGURATION TYPES
@@ -227,26 +215,22 @@ export interface StorageTier {
   notes?: string;
 }
 
-/** Tier pricing delta for compute (optional newBomTotal). */
-export interface TierPriceDelta {
-  delta: number;
-  newBomTotal?: number;
-}
-
-/** Product compute configuration. Callers derive display name via productBySku[sku].name. */
+/** Product compute configuration */
 export interface ProductComputeConfig {
   sku: string;
-  baseTier: ComputeTierId;
+  productName: string;
+  baseTier: ComputeTierId | ComputeBaseTierId;
   baseComputeCost: number;
   availableTiers: ComputeTierId[];
-  tierPricing: Partial<Record<ComputeTierId, TierPriceDelta>>;
+  tierPricing: Partial<Record<ComputeTierId, { delta: number; newBomTotal?: number }>>;
   notes?: string;
 }
 
-/** Product camera configuration. Callers derive display name via productBySku[sku].name. */
+/** Product camera configuration */
 export interface ProductCameraConfig {
   sku: string;
-  baseCameraId: CameraTierId;
+  productName: string;
+  baseCameraId: CameraTierId | CameraBaseId;
   baseCameraPrice: number;
   availableCameras: CameraTierId[];
   cameraPricing: Partial<Record<CameraTierId, { delta: number }>>;
@@ -254,20 +238,22 @@ export interface ProductCameraConfig {
   notes?: string;
 }
 
-/** Product connectivity configuration. Callers derive display name via productBySku[sku].name. */
+/** Product connectivity configuration */
 export interface ProductConnectivityConfig {
   sku: string;
-  baseConnectivityId: ConnectivityTierId;
+  productName: string;
+  baseConnectivityId: ConnectivityTierId | ConnectivityBaseId;
   baseConnectivityPrice: number;
   availableConnectivity: ConnectivityTierId[];
   connectivityPricing: Partial<Record<ConnectivityTierId, { delta: number }>>;
   notes?: string;
 }
 
-/** Product storage configuration. Callers derive display name via productBySku[sku].name. */
+/** Product storage configuration */
 export interface ProductStorageConfig {
   sku: string;
-  baseStorageId: StorageTierId;
+  productName: string;
+  baseStorageId: StorageTierId | StorageBaseId;
   baseStoragePrice: number;
   availableStorage: StorageTierId[];
   storagePricing: Partial<Record<StorageTierId, { delta: number }>>;
@@ -275,9 +261,10 @@ export interface ProductStorageConfig {
   notes?: string;
 }
 
-/** Full product configuration for pre-order. Callers derive display name via productBySku[sku].name. */
+/** Full product configuration for pre-order */
 export interface ProductConfiguration {
   sku: string;
+  productName: string;
   compute?: { tier: ComputeTier; delta: number };
   camera?: { tier: CameraTier; delta: number };
   connectivity?: { tier: ConnectivityTier; delta: number };

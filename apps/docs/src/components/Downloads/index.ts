@@ -55,6 +55,14 @@ export { week48Slides, week48Meta } from "./slidedecks/week48-slides";
 export { pitchDeckSlides, pitchDeckMeta } from "./slidedecks/pitch-deck-slides";
 export { demoPitchSlides, demoPitchMeta } from "./slidedecks/demo-pitch-slides";
 export {
+  lightningPitchSlides,
+  lightningPitchMeta,
+} from "./slidedecks/lightning-pitch-slides";
+export {
+  qaAppendixSlides,
+  qaAppendixMeta,
+} from "./slidedecks/qa-appendix-slides";
+export {
   presentationMaterialsSlides,
   presentationMaterialsMeta,
 } from "./slidedecks/presentation-materials-slides";

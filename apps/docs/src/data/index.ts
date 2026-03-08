@@ -30,7 +30,6 @@ export * from "./team";
 export * from "./roadmap";
 export * from "./competitors";
 export * from "./products";
-export * from "./phase1";
 
 // Simple value exports for MDX
 export * from "./values";

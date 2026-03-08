@@ -2,16 +2,25 @@ import React from "react";
 
 export type ROERiskLevel = "low" | "medium" | "high";
 
+// CSS custom property values for risk levels
+// These map to the design system colors defined in globals.css
+const RISK_COLORS = {
+  low: "rgb(var(--color-teal-deep, 16, 185, 129))", // Green/teal
+  medium: "rgb(var(--sensor-amber, 245, 158, 11))", // Amber
+  high: "rgb(var(--color-red, 239, 68, 68))", // Red
+  default: "rgb(var(--color-gray-500, 100, 116, 139))", // Gray
+} as const;
+
 const getRiskColor = (level: ROERiskLevel): string => {
   switch (level) {
     case "low":
-      return "#10b981"; // Green
+      return RISK_COLORS.low;
     case "medium":
-      return "#f59e0b"; // Amber
+      return RISK_COLORS.medium;
     case "high":
-      return "#ef4444"; // Red
+      return RISK_COLORS.high;
     default:
-      return "#6b7280"; // Gray
+      return RISK_COLORS.default;
   }
 };
 

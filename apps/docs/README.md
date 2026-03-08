@@ -17,10 +17,6 @@ The documentation is organized into the following sections:
 - **Resources** - Downloads, guides, troubleshooting, and reference materials
 - **Playbooks** - Strategic roadmaps and execution guides
 
-## Documentation Staging
-
-A **temporary staging area** for refining the new catalog structure lives in `docs-staging/`. The live site uses `docs/` only; edit and add content in `docs-staging/` until you are ready to promote it. See `docs-staging/README.md` for structure and conventions.
-
 ## Features
 
 - **Docusaurus 3.9** with MDX support

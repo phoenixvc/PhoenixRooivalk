@@ -20,6 +20,9 @@ prerequisites:
 **Date**: 2025-11-27 **Status**: Accepted (Centralized Template System with
 Versioning)
 
+_This ADR follows the canonical template described in
+`./adr-0000-template-and-guide.md`._
+
 ---
 
 ## Executive Summary
@@ -511,8 +514,10 @@ describe("Prompt Templates", () => {
 
 ### Technical Debt
 
-- Legacy `PROMPTS` object maintained for backwards compatibility
-- TODO: Remove legacy system after full migration
+- ~~Legacy `PROMPTS` object maintained for backwards compatibility~~ (removed)
+- Some Azure Functions still use inline prompt definitions instead of the
+  centralized template system in `src/prompts/`. These should be migrated to use
+  `buildUserPrompt()` and the registered templates.
 
 ---
 

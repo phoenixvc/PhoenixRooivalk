@@ -22,7 +22,7 @@
 
 .stat:hover {
   border-color: rgba(var(--sim-accent), 0.5);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(var(--tactical-black), 0.2);
 }
 
 .label {

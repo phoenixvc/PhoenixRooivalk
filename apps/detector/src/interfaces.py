@@ -433,6 +433,15 @@ class DroneScorer(ABC):
 # ============================================================================
 
 
+# Re-export ActuatorTransport from canonical module for consistency with
+# other swappable component ABCs in this file.
+# Import from turret_transport for the full API (ControlOutput, TransportStatus, etc.).
+#
+# Dependency direction: interfaces.py -> turret_transport.py (never reverse).
+# turret_transport.py must NOT import from interfaces.py to avoid circular imports.
+from turret_transport import ActuatorTransport  # noqa: F401, E402
+
+
 @dataclass
 class PipelineConfig:
     """Configuration for the detection pipeline."""

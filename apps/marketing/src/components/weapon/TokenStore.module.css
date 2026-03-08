@@ -2,7 +2,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(var(--tactical-black), 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(var(--tactical-black), 0.3);
 }
 
 .header {
@@ -153,7 +153,7 @@
 .purchaseButton {
   padding: 8px 16px;
   background: rgb(var(--sim-accent));
-  color: #0b0b0b;
+  color: rgb(var(--tactical-black));
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -162,7 +162,7 @@
 }
 
 .purchaseButton:hover:not(:disabled) {
-  background: #2ed573;
+  background: rgb(var(--sim-friendly));
 }
 
 .purchaseButton:disabled {
@@ -212,7 +212,7 @@
   padding: 16px;
   background: rgb(var(--sim-panel));
   border-radius: 8px;
-  border-left: 4px solid #ffa502;
+  border-left: 4px solid rgb(var(--sim-gold));
 }
 
 .help h4 {

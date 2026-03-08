@@ -7,6 +7,37 @@ import os
 import pytest
 
 
+def has_hardware(device: str = "camera") -> bool:
+    """Check if specific hardware is available for testing."""
+    if device == "camera":
+        try:
+            import cv2
+            cap = cv2.VideoCapture(0)
+            available = cap.isOpened()
+            cap.release()
+            return available
+        except Exception:
+            return False
+    if device == "gpio":
+        try:
+            import RPi.GPIO  # noqa: F401
+            return True
+        except Exception:
+            return False
+    return False
+
+
+skip_no_camera = pytest.mark.skipif(
+    not has_hardware("camera"),
+    reason="No camera hardware available",
+)
+
+skip_no_gpio = pytest.mark.skipif(
+    not has_hardware("gpio"),
+    reason="No GPIO hardware available (not a Raspberry Pi)",
+)
+
+
 @pytest.fixture(scope="session", autouse=True)
 def clear_display_env():
     """
