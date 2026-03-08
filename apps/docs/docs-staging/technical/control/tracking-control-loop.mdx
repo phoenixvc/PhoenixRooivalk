@@ -1,0 +1,34 @@
+---
+title: Tracking Control Loop
+sidebar_label: Tracking Control Loop
+---
+
+# Tracking Control Loop
+
+The tracking control loop converts target state (e.g. from AI tracking or operator cue) into actuator setpoints with rate and position limits. It runs in the control path and feeds the [authority and safety controller](./authority-and-safety-controller.mdx), not the actuators directly.
+
+## Inputs and Outputs
+
+- **Input** — Target state (e.g. azimuth/elevation or pan/tilt angles) in a defined coordinate frame; optional velocity or acceleration targets.
+- **Output** — Setpoints (and optionally rate/effort limits) passed to the authority/safety layer, which then issues commands over the [transport abstraction](../architecture/interfaces/transport-abstraction.mdx).
+
+## Loop Structure
+
+- **Feedback** — Telemetry (actual position, rate, status) from the actuator or servo interface; used for closed-loop control.
+- **Controller** — Algorithm (e.g. PID, cascade, or state-space) that computes setpoints from error; tuned for the mechanical plant and [servo calibration](../hardware/servo-selection-and-calibration.mdx).
+- **Limits** — Clamp setpoints and rates to safe bounds; the authority layer applies additional enforcement.
+
+## Timing and Latency
+
+- Loop rate and latency requirements should be documented (e.g. 50–100 Hz for smooth tracking); ensure compute tier and transport can meet them (see [Prototype compute tiers](../hardware/prototype-compute-tiers.mdx)).
+
+## Safety
+
+- The loop never bypasses the authority/safety controller; it only produces setpoints. All actual actuation commands are gated and logged by the safety layer.
+
+## Related
+
+- [Authority and safety controller](./authority-and-safety-controller.mdx)
+- [Transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+- [Tracking–actuator bridge](../architecture/diagrams/tracking-actuator-bridge.mdx)
+- [Servo selection and calibration](../hardware/servo-selection-and-calibration.mdx)

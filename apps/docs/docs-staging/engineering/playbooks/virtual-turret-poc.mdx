@@ -1,0 +1,38 @@
+---
+title: Virtual Turret POC
+sidebar_label: Virtual Turret POC
+---
+
+# Virtual Turret POC (Hardware-Free Tracking PoC)
+
+This playbook describes how to run a **hardware-free proof-of-concept** for the tracking and control pipeline: simulated or prerecorded targets drive the tracking control loop and authority/safety logic without physical servos or turret hardware.
+
+## Purpose
+
+- Validate tracking → control → authority data flow and logic before hardware integration.
+- Test tuning (e.g. PID gains, limits) in simulation to reduce risk and iteration time on hardware.
+- Enable demos and development when hardware is unavailable.
+
+## Scope
+
+- **In scope**: Tracking algorithm consuming synthetic or recorded targets; control loop producing setpoints; authority/safety layer accepting or rejecting; logging and metrics.
+- **Out of scope**: Physical actuation; real servo calibration or field testing (see [Prototype test procedures](../../operations/runbooks/prototype-test-procedures.mdx) and field test runbooks).
+
+## Setup
+
+1. **Target source** — Use synthetic tracks (e.g. scripted trajectories), recorded playback, or a simulated sensor feed. Ensure coordinate frame and units match what the [tracking control loop](../../technical/control/tracking-control-loop.mdx) expects.
+2. **Control and authority** — Run the same control loop and [authority and safety controller](../../technical/control/authority-and-safety-controller.mdx) as in the real system; replace only the actuator interface with a stub or logger.
+3. **Validation** — Check that setpoints stay within limits, safe state triggers on timeout, and logs/telemetry are consistent with design.
+
+## Success Criteria
+
+- Control loop and authority logic run without hardware; setpoints and safe-state transitions are correct for given inputs.
+- Document any differences from hardware behavior (e.g. timing, latency) so that field testing can confirm.
+
+## Related
+
+- [Tracking control loop](../../technical/control/tracking-control-loop.mdx)
+- [Authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+- [Tracking–actuator bridge](../../technical/architecture/diagrams/tracking-actuator-bridge.mdx)
+- [Prototype test procedures](../../operations/runbooks/prototype-test-procedures.mdx)
+- [Component qualification checklist](./component-qualification-checklist.mdx)

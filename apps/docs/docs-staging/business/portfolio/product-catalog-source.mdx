@@ -1,0 +1,70 @@
+---
+title: Product Catalog Data Source
+sidebar_label: Product catalog source
+---
+
+# Product Catalog Data Source
+
+The **single source of truth** for PhoenixRooivalk product definitions is the TypeScript catalog under the docs app. This doc describes where it lives, what it contains, and how to use or export it.
+
+## Location
+
+Repository path: `apps/docs/src/data/products/`
+
+| File | Purpose |
+|------|---------|
+| index.ts | Barrel export; import from @site/src/data/products |
+| catalog.ts | All 19 product definitions, collections, productBySku, helpers |
+| types.ts | Product, BOMItem, ProductSpecs, tier types |
+| platforms.ts | Compute platforms, AI accelerators, FPS benchmarks |
+| storage-options.ts | Local and network storage options |
+| tiers.ts | Compute, camera, connectivity, storage tiers and product configs |
+
+## What the catalog contains
+
+- **19 products** across **6 product lines** (see [Product list summary](./product-list.mdx)).
+- Each product has: sku, name, line, category, targetMarket, priceRange, priceMin, priceMax, specs, bom, bomTotal, optionalAccessories, confidence, lastUpdated.
+- Collections: allProducts, skyWatchProducts, netSentryProducts, skySnareProducts, netSnareProducts, aeroNetProducts, rkvProducts, and productBySku (SKU to product).
+- Helpers: getProductBySku(sku), getProductsByLine(line), getProductsByCategory(category), getProductsByPriceRange(min, max), getTotalWithAccessories(product), formatProductPriceRange(product).
+- Summary data: productCatalogSummary, meshSystemPricing, enterprisePricing.
+
+## Using the catalog in code
+
+Import from the barrel:
+
+```ts
+import {
+  allProducts,
+  getProductBySku,
+  getProductsByLine,
+  productCatalogSummary,
+} from "@site/src/data/products";
+```
+
+Examples: use `allProducts` for the full list; `getProductBySku("SW-STD-001")` for one product; `getProductsByLine("SkyWatch")` for a line.
+
+## Exporting a list (JSON / CSV)
+
+To get a consolidated product list as JSON or CSV, run from the **apps/docs** directory:
+
+```bash
+cd apps/docs && npx tsx scripts/export-products.ts
+```
+
+This writes `apps/docs/exports/products.json` (full product objects) and `apps/docs/exports/products.csv` (summary columns: sku, name, line, category, targetMarket, priceRange, priceMin, priceMax, bomTotal, confidence, lastUpdated, specs). The script imports allProducts from the catalog; no scraping. See `apps/docs/scripts/export-products.ts` for the exact schema.
+
+## Keeping the list in sync
+
+- Edit products in `apps/docs/src/data/products/catalog.ts` (and types in types.ts if needed).
+- Re-run the export script after catalog changes to refresh the export files.
+- Update the [Product list summary](./product-list.mdx) when new lines or products are added.
+
+## Phase-1 demo products
+
+Phase-1 is a subset of demoable products with separate build/BOM guidance: SkyWatch Nano, SkyWatch Standard, SkyWatch Mesh Demo, NetSnare Lite turret variant **NSN-LITE-001-TURRET**, SkySnare handheld, **Response Relay (Demo)**. When implemented, Phase-1 data may live under `apps/docs/src/data/phase1/` (e.g. `phase1-products.ts`, `bom/`) with build guides in docs under `engineering/phase1/`. For build options and BOMs see [Phase-1 overview](../../engineering/phase1/index.mdx).
+
+## Related
+
+- [Product list summary](./product-list.mdx)
+- [PRD index](../prd/index.mdx)
+- [Phase-1 overview](../../engineering/phase1/index.mdx)

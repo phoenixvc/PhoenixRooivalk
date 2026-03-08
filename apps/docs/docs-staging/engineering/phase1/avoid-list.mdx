@@ -1,0 +1,19 @@
+---
+title: Phase-1 Avoid List
+sidebar_label: Avoid list
+---
+
+# Phase-1 Avoid List
+
+Do **not** use the following for Phase 1 builds as specified:
+
+| Avoid | Use instead |
+|-------|-------------|
+| L298N for servos | PCA9685 |
+| OV7670 on ESP32 | OV2640 (e.g. ESP32-CAM) |
+| 360° continuous-rotation servos for pan/tilt | 180° positional servos (e.g. MG90S, MG996R) |
+| L293D for servos | PCA9685 |
+| Brushless motors, ESCs, flight controller, XT60 PDB for turret | Servo-based pan/tilt only |
+| Duplicate IMU families; TCA9548A until needed | Per product BOM |
+
+This list protects future purchasers from wrong-for-Phase-1 parts.

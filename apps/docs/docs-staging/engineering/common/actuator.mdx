@@ -1,0 +1,12 @@
+---
+title: Actuator
+sidebar_label: Actuator
+---
+
+# Phase-1 Actuator
+
+- **Controller:** ESP32 as actuator controller. Receives setpoints (e.g. MQTT/HTTP), drives servos or relay.
+- **Servo driver:** Use **PCA9685 (16-channel I2C)** for servos. **Do not use L298N for servos** (wrong driver type; see [Avoid list](../phase1/avoid-list.mdx)).
+- **Pan/tilt servos:** **180° positional servos only** — not 360° continuous rotation. **MG90S metal gear** (not SG90 plastic) for turret; **MG996R** for heavier head. Two servos typical for pan/tilt.
+- **Servo power rail:** Dedicated 5V/6V from buck; common GND with ESP32; bulk capacitor on servo rail (see [Power](./power.mdx)).
+- **Safety:** Arm flag, rate limits, timeout to neutral. Document in product how-to (e.g. turret, Response Relay).

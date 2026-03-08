@@ -1,0 +1,47 @@
+---
+title: Transport Abstraction
+sidebar_label: Transport Abstraction
+---
+
+# Transport Abstraction
+
+This document defines the transport abstraction for control and telemetry between detection, decision, and actuation components. The abstraction allows swapping physical layers (e.g. USB, serial, Wi-Fi) while keeping a consistent command/telemetry contract and safety semantics.
+
+## Purpose
+
+- **Swappable comms** — Same logical protocol over USB, serial, or Wi-Fi today; other transports (e.g. CAN, Ethernet) can be added later.
+- **Consistent semantics** — Control commands and telemetry formats are defined once; transport only carries bytes and handles connection lifecycle.
+- **Safety** — Timeouts, heartbeat, and authority checks are part of the contract so that actuation never proceeds without valid, authorized commands.
+
+## Logical Messages
+
+### ControlCommand
+
+- Intended effect (e.g. pan/tilt setpoint, enable/disable actuation) and optional limits.
+- Must include or be bound to an authority/session so that only the safety controller can issue actuation commands.
+- Serialization format (e.g. binary or JSON) and versioning should be documented in an appendix or separate spec.
+
+### Telemetry
+
+- State reported from sensors and actuators: positions, status flags, faults.
+- Used for tracking feedback, monitoring, and audit logging.
+- Rate and latency requirements should be stated (e.g. minimum rate for closed-loop tracking).
+
+## Transport Semantics
+
+- **Connection** — How connection is established and detected (e.g. plug-in, pairing); reconnection and backoff.
+- **Framing** — How messages are framed on the wire (length-prefix, delimiters, or protocol-specific).
+- **Ordering** — Whether ordering is guaranteed; if not, how out-of-order or stale commands are rejected.
+
+## Safety Semantics
+
+- **Timeout** — If no valid command or heartbeat within T, actuation must transition to safe state (e.g. hold, disable).
+- **Authority** — Only the designated safety/authority controller can issue actuation commands; see [Authority and safety controller](../../control/authority-and-safety-controller.mdx).
+- **Audit** — Commands and critical state changes should be logged for compliance and debugging.
+
+## Related
+
+- [Authority and safety controller](../../control/authority-and-safety-controller.mdx)
+- [Tracking control loop](../../control/tracking-control-loop.mdx)
+- [Board bring-up and flashing](../../hardware/board-bringup-and-flashing.mdx)
+- [Prototype compute tiers](../../hardware/prototype-compute-tiers.mdx)
