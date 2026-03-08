@@ -4,13 +4,15 @@ This directory contains the CI/CD workflows for the Phoenix Rooivalk project.
 
 ## Prerequisites
 
-⚠️ **Important**: Azure deployment workflows require Azure infrastructure to be deployed **first** before they can run successfully.
+⚠️ **Important**: Azure deployment workflows require Azure infrastructure to be
+deployed **first** before they can run successfully.
 
 ### First-Time Setup
 
 If you see workflows being **skipped** with a notice about missing secrets:
 
-1. This is **expected behavior** - the workflows will automatically skip until infrastructure is deployed
+1. This is **expected behavior** - the workflows will automatically skip until
+   infrastructure is deployed
 2. Follow the setup guide: `.github/DEPLOYMENT_SEQUENCE.md`
 3. Quick start:
    ```bash
@@ -20,13 +22,15 @@ If you see workflows being **skipped** with a notice about missing secrets:
 4. After infrastructure is deployed, configure the deployment secrets in GitHub
 5. Workflows will then run automatically on the next push/PR
 
-The workflows will show as **skipped** (not failed) when secrets are missing, which is the correct behavior.
+The workflows will show as **skipped** (not failed) when secrets are missing,
+which is the correct behavior.
 
 ## Deployment Environments
 
 ### Environment Naming
 
-The Azure Static Web Apps deployment workflows use a two-tier environment naming system:
+The Azure Static Web Apps deployment workflows use a two-tier environment naming
+system:
 
 1. **ENV_NAME** - Internal environment variable used in GitHub Actions:
    - `production` - for pushes to the `main` branch
@@ -38,12 +42,14 @@ The Azure Static Web Apps deployment workflows use a two-tier environment naming
 
 ### Why "preview" for Pull Requests?
 
-When you see **"Deploying to environment: preview (ENV_NAME: preview)"** in workflow logs for a pull request, this is **expected and correct behavior**:
+When you see **"Deploying to environment: preview (ENV_NAME: preview)"** in
+workflow logs for a pull request, this is **expected and correct behavior**:
 
 - ✅ **Pull Requests** → `ENV_NAME=preview` → `SWA_ENV=preview`
 - ✅ **Push to main** → `ENV_NAME=production` → `SWA_ENV=prod`
 
-Azure Static Web Apps automatically creates isolated preview environments for each PR, which are automatically deleted when the PR is closed.
+Azure Static Web Apps automatically creates isolated preview environments for
+each PR, which are automatically deleted when the PR is closed.
 
 ## Deployment Workflows
 
@@ -54,7 +60,8 @@ Deploys the Next.js marketing website to Azure Static Web Apps.
 - **Triggers**: Push to `main`, Pull Requests, Manual workflow dispatch
 - **Build Output**: `apps/marketing/out`
 - **Deployment Timeout**: 15 minutes
-- **Behavior**: Skips automatically if `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN` secret is not configured
+- **Behavior**: Skips automatically if
+  `AZURE_STATIC_WEB_APPS_MARKETING_API_TOKEN` secret is not configured
 
 ### Documentation Site (`deploy-docs-azure.yml`)
 
@@ -63,12 +70,14 @@ Deploys the Docusaurus documentation site to Azure Static Web Apps.
 - **Triggers**: Push to `main`, Pull Requests, Manual workflow dispatch
 - **Build Output**: `apps/docs/build`
 - **Deployment Timeout**: 15 minutes
-- **Behavior**: Skips automatically if `AZURE_STATIC_WEB_APPS_API_TOKEN` secret is not configured
+- **Behavior**: Skips automatically if `AZURE_STATIC_WEB_APPS_API_TOKEN` secret
+  is not configured
 - **Additional**: Deploys Azure Functions on main branch pushes (if configured)
 
 ## Deployment Timeout
 
-Both workflows have a **15-minute timeout** on the deployment step to prevent indefinite hanging. If your deployment exceeds this time:
+Both workflows have a **15-minute timeout** on the deployment step to prevent
+indefinite hanging. If your deployment exceeds this time:
 
 1. Check Azure Portal for deployment status
 2. Review workflow logs for errors
@@ -78,7 +87,8 @@ Both workflows have a **15-minute timeout** on the deployment step to prevent in
 
 ### Deployment Taking Too Long?
 
-The deployment step previously used `--verbose` flag which caused buffering issues and could hang indefinitely. This has been fixed:
+The deployment step previously used `--verbose` flag which caused buffering
+issues and could hang indefinitely. This has been fixed:
 
 - ❌ **Old**: `swa deploy ... --verbose` (could hang for 1+ hours)
 - ✅ **New**: `swa deploy ...` without verbose (typical deployment: 2-5 minutes)
@@ -94,4 +104,5 @@ The deployment step previously used `--verbose` flag which caused buffering issu
 - [Azure Setup Guide](../AZURE_SETUP.md) - Configure Azure secrets
 - [Deployment Sequence](../DEPLOYMENT_SEQUENCE.md) - Infrastructure setup order
 - [Workflow Improvements](../WORKFLOW_IMPROVEMENTS.md) - Planned enhancements
-- [Azure Troubleshooting](../AZURE_TROUBLESHOOTING.md) - Common issues and solutions
+- [Azure Troubleshooting](../AZURE_TROUBLESHOOTING.md) - Common issues and
+  solutions

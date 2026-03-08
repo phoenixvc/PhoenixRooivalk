@@ -1,12 +1,14 @@
 # Phoenix Rooivalk Scripts
 
-This directory contains utility scripts for setting up and managing the Phoenix Rooivalk infrastructure.
+This directory contains utility scripts for setting up and managing the Phoenix
+Rooivalk infrastructure.
 
 ## Azure Infrastructure Scripts
 
 ### Setup-CosmosContainers.ps1 / setup-cosmos-containers.sh
 
-Automated scripts to create all required Cosmos DB containers for the Azure Functions application.
+Automated scripts to create all required Cosmos DB containers for the Azure
+Functions application.
 
 **When to use:**
 
@@ -64,7 +66,8 @@ Automated scripts to create all required Cosmos DB containers for the Azure Func
 
 ### Get-AzureSecrets.ps1
 
-Retrieves all Azure secrets and configuration values needed for GitHub Actions deployment.
+Retrieves all Azure secrets and configuration values needed for GitHub Actions
+deployment.
 
 **Usage:**
 
@@ -87,7 +90,8 @@ Retrieves all Azure secrets and configuration values needed for GitHub Actions d
 
 **NEW** - Comprehensive diagnostic tool for Azure Functions deployment issues.
 
-Validates Azure Functions configuration and diagnoses common problems like missing connection strings, CORS errors, and health check failures.
+Validates Azure Functions configuration and diagnoses common problems like
+missing connection strings, CORS errors, and health check failures.
 
 **Features:**
 
@@ -151,11 +155,13 @@ export AZURE_RESOURCE_GROUP="dev-euw-rg-rooivalk"
 
 **NEW** - Pre-deployment configuration validator for CI/CD pipelines.
 
-Validates that all required secrets and variables are configured before deploying to Azure.
+Validates that all required secrets and variables are configured before
+deploying to Azure.
 
 **Features:**
 
-- ✅ Validates required GitHub secrets (AZURE_CREDENTIALS, COSMOS_DB_CONNECTION_STRING, etc.)
+- ✅ Validates required GitHub secrets (AZURE_CREDENTIALS,
+  COSMOS_DB_CONNECTION_STRING, etc.)
 - ✅ Checks optional settings with warnings
 - ✅ Verifies staticwebapp.config.json headers
 - ✅ Ensures COOP header is absent (OAuth fix)
@@ -234,7 +240,8 @@ Validation Summary
 
 1. **Use automation scripts** - Reduces human error and ensures consistency
 2. **Idempotent operations** - Scripts can be run multiple times safely
-3. **Verify before destructive operations** - Scripts check for existing resources
+3. **Verify before destructive operations** - Scripts check for existing
+   resources
 4. **Use descriptive names** - Follow Azure naming conventions
 5. **Document custom configurations** - Add comments for non-standard setups
 
@@ -305,6 +312,7 @@ When adding new scripts:
 
 For issues or questions:
 
-1. Check `apps/docs/azure-functions/INFRASTRUCTURE.md` for detailed setup instructions
+1. Check `apps/docs/azure-functions/INFRASTRUCTURE.md` for detailed setup
+   instructions
 2. Review the Azure Functions documentation
 3. Open a GitHub issue with the `infrastructure` label

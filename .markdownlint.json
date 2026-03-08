@@ -1,1 +1,5 @@
-config/markdownlint.json
+{
+  "MD025": false,
+  "MD051": false,
+  "MD038": false
+}

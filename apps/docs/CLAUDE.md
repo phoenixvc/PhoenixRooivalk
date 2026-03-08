@@ -103,6 +103,12 @@ See `.env.example` for full list. Key ones:
 Business, Operations, Legal & Compliance, Research, Resources. Most collapsed by
 default. Progress reports use auto-generated sidebars.
 
+## Documentation backlog
+
+Hardware phase and Hugging Face/MCP documentation work is tracked in GitHub
+issues
+[#674–#685](https://github.com/phoenixvc/PhoenixRooivalk/issues?q=is%3Aissue+674+675+676+677+678+679+680+681+682+683+684+685).
+
 ## Testing
 
 - Jest with jsdom, ts-jest, identity-obj-proxy for CSS modules

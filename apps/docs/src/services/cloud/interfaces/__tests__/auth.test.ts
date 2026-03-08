@@ -59,7 +59,10 @@ describe("checkIsAdmin", () => {
 
   it("should handle email with multiple @ symbols gracefully", () => {
     // split("@")[1] will take the part after first @
-    const user = { uid: "123", email: "admin@phoenixrooivalk.com@extra.com" } as CloudUser;
+    const user = {
+      uid: "123",
+      email: "admin@phoenixrooivalk.com@extra.com",
+    } as CloudUser;
     // Current implementation: user.email.split("@")[1] -> "phoenixrooivalk.com"
     // Then it checks if "phoenixrooivalk.com" is in adminDomains.
     expect(checkIsAdmin(user)).toBe(true);
