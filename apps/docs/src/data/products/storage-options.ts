@@ -142,7 +142,9 @@ export const networkStorageOptions: StorageOption[] = [
 // =============================================================================
 
 /** Optional structured summary by storage tier ID for catalog/UI alignment */
-export const storageTierSummary: Partial<Record<StorageTierId, { label: string; typicalPrice?: string }>> = {
+export const storageTierSummary: Partial<
+  Record<StorageTierId, { label: string; typicalPrice?: string }>
+> = {
   sd_32: { label: "32GB microSD", typicalPrice: "$8" },
   sd_64_he: { label: "64GB High Endurance microSD", typicalPrice: "$15" },
   sd_128_he: { label: "128GB High Endurance microSD", typicalPrice: "$25" },

@@ -26,14 +26,20 @@ import type {
 
 export type BomLineKey = string;
 
-export function bomLineKey(item: Pick<BOMItem, "item" | "specification">): BomLineKey {
+export function bomLineKey(
+  item: Pick<BOMItem, "item" | "specification">,
+): BomLineKey {
   return `${item.item} :: ${item.specification}`.toLowerCase();
 }
 
 export type BomOp =
   | { type: "add"; line: BOMItem }
   | { type: "remove"; match: (line: BOMItem) => boolean }
-  | { type: "replace"; match: (line: BOMItem) => boolean; with: BOMItem | ((old: BOMItem) => BOMItem) };
+  | {
+      type: "replace";
+      match: (line: BOMItem) => boolean;
+      with: BOMItem | ((old: BOMItem) => BOMItem);
+    };
 
 export interface BomPatch {
   id: string;
@@ -48,10 +54,16 @@ export interface BomBuildResult {
 }
 
 export function sumBom(bom: BOMItem[]): number {
-  return bom.reduce((sum, line) => sum + (Number.isFinite(line.totalCost) ? line.totalCost : 0), 0);
+  return bom.reduce(
+    (sum, line) => sum + (Number.isFinite(line.totalCost) ? line.totalCost : 0),
+    0,
+  );
 }
 
-export function applyBomPatches(baseBom: BOMItem[], patches: BomPatch[]): BOMItem[] {
+export function applyBomPatches(
+  baseBom: BOMItem[],
+  patches: BomPatch[],
+): BOMItem[] {
   let bom = [...baseBom];
 
   for (const patch of patches) {
@@ -84,7 +96,10 @@ function makeDeltaLine(label: string, delta: number): BOMItem {
   };
 }
 
-function reconcileToTarget(bom: BOMItem[], targetTotal: number): BomBuildResult {
+function reconcileToTarget(
+  bom: BOMItem[],
+  targetTotal: number,
+): BomBuildResult {
   const current = sumBom(bom);
   const diff = Number(targetTotal) - current;
   if (!Number.isFinite(targetTotal) || Math.abs(diff) < 0.01) {
@@ -106,7 +121,9 @@ function reconcileToTarget(bom: BOMItem[], targetTotal: number): BomBuildResult 
 
 function computeSelectedDelta<K extends string>(
   selectedId: K | undefined,
-  pricing: Partial<Record<K, { delta: number; newBomTotal?: number }>> | undefined,
+  pricing:
+    | Partial<Record<K, { delta: number; newBomTotal?: number }>>
+    | undefined,
 ): { delta: number; newBomTotal?: number } | null {
   if (!selectedId || !pricing) return null;
   const entry = pricing[selectedId];
@@ -166,7 +183,10 @@ export function buildConfiguredBom(args: {
 
   // Compute structural swap (heuristic)
   if (computeTier && computeTierId && computeConfig) {
-    const computePricing = computeSelectedDelta(computeTierId, computeConfig.tierPricing);
+    const computePricing = computeSelectedDelta(
+      computeTierId,
+      computeConfig.tierPricing,
+    );
     patches.push({
       id: `compute:${computeTierId}`,
       ops: [
@@ -188,7 +208,14 @@ export function buildConfiguredBom(args: {
             supplier: "Various",
           },
         },
-        ...(computePricing ? [{ type: "add" as const, line: makeDeltaLine("Compute tier delta", computePricing.delta) }] : []),
+        ...(computePricing
+          ? [
+              {
+                type: "add" as const,
+                line: makeDeltaLine("Compute tier delta", computePricing.delta),
+              },
+            ]
+          : []),
       ],
     });
   }
@@ -217,7 +244,14 @@ export function buildConfiguredBom(args: {
             supplier: "Various",
           },
         },
-        ...(cameraPricing ? [{ type: "add" as const, line: makeDeltaLine("Camera tier delta", cameraPricing.delta) }] : []),
+        ...(cameraPricing
+          ? [
+              {
+                type: "add" as const,
+                line: makeDeltaLine("Camera tier delta", cameraPricing.delta),
+              },
+            ]
+          : []),
       ],
     });
   }
@@ -228,7 +262,12 @@ export function buildConfiguredBom(args: {
     if (entry) {
       patches.push({
         id: `connectivity:${connectivityTierId}`,
-        ops: [{ type: "add", line: makeDeltaLine("Connectivity tier delta", entry.delta) }],
+        ops: [
+          {
+            type: "add",
+            line: makeDeltaLine("Connectivity tier delta", entry.delta),
+          },
+        ],
       });
     }
   }
@@ -239,7 +278,12 @@ export function buildConfiguredBom(args: {
     if (entry) {
       patches.push({
         id: `storage:${storageTierId}`,
-        ops: [{ type: "add", line: makeDeltaLine("Storage tier delta", entry.delta) }],
+        ops: [
+          {
+            type: "add",
+            line: makeDeltaLine("Storage tier delta", entry.delta),
+          },
+        ],
       });
     }
   }
@@ -248,11 +292,13 @@ export function buildConfiguredBom(args: {
   const total = sumBom(bom);
 
   // Legacy: reconcile to compute newBomTotal when present for selected compute tier.
-  const computePricing = computeConfig && computeTierId ? computeSelectedDelta(computeTierId, computeConfig.tierPricing) : null;
+  const computePricing =
+    computeConfig && computeTierId
+      ? computeSelectedDelta(computeTierId, computeConfig.tierPricing)
+      : null;
   if (computePricing?.newBomTotal != null) {
     return reconcileToTarget(bom, computePricing.newBomTotal);
   }
 
   return { bom, bomTotal: total, reconciled: false };
 }
-

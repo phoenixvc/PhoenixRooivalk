@@ -2513,11 +2513,15 @@ export function validateCatalogInvariants(): CatalogValidationResult {
   for (const product of allProducts) {
     const bySku = productBySku[product.sku];
     if (!bySku || bySku !== product) {
-      errors.push(`Product ${product.sku} missing or inconsistent in productBySku`);
+      errors.push(
+        `Product ${product.sku} missing or inconsistent in productBySku`,
+      );
     }
     const bomSum = product.bom.reduce((s, i) => s + i.totalCost, 0);
     if (Math.abs(product.bomTotal - bomSum) > 0.01) {
-      errors.push(`Product ${product.sku}: bomTotal ${product.bomTotal} does not match sum(bom) ${bomSum.toFixed(2)}`);
+      errors.push(
+        `Product ${product.sku}: bomTotal ${product.bomTotal} does not match sum(bom) ${bomSum.toFixed(2)}`,
+      );
     }
   }
   const skuKeys = new Set(Object.keys(productBySku));
@@ -2525,7 +2529,9 @@ export function validateCatalogInvariants(): CatalogValidationResult {
     skuKeys.delete(p.sku);
   }
   if (skuKeys.size > 0) {
-    errors.push(`productBySku has extra SKUs not in allProducts: ${[...skuKeys].join(", ")}`);
+    errors.push(
+      `productBySku has extra SKUs not in allProducts: ${[...skuKeys].join(", ")}`,
+    );
   }
   return { valid: errors.length === 0, errors };
 }
@@ -2584,7 +2590,10 @@ export function getProductListSummary(): {
   };
   const lastUpdated =
     allProducts.length > 0
-      ? allProducts.reduce((max, p) => (p.lastUpdated > max ? p.lastUpdated : max), allProducts[0].lastUpdated)
+      ? allProducts.reduce(
+          (max, p) => (p.lastUpdated > max ? p.lastUpdated : max),
+          allProducts[0].lastUpdated,
+        )
       : "";
   return {
     totalProducts: allProducts.length,
@@ -2610,7 +2619,10 @@ export const productCatalogSummary = {
   bomRangeMax: Math.max(...allProducts.map((p) => p.bomTotal)),
   lastUpdated:
     allProducts.length > 0
-      ? allProducts.reduce((max, p) => (p.lastUpdated > max ? p.lastUpdated : max), allProducts[0].lastUpdated)
+      ? allProducts.reduce(
+          (max, p) => (p.lastUpdated > max ? p.lastUpdated : max),
+          allProducts[0].lastUpdated,
+        )
       : "",
 };
 

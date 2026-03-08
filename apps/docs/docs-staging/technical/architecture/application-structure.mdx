@@ -47,14 +47,14 @@ So:
 
 Ways to move from the current layout toward the recommended one:
 
-- **Vision / tracking:** 
+- **Vision / tracking:**
     Option A — keep detector as one app but document logical separation (vision vs tracking) inside it.
-    Option B — split into `apps/vision` and `apps/tracking` when boundaries are stable. - i choose B
-- **Supervisor:** 
+    **Option B (chosen)** — split into `apps/vision` and `apps/tracking` when boundaries are stable.
+- **Supervisor:**
     Option A — designate one of `api` or `keeper` as the authority/safety host and document it.
-    Option B — add `apps/supervisor` and migrate logic from api/keeper over time. - I choose B
+    **Option B (chosen)** — add `apps/supervisor` and migrate logic from api/keeper over time.
 - **Pilot-ui:**
-    Option A — treat threat-simulator-desktop as the pilot/simulation UI. - I choose option A
+    **Option A (chosen)** — treat threat-simulator-desktop as the pilot/simulation UI.
     Option B — add `apps/pilot-ui` for real turret control when needed.
 - **Contracts:** 
     Extend `packages/types` (or add `packages/contracts`) with detection, tracking, intent, and control DTOs.

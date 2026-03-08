@@ -8,7 +8,11 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { allProducts, generateProductConfiguration } from "../src/data/products/index";
+
+import {
+  allProducts,
+  generateProductConfiguration,
+} from "../src/data/products/index";
 
 const outDir = path.resolve(process.cwd(), "exports");
 fs.mkdirSync(outDir, { recursive: true });
@@ -92,7 +96,9 @@ if (shouldWriteSample && sampleConfig) {
   );
 }
 
-console.log(`Wrote:\n  ${path.join(outDir, "products.json")}\n  ${path.join(outDir, "products.csv")}`);
+console.log(
+  `Wrote:\n  ${path.join(outDir, "products.json")}\n  ${path.join(outDir, "products.csv")}`,
+);
 if (shouldWriteSample && sampleConfig) {
   console.log(`  ${path.join(outDir, "sample-configuration.json")}`);
 }

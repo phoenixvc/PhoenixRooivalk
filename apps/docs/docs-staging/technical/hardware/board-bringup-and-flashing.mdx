@@ -38,9 +38,9 @@ This document covers procedures for initial board bring-up and firmware flashing
 ### ESP32 (DevKitC, WROOM, WROVER, S3, ESP32-CAM)
 
 - **Methods:** USB serial (UART), USB DFU (S2/S3). Tools: `esptool.py`, `idf.py flash`, or Arduino/PlatformIO.
-- **Boot mode:** Hold **BOOT** (or **IO0**) low while asserting **EN** (reset); release **BOOT** after release of **EN** to enter bootloader. Some boards auto-entrain via USB.
-- **Flash commands (example):** `esptool.py --port COM3 write_flash 0x0 firmware.bin`. Replace `COM3` with your port; use `esptool.py flash_id` to verify connection.
-- **Recovery:** Hold **BOOT**, tap **EN**; LED may show bootloader. Run `esptool.py --port COM3 write_flash 0x0 firmware.bin`. If USB not recognized, check driver (CP210x/CH340) and try another cable (data-capable).
+- **Boot mode:** Hold **BOOT** (or **IO0**) low while asserting **EN** (reset); release **BOOT** after release of **EN** to enter bootloader. Some boards auto-enter bootloader via USB.
+- **Flash commands (example):** `esptool.py --port /dev/ttyUSB0 write_flash 0x0 firmware.bin`. Replace `/dev/ttyUSB0` with your port (`COM3` on Windows, `/dev/tty.usbserial-*` on macOS); use `esptool.py flash_id` to verify connection.
+- **Recovery:** Hold **BOOT**, tap **EN**; LED may show bootloader. Run `esptool.py --port /dev/ttyUSB0 write_flash 0x0 firmware.bin`. If USB not recognized, check driver (CP210x/CH340) and try another cable (data-capable).
 
 ### Jetson (Orin Nano/NX, AGX Orin)
 

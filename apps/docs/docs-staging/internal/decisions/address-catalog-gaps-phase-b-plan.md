@@ -67,4 +67,4 @@ Add a short subsection **"Platform and accelerator IDs"**:
 3. engineering/common/compute.mdx — add platform IDs and price note.
 4. Review other staging docs for references to catalog/BOM/platforms and align with the single source of truth (cross-links, no contradiction).
 
-**Phase C (code refactors):** Use the implementation order in [Staging alignment roadmap (Phase C)](./staging-alignment-roadmap.md)#1-product-catalog-alignment: types.ts → tiers.ts → platforms.ts → storage-options.ts → catalog.ts → index.ts. LLM prompts per file: [Catalog refactor LLM prompts](./catalog-refactor-llm-prompts.md).
+**Phase C (code refactors):** Use the implementation order in [Staging alignment roadmap (Phase C)](./staging-alignment-roadmap.md#1-product-catalog-alignment): types.ts → tiers.ts → platforms.ts → storage-options.ts → catalog.ts → index.ts. LLM prompts per file: [Catalog refactor LLM prompts](./catalog-refactor-llm-prompts.md).
