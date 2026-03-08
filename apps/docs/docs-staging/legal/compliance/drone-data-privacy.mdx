@@ -1,0 +1,307 @@
+# Drone Data Privacy & Compliance
+
+**Status**: Draft
+**Owner**: Legal/Compliance
+**Last Updated**: 2026-03-05
+
+:::caution Review Required
+This document is in DRAFT status and requires legal review before production use.
+**Review checklist**: [ ] Legal counsel review [ ] Compliance officer sign-off [ ] Export control verification
+:::
+
+---
+
+## Overview
+
+This document outlines the privacy and compliance requirements for Phoenix Rooivalk's drone surveillance data, particularly as it relates to the Data Marketplace and DePIN network participation.
+
+---
+
+## Regulatory Framework
+
+### South African Regulations
+
+| Regulation | Scope | Phoenix Rooivalk Impact |
+|------------|-------|------------------------|
+| **POPIA** | Personal information protection | Drone footage with identifiable individuals |
+| **RICA** | Communications interception | RF monitoring, signal analysis |
+| **NCACC** | Arms/defense exports | Counter-UAS technology, threat data |
+| **CAA Regulations** | Drone operations | Surveillance flight operations |
+
+### International Regulations
+
+| Regulation | Jurisdiction | Applicability |
+|------------|--------------|---------------|
+| **GDPR** | European Union | EU customers, EU citizen data |
+| **ITAR** | United States | Defense technology exports |
+| **UK GDPR** | United Kingdom | UK customers, UK citizen data |
+| **CCPA** | California, USA | California resident data |
+
+---
+
+## Data Classification
+
+### Personal Data Categories
+
+| Category | Examples | Classification | Handling |
+|----------|----------|----------------|----------|
+| **Directly Identifiable** | Faces, license plates, names | Restricted | Never sold, anonymize before storage |
+| **Indirectly Identifiable** | Locations + timestamps, movement patterns | Confidential | Aggregation required before sale |
+| **Device Identifiers** | Drone serial numbers, RF signatures | Internal | May be shared with consent |
+| **Operational Data** | Telemetry, threat events | Internal | Anonymized before marketplace |
+| **Aggregated Statistics** | Incident counts, pattern analysis | Public | Freely shareable |
+
+### Data Retention Periods
+
+| Data Type | Retention Period | Basis |
+|-----------|-----------------|-------|
+| **Raw Video** | 30 days | Operational necessity |
+| **Processed Analytics** | 1 year | Business use |
+| **Incident Records** | 7 years | Legal/regulatory |
+| **Aggregated Statistics** | Indefinite | No personal data |
+| **Evidence (blockchain-anchored)** | Indefinite | Immutable record |
+
+---
+
+## Privacy by Design
+
+### Data Minimization
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Data Processing Pipeline                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Raw Sensor Data                                             │
+│       │                                                      │
+│       ▼                                                      │
+│  ┌─────────────────┐                                        │
+│  │   Edge Device   │  ◀── Collect minimum necessary         │
+│  │   Processing    │                                        │
+│  └────────┬────────┘                                        │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌─────────────────┐                                        │
+│  │  Anonymization  │  ◀── Blur faces, redact plates         │
+│  │     Layer       │      Remove PII before transmission    │
+│  └────────┬────────┘                                        │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌─────────────────┐                                        │
+│  │   Aggregation   │  ◀── Combine records, remove           │
+│  │     Layer       │      individual identifiers            │
+│  └────────┬────────┘                                        │
+│           │                                                  │
+│           ▼                                                  │
+│  ┌─────────────────┐                                        │
+│  │   Marketplace   │  ◀── Only anonymized/aggregated        │
+│  │      Data       │      data available for sale           │
+│  └─────────────────┘                                        │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Anonymization Techniques
+
+| Technique | Application | Effectiveness |
+|-----------|-------------|---------------|
+| **Face Blurring** | Video/images | ML-based detection + blur |
+| **License Plate Redaction** | Vehicle imagery | OCR + redaction |
+| **Location Generalization** | GPS coordinates | Round to 100m grid |
+| **Temporal Rounding** | Timestamps | Round to 15-minute intervals |
+| **K-Anonymity** | Datasets | Ensure k≥5 for any attribute combination |
+| **Differential Privacy** | Statistics | Add calibrated noise |
+
+---
+
+## Consent Framework
+
+### Data Subject Rights
+
+| Right | POPIA | GDPR | Implementation |
+|-------|-------|------|----------------|
+| **Access** | ✅ | ✅ | Self-service portal, 30-day response |
+| **Rectification** | ✅ | ✅ | Support ticket, verified changes |
+| **Erasure** | ✅ | ✅ | Deletion request, 72-hour processing |
+| **Portability** | ❌ | ✅ | JSON export for EU subjects |
+| **Objection** | ✅ | ✅ | Opt-out mechanism |
+| **Automated Decisions** | ✅ | ✅ | Human review available |
+
+### Consent Collection
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Consent Categories                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Operators/Staff:                                            │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ Employment contract includes:                        │    │
+│  │ - Location tracking during operations               │    │
+│  │ - Performance monitoring                            │    │
+│  │ - Communication logging                             │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+│  Clients/Customers:                                          │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ Service agreement includes:                          │    │
+│  │ - Data processing for contracted services           │    │
+│  │ - Incident reporting                                │    │
+│  │ - Anonymized data for product improvement          │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+│  Third Parties (incidentally captured):                      │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ Legitimate interest basis:                           │    │
+│  │ - Security and safety operations                    │    │
+│  │ - Immediate anonymization                           │    │
+│  │ - No sale of identifiable data                     │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Marketplace Compliance
+
+### Data Products Compliance Matrix
+
+| Product | Contains PII | Pre-Sale Processing | Buyer Requirements |
+|---------|--------------|--------------------|--------------------|
+| **Airspace Telemetry** | No | None | Basic tier |
+| **Threat Alerts** | No | None | Basic tier |
+| **Incident Reports** | Maybe | Redaction review | Verified tier |
+| **Training Datasets** | Removed | Full anonymization | Partner tier |
+| **Raw Footage** | Yes | Not sold | N/A |
+
+### Cross-Border Transfer Rules
+
+| Destination | POPIA Requirement | GDPR Requirement | Mechanism |
+|-------------|-------------------|------------------|-----------|
+| **EU/EEA** | Adequate protection | Native | Standard processing |
+| **USA** | Contract + safeguards | SCCs | Standard Contractual Clauses |
+| **UK** | Adequate protection | Adequacy decision | Standard processing |
+| **Other** | Contract + safeguards | SCCs + supplementary measures | Case-by-case |
+
+---
+
+## Export Control Compliance
+
+### ITAR Considerations
+
+**Controlled Items**:
+- Counter-UAS engagement data
+- Threat detection algorithms
+- Defense system specifications
+
+**Exemptions**:
+- Publicly available information
+- Anonymized statistics
+- Non-technical business data
+
+### NCACC Requirements
+
+**Controlled Exports**:
+- Any data related to controlled defense articles
+- Technical data supporting military operations
+- Software for defense systems
+
+**Compliance Process**:
+1. Classification review before any export
+2. End-user verification
+3. Export permit application if required
+4. Record keeping (5+ years)
+
+---
+
+## Audit Trail Requirements
+
+### Logging Requirements
+
+| Event | Data Logged | Retention |
+|-------|-------------|-----------|
+| **Data Collection** | Source, timestamp, data type | 1 year |
+| **Processing** | Operation, purpose, operator | 1 year |
+| **Access** | Who, when, what, purpose | 2 years |
+| **Marketplace Sale** | Buyer, product, price | 7 years |
+| **Deletion** | What, when, requestor | Indefinite |
+
+### Blockchain Anchoring
+
+For evidence and audit trail integrity:
+- Hash of audit logs anchored to Solana daily
+- Tamper-evident record of data lifecycle
+- Court-admissible chain of custody
+
+---
+
+## Incident Response
+
+### Data Breach Protocol
+
+| Phase | Timeline | Actions |
+|-------|----------|---------|
+| **Detection** | T+0 | Automated alerts, manual reports |
+| **Assessment** | T+4h | Scope determination, impact analysis |
+| **Containment** | T+8h | Stop breach, preserve evidence |
+| **Notification** | T+72h (GDPR) | Regulator notification if required |
+| **Remediation** | T+1 week | Fix vulnerability, update controls |
+| **Review** | T+1 month | Post-incident analysis, process updates |
+
+### Notification Thresholds
+
+| Condition | POPIA Notification | GDPR Notification |
+|-----------|-------------------|-------------------|
+| **High risk to rights** | Information Regulator + subjects | Supervisory authority + subjects |
+| **Moderate risk** | Information Regulator | Supervisory authority |
+| **Low risk** | Internal record | Internal record |
+
+---
+
+## Compliance Checklist
+
+### Pre-Launch (Data Marketplace)
+
+- [ ] Privacy Impact Assessment completed
+- [ ] Data Protection Officer designated
+- [ ] Processing records documented
+- [ ] Cross-border transfer mechanisms in place
+- [ ] Consent mechanisms implemented
+- [ ] Anonymization pipeline validated
+- [ ] Security controls audited
+- [ ] Incident response plan tested
+
+### Ongoing Compliance
+
+- [ ] Monthly access log review
+- [ ] Quarterly anonymization audit
+- [ ] Annual privacy impact reassessment
+- [ ] Regulatory update monitoring
+- [ ] Staff privacy training (annual)
+- [ ] Data retention enforcement
+
+---
+
+## Responsible Parties
+
+| Role | Responsibility |
+|------|---------------|
+| **Data Protection Officer** | Overall compliance, regulator liaison |
+| **Legal Counsel** | Contract review, export control |
+| **Security Team** | Technical controls, incident response |
+| **Engineering** | Privacy-by-design implementation |
+| **Operations** | Daily compliance, data handling |
+
+---
+
+## Related Documents
+
+- [Data Marketplace PRD](../../business/prd/data-marketplace-prd.mdx)
+- ADR-0053: Privacy Regulations (planned)
+- ADR-0050: ITAR Compliance (planned)
+- ADR-0051: Export Control SA NCACC (planned)
+
+---
+
+*Draft document - requires legal review before finalization*
