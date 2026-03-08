@@ -27,13 +27,10 @@ jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 60
     permissions:
-      # required for all workflows
       security-events: write
-      # required to fetch internal or private CodeQL packs
       packages: read
-      # only required for workflows in private repositories
       actions: read
       contents: read
 
@@ -44,7 +41,7 @@ jobs:
           - language: javascript-typescript
             build-mode: none
           - language: rust
-            build-mode: none # Rust doesn't support autobuild mode
+            build-mode: none
 
     steps:
       - name: Checkout repository
@@ -65,7 +62,7 @@ jobs:
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/code-scanning/analyses" || true)
-            
+
           if [[ "$RESPONSE" == *"code scanning is not enabled"* ]]; then
             echo "::warning::Code scanning is not enabled for this repository."
             echo "::warning::Please enable it in repository Settings > Security > Code scanning."
@@ -84,13 +81,13 @@ jobs:
           toolchain: stable
           components: rustfmt, clippy
 
-      - name: Clean previous builds
+      - name: Cache Rust dependencies
         if:
           ${{ steps.codeql-check.outputs.enabled == 'true' && matrix.language ==
           'rust' }}
-        run: |
-          # Clean any previous build artifacts that might cause issues
-          find . -name "target" -type d -exec rm -rf {} + 2>/dev/null || true
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2
+        with:
+          shared-key: codeql-rust
 
       - name: Setup pnpm
         if: matrix.language == 'javascript-typescript'
@@ -124,30 +121,6 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           config-file: .github/codeql-config.yml
-          debug: true
-
-      - name: Build Rust project for CodeQL
-        if:
-          ${{ steps.codeql-check.outputs.enabled == 'true' && matrix.language ==
-          'rust' }}
-        run: |
-          # Set environment variables for better Rust compilation
-          export RUST_BACKTRACE=1
-          export CARGO_INCREMENTAL=0
-          export CARGO_TARGET_DIR=/tmp/target
-
-          # Build each Rust project with debug information
-          echo "Building apps/keeper..."
-          cd apps/keeper && cargo build --verbose
-
-          echo "Building crates..."
-          cd ../../crates
-          for crate in */; do
-            if [ -f "$crate/Cargo.toml" ]; then
-              echo "Building $crate..."
-              cd "$crate" && cargo build --verbose && cd ..
-            fi
-          done
 
       - name: Perform CodeQL Analysis
         if: steps.codeql-check.outputs.enabled == 'true'
