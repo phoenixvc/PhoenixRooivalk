@@ -225,6 +225,7 @@ const sidebars: SidebarsConfig = {
                 "technical/hardware/phase2/phase2-hardware-overview",
                 "technical/hardware/phase2/phase2-skywatch-nano-v2",
                 "technical/hardware/phase2/phase2-turret-tracker-v2",
+                "technical/hardware/phase2/phase2-skywatch-hub",
               ],
             },
             {

@@ -113,13 +113,13 @@ Phase 5   (Scale)    Defense-grade deployment, coalition interop
 
 See the dedicated hardware phase documents for full specifications:
 
-- **[Phase 2 — Pi/Jetson ML Inference](../phase2/phase2-hardware-overview)** —
+- **[Phase 2 — Pi/Jetson ML Inference](../phase2/overview)** —
   swap ESP32 for real edge AI compute
-- **[Phase 3 — Field-Ready Systems](../phase3/phase3-hardware-overview)** —
+- **[Phase 3 — Field-Ready Systems](../phase3/overview)** —
   ruggedized enclosures, multi-sensor pods, long-range comms
-- **[Phase 4 — Production Hardware](../phase4/phase4-hardware-overview)** —
+- **[Phase 4 — Production Hardware](../phase4/overview)** —
   custom PCBs, manufacturing tooling, certification
-- **[Phase 5 — Defense-Grade Deployment](../phase5/phase5-hardware-overview)** —
+- **[Phase 5 — Defense-Grade Deployment](../phase5/overview)** —
   MIL-STD compliance, coalition interop, RKV-M integration
 
 ---

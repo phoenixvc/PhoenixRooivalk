@@ -72,7 +72,7 @@ the board.
 
    Coverage: 360° detection perimeter
    Range: 2–5km per node (overlapping coverage)
-   Response: RKV-M airborne in <{TIME_TO_LAUNCH}
+   Response: RKV-M airborne in <30 seconds
 ```
 
 ---
