@@ -122,8 +122,9 @@ Training produces:
 
 ### GPU Quota Error
 
-Request quota increase in Azure Portal: Subscriptions → Usage + quotas → Search
-"NC"
+Request a quota increase in Azure Portal: **Subscriptions** → **Usage +
+quotas** → search for **NC-series (Azure NC GPU VMs)**. NC-series are
+GPU-enabled VM sizes (e.g. NC6, NC12) used for ML training.
 
 ### OOM Error
 
