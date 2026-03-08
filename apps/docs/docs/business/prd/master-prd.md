@@ -2,11 +2,14 @@
 id: master-prd
 title: "Master PRD: PhoenixRooivalk"
 sidebar_label: Master PRD
-description: Master Product Requirements Document for PhoenixRooivalk covering vision, personas, value propositions, and success metrics for SkySnare™ and AeroNet™.
+description:
+  Master Product Requirements Document for PhoenixRooivalk covering vision,
+  personas, value propositions, and success metrics for SkySnare™ and AeroNet™.
 difficulty: intermediate
 estimated_reading_time: 8
 points: 15
 tags:
+  - business
   - prd
   - product
   - roadmap

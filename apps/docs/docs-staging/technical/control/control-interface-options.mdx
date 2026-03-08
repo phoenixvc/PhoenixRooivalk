@@ -1,0 +1,97 @@
+---
+title: Control Interface Options
+sidebar_label: Control interface options
+---
+
+# Control Interface Options
+
+When you need **software control** of pan/tilt or other actuators and already
+have RC gear (e.g. FlySky transmitter and receiver), you have several practical
+options. Do **not** attempt RF protocol emulation (e.g. FlySky AFHDS); it is
+hard, brittle, and unnecessary.
+
+## When you have no microcontroller
+
+If you do not yet have an ESP32, Arduino, or similar:
+
+- **USB servo driver board** — A PCA9685-based (or similar) **USB servo
+  controller** plugs into the laptop and drives servos over USB via serial or
+  I2C. Laptop → USB → servo driver → servos. No MCU or custom firmware; your app
+  sends commands to the driver. When you later add an ESP32, switch to
+  SerialTransport or Wi-Fi and keep the same supervisor/contract.
+- **Old flashable flight controller** — An old drone flight controller with
+  STM32, USB, and motor/servo outputs can act as a **USB→PWM bridge**. Flash
+  Betaflight/INAV or use MAVLink; PC → USB → flight controller → PWM → servos.
+  No RF and no separate MCU purchase. See
+  [Salvage and zero-budget hardware](../hardware/salvage-and-zero-budget-hardware.mdx)
+  for which boards are promising.
+
+In all cases, build the **software pipeline first** (detection → tracking →
+supervisor → transport); use SimulatedTransport until hardware is available. See
+[Virtual turret POC](../../engineering/playbooks/virtual-turret-poc.mdx).
+
+## Option 1: Replace receiver with MCU
+
+Use an ESP32, Arduino, or similar microcontroller to **output PWM directly to
+servos**. The receiver is removed; the MCU receives commands over USB, serial,
+or Wi-Fi and drives servos (or a PCA9685). This is the recommended path for
+Phase-1 turrets. See [Actuator](../../engineering/common/actuator.mdx) and
+[NetSnare Lite (turret)](../../engineering/phase1/products/netsnare-lite-turret.mdx).
+
+## Option 2: Hardware switch (receiver vs MCU)
+
+Keep both the receiver and an MCU. A **physical switch** selects which source
+drives the servos: either the receiver (manual RF) or the MCU (software
+commands). Wiring and switching logic must ensure only one source is connected
+at a time and that power and ground are shared correctly.
+
+## Option 3: Analog injection (spoof transmitter sticks)
+
+Keep the transmitter and receiver unchanged. **Spoof the transmitter’s stick
+inputs** with a voltage from an MCU (DAC or PWM filtered to analog, or a digital
+potentiometer). The transmitter still sends RF; the receiver still outputs PWM
+to the servos. You do not touch the RF layer.
+
+**Minimum hardware:** A small MCU (e.g. ESP8266, ESP32, Arduino Nano, STM32),
+two analog outputs (DAC or filtered PWM), one physical mode switch, and common
+ground with the transmitter.
+
+**Safety (mandatory):**
+
+- **Physical toggle:** MANUAL = real potentiometers (operator controls sticks).
+  AUTO = MCU injects voltages (software controls). Never remove the ability to
+  revert to manual.
+- **Failsafe:** If the MCU stops updating or fails, the system should revert to
+  manual (e.g. switch or mux reconnects real pots) or clamp injection to a safe
+  mid-range.
+- **Clamp:** Injection voltages must stay within the safe range the transmitter
+  expects (e.g. 0–3.3 V or 0–5 V depending on the transmitter); never drive out
+  of range.
+
+For implementation details (where to inject, voltage range, mux/switch), open
+the transmitter and identify the steering and throttle pot connections and their
+voltage range; then drive those nodes from the MCU when in AUTO mode.
+
+## Parrot Bebop 2 Skycontroller
+
+The Parrot Bebop 2 Skycontroller is **not** a flight controller. It is a
+Linux-based device with Wi-Fi and joysticks that talks to Bebop drones over IP.
+It has **no exposed GPIO or servo outputs** and cannot replace a receiver or
+drive servos. It could be used as a vision or Wi-Fi control node, but actuation
+still requires an external MCU or servo driver. See
+[Salvage and zero-budget hardware](../hardware/salvage-and-zero-budget-hardware.mdx).
+
+## Drone / vehicle control (Phase 2+)
+
+For drone or vehicle control beyond pan/tilt, **MAVLink** is the recommended SDK
+boundary. Replace the control stack (e.g. flight controller + MAVLink) rather
+than reverse-engineering proprietary RF. See
+[conversation-gap-analysis-shopping-bom-rc-future-phases](../../internal/decisions/conversation-gap-analysis-shopping-bom-rc-future-phases.md)
+and [Future phases outline](../../internal/decisions/future-phases-outline.md).
+
+## Related
+
+- [Salvage and zero-budget hardware](../hardware/salvage-and-zero-budget-hardware.mdx)
+- [Transport abstraction](../architecture/interfaces/transport-abstraction.mdx)
+- [Authority and safety controller](./authority-and-safety-controller.mdx)
+- [Actuator](../../engineering/common/actuator.mdx)

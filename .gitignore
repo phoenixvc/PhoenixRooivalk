@@ -36,6 +36,9 @@ out/
 # Optional REPL history
 .node_repl_history
 
+# Local tooling (e.g. MCP config)
+.roo/
+
 # Environment Variables
 .env
 .env.local
@@ -89,6 +92,9 @@ pitch-deck/*.pptx
 pitch-deck/*.pdf
 pitch-deck/*.html
 *.egg-info/
+
+# Generated product catalog exports (run: cd apps/docs && npx tsx scripts/export-products.ts)
+apps/docs/exports/
 
 # Claude Code runtime state (template is tracked, runtime state is not)
 .claude/state/orchestrator.json

@@ -1,0 +1,94 @@
+---
+title: Board Bring-up and Flashing
+sidebar_label: Board Bring-up and Flashing
+---
+
+# Board Bring-up and Flashing
+
+This document covers procedures for initial board bring-up and firmware flashing
+for PhoenixRooivalk prototype and production hardware.
+
+## Scope
+
+- Target boards used in detection, control, and demo-safe actuation subsystems
+- Flash tooling and image layout
+- Verification steps after flash
+- Recovery and safe-mode entry
+
+## Prerequisites
+
+- Host toolchain (e.g. OpenOCD, vendor tools) as specified for the target
+  SoC/MCU
+- Correct cable interfaces (JTAG, SWD, UART) and pinouts documented for each
+  board variant
+- Signed or approved firmware images from the build pipeline
+
+## Bring-up Sequence
+
+1. **Power and clocks** — Verify rails and clock sources before attaching debug
+   or flash cables.
+2. **Bootloader** — Flash bootloader first where applicable; confirm boot medium
+   selection (e.g. SD, eMMC, internal flash).
+3. **Application image** — Flash application firmware; verify checksum or
+   signature per security policy.
+4. **Post-flash checks** — Serial/console output, network bring-up (if
+   applicable), and basic self-tests.
+
+## Flashing Methods
+
+### Raspberry Pi (4/5, Zero 2 W)
+
+- **Methods:** SD card image (primary), USB mass-storage boot (Pi 5). No JTAG;
+  UART available for debug.
+- **Boot mode:** Default boot from SD; no jumpers. To reflash: write OS image to
+  SD with Raspberry Pi Imager or `dd` (e.g.
+  `dd if=image.img of=/dev/sdX bs=4M status=progress`); insert SD and power on.
+- **Recovery:** If SD is corrupted, reflash the SD on a host. No built-in
+  recovery button; keep a known-good SD image.
+
+### ESP32 (DevKitC, WROOM, WROVER, S3, ESP32-CAM)
+
+- **Methods:** USB serial (UART), USB DFU (S2/S3). Tools: `esptool.py`,
+  `idf.py flash`, or Arduino/PlatformIO.
+- **Boot mode:** Hold **BOOT** (or **IO0**) low while asserting **EN** (reset);
+  release **BOOT** after release of **EN** to enter bootloader. Some boards
+  auto-enter bootloader via USB.
+- **Flash commands (example):**
+  `esptool.py --port /dev/ttyUSB0 write_flash 0x0 firmware.bin`. Replace
+  `/dev/ttyUSB0` with your port (`COM3` on Windows, `/dev/tty.usbserial-*` on
+  macOS); use `esptool.py flash_id` to verify connection.
+- **Recovery:** Hold **BOOT**, tap **EN**; LED may show bootloader. Run
+  `esptool.py --port /dev/ttyUSB0 write_flash 0x0 firmware.bin`. If USB not
+  recognized, check driver (CP210x/CH340) and try another cable (data-capable).
+
+### Jetson (Orin Nano/NX, AGX Orin)
+
+- **Methods:** SD card (dev kit), USB recovery mode, NVMe (production). Vendor
+  tools: SDK Manager, `flash.sh` (NVIDIA).
+- **Boot mode:** Put device in recovery: power off; hold **RECOVERY** (or
+  **FORCE RECOVERY**) and **RESET** (or power on while holding RECOVERY);
+  release when host shows USB recovery device.
+- **Recovery:** Enter recovery mode as above; on host run NVIDIA `flash.sh` or
+  use SDK Manager to reflash. Serial console (UART) available for boot logs;
+  confirm device enumerates as USB recovery before flashing.
+
+## Safety and Recovery
+
+- **Recovery/safe mode (generic):** For **ESP32:** Hold **BOOT** (IO0), apply
+  power or press **EN**; release **BOOT** after ~1 s. Indicator: serial port
+  appears; `esptool.py` can connect. Use `dfu-util` or `esptool.py` to write a
+  known-good image. For **Raspberry Pi:** Reflash SD on a host; no onboard
+  recovery button. For **Jetson:** Hold **RECOVERY** (or FORCE RECOVERY) and
+  power on; when host sees USB recovery device, run vendor flash script.
+  **Safety:** Before powering actuation boards, ensure motors are disconnected
+  or drivers disabled; after flash, verify interlocks and default state (e.g.
+  outputs off) before re-enabling power to actuators.
+- For boards involved in control or actuation paths, ensure flashing procedures
+  do not leave the system in an unsafe state (e.g. motors disabled, interlocks
+  active).
+
+## Related
+
+- [Servo selection and calibration](./servo-selection-and-calibration.mdx)
+- [Power budgeting and rail isolation](./power-budgeting-and-rail-isolation.mdx)
+- [Prototype compute tiers](./prototype-compute-tiers.mdx) (optional)

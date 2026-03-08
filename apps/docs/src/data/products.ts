@@ -1,20 +1,19 @@
 /**
  * Product Catalog & Bill of Materials Data
  *
- * This file re-exports from the modular products/ directory.
- * All product data has been split into smaller, focused modules:
+ * @deprecated Prefer the modular catalog: import from "src/data/products/index" or
+ * "@site/src/data/products" when the resolver uses the folder (products/index.ts).
+ * This file is a legacy duplicate and does not export the BOM engine or
+ * generateProductConfiguration. See apps/docs/README.md "Product catalog export".
  *
+ * Canonical modules:
  * - products/types.ts      - Type definitions
  * - products/catalog.ts    - All product definitions and collections
+ * - products/bom-engine.ts - BOM patches and buildConfiguredBom
  * - products/platforms.ts  - Compute platforms, accelerators, benchmarks
  * - products/storage-options.ts - Storage options and recommendations
- * - products/tiers.ts      - Tier configurations for product configurator
+ * - products/tiers.ts      - Tier configs and generateProductConfiguration
  * - products/index.ts      - Unified exports
- *
- * Usage:
- * ```ts
- * import { skyWatchStandard, computeTiers } from "@site/src/data/products";
- * ```
  */
 
 import type { Confidence } from "./types";

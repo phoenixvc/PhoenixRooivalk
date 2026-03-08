@@ -1,0 +1,85 @@
+---
+title: Salvage and Zero-Budget Hardware
+sidebar_label: Salvage and zero-budget
+tags: ["hardware", "salvage", "zero-budget"]
+---
+
+# Salvage and Zero-Budget Hardware
+
+This page is for readers considering **zero-budget or salvage** for
+servo/actuator control. It states what cannot be used for PWM, what might be
+salvageable, and recommends a software-first approach so the control pipeline is
+ready when hardware is available.
+
+## Cannot be used for servo PWM (and why)
+
+These devices are **not** suitable for generating stable servo PWM or acting as
+a drop-in receiver replacement:
+
+- **Routers** — Even with OpenWRT, GPIO access is not real-time and there is no
+  hardware PWM; jitter under CPU load makes servo control unreliable. Not worth
+  the effort for pan/tilt.
+- **DVD / appliance boards** — Locked SoCs, no programmable PWM, and often BGA
+  or undocumented pins. Not practical for servo control.
+- **Parrot Bebop 2 Skycontroller** — Linux computer with Wi-Fi and joysticks;
+  talks to Bebop drones over IP. It is **not** a flight controller; it has no
+  exposed GPIO or servo outputs and cannot replace a receiver. It could act as a
+  vision/Wi-Fi node only; actuation would still require an external MCU or servo
+  driver.
+- **Phones** — No exposed GPIO or hardware PWM. A phone can be a vision
+  processor or Wi-Fi command sender but cannot drive servos; it still needs a
+  microcontroller in the chain (Phone → USB/BT/Wi-Fi → MCU → Servos).
+- **Speakers, random PCBs** — Typically mains-powered (unsafe for tinkering) or
+  non–real-time control logic with no documented PWM capability.
+
+## No microcontroller yet: buy one option
+
+The only **no-MCU** way to drive servos from a laptop is a **USB servo driver
+board** (e.g. PCA9685 USB controller or similar). Laptop → USB → driver →
+servos; no firmware or salvage required. When you later get an ESP32 or Arduino,
+you can keep the same software and switch to SerialTransport or Wi-Fi. There is
+no household device you can strip that reliably replaces a microcontroller for
+servo PWM.
+
+## Might be salvageable
+
+- **Old drone flight controller** — If it has an STM32 (or similar) chip, USB
+  port, and motor/servo output pads, it may run Betaflight/INAV/MAVLink or
+  accept serial PWM commands. That is the most promising **salvage** path for
+  pan/tilt control; it can act as a USB→PWM bridge with no RF.
+- **Old 3D printer controller board** — RAMPS, Melzi, or similar boards have
+  stepper/servo drivers and documented pinouts; they can be repurposed for servo
+  or motor control with the right firmware.
+- **RC toy mainboard** — Rarely usable; only if it has exposed headers, an
+  identifiable MCU, and is not an epoxy-blob design. Most cheap toy boards are
+  not reprogrammable.
+
+## Mechanical stick driving (analog injection)
+
+Using **servos to physically move transmitter sticks**, or injecting a voltage
+into the transmitter’s stick inputs (DAC or digital potentiometer), still
+requires a **microcontroller** to generate those signals. There is no zero-MCU
+way to get software control from a laptop to an RC transmitter. For analog
+injection, see
+[Control interface options](../control/control-interface-options.mdx).
+
+## Recommendation
+
+**Build the software pipeline first.** Implement detection → tracking →
+supervisor → transport → simulated actuator so that when you add hardware
+(ESP32, Arduino, USB servo driver, or a flight controller), you only plug in a
+transport backend. The bottleneck is architecture and control logic, not PWM
+hardware. If you have no actuator hardware yet, use **SimulatedTransport** and
+add a real transport when hardware is available. See
+[Virtual turret POC](../../engineering/playbooks/virtual-turret-poc.mdx) for a
+hardware-free pipeline and
+[Control interface options](../control/control-interface-options.mdx) for no-MCU
+and salvage options.
+
+## Related
+
+- [Actuator](../../engineering/common/actuator.mdx)
+- [Avoid list](../../engineering/phase1/avoid-list.mdx)
+- [Future phases outline](../../internal/decisions/future-phases-outline.md)
+- [Control interface options](../control/control-interface-options.mdx)
+- [Virtual turret POC](../../engineering/playbooks/virtual-turret-poc.mdx)

@@ -1,0 +1,176 @@
+---
+title: Product Catalog Data Source
+sidebar_label: Product catalog source
+tags: ["business", "counter-uas"]
+---
+
+# Product Catalog Data Source
+
+The **single source of truth** for PhoenixRooivalk product definitions is the
+TypeScript catalog under the docs app. This doc describes where it lives, what
+it contains, and how to use or export it.
+
+## Location
+
+Repository path: `apps/docs/src/data/products/`
+
+| File               | Purpose                                                                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| index.ts           | Barrel export; import from @site/src/data/products                                                                                                                                              |
+| catalog.ts         | Product definitions, collections, productBySku, helpers (see [Product list summary](./product-list.mdx) for current counts)                                                                     |
+| types.ts           | Product, BOMItem, ProductSpecs, tier types                                                                                                                                                      |
+| platforms.ts       | Compute platforms (Pi/Jetson), AI accelerators (Coral, Hailo), FPS benchmarks, platformRecommendations (hobbyist → military)                                                                    |
+| storage-options.ts | Local and network storage options; storageRecommendations by tier (nano, standard, pro, mesh, enterprise)                                                                                       |
+| tiers.ts           | Compute, camera, connectivity, storage tiers; productComputeConfigs, productCameraConfigs, etc.; tier IDs (e.g. pi4_coral, pi5_hailo8l, jetson_nano) and sentinels (none, server, fixed, mixed) |
+
+## What the catalog contains
+
+- Product and line counts are defined by the catalog; see
+  [Product list summary](./product-list.mdx) for current totals (products and
+  product lines). The full catalog includes **AeroNet** and **RKV**
+  (enterprise/military); Phase-1 build docs cover only the demo subset.
+- Each product has: sku, name, line, category, targetMarket, priceRange,
+  priceMin, priceMax, specs, bom, bomTotal, optional optionalAccessories,
+  confidence, lastUpdated.
+- **Product lines:** SkyWatch (detection), **NetSentry** (NS-_: integrated
+  countermeasure), **NetSnare** (NSN-_: ground launchers), SkySnare (consumer
+  handheld), AeroNet (enterprise platform), RKV (military systems). Phase-1
+  turret demo uses the NetSnare Lite turret variant **NSN-LITE-001-TURRET**.
+- Collections: allProducts, skyWatchProducts, netSentryProducts,
+  skySnareProducts, netSnareProducts, aeroNetProducts, rkvProducts, and
+  productBySku (SKU to product).
+- Helpers: getProductBySku(sku), getProductsByLine(line),
+  getProductsByCategory(category), getProductsByPriceRange(min, max),
+  getTotalWithAccessories(product), formatProductPriceRange(product).
+- Summary data: productCatalogSummary, meshSystemPricing, enterprisePricing.
+
+## Using the catalog in code
+
+Import from the barrel:
+
+```ts
+import {
+  allProducts,
+  getProductBySku,
+  getProductsByLine,
+  productCatalogSummary,
+} from "@site/src/data/products";
+```
+
+Examples: use `allProducts` for the full list; `getProductBySku("SW-STD-001")`
+for one product; `getProductsByLine("SkyWatch")` for a line.
+
+### Configurator helpers
+
+For pre-order or configurator UIs, use the tier helpers from `tiers.ts` (import
+via the barrel):
+
+- **Per-dimension config:** `getProductComputeConfig(sku)`,
+  `getProductCameraConfig(sku)`, `getProductConnectivityConfig(sku)`,
+  `getProductStorageConfig(sku)`.
+- **Available options:** `getAvailableTiers(sku)`, `getAvailableCameras(sku)`,
+  `getAvailableConnectivity(sku)`, `getAvailableStorage(sku)`.
+- **Full configuration:**
+  `generateProductConfiguration(sku, computeTierId?, cameraTierId?, connectivityTierId?, storageTierId?)`
+  returns a `ProductConfiguration` with tier objects, deltas, and
+  `configuredBomCost`.
+
+**Display name:** The product display name must be taken from the catalog (e.g.
+`productBySku[sku].name`). Do not read it from config objects; config objects
+must not duplicate the product name so the catalog remains the single source of
+truth.
+
+## Exporting a list (JSON / CSV)
+
+To get a consolidated product list as JSON or CSV, run from the **apps/docs**
+directory:
+
+```bash
+cd apps/docs && npx tsx scripts/export-products.ts
+```
+
+This writes `apps/docs/exports/products.json` (full product objects) and
+`apps/docs/exports/products.csv` (summary columns: sku, name, line, category,
+targetMarket, priceRange, priceMin, priceMax, bomTotal, confidence, lastUpdated,
+specs). The script imports allProducts from the catalog; no scraping. See
+`apps/docs/scripts/export-products.ts` for the exact schema.
+
+## Data model and consistency (Phase B)
+
+These items are documented here so staging is the single source of truth; Phase
+C will align code and data to them.
+
+- **Product display name:** The product display name must be derived from the
+  catalog (e.g. `productBySku[sku].name`). Config objects (ProductComputeConfig,
+  ProductCameraConfig, ProductConnectivityConfig, ProductStorageConfig) must not
+  include a `productName` field so the catalog remains the single source of
+  truth.
+- **BOM calculation:** Totals are computed by a small **BOM engine** that can
+  apply structural mutations (add/remove/replace) plus auditable deltas.
+  `generateProductConfiguration` returns `configuredBomCost` and may include a
+  materialized `configuredBom` for ordering/export. Legacy `newBomTotal` targets
+  (when present) are honored via an explicit **reconciliation line** rather than
+  a silent override.
+- **Validation:** A validation step (e.g. `validateConfiguratorData`) must
+  check: every config SKU exists in the catalog; every referenced tier ID exists
+  in the corresponding tier dictionary; and every key in `tierPricing` /
+  `cameraPricing` / `connectivityPricing` / `storagePricing` is contained in
+  that product's `availableTiers` / `availableCameras` / `availableConnectivity`
+  / `availableStorage` for that dimension. Recommended at build or config load
+  time.
+- **Type-safe IDs and sentinels:** Tier IDs (compute, camera, connectivity,
+  storage) use literal union types (e.g. `ComputeTierId`); sentinel values
+  (`none`, `server`, `enterprise`, `fixed`, `mixed`, `cloud`, `mesh_radio`) are
+  explicit for non-configurable base tiers. See
+  [Address catalog gaps Phase B plan](../../internal/decisions/address-catalog-gaps-phase-b-plan.md).
+  Phase C implementation checklist (one line per file): see
+  [Staging alignment roadmap (Phase C)](../../internal/decisions/staging-alignment-roadmap.md#1-product-catalog-alignment).
+- **Export type safety:** Phase C and export scripts must preserve typed exports
+  (e.g. `Confidence`, product types) and must not widen them to `any` so catalog
+  types stay strict for consumers.
+
+### Tier configurator reference (tiers.ts)
+
+- **Compute:** tier IDs e.g. `pi4_coral`, `pi5_hailo8l`, `jetson_nano`;
+  sentinels `none`, `server`.
+- **Camera:** tier IDs e.g. `pi_v2`, `pi_v3`, `pi_hq`, `pi_gs`, `lepton_3_5`,
+  `boson_320`; sentinels `none`, `fixed`, `mixed`, `enterprise`.
+- **Connectivity:** tier IDs `wifi`, `ethernet`, `poe`, `poe_plus`, `lte`,
+  `lte_poe`; sentinels `enterprise`, `cloud`, `mesh_radio`.
+- **Storage:** tier IDs `sd_32`, `sd_64_he`, `sd_128_he`, `nvme_128`,
+  `nvme_256`, `nvme_512`, `nvme_1tb`; sentinels `none`, `enterprise`, `cloud`,
+  `fixed`.
+
+Per-product configs (`productComputeConfigs`, `productCameraConfigs`,
+`productConnectivityConfigs`, `productStorageConfigs`) and validation
+(`validateConfiguratorData`) are in `tiers.ts` (see Phase B plan).
+
+## Keeping the list in sync
+
+- Edit products in `apps/docs/src/data/products/catalog.ts` (and types in
+  types.ts if needed).
+- Re-run the export script after catalog changes to refresh the export files.
+- Update the [Product list summary](./product-list.mdx) when new lines or
+  products are added.
+
+## Phase-1 demo products
+
+Phase-1 is a subset of demoable products with separate build/BOM guidance:
+SkyWatch Nano, SkyWatch Standard, SkyWatch Mesh Node, NetSnare Lite turret
+variant **NSN-LITE-001-TURRET**, SkySnare handheld, **Response Relay (Demo)**.
+
+**Docs and data layout:** Phase-1 **docs** live under
+`docs-staging/engineering/phase1/`: one doc per product in `products/`, shared
+modules in `engineering/common/`, and a
+[Buy now vs later](../../engineering/phase1/buy-now-vs-later.mdx) summary.
+**Optional** Phase-1 **data** (when implemented) may live under
+`apps/docs/src/data/phase1/` (e.g. `phase1-products.ts`, `bom/*.ts`) with a BOM
+schema that supports structural composition; build guides remain in the docs.
+For build options and BOMs see
+[Phase-1 overview](../../engineering/phase1/index.mdx).
+
+## Related
+
+- [Product list summary](./product-list.mdx)
+- [PRD index](../prd/index.mdx)
+- [Phase-1 overview](../../engineering/phase1/index.mdx)

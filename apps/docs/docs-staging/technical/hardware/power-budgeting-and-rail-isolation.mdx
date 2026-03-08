@@ -1,0 +1,50 @@
+---
+title: Power Budgeting and Rail Isolation
+sidebar_label: Power Budgeting and Rail Isolation
+---
+
+# Power Budgeting and Rail Isolation
+
+This document covers power budgeting and rail isolation for PhoenixRooivalk
+prototype and integration hardware to ensure reliable operation and to avoid
+noise or fault propagation between subsystems.
+
+## Objectives
+
+- Allocate power budget per subsystem (sensors, compute, actuation, comms) with
+  margin for peak loads.
+- Define rail topology: shared vs isolated rails, and where isolation is
+  required for safety or EMC.
+- Document fusing, reverse-polarity protection, and sequencing where applicable.
+
+## Subsystem Budgets
+
+| Subsystem | Typical role          | Notes                                         |
+| --------- | --------------------- | --------------------------------------------- |
+| Detection | Sensors, RF front-end | Sensitive to noise; consider isolated rail    |
+| Compute   | SoC/MCU, peripherals  | Peak current during boot/flash                |
+| Actuation | Servos, drivers       | High transient currents; isolate from sensing |
+| Comms     | Wi-Fi, serial, USB    | Shared or dedicated rail per design           |
+
+Values and rails should be filled in per platform (e.g. RKV-M, turret demo
+unit).
+
+## Rail Isolation
+
+- **Why** — Prevent motor/servo transients from affecting sensors and logic;
+  meet safety separation where control and actuation are on different rails.
+- **Where** — Document which rails are isolated (e.g. DC-DC with isolation,
+  separate batteries) and which share a common ground or return.
+- **Grounding** — Single-point vs star ground; keep high-current returns away
+  from signal paths.
+
+## Safety and Fusing
+
+- Overcurrent protection per rail or per load as appropriate.
+- Document behavior on undervoltage (brown-out) so that control logic and safety
+  controller can enforce safe state (e.g. disable actuation, hold position).
+
+## Related
+
+- [Board bring-up and flashing](./board-bringup-and-flashing.mdx)
+- [Authority and safety controller](../control/authority-and-safety-controller.mdx)

@@ -1,0 +1,198 @@
+---
+title: Phase-1 Demo Builds
+sidebar_label: Phase-1 overview
+---
+
+# Phase-1 Demo Builds
+
+Shared build blocks (power, networking, actuator, compute, alarms) live in
+[Common modules](../common/index.mdx). Phase-1 stack and BOMs are described in
+this section and in each product doc.
+
+Phase-1 is a **demoable capability set**, not production SKUs. It covers
+detection, tracking, alarm, and inert actuation only. Build docs and BOMs here
+support ultra-cheap (1a), balanced (1b), and better (1c) options per product.
+
+## Purpose
+
+- Demoable end-to-end flows: detection → tracking → alarm and safe actuation
+  (relay/LED or pan/tilt).
+- Shared platform: Pi4+Coral, MQTT, ESP32 actuator; common modules for power,
+  alarms, networking, actuator, compute.
+- Clear safety boundary and avoid list so builds stay within scope.
+
+## Product list (six)
+
+| Product                   | One-line description                                              |
+| ------------------------- | ----------------------------------------------------------------- |
+| SkyWatch Nano             | Entry-level detection node                                        |
+| SkyWatch Standard         | Standard detection node                                           |
+| SkyWatch Mesh Demo        | Mesh-capable detection demo                                       |
+| NetSnare Lite (turret)    | Pan-tilt tracker platform — demo SKU **NSN-LITE-001-TURRET**      |
+| SkySnare handheld spotter | Handheld spotter device                                           |
+| Response Relay (Demo)     | Safe response placeholder (relay/MOSFET to LED/lamp; no launcher) |
+
+See [Products](./products/index.mdx) for build options and BOMs per product.
+
+## Comparison: ultra-cheap / balanced / better
+
+Across products, options are labeled **1a** (ultra-cheap), **1b** (balanced),
+**1c** (better). **Mapping:** 1a = cost-optimized, 1b = speed/reliability, 1c =
+polish. Each product doc has a comparison table and weighted matrix (cost,
+performance, reliability, effort) with a short choice summary. Scrapyard
+variants are optional where noted.
+
+## Detection + alarm only
+
+**SkyWatch Nano** and **SkyWatch Standard** can be configured as **detection +
+alarm only**: camera → detection → local alarm (buzzer/strobe) + remote
+(MQTT/Telegram). No pan/tilt, no actuator. Minimal standalone = ESP32-CAM or
+phone for vision; laptop or Pi later for inference. See
+[SkyWatch Nano](./products/skywatch-nano.mdx) and
+[SkyWatch Standard](./products/skywatch-standard.mdx).
+
+## Evolution: Phase 0 → 1 → 2
+
+- **Phase 0:** Survival build — near-zero cash. Minimal or blind actuator; no
+  turret camera. Prove architecture and control loop (e.g. phone or borrowed
+  Pi + ESP32 turret).
+- **Phase 1:** Limited budget. Optional turret camera (ESP32-CAM or USB to Pi);
+  full BOMs and build docs in this section. Reliable standalone demo (Pi4+Coral
+  default).
+- **Phase 2:** Polish — dual camera, stiffer mechanics; out of scope for this
+  doc set. Investor-grade demo.
+
+**Optimization order:** Phase 0 = cost, Phase 1 = speed/reliability, Phase 2 =
+polish. Documentation: one doc per product under
+[Products](./products/index.mdx); shared modules under
+[Common](../common/index.mdx). For detailed “buy now vs leave for later” with
+rationale and build steps per product, see each product doc and
+[Platform BOM v1](./platform-bom-v1.mdx).
+
+**Canonical stack (one-place):** Pi4+Coral (detection/inference), Pi Camera v3,
+MQTT (event spine), local alarm (12V siren + strobe), remote (Telegram), ESP32 +
+PCA9685 (actuator), power (EPS → buck 5V for Pi, buck 6V for servos).
+
+## Safety boundary
+
+Phase 1 is **detection, tracking, alarm, and inert actuation only**. No
+weaponization.
+
+- **Response Relay:** Relay/MOSFET to LED/lamp/dummy load only; arm/disarm; log
+  activations. No launcher or harmful hardware.
+- **Turret:** Pan/tilt + alarm only. No firing hardware.
+- **All products:** No building or operating systems intended to shoot down
+  drones; no detailed firing hardware in docs.
+
+See [Safety boundary](./safety-boundary.mdx) for the single reference (or in-doc
+summary above).
+
+## Shared parts
+
+Common parts across many Phase-1 builds: ESP32, MP1584 (buck), jumper wires,
+buzzer, LED. See [Shared parts](../common/shared-parts.mdx) for a consolidated
+list.
+
+## Wiring safety
+
+- **Common GND:** Servo PSU GND must tie to ESP32 GND.
+- **Set voltage before connecting:** Adjust buck output with no load before
+  connecting ESP32 or servos.
+- **Fuse / power switch** on supply side where appropriate.
+- **Bulk capacitor (470–1000 µF)** on the servo rail.
+
+Details: [common/power](../common/power.mdx) and
+[Wiring safety](../common/wiring-safety.mdx).
+
+## Phase 1 avoid list
+
+Do **not** use the following for Phase 1 builds as specified:
+
+| Avoid                                                          | Use instead               |
+| -------------------------------------------------------------- | ------------------------- |
+| L298N for servos                                               | PCA9685                   |
+| OV7670 on ESP32                                                | OV2640 (e.g. ESP32-CAM)   |
+| 360° continuous-rotation servos for pan/tilt                   | 180° positional servos    |
+| L293D for servos                                               | PCA9685                   |
+| Brushless motors, ESCs, flight controller, XT60 PDB for turret | Servo-based pan/tilt only |
+| Duplicate IMU families; TCA9548A until needed                  | Per product BOM           |
+
+Full list: [Avoid list](./avoid-list.mdx).
+
+**Deferred to Phase 2 (not avoid):** Solenoids (for trigger), stepper
+motors/drivers — intentional later additions; Phase 1 = servo pan/tilt + alarm
+only. Phase 2+ scope and preparation: see
+[Future phases outline](../../internal/decisions/future-phases-outline.md).
+
+## Platform BOM v1
+
+**Architecture lock:** ESP32 + RP2040 modular robotics stack; PCA9685,
+TB6612/BTS7960 for motor/servo control.
+
+- **Buy now:** Core compute, one actuator stack, minimal sensing.
+- **Buy soon:** Spares, second actuator stack, better camera.
+- **Buy later:** Mesh radio, extra storage, enclosures.
+
+Quantities cheat sheet and tier choices are in each product doc. Full
+**orderable BOMs** (part name, qty, optional search terms for online ordering)
+for 1a/1b/1c live in each [product doc](./products/index.mdx) and in
+[Platform BOM v1](./platform-bom-v1.mdx); use them for build lists and cart
+validation.
+
+## Buy now vs later
+
+Per product, a short “buy now (1a)” vs “leave for later (1b/1c)” with brief
+rationale. See each [product doc](./products/index.mdx) for that product’s full
+BOMs and option tables. Per-product summary:
+[Buy now vs later](./buy-now-vs-later.mdx).
+
+**No actuator hardware yet?** Build the pipeline with SimulatedTransport; see
+[Virtual turret POC](../playbooks/virtual-turret-poc.mdx) and
+[Control interface options](../../technical/control/control-interface-options.mdx)
+(USB servo driver or flight controller options).
+
+## Budget allocation (optional)
+
+If you have ~R2000 to spend, a typical priority order: power + compute spares →
+actuation stack → motor drivers → sensing → camera. Adjust per product and local
+pricing.
+
+## Architectural decisions (Phase-1)
+
+Six decisions are reflected in the docs; they will be formalized as ADRs later.
+**ADR tagging:** ADR-HW (hardware, BOM, interfaces), ADR-SW (protocols, data
+models), ADR-SYS (event bus, safety, deployment). When formalized, these map to
+ADR-0001 … ADR-0006.
+
+| #   | Decision                                           | Tag     | ADR candidate |
+| --- | -------------------------------------------------- | ------- | ------------- |
+| 1   | Event bus (e.g. MQTT backbone)                     | ADR-SYS | ADR-0001      |
+| 2   | Compute baseline (Pi4+Coral default)               | ADR-HW  | ADR-0002      |
+| 3   | Alarm strategy (local + remote)                    | ADR-SYS | ADR-0003      |
+| 4   | Actuator separation (ESP32, PCA9685)               | ADR-HW  | ADR-0004      |
+| 5   | Doc structure (this Phase-1 area + common modules) | ADR-SYS | ADR-0005      |
+| 6   | Canonical hardware (platform BOM v1)               | ADR-HW  | ADR-0006      |
+
+## Phase-1 stack summary
+
+Phase-1 builds use these shared modules; details are in
+[Common modules](../common/index.mdx):
+
+- [Power](../common/power.mdx) — rails, bucks, bulk caps, isolation
+- [Networking](../common/networking.mdx) — MQTT, HTTP, node identity
+- [Actuator](../common/actuator.mdx) — ESP32, PCA9685, servos, safety
+- [Compute](../common/compute.mdx) — Pi4, Coral, tiers
+- [Alarms](../common/alarms.mdx) — local and remote
+
+See also [Shared parts](../common/shared-parts.mdx) and
+[Wiring safety](../common/wiring-safety.mdx).
+
+## Links
+
+- [Phase-0 survival build](../phase0/index.mdx) — previous phase (zero-budget)
+- [Phase-2 investor-grade demo](../phase2/index.mdx) — next phase (polish)
+- [Common modules](../common/index.mdx) — power, alarms, networking, actuator,
+  compute
+- [Products](./products/index.mdx) — six product build docs and BOMs
+- [Virtual turret POC](../playbooks/virtual-turret-poc.mdx) — software-only
+  validation

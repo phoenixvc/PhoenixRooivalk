@@ -17,6 +17,10 @@ The documentation is organized into the following sections:
 - **Resources** - Downloads, guides, troubleshooting, and reference materials
 - **Playbooks** - Strategic roadmaps and execution guides
 
+## Documentation Staging
+
+A **temporary staging area** for refining the new catalog structure lives in `docs-staging/`. The live site uses `docs/` only; edit and add content in `docs-staging/` until you are ready to promote it. See `docs-staging/README.md` for structure and conventions.
+
 ## Features
 
 - **Docusaurus 3.9** with MDX support
@@ -138,6 +142,18 @@ pnpm run test:watch
 # With coverage
 pnpm run test:coverage
 ```
+
+### Product catalog export
+
+Product list JSON/CSV are **generated** and not committed. From `apps/docs` run:
+
+```bash
+npx tsx scripts/export-products.ts
+```
+
+This writes `exports/products.json` and `exports/products.csv`. Set `EXPORT_SAMPLE_CONFIGURATION=1` to also write `exports/sample-configuration.json`. The `apps/docs/exports/` directory is in `.gitignore`.
+
+**Canonical source:** Product and tier data live in `src/data/products/` (use the barrel `src/data/products/index.ts` or the folder). The legacy file `src/data/products.ts` is deprecated; new code and scripts should import from `src/data/products/index` for the full catalog, BOM engine, and configurator APIs.
 
 ## Deployment and Access Control
 

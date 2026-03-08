@@ -1,0 +1,50 @@
+---
+title: "EDR: Transport abstraction baseline"
+sidebar_label: "2025-03-04 Transport abstraction"
+---
+
+# Transport Abstraction Baseline
+
+## Date
+
+2025-03-04
+
+## Status
+
+Proposed
+
+## Context
+
+Control and telemetry between detection, decision, and actuation need a
+consistent contract so that physical transport (USB, serial, Wi-Fi, or future
+CAN/Ethernet) can be swapped without changing application logic. We need a
+single place that defines ControlCommand, Telemetry, timeout, and authority
+semantics.
+
+## Decision
+
+- Adopt a **transport abstraction** document as the baseline: one logical
+  protocol (message types, framing, and safety semantics) implemented over
+  multiple transports.
+- Authority and timeout behavior are part of the contract; the
+  [authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+  is the single issuer of actuation commands; transport only carries bytes.
+- Implementations may start with USB/serial; Wi-Fi and others added as needed.
+  See
+  [Transport abstraction](../../technical/architecture/interfaces/transport-abstraction.mdx).
+
+## Consequences
+
+- **Positive** — Clear contract for integrators; easier to add new links and to
+  test with stubs.
+- **Negative** — All existing ad-hoc links should be migrated to the contract;
+  some rework.
+- **Follow-ups** — Implement reference stub and at least one real transport; add
+  to
+  [prototype test procedures](../../operations/runbooks/prototype-test-procedures.mdx).
+
+## Related
+
+- [Transport abstraction](../../technical/architecture/interfaces/transport-abstraction.mdx)
+- [Authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+- [EDR template](./edr-template.mdx)

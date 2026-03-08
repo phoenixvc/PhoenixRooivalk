@@ -1,0 +1,133 @@
+---
+title: Phase-2 Investor-Grade Demo
+sidebar_label: Phase-2 overview
+tags: ["phase-2", "investor", "polish"]
+---
+
+# Phase-2 Investor-Grade Demo
+
+Phase 2 is the **polish phase**. After Phase 1 proves the demo works reliably,
+Phase 2 upgrades hardware, mechanics, and presentation to investor-grade
+quality. Optimization target: **polish**.
+
+Phase 2 builds on the same software architecture and common modules as Phase 1.
+The differences are in hardware capability, mechanical rigidity, and demo
+presentation quality.
+
+## Purpose
+
+- Investor-grade demo: reliable, visually impressive, and repeatable.
+- Dual-camera architecture: fixed detection camera + turret-mounted tracking
+  camera.
+- Stiffer mechanics: metal brackets, precision pan/tilt, reduced vibration.
+- Expanded actuation: solenoid and stepper capability for demo applications
+  (non-weapon).
+
+## What Phase 2 adds over Phase 1
+
+| Capability           | Phase 1                             | Phase 2                                                       |
+| -------------------- | ----------------------------------- | ------------------------------------------------------------- |
+| Camera               | Single (fixed detection)            | Dual: fixed detection + turret-mounted tracking               |
+| Turret mechanics     | Plastic gimbal, MG90S/MG996R servos | Metal brackets, stiffer mounts, optional stepper pan/tilt     |
+| Compute              | Pi4 + Coral USB                     | Pi5 + Hailo or Jetson Orin Nano (higher inference throughput) |
+| Actuation (expanded) | Relay/MOSFET to LED/lamp only       | Solenoid for demo trigger, stepper for precision positioning  |
+| Enclosure            | None or basic mount                 | IP-rated enclosure, cable glands, weatherproofing             |
+| Networking           | MQTT over Ethernet/Wi-Fi            | PoE, optional LTE failover                                    |
+| Presentation         | Terminal + Telegram alerts          | Operator dashboard (C2C Portal), live turret POV feed         |
+
+## Dual-camera architecture
+
+Phase 1 uses a single fixed camera for detection and tracking. Phase 2 adds a
+second camera mounted on the turret gimbal for:
+
+- **Closed-loop aiming** — turret-view refines aim (not just slewing to
+  predicted coordinates).
+- **Occlusion handling** — if the fixed camera loses track, the turret camera
+  can maintain it.
+- **Zoom / narrow FOV** — turret camera can be a narrow-angle or zoom lens for
+  identification.
+- **UI polish** — turret POV displayed in the operator dashboard alongside the
+  wide-angle view.
+
+Interface: the tracking module publishes a target bearing; the turret camera
+provides feedback for closed-loop correction. Data contracts are defined in
+[Vision-to-actuator contracts](../../technical/architecture/interfaces/vision-to-actuator-contracts.mdx).
+
+## Solenoid and stepper additions
+
+These are **deferred from Phase 1** (not avoided — intentional later additions).
+
+### Solenoids
+
+- **Use case:** Demo trigger for safe response (e.g. latch release, indicator
+  lamp, pneumatic demo). Non-weapon only.
+- **Safety requirements:** Interlock, arming UI, timed pulse limits, watchdog.
+  All activations logged and auditable.
+- **Doc needed:** Actuator expansion (solenoid drive, interlocks); where they
+  fit in the platform BOM.
+
+### Stepper motors / drivers
+
+- **Use case:** Pan/tilt upgrade (higher precision, repeatability), linear
+  motion, or positioning where servos are insufficient.
+- **Driver selection:** Separate from DC motor tiers (TB6612/BTS7960 in Platform
+  BOM v1); dedicated stepper drivers (e.g. A4988, DRV8825, TMC2209).
+- **Doc needed:** Driver selection guide, interface and safety limits, link to
+  platform BOM motor tiers.
+
+Reference:
+[Future phases outline](../../internal/decisions/future-phases-outline.md),
+[Avoid list](../phase1/avoid-list.mdx).
+
+## Compute upgrade paths
+
+| Platform              | TOPS | Notes                              |
+| --------------------- | ---- | ---------------------------------- |
+| Pi4 + Coral USB (Ph1) | 4    | Phase 1 baseline                   |
+| Pi5 + Hailo-8L        | 13   | Cost-effective Phase 2 upgrade     |
+| Jetson Orin Nano 4GB  | 20   | GPU inference, multi-model support |
+| Pi5 + Hailo-8         | 26   | Higher throughput                  |
+| Jetson Orin NX 8GB    | 70   | Professional tier                  |
+
+Compute tier definitions are in [Common/compute](../common/compute.mdx) and
+[platforms.ts](../../../src/data/products/platforms.ts).
+
+## Stiffer mechanics
+
+Phase 1 uses plastic gimbals (R31/R81 bracket kits) with hobby servos. Phase 2
+targets:
+
+- Metal pan/tilt brackets or custom machined mounts.
+- Anti-vibration mounting (rubber grommets or dampeners).
+- Cable management and weatherproofing.
+- Optional: linear actuator for elevation in larger turret designs.
+
+Mechanical design ADRs will be formalized when Phase 2 builds begin.
+
+## Safety boundary
+
+Phase 2 follows the same core safety principle: **no weaponization**. Solenoids
+and actuators are for safe demo applications only (relay, latch, indicator). All
+activations go through the authority/safety controller with interlock, logging,
+and watchdog.
+
+See [Phase-1 safety boundary](../phase1/safety-boundary.mdx) — the same rules
+apply; Phase 2 adds interlock requirements for solenoid/stepper actuation.
+
+## Prerequisites (from Phase 1)
+
+Before starting Phase 2 work:
+
+- Phase 1 detection → tracking → alarm → servo pan/tilt must be reliable.
+- Software pipeline stable: transport abstraction, authority controller, and
+  safety state machine working.
+- Phase 1 demo successfully shown to at least one external audience.
+
+## Related
+
+- [Phase-1 overview](../phase1/index.mdx) — prerequisite phase
+- [Phase-3 overview](../phase3/index.mdx) — next phase
+- [Common modules](../common/index.mdx) — shared across all phases
+- [Future phases outline](../../internal/decisions/future-phases-outline.md)
+- [Authority and safety controller](../../technical/control/authority-and-safety-controller.mdx)
+- [C2C Portal architecture](../../technical/architecture/products/c2c-portal-architecture.mdx)

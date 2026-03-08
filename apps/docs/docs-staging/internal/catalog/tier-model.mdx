@@ -1,0 +1,38 @@
+---
+title: Documentation Tier Model
+sidebar_label: Tier Model
+---
+
+# Documentation Tier Model
+
+A simple tier model for documentation helps decide where content lives and how
+it is treated (e.g. public vs internal, stability expectations).
+
+## Tiers (summary)
+
+| Tier     | Audience            | Examples                  | Build visibility                |
+| -------- | ------------------- | ------------------------- | ------------------------------- |
+| Public   | Customers, partners | User guides, API, legal   | Shown in public build           |
+| Internal | Engineers, product  | EDR, catalog governance   | Hidden or gated in build config |
+| Staging  | Contributors        | Drafts in `docs-staging/` | Not in default build            |
+
+## Placement
+
+- **business/, technical/, engineering/, operations/, legal/** — Mix of public
+  and internal; use build config or frontmatter to hide specific internal pages
+  if needed.
+- **internal/** — Treated as internal; hide via docs configuration (path or
+  sidebar) rather than omitting from the catalog.
+
+## Stability
+
+- **Stable** — Root domains and the catalog structure are intended to last;
+  avoid renaming top-level folders.
+- **Evolving** — Individual docs and subfolders may be added or reorganized
+  within the catalog rules; see [source of truth](./source-of-truth.mdx).
+
+## Related
+
+- [Source of truth](./source-of-truth.mdx)
+- [Normalization](./normalization.mdx)
+- [Export and interop](./export-interop.mdx)

@@ -11,8 +11,10 @@ import type { ComputePlatform, AIAccelerator, FPSBenchmark } from "./types";
 /** Raspberry Pi compute platforms */
 export const raspberryPiPlatforms: ComputePlatform[] = [
   {
+    id: "pi_zero_2w",
     name: "Raspberry Pi Zero 2 W",
     price: 15,
+    priceType: "msrp",
     ram: "512MB",
     cpu: "Quad Cortex-A53 @ 1GHz",
     power: "2-4W",
@@ -20,9 +22,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
     notes: "Entry-level, WiFi only",
   },
   {
+    id: "pi4_2gb",
     name: "Raspberry Pi 4 Model B",
     variant: "2GB",
     price: 35,
+    priceType: "msrp",
     ram: "2GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "4-8W",
@@ -30,9 +34,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
     notes: "Standard detection, PoE HAT compatible",
   },
   {
+    id: "pi4_4gb",
     name: "Raspberry Pi 4 Model B",
     variant: "4GB",
     price: 60,
+    priceType: "msrp",
     ram: "4GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "4-8W",
@@ -40,9 +46,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
     notes: "Multi-sensor fusion capable",
   },
   {
+    id: "pi4_8gb",
     name: "Raspberry Pi 4 Model B",
     variant: "8GB",
     price: 85,
+    priceType: "msrp",
     ram: "8GB",
     cpu: "Quad Cortex-A72 @ 1.8GHz",
     power: "5-10W",
@@ -50,9 +58,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
     notes: "Heavy workloads, video recording",
   },
   {
+    id: "pi5_4gb",
     name: "Raspberry Pi 5",
     variant: "4GB",
     price: 70,
+    priceType: "msrp",
     ram: "4GB",
     cpu: "Quad Cortex-A76 @ 2.4GHz",
     power: "5-12W",
@@ -60,9 +70,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
     notes: "PCIe support, M.2 HAT compatible",
   },
   {
+    id: "pi5_8gb",
     name: "Raspberry Pi 5",
     variant: "8GB",
     price: 95,
+    priceType: "msrp",
     ram: "8GB",
     cpu: "Quad Cortex-A76 @ 2.4GHz",
     power: "5-15W",
@@ -78,9 +90,11 @@ export const raspberryPiPlatforms: ComputePlatform[] = [
 /** NVIDIA Jetson platforms */
 export const jetsonPlatforms: ComputePlatform[] = [
   {
+    id: "jetson_orin_nano_4gb",
     name: "Jetson Orin Nano",
     variant: "4GB",
     price: 199,
+    priceType: "msrp",
     ram: "4GB",
     cpu: "6-core Cortex-A78AE @ 1.5GHz",
     power: "7-15W",
@@ -88,9 +102,11 @@ export const jetsonPlatforms: ComputePlatform[] = [
     notes: "20 TOPS, entry Jetson tier",
   },
   {
+    id: "jetson_orin_nano_8gb",
     name: "Jetson Orin Nano",
     variant: "8GB",
     price: 249,
+    priceType: "msrp",
     ram: "8GB",
     cpu: "6-core Cortex-A78AE @ 1.5GHz",
     power: "7-15W",
@@ -98,19 +114,23 @@ export const jetsonPlatforms: ComputePlatform[] = [
     notes: "40 TOPS, dev kit ~$499",
   },
   {
+    id: "jetson_orin_nx_8gb",
     name: "Jetson Orin NX",
     variant: "8GB",
     price: 399,
+    priceType: "msrp",
     ram: "8GB",
     cpu: "6-core Cortex-A78AE @ 2.0GHz",
     power: "10-25W",
     formFactor: "69.6×45mm (module)",
-    notes: "67 TOPS, professional tier",
+    notes: "70 TOPS, professional tier",
   },
   {
+    id: "jetson_orin_nx_16gb",
     name: "Jetson Orin NX",
     variant: "16GB",
     price: 599,
+    priceType: "msrp",
     ram: "16GB",
     cpu: "8-core Cortex-A78AE @ 2.0GHz",
     power: "10-25W",
@@ -118,9 +138,11 @@ export const jetsonPlatforms: ComputePlatform[] = [
     notes: "117 TOPS, multi-stream capable",
   },
   {
+    id: "jetson_agx_32gb",
     name: "Jetson AGX Orin",
     variant: "32GB",
     price: 999,
+    priceType: "msrp",
     ram: "32GB",
     cpu: "12-core Cortex-A78AE @ 2.2GHz",
     power: "15-40W",
@@ -128,9 +150,11 @@ export const jetsonPlatforms: ComputePlatform[] = [
     notes: "200 TOPS, enterprise/military",
   },
   {
+    id: "jetson_agx_64gb",
     name: "Jetson AGX Orin",
     variant: "64GB",
     price: 1999,
+    priceType: "msrp",
     ram: "64GB",
     cpu: "12-core Cortex-A78AE @ 2.2GHz",
     power: "15-60W",
@@ -145,8 +169,79 @@ export const jetsonPlatforms: ComputePlatform[] = [
 
 /** Available AI accelerators */
 export const aiAccelerators: AIAccelerator[] = [
-  // Google Coral
+  // Sentinels / integrated (used by benchmarks and recommendations)
   {
+    id: "none",
+    name: "None",
+    price: 0,
+    tops: 0,
+    interface: "N/A",
+    power: "0W",
+    compatibility: ["Pi Zero 2W", "Pi 4", "Pi 5", "Jetson", "x86"],
+    notes: "CPU-only",
+  },
+  {
+    id: "integrated_20",
+    name: "Integrated GPU (20 TOPS)",
+    price: 0,
+    tops: 20,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson Orin Nano 4GB",
+  },
+  {
+    id: "integrated_40",
+    name: "Integrated GPU (40 TOPS)",
+    price: 0,
+    tops: 40,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson Orin Nano 8GB",
+  },
+  {
+    id: "integrated_70",
+    name: "Integrated GPU (70 TOPS)",
+    price: 0,
+    tops: 70,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson Orin NX 8GB",
+  },
+  {
+    id: "integrated_117",
+    name: "Integrated GPU (117 TOPS)",
+    price: 0,
+    tops: 117,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson Orin NX 16GB",
+  },
+  {
+    id: "integrated_200",
+    name: "Integrated GPU (200 TOPS)",
+    price: 0,
+    tops: 200,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson AGX Orin 32GB",
+  },
+  {
+    id: "integrated_275",
+    name: "Integrated GPU (275 TOPS)",
+    price: 0,
+    tops: 275,
+    interface: "Integrated",
+    power: "Included",
+    compatibility: ["Jetson"],
+    notes: "Jetson AGX Orin 64GB",
+  },
+  {
+    id: "coral_usb",
     name: "Coral USB Accelerator",
     price: 59.99,
     tops: 4,
@@ -156,6 +251,7 @@ export const aiAccelerators: AIAccelerator[] = [
     notes: "Most versatile, plug-and-play",
   },
   {
+    id: "coral_m2_ae",
     name: "Coral M.2 Accelerator (A+E key)",
     price: 25,
     tops: 4,
@@ -165,6 +261,7 @@ export const aiAccelerators: AIAccelerator[] = [
     notes: "Compact, requires M.2 slot",
   },
   {
+    id: "coral_m2_dual",
     name: "Coral M.2 Accelerator (Dual TPU)",
     price: 90,
     tops: 8,
@@ -174,6 +271,7 @@ export const aiAccelerators: AIAccelerator[] = [
     notes: "Dual Edge TPU, double throughput (retail $65-110)",
   },
   {
+    id: "coral_dev_mini",
     name: "Coral Dev Board Mini",
     price: 99.99,
     tops: 4,
@@ -182,8 +280,8 @@ export const aiAccelerators: AIAccelerator[] = [
     compatibility: ["Standalone"],
     notes: "Integrated Cortex-A35 + TPU",
   },
-  // Hailo
   {
+    id: "hailo8l_m2",
     name: "Hailo-8L M.2",
     price: 99,
     tops: 13,
@@ -193,6 +291,7 @@ export const aiAccelerators: AIAccelerator[] = [
     notes: "Budget Hailo, excellent power efficiency",
   },
   {
+    id: "hailo8_m2",
     name: "Hailo-8 M.2",
     price: 225,
     tops: 26,
@@ -202,6 +301,7 @@ export const aiAccelerators: AIAccelerator[] = [
     notes: "Full Hailo performance, best-in-class edge AI (retail $200-250)",
   },
   {
+    id: "pi_ai_kit_hailo8l",
     name: "Raspberry Pi AI Kit (Hailo-8L)",
     price: 70,
     tops: 13,
@@ -210,8 +310,8 @@ export const aiAccelerators: AIAccelerator[] = [
     compatibility: ["Pi 5 only"],
     notes: "Official Pi HAT with Hailo-8L, recommended for Pi 5",
   },
-  // Intel
   {
+    id: "intel_ncs2",
     name: "Intel Neural Compute Stick 2",
     price: 69,
     tops: 1,
@@ -226,10 +326,11 @@ export const aiAccelerators: AIAccelerator[] = [
 // FPS BENCHMARKS
 // =============================================================================
 
-/** YOLOv9 detection benchmarks (drone detection model) */
+/** YOLOv9 detection benchmarks (drone detection model). Use platformId/acceleratorId for stable references. */
 export const fpsBenchmarks: FPSBenchmark[] = [
-  // Pi Zero 2W (no accelerator - CPU only)
   {
+    platformId: "pi_zero_2w",
+    acceleratorId: "none",
     platform: "Pi Zero 2W",
     accelerator: "None (CPU)",
     modelSize: "nano",
@@ -238,8 +339,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "500ms",
     notes: "Minimal, alerts only",
   },
-  // Pi 4 + Coral USB
   {
+    platformId: "pi4_2gb",
+    acceleratorId: "coral_usb",
     platform: "Pi 4 (2GB)",
     accelerator: "Coral USB",
     modelSize: "small",
@@ -249,6 +351,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Standard tier baseline",
   },
   {
+    platformId: "pi4_4gb",
+    acceleratorId: "coral_usb",
     platform: "Pi 4 (4GB)",
     accelerator: "Coral USB",
     modelSize: "medium",
@@ -257,8 +361,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "55ms",
     notes: "Higher resolution detection",
   },
-  // Pi 5 + Coral M.2 Dual
   {
+    platformId: "pi5_4gb",
+    acceleratorId: "coral_m2_dual",
     platform: "Pi 5 (4GB)",
     accelerator: "Coral M.2 Dual",
     modelSize: "medium",
@@ -268,6 +373,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Pro tier baseline",
   },
   {
+    platformId: "pi5_8gb",
+    acceleratorId: "coral_m2_dual",
     platform: "Pi 5 (8GB)",
     accelerator: "Coral M.2 Dual",
     modelSize: "large",
@@ -276,8 +383,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "45ms",
     notes: "Full HD detection",
   },
-  // Pi 5 + Hailo-8L (AI Kit)
   {
+    platformId: "pi5_4gb",
+    acceleratorId: "pi_ai_kit_hailo8l",
     platform: "Pi 5 (4GB)",
     accelerator: "Hailo-8L (AI Kit)",
     modelSize: "medium",
@@ -287,6 +395,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Recommended Pi 5 config",
   },
   {
+    platformId: "pi5_8gb",
+    acceleratorId: "pi_ai_kit_hailo8l",
     platform: "Pi 5 (8GB)",
     accelerator: "Hailo-8L (AI Kit)",
     modelSize: "large",
@@ -295,8 +405,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "33ms",
     notes: "Full HD with Hailo",
   },
-  // Pi 5 + Hailo-8 (full)
   {
+    platformId: "pi5_8gb",
+    acceleratorId: "hailo8_m2",
     platform: "Pi 5 (8GB)",
     accelerator: "Hailo-8",
     modelSize: "large",
@@ -306,6 +417,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Maximum Pi performance",
   },
   {
+    platformId: "pi5_8gb",
+    acceleratorId: "hailo8_m2",
     platform: "Pi 5 (8GB)",
     accelerator: "Hailo-8",
     modelSize: "large",
@@ -314,8 +427,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "65ms",
     notes: "4K detection capable",
   },
-  // Jetson Orin Nano
   {
+    platformId: "jetson_orin_nano_4gb",
+    acceleratorId: "integrated_20",
     platform: "Jetson Orin Nano (4GB)",
     accelerator: "Integrated GPU (20 TOPS)",
     modelSize: "medium",
@@ -325,6 +439,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Entry Jetson tier",
   },
   {
+    platformId: "jetson_orin_nano_8gb",
+    acceleratorId: "integrated_40",
     platform: "Jetson Orin Nano (8GB)",
     accelerator: "Integrated GPU (40 TOPS)",
     modelSize: "large",
@@ -333,8 +449,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "17ms",
     notes: "Cost-effective pro option",
   },
-  // Jetson Orin NX
   {
+    platformId: "jetson_orin_nx_8gb",
+    acceleratorId: "integrated_70",
     platform: "Jetson Orin NX (8GB)",
     accelerator: "Integrated GPU (70 TOPS)",
     modelSize: "large",
@@ -344,6 +461,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "Multi-stream capable",
   },
   {
+    platformId: "jetson_orin_nx_16gb",
+    acceleratorId: "integrated_117",
     platform: "Jetson Orin NX (16GB)",
     accelerator: "Integrated GPU (117 TOPS)",
     modelSize: "large",
@@ -352,8 +471,9 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     latency: "8ms",
     notes: "2-3 streams @ 40fps each",
   },
-  // Jetson AGX Orin
   {
+    platformId: "jetson_agx_32gb",
+    acceleratorId: "integrated_200",
     platform: "Jetson AGX Orin (32GB)",
     accelerator: "Integrated GPU (200 TOPS)",
     modelSize: "large",
@@ -363,6 +483,8 @@ export const fpsBenchmarks: FPSBenchmark[] = [
     notes: "4-6 streams @ 30fps each",
   },
   {
+    platformId: "jetson_agx_64gb",
+    acceleratorId: "integrated_275",
     platform: "Jetson AGX Orin (64GB)",
     accelerator: "Integrated GPU (275 TOPS)",
     modelSize: "large",
@@ -377,9 +499,11 @@ export const fpsBenchmarks: FPSBenchmark[] = [
 // PLATFORM RECOMMENDATIONS
 // =============================================================================
 
-/** Platform recommendation by use case */
+/** Platform recommendation by use case (platformId/acceleratorId for stable references) */
 export const platformRecommendations = {
   hobbyist: {
+    platformId: "pi_zero_2w",
+    acceleratorId: "none",
     platform: "Pi Zero 2W",
     accelerator: "None",
     price: "$15",
@@ -387,6 +511,8 @@ export const platformRecommendations = {
     notes: "Alerts only, no real-time tracking",
   },
   residential: {
+    platformId: "pi4_2gb",
+    acceleratorId: "coral_usb",
     platform: "Pi 4 (2GB) + Coral USB",
     accelerator: "Coral USB",
     price: "$105",
@@ -394,6 +520,8 @@ export const platformRecommendations = {
     notes: "Best value for home use",
   },
   commercial: {
+    platformId: "pi5_4gb",
+    acceleratorId: "pi_ai_kit_hailo8l",
     platform: "Pi 5 (4GB) + Hailo-8L AI Kit",
     accelerator: "Hailo-8L",
     price: "$130",
@@ -401,6 +529,8 @@ export const platformRecommendations = {
     notes: "Recommended for most commercial",
   },
   professional: {
+    platformId: "pi5_8gb",
+    acceleratorId: "hailo8_m2",
     platform: "Pi 5 (8GB) + Hailo-8",
     accelerator: "Hailo-8",
     price: "$229",
@@ -408,6 +538,8 @@ export const platformRecommendations = {
     notes: "Maximum Pi performance",
   },
   multiStream: {
+    platformId: "jetson_orin_nano_8gb",
+    acceleratorId: "integrated_40",
     platform: "Jetson Orin Nano (8GB)",
     accelerator: "Integrated",
     price: "$499 (dev kit)",
@@ -415,6 +547,8 @@ export const platformRecommendations = {
     notes: "Multiple cameras, compact",
   },
   enterprise: {
+    platformId: "jetson_orin_nx_16gb",
+    acceleratorId: "integrated_117",
     platform: "Jetson Orin NX (16GB)",
     accelerator: "Integrated",
     price: "$599 (module)",
@@ -422,6 +556,8 @@ export const platformRecommendations = {
     notes: "Enterprise multi-sensor",
   },
   military: {
+    platformId: "jetson_agx_64gb",
+    acceleratorId: "integrated_275",
     platform: "Jetson AGX Orin (64GB)",
     accelerator: "Integrated",
     price: "$1999 (module)",

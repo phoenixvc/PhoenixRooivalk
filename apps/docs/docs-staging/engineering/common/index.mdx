@@ -1,0 +1,24 @@
+---
+title: Common Modules
+sidebar_label: Common modules
+tags: ["common", "modules"]
+---
+
+# Common Modules
+
+Shared build blocks (power, networking, actuator, compute, alarms) used across
+engineering builds. Phase-1 and other phases reference these; product docs link
+here to avoid duplication.
+
+| Doc                            | Description                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| [Power](./power.mdx)           | MP1584EN buck, rails, common GND, bulk capacitor, set voltage before connect |
+| [Alarms](./alarms.mdx)         | Local (buzzer, LED, strobe, siren) and remote (MQTT, Telegram)               |
+| [Networking](./networking.mdx) | MQTT as event spine, HTTP fallback, node identity                            |
+| [Actuator](./actuator.mdx)     | ESP32, PCA9685 for servos, 180° only, MG90S/MG996R, safety                   |
+| [Compute](./compute.mdx)       | Pi4+Coral default; camera: OV2640 preferred, avoid OV7670                    |
+
+Also: [Shared parts](./shared-parts.mdx), [Wiring safety](./wiring-safety.mdx).
+
+Phase-1 stack and BOMs are described in [Phase-1 overview](../phase1/index.mdx)
+and in each [product doc](../phase1/products/index.mdx).

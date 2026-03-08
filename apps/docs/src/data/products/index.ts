@@ -18,28 +18,43 @@ export type {
   BOMItem,
   ProductSpecs,
   Product,
+  PlatformId,
+  AcceleratorId,
   ComputePlatform,
   AIAccelerator,
   FPSBenchmark,
   StorageOption,
   ComputeTierId,
-  ComputeBaseTierId,
+  ComputeTierKey,
   CameraTierId,
-  CameraBaseId,
+  CameraTierKey,
   ConnectivityTierId,
-  ConnectivityBaseId,
+  ConnectivityTierKey,
   StorageTierId,
-  StorageBaseId,
+  StorageTierKey,
   ComputeTier,
   CameraTier,
   ConnectivityTier,
   StorageTier,
+  TierPriceDelta,
   ProductComputeConfig,
   ProductCameraConfig,
   ProductConnectivityConfig,
   ProductStorageConfig,
   ProductConfiguration,
+  UseCaseTierId,
 } from "./types";
+
+// =============================================================================
+// BOM ENGINE EXPORTS
+// =============================================================================
+
+export {
+  buildConfiguredBom,
+  applyBomPatches,
+  bomLineKey,
+  sumBom,
+} from "./bom-engine";
 
 // =============================================================================
 // CATALOG EXPORTS - Products and Collections
@@ -66,8 +81,10 @@ export {
   skySnare,
   // NetSnare line
   netSnareLite,
+  netSnareLiteTurret,
   netSnareStandard,
   netSnarePro,
+  responseRelayDemo,
   // AeroNet line
   aeroNetEnterprise,
   aeroNetCommand,
@@ -97,7 +114,12 @@ export {
   getProductsByLine,
   getProductsByCategory,
   getProductsByPriceRange,
+  getProductLines,
+  getProductListSummary,
+  validateCatalogInvariants,
 } from "./catalog";
+export type { ProductLineId } from "./catalog";
+export type { CatalogValidationResult } from "./catalog";
 
 // Catalog summary data
 export {
@@ -129,6 +151,7 @@ export {
 export {
   localStorageOptions,
   networkStorageOptions,
+  storageTierSummary,
   storageRecommendations,
 } from "./storage-options";
 
@@ -164,4 +187,6 @@ export {
   getProductStorageConfig,
   getAvailableStorage,
   generateProductConfiguration,
+  validateConfiguratorData,
 } from "./tiers";
+export type { ConfiguratorValidationResult } from "./tiers";

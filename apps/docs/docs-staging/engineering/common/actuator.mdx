@@ -1,0 +1,30 @@
+---
+title: Actuator
+sidebar_label: Actuator
+---
+
+# Phase-1 Actuator
+
+- **Controller:** ESP32 as actuator controller. Receives setpoints (e.g.
+  MQTT/HTTP), drives servos or relays.
+- **ESP32 variants (when to use):** **ESP32-DevKitC / ESP32-WROOM-32** — general
+  purpose (servo + MQTT/HTTP + alarms); **ESP32-WROVER** (PSRAM) — more RAM,
+  future camera/buffering; **ESP32-S3** — newer, camera boards; **ESP32-CAM
+  (OV2640)** — turret POV stream (streaming only; not for heavy on-device
+  detection). Pair with PCA9685, buck (e.g. MP1584EN), and alarm outputs
+  (buzzer, LED, MOSFET/relay).
+- **Servo driver:** Use **PCA9685 (16-channel I2C)** for servos. **Do not use
+  L298N for servos** (wrong driver type; see
+  [Avoid list](../phase1/avoid-list.mdx)).
+- **Pan/tilt servos:** **180° positional servos only** — not 360° continuous
+  rotation. **MG90S metal gear** (not SG90 plastic) for turret; **MG996R** for
+  heavier head. Two servos typical for pan/tilt.
+- **Servo power rail:** Dedicated 5V/6V from buck; common GND with ESP32; bulk
+  capacitor on servo rail (see [Power](./power.mdx)).
+- **Safety:** Arm flag, rate limits, timeout to neutral. Document in product
+  how-to (e.g. turret, Response Relay).
+- **Control interface options:** When starting from existing RC (e.g. FlySky),
+  see
+  [Control interface options](../../technical/control/control-interface-options.mdx)
+  — replace receiver with MCU, hardware switch, or analog stick injection; no RF
+  emulation.

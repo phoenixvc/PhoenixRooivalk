@@ -1,0 +1,47 @@
+---
+title: Servo Selection and Calibration
+sidebar_label: Servo Selection and Calibration
+---
+
+# Servo Selection and Calibration
+
+Guidance for selecting and calibrating servos used in demo-safe tracking and
+actuation (e.g. pan-tilt or turret-style mounts). Focus is on repeatability,
+safety limits, and integration with the control layer.
+
+## Selection Criteria
+
+- **Torque and speed** — Sized for the mechanical load and required slew rates
+  for tracking; margin for friction and cable routing.
+- **Interface** — PWM, serial bus (e.g. UART servos), or other; compatibility
+  with the chosen control board and transport.
+- **Operating voltage** — Match to system power rails; document derating if
+  shared with sensitive electronics.
+- **Environmental** — Temperature and ingress protection for deployment
+  environment.
+
+## Calibration Workflow
+
+1. **Mechanical limits** — Establish safe min/max positions (hard stops or
+   software limits) to avoid damage and ensure predictable range.
+2. **Center and range** — Map PWM or command values to physical angles; document
+   neutral and full-range values for each axis.
+3. **Repeatability** — Check backlash and repeatability at key positions;
+   document tolerances for tracking accuracy.
+4. **Integration** — Confirm units and sign conventions (e.g. radians vs
+   degrees, positive direction) used by the
+   [tracking control loop](../control/tracking-control-loop.mdx) and
+   [authority/safety controller](../control/authority-and-safety-controller.mdx).
+
+## Safety
+
+- All commanded positions must respect software limits; the safety/authority
+  layer must enforce these before commands reach the servo interface.
+- Document fail-safe behavior (e.g. hold last position, move to neutral, or
+  disable drive) on loss of command or fault.
+
+## Related
+
+- [Board bring-up and flashing](./board-bringup-and-flashing.mdx)
+- [Authority and safety controller](../control/authority-and-safety-controller.mdx)
+- [Tracking control loop](../control/tracking-control-loop.mdx)
