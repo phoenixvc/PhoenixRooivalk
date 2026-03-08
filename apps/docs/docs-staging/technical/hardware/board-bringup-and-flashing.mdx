@@ -38,7 +38,7 @@ This document covers procedures for initial board bring-up and firmware flashing
 ### ESP32 (DevKitC, WROOM, WROVER, S3, ESP32-CAM)
 
 - **Methods:** USB serial (UART), USB DFU (S2/S3). Tools: `esptool.py`, `idf.py flash`, or Arduino/PlatformIO.
-- **Boot mode:** Hold **BOOT** (or **IO0**) low while asserting **EN** (reset); release **BOOT** after release of **EN** to enter bootloader. Some boards auto-entrain via USB.
+- **Boot mode:** Hold **BOOT** (or **IO0**) low while asserting **EN** (reset); release **BOOT** after release of **EN** to enter bootloader. Some boards auto-enter via USB.
 - **Flash commands (example):** `esptool.py --port COM3 write_flash 0x0 firmware.bin`. Replace `COM3` with your port; use `esptool.py flash_id` to verify connection.
 - **Recovery:** Hold **BOOT**, tap **EN**; LED may show bootloader. Run `esptool.py --port COM3 write_flash 0x0 firmware.bin`. If USB not recognized, check driver (CP210x/CH340) and try another cable (data-capable).
 

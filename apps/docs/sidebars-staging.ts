@@ -250,4 +250,4 @@ const sidebarsStaging: SidebarsConfig = {
   ],
 };
 
-export default sidebarsStaging;
+export { sidebarsStaging };

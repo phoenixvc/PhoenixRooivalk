@@ -7,6 +7,7 @@
   "items": {
     "type": "object",
     "required": ["sku", "name", "line", "category", "priceMin", "priceMax", "bomTotal", "confidence", "lastUpdated"],
+    "additionalProperties": false,
     "properties": {
       "sku": {
         "type": "string",
@@ -107,12 +108,14 @@
         "description": "Optional accessory items",
         "items": {
           "type": "object",
+          "required": ["item", "quantity", "unitCost", "totalCost"],
+          "additionalProperties": false,
           "properties": {
             "item": { "type": "string" },
             "specification": { "type": "string" },
-            "quantity": { "type": "number" },
-            "unitCost": { "type": "number" },
-            "totalCost": { "type": "number" },
+            "quantity": { "type": "integer", "minimum": 0 },
+            "unitCost": { "type": "number", "minimum": 0 },
+            "totalCost": { "type": "number", "minimum": 0 },
             "supplier": { "type": "string" }
           }
         }
