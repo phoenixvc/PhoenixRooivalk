@@ -19,7 +19,7 @@
       ]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"],
+      "dependsOn": ["^build", "^typecheck"],
       "outputs": [],
       "inputs": ["**/*.{ts,tsx}", "tsconfig*.json"]
     },

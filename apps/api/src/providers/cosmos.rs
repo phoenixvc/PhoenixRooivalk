@@ -20,10 +20,8 @@ use async_trait::async_trait;
 
 #[cfg(feature = "cosmos")]
 use azure_data_cosmos::{clients::CosmosClient, CosmosClientOptions};
-// Use azure_identity 0.31 (aliased) for azure_data_cosmos 0.30 compatibility.
-// azure_data_cosmos 0.30 expects azure_core 0.31's TokenCredential trait.
 #[cfg(feature = "cosmos")]
-use azure_identity_cosmos::AzureCliCredential;
+use azure_identity::AzureCliCredential;
 
 /// Azure Cosmos DB provider
 #[derive(Debug)]
