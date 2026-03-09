@@ -68,10 +68,10 @@ impl CosmosProvider {
 
             // Use Entra authentication with AzureCliCredential
             // In production, consider using ManagedIdentityCredential or a credential chain
-            let credential = AzureCliCredential::new(None).map_err(|e| {
+            // AzureCliCredential::new returns Arc<AzureCliCredential>, which coerces to Arc<dyn TokenCredential>
+            let credential: Arc<dyn TokenCredential> = AzureCliCredential::new(None).map_err(|e| {
                 ProviderError::Connection(format!("Failed to create Azure credential: {}", e))
             })?;
-            let credential: Arc<dyn TokenCredential> = Arc::new(credential);
 
             let endpoint: CosmosAccountEndpoint =
                 format!("https://{}.documents.azure.com:443/", account)
