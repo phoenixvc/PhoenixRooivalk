@@ -19,9 +19,13 @@ use crate::entities::{CareerApplication, Evidence, Session, User};
 use async_trait::async_trait;
 
 #[cfg(feature = "cosmos")]
-use azure_data_cosmos::{clients::CosmosClient, CosmosClientOptions};
+use azure_core::credentials::TokenCredential;
+#[cfg(feature = "cosmos")]
+use azure_data_cosmos::{CosmosAccountEndpoint, CosmosAccountReference, CosmosClient};
 #[cfg(feature = "cosmos")]
 use azure_identity::AzureCliCredential;
+#[cfg(feature = "cosmos")]
+use std::sync::Arc;
 
 /// Azure Cosmos DB provider
 #[derive(Debug)]
@@ -67,13 +71,18 @@ impl CosmosProvider {
             let credential = AzureCliCredential::new(None).map_err(|e| {
                 ProviderError::Connection(format!("Failed to create Azure credential: {}", e))
             })?;
+            let credential: Arc<dyn TokenCredential> = Arc::new(credential);
 
-            let endpoint = format!("https://{}.documents.azure.com:443/", account);
-            let client =
-                CosmosClient::new(&endpoint, credential, Some(CosmosClientOptions::default()))
-                    .map_err(|e| {
-                        ProviderError::Connection(format!("Failed to create Cosmos client: {}", e))
-                    })?;
+            let endpoint: CosmosAccountEndpoint = format!("https://{}.documents.azure.com:443/", account)
+                .parse()
+                .map_err(|e| ProviderError::Connection(format!("Invalid Cosmos endpoint: {}", e)))?;
+            let account_ref = CosmosAccountReference::with_credential(endpoint, credential);
+            let client = CosmosClient::builder()
+                .build(account_ref)
+                .await
+                .map_err(|e| {
+                    ProviderError::Connection(format!("Failed to create Cosmos client: {}", e))
+                })?;
 
             Ok(Self { client, database })
         }
