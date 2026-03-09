@@ -56,10 +56,10 @@ jobs:
           ../../scripts/validate-env.sh docs
 
       - name: Format check
-        run: pnpm format:check || echo "Format check failed, but continuing..."
+        run: pnpm format:check
 
       - name: Lint
-        run: pnpm lint || echo "Lint failed, but continuing..."
+        run: pnpm lint
 
       - name: Build
         run: pnpm run build
@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: docs-site-build
-          path: build
+          path: apps/docs/build
 
       - name: Check Netlify secrets
         id: check_secrets
@@ -169,28 +169,19 @@ jobs:
           ../../scripts/validate-env.sh docs
 
       - name: Format check
-        run: pnpm format:check || echo "Format check failed, but continuing..."
+        run: pnpm format:check
 
       - name: Lint
-        run: pnpm lint || echo "Lint failed, but continuing..."
+        run: pnpm lint
 
       - name: Build
         env:
           NODE_ENV: production
           CI: true
         run: |
-          echo "Starting build process..."
           echo "Node version: $(node --version)"
           echo "pnpm version: $(pnpm --version)"
-          if pnpm run build; then
-            echo "Build completed successfully"
-          else
-            echo "Build failed, creating fallback build directory..."
-            mkdir -p build
-            echo '<!DOCTYPE html><html><head><title>Phoenix Rooivalk Documentation</title></head><body><h1>Phoenix Rooivalk Documentation</h1><p>Documentation site is being updated. Please check back later.</p></body></html>' > build/index.html
-            echo "Fallback build directory created"
-          fi
-        continue-on-error: false
+          pnpm run build
 
       - name: Debug build output (Preview)
         run: |

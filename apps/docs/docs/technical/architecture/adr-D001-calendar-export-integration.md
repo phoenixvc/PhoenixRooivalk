@@ -16,7 +16,8 @@ prerequisites: []
 
 # ADR D001: Calendar Export and Integration
 
-**Date**: 2025-12-09 **Status**: Accepted
+**Date**: 2025-12-09
+**Status**: Accepted
 
 ---
 

@@ -1,9 +1,10 @@
 # GitHub Actions Workflow Improvements (DEPRECATED)
 
-> **⚠️ DEPRECATED**: This document contains references to Netlify deployment.
-> The project now deploys exclusively to Azure Static Web Apps. Current
-> workflows are in `.github/workflows/deploy-marketing-azure.yml` and
-> `.github/workflows/deploy-docs-azure.yml`.
+> **Outdated — do not use.** This document is deprecated and contains
+> Netlify-specific YAML and references. The project deploys exclusively to
+> Azure Static Web Apps. Use the current workflows:
+> [deploy-marketing-azure.yml](workflows/deploy-marketing-azure.yml) and
+> [deploy-docs-azure.yml](workflows/deploy-docs-azure.yml).
 
 ---
 

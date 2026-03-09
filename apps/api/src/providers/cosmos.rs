@@ -73,9 +73,12 @@ impl CosmosProvider {
             })?;
             let credential: Arc<dyn TokenCredential> = Arc::new(credential);
 
-            let endpoint: CosmosAccountEndpoint = format!("https://{}.documents.azure.com:443/", account)
-                .parse()
-                .map_err(|e| ProviderError::Connection(format!("Invalid Cosmos endpoint: {}", e)))?;
+            let endpoint: CosmosAccountEndpoint =
+                format!("https://{}.documents.azure.com:443/", account)
+                    .parse()
+                    .map_err(|e| {
+                        ProviderError::Connection(format!("Invalid Cosmos endpoint: {}", e))
+                    })?;
             let account_ref = CosmosAccountReference::with_credential(endpoint, credential);
             let client = CosmosClient::builder()
                 .build(account_ref)
