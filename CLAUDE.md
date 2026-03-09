@@ -17,7 +17,7 @@ evidence anchoring, edge AI processing, and a threat simulation engine.
 | Backend        | Rust (Axum 0.8), Python 3.9+ (detector)                  |
 | Blockchain     | Solana SDK, EtherLink, x402 payment protocol             |
 | Database       | SQLite via SQLx, Azure Cosmos DB (Docs)                  |
-| Package Mgr    | pnpm 9.6.0 (enforced via corepack)                       |
+| Package Mgr    | pnpm 10.31.0 (enforced via corepack)                     |
 | Monorepo       | Turborepo 2.8                                            |
 | JS Testing     | Vitest (marketing), Jest (docs, ui)                      |
 | Rust Testing   | cargo test                                               |

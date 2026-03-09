@@ -53,7 +53,7 @@ cargo install trunk --locked
 ✅ Serving on: http://127.0.0.1:8080
 ```
 
-### Issue: "pnpm update available 9.6.0 → 10.18.1"
+### Issue: "pnpm update available" notice
 
 **Status**: ℹ️ INFORMATIONAL - Not critical
 
@@ -65,7 +65,7 @@ npm install -g pnpm@latest
 corepack prepare pnpm@latest --activate
 ```
 
-**Or ignore it** - The current version (9.6.0) works fine.
+**Or ignore it** - The version in `packageManager` (see repo root `package.json`) is the supported one; the notice appears if your global pnpm differs.
 
 ---
 
