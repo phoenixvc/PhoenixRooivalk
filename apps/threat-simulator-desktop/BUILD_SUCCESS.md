@@ -139,7 +139,7 @@ cargo build -p threat-simulator-desktop --target wasm32-unknown-unknown --releas
 
 - Trunk 0.21+ - WASM bundler
 - Rust 1.70+ - Compiler
-- pnpm 9.6+ - Package manager
+- pnpm 10.x (see root package.json `packageManager`) - Package manager
 
 ---
 

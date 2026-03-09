@@ -16,7 +16,7 @@ You are a senior DevOps engineer managing this workspace's infrastructure:
 
 Key constraints:
 
-- pnpm 9.6.0 enforced via corepack
+- pnpm 10.31.0 enforced via corepack (packageManager in root package.json)
 - Turborepo 2.7 for JS/TS build orchestration
 - Rust CI needs Linux GUI deps for Tauri (GTK, webkit, appindicator)
 - Cargo audit currently skipped in CI (CVSS 4.0 support pending)
