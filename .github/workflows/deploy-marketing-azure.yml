@@ -78,9 +78,13 @@ jobs:
 
   build-and-deploy:
     needs: check-secrets
-    if:
-      github.event_name == 'workflow_dispatch' || github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: |
+      (github.event_name == 'workflow_dispatch' || github.event_name == 'push' ||
+       (github.event_name == 'pull_request' && github.event.action != 'closed'))
+      && github.actor != 'dependabot[bot]'
+      && github.actor != 'dependabot'
+      && github.actor != 'renovate[bot]'
+      && github.actor != 'renovate'
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
