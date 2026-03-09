@@ -2,6 +2,9 @@
 id: adr-0202-x402-data-marketplace
 title: "ADR 0202: x402 Data Marketplace Expansion"
 sidebar_label: "ADR 0202: x402 Data Marketplace"
+difficulty: intermediate
+estimated_reading_time: 15
+points: 25
 tags:
   - technical
   - architecture
@@ -14,7 +17,7 @@ prerequisites:
   - adr-0027-x402-payment-protocol
 ---
 
-# ADR 0034: x402 Data Marketplace Expansion
+# ADR 0202: x402 Data Marketplace Expansion
 
 **Date**: 2026-03-05
 **Status**: Draft
@@ -141,7 +144,7 @@ Build a data marketplace layer that:
 │            └──────────────────┼──────────────────────┘                  │
 │                               ▼                                         │
 │  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │                      x402 Payment Layer                           │  │
+│  │                      x402 Payment Layer (post-Phase-1 target)      │  │
 │  │                                                                    │  │
 │  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐   │  │
 │  │  │   402 Response  │  │    Payment      │  │   Settlement    │   │  │
@@ -161,6 +164,8 @@ Build a data marketplace layer that:
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+The diagram above shows the **post-Phase-1 target state** of the x402 Payment Layer. The current `X402Facilitator::verify_payment` implementation validates single payments only; multi-recipient settlement, seller routing, and streaming balance tracking are planned for Phase 1 Week 3 and later phases.
 
 ### Database Schema
 
