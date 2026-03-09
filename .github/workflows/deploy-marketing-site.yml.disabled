@@ -6,24 +6,26 @@ on:
     paths:
       - "apps/marketing/**"
       - "apps/threat-simulator-desktop/**"
+      - "scripts/**"
       - "packages/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "turbo.json"
       - "tsconfig.base.json"
       - ".eslintrc.js"
-      - ".github/workflows/deploy-marketing-site.yml"
+      - ".github/workflows/deploy-marketing-site.yml.disabled"
   pull_request:
     paths:
       - "apps/marketing/**"
       - "apps/threat-simulator-desktop/**"
+      - "scripts/**"
       - "packages/**"
       - "package.json"
       - "pnpm-lock.yaml"
       - "turbo.json"
       - "tsconfig.base.json"
       - ".eslintrc.js"
-      - ".github/workflows/deploy-marketing-site.yml"
+      - ".github/workflows/deploy-marketing-site.yml.disabled"
   workflow_dispatch:
 
 jobs:
@@ -33,7 +35,6 @@ jobs:
     permissions:
       contents: read
       statuses: write
-      pull-requests: write
     defaults:
       run:
         working-directory: .
@@ -54,11 +55,11 @@ jobs:
         with:
           version: "0.21.14"
 
-      - name: Generate lockfile if missing
+      - name: Ensure lockfile is committed
         run: |
           if [ ! -f pnpm-lock.yaml ]; then
-            echo "pnpm-lock.yaml not found, generating..."
-            pnpm install --no-frozen-lockfile
+            echo "Error: pnpm-lock.yaml not found. Commit the lockfile (run pnpm install) before deploying." >&2
+            exit 1
           fi
 
       - name: Setup Node.js
@@ -147,11 +148,11 @@ jobs:
         with:
           version: "0.21.14"
 
-      - name: Generate lockfile if missing
+      - name: Ensure lockfile is committed
         run: |
           if [ ! -f pnpm-lock.yaml ]; then
-            echo "pnpm-lock.yaml not found, generating..."
-            pnpm install --no-frozen-lockfile
+            echo "Error: pnpm-lock.yaml not found. Commit the lockfile (run pnpm install) before deploying." >&2
+            exit 1
           fi
 
       - name: Setup Node.js

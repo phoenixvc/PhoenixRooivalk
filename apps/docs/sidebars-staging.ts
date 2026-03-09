@@ -120,7 +120,7 @@ const sidebarsStaging: SidebarsConfig = {
               label: "ADRs",
               collapsed: true,
               items: [
-                "technical/architecture/adr-0034-x402-data-marketplace",
+                "technical/architecture/adr-0202-x402-data-marketplace",
               ],
             },
             "technical/architecture/subsystems/index",
