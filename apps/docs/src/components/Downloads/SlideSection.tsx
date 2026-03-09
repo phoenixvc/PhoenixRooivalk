@@ -125,6 +125,8 @@ export interface SlideSectionProps {
   keyPoints?: KeyPoint[];
   /** Talking script */
   script?: string;
+  /** Optional speaker notes (for export or display) */
+  speakerNotes?: string;
   /** Children content (alternative to keyPoints) */
   children?: React.ReactNode;
   /** Whether this is the first slide (shows larger brand icon) */
@@ -172,6 +174,7 @@ export default function SlideSection({
   icon,
   keyPoints = [],
   script,
+  speakerNotes,
   children,
   isFirst,
   layout = "default",
@@ -339,6 +342,12 @@ export default function SlideSection({
         <div className={styles.scriptSection}>
           <div className={styles.scriptLabel}>Script</div>
           <p className={styles.scriptText}>&quot;{script}&quot;</p>
+        </div>
+      )}
+      {speakerNotes && (
+        <div className={styles.scriptSection}>
+          <div className={styles.scriptLabel}>Speaker notes</div>
+          <p className={styles.scriptText}>{speakerNotes}</p>
         </div>
       )}
     </div>

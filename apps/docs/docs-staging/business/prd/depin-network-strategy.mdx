@@ -1,0 +1,201 @@
+# DePIN Network Strategy
+
+**Status**: Draft
+**Owner**: Business Development
+**Last Updated**: 2026-03-05
+
+---
+
+## Executive Summary
+
+Phoenix Rooivalk is positioned to become critical infrastructure in the emerging Decentralized Physical Infrastructure Network (DePIN) economy. This document outlines our strategy for integrating drone data, sensor networks, and counter-UAS capabilities into decentralized infrastructure networks.
+
+---
+
+## What is DePIN?
+
+Decentralized Physical Infrastructure Networks (DePIN) are blockchain-coordinated networks where participants contribute physical hardware (sensors, compute, storage, connectivity) and receive token incentives for providing services.
+
+| DePIN Category | Examples | Phoenix Rooivalk Relevance |
+|---------------|----------|---------------------------|
+| **Sensor Networks** | WeatherXM, Hivemapper | Drone telemetry, radar data |
+| **Compute** | Render, Akash | Edge ML inference |
+| **Wireless** | Helium, XNET | Mesh networking, LoRa |
+| **Storage** | Filecoin, Arweave | Evidence archives |
+
+---
+
+## Strategic Vision
+
+### Phase 1: Data Provider (2026 H1)
+
+Contribute drone surveillance and counter-UAS data to existing DePIN networks.
+
+**Data Products**:
+- Real-time airspace telemetry
+- Threat detection events
+- Counter-UAS engagement records
+- Environmental sensor data (weather, RF spectrum)
+
+**Target Networks**:
+- Hivemapper (mapping data)
+- WeatherXM (environmental sensors)
+- Custom defense-focused DePIN (to be developed)
+
+### Phase 2: Network Operator (2026 H2)
+
+Deploy and operate DePIN nodes as part of distributed infrastructure.
+
+**Capabilities**:
+- SkyWatch units as DePIN nodes
+- Mesh network participation
+- Edge compute for distributed ML inference
+- Evidence anchoring nodes
+
+### Phase 3: Protocol Development (2027)
+
+Launch Phoenix Rooivalk DePIN protocol for defense and security applications.
+
+**Protocol Features**:
+- Threat intelligence sharing network
+- Distributed evidence verification
+- Counter-UAS coordination protocol
+- Tokenized data marketplace
+
+---
+
+## Value Proposition
+
+### For Phoenix Rooivalk
+
+| Benefit | Description |
+|---------|-------------|
+| **Revenue Diversification** | Token incentives for data contribution |
+| **Network Effects** | Access to broader sensor coverage |
+| **Data Enhancement** | Ingest data from other DePIN participants |
+| **Infrastructure Costs** | Offset hardware costs via token rewards |
+
+### For DePIN Networks
+
+| Benefit | Description |
+|---------|-------------|
+| **High-Value Data** | Defense-grade sensor data |
+| **Verified Sources** | Blockchain-anchored evidence |
+| **Geographic Coverage** | Airspace monitoring in key regions |
+| **Professional Operations** | Enterprise-grade reliability |
+
+---
+
+## Technical Integration
+
+### Data Flow Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Phoenix Rooivalk                          │
+├─────────────────────────────────────────────────────────────┤
+│  SkyWatch Units ──▶ Edge Processing ──▶ Data Normalization │
+│        │                                        │            │
+│        ▼                                        ▼            │
+│  Local Storage          DePIN Router (Solana/x402)          │
+│        │                        │                            │
+│        ▼                        ▼                            │
+│  Evidence Chain         Token Settlement                     │
+└─────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    DePIN Networks                            │
+├─────────────────────────────────────────────────────────────┤
+│  Hivemapper │ WeatherXM │ Custom Defense DePIN │ Filecoin  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Integration Requirements
+
+1. **Data Normalization Layer**: Transform Phoenix Rooivalk data formats to DePIN standards
+2. **Token Wallet Integration**: Solana wallet for receiving DePIN incentives
+3. **Proof-of-Coverage**: Cryptographic proof of sensor operation and data authenticity
+4. **Oracle Integration**: Price feeds for token/fiat conversion
+
+---
+
+## Token Economics
+
+### Revenue Model
+
+| Data Type | Estimated Value | Frequency | Monthly Potential |
+|-----------|----------------|-----------|-------------------|
+| Airspace Telemetry | $0.001/record | 1M records | $1,000 |
+| Threat Events | $0.10/event | 1K events | $100 |
+| Verified Evidence | $1.00/record | 100 records | $100 |
+| Sensor Coverage | $50/node/month | 10 nodes | $500 |
+
+**Total Monthly DePIN Revenue Potential**: ~$1,700 (Year 1)
+
+### Token Accumulation Strategy
+
+- **HOLD**: Accumulate governance tokens for protocol influence
+- **STAKE**: Stake tokens for enhanced network participation
+- **CONVERT**: Partial conversion to stablecoins for operational costs
+
+---
+
+## Risk Assessment
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| **Token Volatility** | High | Medium | Immediate USDC conversion for revenue |
+| **Protocol Changes** | Medium | Medium | Multi-network diversification |
+| **Regulatory Uncertainty** | Medium | High | Focus on utility tokens, avoid securities |
+| **Data Quality Disputes** | Low | Medium | On-chain verification, SLAs |
+| **Network Congestion** | Low | Low | Priority transaction fees |
+
+---
+
+## Competitive Landscape
+
+| Competitor | DePIN Focus | Differentiation |
+|------------|-------------|-----------------|
+| **Palantir** | Enterprise, centralized | We offer decentralized, token-incentivized |
+| **Anduril** | Defense hardware | We provide DePIN data layer |
+| **DroneShield** | Detection only | We offer full counter-UAS + data network |
+
+---
+
+## Success Metrics
+
+### Year 1 KPIs
+
+- [ ] Integrate with 2+ DePIN networks
+- [ ] Generate $10K+ in token revenue
+- [ ] Deploy 5+ DePIN-enabled nodes
+- [ ] Achieve 99%+ data uptime SLA
+
+### Year 2 KPIs
+
+- [ ] Launch Phoenix Rooivalk DePIN protocol
+- [ ] Onboard 10+ external node operators
+- [ ] $100K+ annual DePIN revenue
+- [ ] Token listing on major DEX
+
+---
+
+## Next Steps
+
+1. **Technical Spike**: Evaluate Hivemapper and WeatherXM integration requirements
+2. **Token Strategy**: Establish Solana wallet and custody procedures
+3. **Partnership Outreach**: Contact DePIN protocols for integration discussions
+4. **Legal Review**: Token handling and regulatory compliance assessment
+
+---
+
+## Related Documents
+
+- [Data Marketplace PRD](./data-marketplace-prd.mdx)
+- [ADR-0202: x402 Data Marketplace](../../technical/architecture/adr-0202-x402-data-marketplace.mdx)
+- [ADR-0027: x402 Payment Protocol](/docs/technical/architecture/adr-0027-x402-payment-protocol)
+
+---
+
+*Draft document - subject to revision*

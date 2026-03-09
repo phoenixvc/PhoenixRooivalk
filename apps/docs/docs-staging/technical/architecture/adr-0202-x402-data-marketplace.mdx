@@ -1,0 +1,439 @@
+---
+id: adr-0202-x402-data-marketplace
+title: "ADR 0202: x402 Data Marketplace Expansion"
+sidebar_label: "ADR 0202: x402 Data Marketplace"
+difficulty: intermediate
+estimated_reading_time: 15
+points: 25
+tags:
+  - technical
+  - architecture
+  - blockchain
+  - solana
+  - x402
+  - data-marketplace
+  - depin
+prerequisites:
+  - adr-0027-x402-payment-protocol
+---
+
+# ADR 0202: x402 Data Marketplace Expansion
+
+**Date**: 2026-03-05
+**Status**: Draft
+**Extends**: ADR-0027 (x402 Payment Protocol Integration)
+
+---
+
+## Executive Summary
+
+1. **Problem**: ADR-0027 established x402 for evidence verification. How do we expand this to a full data marketplace supporting multiple products, DePIN integration, and third-party sellers?
+2. **Decision**: Extend the x402 infrastructure with a catalog service, multi-product payment routing, and seller onboarding system.
+3. **Trade-off**: Increased complexity vs. revenue diversification and ecosystem participation.
+
+---
+
+## Context
+
+### Current State (ADR-0027)
+
+ADR-0027 implemented x402 for a single use case: premium evidence verification.
+
+```
+Client ──▶ Evidence API ──▶ 402 Response ──▶ Payment ──▶ Verification Result
+```
+
+### Expansion Drivers
+
+| Driver | Description |
+|--------|-------------|
+| **DePIN Participation** | Sell data to decentralized networks |
+| **Revenue Diversification** | Multiple data products beyond evidence |
+| **Partner Integration** | Allow third-party data sellers |
+| **AI Agent Economy** | Autonomous agents purchasing data streams |
+
+### Required Capabilities
+
+1. **Product Catalog**: Multiple data products with different pricing
+2. **Dynamic Pricing**: Price adjustments based on demand, volume, data freshness
+3. **Access Control**: Tiered access based on buyer verification level
+4. **Seller Onboarding**: Third-party sellers with revenue sharing
+5. **Streaming Payments**: Continuous data streams with per-unit billing
+
+---
+
+## Options Considered
+
+### Option 1: Extend Single Endpoint ❌
+
+Add query parameters to existing `/evidence/verify-premium` endpoint.
+
+**Pros**: Minimal changes, simple
+
+**Cons**:
+- Endpoint overloading
+- No proper catalog
+- Difficult to add new products
+
+### Option 2: Per-Product Endpoints ❌
+
+Create dedicated endpoints for each product.
+
+**Pros**: Clear separation, simple routing
+
+**Cons**:
+- Endpoint proliferation
+- Code duplication
+- Inconsistent buyer experience
+
+### Option 3: Unified Marketplace Service ✅ Recommended
+
+Build a marketplace abstraction layer over x402.
+
+**Pros**:
+- Scalable to N products
+- Consistent payment flow
+- Supports third-party sellers
+- DePIN-compatible architecture
+
+**Cons**:
+- Higher initial complexity
+- Requires catalog service
+
+---
+
+## Decision
+
+**Implement Option 3: Unified Marketplace Service**
+
+Build a data marketplace layer that:
+1. Manages a product catalog
+2. Routes payments through x402
+3. Enforces access control policies
+4. Supports seller onboarding
+
+---
+
+## Architecture
+
+### System Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Data Marketplace                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                       API Gateway                                 │  │
+│  │  /marketplace/catalog    /marketplace/access    /marketplace/pay │  │
+│  └────────────────────────────────┬─────────────────────────────────┘  │
+│                                   │                                     │
+│  ┌────────────────────────────────┼────────────────────────────────┐   │
+│  │                                ▼                                 │   │
+│  │  ┌─────────────┐  ┌─────────────────┐  ┌─────────────────────┐ │   │
+│  │  │   Catalog   │  │    Pricing      │  │   Access Control    │ │   │
+│  │  │   Service   │  │    Engine       │  │      Service        │ │   │
+│  │  │             │  │                 │  │                     │ │   │
+│  │  │ - Products  │  │ - Base prices   │  │ - Buyer tiers       │ │   │
+│  │  │ - Sellers   │  │ - Volume disc.  │  │ - KYC status        │ │   │
+│  │  │ - Categories│  │ - Dynamic adj.  │  │ - Rate limits       │ │   │
+│  │  └──────┬──────┘  └────────┬────────┘  └──────────┬──────────┘ │   │
+│  │         │                  │                      │             │   │
+│  └─────────┼──────────────────┼──────────────────────┼─────────────┘   │
+│            │                  │                      │                  │
+│            └──────────────────┼──────────────────────┘                  │
+│                               ▼                                         │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                      x402 Payment Layer (post-Phase-1 target)      │  │
+│  │                                                                    │  │
+│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐   │  │
+│  │  │   402 Response  │  │    Payment      │  │   Settlement    │   │  │
+│  │  │   Generator     │  │    Verifier     │  │   & Revenue     │   │  │
+│  │  │                 │  │                 │  │   Split         │   │  │
+│  │  └─────────────────┘  └─────────────────┘  └─────────────────┘   │  │
+│  │                                                                    │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                               │                                         │
+│                               ▼                                         │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                      Data Providers                               │  │
+│  │                                                                    │  │
+│  │  Phoenix Rooivalk  │  Partner Sellers  │  DePIN Networks         │  │
+│  │                                                                    │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+The diagram above shows the **post-Phase-1 target state** of the x402 Payment Layer. The current `X402Facilitator::verify_payment` implementation validates single payments only; multi-recipient settlement, seller routing, and streaming balance tracking are planned for Phase 1 Week 3 and later phases.
+
+### Database Schema
+
+```sql
+-- Product catalog
+CREATE TABLE marketplace_products (
+    id UUID PRIMARY KEY,
+    seller_id UUID REFERENCES marketplace_sellers(id),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(50),
+    base_price_usdc DECIMAL(10,6),
+    price_unit VARCHAR(20),  -- 'per_record', 'per_event', 'monthly'
+    min_buyer_tier VARCHAR(20) DEFAULT 'basic',
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Seller registry
+CREATE TABLE marketplace_sellers (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    wallet_address VARCHAR(44) NOT NULL,  -- Solana address
+    revenue_share_pct DECIMAL(5,2) DEFAULT 80.00,
+    kyc_verified BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Buyer registry
+CREATE TABLE marketplace_buyers (
+    id UUID PRIMARY KEY,
+    wallet_address VARCHAR(44),
+    tier VARCHAR(20) DEFAULT 'basic',  -- basic, verified, partner, government
+    kyc_verified BOOLEAN DEFAULT false,
+    rate_limit_per_hour INT DEFAULT 100,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Transaction log
+CREATE TABLE marketplace_transactions (
+    id UUID PRIMARY KEY,
+    product_id UUID REFERENCES marketplace_products(id),
+    buyer_id UUID REFERENCES marketplace_buyers(id),
+    payment_amount_usdc DECIMAL(10,6),
+    seller_payout_usdc DECIMAL(10,6),
+    platform_fee_usdc DECIMAL(10,6),
+    solana_tx_id VARCHAR(88),
+    status VARCHAR(20),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+### API Specification
+
+#### List Products
+
+```
+GET /marketplace/catalog
+```
+
+**Response**:
+```json
+{
+  "products": [
+    {
+      "id": "prod-001",
+      "name": "Real-Time Airspace Telemetry",
+      "category": "streaming",
+      "price": "0.001",
+      "unit": "per_record",
+      "min_tier": "basic"
+    },
+    {
+      "id": "prod-002",
+      "name": "Evidence Verification",
+      "category": "verification",
+      "price": "1.00",
+      "unit": "per_verification",
+      "min_tier": "verified"
+    }
+  ]
+}
+```
+
+#### Request Product Access
+
+```
+POST /marketplace/access
+Content-Type: application/json
+
+{
+  "product_id": "prod-001",
+  "quantity": 1000
+}
+```
+
+**Response (402 Payment Required)**:
+```json
+{
+  "product_id": "prod-001",
+  "quantity": 1000,
+  "total_price": "1.00",
+  "currency": "USDC",
+  "recipient": "PhxMkt...XYZ",
+  "memo": "mkt:prod-001:1000:buyer123",
+  "facilitator": "https://x402.org/facilitator",
+  "expires_at": "2026-03-05T12:30:00Z"
+}
+```
+
+#### Complete Purchase
+
+```
+POST /marketplace/access
+X-PAYMENT: <base64-payment-proof>
+Content-Type: application/json
+
+{
+  "product_id": "prod-001",
+  "quantity": 1000
+}
+```
+
+**Response (200 OK)**:
+```json
+{
+  "access_token": "eyJ...",
+  "product_id": "prod-001",
+  "quantity_remaining": 1000,
+  "data_endpoint": "wss://data.phoenixrooivalk.com/stream/airspace",
+  "expires_at": "2026-03-05T13:00:00Z"
+}
+```
+
+### Revenue Distribution
+
+```
+Payment Flow:
+  Buyer pays 100 USDC
+       │
+       ▼
+  x402 Facilitator
+       │
+       ├──▶ Seller Wallet: 80 USDC (80%)
+       │
+       └──▶ Platform Wallet: 20 USDC (20%)
+                │
+                ├──▶ Operations: 15 USDC
+                └──▶ Treasury: 5 USDC
+```
+
+| Party | Revenue Share | Use |
+|-------|--------------|-----|
+| **Seller** | 80% | Direct payout |
+| **Platform Operations** | 15% | Infrastructure, support |
+| **Treasury** | 5% | Development fund |
+
+---
+
+## Implementation Plan
+
+### Phase 1: Core Infrastructure (4 weeks)
+
+| Week | Deliverables |
+|------|--------------|
+| 1 | Database schema, Catalog service |
+| 2 | Pricing engine, 402 response generator |
+| 3 | Payment verification, revenue splitting |
+| 4 | Basic API, integration testing |
+
+### Phase 2: Phoenix Rooivalk Products (2 weeks)
+
+- Migrate evidence verification to marketplace
+- Add telemetry streaming product
+- Add threat alerts product
+
+### Phase 3: Seller Onboarding (3 weeks)
+
+- Seller registration flow
+- KYC integration (Persona/Jumio)
+- Revenue reporting dashboard
+
+### Phase 4: DePIN Integration (4 weeks)
+
+- Outbound data feeds to DePIN networks
+- Token reward claiming
+- Cross-marketplace settlement
+
+---
+
+## Streaming Data Protocol
+
+For continuous data products, implement pay-as-you-stream:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  Streaming Payment Flow                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Buyer ──▶ Open WebSocket ──▶ Initial 402 Response          │
+│                                   │                          │
+│            ◀── Pay 100 records ◀──┘                          │
+│                                                              │
+│         ┌──▶ Receive Record 1                                │
+│         │    Receive Record 2                                │
+│         │    ...                                             │
+│         │    Receive Record 99                               │
+│         │    402: Balance Low                                │
+│         │         │                                          │
+│         │    ◀── Pay 100 more ◀──┘                          │
+│         │                                                    │
+│         └──▶ Receive Record 100                              │
+│              Continue streaming...                           │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Security Considerations
+
+| Concern | Mitigation |
+|---------|------------|
+| **Payment Replay** | Memo includes unique nonce, one-time use |
+| **Data Exfiltration** | Rate limiting, anomaly detection |
+| **Seller Fraud** | Escrow period, dispute resolution |
+| **Unauthorized Access** | JWT tokens with short expiry |
+
+---
+
+## Consequences
+
+### Positive
+
+- **Revenue Expansion**: Multiple products, multiple sellers
+- **Ecosystem Play**: DePIN compatibility, AI agent support
+- **Partner Value**: Third-party sellers earn revenue
+- **Scalability**: Architecture supports N products
+
+### Negative
+
+- **Complexity**: More moving parts than single-endpoint
+- **Operational Overhead**: Seller support, dispute resolution
+- **Dependencies**: KYC provider, payment facilitator
+
+### Neutral
+
+- **ADR-0027 Preserved**: Evidence API continues to work
+- **Migration Path**: Gradual product migration to marketplace
+
+---
+
+## Related ADRs
+
+- [ADR-0027: x402 Payment Protocol](/docs/technical/architecture/adr-0027-x402-payment-protocol) - Foundation
+- [ADR-0026: Movement Network Integration](/docs/technical/architecture/adr-0026-movement-network-integration) - Multi-chain
+- [ADR-0053: Privacy Regulations](/docs/technical/architecture/adr-0053-privacy-regulations) - Compliance
+
+---
+
+## Related Documents
+
+- [Data Marketplace PRD](../../business/prd/data-marketplace-prd.mdx)
+- [DePIN Network Strategy](../../business/prd/depin-network-strategy.mdx)
+- [Drone Data Privacy Compliance](../../legal/compliance/drone-data-privacy.mdx)
+
+---
+
+*Draft ADR - pending review*
+

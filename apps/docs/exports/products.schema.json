@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phoenixrooivalk.com/schemas/products.json",
+  "title": "Phoenix Rooivalk Product Catalog",
+  "description": "Schema for validating the exported product catalog",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["sku", "name", "line", "category", "priceMin", "priceMax", "bomTotal", "confidence", "lastUpdated"],
+    "additionalProperties": false,
+    "properties": {
+      "sku": {
+        "type": "string",
+        "pattern": "^[A-Z]{2,4}-[A-Z0-9-]+$",
+        "description": "Unique product SKU (e.g., SW-NANO-001)"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Product display name"
+      },
+      "line": {
+        "type": "string",
+        "enum": ["SkyWatch", "NetSentry", "SkySnare", "NetSnare", "AeroNet", "RKV"],
+        "description": "Product line"
+      },
+      "category": {
+        "type": "string",
+        "enum": ["detection", "countermeasure"],
+        "description": "Product category"
+      },
+      "targetMarket": {
+        "type": "string",
+        "description": "Target market description"
+      },
+      "priceRange": {
+        "type": "string",
+        "description": "Human-readable price range (e.g., '$500-$1000')"
+      },
+      "priceMin": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Minimum price in USD"
+      },
+      "priceMax": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Maximum price in USD"
+      },
+      "bomTotal": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Bill of materials total cost"
+      },
+      "confidence": {
+        "type": "string",
+        "enum": ["high", "medium", "low"],
+        "description": "Pricing confidence level"
+      },
+      "lastUpdated": {
+        "type": "string",
+        "format": "date",
+        "description": "Last update date (YYYY-MM-DD)"
+      },
+      "specs": {
+        "type": "object",
+        "description": "Product-specific specifications",
+        "properties": {
+          "detectionRange": { "type": "string" },
+          "processingSpeed": { "type": "string" },
+          "powerConsumption": { "type": "string" },
+          "operatingTemp": { "type": "string" },
+          "dimensions": { "type": "string" },
+          "weight": { "type": "string" },
+          "connectivity": { "type": "string" },
+          "storage": { "type": "string" },
+          "launchRange": { "type": "string" },
+          "responseTime": { "type": "string" },
+          "reload": { "type": "string" },
+          "netSize": { "type": "string" },
+          "costPerShot": { "type": "string" },
+          "batteryLife": { "type": "string" },
+          "ipRating": { "type": "string" },
+          "stabilization": { "type": "string" },
+          "thermalResolution": { "type": "string" },
+          "thermalSensitivity": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "bom": {
+        "type": "array",
+        "description": "Bill of materials items",
+        "items": {
+          "type": "object",
+          "required": ["item", "specification", "quantity", "unitCost", "totalCost", "supplier"],
+          "properties": {
+            "item": { "type": "string" },
+            "specification": { "type": "string" },
+            "quantity": { "type": "number", "minimum": 0 },
+            "unitCost": { "type": "number", "minimum": 0 },
+            "totalCost": { "type": "number", "minimum": 0 },
+            "supplier": { "type": "string" }
+          }
+        }
+      },
+      "optionalAccessories": {
+        "type": "array",
+        "description": "Optional accessory items",
+        "items": {
+          "type": "object",
+          "required": ["item", "quantity", "unitCost", "totalCost"],
+          "additionalProperties": false,
+          "properties": {
+            "item": { "type": "string" },
+            "specification": { "type": "string" },
+            "quantity": { "type": "integer", "minimum": 0 },
+            "unitCost": { "type": "number", "minimum": 0 },
+            "totalCost": { "type": "number", "minimum": 0 },
+            "supplier": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
