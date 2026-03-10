@@ -32,7 +32,7 @@ async-trait = "0.1"
 azure_data_cosmos = { version = "0.31", optional = true, default-features = false, features = ["hmac_rust"] }
 azure_core = { version = "0.33", optional = true, default-features = false, features = ["reqwest", "reqwest_deflate", "reqwest_gzip"] }
 # Single azure_identity dep (alias used in cosmos.rs for TokenCredential).
-azure_identity = { version = "0.32", optional = true, default-features = false }
+azure_identity = { version = "0.33", optional = true, default-features = false }
 # Provide rustls TLS backend for azure_data_cosmos's transitive reqwest 0.12 dep.
 reqwest_compat = { package = "reqwest", version = "0.12", optional = true, default-features = false, features = ["rustls-tls-native-roots"] }
 

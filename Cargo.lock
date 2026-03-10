@@ -442,13 +442,13 @@ dependencies = [
 
 [[package]]
 name = "azure_identity"
-version = "0.32.0"
+version = "0.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "825f8df144a4dc10dc6e81014906568363ef8e2b94c9234ddb951675161eb972"
+checksum = "d7c89484f1ce8b81471c897150ec748b02beef8870bd0d43693bc5ef42365b8f"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core 0.32.0",
+ "azure_core 0.33.0",
  "futures",
  "pin-project",
  "serde",
