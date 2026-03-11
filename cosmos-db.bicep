@@ -12,7 +12,7 @@ param databaseName string = 'PhoenixRooivalkDb'
 param serverless bool = true
 
 // Cosmos DB Account
-resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
+resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2024-08-15' = {
   name: cosmosDbAccountName
   location: location
   kind: 'GlobalDocumentDB'
